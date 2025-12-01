@@ -13,7 +13,6 @@ from typing import Dict, Any, List, Optional
 from ..base_agent import BaseAgent, AgentRequest, AgentResponse
 from ..agent_types import IntentType
 
-# Import parsers
 from .parsers import (
     PytestErrorParser,
     SyntaxErrorParser,
@@ -22,7 +21,6 @@ from .parsers import (
     LinterErrorParser
 )
 
-# Import strategies
 from .strategies import (
     IndentationFixStrategy,
     ImportFixStrategy,
@@ -30,7 +28,6 @@ from .strategies import (
     PackageFixStrategy
 )
 
-# Import validators
 from .validators import PathValidator, FixValidator
 
 
@@ -47,7 +44,6 @@ class ErrorCorrector(BaseAgent):
     def __init__(self, name: str = "ErrorCorrector"):
         super().__init__(name=name)
         
-        # Initialize parsers
         self.parsers = [
             PytestErrorParser(),
             SyntaxErrorParser(),
@@ -56,7 +52,6 @@ class ErrorCorrector(BaseAgent):
             LinterErrorParser()
         ]
         
-        # Initialize fix strategies
         self.strategies = [
             IndentationFixStrategy(),
             ImportFixStrategy(),
@@ -64,7 +59,6 @@ class ErrorCorrector(BaseAgent):
             PackageFixStrategy()
         ]
         
-        # Initialize validators
         self.path_validator = PathValidator([
             "CORTEX/tests",
             "CORTEX/src/cortex_agents",
@@ -106,7 +100,6 @@ class ErrorCorrector(BaseAgent):
                     metadata={"skip_summary": skip_summary}
                 )
             
-            # Check if file is protected
             if file_path and self.path_validator.is_protected(file_path):
                 return AgentResponse(
                     success=False,
@@ -266,7 +259,6 @@ class ErrorCorrector(BaseAgent):
                 if strategy.can_fix(parsed_error, pattern):
                     fix_result = strategy.apply_fix(parsed_error, pattern, file_path)
                     
-                    # Validate the fix
                     if self.fix_validator.validate(fix_result):
                         fix_result["applied_pattern"] = pattern["name"]
                         fix_result["confidence"] = pattern["confidence"]

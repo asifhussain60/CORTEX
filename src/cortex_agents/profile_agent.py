@@ -130,7 +130,6 @@ class ProfileAgent(BaseAgent):
                 success = success and wm.update_profile(**update_fields)
             
             if success:
-                # Get updated profile
                 profile = self.profile_manager.get_profile()
                 
                 message = self._format_success_message(result, profile)

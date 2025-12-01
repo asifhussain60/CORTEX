@@ -33,7 +33,6 @@ class ADOAgent(BaseAgent):
     Example:
         agent = ADOAgent("ADOAgent", tier1_api, tier2_kg, tier3_context)
         
-        # Create user story
         request = AgentRequest(
             intent=IntentType.ADO_STORY,
             context={"title": "User Login", "description": "..."},
@@ -46,7 +45,6 @@ class ADOAgent(BaseAgent):
         """Initialize ADO Agent with tier APIs."""
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         
-        # Initialize orchestrators lazily (on first use)
         self._unified_orchestrator = None
     
     def _get_unified_orchestrator(self):
@@ -76,7 +74,6 @@ class ADOAgent(BaseAgent):
         ]
         
         try:
-            # Check if intent matches ADO operations
             from .agent_types import IntentType
             if isinstance(request.intent, IntentType):
                 return request.intent in ado_intents
@@ -130,7 +127,6 @@ class ADOAgent(BaseAgent):
             # Log completion
             duration_ms = self.log_completion(start_time)
             
-            # Return response with formatted message
             return AgentResponse(
                 success=result.get("success", False),
                 result=result,
@@ -155,7 +151,6 @@ class ADOAgent(BaseAgent):
         priority = context.get("priority", "Medium")
         tags = context.get("tags", [])
         
-        # Create story via orchestrator
         workflow_result = orchestrator.execute_ado_story(
             title=title,
             description=description,
@@ -182,7 +177,6 @@ class ADOAgent(BaseAgent):
         tags = context.get("tags", [])
         estimated_duration = context.get("estimated_duration")
         
-        # Create feature via orchestrator
         workflow_result = orchestrator.execute_ado_feature(
             title=title,
             description=description,

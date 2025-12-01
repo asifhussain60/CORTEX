@@ -34,7 +34,6 @@ class DependencyManager:
             task["dependencies"] = []
             task_name = task.get("name", "")
             
-            # Check for dependency keywords
             for keyword, deps in dependency_patterns.items():
                 if keyword.lower() in task_name.lower():
                     task["dependencies"] = deps

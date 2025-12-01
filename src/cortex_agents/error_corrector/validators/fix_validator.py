@@ -16,7 +16,6 @@ class FixValidator:
         Returns:
             True if fix is valid and safe to apply
         """
-        # Check required fields
         if not isinstance(fix_result, dict):
             return False
         

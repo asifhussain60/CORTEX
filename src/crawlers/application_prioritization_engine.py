@@ -108,7 +108,6 @@ class ApplicationPrioritizationEngine:
         self.immediate_count = config.get('immediate_count', self.IMMEDIATE_COUNT)
         self.queued_count = config.get('queued_count', self.QUEUED_COUNT)
         
-        # Initialize activity monitors
         self.fs_monitor = FileSystemActivityMonitor(config)
         self.git_analyzer = GitHistoryAnalyzer(config)
         self.access_tracker = AccessPatternTracker(config)
@@ -133,7 +132,6 @@ class ApplicationPrioritizationEngine:
         # Build unified priority data
         priorities = self._build_priorities(fs_activity, git_activity, access_patterns)
         
-        # Calculate composite scores
         self._calculate_composite_scores(priorities)
         
         # Normalize scores to 0-100 scale
@@ -176,7 +174,6 @@ class ApplicationPrioritizationEngine:
             app_name = app['name']
             app_path = app['path']
             
-            # Get activity data for this app
             fs_data = fs_activity.get(app_name)
             git_data = git_activity.get(app_name)
             access_data = access_patterns.get(app_name)
@@ -186,7 +183,6 @@ class ApplicationPrioritizationEngine:
             git_score = git_data.activity_score if git_data else 0.0
             access_score = access_data.activity_score if access_data else 0.0
             
-            # Calculate dependency score
             dependency_score = self._calculate_dependency_score(
                 app_name, fs_data, git_data, access_data
             )

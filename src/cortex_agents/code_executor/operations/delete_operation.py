@@ -23,14 +23,12 @@ class DeleteOperation(BaseOperation):
         Returns:
             Deletion result
         """
-        # Check file exists
         if not os.path.exists(file_path):
             return {
                 "success": False,
                 "message": f"File not found: {file_path}"
             }
         
-        # Check if we need confirmation
         if not context.get("confirm", False):
             return {
                 "success": False,
@@ -44,7 +42,6 @@ class DeleteOperation(BaseOperation):
             backup_path = self.backup_manager.backup_file(file_path)
         
         try:
-            # Get file info before deletion
             file_size = os.path.getsize(file_path)
             
             # Delete file

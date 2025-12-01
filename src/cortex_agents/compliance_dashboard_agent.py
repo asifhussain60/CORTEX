@@ -107,11 +107,9 @@ class ComplianceDashboardAgent(BaseAgent):
         Returns:
             True if request matches compliance dashboard triggers
         """
-        # Check if intent is compliance-related
         if request.intent in ["show_compliance", "compliance_dashboard", "check_compliance"]:
             return True
         
-        # Check user message for trigger phrases
         user_message = request.user_message.lower().strip()
         
         for trigger in self.COMPLIANCE_TRIGGERS:
@@ -218,11 +216,9 @@ class ComplianceDashboardAgent(BaseAgent):
             "refresh": False
         }
         
-        # Check for specific actions
         if "refresh" in user_message or "update" in user_message:
             intent["refresh"] = True
         
-        # Check for category filters
         if "security" in user_message:
             intent["filters"].append("security")
         elif "performance" in user_message:
@@ -246,7 +242,6 @@ class ComplianceDashboardAgent(BaseAgent):
             generator = ComplianceDashboardGenerator(brain_path=self.brain_path)
             dashboard_path = generator.generate_dashboard()
             
-            # Get compliance score from generator
             compliance_score = self._get_compliance_score()
             
             return {
@@ -274,7 +269,6 @@ class ComplianceDashboardAgent(BaseAgent):
             Dict with success status and dashboard path
         """
         try:
-            # Get compliance summary
             from src.utils.compliance_summary import get_compliance_summary
             
             compliance_text = get_compliance_summary(quick=True)

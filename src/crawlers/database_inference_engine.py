@@ -263,7 +263,6 @@ class DatabaseSchemaInferenceEngine:
                 content = cfc_file.read_text(encoding='utf-8', errors='ignore')
                 rel_path = str(cfc_file.relative_to(self.app_path))
                 
-                # Check for ORM entity definition
                 if 'persistent="true"' in content or 'persistent=true' in content:
                     self._parse_orm_entity(content, rel_path)
             
@@ -294,7 +293,6 @@ class DatabaseSchemaInferenceEngine:
             if not table_name:
                 return
             
-            # Create or get table info
             if table_name not in self.tables:
                 self.tables[table_name] = TableInfo(name=table_name, confidence=0.95)  # ORM = high confidence
             

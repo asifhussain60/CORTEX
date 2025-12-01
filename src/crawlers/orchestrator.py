@@ -124,7 +124,6 @@ class CrawlerOrchestrator:
         Args:
             crawler_class: Class inheriting from BaseCrawler
         """
-        # Create temporary instance to get info
         temp_instance = crawler_class({'workspace_path': self.workspace_path})
         info = temp_instance.get_crawler_info()
         crawler_id = info['crawler_id']
@@ -234,7 +233,6 @@ class CrawlerOrchestrator:
         """
         crawler_class = self.crawler_classes[crawler_id]
         
-        # Create crawler instance with config
         crawler_config = {
             'workspace_path': self.workspace_path,
             'knowledge_graph': self.knowledge_graph,
@@ -266,7 +264,6 @@ class CrawlerOrchestrator:
         # Build priority groups
         priority_groups = {}
         for crawler_id in crawler_ids:
-            # Get priority from crawler info
             temp_instance = self.crawler_classes[crawler_id]({
                 'workspace_path': self.workspace_path
             })
@@ -324,7 +321,6 @@ class CrawlerOrchestrator:
             if 'tooling_crawler' in self.results:
                 tooling_result = self.results['tooling_crawler']
                 if tooling_result.status == CrawlerStatus.COMPLETED:
-                    # Check metadata for database connections
                     db_connections = tooling_result.metadata.get('database_connections', {})
                     
                     # Map crawler IDs to database types

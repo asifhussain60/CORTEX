@@ -41,7 +41,6 @@ class WorkPlanner(BaseAgent):
         """Initialize WorkPlanner with tier APIs."""
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         
-        # Initialize components
         self.complexity_analyzer = ComplexityAnalyzer()
         self.workflow_finder = WorkflowFinder(tier2_kg)
         self.velocity_tracker = VelocityTracker(tier3_context)
@@ -78,7 +77,6 @@ class WorkPlanner(BaseAgent):
             # Find similar workflows from Tier 2
             similar_workflows = self.workflow_finder.find_similar(request)
             
-            # Get velocity metrics from Tier 3
             velocity_data = self.velocity_tracker.get_metrics()
             
             # Generate task breakdown
@@ -100,7 +98,6 @@ class WorkPlanner(BaseAgent):
                 len(file_paths)
             )
             
-            # Calculate total hours
             total_hours = sum(t.get("estimated_hours", 0) for t in tasks)
             
             # Log to Tier 1 if available

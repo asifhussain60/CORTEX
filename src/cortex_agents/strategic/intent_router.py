@@ -213,7 +213,6 @@ class IntentRouter(BaseAgent):
         except:
             pass
         
-        # Classify based on keywords
         intent_scores = {}
         for intent_type, keywords in self.INTENT_KEYWORDS.items():
             score = 0
@@ -315,7 +314,6 @@ class IntentRouter(BaseAgent):
         Returns:
             Routing decision with primary agent, secondary agents, and confidence
         """
-        # Get primary agent for intent
         primary_agent = get_agent_for_intent(intent)
         
         # For ENHANCE intent, check if we have fresh crawled data
@@ -415,7 +413,6 @@ class IntentRouter(BaseAgent):
             now = datetime.now()
             stale_threshold = timedelta(hours=24)
             
-            # Get most recent pattern timestamp
             latest_pattern = max(
                 app_patterns,
                 key=lambda p: datetime.fromisoformat(
@@ -490,17 +487,14 @@ class IntentRouter(BaseAgent):
         secondary = []
         message_lower = request.user_message.lower()
         
-        # Check for test-related keywords
         if primary_intent != IntentType.TEST:
             if any(word in message_lower for word in ["test", "testing", "tdd"]):
                 secondary.append(AgentType.TESTER)
         
-        # Check for validation keywords
         if "validate" in message_lower or "check" in message_lower:
             if primary_intent not in [IntentType.HEALTH_CHECK, IntentType.VALIDATE]:
                 secondary.append(AgentType.VALIDATOR)
         
-        # Check for git/commit keywords
         if primary_intent != IntentType.COMMIT:
             if "commit" in message_lower or "git" in message_lower:
                 secondary.append(AgentType.COMMITTER)

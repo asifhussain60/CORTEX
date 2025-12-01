@@ -70,12 +70,10 @@ class ErrorCorrector(BaseAgent):
         if request.intent in [IntentType.FIX.value, IntentType.DEBUG.value]:
             return True
         
-        # Check for error correction keywords
         error_keywords = ["fix_error", "correct", "debug", "resolve_error"]
         if any(keyword in intent_lower for keyword in error_keywords):
             return True
         
-        # Check if error output is provided
         if "error_output" in request.context:
             return True
         
@@ -108,7 +106,6 @@ class ErrorCorrector(BaseAgent):
                     metadata={"skip_summary": skip_summary}
                 )
             
-            # Check if file is in protected directory
             if file_path and self._is_protected_path(file_path):
                 return AgentResponse(
                     success=False,
@@ -188,7 +185,6 @@ class ErrorCorrector(BaseAgent):
         for protected in self.protected_paths:
             protected_path = Path(protected)
             try:
-                # Check if file_path is relative to protected_path
                 path.resolve().relative_to(protected_path.resolve())
                 return True
             except ValueError:
@@ -285,7 +281,6 @@ class ErrorCorrector(BaseAgent):
         for i, line in enumerate(lines):
             if "AssertionError" in line or "FAILED" in line:
                 result["message"] = line.strip()
-                # Get surrounding context
                 result["traceback"] = lines[max(0, i-3):min(len(lines), i+3)]
                 break
         
@@ -317,7 +312,6 @@ class ErrorCorrector(BaseAgent):
                     result["code_snippet"] = lines[i-1].strip()
                 break
         
-        # Get error message
         error_match = re.search(r"(SyntaxError|IndentationError|TabError): (.+)", output)
         if error_match:
             result["message"] = error_match.group(2)
@@ -340,7 +334,6 @@ class ErrorCorrector(BaseAgent):
             result["missing_name"] = name_match.group(1)
             result["message"] = f"Cannot import: {name_match.group(1)}"
         
-        # Get file and line
         file_match = re.search(r'File "([^"]+)", line (\d+)', output)
         if file_match:
             result["file"] = file_match.group(1)
@@ -374,7 +367,6 @@ class ErrorCorrector(BaseAgent):
         elif "KeyError" in output:
             result["category"] = "key"
         
-        # Get file and line from traceback
         traceback_lines = []
         for line in output.split("\n"):
             if line.strip().startswith("File"):
@@ -382,13 +374,11 @@ class ErrorCorrector(BaseAgent):
         
         if traceback_lines:
             result["traceback"] = traceback_lines
-            # Get last file/line (where error occurred)
             last_match = re.search(r'File "([^"]+)", line (\d+)', traceback_lines[-1])
             if last_match:
                 result["file"] = last_match.group(1)
                 result["line"] = int(last_match.group(2))
         
-        # Get error message
         lines = output.split("\n")
         if lines:
             result["message"] = lines[-1].strip()
@@ -553,7 +543,6 @@ class ErrorCorrector(BaseAgent):
                 "confidence": 0.0
             }
         
-        # Get best pattern (already sorted by confidence)
         best_pattern = fix_patterns[0]
         
         result = {
@@ -703,7 +692,6 @@ class ErrorCorrector(BaseAgent):
             if line_num and line_num <= len(lines):
                 problem_line = lines[line_num - 1]
                 
-                # Check if it's a control structure without colon
                 if re.match(r'^\s*(if|elif|else|for|while|def|class|try|except|finally|with)\b', problem_line):
                     if not problem_line.rstrip().endswith(':'):
                         return {

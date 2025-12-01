@@ -24,7 +24,6 @@ class GitValidator(BaseHealthValidator):
     def check(self) -> Dict[str, Any]:
         """Check git repository status."""
         try:
-            # Check if we're in a git repo
             result = subprocess.run(
                 ["git", "rev-parse", "--git-dir"],
                 capture_output=True,
@@ -41,7 +40,6 @@ class GitValidator(BaseHealthValidator):
                     "warnings": []
                 }
             
-            # Get uncommitted changes count
             result = subprocess.run(
                 ["git", "status", "--porcelain"],
                 capture_output=True,

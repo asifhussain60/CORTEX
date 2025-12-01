@@ -82,7 +82,6 @@ class ParallelProcessor:
             result.elapsed_time = time.time() - start_time
             return result
         
-        # Process files in parallel
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             # Submit all tasks
             future_to_path = {
@@ -121,7 +120,6 @@ class ParallelProcessor:
                         })
                         result.failed_files += 1
         
-        # Calculate metrics
         result.elapsed_time = time.time() - start_time
         if result.elapsed_time > 0:
             result.throughput = result.processed_files / result.elapsed_time
@@ -167,7 +165,6 @@ class ParallelProcessor:
         combined_result = ProcessingResult(total_files=len(file_paths))
         start_time = time.time()
         
-        # Process in batches
         for i in range(0, len(file_paths), batch_size):
             batch = file_paths[i:i + batch_size]
             
@@ -177,7 +174,6 @@ class ParallelProcessor:
                 if progress_callback:
                     progress_callback(overall_current, len(file_paths))
             
-            # Process batch
             batch_result = self.process_files(batch, processor_func, batch_progress)
             
             # Aggregate results
@@ -186,7 +182,6 @@ class ParallelProcessor:
             combined_result.results.extend(batch_result.results)
             combined_result.errors.extend(batch_result.errors)
         
-        # Calculate metrics
         combined_result.elapsed_time = time.time() - start_time
         if combined_result.elapsed_time > 0:
             combined_result.throughput = combined_result.processed_files / combined_result.elapsed_time

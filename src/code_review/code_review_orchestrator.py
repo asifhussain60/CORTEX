@@ -139,7 +139,6 @@ class CodeAnalyzer:
         """Perform AST-based analysis for deeper insights"""
         issues = []
         
-        # Check for missing docstrings
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
                 if not ast.get_docstring(node):
@@ -237,12 +236,10 @@ class CodeReviewOrchestrator:
             issues = self.analyzer.analyze_file(Path(file_path))
             all_issues.extend(issues)
         
-        # Calculate severity distribution
         issues_by_severity = {}
         for issue in all_issues:
             issues_by_severity[issue.severity] = issues_by_severity.get(issue.severity, 0) + 1
         
-        # Calculate execution time
         execution_time = time.time() - start_time
         
         # Build report

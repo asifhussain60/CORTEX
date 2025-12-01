@@ -117,7 +117,6 @@ class ChangeGovernor(BaseAgent):
             # Assess risk level
             risk_level = self._assess_risk(files, operation, violations)
             
-            # Check if tests are required
             requires_tests = self._requires_tests(files, operation)
             
             # Determine if change is allowed
@@ -161,7 +160,6 @@ class ChangeGovernor(BaseAgent):
         Returns:
             List of file paths
         """
-        # Check context.files first
         files = request.context.get("files", [])
         if files:
             return files if isinstance(files, list) else [files]

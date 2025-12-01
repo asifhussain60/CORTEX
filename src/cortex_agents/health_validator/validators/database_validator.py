@@ -38,7 +38,6 @@ class DatabaseValidator(BaseHealthValidator):
         }
         
         try:
-            # Check Tier 1 database
             if self.tier1:
                 tier1_check = self._check_single_database(
                     getattr(self.tier1, 'db_path', None),
@@ -51,7 +50,6 @@ class DatabaseValidator(BaseHealthValidator):
                 elif tier1_check["status"] == "warn":
                     results["warnings"].append(tier1_check.get("error", "Tier 1 warning"))
             
-            # Check Tier 2 database
             if self.tier2:
                 tier2_check = self._check_single_database(
                     getattr(self.tier2, 'db_path', None),
@@ -64,7 +62,6 @@ class DatabaseValidator(BaseHealthValidator):
                 elif tier2_check["status"] == "warn":
                     results["warnings"].append(tier2_check.get("error", "Tier 2 warning"))
             
-            # Check Tier 3 database
             if self.tier3:
                 tier3_check = self._check_single_database(
                     getattr(self.tier3, 'db_path', None),
@@ -93,7 +90,6 @@ class DatabaseValidator(BaseHealthValidator):
             }
         
         try:
-            # Check file exists
             if not os.path.exists(db_path):
                 return {
                     "name": name,
@@ -101,7 +97,6 @@ class DatabaseValidator(BaseHealthValidator):
                     "error": f"{name} database file not found: {db_path}"
                 }
             
-            # Check file size
             size_mb = os.path.getsize(db_path) / (1024 * 1024)
             if size_mb > self.max_size_mb:
                 return {
@@ -111,7 +106,6 @@ class DatabaseValidator(BaseHealthValidator):
                     "error": f"{name} database size ({size_mb:.1f}MB) exceeds threshold"
                 }
             
-            # Check database integrity
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             cursor.execute("PRAGMA integrity_check")

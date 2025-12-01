@@ -216,7 +216,6 @@ class UICrawler(BaseCrawler):
     
     def _detect_framework(self) -> str:
         """Detect UI framework used"""
-        # Check tooling crawler results first
         if 'previous_results' in self.config:
             tooling_result = self.config['previous_results'].get('tooling_crawler')
             if tooling_result and tooling_result.metadata:

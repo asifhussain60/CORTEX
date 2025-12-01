@@ -27,7 +27,6 @@ class DiskValidator(BaseHealthValidator):
     def check(self) -> Dict[str, Any]:
         """Check available disk space (cross-platform)."""
         try:
-            # Get current working directory disk usage
             cwd = Path.cwd()
             
             # Use platform-appropriate method
@@ -42,7 +41,6 @@ class DiskValidator(BaseHealthValidator):
                 free_bytes = stat.f_bavail * stat.f_frsize
                 total_bytes = stat.f_blocks * stat.f_frsize
             
-            # Calculate free space in GB
             free_gb = free_bytes / (1024 ** 3)
             total_gb = total_bytes / (1024 ** 3)
             used_percent = ((total_gb - free_gb) / total_gb) * 100

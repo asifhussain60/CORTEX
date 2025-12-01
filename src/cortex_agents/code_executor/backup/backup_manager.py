@@ -58,7 +58,6 @@ class BackupManager:
             self.create_backup_dir()
         
         try:
-            # Create relative path structure in backup
             rel_path = os.path.basename(file_path)
             backup_path = os.path.join(self.backup_dir, rel_path)
             

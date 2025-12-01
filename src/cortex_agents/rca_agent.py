@@ -32,7 +32,6 @@ class RCAAgent(BaseAgent):
         super().__init__(name)
         self.logger = logging.getLogger(__name__)
         
-        # Initialize RCA orchestrator
         if not brain_path:
             from src.utils.config_loader import get_cortex_config
             config = get_cortex_config()
@@ -68,11 +67,9 @@ class RCAAgent(BaseAgent):
             'analyze rca'
         ]
         
-        # Check intent
         if any(rca_intent in intent for rca_intent in rca_intents):
             return True
         
-        # Check query keywords
         if any(keyword in query for keyword in rca_keywords):
             return True
         
@@ -129,7 +126,6 @@ class RCAAgent(BaseAgent):
                 needs_user_input=True
             )
         
-        # Import document
         result = self.rca_orchestrator.import_rca_document(Path(file_path))
         
         return AgentResponse(
@@ -300,7 +296,6 @@ Shows all active RCA analyses in progress.
     def _extract_file_path(self, query: str, context: Dict[str, Any]) -> Optional[str]:
         """Extract file path from query or context"""
         
-        # Check context for attached file
         if context and 'file_path' in context:
             return context['file_path']
         
@@ -409,7 +404,6 @@ Shows all active RCA analyses in progress.
         if not result['success']:
             return f"❌ {result.get('error', 'Could not process answer')}"
         
-        # Check if analysis is complete
         if 'root_cause' in result:
             message = f"""## ✅ Root Cause Identified
 

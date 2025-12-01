@@ -119,7 +119,6 @@ class PersistentApplicationCache:
             Cached context dictionary or None if not found/stale
         """
         try:
-            # Check if entry exists in index
             conn = sqlite3.connect(self.index_db_path)
             cursor = conn.execute("""
                 SELECT cache_path, created_at, fingerprint
@@ -143,7 +142,6 @@ class PersistentApplicationCache:
                 logger.debug(f"Cache miss: {app_name}/{depth} (fingerprint mismatch)")
                 return None
             
-            # Check TTL
             age_days = (datetime.now().timestamp() - created_at) / 86400
             if age_days > self.ttl_days:
                 logger.debug(f"Cache expired: {app_name}/{depth} (age: {age_days:.1f} days)")
@@ -190,10 +188,8 @@ class PersistentApplicationCache:
             True if successful, False otherwise
         """
         try:
-            # Check total cache size and evict if needed
             self._check_and_evict()
             
-            # Create app cache directory
             app_cache_dir = self.cache_apps_dir / app_name
             app_cache_dir.mkdir(parents=True, exist_ok=True)
             
@@ -202,7 +198,6 @@ class PersistentApplicationCache:
             with open(cache_file, 'w') as f:
                 json.dump(data, f, indent=2)
             
-            # Get file size
             file_size = cache_file.stat().st_size
             
             # Update index
@@ -251,12 +246,10 @@ class PersistentApplicationCache:
         try:
             conn = sqlite3.connect(self.index_db_path)
             
-            # Get total entries count first
             cursor = conn.execute("SELECT COUNT(*) FROM cache_index")
             total_count = cursor.fetchone()[0]
             evict_count = int(total_count * 0.2)  # Evict oldest 20%
             
-            # Get oldest entries to evict
             cursor = conn.execute("""
                 SELECT app_name, depth, fingerprint, cache_path
                 FROM cache_index
@@ -343,7 +336,6 @@ class PersistentApplicationCache:
         try:
             conn = sqlite3.connect(self.index_db_path)
             
-            # Get all cache paths for app
             cursor = conn.execute("""
                 SELECT cache_path FROM cache_index
                 WHERE app_name = ?

@@ -60,7 +60,6 @@ class ImportFixStrategy(BaseFixStrategy):
                 "message": "Cannot determine what to import"
             }
         
-        # Get suggested import
         suggested_import = self.IMPORT_MAP.get(name, f"import {name}")
         
         return {

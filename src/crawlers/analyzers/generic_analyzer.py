@@ -79,7 +79,6 @@ class GenericAnalyzer:
                 result.blank_lines += 1
                 continue
             
-            # Check for multi-line comment transitions
             if self.COMMENT_PATTERNS['c_style_start'].search(line):
                 self.in_multiline_comment = True
             
@@ -89,7 +88,6 @@ class GenericAnalyzer:
                     self.in_multiline_comment = False
                 continue
             
-            # Check for single-line comments
             is_comment = False
             for pattern in [self.COMMENT_PATTERNS['hash'], 
                            self.COMMENT_PATTERNS['slash'],
@@ -104,7 +102,6 @@ class GenericAnalyzer:
             if not is_comment:
                 result.source_lines += 1
         
-        # Calculate raw metrics
         result.raw_metrics = {
             'total_lines': result.lines_of_code,
             'source_lines': result.source_lines,

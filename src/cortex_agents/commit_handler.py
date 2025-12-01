@@ -115,7 +115,6 @@ class CommitHandler(BaseAgent):
             rule_context = request.context.get("rule_context", {})
             skip_summary = rule_context.get("skip_summary_generation", False)
             
-            # Check for uncommitted changes
             has_changes, staged_files = self._check_git_status()
             if not has_changes:
                 return self._error_response(
@@ -126,7 +125,6 @@ class CommitHandler(BaseAgent):
             # Generate commit message
             commit_message = self._generate_commit_message(request, staged_files)
             
-            # Validate commit message
             if not commit_message:
                 return self._error_response(
                     "Failed to generate commit message",
@@ -266,7 +264,6 @@ class CommitHandler(BaseAgent):
         Returns:
             Inferred commit type
         """
-        # Check file patterns
         has_tests = any("test_" in f or "_test" in f or "/tests/" in f for f in staged_files)
         has_docs = any(f.endswith(".md") or "docs/" in f for f in staged_files)
         has_code = any(f.endswith(".py") and "test" not in f for f in staged_files)

@@ -103,7 +103,6 @@ class IntelligentCrawler:
         # Phase 4: Execute Crawling
         print("🚀 Phase 4: Executing crawl...")
         
-        # Get file list
         file_list = self._get_file_list(self.options.root_path, self.options.extensions)
         
         # Wrap analyzer with timeout and disclosure
@@ -171,7 +170,6 @@ class IntelligentCrawler:
             Wrapped analyzer function
         """
         def wrapped(file_path: str) -> Dict[str, Any]:
-            # Check timeout
             if self.timeout_preventor and self.timeout_preventor.should_stop():
                 raise TimeoutError("Crawl time budget exceeded")
             

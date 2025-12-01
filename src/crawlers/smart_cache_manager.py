@@ -105,7 +105,6 @@ class SmartCacheManager:
         self.enable_watching = config.get('enable_watching', True) and WATCHDOG_AVAILABLE
         self.watch_interval = config.get('watch_interval', 300)  # 5 minutes
         
-        # Initialize components
         self.cache = PersistentApplicationCache({'cache_dir': self.cache_path})
         self.prioritizer = ApplicationPrioritizationEngine(config)
         
@@ -136,7 +135,6 @@ class SmartCacheManager:
     
     def _initialize_states(self) -> None:
         """Initialize application states from prioritization"""
-        # Get initial priorities
         priorities = self.prioritizer.prioritize_applications()
         
         for priority in priorities:
@@ -183,10 +181,8 @@ class SmartCacheManager:
             return
         
         try:
-            # Create event handler
             self.event_handler = ApplicationFileEventHandler(self)
             
-            # Create observer
             self.observer = Observer()
             
             # Watch each application directory
@@ -239,12 +235,10 @@ class SmartCacheManager:
         for app_name, state in self.app_states.items():
             time_since_activity = now - state.last_activity
             
-            # Check for demotion from immediate to queued
             if state.tier == 'immediate' and time_since_activity > self.IMMEDIATE_TIMEOUT:
                 logger.info(f"Demoting '{app_name}' from immediate to queued (inactive {time_since_activity})")
                 self._demote_application(app_name, 'queued')
             
-            # Check for demotion from queued to background
             elif state.tier == 'queued' and time_since_activity > self.QUEUED_TIMEOUT:
                 logger.info(f"Demoting '{app_name}' from queued to background (inactive {time_since_activity})")
                 self._demote_application(app_name, 'background')
@@ -285,7 +279,6 @@ class SmartCacheManager:
         
         logger.debug(f"File changed in '{app_name}': {file_path}")
         
-        # Check if promotion is needed
         if state.tier == 'background' and state.file_changes >= self.PROMOTION_FILE_COUNT:
             logger.info(f"Promoting '{app_name}' from background to queued ({state.file_changes} files changed)")
             self._promote_application(app_name, 'queued')
@@ -458,7 +451,6 @@ class ApplicationFileEventHandler(FileSystemEventHandler):
         Args:
             file_path: Path to file
         """
-        # Check if file should be monitored
         if not any(file_path.endswith(ext) for ext in self.MONITORED_EXTENSIONS):
             return
         

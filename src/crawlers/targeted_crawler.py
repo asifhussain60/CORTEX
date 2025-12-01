@@ -201,7 +201,6 @@ class TargetedCrawler(BaseCrawler):
         self._start_time = datetime.now()
         self.start_time = self._start_time.timestamp()
         
-        # Initialize result tracking
         self.result = CrawlerResult(
             crawler_id=info['crawler_id'],
             crawler_name=info['name'],
@@ -216,7 +215,6 @@ class TargetedCrawler(BaseCrawler):
         max_depth = 0
         
         try:
-            # Validate can run
             if not self.validate():
                 self.result.status = CrawlerStatus.SKIPPED
                 self.result.errors.append("Validation failed")
@@ -228,7 +226,6 @@ class TargetedCrawler(BaseCrawler):
             # Execute targeted crawl (subclass implements)
             nodes, edges, max_depth = self.crawl_targeted(origin)
             
-            # Check if we hit radius limit
             radius_limit_hit = max_depth >= self.targeted_config.max_depth
             
             self.result.status = CrawlerStatus.COMPLETED
@@ -251,7 +248,6 @@ class TargetedCrawler(BaseCrawler):
             self.result.status = CrawlerStatus.FAILED
             self.result.errors.append(f"Error: {e}")
         
-        # Calculate duration
         self.result.completed_at = datetime.now()
         duration = (self.result.completed_at - self._start_time).total_seconds()
         self.result.duration_seconds = duration
@@ -263,7 +259,6 @@ class TargetedCrawler(BaseCrawler):
             process.memory_info().rss / (1024 * 1024)
         )
         
-        # Create targeted result
         return TargetedCrawlerResult(
             scope=self.targeted_config.scope,
             origin=origin,
@@ -430,12 +425,10 @@ class TargetedCrawler(BaseCrawler):
             current_id, current_depth = queue.popleft()
             max_depth_reached = max(max_depth_reached, current_depth)
             
-            # Check radius limit
             if current_depth >= self.targeted_config.max_depth:
                 self._log(f"Radius limit at depth {current_depth}", "INFO")
                 continue
             
-            # Get children
             try:
                 children = get_children_func(current_id, current_depth)
             except Exception as e:
@@ -449,7 +442,6 @@ class TargetedCrawler(BaseCrawler):
                 )
                 children = children[:self.targeted_config.max_breadth]
             
-            # Process children
             for child_id in children:
                 if self._should_skip(child_id):
                     continue

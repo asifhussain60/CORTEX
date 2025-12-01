@@ -149,11 +149,9 @@ class SessionResumer(BaseAgent):
         Returns:
             Conversation ID or None
         """
-        # Check request.conversation_id first
         if request.conversation_id:
             return request.conversation_id
         
-        # Check context
         return safe_get(request.context, "conversation_id")
     
     def _retrieve_conversation(self, conversation_id: str) -> Optional[Dict[str, Any]]:
@@ -206,14 +204,12 @@ class SessionResumer(BaseAgent):
         # Extract files from messages
         files = set()
         for msg in messages:
-            # Check message metadata for files
             msg_metadata = msg.get("metadata", {})
             if isinstance(msg_metadata, dict):
                 msg_files = msg_metadata.get("files", [])
                 if isinstance(msg_files, list):
                     files.update(msg_files)
             
-            # Check message content for file mentions
             content = msg.get("content", "")
             if isinstance(content, str):
                 # Simple file pattern matching (basic implementation)

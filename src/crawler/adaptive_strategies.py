@@ -174,7 +174,6 @@ class AdaptiveCrawler:
         else:  # INTELLIGENT_SAMPLING
             selected_files = self._intelligent_sample(file_list, config.sample_rate)
         
-        # Process files in chunks
         files_analyzed = 0
         files_skipped = len(file_list) - len(selected_files)
         total_loc = 0
@@ -185,7 +184,6 @@ class AdaptiveCrawler:
         chunks = self._create_chunks(selected_files, config.chunk_size)
         
         for chunk_idx, chunk in enumerate(chunks):
-            # Check time budget
             elapsed = time.time() - start_time
             if elapsed > config.time_budget_seconds:
                 # Time budget exceeded - graceful degradation
@@ -307,7 +305,6 @@ class AdaptiveCrawler:
         for file_path in file_list:
             basename = os.path.basename(file_path).lower()
             
-            # Check if priority file
             is_priority = any(pattern in basename for pattern in priority_patterns)
             
             if is_priority:
@@ -315,7 +312,6 @@ class AdaptiveCrawler:
             else:
                 regular_files.append(file_path)
         
-        # Calculate sampling for regular files
         total_sample_size = max(1, int(len(file_list) * sample_rate))
         priority_count = len(priority_files)
         remaining_slots = max(0, total_sample_size - priority_count)

@@ -43,7 +43,6 @@ class SyntaxErrorParser(BaseErrorParser):
                     result["code_snippet"] = lines[i-1].strip()
                 break
         
-        # Get error message
         error_match = re.search(r"(SyntaxError|IndentationError|TabError): (.+)", output)
         if error_match:
             result["message"] = error_match.group(2)

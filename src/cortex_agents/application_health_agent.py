@@ -48,7 +48,6 @@ class ApplicationHealthAgent(BaseAgent):
         """Initialize Application Health Agent with tier APIs."""
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         
-        # Initialize orchestrator lazily (on first use)
         self._health_orchestrator = None
     
     def _get_health_orchestrator(self):
@@ -75,7 +74,6 @@ class ApplicationHealthAgent(BaseAgent):
         ]
         
         try:
-            # Check if intent matches health operations
             from .agent_types import IntentType
             if isinstance(request.intent, IntentType):
                 return request.intent in health_intents
@@ -103,7 +101,6 @@ class ApplicationHealthAgent(BaseAgent):
             project_path = request.context.get("project_path", str(Path.cwd()))
             scan_level = request.context.get("scan_level", "standard")
             
-            # Get orchestrator
             orchestrator = self._get_health_orchestrator()
             
             # Execute analysis

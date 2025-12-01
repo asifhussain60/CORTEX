@@ -44,7 +44,6 @@ class RuntimeErrorParser(BaseErrorParser):
         elif "KeyError" in output:
             result["category"] = "key"
         
-        # Get file and line from traceback
         traceback_lines = []
         for line in output.split("\n"):
             if line.strip().startswith("File"):
@@ -52,13 +51,11 @@ class RuntimeErrorParser(BaseErrorParser):
         
         if traceback_lines:
             result["traceback"] = traceback_lines
-            # Get last file/line (where error occurred)
             last_match = re.search(r'File "([^"]+)", line (\d+)', traceback_lines[-1])
             if last_match:
                 result["file"] = last_match.group(1)
                 result["line"] = int(last_match.group(2))
         
-        # Get error message
         lines = output.split("\n")
         if lines:
             result["message"] = lines[-1].strip()
