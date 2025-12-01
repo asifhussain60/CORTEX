@@ -98,6 +98,7 @@ templates:
     - setup profile
     - first time
     - new user
+    - onboard application --app-name
     response_type: interactive
     expected_orchestrator: OnboardingOrchestrator
     operation_name: Onboarding
@@ -106,10 +107,14 @@ templates:
     response_content: |
       Welcome! Let's personalize CORTEX in ~30 seconds.
       
+      **Required Parameter:** `--app-name <name>`  
+      Example: `onboard application --app-name MyProject`
+      
       **What we'll capture:**
-      1. Your experience level (affects explanation depth)
-      2. Your interaction preference (autonomous/guided/educational/pair)
-      3. Your tech stack context (optional - for deployment recommendations)
+      1. Your application name (required for context and personalization)
+      2. Your experience level (affects explanation depth)
+      3. Your interaction preference (autonomous/guided/educational/pair)
+      4. Your tech stack context (optional - for deployment recommendations)
       
       **Important:** Tech stack is context for deployment, NOT a constraint.  
       CORTEX will always recommend the best solution first.
@@ -118,8 +123,9 @@ templates:
       You'll see step-by-step progress (Step 1/7, 2/7, etc.) during setup.
       
       {onboarding_question}
-    request_echo_content: "Set up CORTEX profile"
+    request_echo_content: "Set up CORTEX profile with application name"
     next_steps_content: |
+      Provide --app-name parameter: onboard application --app-name <YourProjectName>
       Answer the current question to proceed.
       You can update your profile anytime with `update profile`.
   

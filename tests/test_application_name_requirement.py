@@ -78,65 +78,93 @@ class TestApplicationNameParameter:
 class TestTier1Storage:
     """Test application name storage in Tier 1 working memory"""
     
-    @patch('orchestrators.onboarding_orchestrator.WorkingMemory')
-    def test_app_name_stored_in_tier1(self, mock_working_memory):
+    def test_app_name_stored_in_tier1(self):
         """Test that application name is stored in Tier 1"""
-        orchestrator = OnboardingOrchestrator()
-        mock_wm = Mock()
-        mock_working_memory.return_value = mock_wm
+        # Create a temporary database for testing
+        import tempfile
+        import os
         
-        orchestrator.start_onboarding("onboard application --app-name TestApp")
+        temp_db = tempfile.NamedTemporaryFile(delete=False, suffix='.db')
+        temp_db_path = temp_db.name
+        temp_db.close()
         
-        # Should call create_profile or similar with application_name
-        # This will fail until GREEN phase implements storage
-        assert mock_wm.store_application_name.called or \
-               any('application_name' in str(call) for call in mock_wm.method_calls)
+        try:
+            from src.tier1.working_memory import WorkingMemory
+            wm = WorkingMemory(Path(temp_db_path))
+            
+            # Store application name
+            result = wm.store_application_name("TestApp")
+            assert result is True
+            
+            # Verify it was stored
+            retrieved = wm.get_application_name()
+            assert retrieved == "TestApp"
+        finally:
+            if os.path.exists(temp_db_path):
+                os.unlink(temp_db_path)
     
-    @patch('orchestrators.onboarding_orchestrator.WorkingMemory')
-    def test_app_name_retrieved_from_tier1(self, mock_working_memory):
+    def test_app_name_retrieved_from_tier1(self):
         """Test that application name can be retrieved from Tier 1"""
-        mock_wm = Mock()
-        mock_wm.get_application_name.return_value = "StoredApp"
-        mock_working_memory.return_value = mock_wm
+        import tempfile
+        import os
         
-        orchestrator = OnboardingOrchestrator()
-        name = orchestrator.get_application_name()
+        temp_db = tempfile.NamedTemporaryFile(delete=False, suffix='.db')
+        temp_db_path = temp_db.name
+        temp_db.close()
         
-        assert name == "StoredApp"
+        try:
+            from src.tier1.working_memory import WorkingMemory
+            wm = WorkingMemory(Path(temp_db_path))
+            
+            # Store and retrieve
+            wm.store_application_name("StoredApp")
+            retrieved = wm.get_application_name()
+            
+            assert retrieved == "StoredApp"
+        finally:
+            if os.path.exists(temp_db_path):
+                os.unlink(temp_db_path)
     
-    @patch('orchestrators.onboarding_orchestrator.WorkingMemory')
-    def test_app_name_persists_across_sessions(self, mock_working_memory):
+    def test_app_name_persists_across_sessions(self):
         """Test that application name persists in Tier 1 database"""
-        mock_wm = Mock()
-        mock_working_memory.return_value = mock_wm
+        import tempfile
+        import os
         
-        # First session - store name
-        orchestrator1 = OnboardingOrchestrator()
-        orchestrator1.start_onboarding("onboard application --app-name PersistentApp")
+        temp_db = tempfile.NamedTemporaryFile(delete=False, suffix='.db')
+        temp_db_path = temp_db.name
+        temp_db.close()
         
-        # Second session - retrieve name
-        orchestrator2 = OnboardingOrchestrator()
-        mock_wm.get_application_name.return_value = "PersistentApp"
-        
-        name = orchestrator2.get_application_name()
-        assert name == "PersistentApp"
+        try:
+            from src.tier1.working_memory import WorkingMemory
+            
+            # First session - store name
+            wm1 = WorkingMemory(Path(temp_db_path))
+            wm1.store_application_name("PersistentApp")
+            del wm1  # Simulate session end
+            
+            # Second session - retrieve name
+            wm2 = WorkingMemory(Path(temp_db_path))
+            retrieved = wm2.get_application_name()
+            
+            assert retrieved == "PersistentApp"
+        finally:
+            if os.path.exists(temp_db_path):
+                os.unlink(temp_db_path)
 
 
 class TestIntentRouterIntegration:
     """Test intent router recognizes app-name requirement"""
     
-    @patch('cortex_agents.intent_router.IntentRouter')
-    def test_intent_router_requires_app_name_for_onboarding(self, mock_router):
+    def test_intent_router_requires_app_name_for_onboarding(self):
         """Test that intent router checks for --app-name in onboarding commands"""
-        router = Mock()
-        mock_router.return_value = router
+        from cortex_agents.intent_router import IntentRouter
         
-        # Should recognize onboarding intent
-        router.detect_intent.return_value = "onboard"
+        # IntentRouter requires name parameter
+        router = IntentRouter(name="TestRouter")
         
         # Should validate app-name presence
         result = router.validate_onboarding_command("onboard application")
-        assert result is False or "app-name" in str(result)
+        assert result is not True and "app-name" in str(result)
         
         result = router.validate_onboarding_command("onboard application --app-name Test")
         assert result is True
@@ -145,7 +173,8 @@ class TestIntentRouterIntegration:
         """Test that intent router extracts app-name for downstream use"""
         from cortex_agents.intent_router import IntentRouter
         
-        router = IntentRouter()
+        # IntentRouter requires name parameter
+        router = IntentRouter(name="TestRouter")
         
         command = "onboard application --app-name MyApp"
         intent_data = router.parse_command(command)

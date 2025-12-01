@@ -20,12 +20,14 @@ Version: 3.2.2
 from typing import Dict, Any, Optional
 from pathlib import Path
 import json
+import re
 
 from src.utils.progress_decorator import (
     with_progress,
     yield_progress,
     generate_initial_notification
 )
+from src.tier1.working_memory import WorkingMemory
 
 class OnboardingOrchestrator:
     """
@@ -46,6 +48,7 @@ class OnboardingOrchestrator:
             tier1_api: Tier 1 API instance for profile storage
         """
         self.tier1 = tier1_api
+        self.working_memory = WorkingMemory()
         
         # Experience level choices
         self.experience_levels = {
@@ -570,6 +573,139 @@ To update: `update profile`"""
         }
         
         return descriptions.get(mode, "Unknown mode")
+    
+    def start_onboarding(self, command: str) -> str:
+        """
+        Start onboarding process, requiring --app-name parameter.
+        
+        Args:
+            command: User command string (must include --app-name)
+        
+        Returns:
+            Response message confirming onboarding started
+        
+        Raises:
+            ValueError: If --app-name is missing or invalid
+        """
+        # Extract app name from command
+        app_name = self._extract_app_name(command)
+        
+        if not app_name:
+            raise ValueError(
+                "--app-name parameter is required for onboarding.\n"
+                "Usage: onboard application --app-name <name>\n"
+                "Example: onboard application --app-name MyProject"
+            )
+        
+        # Validate app name
+        if not self._validate_app_name(app_name):
+            raise ValueError(
+                f"Invalid application name '{app_name}'. "
+                "Application name must be at least 3 characters long."
+            )
+        
+        # Store application name in Tier 1
+        self.working_memory.store_application_name(app_name)
+        
+        # Return confirmation
+        return f"Onboarding started for application '{app_name}'. Profile configuration in progress..."
+    
+    def _extract_app_name(self, command: str) -> Optional[str]:
+        """
+        Extract application name from command string.
+        
+        Args:
+            command: Command string potentially containing --app-name
+        
+        Returns:
+            Extracted app name or None if not found
+        
+        Raises:
+            ValueError: If multiple --app-name parameters provided
+        """
+        # Pattern matches: --app-name value, --app-name 'value', --app-name "value"
+        pattern = r'--app-name\s+(?:(["\'](.*?)["\'])|(\S+))'
+        matches = list(re.finditer(pattern, command))
+        
+        if not matches:
+            return None
+        
+        if len(matches) > 1:
+            raise ValueError(
+                "Multiple --app-name parameters detected. Please provide only one application name."
+            )
+        
+        # Extract from match groups (quoted or unquoted)
+        match = matches[0]
+        groups = match.groups()
+        app_name = groups[1] if groups[1] else groups[2]
+        
+        return app_name.strip() if app_name else None
+    
+    def _validate_app_name(self, name: str) -> bool:
+        """
+        Validate application name meets requirements.
+        
+        Args:
+            name: Application name to validate
+        
+        Returns:
+            True if valid, False otherwise
+        """
+        if not name or not name.strip():
+            return False
+        
+        # Must be at least 3 characters (excluding whitespace)
+        if len(name.strip()) < 3:
+            return False
+        
+        return True
+    
+    def get_application_name(self) -> Optional[str]:
+        """
+        Get the stored application name from Tier 1.
+        
+        Returns:
+            Application name or None if not set
+        """
+        return self.working_memory.get_application_name()
+    
+    def update_application_name(self, new_name: str) -> bool:
+        """
+        Update the application name after initial onboarding.
+        
+        Args:
+            new_name: New application name
+        
+        Returns:
+            True if updated successfully, False otherwise
+        """
+        if not self._validate_app_name(new_name):
+            return False
+        
+        self.working_memory.store_application_name(new_name)
+        return True
+    
+    def generate_welcome_message(self) -> str:
+        """
+        Generate personalized welcome message using stored application name.
+        
+        Returns:
+            Welcome message with application name
+        """
+        app_name = self.get_application_name()
+        
+        if app_name:
+            return (
+                f"Welcome to CORTEX! I'm ready to assist with {app_name}.\n"
+                f"I'll help you build, test, and deploy features for {app_name} "
+                "with AI-powered intelligence."
+            )
+        else:
+            return (
+                "Welcome to CORTEX! I'm ready to assist with your project.\n"
+                "I'll help you build, test, and deploy features with AI-powered intelligence."
+            )
 
 
 # Convenience function for CLI/API usage

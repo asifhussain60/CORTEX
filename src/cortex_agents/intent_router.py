@@ -455,7 +455,6 @@ class IntentRouter(BaseAgent):
                         f"analyzed {vision_result['images_analyzed']}"
                     )
             
-            # Check for investigation commands first
             if self._is_investigation_request(request.user_message):
                 return self._handle_investigation_request(request)
             
@@ -554,7 +553,6 @@ class IntentRouter(BaseAgent):
         
         # Check if there's an image attachment in context - this takes priority
         if request.context:
-            # Check for image data in various formats
             has_image = (
                 'image_base64' in request.context or
                 'image_path' in request.context or
@@ -593,7 +591,6 @@ class IntentRouter(BaseAgent):
         except:
             pass
         
-        # Classify based on keywords
         intent_scores = {}
         for intent_type, keywords in self.INTENT_KEYWORDS.items():
             score = 0
@@ -616,7 +613,6 @@ class IntentRouter(BaseAgent):
             intent = best_match[0]
             score_data = best_match[1]
             
-            # Calculate confidence based on score strength
             max_possible_score = len(message_lower.split())  # Rough estimate
             confidence = min(score_data['score'] / max_possible_score, 1.0)
             confidence = max(confidence, 0.6)  # Minimum confidence for keyword match
@@ -690,7 +686,6 @@ class IntentRouter(BaseAgent):
         Returns:
             Routing decision with primary agent, secondary agents, confidence, and rule context
         """
-        # Get primary agent for intent
         primary_agent = get_agent_for_intent(intent)
         
         # Determine secondary agents based on message analysis
@@ -749,17 +744,14 @@ class IntentRouter(BaseAgent):
         secondary = []
         message_lower = request.user_message.lower()
         
-        # Check for test-related keywords
         if primary_intent != IntentType.TEST:
             if any(word in message_lower for word in ["test", "testing", "tdd"]):
                 secondary.append(AgentType.TESTER)
         
-        # Check for validation keywords
         if "validate" in message_lower or "check" in message_lower:
             if primary_intent not in [IntentType.HEALTH_CHECK, IntentType.VALIDATE]:
                 secondary.append(AgentType.VALIDATOR)
         
-        # Check for git/commit keywords
         if primary_intent != IntentType.COMMIT:
             if "commit" in message_lower or "git" in message_lower:
                 secondary.append(AgentType.COMMITTER)
@@ -984,7 +976,6 @@ class IntentRouter(BaseAgent):
             elif 'ado' in message_lower or 'work item' in message_lower:
                 context_type = 'ado'
             
-            # Process request with Vision orchestrator
             result = self.vision_orchestrator.process_request(
                 user_request=request.user_message,
                 attachments=attachments,
@@ -1071,7 +1062,6 @@ class IntentRouter(BaseAgent):
             List of pattern suggestions (top 3)
         """
         try:
-            # Import pattern suggestion engine
             from src.tier2.pattern_suggestion_engine import PatternSuggestionEngine
             
             # Initialize engine (cached instance could be stored in self for performance)
@@ -1140,7 +1130,6 @@ class IntentRouter(BaseAgent):
         """
         message_lower = message.lower()
         
-        # Check for explicit profile update keywords
         update_keywords = self.INTENT_KEYWORDS.get(IntentType.UPDATE_PROFILE, [])
         return any(keyword in message_lower for keyword in update_keywords)
     
@@ -1170,3 +1159,56 @@ class IntentRouter(BaseAgent):
                 "Process updates and confirm"
             ]
         )
+    
+    def parse_command(self, command: str) -> Dict[str, Any]:
+        """
+        Parse command to extract intent and parameters (Phase 1.3).
+        
+        Args:
+            command: User command string
+        
+        Returns:
+            Dict with intent and extracted parameters (including app_name)
+        """
+        import re
+        
+        result = {
+            "intent": None,
+            "app_name": None,
+            "raw_command": command
+        }
+        
+        # Detect intent
+        command_lower = command.lower()
+        if "onboard" in command_lower:
+            result["intent"] = "onboard"
+        
+        # Extract app_name if present
+        pattern = r'--app-name\s+(?:(["\'](.*?)["\'])|(\S+))'
+        match = re.search(pattern, command)
+        
+        if match:
+            groups = match.groups()
+            result["app_name"] = groups[1] if groups[1] else groups[2]
+        
+        return result
+    
+    def validate_onboarding_command(self, command: str) -> bool:
+        """
+        Validate onboarding command has required parameters (Phase 1.3).
+        
+        Args:
+            command: Command to validate
+        
+        Returns:
+            True if valid, False or error message otherwise
+        """
+        parsed = self.parse_command(command)
+        
+        if parsed["intent"] == "onboard":
+            if not parsed["app_name"]:
+                return "Missing required parameter: --app-name"
+            return True
+        
+        return True  # Non-onboarding commands don't need validation
+

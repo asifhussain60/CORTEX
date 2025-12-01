@@ -12,7 +12,6 @@ from datetime import datetime
 import json
 import sqlite3
 
-# Import modular components
 from .conversations import ConversationManager, ConversationSearch, Conversation
 from .messages import MessageStore
 from .entities import EntityExtractor, EntityType, Entity
@@ -53,10 +52,8 @@ class WorkingMemory:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Initialize database schema
         self._init_database()
         
-        # Initialize modular components
         self.conversation_manager = ConversationManager(self.db_path)
         self.conversation_search = ConversationSearch(self.db_path)
         self.message_store = MessageStore(self.db_path)
@@ -66,11 +63,9 @@ class WorkingMemory:
         # Load configuration first (needed for session manager)
         self.config = self._load_config()
         
-        # Initialize session manager (CORTEX 3.0)
         idle_threshold = self.config.get('tier1', {}).get('conversation_boundaries', {}).get('idle_gap_threshold_seconds', 7200)
         self.session_manager = SessionManager(self.db_path, idle_threshold_seconds=idle_threshold)
         
-        # Initialize lifecycle manager (CORTEX 3.0)
         self.lifecycle_manager = ConversationLifecycleManager(self.db_path)
         
         # Initialize session-ambient correlator (CORTEX 3.0 Phase 3)
@@ -84,7 +79,6 @@ class WorkingMemory:
         
         self.optimization_enabled = self.config.get('token_optimization', {}).get('enabled', True)
         
-        # Initialize database on creation
         self._init_database()
     
     def initialize(self) -> bool:
@@ -116,7 +110,6 @@ class WorkingMemory:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Create conversations table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS conversations (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -138,7 +131,6 @@ class WorkingMemory:
             )
         """)
         
-        # Create entities table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS entities (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -152,7 +144,6 @@ class WorkingMemory:
             )
         """)
         
-        # Create conversation-entity relationships table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS conversation_entities (
                 conversation_id TEXT NOT NULL,
@@ -164,7 +155,6 @@ class WorkingMemory:
             )
         """)
         
-        # Create messages table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -219,7 +209,21 @@ class WorkingMemory:
                 ALTER TABLE user_profile ADD COLUMN tech_stack_preference TEXT DEFAULT NULL
             """)
         
-        # Create eviction log table
+        # Create application table (Phase 1.3: Application Name Requirement)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS application (
+                id INTEGER PRIMARY KEY CHECK (id = 1),
+                name TEXT NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Ensure only one application record exists
+        cursor.execute("""
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_single_application ON application(id)
+        """)
+        
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS eviction_log (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -288,7 +292,6 @@ class WorkingMemory:
         config_path = Path("cortex.config.json")
         
         if not config_path.exists():
-            # Return default configuration
             return {
                 'token_optimization': {
                     'enabled': True,
@@ -333,7 +336,6 @@ class WorkingMemory:
                 - optimization_stats: Metrics (token counts, reduction rate, quality score)
                 - cache_health: Current cache health report
         """
-        # Get configuration
         opt_config = self.config.get('token_optimization', {})
         enabled = opt_config.get('enabled', True) and self.optimization_enabled
         
@@ -352,7 +354,6 @@ class WorkingMemory:
         # Build original context
         original_context = self._build_context(conversation_id, pattern_context)
         
-        # Check cache health (Phase 1.5)
         cache_health = self.cache_monitor.check_cache_health()
         
         if not enabled:
@@ -404,7 +405,6 @@ class WorkingMemory:
         if pattern_opt is not None:
             optimized_context['patterns'] = pattern_opt
         
-        # Calculate combined statistics
         orig_tokens = self._estimate_tokens(original_context)
         opt_tokens = self._estimate_tokens(optimized_context)
         reduction_rate = (orig_tokens - opt_tokens) / orig_tokens if orig_tokens > 0 else 0.0
@@ -461,7 +461,6 @@ class WorkingMemory:
             'entities': []
         }
         
-        # Get conversation(s)
         if conversation_id:
             conv = self.get_conversation(conversation_id)
             if conv:
@@ -490,7 +489,6 @@ class WorkingMemory:
                     'entities': [{'type': e.entity_type, 'name': e.entity_name} for e in entities]
                 })
             else:
-                # Get 3 most recent
                 recent = self.get_recent_conversations(limit=3)
                 for conv in recent:
                     messages = self.get_messages(conv.conversation_id)
@@ -732,7 +730,6 @@ class WorkingMemory:
             # Infer initial workflow state
             initial_state = self.lifecycle_manager.infer_workflow_state(user_request)
             
-            # Create conversation
             conversation = self.add_conversation(
                 conversation_id=conversation_id,
                 title=user_request[:100],  # First 100 chars as title
@@ -1058,7 +1055,6 @@ class WorkingMemory:
                     'turns_imported': 0
                 }
             
-            # Check for required keys and non-empty values
             # EDGE CASE: Allow incomplete turns (test_08) - save user message even without assistant
             user_msg = turn.get('user', '').strip()
             assistant_msg = turn.get('assistant', '').strip()
@@ -1090,14 +1086,12 @@ class WorkingMemory:
         ]
         quality_score = analyzer.analyze_multi_turn_conversation(turns_for_analysis)
         
-        # Get or create session if workspace provided
         session_id = None
         if workspace_path:
             active_session = self.session_manager.get_active_session(workspace_path)
             if active_session:
                 session_id = active_session.session_id
             else:
-                # Create import session using detect_or_create
                 new_session = self.session_manager.detect_or_create_session(workspace_path)
                 session_id = new_session.session_id
         
@@ -1299,7 +1293,6 @@ class WorkingMemory:
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         conversation_id = f"conv_{timestamp}_{hash(user_message + assistant_response) & 0xfff:03x}"
         
-        # Create title from user message (first 50 chars)
         title = user_message[:50] + "..." if len(user_message) > 50 else user_message
         
         # Format messages
@@ -1316,7 +1309,6 @@ class WorkingMemory:
             }
         ]
         
-        # Create tags from intent and context
         tags = [intent.lower()]
         if context:
             if context.get('manual_import'):
@@ -1377,7 +1369,6 @@ class WorkingMemory:
         Returns:
             True if profile created successfully, False otherwise
         """
-        # Validate inputs
         valid_modes = ["autonomous", "guided", "educational", "pair"]
         valid_levels = ["junior", "mid", "senior", "expert"]
         
@@ -1387,7 +1378,6 @@ class WorkingMemory:
         if experience_level not in valid_levels:
             raise ValueError(f"Invalid experience_level '{experience_level}'. Must be one of: {', '.join(valid_levels)}")
         
-        # Validate tech_stack_preference if provided
         if tech_stack_preference:
             valid_cloud = ["azure", "aws", "gcp", "none"]
             valid_container = ["kubernetes", "docker", "none"]
@@ -1492,7 +1482,6 @@ class WorkingMemory:
         if interaction_mode is None and experience_level is None and tech_stack_preference is ...:
             return False  # Nothing to update
         
-        # Validate inputs
         valid_modes = ["autonomous", "guided", "educational", "pair"]
         valid_levels = ["junior", "mid", "senior", "expert"]
         
@@ -1603,6 +1592,73 @@ class WorkingMemory:
         except Exception as e:
             print(f"Failed to delete user profile: {e}")
             return False
+    
+    # ========== Application Name Management (Phase 1.3) ==========
+    
+    def store_application_name(self, name: str) -> bool:
+        """
+        Store or update the application name in Tier 1.
+        
+        Args:
+            name: Application name to store
+        
+        Returns:
+            True if storage successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Check if application record exists
+            cursor.execute("SELECT COUNT(*) FROM application WHERE id = 1")
+            exists = cursor.fetchone()[0] > 0
+            
+            if exists:
+                # Update existing record
+                cursor.execute("""
+                    UPDATE application 
+                    SET name = ?, last_updated = CURRENT_TIMESTAMP
+                    WHERE id = 1
+                """, (name,))
+            else:
+                # Insert new record
+                cursor.execute("""
+                    INSERT INTO application (id, name)
+                    VALUES (1, ?)
+                """, (name,))
+            
+            conn.commit()
+            conn.close()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Failed to store application name: {e}")
+            return False
+    
+    def get_application_name(self) -> Optional[str]:
+        """
+        Retrieve the stored application name from Tier 1.
+        
+        Returns:
+            Application name or None if not set
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT name FROM application WHERE id = 1
+            """)
+            
+            result = cursor.fetchone()
+            conn.close()
+            
+            return result[0] if result else None
+            
+        except Exception as e:
+            print(f"Failed to retrieve application name: {e}")
+            return None
     
     # ========== SWAGGER Context Storage (CORTEX 3.2.1: Scope Approval Gate) ==========
     
