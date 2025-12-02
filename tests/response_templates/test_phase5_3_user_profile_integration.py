@@ -108,18 +108,19 @@ class TestUserProfileIntegration:
         # Should use autonomous mode (compact format, no challenge section)
         assert len(composed) < 500  # Autonomous is brief
     
-    def test_invalid_profile_mode_falls_back_to_guided(self, renderer_with_profile, profile_manager):
+    def test_invalid_profile_mode_falls_back_to_guided(self, renderer_with_profile, profile_manager, monkeypatch):
         """Test invalid mode in profile falls back to 'guided'."""
-        # Set invalid mode in profile
-        import sqlite3
-        conn = sqlite3.connect(profile_manager.db_path)
-        cursor = conn.cursor()
-        cursor.execute("""
-            INSERT OR REPLACE INTO user_profile (id, interaction_mode, experience_level)
-            VALUES (1, 'invalid_mode', 'mid')
-        """)
-        conn.commit()
-        conn.close()
+        # Mock get_profile to return invalid mode
+        def mock_get_profile():
+            return {
+                "interaction_mode": "invalid_mode",
+                "experience_level": "mid",
+                "tech_stack_preference": None,
+                "created_at": "2025-12-02",
+                "last_updated": "2025-12-02"
+            }
+        
+        monkeypatch.setattr(profile_manager, "get_profile", mock_get_profile)
         
         # Should fall back to 'guided'
         composed = renderer_with_profile.compose_template("planning")
@@ -237,27 +238,19 @@ class TestErrorHandling:
         
         assert "### 🎯 My Understanding Of Your Request" in composed
     
-    def test_corrupted_profile_falls_back_to_default(self, renderer_with_profile, profile_manager):
+    def test_corrupted_profile_falls_back_to_default(self, renderer_with_profile, profile_manager, monkeypatch):
         """Test corrupted profile data falls back to 'guided' mode."""
-        import sqlite3
+        # Mock get_profile to raise exception (simulating corruption)
+        def mock_get_profile():
+            raise Exception("Database corruption")
         
-        # Insert corrupted data (interaction_mode constraint will fail on read attempt)
-        conn = sqlite3.connect(profile_manager.db_path)
-        cursor = conn.cursor()
-        
-        # Disable constraint for insertion
-        cursor.execute("PRAGMA foreign_keys = OFF")
-        cursor.execute("""
-            INSERT OR REPLACE INTO user_profile (id, interaction_mode, experience_level)
-            VALUES (1, 'corrupted_value', 'mid')
-        """)
-        conn.commit()
-        conn.close()
+        monkeypatch.setattr(profile_manager, "get_profile", mock_get_profile)
         
         # Should handle gracefully and fall back to 'guided'
         composed = renderer_with_profile.compose_template("planning")
         
         assert "CORTEX" in composed
+        assert "### 🎯 My Understanding Of Your Request" in composed
     
     def test_missing_profile_manager_uses_default_mode(self):
         """Test TemplateRenderer works without profile_manager (backward compatibility)."""

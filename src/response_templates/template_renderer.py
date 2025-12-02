@@ -10,6 +10,7 @@ Version: 2.0 (Phase 5.2)
 import re
 import yaml
 import hashlib
+import time
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from difflib import SequenceMatcher
@@ -19,15 +20,23 @@ from .template_loader import Template
 class TemplateRenderer:
     """Renders response templates with placeholder substitution and composition from modular YAML."""
     
-    def __init__(self, template_dir: Optional[Path] = None):
+    def __init__(self, template_dir: Optional[Path] = None, profile_manager: Optional[Any] = None):
         """Initialize template renderer with modular YAML support.
         
         Args:
             template_dir: Path to modular template directory (default: cortex-brain/response-templates)
+            profile_manager: UserProfileManager instance for dynamic mode selection (Phase 5.3)
         """
         self.placeholder_pattern = re.compile(r'\{\{([^}]+)\}\}')
         self.conditional_pattern = re.compile(r'\{\{#if\s+(\w+)\}\}(.*?)\{\{/if\}\}', re.DOTALL)
         self.loop_pattern = re.compile(r'\{\{#(\w+)\}\}(.*?)\{\{/\1\}\}', re.DOTALL)
+        
+        # UserProfile integration (Phase 5.3)
+        self.profile_manager = profile_manager
+        self._profile_mode_cache: Optional[str] = None
+        self._profile_cache_time: float = 0.0
+        self._profile_cache_ttl: float = 300.0  # 5 minutes
+        self.profile_cache_hit_count: int = 0
         
         # Modular YAML support (Phase 5.2)
         self.template_dir = template_dir or Path("cortex-brain/response-templates")
@@ -102,17 +111,21 @@ class TemplateRenderer:
             # Store the relevant section
             setattr(self, attr_name, data.get(attr_name, {}))
     
-    def compose_template(self, template_id: str, mode: str = "guided", context: Optional[Dict[str, Any]] = None) -> str:
+    def compose_template(self, template_id: str, mode: Optional[str] = None, context: Optional[Dict[str, Any]] = None) -> str:
         """Compose a template from components (Phase 5.2).
         
         Args:
             template_id: Template identifier
-            mode: Interaction mode (autonomous/guided/educational/pair)
+            mode: Interaction mode (autonomous/guided/educational/pair). If None, fetches from user profile.
             context: Context data for placeholder substitution
             
         Returns:
             Composed template string
         """
+        # Resolve mode: explicit > profile > default
+        if mode is None:
+            mode = self._get_mode_from_profile()
+        
         # Normalize mode early
         mode = self._normalize_mode(mode)
         
@@ -291,6 +304,44 @@ Which track would you like to pursue first?"""
         context_str = str(sorted(context.items())) if context else ""
         key_data = f"{template_id}|{mode}|{context_str}"
         return hashlib.md5(key_data.encode()).hexdigest()
+    
+    def _get_mode_from_profile(self) -> str:
+        """Get interaction mode from user profile with caching.
+        
+        Returns:
+            Mode from profile, or 'guided' if profile not available
+        """
+        # Return default if no profile_manager
+        if self.profile_manager is None:
+            return 'guided'
+        
+        # Check cache
+        current_time = time.time()
+        if self._profile_mode_cache and (current_time - self._profile_cache_time) < self._profile_cache_ttl:
+            self.profile_cache_hit_count += 1
+            return self._profile_mode_cache
+        
+        # Fetch from profile
+        try:
+            profile = self.profile_manager.get_profile()
+            if profile and 'interaction_mode' in profile:
+                mode = profile['interaction_mode']
+                # Validate and cache
+                if mode in {'autonomous', 'guided', 'educational', 'pair'}:
+                    self._profile_mode_cache = mode
+                    self._profile_cache_time = current_time
+                    return mode
+        except Exception as e:
+            # Silently fall back to default on error
+            pass
+        
+        # Default fallback
+        return 'guided'
+    
+    def _clear_profile_cache(self):
+        """Clear profile mode cache (used for testing and cache invalidation)."""
+        self._profile_mode_cache = None
+        self._profile_cache_time = 0.0
     
     def select_template_by_trigger(self, trigger: str) -> str:
         """Select template by trigger phrase (Phase 5.2).
