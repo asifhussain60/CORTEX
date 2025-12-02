@@ -1,7 +1,7 @@
 """
 CORTEX Health Check Entry Point
 
-Simple CLI wrapper for HealthCheckOperation.
+Simple CLI wrapper for fast HealthCheckUtility.
 Follows the same pattern as align.py for consistency.
 
 Author: Asif Hussain
@@ -15,23 +15,22 @@ from pathlib import Path
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from operations.healthcheck_operation import HealthCheckOperation
+from operations.modules.admin.healthcheck_utility import run_healthcheck_utility
 
 
 def run_healthcheck():
     """
-    Run CORTEX health check operation.
+    Run CORTEX health check operation using fast utility.
     
     Returns:
         Dict with success, message, and health check results
     """
-    health_checker = HealthCheckOperation()
-    result = health_checker.execute()
+    result = run_healthcheck_utility()
     
     return {
-        "success": result.success,
-        "message": result.message,
-        "data": result.data,
+        "success": result["success"],
+        "message": result["message"],
+        "data": result.get("report_data"),
     }
 
 

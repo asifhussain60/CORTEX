@@ -67,6 +67,50 @@ def _is_phase8_operation(message: str) -> bool:
     return any(op in msg_lower for op in phase8_operations)
 
 
+def _handle_utility_command(command: str) -> str:
+    """
+    Handle fast utility commands (align, healthcheck, optimize).
+    
+    These commands bypass full CortexEntry initialization for speed.
+    
+    Args:
+        command: Utility command name (align/healthcheck/optimize)
+    
+    Returns:
+        Formatted response text
+    """
+    try:
+        if command == 'align':
+            from src.operations.modules.admin.align_utility import run_align_utility
+            result = run_align_utility()
+            return result.get('report_text', result.get('message', 'Alignment check complete'))
+        
+        elif command == 'healthcheck':
+            from src.operations.healthcheck import run_healthcheck
+            result = run_healthcheck()
+            # Format the response
+            response = f"\n{'='*60}\nCORTEX Health Check Operation\n{'='*60}\n"
+            response += result.get('message', 'Health check complete')
+            if result.get('data'):
+                response += "\n\nHealth Check Details:"
+                for key, value in result['data'].items():
+                    response += f"\n  {key}: {value}"
+            return response
+        
+        elif command == 'optimize':
+            from src.operations.optimize import run_optimize
+            # User-facing operations skip SKULL tests for speed (<5s)
+            # For comprehensive validation with SKULL tests, use optimize_cortex_orchestrator
+            result = run_optimize(skip_skull_tests=True)
+            return result.get('message', 'Optimization complete')
+        
+        else:
+            return f"Unknown utility command: {command}"
+    
+    except Exception as e:
+        return f"[ERROR] Utility command '{command}' failed: {e}"
+
+
 def _handle_phase8_operation(message: str, entry, args) -> str:
     """
     Handle Phase 8 operations (integration-cleanup, completion-report, phase8-status).
@@ -244,8 +288,11 @@ Examples:
         try:
             command_start = time.perf_counter()
             
+            # Check for fast utility commands (align, healthcheck, optimize)
+            if args.message.lower() in ['align', 'healthcheck', 'optimize']:
+                response = _handle_utility_command(args.message.lower())
             # Check for Phase 8 operations
-            if _is_phase8_operation(args.message):
+            elif _is_phase8_operation(args.message):
                 response = _handle_phase8_operation(
                     args.message, 
                     entry, 

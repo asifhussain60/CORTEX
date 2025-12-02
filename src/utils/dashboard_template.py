@@ -210,7 +210,7 @@ class HealthDashboardTemplate(DashboardTemplate):
             Dict with health trend, integration scores, coverage, quality
         """
         from src.tier3.architecture_health_history import ArchitectureHealthHistory
-        from src.operations.modules.admin.system_alignment_orchestrator import SystemAlignmentOrchestrator
+        from src.operations.modules.admin.align_utility import run_align_utility
         
         data = {}
         

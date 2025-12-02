@@ -142,9 +142,9 @@ class CacheWarmer:
         Returns:
             Result dictionary with success status and items cached
         """
-        from src.operations.modules.admin.system_alignment_orchestrator import SystemAlignmentOrchestrator
+        from src.operations.modules.admin.align_utility import run_align_utility
         
-        logger.info("Warming align cache (orchestrator + agent discovery)...")
+        logger.info("Warming align cache (fast utility check)...")
         
         try:
             orchestrator = AlignSystemOrchestrator(self.project_root)

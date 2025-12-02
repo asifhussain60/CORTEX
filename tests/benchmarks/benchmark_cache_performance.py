@@ -30,13 +30,13 @@ from src.caching import get_cache, clear_global_cache
 
 
 class AlignSimulator:
-    """Simulates SystemAlignmentOrchestrator discovery operations."""
+    """Simulates align utility discovery operations."""
     
     def discover_orchestrators(self, operations_dir: Path) -> List[str]:
         """Simulate expensive orchestrator discovery."""
         time.sleep(0.5)  # Simulate file scanning
         return [
-            "SystemAlignmentOrchestrator",
+            "AlignUtility",
             "DeploymentOrchestrator",
             "OptimizeSystemOrchestrator",
             "CleanupOrchestrator"

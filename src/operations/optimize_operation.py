@@ -122,6 +122,7 @@ class OptimizeOperation(BaseOperationModule):
             target: What to optimize (organization/archives/cortex/cache/all)
             aggressive: Use aggressive optimization
             dry_run: Preview changes without executing (default: False)
+            skip_skull_tests: Skip SKULL test validation for fast user operations (default: False)
         
         Returns:
             OperationResult with optimization summary
@@ -129,6 +130,7 @@ class OptimizeOperation(BaseOperationModule):
         target = kwargs.get('target', 'all')
         aggressive = kwargs.get('aggressive', False)
         dry_run = kwargs.get('dry_run', False)
+        skip_skull_tests = kwargs.get('skip_skull_tests', False)
         
         logger.info(f"Starting CORTEX optimization (target={target}, aggressive={aggressive}, dry_run={dry_run})")
         
@@ -200,9 +202,9 @@ class OptimizeOperation(BaseOperationModule):
             if report_path:
                 results['report_path'] = str(report_path)
             
-            # MANDATORY: Run SKULL test suite after optimization
-            # Skip SKULL tests in dry-run mode
-            if not dry_run:
+            # SKULL test validation (admin operations only)
+            # Skip in dry-run mode or when skip_skull_tests=True (user operations)
+            if not dry_run and not skip_skull_tests:
                 logger.info("\n" + "="*80)
                 logger.info("MANDATORY VALIDATION: Running SKULL test suite...")
                 logger.info("="*80)
@@ -227,6 +229,8 @@ class OptimizeOperation(BaseOperationModule):
                     )
                 
                 logger.info(format_skull_test_summary(skull_result))
+            elif skip_skull_tests:
+                logger.info("[FAST MODE] Skipping SKULL test validation (user operation)")
             else:
                 logger.info("[DRY RUN] Skipping SKULL test validation")
             

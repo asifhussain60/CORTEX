@@ -26,7 +26,7 @@ from operations.optimize_operation import OptimizeOperation
 from operations.optimize_tokens import TokenOptimizer, safe_print
 
 
-def run_optimize(target: str = 'all', aggressive: bool = False, dry_run: bool = False):
+def run_optimize(target: str = 'all', aggressive: bool = False, dry_run: bool = False, skip_skull_tests: bool = False):
     """
     Run CORTEX comprehensive optimize operation.
     
@@ -34,12 +34,13 @@ def run_optimize(target: str = 'all', aggressive: bool = False, dry_run: bool = 
         target: What to optimize (organization/archives/cortex/cache/consolidation/all)
         aggressive: Use aggressive optimization for databases
         dry_run: Preview changes without executing
+        skip_skull_tests: Skip SKULL test validation (for fast user operations)
     
     Returns:
         Dict with success, message, and optimization results
     """
     optimizer = OptimizeOperation()
-    result = optimizer.execute(target=target, aggressive=aggressive, dry_run=dry_run)
+    result = optimizer.execute(target=target, aggressive=aggressive, dry_run=dry_run, skip_skull_tests=skip_skull_tests)
     
     return {
         "success": result.success,
