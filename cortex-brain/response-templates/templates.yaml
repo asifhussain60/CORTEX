@@ -1,0 +1,37 @@
+# Canonical Templates (Phase 5)
+# Schema: v0.1 (scaffold)
+# Purpose: Template bodies referencing base components
+# Backcompat: Non-disruptive; not used unless composer enabled
+
+schema_version: '0.1'
+last_updated: '2025-12-02'
+
+templates:
+  fallback:
+    description: General fallback response
+    composition:
+      header: standard_5_part
+      sections:
+        - understanding
+        - challenge
+        - response
+        - request_echo
+        - next_steps
+    defaults:
+      operation: "CORTEX Response"
+      understanding_content: "[State what you understand they want to achieve]"
+      challenge_content: "No Challenge"
+      response_content: "[Provide helpful response]"
+      request_echo_content: "[Echo user request]"
+      next_steps_content: |
+        1. [First recommendation]
+        2. [Second recommendation]
+        3. [Third recommendation]
+
+  planning_overview:
+    description: Planning workflow overview response
+    composition:
+      header: standard_5_part
+      sections: [understanding, challenge, response, request_echo, next_steps]
+    defaults:
+      operation: "Planning Overview"
