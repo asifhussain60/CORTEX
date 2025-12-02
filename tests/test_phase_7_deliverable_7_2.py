@@ -15,7 +15,7 @@ import pytest
 import tempfile
 from pathlib import Path
 from datetime import datetime
-from src.tier2.knowledge_graph import KnowledgeGraph
+from src.tier2.legacy_knowledge_graph_adapter import LegacyKnowledgeGraphAdapter
 
 
 class TestRelationshipMapper:
@@ -25,7 +25,7 @@ class TestRelationshipMapper:
     def knowledge_graph(self, tmp_path):
         """Create knowledge graph instance"""
         db_path = tmp_path / "test_kg.db"
-        return KnowledgeGraph(db_path=db_path)
+        return LegacyKnowledgeGraphAdapter(db_path=str(db_path))
     
     def test_relationship_mapper_exists(self):
         """Test that relationship_mapper module exists"""
@@ -138,7 +138,7 @@ class TestTDDCycleLearning:
     def knowledge_graph(self, tmp_path):
         """Create knowledge graph instance"""
         db_path = tmp_path / "test_kg.db"
-        return KnowledgeGraph(db_path=db_path)
+        return LegacyKnowledgeGraphAdapter(db_path=str(db_path))
     
     def test_tdd_cycle_logger_exists(self):
         """Test that TDD cycle logger exists"""
@@ -255,7 +255,7 @@ class TestRelevanceScoring:
     def knowledge_graph(self, tmp_path):
         """Create knowledge graph instance"""
         db_path = tmp_path / "test_kg.db"
-        kg = KnowledgeGraph(db_path=db_path)
+        kg = LegacyKnowledgeGraphAdapter(db_path=str(db_path))
         
         # Seed some patterns
         kg.store_pattern(
@@ -391,7 +391,7 @@ class TestEnhancedSemanticSearch:
     def knowledge_graph(self, tmp_path):
         """Create knowledge graph with patterns"""
         db_path = tmp_path / "test_kg.db"
-        kg = KnowledgeGraph(db_path=db_path)
+        kg = LegacyKnowledgeGraphAdapter(db_path=str(db_path))
         
         # Seed patterns
         kg.store_pattern(

@@ -50,7 +50,7 @@ class TestOnboardingFlow:
         """Test onboarding start returns Question 1."""
         orchestrator, tier1 = setup
         
-        result = orchestrator.start_onboarding("User wants to onboard")
+        result = orchestrator.start_onboarding("onboard application --app-name TestApp")
         
         assert result['status'] == 'onboarding_started'
         assert 'Question 1: Experience Level' in result['content']
@@ -138,7 +138,7 @@ class TestOnboardingFlow:
         orchestrator, tier1 = setup
         
         # Step 1: Start onboarding
-        result1 = orchestrator.start_onboarding("User wants to onboard")
+        result1 = orchestrator.start_onboarding("onboard application --app-name TestApp")
         assert result1['status'] == 'onboarding_started'
         
         # Step 2: Select experience (Mid)
