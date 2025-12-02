@@ -1101,8 +1101,8 @@ templates:
     - start onboarding
     - begin setup
     - initialize cortex
-    - show health dashboard
-    - health dashboard
+    - show application dashboard
+    - application dashboard
     - application health
     - app health
     - show app health
@@ -2424,10 +2424,10 @@ templates:
 
   application_health:
     <<: *standard_5_part_base
-    name: Application Health Dashboard
+    name: Application Dashboard
     triggers:
-    - show health dashboard
-    - health dashboard
+    - show application dashboard
+    - application dashboard
     - application health
     - app health
     - show app health
@@ -2438,10 +2438,10 @@ templates:
     - scan application
     response_type: detailed
     handler: src.orchestrators.application_health_orchestrator.ApplicationHealthOrchestrator
-    understanding_content: "You want to analyze your application's health with multi-language code analysis, quality metrics, and a comprehensive report."
-    challenge_content: "No Challenge - Application Health Dashboard uses progressive crawling, multi-threaded analysis, and intelligent caching to handle projects of any size."
+    understanding_content: "You want to analyze your application's health with comprehensive metrics and report."
+    challenge_content: "No Challenge - Application Dashboard uses progressive crawling, multi-threaded analysis, and intelligent caching to handle projects of any size."
     response_content: |
-      **Application Health Dashboard Features:**
+      **Application Dashboard Features:**
       
       **Progressive Crawling Strategy:**
       - **Overview Scan** (30s): High-level file counts, language detection, basic structure
@@ -2470,7 +2470,7 @@ templates:
     next_steps_content: |
       **Quick Start:**
       
-      1. Say "show health dashboard" (uses current directory)
+      1. Say "show application dashboard" (uses current directory)
       2. Specify scan level: "analyze application with deep scan"
       3. Choose directory: "scan application in C:\Projects\MyApp"
       
@@ -2702,8 +2702,8 @@ routing:
   - start onboarding
   - begin setup
   - initialize cortex
-  - show health dashboard
-  - health dashboard
+  - show application dashboard
+  - application dashboard
   - application health
   - app health
   - show app health
@@ -2833,8 +2833,8 @@ routing:
   - estimate effort
   - project timeline
   application_health_triggers:
-  - show health dashboard
-  - health dashboard
+  - show application dashboard
+  - application dashboard
   - application health
   - app health
   - show app health

@@ -8,7 +8,7 @@ Enhanced security threat analysis agent using STRIDE framework with:
 - Risk rating with context awareness
 
 Author: CORTEX Development Team
-Version: 2.0
+Version: 3.0 (Phase 6.1 - cortex_agents integration)
 """
 
 import logging
@@ -16,8 +16,9 @@ from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
+import asyncio
 
-from src.agents.base_agent import BaseAgent
+from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
 from src.workflows.stages.threat_modeler import ThreatCategory, Threat
 
 logger = logging.getLogger(__name__)
@@ -109,6 +110,8 @@ class ThreatModelerAgent(BaseAgent):
     """
     Enhanced threat modeling agent using STRIDE framework.
     
+    Implements cortex_agents BaseAgent interface for standardized request/response flow.
+    
     Features:
     - Feature-specific threat templates (auth, api, data, upload, payment)
     - OWASP Top 10 2021 mapping
@@ -117,11 +120,177 @@ class ThreatModelerAgent(BaseAgent):
     - Semantic threat detection (100+ keywords)
     """
     
-    def __init__(self):
-        super().__init__(agent_name="ThreatModeler")
+    def __init__(self, tier1_api=None, tier2_kg=None, tier3_context=None):
+        super().__init__(
+            name="ThreatModeler",
+            tier1_api=tier1_api,
+            tier2_kg=tier2_kg,
+            tier3_context=tier3_context
+        )
         self._init_threat_templates()
         self._init_mitigation_database()
         self._init_keyword_expansion()
+    
+    def can_handle(self, request: AgentRequest) -> bool:
+        """
+        Check if this agent can handle threat modeling requests.
+        
+        Args:
+            request: AgentRequest with intent and context
+        
+        Returns:
+            True if intent relates to threat modeling
+        """
+        threat_modeling_intents = [
+            "analyze_threats",
+            "threat_model",
+            "security_analysis",
+            "stride_analysis",
+            "identify_threats",
+            "security_review"
+        ]
+        
+        return request.intent in threat_modeling_intents
+    
+    def execute(self, request: AgentRequest) -> AgentResponse:
+        """
+        Execute threat analysis using STRIDE framework.
+        
+        Args:
+            request: AgentRequest containing:
+                - user_message: Feature description
+                - context: Optional dict with:
+                    - feature_description: Detailed requirements
+                    - feature_type: auth/api/data_storage/file_upload/payment/general
+                    - plan_data: Optional plan metadata
+        
+        Returns:
+            AgentResponse with:
+                - success: True if analysis completed
+                - result: Dict with threats, mitigations, OWASP mapping, risk summary
+                - message: Summary message
+        """
+        self.log_request(request)
+        start_time = datetime.now()
+        
+        try:
+            # Extract feature requirements from request
+            feature_description = (
+                request.context.get('feature_description') or 
+                request.user_message or 
+                ""
+            )
+            
+            if not feature_description or feature_description.strip() == "":
+                return AgentResponse(
+                    success=False,
+                    result={},
+                    message="Feature description is required for threat analysis",
+                    agent_name=self.name,
+                    duration_ms=0.0,
+                    error="Empty feature description"
+                )
+            
+            feature_type = request.context.get('feature_type', 'general')
+            context = request.context.get('plan_data', {})
+            
+            # Run threat analysis (synchronously wrap async method)
+            try:
+                report = asyncio.run(self.process(
+                    feature_requirements=feature_description,
+                    feature_type=feature_type,
+                    context=context
+                ))
+            except RuntimeError:
+                # If event loop already running, use synchronous path
+                loop = asyncio.get_event_loop()
+                report = loop.run_until_complete(self.process(
+                    feature_requirements=feature_description,
+                    feature_type=feature_type,
+                    context=context
+                ))
+            
+            # Convert ThreatReport to AgentResponse format
+            result = {
+                'feature_name': report.feature_name,
+                'feature_type': report.feature_type,
+                'threats': [
+                    {
+                        'category': threat.category.value,
+                        'name': threat.name,
+                        'description': threat.description,
+                        'attack_scenario': threat.attack_scenario,
+                        'likelihood': threat.likelihood,
+                        'impact': threat.impact,
+                        'risk_rating': threat.risk_rating.value,
+                        'risk_score': threat.risk_score,
+                        'owasp_categories': [owasp.value for owasp in threat.owasp_categories],
+                        'mitigation_strategies': [
+                            {
+                                'name': mitigation.name,
+                                'description': mitigation.description,
+                                'implementation_steps': mitigation.implementation_steps,
+                                'code_example': mitigation.code_example,
+                                'language': mitigation.language,
+                                'effort_hours': mitigation.effort_hours,
+                                'effectiveness_percent': mitigation.effectiveness_percent,
+                                'tools': mitigation.tools,
+                                'testing_guidance': mitigation.testing_guidance,
+                                'references': mitigation.references
+                            }
+                            for mitigation in threat.mitigation_strategies
+                        ],
+                        'keywords_matched': threat.keywords_matched
+                    }
+                    for threat in report.threats
+                ],
+                'risk_level': report.risk_level.value,
+                'stride_summary': report.stride_summary,
+                'owasp_coverage': report.owasp_coverage,
+                'recommendations': report.recommendations,
+                'critical_count': len(report.critical_threats),
+                'high_count': len(report.high_threats)
+            }
+            
+            duration_ms = (datetime.now() - start_time).total_seconds() * 1000
+            
+            message = (
+                f"Identified {len(report.threats)} threats "
+                f"({len(report.critical_threats)} critical, {len(report.high_threats)} high) "
+                f"for {report.feature_type} feature"
+            )
+            
+            response = AgentResponse(
+                success=True,
+                result=result,
+                message=message,
+                agent_name=self.name,
+                duration_ms=duration_ms,
+                next_actions=[
+                    "Review critical threats first",
+                    "Implement recommended mitigations",
+                    "Update DoD checklist with security items"
+                ]
+            )
+            
+            self.log_response(response)
+            return response
+            
+        except Exception as e:
+            duration_ms = (datetime.now() - start_time).total_seconds() * 1000
+            self.logger.error(f"Threat analysis failed: {e}")
+            
+            response = AgentResponse(
+                success=False,
+                result={},
+                message=f"Threat analysis failed: {str(e)}",
+                agent_name=self.name,
+                duration_ms=duration_ms,
+                error=str(e)
+            )
+            
+            self.log_response(response)
+            return response
     
     def _init_threat_templates(self):
         """Initialize feature-specific threat templates"""
@@ -773,8 +942,6 @@ app.UseIpRateLimiting();''',
         Returns:
             ThreatReport with identified threats and mitigations
         """
-        self._start_execution()
-        
         try:
             self.logger.info(f"Analyzing threats for {feature_type} feature")
             
@@ -816,14 +983,12 @@ app.UseIpRateLimiting();''',
                 recommendations=recommendations
             )
             
-            self._end_execution(success=True)
             self.logger.info(f"Threat analysis complete: {len(threats)} threats, risk={risk_level.value}")
             
             return report
             
         except Exception as e:
             self.logger.error(f"Threat modeling failed: {e}")
-            self._end_execution(success=False, error=str(e))
             raise
     
     def _detect_feature_type(self, requirements: str) -> str:
@@ -1024,10 +1189,12 @@ app.UseIpRateLimiting();''',
     
     def _generate_stride_summary(self, threats: List[EnhancedThreat]) -> Dict[str, int]:
         """Generate summary of threats by STRIDE category"""
-        summary = {category.value: 0 for category in ThreatCategory}
+        # Use lowercase category names for consistency with tests
+        summary = {category.value.lower().replace(' ', '_'): 0 for category in ThreatCategory}
         
         for threat in threats:
-            summary[threat.category.value] += 1
+            key = threat.category.value.lower().replace(' ', '_')
+            summary[key] += 1
         
         return summary
     
@@ -1037,7 +1204,8 @@ app.UseIpRateLimiting();''',
         
         for threat in threats:
             for owasp in threat.owasp_categories:
-                key = owasp.value.split(' - ')[0]  # Extract A01, A02, etc.
+                # Extract just the code (A01, A02, etc.) without year
+                key = owasp.value.split(':')[0]  # A01:2021 -> A01
                 coverage[key] = coverage.get(key, 0) + 1
         
         return coverage

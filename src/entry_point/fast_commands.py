@@ -293,6 +293,14 @@ context awareness, and strategic planning capabilities.
 - `upgrade cortex` - Upgrade to latest version
 - `diagnose` - Full system diagnostics
 
+### ⚙️ Phase 8: Integration & Cleanup
+- `integration-cleanup` - Final cleanup before deployment
+  - `--dry-run` - Simulate without changes
+  - `--operation-profile quick|standard|comprehensive` - Cleanup thoroughness
+- `completion-report` - Generate Phase 8 completion report
+  - `--output /path/to/report.md` - Custom output path
+- `phase8-status` - Show Phase 8 progress
+
 ## Usage
 
 **Interactive Mode:**

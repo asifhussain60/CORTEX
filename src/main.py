@@ -35,6 +35,7 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 import sys
 import argparse
 import time
+import logging
 from pathlib import Path
 from typing import Optional
 
@@ -45,6 +46,73 @@ from src.entry_point.fast_commands import FastCommandHandler, is_fast_command
 from src.utils.lazy_loader import lazy_import
 
 _entry_module = lazy_import('src.entry_point.cortex_entry')
+
+
+def _is_phase8_operation(message: str) -> bool:
+    """Check if message is a Phase 8 operation."""
+    if not message:
+        return False
+    
+    msg_lower = message.lower().strip()
+    phase8_operations = [
+        'integration-cleanup',
+        'integration cleanup',
+        'completion-report',
+        'completion report',
+        'phase8-status',
+        'phase8 status',
+        'phase 8 status'
+    ]
+    
+    return any(op in msg_lower for op in phase8_operations)
+
+
+def _handle_phase8_operation(message: str, entry, args) -> str:
+    """
+    Handle Phase 8 operations (integration-cleanup, completion-report, phase8-status).
+    
+    Args:
+        message: User command
+        entry: CortexEntry instance
+        args: Parsed CLI arguments
+    
+    Returns:
+        Formatted response
+    """
+    from src.orchestrators.phase8_operation_handler import Phase8OperationHandler
+    
+    # Determine brain path - try multiple sources
+    if args.brain:
+        brain_path = Path(args.brain)
+    elif hasattr(entry, 'config') and hasattr(entry.config, 'brain_path'):
+        brain_path = entry.config.brain_path
+    else:
+        # Fallback: auto-detect from current directory
+        brain_path = Path.cwd() / "cortex-brain"
+    
+    # Create handler with minimal dependencies
+    handler = Phase8OperationHandler(brain_path, logger=logging.getLogger(__name__))
+    
+    msg_lower = message.lower().strip()
+    
+    # Build context from CLI args
+    context = {
+        'dry_run': getattr(args, 'dry_run', False),
+        'profile': getattr(args, 'operation_profile', 'standard'),
+        'output_path': getattr(args, 'output', None),
+        'verbose': args.verbose,
+        'format': args.format
+    }
+    
+    # Route to appropriate handler
+    if 'integration-cleanup' in msg_lower or 'integration cleanup' in msg_lower:
+        return handler.handle_integration_cleanup(context)
+    elif 'completion-report' in msg_lower or 'completion report' in msg_lower:
+        return handler.handle_completion_report(context)
+    elif 'phase8-status' in msg_lower or 'phase8 status' in msg_lower or 'phase 8 status' in msg_lower:
+        return handler.handle_phase8_status(context)
+    else:
+        return f"Unknown Phase 8 operation: {message}"
 
 
 def main():
@@ -108,6 +176,25 @@ Examples:
         help="Show performance profiling information"
     )
     
+    # Phase 8: Final Integration & Cleanup arguments
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Simulate operations without making changes (for integration-cleanup)"
+    )
+    
+    parser.add_argument(
+        "--operation-profile",
+        choices=["quick", "standard", "comprehensive"],
+        help="Cleanup profile: quick (cache/backups), standard (+old backups), comprehensive (+logs)"
+    )
+    
+    parser.add_argument(
+        "--output",
+        type=str,
+        help="Custom output path for reports"
+    )
+    
     args = parser.parse_args()
     
     # FAST PATH: Handle simple commands without full initialization
@@ -156,11 +243,21 @@ Examples:
     if args.message:
         try:
             command_start = time.perf_counter()
-            response = entry.process(
-                args.message,
-                resume_session=True,
-                format_type=args.format
-            )
+            
+            # Check for Phase 8 operations
+            if _is_phase8_operation(args.message):
+                response = _handle_phase8_operation(
+                    args.message, 
+                    entry, 
+                    args
+                )
+            else:
+                response = entry.process(
+                    args.message,
+                    resume_session=True,
+                    format_type=args.format
+                )
+            
             print(response)
             
             if args.profile:

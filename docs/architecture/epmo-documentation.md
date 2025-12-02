@@ -2922,10 +2922,10 @@ Apply automatic fix for a validation issue.
 
 *File: `health\dashboard.py`*
 
-CORTEX 3.0 - EPMO Health Dashboard
-==================================
+CORTEX Dashboard
+================
 
-Web-based dashboard for EPMO health monitoring and remediation.
+Web-based dashboard for CORTEX system health monitoring and remediation.
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.

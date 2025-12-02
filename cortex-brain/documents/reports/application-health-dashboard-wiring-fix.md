@@ -1,4 +1,4 @@
-# Application Health Dashboard - Wiring Fix Report
+# Application Dashboard - Wiring Fix Report
 
 **Date:** December 1, 2025  
 **Author:** Asif Hussain | GitHub: github.com/asifhussain60/CORTEX  
@@ -9,7 +9,7 @@
 
 ## 🎯 Problem Summary
 
-The Application Health Dashboard orchestrator (`ApplicationHealthOrchestrator`) existed in the codebase with a response template defined in `response-templates.yaml`, but was not properly integrated into the CORTEX intent routing and execution pipeline. User requests like "show health dashboard" or "onboard application" would not trigger the health analysis.
+The Application Dashboard orchestrator (`ApplicationHealthOrchestrator`) existed in the codebase with a response template defined in `response-templates.yaml`, but was not properly integrated into the CORTEX intent routing and execution pipeline. User requests like "show health dashboard" or "onboard application" would not trigger the health analysis.
 
 ---
 
@@ -19,19 +19,19 @@ The Application Health Dashboard orchestrator (`ApplicationHealthOrchestrator`) 
 
 **Added IntentType Enums:**
 ```python
-# Application Health Dashboard (NEW - Application Onboarding)
+# Application Dashboard (NEW - Application Onboarding)
 APPLICATION_HEALTH = "application_health"
 ONBOARD_APPLICATION = "onboard_application"
 ```
 
 **Added AgentType Enum:**
 ```python
-APPLICATION_HEALTH = auto()  # ApplicationHealthOrchestrator (NEW - Application Health Dashboard)
+APPLICATION_HEALTH = auto()  # ApplicationHealthOrchestrator (NEW - Application Dashboard)
 ```
 
 **Added Intent-to-Agent Mapping:**
 ```python
-# Application Health Dashboard mapping (NEW - Application Onboarding)
+# Application Dashboard mapping (NEW - Application Onboarding)
 IntentType.APPLICATION_HEALTH: AgentType.APPLICATION_HEALTH,
 IntentType.ONBOARD_APPLICATION: AgentType.APPLICATION_HEALTH,
 ```
@@ -40,7 +40,7 @@ IntentType.ONBOARD_APPLICATION: AgentType.APPLICATION_HEALTH,
 
 **Added Intent Keywords:**
 ```python
-# Application Health Dashboard (NEW - Application Onboarding)
+# Application Dashboard (NEW - Application Onboarding)
 IntentType.APPLICATION_HEALTH: [
     "show health dashboard", "health dashboard", "application health",
     "app health", "analyze application", "application analysis",
@@ -155,7 +155,7 @@ The existing template in `response-templates.yaml` is now properly wired:
 
 ## 📊 Capabilities Activated
 
-With this wiring fix, the Application Health Dashboard now provides:
+With this wiring fix, the Application Dashboard now provides:
 
 1. **Multi-Language Analysis**
    - Python (`.py`)
