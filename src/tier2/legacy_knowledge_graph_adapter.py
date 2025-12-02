@@ -457,7 +457,9 @@ class LegacyKnowledgeGraphAdapter:
             'scope': modern_pattern.get('scope'),
             'created_at': modern_pattern.get('created_at'),
             'last_used': modern_pattern.get('last_used'),
-            'usage_count': modern_pattern.get('usage_count', 0)
+            'usage_count': modern_pattern.get('usage_count', 0),
+            'score': modern_pattern.get('score'),  # Preserve FTS5 search score/rank
+            'rank': modern_pattern.get('score')     # FTS5 rank (same as score for compatibility)
         }
         
         # Convert metadata to context_json

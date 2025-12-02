@@ -238,7 +238,7 @@ class TestTDDCycleLearning:
         )
         
         # Link cycle
-        cycle_id = logger.link_cycle(red_id, green_id, refactor_id=None)
+        cycle_id = logger.link_cycle(red_id, green_id, refactor_pattern_id=None)
         
         assert cycle_id is not None
         

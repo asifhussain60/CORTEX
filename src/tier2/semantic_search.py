@@ -59,7 +59,8 @@ class SemanticSearch:
             
             # Apply namespace filter
             if namespaces:
-                pattern_namespaces = self._extract_namespaces(result.get('context_json', ''))
+                # Get namespaces from result (stored as JSON string in legacy format)
+                pattern_namespaces = self._extract_namespaces(result)
                 if not any(ns in pattern_namespaces for ns in namespaces):
                     continue
             
@@ -79,23 +80,37 @@ class SemanticSearch:
         
         return filtered_results
     
-    def _extract_namespaces(self, context_json: str) -> List[str]:
-        """Extract namespaces from context JSON or pattern namespaces field"""
+    def _extract_namespaces(self, result: Dict[str, Any]) -> List[str]:
+        """Extract namespaces from pattern result"""
         import json
         
         namespaces = []
         
-        try:
-            # Try to parse as JSON
-            context = json.loads(context_json) if context_json else {}
+        # First try the namespaces field directly (returned by adapter)
+        if 'namespaces' in result:
+            namespaces_data = result['namespaces']
             
-            # Check for namespaces in context
-            if 'namespaces' in context:
-                namespaces = context['namespaces']
+            # If it's already a list, return it
+            if isinstance(namespaces_data, list):
+                return namespaces_data
             
-        except (json.JSONDecodeError, TypeError):
-            # If not JSON, try comma-separated string
-            if context_json:
-                namespaces = [ns.strip() for ns in context_json.split(',')]
+            # If it's a JSON string, parse it
+            if isinstance(namespaces_data, str):
+                try:
+                    namespaces = json.loads(namespaces_data)
+                    if isinstance(namespaces, list):
+                        return namespaces
+                except json.JSONDecodeError:
+                    pass
         
-        return namespaces
+        # Fallback: try to extract from context_json
+        context_json = result.get('context_json', '')
+        if context_json:
+            try:
+                context = json.loads(context_json) if context_json else {}
+                if 'namespaces' in context:
+                    namespaces = context['namespaces']
+            except (json.JSONDecodeError, TypeError):
+                pass
+        
+        return namespaces if isinstance(namespaces, list) else []
