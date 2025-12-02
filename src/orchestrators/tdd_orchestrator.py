@@ -187,7 +187,8 @@ class TDDOrchestrator(IncrementalWorkExecutor):
                         "phase": TDDPhase.RED.value,
                         "requirement": requirement,
                         "test_number": test_number,
-                        "file_path": tdd_request.test_file_path
+                        "file_path": tdd_request.test_file_path,
+                        "feature_name": tdd_request.feature_name
                     }
                 ))
                 chunk_counter += 1
@@ -220,7 +221,8 @@ class TDDOrchestrator(IncrementalWorkExecutor):
                         "phase": TDDPhase.GREEN.value,
                         "requirement": requirement,
                         "test_number": test_number,
-                        "file_path": tdd_request.implementation_file_path
+                        "file_path": tdd_request.implementation_file_path,
+                        "feature_name": tdd_request.feature_name
                     }
                 ))
                 chunk_counter += 1
@@ -253,7 +255,8 @@ class TDDOrchestrator(IncrementalWorkExecutor):
                         "phase": TDDPhase.REFACTOR.value,
                         "requirement": requirement,
                         "test_number": test_number,
-                        "file_path": tdd_request.implementation_file_path
+                        "file_path": tdd_request.implementation_file_path,
+                        "feature_name": tdd_request.feature_name
                     }
                 ))
                 chunk_counter += 1
