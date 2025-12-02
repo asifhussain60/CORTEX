@@ -280,7 +280,7 @@ class TestErrorHandling:
         """Test missing component raises descriptive error."""
         # Manually create template with non-existent component
         with pytest.raises(KeyError) as exc_info:
-            renderer._compose_from_components(["nonexistent_component"])
+            renderer._compose_from_components(["nonexistent_component"], mode="guided")
         
         assert "nonexistent_component" in str(exc_info.value)
     

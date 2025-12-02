@@ -113,6 +113,9 @@ class TemplateRenderer:
         Returns:
             Composed template string
         """
+        # Normalize mode early
+        mode = self._normalize_mode(mode)
+        
         # Check cache
         cache_key = self._get_cache_key(template_id, mode, context)
         if cache_key in self._cache:
@@ -131,13 +134,8 @@ class TemplateRenderer:
         # Compose from components
         composed = self._compose_from_components(component_list, mode)
         
-        # Apply context substitution
-        if context is None:
-            context = template_def.get('content', {})
-        else:
-            # Merge template content with provided context
-            default_content = template_def.get('content', {})
-            context = {**default_content, **context}
+        # Prepare context for substitution
+        context = self._prepare_context(template_def, context)
         
         # Substitute placeholders
         final = self._substitute_placeholders(composed, context)
@@ -147,45 +145,113 @@ class TemplateRenderer:
         
         return final
     
-    def _compose_from_components(self, component_list: List[str], mode: str = "guided") -> str:
+    def _normalize_mode(self, mode: str) -> str:
+        """Normalize interaction mode to valid value.
+        
+        Args:
+            mode: User-provided mode string
+            
+        Returns:
+            Normalized mode (one of: autonomous, guided, educational, pair)
+        """
+        valid_modes = {'autonomous', 'guided', 'educational', 'pair'}
+        return mode if mode in valid_modes else 'guided'
+    
+    def _prepare_context(self, template_def: Dict[str, Any], context: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """Prepare context dictionary for placeholder substitution.
+        
+        Args:
+            template_def: Template definition dictionary
+            context: User-provided context (may be None)
+            
+        Returns:
+            Merged context dictionary
+        """
+        if context is None:
+            return template_def.get('content', {})
+        
+        # Merge template content with provided context
+        default_content = template_def.get('content', {})
+        return {**default_content, **context}
+    
+    def _compose_from_components(self, component_list: List[str], mode: str) -> str:
         """Compose template from component list.
         
         Args:
             component_list: List of component IDs to compose
-            mode: Interaction mode for mode-specific formatting
+            mode: Normalized interaction mode
             
         Returns:
             Composed template string
         """
         parts = []
-        profile = self.profiles.get(mode, self.profiles.get('guided', {}))
         
         for component_id in component_list:
             if component_id not in self.components:
                 raise KeyError(f"Component '{component_id}' not found in base-components.yaml")
             
-            # Get mode-specific customization
-            mode_customization = self._get_mode_customization(component_id, mode)
-            
-            # Skip component if show is explicitly false
-            if mode_customization.get('show', True) is False:
+            # Check if component should be included in this mode
+            if self._should_skip_component(component_id, mode):
                 continue
             
-            # In autonomous mode, skip progress_bar for brevity
-            if mode == 'autonomous' and component_id == 'progress_bar':
-                continue
+            # Get component format and apply mode-specific customization
+            component_format = self._get_customized_component(component_id, mode)
+            parts.append(component_format)
+        
+        return '\n'.join(parts)
+    
+    def _should_skip_component(self, component_id: str, mode: str) -> bool:
+        """Determine if component should be skipped in given mode.
+        
+        Args:
+            component_id: Component identifier
+            mode: Normalized interaction mode
             
-            component = self.components[component_id]
-            component_format = component.get('format', '')
+        Returns:
+            True if component should be skipped
+        """
+        # Check profile customization
+        mode_customization = self._get_mode_customization(component_id, mode)
+        if mode_customization.get('show', True) is False:
+            return True
+        
+        # Autonomous mode skips progress_bar for brevity
+        if mode == 'autonomous' and component_id == 'progress_bar':
+            return True
+        
+        return False
+    
+    def _get_customized_component(self, component_id: str, mode: str) -> str:
+        """Get component format with mode-specific customization applied.
+        
+        Args:
+            component_id: Component identifier
+            mode: Normalized interaction mode
             
-            # Apply mode-specific formatting
-            if mode == 'autonomous' and component_id == 'next_steps_section':
-                # Autonomous mode: compact next steps
-                component_format = component_format.replace('### 🔍 Next Steps', '**Next:**')
-            elif mode == 'pair' and component_id == 'next_steps_section':
-                # Pair mode: Add collaborative options language
-                # Replace standard next steps with parallel tracks format
-                component_format = """### 🔍 Next Steps
+        Returns:
+            Customized component format string
+        """
+        component = self.components[component_id]
+        component_format = component.get('format', '')
+        
+        # Apply mode-specific transformations
+        if mode == 'autonomous' and component_id == 'next_steps_section':
+            # Compact next steps format
+            return component_format.replace('### 🔍 Next Steps', '**Next:**')
+        
+        if mode == 'pair' and component_id == 'next_steps_section':
+            # Collaborative options format
+            return self._get_pair_mode_next_steps()
+        
+        return component_format
+    
+    def _get_pair_mode_next_steps(self) -> str:
+        """Get pair mode collaborative next steps format.
+        
+        Returns:
+            Next steps section with option/track language
+        """
+        return """### 🔍 Next Steps
 
 **I see a few options we could explore:**
 
@@ -196,28 +262,19 @@ class TemplateRenderer:
 **Option C:** {{next_steps_option_c}}
 
 Which track would you like to pursue first?"""
-            
-            parts.append(component_format)
-        
-        return '\n'.join(parts)
     
     def _get_mode_customization(self, component_id: str, mode: str) -> Dict[str, Any]:
         """Get mode-specific customization for a component.
         
         Args:
             component_id: Component identifier
-            mode: Interaction mode
+            mode: Normalized interaction mode
             
         Returns:
-            Customization dictionary
+            Customization dictionary (empty dict if no customization)
         """
-        # Normalize mode
-        if mode not in ['autonomous', 'guided', 'educational', 'pair']:
-            mode = 'guided'  # Fallback to guided
-        
         profile = self.profiles.get(mode, {})
         customization = profile.get('section_customization', {})
-        
         return customization.get(component_id, {})
     
     def _get_cache_key(self, template_id: str, mode: str, context: Optional[Dict[str, Any]]) -> str:
