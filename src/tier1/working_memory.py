@@ -30,14 +30,14 @@ class WorkingMemory:
     """
     Tier 1: Working Memory (Short-Term Memory) - Modular Facade
     
-    Manages recent conversations with FIFO eviction when capacity (20) is reached.
+    Manages recent conversations with FIFO eviction when capacity (70) is reached.
     Stores conversations, messages, and extracted entities in SQLite.
     
     This class acts as a facade, delegating to specialized modules while
     maintaining full backward compatibility with the original API.
     """
     
-    MAX_CONVERSATIONS = 20
+    MAX_CONVERSATIONS = 70  # Phase 7.5: Increased from 20 to 70
     
     def __init__(self, db_path: Optional[Path] = None):
         """
@@ -2142,6 +2142,323 @@ class WorkingMemory:
             
         except Exception as e:
             print(f"Error listing active contexts: {e}")
+            return []
+    
+    # =========================================================================
+    # Phase 7.5: FIFO 70-Conversation Management
+    # =========================================================================
+    
+    def list_conversations(self, limit: Optional[int] = None, include_inactive: bool = True) -> List[Dict[str, Any]]:
+        """
+        List conversations with optional limit.
+        
+        Args:
+            limit: Maximum number of conversations to return (None = all)
+            include_inactive: Include inactive conversations
+        
+        Returns:
+            List of conversation dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            if include_inactive:
+                if limit:
+                    cursor.execute('''
+                        SELECT conversation_id, title, created_at, message_count, is_active
+                        FROM conversations
+                        ORDER BY created_at DESC
+                        LIMIT ?
+                    ''', (limit,))
+                else:
+                    cursor.execute('''
+                        SELECT conversation_id, title, created_at, message_count, is_active
+                        FROM conversations
+                        ORDER BY created_at DESC
+                    ''')
+            else:
+                if limit:
+                    cursor.execute('''
+                        SELECT conversation_id, title, created_at, message_count, is_active
+                        FROM conversations
+                        WHERE is_active = 1
+                        ORDER BY created_at DESC
+                        LIMIT ?
+                    ''', (limit,))
+                else:
+                    cursor.execute('''
+                        SELECT conversation_id, title, created_at, message_count, is_active
+                        FROM conversations
+                        WHERE is_active = 1
+                        ORDER BY created_at DESC
+                    ''')
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            return [
+                {
+                    'conversation_id': row[0],
+                    'title': row[1],
+                    'created_at': row[2],
+                    'message_count': row[3],
+                    'is_active': bool(row[4])
+                }
+                for row in rows
+            ]
+            
+        except Exception as e:
+            print(f"Error listing conversations: {e}")
+            return []
+    
+    def mark_conversation_inactive(self, conversation_id: str) -> bool:
+        """
+        Mark a conversation as inactive (eligible for FIFO eviction).
+        
+        Args:
+            conversation_id: Conversation to mark inactive
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                UPDATE conversations
+                SET is_active = 0
+                WHERE conversation_id = ?
+            ''', (conversation_id,))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error marking conversation inactive: {e}")
+            return False
+    
+    def archive_conversation_to_tier2(
+        self, 
+        conversation_id: str,
+        knowledge_graph: Any
+    ) -> bool:
+        """
+        Archive a conversation to Tier 2 (Knowledge Graph).
+        
+        Args:
+            conversation_id: Conversation to archive
+            knowledge_graph: Tier 2 KnowledgeGraph instance
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            import json
+            from datetime import datetime
+            
+            # Get conversation data
+            conversation = self.get_conversation(conversation_id)
+            if not conversation:
+                return False
+            
+            # Handle both dict and Conversation object
+            if hasattr(conversation, '__dict__'):
+                # It's a dataclass/object
+                conv_title = getattr(conversation, 'title', '')
+                conv_created_at = str(getattr(conversation, 'created_at', ''))
+            else:
+                # It's a dict
+                conv_title = conversation.get('title', '')
+                conv_created_at = conversation.get('created_at', '')
+            
+            # Get all messages
+            messages = self.get_messages(conversation_id)
+            
+            # Create archived pattern for Tier 2
+            pattern_id = f"conv_{conversation_id}"
+            
+            # Build content with conversation summary
+            content = {
+                'conversation_id': conversation_id,
+                'title': conv_title,
+                'created_at': conv_created_at,
+                'message_count': len(messages),
+                'messages': [
+                    {
+                        'role': m.get('role', '') if isinstance(m, dict) else getattr(m, 'role', ''),
+                        'content': (m.get('content', '') if isinstance(m, dict) else getattr(m, 'content', ''))[:500],
+                        'timestamp': m.get('timestamp', '') if isinstance(m, dict) else str(getattr(m, 'timestamp', ''))
+                    }
+                    for m in messages
+                ]
+            }
+            
+            # Store in Tier 2 as archived conversation pattern
+            knowledge_graph.store_pattern(
+                pattern_id=pattern_id,
+                title=f"Archived: {conv_title or 'Untitled'}",
+                content=json.dumps(content),
+                pattern_type='archived_conversation',
+                confidence=1.0,
+                namespaces=['CORTEX-archived'],
+                scope='cortex'
+            )
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error archiving conversation to Tier 2: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def pin_conversation(self, conversation_id: str) -> bool:
+        """
+        Pin a conversation to prevent FIFO eviction.
+        
+        Args:
+            conversation_id: Conversation to pin
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Add is_pinned column if it doesn't exist
+            cursor.execute("PRAGMA table_info(conversations)")
+            columns = {row[1] for row in cursor.fetchall()}
+            
+            if 'is_pinned' not in columns:
+                cursor.execute('''
+                    ALTER TABLE conversations 
+                    ADD COLUMN is_pinned INTEGER DEFAULT 0
+                ''')
+            
+            # Pin the conversation
+            cursor.execute('''
+                UPDATE conversations
+                SET is_pinned = 1
+                WHERE conversation_id = ?
+            ''', (conversation_id,))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error pinning conversation: {e}")
+            return False
+    
+    def unpin_conversation(self, conversation_id: str) -> bool:
+        """
+        Unpin a conversation (allow FIFO eviction).
+        
+        Args:
+            conversation_id: Conversation to unpin
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                UPDATE conversations
+                SET is_pinned = 0
+                WHERE conversation_id = ?
+            ''', (conversation_id,))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error unpinning conversation: {e}")
+            return False
+    
+    def is_conversation_pinned(self, conversation_id: str) -> bool:
+        """
+        Check if a conversation is pinned.
+        
+        Args:
+            conversation_id: Conversation to check
+        
+        Returns:
+            True if pinned, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Check if is_pinned column exists
+            cursor.execute("PRAGMA table_info(conversations)")
+            columns = {row[1] for row in cursor.fetchall()}
+            
+            if 'is_pinned' not in columns:
+                conn.close()
+                return False
+            
+            cursor.execute('''
+                SELECT is_pinned FROM conversations
+                WHERE conversation_id = ?
+            ''', (conversation_id,))
+            
+            row = cursor.fetchone()
+            conn.close()
+            
+            return bool(row and row[0]) if row else False
+            
+        except Exception as e:
+            print(f"Error checking if conversation is pinned: {e}")
+            return False
+    
+    def list_pinned_conversations(self) -> List[Dict[str, Any]]:
+        """
+        List all pinned conversations.
+        
+        Returns:
+            List of pinned conversation dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Check if is_pinned column exists
+            cursor.execute("PRAGMA table_info(conversations)")
+            columns = {row[1] for row in cursor.fetchall()}
+            
+            if 'is_pinned' not in columns:
+                conn.close()
+                return []
+            
+            cursor.execute('''
+                SELECT conversation_id, title, created_at, message_count
+                FROM conversations
+                WHERE is_pinned = 1
+                ORDER BY created_at DESC
+            ''')
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            return [
+                {
+                    'conversation_id': row[0],
+                    'title': row[1],
+                    'created_at': row[2],
+                    'message_count': row[3]
+                }
+                for row in rows
+            ]
+            
+        except Exception as e:
+            print(f"Error listing pinned conversations: {e}")
             return []
 
 
