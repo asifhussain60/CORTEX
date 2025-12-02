@@ -20,9 +20,9 @@ from typing import Dict, Any, List
 
 # Test imports - will be implemented
 from src.orchestrators.tdd_orchestrator import TDDOrchestrator, TDDPhase, TDDWorkRequest
-from src.tdd_orchestrator.tier1.working_memory import WorkingMemory
-from src.tdd_orchestrator.tier2.knowledge_graph import KnowledgeGraph
-from src.tdd_orchestrator.tier3.context_intelligence import ContextIntelligence
+from src.tier1.working_memory import WorkingMemory
+from src.tier2.knowledge_graph import KnowledgeGraph
+from src.tier3.context_intelligence import ContextIntelligence
 
 
 # ============================================================================
@@ -59,7 +59,7 @@ class TestRedPhaseTierFeeding:
         assert result['success'] is True
         
         # Verify Tier 1 captured test intent (use orchestrator's tier1)
-        tier1_data = tdd_orchestrator.tdd_orchestrator.tier1.get_recent_test_intents(limit=1)
+        tier1_data = tdd_orchestrator.tier1.get_recent_test_intents(limit=1)
         assert len(tier1_data) > 0
         assert "login with valid credentials" in tier1_data[0]['requirement'].lower()
     
@@ -85,7 +85,7 @@ class TestRedPhaseTierFeeding:
             tdd_orchestrator.execute_chunk(chunk)
         
         # Assert
-        edge_cases = tdd_orchestrator.tdd_orchestrator.tier1.get_edge_cases_for_feature("Input Validation")
+        edge_cases = tdd_orchestrator.tier1.get_edge_cases_for_feature("Input Validation")
         assert len(edge_cases) >= 3
         assert any("empty" in case['description'].lower() for case in edge_cases)
         assert any("max length" in case['description'].lower() for case in edge_cases)
@@ -111,7 +111,7 @@ class TestRedPhaseTierFeeding:
         assert result['success'] is True
         
         # Verify Tier 1 has data without needing git commits
-        tier1_data = tdd_orchestrator.tdd_orchestrator.tier1.get_recent_test_intents(limit=1)
+        tier1_data = tdd_orchestrator.tier1.get_recent_test_intents(limit=1)
         assert len(tier1_data) > 0
         # No git commit should have been made yet
         assert tier1_data[0].get('source') != 'git_commit'
@@ -153,7 +153,7 @@ class TestGreenPhaseTierFeeding:
         assert 'email' in pattern['title'].lower() or 'validation' in pattern['title'].lower()
         assert pattern['pattern_type'] == 'implementation'
     
-    def test_green_phase_captures_dependencies(self, tdd_orchestrator, tier2):
+    def test_green_phase_captures_dependencies(self, tdd_orchestrator):
         """Test that GREEN phase captures implementation dependencies"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -173,7 +173,7 @@ class TestGreenPhaseTierFeeding:
         assert len(dependencies) > 0
         assert any('retry' in dep['description'].lower() for dep in dependencies)
     
-    def test_green_phase_captures_decisions(self, tdd_orchestrator, tier2):
+    def test_green_phase_captures_decisions(self, tdd_orchestrator):
         """Test that GREEN phase captures implementation decisions"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -230,7 +230,7 @@ class TestRefactorPhaseTierFeeding:
         improvement = improvements[0]
         assert improvement['improvement_type'] in ['performance', 'readability', 'maintainability']
     
-    def test_refactor_phase_captures_performance_gains(self, tdd_orchestrator, tier3):
+    def test_refactor_phase_captures_performance_gains(self, tdd_orchestrator):
         """Test that REFACTOR phase measures performance gains"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -253,7 +253,7 @@ class TestRefactorPhaseTierFeeding:
         assert 'after_ms' in metric
         assert 'improvement_percent' in metric
     
-    def test_refactor_phase_captures_simplifications(self, tdd_orchestrator, tier3):
+    def test_refactor_phase_captures_simplifications(self, tdd_orchestrator):
         """Test that REFACTOR phase tracks code simplifications"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -317,7 +317,7 @@ class TestPatternLearning:
         assert stored_pattern['title'] == 'User Registration'
         assert stored_pattern['pattern_type'] == 'tdd_cycle'
     
-    def test_pattern_includes_test_strategy(self, tier2):
+    def test_pattern_includes_test_strategy(self, tdd_orchestrator):
         """Test patterns include test strategy"""
         # Arrange
         tdd_orchestrator.tier2.store_tdd_cycle_pattern(
@@ -336,7 +336,7 @@ class TestPatternLearning:
         context = json.loads(pattern['context_json'])
         assert context['test_strategy'] == 'edge_cases_first'
     
-    def test_pattern_includes_implementation_approach(self, tier2):
+    def test_pattern_includes_implementation_approach(self, tdd_orchestrator):
         """Test patterns include implementation approach"""
         # Arrange
         tdd_orchestrator.tier2.store_tdd_cycle_pattern(
@@ -354,7 +354,7 @@ class TestPatternLearning:
         context = json.loads(pattern['context_json'])
         assert context['implementation_approach'] == 'dependency_injection'
     
-    def test_pattern_includes_refactoring_type(self, tier2):
+    def test_pattern_includes_refactoring_type(self, tdd_orchestrator):
         """Test patterns include refactoring type"""
         # Arrange
         tdd_orchestrator.tier2.store_tdd_cycle_pattern(
@@ -372,7 +372,7 @@ class TestPatternLearning:
         context = json.loads(pattern['context_json'])
         assert context['refactoring_type'] == 'replace_temp_with_query'
     
-    def test_future_tdd_cycles_suggest_patterns(self, tier2):
+    def test_future_tdd_cycles_suggest_patterns(self, tdd_orchestrator):
         """Test future TDD cycles get pattern suggestions"""
         # Arrange - Store historical patterns
         tdd_orchestrator.tier2.store_tdd_cycle_pattern(
@@ -397,7 +397,7 @@ class TestPatternLearning:
         security_patterns = [s for s in suggestions if 'security' in s['context'].lower()]
         assert len(security_patterns) > 0
     
-    def test_pattern_matching_uses_fts5(self, tier2):
+    def test_pattern_matching_uses_fts5(self, tdd_orchestrator):
         """Test pattern matching uses FTS5 semantic search"""
         # Arrange - Store patterns with semantic similarity
         tdd_orchestrator.tier2.store_tdd_cycle_pattern(
@@ -461,7 +461,7 @@ class TestRealTimeContextUpdates:
         # Verify this was captured during GREEN, not from git
         assert metrics['source'] == 'tdd_green_phase'
     
-    def test_refactor_phase_measures_impact(self, tdd_orchestrator, tier3):
+    def test_refactor_phase_measures_impact(self, tdd_orchestrator):
         """Test refactoring impact measured during REFACTOR phase"""
         # Arrange - Simulate GREEN phase with initial complexity
         tdd_orchestrator.tier3.store_code_metrics(
@@ -493,7 +493,7 @@ class TestRealTimeContextUpdates:
         # Refactoring should improve (reduce) complexity
         assert impact['after']['cyclomatic_complexity'] <= impact['before']['cyclomatic_complexity']
     
-    def test_hotspot_detection_updates_realtime(self, tdd_orchestrator, tier3):
+    def test_hotspot_detection_updates_realtime(self, tdd_orchestrator):
         """Test hotspot detection updates in real-time"""
         # Arrange - Simulate multiple edits to same file
         work_requests = [
@@ -532,7 +532,7 @@ class TestRealTimeContextUpdates:
         # Verify detection happened in real-time, not from git log
         assert auth_hotspot[0]['detection_source'] == 'tdd_realtime'
     
-    def test_metrics_stored_before_commit(self, tdd_orchestrator, tier3):
+    def test_metrics_stored_before_commit(self, tdd_orchestrator):
         """Test metrics are stored in Tier 3 before any git commit"""
         # Arrange
         work_request = TDDWorkRequest(
