@@ -187,6 +187,15 @@ cp cortex.config.template.json cortex.config.json
 # (Use absolute paths for your machine)
 ```
 
+#### Add CORTEX to .gitignore (Brain Safety)
+
+To keep CORTEX brain data and internal files out of your repository history, ensure your project’s `.gitignore` excludes the CORTEX folder:
+
+- If CORTEX is embedded inside your project repo: add `CORTEX/`
+- If using the brain path directly within the repo: add `cortex-brain/`
+
+This protects Tier databases, caches, and internal artifacts from being committed.
+
 ### 4️⃣ Initialize Brain
 
 ```bash
@@ -319,6 +328,24 @@ cat cortex.config.json
 # Reinitialize brain
 python -m src.setup.modules.brain_initialization_module
 ```
+
+### Setup Validation (Step 9)
+
+Run these quick checks to validate your setup, including `.gitignore` protection:
+
+1. Configuration present
+  - Confirm `cortex.config.json` exists and uses absolute paths.
+2. Environment ready
+  - Verify Python environment resolves CORTEX modules.
+3. Brain safety (.gitignore)
+  - Open `.gitignore` and confirm one of the following lines exists:
+    - `CORTEX/` (if the CORTEX folder is within your project)
+    - `cortex-brain/` (if brain storage is tracked locally)
+  - If missing, add the appropriate line and re-run your status check: `git status` should not list brain files.
+4. Copilot integration
+  - In VS Code Copilot Chat, run `help` and ensure CORTEX prompts load.
+5. Health check (optional)
+  - Execute the setup orchestrator and confirm no errors are reported.
 
 ### Conversation Tracking Not Working
 
