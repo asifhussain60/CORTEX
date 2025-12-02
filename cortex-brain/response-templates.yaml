@@ -2205,6 +2205,21 @@ templates:
     - push changes
     - sync repository
     - commit and sync
+    - git sync
+    - push to origin
+    - push to remote
+    - pull and push
+    - sync repo
+    - sync code
+    - update remote
+    - push code
+    - commit changes
+    - save and push
+    - upload changes
+    - sync with remote
+    - push commits
+    - send changes
+    - publish changes
     response_type: detailed
     expected_orchestrator: CommitOrchestrator
     handler: src.orchestrators.commit_orchestrator.CommitOrchestrator
@@ -2769,6 +2784,19 @@ routing:
   - commit and sync
   - pull and push
   - sync repo
+  - git sync
+  - push to origin
+  - push to remote
+  - sync code
+  - update remote
+  - push code
+  - commit changes
+  - save and push
+  - upload changes
+  - sync with remote
+  - push commits
+  - send changes
+  - publish changes
   cache_status_triggers:
   - cache status
   - show cache

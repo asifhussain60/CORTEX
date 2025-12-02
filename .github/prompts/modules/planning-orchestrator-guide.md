@@ -553,7 +553,26 @@ All planning checkpoints follow the format: `{operation}-{YYYYMMDD}-{HHMMSS}`
 
 ### Viewing Checkpoints
 
-**List All Planning Checkpoints:**
+**Recommended: Use CORTEX Commands:**
+```
+User: "show checkpoints"
+
+CORTEX:
+  📋 Git Checkpoints (Last 30 Days):
+  
+  Recent Planning Checkpoints:
+  1. complete-20251130-144512 (completion) - 2 hours ago
+  2. approve-20251130-143856 (approval) - 3 hours ago
+  3. plan-20251130-143022 (generation) - 3 hours ago
+  
+  💡 Tip: Use 'rollback to <checkpoint>' to restore any checkpoint
+```
+
+**Alternative: Direct Git Commands (Advanced):**
+
+<details>
+<summary>Click to expand git command reference</summary>
+
 ```bash
 # Show all checkpoints from today
 git tag -l '*-20251130-*' --sort=-creatordate
@@ -566,10 +585,7 @@ git tag -l 'approve-*'
 
 # Show only completion checkpoints
 git tag -l 'complete-*'
-```
 
-**View Checkpoint Details:**
-```bash
 # Show commit info for checkpoint
 git show plan-20251130-143022
 
@@ -578,10 +594,7 @@ git log -1 plan-20251130-143022
 
 # Show files changed at checkpoint
 git show plan-20251130-143022 --stat
-```
 
-**Compare with Current State:**
-```bash
 # Show changes since checkpoint
 git diff plan-20251130-143022
 
@@ -592,12 +605,37 @@ git diff plan-20251130-143022 --name-only
 git diff plan-20251130-143022 --stat
 ```
 
+</details>
+
 ### Rollback Procedures
 
 **Rollback Plan Approval (Return to Active State):**
 
 If you approved a plan prematurely and need to make changes:
 
+**Recommended: Use CORTEX Rollback Command:**
+```
+User: "rollback to approve-20251130-143856"
+
+CORTEX:
+  ⚠️  ROLLBACK WARNING
+  
+  This will DISCARD all changes after checkpoint 'approve-20251130-143856'
+  
+  Changes to be lost:
+   cortex-brain/documents/planning/approved/APPROVED-20251130-authentication.md
+   src/auth/authentication_service.py
+   2 files changed, 150 insertions(+)
+  
+  Type 'yes' to confirm rollback: yes
+  
+  📸 Creating safety checkpoint: pre-rollback-20251130-150000
+  ✅ Rolled back to checkpoint: approve-20251130-143856
+  
+  Plan restored to: cortex-brain/documents/planning/active/PLAN-20251130-authentication.md
+```
+
+**Alternative: Direct Git Commands (Advanced):**
 ```bash
 # 1. List available checkpoints
 git tag -l 'approve-*' --sort=-creatordate
@@ -638,6 +676,24 @@ CORTEX:
 ```
 
 **Rollback Plan Generation (Undo Planning Entirely):**
+
+**Recommended: Use CORTEX Rollback Command:**
+```
+User: "rollback to plan-20251130-143022"
+
+CORTEX:
+  ⚠️  ROLLBACK WARNING
+  
+  This will DISCARD all changes after checkpoint 'plan-20251130-143022'
+  (This undoes the entire planning session)
+  
+  Type 'yes' to confirm rollback: yes
+  
+  📸 Creating safety checkpoint: pre-rollback-20251130-150000
+  ✅ Rolled back to checkpoint: plan-20251130-143022
+```
+
+**Alternative: Direct Git Command (Advanced):**
 ```bash
 # Revert to state before planning started
 git reset --hard plan-20251130-143022
