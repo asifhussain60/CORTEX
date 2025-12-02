@@ -569,8 +569,8 @@ class WorkingMemory:
         Returns:
             Created Conversation object
         """
-        # Enforce FIFO limit before adding
-        self.queue_manager.enforce_fifo_limit()
+        # Enforce FIFO limit before adding (with auto-archive to Tier 2)
+        self._enforce_fifo_limit()
         
         # Add conversation
         conversation = self.conversation_manager.add_conversation(
@@ -1277,8 +1277,92 @@ class WorkingMemory:
         return self.queue_manager.get_eviction_log()
     
     def _enforce_fifo_limit(self) -> None:
-        """Enforce FIFO limit (maintained for compatibility, delegates to QueueManager)."""
+        """
+        Enforce FIFO limit (70 conversations).
+        Archives oldest inactive, non-pinned conversation before eviction.
+        """
+        count = self._get_conversation_count()
+        
+        if count < 70:  # MAX_CONVERSATIONS
+            return
+        
+        # Find oldest inactive, non-pinned conversation
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Check if is_pinned column exists
+        cursor.execute("PRAGMA table_info(conversations)")
+        columns = {row[1] for row in cursor.fetchall()}
+        has_pinned_column = 'is_pinned' in columns
+        
+        # Find oldest conversation to evict
+        if has_pinned_column:
+            cursor.execute("""
+                SELECT conversation_id
+                FROM conversations
+                WHERE is_active = 0 AND (is_pinned = 0 OR is_pinned IS NULL)
+                ORDER BY created_at ASC
+                LIMIT 1
+            """)
+        else:
+            cursor.execute("""
+                SELECT conversation_id
+                FROM conversations
+                WHERE is_active = 0
+                ORDER BY created_at ASC
+                LIMIT 1
+            """)
+        
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            oldest_id = row[0]
+            
+            # Auto-archive to Tier 2 before eviction
+            try:
+                tier2 = self._get_tier2_instance()
+                if tier2:
+                    self.archive_conversation_to_tier2(
+                        conversation_id=oldest_id,
+                        knowledge_graph=tier2
+                    )
+            except Exception as e:
+                # Continue with eviction even if archive fails
+                print(f"Warning: Auto-archive failed for {oldest_id}: {e}")
+        
+        # Now let queue_manager handle the actual eviction
         self.queue_manager.enforce_fifo_limit()
+    
+    def _get_tier2_instance(self):
+        """Get Tier 2 KnowledgeGraph instance for archival."""
+        # Check if tier2 was explicitly set (e.g., in tests)
+        if hasattr(self, 'tier2') and self.tier2 is not None:
+            return self.tier2
+        
+        try:
+            from src.tier2.knowledge_graph import KnowledgeGraph
+            
+            # Determine Tier 2 DB path
+            if str(self.db_path).endswith('tier1-working-memory.db'):
+                tier2_path = self.db_path.parent / 'tier2-knowledge-graph.db'
+            else:
+                # For test databases, use sibling path
+                tier2_path = self.db_path.parent / f"tier2_{self.db_path.name}"
+            
+            return KnowledgeGraph(db_path=tier2_path)
+        except Exception as e:
+            print(f"Could not initialize Tier 2: {e}")
+            return None
+    
+    def _get_conversation_count(self) -> int:
+        """Get total number of conversations."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM conversations")
+        count = cursor.fetchone()[0]
+        conn.close()
+        return count
     
     # ========== Utility Methods ==========
     
@@ -1302,9 +1386,11 @@ class WorkingMemory:
         Returns:
             Generated conversation ID
         """
-        # Generate conversation ID
+        # Generate conversation ID with microseconds for uniqueness
+        import time
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        conversation_id = f"conv_{timestamp}_{hash(user_message + assistant_response) & 0xfff:03x}"
+        microseconds = int(time.time() * 1000000) % 1000000
+        conversation_id = f"conv_{timestamp}_{microseconds:06d}_{hash(user_message + assistant_response) & 0xfff:03x}"
         
         title = user_message[:50] + "..." if len(user_message) > 50 else user_message
         
@@ -2301,7 +2387,7 @@ class WorkingMemory:
                 pattern_id=pattern_id,
                 title=f"Archived: {conv_title or 'Untitled'}",
                 content=json.dumps(content),
-                pattern_type='archived_conversation',
+                pattern_type='context',  # Use 'context' as it's a valid pattern type for archived conversations
                 confidence=1.0,
                 namespaces=['CORTEX-archived'],
                 scope='cortex'

@@ -158,9 +158,10 @@ class TestAutoArchiveToTier2:
         )
         
         # Check that archived pattern exists in Tier 2
-        # Should have at least 1 archived conversation
-        patterns = knowledge_graph.list_patterns(pattern_type='archived_conversation')
-        assert len(patterns) >= 1, "Should have archived at least one conversation"
+        # Should have at least 1 archived conversation (stored as 'context' pattern type with 'CORTEX-archived' namespace)
+        patterns = knowledge_graph.list_patterns(pattern_type='context')
+        archived_patterns = [p for p in patterns if 'CORTEX-archived' in str(p.get('namespaces', ''))]
+        assert len(archived_patterns) >= 1, "Should have archived at least one conversation"
     
     def test_archived_conversation_includes_metadata(self, working_memory, knowledge_graph):
         """Test that archived conversations include metadata"""
@@ -399,6 +400,10 @@ class TestFIFOIntegration:
         status = wm.queue_manager.get_queue_status()
         assert status['current_count'] == 70
         
-        # Verify first conversation archived to Tier 2
+        # Verify first conversation archived to Tier 2 (as 'context' pattern type with 'CORTEX-archived' namespace)
         archived = kg.get_pattern(f"conv_{first_conv_id}")
-        assert archived is not None or len(kg.list_patterns(pattern_type='archived_conversation')) > 0
+        if archived is None:
+            # Pattern may not be found by exact ID, check for any archived patterns
+            patterns = kg.list_patterns(pattern_type='context')
+            archived_patterns = [p for p in patterns if 'CORTEX-archived' in str(p.get('namespaces', ''))]
+            assert len(archived_patterns) > 0, "Should have archived conversation in Tier 2"
