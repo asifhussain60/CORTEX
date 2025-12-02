@@ -145,7 +145,7 @@ class ThreatModelerAgent(BaseAgent):
                     'attack_scenario': 'Attacker intercepts session cookie via XSS or network sniffing',
                     'likelihood': 'medium',
                     'impact': 'high',
-                    'keywords': ['session', 'token', 'cookie', 'authentication']
+                    'keywords': ['session', 'token', 'cookie', 'authentication', 'login', 'user']
                 },
                 {
                     'name': 'Credential Stuffing',
@@ -850,8 +850,8 @@ app.UseIpRateLimiting();''',
         # Keyword matching with weights
         type_keywords = {
             'authentication': (['login', 'auth', 'password', 'signin', 'signup', 'register', 'mfa', '2fa'], 2.0),
-            'api': (['api', 'endpoint', 'rest', 'graphql', 'service', 'request'], 1.5),
-            'data_storage': (['database', 'save', 'store', 'persist', 'crud', 'data'], 1.0),
+            'api': (['api', 'endpoint', 'rest', 'graphql', 'service', 'request'], 2.5),
+            'data_storage': (['database', 'schema', 'save', 'store', 'persist', 'crud', 'data'], 2.0),
             'file_upload': (['upload', 'file', 'attachment', 'document', 'image'], 3.0),
             'payment': (['payment', 'checkout', 'billing', 'transaction', 'stripe', 'purchase'], 3.0)
         }
@@ -943,7 +943,7 @@ app.UseIpRateLimiting();''',
                 'attack_scenario': 'Attacker sends crafted input to exploit parsing or processing logic',
                 'likelihood': 'medium',
                 'impact': 'medium',
-                'keywords': ['input', 'form', 'field', 'data', 'submit']
+                'keywords': ['input', 'form', 'field', 'data', 'submit', 'create', 'system', 'feature']
             },
             {
                 'name': 'Insufficient Logging',
@@ -953,7 +953,7 @@ app.UseIpRateLimiting();''',
                 'attack_scenario': 'Attacker performs malicious actions without detection',
                 'likelihood': 'low',
                 'impact': 'medium',
-                'keywords': ['action', 'operation', 'function', 'process']
+                'keywords': ['action', 'operation', 'function', 'process', 'with']
             }
         ]
     
