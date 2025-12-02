@@ -35,6 +35,7 @@ class TestDeliverablethe1_ArchitectureSync:
         (root / "src" / "cortex_agents").mkdir(parents=True)
         (root / "src" / "orchestrators").mkdir(parents=True)
         (root / "cortex-brain").mkdir()
+        (root / ".git" / "hooks").mkdir(parents=True, exist_ok=True)
         
         # Create sample files
         (root / "docs" / "ARCHITECTURE.md").write_text("# Architecture\n\n## Agents: 5\n## Orchestrators: 3")
@@ -216,7 +217,7 @@ class TestDeliverable3_LiveDocumentationSystem:
         # Create structure
         (root / "src" / "cortex_agents").mkdir(parents=True)
         (root / "docs").mkdir()
-        (root / ".git" / "hooks").mkdir(parents=True)
+        (root / ".git" / "hooks").mkdir(parents=True, exist_ok=True)
         
         yield root
         shutil.rmtree(temp_dir)
