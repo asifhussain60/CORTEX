@@ -1,0 +1,44 @@
+# Cross-Platform Line Ending Enforcement
+# Ensures consistent LF line endings across macOS and Windows
+
+# Default behavior: normalize to LF on checkin, convert to native on checkout
+* text=auto
+
+# Explicitly set LF for all text files
+*.py text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.txt text eol=lf
+*.sh text eol=lf
+*.sql text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+
+# Binary files (no line ending conversion)
+*.db binary
+*.sqlite binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.gz binary
+
+# Configuration files
+*.cfg text eol=lf
+*.ini text eol=lf
+*.toml text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# Documentation
+README* text eol=lf
+LICENSE* text eol=lf
+CHANGELOG* text eol=lf
