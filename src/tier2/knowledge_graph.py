@@ -690,4 +690,95 @@ class KnowledgeGraph:
                 })
             
             return results
+    
+    def store_relationship(
+        self,
+        relationship_id: str,
+        file_a: str,
+        file_b: str,
+        relationship_type: str,
+        strength: float,
+        context: str = ""
+    ) -> None:
+        """
+        Store code relationship in knowledge graph
+        
+        Args:
+            relationship_id: Unique relationship identifier
+            file_a: Source file/entity
+            file_b: Target file/entity
+            relationship_type: Type of relationship (import, calls, etc.)
+            strength: Relationship strength (0.0-1.0)
+            context: Description of relationship
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                INSERT OR REPLACE INTO relationships (
+                    relationship_id, file_a, file_b, relationship_type,
+                    strength, context, last_observed
+                )
+                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            """, (
+                relationship_id, file_a, file_b, relationship_type,
+                strength, context
+            ))
+            
+            conn.commit()
+    
+    def get_relationships(
+        self,
+        file_a: Optional[str] = None,
+        file_b: Optional[str] = None,
+        relationship_type: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Get relationships matching criteria
+        
+        Args:
+            file_a: Filter by source file
+            file_b: Filter by target file
+            relationship_type: Filter by relationship type
+            
+        Returns:
+            List of matching relationships
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            
+            query = "SELECT * FROM relationships WHERE 1=1"
+            params = []
+            
+            if file_a:
+                query += " AND file_a = ?"
+                params.append(file_a)
+            
+            if file_b:
+                query += " AND file_b = ?"
+                params.append(file_b)
+            
+            if relationship_type:
+                query += " AND relationship_type = ?"
+                params.append(relationship_type)
+            
+            query += " ORDER BY last_observed DESC"
+            
+            cursor.execute(query, params)
+            
+            rows = cursor.fetchall()
+            results = []
+            for row in rows:
+                results.append({
+                    'relationship_id': row['relationship_id'],
+                    'source': row['file_a'],
+                    'target': row['file_b'],
+                    'relationship_type': row['relationship_type'],
+                    'strength': row['strength'],
+                    'context': row['context'],
+                    'last_observed': row['last_observed']
+                })
+            
+            return results
+
 
