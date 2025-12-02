@@ -198,7 +198,7 @@ class RelationshipMapper:
             file_b=target,
             relationship_type=relationship_type,
             strength=strength,
-            context=context
+            context={'description': context} if context else None
         )
         
         return rel_id

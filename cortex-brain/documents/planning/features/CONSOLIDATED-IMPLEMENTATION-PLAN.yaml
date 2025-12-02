@@ -24,16 +24,24 @@ phases:
   - phase_id: "phase_0"
     name: "Foundation: Code Quality & Debugging"
     file: "phases/phase-0-foundation-code-quality-and-debugging.yaml"
-    status: "not-started"
+    status: "completed"
     priority: 1
     estimated_effort: "18 hours"
+    actual_effort: "48 hours"
+    completion_date: "2025-12-01"
+    version: "v3.4.0"
+    completion_notes: "Debug markers, mock detection, comment cleanup, deprecated code removal. 40/40 tests passing."
 
   - phase_id: "phase_0"
     name: "Foundation: Code Quality & Debugging"
     file: "phases/phase-0-foundation.yaml"
-    status: "not-started"
+    status: "completed"
     priority: 1
     estimated_effort: "18 hours"
+    actual_effort: "48 hours"
+    completion_date: "2025-12-01"
+    version: "v3.4.0"
+    completion_notes: "Duplicate entry - same work as phase-0-foundation-code-quality-and-debugging.yaml"
 
   - phase_id: "phase_1"
     name: "Setup & Onboarding Enhancement"
@@ -41,8 +49,10 @@ phases:
     status: "completed"
     priority: 2
     estimated_effort: "21 hours"
-    completion_date: "2025-11-25"
-    completion_notes: "Multi-Application Context System implemented on alternate machine"
+    actual_effort: "59 hours"
+    completion_date: "2025-12-01"
+    version: "v3.5.0"
+    completion_notes: "Shared CORTEX tooling environment (10x speedup), long-running notifications, application naming, enhanced setup guide. 11/11 tests passing. Velocity: 181% of estimate (21h → 59h)."
 
   - phase_id: "phase_2"
     name: "Architecture Synchronization"

@@ -173,7 +173,8 @@ class TDDCycleLogger:
         self,
         red_pattern_id: str,
         green_pattern_id: str,
-        refactor_pattern_id: Optional[str] = None
+        refactor_pattern_id: Optional[str] = None,
+        refactor_id: Optional[str] = None  # Alias for backward compatibility
     ) -> str:
         """
         Link RED→GREEN→REFACTOR patterns into complete TDD cycle
@@ -182,10 +183,15 @@ class TDDCycleLogger:
             red_pattern_id: RED phase pattern ID
             green_pattern_id: GREEN phase pattern ID
             refactor_pattern_id: Optional REFACTOR phase pattern ID
+            refactor_id: Alias for refactor_pattern_id (backward compatibility)
             
         Returns:
             Cycle pattern ID
         """
+        # Support both parameter names
+        if refactor_id is not None:
+            refactor_pattern_id = refactor_id
+        
         # Generate cycle ID
         cycle_id = self._generate_pattern_id("cycle", red_pattern_id, green_pattern_id)
         

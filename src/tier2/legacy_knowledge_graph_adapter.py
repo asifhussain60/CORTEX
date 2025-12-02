@@ -60,35 +60,77 @@ class LegacyKnowledgeGraphAdapter:
     
     def store_pattern(
         self,
-        title: str,
-        pattern_type: str,
+        title: str = None,
+        pattern_type: str = None,
         confidence: float = 0.5,
         context: Dict[str, Any] = None,
         scope: str = "application",
-        namespaces: List[str] = None
-    ) -> str:
+        namespaces: List[str] = None,
+        # New API parameters
+        pattern_id: str = None,
+        content: str = None,
+        metadata: Dict[str, Any] = None,
+        source: str = None,
+        is_pinned: bool = False,
+        is_cortex_internal: bool = True
+    ) -> Dict[str, Any]:
         """
-        Store pattern using legacy API signature
+        Store pattern using legacy OR modern API signature
+        
+        LEGACY API (5-param):
+            title, pattern_type, confidence, context, scope, namespaces
+            
+        MODERN API (7-param):
+            pattern_id, title, content, pattern_type, confidence, metadata, namespaces
         
         Args:
             title: Pattern name/title
-            pattern_type: Type (workflow, intent, validation)
+            pattern_type: Type (workflow, intent, validation, principle, solution, context)
             confidence: Confidence score (0.0-1.0)
-            context: Pattern details (files, steps, etc.)
+            context: Pattern details (legacy API)
             scope: Scope (cortex or application)
             namespaces: Namespace tags for isolation
+            pattern_id: Explicit pattern ID (modern API)
+            content: Pattern content string (modern API)
+            metadata: Pattern metadata (modern API)
+            source: Pattern source (modern API)
+            is_pinned: Pin status (modern API)
+            is_cortex_internal: Internal flag (modern API)
         
         Returns:
-            pattern_id: Unique identifier
+            dict with pattern_id
         """
-        # Generate pattern ID from title (consistent with old implementation)
-        pattern_id = self._generate_pattern_id(title)
+        # Detect which API is being used based on parameters
+        using_modern_api = (pattern_id is not None or content is not None or metadata is not None)
         
-        # Convert context dict to content string (for new API)
-        content = ""
-        if context:
-            # Extract content if available, otherwise serialize context
-            content = context.get('content', json.dumps(context))
+        if using_modern_api:
+            # Modern API: pattern_id, title, content, pattern_type, confidence, metadata, namespaces
+            if pattern_id is None:
+                pattern_id = self._generate_pattern_id(title or "pattern")
+            
+            if content is None:
+                content = ""
+                
+            if metadata is None:
+                metadata = {}
+        else:
+            # Legacy API: title, pattern_type, confidence, context, scope, namespaces
+            if title is None:
+                raise ValueError("title is required for legacy API")
+            if pattern_type is None:
+                raise ValueError("pattern_type is required")
+                
+            # Generate pattern ID from title (consistent with old implementation)
+            pattern_id = self._generate_pattern_id(title)
+            
+            # Convert context dict to content string (for new API)
+            content = ""
+            if context:
+                # Extract content if available, otherwise serialize context
+                content = context.get('content', json.dumps(context))
+            
+            # Use context as metadata
+            metadata = context or {}
         
         # Map old pattern types to new valid types
         # Old: workflow, intent, validation
@@ -115,15 +157,15 @@ class LegacyKnowledgeGraphAdapter:
             content=content,
             pattern_type=mapped_type,
             confidence=confidence,
-            source=None,
-            metadata=context,  # Store original context as metadata
-            is_pinned=False,
+            source=source,
+            metadata=metadata,
+            is_pinned=is_pinned,
             scope=scope,
             namespaces=namespaces,
-            is_cortex_internal=True  # Adapter is framework code
+            is_cortex_internal=is_cortex_internal
         )
         
-        return result.get('pattern_id', pattern_id)
+        return result
     
     def get_pattern(self, pattern_id: str) -> Optional[Dict[str, Any]]:
         """
@@ -195,10 +237,11 @@ class LegacyKnowledgeGraphAdapter:
             List of matching patterns
         """
         # Use modern search
-        results = self.modern_kg.pattern_search.search_patterns(
+        results = self.modern_kg.pattern_search.search(
             query=query,
-            pattern_type=pattern_type,
             min_confidence=min_confidence,
+            scope=scope,
+            namespaces=namespaces,
             limit=limit
         )
         
@@ -235,9 +278,10 @@ class LegacyKnowledgeGraphAdapter:
             List of matching patterns
         """
         # Use modern search
-        results = self.modern_kg.pattern_search.search_patterns(
+        namespace_filter_list = [namespace_filter] if namespace_filter else None
+        results = self.modern_kg.pattern_search.search(
             query=query,
-            pattern_type=pattern_type,
+            namespaces=namespace_filter_list,
             limit=limit
         )
         
@@ -261,7 +305,8 @@ class LegacyKnowledgeGraphAdapter:
         file_b: str,
         relationship_type: str,
         strength: float = 1.0,
-        context: Optional[Dict[str, Any]] = None
+        context: Optional[Dict[str, Any]] = None,
+        relationship_id: Optional[str] = None  # Support explicit ID
     ) -> str:
         """
         Store relationship between entities (legacy API)
@@ -272,21 +317,23 @@ class LegacyKnowledgeGraphAdapter:
             relationship_type: Type of relationship
             strength: Relationship strength (0.0-1.0)
             context: Additional context
+            relationship_id: Optional explicit relationship ID
             
         Returns:
             Relationship ID
         """
-        return self.modern_kg.relationships.store_relationship(
-            file_a=file_a,
-            file_b=file_b,
+        result = self.modern_kg.relationships.create_relationship(
+            from_pattern=file_a,
+            to_pattern=file_b,
             relationship_type=relationship_type,
-            strength=strength,
-            context=context
+            strength=strength
         )
+        return result.get('relationship_id', relationship_id or '')
     
     def get_relationships(
         self,
         file_path: Optional[str] = None,
+        file_a: Optional[str] = None,  # Alias for file_path
         relationship_type: Optional[str] = None
     ) -> List[Dict[str, Any]]:
         """
@@ -294,11 +341,16 @@ class LegacyKnowledgeGraphAdapter:
         
         Args:
             file_path: Filter by file path (matches file_a or file_b)
+            file_a: Alias for file_path
             relationship_type: Filter by relationship type
             
         Returns:
             List of relationships
         """
+        # Support both parameter names
+        if file_a is not None:
+            file_path = file_a
+            
         return self.modern_kg.relationships.get_relationships(
             file_path=file_path,
             relationship_type=relationship_type
