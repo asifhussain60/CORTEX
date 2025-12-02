@@ -166,16 +166,15 @@ class TestDeployIntegration:
         
         def track_doc_sync(*args, **kwargs):
             call_order.append('doc_sync')
-            return {'success': True, 'docs_updated': True}
+            return {'docs_updated': True}
         
         def track_version_bump(*args, **kwargs):
             call_order.append('version_bump')
-            return {'success': True, 'version': '3.2.2'}
+            return True
         
         with patch.object(orchestrator, '_check_and_update_docs', side_effect=track_doc_sync):
             with patch.object(orchestrator, '_bump_version', side_effect=track_version_bump):
-                with patch.object(orchestrator, '_deploy_to_production', return_value={'success': True, 'message': 'Deployed successfully'}):
-                    orchestrator.execute()
+                orchestrator.execute()
         
         # Doc sync must come before version bump
         assert call_order.index('doc_sync') < call_order.index('version_bump')

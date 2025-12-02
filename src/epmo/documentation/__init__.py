@@ -35,7 +35,7 @@ from dataclasses import dataclass
 
 from .parser import analyze_epmo_structure
 from .dependency_mapper import analyze_epmo_dependencies
-from .health_integration import HealthIntegration
+from .health_integration import HealthIntegration, get_health_integration_data
 from .models import (
     EPMDocumentationModel,
     DocumentationFormat,
@@ -107,11 +107,12 @@ def generate_documentation(
         # Health integration (if available)
         health_data = None
         try:
-            health_integration = HealthIntegration()
-            health_result = health_integration.analyze_epmo_health(epmo_path, project_root)
+            # Prefer lightweight function to avoid strict constructor signature
+            health_result = get_health_integration_data(epmo_path, project_root)
             health_data = health_result if health_result.get('status') == 'success' else None
         except Exception:
-            pass  # Health integration optional
+            # Health integration is optional; proceed without it
+            pass
         
         model = create_epmo_model(
             epmo_path=epmo_path,
