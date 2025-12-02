@@ -385,10 +385,11 @@ class TestIntegrationWithExistingTier1:
     
     def test_working_memory_coexists_with_conversations(self, working_memory):
         """Test that working_memory table works alongside conversations"""
-        # Store conversation
+        # Store conversation using correct API
         conv_id = working_memory.store_conversation(
-            conversation_id="test_conv_001",
-            title="Test Conversation"
+            user_message="Test user message",
+            assistant_response="Test response",
+            intent="test"
         )
         
         # Store temporary context
@@ -406,19 +407,19 @@ class TestIntegrationWithExistingTier1:
     
     def test_migrations_dont_break_existing_data(self, working_memory):
         """Test that schema migrations preserve existing data"""
-        # Store existing data
+        # Store existing data using correct API
         conv_id = working_memory.store_conversation(
-            conversation_id="test_conv_002",
-            title="Existing Data"
+            user_message="Existing conversation",
+            assistant_response="Existing response",
+            intent="test"
         )
-        working_memory.add_message(conv_id, "user", "Test message")
         
         # Verify data exists
         messages = working_memory.get_messages(conv_id)
-        assert len(messages) == 1
+        assert len(messages) >= 1, "Should have at least one message"
         
         # Apply migration (working_memory table should already exist from fixture)
         # Data should still be accessible
         messages_after = working_memory.get_messages(conv_id)
-        assert len(messages_after) == 1
-        assert messages_after[0]["content"] == "Test message"
+        assert len(messages_after) == len(messages), "Message count should be preserved"
+        assert any("Existing" in str(m.get("content", "")) for m in messages_after), "Original content should be preserved"

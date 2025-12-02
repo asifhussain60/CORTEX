@@ -248,6 +248,19 @@ class WorkingMemory:
             )
         """)
         
+        # Create working_memory table (Phase 7.1: TTL-based temporary context storage)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS working_memory (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                key TEXT UNIQUE NOT NULL,
+                value TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                expires_at TIMESTAMP NOT NULL,
+                context_type TEXT NOT NULL,
+                metadata TEXT
+            )
+        """)
+        
         # Create indexes for performance
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_conversations_created 
@@ -1948,6 +1961,187 @@ class WorkingMemory:
             return edge_cases
         except Exception as e:
             print(f"Error retrieving edge cases: {e}")
+            return []
+    
+    # =========================================================================
+    # Phase 7.1: Working Memory (TTL-based Temporary Context Storage)
+    # =========================================================================
+    
+    def store_temp_context(
+        self, 
+        key: str, 
+        value: Any, 
+        ttl_seconds: int,
+        context_type: str,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> bool:
+        """
+        Store temporary context with TTL expiration.
+        
+        Args:
+            key: Unique key for the context
+            value: Context value (will be JSON serialized)
+            ttl_seconds: Time-to-live in seconds
+            context_type: Type of context (e.g., 'feature_work', 'conversation_work')
+            metadata: Optional metadata dictionary
+        
+        Returns:
+            True if stored successfully, False otherwise
+        
+        Example:
+            working_memory.store_temp_context(
+                key="current_feature",
+                value={"feature": "user_auth", "status": "in_progress"},
+                ttl_seconds=3600,  # 1 hour
+                context_type="feature_work"
+            )
+        """
+        try:
+            import json
+            
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Serialize value and metadata
+            value_json = json.dumps(value)
+            metadata_json = json.dumps(metadata) if metadata else None
+            
+            # Insert or replace - use SQLite datetime functions
+            cursor.execute('''
+                INSERT OR REPLACE INTO working_memory 
+                (key, value, expires_at, context_type, metadata, created_at)
+                VALUES (?, ?, datetime('now', '+' || ? || ' seconds'), ?, ?, datetime('now'))
+            ''', (key, value_json, ttl_seconds, context_type, metadata_json))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error storing temporary context: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def get_temp_context(self, key: str) -> Optional[Dict[str, Any]]:
+        """
+        Get temporary context by key (only if not expired).
+        
+        Args:
+            key: Context key to retrieve
+        
+        Returns:
+            Dictionary with 'value', 'context_type', 'created_at', 'expires_at', 'metadata'
+            or None if not found or expired
+        """
+        try:
+            import json
+            from datetime import datetime
+            
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT value, context_type, created_at, expires_at, metadata
+                FROM working_memory
+                WHERE key = ? AND expires_at > datetime('now')
+            ''', (key,))
+            
+            row = cursor.fetchone()
+            conn.close()
+            
+            if not row:
+                return None
+            
+            return {
+                'value': json.loads(row[0]),
+                'context_type': row[1],
+                'created_at': row[2],
+                'expires_at': row[3],
+                'metadata': json.loads(row[4]) if row[4] else None
+            }
+            
+        except Exception as e:
+            print(f"Error retrieving temporary context: {e}")
+            return None
+    
+    def cleanup_expired_contexts(self) -> int:
+        """
+        Remove all expired temporary contexts.
+        
+        Returns:
+            Number of contexts deleted
+        """
+        try:
+            from datetime import datetime
+            
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                DELETE FROM working_memory
+                WHERE expires_at <= datetime('now')
+            ''')
+            
+            deleted_count = cursor.rowcount
+            conn.commit()
+            conn.close()
+            
+            return deleted_count
+            
+        except Exception as e:
+            print(f"Error cleaning up expired contexts: {e}")
+            return 0
+    
+    def list_active_contexts(self, context_type: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        List all active (non-expired) temporary contexts.
+        
+        Args:
+            context_type: Optional filter by context type
+        
+        Returns:
+            List of active context dictionaries
+        """
+        try:
+            import json
+            
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            if context_type:
+                cursor.execute('''
+                    SELECT key, value, context_type, created_at, expires_at, metadata
+                    FROM working_memory
+                    WHERE context_type = ? AND expires_at > datetime('now')
+                    ORDER BY created_at DESC
+                ''', (context_type,))
+            else:
+                cursor.execute('''
+                    SELECT key, value, context_type, created_at, expires_at, metadata
+                    FROM working_memory
+                    WHERE expires_at > datetime('now')
+                    ORDER BY created_at DESC
+                ''')
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            contexts = []
+            for row in rows:
+                contexts.append({
+                    'key': row[0],
+                    'value': json.loads(row[1]),
+                    'context_type': row[2],
+                    'created_at': row[3],
+                    'expires_at': row[4],
+                    'metadata': json.loads(row[5]) if row[5] else None
+                })
+            
+            return contexts
+            
+        except Exception as e:
+            print(f"Error listing active contexts: {e}")
             return []
 
 
