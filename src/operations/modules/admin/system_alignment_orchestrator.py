@@ -962,10 +962,14 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
         from src.deployment.deployment_gates import DeploymentGates
         from src.deployment.package_purity_checker import PackagePurityChecker
         
-        # Gate validation
+        # Gate validation (includes Gate 19: Token Efficiency)
         gates = DeploymentGates(self.project_root)
         gate_results = gates.validate_all_gates(alignment_report=report.__dict__)
         report.deployment_gate_results = gate_results
+        
+        # Phase 9.7: Application Health Dashboard Integration
+        # Extract Gate 19 (Token Efficiency) for health monitoring
+        self._integrate_health_dashboard(gate_results, report)
         
         # Track gate failures
         if not gate_results["passed"]:
@@ -997,6 +1001,326 @@ class SystemAlignmentOrchestrator(BaseOperationModule):
                         "type": "admin_leak",
                         "message": f"Admin code leaked to package: {leak}"
                     })
+    
+    def _integrate_health_dashboard(self, gate_results: Dict[str, Any], report: AlignmentReport) -> None:
+        """
+        Phase 9.7: Integrate Application Health Dashboard with Gate 19 validation.
+        
+        Extracts Gate 19 (Token Efficiency) results and generates health metrics
+        for dashboard visualization and monitoring.
+        
+        Args:
+            gate_results: Results from DeploymentGates.validate_all_gates()
+            report: AlignmentReport to populate with health metrics
+        """
+        try:
+            # Extract Gate 19 results
+            gate_19 = None
+            for gate in gate_results.get("gates", []):
+                if gate.get("name") == "Token Efficiency":
+                    gate_19 = gate
+                    break
+            
+            if not gate_19:
+                logger.warning("Gate 19 (Token Efficiency) not found in deployment gates")
+                return
+            
+            # Build health metrics from Gate 19 data
+            health_metrics = {
+                "gate_19_status": "passed" if gate_19.get("passed") else "failed",
+                "token_efficiency": {
+                    "total_current": gate_19.get("details", {}).get("total_current", 0),
+                    "total_budget": gate_19.get("details", {}).get("total_budget", 0),
+                    "total_overage": gate_19.get("details", {}).get("total_overage", 0),
+                    "compliance_pct": gate_19.get("details", {}).get("compliance_pct", 0),
+                    "files": gate_19.get("details", {}).get("files", [])
+                },
+                "severity": gate_19.get("severity", "UNKNOWN"),
+                "message": gate_19.get("message", ""),
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            # Add health metrics to report
+            if not hasattr(report, 'health_metrics'):
+                report.health_metrics = {}
+            
+            report.health_metrics["gate_19_token_efficiency"] = health_metrics
+            
+            # Generate health dashboard file
+            self._generate_health_dashboard(health_metrics, report)
+            
+            logger.info(
+                f"Phase 9.7: Health dashboard integrated with Gate 19 "
+                f"(Status: {health_metrics['gate_19_status']}, "
+                f"Tokens: {health_metrics['token_efficiency']['total_current']:,} / "
+                f"{health_metrics['token_efficiency']['total_budget']:,})"
+            )
+            
+        except Exception as e:
+            logger.error(f"Failed to integrate health dashboard (non-critical): {e}", exc_info=True)
+            report.warnings += 1
+            report.suggestions.append({
+                "type": "health_dashboard_integration",
+                "message": f"Health dashboard integration failed: {str(e)}"
+            })
+    
+    def _generate_health_dashboard(self, health_metrics: Dict[str, Any], report: AlignmentReport) -> None:
+        """
+        Generate Application Health Dashboard HTML file.
+        
+        Creates interactive dashboard showing:
+        - Gate 19 token efficiency status
+        - File-by-file token compliance
+        - Historical trends (if available)
+        - Optimization recommendations
+        
+        Args:
+            health_metrics: Health metrics from Gate 19 integration
+            report: AlignmentReport with additional context
+        """
+        try:
+            dashboard_path = self.cortex_brain / "dashboards" / "application-health.html"
+            dashboard_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Build dashboard HTML
+            token_data = health_metrics.get("token_efficiency", {})
+            files = token_data.get("files", [])
+            
+            # Calculate summary statistics
+            total_files = len(files)
+            compliant_files = sum(1 for f in files if f.get("is_compliant", False))
+            violation_files = total_files - compliant_files
+            
+            html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Application Health Dashboard</title>
+    <style>
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }}
+        .container {{
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }}
+        h1 {{
+            color: #667eea;
+            margin-bottom: 10px;
+        }}
+        .timestamp {{
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }}
+        .status-card {{
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid;
+        }}
+        .status-passed {{
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }}
+        .status-failed {{
+            background: #ffebee;
+            border-color: #f44336;
+        }}
+        .metrics-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }}
+        .metric {{
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }}
+        .metric-value {{
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }}
+        .metric-label {{
+            color: #666;
+            margin-top: 5px;
+            font-size: 14px;
+        }}
+        .file-table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }}
+        .file-table th {{
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }}
+        .file-table td {{
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }}
+        .file-table tr:hover {{
+            background: #f9f9f9;
+        }}
+        .badge-compliant {{
+            background: #4caf50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }}
+        .badge-violation {{
+            background: #f44336;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }}
+        .progress-bar {{
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+        }}
+        .progress-fill {{
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 0.3s ease;
+        }}
+        .recommendations {{
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+        }}
+        .recommendations h3 {{
+            margin-top: 0;
+            color: #ff9800;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 CORTEX Application Health Dashboard</h1>
+        <div class="timestamp">Generated: {health_metrics.get('timestamp', 'Unknown')}</div>
+        
+        <div class="status-card status-{health_metrics['gate_19_status']}">
+            <h2>Gate 19: Token Efficiency Status</h2>
+            <p><strong>Status:</strong> {health_metrics['gate_19_status'].upper()}</p>
+            <p><strong>Severity:</strong> {health_metrics['severity']}</p>
+            <p>{health_metrics['message']}</p>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric">
+                <div class="metric-value">{token_data.get('total_current', 0):,}</div>
+                <div class="metric-label">Current Tokens</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">{token_data.get('total_budget', 0):,}</div>
+                <div class="metric-label">Budget Tokens</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">{token_data.get('compliance_pct', 0):.1f}%</div>
+                <div class="metric-label">Compliance Rate</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">{violation_files}</div>
+                <div class="metric-label">Files Over Budget</div>
+            </div>
+        </div>
+        
+        <h3>Compliance Progress</h3>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {min(100, token_data.get('compliance_pct', 0))}%">
+                {token_data.get('compliance_pct', 0):.1f}%
+            </div>
+        </div>
+        
+        <h3>File-Level Token Analysis</h3>
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Current</th>
+                    <th>Budget</th>
+                    <th>Overage</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+"""
+            
+            # Add file rows
+            for file_info in files:
+                status_badge = (
+                    '<span class="badge-compliant">✓ OK</span>' 
+                    if file_info.get('is_compliant', False) 
+                    else f'<span class="badge-violation">✗ {file_info.get("overage_pct", 0):.0f}% OVER</span>'
+                )
+                
+                html_content += f"""                <tr>
+                    <td>{file_info.get('file', 'Unknown')}</td>
+                    <td>{file_info.get('current', 0):,}</td>
+                    <td>{file_info.get('budget', 0):,}</td>
+                    <td>{file_info.get('overage', 0):,}</td>
+                    <td>{status_badge}</td>
+                </tr>
+"""
+            
+            html_content += """            </tbody>
+        </table>
+        
+        <div class="recommendations">
+            <h3>🎯 Optimization Recommendations</h3>
+            <ul>
+                <li><strong>Phase 1: Modularization</strong> - Split large governance files into focused modules</li>
+                <li><strong>Phase 2: Template Compression</strong> - Use YAML anchors and base templates</li>
+                <li><strong>Phase 3: Lazy Loading</strong> - Load modules on-demand via orchestrators</li>
+                <li><strong>Phase 4: Reference Compression</strong> - Replace repeated patterns with references</li>
+            </ul>
+            <p>See: <code>cortex-brain/documents/planning/TOKEN-OPTIMIZATION-HOLISTIC-PLAN.md</code></p>
+        </div>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #888; font-size: 12px;">
+            <p>Generated by CORTEX System Alignment Orchestrator v3.2.1</p>
+            <p>Phase 9.7: Application Health Dashboard Integration</p>
+        </div>
+    </div>
+</body>
+</html>
+"""
+            
+            # Write dashboard file
+            dashboard_path.write_text(html_content, encoding='utf-8')
+            
+            logger.info(f"Application health dashboard generated: {dashboard_path}")
+            safe_print(f"\n📊 Application Health Dashboard: {dashboard_path}")
+            
+        except Exception as e:
+            logger.error(f"Failed to generate health dashboard HTML (non-critical): {e}", exc_info=True)
     
     def _validate_gap_remediation_components(self, report: AlignmentReport) -> None:
         """
