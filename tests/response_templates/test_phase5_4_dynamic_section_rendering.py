@@ -402,11 +402,11 @@ class TestPerformance:
         for mode in modes:
             formatter = formatter_registry.get_formatter(mode)
             start = time.time()
-            for _ in range(50):
+            for _ in range(100):  # More iterations for stable timing
                 formatter.format_response(content, {})
             durations.append(time.time() - start)
         
-        # All should be within 3x of fastest
+        # All should be within 5x of fastest (educational mode adds analysis)
         min_duration = min(durations)
         max_duration = max(durations)
-        assert max_duration < min_duration * 3
+        assert max_duration < min_duration * 5

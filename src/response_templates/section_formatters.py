@@ -30,6 +30,33 @@ class SectionFormatter(ABC):
             mode_name: Name of the interaction mode
         """
         self.mode_name = mode_name
+        self.max_response_lines = 30  # Default, can be overridden
+    
+    def _format_with_header(self, emoji: str, title: str, content: str) -> str:
+        """Helper to format section with consistent header style.
+        
+        Args:
+            emoji: Section emoji
+            title: Section title
+            content: Section content
+            
+        Returns:
+            Formatted section with header
+        """
+        if not content:
+            return ""
+        return f"### {emoji} {title}\n{content}"
+    
+    def _is_empty_challenge(self, content: str) -> bool:
+        """Check if challenge content is empty or "no challenge".
+        
+        Args:
+            content: Challenge content to check
+            
+        Returns:
+            True if challenge is empty or "no challenge"
+        """
+        return not content or content.lower() == "no challenge"
     
     @abstractmethod
     def format_understanding(self, content: str, context: Dict[str, Any]) -> str:
@@ -168,32 +195,28 @@ class GuidedSectionFormatter(SectionFormatter):
         self.max_response_lines = 30
     
     def format_understanding(self, content: str, context: Dict[str, Any]) -> str:
-        """Format understanding section - full header and content."""
-        if not content:
-            return ""
-        return f"### 🎯 My Understanding Of Your Request\n{content}"
+        """Format understanding section - standard with full header."""
+        return self._format_with_header("🎯", "My Understanding Of Your Request", content)
     
     def format_challenge(self, content: str, context: Dict[str, Any]) -> str:
-        """Format challenge section - full visibility."""
+        """Format challenge section - always visible."""
         if not content:
             content = "No Challenge"
-        return f"### ⚠️ Challenge\n{content}"
+        return self._format_with_header("⚠️", "Challenge", content)
     
     def format_response(self, content: str, context: Dict[str, Any]) -> str:
         """Format response section - standard format with max 30 lines."""
         if not content:
             return ""
         truncated = self._truncate_to_lines(content, self.max_response_lines)
-        return f"### 💬 Response\n{truncated}"
+        return self._format_with_header("💬", "Response", truncated)
     
     def format_next_steps(self, steps: List[str], context: Dict[str, Any]) -> str:
         """Format next steps - numbered list."""
         if not steps:
             return ""
-        
-        # Numbered list
         steps_text = "\n".join([f"{i}. {step}" for i, step in enumerate(steps, 1)])
-        return f"### 🔍 Next Steps\n{steps_text}"
+        return self._format_with_header("🔍", "Next Steps", steps_text)
 
 
 class EducationalSectionFormatter(SectionFormatter):
@@ -209,24 +232,22 @@ class EducationalSectionFormatter(SectionFormatter):
             return ""
         
         # Always add context explanation for educational mode
-        enriched = content
-        enriched += "\n\n**Context:** This helps us establish shared understanding before proceeding. "
-        enriched += "I want to ensure we're aligned on the requirements and approach."
+        enriched = (f"{content}\n\n"
+                   "**Context:** This helps us establish shared understanding before proceeding. "
+                   "I want to ensure we're aligned on the requirements and approach.")
         
-        return f"### 🎯 My Understanding Of Your Request\n{enriched}"
+        return self._format_with_header("🎯", "My Understanding Of Your Request", enriched)
     
     def format_challenge(self, content: str, context: Dict[str, Any]) -> str:
         """Format challenge section - includes explanation."""
         if not content:
             content = "No Challenge"
         
-        # Educational mode may add "why" explanation
-        formatted = f"### ⚠️ Challenge\n{content}"
+        # Add "why" explanation if challenge exists
+        if not self._is_empty_challenge(content) and context.get('include_explanation'):
+            content += "\n\n**Why this matters:** Understanding challenges helps anticipate solutions."
         
-        if context.get('include_explanation') and content.lower() != "no challenge":
-            formatted += "\n\n**Why this matters:** Understanding challenges helps anticipate solutions."
-        
-        return formatted
+        return self._format_with_header("⚠️", "Challenge", content)
     
     def format_response(self, content: str, context: Dict[str, Any]) -> str:
         """Format response section - detailed with analysis."""
@@ -236,11 +257,11 @@ class EducationalSectionFormatter(SectionFormatter):
         truncated = self._truncate_to_lines(content, self.max_response_lines)
         
         # Always add analysis for educational mode
-        formatted = f"### 💬 Response\n{truncated}"
-        formatted += "\n\n**Analysis:** Breaking down the approach helps build understanding and reveals key decision points."
-        formatted += "\n\n**Recommendations:** Consider best practices, common pitfalls, and long-term maintainability."
+        enriched = (f"{truncated}\n\n"
+                   "**Analysis:** Breaking down the approach helps build understanding and reveals key decision points.\n\n"
+                   "**Recommendations:** Consider best practices, common pitfalls, and long-term maintainability.")
         
-        return formatted
+        return self._format_with_header("💬", "Response", enriched)
     
     def format_next_steps(self, steps: List[str], context: Dict[str, Any]) -> str:
         """Format next steps - checkboxes with learning resources."""
@@ -249,13 +270,12 @@ class EducationalSectionFormatter(SectionFormatter):
         
         # Checkbox format for tracking
         steps_text = "\n".join([f"☐ {step}" for step in steps])
-        formatted = f"### 🔍 Next Steps\n{steps_text}"
         
         # Add learning resources if requested
         if context.get('include_learning_resources'):
-            formatted += "\n\n**Learning Resources:** Consult documentation and examples as you progress."
+            steps_text += "\n\n**Learning Resources:** Consult documentation and examples as you progress."
         
-        return formatted
+        return self._format_with_header("🔍", "Next Steps", steps_text)
 
 
 class PairSectionFormatter(SectionFormatter):
