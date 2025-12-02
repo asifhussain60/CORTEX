@@ -26,16 +26,14 @@ class DeployOrchestrator:
     - Deployment to production branch
     """
     
-    def __init__(self, cortex_root: Optional[Path] = None, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, cortex_root: Optional[Path] = None):
         """
         Initialize deploy orchestrator.
         
         Args:
             cortex_root: Path to CORTEX repository root (default: auto-detect)
-            config: Optional configuration dict with 'doc_sync.enabled' flag
         """
         self.cortex_root = cortex_root or Path(__file__).parent.parent.parent
-        self.config = config or {}
         self.logger = logging.getLogger(__name__)
     
     def execute(self, dry_run: bool = False) -> Dict[str, Any]:
@@ -63,7 +61,7 @@ class DeployOrchestrator:
             }
         
         # Phase 2: Architecture sync (NEW - Phase 2.1)
-        sync_result = self._check_and_update_docs(dry_run=dry_run)
+        sync_result = self._sync_architecture_docs(dry_run=dry_run)
         if not sync_result['success']:
             self.logger.warning(f"Architecture sync failed: {sync_result['message']}")
             # Non-blocking - continue deployment
@@ -102,30 +100,11 @@ class DeployOrchestrator:
             'message': 'Pre-deployment validation passed'
         }
     
-    def _check_and_update_docs(self, dry_run: bool = False) -> Dict[str, Any]:
-        """
-        Check for code changes and update architecture docs if needed.
-        
-        This is the main entry point called by execute().
-        Delegates to _sync_architecture_docs().
-        
-        Args:
-            dry_run: If True, show what would be updated without making changes
-        
-        Returns:
-            Dict with update results including 'docs_updated' flag
-        """
-        result = self._sync_architecture_docs(dry_run=dry_run)
-        # Add docs_updated flag for test compatibility
-        result['docs_updated'] = result.get('changes_detected', False)
-        return result
-    
     def _sync_architecture_docs(self, dry_run: bool = False) -> Dict[str, Any]:
         """
         Synchronize architecture documentation before deployment.
         
         Uses DocSyncHook to update ARCHITECTURE.md based on code changes.
-        Respects config['doc_sync']['enabled'] flag.
         
         Args:
             dry_run: If True, show what would be updated without making changes
@@ -133,19 +112,10 @@ class DeployOrchestrator:
         Returns:
             Dict with sync results
         """
-        # Check if doc sync is disabled via config
-        if not self.config.get('doc_sync', {}).get('enabled', True):
-            self.logger.info("Doc sync disabled via config - skipping")
-            return {
-                'success': True,
-                'changes_detected': False,
-                'message': 'Doc sync disabled via config'
-            }
-        
         self.logger.info("Synchronizing architecture documentation...")
         
         try:
-            from src.utils.doc_sync_hooks import DocSyncHook
+            from src.utils.doc_sync_hook import DocSyncHook
             
             hook = DocSyncHook(self.cortex_root)
             sync_result = hook.sync_on_deploy(dry_run=dry_run)

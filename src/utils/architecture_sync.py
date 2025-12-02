@@ -48,15 +48,6 @@ class ArchitectureSync:
         self.capabilities_file = cortex_root / "cortex-brain" / "capabilities.yaml"
         self.version_file = cortex_root / "VERSION"
     
-    def count_components(self) -> Tuple[int, int]:
-        """
-        Count agents and orchestrators.
-        
-        Returns:
-            Tuple of (agent_count, orchestrator_count)
-        """
-        return (self.count_agents(), self.count_orchestrators())
-    
     def count_agents(self) -> int:
         """Count total number of agent files in src/cortex_agents/."""
         agents_dir = self.cortex_root / "src" / "cortex_agents"

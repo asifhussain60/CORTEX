@@ -23,7 +23,6 @@ from typing import List, Set
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.utils.architecture_sync import ArchitectureSync
-from src.utils.key_files_checker import KeyFilesChecker
 
 
 def run_command(cmd: List[str], cwd: Path = None, check: bool = True) -> subprocess.CompletedProcess:
@@ -193,22 +192,6 @@ def deploy_cortex() -> int:
         else:
             print(f"  ⚠️  Warning: Architecture sync failed: {message}")
             print("     Continuing with deployment...")
-        print()
-        
-        # Step 0.5: Check key files freshness
-        print("📋 Checking key files freshness...")
-        files_checker = KeyFilesChecker(cortex_root)
-        freshness_report = files_checker.generate_freshness_report()
-        
-        if freshness_report['stale_count'] > 0:
-            print(f"  ⚠️  {freshness_report['stale_count']} files need updating (>30 days old)")
-            for stale_file in freshness_report['stale_files'][:3]:  # Show first 3
-                print(f"     • {stale_file['file']} ({stale_file['age_days']} days)")
-            if freshness_report['stale_count'] > 3:
-                print(f"     ... and {freshness_report['stale_count'] - 3} more")
-            print("     Review: cortex-brain/documents/planning/KEY-FILES-INVENTORY.md")
-        else:
-            print(f"  ✅ All key files fresh (<30 days)")
         print()
         
         # Step 1: Clean up any existing worktree

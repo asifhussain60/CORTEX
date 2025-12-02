@@ -24,19 +24,25 @@ import logging
 from pathlib import Path
 
 from src.cortex_agents.base_agent import AgentRequest, AgentResponse
-from src.cortex_agents.intent_router import IntentRouter
 from .request_parser import RequestParser
 from .response_formatter import ResponseFormatter
-from .setup_command import CortexSetup
-from .agent_executor import AgentExecutor
-from src.session_manager import SessionManager
-from src.tier1.tier1_api import Tier1API
-from src.tier2.knowledge_graph import KnowledgeGraph
-from src.tier3.context_intelligence import ContextIntelligence
 from src.config import config
-from src.core.context_management.unified_context_manager import UnifiedContextManager
-from src.response_templates import TemplateLoader
-from src.tier0.brain_protector import BrainProtector, ModificationRequest, Severity
+
+# Lazy imports for performance optimization
+from src.utils.lazy_loader import lazy_import, LazyModule
+from src.caching.component_cache import get_component_cache
+
+# Heavy imports deferred until needed
+_intent_router_module = lazy_import('src.cortex_agents.intent_router')
+_setup_module = lazy_import('.setup_command')
+_agent_executor_module = lazy_import('.agent_executor')
+_session_manager_module = lazy_import('src.session_manager')
+_tier1_module = lazy_import('src.tier1.tier1_api')
+_tier2_module = lazy_import('src.tier2.knowledge_graph')
+_tier3_module = lazy_import('src.tier3.context_intelligence')
+_context_manager_module = lazy_import('src.core.context_management.unified_context_manager')
+_template_loader_module = lazy_import('src.response_templates')
+_brain_protector_module = lazy_import('src.tier0.brain_protector')
 
 
 class CortexEntry:
@@ -69,7 +75,7 @@ class CortexEntry:
         skip_setup_check: bool = False
     ):
         """
-        Initialize CORTEX entry point.
+        Initialize CORTEX entry point with lazy loading and component caching.
         
         Args:
             brain_path: Path to CORTEX brain directory
@@ -90,56 +96,143 @@ class CortexEntry:
         # Ensure brain directory structure exists
         config.ensure_paths_exist()
         
-        self.tier1 = Tier1API(
-            self.brain_path / "tier1" / "conversations.db",
-            self.brain_path / "tier1" / "requests.log"
-        )
-        self.tier2 = KnowledgeGraph(str(self.brain_path / "tier2" / "knowledge_graph.db"))
-        self.tier3 = ContextIntelligence(str(self.brain_path / "tier3" / "context.db"))
+        # Get component cache for performance
+        self._component_cache = get_component_cache()
         
+        # Lazy-initialized components (load on first access)
+        self._tier1 = None
+        self._tier2 = None
+        self._tier3 = None
+        self._session_manager = None
+        self._router = None
+        self._agent_executor = None
+        self._context_manager = None
+        self._brain_protector = None
+        self._template_loader = None
+        
+        # Always initialize lightweight components
         self.parser = RequestParser()
         self.formatter = ResponseFormatter()
-        self.session_manager = SessionManager(db_path=str(self.brain_path / "tier1" / "conversations.db"))
+        self.default_token_budget = 500
         
-        template_file = self.brain_path / "response-templates.yaml"
-        self.template_loader = None
-        if template_file.exists():
-            try:
-                self.template_loader = TemplateLoader(template_file)
-                self.template_loader.load_templates()
-                self.logger.info("Template system initialized successfully")
-            except Exception as e:
-                self.logger.warning(f"Template system initialization failed: {e}")
-        
-        self.router = IntentRouter(
-            name="IntentRouter",
-            tier1_api=self.tier1,
-            tier2_kg=self.tier2,
-            tier3_context=self.tier3
-        )
-        
-        # Initialize agent executor for CORTEX-BRAIN-001 fix
-        self.agent_executor = AgentExecutor(
-            tier1_api=self.tier1,
-            tier2_kg=self.tier2,
-            tier3_context=self.tier3
-        )
-        
-        # Initialize unified context manager (Phase 2: Context Management)
-        self.context_manager = UnifiedContextManager(
-            tier1=self.tier1,
-            tier2=self.tier2,
-            tier3=self.tier3
-        )
-        self.default_token_budget = 500  # Store as instance variable
-        
-        # Initialize Brain Protector for Tier 0 governance enforcement
-        self.brain_protector = BrainProtector(
-            log_path=self.brain_path / "corpus-callosum" / "protection-events.jsonl",
-            rules_path=self.brain_path / "brain-protection-rules.yaml"
-        )
-        
-        self.logger.info("CORTEX entry point initialized with unified context manager and brain protector")
+        self.logger.info("CORTEX entry point initialized (lazy loading enabled)")
+    
+    @property
+    def tier1(self):
+        """Lazy-load Tier1 API."""
+        if self._tier1 is None:
+            self._tier1 = self._component_cache.get_or_create(
+                'tier1_api',
+                lambda: _tier1_module.Tier1API(
+                    self.brain_path / "tier1" / "conversations.db",
+                    self.brain_path / "tier1" / "requests.log"
+                )
+            )
+            self.logger.debug("Tier1 API loaded")
+        return self._tier1
+    
+    @property
+    def tier2(self):
+        """Lazy-load Tier2 Knowledge Graph."""
+        if self._tier2 is None:
+            self._tier2 = self._component_cache.get_or_create(
+                'tier2_kg',
+                lambda: _tier2_module.KnowledgeGraph(
+                    str(self.brain_path / "tier2" / "knowledge_graph.db")
+                )
+            )
+            self.logger.debug("Tier2 Knowledge Graph loaded")
+        return self._tier2
+    
+    @property
+    def tier3(self):
+        """Lazy-load Tier3 Context Intelligence."""
+        if self._tier3 is None:
+            self._tier3 = self._component_cache.get_or_create(
+                'tier3_context',
+                lambda: _tier3_module.ContextIntelligence(
+                    str(self.brain_path / "tier3" / "context.db")
+                )
+            )
+            self.logger.debug("Tier3 Context Intelligence loaded")
+        return self._tier3
+    
+    @property
+    def session_manager(self):
+        """Lazy-load Session Manager."""
+        if self._session_manager is None:
+            self._session_manager = self._component_cache.get_or_create(
+                'session_manager',
+                lambda: _session_manager_module.SessionManager(
+                    db_path=str(self.brain_path / "tier1" / "conversations.db")
+                )
+            )
+            self.logger.debug("Session Manager loaded")
+        return self._session_manager
+    
+    @property
+    def template_loader(self):
+        """Lazy-load Template Loader."""
+        if self._template_loader is None:
+            template_file = self.brain_path / "response-templates.yaml"
+            if template_file.exists():
+                try:
+                    loader = _template_loader_module.TemplateLoader(template_file)
+                    loader.load_templates()
+                    self._template_loader = loader
+                    self.logger.debug("Template Loader loaded")
+                except Exception as e:
+                    self.logger.warning(f"Template system initialization failed: {e}")
+                    self._template_loader = None
+        return self._template_loader
+    
+    @property
+    def router(self):
+        """Lazy-load Intent Router."""
+        if self._router is None:
+            self._router = _intent_router_module.IntentRouter(
+                name="IntentRouter",
+                tier1_api=self.tier1,
+                tier2_kg=self.tier2,
+                tier3_context=self.tier3
+            )
+            self.logger.debug("Intent Router loaded")
+        return self._router
+    
+    @property
+    def agent_executor(self):
+        """Lazy-load Agent Executor."""
+        if self._agent_executor is None:
+            self._agent_executor = _agent_executor_module.AgentExecutor(
+                tier1_api=self.tier1,
+                tier2_kg=self.tier2,
+                tier3_context=self.tier3
+            )
+            self.logger.debug("Agent Executor loaded")
+        return self._agent_executor
+    
+    @property
+    def context_manager(self):
+        """Lazy-load Unified Context Manager."""
+        if self._context_manager is None:
+            self._context_manager = _context_manager_module.UnifiedContextManager(
+                tier1=self.tier1,
+                tier2=self.tier2,
+                tier3=self.tier3
+            )
+            self.logger.debug("Context Manager loaded")
+        return self._context_manager
+    
+    @property
+    def brain_protector(self):
+        """Lazy-load Brain Protector."""
+        if self._brain_protector is None:
+            self._brain_protector = _brain_protector_module.BrainProtector(
+                log_path=self.brain_path / "corpus-callosum" / "protection-events.jsonl",
+                rules_path=self.brain_path / "brain-protection-rules.yaml"
+            )
+            self.logger.debug("Brain Protector loaded")
+        return self._brain_protector
     
     def process(
         self,
@@ -679,6 +772,7 @@ The setup process will:
             # Or in a different repo
             results = entry.setup(repo_path="/path/to/project")
         """
+        CortexSetup = _setup_module.CortexSetup
         setup = CortexSetup(
             repo_path=repo_path,
             brain_path=str(self.brain_path) if repo_path is None else None,
@@ -941,7 +1035,7 @@ Ready to continue! What would you like to do next?
             self.logger.error(f"Brain protector validation failed: {e}", exc_info=True)
             return None
     
-    def _create_modification_request(self, agent_request: AgentRequest) -> ModificationRequest:
+    def _create_modification_request(self, agent_request: AgentRequest):
         """
         Convert AgentRequest to ModificationRequest for brain protector.
         
@@ -954,6 +1048,9 @@ Ready to continue! What would you like to do next?
         # Extract file paths from user message
         from src.cortex_agents.utils import extract_file_paths
         files = extract_file_paths(agent_request.user_message)
+        
+        # Get ModificationRequest class lazily
+        ModificationRequest = _brain_protector_module.ModificationRequest
         
         # Build modification request
         return ModificationRequest(

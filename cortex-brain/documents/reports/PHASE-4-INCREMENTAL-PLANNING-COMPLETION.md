@@ -74,26 +74,29 @@ All Phase 4 objectives successfully completed:
 
 ## 🧪 Test Summary
 
-**Total Tests:** 8  
-**Passed:** 8 ✅  
+**Total Tests (current verification):** 14  
+**Passed:** 14 ✅  
 **Failed:** 0  
 **Coverage:** 100% of acceptance criteria
 
-**Test Execution Time:** <0.35 seconds
+**Test Execution Time:** ~6.1s on macOS (local venv)
 
 ### Test Classes
 
-1. **TestIncrementalPlanGeneration** (4 tests)
+1. **TestIncrementalPlanGeneration** (multiple tests)
    - Empty plan file creation
    - Incremental phase addition with progress
    - Plan resumption after interruption
    - Multi-format support (YAML/MD/ADO/Swagger)
 
-2. **TestProgressVisualizationForPlanning** (2 tests)
+2. **TestProgressVisualization** (multiple tests)
    - Progress percentage and ETA display
    - Hang detection for slow phases
 
-3. **TestIncrementalValidation** (2 tests)
+3. **TestIncrementalValidation** (multiple tests)
+
+### Current Test File
+- `tests/orchestrators/test_incremental_planning.py`
    - Invalid phase rejection without stopping
    - DoR/DoD incremental validation
 
@@ -107,10 +110,10 @@ All Phase 4 objectives successfully completed:
 - Total: 690 lines
 
 **Files Modified:**
-- `src/orchestrators/planning_orchestrator.py` (1 file)
+- `src/orchestrators/planning_orchestrator.py` (Phase 4 fixes for validation, progress messaging, and YAML safety)
 
 **Files Created:**
-- `tests/test_phase_4_incremental_planning.py` (1 file)
+- Note: Consolidated tests live at `tests/orchestrators/test_incremental_planning.py`
 
 **Efficiency:**
 - Estimated: 23 hours
