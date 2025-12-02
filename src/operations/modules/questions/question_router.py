@@ -390,7 +390,5 @@ class QuestionRouter:
     def route(self, message: str, context: Dict = None) -> 'RoutingResult':
         return self._router.route(message, context)
 
-RoutingResult = QuestionRoutingResult
-
 # Export for use in CORTEX operations
 __all__ = ['IntelligentQuestionRouter', 'QuestionRoutingResult', 'QuestionRouter', 'RoutingResult']
