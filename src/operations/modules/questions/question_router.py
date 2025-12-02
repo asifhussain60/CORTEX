@@ -21,6 +21,7 @@ from pathlib import Path
 
 from ....agents.namespace_detector import NamespaceDetector, NamespaceType, NamespaceDetectionResult
 from ....response_templates.template_renderer import TemplateRenderer
+from ...data_collectors.real_time_collectors import DataCollectionCoordinator
 
 
 @dataclass
@@ -289,6 +290,12 @@ class IntelligentQuestionRouter:
         # Add data source specific parameters
         data_source = template_info.get('data_source', 'default')
         
+        # Phase 3.3: Try real-time collectors first, fallback to existing mocks
+        collector_params = self._get_parameters_from_collectors(data_source)
+        if collector_params:
+            base_params.update(collector_params)
+            return base_params
+
         if data_source == 'brain_metrics':
             base_params.update(self._get_brain_metrics())
         elif data_source == 'memory_tiers':
@@ -302,6 +309,27 @@ class IntelligentQuestionRouter:
         # Add more data sources as needed
         
         return base_params
+
+    def _get_parameters_from_collectors(self, data_source: str) -> Dict[str, Any]:
+        """Map router data_source names to real-time collectors and merge results.
+        Returns empty dict if unavailable or errors occur.
+        """
+        try:
+            coord = DataCollectionCoordinator()
+            if data_source == 'brain_metrics':
+                # Merge brain metrics and performance
+                data = {}
+                for key in ['brain_metrics', 'performance']:
+                    res = coord.collectors[key].collect_with_cache(force_refresh=False)
+                    if res.success:
+                        data.update(res.data)
+                return data
+            if data_source in ('code_analysis', 'build_system'):
+                res = coord.collectors['workspace_health'].collect_with_cache(force_refresh=False)
+                return res.data if res.success else {}
+        except Exception:
+            return {}
+        return {}
         
     def _get_brain_metrics(self) -> Dict[str, Any]:
         """Get CORTEX brain performance metrics"""
