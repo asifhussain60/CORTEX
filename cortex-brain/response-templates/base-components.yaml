@@ -1,13 +1,25 @@
 # Base Components for CORTEX Response Templates
 # These are reusable building blocks that templates compose together
+# 
+# Purpose: Define atomic template components that can be composed into full responses
+# Usage: Templates reference components by name, composition engine assembles them
+# 
 # Version: 3.2
 # Phase: 5.1 - Modular YAML Structure
+# Last Updated: December 2, 2025
 
 schema_version: '3.2'
 last_updated: '2025-12-02'
 
+# Note: Component format strings use {{placeholder}} syntax for runtime substitution
+# The composition engine replaces placeholders with actual content during rendering
+
 components:
-  # Standard 5-part structure sections
+  # ============================================================================
+  # STANDARD 5-PART STRUCTURE COMPONENTS
+  # These form the mandatory CORTEX response format
+  # ============================================================================
+  
   understanding_section:
     format: |
       ### 🎯 My Understanding Of Your Request
@@ -43,7 +55,11 @@ components:
     required: true
     description: "Context-appropriate next steps (numbered list, checkboxes, or parallel tracks)"
   
-  # Header variants
+  # ============================================================================
+  # HEADER VARIANTS
+  # Different header styles for different response modes
+  # ============================================================================
+  
   standard_header:
     format: |
       ## 🧠 CORTEX {{operation}}
@@ -64,7 +80,11 @@ components:
     required: true
     description: "Compact header with inline understanding and challenge"
   
-  # Response variants for different interaction modes
+  # ============================================================================
+  # RESPONSE VARIANTS
+  # Specialized response formats for different interaction modes and contexts
+  # ============================================================================
+  
   response_detailed:
     format: |
       ### 💬 Response
@@ -107,7 +127,11 @@ components:
       {{/if}}
     description: "Tech-aware response with best practice + company-aligned options"
   
-  # Special components
+  # ============================================================================
+  # SPECIAL COMPONENTS
+  # Context summaries, progress bars, and decorative elements
+  # ============================================================================
+  
   context_summary:
     format: |
       
@@ -155,7 +179,11 @@ components:
       ```
     description: "Code block with syntax highlighting"
   
-  # Next steps variants
+  # ============================================================================
+  # NEXT STEPS VARIANTS
+  # Different formats for presenting action items
+  # ============================================================================
+  
   next_steps_numbered:
     format: |
       ### 🔍 Next Steps

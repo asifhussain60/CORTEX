@@ -1,7 +1,20 @@
 # CORTEX Response Templates
 # Concrete response templates that compose components from base-components.yaml
+# 
+# Purpose: Define specific response templates for operations and workflows
+# Structure: Each template specifies components to compose and content to inject
+# 
+# Template Anatomy:
+#   - name: Human-readable template name
+#   - components: List of component IDs from base-components.yaml
+#   - triggers: Keywords that activate this template
+#   - response_type: Classification (interactive, detailed, table, admin, narrative)
+#   - expected_orchestrator: (Optional) Orchestrator that handles this operation
+#   - content: Data to inject into component placeholders
+# 
 # Version: 3.2
-# Phase: 5.1 - Modular YAML Structure
+# Phase: 5.1 - Modular YAML Structure  
+# Last Updated: December 2, 2025
 
 schema_version: '3.2'
 last_updated: '2025-12-02'
