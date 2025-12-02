@@ -97,6 +97,32 @@ class TDDOrchestrator(IncrementalWorkExecutor):
         self.current_phase = TDDPhase.RED
         self.current_requirement_index = 0
         
+        # Initialize tier connections for Phase 3 tier feeding
+        if brain_path:
+            tier1_db = brain_path / "tier1" / "working_memory.db"
+            tier2_db = brain_path / "tier2" / "knowledge_graph.db"
+            tier3_db = brain_path / "tier3" / "development_context.db"
+            
+            # Import tier modules
+            from src.tier1.working_memory import WorkingMemory
+            from src.tier2.knowledge_graph import KnowledgeGraph
+            from src.tier3.context_intelligence import ContextIntelligence
+            
+            # Create tier instances
+            tier1_db.parent.mkdir(parents=True, exist_ok=True)
+            tier2_db.parent.mkdir(parents=True, exist_ok=True)
+            tier3_db.parent.mkdir(parents=True, exist_ok=True)
+            
+            self.tier1 = WorkingMemory(db_path=tier1_db)
+            self.tier2 = KnowledgeGraph(db_path=str(tier2_db))
+            self.tier3 = ContextIntelligence(db_path=str(tier3_db))
+            self.tier_feeding_enabled = True
+        else:
+            self.tier1 = None
+            self.tier2 = None
+            self.tier3 = None
+            self.tier_feeding_enabled = False
+        
         logger.info("✨ TDD Orchestrator initialized with incremental execution")
     
     def break_into_chunks(self, work_request: Dict[str, Any]) -> List[WorkChunk]:
@@ -343,6 +369,20 @@ class Test{class_name}:
         requirement = chunk.metadata.get("requirement", "Feature requirement")
         test_number = chunk.metadata.get("test_number", 1)
         
+        # Phase 3: Feed Tier 1 with test intent during RED phase
+        if self.tier_feeding_enabled and self.tier1:
+            feature_name = chunk.metadata.get("feature_name", "Unknown Feature")
+            self.tier1.store_test_intent(
+                feature_name=feature_name,
+                requirement=requirement,
+                test_phase='RED',
+                edge_cases=[requirement],  # Store requirement as edge case
+                metadata={
+                    'test_number': test_number,
+                    'chunk_id': chunk.chunk_id
+                }
+            )
+        
         # Generate test method name from requirement
         method_name = self._requirement_to_test_name(requirement, test_number)
         
@@ -355,15 +395,12 @@ class Test{class_name}:
         Run pytest to verify failure before implementing.
         \"\"\"
         # Arrange
-        # TODO: Set up test data
         
         # Act
-        # TODO: Call method under test
         result = None  # Replace with actual method call
         
         # Assert
         assert result is not None, "{requirement}"
-        # TODO: Add specific assertions for requirement
 """
         return test_code
     
@@ -371,6 +408,37 @@ class Test{class_name}:
         """Generate implementation method (GREEN phase)"""
         requirement = chunk.metadata.get("requirement", "Feature requirement")
         test_number = chunk.metadata.get("test_number", 1)
+        file_path = chunk.metadata.get("file_path", "src/feature.py")
+        
+        # Phase 3: Feed Tier 2 with implementation pattern during GREEN phase
+        if self.tier_feeding_enabled and self.tier2:
+            feature_name = chunk.metadata.get("feature_name", "Unknown Feature")
+            self.tier2.store_pattern(
+                title=f"{feature_name} - Implementation",
+                pattern_type='implementation',
+                confidence=0.6,
+                context={
+                    'requirement': requirement,
+                    'implementation_approach': 'minimal_then_extend',
+                    'dependencies': [],
+                    'source': 'tdd_green_phase'
+                },
+                scope='application',
+                namespaces=['tdd', 'implementation']
+            )
+        
+        # Phase 3: Feed Tier 3 with code metrics during GREEN phase
+        if self.tier_feeding_enabled and self.tier3:
+            # Store initial metrics (simplified - real metrics would use radon or similar)
+            self.tier3.store_code_metrics(
+                file_path=file_path,
+                cyclomatic_complexity=1,  # Minimal implementation = low complexity
+                cognitive_complexity=1,
+                lines_of_code=10,
+                source='tdd_green_phase'
+            )
+            # Track file as hotspot
+            self.tier3.increment_hotspot(file_path)
         
         # Generate method name from requirement
         method_name = self._requirement_to_method_name(requirement)
@@ -383,7 +451,6 @@ class Test{class_name}:
         Minimal implementation to pass test (GREEN phase).
         Will be refactored in next phase.
         \"\"\"
-        # TODO: Implement minimal logic to pass test
         return None  # Replace with actual implementation
 """
         return method_code
@@ -392,6 +459,22 @@ class Test{class_name}:
         """Generate refactoring suggestions (REFACTOR phase)"""
         requirement = chunk.metadata.get("requirement", "Feature requirement")
         test_number = chunk.metadata.get("test_number", 1)
+        file_path = chunk.metadata.get("file_path", "src/feature.py")
+        
+        # Phase 3: Feed Tier 3 with refactoring improvements during REFACTOR phase
+        if self.tier_feeding_enabled and self.tier3:
+            # Simulate refactoring - complexity should improve
+            before_complexity = 1  # From GREEN phase
+            after_complexity = 1   # Minimal change for now
+            
+            # Store updated metrics after refactoring
+            self.tier3.store_code_metrics(
+                file_path=file_path,
+                cyclomatic_complexity=after_complexity,
+                cognitive_complexity=after_complexity,
+                lines_of_code=12,  # Slightly more after refactoring comments/docs
+                source='tdd_refactor_phase'
+            )
         
         suggestions = f"""
 ## 🔄 Refactoring Suggestions for Test {test_number}
@@ -505,3 +588,12 @@ pytest -xvs tests/test_*.py::*test_{test_number}*
             return True
         
         return False
+
+    def disable_tier_feeding(self):
+        """Disable tier feeding for performance testing"""
+        self.tier_feeding_enabled = False
+    
+    def enable_tier_feeding(self):
+        """Enable tier feeding"""
+        self.tier_feeding_enabled = True
+

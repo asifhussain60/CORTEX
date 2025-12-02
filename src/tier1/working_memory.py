@@ -1780,4 +1780,174 @@ class WorkingMemory:
         except Exception as e:
             print(f"Error updating SWAGGER context status: {e}")
             return False
+    
+    # ========== Phase 3: TDD Workflow Enhancement - Tier Feeding ==========
+    
+    def store_test_intent(
+        self,
+        feature_name: str,
+        requirement: str,
+        test_phase: str = 'RED',
+        edge_cases: List[str] = None,
+        metadata: Dict[str, Any] = None
+    ) -> bool:
+        """
+        Store test intent extracted during RED phase of TDD.
+        
+        Part of Phase 3: Eliminates circular dependency on git commit messages
+        by capturing test requirements in real-time during RED phase.
+        
+        Args:
+            feature_name: Name of feature being tested
+            requirement: Test requirement/behavior being validated
+            test_phase: TDD phase (RED, GREEN, REFACTOR)
+            edge_cases: List of edge cases being tested
+            metadata: Additional context (file paths, test number, etc.)
+        
+        Returns:
+            True if stored successfully
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Create table if not exists
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS test_intents (
+                    intent_id TEXT PRIMARY KEY,
+                    feature_name TEXT NOT NULL,
+                    requirement TEXT NOT NULL,
+                    test_phase TEXT DEFAULT 'RED',
+                    edge_cases_json TEXT,
+                    metadata_json TEXT,
+                    source TEXT DEFAULT 'tdd_red_phase',
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            intent_id = f"test_intent_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+            edge_cases_json = json.dumps(edge_cases) if edge_cases else None
+            metadata_json = json.dumps(metadata) if metadata else None
+            
+            cursor.execute('''
+                INSERT INTO test_intents 
+                (intent_id, feature_name, requirement, test_phase, edge_cases_json, metadata_json, source)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                intent_id,
+                feature_name,
+                requirement,
+                test_phase,
+                edge_cases_json,
+                metadata_json,
+                'tdd_red_phase'
+            ))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error storing test intent: {e}")
+            return False
+    
+    def get_recent_test_intents(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Get recently captured test intents.
+        
+        Returns:
+            List of test intent dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT intent_id, feature_name, requirement, test_phase, 
+                       edge_cases_json, metadata_json, source, created_at
+                FROM test_intents
+                ORDER BY created_at DESC
+                LIMIT ?
+            ''', (limit,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            intents = []
+            for row in rows:
+                intents.append({
+                    'intent_id': row[0],
+                    'feature_name': row[1],
+                    'requirement': row[2],
+                    'test_phase': row[3],
+                    'edge_cases': json.loads(row[4]) if row[4] else [],
+                    'metadata': json.loads(row[5]) if row[5] else {},
+                    'source': row[6],
+                    'created_at': row[7]
+                })
+            
+            return intents
+        except Exception as e:
+            print(f"Error retrieving test intents: {e}")
+            return []
+    
+    def get_edge_cases_for_feature(self, feature_name: str) -> List[Dict[str, Any]]:
+        """
+        Get all edge cases for a specific feature.
+        
+        Args:
+            feature_name: Name of feature to retrieve edge cases for
+        
+        Returns:
+            List of edge case dictionaries with descriptions
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT intent_id, requirement, edge_cases_json, created_at
+                FROM test_intents
+                WHERE feature_name = ? AND edge_cases_json IS NOT NULL
+                ORDER BY created_at DESC
+            ''', (feature_name,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            edge_cases = []
+            for row in rows:
+                cases = json.loads(row[2]) if row[2] else []
+                for case in cases:
+                    edge_cases.append({
+                        'intent_id': row[0],
+                        'requirement': row[1],
+                        'description': case,
+                        'created_at': row[3]
+                    })
+            
+            # Also include requirements as implicit edge cases
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT intent_id, requirement, created_at
+                FROM test_intents
+                WHERE feature_name = ?
+                ORDER BY created_at DESC
+            ''', (feature_name,))
+            rows = cursor.fetchall()
+            conn.close()
+            
+            for row in rows:
+                edge_cases.append({
+                    'intent_id': row[0],
+                    'requirement': row[1],
+                    'description': row[1],  # Requirement itself as edge case
+                    'created_at': row[2]
+                })
+            
+            return edge_cases
+        except Exception as e:
+            print(f"Error retrieving edge cases: {e}")
+            return []
+
 

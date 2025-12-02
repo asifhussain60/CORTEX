@@ -479,3 +479,215 @@ class KnowledgeGraph:
                     return base_rate
             
             return 0.5  # Default if pattern not found
+    
+    # ========== Phase 3: TDD Workflow Enhancement - Pattern Learning ==========
+    
+    def store_tdd_cycle_pattern(
+        self,
+        feature: str,
+        test_strategy: str,
+        implementation_approach: str,
+        refactoring_type: str,
+        confidence: float = 0.7
+    ) -> str:
+        """
+        Store a completed TDD cycle as a pattern for future reference.
+        
+        Part of Phase 3 Deliverable 3.2: Pattern Learning from TDD Cycles
+        
+        Args:
+            feature: Feature name that was implemented
+            test_strategy: Testing strategy used (e.g., 'happy_path_first', 'edge_cases_first')
+            implementation_approach: Implementation approach (e.g., 'minimal_then_extend')
+            refactoring_type: Type of refactoring performed (e.g., 'extract_method')
+            confidence: Initial confidence score (default: 0.7)
+        
+        Returns:
+            pattern_id: Unique identifier for the stored pattern
+        """
+        context = {
+            'test_strategy': test_strategy,
+            'implementation_approach': implementation_approach,
+            'refactoring_type': refactoring_type,
+            'source': 'tdd_cycle'
+        }
+        
+        return self.store_pattern(
+            title=feature,
+            pattern_type='tdd_cycle',
+            confidence=confidence,
+            context=context,
+            scope='application',
+            namespaces=['tdd', 'development']
+        )
+    
+    def get_pattern(self, pattern_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve a specific pattern by ID.
+        
+        Args:
+            pattern_id: Pattern identifier
+        
+        Returns:
+            Pattern dictionary or None if not found
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT pattern_id, title, pattern_type, confidence, context_json,
+                       scope, namespaces, created_at, last_used, usage_count
+                FROM patterns
+                WHERE pattern_id = ?
+            """, (pattern_id,))
+            
+            row = cursor.fetchone()
+            if row:
+                return {
+                    'pattern_id': row['pattern_id'],
+                    'title': row['title'],
+                    'pattern_type': row['pattern_type'],
+                    'confidence': row['confidence'],
+                    'context_json': row['context_json'],
+                    'scope': row['scope'],
+                    'namespaces': row['namespaces'],
+                    'created_at': row['created_at'],
+                    'last_used': row['last_used'],
+                    'usage_count': row['usage_count']
+                }
+            return None
+    
+    def get_implementation_dependencies(self, feature: str) -> List[Dict[str, Any]]:
+        """
+        Get implementation dependencies captured during GREEN phase.
+        
+        Args:
+            feature: Feature name to retrieve dependencies for
+        
+        Returns:
+            List of dependency dictionaries
+        """
+        patterns = self.search_patterns(query=feature, limit=10)
+        
+        dependencies = []
+        for pattern in patterns:
+            if pattern['pattern_type'] in ['implementation', 'tdd_cycle']:
+                context = json.loads(pattern['context_json']) if pattern['context_json'] else {}
+                if 'dependencies' in context or 'implementation_approach' in context:
+                    dependencies.append({
+                        'pattern_id': pattern['pattern_id'],
+                        'feature': pattern['title'],
+                        'description': context.get('implementation_approach', ''),
+                        'dependencies': context.get('dependencies', []),
+                        'created_at': pattern['created_at']
+                    })
+        
+        return dependencies
+    
+    def get_implementation_decisions(self, feature: str) -> List[Dict[str, Any]]:
+        """
+        Get implementation decisions captured during GREEN phase.
+        
+        Args:
+            feature: Feature name to retrieve decisions for
+        
+        Returns:
+            List of decision dictionaries with rationale
+        """
+        patterns = self.search_patterns(query=feature, limit=10)
+        
+        decisions = []
+        for pattern in patterns:
+            if pattern['pattern_type'] in ['implementation', 'tdd_cycle']:
+                context = json.loads(pattern['context_json']) if pattern['context_json'] else {}
+                implementation_approach = context.get('implementation_approach', '')
+                
+                if implementation_approach:
+                    decisions.append({
+                        'pattern_id': pattern['pattern_id'],
+                        'feature': pattern['title'],
+                        'decision': implementation_approach,
+                        'rationale': f"Applied {implementation_approach} based on TDD cycle",
+                        'test_strategy': context.get('test_strategy', 'unknown'),
+                        'created_at': pattern['created_at']
+                    })
+        
+        return decisions
+    
+    def suggest_patterns_for_feature(self, feature_name: str, limit: int = 5) -> List[Dict[str, Any]]:
+        """
+        Suggest relevant patterns for a new feature based on semantic similarity.
+        
+        Part of Phase 3 Deliverable 3.2: Future TDD cycles get pattern suggestions
+        
+        Args:
+            feature_name: New feature being implemented
+            limit: Maximum number of suggestions
+        
+        Returns:
+            List of relevant pattern suggestions
+        """
+        # Search for semantically similar patterns
+        patterns = self.search_patterns(query=feature_name, limit=limit * 2)
+        
+        suggestions = []
+        for pattern in patterns:
+            if pattern['pattern_type'] == 'tdd_cycle':
+                context = json.loads(pattern['context_json']) if pattern['context_json'] else {}
+                suggestions.append({
+                    'pattern_id': pattern['pattern_id'],
+                    'title': pattern['title'],
+                    'confidence': pattern['confidence'],
+                    'test_strategy': context.get('test_strategy', ''),
+                    'implementation_approach': context.get('implementation_approach', ''),
+                    'refactoring_type': context.get('refactoring_type', ''),
+                    'context': pattern['context_json']
+                })
+        
+        # Sort by confidence and return top N
+        suggestions.sort(key=lambda x: x['confidence'], reverse=True)
+        return suggestions[:limit]
+    
+    def fts5_search(self, query: str, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Full-text search using FTS5 for semantic pattern matching.
+        
+        Part of Phase 3 Deliverable 3.2: Pattern matching uses FTS5
+        
+        Args:
+            query: Search query
+            limit: Maximum results
+        
+        Returns:
+            List of matching patterns
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            
+            # FTS5 search with relevance ranking
+            cursor.execute("""
+                SELECT p.pattern_id, p.title, p.pattern_type, p.confidence,
+                       p.context_json, p.scope, p.created_at,
+                       rank AS relevance
+                FROM patterns_fts fts
+                JOIN patterns p ON fts.pattern_id = p.pattern_id
+                WHERE patterns_fts MATCH ?
+                ORDER BY rank, p.confidence DESC
+                LIMIT ?
+            """, (query, limit))
+            
+            rows = cursor.fetchall()
+            results = []
+            for row in rows:
+                results.append({
+                    'pattern_id': row['pattern_id'],
+                    'title': row['title'],
+                    'pattern_type': row['pattern_type'],
+                    'confidence': row['confidence'],
+                    'context_json': row['context_json'],
+                    'scope': row['scope'],
+                    'created_at': row['created_at'],
+                    'relevance': row['relevance']
+                })
+            
+            return results
+
