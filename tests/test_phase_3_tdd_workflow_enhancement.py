@@ -20,9 +20,9 @@ from typing import Dict, Any, List
 
 # Test imports - will be implemented
 from src.orchestrators.tdd_orchestrator import TDDOrchestrator, TDDPhase, TDDWorkRequest
-from src.tier1.working_memory import WorkingMemory
-from src.tier2.knowledge_graph import KnowledgeGraph
-from src.tier3.context_intelligence import ContextIntelligence
+from src.tdd_orchestrator.tier1.working_memory import WorkingMemory
+from src.tdd_orchestrator.tier2.knowledge_graph import KnowledgeGraph
+from src.tdd_orchestrator.tier3.context_intelligence import ContextIntelligence
 
 
 # ============================================================================
@@ -40,14 +40,7 @@ class TestRedPhaseTierFeeding:
         brain_path.mkdir(parents=True, exist_ok=True)
         return TDDOrchestrator(brain_path=brain_path)
     
-    @pytest.fixture
-    def tier1(self, tmp_path):
-        """Create Tier 1 working memory"""
-        db_path = tmp_path / "cortex-brain" / "tier1" / "working_memory.db"
-        db_path.parent.mkdir(parents=True, exist_ok=True)
-        return WorkingMemory(db_path=db_path)
-    
-    def test_red_phase_captures_test_intent(self, tdd_orchestrator, tier1):
+    def test_red_phase_captures_test_intent(self, tdd_orchestrator):
         """Test that RED phase extracts test intent to Tier 1"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -65,12 +58,12 @@ class TestRedPhaseTierFeeding:
         # Assert
         assert result['success'] is True
         
-        # Verify Tier 1 captured test intent
-        tier1_data = tier1.get_recent_test_intents(limit=1)
+        # Verify Tier 1 captured test intent (use orchestrator's tier1)
+        tier1_data = tdd_orchestrator.tdd_orchestrator.tier1.get_recent_test_intents(limit=1)
         assert len(tier1_data) > 0
         assert "login with valid credentials" in tier1_data[0]['requirement'].lower()
     
-    def test_red_phase_captures_edge_cases(self, tdd_orchestrator, tier1):
+    def test_red_phase_captures_edge_cases(self, tdd_orchestrator):
         """Test that RED phase extracts edge cases to Tier 1"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -92,12 +85,12 @@ class TestRedPhaseTierFeeding:
             tdd_orchestrator.execute_chunk(chunk)
         
         # Assert
-        edge_cases = tier1.get_edge_cases_for_feature("Input Validation")
+        edge_cases = tdd_orchestrator.tdd_orchestrator.tier1.get_edge_cases_for_feature("Input Validation")
         assert len(edge_cases) >= 3
         assert any("empty" in case['description'].lower() for case in edge_cases)
         assert any("max length" in case['description'].lower() for case in edge_cases)
     
-    def test_red_phase_no_circular_dependency(self, tdd_orchestrator, tier1):
+    def test_red_phase_no_circular_dependency(self, tdd_orchestrator):
         """Test that RED phase does not rely on git commit messages"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -118,7 +111,7 @@ class TestRedPhaseTierFeeding:
         assert result['success'] is True
         
         # Verify Tier 1 has data without needing git commits
-        tier1_data = tier1.get_recent_test_intents(limit=1)
+        tier1_data = tdd_orchestrator.tdd_orchestrator.tier1.get_recent_test_intents(limit=1)
         assert len(tier1_data) > 0
         # No git commit should have been made yet
         assert tier1_data[0].get('source') != 'git_commit'
@@ -135,14 +128,7 @@ class TestGreenPhaseTierFeeding:
         brain_path.mkdir(parents=True, exist_ok=True)
         return TDDOrchestrator(brain_path=brain_path)
     
-    @pytest.fixture
-    def tier2(self, tmp_path):
-        """Create Tier 2 knowledge graph"""
-        db_path = tmp_path / "cortex-brain" / "tier2" / "knowledge_graph.db"
-        db_path.parent.mkdir(parents=True, exist_ok=True)
-        return KnowledgeGraph(db_path=str(db_path))
-    
-    def test_green_phase_captures_implementation_pattern(self, tdd_orchestrator, tier2):
+    def test_green_phase_captures_implementation_pattern(self, tdd_orchestrator):
         """Test that GREEN phase extracts implementation patterns to Tier 2"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -161,7 +147,7 @@ class TestGreenPhaseTierFeeding:
         assert result['success'] is True
         
         # Verify Tier 2 learned the implementation pattern
-        patterns = tier2.search_patterns(query="email validation", limit=5)
+        patterns = tdd_orchestrator.tier2.search_patterns(query="email validation", limit=5)
         assert len(patterns) > 0
         pattern = patterns[0]
         assert 'email' in pattern['title'].lower() or 'validation' in pattern['title'].lower()
@@ -183,7 +169,7 @@ class TestGreenPhaseTierFeeding:
         result = tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert
-        dependencies = tier2.get_implementation_dependencies(feature="Database Connection")
+        dependencies = tdd_orchestrator.tier2.get_implementation_dependencies(feature="Database Connection")
         assert len(dependencies) > 0
         assert any('retry' in dep['description'].lower() for dep in dependencies)
     
@@ -203,7 +189,7 @@ class TestGreenPhaseTierFeeding:
         result = tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert
-        decisions = tier2.get_implementation_decisions(feature="Cache Strategy")
+        decisions = tdd_orchestrator.tier2.get_implementation_decisions(feature="Cache Strategy")
         assert len(decisions) > 0
         decision = decisions[0]
         assert 'lru' in decision['decision'].lower() or 'ttl' in decision['decision'].lower()
@@ -220,14 +206,7 @@ class TestRefactorPhaseTierFeeding:
         brain_path.mkdir(parents=True, exist_ok=True)
         return TDDOrchestrator(brain_path=brain_path)
     
-    @pytest.fixture
-    def tier3(self, tmp_path):
-        """Create Tier 3 development context"""
-        db_path = tmp_path / "cortex-brain" / "tier3" / "development_context.db"
-        db_path.parent.mkdir(parents=True, exist_ok=True)
-        return ContextIntelligence(db_path=str(db_path))
-    
-    def test_refactor_phase_captures_improvements(self, tdd_orchestrator, tier3):
+    def test_refactor_phase_captures_improvements(self, tdd_orchestrator):
         """Test that REFACTOR phase captures code improvements"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -246,7 +225,7 @@ class TestRefactorPhaseTierFeeding:
         assert result['success'] is True
         
         # Verify Tier 3 captured improvements
-        improvements = tier3.get_recent_improvements(limit=5)
+        improvements = tdd_orchestrator.tier3.get_recent_improvements(limit=5)
         assert len(improvements) > 0
         improvement = improvements[0]
         assert improvement['improvement_type'] in ['performance', 'readability', 'maintainability']
@@ -267,7 +246,7 @@ class TestRefactorPhaseTierFeeding:
         result = tdd_orchestrator.execute_chunk(refactor_chunk)
         
         # Assert
-        metrics = tier3.get_performance_metrics(feature="Data Processor")
+        metrics = tdd_orchestrator.tier3.get_performance_metrics(feature="Data Processor")
         assert len(metrics) > 0
         metric = metrics[0]
         assert 'before_ms' in metric
@@ -290,7 +269,7 @@ class TestRefactorPhaseTierFeeding:
         result = tdd_orchestrator.execute_chunk(refactor_chunk)
         
         # Assert
-        simplifications = tier3.get_complexity_changes(feature="Complex Algorithm")
+        simplifications = tdd_orchestrator.tier3.get_complexity_changes(feature="Complex Algorithm")
         assert len(simplifications) > 0
         simplification = simplifications[0]
         assert 'before_complexity' in simplification
@@ -308,13 +287,13 @@ class TestPatternLearning:
     """Test Tier 2 learns patterns from completed TDD cycles"""
     
     @pytest.fixture
-    def tier2(self, tmp_path):
-        """Create Tier 2 knowledge graph"""
-        db_path = tmp_path / "cortex-brain" / "tier2" / "knowledge_graph.db"
-        db_path.parent.mkdir(parents=True, exist_ok=True)
-        return KnowledgeGraph(db_path=str(db_path))
+    def tdd_orchestrator(self, tmp_path):
+        """Create TDD orchestrator (includes tier2)"""
+        brain_path = tmp_path / "cortex-brain"
+        brain_path.mkdir(parents=True, exist_ok=True)
+        return TDDOrchestrator(brain_path=brain_path)
     
-    def test_stores_tdd_cycle_as_pattern(self, tier2):
+    def test_stores_tdd_cycle_as_pattern(self, tdd_orchestrator):
         """Test completed TDD cycles are stored as patterns"""
         # Arrange
         tdd_cycle = {
@@ -325,7 +304,7 @@ class TestPatternLearning:
         }
         
         # Act
-        pattern_id = tier2.store_tdd_cycle_pattern(
+        pattern_id = tdd_orchestrator.tier2.store_tdd_cycle_pattern(
             feature=tdd_cycle['feature'],
             test_strategy=tdd_cycle['test_strategy'],
             implementation_approach=tdd_cycle['implementation_approach'],
@@ -334,14 +313,14 @@ class TestPatternLearning:
         
         # Assert
         assert pattern_id is not None
-        stored_pattern = tier2.get_pattern(pattern_id)
+        stored_pattern = tdd_orchestrator.tier2.get_pattern(pattern_id)
         assert stored_pattern['title'] == 'User Registration'
         assert stored_pattern['pattern_type'] == 'tdd_cycle'
     
     def test_pattern_includes_test_strategy(self, tier2):
         """Test patterns include test strategy"""
         # Arrange
-        tier2.store_tdd_cycle_pattern(
+        tdd_orchestrator.tier2.store_tdd_cycle_pattern(
             feature='Input Validation',
             test_strategy='edge_cases_first',
             implementation_approach='defensive_programming',
@@ -349,7 +328,7 @@ class TestPatternLearning:
         )
         
         # Act
-        patterns = tier2.search_patterns(query="Input Validation")
+        patterns = tdd_orchestrator.tier2.search_patterns(query="Input Validation")
         
         # Assert
         assert len(patterns) > 0
@@ -360,7 +339,7 @@ class TestPatternLearning:
     def test_pattern_includes_implementation_approach(self, tier2):
         """Test patterns include implementation approach"""
         # Arrange
-        tier2.store_tdd_cycle_pattern(
+        tdd_orchestrator.tier2.store_tdd_cycle_pattern(
             feature='API Client',
             test_strategy='mock_external_services',
             implementation_approach='dependency_injection',
@@ -368,7 +347,7 @@ class TestPatternLearning:
         )
         
         # Act
-        patterns = tier2.search_patterns(query="API Client")
+        patterns = tdd_orchestrator.tier2.search_patterns(query="API Client")
         
         # Assert
         pattern = patterns[0]
@@ -378,7 +357,7 @@ class TestPatternLearning:
     def test_pattern_includes_refactoring_type(self, tier2):
         """Test patterns include refactoring type"""
         # Arrange
-        tier2.store_tdd_cycle_pattern(
+        tdd_orchestrator.tier2.store_tdd_cycle_pattern(
             feature='Data Parser',
             test_strategy='property_based_testing',
             implementation_approach='functional_style',
@@ -386,7 +365,7 @@ class TestPatternLearning:
         )
         
         # Act
-        patterns = tier2.search_patterns(query="Data Parser")
+        patterns = tdd_orchestrator.tier2.search_patterns(query="Data Parser")
         
         # Assert
         pattern = patterns[0]
@@ -396,13 +375,13 @@ class TestPatternLearning:
     def test_future_tdd_cycles_suggest_patterns(self, tier2):
         """Test future TDD cycles get pattern suggestions"""
         # Arrange - Store historical patterns
-        tier2.store_tdd_cycle_pattern(
+        tdd_orchestrator.tier2.store_tdd_cycle_pattern(
             feature='User Authentication',
             test_strategy='security_focused',
             implementation_approach='fail_secure',
             refactoring_type='extract_security_checks'
         )
-        tier2.store_tdd_cycle_pattern(
+        tdd_orchestrator.tier2.store_tdd_cycle_pattern(
             feature='User Authorization',
             test_strategy='security_focused',
             implementation_approach='fail_secure',
@@ -410,7 +389,7 @@ class TestPatternLearning:
         )
         
         # Act - Search for similar patterns
-        suggestions = tier2.suggest_patterns_for_feature("User Password Reset")
+        suggestions = tdd_orchestrator.tier2.suggest_patterns_for_feature("User Password Reset")
         
         # Assert
         assert len(suggestions) > 0
@@ -421,13 +400,13 @@ class TestPatternLearning:
     def test_pattern_matching_uses_fts5(self, tier2):
         """Test pattern matching uses FTS5 semantic search"""
         # Arrange - Store patterns with semantic similarity
-        tier2.store_tdd_cycle_pattern(
+        tdd_orchestrator.tier2.store_tdd_cycle_pattern(
             feature='Email Validator',
             test_strategy='regex_testing',
             implementation_approach='regex_based',
             refactoring_type='extract_regex_patterns'
         )
-        tier2.store_tdd_cycle_pattern(
+        tdd_orchestrator.tier2.store_tdd_cycle_pattern(
             feature='Phone Validator',
             test_strategy='regex_testing',
             implementation_approach='regex_based',
@@ -435,7 +414,7 @@ class TestPatternLearning:
         )
         
         # Act - Search with related term (not exact match)
-        results = tier2.fts5_search("validation")
+        results = tdd_orchestrator.tier2.fts5_search("validation")
         
         # Assert - FTS5 should find semantically related patterns
         assert len(results) >= 2
@@ -452,20 +431,13 @@ class TestRealTimeContextUpdates:
     """Test Tier 3 updates during development, not post-commit"""
     
     @pytest.fixture
-    def tier3(self, tmp_path):
-        """Create Tier 3 development context"""
-        db_path = tmp_path / "cortex-brain" / "tier3" / "development_context.db"
-        db_path.parent.mkdir(parents=True, exist_ok=True)
-        return ContextIntelligence(db_path=str(db_path))
-    
-    @pytest.fixture
     def tdd_orchestrator(self, tmp_path):
-        """Create TDD orchestrator"""
+        """Create TDD orchestrator (includes tier3)"""
         brain_path = tmp_path / "cortex-brain"
         brain_path.mkdir(parents=True, exist_ok=True)
         return TDDOrchestrator(brain_path=brain_path)
     
-    def test_green_phase_calculates_complexity_metrics(self, tdd_orchestrator, tier3):
+    def test_green_phase_calculates_complexity_metrics(self, tdd_orchestrator):
         """Test complexity metrics calculated during GREEN phase"""
         # Arrange
         work_request = TDDWorkRequest(
@@ -481,7 +453,7 @@ class TestRealTimeContextUpdates:
         result = tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert - Tier 3 should have metrics BEFORE commit
-        metrics = tier3.get_code_metrics(file_path="src/logic.py")
+        metrics = tdd_orchestrator.tier3.get_code_metrics(file_path="src/logic.py")
         assert metrics is not None
         assert 'cyclomatic_complexity' in metrics
         assert 'cognitive_complexity' in metrics
@@ -492,7 +464,7 @@ class TestRealTimeContextUpdates:
     def test_refactor_phase_measures_impact(self, tdd_orchestrator, tier3):
         """Test refactoring impact measured during REFACTOR phase"""
         # Arrange - Simulate GREEN phase with initial complexity
-        tier3.store_code_metrics(
+        tdd_orchestrator.tier3.store_code_metrics(
             file_path="src/calculator.py",
             cyclomatic_complexity=8,
             cognitive_complexity=12,
@@ -513,7 +485,7 @@ class TestRealTimeContextUpdates:
         result = tdd_orchestrator.execute_chunk(refactor_chunk)
         
         # Assert - Tier 3 should have before/after comparison
-        impact = tier3.get_refactoring_impact(file_path="src/calculator.py")
+        impact = tdd_orchestrator.tier3.get_refactoring_impact(file_path="src/calculator.py")
         assert impact is not None
         assert 'before' in impact
         assert 'after' in impact
@@ -552,7 +524,7 @@ class TestRealTimeContextUpdates:
             tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert - src/auth.py should be detected as hotspot
-        hotspots = tier3.get_hotspots(limit=5)
+        hotspots = tdd_orchestrator.tier3.get_hotspots(limit=5)
         assert len(hotspots) > 0
         auth_hotspot = [h for h in hotspots if 'auth.py' in h['file_path']]
         assert len(auth_hotspot) > 0
@@ -576,7 +548,7 @@ class TestRealTimeContextUpdates:
         result = tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert - Tier 3 should have data BEFORE commit
-        all_metrics = tier3.get_all_metrics(source='tdd_green_phase')
+        all_metrics = tdd_orchestrator.tier3.get_all_metrics(source='tdd_green_phase')
         assert len(all_metrics) > 0
         # Verify timestamp is during GREEN phase, not post-commit
         metric = all_metrics[0]
@@ -600,23 +572,12 @@ class TestFullTDDCycleIntegration:
         return TDDOrchestrator(brain_path=brain_path)
     
     @pytest.fixture
-    def all_tiers(self, tmp_path):
-        """Create all three tiers"""
-        brain_path = tmp_path / "cortex-brain"
-        
-        tier1_db = brain_path / "tier1" / "working_memory.db"
-        tier1_db.parent.mkdir(parents=True, exist_ok=True)
-        
-        tier2_db = brain_path / "tier2" / "knowledge_graph.db"
-        tier2_db.parent.mkdir(parents=True, exist_ok=True)
-        
-        tier3_db = brain_path / "tier3" / "development_context.db"
-        tier3_db.parent.mkdir(parents=True, exist_ok=True)
-        
+    def all_tiers(self, orchestrator):
+        """Return orchestrator's tier instances"""
         return {
-            'tier1': WorkingMemory(db_path=tier1_db),
-            'tier2': KnowledgeGraph(db_path=str(tier2_db)),
-            'tier3': ContextIntelligence(db_path=str(tier3_db))
+            'tier1': orchestrator.tier1,
+            'tier2': orchestrator.tier2,
+            'tier3': orchestrator.tier3
         }
     
     def test_complete_tdd_cycle_feeds_all_tiers(self, orchestrator, all_tiers):
