@@ -1,24 +1,48 @@
 """Template renderer for CORTEX response templates.
 
 This module handles rendering templates with placeholders and verbosity control.
+Enhanced in Phase 5.2 to support modular YAML composition.
 
 Author: Asif Hussain
-Version: 1.0
+Version: 2.0 (Phase 5.2)
 """
 
 import re
-from typing import Dict, Any, Optional
+import yaml
+import hashlib
+from pathlib import Path
+from typing import Dict, Any, Optional, List
+from difflib import SequenceMatcher
 from .template_loader import Template
 
 
 class TemplateRenderer:
-    """Renders response templates with placeholder substitution and verbosity control."""
+    """Renders response templates with placeholder substitution and composition from modular YAML."""
     
-    def __init__(self):
-        """Initialize template renderer."""
+    def __init__(self, template_dir: Optional[Path] = None):
+        """Initialize template renderer with modular YAML support.
+        
+        Args:
+            template_dir: Path to modular template directory (default: cortex-brain/response-templates)
+        """
         self.placeholder_pattern = re.compile(r'\{\{([^}]+)\}\}')
         self.conditional_pattern = re.compile(r'\{\{#if\s+(\w+)\}\}(.*?)\{\{/if\}\}', re.DOTALL)
         self.loop_pattern = re.compile(r'\{\{#(\w+)\}\}(.*?)\{\{/\1\}\}', re.DOTALL)
+        
+        # Modular YAML support (Phase 5.2)
+        self.template_dir = template_dir or Path("cortex-brain/response-templates")
+        self.components: Dict[str, Any] = {}
+        self.templates: Dict[str, Any] = {}
+        self.profiles: Dict[str, Any] = {}
+        self.routing: Dict[str, Any] = {}
+        self.schema_version: str = ""
+        
+        # Caching
+        self._cache: Dict[str, str] = {}
+        self.cache_hit_count: int = 0
+        
+        # Load modular YAML files
+        self._load_modular_yaml()
         
         # Tech stack to deployment platform mappings
         self.tech_stack_mappings = {
@@ -47,6 +71,205 @@ class TemplateRenderer:
                 'storage': 'Google Cloud Storage / Firestore'
             }
         }
+    
+    def _load_modular_yaml(self):
+        """Load all 4 modular YAML files (Phase 5.2)."""
+        files = {
+            'base-components': 'components',
+            'templates': 'templates',
+            'profiles': 'profiles',
+            'routing': 'routing'
+        }
+        
+        for filename, attr_name in files.items():
+            file_path = self.template_dir / f"{filename}.yaml"
+            
+            if not file_path.exists():
+                raise FileNotFoundError(f"Required template file not found: {file_path}")
+            
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+            
+            # Store schema version from first file
+            if not self.schema_version:
+                self.schema_version = data.get('schema_version', '3.2')
+            
+            # Validate schema version consistency
+            file_version = data.get('schema_version', '3.2')
+            if file_version != self.schema_version:
+                raise ValueError(f"Schema version mismatch: {filename}.yaml has {file_version}, expected {self.schema_version}")
+            
+            # Store the relevant section
+            setattr(self, attr_name, data.get(attr_name, {}))
+    
+    def compose_template(self, template_id: str, mode: str = "guided", context: Optional[Dict[str, Any]] = None) -> str:
+        """Compose a template from components (Phase 5.2).
+        
+        Args:
+            template_id: Template identifier
+            mode: Interaction mode (autonomous/guided/educational/pair)
+            context: Context data for placeholder substitution
+            
+        Returns:
+            Composed template string
+        """
+        # Check cache
+        cache_key = self._get_cache_key(template_id, mode, context)
+        if cache_key in self._cache:
+            self.cache_hit_count += 1
+            return self._cache[cache_key]
+        
+        # Get template definition
+        if template_id not in self.templates:
+            raise KeyError(f"Template '{template_id}' not found")
+        
+        template_def = self.templates[template_id]
+        
+        # Get components to compose
+        component_list = template_def.get('components', [])
+        
+        # Compose from components
+        composed = self._compose_from_components(component_list, mode)
+        
+        # Apply context substitution
+        if context is None:
+            context = template_def.get('content', {})
+        else:
+            # Merge template content with provided context
+            default_content = template_def.get('content', {})
+            context = {**default_content, **context}
+        
+        # Substitute placeholders
+        final = self._substitute_placeholders(composed, context)
+        
+        # Cache result
+        self._cache[cache_key] = final
+        
+        return final
+    
+    def _compose_from_components(self, component_list: List[str], mode: str = "guided") -> str:
+        """Compose template from component list.
+        
+        Args:
+            component_list: List of component IDs to compose
+            mode: Interaction mode for mode-specific formatting
+            
+        Returns:
+            Composed template string
+        """
+        parts = []
+        profile = self.profiles.get(mode, self.profiles.get('guided', {}))
+        
+        for component_id in component_list:
+            if component_id not in self.components:
+                raise KeyError(f"Component '{component_id}' not found in base-components.yaml")
+            
+            # Get mode-specific customization
+            mode_customization = self._get_mode_customization(component_id, mode)
+            
+            # Skip component if show is explicitly false
+            if mode_customization.get('show', True) is False:
+                continue
+            
+            # In autonomous mode, skip progress_bar for brevity
+            if mode == 'autonomous' and component_id == 'progress_bar':
+                continue
+            
+            component = self.components[component_id]
+            component_format = component.get('format', '')
+            
+            # Apply mode-specific formatting
+            if mode == 'autonomous' and component_id == 'next_steps_section':
+                # Autonomous mode: compact next steps
+                component_format = component_format.replace('### 🔍 Next Steps', '**Next:**')
+            elif mode == 'pair' and component_id == 'next_steps_section':
+                # Pair mode: Add collaborative options language
+                # Replace standard next steps with parallel tracks format
+                component_format = """### 🔍 Next Steps
+
+**I see a few options we could explore:**
+
+**Option A:** {{next_steps_option_a}}
+
+**Option B:** {{next_steps_option_b}}
+
+**Option C:** {{next_steps_option_c}}
+
+Which track would you like to pursue first?"""
+            
+            parts.append(component_format)
+        
+        return '\n'.join(parts)
+    
+    def _get_mode_customization(self, component_id: str, mode: str) -> Dict[str, Any]:
+        """Get mode-specific customization for a component.
+        
+        Args:
+            component_id: Component identifier
+            mode: Interaction mode
+            
+        Returns:
+            Customization dictionary
+        """
+        # Normalize mode
+        if mode not in ['autonomous', 'guided', 'educational', 'pair']:
+            mode = 'guided'  # Fallback to guided
+        
+        profile = self.profiles.get(mode, {})
+        customization = profile.get('section_customization', {})
+        
+        return customization.get(component_id, {})
+    
+    def _get_cache_key(self, template_id: str, mode: str, context: Optional[Dict[str, Any]]) -> str:
+        """Generate cache key for template composition.
+        
+        Args:
+            template_id: Template identifier
+            mode: Interaction mode
+            context: Context dictionary
+            
+        Returns:
+            Cache key string
+        """
+        context_str = str(sorted(context.items())) if context else ""
+        key_data = f"{template_id}|{mode}|{context_str}"
+        return hashlib.md5(key_data.encode()).hexdigest()
+    
+    def select_template_by_trigger(self, trigger: str) -> str:
+        """Select template by trigger phrase (Phase 5.2).
+        
+        Args:
+            trigger: Trigger phrase to match
+            
+        Returns:
+            Template ID
+        """
+        trigger_lower = trigger.lower().strip()
+        
+        # Get trigger index from routing
+        trigger_index = self.routing.get('trigger_index', {})
+        
+        # Exact match (case-insensitive)
+        for indexed_trigger, template_id in trigger_index.items():
+            if indexed_trigger.lower() == trigger_lower:
+                return template_id
+        
+        # Fuzzy match (80%+ similarity)
+        best_match = None
+        best_score = 0.0
+        threshold = 0.8
+        
+        for indexed_trigger, template_id in trigger_index.items():
+            similarity = SequenceMatcher(None, trigger_lower, indexed_trigger.lower()).ratio()
+            if similarity > best_score and similarity >= threshold:
+                best_score = similarity
+                best_match = template_id
+        
+        if best_match:
+            return best_match
+        
+        # Fallback to default
+        return self.routing.get('default_template', 'fallback')
     
     def render(
         self, 
