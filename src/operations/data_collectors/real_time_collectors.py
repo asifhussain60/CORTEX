@@ -430,6 +430,42 @@ class PerformanceCollector(BaseDataCollector):
             "template_render_time_ms": 5
         }
 
+class TokenUsageCollector(BaseDataCollector):
+    """Collects token usage and template efficiency metrics (Phase 3.2)."""
+
+    def __init__(self):
+        super().__init__("token_usage", "Token usage and template efficiency")
+
+    def collect(self) -> Dict[str, Any]:
+        # Placeholder implementation; in future, wire into actual counters
+        return {
+            "tokens_used_recent": 12345,
+            "avg_tokens_per_response": 320,
+            "template_hit_rate_percent": 92,
+            "response_template_efficiency": "high",
+            "optimization_opportunities": 3,
+        }
+
+class ConversationQualityCollector(BaseDataCollector):
+    """Scores conversation quality and capture recommendations (Phase 3.2)."""
+
+    def __init__(self):
+        super().__init__("conversation_quality", "Conversation quality scoring")
+
+    def collect(self) -> Dict[str, Any]:
+        # Placeholder implementation; will use real signals (length, depth, outcomes)
+        avg_turns = 14
+        technical_depth = 0.78
+        learning_value = 0.82
+        quality = round((technical_depth * 0.6 + learning_value * 0.4) * 100)
+        return {
+            "avg_turns": avg_turns,
+            "technical_depth_score": int(technical_depth * 100),
+            "learning_value_score": int(learning_value * 100),
+            "quality_score": quality,
+            "capture_recommendation": quality >= 70,
+        }
+
 class DataCollectionCoordinator:
     """Coordinates all data collectors and provides unified interface"""
     
@@ -437,7 +473,10 @@ class DataCollectionCoordinator:
         self.collectors = {
             "brain_metrics": BrainMetricsCollector(),
             "workspace_health": WorkspaceHealthCollector(),
-            "performance": PerformanceCollector()
+            "performance": PerformanceCollector(),
+            # Phase 3.2 additions
+            "token_usage": TokenUsageCollector(),
+            "conversation_quality": ConversationQualityCollector(),
         }
         
     def collect_all(self, force_refresh: bool = False) -> Dict[str, CollectorResult]:
