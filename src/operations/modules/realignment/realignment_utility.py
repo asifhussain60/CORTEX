@@ -549,24 +549,43 @@ def align_system_v2(
         validator = FeatureRegistrationValidator(cortex_root)
         registration_result = validator.validate()
         
+        # Identify user-facing operations
+        ops_dir = cortex_root / "src" / "operations"
+        user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
+        
+        # Check how many unregistered are user-facing
+        unregistered_user_facing = [op for op in registration_result.unregistered_operations if op in user_facing_ops]
+        
         results["checks"]["feature_registration"] = {
             "passed": registration_result.passed,
             "registered_operations": len(registration_result.registered_operations),
             "unregistered_operations": len(registration_result.unregistered_operations),
+            "unregistered_user_facing": len(unregistered_user_facing),
             "registration_percentage": registration_result.registration_percentage
         }
         
         if not registration_result.passed:
-            logger.warning(f"⚠️  {registration_result.unregistered_count} unregistered features found")
+            if len(unregistered_user_facing) > 0:
+                logger.error(f"❌ {len(unregistered_user_facing)} USER-FACING operations unregistered (CRITICAL)")
+            
+            logger.warning(f"⚠️  {registration_result.unregistered_count} total unregistered features found")
+            
+            severity = "CRITICAL" if len(unregistered_user_facing) > 10 else "HIGH" if len(unregistered_user_facing) > 0 else "MEDIUM"
+            
             results["warnings"].append({
                 "category": "feature_registration",
-                "severity": "HIGH",
-                "message": f"{registration_result.unregistered_count} unregistered features",
+                "severity": severity,
+                "message": f"{len(unregistered_user_facing)} USER-FACING operations unregistered",
                 "details": {
-                    "operations": registration_result.unregistered_operations,
-                    "modules": registration_result.unregistered_modules
+                    "user_facing_operations": unregistered_user_facing,
+                    "utility_modules": [op for op in registration_result.unregistered_operations if op not in user_facing_ops],
+                    "unregistered_modules": registration_result.unregistered_modules
                 }
             })
+            
+            # Mark as failed if user-facing operations are unregistered
+            if len(unregistered_user_facing) > 10:
+                results["success"] = False
             
             # Auto-fix if enabled
             if auto_fix and not dry_run:
@@ -609,6 +628,28 @@ def align_system_v2(
                 "message": f"{intent_router_coverage['missing_count']} operations not routable",
                 "details": intent_router_coverage["missing_operations"]
             })
+            
+            # Auto-fix if enabled
+            if auto_fix and not dry_run:
+                logger.info("🔧 Auto-adding operations to intent router...")
+                try:
+                    from src.operations.modules.realignment.intent_router_auto_fixer import (
+                        IntentRouterAutoFixer
+                    )
+                    fixer = IntentRouterAutoFixer(cortex_root)
+                    fix_results = fixer.fix_missing_operations(
+                        intent_router_coverage["missing_operations"],
+                        dry_run=False
+                    )
+                    
+                    for fix_result in fix_results:
+                        if fix_result.success and not fix_result.error_message:
+                            results["fixes_applied"].append(
+                                f"Added {fix_result.operation_name} to intent router"
+                            )
+                except Exception as e:
+                    logger.error(f"   ❌ Auto-fix failed: {e}")
+                    results["errors"].append(f"Intent router auto-fix failed: {e}")
         else:
             logger.info("✅ All operations have intent router triggers")
         
@@ -620,13 +661,54 @@ def align_system_v2(
         results["checks"]["response_templates"] = template_coverage
         
         if template_coverage["missing_count"] > 0:
-            logger.warning(f"⚠️  {template_coverage['missing_count']} operations missing response templates")
+            # Identify user-facing operations (have entry point files)
+            ops_dir = cortex_root / "src" / "operations"
+            user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
+            
+            # Check how many missing templates are for user-facing operations
+            missing_user_facing = [op for op in template_coverage["missing_templates"] if op in user_facing_ops]
+            
+            severity = "CRITICAL" if len(missing_user_facing) > 20 else "HIGH" if len(missing_user_facing) > 10 else "MEDIUM"
+            
+            logger.error(f"❌ {len(missing_user_facing)} USER-FACING operations missing response templates (CRITICAL)")
+            logger.warning(f"⚠️  {template_coverage['missing_count'] - len(missing_user_facing)} utility operations missing templates")
+            
             results["warnings"].append({
                 "category": "response_templates",
-                "severity": "MEDIUM",
-                "message": f"{template_coverage['missing_count']} operations lack templates",
-                "details": template_coverage["missing_templates"]
+                "severity": severity,
+                "message": f"{len(missing_user_facing)} USER-FACING operations lack templates (CRITICAL)",
+                "details": {
+                    "user_facing_missing": missing_user_facing,
+                    "utility_missing": [op for op in template_coverage["missing_templates"] if op not in user_facing_ops],
+                    "total_missing": template_coverage["missing_count"]
+                }
             })
+            
+            # Mark as failed if too many user-facing operations missing
+            if len(missing_user_facing) > 20:
+                results["success"] = False
+            
+            # Auto-fix if enabled
+            if auto_fix and not dry_run:
+                logger.info("🔧 Auto-generating response templates...")
+                try:
+                    from src.operations.modules.realignment.response_template_auto_generator import (
+                        ResponseTemplateAutoGenerator
+                    )
+                    generator = ResponseTemplateAutoGenerator(cortex_root)
+                    gen_results = generator.generate_missing_templates(
+                        template_coverage["missing_templates"],
+                        dry_run=False
+                    )
+                    
+                    for gen_result in gen_results:
+                        if gen_result.success and not gen_result.error_message:
+                            results["fixes_applied"].append(
+                                f"Generated template for {gen_result.operation_name}"
+                            )
+                except Exception as e:
+                    logger.error(f"   ❌ Template generation failed: {e}")
+                    results["errors"].append(f"Template generation failed: {e}")
         else:
             logger.info("✅ All operations have response templates")
         
@@ -670,6 +752,36 @@ def align_system_v2(
                 "message": f"{total_obsolete} obsolete files found",
                 "details": obsolete_result
             })
+            
+            # Auto-fix if enabled
+            if auto_fix and not dry_run:
+                logger.info("🔧 Auto-cleaning obsolete code...")
+                try:
+                    from src.operations.modules.realignment.obsolete_code_auto_cleaner import (
+                        ObsoleteCodeAutoCleaner
+                    )
+                    cleaner = ObsoleteCodeAutoCleaner(cortex_root)
+                    
+                    # Collect all obsolete files
+                    obsolete_files = []
+                    obsolete_files.extend(obsolete_result.get("deprecated", []))
+                    obsolete_files.extend(obsolete_result.get("test_files", []))
+                    obsolete_files.extend(obsolete_result.get("temp_files", []))
+                    
+                    cleanup_result = cleaner.cleanup_files(obsolete_files, dry_run=False)
+                    
+                    if cleanup_result.success:
+                        results["fixes_applied"].append(
+                            f"Cleaned up {len(cleanup_result.files_removed)} obsolete files "
+                            f"({cleanup_result.space_freed_mb} MB freed)"
+                        )
+                        logger.info(f"   💾 Backup: {cleanup_result.backup_dir}")
+                    else:
+                        for error in cleanup_result.errors:
+                            results["errors"].append(f"Cleanup error: {error}")
+                except Exception as e:
+                    logger.error(f"   ❌ Obsolete code cleanup failed: {e}")
+                    results["errors"].append(f"Obsolete code cleanup failed: {e}")
         else:
             logger.info("✅ No obsolete code detected")
         
