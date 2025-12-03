@@ -1144,7 +1144,7 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 
 ---
 
-**Last Updated:** 2025-12-03 | Version 3.5.5 (Git Checkpoint + Onboarding + Dashboard System Enhancement)  
+**Last Updated:** 2025-12-03 | Version 3.7.0 (Phase 7: Integration & Testing + Phase 8: File Naming Governance)  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Source-Available - See LICENSE | **Repository:** https://github.com/asifhussain60/CORTEX
 
