@@ -100,6 +100,41 @@ class TestPythonEnvironmentModule:
         
         assert parent_project is None
     
+    def test_detect_shared_environment_exists(self, module):
+        """Test detection of existing shared environment."""
+        python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+        
+        with patch('pathlib.Path.exists') as mock_exists, \
+             patch('pathlib.Path.is_dir') as mock_is_dir:
+            # Simulate shared venv exists
+            mock_exists.return_value = True
+            mock_is_dir.return_value = True
+            
+            shared_env = module._detect_shared_environment()
+            
+            assert shared_env is not None
+            assert f"venv-{python_version}" in str(shared_env)
+            assert ".cortex" in str(shared_env)
+    
+    def test_detect_shared_environment_not_exists(self, module):
+        """Test detection when shared environment doesn't exist."""
+        with patch('pathlib.Path.exists') as mock_exists:
+            mock_exists.return_value = False
+            
+            shared_env = module._detect_shared_environment()
+            
+            assert shared_env is None
+    
+    def test_get_python_version_string(self, module):
+        """Test Python version string formatting."""
+        version_str = module._get_python_version_string()
+        
+        assert version_str == f"{sys.version_info.major}.{sys.version_info.minor}"
+        assert "." in version_str
+        parts = version_str.split(".")
+        assert len(parts) == 2
+        assert all(part.isdigit() for part in parts)
+    
     def test_check_dependencies_all_satisfied(self, module):
         """Test dependency check when all packages installed."""
         with patch.object(module, '_check_dependencies', return_value=([], [])):

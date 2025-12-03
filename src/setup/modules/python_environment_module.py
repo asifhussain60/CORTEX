@@ -203,6 +203,37 @@ class PythonEnvironmentModule(BaseSetupModule):
             reason=reason
         )
     
+    def _get_python_version_string(self) -> str:
+        """Get Python version as string (e.g., '3.11')."""
+        return f"{sys.version_info.major}.{sys.version_info.minor}"
+    
+    def _detect_shared_environment(self) -> Optional[Path]:
+        """
+        Detect existing shared CORTEX environment.
+        
+        Shared environment location: ~/.cortex/venv-{python_version}/
+        Example: ~/.cortex/venv-3.11/
+        
+        Returns:
+            Path to shared environment if exists and valid, None otherwise
+        """
+        try:
+            home = Path.home()
+            python_version = self._get_python_version_string()
+            shared_venv_path = home / ".cortex" / f"venv-{python_version}"
+            
+            # Verify environment exists and is valid
+            if shared_venv_path.exists() and shared_venv_path.is_dir():
+                # Check for basic venv structure
+                python_executable = shared_venv_path / "bin" / "python"
+                if python_executable.exists():
+                    return shared_venv_path
+            
+            return None
+        except Exception as e:
+            self.logger.debug(f"Error detecting shared environment: {e}")
+            return None
+    
     def _detect_parent_project(self, context: Dict) -> Optional[str]:
         """Detect if CORTEX is embedded in a parent project."""
         project_root = context.get('project_root', Path.cwd())
