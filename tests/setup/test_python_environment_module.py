@@ -135,6 +135,37 @@ class TestPythonEnvironmentModule:
         assert len(parts) == 2
         assert all(part.isdigit() for part in parts)
     
+    def test_analyze_environment_prioritizes_shared(self, module, mock_context, tmp_path):
+        """Test that shared environment is prioritized over local venv."""
+        shared_venv = tmp_path / ".cortex" / "venv-3.9"
+        shared_venv.mkdir(parents=True)
+        (shared_venv / "bin").mkdir()
+        (shared_venv / "bin" / "python").touch()
+        
+        with patch.object(module, '_detect_shared_environment', return_value=shared_venv), \
+             patch.object(module, '_check_dependencies', return_value=([], [])), \
+             patch('sys.prefix', str(tmp_path / ".venv")), \
+             patch('sys.base_prefix', '/usr/bin'):
+            
+            analysis = module._analyze_environment(mock_context)
+            
+            # Should recommend using shared environment
+            assert analysis.action_recommendation in ["use_shared", "reuse_environment"]
+            assert "shared" in analysis.reason.lower() or str(shared_venv) in analysis.reason
+    
+    def test_analyze_environment_no_shared_uses_local(self, module, mock_context):
+        """Test that local venv is used when shared environment doesn't exist."""
+        with patch.object(module, '_detect_shared_environment', return_value=None), \
+             patch.object(module, '_check_dependencies', return_value=([], [])), \
+             patch('sys.prefix', '/path/to/.venv'), \
+             patch('sys.base_prefix', '/usr/bin'):
+            
+            analysis = module._analyze_environment(mock_context)
+            
+            # Should use existing local environment
+            assert analysis.action_recommendation == "reuse_environment"
+            assert analysis.is_virtual_env
+    
     def test_check_dependencies_all_satisfied(self, module):
         """Test dependency check when all packages installed."""
         with patch.object(module, '_check_dependencies', return_value=([], [])):

@@ -159,6 +159,9 @@ class PythonEnvironmentModule(BaseSetupModule):
     def _analyze_environment(self, context: Dict) -> EnvironmentAnalysis:
         """Analyze current Python environment."""
         
+        # Priority 1: Check for shared environment
+        shared_env = self._detect_shared_environment()
+        
         # Detect environment type
         is_virtual_env = hasattr(sys, 'real_prefix') or (
             hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix
@@ -174,10 +177,16 @@ class PythonEnvironmentModule(BaseSetupModule):
         missing_packages, conflicts = self._check_dependencies()
         dependencies_satisfied = not missing_packages and not conflicts
         
-        # Determine action
-        if is_global:
-            action = "create_venv"
-            reason = "Global Python environment - isolation required for safety"
+        # Determine action with shared environment prioritization
+        if shared_env and dependencies_satisfied:
+            action = "use_shared"
+            reason = f"Shared environment available and compatible: {shared_env}"
+        elif shared_env and not conflicts:
+            action = "use_shared"
+            reason = f"Shared environment available - missing packages will be installed: {shared_env}"
+        elif is_global:
+            action = "create_shared"
+            reason = "Global Python environment - creating shared CORTEX environment"
         elif dependencies_satisfied:
             action = "reuse_environment"
             reason = f"Existing environment compatible - all dependencies satisfied"
