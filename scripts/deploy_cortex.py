@@ -1363,48 +1363,48 @@ def publish_to_branch(
         preliminary_manifest_dir = project_root / "publish"
         preliminary_manifest_dir.mkdir(parents=True, exist_ok=True)
         
-        # Get current project files using the exclusion rules
+        # Get current project files using the comprehensive exclusion rules from top of file
         import os
         current_files = []
         for root, dirs, files in os.walk(project_root):
-            # Skip excluded directories
-            dirs[:] = [d for d in dirs if not any(pattern in str(Path(root) / d) for pattern in [
-                '.git', '__pycache__', '.pytest_cache', 'node_modules', '.venv', 'venv',
-                'workflow_checkpoints', 'logs', 'test_merge', 'static/temp'
-            ])]
+            root_path = Path(root)
+            
+            # Skip excluded directories (use EXCLUDED_DIRS from top of file)
+            dirs[:] = [d for d in dirs if not any(
+                excluded_dir in str((root_path / d).relative_to(project_root)).replace('\\', '/')
+                for excluded_dir in EXCLUDED_DIRS
+            )]
             
             for file in files:
-                file_path = Path(root) / file
+                file_path = root_path / file
                 rel_path = file_path.relative_to(project_root)
-                current_files.append(rel_path)
-        
-        # Filter out admin patterns (Gate 15 validation requirements)
-        admin_patterns = [
-            "admin/",
-            "deployment_gates.py",
-            "deploy_cortex.py",
-            "system_alignment_orchestrator.py",
-            "enterprise_documentation_orchestrator.py",
-            "deployment/",
-            "validate_deployment.py",
-            "scripts/deploy",
-            "scripts/validate_deployment",
-            "publish_branch_orchestrator.py",
-        ]
-        
-        filtered_files = [
-            f for f in current_files 
-            if not any(pattern in str(f).replace('\\', '/') for pattern in admin_patterns)
-        ]
+                rel_path_str = str(rel_path).replace('\\', '/')
+                
+                # Skip excluded patterns (use EXCLUDED_PATTERNS from top of file)
+                skip = False
+                for pattern in EXCLUDED_PATTERNS:
+                    if pattern.startswith('*'):
+                        # Wildcard pattern
+                        if rel_path_str.endswith(pattern[1:]):
+                            skip = True
+                            break
+                    else:
+                        # Exact match or substring
+                        if pattern in rel_path_str:
+                            skip = True
+                            break
+                
+                if not skip:
+                    current_files.append(rel_path)
         
         # Create preliminary manifest
         preliminary_manifest = {
             "version": PACKAGE_VERSION,
             "generated_at": datetime.now().isoformat(),
-            "files": [str(f).replace('\\', '/') for f in filtered_files],
+            "files": [str(f).replace('\\', '/') for f in current_files],
             "stats": {
                 "preliminary": True,
-                "file_count": len(filtered_files),
+                "file_count": len(current_files),
                 "note": "Preliminary manifest for Gate 15 validation - will be regenerated after build"
             }
         }
@@ -1413,7 +1413,7 @@ def publish_to_branch(
         with open(manifest_path, 'w', encoding='utf-8') as f:
             json.dump(preliminary_manifest, f, indent=2)
         
-        logger.info(f"✅ Preliminary manifest created: {len(filtered_files)} files")
+        logger.info(f"✅ Preliminary manifest created: {len(current_files)} files")
         logger.info(f"   Location: {manifest_path.relative_to(project_root)}")
         logger.info("")
     

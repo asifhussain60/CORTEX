@@ -61,71 +61,31 @@
 
 ## ⏱️ Timeframe Estimation
 
-**Module:** `src/agents/estimation/timeframe_estimator.py`
+**Complete Guide:** #file:modules/timeframe-estimation-guide.md
 
-**Quick Start:**
-- `estimate timeframe` - Estimate development timeframe for features
-- `timeline comparison` - Compare single developer vs team timelines
-- `project timeline` - Generate visual timeline with parallel tracks
-- `effort estimate` - Story points and sprint estimation
+**Quick Commands:** `estimate timeframe`, `timeline comparison`, `project timeline`, `effort estimate`
 
-**Key Features:**
-- **SWAGGER Complexity Analysis** - Convert complexity scores to sprint estimates
-- **Parallel Track Identification** - Automatically identify work that can be done concurrently
-- **Critical Path Calculation** - Find the minimum delivery timeline
-- **What-If Scenarios** - Compare 1, 2, 3, 5+ developer configurations
-- **Cost Projections** - Hourly rate calculations for different team sizes
-- **ASCII & HTML Timelines** - Visual Gantt charts for terminal and browser
+**Key Capabilities:** SWAGGER complexity analysis, parallel track identification, critical path calculation, what-if scenarios, cost projections, ASCII & HTML Gantt charts
 
-**Example Usage:**
-```
-You: "estimate timeframe for user authentication"
-CORTEX: 
-   📊 Estimated 14 story points (3 sprints single dev)
-   ⚡ With 2 developers: 1.5 sprints (50% faster)
-   🎯 Critical path: 12 days
-   💰 Cost at $75/hr: $8,400 (single) vs $9,240 (team of 2)
-```
-
-**Integration:** Response template `timeframe_estimate`, routing triggers in `response-templates.yaml`
+**See timeframe-estimation-guide.md for complete documentation, examples, and configuration options.**
 
 ---
 
 ## 👤 User Profile System
 
-**Documentation:** #file:../../cortex-brain/documents/implementation-guides/user-profile-guide.md
+**Complete Guide:** #file:modules/user-profile-system-guide.md
 
-**Quick Start:**
-- First-time users: 3-question onboarding (experience → mode → tech stack)
-- Update anytime: `update profile` or `change tech stack`
-- 16 keywords trigger profile updates
+**Quick Start:** 3-question onboarding (experience → mode → tech stack), update anytime with `update profile`
 
-**Interaction Modes:**
-1. **Autonomous** - Quick results, minimal explanation
-2. **Guided** - Standard format with explanations (default)
-3. **Educational** - Teaching-focused with extended context
-4. **Pair Programming** - Collaborative, seeks feedback
+**4 Interaction Modes:** Autonomous (fast), Guided (default), Educational (learning), Pair Programming (collaborative)
 
-**Experience Levels:**
-1. **Junior** (0-2 years) - More explanation, learning resources
-2. **Mid** (2-5 years) - Balanced approach
-3. **Senior** (5-10 years) - Advanced patterns, less basics
-4. **Expert** (10+ years) - Assumes deep knowledge
+**4 Experience Levels:** Junior, Mid, Senior, Expert - adapts response complexity and depth
 
-**Tech Stack Preference:**
-- **Azure Stack** - Azure DevOps, AKS, ARM/Terraform
-- **AWS Stack** - ECS/EKS, CodePipeline, CloudFormation/Terraform
-- **GCP Stack** - GKE, Cloud Build, Terraform
-- **No Preference** - CORTEX decides based on best practice (recommended for learning)
-- **Custom** - Mix and match individual tools
+**Tech Stacks:** Azure, AWS, GCP, No Preference (recommended), Custom
 
-**CRITICAL PRINCIPLE: Context NOT Constraint**
-- Tech stack is deployment context only
-- CORTEX always recommends best solution first
-- Responses show BOTH: best practice + company stack deployment
-- Recommendations never filtered by tech stack
+**CRITICAL:** Tech stack is context NOT constraint - CORTEX always shows best practice + deployment adaptation
 
-**See user-profile-guide.md for complete documentation, examples, and API reference.**
+**See user-profile-system-guide.md for complete documentation and examples.**
 
 ---
 
@@ -251,134 +211,37 @@ CORTEX:
 
 ## 🚀 Quick Start
 
-### How to Use CORTEX
+**Complete Guide:** #file:modules/quick-start-guide.md
 
-**Just talk naturally - CORTEX figures out what you need:**
+**Just talk naturally - CORTEX figures out what you need.** Examples: "plan authentication feature", "start tdd workflow", "Add a purple button"
 
-```
-"plan authentication feature"
-"start tdd workflow"
-"review architecture"
-"Add a purple button to the HostControlPanel"
-```
+**First time?** 3-question onboarding: experience level → interaction mode → tech stack  
+**Want to skip?** Choose "No preference" for all questions
 
-**First time?** You'll go through a quick 3-question onboarding:
-1. **Experience level** - Junior/Mid/Senior/Expert
-2. **Interaction mode** - Autonomous/Guided/Educational/Pair Programming
-3. **Tech stack** - Azure/AWS/GCP/No Preference/Custom
+**Common commands:** `help` (command list), `tutorial` (interactive learning), `update profile` (change settings)
 
-**IMPORTANT:** Tech stack is context for deployment, NOT a constraint.  
-CORTEX always recommends the best solution first.
-
-**Want to skip setup?** Choose "No preference" for all questions.
-
-**Update profile later:**
-```
-update profile
-change tech stack
-```
-
-**Start learning:** Interactive tutorial:
-```
-tutorial
-```
-
-**Need command list?** Quick reference:
-```
-help
-```
-
-**How it works:**
-1. You describe what you want in natural language
-2. CORTEX detects intent and routes to specialist agent
-3. Executes workflow with memory of past conversations
-4. Tracks progress for future reference
-
-**No syntax to memorize** - context-aware, intuitive, conversation-based
+**See quick-start-guide.md for complete setup instructions and examples.**
 
 ---
 
 # 🏛️ Operations Routing Architecture
 
-**CORTEX 3.0 Operations System:** All orchestrators have been migrated to lightweight utilities in `src/operations/modules/`
+**Complete Guide:** #file:modules/operations-routing-guide.md
 
-**Route Overview (23 Operations):**
+**Quick Overview:**
+- **23 Total Operations:** 18 user-facing, 3 dual-context, 5 admin-only
+- **Context-Aware:** commit, align, optimize, deploy adapt based on repository type
+- **Natural Language:** Just describe what you want, CORTEX routes to the right module
+- **Registry:** All operations in `cortex-operations.yaml` (107 modules)
 
-### User-Facing Operations (18 Total)
+**Key Operations:**
+- **Planning:** plan feature X → modules/planning/
+- **TDD:** start tdd → tier0/tdd_operations/
+- **Commit:** commit → commit_and_push.py (stage, commit, push, sync)
+- **Deploy:** deploy → deploy.py (19-gate validation, admin-only)
+- **Align:** align → context-aware (admin or user version)
 
-| Natural Language | Operation | Module Location | Status |
-|------------------|-----------|----------------|--------|
-| "plan feature X" | planning | src/operations/modules/planning/ | ✅ Ready |
-| "start tdd" | tdd | src/tier0/tdd_operations/ | ✅ Ready |
-| "commit" | commit | src/operations/commit_and_push.py | ✅ Ready (commit, push, sync) |
-| "create checkpoint" | git_checkpoint | src/operations/modules/git_checkpoint/ | ✅ Ready (TDD only) |
-| "rollback to X" | rollback | src/operations/modules/rollback/ | ✅ Ready |
-| "review code" | code_review | src/operations/modules/code_review/ | ✅ Ready |
-| "show health dashboard" | application_health | src/operations/modules/health/ | ✅ Ready |
-| "root cause analysis" | rca | src/operations/modules/rca/ | ✅ Ready |
-| "lint validation" | lint_validation | src/operations/modules/lint/ | ✅ Ready |
-| "feedback" | feedback | src/agents/feedback/ | ✅ Ready |
-| "discover views" | view_discovery | src/agents/view_discovery/ | ✅ Ready |
-| "optimize" | optimize | src/operations/optimize.py | ✅ Ready (context-aware) |
-| "healthcheck" | healthcheck | src/operations/modules/healthcheck/ | ✅ Ready |
-| "upgrade cortex" | upgrade | src/operations/modules/upgrade/ | ✅ Ready |
-| "setup copilot" | setup_epm | src/operations/modules/setup_epm/ | ✅ Ready |
-| "estimate swagger" | swagger_estimation | src/operations/modules/estimation/ | ✅ Ready |
-| "ux enhancement" | ux_enhancement | src/operations/modules/ux/ | ✅ Ready |
-| "debug X" | debug | src/operations/modules/debug/ | ✅ Ready |
-
-### Dual-Context Operations (3 Total)
-
-| Natural Language | Operation | Module Location | Status |
-|------------------|-----------|----------------|--------|
-| "plan ado" | ado_work_item | src/operations/modules/ado/ | ✅ Ready |
-| "align" | align | src/operations/align.py | ✅ Ready (context-aware: admin/user) |
-| "review architecture" | architecture_intelligence | src/operations/modules/architecture/ | ✅ Ready |
-
-### Admin-Only Operations (5 Total)
-
-| Natural Language | Operation | Module Location | Status |
-|------------------|-----------|----------------|--------|
-| "deploy" | deploy | src/operations/deploy.py | ✅ Ready (all 19 gates enforced) |
-| "generate docs" | doc_generation | src/operations/modules/admin/doc_generation/ | ✅ Ready |
-| "cleanup repository" | cleanup | src/operations/modules/cleanup/ | ✅ Ready |
-| "consolidate markdown" | consolidation | src/operations/modules/admin/consolidation/ | ✅ Ready |
-| "design sync" | design_sync | src/operations/modules/admin/design_sync/ | ✅ Ready |
-
-**Registry:** All operations registered in `cortex-operations.yaml` (23 operations, 107 modules)
-
-**Migration Status:** 29/29 orchestrators migrated to utilities (97% code reduction, 100% complete)
-
-**Key Architectural Changes:**
-- ❌ **OLD:** Heavy orchestrators in `src/orchestrators/` (500-800 lines each)
-- ✅ **NEW:** Lightweight utilities in `src/operations/modules/` (100-200 lines each)
-- ✅ **Pattern:** Entry point → utility → agent (if needed)
-- ✅ **Validation:** align v2.0 auto-validates all registrations
-- ✅ **Maintenance:** align v2.0 auto-discovers and registers new features
-- ✅ **Cleanup:** align v2.0 auto-detects and removes obsolete code
-
-**Routing Logic:**
-1. User provides natural language input
-2. Intent detection maps to operation ID
-3. Context detection determines if in CORTEX repo or user repo
-4. cortex-operations.yaml provides module path
-5. Entry point loads utility and executes
-6. Results returned to user
-
-**Context-Aware Operations:**
-
-When user says `/CORTEX [command]`, certain operations adapt based on context:
-
-| Command | In CORTEX Repo (has `cortex-brain/admin/`) | In User Repo |
-|---------|---------------------------------------------|--------------|
-| **commit** | Runs commit_push_sync orchestrator (stage, commit, push, sync) | Same - git_checkpoint is TDD-only |
-| **align** | Admin version: Full system alignment with all checks | User version: Workspace alignment only |
-| **optimize** | Admin version: CORTEX optimization with SKULL tests | User version: Workspace optimization |
-| **deploy** | Deployment to publish branch with all 19 validation gates (NO SKIPPING) | N/A (admin-only) |
-
-**Detection Method:** Checks for `cortex-brain/admin/` or `src/operations/modules/admin/` directories
-
-**See:** `cortex-brain/documents/reports/ORCHESTRATOR-MIGRATION-COMPLETE-ANALYSIS.md` for complete migration history
+**See operations-routing-guide.md for complete routing table and architectural details.**
 
 ---
 

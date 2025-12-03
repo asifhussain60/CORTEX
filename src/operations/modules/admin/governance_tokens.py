@@ -326,11 +326,14 @@ class GovernanceTokenValidator:
         )
 
 
-def validate_token_budgets() -> Dict[str, Any]:
+def validate_token_budgets(silent: bool = False) -> Dict[str, Any]:
     """
     Validate all governance files against token budgets.
     
     This is the primary entry point for 'align governance-tokens validate'.
+    
+    Args:
+        silent: If True, skip console output (useful for programmatic calls)
     
     Returns:
         Dict with:
@@ -343,9 +346,11 @@ def validate_token_budgets() -> Dict[str, Any]:
         validator = GovernanceTokenValidator()
         report = validator.validate_all()
         
-        # Format console output
-        console_output = report.format_console()
-        safe_print(console_output)
+        # Format console output only if not silent
+        console_output = ""
+        if not silent:
+            console_output = report.format_console()
+            safe_print(console_output)
         
         return {
             'success': report.is_compliant,
