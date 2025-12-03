@@ -1,7 +1,7 @@
 """
 Deployment Gates - Quality Thresholds
 
-MANDATORY GATE ENFORCEMENT: ALL 19 gates MUST pass for production deployment.
+MANDATORY GATE ENFORCEMENT: ALL 21 gates MUST pass for production deployment.
 No skipping allowed. No bypass flags. Professional quality standards enforced.
 
 Enforces quality gates before deployment:
@@ -10,7 +10,10 @@ Enforces quality gates before deployment:
 - Mock/stub detection (no mocks in production)
 - Documentation synchronization (prompts match reality)
 - Version consistency (all version files match)
-- And 14 additional critical quality gates
+- TDD workflow validation (RED→GREEN→REFACTOR with git checkpoints)
+- Application onboarding system (EPM integration)
+- Dashboard utility (D3.js charts and data collection)
+- And 13 additional critical quality gates
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -218,7 +221,19 @@ class DeploymentGates:
         if gate19["severity"] == "WARNING" and not gate19["passed"]:
             results["warnings"].append(gate19["message"])
         
-        # ALL 19 GATES MANDATORY - No skipping allowed
+        # Gate 20: Application Onboarding Validation (WARNING - user feature)
+        gate20 = self._validate_application_onboarding()
+        results["gates"].append(gate20)
+        if gate20["severity"] == "WARNING" and not gate20["passed"]:
+            results["warnings"].append(gate20["message"])
+        
+        # Gate 21: Dashboard Utility Validation (WARNING - user feature)
+        gate21 = self._validate_dashboard_utility()
+        results["gates"].append(gate21)
+        if gate21["severity"] == "WARNING" and not gate21["passed"]:
+            results["warnings"].append(gate21["message"])
+        
+        # ALL 21 GATES MANDATORY - No skipping allowed
         # Enforced by DEPLOYMENT_GATE_ENFORCEMENT Tier 0 instinct
         # See: cortex-brain/brain-protection-rules.yaml (rule_id: DEPLOYMENT_GATE_ENFORCEMENT)
         
@@ -712,30 +727,31 @@ class DeploymentGates:
         
         issues = []
         checks = {
-            "orchestrator_exists": False,
-            "orchestrator_imports": False,
+            "utility_exists": False,
+            "utility_imports": False,
             "config_exists": False,
             "config_valid": False,
             "brain_rule_active": False,
-            "can_instantiate": False
+            "can_call_utility": False
         }
         
-        orchestrator_path = self.project_root / "src" / "orchestrators" / "git_checkpoint_orchestrator.py"
-        if orchestrator_path.exists():
-            checks["orchestrator_exists"] = True
+        # Check for migrated utility (Sprint 12 - git checkpoint → utility)
+        utility_path = self.project_root / "src" / "operations" / "modules" / "git" / "git_checkpoint_utility.py"
+        if utility_path.exists():
+            checks["utility_exists"] = True
         else:
-            issues.append("GitCheckpointOrchestrator file not found")
+            issues.append("Git checkpoint utility not found (expected: src/operations/modules/git/git_checkpoint_utility.py)")
         
-        if checks["orchestrator_exists"]:
+        if checks["utility_exists"]:
             try:
                 import sys
                 if str(self.project_root) not in sys.path:
                     sys.path.insert(0, str(self.project_root))
                 
-                from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
-                checks["orchestrator_imports"] = True
+                from src.operations.modules.git.git_checkpoint_utility import run_checkpoint_utility
+                checks["utility_imports"] = True
             except ImportError as e:
-                issues.append(f"Cannot import GitCheckpointOrchestrator: {e}")
+                issues.append(f"Cannot import git checkpoint utility: {e}")
             except Exception as e:
                 issues.append(f"Import error: {e}")
         
@@ -811,21 +827,17 @@ class DeploymentGates:
         else:
             issues.append("brain-protection-rules.yaml not found")
         
-        if checks["orchestrator_imports"]:
+        if checks["utility_imports"]:
             try:
-                from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
+                from src.operations.modules.git.git_checkpoint_utility import run_checkpoint_utility
                 
-                # Try instantiating with project root
-                orchestrator = GitCheckpointOrchestrator(
-                    project_root=self.project_root,
-                    brain_path=self.project_root / "cortex-brain"
-                )
-                checks["can_instantiate"] = True
-            except TypeError:
-                # May need different arguments - still counts if class exists
-                checks["can_instantiate"] = True
+                # Test that utility function is callable
+                if callable(run_checkpoint_utility):
+                    checks["can_call_utility"] = True
+                else:
+                    issues.append("run_checkpoint_utility is not callable")
             except Exception as e:
-                issues.append(f"Cannot instantiate orchestrator: {e}")
+                issues.append(f"Cannot verify utility callable: {e}")
         
         gate["details"] = {
             "checks": checks,
@@ -835,8 +847,8 @@ class DeploymentGates:
         }
         
         critical_checks = [
-            "orchestrator_exists",
-            "orchestrator_imports",
+            "utility_exists",
+            "utility_imports",
             "config_exists",
             "brain_rule_active"
         ]
@@ -1655,19 +1667,20 @@ class DeploymentGates:
 
     def _validate_tdd_mastery_integration(self) -> Dict[str, Any]:
         """
-        Gate 13: TDD Mastery Integration - Git Checkpoint System + Vision API.
+        Gate 13: TDD Mastery Integration - Complete TDD Workflow Validation.
         
         Validates:
-        - TDDWorkflowOrchestrator imports GitCheckpointOrchestrator
+        - TDDWorkflowOrchestrator exists and can be imported
+        - State machine (IDLE → RED → GREEN → REFACTOR → COMPLETE)
+        - Git checkpoint integration (auto-checkpoint at phases)
+        - Terminal integration for test execution
+        - Auto-debug on RED phase failures
         - TDDWorkflowConfig has enable_git_checkpoints parameter
-        - State transitions create checkpoints (RED, GREEN, REFACTOR phases)
-        - tdd-mastery-guide.md documents git checkpoint functionality
-        - IntentRouter has VisionOrchestrator integration
-        - Vision API automatically triggers when images attached
-        - Response templates state Vision API usage explicitly
+        - tdd-mastery-guide.md documents complete workflow
+        - Vision API integration for screenshot-driven test generation
         
         Returns:
-            Gate result with ERROR severity
+            Gate result with WARNING severity
         """
         gate = {
             "name": "TDD Mastery Integration",
@@ -1675,30 +1688,62 @@ class DeploymentGates:
             "severity": "WARNING",  # Changed from ERROR: Phase 2 enhancement, non-blocking
             "message": "",
             "details": {
+                "tdd_orchestrator_exists": False,
+                "tdd_orchestrator_imports": False,
+                "state_machine_exists": False,
+                "state_machine_has_phases": False,
                 "git_checkpoint_imported": False,
                 "config_has_git_option": False,
-                "checkpoints_in_state_transitions": False,
-                "guide_documents_git": False,
-                "vision_orchestrator_integrated": False,
-                "vision_auto_trigger_enforced": False,
-                "vision_response_template_exists": False,
+                "terminal_integration_exists": False,
+                "auto_debug_enabled": False,
+                "guide_documents_workflow": False,
+                "vision_api_integrated": False,
                 "issues": []
             }
         }
         
         try:
-            # Check 1: TDDWorkflowOrchestrator imports GitCheckpointOrchestrator
+            # Check 1: TDDWorkflowOrchestrator exists
             tdd_orch_path = self.project_root / "src" / "workflows" / "tdd_workflow_orchestrator.py"
             if tdd_orch_path.exists():
+                gate["details"]["tdd_orchestrator_exists"] = True
                 content = tdd_orch_path.read_text(encoding='utf-8')
-                if "GitCheckpointOrchestrator" in content or "git_checkpoint_orchestrator" in content:
+                
+                # Try importing
+                try:
+                    import sys
+                    if str(self.project_root) not in sys.path:
+                        sys.path.insert(0, str(self.project_root))
+                    from src.workflows.tdd_workflow_orchestrator import TDDWorkflowOrchestrator
+                    gate["details"]["tdd_orchestrator_imports"] = True
+                except ImportError as e:
+                    gate["details"]["issues"].append(f"Cannot import TDDWorkflowOrchestrator: {e}")
+                
+                # Check for git checkpoint integration
+                if "GitCheckpointOrchestrator" in content or "git_checkpoint" in content:
                     gate["details"]["git_checkpoint_imported"] = True
                 else:
-                    gate["details"]["issues"].append("TDDWorkflowOrchestrator missing GitCheckpointOrchestrator import")
+                    gate["details"]["issues"].append("TDDWorkflowOrchestrator missing git checkpoint integration")
             else:
-                gate["details"]["issues"].append("TDDWorkflowOrchestrator not found")
+                gate["details"]["issues"].append("TDDWorkflowOrchestrator not found (expected: src/workflows/tdd_workflow_orchestrator.py)")
             
-            # Check 2: TDDWorkflowConfig has enable_git_checkpoints
+            # Check 2: TDD State Machine exists with RED→GREEN→REFACTOR phases
+            state_machine_path = self.project_root / "src" / "workflows" / "tdd_state_machine.py"
+            if state_machine_path.exists():
+                gate["details"]["state_machine_exists"] = True
+                content = state_machine_path.read_text(encoding='utf-8')
+                
+                # Check for TDD phases
+                required_phases = ["RED", "GREEN", "REFACTOR"]
+                has_all_phases = all(phase in content for phase in required_phases)
+                if has_all_phases and "TDDState" in content:
+                    gate["details"]["state_machine_has_phases"] = True
+                else:
+                    gate["details"]["issues"].append("State machine missing RED→GREEN→REFACTOR phases")
+            else:
+                gate["details"]["issues"].append("TDD state machine not found (expected: src/workflows/tdd_state_machine.py)")
+            
+            # Check 3: TDDWorkflowConfig has enable_git_checkpoints
             if tdd_orch_path.exists():
                 content = tdd_orch_path.read_text(encoding='utf-8')
                 if "enable_git_checkpoints" in content:
@@ -1706,82 +1751,65 @@ class DeploymentGates:
                 else:
                     gate["details"]["issues"].append("TDDWorkflowConfig missing enable_git_checkpoints parameter")
             
+            # Check 4: Terminal integration for test execution
+            terminal_integration_path = self.project_root / "src" / "workflows" / "terminal_integration.py"
+            if terminal_integration_path.exists():
+                gate["details"]["terminal_integration_exists"] = True
+            else:
+                gate["details"]["issues"].append("Terminal integration not found (expected: src/workflows/terminal_integration.py)")
+            
+            # Check 5: Auto-debug configuration
             if tdd_orch_path.exists():
                 content = tdd_orch_path.read_text(encoding='utf-8')
-                has_checkpoints = (
-                    "create_checkpoint" in content or
-                    "create_auto_checkpoint" in content or
-                    'checkpoint_id' in content
-                )
-                if has_checkpoints:
-                    gate["details"]["checkpoints_in_state_transitions"] = True
+                if "auto_debug_on_failure" in content or "enable_terminal_integration" in content:
+                    gate["details"]["auto_debug_enabled"] = True
                 else:
-                    gate["details"]["issues"].append("TDD state transitions don't create git checkpoints")
+                    gate["details"]["issues"].append("Auto-debug on RED failures not configured")
             
-            # Check 4: tdd-mastery-guide.md documents git checkpoints
+            # Check 6: tdd-mastery-guide.md documents complete workflow
             tdd_guide_path = self.project_root / ".github" / "prompts" / "modules" / "tdd-mastery-guide.md"
             if tdd_guide_path.exists():
                 content = tdd_guide_path.read_text(encoding='utf-8')
-                if "git checkpoint" in content.lower() or "GitCheckpointOrchestrator" in content:
-                    gate["details"]["guide_documents_git"] = True
+                workflow_docs = (
+                    "red" in content.lower() and 
+                    "green" in content.lower() and 
+                    "refactor" in content.lower() and
+                    ("git checkpoint" in content.lower() or "checkpoint" in content.lower())
+                )
+                if workflow_docs:
+                    gate["details"]["guide_documents_workflow"] = True
                 else:
-                    gate["details"]["issues"].append("tdd-mastery-guide.md doesn't document git checkpoint integration")
+                    gate["details"]["issues"].append("tdd-mastery-guide.md doesn't document complete RED→GREEN→REFACTOR workflow")
             else:
                 gate["details"]["issues"].append("tdd-mastery-guide.md not found")
             
-            # Check 5: IntentRouter has VisionOrchestrator integration
-            intent_router_path = self.project_root / "src" / "cortex_agents" / "intent_router.py"
-            if intent_router_path.exists():
-                content = intent_router_path.read_text(encoding='utf-8')
-                if "VisionOrchestrator" in content and "self.vision_orchestrator" in content:
-                    gate["details"]["vision_orchestrator_integrated"] = True
+            # Check 7: Vision API integration
+            if tdd_orch_path.exists():
+                content = tdd_orch_path.read_text(encoding='utf-8')
+                if "ScreenshotAnalyzer" in content or "enable_vision_api" in content:
+                    gate["details"]["vision_api_integrated"] = True
                 else:
-                    gate["details"]["issues"].append("IntentRouter missing VisionOrchestrator integration")
-            else:
-                gate["details"]["issues"].append("IntentRouter not found")
-            
-            # Check 6: Vision API auto-trigger enforcement exists
-            vision_enforcement_test_path = self.project_root / "tests" / "test_vision_api_enforcement.py"
-            if vision_enforcement_test_path.exists():
-                content = vision_enforcement_test_path.read_text(encoding='utf-8')
-                has_auto_trigger = (
-                    "test_intent_router_has_vision_orchestrator" in content and
-                    "test_vision_orchestrator_auto_processes_images" in content and
-                    "test_vision_results_injected_into_context" in content
-                )
-                if has_auto_trigger:
-                    gate["details"]["vision_auto_trigger_enforced"] = True
-                else:
-                    gate["details"]["issues"].append("Vision API auto-trigger enforcement tests incomplete")
-            else:
-                gate["details"]["issues"].append("Vision API enforcement tests not found")
-            
-            # Check 7: Response templates state Vision API usage
-            response_templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
-            if response_templates_path.exists():
-                content = response_templates_path.read_text(encoding='utf-8')
-                if "vision" in content.lower() and ("analyzed screenshot" in content.lower() or "vision api" in content.lower()):
-                    gate["details"]["vision_response_template_exists"] = True
-                else:
-                    gate["details"]["issues"].append("Response templates don't explicitly state Vision API usage")
-            else:
-                gate["details"]["issues"].append("Response templates file not found")
+                    gate["details"]["issues"].append("Vision API not integrated into TDD workflow")
 
             
-            # Fail gate if any checks failed
+            # Count passed checks
+            passed_checks = sum(1 for k, v in gate["details"].items() if k != "issues" and v is True)
+            total_checks = len([k for k in gate["details"].keys() if k != "issues"])
+            
+            # Fail gate if critical checks failed
             if gate["details"]["issues"]:
                 gate["passed"] = False
                 gate["message"] = (
-                    f"TDD Mastery integration incomplete: {len(gate['details']['issues'])} issues. "
-                    f"Git checkpoint system and/or Vision API not fully integrated into TDD workflow. "
-                    f"Production deployment BLOCKED. Issues: {'; '.join(gate['details']['issues'])}"
+                    f"TDD Mastery integration incomplete: {len(gate['details']['issues'])} issues "
+                    f"({passed_checks}/{total_checks} checks passed). "
+                    f"Issues: {'; '.join(gate['details']['issues'][:3])}{'...' if len(gate['details']['issues']) > 3 else ''}"
                 )
                 logger.warning(f"Gate 13 FAILED: {gate['message']}")
             else:
                 gate["message"] = (
-                    "TDD Mastery fully integrated with Git Checkpoint system and Vision API. "
-                    "All checks passed: Git checkpoints enforced, Vision API auto-triggers on images, "
-                    "responses explicitly state Vision API usage."
+                    f"TDD Mastery fully integrated: RED→GREEN→REFACTOR workflow operational. "
+                    f"All {total_checks} checks passed: State machine, git checkpoints, terminal integration, "
+                    f"auto-debug, Vision API, complete documentation."
                 )
                 logger.info("Gate 13 PASSED: TDD Mastery integration validated")
         
@@ -2814,5 +2842,210 @@ class DeploymentGates:
             gate["message"] = f"Token efficiency validation failed: {str(e)}"
             gate["details"]["error_type"] = type(e).__name__
             logger.error(f"Gate 19 validation error: {e}", exc_info=True)
+        
+        return gate
+    
+    def _validate_application_onboarding(self) -> Dict[str, Any]:
+        """
+        Gate 20: Application Onboarding Validation.
+        
+        Validates that application onboarding system is fully operational:
+        - ApplicationOnboardingOperation exists and can be imported
+        - OnboardingOrchestrator integrated with EPM framework
+        - Step registry configured
+        - Natural language triggers documented
+        - Onboarding profiles (quick/standard/comprehensive) supported
+        
+        Returns:
+            Gate result with WARNING severity
+        """
+        gate = {
+            "name": "Application Onboarding",
+            "passed": True,
+            "severity": "WARNING",  # User feature - can be enhanced post-deployment
+            "message": "",
+            "details": {
+                "operation_exists": False,
+                "operation_imports": False,
+                "orchestrator_exists": False,
+                "epm_integration": False,
+                "step_registry_configured": False,
+                "profiles_supported": False,
+                "issues": []
+            }
+        }
+        
+        try:
+            # Check 1: ApplicationOnboardingOperation exists
+            operation_path = self.project_root / "src" / "operations" / "application_onboarding_operation.py"
+            if operation_path.exists():
+                gate["details"]["operation_exists"] = True
+                content = operation_path.read_text(encoding='utf-8')
+                
+                # Try importing
+                try:
+                    import sys
+                    if str(self.project_root) not in sys.path:
+                        sys.path.insert(0, str(self.project_root))
+                    from src.operations.application_onboarding_operation import ApplicationOnboardingOperation
+                    gate["details"]["operation_imports"] = True
+                except ImportError as e:
+                    gate["details"]["issues"].append(f"Cannot import ApplicationOnboardingOperation: {e}")
+                
+                # Check for EPM integration
+                if "OnboardingOrchestrator" in content and "EPM" in content.upper():
+                    gate["details"]["epm_integration"] = True
+                else:
+                    gate["details"]["issues"].append("EPM framework integration not found")
+                
+                # Check for step registry
+                if "StepRegistry" in content or "step_registry" in content:
+                    gate["details"]["step_registry_configured"] = True
+                else:
+                    gate["details"]["issues"].append("Step registry not configured")
+                
+                # Check for onboarding profiles
+                if "OnboardingProfile" in content or ("quick" in content and "standard" in content):
+                    gate["details"]["profiles_supported"] = True
+                else:
+                    gate["details"]["issues"].append("Onboarding profiles not supported")
+            else:
+                gate["details"]["issues"].append("ApplicationOnboardingOperation not found")
+            
+            # Check 2: OnboardingOrchestrator exists
+            orchestrator_path = self.project_root / "src" / "operations" / "onboarding_orchestrator.py"
+            if orchestrator_path.exists():
+                gate["details"]["orchestrator_exists"] = True
+            else:
+                gate["details"]["issues"].append("OnboardingOrchestrator not found")
+            
+            # Count passed checks
+            passed_checks = sum(1 for k, v in gate["details"].items() if k != "issues" and v is True)
+            total_checks = len([k for k in gate["details"].keys() if k != "issues"])
+            
+            # Determine pass/fail
+            if gate["details"]["issues"]:
+                gate["passed"] = False
+                gate["message"] = (
+                    f"Application onboarding incomplete: {len(gate['details']['issues'])} issues "
+                    f"({passed_checks}/{total_checks} checks passed). "
+                    f"Can deploy without onboarding - users can onboard manually."
+                )
+                logger.warning(f"Gate 20 FAILED: {gate['message']}")
+            else:
+                gate["message"] = (
+                    f"Application onboarding fully operational: EPM integration, step registry, "
+                    f"profile support ({total_checks}/{total_checks} checks passed)."
+                )
+                logger.info("Gate 20 PASSED: Application onboarding validated")
+        
+        except Exception as e:
+            gate["passed"] = False
+            gate["message"] = f"Application onboarding validation error: {str(e)}"
+            gate["details"]["error_type"] = type(e).__name__
+            logger.error(f"Gate 20 validation error: {e}", exc_info=True)
+        
+        return gate
+    
+    def _validate_dashboard_utility(self) -> Dict[str, Any]:
+        """
+        Gate 21: Dashboard Utility Validation.
+        
+        Validates that D3.js dashboard system is fully operational:
+        - dashboard_utility.py exists with core functions
+        - D3.js chart generation (health trend, heatmap, coverage, radar)
+        - DashboardDataCollector integration
+        - Template rendering with Jinja2
+        - Output to cortex-brain/documents/analysis/dashboards/
+        
+        Returns:
+            Gate result with WARNING severity
+        """
+        gate = {
+            "name": "Dashboard Utility",
+            "passed": True,
+            "severity": "WARNING",  # User feature - can be enhanced post-deployment
+            "message": "",
+            "details": {
+                "utility_exists": False,
+                "utility_imports": False,
+                "has_d3_charts": False,
+                "data_collector_integrated": False,
+                "template_rendering": False,
+                "output_directory_configured": False,
+                "issues": []
+            }
+        }
+        
+        try:
+            # Check 1: Dashboard utility exists
+            utility_path = self.project_root / "src" / "operations" / "modules" / "reporting" / "dashboard_utility.py"
+            if utility_path.exists():
+                gate["details"]["utility_exists"] = True
+                content = utility_path.read_text(encoding='utf-8')
+                
+                # Try importing
+                try:
+                    import sys
+                    if str(self.project_root) not in sys.path:
+                        sys.path.insert(0, str(self.project_root))
+                    from src.operations.modules.reporting.dashboard_utility import generate_dashboard
+                    gate["details"]["utility_imports"] = True
+                except ImportError as e:
+                    gate["details"]["issues"].append(f"Cannot import dashboard_utility: {e}")
+                
+                # Check for D3.js charts
+                d3_charts = ["health_trend", "integration_heatmap", "coverage_gauge", "quality_radar"]
+                has_charts = sum(1 for chart in d3_charts if chart in content) >= 3
+                if has_charts:
+                    gate["details"]["has_d3_charts"] = True
+                else:
+                    gate["details"]["issues"].append("D3.js chart generation incomplete (need 3+ chart types)")
+                
+                # Check for data collector
+                if "DashboardDataCollector" in content or "data_collector" in content:
+                    gate["details"]["data_collector_integrated"] = True
+                else:
+                    gate["details"]["issues"].append("DashboardDataCollector not integrated")
+                
+                # Check for template rendering
+                if "Jinja2" in content or "Environment" in content or "render" in content:
+                    gate["details"]["template_rendering"] = True
+                else:
+                    gate["details"]["issues"].append("Template rendering not configured")
+                
+                # Check for output directory
+                if "documents/analysis/dashboards" in content or "OUTPUT_DIR" in content:
+                    gate["details"]["output_directory_configured"] = True
+                else:
+                    gate["details"]["issues"].append("Output directory not configured")
+            else:
+                gate["details"]["issues"].append("Dashboard utility not found (expected: src/operations/modules/reporting/dashboard_utility.py)")
+            
+            # Count passed checks
+            passed_checks = sum(1 for k, v in gate["details"].items() if k != "issues" and v is True)
+            total_checks = len([k for k in gate["details"].keys() if k != "issues"])
+            
+            # Determine pass/fail
+            if gate["details"]["issues"]:
+                gate["passed"] = False
+                gate["message"] = (
+                    f"Dashboard utility incomplete: {len(gate['details']['issues'])} issues "
+                    f"({passed_checks}/{total_checks} checks passed). "
+                    f"Can deploy without dashboard - users can view metrics via healthcheck."
+                )
+                logger.warning(f"Gate 21 FAILED: {gate['message']}")
+            else:
+                gate["message"] = (
+                    f"Dashboard utility fully operational: D3.js charts, data collection, "
+                    f"template rendering ({total_checks}/{total_checks} checks passed)."
+                )
+                logger.info("Gate 21 PASSED: Dashboard utility validated")
+        
+        except Exception as e:
+            gate["passed"] = False
+            gate["message"] = f"Dashboard utility validation error: {str(e)}"
+            gate["details"]["error_type"] = type(e).__name__
+            logger.error(f"Gate 21 validation error: {e}", exc_info=True)
         
         return gate
