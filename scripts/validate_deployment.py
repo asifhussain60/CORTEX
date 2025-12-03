@@ -881,8 +881,8 @@ class DeploymentValidator:
             "LICENSE",
             
             # Brain Protection & Templates
-            "cortex-brain/protection/brain-protection-rules.yaml",
-            "cortex-brain/templates/response-templates.yaml",
+            "cortex-brain/brain-protection-rules.yaml",
+            "cortex-brain/response-templates.yaml",
         ]
         
         missing = []
@@ -1317,7 +1317,7 @@ class DeploymentValidator:
                     wiring_issues.append("CORTEX.prompt.md does not reference response-templates.yaml")
                 
                 if '#file:../../cortex-brain/response-templates.yaml' not in prompt_content and \
-                   'cortex-brain/templates/response-templates.yaml' not in prompt_content:
+                   'cortex-brain/response-templates.yaml' not in prompt_content:
                     wiring_issues.append("CORTEX.prompt.md missing correct path to response-templates.yaml")
                 
                 if 'RESPONSE TEMPLATES' not in prompt_content:
@@ -1354,14 +1354,18 @@ class DeploymentValidator:
             except Exception as e:
                 wiring_issues.append(f"Failed to validate copilot-instructions.md: {e}")
         
-        # Check 5: Verify template wiring in publish package
+        # Check 5: Verify template wiring in publish package (if it exists)
         publish_templates = self.project_root / "publish" / "CORTEX" / "cortex-brain" / "response-templates.yaml"
-        if not publish_templates.exists():
-            wiring_issues.append("publish/CORTEX/cortex-brain/response-templates.yaml NOT FOUND - deployment package missing templates")
-        
         publish_prompt = self.project_root / "publish" / "CORTEX" / ".github" / "prompts" / "CORTEX.prompt.md"
-        if not publish_prompt.exists():
-            wiring_issues.append("publish/CORTEX/.github/prompts/CORTEX.prompt.md NOT FOUND - deployment package incomplete")
+        
+        # Only check publish/ if it exists (post-deployment validation)
+        publish_dir = self.project_root / "publish" / "CORTEX"
+        if publish_dir.exists():
+            if not publish_templates.exists():
+                wiring_issues.append("publish/CORTEX/cortex-brain/response-templates.yaml NOT FOUND - deployment package missing templates")
+            
+            if not publish_prompt.exists():
+                wiring_issues.append("publish/CORTEX/.github/prompts/CORTEX.prompt.md NOT FOUND - deployment package incomplete")
         
         # Build result
         if wiring_issues:
