@@ -101,7 +101,14 @@ class IntentRouter(BaseAgent):
                 "forecast technical debt", "track architecture evolution",
                 "cortex health", "health trends", "architecture trends"
             ],
+            IntentType.ALIGN: [
+                "align", "cortex align", "system alignment", "align system",
+                "full alignment", "system check", "realign", "realignment",
+                "align orchestrator", "run alignment", "check alignment",
+                "validate system", "holistic check", "comprehensive check"
+            ],
         }
+
 
     
     def can_handle(self, request: AgentRequest) -> bool:

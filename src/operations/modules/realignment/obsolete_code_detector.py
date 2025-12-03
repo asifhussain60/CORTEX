@@ -344,6 +344,27 @@ class ObsoleteCodeDetector:
         
         return total_bytes / (1024 * 1024)  # Convert to MB
     
+    def detect_all(self) -> Dict[str, List[Path]]:
+        """
+        Detect all types of obsolete code.
+        
+        This is a simplified version of generate_cleanup_plan() that returns
+        a dictionary with categorized obsolete files.
+        
+        Returns:
+            Dictionary with keys:
+                - deprecated: List of obsolete orchestrator files
+                - test_files: List of obsolete test files  
+                - temp_files: List of obsolete script/temp files
+        """
+        logger.info("Detecting obsolete code...")
+        
+        return {
+            "deprecated": self.scan_for_obsolete_orchestrators(),
+            "test_files": self.scan_for_obsolete_tests(),
+            "temp_files": self.scan_for_obsolete_scripts()
+        }
+    
     def generate_cleanup_plan(self) -> CleanupPlan:
         """
         Generate comprehensive cleanup plan.

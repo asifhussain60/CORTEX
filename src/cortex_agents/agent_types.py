@@ -98,6 +98,12 @@ class IntentType(Enum):
     UPDATE_PROFILE = "update_profile"
     
     # ADO (Azure DevOps) operations (NEW - ADO Integration)
+    ADO_WORK_ITEM = "ado_work_item"
+    
+    # System alignment operations (NEW - CORTEX Align v2.0)
+    ALIGN = "align"
+    SYSTEM_ALIGNMENT = "system_alignment"
+    REALIGNMENT = "realignment"
     ADO_WORKITEM = "ado_workitem"
     ADO_STORY = "ado_story"
     ADO_FEATURE = "ado_feature"
@@ -228,6 +234,11 @@ INTENT_AGENT_MAP = {
     # Application Health Dashboard mapping (NEW - Application Onboarding)
     IntentType.APPLICATION_HEALTH: AgentType.APPLICATION_HEALTH,
     IntentType.ONBOARD_APPLICATION: AgentType.APPLICATION_HEALTH,
+    
+    # System Alignment mapping (NEW - CORTEX Align v2.0)
+    IntentType.ALIGN: AgentType.GOVERNOR,
+    IntentType.SYSTEM_ALIGNMENT: AgentType.GOVERNOR,
+    IntentType.REALIGNMENT: AgentType.GOVERNOR,
     
     IntentType.CHECK_RULES: AgentType.GOVERNOR,
     IntentType.COMPLIANCE: AgentType.GOVERNOR,
