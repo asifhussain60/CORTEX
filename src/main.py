@@ -69,21 +69,49 @@ def _is_phase8_operation(message: str) -> bool:
 
 def _handle_utility_command(command: str) -> str:
     """
-    Handle fast utility commands (align, healthcheck, optimize).
+    Handle fast utility commands (commit, align, healthcheck, optimize, deploy).
     
     These commands bypass full CortexEntry initialization for speed.
+    Context-aware operations automatically detect CORTEX repo vs user repo.
     
     Args:
-        command: Utility command name (align/healthcheck/optimize)
+        command: Utility command name (commit/align/healthcheck/optimize/deploy)
     
     Returns:
         Formatted response text
     """
     try:
-        if command == 'align':
-            from src.operations.modules.admin.align_utility import run_align_utility
-            result = run_align_utility()
-            return result.get('report_text', result.get('message', 'Alignment check complete'))
+        # Import context detector
+        from src.utils.context_detector import is_cortex_repo, get_context_type
+        from pathlib import Path
+        import os
+        
+        project_root = Path(os.getcwd())
+        context_type = get_context_type(project_root)
+        is_cortex = is_cortex_repo(project_root)
+        
+        if command == 'commit':
+            # Commit always runs commit_push_sync orchestrator (git_checkpoint is TDD-only)
+            from src.operations.commit_and_push import CommitAndPushOrchestrator
+            orchestrator = CommitAndPushOrchestrator(repo_path=project_root)
+            result = orchestrator.execute()
+            if result.get('success'):
+                return result.get('message', 'Commit and push complete')
+            else:
+                return f"[ERROR] {result.get('message', 'Commit failed')}"
+        
+        elif command == 'align':
+            # Context-aware: admin version if in CORTEX repo, user version otherwise
+            from src.operations.align import run_align
+            
+            if is_cortex:
+                # Admin version: Full system alignment with all checks
+                result = run_align(auto_fix=False, dry_run=False)
+            else:
+                # User version: Workspace alignment (will automatically skip admin-only checks)
+                result = run_align(auto_fix=False, dry_run=False)
+            
+            return result.get('report_text', result.get('message', 'System alignment complete'))
         
         elif command == 'healthcheck':
             from src.operations.healthcheck import run_healthcheck
@@ -98,17 +126,38 @@ def _handle_utility_command(command: str) -> str:
             return response
         
         elif command == 'optimize':
-            from src.operations.optimize import run_optimize
-            # User-facing operations skip SKULL tests for speed (<5s)
-            # For comprehensive validation with SKULL tests, use optimize_cortex_orchestrator
-            result = run_optimize(skip_skull_tests=True)
-            return result.get('message', 'Optimization complete')
+            # Context-aware: admin version if in CORTEX repo, user version otherwise
+            if is_cortex:
+                # Admin version: CORTEX optimization with SKULL tests
+                from src.operations.modules.optimization.optimize_cortex_orchestrator import OptimizeCortexOrchestrator
+                orchestrator = OptimizeCortexOrchestrator(project_root=project_root)
+                result = orchestrator.execute(context={})
+                return result.message
+            else:
+                # User version: Fast workspace optimization (skip SKULL tests)
+                from src.operations.optimize import run_optimize
+                result = run_optimize(skip_skull_tests=True)
+                return result.get('message', 'Optimization complete')
+        
+        elif command == 'deploy':
+            # Deploy is CORTEX-only operation (requires admin context)
+            if not is_cortex:
+                return "[ERROR] Deploy operation is only available in CORTEX repository. Run this command from the CORTEX development repository."
+            
+            # Run deploy with all 19 validation gates (no skipping allowed)
+            from src.operations.deploy import run_deploy
+            result = run_deploy(dry_run=False)
+            if result.get('success'):
+                return f"✅ Deployment complete\n   Branch: {result.get('branch', 'main')}\n   {result.get('validation', 'All 19 gates passed')}"
+            else:
+                return f"[ERROR] {result.get('message', 'Deployment failed')}"
         
         else:
             return f"Unknown utility command: {command}"
     
     except Exception as e:
-        return f"[ERROR] Utility command '{command}' failed: {e}"
+        import traceback
+        return f"[ERROR] Utility command '{command}' failed: {e}\n{traceback.format_exc()}"
 
 
 def _handle_phase8_operation(message: str, entry, args) -> str:
@@ -288,8 +337,8 @@ Examples:
         try:
             command_start = time.perf_counter()
             
-            # Check for fast utility commands (align, healthcheck, optimize)
-            if args.message.lower() in ['align', 'healthcheck', 'optimize']:
+            # Check for fast utility commands (commit, align, healthcheck, optimize, deploy)
+            if args.message.lower() in ['commit', 'align', 'healthcheck', 'optimize', 'deploy']:
                 response = _handle_utility_command(args.message.lower())
             # Check for Phase 8 operations
             elif _is_phase8_operation(args.message):

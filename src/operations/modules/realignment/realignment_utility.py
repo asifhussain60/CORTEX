@@ -462,7 +462,7 @@ def generate_report(
         content += "✅ **Fully compliant (100%)!**\n\n"
         content += "All policy requirements met. Great work!\n"
     
-    report_path.write_text(content)
+    report_path.write_text(content, encoding='utf-8')
     return report_path
 
 
@@ -726,13 +726,13 @@ def _check_intent_router_coverage(cortex_root: Path) -> Dict[str, Any]:
         
         # Load operations
         ops_yaml = cortex_root / "cortex-operations.yaml"
-        with open(ops_yaml) as f:
+        with open(ops_yaml, encoding='utf-8') as f:
             ops_data = yaml.safe_load(f)
             operations = list(ops_data["operations"].keys())
         
         # Load intent router
         router_file = cortex_root / "src" / "cortex_agents" / "strategic" / "intent_router.py"
-        router_content = router_file.read_text()
+        router_content = router_file.read_text(encoding='utf-8')
         
         # Simple check: see if operation name appears in intent router
         covered = []
@@ -778,13 +778,13 @@ def _check_response_template_coverage(cortex_root: Path) -> Dict[str, Any]:
         
         # Load operations
         ops_yaml = cortex_root / "cortex-operations.yaml"
-        with open(ops_yaml) as f:
+        with open(ops_yaml, encoding='utf-8') as f:
             ops_data = yaml.safe_load(f)
             operations = list(ops_data["operations"].keys())
         
         # Load response templates
         templates_yaml = cortex_root / "cortex-brain" / "response-templates.yaml"
-        with open(templates_yaml) as f:
+        with open(templates_yaml, encoding='utf-8') as f:
             templates_data = yaml.safe_load(f)
             template_names = list(templates_data.get("templates", {}).keys())
         
@@ -831,7 +831,7 @@ def _check_prompt_optimization(cortex_root: Path) -> Dict[str, Any]:
                 "error": "CORTEX.prompt.md not found"
             }
         
-        lines = prompt_file.read_text().splitlines()
+        lines = prompt_file.read_text(encoding='utf-8').splitlines()
         line_count = len(lines)
         
         # Check for template-triggers.md reference
@@ -868,7 +868,7 @@ def _check_module_imports(cortex_root: Path) -> Dict[str, Any]:
             total_checked += 1
             try:
                 # Try to compile the file
-                content = py_file.read_text()
+                content = py_file.read_text(encoding='utf-8')
                 compile(content, str(py_file), 'exec')
             except SyntaxError as e:
                 broken_modules.append({
@@ -1047,7 +1047,7 @@ def _generate_alignment_report(cortex_root: Path, results: Dict[str, Any]) -> Pa
 **License:** Source-Available (Use Allowed, No Contributions)
 """
     
-    report_path.write_text(content)
+    report_path.write_text(content, encoding='utf-8')
     logger.info(f"📄 Report saved to: {report_path}")
     
     return report_path

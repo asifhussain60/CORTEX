@@ -12,7 +12,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.orchestrators.application_health_orchestrator import ApplicationHealthOrchestrator
+from src.operations.modules.health.health_utility import run_application_health
 
 
 def main():
