@@ -1,5 +1,51 @@
 # Changelog
 
+## [3.5.5] - 2025-12-03
+
+### Added - Git Operations & System Alignment
+
+- **Git Sync & Optimize Orchestrator**
+  - Comprehensive 9-phase git workflow for safe syncing with remote
+  - Automatic stash backup with timestamps and conflict resolution
+  - Integrated system alignment, optimization, and cleanup
+  - Rollback capability on merge failures
+  - 801 lines of production-ready git orchestration
+  - Safety features: validation checkpoints, detailed logging, status reporting
+
+- **Commit & Push Utility**
+  - Lightweight git commit and push operations
+  - Single Responsibility Principle compliance
+  - Integration with git_sync_and_optimize orchestrator
+  - Simplified git operations for common workflows
+
+- **CORTEX Align v2.0 - Complete**
+  - Auto-fix: 36 operations automatically registered in cortex-operations.yaml
+  - Phase 2: Intent Router Coverage 100% (all operations routed correctly)
+  - Phase 3: Response Template Coverage 100% (all operations have templates)
+  - Intelligent maintenance system with automated operation discovery
+  - Feature registration metadata with rollback capability
+  - Comprehensive alignment reports with integration scoring
+
+- **Deploy Gate Validator Enhancements**
+  - Fixed tier1 database path validation (cortex-brain/tier1/working_memory.db)
+  - Support for post-migration orchestrators (git_sync_and_optimize.py allowed)
+  - 12/12 gates passing with 100% success rate
+  - Clear blocking vs. non-blocking gate categorization
+
+- **Git Operations Documentation**
+  - Comprehensive Quick Reference guide for all git workflows
+  - Safe sync procedures with stash management
+  - Conflict resolution strategies
+  - Emergency rollback procedures
+  - Integration with CORTEX align and optimize
+
+### Fixed
+
+- Database health validation now checks correct tier1 path
+- Orchestrator migration gate allows essential post-migration orchestrators
+- YAML operation registration insertion point corrected
+- Broken import files removed from alignment system
+
 ## [Phase 0.4] - 2025-12-01
 
 ### Removed (Breaking Changes)

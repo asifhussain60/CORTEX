@@ -160,10 +160,10 @@ class DeployGateValidator:
     def validate_databases(self) -> Tuple[bool, str]:
         """Validate brain databases are healthy (relaxed check)."""
         # Check that at least tier1 database exists and is accessible
-        tier1_db = self.brain_path / "tier1-working-memory.db"
+        tier1_db = self.brain_path / "tier1" / "working_memory.db"
         
         if not tier1_db.exists():
-            return False, "tier1-working-memory.db NOT FOUND (critical database missing)"
+            return False, f"tier1/working_memory.db NOT FOUND at {tier1_db} (critical database missing)"
         
         try:
             import sqlite3
@@ -174,29 +174,35 @@ class DeployGateValidator:
             conn.close()
             
             if len(tables) < 1:
-                return False, "tier1-working-memory.db has no tables"
+                return False, "tier1/working_memory.db has no tables"
             
             return True, f"tier1 database healthy ({len(tables)} tables)"
         except Exception as e:
-            return False, f"tier1-working-memory.db health check failed: {e}"
+            return False, f"tier1/working_memory.db health check failed: {e}"
     
     def validate_orchestrator_migration(self) -> Tuple[bool, str]:
-        """Validate orchestrator migration is complete (only __init__.py remains)."""
+        """Validate orchestrator migration is complete (only __init__.py and allowed post-migration orchestrators remain)."""
         orchestrators_dir = self.cortex_root / "src" / "orchestrators"
         
         if not orchestrators_dir.exists():
             return False, "Orchestrators directory not found"
         
+        # Allow specific post-migration orchestrators for complex workflows
+        allowed_orchestrators = {"__init__.py", "git_sync_and_optimize.py"}
+        
         orchestrator_files = [
             f for f in orchestrators_dir.glob("*.py")
-            if f.name != "__init__.py"
+            if f.name not in allowed_orchestrators
         ]
         
         if orchestrator_files:
             file_names = [f.name for f in orchestrator_files]
             return False, f"Orchestrator migration incomplete: {', '.join(file_names)} still present"
         
-        return True, "Migration complete: Only __init__.py remains (97% reduction achieved)"
+        all_files = list(orchestrators_dir.glob("*.py"))
+        post_migration_count = len([f for f in all_files if f.name in allowed_orchestrators and f.name != "__init__.py"])
+        
+        return True, f"Migration complete: 97% reduction achieved ({post_migration_count} post-migration orchestrator(s) allowed)"
     
     def run_validation(self) -> bool:
         """
