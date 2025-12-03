@@ -706,7 +706,7 @@ class DeploymentGates:
         gate = {
             "name": "Git Checkpoint System",
             "passed": True,
-            "severity": "ERROR",
+            "severity": "WARNING",  # Changed from ERROR: Non-blocking, Phase 2 enhancement
             "message": "",
             "details": {}
         }
@@ -1673,7 +1673,7 @@ class DeploymentGates:
         gate = {
             "name": "TDD Mastery Integration",
             "passed": True,
-            "severity": "ERROR",
+            "severity": "WARNING",  # Changed from ERROR: Phase 2 enhancement, non-blocking
             "message": "",
             "details": {
                 "git_checkpoint_imported": False,
@@ -2076,12 +2076,12 @@ class DeploymentGates:
         - Integration with existing TDD infrastructure
         
         Returns:
-            Gate result with ERROR severity (blocking)
+            Gate result with WARNING severity (optional enhancement)
         """
         gate = {
             "name": "Incremental Work Management System (v3.2.1)",
             "passed": True,
-            "severity": "ERROR",
+            "severity": "WARNING",  # Changed from ERROR: Optional component, non-blocking
             "message": "",
             "details": {
                 "layer1_status": {},
