@@ -107,6 +107,60 @@ class IntentRouter(BaseAgent):
                 "align orchestrator", "run alignment", "check alignment",
                 "validate system", "holistic check", "comprehensive check"
             ],
+            IntentType.RESUME: [
+                "resume", "continue", "restore", "recover", "resume conversation",
+                "resume session", "continue conversation", "pick up where",
+                "restore context", "continue from", "resume from"
+            ],
+            IntentType.FEEDBACK: [
+                "feedback", "report", "issue", "bug report", "feature request",
+                "report issue", "report bug", "give feedback", "send feedback",
+                "admin feedback", "review feedback", "feedback review",
+                "admin feedback review", "feedback report"
+            ],
+            "tutorial": [
+                "tutorial", "demo", "show me", "cortex tutorial", "interactive demo",
+                "walkthrough", "guide", "learn cortex", "how to use", "cortex demo"
+            ],
+            "setup": [
+                "setup", "environment", "configure", "install", "initialize",
+                "environment setup", "setup environment", "configure environment",
+                "setup cortex", "initialize cortex", "install cortex"
+            ],
+            "documentation": [
+                "document", "docs", "documentation", "generate docs", "update docs",
+                "document cortex", "cortex docs", "generate documentation",
+                "update documentation", "maintain cortex", "cortex documentation",
+                "generate cortex docs", "create cortex docs", "build cortex docs"
+            ],
+            "deployment": [
+                "deploy", "deployment", "deploy cortex", "production deploy",
+                "deploy to production", "deploy to app", "release cortex",
+                "publish cortex", "build cortex", "deploy cortex production"
+            ],
+            "onboarding": [
+                "onboard", "onboarding", "welcome", "getting started", "user onboarding",
+                "application onboarding", "app onboarding", "setup app", "configure app"
+            ],
+            "planning": [
+                "architecture", "design", "architecture planning", "feature planning",
+                "refactoring planning", "design sync", "sync design", "plan architecture",
+                "plan refactoring", "plan feature"
+            ],
+            "maintenance": [
+                "maintain", "maintenance", "optimize", "optimize cortex",
+                "maintain cortex", "system maintenance", "brain health",
+                "brain health check", "brain protection", "brain protection check",
+                "comprehensive review", "self review", "comprehensive self review"
+            ],
+            "help": [
+                "help", "command help", "search command", "command search",
+                "what can you do", "show commands", "list commands", "available commands"
+            ],
+            "diagrams": [
+                "diagram", "diagrams", "regenerate diagrams", "update diagrams",
+                "generate diagrams", "create diagrams", "rebuild diagrams", "refresh diagrams"
+            ],
         }
 
 
