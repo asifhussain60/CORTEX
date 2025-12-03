@@ -2871,6 +2871,294 @@ metadata:
     date: 2025-12-03
     changes:
     - Auto-registered ado operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
   - version: 3.5.4
     date: '2025-12-03'
     changes:
@@ -2960,7 +3248,7 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
-  last_updated: '2025-12-03 06:58:04'
+  last_updated: '2025-12-03 07:16:10'
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper
