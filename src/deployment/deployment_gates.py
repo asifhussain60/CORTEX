@@ -57,7 +57,7 @@ class DeploymentGates:
         """
         Validate all deployment gates.
         
-        MANDATORY ENFORCEMENT: ALL 19 gates MUST execute and pass.
+        MANDATORY ENFORCEMENT: ALL 21 gates MUST execute and pass.
         No skipping allowed - enforced by DEPLOYMENT_GATE_ENFORCEMENT SKULL rule.
         
         Args:

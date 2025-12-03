@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 CORTEX Post-Deployment Validation System
 
@@ -22,6 +23,12 @@ License: Source-Available (Use Allowed, No Contributions)
 
 import sys
 import os
+import io
+
+# Fix Windows console encoding for Unicode emoji support
+if sys.platform == "win32":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 import sqlite3
 import importlib.util
 import yaml
