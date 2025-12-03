@@ -455,6 +455,227 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
+
+        /* Tech Stack Styles */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .framework-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .framework-card h4 {
+            margin: 0 0 5px 0;
+            color: var(--primary-color);
+        }
+
+        .framework-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+
+        .dep-tab {
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .dep-tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .dependencies-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .dependency-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tech-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        /* Architecture Styles */
+        .controls {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .controls label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .controls select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        /* Security Styles */
+        .severity-filters,
+        .priority-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .severity-filter,
+        .priority-filter {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .severity-filter.active,
+        .priority-filter.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .issues-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .issue-card {
+            background: white;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .issue-card.critical {
+            border-left-color: var(--danger-color);
+        }
+
+        .issue-card.high {
+            border-left-color: #FF5722;
+        }
+
+        .issue-card.medium {
+            border-left-color: var(--warning-color);
+        }
+
+        .issue-card.low {
+            border-left-color: #9E9E9E;
+        }
+
+        /* UML Styles */
+        .uml-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            overflow: auto;
+        }
+
+        .uml-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Recommendation Styles */
+        .recommendation-card {
+            background: white;
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .recommendation-card.critical {
+            border-left-color: var(--danger-color);
+        }
+
+        .recommendation-card.high {
+            border-left-color: #FF5722;
+        }
+
+        .recommendation-card.medium {
+            border-left-color: var(--warning-color);
+        }
+
+        .recommendation-card.low {
+            border-left-color: #9E9E9E;
+        }
+
+        .recommendation-card h3 {
+            margin: 0 0 10px 0;
+            color: var(--text-color);
+        }
+
+        .recommendation-meta {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .meta-badge.impact-high,
+        .meta-badge.effort-high {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .meta-badge.impact-medium,
+        .meta-badge.effort-medium {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .meta-badge.impact-low,
+        .meta-badge.effort-low {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
     </style>
 </head>
 <body>
@@ -469,10 +690,12 @@
     <!-- Tab Navigation -->
     <nav class="dashboard-tabs">
         <button class="tab-button active" data-tab="overview" onclick="switchTab('overview')">📊 Overview</button>
-        <button class="tab-button" data-tab="visualizations" onclick="switchTab('visualizations')">📈 Visualizations</button>
-        <button class="tab-button" data-tab="diagrams" onclick="switchTab('diagrams')">🗺️ Diagrams</button>
-        <button class="tab-button" data-tab="data" onclick="switchTab('data')">📋 Data</button>
+        <button class="tab-button" data-tab="techstack" onclick="switchTab('techstack')">🔧 Tech Stack</button>
+        <button class="tab-button" data-tab="architecture" onclick="switchTab('architecture')">🏗️ Architecture</button>
+        <button class="tab-button" data-tab="security" onclick="switchTab('security')">🔒 Security</button>
+        <button class="tab-button" data-tab="uml" onclick="switchTab('uml')">📐 UML</button>
         <button class="tab-button" data-tab="recommendations" onclick="switchTab('recommendations')">💡 Recommendations</button>
+        <button class="tab-button" data-tab="data" onclick="switchTab('data')">📋 Data</button>
     </nav>
 
     <!-- Tab 1: Overview -->
@@ -493,29 +716,136 @@
         </div>
     </div>
 
-    <!-- Tab 2: Visualizations -->
-    <div class="tab-content" id="visualizations-tab">
+    <!-- Tab 2: Tech Stack -->
+    <div class="tab-content" id="techstack-tab">
+        <div class="section">
+            <h2>Programming Languages</h2>
+            <div id="languages-container" class="viz-container">
+                <canvas id="languages-chart"></canvas>
+            </div>
+            <div id="languages-list" class="tech-list"></div>
+        </div>
+
+        <div class="section">
+            <h2>Frameworks & Libraries</h2>
+            <div id="frameworks-container" class="tech-grid"></div>
+        </div>
+
+        <div class="section">
+            <h2>Dependencies</h2>
+            <div class="dependencies-tabs">
+                <button class="dep-tab active" onclick="showDependencies('python')">Python</button>
+                <button class="dep-tab" onclick="showDependencies('javascript')">JavaScript</button>
+                <button class="dep-tab" onclick="showDependencies('dotnet')">.NET</button>
+            </div>
+            <div id="dependencies-container" class="dependencies-container">
+                <div id="dependencies-list"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Build Tools & DevOps</h2>
+            <div class="tech-badges">
+                <div id="build-tools" class="badge-container"></div>
+                <div id="devops-tools" class="badge-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 3: Architecture -->
+    <div class="tab-content" id="architecture-tab">
         <div class="section">
             <h2>Component Dependency Graph</h2>
+            <div class="controls">
+                <label><input type="checkbox" id="show-modules" checked onchange="filterArchitectureGraph()"> Modules</label>
+                <label><input type="checkbox" id="show-classes" checked onchange="filterArchitectureGraph()"> Classes</label>
+                <label><input type="checkbox" id="show-functions" checked onchange="filterArchitectureGraph()"> Functions</label>
+                <select id="layer-filter" onchange="filterArchitectureGraph()">
+                    <option value="all">All Layers</option>
+                    <option value="presentation">Presentation</option>
+                    <option value="application">Application</option>
+                    <option value="domain">Domain</option>
+                    <option value="infrastructure">Infrastructure</option>
+                </select>
+            </div>
             <div class="viz-container">
-                <div id="force-graph" class="d3-container"></div>
+                <div id="architecture-graph" class="d3-container" style="height: 600px;"></div>
             </div>
         </div>
 
         <div class="section">
-            <h2>Health Trend</h2>
+            <h2>Architecture Statistics</h2>
+            <div id="architecture-stats" class="stats-grid">
+                <!-- Stats populated by JS -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Layer Distribution</h2>
             <div class="viz-container">
-                <canvas id="time-series-chart"></canvas>
+                <canvas id="layers-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Architecture Metrics</h2>
+            <div id="architecture-metrics" class="metrics-grid"></div>
+        </div>
+    </div>
+
+    <!-- Tab 4: Security -->
+    <div class="tab-content" id="security-tab">
+        <div class="section">
+            <h2>Vulnerability Overview</h2>
+            <div id="security-summary" class="stats-grid">
+                <!-- Summary stats populated by JS -->
+            </div>
+            <div class="viz-container">
+                <canvas id="severity-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Security Issues</h2>
+            <div id="severity-filters" class="severity-filters">
+                <button class="severity-filter active" data-severity="all" onclick="filterSecurityIssues('all')">All</button>
+                <button class="severity-filter" data-severity="critical" onclick="filterSecurityIssues('critical')">Critical</button>
+                <button class="severity-filter" data-severity="high" onclick="filterSecurityIssues('high')">High</button>
+                <button class="severity-filter" data-severity="medium" onclick="filterSecurityIssues('medium')">Medium</button>
+                <button class="severity-filter" data-severity="low" onclick="filterSecurityIssues('low')">Low</button>
+            </div>
+            <div id="vulnerabilities-list" class="issues-container">
+                <div id="security-issues"></div>
             </div>
         </div>
     </div>
 
-    <!-- Tab 3: Diagrams -->
-    <div class="tab-content" id="diagrams-tab">
-        <div id="diagrams-container"></div>
+    <!-- Tab 5: UML Diagrams -->
+    <div class="tab-content" id="uml-tab">
+        <div class="section">
+            <h2>Class Diagrams</h2>
+            <div id="uml-container" class="uml-container">
+                <div id="uml-diagram-display" class="uml-diagram"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Tab 4: Data -->
+    <!-- Tab 6: Recommendations -->
+    <div class="tab-content" id="recommendations-tab">
+        <div class="section">
+            <h2>Actionable Recommendations</h2>
+            <div class="priority-filters">
+                <button class="priority-filter active" data-priority="all" onclick="filterRecommendations('all')">All</button>
+                <button class="priority-filter" data-priority="critical" onclick="filterRecommendations('critical')">Critical</button>
+                <button class="priority-filter" data-priority="high" onclick="filterRecommendations('high')">High</button>
+                <button class="priority-filter" data-priority="medium" onclick="filterRecommendations('medium')">Medium</button>
+                <button class="priority-filter" data-priority="low" onclick="filterRecommendations('low')">Low</button>
+            </div>
+            <div class="recommendations-container" id="recommendations-container"></div>
+        </div>
+    </div>
+
+    <!-- Tab 7: Data -->
     <div class="tab-content" id="data-tab">
         <div class="section">
             <h2>Data Table</h2>
@@ -538,14 +868,6 @@
                 <span id="page-info">Page 1 of 1</span>
                 <button id="next-page" onclick="nextPage()">Next →</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Tab 5: Recommendations -->
-    <div class="tab-content" id="recommendations-tab">
-        <div class="section">
-            <h2>Actionable Recommendations</h2>
-            <div class="recommendations-container" id="recommendations-container"></div>
         </div>
     </div>
 
@@ -622,10 +944,10 @@
         function initializeVisualizations() {
             // D3.js Force-Directed Graph
             const forceGraphData = dashboardData.visualizations.forceGraph;
-            const width = document.getElementById('force-graph').clientWidth;
+            const width = document.getElementById('architecture-graph').clientWidth;
             const height = 500;
 
-            const svg = d3.select('#force-graph')
+            const svg = d3.select('#architecture-graph')
                 .append('svg')
                 .attr('width', width)
                 .attr('height', height)
