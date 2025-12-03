@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 CORTEX Production Deployment - Single Entry Point
 ==================================================
@@ -37,6 +38,7 @@ import argparse
 import shutil
 import subprocess
 import sys
+import io
 import yaml
 from pathlib import Path
 from typing import Set, Dict, List, Optional
@@ -44,6 +46,11 @@ import json
 import logging
 from datetime import datetime
 import traceback
+
+# Fix Windows console encoding for Unicode emoji support
+if sys.platform == "win32":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)

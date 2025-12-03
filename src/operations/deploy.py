@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 CORTEX Deploy Operation - CLI Entry Point
 
@@ -10,7 +11,13 @@ Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 """
 
 import sys
+import io
 from pathlib import Path
+
+# Fix Windows console encoding for Unicode emoji support
+if sys.platform == "win32":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent
