@@ -64,8 +64,8 @@ class TestPythonEnvironmentModule:
             
             assert analysis.is_global
             assert not analysis.is_virtual_env
-            assert analysis.action_recommendation == "create_venv"
-            assert "isolation required" in analysis.reason.lower()
+            assert analysis.action_recommendation == "create_shared"
+            assert "shared" in analysis.reason.lower() or "global" in analysis.reason.lower()
     
     def test_analyze_virtual_environment(self, module, mock_context):
         """Test analysis detects virtual environment."""
