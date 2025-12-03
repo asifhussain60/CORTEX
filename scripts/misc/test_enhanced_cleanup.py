@@ -12,8 +12,8 @@ import sys
 from pathlib import Path
 import logging
 
-# Add project root to path
-project_root = Path(__file__).parent
+# Add project root to path (go up 2 levels from scripts/misc/)
+project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from src.operations.modules.cleanup.cleanup_orchestrator import CleanupOrchestrator

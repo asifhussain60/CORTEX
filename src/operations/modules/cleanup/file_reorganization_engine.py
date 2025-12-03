@@ -94,9 +94,30 @@ class FileReorganizationEngine:
             priority=70
         ),
         ReorganizationRule(
+            name="deployment_files_to_reports",
+            description="Move deployment logs and validation files to cortex-brain/documents/reports",
+            source_pattern=r"^(deploy-log|deploy-output|deployment-validation|ado-validation|alignment_result)\.(txt|json)$",
+            destination_template="cortex-brain/documents/reports/{filename}",
+            priority=95
+        ),
+        ReorganizationRule(
+            name="patches_to_artifacts",
+            description="Move patch files to cortex-brain/artifacts",
+            source_pattern=r"^.*\.patch$",
+            destination_template="cortex-brain/artifacts/{filename}",
+            priority=92
+        ),
+        ReorganizationRule(
+            name="diagrams_to_docs",
+            description="Move diagram files to docs/diagrams",
+            source_pattern=r"^.*\.(svg|png|jpg|jpeg|drawio)$",
+            destination_template="docs/diagrams/{filename}",
+            priority=91
+        ),
+        ReorganizationRule(
             name="root_cleanup",
-            description="Move misplaced files from root",
-            source_pattern=r"^[^/]+\.(py|sh|md)$",
+            description="Move misplaced files from root to scripts/misc",
+            source_pattern=r"^[^/]+\.(py|sh|md|txt|json|yaml|yml|ini|backup|bak|old)$",
             destination_template="scripts/misc/{filename}",
             priority=90
         )

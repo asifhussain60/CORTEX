@@ -1,0 +1,98 @@
+{
+  "timestamp": "2025-12-03T17:08:54.295399",
+  "version": "3.0.0",
+  "summary": {
+    "total_scanned": 7,
+    "total_deleted": 0,
+    "total_moved": 7,
+    "total_references_updated": 0,
+    "space_freed_mb": 0.0,
+    "duration_seconds": 0.010004
+  },
+  "scan_statistics": {
+    "total_files": 7,
+    "total_size_bytes": 29736,
+    "total_size_mb": 0.02835845947265625,
+    "protected_count": 0,
+    "duplicate_count": 0,
+    "duplicate_groups": 0,
+    "categories": {
+      "source_code": 4,
+      "test": 2,
+      "documentation": 1
+    },
+    "purposes": {
+      "feature": 6,
+      "unknown": 1
+    }
+  },
+  "reference_statistics": {
+    "total_references": 7,
+    "total_imports": 0,
+    "total_path_refs": 7,
+    "total_links": 0,
+    "total_config_refs": 0,
+    "files_with_dependencies": 0,
+    "files_with_dependents": 6
+  },
+  "deletion_statistics": {
+    "total_analyzed": 7,
+    "total_candidates": 0,
+    "safe_to_delete": 0,
+    "space_to_free_bytes": 0,
+    "space_to_free_mb": 0.0,
+    "risk_breakdown": {},
+    "reason_breakdown": {}
+  },
+  "deletion_results": {
+    "dry_run": true,
+    "deleted_count": 0,
+    "skipped_count": 0,
+    "failed_count": 0,
+    "space_freed_bytes": 0,
+    "space_freed_mb": 0.0,
+    "deleted_files": [],
+    "skipped_files": [],
+    "failed_files": []
+  },
+  "reorganization_results": {
+    "dry_run": true,
+    "moved_count": 7,
+    "failed_count": 0,
+    "references_updated": 0,
+    "moved_files": [
+      "run_optimize.py",
+      "test_gate8_swagger.py",
+      "validate_yaml.py",
+      "run_enhanced_cleanup_live.py",
+      "test_enhanced_cleanup.py",
+      "run_deploy_gates.py",
+      "MAC-CONTINUATION-GUIDE.md"
+    ],
+    "failed_moves": []
+  },
+  "verification": {
+    "essential_deleted": [],
+    "recovery_commands": [],
+    "verification_passed": true
+  },
+  "recommendations": [],
+  "metrics": {
+    "timestamp": "2025-12-03T17:08:54.285367",
+    "backups_deleted": 0,
+    "backups_archived": 0,
+    "files_reorganized": 7,
+    "md_files_consolidated": 0,
+    "root_files_cleaned": 0,
+    "bloated_files_found": 0,
+    "archived_docs_removed": 0,
+    "space_freed_bytes": 0,
+    "git_commits_created": 0,
+    "duration_seconds": 0.010004,
+    "optimization_triggered": false,
+    "warnings": [],
+    "errors": [],
+    "space_freed_mb": 0.0,
+    "space_freed_gb": 0.0
+  }
+}

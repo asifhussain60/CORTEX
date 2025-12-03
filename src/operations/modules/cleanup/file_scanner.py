@@ -132,8 +132,10 @@ class FileScanner:
     # Protected file patterns
     PROTECTED_FILES = {
         'LICENSE', 'README.md', 'CHANGELOG.md', '.gitignore', '.gitattributes',
-        'requirements.txt', 'package.json', 'tsconfig.json', 'pytest.ini',
-        'cortex.config.json', 'cortex.config.template.json', 'mkdocs.yml'
+        'requirements.txt', 'optional-requirements.txt', 'package.json', 
+        'tsconfig.json', 'pytest.ini', 'VERSION',
+        'cortex.config.json', 'cortex.config.template.json', 'mkdocs.yml',
+        'cortex-operations.yaml'
     }
     
     # Backup file patterns
@@ -228,13 +230,20 @@ class FileScanner:
             # Scan directory
             if path.is_dir():
                 try:
+                    # First, process files in current directory (including root)
                     for item in path.iterdir():
-                        self._scan_recursive(item)
+                        if item.is_file():
+                            self._process_file(item)
+                    
+                    # Then recursively scan subdirectories
+                    for item in path.iterdir():
+                        if item.is_dir():
+                            self._scan_recursive(item)
                 except PermissionError:
                     logger.warning(f"Permission denied: {path}")
                     return
             
-            # Process file
+            # Process file (for when path itself is a file)
             elif path.is_file():
                 self._process_file(path)
         
