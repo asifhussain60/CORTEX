@@ -72,7 +72,7 @@ class CleanupOrchestrator(BaseOperationModule):
         
         # Protected paths - NEVER touch these
         self.protected_paths = {
-            'src/', 'tests/', 'cortex-brain/', 'docs/',
+            'src/', 'src/orchestrators/', 'tests/', 'cortex-brain/', 'docs/',
             'prompts/', 'workflows/', 'scripts/', '.git/',
             '.github/', '.vscode/', 'node_modules/',
             'package.json', 'tsconfig.json', 'pytest.ini',
@@ -81,6 +81,26 @@ class CleanupOrchestrator(BaseOperationModule):
             'LICENSE', 'README.md', 'CHANGELOG.md',
             '.gitignore', '.gitattributes', '.editorconfig',
             'mkdocs.yml', 'cortex-operations.yaml'
+        }
+        
+        # CRITICAL: Protected orchestrator files (restored 2025-12-03)
+        # These files were incorrectly removed by cleanup but are required for:
+        # - TDD Mastery workflow (git_checkpoint_orchestrator, phase_checkpoint_manager)
+        # - Deployment validation (planning_orchestrator, setup_epm_orchestrator)
+        # - Test suite execution (rollback_orchestrator, rollback_command_parser)
+        # - Health monitoring (application_health_orchestrator, dashboard_generator)
+        # - User onboarding (onboarding_acknowledgment_orchestrator, master_setup_orchestrator)
+        self.protected_orchestrator_files = {
+            'src/orchestrators/git_checkpoint_orchestrator.py',
+            'src/orchestrators/phase_checkpoint_manager.py',
+            'src/orchestrators/rollback_orchestrator.py',
+            'src/orchestrators/rollback_command_parser.py',
+            'src/orchestrators/application_health_orchestrator.py',
+            'src/orchestrators/dashboard_generator.py',
+            'src/orchestrators/planning_orchestrator.py',
+            'src/orchestrators/setup_epm_orchestrator.py',
+            'src/orchestrators/onboarding_acknowledgment_orchestrator.py',
+            'src/orchestrators/master_setup_orchestrator.py',
         }
         
         # File organization rules
@@ -639,6 +659,12 @@ class CleanupOrchestrator(BaseOperationModule):
             relative_path = path.relative_to(self.project_root)
             path_str = str(relative_path).replace('\\', '/')
             
+            # Check if path matches protected orchestrator files (exact match)
+            if path_str in self.protected_orchestrator_files:
+                logger.debug(f"Protected orchestrator file: {path_str}")
+                return True
+            
+            # Check if path is in protected directories
             for protected in self.protected_paths:
                 if path_str == protected.rstrip('/'):
                     return True
