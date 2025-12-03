@@ -221,6 +221,54 @@ class PlanRegistry:
         # Convert to dictionaries
         return [self._row_to_dict(row) for row in results]
     
+    def search_plans(self, query: str) -> List[Dict[str, Any]]:
+        """
+        Search plans by keyword in title or plan_id.
+        
+        Args:
+            query: Search term (case-insensitive)
+            
+        Returns:
+            List of matching plan dictionaries
+        """
+        search_term = f"%{query}%"
+        
+        results = self._execute_query(
+            """
+            SELECT * FROM plans 
+            WHERE plan_id LIKE ? OR title LIKE ?
+            ORDER BY priority DESC, created_date DESC
+            """,
+            (search_term, search_term)
+        )
+        
+        return [self._row_to_dict(row) for row in results]
+    
+    def update_plan_status(self, plan_id: str, new_status: str) -> bool:
+        """
+        Update plan status.
+        
+        Args:
+            plan_id: Plan to update
+            new_status: New status value
+            
+        Returns:
+            True if updated, False if plan not found
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            "UPDATE plans SET status = ?, updated_date = ? WHERE plan_id = ?",
+            (new_status, datetime.now().isoformat(), plan_id)
+        )
+        
+        rows_affected = cursor.rowcount
+        conn.commit()
+        conn.close()
+        
+        return rows_affected > 0
+    
     def _execute_query(
         self,
         query: str,

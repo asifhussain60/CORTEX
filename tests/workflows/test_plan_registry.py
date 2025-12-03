@@ -515,3 +515,158 @@ estimated_hours: 10
         assert len(filtered_plans) == 1
         assert filtered_plans[0]["status"] == "proposed"
         assert filtered_plans[0]["priority"] == "high"
+
+
+class TestPlanRegistrySearch:
+    """Test searching plans."""
+    
+    def test_search_by_title(self, tmp_path):
+        """Should find plans by title keyword."""
+        brain_path = tmp_path / "cortex-brain"
+        planning_dir = brain_path / "documents" / "planning"
+        planning_dir.mkdir(parents=True)
+        
+        # Create plans with different titles
+        titles = ["Environment Setup", "Database Migration", "UI Components"]
+        for i, title in enumerate(titles):
+            plan_file = planning_dir / f"plan-{i}.md"
+            plan_file.write_text(f"""---
+plan_id: SEARCH-00{i}
+title: {title}
+status: proposed
+priority: medium
+created_date: 2025-12-03
+estimated_hours: 10
+---
+# Content
+""")
+        
+        registry = PlanRegistry(brain_path)
+        registry.scan_and_index()
+        
+        results = registry.search_plans("Environment")
+        
+        assert len(results) == 1
+        assert results[0]["title"] == "Environment Setup"
+    
+    def test_search_by_plan_id(self, tmp_path):
+        """Should find plans by plan_id keyword."""
+        brain_path = tmp_path / "cortex-brain"
+        planning_dir = brain_path / "documents" / "planning"
+        planning_dir.mkdir(parents=True)
+        
+        plan_file = planning_dir / "test-plan.md"
+        plan_file.write_text("""---
+plan_id: UNIQUE-123
+title: Test Plan
+status: proposed
+priority: medium
+created_date: 2025-12-03
+estimated_hours: 10
+---
+# Content
+""")
+        
+        registry = PlanRegistry(brain_path)
+        registry.scan_and_index()
+        
+        results = registry.search_plans("UNIQUE")
+        
+        assert len(results) == 1
+        assert results[0]["plan_id"] == "UNIQUE-123"
+    
+    def test_search_case_insensitive(self, tmp_path):
+        """Should search case-insensitively."""
+        brain_path = tmp_path / "cortex-brain"
+        planning_dir = brain_path / "documents" / "planning"
+        planning_dir.mkdir(parents=True)
+        
+        plan_file = planning_dir / "test-plan.md"
+        plan_file.write_text("""---
+plan_id: CASE-001
+title: Environment Setup
+status: proposed
+priority: medium
+created_date: 2025-12-03
+estimated_hours: 10
+---
+# Content
+""")
+        
+        registry = PlanRegistry(brain_path)
+        registry.scan_and_index()
+        
+        results = registry.search_plans("ENVIRONMENT")
+        
+        assert len(results) == 1
+        assert results[0]["title"] == "Environment Setup"
+    
+    def test_search_no_matches(self, tmp_path):
+        """Should return empty list when no matches."""
+        brain_path = tmp_path / "cortex-brain"
+        planning_dir = brain_path / "documents" / "planning"
+        planning_dir.mkdir(parents=True)
+        
+        plan_file = planning_dir / "test-plan.md"
+        plan_file.write_text("""---
+plan_id: NOMATCH-001
+title: Test Plan
+status: proposed
+priority: medium
+created_date: 2025-12-03
+estimated_hours: 10
+---
+# Content
+""")
+        
+        registry = PlanRegistry(brain_path)
+        registry.scan_and_index()
+        
+        results = registry.search_plans("nonexistent")
+        
+        assert len(results) == 0
+
+
+class TestPlanRegistryUpdateStatus:
+    """Test updating plan status."""
+    
+    def test_update_existing_plan(self, tmp_path):
+        """Should update status of existing plan."""
+        brain_path = tmp_path / "cortex-brain"
+        planning_dir = brain_path / "documents" / "planning"
+        planning_dir.mkdir(parents=True)
+        
+        plan_file = planning_dir / "test-plan.md"
+        plan_file.write_text("""---
+plan_id: UPDATE-001
+title: Test Plan
+status: proposed
+priority: medium
+created_date: 2025-12-03
+estimated_hours: 10
+---
+# Content
+""")
+        
+        registry = PlanRegistry(brain_path)
+        registry.scan_and_index()
+        
+        result = registry.update_plan_status("UPDATE-001", "completed")
+        
+        assert result is True
+        
+        # Verify update
+        plan = registry.get_plan("UPDATE-001")
+        assert plan["status"] == "completed"
+        assert plan["updated_date"] is not None
+    
+    def test_update_nonexistent_plan(self, tmp_path):
+        """Should return False for nonexistent plan."""
+        brain_path = tmp_path / "cortex-brain"
+        brain_path.mkdir(parents=True)
+        
+        registry = PlanRegistry(brain_path)
+        
+        result = registry.update_plan_status("nonexistent", "completed")
+        
+        assert result is False
