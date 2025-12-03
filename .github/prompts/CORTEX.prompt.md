@@ -5,7 +5,7 @@
 
 **Purpose:** Single command for ALL CORTEX interactions. You don't need to remember multiple commands - just use this one and CORTEX figures out what you need.
 
-**Version:** 3.2.1  
+**Version:** 3.5.5  
 **Status:** ✅ PRODUCTION  
 **Architecture:** Template-based responses + Modular documentation + Interactive Planning + Universal Upgrade System + User Profile System
 
@@ -1144,7 +1144,7 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 
 ---
 
-**Last Updated:** 2025-11-30 | Version 3.2.1 (Deployment System Enhancement)  
+**Last Updated:** 2025-12-03 | Version 3.5.5 (Git Checkpoint + Onboarding + Dashboard System Enhancement)  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Source-Available - See LICENSE | **Repository:** https://github.com/asifhussain60/CORTEX
 

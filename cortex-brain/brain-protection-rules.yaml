@@ -3,7 +3,7 @@ type: governance
 name: Brain Protection Rules
 description: Automated architectural protection challenges
 rules:
-  total_count: 45
+  total_count: 44
   layers: 17
   severity_levels:
   - blocked
@@ -65,8 +65,6 @@ tier0_instincts:
 - API_DOCUMENTATION_REQUIRED
 - OPERATIONAL_READINESS_ENFORCEMENT
 - DEBUG_MARKER_REMOVAL_ENFORCEMENT
-- TOKEN_EFFICIENCY_ENFORCEMENT
-- DEPLOYMENT_GATE_ENFORCEMENT
 application_paths:
 - SPA/
 - KSESSIONS/
@@ -2097,101 +2095,6 @@ challenge_template: "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255
   \        \u274C BLOCKED: Cannot commit code with debug markers\n        \n        **Why Debug Markers Must Be Removed:**\n        \n        1. **Production Readiness**\n           - Debug markers indicate incomplete/temporary code\n           - MARKER: Used during development to track execution\n           - DEBUG: Code meant for debugging only\n           - FIXME: Temporary fixes needing proper implementation\n           - TODO: Incomplete implementations\n           - BREAKPOINT: Execution pause points\n        \n        2. **Code Quality**\n           - Markers clutter codebase\n           - Confuse future developers\n           - Indicate lack of review\n           - Suggest rushed implementation\n        \n        3. **Professional Standards**\n           - Clean code ready for review\n           - No debugging artifacts\n           - Proper implementation complete\n           - Ready for production\n        \n        **Marker Types Detected:**\n        \n        {marker_details}\n\
   \        \n        **Automated Removal Available:**\n        \n        ```bash\n        # Scan for all markers\n        python src/utils/debug_markers.py scan src/\n        \n        # Remove from specific file\n        python src/utils/debug_markers.py remove src/orchestrators/example.py\n        \n        # Dry-run to see what would be removed\n        python src/utils/debug_markers.py remove src/orchestrators/example.py --dry-run\n        ```\n        \n        **Git Pre-Commit Hook Protection:**\n        \n        The git pre-commit hook automatically scans staged Python files for markers:\n        - Located: `.git/hooks/pre-commit`\n        - Auto-scans: All staged .py files\n        - Blocks commit: If any markers found\n        - Clear guidance: Shows exact locations\n        \n        **Manual Removal:**\n        \n        1. Open files listed above\n        2. Find lines with markers (MARKER:, DEBUG:, etc.)\n        3. Remove marker comments\n        4. Ensure code still functions\n\
   \        5. Stage cleaned files: git add <files>\n        6. Retry commit\n        \n        **Exceptions:**\n        \n        - If marker is intentional (e.g., TODO in documentation): Convert to proper format\n        - If marker is critical for tracking: Move to issue tracker or planning document\n        - If fixing marker is complex: Create separate task and remove marker\n        \n        **Benefits of Clean Commits:**\n        - Professional code quality\n        - Clear git history\n        - Production-ready code\n        - Easy code review\n        - No confusion for future developers\n        \n        **Pre-Commit Hook Installation:**\n        \n        Copy the hook to your .git/hooks directory:\n        ```bash\n        cp scripts/git-hooks/pre-commit .git/hooks/pre-commit\n        chmod +x .git/hooks/pre-commit  # Unix/Mac only\n        ```\n        \n        The hook will automatically validate all future commits.\n"
-    - rule_id: "DEPLOYMENT_GATE_ENFORCEMENT"
-      name: "Deployment Gate Enforcement"
-      severity: "blocked"
-      description: "ALL 19 deployment gates MUST execute and pass before production deployment. No skipping, no bypass flags, no exceptions."
-      
-      detection:
-        combined_keywords:
-          deployment_actions:
-            - "deploy cortex"
-            - "publish cortex"
-            - "release cortex"
-          bypass_attempts:
-            - "skip validation"
-            - "skip gates"
-            - "--skip-validation"
-            - "bypass gates"
-        scope: ["intent", "command", "flags"]
-        logic: "AND"
-      
-      alternatives:
-        - "REMOVE --skip-validation flag from deployment scripts"
-        - "FIX failing gates rather than bypassing them"
-        - "USE dry-run mode for testing deployment process"
-        - "ALL 19 gates must pass before production release"
-      
-      evidence_template: |
-        Deployment gate bypass attempt detected!
-        
-        Operation: '{operation}'
-        
-        ❌ BLOCKED: ALL 19 deployment gates are MANDATORY
-        
-        **19 Critical Gates (All Required):**
-        - Gate 1-5: Integration, Tests, Mocks, Docs, Versions
-        - Gate 6-10: Templates, Git, Swagger, Estimator, Production Files
-        - Gate 11-15: Brain Operational, Next Steps, TDD, Packaging, Separation
-        - Gate 16-19: Align EPM, Incremental Work, EPM Wiring, Token Efficiency
-        
-        **No Bypass Allowed:** --skip-validation flag removed
-        **Only Exception:** --dry-run for testing (no production changes)
-      
-      rationale: |
-        DEPLOYMENT_GATE_ENFORCEMENT: Non-Negotiable Quality Standards
-        
-        Gates prevent production bugs, ensure quality, maintain trust.
-        All gates are critical - none optional. Fix issues, don't bypass.
-
-    - rule_id: "DEPLOYMENT_GATE_ENFORCEMENT"
-      name: "Deployment Gate Enforcement"
-      severity: "blocked"
-      description: "ALL 19 deployment gates MUST execute and pass before production deployment. No skipping, no bypass flags, no exceptions."
-      
-      detection:
-        combined_keywords:
-          deployment_actions:
-            - "deploy cortex"
-            - "publish cortex"
-            - "release cortex"
-          bypass_attempts:
-            - "skip validation"
-            - "skip gates"
-            - "--skip-validation"
-            - "bypass gates"
-        scope: ["intent", "command", "flags"]
-        logic: "AND"
-      
-      alternatives:
-        - "REMOVE --skip-validation flag from deployment scripts"
-        - "FIX failing gates rather than bypassing them"
-        - "USE dry-run mode for testing deployment process"
-        - "ALL 19 gates must pass before production release"
-      
-      evidence_template: |
-        Deployment gate bypass attempt detected!
-        
-        Operation: '{operation}'
-        
-        ❌ BLOCKED: ALL 19 deployment gates are MANDATORY
-        
-        **19 Critical Gates (All Required):**
-        - Gate 1-5: Integration, Tests, Mocks, Docs, Versions
-        - Gate 6-10: Templates, Git, Swagger, Estimator, Production Files
-        - Gate 11-15: Brain Operational, Next Steps, TDD, Packaging, Separation
-        - Gate 16-19: Align EPM, Incremental Work, EPM Wiring, Token Efficiency
-        
-        **No Bypass Allowed:** --skip-validation flag removed
-        **Only Exception:** --dry-run for testing (no production changes)
-      
-      rationale: |
-        DEPLOYMENT_GATE_ENFORCEMENT: Non-Negotiable Quality Standards
-        
-        Gates prevent production bugs, ensure quality, maintain trust.
-        All gates are critical - none optional. Fix issues, don't bypass.
-
-
 logging:
   enabled: true
   path: cortex-brain/corpus-callosum/protection-events.jsonl

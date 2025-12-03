@@ -556,12 +556,12 @@ class DeploymentGates:
         
         version_file = self.project_root / "VERSION"
         if version_file.exists():
-            versions["VERSION"] = version_file.read_text().strip()
+            versions["VERSION"] = version_file.read_text(encoding='utf-8').strip()
         
         package_json = self.project_root / "package.json"
         if package_json.exists():
             try:
-                data = json.loads(package_json.read_text())
+                data = json.loads(package_json.read_text(encoding='utf-8'))
                 versions["package.json"] = data.get("version", "unknown")
             except Exception:
                 versions["package.json"] = "error"
@@ -569,7 +569,7 @@ class DeploymentGates:
         prompt_path = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
         if prompt_path.exists():
             try:
-                content = prompt_path.read_text()
+                content = prompt_path.read_text(encoding='utf-8')
                 # Look for version in prompt
                 match = re.search(r'Version[:\s]+(\d+\.\d+\.\d+)', content)
                 if match:
