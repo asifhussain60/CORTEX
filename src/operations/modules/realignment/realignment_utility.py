@@ -574,10 +574,20 @@ def align_system_v2(
                 registrar = FeatureAutoRegistrar(cortex_root)
                 for op_name in registration_result.unregistered_operations:
                     try:
-                        # Auto-register operation
-                        # (Implementation would call registrar.register_operation)
-                        logger.info(f"   ✅ Registered: {op_name}")
-                        results["fixes_applied"].append(f"Registered operation: {op_name}")
+                        # Register operation to cortex-operations.yaml
+                        reg_result = registrar.register_feature(op_name, dry_run=False)
+                        
+                        if reg_result.success:
+                            logger.info(f"   ✅ Registered: {op_name}")
+                            results["fixes_applied"].append(f"Registered operation: {op_name}")
+                        else:
+                            logger.warning(f"   ⚠️  Could not register {op_name}: {reg_result.error_message}")
+                            results["warnings"].append({
+                                "category": "feature_registration",
+                                "severity": "MEDIUM",
+                                "message": f"Could not register {op_name}",
+                                "details": reg_result.error_message
+                            })
                     except Exception as e:
                         logger.error(f"   ❌ Failed to register {op_name}: {e}")
                         results["errors"].append(f"Registration failed: {op_name} - {e}")

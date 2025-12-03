@@ -1,11 +1,9 @@
 operations:
-  
-  # ========== Conversation Management Operations ==========
-  
   resume_conversation:
     name: Resume Conversation
-    description: Resume previous conversation from new chat session with full context restoration
-    deployment_tier: user  # User-facing operation
+    description: Resume previous conversation from new chat session with full context
+      restoration
+    deployment_tier: user
     natural_language:
     - resume {topic}
     - continue {topic}
@@ -36,11 +34,11 @@ operations:
     - resume planning session
     - continue the API refactoring
     - resume conversation conv-20251122-001
-  
   deploy_cortex_production:
     name: Deploy CORTEX Production Build
-    description: Build clean production package and publish to downloadable repository for user deployment
-    deployment_tier: admin  # Admin operation (deploys CORTEX itself)
+    description: Build clean production package and publish to downloadable repository
+      for user deployment
+    deployment_tier: admin
     natural_language:
     - deploy cortex
     - deploy production
@@ -73,11 +71,10 @@ operations:
       modules_total: 1
       completion_percentage: 100
       notes: Builds clean production package and publishes to downloadable repository
-  
   regenerate_diagrams:
     name: Regenerate All Diagrams
     description: Analyze CORTEX design and regenerate all visual assets from scratch
-    deployment_tier: developer  # Developer operation
+    deployment_tier: developer
     natural_language:
     - regenerate diagrams
     - regenerate all diagrams
@@ -99,11 +96,10 @@ operations:
       modules_total: 1
       completion_percentage: 100
       notes: Complete diagram regeneration system with CORTEX design analysis
-  
   cortex_tutorial:
     name: CORTEX Interactive Demo
     description: Hands-on walkthrough of CORTEX capabilities with live execution
-    deployment_tier: user  # ✅ Include in user deployment package
+    deployment_tier: user
     natural_language:
     - demo
     - show me what cortex can do
@@ -168,12 +164,14 @@ operations:
       modules_implemented: 8
       modules_total: 9
       completion_percentage: 89
-      notes: Core demo modules complete (intro, help, story_refresh, dod_dor, token_optimization, code_review, conversation, completion). Cleanup module in progress. All showcase real CORTEX capabilities - no mocks.
+      notes: Core demo modules complete (intro, help, story_refresh, dod_dor, token_optimization,
+        code_review, conversation, completion). Cleanup module in progress. All showcase
+        real CORTEX capabilities - no mocks.
       estimated_hours: 6
   environment_setup:
     name: Environment Setup
     description: Configure CORTEX development environment on Mac/Windows/Linux
-    deployment_tier: user  # ✅ Include in user deployment package
+    deployment_tier: user
     natural_language:
     - setup
     - setup environment
@@ -239,13 +237,16 @@ operations:
       modules_implemented: 12
       modules_total: 12
       completion_percentage: 100
-      notes: "Environment setup is fully implemented and operational. All modules including platform detection, dependency management, gitignore setup, and brain initialization are complete and tested across Mac/Windows/Linux platforms."
+      notes: Environment setup is fully implemented and operational. All modules including
+        platform detection, dependency management, gitignore setup, and brain initialization
+        are complete and tested across Mac/Windows/Linux platforms.
       estimated_hours: 15
-      completion_date: "2025-11-14"
+      completion_date: '2025-11-14'
   document_cortex:
     name: CORTEX Documentation
-    description: Comprehensive CORTEX documentation management combining story refresh and documentation updates
-    deployment_tier: admin  # ❌ Admin-only (manages CORTEX's own documentation)
+    description: Comprehensive CORTEX documentation management combining story refresh
+      and documentation updates
+    deployment_tier: admin
     natural_language:
     - document
     - documentation
@@ -310,17 +311,20 @@ operations:
       modules_implemented: 11
       modules_total: 11
       completion_percentage: 100
-      notes: "Documentation management is fully implemented, consolidating story refresh and documentation update capabilities. All modules including narrator voice transformation and automated doc generation are complete."
+      notes: Documentation management is fully implemented, consolidating story refresh
+        and documentation update capabilities. All modules including narrator voice
+        transformation and automated doc generation are complete.
       estimated_hours: 20
-      completion_date: "2025-11-14"
+      completion_date: '2025-11-14'
       consolidation_from:
-        - update_documentation
+      - update_documentation
   generate_cortex_docs:
     name: Generate CORTEX Documentation
-    description: Run CORTEX Enterprise Documentation Orchestrator to generate comprehensive MkDocs documentation with diagrams, guides, and API references
-    deployment_tier: admin  # Admin operation (generates CORTEX's own documentation)
-    module: "src.operations.modules.enterprise_documentation_orchestrator_module"
-    class: "EnterpriseDocumentationOrchestratorModule"
+    description: Run CORTEX Enterprise Documentation Orchestrator to generate comprehensive
+      MkDocs documentation with diagrams, guides, and API references
+    deployment_tier: admin
+    module: src.operations.modules.enterprise_documentation_orchestrator_module
+    class: EnterpriseDocumentationOrchestratorModule
     natural_language:
     - generate docs
     - generate documentation
@@ -333,7 +337,6 @@ operations:
     - generate cortex documentation
     category: documentation
     modules:
-    # Uses EPM system - single orchestrator module
     - enterprise_documentation_orchestrator_module
     profiles:
       quick:
@@ -356,21 +359,23 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: "Runs Enterprise Documentation Orchestrator to generate MkDocs site with all documentation components"
+      notes: Runs Enterprise Documentation Orchestrator to generate MkDocs site with
+        all documentation components
       estimated_hours: 8
-      completion_date: "2025-11-16"
+      completion_date: '2025-11-16'
       epm_integration: true
       epm_modules:
-        - doc_generator.py
-        - modules/validation_engine.py
-        - modules/cleanup_manager.py
-        - modules/diagram_generator.py
-        - modules/page_generator.py
-        - modules/cross_reference_builder.py
+      - doc_generator.py
+      - modules/validation_engine.py
+      - modules/cleanup_manager.py
+      - modules/diagram_generator.py
+      - modules/page_generator.py
+      - modules/cross_reference_builder.py
   maintain_cortex:
     name: CORTEX Maintenance
-    description: Comprehensive CORTEX maintenance combining workspace cleanup, system optimization, and health diagnostics
-    deployment_tier: user  # ✅ Include in user deployment package - combines user and admin functionality
+    description: Comprehensive CORTEX maintenance combining workspace cleanup, system
+      optimization, and health diagnostics
+    deployment_tier: user
     natural_language:
     - maintain
     - maintenance
@@ -432,7 +437,8 @@ operations:
         - generate_optimization_plan
         - generate_health_report
       comprehensive:
-        description: Full maintenance - complete cleanup, optimization, health check, and auto-optimization
+        description: Full maintenance - complete cleanup, optimization, health check,
+          and auto-optimization
         modules:
         - cleanup_orchestrator
         - optimize_cortex_orchestrator
@@ -452,16 +458,20 @@ operations:
       modules_implemented: 13
       modules_total: 13
       completion_percentage: 100
-      notes: "Consolidates workspace_cleanup (ready), optimize_cortex (ready), and brain_health_check (designed) into single maintenance operation. All cleanup and optimization orchestrators are ready; health check modules will be implemented as part of this consolidation."
-      estimated_hours: 47  # Combined: 10 + 12 + 25 hours
+      notes: Consolidates workspace_cleanup (ready), optimize_cortex (ready), and
+        brain_health_check (designed) into single maintenance operation. All cleanup
+        and optimization orchestrators are ready; health check modules will be implemented
+        as part of this consolidation.
+      estimated_hours: 47
       consolidation_from:
-        - workspace_cleanup
-        - optimize_cortex  
-        - brain_health_check
+      - workspace_cleanup
+      - optimize_cortex
+      - brain_health_check
   feature_planning:
     name: Feature Planning
-    description: Interactive feature planning with Work Planner agent - breaks down requirements into executable phases
-    deployment_tier: user  # ✅ Include in user deployment package
+    description: Interactive feature planning with Work Planner agent - breaks down
+      requirements into executable phases
+    deployment_tier: user
     natural_language:
     - plan a feature
     - let's plan a feature
@@ -511,13 +521,16 @@ operations:
       modules_implemented: 7
       modules_total: 7
       completion_percentage: 100
-      notes: "Feature planning is fully implemented using existing Work Planner, Pattern Matcher, and Architect agents. All 7 modules complete and integrated with interactive planning workflows from CORTEX 2.1."
+      notes: Feature planning is fully implemented using existing Work Planner, Pattern
+        Matcher, and Architect agents. All 7 modules complete and integrated with
+        interactive planning workflows from CORTEX 2.1.
       estimated_hours: 160
-      completion_date: "2025-11-14"
+      completion_date: '2025-11-14'
   update_documentation:
     name: Update Documentation
-    description: "[DEPRECATED] Use 'document_cortex' instead - Refresh and build CORTEX documentation site"
-    deployment_tier: admin  # ❌ Admin-only (builds CORTEX's own docs) - DEPRECATED
+    description: '[DEPRECATED] Use ''document_cortex'' instead - Refresh and build
+      CORTEX documentation site'
+    deployment_tier: admin
     status: deprecated
     consolidation_target: document_cortex
     natural_language:
@@ -525,15 +538,18 @@ operations:
     category: documentation
     implementation_status:
       status: deprecated
-      notes: "DEPRECATED: Consolidated into 'document_cortex' operation for simplification. All functionality preserved in the new consolidated operation."
-      consolidation_date: "2025-11-14"
-      replacement: "document_cortex"
+      notes: 'DEPRECATED: Consolidated into ''document_cortex'' operation for simplification.
+        All functionality preserved in the new consolidated operation.'
+      consolidation_date: '2025-11-14'
+      replacement: document_cortex
   brain_protection_check:
     name: Brain Protection Validation
-    description: "[EXPERIMENTAL] Validate CORTEX brain protection rules and integrity - Tier 0 governance handles this automatically"
-    deployment_tier: experimental  # 🧪 Experimental feature (Tier 0 handles protection)
+    description: '[EXPERIMENTAL] Validate CORTEX brain protection rules and integrity
+      - Tier 0 governance handles this automatically'
+    deployment_tier: experimental
     status: experimental
-    experimental_reason: "Tier 0 governance automatically handles brain protection validation. This operation is redundant with existing protection mechanisms."
+    experimental_reason: Tier 0 governance automatically handles brain protection
+      validation. This operation is redundant with existing protection mechanisms.
     natural_language:
     - check brain (experimental)
     - validate brain (experimental)
@@ -541,13 +557,15 @@ operations:
     category: validation
     implementation_status:
       status: experimental
-      notes: "EXPERIMENTAL: Tier 0 governance provides automatic brain protection. This operation may be redundant. Consider for future implementation if advanced validation features are needed."
-      experimental_date: "2025-11-14"
-  
+      notes: 'EXPERIMENTAL: Tier 0 governance provides automatic brain protection.
+        This operation may be redundant. Consider for future implementation if advanced
+        validation features are needed.'
+      experimental_date: '2025-11-14'
   brain_health_check:
     name: Brain Health Check & Self-Optimization
-    description: "[DEPRECATED] Use 'maintain_cortex' instead - Comprehensive self-diagnostic that validates all CORTEX components, identifies issues, and suggests optimizations"
-    deployment_tier: admin  # ❌ Admin-only (system diagnostics) - DEPRECATED
+    description: '[DEPRECATED] Use ''maintain_cortex'' instead - Comprehensive self-diagnostic
+      that validates all CORTEX components, identifies issues, and suggests optimizations'
+    deployment_tier: admin
     status: deprecated
     consolidation_target: maintain_cortex
     natural_language:
@@ -555,16 +573,19 @@ operations:
     category: validation
     implementation_status:
       status: deprecated
-      notes: "DEPRECATED: Consolidated into 'maintain_cortex' operation for simplification. All functionality preserved in the new consolidated operation."
-      consolidation_date: "2025-11-14"
-      replacement: "maintain_cortex"
-  
+      notes: 'DEPRECATED: Consolidated into ''maintain_cortex'' operation for simplification.
+        All functionality preserved in the new consolidated operation.'
+      consolidation_date: '2025-11-14'
+      replacement: maintain_cortex
   comprehensive_self_review:
     name: Comprehensive Self-Review
-    description: "[EXPERIMENTAL] Validate all brain protection layers, coding standards, and architecture integrity - Advanced validation feature"
-    deployment_tier: experimental  # 🧪 Experimental feature (advanced validation)
+    description: '[EXPERIMENTAL] Validate all brain protection layers, coding standards,
+      and architecture integrity - Advanced validation feature'
+    deployment_tier: experimental
     status: experimental
-    experimental_reason: "Advanced validation feature for comprehensive architecture review. Consider for future implementation when automated quality assurance is needed."
+    experimental_reason: Advanced validation feature for comprehensive architecture
+      review. Consider for future implementation when automated quality assurance
+      is needed.
     natural_language:
     - run self-review (experimental)
     - comprehensive review (experimental)
@@ -572,30 +593,34 @@ operations:
     category: validation
     implementation_status:
       status: experimental
-      notes: "EXPERIMENTAL: Advanced validation feature for comprehensive architecture and code quality review. May be implemented in future versions for enhanced quality assurance."
-      experimental_date: "2025-11-14"
-  
+      notes: 'EXPERIMENTAL: Advanced validation feature for comprehensive architecture
+        and code quality review. May be implemented in future versions for enhanced
+        quality assurance.'
+      experimental_date: '2025-11-14'
   run_tests:
     name: Test Suite Execution
-    description: "[INTEGRATED] Test execution integrated into maintain_cortex and other operations as validation"
-    deployment_tier: integrated  # 🔗 Integrated into operations as validation
+    description: '[INTEGRATED] Test execution integrated into maintain_cortex and
+      other operations as validation'
+    deployment_tier: integrated
     status: integrated
-    integration_target: "maintain_cortex and other operations"
+    integration_target: maintain_cortex and other operations
     natural_language:
     - run tests (integrated into maintain operation)
     - test this (integrated into operations)
     category: testing
     implementation_status:
       status: integrated
-      notes: "INTEGRATED: Test execution is integrated into maintain_cortex operation and other operations for validation. No separate operation needed - tests run as part of maintenance and validation workflows."
-      integration_date: "2025-11-14"
+      notes: 'INTEGRATED: Test execution is integrated into maintain_cortex operation
+        and other operations for validation. No separate operation needed - tests
+        run as part of maintenance and validation workflows.'
+      integration_date: '2025-11-14'
       related_operations:
-        - maintain_cortex
-  
+      - maintain_cortex
   optimize_cortex:
     name: CORTEX Optimization
-    description: "[DEPRECATED] Use 'maintain_cortex' instead - Holistic architecture review with SKULL tests and automated optimizations"
-    deployment_tier: admin  # ❌ Admin-only (system diagnostics) - DEPRECATED
+    description: '[DEPRECATED] Use ''maintain_cortex'' instead - Holistic architecture
+      review with SKULL tests and automated optimizations'
+    deployment_tier: admin
     status: deprecated
     consolidation_target: maintain_cortex
     natural_language:
@@ -603,31 +628,36 @@ operations:
     category: maintenance
     implementation_status:
       status: deprecated
-      notes: "DEPRECATED: Consolidated into 'maintain_cortex' operation for simplification. All functionality preserved in the new consolidated operation."
-      consolidation_date: "2025-11-14"
-      replacement: "maintain_cortex"
-  
+      notes: 'DEPRECATED: Consolidated into ''maintain_cortex'' operation for simplification.
+        All functionality preserved in the new consolidated operation.'
+      consolidation_date: '2025-11-14'
+      replacement: maintain_cortex
   deploy_to_app:
     name: Deploy CORTEX to Application
-    description: "[FUTURE] Deploy CORTEX package to target application - Advanced deployment automation feature"
-    deployment_tier: future  # 🔮 Future feature (advanced deployment automation)
+    description: '[FUTURE] Deploy CORTEX package to target application - Advanced
+      deployment automation feature'
+    deployment_tier: future
     status: future
-    future_reason: "Advanced deployment automation feature planned for future versions. Application onboarding currently handles basic deployment needs."
+    future_reason: Advanced deployment automation feature planned for future versions.
+      Application onboarding currently handles basic deployment needs.
     natural_language:
     - deploy to app (future feature)
     - deploy cortex (future feature)
     category: deployment
     implementation_status:
       status: future
-      notes: "FUTURE: Advanced deployment automation feature. Application onboarding operation currently provides basic deployment capabilities. Full automation planned for future versions."
-      future_date: "2025-11-14"
+      notes: 'FUTURE: Advanced deployment automation feature. Application onboarding
+        operation currently provides basic deployment capabilities. Full automation
+        planned for future versions.'
+      future_date: '2025-11-14'
       related_operations:
-        - application_onboarding
-  
+      - application_onboarding
   design_sync:
     name: Design-Implementation Synchronization
-    description: Resynchronizes CORTEX design documents with actual implementation, consolidates to single status doc, integrates optimization recommendations, converts verbose MD to YAML schemas
-    deployment_tier: admin  # ❌ Admin-only (development tool)
+    description: Resynchronizes CORTEX design documents with actual implementation,
+      consolidates to single status doc, integrates optimization recommendations,
+      converts verbose MD to YAML schemas
+    deployment_tier: admin
     natural_language:
     - sync design
     - design sync
@@ -651,7 +681,8 @@ operations:
         modules:
         - design_sync_orchestrator
       comprehensive:
-        description: Full sync - discovery, optimization, YAML conversion, consolidation (all changes with git tracking)
+        description: Full sync - discovery, optimization, YAML conversion, consolidation
+          (all changes with git tracking)
         modules:
         - design_sync_orchestrator
     implementation_status:
@@ -659,15 +690,17 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: "Single orchestrator module coordinates: (1) Live implementation discovery, (2) Design-implementation gap analysis, (3) Optimization integration, (4) MD-to-YAML conversion, (5) Single status doc consolidation, (6) Git tracking. Always works on LATEST design version (currently CORTEX 2.0)."
+      notes: 'Single orchestrator module coordinates: (1) Live implementation discovery,
+        (2) Design-implementation gap analysis, (3) Optimization integration, (4)
+        MD-to-YAML conversion, (5) Single status doc consolidation, (6) Git tracking.
+        Always works on LATEST design version (currently CORTEX 2.0).'
       estimated_hours: 14
-  
-  # ========== Feedback & Analytics Operations ==========
-  
   feedback_report:
     name: Generate Comprehensive Feedback Report
-    description: Generate detailed performance and metrics report covering 8 categories (Application, Crawler, CORTEX Performance, Knowledge Graph, Development Hygiene, TDD Mastery, Commit Metrics, Velocity)
-    deployment_tier: user  # User-facing operation
+    description: Generate detailed performance and metrics report covering 8 categories
+      (Application, Crawler, CORTEX Performance, Knowledge Graph, Development Hygiene,
+      TDD Mastery, Commit Metrics, Velocity)
+    deployment_tier: user
     natural_language:
     - feedback
     - generate feedback
@@ -691,17 +724,18 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: "8-category metrics collection with GitHub Gist integration and privacy sanitization"
+      notes: 8-category metrics collection with GitHub Gist integration and privacy
+        sanitization
     examples:
     - feedback
     - generate feedback report
     - share performance metrics with team
     - how is cortex performing
-  
   admin_feedback_review:
     name: Review Feedback from Multiple Applications
-    description: "[ADMIN ONLY] Aggregate and analyze feedback reports from multiple user repositories. Only works in CORTEX repo"
-    deployment_tier: admin  # Admin operation (CORTEX repo only)
+    description: '[ADMIN ONLY] Aggregate and analyze feedback reports from multiple
+      user repositories. Only works in CORTEX repo'
+    deployment_tier: admin
     natural_language:
     - review feedback
     - feedback review
@@ -726,26 +760,28 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: "Phase 2 - Admin feedback aggregation with Gist sync, analytics DB storage, and trend analysis. CORTEX repo only."
-  
+      notes: Phase 2 - Admin feedback aggregation with Gist sync, analytics DB storage,
+        and trend analysis. CORTEX repo only.
   interactive_planning:
     name: Interactive Feature Planning
-    description: "[INTEGRATED] Interactive planning integrated into feature_planning operation with CORTEX 2.1 capabilities"
-    deployment_tier: integrated  # 🔗 Integrated into feature_planning operation
+    description: '[INTEGRATED] Interactive planning integrated into feature_planning
+      operation with CORTEX 2.1 capabilities'
+    deployment_tier: integrated
     status: integrated
-    integration_target: "feature_planning"
+    integration_target: feature_planning
     natural_language:
     - let's plan a feature (integrated into feature planning)
     - collaborative planning (integrated into feature planning)
     category: planning
     implementation_status:
       status: integrated
-      notes: "INTEGRATED: Interactive planning capabilities are built into the feature_planning operation. CORTEX 2.1 interactive planning workflows are fully integrated."
-      integration_date: "2025-11-14"
+      notes: 'INTEGRATED: Interactive planning capabilities are built into the feature_planning
+        operation. CORTEX 2.1 interactive planning workflows are fully integrated.'
+      integration_date: '2025-11-14'
       related_operations:
-        - feature_planning
-        - generate_implementation_plan
-        - present_plan_for_approval
+      - feature_planning
+      - generate_implementation_plan
+      - present_plan_for_approval
       collaborative:
         description: Collaborative planning - thorough exploration
         modules:
@@ -759,10 +795,12 @@ operations:
         - present_plan_for_approval
   architecture_planning:
     name: Architecture Solution Planning
-    description: "[FUTURE] Collaborative architecture design with guided questions - Advanced planning feature"
-    deployment_tier: future  # 🔮 Future feature (advanced architecture planning)
+    description: '[FUTURE] Collaborative architecture design with guided questions
+      - Advanced planning feature'
+    deployment_tier: future
     status: future
-    future_reason: "Advanced architecture planning with guided questionnaire system. Feature planning operation currently handles basic planning needs."
+    future_reason: Advanced architecture planning with guided questionnaire system.
+      Feature planning operation currently handles basic planning needs.
     natural_language:
     - architect a solution (future feature)
     - design architecture (future feature)
@@ -770,15 +808,16 @@ operations:
     category: planning
     implementation_status:
       status: future
-      notes: "FUTURE: Advanced architecture planning with collaborative questionnaire system. Feature planning operation currently provides basic planning capabilities."
-      future_date: "2025-11-14"
+      notes: 'FUTURE: Advanced architecture planning with collaborative questionnaire
+        system. Feature planning operation currently provides basic planning capabilities.'
+      future_date: '2025-11-14'
       related_operations:
-        - feature_planning
-  
+      - feature_planning
   application_onboarding:
     name: Application Onboarding & Intelligent Analysis
-    description: One-command CORTEX deployment with intelligent codebase discovery and contextual questioning
-    deployment_tier: user  # ✅ User-facing operation (included in publish package)
+    description: One-command CORTEX deployment with intelligent codebase discovery
+      and contextual questioning
+    deployment_tier: user
     natural_language:
     - onboard this application
     - analyze my codebase
@@ -831,14 +870,16 @@ operations:
       modules_implemented: 7
       modules_total: 7
       completion_percentage: 100
-      notes: "Application onboarding is fully implemented and operational. Provides seamless CORTEX deployment to target applications with intelligent codebase analysis, tech stack detection, and contextual questioning capabilities."
+      notes: Application onboarding is fully implemented and operational. Provides
+        seamless CORTEX deployment to target applications with intelligent codebase
+        analysis, tech stack detection, and contextual questioning capabilities.
       estimated_hours: 6
-      completion_date: "2025-11-14"
-  
+      completion_date: '2025-11-14'
   user_onboarding:
     name: User Onboarding & CORTEX Introduction
-    description: Guided new user experience with interactive learning and hands-on validation
-    deployment_tier: user  # ✅ User-facing operation (included in publish package)
+    description: Guided new user experience with interactive learning and hands-on
+      validation
+    deployment_tier: user
     natural_language:
     - onboard me
     - new user setup
@@ -862,13 +903,14 @@ operations:
     - present_graduation_summary
     profiles:
       quick:
-        description: Essential introduction - 5-7 minutes (understand value + basic setup)
+        description: Essential introduction - 5-7 minutes (understand value + basic
+          setup)
         modules:
         - present_cortex_introduction
         - detect_user_environment
         - validate_cortex_installation
         - present_graduation_summary
-        estimated_duration: 420  # 7 minutes
+        estimated_duration: 420
       standard:
         description: Complete onboarding - 10-15 minutes (full guided experience)
         modules:
@@ -879,7 +921,7 @@ operations:
         - guide_first_interaction
         - setup_conversation_tracking
         - present_graduation_summary
-        estimated_duration: 900  # 15 minutes
+        estimated_duration: 900
       comprehensive:
         description: Deep dive onboarding - 20-30 minutes (includes advanced features)
         modules:
@@ -890,63 +932,72 @@ operations:
         - guide_first_interaction
         - setup_conversation_tracking
         - present_graduation_summary
-        estimated_duration: 1800  # 30 minutes
+        estimated_duration: 1800
     implementation_status:
       status: ready
       modules_implemented: 7
       modules_total: 7
       completion_percentage: 100
-      notes: "User onboarding operation implemented with EPM orchestrator integration. Provides comprehensive guided experience from first contact to productive CORTEX usage with memory validation."
+      notes: User onboarding operation implemented with EPM orchestrator integration.
+        Provides comprehensive guided experience from first contact to productive
+        CORTEX usage with memory validation.
       estimated_hours: 4
-      completion_date: "2025-11-15"
+      completion_date: '2025-11-15'
       epm_integration: true
-      orchestrator_class: "OnboardingOrchestrator"
-      step_registry: "UserOnboardingSteps"
-  
+      orchestrator_class: OnboardingOrchestrator
+      step_registry: UserOnboardingSteps
   refactoring_planning:
     name: Refactoring Module Planning
-    description: "[FUTURE] Interactive refactoring with clarification questions - Advanced refactoring assistance"
-    deployment_tier: future  # 🔮 Future feature (advanced refactoring planning)
+    description: '[FUTURE] Interactive refactoring with clarification questions -
+      Advanced refactoring assistance'
+    deployment_tier: future
     status: future
-    future_reason: "Advanced refactoring planning with interactive guidance. Feature planning operation can handle basic refactoring tasks."
+    future_reason: Advanced refactoring planning with interactive guidance. Feature
+      planning operation can handle basic refactoring tasks.
     natural_language:
     - refactor this module (future feature)
     - refactor code (future feature)
     category: planning
     implementation_status:
       status: future
-      notes: "FUTURE: Advanced refactoring planning with interactive clarification questions. Basic refactoring guidance available through feature planning operation."
-      future_date: "2025-11-14"
+      notes: 'FUTURE: Advanced refactoring planning with interactive clarification
+        questions. Basic refactoring guidance available through feature planning operation.'
+      future_date: '2025-11-14'
       related_operations:
-        - feature_planning
+      - feature_planning
   command_help:
     name: Command Discovery & Help
-    description: "[INTEGRATED] Command discovery integrated into CORTEX help system and natural language interface"
-    deployment_tier: integrated  # 🔗 Integrated into core help system
+    description: '[INTEGRATED] Command discovery integrated into CORTEX help system
+      and natural language interface'
+    deployment_tier: integrated
     status: integrated
-    integration_target: "Natural language interface and help system"
+    integration_target: Natural language interface and help system
     natural_language:
     - help (integrated into help system)
     - show commands (integrated into help system)
     category: discovery
     implementation_status:
       status: integrated
-      notes: "INTEGRATED: Command discovery and help functionality is built into the natural language interface and core help system. No separate operation needed."
-      integration_date: "2025-11-14"
+      notes: 'INTEGRATED: Command discovery and help functionality is built into the
+        natural language interface and core help system. No separate operation needed.'
+      integration_date: '2025-11-14'
   command_search:
     name: Command Search
-    description: "[INTEGRATED] Command search integrated into CORTEX help system and natural language interface" 
-    deployment_tier: integrated  # 🔗 Integrated into core help system
+    description: '[INTEGRATED] Command search integrated into CORTEX help system and
+      natural language interface'
+    deployment_tier: integrated
     status: integrated
-    integration_target: "Natural language interface and help system"
+    integration_target: Natural language interface and help system
     natural_language:
     - find command (integrated into help system)
     - search commands (integrated into help system)
     category: discovery
     implementation_status:
       status: integrated
-      notes: "INTEGRATED: Command search functionality is built into the natural language interface. Users can ask 'how do I...' or 'help with...' and get contextual assistance."
-      integration_date: "2025-11-14"
+      notes: 'INTEGRATED: Command search functionality is built into the natural language
+        interface. Users can ask ''how do I...'' or ''help with...'' and get contextual
+        assistance.'
+      integration_date: '2025-11-14'
 modules:
   project_validation:
     name: Project Validation
@@ -1963,7 +2014,8 @@ modules:
     cortex_version: '2.0'
   demo_dod_dor_workflow:
     name: Demo DoD/DoR Workflow Integration
-    description: Showcase how CORTEX processes user-provided DoD, DoR, and acceptance criteria through Work Planner agent
+    description: Showcase how CORTEX processes user-provided DoD, DoR, and acceptance
+      criteria through Work Planner agent
     phase: DEMONSTRATION
     priority: medium
     class: DoDDoRWorkflowDemo
@@ -1982,10 +2034,11 @@ modules:
     estimated_hours: 2.0
     token_cost: 250
     cortex_version: '2.0'
-    notes: Demonstrates DoR validation (Rule #21), planning enhancement, AC-to-test mapping, and DoD enforcement (Rule #20)
+    notes: Demonstrates DoR validation (Rule
   demo_token_optimization:
     name: Demo Token Optimization
-    description: Showcase CORTEX's 97.2% token reduction achievement and optimization strategies (modular architecture, YAML extraction, lazy loading)
+    description: Showcase CORTEX's 97.2% token reduction achievement and optimization
+      strategies (modular architecture, YAML extraction, lazy loading)
     phase: DEMONSTRATION
     priority: medium
     class: DemoTokenOptimizationModule
@@ -2003,10 +2056,12 @@ modules:
     estimated_hours: 1.5
     token_cost: 200
     cortex_version: '2.0'
-    notes: Demonstrates 97.2% token reduction (74,047 → 2,078 tokens), 93.4% cost savings, and optimization techniques applied to CORTEX 2.0
+    notes: "Demonstrates 97.2% token reduction (74,047 \u2192 2,078 tokens), 93.4%\
+      \ cost savings, and optimization techniques applied to CORTEX 2.0"
   demo_code_review:
     name: Demo Code Review & PR Capabilities
-    description: Showcase CORTEX's automated code review with SOLID principles, security scanning, performance analysis, and PR integration
+    description: Showcase CORTEX's automated code review with SOLID principles, security
+      scanning, performance analysis, and PR integration
     phase: DEMONSTRATION
     priority: medium
     class: DemoCodeReviewModule
@@ -2025,7 +2080,8 @@ modules:
     estimated_hours: 2.0
     token_cost: 300
     cortex_version: '2.0'
-    notes: Demonstrates automated PR review, SOLID violation detection, security scanning (secrets, SQL injection, XSS), and performance anti-pattern detection
+    notes: Demonstrates automated PR review, SOLID violation detection, security scanning
+      (secrets, SQL injection, XSS), and performance anti-pattern detection
   demo_cleanup:
     name: Demo Cleanup
     description: Execute workspace cleanup and show optimization report (files removed,
@@ -2081,10 +2137,10 @@ modules:
     estimated_hours: 0.5
     token_cost: 100
     cortex_version: '2.0'
-  
   cleanup_orchestrator:
     name: Cleanup Orchestrator
-    description: Orchestrates comprehensive workspace cleanup with backup management, organization, and optimization
+    description: Orchestrates comprehensive workspace cleanup with backup management,
+      organization, and optimization
     phase: PROCESSING
     priority: 100
     class: CleanupOrchestrator
@@ -2102,10 +2158,10 @@ modules:
     implemented_date: '2025-11-11'
     lines_of_code: 1120
     cortex_version: '2.0'
-  
   optimize_cortex_orchestrator:
     name: CORTEX Optimization Orchestrator
-    description: Comprehensive health scanning and optimization with obsolete test detection
+    description: Comprehensive health scanning and optimization with obsolete test
+      detection
     phase: EXECUTION
     priority: 100
     class: OptimizeCortexOrchestrator
@@ -2124,11 +2180,10 @@ modules:
     implemented_date: '2025-11-11'
     lines_of_code: 650
     cortex_version: '2.0'
-    
-  # Feature Planning Modules (CORTEX 2.0 Enhancement)
   feature_discovery:
     name: Feature Discovery
-    description: Interactive questioning to understand feature requirements (what, why, who, constraints)
+    description: Interactive questioning to understand feature requirements (what,
+      why, who, constraints)
     phase: PRE_VALIDATION
     priority: 10
     class: FeatureDiscoveryModule
@@ -2142,10 +2197,10 @@ modules:
     status: designed
     estimated_hours: 8
     cortex_version: '2.1'
-    
   pattern_search:
     name: Pattern Search
-    description: Search Tier 2 Knowledge Graph for similar past features and proven approaches
+    description: Search Tier 2 Knowledge Graph for similar past features and proven
+      approaches
     phase: PREPARATION
     priority: 20
     class: PatternSearchModule
@@ -2160,7 +2215,6 @@ modules:
     status: designed
     estimated_hours: 12
     cortex_version: '2.1'
-    
   requirement_breakdown:
     name: Requirement Breakdown
     description: Decompose feature into phases, tasks, and acceptance criteria
@@ -2178,10 +2232,10 @@ modules:
     status: designed
     estimated_hours: 16
     cortex_version: '2.1'
-    
   dependency_analysis:
     name: Dependency Analysis
-    description: Identify phase dependencies, external dependencies, and technical constraints
+    description: Identify phase dependencies, external dependencies, and technical
+      constraints
     phase: PROCESSING
     priority: 40
     class: DependencyAnalysisModule
@@ -2196,7 +2250,6 @@ modules:
     status: designed
     estimated_hours: 12
     cortex_version: '2.1'
-    
   risk_identification:
     name: Risk Identification
     description: Identify technical risks, suggest mitigations, flag unknown unknowns
@@ -2214,10 +2267,10 @@ modules:
     status: designed
     estimated_hours: 10
     cortex_version: '2.1'
-    
   roadmap_generation:
     name: Roadmap Generation
-    description: Generate phase-based roadmap with timeline, acceptance criteria, and markdown document
+    description: Generate phase-based roadmap with timeline, acceptance criteria,
+      and markdown document
     phase: FINALIZATION
     priority: 60
     class: RoadmapGenerationModule
@@ -2233,10 +2286,10 @@ modules:
     status: designed
     estimated_hours: 12
     cortex_version: '2.1'
-    
   plan_storage:
     name: Plan Storage
-    description: Save feature plan to Tier 1 database and cortex-brain/feature-plans/ markdown file
+    description: Save feature plan to Tier 1 database and cortex-brain/feature-plans/
+      markdown file
     phase: FINALIZATION
     priority: 70
     class: PlanStorageModule
@@ -2251,7 +2304,6 @@ modules:
     status: designed
     estimated_hours: 8
     cortex_version: '2.1'
-  
   diagram_regeneration:
     name: Diagram Regeneration
     description: Analyze CORTEX design and regenerate all visual assets from scratch
@@ -2269,8 +2321,8 @@ modules:
     status: implemented
     estimated_hours: 24
     cortex_version: '3.0'
-    notes: Complete diagram regeneration with CORTEX design analysis, feature identification, Mermaid generation, and professional illustration prompts
-  
+    notes: Complete diagram regeneration with CORTEX design analysis, feature identification,
+      Mermaid generation, and professional illustration prompts
   publish_branch_orchestrator:
     name: Publish Branch Orchestrator
     description: Build production package and publish to dedicated git branch
@@ -2288,12 +2340,13 @@ modules:
     status: implemented
     estimated_hours: 0
     cortex_version: '3.0'
-    notes: Wraps existing publish_to_branch.py script for integration with CORTEX operations system
-  
-  # Feedback & Analytics Modules (CORTEX 3.0)
+    notes: Wraps existing publish_to_branch.py script for integration with CORTEX
+      operations system
   enhanced_feedback_module:
     name: Enhanced Feedback Module
-    description: Collect comprehensive metrics across 8 categories (Application, Crawler, CORTEX Performance, Knowledge Graph, Development Hygiene, TDD Mastery, Commit Metrics, Velocity) with privacy sanitization and GitHub Gist integration
+    description: Collect comprehensive metrics across 8 categories (Application, Crawler,
+      CORTEX Performance, Knowledge Graph, Development Hygiene, TDD Mastery, Commit
+      Metrics, Velocity) with privacy sanitization and GitHub Gist integration
     phase: EXECUTION
     priority: 100
     class: EnhancedFeedbackModule
@@ -2309,11 +2362,16 @@ modules:
     status: implemented
     estimated_hours: 8
     cortex_version: '3.0'
-    notes: "8 metrics collectors: ApplicationMetricsCollector, CrawlerPerformanceCollector, CortexPerformanceCollector, KnowledgeGraphCollector, DevelopmentHygieneCollector, TDDMasteryCollector, CommitMetricsCollector, VelocityMetricsCollector. Privacy sanitization with 3 levels (full/medium/minimal). GitHub Gist upload with registry tracking"
-  
+    notes: '8 metrics collectors: ApplicationMetricsCollector, CrawlerPerformanceCollector,
+      CortexPerformanceCollector, KnowledgeGraphCollector, DevelopmentHygieneCollector,
+      TDDMasteryCollector, CommitMetricsCollector, VelocityMetricsCollector. Privacy
+      sanitization with 3 levels (full/medium/minimal). GitHub Gist upload with registry
+      tracking'
   admin_feedback_review_module:
     name: Admin Feedback Review Module
-    description: "[ADMIN ONLY] Aggregate and analyze feedback reports from multiple applications. Sync Gist registry, process reports, generate trend analysis, categorize issues"
+    description: '[ADMIN ONLY] Aggregate and analyze feedback reports from multiple
+      applications. Sync Gist registry, process reports, generate trend analysis,
+      categorize issues'
     phase: EXECUTION
     priority: 100
     class: AdminFeedbackReviewModule
@@ -2329,17 +2387,15 @@ modules:
     status: implemented
     estimated_hours: 6
     cortex_version: '3.0'
-    notes: "CORTEX repo only. Natural language triggers: review feedback, feedback review, analyze feedback, process feedback, sync feedback, import feedback. Auto-syncs Gist registry by default. Stores in cortex-brain/analytics/ databases"
+    notes: 'CORTEX repo only. Natural language triggers: review feedback, feedback
+      review, analyze feedback, process feedback, sync feedback, import feedback.
+      Auto-syncs Gist registry by default. Stores in cortex-brain/analytics/ databases'
     implemented_date: '2025-11-24'
-  
-  # ========== Orchestrator Migration Registrations (Sprint 13b) ==========
-  # These operations were migrated from orchestrators to utilities during
-  # the CORTEX 3.0 orchestrator migration program (November-December 2025)
-  
   ado_work_item:
     name: ADO Work Item Management
-    description: Azure DevOps work item creation and management - interactive planning with ADO integration
-    deployment_tier: user  # User-facing operation
+    description: Azure DevOps work item creation and management - interactive planning
+      with ADO integration
+    deployment_tier: user
     natural_language:
     - plan ado
     - create ado work item
@@ -2359,16 +2415,18 @@ modules:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: ADO work item orchestrator migrated to utility in Sprint 3 (Task 6). Full ADO integration with work item creation, planning context, and DoR/DoD validation.
+      notes: ADO work item orchestrator migrated to utility in Sprint 3 (Task 6).
+        Full ADO integration with work item creation, planning context, and DoR/DoD
+        validation.
     examples:
     - plan ado
     - create ado work item for authentication feature
     - ado planning session
-  
   swagger_estimation:
     name: SWAGGER/OpenAPI Complexity Estimation
-    description: Analyze SWAGGER/OpenAPI specifications and estimate implementation complexity and timeframes
-    deployment_tier: user  # User-facing operation
+    description: Analyze SWAGGER/OpenAPI specifications and estimate implementation
+      complexity and timeframes
+    deployment_tier: user
     natural_language:
     - swagger estimate
     - openapi estimate
@@ -2388,17 +2446,18 @@ modules:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: SWAGGER entry point orchestrator migrated to estimation utility in Sprint 13b (Final sprint). Analyzes API complexity, endpoint count, and provides implementation timeframes.
+      notes: SWAGGER entry point orchestrator migrated to estimation utility in Sprint
+        13b (Final sprint). Analyzes API complexity, endpoint count, and provides
+        implementation timeframes.
     examples:
     - swagger estimate
     - estimate this openapi spec
     - analyze swagger complexity
     - how long will this API take
-  
   ux_enhancement:
     name: UX Enhancement Analysis
     description: Analyze user experience and suggest UI/UX improvements for applications
-    deployment_tier: user  # User-facing operation
+    deployment_tier: user
     natural_language:
     - ux enhancement
     - improve ux
@@ -2418,16 +2477,16 @@ modules:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: UX enhancement orchestrator migrated to utility. Analyzes UI patterns, accessibility, user flows, and provides specific improvement recommendations.
+      notes: UX enhancement orchestrator migrated to utility. Analyzes UI patterns,
+        accessibility, user flows, and provides specific improvement recommendations.
     examples:
     - ux enhancement
     - analyze user experience for this feature
     - suggest ui improvements
-  
   lint_validation:
     name: Code Linting and Validation
     description: Run linting and code quality validation with auto-fix capabilities
-    deployment_tier: user  # User-facing operation
+    deployment_tier: user
     natural_language:
     - lint code
     - run linter
@@ -2447,17 +2506,18 @@ modules:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: Lint validation orchestrator migrated to utility in Sprint 4 (Task 11). Integrates with TDD workflow for automated code quality checks.
+      notes: Lint validation orchestrator migrated to utility in Sprint 4 (Task 11).
+        Integrates with TDD workflow for automated code quality checks.
     examples:
     - lint code
     - run linter on this file
     - validate code quality
     - auto-fix linting issues
-  
   application_health:
     name: Application Health Dashboard
-    description: Comprehensive application health monitoring with interactive dashboard and onboarding workflow
-    deployment_tier: user  # User-facing operation
+    description: Comprehensive application health monitoring with interactive dashboard
+      and onboarding workflow
+    deployment_tier: user
     natural_language:
     - show health dashboard
     - application health
@@ -2477,16 +2537,18 @@ modules:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: Application health orchestrator migrated to agent-based implementation in Sprint 5 (Task 15). Features progressive crawling, metrics collection, and interactive dashboard.
+      notes: Application health orchestrator migrated to agent-based implementation
+        in Sprint 5 (Task 15). Features progressive crawling, metrics collection,
+        and interactive dashboard.
     examples:
     - show health dashboard
     - health check my application
     - onboard application for monitoring
-  
   rca:
     name: Root Cause Analysis
-    description: Interactive root cause analysis with 5 Whys methodology and structured investigation
-    deployment_tier: user  # User-facing operation
+    description: Interactive root cause analysis with 5 Whys methodology and structured
+      investigation
+    deployment_tier: user
     natural_language:
     - root cause analysis
     - rca
@@ -2506,21 +2568,310 @@ modules:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: RCA orchestrator migrated to utility in Sprint 3 (Task 7). Interactive investigation workflow with structured evidence collection and remediation planning.
+      notes: RCA orchestrator migrated to utility in Sprint 3 (Task 7). Interactive
+        investigation workflow with structured evidence collection and remediation
+        planning.
     examples:
     - root cause analysis for login failure
     - rca session
     - investigate this issue
     - 5 whys analysis
-    
 metadata:
   version: '2.1'
   schema_version: '1.0'
   author: Asif Hussain
-  last_updated: '2025-12-03'  # Updated with 6 orchestrator migration registrations
+  last_updated: '2025-12-03'
   description: Universal operations registry for CORTEX 2.0 + 2.1 + 3.0
   changelog:
-  - version: '3.5.4'
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
+  - version: 3.5.4
     date: '2025-12-03'
     changes:
     - Registered 6 migrated orchestrators from Sprint 13b completion
@@ -2535,7 +2886,8 @@ metadata:
   - version: '3.0'
     date: '2025-11-23'
     changes:
-    - Added Feedback & Analytics System (feedback_report and admin_feedback_review operations)
+    - Added Feedback & Analytics System (feedback_report and admin_feedback_review
+      operations)
     - Added enhanced_feedback_module with 8-category metrics collection
     - Added admin_feedback_review_module for aggregation and analytics
     - Added 2 new feedback operations (1 user-facing, 1 admin-only)
@@ -2572,15 +2924,786 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 23  # Increased from 17 (+6 orchestrator migrations)
-  total_modules: 107  # Increased from 101 (+6 modules)
+  total_operations: 26
+  total_modules: 73
   total_phases: 9
   cortex_2_0_operations: 9
   cortex_2_1_operations: 6
-  cortex_3_0_operations: 8  # Increased from 2 (+6 orchestrator migrations)
+  cortex_3_0_operations: 8
   cortex_2_0_modules: 67
   cortex_2_1_modules: 22
-  cortex_3_0_modules: 8  # Increased from 2 (+6 modules)
-  modules_implemented: 47  # Increased from 41 (+6 ready modules)
+  cortex_3_0_modules: 8
+  modules_implemented: 47
   modules_pending: 60
-  implementation_percentage: 44  # Updated: 47/107 = 43.9%
+  implementation_percentage: 44
+  ado:
+    name: Ado
+    description: ADO CLI - Azure DevOps Work Item Management
+    deployment_tier: dual_context
+    natural_language:
+    - create
+    - create new work item
+    - update
+    - update work item
+    - generate completion summary
+    category: general
+    modules:
+    - ado_utility
+    profiles:
+      standard:
+        description: ADO CLI - Azure DevOps Work Item Management
+        modules:
+        - ado_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  last_updated: '2025-12-03 06:58:04'
+  align:
+    name: Align
+    description: CORTEX Align v2.0 Command - Entry Point Wrapper
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    - analyze
+    - preview changes without applying them
+    category: maintenance
+    modules:
+    - realignment_utility
+    - align_utility
+    profiles:
+      standard:
+        description: CORTEX Align v2.0 Command - Entry Point Wrapper
+        modules:
+        - realignment_utility
+        - align_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 2
+      modules_total: 2
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  application_onboarding_operation:
+    name: Application Onboarding Operation
+    description: Application Onboarding Operation
+    deployment_tier: admin_only
+    natural_language:
+    - analyze my codebase
+    - deploy cortex
+    - check project directory permissions
+    - generate comprehensive session summary
+    - generate
+    category: setup
+    modules:
+    - application_onboarding_operation_utility
+    profiles:
+      standard:
+        description: Application Onboarding Operation
+        modules:
+        - application_onboarding_operation_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  cache_commands:
+    name: Cache Commands
+    description: Cache Management Commands for CORTEX
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    - show cache
+    - show cache statistics and hit rates
+    - cache invalidate
+    category: general
+    modules:
+    - cache_commands_utility
+    profiles:
+      standard:
+        description: Cache Management Commands for CORTEX
+        modules:
+        - cache_commands_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  cache_dashboard:
+    name: Cache Dashboard
+    description: Cache Performance Dashboard
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    category: reporting
+    modules:
+    - cache_dashboard_utility
+    profiles:
+      standard:
+        description: Cache Performance Dashboard
+        modules:
+        - cache_dashboard_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  cleanup:
+    name: Cleanup
+    description: Workspace Cleanup Operation
+    deployment_tier: admin_only
+    natural_language:
+    - dry run complete
+    category: maintenance
+    modules:
+    - cleanup_utility
+    profiles:
+      standard:
+        description: Workspace Cleanup Operation
+        modules:
+        - cleanup_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  commit:
+    name: Commit
+    description: Commit Entry Point
+    deployment_tier: user_facing
+    natural_language:
+    - commit operation
+    category: git
+    modules:
+    - commit_utility
+    profiles:
+      standard:
+        description: Commit Entry Point
+        modules:
+        - commit_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  dashboard_data_adapter:
+    name: Dashboard Data Adapter
+    description: Dashboard Data Adapter
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: reporting
+    modules:
+    - dashboard_data_adapter_utility
+    profiles:
+      standard:
+        description: Dashboard Data Adapter
+        modules:
+        - dashboard_data_adapter_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  dependency_installer:
+    name: Dependency Installer
+    description: Dependency Installer
+    deployment_tier: user_facing
+    natural_language:
+    - already running in virtual environment
+    - skip python version check
+    category: setup
+    modules:
+    - dependency_installer_utility
+    profiles:
+      standard:
+        description: Dependency Installer
+        modules:
+        - dependency_installer_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  deploy:
+    name: Deploy
+    description: CORTEX Deploy Operation - CLI Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    - cortex deployment with validation gates
+    category: deployment
+    modules:
+    - deploy_utility
+    profiles:
+      standard:
+        description: CORTEX Deploy Operation - CLI Entry Point
+        modules:
+        - deploy_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  documentation_component_registry:
+    name: Documentation Component Registry
+    description: Documentation Component Registry
+    deployment_tier: admin_only
+    natural_language:
+    - generate image prompts
+    - generate diagrams
+    - generate features
+    - generate summary
+    - deploy docs
+    category: documentation
+    modules:
+    - documentation_component_registry_utility
+    profiles:
+      standard:
+        description: Documentation Component Registry
+        modules:
+        - documentation_component_registry_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  environment_setup_module:
+    name: Environment Setup Module
+    description: Environment Setup Operation - Module Wrapper
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: setup
+    modules:
+    - environment_setup_module_utility
+    profiles:
+      standard:
+        description: Environment Setup Operation - Module Wrapper
+        modules:
+        - environment_setup_module_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  git_checkpoint:
+    name: Git Checkpoint
+    description: Git Checkpoint CLI Wrapper
+    deployment_tier: user_facing
+    natural_language:
+    - checkpoints
+    - cortex git checkpoint utility
+    - create
+    category: git
+    modules:
+    - git_checkpoint_utility
+    profiles:
+      standard:
+        description: Git Checkpoint CLI Wrapper
+        modules:
+        - git_checkpoint_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  header_formatter:
+    name: Header Formatter
+    description: CORTEX Orchestrator Header Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - dry run
+    category: general
+    modules:
+    - header_formatter_utility
+    profiles:
+      standard:
+        description: CORTEX Orchestrator Header Formatter
+        modules:
+        - header_formatter_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  header_utils:
+    name: Header Utils
+    description: CORTEX Orchestrator Header Utilities
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - header_utils_utility
+    profiles:
+      standard:
+        description: CORTEX Orchestrator Header Utilities
+        modules:
+        - header_utils_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  healthcheck:
+    name: Healthcheck
+    description: CORTEX Health Check Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - cortex health check operation
+    category: analysis
+    modules:
+    - healthcheck_utility
+    profiles:
+      standard:
+        description: CORTEX Health Check Entry Point
+        modules:
+        - healthcheck_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  help_command:
+    name: Help Command
+    description: CORTEX Help Command - Display Available Operations
+    deployment_tier: dual_context
+    natural_language:
+    - planned
+    category: general
+    modules:
+    - help_command_utility
+    profiles:
+      standard:
+        description: CORTEX Help Command - Display Available Operations
+        modules:
+        - help_command_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  onboarding_orchestrator:
+    name: Onboarding Orchestrator
+    description: Onboarding Orchestrator
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: setup
+    modules:
+    - onboarding_orchestrator_utility
+    profiles:
+      standard:
+        description: Onboarding Orchestrator
+        modules:
+        - onboarding_orchestrator_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  operation_factory:
+    name: Operation Factory
+    description: Operation Factory - Load and Create Operations from YAML
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - operation_factory_utility
+    profiles:
+      standard:
+        description: Operation Factory - Load and Create Operations from YAML
+        modules:
+        - operation_factory_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  operation_header_formatter:
+    name: Operation Header Formatter
+    description: CORTEX Operation Header Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - dry run
+    category: general
+    modules:
+    - operation_header_formatter_utility
+    profiles:
+      standard:
+        description: CORTEX Operation Header Formatter
+        modules:
+        - operation_header_formatter_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  operations_orchestrator:
+    name: Operations Orchestrator
+    description: Universal Operations Orchestrator - CORTEX 2.0
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - operations_orchestrator_utility
+    profiles:
+      standard:
+        description: Universal Operations Orchestrator - CORTEX 2.0
+        modules:
+        - operations_orchestrator_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  optimize:
+    name: Optimize
+    description: CORTEX Optimize Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    - preview changes only
+    - run all optimizations
+    category: maintenance
+    modules:
+    - optimize_utility
+    profiles:
+      standard:
+        description: CORTEX Optimize Entry Point
+        modules:
+        - optimize_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  optimize_operation:
+    name: Optimize Operation
+    description: CORTEX Optimize Operation Module
+    deployment_tier: admin_only
+    natural_language:
+    - planning
+    - plan
+    - deployment
+    - deploy
+    - validate
+    category: maintenance
+    modules:
+    - optimize_operation_utility
+    profiles:
+      standard:
+        description: CORTEX Optimize Operation Module
+        modules:
+        - optimize_operation_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  optimize_tokens:
+    name: Optimize Tokens
+    description: CORTEX Token Optimization CLI
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    category: maintenance
+    modules:
+    - optimize_tokens_utility
+    profiles:
+      standard:
+        description: CORTEX Token Optimization CLI
+        modules:
+        - optimize_tokens_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  planning:
+    name: Planning
+    description: Planning CLI Wrapper
+    deployment_tier: user_facing
+    natural_language:
+    - create
+    - validate
+    - markdown generated
+    - plan loaded
+    - create new plan
+    category: planning
+    modules:
+    - planning_utility
+    profiles:
+      standard:
+        description: Planning CLI Wrapper
+        modules:
+        - planning_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  policy_scanner:
+    name: Policy Scanner
+    description: Policy Scanner - Multi-format policy document detection and parsing
+    deployment_tier: dual_context
+    natural_language:
+    - validate policy document structure
+    - quick check if any policies exist
+    category: general
+    modules:
+    - policy_scanner_utility
+    profiles:
+      standard:
+        description: Policy Scanner - Multi-format policy document detection and parsing
+        modules:
+        - policy_scanner_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  realtime_dashboard_auth:
+    name: Realtime Dashboard Auth
+    description: Real-Time Dashboard Authentication Layer
+    deployment_tier: admin_only
+    natural_language:
+    - 'generated token for user '
+    category: reporting
+    modules:
+    - realtime_dashboard_auth_utility
+    profiles:
+      standard:
+        description: Real-Time Dashboard Authentication Layer
+        modules:
+        - realtime_dashboard_auth_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  realtime_dashboard_server:
+    name: Realtime Dashboard Server
+    description: Real-Time Dashboard WebSocket Server
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: reporting
+    modules:
+    - realtime_dashboard_server_utility
+    profiles:
+      standard:
+        description: Real-Time Dashboard WebSocket Server
+        modules:
+        - realtime_dashboard_server_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  realtime_metrics_publisher:
+    name: Realtime Metrics Publisher
+    description: Real-Time Metrics Publisher
+    deployment_tier: admin_only
+    natural_language:
+    - metrics publisher already running
+    - metrics publisher started
+    category: reporting
+    modules:
+    - realtime_metrics_publisher_utility
+    profiles:
+      standard:
+        description: Real-Time Metrics Publisher
+        modules:
+        - realtime_metrics_publisher_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  response_formatter:
+    name: Response Formatter
+    description: CORTEX Response Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - response_formatter_utility
+    profiles:
+      standard:
+        description: CORTEX Response Formatter
+        modules:
+        - response_formatter_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  review:
+    name: Review
+    description: Code Review CLI
+    deployment_tier: dual_context
+    natural_language:
+    - feature review
+    - review new authentication feature
+    - create
+    - create new code review
+    - review title
+    category: review
+    modules:
+    - review_utility
+    profiles:
+      standard:
+        description: Code Review CLI
+        modules:
+        - review_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  rollback:
+    name: Rollback
+    description: Rollback CLI Wrapper
+    deployment_tier: dual_context
+    natural_language:
+    - checkpoint sha to rollback to
+    - preview changes without executing
+    category: git
+    modules:
+    - rollback_utility
+    profiles:
+      standard:
+        description: Rollback CLI Wrapper
+        modules:
+        - rollback_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  setup:
+    name: Setup
+    description: Environment Setup Operation - CORTEX 3.0 Phase 1.1
+    deployment_tier: user_facing
+    natural_language:
+    - virtual environment created
+    category: setup
+    modules:
+    - setup_epm_utility
+    - setup_utility
+    profiles:
+      standard:
+        description: Environment Setup Operation - CORTEX 3.0 Phase 1.1
+        modules:
+        - setup_epm_utility
+        - setup_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 2
+      modules_total: 2
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  tdd:
+    name: Tdd
+    description: TDD CLI - Test-Driven Development Workflow
+    deployment_tier: user_facing
+    natural_language:
+    - start
+    - start new tdd session
+    - run tests
+    - specific test to run
+    - generate test skeleton
+    category: development
+    modules:
+    - tdd_utility
+    profiles:
+      standard:
+        description: TDD CLI - Test-Driven Development Workflow
+        modules:
+        - tdd_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  user_consent_manager:
+    name: User Consent Manager
+    description: User Consent Manager
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - user_consent_manager_utility
+    profiles:
+      standard:
+        description: User Consent Manager
+        modules:
+        - user_consent_manager_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  user_onboarding_operation:
+    name: User Onboarding Operation
+    description: User Onboarding Operation
+    deployment_tier: admin_only
+    natural_language:
+    - getting started
+    - help me get started
+    - 'check cortex installation with '
+    - 'validate brain structure with '
+    - quick start
+    category: setup
+    modules:
+    - user_onboarding_operation_utility
+    profiles:
+      standard:
+        description: User Onboarding Operation
+        modules:
+        - user_onboarding_operation_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
