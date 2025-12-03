@@ -1,4 +1,5 @@
 {
+  "version": "3.7.0",
   "application": {
     "name": "CORTEX",
     "framework": "Browser-Native (SQL.js + TypeScript) + PowerShell",
