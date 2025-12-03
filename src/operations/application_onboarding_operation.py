@@ -71,7 +71,6 @@ class ApplicationOnboardingOperation(BaseOperationModule):
             Dict with onboarding results and session information
         """
         try:
-            # Initialize context if not provided
             if context is None:
                 context = {}
             
@@ -82,7 +81,6 @@ class ApplicationOnboardingOperation(BaseOperationModule):
             # Detect onboarding profile from request or default to standard
             profile = self._detect_onboarding_profile(request, context)
             
-            # Create onboarding session
             session_id = str(uuid.uuid4())
             session = OnboardingSession(
                 session_id=session_id,
@@ -100,7 +98,6 @@ class ApplicationOnboardingOperation(BaseOperationModule):
             
             self.current_session = session
             
-            # Initialize orchestrator
             self.orchestrator = OnboardingOrchestrator(
                 step_registry=self.step_registry,
                 session=session
@@ -156,7 +153,6 @@ class ApplicationOnboardingOperation(BaseOperationModule):
         """
         request_lower = request.lower()
         
-        # Check for explicit profile requests
         if "quick" in request_lower or "fast" in request_lower or "minimal" in request_lower:
             return OnboardingProfile.QUICK
         elif "comprehensive" in request_lower or "complete" in request_lower or "full" in request_lower:
@@ -164,7 +160,6 @@ class ApplicationOnboardingOperation(BaseOperationModule):
         elif "detailed" in request_lower or "thorough" in request_lower or "deep" in request_lower:
             return OnboardingProfile.COMPREHENSIVE
         
-        # Check context for profile preferences
         if context.get("onboarding_profile"):
             profile_map = {
                 "quick": OnboardingProfile.QUICK,

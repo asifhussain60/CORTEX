@@ -20,7 +20,6 @@ from typing import Dict, List, Optional, Set, Tuple, Any
 from dataclasses import dataclass, field
 import logging
 
-# Import implementation data structures
 from .implementation_discovery_engine import ImplementationData, CodeElement, FileChange
 
 logger = logging.getLogger(__name__)
@@ -129,7 +128,6 @@ class CodeQualityAnalyzer:
         )
         issues.extend(doc_issues)
         
-        # Calculate quality score
         quality_score = self._calculate_quality_score(issues, implementation_data)
         
         return quality_score, issues
@@ -158,7 +156,6 @@ class CodeQualityAnalyzer:
         issues = []
         
         for element in elements:
-            # Check class naming (should be PascalCase)
             if element.element_type == 'class':
                 if not re.match(r'^[A-Z][a-zA-Z0-9]*$', element.name):
                     issue = CodeQualityIssue(
@@ -191,7 +188,6 @@ class CodeQualityAnalyzer:
         """Analyze code structure and organization"""
         issues = []
         
-        # Check for large files
         for file_change in implementation_data.files_changed:
             if file_change.lines_added > 500:  # Large file threshold
                 issue = CodeQualityIssue(
@@ -204,7 +200,6 @@ class CodeQualityAnalyzer:
                 )
                 issues.append(issue)
                 
-        # Check for too many classes in one file
         file_class_count = {}
         for cls in implementation_data.new_classes:
             file_class_count[cls.file_path] = file_class_count.get(cls.file_path, 0) + 1
@@ -414,7 +409,6 @@ class SecurityAnalyzer:
         exposure_findings = self._analyze_data_exposure(implementation_data)
         findings.extend(exposure_findings)
         
-        # Calculate security score
         security_score = self._calculate_security_score(findings)
         
         return security_score, findings
@@ -423,7 +417,6 @@ class SecurityAnalyzer:
         """Analyze authentication and authorization security"""
         findings = []
         
-        # Check for authentication endpoints
         auth_endpoints = [ep for ep in implementation_data.new_endpoints 
                          if 'auth' in ep.path.lower() or 'login' in ep.path.lower()]
         
@@ -665,7 +658,6 @@ class OptimizationHealthMonitor:
             quality_issues, performance_metrics, security_findings
         )
         
-        # Calculate overall health
         overall_score = (quality_score + performance_score + security_score) / 3
         health_status = self._determine_health_status(overall_score)
         
@@ -717,7 +709,6 @@ if __name__ == "__main__":
     from .implementation_discovery_engine import ImplementationData, CodeElement, APIEndpoint
     
     async def test_health_monitor():
-        # Create test implementation data
         test_data = ImplementationData(
             feature_name="User Authentication System",
             discovery_timestamp=datetime.now(),

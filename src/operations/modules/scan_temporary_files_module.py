@@ -131,7 +131,6 @@ class ScanTemporaryFilesModule(BaseOperationModule):
                 
                 self.log_info(f"Found {len(old_logs)} old log files ({self._format_size(scan_results['total_log_size_bytes'])})")
             
-            # Calculate totals
             total_size = (
                 scan_results['total_temp_size_bytes'] +
                 scan_results['total_cache_size_bytes'] +
@@ -191,7 +190,6 @@ class ScanTemporaryFilesModule(BaseOperationModule):
                 if any(skip in file_path.parts for skip in self.SKIP_DIRS):
                     continue
                 
-                # Check extension
                 if file_path.suffix.lower() in self.TEMP_EXTENSIONS:
                     try:
                         size = file_path.stat().st_size
@@ -215,7 +213,6 @@ class ScanTemporaryFilesModule(BaseOperationModule):
                 continue
             
             try:
-                # Calculate directory size
                 total_size = sum(
                     f.stat().st_size 
                     for f in cache_dir.rglob('*') 

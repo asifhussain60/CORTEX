@@ -120,18 +120,15 @@ class TokenMetricsCollector:
             >>> metrics = collector.get_current_metrics()
             >>> print(f"Session cost: ${metrics['session_cost_usd']:.4f}")
         """
-        # Check cache
         now = datetime.now()
         if not force_refresh and self._metrics_cache and self._cache_timestamp:
             cache_age = (now - self._cache_timestamp).total_seconds()
             if cache_age < self._cache_ttl_seconds:
                 return self._metrics_cache
         
-        # Calculate metrics
         conversations = self.working_memory.get_recent_conversations(limit=50)
         cache_tokens = self._count_conversation_tokens(conversations)
         
-        # Get pattern count if knowledge graph available
         pattern_count = 0
         if self.knowledge_graph:
             try:
@@ -140,13 +137,11 @@ class TokenMetricsCollector:
             except Exception:
                 pattern_count = 0
         
-        # Get database sizes
         tier1_size = self._get_database_size(self.working_memory.db_path)
         tier2_size = 0
         if self.knowledge_graph and hasattr(self.knowledge_graph, 'db_path'):
             tier2_size = self._get_database_size(self.knowledge_graph.db_path)
         
-        # Calculate session metrics
         session_duration = (now - self._session_start).total_seconds()
         
         metrics = {
@@ -211,7 +206,6 @@ class TokenMetricsCollector:
         """
         metrics = self.get_current_metrics()
         
-        # Calculate additional summary stats
         if self._requests:
             best_reduction = max(
                 self._requests, 

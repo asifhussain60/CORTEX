@@ -19,7 +19,6 @@ from datetime import datetime
 from typing import List, Dict, Set, Any, Optional
 from pathlib import Path
 
-# Import data structures from main FCO module
 from src.agents.feature_completion_orchestrator import (
     BrainIngestionAgent, BrainData, Entity, Pattern, ContextUpdate, 
     ImplementationScan
@@ -135,7 +134,6 @@ class BrainIngestionAgentImpl(BrainIngestionAgent):
                 for match in matches:
                     entity_value = match.group(1) if match.groups() else match.group(0)
                     
-                    # Calculate confidence based on match type
                     confidence = self._calculate_entity_confidence(
                         entity_value, entity_type, text_lower
                     )
@@ -245,7 +243,6 @@ class BrainIngestionAgentImpl(BrainIngestionAgent):
         """
         patterns = []
         
-        # Create feature implementation pattern
         feature_pattern = Pattern(
             pattern_type="feature_implementation",
             confidence=0.8,
@@ -260,7 +257,6 @@ class BrainIngestionAgentImpl(BrainIngestionAgent):
         )
         patterns.append(feature_pattern)
         
-        # Create entity relationship patterns
         for entity in entities[:10]:  # Top 10 entities
             if entity.confidence > 0.7:
                 entity_pattern = Pattern(
@@ -276,7 +272,6 @@ class BrainIngestionAgentImpl(BrainIngestionAgent):
                 )
                 patterns.append(entity_pattern)
         
-        # Create workflow pattern based on feature type
         workflow_pattern = self._create_workflow_pattern(feature_description, entities)
         if workflow_pattern:
             patterns.append(workflow_pattern)

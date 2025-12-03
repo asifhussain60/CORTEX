@@ -131,7 +131,6 @@ class RefreshDesignDocsModule(BaseOperationModule):
                     analysis["by_category"][category] = 0
                 analysis["by_category"][category] += 1
                 
-                # Check for metadata
                 if "**Date:**" not in content and "Last Updated:" not in content:
                     analysis["missing_metadata"].append(str(doc_file.name))
                 
@@ -223,7 +222,6 @@ class RefreshDesignDocsModule(BaseOperationModule):
                 content = doc_file.read_text(encoding="utf-8")
                 lines = content.split('\n')
                 
-                # Check if timestamp exists
                 has_timestamp = any("**Date:**" in line or "Last Updated:" in line for line in lines[:10])
                 
                 if not has_timestamp:

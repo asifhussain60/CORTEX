@@ -58,7 +58,6 @@ class BrainImporter:
         self.applied_dir = self.import_dir / "applied"
         self.rejected_dir = self.import_dir / "rejected"
         
-        # Create directories
         self.import_dir.mkdir(exist_ok=True)
         self.applied_dir.mkdir(exist_ok=True)
         self.rejected_dir.mkdir(exist_ok=True)
@@ -91,7 +90,6 @@ class BrainImporter:
         with open(yaml_path, 'r', encoding='utf-8') as f:
             export_data = yaml.safe_load(f)
         
-        # Validate YAML structure
         validation_result = self._validate_export_file(export_data)
         if not validation_result["valid"]:
             self._move_to_rejected(yaml_path, validation_result["errors"])
@@ -136,7 +134,6 @@ class BrainImporter:
         """Validate YAML export file structure."""
         errors = []
         
-        # Check required fields
         required_fields = ["version", "export_date", "source_machine_id", 
                           "cortex_version", "total_patterns", "patterns"]
         
@@ -144,12 +141,10 @@ class BrainImporter:
             if field not in export_data:
                 errors.append(f"Missing required field: {field}")
         
-        # Check version compatibility
         if "version" in export_data:
             if export_data["version"] != "1.0":
                 errors.append(f"Unsupported version: {export_data['version']}")
         
-        # Check patterns structure
         if "patterns" in export_data:
             if not isinstance(export_data["patterns"], dict):
                 errors.append("Patterns must be a dictionary")
@@ -188,7 +183,6 @@ class BrainImporter:
         cursor = conn.cursor()
         
         for pattern_id, imported_pattern in patterns.items():
-            # Check if pattern exists
             cursor.execute(
                 "SELECT pattern_id, confidence, usage_count, context_json FROM patterns WHERE pattern_id = ?",
                 (pattern_id,)
@@ -573,7 +567,6 @@ def main():
     
     args = parser.parse_args()
     
-    # Import brain
     importer = BrainImporter()
     result = importer.import_brain(
         yaml_path=args.yaml_file,

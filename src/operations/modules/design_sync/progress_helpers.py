@@ -136,7 +136,6 @@ class SyncContextGenerator:
         if 'doc' in update_text or 'documentation' in update_text:
             context_keywords.append('documentation')
         
-        # Check transformations
         if transformations.get('md_to_yaml_converted', 0) > 0:
             context_keywords.append('YAML conversion')
         

@@ -245,7 +245,6 @@ class CategoryManager:
         categories = []
         text = idea.raw_text.lower()
         
-        # Check against category rules
         for category_name, rules in self.category_rules.items():
             confidence = self._calculate_category_confidence(text, rules)
             if confidence > 0.3:  # Minimum confidence threshold
@@ -270,12 +269,10 @@ class CategoryManager:
         pattern_score = 0.0
         keyword_score = 0.0
         
-        # Check patterns
         for pattern in rules.get('patterns', []):
             if re.search(pattern, text, re.IGNORECASE):
                 pattern_score = max(pattern_score, 0.8)
         
-        # Check keywords
         keywords = rules.get('keywords', [])
         if keywords:
             found_keywords = sum(1 for keyword in keywords if keyword in text)
@@ -294,7 +291,6 @@ class CategoryManager:
                 if any(keyword in file_path for keyword in keywords):
                     return component
         
-        # Check text content
         component_scores = {}
         for component, keywords in self.component_patterns.items():
             score = sum(1 for keyword in keywords if keyword in text)
@@ -672,7 +668,6 @@ class ClusteringEngine:
                     cluster_ideas.append(idea2.idea_id)
                     processed_ideas.add(idea2.idea_id)
             
-            # Create cluster if we have enough ideas
             if len(cluster_ideas) >= self.min_cluster_size:
                 cluster_id = self._generate_cluster_id(cluster_ideas)
                 cluster = IdeaCluster(
@@ -699,7 +694,6 @@ class IdeaOrganizer:
         self.enable_clustering = enable_clustering
         self.logger = logging.getLogger(__name__)
         
-        # Initialize components
         self.category_manager = CategoryManager()
         self.tag_system = TagSystem(db_path)
         self.priority_engine = PriorityEngine()
@@ -738,7 +732,6 @@ class IdeaOrganizer:
                 'processing_time': (time.time() - start_time) * 1000
             }
         else:
-            # Process immediately
             return self._process_idea_organization(idea)
     
     def _process_idea_organization(self, idea: IdeaCapture) -> Dict[str, Any]:
@@ -836,7 +829,6 @@ class IdeaOrganizer:
             'clusters': []
         }
         
-        # Process ideas individually
         for idea in ideas:
             try:
                 self._process_idea_organization(idea)

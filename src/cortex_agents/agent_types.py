@@ -27,6 +27,8 @@ class AgentType(Enum):
     PROFILE = auto()         # ProfileAgent (NEW - User Profile System)
     ADO_ORCHESTRATOR = auto() # ADO/Unified Entry Point (NEW - ADO Integration)
     ESTIMATOR = auto()       # TimeframeEstimator (NEW - SWAGGER Timeframe Estimation)
+    RCA = auto()             # RCAAgent (NEW - Root Cause Analysis)
+    APPLICATION_HEALTH = auto()  # ApplicationHealthOrchestrator (NEW - Application Health Dashboard)
 
 
 class IntentType(Enum):
@@ -96,6 +98,12 @@ class IntentType(Enum):
     UPDATE_PROFILE = "update_profile"
     
     # ADO (Azure DevOps) operations (NEW - ADO Integration)
+    ADO_WORK_ITEM = "ado_work_item"
+    
+    # System alignment operations (NEW - CORTEX Align v2.0)
+    ALIGN = "align"
+    SYSTEM_ALIGNMENT = "system_alignment"
+    REALIGNMENT = "realignment"
     ADO_WORKITEM = "ado_workitem"
     ADO_STORY = "ado_story"
     ADO_FEATURE = "ado_feature"
@@ -107,6 +115,16 @@ class IntentType(Enum):
     TIMEFRAME = "timeframe"
     STORY_POINTS = "story_points"
     APPROVE_SCOPE = "approve_scope"  # NEW 3.2.1: Approve inferred scope for estimation
+    
+    # Root Cause Analysis (NEW - RCA Module)
+    RCA = "rca"
+    ROOT_CAUSE_ANALYSIS = "root_cause_analysis"
+    FIVE_WHYS = "five_whys"
+    IMPORT_RCA = "import_rca"
+    
+    # Application Health Dashboard (NEW - Application Onboarding)
+    APPLICATION_HEALTH = "application_health"
+    ONBOARD_APPLICATION = "onboard_application"
     
     # Governance
     CHECK_RULES = "check_rules"
@@ -206,6 +224,21 @@ INTENT_AGENT_MAP = {
     IntentType.TIMEFRAME: AgentType.ESTIMATOR,
     IntentType.STORY_POINTS: AgentType.ESTIMATOR,
     IntentType.APPROVE_SCOPE: AgentType.ESTIMATOR,  # NEW 3.2.1: Route approval to estimator
+    
+    # Root Cause Analysis mapping (NEW - RCA Module)
+    IntentType.RCA: AgentType.RCA,
+    IntentType.ROOT_CAUSE_ANALYSIS: AgentType.RCA,
+    IntentType.FIVE_WHYS: AgentType.RCA,
+    IntentType.IMPORT_RCA: AgentType.RCA,
+    
+    # Application Health Dashboard mapping (NEW - Application Onboarding)
+    IntentType.APPLICATION_HEALTH: AgentType.APPLICATION_HEALTH,
+    IntentType.ONBOARD_APPLICATION: AgentType.APPLICATION_HEALTH,
+    
+    # System Alignment mapping (NEW - CORTEX Align v2.0)
+    IntentType.ALIGN: AgentType.GOVERNOR,
+    IntentType.SYSTEM_ALIGNMENT: AgentType.GOVERNOR,
+    IntentType.REALIGNMENT: AgentType.GOVERNOR,
     
     IntentType.CHECK_RULES: AgentType.GOVERNOR,
     IntentType.COMPLIANCE: AgentType.GOVERNOR,

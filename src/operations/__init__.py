@@ -137,7 +137,6 @@ def execute_operation(
             **kwargs
         }
         
-        # Create orchestrator
         orchestrator = factory.create_operation(operation_id, profile, context)
         
         if not orchestrator:
@@ -167,7 +166,6 @@ def _resolve_operation_id(user_input: str, factory: OperationFactory) -> Optiona
         1. Direct match (if input is already an operation ID)
         2. Natural language/slash command lookup
     """
-    # Check if input is already a valid operation ID
     available_ops = factory.get_available_operations()
     if user_input in available_ops:
         return user_input
@@ -185,11 +183,9 @@ def _find_project_root() -> Path:
     """Find CORTEX project root by looking for cortex-operations.yaml."""
     current = Path.cwd()
     
-    # Check current directory
     if (current / "cortex-operations.yaml").exists():
         return current
     
-    # Check parent directories
     for parent in current.parents:
         if (parent / "cortex-operations.yaml").exists():
             return parent

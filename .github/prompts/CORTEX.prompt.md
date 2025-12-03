@@ -1,148 +1,11 @@
-# 🎯 CRITICAL: Template Trigger Detection & Selection
+# 🎯 CORTEX Universal Entry Point
 
-**AUTO-GENERATED FROM response-templates.yaml**
-**Last Updated:** 2025-11-30 09:00:39
+**TEMPLATE TRIGGERS:** See #file:modules/template-triggers.md for auto-selection rules
 
-**BEFORE responding to ANY user request:**
-
-1. **Check user message for template triggers** (exact match or fuzzy match)
-2. **Select appropriate template** based on trigger match
-3. **Apply template format** with context substitution
-4. **If no trigger matches:** Use fallback template
-
----
-
-## 📋 Template Trigger Mappings
-
-### Confidence Display - High
-
-**Template ID:** `confidence_high`  
-**Response Type:** `confidence_indicator`  
-**Trigger:** `confidence_high`
-
-**Format to use:**
-```markdown
-🧠 **CORTEX Pattern Confidence**
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-
-🎯 **Pattern Match Confidence:** {confidence_display}
-
-I'm applying learned patterns from {pattern_count} similar conversations.
-{detailed_explanation}
-```
-
----
-
-### Confidence Display - Low
-
-**Template ID:** `confidence_low`  
-**Response Type:** `confidence_indicator`  
-**Trigger:** `confidence_low`
-
-**Format to use:**
-```markdown
-🧠 **CORTEX Pattern Confidence**
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-
-🟠 **Pattern Match Confidence:** {confidence_display}
-
-Limited pattern history available. Response based on {pattern_count} patterns.
-{detailed_explanation}
-```
-
----
-
-### Confidence Display - Medium
-
-**Template ID:** `confidence_medium`  
-**Response Type:** `confidence_indicator`  
-**Trigger:** `confidence_medium`
-
-**Format to use:**
-```markdown
-🧠 **CORTEX Pattern Confidence**
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-
-🟡 **Pattern Match Confidence:** {confidence_display}
-
-I found {pattern_count} related patterns, applying with moderate confidence.
-{detailed_explanation}
-```
-
----
-
-### Confidence Display - None
-
-**Template ID:** `confidence_none`  
-**Response Type:** `confidence_indicator`  
-**Trigger:** `confidence_none`
-
-**Format to use:**
-```markdown
-🧠 **CORTEX Pattern Confidence**
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-
-ℹ️ **New Territory:** No learned patterns available for this request.
-
-Generating fresh response using CORTEX capabilities.
-```
-
----
-
-### Fallback Response (No Trigger Match)
-
-**Template ID:** `fallback`  
-**When to use:** No specific trigger detected  
-
-**Format to use:**
-```markdown
-🧠 **CORTEX Response**
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-
-🎯 **My Understanding Of Your Request:**
-   [State what you understand they want to achieve]
-
-⚠️ **Challenge:** [Validate assumptions, then Accept OR Challenge]
-
-💬 **Response:**
-   [Provide helpful response]
-
-📝 **Your Request:** [Echo user request]
-
-🔍 **Next Steps:**
-   1. [First recommendation]
-   2. [Second recommendation]
-   3. [Third recommendation]
-```
-
----
-
-## 🎯 Template Selection Algorithm (For AI)
-
-```
-1. Extract key phrases from user message
-2. Check each template's triggers (case-insensitive)
-3. If exact match found → Use that template
-4. If fuzzy match found (70%+ similarity) → Use that template
-5. If TDD keywords (implement/add/create) → Check if critical feature → Use TDD template
-6. If planning keywords (plan/let's plan) → Use planning template
-7. If no match → Use fallback template
-```
-
-**Priority Order:**
-1. Exact trigger match (highest priority)
-2. TDD workflow detection (critical features)
-3. Planning workflow detection
-4. Documentation generation
-5. Fuzzy trigger match (70%+ similarity)
-6. Fallback (lowest priority)
-
-
-# CORTEX Universal Entry Point
 
 **Purpose:** Single command for ALL CORTEX interactions. You don't need to remember multiple commands - just use this one and CORTEX figures out what you need.
 
-**Version:** 3.2.1  
+**Version:** 3.5.5  
 **Status:** ✅ PRODUCTION  
 **Architecture:** Template-based responses + Modular documentation + Interactive Planning + Universal Upgrade System + User Profile System
 
@@ -198,71 +61,31 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 ## ⏱️ Timeframe Estimation
 
-**Module:** `src/agents/estimation/timeframe_estimator.py`
+**Complete Guide:** #file:modules/timeframe-estimation-guide.md
 
-**Quick Start:**
-- `estimate timeframe` - Estimate development timeframe for features
-- `timeline comparison` - Compare single developer vs team timelines
-- `project timeline` - Generate visual timeline with parallel tracks
-- `effort estimate` - Story points and sprint estimation
+**Quick Commands:** `estimate timeframe`, `timeline comparison`, `project timeline`, `effort estimate`
 
-**Key Features:**
-- **SWAGGER Complexity Analysis** - Convert complexity scores to sprint estimates
-- **Parallel Track Identification** - Automatically identify work that can be done concurrently
-- **Critical Path Calculation** - Find the minimum delivery timeline
-- **What-If Scenarios** - Compare 1, 2, 3, 5+ developer configurations
-- **Cost Projections** - Hourly rate calculations for different team sizes
-- **ASCII & HTML Timelines** - Visual Gantt charts for terminal and browser
+**Key Capabilities:** SWAGGER complexity analysis, parallel track identification, critical path calculation, what-if scenarios, cost projections, ASCII & HTML Gantt charts
 
-**Example Usage:**
-```
-You: "estimate timeframe for user authentication"
-CORTEX: 
-   📊 Estimated 14 story points (3 sprints single dev)
-   ⚡ With 2 developers: 1.5 sprints (50% faster)
-   🎯 Critical path: 12 days
-   💰 Cost at $75/hr: $8,400 (single) vs $9,240 (team of 2)
-```
-
-**Integration:** Response template `timeframe_estimate`, routing triggers in `response-templates.yaml`
+**See timeframe-estimation-guide.md for complete documentation, examples, and configuration options.**
 
 ---
 
 ## 👤 User Profile System
 
-**Documentation:** #file:../../cortex-brain/documents/implementation-guides/user-profile-guide.md
+**Complete Guide:** #file:modules/user-profile-system-guide.md
 
-**Quick Start:**
-- First-time users: 3-question onboarding (experience → mode → tech stack)
-- Update anytime: `update profile` or `change tech stack`
-- 16 keywords trigger profile updates
+**Quick Start:** 3-question onboarding (experience → mode → tech stack), update anytime with `update profile`
 
-**Interaction Modes:**
-1. **Autonomous** - Quick results, minimal explanation
-2. **Guided** - Standard format with explanations (default)
-3. **Educational** - Teaching-focused with extended context
-4. **Pair Programming** - Collaborative, seeks feedback
+**4 Interaction Modes:** Autonomous (fast), Guided (default), Educational (learning), Pair Programming (collaborative)
 
-**Experience Levels:**
-1. **Junior** (0-2 years) - More explanation, learning resources
-2. **Mid** (2-5 years) - Balanced approach
-3. **Senior** (5-10 years) - Advanced patterns, less basics
-4. **Expert** (10+ years) - Assumes deep knowledge
+**4 Experience Levels:** Junior, Mid, Senior, Expert - adapts response complexity and depth
 
-**Tech Stack Preference:**
-- **Azure Stack** - Azure DevOps, AKS, ARM/Terraform
-- **AWS Stack** - ECS/EKS, CodePipeline, CloudFormation/Terraform
-- **GCP Stack** - GKE, Cloud Build, Terraform
-- **No Preference** - CORTEX decides based on best practice (recommended for learning)
-- **Custom** - Mix and match individual tools
+**Tech Stacks:** Azure, AWS, GCP, No Preference (recommended), Custom
 
-**CRITICAL PRINCIPLE: Context NOT Constraint**
-- Tech stack is deployment context only
-- CORTEX always recommends best solution first
-- Responses show BOTH: best practice + company stack deployment
-- Recommendations never filtered by tech stack
+**CRITICAL:** Tech stack is context NOT constraint - CORTEX always shows best practice + deployment adaptation
 
-**See user-profile-guide.md for complete documentation, examples, and API reference.**
+**See user-profile-system-guide.md for complete documentation and examples.**
 
 ---
 
@@ -388,50 +211,37 @@ CORTEX:
 
 ## 🚀 Quick Start
 
-### How to Use CORTEX
+**Complete Guide:** #file:modules/quick-start-guide.md
 
-**Just talk naturally - CORTEX figures out what you need:**
+**Just talk naturally - CORTEX figures out what you need.** Examples: "plan authentication feature", "start tdd workflow", "Add a purple button"
 
-```
-"plan authentication feature"
-"start tdd workflow"
-"review architecture"
-"Add a purple button to the HostControlPanel"
-```
+**First time?** 3-question onboarding: experience level → interaction mode → tech stack  
+**Want to skip?** Choose "No preference" for all questions
 
-**First time?** You'll go through a quick 3-question onboarding:
-1. **Experience level** - Junior/Mid/Senior/Expert
-2. **Interaction mode** - Autonomous/Guided/Educational/Pair Programming
-3. **Tech stack** - Azure/AWS/GCP/No Preference/Custom
+**Common commands:** `help` (command list), `tutorial` (interactive learning), `update profile` (change settings)
 
-**IMPORTANT:** Tech stack is context for deployment, NOT a constraint.  
-CORTEX always recommends the best solution first.
+**See quick-start-guide.md for complete setup instructions and examples.**
 
-**Want to skip setup?** Choose "No preference" for all questions.
+---
 
-**Update profile later:**
-```
-update profile
-change tech stack
-```
+# 🏛️ Operations Routing Architecture
 
-**Start learning:** Interactive tutorial:
-```
-tutorial
-```
+**Complete Guide:** #file:modules/operations-routing-guide.md
 
-**Need command list?** Quick reference:
-```
-help
-```
+**Quick Overview:**
+- **23 Total Operations:** 18 user-facing, 3 dual-context, 5 admin-only
+- **Context-Aware:** commit, align, optimize, deploy adapt based on repository type
+- **Natural Language:** Just describe what you want, CORTEX routes to the right module
+- **Registry:** All operations in `cortex-operations.yaml` (107 modules)
 
-**How it works:**
-1. You describe what you want in natural language
-2. CORTEX detects intent and routes to specialist agent
-3. Executes workflow with memory of past conversations
-4. Tracks progress for future reference
+**Key Operations:**
+- **Planning:** plan feature X → modules/planning/
+- **TDD:** start tdd → tier0/tdd_operations/
+- **Commit:** commit → commit_and_push.py (stage, commit, push, sync)
+- **Deploy:** deploy → deploy.py (19-gate validation, admin-only)
+- **Align:** align → context-aware (admin or user version)
 
-**No syntax to memorize** - context-aware, intuitive, conversation-based
+**See operations-routing-guide.md for complete routing table and architectural details.**
 
 ---
 
@@ -494,7 +304,18 @@ See `docs/api/openapi.yaml` for complete API reference with interactive Swagger 
 **Context Detection:** Admin operations only available in CORTEX development repository (detects `cortex-brain/admin/`)
 
 **System Validation:**
-- `align` - Full system alignment with convention-based discovery (7-layer integration scoring)
+- `align` - Full system alignment with intelligent maintenance (v2.0)
+- `align validate-registrations` - Check for unregistered features
+- `align discover-features` - Scan and display unregistered features
+- `align register-features` - Interactive registration workflow
+- `align register-features --auto` - Auto-register all discovered features
+- `align detect-obsolete` - Scan for obsolete code
+- `align cleanup --dry-run` - Preview cleanup plan
+- `align cleanup --execute` - Execute cleanup with safety checks
+- `align migrate-tests --dry-run` - Preview test migrations
+- `align migrate-tests --execute` - Execute test migrations with backup
+- `align full-maintenance` - Run all checks + auto-fix
+- `align full-maintenance --dry-run` - Preview all changes
 - `align report` - Detailed report with auto-remediation templates
 - **Guide:** #file:modules/system-alignment-guide.md
 
@@ -960,7 +781,7 @@ CORTEX:
 
 ## 🧠 Conversation Capture & Context
 
-**Complete Guide:** #file:../../cortex-brain/documents/implementation-guides/conversation-capture-guide.md
+**Complete Guide:** #file:../../cortex-brain/documents/conversation-captures/conversation-capture-guide.md
 
 **Quick Commands:**
 - `capture conversation` - Create blank file for conversation capture (opens in VS Code)
@@ -1323,7 +1144,7 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 
 ---
 
-**Last Updated:** 2025-11-30 | Version 3.2.1 (Deployment System Enhancement)  
+**Last Updated:** 2025-12-03 | Version 3.7.0 (Phase 7: Integration & Testing + Phase 8: File Naming Governance)  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Source-Available - See LICENSE | **Repository:** https://github.com/asifhussain60/CORTEX
 

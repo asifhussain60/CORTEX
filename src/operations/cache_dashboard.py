@@ -393,7 +393,6 @@ class CacheDashboard:
         total = hits + misses
         hit_rate = hits / total if total > 0 else 0.0
         
-        # Get cache size and age from database
         cache_size_mb, avg_age_hours, oldest_days = self._query_cache_health(operation)
         
         # Estimate time saved (assume 2-3s per cache hit)
@@ -424,7 +423,6 @@ class CacheDashboard:
         try:
             conn = sqlite3.connect(self.cache.cache_db)
             
-            # Get total size
             cursor = conn.execute(
                 "SELECT SUM(LENGTH(result_json) + LENGTH(file_hashes_json)) FROM cache_entries WHERE operation = ?",
                 (operation,)
@@ -432,7 +430,6 @@ class CacheDashboard:
             total_bytes = cursor.fetchone()[0] or 0
             size_mb = total_bytes / (1024 * 1024)
             
-            # Get age statistics
             cursor = conn.execute(
                 "SELECT timestamp FROM cache_entries WHERE operation = ? ORDER BY timestamp DESC",
                 (operation,)

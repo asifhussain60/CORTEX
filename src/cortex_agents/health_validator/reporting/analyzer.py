@@ -41,13 +41,11 @@ class ResultAnalyzer:
                 warning_msg = result.get("message", result.get("error", f"{check_name} warning"))
                 warnings.append(f"{check_name}: {warning_msg}")
             
-            # Check for specific error fields in details
             if "errors" in result and result["errors"]:
                 for err in result["errors"]:
                     if err:  # Skip None/empty errors
                         errors.append(f"{check_name}: {err}")
             
-            # Check for warnings
             if "warnings" in result and result["warnings"]:
                 for warn in result["warnings"]:
                     if warn:
@@ -81,7 +79,6 @@ class ResultAnalyzer:
         if not errors:
             return "low"
         
-        # Check for critical failures
         for check_name, result in check_results.items():
             if result.get("status") == "fail":
                 risk = self.RISK_LEVELS.get(check_name, "medium")

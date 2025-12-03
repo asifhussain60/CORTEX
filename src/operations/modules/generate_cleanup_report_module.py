@@ -87,7 +87,6 @@ class GenerateCleanupReportModule(BaseOperationModule):
             orphaned_removed = context.get('orphaned_removed', 0)
             orphaned_space = context.get('orphaned_space_recovered', 0)
             
-            # Calculate totals
             total_items_removed = logs_removed + cache_removed + orphaned_removed
             total_space_recovered = logs_space + cache_space + database_space + orphaned_space
             

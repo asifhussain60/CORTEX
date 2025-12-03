@@ -148,7 +148,6 @@ class AgentScanner:
         Returns:
             True if class is abstract
         """
-        # Check if inherits from ABC
         for base in class_node.bases:
             if isinstance(base, ast.Name):
                 if base.id in ("ABC", "ABCMeta"):
@@ -192,7 +191,6 @@ class AgentScanner:
             if isinstance(node, ast.FunctionDef)
         ]
         
-        # Check for common agent patterns
         has_process_method = "process" in methods
         has_execute_method = "execute" in methods
         
@@ -200,7 +198,6 @@ class AgentScanner:
         relative_path = file_path.relative_to(self.project_root)
         module_path = str(relative_path.with_suffix("")).replace("\\", ".").replace("/", ".")
         
-        # Classify feature (production/admin/internal)
         classification = self._classify_agent(class_node.name, docstring)
         
         return {
@@ -232,7 +229,6 @@ class AgentScanner:
         if any(keyword in class_name for keyword in internal_keywords):
             return "internal"
         
-        # Check docstring for internal/admin indicators
         if docstring:
             docstring_lower = docstring.lower()
             if "internal" in docstring_lower or "utility" in docstring_lower:

@@ -131,7 +131,6 @@ class FileHashCache:
             if not row:
                 return None
             
-            # Check TTL
             current_time = time.time()
             if current_time - row['cached_at'] > self.ttl_seconds:
                 # Expired - delete entry
@@ -163,7 +162,6 @@ class FileHashCache:
         if not cached_entry:
             return True  # Not in cache = changed
         
-        # Check file modification time (fast check)
         try:
             current_mtime = Path(file_path).stat().st_mtime
             if abs(current_mtime - cached_entry.modified_time) > 0.001:
@@ -191,11 +189,9 @@ class FileHashCache:
         # Normalize path
         file_path_normalized = str(Path(file_path).resolve())
         
-        # Calculate hash if not provided
         if content_hash is None:
             content_hash = self.calculate_hash(file_path)
         
-        # Get file stats
         file_stat = Path(file_path).stat()
         
         with sqlite3.connect(self.cache_db_path) as conn:

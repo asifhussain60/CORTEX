@@ -203,7 +203,6 @@ class ConversationalChannel:
             title = getattr(conv, 'title', '')
             intent = getattr(conv, 'intent', '')
             
-            # Check title and intent first
             title_match = query.lower() in title.lower()
             intent_match = intent and query.lower() in intent.lower()
             
@@ -218,7 +217,6 @@ class ConversationalChannel:
             
             if title_match or intent_match or message_match:
                 
-                # Get full conversation details via adapter
                 conv_data = self.adapter.retrieve_conversation(conv.conversation_id)
                 if conv_data and conv_data.get("success"):
                     results.append(conv_data["conversation"])
@@ -298,7 +296,6 @@ class TraditionalChannel:
         with open(self.events_file, "r", encoding="utf-8") as f:
             lines = f.readlines()
             
-        # Get most recent events
         for line in reversed(lines[-limit:]):
             try:
                 event = json.loads(line.strip())
@@ -377,7 +374,6 @@ class IntelligentFusion:
                 if time_diff <= time_window_minutes:
                     related_executions.append(execution)
                     
-            # Create unified narrative
             if related_executions:
                 narrative = self._create_unified_narrative(conversation, related_executions)
                 correlated_narratives.append(narrative)
@@ -443,7 +439,6 @@ class DualChannelMemory:
     def __init__(self, cortex_brain_path: Union[str, Path]):
         self.cortex_brain_path = Path(cortex_brain_path)
         
-        # Initialize channels with proper isolated storage
         # Use cortex_brain_path for database to ensure test isolation
         db_path = self.cortex_brain_path / "tier1" / "working_memory.db"
         working_memory = WorkingMemory(db_path)

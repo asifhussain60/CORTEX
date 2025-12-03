@@ -184,7 +184,6 @@ class IdeaNaturalLanguageInterface:
                         idea_text=original_match.group(3).strip()
                     )
         
-        # Check management patterns
         for pattern in self.management_patterns:
             match = re.match(pattern, input_lower, re.IGNORECASE)
             if match:

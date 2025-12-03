@@ -80,10 +80,8 @@ class ContextFormatter:
         lines = ["---", "Recent Work Context (Last 5 Conversations):", ""]
         
         for idx, conv in enumerate(conversations, 1):
-            # Calculate time ago
             time_ago = self._format_time_ago(conv.get('created_at'))
             
-            # Get summary (truncate if needed)
             summary = conv.get('summary', 'No summary')
             if summary and len(summary) > self.max_summary_length:
                 summary = summary[:self.max_summary_length] + "..."
@@ -173,7 +171,6 @@ class ContextFormatter:
             most_recent = conversations[0]
             active_entities['current_task'] = most_recent.get('summary', '')
             
-            # Get most recent entity (for "it" resolution)
             recent_entities = most_recent.get('entities', [])
             if recent_entities:
                 active_entities['most_recent_entity'] = recent_entities[0]
@@ -203,7 +200,6 @@ class ContextFormatter:
         if not active_entities:
             return user_request
         
-        # Get most recent entity for resolution
         most_recent = active_entities.get('most_recent_entity')
         if not most_recent:
             # Try to get any entity

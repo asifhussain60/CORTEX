@@ -1,0 +1,479 @@
+# Response Template Definitions
+# Version: 3.3.0
+# Purpose: Template structures with metadata (no hard-coded content)
+# Part of: Response Template System Refactor (Phase 5)
+
+schema_version: '3.3'
+last_updated: '2025-12-02'
+refactor_phase: 'modular_architecture'
+
+# ============================================================================
+# TEMPLATE DEFINITIONS - Structure + Metadata (content in components)
+# ============================================================================
+
+templates:
+  # -------------------------------------------------------------------------
+  # ONBOARDING TEMPLATES
+  # -------------------------------------------------------------------------
+  onboarding:
+    id: template_onboarding
+    name: "User Onboarding"
+    description: "Interactive onboarding process for new users"
+    format: standard_5_part
+    response_type: interactive
+    expected_orchestrator: OnboardingOrchestrator
+    
+    triggers:
+      - "onboard"
+      - "onboarding"
+      - "setup profile"
+      - "first time"
+      - "new user"
+      - "onboard application --app-name"
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_challenge
+      - section_response
+      - section_request_echo
+      - section_next_steps
+    
+    optional_sections: []
+    
+    default_content:
+      operation_name: "Onboarding"
+      understanding_content: "You're starting the onboarding process to personalize CORTEX for your experience level, interaction preferences, and tech stack."
+      challenge_content: "No Challenge - This quick 3-question setup helps CORTEX adapt to your needs."
+      request_echo_content: "Set up CORTEX profile with application name"
+
+  # -------------------------------------------------------------------------
+  # HELP & DOCUMENTATION
+  # -------------------------------------------------------------------------
+  help_table:
+    id: template_help_table
+    name: "Help Table"
+    description: "Command reference in table format"
+    format: compact
+    response_type: reference
+    expected_orchestrator: null
+    
+    triggers:
+      - "help"
+      - "commands"
+      - "what can you do"
+      - "operations"
+    
+    required_sections:
+      - header_compact
+      - section_response
+      - section_next_steps
+    
+    optional_sections:
+      - section_request_echo
+
+  help_detailed:
+    id: template_help_detailed
+    name: "Detailed Help"
+    description: "Comprehensive command documentation"
+    format: standard_5_part
+    response_type: documentation
+    expected_orchestrator: null
+    
+    triggers:
+      - "help detailed"
+      - "full help"
+      - "all commands"
+    
+    required_sections:
+      - header_standard
+      - section_response
+      - section_next_steps
+
+  # -------------------------------------------------------------------------
+  # PLANNING SYSTEM
+  # -------------------------------------------------------------------------
+  planning_dor_incomplete:
+    id: template_planning_dor_incomplete
+    name: "Planning DoR Incomplete"
+    description: "Definition of Ready not met - gather requirements"
+    format: standard_5_part
+    response_type: validation
+    expected_orchestrator: PlanningOrchestrator
+    
+    triggers:
+      - "plan"
+      - "planning"
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_challenge
+      - section_response
+      - section_next_steps
+
+  planning_dor_complete:
+    id: template_planning_dor_complete
+    name: "Planning DoR Complete"
+    description: "Definition of Ready met - proceed with planning"
+    format: standard_5_part
+    response_type: confirmation
+    expected_orchestrator: PlanningOrchestrator
+    
+    triggers:
+      - "approve plan"
+      - "dor complete"
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_response
+      - section_next_steps
+
+  planning_security_review:
+    id: template_planning_security_review
+    name: "Security Review"
+    description: "OWASP security threat analysis"
+    format: standard_5_part
+    response_type: security_analysis
+    expected_orchestrator: ThreatModelingOrchestrator
+    
+    triggers:
+      - "security review"
+      - "threat model"
+      - "owasp"
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_response
+      - section_next_steps
+
+  threat_analysis_summary:
+    id: template_threat_analysis_summary
+    name: "Threat Analysis Summary"
+    description: "Quick threat analysis summary for chat"
+    format: compact
+    response_type: security_analysis
+    expected_orchestrator: PlanningOrchestrator
+    
+    triggers:
+      - "analyze threats"
+      - "threat analysis"
+      - "security threats"
+      - "stride analysis"
+    
+    required_sections:
+      - header_compact
+      - section_response
+      - section_next_steps
+    
+    content_structure:
+      - risk_level_badge
+      - threat_count_summary
+      - critical_threats_list
+      - high_threats_list
+      - mitigation_summary
+      - owasp_coverage_brief
+
+  threat_analysis_detailed:
+    id: template_threat_analysis_detailed
+    name: "Detailed Threat Analysis Report"
+    description: "Comprehensive threat report for markdown file"
+    format: report
+    response_type: security_analysis
+    expected_orchestrator: PlanningOrchestrator
+    
+    triggers:
+      - "detailed threat analysis"
+      - "full threat report"
+      - "complete security analysis"
+    
+    required_sections:
+      - header_report
+      - executive_summary
+      - stride_analysis
+      - owasp_mapping
+      - mitigation_strategies
+      - implementation_guidance
+      - risk_assessment
+      - recommendations
+    
+    content_structure:
+      - feature_overview
+      - risk_level_assessment
+      - stride_categories:
+          - spoofing
+          - tampering
+          - repudiation
+          - information_disclosure
+          - denial_of_service
+          - elevation_of_privilege
+      - owasp_top_10_mapping
+      - threat_details_table
+      - mitigation_strategies_with_code
+      - implementation_timeline
+      - verification_checklist
+
+  # -------------------------------------------------------------------------
+  # ADO INTEGRATION
+  # -------------------------------------------------------------------------
+  ado_created:
+    id: template_ado_created
+    name: "ADO Work Item Created"
+    description: "Confirmation of new ADO item creation"
+    format: standard_5_part
+    response_type: confirmation
+    expected_orchestrator: ADOOrchestrator
+    
+    triggers:
+      - "plan ado"
+      - "create ado"
+    
+    required_sections:
+      - header_standard
+      - section_response
+      - section_next_steps
+
+  ado_resumed:
+    id: template_ado_resumed
+    name: "ADO Planning Resumed"
+    description: "Continue planning from saved ADO item"
+    format: standard_5_part
+    response_type: continuation
+    expected_orchestrator: ADOOrchestrator
+    
+    triggers:
+      - "resume plan"
+      - "continue ado"
+    
+    required_sections:
+      - header_standard
+      - section_response
+      - section_next_steps
+
+  # -------------------------------------------------------------------------
+  # TDD WORKFLOW
+  # -------------------------------------------------------------------------
+  tdd_red_phase:
+    id: template_tdd_red_phase
+    name: "TDD Red Phase"
+    description: "Write failing test first"
+    format: standard_5_part
+    response_type: workflow
+    expected_orchestrator: TDDOrchestrator
+    
+    triggers:
+      - "red phase"
+      - "write test"
+      - "tdd start"
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_response
+      - section_next_steps
+
+  tdd_green_phase:
+    id: template_tdd_green_phase
+    name: "TDD Green Phase"
+    description: "Implement minimal code to pass test"
+    format: standard_5_part
+    response_type: workflow
+    expected_orchestrator: TDDOrchestrator
+    
+    triggers:
+      - "green phase"
+      - "make it pass"
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_response
+      - section_next_steps
+
+  tdd_refactor_phase:
+    id: template_tdd_refactor_phase
+    name: "TDD Refactor Phase"
+    description: "Clean code while maintaining tests"
+    format: standard_5_part
+    response_type: workflow
+    expected_orchestrator: TDDOrchestrator
+    
+    triggers:
+      - "refactor phase"
+      - "clean code"
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_response
+      - section_next_steps
+
+  # -------------------------------------------------------------------------
+  # TECH-AWARE IMPLEMENTATIONS
+  # -------------------------------------------------------------------------
+  tech_implementation:
+    id: template_tech_implementation
+    name: "Tech-Aware Implementation"
+    description: "Best practice + company-aligned solution"
+    format: tech_aware
+    response_type: tech_aware
+    expected_orchestrator: null
+    
+    triggers:
+      - "implement"
+      - "add"
+      - "create"
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_challenge
+      - section_tech_solution
+      - section_response
+      - section_request_echo
+      - section_next_steps
+    
+    optional_sections:
+      - section_tech_solution  # Only if has_tech_stack
+
+  # -------------------------------------------------------------------------
+  # CACHE OPERATIONS
+  # -------------------------------------------------------------------------
+  cache_management:
+    id: template_cache_management
+    name: "Cache Management"
+    description: "Brain cache operations (clear, refresh, status)"
+    format: standard_5_part
+    response_type: operational
+    expected_orchestrator: CacheOrchestrator
+    
+    triggers:
+      - "clear cache"
+      - "refresh cache"
+      - "cache status"
+    
+    required_sections:
+      - header_standard
+      - section_response
+      - section_next_steps
+
+  # -------------------------------------------------------------------------
+  # DIAGRAM OPERATIONS
+  # -------------------------------------------------------------------------
+  diagram_regeneration:
+    id: template_diagram_regeneration
+    name: "Diagram Regeneration"
+    description: "Regenerate architecture diagrams from code"
+    format: standard_5_part
+    response_type: operational
+    expected_orchestrator: DiagramRegenerationOrchestrator
+    
+    triggers:
+      - "regenerate diagram"
+      - "refresh diagram"
+      - "update diagram"
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_challenge
+      - section_response
+      - section_request_echo
+      - section_next_steps
+
+  # -------------------------------------------------------------------------
+  # FEEDBACK SYSTEM
+  # -------------------------------------------------------------------------
+  feedback_received:
+    id: template_feedback_received
+    name: "Feedback Received"
+    description: "Confirmation of feedback submission"
+    format: standard_5_part
+    response_type: confirmation
+    expected_orchestrator: FeedbackOrchestrator
+    
+    triggers:
+      - "feedback"
+      - "report issue"
+      - "suggest feature"
+    
+    required_sections:
+      - header_standard
+      - section_response
+      - section_next_steps
+
+  # -------------------------------------------------------------------------
+  # STATUS & MONITORING
+  # -------------------------------------------------------------------------
+  status_check:
+    id: template_status_check
+    name: "System Status Check"
+    description: "Health check and system metrics"
+    format: standard_5_part
+    response_type: status
+    expected_orchestrator: null
+    
+    triggers:
+      - "status"
+      - "health"
+      - "system check"
+    
+    required_sections:
+      - header_standard
+      - section_response
+      - section_next_steps
+
+  # -------------------------------------------------------------------------
+  # GENERAL OPERATIONS
+  # -------------------------------------------------------------------------
+  success_general:
+    id: template_success_general
+    name: "General Success"
+    description: "Generic success confirmation"
+    format: standard_5_part
+    response_type: success
+    expected_orchestrator: null
+    
+    required_sections:
+      - header_standard
+      - section_response
+      - section_next_steps
+
+  error_general:
+    id: template_error_general
+    name: "General Error"
+    description: "Generic error handling"
+    format: standard_5_part
+    response_type: error
+    expected_orchestrator: null
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_challenge
+      - section_response
+      - section_next_steps
+
+  # -------------------------------------------------------------------------
+  # FALLBACK
+  # -------------------------------------------------------------------------
+  fallback:
+    id: template_fallback
+    name: "Fallback Response"
+    description: "Default response when no specific template matches"
+    format: standard_5_part
+    response_type: general
+    expected_orchestrator: null
+    
+    triggers:
+      - "*"  # Matches anything
+    
+    required_sections:
+      - header_standard
+      - section_understanding
+      - section_challenge
+      - section_response
+      - section_request_echo
+      - section_next_steps

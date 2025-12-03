@@ -148,7 +148,6 @@ class QualityMonitor:
         
         logger.debug(f"Added turn {turn_number} to session {self.current_session.session_id}")
         
-        # Check quality if enough turns have accumulated
         should_check = turn_number >= self.min_turns_before_check
         
         if should_check:

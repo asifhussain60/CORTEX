@@ -104,7 +104,6 @@ class TemplateRegistry:
             ):
                 continue
             
-            # Check if query matches
             if (query_lower in template.template_id.lower() or
                 any(query_lower in trigger.lower() for trigger in template.triggers) or
                 query_lower in template.content.lower()):

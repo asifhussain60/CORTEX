@@ -279,7 +279,6 @@ class OracleCrawler:
         """Get all indexes for a table."""
         cursor = self.connection.cursor()
         
-        # Get index metadata
         cursor.execute(
             """
             SELECT 
@@ -298,7 +297,6 @@ class OracleCrawler:
         for row in cursor:
             index_name = row[0]
             
-            # Get columns for this index
             col_cursor = self.connection.cursor()
             col_cursor.execute(
                 """
@@ -329,7 +327,6 @@ class OracleCrawler:
         """Get all constraints for a table."""
         cursor = self.connection.cursor()
         
-        # Get constraint metadata
         cursor.execute(
             """
             SELECT 
@@ -353,7 +350,6 @@ class OracleCrawler:
             r_owner = row[2]
             r_constraint_name = row[3]
             
-            # Get columns for this constraint
             col_cursor = self.connection.cursor()
             col_cursor.execute(
                 """
@@ -375,7 +371,6 @@ class OracleCrawler:
             if constraint_type == 'R' and r_constraint_name:
                 ref_cursor = self.connection.cursor()
                 
-                # Get referenced table
                 ref_cursor.execute(
                     """
                     SELECT table_name
@@ -389,7 +384,6 @@ class OracleCrawler:
                 r_table_row = ref_cursor.fetchone()
                 r_table = r_table_row[0] if r_table_row else None
                 
-                # Get referenced columns
                 ref_cursor.execute(
                     """
                     SELECT column_name
@@ -551,7 +545,6 @@ if __name__ == "__main__":
     password = sys.argv[2]
     dsn = sys.argv[3]
     
-    # Initialize crawler
     crawler = OracleCrawler(user=user, password=password, dsn=dsn)
     
     try:
@@ -563,7 +556,6 @@ if __name__ == "__main__":
         tables = crawler.extract_schema(include_system=False)
         print(f"✅ Found {len(tables)} tables")
         
-        # Initialize knowledge graph
         brain_dir = Path(__file__).parent.parent.parent.parent / "cortex-brain"
         kg = KnowledgeGraph(brain_dir=brain_dir)
         

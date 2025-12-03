@@ -63,7 +63,6 @@ class BrainInitializationModule(BaseSetupModule):
         """
         issues = []
         
-        # Check project root
         project_root = context.get('project_root')
         if not project_root:
             issues.append("Project root not found in context")
@@ -71,10 +70,8 @@ class BrainInitializationModule(BaseSetupModule):
         
         project_root = Path(project_root)
         
-        # Check cortex-brain directory
         brain_dir = project_root / "cortex-brain"
         if not brain_dir.exists():
-            # Check if we can create it
             try:
                 brain_dir.mkdir(parents=True, exist_ok=True)
                 self.log_info(f"Created cortex-brain directory: {brain_dir}")
@@ -110,7 +107,6 @@ class BrainInitializationModule(BaseSetupModule):
             
             self.log_info("Initializing CORTEX brain...")
             
-            # Initialize Tier 1 (Conversation History)
             tier1_result = self._initialize_tier1(brain_dir)
             if not tier1_result['success']:
                 return SetupResult(
@@ -122,7 +118,6 @@ class BrainInitializationModule(BaseSetupModule):
                 )
             self.log_info(f"✓ Tier 1: {tier1_result['message']}")
             
-            # Initialize Tier 2 (Knowledge Graph)
             tier2_result = self._initialize_tier2(brain_dir)
             if not tier2_result['success']:
                 warnings.append(f"Tier 2: {tier2_result.get('error', 'Failed')}")
@@ -130,7 +125,6 @@ class BrainInitializationModule(BaseSetupModule):
             else:
                 self.log_info(f"✓ Tier 2: {tier2_result['message']}")
             
-            # Initialize Tier 3 (Development Context)
             tier3_result = self._initialize_tier3(brain_dir)
             if not tier3_result['success']:
                 warnings.append(f"Tier 3: {tier3_result.get('error', 'Failed')}")
@@ -187,7 +181,6 @@ class BrainInitializationModule(BaseSetupModule):
         try:
             db_path = brain_dir / "conversation-history.db"
             
-            # Check if already exists
             if db_path.exists():
                 # Verify it's a valid SQLite database
                 try:
@@ -207,11 +200,9 @@ class BrainInitializationModule(BaseSetupModule):
                     # Database corrupt, will recreate
                     pass
             
-            # Create new database
             conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
             
-            # Create conversations table
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS conversations (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -224,7 +215,6 @@ class BrainInitializationModule(BaseSetupModule):
                 )
             ''')
             
-            # Create index
             cursor.execute('''
                 CREATE INDEX IF NOT EXISTS idx_conversation_id 
                 ON conversations(conversation_id)
@@ -258,7 +248,6 @@ class BrainInitializationModule(BaseSetupModule):
         try:
             kg_path = brain_dir / "knowledge-graph.yaml"
             
-            # Check if already exists
             if kg_path.exists():
                 try:
                     with open(kg_path, 'r') as f:
@@ -272,7 +261,6 @@ class BrainInitializationModule(BaseSetupModule):
                 except:
                     pass
             
-            # Create new knowledge graph
             initial_kg = {
                 'version': '1.0',
                 'created': datetime.now().isoformat(),
@@ -311,7 +299,6 @@ class BrainInitializationModule(BaseSetupModule):
         try:
             context_path = brain_dir / "development-context.yaml"
             
-            # Check if already exists
             if context_path.exists():
                 try:
                     with open(context_path, 'r') as f:
@@ -325,7 +312,6 @@ class BrainInitializationModule(BaseSetupModule):
                 except:
                     pass
             
-            # Create new development context
             initial_context = {
                 'version': '1.0',
                 'created': datetime.now().isoformat(),

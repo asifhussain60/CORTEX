@@ -99,7 +99,6 @@ class FileTracker:
         if '.' not in path:
             return False
         
-        # Check extension
         parts = path.split('.')
         if len(parts) < 2:
             return False
@@ -235,7 +234,6 @@ class FileTracker:
         dir_counts = {}
         
         for file in files:
-            # Get directory
             directory = str(Path(file).parent)
             
             # Count

@@ -103,7 +103,6 @@ class BrainIntegrationAPI:
         """
         self.logger = logging.getLogger(__name__)
         
-        # Initialize brain connector
         try:
             self.brain = BrainConnector(brain_root) if brain_root else None
             self.brain_available = self.brain is not None
@@ -112,7 +111,6 @@ class BrainIntegrationAPI:
             self.brain = None
             self.brain_available = False
         
-        # Initialize brain components
         self.pattern_engine = PatternLearningEngine(self.brain) if enable_brain_learning else None
         self.template_system = AdaptiveTemplateSystem(self.brain, self.pattern_engine)
         self.config_system = BrainEnhancedConfig(self.brain, self.pattern_engine, self.template_system)
@@ -180,14 +178,12 @@ class BrainIntegrationAPI:
                 self.logger.debug("Phase 7: Applying learning and optimization")
                 self._apply_learning_feedback(request, generation_result, quality_metrics, intelligent_config)
             
-            # Calculate final metrics
             end_time = datetime.now()
             generation_time = (end_time - start_time).total_seconds()
             confidence_score = self._calculate_overall_confidence(
                 template_recommendation, intelligent_config, quality_metrics
             )
             
-            # Create comprehensive result
             result = BrainGenerationResult(
                 request_id=request.request_id,
                 success=True,
@@ -219,7 +215,6 @@ class BrainIntegrationAPI:
         except Exception as e:
             self.logger.error(f"Error in brain-enhanced generation: {e}")
             
-            # Return error result
             end_time = datetime.now()
             return BrainGenerationResult(
                 request_id=request.request_id,
@@ -589,14 +584,12 @@ class BrainIntegrationAPI:
     def get_system_status(self) -> BrainSystemStatus:
         """Get comprehensive system status"""
         try:
-            # Check component health
             brain_connection = self.brain_available
             pattern_learning = self.pattern_engine is not None
             adaptive_templates = self.template_system is not None
             quality_feedback = self.quality_loop is not None
             context_awareness = self.context_generator is not None
             
-            # Get data counts
             total_patterns = 0
             total_learning_data = 0
             
@@ -662,7 +655,6 @@ class BrainIntegrationAPI:
             if not recent_generations:
                 return {"message": "No generation data available for the specified period"}
             
-            # Calculate analytics
             total_generations = len(recent_generations)
             successful_generations = len([g for g in recent_generations if g.success])
             avg_confidence = sum(g.confidence_score for g in recent_generations) / total_generations
@@ -781,7 +773,6 @@ def create_brain_integration_api(
         return BrainIntegrationAPI(brain_root, enable_learning, enable_optimization)
     except Exception as e:
         logging.getLogger(__name__).error(f"Failed to create BrainIntegrationAPI: {e}")
-        # Return API with minimal functionality
         return BrainIntegrationAPI(None, False, False)
 
 

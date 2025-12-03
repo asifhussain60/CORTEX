@@ -89,7 +89,6 @@ def cache_clear_command(args: Dict[str, Any] = None) -> str:
     """
     cache = get_cache()
     
-    # Get stats before clearing
     stats_before = cache.get_stats()
     entries_before = stats_before['total_entries']
     
@@ -117,7 +116,6 @@ def cache_invalidate_command(args: Dict[str, Any]) -> str:
     operation = args['operation']
     cache = get_cache()
     
-    # Get stats before invalidation
     stats_before = cache.get_stats(operation)
     entries_before = stats_before['total_entries']
     

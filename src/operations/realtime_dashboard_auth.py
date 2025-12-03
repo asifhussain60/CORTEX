@@ -19,13 +19,11 @@ Security:
     - Session cleanup for expired tokens
 
 Usage:
-    # Initialize auth layer
     auth = RealtimeDashboardAuth()
     
     # Generate admin token
     token = auth.generate_token('admin_user', is_admin=True)
     
-    # Validate token
     user_info = auth.validate_token(token)
     if user_info and user_info['is_admin']:
         # Grant access
@@ -123,7 +121,6 @@ class RealtimeDashboardAuth:
         self.tokens: Dict[str, AuthToken] = {}
         self.audit_log: List[AuditLogEntry] = []
         
-        # Initialize database if persistence enabled
         if self.enable_persistence:
             self._init_database()
         
@@ -137,7 +134,6 @@ class RealtimeDashboardAuth:
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
             
-            # Create tokens table
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS tokens (
                     token TEXT PRIMARY KEY,
@@ -150,7 +146,6 @@ class RealtimeDashboardAuth:
                 )
             """)
             
-            # Create audit log table
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS audit_log (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -164,7 +159,6 @@ class RealtimeDashboardAuth:
                 )
             """)
             
-            # Create index on user_id for faster lookups
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_tokens_user_id 
                 ON tokens(user_id)
@@ -255,7 +249,6 @@ class RealtimeDashboardAuth:
         
         auth_token = self.tokens[token]
         
-        # Check expiration
         if datetime.now() > auth_token.expires_at:
             auth_token.status = TokenStatus.EXPIRED
             self._update_token_status(token, TokenStatus.EXPIRED)
@@ -269,7 +262,6 @@ class RealtimeDashboardAuth:
             )
             return None
         
-        # Check status
         if auth_token.status != TokenStatus.ACTIVE:
             self._log_audit(
                 user_id=auth_token.user_id,
@@ -545,22 +537,18 @@ class RealtimeDashboardAuth:
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     
-    # Initialize auth layer
     auth = RealtimeDashboardAuth()
     
     # Generate admin token
     admin_token = auth.generate_token('admin_user', is_admin=True)
     print(f"Admin token: {admin_token}")
     
-    # Validate token
     user_info = auth.validate_token(admin_token)
     print(f"Token valid: {user_info}")
     
-    # Get active sessions
     sessions = auth.get_active_sessions()
     print(f"Active sessions: {len(sessions)}")
     
-    # Get audit log
     audit_log = auth.get_audit_log()
     print(f"Audit log entries: {len(audit_log)}")
     
@@ -568,6 +556,5 @@ if __name__ == '__main__':
     auth.revoke_token(admin_token)
     print("Token revoked")
     
-    # Validate again (should fail)
     user_info = auth.validate_token(admin_token)
     print(f"Token valid after revocation: {user_info}")

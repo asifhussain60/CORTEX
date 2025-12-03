@@ -411,7 +411,6 @@ class CheckpointedPlanWriter(StreamingPlanWriter):
         # Flush current buffer
         self.flush()
         
-        # Create checkpoint file (copy current state)
         checkpoint_path = self.checkpoint_dir / f"{checkpoint_id}.md"
         
         try:

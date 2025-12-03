@@ -144,7 +144,6 @@ class Plugin(BasePlugin):
                 "token_dashboard"
             ])
             
-            # Create output directory
             output_path = Path(output_dir)
             if output_path.exists():
                 self.logger.warning(f"Output directory exists: {output_path}")

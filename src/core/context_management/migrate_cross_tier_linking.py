@@ -37,7 +37,6 @@ class CrossTierLinkingMigration:
         cursor = conn.cursor()
         
         try:
-            # Check if columns already exist
             cursor.execute("PRAGMA table_info(conversations)")
             columns = [row[1] for row in cursor.fetchall()]
             
@@ -94,7 +93,6 @@ class CrossTierLinkingMigration:
         cursor = conn.cursor()
         
         try:
-            # Check if columns already exist
             cursor.execute("PRAGMA table_info(patterns)")
             columns = [row[1] for row in cursor.fetchall()]
             
@@ -151,7 +149,6 @@ class CrossTierLinkingMigration:
         cursor = conn.cursor()
         
         try:
-            # Check if columns already exist
             cursor.execute("PRAGMA table_info(insights)")
             columns = [row[1] for row in cursor.fetchall()]
             

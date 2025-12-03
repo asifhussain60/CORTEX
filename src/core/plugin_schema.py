@@ -202,7 +202,6 @@ def validate_plugin_schema(config: Dict[str, Any]) -> tuple[bool, Optional[str]]
         (is_valid, error_message)
     """
     try:
-        # Check required fields
         if "version" not in config:
             return False, "Missing required field: version"
         if "type" not in config:
@@ -210,12 +209,10 @@ def validate_plugin_schema(config: Dict[str, Any]) -> tuple[bool, Optional[str]]
         if "name" not in config:
             return False, "Missing required field: name"
         
-        # Validate plugin type
         valid_types = ["workflow", "agent", "constraint", "validator"]
         if config["type"] not in valid_types:
             return False, f"Invalid plugin type: {config['type']}. Must be one of: {valid_types}"
         
-        # Validate workflow steps if present
         if "workflow" in config:
             valid_actions = ["analyze", "execute", "validate", "query", "transform", "notify"]
             for i, step in enumerate(config["workflow"]):
@@ -226,7 +223,6 @@ def validate_plugin_schema(config: Dict[str, Any]) -> tuple[bool, Optional[str]]
                 if step["action"] not in valid_actions:
                     return False, f"Invalid action '{step['action']}' in step {i}"
         
-        # Validate parameters if present
         if "parameters" in config:
             valid_param_types = ["string", "int", "bool", "date", "enum", "list"]
             for param in config["parameters"]:

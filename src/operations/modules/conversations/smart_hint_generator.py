@@ -152,15 +152,12 @@ class SmartHintGenerator:
         Returns:
             True if hint should be displayed
         """
-        # Check master switch
         if not self.enable_hints:
             return False
         
-        # Check if hint already shown
         if hint_already_shown:
             return False
         
-        # Check quality threshold
         if not quality_score.should_show_hint:
             return False
         

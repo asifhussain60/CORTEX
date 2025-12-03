@@ -183,7 +183,6 @@ class DocumentationGenerator:
             section_type="api"
         ))
         
-        # Classes
         if "classes" in api_analysis:
             for class_info in api_analysis["classes"]:
                 sections.append(DocumentSection(
@@ -194,7 +193,6 @@ class DocumentationGenerator:
                     section_type="api"
                 ))
         
-        # Functions
         if "functions" in api_analysis:
             for func_info in api_analysis["functions"]:
                 sections.append(DocumentSection(
@@ -400,7 +398,6 @@ class DocumentationGenerator:
         """Format class documentation"""
         lines = []
         
-        # Class signature
         if "signature" in class_info:
             lines.append(f"```python")
             lines.append(class_info["signature"])
@@ -434,7 +431,6 @@ class DocumentationGenerator:
         """Format function documentation"""
         lines = []
         
-        # Function signature
         if "signature" in func_info:
             lines.append(f"```python")
             lines.append(func_info["signature"])

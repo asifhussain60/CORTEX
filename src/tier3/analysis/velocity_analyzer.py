@@ -66,7 +66,6 @@ class VelocityAnalyzer:
             else:
                 previous_window.append(metric)
         
-        # Calculate velocities
         current_velocity = sum(m.commits_count for m in current_window)
         previous_velocity = sum(m.commits_count for m in previous_window)
         
@@ -121,7 +120,6 @@ class VelocityAnalyzer:
         net_growth = sum(m.net_growth for m in metrics)
         files_changed = sum(m.files_changed for m in metrics)
         
-        # Calculate averages
         active_days = len(set(m.metric_date for m in metrics))
         avg_commits_per_day = total_commits / active_days if active_days > 0 else 0
         avg_lines_per_commit = (total_lines_added + total_lines_deleted) / total_commits if total_commits > 0 else 0

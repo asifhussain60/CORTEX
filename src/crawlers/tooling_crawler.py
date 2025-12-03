@@ -253,7 +253,6 @@ class ToolingCrawler(BaseCrawler):
         """Discover Oracle connections from tnsnames.ora"""
         connections = []
         
-        # Check common locations
         tns_paths = []
         
         if os.environ.get('TNS_ADMIN'):
@@ -427,7 +426,6 @@ class ToolingCrawler(BaseCrawler):
             if config_path.suffix == '.json':
                 config = json.loads(config_path.read_text())
                 
-                # Check common config structures
                 if 'ConnectionStrings' in config:
                     for name, conn_string in config['ConnectionStrings'].items():
                         conn = self._parse_connection_string(conn_string, detect_type=True)
@@ -663,7 +661,6 @@ class ToolingCrawler(BaseCrawler):
         """Detect frameworks used in the project"""
         frameworks = set()
         
-        # Check package.json for frontend frameworks
         workspace = Path(self.workspace_path)
         
         for package_json in workspace.rglob('package.json'):
@@ -688,7 +685,6 @@ class ToolingCrawler(BaseCrawler):
             except Exception as e:
                 logger.debug(f"Error parsing package.json: {e}")
         
-        # Check for backend frameworks
         for py_file in workspace.rglob('*.py'):
             try:
                 content = py_file.read_text(errors='ignore')

@@ -172,7 +172,6 @@ class MultiThreadedCrawler:
             for entry in directory.iterdir():
                 # Only process files, not subdirectories (subdirs handled separately)
                 if entry.is_file():
-                    # Check extension filter
                     if extensions is None or entry.suffix in extensions:
                         # Thread-safe file addition
                         with self._lock:
@@ -293,7 +292,6 @@ if __name__ == '__main__':
     print(f"   Throughput: {result_par.files_per_second:.0f} files/s")
     print()
     
-    # Calculate improvement
     if result_seq.duration_seconds > 0:
         speedup = result_seq.duration_seconds / result_par.duration_seconds
         improvement = ((result_seq.duration_seconds - result_par.duration_seconds) / result_seq.duration_seconds) * 100

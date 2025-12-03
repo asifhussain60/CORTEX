@@ -98,7 +98,6 @@ class DashboardHTMLParser(HTMLParser):
         attrs_dict = dict(attrs)
         self.current_tag_attrs = attrs_dict
         
-        # Check for inline event handlers
         for attr_name, attr_value in attrs:
             if attr_name.startswith('on') and attr_name.lower() in [
                 'onclick', 'onload', 'onmouseover', 'onmouseout', 
@@ -130,7 +129,6 @@ class DashboardHTMLParser(HTMLParser):
             self.in_style = True
             self.structure['style_tags'].append(attrs_dict)
         
-        # Check for CSP meta tag
         if tag == 'meta':
             http_equiv = attrs_dict.get('http-equiv', '').lower()
             if http_equiv == 'content-security-policy':
@@ -272,7 +270,6 @@ class DocumentationFormatValidator:
             with open(schema_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         else:
-            # Return minimal schema if file not found
             return {"version": "1.0.0"}
     
     def validate(self, file_path: str) -> ValidationResult:
@@ -291,7 +288,6 @@ class DocumentationFormatValidator:
         
         file_path = Path(file_path)
         
-        # Check file exists
         if not file_path.exists():
             self.errors.append(ValidationError(
                 category="file",
@@ -300,7 +296,6 @@ class DocumentationFormatValidator:
             ))
             return self._build_result(False)
         
-        # Check file extension
         if file_path.suffix.lower() != '.html':
             self.errors.append(ValidationError(
                 category="file",
@@ -321,11 +316,9 @@ class DocumentationFormatValidator:
             ))
             return self._build_result(False)
         
-        # Get file size
         file_size = file_path.stat().st_size
         self.metrics['file_size'] = file_size
         
-        # Check file size (max 2 MB)
         if file_size > 2 * 1024 * 1024:
             self.warnings.append(ValidationWarning(
                 category="performance",
@@ -364,7 +357,6 @@ class DocumentationFormatValidator:
     
     def _validate_structure(self, structure: Dict, content: str):
         """Validate HTML structure"""
-        # Check DOCTYPE
         if not structure['doctype']:
             self.errors.append(ValidationError(
                 category="structure",
@@ -378,7 +370,6 @@ class DocumentationFormatValidator:
                 fix_suggestion="Use HTML5 DOCTYPE: <!DOCTYPE html>"
             ))
         
-        # Check for required HTML structure
         if '<html' not in content.lower():
             self.errors.append(ValidationError(
                 category="structure",
@@ -400,7 +391,6 @@ class DocumentationFormatValidator:
                 fix_suggestion="Add <body> section with dashboard content"
             ))
         
-        # Check for author attribution
         if 'Asif Hussain' not in content:
             self.warnings.append(ValidationWarning(
                 category="metadata",
@@ -408,7 +398,6 @@ class DocumentationFormatValidator:
                 location="header"
             ))
         
-        # Check for GitHub link
         if 'github.com/asifhussain60/CORTEX' not in content:
             self.warnings.append(ValidationWarning(
                 category="metadata",
@@ -451,7 +440,6 @@ class DocumentationFormatValidator:
         
         csp_content = structure['csp_content'] or ''
         
-        # Check required directives
         for directive in self.REQUIRED_CSP_DIRECTIVES:
             if directive.lower() not in csp_content.lower():
                 self.errors.append(ValidationError(
@@ -467,7 +455,6 @@ class DocumentationFormatValidator:
         
         self.metrics['layer_count'] = len(layers)
         
-        # Check minimum layer count
         if len(layers) < 5:
             self.errors.append(ValidationError(
                 category="content",
@@ -475,7 +462,6 @@ class DocumentationFormatValidator:
                 fix_suggestion="Add missing layers: Executive Summary, Detailed Analysis, Issues, Technical Details, Export"
             ))
         
-        # Check for required layers
         for required_layer in self.REQUIRED_LAYERS:
             if required_layer not in layer_ids:
                 self.errors.append(ValidationError(
@@ -484,7 +470,6 @@ class DocumentationFormatValidator:
                     fix_suggestion=f"Add <div id=\"{required_layer}\" class=\"tab-content\">...</div>"
                 ))
         
-        # Check tab buttons
         if len(structure['tab_buttons']) < 5:
             self.errors.append(ValidationError(
                 category="structure",
@@ -508,7 +493,6 @@ class DocumentationFormatValidator:
     
     def _validate_security(self, structure: Dict, content: str):
         """Validate security measures"""
-        # Check for inline event handlers (forbidden)
         inline_handlers = structure['inline_handlers']
         if inline_handlers:
             for handler in inline_handlers[:3]:  # Show first 3
@@ -526,7 +510,6 @@ class DocumentationFormatValidator:
                     fix_suggestion="Remove ALL inline event handlers"
                 ))
         
-        # Check for potential XSS vulnerabilities
         xss_patterns = [
             r'\.innerHTML\s*=\s*[^;]+(?!sanitize)',  # innerHTML without sanitization
             r'document\.write\(',  # document.write
@@ -544,7 +527,6 @@ class DocumentationFormatValidator:
     
     def _validate_export(self, structure: Dict, content: str):
         """Validate export functionality"""
-        # Check for export buttons
         export_buttons = structure['export_buttons']
         if len(export_buttons) < 3:
             self.warnings.append(ValidationWarning(
@@ -553,7 +535,6 @@ class DocumentationFormatValidator:
                 location="Export & Actions layer"
             ))
         
-        # Check for export functions
         export_functions = ['exportPDF', 'exportPNG', 'exportPPTX']
         for func in export_functions:
             if func not in content:
@@ -565,7 +546,6 @@ class DocumentationFormatValidator:
     
     def _validate_accessibility(self, structure: Dict, content: str):
         """Validate accessibility features (WCAG AA)"""
-        # Check for ARIA labels on visualizations
         visualizations = structure['visualizations']
         for viz in visualizations:
             viz_id = viz['id']
@@ -578,7 +558,6 @@ class DocumentationFormatValidator:
                     location=viz_id
                 ))
         
-        # Check for alt text on images (if any)
         img_pattern = r'<img(?![^>]*alt=)[^>]*>'
         imgs_without_alt = re.findall(img_pattern, content, re.IGNORECASE)
         if imgs_without_alt:
@@ -590,7 +569,6 @@ class DocumentationFormatValidator:
     
     def _validate_styling(self, content: str):
         """Validate CORTEX color palette compliance"""
-        # Check for CORTEX primary color
         if self.CORTEX_COLORS['primary'] not in content:
             self.warnings.append(ValidationWarning(
                 category="styling",
@@ -598,7 +576,6 @@ class DocumentationFormatValidator:
                 location="CSS styles"
             ))
         
-        # Check for font family
         font_patterns = [
             '-apple-system',
             'BlinkMacSystemFont',

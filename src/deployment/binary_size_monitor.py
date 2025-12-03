@@ -133,11 +133,9 @@ class BinarySizeMonitor:
         
         comparison["has_history"] = True
         
-        # Get most recent measurement
         last_measurement = history[-1]
         comparison["previous_size_bytes"] = last_measurement.get("total_size_bytes", 0)
         
-        # Calculate change
         if comparison["previous_size_bytes"] > 0:
             comparison["size_change_bytes"] = (
                 comparison["current_size_bytes"] - comparison["previous_size_bytes"]
@@ -146,7 +144,6 @@ class BinarySizeMonitor:
                 (comparison["size_change_bytes"] / comparison["previous_size_bytes"]) * 100
             )
             
-            # Check threshold (10%)
             if abs(comparison["size_change_percent"]) > 10:
                 comparison["alert_threshold_exceeded"] = True
                 comparison["message"] = (

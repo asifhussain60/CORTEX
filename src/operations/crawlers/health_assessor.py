@@ -50,7 +50,6 @@ class HealthAssessorCrawler(BaseCrawler):
             'recommendations': []
         }
         
-        # Calculate health score
         health_data['health_score'] = self._calculate_health_score()
         health_data['grade'] = self._score_to_grade(health_data['health_score'])
         
@@ -363,18 +362,15 @@ class HealthAssessorCrawler(BaseCrawler):
             
             project_root = Path(self.project_root)
             
-            # Check meta-template system (0.25 points)
             meta_template = project_root / 'cortex-brain' / 'templates' / 'meta-template.yaml'
             validator = project_root / 'src' / 'validators' / 'template_validator.py'
             if meta_template.exists() and validator.exists():
                 score += 0.25
             
-            # Check confidence display (0.25 points)
             confidence_scorer = project_root / 'src' / 'cognitive' / 'confidence_scorer.py'
             if confidence_scorer.exists():
                 score += 0.25
             
-            # Check response templates (0.25 points)
             templates = project_root / 'cortex-brain' / 'response-templates.yaml'
             if templates.exists():
                 with open(templates, 'r', encoding='utf-8') as f:
@@ -383,7 +379,6 @@ class HealthAssessorCrawler(BaseCrawler):
                 if template_count >= 32:
                     score += 0.25
             
-            # Check enhancement tests (0.25 points)
             enhancement_tests = project_root / 'tests' / 'integration' / 'test_cortex_enhancements.py'
             if enhancement_tests.exists():
                 score += 0.25

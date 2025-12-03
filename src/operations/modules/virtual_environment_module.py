@@ -65,13 +65,11 @@ class VirtualEnvironmentModule(BaseOperationModule):
         """
         issues = []
         
-        # Check project root
         project_root = context.get('project_root')
         if not project_root:
             issues.append("Project root not found in context")
             return False, issues
         
-        # Check platform info
         if 'platform_config' not in context:
             issues.append("Platform configuration not found in context")
             return False, issues
@@ -95,7 +93,6 @@ class VirtualEnvironmentModule(BaseOperationModule):
         python_cmd = platform_config['python_command']
         
         try:
-            # Check if already in venv
             in_venv = self._is_in_virtualenv()
             if in_venv:
                 venv_path = self._get_current_venv_path()
@@ -123,7 +120,6 @@ class VirtualEnvironmentModule(BaseOperationModule):
             if existing_venv:
                 self.log_info(f"Found existing virtual environment: {existing_venv}")
                 
-                # Validate it's usable
                 if self._validate_venv(existing_venv, python_cmd):
                     activation_cmd = self._get_activation_command(existing_venv, platform_config)
                     
@@ -146,7 +142,6 @@ class VirtualEnvironmentModule(BaseOperationModule):
                         duration_seconds=(datetime.now() - start_time).total_seconds()
                     )
             
-            # Create new venv
             self.log_info("Creating new virtual environment...")
             venv_path = project_root / ".venv"
             
@@ -162,7 +157,6 @@ class VirtualEnvironmentModule(BaseOperationModule):
             
             self.log_info(f"Created virtual environment at: {venv_path}")
             
-            # Validate new venv
             if not self._validate_venv(venv_path, python_cmd):
                 return OperationResult(
                     success=False,
@@ -234,7 +228,6 @@ class VirtualEnvironmentModule(BaseOperationModule):
     
     def _validate_venv(self, venv_path: Path, python_cmd: str) -> bool:
         """Validate virtual environment is functional."""
-        # Check for python executable
         if (venv_path / "Scripts" / "python.exe").exists():
             python_exe = venv_path / "Scripts" / "python.exe"
         elif (venv_path / "bin" / "python").exists():

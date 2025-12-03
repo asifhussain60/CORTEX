@@ -186,7 +186,6 @@ class ProgressMonitor:
                 if not self.state or self.state.completed:
                     break
                 
-                # Check for hang
                 if self.state.seconds_since_update > self.hang_timeout:
                     self._handle_hang()
                     break
@@ -209,7 +208,6 @@ class ProgressMonitor:
             current = self.state.current_index
             total = self.state.total_items
             
-            # Calculate ETA
             eta_sec = self.state.eta_seconds
             eta_str = f", ETA: {eta_sec:.0f}s" if eta_sec else ""
             

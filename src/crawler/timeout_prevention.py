@@ -91,7 +91,6 @@ class TimeoutPreventor:
         remaining = self.config.max_time_seconds - elapsed
         percentage_used = elapsed / self.config.max_time_seconds
         
-        # Check if warning threshold exceeded
         if percentage_used >= self.config.warning_threshold:
             # Estimate completion time
             if files_processed > 0:

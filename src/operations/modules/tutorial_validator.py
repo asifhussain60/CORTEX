@@ -54,36 +54,30 @@ class TutorialValidator:
         # Read file content
         content = work_item_file.read_text()
         
-        # Check for Git History Context section
         if '## Git History Context' in content:
             results['git_context_present'] = True
         
-        # Check for quality score
         quality_match = re.search(r'\*\*Quality Score:\*\*\s+(\d+\.?\d*)%', content)
         if quality_match:
             results['quality_score_calculated'] = True
             results['quality_score_value'] = float(quality_match.group(1))
         
-        # Check for high-risk files
         if '⚠️ High-Risk Files Detected:' in content:
             results['high_risk_detected'] = True
             high_risk_files = re.findall(r'-\s+`([^`]+)`\s+-\s+Requires extra attention', content)
             results['high_risk_files'] = high_risk_files
         
-        # Check for SME suggestions
         if '💡 Subject Matter Expert Suggestions:' in content:
             results['sme_suggested'] = True
             sme_match = re.search(r'-\s+\*\*([^*]+)\*\*\s+\(top contributor', content)
             if sme_match:
                 results['sme_name'] = sme_match.group(1)
         
-        # Check for contributors
         if '**Contributors to Related Files:**' in content:
             results['contributors_listed'] = True
             contributors = re.findall(r'-\s+([^(]+)\((\d+)\s+commits?\)', content)
             results['contributors'] = [(name.strip(), int(count)) for name, count in contributors]
         
-        # Check for related commits
         if '**Related Commits:**' in content:
             results['related_commits_listed'] = True
             commits = re.findall(r'-\s+`([^`]+)`[:\s]+([^\n]+)', content)
@@ -93,7 +87,6 @@ class TutorialValidator:
         if re.search(r'\[\s*\]\s+⚠️\s+Review high-risk files:', content):
             results['acceptance_criteria_enhanced'] = True
         
-        # Calculate completion percentage
         checks = [
             results['work_item_created'],
             results['git_context_present'],
@@ -144,7 +137,6 @@ class TutorialValidator:
             'testing_complete': self._validate_testing_exercises()
         }
         
-        # Calculate overall completion
         module_results = [
             results['basics_complete']['passed'],
             results['planning_complete']['passed'],
@@ -159,7 +151,6 @@ class TutorialValidator:
     
     def _validate_basics_exercises(self) -> Dict[str, Any]:
         """Validate basics module completion."""
-        # Check for conversation history
         history_file = self.cortex_root / "cortex-brain" / "tier1" / "working_memory.db"
         
         return {
@@ -172,7 +163,6 @@ class TutorialValidator:
     
     def _validate_planning_exercises(self) -> Dict[str, Any]:
         """Validate planning module completion."""
-        # Check for planning files
         features_dir = self.planning_dir / "features"
         active_plans = list(features_dir.glob("active/PLAN-*.md")) if features_dir.exists() else []
         approved_plans = list(features_dir.glob("approved/APPROVED-*.md")) if features_dir.exists() else []
@@ -188,7 +178,6 @@ class TutorialValidator:
     
     def _validate_ado_planning_exercises(self) -> Dict[str, Any]:
         """Validate ADO planning module completion."""
-        # Check for ADO work items
         ado_dir = self.planning_dir / "ado" / "active"
         work_items = list(ado_dir.glob("*.md")) if ado_dir.exists() else []
         

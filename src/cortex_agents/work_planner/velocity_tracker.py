@@ -24,7 +24,6 @@ class VelocityTracker:
             return None
         
         try:
-            # Get context summary with velocity data
             summary = self.tier3.get_context_summary()
             
             velocity_data = {

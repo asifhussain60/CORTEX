@@ -59,15 +59,12 @@ class TemplateEngine:
         self.template_dir = template_dir or Path(__file__).parent / 'templates'
         self.config = config or TemplateConfiguration("comprehensive")
         
-        # Initialize Jinja2 environment if available
         self.jinja_env = None
         if JINJA2_AVAILABLE:
             self._setup_jinja_environment()
         
-        # Create template directory if it doesn't exist
         self.template_dir.mkdir(parents=True, exist_ok=True)
         
-        # Initialize default templates
         self._ensure_default_templates()
     
     def _setup_jinja_environment(self):

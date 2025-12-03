@@ -85,8 +85,18 @@ def process_files(files):
 Users interact via natural language. No slash commands needed.
 
 **Context Detection:**
-- **CORTEX development repo** (has `cortex-brain/admin/`): Admin operations available (`deploy cortex`, `generate docs`, `align`)
-- **User repositories**: Only user-facing operations (planning, TDD, feedback, etc.)
+- **CORTEX development repo** (has `cortex-brain/admin/`): Admin operations available
+  - `commit` - Runs commit_push_sync orchestrator (stage, commit, push, sync)
+  - `align` - Full system alignment with all checks (admin version)
+  - `optimize` - CORTEX optimization with SKULL tests (admin version)
+  - `deploy` - Deploy to publish branch with all 19 validation gates (admin-only, NO SKIPPING)
+- **User repositories**: Only user-facing operations
+  - `commit` - Runs commit_push_sync orchestrator (same as CORTEX, git_checkpoint is TDD-only)
+  - `align` - Workspace alignment (user version, auto-skips admin checks)
+  - `optimize` - Fast workspace optimization (user version, skips SKULL tests)
+  - `deploy` - Not available (admin-only operation)
+  
+**Note:** git_checkpoint is exclusively for TDD Mastery workflow, not general commit operations
 
 ---
 
@@ -410,8 +420,18 @@ python src/orchestrators/upgrade_orchestrator.py --upgrade
 Users interact via natural language. No slash commands needed.
 
 **Context Detection:**
-- **CORTEX development repo** (has `cortex-brain/admin/`): Admin operations available (`deploy cortex`, `generate docs`, `align`)
-- **User repositories**: Only user-facing operations (planning, TDD, feedback, etc.)
+- **CORTEX development repo** (has `cortex-brain/admin/`): Admin operations available
+  - `commit` - Runs commit_push_sync orchestrator (stage, commit, push, sync)
+  - `align` - Full system alignment with all checks (admin version)
+  - `optimize` - CORTEX optimization with SKULL tests (admin version)
+  - `deploy` - Deploy to publish branch with all 19 validation gates (admin-only, NO SKIPPING)
+- **User repositories**: Only user-facing operations
+  - `commit` - Runs commit_push_sync orchestrator (same as CORTEX, git_checkpoint is TDD-only)
+  - `align` - Workspace alignment (user version, auto-skips admin checks)
+  - `optimize` - Fast workspace optimization (user version, skips SKULL tests)
+  - `deploy` - Not available (admin-only operation)
+  
+**Note:** git_checkpoint is exclusively for TDD Mastery workflow, not general commit operations
 
 ---
 

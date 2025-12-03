@@ -12,7 +12,6 @@ from datetime import datetime
 import json
 import sqlite3
 
-# Import modular components
 from .conversations import ConversationManager, ConversationSearch, Conversation
 from .messages import MessageStore
 from .entities import EntityExtractor, EntityType, Entity
@@ -31,14 +30,14 @@ class WorkingMemory:
     """
     Tier 1: Working Memory (Short-Term Memory) - Modular Facade
     
-    Manages recent conversations with FIFO eviction when capacity (20) is reached.
+    Manages recent conversations with FIFO eviction when capacity (70) is reached.
     Stores conversations, messages, and extracted entities in SQLite.
     
     This class acts as a facade, delegating to specialized modules while
     maintaining full backward compatibility with the original API.
     """
     
-    MAX_CONVERSATIONS = 20
+    MAX_CONVERSATIONS = 70  # Phase 7.5: Increased from 20 to 70
     
     def __init__(self, db_path: Optional[Path] = None):
         """
@@ -53,10 +52,8 @@ class WorkingMemory:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Initialize database schema
         self._init_database()
         
-        # Initialize modular components
         self.conversation_manager = ConversationManager(self.db_path)
         self.conversation_search = ConversationSearch(self.db_path)
         self.message_store = MessageStore(self.db_path)
@@ -66,11 +63,9 @@ class WorkingMemory:
         # Load configuration first (needed for session manager)
         self.config = self._load_config()
         
-        # Initialize session manager (CORTEX 3.0)
         idle_threshold = self.config.get('tier1', {}).get('conversation_boundaries', {}).get('idle_gap_threshold_seconds', 7200)
         self.session_manager = SessionManager(self.db_path, idle_threshold_seconds=idle_threshold)
         
-        # Initialize lifecycle manager (CORTEX 3.0)
         self.lifecycle_manager = ConversationLifecycleManager(self.db_path)
         
         # Initialize session-ambient correlator (CORTEX 3.0 Phase 3)
@@ -84,7 +79,6 @@ class WorkingMemory:
         
         self.optimization_enabled = self.config.get('token_optimization', {}).get('enabled', True)
         
-        # Initialize database on creation
         self._init_database()
     
     def initialize(self) -> bool:
@@ -116,7 +110,6 @@ class WorkingMemory:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Create conversations table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS conversations (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -138,7 +131,6 @@ class WorkingMemory:
             )
         """)
         
-        # Create entities table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS entities (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -152,7 +144,6 @@ class WorkingMemory:
             )
         """)
         
-        # Create conversation-entity relationships table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS conversation_entities (
                 conversation_id TEXT NOT NULL,
@@ -164,7 +155,6 @@ class WorkingMemory:
             )
         """)
         
-        # Create messages table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -219,7 +209,21 @@ class WorkingMemory:
                 ALTER TABLE user_profile ADD COLUMN tech_stack_preference TEXT DEFAULT NULL
             """)
         
-        # Create eviction log table
+        # Create application table (Phase 1.3: Application Name Requirement)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS application (
+                id INTEGER PRIMARY KEY CHECK (id = 1),
+                name TEXT NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Ensure only one application record exists
+        cursor.execute("""
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_single_application ON application(id)
+        """)
+        
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS eviction_log (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -241,6 +245,19 @@ class WorkingMemory:
                 status TEXT NOT NULL DEFAULT 'awaiting_approval',
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL
+            )
+        """)
+        
+        # Create working_memory table (Phase 7.1: TTL-based temporary context storage)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS working_memory (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                key TEXT UNIQUE NOT NULL,
+                value TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                expires_at TIMESTAMP NOT NULL,
+                context_type TEXT NOT NULL,
+                metadata TEXT
             )
         """)
         
@@ -288,7 +305,6 @@ class WorkingMemory:
         config_path = Path("cortex.config.json")
         
         if not config_path.exists():
-            # Return default configuration
             return {
                 'token_optimization': {
                     'enabled': True,
@@ -333,7 +349,6 @@ class WorkingMemory:
                 - optimization_stats: Metrics (token counts, reduction rate, quality score)
                 - cache_health: Current cache health report
         """
-        # Get configuration
         opt_config = self.config.get('token_optimization', {})
         enabled = opt_config.get('enabled', True) and self.optimization_enabled
         
@@ -352,7 +367,6 @@ class WorkingMemory:
         # Build original context
         original_context = self._build_context(conversation_id, pattern_context)
         
-        # Check cache health (Phase 1.5)
         cache_health = self.cache_monitor.check_cache_health()
         
         if not enabled:
@@ -404,7 +418,6 @@ class WorkingMemory:
         if pattern_opt is not None:
             optimized_context['patterns'] = pattern_opt
         
-        # Calculate combined statistics
         orig_tokens = self._estimate_tokens(original_context)
         opt_tokens = self._estimate_tokens(optimized_context)
         reduction_rate = (orig_tokens - opt_tokens) / orig_tokens if orig_tokens > 0 else 0.0
@@ -461,7 +474,6 @@ class WorkingMemory:
             'entities': []
         }
         
-        # Get conversation(s)
         if conversation_id:
             conv = self.get_conversation(conversation_id)
             if conv:
@@ -490,7 +502,6 @@ class WorkingMemory:
                     'entities': [{'type': e.entity_type, 'name': e.entity_name} for e in entities]
                 })
             else:
-                # Get 3 most recent
                 recent = self.get_recent_conversations(limit=3)
                 for conv in recent:
                     messages = self.get_messages(conv.conversation_id)
@@ -558,8 +569,8 @@ class WorkingMemory:
         Returns:
             Created Conversation object
         """
-        # Enforce FIFO limit before adding
-        self.queue_manager.enforce_fifo_limit()
+        # Enforce FIFO limit before adding (with auto-archive to Tier 2)
+        self._enforce_fifo_limit()
         
         # Add conversation
         conversation = self.conversation_manager.add_conversation(
@@ -732,7 +743,6 @@ class WorkingMemory:
             # Infer initial workflow state
             initial_state = self.lifecycle_manager.infer_workflow_state(user_request)
             
-            # Create conversation
             conversation = self.add_conversation(
                 conversation_id=conversation_id,
                 title=user_request[:100],  # First 100 chars as title
@@ -1058,7 +1068,6 @@ class WorkingMemory:
                     'turns_imported': 0
                 }
             
-            # Check for required keys and non-empty values
             # EDGE CASE: Allow incomplete turns (test_08) - save user message even without assistant
             user_msg = turn.get('user', '').strip()
             assistant_msg = turn.get('assistant', '').strip()
@@ -1090,14 +1099,12 @@ class WorkingMemory:
         ]
         quality_score = analyzer.analyze_multi_turn_conversation(turns_for_analysis)
         
-        # Get or create session if workspace provided
         session_id = None
         if workspace_path:
             active_session = self.session_manager.get_active_session(workspace_path)
             if active_session:
                 session_id = active_session.session_id
             else:
-                # Create import session using detect_or_create
                 new_session = self.session_manager.detect_or_create_session(workspace_path)
                 session_id = new_session.session_id
         
@@ -1270,8 +1277,92 @@ class WorkingMemory:
         return self.queue_manager.get_eviction_log()
     
     def _enforce_fifo_limit(self) -> None:
-        """Enforce FIFO limit (maintained for compatibility, delegates to QueueManager)."""
+        """
+        Enforce FIFO limit (70 conversations).
+        Archives oldest inactive, non-pinned conversation before eviction.
+        """
+        count = self._get_conversation_count()
+        
+        if count < 70:  # MAX_CONVERSATIONS
+            return
+        
+        # Find oldest inactive, non-pinned conversation
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Check if is_pinned column exists
+        cursor.execute("PRAGMA table_info(conversations)")
+        columns = {row[1] for row in cursor.fetchall()}
+        has_pinned_column = 'is_pinned' in columns
+        
+        # Find oldest conversation to evict
+        if has_pinned_column:
+            cursor.execute("""
+                SELECT conversation_id
+                FROM conversations
+                WHERE is_active = 0 AND (is_pinned = 0 OR is_pinned IS NULL)
+                ORDER BY created_at ASC
+                LIMIT 1
+            """)
+        else:
+            cursor.execute("""
+                SELECT conversation_id
+                FROM conversations
+                WHERE is_active = 0
+                ORDER BY created_at ASC
+                LIMIT 1
+            """)
+        
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            oldest_id = row[0]
+            
+            # Auto-archive to Tier 2 before eviction
+            try:
+                tier2 = self._get_tier2_instance()
+                if tier2:
+                    self.archive_conversation_to_tier2(
+                        conversation_id=oldest_id,
+                        knowledge_graph=tier2
+                    )
+            except Exception as e:
+                # Continue with eviction even if archive fails
+                print(f"Warning: Auto-archive failed for {oldest_id}: {e}")
+        
+        # Now let queue_manager handle the actual eviction
         self.queue_manager.enforce_fifo_limit()
+    
+    def _get_tier2_instance(self):
+        """Get Tier 2 KnowledgeGraph instance for archival."""
+        # Check if tier2 was explicitly set (e.g., in tests)
+        if hasattr(self, 'tier2') and self.tier2 is not None:
+            return self.tier2
+        
+        try:
+            from src.tier2.knowledge_graph import KnowledgeGraph
+            
+            # Determine Tier 2 DB path
+            if str(self.db_path).endswith('tier1-working-memory.db'):
+                tier2_path = self.db_path.parent / 'tier2-knowledge-graph.db'
+            else:
+                # For test databases, use sibling path
+                tier2_path = self.db_path.parent / f"tier2_{self.db_path.name}"
+            
+            return KnowledgeGraph(db_path=tier2_path)
+        except Exception as e:
+            print(f"Could not initialize Tier 2: {e}")
+            return None
+    
+    def _get_conversation_count(self) -> int:
+        """Get total number of conversations."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM conversations")
+        count = cursor.fetchone()[0]
+        conn.close()
+        return count
     
     # ========== Utility Methods ==========
     
@@ -1295,11 +1386,12 @@ class WorkingMemory:
         Returns:
             Generated conversation ID
         """
-        # Generate conversation ID
+        # Generate conversation ID with microseconds for uniqueness
+        import time
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        conversation_id = f"conv_{timestamp}_{hash(user_message + assistant_response) & 0xfff:03x}"
+        microseconds = int(time.time() * 1000000) % 1000000
+        conversation_id = f"conv_{timestamp}_{microseconds:06d}_{hash(user_message + assistant_response) & 0xfff:03x}"
         
-        # Create title from user message (first 50 chars)
         title = user_message[:50] + "..." if len(user_message) > 50 else user_message
         
         # Format messages
@@ -1316,7 +1408,6 @@ class WorkingMemory:
             }
         ]
         
-        # Create tags from intent and context
         tags = [intent.lower()]
         if context:
             if context.get('manual_import'):
@@ -1377,7 +1468,6 @@ class WorkingMemory:
         Returns:
             True if profile created successfully, False otherwise
         """
-        # Validate inputs
         valid_modes = ["autonomous", "guided", "educational", "pair"]
         valid_levels = ["junior", "mid", "senior", "expert"]
         
@@ -1387,7 +1477,6 @@ class WorkingMemory:
         if experience_level not in valid_levels:
             raise ValueError(f"Invalid experience_level '{experience_level}'. Must be one of: {', '.join(valid_levels)}")
         
-        # Validate tech_stack_preference if provided
         if tech_stack_preference:
             valid_cloud = ["azure", "aws", "gcp", "none"]
             valid_container = ["kubernetes", "docker", "none"]
@@ -1492,7 +1581,6 @@ class WorkingMemory:
         if interaction_mode is None and experience_level is None and tech_stack_preference is ...:
             return False  # Nothing to update
         
-        # Validate inputs
         valid_modes = ["autonomous", "guided", "educational", "pair"]
         valid_levels = ["junior", "mid", "senior", "expert"]
         
@@ -1603,6 +1691,72 @@ class WorkingMemory:
         except Exception as e:
             print(f"Failed to delete user profile: {e}")
             return False
+    
+    # ========== Application Name Management (Phase 1.3) ==========
+    
+    def store_application_name(self, name: str) -> bool:
+        """
+        Store or update the application name in Tier 1.
+        
+        Args:
+            name: Application name to store
+        
+        Returns:
+            True if storage successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("SELECT COUNT(*) FROM application WHERE id = 1")
+            exists = cursor.fetchone()[0] > 0
+            
+            if exists:
+                # Update existing record
+                cursor.execute("""
+                    UPDATE application 
+                    SET name = ?, last_updated = CURRENT_TIMESTAMP
+                    WHERE id = 1
+                """, (name,))
+            else:
+                # Insert new record
+                cursor.execute("""
+                    INSERT INTO application (id, name)
+                    VALUES (1, ?)
+                """, (name,))
+            
+            conn.commit()
+            conn.close()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Failed to store application name: {e}")
+            return False
+    
+    def get_application_name(self) -> Optional[str]:
+        """
+        Retrieve the stored application name from Tier 1.
+        
+        Returns:
+            Application name or None if not set
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT name FROM application WHERE id = 1
+            """)
+            
+            result = cursor.fetchone()
+            conn.close()
+            
+            return result[0] if result else None
+            
+        except Exception as e:
+            print(f"Failed to retrieve application name: {e}")
+            return None
     
     # ========== SWAGGER Context Storage (CORTEX 3.2.1: Scope Approval Gate) ==========
     
@@ -1725,4 +1879,672 @@ class WorkingMemory:
         except Exception as e:
             print(f"Error updating SWAGGER context status: {e}")
             return False
+    
+    # ========== Phase 3: TDD Workflow Enhancement - Tier Feeding ==========
+    
+    def store_test_intent(
+        self,
+        feature_name: str,
+        requirement: str,
+        test_phase: str = 'RED',
+        edge_cases: List[str] = None,
+        metadata: Dict[str, Any] = None
+    ) -> bool:
+        """
+        Store test intent extracted during RED phase of TDD.
+        
+        Part of Phase 3: Eliminates circular dependency on git commit messages
+        by capturing test requirements in real-time during RED phase.
+        
+        Args:
+            feature_name: Name of feature being tested
+            requirement: Test requirement/behavior being validated
+            test_phase: TDD phase (RED, GREEN, REFACTOR)
+            edge_cases: List of edge cases being tested
+            metadata: Additional context (file paths, test number, etc.)
+        
+        Returns:
+            True if stored successfully
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Create table if not exists
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS test_intents (
+                    intent_id TEXT PRIMARY KEY,
+                    feature_name TEXT NOT NULL,
+                    requirement TEXT NOT NULL,
+                    test_phase TEXT DEFAULT 'RED',
+                    edge_cases_json TEXT,
+                    metadata_json TEXT,
+                    source TEXT DEFAULT 'tdd_red_phase',
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            intent_id = f"test_intent_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+            edge_cases_json = json.dumps(edge_cases) if edge_cases else None
+            metadata_json = json.dumps(metadata) if metadata else None
+            
+            cursor.execute('''
+                INSERT INTO test_intents 
+                (intent_id, feature_name, requirement, test_phase, edge_cases_json, metadata_json, source)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                intent_id,
+                feature_name,
+                requirement,
+                test_phase,
+                edge_cases_json,
+                metadata_json,
+                'tdd_red_phase'
+            ))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error storing test intent: {e}")
+            return False
+    
+    def get_recent_test_intents(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Get recently captured test intents.
+        
+        Returns:
+            List of test intent dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT intent_id, feature_name, requirement, test_phase, 
+                       edge_cases_json, metadata_json, source, created_at
+                FROM test_intents
+                ORDER BY created_at DESC
+                LIMIT ?
+            ''', (limit,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            intents = []
+            for row in rows:
+                intents.append({
+                    'intent_id': row[0],
+                    'feature_name': row[1],
+                    'requirement': row[2],
+                    'test_phase': row[3],
+                    'edge_cases': json.loads(row[4]) if row[4] else [],
+                    'metadata': json.loads(row[5]) if row[5] else {},
+                    'source': row[6],
+                    'created_at': row[7]
+                })
+            
+            return intents
+        except Exception as e:
+            print(f"Error retrieving test intents: {e}")
+            return []
+    
+    def get_edge_cases_for_feature(self, feature_name: str) -> List[Dict[str, Any]]:
+        """
+        Get all edge cases for a specific feature.
+        
+        Args:
+            feature_name: Name of feature to retrieve edge cases for
+        
+        Returns:
+            List of edge case dictionaries with descriptions
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT intent_id, requirement, edge_cases_json, created_at
+                FROM test_intents
+                WHERE feature_name = ? AND edge_cases_json IS NOT NULL
+                ORDER BY created_at DESC
+            ''', (feature_name,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            edge_cases = []
+            for row in rows:
+                cases = json.loads(row[2]) if row[2] else []
+                for case in cases:
+                    edge_cases.append({
+                        'intent_id': row[0],
+                        'requirement': row[1],
+                        'description': case,
+                        'created_at': row[3]
+                    })
+            
+            # Also include requirements as implicit edge cases
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT intent_id, requirement, created_at
+                FROM test_intents
+                WHERE feature_name = ?
+                ORDER BY created_at DESC
+            ''', (feature_name,))
+            rows = cursor.fetchall()
+            conn.close()
+            
+            for row in rows:
+                edge_cases.append({
+                    'intent_id': row[0],
+                    'requirement': row[1],
+                    'description': row[1],  # Requirement itself as edge case
+                    'created_at': row[2]
+                })
+            
+            return edge_cases
+        except Exception as e:
+            print(f"Error retrieving edge cases: {e}")
+            return []
+    
+    # =========================================================================
+    # Phase 7.1: Working Memory (TTL-based Temporary Context Storage)
+    # =========================================================================
+    
+    def store_temp_context(
+        self, 
+        key: str, 
+        value: Any, 
+        ttl_seconds: int,
+        context_type: str,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> bool:
+        """
+        Store temporary context with TTL expiration.
+        
+        Args:
+            key: Unique key for the context
+            value: Context value (will be JSON serialized)
+            ttl_seconds: Time-to-live in seconds
+            context_type: Type of context (e.g., 'feature_work', 'conversation_work')
+            metadata: Optional metadata dictionary
+        
+        Returns:
+            True if stored successfully, False otherwise
+        
+        Example:
+            working_memory.store_temp_context(
+                key="current_feature",
+                value={"feature": "user_auth", "status": "in_progress"},
+                ttl_seconds=3600,  # 1 hour
+                context_type="feature_work"
+            )
+        """
+        try:
+            import json
+            
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Serialize value and metadata
+            value_json = json.dumps(value)
+            metadata_json = json.dumps(metadata) if metadata else None
+            
+            # Insert or replace - use SQLite datetime functions
+            cursor.execute('''
+                INSERT OR REPLACE INTO working_memory 
+                (key, value, expires_at, context_type, metadata, created_at)
+                VALUES (?, ?, datetime('now', '+' || ? || ' seconds'), ?, ?, datetime('now'))
+            ''', (key, value_json, ttl_seconds, context_type, metadata_json))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error storing temporary context: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def get_temp_context(self, key: str) -> Optional[Dict[str, Any]]:
+        """
+        Get temporary context by key (only if not expired).
+        
+        Args:
+            key: Context key to retrieve
+        
+        Returns:
+            Dictionary with 'value', 'context_type', 'created_at', 'expires_at', 'metadata'
+            or None if not found or expired
+        """
+        try:
+            import json
+            from datetime import datetime
+            
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT value, context_type, created_at, expires_at, metadata
+                FROM working_memory
+                WHERE key = ? AND expires_at > datetime('now')
+            ''', (key,))
+            
+            row = cursor.fetchone()
+            conn.close()
+            
+            if not row:
+                return None
+            
+            return {
+                'value': json.loads(row[0]),
+                'context_type': row[1],
+                'created_at': row[2],
+                'expires_at': row[3],
+                'metadata': json.loads(row[4]) if row[4] else None
+            }
+            
+        except Exception as e:
+            print(f"Error retrieving temporary context: {e}")
+            return None
+    
+    def cleanup_expired_contexts(self) -> int:
+        """
+        Remove all expired temporary contexts.
+        
+        Returns:
+            Number of contexts deleted
+        """
+        try:
+            from datetime import datetime
+            
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                DELETE FROM working_memory
+                WHERE expires_at <= datetime('now')
+            ''')
+            
+            deleted_count = cursor.rowcount
+            conn.commit()
+            conn.close()
+            
+            return deleted_count
+            
+        except Exception as e:
+            print(f"Error cleaning up expired contexts: {e}")
+            return 0
+    
+    def list_active_contexts(self, context_type: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        List all active (non-expired) temporary contexts.
+        
+        Args:
+            context_type: Optional filter by context type
+        
+        Returns:
+            List of active context dictionaries
+        """
+        try:
+            import json
+            
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            if context_type:
+                cursor.execute('''
+                    SELECT key, value, context_type, created_at, expires_at, metadata
+                    FROM working_memory
+                    WHERE context_type = ? AND expires_at > datetime('now')
+                    ORDER BY created_at DESC
+                ''', (context_type,))
+            else:
+                cursor.execute('''
+                    SELECT key, value, context_type, created_at, expires_at, metadata
+                    FROM working_memory
+                    WHERE expires_at > datetime('now')
+                    ORDER BY created_at DESC
+                ''')
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            contexts = []
+            for row in rows:
+                contexts.append({
+                    'key': row[0],
+                    'value': json.loads(row[1]),
+                    'context_type': row[2],
+                    'created_at': row[3],
+                    'expires_at': row[4],
+                    'metadata': json.loads(row[5]) if row[5] else None
+                })
+            
+            return contexts
+            
+        except Exception as e:
+            print(f"Error listing active contexts: {e}")
+            return []
+    
+    # =========================================================================
+    # Phase 7.5: FIFO 70-Conversation Management
+    # =========================================================================
+    
+    def list_conversations(self, limit: Optional[int] = None, include_inactive: bool = True) -> List[Dict[str, Any]]:
+        """
+        List conversations with optional limit.
+        
+        Args:
+            limit: Maximum number of conversations to return (None = all)
+            include_inactive: Include inactive conversations
+        
+        Returns:
+            List of conversation dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            if include_inactive:
+                if limit:
+                    cursor.execute('''
+                        SELECT conversation_id, title, created_at, message_count, is_active
+                        FROM conversations
+                        ORDER BY created_at DESC
+                        LIMIT ?
+                    ''', (limit,))
+                else:
+                    cursor.execute('''
+                        SELECT conversation_id, title, created_at, message_count, is_active
+                        FROM conversations
+                        ORDER BY created_at DESC
+                    ''')
+            else:
+                if limit:
+                    cursor.execute('''
+                        SELECT conversation_id, title, created_at, message_count, is_active
+                        FROM conversations
+                        WHERE is_active = 1
+                        ORDER BY created_at DESC
+                        LIMIT ?
+                    ''', (limit,))
+                else:
+                    cursor.execute('''
+                        SELECT conversation_id, title, created_at, message_count, is_active
+                        FROM conversations
+                        WHERE is_active = 1
+                        ORDER BY created_at DESC
+                    ''')
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            return [
+                {
+                    'conversation_id': row[0],
+                    'title': row[1],
+                    'created_at': row[2],
+                    'message_count': row[3],
+                    'is_active': bool(row[4])
+                }
+                for row in rows
+            ]
+            
+        except Exception as e:
+            print(f"Error listing conversations: {e}")
+            return []
+    
+    def mark_conversation_inactive(self, conversation_id: str) -> bool:
+        """
+        Mark a conversation as inactive (eligible for FIFO eviction).
+        
+        Args:
+            conversation_id: Conversation to mark inactive
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                UPDATE conversations
+                SET is_active = 0
+                WHERE conversation_id = ?
+            ''', (conversation_id,))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error marking conversation inactive: {e}")
+            return False
+    
+    def archive_conversation_to_tier2(
+        self, 
+        conversation_id: str,
+        knowledge_graph: Any
+    ) -> bool:
+        """
+        Archive a conversation to Tier 2 (Knowledge Graph).
+        
+        Args:
+            conversation_id: Conversation to archive
+            knowledge_graph: Tier 2 KnowledgeGraph instance
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            import json
+            from datetime import datetime
+            
+            # Get conversation data
+            conversation = self.get_conversation(conversation_id)
+            if not conversation:
+                return False
+            
+            # Handle both dict and Conversation object
+            if hasattr(conversation, '__dict__'):
+                # It's a dataclass/object
+                conv_title = getattr(conversation, 'title', '')
+                conv_created_at = str(getattr(conversation, 'created_at', ''))
+            else:
+                # It's a dict
+                conv_title = conversation.get('title', '')
+                conv_created_at = conversation.get('created_at', '')
+            
+            # Get all messages
+            messages = self.get_messages(conversation_id)
+            
+            # Create archived pattern for Tier 2
+            pattern_id = f"conv_{conversation_id}"
+            
+            # Build content with conversation summary
+            content = {
+                'conversation_id': conversation_id,
+                'title': conv_title,
+                'created_at': conv_created_at,
+                'message_count': len(messages),
+                'messages': [
+                    {
+                        'role': m.get('role', '') if isinstance(m, dict) else getattr(m, 'role', ''),
+                        'content': (m.get('content', '') if isinstance(m, dict) else getattr(m, 'content', ''))[:500],
+                        'timestamp': m.get('timestamp', '') if isinstance(m, dict) else str(getattr(m, 'timestamp', ''))
+                    }
+                    for m in messages
+                ]
+            }
+            
+            # Store in Tier 2 as archived conversation pattern
+            knowledge_graph.store_pattern(
+                pattern_id=pattern_id,
+                title=f"Archived: {conv_title or 'Untitled'}",
+                content=json.dumps(content),
+                pattern_type='context',  # Use 'context' as it's a valid pattern type for archived conversations
+                confidence=1.0,
+                namespaces=['CORTEX-archived'],
+                scope='cortex'
+            )
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error archiving conversation to Tier 2: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def pin_conversation(self, conversation_id: str) -> bool:
+        """
+        Pin a conversation to prevent FIFO eviction.
+        
+        Args:
+            conversation_id: Conversation to pin
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Add is_pinned column if it doesn't exist
+            cursor.execute("PRAGMA table_info(conversations)")
+            columns = {row[1] for row in cursor.fetchall()}
+            
+            if 'is_pinned' not in columns:
+                cursor.execute('''
+                    ALTER TABLE conversations 
+                    ADD COLUMN is_pinned INTEGER DEFAULT 0
+                ''')
+            
+            # Pin the conversation
+            cursor.execute('''
+                UPDATE conversations
+                SET is_pinned = 1
+                WHERE conversation_id = ?
+            ''', (conversation_id,))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error pinning conversation: {e}")
+            return False
+    
+    def unpin_conversation(self, conversation_id: str) -> bool:
+        """
+        Unpin a conversation (allow FIFO eviction).
+        
+        Args:
+            conversation_id: Conversation to unpin
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                UPDATE conversations
+                SET is_pinned = 0
+                WHERE conversation_id = ?
+            ''', (conversation_id,))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error unpinning conversation: {e}")
+            return False
+    
+    def is_conversation_pinned(self, conversation_id: str) -> bool:
+        """
+        Check if a conversation is pinned.
+        
+        Args:
+            conversation_id: Conversation to check
+        
+        Returns:
+            True if pinned, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Check if is_pinned column exists
+            cursor.execute("PRAGMA table_info(conversations)")
+            columns = {row[1] for row in cursor.fetchall()}
+            
+            if 'is_pinned' not in columns:
+                conn.close()
+                return False
+            
+            cursor.execute('''
+                SELECT is_pinned FROM conversations
+                WHERE conversation_id = ?
+            ''', (conversation_id,))
+            
+            row = cursor.fetchone()
+            conn.close()
+            
+            return bool(row and row[0]) if row else False
+            
+        except Exception as e:
+            print(f"Error checking if conversation is pinned: {e}")
+            return False
+    
+    def list_pinned_conversations(self) -> List[Dict[str, Any]]:
+        """
+        List all pinned conversations.
+        
+        Returns:
+            List of pinned conversation dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Check if is_pinned column exists
+            cursor.execute("PRAGMA table_info(conversations)")
+            columns = {row[1] for row in cursor.fetchall()}
+            
+            if 'is_pinned' not in columns:
+                conn.close()
+                return []
+            
+            cursor.execute('''
+                SELECT conversation_id, title, created_at, message_count
+                FROM conversations
+                WHERE is_pinned = 1
+                ORDER BY created_at DESC
+            ''')
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            return [
+                {
+                    'conversation_id': row[0],
+                    'title': row[1],
+                    'created_at': row[2],
+                    'message_count': row[3]
+                }
+                for row in rows
+            ]
+            
+        except Exception as e:
+            print(f"Error listing pinned conversations: {e}")
+            return []
+
 

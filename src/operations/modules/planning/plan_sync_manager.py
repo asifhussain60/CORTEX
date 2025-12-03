@@ -113,7 +113,6 @@ class PlanSyncManager:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Set planning root
         if planning_root is None:
             project_root = Path(__file__).parent.parent.parent.parent.parent
             self.planning_root = project_root / "cortex-brain" / "documents" / "planning"
@@ -213,7 +212,6 @@ class PlanSyncManager:
         cursor = conn.cursor()
         
         try:
-            # Check if plan exists
             cursor.execute("SELECT plan_id FROM plans WHERE file_path = ?", (str(file_path),))
             existing = cursor.fetchone()
             
@@ -283,7 +281,6 @@ class PlanSyncManager:
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
-        # Get plan record
         cursor.execute("SELECT * FROM plans WHERE plan_id = ?", (plan_id,))
         plan = cursor.fetchone()
         conn.close()
@@ -387,7 +384,6 @@ class PlanSyncManager:
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
-        # Get all plans from database
         cursor.execute("SELECT plan_id, file_path, status FROM plans")
         db_plans = cursor.fetchall()
         conn.close()
@@ -395,7 +391,6 @@ class PlanSyncManager:
         orphaned_db_records = []
         status_divergence = []
         
-        # Check DB records
         for plan in db_plans:
             file_path = Path(plan['file_path'])
             
@@ -405,7 +400,6 @@ class PlanSyncManager:
                     "file_path": plan['file_path']
                 })
             else:
-                # Check status divergence
                 file_metadata = self._extract_file_metadata(file_path)
                 if file_metadata and file_metadata['status'] != plan['status']:
                     status_divergence.append({
@@ -414,7 +408,6 @@ class PlanSyncManager:
                         "file_status": file_metadata['status']
                     })
         
-        # Check for orphaned files
         orphaned_files = []
         
         if self.planning_root.exists():
@@ -497,7 +490,6 @@ class PlanSyncManager:
         # Simple implementation: Add/update status marker at top
         lines = content.split('\n')
         
-        # Check if status marker exists
         status_line_index = None
         for i, line in enumerate(lines):
             if line.startswith('**Status:**'):

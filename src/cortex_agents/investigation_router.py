@@ -137,7 +137,6 @@ class InvestigationRouter:
                 "suggestion": "Try: 'Investigate why the UserLoginView component...' or 'Investigate why this file...'"
             }
         
-        # Check if user wants to proceed to analysis phase
         user_response = await self._user_checkpoint(
             investigation_context,
             f"Found {investigation_context.target_entity} with {len(investigation_context.direct_relationships)} direct relationships. "
@@ -150,7 +149,6 @@ class InvestigationRouter:
         # Phase 2: Analysis - Deep relationship traversal
         await self._analysis_phase(investigation_context)
         
-        # Check if user wants synthesis phase
         user_response = await self._user_checkpoint(
             investigation_context,
             f"Analysis complete with {len(investigation_context.findings)} findings. "
@@ -185,7 +183,6 @@ class InvestigationRouter:
             budget=budget
         )
         
-        # Get immediate context - consume tokens
         token_cost = len(query.split()) * 2  # Rough estimate
         if not budget.consume(token_cost):
             self.logger.warning("Discovery phase budget exhausted during entity detection")
@@ -203,7 +200,6 @@ class InvestigationRouter:
         except Exception as e:
             self.logger.error(f"Error getting relationships for {target_entity}: {e}")
         
-        # Get current workspace context if available
         if context and context.get('current_file'):
             workspace_context = await self._get_workspace_context(context['current_file'])
             investigation_context.findings.append({
@@ -229,7 +225,6 @@ class InvestigationRouter:
         medium_confidence_rels = [r for r in investigation_context.direct_relationships 
                                  if 0.6 <= r.get('confidence', 0) < 0.8]
         
-        # Process high confidence relationships first
         for relationship in high_confidence_rels:
             if investigation_context.budget.is_exhausted:
                 break
@@ -238,7 +233,6 @@ class InvestigationRouter:
             if finding:
                 investigation_context.findings.append(finding)
         
-        # Process medium confidence if budget allows
         if not investigation_context.budget.is_exhausted:
             for relationship in medium_confidence_rels:
                 if investigation_context.budget.is_exhausted:
@@ -322,7 +316,6 @@ class InvestigationRouter:
         plugin_findings = []
         
         try:
-            # Import plugin registry
             from src.plugins.plugin_registry import get_registry
             
             registry = get_registry()

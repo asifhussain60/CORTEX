@@ -177,7 +177,6 @@ class DependencyInstaller:
     
     def _ensure_venv(self) -> bool:
         """Ensure virtual environment exists, create if missing."""
-        # Check if running in virtual environment
         in_venv = (
             hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)
@@ -187,7 +186,6 @@ class DependencyInstaller:
             logger.info("Already running in virtual environment")
             return False
         
-        # Check for existing venv
         venv_paths = [
             self.cortex_root / "venv",
             self.cortex_root / ".venv",
@@ -199,7 +197,6 @@ class DependencyInstaller:
                 logger.info(f"Found existing virtual environment: {venv_path}")
                 return False
         
-        # Create new virtual environment
         venv_path = self.cortex_root / "venv"
         logger.info(f"Creating virtual environment: {venv_path}")
         

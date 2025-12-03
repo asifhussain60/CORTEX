@@ -204,7 +204,6 @@ class CortexEntryWithWorkflows(CortexEntry):
             workflow_path = self.workflows_dir / f"{selected_workflow}.yaml"
             workflow_def = WorkflowDefinition.from_yaml(workflow_path)
             
-            # Create orchestrator
             orchestrator = WorkflowOrchestrator(
                 workflow_def=workflow_def,
                 context_injector=self.context_injector,
@@ -271,11 +270,9 @@ class CortexEntryWithWorkflows(CortexEntry):
         
         for stage_def in workflow_def.stages:
             try:
-                # Import stage module
                 # Example: "threat_modeler" → src.workflows.stages.threat_modeler
                 module = import_module(f"src.workflows.stages.{stage_def.script}")
                 
-                # Get stage instance via factory function
                 stage_instance = module.create_stage()
                 
                 # Register with orchestrator

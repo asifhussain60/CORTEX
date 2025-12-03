@@ -33,7 +33,6 @@ class ImportErrorParser(BaseErrorParser):
             result["missing_name"] = name_match.group(1)
             result["message"] = f"Cannot import: {name_match.group(1)}"
         
-        # Get file and line
         file_match = re.search(r'File "([^"]+)", line (\d+)', output)
         if file_match:
             result["file"] = file_match.group(1)

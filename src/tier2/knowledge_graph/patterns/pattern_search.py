@@ -166,7 +166,6 @@ class PatternSearch:
         
         Performance: <100ms
         """
-        # Get all matching patterns
         all_results = self.search(
             query=query,
             min_confidence=min_confidence,
@@ -178,7 +177,6 @@ class PatternSearch:
         for result in all_results:
             result_namespaces = result.get("namespaces", [])
             
-            # Calculate priority weight
             if current_namespace and current_namespace in result_namespaces:
                 weight = 2.0  # Current namespace boost
             elif include_cortex and "CORTEX-core" in result_namespaces:

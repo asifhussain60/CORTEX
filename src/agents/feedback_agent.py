@@ -124,7 +124,6 @@ class FeedbackAgent:
                 print(f"⚠️  Could not upload to Gist: {e}")
                 print(f"📝 Feedback saved locally: {file_path}")
         
-        # Return confirmation
         return {
             "success": True,
             "feedback_id": feedback_id,

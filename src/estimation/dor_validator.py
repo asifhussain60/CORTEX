@@ -302,7 +302,6 @@ class DoRValidator:
         vague_count = sum(1 for term in vague_terms if term in answer_lower)
         specific_count = sum(1 for ind in specific_indicators if ind in answer_lower)
         
-        # Check for measurable numbers
         has_numbers = any(c.isdigit() for c in answer)
         
         # Determine clarity level
@@ -412,14 +411,12 @@ class DoRValidator:
         """Get list of issues blocking DoR completion."""
         issues = []
         
-        # Check for unanswered required questions
         for q in self.questions:
             if q.required and q.answer is None:
                 issues.append(f"❌ Missing: {q.question}")
             elif q.answer and q.clarity == ClarityLevel.VAGUE:
                 issues.append(f"⚠️ Too vague: {q.category} - needs specifics")
         
-        # Check unmet checklist items
         self.update_checklist_from_answers()
         for item in self.checklist:
             if not item.is_met:
@@ -456,7 +453,6 @@ class DoRValidator:
         else:
             status = DoRStatus.COMPLETE
         
-        # Get met/unmet criteria
         met_criteria = [item.description for item in self.checklist if item.is_met]
         unmet_criteria = [item.description for item in self.checklist if not item.is_met]
         

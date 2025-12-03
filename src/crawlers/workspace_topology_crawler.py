@@ -228,7 +228,6 @@ class WorkspaceTopologyCrawler(BaseCrawler):
             if entry.name in ['node_modules', 'vendor', '__pycache__', 'venv', '.git']:
                 continue
             
-            # Check for application markers
             app_path = Path(entry.path)
             for marker in self.APPLICATION_MARKERS:
                 marker_path = app_path / marker
@@ -366,7 +365,6 @@ class WorkspaceTopologyCrawler(BaseCrawler):
         
         Fast check using file content sampling.
         """
-        # Check for database configuration files
         db_config_files = [
             'datasource.cfm',
             'database.yml',

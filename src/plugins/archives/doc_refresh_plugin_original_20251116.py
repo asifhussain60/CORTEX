@@ -306,7 +306,6 @@ class Plugin(BasePlugin):
         """Check if documentation is synchronized with design"""
         issues = []
         
-        # Check last modified timestamps
         design_index = Path("cortex-brain/cortex-2.0-design/00-INDEX.md")
         story_dir = Path("docs/story/CORTEX-STORY")
         
@@ -367,7 +366,6 @@ class Plugin(BasePlugin):
         from src.operations.modules.generate_technical_doc_module import GenerateTechnicalDocModule
         
         try:
-            # Create module and execute
             module = GenerateTechnicalDocModule()
             context = {
                 'project_root': self.cortex_root
@@ -406,7 +404,6 @@ class Plugin(BasePlugin):
         try:
             logger.info("Starting story refresh with modular architecture...")
             
-            # Initialize context for modules
             context = {
                 'project_root': Path('.'),
                 'output_dir': file_path.parent,
@@ -528,7 +525,6 @@ class Plugin(BasePlugin):
                 self.config.get("voice_transformation_mode", "mixed")
             )
         
-        # Check if story recap is enabled
         if not self.config.get("story_recap_enabled", True):
             return {
                 "success": True,
@@ -552,7 +548,6 @@ class Plugin(BasePlugin):
             narrative_analysis
         )
         
-        # Validate narrative continuity
         flow_validation = self._validate_narrative_flow(
             existing_story, 
             recap_suggestions,
@@ -865,13 +860,11 @@ class Plugin(BasePlugin):
             if pattern in story_text:
                 analysis["transitions"].append(pattern)
         
-        # Check for narrative flow issues
         if interludes > 0 and interludes != total_parts:
             analysis["warnings"].append(
                 f"Interlude/Part mismatch: {interludes} interludes but {total_parts} parts"
             )
         
-        # Check for abrupt transitions
         lines = story_text.split('\n')
         for i in range(len(lines) - 1):
             if lines[i].startswith("## Chapter") or lines[i].startswith("# PART"):
@@ -891,7 +884,6 @@ class Plugin(BasePlugin):
             "suggestions": []
         }
         
-        # Check if interludes exist
         if "## Interlude:" not in story_text:
             validation["warnings"].append("No interludes detected - may need manual insertion")
         
@@ -902,7 +894,6 @@ class Plugin(BasePlugin):
             for i, part in enumerate(parts[1:], 1):
                 lines = part.split('\n')
                 
-                # Check if interlude ends with proper transition
                 last_meaningful_line = None
                 for line in reversed(lines[:100]):  # Check last 100 lines of interlude
                     if line.strip() and not line.startswith('#'):
@@ -929,7 +920,6 @@ class Plugin(BasePlugin):
                             f"Add narrative bridge after Interlude {i} (e.g., '*Asif took a deep breath...')"
                         )
         
-        # Check for consistent tone
         if narrative_analysis.get("tone"):
             tone_type = narrative_analysis["tone"].split()[0]
             if tone_type not in ["comedy", "technical-comedy"]:
@@ -943,7 +933,6 @@ class Plugin(BasePlugin):
                 "Too many interludes relative to chapters - may disrupt narrative flow"
             )
         
-        # Validate recap suggestions match story structure
         expected_interludes = narrative_analysis.get("parts_detected", 0)
         if expected_interludes > 0:
             validation["suggestions"].append(
@@ -957,7 +946,6 @@ class Plugin(BasePlugin):
         from src.operations.modules.generate_image_prompts_module import GenerateImagePromptsModule
         
         try:
-            # Create module and execute
             module = GenerateImagePromptsModule()
             context = {
                 'project_root': self.cortex_root
@@ -982,7 +970,6 @@ class Plugin(BasePlugin):
         from src.operations.modules.generate_history_doc_module import GenerateHistoryDocModule
         
         try:
-            # Create module and execute
             module = GenerateHistoryDocModule()
             context = {
                 'project_root': self.cortex_root
@@ -1638,7 +1625,6 @@ class Plugin(BasePlugin):
                 introduced_features.update(chapter_features)
         validation["checks_passed"] += 1
         
-        # Check 2: Chapter numbering consistency
         validation["checks_total"] += 1
         for part in story_structure.get("parts", []):
             chapters = part.get("chapters", [])
@@ -1653,7 +1639,6 @@ class Plugin(BasePlugin):
         if not validation["errors"]:
             validation["checks_passed"] += 1
         
-        # Check 3: Part structure
         validation["checks_total"] += 1
         if len(story_structure.get("parts", [])) >= 3:
             validation["checks_passed"] += 1
@@ -1703,7 +1688,6 @@ class Plugin(BasePlugin):
         
         lines = story_text.split('\n')
         for line_num, line in enumerate(lines, 1):
-            # Check passive patterns
             for pattern in passive_patterns:
                 if re.search(pattern, line, re.IGNORECASE):
                     analysis["passive_violations"].append({
@@ -1713,7 +1697,6 @@ class Plugin(BasePlugin):
                         "suggestion": "Use active storytelling: 'So Asif built...'"
                     })
             
-            # Check documentary patterns
             for pattern in documentary_patterns:
                 if re.search(pattern, line, re.IGNORECASE):
                     analysis["documentary_violations"].append({
@@ -1828,10 +1811,8 @@ class Plugin(BasePlugin):
         # Industry standard reading speed
         words_per_minute = 225  # Average adult reading speed
         
-        # Calculate estimated read time
         estimated_minutes = words / words_per_minute
         
-        # Calculate acceptable range (±10%)
         min_acceptable = target_minutes * 0.9
         max_acceptable = target_minutes * 1.1
         

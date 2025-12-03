@@ -65,7 +65,6 @@ class SmartAutoDetection:
         self.quality_threshold = quality_threshold
         self.enable_learning = enable_learning
         
-        # Initialize components
         self.quality_monitor = QualityMonitor(
             min_turns_before_check=min_turns_before_check,
             quality_threshold=quality_threshold
@@ -142,14 +141,12 @@ class SmartAutoDetection:
             }
         }
         
-        # Check if quality analysis was performed
         if not monitor_result.get('should_check_quality', False):
             logger.debug(
                 f"Quality check skipped: turn {monitor_result.get('turn_count', 0)}"
             )
             return result
         
-        # Get quality score from monitor
         quality_score = self.quality_monitor.get_current_quality()
         if not quality_score:
             logger.warning("Quality score not available after check")

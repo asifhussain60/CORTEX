@@ -100,7 +100,6 @@ class GitHistoryCache:
             cache_data = json.loads(self.cache_file.read_text())
             cached_at = datetime.fromisoformat(cache_data["cached_at"])
             
-            # Check if cache is fresh
             age = datetime.now(UTC) - cached_at
             if age < timedelta(hours=self.ttl_hours):
                 return cache_data["commits"]

@@ -37,12 +37,10 @@ class ComplexityAnalyzer:
                 if keyword in message_lower:
                     complexity_scores[level] += 1
         
-        # Check context hints
         context_complexity = safe_get(request.context, "complexity", default="")
         if context_complexity and context_complexity.lower() in complexity_scores:
             complexity_scores[context_complexity.lower()] += 3
         
-        # Check for multi-file operations
         if len(extract_file_paths(request.user_message)) > 3:
             complexity_scores["complex"] += 2
         

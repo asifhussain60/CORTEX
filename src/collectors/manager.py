@@ -61,7 +61,6 @@ class CollectorManager:
         # Setup logging
         self.logger = logging.getLogger("cortex.collector.manager")
         
-        # Initialize collectors
         self.collectors: Dict[str, BaseCollector] = {}
         
         if auto_start:
@@ -76,7 +75,6 @@ class CollectorManager:
             
             self.logger.info("Initializing CORTEX data collectors...")
             
-            # Create and register core collectors
             self._create_core_collectors()
             
             # Start collectors if auto-start is enabled
@@ -329,7 +327,6 @@ class CollectorManager:
             }
         }
         
-        # Get summary from each collector
         for collector_id, collector in self.collectors.items():
             try:
                 health = collector.get_health()
@@ -369,7 +366,6 @@ class CollectorManager:
         if not health_data:
             return {"score": 0, "status": "no_collectors"}
         
-        # Calculate health score (0-100)
         active_collectors = sum(1 for h in health_data.values() if h.status.value == "active")
         error_collectors = sum(1 for h in health_data.values() if h.status.value == "error")
         total_collectors = len(health_data)

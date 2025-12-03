@@ -233,10 +233,8 @@ class ConflictDetector:
                     if isinstance(node, ast.ClassDef):
                         class_name = node.name
                         
-                        # Check if class matches expected pattern
                         for suffix, expected_dirs in expected_locations.items():
                             if class_name.endswith(suffix):
-                                # Check if file is in expected location
                                 in_correct_location = any(
                                     py_file.is_relative_to(expected_dir)
                                     for expected_dir in expected_dirs
@@ -276,13 +274,11 @@ class ConflictDetector:
                 
                 for node in ast.walk(tree):
                     if isinstance(node, (ast.Import, ast.ImportFrom)):
-                        # Get module name
                         if isinstance(node, ast.Import):
                             module_names = [alias.name for alias in node.names]
                         else:
                             module_names = [node.module] if node.module else []
                         
-                        # Check if module can be resolved
                         for module_name in module_names:
                             if module_name and module_name.startswith('src.'):
                                 # Internal CORTEX import - verify it exists

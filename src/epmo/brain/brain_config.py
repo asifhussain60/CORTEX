@@ -157,7 +157,6 @@ class BrainEnhancedConfig:
             context_analysis = self._analyze_context(context)
             base_config = self._select_base_config(context, constraints)
             
-            # Get template recommendation from adaptive system
             template_recommendation = self._get_template_recommendation(context, user_preferences)
             
             # Apply learned optimizations
@@ -183,7 +182,6 @@ class BrainEnhancedConfig:
                 user_preferences
             )
             
-            # Calculate confidence score
             confidence = self._calculate_configuration_confidence(
                 context, template_recommendation, len(learned_optimizations)
             )
@@ -193,7 +191,6 @@ class BrainEnhancedConfig:
                 context, template_recommendation, learned_optimizations, contextual_adjustments
             )
             
-            # Create fallback configuration
             fallback_config = self._create_fallback_config(context)
             
             intelligent_config = IntelligentConfiguration(
@@ -330,7 +327,6 @@ class BrainEnhancedConfig:
         """Apply optimizations learned from previous successful configurations"""
         optimizations = {}
         
-        # Get learning data for similar contexts
         similar_configs = self._find_similar_configs(context)
         
         if similar_configs:
@@ -739,7 +735,6 @@ class BrainEnhancedConfig:
                 learning.last_used = datetime.now().isoformat()
                 
             else:
-                # Create new learning entry
                 avg_quality = sum(quality_scores.values()) / len(quality_scores) if quality_scores else 0.7
                 
                 learning = ConfigurationLearning(

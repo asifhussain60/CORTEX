@@ -226,7 +226,6 @@ class AlertSystem:
         # Alert callbacks
         self._alert_callbacks: List[Callable[[Alert], None]] = []
         
-        # Initialize storage
         if self.enable_persistence:
             self._init_storage()
         
@@ -283,7 +282,6 @@ class AlertSystem:
         if alert_id is None:
             alert_id = f"{source}_{int(time.time() * 1000)}"
         
-        # Check for existing active alert with same ID
         with self._alerts_lock:
             existing_alert = self._alerts.get(alert_id)
             if existing_alert and existing_alert.status == AlertStatus.ACTIVE:
@@ -297,7 +295,6 @@ class AlertSystem:
                     existing_alert.metadata.update(metadata)
                 return existing_alert
         
-        # Create new alert
         alert = Alert(
             id=alert_id,
             title=title,
@@ -308,7 +305,6 @@ class AlertSystem:
             metadata=metadata or {}
         )
         
-        # Check suppression rules
         if self._is_alert_suppressed(alert):
             logger.info(f"Alert suppressed: {alert.id}")
             return alert
@@ -544,12 +540,10 @@ class AlertSystem:
         current_time = time.time()
         
         for rule in self._suppression_rules:
-            # Check if rule has expired
             rule_age_minutes = (current_time - rule['created_at']) / 60
             if rule_age_minutes > rule['duration_minutes']:
                 continue
             
-            # Check if alert matches rule condition
             condition = rule['condition']
             matches = True
             
@@ -580,7 +574,6 @@ class AlertSystem:
             logger.warning(f"No escalation policy found for alert {alert.id}")
             return
         
-        # Check if it's time for next escalation step
         current_time = time.time()
         delay_minutes = policy.get_delay_for_step(alert.escalation_step)
         
@@ -593,7 +586,6 @@ class AlertSystem:
         if not should_escalate or alert.status != AlertStatus.ACTIVE:
             return
         
-        # Get channels for current escalation step
         channel_names = policy.get_channels_for_step(alert.escalation_step)
         
         # Send notifications
@@ -611,11 +603,9 @@ class AlertSystem:
         if not channel or not channel.enabled:
             return False
         
-        # Check severity filter
         if channel.severity_filter and alert.severity not in channel.severity_filter:
             return False
         
-        # Check rate limiting
         if not channel.can_send_alert():
             logger.warning(f"Rate limit exceeded for channel {channel_name}")
             return False
@@ -663,13 +653,11 @@ class AlertSystem:
         
         config = channel.config
         
-        # Create message
         msg = MimeMultipart()
         msg['From'] = config['from_address']
         msg['To'] = ', '.join(config['to_addresses'])
         msg['Subject'] = f"[{alert.severity.value.upper()}] {alert.title}"
         
-        # Create body
         body = f"""
 Alert Details:
 --------------
@@ -705,7 +693,6 @@ Alert ID: {alert.id}
         
         config = channel.config
         
-        # Create Slack message
         color_map = {
             AlertSeverity.INFO: "good",
             AlertSeverity.WARNING: "warning",
@@ -786,7 +773,6 @@ Alert ID: {alert.id}
             conn = sqlite3.connect(self.storage_path)
             cursor = conn.cursor()
             
-            # Create alerts table
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS alerts (
                     id TEXT PRIMARY KEY,
@@ -806,7 +792,6 @@ Alert ID: {alert.id}
                 )
             """)
             
-            # Create index for efficient queries
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_alerts_status_created 
                 ON alerts(status, created_at)
@@ -826,17 +811,14 @@ Alert ID: {alert.id}
         
         while self._processing_active:
             try:
-                # Process queued alerts
                 alerts_to_process = []
                 with self._queue_lock:
                     alerts_to_process = self._alert_queue[:]
                     self._alert_queue.clear()
                 
-                # Process new alerts
                 for alert in alerts_to_process:
                     self._process_alert(alert)
                 
-                # Check existing active alerts for escalation
                 active_alerts = self.get_active_alerts()
                 for alert in active_alerts:
                     self._process_alert(alert)

@@ -56,7 +56,6 @@ def migrate_tier1_add_sessions(db_path: Path) -> bool:
         # Step 2: Add session-related columns to conversations
         print("[MIGRATION] Adding session columns to conversations table...")
         
-        # Check if columns already exist
         cursor.execute("PRAGMA table_info(conversations)")
         existing_columns = {row[1] for row in cursor.fetchall()}
         
@@ -99,7 +98,6 @@ def migrate_tier1_add_sessions(db_path: Path) -> bool:
         null_session_count = cursor.fetchone()[0]
         
         if null_session_count > 0:
-            # Create default legacy session
             now = datetime.now().isoformat()
             default_session_id = "session_legacy_migration"
             

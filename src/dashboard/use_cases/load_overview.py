@@ -58,12 +58,10 @@ class LoadOverviewUseCase:
         logger.info("Loading overview tab data")
         
         try:
-            # Get data from repositories
             components = self.component_repo.get_all()
             all_issues = self.issue_repo.get_all()
             system_health = self.health_repo.get_system_health()
             
-            # Calculate summary statistics
             total_components = len(components)
             total_loc = sum(c.lines_of_code for c in components)
             avg_complexity = (

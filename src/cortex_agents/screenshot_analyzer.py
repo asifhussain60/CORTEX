@@ -72,13 +72,10 @@ class ScreenshotAnalyzer(BaseAgent):
             "identify_elements"
         ]
         
-        # Initialize Vision API integration
         self.vision_enabled = False
         self.vision_api = None
         
-        # Check if Vision API should be enabled
         try:
-            # Import VisionAPI and config
             from src.tier1.vision_api import VisionAPI
             from src.config import CortexConfig
             import json
@@ -140,7 +137,6 @@ class ScreenshotAnalyzer(BaseAgent):
                     start_time
                 )
             
-            # Validate image format
             if not self._validate_image(image_data):
                 return self._error_response(
                     "Invalid image format. Supported: PNG, JPEG",
@@ -190,12 +186,10 @@ class ScreenshotAnalyzer(BaseAgent):
         Returns:
             Base64 image data or None
         """
-        # Check context for image data
         image_data = request.context.get("image_base64")
         if image_data:
             return image_data
         
-        # Check for file path
         image_path = request.context.get("image_path")
         if image_path:
             # In production, would load image from file
@@ -217,11 +211,9 @@ class ScreenshotAnalyzer(BaseAgent):
         if not image_data:
             return False
         
-        # Check for data URI prefix
         if not image_data.startswith('data:image/'):
             return False
         
-        # Check for supported formats
         supported_formats = ['png', 'jpeg', 'jpg']
         for fmt in supported_formats:
             if f'image/{fmt}' in image_data:
@@ -446,17 +438,14 @@ Focus on extracting structured, actionable data."""
             recommendations.append("No elements identified - ensure screenshot is clear")
             return recommendations
         
-        # Check for proper IDs
         has_proper_ids = all('suggested_id' in elem for elem in elements)
         if not has_proper_ids:
             recommendations.append("Add data-testid attributes for reliable testing")
         
-        # Check for accessibility labels
         has_labels = all('label' in elem for elem in elements)
         if not has_labels:
             recommendations.append("Add ARIA labels for accessibility")
         
-        # Check element types
         element_types = set(elem.get('type') for elem in elements)
         if 'input' in element_types:
             recommendations.append("Validate input fields with proper type attributes")

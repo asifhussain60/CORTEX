@@ -124,7 +124,6 @@ class ApplicationScopedCrawler(BaseCrawler):
             # Generate cache key (fingerprint)
             fingerprint = self._generate_fingerprint()
             
-            # Check cache first
             if self.cache_manager:
                 cached = self.cache_manager.get(self.app_name, self.depth, fingerprint)
                 if cached:
@@ -324,7 +323,6 @@ class ApplicationScopedCrawler(BaseCrawler):
         
         try:
             for root, dirs, files in os.walk(self.app_path):
-                # Calculate current depth
                 depth = len(Path(root).relative_to(self.app_path).parts)
                 
                 if depth >= max_depth:

@@ -96,7 +96,6 @@ class ErrorLogger:
             'error_patterns': {}
         }
         
-        # Initialize Python logger
         self._setup_python_logger()
         
         # Log filtering
@@ -140,7 +139,6 @@ class ErrorLogger:
         sanitized_context = self._sanitize_dict(context or {})
         sanitized_metadata = self._sanitize_dict(metadata or {})
         
-        # Create log entry
         log_entry = LogEntry(
             timestamp=time.time(),
             level=level,
@@ -301,7 +299,6 @@ class ErrorLogger:
             True if export successful
         """
         try:
-            # Get filtered logs
             logs = self.get_recent_logs(
                 limit=len(self._log_entries),
                 level_filter=level_filter,
@@ -490,7 +487,6 @@ class ErrorLogger:
         
         python_level = level_mapping.get(log_entry.level, logging.INFO)
         
-        # Create log message
         message = log_entry.message
         if log_entry.error_code:
             message = f"[{log_entry.error_code}] {message}"

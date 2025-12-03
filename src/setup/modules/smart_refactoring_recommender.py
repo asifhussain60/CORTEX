@@ -171,12 +171,10 @@ class SmartRefactoringRecommender(BaseSetupModule):
         """
         issues = []
         
-        # Check brain initialization
         brain_root = context.get('brain_root')
         if not brain_root:
             issues.append("Brain root not found - brain must be initialized first")
         
-        # Check if codebase crawled
         # We'll check for file statistics in context or development-context.yaml
         dev_context_file = Path(brain_root) / "development-context.yaml" if brain_root else None
         if dev_context_file and not dev_context_file.exists():
@@ -306,7 +304,6 @@ class SmartRefactoringRecommender(BaseSetupModule):
             if count > 0:
                 language_counts[lang] = count
         
-        # Calculate percentages
         language_percentages = {
             lang: (count / total_files * 100)
             for lang, count in language_counts.items()
@@ -335,7 +332,6 @@ class SmartRefactoringRecommender(BaseSetupModule):
         recommendations = []
         
         for language, percentage in language_stats.items():
-            # Calculate priority
             if percentage >= 20:
                 priority = ToolPriority.HIGH
             elif percentage >= 5:
@@ -346,12 +342,10 @@ class SmartRefactoringRecommender(BaseSetupModule):
                 priority = ToolPriority.SKIP
                 continue  # Skip languages below 1%
             
-            # Get tool mapping
             tool_info = self.TOOL_MAPPINGS.get(language)
             if not tool_info:
                 continue
             
-            # Create recommendation
             recommendation = ToolRecommendation(
                 category=language.upper(),
                 language=language,

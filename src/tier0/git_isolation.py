@@ -74,7 +74,6 @@ class GitIsolationEnforcer:
             logger.error(f"Not a git repository: {self.user_repo_path}")
             return False
         
-        # Create hooks directory if needed
         self.hooks_dir.mkdir(parents=True, exist_ok=True)
         
         # Install pre-commit hook
@@ -99,7 +98,6 @@ class GitIsolationEnforcer:
         """
         hook_path = self.hooks_dir / "pre-commit"
         
-        # Check if hook already exists
         if hook_path.exists():
             content = hook_path.read_text()
             if "CORTEX Git Isolation" in content:
@@ -128,7 +126,6 @@ class GitIsolationEnforcer:
         """
         hook_path = self.hooks_dir / "pre-push"
         
-        # Check if hook already exists
         if hook_path.exists():
             content = hook_path.read_text()
             if "CORTEX Git Isolation" in content:
@@ -164,13 +161,11 @@ class GitIsolationEnforcer:
 
 echo "[CORTEX] Checking for code isolation violations..."
 
-# Get list of staged files
 STAGED_FILES=$(git diff --cached --name-only)
 
 # CORTEX protected paths (regex)
 PROTECTED_PATTERN="{protected_paths}"
 
-# Check each staged file
 VIOLATIONS=""
 for FILE in $STAGED_FILES; do
     if echo "$FILE" | grep -E "$PROTECTED_PATTERN" > /dev/null; then
@@ -227,13 +222,11 @@ exit 0
 
 echo "[CORTEX] Final isolation check before push..."
 
-# Get list of files in last commit
 COMMITTED_FILES=$(git diff --name-only HEAD~1 HEAD)
 
 # CORTEX protected paths (regex)
 PROTECTED_PATTERN="{protected_paths}"
 
-# Check each file
 VIOLATIONS=""
 for FILE in $COMMITTED_FILES; do
     if echo "$FILE" | grep -E "$PROTECTED_PATTERN" > /dev/null; then
@@ -280,7 +273,6 @@ exit 0
             (is_safe, violations) where is_safe=False if violations found
         """
         try:
-            # Get staged files
             result = subprocess.run(
                 ["git", "diff", "--cached", "--name-only"],
                 cwd=self.user_repo_path,
@@ -296,7 +288,6 @@ exit 0
                 if not file_path:
                     continue
                 
-                # Check if file matches CORTEX protected paths
                 if self._is_cortex_path(file_path):
                     # Exception: team-knowledge/ allowed
                     if not file_path.startswith("team-knowledge/"):

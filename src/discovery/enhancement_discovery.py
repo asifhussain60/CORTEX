@@ -85,7 +85,6 @@ class EnhancementDiscoveryEngine:
         self.repo_path = Path(repo_path)
         self.brain_path = self.repo_path / "cortex-brain"
         
-        # Validate paths
         if not self.repo_path.exists():
             raise FileNotFoundError(f"Repository not found: {self.repo_path}")
         if not self.brain_path.exists():
@@ -194,7 +193,6 @@ class EnhancementDiscoveryEngine:
         features = []
         
         try:
-            # Get commit log
             cmd = [
                 "git", "log",
                 f"--since={days} days ago",
@@ -550,7 +548,6 @@ class EnhancementDiscoveryEngine:
             match = re.search(r'"""(.+?)"""', content, re.DOTALL)
             if match:
                 docstring = match.group(1).strip()
-                # Get first line only
                 first_line = docstring.split('\n')[0].strip()
                 return first_line[:200]
         except:

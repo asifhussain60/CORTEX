@@ -235,7 +235,6 @@ class OutputEncoder:
         
         url_lower = url.lower().strip()
         
-        # Check for dangerous protocols
         for pattern in OutputEncoder.DANGEROUS_URL_PATTERNS:
             if re.match(pattern, url_lower):
                 logger.warning(f"Blocked dangerous URL protocol: {url}")

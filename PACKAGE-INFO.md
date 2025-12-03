@@ -1,17 +1,17 @@
 # CORTEX Package Information
 
-**Version:** 3.3.0  
+**Version:** 3.7.0  
 **Branch:** main  
-**Build Date:** 2025-11-30 17:47:55
+**Build Date:** 2025-12-03 15:24:41
 
 ---
 
 ## 📊 Package Statistics
 
-- **Files Included:** 2391
-- **Directories Created:** 298
-- **Files Excluded:** 4520
-- **Total Size:** 93.38 MB
+- **Files Included:** 2815
+- **Directories Created:** 343
+- **Files Excluded:** 3235
+- **Total Size:** 59.54 MB
 
 ---
 

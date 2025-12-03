@@ -71,7 +71,6 @@ class ConversationAutoCapture:
         with sqlite3.connect(self.tier1_db_path) as conn:
             cursor = conn.cursor()
             
-            # Create conversations table if not exists
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS conversations (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,7 +85,6 @@ class ConversationAutoCapture:
                 )
             """)
             
-            # Create messages table if not exists
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS messages (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -126,7 +124,6 @@ class ConversationAutoCapture:
         if context is None:
             context = {}
         
-        # Initialize criteria scores
         criteria_met = 0
         reasons = []
         
@@ -177,7 +174,6 @@ class ConversationAutoCapture:
         # Decision: Capture if 3+ criteria met
         should_capture = criteria_met >= 3
         
-        # Calculate quality score if capturing
         if should_capture:
             quality_score = self._calculate_quality_score(
                 messages=messages,
@@ -253,7 +249,6 @@ class ConversationAutoCapture:
         # Resolution success score (0-2.5 points)
         resolution_score = 2.5 if has_problem_resolution else 0.0
         
-        # Calculate total (0-10)
         quality_score = message_score + code_score + strategic_score + resolution_score
         
         logger.debug(
@@ -286,7 +281,6 @@ class ConversationAutoCapture:
         if context is None:
             context = {}
         
-        # Check if should capture
         should_capture, quality_score, reason = self.should_capture_conversation(messages, context)
         
         if not should_capture:
@@ -297,7 +291,6 @@ class ConversationAutoCapture:
             with sqlite3.connect(self.tier1_db_path) as conn:
                 cursor = conn.cursor()
                 
-                # Check if already exists
                 cursor.execute(
                     "SELECT conversation_id FROM conversations WHERE conversation_id = ?",
                     (conversation_id,)

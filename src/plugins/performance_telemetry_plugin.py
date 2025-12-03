@@ -135,7 +135,6 @@ class PerformanceTelemetryPlugin(BasePlugin):
             Execution result
         """
         try:
-            # Check telemetry enabled
             if not self._has_user_consent():
                 return {
                     "success": True,
@@ -218,7 +217,6 @@ class PerformanceTelemetryPlugin(BasePlugin):
         
         logger.info(f"Generating business value report (last {days} days)")
         
-        # Get engineer profile
         engineer_profile = self._get_engineer_profile(engineer_email)
         
         # Aggregate all metrics
@@ -227,7 +225,6 @@ class PerformanceTelemetryPlugin(BasePlugin):
         cost_savings = self._aggregate_cost_savings(since, engineer_email)
         copilot_metrics = self._aggregate_copilot_metrics(since, engineer_email)
         
-        # Calculate ROI
         roi_analysis = self._calculate_roi(
             cost_savings,
             productivity_metrics,
@@ -920,7 +917,6 @@ class PerformanceTelemetryPlugin(BasePlugin):
             by_capability[capability]["total_tokens_saved"] += row[4] or 0
             by_capability[capability]["total_context_tokens"] += row[5] or 0
         
-        # Calculate statistics
         result = []
         for capability, data in sorted(by_capability.items()):
             durations = data["durations"]
@@ -1114,7 +1110,6 @@ class PerformanceTelemetryPlugin(BasePlugin):
         productivity_value = (cost_savings["total_time_saved_minutes"] / 60) * 100
         total_value += productivity_value
         
-        # Calculate ROI
         roi_multiplier = total_value / cortex_cost_period if cortex_cost_period > 0 else 0
         
         # Productivity gain (commits per day vs baseline)

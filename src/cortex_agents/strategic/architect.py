@@ -212,7 +212,6 @@ class ArchitectAgent(BaseAgent):
             Dict with save results and confirmation data
         """
         try:
-            # Create context for namespace detection
             context = {
                 'workspace_path': analysis_result.get('workspace_path', ''),
                 'files_analyzed': analysis_result.get('files_analyzed', []),

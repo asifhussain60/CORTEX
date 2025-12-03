@@ -1,0 +1,16 @@
+acceptance_criteria: []
+area_path: null
+assigned_to: null
+created_date: '2025-12-02T17:37:27.446508'
+description: This is a test description
+iteration: null
+priority: 1
+related_work_items: []
+status: active
+tags:
+- test
+- cli
+title: Test Story for CLI
+updated_date: '2025-12-02T17:37:27.446511'
+work_item_id: ado-20251202-173727-test-story-for-cli
+work_item_type: User Story

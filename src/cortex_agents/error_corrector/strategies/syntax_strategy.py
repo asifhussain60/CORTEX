@@ -48,7 +48,6 @@ class SyntaxFixStrategy(BaseFixStrategy):
             if line_num and line_num <= len(lines):
                 problem_line = lines[line_num - 1]
                 
-                # Check if it's a control structure without colon
                 if re.match(r'^\s*(if|elif|else|for|while|def|class|try|except|finally|with)\b', problem_line):
                     if not problem_line.rstrip().endswith(':'):
                         return {

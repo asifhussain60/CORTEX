@@ -89,7 +89,6 @@ class DocumentationComponentRegistry:
 
         component = self.components[component_id]
 
-        # Import generator module and class dynamically
         # Ensure component is imported under the same pseudo-package so relative imports work
         module = self._import_module(
             component.module_path,

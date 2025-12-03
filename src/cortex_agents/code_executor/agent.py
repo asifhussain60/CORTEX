@@ -55,12 +55,10 @@ class CodeExecutor(BaseAgent):
         """Initialize CodeExecutor with tier APIs and operations."""
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         
-        # Initialize components
         self.backup_manager = None
         self.validator = SyntaxValidator()
         self.current_operation_id = None
         
-        # Initialize operations
         self.create_op = None
         self.edit_op = None
         self.delete_op = None
@@ -115,14 +113,11 @@ class CodeExecutor(BaseAgent):
             # Generate operation ID for tracking
             self.current_operation_id = f"op_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
             
-            # Create backup manager
             self.backup_manager = BackupManager(self.current_operation_id)
             self.backup_manager.create_backup_dir()
             
-            # Initialize operations with backup manager
             self._initialize_operations()
             
-            # Get operation details
             operation = safe_get(request.context, "operation", default="edit").lower()
             
             if operation not in self.OPERATIONS:

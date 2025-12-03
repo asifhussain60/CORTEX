@@ -66,7 +66,6 @@ class RelevanceScorer:
         context = context or {}
         query_lower = query.lower()
         
-        # Initialize score components
         keyword_score = 0.0
         trigger_score = 0.0
         context_score = 0.0
@@ -110,7 +109,6 @@ class RelevanceScorer:
             if any(cat_word in query_lower for cat_word in category.split()):
                 category_score = 1.0
         
-        # Calculate weighted total score
         total_score = (
             keyword_score * self.keyword_weight +
             trigger_score * self.trigger_weight +
@@ -401,13 +399,11 @@ class ConflictResolver:
         Returns:
             True if templates are redundant
         """
-        # Check trigger overlap
         triggers1 = set(t.lower() for t in template1.triggers)
         triggers2 = set(t.lower() for t in template2.triggers)
         
         trigger_overlap = len(triggers1 & triggers2) / max(len(triggers1), len(triggers2), 1)
         
-        # Check content similarity (simple word overlap)
         words1 = set(re.findall(r'\w+', template1.content.lower()))
         words2 = set(re.findall(r'\w+', template2.content.lower()))
         
@@ -537,7 +533,6 @@ class MultiTemplateOrchestrator:
         context = context or {}
         rule = rule or self.default_rule
         
-        # Get all templates
         all_templates = self.registry.list_templates()
         
         if not all_templates:

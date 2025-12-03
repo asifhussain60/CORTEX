@@ -54,7 +54,6 @@ class DocumentationValidator(BaseValidator):
                     if self.find_docstring(node):
                         documented_classes += 1
         
-        # Calculate documentation coverage
         total_items = total_functions + total_classes
         documented_items = documented_functions + documented_classes
         

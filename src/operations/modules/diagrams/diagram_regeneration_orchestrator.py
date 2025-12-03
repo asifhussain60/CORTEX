@@ -116,12 +116,10 @@ class DiagramRegenerationOrchestrator:
         # Scan diagram status
         diagrams = self._scan_diagrams()
         
-        # Calculate metrics
         total = len(diagrams)
         complete = sum(1 for d in diagrams if d.completion_percentage == 100)
         incomplete = total - complete
         
-        # Create report
         report = DiagramRegenerationReport(
             timestamp=datetime.now(),
             diagrams=diagrams,
@@ -146,13 +144,11 @@ class DiagramRegenerationOrchestrator:
             file_id = diagram_def["id"]
             file_name = diagram_def["name"]
             
-            # Check file existence
             prompt_file = self.prompts_path / f"{file_id}-{file_name}.md"
             narrative_file = self.narratives_path / f"{file_id}-{file_name}.md"
             mermaid_file = self.mermaid_path / f"{file_id}-{file_name}.mmd"
             image_file = self.img_path / f"{file_id}-{file_name}.png"
             
-            # Get last modified time (use most recent file)
             last_modified = None
             for file in [prompt_file, narrative_file, mermaid_file, image_file]:
                 if file.exists():

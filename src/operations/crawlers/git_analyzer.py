@@ -48,14 +48,12 @@ class GitAnalyzerCrawler(BaseCrawler):
             'current_branch': None
         }
         
-        # Check if git is available
         if not self._is_git_available():
             self.log_warning("Git not available on system")
             return {"success": True, "data": git_data}
         
         git_data['git_available'] = True
         
-        # Check if this is a git repository
         if not self._is_git_repo():
             self.log_warning("Not a Git repository")
             return {"success": True, "data": git_data}
@@ -146,7 +144,6 @@ class GitAnalyzerCrawler(BaseCrawler):
             Dict with total, active, and stale branch counts
         """
         try:
-            # Get all branches
             output = self._run_git_command(['branch', '-a'])
             branches = [b.strip().lstrip('* ') for b in output.split('\n') if b.strip()]
             
@@ -237,7 +234,6 @@ class GitAnalyzerCrawler(BaseCrawler):
             List of dicts with file path and commit count
         """
         try:
-            # Get file change statistics
             output = self._run_git_command([
                 'log', '--format=', '--name-only', '--diff-filter=M'
             ])

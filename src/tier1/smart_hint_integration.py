@@ -70,7 +70,6 @@ class SmartHintSystem:
         """
         self.config = config or {}
         
-        # Initialize components
         self.analyzer = create_analyzer(self.config.get('quality_analyzer'))
         self.hint_generator = create_hint_generator(self.config.get('hint_generator'))
         self.vault_manager = create_vault_manager(self.config.get('vault_manager'))
@@ -157,7 +156,6 @@ class SmartHintSystem:
         # Generate filename
         filename = self.hint_generator._generate_filename(user_prompt, conversation_id)
         
-        # Create file
         filepath = self.vault_manager.create_conversation_file(
             metadata=metadata,
             turns=[turn],
@@ -211,7 +209,6 @@ class SmartHintSystem:
         # Generate filename
         filename = self.hint_generator._generate_filename(topic, conversation_id)
         
-        # Create file
         filepath = self.vault_manager.create_conversation_file(
             metadata=metadata,
             turns=turn_objects,

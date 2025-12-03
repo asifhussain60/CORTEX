@@ -15,10 +15,8 @@ Usage:
     # Get brain path (automatically resolved for current machine)
     brain_path = config.brain_path
     
-    # Get project root
     root = config.root_path
     
-    # Check if running in development mode
     if config.is_development:
         print("Development mode active")
 """

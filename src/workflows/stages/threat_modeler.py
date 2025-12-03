@@ -11,7 +11,7 @@ from typing import Dict, Any, List
 from dataclasses import dataclass
 from enum import Enum
 
-from workflows.workflow_pipeline import WorkflowStage, WorkflowState, StageResult, StageStatus
+from src.workflows.workflow_pipeline import WorkflowStage, WorkflowState, StageResult, StageStatus
 
 
 class ThreatCategory(Enum):
@@ -69,7 +69,6 @@ class ThreatModelerStage:
         # Analyze request for threat indicators
         threats = self._identify_threats(user_request, state.context)
         
-        # Calculate overall risk
         risk_level = self._calculate_risk_level(threats)
         
         # Generate recommendations

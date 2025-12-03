@@ -164,12 +164,50 @@ class UpgradeOrchestrator:
             # Verify upgrade
             new_version = self._get_current_version()
             if new_version == latest_version:
+                # Run enhanced validation gates (addresses deployment gap)
+                logger.info("\n🔍 Running enhanced validation gates...")
+                
+                # Gate 1: Dependency validation
+                deps_ok, deps_result = self._validate_dependencies()
+                if not deps_ok:
+                    error_msg = f"❌ Core dependencies missing: {deps_result['core_failed']}"
+                    logger.error(error_msg)
+                    if backup_id:
+                        self._rollback(backup_id)
+                    return (False, error_msg)
+                
+                # Gate 2: Operational readiness
+                ops_ok, ops_result = self._validate_operational_readiness()
+                if not ops_ok:
+                    error_msg = f"❌ Operational readiness failed: {ops_result['errors'][:3]}"
+                    logger.error(error_msg)
+                    if backup_id:
+                        self._rollback(backup_id)
+                    return (False, error_msg)
+                
+                # Gate 3: Test suite validation (warning only)
+                tests_ok, tests_result = self._validate_test_suite()
+                if not tests_ok:
+                    logger.warning(f"⚠️  Test suite validation failed (non-critical): {tests_result['errors'][:2]}")
+                
                 # Generate "What's New" report
                 whats_new = self._generate_whats_new(current_version, new_version)
                 
                 message = f"✅ Upgraded successfully: {current_version} → {new_version}"
                 if backup_id:
                     message += f"\n📦 Backup created: {backup_id}"
+                
+                # Add validation summary
+                message += f"\n\n🔍 Validation Results:"
+                message += f"\n  ✅ Dependencies: {len(deps_result['core_installed'])} core, {len(deps_result['optional_installed'])} optional"
+                if deps_result['optional_failed']:
+                    message += f"\n  ⚠️  Optional dependencies skipped: {', '.join(deps_result['optional_failed'][:3])}"
+                message += f"\n  ✅ Operational: imports, databases, configs validated"
+                if tests_ok:
+                    message += f"\n  ✅ Test suite: {tests_result['test_count']} tests discoverable"
+                else:
+                    message += f"\n  ⚠️  Test suite: {tests_result.get('test_count', 0)} tests (validation incomplete)"
+                
                 if whats_new:
                     message += f"\n\n{whats_new}"
                 
@@ -717,6 +755,323 @@ class UpgradeOrchestrator:
             logger.error(f"❌ Bootstrap verification FAILED: {result['checks_passed']}/{total_checks} checks passed")
         
         return result
+    
+    def _validate_dependencies(self) -> Tuple[bool, Dict[str, Any]]:
+        """
+        Validate that core dependencies are installed and importable.
+        
+        This addresses the deployment gap where NumPy failed to install
+        but upgrade was declared successful anyway.
+        
+        Returns:
+            Tuple of (success, details)
+        """
+        result = {
+            "core_installed": [],
+            "core_failed": [],
+            "optional_installed": [],
+            "optional_failed": [],
+            "status": "unknown"
+        }
+        
+        logger.info("Validating dependencies...")
+        
+        # Core dependencies (MUST be present)
+        core_deps = [
+            'pytest',
+            'yaml',  # PyYAML
+            'watchdog',
+            'psutil',
+            'send2trash'
+        ]
+        
+        # Optional dependencies (warn if missing)
+        optional_deps = [
+            'numpy',
+            'sklearn',  # scikit-learn
+            'pandas'
+        ]
+        
+        # Test core dependencies
+        for dep in core_deps:
+            try:
+                __import__(dep)
+                result["core_installed"].append(dep)
+                logger.info(f"  ✅ Core dependency: {dep}")
+            except ImportError:
+                result["core_failed"].append(dep)
+                logger.error(f"  ❌ Core dependency MISSING: {dep}")
+        
+        # Test optional dependencies
+        for dep in optional_deps:
+            try:
+                __import__(dep)
+                result["optional_installed"].append(dep)
+                logger.info(f"  ✅ Optional dependency: {dep}")
+            except ImportError:
+                result["optional_failed"].append(dep)
+                logger.warning(f"  ⚠️  Optional dependency missing: {dep}")
+        
+        # Determine status
+        if len(result["core_failed"]) == 0:
+            result["status"] = "healthy"
+            success = True
+        else:
+            result["status"] = "critical"
+            success = False
+        
+        return success, result
+    
+    def _validate_operational_readiness(self) -> Tuple[bool, Dict[str, Any]]:
+        """
+        Validate that CORTEX is fully operational in target environment.
+        
+        This addresses the deployment gap where files were copied but
+        CORTEX wasn't actually functional.
+        
+        Checks:
+        - Core imports work (tier1, tier2, tier3)
+        - Databases are accessible
+        - Operations config is valid
+        - Response templates are valid
+        - Brain protection rules are valid
+        
+        Returns:
+            Tuple of (success, details)
+        """
+        result = {
+            "imports": False,
+            "tier1_db": False,
+            "tier2_db": False,
+            "tier3_db": False,
+            "operations_config": False,
+            "response_templates": False,
+            "brain_protection": False,
+            "errors": [],
+            "status": "unknown"
+        }
+        
+        logger.info("Validating operational readiness...")
+        
+        # Check 1: Core imports work
+        try:
+            import sys
+            sys.path.insert(0, str(self.cortex_root / 'src'))
+            
+            from tier1.working_memory import WorkingMemory
+            from tier3.development_context import DevelopmentContext
+            
+            result["imports"] = True
+            logger.info("  ✅ Core imports successful")
+        except ImportError as e:
+            result["errors"].append(f"Import failed: {e}")
+            logger.error(f"  ❌ Core imports FAILED: {e}")
+        
+        # Check 2: Databases accessible
+        brain_path = self.cortex_root / 'cortex-brain'
+        
+        tier1_db = brain_path / 'tier1' / 'working_memory.db'
+        if tier1_db.exists():
+            result["tier1_db"] = True
+            logger.info("  ✅ Tier 1 database accessible")
+        else:
+            result["errors"].append("Tier 1 database not found")
+            logger.error("  ❌ Tier 1 database NOT FOUND")
+        
+        tier2_db = brain_path / 'tier2' / 'knowledge_graph.db'
+        if tier2_db.exists():
+            result["tier2_db"] = True
+            logger.info("  ✅ Tier 2 database accessible")
+        else:
+            logger.warning("  ⚠️  Tier 2 database not found (will auto-initialize)")
+        
+        tier3_db = brain_path / 'tier3' / 'development_context.db'
+        if tier3_db.exists():
+            result["tier3_db"] = True
+            logger.info("  ✅ Tier 3 database accessible")
+        else:
+            result["errors"].append("Tier 3 database not found")
+            logger.error("  ❌ Tier 3 database NOT FOUND")
+        
+        # Check 3: Operations config valid
+        try:
+            import yaml
+            ops_config = self.cortex_root / 'cortex-operations.yaml'
+            if ops_config.exists():
+                with open(ops_config, 'r', encoding='utf-8') as f:
+                    config = yaml.safe_load(f)
+                    if config and 'operations' in config and len(config['operations']) > 0:
+                        result["operations_config"] = True
+                        logger.info(f"  ✅ Operations config valid ({len(config['operations'])} operations)")
+                    else:
+                        result["errors"].append("Operations config empty or invalid")
+                        logger.error("  ❌ Operations config EMPTY")
+            else:
+                result["errors"].append("cortex-operations.yaml not found")
+                logger.error("  ❌ cortex-operations.yaml NOT FOUND")
+        except Exception as e:
+            result["errors"].append(f"Operations config error: {e}")
+            logger.error(f"  ❌ Operations config ERROR: {e}")
+        
+        # Check 4: Response templates valid
+        try:
+            templates_file = brain_path / 'response-templates.yaml'
+            if templates_file.exists():
+                with open(templates_file, 'r', encoding='utf-8') as f:
+                    templates = yaml.safe_load(f)
+                    if templates and 'templates' in templates and len(templates['templates']) > 0:
+                        result["response_templates"] = True
+                        logger.info(f"  ✅ Response templates valid ({len(templates['templates'])} templates)")
+                    else:
+                        result["errors"].append("Response templates empty")
+                        logger.error("  ❌ Response templates EMPTY")
+            else:
+                result["errors"].append("response-templates.yaml not found")
+                logger.error("  ❌ response-templates.yaml NOT FOUND")
+        except Exception as e:
+            result["errors"].append(f"Response templates error: {e}")
+            logger.error(f"  ❌ Response templates ERROR: {e}")
+        
+        # Check 5: Brain protection rules valid
+        try:
+            rules_file = brain_path / 'brain-protection-rules.yaml'
+            if rules_file.exists():
+                with open(rules_file, 'r', encoding='utf-8') as f:
+                    rules = yaml.safe_load(f)
+                    if rules and 'tier0_instincts' in rules and len(rules['tier0_instincts']) > 0:
+                        result["brain_protection"] = True
+                        logger.info(f"  ✅ Brain protection rules valid ({len(rules['tier0_instincts'])} instincts)")
+                    else:
+                        result["errors"].append("Brain protection rules empty")
+                        logger.error("  ❌ Brain protection rules EMPTY")
+            else:
+                result["errors"].append("brain-protection-rules.yaml not found")
+                logger.error("  ❌ brain-protection-rules.yaml NOT FOUND")
+        except Exception as e:
+            result["errors"].append(f"Brain protection rules error: {e}")
+            logger.error(f"  ❌ Brain protection rules ERROR: {e}")
+        
+        # Calculate final status
+        critical_checks = [
+            result["imports"],
+            result["tier1_db"],
+            result["tier3_db"],
+            result["operations_config"],
+            result["response_templates"],
+            result["brain_protection"]
+        ]
+        
+        if all(critical_checks):
+            result["status"] = "operational"
+            success = True
+            logger.info("✅ Operational readiness: PASSED")
+        else:
+            result["status"] = "not_operational"
+            success = False
+            logger.error(f"❌ Operational readiness: FAILED ({len(result['errors'])} errors)")
+        
+        return success, result
+    
+    def _validate_test_suite(self) -> Tuple[bool, Dict[str, Any]]:
+        """
+        Validate that test suite is discoverable and runnable.
+        
+        This addresses the deployment gap where tests were assumed to exist
+        but pytest couldn't find them.
+        
+        Returns:
+            Tuple of (success, details)
+        """
+        result = {
+            "pytest_available": False,
+            "tests_discoverable": False,
+            "test_count": 0,
+            "smoke_test_passed": False,
+            "errors": [],
+            "status": "unknown"
+        }
+        
+        logger.info("Validating test suite...")
+        
+        # Check 1: pytest is available
+        try:
+            import pytest
+            result["pytest_available"] = True
+            logger.info("  ✅ pytest available")
+        except ImportError:
+            result["errors"].append("pytest not installed")
+            logger.error("  ❌ pytest NOT INSTALLED")
+            result["status"] = "critical"
+            return False, result
+        
+        # Check 2: pytest can collect tests
+        try:
+            test_result = subprocess.run(
+                ['pytest', '--collect-only', '-q'],
+                cwd=self.cortex_root,
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            if test_result.returncode == 0:
+                output = test_result.stdout
+                # Count test functions
+                test_count = len([line for line in output.split('\n') if '::test_' in line or '/test_' in line])
+                
+                if test_count > 0:
+                    result["tests_discoverable"] = True
+                    result["test_count"] = test_count
+                    logger.info(f"  ✅ Tests discoverable ({test_count} tests)")
+                else:
+                    result["errors"].append("No tests found by pytest")
+                    logger.warning("  ⚠️  No tests discovered")
+            else:
+                result["errors"].append(f"pytest collection failed: {test_result.stderr}")
+                logger.error(f"  ❌ pytest collection FAILED: {test_result.stderr[:200]}")
+        
+        except subprocess.TimeoutExpired:
+            result["errors"].append("pytest collection timed out")
+            logger.error("  ❌ pytest collection TIMED OUT")
+        except Exception as e:
+            result["errors"].append(f"pytest collection error: {e}")
+            logger.error(f"  ❌ pytest collection ERROR: {e}")
+        
+        # Check 3: Run smoke test (if tests are discoverable)
+        if result["tests_discoverable"]:
+            try:
+                smoke_test_result = subprocess.run(
+                    ['pytest', 'tests/', '-k', 'test_brain_protector or test_working_memory', '-v', '--tb=short'],
+                    cwd=self.cortex_root,
+                    capture_output=True,
+                    text=True,
+                    timeout=60
+                )
+                
+                if smoke_test_result.returncode == 0:
+                    result["smoke_test_passed"] = True
+                    logger.info("  ✅ Smoke test passed")
+                else:
+                    logger.warning(f"  ⚠️  Smoke test failed (non-critical)")
+            
+            except subprocess.TimeoutExpired:
+                logger.warning("  ⚠️  Smoke test timed out (non-critical)")
+            except Exception as e:
+                logger.warning(f"  ⚠️  Smoke test error: {e} (non-critical)")
+        
+        # Determine status
+        if result["tests_discoverable"] and result["test_count"] >= 10:
+            result["status"] = "validated"
+            success = True
+        elif result["tests_discoverable"]:
+            result["status"] = "warning"
+            success = True  # Non-critical
+            logger.warning(f"  ⚠️  Only {result['test_count']} tests found (expected 10+)")
+        else:
+            result["status"] = "failed"
+            success = False
+        
+        return success, result
 
 
 def main():

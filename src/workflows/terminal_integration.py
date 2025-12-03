@@ -91,7 +91,6 @@ class TerminalIntegration:
         # NOTE: This is a placeholder that will be called by GitHub Copilot
         # Copilot will inject the actual terminal_last_command data
         
-        # Check if cache is still valid
         if self._is_cache_valid():
             return self.last_command_cache
         
@@ -159,7 +158,6 @@ class TerminalIntegration:
                 'duration': 2.5
             }
         """
-        # Get cached command info
         if not self.last_command_cache:
             return {
                 'error': 'No recent test execution detected',

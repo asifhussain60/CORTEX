@@ -96,7 +96,6 @@ class RemoveOrphanedFilesModule(BaseOperationModule):
         project_root = Path(context['project_root'])
         
         try:
-            # Get untracked files
             result = subprocess.run(
                 ["git", "ls-files", "--others", "--exclude-standard"],
                 cwd=project_root,

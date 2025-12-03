@@ -243,7 +243,6 @@ class BrainMetricsCollector(BaseCollector):
         metrics = []
         
         try:
-            # Calculate overall brain health score (0-100)
             health_score = self._calculate_brain_health_score()
             metrics.append(CollectorMetric(
                 name="brain_overall_health_score",
@@ -279,7 +278,6 @@ class BrainMetricsCollector(BaseCollector):
         metrics = []
         
         try:
-            # Process memory usage
             process = psutil.Process()
             memory_info = process.memory_info()
             
@@ -309,7 +307,6 @@ class BrainMetricsCollector(BaseCollector):
         try:
             score = 100.0
             
-            # Check database accessibility (20 points)
             db_paths = [
                 "tier1/tier1-working-memory.db",
                 "tier2/tier2-knowledge-graph.db",

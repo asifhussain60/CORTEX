@@ -44,7 +44,6 @@ class ChartConfigBuilder:
         Returns:
             D3.js chart config with data, axes, and styling, or N/A config
         """
-        # Return N/A config if no data
         if not snapshots:
             return self._build_na_config('health_trend', '📊 Architecture Health Trend (30 Days)')
         
@@ -118,7 +117,6 @@ class ChartConfigBuilder:
         Returns:
             D3.js heatmap config or N/A config
         """
-        # Return N/A config if no data
         if not snapshots:
             return self._build_na_config('integration_heatmap', '🔥 Integration Layer Heatmap')
         
@@ -127,7 +125,6 @@ class ChartConfigBuilder:
             latest = snapshots[-1]
             layer_scores = latest.get('layer_scores', {})
             
-            # Create grid data
             layers = ['discovery', 'import', 'instantiation', 'documentation', 
                      'testing', 'wiring', 'optimization']
             
@@ -197,7 +194,6 @@ class ChartConfigBuilder:
         Returns:
             D3.js gauge config or N/A config
         """
-        # Return N/A config if no data
         if not test_results:
             return self._build_na_config('coverage_gauge', '🎯 Test Coverage Gauge')
         
@@ -261,7 +257,6 @@ class ChartConfigBuilder:
         Returns:
             D3.js radar config or N/A config
         """
-        # Return N/A config if no data
         if not code_metrics:
             return self._build_na_config('quality_radar', '🕸️ Code Quality Radar')
         

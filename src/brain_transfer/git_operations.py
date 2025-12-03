@@ -108,7 +108,6 @@ class GitOperations:
                 text=True
             )
         except subprocess.CalledProcessError as e:
-            # Check if it's "nothing to commit" - not an error
             if "nothing to commit" in e.stderr.lower():
                 return
             raise RuntimeError(f"Failed to commit: {e.stderr}")
@@ -215,7 +214,6 @@ class GitOperations:
         Returns:
             List of unprocessed export files, sorted by timestamp
         """
-        # Get all YAML files in exports directory
         yaml_files = sorted(exports_dir.glob('brain-export-*.yaml'))
         
         if not import_history_file or not import_history_file.exists():

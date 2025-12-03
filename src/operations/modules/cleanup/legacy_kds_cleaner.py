@@ -77,7 +77,6 @@ class LegacyKDSCleaner:
             'cleanup.prompt.md'
         ]
         
-        # Define legacy directories to remove
         legacy_directories = [
             '.github/_Portable',
             '.github/instructions',

@@ -164,7 +164,6 @@ class NextStepsValidator:
             # Detect pattern
             detected_pattern = self._detect_pattern(section_content)
             
-            # Validate based on pattern
             section_violations = self._validate_section(
                 file_path=str(file_path.relative_to(self.project_root)),
                 line_number=line_number,
@@ -217,15 +216,12 @@ class NextStepsValidator:
         Returns:
             Detected pattern type
         """
-        # Check for checkbox pattern (Complex Projects)
         if self.CHECKBOX_PATTERN.search(section_content):
             return NextStepsPattern.COMPLEX_PROJECTS
         
-        # Check for track pattern (Parallel Work)
         if self.TRACK_PATTERN.search(section_content):
             return NextStepsPattern.PARALLEL_WORK
         
-        # Check for simple numbered list
         numbered_matches = self.SIMPLE_TASK_PATTERN.findall(section_content)
         if numbered_matches and len(numbered_matches) <= 5:
             return NextStepsPattern.SIMPLE_TASKS
@@ -309,7 +305,6 @@ class NextStepsValidator:
         """Validate Complex Projects pattern"""
         violations = []
         
-        # Check for "Ready to proceed" prompt
         if not self.READY_PROMPT.search(section_content):
             violations.append(NextStepsViolation(
                 file_path=file_path,
@@ -332,7 +327,6 @@ class NextStepsValidator:
         """Validate Parallel Work pattern"""
         violations = []
         
-        # Check for parallel indicator
         if not self.PARALLEL_INDICATOR.search(section_content):
             violations.append(NextStepsViolation(
                 file_path=file_path,
@@ -344,7 +338,6 @@ class NextStepsValidator:
                 fix_suggestion="Add after tracks: 'These tracks are independent and can run in parallel.'"
             ))
         
-        # Check for choice prompt
         if not self.CHOICE_PROMPT.search(section_content):
             violations.append(NextStepsViolation(
                 file_path=file_path,

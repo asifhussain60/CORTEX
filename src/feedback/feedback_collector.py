@@ -26,7 +26,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 import json
 
-# Import platform from stdlib explicitly
 import importlib
 platform_module = importlib.import_module('platform')
 
@@ -243,7 +242,6 @@ class FeedbackCollector:
         error_message = self._anonymize(error_message)
         stack_trace = self._anonymize(stack_trace)
         
-        # Create feedback item
         item = FeedbackItem(
             category=FeedbackCategory.BUG,
             priority=priority,
@@ -465,7 +463,6 @@ class FeedbackCollector:
             item: FeedbackItem to upload
         """
         try:
-            # Import here to avoid circular dependency
             from .gist_uploader import get_gist_uploader
             from .github_formatter import GitHubIssueFormatter
             

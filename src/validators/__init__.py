@@ -11,10 +11,16 @@ from .documentation_format_validator import (
     ValidationError,
     ValidationWarning
 )
+from .code_language_validator import (
+    CodeLanguageValidator,
+    Violation
+)
 
 __all__ = [
     'DocumentationFormatValidator',
     'ValidationResult',
     'ValidationError',
-    'ValidationWarning'
+    'ValidationWarning',
+    'CodeLanguageValidator',
+    'Violation'
 ]

@@ -91,13 +91,11 @@ class ConversationCaptureModule(BaseOperationModule):
         """
         issues = []
         
-        # Check brain initialization
         brain_initialized = context.get('brain_initialized', False)
         if not brain_initialized:
             issues.append("Brain must be initialized before capturing conversations")
             return False, issues
         
-        # Check if user request contains capture trigger
         user_request = context.get('user_request', '')
         if not self.should_capture(user_request):
             # This is not an error - just means capture not requested
@@ -169,7 +167,6 @@ class ConversationCaptureModule(BaseOperationModule):
         file_pattern = r'\b[\w\-./]+\.(?:py|cs|js|ts|jsx|tsx|java|cpp|h|css|html|json|yaml|yml|md|txt)\b'
         entities['files'] = list(set(re.findall(file_pattern, conversation_text)))
         
-        # Class patterns - PascalCase
         class_pattern = r'\b[A-Z][a-z]+(?:[A-Z][a-z]*)*\b'
         potential_classes = re.findall(class_pattern, conversation_text)
         # Filter out common words
@@ -198,7 +195,6 @@ class ConversationCaptureModule(BaseOperationModule):
         Returns:
             Summary string
         """
-        # Get first user message as primary context
         first_user_msg = next((msg['content'] for msg in conversation_history if msg['role'] == 'user'), '')
         
         if len(first_user_msg) <= max_length:
@@ -226,7 +222,6 @@ class ConversationCaptureModule(BaseOperationModule):
             # Import WorkingMemory here to avoid circular dependencies
             from src.tier1.working_memory import WorkingMemory
             
-            # Get conversation history from context
             conversation_history = context.get('conversation_history', [])
             if not conversation_history:
                 return OperationResult(
@@ -248,10 +243,8 @@ class ConversationCaptureModule(BaseOperationModule):
             # Detect intent
             intent = self.detect_intent(conversation_text)
             
-            # Create summary
             summary = self.create_conversation_summary(conversation_history)
             
-            # Initialize Working Memory
             project_root = context.get('project_root', Path.cwd())
             db_path = Path(project_root) / "cortex-brain" / "tier1" / "working_memory.db"
             wm = WorkingMemory(db_path=db_path)
@@ -303,7 +296,6 @@ class ConversationCaptureModule(BaseOperationModule):
             
             execution_time = (datetime.now() - start_time).total_seconds()
             
-            # Create success message
             entity_summary = ', '.join([f"{len(v)} {k}" for k, v in entities.items() if v])
             message = f"✅ Conversation captured to Tier 1 Working Memory\n\n"
             message += f"**Conversation ID:** `{conversation_id}`\n"
@@ -360,11 +352,9 @@ def capture_conversation(user_request: str, conversation_history: List[Dict[str,
         'project_root': project_root or Path.cwd()
     }
     
-    # Check if capture was requested
     if not module.should_capture(user_request):
         return None
     
-    # Validate prerequisites
     valid, issues = module.validate_prerequisites(context)
     if not valid:
         return {

@@ -23,7 +23,6 @@ class EditOperation(BaseOperation):
         Returns:
             Edit result
         """
-        # Check file exists
         if not os.path.exists(file_path):
             return {
                 "success": False,
@@ -40,7 +39,6 @@ class EditOperation(BaseOperation):
             with open(file_path, 'r', encoding='utf-8') as f:
                 original_content = f.read()
             
-            # Get new content
             new_content = context.get("content")
             
             if new_content is None:
@@ -56,7 +54,6 @@ class EditOperation(BaseOperation):
                         "message": "No content or old_string/new_string provided"
                     }
             
-            # Validate syntax if validator available
             if self.validator and self.validator.should_validate(file_path):
                 is_valid, error = self.validator.validate(new_content, file_path)
                 if not is_valid:

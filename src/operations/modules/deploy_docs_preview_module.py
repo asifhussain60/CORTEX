@@ -86,7 +86,6 @@ class DeployDocsPreviewModule(BaseOperationModule):
                     error="Cannot deploy preview without MkDocs configuration"
                 )
             
-            # Check deployment mode from context
             default_deploy_mode = os.getenv("CORTEX_DEFAULT_DEPLOY_MODE", "local")
             deploy_mode = context.get("deploy_mode", default_deploy_mode)
             
@@ -126,7 +125,6 @@ class DeployDocsPreviewModule(BaseOperationModule):
         try:
             self.log_info("Starting local documentation server...")
             
-            # Check if mkdocs is installed
             try:
                 subprocess.run(
                     ["mkdocs", "--version"],
@@ -243,7 +241,6 @@ class DeployDocsPreviewModule(BaseOperationModule):
             GitHub Pages URL or empty string
         """
         try:
-            # Get remote URL
             result = subprocess.run(
                 ["git", "config", "--get", "remote.origin.url"],
                 cwd=str(project_root),

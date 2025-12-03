@@ -132,10 +132,8 @@ class IntegrationScorer:
             True if class can be instantiated
         """
         try:
-            # Import module
             module = importlib.import_module(module_path)
             
-            # Get class
             if not hasattr(module, class_name):
                 logger.debug(f"❌ Class not found: {class_name} in {module_path}")
                 return False

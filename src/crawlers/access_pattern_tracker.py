@@ -109,7 +109,6 @@ class AccessPatternTracker:
         self.cutoff_time = datetime.now() - timedelta(hours=self.lookback_hours)
         self.files_checked = 0
         
-        # Check if atime is available
         self.atime_available = self._check_atime_availability()
         
         logger.info(f"Initialized Access Pattern Tracker: {self.workspace_path}")
@@ -137,7 +136,6 @@ class AccessPatternTracker:
             # Clean up
             test_file.unlink()
             
-            # Check if atime changed
             atime_works = stat_after.st_atime != stat_before.st_atime
             
             if not atime_works:
@@ -168,7 +166,6 @@ class AccessPatternTracker:
         # Map to applications
         app_patterns = self._map_to_applications(access_info, cross_app_links)
         
-        # Calculate activity scores
         self._calculate_activity_scores(app_patterns)
         
         logger.info(f"Access pattern analysis complete: {len(access_info)} files tracked")
@@ -208,7 +205,6 @@ class AccessPatternTracker:
                         stat = file_path.stat()
                         atime = datetime.fromtimestamp(stat.st_atime)
                         
-                        # Check if accessed within lookback window
                         if atime >= self.cutoff_time:
                             file_str = str(file_path)
                             access_counts[file_str] += 1
@@ -262,13 +258,11 @@ class AccessPatternTracker:
                 if app_name:
                     current_window_apps.add(app_name)
             else:
-                # Check if still in current window
                 if access.access_time - current_window_start <= window_size:
                     app_name = self._find_application_for_file(Path(access.path))
                     if app_name:
                         current_window_apps.add(app_name)
                 else:
-                    # Process completed window
                     if len(current_window_apps) > 1:
                         # Multiple apps accessed in same window - create links
                         for app1 in current_window_apps:
@@ -283,7 +277,6 @@ class AccessPatternTracker:
                     if app_name:
                         current_window_apps.add(app_name)
         
-        # Process final window
         if len(current_window_apps) > 1:
             for app1 in current_window_apps:
                 for app2 in current_window_apps:
@@ -314,7 +307,6 @@ class AccessPatternTracker:
         """
         app_patterns = {}
         
-        # Initialize application patterns
         for app in self.applications:
             app_name = app['name']
             app_patterns[app_name] = ApplicationAccessPattern(
@@ -333,7 +325,6 @@ class AccessPatternTracker:
                 app_patterns[app_name].accessed_files.append(access)
                 app_patterns[app_name].total_accesses += access.access_count
         
-        # Calculate unique files and access frequency
         for pattern in app_patterns.values():
             unique_paths = set(a.path for a in pattern.accessed_files)
             pattern.unique_files = len(unique_paths)

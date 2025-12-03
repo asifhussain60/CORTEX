@@ -106,21 +106,18 @@ class VisionAPI:
         start_time = datetime.now()
         
         try:
-            # Check if enabled
             if not self.enabled:
                 return self._error_response(
                     "Vision API disabled. Set vision_api.enabled=true in config.",
                     start_time
                 )
             
-            # Validate image data
             if not self._validate_image_data(image_data):
                 return self._error_response(
                     "Invalid image data format. Expected data URI (data:image/...).",
                     start_time
                 )
             
-            # Check cache
             cache_key = self._get_cache_key(image_data, prompt)
             cached_result = self._get_cached_result(cache_key)
             if cached_result:
@@ -186,11 +183,9 @@ class VisionAPI:
         if not image_data or not isinstance(image_data, str):
             return False
         
-        # Check data URI format
         if not image_data.startswith('data:image/'):
             return False
         
-        # Check supported formats
         supported = ['png', 'jpeg', 'jpg', 'webp']
         for fmt in supported:
             if f'image/{fmt}' in image_data.lower():
@@ -222,7 +217,6 @@ class VisionAPI:
             original_size = img.size
             original_format = img.format
             
-            # Check if preprocessing needed
             needs_downscale = img.width > self.downscale_threshold
             needs_compress = len(image_bytes) > self.max_image_size
             
@@ -303,7 +297,6 @@ class VisionAPI:
             image_bytes = base64.b64decode(base64_data)
             img = Image.open(io.BytesIO(image_bytes))
             
-            # Calculate tiles
             width_tiles = max(1, img.width / 512)
             height_tiles = max(1, img.height / 512)
             estimated = int(width_tiles * height_tiles * 85)
@@ -335,7 +328,6 @@ class VisionAPI:
         import time
         time.sleep(0.5)
         
-        # Return mock successful response
         # In production, this would be the actual API response
         return {
             'success': True,
@@ -429,7 +421,6 @@ class VisionAPI:
         cached = self.cache[cache_key]
         timestamp = cached['timestamp']
         
-        # Check if expired
         age = datetime.now() - timestamp
         if age > timedelta(hours=self.cache_ttl_hours):
             del self.cache[cache_key]

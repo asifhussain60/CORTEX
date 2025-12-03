@@ -93,7 +93,6 @@ class UXEnhancementEntryPoint(BaseAgent):
             if blocked in user_request:
                 return False
         
-        # Check for enhancement keywords
         for keyword in self.ENHANCEMENT_KEYWORDS:
             if keyword in user_request:
                 return True
@@ -320,17 +319,14 @@ I'll show real-time progress updates as each analysis phase completes.
         """
         response_lower = user_response.lower().strip()
         
-        # Check for "always enhance" preference
         if "always" in response_lower and ("enhance" in response_lower or "proceed" in response_lower):
             self._set_always_enhance_preference(enabled=True)
             return self._route_to_orchestrator(original_request, skip_explanation=False)
         
-        # Check for consent
         consent_keywords = ["yes", "proceed", "continue", "go ahead", "ok", "sure"]
         if any(keyword in response_lower for keyword in consent_keywords):
             return self._route_to_orchestrator(original_request)
         
-        # Check for decline
         decline_keywords = ["no", "cancel", "stop", "skip", "not now"]
         if any(keyword in response_lower for keyword in decline_keywords):
             return self._explain_alternatives()

@@ -124,7 +124,6 @@ class SizeDetector:
         
         # Walk directory tree with timeout check
         for root, dirs, files in os.walk(root_path):
-            # Check timeout
             if self._is_timeout():
                 break
             
@@ -155,13 +154,11 @@ class SizeDetector:
                         # Skip files we can't read
                         continue
         
-        # Calculate total estimated LOC
         estimated_loc = self._estimate_loc(total_bytes)
         
         # Determine size category
         size_category = self._categorize_size(estimated_loc)
         
-        # Calculate detection time
         detection_time_ms = (time.time() - self.start_time) * 1000
         
         return SizeEstimate(

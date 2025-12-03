@@ -319,7 +319,6 @@ class BrainOptimizationEngine:
                 # Analyze table and create indexes if needed
                 cursor.execute("ANALYZE")
                 
-                # Check for missing indexes
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='index'")
                 existing_indexes = [row[0] for row in cursor.fetchall()]
                 
@@ -502,7 +501,6 @@ class BrainOptimizationEngine:
         recommendations = []
         improvement = 0.0
         
-        # Calculate cache hit rate
         total_requests = self.cache_hits + self.cache_misses
         hit_rate = self.cache_hits / max(total_requests, 1)
         
@@ -539,7 +537,6 @@ class BrainOptimizationEngine:
         memory_saved = 0
         
         try:
-            # Get current memory usage
             process = psutil.Process()
             memory_mb = process.memory_info().rss / (1024 * 1024)
             
@@ -666,7 +663,6 @@ if __name__ == "__main__":
     print("🧠 CORTEX 3.0 Phase 2 - Brain Optimization Engine Test")
     print("=" * 65)
     
-    # Initialize engine
     engine = BrainOptimizationEngine("cortex-brain")
     
     # Test tier monitoring

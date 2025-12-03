@@ -56,7 +56,6 @@ class ArchitectureIntelligenceAgent(BaseAgent):
         self.cortex_root = Path(cortex_root)
         self.agent_name = "ArchitectureIntelligenceAgent"
         
-        # Initialize dependencies
         self.scorer = IntegrationScorer(self.cortex_root)
         self.health_history = ArchitectureHealthHistory()
         self.orchestrator_scanner = OrchestratorScanner(self.cortex_root)
@@ -222,7 +221,6 @@ class ArchitectureIntelligenceAgent(BaseAgent):
                 "summary": "No features discovered"
             }
         
-        # Calculate scores for each feature
         scores = []
         healthy_count = 0
         warning_count = 0
@@ -267,7 +265,6 @@ class ArchitectureIntelligenceAgent(BaseAgent):
                 for layer, points in score_result["layers"].items():
                     layer_totals[layer] += points
         
-        # Calculate overall score
         overall_score = sum(scores) / len(scores) if scores else 0.0
         
         # Normalize layer totals
@@ -424,7 +421,6 @@ class ArchitectureIntelligenceAgent(BaseAgent):
         Returns:
             Path to saved report
         """
-        # Create output directory
         output_dir = self.cortex_root / "cortex-brain" / "documents" / "analysis"
         output_dir.mkdir(parents=True, exist_ok=True)
         

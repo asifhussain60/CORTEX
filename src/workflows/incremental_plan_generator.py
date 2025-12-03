@@ -153,7 +153,6 @@ class IncrementalPlanGenerator:
             'checkpoint_count': 4  # Skeleton + 3 phases
         }
         
-        # Calculate actual token count for skeleton
         skeleton_text = self._serialize_skeleton(skeleton)
         token_count = self.count_tokens(skeleton_text)
         
@@ -200,7 +199,6 @@ class IncrementalPlanGenerator:
         content = self._generate_section_content(section_name, context)
         token_count = self.count_tokens(content)
         
-        # Check if section needs chunking
         needs_chunking = token_count > token_limit
         
         if needs_chunking:

@@ -90,7 +90,6 @@ class InsightGenerator:
         """
         insights = []
         
-        # Check velocity trends
         velocity = self.velocity_analyzer.calculate_velocity()
         if velocity['trend'] == 'declining':
             insights.append(Insight(
@@ -105,7 +104,6 @@ class InsightGenerator:
                 data_snapshot=velocity
             ))
         
-        # Check for unstable files
         unstable_files = self.file_analyzer.get_unstable_files(limit=5)
         for hotspot in unstable_files:
             if hotspot.churn_rate > self.HIGH_CHURN_THRESHOLD:
@@ -140,10 +138,8 @@ class InsightGenerator:
         """
         insights = []
         
-        # Get productivity summary
         summary = self.velocity_analyzer.get_productivity_summary(days=days)
         
-        # Check if productivity is low
         if summary['avg_commits_per_day'] < 1.0:
             insights.append(Insight(
                 insight_type=InsightType.PRODUCTIVITY_TIME,
@@ -156,7 +152,6 @@ class InsightGenerator:
                 data_snapshot=summary
             ))
         
-        # Check for large commits
         if summary['avg_lines_per_commit'] > 500:
             insights.append(Insight(
                 insight_type=InsightType.PRODUCTIVITY_TIME,
@@ -180,7 +175,6 @@ class InsightGenerator:
         """
         insights = []
         
-        # Get all unstable files
         unstable_files = self.file_analyzer.get_unstable_files(limit=10)
         
         if len(unstable_files) > 5:

@@ -30,7 +30,6 @@ class TrackDocumentTemplates:
         if not config.is_multi_track or not config.display_leaderboard:
             return ""
         
-        # Get leader
         leader = config.get_leader()
         leader_id = leader.track_id if leader else None
         
@@ -241,7 +240,6 @@ class TrackDocumentTemplates:
         Returns:
             Complete consolidated Markdown document
         """
-        # Calculate overall metrics
         total_modules = sum(len(t.modules) for t in config.tracks.values())
         total_completed = sum(t.metrics.modules_completed for t in config.tracks.values())
         completion_percentage = (total_completed / total_modules * 100) if total_modules > 0 else 0

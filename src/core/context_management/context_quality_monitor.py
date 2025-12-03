@@ -85,12 +85,10 @@ class ContextQualityMonitor:
                 'timestamp': datetime
             }
         """
-        # Check each tier
         tier1_health = self._check_tier1_health()
         tier2_health = self._check_tier2_health()
         tier3_health = self._check_tier3_health()
         
-        # Calculate overall score
         overall_score = (
             tier1_health.quality_score +
             tier2_health.quality_score +
@@ -161,7 +159,6 @@ class ContextQualityMonitor:
         performance_score = 0.9  # Assume good performance
         metrics['avg_query_time_ms'] = 35
         
-        # Calculate overall quality score
         quality_score = (
             staleness_score * 0.4 +
             coverage_score * 0.3 +
@@ -190,10 +187,8 @@ class ContextQualityMonitor:
         
         # Staleness check
         try:
-            # Check when patterns were last used
             patterns = self.ucm.tier2.search_patterns('', limit=10)  # Get recent patterns
             if patterns:
-                # Check last_used dates
                 recent_uses = [p.get('last_used') for p in patterns if p.get('last_used')]
                 if recent_uses:
                     latest_use = max(datetime.fromisoformat(d) for d in recent_uses)
@@ -233,7 +228,6 @@ class ContextQualityMonitor:
         performance_score = 0.85  # Assume good performance
         metrics['avg_query_time_ms'] = 45
         
-        # Calculate overall quality score
         quality_score = (
             staleness_score * 0.4 +
             coverage_score * 0.3 +
@@ -297,7 +291,6 @@ class ContextQualityMonitor:
         performance_score = 0.88  # Assume good performance
         metrics['avg_query_time_ms'] = 40
         
-        # Calculate overall quality score
         quality_score = (
             staleness_score * 0.4 +
             coverage_score * 0.3 +

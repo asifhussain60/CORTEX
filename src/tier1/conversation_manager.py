@@ -14,7 +14,6 @@ from contextlib import contextmanager
 import json
 import logging
 
-# Import planning doc sync engine
 try:
     from .planning_doc_sync import PlanningDocSyncEngine
     PLANNING_SYNC_AVAILABLE = True
@@ -47,10 +46,13 @@ class ConversationManager:
             db_path: Path to conversations.db SQLite database
             enable_planning_sync: Enable auto-sync to planning documents
         """
-        self.db_path = db_path
+        self.db_path = Path(db_path)
+        
+        # Ensure parent directory exists (critical for tests with temp directories)
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        
         self._ensure_schema()
         
-        # Initialize planning doc sync engine
         self.sync_engine = None
         if enable_planning_sync and PLANNING_SYNC_AVAILABLE:
             try:
@@ -80,7 +82,6 @@ class ConversationManager:
                 WHERE type='table' AND name='conversations'
             """)
             if not cursor.fetchone():
-                # Create schema (same as in migrate_tier1.py)
                 self._create_schema(conn)
     
     def _create_schema(self, conn):
@@ -182,7 +183,6 @@ class ConversationManager:
             )
         """)
         
-        # Create indices
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_conv_agent ON conversations(agent_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_conv_status ON conversations(status)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_msg_conv ON messages(conversation_id)")
@@ -219,7 +219,6 @@ class ConversationManager:
             import random
             conv_id = f"conv-{timestamp}-{random.randint(1000, 9999)}"
             
-            # Check if we need to enforce FIFO
             self._enforce_fifo(cursor)
             
             # Insert conversation
@@ -428,7 +427,6 @@ class ConversationManager:
             
             conv = dict(row)
             
-            # Get messages
             cursor.execute("""
                 SELECT * FROM messages
                 WHERE conversation_id = ?
@@ -436,7 +434,6 @@ class ConversationManager:
             """, (conversation_id,))
             conv['messages'] = [dict(r) for r in cursor.fetchall()]
             
-            # Get entities
             cursor.execute("""
                 SELECT entity_type, entity_value, timestamp FROM entities
                 WHERE conversation_id = ?
@@ -444,7 +441,6 @@ class ConversationManager:
             """, (conversation_id,))
             conv['entities'] = [dict(r) for r in cursor.fetchall()]
             
-            # Get files
             cursor.execute("""
                 SELECT file_path, operation, timestamp FROM files_modified
                 WHERE conversation_id = ?

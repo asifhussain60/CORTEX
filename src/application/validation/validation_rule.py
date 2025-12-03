@@ -94,7 +94,6 @@ class ValidationRule(ABC, Generic[T, TProperty]):
         Returns:
             Tuple of (is_valid, error_message)
         """
-        # Check if rule should be applied
         if not self.should_validate(instance):
             return (True, None)
         

@@ -61,7 +61,6 @@ class GitSyncModule(BaseOperationModule):
         """
         issues = []
         
-        # Check project root
         project_root = context.get('project_root')
         if not project_root:
             issues.append("Project root not found in context")
@@ -89,7 +88,6 @@ class GitSyncModule(BaseOperationModule):
         project_root = Path(context['project_root'])
         
         try:
-            # Check if git is installed
             git_available, git_version = self._check_git_available()
             if not git_available:
                 self.log_warning("Git not available, skipping synchronization")
@@ -104,7 +102,6 @@ class GitSyncModule(BaseOperationModule):
             
             self.log_info(f"Git version: {git_version}")
             
-            # Check if project is a git repository
             if not self._is_git_repository(project_root):
                 self.log_warning("Project is not a git repository")
                 return OperationResult(
@@ -116,11 +113,9 @@ class GitSyncModule(BaseOperationModule):
                     duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
             
-            # Get current branch
             current_branch = self._get_current_branch(project_root)
             self.log_info(f"Current branch: {current_branch}")
             
-            # Check for uncommitted changes
             has_changes = self._has_uncommitted_changes(project_root)
             if has_changes:
                 self.log_warning("Uncommitted changes detected, skipping pull")
@@ -174,7 +169,6 @@ class GitSyncModule(BaseOperationModule):
                     duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
             
-            # Check if we're behind remote
             behind_count = self._get_behind_count(project_root, current_branch)
             
             if behind_count == 0:
@@ -301,7 +295,6 @@ class GitSyncModule(BaseOperationModule):
         Performance: ~50-100ms vs 2-5s for full fetch
         """
         try:
-            # Get local HEAD commit
             result_local = subprocess.run(
                 ['git', 'rev-parse', 'HEAD'],
                 cwd=str(project_root),
@@ -314,7 +307,6 @@ class GitSyncModule(BaseOperationModule):
             
             local_commit = result_local.stdout.strip()
             
-            # Get remote HEAD commit without fetching
             result_remote = subprocess.run(
                 ['git', 'ls-remote', 'origin', branch],
                 cwd=str(project_root),

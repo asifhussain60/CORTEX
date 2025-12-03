@@ -19,13 +19,11 @@ Components:
 Usage:
     from src.collectors import initialize_data_collectors, get_collector_manager
     
-    # Initialize the collection system
     initialize_data_collectors(
         brain_path="/path/to/cortex-brain",
         workspace_path="/path/to/workspace"
     )
     
-    # Get manager for manual control
     manager = get_collector_manager()
     summary = manager.get_summary_report()
 """

@@ -23,7 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from tier1.user_profile_governance import UserProfileGovernance
-from orchestrators.onboarding_acknowledgment_orchestrator import OnboardingAcknowledgmentOrchestrator
+from operations.modules.onboarding.onboarding_utility import run_onboarding_acknowledgment
 
 
 def print_header(title: str):

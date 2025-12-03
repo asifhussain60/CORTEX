@@ -177,7 +177,6 @@ class LearningCaptureAgent:
         Returns:
             LearningEvent if lesson extracted, None otherwise
         """
-        # Check for errors in result
         if hasattr(result, 'errors') and result.errors:
             for error in result.errors:
                 event = self._parse_error_for_learning(
@@ -188,7 +187,6 @@ class LearningCaptureAgent:
                 if event:
                     return event
         
-        # Check for module failures
         if hasattr(result, 'modules_failed') and result.modules_failed:
             problem = f"Operation '{operation_name}' had {len(result.modules_failed)} failed modules"
             
@@ -348,7 +346,6 @@ class LearningCaptureAgent:
             # Convert event to lesson
             lesson = event.to_lesson_dict(lesson_id)
             
-            # Check for duplicates
             if self._is_duplicate_lesson(lesson, data.get('lessons', [])):
                 logger.info(f"Duplicate lesson detected, skipping: {lesson_id}")
                 return False

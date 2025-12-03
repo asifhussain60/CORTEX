@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from .parser import analyze_epmo_structure
 from .dependency_mapper import analyze_epmo_dependencies
-from .health_integration import HealthIntegration
+from .health_integration import HealthIntegration, get_health_integration_data
 from .models import (
     create_epmo_model, validate_model, GenerationConfig, 
     TemplateConfiguration, DocumentationFormat, DiagramConfig
@@ -310,11 +310,9 @@ Examples:
                 for item in path.rglob('__init__.py'):
                     epmos.append(item.parent)
             else:
-                # Check if current directory is an EPMO
                 if (path / '__init__.py').exists():
                     epmos.append(path)
                 else:
-                    # Check immediate subdirectories
                     for item in path.iterdir():
                         if item.is_dir() and (item / '__init__.py').exists():
                             epmos.append(item)
@@ -348,8 +346,7 @@ Examples:
             if args.health_analysis:
                 try:
                     logger.info("Running health analysis...")
-                    health_integration = HealthIntegration()
-                    health_result = health_integration.analyze_epmo_health(epmo_path, project_root)
+                    health_result = get_health_integration_data(epmo_path, project_root)
                     health_data = health_result if health_result.get('status') == 'success' else None
                 except Exception as e:
                     logger.warning(f"Health analysis failed: {e}")
@@ -409,7 +406,6 @@ Examples:
                     output_file.parent.mkdir(parents=True, exist_ok=True)
                     output_file.write_text(documentation, encoding='utf-8')
             
-            # Calculate generation time
             generation_time = (datetime.now() - start_time).total_seconds()
             model.metadata.generation_time_seconds = generation_time
             
@@ -464,7 +460,6 @@ Examples:
         if project_root.is_file():
             project_root = project_root.parent
         
-        # Create configurations
         config = self.create_generation_config(args)
         diagram_config = self.create_diagram_config(args)
         
@@ -527,7 +522,6 @@ Examples:
         for result in failed:
             print(f"\n❌ {result['epmo_name']}: {result['error']}")
         
-        # Validate output if requested
         if args.validate_output and not args.dry_run:
             print("\n🔍 Validating generated documentation...")
             # Implementation would validate output files

@@ -58,14 +58,12 @@ class GitCheckpointModule(BaseOperationModule):
     Example:
         module = GitCheckpointModule()
         
-        # Create checkpoint before feature development
         result = module.execute({
             'operation': 'create',
             'message': 'before authentication implementation',
             'checkpoint_type': 'commit'
         })
         
-        # Validate checkpoint exists
         result = module.execute({
             'operation': 'validate',
             'required_for': 'authentication feature'
@@ -292,7 +290,6 @@ class GitCheckpointModule(BaseOperationModule):
                 capture_output=True
             )
             
-            # Create commit
             commit_message = f"checkpoint: {message}"
             subprocess.run(
                 ['git', 'commit', '-m', commit_message],
@@ -302,7 +299,6 @@ class GitCheckpointModule(BaseOperationModule):
                 text=True
             )
             
-            # Get commit hash
             result = subprocess.run(
                 ['git', 'rev-parse', 'HEAD'],
                 cwd=self.repo_path,
@@ -351,7 +347,6 @@ class GitCheckpointModule(BaseOperationModule):
                 text=True
             )
             
-            # Get commit hash
             result = subprocess.run(
                 ['git', 'rev-parse', 'HEAD'],
                 cwd=self.repo_path,
@@ -396,7 +391,6 @@ class GitCheckpointModule(BaseOperationModule):
             timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
             tag_name = f"checkpoint-{timestamp}"
             
-            # Create annotated tag
             subprocess.run(
                 ['git', 'tag', '-a', tag_name, '-m', f"Checkpoint: {message}"],
                 cwd=self.repo_path,
@@ -404,7 +398,6 @@ class GitCheckpointModule(BaseOperationModule):
                 capture_output=True
             )
             
-            # Get current commit
             result = subprocess.run(
                 ['git', 'rev-parse', 'HEAD'],
                 cwd=self.repo_path,
@@ -455,7 +448,6 @@ class GitCheckpointModule(BaseOperationModule):
                 text=True
             )
             
-            # Get stash list
             result = subprocess.run(
                 ['git', 'stash', 'list', '-1'],
                 cwd=self.repo_path,
@@ -495,7 +487,6 @@ class GitCheckpointModule(BaseOperationModule):
         """
         required_for = context.get('required_for', 'development work')
         
-        # Check git status
         status = self._check_git_status()
         
         if status['has_changes']:
@@ -508,7 +499,6 @@ class GitCheckpointModule(BaseOperationModule):
                 f"  Untracked: {len(status['untracked'])} files"
             )
         
-        # Check if recent checkpoint exists
         try:
             result = subprocess.run(
                 ['git', 'log', '-1', '--oneline'],
@@ -550,7 +540,6 @@ class GitCheckpointModule(BaseOperationModule):
         limit = context.get('limit', 10)
         
         try:
-            # Get commit checkpoints
             result = subprocess.run(
                 ['git', 'log', f'-{limit}', '--oneline', '--grep=checkpoint:'],
                 cwd=self.repo_path,
@@ -569,7 +558,6 @@ class GitCheckpointModule(BaseOperationModule):
                         'message': parts[1] if len(parts) > 1 else ''
                     })
             
-            # Get tag checkpoints
             result = subprocess.run(
                 ['git', 'tag', '-l', 'checkpoint-*'],
                 cwd=self.repo_path,
@@ -631,7 +619,6 @@ class GitCheckpointModule(BaseOperationModule):
                 capture_output=True
             )
             
-            # Create safety tag before rollback
             safety_tag = f"before-rollback-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
             subprocess.run(
                 ['git', 'tag', safety_tag],

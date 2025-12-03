@@ -148,7 +148,6 @@ class TrackNameGenerator:
         Returns:
             Tuple of (full_name, emoji, color)
         """
-        # Create deterministic hash
         hash_input = f"{machine_name}-{index}"
         hash_value = int(hashlib.md5(hash_input.encode()).hexdigest(), 16)
         
@@ -280,7 +279,6 @@ class PhaseDistributor:
         
         Uses greedy algorithm: assign each group to track with least work.
         """
-        # Initialize tracks
         track_assignments = {track_id: [] for track_id in track_names}
         track_hours = {track_id: 0.0 for track_id in track_names}
         
@@ -436,7 +434,6 @@ class TrackConfigManager:
             track = tracks[track_id]
             track.phases = phases
             
-            # Calculate estimated hours and module list
             track_modules = [
                 m_id for m_id, m_data in modules.items()
                 if m_data.get('phase') in phases

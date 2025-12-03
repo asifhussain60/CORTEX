@@ -94,7 +94,6 @@ class SaveStoryMarkdownModule(BaseOperationModule):
             
             logger.info(f"Saving story to: {output_path}")
             
-            # Create docs directory if it doesn't exist
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
             # Backup existing file

@@ -161,7 +161,6 @@ class ScanDocstringsModule(BaseOperationModule):
             
             tree = ast.parse(source, filename=str(file_path))
             
-            # Get relative module path
             relative_path = file_path.relative_to(project_root)
             module_path = str(relative_path).replace(os.sep, '.').replace('.py', '')
             

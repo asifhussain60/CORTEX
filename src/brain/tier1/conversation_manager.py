@@ -89,7 +89,6 @@ class ConversationManager:
             # Generate conversation ID
             conversation_id = f"conv-{uuid.uuid4().hex[:12]}"
             
-            # Check current conversation count
             cursor.execute("SELECT COUNT(*) FROM tier1_conversations WHERE status = 'active'")
             active_count = cursor.fetchone()[0]
             
@@ -97,7 +96,6 @@ class ConversationManager:
             if active_count >= 20:
                 self._enforce_fifo_queue(cursor)
             
-            # Get next queue position
             cursor.execute("SELECT COALESCE(MAX(queue_position), 0) + 1 FROM tier1_conversations")
             queue_position = cursor.fetchone()[0]
             
@@ -332,7 +330,6 @@ class ConversationManager:
         Raises:
             ValueError: If conversation not found or role invalid
         """
-        # Validate role
         if role not in ('user', 'assistant', 'system'):
             raise ValueError(f"Invalid role: {role}. Must be 'user', 'assistant', or 'system'")
         
@@ -345,7 +342,6 @@ class ConversationManager:
             if not cursor.fetchone():
                 raise ValueError(f"Conversation not found: {conversation_id}")
             
-            # Get next sequence number
             cursor.execute("""
                 SELECT COALESCE(MAX(sequence_number), 0) + 1
                 FROM tier1_messages
@@ -578,7 +574,6 @@ class ConversationManager:
         cursor = conn.cursor()
         
         try:
-            # Get conversation metadata
             cursor.execute("""
                 SELECT primary_entity, related_files FROM tier1_conversations
                 WHERE conversation_id = ?
@@ -588,7 +583,6 @@ class ConversationManager:
             if not row:
                 return {}
             
-            # Get recent messages
             recent_messages = self.get_recent_messages(conversation_id, limit=5)
             
             import json

@@ -131,7 +131,6 @@ class DocumentValidator:
         
         # Handle both absolute and relative paths
         if path.is_absolute():
-            # Get relative path from workspace root
             try:
                 rel_path = path.relative_to(self.workspace_root)
             except ValueError:
@@ -149,7 +148,6 @@ class DocumentValidator:
         
         parts = rel_path.parts
         
-        # Check if in root directory
         if len(parts) == 1:
             if path.name in ROOT_WHITELIST:
                 return {
@@ -168,7 +166,6 @@ class DocumentValidator:
                     'reason': f'Document {path.name} should be in cortex-brain/documents/[category]/'
                 }
         
-        # Check if in cortex-brain root
         if len(parts) == 2 and parts[0] == 'cortex-brain':
             if path.name in CORTEX_BRAIN_WHITELIST:
                 return {
@@ -187,7 +184,6 @@ class DocumentValidator:
                     'reason': f'Document {path.name} should be in cortex-brain/documents/[category]/'
                 }
         
-        # Check if in organized structure
         if len(parts) >= 4 and parts[0] == 'cortex-brain' and parts[1] == 'documents':
             category = parts[2]
             if category in VALID_CATEGORIES:

@@ -132,7 +132,6 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
             context['architecture_state'] = arch_state
             context['read_time_validation'] = validation
             
-            # Calculate transformation metrics
             original_words = len(story_content.split())
             transformed_words = len(transformed_story.split())
             change_percent = abs(transformed_words - original_words) / original_words * 100
@@ -149,7 +148,6 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
                 warnings.append(validation['message'])
                 warnings.extend(validation.get('recommendations', []))
             
-            # Check for critical length issues
             story_config = config.get('story_refresh', {})
             fail_on_critical = story_config.get('fail_on_critical_length', False)
             
@@ -313,7 +311,6 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
             
         except Exception as e:
             logger.warning(f"Failed to gather full architecture state: {e}")
-            # Return defaults if gathering fails
         
         return state
     
@@ -434,7 +431,6 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
         # Load configuration
         story_config = config.get('story_refresh', {})
         
-        # Get configured values with defaults
         min_minutes = story_config.get('target_read_time_min', 25)
         max_minutes = story_config.get('target_read_time_max', 30)
         wpm = story_config.get('words_per_minute', 200)
@@ -446,7 +442,6 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
         word_count = len(words)
         read_time = round(word_count / wpm, 1)
         
-        # Calculate thresholds based on config
         min_target = min_minutes * wpm
         max_target = max_minutes * wpm
         min_acceptable = int(min_target * (1 - tolerance / 100))

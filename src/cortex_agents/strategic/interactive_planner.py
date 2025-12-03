@@ -21,14 +21,12 @@ import logging
 from src.cortex_agents.base_agent import BaseAgent, AgentRequest, AgentResponse
 from src.cortex_agents.agent_types import IntentType
 
-# Import plan sync manager for two-way sync
 try:
     from src.operations.modules.planning.plan_sync_manager import PlanSyncManager
     PLAN_SYNC_AVAILABLE = True
 except ImportError:
     PLAN_SYNC_AVAILABLE = False
 
-# Import plan sync manager for two-way sync
 try:
     from src.operations.modules.planning.plan_sync_manager import PlanSyncManager
     PLAN_SYNC_AVAILABLE = True
@@ -189,7 +187,6 @@ class InteractivePlannerAgent(BaseAgent):
         self.logger = logging.getLogger(__name__)
         self.active_sessions: Dict[str, PlanningSession] = {}
         
-        # Initialize plan sync manager for two-way sync
         self.plan_sync_manager = None
         if PLAN_SYNC_AVAILABLE:
             try:
@@ -233,13 +230,11 @@ class InteractivePlannerAgent(BaseAgent):
         start_time = datetime.now()
         
         try:
-            # Check if resuming existing session
             session_id = request.context.get("session_id")
             if session_id and session_id in self.active_sessions:
                 session = self.active_sessions[session_id]
                 self.logger.info(f"Resuming session {session_id}")
             else:
-                # Create new session
                 confidence = self.detect_ambiguity(request.user_message, request.context)
                 session = self._create_session(request.user_message, confidence)
                 self.active_sessions[session.session_id] = session
@@ -306,7 +301,6 @@ class InteractivePlannerAgent(BaseAgent):
         confidence = 1.0
         request_lower = request.lower()
         
-        # Check for vague terms (reduce confidence)
         vague_terms = ["refactor", "improve", "update", "change", "fix", "enhance"]
         vague_count = sum(1 for term in vague_terms if term in request_lower)
         confidence -= vague_count * 0.25  # Increased penalty from 0.15
@@ -316,7 +310,6 @@ class InteractivePlannerAgent(BaseAgent):
         specific_count = sum(1 for term in specific_terms if term in request_lower)
         confidence += specific_count * 0.08  # Decreased boost from 0.10
         
-        # Check request length (very short = ambiguous)
         word_count = len(request.split())
         if word_count < 5:
             confidence -= 0.30  # Increased penalty from 0.20
@@ -328,7 +321,6 @@ class InteractivePlannerAgent(BaseAgent):
         detail_count = sum(1 for term in detail_indicators if term in request_lower)
         confidence += detail_count * 0.04  # Decreased from 0.05
         
-        # Check Tier 2 for similar past requests
         if self.tier2:
             similar_patterns = self._find_similar_patterns(request)
             if similar_patterns:
@@ -444,7 +436,6 @@ class InteractivePlannerAgent(BaseAgent):
         """
         answer_lower = answer_text.lower().strip()
         
-        # Check for control commands
         if answer_lower in ["skip", "s"]:
             return Answer(
                 question_id=question.id,
@@ -503,7 +494,6 @@ class InteractivePlannerAgent(BaseAgent):
         try:
             from src.cortex_agents.work_planner.agent import WorkPlanner
             
-            # Create WorkPlanner instance
             work_planner = WorkPlanner(
                 name="WorkPlanner",
                 tier1_api=self.tier1,
@@ -511,7 +501,6 @@ class InteractivePlannerAgent(BaseAgent):
                 tier3_context=self.tier3
             )
             
-            # Create request for WorkPlanner
             from src.cortex_agents.base_agent import AgentRequest
             planner_request = AgentRequest(
                 intent="plan",
@@ -521,7 +510,6 @@ class InteractivePlannerAgent(BaseAgent):
                 priority="normal"
             )
             
-            # Get task breakdown from WorkPlanner
             planner_response = work_planner.execute(planner_request)
             
             if planner_response.success:
@@ -725,7 +713,6 @@ class InteractivePlannerAgent(BaseAgent):
             session.questions = self.generate_questions(session.user_request, context)
             session.state = PlanningState.QUESTIONING
         
-        # Check for user answer in context
         user_input = context.get("user_input", "").strip()
         
         # Handle control commands
@@ -750,13 +737,11 @@ class InteractivePlannerAgent(BaseAgent):
                 "message": "Planning cancelled."
             }
         
-        # Process answer if provided
         if user_input and len(session.answers) < len(session.questions):
             current_question = session.questions[len(session.answers)]
             answer = self.process_answer(session, current_question, user_input)
             session.answers.append(answer)
         
-        # Check if more questions needed
         if len(session.answers) >= len(session.questions):
             # All questions answered
             session.state = PlanningState.CONFIRMING
@@ -833,7 +818,6 @@ class InteractivePlannerAgent(BaseAgent):
             return
         
         try:
-            # Check if plan was written to file
             plan_file_path = session.context.get("plan_file_path")
             
             if plan_file_path:

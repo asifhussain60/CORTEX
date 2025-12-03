@@ -54,7 +54,6 @@ class SetupOrchestrator:
         context = {'project_root': Path('/path/to/project')}
         results = orchestrator.execute_setup(context)
         
-        # Check results
         if results.overall_success:
             print("✅ Setup complete!")
         else:
@@ -180,7 +179,6 @@ class SetupOrchestrator:
         # Sort queue by priority
         queue.sort(key=lambda m: m.metadata.priority)
         
-        # Process queue
         result = []
         while queue:
             # Take module with highest priority (lowest number)
@@ -199,7 +197,6 @@ class SetupOrchestrator:
                         queue.append(other_module)
                         queue.sort(key=lambda m: m.metadata.priority)
         
-        # Check for circular dependencies
         if len(result) != len(modules):
             remaining = [m.metadata.module_id for m in modules if m not in result]
             raise ValueError(f"Circular dependencies detected: {remaining}")
@@ -265,7 +262,6 @@ class SetupOrchestrator:
         for module_id in execution_order:
             module = self._modules[module_id]
             
-            # Check if should run
             if not module.should_run(context):
                 result = SetupResult(
                     module_id=module_id,
@@ -276,7 +272,6 @@ class SetupOrchestrator:
                 self.logger.info(f"\n⏭️  Skipped: {module.metadata.name}")
                 continue
             
-            # Validate prerequisites
             is_valid, issues = module.validate_prerequisites(context)
             if not is_valid:
                 result = SetupResult(
@@ -336,7 +331,6 @@ class SetupOrchestrator:
                     self.logger.error("⛔ Required module failed. Stopping setup.")
                     break
         
-        # Calculate overall success
         total_duration = (datetime.now() - start_time).total_seconds() * 1000
         overall_success = len(failed_modules) == 0
         

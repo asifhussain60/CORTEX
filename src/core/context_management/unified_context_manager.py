@@ -57,8 +57,10 @@ class ContextRelevanceScorer:
         for conv in conversations:
             score = 0.0
             
-            # Keyword overlap
-            conv_text = (conv.get('title', '') + ' ' + conv.get('summary', '')).lower()
+            # Keyword overlap (handle SQL NULL values)
+            title = conv.get('title') or ''
+            summary = conv.get('summary') or ''
+            conv_text = (title + ' ' + summary).lower()
             conv_keywords = set(conv_text.split())
             keyword_overlap = len(request_keywords & conv_keywords) / max(len(request_keywords), 1)
             score += keyword_overlap * self.weights['keyword_overlap']
@@ -260,7 +262,6 @@ class UnifiedContextManager:
         current_files = current_files or []
         prioritize = prioritize or ['tier1', 'tier2', 'tier3']
         
-        # Check cache
         cache_key = self._cache_key(user_request, token_budget, current_files)
         cached = self._get_cached(cache_key)
         if cached:
@@ -289,7 +290,6 @@ class UnifiedContextManager:
         tier2_context = self._build_tier2_context(tier2_data, tier_budgets['tier2'])
         tier3_context = self._build_tier3_context(tier3_data, tier_budgets['tier3'])
         
-        # Calculate actual token usage
         tier1_tokens = self._estimate_tokens(tier1_context)
         tier2_tokens = self._estimate_tokens(tier2_context)
         tier3_tokens = self._estimate_tokens(tier3_context)
@@ -335,18 +335,17 @@ class UnifiedContextManager:
         """Load context from Tier 1 (Working Memory)"""
         conversations = []
         
-        # Get recent conversations
         all_convs = self.tier1.conversation_manager.get_recent_conversations(limit=10)
         
-        # Filter relevant ones
+        # Filter relevant ones (conversation_manager returns dicts, not objects)
         for conv in all_convs:
             conversations.append({
-                'conversation_id': conv.conversation_id,
-                'title': conv.title,
-                'summary': conv.summary or '',
-                'created_at': conv.created_at.isoformat() if hasattr(conv.created_at, 'isoformat') else str(conv.created_at),
-                'message_count': conv.message_count,
-                'is_active': conv.is_active
+                'conversation_id': conv.get('conversation_id', ''),
+                'title': conv.get('title', ''),
+                'summary': conv.get('outcome', '') or '',  # outcome field maps to summary
+                'created_at': conv.get('started', ''),
+                'message_count': conv.get('message_count', 0),
+                'is_active': conv.get('active', '') == 'active'
             })
         
         return {'conversations': conversations}
@@ -383,7 +382,6 @@ class UnifiedContextManager:
         insights = []
         
         try:
-            # Get unstable files
             unstable_files = self.tier3.get_unstable_files(limit=10)
             for hotspot in unstable_files[:5]:  # Top 5 unstable files
                 insights.append({
@@ -394,7 +392,6 @@ class UnifiedContextManager:
                     'severity': 'WARNING' if hotspot.stability.value == 'UNSTABLE' else 'INFO'
                 })
             
-            # Get recent insights
             recent_insights = self.tier3.generate_insights()
             for insight in recent_insights[:5]:  # Top 5 insights
                 insights.append({

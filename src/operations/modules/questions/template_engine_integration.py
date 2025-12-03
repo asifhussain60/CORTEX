@@ -55,7 +55,6 @@ class TemplateEngine:
                        context: Dict[str, Any] = None, force_refresh: bool = False) -> Dict[str, Any]:
         """Render a template with live data"""
         
-        # Get template
         if template_name not in self.templates:
             return {
                 "success": False,

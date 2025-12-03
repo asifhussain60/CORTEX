@@ -163,7 +163,6 @@ class TokenUsageCollector(BaseCollector):
         """Collect cost-related metrics"""
         metrics = []
         
-        # Calculate recent cost
         if self.input_tokens and self.output_tokens:
             recent_input = sum(self.input_tokens[-100:])
             recent_output = sum(self.output_tokens[-100:])
@@ -296,7 +295,6 @@ class TokenUsageCollector(BaseCollector):
         self.input_tokens.append(input_tokens)
         self.output_tokens.append(output_tokens)
         
-        # Calculate operation cost
         operation_cost = self._calculate_cost(input_tokens, output_tokens)
         
         if operation_name not in self.operation_costs:

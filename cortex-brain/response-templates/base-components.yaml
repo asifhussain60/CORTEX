@@ -1,0 +1,257 @@
+# Base Components for CORTEX Response Templates
+# These are reusable building blocks that templates compose together
+# 
+# Purpose: Define atomic template components that can be composed into full responses
+# Usage: Templates reference components by name, composition engine assembles them
+# 
+# Version: 3.2
+# Phase: 5.1 - Modular YAML Structure
+# Last Updated: December 2, 2025
+
+schema_version: '3.2'
+last_updated: '2025-12-02'
+
+# Note: Component format strings use {{placeholder}} syntax for runtime substitution
+# The composition engine replaces placeholders with actual content during rendering
+
+components:
+  # ============================================================================
+  # STANDARD 5-PART STRUCTURE COMPONENTS
+  # These form the mandatory CORTEX response format
+  # ============================================================================
+  
+  understanding_section:
+    format: |
+      ### 🎯 My Understanding Of Your Request
+      {{understanding_content}}
+    required: true
+    description: "Restates user intent to confirm understanding"
+  
+  challenge_section:
+    format: |
+      ### ⚠️ Challenge
+      {{challenge_content}}
+    required: true
+    description: "Identifies specific challenge or states 'No Challenge'"
+  
+  response_section:
+    format: |
+      ### 💬 Response
+      {{response_content}}
+    required: true
+    description: "Main response content with detailed information"
+  
+  request_echo_section:
+    format: |
+      ### 📝 Your Request
+      {{request_echo_content}}
+    required: true
+    description: "Echo of refined user request"
+  
+  next_steps_section:
+    format: |
+      ### 🔍 Next Steps
+      {{next_steps_content}}
+    required: true
+    description: "Context-appropriate next steps (numbered list, checkboxes, or parallel tracks)"
+  
+  # ============================================================================
+  # HEADER VARIANTS
+  # Different header styles for different response modes
+  # ============================================================================
+  
+  standard_header:
+    format: |
+      ## 🧠 CORTEX {{operation}}
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+    required: true
+    description: "Standard CORTEX header with author attribution"
+  
+  compact_header:
+    format: |
+      ## 🧠 CORTEX {{operation}}
+      **{{understanding_brief}}** | *No Challenge*
+      
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+    required: true
+    description: "Compact header with inline understanding and challenge"
+  
+  # ============================================================================
+  # RESPONSE VARIANTS
+  # Specialized response formats for different interaction modes and contexts
+  # ============================================================================
+  
+  response_detailed:
+    format: |
+      ### 💬 Response
+      
+      **Context:** {{context_info}}
+      
+      **Analysis:**
+      {{analysis_content}}
+      
+      **Recommended Approach:**
+      {{recommendation}}
+      
+      **Implementation Details:**
+      {{implementation_details}}
+    description: "Detailed response with structured breakdown (educational mode)"
+  
+  response_compact:
+    format: |
+      💬 **Response:**
+      {{response_content}}
+    description: "Compact response format (autonomous mode)"
+  
+  response_tech_aware:
+    format: |
+      ### 💬 Response
+      
+      **🏆 Recommended Solution:**
+      {{recommended_solution}}
+      
+      {{#if has_tech_stack}}
+      **🔧 {{cloud_provider_name}}-Aligned Implementation:**
+      {{company_aligned_implementation}}
+      
+      *Deployment Options:*
+      - **Cloud Platform:** {{cloud_deployment}}
+      - **Container Orchestration:** {{container_orchestration}}
+      - **CI/CD:** {{cicd_pipeline}}
+      - **Infrastructure as Code:** {{iac_tool}}
+      - **Monitoring:** {{monitoring_platform}}
+      {{/if}}
+    description: "Tech-aware response with best practice + company-aligned options"
+  
+  # ============================================================================
+  # SPECIAL COMPONENTS
+  # Context summaries, progress bars, and decorative elements
+  # ============================================================================
+  
+  context_summary:
+    format: |
+      
+      <details>
+      <summary>🧠 <b>Context Memory ({conversation_count} conversations loaded, Quality: {quality_score}/10 {quality_emoji})</b></summary>
+      
+      **Freshness:** {freshness_label} ({hours_since_last}h ago)  
+      **Entity Coverage:** {entity_coverage}%  
+      **Relevance Score:** {avg_relevance_score}/1.0 ({relevance_label})  
+      **Memory Health:** {memory_health}
+      
+      **Performance Metrics:**
+      - Average query time: {avg_query_time}ms
+      - Token usage: {token_usage}/{token_budget} ({token_percentage}%)
+      - Storage health: {storage_health}
+      
+      *Use `show context` for detailed view*
+      </details>
+    description: "Context summary collapsible section with quality metrics"
+  
+  progress_bar:
+    format: |
+      **Progress Overview:**
+      ```
+      Overall Status: [{{progress_bar}}] {{progress_percentage}}%
+      ✅ Completed: [{{completed_bar}}] {{completed_percentage}}%
+      ⏳ In Progress: [{{in_progress_bar}}] {{in_progress_percentage}}%
+      ⏸️  Not Started: [{{not_started_bar}}] {{not_started_percentage}}%
+      ```
+    description: "Visual progress bar for status checks"
+  
+  banner_frame:
+    format: |
+      ╔═════════════════════════════════════════════════════════════════════════════╗
+      ║                  {{banner_title}}                       ║
+      ╔═════════════════════════════════════════════════════════════════════════════╗
+      {{banner_content}}
+      ╚═════════════════════════════════════════════════════════════════════════════╝
+    description: "Decorative banner frame for important notices"
+  
+  code_example:
+    format: |
+      ```{{language}}
+      {{code_content}}
+      ```
+    description: "Code block with syntax highlighting"
+  
+  # ============================================================================
+  # NEXT STEPS VARIANTS
+  # Different formats for presenting action items
+  # ============================================================================
+  
+  next_steps_numbered:
+    format: |
+      ### 🔍 Next Steps
+      {{#each steps}}
+      {{add @index 1}}. {{this}}
+      {{/each}}
+    description: "Simple numbered list for sequential steps"
+  
+  next_steps_checkboxes:
+    format: |
+      ### 🔍 Next Steps
+      {{#each phases}}
+      ☐ **{{name}}** {{#if description}}({{description}}){{/if}}
+      {{#each this.tasks}}
+        - {{this}}
+      {{/each}}
+      {{/each}}
+    description: "Checkbox format with phases for complex projects"
+  
+  next_steps_parallel:
+    format: |
+      ### 🔍 Next Steps
+      
+      **Parallel Tracks:**
+      {{#each tracks}}
+      **Track {{@key}}:** {{name}}
+      {{#each this.tasks}}
+      - {{this}}
+      {{/each}}
+      {{/each}}
+    description: "Parallel tracks format for concurrent work"
+
+# Composition rules
+composition_rules:
+  standard_5_part:
+    components:
+      - standard_header
+      - understanding_section
+      - challenge_section
+      - response_section
+      - request_echo_section
+      - next_steps_section
+    description: "Standard 5-part CORTEX response structure"
+  
+  compact_format:
+    components:
+      - compact_header
+      - response_compact
+      - request_echo_section
+      - next_steps_section
+    description: "Compact format for autonomous mode"
+  
+  tech_aware:
+    components:
+      - standard_header
+      - understanding_section
+      - challenge_section
+      - response_tech_aware
+      - request_echo_section
+      - next_steps_section
+    description: "Tech-aware format with best practice + company-aligned options"
+  
+  educational:
+    components:
+      - standard_header
+      - understanding_section
+      - challenge_section
+      - response_detailed
+      - request_echo_section
+      - next_steps_section
+    description: "Educational format with detailed explanations"

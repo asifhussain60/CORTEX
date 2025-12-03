@@ -165,7 +165,6 @@ class PolicyAnalyzer:
         if path.suffix.lower() not in self.supported_formats:
             raise ValueError(f"Unsupported format: {path.suffix}. Supported: {self.supported_formats}")
         
-        # Calculate file hash
         file_hash = self._calculate_file_hash(path)
         
         # Parse document based on format
@@ -321,7 +320,6 @@ class PolicyAnalyzer:
         lines = content.split('\n')
         
         for i, line in enumerate(lines):
-            # Check if line contains a policy level keyword
             level = self._detect_level(line)
             if not level:
                 continue
@@ -348,7 +346,6 @@ class PolicyAnalyzer:
                 if re.match(r'(Rationale|Because|Reason):', next_line, re.IGNORECASE):
                     rationale = re.sub(r'(Rationale|Because|Reason):\s*', '', next_line, flags=re.IGNORECASE)
             
-            # Create policy rule
             rule = PolicyRule(
                 id=rule_id,
                 text=rule_text,
@@ -367,15 +364,12 @@ class PolicyAnalyzer:
     
     def _detect_level(self, text: str) -> Optional[PolicyLevel]:
         """Detect policy level from text"""
-        # Check MUST NOT before MUST (order matters)
         if re.search(self.level_patterns[PolicyLevel.MUST_NOT], text, re.IGNORECASE):
             return PolicyLevel.MUST_NOT
         
-        # Check SHOULD NOT before SHOULD
         if re.search(self.level_patterns[PolicyLevel.SHOULD_NOT], text, re.IGNORECASE):
             return PolicyLevel.SHOULD_NOT
         
-        # Check other levels
         for level, pattern in self.level_patterns.items():
             if level in [PolicyLevel.MUST_NOT, PolicyLevel.SHOULD_NOT]:
                 continue  # Already checked
@@ -395,7 +389,6 @@ class PolicyAnalyzer:
             if score > 0:
                 category_scores[category] = score
         
-        # Return category with highest score
         if category_scores:
             return max(category_scores.items(), key=lambda x: x[1])[0]
         
@@ -447,7 +440,6 @@ def main():
     """Test policy analyzer"""
     analyzer = PolicyAnalyzer()
     
-    # Create sample policy file
     sample_policy = """# Code Quality Policy
 Version: 1.0
 Date: 2025-11-26

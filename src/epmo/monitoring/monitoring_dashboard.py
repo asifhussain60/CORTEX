@@ -147,7 +147,6 @@ class MonitoringDashboard:
         # Event callbacks
         self._update_callbacks: List[Callable[[str, Dict[str, Any]], None]] = []
         
-        # Initialize default layouts
         self._create_default_layouts()
     
     def start_dashboard(self) -> None:
@@ -418,7 +417,6 @@ class MonitoringDashboard:
         if not panel:
             return {'error': 'Panel not found'}
         
-        # Check cache first
         cache_key = f"{layout_id}:{panel_id}"
         if cache_key in self._panel_data_cache:
             cache_time = self._cache_timestamps.get(cache_key, 0)
@@ -463,7 +461,6 @@ class MonitoringDashboard:
             'timestamp': time.time()
         }
         
-        # Get data for each panel
         for panel in layout.panels:
             if panel.enabled:
                 layout_data['panels'][panel.id] = {
@@ -531,7 +528,6 @@ class MonitoringDashboard:
         try:
             layout_data = json.loads(layout_json)
             
-            # Create layout
             layout = DashboardLayout(
                 id=layout_data['id'],
                 name=layout_data['name'],
@@ -599,7 +595,6 @@ class MonitoringDashboard:
         if not metric_name:
             return {'error': 'No metric name specified'}
         
-        # Get metric statistics
         time_range_hours = panel.config.get('time_range_hours', 1)
         window_seconds = time_range_hours * 3600
         
@@ -699,7 +694,6 @@ class MonitoringDashboard:
             # Limit to max_alerts
             displayed_alerts = filtered_alerts[:max_alerts]
             
-            # Get alert statistics
             stats = self.alert_system.get_alert_statistics()
             
             return {
@@ -792,7 +786,6 @@ class MonitoringDashboard:
             MetricVisualization.GAUGE
         )
         
-        # Set default current layout
         self.set_current_layout("system_overview")
         
         logger.info("Created default dashboard layouts")

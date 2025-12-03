@@ -294,7 +294,6 @@ class ResponseSizeMonitor:
         result = self.check_response(response_text, context)
         
         if result.action == "CHUNK_TO_FILE":
-            # Return summary instead of full content
             return result.summary
         elif result.action == "WARN":
             # Add warning header to response

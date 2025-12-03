@@ -88,7 +88,6 @@ class DocumentGovernance:
         governance_file = self.brain_path / "documents" / "governance" / "documentation-governance.yaml"
         
         if not governance_file.exists():
-            # Return minimal defaults if file doesn't exist
             return {
                 'governance_rules': {
                     'search_before_create': {
@@ -226,7 +225,6 @@ class DocumentGovernance:
         canonical_names = self.rules['documentation_structure']['module_guides']['canonical_names']
         filename = path.name
         
-        # Check if filename matches any canonical name
         is_canonical = filename in canonical_names.values()
         
         if not is_canonical:

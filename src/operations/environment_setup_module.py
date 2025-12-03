@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import Dict, Any
 from src.operations.base_operation_module import BaseOperationModule, OperationModuleMetadata, OperationResult
 
-# Import monolithic setup implementation
 from src.operations.setup import setup_environment as setup_impl
 
 

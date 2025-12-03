@@ -105,11 +105,9 @@ class Mediator:
         """
         request_type = type(request)
         
-        # Get handler
         if request_type not in self._handlers:
             error_msg = f"No handler registered for {request_type.__name__}"
             logger.error(error_msg)
-            # Return failure result instead of raising
             return Result.failure([error_msg])
         
         handler = self._handlers[request_type]

@@ -108,7 +108,6 @@ class Metric:
             # For gauges, store the current value
             self.current_value = value
         elif self.metric_type == MetricType.RATE:
-            # Calculate rate if we have previous value
             if self.last_value_for_rate is not None and self.last_rate_timestamp is not None:
                 time_diff = timestamp - self.last_rate_timestamp
                 if time_diff > 0:
@@ -231,7 +230,6 @@ class MetricsCollector:
         self._aggregation_cache: Dict[str, Dict[str, Any]] = {}
         self._cache_expiry: Dict[str, float] = {}
         
-        # Initialize storage
         if self.auto_persist:
             self._init_storage()
     
@@ -329,7 +327,6 @@ class MetricsCollector:
             if tags:
                 point_tags.update(tags)
             
-            # Create metric point
             point = MetricPoint(
                 name=metric_name,
                 value=value,
@@ -343,7 +340,6 @@ class MetricsCollector:
         # Clear relevant cache
         self._invalidate_cache(metric_name)
         
-        # Check alerts
         if self.enable_alerts:
             self._check_alerts(metric_name, value, timestamp)
     
@@ -442,7 +438,6 @@ class MetricsCollector:
         Returns:
             Statistics dictionary
         """
-        # Check cache
         cache_key = f"{metric_name}:{window_seconds}"
         if cache_key in self._aggregation_cache:
             if self._cache_expiry.get(cache_key, 0) > time.time():
@@ -546,7 +541,6 @@ class MetricsCollector:
             conn = sqlite3.connect(self.storage_path)
             cursor = conn.cursor()
             
-            # Create metrics table
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS metrics (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -559,7 +553,6 @@ class MetricsCollector:
                 )
             """)
             
-            # Create index for efficient queries
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_metrics_name_timestamp 
                 ON metrics(name, timestamp)

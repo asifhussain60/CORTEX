@@ -6,8 +6,9 @@
 # Author: Asif Hussain
 # Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 # Date: November 11, 2025
+# Updated: December 1, 2025 - Added comment cleanup rules (Phase 0.3)
 
-version: "1.0"
+version: "1.1"
 workspace_root: "." # Relative to cortex-brain directory
 
 # ============================================================================
@@ -767,6 +768,38 @@ advanced:
   orphan_scan_patterns:
     - "*.md"
     - "*.py"
+
+# ============================================================================
+# CODE QUALITY CLEANUP (Phase 0.3)
+# ============================================================================
+
+code_quality:
+  
+  # --------------------------------------------------------------------------
+  # Comment Cleanup
+  # --------------------------------------------------------------------------
+  comment_cleanup:
+    enabled: true
+    priority: medium
+    risk_level: medium
+    
+    script: "scripts/cleanup_comments.py"
+    
+    targets:
+      - "src/**/*.py"
+    
+    rules:
+      remove_obvious: true  # Remove obvious/redundant comments
+      remove_commented_code: true  # Remove commented-out code
+      preserve_important: true  # Preserve TODO, FIXME, NOTE, etc.
+      preserve_long: true  # Preserve comments >60 chars (likely explanatory)
+    
+    safety:
+      require_confirmation: true
+      create_backup: true
+      dry_run_default: true
+    
+    reason: "Phase 0.3 - Remove redundant comments, improve code clarity"
 
 # ============================================================================
 # NOTES

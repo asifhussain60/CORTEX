@@ -103,6 +103,7 @@ class UserProfileManager:
                 id INTEGER PRIMARY KEY CHECK (id = 1),
                 interaction_mode TEXT NOT NULL CHECK(interaction_mode IN ('autonomous', 'guided', 'educational', 'pair')) DEFAULT 'guided',
                 experience_level TEXT NOT NULL CHECK(experience_level IN ('junior', 'mid', 'senior', 'expert')) DEFAULT 'mid',
+                response_detail TEXT NOT NULL CHECK(response_detail IN ('concise', 'balanced', 'verbose')) DEFAULT 'balanced',
                 tech_stack_preference TEXT DEFAULT NULL,
                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -136,7 +137,6 @@ class UserProfileManager:
             # Serialize config to JSON (None for NO_PREFERENCE)
             config_json = json.dumps(config) if config else None
             
-            # Check if profile exists
             cursor.execute("SELECT COUNT(*) FROM user_profile WHERE id = 1")
             exists = cursor.fetchone()[0] > 0
             
@@ -148,7 +148,6 @@ class UserProfileManager:
                     WHERE id = 1
                 """, (config_json,))
             else:
-                # Create new profile with defaults
                 cursor.execute("""
                     INSERT INTO user_profile (id, interaction_mode, experience_level, tech_stack_preference)
                     VALUES (1, 'guided', 'mid', ?)
@@ -176,7 +175,6 @@ class UserProfileManager:
         Raises:
             ValueError: If configuration contains invalid values
         """
-        # Validate configuration
         self._validate_tech_stack_config(config)
         
         try:
@@ -185,7 +183,6 @@ class UserProfileManager:
             
             config_json = json.dumps(config)
             
-            # Check if profile exists
             cursor.execute("SELECT COUNT(*) FROM user_profile WHERE id = 1")
             exists = cursor.fetchone()[0] > 0
             
@@ -197,7 +194,6 @@ class UserProfileManager:
                     WHERE id = 1
                 """, (config_json,))
             else:
-                # Create new profile with defaults
                 cursor.execute("""
                     INSERT INTO user_profile (id, interaction_mode, experience_level, tech_stack_preference)
                     VALUES (1, 'guided', 'mid', ?)
@@ -277,7 +273,7 @@ class UserProfileManager:
             cursor = conn.cursor()
             
             cursor.execute("""
-                SELECT interaction_mode, experience_level, tech_stack_preference, 
+                SELECT interaction_mode, experience_level, response_detail, tech_stack_preference, 
                        created_at, last_updated
                 FROM user_profile
                 WHERE id = 1
@@ -287,14 +283,15 @@ class UserProfileManager:
             conn.close()
             
             if result:
-                tech_stack = json.loads(result[2]) if result[2] else None
+                tech_stack = json.loads(result[3]) if result[3] else None
                 
                 return {
                     "interaction_mode": result[0],
                     "experience_level": result[1],
+                    "response_detail": result[2],
                     "tech_stack_preference": tech_stack,
-                    "created_at": result[3],
-                    "last_updated": result[4]
+                    "created_at": result[4],
+                    "last_updated": result[5]
                 }
             
             return None
@@ -333,3 +330,98 @@ class UserProfileManager:
         
         if "iac" in config and config["iac"] not in valid_iac:
             raise ValueError(f"Invalid iac. Must be one of: {', '.join(valid_iac)}")
+    
+    def set_response_detail(self, detail_level: str) -> bool:
+        """
+        Set user's response detail preference.
+        
+        Args:
+            detail_level: One of 'concise', 'balanced', 'verbose'
+        
+        Returns:
+            True if successful, False otherwise
+        
+        Raises:
+            ValueError: If detail_level is invalid
+        """
+        valid_levels = ['concise', 'balanced', 'verbose']
+        if detail_level not in valid_levels:
+            raise ValueError(f"Invalid detail_level. Must be one of: {', '.join(valid_levels)}")
+        
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("SELECT COUNT(*) FROM user_profile WHERE id = 1")
+            exists = cursor.fetchone()[0] > 0
+            
+            if exists:
+                # Update existing profile
+                cursor.execute("""
+                    UPDATE user_profile 
+                    SET response_detail = ?, last_updated = CURRENT_TIMESTAMP 
+                    WHERE id = 1
+                """, (detail_level,))
+            else:
+                # Create profile with response_detail
+                cursor.execute("""
+                    INSERT INTO user_profile (id, interaction_mode, experience_level, response_detail)
+                    VALUES (1, 'guided', 'mid', ?)
+                """, (detail_level,))
+            
+            conn.commit()
+            conn.close()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Failed to set response detail: {e}")
+            return False
+    
+    def get_response_detail(self) -> Optional[str]:
+        """
+        Get user's response detail preference.
+        
+        Returns:
+            'concise', 'balanced', or 'verbose', or None if not set
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT response_detail 
+                FROM user_profile 
+                WHERE id = 1
+            """)
+            
+            result = cursor.fetchone()
+            conn.close()
+            
+            return result[0] if result else None
+            
+        except Exception as e:
+            print(f"Failed to get response detail: {e}")
+            return None
+    
+    def infer_response_detail_from_mode(self, interaction_mode: str) -> str:
+        """
+        Infer appropriate response_detail from interaction_mode.
+        
+        Used for migration/backward compatibility.
+        
+        Args:
+            interaction_mode: User's interaction mode
+        
+        Returns:
+            Inferred response detail level
+        """
+        inference_map = {
+            'autonomous': 'concise',
+            'guided': 'balanced',
+            'educational': 'verbose',
+            'pair': 'balanced'
+        }
+        
+        return inference_map.get(interaction_mode, 'balanced')
+

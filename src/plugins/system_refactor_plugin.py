@@ -213,7 +213,6 @@ class SystemRefactorPlugin(BasePlugin):
         """
         self.logger.info("Performing critical review...")
         
-        # Get test metrics
         test_metrics = self._analyze_test_suite()
         
         # Determine overall health
@@ -378,14 +377,11 @@ class SystemRefactorPlugin(BasePlugin):
         if not plugins_dir.exists() or not tests_plugins_dir.exists():
             return None
         
-        # Get all plugin files
         plugin_files = [f for f in plugins_dir.glob("*_plugin.py") if f.name != "base_plugin.py"]
         
-        # Get all test files
         test_files = [f for f in tests_plugins_dir.glob("test_*.py")]
         test_names = {f.stem.replace("test_", "") for f in test_files}
         
-        # Check coverage
         untested_plugins = []
         for plugin_file in plugin_files:
             plugin_name = plugin_file.stem  # e.g., "system_refactor_plugin"
@@ -453,7 +449,6 @@ class SystemRefactorPlugin(BasePlugin):
     
     def _check_module_coverage(self) -> Optional[CoverageGap]:
         """Check if core modules have integration tests."""
-        # Check critical modules
         critical_modules = [
             self.src_path / "tier1" / "tier1_api.py",
             self.src_path / "tier2" / "tier2_api.py",
@@ -463,7 +458,6 @@ class SystemRefactorPlugin(BasePlugin):
         untested_modules = []
         for module in critical_modules:
             if module.exists():
-                # Check if integration tests exist
                 module_name = module.stem
                 integration_tests = list((self.tests_path / "integration").glob(f"*{module_name}*.py"))
                 if not integration_tests:

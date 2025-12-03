@@ -59,7 +59,6 @@ class HealthScore:
         if not self.layers:
             self.layers = self._create_default_layers()
         
-        # Calculate total if not set
         if self.total_score == 0.0 and self.layers:
             self.total_score = self.calculate_total()
     
@@ -82,7 +81,6 @@ class HealthScore:
             for layer in self.layers.values()
         )
         
-        # Validate weights sum to 1.0
         weight_sum = sum(layer.weight for layer in self.layers.values())
         if not 0.99 <= weight_sum <= 1.01:
             raise ValueError(f"Layer weights must sum to 1.0, got {weight_sum}")

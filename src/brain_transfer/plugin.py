@@ -12,7 +12,6 @@ from typing import Dict, Any, List
 from pathlib import Path
 import logging
 
-# Import plugin base if available
 try:
     from src.plugins.base_plugin import BasePlugin
     from src.plugins.command_registry import CommandMetadata, CommandCategory
@@ -66,7 +65,6 @@ class BrainTransferPlugin(BasePlugin if BasePlugin != object else object):
     
     def initialize(self) -> bool:
         """Initialize plugin resources."""
-        # Validate cortex-brain directory exists
         try:
             current = Path(__file__).resolve()
             for parent in current.parents:
@@ -125,7 +123,6 @@ class BrainTransferPlugin(BasePlugin if BasePlugin != object else object):
             requires_online=False
         )
         
-        # Import brain command
         import_cmd = CommandMetadata(
             command="/import-brain",
             natural_language_equivalent="import brain",
@@ -179,7 +176,6 @@ class BrainTransferPlugin(BasePlugin if BasePlugin != object else object):
         Returns:
             True if valid, False otherwise
         """
-        # Check if cortex-brain directory exists
         try:
             current = Path(__file__).resolve()
             for parent in current.parents:

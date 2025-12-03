@@ -402,11 +402,9 @@ class SmartRecommendations:
                 for row in cursor.fetchall():
                     file_path, access_type, file_context, timestamp = row
                     
-                    # Check if file type matches development phase
                     file_type_score = self._calculate_file_type_score(file_path, appropriate_types)
                     if file_type_score > 0.1:  # Lowered from 0.2 to 0.1
                         
-                        # Calculate development flow score
                         flow_score = self._calculate_development_flow_score(
                             context.development_phase, context.user_intent, file_context
                         )
@@ -553,7 +551,6 @@ class SmartRecommendations:
         recency_scores = [rec.recency_score for rec in recommendations if rec.recency_score > 0]
         pattern_strengths = [rec.pattern_strength for rec in recommendations if rec.pattern_strength > 0]
         
-        # Get most recent access time
         access_times = [rec.last_accessed for rec in recommendations if rec.last_accessed]
         last_accessed = max(access_times) if access_times else None
         
@@ -680,7 +677,6 @@ class SmartRecommendations:
         # Filter out stop words and short words
         keywords = [word for word in words if len(word) > 2 and word not in stop_words]
         
-        # Return unique keywords maintaining order
         seen = set()
         unique_keywords = []
         for keyword in keywords:
@@ -755,15 +751,12 @@ class SmartRecommendations:
         
         context_lower = context.lower()
         
-        # Check for phase-appropriate keywords
         phase_keywords = self.activity_keywords.get(development_phase, [])
         phase_matches = sum(1 for keyword in phase_keywords if keyword in context_lower)
         
-        # Check for intent-appropriate keywords  
         intent_keywords = self.activity_keywords.get(user_intent, [])
         intent_matches = sum(1 for keyword in intent_keywords if keyword in context_lower)
         
-        # Calculate score based on keyword matches
         total_keywords = len(phase_keywords) + len(intent_keywords)
         total_matches = phase_matches + intent_matches
         

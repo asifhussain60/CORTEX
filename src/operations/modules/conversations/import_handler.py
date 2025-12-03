@@ -109,7 +109,6 @@ class ConversationImportHandler:
         try:
             # Resolve file path
             if file_path:
-                # Check if it's just a filename or full path
                 if "\\" not in file_path and "/" not in file_path:
                     target_file = self.captures_dir / file_path
                 else:
@@ -186,7 +185,6 @@ class ConversationImportHandler:
                 try:
                     content = file_path.read_text(encoding="utf-8")
                     
-                    # Check if file has pending status marker
                     if "⏳ Awaiting conversation paste" in content or "Status:** ✅ Imported" not in content:
                         pending_files.append({
                             "path": file_path,
@@ -249,7 +247,6 @@ class ConversationImportHandler:
             
         except Exception as e:
             logger.error(f"Failed to parse conversation: {e}", exc_info=True)
-            # Return minimal structure on error
             return {
                 "filename": filename,
                 "metadata": {},
@@ -395,13 +392,6 @@ class ConversationImportHandler:
         entity_count = len(parsed["entities"])
         
         # TODO Phase 5.2: Call Track A import pipeline here
-        # if self.working_memory:
-        #     self.working_memory.import_conversation(parsed)
-        
-        # TODO Phase 5.2: Update Tier 2 knowledge graph
-        # if self.knowledge_graph:
-        #     self.knowledge_graph.extract_patterns(parsed)
-        
         logger.info(f"Imported conversation {conversation_id}: {message_count} messages, {entity_count} entities (stub)")
         
         return {

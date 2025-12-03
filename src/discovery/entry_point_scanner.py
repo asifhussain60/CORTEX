@@ -190,6 +190,22 @@ class EntryPointScanner:
             "push changes": "CommitOrchestrator",
             "commit sync": "CommitOrchestrator",
             "sync repository": "CommitOrchestrator",
+            "git sync": "CommitOrchestrator",
+            "push to origin": "CommitOrchestrator",
+            "push to remote": "CommitOrchestrator",
+            "pull and push": "CommitOrchestrator",
+            "sync repo": "CommitOrchestrator",
+            "sync code": "CommitOrchestrator",
+            "update remote": "CommitOrchestrator",
+            "push code": "CommitOrchestrator",
+            "commit changes": "CommitOrchestrator",
+            "save and push": "CommitOrchestrator",
+            "upload changes": "CommitOrchestrator",
+            "sync with origin": "CommitOrchestrator",
+            "sync with remote": "CommitOrchestrator",
+            "push commits": "CommitOrchestrator",
+            "send changes": "CommitOrchestrator",
+            "publish changes": "CommitOrchestrator",
             "onboard": "OnboardingOrchestrator",
             "onboarding": "OnboardingOrchestrator",
             "setup profile": "OnboardingOrchestrator",
@@ -255,7 +271,6 @@ class EntryPointScanner:
             "resource planning": "TimeframeEstimator"
         }
         
-        # Check trigger keywords
         trigger_lower = trigger.lower()
         template_lower = template_name.lower()
         
@@ -291,7 +306,6 @@ class EntryPointScanner:
         orphaned_triggers = []
         wired_orchestrators = set()
         
-        # Check for orphaned triggers
         for trigger, metadata in entry_points.items():
             expected = metadata["expected_orchestrator"]
             if expected and expected not in discovered_orchestrators:

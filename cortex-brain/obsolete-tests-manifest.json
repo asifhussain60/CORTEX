@@ -78,7 +78,9 @@
         "src.tier1.vision_orchestrator",
         "src.tier1.vision_api"
       ],
-      "confidence": 0.9
+      "confidence": 0.9,
+      "removed": true,
+      "removed_at": "2025-12-01T15:42:08.583981"
     },
     {
       "file_path": "tests/test_documentation_e2e.py",
@@ -1574,5 +1576,8 @@
       ],
       "confidence": 0.9
     }
-  ]
+  ],
+  "removed_timestamp": "2025-12-01T15:42:08.583981",
+  "files_removed_count": 1,
+  "phase_0_4_complete": true
 }

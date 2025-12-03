@@ -15,7 +15,6 @@ from datetime import datetime
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import json
 
-# Import use cases
 from src.dashboard.use_cases.load_overview import LoadOverviewUseCase
 from src.dashboard.use_cases.render_architecture_graph import RenderArchitectureGraphUseCase
 from src.dashboard.use_cases.analyze_quality_metrics import AnalyzeQualityMetricsUseCase
@@ -23,7 +22,6 @@ from src.dashboard.use_cases.scan_security_vulnerabilities import ScanSecurityVu
 from src.dashboard.use_cases.generate_recommendations import GenerateRecommendationsUseCase
 from src.use_cases.render_uml_diagrams import render_uml_for_project
 
-# Import repositories
 from src.dashboard.data.json_repositories import (
     JSONComponentRepository,
     JSONDependencyRepository,
@@ -56,7 +54,6 @@ class DashboardRenderer:
         self.project_path = project_path
         self.data_dir = data_dir
         
-        # Initialize Jinja2 environment
         template_dir = Path(__file__).parents[3] / "templates"
         self.jinja_env = Environment(
             loader=FileSystemLoader(str(template_dir)),
@@ -68,7 +65,6 @@ class DashboardRenderer:
         # Register custom filters
         self._register_filters()
         
-        # Initialize repositories
         self.component_repo = JSONComponentRepository(data_dir / "components.json")
         self.dependency_repo = JSONDependencyRepository(data_dir / "dependencies.json")
         self.issue_repo = JSONIssueRepository(data_dir / "issues.json")
@@ -76,7 +72,6 @@ class DashboardRenderer:
         # TODO: Implement RecommendationRepository when needed
         self.recommendation_repo = None  # Placeholder
         
-        # Initialize use cases
         self.overview_use_case = LoadOverviewUseCase(
             self.component_repo,
             self.issue_repo,

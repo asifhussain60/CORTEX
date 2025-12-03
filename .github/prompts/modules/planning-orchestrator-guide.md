@@ -553,7 +553,26 @@ All planning checkpoints follow the format: `{operation}-{YYYYMMDD}-{HHMMSS}`
 
 ### Viewing Checkpoints
 
-**List All Planning Checkpoints:**
+**Recommended: Use CORTEX Commands:**
+```
+User: "show checkpoints"
+
+CORTEX:
+  📋 Git Checkpoints (Last 30 Days):
+  
+  Recent Planning Checkpoints:
+  1. complete-20251130-144512 (completion) - 2 hours ago
+  2. approve-20251130-143856 (approval) - 3 hours ago
+  3. plan-20251130-143022 (generation) - 3 hours ago
+  
+  💡 Tip: Use 'rollback to <checkpoint>' to restore any checkpoint
+```
+
+**Alternative: Direct Git Commands (Advanced):**
+
+<details>
+<summary>Click to expand git command reference</summary>
+
 ```bash
 # Show all checkpoints from today
 git tag -l '*-20251130-*' --sort=-creatordate
@@ -566,10 +585,7 @@ git tag -l 'approve-*'
 
 # Show only completion checkpoints
 git tag -l 'complete-*'
-```
 
-**View Checkpoint Details:**
-```bash
 # Show commit info for checkpoint
 git show plan-20251130-143022
 
@@ -578,10 +594,7 @@ git log -1 plan-20251130-143022
 
 # Show files changed at checkpoint
 git show plan-20251130-143022 --stat
-```
 
-**Compare with Current State:**
-```bash
 # Show changes since checkpoint
 git diff plan-20251130-143022
 
@@ -592,12 +605,37 @@ git diff plan-20251130-143022 --name-only
 git diff plan-20251130-143022 --stat
 ```
 
+</details>
+
 ### Rollback Procedures
 
 **Rollback Plan Approval (Return to Active State):**
 
 If you approved a plan prematurely and need to make changes:
 
+**Recommended: Use CORTEX Rollback Command:**
+```
+User: "rollback to approve-20251130-143856"
+
+CORTEX:
+  ⚠️  ROLLBACK WARNING
+  
+  This will DISCARD all changes after checkpoint 'approve-20251130-143856'
+  
+  Changes to be lost:
+   cortex-brain/documents/planning/approved/APPROVED-20251130-authentication.md
+   src/auth/authentication_service.py
+   2 files changed, 150 insertions(+)
+  
+  Type 'yes' to confirm rollback: yes
+  
+  📸 Creating safety checkpoint: pre-rollback-20251130-150000
+  ✅ Rolled back to checkpoint: approve-20251130-143856
+  
+  Plan restored to: cortex-brain/documents/planning/active/PLAN-20251130-authentication.md
+```
+
+**Alternative: Direct Git Commands (Advanced):**
 ```bash
 # 1. List available checkpoints
 git tag -l 'approve-*' --sort=-creatordate
@@ -638,6 +676,24 @@ CORTEX:
 ```
 
 **Rollback Plan Generation (Undo Planning Entirely):**
+
+**Recommended: Use CORTEX Rollback Command:**
+```
+User: "rollback to plan-20251130-143022"
+
+CORTEX:
+  ⚠️  ROLLBACK WARNING
+  
+  This will DISCARD all changes after checkpoint 'plan-20251130-143022'
+  (This undoes the entire planning session)
+  
+  Type 'yes' to confirm rollback: yes
+  
+  📸 Creating safety checkpoint: pre-rollback-20251130-150000
+  ✅ Rolled back to checkpoint: plan-20251130-143022
+```
+
+**Alternative: Direct Git Command (Advanced):**
 ```bash
 # Revert to state before planning started
 git reset --hard plan-20251130-143022
@@ -854,6 +910,194 @@ retention:
 - [ ] Acceptance criteria validated
 - [ ] User acceptance testing completed
 - [ ] Production deployment checklist complete
+
+---
+
+## 🛡️ Threat Modeling Integration
+
+**What:** Automated security threat analysis using STRIDE framework integrated into planning workflow
+
+**When:** Threat modeling runs automatically after DoR validation and before plan generation
+
+**Framework:** STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege)
+
+### How It Works
+
+```
+User: "plan user authentication feature"
+    ↓
+CORTEX: 
+  ✅ DoR validation passed
+  🔒 Running threat analysis...
+  ✅ Identified 8 threats (2 Critical, 3 High, 3 Medium)
+  ✅ Generated mitigation strategies with code examples
+  ✅ Mapped to OWASP Top 10 2021
+  ✅ Updated DoD with security criteria
+    ↓
+Plan Output:
+  - Phase sections (Requirements, Architecture, Implementation)
+  - Security section with threat analysis
+  - DoD updated with threat mitigations
+  - Standalone threat report generated
+```
+
+### Threat Analysis Output
+
+**Quick Summary:**
+- Total threats identified
+- Risk distribution (Critical/High/Medium/Low)
+- OWASP Top 10 mapping
+- Top 3 threats requiring immediate attention
+- Quick mitigation recommendations
+
+**Detailed Report Includes:**
+- Full STRIDE breakdown
+- Each threat with:
+  - Category (e.g., Spoofing)
+  - Description
+  - Risk rating (CRITICAL/HIGH/MEDIUM/LOW)
+  - Attack scenario
+  - Mitigation strategy
+  - Implementation code example (C#)
+  - Test recommendations
+- OWASP Top 10 2021 mapping
+- Context-aware risk scoring
+
+### Feature-Specific Threat Templates
+
+CORTEX uses specialized threat templates based on feature type:
+
+**Authentication Features:**
+- Credential stuffing attacks
+- Session hijacking
+- Weak password policies
+- Multi-factor authentication bypass
+
+**API Features:**
+- Broken authentication
+- Excessive data exposure
+- Lack of rate limiting
+- Injection attacks
+
+**Data Storage Features:**
+- SQL injection
+- Insecure data at rest
+- Missing encryption
+- Sensitive data exposure
+
+**File Upload Features:**
+- Malicious file upload
+- Path traversal
+- Unrestricted file types
+- Denial of service via large files
+
+**Payment Processing:**
+- PCI-DSS compliance gaps
+- Payment data exposure
+- Transaction tampering
+- Insecure payment gateway integration
+
+### Accessing Threat Reports
+
+**Quick Report (in chat):**
+```
+User: "show threats"
+CORTEX: [Displays quick summary with top threats and mitigations]
+```
+
+**Detailed Report (file):**
+```
+Location: cortex-brain/documents/reports/threat-analysis-[feature-name].md
+Auto-opens: Yes (when threat analysis completes)
+Format: Markdown with structured sections
+```
+
+**Integrated in Plan:**
+```
+Location: cortex-brain/documents/planning/active/[plan-name].md
+Section: ## Security Threat Analysis
+Includes: All identified threats, mitigations, DoD updates
+```
+
+### Security DoD Checklist
+
+Threat modeling automatically adds security items to Definition of Done:
+
+**Critical/High Threats (Must Complete):**
+- [ ] SQL injection prevention implemented and tested
+- [ ] Authentication bypass vulnerability mitigated
+- [ ] Sensitive data encryption at rest configured
+
+**Medium Threats (Should Complete):**
+- [ ] Rate limiting implemented for API endpoints
+- [ ] Input validation for all user inputs
+- [ ] Error handling doesn't leak sensitive information
+
+**Security Testing:**
+- [ ] Unit tests for all security controls
+- [ ] Integration tests for authentication/authorization
+- [ ] Security-focused code review completed
+
+### Commands
+
+```bash
+# Run threat analysis on feature description
+"analyze threats for [feature]"
+
+# Show quick threat summary
+"show threats"
+
+# Show detailed threat report
+"detailed threat report"
+
+# Show security DoD checklist
+"security checklist"
+
+# Validate security DoD
+"validate security"
+```
+
+### Example: Authentication Feature Threat Analysis
+
+```markdown
+## 🛡️ Security Threat Analysis
+
+**Feature:** User Authentication System
+**Analysis Date:** 2025-12-01
+**Total Threats:** 8
+**Risk Score:** 72/100 (HIGH)
+
+### Critical Threats (2)
+
+1. **Weak Password Storage (Spoofing)**
+   - **Risk:** CRITICAL
+   - **OWASP:** A02:2021 - Cryptographic Failures
+   - **Attack:** Attacker gains database access and cracks passwords
+   - **Mitigation:** Use Argon2id or bcrypt with high cost factor
+   ```csharp
+   using Microsoft.AspNetCore.Identity;
+   var hasher = new PasswordHasher<User>();
+   string hashedPassword = hasher.HashPassword(user, password);
+   ```
+
+2. **Missing Multi-Factor Authentication (Spoofing)**
+   - **Risk:** CRITICAL
+   - **OWASP:** A07:2021 - Identification and Authentication Failures
+   - **Attack:** Compromised password grants full account access
+   - **Mitigation:** Implement TOTP-based MFA
+   ```csharp
+   // Implementation code provided...
+   ```
+
+### High Threats (3)
+[Details for each high threat...]
+
+### DoD Integration
+- [ ] Argon2id password hashing implemented
+- [ ] MFA enabled for all user accounts
+- [ ] Session timeout configured (15 minutes)
+- [ ] All security tests passing (15/15)
+```
 
 ---
 

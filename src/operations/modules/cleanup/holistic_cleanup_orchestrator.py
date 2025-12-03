@@ -291,7 +291,6 @@ class HolisticRepositoryScanner:
                 # Categorize file
                 file_info = self.categorization_engine.categorize_file(file_path)
                 
-                # Validate production readiness
                 if not file_info.production_ready:
                     validation_info = self.validator.validate_file(file_path)
                     file_info.violations = validation_info.violations
@@ -303,10 +302,8 @@ class HolisticRepositoryScanner:
                     results['files_by_category'][category].append(file_info)
                     results['categories'][category].append(asdict(file_info))  # Also add to categories
                 
-                # Check for duplicates
                 self._check_duplicates(file_path, results)
                 
-                # Check if bloated
                 if self._is_bloated(file_path):
                     results['bloated_files'].append(file_info)
             
@@ -417,7 +414,6 @@ class CleanupManifestGenerator:
         """Generate cleanup recommendations"""
         recommendations = []
         
-        # Check for non-production files
         non_prod_files = scan_results['files_by_category'].get('non_production', [])
         if non_prod_files:
             recommendations.append({
@@ -429,7 +425,6 @@ class CleanupManifestGenerator:
                 'sample_files': [f.name for f in non_prod_files[:10]]
             })
         
-        # Check for redundant files
         redundant_files = scan_results['files_by_category'].get('redundant', [])
         if redundant_files:
             space_freed = sum(f.size for f in redundant_files) / (1024 * 1024)
@@ -442,7 +437,6 @@ class CleanupManifestGenerator:
                 'sample_files': [f.name for f in redundant_files[:10]]
             })
         
-        # Check for deprecated files
         deprecated_files = scan_results['files_by_category'].get('deprecated', [])
         if deprecated_files:
             recommendations.append({
@@ -454,7 +448,6 @@ class CleanupManifestGenerator:
                 'sample_files': [f.name for f in deprecated_files[:10]]
             })
         
-        # Check for duplicates
         if scan_results['duplicates']:
             recommendations.append({
                 'priority': 'medium',
@@ -742,7 +735,6 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
             errors = []
             rollback_occurred = False
             
-            # Process each category with test validation
             for category, category_actions in actions_by_category.items():
                 logger.info(f"\n📦 Processing category: {category} ({len(category_actions)} actions)")
                 logger.info("-" * 50)
@@ -949,7 +941,6 @@ class HolisticCleanupOrchestrator(BaseOperationModule):
                     data={'error': 'Directory not found'}
                 )
             
-            # Initialize engine
             engine = MarkdownConsolidationEngine(
                 documents_root=documents_root,
                 archive_retention_days=30

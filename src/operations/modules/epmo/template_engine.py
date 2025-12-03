@@ -70,7 +70,6 @@ class TemplateEngine:
         # Ensure template directory exists
         self.template_dir.mkdir(parents=True, exist_ok=True)
         
-        # Initialize Jinja2 environment
         self.env = Environment(
             loader=FileSystemLoader(str(self.template_dir)),
             autoescape=select_autoescape(['html', 'xml']) if self.config.auto_escape else False,
@@ -82,7 +81,6 @@ class TemplateEngine:
         self._register_custom_filters()
         self._register_custom_functions()
         
-        # Create default templates if they don't exist
         self._ensure_default_templates()
     
     def render_template(self, template_name: str, context: Union[TemplateContext, Dict[str, Any]]) -> str:
@@ -190,10 +188,8 @@ class TemplateEngine:
             # Try to load and parse template
             template = self.env.get_template(template_name)
             
-            # Check for common issues
             template_source = template.source
             
-            # Check for undefined variables (basic check)
             undefined_vars = re.findall(r'\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}', template_source)
             if undefined_vars:
                 validation_result['warnings'].append({
@@ -201,7 +197,6 @@ class TemplateEngine:
                     'message': f"Template references variables that may be undefined: {set(undefined_vars)}"
                 })
             
-            # Check for missing includes/extends
             includes = re.findall(r'\{\%\s*include\s+[\'\"](.*?)[\'\"]', template_source)
             extends = re.findall(r'\{\%\s*extends\s+[\'\"](.*?)[\'\"]', template_source)
             
@@ -536,7 +531,6 @@ Code quality metrics and statistics.
 Generated on: {{ _template.rendered_at | format_datetime }}
 """
         
-        # Create templates
         default_templates = {
             'README.md.j2': readme_template,
             'api-reference.md.j2': api_template,

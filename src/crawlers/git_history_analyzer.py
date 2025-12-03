@@ -156,7 +156,6 @@ class GitHistoryAnalyzer:
         # Map to applications
         app_activity = self._map_to_applications(all_file_changes)
         
-        # Calculate activity scores
         self._calculate_activity_scores(app_activity)
         
         logger.info(f"Git analysis complete: {len(all_file_changes)} files changed across {len(app_activity)} applications")
@@ -300,7 +299,6 @@ class GitHistoryAnalyzer:
         """
         app_activity = {}
         
-        # Initialize application activity
         for app in self.applications:
             app_name = app['name']
             app_activity[app_name] = ApplicationGitActivity(
@@ -318,7 +316,6 @@ class GitHistoryAnalyzer:
                 app_activity[app_name].files_changed.append(change_info)
                 app_activity[app_name].total_commits += change_info.commit_count
         
-        # Calculate commit frequency (commits per day)
         for activity in app_activity.values():
             if activity.total_commits > 0:
                 activity.commit_frequency = activity.total_commits / max(self.lookback_days, 1)
@@ -432,5 +429,4 @@ class GitHistoryAnalyzer:
         }
 
 
-# Import os for walk function
 import os

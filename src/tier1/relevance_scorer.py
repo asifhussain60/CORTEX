@@ -82,7 +82,6 @@ class RelevanceScorer:
         conv_text = self._get_conversation_text(conversation)
         conv_timestamp = conversation.get('created_at') or conversation.get('updated_at')
         
-        # Calculate component scores
         entity_score = self._calculate_entity_overlap(
             conv_entities,
             current_request,
@@ -130,7 +129,6 @@ class RelevanceScorer:
             'ui_components': set()
         }
         
-        # Get entities from metadata if available
         metadata = conversation.get('metadata', {})
         if isinstance(metadata, dict):
             for entity_type in entities.keys():
@@ -212,7 +210,6 @@ class RelevanceScorer:
         
         matches = 0
         
-        # Check file matches
         if current_file:
             current_file_name = current_file.split('/')[-1]
             for conv_file in conv_entities['files']:
@@ -220,14 +217,12 @@ class RelevanceScorer:
                 if current_file_name == conv_file_name:
                     matches += 2  # Files are very strong signals
         
-        # Check entity matches in current request
         current_request_lower = current_request.lower()
         for entity_type, entity_set in conv_entities.items():
             for entity in entity_set:
                 if entity.lower() in current_request_lower:
                     matches += 1
         
-        # Check entity matches in active entities
         if active_entities:
             for entity_type, active_list in active_entities.items():
                 conv_set = conv_entities.get(entity_type, set())
@@ -266,7 +261,6 @@ class RelevanceScorer:
         else:
             return 0.0
         
-        # Calculate age
         now = datetime.now(conv_time.tzinfo) if conv_time.tzinfo else datetime.now()
         age = now - conv_time
         age_hours = age.total_seconds() / 3600
@@ -305,11 +299,9 @@ class RelevanceScorer:
         if not request_keywords:
             return 0.0
         
-        # Calculate keyword overlap
         common_keywords = conv_keywords & request_keywords
         keyword_score = len(common_keywords) / len(request_keywords)
         
-        # Check for topic category matches
         conv_topics = self._detect_topics(conv_text_lower)
         request_topics = self._detect_topics(request_lower)
         
@@ -389,7 +381,6 @@ class RelevanceScorer:
         """
         score = 0.0
         
-        # Check if same file is involved
         conv_entities = self._extract_conversation_entities(conversation)
         if current_file:
             current_file_name = current_file.split('/')[-1]
@@ -398,7 +389,6 @@ class RelevanceScorer:
                     score += 0.5
                     break
         
-        # Check for continuation phrases
         continuation_patterns = [
             r'\bcontinue\b',
             r'\bresume\b',
@@ -451,5 +441,4 @@ class RelevanceScorer:
         # Sort by score descending
         scored_conversations.sort(key=lambda x: x[1], reverse=True)
         
-        # Return top N
         return scored_conversations[:top_n]

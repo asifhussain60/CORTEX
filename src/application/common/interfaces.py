@@ -68,7 +68,6 @@ class IRequestHandler(ABC, Generic[TRequest, TResponse]):
     Example:
         class CaptureConversationHandler(IRequestHandler[CaptureConversationCommand, str]):
             async def handle(self, request: CaptureConversationCommand) -> Result[str]:
-                # Process command
                 return Result.success(conversation_id)
     """
     
@@ -98,7 +97,6 @@ class IPipelineBehavior(ABC, Generic[TRequest, TResponse]):
     Example:
         class ValidationBehavior(IPipelineBehavior[IRequest, Any]):
             async def handle(self, request, next_handler):
-                # Validate request
                 if not is_valid(request):
                     return Result.failure("Validation failed")
                 return await next_handler()

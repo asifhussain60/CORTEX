@@ -32,7 +32,6 @@ from typing import Tuple, List, Dict, Any
 class BoundaryMigration:
     """Handles schema migration for namespace/scope boundaries."""
     
-    # Classification rules
     GENERIC_KEYWORDS = [
         'test', 'tdd', 'refactor', 'solid', 'governance',
         'protection', 'cortex', 'tier', 'agent', 'workflow'
@@ -190,7 +189,6 @@ class BoundaryMigration:
         patterns = self.get_existing_patterns()
         print(f"Found {len(patterns)} patterns to classify")
         
-        # Classify all patterns
         classifications = {}
         scope_counts = {'generic': 0, 'application': 0}
         namespace_counts = {}
@@ -249,7 +247,6 @@ class BoundaryMigration:
                 """)
                 print("  ✅ Added 'namespaces' column")
                 
-                # Create indexes
                 cursor.execute("CREATE INDEX idx_scope ON patterns(scope)")
                 print("  ✅ Created index on scope")
                 

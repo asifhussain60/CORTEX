@@ -1,8 +1,8 @@
 # 🚀 CORTEX Setup Guide
 
-**Version:** 3.3.0  
+**Version:** 3.7.0  
 **Branch:** main  
-**Updated:** 2025-11-30
+**Updated:** 2025-12-03
 
 ---
 
@@ -151,6 +151,70 @@ Stage 2: Deployment Gate Validation (16 Gates)
 
 ✅ CORTEX is ready to use!
 ```
+
+### 6️⃣ Post-Deployment Validation
+
+**IMPORTANT:** After installation or upgrade, run comprehensive post-deployment validation to ensure CORTEX is production-ready with all features properly wired.
+
+```bash
+# Run comprehensive validation
+python scripts/post_deployment_check.py
+
+# Verbose output (see all checks)
+python scripts/post_deployment_check.py --verbose
+
+# Generate report only (no console output)
+python scripts/post_deployment_check.py --report-only
+```
+
+**Exit Codes:**
+- `0`: All validations passed ✅ (production ready)
+- `1`: Warnings detected ⚠️ (review but operational)
+- `2`: Critical failures ❌ (fix before using CORTEX)
+
+**What's Validated (10 Categories):**
+1. ✅ **Core Agents** - FeedbackAgent, ViewDiscoveryAgent, TDDAgent, PlanningAgent
+2. ✅ **Response Templates** - 11 critical templates loadable
+3. ✅ **Documentation Sync** - Entry point and modules synchronized
+4. ✅ **TDD Workflow** - TDD Mastery integration complete
+5. ✅ **Planning System** - DoR/DoD validation functional
+6. ✅ **ADO Integration** - ADO operations wired correctly
+7. ✅ **Entry Points** - All required modules present and documented
+8. ✅ **Database Schema** - Tier 1/2/3 databases healthy
+9. ✅ **Brain Protection** - SKULL rules active
+10. ✅ **System Alignment** - Convention-based feature discovery working
+
+**Validation Reports:**
+Reports are saved to `cortex-brain/documents/reports/post-deployment-validation-{timestamp}.md`
+
+**If Validation Fails:**
+
+```bash
+# 1. Review the validation report
+cat cortex-brain/documents/reports/post-deployment-validation-*.md
+
+# 2. Fix issues listed in the report (examples):
+#    - Missing agents: Check imports in orchestrators
+#    - Template issues: Validate response-templates.yaml syntax
+#    - Database errors: Run migrations from cortex-brain/migrations/
+#    - Entry point issues: Check .github/prompts/CORTEX.prompt.md
+
+# 3. Re-run validation until it passes
+python scripts/post_deployment_check.py
+
+# 4. If issues persist, use CORTEX diagnostics:
+/CORTEX healthcheck
+```
+
+**Common Issues:**
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Agent import fails | Missing dependencies | `pip install -r requirements.txt` |
+| Template not found | YAML syntax error | Validate `cortex-brain/response-templates.yaml` |
+| Database locked | Another process | Close VS Code, kill python processes |
+| Entry point missing | Module not documented | Add to `.github/prompts/CORTEX.prompt.md` |
+| TDD integration fail | Test framework missing | `pip install pytest` |
 
 **If Validation Fails:**
 
@@ -437,4 +501,4 @@ git clone -b main --single-branch https://github.com/asifhussain60/CORTEX.git
 
 ---
 
-*Last Updated: 2025-11-30 17:47:55 | CORTEX 3.3.0*
+*Last Updated: 2025-12-03 15:24:41 | CORTEX 3.7.0*

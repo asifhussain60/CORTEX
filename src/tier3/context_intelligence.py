@@ -233,7 +233,6 @@ class ContextIntelligence:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Initialize database
         self._init_database()
     
     def _init_database(self):
@@ -332,7 +331,6 @@ class ContextIntelligence:
             WHERE expires_at < CURRENT_TIMESTAMP
         """)
         
-        # Get cache value
         cursor.execute("""
             SELECT cache_value FROM context_cache
             WHERE cache_key = ?
@@ -435,7 +433,6 @@ class ContextIntelligence:
                     current_date = datetime.strptime(date_str, "%Y-%m-%d").date()
                     current_contributor = contributor
                     
-                    # Initialize metric for this date
                     key = (current_date, current_contributor)
                     if key not in metrics_by_date:
                         metrics_by_date[key] = {
@@ -591,7 +588,6 @@ class ContextIntelligence:
         period_end = date.today()
         period_start = period_end - timedelta(days=days)
         
-        # Check cache first (60 minute TTL)
         cache_key = f"file_hotspots_{days}d_{period_start}_{period_end}"
         cached = self._get_cache(cache_key)
         
@@ -618,7 +614,6 @@ class ContextIntelligence:
         
         # Cache miss or invalid - compute hotspots
         try:
-            # Get total commits in period
             since_str = period_start.strftime("%Y-%m-%d")
             cmd_total = [
                 "git", "-C", str(repo_path), "rev-list",
@@ -631,7 +626,6 @@ class ContextIntelligence:
             if total_commits == 0:
                 return []
             
-            # Get file edit counts
             cmd_files = [
                 "git", "-C", str(repo_path), "log",
                 f"--since={since_str}",
@@ -646,12 +640,10 @@ class ContextIntelligence:
                 if line.strip():
                     file_edits[line.strip()] = file_edits.get(line.strip(), 0) + 1
             
-            # Calculate churn rates and stability
             hotspots = []
             for file_path, edits in file_edits.items():
                 churn_rate = edits / total_commits
                 
-                # Classify stability
                 if churn_rate < self.CHURN_STABLE_THRESHOLD:
                     stability = Stability.STABLE
                 elif churn_rate < self.CHURN_MODERATE_THRESHOLD:
@@ -789,7 +781,6 @@ class ContextIntelligence:
             else:
                 previous_window.append(metric)
         
-        # Calculate velocities
         current_velocity = sum(m.commits_count for m in current_window)
         previous_velocity = sum(m.commits_count for m in previous_window)
         
@@ -826,7 +817,6 @@ class ContextIntelligence:
         """
         insights = []
         
-        # Check velocity trends
         velocity = self.calculate_commit_velocity()
         if velocity['trend'] == 'declining':
             insights.append(Insight(
@@ -841,7 +831,6 @@ class ContextIntelligence:
                 data_snapshot=velocity
             ))
         
-        # Check for unstable files
         unstable_files = self.get_unstable_files(limit=5)
         for hotspot in unstable_files:
             if hotspot.churn_rate > 0.3:  # >30% churn
@@ -925,4 +914,485 @@ class ContextIntelligence:
         hotspots = self.analyze_file_hotspots(repo_path=repo_path, days=days)
         if hotspots:
             self.save_file_hotspots(hotspots)
+    
+    # ========== Phase 3: TDD Workflow Enhancement - Real-Time Context Updates ==========
+    
+    def store_code_metrics(
+        self,
+        file_path: str,
+        cyclomatic_complexity: int,
+        cognitive_complexity: int,
+        lines_of_code: int,
+        source: str = 'tdd_green_phase'
+    ) -> bool:
+        """
+        Store code metrics captured during GREEN phase of TDD.
+        
+        Part of Phase 3 Deliverable 3.3: Real-time dev context updates
+        
+        Args:
+            file_path: Path to file being measured
+            cyclomatic_complexity: Cyclomatic complexity score
+            cognitive_complexity: Cognitive complexity score
+            lines_of_code: Total lines of code
+            source: Where metrics were captured from
+        
+        Returns:
+            True if stored successfully
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Create table if not exists
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS code_metrics_realtime (
+                    metric_id TEXT PRIMARY KEY,
+                    file_path TEXT NOT NULL,
+                    cyclomatic_complexity INTEGER,
+                    cognitive_complexity INTEGER,
+                    lines_of_code INTEGER,
+                    source TEXT NOT NULL,
+                    measured_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    captured_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            metric_id = f"metric_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+            
+            cursor.execute('''
+                INSERT INTO code_metrics_realtime
+                (metric_id, file_path, cyclomatic_complexity, cognitive_complexity, 
+                 lines_of_code, source, measured_at, captured_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                metric_id,
+                file_path,
+                cyclomatic_complexity,
+                cognitive_complexity,
+                lines_of_code,
+                source,
+                datetime.now(),
+                datetime.now()
+            ))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error storing code metrics: {e}")
+            return False
+    
+    def get_code_metrics(self, file_path: str) -> Optional[Dict[str, Any]]:
+        """
+        Get most recent code metrics for a file.
+        
+        Args:
+            file_path: File to retrieve metrics for
+        
+        Returns:
+            Metrics dictionary or None if not found
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT metric_id, cyclomatic_complexity, cognitive_complexity,
+                       lines_of_code, source, measured_at, captured_at
+                FROM code_metrics_realtime
+                WHERE file_path = ?
+                ORDER BY captured_at DESC
+                LIMIT 1
+            ''', (file_path,))
+            
+            row = cursor.fetchone()
+            conn.close()
+            
+            if row:
+                return {
+                    'metric_id': row[0],
+                    'file_path': file_path,
+                    'cyclomatic_complexity': row[1],
+                    'cognitive_complexity': row[2],
+                    'lines_of_code': row[3],
+                    'source': row[4],
+                    'measured_at': row[5],
+                    'captured_at': row[6]
+                }
+            return None
+        except Exception as e:
+            print(f"Error retrieving code metrics: {e}")
+            return None
+    
+    def get_recent_improvements(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Get recent code improvements from REFACTOR phase.
+        
+        Returns:
+            List of improvement dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Create table if not exists
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS refactoring_improvements (
+                    improvement_id TEXT PRIMARY KEY,
+                    file_path TEXT NOT NULL,
+                    improvement_type TEXT NOT NULL,
+                    description TEXT,
+                    before_complexity INTEGER,
+                    after_complexity INTEGER,
+                    improvement_percent REAL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            cursor.execute('''
+                SELECT improvement_id, file_path, improvement_type, description,
+                       before_complexity, after_complexity, improvement_percent, created_at
+                FROM refactoring_improvements
+                ORDER BY created_at DESC
+                LIMIT ?
+            ''', (limit,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            improvements = []
+            for row in rows:
+                improvements.append({
+                    'improvement_id': row[0],
+                    'file_path': row[1],
+                    'improvement_type': row[2],
+                    'description': row[3],
+                    'before_complexity': row[4],
+                    'after_complexity': row[5],
+                    'improvement_percent': row[6],
+                    'created_at': row[7]
+                })
+            
+            return improvements
+        except Exception as e:
+            print(f"Error retrieving improvements: {e}")
+            return []
+    
+    def get_performance_metrics(self, feature: str) -> List[Dict[str, Any]]:
+        """
+        Get performance metrics for a feature from REFACTOR phase.
+        
+        Args:
+            feature: Feature name to retrieve metrics for
+        
+        Returns:
+            List of performance metric dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Create table if not exists
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS performance_metrics (
+                    metric_id TEXT PRIMARY KEY,
+                    feature_name TEXT NOT NULL,
+                    before_ms REAL NOT NULL,
+                    after_ms REAL NOT NULL,
+                    improvement_percent REAL,
+                    measurement_type TEXT,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            cursor.execute('''
+                SELECT metric_id, feature_name, before_ms, after_ms, 
+                       improvement_percent, measurement_type, created_at
+                FROM performance_metrics
+                WHERE feature_name = ?
+                ORDER BY created_at DESC
+            ''', (feature,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            metrics = []
+            for row in rows:
+                metrics.append({
+                    'metric_id': row[0],
+                    'feature_name': row[1],
+                    'before_ms': row[2],
+                    'after_ms': row[3],
+                    'improvement_percent': row[4],
+                    'measurement_type': row[5],
+                    'created_at': row[6]
+                })
+            
+            return metrics
+        except Exception as e:
+            print(f"Error retrieving performance metrics: {e}")
+            return []
+    
+    def get_complexity_changes(self, feature: str) -> List[Dict[str, Any]]:
+        """
+        Get complexity changes from REFACTOR phase.
+        
+        Args:
+            feature: Feature name to retrieve complexity changes for
+        
+        Returns:
+            List of complexity change dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Create table if not exists
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS complexity_changes (
+                    change_id TEXT PRIMARY KEY,
+                    feature_name TEXT NOT NULL,
+                    file_path TEXT NOT NULL,
+                    before_complexity INTEGER NOT NULL,
+                    after_complexity INTEGER NOT NULL,
+                    change_percent REAL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            cursor.execute('''
+                SELECT change_id, feature_name, file_path, before_complexity,
+                       after_complexity, change_percent, created_at
+                FROM complexity_changes
+                WHERE feature_name = ?
+                ORDER BY created_at DESC
+            ''', (feature,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            changes = []
+            for row in rows:
+                changes.append({
+                    'change_id': row[0],
+                    'feature_name': row[1],
+                    'file_path': row[2],
+                    'before_complexity': row[3],
+                    'after_complexity': row[4],
+                    'change_percent': row[5],
+                    'created_at': row[6]
+                })
+            
+            return changes
+        except Exception as e:
+            print(f"Error retrieving complexity changes: {e}")
+            return []
+    
+    def get_refactoring_impact(self, file_path: str) -> Optional[Dict[str, Any]]:
+        """
+        Get refactoring impact comparison (before/after metrics).
+        
+        Args:
+            file_path: File to analyze
+        
+        Returns:
+            Impact dictionary with before/after comparison
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Get last 2 metrics (before and after refactoring)
+            cursor.execute('''
+                SELECT metric_id, cyclomatic_complexity, cognitive_complexity,
+                       lines_of_code, source, measured_at
+                FROM code_metrics_realtime
+                WHERE file_path = ?
+                ORDER BY captured_at DESC
+                LIMIT 2
+            ''', (file_path,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            if len(rows) >= 2:
+                after = rows[0]
+                before = rows[1]
+                
+                improvement_percent = 0
+                if before[1] > 0:  # before cyclomatic_complexity
+                    improvement_percent = ((before[1] - after[1]) / before[1]) * 100
+                
+                return {
+                    'file_path': file_path,
+                    'before': {
+                        'cyclomatic_complexity': before[1],
+                        'cognitive_complexity': before[2],
+                        'lines_of_code': before[3],
+                        'measured_at': before[5]
+                    },
+                    'after': {
+                        'cyclomatic_complexity': after[1],
+                        'cognitive_complexity': after[2],
+                        'lines_of_code': after[3],
+                        'measured_at': after[5]
+                    },
+                    'improvement_percent': improvement_percent
+                }
+            return None
+        except Exception as e:
+            print(f"Error calculating refactoring impact: {e}")
+            return None
+    
+    def get_hotspots(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Get file hotspots detected in real-time during development.
+        
+        Args:
+            limit: Maximum number of hotspots to return
+        
+        Returns:
+            List of hotspot dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Create table if not exists
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS hotspots_realtime (
+                    hotspot_id TEXT PRIMARY KEY,
+                    file_path TEXT NOT NULL,
+                    edit_count INTEGER DEFAULT 1,
+                    last_edited DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    detection_source TEXT DEFAULT 'tdd_realtime'
+                )
+            ''')
+            
+            cursor.execute('''
+                SELECT hotspot_id, file_path, edit_count, last_edited, detection_source
+                FROM hotspots_realtime
+                ORDER BY edit_count DESC, last_edited DESC
+                LIMIT ?
+            ''', (limit,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            hotspots = []
+            for row in rows:
+                hotspots.append({
+                    'hotspot_id': row[0],
+                    'file_path': row[1],
+                    'edit_count': row[2],
+                    'last_edited': row[3],
+                    'detection_source': row[4]
+                })
+            
+            return hotspots
+        except Exception as e:
+            print(f"Error retrieving hotspots: {e}")
+            return []
+    
+    def increment_hotspot(self, file_path: str) -> bool:
+        """
+        Increment hotspot counter for a file (called during each TDD cycle).
+        
+        Args:
+            file_path: File being edited
+        
+        Returns:
+            True if updated successfully
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Create table if not exists
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS hotspots_realtime (
+                    hotspot_id TEXT PRIMARY KEY,
+                    file_path TEXT NOT NULL,
+                    edit_count INTEGER DEFAULT 1,
+                    last_edited DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    detection_source TEXT DEFAULT 'tdd_realtime'
+                )
+            ''')
+            
+            # Check if hotspot exists
+            cursor.execute('''
+                SELECT hotspot_id, edit_count FROM hotspots_realtime
+                WHERE file_path = ?
+            ''', (file_path,))
+            
+            row = cursor.fetchone()
+            
+            if row:
+                # Update existing hotspot
+                cursor.execute('''
+                    UPDATE hotspots_realtime
+                    SET edit_count = edit_count + 1,
+                        last_edited = ?
+                    WHERE file_path = ?
+                ''', (datetime.now(), file_path))
+            else:
+                # Create new hotspot
+                hotspot_id = f"hotspot_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+                cursor.execute('''
+                    INSERT INTO hotspots_realtime
+                    (hotspot_id, file_path, edit_count, last_edited, detection_source)
+                    VALUES (?, ?, 1, ?, 'tdd_realtime')
+                ''', (hotspot_id, file_path, datetime.now()))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error incrementing hotspot: {e}")
+            return False
+    
+    def get_all_metrics(self, source: str = 'tdd_green_phase') -> List[Dict[str, Any]]:
+        """
+        Get all metrics from a specific source.
+        
+        Args:
+            source: Source to filter by
+        
+        Returns:
+            List of metric dictionaries
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT metric_id, file_path, cyclomatic_complexity, cognitive_complexity,
+                       lines_of_code, source, measured_at, captured_at
+                FROM code_metrics_realtime
+                WHERE source = ?
+                ORDER BY captured_at DESC
+            ''', (source,))
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            metrics = []
+            for row in rows:
+                metrics.append({
+                    'metric_id': row[0],
+                    'file_path': row[1],
+                    'cyclomatic_complexity': row[2],
+                    'cognitive_complexity': row[3],
+                    'lines_of_code': row[4],
+                    'source': row[5],
+                    'measured_at': row[6],
+                    'captured_at': datetime.fromisoformat(row[7]) if isinstance(row[7], str) else row[7]
+                })
+            
+            return metrics
+        except Exception as e:
+            print(f"Error retrieving all metrics: {e}")
+            return []
+
 

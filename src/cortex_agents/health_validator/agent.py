@@ -49,14 +49,12 @@ class HealthValidator(BaseAgent):
         """Initialize HealthValidator with tier APIs and validators."""
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         
-        # Initialize validators
         self.db_validator = DatabaseValidator(tier1_api, tier2_kg, tier3_context)
         self.test_validator = TestValidator()
         self.git_validator = GitValidator()
         self.disk_validator = DiskValidator()
         self.perf_validator = PerformanceValidator(tier3_context)
         
-        # Initialize reporting components
         self.analyzer = ResultAnalyzer()
         self.formatter = ReportFormatter()
     
@@ -109,7 +107,6 @@ class HealthValidator(BaseAgent):
             # Analyze results
             status, warnings, errors = self.analyzer.analyze_results(check_results)
             
-            # Calculate overall risk
             risk_level = self.analyzer.calculate_risk(check_results, errors)
             
             # Format message - conditionally verbose based on skip_summary
@@ -120,7 +117,6 @@ class HealthValidator(BaseAgent):
                 # Detailed message for investigation intents
                 message = self.formatter.format_message(status, warnings, errors, check_results)
             
-            # Get action suggestions only if NOT suppressed
             suggestions = self.formatter.suggest_actions(check_results, risk_level) if not skip_summary else []
             
             # Log to Tier 1 if available

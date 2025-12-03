@@ -61,7 +61,6 @@ class WorkflowFinder:
         # Simple extraction - in real implementation, this would be more sophisticated
         tasks = []
         
-        # Check if workflow has embedded task data
         if isinstance(content, dict) and "tasks" in content:
             tasks = content["tasks"]
         

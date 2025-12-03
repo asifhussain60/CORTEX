@@ -33,10 +33,9 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 
-# Import core components
 from .parser import analyze_epmo_structure
 from .dependency_mapper import analyze_epmo_dependencies
-from .health_integration import HealthIntegration
+from .health_integration import HealthIntegration, get_health_integration_data
 from .models import (
     EPMDocumentationModel,
     DocumentationFormat,
@@ -50,7 +49,6 @@ from .models import (
     validate_model
 )
 
-# Import Phase 4.2 components
 from .markdown_generator import generate_markdown_documentation, MarkdownGenerator
 from .mermaid_generator import (
     create_diagrams_for_model, MultiModalDiagramGenerator, 
@@ -109,13 +107,13 @@ def generate_documentation(
         # Health integration (if available)
         health_data = None
         try:
-            health_integration = HealthIntegration()
-            health_result = health_integration.analyze_epmo_health(epmo_path, project_root)
+            # Prefer lightweight function to avoid strict constructor signature
+            health_result = get_health_integration_data(epmo_path, project_root)
             health_data = health_result if health_result.get('status') == 'success' else None
         except Exception:
-            pass  # Health integration optional
+            # Health integration is optional; proceed without it
+            pass
         
-        # Create comprehensive model
         model = create_epmo_model(
             epmo_path=epmo_path,
             ast_analysis=ast_analysis,
@@ -209,10 +207,8 @@ def generate_brain_enhanced_documentation(
             create_simple_generation_request
         )
         
-        # Create brain API
         brain_api = create_brain_integration_api()
         
-        # Create generation request
         request = create_simple_generation_request(
             project_path=epmo_path,
             output_path=project_root / 'documentation' / 'generated',

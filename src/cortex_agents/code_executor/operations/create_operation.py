@@ -23,7 +23,6 @@ class CreateOperation(BaseOperation):
         Returns:
             Creation result
         """
-        # Check if file already exists
         if os.path.exists(file_path):
             if not context.get("overwrite", False):
                 return {
@@ -31,10 +30,8 @@ class CreateOperation(BaseOperation):
                     "message": f"File already exists: {file_path}"
                 }
         
-        # Get content
         content = context.get("content", "")
         
-        # Validate syntax if validator available
         if self.validator and self.validator.should_validate(file_path):
             is_valid, error = self.validator.validate(content, file_path)
             if not is_valid:
@@ -45,7 +42,6 @@ class CreateOperation(BaseOperation):
                 }
         
         try:
-            # Create directory if needed
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
             
             # Write file

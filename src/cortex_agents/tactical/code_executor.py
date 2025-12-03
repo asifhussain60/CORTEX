@@ -162,7 +162,6 @@ class CodeExecutor(BaseAgent):
         Returns:
             True if tests should be written, False otherwise
         """
-        # Check if intelligent determination is enabled
         if not rule_context.get('intelligent_test_determination', False):
             # If not enabled, default to requiring tests
             return True
@@ -218,7 +217,6 @@ class CodeExecutor(BaseAgent):
             'payment', 'integration', 'state change', 'workflow'
         ]
         
-        # Check for test-required indicators
         for indicator in test_required_indicators:
             if indicator in task_lower:
                 self.logger.info(

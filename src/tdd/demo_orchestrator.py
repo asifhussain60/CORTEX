@@ -140,17 +140,14 @@ class DemoOrchestrator:
         Returns:
             Session ID if successful, None if scenario not found
         """
-        # Get scenario
         scenario = self.demo_engine.get_scenario(scenario_id)
         if not scenario:
             return None
         
-        # Create session in demo engine
         session_id = self.demo_engine.create_demo_session(scenario_id)
         if not session_id:
             return None
         
-        # Create session object
         session = DemoSession(
             session_id=session_id,
             scenario_id=scenario_id,
@@ -240,7 +237,6 @@ class DemoOrchestrator:
         session = self.sessions[session_id]
         scenario = self.demo_engine.get_scenario(session.scenario_id)
         
-        # Get RED phase code (test)
         test_code = self.demo_engine.get_phase_code(
             session.scenario_id,
             DemoPhase.RED
@@ -290,7 +286,6 @@ class DemoOrchestrator:
         session = self.sessions[session_id]
         scenario = self.demo_engine.get_scenario(session.scenario_id)
         
-        # Get GREEN phase code (implementation)
         impl_code = self.demo_engine.get_phase_code(
             session.scenario_id,
             DemoPhase.GREEN
@@ -299,7 +294,6 @@ class DemoOrchestrator:
         print("\n💚 Implementation Code:")
         print(impl_code)
         
-        # Get test code
         test_code = self.demo_engine.get_phase_code(
             session.scenario_id,
             DemoPhase.RED
@@ -346,7 +340,6 @@ class DemoOrchestrator:
         session = self.sessions[session_id]
         scenario = self.demo_engine.get_scenario(session.scenario_id)
         
-        # Get REFACTOR phase code
         refactored_code = self.demo_engine.get_phase_code(
             session.scenario_id,
             DemoPhase.REFACTOR
@@ -371,7 +364,6 @@ class DemoOrchestrator:
         print("\n♻️  Refactored Code:")
         print(refactored_code)
         
-        # Get test code
         test_code = self.demo_engine.get_phase_code(
             session.scenario_id,
             DemoPhase.RED

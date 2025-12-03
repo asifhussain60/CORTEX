@@ -21,7 +21,6 @@ USAGE:
     
     governance = UserProfileGovernance()
     
-    # Check if user has acknowledged rulebook
     if not governance.has_acknowledged_rulebook():
         # Show onboarding flow
         pass
@@ -125,7 +124,6 @@ class UserProfileGovernance:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
-            # Check existing columns
             cursor.execute("PRAGMA table_info(user_profile)")
             existing_columns = {row[1] for row in cursor.fetchall()}
             
@@ -207,7 +205,6 @@ class UserProfileGovernance:
             
             now = datetime.now().isoformat()
             
-            # Check if profile exists
             cursor.execute("SELECT COUNT(*) FROM user_profile WHERE id = 1")
             exists = cursor.fetchone()[0] > 0
             
@@ -221,7 +218,6 @@ class UserProfileGovernance:
                     WHERE id = 1
                 """, (now,))
             else:
-                # Create new profile with defaults
                 cursor.execute("""
                     INSERT INTO user_profile (
                         id, 
@@ -311,7 +307,6 @@ class UserProfileGovernance:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
-            # Check if profile exists
             cursor.execute("SELECT COUNT(*) FROM user_profile WHERE id = 1")
             exists = cursor.fetchone()[0] > 0
             
@@ -324,7 +319,6 @@ class UserProfileGovernance:
                     WHERE id = 1
                 """)
             else:
-                # Create new profile with defaults
                 cursor.execute("""
                     INSERT INTO user_profile (
                         id, 

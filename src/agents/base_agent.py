@@ -60,7 +60,6 @@ class BaseAgent(ABC):
         self.agent_name = agent_name or self.__class__.__name__
         self.logger = logging.getLogger(f"cortex.agents.{self.agent_name}")
         
-        # Initialize metrics
         self.metrics = AgentMetrics()
         
         # Execution tracking

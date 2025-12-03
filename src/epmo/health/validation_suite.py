@@ -185,7 +185,6 @@ class EPMOHealthValidator:
                 results = validator.validate(epmo_path, self.project_root)
                 all_results.extend(results)
                 
-                # Calculate dimension score
                 dim_score = sum(r.percentage for r in results) / len(results) if results else 0.0
                 dimension_scores[dimension] = dim_score
                 
@@ -204,7 +203,6 @@ class EPMOHealthValidator:
                 all_results.append(error_result)
                 dimension_scores[dimension] = 0.0
         
-        # Calculate overall score (weighted average)
         weights = {
             HealthDimension.CODE_QUALITY: 0.25,      # 25%
             HealthDimension.DOCUMENTATION: 0.15,     # 15%
@@ -219,10 +217,8 @@ class EPMOHealthValidator:
             for dim, weight in weights.items()
         )
         
-        # Calculate grade
         overall_grade = self._calculate_grade(overall_score)
         
-        # Create report
         report = EPMOHealthReport(
             epmo_name=epmo_name,
             module_path=epmo_path,
@@ -250,7 +246,6 @@ class EPMOHealthValidator:
         epmo_paths = self._discover_epmos()
         logger.info(f"Found {len(epmo_paths)} EPMOs to validate")
         
-        # Validate each EPMO
         reports = {}
         for epmo_path in epmo_paths:
             try:
@@ -335,7 +330,6 @@ class EPMOHealthValidator:
         if not reports:
             return {"error": "No EPMO reports available"}
         
-        # Calculate summary statistics
         scores = [r.overall_score for r in reports.values()]
         avg_score = sum(scores) / len(scores)
         min_score = min(scores)
@@ -396,7 +390,6 @@ class EPMOHealthValidator:
             self.project_root = project_root
         
         try:
-            # Get the full health report
             report = self.validate_epmo(epmo_path)
             
             # Convert to structured dictionary format expected by integration layer
@@ -410,7 +403,6 @@ class EPMOHealthValidator:
                     all_results_by_dimension[dim] = []
                 all_results_by_dimension[dim].append(result)
             
-            # Calculate dimension scores and weights
             weights = {
                 HealthDimension.CODE_QUALITY: 0.25,      # 25%
                 HealthDimension.DOCUMENTATION: 0.15,     # 15%

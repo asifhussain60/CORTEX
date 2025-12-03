@@ -150,7 +150,6 @@ class DocumentDeduplicator:
                             keep_file = file2_path
                             archive_file = file1_path
                         
-                        # Create archive directory
                         archive_dir = docs_dir / "archive"
                         archive_dir.mkdir(exist_ok=True)
                         

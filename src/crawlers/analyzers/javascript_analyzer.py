@@ -74,7 +74,6 @@ class JavaScriptAnalyzer:
         # findall returns tuples due to multiple groups
         functions = []
         for match in matches:
-            # Get first non-empty group
             name = match[0] if match[0] else match[1]
             if name:
                 functions.append(name)

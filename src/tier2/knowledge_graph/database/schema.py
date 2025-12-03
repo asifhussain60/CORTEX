@@ -30,17 +30,14 @@ class DatabaseSchema:
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
-        # Create tables
         DatabaseSchema._create_patterns_table(cursor)
         DatabaseSchema._create_relationships_table(cursor)
         DatabaseSchema._create_tags_table(cursor)
         DatabaseSchema._create_decay_log_table(cursor)
         DatabaseSchema._create_fts_table(cursor)
         
-        # Create triggers
         DatabaseSchema._create_fts_triggers(cursor)
         
-        # Create indexes
         DatabaseSchema._create_indexes(cursor)
         
         conn.commit()

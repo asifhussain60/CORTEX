@@ -18,7 +18,6 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 import json
 
-# Import EPMO health system
 try:
     from ..health import run_health_system, EPMOHealthValidator
     from ..health.validation_suite import ValidationResult
@@ -93,7 +92,6 @@ class HealthIntegration:
             remediation_plan = health_result.get('remediation_plan', [])
             effort_estimate = health_result.get('effort_estimate', {})
             
-            # Process remediation actions
             remediation_actions = []
             auto_fixable_issues = []
             priority_issues = []
@@ -153,11 +151,9 @@ class HealthIntegration:
         Returns:
             HealthAwareDocumentation with integrated health data
         """
-        # Get health data
         health_data = self.get_health_documentation_data(epmo_path)
         
         if health_data is None:
-            # Create minimal health data if system unavailable
             health_data = HealthDocumentationData(
                 overall_score=0.0,
                 dimension_scores={},
@@ -177,7 +173,6 @@ class HealthIntegration:
         # Generate health warnings
         health_warnings = self._generate_health_warnings(health_data)
         
-        # Create quality badges
         quality_badges = self._create_quality_badges(health_data)
         
         return HealthAwareDocumentation(
@@ -382,7 +377,6 @@ Review the remediation guide below for specific improvements.
         if health_data.priority_issues:
             warnings.append(f"🔥 {len(health_data.priority_issues)} high-priority issues require immediate attention")
         
-        # Check for specific dimension issues
         for dim_name, dim_data in health_data.dimension_scores.items():
             score = dim_data.get('score', 0)
             if score < 50:

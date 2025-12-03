@@ -169,7 +169,6 @@ class CodeSmellDetector:
         
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
-                # Calculate method length (exclude docstrings)
                 start_line = node.lineno
                 end_line = node.end_lineno or start_line
                 method_lines = end_line - start_line + 1
@@ -287,7 +286,6 @@ class CodeSmellDetector:
         
         for node in ast.walk(tree):
             if isinstance(node, ast.Constant):
-                # Check if it's a number (not string, bool, None)
                 if isinstance(node.value, (int, float)) and node.value not in (0, 1, -1):
                     smells.append(CodeSmell(
                         smell_type=CodeSmellType.MAGIC_NUMBER,

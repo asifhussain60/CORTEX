@@ -139,7 +139,6 @@ class CortexSetup:
             "file_count": 0
         }
         
-        # Check for Git
         git_dir = self.repo_path / ".git"
         env["has_git"] = git_dir.exists()
         
@@ -255,11 +254,9 @@ class CortexSetup:
             "schemas_created": False
         }
         
-        # Create main brain directory
         self.brain_path.mkdir(parents=True, exist_ok=True)
         self._log_info(f"✓ Created brain directory: {self.brain_path}")
         
-        # Create tier directories
         tiers = ["tier0", "tier1", "tier2", "tier3"]
         for tier in tiers:
             tier_path = self.brain_path / tier
@@ -267,24 +264,19 @@ class CortexSetup:
             results["tiers_created"].append(tier)
             self._log_info(f"✓ Created {tier}")
         
-        # Create corpus callosum directory
         corpus_path = self.brain_path / "corpus-callosum"
         corpus_path.mkdir(exist_ok=True)
         self._log_info("✓ Created corpus-callosum")
         
-        # Initialize Tier 0 (Instinct) - Immutable rules
         self._create_tier0_instinct()
         
-        # Initialize Tier 1 (Working Memory) - Database
         self._create_tier1_database()
         
-        # Initialize Tier 2 (Knowledge Graph) - Database
         self._create_tier2_database()
         
         # Initialize Tier 3 (Context Intelligence) - Database
         self._create_tier3_database()
         
-        # Create README
         self._create_brain_readme()
         
         results["schemas_created"] = True
@@ -344,7 +336,6 @@ Large files (>100 lines) created in small increments to prevent response limits.
         db_path = tier1_path / "conversations.db"
         log_path = tier1_path / "requests.log"
         
-        # Initialize database
         tier1 = Tier1API(db_path, log_path)
         
         self._log_info(f"  ✓ Created {db_path.name}")
@@ -357,7 +348,6 @@ Large files (>100 lines) created in small increments to prevent response limits.
         tier2_path = self.brain_path / "tier2"
         db_path = tier2_path / "knowledge_graph.db"
         
-        # Initialize database
         kg = KnowledgeGraph(str(db_path))
         
         self._log_info(f"  ✓ Created {db_path.name}")
@@ -369,7 +359,6 @@ Large files (>100 lines) created in small increments to prevent response limits.
         tier3_path = self.brain_path / "tier3"
         db_path = tier3_path / "context.db"
         
-        # Initialize database
         context = ContextIntelligence(str(db_path))
         
         self._log_info(f"  ✓ Created {db_path.name}")
@@ -630,7 +619,6 @@ Estimated time: 5-10 minutes
         logger = logging.getLogger("cortex.setup")
         
         if not logger.handlers:
-            # Create logs directory
             log_dir = self.brain_path / "logs"
             log_dir.mkdir(parents=True, exist_ok=True)
             

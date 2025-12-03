@@ -80,7 +80,6 @@ class PluginRegistryCrawler(BaseCrawler):
                     'error': str(e)
                 })
         
-        # Calculate success rate
         if plugin_data['total_plugins'] > 0:
             plugin_data['initialization_success_rate'] = (
                 successful_loads / plugin_data['total_plugins'] * 100
@@ -120,7 +119,6 @@ class PluginRegistryCrawler(BaseCrawler):
             with open(plugin_file, 'r') as f:
                 content = f.read()
             
-            # Check for BasePlugin inheritance
             if 'BasePlugin' in content:
                 plugin_info['status'] = 'active'
             
@@ -137,7 +135,6 @@ class PluginRegistryCrawler(BaseCrawler):
                                if 'command=' in line or '@command' in line]
                 plugin_info['commands'] = len(command_lines)
             
-            # Check for metadata
             if 'PluginMetadata' in content or '_get_metadata' in content:
                 plugin_info['has_metadata'] = True
             

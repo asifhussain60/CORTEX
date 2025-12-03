@@ -107,7 +107,6 @@ class FileScannerCrawler(BaseCrawler):
             # Count directories
             stats['total_directories'] += len(dirs)
             
-            # Process files
             for file in files:
                 file_path = Path(root) / file
                 
@@ -147,7 +146,6 @@ class FileScannerCrawler(BaseCrawler):
         # Detect architecture pattern
         stats['architecture_pattern'] = self._detect_architecture()
         
-        # Classify project size
         stats['project_size'] = self._classify_size(stats['total_files'], stats['total_lines'])
         
         self.log_info(
@@ -170,23 +168,18 @@ class FileScannerCrawler(BaseCrawler):
         """
         project_path = Path(self.project_root)
         
-        # Check for plugin architecture
         if (project_path / 'src' / 'plugins').exists():
             return "plugin-based"
         
-        # Check for microservices
         if (project_path / 'services').exists():
             return "microservices"
         
-        # Check for monorepo
         if (project_path / 'packages').exists() or (project_path / 'apps').exists():
             return "monorepo"
         
-        # Check for standard Python package
         if (project_path / 'src').exists() and (project_path / 'tests').exists():
             return "standard-package"
         
-        # Check for MVC
         if all((project_path / dir).exists() for dir in ['models', 'views', 'controllers']):
             return "mvc"
         

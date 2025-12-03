@@ -222,7 +222,6 @@ class PlanningRulesValidator:
         
         mandatory_sections = self.dor_rules.get('mandatory_sections', {})
         
-        # Check for acceptance criteria
         if 'acceptance_criteria' in mandatory_sections:
             if not self._has_acceptance_criteria(content):
                 issues.append(ValidationIssue(
@@ -233,7 +232,6 @@ class PlanningRulesValidator:
                     suggestion="Add acceptance criteria section with GIVEN-WHEN-THEN format"
                 ))
         
-        # Check for risk analysis
         if 'risk_analysis' in mandatory_sections:
             if not self._has_risk_analysis(content):
                 issues.append(ValidationIssue(
@@ -244,7 +242,6 @@ class PlanningRulesValidator:
                     suggestion="Add risk analysis with identified risks and mitigation strategies"
                 ))
         
-        # Check for definition of done
         if 'definition_of_done' in mandatory_sections:
             if not self._has_definition_of_done(content):
                 issues.append(ValidationIssue(

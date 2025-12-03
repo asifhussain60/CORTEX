@@ -71,7 +71,6 @@ class ConversationContextAnalyzer:
         links = []
         
         try:
-            # Get recent conversation files
             conversations = self._get_recent_conversations()
             
             # Score relevance for each conversation
@@ -135,7 +134,6 @@ class ConversationContextAnalyzer:
             # Extract keywords from conversation
             conv_keywords = self._extract_keywords(content.lower())
             
-            # Calculate keyword overlap score
             if not idea_keywords:
                 return 0.0
             
@@ -241,7 +239,6 @@ class KnowledgeGraphLinker:
             pattern_text = str(pattern_data).lower()
             pattern_keywords = self._extract_keywords(pattern_text)
             
-            # Calculate keyword overlap
             if not idea_keywords:
                 return 0.0
             
@@ -273,7 +270,6 @@ class OperationLinker:
         links = []
         
         try:
-            # Get operation modules
             operation_files = self._get_operation_files()
             
             # Extract idea keywords
@@ -332,7 +328,6 @@ class OperationLinker:
             # Extract keywords from operation
             op_keywords = self._extract_keywords(content.lower())
             
-            # Calculate keyword overlap
             if not idea_keywords:
                 return 0.0
             
@@ -357,7 +352,6 @@ class IdeaContextLinker:
         self.db_path = db_path or str(self.cortex_root / "cortex-brain" / "idea-contexts.db")
         self.db_lock = Lock()
         
-        # Initialize context analyzers
         self.conversation_analyzer = ConversationContextAnalyzer(
             self.cortex_root / "cortex-brain" / "conversation-captures"
         )
@@ -523,11 +517,9 @@ async def demo_context_linking():
     print("\n🔗 CORTEX IDEA Context Linking Demo")
     print("=" * 50)
     
-    # Create context linker
     cortex_root = "/Users/asifhussain/PROJECTS/CORTEX"
     linker = create_context_linker(cortex_root)
     
-    # Create sample ideas to test linking
     test_ideas = [
         IdeaCapture(
             idea_id="demo_001",
@@ -561,7 +553,6 @@ async def demo_context_linking():
             print(f"  • {link.context_type}: {link.context_id} (relevance: {link.relevance_score:.3f})")
             print(f"    Reason: {link.link_reason}")
         
-        # Get context insights
         insights = linker.get_context_insights(idea.idea_id)
         print(f"\n📊 Context Insights:")
         print(f"  • Total links: {insights['total_links']}")

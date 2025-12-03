@@ -5,7 +5,6 @@ from typing import Dict, List, Any, Optional
 import logging
 from pathlib import Path
 
-# Import the existing HealthValidator
 from src.cortex_agents.health_validator.agent import HealthValidator as BaseHealthValidator
 
 
@@ -33,7 +32,6 @@ class EnhancedHealthValidator(BaseHealthValidator):
             Health analysis data with investigation-specific insights
         """
         try:
-            # Check if file exists
             if not Path(file_path).exists():
                 return {
                     'file_path': file_path,
@@ -143,7 +141,6 @@ class EnhancedHealthValidator(BaseHealthValidator):
             # Modification frequency (if available from Tier 3)
             modification_score = await self._get_modification_frequency_score(file_path)
             
-            # Calculate overall health score
             health_score = (size_score + complexity_score + modification_score) / 3
             
             # Identify issues
@@ -355,7 +352,6 @@ class EnhancedHealthValidator(BaseHealthValidator):
         """Identify architectural concerns from file analyses"""
         concerns = []
         
-        # Check for size distribution
         sizes = [fa.get('metrics', {}).get('file_size', 0) for fa in file_analyses]
         if sizes and max(sizes) > 50000:  # 50KB
             concerns.append("Large files detected - consider breaking down")

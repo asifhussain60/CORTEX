@@ -53,14 +53,12 @@ class UserOnboardingOperation(BaseOperationModule):
             Dict with onboarding results and session information
         """
         try:
-            # Initialize context if not provided
             if context is None:
                 context = {}
             
             # Detect onboarding profile from request or default to standard
             profile = self._detect_onboarding_profile(request, context)
             
-            # Create onboarding session
             session_id = str(uuid.uuid4())
             session = OnboardingSession(
                 session_id=session_id,
@@ -75,7 +73,6 @@ class UserOnboardingOperation(BaseOperationModule):
                 }
             )
             
-            # Initialize orchestrator
             self.orchestrator = OnboardingOrchestrator(
                 step_registry=self.step_registry,
                 session=session
@@ -128,7 +125,6 @@ class UserOnboardingOperation(BaseOperationModule):
         """
         request_lower = request.lower()
         
-        # Check for explicit profile requests
         if "quick" in request_lower or "fast" in request_lower or "minimal" in request_lower:
             return OnboardingProfile.QUICK
         elif "comprehensive" in request_lower or "complete" in request_lower or "full" in request_lower:
@@ -136,7 +132,6 @@ class UserOnboardingOperation(BaseOperationModule):
         elif "detailed" in request_lower or "thorough" in request_lower:
             return OnboardingProfile.COMPREHENSIVE
         
-        # Check context for profile preferences
         if context.get("onboarding_profile"):
             profile_map = {
                 "quick": OnboardingProfile.QUICK,
@@ -145,7 +140,6 @@ class UserOnboardingOperation(BaseOperationModule):
             }
             return profile_map.get(context["onboarding_profile"], OnboardingProfile.STANDARD)
         
-        # Check for time indicators
         if "5 min" in request_lower or "quick start" in request_lower:
             return OnboardingProfile.QUICK
         elif "30 min" in request_lower or "deep dive" in request_lower:

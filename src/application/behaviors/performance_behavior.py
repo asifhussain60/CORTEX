@@ -56,7 +56,6 @@ class PerformanceBehavior(IPipelineBehavior):
             # Execute handler
             result = await next_handler(request)
             
-            # Calculate duration
             duration_ms = (time.perf_counter() - start_time) * 1000
             
             # Record metrics
@@ -75,7 +74,6 @@ class PerformanceBehavior(IPipelineBehavior):
             return result
             
         except Exception as e:
-            # Calculate duration even on error
             duration_ms = (time.perf_counter() - start_time) * 1000
             
             # Record failed metrics
@@ -128,7 +126,6 @@ class PerformanceBehavior(IPipelineBehavior):
         """
         status = "✅" if success else "❌"
         
-        # Get average duration for comparison
         metrics = self.performance_metrics.get(request_type, {})
         avg_duration = (
             metrics['total_duration_ms'] / metrics['count']

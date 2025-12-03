@@ -36,7 +36,6 @@ class PathValidator:
         for protected in self.protected_paths:
             protected_path = Path(protected)
             try:
-                # Check if file_path is relative to protected_path
                 path.resolve().relative_to(protected_path.resolve())
                 return True
             except ValueError:

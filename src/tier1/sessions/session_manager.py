@@ -48,7 +48,6 @@ class SessionManager:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Create sessions table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS sessions (
                 session_id TEXT PRIMARY KEY,
@@ -61,13 +60,11 @@ class SessionManager:
             )
         """)
         
-        # Create index for active sessions
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_sessions_active 
             ON sessions(is_active, workspace_path)
         """)
         
-        # Create index for last activity (idle detection)
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_sessions_last_activity 
             ON sessions(last_activity DESC)
@@ -91,11 +88,9 @@ class SessionManager:
         Returns:
             Active Session object
         """
-        # Check for existing active session
         active_session = self.get_active_session(workspace_path)
         
         if active_session:
-            # Check idle threshold
             time_since_activity = datetime.now() - active_session.last_activity
             
             if time_since_activity.total_seconds() > self.idle_threshold:

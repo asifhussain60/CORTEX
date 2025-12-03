@@ -119,7 +119,6 @@ class OrchestratorScanner:
                 if not isinstance(node, ast.ClassDef):
                     continue
                 
-                # Check if name ends with 'Orchestrator'
                 if not node.name.endswith("Orchestrator"):
                     continue
                 
@@ -157,7 +156,6 @@ class OrchestratorScanner:
             if isinstance(node, ast.FunctionDef)
         ]
         
-        # Check inheritance
         inherits_base = any(
             self._is_base_class(base)
             for base in class_node.bases
@@ -170,7 +168,6 @@ class OrchestratorScanner:
         relative_path = file_path.relative_to(self.project_root)
         module_path = str(relative_path.with_suffix("")).replace("\\", ".").replace("/", ".")
         
-        # Classify feature (production/admin/internal)
         classification = self._classify_feature(class_node.name, file_path, docstring)
         
         return {
@@ -275,11 +272,9 @@ class OrchestratorScanner:
         if any(keyword in class_name for keyword in internal_keywords):
             return "internal"
         
-        # Check file path for admin modules
         if "admin" in file_path.parts:
             return "admin"
         
-        # Check docstring for admin indicators
         if docstring:
             docstring_lower = docstring.lower()
             if "admin-only" in docstring_lower or "maintainer" in docstring_lower:

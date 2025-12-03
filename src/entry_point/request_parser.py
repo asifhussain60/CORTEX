@@ -99,7 +99,6 @@ class RequestParser:
         if metadata:
             context.update(metadata)
         
-        # Create request
         return AgentRequest(
             intent=intent,
             context=context,
@@ -121,7 +120,6 @@ class RequestParser:
         """
         message_lower = message.lower()
         
-        # Check for intent keywords
         for intent, keywords in self.INTENT_KEYWORDS.items():
             for keyword in keywords:
                 if re.search(rf'\b{keyword}\b', message_lower):
@@ -268,11 +266,9 @@ class RequestParser:
         Returns:
             Tuple of (is_valid, error_message)
         """
-        # Check user message
         if not request.user_message or not request.user_message.strip():
             return False, "User message is required"
         
-        # Check intent
         if not request.intent:
             return False, "Intent is required"
         

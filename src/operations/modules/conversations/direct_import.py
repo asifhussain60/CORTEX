@@ -96,7 +96,6 @@ class DirectConversationImport:
                     "message": "No file reference found in request. Use #file:path or provide file path."
                 }
             
-            # Validate file exists
             if not file_path.exists():
                 return {
                     "success": False,
@@ -106,7 +105,6 @@ class DirectConversationImport:
             
             logger.info(f"Direct import from file: {file_path}")
             
-            # Import using standard import handler
             result = self.import_handler.import_conversation(
                 file_path=str(file_path),
                 auto_detect=False
@@ -253,7 +251,6 @@ class DirectConversationImport:
             if metadata:
                 parsed["metadata"].update(metadata)
             
-            # Import to brain (stub implementation)
             import_result = self.import_handler._import_to_brain(
                 parsed,
                 Path(f"direct-import-{source_description}")

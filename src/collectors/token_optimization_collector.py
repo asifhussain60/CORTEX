@@ -157,7 +157,6 @@ class TokenOptimizationCollector(BaseCollector):
             optimization_data = self._load_optimization_history()
             
             if optimization_data:
-                # Calculate total reduction
                 total_reduction_percent = optimization_data.get('total_reduction_percent', 0)
                 metrics.append(CollectorMetric(
                     name="token_reduction_achievement_percent",
@@ -195,10 +194,8 @@ class TokenOptimizationCollector(BaseCollector):
         metrics = []
         
         try:
-            # Get current token usage
             current_tokens = self._get_total_current_tokens()
             
-            # Calculate monthly cost at current usage
             # GitHub Copilot pricing: (input × 1.0 + output × 1.5) × $0.00001
             # Assume average 2000 output tokens per 2000 input tokens
             monthly_requests = 1000  # Assumed monthly usage
@@ -216,7 +213,6 @@ class TokenOptimizationCollector(BaseCollector):
                 metadata={"assumptions": "1000 requests/month, 2000 output tokens avg"}
             ))
             
-            # Calculate savings vs baseline (if available)
             baseline_tokens = self.baseline_metrics.get('total_tokens', current_tokens)
             if baseline_tokens > current_tokens:
                 baseline_cost = (baseline_tokens * 1.0 + 2000 * 1.5) * 0.00001 * monthly_requests

@@ -311,7 +311,6 @@ class WorkDecomposer:
         context = context or {}
         self.decomposition_notes = []
         
-        # Calculate total story points
         total_points = self._complexity_to_story_points(complexity_score)
         
         # Determine if we need Epic level
@@ -327,7 +326,6 @@ class WorkDecomposer:
         if not functional_areas:
             functional_areas = self._infer_functional_areas(title, description)
         
-        # Create Epic if needed
         epic = None
         if needs_epic:
             epic = self._create_epic(
@@ -360,7 +358,6 @@ class WorkDecomposer:
             stories.extend(feature_stories)
             feature.children = feature_stories
         
-        # Calculate distribution
         complexity_distribution = self._calculate_complexity_distribution(stories)
         
         return DecompositionResult(
@@ -605,7 +602,6 @@ class WorkDecomposer:
         story_templates = self._get_story_templates(feature.title)
         
         for i, points in enumerate(story_point_distribution):
-            # Get template or generate generic
             if i < len(story_templates):
                 story_title, story_desc = story_templates[i]
             else:

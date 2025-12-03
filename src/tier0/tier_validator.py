@@ -83,7 +83,6 @@ class TierValidator:
         
         self.brain_root = Path(brain_root)
         
-        # Define tier paths
         self.tier_paths = {
             TierLevel.TIER_0: self.brain_root / "brain-protection-rules.yaml",
             TierLevel.TIER_1: self.brain_root / "conversation-history.jsonl",
@@ -91,7 +90,6 @@ class TierValidator:
             TierLevel.TIER_3: self.brain_root / "development-context.yaml"
         }
         
-        # Define tier content rules
         self.tier_rules = {
             TierLevel.TIER_0: {
                 "allowed_extensions": [".yaml", ".yml"],
@@ -147,7 +145,6 @@ class TierValidator:
             "path": str(self.tier_paths.get(tier, "N/A"))
         }
         
-        # Check if tier exists
         tier_path = self.tier_paths.get(tier)
         if not tier_path or not tier_path.exists():
             warnings.append(TierViolation(
@@ -166,7 +163,6 @@ class TierValidator:
                 metadata=metadata
             )
         
-        # Validate tier content
         if tier == TierLevel.TIER_0:
             violations.extend(self._validate_tier0(tier_path))
         elif tier == TierLevel.TIER_1:
@@ -201,7 +197,6 @@ class TierValidator:
         violations = []
         rules = self.tier_rules[TierLevel.TIER_0]
         
-        # Check file extension
         if tier_path.suffix not in rules["allowed_extensions"]:
             violations.append(TierViolation(
                 tier=TierLevel.TIER_0,
@@ -232,7 +227,6 @@ class TierValidator:
                         suggestion="Move application data to Tier 2 with scope='application'"
                     ))
             
-            # Validate structure
             if not isinstance(data, dict):
                 violations.append(TierViolation(
                     tier=TierLevel.TIER_0,
@@ -242,7 +236,6 @@ class TierValidator:
                     affected_file=str(tier_path)
                 ))
             
-            # Check for immutability markers
             if data and not data.get('version'):
                 violations.append(TierViolation(
                     tier=TierLevel.TIER_0,
@@ -278,7 +271,6 @@ class TierValidator:
         violations = []
         rules = self.tier_rules[TierLevel.TIER_1]
         
-        # Check file extension
         if tier_path.suffix not in rules["allowed_extensions"]:
             violations.append(TierViolation(
                 tier=TierLevel.TIER_1,
@@ -290,7 +282,6 @@ class TierValidator:
             ))
             return violations
         
-        # Validate based on format
         if tier_path.suffix in ['.db', '.sqlite']:
             violations.extend(self._validate_tier1_db(tier_path, rules))
         elif tier_path.suffix == '.jsonl':
@@ -306,7 +297,6 @@ class TierValidator:
             conn = sqlite3.connect(tier_path)
             cursor = conn.cursor()
             
-            # Check for required schema
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
             tables = [row[0] for row in cursor.fetchall()]
             
@@ -320,7 +310,6 @@ class TierValidator:
                     suggestion="Initialize with conversation schema"
                 ))
             else:
-                # Check for required columns in main table
                 main_table = tables[0]
                 cursor.execute(f"PRAGMA table_info({main_table});")
                 columns = [row[1] for row in cursor.fetchall()]
@@ -370,7 +359,6 @@ class TierValidator:
                 ))
                 return violations
             
-            # Validate first few lines
             for i, line in enumerate(lines[:5], 1):
                 if not line.strip():
                     continue
@@ -378,7 +366,6 @@ class TierValidator:
                 try:
                     entry = json.loads(line)
                     
-                    # Check for required fields
                     for required_field in rules.get("required_schema", []):
                         if required_field not in entry:
                             violations.append(TierViolation(
@@ -416,7 +403,6 @@ class TierValidator:
         violations = []
         rules = self.tier_rules[TierLevel.TIER_2]
         
-        # Check file extension
         if tier_path.suffix not in rules["allowed_extensions"]:
             violations.append(TierViolation(
                 tier=TierLevel.TIER_2,
@@ -447,7 +433,6 @@ class TierValidator:
                         suggestion="Move raw conversations to Tier 1, keep only patterns"
                     ))
             
-            # Check for required keys
             if data:
                 for required_key in rules.get("required_keys", []):
                     if required_key not in data:
@@ -485,7 +470,6 @@ class TierValidator:
         violations = []
         rules = self.tier_rules[TierLevel.TIER_3]
         
-        # Check file extension
         if tier_path.suffix not in rules["allowed_extensions"]:
             violations.append(TierViolation(
                 tier=TierLevel.TIER_3,
@@ -502,7 +486,6 @@ class TierValidator:
             with open(tier_path, 'r', encoding='utf-8') as f:
                 data = yaml.safe_load(f)
             
-            # Check for required keys
             if data:
                 for required_key in rules.get("required_keys", []):
                     if required_key not in data:

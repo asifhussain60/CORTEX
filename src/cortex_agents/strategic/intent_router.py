@@ -101,7 +101,68 @@ class IntentRouter(BaseAgent):
                 "forecast technical debt", "track architecture evolution",
                 "cortex health", "health trends", "architecture trends"
             ],
+            IntentType.ALIGN: [
+                "align", "cortex align", "system alignment", "align system",
+                "full alignment", "system check", "realign", "realignment",
+                "align orchestrator", "run alignment", "check alignment",
+                "validate system", "holistic check", "comprehensive check"
+            ],
+            IntentType.RESUME: [
+                "resume", "continue", "restore", "recover", "resume conversation",
+                "resume session", "continue conversation", "pick up where",
+                "restore context", "continue from", "resume from"
+            ],
+            IntentType.FEEDBACK: [
+                "feedback", "report", "issue", "bug report", "feature request",
+                "report issue", "report bug", "give feedback", "send feedback",
+                "admin feedback", "review feedback", "feedback review",
+                "admin feedback review", "feedback report"
+            ],
+            "tutorial": [
+                "tutorial", "demo", "show me", "cortex tutorial", "interactive demo",
+                "walkthrough", "guide", "learn cortex", "how to use", "cortex demo"
+            ],
+            "setup": [
+                "setup", "environment", "configure", "install", "initialize",
+                "environment setup", "setup environment", "configure environment",
+                "setup cortex", "initialize cortex", "install cortex"
+            ],
+            "documentation": [
+                "document", "docs", "documentation", "generate docs", "update docs",
+                "document cortex", "cortex docs", "generate documentation",
+                "update documentation", "maintain cortex", "cortex documentation",
+                "generate cortex docs", "create cortex docs", "build cortex docs"
+            ],
+            "deployment": [
+                "deploy", "deployment", "deploy cortex", "production deploy",
+                "deploy to production", "deploy to app", "release cortex",
+                "publish cortex", "build cortex", "deploy cortex production"
+            ],
+            "onboarding": [
+                "onboard", "onboarding", "welcome", "getting started", "user onboarding",
+                "application onboarding", "app onboarding", "setup app", "configure app"
+            ],
+            "planning": [
+                "architecture", "design", "architecture planning", "feature planning",
+                "refactoring planning", "design sync", "sync design", "plan architecture",
+                "plan refactoring", "plan feature"
+            ],
+            "maintenance": [
+                "maintain", "maintenance", "optimize", "optimize cortex",
+                "maintain cortex", "system maintenance", "brain health",
+                "brain health check", "brain protection", "brain protection check",
+                "comprehensive review", "self review", "comprehensive self review"
+            ],
+            "help": [
+                "help", "command help", "search command", "command search",
+                "what can you do", "show commands", "list commands", "available commands"
+            ],
+            "diagrams": [
+                "diagram", "diagrams", "regenerate diagrams", "update diagrams",
+                "generate diagrams", "create diagrams", "rebuild diagrams", "refresh diagrams"
+            ],
         }
+
 
     
     def can_handle(self, request: AgentRequest) -> bool:
@@ -213,7 +274,6 @@ class IntentRouter(BaseAgent):
         except:
             pass
         
-        # Classify based on keywords
         intent_scores = {}
         for intent_type, keywords in self.INTENT_KEYWORDS.items():
             score = 0
@@ -315,7 +375,6 @@ class IntentRouter(BaseAgent):
         Returns:
             Routing decision with primary agent, secondary agents, and confidence
         """
-        # Get primary agent for intent
         primary_agent = get_agent_for_intent(intent)
         
         # For ENHANCE intent, check if we have fresh crawled data
@@ -415,7 +474,6 @@ class IntentRouter(BaseAgent):
             now = datetime.now()
             stale_threshold = timedelta(hours=24)
             
-            # Get most recent pattern timestamp
             latest_pattern = max(
                 app_patterns,
                 key=lambda p: datetime.fromisoformat(
@@ -490,17 +548,14 @@ class IntentRouter(BaseAgent):
         secondary = []
         message_lower = request.user_message.lower()
         
-        # Check for test-related keywords
         if primary_intent != IntentType.TEST:
             if any(word in message_lower for word in ["test", "testing", "tdd"]):
                 secondary.append(AgentType.TESTER)
         
-        # Check for validation keywords
         if "validate" in message_lower or "check" in message_lower:
             if primary_intent not in [IntentType.HEALTH_CHECK, IntentType.VALIDATE]:
                 secondary.append(AgentType.VALIDATOR)
         
-        # Check for git/commit keywords
         if primary_intent != IntentType.COMMIT:
             if "commit" in message_lower or "git" in message_lower:
                 secondary.append(AgentType.COMMITTER)

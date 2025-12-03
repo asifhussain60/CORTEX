@@ -92,7 +92,6 @@ class PatternLearningEngine:
             with sqlite3.connect(self.database_path) as conn:
                 cursor = conn.cursor()
                 
-                # Create correlation_patterns table
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS correlation_patterns (
                         pattern_id TEXT PRIMARY KEY,
@@ -106,7 +105,6 @@ class PatternLearningEngine:
                     )
                 """)
                 
-                # Create pattern_learning_sessions table
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS pattern_learning_sessions (
                         session_id TEXT PRIMARY KEY,
@@ -412,7 +410,6 @@ class PatternLearningEngine:
             with sqlite3.connect(self.database_path) as conn:
                 cursor = conn.cursor()
                 
-                # Check if similar pattern already exists
                 existing_pattern = self._find_similar_pattern(pattern)
                 
                 if existing_pattern:
@@ -509,7 +506,6 @@ class PatternLearningEngine:
             # Extract keywords from conversation
             keywords = self._extract_keywords(conversation_text)
             
-            # Get relevant patterns from database
             context_patterns = self._get_patterns_by_type(PatternType.CONTEXT)
             file_mention_patterns = self._get_patterns_by_type(PatternType.FILE_MENTION)
             
@@ -521,7 +517,6 @@ class PatternLearningEngine:
                 target_file = pattern.get("pattern_data", {}).get("target_file", "")
                 
                 if target_file:
-                    # Calculate keyword overlap
                     keyword_overlap = len(set(keywords) & set(pattern_keywords))
                     if keyword_overlap > 0:
                         # Calculate confidence score with more generous scoring
@@ -585,7 +580,6 @@ class PatternLearningEngine:
             Same list with updated confidence scores based on patterns
         """
         try:
-            # Get all patterns for confidence boosting
             patterns = self._get_all_patterns()
             
             for candidate in correlation_candidates:
@@ -596,7 +590,6 @@ class PatternLearningEngine:
                 # Apply pattern-based confidence boosts
                 confidence_boost = 0.0
                 
-                # Check file mention patterns
                 for pattern in patterns:
                     if pattern.get("pattern_type") == PatternType.FILE_MENTION.value:
                         pattern_data = pattern.get("pattern_data", {})
@@ -605,7 +598,6 @@ class PatternLearningEngine:
                             pattern_confidence = pattern.get("confidence", 0.5)
                             confidence_boost += boost * pattern_confidence
                 
-                # Check temporal patterns
                 for pattern in patterns:
                     if pattern.get("pattern_type") == PatternType.TEMPORAL.value:
                         pattern_data = pattern.get("pattern_data", {})
@@ -735,7 +727,6 @@ class PatternLearningEngine:
             with sqlite3.connect(self.database_path) as conn:
                 cursor = conn.cursor()
                 
-                # Get pattern counts by type
                 cursor.execute("""
                     SELECT pattern_type, COUNT(*) as count, AVG(confidence) as avg_confidence
                     FROM correlation_patterns 
@@ -743,7 +734,6 @@ class PatternLearningEngine:
                 """)
                 pattern_stats = {row[0]: {"count": row[1], "avg_confidence": row[2]} for row in cursor.fetchall()}
                 
-                # Get total patterns and usage
                 cursor.execute("""
                     SELECT COUNT(*) as total_patterns, 
                            SUM(usage_count) as total_usage,
@@ -757,7 +747,6 @@ class PatternLearningEngine:
                     "overall_confidence": row[2] or 0.0
                 }
                 
-                # Get learning session stats
                 cursor.execute("""
                     SELECT COUNT(*) as session_count,
                            AVG(patterns_learned) as avg_patterns_per_session,

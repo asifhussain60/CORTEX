@@ -151,7 +151,6 @@ class BaseCollector(ABC):
                 self.logger.warning(f"Collector {self.name} is already active")
                 return True
             
-            # Initialize collector-specific resources
             if not self._initialize():
                 self.status = CollectorStatus.ERROR
                 return False
@@ -221,7 +220,6 @@ class BaseCollector(ABC):
     
     def get_health(self) -> CollectorHealth:
         """Get current health status of the collector"""
-        # Calculate collection rate
         collection_rate = 0.0
         if self.last_collection and self.metrics_collected > 0:
             time_running = (datetime.now(timezone.utc) - self.last_collection).total_seconds()
@@ -294,11 +292,9 @@ class BaseCollector(ABC):
             if not self.brain_path:
                 return
             
-            # Create metrics directory if it doesn't exist
             metrics_dir = self.brain_path / "metrics-history"
             metrics_dir.mkdir(exist_ok=True)
             
-            # Create daily metrics file
             today = datetime.now().strftime("%Y-%m-%d")
             metrics_file = metrics_dir / f"{self.collector_id}-{today}.jsonl"
             

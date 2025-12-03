@@ -60,7 +60,6 @@ class RuleBuilder:
         import inspect
         import re
         try:
-            # Get the source code
             source = inspect.getsource(selector)
             # Remove any leading/trailing whitespace
             source = source.strip()

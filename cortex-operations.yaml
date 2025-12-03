@@ -72,6 +72,288 @@ operations:
     - interactive tutorial
     - show demo
     category: onboarding
+  ado:
+    name: Ado
+    description: ADO CLI - Azure DevOps Work Item Management
+    deployment_tier: dual_context
+    natural_language:
+    - create
+    - create new work item
+    - update
+    - update work item
+    - generate completion summary
+    category: general
+  align:
+    name: Align
+    description: CORTEX Align v2.0 Command - Entry Point Wrapper
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    - analyze
+    - preview changes without applying them
+    category: maintenance
+  application_onboarding_operation:
+    name: Application Onboarding Operation
+    description: Application Onboarding Operation
+    deployment_tier: admin_only
+    natural_language:
+    - analyze my codebase
+    - deploy cortex
+    - check project directory permissions
+    - generate comprehensive session summary
+    - generate
+    category: setup
+  cache_commands:
+    name: Cache Commands
+    description: Cache Management Commands for CORTEX
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    - show cache
+    - show cache statistics and hit rates
+    - cache invalidate
+    category: general
+  cache_dashboard:
+    name: Cache Dashboard
+    description: Cache Performance Dashboard
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    category: reporting
+  cleanup:
+    name: Cleanup
+    description: Workspace Cleanup Operation
+    deployment_tier: admin_only
+    natural_language:
+    - dry run complete
+    category: maintenance
+  commit:
+    name: Commit
+    description: Commit Entry Point
+    deployment_tier: user_facing
+    natural_language:
+    - commit operation
+    category: git
+  dashboard_data_adapter:
+    name: Dashboard Data Adapter
+    description: Dashboard Data Adapter
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: reporting
+  dependency_installer:
+    name: Dependency Installer
+    description: Dependency Installer
+    deployment_tier: user_facing
+    natural_language:
+    - already running in virtual environment
+    - skip python version check
+    category: setup
+  documentation_component_registry:
+    name: Documentation Component Registry
+    description: Documentation Component Registry
+    deployment_tier: admin_only
+    natural_language:
+    - generate image prompts
+    - generate diagrams
+    - generate features
+    - generate summary
+    - deploy docs
+    category: documentation
+  environment_setup_module:
+    name: Environment Setup Module
+    description: Environment Setup Operation - Module Wrapper
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: setup
+  git_checkpoint:
+    name: Git Checkpoint
+    description: Git Checkpoint CLI Wrapper
+    deployment_tier: user_facing
+    natural_language:
+    - checkpoints
+    - cortex git checkpoint utility
+    - create
+    category: git
+  header_formatter:
+    name: Header Formatter
+    description: CORTEX Orchestrator Header Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - dry run
+    category: general
+  header_utils:
+    name: Header Utils
+    description: CORTEX Orchestrator Header Utilities
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
+  healthcheck:
+    name: Healthcheck
+    description: CORTEX Health Check Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - cortex health check operation
+    category: analysis
+  help_command:
+    name: Help Command
+    description: CORTEX Help Command - Display Available Operations
+    deployment_tier: dual_context
+    natural_language:
+    - planned
+    category: general
+  onboarding_orchestrator:
+    name: Onboarding Orchestrator
+    description: Onboarding Orchestrator
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: setup
+  operation_factory:
+    name: Operation Factory
+    description: Operation Factory - Load and Create Operations from YAML
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+  operation_header_formatter:
+    name: Operation Header Formatter
+    description: CORTEX Operation Header Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - dry run
+    category: general
+  operations_orchestrator:
+    name: Operations Orchestrator
+    description: Universal Operations Orchestrator - CORTEX 2.0
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+  optimize:
+    name: Optimize
+    description: CORTEX Optimize Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    - preview changes only
+    - run all optimizations
+    category: maintenance
+  optimize_operation:
+    name: Optimize Operation
+    description: CORTEX Optimize Operation Module
+    deployment_tier: admin_only
+    natural_language:
+    - planning
+    - plan
+    - deployment
+    - deploy
+    - validate
+    category: maintenance
+  optimize_tokens:
+    name: Optimize Tokens
+    description: CORTEX Token Optimization CLI
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    category: maintenance
+  planning:
+    name: Planning
+    description: Planning CLI Wrapper
+    deployment_tier: user_facing
+    natural_language:
+    - create
+    - validate
+    - markdown generated
+    - plan loaded
+    - create new plan
+    category: planning
+  policy_scanner:
+    name: Policy Scanner
+    description: Policy Scanner - Multi-format policy document detection and parsing
+    deployment_tier: dual_context
+    natural_language:
+    - validate policy document structure
+    - quick check if any policies exist
+    category: general
+  realtime_dashboard_auth:
+    name: Realtime Dashboard Auth
+    description: Real-Time Dashboard Authentication Layer
+    deployment_tier: admin_only
+    natural_language:
+    - 'generated token for user '
+    category: reporting
+  realtime_dashboard_server:
+    name: Realtime Dashboard Server
+    description: Real-Time Dashboard WebSocket Server
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: reporting
+  response_formatter:
+    name: Response Formatter
+    description: CORTEX Response Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+  review:
+    name: Review
+    description: Code Review CLI
+    deployment_tier: dual_context
+    natural_language:
+    - feature review
+    - review new authentication feature
+    - create
+    - create new code review
+    - review title
+    category: review
+  rollback:
+    name: Rollback
+    description: Rollback CLI Wrapper
+    deployment_tier: dual_context
+    natural_language:
+    - checkpoint sha to rollback to
+    - preview changes without executing
+    category: git
+  setup:
+    name: Setup
+    description: Environment Setup Operation - CORTEX 3.0 Phase 1.1
+    deployment_tier: user_facing
+    natural_language:
+    - virtual environment created
+    category: setup
+  tdd:
+    name: Tdd
+    description: TDD CLI - Test-Driven Development Workflow
+    deployment_tier: user_facing
+    natural_language:
+    - start
+    - start new tdd session
+    - run tests
+    - specific test to run
+    - generate test skeleton
+    category: development
+  user_consent_manager:
+    name: User Consent Manager
+    description: User Consent Manager
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: general
+  user_onboarding_operation:
+    name: User Onboarding Operation
+    description: User Onboarding Operation
+    deployment_tier: admin_only
+    natural_language:
+    - getting started
+    - help me get started
+    - 'check cortex installation with '
+    - 'validate brain structure with '
+    - quick start
+    category: setup
     modules:
     - demo_introduction
     - demo_help_system
@@ -2287,13 +2569,930 @@ modules:
       review, analyze feedback, process feedback, sync feedback, import feedback.
       Auto-syncs Gist registry by default. Stores in cortex-brain/analytics/ databases'
     implemented_date: '2025-11-24'
+  ado_work_item:
+    name: ADO Work Item Management
+    description: Azure DevOps work item creation and management - interactive planning
+      with ADO integration
+    deployment_tier: user
+    natural_language:
+    - plan ado
+    - create ado work item
+    - ado planning
+    - azure devops planning
+    - create work item
+    category: planning
+    modules:
+    - ado_utility
+    profiles:
+      standard:
+        description: Interactive ADO work item creation with DoR/DoD validation
+        modules:
+        - ado_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: ADO work item orchestrator migrated to utility in Sprint 3 (Task 6).
+        Full ADO integration with work item creation, planning context, and DoR/DoD
+        validation.
+    examples:
+    - plan ado
+    - create ado work item for authentication feature
+    - ado planning session
+  swagger_estimation:
+    name: SWAGGER/OpenAPI Complexity Estimation
+    description: Analyze SWAGGER/OpenAPI specifications and estimate implementation
+      complexity and timeframes
+    deployment_tier: user
+    natural_language:
+    - swagger estimate
+    - openapi estimate
+    - estimate swagger
+    - analyze swagger complexity
+    - api complexity analysis
+    category: estimation
+    modules:
+    - swagger_estimation_utility
+    profiles:
+      standard:
+        description: SWAGGER spec analysis with complexity scoring and time estimation
+        modules:
+        - swagger_estimation_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: SWAGGER entry point orchestrator migrated to estimation utility in Sprint
+        13b (Final sprint). Analyzes API complexity, endpoint count, and provides
+        implementation timeframes.
+    examples:
+    - swagger estimate
+    - estimate this openapi spec
+    - analyze swagger complexity
+    - how long will this API take
+  ux_enhancement:
+    name: UX Enhancement Analysis
+    description: Analyze user experience and suggest UI/UX improvements for applications
+    deployment_tier: user
+    natural_language:
+    - ux enhancement
+    - improve ux
+    - analyze user experience
+    - ui improvement suggestions
+    - enhance user interface
+    category: enhancement
+    modules:
+    - ux_enhancement_utility
+    profiles:
+      standard:
+        description: UX analysis with actionable improvement recommendations
+        modules:
+        - ux_enhancement_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: UX enhancement orchestrator migrated to utility. Analyzes UI patterns,
+        accessibility, user flows, and provides specific improvement recommendations.
+    examples:
+    - ux enhancement
+    - analyze user experience for this feature
+    - suggest ui improvements
+  lint_validation:
+    name: Code Linting and Validation
+    description: Run linting and code quality validation with auto-fix capabilities
+    deployment_tier: user
+    natural_language:
+    - lint code
+    - run linter
+    - validate code quality
+    - check code standards
+    - auto-fix linting issues
+    category: quality
+    modules:
+    - lint_utility
+    profiles:
+      standard:
+        description: Multi-language linting with auto-fix support
+        modules:
+        - lint_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Lint validation orchestrator migrated to utility in Sprint 4 (Task 11).
+        Integrates with TDD workflow for automated code quality checks.
+    examples:
+    - lint code
+    - run linter on this file
+    - validate code quality
+    - auto-fix linting issues
+  application_health:
+    name: Application Health Dashboard
+    description: Comprehensive application health monitoring with interactive dashboard
+      and onboarding workflow
+    deployment_tier: user
+    natural_language:
+    - show health dashboard
+    - application health
+    - health check
+    - onboard application
+    - analyze application health
+    category: monitoring
+    modules:
+    - application_health_agent
+    profiles:
+      standard:
+        description: Real-time health monitoring with progressive crawling
+        modules:
+        - application_health_agent
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Application health orchestrator migrated to agent-based implementation
+        in Sprint 5 (Task 15). Features progressive crawling, metrics collection,
+        and interactive dashboard.
+    examples:
+    - show health dashboard
+    - health check my application
+    - onboard application for monitoring
+  rca:
+    name: Root Cause Analysis
+    description: Interactive root cause analysis with 5 Whys methodology and structured
+      investigation
+    deployment_tier: user
+    natural_language:
+    - root cause analysis
+    - rca
+    - analyze issue
+    - investigate problem
+    - 5 whys analysis
+    category: investigation
+    modules:
+    - rca_utility
+    profiles:
+      standard:
+        description: Structured RCA with 5 Whys and evidence collection
+        modules:
+        - rca_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: RCA orchestrator migrated to utility in Sprint 3 (Task 7). Interactive
+        investigation workflow with structured evidence collection and remediation
+        planning.
+    examples:
+    - root cause analysis for login failure
+    - rca session
+    - investigate this issue
+    - 5 whys analysis
 metadata:
   version: '2.1'
   schema_version: '1.0'
   author: Asif Hussain
-  last_updated: '2025-11-13'
+  last_updated: '2025-12-03'
   description: Universal operations registry for CORTEX 2.0 + 2.1 + 3.0
   changelog:
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
+  - version: 3.5.4
+    date: '2025-12-03'
+    changes:
+    - Registered 6 migrated orchestrators from Sprint 13b completion
+    - Added ado_work_item operation (ADO work item management)
+    - Added swagger_estimation operation (SWAGGER/OpenAPI complexity analysis)
+    - Added ux_enhancement operation (UX improvement analysis)
+    - Added lint_validation operation (code linting and validation)
+    - Added application_health operation (health dashboard and monitoring)
+    - Added rca operation (root cause analysis with 5 Whys)
+    - All 6 operations are user-facing and deployment_tier user
+    - Orchestrator migration program 97% complete (29/30 orchestrators migrated)
   - version: '3.0'
     date: '2025-11-23'
     changes:
@@ -2335,15 +3534,786 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 17
-  total_modules: 101
+  total_operations: 62
+  total_modules: 73
   total_phases: 9
   cortex_2_0_operations: 9
   cortex_2_1_operations: 6
-  cortex_3_0_operations: 2
+  cortex_3_0_operations: 8
   cortex_2_0_modules: 67
   cortex_2_1_modules: 22
-  cortex_3_0_modules: 2
-  modules_implemented: 41
+  cortex_3_0_modules: 8
+  modules_implemented: 47
   modules_pending: 60
-  implementation_percentage: 41
+  implementation_percentage: 44
+  ado:
+    name: Ado
+    description: ADO CLI - Azure DevOps Work Item Management
+    deployment_tier: dual_context
+    natural_language:
+    - create
+    - create new work item
+    - update
+    - update work item
+    - generate completion summary
+    category: general
+    modules:
+    - ado_utility
+    profiles:
+      standard:
+        description: ADO CLI - Azure DevOps Work Item Management
+        modules:
+        - ado_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  last_updated: '2025-12-03 07:36:47'
+  align:
+    name: Align
+    description: CORTEX Align v2.0 Command - Entry Point Wrapper
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    - analyze
+    - preview changes without applying them
+    category: maintenance
+    modules:
+    - realignment_utility
+    - align_utility
+    profiles:
+      standard:
+        description: CORTEX Align v2.0 Command - Entry Point Wrapper
+        modules:
+        - realignment_utility
+        - align_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 2
+      modules_total: 2
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  application_onboarding_operation:
+    name: Application Onboarding Operation
+    description: Application Onboarding Operation
+    deployment_tier: admin_only
+    natural_language:
+    - analyze my codebase
+    - deploy cortex
+    - check project directory permissions
+    - generate comprehensive session summary
+    - generate
+    category: setup
+    modules:
+    - application_onboarding_operation_utility
+    profiles:
+      standard:
+        description: Application Onboarding Operation
+        modules:
+        - application_onboarding_operation_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  cache_commands:
+    name: Cache Commands
+    description: Cache Management Commands for CORTEX
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    - show cache
+    - show cache statistics and hit rates
+    - cache invalidate
+    category: general
+    modules:
+    - cache_commands_utility
+    profiles:
+      standard:
+        description: Cache Management Commands for CORTEX
+        modules:
+        - cache_commands_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  cache_dashboard:
+    name: Cache Dashboard
+    description: Cache Performance Dashboard
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    category: reporting
+    modules:
+    - cache_dashboard_utility
+    profiles:
+      standard:
+        description: Cache Performance Dashboard
+        modules:
+        - cache_dashboard_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  cleanup:
+    name: Cleanup
+    description: Workspace Cleanup Operation
+    deployment_tier: admin_only
+    natural_language:
+    - dry run complete
+    category: maintenance
+    modules:
+    - cleanup_utility
+    profiles:
+      standard:
+        description: Workspace Cleanup Operation
+        modules:
+        - cleanup_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  commit:
+    name: Commit
+    description: Commit Entry Point
+    deployment_tier: user_facing
+    natural_language:
+    - commit operation
+    category: git
+    modules:
+    - commit_utility
+    profiles:
+      standard:
+        description: Commit Entry Point
+        modules:
+        - commit_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  dashboard_data_adapter:
+    name: Dashboard Data Adapter
+    description: Dashboard Data Adapter
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: reporting
+    modules:
+    - dashboard_data_adapter_utility
+    profiles:
+      standard:
+        description: Dashboard Data Adapter
+        modules:
+        - dashboard_data_adapter_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  dependency_installer:
+    name: Dependency Installer
+    description: Dependency Installer
+    deployment_tier: user_facing
+    natural_language:
+    - already running in virtual environment
+    - skip python version check
+    category: setup
+    modules:
+    - dependency_installer_utility
+    profiles:
+      standard:
+        description: Dependency Installer
+        modules:
+        - dependency_installer_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  deploy:
+    name: Deploy
+    description: CORTEX Deploy Operation - CLI Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    - cortex deployment with validation gates
+    category: deployment
+    modules:
+    - deploy_utility
+    profiles:
+      standard:
+        description: CORTEX Deploy Operation - CLI Entry Point
+        modules:
+        - deploy_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  documentation_component_registry:
+    name: Documentation Component Registry
+    description: Documentation Component Registry
+    deployment_tier: admin_only
+    natural_language:
+    - generate image prompts
+    - generate diagrams
+    - generate features
+    - generate summary
+    - deploy docs
+    category: documentation
+    modules:
+    - documentation_component_registry_utility
+    profiles:
+      standard:
+        description: Documentation Component Registry
+        modules:
+        - documentation_component_registry_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  environment_setup_module:
+    name: Environment Setup Module
+    description: Environment Setup Operation - Module Wrapper
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: setup
+    modules:
+    - environment_setup_module_utility
+    profiles:
+      standard:
+        description: Environment Setup Operation - Module Wrapper
+        modules:
+        - environment_setup_module_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  git_checkpoint:
+    name: Git Checkpoint
+    description: Git Checkpoint CLI Wrapper
+    deployment_tier: user_facing
+    natural_language:
+    - checkpoints
+    - cortex git checkpoint utility
+    - create
+    category: git
+    modules:
+    - git_checkpoint_utility
+    profiles:
+      standard:
+        description: Git Checkpoint CLI Wrapper
+        modules:
+        - git_checkpoint_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  header_formatter:
+    name: Header Formatter
+    description: CORTEX Orchestrator Header Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - dry run
+    category: general
+    modules:
+    - header_formatter_utility
+    profiles:
+      standard:
+        description: CORTEX Orchestrator Header Formatter
+        modules:
+        - header_formatter_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  header_utils:
+    name: Header Utils
+    description: CORTEX Orchestrator Header Utilities
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - header_utils_utility
+    profiles:
+      standard:
+        description: CORTEX Orchestrator Header Utilities
+        modules:
+        - header_utils_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  healthcheck:
+    name: Healthcheck
+    description: CORTEX Health Check Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - cortex health check operation
+    category: analysis
+    modules:
+    - healthcheck_utility
+    profiles:
+      standard:
+        description: CORTEX Health Check Entry Point
+        modules:
+        - healthcheck_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  help_command:
+    name: Help Command
+    description: CORTEX Help Command - Display Available Operations
+    deployment_tier: dual_context
+    natural_language:
+    - planned
+    category: general
+    modules:
+    - help_command_utility
+    profiles:
+      standard:
+        description: CORTEX Help Command - Display Available Operations
+        modules:
+        - help_command_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  onboarding_orchestrator:
+    name: Onboarding Orchestrator
+    description: Onboarding Orchestrator
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: setup
+    modules:
+    - onboarding_orchestrator_utility
+    profiles:
+      standard:
+        description: Onboarding Orchestrator
+        modules:
+        - onboarding_orchestrator_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  operation_factory:
+    name: Operation Factory
+    description: Operation Factory - Load and Create Operations from YAML
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - operation_factory_utility
+    profiles:
+      standard:
+        description: Operation Factory - Load and Create Operations from YAML
+        modules:
+        - operation_factory_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  operation_header_formatter:
+    name: Operation Header Formatter
+    description: CORTEX Operation Header Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - dry run
+    category: general
+    modules:
+    - operation_header_formatter_utility
+    profiles:
+      standard:
+        description: CORTEX Operation Header Formatter
+        modules:
+        - operation_header_formatter_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  operations_orchestrator:
+    name: Operations Orchestrator
+    description: Universal Operations Orchestrator - CORTEX 2.0
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - operations_orchestrator_utility
+    profiles:
+      standard:
+        description: Universal Operations Orchestrator - CORTEX 2.0
+        modules:
+        - operations_orchestrator_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  optimize:
+    name: Optimize
+    description: CORTEX Optimize Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    - preview changes only
+    - run all optimizations
+    category: maintenance
+    modules:
+    - optimize_utility
+    profiles:
+      standard:
+        description: CORTEX Optimize Entry Point
+        modules:
+        - optimize_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  optimize_operation:
+    name: Optimize Operation
+    description: CORTEX Optimize Operation Module
+    deployment_tier: admin_only
+    natural_language:
+    - planning
+    - plan
+    - deployment
+    - deploy
+    - validate
+    category: maintenance
+    modules:
+    - optimize_operation_utility
+    profiles:
+      standard:
+        description: CORTEX Optimize Operation Module
+        modules:
+        - optimize_operation_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  optimize_tokens:
+    name: Optimize Tokens
+    description: CORTEX Token Optimization CLI
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    category: maintenance
+    modules:
+    - optimize_tokens_utility
+    profiles:
+      standard:
+        description: CORTEX Token Optimization CLI
+        modules:
+        - optimize_tokens_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  planning:
+    name: Planning
+    description: Planning CLI Wrapper
+    deployment_tier: user_facing
+    natural_language:
+    - create
+    - validate
+    - markdown generated
+    - plan loaded
+    - create new plan
+    category: planning
+    modules:
+    - planning_utility
+    profiles:
+      standard:
+        description: Planning CLI Wrapper
+        modules:
+        - planning_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  policy_scanner:
+    name: Policy Scanner
+    description: Policy Scanner - Multi-format policy document detection and parsing
+    deployment_tier: dual_context
+    natural_language:
+    - validate policy document structure
+    - quick check if any policies exist
+    category: general
+    modules:
+    - policy_scanner_utility
+    profiles:
+      standard:
+        description: Policy Scanner - Multi-format policy document detection and parsing
+        modules:
+        - policy_scanner_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  realtime_dashboard_auth:
+    name: Realtime Dashboard Auth
+    description: Real-Time Dashboard Authentication Layer
+    deployment_tier: admin_only
+    natural_language:
+    - 'generated token for user '
+    category: reporting
+    modules:
+    - realtime_dashboard_auth_utility
+    profiles:
+      standard:
+        description: Real-Time Dashboard Authentication Layer
+        modules:
+        - realtime_dashboard_auth_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  realtime_dashboard_server:
+    name: Realtime Dashboard Server
+    description: Real-Time Dashboard WebSocket Server
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: reporting
+    modules:
+    - realtime_dashboard_server_utility
+    profiles:
+      standard:
+        description: Real-Time Dashboard WebSocket Server
+        modules:
+        - realtime_dashboard_server_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  realtime_metrics_publisher:
+    name: Realtime Metrics Publisher
+    description: Real-Time Metrics Publisher
+    deployment_tier: admin_only
+    natural_language:
+    - metrics publisher already running
+    - metrics publisher started
+    category: reporting
+    modules:
+    - realtime_metrics_publisher_utility
+    profiles:
+      standard:
+        description: Real-Time Metrics Publisher
+        modules:
+        - realtime_metrics_publisher_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  response_formatter:
+    name: Response Formatter
+    description: CORTEX Response Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - response_formatter_utility
+    profiles:
+      standard:
+        description: CORTEX Response Formatter
+        modules:
+        - response_formatter_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  review:
+    name: Review
+    description: Code Review CLI
+    deployment_tier: dual_context
+    natural_language:
+    - feature review
+    - review new authentication feature
+    - create
+    - create new code review
+    - review title
+    category: review
+    modules:
+    - review_utility
+    profiles:
+      standard:
+        description: Code Review CLI
+        modules:
+        - review_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  rollback:
+    name: Rollback
+    description: Rollback CLI Wrapper
+    deployment_tier: dual_context
+    natural_language:
+    - checkpoint sha to rollback to
+    - preview changes without executing
+    category: git
+    modules:
+    - rollback_utility
+    profiles:
+      standard:
+        description: Rollback CLI Wrapper
+        modules:
+        - rollback_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  setup:
+    name: Setup
+    description: Environment Setup Operation - CORTEX 3.0 Phase 1.1
+    deployment_tier: user_facing
+    natural_language:
+    - virtual environment created
+    category: setup
+    modules:
+    - setup_epm_utility
+    - setup_utility
+    profiles:
+      standard:
+        description: Environment Setup Operation - CORTEX 3.0 Phase 1.1
+        modules:
+        - setup_epm_utility
+        - setup_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 2
+      modules_total: 2
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  tdd:
+    name: Tdd
+    description: TDD CLI - Test-Driven Development Workflow
+    deployment_tier: user_facing
+    natural_language:
+    - start
+    - start new tdd session
+    - run tests
+    - specific test to run
+    - generate test skeleton
+    category: development
+    modules:
+    - tdd_utility
+    profiles:
+      standard:
+        description: TDD CLI - Test-Driven Development Workflow
+        modules:
+        - tdd_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  user_consent_manager:
+    name: User Consent Manager
+    description: User Consent Manager
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: general
+    modules:
+    - user_consent_manager_utility
+    profiles:
+      standard:
+        description: User Consent Manager
+        modules:
+        - user_consent_manager_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  user_onboarding_operation:
+    name: User Onboarding Operation
+    description: User Onboarding Operation
+    deployment_tier: admin_only
+    natural_language:
+    - getting started
+    - help me get started
+    - 'check cortex installation with '
+    - 'validate brain structure with '
+    - quick start
+    category: setup
+    modules:
+    - user_onboarding_operation_utility
+    profiles:
+      standard:
+        description: User Onboarding Operation
+        modules:
+        - user_onboarding_operation_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-03

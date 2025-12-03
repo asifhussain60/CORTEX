@@ -171,13 +171,11 @@ class ComplianceValidator:
         remediation_actions = self._generate_remediation(violations, gap_analyses)
         print(f"   Created {len(remediation_actions)} actionable recommendations\n")
         
-        # Calculate compliance score
         compliance_score = self._calculate_compliance_score(policy_doc, violations)
         
         # Build summary
         summary = self._build_summary(violations, gap_analyses, remediation_actions)
         
-        # Create report
         report = ComplianceReport(
             timestamp=datetime.now(),
             policy_file=policy_doc.file_path,
@@ -205,11 +203,9 @@ class ComplianceValidator:
         """
         violations = []
         
-        # Get all Python files
         python_files = list(Path(codebase_path).rglob("*.py"))
         
         for rule in policy_doc.rules:
-            # Check each file for this rule
             for py_file in python_files:
                 rule_violations = self._check_rule(rule, py_file)
                 violations.extend(rule_violations)
@@ -281,9 +277,7 @@ class ComplianceValidator:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
             
-            # Check for common security issues
             if 'password' in rule.text.lower() and 'plain text' in rule.text.lower():
-                # Check for hardcoded passwords
                 password_patterns = [
                     r'password\s*=\s*["\'][\w]+["\']',
                     r'PASSWORD\s*=\s*["\'][\w]+["\']',
@@ -304,11 +298,9 @@ class ComplianceValidator:
                         )
                         violations.append(violation)
             
-            # Check for input validation
             if 'input' in rule.text.lower() and 'validat' in rule.text.lower():
                 # Look for input() or request.args without validation
                 if 'input(' in content or 'request.args' in content or 'request.form' in content:
-                    # Check if validation is present (simplified)
                     if not any(keyword in content for keyword in ['validate', 'sanitize', 'clean', 'escape']):
                         violation = PolicyViolation(
                             rule_id=rule.id,
@@ -339,7 +331,6 @@ class ComplianceValidator:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
             
-            # Check for inefficient patterns
             if '+=' in content and 'for' in content:
                 # String concatenation in loop (inefficient)
                 if re.search(r'for\s+\w+\s+in.*:\s*\n\s*\w+\s*\+=\s*["\']', content):
@@ -374,7 +365,6 @@ class ComplianceValidator:
             try:
                 tree = ast.parse(content)
                 
-                # Check functions without docstrings
                 for node in ast.walk(tree):
                     if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
                         if not ast.get_docstring(node):
@@ -681,7 +671,6 @@ class ComplianceValidator:
             ViolationSeverity.INFO: 0.5
         }
         
-        # Calculate weighted violation score
         weighted_violations = sum(
             severity_weights.get(v.severity, 1) for v in violations
         )
@@ -689,7 +678,6 @@ class ComplianceValidator:
         # Max possible violations (all rules violated at highest severity)
         max_violations = len(policy_doc.rules) * severity_weights[ViolationSeverity.CRITICAL]
         
-        # Calculate score
         if max_violations == 0:
             return 100.0
         
@@ -750,7 +738,6 @@ def main():
     """Test compliance validator"""
     from .policy_analyzer import PolicyAnalyzer
     
-    # Create sample policy
     sample_policy = """# Security Policy
 Version: 1.0
 
@@ -776,7 +763,6 @@ Version: 1.0
         analyzer = PolicyAnalyzer()
         policy_doc = analyzer.analyze_file(policy_path)
         
-        # Validate against current directory
         validator = ComplianceValidator()
         report = validator.validate(policy_doc, ".")
         

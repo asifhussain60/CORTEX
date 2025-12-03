@@ -56,7 +56,6 @@ class Issue:
     line_number: int = 0
     column_number: int = 0
     
-    # Classification
     rule_id: Optional[str] = None
     rule_category: Optional[str] = None
     owasp_category: Optional[str] = None  # e.g., "A03:2021 Injection"

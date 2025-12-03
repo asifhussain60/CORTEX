@@ -196,7 +196,6 @@ class LoadBalancer:
             self._workers[worker_id] = worker
             self._metrics.total_workers += 1
             
-            # Initialize circuit breaker state
             if self.enable_circuit_breaker:
                 self._circuit_breaker_state[worker_id] = {
                     'failures': 0,
@@ -465,7 +464,6 @@ class LoadBalancer:
     
     def _select_weighted_round_robin(self, workers: Dict[str, WorkerNode]) -> str:
         """Weighted round robin selection strategy."""
-        # Create weighted list
         weighted_workers = []
         for worker_id, worker in workers.items():
             weight_count = max(1, int(worker.weight * 10))
@@ -527,7 +525,6 @@ class LoadBalancer:
         if state == 'closed':
             return True
         elif state == 'open':
-            # Check if enough time has passed to try again
             if time.time() > circuit_state.get('next_attempt', 0):
                 circuit_state['state'] = 'half-open'
                 return True
@@ -571,11 +568,9 @@ class LoadBalancer:
             if worker.status in [WorkerStatus.ACTIVE, WorkerStatus.BUSY, WorkerStatus.IDLE]
         )
         
-        # Calculate average utilization
         utilizations = [worker.utilization for worker in self._workers.values()]
         self._metrics.avg_worker_utilization = statistics.mean(utilizations) if utilizations else 0.0
         
-        # Calculate average response time
         all_response_times = []
         for worker_times in self._response_times.values():
             all_response_times.extend(worker_times)
@@ -583,7 +578,6 @@ class LoadBalancer:
         if all_response_times:
             self._metrics.avg_response_time_ms = statistics.mean(all_response_times)
         
-        # Calculate requests per second (rough estimate)
         if len(self._request_history) > 1:
             time_span = self._request_history[-1] - self._request_history[0]
             if time_span > 0:

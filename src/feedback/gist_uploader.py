@@ -126,13 +126,11 @@ class GistUploader:
         Returns:
             GistUploadResult with status and URL
         """
-        # Check for GitHub token
         github_token = self._get_github_token()
         
         if not github_token:
             return self._handle_no_token(report_content, filename)
         
-        # Check user preferences
         upload_preference = self._get_upload_preference(auto_prompt)
         
         if upload_preference == "never":
@@ -213,7 +211,6 @@ class GistUploader:
                 timeout=30
             )
             
-            # Check response
             if response.status_code == 201:
                 # Success
                 gist_data = response.json()
@@ -267,7 +264,6 @@ class GistUploader:
         Returns:
             "always", "never", "manual", or "ask"
         """
-        # Check saved preference
         if 'upload_to_gist' in self.preferences:
             return self.preferences['upload_to_gist']
         
@@ -419,11 +415,9 @@ class GistUploader:
         Returns:
             GitHub token or None
         """
-        # Check config file
         if 'github' in self.config and 'token' in self.config['github']:
             return self.config['github']['token']
         
-        # Check environment variable
         token = os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN')
         if token:
             return token

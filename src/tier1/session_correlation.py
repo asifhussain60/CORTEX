@@ -246,7 +246,6 @@ class SessionAmbientCorrelator:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Get session info
         cursor.execute("""
             SELECT workspace_path, start_time, end_time, conversation_count
             FROM sessions
@@ -260,7 +259,6 @@ class SessionAmbientCorrelator:
         
         workspace, start, end, conv_count = session_result
         
-        # Get all conversations in session
         cursor.execute("""
             SELECT conversation_id, title, workflow_state, created_at, updated_at
             FROM conversations
@@ -270,7 +268,6 @@ class SessionAmbientCorrelator:
         
         conversations = cursor.fetchall()
         
-        # Get all ambient events
         events = self.get_session_events(session_id)
         
         conn.close()
@@ -292,7 +289,6 @@ class SessionAmbientCorrelator:
                 narrative.append(f"- **State:** {state or 'ACTIVE'}")
                 narrative.append(f"- **Timeline:** {created} → {updated}")
                 
-                # Get events during this conversation
                 conv_events = self.get_conversation_events(conv_id)
                 if conv_events:
                     narrative.append(f"- **Activity:** {len(conv_events)} events")

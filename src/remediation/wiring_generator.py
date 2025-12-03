@@ -66,7 +66,6 @@ class WiringGenerator:
         if not docstring:
             return "Feature operations"
         
-        # Get first line that's not empty
         lines = [line.strip() for line in docstring.split('\n') if line.strip()]
         if not lines:
             return "Feature operations"
@@ -75,7 +74,6 @@ class WiringGenerator:
         # Remove quotes, triple quotes
         first_line = first_line.strip('"\'')
         
-        # Get first sentence
         match = re.match(r'^([^.!?]+[.!?])', first_line)
         if match:
             return match.group(1).strip()

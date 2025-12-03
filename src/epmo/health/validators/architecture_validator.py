@@ -30,7 +30,6 @@ class ArchitectureValidator(BaseValidator):
         if not python_files:
             return [self.create_result("no_files", 1.0, "No files to validate")]
         
-        # Check for proper separation of concerns
         separation_score = self._check_separation_of_concerns(epmo_path)
         results.append(self.create_result(
             "separation_of_concerns",
@@ -39,7 +38,6 @@ class ArchitectureValidator(BaseValidator):
             ValidationSeverity.LOW if separation_score < 0.7 else ValidationSeverity.INFO
         ))
         
-        # Check for single responsibility principle
         srp_violations = 0
         total_classes = 0
         
@@ -66,7 +64,6 @@ class ArchitectureValidator(BaseValidator):
             ValidationSeverity.MEDIUM if srp_violations > 0 else ValidationSeverity.INFO
         ))
         
-        # Check for proper interface usage
         interface_score = self._check_interface_usage(python_files)
         results.append(self.create_result(
             "interface_usage",
@@ -99,7 +96,6 @@ class ArchitectureValidator(BaseValidator):
         if total_files == 0:
             return 1.0
         
-        # Calculate deviation from expected structure
         total_deviation = 0
         for category, expected_ratio in expected_structure.items():
             actual_ratio = actual_structure.get(category, 0) / total_files
@@ -134,12 +130,10 @@ class ArchitectureValidator(BaseValidator):
     
     def _is_interface_class(self, node: ast.ClassDef) -> bool:
         """Check if a class is an interface (ABC or has abstract methods)."""
-        # Check for ABC base class
         for base in node.bases:
             if isinstance(base, ast.Name) and base.id in ['ABC', 'BaseValidator']:
                 return True
         
-        # Check for abstract methods
         for n in ast.walk(node):
             if isinstance(n, ast.FunctionDef):
                 for decorator in n.decorator_list:

@@ -149,14 +149,12 @@ class PluginCommandRegistry:
         Raises:
             ValueError: If command format is invalid
         """
-        # Validate command format
         if not metadata.command.startswith('/'):
             raise ValueError(f"Command must start with /: {metadata.command}")
         
         if len(metadata.command) < 2:
             raise ValueError(f"Command too short: {metadata.command}")
         
-        # Check for conflicts
         if metadata.command in self._commands:
             existing = self._commands[metadata.command]
             logger.error(
@@ -165,7 +163,6 @@ class PluginCommandRegistry:
             )
             return False
         
-        # Check alias conflicts
         for alias in metadata.aliases:
             if alias in self._all_command_strings:
                 logger.warning(
@@ -217,7 +214,6 @@ class PluginCommandRegistry:
         """
         stripped = user_input.strip()
         
-        # Check if it's a registered command
         if stripped in self._commands:
             metadata = self._commands[stripped]
             logger.debug(
@@ -260,7 +256,6 @@ class PluginCommandRegistry:
         Returns:
             List of all CommandMetadata objects (deduplicated)
         """
-        # Return only primary commands (not aliases)
         seen = set()
         commands = []
         

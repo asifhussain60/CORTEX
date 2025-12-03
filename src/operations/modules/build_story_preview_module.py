@@ -87,7 +87,6 @@ class BuildStoryPreviewModule(BaseOperationModule):
             
             logger.info("Building story preview with MkDocs...")
             
-            # Check if mkdocs is available
             try:
                 result = subprocess.run(
                     ['mkdocs', '--version'],
@@ -139,7 +138,6 @@ class BuildStoryPreviewModule(BaseOperationModule):
                     errors=["MkDocs build completed but site/ directory missing"]
                 )
             
-            # Check for story HTML
             story_html = site_dir / "awakening-of-cortex" / "index.html"
             if not story_html.exists():
                 # Try alternative path
@@ -155,7 +153,6 @@ class BuildStoryPreviewModule(BaseOperationModule):
             context['preview_path'] = site_dir
             context['preview_url'] = preview_url
             
-            # Get build output statistics
             html_files = list(site_dir.rglob("*.html"))
             
             logger.info(

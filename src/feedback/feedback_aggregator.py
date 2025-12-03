@@ -96,7 +96,6 @@ class FeedbackAggregator:
         
         self.github_token = github_token or os.environ.get('GITHUB_TOKEN')
         
-        # Initialize database
         self._init_database()
     
     def _init_database(self) -> None:
@@ -155,7 +154,6 @@ class FeedbackAggregator:
             )
         """)
         
-        # Create indexes
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_issue_signature ON feedback_items(issue_signature)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_category_priority ON feedback_items(category, priority)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON feedback_items(timestamp)")
@@ -201,11 +199,9 @@ class FeedbackAggregator:
         new_items = 0
         
         for gist in gists:
-            # Check if gist contains cortex feedback
             if not self._is_feedback_gist(gist, tag):
                 continue
             
-            # Check if already processed
             if self._is_gist_processed(gist['id']):
                 continue
             
@@ -219,11 +215,9 @@ class FeedbackAggregator:
         """Check if gist contains CORTEX feedback."""
         description = gist.get('description', '').lower()
         
-        # Check description
         if tag.lower() in description or 'cortex' in description:
             return True
         
-        # Check filenames
         for filename in gist.get('files', {}).keys():
             if 'cortex' in filename.lower() and 'feedback' in filename.lower():
                 return True
@@ -257,7 +251,6 @@ class FeedbackAggregator:
         
         items_added = 0
         
-        # Process each file in gist
         for filename, file_data in gist.get('files', {}).items():
             try:
                 # Download file content
@@ -379,7 +372,6 @@ class FeedbackAggregator:
         cursor = conn.cursor()
         
         try:
-            # Check if exact feedback_id exists
             cursor.execute("SELECT 1 FROM feedback_items WHERE feedback_id = ?", (feedback.feedback_id,))
             if cursor.fetchone():
                 return False  # Duplicate
@@ -539,7 +531,6 @@ class FeedbackAggregator:
 
 """
         
-        # Get category stats
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
@@ -600,7 +591,6 @@ def main():
     
     args = parser.parse_args()
     
-    # Initialize aggregator
     token = args.token or os.environ.get('GITHUB_TOKEN')
     aggregator = FeedbackAggregator(github_token=token)
     

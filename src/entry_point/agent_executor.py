@@ -20,6 +20,7 @@ from src.cortex_agents.health_validator.agent import HealthValidator
 from src.cortex_agents.tactical.code_executor import CodeExecutor
 from src.agents.feedback_agent import FeedbackAgent
 from src.cortex_agents.ado_agent import ADOAgent
+from src.cortex_agents.application_health_agent import ApplicationHealthAgent
 
 
 class AgentExecutor:
@@ -97,13 +98,11 @@ class AgentExecutor:
         Returns:
             AgentResponse from the agent
         """
-        # Get or create agent instance
         agent = self._get_agent_instance(agent_type)
         
         if not agent:
             raise ValueError(f"No agent available for type: {agent_type}")
             
-        # Check if agent can handle this request
         if not agent.can_handle(request):
             raise ValueError(f"Agent {agent_type} cannot handle request: {request.user_message}")
         
@@ -123,11 +122,9 @@ class AgentExecutor:
         Returns:
             Agent instance or None if not available
         """
-        # Check cache first
         if agent_type in self._agent_cache:
             return self._agent_cache[agent_type]
         
-        # Create new instance based on type
         agent = None
         
         if agent_type == AgentType.ARCHITECT:
@@ -169,6 +166,13 @@ class AgentExecutor:
                 tier2_kg=self.tier2,
                 tier3_context=self.tier3
             )
+        elif agent_type == AgentType.APPLICATION_HEALTH:
+            agent = ApplicationHealthAgent(
+                name="ApplicationHealthAgent",
+                tier1_api=self.tier1,
+                tier2_kg=self.tier2,
+                tier3_context=self.tier3
+            )
         # Add other agents as needed
         else:
             self.logger.warning(f"Agent type {agent_type} not implemented yet")
@@ -203,7 +207,6 @@ class AgentExecutor:
             if response.result:
                 combined_result[f'secondary_agent_{i+1}'] = response.result
         
-        # Create combined response
         return AgentResponse(
             success=primary_response.success and all(r.success for r in secondary_responses),
             result=combined_result,

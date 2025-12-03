@@ -63,7 +63,6 @@ class DoDDoRClarifierStage:
         Returns:
             StageResult with clarified DoD/DoR
         """
-        # Get threat model output (if available)
         threat_model = state.get_stage_output("threat_model")
         
         # Assess Definition of Ready
@@ -75,7 +74,6 @@ class DoDDoRClarifierStage:
         # Generate clarification questions
         questions = self._generate_questions(dor, dod, threat_model)
         
-        # Check readiness
         is_ready = self._check_readiness(dor)
         
         return StageResult(

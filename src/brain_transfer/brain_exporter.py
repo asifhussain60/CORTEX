@@ -45,7 +45,6 @@ class BrainExporter:
         self.export_dir = self.brain_path / "exports"
         self.export_dir.mkdir(exist_ok=True)
         
-        # Get machine ID from config
         self.machine_id = self._get_machine_id()
         
     def _get_machine_id(self) -> str:
@@ -57,7 +56,6 @@ class BrainExporter:
         system = platform.system()
         machine = platform.machine()
         
-        # Create deterministic ID
         id_string = f"{hostname}-{system}-{machine}"
         return hashlib.md5(id_string.encode()).hexdigest()[:12]
     
@@ -204,7 +202,6 @@ class BrainExporter:
             
             patterns[pattern_id] = pattern_entry
         
-        # Get CORTEX version
         cortex_version = self._get_cortex_version()
         
         # Build complete export structure
@@ -248,7 +245,6 @@ class BrainExporter:
     
     def _generate_signature(self, export_data: Dict[str, Any]) -> str:
         """Generate SHA256 signature for export integrity verification."""
-        # Create deterministic string from export data
         signature_data = {
             "export_date": export_data["export_date"],
             "source_machine_id": export_data["source_machine_id"],

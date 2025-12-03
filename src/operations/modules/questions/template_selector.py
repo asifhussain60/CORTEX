@@ -20,7 +20,6 @@ from enum import Enum
 import time
 import logging
 
-# Import from Feature 2 (Phase 1)
 try:
     from src.agents.namespace_detector import NamespaceDetector, NamespaceType, NamespaceDetectionResult
 except ImportError:
@@ -73,7 +72,6 @@ class TemplateSelector:
         self.brain_path = Path(brain_path) if brain_path else Path(__file__).parent.parent.parent.parent / "cortex-brain"
         self.templates_path = self.brain_path / "response-templates"
         
-        # Initialize namespace detector from Phase 1
         self.namespace_detector = None
         if NamespaceDetector:
             try:
@@ -161,7 +159,6 @@ class TemplateSelector:
         start_time = time.time()
         context = context or {}
         
-        # Check cache first
         cache_key = self._get_cache_key(question, context)
         if cache_key in self._selection_cache:
             cached_result = self._selection_cache[cache_key]

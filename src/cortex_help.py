@@ -202,7 +202,6 @@ def _generate_category_help(registry) -> str:
     """
     help_text = "# CORTEX Commands by Category\n\n"
     
-    # Get all categories
     all_commands = registry.get_all_commands()
     by_category: Dict[CommandCategory, List] = {}
     
@@ -316,7 +315,6 @@ def handle_help_request(request: str) -> str:
         if keyword in request_lower:
             return show_help(HelpFormat.CONCISE, category)
     
-    # Check if asking for categories
     if any(word in request_lower for word in ['categories', 'category', 'organize']):
         return show_help(HelpFormat.CATEGORY)
     

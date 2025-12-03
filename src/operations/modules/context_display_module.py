@@ -214,7 +214,6 @@ class ContextDisplayModule(BaseOperationModule):
         if not conversations:
             return "🟢 **Memory Health:** Optimal (Empty state)\n\nNo conversations to analyze."
         
-        # Calculate health metrics
         scores = [s.get('score', 0.0) for s in relevance_scores]
         avg_score = sum(scores) / len(scores) if scores else 0.0
         
@@ -300,7 +299,6 @@ No recent conversations loaded.
                 'memory_health': 'Empty'
             }
         
-        # Calculate average relevance score
         scores = [s.get('score', 0.0) for s in relevance_scores]
         avg_score = sum(scores) / len(scores) if scores else 0.0
         overall_score = avg_score * 10  # Scale to 0-10

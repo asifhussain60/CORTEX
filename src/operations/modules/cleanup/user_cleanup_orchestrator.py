@@ -409,7 +409,6 @@ class UserCleanupOrchestrator(BaseOperationModule):
         except ValueError:
             return True  # Outside project root
 
-        # Check against protected paths
         path_str = str(relative_path) + ("/" if path.is_dir() else "")
 
         for protected in self.protected_paths:

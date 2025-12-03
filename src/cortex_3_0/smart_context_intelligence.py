@@ -218,10 +218,8 @@ class AdaptiveMemoryManager:
     def cache_context(self, context: ContextItem, predicted: bool = False):
         """Add context to cache with adaptive management"""
         
-        # Calculate context size
         size_mb = context.size_bytes / (1024 * 1024)
         
-        # Check if we need to free memory
         if self.current_memory_usage + size_mb > self.max_memory_mb:
             self._evict_contexts(size_mb)
             
@@ -348,7 +346,6 @@ class CrossSessionContextManager:
         # Load relevant context from previous sessions
         previous_context = self._load_relevant_previous_context(intent, user_request)
         
-        # Create session context
         session_context = SessionContext(
             session_id=session_id,
             user_intent=intent,
@@ -439,11 +436,9 @@ class SmartContextIntelligence:
         os.makedirs(f"{cortex_brain_path}/tier2", exist_ok=True)
         os.makedirs(f"{cortex_brain_path}/tier3", exist_ok=True)
         
-        # Initialize components
         self.memory_manager = AdaptiveMemoryManager(max_memory_mb)
         self.session_manager = CrossSessionContextManager(cortex_brain_path)
         
-        # Initialize existing CORTEX systems
         self.tier1 = WorkingMemory(f"{cortex_brain_path}/tier1/working_memory.db")
         self.tier2 = KnowledgeGraph(f"{cortex_brain_path}/tier2")
         self.tier3 = ContextIntelligence(f"{cortex_brain_path}/tier3")
@@ -464,7 +459,6 @@ class SmartContextIntelligence:
     async def get_intelligent_context(self, session_id: str, context_query: str) -> Dict[str, Any]:
         """Get intelligently assembled context for a query"""
         
-        # Get relevant contexts from all tiers
         tier1_context = await self._get_tier1_context(context_query)
         tier2_context = await self._get_tier2_context(context_query)
         tier3_context = await self._get_tier3_context(context_query)

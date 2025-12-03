@@ -60,7 +60,6 @@ class BrainProtectionBehavior(IPipelineBehavior):
             elif hasattr(request, 'namespace_filter'):
                 namespace_value = request.namespace_filter
                 
-            # Check protected namespace access
             if namespace_value:
                 if self._is_protected_namespace(namespace_value):
                     logger.warning(
@@ -70,7 +69,6 @@ class BrainProtectionBehavior(IPipelineBehavior):
                     # In production, would check user permissions here
                     # For now, allow but log
             
-            # Check for destructive operations
             if self._is_destructive_operation(request):
                 logger.warning(
                     f"⚠️ SKULL: Destructive operation detected: {request.__class__.__name__}"

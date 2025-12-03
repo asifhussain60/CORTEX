@@ -97,7 +97,6 @@ class ConcreteFeatureCompletionOrchestrator(FeatureCompletionOrchestrator):
         """Initialize orchestrator with concrete sub-agents"""
         super().__init__(workspace_path)
         
-        # Initialize concrete sub-agents
         self._initialize_sub_agents()
         
         logger.info(f"ConcreteFeatureCompletionOrchestrator initialized for workspace: {workspace_path}")
@@ -183,7 +182,6 @@ class ConcreteFeatureCompletionOrchestrator(FeatureCompletionOrchestrator):
             visual_assets = self._get_empty_visual_assets()
             health_report = self._get_empty_health_report()
             
-            # Create streamlined report
             report = AlignmentReport(
                 feature_description=feature_description,
                 execution_start=self.execution_start,
@@ -226,7 +224,6 @@ class ConcreteFeatureCompletionOrchestrator(FeatureCompletionOrchestrator):
             "overall": "unknown"
         }
         
-        # Check sub-agent health
         if self._are_subagents_ready():
             for agent_name, agent in [
                 ("brain_ingestion", self.brain_ingestion_agent),
@@ -426,7 +423,6 @@ async def main():
     )
     
     try:
-        # Create orchestrator
         if args.mode == "mock":
             orchestrator = MockFeatureCompletionOrchestrator(args.workspace)
         else:

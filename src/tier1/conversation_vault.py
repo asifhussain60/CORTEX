@@ -68,7 +68,6 @@ class ConversationVaultManager:
         self.vault_path = Path(vault_path)
         self.metadata_path = self.vault_path / "metadata"
         
-        # Create directories if needed
         self.vault_path.mkdir(exist_ok=True, parents=True)
         self.metadata_path.mkdir(exist_ok=True, parents=True)
     
@@ -208,7 +207,6 @@ class ConversationVaultManager:
         Returns:
             Path to conversation file or None if not found
         """
-        # Check metadata first
         metadata_file = self.metadata_path / f"{conv_id}.json"
         if not metadata_file.exists():
             return None

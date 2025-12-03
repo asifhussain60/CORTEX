@@ -63,7 +63,6 @@ class InteractiveDashboardGenerator:
             True
         """
         try:
-            # Validate data structure
             self._validate_data(data)
             
             # Load template
@@ -99,43 +98,35 @@ class InteractiveDashboardGenerator:
             if key not in data:
                 raise ValueError(f"Missing required key: {key}")
         
-        # Validate metadata
         metadata_keys = ["generatedAt", "version", "operationType", "author"]
         for key in metadata_keys:
             if key not in data["metadata"]:
                 raise ValueError(f"Missing metadata.{key}")
         
-        # Validate overview
         overview_keys = ["executiveSummary", "keyMetrics", "statusIndicator"]
         for key in overview_keys:
             if key not in data["overview"]:
                 raise ValueError(f"Missing overview.{key}")
         
-        # Validate key metrics count
         if not (5 <= len(data["overview"]["keyMetrics"]) <= 10):
             raise ValueError(f"keyMetrics must have 5-10 items, got {len(data['overview']['keyMetrics'])}")
         
-        # Validate visualizations
         viz_keys = ["forceGraph", "timeSeries"]
         for key in viz_keys:
             if key not in data["visualizations"]:
                 raise ValueError(f"Missing visualizations.{key}")
         
-        # Validate force graph structure
         if "nodes" not in data["visualizations"]["forceGraph"]:
             raise ValueError("Missing forceGraph.nodes")
         if "links" not in data["visualizations"]["forceGraph"]:
             raise ValueError("Missing forceGraph.links")
         
-        # Validate diagrams array
         if not isinstance(data["diagrams"], list) or len(data["diagrams"]) == 0:
             raise ValueError("diagrams must be non-empty array")
         
-        # Validate data table array
         if not isinstance(data["dataTable"], list) or len(data["dataTable"]) == 0:
             raise ValueError("dataTable must be non-empty array")
         
-        # Validate recommendations array
         if not isinstance(data["recommendations"], list) or len(data["recommendations"]) == 0:
             raise ValueError("recommendations must be non-empty array")
     
@@ -297,7 +288,6 @@ class InteractiveDashboardGenerator:
             from playwright.sync_api import sync_playwright
             import tempfile
             
-            # Create presentation
             prs = Presentation()
             prs.slide_width = Inches(10)
             prs.slide_height = Inches(7.5)

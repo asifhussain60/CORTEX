@@ -84,7 +84,6 @@ class HelpCommand:
             # Determine status
             status = self._determine_status(op_id, op_info)
             
-            # Get module count
             modules = op_info.get('modules', [])
             module_count = len(modules)
             
@@ -116,17 +115,14 @@ class HelpCommand:
         Returns:
             Status string: 'ready', 'pending', 'planned'
         """
-        # Check explicit status field
         explicit_status = op_info.get('status', '').lower()
         if explicit_status == 'pending':
             return 'planned'
         
-        # Check module implementation status
         modules = op_info.get('modules', [])
         if not modules:
             return 'pending'
         
-        # Get module definitions from config
         all_modules = self.factory.config.get('modules', {})
         
         implemented_count = 0

@@ -222,7 +222,6 @@ class MultiApplicationOrchestrator(CrawlerOrchestrator):
             max_workers=3  # Optimized for 2-3 apps
         )
         
-        # Initialize cache manager
         if cortex_brain_path:
             self.cache_manager = PersistentApplicationCache(
                 cache_dir=Path(cortex_brain_path) if isinstance(cortex_brain_path, str) else cortex_brain_path,
@@ -232,7 +231,6 @@ class MultiApplicationOrchestrator(CrawlerOrchestrator):
         else:
             self.cache_manager = None
         
-        # Initialize shared database context
         if cortex_brain_path:
             self.shared_db_context = SharedDatabaseContextManager(cortex_brain_path)
         else:
@@ -266,7 +264,6 @@ class MultiApplicationOrchestrator(CrawlerOrchestrator):
             if topology_result.status != CrawlerStatus.COMPLETED:
                 raise Exception("Topology detection failed")
             
-            # Get topology from knowledge graph
             topology = self._get_topology_from_kg()
             if not topology:
                 raise Exception("Failed to retrieve topology from knowledge graph")
@@ -416,7 +413,6 @@ class MultiApplicationOrchestrator(CrawlerOrchestrator):
         # Try Phase 2 intelligent prioritization
         try:
             if not self.prioritization_engine:
-                # Initialize prioritization engine
                 config = {
                     'workspace_path': self.workspace_path,
                     'applications': applications,
@@ -425,7 +421,6 @@ class MultiApplicationOrchestrator(CrawlerOrchestrator):
                 }
                 self.prioritization_engine = ApplicationPrioritizationEngine(config)
             
-            # Get prioritized applications
             priorities = self.prioritization_engine.prioritize_applications()
             
             # Convert to dictionary format with priority scores

@@ -20,7 +20,6 @@ import logging
 from datetime import datetime
 import json
 
-# Import from template selector
 try:
     from .template_selector import TemplateSelectionResult
 except ImportError:
@@ -329,7 +328,6 @@ def render_response_for_question(question: str, context: Dict[str, Any] = None, 
     Returns:
         RenderResult with fully rendered response
     """
-    # Import here to avoid circular imports
     try:
         from .template_selector import TemplateSelector
     except ImportError:

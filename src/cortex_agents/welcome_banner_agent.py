@@ -72,7 +72,6 @@ class WelcomeBannerAgent(BaseAgent):
         else:
             self.db_path = db_path
         
-        # Initialize session state table
         self._initialize_session_table()
         
         self.logger.info(f"WelcomeBannerAgent initialized (db: {self.db_path})")
@@ -208,7 +207,6 @@ class WelcomeBannerAgent(BaseAgent):
                 "is_new_session": True
             }
         
-        # Check existing session
         try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()

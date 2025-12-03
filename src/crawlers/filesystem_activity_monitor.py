@@ -160,7 +160,6 @@ class FileSystemActivityMonitor:
         # Map files to applications
         app_activity = self._map_to_applications(recent_files, lock_files)
         
-        # Calculate activity scores
         self._calculate_activity_scores(app_activity)
         
         elapsed = time.time() - start_time
@@ -200,7 +199,6 @@ class FileSystemActivityMonitor:
                         stat = file_path.stat()
                         mtime = datetime.fromtimestamp(stat.st_mtime)
                         
-                        # Check if modified within time window
                         if mtime >= self.cutoff_time:
                             recent_files.append(FileActivity(
                                 path=str(file_path),
@@ -233,7 +231,6 @@ class FileSystemActivityMonitor:
                 dirs[:] = [d for d in dirs if d not in self.SKIP_DIRECTORIES]
                 
                 for filename in files:
-                    # Check if this is a lock file
                     is_lock_file = any(
                         filename.endswith(pattern) or filename.startswith(pattern)
                         for pattern in self.LOCK_FILE_PATTERNS
@@ -275,7 +272,6 @@ class FileSystemActivityMonitor:
         """
         app_activity = {}
         
-        # Initialize application activity tracking
         for app in self.applications:
             app_name = app['name']
             app_activity[app_name] = ApplicationActivity(

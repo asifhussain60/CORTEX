@@ -103,7 +103,6 @@ class CacheManager:
                 self._update_access_time(start_time)
                 return None
             
-            # Check TTL expiration
             if self._is_expired(entry):
                 del self._cache[key]
                 self._stats.miss_count += 1
@@ -139,18 +138,15 @@ class CacheManager:
             True if successfully cached
         """
         with self._lock:
-            # Calculate value size
             try:
                 size_bytes = len(pickle.dumps(value))
             except:
                 size_bytes = 1024  # Fallback estimate
             
-            # Check if we need to evict entries
             if not self._ensure_space(size_bytes):
                 logger.warning(f"Failed to cache {key}: insufficient space")
                 return False
             
-            # Create cache entry
             entry = CacheEntry(
                 key=key,
                 value=value,

@@ -77,7 +77,6 @@ class LoadProtectionRulesModule(BaseOperationModule):
                     error="YAML file contains no rules"
                 )
             
-            # Validate structure
             validation = self._validate_rules_structure(rules)
             if not validation["valid"]:
                 return OperationResult(
@@ -134,14 +133,12 @@ class LoadProtectionRulesModule(BaseOperationModule):
         Returns:
             Validation result
         """
-        # Check for required sections
         if "skull_rules" not in rules:
             return {
                 "valid": False,
                 "error": "Missing required 'skull_rules' section"
             }
         
-        # Validate SKULL rules
         skull_rules = rules["skull_rules"]
         for rule_id, rule_def in skull_rules.items():
             if "name" not in rule_def:

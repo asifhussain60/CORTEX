@@ -57,19 +57,16 @@ class SearchContextHandler(IRequestHandler[SearchContextQuery, Result[List[Conve
             Result[List[ConversationDto]] with matching conversations
         """
         try:
-            # Validate input
             Guard.against_empty(request.search_text, "search_text")
             Guard.against_out_of_range(request.min_relevance, 0.0, 1.0, "min_relevance")
             Guard.against_negative_or_zero(request.max_results, "max_results")
             
-            # Validate namespace if provided
             if request.namespace_filter:
                 namespace = Namespace(value=request.namespace_filter)
             
             # Search conversations in database
             try:
                 async with self._uow as uow:
-                    # Get high-quality conversations first
                     conversations = await uow.conversations.get_high_quality(request.min_relevance)
                     
                     # Filter by namespace if specified
@@ -143,14 +140,12 @@ class GetConversationQualityHandler(IRequestHandler[GetConversationQualityQuery,
             Result[ConversationQualityDto] with quality metrics
         """
         try:
-            # Validate input
             Guard.against_empty(request.conversation_id, "conversation_id")
             
             # TODO: Get conversation from database
             # For now, return mock quality
             logger.info(f"Getting quality for conversation: {request.conversation_id}")
             
-            # Create quality value object
             quality = ConversationQuality(
                 score=0.85,
                 turn_count=10,
@@ -199,13 +194,11 @@ class FindSimilarPatternsHandler(IRequestHandler[FindSimilarPatternsQuery, Resul
             Result[List[PatternDto]] with matching patterns
         """
         try:
-            # Validate input
             Guard.against_empty(request.context, "context")
             Guard.against_empty(request.namespace, "namespace")
             Guard.against_out_of_range(request.min_confidence, 0.0, 1.0, "min_confidence")
             Guard.against_negative_or_zero(request.max_results, "max_results")
             
-            # Validate namespace
             namespace = Namespace(value=request.namespace)
             
             # TODO: Execute similarity search in database
@@ -268,10 +261,8 @@ class GetConversationByIdHandler(IRequestHandler[GetConversationByIdQuery, Resul
             Result[Optional[ConversationDto]] with conversation or None
         """
         try:
-            # Validate input
             Guard.against_empty(request.conversation_id, "conversation_id")
             
-            # Get conversation from database
             try:
                 async with self._uow as uow:
                     conversation = await uow.conversations.get_by_id(request.conversation_id)
@@ -335,10 +326,8 @@ class GetPatternByIdHandler(IRequestHandler[GetPatternByIdQuery, Result[Optional
             Result[Optional[PatternDto]] with pattern or None
         """
         try:
-            # Validate input
             Guard.against_empty(request.pattern_id, "pattern_id")
             
-            # Get pattern from database
             try:
                 async with self._uow as uow:
                     pattern = await uow.patterns.get_by_id(request.pattern_id)
@@ -404,17 +393,13 @@ class GetRecentConversationsHandler(IRequestHandler[GetRecentConversationsQuery,
             Result[List[ConversationDto]] with recent conversations
         """
         try:
-            # Validate input
             Guard.against_negative_or_zero(request.max_results, "max_results")
             
-            # Validate namespace if provided
             if request.namespace_filter:
                 namespace = Namespace(value=request.namespace_filter)
             
-            # Get recent conversations from database
             try:
                 async with self._uow as uow:
-                    # Get all conversations
                     conversations = await uow.conversations.get_all()
                     
                     # Filter by namespace if specified
@@ -490,18 +475,14 @@ class GetPatternsByNamespaceHandler(IRequestHandler[GetPatternsByNamespaceQuery,
             Result[List[PatternDto]] with patterns in namespace
         """
         try:
-            # Validate input
             Guard.against_empty(request.namespace, "namespace")
             Guard.against_out_of_range(request.min_confidence, 0.0, 1.0, "min_confidence")
             Guard.against_negative_or_zero(request.max_results, "max_results")
             
-            # Validate namespace
             namespace = Namespace(value=request.namespace)
             
-            # Get patterns from database
             try:
                 async with self._uow as uow:
-                    # Get patterns with minimum confidence
                     patterns = await uow.patterns.get_by_confidence(request.min_confidence)
                     
                     # Sort by confidence (highest first) and limit results

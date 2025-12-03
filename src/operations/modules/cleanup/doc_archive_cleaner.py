@@ -39,13 +39,11 @@ class DocumentArchiveCleaner:
         """
         logger.info("Scanning for old archived documents...")
         
-        # Define archive directories
         archive_dirs = [
             self.project_root / 'cortex-brain' / 'documents' / 'archive',
             self.project_root / 'docs' / 'archive' / 'consolidated'
         ]
         
-        # Define age threshold (30 days in seconds)
         age_threshold_seconds = 30 * 24 * 60 * 60
         current_time = datetime.now().timestamp()
         
@@ -60,7 +58,6 @@ class DocumentArchiveCleaner:
                 if not archive_file.is_file():
                     continue
                 
-                # Check file age
                 try:
                     file_mtime = archive_file.stat().st_mtime
                     file_age_seconds = current_time - file_mtime
@@ -108,7 +105,6 @@ class DocumentArchiveCleaner:
             for archive_dir in archive_dirs:
                 if archive_dir.exists():
                     try:
-                        # Check if directory is empty
                         if not any(archive_dir.iterdir()):
                             archive_dir.rmdir()
                             logger.info(f"  🗑️  Removed empty archive directory: {archive_dir.relative_to(self.project_root)}")

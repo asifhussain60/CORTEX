@@ -91,13 +91,11 @@ class ValidateStoryStructureModule(BaseOperationModule):
             issues = []
             warnings = []
             
-            # Check for title (H1)
             h1_pattern = re.compile(r'^# .+')
             h1_found = any(h1_pattern.match(line) for line in lines[:10])
             if not h1_found:
                 issues.append("No H1 title found in first 10 lines")
             
-            # Check for headings hierarchy
             heading_pattern = re.compile(r'^(#{1,6}) .+')
             headings = []
             for i, line in enumerate(lines):
@@ -119,12 +117,10 @@ class ValidateStoryStructureModule(BaseOperationModule):
                         f"H{prev_level} → H{curr_level}"
                     )
             
-            # Check for minimum content
             non_empty_lines = [line for line in lines if line.strip()]
             if len(non_empty_lines) < 100:
                 warnings.append(f"Story only has {len(non_empty_lines)} non-empty lines")
             
-            # Check for common Markdown issues
             # - Multiple consecutive blank lines
             consecutive_blank = 0
             for i, line in enumerate(lines):

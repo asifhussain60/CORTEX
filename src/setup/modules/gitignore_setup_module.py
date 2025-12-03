@@ -81,7 +81,6 @@ class GitIgnoreSetupModule(BaseSetupModule):
         """
         issues = []
         
-        # Check project root exists
         project_root = context.get('project_root')
         if not project_root:
             issues.append("project_root not found in context")
@@ -97,7 +96,6 @@ class GitIgnoreSetupModule(BaseSetupModule):
             context['user_project_root'] = str(user_project_root)
             self.log_info(f"Inferred user_project_root: {user_project_root}")
         
-        # Check git is available
         try:
             result = subprocess.run(
                 ['git', '--version'],
@@ -112,7 +110,6 @@ class GitIgnoreSetupModule(BaseSetupModule):
         except Exception as e:
             issues.append(f"Git validation error: {e}")
         
-        # Check we're in a git repository
         try:
             user_root = Path(context.get('user_project_root', project_root))
             result = subprocess.run(
@@ -157,7 +154,6 @@ class GitIgnoreSetupModule(BaseSetupModule):
             if "CORTEX AI Assistant" in existing_content:
                 self.log_info("CORTEX patterns already present in .gitignore")
                 
-                # Validate patterns work
                 is_valid, issues = self._validate_gitignore_patterns(user_root)
                 if is_valid:
                     return SetupResult(

@@ -4,7 +4,6 @@ from typing import Optional, List
 from src.application.common.interfaces import IQuery
 
 
-# Define result types for queries
 @dataclass
 class ConversationDto:
     """Data transfer object for conversation"""

@@ -78,7 +78,6 @@ class TDDDemoEngine:
         # Load demo scenarios from configuration
         self.scenarios = self._load_scenarios()
         
-        # Initialize database
         self._init_database()
     
     def _init_database(self) -> None:
@@ -352,7 +351,6 @@ class PaymentProcessor:
     
     def process_payment(self, payment: PaymentRequest) -> PaymentResult:
         """Refactored: Added validation and proper error handling."""
-        # Validate payment
         validation_error = self._validate_payment(payment)
         if validation_error:
             return PaymentResult(
@@ -500,7 +498,6 @@ class APIService:
     
     def create_task(self, task_data: Dict) -> APIResponse:
         """Refactored: Added validation and proper error handling."""
-        # Validate input
         if "title" not in task_data:
             return APIResponse(
                 status_code=HTTPStatus.BAD_REQUEST.value,
@@ -509,7 +506,6 @@ class APIService:
             )
         
         try:
-            # Create task
             task = Task(
                 id=self._next_id,
                 title=task_data["title"],

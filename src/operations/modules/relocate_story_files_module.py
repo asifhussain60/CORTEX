@@ -68,7 +68,6 @@ class RelocateStoryFilesModule(BaseOperationModule):
     
     def validate(self, context: Dict[str, Any]) -> OperationResult:
         """Validate prerequisites."""
-        # Check if at least one target file exists
         project_root = Path(context.get('project_root', '.'))
         found_files = []
         
@@ -94,7 +93,6 @@ class RelocateStoryFilesModule(BaseOperationModule):
         try:
             logger.info("Relocating story files...")
             
-            # Get paths
             project_root = Path(context.get('project_root', '.'))
             output_dir = Path(context.get('output_dir', 'docs/story/CORTEX-STORY'))
             output_dir.mkdir(parents=True, exist_ok=True)
@@ -207,7 +205,6 @@ class RelocateStoryFilesModule(BaseOperationModule):
             
             target_path = target_dir / filename
             
-            # Check if already in target location
             if source_path.resolve() == target_path.resolve():
                 return {
                     'status': 'skipped',
@@ -215,7 +212,6 @@ class RelocateStoryFilesModule(BaseOperationModule):
                     'reason': 'Already in target location'
                 }
             
-            # Create backup if requested
             if create_backup and source_path.exists():
                 backup_dir = source_path.parent / '.backups'
                 backup_dir.mkdir(exist_ok=True)

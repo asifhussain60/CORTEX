@@ -99,7 +99,6 @@ class EPMASTParser:
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
         
-        # Check cache first
         cache_key = str(file_path)
         if cache_key in self.analysis_cache:
             return self.analysis_cache[cache_key]
@@ -111,7 +110,6 @@ class EPMASTParser:
             # Parse the AST
             tree = ast.parse(source_code)
             
-            # Initialize analysis results
             analysis = EPMAnalysis(
                 file_path=file_path,
                 total_lines=len(source_code.splitlines()),
@@ -124,7 +122,6 @@ class EPMASTParser:
             # Calculate complexity
             analysis.complexity_score = self._calculate_complexity(analysis)
             
-            # Check for test file
             analysis.has_tests = self._has_test_file(file_path)
             
             # Cache the results
@@ -204,7 +201,6 @@ class EPMASTParser:
             is_private=node.name.startswith('_')
         )
         
-        # Set current class for method analysis
         self.current_class = class_info
         
         # Analyze class methods
@@ -303,7 +299,6 @@ class EPMASTParser:
             f"test{file_path.stem}.py"
         ]
         
-        # Check in same directory and tests/ subdirectory
         search_dirs = [file_path.parent, file_path.parent / "tests"]
         
         for search_dir in search_dirs:

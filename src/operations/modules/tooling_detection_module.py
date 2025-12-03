@@ -117,7 +117,6 @@ class ToolingDetector:
     def detect_package_manager(self) -> Dict:
         """Detect system package manager for automated installation."""
         if self.system == 'Windows':
-            # Check for Chocolatey, winget
             for mgr in ['choco', 'winget']:
                 result = self._check_command(mgr, ['--version'])
                 if result['installed']:
@@ -129,7 +128,6 @@ class ToolingDetector:
             return {'name': 'none', 'installed': False}
         
         elif self.system == 'Darwin':
-            # Check for Homebrew
             result = self._check_command('brew', ['--version'])
             if result['installed']:
                 return {
@@ -140,7 +138,6 @@ class ToolingDetector:
             return {'name': 'none', 'installed': False}
         
         elif self.system == 'Linux':
-            # Check for apt, yum, dnf
             for mgr in ['apt-get', 'yum', 'dnf']:
                 result = self._check_command(mgr, ['--version'])
                 if result['installed']:

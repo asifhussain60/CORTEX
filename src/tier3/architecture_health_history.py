@@ -62,7 +62,6 @@ class ArchitectureHealthHistory:
         # Detect trend based on historical data
         trend_direction = self._detect_trend(overall_score)
         
-        # Calculate debt estimate
         debt_estimate_hours = self._estimate_debt_hours(
             overall_score,
             feature_breakdown.get("critical", 0),
@@ -116,7 +115,6 @@ class ArchitectureHealthHistory:
                 "insights": ["Need at least 2 snapshots for trend analysis"]
             }
         
-        # Calculate velocity (score change per day)
         first_score = trend_data[0]["overall_score"]
         last_score = trend_data[-1]["overall_score"]
         score_change = last_score - first_score
@@ -135,7 +133,6 @@ class ArchitectureHealthHistory:
         else:
             direction = "degrading"
         
-        # Calculate volatility
         scores = [d["overall_score"] for d in trend_data]
         volatility = statistics.stdev(scores) if len(scores) > 1 else 0.0
         
@@ -166,7 +163,6 @@ class ArchitectureHealthHistory:
         Returns:
             Forecast data with predicted score and confidence
         """
-        # Get recent trend (last 30 days)
         trend_analysis = self.analyze_trends(days=30)
         
         if trend_analysis["trend"] == "insufficient_data":
