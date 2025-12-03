@@ -400,30 +400,49 @@ class FeatureAutoRegistrar:
     def insert_yaml_entry(self, yaml_entry: str) -> None:
         """
         Insert YAML entry into cortex-operations.yaml.
+        Inserts at the end of the operations section, before the modules section.
         
         Args:
             yaml_entry: Formatted YAML string to insert
         """
-        # Read current YAML
+        # Read current YAML line by line
         with open(self.operations_yaml, 'r', encoding='utf-8') as f:
-            content = f.read()
+            lines = f.readlines()
         
-        # Find the operations section
-        # Insert before the last operation or before statistics
-        insert_position = content.rfind('\n\nstatistics:')
+        # Find the modules section line (this marks end of operations section)
+        modules_line_idx = None
+        for i, line in enumerate(lines):
+            if line.strip() == 'modules:' and i > 100:  # Skip any modules: inside operations
+                modules_line_idx = i
+                logger.info(f"Found modules: section at line {i+1}")
+                break
         
-        if insert_position == -1:
-            # No statistics section, append to end
-            insert_position = len(content)
+        if modules_line_idx is None:
+            # No modules section, try metadata
+            for i, line in enumerate(lines):
+                if line.strip() == 'metadata:':
+                    modules_line_idx = i
+                    logger.info(f"Found metadata: section at line {i+1}")
+                    break
         
-        # Insert the new entry
-        new_content = content[:insert_position] + yaml_entry + content[insert_position:]
+        if modules_line_idx is None:
+            # No modules or metadata, append to end
+            logger.warning("No modules: or metadata: section found, appending to end")
+            modules_line_idx = len(lines)
+        
+        # Insert the new entry before modules/metadata section
+        # Make sure yaml_entry ends with a newline
+        if not yaml_entry.endswith('\n'):
+            yaml_entry += '\n'
+        
+        # Insert before modules/metadata line
+        lines.insert(modules_line_idx, yaml_entry)
         
         # Write back
         with open(self.operations_yaml, 'w', encoding='utf-8') as f:
-            f.write(new_content)
+            f.writelines(lines)
         
-        logger.info(f"Inserted YAML entry into {self.operations_yaml}")
+        logger.info(f"Inserted YAML entry at line {modules_line_idx+1}")
     
     def update_statistics(self) -> None:
         """Update statistics section in cortex-operations.yaml."""

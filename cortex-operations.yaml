@@ -109,6 +109,304 @@ operations:
     - interactive tutorial
     - show demo
     category: onboarding
+  ado:
+    name: Ado
+    description: ADO CLI - Azure DevOps Work Item Management
+    deployment_tier: dual_context
+    natural_language:
+    - create
+    - create new work item
+    - update
+    - update work item
+    - generate completion summary
+    category: general
+  align:
+    name: Align
+    description: CORTEX Align v2.0 Command - Entry Point Wrapper
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    - analyze
+    - preview changes without applying them
+    category: maintenance
+  application_onboarding_operation:
+    name: Application Onboarding Operation
+    description: Application Onboarding Operation
+    deployment_tier: admin_only
+    natural_language:
+    - analyze my codebase
+    - deploy cortex
+    - check project directory permissions
+    - generate comprehensive session summary
+    - generate
+    category: setup
+  cache_commands:
+    name: Cache Commands
+    description: Cache Management Commands for CORTEX
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    - show cache
+    - show cache statistics and hit rates
+    - cache invalidate
+    category: general
+  cache_dashboard:
+    name: Cache Dashboard
+    description: Cache Performance Dashboard
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    category: reporting
+  cleanup:
+    name: Cleanup
+    description: Workspace Cleanup Operation
+    deployment_tier: admin_only
+    natural_language:
+    - dry run complete
+    category: maintenance
+  commit:
+    name: Commit
+    description: Commit Entry Point
+    deployment_tier: user_facing
+    natural_language:
+    - commit operation
+    category: git
+  dashboard_data_adapter:
+    name: Dashboard Data Adapter
+    description: Dashboard Data Adapter
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: reporting
+  dependency_installer:
+    name: Dependency Installer
+    description: Dependency Installer
+    deployment_tier: user_facing
+    natural_language:
+    - already running in virtual environment
+    - skip python version check
+    category: setup
+  deploy:
+    name: Deploy
+    description: CORTEX Deploy Operation - CLI Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - deploy
+    - cortex deployment with validation gates
+    category: deployment
+  documentation_component_registry:
+    name: Documentation Component Registry
+    description: Documentation Component Registry
+    deployment_tier: admin_only
+    natural_language:
+    - generate image prompts
+    - generate diagrams
+    - generate features
+    - generate summary
+    - deploy docs
+    category: documentation
+  environment_setup_module:
+    name: Environment Setup Module
+    description: Environment Setup Operation - Module Wrapper
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: setup
+  git_checkpoint:
+    name: Git Checkpoint
+    description: Git Checkpoint CLI Wrapper
+    deployment_tier: user_facing
+    natural_language:
+    - checkpoints
+    - cortex git checkpoint utility
+    - create
+    category: git
+  header_formatter:
+    name: Header Formatter
+    description: CORTEX Orchestrator Header Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - dry run
+    category: general
+  header_utils:
+    name: Header Utils
+    description: CORTEX Orchestrator Header Utilities
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
+  healthcheck:
+    name: Healthcheck
+    description: CORTEX Health Check Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - cortex health check operation
+    category: analysis
+  help_command:
+    name: Help Command
+    description: CORTEX Help Command - Display Available Operations
+    deployment_tier: dual_context
+    natural_language:
+    - planned
+    category: general
+  onboarding_orchestrator:
+    name: Onboarding Orchestrator
+    description: Onboarding Orchestrator
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: setup
+  operation_factory:
+    name: Operation Factory
+    description: Operation Factory - Load and Create Operations from YAML
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+  operation_header_formatter:
+    name: Operation Header Formatter
+    description: CORTEX Operation Header Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - dry run
+    category: general
+  operations_orchestrator:
+    name: Operations Orchestrator
+    description: Universal Operations Orchestrator - CORTEX 2.0
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+  optimize:
+    name: Optimize
+    description: CORTEX Optimize Entry Point
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    - preview changes only
+    - run all optimizations
+    category: maintenance
+  optimize_operation:
+    name: Optimize Operation
+    description: CORTEX Optimize Operation Module
+    deployment_tier: admin_only
+    natural_language:
+    - planning
+    - plan
+    - deployment
+    - deploy
+    - validate
+    category: maintenance
+  optimize_tokens:
+    name: Optimize Tokens
+    description: CORTEX Token Optimization CLI
+    deployment_tier: admin_only
+    natural_language:
+    - validate
+    category: maintenance
+  planning:
+    name: Planning
+    description: Planning CLI Wrapper
+    deployment_tier: user_facing
+    natural_language:
+    - create
+    - validate
+    - markdown generated
+    - plan loaded
+    - create new plan
+    category: planning
+  policy_scanner:
+    name: Policy Scanner
+    description: Policy Scanner - Multi-format policy document detection and parsing
+    deployment_tier: dual_context
+    natural_language:
+    - validate policy document structure
+    - quick check if any policies exist
+    category: general
+  realtime_dashboard_auth:
+    name: Realtime Dashboard Auth
+    description: Real-Time Dashboard Authentication Layer
+    deployment_tier: admin_only
+    natural_language:
+    - 'generated token for user '
+    category: reporting
+  realtime_dashboard_server:
+    name: Realtime Dashboard Server
+    description: Real-Time Dashboard WebSocket Server
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: reporting
+  realtime_metrics_publisher:
+    name: Realtime Metrics Publisher
+    description: Real-Time Metrics Publisher
+    deployment_tier: admin_only
+    natural_language:
+    - metrics publisher already running
+    - metrics publisher started
+    category: reporting
+  response_formatter:
+    name: Response Formatter
+    description: CORTEX Response Formatter
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+  review:
+    name: Review
+    description: Code Review CLI
+    deployment_tier: dual_context
+    natural_language:
+    - feature review
+    - review new authentication feature
+    - create
+    - create new code review
+    - review title
+    category: review
+  rollback:
+    name: Rollback
+    description: Rollback CLI Wrapper
+    deployment_tier: dual_context
+    natural_language:
+    - checkpoint sha to rollback to
+    - preview changes without executing
+    category: git
+  setup:
+    name: Setup
+    description: Environment Setup Operation - CORTEX 3.0 Phase 1.1
+    deployment_tier: user_facing
+    natural_language:
+    - virtual environment created
+    category: setup
+  tdd:
+    name: Tdd
+    description: TDD CLI - Test-Driven Development Workflow
+    deployment_tier: user_facing
+    natural_language:
+    - start
+    - start new tdd session
+    - run tests
+    - specific test to run
+    - generate test skeleton
+    category: development
+  user_consent_manager:
+    name: User Consent Manager
+    description: User Consent Manager
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: general
+  user_onboarding_operation:
+    name: User Onboarding Operation
+    description: User Onboarding Operation
+    deployment_tier: admin_only
+    natural_language:
+    - getting started
+    - help me get started
+    - 'check cortex installation with '
+    - 'validate brain structure with '
+    - quick start
+    category: setup
     modules:
     - demo_introduction
     - demo_help_system
@@ -3159,6 +3457,150 @@ metadata:
     date: 2025-12-03
     changes:
     - Auto-registered ado operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered user_consent_manager operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered tdd operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered setup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered rollback operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered review operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered response_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_metrics_publisher operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_server operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered realtime_dashboard_auth operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered policy_scanner operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered planning operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_tokens operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered optimize operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operations_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered operation_factory operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered onboarding_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered help_command operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered healthcheck operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_utils operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered header_formatter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered git_checkpoint operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered environment_setup_module operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered documentation_component_registry operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered deploy operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dependency_installer operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered dashboard_data_adapter operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cleanup operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_dashboard operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered cache_commands operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered application_onboarding_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered align operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered ado operation
   - version: 3.5.4
     date: '2025-12-03'
     changes:
@@ -3212,7 +3654,7 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 26
+  total_operations: 62
   total_modules: 73
   total_phases: 9
   cortex_2_0_operations: 9
@@ -3248,7 +3690,7 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
-  last_updated: '2025-12-03 07:16:10'
+  last_updated: '2025-12-03 07:36:47'
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper
