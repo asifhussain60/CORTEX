@@ -37,9 +37,79 @@ from typing import Dict, Any, List, Optional
 CORTEX_TOOLING = ["pytest", "pyyaml", "requests", "playwright"]
 
 
+def create_versioned_shared_venv(python_version: Optional[str] = None, home_dir: Optional[Path] = None) -> Dict[str, Any]:
+    """
+    Create version-specific shared CORTEX environment at ~/.cortex/venv-X.Y/
+    
+    This integrates with PythonEnvironmentModule's shared environment detection.
+    
+    Args:
+        python_version: Python version string (e.g., "3.11"). Auto-detects if None.
+        home_dir: Home directory path (defaults to user home)
+        
+    Returns:
+        Dict with operation result:
+            - success: bool
+            - venv_path: str (path to created venv)
+            - python_version: str (version used)
+            - message: str
+            
+    Example:
+        >>> result = create_versioned_shared_venv()
+        >>> print(result['venv_path'])  # ~/.cortex/venv-3.11/
+    """
+    try:
+        # Detect Python version if not provided
+        if python_version is None:
+            python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+        
+        home = home_dir or Path.home()
+        venv_path = home / ".cortex" / f"venv-{python_version}"
+        
+        # Check if already exists
+        if venv_path.exists():
+            return {
+                'success': True,
+                'venv_path': str(venv_path),
+                'python_version': python_version,
+                'message': f'Version-specific venv already exists at {venv_path}',
+                'created': False
+            }
+        
+        # Create directory structure
+        venv_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Create virtual environment
+        venv.create(
+            str(venv_path),
+            system_site_packages=False,
+            clear=False,
+            with_pip=True
+        )
+        
+        return {
+            'success': True,
+            'venv_path': str(venv_path),
+            'python_version': python_version,
+            'message': f'Version-specific venv created at {venv_path}',
+            'created': True
+        }
+    except Exception as e:
+        return {
+            'success': False,
+            'venv_path': None,
+            'python_version': python_version,
+            'message': f'Failed to create version-specific venv: {e}',
+            'created': False
+        }
+
+
 def create_shared_venv(home_dir: Optional[Path] = None) -> Dict[str, Any]:
     """
     Create shared CORTEX virtual environment at ~/.cortex/venv/
+    
+    DEPRECATED: Use create_versioned_shared_venv() for Python version isolation.
+    This function is maintained for backward compatibility only.
     
     Args:
         home_dir: Home directory path (defaults to user home)
