@@ -56,7 +56,7 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 # Package metadata
-PACKAGE_VERSION = "3.5.5"  # Git Sync & Optimize + CORTEX Align v2.0 Complete
+PACKAGE_VERSION = "3.7.0"  # Phase 7 (Integration & Testing) + Phase 8 (File Naming Governance) + System Alignment
 PUBLISH_BRANCH = "main"
 
 # Checkpoint file for fault tolerance
