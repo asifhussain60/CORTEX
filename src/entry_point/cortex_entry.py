@@ -34,8 +34,8 @@ from src.caching.component_cache import get_component_cache
 
 # Heavy imports deferred until needed
 _intent_router_module = lazy_import('src.cortex_agents.intent_router')
-_setup_module = lazy_import('.setup_command')
-_agent_executor_module = lazy_import('.agent_executor')
+_setup_module = lazy_import('src.entry_point.setup_command')
+_agent_executor_module = lazy_import('src.entry_point.agent_executor')
 _session_manager_module = lazy_import('src.session_manager')
 _tier1_module = lazy_import('src.tier1.tier1_api')
 _tier2_module = lazy_import('src.tier2.knowledge_graph')
@@ -124,7 +124,7 @@ class CortexEntry:
             self._tier1 = self._component_cache.get_or_create(
                 'tier1_api',
                 lambda: _tier1_module.Tier1API(
-                    self.brain_path / "tier1" / "conversations.db",
+                    self.brain_path / "tier1" / "working_memory.db",  # CORTEX 3.0: Migrated from conversations.db
                     self.brain_path / "tier1" / "requests.log"
                 )
             )
@@ -164,7 +164,7 @@ class CortexEntry:
             self._session_manager = self._component_cache.get_or_create(
                 'session_manager',
                 lambda: _session_manager_module.SessionManager(
-                    db_path=str(self.brain_path / "tier1" / "conversations.db")
+                    db_path=str(self.brain_path / "tier1" / "working_memory.db")  # CORTEX 3.0: Use working_memory.db
                 )
             )
             self.logger.debug("Session Manager loaded")

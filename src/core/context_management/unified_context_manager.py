@@ -57,8 +57,10 @@ class ContextRelevanceScorer:
         for conv in conversations:
             score = 0.0
             
-            # Keyword overlap
-            conv_text = (conv.get('title', '') + ' ' + conv.get('summary', '')).lower()
+            # Keyword overlap (handle SQL NULL values)
+            title = conv.get('title') or ''
+            summary = conv.get('summary') or ''
+            conv_text = (title + ' ' + summary).lower()
             conv_keywords = set(conv_text.split())
             keyword_overlap = len(request_keywords & conv_keywords) / max(len(request_keywords), 1)
             score += keyword_overlap * self.weights['keyword_overlap']
@@ -335,15 +337,15 @@ class UnifiedContextManager:
         
         all_convs = self.tier1.conversation_manager.get_recent_conversations(limit=10)
         
-        # Filter relevant ones
+        # Filter relevant ones (conversation_manager returns dicts, not objects)
         for conv in all_convs:
             conversations.append({
-                'conversation_id': conv.conversation_id,
-                'title': conv.title,
-                'summary': conv.summary or '',
-                'created_at': conv.created_at.isoformat() if hasattr(conv.created_at, 'isoformat') else str(conv.created_at),
-                'message_count': conv.message_count,
-                'is_active': conv.is_active
+                'conversation_id': conv.get('conversation_id', ''),
+                'title': conv.get('title', ''),
+                'summary': conv.get('outcome', '') or '',  # outcome field maps to summary
+                'created_at': conv.get('started', ''),
+                'message_count': conv.get('message_count', 0),
+                'is_active': conv.get('active', '') == 'active'
             })
         
         return {'conversations': conversations}

@@ -781,7 +781,7 @@ CORTEX:
 
 ## 🧠 Conversation Capture & Context
 
-**Complete Guide:** #file:../../cortex-brain/documents/implementation-guides/conversation-capture-guide.md
+**Complete Guide:** #file:../../cortex-brain/documents/conversation-captures/conversation-capture-guide.md
 
 **Quick Commands:**
 - `capture conversation` - Create blank file for conversation capture (opens in VS Code)

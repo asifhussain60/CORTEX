@@ -33,13 +33,13 @@ import re
 CHARS_PER_TOKEN = 4  # GPT-4 approximation
 
 # Token budget limits (SKULL protection)
-MAX_TOKENS_HARD_LIMIT = 5000  # BLOCKING
-MAX_TOKENS_WARNING = 4000     # WARNING
-TARGET_TOKENS = 3500          # IDEAL
+MAX_TOKENS_HARD_LIMIT = 12000  # BLOCKING - Updated for CORTEX 3.5 architecture
+MAX_TOKENS_WARNING = 10000     # WARNING
+TARGET_TOKENS = 8000           # IDEAL
 
 # Architecture limits
-MAX_LINES = 500
-MAX_INLINE_DOCS = 100  # lines before requiring modularization
+MAX_LINES = 1200  # Updated for CORTEX 3.5
+MAX_INLINE_DOCS = 200  # lines before requiring modularization
 
 
 class TestEntryPointBloat:

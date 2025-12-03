@@ -46,7 +46,11 @@ class ConversationManager:
             db_path: Path to conversations.db SQLite database
             enable_planning_sync: Enable auto-sync to planning documents
         """
-        self.db_path = db_path
+        self.db_path = Path(db_path)
+        
+        # Ensure parent directory exists (critical for tests with temp directories)
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        
         self._ensure_schema()
         
         self.sync_engine = None
