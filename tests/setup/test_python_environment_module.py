@@ -224,6 +224,62 @@ class TestPythonEnvironmentModule:
         
         assert candidate is None
     
+    def test_fallback_to_local_on_shared_failure(self, module, tmp_path, mock_context):
+        """Test fallback to local venv when shared environment fails."""
+        with patch.object(module, '_create_shared_environment', return_value=False), \
+             patch.object(module, '_detect_shared_environment', return_value=None), \
+             patch('sys.prefix', '/usr/bin'), \
+             patch('sys.base_prefix', '/usr/bin'):
+            
+            # Should fallback to creating local venv
+            analysis = module._analyze_environment(mock_context)
+            
+            assert analysis.action_recommendation in ["create_venv", "create_shared"]
+            assert analysis.is_global
+    
+    def test_rollback_on_migration_failure(self, module, tmp_path):
+        """Test rollback when migration fails."""
+        local_venv = tmp_path / "project" / ".venv"
+        local_venv.mkdir(parents=True)
+        (local_venv / "pyvenv.cfg").write_text("home = /usr/bin\n")
+        
+        shared_path = tmp_path / ".cortex" / "venv-3.9"
+        context = {'project_root': tmp_path / "project"}
+        
+        # Simulate migration failure by making shared path read-only parent
+        with patch.object(module.logger, 'error') as mock_error:
+            # Force an error during rename
+            with patch('pathlib.Path.rename', side_effect=OSError("Permission denied")):
+                result = module._migrate_to_shared(context, local_venv, shared_path)
+                
+                assert result is False
+                # Should have logged error
+                assert mock_error.called
+                # Original venv should still exist (rollback failed in this case)
+                assert local_venv.exists()
+    
+    def test_validate_shared_environment(self, module, tmp_path):
+        """Test validation of shared environment structure."""
+        shared_path = tmp_path / ".cortex" / "venv-3.9"
+        shared_path.mkdir(parents=True)
+        (shared_path / "bin").mkdir()
+        (shared_path / "bin" / "python").touch()
+        (shared_path / "pyvenv.cfg").write_text("home = /usr/bin\n")
+        
+        is_valid = module._validate_shared_environment(shared_path)
+        
+        assert is_valid is True
+    
+    def test_validate_shared_environment_invalid(self, module, tmp_path):
+        """Test validation fails for invalid shared environment."""
+        shared_path = tmp_path / ".cortex" / "venv-3.9"
+        shared_path.mkdir(parents=True)
+        # Missing bin/python
+        
+        is_valid = module._validate_shared_environment(shared_path)
+        
+        assert is_valid is False
+    
     def test_check_dependencies_all_satisfied(self, module):
         """Test dependency check when all packages installed."""
         with patch.object(module, '_check_dependencies', return_value=([], [])):

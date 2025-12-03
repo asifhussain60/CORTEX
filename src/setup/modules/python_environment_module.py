@@ -243,6 +243,38 @@ class PythonEnvironmentModule(BaseSetupModule):
             self.logger.debug(f"Error detecting shared environment: {e}")
             return None
     
+    def _validate_shared_environment(self, shared_path: Path) -> bool:
+        """
+        Validate shared environment structure and integrity.
+        
+        Args:
+            shared_path: Path to shared environment
+        
+        Returns:
+            True if valid, False otherwise
+        """
+        try:
+            if not shared_path.exists() or not shared_path.is_dir():
+                return False
+            
+            # Check for Python executable
+            python_executable = shared_path / "bin" / "python"
+            if not python_executable.exists():
+                # Try Windows path
+                python_executable = shared_path / "Scripts" / "python.exe"
+                if not python_executable.exists():
+                    return False
+            
+            # Check for pyvenv.cfg
+            pyvenv_cfg = shared_path / "pyvenv.cfg"
+            if not pyvenv_cfg.exists():
+                return False
+            
+            return True
+        except Exception as e:
+            self.logger.debug(f"Error validating shared environment: {e}")
+            return False
+    
     def _create_shared_environment(self, shared_path: Path) -> bool:
         """
         Create a version-specific shared CORTEX environment.
