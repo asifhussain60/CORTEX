@@ -407,6 +407,28 @@ operations:
     - 'validate brain structure with '
     - quick start
     category: setup
+  commit_and_push:
+    name: Commit And Push
+    description: Commit and Push Orchestrator
+    deployment_tier: user_facing
+    natural_language:
+    - commit
+    - no changes to commit
+    - commit failed
+    - commit and push completed successfully
+    - cortex commit and push orchestrator
+    category: git
+  healthcheck_operation:
+    name: Healthcheck Operation
+    description: CORTEX Healthcheck Operation Module
+    deployment_tier: admin_only
+    natural_language:
+    - healthcheck
+    - check cortex health
+    - healthcheck validation passed
+    - health check failed
+    - rollback not applicable for health checks
+    category: analysis
     modules:
     - demo_introduction
     - demo_help_system
@@ -2884,6 +2906,14 @@ metadata:
   - version: auto-registered
     date: 2025-12-03
     changes:
+    - Auto-registered healthcheck_operation operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
+    - Auto-registered commit_and_push operation
+  - version: auto-registered
+    date: 2025-12-03
+    changes:
     - Auto-registered user_onboarding_operation operation
   - version: auto-registered
     date: 2025-12-03
@@ -3654,7 +3684,7 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 62
+  total_operations: 64
   total_modules: 73
   total_phases: 9
   cortex_2_0_operations: 9
@@ -3690,7 +3720,7 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
-  last_updated: '2025-12-03 07:36:47'
+  last_updated: '2025-12-03 17:22:14'
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper
