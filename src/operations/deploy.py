@@ -22,15 +22,16 @@ from deploy_cortex import publish_to_branch, PUBLISH_BRANCH
 
 def run_deploy(
     dry_run: bool = False,
-    skip_validation: bool = False,
     branch: str = PUBLISH_BRANCH
 ):
     """
     Run CORTEX deploy operation with validators.
     
+    ALL DEPLOYMENT GATES MANDATORY - No skipping allowed.
+    All 19 gates must pass for production deployment.
+    
     Args:
         dry_run: Preview only, don't make changes
-        skip_validation: Skip deployment gates (use with caution)
         branch: Target branch name (default: main)
     
     Returns:
@@ -41,8 +42,7 @@ def run_deploy(
             project_root=project_root,
             branch_name=branch,
             dry_run=dry_run,
-            resume=False,
-            skip_validation=skip_validation
+            resume=False
         )
         
         return {
@@ -50,7 +50,7 @@ def run_deploy(
             "operation": "deploy",
             "branch": branch,
             "dry_run": dry_run,
-            "validation_enabled": not skip_validation
+            "validation": "MANDATORY (all 19 gates enforced)"
         }
     except Exception as e:
         return {
@@ -73,11 +73,6 @@ def main():
         help='Preview only, no changes'
     )
     parser.add_argument(
-        '--skip-validation',
-        action='store_true',
-        help='Skip deployment gates (caution)'
-    )
-    parser.add_argument(
         '--branch',
         type=str,
         default=PUBLISH_BRANCH,
@@ -88,7 +83,6 @@ def main():
     
     result = run_deploy(
         dry_run=args.dry_run,
-        skip_validation=args.skip_validation,
         branch=args.branch
     )
     
@@ -97,7 +91,7 @@ def main():
         if result.get("dry_run"):
             print("   (Dry run - no changes made)")
         print(f"   Branch: {result.get('branch', 'main')}")
-        print(f"   Validation: {'SKIPPED' if not result.get('validation_enabled') else 'ENABLED'}")
+        print(f"   {result.get('validation', 'Validation: MANDATORY')}")
         sys.exit(0)
     else:
         print("\n❌ Deployment failed")

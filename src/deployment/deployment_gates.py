@@ -1,12 +1,16 @@
 """
 Deployment Gates - Quality Thresholds
 
+MANDATORY GATE ENFORCEMENT: ALL 19 gates MUST pass for production deployment.
+No skipping allowed. No bypass flags. Professional quality standards enforced.
+
 Enforces quality gates before deployment:
 - Integration score thresholds (>80% for user features)
 - Test coverage requirements (100% passing)
 - Mock/stub detection (no mocks in production)
 - Documentation synchronization (prompts match reality)
 - Version consistency (all version files match)
+- And 14 additional critical quality gates
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -50,11 +54,14 @@ class DeploymentGates:
         """
         Validate all deployment gates.
         
+        MANDATORY ENFORCEMENT: ALL 19 gates MUST execute and pass.
+        No skipping allowed - enforced by DEPLOYMENT_GATE_ENFORCEMENT SKULL rule.
+        
         Args:
             alignment_report: System alignment report (optional)
         
         Returns:
-            Gate validation results
+            Gate validation results with pass/fail for each gate
         """
         results = {
             "passed": True,
@@ -222,6 +229,10 @@ class DeploymentGates:
             results["errors"].append(gate19["message"])
         elif gate19["severity"] == "WARNING" and not gate19["passed"]:
             results["warnings"].append(gate19["message"])
+        
+        # ALL 19 GATES MANDATORY - No skipping allowed
+        # Enforced by DEPLOYMENT_GATE_ENFORCEMENT Tier 0 instinct
+        # See: cortex-brain/brain-protection-rules.yaml (rule_id: DEPLOYMENT_GATE_ENFORCEMENT)
         
         return results
     

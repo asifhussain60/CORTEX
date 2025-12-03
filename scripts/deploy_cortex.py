@@ -1328,17 +1328,18 @@ def publish_to_branch(
     project_root: Path,
     branch_name: str = PUBLISH_BRANCH,
     dry_run: bool = False,
-    resume: bool = False,
-    skip_validation: bool = False
+    resume: bool = False
 ) -> bool:
     """Publish CORTEX to dedicated branch with fault tolerance.
+    
+    ALL DEPLOYMENT GATES MANDATORY - No skipping allowed.
+    All 19 gates must pass for production deployment.
     
     Args:
         project_root: Root directory of CORTEX project
         branch_name: Name of publish branch
         dry_run: Preview mode (no git changes)
         resume: Resume from last checkpoint
-        skip_validation: Skip pre-deployment validation (use with caution)
         
     Returns:
         True if successful, False otherwise
@@ -1351,12 +1352,13 @@ def publish_to_branch(
     logger.info(f"Project root: {project_root}")
     logger.info(f"Dry run: {dry_run}")
     logger.info(f"Resume mode: {resume}")
-    logger.info(f"Skip validation: {skip_validation}")
+    logger.info(f"Gate validation: MANDATORY (all 19 gates must pass)")
     logger.info("")
     
     # PRE-VALIDATION: Generate preliminary deployment manifest for Gate 15
     # Gate 15 validates admin/user separation and needs the manifest before validation runs
-    if not resume and not skip_validation:
+    # ALL GATES MANDATORY - No skipping allowed
+    if not resume:
         logger.info("\n📄 Generating preliminary deployment manifest for validation...")
         preliminary_manifest_dir = project_root / "publish"
         preliminary_manifest_dir.mkdir(parents=True, exist_ok=True)
@@ -1417,9 +1419,11 @@ def publish_to_branch(
     
     # Run validation gate first (unless resuming or explicitly skipped)
     # NOTE: Validation runs even in dry-run mode to catch issues before deployment
-    if not resume and not skip_validation:
+    # STAGE 0: Pre-Deployment Validation Gate (19-Gate System)
+    # ALL GATES MANDATORY - No skipping allowed
+    if not resume:
         logger.info("" + "=" * 80)
-        logger.info("STAGE 0: Pre-Deployment Validation Gate (16-Gate System)")
+        logger.info("STAGE 0: Pre-Deployment Validation Gate (19-Gate System - MANDATORY)")
         logger.info("" + "=" * 80)
         logger.info("")
         
@@ -1735,69 +1739,67 @@ def publish_to_branch(
             stats = checkpoint.get_data('stats')
         
         # STAGE 2.5: Post-Deployment Validation (runs BEFORE git operations for dry-run testing)
-        if not skip_validation:
-            logger.info("\n🔍 STAGE 2.5: Post-Deployment Validation")
-            logger.info("Running comprehensive validation on built package...")
+        # ALL VALIDATION MANDATORY - No skipping allowed
+        logger.info("\n🔍 STAGE 2.5: Post-Deployment Validation (MANDATORY)")
+        logger.info("Running comprehensive validation on built package...")
+        
+        try:
+            # Run post-deployment validator as subprocess
+            validation_script = project_root / "scripts" / "post_deployment_check.py"
+            result = subprocess.run(
+                [sys.executable, str(validation_script)],
+                cwd=project_root,
+                capture_output=True,
+                text=True,
+                timeout=300  # 5 minute timeout
+            )
             
-            try:
-                # Run post-deployment validator as subprocess
-                validation_script = project_root / "scripts" / "post_deployment_check.py"
-                result = subprocess.run(
-                    [sys.executable, str(validation_script)],
-                    cwd=project_root,
-                    capture_output=True,
-                    text=True,
-                    timeout=300  # 5 minute timeout
-                )
-                
-                # Print output
-                if result.stdout:
-                    logger.info(result.stdout)
-                if result.stderr:
-                    logger.warning(result.stderr)
-                
-                # Check exit code
-                if result.returncode == 2:  # Failures
-                    logger.error("\n❌ POST-DEPLOYMENT VALIDATION FAILED")
-                    logger.error("   Built package has validation issues.")
-                    logger.error("   Fix issues before pushing to production.")
-                    logger.error("\n   Common fixes:")
-                    logger.error("   1. Run 'python scripts/post_deployment_check.py' locally")
-                    logger.error("   2. Fix identified issues")
-                    logger.error("   3. Rebuild and retry deployment")
-                    # Fail deployment if critical issues found
-                    if not dry_run:
-                        logger.error("\n❌ DEPLOYMENT ABORTED - Fix validation issues first")
-                        checkpoint.clear()
-                        return False
-                elif result.returncode == 1:  # Warnings
-                    logger.warning("\n⚠️  POST-DEPLOYMENT VALIDATION WARNINGS")
-                    logger.warning("   Built package has minor issues.")
-                    logger.warning("   Review validation report in cortex-brain/documents/reports/")
-                    # Continue with warnings
-                else:  # Success
-                    logger.info("\n✅ POST-DEPLOYMENT VALIDATION PASSED")
-                    logger.info("   All features validated successfully!")
-                
-            except FileNotFoundError:
-                logger.warning("⚠️  Post-deployment validation skipped (script not found)")
-                logger.warning(f"   Expected: {validation_script}")
-            except subprocess.TimeoutExpired:
-                logger.error("❌ Post-deployment validation timed out after 5 minutes")
+            # Print output
+            if result.stdout:
+                logger.info(result.stdout)
+            if result.stderr:
+                logger.warning(result.stderr)
+            
+            # Check exit code
+            if result.returncode == 2:  # Failures
+                logger.error("\n❌ POST-DEPLOYMENT VALIDATION FAILED")
+                logger.error("   Built package has validation issues.")
+                logger.error("   Fix issues before pushing to production.")
+                logger.error("\n   Common fixes:")
+                logger.error("   1. Run 'python scripts/post_deployment_check.py' locally")
+                logger.error("   2. Fix identified issues")
+                logger.error("   3. Rebuild and retry deployment")
+                # Fail deployment if critical issues found
                 if not dry_run:
-                    logger.error("\n❌ DEPLOYMENT ABORTED - Validation timeout")
+                    logger.error("\n❌ DEPLOYMENT ABORTED - Fix validation issues first")
                     checkpoint.clear()
                     return False
-            except Exception as e:
-                logger.error(f"❌ Post-deployment validation error: {e}")
-                logger.error("   Fix the error and retry deployment.")
-                if not dry_run:
-                    logger.error("\n❌ DEPLOYMENT ABORTED - Validation error")
-                    checkpoint.clear()
-                    return False
-        else:
-            logger.warning("\n⚠️  POST-DEPLOYMENT VALIDATION SKIPPED (--skip-validation flag)")
-            logger.warning("   Run manually: python scripts/post_deployment_check.py")
+            elif result.returncode == 1:  # Warnings
+                logger.warning("\n⚠️  POST-DEPLOYMENT VALIDATION WARNINGS")
+                logger.warning("   Built package has minor issues.")
+                logger.warning("   Review validation report in cortex-brain/documents/reports/")
+                # Continue with warnings
+            else:  # Success
+                logger.info("\n✅ POST-DEPLOYMENT VALIDATION PASSED")
+                logger.info("   All features validated successfully!")
+            
+        except FileNotFoundError:
+            logger.warning("⚠️  Post-deployment validation skipped (script not found)")
+            logger.warning(f"   Expected: {validation_script}")
+        except subprocess.TimeoutExpired:
+            logger.error("❌ Post-deployment validation timed out after 5 minutes")
+            if not dry_run:
+                logger.error("\n❌ DEPLOYMENT ABORTED - Validation timeout")
+                checkpoint.clear()
+                return False
+        except Exception as e:
+            logger.error(f"❌ Post-deployment validation error: {e}")
+            logger.error("   Fix the error and retry deployment.")
+            if not dry_run:
+                logger.error("\n❌ DEPLOYMENT ABORTED - Validation error")
+                checkpoint.clear()
+                return False
+                return False
         
         if dry_run:
             logger.info("\n🔍 DRY RUN - No git operations performed")
@@ -2145,11 +2147,6 @@ Fault Tolerance:
         action='store_true',
         help='Resume from last checkpoint (if publish was interrupted)'
     )
-    parser.add_argument(
-        '--skip-validation',
-        action='store_true',
-        help='Skip pre-deployment validation gate (use with caution - for documented known issues only)'
-    )
     
     args = parser.parse_args()
     
@@ -2158,8 +2155,7 @@ Fault Tolerance:
             project_root=args.project_root,
             branch_name=args.branch,
             dry_run=args.dry_run,
-            resume=args.resume,
-            skip_validation=args.skip_validation
+            resume=args.resume
         )
         return 0 if success else 1
     except KeyboardInterrupt:
