@@ -139,6 +139,7 @@ EXCLUDED_DIRS = {
     
     # Admin-only directories (SECURITY: Users must not modify CORTEX)
     'cortex-brain/admin',
+    'cortex-brain/backups',  # Backup archives (including obsolete code cleanup backups)
     'src/operations/modules/admin',
     'scripts/admin',
     'tests/admin',
