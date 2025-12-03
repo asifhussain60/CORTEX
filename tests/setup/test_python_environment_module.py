@@ -166,6 +166,64 @@ class TestPythonEnvironmentModule:
             assert analysis.action_recommendation == "reuse_environment"
             assert analysis.is_virtual_env
     
+    def test_create_shared_environment(self, module, tmp_path):
+        """Test creation of version-specific shared environment."""
+        python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+        shared_path = tmp_path / ".cortex" / f"venv-{python_version}"
+        
+        # Ensure doesn't exist
+        assert not shared_path.exists()
+        
+        result = module._create_shared_environment(shared_path)
+        
+        assert result is True
+        assert shared_path.exists()
+        assert (shared_path / "bin" / "python").exists() or (shared_path / "Scripts" / "python.exe").exists()
+    
+    def test_migrate_to_shared_environment(self, module, tmp_path):
+        """Test migration from local .venv to shared environment."""
+        local_venv = tmp_path / "project" / ".venv"
+        local_venv.mkdir(parents=True)
+        (local_venv / "pyvenv.cfg").write_text("home = /usr/bin\n")
+        
+        shared_path = tmp_path / ".cortex" / "venv-3.9"
+        shared_path.mkdir(parents=True)
+        (shared_path / "bin").mkdir()
+        (shared_path / "bin" / "python").touch()
+        
+        context = {'project_root': tmp_path / "project"}
+        
+        with patch.object(module, '_detect_shared_environment', return_value=shared_path):
+            result = module._migrate_to_shared(context, local_venv, shared_path)
+            
+            assert result is True
+            # Local venv should be backed up (renamed to .venv.backup)
+            backup_path = local_venv.parent / ".venv.backup"
+            assert backup_path.exists()
+            assert not local_venv.exists()  # Original should be moved
+    
+    def test_detect_migration_candidate(self, module, tmp_path):
+        """Test detection of local venv that should be migrated."""
+        project_root = tmp_path / "project"
+        local_venv = project_root / ".venv"
+        local_venv.mkdir(parents=True)
+        (local_venv / "pyvenv.cfg").write_text("home = /usr/bin\n")
+        
+        context = {'project_root': project_root}
+        
+        candidate = module._detect_migration_candidate(context)
+        
+        assert candidate is not None
+        assert candidate == local_venv
+    
+    def test_no_migration_candidate_when_none_exists(self, module, tmp_path):
+        """Test no migration when no local venv exists."""
+        context = {'project_root': tmp_path / "project"}
+        
+        candidate = module._detect_migration_candidate(context)
+        
+        assert candidate is None
+    
     def test_check_dependencies_all_satisfied(self, module):
         """Test dependency check when all packages installed."""
         with patch.object(module, '_check_dependencies', return_value=([], [])):

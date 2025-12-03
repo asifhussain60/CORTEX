@@ -243,6 +243,105 @@ class PythonEnvironmentModule(BaseSetupModule):
             self.logger.debug(f"Error detecting shared environment: {e}")
             return None
     
+    def _create_shared_environment(self, shared_path: Path) -> bool:
+        """
+        Create a version-specific shared CORTEX environment.
+        
+        Args:
+            shared_path: Path where shared environment should be created
+        
+        Returns:
+            True if creation successful, False otherwise
+        """
+        try:
+            # Ensure parent directory exists
+            shared_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Create virtual environment
+            subprocess.run(
+                [sys.executable, '-m', 'venv', str(shared_path)],
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            
+            self.logger.info(f"✅ Created shared environment: {shared_path}")
+            return True
+        except subprocess.CalledProcessError as e:
+            self.logger.error(f"❌ Failed to create shared environment: {e.stderr}")
+            return False
+        except Exception as e:
+            self.logger.error(f"❌ Unexpected error creating shared environment: {e}")
+            return False
+    
+    def _detect_migration_candidate(self, context: Dict) -> Optional[Path]:
+        """
+        Detect local .venv that should be migrated to shared environment.
+        
+        Args:
+            context: Setup context with project_root
+        
+        Returns:
+            Path to local venv if found, None otherwise
+        """
+        try:
+            project_root = context.get('project_root', Path.cwd())
+            local_venv = project_root / ".venv"
+            
+            # Check if local venv exists
+            if local_venv.exists() and local_venv.is_dir():
+                # Verify it's a valid venv
+                pyvenv_cfg = local_venv / "pyvenv.cfg"
+                if pyvenv_cfg.exists():
+                    return local_venv
+            
+            return None
+        except Exception as e:
+            self.logger.debug(f"Error detecting migration candidate: {e}")
+            return None
+    
+    def _migrate_to_shared(self, context: Dict, local_venv: Path, shared_venv: Path) -> bool:
+        """
+        Migrate from local .venv to shared environment.
+        
+        Strategy:
+        1. Backup local venv (rename to .venv.backup)
+        2. Install CORTEX packages in shared environment
+        3. Keep backup for rollback if needed
+        
+        Args:
+            context: Setup context
+            local_venv: Path to local venv to migrate from
+            shared_venv: Path to shared venv to migrate to
+        
+        Returns:
+            True if migration successful, False otherwise
+        """
+        try:
+            # Backup local venv
+            backup_path = local_venv.parent / ".venv.backup"
+            if backup_path.exists():
+                import shutil
+                shutil.rmtree(backup_path)
+            
+            # Rename to backup (don't delete yet - keep for rollback)
+            local_venv.rename(backup_path)
+            self.logger.info(f"📦 Backed up local venv: {backup_path}")
+            
+            # Note: Actual package installation will happen in execute()
+            self.logger.info(f"✅ Migration prepared: {local_venv} → {shared_venv}")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Migration failed: {e}")
+            # Try to restore backup
+            if backup_path.exists():
+                try:
+                    backup_path.rename(local_venv)
+                    self.logger.info("🔄 Restored local venv from backup")
+                except:
+                    pass
+            return False
+    
     def _detect_parent_project(self, context: Dict) -> Optional[str]:
         """Detect if CORTEX is embedded in a parent project."""
         project_root = context.get('project_root', Path.cwd())
