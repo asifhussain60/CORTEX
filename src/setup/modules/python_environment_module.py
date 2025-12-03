@@ -112,11 +112,15 @@ class PythonEnvironmentModule(BaseSetupModule):
         """
         try:
             self.logger.info("🔍 Analyzing Python environment...")
+            self.logger.info(f"   Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
             
             # Analyze current environment
             analysis = self._analyze_environment(context)
             
-            # Log analysis
+            # Log analysis with enhanced UX
+            self._log_analysis_enhanced(analysis)
+            
+            # Original analysis log for backward compatibility
             self._log_analysis(analysis)
             
             # Execute recommended action
@@ -286,8 +290,13 @@ class PythonEnvironmentModule(BaseSetupModule):
             True if creation successful, False otherwise
         """
         try:
+            self.logger.info(f"🔧 Creating shared environment...")
+            self.logger.info(f"   📍 {shared_path}")
+            
             # Ensure parent directory exists
             shared_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            self.logger.info("   ⏳ Running: python -m venv...")
             
             # Create virtual environment
             subprocess.run(
@@ -297,13 +306,13 @@ class PythonEnvironmentModule(BaseSetupModule):
                 text=True
             )
             
-            self.logger.info(f"✅ Created shared environment: {shared_path}")
+            self.logger.info(f"   ✅ Shared environment created successfully")
             return True
         except subprocess.CalledProcessError as e:
-            self.logger.error(f"❌ Failed to create shared environment: {e.stderr}")
+            self.logger.error(f"   ❌ Failed to create shared environment: {e.stderr}")
             return False
         except Exception as e:
-            self.logger.error(f"❌ Unexpected error creating shared environment: {e}")
+            self.logger.error(f"   ❌ Unexpected error: {e}")
             return False
     
     def _detect_migration_candidate(self, context: Dict) -> Optional[Path]:
@@ -350,21 +359,27 @@ class PythonEnvironmentModule(BaseSetupModule):
             True if migration successful, False otherwise
         """
         try:
+            self.logger.info("🔄 Migrating to shared environment...")
+            self.logger.info(f"   From: {local_venv}")
+            self.logger.info(f"   To:   {shared_venv}")
+            
             # Backup local venv
             backup_path = local_venv.parent / ".venv.backup"
             if backup_path.exists():
+                self.logger.info("   🗑️  Removing old backup...")
                 import shutil
                 shutil.rmtree(backup_path)
             
+            self.logger.info("   📦 Creating backup...")
             # Rename to backup (don't delete yet - keep for rollback)
             local_venv.rename(backup_path)
-            self.logger.info(f"📦 Backed up local venv: {backup_path}")
+            self.logger.info(f"   ✅ Backup created: .venv.backup")
             
             # Note: Actual package installation will happen in execute()
-            self.logger.info(f"✅ Migration prepared: {local_venv} → {shared_venv}")
+            self.logger.info(f"   ✅ Migration prepared successfully")
             return True
         except Exception as e:
-            self.logger.error(f"❌ Migration failed: {e}")
+            self.logger.error(f"   ❌ Migration failed: {e}")
             # Try to restore backup
             if backup_path.exists():
                 try:
@@ -525,15 +540,23 @@ class PythonEnvironmentModule(BaseSetupModule):
     def _install_packages(self, packages: List[str]) -> bool:
         """Install missing packages in current environment."""
         try:
+            self.logger.info(f"📦 Installing {len(packages)} packages...")
+            for pkg in packages[:3]:  # Show first 3
+                self.logger.info(f"   • {pkg}")
+            if len(packages) > 3:
+                self.logger.info(f"   • ... and {len(packages) - 3} more")
+            
             subprocess.run(
                 [sys.executable, '-m', 'pip', 'install'] + packages,
                 check=True,
                 capture_output=True,
                 text=True
             )
+            
+            self.logger.info(f"   ✅ Packages installed successfully")
             return True
         except subprocess.CalledProcessError as e:
-            self.logger.error(f"Failed to install packages: {e.stderr}")
+            self.logger.error(f"   ❌ Failed to install packages: {e.stderr}")
             return False
     
     def _log_analysis(self, analysis: EnvironmentAnalysis):
@@ -559,3 +582,55 @@ class PythonEnvironmentModule(BaseSetupModule):
         self.logger.info(f"\n💡 Recommendation: {analysis.action_recommendation}")
         self.logger.info(f"📝 Reason: {analysis.reason}")
         self.logger.info("="*60 + "\n")
+    
+    def _log_analysis_enhanced(self, analysis: EnvironmentAnalysis):
+        """
+        Log environment analysis with enhanced UX.
+        
+        Provides clear, user-friendly feedback with emoji indicators
+        and actionable information.
+        """
+        # Status emoji based on action
+        status_emoji = {
+            "use_shared": "🎯",
+            "create_shared": "🔧",
+            "reuse_environment": "♻️",
+            "create_venv": "📦",
+        }
+        emoji = status_emoji.get(analysis.action_recommendation, "🔍")
+        
+        # Environment type indicator
+        if analysis.is_global:
+            env_type = "🌍 Global Python"
+        elif "shared" in analysis.reason.lower():
+            env_type = "🎯 Shared Environment"
+        else:
+            env_type = "📦 Virtual Environment"
+        
+        self.logger.info(f"\n{emoji} Environment Decision: {analysis.action_recommendation.replace('_', ' ').title()}")
+        self.logger.info(f"   {env_type}")
+        
+        # Version-specific shared path
+        if analysis.action_recommendation in ["use_shared", "create_shared"]:
+            python_version = f"{analysis.python_version[0]}.{analysis.python_version[1]}"
+            shared_path = Path.home() / ".cortex" / f"venv-{python_version}"
+            self.logger.info(f"   📍 Location: {shared_path}")
+        
+        # Dependency status
+        if analysis.dependencies_satisfied:
+            self.logger.info("   ✅ All dependencies satisfied")
+        else:
+            if analysis.missing_packages:
+                self.logger.info(f"   📦 Will install: {len(analysis.missing_packages)} packages")
+            if analysis.conflicts:
+                self.logger.warning(f"   ⚠️  Conflicts: {len(analysis.conflicts)} packages")
+        
+        # Migration notice
+        if analysis.action_recommendation == "use_shared":
+            self.logger.info("   💡 Benefit: Shared across CORTEX projects")
+        elif analysis.action_recommendation == "create_shared":
+            self.logger.info("   ⏱️  Estimated time: ~30-60 seconds")
+            self.logger.info("   💡 One-time setup for Python {}.{}".format(
+                analysis.python_version[0], analysis.python_version[1]
+            ))
+

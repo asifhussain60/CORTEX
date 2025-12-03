@@ -280,6 +280,70 @@ class TestPythonEnvironmentModule:
         
         assert is_valid is False
     
+    def test_log_analysis_enhanced_use_shared(self, module, mock_context):
+        """Test enhanced UX logging for shared environment."""
+        analysis = EnvironmentAnalysis(
+            is_virtual_env=False,
+            environment_path=Path('/usr/bin'),
+            python_version=(3, 11, 0),
+            is_global=True,
+            parent_project=None,
+            dependencies_satisfied=True,
+            conflicts=[],
+            missing_packages=[],
+            action_recommendation="use_shared",
+            reason="Shared environment available and compatible"
+        )
+        
+        with patch.object(module.logger, 'info') as mock_info:
+            module._log_analysis_enhanced(analysis)
+            
+            # Check for emoji and clear messaging
+            calls = [str(call) for call in mock_info.call_args_list]
+            assert any("🎯" in str(call) for call in calls)
+            assert any("Shared" in str(call) for call in calls)
+    
+    def test_log_analysis_enhanced_create_shared(self, module):
+        """Test enhanced logging for creating shared environment."""
+        analysis = EnvironmentAnalysis(
+            is_virtual_env=False,
+            environment_path=Path('/usr/bin'),
+            python_version=(3, 11, 0),
+            is_global=True,
+            parent_project=None,
+            dependencies_satisfied=False,
+            conflicts=[],
+            missing_packages=['pytest'],
+            action_recommendation="create_shared",
+            reason="Global Python environment - creating shared CORTEX environment"
+        )
+        
+        with patch.object(module.logger, 'info') as mock_info:
+            module._log_analysis_enhanced(analysis)
+            
+            calls = [str(call) for call in mock_info.call_args_list]
+            # Check for time estimate
+            assert any("⏱️" in str(call) or "Estimated" in str(call) for call in calls)
+            # Check for one-time setup message
+            assert any("One-time" in str(call) for call in calls)
+    
+    def test_install_packages_with_progress(self, module):
+        """Test package installation with progress messages."""
+        packages = ['pytest', 'PyYAML', 'watchdog']
+        
+        with patch('subprocess.run') as mock_run, \
+             patch.object(module.logger, 'info') as mock_info:
+            mock_run.return_value = None  # Success
+            
+            result = module._install_packages(packages)
+            
+            assert result is True
+            calls = [str(call) for call in mock_info.call_args_list]
+            # Check for package count and emoji
+            assert any("📦" in str(call) and "3 packages" in str(call) for call in calls)
+            # Check for success message
+            assert any("✅" in str(call) and "successfully" in str(call) for call in calls)
+    
     def test_check_dependencies_all_satisfied(self, module):
         """Test dependency check when all packages installed."""
         with patch.object(module, '_check_dependencies', return_value=([], [])):
