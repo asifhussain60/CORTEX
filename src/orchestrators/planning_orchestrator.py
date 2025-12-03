@@ -24,6 +24,8 @@ from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
+from src.agents.security.threat_modeler_agent import ThreatModelerAgent
+from src.agents.base_agent import AgentRequest
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +60,9 @@ class PlanningOrchestrator:
         
         # NEW: Initialize git checkpoint orchestrator for planning workflow
         self.git_checkpoint = GitCheckpointOrchestrator(project_root=str(self.cortex_root))
+        
+        # NEW: Initialize ThreatModelerAgent for security analysis
+        self.threat_modeler = ThreatModelerAgent()
     
     def _load_schema(self) -> Dict[str, Any]:
         """Load plan schema from YAML file."""
@@ -93,37 +98,31 @@ class PlanningOrchestrator:
         """
         errors = []
         
-        # Check required top-level fields
         required_fields = self.schema.get("schema", {}).get("required_fields", [])
         for field in required_fields:
             if field not in plan_data:
                 errors.append(f"Missing required field: {field}")
         
-        # Validate metadata
         if "metadata" in plan_data:
             metadata_errors = self._validate_metadata(plan_data["metadata"])
             errors.extend(metadata_errors)
         
-        # Validate phases
         if "phases" in plan_data:
             phase_errors = self._validate_phases(plan_data["phases"])
             errors.extend(phase_errors)
         
-        # Validate Definition of Ready
         if "definition_of_ready" in plan_data:
             if not isinstance(plan_data["definition_of_ready"], list):
                 errors.append("definition_of_ready must be a list")
             elif len(plan_data["definition_of_ready"]) == 0:
                 errors.append("definition_of_ready must have at least 1 item")
         
-        # Validate Definition of Done
         if "definition_of_done" in plan_data:
             if not isinstance(plan_data["definition_of_done"], list):
                 errors.append("definition_of_done must be a list")
             elif len(plan_data["definition_of_done"]) == 0:
                 errors.append("definition_of_done must have at least 1 item")
         
-        # Validate risks if present
         if "risks" in plan_data:
             risk_errors = self._validate_risks(plan_data["risks"])
             errors.extend(risk_errors)
@@ -140,29 +139,24 @@ class PlanningOrchestrator:
             if field not in metadata:
                 errors.append(f"metadata: Missing required field '{field}'")
         
-        # Validate plan_id format
         if "plan_id" in metadata:
             if not re.match(r'^[A-Z0-9-]+$', metadata["plan_id"]):
                 errors.append(f"metadata.plan_id: Must match pattern ^[A-Z0-9-]+$ (got: {metadata['plan_id']})")
         
-        # Validate status enum
         if "status" in metadata:
             valid_statuses = ["proposed", "approved", "in-progress", "blocked", "completed", "cancelled"]
             if metadata["status"] not in valid_statuses:
                 errors.append(f"metadata.status: Must be one of {valid_statuses} (got: {metadata['status']})")
         
-        # Validate priority enum
         if "priority" in metadata:
             valid_priorities = ["critical", "high", "medium", "low"]
             if metadata["priority"] not in valid_priorities:
                 errors.append(f"metadata.priority: Must be one of {valid_priorities} (got: {metadata['priority']})")
         
-        # Validate estimated_hours
         if "estimated_hours" in metadata:
             if not isinstance(metadata["estimated_hours"], (int, float)) or metadata["estimated_hours"] < 0:
                 errors.append(f"metadata.estimated_hours: Must be a positive number (got: {metadata['estimated_hours']})")
         
-        # Validate ISO 8601 date format
         if "created_date" in metadata:
             if not self._is_valid_iso8601(metadata["created_date"]):
                 errors.append(f"metadata.created_date: Must be ISO 8601 format (got: {metadata['created_date']})")
@@ -193,19 +187,16 @@ class PlanningOrchestrator:
                 if field not in phase:
                     errors.append(f"{phase_label}: Missing required field '{field}'")
             
-            # Validate phase_number
             if "phase_number" in phase:
                 if not isinstance(phase["phase_number"], int) or phase["phase_number"] < 1:
                     errors.append(f"{phase_label}.phase_number: Must be integer >= 1")
                 else:
                     phase_numbers.append(phase["phase_number"])
             
-            # Validate tasks
             if "tasks" in phase:
                 task_errors = self._validate_tasks(phase["tasks"], task_ids, phase_label)
                 errors.extend(task_errors)
         
-        # Check sequential phase numbers
         if phase_numbers:
             phase_numbers.sort()
             expected = list(range(1, len(phase_numbers) + 1))
@@ -235,7 +226,6 @@ class PlanningOrchestrator:
                 if field not in task:
                     errors.append(f"{task_label}: Missing required field '{field}'")
             
-            # Validate task_id format and uniqueness
             if "task_id" in task:
                 if not re.match(r'^\d+\.\d+$', task["task_id"]):
                     errors.append(f"{task_label}.task_id: Must match pattern \\d+\\.\\d+ (got: {task['task_id']})")
@@ -244,7 +234,6 @@ class PlanningOrchestrator:
                 else:
                     task_ids.add(task["task_id"])
             
-            # Validate estimated_hours
             if "estimated_hours" in task:
                 if not isinstance(task["estimated_hours"], (int, float)) or task["estimated_hours"] < 0.25:
                     errors.append(f"{task_label}.estimated_hours: Must be >= 0.25 (got: {task['estimated_hours']})")
@@ -268,13 +257,11 @@ class PlanningOrchestrator:
                 if field not in risk:
                     errors.append(f"{risk_label}: Missing required field '{field}'")
             
-            # Validate likelihood enum
             if "likelihood" in risk:
                 valid_values = ["low", "medium", "high"]
                 if risk["likelihood"] not in valid_values:
                     errors.append(f"{risk_label}.likelihood: Must be one of {valid_values}")
             
-            # Validate impact enum
             if "impact" in risk:
                 valid_values = ["low", "medium", "high", "critical"]
                 if risk["impact"] not in valid_values:
@@ -432,7 +419,6 @@ class PlanningOrchestrator:
         Returns:
             Tuple of (success, message)
         """
-        # Validate plan
         is_valid, errors = self.validate_plan(plan_data)
         if not is_valid:
             error_msg = "Plan validation failed:\n" + "\n".join([f"  - {e}" for e in errors])
@@ -511,7 +497,6 @@ class PlanningOrchestrator:
             
             plan_data = self._parse_markdown_plan(content, md_path)
             
-            # Validate migrated plan
             is_valid, errors = self.validate_plan(plan_data)
             if not is_valid:
                 return (False, plan_data, f"Migrated plan validation failed: {errors}")
@@ -541,7 +526,6 @@ class PlanningOrchestrator:
         plan_id = md_path.stem.upper().replace(' ', '-')
         plan_data["metadata"]["plan_id"] = plan_id
         
-        # Set defaults
         plan_data["metadata"]["created_date"] = datetime.now().isoformat() + "Z"
         plan_data["metadata"]["created_by"] = "Markdown Migration"
         plan_data["metadata"]["status"] = "in-progress"
@@ -604,7 +588,6 @@ class PlanningOrchestrator:
         if current_phase:
             plan_data["phases"].append(current_phase)
         
-        # Calculate total hours
         total_hours = 0
         for phase in plan_data["phases"]:
             for task in phase["tasks"]:
@@ -889,7 +872,6 @@ class PlanningOrchestrator:
         output_path = self.active_plans_dir / output_filename
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Create writer with checkpoint support
         writer = CheckpointedPlanWriter(output_path)
         
         try:
@@ -1036,7 +1018,6 @@ class PlanningOrchestrator:
             
             for existing_file in dir_path.glob('*.md'):
                 try:
-                    # Check filename match
                     if existing_file.name == proposed_filename:
                         results.append({
                             'existing_path': existing_file,
@@ -1199,7 +1180,6 @@ class PlanningOrchestrator:
         old_path = active_dir / plan_filename
         new_path = approved_dir / plan_filename
         
-        # Validate plan exists in active directory
         if not old_path.exists():
             return {
                 'success': False,
@@ -1223,7 +1203,6 @@ class PlanningOrchestrator:
             
             logger.info(f"Approved plan: {plan_filename} (active → approved)")
             
-            # Create git checkpoint after successful approval
             try:
                 self.git_checkpoint.create_auto_checkpoint(
                     operation="approve",
@@ -1275,7 +1254,6 @@ class PlanningOrchestrator:
         old_path = approved_dir / plan_filename
         new_path = completed_dir / plan_filename
         
-        # Validate plan exists in approved directory
         if not old_path.exists():
             return {
                 'success': False,
@@ -1379,7 +1357,6 @@ class PlanningOrchestrator:
         """
         import re
         
-        # Check if completion timestamp already exists
         if re.search(r'\*\*Completed:\*\*', content, re.IGNORECASE):
             # Update existing
             return re.sub(
@@ -1435,7 +1412,6 @@ class PlanningOrchestrator:
         from src.agents.estimation.scope_validator import ScopeValidator
         from src.agents.estimation.clarification_orchestrator import ClarificationOrchestrator
         
-        # Initialize components
         inference_engine = ScopeInferenceEngine()
         validator = ScopeValidator()
         clarifier = ClarificationOrchestrator()
@@ -1446,7 +1422,6 @@ class PlanningOrchestrator:
         # Extract scope entities
         entities = inference_engine.extract_entities(requirements_text)
         
-        # Calculate confidence
         confidence = inference_engine.calculate_confidence(entities, requirements_text)
         
         # Generate scope boundary
@@ -1471,7 +1446,6 @@ class PlanningOrchestrator:
         if 'services' in validation_result.missing_elements:
             validation_dict['clarification_questions'].append('What external services will be integrated?')
         
-        # Check if clarification is needed
         needs_clarification = clarifier.should_clarify(validation_dict)
         
         result = {
@@ -1678,7 +1652,6 @@ class PlanningOrchestrator:
             )
         
         # STEP 3: Scope approved - proceed with estimation
-        # Initialize TIMEFRAME estimator
         estimator = TimeframeEstimator()
         
         # Generate estimate
@@ -1777,7 +1750,6 @@ class PlanningOrchestrator:
             confidence=scope_boundary.confidence
         )
         
-        # Return handoff response (not an estimate)
         return {
             'status': 'scope_approval_required',
             'swagger_context_id': swagger_context_id,
@@ -1810,7 +1782,6 @@ class PlanningOrchestrator:
         from src.tier1.working_memory import WorkingMemory
         from datetime import datetime
         
-        # Initialize working memory
         tier1 = WorkingMemory()
         
         # Prepare scope_boundary for JSON serialization
@@ -1994,3 +1965,133 @@ class PlanningOrchestrator:
         tier1.update_swagger_context_status(swagger_context_id, 'estimated')
         
         return result
+    
+    # ========================================
+    # Threat Modeling Integration
+    # ========================================
+    
+    def analyze_threats(
+        self,
+        feature_description: str,
+        plan_data: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Analyze security threats for a feature using ThreatModelerAgent.
+        
+        This method integrates threat modeling into the planning workflow,
+        providing STRIDE-based threat analysis with mitigations.
+        
+        Args:
+            feature_description: Natural language description of feature
+            plan_data: Optional plan data for enhanced context
+        
+        Returns:
+            Threat analysis result with:
+            - threats: List of identified threats
+            - mitigations: Mitigation strategies
+            - owasp_mapping: OWASP Top 10 mappings
+            - risk_summary: Risk rating summary
+        """
+        try:
+            # Prepare context for threat modeler
+            context = {
+                'feature_description': feature_description,
+                'timestamp': datetime.now().isoformat()
+            }
+            
+            # Add plan data if available
+            if plan_data:
+                context['plan_metadata'] = plan_data.get('metadata', {})
+                context['phases'] = plan_data.get('phases', [])
+            
+            request = AgentRequest(
+                intent='analyze_threats',
+                context=context,
+                user_input=feature_description
+            )
+            
+            # Execute threat analysis
+            logger.info("🔒 Analyzing security threats...")
+            response = self.threat_modeler.execute(request)
+            
+            if not response.success:
+                logger.error(f"Threat analysis failed: {response.message}")
+                return {
+                    'success': False,
+                    'error': response.message,
+                    'threats': [],
+                    'mitigations': []
+                }
+            
+            logger.info(f"✅ Threat analysis complete: {len(response.result.get('threats', []))} threats identified")
+            return {
+                'success': True,
+                'threats': response.result.get('threats', []),
+                'mitigations': response.result.get('mitigations', []),
+                'owasp_mapping': response.result.get('owasp_mapping', {}),
+                'risk_summary': response.result.get('risk_summary', {}),
+                'report': response.result.get('report', '')
+            }
+            
+        except Exception as e:
+            error_msg = f"Threat analysis failed: {e}"
+            logger.error(error_msg)
+            return {
+                'success': False,
+                'error': error_msg,
+                'threats': [],
+                'mitigations': []
+            }
+    
+    def integrate_threats_into_plan(
+        self,
+        plan_data: Dict[str, Any],
+        threat_analysis: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Integrate threat analysis results into plan data.
+        
+        Adds security section and updates DoD with threat mitigations.
+        
+        Args:
+            plan_data: Existing plan data
+            threat_analysis: Results from analyze_threats()
+        
+        Returns:
+            Updated plan data with integrated threats
+        """
+        try:
+            # Add security section if not present
+            if 'security' not in plan_data:
+                plan_data['security'] = {}
+            
+            # Integrate threat data
+            plan_data['security']['threat_analysis'] = {
+                'threats': threat_analysis.get('threats', []),
+                'mitigations': threat_analysis.get('mitigations', []),
+                'owasp_mapping': threat_analysis.get('owasp_mapping', {}),
+                'risk_summary': threat_analysis.get('risk_summary', {}),
+                'analyzed_at': datetime.now().isoformat()
+            }
+            
+            # Add threat mitigations to DoD
+            if 'definition_of_done' not in plan_data:
+                plan_data['definition_of_done'] = []
+            
+            # Add security DoD items
+            critical_threats = [t for t in threat_analysis.get('threats', []) 
+                              if t.get('risk_rating') in ['CRITICAL', 'HIGH']]
+            
+            if critical_threats:
+                plan_data['definition_of_done'].append({
+                    'category': 'Security',
+                    'item': f'All {len(critical_threats)} critical/high threats mitigated',
+                    'threat_count': len(critical_threats)
+                })
+            
+            logger.info(f"✅ Threats integrated into plan: {len(threat_analysis.get('threats', []))} threats")
+            return plan_data
+            
+        except Exception as e:
+            logger.error(f"Failed to integrate threats: {e}")
+            return plan_data

@@ -1,0 +1,106 @@
+{
+  "timestamp": "2025-12-03T17:13:23.643791",
+  "version": "3.0.0",
+  "summary": {
+    "total_scanned": 75,
+    "total_deleted": 0,
+    "total_moved": 10,
+    "total_references_updated": 0,
+    "space_freed_mb": 0.0,
+    "duration_seconds": 0.379619
+  },
+  "scan_statistics": {
+    "total_files": 75,
+    "total_size_bytes": 1888325,
+    "total_size_mb": 1.800847053527832,
+    "protected_count": 16,
+    "duplicate_count": 0,
+    "duplicate_groups": 0,
+    "categories": {
+      "configuration": 18,
+      "unknown": 25,
+      "documentation": 12,
+      "backup": 1,
+      "source_code": 19
+    },
+    "purposes": {
+      "unknown": 40,
+      "temporary": 10,
+      "archive": 1,
+      "feature": 4,
+      "example": 20
+    }
+  },
+  "reference_statistics": {
+    "total_references": 102,
+    "total_imports": 11,
+    "total_path_refs": 10,
+    "total_links": 41,
+    "total_config_refs": 40,
+    "files_with_dependencies": 5,
+    "files_with_dependents": 81
+  },
+  "deletion_statistics": {
+    "total_analyzed": 75,
+    "total_candidates": 0,
+    "safe_to_delete": 0,
+    "space_to_free_bytes": 0,
+    "space_to_free_mb": 0.0,
+    "risk_breakdown": {},
+    "reason_breakdown": {}
+  },
+  "deletion_results": {
+    "dry_run": true,
+    "deleted_count": 0,
+    "skipped_count": 0,
+    "failed_count": 0,
+    "space_freed_bytes": 0,
+    "space_freed_mb": 0.0,
+    "deleted_files": [],
+    "skipped_files": [],
+    "failed_files": []
+  },
+  "reorganization_results": {
+    "dry_run": true,
+    "moved_count": 10,
+    "failed_count": 0,
+    "references_updated": 0,
+    "moved_files": [
+      "deployment-validation.json",
+      "cortex_uml_diagram.svg",
+      "alignment_result.txt",
+      "deploy-log.txt",
+      "ado-validation.json",
+      "deploy-output.txt",
+      "gate15-manifest-improvements.patch",
+      "static/dashboard_uml.svg",
+      "static/test_uml.svg",
+      "static/use_cases_uml.svg"
+    ],
+    "failed_moves": []
+  },
+  "verification": {
+    "essential_deleted": [],
+    "recovery_commands": [],
+    "verification_passed": true
+  },
+  "recommendations": [],
+  "metrics": {
+    "timestamp": "2025-12-03T17:13:23.264146",
+    "backups_deleted": 0,
+    "backups_archived": 0,
+    "files_reorganized": 10,
+    "md_files_consolidated": 0,
+    "root_files_cleaned": 0,
+    "bloated_files_found": 0,
+    "archived_docs_removed": 0,
+    "space_freed_bytes": 0,
+    "git_commits_created": 0,
+    "duration_seconds": 0.379619,
+    "optimization_triggered": false,
+    "warnings": [],
+    "errors": [],
+    "space_freed_mb": 0.0,
+    "space_freed_gb": 0.0
+  }
+}

@@ -68,15 +68,12 @@ class MasterSetupOrchestrator:
     
     def _find_cortex_root(self) -> Path:
         """Find CORTEX installation root."""
-        # Check for embedded CORTEX
         if (self.project_root / "CORTEX").exists():
             return self.project_root / "CORTEX"
         
-        # Check if we're in CORTEX repo
         if (self.project_root / "cortex-brain").exists():
             return self.project_root
         
-        # Check common locations
         common_locations = [
             Path.home() / "PROJECTS" / "CORTEX",
             Path(__file__).parent.parent.parent
@@ -199,7 +196,6 @@ class MasterSetupOrchestrator:
                     logger.info(f"Compliance: {result.compliance_percentage:.1f}%")
                     logger.info(f"Report: {report_path}")
                     
-                    # Check for critical violations
                     critical = [v for v in result.violations if v.severity == ViolationSeverity.CRITICAL]
                     if critical:
                         logger.warning(f"\n⚠️  {len(critical)} critical violation(s) detected")
@@ -433,11 +429,9 @@ class MasterSetupOrchestrator:
         cortex_pattern = "# CORTEX AI Assistant (local only)\nCORTEX/\n"
         
         try:
-            # Check if .gitignore exists
             if gitignore_path.exists():
                 content = gitignore_path.read_text()
                 
-                # Check if CORTEX/ already excluded
                 if "CORTEX/" in content:
                     return {
                         'success': True,
@@ -455,7 +449,6 @@ class MasterSetupOrchestrator:
                     'path': str(gitignore_path)
                 }
             else:
-                # Create new .gitignore
                 gitignore_path.write_text(cortex_pattern)
                 
                 return {
@@ -606,7 +599,6 @@ class MasterSetupOrchestrator:
    # Start TDD workflow
    start tdd
    
-   # Get help
    help
    ```
 
