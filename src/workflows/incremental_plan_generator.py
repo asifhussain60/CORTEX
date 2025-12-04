@@ -89,14 +89,6 @@ class IncrementalPlanGenerator:
         self.skeleton_token_limit = skeleton_token_limit
         self.section_token_limit = section_token_limit
         self.auto_commit = auto_commit
-            session_id: Optional session ID for checkpoint tracking
-            skeleton_token_limit: Token limit for skeleton generation
-            section_token_limit: Token limit per section
-        """
-        self.brain_path = brain_path
-        self.session_id = session_id or self._generate_session_id()
-        self.skeleton_token_limit = skeleton_token_limit
-        self.section_token_limit = section_token_limit
         
         # Planning state
         self.skeleton: Optional[Dict[str, Any]] = None

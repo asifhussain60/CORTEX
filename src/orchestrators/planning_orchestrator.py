@@ -25,7 +25,7 @@ from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 from src.agents.security.threat_modeler_agent import ThreatModelerAgent
-from src.agents.base_agent import AgentRequest
+from src.cortex_agents.base_agent import AgentRequest
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +63,30 @@ class PlanningOrchestrator:
         
         # NEW: Initialize ThreatModelerAgent for security analysis
         self.threat_modeler = ThreatModelerAgent()
+        
+        # UX Enhancement: Planning mode state management
+        self.planning_mode_active = False
+        self.current_plan_context: Optional[Dict[str, Any]] = None
+        self.session_restoration_enabled = True
+        
+        # Load response templates for configuration
+        self._load_template_flags()
+    
+    def _load_template_flags(self) -> None:
+        """Load planning-related flags from response templates."""
+        try:
+            template_path = self.cortex_root / "cortex-brain" / "response-templates.yaml"
+            if template_path.exists():
+                with open(template_path, 'r', encoding='utf-8') as f:
+                    templates = yaml.safe_load(f)
+                    
+                work_planner = templates.get('templates', {}).get('work_planner_success', {})
+                self.planning_mode_active = work_planner.get('planning_mode_active', False)
+                self.session_restoration_enabled = work_planner.get('session_restoration_enabled', True)
+                
+                logger.info(f"📋 Planning mode config loaded: active={self.planning_mode_active}, restoration={self.session_restoration_enabled}")
+        except Exception as e:
+            logger.warning(f"Could not load template flags: {e}")
     
     def _load_schema(self) -> Dict[str, Any]:
         """Load plan schema from YAML file."""
@@ -2126,3 +2150,266 @@ class PlanningOrchestrator:
         except Exception as e:
             logger.error(f"Failed to integrate threats: {e}")
             return plan_data
+    
+    # ========================================
+    # Session Restoration
+    # ========================================
+    
+    def restore_session(self, plan_file_path: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Restore planning session from existing plan file.
+        
+        Enables cross-chat resumption: Open new chat → Reference plan file → Say 'continue'
+        
+        Args:
+            plan_file_path: Path to plan file, or None to find most recent active plan
+        
+        Returns:
+            Restoration result with plan data and resume point
+        """
+        try:
+            if not self.session_restoration_enabled:
+                return {
+                    'success': False,
+                    'error': 'Session restoration is disabled',
+                    'plan_data': None
+                }
+            
+            # Find plan file
+            if plan_file_path:
+                plan_path = Path(plan_file_path)
+            else:
+                # Find most recent active plan
+                plan_path = self._find_most_recent_plan()
+            
+            if not plan_path or not plan_path.exists():
+                return {
+                    'success': False,
+                    'error': f'Plan file not found: {plan_path}',
+                    'plan_data': None
+                }
+            
+            # Load plan file
+            logger.info(f"📂 Loading plan from: {plan_path}")
+            with open(plan_path, 'r', encoding='utf-8') as f:
+                plan_content = f.read()
+            
+            # Parse plan to find incomplete phases
+            resume_point = self._find_resume_point(plan_content)
+            
+            # Activate planning mode
+            self.planning_mode_active = True
+            self.current_plan_context = {
+                'plan_file': str(plan_path),
+                'resume_point': resume_point,
+                'loaded_at': datetime.now().isoformat()
+            }
+            
+            logger.info(f"✅ Session restored: Resume at {resume_point['phase']} - {resume_point['task']}")
+            
+            return {
+                'success': True,
+                'plan_file': str(plan_path),
+                'resume_point': resume_point,
+                'plan_content': plan_content,
+                'planning_mode_active': self.planning_mode_active
+            }
+            
+        except Exception as e:
+            error_msg = f"Session restoration failed: {e}"
+            logger.error(error_msg)
+            return {
+                'success': False,
+                'error': error_msg,
+                'plan_data': None
+            }
+    
+    def _find_most_recent_plan(self) -> Optional[Path]:
+        """Find most recent active plan file."""
+        try:
+            active_plans = list(self.active_plans_dir.glob('*.md'))
+            if not active_plans:
+                return None
+            
+            # Sort by modification time, return most recent
+            active_plans.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+            return active_plans[0]
+        except Exception as e:
+            logger.error(f"Error finding recent plan: {e}")
+            return None
+    
+    def _find_resume_point(self, plan_content: str) -> Dict[str, Any]:
+        """Parse plan content to find first incomplete task."""
+        try:
+            lines = plan_content.split('\n')
+            current_phase = None
+            
+            for line in lines:
+                # Detect phase headers
+                if line.startswith('##') and 'Phase' in line:
+                    current_phase = line.strip('#').strip()
+                
+                # Find first unchecked task (☐ or [ ])
+                if '☐' in line or '[ ]' in line:
+                    task = line.strip()
+                    return {
+                        'phase': current_phase or 'Unknown Phase',
+                        'task': task,
+                        'status': 'incomplete'
+                    }
+            
+            # If all tasks complete, return completion status
+            return {
+                'phase': 'Complete',
+                'task': 'All tasks completed',
+                'status': 'complete'
+            }
+        except Exception as e:
+            logger.error(f"Error parsing resume point: {e}")
+            return {
+                'phase': 'Error',
+                'task': str(e),
+                'status': 'error'
+            }
+    
+    def activate_planning_mode(self, context: Optional[Dict[str, Any]] = None) -> None:
+        """Activate planning mode - all user input treated as plan refinement."""
+        self.planning_mode_active = True
+        self.current_plan_context = context or {}
+        logger.info("📋 Planning mode ACTIVATED - All input will refine the plan until 'approve plan'")
+    
+    def deactivate_planning_mode(self) -> None:
+        """Deactivate planning mode after 'approve plan' command."""
+        self.planning_mode_active = False
+        self.current_plan_context = None
+        logger.info("✅ Planning mode DEACTIVATED - Returning to normal operation")
+    
+    def is_planning_mode_active(self) -> bool:
+        """Check if planning mode is currently active."""
+        return self.planning_mode_active
+    
+    # ========================================
+    # Challenge System
+    # ========================================
+    
+    def challenge_approach(self, requirements: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Challenge potentially suboptimal approaches during DoR validation.
+        
+        Proactively presents alternatives with trade-offs before proceeding.
+        
+        Args:
+            requirements: Feature requirements from DoR validation
+        
+        Returns:
+            Challenge result with alternatives and recommendations
+        """
+        try:
+            challenges = []
+            
+            # Challenge 1: No test strategy
+            if not requirements.get('test_strategy'):
+                challenges.append({
+                    'issue': 'No test strategy defined',
+                    'risk': 'HIGH',
+                    'impact': 'Code quality, maintainability, regression risks',
+                    'alternatives': [
+                        {
+                            'approach': 'TDD (Test-Driven Development)',
+                            'pros': ['94% success rate', 'Better design', 'Instant feedback'],
+                            'cons': ['Requires discipline', 'Initial time investment']
+                        },
+                        {
+                            'approach': 'Test-After Development',
+                            'pros': ['Faster initial implementation', 'Flexible approach'],
+                            'cons': ['67% success rate', 'Technical debt', 'Design compromises']
+                        }
+                    ],
+                    'recommendation': 'TDD approach - Evidence shows 27% higher success rate'
+                })
+            
+            # Challenge 2: No error handling strategy
+            if not requirements.get('error_handling'):
+                challenges.append({
+                    'issue': 'No error handling strategy',
+                    'risk': 'MEDIUM',
+                    'impact': 'Production incidents, poor user experience',
+                    'alternatives': [
+                        {
+                            'approach': 'Comprehensive error handling',
+                            'pros': ['Graceful degradation', 'Better UX', 'Easier debugging'],
+                            'cons': ['More code', 'Complexity']
+                        },
+                        {
+                            'approach': 'Minimal error handling',
+                            'pros': ['Less code', 'Faster development'],
+                            'cons': ['Crashes', 'Poor UX', 'Hard to debug']
+                        }
+                    ],
+                    'recommendation': 'Comprehensive approach - Critical for production systems'
+                })
+            
+            # Challenge 3: No security considerations
+            if not requirements.get('security_requirements'):
+                challenges.append({
+                    'issue': 'No security requirements',
+                    'risk': 'CRITICAL',
+                    'impact': 'Data breaches, compliance violations, liability',
+                    'alternatives': [
+                        {
+                            'approach': 'OWASP security review',
+                            'pros': ['Industry standard', 'Comprehensive', 'Compliance ready'],
+                            'cons': ['Time investment', 'May reveal scope increase']
+                        },
+                        {
+                            'approach': 'Skip security review',
+                            'pros': ['Faster to market'],
+                            'cons': ['Security vulnerabilities', 'Compliance risk', 'Liability']
+                        }
+                    ],
+                    'recommendation': 'OWASP review - Non-negotiable for production features'
+                })
+            
+            # Challenge 4: Overly broad scope
+            estimated_hours = requirements.get('estimated_hours', 0)
+            if estimated_hours > 40:
+                challenges.append({
+                    'issue': 'Large scope (>40 hours)',
+                    'risk': 'MEDIUM',
+                    'impact': 'Delayed delivery, scope creep, integration complexity',
+                    'alternatives': [
+                        {
+                            'approach': 'Break into phases',
+                            'pros': ['Incremental delivery', 'Easier testing', 'Faster feedback'],
+                            'cons': ['More planning overhead', 'Multiple releases']
+                        },
+                        {
+                            'approach': 'Single large implementation',
+                            'pros': ['One release', 'Less coordination'],
+                            'cons': ['Higher risk', 'Delayed value', 'Integration hell']
+                        }
+                    ],
+                    'recommendation': 'Phase approach - Reduce risk, deliver value sooner'
+                })
+            
+            if not challenges:
+                return {
+                    'has_challenges': False,
+                    'message': 'No challenges identified - Approach looks solid ✅'
+                }
+            
+            logger.info(f"⚡ Challenge system: {len(challenges)} concerns raised")
+            
+            return {
+                'has_challenges': True,
+                'challenges': challenges,
+                'summary': f'{len(challenges)} potential issues identified',
+                'recommendation': 'Review alternatives before proceeding'
+            }
+            
+        except Exception as e:
+            logger.error(f"Challenge analysis failed: {e}")
+            return {
+                'has_challenges': False,
+                'error': str(e)
+            }
