@@ -19,7 +19,7 @@ import uuid
 import logging
 from datetime import datetime
 
-from src.cortex_agents.strategic.intent_router import IntentRouter
+from src.cortex_agents.intent_router import IntentRouter
 from .session_manager import SessionManager
 from .context_injector import ContextInjector
 from .plugins.command_registry import get_command_registry

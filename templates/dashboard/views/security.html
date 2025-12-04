@@ -1,0 +1,400 @@
+<!-- Security View Template -->
+<div class="dashboard-view" id="security-view">
+    <div class="view-header">
+        <h2>🔒 Security Dashboard</h2>
+        <div class="header-actions">
+            <button class="btn-export" onclick="exportSecurityReport()">Export Report</button>
+            <button class="btn-refresh" onclick="refreshSecurityScan()">🔄 Refresh Scan</button>
+        </div>
+    </div>
+
+    <!-- Security Score Gauge -->
+    <div class="security-score-section">
+        <div class="score-gauge glass-card">
+            <h3>Overall Security Score</h3>
+            <div class="gauge-container">
+                <svg width="300" height="200" id="security-gauge"></svg>
+                <div class="score-label">{{ security_data.overall_score }}/100</div>
+            </div>
+            <p class="scan-date">Last scan: {{ security_data.last_scan }}</p>
+        </div>
+
+        <!-- Vulnerability Summary -->
+        <div class="vulnerability-summary glass-card">
+            <h3>Vulnerability Breakdown</h3>
+            <div class="vuln-grid">
+                <div class="vuln-card critical">
+                    <div class="vuln-count">{{ security_data.vulnerabilities.critical }}</div>
+                    <div class="vuln-label">Critical</div>
+                </div>
+                <div class="vuln-card high">
+                    <div class="vuln-count">{{ security_data.vulnerabilities.high }}</div>
+                    <div class="vuln-label">High</div>
+                </div>
+                <div class="vuln-card medium">
+                    <div class="vuln-count">{{ security_data.vulnerabilities.medium }}</div>
+                    <div class="vuln-label">Medium</div>
+                </div>
+                <div class="vuln-card low">
+                    <div class="vuln-count">{{ security_data.vulnerabilities.low }}</div>
+                    <div class="vuln-label">Low</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Categories -->
+    <div class="security-categories">
+        <h3>Security Categories</h3>
+        <div class="categories-grid">
+            {% for category, data in security_data.categories.items() %}
+            <div class="category-card glass-card">
+                <h4>{{ category.replace('_', ' ').title() }}</h4>
+                <div class="category-score score-{{ 'high' if data.score >= 80 else 'medium' if data.score >= 60 else 'low' }}">
+                    {{ data.score }}%
+                </div>
+                <div class="category-issues">
+                    {% if data.issues > 0 %}
+                    <span class="issue-badge">{{ data.issues }} issues</span>
+                    {% else %}
+                    <span class="no-issues">✅ No issues</span>
+                    {% endif %}
+                </div>
+                <div class="category-progress">
+                    <div class="progress-bar" style="width: {{ data.score }}%"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- OWASP Top 10 Compliance -->
+    <div class="owasp-section glass-card">
+        <h3>🛡️ OWASP Top 10 (2021) Compliance</h3>
+        <div class="owasp-grid">
+            {% for item in security_data.owasp_top_10 %}
+            <div class="owasp-item status-{{ item.status }}">
+                <div class="owasp-header">
+                    <span class="owasp-id">{{ item.risk.split('_')[0] }}</span>
+                    <span class="owasp-status">
+                        {% if item.status == 'pass' %}✅{% endif %}
+                        {% if item.status == 'warn' %}⚠️{% endif %}
+                        {% if item.status == 'fail' %}❌{% endif %}
+                    </span>
+                </div>
+                <div class="owasp-name">{{ item.name }}</div>
+                <div class="owasp-score">Score: {{ item.score }}/100</div>
+                <div class="owasp-progress">
+                    <div class="progress-bar status-{{ item.status }}" style="width: {{ item.score }}%"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Compliance Status -->
+    <div class="compliance-section">
+        <h3>📋 Compliance Status</h3>
+        <div class="compliance-grid">
+            <div class="compliance-card glass-card {{ 'compliant' if security_data.compliance.gdpr_ready else 'non-compliant' }}">
+                <div class="compliance-icon">{% if security_data.compliance.gdpr_ready %}✅{% else %}⚠️{% endif %}</div>
+                <div class="compliance-name">GDPR</div>
+                <div class="compliance-status">
+                    {% if security_data.compliance.gdpr_ready %}Ready{% else %}Not Ready{% endif %}
+                </div>
+            </div>
+            
+            <div class="compliance-card glass-card {{ 'compliant' if security_data.compliance.soc2_ready else 'non-compliant' }}">
+                <div class="compliance-icon">{% if security_data.compliance.soc2_ready %}✅{% else %}⚠️{% endif %}</div>
+                <div class="compliance-name">SOC 2</div>
+                <div class="compliance-status">
+                    {% if security_data.compliance.soc2_ready %}Ready{% else %}Not Ready{% endif %}
+                </div>
+            </div>
+            
+            <div class="compliance-card glass-card {{ 'compliant' if security_data.compliance.hipaa_ready else 'non-compliant' }}">
+                <div class="compliance-icon">{% if security_data.compliance.hipaa_ready %}✅{% else %}⚠️{% endif %}</div>
+                <div class="compliance-name">HIPAA</div>
+                <div class="compliance-status">
+                    {% if security_data.compliance.hipaa_ready %}Ready{% else %}Not Ready{% endif %}
+                </div>
+            </div>
+            
+            <div class="compliance-card glass-card {{ 'compliant' if security_data.compliance.pci_dss_ready else 'non-compliant' }}">
+                <div class="compliance-icon">{% if security_data.compliance.pci_dss_ready %}✅{% else %}⚠️{% endif %}</div>
+                <div class="compliance-name">PCI DSS</div>
+                <div class="compliance-status">
+                    {% if security_data.compliance.pci_dss_ready %}Ready{% else %}Not Ready{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .security-score-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .score-gauge {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .gauge-container {
+            position: relative;
+        }
+
+        .score-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .vulnerability-summary {
+            padding: 30px;
+        }
+
+        .vuln-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .vuln-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid;
+        }
+
+        .vuln-card.critical {
+            border-color: #dc2626;
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        .vuln-card.high {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .vuln-card.medium {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .vuln-card.low {
+            border-color: #6b7280;
+            background: rgba(107, 114, 128, 0.1);
+        }
+
+        .vuln-count {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .vuln-card.critical .vuln-count { color: #dc2626; }
+        .vuln-card.high .vuln-count { color: #f59e0b; }
+        .vuln-card.medium .vuln-count { color: #3b82f6; }
+        .vuln-card.low .vuln-count { color: #6b7280; }
+
+        .vuln-label {
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .category-card {
+            padding: 20px;
+        }
+
+        .category-score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .category-score.score-high { color: #10b981; }
+        .category-score.score-medium { color: #f59e0b; }
+        .category-score.score-low { color: #ef4444; }
+
+        .category-progress {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            transition: width 0.3s ease;
+        }
+
+        .owasp-section {
+            margin-top: 30px;
+            padding: 30px;
+        }
+
+        .owasp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .owasp-item {
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .owasp-item.status-pass {
+            border-left: 4px solid #10b981;
+        }
+
+        .owasp-item.status-warn {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .owasp-item.status-fail {
+            border-left: 4px solid #ef4444;
+        }
+
+        .owasp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .owasp-id {
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .owasp-name {
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+        }
+
+        .owasp-score {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .owasp-progress {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar.status-pass {
+            background: #10b981;
+        }
+
+        .progress-bar.status-warn {
+            background: #f59e0b;
+        }
+
+        .progress-bar.status-fail {
+            background: #ef4444;
+        }
+
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .compliance-card {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .compliance-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .compliance-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .compliance-card.compliant {
+            border: 2px solid #10b981;
+        }
+
+        .compliance-card.non-compliant {
+            border: 2px solid #f59e0b;
+        }
+    </style>
+
+    <script>
+        // Draw security gauge with D3.js
+        function drawSecurityGauge(score) {
+            const svg = d3.select("#security-gauge");
+            const width = 300;
+            const height = 200;
+            const radius = Math.min(width, height) / 2 - 20;
+
+            const arc = d3.arc()
+                .innerRadius(radius - 30)
+                .outerRadius(radius)
+                .startAngle(-Math.PI / 2)
+                .endAngle((score / 100) * Math.PI - Math.PI / 2);
+
+            const background = d3.arc()
+                .innerRadius(radius - 30)
+                .outerRadius(radius)
+                .startAngle(-Math.PI / 2)
+                .endAngle(Math.PI / 2);
+
+            const g = svg.append("g")
+                .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+            // Background arc
+            g.append("path")
+                .attr("d", background)
+                .style("fill", "rgba(255, 255, 255, 0.1)");
+
+            // Score arc
+            g.append("path")
+                .attr("d", arc)
+                .style("fill", score >= 80 ? "#10b981" : score >= 60 ? "#f59e0b" : "#ef4444");
+        }
+
+        function exportSecurityReport() {
+            alert('Security report will be exported as PDF');
+        }
+
+        function refreshSecurityScan() {
+            alert('Security scan will be refreshed (may take 1-2 minutes)');
+        }
+
+        // Initialize gauge on load
+        drawSecurityGauge({{ security_data.overall_score }});
+    </script>
+</div>

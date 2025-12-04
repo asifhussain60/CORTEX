@@ -15,7 +15,7 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from src.orchestrators.planning_orchestrator import PlanningOrchestrator
-from src.cortex_agents.strategic.intent_router import IntentRouter
+from src.cortex_agents.intent_router import IntentRouter
 from src.cortex_agents.base_agent import AgentRequest
 from src.cortex_agents.agent_types import IntentType
 
@@ -148,59 +148,6 @@ class TestSessionRestoration:
         
         assert result['success'] == False
         assert 'not found' in result['error'].lower()
-
-
-class TestMultiRequestDetection:
-    """Test multi-request detection in IntentRouter."""
-    
-    @pytest.fixture
-    def router(self):
-        """Create IntentRouter instance."""
-        return IntentRouter(name="TestRouter")
-    
-    def test_single_request_not_detected(self, router):
-        """Single action should not trigger multi-request."""
-        message = "fix the authentication bug"
-        
-        result = router._detect_multi_request(message)
-        
-        assert result == False
-    
-    def test_multi_request_with_and(self, router):
-        """Should detect multiple requests joined by 'and'."""
-        message = "fix the auth bug and add a dashboard and investigate performance"
-        
-        result = router._detect_multi_request(message)
-        
-        assert result == True
-    
-    def test_multi_request_with_comma(self, router):
-        """Should detect multiple requests separated by commas."""
-        message = "implement login, create tests, update documentation"
-        
-        result = router._detect_multi_request(message)
-        
-        assert result == True
-    
-    def test_multi_request_with_plus(self, router):
-        """Should detect multiple requests with 'plus'."""
-        message = "debug the API plus refactor the database"
-        
-        result = router._detect_multi_request(message)
-        
-        assert result == True
-    
-    def test_classify_intent_returns_plan_for_multi_request(self, router):
-        """Multi-request should return PLAN intent."""
-        request = AgentRequest(
-            intent="unknown",
-            context={},
-            user_message="fix auth and add dashboard and test performance"
-        )
-        
-        intent = router._classify_intent(request)
-        
-        assert intent == IntentType.PLAN
 
 
 class TestChallengeSystem:

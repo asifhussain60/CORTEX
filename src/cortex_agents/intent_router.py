@@ -74,6 +74,15 @@ class IntentRouter(BaseAgent):
             self.logger.warning(f"Could not initialize vision orchestrator: {e}")
             self.vision_orchestrator = None
         
+        # Initialize TDD Intent Router for TDD Mastery auto-activation (Layer 3 wiring)
+        try:
+            from src.cortex_agents.test_generator.tdd_intent_router import TDDIntentRouter
+            self.tdd_router = TDDIntentRouter()
+            self.logger.info("TDD Intent Router initialized - auto-activation enabled")
+        except Exception as e:
+            self.logger.warning(f"Could not initialize TDD Intent Router: {e}")
+            self.tdd_router = None
+        
         # Intent classification keywords
         self.INTENT_KEYWORDS = {
             IntentType.PLAN: [

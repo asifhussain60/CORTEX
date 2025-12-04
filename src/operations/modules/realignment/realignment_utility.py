@@ -821,9 +821,63 @@ def align_system_v2(
             logger.info("✅ No obsolete code detected")
         
         # ====================================================================
-        # CHECK 7: Module Import Health
+        # CHECK 7: Specialist Router Wiring (NEW - Critical for TDD Mastery)
         # ====================================================================
-        logger.info("📋 Check 7: Module Import Health")
+        logger.info("📋 Check 7: Specialist Router Wiring")
+        wiring_check = _check_specialist_router_wiring(cortex_root)
+        results["checks"]["specialist_router_wiring"] = wiring_check
+        
+        if not wiring_check["passed"]:
+            logger.error(f"❌ {wiring_check['unwired_count']} specialist router(s) NOT wired")
+            for issue in wiring_check["issues"]:
+                results["errors"].append({
+                    "category": "router_wiring",
+                    "severity": issue["severity"].upper(),
+                    "message": f"{issue['router']} not wired - {issue['impact']}",
+                    "details": {
+                        "router": issue["router"],
+                        "fix": issue["fix"]
+                    }
+                })
+            results["success"] = False
+            
+            # Auto-fix if enabled
+            if auto_fix and not dry_run:
+                logger.info("🔧 Auto-wiring specialist routers...")
+                try:
+                    from src.operations.modules.realignment.specialist_router_wiring_checker import (
+                        SpecialistRouterWiringChecker
+                    )
+                    wiring_checker = SpecialistRouterWiringChecker(cortex_root)
+                    fix_result = wiring_checker.fix_wiring(dry_run=False)
+                    
+                    if fix_result["success"]:
+                        results["fixes_applied"].extend(fix_result["fixes_applied"])
+                        logger.info(f"   ✅ Applied {len(fix_result['fixes_applied'])} wiring fix(es)")
+                    
+                    if fix_result["fixes_skipped"]:
+                        results["warnings"].extend([{
+                            "category": "router_wiring_manual",
+                            "severity": "HIGH",
+                            "message": skip
+                        } for skip in fix_result["fixes_skipped"]])
+                    
+                    if fix_result["errors"]:
+                        results["errors"].extend([{
+                            "category": "router_wiring_error",
+                            "severity": "CRITICAL",
+                            "message": error
+                        } for error in fix_result["errors"]])
+                except Exception as e:
+                    logger.error(f"   ❌ Router wiring fix failed: {e}")
+                    results["errors"].append(f"Router wiring fix failed: {e}")
+        else:
+            logger.info(f"✅ All {wiring_check['total_specialist_routers']} specialist router(s) properly wired")
+        
+        # ====================================================================
+        # CHECK 8: Module Import Health
+        # ====================================================================
+        logger.info("📋 Check 8: Module Import Health")
         import_health = _check_module_imports(cortex_root)
         results["checks"]["module_imports"] = import_health
         
@@ -851,7 +905,7 @@ def align_system_v2(
         logger.info("\n" + "=" * 70)
         logger.info("📊 CORTEX Align v2.0 - Summary")
         logger.info("=" * 70)
-        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/7")
+        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/8")
         logger.info(f"⚠️  Warnings: {len(results['warnings'])}")
         logger.info(f"❌ Errors: {len(results['errors'])}")
         logger.info(f"🔧 Fixes Applied: {len(results['fixes_applied'])}")
@@ -866,6 +920,27 @@ def align_system_v2(
     return results
 
 
+def _check_specialist_router_wiring(cortex_root: Path) -> Dict[str, Any]:
+    """Check if specialist routers (TDD, Strategic, etc) are wired into main flow."""
+    try:
+        from src.operations.modules.realignment.specialist_router_wiring_checker import (
+            SpecialistRouterWiringChecker
+        )
+        
+        checker = SpecialistRouterWiringChecker(cortex_root)
+        return checker.check_wiring()
+        
+    except Exception as e:
+        logger.error(f"Specialist router wiring check failed: {e}")
+        return {
+            "passed": False,
+            "total_specialist_routers": 0,
+            "wired_count": 0,
+            "unwired_count": 0,
+            "error": str(e)
+        }
+
+
 def _check_intent_router_coverage(cortex_root: Path) -> Dict[str, Any]:
     """Check if all operations are covered in intent router."""
     try:
@@ -877,8 +952,8 @@ def _check_intent_router_coverage(cortex_root: Path) -> Dict[str, Any]:
             ops_data = yaml.safe_load(f)
             operations = list(ops_data["operations"].keys())
         
-        # Load intent router
-        router_file = cortex_root / "src" / "cortex_agents" / "strategic" / "intent_router.py"
+        # Load intent router (main router after consolidation)
+        router_file = cortex_root / "src" / "cortex_agents" / "intent_router.py"
         router_content = router_file.read_text(encoding='utf-8')
         
         # Simple check: see if operation name appears in intent router
