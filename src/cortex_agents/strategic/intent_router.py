@@ -298,6 +298,11 @@ class IntentRouter(BaseAgent):
             else:
                 intent_scores[IntentType.ENHANCE] = 1
         
+        # Multi-request detection: Check for multiple disconnected requests
+        if self._detect_multi_request(message_lower):
+            self.logger.info("🔍 Multi-request detected - Switching to planning mode")
+            return IntentType.PLAN
+        
         # Return highest scoring intent, or UNKNOWN if none found
         if intent_scores:
             return max(intent_scores.items(), key=lambda x: x[1])[0]
@@ -331,6 +336,62 @@ class IntentRouter(BaseAgent):
         ]
         
         return any(signal in message for signal in domain_signals)
+    
+    def _detect_multi_request(self, message: str) -> bool:
+        """
+        Detect multiple disconnected requests in a single message.
+        
+        Examples:
+        - "fix the auth bug and add a dashboard and investigate performance"
+        - "implement login, create tests, update documentation"
+        - "debug the API plus refactor the database"
+        
+        Args:
+            message: Lowercased user message
+        
+        Returns:
+            True if multiple disconnected requests detected
+        """
+        # Split by common conjunctions
+        separators = [' and ', ' also ', ' plus ', ', ', ' & ']
+        
+        segments = [message]
+        for sep in separators:
+            new_segments = []
+            for seg in segments:
+                new_segments.extend(seg.split(sep))
+            segments = new_segments
+        
+        # Filter out empty segments
+        segments = [s.strip() for s in segments if s.strip()]
+        
+        # Need at least 2 segments to be multi-request
+        if len(segments) < 2:
+            return False
+        
+        # Check if segments represent different intents
+        action_verbs = [
+            'fix', 'debug', 'investigate', 'add', 'create', 'implement',
+            'build', 'update', 'refactor', 'enhance', 'improve', 'test',
+            'deploy', 'review', 'analyze', 'plan'
+        ]
+        
+        detected_intents = []
+        for segment in segments:
+            segment_words = segment.split()
+            for verb in action_verbs:
+                if verb in segment_words:
+                    detected_intents.append(verb)
+                    break
+        
+        # If we detected 2+ different action verbs, it's multi-request
+        unique_intents = set(detected_intents)
+        is_multi = len(unique_intents) >= 2
+        
+        if is_multi:
+            self.logger.info(f"Multi-request detected: {unique_intents}")
+        
+        return is_multi
     
     def _find_similar_intents(
         self,

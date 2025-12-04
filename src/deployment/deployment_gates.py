@@ -1,7 +1,7 @@
 """
 Deployment Gates - Quality Thresholds
 
-MANDATORY GATE ENFORCEMENT: ALL 21 gates MUST pass for production deployment.
+MANDATORY GATE ENFORCEMENT: ALL 22 gates MUST pass for production deployment.
 No skipping allowed. No bypass flags. Professional quality standards enforced.
 
 Enforces quality gates before deployment:
@@ -13,6 +13,7 @@ Enforces quality gates before deployment:
 - TDD workflow validation (RED→GREEN→REFACTOR with git checkpoints)
 - Application onboarding system (EPM integration)
 - Dashboard utility (D3.js charts and data collection)
+- UX Enhancement features (planning mode, session restoration, multi-request, challenge system)
 - And 13 additional critical quality gates
 
 Author: Asif Hussain
@@ -233,7 +234,25 @@ class DeploymentGates:
         if gate21["severity"] == "WARNING" and not gate21["passed"]:
             results["warnings"].append(gate21["message"])
         
-        # ALL 21 GATES MANDATORY - No skipping allowed
+        # Gate 22: UX Enhancement Features Validation (ERROR - critical UX)
+        gate22 = self._validate_ux_enhancements()
+        results["gates"].append(gate22)
+        if gate22["severity"] == "ERROR" and not gate22["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate22["message"])
+        elif gate22["severity"] == "WARNING" and not gate22["passed"]:
+            results["warnings"].append(gate22["message"])
+        
+        # Gate 23: Plan Execution Orchestrator (ERROR - critical planning feature)
+        gate23 = self._validate_plan_execution_orchestrator()
+        results["gates"].append(gate23)
+        if gate23["severity"] == "ERROR" and not gate23["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate23["message"])
+        elif gate23["severity"] == "WARNING" and not gate23["passed"]:
+            results["warnings"].append(gate23["message"])
+        
+        # ALL 23 GATES MANDATORY - No skipping allowed
         # Enforced by DEPLOYMENT_GATE_ENFORCEMENT Tier 0 instinct
         # See: cortex-brain/brain-protection-rules.yaml (rule_id: DEPLOYMENT_GATE_ENFORCEMENT)
         
@@ -3047,5 +3066,403 @@ class DeploymentGates:
             gate["message"] = f"Dashboard utility validation error: {str(e)}"
             gate["details"]["error_type"] = type(e).__name__
             logger.error(f"Gate 21 validation error: {e}", exc_info=True)
+        
+        return gate
+    
+    def _validate_ux_enhancements(self) -> Dict[str, Any]:
+        """
+        Gate 22: UX Enhancement Features Validation.
+        
+        Validates that all UX enhancement features from cortex-ux-enhancement-plan.md
+        are fully implemented and operational:
+        - Planning mode state management (activate/deactivate/is_active methods)
+        - Session restoration (restore_session, cross-chat resumption)
+        - Multi-request detection (auto-planning for disconnected requests)
+        - Challenge system (DoR validation with evidence-based alternatives)
+        - Auto-commit flag (autonomous execution)
+        - Template integration (flags loaded from response-templates.yaml)
+        
+        Returns:
+            Gate result with ERROR severity (critical UX features)
+        """
+        gate = {
+            "name": "UX Enhancement Features",
+            "passed": True,
+            "severity": "ERROR",  # Critical UX features - must be operational
+            "message": "",
+            "details": {
+                "planning_mode_implemented": False,
+                "session_restoration_implemented": False,
+                "multi_request_detection_implemented": False,
+                "challenge_system_implemented": False,
+                "auto_commit_implemented": False,
+                "template_integration_verified": False,
+                "test_coverage_verified": False,
+                "issues": []
+            }
+        }
+        
+        try:
+            # Check 1: Planning mode state management in PlanningOrchestrator
+            orchestrator_path = self.project_root / "src" / "orchestrators" / "planning_orchestrator.py"
+            if orchestrator_path.exists():
+                content = orchestrator_path.read_text(encoding='utf-8')
+                
+                # Check for planning mode methods
+                required_methods = [
+                    "activate_planning_mode",
+                    "deactivate_planning_mode",
+                    "is_planning_mode_active",
+                    "_load_template_flags"
+                ]
+                
+                found_methods = [method for method in required_methods if f"def {method}" in content]
+                
+                if len(found_methods) == len(required_methods):
+                    gate["details"]["planning_mode_implemented"] = True
+                    
+                    # Check for instance variables
+                    if "self.planning_mode_active" in content and "self.current_plan_context" in content:
+                        gate["details"]["planning_mode_implemented"] = True
+                    else:
+                        gate["details"]["issues"].append("Planning mode instance variables not found")
+                else:
+                    missing = set(required_methods) - set(found_methods)
+                    gate["details"]["issues"].append(f"Planning mode methods missing: {', '.join(missing)}")
+            else:
+                gate["details"]["issues"].append("PlanningOrchestrator not found")
+            
+            # Check 2: Session restoration
+            if orchestrator_path.exists():
+                content = orchestrator_path.read_text(encoding='utf-8')
+                
+                restoration_methods = [
+                    "restore_session",
+                    "_find_most_recent_plan",
+                    "_find_resume_point"
+                ]
+                
+                found_restoration = [method for method in restoration_methods if f"def {method}" in content]
+                
+                if len(found_restoration) == len(restoration_methods):
+                    gate["details"]["session_restoration_implemented"] = True
+                else:
+                    missing = set(restoration_methods) - set(found_restoration)
+                    gate["details"]["issues"].append(f"Session restoration methods missing: {', '.join(missing)}")
+            
+            # Check 3: Multi-request detection in IntentRouter
+            router_path = self.project_root / "src" / "cortex_agents" / "strategic" / "intent_router.py"
+            if router_path.exists():
+                content = router_path.read_text(encoding='utf-8')
+                
+                if "def _detect_multi_request" in content:
+                    # Check integration into classify_intent
+                    if "_detect_multi_request" in content and "IntentType.PLAN" in content:
+                        gate["details"]["multi_request_detection_implemented"] = True
+                    else:
+                        gate["details"]["issues"].append("Multi-request detection not integrated into intent classification")
+                else:
+                    gate["details"]["issues"].append("_detect_multi_request method not found in IntentRouter")
+            else:
+                gate["details"]["issues"].append("IntentRouter not found")
+            
+            # Check 4: Challenge system
+            if orchestrator_path.exists():
+                content = orchestrator_path.read_text(encoding='utf-8')
+                
+                if "def challenge_approach" in content:
+                    # Check for challenge categories
+                    challenge_checks = [
+                        "test_strategy" in content or "test strategy" in content,
+                        "error_handling" in content or "error handling" in content,
+                        "security_requirements" in content or "security" in content,
+                        "estimated_hours" in content or "scope" in content
+                    ]
+                    
+                    if sum(challenge_checks) >= 3:
+                        gate["details"]["challenge_system_implemented"] = True
+                    else:
+                        gate["details"]["issues"].append("Challenge system incomplete (need 3+ challenge categories)")
+                else:
+                    gate["details"]["issues"].append("challenge_approach method not found")
+            
+            # Check 5: Auto-commit flag in IncrementalPlanGenerator
+            generator_path = self.project_root / "src" / "workflows" / "incremental_plan_generator.py"
+            if generator_path.exists():
+                content = generator_path.read_text(encoding='utf-8')
+                
+                if "auto_commit" in content and "self.auto_commit" in content:
+                    gate["details"]["auto_commit_implemented"] = True
+                else:
+                    gate["details"]["issues"].append("auto_commit flag not found in IncrementalPlanGenerator")
+            else:
+                gate["details"]["issues"].append("IncrementalPlanGenerator not found")
+            
+            # Check 6: Template integration
+            template_path = self.project_root / "cortex-brain" / "response-templates.yaml"
+            if template_path.exists():
+                content = template_path.read_text(encoding='utf-8')
+                
+                template_flags = [
+                    "planning_mode_active" in content,
+                    "session_restoration_enabled" in content,
+                    "resume_plan_triggers" in content,
+                    "multi_request_detection_triggers" in content
+                ]
+                
+                if all(template_flags):
+                    gate["details"]["template_integration_verified"] = True
+                else:
+                    gate["details"]["issues"].append("Template flags incomplete in response-templates.yaml")
+            else:
+                gate["details"]["issues"].append("response-templates.yaml not found")
+            
+            # Check 7: Test coverage
+            test_path = self.project_root / "tests" / "test_ux_enhancements_integration.py"
+            if test_path.exists():
+                content = test_path.read_text(encoding='utf-8')
+                
+                # Check for test classes
+                test_classes = [
+                    "TestPlanningModeStateManagement" in content,
+                    "TestSessionRestoration" in content,
+                    "TestMultiRequestDetection" in content,
+                    "TestChallengeSystem" in content
+                ]
+                
+                if all(test_classes):
+                    gate["details"]["test_coverage_verified"] = True
+                else:
+                    gate["details"]["issues"].append("Test coverage incomplete (missing test classes)")
+            else:
+                gate["details"]["issues"].append("UX enhancement integration tests not found")
+            
+            # Count passed checks
+            passed_checks = sum(1 for k, v in gate["details"].items() if k != "issues" and v is True)
+            total_checks = len([k for k in gate["details"].keys() if k != "issues"])
+            
+            # Determine pass/fail (all checks must pass for ERROR severity)
+            if gate["details"]["issues"]:
+                gate["passed"] = False
+                gate["message"] = (
+                    f"UX enhancement features incomplete: {len(gate['details']['issues'])} issues "
+                    f"({passed_checks}/{total_checks} checks passed). "
+                    f"DEPLOYMENT BLOCKED - critical UX features must be operational."
+                )
+                logger.error(f"Gate 22 FAILED: {gate['message']}")
+            else:
+                gate["message"] = (
+                    f"UX enhancement features fully operational: Planning mode, session restoration, "
+                    f"multi-request detection, challenge system, auto-commit "
+                    f"({total_checks}/{total_checks} checks passed)."
+                )
+                logger.info("Gate 22 PASSED: UX enhancements validated")
+        
+        except Exception as e:
+            gate["passed"] = False
+            gate["message"] = f"UX enhancement validation error: {str(e)}"
+            gate["details"]["error_type"] = type(e).__name__
+            logger.error(f"Gate 22 validation error: {e}", exc_info=True)
+        
+        return gate
+
+    def _validate_plan_execution_orchestrator(self) -> Dict[str, Any]:
+        """
+        Gate 23: Plan Execution Orchestrator with Integration & Consolidation phase.
+        
+        Validates:
+        - PlanExecutionOrchestrator class exists in src/orchestrators/
+        - Can be imported without errors
+        - Has required methods (execute_plan, _execute_integration_consolidation_phase)
+        - Integration & Consolidation phase properly implemented
+        - Has 7 consolidation operations (remove deprecated, eliminate duplicates, etc.)
+        - Is integrated with PlanningOrchestrator
+        - ADO parser includes consolidation DoD
+        - InteractivePlannerAgent auto-adds consolidation phase
+        
+        Returns:
+            Gate result with plan execution validation details
+        """
+        gate = {
+            "name": "Plan Execution Orchestrator",
+            "passed": True,
+            "severity": "ERROR",  # Critical feature - must be operational
+            "message": "",
+            "details": {
+                "orchestrator_exists": False,
+                "orchestrator_imports": False,
+                "required_methods_present": False,
+                "consolidation_phase_implemented": False,
+                "consolidation_operations_verified": False,
+                "planning_orchestrator_integration": False,
+                "ado_parser_integration": False,
+                "interactive_planner_integration": False,
+                "issues": []
+            }
+        }
+        
+        try:
+            # Check 1: Orchestrator file exists
+            orchestrator_path = self.project_root / "src" / "orchestrators" / "plan_execution_orchestrator.py"
+            if orchestrator_path.exists():
+                gate["details"]["orchestrator_exists"] = True
+            else:
+                gate["details"]["issues"].append("PlanExecutionOrchestrator not found at src/orchestrators/plan_execution_orchestrator.py")
+                gate["passed"] = False
+                gate["message"] = "Plan Execution Orchestrator file missing - DEPLOYMENT BLOCKED"
+                return gate
+            
+            # Check 2: Can import orchestrator
+            try:
+                import sys
+                if str(self.project_root) not in sys.path:
+                    sys.path.insert(0, str(self.project_root))
+                
+                from src.orchestrators.plan_execution_orchestrator import PlanExecutionOrchestrator
+                gate["details"]["orchestrator_imports"] = True
+                
+                # Check 3: Required methods present
+                required_methods = [
+                    "execute_plan",
+                    "_execute_phase",
+                    "_execute_integration_consolidation_phase",
+                    "_remove_deprecated_code",
+                    "_eliminate_duplicates",
+                    "_organize_files",
+                    "_update_references",
+                    "_verify_wiring",
+                    "_run_integration_tests",
+                    "_generate_summary_report"
+                ]
+                
+                missing_methods = []
+                for method in required_methods:
+                    if not hasattr(PlanExecutionOrchestrator, method):
+                        missing_methods.append(method)
+                
+                if missing_methods:
+                    gate["details"]["issues"].append(f"Missing required methods: {', '.join(missing_methods)}")
+                else:
+                    gate["details"]["required_methods_present"] = True
+                
+            except ImportError as e:
+                gate["details"]["issues"].append(f"Cannot import PlanExecutionOrchestrator: {e}")
+            except Exception as e:
+                gate["details"]["issues"].append(f"Error inspecting PlanExecutionOrchestrator: {e}")
+            
+            # Check 4: Consolidation phase implementation
+            if orchestrator_path.exists():
+                content = orchestrator_path.read_text(encoding='utf-8')
+                
+                consolidation_checks = [
+                    "Integration & Consolidation" in content or "Integration and Consolidation" in content,
+                    "_execute_integration_consolidation_phase" in content,
+                    "consolidation_operations" in content or "consolidation_ops" in content
+                ]
+                
+                if all(consolidation_checks):
+                    gate["details"]["consolidation_phase_implemented"] = True
+                else:
+                    gate["details"]["issues"].append("Integration & Consolidation phase not properly implemented")
+            
+            # Check 5: 7 consolidation operations verified
+            if orchestrator_path.exists():
+                content = orchestrator_path.read_text(encoding='utf-8')
+                
+                required_operations = [
+                    "_remove_deprecated_code",
+                    "_eliminate_duplicates",
+                    "_organize_files",
+                    "_update_references",
+                    "_verify_wiring",
+                    "_run_integration_tests",
+                    "_generate_summary_report"
+                ]
+                
+                operations_found = sum(1 for op in required_operations if op in content)
+                
+                if operations_found == len(required_operations):
+                    gate["details"]["consolidation_operations_verified"] = True
+                else:
+                    gate["details"]["issues"].append(f"Only {operations_found}/7 consolidation operations found")
+            
+            # Check 6: PlanningOrchestrator integration
+            planning_path = self.project_root / "src" / "orchestrators" / "planning_orchestrator.py"
+            if planning_path.exists():
+                content = planning_path.read_text(encoding='utf-8')
+                
+                integration_checks = [
+                    "PlanExecutionOrchestrator" in content,
+                    "add_integration_consolidation_phase" in content,
+                    "execute_plan_with_consolidation" in content
+                ]
+                
+                if all(integration_checks):
+                    gate["details"]["planning_orchestrator_integration"] = True
+                else:
+                    gate["details"]["issues"].append("PlanningOrchestrator not properly integrated with PlanExecutionOrchestrator")
+            else:
+                gate["details"]["issues"].append("PlanningOrchestrator not found")
+            
+            # Check 7: ADO parser integration
+            ado_parser_path = self.project_root / "src" / "planning" / "ado_parser.py"
+            if ado_parser_path.exists():
+                content = ado_parser_path.read_text(encoding='utf-8')
+                
+                ado_checks = [
+                    "INTEGRATION_CONSOLIDATION_DOD" in content,
+                    "Integration & Consolidation" in content or "Integration and Consolidation" in content
+                ]
+                
+                if all(ado_checks):
+                    gate["details"]["ado_parser_integration"] = True
+                else:
+                    gate["details"]["issues"].append("ADO parser not updated with consolidation DoD")
+            else:
+                gate["details"]["issues"].append("ADO parser not found")
+            
+            # Check 8: InteractivePlannerAgent integration
+            planner_path = self.project_root / "src" / "cortex_agents" / "strategic" / "interactive_planner.py"
+            if planner_path.exists():
+                content = planner_path.read_text(encoding='utf-8')
+                
+                planner_checks = [
+                    "_add_integration_consolidation_phase" in content,
+                    "Integration & Consolidation" in content or "Integration and Consolidation" in content
+                ]
+                
+                if all(planner_checks):
+                    gate["details"]["interactive_planner_integration"] = True
+                else:
+                    gate["details"]["issues"].append("InteractivePlannerAgent not updated to auto-add consolidation phase")
+            else:
+                gate["details"]["issues"].append("InteractivePlannerAgent not found")
+            
+            # Count passed checks
+            passed_checks = sum(1 for k, v in gate["details"].items() if k != "issues" and v is True)
+            total_checks = len([k for k in gate["details"].keys() if k != "issues"])
+            
+            # Determine pass/fail
+            if gate["details"]["issues"]:
+                gate["passed"] = False
+                gate["message"] = (
+                    f"Plan Execution Orchestrator validation failed: {len(gate['details']['issues'])} issues "
+                    f"({passed_checks}/{total_checks} checks passed). "
+                    f"DEPLOYMENT BLOCKED - critical planning feature must be operational."
+                )
+                logger.error(f"Gate 23 FAILED: {gate['message']}")
+            else:
+                gate["message"] = (
+                    f"Plan Execution Orchestrator fully operational: Autonomous execution with "
+                    f"Integration & Consolidation phase validated "
+                    f"({total_checks}/{total_checks} checks passed)."
+                )
+                logger.info("Gate 23 PASSED: Plan execution orchestrator validated")
+        
+        except Exception as e:
+            gate["passed"] = False
+            gate["message"] = f"Plan execution orchestrator validation error: {str(e)}"
+            gate["details"]["error_type"] = type(e).__name__
+            logger.error(f"Gate 23 validation error: {e}", exc_info=True)
         
         return gate

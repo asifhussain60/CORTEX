@@ -71,7 +71,8 @@ class IncrementalPlanGenerator:
         brain_path: Path,
         session_id: Optional[str] = None,
         skeleton_token_limit: int = 200,
-        section_token_limit: int = 500
+        section_token_limit: int = 500,
+        auto_commit: bool = True
     ):
         """
         Initialize incremental plan generator.
@@ -81,11 +82,13 @@ class IncrementalPlanGenerator:
             session_id: Optional session ID for checkpoint tracking
             skeleton_token_limit: Token limit for skeleton generation
             section_token_limit: Token limit per section
+            auto_commit: Auto-commit changes without approval (default: True)
         """
         self.brain_path = brain_path
         self.session_id = session_id or self._generate_session_id()
         self.skeleton_token_limit = skeleton_token_limit
         self.section_token_limit = section_token_limit
+        self.auto_commit = auto_commit
         
         # Planning state
         self.skeleton: Optional[Dict[str, Any]] = None
@@ -274,7 +277,7 @@ and DoR/DoD validation results.
             section_name=section_name,
             content_preview=content_preview[:200],
             token_count=token_count,
-            status='pending_approval'
+            status='auto_approved'  # Changed from 'pending_approval' for autonomous execution
         )
         
         self.checkpoints.append(checkpoint)

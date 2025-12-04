@@ -50,6 +50,17 @@ class ADOTemplateParser:
         ]
     }
     
+    # Integration & Consolidation phase items (added automatically)
+    INTEGRATION_CONSOLIDATION_DOD = [
+        "🔧 INTEGRATION & CONSOLIDATION:",
+        "Deprecated/obsolete code removed",
+        "Duplicate implementations eliminated",
+        "Files organized into proper folder structures",
+        "References updated across application",
+        "New features wired and functional in production",
+        "Integration tests passing"
+    ]
+    
     def __init__(self, db_path: str = "cortex-brain/tier1/ado_planning.db"):
         """Initialize parser with database path."""
         self.db_path = Path(db_path)
@@ -138,17 +149,23 @@ class ADOTemplateParser:
         """
         Generate Definition of Done based on work item type.
         
+        Automatically adds Integration & Consolidation phase items to ensure
+        cleanup, organization, and production readiness.
+        
         Returns:
-            List of DoD checklist items
+            List of DoD checklist items (including Integration & Consolidation)
         """
-        base_dod = self.DOD_TEMPLATES.get(work_type, self.DOD_TEMPLATES["Task"])
+        base_dod = self.DOD_TEMPLATES.get(work_type, self.DOD_TEMPLATES["Task"]).copy()
         
         # For features, add AC verification items
         if work_type == "Feature":
             ac_dod = [f"Verified: {ac}" for ac in acceptance_criteria[:3]]
-            return ac_dod + base_dod
+            base_dod = ac_dod + base_dod
         
-        return base_dod
+        # Always add Integration & Consolidation phase items
+        complete_dod = base_dod + self.INTEGRATION_CONSOLIDATION_DOD
+        
+        return complete_dod
     
     def import_to_database(self, parsed_data: Dict, file_path: Path) -> str:
         """

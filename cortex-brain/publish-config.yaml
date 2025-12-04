@@ -117,6 +117,12 @@ user_content_patterns:
     # Specialist Agents
     - "src/cortex_agents/"
     
+    # Orchestrators (plan execution, planning, rollback, etc.)
+    - "src/orchestrators/"
+    
+    # Planning (ADO parser, plan validators, etc.)
+    - "src/planning/"
+    
     # Operations & Workflows
     - "src/operations/"
     - "src/workflows/"

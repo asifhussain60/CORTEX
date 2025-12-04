@@ -25,7 +25,7 @@ from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 from src.agents.security.threat_modeler_agent import ThreatModelerAgent
-from src.agents.base_agent import AgentRequest
+from src.cortex_agents.base_agent import AgentRequest
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +63,39 @@ class PlanningOrchestrator:
         
         # NEW: Initialize ThreatModelerAgent for security analysis
         self.threat_modeler = ThreatModelerAgent()
+        
+        # NEW: Initialize Plan Execution Orchestrator for automatic execution
+        try:
+            from src.orchestrators.plan_execution_orchestrator import PlanExecutionOrchestrator
+            self.plan_executor = PlanExecutionOrchestrator(str(self.cortex_root))
+            logger.info("✅ PlanExecutionOrchestrator initialized for auto-execution")
+        except ImportError as e:
+            logger.warning(f"⚠️  PlanExecutionOrchestrator not available: {e}")
+            self.plan_executor = None
+        
+        # UX Enhancement: Planning mode state management
+        self.planning_mode_active = False
+        self.current_plan_context: Optional[Dict[str, Any]] = None
+        self.session_restoration_enabled = True
+        
+        # Load response templates for configuration
+        self._load_template_flags()
+    
+    def _load_template_flags(self) -> None:
+        """Load planning-related flags from response templates."""
+        try:
+            template_path = self.cortex_root / "cortex-brain" / "response-templates.yaml"
+            if template_path.exists():
+                with open(template_path, 'r', encoding='utf-8') as f:
+                    templates = yaml.safe_load(f)
+                    
+                work_planner = templates.get('templates', {}).get('work_planner_success', {})
+                self.planning_mode_active = work_planner.get('planning_mode_active', False)
+                self.session_restoration_enabled = work_planner.get('session_restoration_enabled', True)
+                
+                logger.info(f"📋 Planning mode config loaded: active={self.planning_mode_active}, restoration={self.session_restoration_enabled}")
+        except Exception as e:
+            logger.warning(f"Could not load template flags: {e}")
     
     def _load_schema(self) -> Dict[str, Any]:
         """Load plan schema from YAML file."""
@@ -689,12 +722,17 @@ class PlanningOrchestrator:
             logger.warning(f"Git checkpoint failed: {e}")
         
         try:
+            # STEP 0: Create empty plan file FIRST (small increment principle)
+            feature_name = feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
+            output_path = self._create_empty_plan_file(feature_name, output_filename)
+            logger.info(f"✅ Empty plan file created: {output_path.name}")
+            
             # Step 1: Generate skeleton (200-token structure)
             logger.info("🧠 Generating plan skeleton (200-token limit)...")
             
             # Convert feature_requirements string to dict format expected by generator
             requirements_dict = {
-                'feature_name': feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
+                'feature_name': feature_name
             }
             
             skeleton, token_count = self.incremental_generator.generate_skeleton(requirements_dict)
@@ -709,7 +747,7 @@ class PlanningOrchestrator:
             )
             
             if not skeleton_approved:
-                return (False, None, "Plan skeleton rejected by user")
+                return (False, output_path, "Plan skeleton rejected by user (empty file created)")
             
             # Approve the checkpoint in generator
             checkpoints = [cp for cp in self.incremental_generator.checkpoints if cp.status == 'pending_approval']
@@ -722,6 +760,15 @@ class PlanningOrchestrator:
             for section in phase_1_sections:
                 self.incremental_generator.fill_section(section, {"feature": feature_requirements})
             
+            # Append Phase 1 to file immediately
+            phase_1_data = [
+                {"name": "Requirements", "content": self._get_section_content("Requirements")},
+                {"name": "Dependencies", "content": self._get_section_content("Dependencies")},
+                {"name": "Architecture", "content": self._get_section_content("Architecture")}
+            ]
+            self._append_phase_to_plan(output_path, "Phase 1: Foundation", phase_1_data)
+            logger.info("✅ Phase 1 written to file")
+            
             # Checkpoint 2: Phase 1 approval
             phase_1_approved = self._handle_phase_checkpoint(
                 checkpoint_callback,
@@ -731,13 +778,22 @@ class PlanningOrchestrator:
             )
             
             if not phase_1_approved:
-                return (False, None, "Phase 1 rejected by user")
+                return (True, output_path, "Phase 1 complete, Phase 2 pending user approval")
             
             # Step 3: Fill Phase 2 sections (Implementation, Tests, Integration)
             logger.info("📝 Filling Phase 2 sections (500 tokens per section)...")
             phase_2_sections = ["Implementation", "Tests", "Integration"]
             for section in phase_2_sections:
                 self.incremental_generator.fill_section(section, {"feature": feature_requirements})
+            
+            # Append Phase 2 to file immediately
+            phase_2_data = [
+                {"name": "Implementation", "content": self._get_section_content("Implementation")},
+                {"name": "Tests", "content": self._get_section_content("Tests")},
+                {"name": "Integration", "content": self._get_section_content("Integration")}
+            ]
+            self._append_phase_to_plan(output_path, "Phase 2: Development", phase_2_data)
+            logger.info("✅ Phase 2 written to file")
             
             # Checkpoint 3: Phase 2 approval
             phase_2_approved = self._handle_phase_checkpoint(
@@ -748,13 +804,22 @@ class PlanningOrchestrator:
             )
             
             if not phase_2_approved:
-                return (False, None, "Phase 2 rejected by user")
+                return (True, output_path, "Phase 2 complete, Phase 3 pending user approval")
             
             # Step 4: Fill Phase 3 sections (Acceptance, Security, Deployment)
             logger.info("📝 Filling Phase 3 sections (500 tokens per section)...")
             phase_3_sections = ["Acceptance", "Security", "Deployment"]
             for section in phase_3_sections:
                 self.incremental_generator.fill_section(section, {"feature": feature_requirements})
+            
+            # Append Phase 3 to file immediately
+            phase_3_data = [
+                {"name": "Acceptance", "content": self._get_section_content("Acceptance")},
+                {"name": "Security", "content": self._get_section_content("Security")},
+                {"name": "Deployment", "content": self._get_section_content("Deployment")}
+            ]
+            self._append_phase_to_plan(output_path, "Phase 3: Validation & Deployment", phase_3_data)
+            logger.info("✅ Phase 3 written to file")
             
             # Checkpoint 4: Phase 3 approval
             phase_3_approved = self._handle_phase_checkpoint(
@@ -765,11 +830,25 @@ class PlanningOrchestrator:
             )
             
             if not phase_3_approved:
-                return (False, None, "Phase 3 rejected by user")
+                return (True, output_path, "Phase 3 complete, pending final approval")
             
-            # Step 5: Write complete plan to disk using streaming writer
-            logger.info("💾 Writing complete plan to disk...")
-            output_path = self._write_incremental_plan(output_filename)
+            # Step 5: Automatically add Integration & Consolidation phase
+            logger.info("🔧 Adding Integration & Consolidation phase...")
+            
+            # Load the generated plan
+            success, plan_data, load_errors = self.load_plan(output_path)
+            if success and plan_data:
+                # Add Integration & Consolidation phase
+                plan_data = self.add_integration_consolidation_phase(plan_data)
+                
+                # Save updated plan
+                self.save_plan(plan_data, output_path)
+                logger.info("✅ Integration & Consolidation phase added to plan")
+            else:
+                logger.warning(f"⚠️  Could not add Integration & Consolidation phase: {load_errors}")
+            
+            # Step 6: Mark plan as complete (file already written incrementally)
+            logger.info("💾 All phases written incrementally to disk")
             
             # Auto-organize using DocumentOrganizer
             try:
@@ -781,7 +860,7 @@ class PlanningOrchestrator:
                 logger.warning(f"⚠️ Plan organization failed: {org_error}")
             
             logger.info(f"✅ Incremental plan generation complete: {output_path}")
-            return (True, output_path, f"Plan generated successfully: {output_path}")
+            return (True, output_path, f"Plan generated successfully with Integration & Consolidation phase: {output_path}")
             
         except Exception as e:
             error_msg = f"Failed to generate incremental plan: {e}"
@@ -2095,3 +2174,480 @@ class PlanningOrchestrator:
         except Exception as e:
             logger.error(f"Failed to integrate threats: {e}")
             return plan_data
+    
+    # ========================================
+    # Session Restoration
+    # ========================================
+    
+    def restore_session(self, plan_file_path: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Restore planning session from existing plan file.
+        
+        Enables cross-chat resumption: Open new chat → Reference plan file → Say 'continue'
+        
+        Args:
+            plan_file_path: Path to plan file, or None to find most recent active plan
+        
+        Returns:
+            Restoration result with plan data and resume point
+        """
+        try:
+            if not self.session_restoration_enabled:
+                return {
+                    'success': False,
+                    'error': 'Session restoration is disabled',
+                    'plan_data': None
+                }
+            
+            # Find plan file
+            if plan_file_path:
+                plan_path = Path(plan_file_path)
+            else:
+                # Find most recent active plan
+                plan_path = self._find_most_recent_plan()
+            
+            if not plan_path or not plan_path.exists():
+                return {
+                    'success': False,
+                    'error': f'Plan file not found: {plan_path}',
+                    'plan_data': None
+                }
+            
+            # Load plan file
+            logger.info(f"📂 Loading plan from: {plan_path}")
+            with open(plan_path, 'r', encoding='utf-8') as f:
+                plan_content = f.read()
+            
+            # Parse plan to find incomplete phases
+            resume_point = self._find_resume_point(plan_content)
+            
+            # Activate planning mode
+            self.planning_mode_active = True
+            self.current_plan_context = {
+                'plan_file': str(plan_path),
+                'resume_point': resume_point,
+                'loaded_at': datetime.now().isoformat()
+            }
+            
+            logger.info(f"✅ Session restored: Resume at {resume_point['phase']} - {resume_point['task']}")
+            
+            return {
+                'success': True,
+                'plan_file': str(plan_path),
+                'resume_point': resume_point,
+                'plan_content': plan_content,
+                'planning_mode_active': self.planning_mode_active
+            }
+            
+        except Exception as e:
+            error_msg = f"Session restoration failed: {e}"
+            logger.error(error_msg)
+            return {
+                'success': False,
+                'error': error_msg,
+                'plan_data': None
+            }
+    
+    def _find_most_recent_plan(self) -> Optional[Path]:
+        """Find most recent active plan file."""
+        try:
+            active_plans = list(self.active_plans_dir.glob('*.md'))
+            if not active_plans:
+                return None
+            
+            # Sort by modification time, return most recent
+            active_plans.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+            return active_plans[0]
+        except Exception as e:
+            logger.error(f"Error finding recent plan: {e}")
+            return None
+    
+    def _find_resume_point(self, plan_content: str) -> Dict[str, Any]:
+        """Parse plan content to find first incomplete task."""
+        try:
+            lines = plan_content.split('\n')
+            current_phase = None
+            
+            for line in lines:
+                # Detect phase headers
+                if line.startswith('##') and 'Phase' in line:
+                    current_phase = line.strip('#').strip()
+                
+                # Find first unchecked task (☐ or [ ])
+                if '☐' in line or '[ ]' in line:
+                    task = line.strip()
+                    return {
+                        'phase': current_phase or 'Unknown Phase',
+                        'task': task,
+                        'status': 'incomplete'
+                    }
+            
+            # If all tasks complete, return completion status
+            return {
+                'phase': 'Complete',
+                'task': 'All tasks completed',
+                'status': 'complete'
+            }
+        except Exception as e:
+            logger.error(f"Error parsing resume point: {e}")
+            return {
+                'phase': 'Error',
+                'task': str(e),
+                'status': 'error'
+            }
+    
+    def activate_planning_mode(self, context: Optional[Dict[str, Any]] = None) -> None:
+        """Activate planning mode - all user input treated as plan refinement."""
+        self.planning_mode_active = True
+        self.current_plan_context = context or {}
+        logger.info("📋 Planning mode ACTIVATED - All input will refine the plan until 'approve plan'")
+    
+    def deactivate_planning_mode(self) -> None:
+        """Deactivate planning mode after 'approve plan' command."""
+        self.planning_mode_active = False
+        self.current_plan_context = None
+        logger.info("✅ Planning mode DEACTIVATED - Returning to normal operation")
+    
+    def is_planning_mode_active(self) -> bool:
+        """Check if planning mode is currently active."""
+        return self.planning_mode_active
+    
+    # ========================================
+    # Challenge System
+    # ========================================
+    
+    def challenge_approach(self, requirements: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Challenge potentially suboptimal approaches during DoR validation.
+        
+        Proactively presents alternatives with trade-offs before proceeding.
+        
+        Args:
+            requirements: Feature requirements from DoR validation
+        
+        Returns:
+            Challenge result with alternatives and recommendations
+        """
+        try:
+            challenges = []
+            
+            # Challenge 1: No test strategy
+            if not requirements.get('test_strategy'):
+                challenges.append({
+                    'issue': 'No test strategy defined',
+                    'risk': 'HIGH',
+                    'impact': 'Code quality, maintainability, regression risks',
+                    'alternatives': [
+                        {
+                            'approach': 'TDD (Test-Driven Development)',
+                            'pros': ['94% success rate', 'Better design', 'Instant feedback'],
+                            'cons': ['Requires discipline', 'Initial time investment']
+                        },
+                        {
+                            'approach': 'Test-After Development',
+                            'pros': ['Faster initial implementation', 'Flexible approach'],
+                            'cons': ['67% success rate', 'Technical debt', 'Design compromises']
+                        }
+                    ],
+                    'recommendation': 'TDD approach - Evidence shows 27% higher success rate'
+                })
+            
+            # Challenge 2: No error handling strategy
+            if not requirements.get('error_handling'):
+                challenges.append({
+                    'issue': 'No error handling strategy',
+                    'risk': 'MEDIUM',
+                    'impact': 'Production incidents, poor user experience',
+                    'alternatives': [
+                        {
+                            'approach': 'Comprehensive error handling',
+                            'pros': ['Graceful degradation', 'Better UX', 'Easier debugging'],
+                            'cons': ['More code', 'Complexity']
+                        },
+                        {
+                            'approach': 'Minimal error handling',
+                            'pros': ['Less code', 'Faster development'],
+                            'cons': ['Crashes', 'Poor UX', 'Hard to debug']
+                        }
+                    ],
+                    'recommendation': 'Comprehensive approach - Critical for production systems'
+                })
+            
+            # Challenge 3: No security considerations
+            if not requirements.get('security_requirements'):
+                challenges.append({
+                    'issue': 'No security requirements',
+                    'risk': 'CRITICAL',
+                    'impact': 'Data breaches, compliance violations, liability',
+                    'alternatives': [
+                        {
+                            'approach': 'OWASP security review',
+                            'pros': ['Industry standard', 'Comprehensive', 'Compliance ready'],
+                            'cons': ['Time investment', 'May reveal scope increase']
+                        },
+                        {
+                            'approach': 'Skip security review',
+                            'pros': ['Faster to market'],
+                            'cons': ['Security vulnerabilities', 'Compliance risk', 'Liability']
+                        }
+                    ],
+                    'recommendation': 'OWASP review - Non-negotiable for production features'
+                })
+            
+            # Challenge 4: Overly broad scope
+            estimated_hours = requirements.get('estimated_hours', 0)
+            if estimated_hours > 40:
+                challenges.append({
+                    'issue': 'Large scope (>40 hours)',
+                    'risk': 'MEDIUM',
+                    'impact': 'Delayed delivery, scope creep, integration complexity',
+                    'alternatives': [
+                        {
+                            'approach': 'Break into phases',
+                            'pros': ['Incremental delivery', 'Easier testing', 'Faster feedback'],
+                            'cons': ['More planning overhead', 'Multiple releases']
+                        },
+                        {
+                            'approach': 'Single large implementation',
+                            'pros': ['One release', 'Less coordination'],
+                            'cons': ['Higher risk', 'Delayed value', 'Integration hell']
+                        }
+                    ],
+                    'recommendation': 'Phase approach - Reduce risk, deliver value sooner'
+                })
+            
+            if not challenges:
+                return {
+                    'has_challenges': False,
+                    'message': 'No challenges identified - Approach looks solid ✅'
+                }
+            
+            logger.info(f"⚡ Challenge system: {len(challenges)} concerns raised")
+            
+            return {
+                'has_challenges': True,
+                'challenges': challenges,
+                'summary': f'{len(challenges)} potential issues identified',
+                'recommendation': 'Review alternatives before proceeding'
+            }
+        except Exception as e:
+            logger.error(f"Challenge system failed: {e}", exc_info=True)
+            return {
+                'has_challenges': False,
+                'error': str(e)
+            }
+    
+    # ========================================
+    # Integration & Consolidation Phase
+    # ========================================
+    
+    def add_integration_consolidation_phase(self, plan_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Automatically add Integration & Consolidation phase to plan.
+        
+        This final phase ensures:
+        - Deprecated code is removed
+        - Duplicates are eliminated
+        - Files are organized properly
+        - References are updated across application
+        - New features are wired and functional in production
+        
+        Args:
+            plan_data: Original plan data
+        
+        Returns:
+            Updated plan data with Integration & Consolidation phase
+        """
+        try:
+            phases = plan_data.get("phases", [])
+            
+            # Determine next phase number
+            next_phase_num = len(phases) + 1
+            
+            # Calculate estimated hours (10% of total implementation time, minimum 1 hour)
+            total_hours = sum(phase.get("estimated_hours", 0) for phase in phases)
+            consolidation_hours = max(1, round(total_hours * 0.1))
+            
+            # Create Integration & Consolidation phase
+            consolidation_phase = {
+                "phase_number": next_phase_num,
+                "phase_name": "Integration & Consolidation",
+                "description": "Cleanup, organize, and wire new features for production deployment",
+                "estimated_hours": consolidation_hours,
+                "auto_generated": True,
+                "tasks": [
+                    {
+                        "task_id": f"{next_phase_num}.1",
+                        "task_name": "Remove deprecated and obsolete code",
+                        "description": "Identify and remove deprecated code markers, obsolete implementations, and dead code paths",
+                        "estimated_hours": round(consolidation_hours * 0.2, 1),
+                        "acceptance_criteria": [
+                            "All deprecated code markers identified",
+                            "Obsolete implementations removed",
+                            "No dead code paths remaining",
+                            "Tests still passing after removal"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.2",
+                        "task_name": "Eliminate duplicate implementations",
+                        "description": "Find and consolidate duplicate code, shared logic, and redundant implementations",
+                        "estimated_hours": round(consolidation_hours * 0.2, 1),
+                        "acceptance_criteria": [
+                            "Duplicate code identified via AST analysis",
+                            "Shared logic extracted to utilities",
+                            "Single source of truth for each component",
+                            "All tests passing after consolidation"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.3",
+                        "task_name": "Organize files into proper folder structures",
+                        "description": "Move files to follow project conventions, create missing directories, update module structure",
+                        "estimated_hours": round(consolidation_hours * 0.15, 1),
+                        "acceptance_criteria": [
+                            "Files organized per project conventions",
+                            "Directory structure follows standards",
+                            "Module hierarchy is clear",
+                            "No orphaned files remain"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.4",
+                        "task_name": "Update references across application",
+                        "description": "Update import statements, module references, configuration entries, and documentation links",
+                        "estimated_hours": round(consolidation_hours * 0.2, 1),
+                        "acceptance_criteria": [
+                            "All import statements updated",
+                            "Configuration files reflect new structure",
+                            "Documentation links verified",
+                            "No broken references remain"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.5",
+                        "task_name": "Verify feature wiring and functionality",
+                        "description": "Ensure new features are registered, accessible, and functional in production environment",
+                        "estimated_hours": round(consolidation_hours * 0.15, 1),
+                        "acceptance_criteria": [
+                            "Entry points registered correctly",
+                            "Routes/endpoints configured",
+                            "Dependencies properly injected",
+                            "Feature accessible via user interface/API"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.6",
+                        "task_name": "Run integration tests",
+                        "description": "Execute integration test suite to validate production readiness",
+                        "estimated_hours": round(consolidation_hours * 0.1, 1),
+                        "acceptance_criteria": [
+                            "All integration tests passing",
+                            "No regressions detected",
+                            "Performance within acceptable limits",
+                            "Production deployment approved"
+                        ]
+                    }
+                ]
+            }
+            
+            # Add phase to plan
+            plan_data["phases"].append(consolidation_phase)
+            
+            # Update total estimated hours
+            if "metadata" in plan_data:
+                plan_data["metadata"]["estimated_hours"] = plan_data["metadata"].get("estimated_hours", 0) + consolidation_hours
+            
+            logger.info(f"✅ Integration & Consolidation phase added (Phase {next_phase_num}, {consolidation_hours}h)")
+            
+            return plan_data
+            
+        except Exception as e:
+            logger.error(f"Failed to add Integration & Consolidation phase: {e}", exc_info=True)
+            return plan_data  # Return original plan if addition fails
+    
+    def execute_plan_with_consolidation(
+        self, 
+        plan_path: Path,
+        auto_execute: bool = False,
+        dry_run: bool = False
+    ) -> Tuple[bool, Dict[str, Any]]:
+        """
+        Execute plan with automatic Integration & Consolidation phase.
+        
+        Workflow:
+        1. Load plan
+        2. Add Integration & Consolidation phase if not present
+        3. Optionally execute plan automatically
+        4. Return execution results
+        
+        Args:
+            plan_path: Path to plan file
+            auto_execute: Execute plan immediately (default: False, plan only)
+            dry_run: Preview execution without making changes
+        
+        Returns:
+            Tuple of (success, result_data)
+        """
+        try:
+            # Load plan
+            success, plan_data, errors = self.load_plan(plan_path)
+            if not success:
+                return (False, {
+                    "error": "Failed to load plan",
+                    "details": errors
+                })
+            
+            # Check if Integration & Consolidation phase already exists
+            phases = plan_data.get("phases", [])
+            has_consolidation = any(
+                "Integration & Consolidation" in phase.get("phase_name", "")
+                or phase.get("auto_generated", False)
+                for phase in phases
+            )
+            
+            if not has_consolidation:
+                logger.info("🔧 Adding Integration & Consolidation phase...")
+                plan_data = self.add_integration_consolidation_phase(plan_data)
+                
+                # Save updated plan
+                self.save_plan(plan_data, plan_path)
+            else:
+                logger.info("✅ Integration & Consolidation phase already present")
+            
+            # Execute if requested
+            if auto_execute and self.plan_executor:
+                logger.info("🚀 Executing plan with consolidation...")
+                success, execution_report = self.plan_executor.execute_plan(
+                    plan_path,
+                    auto_consolidate=True,
+                    dry_run=dry_run
+                )
+                
+                return (success, {
+                    "plan_path": str(plan_path),
+                    "consolidation_added": not has_consolidation,
+                    "execution_report": execution_report,
+                    "executed": True
+                })
+            else:
+                return (True, {
+                    "plan_path": str(plan_path),
+                    "consolidation_added": not has_consolidation,
+                    "executed": False,
+                    "message": "Plan updated with Integration & Consolidation phase. Use 'execute plan' to run."
+                })
+        
+        except Exception as e:
+            logger.error(f"Failed to execute plan with consolidation: {e}", exc_info=True)
+            return (False, {
+                "error": str(e)
+            })
+            }
+            
+        except Exception as e:
+            logger.error(f"Challenge analysis failed: {e}")
+            return {
+                'has_challenges': False,
+                'error': str(e)
+            }

@@ -448,7 +448,7 @@ class PlanningFileManager:
             print(f"❌ Sync error: {e}")
     
     def _sanitize_filename(self, title: str) -> str:
-        """Sanitize title for use in filename"""
+        """Sanitize title for use in filename (30 char max)"""
         # Remove invalid characters
         invalid_chars = '<>:"/\\|?*'
         for char in invalid_chars:
@@ -457,8 +457,8 @@ class PlanningFileManager:
         # Replace spaces with hyphens
         title = title.replace(' ', '-')
         
-        # Limit length
-        return title[:50]
+        # Limit length to 30 characters
+        return title[:30]
     
     def export_statistics(self) -> Dict:
         """Export statistics about planning files"""

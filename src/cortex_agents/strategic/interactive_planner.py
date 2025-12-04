@@ -532,6 +532,9 @@ class InteractivePlannerAgent(BaseAgent):
                     "risks": planner_response.result.get("risks", [])
                 }
                 
+                # Automatically add Integration & Consolidation phase
+                self._add_integration_consolidation_phase(plan)
+                
                 # Auto-sync plan to database
                 self._sync_plan_to_database(plan, session)
                 
@@ -679,10 +682,13 @@ class InteractivePlannerAgent(BaseAgent):
             ]
         }
         
+        # Automatically add Integration & Consolidation phase
+        self._add_integration_consolidation_phase(session.final_plan)
+        
         return {
             "action": "execute",
             "session": session,
-            "message": "High confidence - executing immediately",
+            "message": "High confidence - executing immediately with Integration & Consolidation",
             "plan": session.final_plan
         }
     
@@ -693,10 +699,13 @@ class InteractivePlannerAgent(BaseAgent):
         # Generate basic plan
         session.final_plan = self.build_refined_plan(session)
         
+        # Automatically add Integration & Consolidation phase
+        self._add_integration_consolidation_phase(session.final_plan)
+        
         return {
             "action": "confirm",
             "session": session,
-            "message": "Please confirm this plan before proceeding",
+            "message": "Please confirm this plan before proceeding (includes Integration & Consolidation phase)",
             "plan": session.final_plan,
             "prompt": "Proceed? (yes/no/modify)"
         }
@@ -839,6 +848,59 @@ class InteractivePlannerAgent(BaseAgent):
                 
         except Exception as e:
             self.logger.error(f"Error syncing plan to database: {e}", exc_info=True)
+    
+    def _add_integration_consolidation_phase(self, plan: Dict[str, Any]) -> None:
+        """
+        Add Integration & Consolidation phase to plan.
+        
+        This ensures every plan includes cleanup, organization, and
+        production wiring steps automatically.
+        
+        Args:
+            plan: Plan dictionary to modify in-place
+        """
+        phases = plan.get("phases", [])
+        
+        # Check if already exists
+        has_consolidation = any(
+            "Integration & Consolidation" in phase.get("name", "")
+            for phase in phases
+        )
+        
+        if has_consolidation:
+            self.logger.debug("Integration & Consolidation phase already present")
+            return
+        
+        # Determine next phase number
+        next_phase_num = len(phases) + 1
+        
+        # Calculate estimated hours (10% of total, minimum 1 hour)
+        total_hours = sum(phase.get("estimated_hours", 0) for phase in phases)
+        consolidation_hours = max(1, round(total_hours * 0.1))
+        
+        # Add Integration & Consolidation phase
+        consolidation_phase = {
+            "phase": next_phase_num,
+            "name": "Integration & Consolidation",
+            "tasks": [
+                "Remove deprecated and obsolete code",
+                "Eliminate duplicate implementations",
+                "Organize files into proper folder structures",
+                "Update references across application",
+                "Verify feature wiring and functionality",
+                "Run integration tests"
+            ],
+            "estimated_hours": consolidation_hours
+        }
+        
+        phases.append(consolidation_phase)
+        plan["phases"] = phases
+        
+        # Update total estimate
+        if "total_estimate_hours" in plan:
+            plan["total_estimate_hours"] += consolidation_hours
+        
+        self.logger.info(f"✅ Added Integration & Consolidation phase (Phase {next_phase_num}, {consolidation_hours}h)")
     
     def _find_similar_patterns(self, request: str) -> List[Dict[str, Any]]:
         """Query Tier 2 for similar past requests (placeholder)."""

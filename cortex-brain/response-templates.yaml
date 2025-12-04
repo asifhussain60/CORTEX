@@ -14,6 +14,20 @@ shared:
     ---
 
     '
+  progress_bar: &progress_bar_component
+    format: |
+      ## 📊 Progress Update
+      
+      Progress: [{bar}] {percentage}% - Phase {current} of {total} Complete
+      ⏱️  Estimated Time Remaining: {eta}
+      📋 Current: {operation}
+      ✅ Completed: {completed_tasks}
+  
+  plan_file_link: &plan_file_link_component
+    format: |
+      📋 **Plan File:** [View in Editor](file:///{plan_file_path})
+      
+      💡 **Session Restoration:** Open new chat → Reference this plan → Say "Continue"
 base_templates:
   standard_5_part: &standard_5_part_base
     base_structure: |
@@ -1024,6 +1038,10 @@ templates:
     - i want to plan
     - work_planner_success
     response_type: detailed
+    plan_file_link: true
+    session_restoration_enabled: true
+    planning_mode_active: true
+    mode_indicator: "📋 **Planning Mode Active** - All input will be treated as plan refinement until you say 'approve plan'"
 
   planning_dor_incomplete:
     <<: *standard_5_part_base
@@ -1046,6 +1064,38 @@ templates:
     - security review
     - owasp review
     response_type: detailed
+
+  multi_request_planning:
+    <<: *standard_5_part_base
+    name: Multi-Request Planning Mode
+    triggers:
+    - multi_request_detected
+    - multiple_disconnected_requests
+    response_type: detailed
+    operation_name: Multi-Request Planning
+    understanding_content: "I've detected multiple disconnected requests in your message. Switching to planning mode for structured handling."
+    challenge_content: "No Challenge"
+    response_content: |
+      **🔍 Detected Requests:**
+      {detected_requests}
+      
+      **📋 Switching to Planning Mode**
+      
+      When you provide multiple unrelated requests (different features, issues, investigations), CORTEX automatically engages the planning orchestrator to:
+      - Break down each request systematically
+      - Identify dependencies and conflicts
+      - Provide structured execution plan
+      - Enable phase-by-phase progress tracking
+      
+      **Your Requests:**
+      {request_breakdown}
+    request_echo_content: "{original_request}"
+    next_steps_content: |
+      ☐ Phase 1: {phase_1_summary}
+      ☐ Phase 2: {phase_2_summary}
+      ☐ Phase 3: {phase_3_summary}
+      
+      Ready to proceed with planning mode?
 
   ado_created:
     <<: *standard_5_part_base
@@ -2847,6 +2897,15 @@ routing:
   - planning
   - feature planning
   - i want to plan
+  - plan investigation
+  - investigation plan
+  - analyze
+  resume_plan_triggers:
+  - continue
+  - resume
+  - resume plan
+  - continue plan
+  - pick up where we left off
   enhancement_triggers:
   - enhance
   - improve
@@ -2887,6 +2946,9 @@ routing:
   - continue ado
   - open ado
   - show ado
+  multi_request_detection_triggers:
+  - multi_request_detected
+  - multiple_disconnected_requests
   ado_search_triggers:
   - find ado
   - search ado

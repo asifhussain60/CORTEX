@@ -54,7 +54,7 @@ Transform CORTEX setup to use shared environment (`~/.cortex/venv/`) as default,
 | **Multilingual Support** | 12 languages with translated section headers, English technical content | Global accessibility, inclusive UX | All languages working, fallbacks functional |
 | **Alignment Validation** | Final orchestrator run validating all features | Zero setup issues, production-ready | All checks pass, no manual fixes needed |
 | **Planning Infrastructure** | Lightweight plan registry, status tracking, lookup API | Organized plan management, easy retrieval | Plans indexed, searchable, status-tracked |
-| **File Naming Governance** | Tier 0 rules for optimal filename lengths (10-45 chars) | Maintainable codebase, better VS Code UX | All files within limits, no tab overflow |
+| **File Naming Governance** | Tier 0 rules for optimal filename lengths (10-30 chars) | Maintainable codebase, better VS Code UX | All files within limits, no tab overflow |
 
 ### 2. Technical Requirements (DoR Answers)
 
@@ -1106,14 +1106,14 @@ Choose setup mode [S]: _
 **Optimal Balance:**
 
 **Filename Length Limits:**
-- **Maximum:** 45 characters (excluding extension)
+- **Maximum:** 30 characters (excluding extension)
 - **Minimum:** 10 characters (excluding extension)
-- **Sweet Spot:** 20-35 characters
+- **Sweet Spot:** 15-25 characters
 
 **Rationale:**
-- 45 chars = ~5 tabs visible in VS Code (optimal multitasking)
+- 30 chars = Optimal for VS Code tabs and file explorer navigation
 - 10 chars = Prevents meaningless names like `plan.md`, `doc.md`
-- 20-35 chars = Descriptive yet concise
+- 15-25 chars = Descriptive yet concise, forces meaningful abbreviations
 
 **Tasks:**
 
@@ -1189,13 +1189,13 @@ Choose setup mode [S]: _
 - **TDD:** RED (long filenames generated) → GREEN (short filenames) → REFACTOR (abbreviator integration)
 
 ☐ **8.6 Create Realignment Script for Existing Files**
-- **Purpose:** Rename all existing files to comply with new governance (45 char max)
+- **Purpose:** Rename all existing files to comply with new governance (30 char max)
 - **Scope:** All documents in `cortex-brain/documents/` including plans, reports, captures, analyses
 - **Script:** `scripts/realign_filenames.py` with comprehensive features:
   
   **Core Functionality:**
   - Scan all `.md` files recursively in `cortex-brain/documents/`
-  - Identify files >45 chars or <10 chars (excluding extension)
+  - Identify files >30 chars or <10 chars (excluding extension)
   - Generate optimized names using `filename_optimizer` abbreviation engine
   - Preserve TYPE-ID pattern when present
   - Auto-assign IDs when missing (sequential by type)
@@ -1264,7 +1264,7 @@ Choose setup mode [S]: _
   **Self-Application:**
   - This plan file (`shared-environment-default-activation.md`, 41 chars) will be renamed to:
   - **New name:** `PLAN-001-shared-env-setup.md` (27 chars)
-  - Rationale: Follows TYPE-ID-TITLE pattern, removes redundancy, under 45 char limit
+  - Rationale: Follows TYPE-ID-TITLE pattern, removes redundancy, under 30 char limit
   
 - **Files:** `scripts/realign_filenames.py` (new), `src/utils/filename_optimizer.py` (dependency)
 - **Tests:** `tests/test_realign_filenames.py` (new) - dry-run validation, backup verification, reference updating
@@ -1273,7 +1273,7 @@ Choose setup mode [S]: _
 ☐ **8.7 Unified Pre-Commit Hook (Filename + Code Language)**
 - **Purpose:** Single pre-commit hook for dual governance (filename length + code language)
 - **Validations:**
-  1. **Filename Length:** Warn on files >45 or <10 chars (non-blocking warning)
+  1. **Filename Length:** Warn on files >30 or <10 chars (non-blocking warning)
   2. **Code Language:** Block commits with non-English code/comments (blocking error)
 - **Hook Structure:**
   ```bash
@@ -1315,7 +1315,7 @@ Choose setup mode [S]: _
 **Acceptance Criteria:**
 - [ ] Tier 0 rule `FILENAME_LENGTH_GOVERNANCE` added to brain protection rules
 - [ ] Tier 0 rule `CODE_LANGUAGE_ENFORCEMENT` added to brain protection rules (new)
-- [ ] Filename validator warns on files >45 chars or <10 chars
+- [ ] Filename validator warns on files >30 chars or <10 chars
 - [ ] Code language validator detects non-English in 8 file types (new)
 - [ ] Filename optimizer suggests intelligent abbreviations with domain dictionary
 - [ ] Planning orchestrator generates short filenames (20-35 chars)
@@ -1365,12 +1365,12 @@ This becomes a **Tier 0 Instinct**: `FILENAME_LENGTH_GOVERNANCE`
     Enforce optimal filename lengths for maintainability and UX.
     
     Limits:
-    - Maximum: 45 characters (excluding extension)
+    - Maximum: 30 characters (excluding extension)
     - Minimum: 10 characters (excluding extension)
     - Optimal: 20-35 characters
     
     Rationale:
-    - 45 chars = ~5 tabs visible in VS Code
+    - 30 chars = Optimal for VS Code tabs and navigation
     - 10 chars = Prevents meaningless names
     - Descriptive yet scannable
   
@@ -1382,7 +1382,7 @@ This becomes a **Tier 0 Instinct**: `FILENAME_LENGTH_GOVERNANCE`
   
   validation:
     - Check filename length (exclude extension)
-    - Warn if >45 or <10 characters
+    - Warn if >30 or <10 characters
     - Suggest optimized name using abbreviation dictionary
   
   alternatives:
@@ -1395,7 +1395,7 @@ This becomes a **Tier 0 Instinct**: `FILENAME_LENGTH_GOVERNANCE`
     Filename too long/short: '{filename}' ({length} chars)
     
     Guideline violation:
-    - Maximum: 45 chars (yours: {length})
+    - Maximum: 30 chars (yours: {length})
     - Minimum: 10 chars
     - Optimal: 20-35 chars
     

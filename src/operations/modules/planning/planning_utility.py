@@ -87,11 +87,10 @@ def create_plan(
         plans_dir = BRAIN_PATH / "documents" / "planning" / "features" / "active"
         plans_dir.mkdir(parents=True, exist_ok=True)
         
-        # Generate filename from feature name
+        # Generate filename from feature name (30 char max)
         safe_name = re.sub(r'[^a-z0-9-]', '-', feature_name.lower())
         safe_name = re.sub(r'-+', '-', safe_name).strip('-')
-        timestamp = datetime.now().strftime("%Y%m%d")
-        filename = f"{safe_name}-{timestamp}.yaml"
+        filename = _truncate_filename(safe_name, max_length=30)
         plan_path = plans_dir / filename
         
         # Check if plan already exists
@@ -228,8 +227,7 @@ def save_plan(
             feature_name = metadata.get("feature_name", "unknown")
             safe_name = re.sub(r'[^a-z0-9-]', '-', feature_name.lower())
             safe_name = re.sub(r'-+', '-', safe_name).strip('-')
-            timestamp = datetime.now().strftime("%Y%m%d")
-            filename = f"{safe_name}-{timestamp}.yaml"
+            filename = _truncate_filename(safe_name, max_length=30)
             
             status = metadata.get("status", "draft")
             if status == "active" or status == "approved":
