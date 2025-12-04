@@ -18,26 +18,26 @@ def test_css_file_exists():
 
 def test_css_contains_dashboard_container(client):
     """Test that rendered HTML references dashboard-container class"""
-    response = client.get('/')
+    response = client.get('/', follow_redirects=True)
     assert b'dashboard-container' in response.data
 
 
 def test_css_contains_metrics_grid(client):
     """Test that rendered HTML references metrics-grid class"""
     # Use default cortex dashboard that's already seeded in conftest
-    response = client.get('/')
+    response = client.get('/', follow_redirects=True)
     assert b'metrics-grid' in response.data
 
 
 def test_css_contains_tab_button_class(client):
     """Test that rendered HTML references tab-button class"""
-    response = client.get('/')
+    response = client.get('/', follow_redirects=True)
     assert b'tab-button' in response.data
 
 
 def test_css_contains_metric_card_class(client):
     """Test that rendered HTML references metric-card class"""
-    response = client.get('/')
+    response = client.get('/', follow_redirects=True)
     assert b'metric-card' in response.data
 
 

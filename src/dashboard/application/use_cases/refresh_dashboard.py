@@ -47,7 +47,7 @@ class RefreshDashboardUseCase:
         
         # Update dashboard with new timestamp (Phase 1.6 will add repo scanning)
         refreshed_data = self._create_refreshed_data(current_data, now)
-        self._dashboard_repo.save(refreshed_data)
+        self._dashboard_repo.save(refreshed_data, app_id=request.app_id)
         
         return RefreshDashboardResponse(
             app_id=request.app_id,

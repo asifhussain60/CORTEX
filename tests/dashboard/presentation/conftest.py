@@ -14,10 +14,21 @@ def client(tmp_path):
     """Flask test client with temporary dashboard storage"""
     from src.dashboard.presentation.app import create_app
     from src.dashboard.domain.entities.dashboard_data import DashboardData
-    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    from src.dashboard.infrastructure.repositories.json_multi_app_repository import JsonMultiAppRepository
+    from src.dashboard.domain.entities.application_registry import Application
     
-    # Create repositories
-    dashboard_repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    # Create repositories (multi-app support)
+    dashboard_repo = JsonMultiAppRepository(root_path=str(tmp_path / "dashboards"))
+    
+    # Initialize CORTEX application
+    cortex_app = Application(
+        id="cortex",
+        name="CORTEX",
+        display_name="CORTEX Dashboard",
+        dashboard_path="dashboards/cortex",
+        is_active=True
+    )
+    dashboard_repo.initialize_app(cortex_app)
     
     # Seed default CORTEX dashboard data
     cortex_data = DashboardData(
@@ -29,7 +40,7 @@ def client(tmp_path):
         },
         metadata={"app_name": "CORTEX"}
     )
-    dashboard_repo.save(cortex_data)
+    dashboard_repo.save(cortex_data, app_id="cortex")
     
     # Create Flask app with temp storage paths
     app = create_app(

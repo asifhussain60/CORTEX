@@ -159,6 +159,7 @@ def test_refresh_dashboard_use_case_success():
     
     # Arrange - Fake repository with save tracking
     saved_data = None
+    saved_app_id = None
     
     class FakeDashboardRepo(DashboardRepository):
         def get_by_id(self, app_id: str) -> DashboardData:
@@ -168,9 +169,10 @@ def test_refresh_dashboard_use_case_success():
                 metadata={}
             )
         
-        def save(self, data: DashboardData) -> None:
-            nonlocal saved_data
+        def save(self, data: DashboardData, app_id: str) -> None:
+            nonlocal saved_data, saved_app_id
             saved_data = data
+            saved_app_id = app_id
         
         def exists(self, app_id: str) -> bool:
             return True
@@ -185,6 +187,7 @@ def test_refresh_dashboard_use_case_success():
     assert response.success is True
     assert saved_data is not None
     assert saved_data.app_id == "cortex"
+    assert saved_app_id == "cortex"
 
 
 def test_refresh_dashboard_use_case_skips_if_fresh():
@@ -203,7 +206,7 @@ def test_refresh_dashboard_use_case_skips_if_fresh():
                 metadata={"last_updated": datetime.now().isoformat()}
             )
         
-        def save(self, data: DashboardData) -> None:
+        def save(self, data: DashboardData, app_id: str) -> None:
             pass  # Should not be called
         
         def exists(self, app_id: str) -> bool:

@@ -52,11 +52,11 @@ def test_js_contains_event_listeners():
 
 def test_html_includes_js_script(client):
     """Test that rendered HTML includes dashboard.js script tag"""
-    response = client.get('/')
+    response = client.get('/', follow_redirects=True)
     assert b'dashboard.js' in response.data
 
 
 def test_tab_buttons_have_data_attributes(client):
     """Test that tab buttons have data-tab attributes for JS targeting"""
-    response = client.get('/')
+    response = client.get('/', follow_redirects=True)
     assert b'data-tab' in response.data
