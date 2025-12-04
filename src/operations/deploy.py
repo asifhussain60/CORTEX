@@ -29,7 +29,8 @@ from deploy_cortex import publish_to_branch, PUBLISH_BRANCH
 
 def run_deploy(
     dry_run: bool = False,
-    branch: str = PUBLISH_BRANCH
+    branch: str = PUBLISH_BRANCH,
+    skip_align: bool = False
 ):
     """
     Run CORTEX deploy operation with validators.
@@ -40,6 +41,7 @@ def run_deploy(
     Args:
         dry_run: Preview only, don't make changes
         branch: Target branch name (default: main)
+        skip_align: Skip pre-flight alignment check (not recommended)
     
     Returns:
         dict: Operation result with success status
@@ -49,7 +51,8 @@ def run_deploy(
             project_root=project_root,
             branch_name=branch,
             dry_run=dry_run,
-            resume=False
+            resume=False,
+            skip_align=skip_align
         )
         
         return {
@@ -85,12 +88,18 @@ def main():
         default=PUBLISH_BRANCH,
         help=f'Target branch (default: {PUBLISH_BRANCH})'
     )
+    parser.add_argument(
+        '--skip-align',
+        action='store_true',
+        help='Skip pre-flight alignment check (not recommended)'
+    )
     
     args = parser.parse_args()
     
     result = run_deploy(
         dry_run=args.dry_run,
-        branch=args.branch
+        branch=args.branch,
+        skip_align=args.skip_align
     )
     
     if result["success"]:

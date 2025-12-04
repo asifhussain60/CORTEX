@@ -8,6 +8,7 @@ The IntentRouter is the entry point for all user requests - it analyzes the inte
 checks for patterns in past requests, and routes to the most appropriate specialist agent.
 """
 
+import re
 from typing import List, Dict, Any, Optional, Tuple
 from .base_agent import BaseAgent, AgentRequest, AgentResponse
 from .agent_types import (
@@ -550,6 +551,24 @@ class IntentRouter(BaseAgent):
             self.logger.warning(f"Could not initialize investigation router: {e}")
             self.investigation_router = None
     
+    def _get_intent_value(self, intent) -> str:
+        """
+        Safely extract string value from intent (handles both IntentType enum and strings).
+        
+        Args:
+            intent: IntentType enum or string
+        
+        Returns:
+            String representation of intent
+        """
+        if intent is None:
+            return "unknown"
+        if isinstance(intent, str):
+            return intent
+        if hasattr(intent, 'value'):
+            return intent.value
+        return str(intent)
+    
     def can_handle(self, request: AgentRequest) -> bool:
         """
         IntentRouter can handle all requests (it's the entry point).
@@ -576,6 +595,27 @@ class IntentRouter(BaseAgent):
         start_time = self.logger.info("Starting intent routing")
         
         try:
+            # Step -2: Filter meta-directives from user message (CRITICAL FIX)
+            original_message = request.user_message
+            filtered_message = self._filter_meta_directives(request.user_message)
+            
+            if filtered_message != original_message:
+                self.logger.info(f"Filtered meta-directive from message")
+                self.logger.info(f"Original: {original_message[:100]}...")
+                self.logger.info(f"Filtered: {filtered_message[:100]}...")
+                request.user_message = filtered_message
+                
+                # If filtering resulted in empty message, prompt user
+                if not filtered_message:
+                    self.logger.warning("Meta-directive filtered but no actual request found")
+                    return AgentResponse(
+                        success=False,
+                        result=None,
+                        message="I see you want me to follow instructions. What would you like me to do?",
+                        agent_name=self.name,
+                        metadata={"filtered_meta_directive": True}
+                    )
+            
             # Step -1: Load user profile and inject into request (CORTEX 3.2.1)
             if self.tier1 and not request.user_profile:
                 try:
@@ -650,7 +690,7 @@ class IntentRouter(BaseAgent):
                 message=self._format_routing_message(routing_decision),
                 agent_name=self.name,
                 metadata={
-                    "classified_intent": classification_result.intent.value,
+                    "classified_intent": self._get_intent_value(classification_result.intent),
                     "classification_confidence": classification_result.confidence,
                     "rule_context": classification_result.rule_context,
                     "similar_patterns_found": len(similar_patterns),
@@ -672,6 +712,59 @@ class IntentRouter(BaseAgent):
                 message=f"Routing failed: {str(e)}",
                 agent_name=self.name
             )
+    
+    def _filter_meta_directives(self, message: str) -> str:
+        """
+        Filter out meta-directives from user message to extract actual request.
+        
+        Meta-directives are instructions about HOW to process the request (e.g.,
+        "Follow instructions in X"), not the actual user request. This prevents
+        Copilot from treating them as the intent to classify.
+        
+        Args:
+            message: Original user message possibly containing meta-directives
+        
+        Returns:
+            Filtered message with meta-directives removed
+        """
+        # Meta-directive patterns to filter
+        # Match until we hit delimiter at END (followed by space/newline/end of string)
+        # Use non-greedy .+? but ensure we get to the delimiter at sentence boundary
+        patterns = [
+            (r'^Follow instructions in [^;\n]+[.;](?=\s|$)', 'Follow instructions'),
+            (r'^Use [^;\n]+\.prompt\.md[.;](?=\s|$)', 'Use prompt'),
+            (r'^Reference file:///[^;\n]+[.;](?=\s|$)', 'Reference file'),
+            (r'^Load #file:[^;\n]+[.;](?=\s|$)', 'Load file'),
+            (r'^According to [^;\n]+[.;](?=\s|$)', 'According to'),
+            (r'^Based on [^;\n]+[.;](?=\s|$)', 'Based on'),
+            (r'^Using [^;\n]+[.;](?=\s|$)', 'Using'),
+        ]
+        
+        filtered_message = message
+        for pattern, description in patterns:
+            match = re.match(pattern, filtered_message, flags=re.IGNORECASE)
+            if match:
+                filtered_message = filtered_message[match.end():]
+                self.logger.debug(f"Filtered '{description}' meta-directive")
+                break  # Only filter one meta-directive
+        
+        # Also check for newline-separated meta-directives
+        if filtered_message == message:  # No pattern matched yet
+            lines = message.split('\n')
+            if len(lines) > 1:
+                # If first line looks like meta-directive, take rest
+                first_line_lower = lines[0].lower()
+                if any(indicator in first_line_lower for indicator in ['follow instructions', 'use ', 'reference file', 'load #file', 'according to']):
+                    filtered_message = '\n'.join(lines[1:]).strip()
+        
+        # Final cleanup
+        filtered_message = filtered_message.strip()
+        
+        # If we filtered everything, return empty string (will prompt user)
+        if not filtered_message:
+            return ""
+        
+        return filtered_message
     
     def _classify_intent(self, request: AgentRequest) -> IntentType:
         """
@@ -985,9 +1078,9 @@ class IntentRouter(BaseAgent):
             return "Intent unclear, using pattern matching"
         
         if similar_patterns:
-            return f"Intent '{intent.value}' matched, {len(similar_patterns)} similar patterns found"
+            return f"Intent '{self._get_intent_value(intent)}' matched, {len(similar_patterns)} similar patterns found"
         
-        return f"Intent '{intent.value}' classified with {confidence:.0%} confidence"
+        return f"Intent '{self._get_intent_value(intent)}' classified with {confidence:.0%} confidence"
     
     def _log_to_conversation(
         self,
@@ -1000,7 +1093,7 @@ class IntentRouter(BaseAgent):
         
         try:
             message = (
-                f"Routing: {routing_decision['intent'].value} → "
+                f"Routing: {self._get_intent_value(routing_decision['intent'])} → "
                 f"{routing_decision['primary_agent'].name} "
                 f"(confidence: {routing_decision['confidence']:.0%})"
             )
@@ -1024,7 +1117,7 @@ class IntentRouter(BaseAgent):
         try:
             self.tier2.add_pattern(
                 pattern_type="routing",
-                title=f"Route: {routing_decision['intent'].value}",
+                title=f"Route: {self._get_intent_value(routing_decision['intent'])}",
                 content=f"Message: {request.user_message[:100]}, "
                         f"Agent: {routing_decision['primary_agent'].name}"
             )
@@ -1232,7 +1325,7 @@ class IntentRouter(BaseAgent):
             # Suggest patterns
             suggestions = self._pattern_engine.suggest_patterns(
                 task_description=request.user_message,
-                intent_type=intent_type.value if intent_type else None,
+                intent_type=self._get_intent_value(intent_type),
                 current_namespace=current_namespace,
                 limit=3
             )
