@@ -1,7 +1,7 @@
 # Filename Realignment Script - Quick Reference
 
 **Script:** `scripts/realign_filenames.py`  
-**Purpose:** Rename existing files to comply with CORTEX filename governance (10-45 chars)  
+**Purpose:** Rename existing files to comply with CORTEX filename governance (10-30 chars)  
 **Created:** 2025-12-03 (Phase 8, Task 8.6)
 
 ---

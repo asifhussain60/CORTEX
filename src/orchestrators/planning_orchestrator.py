@@ -689,12 +689,17 @@ class PlanningOrchestrator:
             logger.warning(f"Git checkpoint failed: {e}")
         
         try:
+            # STEP 0: Create empty plan file FIRST (small increment principle)
+            feature_name = feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
+            output_path = self._create_empty_plan_file(feature_name, output_filename)
+            logger.info(f"✅ Empty plan file created: {output_path.name}")
+            
             # Step 1: Generate skeleton (200-token structure)
             logger.info("🧠 Generating plan skeleton (200-token limit)...")
             
             # Convert feature_requirements string to dict format expected by generator
             requirements_dict = {
-                'feature_name': feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
+                'feature_name': feature_name
             }
             
             skeleton, token_count = self.incremental_generator.generate_skeleton(requirements_dict)
@@ -709,7 +714,7 @@ class PlanningOrchestrator:
             )
             
             if not skeleton_approved:
-                return (False, None, "Plan skeleton rejected by user")
+                return (False, output_path, "Plan skeleton rejected by user (empty file created)")
             
             # Approve the checkpoint in generator
             checkpoints = [cp for cp in self.incremental_generator.checkpoints if cp.status == 'pending_approval']
@@ -722,6 +727,15 @@ class PlanningOrchestrator:
             for section in phase_1_sections:
                 self.incremental_generator.fill_section(section, {"feature": feature_requirements})
             
+            # Append Phase 1 to file immediately
+            phase_1_data = [
+                {"name": "Requirements", "content": self._get_section_content("Requirements")},
+                {"name": "Dependencies", "content": self._get_section_content("Dependencies")},
+                {"name": "Architecture", "content": self._get_section_content("Architecture")}
+            ]
+            self._append_phase_to_plan(output_path, "Phase 1: Foundation", phase_1_data)
+            logger.info("✅ Phase 1 written to file")
+            
             # Checkpoint 2: Phase 1 approval
             phase_1_approved = self._handle_phase_checkpoint(
                 checkpoint_callback,
@@ -731,13 +745,22 @@ class PlanningOrchestrator:
             )
             
             if not phase_1_approved:
-                return (False, None, "Phase 1 rejected by user")
+                return (True, output_path, "Phase 1 complete, Phase 2 pending user approval")
             
             # Step 3: Fill Phase 2 sections (Implementation, Tests, Integration)
             logger.info("📝 Filling Phase 2 sections (500 tokens per section)...")
             phase_2_sections = ["Implementation", "Tests", "Integration"]
             for section in phase_2_sections:
                 self.incremental_generator.fill_section(section, {"feature": feature_requirements})
+            
+            # Append Phase 2 to file immediately
+            phase_2_data = [
+                {"name": "Implementation", "content": self._get_section_content("Implementation")},
+                {"name": "Tests", "content": self._get_section_content("Tests")},
+                {"name": "Integration", "content": self._get_section_content("Integration")}
+            ]
+            self._append_phase_to_plan(output_path, "Phase 2: Development", phase_2_data)
+            logger.info("✅ Phase 2 written to file")
             
             # Checkpoint 3: Phase 2 approval
             phase_2_approved = self._handle_phase_checkpoint(
@@ -748,13 +771,22 @@ class PlanningOrchestrator:
             )
             
             if not phase_2_approved:
-                return (False, None, "Phase 2 rejected by user")
+                return (True, output_path, "Phase 2 complete, Phase 3 pending user approval")
             
             # Step 4: Fill Phase 3 sections (Acceptance, Security, Deployment)
             logger.info("📝 Filling Phase 3 sections (500 tokens per section)...")
             phase_3_sections = ["Acceptance", "Security", "Deployment"]
             for section in phase_3_sections:
                 self.incremental_generator.fill_section(section, {"feature": feature_requirements})
+            
+            # Append Phase 3 to file immediately
+            phase_3_data = [
+                {"name": "Acceptance", "content": self._get_section_content("Acceptance")},
+                {"name": "Security", "content": self._get_section_content("Security")},
+                {"name": "Deployment", "content": self._get_section_content("Deployment")}
+            ]
+            self._append_phase_to_plan(output_path, "Phase 3: Validation & Deployment", phase_3_data)
+            logger.info("✅ Phase 3 written to file")
             
             # Checkpoint 4: Phase 3 approval
             phase_3_approved = self._handle_phase_checkpoint(
@@ -765,11 +797,10 @@ class PlanningOrchestrator:
             )
             
             if not phase_3_approved:
-                return (False, None, "Phase 3 rejected by user")
+                return (True, output_path, "Phase 3 complete, pending final approval")
             
-            # Step 5: Write complete plan to disk using streaming writer
-            logger.info("💾 Writing complete plan to disk...")
-            output_path = self._write_incremental_plan(output_filename)
+            # Step 5: Mark plan as complete (file already written incrementally)
+            logger.info("💾 All phases written incrementally to disk")
             
             # Auto-organize using DocumentOrganizer
             try:
