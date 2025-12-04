@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Health Dashboard</title>
+    
+    <!-- External Libraries -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    
+    <style>
+        /* Glassmorphism Dark Mode Dashboard */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1f3a;
+            --glass-bg: rgba(26, 31, 58, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-primary: #00d4ff;
+            --accent-secondary: #7b61ff;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a6c0;
+            --success: #00ff88;
+            --warning: #ffa500;
+            --danger: #ff4444;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Layout */
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 0 2rem 2rem 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Source Selector */
+        .source-selector {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .source-selector label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .source-selector select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .source-selector select:hover {
+            border-color: var(--accent-primary);
+        }
+        
+        /* Navigation Tabs */
+        .nav-tabs {
+            padding: 1.5rem 0;
+        }
+        
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+        
+        .nav-tab.active {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-primary);
+            border-left-color: var(--accent-primary);
+        }
+        
+        .nav-tab-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        
+        .nav-tab-text {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        
+        /* Content Header */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .content-title {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        
+        .content-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Glass Cards */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 39, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--glass-border);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            margin-top: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Error State */
+        .error-message {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            border-radius: 8px;
+            padding: 1.5rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+        
+        .error-message h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .nav-tabs {
+                display: flex;
+                overflow-x: auto;
+                padding: 0;
+            }
+            
+            .nav-tab {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+                min-width: 100px;
+            }
+            
+            .nav-tab-icon {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading dashboard...</div>
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container" style="display: none;" id="dashboardContainer">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>🧠 CORTEX</h1>
+                <div class="sidebar-subtitle">Health Dashboard</div>
+            </div>
+            
+            <!-- Source Selector -->
+            <div class="source-selector">
+                <label for="sourceSelect">Data Source:</label>
+                <select id="sourceSelect" onchange="handleSourceChange(this.value)">
+                    <option value="mock">Mock Data (Demo)</option>
+                    <option value="cortex">CORTEX Live</option>
+                    <option value="noor-canvas">NOOR CANVAS</option>
+                    <option value="alist">ALIST</option>
+                    <option value="ksessions">KSESSIONS</option>
+                </select>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <nav class="nav-tabs">
+                <a class="nav-tab active" data-tab="overview" onclick="switchTab('overview')">
+                    <span class="nav-tab-icon">📊</span>
+                    <span class="nav-tab-text">Overview</span>
+                </a>
+                <a class="nav-tab" data-tab="tech-stack" onclick="switchTab('tech-stack')">
+                    <span class="nav-tab-icon">🛠️</span>
+                    <span class="nav-tab-text">Tech Stack</span>
+                </a>
+                <a class="nav-tab" data-tab="security" onclick="switchTab('security')">
+                    <span class="nav-tab-icon">🔒</span>
+                    <span class="nav-tab-text">Security</span>
+                </a>
+                <a class="nav-tab" data-tab="architecture" onclick="switchTab('architecture')">
+                    <span class="nav-tab-icon">🏗️</span>
+                    <span class="nav-tab-text">Architecture</span>
+                </a>
+                <a class="nav-tab" data-tab="code-org" onclick="switchTab('code-org')">
+                    <span class="nav-tab-icon">📁</span>
+                    <span class="nav-tab-text">Code Organization</span>
+                </a>
+                <a class="nav-tab" data-tab="team" onclick="switchTab('team')">
+                    <span class="nav-tab-icon">👥</span>
+                    <span class="nav-tab-text">Team Metrics</span>
+                </a>
+                <a class="nav-tab" data-tab="vendors" onclick="switchTab('vendors')">
+                    <span class="nav-tab-icon">🔌</span>
+                    <span class="nav-tab-text">Dependencies</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Content Header -->
+            <div class="content-header">
+                <h2 class="content-title" id="contentTitle">Dashboard Overview</h2>
+                <div class="content-actions">
+                    <button class="btn" onclick="refreshData()">🔄 Refresh</button>
+                    <button class="btn" onclick="exportData()">📥 Export</button>
+                    <button class="btn-primary btn" onclick="generateReport()">📄 Generate Report</button>
+                </div>
+            </div>
+            
+            <!-- Error Container -->
+            <div id="errorContainer"></div>
+            
+            <!-- Tab Content: Overview -->
+            <div class="tab-content active" id="tab-overview">
+                <div id="overview-container">
+                    <!-- Overview content will be dynamically loaded -->
+                </div>
+            </div>
+            
+            <!-- Tab Content: Tech Stack -->
+            <div class="tab-content" id="tab-tech-stack">
+                <div id="tech-stack-container">
+                    <!-- Tech stack content will be dynamically loaded -->
+                </div>
+            </div>
+            
+            <!-- Tab Content: Security -->
+            <div class="tab-content" id="tab-security">
+                <div id="security-container">
+                    <!-- Security content will be dynamically loaded -->
+                </div>
+            </div>
+            
+            <!-- Tab Content: Architecture -->
+            <div class="tab-content" id="tab-architecture">
+                <div id="architecture-container">
+                    <!-- Architecture content will be dynamically loaded -->
+                </div>
+            </div>
+            
+            <!-- Tab Content: Code Organization -->
+            <div class="tab-content" id="tab-code-org">
+                <div id="code-org-container">
+                    <!-- Code organization content will be dynamically loaded -->
+                </div>
+            </div>
+            
+            <!-- Tab Content: Team Metrics -->
+            <div class="tab-content" id="tab-team">
+                <div id="team-container">
+                    <!-- Team metrics content will be dynamically loaded -->
+                </div>
+            </div>
+            
+            <!-- Tab Content: Vendors/Dependencies -->
+            <div class="tab-content" id="tab-vendors">
+                <div id="vendors-container">
+                    <!-- Vendors/dependencies content will be dynamically loaded -->
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Application Scripts -->
+    <script type="module" src="data-loader.js"></script>
+    <script type="module" src="app.js"></script>
+    <script type="module" src="components/overview-tab.js"></script>
+    <script type="module" src="components/tech-stack-tab.js"></script>
+    <script type="module" src="components/security-tab.js"></script>
+    <script type="module" src="components/architecture-tab.js"></script>
+    <script type="module" src="components/code-org-tab.js"></script>
+    <script type="module" src="components/team-tab.js"></script>
+    <script type="module" src="components/vendors-tab.js"></script>
+    
+    <script>
+        // Global tab switching function
+        function switchTab(tabName) {
+            // Update navigation
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            
+            // Update title
+            const titles = {
+                'overview': 'Dashboard Overview',
+                'tech-stack': 'Technology Stack',
+                'security': 'Security Analysis',
+                'architecture': 'Architecture Overview',
+                'code-org': 'Code Organization',
+                'team': 'Team Productivity',
+                'vendors': 'Dependencies & Vendors'
+            };
+            document.getElementById('contentTitle').textContent = titles[tabName] || 'Dashboard';
+            
+            // Update URL
+            const url = new URL(window.location);
+            url.searchParams.set('tab', tabName);
+            window.history.pushState({}, '', url);
+            
+            // Trigger tab load event
+            window.dispatchEvent(new CustomEvent('tabChanged', { detail: { tab: tabName } }));
+        }
+        
+        // Global source change handler
+        function handleSourceChange(source) {
+            const url = new URL(window.location);
+            url.searchParams.set('source', source);
+            window.history.pushState({}, '', url);
+            
+            // Trigger source change event
+            window.dispatchEvent(new CustomEvent('sourceChanged', { detail: { source } }));
+        }
+        
+        // Global action handlers
+        function refreshData() {
+            window.dispatchEvent(new CustomEvent('refreshData'));
+        }
+        
+        function exportData() {
+            window.dispatchEvent(new CustomEvent('exportData'));
+        }
+        
+        function generateReport() {
+            window.dispatchEvent(new CustomEvent('generateReport'));
+        }
+        
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Parse URL parameters
+            const url = new URL(window.location);
+            const source = url.searchParams.get('source') || 'mock';
+            const tab = url.searchParams.get('tab') || 'overview';
+            
+            // Set initial source
+            document.getElementById('sourceSelect').value = source;
+            
+            // Set initial tab
+            if (tab !== 'overview') {
+                switchTab(tab);
+            }
+        });
+    </script>
+</body>
+</html>
