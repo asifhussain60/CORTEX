@@ -64,6 +64,15 @@ class PlanningOrchestrator:
         # NEW: Initialize ThreatModelerAgent for security analysis
         self.threat_modeler = ThreatModelerAgent()
         
+        # NEW: Initialize Plan Execution Orchestrator for automatic execution
+        try:
+            from src.orchestrators.plan_execution_orchestrator import PlanExecutionOrchestrator
+            self.plan_executor = PlanExecutionOrchestrator(str(self.cortex_root))
+            logger.info("✅ PlanExecutionOrchestrator initialized for auto-execution")
+        except ImportError as e:
+            logger.warning(f"⚠️  PlanExecutionOrchestrator not available: {e}")
+            self.plan_executor = None
+        
         # UX Enhancement: Planning mode state management
         self.planning_mode_active = False
         self.current_plan_context: Optional[Dict[str, Any]] = None
@@ -823,7 +832,22 @@ class PlanningOrchestrator:
             if not phase_3_approved:
                 return (True, output_path, "Phase 3 complete, pending final approval")
             
-            # Step 5: Mark plan as complete (file already written incrementally)
+            # Step 5: Automatically add Integration & Consolidation phase
+            logger.info("🔧 Adding Integration & Consolidation phase...")
+            
+            # Load the generated plan
+            success, plan_data, load_errors = self.load_plan(output_path)
+            if success and plan_data:
+                # Add Integration & Consolidation phase
+                plan_data = self.add_integration_consolidation_phase(plan_data)
+                
+                # Save updated plan
+                self.save_plan(plan_data, output_path)
+                logger.info("✅ Integration & Consolidation phase added to plan")
+            else:
+                logger.warning(f"⚠️  Could not add Integration & Consolidation phase: {load_errors}")
+            
+            # Step 6: Mark plan as complete (file already written incrementally)
             logger.info("💾 All phases written incrementally to disk")
             
             # Auto-organize using DocumentOrganizer
@@ -836,7 +860,7 @@ class PlanningOrchestrator:
                 logger.warning(f"⚠️ Plan organization failed: {org_error}")
             
             logger.info(f"✅ Incremental plan generation complete: {output_path}")
-            return (True, output_path, f"Plan generated successfully: {output_path}")
+            return (True, output_path, f"Plan generated successfully with Integration & Consolidation phase: {output_path}")
             
         except Exception as e:
             error_msg = f"Failed to generate incremental plan: {e}"
@@ -2405,6 +2429,220 @@ class PlanningOrchestrator:
                 'challenges': challenges,
                 'summary': f'{len(challenges)} potential issues identified',
                 'recommendation': 'Review alternatives before proceeding'
+            }
+        except Exception as e:
+            logger.error(f"Challenge system failed: {e}", exc_info=True)
+            return {
+                'has_challenges': False,
+                'error': str(e)
+            }
+    
+    # ========================================
+    # Integration & Consolidation Phase
+    # ========================================
+    
+    def add_integration_consolidation_phase(self, plan_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Automatically add Integration & Consolidation phase to plan.
+        
+        This final phase ensures:
+        - Deprecated code is removed
+        - Duplicates are eliminated
+        - Files are organized properly
+        - References are updated across application
+        - New features are wired and functional in production
+        
+        Args:
+            plan_data: Original plan data
+        
+        Returns:
+            Updated plan data with Integration & Consolidation phase
+        """
+        try:
+            phases = plan_data.get("phases", [])
+            
+            # Determine next phase number
+            next_phase_num = len(phases) + 1
+            
+            # Calculate estimated hours (10% of total implementation time, minimum 1 hour)
+            total_hours = sum(phase.get("estimated_hours", 0) for phase in phases)
+            consolidation_hours = max(1, round(total_hours * 0.1))
+            
+            # Create Integration & Consolidation phase
+            consolidation_phase = {
+                "phase_number": next_phase_num,
+                "phase_name": "Integration & Consolidation",
+                "description": "Cleanup, organize, and wire new features for production deployment",
+                "estimated_hours": consolidation_hours,
+                "auto_generated": True,
+                "tasks": [
+                    {
+                        "task_id": f"{next_phase_num}.1",
+                        "task_name": "Remove deprecated and obsolete code",
+                        "description": "Identify and remove deprecated code markers, obsolete implementations, and dead code paths",
+                        "estimated_hours": round(consolidation_hours * 0.2, 1),
+                        "acceptance_criteria": [
+                            "All deprecated code markers identified",
+                            "Obsolete implementations removed",
+                            "No dead code paths remaining",
+                            "Tests still passing after removal"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.2",
+                        "task_name": "Eliminate duplicate implementations",
+                        "description": "Find and consolidate duplicate code, shared logic, and redundant implementations",
+                        "estimated_hours": round(consolidation_hours * 0.2, 1),
+                        "acceptance_criteria": [
+                            "Duplicate code identified via AST analysis",
+                            "Shared logic extracted to utilities",
+                            "Single source of truth for each component",
+                            "All tests passing after consolidation"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.3",
+                        "task_name": "Organize files into proper folder structures",
+                        "description": "Move files to follow project conventions, create missing directories, update module structure",
+                        "estimated_hours": round(consolidation_hours * 0.15, 1),
+                        "acceptance_criteria": [
+                            "Files organized per project conventions",
+                            "Directory structure follows standards",
+                            "Module hierarchy is clear",
+                            "No orphaned files remain"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.4",
+                        "task_name": "Update references across application",
+                        "description": "Update import statements, module references, configuration entries, and documentation links",
+                        "estimated_hours": round(consolidation_hours * 0.2, 1),
+                        "acceptance_criteria": [
+                            "All import statements updated",
+                            "Configuration files reflect new structure",
+                            "Documentation links verified",
+                            "No broken references remain"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.5",
+                        "task_name": "Verify feature wiring and functionality",
+                        "description": "Ensure new features are registered, accessible, and functional in production environment",
+                        "estimated_hours": round(consolidation_hours * 0.15, 1),
+                        "acceptance_criteria": [
+                            "Entry points registered correctly",
+                            "Routes/endpoints configured",
+                            "Dependencies properly injected",
+                            "Feature accessible via user interface/API"
+                        ]
+                    },
+                    {
+                        "task_id": f"{next_phase_num}.6",
+                        "task_name": "Run integration tests",
+                        "description": "Execute integration test suite to validate production readiness",
+                        "estimated_hours": round(consolidation_hours * 0.1, 1),
+                        "acceptance_criteria": [
+                            "All integration tests passing",
+                            "No regressions detected",
+                            "Performance within acceptable limits",
+                            "Production deployment approved"
+                        ]
+                    }
+                ]
+            }
+            
+            # Add phase to plan
+            plan_data["phases"].append(consolidation_phase)
+            
+            # Update total estimated hours
+            if "metadata" in plan_data:
+                plan_data["metadata"]["estimated_hours"] = plan_data["metadata"].get("estimated_hours", 0) + consolidation_hours
+            
+            logger.info(f"✅ Integration & Consolidation phase added (Phase {next_phase_num}, {consolidation_hours}h)")
+            
+            return plan_data
+            
+        except Exception as e:
+            logger.error(f"Failed to add Integration & Consolidation phase: {e}", exc_info=True)
+            return plan_data  # Return original plan if addition fails
+    
+    def execute_plan_with_consolidation(
+        self, 
+        plan_path: Path,
+        auto_execute: bool = False,
+        dry_run: bool = False
+    ) -> Tuple[bool, Dict[str, Any]]:
+        """
+        Execute plan with automatic Integration & Consolidation phase.
+        
+        Workflow:
+        1. Load plan
+        2. Add Integration & Consolidation phase if not present
+        3. Optionally execute plan automatically
+        4. Return execution results
+        
+        Args:
+            plan_path: Path to plan file
+            auto_execute: Execute plan immediately (default: False, plan only)
+            dry_run: Preview execution without making changes
+        
+        Returns:
+            Tuple of (success, result_data)
+        """
+        try:
+            # Load plan
+            success, plan_data, errors = self.load_plan(plan_path)
+            if not success:
+                return (False, {
+                    "error": "Failed to load plan",
+                    "details": errors
+                })
+            
+            # Check if Integration & Consolidation phase already exists
+            phases = plan_data.get("phases", [])
+            has_consolidation = any(
+                "Integration & Consolidation" in phase.get("phase_name", "")
+                or phase.get("auto_generated", False)
+                for phase in phases
+            )
+            
+            if not has_consolidation:
+                logger.info("🔧 Adding Integration & Consolidation phase...")
+                plan_data = self.add_integration_consolidation_phase(plan_data)
+                
+                # Save updated plan
+                self.save_plan(plan_data, plan_path)
+            else:
+                logger.info("✅ Integration & Consolidation phase already present")
+            
+            # Execute if requested
+            if auto_execute and self.plan_executor:
+                logger.info("🚀 Executing plan with consolidation...")
+                success, execution_report = self.plan_executor.execute_plan(
+                    plan_path,
+                    auto_consolidate=True,
+                    dry_run=dry_run
+                )
+                
+                return (success, {
+                    "plan_path": str(plan_path),
+                    "consolidation_added": not has_consolidation,
+                    "execution_report": execution_report,
+                    "executed": True
+                })
+            else:
+                return (True, {
+                    "plan_path": str(plan_path),
+                    "consolidation_added": not has_consolidation,
+                    "executed": False,
+                    "message": "Plan updated with Integration & Consolidation phase. Use 'execute plan' to run."
+                })
+        
+        except Exception as e:
+            logger.error(f"Failed to execute plan with consolidation: {e}", exc_info=True)
+            return (False, {
+                "error": str(e)
+            })
             }
             
         except Exception as e:
