@@ -346,3 +346,277 @@ GitHub: [github.com/asifhussain60/CORTEX](https://github.com/asifhussain60/CORTE
 ---
 
 **Built with Clean Architecture • TDD Mastery • SOLID Principles**
+
+---
+
+## 🎨 Phase 2: UI Templates & Styling (COMPLETE)
+
+### Template System
+
+**Base Template** (`templates/base.html`):
+- HTML5 structure with responsive viewport
+- Header with navigation
+- Footer with attribution  
+- CSS and JavaScript asset links
+- Content block for child templates
+
+**Dashboard Template** (`templates/dashboard_clean.html`):
+- Extends base.html
+- Dashboard header with app name and metadata
+- Tab navigation with data-tab attributes
+- Tab panels with unique IDs
+- Metrics grid with card layout
+- Automatic HTML escaping (XSS protection)
+
+### CSS Customization (`static/css/style.css`)
+
+**CSS Variables for Theming:**
+```css
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #1abc9c;
+    --spacing-md: 1rem;
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+```
+
+**Key CSS Classes:**
+- `.dashboard-container` - Main wrapper
+- `.tabs-nav` - Tab button container
+- `.tab-button` / `.tab-button.active` - Tab buttons with active state
+- `.metrics-grid` - CSS Grid for metric cards (auto-fill, minmax(250px, 1fr))
+- `.metric-card` - Individual metric with hover effect
+- `.metric-label` / `.metric-value` - Metric display
+
+**Responsive Breakpoints:**
+- Mobile: < 768px (single column, stacked tabs)
+- Tablet: 768px+ (2-3 columns)
+- Desktop: 1024px+ (3-4 columns)
+- Large: 1440px+ (max width 1600px)
+
+### JavaScript API (`static/js/dashboard.js`)
+
+**Tab Switching:**
+```javascript
+// Automatic on button click with data-tab="tab-name"
+// Manual: switchTab('overview')
+```
+
+**Refresh Dashboard:**
+```javascript
+// Call from HTML: onclick="refreshDashboard(); return false;"
+// AJAX POST to /refresh/<app_id>
+// Reloads page on success
+```
+
+**URL Hash Support:**
+```javascript
+// Direct links: http://localhost:5000/cortex#metrics
+// Browser back/forward buttons work
+// Hash changes trigger tab switches
+```
+
+**Utility Functions:**
+```javascript
+formatNumber(1234567)  // "1,234,567"
+formatBytes(1048576)   // "1 MB"
+```
+
+### Customization Examples
+
+**1. Change Color Scheme:**
+```css
+/* Edit style.css :root section */
+:root {
+    --primary-color: #1e3a8a;      /* Dark blue */
+    --secondary-color: #3b82f6;    /* Bright blue */
+    --accent-color: #10b981;       /* Green */
+}
+```
+
+**2. Adjust Metric Card Size:**
+```css
+.metrics-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Larger cards */
+    gap: var(--spacing-xl); /* More spacing */
+}
+```
+
+**3. Add Custom Tab:**
+```html
+<!-- In dashboard_clean.html -->
+<button class="tab-button" data-tab="custom">Custom Tab</button>
+
+<div class="tab-panel" id="tab-custom">
+    <h3>Custom Content</h3>
+    <!-- Your content here -->
+</div>
+```
+
+---
+
+## 📊 Test Coverage
+
+**Total Tests:** 104 (100% passing)
+
+### Breakdown by Layer:
+- Domain Layer: 22 tests
+- Application Layer: 9 tests  
+- Infrastructure Layer: 26 tests
+- Presentation Layer: 39 tests
+  - Templates: 8 tests
+  - CSS: 8 tests
+  - JavaScript: 7 tests
+  - Integration: 11 tests
+  - Routes: 5 tests
+- Architecture: 8 tests
+
+### Test Execution:
+```bash
+# All tests
+pytest tests/dashboard/ -v
+
+# Specific layer
+pytest tests/dashboard/presentation/ -v
+
+# With coverage
+pytest tests/dashboard/ --cov=src/dashboard --cov-report=html
+```
+
+---
+
+## 🚀 Deployment Checklist
+
+### Pre-Deployment
+- [ ] All 104 tests passing
+- [ ] No architecture violations (8 architecture tests)
+- [ ] CSS minified for production
+- [ ] JavaScript linted and tested
+- [ ] Templates tested with real data
+- [ ] Security: HTML escaping enabled (Jinja2 auto-escape)
+- [ ] Security: No inline JavaScript in templates
+- [ ] Security: CSP headers configured (if needed)
+
+### Production Settings
+```python
+app = create_app(
+    dashboard_base_path=Path("/var/www/dashboards"),
+    app_registry_db_path=Path("/var/www/data/apps.db")
+)
+
+app.config['TESTING'] = False
+app.config['DEBUG'] = False
+app.config['ENV'] = 'production'
+```
+
+### Performance Optimization
+- Enable Flask caching for static assets
+- Minify CSS and JavaScript (optional, already small)
+- Use CDN for static assets (optional)
+- Enable gzip compression
+
+---
+
+## 📖 API Reference
+
+### Flask Routes
+
+**GET /**
+- Returns: CORTEX dashboard HTML
+- Template: dashboard_clean.html
+- Data: loads from `cortex.json`
+
+**GET /<app_id>**
+- Returns: Application dashboard HTML
+- Template: dashboard_clean.html
+- Data: loads from `<app_id>.json`
+- Error: 404 if dashboard not found
+
+**POST /refresh/<app_id>**
+- Returns: JSON response
+- Body: `{ "app_id": "...", "success": true, "message": "...", "refresh_time": "..." }`
+- Query Params: `?force=true` (optional)
+- Error: 500 with JSON error response
+
+### Repository Interface
+
+```python
+# Load dashboard
+data = dashboard_repository.get_by_id("cortex")
+
+# Save dashboard
+dashboard_repository.save(dashboard_data)
+
+# Check existence
+exists = dashboard_repository.exists("cortex")
+```
+
+### Use Case Execution
+
+```python
+# Load dashboard use case
+request = LoadDashboardRequest(app_id="cortex")
+response = load_dashboard_use_case.execute(request)
+
+# Access response
+print(response.app_id)
+print(response.app_name)
+print(response.data.tabs)
+```
+
+---
+
+## 🔧 Troubleshooting
+
+### Dashboard Not Found (404)
+- Check JSON file exists: `data/dashboards/<app_id>.json`
+- Verify app_id format (alphanumeric, hyphens, underscores only)
+- Check file permissions (readable by Flask process)
+
+### Tabs Not Switching
+- Verify dashboard.js is loaded (check browser console)
+- Ensure tab buttons have `data-tab` attributes
+- Ensure tab panels have `id="tab-<name>"` format
+- Check browser JavaScript console for errors
+
+### Styling Issues
+- Verify style.css is loaded (check Network tab)
+- Clear browser cache (CSS may be cached)
+- Check for CSS variable support (modern browsers only)
+- Inspect element to verify classes are applied
+
+### Refresh Not Working
+- Check network request in browser DevTools
+- Verify `/refresh/<app_id>` endpoint exists
+- Check Flask logs for errors
+- Ensure AJAX response is valid JSON
+
+---
+
+## 🎓 Learning Resources
+
+### Clean Architecture
+- **Book:** "Clean Architecture" by Robert C. Martin
+- **Pattern:** Dependency Inversion Principle (DIP)
+- **Benefits:** Testability, maintainability, flexibility
+
+### TDD Mastery
+- **Cycle:** RED (failing test) → GREEN (minimal code) → REFACTOR (clean code)
+- **Benefits:** Confidence, documentation, design feedback
+- **Practice:** Write test first, make it fail, make it pass, refactor
+
+### Flask Best Practices
+- Application factory pattern (create_app)
+- Dependency injection (repositories)
+- Template inheritance (base → child)
+- Blueprint organization (for larger apps)
+
+---
+
+**Version History:**
+- v2.0 (Phase 2): UI Templates, CSS, JavaScript, Integration Tests (104 tests)
+- v1.0 (Phase 1): Clean Architecture Foundation (70 tests)
+
+**Maintainer:** Asif Hussain  
+**License:** Source-Available (Use Allowed, No Contributions)
