@@ -229,3 +229,43 @@ class GitCheckpointOrchestrator:
                 "success": False,
                 "error": str(e)
             }
+    
+    def create_auto_checkpoint(
+        self,
+        operation: str,
+        message: str,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Create an automatic git checkpoint with simplified interface.
+        
+        This is a convenience wrapper around create_checkpoint that auto-generates
+        session IDs and checkpoint types. Used by orchestrators for automatic
+        commit-on-phase-completion workflows.
+        
+        Args:
+            operation: Type of operation (e.g., "plan", "phase-1", "phase-2")
+            message: Checkpoint message
+            metadata: Optional metadata dict
+            
+        Returns:
+            Dict with success, checkpoint_id, commit_sha
+            
+        Example:
+            >>> orchestrator.create_auto_checkpoint(
+            ...     operation="plan-phase-1",
+            ...     message="Phase 1: Foundation complete"
+            ... )
+        """
+        # Auto-generate session ID from timestamp if not in metadata
+        session_id = f"auto-{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')}"
+        if metadata and "session_id" in metadata:
+            session_id = metadata["session_id"]
+        
+        # Create checkpoint with simplified parameters
+        return self.create_checkpoint(
+            session_id=session_id,
+            checkpoint_type=f"auto-{operation}",
+            message=message,
+            metadata=metadata
+        )

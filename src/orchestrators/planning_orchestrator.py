@@ -777,6 +777,16 @@ class PlanningOrchestrator:
                 phase_1_sections
             )
             
+            # Git checkpoint after Phase 1 completion
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    operation="plan-phase-1",
+                    message=f"Planning Phase 1 complete: {feature_name}"
+                )
+                logger.info("✅ Git checkpoint created for Phase 1")
+            except Exception as e:
+                logger.warning(f"Git checkpoint failed for Phase 1: {e}")
+            
             if not phase_1_approved:
                 return (True, output_path, "Phase 1 complete, Phase 2 pending user approval")
             
@@ -803,6 +813,16 @@ class PlanningOrchestrator:
                 phase_2_sections
             )
             
+            # Git checkpoint after Phase 2 completion
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    operation="plan-phase-2",
+                    message=f"Planning Phase 2 complete: {feature_name}"
+                )
+                logger.info("✅ Git checkpoint created for Phase 2")
+            except Exception as e:
+                logger.warning(f"Git checkpoint failed for Phase 2: {e}")
+            
             if not phase_2_approved:
                 return (True, output_path, "Phase 2 complete, Phase 3 pending user approval")
             
@@ -828,6 +848,16 @@ class PlanningOrchestrator:
                 "Phase 3: Validation & Deployment",
                 phase_3_sections
             )
+            
+            # Git checkpoint after Phase 3 completion
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    operation="plan-phase-3",
+                    message=f"Planning Phase 3 complete: {feature_name}"
+                )
+                logger.info("✅ Git checkpoint created for Phase 3")
+            except Exception as e:
+                logger.warning(f"Git checkpoint failed for Phase 3: {e}")
             
             if not phase_3_approved:
                 return (True, output_path, "Phase 3 complete, pending final approval")
