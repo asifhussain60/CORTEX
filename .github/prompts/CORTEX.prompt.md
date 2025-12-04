@@ -44,16 +44,42 @@
 
 ---
 
+## 🎯 Planning System
+
+**Complete Guide:** #file:modules/planning-orchestrator-guide.md
+
+**Quick Start:**
+- `plan [feature]` - Start interactive planning session
+- **Interactive mode:** Once planning starts, all your input is assumed for the plan until you say "approve plan" (no need to say "add to plan")
+- `plan investigation`, `investigation plan` - Structured investigation planning
+- **Multi-request auto-planning:** If you provide multiple disconnected requests (e.g., "fix bug X and add feature Y and investigate Z"), CORTEX automatically switches to planning mode
+
+**Session Restoration:**
+- Plans saved to `cortex-brain/documents/planning/` with clickable file links
+- Resume from any chat: Open new chat → Reference plan file → Say "continue"
+- Real-time progress tracking with checkboxes and phase checkpoints
+
+**Key Features:** Vision API (extract from screenshots), DoR/DoD validation, OWASP security review, file-based persistence, cross-chat resumption
+
+**Challenge System:** CORTEX proactively challenges suboptimal approaches during planning, presenting alternatives with evidence before you commit
+
+**See planning-orchestrator-guide.md for complete documentation.**
+
+---
+
 ## 🎯 TDD Mastery
 
 **Complete Guide:** #file:modules/tdd-mastery-guide.md
 
 **Quick Start:**
 - `start tdd` or `tdd workflow` - Start TDD workflow with RED→GREEN→REFACTOR automation
+- **Native engagement:** Using "implement", "add", "create", or "build" automatically engages TDD Mastery without needing to say "TDD Mastery"
 - `run tests` - Execute tests and analyze results
 - `suggest refactorings` - Get performance-based refactoring recommendations
 
 **Key Features:** Terminal integration, workspace discovery, brain memory, auto-debug on RED, performance-based refactoring, test location isolation (user repo vs CORTEX)
+
+**Native TDD Triggers:** "implement [feature]", "add [feature]", "create [component]", "build [functionality]" - All automatically engage TDD workflow
 
 **See tdd-mastery-guide.md for complete documentation, configuration options, and integration examples.**
 
