@@ -1,0 +1,510 @@
+{
+  "languages": [
+    {
+      "name": "Python",
+      "files": 2256,
+      "lines": 702371,
+      "extensions": [
+        ".py"
+      ],
+      "percentage": 74.61
+    },
+    {
+      "name": "JavaScript",
+      "files": 183,
+      "lines": 91427,
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".ts",
+        ".tsx"
+      ],
+      "percentage": 9.71
+    },
+    {
+      "name": "HTML",
+      "files": 162,
+      "lines": 55400,
+      "extensions": [
+        ".html",
+        ".htm"
+      ],
+      "percentage": 5.89
+    },
+    {
+      "name": "CSS",
+      "files": 73,
+      "lines": 33581,
+      "extensions": [
+        ".css",
+        ".scss",
+        ".sass",
+        ".less"
+      ],
+      "percentage": 3.57
+    },
+    {
+      "name": "C#",
+      "files": 166,
+      "lines": 31270,
+      "extensions": [
+        ".cs"
+      ],
+      "percentage": 3.32
+    },
+    {
+      "name": "SQL",
+      "files": 48,
+      "lines": 27294,
+      "extensions": [
+        ".sql"
+      ],
+      "percentage": 2.9
+    }
+  ],
+  "frameworks": [
+    {
+      "name": "django",
+      "category": "web",
+      "detected_from": "code_imports"
+    },
+    {
+      "name": "flask",
+      "category": "web",
+      "detected_from": "code_imports"
+    },
+    {
+      "name": "fastapi",
+      "category": "web",
+      "detected_from": "code_imports"
+    },
+    {
+      "name": "pytorch",
+      "category": "ml",
+      "detected_from": "code_imports"
+    },
+    {
+      "name": "numpy",
+      "category": "data",
+      "detected_from": "code_imports"
+    },
+    {
+      "name": "sqlalchemy",
+      "category": "data",
+      "detected_from": "code_imports"
+    },
+    {
+      "name": "react",
+      "category": "frontend",
+      "detected_from": "code_imports"
+    },
+    {
+      "name": "vue",
+      "category": "frontend",
+      "detected_from": "code_imports"
+    },
+    {
+      "name": "next",
+      "category": "frontend",
+      "detected_from": "code_imports"
+    }
+  ],
+  "dependencies": {
+    "python": [],
+    "javascript": [
+      {
+        "name": "@percy/cli",
+        "version": "^1.31.4",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "@percy/playwright",
+        "version": "^1.0.9",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "@playwright/test",
+        "version": "^1.56.1",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "@types/mssql",
+        "version": "^9.1.8",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "@types/node",
+        "version": "^24.5.2",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "@typescript-eslint/eslint-plugin",
+        "version": "^8.44.1",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "@typescript-eslint/parser",
+        "version": "^8.44.1",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "eslint",
+        "version": "^9.36.0",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "eslint-config-prettier",
+        "version": "^10.1.8",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "eslint-plugin-playwright",
+        "version": "^2.2.2",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "mssql",
+        "version": "^11.0.1",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "playwright",
+        "version": "^1.56.1",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "postcss-html",
+        "version": "^1.8.0",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "prettier",
+        "version": "^3.6.2",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "stylelint",
+        "version": "^16.25.0",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "stylelint-config-standard",
+        "version": "^39.0.1",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "ts-node",
+        "version": "^10.9.2",
+        "constraint": "",
+        "type": "devDependencies"
+      },
+      {
+        "name": "typescript",
+        "version": "^5.9.2",
+        "constraint": "",
+        "type": "devDependencies"
+      }
+    ],
+    "dotnet": [
+      {
+        "name": "System.CommandLine",
+        "version": "2.0.0-beta4.22272.1",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.SqlServer",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.Tools",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Serilog.Sinks.Console",
+        "version": "5.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration.Json",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.DependencyInjection",
+        "version": "8.0.1",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+        "version": "8.0.2",
+        "constraint": ""
+      },
+      {
+        "name": "Avalonia",
+        "version": "11.3.6",
+        "constraint": ""
+      },
+      {
+        "name": "Avalonia.Desktop",
+        "version": "11.3.6",
+        "constraint": ""
+      },
+      {
+        "name": "Avalonia.Themes.Fluent",
+        "version": "11.3.6",
+        "constraint": ""
+      },
+      {
+        "name": "Avalonia.Fonts.Inter",
+        "version": "11.3.6",
+        "constraint": ""
+      },
+      {
+        "name": "Avalonia.Diagnostics",
+        "version": "11.3.6",
+        "constraint": ""
+      },
+      {
+        "name": "CommunityToolkit.Mvvm",
+        "version": "8.2.1",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore",
+        "version": "8.0.11",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.SqlServer",
+        "version": "8.0.11",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration.Json",
+        "version": "8.0.1",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.DependencyInjection",
+        "version": "8.0.1",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.SqlServer",
+        "version": "8.0.12",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.Tools",
+        "version": "8.0.12",
+        "constraint": ""
+      },
+      {
+        "name": "Serilog.Sinks.Console",
+        "version": "5.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration.Json",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.DependencyInjection",
+        "version": "8.0.1",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+        "version": "8.0.2",
+        "constraint": ""
+      },
+      {
+        "name": "coverlet.collector",
+        "version": "6.0.2",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Hosting",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.NET.Test.Sdk",
+        "version": "17.12.0",
+        "constraint": ""
+      },
+      {
+        "name": "xunit",
+        "version": "2.9.2",
+        "constraint": ""
+      },
+      {
+        "name": "xunit.runner.visualstudio",
+        "version": "2.8.2",
+        "constraint": ""
+      },
+      {
+        "name": "Moq",
+        "version": "4.20.70",
+        "constraint": ""
+      },
+      {
+        "name": "AngleSharp",
+        "version": "1.0.7",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Logging.Abstractions",
+        "version": "8.0.2",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Http",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "FluentAssertions",
+        "version": "6.12.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.Extensions.Caching.Memory",
+        "version": "8.0.1",
+        "constraint": ""
+      },
+      {
+        "name": "Azure.AI.OpenAI",
+        "version": "2.1.0",
+        "constraint": ""
+      },
+      {
+        "name": "HtmlAgilityPack",
+        "version": "1.12.3",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.AspNetCore.SignalR.Client",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.CodeAnalysis.NetAnalyzers",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.SqlServer",
+        "version": "8.0.11",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.InMemory",
+        "version": "8.0.11",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.Tools",
+        "version": "8.0.11",
+        "constraint": ""
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.Design",
+        "version": "8.0.11",
+        "constraint": ""
+      },
+      {
+        "name": "MudBlazor",
+        "version": "8.13.0",
+        "constraint": ""
+      },
+      {
+        "name": "Roslynator.Analyzers",
+        "version": "4.12.4",
+        "constraint": ""
+      },
+      {
+        "name": "Serilog.AspNetCore",
+        "version": "8.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Serilog.Extensions.Logging.File",
+        "version": "3.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Serilog.Sinks.File",
+        "version": "5.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "Serilog.Sinks.Console",
+        "version": "5.0.0",
+        "constraint": ""
+      },
+      {
+        "name": "StyleCop.Analyzers",
+        "version": "1.2.0-beta.507",
+        "constraint": ""
+      },
+      {
+        "name": "AngleSharp",
+        "version": "1.0.7",
+        "constraint": ""
+      }
+    ]
+  },
+  "build_tools": [
+    "msbuild"
+  ],
+  "databases": [
+    "sqlserver"
+  ],
+  "devops": [
+    "docker",
+    "kubernetes",
+    "ansible"
+  ],
+  "statistics": {
+    "total_languages": 6,
+    "total_frameworks": 9,
+    "total_dependencies": 71,
+    "total_build_tools": 1,
+    "primary_language": "Python"
+  }
+}

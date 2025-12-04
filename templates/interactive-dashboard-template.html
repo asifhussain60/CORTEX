@@ -884,7 +884,7 @@
 
     <!-- Dashboard Logic -->
     <script>
-        // Tab switching
+        // Tab switching with lazy initialization
         function switchTab(tabName) {
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
@@ -898,13 +898,25 @@
             document.getElementById(tabName + '-tab').classList.add('active');
             document.querySelector(`button[data-tab="${tabName}"]`).classList.add('active');
 
-            // Initialize tab content if needed
-            if (tabName === 'visualizations' && !window.visualizationsInitialized) {
-                initializeVisualizations();
-                window.visualizationsInitialized = true;
-            } else if (tabName === 'diagrams' && !window.diagramsInitialized) {
-                initializeDiagrams();
-                window.diagramsInitialized = true;
+            // Initialize tab content on first access (lazy loading)
+            if (tabName === 'techstack' && !window.techstackInitialized) {
+                initializeTechStack();
+                window.techstackInitialized = true;
+            } else if (tabName === 'architecture' && !window.architectureInitialized) {
+                initializeArchitecture();
+                window.architectureInitialized = true;
+            } else if (tabName === 'security' && !window.securityInitialized) {
+                initializeSecurity();
+                window.securityInitialized = true;
+            } else if (tabName === 'uml' && !window.umlInitialized) {
+                initializeUml();
+                window.umlInitialized = true;
+            } else if (tabName === 'recommendations' && !window.recommendationsInitialized) {
+                initializeRecommendations();
+                window.recommendationsInitialized = true;
+            } else if (tabName === 'data' && !window.dataInitialized) {
+                initializeDataTable();
+                window.dataInitialized = true;
             }
         }
 
@@ -1245,11 +1257,9 @@
             });
         }
 
-        // Initialize on load
+        // Initialize on load - only Overview tab (lazy load others on tab switch)
         window.addEventListener('DOMContentLoaded', () => {
             initializeOverview();
-            initializeDataTable();
-            initializeRecommendations();
         });
     </script>
 </body>

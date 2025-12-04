@@ -1,0 +1,630 @@
+{
+  "success": true,
+  "summary": {
+    "total_tests": 72,
+    "passed_tests": 68,
+    "failed_tests": 4,
+    "errors": 0,
+    "warnings": 4,
+    "tabs_validated": 10,
+    "tabs_passed": 10
+  },
+  "tabs": {
+    "overview": {
+      "passed": true,
+      "total_tests": 11,
+      "passed_tests": 11,
+      "errors": [],
+      "warnings": [],
+      "all_tests": [
+        {
+          "name": "tab_element",
+          "category": "structure",
+          "passed": true,
+          "message": "Tab element #overview-tab present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_generated-time",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #generated-time present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_executive-summary",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #executive-summary present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_metrics-grid",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #metrics-grid present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_status-indicator",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #status-indicator present",
+          "severity": "error"
+        },
+        {
+          "name": "metadata_exists",
+          "category": "data",
+          "passed": true,
+          "message": "Metadata present with timestamp",
+          "severity": "error"
+        },
+        {
+          "name": "valid_timestamp",
+          "category": "data",
+          "passed": true,
+          "message": "Generated timestamp is valid ISO format",
+          "severity": "error"
+        },
+        {
+          "name": "executive_summary",
+          "category": "data",
+          "passed": true,
+          "message": "Executive summary text present",
+          "severity": "error"
+        },
+        {
+          "name": "key_metrics",
+          "category": "data",
+          "passed": true,
+          "message": "Key metrics: 4 items (expected \u22653)",
+          "severity": "info"
+        },
+        {
+          "name": "status_indicator",
+          "category": "data",
+          "passed": true,
+          "message": "Status indicator: warning",
+          "severity": "error"
+        },
+        {
+          "name": "init_function_called",
+          "category": "function",
+          "passed": true,
+          "message": "initializeOverview() is called on page load",
+          "severity": "error"
+        }
+      ]
+    },
+    "techstack": {
+      "passed": true,
+      "total_tests": 7,
+      "passed_tests": 6,
+      "errors": [],
+      "warnings": [
+        {
+          "test": "dependencies_data",
+          "message": "Dependencies array missing"
+        }
+      ],
+      "all_tests": [
+        {
+          "name": "tab_element",
+          "category": "structure",
+          "passed": true,
+          "message": "Tab element #techstack-tab present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_languages-container",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #languages-container present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_frameworks-container",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #frameworks-container present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_dependencies-container",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #dependencies-container present",
+          "severity": "error"
+        },
+        {
+          "name": "languages_data",
+          "category": "data",
+          "passed": true,
+          "message": "Languages detected: 6",
+          "severity": "info"
+        },
+        {
+          "name": "frameworks_data",
+          "category": "data",
+          "passed": true,
+          "message": "Frameworks detected: 9",
+          "severity": "info"
+        },
+        {
+          "name": "dependencies_data",
+          "category": "data",
+          "passed": false,
+          "message": "Dependencies array missing",
+          "severity": "warning"
+        }
+      ]
+    },
+    "architecture": {
+      "passed": true,
+      "total_tests": 7,
+      "passed_tests": 7,
+      "errors": [],
+      "warnings": [],
+      "all_tests": [
+        {
+          "name": "tab_element",
+          "category": "structure",
+          "passed": true,
+          "message": "Tab element #architecture-tab present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_architecture-graph",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #architecture-graph present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_architecture-stats",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #architecture-stats present",
+          "severity": "error"
+        },
+        {
+          "name": "nodes_data",
+          "category": "data",
+          "passed": true,
+          "message": "Architecture nodes: 8680",
+          "severity": "info"
+        },
+        {
+          "name": "relationships_data",
+          "category": "data",
+          "passed": true,
+          "message": "Architecture relationships: 6478",
+          "severity": "info"
+        },
+        {
+          "name": "d3_force_graph",
+          "category": "visualization",
+          "passed": true,
+          "message": "D3 force graph: 8680 nodes, 6478 links",
+          "severity": "error"
+        },
+        {
+          "name": "d3_library",
+          "category": "visualization",
+          "passed": true,
+          "message": "D3.js library included",
+          "severity": "error"
+        }
+      ]
+    },
+    "security": {
+      "passed": true,
+      "total_tests": 8,
+      "passed_tests": 8,
+      "errors": [],
+      "warnings": [],
+      "all_tests": [
+        {
+          "name": "tab_element",
+          "category": "structure",
+          "passed": true,
+          "message": "Tab element #security-tab present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_security-summary",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #security-summary present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_vulnerabilities-list",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #vulnerabilities-list present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_severity-filters",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #severity-filters present",
+          "severity": "error"
+        },
+        {
+          "name": "vulnerabilities_count",
+          "category": "data",
+          "passed": true,
+          "message": "Vulnerabilities count: 383",
+          "severity": "info"
+        },
+        {
+          "name": "security_issues",
+          "category": "data",
+          "passed": true,
+          "message": "Security issues listed: 100",
+          "severity": "info"
+        },
+        {
+          "name": "issue_structure",
+          "category": "structure",
+          "passed": true,
+          "message": "Security issue structure valid",
+          "severity": "error"
+        },
+        {
+          "name": "severity_filters",
+          "category": "interaction",
+          "passed": true,
+          "message": "Severity filters UI present",
+          "severity": "error"
+        }
+      ]
+    },
+    "uml": {
+      "passed": true,
+      "total_tests": 4,
+      "passed_tests": 3,
+      "errors": [],
+      "warnings": [
+        {
+          "test": "uml_generated",
+          "message": "UML diagram not generated (graphviz may be missing)"
+        }
+      ],
+      "all_tests": [
+        {
+          "name": "tab_element",
+          "category": "structure",
+          "passed": true,
+          "message": "Tab element #uml-tab present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_uml-container",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #uml-container present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_uml-diagram-display",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #uml-diagram-display present",
+          "severity": "error"
+        },
+        {
+          "name": "uml_generated",
+          "category": "data",
+          "passed": false,
+          "message": "UML diagram not generated (graphviz may be missing)",
+          "severity": "warning"
+        }
+      ]
+    },
+    "recommendations": {
+      "passed": true,
+      "total_tests": 6,
+      "passed_tests": 5,
+      "errors": [],
+      "warnings": [
+        {
+          "test": "recommendation_structure",
+          "message": "Recommendations missing fields: ['steps']"
+        }
+      ],
+      "all_tests": [
+        {
+          "name": "tab_element",
+          "category": "structure",
+          "passed": true,
+          "message": "Tab element #recommendations-tab present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_recommendations-container",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #recommendations-container present",
+          "severity": "error"
+        },
+        {
+          "name": "recommendations_count",
+          "category": "data",
+          "passed": true,
+          "message": "Recommendations: 5",
+          "severity": "info"
+        },
+        {
+          "name": "recommendation_structure",
+          "category": "structure",
+          "passed": false,
+          "message": "Recommendations missing fields: ['steps']",
+          "severity": "warning"
+        },
+        {
+          "name": "priority_distribution",
+          "category": "data",
+          "passed": true,
+          "message": "Priority distribution: {'high': 1, 'medium': 4}",
+          "severity": "info"
+        },
+        {
+          "name": "init_function",
+          "category": "function",
+          "passed": true,
+          "message": "initializeRecommendations() called on load",
+          "severity": "error"
+        }
+      ]
+    },
+    "data": {
+      "passed": true,
+      "total_tests": 10,
+      "passed_tests": 10,
+      "errors": [],
+      "warnings": [],
+      "all_tests": [
+        {
+          "name": "tab_element",
+          "category": "structure",
+          "passed": true,
+          "message": "Tab element #data-tab present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_table-search",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #table-search present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_table-body",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #table-body present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_rows-per-page",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #rows-per-page present",
+          "severity": "error"
+        },
+        {
+          "name": "dom_id_page-info",
+          "category": "structure",
+          "passed": true,
+          "message": "DOM element #page-info present",
+          "severity": "error"
+        },
+        {
+          "name": "table_element",
+          "category": "structure",
+          "passed": true,
+          "message": "HTML table element present",
+          "severity": "error"
+        },
+        {
+          "name": "search_function",
+          "category": "interaction",
+          "passed": true,
+          "message": "Table search functionality present",
+          "severity": "error"
+        },
+        {
+          "name": "pagination_controls",
+          "category": "interaction",
+          "passed": true,
+          "message": "Pagination controls: 3/3 found",
+          "severity": "info"
+        },
+        {
+          "name": "rows_selector",
+          "category": "interaction",
+          "passed": true,
+          "message": "Rows per page selector present",
+          "severity": "error"
+        },
+        {
+          "name": "csv_export",
+          "category": "interaction",
+          "passed": true,
+          "message": "CSV export function present",
+          "severity": "error"
+        }
+      ]
+    },
+    "javascript": {
+      "passed": true,
+      "total_tests": 10,
+      "passed_tests": 10,
+      "errors": [],
+      "warnings": [],
+      "all_tests": [
+        {
+          "name": "function_switchTab",
+          "category": "function",
+          "passed": true,
+          "message": "Function switchTab() defined",
+          "severity": "error"
+        },
+        {
+          "name": "function_initializeOverview",
+          "category": "function",
+          "passed": true,
+          "message": "Function initializeOverview() defined",
+          "severity": "error"
+        },
+        {
+          "name": "function_initializeDataTable",
+          "category": "function",
+          "passed": true,
+          "message": "Function initializeDataTable() defined",
+          "severity": "error"
+        },
+        {
+          "name": "function_initializeRecommendations",
+          "category": "function",
+          "passed": true,
+          "message": "Function initializeRecommendations() defined",
+          "severity": "error"
+        },
+        {
+          "name": "function_renderTable",
+          "category": "function",
+          "passed": true,
+          "message": "Function renderTable() defined",
+          "severity": "error"
+        },
+        {
+          "name": "function_sortTable",
+          "category": "function",
+          "passed": true,
+          "message": "Function sortTable() defined",
+          "severity": "error"
+        },
+        {
+          "name": "function_exportTableToCSV",
+          "category": "function",
+          "passed": true,
+          "message": "Function exportTableToCSV() defined",
+          "severity": "error"
+        },
+        {
+          "name": "function_changeRowsPerPage",
+          "category": "function",
+          "passed": true,
+          "message": "Function changeRowsPerPage() defined",
+          "severity": "error"
+        },
+        {
+          "name": "function_prevPage",
+          "category": "function",
+          "passed": true,
+          "message": "Function prevPage() defined",
+          "severity": "error"
+        },
+        {
+          "name": "function_nextPage",
+          "category": "function",
+          "passed": true,
+          "message": "Function nextPage() defined",
+          "severity": "error"
+        }
+      ]
+    },
+    "interactive": {
+      "passed": true,
+      "total_tests": 4,
+      "passed_tests": 3,
+      "errors": [],
+      "warnings": [
+        {
+          "test": "event_listeners",
+          "message": "Event listeners attached: 2"
+        }
+      ],
+      "all_tests": [
+        {
+          "name": "tab_switching",
+          "category": "interaction",
+          "passed": true,
+          "message": "Tab switching mechanism present",
+          "severity": "error"
+        },
+        {
+          "name": "print_button",
+          "category": "interaction",
+          "passed": true,
+          "message": "Print/PDF functionality present",
+          "severity": "error"
+        },
+        {
+          "name": "event_listeners",
+          "category": "interaction",
+          "passed": false,
+          "message": "Event listeners attached: 2",
+          "severity": "warning"
+        },
+        {
+          "name": "dom_ready",
+          "category": "interaction",
+          "passed": true,
+          "message": "DOMContentLoaded handler present",
+          "severity": "error"
+        }
+      ]
+    },
+    "visualizations": {
+      "passed": true,
+      "total_tests": 5,
+      "passed_tests": 5,
+      "errors": [],
+      "warnings": [],
+      "all_tests": [
+        {
+          "name": "d3_library",
+          "category": "visualization",
+          "passed": true,
+          "message": "D3.js library included",
+          "severity": "error"
+        },
+        {
+          "name": "chartjs_library",
+          "category": "visualization",
+          "passed": true,
+          "message": "Chart.js library included",
+          "severity": "error"
+        },
+        {
+          "name": "mermaid_library",
+          "category": "visualization",
+          "passed": true,
+          "message": "Mermaid.js library included",
+          "severity": "error"
+        },
+        {
+          "name": "svg_elements",
+          "category": "visualization",
+          "passed": true,
+          "message": "SVG elements in HTML: 0",
+          "severity": "info"
+        },
+        {
+          "name": "canvas_elements",
+          "category": "visualization",
+          "passed": true,
+          "message": "Canvas elements: 3",
+          "severity": "info"
+        }
+      ]
+    }
+  },
+  "timestamp": "2025-12-03T15:29:09.752147",
+  "dashboard_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\documents\\onboarded-apps\\noor-canvas\\dashboard.html"
+}

@@ -43,3 +43,8 @@ PyPDF2>=3.0.0  # PDF text extraction (document_converter, policy_analyzer)
 esprima>=4.0.1  # JavaScript AST parser
 tree-sitter-languages>=1.10.2  # Pre-built language grammars
 
+# Application Onboarding System (CORTEX 3.2 - Phase 1)
+networkx>=3.1  # Graph analysis for architecture visualization
+toml>=0.10.2  # TOML parsing for pyproject.toml, Cargo.toml
+# Note: astroid and requirements-parser omitted (not strictly needed for simplified onboarding)
+
