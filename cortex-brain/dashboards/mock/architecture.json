@@ -1,0 +1,142 @@
+{
+  "style": "clean_architecture",
+  "score": 75,
+  "last_scan": "2025-12-04T12:46:23.666774",
+  "tiers": [
+    {
+      "name": "presentation",
+      "component_count": 12,
+      "loc": 8450,
+      "description": "UI components, views, and user interaction"
+    },
+    {
+      "name": "application",
+      "component_count": 28,
+      "loc": 15230,
+      "description": "Business logic, use cases, orchestration"
+    },
+    {
+      "name": "domain",
+      "component_count": 8,
+      "loc": 4560,
+      "description": "Core entities, domain models, business rules"
+    },
+    {
+      "name": "infrastructure",
+      "component_count": 7,
+      "loc": 5890,
+      "description": "Data access, external services, persistence"
+    }
+  ],
+  "components": [
+    {
+      "name": "UserFeature",
+      "tier": "application",
+      "loc": 1250,
+      "complexity": 42,
+      "dependencies": [
+        "UserRepository",
+        "ValidationService",
+        "EmailService"
+      ]
+    },
+    {
+      "name": "AuthenticationService",
+      "tier": "application",
+      "loc": 890,
+      "complexity": 38,
+      "dependencies": [
+        "TokenService",
+        "UserRepository",
+        "PasswordHasher"
+      ]
+    },
+    {
+      "name": "UserRepository",
+      "tier": "infrastructure",
+      "loc": 645,
+      "complexity": 28,
+      "dependencies": [
+        "DatabaseContext",
+        "User"
+      ]
+    },
+    {
+      "name": "User",
+      "tier": "domain",
+      "loc": 320,
+      "complexity": 12,
+      "dependencies": []
+    },
+    {
+      "name": "ValidationService",
+      "tier": "application",
+      "loc": 450,
+      "complexity": 22,
+      "dependencies": [
+        "ValidationRules"
+      ]
+    }
+  ],
+  "database_schema": {
+    "tables": [
+      {
+        "name": "users",
+        "columns": 12,
+        "relationships": [
+          {
+            "table": "sessions",
+            "type": "one_to_many"
+          },
+          {
+            "table": "user_roles",
+            "type": "one_to_many"
+          }
+        ]
+      },
+      {
+        "name": "sessions",
+        "columns": 8,
+        "relationships": [
+          {
+            "table": "users",
+            "type": "many_to_one"
+          }
+        ]
+      },
+      {
+        "name": "user_roles",
+        "columns": 5,
+        "relationships": [
+          {
+            "table": "users",
+            "type": "many_to_one"
+          },
+          {
+            "table": "roles",
+            "type": "many_to_one"
+          }
+        ]
+      },
+      {
+        "name": "roles",
+        "columns": 6,
+        "relationships": [
+          {
+            "table": "user_roles",
+            "type": "one_to_many"
+          }
+        ]
+      }
+    ],
+    "total_tables": 8,
+    "total_relationships": 12
+  },
+  "summary": {
+    "total_components": 55,
+    "total_loc": 34130,
+    "average_complexity": 27.3,
+    "tier_count": 4,
+    "high_coupling_components": 3
+  }
+}

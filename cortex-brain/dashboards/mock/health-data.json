@@ -1,89 +1,24 @@
 {
-  "metadata": {
-    "repo_name": "Mock Application (Healthy)",
-    "repo_url": "https://github.com/example/mock-app",
-    "branch": "main",
-    "commit_hash": "a1b2c3d4",
-    "commit_date": "2025-12-04T09:00:00-05:00",
-    "last_scan": "2025-12-04T10:00:00-05:00",
-    "scan_duration_seconds": 12.5,
-    "scanner_version": "CORTEX-3.5.5"
+  "overall_health_score": 65,
+  "status": "warning",
+  "last_scan": "2025-12-04T12:46:23.666759",
+  "summary": {
+    "total_files": 994,
+    "total_loc": 45678,
+    "test_coverage": 45.2,
+    "critical_issues": 2,
+    "warnings": 12,
+    "maintainability_index": 58
   },
-  "health": {
-    "overall_score": 88,
-    "trend": "improving",
-    "status": "healthy"
+  "metrics": {
+    "code_quality_score": 62,
+    "security_score": 54,
+    "test_score": 48,
+    "documentation_score": 75
   },
-  "code_metrics": {
-    "lines_of_code": 18500,
-    "file_count": 275,
-    "directory_count": 85,
-    "language_breakdown": {
-      "Python": 12000,
-      "TypeScript": 4500,
-      "YAML": 1500,
-      "Markdown": 500
-    }
-  },
-  "code_quality": {
-    "complexity_score": 82,
-    "maintainability_index": 78,
-    "cyclomatic_complexity_avg": 6.2,
-    "cognitive_complexity_avg": 4.8,
-    "code_duplication_pct": 3.5,
-    "comment_ratio_pct": 18.0
-  },
-  "testing": {
-    "coverage_pct": 68.5,
-    "unit_test_count": 125,
-    "integration_test_count": 45,
-    "test_pass_rate_pct": 97.8
-  },
-  "issues": {
-    "total_count": 15,
-    "by_severity": {
-      "critical": 0,
-      "high": 2,
-      "medium": 8,
-      "low": 5
-    },
-    "technical_debt_days": 4.2,
-    "code_smells_count": 12
-  },
-  "dependencies": {
-    "total": 98,
-    "direct": 28,
-    "transitive": 70,
-    "outdated": 5,
-    "vulnerable": 0,
-    "health_score": 92
-  },
-  "security": {
-    "score": 95,
-    "vulnerabilities": {
-      "critical": 0,
-      "high": 0,
-      "medium": 0,
-      "low": 1
-    },
-    "secrets_exposed": 0,
-    "last_scan": "2025-12-04T08:00:00-05:00"
-  },
-  "performance": {
-    "build_time_seconds": 45.3,
-    "test_execution_time_seconds": 15.3,
-    "deployment_frequency": "weekly",
-    "mean_time_to_recovery_hours": 2.5
-  },
-  "activity": {
-    "commits_last_30_days": 145,
-    "contributors_active": 3,
-    "pull_requests_open": 2,
-    "pull_requests_merged_last_30_days": 18
-  },
-  "custom_metrics": {
-    "mock_data": true,
-    "scenario": "healthy",
-    "repo_size": "medium"
+  "trends": {
+    "health_trend": "declining",
+    "velocity_trend": "stable",
+    "quality_trend": "declining"
   }
 }

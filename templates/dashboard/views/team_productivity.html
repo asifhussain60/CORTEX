@@ -1,0 +1,562 @@
+<!-- Team Productivity View Template -->
+<div class="dashboard-view" id="team-productivity-view">
+    <div class="view-header">
+        <h2>👥 Team Productivity</h2>
+        <div class="header-actions">
+            <button class="btn-filter" onclick="filterTimeRange()">Time Range</button>
+            <button class="btn-export" onclick="exportTeamMetrics()">Export Report</button>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-grid">
+        <div class="summary-card glass-card">
+            <div class="card-icon">👥</div>
+            <div class="card-content">
+                <h3>{{ team_metrics.summary.total_contributors }}</h3>
+                <p>Total Contributors</p>
+            </div>
+        </div>
+        
+        <div class="summary-card glass-card">
+            <div class="card-icon">✅</div>
+            <div class="card-content">
+                <h3>{{ team_metrics.summary.active_contributors }}</h3>
+                <p>Active Contributors</p>
+            </div>
+        </div>
+        
+        <div class="summary-card glass-card">
+            <div class="card-icon">📝</div>
+            <div class="card-content">
+                <h3>{{ team_metrics.summary.total_commits }}</h3>
+                <p>Total Commits</p>
+            </div>
+        </div>
+        
+        <div class="summary-card glass-card">
+            <div class="card-icon">📊</div>
+            <div class="card-content">
+                <h3>{{ "%.1f"|format(team_metrics.summary.avg_commits_per_contributor) }}</h3>
+                <p>Avg Commits/Person</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Velocity Trends -->
+    <div class="velocity-section glass-card">
+        <h3>📈 Velocity Trends</h3>
+        <div class="velocity-stats">
+            <div class="stat-item">
+                <span class="label">Commits/Week:</span>
+                <span class="value">{{ "%.1f"|format(team_metrics.velocity.commits_per_week) }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="label">Trend:</span>
+                <span class="value trend-{{ team_metrics.velocity.trend }}">
+                    {% if team_metrics.velocity.trend == 'increasing' %}↑ Increasing{% endif %}
+                    {% if team_metrics.velocity.trend == 'stable' %}→ Stable{% endif %}
+                    {% if team_metrics.velocity.trend == 'decreasing' %}↓ Decreasing{% endif %}
+                </span>
+            </div>
+        </div>
+        <canvas id="velocity-chart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Contributors Table -->
+    <div class="contributors-section glass-card">
+        <h3>👤 Contributor Breakdown</h3>
+        <table class="contributors-table">
+            <thead>
+                <tr>
+                    <th>Contributor</th>
+                    <th>Commits</th>
+                    <th>Lines Added</th>
+                    <th>Lines Removed</th>
+                    <th>Files Changed</th>
+                    <th>Active Period</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contributor in team_metrics.contributors[:15] %}
+                <tr>
+                    <td class="contributor-name">{{ contributor.name }}</td>
+                    <td><span class="badge">{{ contributor.commits }}</span></td>
+                    <td class="stat-green">+{{ contributor.lines_added }}</td>
+                    <td class="stat-red">-{{ contributor.lines_removed }}</td>
+                    <td>{{ contributor.files_changed }}</td>
+                    <td class="date-range">
+                        {{ contributor.first_commit }} to {{ contributor.last_commit }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Contribution Distribution -->
+    <div class="contribution-chart glass-card">
+        <h3>🥧 Contribution Distribution</h3>
+        <canvas id="contribution-pie-chart" width="300" height="300"></canvas>
+    </div>
+
+    <!-- Bus Factor Analysis -->
+    <div class="bus-factor-section glass-card">
+        <h3>🚍 Bus Factor Analysis</h3>
+        <p class="section-description">Minimum number of contributors whose absence would cripple the project.</p>
+        
+        <div class="bus-factor-display">
+            <div class="bus-factor-number risk-{{ team_metrics.bus_factor.risk }}">
+                {{ team_metrics.bus_factor.factor }}
+            </div>
+            <div class="bus-factor-label">
+                <strong>Bus Factor</strong>
+                <span class="risk-badge risk-{{ team_metrics.bus_factor.risk }}">
+                    {{ team_metrics.bus_factor.risk.upper() }} RISK
+                </span>
+            </div>
+        </div>
+        
+        <div class="critical-contributors">
+            <h4>Critical Contributors:</h4>
+            <ul>
+                {% for contributor in team_metrics.bus_factor.top_contributors %}
+                <li>{{ contributor }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="recommendation-box">
+            <strong>Recommendation:</strong>
+            {% if team_metrics.bus_factor.risk == 'critical' %}
+            <p>⚠️ Single point of failure! Encourage knowledge sharing and documentation.</p>
+            {% elif team_metrics.bus_factor.risk == 'high' %}
+            <p>⚠️ High risk. Distribute work across more team members.</p>
+            {% elif team_metrics.bus_factor.risk == 'medium' %}
+            <p>✓ Moderate risk. Consider cross-training for key areas.</p>
+            {% else %}
+            <p>✅ Good knowledge distribution across team.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Knowledge Distribution -->
+    {% if team_metrics.knowledge_distribution.files %}
+    <div class="knowledge-distribution glass-card">
+        <h3>📚 Knowledge Distribution</h3>
+        <p class="section-description">
+            Concentration Score: <strong>{{ team_metrics.knowledge_distribution.concentration_score }}%</strong>
+            (Higher = More concentrated knowledge)
+        </p>
+        
+        <div class="knowledge-grid">
+            {% for file_data in team_metrics.knowledge_distribution.files[:20] %}
+            <div class="knowledge-item">
+                <div class="file-path">{{ file_data.file }}</div>
+                <div class="ownership-bar">
+                    <div class="ownership-fill" style="width: {{ file_data.ownership_percentage }}%"></div>
+                </div>
+                <div class="owner-info">
+                    <span class="owner-name">{{ file_data.primary_owner }}</span>
+                    <span class="ownership-pct">{{ file_data.ownership_percentage }}% ownership</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <style>
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+        }
+
+        .card-content h3 {
+            font-size: 2rem;
+            margin: 0;
+            color: #10b981;
+        }
+
+        .card-content p {
+            margin: 5px 0 0 0;
+            color: #94a3b8;
+        }
+
+        .velocity-section {
+            margin-bottom: 30px;
+        }
+
+        .velocity-stats {
+            display: flex;
+            gap: 40px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            display: flex;
+            gap: 10px;
+        }
+
+        .stat-item .label {
+            color: #94a3b8;
+        }
+
+        .stat-item .value {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .value.trend-increasing {
+            color: #10b981;
+        }
+
+        .value.trend-stable {
+            color: #3b82f6;
+        }
+
+        .value.trend-decreasing {
+            color: #f59e0b;
+        }
+
+        .contributors-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .contributors-table thead {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .contributors-table th {
+            padding: 12px;
+            text-align: left;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .contributors-table td {
+            padding: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .contributor-name {
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .badge {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .stat-green {
+            color: #10b981;
+        }
+
+        .stat-red {
+            color: #ef4444;
+        }
+
+        .date-range {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .contribution-chart {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .bus-factor-section {
+            margin: 30px 0;
+        }
+
+        .section-description {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .bus-factor-display {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .bus-factor-number {
+            font-size: 5rem;
+            font-weight: bold;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 4px solid;
+        }
+
+        .bus-factor-number.risk-critical {
+            color: #ef4444;
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .bus-factor-number.risk-high {
+            color: #f59e0b;
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .bus-factor-number.risk-medium {
+            color: #3b82f6;
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .bus-factor-number.risk-low {
+            color: #10b981;
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .bus-factor-label {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .risk-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .risk-badge.risk-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .risk-badge.risk-high {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .risk-badge.risk-medium {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .risk-badge.risk-low {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .critical-contributors {
+            margin: 20px 0;
+        }
+
+        .critical-contributors ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .critical-contributors li {
+            padding: 8px 0;
+            color: #e2e8f0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .recommendation-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 6px;
+        }
+
+        .recommendation-box p {
+            margin: 5px 0 0 0;
+            color: #e2e8f0;
+        }
+
+        .knowledge-distribution {
+            margin: 30px 0;
+        }
+
+        .knowledge-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .knowledge-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .file-path {
+            color: #3b82f6;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .ownership-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .ownership-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            transition: width 0.3s ease;
+        }
+
+        .owner-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .owner-name {
+            color: #e2e8f0;
+        }
+
+        .ownership-pct {
+            color: #94a3b8;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Velocity Trend Chart
+        function initVelocityChart() {
+            const velocityData = {{ team_metrics.velocity.recent_activity | tojson }};
+            
+            const ctx = document.getElementById('velocity-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: velocityData.map((_, i) => `Week ${i + 1}`),
+                    datasets: [{
+                        label: 'Commits per Week',
+                        data: velocityData,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Contribution Pie Chart
+        function initContributionChart() {
+            const contributors = {{ team_metrics.contributors | tojson }};
+            const topContributors = contributors.slice(0, 5);
+            const others = contributors.slice(5);
+            
+            const labels = topContributors.map(c => c.name);
+            const data = topContributors.map(c => c.commits);
+            
+            if (others.length > 0) {
+                labels.push('Others');
+                data.push(others.reduce((sum, c) => sum + c.commits, 0));
+            }
+            
+            const ctx = document.getElementById('contribution-pie-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            '#3b82f6',
+                            '#10b981',
+                            '#f59e0b',
+                            '#ec4899',
+                            '#8b5cf6',
+                            '#6b7280'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function filterTimeRange() {
+            alert('Time range filter will be implemented (30/60/90 days)');
+        }
+
+        function exportTeamMetrics() {
+            alert('Team metrics will be exported as CSV/PDF');
+        }
+
+        // Initialize charts on load
+        window.addEventListener('load', () => {
+            initVelocityChart();
+            initContributionChart();
+        });
+    </script>
+</div>

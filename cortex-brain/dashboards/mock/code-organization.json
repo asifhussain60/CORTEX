@@ -1,0 +1,112 @@
+{
+  "heatmap": [
+    {
+      "directory": "src/entry_point/",
+      "file_count": 8,
+      "total_loc": 3450,
+      "avg_complexity": 68,
+      "max_complexity": 163,
+      "files": [
+        {
+          "name": "cortex_entry.py",
+          "loc": 825,
+          "complexity": 91
+        },
+        {
+          "name": "response_formatter.py",
+          "loc": 625,
+          "complexity": 163
+        },
+        {
+          "name": "intent_classifier.py",
+          "loc": 445,
+          "complexity": 42
+        }
+      ]
+    },
+    {
+      "directory": "src/plugins/",
+      "file_count": 15,
+      "total_loc": 8920,
+      "avg_complexity": 48,
+      "max_complexity": 181,
+      "files": [
+        {
+          "name": "cleanup_plugin.py",
+          "loc": 901,
+          "complexity": 181
+        },
+        {
+          "name": "validation_plugin.py",
+          "loc": 567,
+          "complexity": 54
+        }
+      ]
+    },
+    {
+      "directory": "src/tier1/",
+      "file_count": 12,
+      "total_loc": 5680,
+      "avg_complexity": 28,
+      "max_complexity": 72,
+      "files": []
+    }
+  ],
+  "hotspots": [
+    {
+      "file": "src/entry_point/cortex_entry.py",
+      "loc": 825,
+      "complexity": 91,
+      "change_frequency": 18,
+      "risk_score": 100,
+      "recommendation": "Split into multiple focused modules"
+    },
+    {
+      "file": "src/entry_point/response_formatter.py",
+      "loc": 625,
+      "complexity": 163,
+      "change_frequency": 15,
+      "risk_score": 98,
+      "recommendation": "Extract formatting strategies into separate classes"
+    },
+    {
+      "file": "src/plugins/cleanup_plugin.py",
+      "loc": 901,
+      "complexity": 181,
+      "change_frequency": 12,
+      "risk_score": 95,
+      "recommendation": "Refactor into cleanup orchestrator with smaller handlers"
+    },
+    {
+      "file": "src/core/legacy_processor.py",
+      "loc": 1450,
+      "complexity": 245,
+      "change_frequency": 28,
+      "risk_score": 100,
+      "recommendation": "Critical refactoring required - legacy code"
+    },
+    {
+      "file": "src/utils/data_transformer.py",
+      "loc": 980,
+      "complexity": 198,
+      "change_frequency": 22,
+      "risk_score": 92,
+      "recommendation": "Break into smaller transformation utilities"
+    }
+  ],
+  "complexity_distribution": {
+    "low": 526,
+    "medium": 350,
+    "high": 100,
+    "very_high": 18
+  },
+  "summary": {
+    "total_files": 994,
+    "total_loc": 45678,
+    "avg_complexity": 42.8,
+    "max_complexity": 181,
+    "hotspots_count": 5,
+    "high_complexity_files": 245,
+    "last_scan": "2025-12-04T12:46:23.666780"
+  }
+}

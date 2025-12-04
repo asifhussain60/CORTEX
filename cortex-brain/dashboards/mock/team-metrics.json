@@ -1,0 +1,104 @@
+{
+  "contributors": [
+    {
+      "name": "Asif Hussain",
+      "email": "asif@example.com",
+      "commits": 856,
+      "lines_added": 125430,
+      "lines_deleted": 45230,
+      "active_days": 145,
+      "first_commit": "2025-06-07T12:46:23.666781",
+      "last_commit": "2025-12-04T12:46:23.666785"
+    },
+    {
+      "name": "Developer 2",
+      "email": "dev2@example.com",
+      "commits": 234,
+      "lines_added": 34560,
+      "lines_deleted": 12340,
+      "active_days": 98,
+      "first_commit": "2025-08-06T12:46:23.666786",
+      "last_commit": "2025-12-02T12:46:23.666787"
+    },
+    {
+      "name": "Developer 3",
+      "email": "dev3@example.com",
+      "commits": 98,
+      "lines_added": 15670,
+      "lines_deleted": 5430,
+      "active_days": 45,
+      "first_commit": "2025-10-05T12:46:23.666788",
+      "last_commit": "2025-11-29T12:46:23.666789"
+    },
+    {
+      "name": "Developer 4",
+      "email": "dev4@example.com",
+      "commits": 48,
+      "lines_added": 8920,
+      "lines_deleted": 2340,
+      "active_days": 28,
+      "first_commit": "2025-10-20T12:46:23.666790",
+      "last_commit": "2025-11-26T12:46:23.666791"
+    }
+  ],
+  "velocity": {
+    "commits_per_week": [
+      {
+        "week": "2025-W48",
+        "commits": 42
+      },
+      {
+        "week": "2025-W47",
+        "commits": 38
+      },
+      {
+        "week": "2025-W46",
+        "commits": 45
+      },
+      {
+        "week": "2025-W45",
+        "commits": 51
+      },
+      {
+        "week": "2025-W44",
+        "commits": 39
+      }
+    ],
+    "trend": "stable",
+    "avg_commits_per_week": 43
+  },
+  "commit_trends": {
+    "by_hour": {
+      "09": 45,
+      "10": 78,
+      "11": 92,
+      "12": 34,
+      "13": 28,
+      "14": 67,
+      "15": 89,
+      "16": 72,
+      "17": 45,
+      "18": 23,
+      "19": 12,
+      "20": 8
+    },
+    "by_day": {
+      "Monday": 234,
+      "Tuesday": 267,
+      "Wednesday": 289,
+      "Thursday": 245,
+      "Friday": 201,
+      "Saturday": 0,
+      "Sunday": 0
+    }
+  },
+  "summary": {
+    "total_contributors": 4,
+    "total_commits": 1236,
+    "active_contributors": 4,
+    "bus_factor": 1,
+    "avg_commits_per_contributor": 309,
+    "avg_commits_per_week": 43,
+    "last_scan": "2025-12-04T12:46:23.666793"
+  }
+}
