@@ -89,7 +89,8 @@ The core objective—consolidating two dashboard systems into a single universal
 cd /Users/asifhussain/PROJECTS/CORTEX
 python3 -m src.dashboard.presentation.app
 
-# Access at: http://localhost:5000/dashboard/cortex
+# Access at: http://localhost:5001/dashboard/cortex
+# Note: Port 5001 used (macOS reserves port 5000)
 ```
 
 **Option 2: Production Server (Gunicorn)**
@@ -98,9 +99,9 @@ cd /Users/asifhussain/PROJECTS/CORTEX
 pip install gunicorn
 
 # Production deployment
-gunicorn -w 4 -b 0.0.0.0:5000 "src.dashboard.presentation.app:app"
+gunicorn -w 4 -b 0.0.0.0:5001 "src.dashboard.presentation.app:create_app(Path('cortex-brain/dashboards'), Path('cortex-brain/cache/dashboard-cache.db'))"
 
-# Access at: http://localhost:5000/dashboard/cortex
+# Access at: http://localhost:5001/dashboard/cortex
 ```
 
 **Option 3: Systemd Service (Linux/macOS)**
@@ -114,7 +115,7 @@ After=network.target
 Type=simple
 User=asifhussain
 WorkingDirectory=/Users/asifhussain/PROJECTS/CORTEX
-ExecStart=/usr/local/bin/gunicorn -w 4 -b 0.0.0.0:5000 "src.dashboard.presentation.app:app"
+ExecStart=/usr/local/bin/gunicorn -w 4 -b 0.0.0.0:5001 "src.dashboard.presentation.app:create_app(Path('cortex-brain/dashboards'), Path('cortex-brain/cache/dashboard-cache.db'))"
 Restart=always
 
 [Install]
@@ -128,7 +129,7 @@ sudo systemctl start cortex-dashboard
 ### Post-Deployment Validation
 
 - [ ] **Smoke Tests**
-  - [ ] Access http://localhost:5000/dashboard/cortex
+  - [ ] Access http://localhost:5001/dashboard/cortex
   - [ ] Verify dashboard renders correctly
   - [ ] Test tab switching (Overview, Architecture, Health, Metrics, Reports)
   - [ ] Test application switcher dropdown
@@ -246,7 +247,7 @@ python3 src/dashboard/presentation/dashboard_renderer.py
 ### Application Settings
 
 **Default Configuration:**
-- **Port:** 5000
+- **Port:** 5001 (macOS reserves 5000 for ControlCenter)
 - **Host:** 0.0.0.0 (all interfaces)
 - **Debug Mode:** False (production)
 - **Template Auto-Reload:** True (development)
@@ -261,7 +262,7 @@ python3 src/dashboard/presentation/dashboard_renderer.py
 
 ```bash
 # Optional overrides
-export CORTEX_DASHBOARD_PORT=5000
+export CORTEX_DASHBOARD_PORT=5001
 export CORTEX_DASHBOARD_HOST=0.0.0.0
 export CORTEX_DEBUG=False
 export CORTEX_DATA_PATH=/path/to/cortex-brain

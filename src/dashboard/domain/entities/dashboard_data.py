@@ -7,7 +7,7 @@ Pure Python - no framework dependencies (Clean Architecture Domain Layer).
 Author: Asif Hussain
 """
 from dataclasses import dataclass
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Union
 
 
 @dataclass(frozen=True)
@@ -20,30 +20,46 @@ class DashboardData:
     
     Attributes:
         app_id: Unique application identifier (e.g., "cortex", "noor-canvas")
-        tabs: Dictionary mapping tab names to their data
+        tabs: Array of tab objects with sections (NEW) OR dict for legacy support
         metadata: Application metadata (name, version, last_scan)
     
     Examples:
+        >>> # New array format
+        >>> data = DashboardData(
+        ...     app_id="cortex",
+        ...     tabs=[{"id": "overview", "name": "Overview", "sections": [...]}],
+        ...     metadata={"version": "3.3.0"}
+        ... )
+        >>> data.app_id
+        'cortex'
+        
+        >>> # Legacy dict format (deprecated)
         >>> data = DashboardData(
         ...     app_id="cortex",
         ...     tabs={"overview": {"files": 100}},
         ...     metadata={"version": "3.3.0"}
         ... )
-        >>> data.app_id
-        'cortex'
     """
     app_id: str
-    tabs: Dict[str, Any]
+    tabs: Union[List[Dict[str, Any]], Dict[str, Any]]  # List for new format, Dict for legacy
     metadata: Dict[str, Any]
     
     def get_tab_names(self) -> List[str]:
         """
         Get list of available tab names.
         
+        Handles both array format (new) and dict format (legacy).
+        
         Returns:
-            List of tab names (e.g., ["overview", "architecture"])
+            List of tab names/IDs (e.g., ["overview", "architecture"])
         """
-        return list(self.tabs.keys())
+        if isinstance(self.tabs, list):
+            # New format: array of tab objects with 'id' or 'name'
+            return [tab.get('id', tab.get('name', f'tab_{i}')) 
+                    for i, tab in enumerate(self.tabs)]
+        else:
+            # Legacy format: dict with tab names as keys
+            return list(self.tabs.keys())
     
     def to_dict(self) -> Dict[str, Any]:
         """

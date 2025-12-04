@@ -1,0 +1,453 @@
+{
+  "app_id": "mock",
+  "tabs": {
+    "overview": {
+      "total_files": 487,
+      "total_lines": 52340,
+      "languages": 6,
+      "health_score": 87.5
+    },
+    "languages": {
+      "title": "Language Analysis",
+      "python": {
+        "file_count": 245,
+        "total_lines": 28450,
+        "code_lines": 22360,
+        "comment_lines": 4690,
+        "blank_lines": 1400,
+        "functions": 1847,
+        "classes": 342,
+        "imports": 1256,
+        "avg_lines_per_file": 116,
+        "avg_complexity": 3.8,
+        "quality_score": 88.5,
+        "test_coverage": 84.2,
+        "patterns_detected": {
+          "async_functions": 156,
+          "decorators": 423,
+          "type_hints": 1568,
+          "docstrings": 1789,
+          "list_comprehensions": 287,
+          "context_managers": 134
+        }
+      },
+      "javascript": {
+        "file_count": 89,
+        "total_lines": 12340,
+        "code_lines": 9870,
+        "comment_lines": 1890,
+        "blank_lines": 580,
+        "functions": 876,
+        "classes": 123,
+        "imports": 534,
+        "avg_lines_per_file": 139,
+        "avg_complexity": 4.2,
+        "quality_score": 82.3,
+        "frameworks_detected": ["React", "Vue", "Express"],
+        "patterns_detected": {
+          "async_await": 234,
+          "promises": 189,
+          "arrow_functions": 756,
+          "es6_classes": 123,
+          "destructuring": 445,
+          "template_literals": 567
+        }
+      },
+      "typescript": {
+        "file_count": 56,
+        "total_lines": 8920,
+        "code_lines": 7140,
+        "comment_lines": 1340,
+        "blank_lines": 440,
+        "functions": 542,
+        "classes": 89,
+        "interfaces": 156,
+        "imports": 423,
+        "avg_lines_per_file": 159,
+        "avg_complexity": 3.5,
+        "quality_score": 91.2,
+        "patterns_detected": {
+          "generic_types": 234,
+          "enums": 45,
+          "decorators": 78,
+          "async_await": 167,
+          "type_guards": 89
+        }
+      },
+      "csharp": {
+        "file_count": 42,
+        "total_lines": 6340,
+        "code_lines": 5070,
+        "comment_lines": 980,
+        "blank_lines": 290,
+        "functions": 423,
+        "classes": 67,
+        "interfaces": 34,
+        "imports": 287,
+        "avg_lines_per_file": 151,
+        "avg_complexity": 3.2,
+        "quality_score": 85.7,
+        "patterns_detected": {
+          "async_methods": 134,
+          "linq_queries": 89,
+          "properties": 456,
+          "events": 67,
+          "dependency_injection": 78
+        }
+      },
+      "html": {
+        "file_count": 31,
+        "total_lines": 3890,
+        "code_lines": 3110,
+        "comment_lines": 590,
+        "blank_lines": 190,
+        "avg_lines_per_file": 126
+      },
+      "css": {
+        "file_count": 24,
+        "total_lines": 2890,
+        "code_lines": 2310,
+        "comment_lines": 440,
+        "blank_lines": 140,
+        "avg_lines_per_file": 120,
+        "patterns_detected": {
+          "css_variables": 78,
+          "media_queries": 45,
+          "flexbox": 123,
+          "grid": 67
+        }
+      }
+    },
+    "metrics": {
+      "title": "Code Quality Metrics",
+      "complexity": {
+        "avg_cyclomatic_complexity": 3.7,
+        "max_cyclomatic_complexity": 18,
+        "files_over_threshold": 23,
+        "threshold": 10,
+        "distribution": {
+          "1-5": 412,
+          "6-10": 52,
+          "11-15": 18,
+          "16+": 5
+        }
+      },
+      "maintainability": {
+        "maintainability_index": 82.4,
+        "technical_debt_hours": 127.5,
+        "code_smells": 89,
+        "duplication_percentage": 4.2,
+        "comment_density": 15.7
+      },
+      "security": {
+        "security_score": 78.5,
+        "vulnerabilities_found": 12,
+        "critical": 1,
+        "high": 3,
+        "medium": 5,
+        "low": 3,
+        "patterns_detected": {
+          "sql_injection_risks": 2,
+          "xss_vulnerabilities": 3,
+          "unsafe_deserialization": 1,
+          "hardcoded_credentials": 0,
+          "insecure_random": 2,
+          "path_traversal": 1
+        }
+      },
+      "testing": {
+        "total_tests": 1247,
+        "test_coverage": 84.2,
+        "unit_tests": 1089,
+        "integration_tests": 132,
+        "e2e_tests": 26,
+        "test_pass_rate": 98.7,
+        "avg_test_duration": 0.12,
+        "test_files": 89
+      }
+    },
+    "architecture": {
+      "title": "Architecture Analysis",
+      "layers": {
+        "presentation": {
+          "files": 78,
+          "lines": 8920,
+          "dependencies_in": 23,
+          "dependencies_out": 145
+        },
+        "application": {
+          "files": 134,
+          "lines": 15680,
+          "dependencies_in": 167,
+          "dependencies_out": 89
+        },
+        "domain": {
+          "files": 89,
+          "lines": 11240,
+          "dependencies_in": 234,
+          "dependencies_out": 12
+        },
+        "infrastructure": {
+          "files": 67,
+          "lines": 7890,
+          "dependencies_in": 45,
+          "dependencies_out": 178
+        }
+      },
+      "patterns": {
+        "clean_architecture": true,
+        "dependency_injection": true,
+        "repository_pattern": true,
+        "service_layer": true,
+        "cqrs": false,
+        "event_sourcing": false
+      },
+      "graph": {
+        "total_nodes": 487,
+        "total_edges": 1834,
+        "avg_dependencies": 3.8,
+        "circular_dependencies": 3,
+        "isolated_components": 12,
+        "largest_component_size": 342,
+        "modularity_score": 0.72
+      },
+      "hotspots": [
+        {
+          "file": "src/core/processing_engine.py",
+          "lines": 1247,
+          "dependencies": 23,
+          "changes_last_30_days": 47,
+          "contributors": 5,
+          "complexity": 15.8
+        },
+        {
+          "file": "src/api/main_controller.js",
+          "lines": 892,
+          "dependencies": 18,
+          "changes_last_30_days": 34,
+          "contributors": 4,
+          "complexity": 12.3
+        },
+        {
+          "file": "src/services/data_service.cs",
+          "lines": 756,
+          "dependencies": 15,
+          "changes_last_30_days": 28,
+          "contributors": 3,
+          "complexity": 11.7
+        }
+      ]
+    },
+    "dependencies": {
+      "title": "Dependency Analysis",
+      "external_packages": {
+        "total": 87,
+        "outdated": 12,
+        "vulnerable": 3,
+        "python": {
+          "total": 34,
+          "packages": [
+            {"name": "fastapi", "version": "0.109.0", "latest": "0.110.0", "outdated": true},
+            {"name": "sqlalchemy", "version": "2.0.23", "latest": "2.0.25", "outdated": true},
+            {"name": "pydantic", "version": "2.5.3", "latest": "2.5.3", "outdated": false},
+            {"name": "pytest", "version": "7.4.3", "latest": "8.0.0", "outdated": true},
+            {"name": "requests", "version": "2.31.0", "latest": "2.31.0", "outdated": false}
+          ]
+        },
+        "javascript": {
+          "total": 53,
+          "packages": [
+            {"name": "react", "version": "18.2.0", "latest": "18.2.0", "outdated": false},
+            {"name": "vue", "version": "3.3.8", "latest": "3.4.15", "outdated": true},
+            {"name": "express", "version": "4.18.2", "latest": "4.18.2", "outdated": false},
+            {"name": "axios", "version": "1.6.2", "latest": "1.6.5", "outdated": true},
+            {"name": "lodash", "version": "4.17.20", "latest": "4.17.21", "outdated": true, "vulnerable": true}
+          ]
+        }
+      },
+      "internal_modules": {
+        "total": 124,
+        "most_imported": [
+          {"module": "src.core.utils", "import_count": 89},
+          {"module": "src.api.middleware", "import_count": 67},
+          {"module": "src.domain.models", "import_count": 54},
+          {"module": "src.services.base", "import_count": 45}
+        ]
+      }
+    },
+    "health": {
+      "title": "Project Health Status",
+      "status": "healthy",
+      "last_check": "2025-12-04T14:30:00Z",
+      "health_indicators": {
+        "code_quality": {
+          "status": "good",
+          "score": 87.5,
+          "trend": "improving",
+          "details": "Well-structured code with good test coverage"
+        },
+        "security": {
+          "status": "warning",
+          "score": 78.5,
+          "trend": "stable",
+          "details": "12 vulnerabilities detected, 4 require immediate attention"
+        },
+        "maintainability": {
+          "status": "good",
+          "score": 82.4,
+          "trend": "stable",
+          "details": "Technical debt within acceptable range"
+        },
+        "testing": {
+          "status": "excellent",
+          "score": 84.2,
+          "trend": "improving",
+          "details": "High test coverage with 98.7% pass rate"
+        },
+        "dependencies": {
+          "status": "warning",
+          "score": 72.3,
+          "trend": "degrading",
+          "details": "12 outdated packages, 3 with known vulnerabilities"
+        }
+      },
+      "recommendations": [
+        {
+          "priority": "critical",
+          "category": "security",
+          "title": "Update vulnerable dependency: lodash",
+          "description": "CVE-2021-23337 affects lodash 4.17.20. Update to 4.17.21 or higher.",
+          "effort": "low",
+          "impact": "high"
+        },
+        {
+          "priority": "high",
+          "category": "security",
+          "title": "Review SQL injection risks",
+          "description": "2 potential SQL injection vulnerabilities detected in data access layer.",
+          "effort": "medium",
+          "impact": "high"
+        },
+        {
+          "priority": "medium",
+          "category": "maintainability",
+          "title": "Refactor high-complexity functions",
+          "description": "23 functions exceed complexity threshold of 10. Consider breaking them down.",
+          "effort": "high",
+          "impact": "medium"
+        },
+        {
+          "priority": "medium",
+          "category": "dependencies",
+          "title": "Update outdated packages",
+          "description": "12 packages have newer versions available. Schedule update sprint.",
+          "effort": "medium",
+          "impact": "medium"
+        },
+        {
+          "priority": "low",
+          "category": "testing",
+          "title": "Increase E2E test coverage",
+          "description": "Only 26 E2E tests. Consider adding more critical user flow tests.",
+          "effort": "high",
+          "impact": "low"
+        }
+      ]
+    },
+    "trends": {
+      "title": "Historical Trends",
+      "code_growth": {
+        "last_30_days": {
+          "lines_added": 8920,
+          "lines_removed": 5340,
+          "net_change": 3580,
+          "files_added": 23,
+          "files_removed": 8,
+          "commits": 187
+        },
+        "last_90_days": {
+          "lines_added": 24680,
+          "lines_removed": 18230,
+          "net_change": 6450,
+          "files_added": 67,
+          "files_removed": 34,
+          "commits": 542
+        }
+      },
+      "quality_trend": {
+        "current": 87.5,
+        "30_days_ago": 85.2,
+        "60_days_ago": 83.8,
+        "90_days_ago": 82.1,
+        "trend": "improving"
+      },
+      "test_coverage_trend": {
+        "current": 84.2,
+        "30_days_ago": 82.7,
+        "60_days_ago": 81.3,
+        "90_days_ago": 79.8,
+        "trend": "improving"
+      },
+      "technical_debt_trend": {
+        "current": 127.5,
+        "30_days_ago": 134.2,
+        "60_days_ago": 142.8,
+        "90_days_ago": 156.4,
+        "trend": "improving",
+        "unit": "hours"
+      }
+    },
+    "team": {
+      "title": "Team Metrics",
+      "contributors": {
+        "total": 8,
+        "active_last_30_days": 6,
+        "top_contributors": [
+          {
+            "name": "Developer A",
+            "commits": 89,
+            "lines_added": 3420,
+            "lines_removed": 1890,
+            "files_changed": 134
+          },
+          {
+            "name": "Developer B",
+            "commits": 67,
+            "lines_added": 2890,
+            "lines_removed": 1560,
+            "files_changed": 98
+          },
+          {
+            "name": "Developer C",
+            "commits": 54,
+            "lines_added": 2340,
+            "lines_removed": 1240,
+            "files_changed": 76
+          }
+        ]
+      },
+      "activity": {
+        "avg_commits_per_day": 6.2,
+        "avg_lines_per_commit": 47.8,
+        "busiest_day": "Wednesday",
+        "peak_hours": "10:00-12:00 UTC"
+      }
+    }
+  },
+  "metadata": {
+    "app_name": "Mock Enterprise Application",
+    "app_type": "mock",
+    "description": "Comprehensive mock dashboard data simulating a real-world multi-language enterprise application",
+    "version": "1.0.0",
+    "framework": "Multi-Framework (FastAPI, React, Vue, Express, .NET)",
+    "languages": ["Python", "JavaScript", "TypeScript", "C#", "HTML", "CSS"],
+    "team_size": 8,
+    "project_age_days": 547,
+    "last_updated": "2025-12-04T14:30:00Z",
+    "last_scan": "2025-12-04T14:30:00Z",
+    "scan_level": "standard",
+    "generated_by": "CORTEX Mock Data Generator",
+    "data_source": "synthetic",
+    "realistic_simulation": true
+  }
+}

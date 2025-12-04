@@ -133,6 +133,11 @@ def create_app(dashboard_base_path: Path, app_registry_db_path: Path) -> Flask:
         except FileNotFoundError:
             return "Dashboard not found", 404
         except Exception as e:
+            # Enhanced error reporting for debugging
+            import traceback
+            error_details = f"Error: {str(e)}\n\nTraceback:\n{traceback.format_exc()}"
+            if app.config.get('DEBUG'):
+                return error_details, 500
             return f"Error: {str(e)}", 500
     
     @app.route('/dashboard/<app_id>/refresh', methods=['POST'])
@@ -169,3 +174,37 @@ def create_app(dashboard_base_path: Path, app_registry_db_path: Path) -> Flask:
             return jsonify({"success": False, "error": str(e)}), 500
     
     return app
+
+
+if __name__ == '__main__':
+    """
+    Run Flask development server.
+    
+    Note: macOS uses port 5000 for ControlCenter, so we use 5001.
+    For production, use Gunicorn or similar WSGI server.
+    """
+    from pathlib import Path
+    
+    # Get CORTEX paths
+    cortex_root = Path(__file__).resolve().parents[3]
+    dashboard_base_path = cortex_root / 'cortex-brain' / 'dashboards'
+    app_registry_db_path = cortex_root / 'cortex-brain' / 'cache' / 'dashboard-cache.db'
+    
+    # Create Flask app
+    app = create_app(dashboard_base_path, app_registry_db_path)
+    
+    # Run development server
+    print("=" * 80)
+    print("🧠 CORTEX Dashboard Server Starting...")
+    print("=" * 80)
+    print(f"Dashboard Data: {dashboard_base_path}")
+    print(f"App Registry: {app_registry_db_path}")
+    print("")
+    print("🌐 Access dashboard at:")
+    print("   http://localhost:5001/dashboard/cortex")
+    print("   http://127.0.0.1:5001/dashboard/cortex")
+    print("")
+    print("⚠️  Using port 5001 (macOS uses 5000 for ControlCenter)")
+    print("=" * 80)
+    
+    app.run(debug=True, host='0.0.0.0', port=5001)

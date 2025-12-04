@@ -15,30 +15,104 @@
     {% if tabs %}
     <div class="tabs-container">
         <div class="tabs-nav">
-            {% for tab_name in tabs.keys() %}
+            {% for tab in tabs %}
             <button class="tab-button {% if loop.first %}active{% endif %}" 
-                    data-tab="{{ tab_name }}">
-                {{ tab_name|title }}
+                    data-tab="{{ tab.id }}">
+                {% if tab.icon %}{{ tab.icon }} {% endif %}{{ tab.name }}
             </button>
             {% endfor %}
         </div>
         
         <div class="tabs-content">
-            {% for tab_name, tab_data in tabs.items() %}
+            {% for tab in tabs %}
             <div class="tab-panel {% if loop.first %}active{% endif %}" 
-                 id="tab-{{ tab_name }}">
-                <h3>{{ tab_name|title }}</h3>
-                {% if tab_data %}
-                <div class="metrics-grid">
-                    {% for key, value in tab_data.items() %}
-                    <div class="metric-card">
-                        <div class="metric-label">{{ key|replace('_', ' ')|title }}</div>
-                        <div class="metric-value">{{ value }}</div>
+                 id="tab-{{ tab.id }}">
+                <h3>{{ tab.name }}</h3>
+                
+                {% if tab.sections %}
+                    {% for section in tab.sections %}
+                    <div class="section-container" data-content-type="{{ section.content_type }}">
+                        <h4 class="section-title">{{ section.title }}</h4>
+                        
+                        {% if section.content_type == 'metrics' %}
+                            <div class="metrics-grid">
+                                {% for key, value in section.data.items() %}
+                                <div class="metric-card">
+                                    <div class="metric-label">{{ key|replace('_', ' ')|title }}</div>
+                                    <div class="metric-value">{{ value }}</div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        
+                        {% elif section.content_type == 'table' %}
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            {% for header in section.data.headers %}
+                                            <th>{{ header }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in section.data.rows %}
+                                        <tr>
+                                            {% for cell in row %}
+                                            <td>{{ cell }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        
+                        {% elif section.content_type == 'chart' %}
+                            <div class="chart-container">
+                                <div class="chart-placeholder" data-chart-type="{{ section.chart_type }}">
+                                    <p class="chart-info">📊 {{ section.chart_type|title }} Chart</p>
+                                    <p class="chart-note">Chart rendering requires Chart.js integration (Phase 5)</p>
+                                    <div class="chart-data-preview">
+                                        <pre>{{ section.data|tojson(indent=2) }}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        {% elif section.content_type == 'list' %}
+                            <div class="list-container">
+                                <ul class="data-list">
+                                    {% for item in section.data['items'] %}
+                                    <li class="list-item">
+                                        <span class="item-type">{{ item.type|upper }}</span>
+                                        <span class="item-message">{{ item.message }}</span>
+                                        {% if item.author %}
+                                        <span class="item-author">by {{ item.author }}</span>
+                                        {% endif %}
+                                        {% if item.timestamp %}
+                                        <span class="item-timestamp">{{ item.timestamp }}</span>
+                                        {% endif %}
+                                        {% if item.result %}
+                                        <span class="item-result">{{ item.result }}</span>
+                                        {% endif %}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        
+                        {% elif section.content_type == 'message' %}
+                            <div class="message-container message-{{ section.data.type }}">
+                                <p class="message-text">{{ section.data.message }}</p>
+                            </div>
+                        
+                        {% else %}
+                            <div class="unknown-content">
+                                <p>Unknown content type: {{ section.content_type }}</p>
+                                <pre>{{ section.data|tojson(indent=2) }}</pre>
+                            </div>
+                        {% endif %}
                     </div>
                     {% endfor %}
-                </div>
                 {% else %}
-                <p class="no-data">No data available for this tab.</p>
+                    <p class="no-data">No sections available for this tab.</p>
                 {% endif %}
             </div>
             {% endfor %}
