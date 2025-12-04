@@ -1,0 +1,12 @@
+"""
+Setup Models Package
+
+Pydantic models for CORTEX setup and configuration.
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+"""
+
+from .user_profile import UserProfile, SUPPORTED_LANGUAGES
+
+__all__ = ["UserProfile", "SUPPORTED_LANGUAGES"]

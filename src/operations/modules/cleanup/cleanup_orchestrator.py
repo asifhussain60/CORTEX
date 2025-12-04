@@ -1,14 +1,23 @@
 """
-Cleanup Orchestrator for CORTEX 2.0
+Cleanup Orchestrator for CORTEX 3.0 - Enhanced Edition
 
-Comprehensive workspace cleanup orchestrator that:
-- Deletes all backup files and folders (with GitHub archival)
-- Keeps root folder clean and organized
-- Reorganizes misplaced files to correct locations
-- Removes redundancies in MD files (consolidates duplicates)
-- Runs bloat tests on entry points and orchestrators
-- Automatically triggers optimization orchestrator after cleanup
-- Git tracking for all changes
+Comprehensive workspace cleanup orchestrator with advanced capabilities:
+- Recursive file scanning and categorization
+- Smart deletion with safety validation
+- File reorganization with automatic reference updates
+- Document consolidation
+- Script/test organization
+- Git recovery capability
+- Comprehensive reporting
+
+NEW CAPABILITIES (v3.0):
+- Deep recursive scanning from repo root
+- Intelligent file categorization (type, purpose, age)
+- Reference tracking across Python imports, paths, markdown links
+- Automatic import/path/link updates when files move
+- Smart deletion rules with risk assessment
+- Post-cleanup verification with git recovery
+- Comprehensive audit trail and reporting
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -35,6 +44,12 @@ from src.operations.modules.cleanup.backup_archiver import BackupArchiver
 from .remove_obsolete_tests_module import RemoveObsoleteTestsModule
 from src.governance import DocumentGovernance
 
+# NEW: Import enhanced cleanup components
+from src.operations.modules.cleanup.file_scanner import FileScanner, FileCategory, FilePurpose
+from src.operations.modules.cleanup.reference_tracker import ReferenceTracker
+from src.operations.modules.cleanup.smart_deletion_engine import SmartDeletionEngine, DeletionRisk
+from src.operations.modules.cleanup.file_reorganization_engine import FileReorganizationEngine
+
 logger = logging.getLogger(__name__)
 
 
@@ -57,7 +72,7 @@ class CleanupOrchestrator(BaseOperationModule):
         
         # Protected paths - NEVER touch these
         self.protected_paths = {
-            'src/', 'tests/', 'cortex-brain/', 'docs/',
+            'src/', 'src/orchestrators/', 'tests/', 'cortex-brain/', 'docs/',
             'prompts/', 'workflows/', 'scripts/', '.git/',
             '.github/', '.vscode/', 'node_modules/',
             'package.json', 'tsconfig.json', 'pytest.ini',
@@ -66,6 +81,26 @@ class CleanupOrchestrator(BaseOperationModule):
             'LICENSE', 'README.md', 'CHANGELOG.md',
             '.gitignore', '.gitattributes', '.editorconfig',
             'mkdocs.yml', 'cortex-operations.yaml'
+        }
+        
+        # CRITICAL: Protected orchestrator files (restored 2025-12-03)
+        # These files were incorrectly removed by cleanup but are required for:
+        # - TDD Mastery workflow (git_checkpoint_orchestrator, phase_checkpoint_manager)
+        # - Deployment validation (planning_orchestrator, setup_epm_orchestrator)
+        # - Test suite execution (rollback_orchestrator, rollback_command_parser)
+        # - Health monitoring (application_health_orchestrator, dashboard_generator)
+        # - User onboarding (onboarding_acknowledgment_orchestrator, master_setup_orchestrator)
+        self.protected_orchestrator_files = {
+            'src/orchestrators/git_checkpoint_orchestrator.py',
+            'src/orchestrators/phase_checkpoint_manager.py',
+            'src/orchestrators/rollback_orchestrator.py',
+            'src/orchestrators/rollback_command_parser.py',
+            'src/orchestrators/application_health_orchestrator.py',
+            'src/orchestrators/dashboard_generator.py',
+            'src/orchestrators/planning_orchestrator.py',
+            'src/orchestrators/setup_epm_orchestrator.py',
+            'src/orchestrators/onboarding_acknowledgment_orchestrator.py',
+            'src/orchestrators/master_setup_orchestrator.py',
         }
         
         # File organization rules
@@ -103,16 +138,16 @@ class CleanupOrchestrator(BaseOperationModule):
     def get_metadata(self) -> OperationModuleMetadata:
         """Module metadata."""
         return OperationModuleMetadata(
-            module_id="cleanup_orchestrator",
-            name="Cleanup Orchestrator",
-            description="Comprehensive workspace cleanup with organization and optimization",
-            version="1.0.0",
+            module_id="cleanup_orchestrator_v3",
+            name="Cleanup Orchestrator v3.0 (Enhanced)",
+            description="Comprehensive workspace cleanup with advanced scanning, intelligent deletion, and automatic reference updates",
+            version="3.0.0",
             author="Asif Hussain",
             phase=OperationPhase.PROCESSING,
             priority=100,
             dependencies=[],
             optional=False,
-            tags=['cleanup', 'maintenance', 'organization']
+            tags=['cleanup', 'maintenance', 'organization', 'enhanced']
         )
     
     def check_prerequisites(self, context: Dict[str, Any]) -> Dict[str, Any]:
@@ -149,6 +184,269 @@ class CleanupOrchestrator(BaseOperationModule):
             'prerequisites_met': len(issues) == 0,
             'issues': issues
         }
+    
+    def execute_enhanced(self, context: Dict[str, Any]) -> OperationResult:
+        """
+        Execute ENHANCED comprehensive cleanup workflow (v3.0).
+        
+        NEW WORKFLOW:
+        1. Deep recursive scanning and categorization
+        2. Reference tracking (imports, paths, links)
+        3. Smart deletion with risk assessment
+        4. File reorganization with auto-reference updates
+        5. Document consolidation
+        6. Script/test organization
+        7. Final verification with git recovery
+        8. Comprehensive reporting
+        
+        Args:
+            context: Execution context with options
+            
+        Returns:
+            OperationResult with comprehensive cleanup data
+        """
+        start_time = datetime.now()
+        
+        try:
+            logger.info("=" * 80)
+            logger.info("CORTEX CLEANUP ORCHESTRATOR v3.0 - ENHANCED EDITION")
+            logger.info("=" * 80)
+            
+            profile = context.get('profile', 'standard')
+            dry_run = context.get('dry_run', False)
+            
+            # Display header
+            mode = "DRY RUN" if dry_run else "LIVE EXECUTION"
+            print_minimalist_header(
+                operation_name="Enhanced Cleanup v3.0",
+                version="3.0.0",
+                profile=profile,
+                mode=mode
+            )
+            
+            logger.info(f"Profile: {profile}")
+            logger.info(f"Dry Run: {dry_run}")
+            logger.info(f"Project Root: {self.project_root}")
+            logger.info("")
+            
+            # ================================================================
+            # PHASE 1: Deep File Scanning & Categorization
+            # ================================================================
+            logger.info("Phase 1: Deep File Scanning & Categorization")
+            logger.info("-" * 80)
+            
+            scanner = FileScanner(self.project_root, self.protected_paths)
+            files = scanner.scan()
+            
+            scan_stats = scanner.get_statistics()
+            logger.info(f"✅ Scanned {scan_stats['total_files']} files ({scan_stats['total_size_mb']:.2f}MB)")
+            logger.info(f"   Categories: {len(scan_stats['categories'])} types identified")
+            logger.info(f"   Duplicates: {scan_stats['duplicate_count']} files ({scan_stats['duplicate_groups']} groups)")
+            logger.info("")
+            
+            # ================================================================
+            # PHASE 2: Reference Tracking
+            # ================================================================
+            logger.info("Phase 2: Reference Tracking (imports, paths, links)")
+            logger.info("-" * 80)
+            
+            reference_tracker = ReferenceTracker(self.project_root)
+            references = reference_tracker.scan(files)
+            
+            ref_stats = reference_tracker.get_statistics()
+            logger.info(f"✅ Tracked {ref_stats['total_references']} references:")
+            logger.info(f"   - Python imports: {ref_stats['total_imports']}")
+            logger.info(f"   - Path references: {ref_stats['total_path_refs']}")
+            logger.info(f"   - Markdown links: {ref_stats['total_links']}")
+            logger.info(f"   - Config references: {ref_stats['total_config_refs']}")
+            logger.info("")
+            
+            # ================================================================
+            # PHASE 3: Smart Deletion Analysis
+            # ================================================================
+            logger.info("Phase 3: Smart Deletion Analysis")
+            logger.info("-" * 80)
+            
+            deletion_engine = SmartDeletionEngine(self.project_root)
+            deletion_candidates = deletion_engine.analyze(files, reference_tracker.dependency_graph)
+            
+            del_stats = deletion_engine.get_statistics()
+            logger.info(f"✅ Found {del_stats['total_candidates']} deletion candidates:")
+            logger.info(f"   - Safe to auto-delete: {del_stats['safe_to_delete']}")
+            logger.info(f"   - Space to free: {del_stats['space_to_free_mb']:.2f}MB")
+            logger.info(f"   Risk breakdown: {del_stats['risk_breakdown']}")
+            logger.info("")
+            
+            # Generate deletion manifest
+            manifest_path = deletion_engine.generate_manifest()
+            logger.info(f"📄 Deletion manifest: {manifest_path.relative_to(self.project_root)}")
+            logger.info("")
+            
+            # ================================================================
+            # PHASE 4: Execute Safe Deletions
+            # ================================================================
+            if profile in ['standard', 'comprehensive']:
+                logger.info("Phase 4: Execute Safe Deletions")
+                logger.info("-" * 80)
+                
+                deletion_results = deletion_engine.execute_deletions(
+                    dry_run=dry_run,
+                    risk_filter={DeletionRisk.SAFE, DeletionRisk.LOW}
+                )
+                
+                logger.info(f"✅ Deleted {deletion_results['deleted_count']} files ({deletion_results['space_freed_mb']:.2f}MB)")
+                logger.info(f"   Skipped: {deletion_results['skipped_count']}")
+                logger.info(f"   Failed: {deletion_results['failed_count']}")
+                
+                # Update metrics
+                self.metrics.files_deleted = deletion_results['deleted_count']
+                self.metrics.space_freed_bytes = deletion_results['space_freed_bytes']
+                logger.info("")
+            
+            # ================================================================
+            # PHASE 5: File Reorganization
+            # ================================================================
+            if profile in ['standard', 'comprehensive']:
+                logger.info("Phase 5: File Reorganization with Reference Updates")
+                logger.info("-" * 80)
+                
+                reorganization_engine = FileReorganizationEngine(self.project_root, reference_tracker)
+                reorganization_plan = reorganization_engine.analyze_reorganization(files)
+                
+                logger.info(f"📋 Reorganization plan: {len(reorganization_plan)} files to move")
+                
+                if reorganization_plan:
+                    reorg_results = reorganization_engine.execute_reorganization(
+                        reorganization_plan,
+                        dry_run=dry_run
+                    )
+                    
+                    logger.info(f"✅ Moved {reorg_results['moved_count']} files")
+                    logger.info(f"   References updated: {reorg_results['references_updated']}")
+                    logger.info(f"   Failed: {reorg_results['failed_count']}")
+                    
+                    # Generate reorganization manifest
+                    if not dry_run and reorg_results['moved_count'] > 0:
+                        reorg_manifest = reorganization_engine.generate_move_manifest()
+                        logger.info(f"📄 Reorganization manifest: {reorg_manifest.relative_to(self.project_root)}")
+                    
+                    # Update metrics
+                    self.metrics.files_reorganized = reorg_results['moved_count']
+                
+                logger.info("")
+            
+            # ================================================================
+            # PHASE 6: Legacy Cleanup (Existing Phases)
+            # ================================================================
+            logger.info("Phase 6: Legacy Cleanup Operations")
+            logger.info("-" * 80)
+            
+            # Run existing backup management
+            if profile in ['standard', 'comprehensive']:
+                self._manage_backups(dry_run)
+                logger.info(f"✅ Managed {self.metrics.backups_deleted} backup files")
+            
+            # Run existing legacy cleanup
+            legacy_cleaned = self._cleanup_legacy_kds_files(dry_run)
+            logger.info(f"✅ Cleaned {legacy_cleaned} legacy files")
+            
+            # Run existing doc archive cleanup
+            if profile in ['standard', 'comprehensive']:
+                self._cleanup_doc_archives(dry_run)
+                logger.info(f"✅ Removed {self.metrics.archived_docs_removed} archived documents")
+            
+            # Run existing bloat detection
+            self._detect_bloat()
+            logger.info(f"✅ Detected {self.metrics.bloated_files_found} bloated files")
+            
+            logger.info("")
+            
+            # ================================================================
+            # PHASE 7: Final Verification & Git Recovery Setup
+            # ================================================================
+            logger.info("Phase 7: Final Verification & Git Recovery")
+            logger.info("-" * 80)
+            
+            verification = self._verify_essential_files(files, deletion_results if 'deletion_results' in locals() else None)
+            
+            if verification['essential_deleted']:
+                logger.warning(f"⚠️  {len(verification['essential_deleted'])} essential files may have been deleted")
+                logger.warning("   Git recovery commands generated in report")
+            else:
+                logger.info("✅ No essential files deleted")
+            
+            logger.info("")
+            
+            # ================================================================
+            # PHASE 8: Git Commit
+            # ================================================================
+            if not dry_run and self.metrics.files_deleted > 0:
+                logger.info("Phase 8: Git Commit")
+                logger.info("-" * 80)
+                self._git_commit_enhanced_cleanup()
+                logger.info(f"✅ Changes committed to git")
+                logger.info("")
+            
+            # ================================================================
+            # PHASE 9: Comprehensive Reporting
+            # ================================================================
+            logger.info("Phase 9: Comprehensive Reporting")
+            logger.info("-" * 80)
+            
+            end_time = datetime.now()
+            self.metrics.duration_seconds = (end_time - start_time).total_seconds()
+            
+            report = self._generate_enhanced_report({
+                'scan_stats': scan_stats,
+                'ref_stats': ref_stats,
+                'del_stats': del_stats,
+                'deletion_results': deletion_results if 'deletion_results' in locals() else {},
+                'reorg_results': reorg_results if 'reorg_results' in locals() else {},
+                'verification': verification
+            })
+            
+            logger.info(f"✅ Report generated: {report['report_path']}")
+            logger.info("")
+            
+            # ================================================================
+            # COMPLETION
+            # ================================================================
+            logger.info("=" * 80)
+            logger.info("ENHANCED CLEANUP COMPLETE")
+            logger.info("=" * 80)
+            logger.info(f"Duration: {self.metrics.duration_seconds:.2f}s")
+            logger.info(f"Files Scanned: {scan_stats['total_files']}")
+            logger.info(f"Files Deleted: {self.metrics.files_deleted}")
+            logger.info(f"Files Moved: {self.metrics.files_reorganized}")
+            logger.info(f"References Updated: {reorg_results.get('references_updated', 0) if 'reorg_results' in locals() else 0}")
+            logger.info(f"Space Freed: {self.metrics.space_freed_mb:.2f}MB")
+            logger.info("")
+            
+            return OperationResult(
+                success=True,
+                status=OperationStatus.SUCCESS,
+                message=f"Enhanced cleanup completed: {self.metrics.files_deleted} deleted, "
+                        f"{self.metrics.files_reorganized} reorganized, "
+                        f"{self.metrics.space_freed_mb:.2f}MB freed",
+                data={
+                    'metrics': self.metrics.to_dict(),
+                    'report': report,
+                    'scan_stats': scan_stats,
+                    'reference_stats': ref_stats,
+                    'deletion_stats': del_stats,
+                    'verification': verification
+                }
+            )
+            
+        except Exception as e:
+            logger.error(f"Enhanced cleanup failed: {e}", exc_info=True)
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Enhanced cleanup failed: {str(e)}",
+                data={'error': str(e)}
+            )
+    
     
     def execute(self, context: Dict[str, Any]) -> OperationResult:
         """Execute comprehensive cleanup workflow"""
@@ -361,6 +659,12 @@ class CleanupOrchestrator(BaseOperationModule):
             relative_path = path.relative_to(self.project_root)
             path_str = str(relative_path).replace('\\', '/')
             
+            # Check if path matches protected orchestrator files (exact match)
+            if path_str in self.protected_orchestrator_files:
+                logger.debug(f"Protected orchestrator file: {path_str}")
+                return True
+            
+            # Check if path is in protected directories
             for protected in self.protected_paths:
                 if path_str == protected.rstrip('/'):
                     return True
@@ -932,3 +1236,189 @@ Duration: {self.metrics.duration_seconds:.2f}s"""
             'recommendations': recommendations,
             'success': len(self.metrics.errors) == 0
         }
+
+    # ========================================================================
+    # ENHANCED v3.0 METHODS
+    # ========================================================================
+    
+    def _verify_essential_files(self, files: Dict[str, Any], deletion_results: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Verify no essential files were deleted.
+        
+        Args:
+            files: Dictionary of scanned files
+            deletion_results: Results from deletion engine
+            
+        Returns:
+            Verification results with recovery commands if needed
+        """
+        essential_deleted = []
+        recovery_commands = []
+        
+        if not deletion_results or not deletion_results.get('deleted_files'):
+            return {
+                'essential_deleted': [],
+                'recovery_commands': [],
+                'verification_passed': True
+            }
+        
+        # Define essential file patterns
+        essential_patterns = [
+            r'^src/tier0/.*\.py$',  # Core tier 0
+            r'^src/tier1/.*\.py$',  # Core tier 1
+            r'^src/cortex_agents/.*\.py$',  # Agents
+            r'^cortex-brain/brain-protection-rules\.yaml$',  # Protection rules
+            r'^cortex-brain/response-templates\.yaml$',  # Response templates
+            r'^cortex.config\.json$',  # Main config
+            r'^requirements\.txt$',  # Dependencies
+        ]
+        
+        for deleted_file in deletion_results.get('deleted_files', []):
+            # Check if file matches essential patterns
+            for pattern in essential_patterns:
+                if re.match(pattern, deleted_file):
+                    essential_deleted.append(deleted_file)
+                    
+                    # Generate git recovery command
+                    recovery_commands.append(f"git checkout HEAD -- {deleted_file}")
+                    break
+        
+        verification_passed = len(essential_deleted) == 0
+        
+        return {
+            'essential_deleted': essential_deleted,
+            'recovery_commands': recovery_commands,
+            'verification_passed': verification_passed,
+            'total_deleted': len(deletion_results.get('deleted_files', []))
+        }
+    
+    def _git_commit_enhanced_cleanup(self) -> None:
+        """Commit enhanced cleanup changes to git"""
+        try:
+            result = subprocess.run(
+                ['git', 'status', '--porcelain'],
+                cwd=str(self.project_root),
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            
+            if not result.stdout.strip():
+                logger.info("No changes to commit")
+                return
+            
+            # Add all changes
+            subprocess.run(
+                ['git', 'add', '-A'],
+                cwd=str(self.project_root),
+                check=True,
+                timeout=10
+            )
+            
+            # Commit with detailed message
+            commit_message = f"""[CLEANUP v3.0] Enhanced workspace cleanup - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+Enhanced cleanup performed:
+- Files scanned: comprehensive recursive scan
+- Files deleted: {self.metrics.files_deleted} (with safety validation)
+- Files reorganized: {self.metrics.files_reorganized} (with reference updates)
+- Backups managed: {self.metrics.backups_deleted} archived and deleted
+- Space freed: {self.metrics.space_freed_mb:.2f}MB
+- References updated: automatic import/path/link updates
+- Verification: essential files checked and protected
+
+Duration: {self.metrics.duration_seconds:.2f}s
+Version: 3.0.0"""
+            
+            subprocess.run(
+                ['git', 'commit', '-m', commit_message],
+                cwd=str(self.project_root),
+                check=True,
+                timeout=30
+            )
+            
+            self.metrics.git_commits_created += 1
+            logger.info("✅ Changes committed to git")
+            
+        except subprocess.TimeoutExpired:
+            self.metrics.errors.append("Git commit timed out")
+        except subprocess.CalledProcessError as e:
+            self.metrics.errors.append(f"Git commit failed: {e}")
+    
+    def _generate_enhanced_report(self, stats: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Generate comprehensive cleanup report.
+        
+        Args:
+            stats: Dictionary containing all statistics
+            
+        Returns:
+            Report dictionary with path to saved report
+        """
+        recommendations = []
+        
+        # Analyze scan results
+        scan_stats = stats.get('scan_stats', {})
+        if scan_stats.get('duplicate_count', 0) > 10:
+            recommendations.append(
+                f"Found {scan_stats['duplicate_count']} duplicate files. "
+                f"Consider using git for version control instead of file copies."
+            )
+        
+        # Analyze deletion results
+        del_stats = stats.get('del_stats', {})
+        if del_stats.get('space_to_free_mb', 0) > 100:
+            recommendations.append(
+                f"Could free {del_stats['space_to_free_mb']:.2f}MB more by reviewing medium-risk deletions."
+            )
+        
+        # Analyze reorganization
+        reorg_results = stats.get('reorg_results', {})
+        if reorg_results.get('moved_count', 0) > 20:
+            recommendations.append(
+                f"Reorganized {reorg_results['moved_count']} files. "
+                f"Consider establishing file organization guidelines to prevent future misplacement."
+            )
+        
+        # Analyze verification
+        verification = stats.get('verification', {})
+        if not verification.get('verification_passed', True):
+            recommendations.append(
+                f"⚠️ {len(verification['essential_deleted'])} essential files may need recovery. "
+                f"Review recovery commands in report."
+            )
+        
+        # Build comprehensive report
+        report = {
+            'timestamp': datetime.now().isoformat(),
+            'version': '3.0.0',
+            'summary': {
+                'total_scanned': scan_stats.get('total_files', 0),
+                'total_deleted': self.metrics.files_deleted,
+                'total_moved': self.metrics.files_reorganized,
+                'total_references_updated': reorg_results.get('references_updated', 0),
+                'space_freed_mb': self.metrics.space_freed_mb,
+                'duration_seconds': self.metrics.duration_seconds
+            },
+            'scan_statistics': scan_stats,
+            'reference_statistics': stats.get('ref_stats', {}),
+            'deletion_statistics': del_stats,
+            'deletion_results': stats.get('deletion_results', {}),
+            'reorganization_results': reorg_results,
+            'verification': verification,
+            'recommendations': recommendations,
+            'metrics': self.metrics.to_dict()
+        }
+        
+        # Save report
+        report_path = self.project_root / 'cortex-brain' / 'cleanup-reports' / f'enhanced-cleanup-report-{datetime.now().strftime("%Y%m%d-%H%M%S")}.json'
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        with open(report_path, 'w', encoding='utf-8') as f:
+            json.dump(report, f, indent=2)
+        
+        logger.info(f"📄 Enhanced cleanup report saved: {report_path.relative_to(self.project_root)}")
+        
+        report['report_path'] = str(report_path.relative_to(self.project_root))
+        
+        return report

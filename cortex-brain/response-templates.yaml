@@ -1,12 +1,12 @@
 schema_version: '3.2'
-last_updated: '2025-11-26'
+last_updated: '2025-12-03'
 optimization:
   type: aggressive_minimal
   original_templates: 107
   minimal_templates: 18
   reduction_strategy: Core essentials only + fallback pattern
 shared:
-  standard_header: '## 🧠 CORTEX {{title}}
+  standard_header: '## 🧠 CORTEX {title}
 
     **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
@@ -17,77 +17,77 @@ shared:
 base_templates:
   standard_5_part: &standard_5_part_base
     base_structure: |
-      ## 🧠 CORTEX {{operation}}
+      ## 🧠 CORTEX {operation}
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
       
       ---
       
       ### 🎯 My Understanding Of Your Request
-      {{understanding_content}}
+      {understanding_content}
       
       ### ⚠️ Challenge
-      {{challenge_content}}
+      {challenge_content}
       
       ### 💬 Response
-      {{response_content}}
+      {response_content}
       
       ### 📝 Your Request
-      {{request_echo_content}}
+      {request_echo_content}
       
       ### 🔍 Next Steps
-      {{next_steps_content}}
+      {next_steps_content}
   
   tech_aware_response: &tech_aware_base
     base_structure: |
-      ## 🧠 CORTEX {{operation}}
+      ## 🧠 CORTEX {operation}
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
       
       ---
       
       ### 🎯 My Understanding Of Your Request
-      {{understanding_content}}
+      {understanding_content}
       
       ### ⚠️ Challenge
-      {{challenge_content}}
+      {challenge_content}
       
       ### 💬 Response
       
       **🏆 Recommended Solution:**
-      {{recommended_solution}}
+      {recommended_solution}
       
       {{#if has_tech_stack}}
-      **🔧 {{cloud_provider_name}}-Aligned Implementation:**
-      {{company_aligned_implementation}}
+      **🔧 {cloud_provider_name}-Aligned Implementation:**
+      {company_aligned_implementation}
       
       *Deployment Options:*
-      - **Cloud Platform:** {{cloud_deployment}}
-      - **Container Orchestration:** {{container_orchestration}}
-      - **CI/CD:** {{cicd_pipeline}}
-      - **Infrastructure as Code:** {{iac_tool}}
-      - **Monitoring:** {{monitoring_platform}}
+      - **Cloud Platform:** {cloud_deployment}
+      - **Container Orchestration:** {container_orchestration}
+      - **CI/CD:** {cicd_pipeline}
+      - **Infrastructure as Code:** {iac_tool}
+      - **Monitoring:** {monitoring_platform}
       {{/if}}
       
       ### 📝 Your Request
-      {{request_echo_content}}
+      {request_echo_content}
       
       ### 🔍 Next Steps
-      {{next_steps_content}}
+      {next_steps_content}
   
   compact_format: &compact_format_base
     base_structure: |
-      ## 🧠 CORTEX {{operation}}
-      **{{understanding_brief}}** | *No Challenge*
+      ## 🧠 CORTEX {operation}
+      **{understanding_brief}** | *No Challenge*
       
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
       
       ---
       
       💬 **Response:**
-      {{response_content}}
+      {response_content}
       
-      📝 **Your Request:** {{request_echo_content}}
+      📝 **Your Request:** {request_echo_content}
       
-      🔍 Next Steps: {{next_steps_content}}
+      🔍 Next Steps: {next_steps_content}
 templates:
   onboarding:
     <<: *standard_5_part_base
@@ -129,7 +129,7 @@ templates:
       Answer the current question to proceed.
       You can update your profile anytime with `update profile`.
   
-  regenerate_diagrams:
+  diagram_regeneration:
     <<: *standard_5_part_base
     name: Diagram Regeneration
     triggers:
@@ -163,782 +163,6 @@ templates:
       Say "regenerate diagram" to start the automated diagram generation process.
       
       Diagrams will be saved to `docs/architecture/` directory.
-  
-  resume_conversation:
-    <<: *standard_5_part_base
-    name: Resume Conversation
-    triggers:
-    - resume
-    - continue
-    - restore
-    - resume conversation
-    - continue conversation
-    response_type: interactive
-    operation_name: Resume Conversation
-    understanding_content: "You want to resume a previous conversation with full context restoration."
-    challenge_content: "No Challenge - CORTEX restores conversation history, entity extraction, and working context from Tier 1 memory."
-    response_content: |
-      **Context Restoration Process:**
-      
-      1. **Conversation Retrieval** - Load conversation from Tier 1 working memory
-      2. **Entity Extraction** - Restore extracted entities (files, functions, concepts)
-      3. **Context Injection** - Rebuild working context with relevant code/docs
-      4. **Continuation** - Resume exactly where you left off
-      
-      **What's Restored:**
-      • Full conversation history
-      • Extracted entities and relationships
-      • Active tasks and progress
-      • File references and code context
-    request_echo_content: "Resume previous conversation with context"
-    next_steps_content: |
-      Provide conversation ID: `resume {conversation_id}`
-      Or describe the topic: `resume the authentication work`
-  
-  admin_feedback_review:
-    <<: *standard_5_part_base
-    name: Admin Feedback Review
-    triggers:
-    - admin feedback
-    - review feedback
-    - admin feedback review
-    response_type: detailed
-    operation_name: Admin Feedback Review
-    understanding_content: "You want to review collected user feedback for CORTEX improvements."
-    challenge_content: "No Challenge - Admin operation for reviewing and analyzing user feedback submissions."
-    response_content: |
-      **Feedback Review Dashboard:**
-      
-      1. **Recent Feedback** - Display latest user submissions
-      2. **Category Breakdown** - Group by bug/feature/improvement
-      3. **Priority Analysis** - Identify high-impact items
-      4. **Action Items** - Generate improvement tasks
-      
-      **Review Capabilities:**
-      • Filter by severity, category, date
-      • View user context and screenshots
-      • Track resolution status
-      • Export for planning
-    request_echo_content: "Review user feedback submissions"
-    next_steps_content: |
-      Say "admin feedback review" to access the feedback dashboard.
-      Admin-only operation (requires CORTEX development context).
-  
-  feedback_report:
-    <<: *standard_5_part_base
-    name: Feedback Report
-    triggers:
-    - feedback
-    - report
-    - report issue
-    - bug report
-    - feedback report
-    response_type: interactive
-    operation_name: Feedback Report
-    understanding_content: "You want to submit feedback about CORTEX (bug, feature request, or improvement)."
-    challenge_content: "No Challenge - Your feedback helps improve CORTEX for everyone."
-    response_content: |
-      **Feedback Submission Process:**
-      
-      1. **Category Selection** - Bug / Feature Request / Improvement
-      2. **Context Collection** - Auto-capture system state, conversation ID
-      3. **Privacy Protection** - Auto-redact sensitive data
-      4. **GitHub Gist Upload** - Share with CORTEX team
-      
-      **What We Capture:**
-      • Feedback description (your input)
-      • System context (CORTEX version, environment)
-      • Conversation ID (if relevant)
-      • Redacted examples (no sensitive data)
-    request_echo_content: "Submit feedback to improve CORTEX"
-    next_steps_content: |
-      Say "feedback" to start the guided submission process.
-      Your privacy is protected - sensitive data is automatically redacted.
-  
-  cortex_tutorial:
-    <<: *standard_5_part_base
-    name: CORTEX Tutorial
-    triggers:
-    - tutorial
-    - demo
-    - show me
-    - cortex tutorial
-    - interactive demo
-    response_type: interactive
-    operation_name: CORTEX Tutorial
-    understanding_content: "You want an interactive demonstration of CORTEX capabilities."
-    challenge_content: "No Challenge - Hands-on tutorial walks through real CORTEX features with live execution."
-    response_content: |
-      **Interactive Tutorial Program:**
-      
-      **Duration:** 15-30 minutes (customizable)
-      **Format:** Build real feature with tests and production-ready code
-      
-      **What You'll Learn:**
-      1. **Planning System 2.0** - DoR/DoD validation, Vision API
-      2. **TDD Mastery** - RED→GREEN→REFACTOR workflow
-      3. **Auto-Debug** - Automatic debug session on test failures
-      4. **Brain Protection** - SKULL rules and governance
-      5. **Git Isolation** - Safe CORTEX/user code separation
-      
-      **Tutorial Modes:**
-      • Quick (15 min) - Core features only
-      • Standard (25 min) - Full walkthrough
-      • Comprehensive (30 min) - Deep dive with best practices
-    request_echo_content: "Start interactive CORTEX tutorial"
-    next_steps_content: |
-      Say "tutorial" to start the guided walkthrough.
-      Choose your mode: "tutorial quick", "tutorial standard", or "tutorial comprehensive".
-  
-  environment_setup:
-    <<: *standard_5_part_base
-    name: Environment Setup
-    triggers:
-    - setup
-    - environment
-    - configure
-    - environment setup
-    - setup environment
-    response_type: detailed
-    operation_name: Environment Setup
-    understanding_content: "You want to configure CORTEX development environment on your machine."
-    challenge_content: "No Challenge - Automated setup for Mac/Windows/Linux with dependency management."
-    response_content: |
-      **Environment Setup Process:**
-      
-      1. **Platform Detection** - Auto-detect Mac/Windows/Linux
-      2. **Dependency Check** - Verify Python 3.8+, Git, required packages
-      3. **Brain Initialization** - Create Tier 1/2/3 databases
-      4. **Git Configuration** - Setup .gitignore, hooks
-      5. **Validation** - Test all components
-      
-      **What Gets Configured:**
-      • Python environment (venv or system)
-      • CORTEX brain databases (SQLite)
-      • Git isolation rules
-      • Configuration files (cortex.config.json)
-      • Development dependencies
-    request_echo_content: "Setup CORTEX development environment"
-    next_steps_content: |
-      Say "setup" or "environment setup" to start automated configuration.
-      Process takes 5-10 minutes depending on dependencies.
-  
-  document_cortex:
-    <<: *standard_5_part_base
-    name: Document CORTEX
-    triggers:
-    - document
-    - documentation
-    - document cortex
-    - cortex documentation
-    response_type: detailed
-    operation_name: Document CORTEX
-    understanding_content: "You want to update CORTEX's own documentation (story refresh + docs generation)."
-    challenge_content: "No Challenge - Admin operation combining story refresh and documentation updates."
-    response_content: |
-      **Documentation Update Process:**
-      
-      1. **Story Refresh** - Update CORTEX.prompt.md with latest features
-      2. **Module Documentation** - Generate README files for all modules
-      3. **API Documentation** - Extract docstrings and type hints
-      4. **Architecture Diagrams** - Regenerate visual documentation
-      5. **Changelog Update** - Document recent changes
-      
-      **Documentation Generated:**
-      • CORTEX.prompt.md (main entry point)
-      • Module-specific guides
-      • API reference documentation
-      • Architecture diagrams
-      • Implementation guides
-    request_echo_content: "Update CORTEX documentation"
-    next_steps_content: |
-      Say "document cortex" to start comprehensive documentation update.
-      Admin-only operation (requires CORTEX development context).
-  
-  generate_cortex_docs:
-    <<: *standard_5_part_base
-    name: Generate CORTEX Docs
-    triggers:
-    - generate docs
-    - generate cortex docs
-    - create cortex docs
-    response_type: detailed
-    operation_name: Generate CORTEX Docs
-    understanding_content: "You want to generate fresh CORTEX documentation from source code."
-    challenge_content: "No Challenge - Automated documentation generation from code analysis."
-    response_content: |
-      **Documentation Generation:**
-      
-      1. **Code Analysis** - Scan all Python modules
-      2. **Docstring Extraction** - Parse module/class/function docs
-      3. **Type Hint Processing** - Extract parameter and return types
-      4. **Example Collection** - Find usage examples in tests
-      5. **Markdown Generation** - Create formatted documentation
-      
-      **Output:**
-      • API reference (all modules)
-      • Function signatures with types
-      • Usage examples
-      • Cross-references between modules
-    request_echo_content: "Generate CORTEX documentation from source"
-    next_steps_content: |
-      Say "generate cortex docs" to create fresh documentation.
-      Output saved to `docs/api/` directory.
-  
-  update_documentation:
-    <<: *standard_5_part_base
-    name: Update Documentation
-    triggers:
-    - update docs
-    - update documentation
-    - refresh docs
-    response_type: detailed
-    operation_name: Update Documentation
-    understanding_content: "You want to update existing CORTEX documentation with recent changes."
-    challenge_content: "No Challenge - Incremental documentation updates for recent code changes."
-    response_content: |
-      **Documentation Update:**
-      
-      1. **Change Detection** - Identify modified modules since last update
-      2. **Docstring Refresh** - Update changed documentation
-      3. **Cross-Reference Update** - Fix broken links
-      4. **Changelog Generation** - Document what changed
-      5. **Version Bump** - Update documentation version
-      
-      **Smart Updates:**
-      • Only updates changed sections
-      • Preserves manual edits
-      • Maintains version history
-      • Validates all links
-    request_echo_content: "Update CORTEX documentation"
-    next_steps_content: |
-      Say "update documentation" for incremental doc updates.
-      Faster than full regeneration, preserves customizations.
-  
-  deploy_cortex_production:
-    <<: *standard_5_part_base
-    name: Deploy CORTEX Production
-    triggers:
-    - deploy
-    - deploy cortex
-    - production deploy
-    - deploy cortex production
-    response_type: detailed
-    operation_name: Deploy CORTEX Production
-    understanding_content: "You want to build and publish a clean CORTEX production package."
-    challenge_content: "No Challenge - Automated production build with brain preservation and clean packaging."
-    response_content: |
-      **Production Deployment Process:**
-      
-      1. **Pre-Deploy Validation** - Run all tests, check module health
-      2. **Brain Backup** - Preserve Tier 1/2/3 databases
-      3. **Clean Build** - Remove dev artifacts, temp files
-      4. **Package Creation** - Create downloadable archive
-      5. **Publication** - Upload to download repository
-      6. **Verification** - Test installed package
-      
-      **Package Contents:**
-      • Core CORTEX code
-      • Brain databases (preserved)
-      • Configuration templates
-      • Documentation
-      • Installation scripts
-    request_echo_content: "Deploy CORTEX to production"
-    next_steps_content: |
-      Say "deploy cortex" to start production build.
-      Admin-only operation (requires CORTEX development context).
-  
-  deploy_to_app:
-    <<: *standard_5_part_base
-    name: Deploy to Application
-    triggers:
-    - deploy to app
-    - deploy application
-    - app deployment
-    response_type: detailed
-    operation_name: Deploy to Application
-    understanding_content: "You want to deploy your application to a target environment."
-    challenge_content: "No Challenge - CORTEX assists with application deployment planning and execution."
-    response_content: |
-      **Application Deployment Support:**
-      
-      1. **Environment Detection** - Identify target (dev/staging/prod)
-      2. **Deployment Strategy** - CI/CD, manual, container, serverless
-      3. **Pre-Deploy Checks** - Run tests, validate config
-      4. **Deployment Execution** - Execute deployment scripts
-      5. **Post-Deploy Validation** - Health checks, smoke tests
-      
-      **Supported Platforms:**
-      • Cloud platforms (AWS, Azure, GCP)
-      • Container orchestration (Docker, Kubernetes)
-      • Serverless (Lambda, Functions, Cloud Run)
-      • Traditional hosting (VMs, bare metal)
-    request_echo_content: "Deploy application to target environment"
-    next_steps_content: |
-      Say "deploy to app" and specify target environment.
-      CORTEX will guide through platform-specific deployment steps.
-  
-  application_onboarding:
-    <<: *standard_5_part_base
-    name: Application Onboarding
-    triggers:
-    - application onboarding
-    - onboard application
-    - app onboarding
-    - setup app
-    response_type: interactive
-    operation_name: Application Onboarding
-    understanding_content: "You want to onboard a new application for CORTEX to work with."
-    challenge_content: "No Challenge - Guided application setup with context collection."
-    response_content: |
-      **Application Onboarding:**
-      
-      1. **Application Name** - Identifier for this project
-      2. **Tech Stack** - Languages, frameworks, platforms
-      3. **Repository Info** - Git repository location
-      4. **Architecture Type** - Monolith, microservices, serverless
-      5. **Testing Strategy** - Test frameworks and coverage goals
-      
-      **Benefits:**
-      • Context-aware code suggestions
-      • Platform-specific deployment advice
-      • Relevant testing strategies
-      • Architecture best practices
-    request_echo_content: "Onboard new application"
-    next_steps_content: |
-      Provide app name: `onboard application --app-name <name>`
-      Answer guided questions to complete setup.
-  
-  user_onboarding:
-    <<: *standard_5_part_base
-    name: User Onboarding
-    triggers:
-    - user onboarding
-    - onboard user
-    - new user
-    - getting started
-    response_type: interactive
-    operation_name: User Onboarding
-    understanding_content: "You're a new user getting started with CORTEX."
-    challenge_content: "No Challenge - Welcome! Quick 3-question setup to personalize your experience."
-    response_content: |
-      **User Onboarding (30 seconds):**
-      
-      1. **Application Name** - What project are you working on?
-      2. **Experience Level** - Beginner / Intermediate / Expert
-      3. **Interaction Style** - Autonomous / Guided / Educational / Pair Programming
-      4. **Tech Stack** (Optional) - For deployment recommendations
-      
-      **Personalization:**
-      • Explanation depth matches your level
-      • Interaction style affects autonomy
-      • Tech stack provides context (not constraints)
-      • Update anytime with `update profile`
-    request_echo_content: "Get started with CORTEX"
-    next_steps_content: |
-      Provide app name: `onboard application --app-name <name>`
-      Answer 3 quick questions to customize CORTEX for you.
-  
-  architecture_planning:
-    <<: *standard_5_part_base
-    name: Architecture Planning
-    triggers:
-    - architecture
-    - plan architecture
-    - architecture planning
-    - design architecture
-    response_type: detailed
-    operation_name: Architecture Planning
-    understanding_content: "You want to plan the architecture for a new system or component."
-    challenge_content: "No Challenge - Interactive architecture planning with best practices and pattern recommendations."
-    response_content: |
-      **Architecture Planning Process:**
-      
-      1. **Requirements Gathering** - Functional and non-functional requirements
-      2. **Pattern Selection** - Recommend architectural patterns
-      3. **Component Design** - Identify services, modules, boundaries
-      4. **Data Flow** - Design data pipelines and storage
-      5. **Scalability Planning** - Load estimates, scaling strategy
-      6. **Security Review** - OWASP Top 10, security patterns
-      
-      **Deliverables:**
-      • Architecture diagrams
-      • Component specifications
-      • Data flow diagrams
-      • Technology recommendations
-      • Risk assessment
-    request_echo_content: "Plan system architecture"
-    next_steps_content: |
-      Say "plan architecture" and describe your system requirements.
-      CORTEX will guide through comprehensive architecture design.
-  
-  feature_planning:
-    <<: *standard_5_part_base
-    name: Feature Planning
-    triggers:
-    - feature planning
-    - plan feature
-    - feature design
-    response_type: detailed
-    operation_name: Feature Planning
-    understanding_content: "You want to plan a new feature with DoR/DoD validation."
-    challenge_content: "No Challenge - Interactive feature planning with zero-ambiguity validation."
-    response_content: |
-      **Feature Planning (Planning System 2.0):**
-      
-      1. **Vision API** - Extract requirements from screenshots/descriptions
-      2. **DoR Validation** - Verify Definition of Ready
-      3. **Task Breakdown** - Decompose into actionable tasks
-      4. **Security Review** - OWASP validation
-      5. **DoD Definition** - Clear completion criteria
-      6. **File Output** - Save plan to `cortex-brain/documents/planning/`
-      
-      **DoR Checklist:**
-      • Clear acceptance criteria
-      • Technical approach defined
-      • Dependencies identified
-      • Security considerations reviewed
-      • Testability confirmed
-    request_echo_content: "Plan new feature with validation"
-    next_steps_content: |
-      Say "plan feature" or provide screenshot with `plan ado`.
-      CORTEX validates requirements before starting implementation.
-  
-  refactoring_planning:
-    <<: *standard_5_part_base
-    name: Refactoring Planning
-    triggers:
-    - refactoring
-    - plan refactoring
-    - refactoring planning
-    - refactor planning
-    response_type: detailed
-    operation_name: Refactoring Planning
-    understanding_content: "You want to plan a code refactoring with risk assessment."
-    challenge_content: "No Challenge - Structured refactoring planning with testing strategy and rollback plan."
-    response_content: |
-      **Refactoring Planning:**
-      
-      1. **Current State Analysis** - Code quality, technical debt, pain points
-      2. **Refactoring Goals** - Specific improvements to achieve
-      3. **Impact Assessment** - Affected components, dependencies
-      4. **Testing Strategy** - Regression tests, validation approach
-      5. **Rollback Plan** - Revert strategy if issues arise
-      6. **Phased Execution** - Break into safe, incremental steps
-      
-      **Risk Mitigation:**
-      • Comprehensive test coverage first
-      • Feature flag support
-      • Gradual rollout
-      • Monitoring and alerts
-    request_echo_content: "Plan code refactoring"
-    next_steps_content: |
-      Say "plan refactoring" and specify target code/module.
-      CORTEX creates safe refactoring plan with testing strategy.
-  
-  maintain_cortex:
-    <<: *standard_5_part_base
-    name: Maintain CORTEX
-    triggers:
-    - maintain
-    - maintain cortex
-    - system maintenance
-    response_type: detailed
-    operation_name: Maintain CORTEX
-    understanding_content: "You want to perform CORTEX system maintenance and optimization."
-    challenge_content: "No Challenge - Comprehensive maintenance including database optimization, cleanup, and health checks."
-    response_content: |
-      **CORTEX Maintenance:**
-      
-      1. **Database Optimization** - Vacuum Tier 1/2/3, rebuild indexes
-      2. **Obsolete Code Cleanup** - Remove deprecated files
-      3. **Cache Management** - Clear stale cache entries
-      4. **Log Rotation** - Archive old logs
-      5. **Health Validation** - Run all health checks
-      6. **Performance Tuning** - Optimize slow queries
-      
-      **Maintenance Schedule:**
-      • Weekly: Cache cleanup, log rotation
-      • Monthly: Database vacuum, obsolete file removal
-      • Quarterly: Full system optimization
-    request_echo_content: "Perform CORTEX maintenance"
-    next_steps_content: |
-      Say "maintain cortex" for comprehensive system maintenance.
-      Admin-only operation (requires CORTEX development context).
-  
-  optimize_cortex:
-    <<: *standard_5_part_base
-    name: Optimize CORTEX
-    triggers:
-    - optimize
-    - optimize cortex
-    - performance optimization
-    response_type: detailed
-    operation_name: Optimize CORTEX
-    understanding_content: "You want to optimize CORTEX performance and resource usage."
-    challenge_content: "No Challenge - Performance profiling and optimization recommendations."
-    response_content: |
-      **CORTEX Optimization:**
-      
-      1. **Performance Profiling** - Identify bottlenecks
-      2. **Query Optimization** - Tune database queries
-      3. **Cache Strategy** - Improve cache hit rates
-      4. **Memory Management** - Reduce memory footprint
-      5. **Code Optimization** - Refactor hot paths
-      6. **Benchmark Validation** - Measure improvements
-      
-      **Optimization Areas:**
-      • Tier 1/2/3 query performance
-      • Intent routing speed
-      • Context injection efficiency
-      • Memory usage reduction
-      • Startup time improvement
-    request_echo_content: "Optimize CORTEX performance"
-    next_steps_content: |
-      Say "optimize cortex" to start performance analysis.
-      Admin-only operation (requires CORTEX development context).
-  
-  brain_health_check:
-    <<: *standard_5_part_base
-    name: Brain Health Check
-    triggers:
-    - brain health
-    - check brain
-    - brain health check
-    response_type: detailed
-    operation_name: Brain Health Check
-    understanding_content: "You want to check CORTEX brain database health and integrity."
-    challenge_content: "No Challenge - Comprehensive brain database validation and diagnostics."
-    response_content: |
-      **Brain Health Check:**
-      
-      1. **Tier 1 Validation** - Working memory integrity, conversation count
-      2. **Tier 2 Validation** - Knowledge graph consistency, pattern count
-      3. **Tier 3 Validation** - Development context accuracy, metrics
-      4. **Schema Validation** - Verify all tables/indexes exist
-      5. **Data Integrity** - Check for corruption, orphaned records
-      6. **Performance Metrics** - Query times, database sizes
-      
-      **Health Indicators:**
-      • ✅ All databases accessible
-      • ✅ Schema matches expected version
-      • ✅ No data corruption detected
-      • ✅ Query performance within thresholds
-      • ✅ FIFO enforcement working
-    request_echo_content: "Check CORTEX brain health"
-    next_steps_content: |
-      Say "brain health check" for comprehensive diagnostics.
-      Report saved to `cortex-brain/health-reports/`.
-  
-  brain_protection_check:
-    <<: *standard_5_part_base
-    name: Brain Protection Check
-    triggers:
-    - brain protection
-    - check protection
-    - brain protection check
-    response_type: detailed
-    operation_name: Brain Protection Check
-    understanding_content: "You want to verify CORTEX brain protection rules (SKULL) are active."
-    challenge_content: "No Challenge - Validation of all 8 protection layers and SKULL rules."
-    response_content: |
-      **Brain Protection Validation:**
-      
-      1. **SKULL Rules** - Verify all Tier 0 instincts active
-      2. **Git Isolation** - Confirm CORTEX/user code separation
-      3. **Test Location** - Validate test file separation
-      4. **TDD Enforcement** - Check RED phase validation
-      5. **Brain Architecture** - Verify 4-tier integrity
-      6. **Document Organization** - Confirm proper categorization
-      7. **Schema Migrations** - Validate upgrade safety
-      8. **Version Tracking** - Check VERSION file consistency
-      
-      **Protection Status:**
-      • TDD_ENFORCEMENT: Active
-      • GIT_ISOLATION_ENFORCEMENT: Active
-      • TEST_LOCATION_SEPARATION: Active
-      • BRAIN_ARCHITECTURE_INTEGRITY: Active
-      • All 8 protection layers: ✅ Operational
-    request_echo_content: "Verify brain protection active"
-    next_steps_content: |
-      Say "brain protection check" to validate all SKULL rules.
-      Any violations will trigger Brain Protector challenges.
-  
-  comprehensive_self_review:
-    <<: *standard_5_part_base
-    name: Comprehensive Self Review
-    triggers:
-    - self review
-    - comprehensive review
-    - comprehensive self review
-    response_type: detailed
-    operation_name: Comprehensive Self Review
-    understanding_content: "You want CORTEX to perform a comprehensive self-assessment."
-    challenge_content: "No Challenge - Full system review covering code quality, architecture, testing, and documentation."
-    response_content: |
-      **Comprehensive Self Review:**
-      
-      1. **Code Quality** - Analyze all modules for best practices
-      2. **Architecture Review** - Validate 4-tier brain structure
-      3. **Test Coverage** - Calculate coverage, identify gaps
-      4. **Documentation** - Check completeness, accuracy
-      5. **Performance** - Profile bottlenecks, optimization opportunities
-      6. **Security** - OWASP validation, vulnerability scan
-      7. **Governance** - SKULL rules compliance
-      8. **Technical Debt** - Identify areas needing refactoring
-      
-      **Review Report:**
-      • Overall health score
-      • Priority improvement areas
-      • Recommended actions
-      • Metrics and trends
-    request_echo_content: "Perform comprehensive system review"
-    next_steps_content: |
-      Say "comprehensive self review" for full system analysis.
-      Report saved to `cortex-brain/health-reports/`.
-  
-  command_help:
-    <<: *standard_5_part_base
-    name: Command Help
-    triggers:
-    - help
-    - command help
-    - show commands
-    response_type: detailed
-    operation_name: Command Help
-    understanding_content: "You want to see available CORTEX commands and operations."
-    challenge_content: "No Challenge - Comprehensive command reference with examples."
-    response_content: |
-      **CORTEX Command Reference:**
-      
-      **Planning & Design:**
-      • `plan feature` - Interactive feature planning with DoR/DoD
-      • `plan ado` - Extract requirements from screenshots
-      • `plan architecture` - System architecture design
-      • `plan refactoring` - Refactoring planning
-      
-      **Development:**
-      • `start tdd` - Begin TDD workflow
-      • `run tests` - Execute test suite
-      • `commit` - Git commit with validation
-      
-      **Operations:**
-      • `align` - System health check
-      • `align --auto-fix` - Auto-register features
-      • `cleanup` - Remove obsolete files
-      • `deploy cortex` - Production deployment
-      
-      **Help & Learning:**
-      • `tutorial` - Interactive demo
-      • `help` - Show this help
-      • `status` - Quick system status
-    request_echo_content: "Show available commands"
-    next_steps_content: |
-      Say "help" anytime to see this reference.
-      Try "tutorial" for hands-on learning.
-  
-  command_search:
-    <<: *standard_5_part_base
-    name: Command Search
-    triggers:
-    - search command
-    - find command
-    - command search
-    response_type: detailed
-    operation_name: Command Search
-    understanding_content: "You want to search for a specific CORTEX command or operation."
-    challenge_content: "No Challenge - Fuzzy search across all CORTEX operations."
-    response_content: |
-      **Command Search:**
-      
-      Search across:
-      • Operation names
-      • Natural language triggers
-      • Command descriptions
-      • Usage examples
-      
-      **Example Searches:**
-      • "how to plan" → Planning operations
-      • "test" → TDD, run_tests, test_runner
-      • "deploy" → deploy_cortex, deploy_to_app
-      • "help" → help, tutorial, documentation
-      
-      **Search Results Include:**
-      • Command name
-      • Description
-      • Triggers (natural language)
-      • Usage examples
-      • Related commands
-    request_echo_content: "Search for command"
-    next_steps_content: |
-      Say "search command <query>" to find matching operations.
-      Example: "search command planning"
-  
-  run_tests:
-    <<: *standard_5_part_base
-    name: Run Tests
-    triggers:
-    - run tests
-    - execute tests
-    - test run
-    response_type: detailed
-    operation_name: Run Tests
-    understanding_content: "You want to run the test suite."
-    challenge_content: "No Challenge - Execute tests with automatic debug session on failures."
-    response_content: |
-      **Test Execution:**
-      
-      1. **Test Discovery** - Find all test files
-      2. **Execution** - Run tests in isolation
-      3. **Result Collection** - Pass/fail/skip counts
-      4. **Coverage Report** - Line/branch coverage
-      5. **Auto-Debug** - Debug session starts on failures
-      
-      **Test Isolation:**
-      • App tests in user repo: `pytest tests/`
-      • CORTEX tests: `pytest tests/` (in CORTEX repo)
-      • Never mix CORTEX and application tests
-      
-      **On Failure:**
-      • Debug session starts automatically
-      • Stack trace analysis
-      • Suggested fixes
-      • Rerun after fix
-    request_echo_content: "Run test suite"
-    next_steps_content: |
-      Say "run tests" to execute all tests.
-      Auto-debug activates on failures for quick resolution.
-  
-  interactive_planning:
-    <<: *standard_5_part_base
-    name: Interactive Planning
-    triggers:
-    - interactive planning
-    - plan interactively
-    response_type: interactive
-    operation_name: Interactive Planning
-    understanding_content: "You want to use interactive planning mode with guided questions."
-    challenge_content: "No Challenge - Conversational planning with step-by-step guidance."
-    response_content: |
-      **Interactive Planning Mode:**
-      
-      1. **Feature Description** - What are you building?
-      2. **Acceptance Criteria** - How do you know it's done?
-      3. **Technical Approach** - How will you implement it?
-      4. **Dependencies** - What does it depend on?
-      5. **Security Review** - OWASP validation
-      6. **Test Strategy** - How will you test it?
-      
-      **Benefits:**
-      • Guided question flow
-      • Real-time DoR validation
-      • Ambiguity detection
-      • Security checklist
-      • File-based output (git-trackable)
-    request_echo_content: "Start interactive planning"
-    next_steps_content: |
-      Say "interactive planning" to begin guided feature planning.
-      Answer questions step-by-step to complete DoR.
   
   tech_implementation_example:
     <<: *tech_aware_base
@@ -1877,8 +1101,8 @@ templates:
     - start onboarding
     - begin setup
     - initialize cortex
-    - show application dashboard
-    - application dashboard
+    - show health dashboard
+    - health dashboard
     - application health
     - app health
     - show app health
@@ -2944,11 +2168,6 @@ templates:
     - optimize system
     - clean and optimize
     response_type: detailed
-    understanding_content: "You want to optimize CORTEX system performance by cleaning brain databases, removing outdated cache entries, and compacting SQLite files."
-    challenge_content: "No Challenge - Optimization is a safe, non-destructive operation with automatic backups."
-    response_content: "**Optimization Process:**\n   \n   1. **Brain Database Cleaning** - Removes outdated conversation entries (70-conversation FIFO)\n   2. **Cache Cleanup** - Clears expired cache entries and orphaned data\n   3. **SQLite Vacuuming** - Compacts Tier 1, Tier 2, and Tier 3 databases\n   4. **Performance Validation** - Verifies query performance (<100ms requirement)\n   \n   **Expected Results:**\n   • Space savings: 50-200 MB typical\n   • Query performance: <100ms (Tier 1), <500ms (Tier 2/3)\n   • Database integrity: Validated after optimization\n   • Cache effectiveness: 6.4x speedup maintained\n   \n   **Safety Features:**\n   • Automatic backup before optimization\n   • Read-only operations during validation\n   • Rollback capability if issues detected"
-    request_echo_content: "Optimize CORTEX system (clean databases, vacuum SQLite, improve performance)"
-    next_steps_content: "**Optimization Complete:**\n   \n   1. ✅ Check space savings reported above\n   2. ✅ Verify query performance metrics\n   3. ✅ Run `healthcheck` to validate system integrity\n   4. ✅ Continue normal CORTEX operations\n   \n   **Performance Monitoring:**\n   Use `cache status` to check effectiveness metrics after optimization."
 
   workflow_execution:
     <<: *standard_5_part_base
@@ -2981,21 +2200,6 @@ templates:
     - push changes
     - sync repository
     - commit and sync
-    - git sync
-    - push to origin
-    - push to remote
-    - pull and push
-    - sync repo
-    - sync code
-    - update remote
-    - push code
-    - commit changes
-    - save and push
-    - upload changes
-    - sync with remote
-    - push commits
-    - send changes
-    - publish changes
     response_type: detailed
     expected_orchestrator: CommitOrchestrator
     handler: src.orchestrators.commit_orchestrator.CommitOrchestrator
@@ -3200,10 +2404,10 @@ templates:
 
   application_health:
     <<: *standard_5_part_base
-    name: Application Dashboard
+    name: Application Health Dashboard
     triggers:
-    - show application dashboard
-    - application dashboard
+    - show health dashboard
+    - health dashboard
     - application health
     - app health
     - show app health
@@ -3214,10 +2418,10 @@ templates:
     - scan application
     response_type: detailed
     handler: src.orchestrators.application_health_orchestrator.ApplicationHealthOrchestrator
-    understanding_content: "You want to analyze your application's health with comprehensive metrics and report."
-    challenge_content: "No Challenge - Application Dashboard uses progressive crawling, multi-threaded analysis, and intelligent caching to handle projects of any size."
+    understanding_content: "You want to analyze your application's health with multi-language code analysis, quality metrics, and a comprehensive report."
+    challenge_content: "No Challenge - Application Health Dashboard uses progressive crawling, multi-threaded analysis, and intelligent caching to handle projects of any size."
     response_content: |
-      **Application Dashboard Features:**
+      **Application Health Dashboard Features:**
       
       **Progressive Crawling Strategy:**
       - **Overview Scan** (30s): High-level file counts, language detection, basic structure
@@ -3246,7 +2450,7 @@ templates:
     next_steps_content: |
       **Quick Start:**
       
-      1. Say "show application dashboard" (uses current directory)
+      1. Say "show health dashboard" (uses current directory)
       2. Specify scan level: "analyze application with deep scan"
       3. Choose directory: "scan application in C:\Projects\MyApp"
       
@@ -3256,6 +2460,306 @@ templates:
       - **deep** - Comprehensive audit (5-10 minutes)
       
       Reports are saved to: `cortex-brain/documents/analysis/`
+
+  # ============================================================================
+  # NEW TEMPLATES - Added December 3, 2025 for critical user-facing operations
+  # ============================================================================
+
+  ado:
+    <<: *standard_5_part_base
+    name: Azure DevOps Integration
+    triggers:
+    - ado
+    - azure devops
+    - create work item
+    response_type: detailed
+
+  align:
+    <<: *standard_5_part_base
+    name: System Alignment
+    triggers:
+    - align
+    - system alignment
+    response_type: detailed
+
+  application_onboarding_operation:
+    <<: *standard_5_part_base
+    name: Application Onboarding
+    triggers:
+    - onboard application
+    - application onboarding
+    response_type: detailed
+
+  cache_commands:
+    <<: *standard_5_part_base
+    name: Cache Management
+    triggers:
+    - cache
+    - show cache
+    response_type: detailed
+
+  cache_dashboard:
+    <<: *standard_5_part_base
+    name: Cache Dashboard
+    triggers:
+    - cache dashboard
+    response_type: detailed
+
+  cleanup:
+    <<: *standard_5_part_base
+    name: Code Cleanup
+    triggers:
+    - cleanup
+    - clean code
+    response_type: detailed
+
+  commit:
+    <<: *standard_5_part_base
+    name: Git Commit
+    triggers:
+    - commit
+    - git commit
+    response_type: detailed
+
+  commit_and_push:
+    <<: *standard_5_part_base
+    name: Commit and Push
+    triggers:
+    - commit and push
+    response_type: detailed
+
+  dashboard_data_adapter:
+    <<: *standard_5_part_base
+    name: Dashboard Data Adapter
+    triggers:
+    - dashboard data
+    response_type: detailed
+
+  deploy:
+    <<: *standard_5_part_base
+    name: Deployment
+    triggers:
+    - deploy
+    - deployment
+    response_type: detailed
+
+  dependency_installer:
+    <<: *standard_5_part_base
+    name: Dependency Installer
+    triggers:
+    - install dependencies
+    - dependency installer
+    response_type: detailed
+
+  documentation_component_registry:
+    <<: *standard_5_part_base
+    name: Documentation Component Registry
+    triggers:
+    - doc registry
+    - documentation registry
+    response_type: detailed
+
+  environment_setup:
+    <<: *standard_5_part_base
+    name: Environment Setup
+    triggers:
+    - setup environment
+    - environment setup
+    response_type: detailed
+
+  environment_setup_module:
+    <<: *standard_5_part_base
+    name: Environment Setup Module
+    triggers:
+    - setup env module
+    response_type: detailed
+
+  header_formatter:
+    <<: *standard_5_part_base
+    name: Header Formatter
+    triggers:
+    - format header
+    response_type: detailed
+
+  header_utils:
+    <<: *standard_5_part_base
+    name: Header Utilities
+    triggers:
+    - header utils
+    response_type: detailed
+
+  healthcheck:
+    <<: *standard_5_part_base
+    name: Health Check
+    triggers:
+    - healthcheck
+    - health check
+    response_type: detailed
+
+  healthcheck_operation:
+    <<: *standard_5_part_base
+    name: Health Check Operation
+    triggers:
+    - healthcheck operation
+    response_type: detailed
+
+  help_command:
+    <<: *standard_5_part_base
+    name: Help Command
+    triggers:
+    - help
+    - show help
+    response_type: detailed
+
+  onboarding_orchestrator:
+    <<: *standard_5_part_base
+    name: Onboarding Orchestrator
+    triggers:
+    - onboarding orchestrator
+    response_type: detailed
+
+  operation_factory:
+    <<: *standard_5_part_base
+    name: Operation Factory
+    triggers:
+    - operation factory
+    response_type: detailed
+
+  operation_header_formatter:
+    <<: *standard_5_part_base
+    name: Operation Header Formatter
+    triggers:
+    - operation header
+    response_type: detailed
+
+  operations_orchestrator:
+    <<: *standard_5_part_base
+    name: Operations Orchestrator
+    triggers:
+    - operations orchestrator
+    response_type: detailed
+
+  optimize:
+    <<: *standard_5_part_base
+    name: Optimization
+    triggers:
+    - optimize
+    - optimization
+    response_type: detailed
+
+  optimize_operation:
+    <<: *standard_5_part_base
+    name: Optimize Operation
+    triggers:
+    - optimize operation
+    response_type: detailed
+
+  optimize_tokens:
+    <<: *standard_5_part_base
+    name: Token Optimization
+    triggers:
+    - optimize tokens
+    response_type: detailed
+
+  planning:
+    <<: *standard_5_part_base
+    name: Feature Planning
+    triggers:
+    - plan
+    - planning
+    response_type: detailed
+
+  policy_scanner:
+    <<: *standard_5_part_base
+    name: Policy Scanner
+    triggers:
+    - scan policies
+    response_type: detailed
+
+  realtime_dashboard_auth:
+    <<: *standard_5_part_base
+    name: Realtime Dashboard Auth
+    triggers:
+    - dashboard auth
+    response_type: detailed
+
+  realtime_dashboard_server:
+    <<: *standard_5_part_base
+    name: Realtime Dashboard Server
+    triggers:
+    - dashboard server
+    response_type: detailed
+
+  realtime_metrics_publisher:
+    <<: *standard_5_part_base
+    name: Realtime Metrics Publisher
+    triggers:
+    - metrics publisher
+    response_type: detailed
+
+  response_formatter:
+    <<: *standard_5_part_base
+    name: Response Formatter
+    triggers:
+    - format response
+    response_type: detailed
+
+  resume_conversation:
+    <<: *standard_5_part_base
+    name: Resume Conversation
+    triggers:
+    - resume
+    - resume conversation
+    response_type: detailed
+
+  review:
+    <<: *standard_5_part_base
+    name: Code Review
+    triggers:
+    - review
+    - code review
+    response_type: detailed
+
+  rollback:
+    <<: *standard_5_part_base
+    name: Git Rollback
+    triggers:
+    - rollback
+    - git rollback
+    response_type: detailed
+
+  setup:
+    <<: *standard_5_part_base
+    name: System Setup
+    triggers:
+    - setup
+    - system setup
+    response_type: detailed
+
+  tdd:
+    <<: *standard_5_part_base
+    name: TDD Workflow
+    triggers:
+    - tdd
+    - test driven development
+    response_type: detailed
+
+  user_consent_manager:
+    <<: *standard_5_part_base
+    name: User Consent Manager
+    triggers:
+    - user consent
+    response_type: detailed
+
+  user_onboarding_operation:
+    <<: *standard_5_part_base
+    name: User Onboarding Operation
+    triggers:
+    - user onboarding
+    response_type: detailed
+
+  # End of new templates
+  # ============================================================================
 
 routing:
   default: fallback
@@ -3478,8 +2982,8 @@ routing:
   - start onboarding
   - begin setup
   - initialize cortex
-  - show application dashboard
-  - application dashboard
+  - show health dashboard
+  - health dashboard
   - application health
   - app health
   - show app health
@@ -3560,19 +3064,6 @@ routing:
   - commit and sync
   - pull and push
   - sync repo
-  - git sync
-  - push to origin
-  - push to remote
-  - sync code
-  - update remote
-  - push code
-  - commit changes
-  - save and push
-  - upload changes
-  - sync with remote
-  - push commits
-  - send changes
-  - publish changes
   cache_status_triggers:
   - cache status
   - show cache
@@ -3609,8 +3100,8 @@ routing:
   - estimate effort
   - project timeline
   application_health_triggers:
-  - show application dashboard
-  - application dashboard
+  - show health dashboard
+  - health dashboard
   - application health
   - app health
   - show app health
