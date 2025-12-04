@@ -12,7 +12,7 @@ from pathlib import Path
 
 def test_dashboard_404_for_nonexistent_app(client):
     """Test that non-existent dashboard returns 404"""
-    response = client.get('/nonexistent-app')
+    response = client.get('/dashboard/nonexistent-app')
     assert response.status_code == 404
     assert b'Dashboard not found' in response.data
 
@@ -20,9 +20,11 @@ def test_dashboard_404_for_nonexistent_app(client):
 def test_dashboard_renders_multiple_tabs(client, tmp_path):
     """Test dashboard renders correctly with 5 tabs"""
     from src.dashboard.domain.entities.dashboard_data import DashboardData
-    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    from src.dashboard.infrastructure.repositories.json_multi_app_repository import JsonMultiAppRepository
+from src.dashboard.domain.entities.application_registry import Application
+from src.dashboard.domain.entities.application_registry import Application
     
-    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    repo = JsonMultiAppRepository(root_path=str(tmp_path / "dashboards"))
     data = DashboardData(
         app_id="multi-tab-test",
         tabs={
@@ -36,7 +38,7 @@ def test_dashboard_renders_multiple_tabs(client, tmp_path):
     )
     repo.save(data)
     
-    response = client.get('/multi-tab-test')
+    response = client.get('/dashboard/multi-tab-test')
     assert response.status_code == 200
     assert b'overview' in response.data.lower()
     assert b'metrics' in response.data.lower()
@@ -48,9 +50,11 @@ def test_dashboard_renders_multiple_tabs(client, tmp_path):
 def test_dashboard_renders_empty_tabs(client, tmp_path):
     """Test dashboard handles empty tab data gracefully"""
     from src.dashboard.domain.entities.dashboard_data import DashboardData
-    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    from src.dashboard.infrastructure.repositories.json_multi_app_repository import JsonMultiAppRepository
+from src.dashboard.domain.entities.application_registry import Application
+from src.dashboard.domain.entities.application_registry import Application
     
-    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    repo = JsonMultiAppRepository(root_path=str(tmp_path / "dashboards"))
     data = DashboardData(
         app_id="empty-tabs",
         tabs={"overview": {}},
@@ -66,9 +70,11 @@ def test_dashboard_renders_empty_tabs(client, tmp_path):
 def test_dashboard_renders_large_metric_values(client, tmp_path):
     """Test dashboard handles large metric values"""
     from src.dashboard.domain.entities.dashboard_data import DashboardData
-    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    from src.dashboard.infrastructure.repositories.json_multi_app_repository import JsonMultiAppRepository
+from src.dashboard.domain.entities.application_registry import Application
+from src.dashboard.domain.entities.application_registry import Application
     
-    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    repo = JsonMultiAppRepository(root_path=str(tmp_path / "dashboards"))
     data = DashboardData(
         app_id="large-metrics",
         tabs={"overview": {"total_lines": 1234567890, "total_files": 999999}},
@@ -84,9 +90,11 @@ def test_dashboard_renders_large_metric_values(client, tmp_path):
 def test_dashboard_renders_special_characters(client, tmp_path):
     """Test dashboard handles special characters in data"""
     from src.dashboard.domain.entities.dashboard_data import DashboardData
-    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    from src.dashboard.infrastructure.repositories.json_multi_app_repository import JsonMultiAppRepository
+from src.dashboard.domain.entities.application_registry import Application
+from src.dashboard.domain.entities.application_registry import Application
     
-    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    repo = JsonMultiAppRepository(root_path=str(tmp_path / "dashboards"))
     data = DashboardData(
         app_id="special-chars",
         tabs={"overview": {"metric_name": "Test & <Special> \"Characters\""}},
@@ -94,7 +102,7 @@ def test_dashboard_renders_special_characters(client, tmp_path):
     )
     repo.save(data)
     
-    response = client.get('/special-chars')
+    response = client.get('/dashboard/special-chars')
     assert response.status_code == 200
     # HTML should be escaped
     assert b'&lt;' in response.data or b'&amp;' in response.data
@@ -102,7 +110,7 @@ def test_dashboard_renders_special_characters(client, tmp_path):
 
 def test_refresh_endpoint_returns_json(client):
     """Test refresh endpoint returns proper JSON response"""
-    response = client.post('/refresh/cortex')
+    response = client.post('/dashboard/cortex/refresh')
     assert response.status_code == 200
     assert response.is_json
     data = response.get_json()
@@ -147,9 +155,11 @@ def test_css_and_js_assets_linked(client):
 def test_tabs_have_unique_ids(client, tmp_path):
     """Test that tab panels have unique IDs for JavaScript targeting"""
     from src.dashboard.domain.entities.dashboard_data import DashboardData
-    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    from src.dashboard.infrastructure.repositories.json_multi_app_repository import JsonMultiAppRepository
+from src.dashboard.domain.entities.application_registry import Application
+from src.dashboard.domain.entities.application_registry import Application
     
-    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    repo = JsonMultiAppRepository(root_path=str(tmp_path / "dashboards"))
     data = DashboardData(
         app_id="unique-ids",
         tabs={"tab1": {"data": 1}, "tab2": {"data": 2}},
