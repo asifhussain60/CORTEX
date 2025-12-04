@@ -30,26 +30,20 @@ class LoadDashboardUseCase:
         Execute use case to load dashboard.
         
         Args:
-            request: LoadDashboardRequest with app_id
+            request: LoadDashboardRequest with app_id (validated by DTO)
             
         Returns:
             LoadDashboardResponse with dashboard data
             
         Raises:
-            ValueError: If app_id is empty
             FileNotFoundError: If dashboard doesn't exist
         """
-        # Validate input
-        if not request.app_id or not request.app_id.strip():
-            raise ValueError("app_id cannot be empty")
-        
         # Load dashboard from repository
         data = self._dashboard_repo.get_by_id(request.app_id)
         
-        # Extract app_name from metadata
+        # Extract app_name from metadata with fallback
         app_name = data.metadata.get("app_name", request.app_id.upper())
         
-        # Return response
         return LoadDashboardResponse(
             app_id=request.app_id,
             app_name=app_name,

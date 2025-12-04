@@ -33,51 +33,49 @@ class RefreshDashboardUseCase:
         Execute use case to refresh dashboard.
         
         Args:
-            request: RefreshDashboardRequest with app_id and force flag
+            request: RefreshDashboardRequest with app_id (validated by DTO) and force flag
             
         Returns:
             RefreshDashboardResponse with refresh result
-            
-        Raises:
-            ValueError: If app_id is empty
         """
-        # Validate input
-        if not request.app_id or not request.app_id.strip():
-            raise ValueError("app_id cannot be empty")
-        
-        # Load current dashboard
         current_data = self._dashboard_repo.get_by_id(request.app_id)
+        now = datetime.now()
         
-        # Check if data is fresh (skip refresh if fresh and not forced)
+        # Skip refresh if data is fresh and not forced
         if not request.force and self._is_fresh(current_data):
-            return RefreshDashboardResponse(
-                app_id=request.app_id,
-                success=True,
-                message="Dashboard is fresh, refresh skipped",
-                refresh_time=datetime.now()
-            )
+            return self._skip_response(request.app_id, now)
         
-        # Perform refresh (for now, just update last_updated timestamp)
-        # In Phase 1.6, this will call ScanRepositoryUseCase
-        refreshed_metadata = {
-            **current_data.metadata,
-            "last_updated": datetime.now().isoformat()
-        }
-        
-        refreshed_data = type(current_data)(
-            app_id=current_data.app_id,
-            tabs=current_data.tabs,
-            metadata=refreshed_metadata
-        )
-        
-        # Save refreshed data
+        # Update dashboard with new timestamp (Phase 1.6 will add repo scanning)
+        refreshed_data = self._create_refreshed_data(current_data, now)
         self._dashboard_repo.save(refreshed_data)
         
         return RefreshDashboardResponse(
             app_id=request.app_id,
             success=True,
             message="Dashboard refreshed successfully",
-            refresh_time=datetime.now()
+            refresh_time=now
+        )
+    
+    def _skip_response(self, app_id: str, refresh_time: datetime) -> RefreshDashboardResponse:
+        """Create response for skipped refresh"""
+        return RefreshDashboardResponse(
+            app_id=app_id,
+            success=True,
+            message="Dashboard is fresh, refresh skipped",
+            refresh_time=refresh_time
+        )
+    
+    def _create_refreshed_data(self, current_data, refresh_time: datetime):
+        """Create refreshed dashboard data with updated timestamp"""
+        refreshed_metadata = {
+            **current_data.metadata,
+            "last_updated": refresh_time.isoformat()
+        }
+        
+        return type(current_data)(
+            app_id=current_data.app_id,
+            tabs=current_data.tabs,
+            metadata=refreshed_metadata
         )
     
     def _is_fresh(self, data) -> bool:
