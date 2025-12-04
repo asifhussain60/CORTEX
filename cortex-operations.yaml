@@ -483,6 +483,432 @@ operations:
     - grunt
     - check if file should be counted
     category: analysis
+  alignment_orchestrator:
+    name: Alignment Orchestrator
+    description: Alignment orchestrator - integrates all Phase 4 components
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: maintenance
+  application_health_orchestrator:
+    name: Application Health Orchestrator
+    description: Application Health Orchestrator
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: analysis
+  git_checkpoint_orchestrator:
+    name: Git Checkpoint Orchestrator
+    description: Git Checkpoint Orchestrator
+    deployment_tier: user_facing
+    natural_language:
+    - commit
+    - nothing to commit
+    - no changes to commit
+    category: git
+  git_sync_and_optimize:
+    name: Git Sync And Optimize
+    description: Git Sync and Optimize Orchestrator
+    deployment_tier: admin_only
+    natural_language:
+    - generated
+    - checkout
+    category: git
+  onboarding_acknowledgment_orchestrator:
+    name: Onboarding Acknowledgment Orchestrator
+    description: Onboarding Acknowledgment Orchestrator - Sprint 1 Day 3
+    deployment_tier: dual_context
+    natural_language:
+    - show rules
+    category: setup
+  phase_checkpoint_manager:
+    name: Phase Checkpoint Manager
+    description: Phase Checkpoint Manager for workflow phase tracking.
+    deployment_tier: user_facing
+    natural_language:
+    - checkpoints
+    category: git
+  plan_execution_orchestrator:
+    name: Plan Execution Orchestrator
+    description: Plan Execution Orchestrator for CORTEX
+    deployment_tier: admin_only
+    natural_language:
+    - planning
+    - failed to load plan
+    - updated
+    - markdown plan
+    category: planning
+  planning_orchestrator:
+    name: Planning Orchestrator
+    description: YAML Planning Orchestrator for CORTEX
+    deployment_tier: admin_only
+    natural_language:
+    - planning
+    - untitled plan
+    - plan
+    - plan skeleton
+    - deployment
+    category: planning
+  ado_agent:
+    name: Ado Agent
+    description: ADO Agent
+    deployment_tier: dual_context
+    natural_language:
+    - plan ado story
+    - create ado story
+    - plan ado feature
+    - create ado feature
+    category: general
+  agent_types:
+    name: Agent Types
+    description: Agent Type Definitions and Enums
+    deployment_tier: admin_only
+    natural_language:
+    - plan
+    - validate
+    - review
+    - commit
+    category: general
+  application_health_agent:
+    name: Application Health Agent
+    description: Application Health Agent
+    deployment_tier: dual_context
+    natural_language:
+    - show health dashboard
+    category: analysis
+  ast_cache:
+    name: Ast Cache
+    description: AST Cache for TDD Workflow Optimization
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
+  batch_processor:
+    name: Batch Processor
+    description: Batch Test Generator for Parallel Processing
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: review
+  change_governor:
+    name: Change Governor
+    description: ChangeGovernor Agent
+    deployment_tier: dual_context
+    natural_language:
+    - create
+    category: general
+  checkpoint:
+    name: Checkpoint
+    description: CORTEX Workflow Checkpoint System
+    deployment_tier: admin_only
+    natural_language:
+    - get path to checkpoint file
+    - calculate age of checkpoint in days
+    - checkpointmanager
+    category: git
+  code_cleanup_validator:
+    name: Code Cleanup Validator
+    description: Code Cleanup Validator
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: maintenance
+  commit_handler:
+    name: Commit Handler
+    description: CommitHandler Agent
+    deployment_tier: dual_context
+    natural_language:
+    - committer
+    - commit
+    - commit the authentication feature
+    - committed
+    - no staged changes to commit
+    category: git
+  compliance_dashboard_agent:
+    name: Compliance Dashboard Agent
+    description: Compliance Dashboard Agent - Sprint 1 Day 5
+    deployment_tier: user_facing
+    natural_language:
+    - show compliance
+    - check governance status
+    - show compliance dashboard
+    - check governance
+    - update
+    category: reporting
+  document_organizer:
+    name: Document Organizer
+    description: Document Organizer for CORTEX Brain
+    deployment_tier: dual_context
+    natural_language:
+    - planning
+    category: general
+  error_corrector:
+    name: Error Corrector
+    description: ErrorCorrector Agent
+    deployment_tier: dual_context
+    natural_language:
+    - manual review needed
+    - runtime
+    category: general
+  exceptions:
+    name: Exceptions
+    description: Custom Exceptions for CORTEX Agents
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
+  feature_workflow:
+    name: Feature Workflow
+    description: Feature Creation Workflow
+    deployment_tier: user_facing
+    natural_language:
+    - plan
+    - checks
+    - create user class
+    - create login endpoint
+    category: planning
+  incremental_plan_generator:
+    name: Incremental Plan Generator
+    description: Incremental Plan Generator
+    deployment_tier: admin_only
+    natural_language:
+    - plansection
+    - implementation plan
+    - security review
+    - deployment plan
+    - checkpoints
+    category: planning
+  intent_router:
+    name: Intent Router
+    description: IntentRouter Agent
+    deployment_tier: dual_context
+    natural_language:
+    - plan
+    - planning
+    - plan a feature
+    - plan this
+    - plan this feature
+    category: general
+  investigation_router:
+    name: Investigation Router
+    description: Description needed
+    deployment_tier: dual_context
+    natural_language:
+    - create
+    - update
+    - generate discovery phase report
+    - generate analysis phase report
+    - generate final investigation report
+    category: general
+  learning_capture_agent:
+    name: Learning Capture Agent
+    description: CORTEX Learning Capture Agent
+    deployment_tier: dual_context
+    natural_language:
+    - validate inputs before processing
+    - review similar code for same issue
+    - tests not run before claiming fix
+    category: general
+  lint_integration:
+    name: Lint Integration
+    description: Lint Integration Wrapper
+    deployment_tier: user_facing
+    natural_language:
+    - roslynator analyze
+    category: analysis
+  page_tracking:
+    name: Page Tracking
+    description: Page Tracking & Context Retention - Phase 2 Milestone 2.3
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
+  pattern_cache:
+    name: Pattern Cache
+    description: Pattern Cache for Edge Case Analysis Optimization
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+  plan_cli:
+    name: Plan Cli
+    description: Plan CLI commands for interacting with plan registry.
+    deployment_tier: user_facing
+    natural_language:
+    - 'plan '
+    - 'no plans found matching '
+    category: planning
+  plan_index_generator:
+    name: Plan Index Generator
+    description: Plan index generator for auto-generating INDEX.md.
+    deployment_tier: user_facing
+    natural_language:
+    - planning
+    category: planning
+  plan_metadata:
+    name: Plan Metadata
+    description: Plan Metadata extraction system.
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: planning
+  plan_organizer:
+    name: Plan Organizer
+    description: Plan file organizer for status-based directory structure.
+    deployment_tier: user_facing
+    natural_language:
+    - planning
+    category: planning
+  plan_registry:
+    name: Plan Registry
+    description: Plan Registry system.
+    deployment_tier: user_facing
+    natural_language:
+    - planning
+    category: planning
+  production_readiness:
+    name: Production Readiness
+    description: Production Readiness Checklist
+    deployment_tier: admin_only
+    natural_language:
+    - add unit tests to validate functionality
+    - fix lint errors before deployment
+    - lint validation not run
+    - documentation check requires code parsing
+    - validated by cleanup scanner
+    category: review
+  profile_agent:
+    name: Profile Agent
+    description: ProfileAgent - User Profile Update Handler
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: review
+  rca_agent:
+    name: Rca Agent
+    description: RCA Agent - Root Cause Analysis Intent Handler
+    deployment_tier: dual_context
+    natural_language:
+    - analyze rca
+    - show
+    - analyze
+    - start
+    - generate
+    category: analysis
+  refactoring_intelligence:
+    name: Refactoring Intelligence
+    description: Refactoring Intelligence - Phase 2 Milestone 2.2
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
+  screenshot_analyzer:
+    name: Screenshot Analyzer
+    description: ScreenshotAnalyzer Agent
+    deployment_tier: user_facing
+    natural_language:
+    - analyzer
+    - create playwright test selectors
+    category: analysis
+  session_resumer:
+    name: Session Resumer
+    description: SessionResumer Agent
+    deployment_tier: dual_context
+    natural_language:
+    - review conversation history
+    - execute next planned task
+    category: general
+  smell_cache:
+    name: Smell Cache
+    description: Code Smell Detection Cache for Refactoring Intelligence Optimization
+    deployment_tier: admin_only
+    natural_language:
+    - operation name
+    category: general
+  streaming_plan_writer:
+    name: Streaming Plan Writer
+    description: Streaming Plan Writer
+    deployment_tier: admin_only
+    natural_language:
+    - list available checkpoint ids
+    - remove all checkpoint files
+    category: planning
+  tdd_state_machine:
+    name: Tdd State Machine
+    description: TDD Workflow State Machine - Phase 2 Milestone 2.1
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: development
+  tdd_workflow:
+    name: Tdd Workflow
+    description: TDD Workflow Orchestrator
+    deployment_tier: user_facing
+    natural_language:
+    - checks
+    category: development
+  tdd_workflow_integrator:
+    name: Tdd Workflow Integrator
+    description: TDD Workflow Integrator - Issue
+    deployment_tier: user_facing
+    natural_language:
+    - generate token button
+    category: development
+  tdd_workflow_orchestrator:
+    name: Tdd Workflow Orchestrator
+    description: TDD Workflow Orchestrator - Phase 4 Milestone 3.2.1 - Vision API
+      Integration
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: development
+  terminal_integration:
+    name: Terminal Integration
+    description: Terminal Integration for TDD Mastery
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
+  test_execution_manager:
+    name: Test Execution Manager
+    description: Test Execution Manager for TDD Mastery
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: development
+  welcome_banner_agent:
+    name: Welcome Banner Agent
+    description: Welcome Banner Agent - Sprint 1 (Rulebook Visibility)
+    deployment_tier: dual_context
+    natural_language:
+    - show rules
+    category: general
+  workflow_engine:
+    name: Workflow Engine
+    description: CORTEX Workflow Engine - DAG-based Workflow Orchestration
+    deployment_tier: user_facing
+    natural_language:
+    - running
+    - create workflowstate from dictionary
+    - validate inputs before execution
+    - resume a workflow from checkpoint
+    - check if stage should be executed
+    category: general
+  workflow_pipeline:
+    name: Workflow Pipeline
+    description: CORTEX Workflow Pipeline System
+    deployment_tier: admin_only
+    natural_language:
+    - running
+    - update state with stage result
+    category: general
+  workspace_context_manager:
+    name: Workspace Context Manager
+    description: Workspace Context Manager for TDD Mastery
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: general
     modules:
     - demo_introduction
     - demo_help_system
@@ -2960,6 +3386,214 @@ metadata:
   - version: auto-registered
     date: 2025-12-04
     changes:
+    - Auto-registered workspace_context_manager operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered workflow_pipeline operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered workflow_engine operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered welcome_banner_agent operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered test_execution_manager operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered terminal_integration operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered tdd_workflow_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered tdd_workflow_integrator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered tdd_workflow operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered tdd_state_machine operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered streaming_plan_writer operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered smell_cache operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered session_resumer operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered screenshot_analyzer operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered refactoring_intelligence operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered rca_agent operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered profile_agent operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered production_readiness operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered plan_registry operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered plan_organizer operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered plan_metadata operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered plan_index_generator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered plan_cli operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered pattern_cache operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered page_tracking operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered lint_integration operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered learning_capture_agent operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered investigation_router operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered intent_router operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered incremental_plan_generator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered feature_workflow operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered exceptions operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered error_corrector operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered document_organizer operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered compliance_dashboard_agent operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered commit_handler operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered code_cleanup_validator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered checkpoint operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered change_governor operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered batch_processor operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered ast_cache operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered application_health_agent operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered agent_types operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered ado_agent operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered planning_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered plan_execution_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered phase_checkpoint_manager operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered onboarding_acknowledgment_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered git_sync_and_optimize operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered git_checkpoint_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered application_health_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered alignment_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
     - Auto-registered techstack_analyzer operation
   - version: auto-registered
     date: 2025-12-04
@@ -3762,7 +4396,7 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 70
+  total_operations: 122
   total_modules: 73
   total_phases: 9
   cortex_2_0_operations: 9
@@ -3798,7 +4432,7 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
-  last_updated: '2025-12-04 06:30:32'
+  last_updated: '2025-12-04 11:06:41'
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper

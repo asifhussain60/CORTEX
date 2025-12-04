@@ -60,6 +60,70 @@ class ValidationResult:
     warnings: List[str] = field(default_factory=list)
 
 
+# ===== HELPER FUNCTIONS =====
+
+def _truncate_filename(name: str, max_length: int = 30) -> str:
+    """
+    Truncate filename to max_length while preserving meaning.
+    
+    Algorithm:
+    - Reserve 9 chars for timestamp: -{YYYYMMDD} (includes hyphen)
+    - Reserve 5 chars for extension: .yaml
+    - Total overhead: 14 chars
+    - Available for name: max_length - 14
+    
+    For multi-word names:
+    - Keep first word complete
+    - Abbreviate remaining words to 3 chars each
+    - Preserve readability
+    
+    Args:
+        name: Sanitized filename base (lowercase, hyphens only)
+        max_length: Maximum total filename length (default: 30)
+        
+    Returns:
+        Truncated filename with timestamp: {name}-{YYYYMMDD}.yaml
+        
+    Examples:
+        "user-authentication-feature" → "user-aut-fea-20251204.yaml"
+        "payment-gateway-integration" → "payment-gat-int-20251204.yaml"
+        "api" → "api-20251204.yaml"
+    """
+    timestamp = datetime.now().strftime("%Y%m%d")
+    extension = ".yaml"
+    
+    # Calculate available space for name
+    overhead = len(f"-{timestamp}{extension}")  # 14 chars
+    available = max_length - overhead
+    
+    # If name fits, use as-is
+    if len(name) <= available:
+        return f"{name}-{timestamp}{extension}"
+    
+    # Multi-word truncation strategy
+    words = name.split('-')
+    
+    if len(words) == 1:
+        # Single word - simple truncation
+        truncated = name[:available]
+        return f"{truncated}-{timestamp}{extension}"
+    
+    # Multiple words - keep first, abbreviate rest
+    result_words = [words[0]]  # Keep first word complete
+    remaining_space = available - len(words[0])
+    
+    for word in words[1:]:
+        abbreviated = word[:3]  # 3 chars per word
+        test_name = '-'.join(result_words + [abbreviated])
+        if len(test_name) <= available:
+            result_words.append(abbreviated)
+        else:
+            break
+    
+    truncated = '-'.join(result_words)
+    return f"{truncated}-{timestamp}{extension}"
+
+
 # ===== CORE OPERATION 1: CREATE PLAN =====
 
 def create_plan(

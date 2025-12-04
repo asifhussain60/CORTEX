@@ -12,9 +12,9 @@
 
 **Objective:** Build unified health dashboard supporting multiple applications (CORTEX, NOOR CANVAS, ALIST, KSESSIONS) with mock-first development approach, universal data schema, and URL-based routing.
 
-**Total Features:** 3 (FEAT 0: Flask Cleanup, FEAT 1: Mock Dashboard, FEAT 2: CORTEX Health, FEAT 3: External Repos)  
-**Total Phases:** 12  
-**Estimated Time:** 8 hours 30 minutes  
+**Total Features:** 5 (FEAT 0: Flask Cleanup, FEAT 1: Mock Dashboard, FEAT 2: CORTEX Health, FEAT 3: External Repos, FEAT 4: Advanced Views)  
+**Total Phases:** 15 (added 3 phases for advanced views)  
+**Estimated Time:** 12 hours (added 3.5 hours for advanced views)  
 **Execution Mode:** Supervised (phase checkpoints with progress reports)
 
 ---
@@ -27,19 +27,31 @@
 4. ✅ **Mock-First Development:** Build with mock data, iterate until satisfied, then implement live scanning
 5. ✅ **Schema Validation:** Automated validation ensures all apps match universal schema
 6. ✅ **External Repo Scanning:** CORTEX can scan external repos (NOOR CANVAS, ALIST, KSESSIONS)
-7. ✅ **Multi-Tab Interface:** Overview, Metrics, Code Quality, Dependencies tabs
-8. ✅ **Reusable Patterns:** Mock data structure becomes template for live data generation
+7. ✅ **Advanced Views:** Tech Stack, Architecture, Security, API Docs, Code Organization, Team Productivity
+8. ✅ **Multi-Tab Interface:** Overview, Metrics, Code Quality, Dependencies, Security, Tech Stack, Architecture
+9. ✅ **Reusable Patterns:** Mock data structure becomes template for live data generation
+
+## 🎯 Enhanced Requirements (Advanced Views)
+
+**See:** `dashboard-advanced-views-proposal.md` for complete specifications
+
+10. ✅ **Tech Stack View:** Technology inventory with version tracking and deprecation warnings
+11. ✅ **Architecture View:** Visual tier diagrams, UML/ERD generation, component relationships
+12. ✅ **Security View:** Multi-angle security analysis (OWASP Top 10, compliance, vulnerabilities)
+13. ✅ **API Documentation:** Auto-generated API docs with Swagger/OpenAPI integration (API projects)
+14. ✅ **Code Organization:** Directory heatmaps, complexity hotspots, dependency depth analysis
+15. ✅ **Team Productivity:** Contribution graphs, PR metrics, knowledge distribution (optional)
 
 ---
 
 ## 📊 Execution Progress
 
-**Overall Progress:** [██░░░░░░░░░] 17% - FEAT 1 In Progress
+**Overall Progress:** [███░░░░░░░░] 25% - FEAT 1 In Progress
 
-**Completed Phases:** 2/12  
+**Completed Phases:** 3/12  
 **Current Feature:** FEAT 1 (Mock Dashboard Development)  
-**Current Phase:** Phase 2 (Mock Data Generation)  
-**Remaining Phases:** 10
+**Current Phase:** Phase 3 (Single HTML Dashboard with Tabs)  
+**Remaining Phases:** 9
 
 ---
 
@@ -312,9 +324,10 @@ Scan NOOR CANVAS, ALIST, KSESSIONS repos to understand real-world data patterns,
 
 ## Phase 2: Mock Data File Generation
 
-**Status:** ☐ NOT STARTED  
-**Duration:** 45 minutes  
-**Dependencies:** Phase 1 (schema must exist)
+**Status:** ✅ COMPLETED  
+**Duration:** 45 minutes (actual: 20 minutes)  
+**Dependencies:** Phase 1 (schema complete)  
+**Completed:** December 4, 2025
 
 ### Objective
 Generate comprehensive mock data files conforming to universal schema, simulating realistic scenarios (small/medium/large repos, various health states).
@@ -1595,3 +1608,321 @@ Say "approve plan" to begin Phase 1
 **Author:** Asif Hussain (via CORTEX)  
 **Version:** 1.0  
 **Session Restoration:** Enabled (reference this plan in new chat to continue)
+
+---
+
+## ⭐ FEAT 4: Advanced Views Implementation
+
+**Duration:** 3 hours 30 minutes  
+**Objective:** Implement advanced dashboard views (Tech Stack, Architecture, Security, API Docs) for comprehensive application intelligence
+
+---
+
+## Phase 13: Tech Stack & Security Views
+
+**Status:** ☐ NOT STARTED  
+**Duration:** 90 minutes  
+**Dependencies:** Phase 2 (schema must support new fields)
+
+### Objective
+Implement Tech Stack and Security views to provide technology inventory and comprehensive security analysis.
+
+### Tasks
+
+- [ ] **Task 13.1:** Extend schema with tech_stack object
+  - Update: `health-data-schema.json` to include tech_stack section
+  - Fields: name, version, latest_version, status, category, license, cve_count, etc.
+  - Categories: frontend, backend, database, devops, cloud
+  - Validate: Schema still passes JSON Schema Draft 7 validation
+
+- [ ] **Task 13.2:** Extend schema with enhanced security object
+  - Update: security section with OWASP Top 10, compliance, authentication details
+  - Add: authentication, data_protection, network_security, code_security sub-objects
+  - Add: owasp_top_10, compliance sub-objects
+  - Document: All new fields in schema README
+
+- [ ] **Task 13.3:** Create Tech Stack tab component
+  - File: `cortex-brain/dashboards/ui/components/tech-stack-tab.js`
+  - Layout: Category cards (Frontend, Backend, Database, DevOps, Cloud)
+  - Display: Version badges (color-coded: current, update available, deprecated)
+  - Display: CVE counts, license info, update urgency
+  - Interactive: Click for details, changelog links
+
+- [ ] **Task 13.4:** Create Security tab component
+  - File: `cortex-brain/dashboards/ui/components/security-tab.js`
+  - Layout: Security score gauge, vulnerability breakdown, OWASP checklist
+  - Display: Vulnerability heatmap by severity
+  - Display: OWASP Top 10 status indicators
+  - Display: Compliance dashboard (GDPR, SOC 2, etc.)
+  - Interactive: Click vulnerability for details, remediation timeline
+
+- [ ] **Task 13.5:** Generate mock data for Tech Stack view
+  - File: `cortex-brain/dashboards/mock/tech-stack.json`
+  - Include: 20+ technologies across all categories
+  - Variants: Current versions, outdated versions, deprecated items
+  - Realistic: Based on typical modern application stack
+
+- [ ] **Task 13.6:** Generate mock data for Security view
+  - File: `cortex-brain/dashboards/mock/security.json`
+  - Include: Sample vulnerabilities (critical, high, medium, low)
+  - Include: OWASP Top 10 coverage status
+  - Include: Compliance status for common standards
+  - Realistic: Based on typical security scan results
+
+- [ ] **Task 13.7:** Integrate tabs into main dashboard
+  - Update: `cortex-brain/dashboards/ui/index.html` with new tabs
+  - Wire: Tab routing to load tech-stack-tab.js and security-tab.js
+  - Test: Tab switching, data loading, error handling
+
+- [ ] **Task 13.8:** Test with mock data
+  - Load: Dashboard with tech stack and security tabs
+  - Verify: All data displays correctly
+  - Verify: Color coding works (current, warning, critical)
+  - Verify: Interactive elements functional
+
+### Checkpoint
+✓ Tech Stack view showing technology inventory with version tracking  
+✓ Security view showing comprehensive security analysis  
+✓ Schema extended with new fields (backwards compatible)  
+✓ Mock data available for both views
+
+---
+
+## Phase 14: Architecture & API Documentation Views
+
+**Status:** ☐ NOT STARTED  
+**Duration:** 120 minutes  
+**Dependencies:** Phase 13 (schema extensions ready)
+
+### Objective
+Implement Architecture and API Documentation views to visualize application structure and provide interactive API exploration.
+
+### Tasks
+
+- [ ] **Task 14.1:** Extend schema with architecture object
+  - Fields: pattern (clean_architecture, mvc, etc.), tiers array, diagrams URLs
+  - Fields: communication_protocols breakdown (REST, GraphQL, SignalR percentages)
+  - Fields: patterns array (repository, cqrs, etc.)
+  - Validate: Schema still valid
+
+- [ ] **Task 14.2:** Extend schema with api_documentation object (optional, API projects only)
+  - Fields: total_endpoints, by_method breakdown, endpoints array
+  - Fields: openapi_spec_url, swagger_ui_url, health_metrics
+  - Document: When this section is required vs optional
+
+- [ ] **Task 14.3:** Create Architecture tab component
+  - File: `cortex-brain/dashboards/ui/components/architecture-tab.js`
+  - Display: Tier diagram (visual representation with layers)
+  - Display: Component breakdown by tier
+  - Display: Architecture patterns detected
+  - Display: Communication protocol breakdown (pie chart)
+  - Interactive: Click tier for details, hover for component counts
+
+- [ ] **Task 14.4:** Implement diagram generation placeholders
+  - Placeholder: UML class diagram (future: PlantUML integration)
+  - Placeholder: Sequence diagram (future: auto-generation)
+  - Placeholder: ERD (future: database schema analysis)
+  - For now: Display message "Diagram generation coming soon" with plan link
+
+- [ ] **Task 14.5:** Create API Documentation tab component (conditional)
+  - File: `cortex-brain/dashboards/ui/components/api-docs-tab.js`
+  - Display: Only if api_documentation object exists in data
+  - Layout: Endpoint tree, method breakdown, health metrics
+  - Display: Endpoint list with status (documented, tested, deprecated)
+  - Interactive: Click endpoint for details, filter by method/status
+
+- [ ] **Task 14.6:** Embed Swagger UI (for API projects)
+  - Conditional: If openapi_spec_url exists, embed Swagger UI iframe
+  - Fallback: If no OpenAPI spec, show endpoint list only
+  - Test: iframe embedding, authentication handling
+
+- [ ] **Task 14.7:** Generate mock data for Architecture view
+  - File: `cortex-brain/dashboards/mock/architecture.json`
+  - Include: 3-tier structure (presentation, application, data)
+  - Include: Component counts, LOC breakdown by tier
+  - Include: Architecture patterns, communication protocols
+  - Realistic: Based on typical clean architecture setup
+
+- [ ] **Task 14.8:** Generate mock data for API Documentation view
+  - File: `cortex-brain/dashboards/mock/api-documentation.json`
+  - Include: 20+ sample endpoints (GET, POST, PUT, DELETE)
+  - Include: Documentation status, test coverage, health metrics
+  - Include: Mock OpenAPI spec URL (points to sample spec)
+  - Realistic: Based on typical REST API
+
+- [ ] **Task 14.9:** Test architecture view
+  - Load: Dashboard with architecture tab
+  - Verify: Tier diagram renders correctly
+  - Verify: Component breakdown displays
+  - Verify: Interactive elements work
+
+- [ ] **Task 14.10:** Test API documentation view (conditional)
+  - Load: Dashboard with API project mock data
+  - Verify: API docs tab appears (conditional rendering)
+  - Verify: Endpoint list displays correctly
+  - Verify: Swagger UI embed works (if spec URL provided)
+
+### Checkpoint
+✓ Architecture view showing tier structure and patterns  
+✓ API Documentation view for API projects (conditional)  
+✓ Diagram generation placeholders in place  
+✓ Schema extended with architecture and API fields
+
+---
+
+## Phase 15: Code Organization & Polish
+
+**Status:** ☐ NOT STARTED  
+**Duration:** 60 minutes  
+**Dependencies:** Phase 14 (all views implemented)
+
+### Objective
+Implement Code Organization view and polish all advanced views for production readiness.
+
+### Tasks
+
+- [ ] **Task 15.1:** Extend schema with code_organization object
+  - Fields: directory_structure array, file_types breakdown, complexity_hotspots
+  - Fields: code_ownership array (most active files), dependency_depth
+  - Validate: Schema complete and backwards compatible
+
+- [ ] **Task 15.2:** Create Code Organization tab component
+  - File: `cortex-brain/dashboards/ui/components/code-org-tab.js`
+  - Display: Directory structure heat map (size and complexity)
+  - Display: File type distribution (pie chart)
+  - Display: Top 10 complexity hotspots (table with recommendations)
+  - Display: Code ownership (most active files)
+  - Interactive: Click directory/file for details
+
+- [ ] **Task 15.3:** Generate mock data for Code Organization view
+  - File: `cortex-brain/dashboards/mock/code-organization.json`
+  - Include: Sample directory structure with LOC and complexity
+  - Include: File type breakdown (Python, TypeScript, YAML, etc.)
+  - Include: 10+ complexity hotspots with refactor recommendations
+  - Include: Code ownership data (commits, authors)
+
+- [ ] **Task 15.4:** Test code organization view
+  - Load: Dashboard with code organization tab
+  - Verify: Heat map renders correctly
+  - Verify: File type chart displays
+  - Verify: Complexity hotspots table functional
+  - Verify: Interactive elements work
+
+- [ ] **Task 15.5:** Polish all advanced views
+  - Consistency: Ensure all views use same color scheme
+  - Icons: Add consistent icons for all view types
+  - Tooltips: Add helpful tooltips to all interactive elements
+  - Loading: Add loading states for all data-dependent views
+  - Errors: Add error states for missing/invalid data
+
+- [ ] **Task 15.6:** Implement responsive design for advanced views
+  - Desktop: Full interactive diagrams, multiple columns
+  - Tablet: Simplified diagrams, single column with collapsible sections
+  - Mobile: Card-based layout, essential info only
+  - Test: All views on different screen sizes
+
+- [ ] **Task 15.7:** Add view documentation
+  - File: `cortex-brain/dashboards/ui/README-ADVANCED-VIEWS.md`
+  - Document: Each view's purpose, data requirements, features
+  - Document: How to extend views with custom data
+  - Include: Screenshots/mockups of each view
+
+- [ ] **Task 15.8:** Create consolidated mock data file
+  - File: `cortex-brain/dashboards/mock/health-data-complete.json`
+  - Include: ALL sections (basic + advanced views)
+  - Purpose: Single file demonstration of full capabilities
+  - Validate: Against extended schema
+
+- [ ] **Task 15.9:** Update schema validator
+  - File: `cortex-brain/dashboards/schema/schema-validator.py`
+  - Update: Support all new optional sections
+  - Test: Validate mock data against extended schema
+  - Output: Detailed validation report with field coverage
+
+- [ ] **Task 15.10:** Final integration testing
+  - Test: Load dashboard with all tabs enabled
+  - Test: Tab switching between all views
+  - Test: Data loading for all sections
+  - Test: Error handling (missing optional sections)
+  - Test: Responsive design on mobile/tablet/desktop
+
+### Checkpoint
+✓ Code Organization view implemented and functional  
+✓ All advanced views polished and production-ready  
+✓ Responsive design working on all screen sizes  
+✓ Documentation complete for all views  
+✓ Schema validator supports all extensions  
+✓ Consolidated mock data demonstrates all capabilities
+
+---
+
+## 📊 Updated Feature Summary
+
+### FEAT 0: Flask Cleanup ✅ COMPLETE
+- Duration: 60 minutes (actual: 45 minutes)
+- Status: All Flask code removed and archived
+
+### FEAT 1: Mock Dashboard Development 🔄 IN PROGRESS
+- Phases 1-6: Basic dashboard with core views
+- Duration: 4 hours 15 minutes
+- Status: Phase 3 current
+
+### FEAT 2: CORTEX Health Integration ☐ PENDING
+- Phases 7-9: Live CORTEX metrics
+- Duration: 3 hours 15 minutes
+- Status: Not started
+
+### FEAT 3: External Repo Scanning ☐ DEFERRED
+- Phases 10-12: NOOR CANVAS, ALIST, KSESSIONS
+- Duration: 3 hours 15 minutes
+- Status: Deferred until FEAT 1 & 2 complete
+
+### FEAT 4: Advanced Views Implementation ☐ NEW
+- Phases 13-15: Tech Stack, Architecture, Security, API Docs, Code Organization
+- Duration: 3 hours 30 minutes (270 minutes)
+- Status: Not started (begins after basic dashboard working)
+
+---
+
+## 🎯 Updated Execution Plan
+
+**Total Phases:** 15 (was 12, added 3 for advanced views)  
+**Total Duration:** 12 hours (was 8.5 hours, added 3.5 hours)  
+**Current Progress:** 17% (2/15 phases complete: Phase 0 and Phase 1)
+
+**Recommended Execution Order:**
+1. ✅ Phase 0: Flask Cleanup (COMPLETE)
+2. ✅ Phase 1: Schema Design (COMPLETE)
+3. 🔄 Phase 2: Mock Data Generation (IN PROGRESS or COMPLETE)
+4. ☐ Phase 3-6: Basic Dashboard UI (FEAT 1)
+5. ☐ Phase 7-9: CORTEX Integration (FEAT 2)
+6. ☐ Phase 13-15: Advanced Views (FEAT 4) - Can start after Phase 6
+7. ☐ Phase 10-12: External Repos (FEAT 3) - Deferred until all others complete
+
+**Advanced Views Can Run in Parallel:**
+- Phases 13-15 (Advanced Views) can start as soon as Phase 6 (basic dashboard) completes
+- Don't need to wait for CORTEX integration (Phase 7-9)
+- Use mock data to develop advanced views
+- Integrate with live data later
+
+---
+
+## 📋 Advanced Views Quick Reference
+
+| View | Tab Name | Priority | Data Required | Optional |
+|------|----------|----------|---------------|----------|
+| Tech Stack | Tech Stack | HIGH | tech_stack object | No |
+| Security | Security | CRITICAL | enhanced security object | No |
+| Architecture | Architecture | HIGH | architecture object | No |
+| API Docs | API Documentation | HIGH* | api_documentation object | Yes** |
+| Code Organization | Code Org | MEDIUM | code_organization object | Yes*** |
+
+*HIGH for API projects, MEDIUM for UI-heavy projects  
+**Only shown if api_documentation exists (API projects)  
+***Can be omitted for minimal dashboards
+
+---
+
+**Plan Updated:** December 4, 2025  
+**Advanced Views Proposal:** `dashboard-advanced-views-proposal.md`  
+**Schema Version:** 1.0.0 (will extend to 1.1.0 with advanced views)

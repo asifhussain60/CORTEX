@@ -713,9 +713,44 @@ def align_system_v2(
             logger.info("✅ All operations have response templates")
         
         # ====================================================================
-        # CHECK 4: CORTEX.prompt.md Optimization
+        # CHECK 4: Response Template Structure
         # ====================================================================
-        logger.info("📋 Check 4: CORTEX.prompt.md Optimization")
+        logger.info("📋 Check 4: Response Template Structure")
+        template_structure = _check_template_structure(cortex_root)
+        results["checks"]["template_structure"] = template_structure
+        
+        if template_structure["root_level_templates"] > 0:
+            logger.error(f"❌ {template_structure['root_level_templates']} templates at ROOT level (should be in templates: section)")
+            results["warnings"].append({
+                "category": "template_structure",
+                "severity": "HIGH",
+                "message": f"{template_structure['root_level_templates']} templates incorrectly placed at root level",
+                "details": template_structure["root_level_template_names"]
+            })
+            
+            # Auto-fix if enabled
+            if auto_fix and not dry_run:
+                logger.info("🔧 Auto-fixing template structure...")
+                try:
+                    fix_result = _fix_template_structure(cortex_root)
+                    
+                    if fix_result["success"]:
+                        results["fixes_applied"].append(
+                            f"Moved {fix_result['moved']} templates into templates: section"
+                        )
+                        logger.info(f"   ✅ Moved {fix_result['moved']} templates")
+                    else:
+                        results["errors"].append(f"Template structure fix failed: {fix_result.get('error', 'Unknown error')}")
+                except Exception as e:
+                    logger.error(f"   ❌ Template structure fix failed: {e}")
+                    results["errors"].append(f"Template structure fix failed: {e}")
+        else:
+            logger.info("✅ All templates in correct location (templates: section)")
+        
+        # ====================================================================
+        # CHECK 5: CORTEX.prompt.md Optimization
+        # ====================================================================
+        logger.info("📋 Check 5: CORTEX.prompt.md Optimization")
         prompt_check = _check_prompt_optimization(cortex_root)
         results["checks"]["prompt_optimization"] = prompt_check
         
@@ -731,9 +766,9 @@ def align_system_v2(
             logger.info(f"✅ CORTEX.prompt.md optimized: {prompt_check['line_count']} lines")
         
         # ====================================================================
-        # CHECK 5: Obsolete Code Detection
+        # CHECK 6: Obsolete Code Detection
         # ====================================================================
-        logger.info("📋 Check 5: Obsolete Code Detection")
+        logger.info("📋 Check 6: Obsolete Code Detection")
         detector = ObsoleteCodeDetector(cortex_root)
         obsolete_result = detector.detect_all()
         
@@ -786,9 +821,9 @@ def align_system_v2(
             logger.info("✅ No obsolete code detected")
         
         # ====================================================================
-        # CHECK 6: Module Import Health
+        # CHECK 7: Module Import Health
         # ====================================================================
-        logger.info("📋 Check 6: Module Import Health")
+        logger.info("📋 Check 7: Module Import Health")
         import_health = _check_module_imports(cortex_root)
         results["checks"]["module_imports"] = import_health
         
@@ -816,7 +851,7 @@ def align_system_v2(
         logger.info("\n" + "=" * 70)
         logger.info("📊 CORTEX Align v2.0 - Summary")
         logger.info("=" * 70)
-        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/6")
+        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/7")
         logger.info(f"⚠️  Warnings: {len(results['warnings'])}")
         logger.info(f"❌ Errors: {len(results['errors'])}")
         logger.info(f"🔧 Fixes Applied: {len(results['fixes_applied'])}")
@@ -927,6 +962,118 @@ def _check_response_template_coverage(cortex_root: Path) -> Dict[str, Any]:
             "covered_count": 0,
             "missing_count": 0,
             "coverage_percentage": 0.0,
+            "error": str(e)
+        }
+
+
+def _check_template_structure(cortex_root: Path) -> Dict[str, Any]:
+    """Check if all templates are in templates: section (not at root level)."""
+    try:
+        import yaml
+        
+        templates_yaml = cortex_root / "cortex-brain" / "response-templates.yaml"
+        with open(templates_yaml, encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+        
+        # Expected top-level keys
+        expected_top_level = {
+            'schema_version', 'last_updated', 'optimization', 
+            'shared', 'base_templates', 'templates', 
+            'routing', 'formatting'
+        }
+        
+        # Find root-level templates
+        root_level_templates = []
+        for key in data.keys():
+            if key not in expected_top_level and isinstance(data[key], dict):
+                # Check if it looks like a template
+                value_str = str(data[key])
+                if 'trigger_phrases' in value_str or 'response_profile' in value_str:
+                    root_level_templates.append(key)
+        
+        return {
+            "passed": len(root_level_templates) == 0,
+            "root_level_templates": len(root_level_templates),
+            "root_level_template_names": root_level_templates,
+            "total_templates": len(data.get('templates', {})),
+            "structure_correct": len(root_level_templates) == 0
+        }
+    except Exception as e:
+        logger.error(f"Template structure check failed: {e}")
+        return {
+            "passed": False,
+            "root_level_templates": 0,
+            "root_level_template_names": [],
+            "error": str(e)
+        }
+
+
+def _fix_template_structure(cortex_root: Path) -> Dict[str, Any]:
+    """Fix template structure by moving root-level templates into templates: section."""
+    try:
+        import yaml
+        import shutil
+        from datetime import datetime
+        
+        templates_yaml = cortex_root / "cortex-brain" / "response-templates.yaml"
+        
+        # Create backup
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        backup_file = templates_yaml.with_suffix(f'.yaml.backup-{timestamp}')
+        shutil.copy2(templates_yaml, backup_file)
+        logger.info(f"   📦 Created backup: {backup_file.name}")
+        
+        # Load current structure
+        with open(templates_yaml, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+        
+        # Expected top-level keys
+        expected_top_level = {
+            'schema_version', 'last_updated', 'optimization', 
+            'shared', 'base_templates', 'templates', 
+            'routing', 'formatting'
+        }
+        
+        # Find and move root-level templates
+        root_level_templates = {}
+        keys_to_move = []
+        
+        for key in list(data.keys()):
+            if key not in expected_top_level and isinstance(data[key], dict):
+                value_str = str(data[key])
+                if 'trigger_phrases' in value_str or 'response_profile' in value_str:
+                    root_level_templates[key] = data[key]
+                    keys_to_move.append(key)
+        
+        if not root_level_templates:
+            return {"success": True, "moved": 0, "message": "No templates to move"}
+        
+        # Ensure templates section exists
+        if 'templates' not in data:
+            data['templates'] = {}
+        
+        # Move templates
+        moved_count = 0
+        for key in keys_to_move:
+            data['templates'][key] = root_level_templates[key]
+            del data[key]
+            moved_count += 1
+        
+        # Write back
+        with open(templates_yaml, 'w', encoding='utf-8') as f:
+            yaml.dump(data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+        
+        return {
+            "success": True,
+            "moved": moved_count,
+            "backup": str(backup_file),
+            "total_templates": len(data.get('templates', {}))
+        }
+    except Exception as e:
+        logger.error(f"Template structure fix failed: {e}")
+        return {
+            "success": False,
+            "moved": 0,
             "error": str(e)
         }
 

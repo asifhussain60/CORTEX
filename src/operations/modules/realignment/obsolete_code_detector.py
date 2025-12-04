@@ -107,6 +107,13 @@ class ObsoleteCodeDetector:
             'cortex-brain',
             '.vscode'
         }
+        
+        # Protected orchestrators (DO NOT mark as obsolete)
+        # These orchestrators have advanced features NOT in utilities
+        self.protected_orchestrators = {
+            'planning_orchestrator',  # Has UX enhancements: planning mode, session restoration, challenge system
+            'git_checkpoint_orchestrator',  # TDD workflow integration, required by planning orchestrator
+        }
     
     def _detect_project_root(self) -> Path:
         """Auto-detect CORTEX project root."""
@@ -171,6 +178,11 @@ class ObsoleteCodeDetector:
         
         for file in self.orchestrators_dir.glob("*_orchestrator.py"):
             if file.stem == '__init__':
+                continue
+            
+            # PROTECTION: Check if orchestrator is protected (has advanced features)
+            if file.stem in self.protected_orchestrators:
+                logger.info(f"Protected orchestrator: {file.name} (has advanced features not in utility)")
                 continue
             
             # Check if this orchestrator has been migrated

@@ -60,6 +60,9 @@ class FeatureRegistrationValidator:
         """
         self.project_root = project_root or self._detect_project_root()
         self.operations_dir = self.project_root / "src" / "operations"
+        self.orchestrators_dir = self.project_root / "src" / "orchestrators"
+        self.workflows_dir = self.project_root / "src" / "workflows"
+        self.agents_dir = self.project_root / "src" / "cortex_agents"
         self.modules_dir = self.operations_dir / "modules"
         self.operations_yaml = self.project_root / "cortex-operations.yaml"
         
@@ -68,7 +71,23 @@ class FeatureRegistrationValidator:
             "__init__.py",
             "base_operation_module.py",
             "base_operation.py",
-            "operation_base.py"
+            "operation_base.py",
+            "base_agent.py",
+            "agent_base.py",
+            "workflow_base.py",
+            "rollback_command_parser.py",  # Utility, not orchestrator
+        }
+        
+        # Excluded subdirectories (internal components)
+        self.excluded_subdirs = {
+            "stages",          # Workflow stages are internal
+            "test_generator",  # Agent sub-components
+            "strategic",       # Agent sub-components
+            "tactical",        # Agent sub-components
+            "__pycache__",
+            "internal",
+            "utils",
+            "helpers",
         }
         
         # Excluded module patterns
@@ -97,24 +116,106 @@ class FeatureRegistrationValidator:
             "Ensure cortex-operations.yaml exists."
         )
     
+    def _is_registerable_operation(self, file_path: Path) -> bool:
+        """
+        Determine if a Python file should be registered as an operation.
+        
+        Uses heuristics to filter out internal components, utilities, and base classes.
+        
+        Args:
+            file_path: Path to Python file
+            
+        Returns:
+            True if file should be registered as an operation
+        """
+        try:
+            # Check if file is in excluded subdirectory
+            for excluded_subdir in self.excluded_subdirs:
+                if excluded_subdir in file_path.parts:
+                    return False
+            
+            # Read file content
+            content = file_path.read_text(encoding='utf-8')
+            
+            # Must have executable entry point
+            has_entry_point = any(pattern in content for pattern in [
+                'def execute(',
+                'def run(',
+                'def main(',
+                'def orchestrate(',
+                'def process(',
+                'class ', # Has class definition
+            ])
+            
+            if not has_entry_point:
+                return False
+            
+            # Must have docstring (operation description)
+            has_docstring = '"""' in content or "'''" in content
+            
+            # Exclude if it's clearly a utility/helper
+            is_utility = any(pattern in file_path.name.lower() for pattern in [
+                'util', 'helper', 'base_', '_base', 'mixin', 'abstract'
+            ])
+            
+            return has_docstring and not is_utility
+            
+        except Exception as e:
+            logger.debug(f"Failed to analyze {file_path}: {e}")
+            return False
+    
     def scan_operations_directory(self) -> List[str]:
         """
-        Scan src/operations/ for entry point files.
+        Scan multiple directories for executable operations with smart filtering.
+        
+        Scans:
+        - src/operations/*.py - User-facing commands
+        - src/orchestrators/*.py - Complex workflows  
+        - src/workflows/*.py - Multi-stage workflows (top-level only)
+        - src/cortex_agents/*.py - AI agents (top-level only)
         
         Returns:
             List of operation names (file stems without .py extension)
         """
         operations = []
         
+        # Scan src/operations/*.py
         if not self.operations_dir.exists():
             logger.warning(f"Operations directory not found: {self.operations_dir}")
-            return operations
+        else:
+            for file in self.operations_dir.glob("*.py"):
+                if file.name not in self.excluded_files:
+                    operations.append(file.stem)
         
-        for file in self.operations_dir.glob("*.py"):
-            if file.name not in self.excluded_files:
-                operations.append(file.stem)
+        # Scan src/orchestrators/*.py
+        if not self.orchestrators_dir.exists():
+            logger.warning(f"Orchestrators directory not found: {self.orchestrators_dir}")
+        else:
+            for file in self.orchestrators_dir.glob("*.py"):
+                if file.name not in self.excluded_files:
+                    operations.append(file.stem)
         
-        logger.info(f"Found {len(operations)} operation files in {self.operations_dir}")
+        # Scan src/workflows/*.py (top-level only, exclude stages/)
+        if not self.workflows_dir.exists():
+            logger.info(f"Workflows directory not found: {self.workflows_dir} (optional)")
+        else:
+            for file in self.workflows_dir.glob("*.py"):
+                if file.name not in self.excluded_files:
+                    if self._is_registerable_operation(file):
+                        operations.append(file.stem)
+                        logger.debug(f"Found registerable workflow: {file.stem}")
+        
+        # Scan src/cortex_agents/*.py (top-level only, exclude subdirs)
+        if not self.agents_dir.exists():
+            logger.info(f"Agents directory not found: {self.agents_dir} (optional)")
+        else:
+            for file in self.agents_dir.glob("*.py"):
+                if file.name not in self.excluded_files:
+                    if self._is_registerable_operation(file):
+                        operations.append(file.stem)
+                        logger.debug(f"Found registerable agent: {file.stem}")
+        
+        logger.info(f"Found {len(operations)} operation/orchestrator/workflow/agent files")
         return sorted(operations)
     
     def scan_operation_modules(self) -> List[Dict[str, str]]:

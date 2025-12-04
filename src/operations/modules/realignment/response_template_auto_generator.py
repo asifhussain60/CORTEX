@@ -40,6 +40,9 @@ class ResponseTemplateAutoGenerator:
         self.cortex_root = cortex_root
         self.templates_file = cortex_root / "cortex-brain" / "response-templates.yaml"
         self.operations_dir = cortex_root / "src" / "operations"
+        self.orchestrators_dir = cortex_root / "src" / "orchestrators"
+        self.workflows_dir = cortex_root / "src" / "workflows"
+        self.agents_dir = cortex_root / "src" / "cortex_agents"
     
     def extract_operation_metadata(self, operation_name: str) -> Dict[str, str]:
         """
@@ -58,11 +61,22 @@ class ResponseTemplateAutoGenerator:
             'next_steps_format': 'numbered'
         }
         
-        # Try to find and read operation file
-        op_file = self.operations_dir / f"{operation_name}.py"
+        # Try to find and read operation file in all locations
+        search_locations = [
+            self.operations_dir / f"{operation_name}.py",
+            self.orchestrators_dir / f"{operation_name}.py",
+            self.workflows_dir / f"{operation_name}.py",
+            self.agents_dir / f"{operation_name}.py",
+        ]
         
-        if not op_file.exists():
-            # Try modules directory
+        op_file = None
+        for potential_file in search_locations:
+            if potential_file.exists():
+                op_file = potential_file
+                break
+        
+        # If not found in top-level, try modules directory
+        if not op_file:
             modules_dir = self.operations_dir / "modules"
             for subdir in modules_dir.iterdir():
                 if subdir.is_dir():
@@ -90,6 +104,10 @@ class ResponseTemplateAutoGenerator:
                     docstring_lower = docstring.lower()
                     if any(kw in docstring_lower for kw in ['plan', 'planning', 'feature']):
                         metadata['category'] = 'planning'
+                    elif any(kw in docstring_lower for kw in ['workflow', 'orchestrat', 'pipeline']):
+                        metadata['category'] = 'workflow'
+                    elif any(kw in docstring_lower for kw in ['agent', 'ai', 'intelligence', 'analyze']):
+                        metadata['category'] = 'agent'
                     elif any(kw in docstring_lower for kw in ['test', 'tdd', 'debug']):
                         metadata['category'] = 'development'
                     elif any(kw in docstring_lower for kw in ['commit', 'git', 'checkpoint']):
@@ -169,13 +187,82 @@ class ResponseTemplateAutoGenerator:
             TemplateGenerationResult
         """
         try:
-            # For now, skip template generation due to complexity of YAML structure
-            # Templates should be added manually or with a more sophisticated approach
+            # Generate template content
+            template_content = self.generate_template(operation_name)
+            
+            if dry_run:
+                return TemplateGenerationResult(
+                    success=True,
+                    operation_name=operation_name,
+                    template_content=template_content,
+                    error_message=""
+                )
+            
+            # Read existing templates file
+            if not self.templates_file.exists():
+                logger.error(f"Response templates file not found: {self.templates_file}")
+                return TemplateGenerationResult(
+                    success=False,
+                    operation_name=operation_name,
+                    error_message="response-templates.yaml not found"
+                )
+            
+            content = self.templates_file.read_text(encoding='utf-8')
+            
+            # Find the templates: section
+            if 'templates:' not in content:
+                logger.error("templates: section not found in YAML")
+                return TemplateGenerationResult(
+                    success=False,
+                    operation_name=operation_name,
+                    error_message="templates: section not found"
+                )
+            
+            # Find where to insert: END of templates section (before next top-level key)
+            lines = content.split('\n')
+            insert_index = -1
+            
+            # Find templates: line first
+            templates_index = -1
+            for i, line in enumerate(lines):
+                if line.strip() == 'templates:' and not line.startswith(' '):
+                    templates_index = i
+                    break
+            
+            if templates_index == -1:
+                logger.error("Could not find templates: section start")
+                return TemplateGenerationResult(
+                    success=False,
+                    operation_name=operation_name,
+                    error_message="templates: section start not found"
+                )
+            
+            # Find next top-level section after templates: (not indented)
+            # This marks the end of templates section
+            for i in range(templates_index + 1, len(lines)):
+                line = lines[i]
+                # Check if it's a top-level key (no leading whitespace, has colon)
+                if line and not line.startswith(' ') and not line.startswith('\t') and ':' in line:
+                    insert_index = i
+                    break
+            
+            if insert_index == -1:
+                # No next section found, append at end
+                insert_index = len(lines)
+            
+            # Insert template (already has proper indentation from generate_template)
+            lines.insert(insert_index, template_content)
+            
+            # Write back
+            self.templates_file.write_text('\n'.join(lines), encoding='utf-8')
+            
+            logger.info(f"   ✅ Generated template for {operation_name}")
+            
             return TemplateGenerationResult(
                 success=True,
                 operation_name=operation_name,
-                template_content="",
-                error_message="Template generation requires manual addition due to complex YAML structure"
+                template_content=template_content,
+                error_message=""
             )
             
         except Exception as e:
@@ -203,16 +290,17 @@ class ResponseTemplateAutoGenerator:
         """
         results = []
         
-        logger.info(f"   ℹ️  Skipping template generation for {len(missing_operations)} operations")
-        logger.info("   ℹ️  Response templates require manual addition due to complex YAML structure")
+        logger.info(f"   🔧 Generating templates for {len(missing_operations)} operations...")
         
         for op_name in missing_operations:
-            result = TemplateGenerationResult(
-                success=True,
-                operation_name=op_name,
-                template_content="",
-                error_message="Requires manual addition"
-            )
+            result = self.add_template(op_name, dry_run=dry_run)
             results.append(result)
+            
+            if not result.success:
+                logger.warning(f"   ⚠️  Failed to generate template for {op_name}: {result.error_message}")
+        
+        successful = sum(1 for r in results if r.success)
+        logger.info(f"   ✅ Successfully generated {successful}/{len(missing_operations)} templates")
         
         return results
+

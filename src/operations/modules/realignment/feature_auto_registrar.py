@@ -59,6 +59,9 @@ class FeatureAutoRegistrar:
         """
         self.project_root = project_root or self._detect_project_root()
         self.operations_dir = self.project_root / "src" / "operations"
+        self.orchestrators_dir = self.project_root / "src" / "orchestrators"
+        self.workflows_dir = self.project_root / "src" / "workflows"
+        self.agents_dir = self.project_root / "src" / "cortex_agents"
         self.modules_dir = self.operations_dir / "modules"
         self.operations_yaml = self.project_root / "cortex-operations.yaml"
     
@@ -514,11 +517,26 @@ class FeatureAutoRegistrar:
             RegistrationResult with status and details
         """
         try:
-            # Find operation file
-            file_path = self.operations_dir / f"{operation_name}.py"
+            # Find operation file - check all possible locations
+            search_locations = [
+                (self.operations_dir, "operations"),
+                (self.orchestrators_dir, "orchestrators"),
+                (self.workflows_dir, "workflows"),
+                (self.agents_dir, "cortex_agents"),
+            ]
             
-            if not file_path.exists():
-                # Try to find in modules
+            file_path = None
+            location_type = None
+            
+            for location_dir, loc_type in search_locations:
+                potential_file = location_dir / f"{operation_name}.py"
+                if potential_file.exists():
+                    file_path = potential_file
+                    location_type = loc_type
+                    break
+            
+            # If not found in top-level, try modules
+            if not file_path:
                 for category_dir in self.modules_dir.iterdir():
                     if not category_dir.is_dir():
                         continue
@@ -526,13 +544,14 @@ class FeatureAutoRegistrar:
                     potential_file = category_dir / f"{operation_name}.py"
                     if potential_file.exists():
                         file_path = potential_file
+                        location_type = "modules"
                         break
             
-            if not file_path.exists():
+            if not file_path:
                 return RegistrationResult(
                     success=False,
                     operation_name=operation_name,
-                    error_message=f"Operation file not found: {operation_name}.py"
+                    error_message=f"Operation file not found: {operation_name}.py (checked operations/, orchestrators/, workflows/, cortex_agents/, and modules/)"
                 )
             
             # Analyze operation
