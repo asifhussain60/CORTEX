@@ -6,7 +6,7 @@ Routes orchestrate use cases without containing business logic.
 
 Author: Asif Hussain
 """
-from flask import Flask, request, jsonify, render_template_string
+from flask import Flask, request, jsonify, render_template
 from pathlib import Path
 
 from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
@@ -63,21 +63,14 @@ def create_app(dashboard_base_path: Path, app_registry_db_path: Path) -> Flask:
             # Create URL resolver
             url_resolver = UrlResolver(request)
             
-            # Simple HTML template (will be replaced with proper templates in Phase 1.10)
-            html = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>{response_dto.app_name} Dashboard</title>
-            </head>
-            <body>
-                <h1>{response_dto.app_name} Dashboard</h1>
-                <div>App ID: {response_dto.app_id}</div>
-                <div>Tabs: {len(response_dto.data.tabs)}</div>
-            </body>
-            </html>
-            """
-            return html, 200
+            # Render template with dashboard data
+            return render_template(
+                'base.html',
+                app_id=response_dto.app_id,
+                app_name=response_dto.app_name,
+                tabs=response_dto.data.tabs,
+                metadata=response_dto.data.metadata
+            ), 200
         except FileNotFoundError:
             return "Dashboard not found", 404
         except Exception as e:
