@@ -8,6 +8,8 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
+import { showPanelSpinner } from '../shared-utils.js';
+
 /**
  * Render vendors tab
  * @param {Object} data - Dashboard data containing vendors information
@@ -19,12 +21,15 @@ export function renderVendors(data) {
         return;
     }
     
-    const vendors = data.vendors || {};
-    const summary = vendors.summary || {};
-    const vendorList = vendors.vendors || [];
+    showPanelSpinner(container, 'Loading vendor data...');
     
-    // Build HTML
-    container.innerHTML = `
+    setTimeout(() => {
+        const vendors = data.vendors || {};
+        const summary = vendors.summary || {};
+        const vendorList = vendors.vendors || [];
+        
+        // Build HTML
+        container.innerHTML = `
         <div class="view-header">
             <h2>🔗 Dependencies & Vendors</h2>
             <div class="header-actions">
@@ -78,6 +83,7 @@ export function renderVendors(data) {
         <!-- Vendor Cards by Category -->
         ${renderVendorsByCategory(vendorList)}
     `;
+    }, 250);
 }
 
 /**

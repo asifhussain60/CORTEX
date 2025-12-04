@@ -1,15 +1,79 @@
-# Dashboard Data Storage
+# CORTEX Repository Dashboard
 
-This directory stores dashboard JSON files for the universal dashboard system.
+**Version:** 1.0  
+**Location:** `cortex-brain/dashboards/ui/`  
+**Type:** Pure client-side JavaScript dashboard (no backend required)
+
+---
+
+## Quick Start
+
+### 1. Start HTTP Server
+
+```bash
+# Navigate to dashboards directory
+cd cortex-brain/dashboards/
+python -m http.server 8080
+```
+
+### 2. Open Dashboard
+
+```
+http://localhost:8080/ui/index.html?source=mock
+```
+
+### 3. Data Sources
+
+The `?source=` parameter controls which data directory to load:
+- `mock` - Example data
+- `cortex` - CORTEX repository data
+- `noor-canvas` - Noor Canvas application data
+- `alist` - Alist application data
+- `ksessions` - K-Sessions application data
+
+---
+
+## For Repository Scanners & Data Generators
+
+**📖 IMPORTANT:** To generate compatible JSON data for your repository:
+
+**See:** `cortex-brain/documents/user-guides/dashboard-data-format-guidelines.md`
+
+This guide provides:
+- **Exact JSON schemas** for all 7 required files
+- **Field specifications** with data types and validation rules
+- **Common mistakes to avoid**
+- **Python code examples**
+
+### Required Data Files (7 files)
+
+Your scanner must generate these in `cortex-brain/dashboards/{source}/`:
+
+1. **health-data.json** - Repository health metrics
+2. **tech-stack.json** - Technologies (languages, frameworks)
+3. **security.json** - Vulnerabilities, OWASP compliance
+4. **architecture.json** - Code structure, components
+5. **code-organization.json** - Complexity, hotspots
+6. **team-metrics.json** - Git activity, contributors
+7. **vendors.json** - Third-party services
+
+---
 
 ## File Structure
 
-Each application has its own JSON file:
 ```
 dashboards/
-├── cortex.json         # CORTEX dashboard data
-├── user-app-1.json     # External application 1
-└── user-app-2.json     # External application 2
+├── ui/                 # Dashboard application (49 files)
+│   ├── index.html
+│   ├── app.js
+│   ├── data-loader.js
+│   ├── components/     # 7 tab components
+│   └── tests/          # 170 tests
+├── mock/               # Example data (7 JSON files)
+├── cortex/             # CORTEX data
+├── noor-canvas/        # Noor Canvas data
+├── alist/              # Alist data
+└── ksessions/          # K-Sessions data
 ```
 
 ## JSON Schema

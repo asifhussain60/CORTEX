@@ -8,6 +8,8 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
+import { showPanelSpinner } from '../shared-utils.js';
+
 /**
  * Render team metrics tab
  * @param {Object} data - Dashboard data containing team metrics information
@@ -19,7 +21,10 @@ export function renderTeamMetrics(data) {
         return;
     }
     
-    const teamMetrics = data.teamMetrics || {};
+    showPanelSpinner(container, 'Loading team metrics...');
+    
+    setTimeout(() => {
+        const teamMetrics = data.teamMetrics || {};
     const summary = teamMetrics.summary || {};
     const contributors = teamMetrics.contributors || [];
     const velocity = teamMetrics.velocity || {};
@@ -146,11 +151,12 @@ export function renderTeamMetrics(data) {
             </div>
         </div>
     `;
-    
-    // Initialize charts after DOM is updated
-    setTimeout(() => {
-        initVelocityChart(velocity);
-    }, 100);
+        
+        // Initialize charts after DOM is updated
+        setTimeout(() => {
+            initVelocityChart(velocity);
+        }, 100);
+    }, 250);
 }
 
 /**

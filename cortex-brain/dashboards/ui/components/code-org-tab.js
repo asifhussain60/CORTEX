@@ -8,6 +8,8 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
+import { showPanelSpinner } from '../shared-utils.js';
+
 /**
  * Render code organization tab
  * @param {Object} data - Dashboard data containing code organization information
@@ -19,13 +21,18 @@ export function renderCodeOrganization(data) {
         return;
     }
     
-    const codeOrg = data.codeOrganization || {};
-    const summary = codeOrg.summary || {};
-    const hotspots = codeOrg.hotspots || [];
-    const fileComplexity = codeOrg.file_complexity || [];
+    // Show loading spinner
+    showPanelSpinner(container, 'Analyzing code organization...');
     
-    // Build HTML
-    container.innerHTML = `
+    // Render after brief delay to show spinner
+    setTimeout(() => {
+        const codeOrg = data.codeOrganization || {};
+        const summary = codeOrg.summary || {};
+        const hotspots = codeOrg.hotspots || [];
+        const fileComplexity = codeOrg.file_complexity || [];
+        
+        // Build HTML
+        container.innerHTML = `
         <div class="view-header">
             <h2>📊 Code Organization & Hotspots</h2>
             <div class="header-actions">
@@ -119,11 +126,12 @@ export function renderCodeOrganization(data) {
             </div>
         </div>
     `;
-    
-    // Initialize visualizations after DOM is updated
-    setTimeout(() => {
-        initComplexityHeatmap(fileComplexity);
-    }, 100);
+        
+        // Initialize visualizations after DOM is updated
+        setTimeout(() => {
+            initComplexityHeatmap(fileComplexity);
+        }, 100);
+    }, 250);
 }
 
 /**

@@ -138,6 +138,52 @@ export function hideLoading() {
 }
 
 /**
+ * Show inline spinner for panels
+ * @param {HTMLElement} container - Container to show spinner in
+ * @param {string} message - Optional loading message
+ */
+export function showPanelSpinner(container, message = 'Loading...') {
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            min-height: 200px;
+        ">
+            <div class="panel-spinner" style="
+                border: 4px solid rgba(255, 255, 255, 0.1);
+                border-radius: 50%;
+                border-top: 4px solid var(--accent-primary);
+                width: 40px;
+                height: 40px;
+                animation: spin 1s linear infinite;
+            "></div>
+            <div style="
+                margin-top: 1rem;
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+            ">${message}</div>
+        </div>
+    `;
+}
+
+/**
+ * Hide inline spinner and restore content
+ * @param {HTMLElement} container - Container to hide spinner from
+ */
+export function hidePanelSpinner(container) {
+    if (!container) return;
+    const spinner = container.querySelector('.panel-spinner');
+    if (spinner && spinner.parentElement) {
+        spinner.parentElement.remove();
+    }
+}
+
+/**
  * DOM utility functions
  */
 export function createElement(tag, className = '', textContent = '') {

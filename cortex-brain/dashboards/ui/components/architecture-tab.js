@@ -8,6 +8,8 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
+import { showPanelSpinner } from '../shared-utils.js';
+
 /**
  * Render architecture tab
  * @param {Object} data - Dashboard data containing architecture information
@@ -19,13 +21,18 @@ export function renderArchitecture(data) {
         return;
     }
     
-    const architecture = data.architecture || {};
-    const summary = architecture.summary || {};
-    const tiers = architecture.tiers || [];
-    const components = architecture.components || [];
+    // Show loading spinner
+    showPanelSpinner(container, 'Loading architecture visualization...');
     
-    // Build HTML
-    container.innerHTML = `
+    // Render after brief delay to show spinner
+    setTimeout(() => {
+        const architecture = data.architecture || {};
+        const summary = architecture.summary || {};
+        const tiers = architecture.tiers || [];
+        const components = architecture.components || [];
+        
+        // Build HTML
+        container.innerHTML = `
         <div class="view-header">
             <h2>🏗️ Architecture Overview</h2>
             <div class="header-actions">
@@ -111,12 +118,13 @@ export function renderArchitecture(data) {
             </div>
         </div>
     `;
-    
-    // Initialize visualizations after DOM is updated
-    setTimeout(() => {
-        init3DArchitecture(tiers);
-        initComponentGraph(components);
-    }, 100);
+        
+        // Initialize visualizations after DOM is updated
+        setTimeout(() => {
+            init3DArchitecture(tiers);
+            initComponentGraph(components);
+        }, 100);
+    }, 250);
 }
 
 /**

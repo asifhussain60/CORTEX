@@ -8,6 +8,8 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
+import { showPanelSpinner } from '../shared-utils.js';
+
 /**
  * Render security tab
  * @param {Object} data - Dashboard data containing security information
@@ -19,7 +21,12 @@ export function renderSecurity(data) {
         return;
     }
     
-    const security = data.security || {};
+    // Show loading spinner
+    showPanelSpinner(container, 'Loading security analysis...');
+    
+    // Render after brief delay to show spinner
+    setTimeout(() => {
+        const security = data.security || {};
     const score = security.overall_score || 0;
     const vulnerabilities = security.vulnerabilities || {};
     
@@ -113,9 +120,10 @@ export function renderSecurity(data) {
             </div>
         </div>
     `;
-    
-    // Draw the gauge after DOM is updated
-    setTimeout(() => drawSecurityGauge(score), 100);
+        
+        // Draw the gauge after DOM is updated
+        setTimeout(() => drawSecurityGauge(score), 100);
+    }, 250);
 }
 
 /**

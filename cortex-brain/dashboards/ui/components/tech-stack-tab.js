@@ -8,6 +8,8 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
+import { showPanelSpinner } from '../shared-utils.js';
+
 /**
  * Render tech stack tab
  * @param {Object} data - Dashboard data containing tech stack information
@@ -19,11 +21,16 @@ export function renderTechStack(data) {
         return;
     }
     
-    const techStack = data.techStack || {};
-    const summary = techStack.summary || {};
+    // Show loading spinner
+    showPanelSpinner(container, 'Loading technology stack...');
     
-    // Build HTML
-    container.innerHTML = `
+    // Render after brief delay to show spinner
+    setTimeout(() => {
+        const techStack = data.techStack || {};
+        const summary = techStack.summary || {};
+        
+        // Build HTML
+        container.innerHTML = `
         <div class="view-header">
             <h2>🛠️ Technology Stack</h2>
             <div class="header-actions">
@@ -74,6 +81,7 @@ export function renderTechStack(data) {
             ${renderTechCategory('DevOps', '🚀', techStack.devops || [])}
         </div>
     `;
+    }, 250);
 }
 
 /**

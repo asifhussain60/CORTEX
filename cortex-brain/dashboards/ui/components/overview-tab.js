@@ -9,6 +9,8 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
+import { showPanelSpinner } from '../shared-utils.js';
+
 /**
  * Render overview tab
  * @param {Object} data - Dashboard data
@@ -33,7 +35,7 @@ export function renderOverview(data) {
             <!-- Health Score Gauge -->
             <div class="glass-card" style="grid-column: span 2;">
                 <h3 style="margin-bottom: 1.5rem;">📊 Overall Health Score</h3>
-                <div id="health-gauge" style="width: 100%; height: 300px;"></div>
+                <div id="health-gauge" style="width: 100%; height: 400px;"></div>
                 <div style="text-align: center; margin-top: 1rem;">
                     <p style="font-size: 0.875rem; color: var(--text-secondary);">
                         Status: <span class="status-badge status-${healthData.status || 'unknown'}" style="
@@ -191,8 +193,16 @@ export function renderOverview(data) {
         </div>
     `;
     
-    // Render health gauge using D3.js
-    renderHealthGauge(healthData.overall_health_score || 0);
+    // Show spinner then render health gauge
+    const gaugeContainer = document.getElementById('health-gauge');
+    if (gaugeContainer) {
+        showPanelSpinner(gaugeContainer, 'Loading health score...');
+    }
+    
+    // Render health gauge after brief delay to show spinner
+    setTimeout(() => {
+        renderHealthGauge(healthData.overall_health_score || 0);
+    }, 300);
 }
 
 /**
@@ -203,12 +213,12 @@ function renderHealthGauge(score) {
     const container = document.getElementById('health-gauge');
     if (!container) return;
     
-    // Clear previous content
+    // Clear previous content (including spinner)
     container.innerHTML = '';
     
     const width = container.clientWidth;
-    const height = 300;
-    const radius = Math.min(width, height) / 2 - 20;
+    const height = 400;
+    const radius = Math.min(width, height) / 2 - 30;
     
     const svg = d3.select(container)
         .append('svg')
@@ -246,19 +256,21 @@ function renderHealthGauge(score) {
         .attr('fill', color)
         .attr('opacity', 0.8);
     
-    // Score text
+    // Score text - larger and more prominent
     svg.append('text')
         .attr('text-anchor', 'middle')
-        .attr('dy', '0.3em')
-        .style('font-size', '3rem')
-        .style('font-weight', '700')
+        .attr('dy', '0.1em')
+        .style('font-size', '5rem')
+        .style('font-weight', '800')
         .style('fill', color)
+        .style('text-shadow', `0 0 20px ${color}40`)
         .text(score);
     
     svg.append('text')
         .attr('text-anchor', 'middle')
-        .attr('dy', '2.5em')
-        .style('font-size', '1rem')
+        .attr('dy', '3.2em')
+        .style('font-size', '1.125rem')
+        .style('font-weight', '500')
         .style('fill', 'var(--text-secondary)')
         .text('Health Score');
 }
