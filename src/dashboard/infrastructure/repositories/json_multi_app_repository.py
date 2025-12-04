@@ -245,6 +245,30 @@ class JsonMultiAppRepository(DashboardRepository):
                 apps.append(item.name)
         return sorted(apps)
     
+    def get_all_apps(self) -> List[Application]:
+        """
+        Get all initialized applications with full metadata.
+        
+        Returns:
+            List of Application entities for all initialized apps
+        """
+        from src.dashboard.domain.entities.application_registry import Application
+        
+        apps = []
+        for app_id in self.list_apps():
+            metadata = self.get_metadata(app_id)
+            if metadata:
+                # Reconstruct Application entity from metadata
+                app = Application(
+                    id=metadata.get("app_id", app_id),
+                    name=metadata.get("name", app_id.upper()),
+                    display_name=metadata.get("display_name", app_id.title()),
+                    dashboard_path=f"dashboards/{app_id}",
+                    is_active=True  # All initialized apps are considered active
+                )
+                apps.append(app)
+        return sorted(apps, key=lambda a: a.display_name.lower())
+    
     def delete_app(self, app_id: str) -> None:
         """
         Delete all data for specified application.

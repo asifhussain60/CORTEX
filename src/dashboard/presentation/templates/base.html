@@ -13,6 +13,19 @@
             <div class="nav-brand">
                 <h1>CORTEX Dashboard</h1>
             </div>
+            
+            {% if available_apps %}
+            <div class="app-switcher">
+                <select id="application-switcher" data-switcher="true" onchange="switchApplication(this.value)">
+                    {% for app in available_apps %}
+                    <option value="{{ app.id }}" {% if current_app_id == app.id %}selected{% endif %}>
+                        {{ app.display_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+            
             <div class="nav-links">
                 <a href="/">Home</a>
                 <a href="#" onclick="refreshDashboard(); return false;">Refresh</a>

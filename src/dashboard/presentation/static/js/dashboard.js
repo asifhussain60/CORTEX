@@ -43,6 +43,32 @@
     }
     
     /**
+     * Switch to different application dashboard
+     * Uses pushState for URL update with back button support
+     */
+    window.switchApplication = function(newAppId) {
+        if (!newAppId) {
+            console.error('No app ID provided for switch');
+            return;
+        }
+        
+        console.log('Switching to application: ' + newAppId);
+        
+        // Build new URL
+        const newUrl = '/dashboard/' + newAppId;
+        
+        // Update browser URL with pushState (enables back button)
+        history.pushState(
+            { appId: newAppId },
+            '',
+            newUrl
+        );
+        
+        // Navigate to new dashboard
+        window.location.href = newUrl;
+    };
+    
+    /**
      * Setup tab navigation with click handlers
      */
     function setupTabNavigation() {

@@ -114,6 +114,9 @@ def create_app(dashboard_base_path: Path, app_registry_db_path: Path) -> Flask:
             request_dto = LoadDashboardRequest(app_id=app_id)
             response_dto = load_dashboard_use_case.execute(request_dto)
             
+            # Get all active applications for switcher dropdown
+            available_apps = dashboard_repo.get_all_apps()
+            
             # Create URL resolver
             url_resolver = UrlResolver(request)
             
@@ -123,7 +126,9 @@ def create_app(dashboard_base_path: Path, app_registry_db_path: Path) -> Flask:
                 app_id=response_dto.app_id,
                 app_name=response_dto.app_name,
                 tabs=response_dto.data.tabs,
-                metadata=response_dto.data.metadata
+                metadata=response_dto.data.metadata,
+                available_apps=available_apps,
+                current_app_id=app_id
             ), 200
         except FileNotFoundError:
             return "Dashboard not found", 404
