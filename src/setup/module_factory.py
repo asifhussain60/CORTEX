@@ -165,6 +165,18 @@ def _auto_register_modules():
         register_module_class('onboarding', OnboardingModule)
     except ImportError as e:
         logger.warning(f"Could not load OnboardingModule: {e}")
+    
+    try:
+        from .modules.user_profile_module import UserProfileModule
+        register_module_class('user_profile', UserProfileModule)
+    except ImportError as e:
+        logger.warning(f"Could not load UserProfileModule: {e}")
+    
+    try:
+        from .modules.path_configuration_module import PathConfigurationModule
+        register_module_class('path_configuration', PathConfigurationModule)
+    except ImportError as e:
+        logger.warning(f"Could not load PathConfigurationModule: {e}")
 
 
 # Run auto-registration on module load

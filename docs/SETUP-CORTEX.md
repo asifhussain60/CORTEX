@@ -209,6 +209,211 @@ Or use Python directly:
 python -m src.setup.setup_orchestrator
 ```
 
+### 5️⃣ Configure User Profile (Interactive)
+
+CORTEX creates a personalized experience through an interactive questionnaire:
+
+```bash
+# User profile is created during setup
+python -m src.setup.modules.user_profile_module
+```
+
+**What You'll Configure:**
+- **Name:** Your display name (default: Git user name)
+- **Preference:** Concise, Balanced, or Detailed responses
+- **Role:** Developer, Architect, Analyst, Student, Manager, or Other
+- **Work Area:** Backend, Frontend, Full-Stack, DevOps, Data, Mobile, etc.
+- **Language:** Interface language (English, Spanish, French, German, etc.)
+
+**Example Session:**
+```
+CORTEX User Profile Setup
+=========================
+
+What's your name? [Asif Hussain]: 
+How would you like responses?
+  1. Concise (brief, direct)
+  2. Balanced (moderate detail) ✓
+  3. Detailed (comprehensive)
+Choice [2]: 
+
+What's your role?
+  1. Developer ✓
+  2. Architect
+  3. Analyst
+  [...]
+Choice [1]: 
+
+✓ Profile saved to cortex.config.json
+```
+
+### 6️⃣ Configure Repository Paths (NEW - Phase 3.2)
+
+**CORTEX intelligently detects and configures where files should be created in your repository.**
+
+#### Why Path Configuration?
+
+Different projects organize tests and documents differently:
+- **Python:** `tests/` or `test/`
+- **JavaScript:** `__tests__/` or `spec/`
+- **C#:** `ProjectName.Tests/`
+- **Documents:** `docs/`, `documentation/`, or custom paths
+
+CORTEX adapts to **your** project structure instead of forcing conventions.
+
+#### What Gets Configured?
+
+1. **Test Directory** - Where application tests are stored
+2. **Documents Root** - Base path for generated documentation
+3. **Reports Path** - Test results, coverage reports, analysis
+4. **Temp Files Path** - Temporary files and caches
+5. **Custom Paths** - Any project-specific paths you need
+
+#### Intelligent Path Detection
+
+CORTEX automatically scans your repository:
+
+```bash
+# During setup, CORTEX shows:
+Step 1: Scanning repository for existing paths...
+
+  Found 2 test directories:
+    • tests/ [pytest, 127 tests, 95% confidence]
+    • src/tests/ [pytest, 15 tests, 75% confidence]
+  
+  Detected frameworks: pytest, unittest
+```
+
+**Confidence Scoring:**
+- **90-100%:** High confidence (pytest.ini + test files + naming patterns)
+- **70-89%:** Medium confidence (test files + some patterns)
+- **<70%:** Low confidence (some test-like files)
+
+#### Interactive Path Setup
+
+```
+Step 2: Path Configuration Questionnaire
+----------------------------------------
+
+Test Directory Configuration:
+  We found existing test directories:
+    1. tests/ [pytest, 127 tests, 95% confidence] ✓
+    2. src/tests/ [pytest, 15 tests, 75% confidence]
+    3. Custom path...
+
+  Choose test directory [1]: 
+
+Documents Root:
+  Default: cortex-brain/documents
+  Custom path (or Enter for default): 
+
+Reports Path:
+  Default: cortex-brain/documents/reports
+  Custom path (or Enter for default): 
+
+✓ Path configuration saved to cortex.config.json
+```
+
+#### Configuration Structure
+
+Paths are saved in `cortex.config.json`:
+
+```json
+{
+  "user": {
+    "name": "Asif Hussain",
+    "preference": "balanced",
+    "role": "developer",
+    "language": "en"
+  },
+  "user_paths": {
+    "test_directory": "tests",
+    "documents_root": "cortex-brain/documents",
+    "documents_reports": "cortex-brain/documents/reports",
+    "documents_analysis": "cortex-brain/documents/analysis",
+    "documents_summaries": "cortex-brain/documents/summaries",
+    "temp_directory": ".cortex-temp",
+    "custom_paths": {
+      "coverage": "coverage-reports",
+      "logs": "logs"
+    }
+  }
+}
+```
+
+#### Benefits
+
+**For Test-Driven Development:**
+- Tests created in the correct location automatically
+- Source ↔ Test file mapping respects your structure
+- Supports nested directories (`src/models/` → `tests/models/`)
+
+**For Documentation:**
+- Reports, analysis, and summaries go to configured paths
+- Avoids littering repository root with documents
+- Respects `.gitignore` patterns
+
+**For Multi-Language Projects:**
+- Python tests: `tests/`
+- JavaScript tests: `__tests__/`
+- C# tests: `MyApp.Tests/`
+- All work simultaneously in same repository
+
+#### Path Resolution
+
+CORTEX resolves paths intelligently:
+
+```python
+from src.setup.modules.path_resolver import PathResolver
+
+resolver = PathResolver()
+
+# Get test directory (respects user config)
+test_dir = resolver.get_test_directory()  # → "tests/"
+
+# Get document paths (with category)
+reports = resolver.get_documents_directory("reports")
+# → "cortex-brain/documents/reports"
+
+# Resolve custom paths
+logs = resolver.resolve_path("logs")  # → Configured or default
+```
+
+#### Updating Path Configuration
+
+Change paths anytime:
+
+```bash
+# Re-run path configuration
+python -m src.setup.modules.path_configuration_module
+
+# Or edit cortex.config.json directly
+```
+
+#### Troubleshooting
+
+**Tests Created in Wrong Location:**
+```bash
+# Check configured path
+cat cortex.config.json | grep test_directory
+
+# Update configuration
+python -m src.setup.modules.path_configuration_module
+```
+
+**Missing Document Directories:**
+```bash
+# CORTEX auto-creates on first use, or manually:
+mkdir -p cortex-brain/documents/{reports,analysis,summaries}
+```
+
+**Path Detection Shows No Results:**
+```bash
+# Add test files manually, then re-scan:
+echo "def test_example(): pass" > tests/test_sample.py
+python -m src.setup.modules.path_detector
+```
+
 ---
 
 ## 📚 Using CORTEX

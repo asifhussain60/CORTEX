@@ -1,12 +1,13 @@
 """
 User Profile Storage Module (Task 2.3)
-Handles saving/loading user profiles to/from cortex.config.json
+Handles saving/loading user profiles and path configurations to/from cortex.config.json
 """
 import json
 import os
 from pathlib import Path
 from typing import Optional
 from src.setup.models.user_profile import UserProfile
+from src.setup.models.user_path_config import UserPathConfig
 
 
 class UserProfileStorage:
@@ -112,3 +113,73 @@ class UserProfileStorage:
         
         config = self._read_config()
         return 'user' in config and isinstance(config['user'], dict)
+    
+    def save_path_config(self, path_config: UserPathConfig) -> None:
+        """
+        Save user path configuration to config file.
+        
+        Args:
+            path_config: UserPathConfig instance to save
+        """
+        # Read existing config
+        config = self._read_config()
+        
+        # Add/update user_paths section
+        config['user_paths'] = path_config.to_dict()
+        
+        # Write back to file
+        self._write_config(config)
+    
+    def load_path_config(self) -> Optional[UserPathConfig]:
+        """
+        Load user path configuration from config file.
+        
+        Returns:
+            UserPathConfig instance if found, None otherwise
+        """
+        if not os.path.exists(self.config_path):
+            return None
+        
+        config = self._read_config()
+        
+        if 'user_paths' not in config:
+            return None
+        
+        try:
+            # Create UserPathConfig from config data
+            return UserPathConfig(**config['user_paths'])
+        except Exception:
+            # If path config data is invalid, return None
+            return None
+    
+    def path_config_exists(self) -> bool:
+        """
+        Check if user path configuration exists in config.
+        
+        Returns:
+            True if path config exists, False otherwise
+        """
+        if not os.path.exists(self.config_path):
+            return False
+        
+        config = self._read_config()
+        return 'user_paths' in config and isinstance(config['user_paths'], dict)
+    
+    def save_complete_config(self, profile: UserProfile, path_config: UserPathConfig) -> None:
+        """
+        Save both user profile and path configuration atomically.
+        
+        Args:
+            profile: UserProfile instance
+            path_config: UserPathConfig instance
+        """
+        # Read existing config
+        config = self._read_config()
+        
+        # Update both sections
+        config['user'] = profile.model_dump()
+        config['user_paths'] = path_config.to_dict()
+        
+        # Write back to file
+        self._write_config(config)
+

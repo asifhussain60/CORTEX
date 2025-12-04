@@ -52,6 +52,10 @@ from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestra
 # Phase 4 - Vision API Integration (2025-11-30)
 from src.cortex_agents.screenshot_analyzer import ScreenshotAnalyzer
 
+# Phase 4 - User Path Configuration (2025-12-04)
+from src.setup.modules.path_resolver import PathResolver
+from src.setup.modules.tdd_path_adapter import TDDWorkflowPathAdapter
+
 # Phase 4 - TDD Mastery Integration (2025-11-24)
 import sys
 from pathlib import Path as PathLib
@@ -283,6 +287,10 @@ class TDDWorkflowOrchestrator:
         self.current_session_id: Optional[str] = None
         self.current_context: Optional[TDDContext] = None
         self.current_brain_session: Optional[Session] = None
+        
+        # Phase 4 - User Path Configuration (2025-12-04)
+        self.path_resolver = PathResolver(workspace_root=config.project_root)
+        self.path_adapter = TDDWorkflowPathAdapter(config.project_root)
     
     def _detect_test_location(self, source_file: str) -> Path:
         """
@@ -292,8 +300,8 @@ class TDDWorkflowOrchestrator:
         
         Rules:
         - If source_file is within CORTEX folder → Tests go in CORTEX/tests/
-        - If source_file is in user repo → Tests go in user_repo/tests/
-        - CORTEX learns from user tests but doesn't store them in CORTEX
+        - If source_file is in user repo → Tests go in configured test directory
+        - Uses PathResolver to respect user-configured test paths
         
         Args:
             source_file: Path to source file being tested
@@ -311,19 +319,14 @@ class TDDWorkflowOrchestrator:
             self.config.is_cortex_test = True
             return test_location
         except ValueError:
-            # Source is outside CORTEX → Tests go in user repo
-            if self.config.user_repo_root:
-                user_root = Path(self.config.user_repo_root).resolve()
-            else:
-                # Auto-detect user repo root
-                user_root = self._find_user_repo_root(source_path)
-            
-            test_location = user_root / self.config.test_output_dir
+            # Source is outside CORTEX → Use PathResolver for configured test directory
+            test_location_str = self.path_resolver.get_test_directory(create=True)
+            test_location = Path(test_location_str)
             self.config.is_cortex_test = False
             
             # Store user repo root for future use
             if not self.config.user_repo_root:
-                self.config.user_repo_root = str(user_root)
+                self.config.user_repo_root = str(test_location.parent)
             
             return test_location
     
@@ -949,23 +952,31 @@ class TDDWorkflowOrchestrator:
         ]
     
     def _get_test_filepath(self, source_file: str) -> Path:
-        """Generate test file path from source file."""
-        source_path = Path(source_file)
+        """
+        Generate test file path from source file.
         
-        # Convert src/module/file.py -> tests/test_module/test_file.py
-        parts = source_path.parts
+        Uses TDDWorkflowPathAdapter to handle:
+        - Configured test directory locations
+        - Directory structure preservation
+        - Source to test file mapping
+        """
+        # Check if this is a CORTEX internal test
+        source_path = Path(source_file).resolve()
+        cortex_root = Path(__file__).parent.parent.parent.resolve()
         
-        # Remove 'src' if present
-        if parts[0] == 'src':
-            parts = parts[1:]
-        
-        # Add test prefix to filename
-        filename = f"test_{source_path.stem}.py"
-        
-        # Build test path
-        test_path = Path(self.config.test_output_dir) / Path(*parts[:-1]) / filename
-        
-        return test_path
+        try:
+            source_path.relative_to(cortex_root)
+            # CORTEX internal test - use standard logic
+            parts = source_path.parts
+            if parts[0] == 'src':
+                parts = parts[1:]
+            filename = f"test_{source_path.stem}.py"
+            test_path = Path(self.config.test_output_dir) / Path(*parts[:-1]) / filename
+            return test_path
+        except ValueError:
+            # User repository test - use PathAdapter
+            test_path_str = self.path_adapter.get_test_path_for_source(source_file)
+            return Path(test_path_str)
     
     # Phase 4 - TDD Mastery Integration: Helper methods for view discovery
     

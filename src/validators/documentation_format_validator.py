@@ -697,7 +697,19 @@ class DocumentationFormatValidator:
         
         # Save report if output path provided
         if output_path:
-            output_path = Path(output_path)
+            # If relative path provided, resolve using PathResolver
+            if not Path(output_path).is_absolute():
+                try:
+                    from src.utils.document_path_helper import get_document_path, REPORTS
+                    # Extract filename from output_path
+                    filename = Path(output_path).name
+                    output_path = get_document_path(REPORTS, filename)
+                except Exception as e:
+                    # Fallback to original path if resolution fails
+                    self.logger.warning(f"Could not resolve configured path: {e}")
+                    output_path = Path(output_path)
+            else:
+                output_path = Path(output_path)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             with open(output_path, 'w', encoding='utf-8') as f:
                 f.write(report_content)

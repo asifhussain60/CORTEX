@@ -23,7 +23,9 @@ send2trash>=1.8.3  # OS-native Recycle Bin support (sweeper_plugin)
 # Phase 1.5: Token Optimization System
 scikit-learn>=1.5.2  # ML context compression (TF-IDF vectorization) - compatible with Python 3.9
 numpy>=1.26.4,<2.0.0  # Required by scikit-learn - Python 3.9 compatible
-# pydantic removed (Python 3.13 build issue); using dataclasses validation for planning schemas
+
+# Configuration & Data Validation
+pydantic>=2.0.0  # Data validation for user path configuration (setup system)
 
 # NOTE: Development tools (black, flake8, mypy, radon, pylint, vulture) moved to optional-requirements.txt
 # These are now lazy-loaded when first used by validation/formatting/analysis commands
