@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased]
+
+### Added - Dashboard Consolidation (Phase 1 Complete)
+- **Universal Dashboard System** with Clean Architecture (4 layers: Domain, Application, Infrastructure, Presentation)
+- **Domain Layer**: 3 entities (DashboardData, Application, TabContent) with 100% test coverage
+- **Domain Layer**: 2 repository interfaces (DashboardRepository, ApplicationRepository) following Repository Pattern
+- **Application Layer**: 2 use cases (LoadDashboard, RefreshDashboard) with 4 DTOs
+- **Infrastructure Layer**: JSON file persistence, SQLite app registry, portable URL resolver
+- **Presentation Layer**: Flask application factory with dependency injection
+- **Architecture Enforcement**: 8 automated tests validating Clean Architecture dependency rule
+- **Test Suite**: 47+ tests with 100% coverage across all layers
+- **Security**: app_id validation preventing path traversal attacks
+- **Documentation**: Comprehensive README with architecture diagrams, API reference, troubleshooting
+- **TDD Discipline**: All code developed using RED → GREEN → REFACTOR cycle
+- **Git History**: 10 commits documenting each phase with clear TDD messages
+
 ## [3.7.0] - 2025-12-03
 
 ### Added - File Naming Governance (Phase 8)
