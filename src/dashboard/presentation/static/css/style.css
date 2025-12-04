@@ -102,6 +102,34 @@ nav {
     color: var(--accent-color);
 }
 
+/* ==================== Application Switcher ==================== */
+.app-switcher {
+    margin: 0 var(--spacing-lg);
+}
+
+.app-switcher select {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.app-switcher select:hover {
+    border-color: var(--accent-color);
+    background-color: var(--bg-primary);
+}
+
+.app-switcher select:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
 /* ==================== Main Content ==================== */
 main {
     max-width: 1400px;

@@ -44,11 +44,20 @@
     
     /**
      * Switch to different application dashboard
-     * Uses pushState for URL update with back button support
+     * 
+     * Performs navigation to new application dashboard.
+     * Uses pushState before navigation for browser history support.
+     * 
+     * @param {string} newAppId - Application ID to switch to
      */
     window.switchApplication = function(newAppId) {
         if (!newAppId) {
             console.error('No app ID provided for switch');
+            return;
+        }
+        
+        if (newAppId === state.appId) {
+            // Already on this app, no switch needed
             return;
         }
         
@@ -57,7 +66,8 @@
         // Build new URL
         const newUrl = '/dashboard/' + newAppId;
         
-        // Update browser URL with pushState (enables back button)
+        // Update browser history entry before navigation
+        // This ensures back button works correctly after page load
         history.pushState(
             { appId: newAppId },
             '',
