@@ -6,12 +6,12 @@
 # Purpose: Capture patterns and learnings from CORTEX operations
 
 version: "2.1"
-last_updated: "2025-11-17"
+last_updated: "2025-12-04"
 type: "knowledge_graph"
 
 # Summary of learned patterns across all categories
 patterns:
-  total_count: 54
+  total_count: 55
   categories: ["validation_insights", "workflow_patterns", "architectural_patterns", "intent_patterns", "file_relationships", "common_mistakes", "quality_gates", "documentation_patterns", "ui_patterns"]
   learning_method: "automatic extraction from Tier 1 conversations"
   confidence_decay: "5% per 90 days unused"
@@ -1260,4 +1260,54 @@ ui_patterns:
       - "Check orientation changes (portrait/landscape)"
     confidence: 0.90
     incident_date: "2025-11-17"
+  
+  http_server_working_directory:
+    issue: "Python HTTP server returns 404 for valid paths when started from wrong directory"
+    root_cause: "HTTP server serves files relative to working directory, not script location"
+    symptom: "Server runs without errors but returns 404 for /ui/index.html and all static files"
+    incident_date: "2025-12-04"
+    impact: "Critical - Dashboard completely inaccessible, user sees 'File not found' errors"
+    solution: "Always start HTTP server from the directory containing files to serve"
+    incorrect_approach: |
+      # Running from project root
+      cd D:\PROJECTS\CORTEX
+      python -m http.server 8090
+      # Server logs: "GET /ui/index.html HTTP/1.1" 404
+    correct_approach: |
+      # Running from dashboards directory
+      cd D:\PROJECTS\CORTEX\cortex-brain\dashboards
+      python -m http.server 8090
+      # Server logs: "GET /ui/index.html HTTP/1.1" 200
+    detection_method: "Check server logs for 404 errors, verify current working directory"
+    prevention_rule: "HTTP servers serve CWD - always cd to content directory before starting"
+    applies_to:
+      - "Python http.server"
+      - "Node.js http-server"
+      - "PHP built-in server"
+      - "Any static file server"
+    validation_steps:
+      - "Check server logs for 404 vs 200 status codes"
+      - "Verify pwd/Get-Location matches expected content directory"
+      - "Test with simple file (index.html) before complex paths"
+    fix_commands:
+      powershell: |
+        # Kill existing servers
+        Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force
+        # Navigate and start from correct directory
+        cd d:\PROJECTS\CORTEX\cortex-brain\dashboards
+        python -m http.server 8090
+      bash: |
+        # Kill existing servers
+        pkill -f "python.*http.server"
+        # Navigate and start from correct directory
+        cd cortex-brain/dashboards
+        python -m http.server 8090
+    documentation_updated: "cortex-brain/dashboards/README.md"
+    frequency: 1
+    confidence: 1.0
+    severity: "critical"
+    strategic_value: "high"
+    reusability: 100
+    last_seen: "2025-12-04"
+    lesson: "HTTP server working directory matters - 404 errors often indicate wrong CWD, not missing files"
 

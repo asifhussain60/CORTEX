@@ -11,15 +11,27 @@
 ### 1. Start HTTP Server
 
 ```bash
-# Navigate to dashboards directory
+# CRITICAL: Must run from dashboards directory, not project root
 cd cortex-brain/dashboards/
-python -m http.server 8080
+python -m http.server 8090
+```
+
+**⚠️ Common Issue:** If you see 404 errors, the server is running from wrong directory.
+
+**Fix:**
+```powershell
+# Kill any existing servers
+Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force
+
+# Navigate to correct directory and start
+cd d:\PROJECTS\CORTEX\cortex-brain\dashboards
+python -m http.server 8090
 ```
 
 ### 2. Open Dashboard
 
 ```
-http://localhost:8080/ui/index.html?source=mock
+http://localhost:8090/ui/index.html?source=mock
 ```
 
 ### 3. Data Sources
