@@ -46,23 +46,12 @@ class JsonDashboardRepository(DashboardRepository):
             ValueError: If JSON file is corrupted
         """
         self._validate_app_id(app_id)
-        
         file_path = self._get_file_path(app_id)
         
         if not file_path.exists():
             raise FileNotFoundError(f"Dashboard not found for app_id='{app_id}'")
         
-        try:
-            with open(file_path, 'r') as f:
-                data = json.load(f)
-            
-            return DashboardData(
-                app_id=data["app_id"],
-                tabs=data["tabs"],
-                metadata=data["metadata"]
-            )
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Invalid JSON in dashboard file: {e}")
+        return self._load_from_file(file_path)
     
     def save(self, data: DashboardData) -> None:
         """
@@ -75,20 +64,11 @@ class JsonDashboardRepository(DashboardRepository):
             ValueError: If app_id contains invalid characters
         """
         self._validate_app_id(data.app_id)
-        
-        # Ensure directory exists
         self._base_path.mkdir(parents=True, exist_ok=True)
         
         file_path = self._get_file_path(data.app_id)
+        json_data = self._entity_to_dict(data)
         
-        # Convert entity to dict for JSON serialization
-        json_data = {
-            "app_id": data.app_id,
-            "tabs": data.tabs,
-            "metadata": data.metadata
-        }
-        
-        # Write to file (overwrites existing)
         with open(file_path, 'w') as f:
             json.dump(json_data, f, indent=2)
     
@@ -125,3 +105,30 @@ class JsonDashboardRepository(DashboardRepository):
                 f"Invalid app_id '{app_id}'. "
                 "Only alphanumeric characters, hyphens, and underscores allowed."
             )
+    
+    def _load_from_file(self, file_path: Path) -> DashboardData:
+        """
+        Load and deserialize dashboard from JSON file.
+        
+        Raises:
+            ValueError: If JSON is invalid
+        """
+        try:
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+            
+            return DashboardData(
+                app_id=data["app_id"],
+                tabs=data["tabs"],
+                metadata=data["metadata"]
+            )
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON in dashboard file: {e}")
+    
+    def _entity_to_dict(self, data: DashboardData) -> dict:
+        """Convert DashboardData entity to dict for JSON serialization"""
+        return {
+            "app_id": data.app_id,
+            "tabs": data.tabs,
+            "metadata": data.metadata
+        }
