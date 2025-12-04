@@ -1,0 +1,129 @@
+{
+  "contributors": [
+    {
+      "name": "Asif Hussain",
+      "commits": 426,
+      "lines_added": 846552,
+      "lines_removed": 110362,
+      "files_changed": 3329,
+      "first_commit": "2025-11-15",
+      "last_commit": "2025-11-15"
+    },
+    {
+      "name": "Igor Minkin",
+      "commits": 138,
+      "lines_added": 177649,
+      "lines_removed": 16786,
+      "files_changed": 1137,
+      "first_commit": "2013-12-20",
+      "last_commit": "2013-12-20"
+    },
+    {
+      "name": "anjum10018",
+      "commits": 68,
+      "lines_added": 38715,
+      "lines_removed": 14004,
+      "files_changed": 216,
+      "first_commit": "2014-03-24",
+      "last_commit": "2014-03-24"
+    },
+    {
+      "name": "asifhussain60",
+      "commits": 62,
+      "lines_added": 45157,
+      "lines_removed": 71430,
+      "files_changed": 321,
+      "first_commit": "2025-11-15",
+      "last_commit": "2025-11-15"
+    },
+    {
+      "name": "igorm",
+      "commits": 25,
+      "lines_added": 93629,
+      "lines_removed": 812,
+      "files_changed": 351,
+      "first_commit": "2013-06-09",
+      "last_commit": "2013-06-09"
+    },
+    {
+      "name": "Igor",
+      "commits": 15,
+      "lines_added": 182882,
+      "lines_removed": 17383,
+      "files_changed": 1277,
+      "first_commit": "2013-12-20",
+      "last_commit": "2013-12-20"
+    },
+    {
+      "name": "rituchouksey@gmail.com",
+      "commits": 14,
+      "lines_added": 2007,
+      "lines_removed": 721,
+      "files_changed": 67,
+      "first_commit": "2013-06-07",
+      "last_commit": "2013-06-07"
+    },
+    {
+      "name": "Anjum10018",
+      "commits": 10,
+      "lines_added": 605,
+      "lines_removed": 280,
+      "files_changed": 14,
+      "first_commit": "2014-02-13",
+      "last_commit": "2014-02-13"
+    },
+    {
+      "name": "Anjum Butt",
+      "commits": 3,
+      "lines_added": 1206,
+      "lines_removed": 0,
+      "files_changed": 1,
+      "first_commit": "2013-04-15",
+      "last_commit": "2013-04-15"
+    },
+    {
+      "name": "anjum1008",
+      "commits": 1,
+      "lines_added": 211,
+      "lines_removed": 110,
+      "files_changed": 1,
+      "first_commit": "2013-08-26",
+      "last_commit": "2013-08-26"
+    }
+  ],
+  "velocity": {
+    "commits_per_week": 0.08333333333333333,
+    "trend": "increasing",
+    "recent_activity": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ]
+  },
+  "knowledge_distribution": {
+    "files": [],
+    "concentration_score": 0
+  },
+  "bus_factor": {
+    "factor": 1,
+    "risk": "critical",
+    "top_contributors": [
+      "Asif Hussain"
+    ]
+  },
+  "summary": {
+    "total_contributors": 10,
+    "active_contributors": 8,
+    "total_commits": 762,
+    "avg_commits_per_contributor": 76.2
+  }
+}

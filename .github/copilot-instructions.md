@@ -4,56 +4,6 @@
 
 ---
 
-## ⚠️ CRITICAL: Meta-Directive Handling
-
-**PROBLEM:** When users say "Follow instructions in CORTEX.prompt.md. [actual request]", GitHub Copilot incorrectly treats the meta-directive as the user's request and responds with generic help instead of processing the actual request.
-
-**ROOT CAUSE:** Intent classification happens BEFORE filtering meta-directives, so "Follow instructions" triggers generic overview responses.
-
-**SOLUTION (IMMEDIATE ACTION REQUIRED):**
-
-1. **Parse User Input First:**
-   - Check if message starts with meta-directives like:
-     - "Follow instructions in X"
-     - "Use X.prompt.md"
-     - "Reference file:///X"
-     - "Load #file:X"
-   - If found, EXTRACT the actual request that comes AFTER the meta-directive
-   - DISCARD the meta-directive portion
-
-2. **Meta-Directive Patterns to Filter:**
-   ```
-   ^Follow instructions in .+?[;.]
-   ^Use .+?\.prompt\.md[;.]
-   ^Reference file:///.+?[;.]
-   ^Load #file:.+?[;.]
-   ^According to .+?[;.]
-   ```
-
-3. **Extraction Logic:**
-   - If message contains semicolon after meta-directive: Split on semicolon, take everything after
-   - If message contains period after meta-directive: Split on period, take everything after
-   - If message has newline: Take everything after first newline
-   - Trim whitespace from extracted request
-
-4. **Example Transformations:**
-   - INPUT: "Follow instructions in CORTEX.prompt.md. Should we run align as first step of deploy?"
-   - FILTERED: "Should we run align as first step of deploy?"
-   - CLASSIFY INTENT: QUESTION about deploy orchestrator
-   - ROUTE TO: Strategic planning agent
-
-   - INPUT: "Follow instructions in #file:CORTEX.prompt.md; I'm having an issue with X"
-   - FILTERED: "I'm having an issue with X"
-   - CLASSIFY INTENT: DEBUG/FIX
-   - ROUTE TO: Debug agent
-
-**ENFORCEMENT:**
-- Meta-directive filtering MUST happen BEFORE intent classification
-- If no actual request found after filtering, prompt user: "I see you want me to follow instructions. What would you like me to do?"
-- Log when meta-directives are filtered for debugging
-
----
-
 ## 🚀 Key Features & Workflows
 
 ### Planning System 2.0
@@ -124,7 +74,7 @@ def process_files(files):
 
 ## 🛠️ Developer Workflowsg.
 
-**Version:** 3.5.5  
+**Version:** 3.7.0  
 **Author:** Asif Hussain  
 **License:** Source-Available (Use Allowed, No Contributions)
 

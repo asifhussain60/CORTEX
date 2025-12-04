@@ -7,8 +7,8 @@
       "lines_added": 125430,
       "lines_deleted": 45230,
       "active_days": 145,
-      "first_commit": "2025-06-07T12:46:23.666781",
-      "last_commit": "2025-12-04T12:46:23.666785"
+      "first_commit": "2025-06-07T17:05:03.493389",
+      "last_commit": "2025-12-04T17:05:03.493396"
     },
     {
       "name": "Developer 2",
@@ -17,8 +17,8 @@
       "lines_added": 34560,
       "lines_deleted": 12340,
       "active_days": 98,
-      "first_commit": "2025-08-06T12:46:23.666786",
-      "last_commit": "2025-12-02T12:46:23.666787"
+      "first_commit": "2025-08-06T17:05:03.493399",
+      "last_commit": "2025-12-02T17:05:03.493402"
     },
     {
       "name": "Developer 3",
@@ -27,8 +27,8 @@
       "lines_added": 15670,
       "lines_deleted": 5430,
       "active_days": 45,
-      "first_commit": "2025-10-05T12:46:23.666788",
-      "last_commit": "2025-11-29T12:46:23.666789"
+      "first_commit": "2025-10-05T17:05:03.493405",
+      "last_commit": "2025-11-29T17:05:03.493407"
     },
     {
       "name": "Developer 4",
@@ -37,8 +37,8 @@
       "lines_added": 8920,
       "lines_deleted": 2340,
       "active_days": 28,
-      "first_commit": "2025-10-20T12:46:23.666790",
-      "last_commit": "2025-11-26T12:46:23.666791"
+      "first_commit": "2025-10-20T17:05:03.493410",
+      "last_commit": "2025-11-26T17:05:03.493413"
     }
   ],
   "velocity": {
@@ -99,6 +99,6 @@
     "bus_factor": 1,
     "avg_commits_per_contributor": 309,
     "avg_commits_per_week": 43,
-    "last_scan": "2025-12-04T12:46:23.666793"
+    "last_scan": "2025-12-04T17:05:03.493419"
   }
 }

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2025-12-04T12:46:23.666759",
-  "scenario": "warning",
+  "generated_at": "2025-12-04T17:05:03.493302",
+  "scenario": "healthy",
   "generator_version": "1.0.0",
   "files": [
     "health-data.json",

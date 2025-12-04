@@ -1,0 +1,22 @@
+{
+  "contributors": [],
+  "velocity": {
+    "commits_per_week": 0,
+    "trend": "stable",
+    "recent_activity": []
+  },
+  "knowledge_distribution": {
+    "files": [],
+    "concentration_score": 0
+  },
+  "bus_factor": {
+    "factor": 0,
+    "risk": "unknown"
+  },
+  "summary": {
+    "total_contributors": 0,
+    "active_contributors": 0,
+    "total_commits": 0,
+    "avg_commits_per_contributor": 0
+  }
+}

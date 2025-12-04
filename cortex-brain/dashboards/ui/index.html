@@ -373,10 +373,6 @@
                     <span class="nav-tab-icon">📁</span>
                     <span class="nav-tab-text">Code Organization</span>
                 </a>
-                <a class="nav-tab" data-tab="team" onclick="switchTab('team')">
-                    <span class="nav-tab-icon">👥</span>
-                    <span class="nav-tab-text">Team Metrics</span>
-                </a>
                 <a class="nav-tab" data-tab="vendors" onclick="switchTab('vendors')">
                     <span class="nav-tab-icon">🔌</span>
                     <span class="nav-tab-text">Dependencies</span>
@@ -434,13 +430,6 @@
                 </div>
             </div>
             
-            <!-- Tab Content: Team Metrics -->
-            <div class="tab-content" id="tab-team">
-                <div id="team-container">
-                    <!-- Team metrics content will be dynamically loaded -->
-                </div>
-            </div>
-            
             <!-- Tab Content: Vendors/Dependencies -->
             <div class="tab-content" id="tab-vendors">
                 <div id="vendors-container">
@@ -458,7 +447,6 @@
     <script type="module" src="components/security-tab.js"></script>
     <script type="module" src="components/architecture-tab.js"></script>
     <script type="module" src="components/code-org-tab.js"></script>
-    <script type="module" src="components/team-tab.js"></script>
     <script type="module" src="components/vendors-tab.js"></script>
     
     <script>
@@ -483,7 +471,6 @@
                 'security': 'Security Analysis',
                 'architecture': 'Architecture Overview',
                 'code-org': 'Code Organization',
-                'team': 'Team Productivity',
                 'vendors': 'Dependencies & Vendors'
             };
             document.getElementById('contentTitle').textContent = titles[tabName] || 'Dashboard';

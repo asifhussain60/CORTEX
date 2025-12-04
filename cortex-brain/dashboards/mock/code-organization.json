@@ -76,22 +76,6 @@
       "change_frequency": 12,
       "risk_score": 95,
       "recommendation": "Refactor into cleanup orchestrator with smaller handlers"
-    },
-    {
-      "file": "src/core/legacy_processor.py",
-      "loc": 1450,
-      "complexity": 245,
-      "change_frequency": 28,
-      "risk_score": 100,
-      "recommendation": "Critical refactoring required - legacy code"
-    },
-    {
-      "file": "src/utils/data_transformer.py",
-      "loc": 980,
-      "complexity": 198,
-      "change_frequency": 22,
-      "risk_score": 92,
-      "recommendation": "Break into smaller transformation utilities"
     }
   ],
   "complexity_distribution": {
@@ -103,10 +87,10 @@
   "summary": {
     "total_files": 994,
     "total_loc": 45678,
-    "avg_complexity": 42.8,
+    "avg_complexity": 27.3,
     "max_complexity": 181,
-    "hotspots_count": 5,
-    "high_complexity_files": 245,
-    "last_scan": "2025-12-04T12:46:23.666780"
+    "hotspots_count": 3,
+    "high_complexity_files": 118,
+    "last_scan": "2025-12-04T17:05:03.493386"
   }
 }

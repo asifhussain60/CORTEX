@@ -1,7 +1,7 @@
 /**
  * Integration Tests - All Dashboard Components
  * 
- * Tests rendering of all 7 dashboard tabs with mock data.
+ * Tests rendering of all 6 dashboard tabs with mock data.
  * 
  * Run: npm test tests/integration/components.test.js
  */
@@ -12,7 +12,6 @@ import {
     mockSecurity,
     mockArchitecture,
     mockCodeOrganization,
-    mockTeamMetrics,
     mockVendors
 } from '../fixtures/mock-data.js';
 
@@ -27,7 +26,6 @@ describe('Dashboard Components', () => {
             security: await import('../../components/security-tab.js'),
             architecture: await import('../../components/architecture-tab.js'),
             codeOrg: await import('../../components/code-org-tab.js'),
-            team: await import('../../components/team-tab.js'),
             vendors: await import('../../components/vendors-tab.js')
         };
     });
@@ -289,56 +287,6 @@ describe('Dashboard Components', () => {
             
             const svg = container.querySelector('svg');
             expect(svg).toBeDefined();
-        });
-    });
-    
-    describe('Team Metrics Tab', () => {
-        let container;
-        
-        beforeEach(() => {
-            container = document.getElementById('test-container');
-        });
-        
-        it('should render contributor counts', () => {
-            components.team.renderTeamMetrics(container, mockTeamMetrics);
-            
-            expect(container.innerHTML).toContain('12');
-            expect(container.innerHTML).toContain('contributors');
-        });
-        
-        it('should render commit statistics', () => {
-            components.team.renderTeamMetrics(container, mockTeamMetrics);
-            
-            expect(container.innerHTML).toContain('2,456');
-            expect(container.innerHTML).toContain('commits');
-        });
-        
-        it('should render contributor list', () => {
-            components.team.renderTeamMetrics(container, mockTeamMetrics);
-            
-            expect(container.innerHTML).toContain('Asif Hussain');
-            expect(container.innerHTML).toContain('Developer B');
-        });
-        
-        it('should render contributor metrics', () => {
-            components.team.renderTeamMetrics(container, mockTeamMetrics);
-            
-            expect(container.innerHTML).toContain('1,456'); // commits
-            expect(container.innerHTML).toContain('89,234'); // additions
-        });
-        
-        it('should create activity timeline chart', () => {
-            components.team.renderTeamMetrics(container, mockTeamMetrics);
-            
-            const canvas = container.querySelector('canvas');
-            expect(canvas).toBeDefined();
-        });
-        
-        it('should render recent activity', () => {
-            components.team.renderTeamMetrics(container, mockTeamMetrics);
-            
-            expect(container.innerHTML).toContain('Dec 1');
-            expect(container.innerHTML).toContain('Dec 4');
         });
     });
     

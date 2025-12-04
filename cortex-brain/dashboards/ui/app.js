@@ -14,7 +14,6 @@ import { renderTechStack } from './components/tech-stack-tab.js';
 import { renderSecurity } from './components/security-tab.js';
 import { renderArchitecture } from './components/architecture-tab.js';
 import { renderCodeOrganization } from './components/code-org-tab.js';
-import { renderTeamMetrics } from './components/team-tab.js';
 import { renderVendors } from './components/vendors-tab.js';
 import { initKeyboardNavigation } from './keyboard-navigation.js';
 import { 
@@ -211,9 +210,6 @@ async function renderCurrentTab() {
                 break;
             case 'code-org':
                 await lazyRenderTab('code-org', () => renderCodeOrganization(appState.data), appState.data);
-                break;
-            case 'team':
-                await lazyRenderTab('team', () => renderTeamMetrics(appState.data), appState.data);
                 break;
             case 'vendors':
                 await lazyRenderTab('vendors', () => renderVendors(appState.data), appState.data);

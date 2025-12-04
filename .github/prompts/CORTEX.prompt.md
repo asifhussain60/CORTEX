@@ -2,28 +2,9 @@
 
 **TEMPLATE TRIGGERS:** See #file:modules/template-triggers.md for auto-selection rules
 
-**⚠️ CRITICAL - USER REQUEST PARSING:**
-
-Before processing ANY user message, you MUST filter out meta-directives:
-
-**Meta-Directives to Remove:**
-- "Follow instructions in [file]"
-- "Use [file].prompt.md"
-- "Reference file:///[path]"
-- "Load #file:[path]"
-- "According to [file]"
-
-**Parsing Rules:**
-1. Check if message starts with meta-directive pattern
-2. If found, extract actual request after semicolon/period/newline
-3. Use extracted request for intent classification
-4. Discard meta-directive portion completely
-
-**Example:** "Follow instructions in CORTEX.prompt.md. Should we run align first?" → Process: "Should we run align first?"
-
 **Purpose:** Single command for ALL CORTEX interactions. You don't need to remember multiple commands - just use this one and CORTEX figures out what you need.
 
-**Version:** 3.5.5  
+**Version:** 3.7.0  
 **Status:** ✅ PRODUCTION  
 **Architecture:** Template-based responses + Modular documentation + Interactive Planning + Universal Upgrade System + User Profile System
 

@@ -210,18 +210,10 @@ class OnboardingOrchestrator:
             logger.info("Step 8: Generating UML diagrams...")
             uml_diagram = self._generate_uml_diagram(project_path)
             
-            # Step 9: Generate interactive dashboard...
-            logger.info("Step 9: Generating interactive dashboard...")
-            dashboard_url, output_path = self._generate_dashboard_html(
-                project_info,
-                quality_issues,
-                quality_score,
-                vulnerabilities,
-                metrics,
-                architecture,
-                tech_stack,
-                recommendations,
-                uml_diagram,
+            # Step 9: Generate dashboard data files
+            logger.info("Step 9: Generating dashboard data files...")
+            dashboard_url, output_path = self._generate_dashboard_data(
+                project_path,
                 project_name
             )
             
@@ -540,21 +532,21 @@ class OnboardingOrchestrator:
             logger.warning(f"UML diagram generation skipped: {e}")
             return ""
     
-    def _generate_dashboard_html(
+    def _generate_dashboard_data(
         self,
-        project_info: Dict[str, Any],
-        quality_issues: List[Any],
-        quality_score: float,
-        vulnerabilities: List[Any],
-        metrics: List[Any],
-        architecture: Dict[str, Any],
-        tech_stack: Dict[str, Any],
-        recommendations: List[Dict[str, Any]],
-        uml_diagram: str,
+        project_path: Path,
         project_name: str
     ) -> tuple[str, Path]:
         """
-        Generate interactive dashboard HTML using DashboardGenerator.
+        Generate dashboard data files using optimized dashboard collectors.
+        
+        Creates 7 JSON files matching dashboard UI format:
+        health-data.json, tech-stack.json, security.json, architecture.json,
+        code-organization.json, team-metrics.json, vendors.json
+        
+        Args:
+            project_path: Path to project
+            project_name: Project name
         
         Returns:
             Tuple of (dashboard_url, output_path)
@@ -562,162 +554,133 @@ class OnboardingOrchestrator:
         try:
             import sys
             import json
+            import time
             sys.path.insert(0, str(self.cortex_root / "src"))
-            from operations.dashboard_generator import generate_dashboard_html
             
-            # Determine output path based on mode
-            if self.test_mode:
-                # Testing mode: output to onboarded-apps/{project-name}/
-                output_dir = (
-                    self.cortex_root / "cortex-brain" / "documents" / 
-                    "onboarded-apps" / project_name.lower().replace(" ", "-")
-                )
-                output_dir.mkdir(parents=True, exist_ok=True)
-                
-                # Write raw data files for inspection
-                (output_dir / "project_info.json").write_text(
-                    json.dumps(project_info, indent=2, ensure_ascii=False),
-                    encoding='utf-8'
-                )
-                (output_dir / "quality_score.json").write_text(
-                    json.dumps({"score": quality_score, "issue_count": len(quality_issues)}, indent=2),
-                    encoding='utf-8'
-                )
-                (output_dir / "security_scan.json").write_text(
-                    json.dumps({"vulnerability_count": len(vulnerabilities)}, indent=2),
-                    encoding='utf-8'
-                )
-                (output_dir / "performance_metrics.json").write_text(
-                    json.dumps({"metric_count": len(metrics)}, indent=2),
-                    encoding='utf-8'
-                )
-                (output_dir / "architecture.json").write_text(
-                    json.dumps(architecture, indent=2, ensure_ascii=False),
-                    encoding='utf-8'
-                )
-                (output_dir / "techstack.json").write_text(
-                    json.dumps(tech_stack, indent=2, ensure_ascii=False),
-                    encoding='utf-8'
-                )
-                (output_dir / "recommendations.json").write_text(
-                    json.dumps(recommendations, indent=2, ensure_ascii=False),
-                    encoding='utf-8'
-                )
-                
-                # Create summary report
-                summary_path = output_dir / "onboarding_summary.md"
-                summary_content = f"""# {project_info['name']} - Onboarding Report
-
-**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-
-## Project Overview
-- **Files:** {project_info['files']}
-- **Lines of Code:** {project_info['lines']:,}
-- **Languages:** {', '.join(project_info['languages'])}
-
-## Quality Analysis
-- **Score:** {quality_score:.1f}/100
-- **Issues Found:** {len(quality_issues)}
-
-## Security Analysis
-- **Vulnerabilities:** {len(vulnerabilities)}
-
-## Architecture
-- **Nodes:** {architecture.get('metadata', {}).get('total_nodes', 0)}
-- **Relationships:** {architecture.get('metadata', {}).get('total_edges', 0)}
-
-## Technology Stack
-- **Languages:** {tech_stack.get('statistics', {}).get('total_languages', 0)}
-- **Frameworks:** {tech_stack.get('statistics', {}).get('total_frameworks', 0)}
-- **Dependencies:** {tech_stack.get('statistics', {}).get('total_dependencies', 0)}
-
-## Recommendations
-- **Total:** {len(recommendations)}
-- **Critical:** {sum(1 for r in recommendations if r.get('priority') == 'critical')}
-- **High:** {sum(1 for r in recommendations if r.get('priority') == 'high')}
-
-## Files Generated
-- `project_info.json` - Project metadata
-- `quality_score.json` - Code quality analysis
-- `security_scan.json` - Security vulnerability scan
-- `performance_metrics.json` - Performance telemetry
-- `architecture.json` - Architecture graph (D3.js format)
-- `techstack.json` - Technology stack analysis
-- `recommendations.json` - Prioritized recommendations
-- `dashboard.html` - Interactive dashboard (NEW!)
-
-## Next Steps
-1. Open interactive dashboard: `dashboard.html`
-2. Review security vulnerabilities
-3. Use CORTEX for TDD workflow: `start tdd`
-4. Plan features with DoR/DoD: `plan feature`
-"""
-                summary_path.write_text(summary_content, encoding='utf-8')
-                
-                # Generate interactive dashboard HTML
-                template_path = self.cortex_root / "templates" / "interactive-dashboard-template.html"
-                dashboard_path = output_dir / "dashboard.html"
-                
-                quality_data = {
-                    "score": quality_score,
-                    "issues": [{
-                        "type": str(getattr(i, "type", "unknown")),
-                        "severity": str(getattr(i, "severity", "medium")),
-                        "file": str(getattr(i, "file_path", ""))
-                    } for i in quality_issues[:100]]
-                }
-                
-                security_data = {
-                    "vulnerabilities": len(vulnerabilities),
-                    "issues": [{
-                        "type": str(getattr(v, "vulnerability_type", "unknown")),
-                        "severity": str(getattr(v, "severity", "medium")),
-                        "file": str(getattr(v, "file_path", ""))
-                    } for v in vulnerabilities[:100]]
-                }
-                
-                generate_dashboard_html(
-                    template_path=template_path,
-                    output_path=dashboard_path,
-                    title=f"{project_name} - Application Dashboard",
-                    project_info=project_info,
-                    quality_data=quality_data,
-                    security_data=security_data,
-                    architecture_data=architecture,
-                    techstack_data=tech_stack,
-                    recommendations_data=recommendations,
-                    uml_diagram=uml_diagram
-                )
-                
-                dashboard_url = f"file:///{dashboard_path}"
-                return dashboard_url, output_dir
-                
-            else:
-                # Production mode: standard dashboard location
-                from operations.dashboard_data_adapter import DashboardDataAdapter
-                
-                adapter = DashboardDataAdapter(self.cortex_root)
-                adapter.generate_full_dashboard_data(
-                    project_info,
-                    quality_issues,
-                    quality_score,
-                    vulnerabilities,
-                    metrics
-                )
-                
-                dashboard_path = (
-                    self.cortex_root / "cortex-brain" / "documents" / 
-                    "analysis" / "dashboard" / "dashboard.html"
-                )
-                
-                return f"file://{dashboard_path}", dashboard_path.parent
+            # Parallel collection imports handled in parallel_collector.py
+            
+            start_time = time.time()
+            repo_slug = project_name.lower().replace(" ", "-")
+            
+            # Output to dashboards directory
+            output_dir = self.cortex_root / "cortex-brain" / "dashboards" / repo_slug
+            output_dir.mkdir(parents=True, exist_ok=True)
+            
+            logger.info(f"Collecting data using parallel collectors (6 threads)...")
+            
+            # Import parallel orchestrator
+            from dashboard.data.parallel_collector import ParallelCollectorOrchestrator
+            
+            # Execute collectors in parallel
+            parallel_orchestrator = ParallelCollectorOrchestrator(project_path)
+            collected_data, collection_time = parallel_orchestrator.collect_all_parallel()
+            
+            logger.info(f"  ✓ All collectors completed in {collection_time:.2f}s")
+            
+            # Write collected data to files
+            for filename, data in collected_data.items():
+                try:
+                    file_path = output_dir / filename
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        json.dump(data, f, indent=2, ensure_ascii=False)
+                    logger.debug(f"    Written {filename}")
+                except Exception as e:
+                    logger.error(f"    Failed to write {filename}: {e}")
+            
+            # Generate health-data.json (overview)
+            logger.info("  Generating health-data.json...")
+            health_data = self._calculate_health_metrics(collected_data)
+            health_file = output_dir / "health-data.json"
+            with open(health_file, 'w', encoding='utf-8') as f:
+                json.dump(health_data, f, indent=2, ensure_ascii=False)
+            logger.info(f"    ✓ Written to {health_file}")
+            
+            # Generate metadata.json
+            metadata = {
+                "app_name": project_name,
+                "app_type": "external",
+                "version": "1.0.0",
+                "last_updated": datetime.now().isoformat(),
+                "last_scan": datetime.now().isoformat(),
+                "scan_duration_seconds": round(time.time() - start_time, 2),
+                "collection_time_seconds": round(collection_time, 2),
+                "parallel_execution": True,
+                "collectors": 6
+            }
+            metadata_file = output_dir / "metadata.json"
+            with open(metadata_file, 'w', encoding='utf-8') as f:
+                json.dump(metadata, f, indent=2, ensure_ascii=False)
+            logger.info(f"    ✓ Written to {metadata_file}")
+            
+            elapsed = time.time() - start_time
+            logger.info(f"✅ Dashboard data generated in {elapsed:.2f} seconds")
+            
+            dashboard_url = f"cortex-brain/dashboards/ui/index.html?source={repo_slug}"
+            return dashboard_url, output_dir
             
         except ImportError as e:
-            logger.error(f"Failed to import required module: {e}")
+            logger.error(f"Failed to import crawler module: {e}")
             raise
         except Exception as e:
-            logger.error(f"Dashboard data generation failed: {e}")
+            logger.error(f"Dashboard generation failed: {e}")
             raise
+    
+    def _get_minimal_structure(self, filename: str) -> Dict[str, Any]:
+        """
+        Get minimal structure for dashboard JSON when no data found.
+        
+        Returns ONLY structure, NO mock data values.
+        """
+        if filename == "tech-stack.json":
+            return {"languages": [], "frameworks": [], "total_languages": 0, "total_frameworks": 0}
+        elif filename == "security.json":
+            return {"overall_score": 0, "last_scan": datetime.now().isoformat(), "categories": [], "vulnerabilities": []}
+        elif filename == "architecture.json":
+            return {"components": [], "layers": 0, "patterns": []}
+        elif filename == "code-organization.json":
+            return {"total_files": 0, "total_lines": 0, "hotspots": [], "file_types": {}}
+        elif filename == "team-metrics.json":
+            return {"total_commits": 0, "contributor_count": 0, "last_commit_date": "N/A", "active_contributors": []}
+        elif filename == "vendors.json":
+            return {"vendors": [], "total_vendors": 0}
+        else:
+            return {}
+    
+    def _calculate_health_metrics(self, collected_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Calculate overall health metrics from collected data."""
+        security = collected_data.get("security.json", {})
+        code_org = collected_data.get("code-organization.json", {})
+        architecture = collected_data.get("architecture.json", {})
+        tech_stack = collected_data.get("tech-stack.json", {})
+        team_metrics = collected_data.get("team-metrics.json", {})
+        vendors = collected_data.get("vendors.json", {})
+        
+        # Calculate health score (weighted average)
+        security_score = security.get("score", 0) * 0.3
+        code_score = min(100, max(0, 100 - len(code_org.get("hotspots", [])) * 5)) * 0.2
+        arch_score = min(100, max(0, 100 - len(architecture.get("components", [])) / 10)) * 0.2
+        tech_score = min(100, len(tech_stack.get("languages", [])) * 20) * 0.15
+        team_score = min(100, team_metrics.get("total_commits", 0) / 10) * 0.15
+        
+        overall_score = security_score + code_score + arch_score + tech_score + team_score
+        status = "healthy" if overall_score >= 80 else "warning" if overall_score >= 60 else "critical"
+        
+        return {
+            "overall_health_score": round(overall_score, 1),
+            "status": status,
+            "total_files": code_org.get("total_files", 0),
+            "lines_of_code": code_org.get("total_lines", 0),
+            "contributors": team_metrics.get("contributor_count", 0),
+            "languages": len(tech_stack.get("languages", [])),
+            "frameworks": len(tech_stack.get("frameworks", [])),
+            "security_score": security.get("score", 0),
+            "security_issues": len(security.get("vulnerabilities", [])),
+            "architecture_components": len(architecture.get("components", [])),
+            "complexity_hotspots": len(code_org.get("hotspots", [])),
+            "external_vendors": len(vendors.get("vendors", [])),
+            "recent_commits": team_metrics.get("total_commits", 0),
+            "last_commit_date": team_metrics.get("last_commit_date", "N/A")
+        }
     
     def _validate_dashboard(self, output_dir: Path) -> tuple:
         """
