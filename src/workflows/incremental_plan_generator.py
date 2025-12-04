@@ -71,13 +71,24 @@ class IncrementalPlanGenerator:
         brain_path: Path,
         session_id: Optional[str] = None,
         skeleton_token_limit: int = 200,
-        section_token_limit: int = 500
+        section_token_limit: int = 500,
+        auto_commit: bool = True
     ):
         """
         Initialize incremental plan generator.
         
         Args:
             brain_path: Path to CORTEX brain directory
+            session_id: Optional session ID for checkpoint tracking
+            skeleton_token_limit: Token limit for skeleton generation
+            section_token_limit: Token limit per section
+            auto_commit: Auto-commit changes without approval (default: True)
+        """
+        self.brain_path = brain_path
+        self.session_id = session_id or self._generate_session_id()
+        self.skeleton_token_limit = skeleton_token_limit
+        self.section_token_limit = section_token_limit
+        self.auto_commit = auto_commit
             session_id: Optional session ID for checkpoint tracking
             skeleton_token_limit: Token limit for skeleton generation
             section_token_limit: Token limit per section
