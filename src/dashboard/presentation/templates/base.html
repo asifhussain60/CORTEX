@@ -22,54 +22,7 @@
     
     <main>
         {% block content %}
-        <!-- Default Dashboard Content -->
-        <div class="dashboard-container">
-            <div class="dashboard-header">
-                <h2>{{ app_name|default('Dashboard') }}</h2>
-                {% if app_id %}
-                <div class="app-meta">
-                    <span class="app-id">App ID: {{ app_id }}</span>
-                    {% if tabs %}
-                    <span class="tab-count">Tabs: {{ tabs|length }}</span>
-                    {% endif %}
-                </div>
-                {% endif %}
-            </div>
-            
-            {% if tabs %}
-            <div class="tabs-container">
-                <div class="tabs-nav">
-                    {% for tab_name in tabs.keys() %}
-                    <button class="tab-button {% if loop.first %}active{% endif %}" 
-                            data-tab="{{ tab_name }}">
-                        {{ tab_name|title }}
-                    </button>
-                    {% endfor %}
-                </div>
-                
-                <div class="tabs-content">
-                    {% for tab_name, tab_data in tabs.items() %}
-                    <div class="tab-panel {% if loop.first %}active{% endif %}" 
-                         id="tab-{{ tab_name }}">
-                        <h3>{{ tab_name|title }}</h3>
-                        {% if tab_data %}
-                        <div class="metrics-grid">
-                            {% for key, value in tab_data.items() %}
-                            <div class="metric-card">
-                                <div class="metric-label">{{ key|replace('_', ' ')|title }}</div>
-                                <div class="metric-value">{{ value }}</div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% else %}
-                        <p class="no-data">No data available for this tab.</p>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-        </div>
+        <!-- Child templates override this block -->
         {% endblock %}
     </main>
     

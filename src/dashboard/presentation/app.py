@@ -65,7 +65,7 @@ def create_app(dashboard_base_path: Path, app_registry_db_path: Path) -> Flask:
             
             # Render template with dashboard data
             return render_template(
-                'base.html',
+                'dashboard_clean.html',
                 app_id=response_dto.app_id,
                 app_name=response_dto.app_name,
                 tabs=response_dto.data.tabs,
