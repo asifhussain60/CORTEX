@@ -429,6 +429,60 @@ operations:
     - health check failed
     - rollback not applicable for health checks
     category: analysis
+  architecture_graph_builder:
+    name: Architecture Graph Builder
+    description: Architecture Graph Builder
+    deployment_tier: dual_context
+    natural_language:
+    - analyze a single python file
+    category: general
+  dashboard_generator:
+    name: Dashboard Generator
+    description: Dashboard Generator
+    deployment_tier: dual_context
+    natural_language:
+    - generatedat
+    category: reporting
+  dashboard_validator:
+    name: Dashboard Validator
+    description: Dashboard Validator
+    deployment_tier: dual_context
+    natural_language:
+    - result of a validation check
+    - validates dashboard data for all tabs
+    - validate overview tab data
+    - validate tech stack tab data
+    - validate architecture tab data
+    category: reporting
+  dashboard_validator_v2:
+    name: Dashboard Validator V2
+    description: Dashboard Validator V2 - Comprehensive Functionality Testing
+    deployment_tier: dual_context
+    natural_language:
+    - generatedat
+    - generated timestamp is valid iso format
+    - validate tech stack tab
+    - validate security tab
+    - validate uml tab
+    category: reporting
+  recommendations_engine:
+    name: Recommendations Engine
+    description: Recommendations Engine
+    deployment_tier: dual_context
+    natural_language:
+    - generate code quality recommendations
+    - generate architecture recommendations
+    - review and update dependencies
+    category: general
+  techstack_analyzer:
+    name: Techstack Analyzer
+    description: Technology Stack Analyzer
+    deployment_tier: user_facing
+    natural_language:
+    - detect build tools and task runners
+    - grunt
+    - check if file should be counted
+    category: analysis
     modules:
     - demo_introduction
     - demo_help_system
@@ -2904,6 +2958,30 @@ metadata:
   description: Universal operations registry for CORTEX 2.0 + 2.1 + 3.0
   changelog:
   - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered techstack_analyzer operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered recommendations_engine operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered dashboard_validator_v2 operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered dashboard_validator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered dashboard_generator operation
+  - version: auto-registered
+    date: 2025-12-04
+    changes:
+    - Auto-registered architecture_graph_builder operation
+  - version: auto-registered
     date: 2025-12-03
     changes:
     - Auto-registered healthcheck_operation operation
@@ -3684,7 +3762,7 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 64
+  total_operations: 70
   total_modules: 73
   total_phases: 9
   cortex_2_0_operations: 9
@@ -3720,7 +3798,7 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
-  last_updated: '2025-12-03 17:22:14'
+  last_updated: '2025-12-04 06:30:32'
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper
