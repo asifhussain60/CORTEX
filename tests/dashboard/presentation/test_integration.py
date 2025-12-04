@@ -1,0 +1,163 @@
+"""
+Template Integration Tests (RED Phase)
+
+End-to-end tests for complete template rendering pipeline.
+Tests error handling, 404 pages, multiple dashboards, and edge cases.
+
+Author: Asif Hussain
+"""
+import pytest
+from pathlib import Path
+
+
+def test_dashboard_404_for_nonexistent_app(client):
+    """Test that non-existent dashboard returns 404"""
+    response = client.get('/nonexistent-app')
+    assert response.status_code == 404
+    assert b'Dashboard not found' in response.data
+
+
+def test_dashboard_renders_multiple_tabs(client, tmp_path):
+    """Test dashboard renders correctly with 5 tabs"""
+    from src.dashboard.domain.entities.dashboard_data import DashboardData
+    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    
+    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    data = DashboardData(
+        app_id="multi-tab-test",
+        tabs={
+            "overview": {"files": 100},
+            "metrics": {"coverage": 95},
+            "health": {"status": "good"},
+            "reports": {"total": 50},
+            "logs": {"entries": 1000}
+        },
+        metadata={"app_name": "Multi Tab Test"}
+    )
+    repo.save(data)
+    
+    response = client.get('/multi-tab-test')
+    assert response.status_code == 200
+    assert b'overview' in response.data.lower()
+    assert b'metrics' in response.data.lower()
+    assert b'health' in response.data.lower()
+    assert b'reports' in response.data.lower()
+    assert b'logs' in response.data.lower()
+
+
+def test_dashboard_renders_empty_tabs(client, tmp_path):
+    """Test dashboard handles empty tab data gracefully"""
+    from src.dashboard.domain.entities.dashboard_data import DashboardData
+    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    
+    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    data = DashboardData(
+        app_id="empty-tabs",
+        tabs={"overview": {}},
+        metadata={"app_name": "Empty Tabs Test"}
+    )
+    repo.save(data)
+    
+    response = client.get('/empty-tabs')
+    assert response.status_code == 200
+    assert b'no-data' in response.data.lower() or b'no data' in response.data.lower()
+
+
+def test_dashboard_renders_large_metric_values(client, tmp_path):
+    """Test dashboard handles large metric values"""
+    from src.dashboard.domain.entities.dashboard_data import DashboardData
+    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    
+    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    data = DashboardData(
+        app_id="large-metrics",
+        tabs={"overview": {"total_lines": 1234567890, "total_files": 999999}},
+        metadata={"app_name": "Large Metrics"}
+    )
+    repo.save(data)
+    
+    response = client.get('/large-metrics')
+    assert response.status_code == 200
+    assert b'1234567890' in response.data or b'1,234,567,890' in response.data
+
+
+def test_dashboard_renders_special_characters(client, tmp_path):
+    """Test dashboard handles special characters in data"""
+    from src.dashboard.domain.entities.dashboard_data import DashboardData
+    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    
+    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    data = DashboardData(
+        app_id="special-chars",
+        tabs={"overview": {"metric_name": "Test & <Special> \"Characters\""}},
+        metadata={"app_name": "Special & <Chars>"}
+    )
+    repo.save(data)
+    
+    response = client.get('/special-chars')
+    assert response.status_code == 200
+    # HTML should be escaped
+    assert b'&lt;' in response.data or b'&amp;' in response.data
+
+
+def test_refresh_endpoint_returns_json(client):
+    """Test refresh endpoint returns proper JSON response"""
+    response = client.post('/refresh/cortex')
+    assert response.status_code == 200
+    assert response.is_json
+    data = response.get_json()
+    assert 'app_id' in data
+    assert 'success' in data
+    assert 'message' in data
+
+
+def test_refresh_endpoint_with_force_parameter(client):
+    """Test refresh endpoint accepts force parameter"""
+    response = client.post('/refresh/cortex?force=true')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data['success'] is True
+
+
+def test_dashboard_index_redirects_to_cortex(client):
+    """Test that index route shows cortex dashboard"""
+    response = client.get('/')
+    assert response.status_code == 200
+    assert b'CORTEX' in response.data
+
+
+def test_template_inheritance_works(client):
+    """Test that dashboard extends base template"""
+    response = client.get('/')
+    # Should have base template elements
+    assert b'<header>' in response.data
+    assert b'<footer>' in response.data
+    assert b'<nav>' in response.data
+    # And dashboard content
+    assert b'dashboard-container' in response.data
+
+
+def test_css_and_js_assets_linked(client):
+    """Test that CSS and JS files are properly linked"""
+    response = client.get('/')
+    assert b'/static/css/style.css' in response.data
+    assert b'/static/js/dashboard.js' in response.data
+
+
+def test_tabs_have_unique_ids(client, tmp_path):
+    """Test that tab panels have unique IDs for JavaScript targeting"""
+    from src.dashboard.domain.entities.dashboard_data import DashboardData
+    from src.dashboard.infrastructure.repositories.json_dashboard_repository import JsonDashboardRepository
+    
+    repo = JsonDashboardRepository(base_path=tmp_path / "dashboards")
+    data = DashboardData(
+        app_id="unique-ids",
+        tabs={"tab1": {"data": 1}, "tab2": {"data": 2}},
+        metadata={"app_name": "Unique IDs"}
+    )
+    repo.save(data)
+    
+    response = client.get('/unique-ids')
+    assert response.status_code == 200
+    assert b'id="tab-tab1"' in response.data
+    assert b'id="tab-tab2"' in response.data
