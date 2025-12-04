@@ -677,6 +677,7 @@ templates:
 
       '
     name: Hands-On Tutorial
+    expected_orchestrator: HandsOnTutorialOrchestrator
     triggers:
     - tutorial
     - start tutorial
@@ -2813,6 +2814,47 @@ templates:
     - old cleanup
     - basic cleanup
     response_type: detailed
+  design_sync:
+    base_structure: '## 🧠 CORTEX {operation}
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ### 🎯 My Understanding Of Your Request
+
+      {understanding_content}
+
+
+      ### ⚠️ Challenge
+
+      {challenge_content}
+
+
+      ### 💬 Response
+
+      {response_content}
+
+
+      ### 📝 Your Request
+
+      {request_echo_content}
+
+
+      ### 🔍 Next Steps
+
+      {next_steps_content}
+
+      '
+    name: Design Sync
+    expected_orchestrator: DesignSyncOrchestrator
+    triggers:
+    - sync design
+    - design sync
+    - synchronize design
+    response_type: detailed
   publish_branch:
     base_structure: '## 🧠 CORTEX {operation}
 
@@ -4591,6 +4633,7 @@ templates:
 
       '
     name: Optimize System
+    expected_orchestrator: OptimizeSystemOrchestrator
     triggers:
     - optimize
     - optimize cortex
@@ -5382,6 +5425,7 @@ templates:
 
       '
     name: Application Health Dashboard
+    expected_orchestrator: ApplicationHealthOrchestrator
     triggers:
     - show health dashboard
     - health dashboard
@@ -6511,6 +6555,7 @@ templates:
 
       '
     name: Feature Planning
+    expected_orchestrator: PlanningOrchestrator
     triggers:
     - plan
     - planning
@@ -7552,6 +7597,7 @@ templates:
         format: numbered
         auto_generate: true
   optimize_cortex:
+    expected_orchestrator: OptimizeCortexOrchestrator
     trigger_phrases:
     - optimize_cortex
     - optimize cortex

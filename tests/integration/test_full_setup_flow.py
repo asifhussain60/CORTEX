@@ -177,16 +177,23 @@ class TestSetupComponentIntegration:
     
     def test_alignment_validates_all_components(self, fresh_cortex_install):
         """Should run alignment check on all setup components."""
-        from src.orchestrators.alignment_orchestrator import AlignmentOrchestrator
+        from src.operations.modules.realignment.realignment_utility import align_system_v2
         
         brain_path = fresh_cortex_install / "cortex-brain"
         brain_path.mkdir(exist_ok=True)
         
-        # AlignmentOrchestrator requires root_path
-        orchestrator = AlignmentOrchestrator(root_path=fresh_cortex_install)
+        # Run alignment v2.0
+        result = align_system_v2(
+            project_root=fresh_cortex_install,
+            cortex_root=fresh_cortex_install,
+            auto_fix=False,
+            dry_run=True
+        )
         
-        # Verify orchestrator initializes
-        assert orchestrator is not None
+        # Verify result structure
+        assert result is not None
+        assert "success" in result
+        assert "checks" in result
     
     def test_plan_registry_initialized(self, fresh_cortex_install):
         """Should initialize plan registry during setup."""
@@ -250,13 +257,18 @@ class TestSetupPerformance:
     
     def test_alignment_check_fast(self, fresh_cortex_install):
         """Alignment check should be <5 seconds."""
-        from src.orchestrators.alignment_orchestrator import AlignmentOrchestrator
+        from src.operations.modules.realignment.realignment_utility import align_system_v2
         
         brain_path = fresh_cortex_install / "cortex-brain"
         brain_path.mkdir(exist_ok=True)
         
-        orchestrator = AlignmentOrchestrator(root_path=fresh_cortex_install)
+        # Run alignment v2.0 with dry_run for speed
+        result = align_system_v2(
+            project_root=fresh_cortex_install,
+            cortex_root=fresh_cortex_install,
+            auto_fix=False,
+            dry_run=True
+        )
         
-        # Just initialization time for now
-        # Would test full alignment execution time
-        assert orchestrator is not None
+        # Just verify it completes
+        assert result is not None

@@ -565,27 +565,36 @@ def align_system_v2(
         }
         
         if not registration_result.passed:
+            # Only user-facing operations are CRITICAL
+            # Utility modules are internal helpers - WARNING only
             if len(unregistered_user_facing) > 0:
                 logger.error(f"❌ {len(unregistered_user_facing)} USER-FACING operations unregistered (CRITICAL)")
-            
-            logger.warning(f"⚠️  {registration_result.unregistered_count} total unregistered features found")
-            
-            severity = "CRITICAL" if len(unregistered_user_facing) > 10 else "HIGH" if len(unregistered_user_facing) > 0 else "MEDIUM"
-            
-            results["warnings"].append({
-                "category": "feature_registration",
-                "severity": severity,
-                "message": f"{len(unregistered_user_facing)} USER-FACING operations unregistered",
-                "details": {
-                    "user_facing_operations": unregistered_user_facing,
-                    "utility_modules": [op for op in registration_result.unregistered_operations if op not in user_facing_ops],
-                    "unregistered_modules": registration_result.unregistered_modules
-                }
-            })
-            
-            # Mark as failed if user-facing operations are unregistered
-            if len(unregistered_user_facing) > 10:
+                
+                results["errors"].append({
+                    "category": "feature_registration",
+                    "severity": "CRITICAL",
+                    "message": f"{len(unregistered_user_facing)} user-facing operations unregistered",
+                    "details": {
+                        "user_facing_operations": unregistered_user_facing
+                    }
+                })
+                
+                # Mark as failed ONLY if user-facing operations are unregistered
                 results["success"] = False
+            
+            # Utility modules are internal - log as warning but don't fail
+            unregistered_utility_count = len(registration_result.unregistered_modules)
+            if unregistered_utility_count > 0:
+                logger.warning(f"⚠️  {unregistered_utility_count} utility modules not explicitly registered (internal helpers)")
+                
+                results["warnings"].append({
+                    "category": "utility_module_registration",
+                    "severity": "INFO",
+                    "message": f"{unregistered_utility_count} utility modules are internal helpers (registration optional)",
+                    "details": {
+                        "unregistered_modules": registration_result.unregistered_modules
+                    }
+                })
             
             # Auto-fix if enabled
             if auto_fix and not dry_run:
@@ -621,13 +630,42 @@ def align_system_v2(
         results["checks"]["intent_router"] = intent_router_coverage
         
         if intent_router_coverage["missing_count"] > 0:
-            logger.warning(f"⚠️  {intent_router_coverage['missing_count']} operations missing from intent router")
-            results["warnings"].append({
-                "category": "intent_router",
-                "severity": "HIGH",
-                "message": f"{intent_router_coverage['missing_count']} operations not routable",
-                "details": intent_router_coverage["missing_operations"]
-            })
+            # Calculate severity based on coverage percentage and type of operations
+            coverage_pct = intent_router_coverage["coverage_percentage"]
+            missing_ops = intent_router_coverage["missing_operations"]
+            
+            # Count user-facing operations (those in src/operations/*.py)
+            ops_dir = cortex_root / "src" / "operations"
+            user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
+            missing_user_facing = [op for op in missing_ops if op in user_facing_ops]
+            
+            # Severity based on user-facing operation coverage
+            if len(missing_user_facing) > 10:
+                severity = "CRITICAL"
+                logger.error(f"❌ {len(missing_user_facing)} user-facing operations not routable (CRITICAL)")
+                results["success"] = False  # Fail if many user-facing operations unmapped
+                
+                results["errors"].append({
+                    "category": "intent_router",
+                    "severity": severity,
+                    "message": f"{len(missing_user_facing)} user-facing operations not routable ({coverage_pct:.1f}% coverage)",
+                    "details": missing_user_facing
+                })
+            else:
+                # Most missing are internal orchestrators/workflows - WARNING only
+                severity = "MEDIUM"
+                logger.warning(f"⚠️  {intent_router_coverage['missing_count']} operations missing from intent router (mostly internal)")
+                logger.info(f"   User-facing: {len(missing_user_facing)}, Internal: {len(missing_ops) - len(missing_user_facing)}")
+                
+                results["warnings"].append({
+                    "category": "intent_router_coverage",
+                    "severity": severity,
+                    "message": f"{intent_router_coverage['missing_count']} operations not routable ({coverage_pct:.1f}% coverage) - {len(missing_user_facing)} user-facing, {len(missing_ops) - len(missing_user_facing)} internal",
+                    "details": {
+                        "user_facing": missing_user_facing,
+                        "internal": [op for op in missing_ops if op not in user_facing_ops]
+                    }
+                })
             
             # Auto-fix if enabled
             if auto_fix and not dry_run:
@@ -894,6 +932,27 @@ def align_system_v2(
             logger.info("✅ All module imports healthy")
         
         # ====================================================================
+        # CHECK 9: Git Checkpoint Orchestrator Wiring (SKULL Rule Enforcement)
+        # ====================================================================
+        logger.info("📋 Check 9: Git Checkpoint Orchestrator Wiring")
+        wiring_result = _check_git_checkpoint_wiring(cortex_root)
+        results["checks"]["git_checkpoint_wiring"] = wiring_result
+        
+        if not wiring_result["passed"]:
+            logger.error(f"❌ Git checkpoint wiring validation FAILED")
+            for issue in wiring_result["issues"]:
+                logger.error(f"   - {issue}")
+            results["errors"].append({
+                "category": "git_checkpoint_wiring",
+                "severity": "CRITICAL",
+                "message": "Git checkpoint orchestrator wiring failed SKULL rule validation",
+                "details": wiring_result["issues"]
+            })
+            results["success"] = False
+        else:
+            logger.info("✅ Git checkpoint orchestrator properly wired")
+        
+        # ====================================================================
         # Generate Comprehensive Report
         # ====================================================================
         report_path = _generate_alignment_report(cortex_root, results)
@@ -905,7 +964,7 @@ def align_system_v2(
         logger.info("\n" + "=" * 70)
         logger.info("📊 CORTEX Align v2.0 - Summary")
         logger.info("=" * 70)
-        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/8")
+        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/9")
         logger.info(f"⚠️  Warnings: {len(results['warnings'])}")
         logger.info(f"❌ Errors: {len(results['errors'])}")
         logger.info(f"🔧 Fixes Applied: {len(results['fixes_applied'])}")
@@ -1224,6 +1283,86 @@ def _check_module_imports(cortex_root: Path) -> Dict[str, Any]:
             "broken_modules": [],
             "error": str(e)
         }
+
+
+def _check_git_checkpoint_wiring(cortex_root: Path) -> Dict[str, Any]:
+    """
+    Validate git checkpoint orchestrator wiring.
+    
+    Enforces SKULL rule GIT_CHECKPOINT_ENFORCEMENT by validating:
+    1. GitCheckpointOrchestrator has create_auto_checkpoint method
+    2. PlanningOrchestrator initializes GitCheckpointOrchestrator
+    3. PlanningOrchestrator calls git checkpoints after each phase
+    
+    Returns:
+        Dict with passed status and issues list
+    """
+    issues = []
+    
+    try:
+        from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
+        from src.orchestrators.planning_orchestrator import PlanningOrchestrator
+        import inspect
+        
+        # Validation 1: GitCheckpointOrchestrator has create_auto_checkpoint
+        git_checkpoint = GitCheckpointOrchestrator(project_root=cortex_root)
+        if not hasattr(git_checkpoint, 'create_auto_checkpoint'):
+            issues.append("GitCheckpointOrchestrator missing create_auto_checkpoint method")
+        elif not callable(getattr(git_checkpoint, 'create_auto_checkpoint')):
+            issues.append("GitCheckpointOrchestrator.create_auto_checkpoint is not callable")
+        
+        # Validation 2: Test that create_auto_checkpoint has correct signature
+        if hasattr(git_checkpoint, 'create_auto_checkpoint'):
+            try:
+                sig = inspect.signature(git_checkpoint.create_auto_checkpoint)
+                required_params = ['operation', 'message']
+                params = list(sig.parameters.keys())
+                
+                for req_param in required_params:
+                    if req_param not in params:
+                        issues.append(f"create_auto_checkpoint missing required parameter: {req_param}")
+            except Exception as e:
+                issues.append(f"Failed to validate create_auto_checkpoint signature: {e}")
+        
+        # Validation 3: PlanningOrchestrator exists and has git_checkpoint
+        try:
+            planning_orchestrator = PlanningOrchestrator(str(cortex_root))
+            
+            if not hasattr(planning_orchestrator, 'git_checkpoint'):
+                issues.append("PlanningOrchestrator missing git_checkpoint attribute")
+            elif not isinstance(planning_orchestrator.git_checkpoint, GitCheckpointOrchestrator):
+                issues.append("PlanningOrchestrator.git_checkpoint is not a GitCheckpointOrchestrator instance")
+        except Exception as e:
+            issues.append(f"Failed to validate PlanningOrchestrator: {e}")
+        
+        # Validation 4: Check that generate_incremental_plan calls git checkpoints
+        try:
+            if 'planning_orchestrator' in locals():
+                source = inspect.getsource(planning_orchestrator.generate_incremental_plan)
+                
+                # Look for git checkpoint calls after each phase
+                phase_checkpoints = ['plan-phase-1', 'plan-phase-2', 'plan-phase-3']
+                
+                for phase in phase_checkpoints:
+                    if phase not in source:
+                        issues.append(f"PlanningOrchestrator.generate_incremental_plan missing git checkpoint for {phase}")
+                
+                # Verify create_auto_checkpoint is called
+                if 'create_auto_checkpoint' not in source:
+                    issues.append("PlanningOrchestrator.generate_incremental_plan does not call create_auto_checkpoint")
+        except Exception as e:
+            logger.warning(f"Could not validate planning orchestrator source code: {e}")
+            # This is a warning, not a blocker
+        
+    except Exception as e:
+        issues.append(f"Git checkpoint wiring validation failed: {e}")
+    
+    return {
+        "passed": len(issues) == 0,
+        "issues": issues,
+        "validation_count": 4,
+        "failures": len(issues)
+    }
 
 
 def _generate_alignment_report(cortex_root: Path, results: Dict[str, Any]) -> Path:

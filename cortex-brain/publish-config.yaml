@@ -184,10 +184,6 @@ user_content_patterns:
     - "prompts/shared/plugin-system.md"
     - "prompts/shared/operations-reference.md"
     
-    # Setup Documentation (user-facing)
-    - "docs/SETUP-CORTEX.md"  # Comprehensive setup guide
-    - "cortex-brain/documents/implementation-guides/user-path-configuration-guide.md"  # Path config guide
-    
     # Essential User Tools
     - "scripts/cortex/auto_capture_daemon.py"  # ⭐ Ambient tracking
     - "scripts/cortex/capture_git_event.py"
@@ -241,8 +237,6 @@ validation:
     - ".cortex-version"  # Version tracking (MANDATORY)
     - "cortex-brain/schema.sql"  # Database schema
     - "cortex-brain/migrations/"  # Migration files directory
-    - "docs/SETUP-CORTEX.md"  # Setup guide (user-facing)
-    - "cortex-brain/documents/implementation-guides/user-path-configuration-guide.md"  # Path config
   
   # Deployment integrity checks (NEW)
   deployment_validation:

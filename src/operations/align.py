@@ -40,16 +40,25 @@ from src.operations.modules.realignment.realignment_utility import align_system_
 from src.operations.modules.admin.governance_tokens import validate_token_budgets
 
 
-def run_align(auto_fix: bool = False, dry_run: bool = False) -> Dict[str, Any]:
+def run_align(
+    auto_fix: bool = False, 
+    dry_run: bool = False,
+    force_full: bool = False,
+    quick_mode: bool = False
+) -> Dict[str, Any]:
     """
-    Execute CORTEX Align v2.0 - Holistic system alignment.
+    Execute CORTEX Align v3.2 - Holistic system alignment with incremental support.
     
     This is the MOST CRUCIAL validation step. When user says '/CORTEX align',
     this function runs comprehensive checks to ensure CORTEX is fully operational.
     
-    Features:
+    Features (v3.2):
+    - Incremental validation (only check changed features)
+    - File change detection via SHA256 checksums
+    - Auto-discovery and wiring validation for new features
+    - Admin vs User context detection
+    - Performance metrics tracking
     - Feature registration validation (all operations in cortex-operations.yaml)
-    - Auto-discovery and registration of new features
     - Intent router coverage check (all operations have triggers)
     - Response template validation (all operations have templates)
     - Documentation alignment (docs match implementation)
@@ -60,27 +69,46 @@ def run_align(auto_fix: bool = False, dry_run: bool = False) -> Dict[str, Any]:
     Args:
         auto_fix: Automatically fix issues without prompting (default: False)
         dry_run: Preview changes without applying (default: False)
+        force_full: Force full scan even if incremental is possible (default: False)
+        quick_mode: Infrastructure checks only, skip feature validation (default: False)
     
     Returns:
         Dict with:
             - success (bool): True if system is healthy
-            - checks (dict): Results from all 6 checks
+            - checks (dict): Results from all checks
             - fixes_applied (list): List of fixes applied
             - warnings (list): Warnings found
             - errors (list): Errors found
             - report_path (str): Path to detailed report
+            - performance (dict): Performance metrics
     """
     # Detect CORTEX root
     cortex_root = Path(__file__).resolve().parents[2]
     project_root = cortex_root
     
-    # Run align v2.0
-    return align_system_v2(
-        project_root=project_root,
-        cortex_root=cortex_root,
-        auto_fix=auto_fix,
-        dry_run=dry_run
-    )
+    # Determine which align system to use based on flags
+    if force_full or quick_mode:
+        # Use lightweight align utility with incremental support
+        from src.operations.modules.admin.align_utility import run_align_utility
+        return run_align_utility(force_full=force_full, quick_mode=quick_mode)
+    else:
+        # Use full align v2.0 system (realignment with auto-fix)
+        result = align_system_v2(
+            project_root=project_root,
+            cortex_root=cortex_root,
+            auto_fix=auto_fix,
+            dry_run=dry_run
+        )
+        
+        # Add performance metrics if not present
+        if 'performance' not in result:
+            result['performance'] = {
+                'features_checked': 0,
+                'features_skipped': 0,
+                'duration_seconds': 0.0
+            }
+        
+        return result
 
 
 
@@ -166,16 +194,30 @@ Examples:
         help='Preview changes without applying them'
     )
     
+    parser.add_argument(
+        '--full',
+        action='store_true',
+        help='Force full scan even if incremental is possible'
+    )
+    
+    parser.add_argument(
+        '--quick',
+        action='store_true',
+        help='Infrastructure checks only, skip feature validation'
+    )
+    
     args = parser.parse_args()
     
     # Route to appropriate handler
     if args.subcommand == 'governance-tokens':
         result = run_governance_tokens(args.action)
     else:
-        # Default: CORTEX Align v2.0
+        # Default: CORTEX Align v3.2
         result = run_align(
             auto_fix=args.auto_fix,
-            dry_run=args.dry_run
+            dry_run=args.dry_run,
+            force_full=args.full,
+            quick_mode=args.quick
         )
     
     # Exit with appropriate code

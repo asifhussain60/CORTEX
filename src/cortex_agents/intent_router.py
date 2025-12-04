@@ -130,10 +130,20 @@ class IntentRouter(BaseAgent):
             IntentType.RUN_TESTS: ["run test", "execute test", "test run"],
             IntentType.FIX: ["fix", "bug", "error", "issue", "problem"],
             IntentType.DEBUG: ["debug", "investigate", "trace", "diagnose"],
-            IntentType.HEALTH_CHECK: ["health", "status", "check", "validate"],
-            IntentType.RESUME: ["resume", "continue", "restore", "recover"],
+            IntentType.HEALTH_CHECK: [
+                "health", "status", "check", "validate", "healthcheck", "health check",
+                "system health", "cortex health", "health status"
+            ],
+            IntentType.RESUME: [
+                "resume", "continue", "restore", "recover", "resume conversation",
+                "continue conversation", "restore conversation", "resume our work",
+                "continue our work", "pick up where we left off"
+            ],
             IntentType.SCREENSHOT: ["screenshot", "ui", "screen", "visual"],
-            IntentType.COMMIT: ["commit", "git", "push", "save changes"],
+            IntentType.COMMIT: [
+                "commit", "git", "push", "save changes", "commit and push",
+                "git commit", "commit changes", "push changes", "save to git"
+            ],
             IntentType.COMPLIANCE: ["rule", "governance", "compliance", "policy"],
             # ADO (Azure DevOps) operations (NEW - ADO Integration)
             IntentType.ADO_STORY: [
@@ -197,6 +207,141 @@ class IntentRouter(BaseAgent):
                 "onboard application", "onboard app", "setup application",
                 "analyze my application", "scan application", "scan project",
                 "analyze project", "project analysis"
+            ],
+            # Additional operation keywords (Consolidated Alignment - wiring 39 user-facing ops)
+            "align": [
+                "align", "alignment", "align system", "system alignment", "cortex align",
+                "run alignment", "alignment check", "validate system", "check alignment",
+                "system check", "validate cortex"
+            ],
+            "cleanup": [
+                "cleanup", "clean up", "clean", "remove obsolete", "remove unused",
+                "delete obsolete", "purge old files", "clean workspace", "clean cortex"
+            ],
+            "deploy": [
+                "deploy", "deployment", "deploy cortex", "create build", "build package",
+                "publish", "release", "deploy production", "production deploy",
+                "build for production"
+            ],
+            "git_checkpoint": [
+                "checkpoint", "git checkpoint", "create checkpoint", "save checkpoint",
+                "checkpoint my work", "save progress", "checkpoint this", "save state"
+            ],
+            "optimize": [
+                "optimize", "optimization", "optimize cortex", "optimize system",
+                "performance", "improve performance", "speed up", "optimize code",
+                "make faster", "performance tuning"
+            ],
+            "rollback": [
+                "rollback", "roll back", "revert", "undo", "restore previous",
+                "go back", "rollback changes", "undo changes", "revert changes",
+                "restore state"
+            ],
+            "help_command": [
+                "help", "help me", "what can you do", "show commands", "list commands",
+                "available commands", "cortex help", "show help", "usage", "commands"
+            ],
+            "cache_dashboard": [
+                "cache dashboard", "dashboard cache", "cache metrics", "cache data"
+            ],
+            "dashboard_generator": [
+                "generate dashboard", "create dashboard", "dashboard", "show dashboard",
+                "display dashboard", "build dashboard"
+            ],
+            "environment_setup": [
+                "setup environment", "environment setup", "configure environment",
+                "setup dev environment", "dev environment", "environment config"
+            ],
+            "user_onboarding": [
+                "onboard", "onboarding", "user onboarding", "setup user",
+                "user setup", "onboard user", "get started"
+            ],
+            "application_onboarding_operation": [
+                "onboard application", "application onboarding", "app onboarding",
+                "setup application", "analyze application"
+            ],
+            "architecture_graph_builder": [
+                "architecture graph", "build architecture graph", "generate architecture",
+                "visualize architecture", "architecture diagram"
+            ],
+            "cache_commands": [
+                "cache commands", "command cache", "cache operations", "clear cache"
+            ],
+            "dashboard_validator": [
+                "validate dashboard", "dashboard validation", "check dashboard",
+                "verify dashboard", "dashboard check"
+            ],
+            "dependency_installer": [
+                "install dependencies", "install deps", "setup dependencies",
+                "install packages", "install requirements"
+            ],
+            "healthcheck_operation": [
+                "run healthcheck", "healthcheck operation", "system healthcheck"
+            ],
+            "optimize_operation": [
+                "optimize operation", "operation optimization"
+            ],
+            "optimize_tokens": [
+                "optimize tokens", "token optimization", "reduce tokens",
+                "optimize token usage"
+            ],
+            "policy_scanner": [
+                "scan policy", "policy scan", "check policies", "validate policies",
+                "scan for violations"
+            ],
+            "recommendations_engine": [
+                "recommendations", "suggest improvements", "suggestions",
+                "generate recommendations", "improvement suggestions"
+            ],
+            "techstack_analyzer": [
+                "analyze tech stack", "tech stack analysis", "analyze technology",
+                "technology analysis", "stack analysis"
+            ],
+            "user_consent_manager": [
+                "user consent", "manage consent", "consent manager", "permissions"
+            ],
+            "user_onboarding_operation": [
+                "user onboarding operation", "onboard user operation"
+            ],
+            "dashboard_data_adapter": [
+                "dashboard data", "adapt dashboard data", "dashboard adapter"
+            ],
+            "dashboard_validator_v2": [
+                "validate dashboard v2", "dashboard validator v2", "v2 validator"
+            ],
+            "documentation_component_registry": [
+                "documentation registry", "doc registry", "component registry",
+                "register documentation"
+            ],
+            "environment_setup_module": [
+                "environment module", "setup environment module"
+            ],
+            "header_formatter": [
+                "format header", "header formatting"
+            ],
+            "header_utils": [
+                "header utilities", "header utils"
+            ],
+            "operation_factory": [
+                "operation factory", "create operation"
+            ],
+            "operation_header_formatter": [
+                "operation header", "format operation header"
+            ],
+            "operations_orchestrator": [
+                "operations orchestrator", "orchestrate operations"
+            ],
+            "realtime_dashboard_auth": [
+                "realtime auth", "dashboard auth", "realtime authentication"
+            ],
+            "realtime_dashboard_server": [
+                "realtime server", "dashboard server", "realtime dashboard"
+            ],
+            "realtime_metrics_publisher": [
+                "realtime metrics", "publish metrics", "metrics publisher"
+            ],
+            "response_formatter": [
+                "format response", "response formatting"
             ],
         }
         

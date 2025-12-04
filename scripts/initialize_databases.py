@@ -13,15 +13,16 @@ import sys
 from pathlib import Path
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent / "src"))
+cortex_root = Path(__file__).parent.parent
+sys.path.insert(0, str(cortex_root / "src"))
 
-from tier1.working_memory import WorkingMemory
-from tier2.knowledge_graph import KnowledgeGraph
-from tier3.context_intelligence import ContextIntelligence
+from src.tier1.working_memory import WorkingMemory
+from src.tier2.knowledge_graph import KnowledgeGraph
+from src.tier3.context_intelligence import ContextIntelligence
 
 def initialize_databases():
     """Initialize all three tier databases."""
-    brain_path = Path(__file__).parent / "cortex-brain"
+    brain_path = cortex_root / "cortex-brain"
     
     print("🧠 CORTEX Database Initialization")
     print("=" * 50)

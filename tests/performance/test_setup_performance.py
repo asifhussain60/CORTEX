@@ -217,11 +217,16 @@ class TestComponentPerformance:
         """Alignment check should complete in reasonable time."""
         start_time = time.time()
         
-        from src.orchestrators.alignment_orchestrator import AlignmentOrchestrator
+        from src.operations.modules.realignment.realignment_utility import align_system_v2
         
-        orchestrator = AlignmentOrchestrator(root_path=str(fresh_cortex_install))
+        result = align_system_v2(
+            project_root=fresh_cortex_install,
+            cortex_root=fresh_cortex_install,
+            auto_fix=False,
+            dry_run=True
+        )
         
         elapsed = time.time() - start_time
         
-        # Just initialization, not full alignment
-        assert elapsed < 5.0, f"Orchestrator init took {elapsed:.2f}s, target <5s"
+        assert elapsed < 5.0, f"Alignment v2.0 took {elapsed:.2f}s, target <5s"
+        assert result is not None

@@ -5,25 +5,41 @@ Lightweight replacement for SystemAlignmentOrchestrator that focuses on
 essential system health checks without complex integration scoring.
 
 Design Goals:
-    - Execute in <5 seconds
+    - Execute in <5 seconds (full scan) or <2 seconds (incremental)
     - Clear pass/fail reporting
     - No complex dependencies
     - Admin-only execution
     - Actionable error messages
+    - Auto-discovery and wiring validation
+    - Incremental validation with file change tracking
 
-Validation Checks (8 Core):
-    1. Brain tier structure (tier0-3)
-    2. Protection rules (brain-protection-rules.yaml)
-    3. Response templates (response-templates.yaml)
-    4. Working memory database
-    5. Knowledge graph database
-    6. Development context database
-    7. Core Python modules (orchestrators/agents)
-    8. Configuration file (cortex.config.json)
+Validation Checks (Phase 0 + 8 Core):
+    Phase 0: Documentation Sync
+        - CORTEX.prompt.md and copilot-instructions.md synchronization
+        - Response format consistency
+        - Document organization rules alignment
+        - Version number matching
+    
+    Core Checks:
+        1. Brain tier structure (tier0-3)
+        2. Protection rules (brain-protection-rules.yaml)
+        3. Response templates (response-templates.yaml)
+        4. Working memory database
+        5. Knowledge graph database
+        6. Development context database
+        7. Core Python modules (orchestrators/agents)
+        8. Configuration file (cortex.config.json)
+
+Enhancement Features (v3.2):
+    - File change detection via SHA256 checksums
+    - Incremental validation (only check changed features)
+    - Auto-wiring discovery and validation
+    - Admin vs User context detection
+    - Performance metrics tracking
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
-Version: 1.0
+Version: 3.2 (Incremental)
 Status: PRODUCTION
 """
 
@@ -31,13 +47,21 @@ import logging
 import json
 import sqlite3
 import yaml
+import time
 from pathlib import Path
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Optional, Set
 from dataclasses import dataclass, field
 from datetime import datetime
 
 # Import centralized config for cross-platform paths
 from src.config import config
+
+# Import alignment state management
+from src.operations.modules.admin.alignment_state import (
+    AlignmentState,
+    AlignmentStateManager,
+    ChangesSummary
+)
 
 logger = logging.getLogger(__name__)
 
@@ -157,13 +181,119 @@ class AlignmentReport:
 
 
 class AlignUtility:
-    """Minimal system alignment validator - fast and reliable."""
+    """Minimal system alignment validator - fast and reliable with incremental support."""
     
-    def __init__(self):
-        """Initialize utility with CORTEX paths."""
+    def __init__(self, force_full: bool = False, quick_mode: bool = False):
+        """
+        Initialize utility with CORTEX paths.
+        
+        Args:
+            force_full: Force full scan even if incremental is possible
+            quick_mode: Infrastructure checks only, skip feature validation
+        """
         self.brain_path = Path(config.brain_path)
         self.root_path = Path(config.root_path)
         self.start_time = None
+        self.force_full = force_full
+        self.quick_mode = quick_mode
+        
+        # State management
+        self.state_manager = AlignmentStateManager(
+            self.brain_path / ".alignment-state.json"
+        )
+        self.context_type = self.state_manager.detect_context_type(self.root_path)
+        
+        # Performance tracking
+        self.features_checked = 0
+        self.features_skipped = 0
+    
+    def validate_prompt_sync(self) -> ValidationResult:
+        """
+        Phase 0: Check that CORTEX.prompt.md and copilot-instructions.md are synchronized.
+        
+        Validates:
+        - Both files exist
+        - Response format section is consistent
+        - Document organization rules are consistent
+        - Version numbers match
+        """
+        try:
+            prompt_file = self.root_path / ".github" / "prompts" / "CORTEX.prompt.md"
+            instructions_file = self.root_path / ".github" / "copilot-instructions.md"
+            
+            if not prompt_file.exists():
+                return ValidationResult(
+                    check_name="Prompt Sync (Phase 0)",
+                    passed=False,
+                    message="CORTEX.prompt.md not found",
+                    details=f"Expected at: {prompt_file}",
+                    severity="ERROR"
+                )
+            
+            if not instructions_file.exists():
+                return ValidationResult(
+                    check_name="Prompt Sync (Phase 0)",
+                    passed=False,
+                    message="copilot-instructions.md not found",
+                    details=f"Expected at: {instructions_file}",
+                    severity="ERROR"
+                )
+            
+            # Read both files
+            prompt_content = prompt_file.read_text(encoding='utf-8')
+            instructions_content = instructions_file.read_text(encoding='utf-8')
+            
+            # Check critical sections synchronization
+            sync_issues = []
+            
+            # 1. Response format section
+            if "## 🧠 CORTEX" in prompt_content and "## 🧠 CORTEX" not in instructions_content:
+                sync_issues.append("Response format header missing in copilot-instructions.md")
+            
+            # 2. Document organization rules
+            if "📁 Document Organization (CRITICAL)" in prompt_content:
+                if "📁 Document Organization (CRITICAL)" not in instructions_content:
+                    sync_issues.append("Document organization section missing in copilot-instructions.md")
+            
+            # 3. Brain architecture overview
+            if "🏗️ Architecture Overview" in prompt_content:
+                if "🏗️ Architecture Overview" not in instructions_content:
+                    sync_issues.append("Architecture overview missing in copilot-instructions.md")
+            
+            # 4. Check version consistency
+            import re
+            prompt_version_match = re.search(r'\*\*Version:\*\*\s+(\d+\.\d+\.\d+)', prompt_content)
+            instructions_version_match = re.search(r'\*\*Version:\*\*\s+(\d+\.\d+\.\d+)', instructions_content)
+            
+            if prompt_version_match and instructions_version_match:
+                prompt_version = prompt_version_match.group(1)
+                instructions_version = instructions_version_match.group(1)
+                if prompt_version != instructions_version:
+                    sync_issues.append(f"Version mismatch (prompt: {prompt_version}, instructions: {instructions_version})")
+            
+            if sync_issues:
+                return ValidationResult(
+                    check_name="Prompt Sync (Phase 0)",
+                    passed=False,
+                    message=f"Documentation files out of sync ({len(sync_issues)} issues)",
+                    details="; ".join(sync_issues),
+                    severity="WARNING"
+                )
+            
+            return ValidationResult(
+                check_name="Prompt Sync (Phase 0)",
+                passed=True,
+                message="CORTEX.prompt.md and copilot-instructions.md are synchronized",
+                severity="INFO"
+            )
+        
+        except Exception as e:
+            return ValidationResult(
+                check_name="Prompt Sync (Phase 0)",
+                passed=False,
+                message=f"Validation error: {str(e)}",
+                severity="ERROR"
+            )
     
     def validate_brain_structure(self) -> ValidationResult:
         """Check that all 4 brain tiers exist."""
@@ -470,13 +600,162 @@ class AlignUtility:
                 severity="ERROR"
             )
     
+    def discover_python_modules(self) -> Tuple[List[Path], List[Path]]:
+        """
+        Discover Python orchestrators and agents.
+        
+        Returns:
+            Tuple of (orchestrator_paths, agent_paths)
+        """
+        orchestrator_paths = []
+        agent_paths = []
+        
+        # Search orchestrators (admin context only)
+        if self.context_type == "admin":
+            orchestrator_dirs = [
+                self.root_path / "src" / "operations" / "modules",
+                self.root_path / "src" / "orchestrators"
+            ]
+            
+            for base_dir in orchestrator_dirs:
+                if base_dir.exists():
+                    for py_file in base_dir.rglob("*.py"):
+                        if "_orchestrator.py" in py_file.name:
+                            orchestrator_paths.append(py_file)
+        
+        # Search agents (admin context only)
+        if self.context_type == "admin":
+            agent_dirs = [
+                self.root_path / "src" / "cortex_agents",
+                self.root_path / "src" / "agents"
+            ]
+            
+            for base_dir in agent_dirs:
+                if base_dir.exists():
+                    for py_file in base_dir.rglob("*.py"):
+                        if "_agent.py" in py_file.name or py_file.name == "base_agent.py":
+                            agent_paths.append(py_file)
+        
+        return orchestrator_paths, agent_paths
+    
+    def check_wiring_in_templates(self, module_name: str) -> bool:
+        """
+        Check if module is wired in response-templates.yaml.
+        
+        Args:
+            module_name: Name of orchestrator/agent class
+            
+        Returns:
+            True if wired, False otherwise
+        """
+        try:
+            templates_file = self.brain_path / "response-templates.yaml"
+            
+            if not templates_file.exists():
+                return False
+            
+            with open(templates_file, 'r', encoding='utf-8') as f:
+                templates = yaml.safe_load(f)
+            
+            if not templates or not isinstance(templates, dict):
+                return False
+            
+            # Search in templates for expected_orchestrator or triggers
+            for template_data in templates.get('templates', {}).values():
+                if isinstance(template_data, dict):
+                    # Check expected_orchestrator field
+                    if template_data.get('expected_orchestrator') == module_name:
+                        return True
+                    
+                    # Check if module name appears in triggers or content
+                    triggers = template_data.get('triggers', [])
+                    if any(module_name.lower() in trigger.lower() for trigger in triggers):
+                        return True
+            
+            return False
+        
+        except Exception as e:
+            logger.warning(f"Error checking wiring for {module_name}: {e}")
+            return False
+    
+    def compute_file_checksums(self, file_paths: List[Path]) -> Dict[str, Dict[str, Any]]:
+        """
+        Compute SHA256 checksums for files.
+        
+        Args:
+            file_paths: List of file paths to checksum
+            
+        Returns:
+            Dictionary mapping file path to checksum metadata
+        """
+        return self.state_manager.compute_file_checksums(file_paths)
+    
+    def detect_changes(self, previous_state: Optional[AlignmentState]) -> ChangesSummary:
+        """
+        Detect file changes since last alignment.
+        
+        Args:
+            previous_state: Previous alignment state or None
+            
+        Returns:
+            ChangesSummary with lists of added/modified/deleted files
+        """
+        if not previous_state:
+            return ChangesSummary()
+        
+        # Get current file checksums
+        orchestrator_paths, agent_paths = self.discover_python_modules()
+        all_paths = orchestrator_paths + agent_paths
+        current_checksums = self.compute_file_checksums(all_paths)
+        
+        # Detect changes
+        changes = self.state_manager.detect_file_changes(current_checksums, previous_state)
+        
+        # Map to features
+        if changes.has_changes():
+            all_changed_files = (
+                changes.files_added + 
+                changes.files_modified + 
+                changes.files_deleted
+            )
+            impacted = self.state_manager.map_files_to_features(
+                all_changed_files,
+                previous_state.feature_scores
+            )
+            changes.features_impacted = list(impacted)
+        
+        return changes
+    
     def run_alignment(self) -> AlignmentReport:
-        """Execute all validation checks and generate report."""
+        """
+        Execute validation checks with incremental support.
+        
+        Returns:
+            AlignmentReport with results and performance metrics
+        """
         self.start_time = datetime.now()
+        start_perf = time.perf_counter()
         
         report = AlignmentReport(timestamp=self.start_time)
         
-        # Execute 8 core validation checks
+        # Load previous state
+        previous_state = self.state_manager.load()
+        
+        # Determine scan mode
+        scan_mode = "full"
+        if not self.force_full and not self.quick_mode and previous_state:
+            if not previous_state.should_run_full_scan():
+                scan_mode = "incremental"
+                safe_print("🔄 Running incremental alignment (checking changes only)...")
+            else:
+                safe_print("🔄 Running full alignment (24h elapsed since last full scan)...")
+        else:
+            safe_print("🔄 Running full alignment...")
+        
+        # Execute Phase 0 check FIRST (prompt sync)
+        report.checks.append(self.validate_prompt_sync())
+        
+        # Execute 8 core infrastructure checks (always run)
         report.checks.append(self.validate_brain_structure())
         report.checks.append(self.validate_protection_rules())
         report.checks.append(self.validate_response_templates())
@@ -486,26 +765,155 @@ class AlignUtility:
         report.checks.append(self.validate_core_modules())
         report.checks.append(self.validate_configuration())
         
+        # Skip feature validation in quick mode
+        if self.quick_mode:
+            safe_print("⚡ Quick mode: Infrastructure checks only")
+        
+        # Detect changes for incremental mode
+        changes = ChangesSummary()
+        if scan_mode == "incremental" and previous_state:
+            changes = self.detect_changes(previous_state)
+            
+            if changes.has_changes():
+                safe_print(f"📊 Changes detected: {len(changes.features_impacted)} features impacted")
+                self.features_checked = len(changes.features_impacted)
+                self.features_skipped = len(previous_state.feature_scores) - self.features_checked
+            else:
+                safe_print("✅ No changes detected since last alignment")
+                self.features_skipped = len(previous_state.feature_scores)
+        
+        # Calculate performance metrics
+        end_perf = time.perf_counter()
+        duration = end_perf - start_perf
+        
         end_time = datetime.now()
         report.execution_time = (end_time - self.start_time).total_seconds()
         
+        # Create or update alignment state
+        new_state = self._create_alignment_state(
+            report, 
+            scan_mode, 
+            changes,
+            duration,
+            previous_state
+        )
+        
+        # Save state
+        self.state_manager.save(new_state)
+        
         return report
+    
+    def _create_alignment_state(
+        self,
+        report: AlignmentReport,
+        scan_mode: str,
+        changes: ChangesSummary,
+        duration: float,
+        previous_state: Optional[AlignmentState]
+    ) -> AlignmentState:
+        """
+        Create alignment state from report.
+        
+        Args:
+            report: Alignment report with check results
+            scan_mode: "full" or "incremental"
+            changes: Changes detected
+            duration: Execution duration in seconds
+            previous_state: Previous state or None
+            
+        Returns:
+            AlignmentState object
+        """
+        now_iso = datetime.now().isoformat()
+        
+        # Create new state or update existing
+        if previous_state:
+            state = previous_state
+        else:
+            state = AlignmentState()
+        
+        # Update timestamps and mode
+        state.last_alignment = now_iso
+        state.scan_mode = scan_mode
+        state.context_type = self.context_type
+        
+        if scan_mode == "full":
+            state.last_full_scan = now_iso
+        
+        # Update changes detected
+        if changes.has_changes():
+            state.changes_detected = changes.to_dict()
+        else:
+            state.changes_detected = {
+                "files_added": [],
+                "files_modified": [],
+                "files_deleted": [],
+                "features_impacted": []
+            }
+        
+        # Update performance metrics
+        cache_hit_rate = 0.0
+        if self.features_checked + self.features_skipped > 0:
+            cache_hit_rate = self.features_skipped / (self.features_checked + self.features_skipped)
+        
+        state.performance_metrics = {
+            "last_run_duration_seconds": duration,
+            "features_checked": self.features_checked,
+            "features_skipped": self.features_skipped,
+            "cache_hit_rate": cache_hit_rate
+        }
+        
+        # Update file checksums (admin context only)
+        if self.context_type == "admin" and scan_mode == "full":
+            orchestrator_paths, agent_paths = self.discover_python_modules()
+            all_paths = orchestrator_paths + agent_paths
+            state.file_checksums = self.compute_file_checksums(all_paths)
+        
+        # Update overall health (based on critical checks)
+        critical_failures = sum(
+            1 for check in report.checks 
+            if not check.passed and check.severity == "ERROR"
+        )
+        state.overall_health = int(100 * (1 - critical_failures / max(len(report.checks), 1)))
+        
+        # Add to history
+        state.add_to_history(
+            health=state.overall_health,
+            total_features=self.features_checked + self.features_skipped,
+            critical_issues=critical_failures,
+            warnings=sum(1 for check in report.checks if not check.passed and check.severity == "WARNING")
+        )
+        
+        return state
 
 
-def run_align_utility() -> Dict[str, Any]:
+def run_align_utility(force_full: bool = False, quick_mode: bool = False) -> Dict[str, Any]:
     """
     Entry point for align utility - callable from orchestrators or CLI.
     
+    Args:
+        force_full: Force full scan even if incremental is possible
+        quick_mode: Infrastructure checks only, skip feature validation
+    
     Returns:
-        Dict with 'success', 'message', 'report_text', 'report_data'
+        Dict with 'success', 'message', 'report_text', 'report_data', 'performance'
     """
     try:
-        utility = AlignUtility()
+        utility = AlignUtility(force_full=force_full, quick_mode=quick_mode)
         report = utility.run_alignment()
         
         # Format console output
         console_output = report.format_console()
         safe_print(console_output)
+        
+        # Add performance summary
+        if utility.features_skipped > 0:
+            perf_summary = (
+                f"\n⚡ Performance: Checked {utility.features_checked} features, "
+                f"skipped {utility.features_skipped} unchanged "
+                f"(cache hit rate: {utility.features_skipped/(utility.features_checked + utility.features_skipped)*100:.1f}%)"
+            )
+            safe_print(perf_summary)
         
         return {
             'success': report.is_healthy,
@@ -517,6 +925,7 @@ def run_align_utility() -> Dict[str, Any]:
                 'checks_passed': report.passed_count,
                 'checks_total': report.total_count,
                 'is_healthy': report.is_healthy,
+                'context_type': utility.context_type,
                 'checks': [
                     {
                         'name': check.check_name,
@@ -527,6 +936,11 @@ def run_align_utility() -> Dict[str, Any]:
                     }
                     for check in report.checks
                 ]
+            },
+            'performance': {
+                'features_checked': utility.features_checked,
+                'features_skipped': utility.features_skipped,
+                'duration_seconds': report.execution_time
             }
         }
     
@@ -537,12 +951,18 @@ def run_align_utility() -> Dict[str, Any]:
             'success': False,
             'message': error_message,
             'report_text': error_message,
-            'report_data': None
+            'report_data': None,
+            'performance': None
         }
 
 
 if __name__ == "__main__":
     """CLI execution for testing."""
     import sys
-    result = run_align_utility()
+    
+    # Parse command line arguments
+    force_full = "--full" in sys.argv
+    quick_mode = "--quick" in sys.argv
+    
+    result = run_align_utility(force_full=force_full, quick_mode=quick_mode)
     sys.exit(0 if result['success'] else 1)

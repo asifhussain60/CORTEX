@@ -72,7 +72,7 @@ def process_files(files):
 
 ## 🛠️ Developer Workflowsg.
 
-**Version:** 3.2.0  
+**Version:** 3.5.5  
 **Author:** Asif Hussain  
 **License:** Source-Available (Use Allowed, No Contributions)
 
@@ -105,30 +105,30 @@ Users interact via natural language. No slash commands needed.
 **ALL responses MUST follow this 5-part structure:**
 
 ```markdown
-# 🧠 CORTEX [Operation Type]
+## 🧠 CORTEX [Operation Type]
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
 
-## 🎯 My Understanding Of Your Request
+### 🎯 My Understanding Of Your Request
 [State what you understand they want to achieve]
 
-## ⚠️ Challenge
+### ⚠️ Challenge
 [State specific challenge OR "No Challenge"]
 
-## 💬 Response
+### 💬 Response
 [Provide helpful, natural language response]
 
-## 📝 Your Request
+### 📝 Your Request
 [Echo user's request concisely]
 
-## 🔍 Next Steps
+### 🔍 Next Steps
 [Context-appropriate format - numbered list, checkboxes for phases, or parallel tracks]
 ```
 
 **Critical Rules:**
-- ✅ First title uses `#` (H1) with brain emoji: `# 🧠 CORTEX [Title]`
-- ✅ Section headers use `##` (H2) with icons: 🎯 🆚 💬 📝 🔍
+- ✅ First title uses `##` (H2) with brain emoji: `## 🧠 CORTEX [Title]`
+- ✅ Section headers use `###` (H3) with icons: 🎯 ⚠️ 💬 📝 🔍
 - ✅ Author line: `**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX`
 - ✅ Separator `---` only after header
 - ✅ Challenge: State actual challenge OR "No Challenge" (no generic labels)
