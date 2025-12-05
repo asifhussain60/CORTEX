@@ -1,15 +1,326 @@
 {
-  "style": "unknown",
-  "tiers": [],
-  "components": [],
-  "database_schema": {
-    "tables": [],
-    "relationships": []
+  "application_type": {
+    "type": "SOAP Web Service",
+    "primary": "web_service",
+    "confidence": 90,
+    "evidence": [
+      "Found 2 Web.config files",
+      "Found 2 ASMX service files",
+      "Found 1 API controllers",
+      "Found 1 data access files"
+    ],
+    "scores": {
+      "web_service": 90,
+      "api": 50,
+      "full_stack": 0,
+      "database_library": 20,
+      "console_app": 0,
+      "class_library": 0
+    }
+  },
+  "style": {
+    "name": "N-Tier Architecture",
+    "description": "Traditional layered architecture with separated business logic and data access",
+    "characteristics": [
+      "Separated layers (Presentation, Business, Data)",
+      "Service-oriented presentation layer"
+    ],
+    "evidence": [
+      "Business layer: 1 folders",
+      "Data layer: 1 folders",
+      "Service layer: 2 folders"
+    ],
+    "tier_count": 3
+  },
+  "tiers": [
+    {
+      "name": "Business Logic",
+      "path": "Business",
+      "file_count": 21,
+      "loc": 2588,
+      "technologies": [
+        "Dependency Injection",
+        "JSON.NET"
+      ],
+      "key_files": [
+        "ValidationAutofacModule.cs",
+        "IFileEncryptionProvider.cs",
+        "AssemblyInfo.cs",
+        "EncryptionAutofacModule.cs",
+        "FileSettings.cs",
+        "NonSeekableStreamLinesEnumerator.cs",
+        "Extensions.cs",
+        "ValidationScheme.cs",
+        "AESFileEncryptionProvider.cs",
+        "ApplicationConfiguration.cs"
+      ],
+      "folders": [
+        "Business"
+      ]
+    },
+    {
+      "name": "Service Layer",
+      "path": "WebServiceAppl",
+      "file_count": 22,
+      "loc": 1674,
+      "technologies": [
+        "ASMX Web Services",
+        "Dependency Injection"
+      ],
+      "key_files": [
+        "AssemblyInfo.cs",
+        "PsfPreValidationControllerV2.cs",
+        "CustTokenManager.cs",
+        "InstrumentCallAttribute.cs",
+        "DataObjects.cs",
+        "PsfTempFileProvider.cs",
+        "JwtBearerTokenKeyProvider.cs",
+        "Global.asax.cs",
+        "TempFileWatcherProvider.cs",
+        "ApiJwtBearerAuthorizationAttribute.cs"
+      ],
+      "folders": [
+        "WebServiceAppl",
+        "WebService"
+      ]
+    },
+    {
+      "name": "Tests",
+      "path": "PSFPreValidationTests",
+      "file_count": 6,
+      "loc": 1570,
+      "technologies": [
+        "Dependency Injection",
+        "JSON.NET"
+      ],
+      "key_files": [
+        "OtherTests.cs",
+        "FileSettingsTests.cs",
+        "PSFUtilitiesTests.cs",
+        "PsfPreValidationV2ControllerTests.cs",
+        "AssemblyInfo.cs",
+        "PsfValidatorTests.cs"
+      ],
+      "folders": [
+        "PSFPreValidationTests"
+      ]
+    },
+    {
+      "name": "Infrastructure",
+      "path": "Multiple locations",
+      "file_count": 2,
+      "loc": 815,
+      "technologies": [
+        "JSON.NET"
+      ],
+      "key_files": [
+        "PSFUtilities.cs",
+        "PSFUtilitiesTests.cs"
+      ],
+      "folders": []
+    },
+    {
+      "name": "Data Access",
+      "path": "Multiple locations",
+      "file_count": 3,
+      "loc": 322,
+      "technologies": [
+        "Oracle Database"
+      ],
+      "key_files": [
+        "DataObjects.cs",
+        "PrevalidationData.cs",
+        "PsfValidatorRepository.cs"
+      ],
+      "folders": []
+    }
+  ],
+  "components": [
+    {
+      "name": "PrevalBusiness",
+      "type": "Business Logic",
+      "loc": 2588,
+      "file_count": 21,
+      "dependencies": [
+        "Twilio",
+        "Microsoft.AspNet.WebApi.Client",
+        "HQY.Legacy.WW.Esp.DataAccess",
+        "System.Globalization",
+        "System.Runtime.Extensions",
+        "NETStandard.Library",
+        "Serilog.Enrichers.Thread",
+        "EnterpriseLibrary.ExceptionHandling",
+        "Microsoft.IdentityModel.Logging",
+        "EnterpriseLibrary.Data",
+        "System.Buffers",
+        "System.Text.Encoding.Extensions",
+        "System.Threading.Tasks",
+        "HQY.Legacy.CommonUtilities.Utilities",
+        "HQY.Legacy.WW.Common.BL.DomainManager"
+      ],
+      "key_classes": [
+        "AppConstants",
+        "ApplicationConfiguration",
+        "EnumeratorExtensions",
+        "Extensions",
+        "FileSettings",
+        "NonSeekableStreamLinesEnumerator",
+        "PrevalidationData",
+        "PSFPrevalResult",
+        "PSFUtilities",
+        "PSFValidator"
+      ],
+      "path": "Business"
+    },
+    {
+      "name": "PSFPreValidationUnitTest",
+      "type": "Unit Tests",
+      "loc": 1570,
+      "file_count": 6,
+      "dependencies": [
+        "Microsoft.AspNet.WebApi.Client",
+        "xunit.extensibility.execution",
+        "EnterpriseLibrary.ExceptionHandling",
+        "Microsoft.IdentityModel.Logging",
+        "EnterpriseLibrary.Data",
+        "System.Buffers",
+        "Microsoft.Bcl.Memory",
+        "EnterpriseLibrary.Logging.Database",
+        "HQY.Legacy.WW.Common.Data",
+        "CommonServiceLocator",
+        "System.Numerics.Vectors",
+        "DevSecOps.Validation",
+        "HQY.Legacy.WW.Commuter.Service.Contract",
+        "WW.ODPNetFramework",
+        "System.Formats.Asn1"
+      ],
+      "key_classes": [
+        "FileSettingsTests",
+        "OtherTests",
+        "PSFUtilitiesTests",
+        "PsfValidatorTests",
+        "PsfPreValidationV2ControllerTests"
+      ],
+      "path": "PSFPreValidationTests"
+    },
+    {
+      "name": "WebServiceAppl",
+      "type": "Service Layer",
+      "loc": 1252,
+      "file_count": 17,
+      "dependencies": [
+        "Microsoft.AspNet.WebApi.Client",
+        "Serilog.Enrichers.Thread",
+        "EnterpriseLibrary.ExceptionHandling",
+        "Microsoft.IdentityModel.Logging",
+        "Swashbuckle",
+        "EnterpriseLibrary.Data",
+        "System.Buffers",
+        "Microsoft.Bcl.Memory",
+        "EnterpriseLibrary.Logging.Database",
+        "Serilog.Enrichers.Environment",
+        "Serilog.Sinks.File",
+        "HQY.Legacy.WW.Common.Data",
+        "CommonServiceLocator",
+        "System.Numerics.Vectors",
+        "DevSecOps.Validation"
+      ],
+      "key_classes": [
+        "Global.asax",
+        "PSFPreValidate.asmx",
+        "SwaggerConfig",
+        "WebApiConfig",
+        "PsfPrevalidationAutofacModule",
+        "ApplicationConfigInvalidateCacheController",
+        "DataObjects",
+        "PsfPreValidationControllerV2",
+        "ApiJwtBearerAuthorizationAttribute",
+        "GlobalExceptionFilterAttribute"
+      ],
+      "path": "WebServiceAppl"
+    }
+  ],
+  "endpoints": [
+    {
+      "type": "ASMX Web Service",
+      "file": "WebServiceAppl\\PSFPreValidate.asmx",
+      "method": "ValidatePSFFile",
+      "protocol": "SOAP",
+      "url": "/PSFPreValidate.asmx/ValidatePSFFile"
+    },
+    {
+      "type": "ASMX Web Service",
+      "file": "WebServiceAppl\\PSFPreValidate.asmx",
+      "method": "ValidatePSFFileWLogging",
+      "protocol": "SOAP",
+      "url": "/PSFPreValidate.asmx/ValidatePSFFileWLogging"
+    },
+    {
+      "type": "ASMX Web Service",
+      "file": "WebServiceAppl\\PSFPreValidate.asmx",
+      "method": "ValidatePSFFileWorkFlow",
+      "protocol": "SOAP",
+      "url": "/PSFPreValidate.asmx/ValidatePSFFileWorkFlow"
+    },
+    {
+      "type": "ASMX Web Service",
+      "file": "WebServiceAppl\\PSFPreValidate.asmx",
+      "method": "ValidatePSFFileWorkFlowWithFileID",
+      "protocol": "SOAP",
+      "url": "/PSFPreValidate.asmx/ValidatePSFFileWorkFlowWithFileID"
+    },
+    {
+      "type": "ASMX Web Service",
+      "file": "WebServiceAppl\\PSFPreValidate.asmx",
+      "method": "ValidatePSFFileWithoutLogging",
+      "protocol": "SOAP",
+      "url": "/PSFPreValidate.asmx/ValidatePSFFileWithoutLogging"
+    },
+    {
+      "type": "ASMX Web Service",
+      "file": "WebServiceAppl\\PSFPreValidate.asmx",
+      "method": "ValidatePSFCustomFile",
+      "protocol": "SOAP",
+      "url": "/PSFPreValidate.asmx/ValidatePSFCustomFile"
+    },
+    {
+      "type": "REST API",
+      "file": "WebServiceAppl\\Controllers\\ApplicationConfigInvalidateCacheController.cs",
+      "method": "RefreshApplicationConfigurationCache",
+      "http_method": "GET",
+      "protocol": "HTTP/REST",
+      "returns": "HttpResponseMessage"
+    }
+  ],
+  "database": {
+    "connections": [],
+    "count": 0,
+    "types": [],
+    "evidence": []
+  },
+  "deployment": {
+    "hosting": "IIS (Internet Information Services)",
+    "platform": ".NET Framework",
+    "configs": [
+      "Web.config found - IIS hosting"
+    ],
+    "build_outputs": []
+  },
+  "metrics": {
+    "layer_separation": 90,
+    "modularity": 70,
+    "api_design": 74,
+    "tier_balance": 53,
+    "overall_score": 73
   },
   "summary": {
-    "total_components": 0,
-    "total_files": 0,
-    "total_loc": 0,
-    "architecture_score": 70
+    "total_components": 3,
+    "total_tiers": 5,
+    "total_files": 54,
+    "total_loc": 6969,
+    "endpoint_count": 7,
+    "database_count": 0,
+    "architecture_score": 73,
+    "last_analyzed": "2025-12-05T07:18:29.948299"
   }
 }

@@ -30,51 +30,109 @@ export function renderArchitecture(data) {
         const summary = architecture.summary || {};
         const tiers = architecture.tiers || [];
         const components = architecture.components || [];
+        const appType = architecture.application_type || {};
+        const style = architecture.style || {};
+        const endpoints = architecture.endpoints || [];
+        const deployment = architecture.deployment || {};
+        const metrics = architecture.metrics || {};
         
         // Build HTML
         container.innerHTML = `
         <div class="view-header">
             <h2>🏗️ Architecture Overview</h2>
-            <div class="header-actions">
-                <button class="btn-secondary" onclick="toggle3DView()">Toggle 3D/2D</button>
+        </div>
+
+        <!-- Application Type & Style -->
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; padding: 1.5rem;">
+                <div>
+                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Application Type</h3>
+                    <p style="font-size: 1.25rem; font-weight: 600; color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        ${appType.type || 'Unknown'}
+                    </p>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                        Confidence: <span style="color: ${appType.confidence >= 70 ? '#10b981' : '#f59e0b'}; font-weight: 600;">${appType.confidence || 0}%</span>
+                    </div>
+                    ${appType.evidence && appType.evidence.length > 0 ? `
+                        <ul style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--text-secondary); padding-left: 1.25rem;">
+                            ${appType.evidence.slice(0, 3).map(ev => `<li>${ev}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                </div>
+                <div>
+                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Architecture Style</h3>
+                    <p style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">
+                        ${style.name || 'Unknown'}
+                    </p>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                        ${style.description || ''}
+                    </p>
+                    ${style.characteristics && style.characteristics.length > 0 ? `
+                        <ul style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 1.25rem;">
+                            ${style.characteristics.slice(0, 3).map(ch => `<li>${ch}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                </div>
+                <div>
+                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Deployment</h3>
+                    <div style="margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Hosting:</span>
+                        <span style="font-size: 0.875rem; font-weight: 600; display: block;">${deployment.hosting || 'Unknown'}</span>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Platform:</span>
+                        <span style="font-size: 0.875rem; font-weight: 600; display: block;">${deployment.platform || 'Unknown'}</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Architecture Summary -->
+        <!-- Metrics Dashboard -->
         <div class="glass-card" style="margin-bottom: 2rem;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; padding: 1.5rem;">
-                <div style="text-align: center;">
-                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Architecture Style</h3>
-                    <p style="font-size: 1.5rem; font-weight: 600; color: var(--accent-primary);">
-                        ${architecture.style || 'Unknown'}
-                    </p>
+            <h3 style="margin-bottom: 1rem;">📊 Architecture Metrics</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
+                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Overall Score</div>
+                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.overall_score || 0)};">
+                        ${metrics.overall_score || 0}
+                    </div>
                 </div>
-                <div style="text-align: center;">
-                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Components</h3>
-                    <p style="font-size: 1.5rem; font-weight: 600;">
-                        ${summary.total_components || 0}
-                    </p>
+                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
+                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Layer Separation</div>
+                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.layer_separation || 0)};">
+                        ${metrics.layer_separation || 0}
+                    </div>
                 </div>
-                <div style="text-align: center;">
-                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Total Files</h3>
-                    <p style="font-size: 1.5rem; font-weight: 600;">
-                        ${summary.total_files || 0}
-                    </p>
+                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
+                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Modularity</div>
+                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.modularity || 0)};">
+                        ${metrics.modularity || 0}
+                    </div>
                 </div>
-                <div style="text-align: center;">
-                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Lines of Code</h3>
-                    <p style="font-size: 1.5rem; font-weight: 600;">
-                        ${(summary.total_loc || 0).toLocaleString()}
-                    </p>
+                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
+                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">API Design</div>
+                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.api_design || 0)};">
+                        ${metrics.api_design || 0}
+                    </div>
                 </div>
-                <div style="text-align: center;">
-                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Architecture Score</h3>
-                    <p style="font-size: 1.5rem; font-weight: 600; color: ${getScoreColor(summary.architecture_score)};">
-                        ${summary.architecture_score || 0}/100
-                    </p>
+                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
+                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Tier Balance</div>
+                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.tier_balance || 0)};">
+                        ${metrics.tier_balance || 0}
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- API Endpoints -->
+        ${endpoints.length > 0 ? `
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">🔌 API Endpoints (${endpoints.length})</h3>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    ${endpoints.map(ep => renderEndpointCard(ep)).join('')}
+                </div>
+            </div>
+        ` : ''}
 
         <!-- 3D Architecture Visualization -->
         <div class="glass-card" style="margin-bottom: 2rem;">
@@ -133,32 +191,105 @@ export function renderArchitecture(data) {
  * @returns {string} HTML string
  */
 function renderTierCard(tier) {
+    const locPercentage = tier.loc_percentage || 0;
     return `
-        <div class="glass-card">
-            <h4 style="margin-bottom: 1rem; color: var(--accent-primary);">
-                ${(tier.name || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+        <div class="glass-card" style="transition: transform 0.2s; position: relative;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <h4 style="margin-bottom: 0.75rem; color: var(--accent-primary); font-size: 1.1rem;">
+                ${tier.name || 'Unknown Tier'}
             </h4>
             <div style="margin-bottom: 1rem;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <span style="color: var(--text-secondary);">Files:</span>
+                    <span style="color: var(--text-secondary); font-size: 0.875rem;">Files:</span>
                     <span style="font-weight: 600;">${tier.file_count || 0}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <span style="color: var(--text-secondary);">LOC:</span>
+                    <span style="color: var(--text-secondary); font-size: 0.875rem;">LOC:</span>
                     <span style="font-weight: 600;">${(tier.loc || 0).toLocaleString()}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span style="color: var(--text-secondary);">Path:</span>
-                    <span style="font-size: 0.75rem; color: var(--text-secondary);">${tier.path || 'N/A'}</span>
+            </div>
+            ${tier.technologies && tier.technologies.length > 0 ? `
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Technologies:</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        ${tier.technologies.map(tech => `
+                            <span style="
+                                background: rgba(0, 212, 255, 0.1);
+                                color: var(--accent-primary);
+                                padding: 0.25rem 0.75rem;
+                                border-radius: 12px;
+                                font-size: 0.75rem;
+                                font-weight: 500;
+                            ">${tech}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+            ${tier.key_files && tier.key_files.length > 0 ? `
+                <div style="padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Key Files:</div>
+                    <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.75rem; color: var(--text-secondary);">
+                        ${tier.key_files.slice(0, 5).map(file => `<li style="margin: 0.25rem 0;">${file}</li>`).join('')}
+                        ${tier.key_files.length > 5 ? `<li style="color: var(--accent-primary); margin: 0.25rem 0;">+${tier.key_files.length - 5} more...</li>` : ''}
+                    </ul>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+/**
+ * Render endpoint card
+ * @param {Object} endpoint - Endpoint object
+ * @returns {string} HTML string
+ */
+function renderEndpointCard(endpoint) {
+    const typeColors = {
+        "ASMX Web Service": "#ec4899",
+        "WCF Service": "#8b5cf6",
+        "REST API": "#10b981"
+    };
+    const color = typeColors[endpoint.type] || "#6b7280";
+    
+    return `
+        <div style="
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid ${color};
+            border-radius: 6px;
+            transition: transform 0.2s, background 0.2s;
+        " onmouseover="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.transform='translateX(4px)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.02)'; this.style.transform='translateX(0)'">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">
+                        ${endpoint.method || endpoint.service || 'Unknown'}
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                        📁 ${endpoint.file}
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <span style="
+                        background: ${color}22;
+                        color: ${color};
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 12px;
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        display: inline-block;
+                        margin-bottom: 0.25rem;
+                    ">${endpoint.type}</span>
+                    ${endpoint.http_method ? `
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                            ${endpoint.http_method}
+                        </div>
+                    ` : ''}
                 </div>
             </div>
-            ${tier.directories && tier.directories.length > 0 ? `
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
-                    <strong style="font-size: 0.875rem;">Directories:</strong>
-                    <ul style="margin-top: 0.5rem; padding-left: 1.5rem; font-size: 0.875rem; color: var(--text-secondary);">
-                        ${tier.directories.slice(0, 5).map(dir => `<li>${dir}</li>`).join('')}
-                        ${tier.directories.length > 5 ? `<li style="color: var(--accent-primary);">+${tier.directories.length - 5} more...</li>` : ''}
-                    </ul>
+            ${endpoint.protocol ? `
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                    Protocol: <span style="color: var(--accent-primary);">${endpoint.protocol}</span>
+                    ${endpoint.url ? ` | URL: <code style="background: rgba(0,0,0,0.3); padding: 0.125rem 0.5rem; border-radius: 4px;">${endpoint.url}</code>` : ''}
                 </div>
             ` : ''}
         </div>
