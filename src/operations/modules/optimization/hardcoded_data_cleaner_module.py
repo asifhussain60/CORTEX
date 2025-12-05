@@ -659,7 +659,7 @@ class HardcodedDataCleanerModule(BaseOperationModule):
         violations: List[HardcodedViolation],
         base_path_var: str = 'CORTEX_ROOT'
     ) -> Dict[str, Any]:
-        """
+        r"""
         Automatically fix hardcoded path violations.
         
         Strategy:

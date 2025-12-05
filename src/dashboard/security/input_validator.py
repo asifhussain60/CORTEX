@@ -34,7 +34,7 @@ class ValidationResult:
 
 
 class InputValidator:
-    """
+    r"""
     Security-focused input validation for dashboard operations.
     
     Prevents:
