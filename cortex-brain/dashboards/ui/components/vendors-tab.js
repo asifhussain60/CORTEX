@@ -528,3 +528,172 @@ window.exportVendors = function() {
     console.log('Export vendors');
     alert('Vendors export functionality coming soon!');
 };
+
+/**
+ * Show vendor tooltip with security and integration details
+ * @param {Event} event - Mouse event
+ * @param {Object} vendor - Vendor data
+ * @param {HTMLElement} card - Card element
+ */
+window.showVendorTooltip = function(event, vendor, card) {
+    hideVendorTooltip();
+    
+    const statusConfig = {
+        'configured_active': { color: 'var(--success)', icon: '✅', label: 'Active' },
+        'configured_unused': { color: 'var(--warning)', icon: '⚠️', label: 'Unused' },
+        'not_configured': { color: 'var(--danger)', icon: '❌', label: 'Not Configured' }
+    };
+    
+    const status = statusConfig[vendor.status] || statusConfig.not_configured;
+    const confidence = vendor.detection_confidence || 0;
+    
+    // Generate recommendations based on status
+    let recommendation = '';
+    let securityRisk = '';
+    
+    if (vendor.status === 'configured_active') {
+        recommendation = 'Monitor API usage and credential expiration dates. Ensure all API calls use latest SDK version.';
+        securityRisk = 'Low - Active integration with proper credentials.';
+    } else if (vendor.status === 'configured_unused') {
+        recommendation = '⚠️ <strong>Consider removing</strong> unused credentials to reduce attack surface. Verify no legacy code paths use this integration.';
+        securityRisk = 'Medium - Unused credentials increase security risk.';
+    } else {
+        recommendation = '❌ <strong>Action Required:</strong> Vendor code detected but no credentials found. Either configure credentials or remove unused code.';
+        securityRisk = 'High - Incomplete integration may cause runtime errors.';
+    }
+    
+    const tooltip = document.createElement('div');
+    tooltip.id = 'vendor-tooltip';
+    tooltip.innerHTML = `
+        <div style="
+            position: fixed;
+            background: linear-gradient(135deg, var(--glass-dark) 0%, var(--background-primary) 100%);
+            border: 2px solid ${status.color};
+            border-radius: 12px;
+            padding: 1.25rem;
+            max-width: 450px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            z-index: 10000;
+            animation: tooltipFadeIn 0.2s ease-out;
+        ">
+            <!-- Header -->
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--glass-border);">
+                <div style="font-size: 1.5rem;">${status.icon}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 1.125rem; margin-bottom: 0.25rem;">${vendor.name || 'Unknown Vendor'}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary);">${(vendor.category || 'other').replace('_', ' ')}</div>
+                </div>
+                <div style="
+                    padding: 0.375rem 0.75rem;
+                    border-radius: 8px;
+                    background: ${status.color}22;
+                    color: ${status.color};
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    white-space: nowrap;
+                ">
+                    ${status.label}
+                </div>
+            </div>
+            
+            ${vendor.description ? `
+                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem;">
+                    ${vendor.description}
+                </div>
+            ` : ''}
+            
+            <!-- Metrics Grid -->
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1rem;">
+                ${vendor.integration_points ? `
+                    <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                        <div style="font-size: 1.25rem; font-weight: 600; color: var(--accent-primary);">${vendor.integration_points}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Integration Points</div>
+                    </div>
+                ` : ''}
+                <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 1.25rem; font-weight: 600; color: ${getConfidenceColor(confidence)};">${confidence}%</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Confidence</div>
+                </div>
+                ${vendor.files && vendor.files.length > 0 ? `
+                    <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                        <div style="font-size: 1.25rem; font-weight: 600; color: var(--info);">${vendor.files.length}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Referenced Files</div>
+                    </div>
+                ` : ''}
+                ${vendor.env_vars && vendor.env_vars.length > 0 ? `
+                    <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                        <div style="font-size: 1.25rem; font-weight: 600; color: var(--warning);">${vendor.env_vars.length}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Environment Vars</div>
+                    </div>
+                ` : ''}
+            </div>
+            
+            <!-- Security Risk Assessment -->
+            <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    🛡️ Security Risk
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                    ${securityRisk}
+                </div>
+            </div>
+            
+            ${vendor.last_used ? `
+                <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem;">
+                    <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; color: var(--text-primary);">
+                        🕒 Last Activity
+                    </div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                        ${vendor.last_used}
+                    </div>
+                </div>
+            ` : ''}
+            
+            <!-- Recommendation -->
+            <div style="
+                background: ${status.color}11;
+                border: 1px solid ${status.color};
+                border-radius: 8px;
+                padding: 0.75rem;
+            ">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: ${status.color};">
+                    💡 Recommendation
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                    ${recommendation}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const tooltipRect = tooltip.firstElementChild.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    
+    let left = cardRect.right + 10;
+    let top = cardRect.top;
+    
+    if (left + tooltipRect.width > window.innerWidth) {
+        left = cardRect.left - tooltipRect.width - 10;
+    }
+    
+    if (top + tooltipRect.height > window.innerHeight) {
+        top = window.innerHeight - tooltipRect.height - 10;
+    }
+    
+    if (top < 10) top = 10;
+    
+    tooltip.firstElementChild.style.left = `${left}px`;
+    tooltip.firstElementChild.style.top = `${top}px`;
+};
+
+/**
+ * Hide vendor tooltip
+ * @param {HTMLElement} card - Card element
+ */
+window.hideVendorTooltip = function(card) {
+    const tooltip = document.getElementById('vendor-tooltip');
+    if (tooltip) tooltip.remove();
+};
