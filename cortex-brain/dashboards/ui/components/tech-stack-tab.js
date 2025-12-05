@@ -76,8 +76,47 @@ export function renderTechStack(data) {
             </div>
         </div>
 
+        <!-- How to Read Description -->
+        <div class="glass-card" style="margin-bottom: 2rem; background: linear-gradient(135deg, var(--glass-light) 0%, var(--background-secondary) 100%);">
+            <h3 style="margin-bottom: 1rem;">📋 Technology Stack Status</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                This view shows all technologies detected in your project. Each technology is color-coded by status: 
+                <strong style="color: var(--success);">✅ Current</strong> versions are up-to-date, 
+                <strong style="color: var(--warning);">⚠️ Outdated</strong> versions should be upgraded, and 
+                <strong style="color: var(--danger);">❌ Deprecated</strong> technologies require immediate attention.
+                <strong>Hover over each technology card</strong> to see detailed version information, security vulnerabilities, and upgrade recommendations.
+            </p>
+        </div>
+
+        <!-- Description Panel -->
+        <div style="
+            background: var(--glass-light);
+            border: 1px solid var(--glass-border);
+            border-left: 4px solid var(--accent-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        ">
+            <div style="display: flex; align-items: start; gap: 1rem;">
+                <div style="
+                    font-size: 2rem;
+                    line-height: 1;
+                    opacity: 0.8;
+                ">💡</div>
+                <div style="flex: 1;">
+                    <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                        Technology status indicators show maintenance state and security posture.
+                        <span style="color: var(--success); font-weight: 600;">✅ Current</span> means running the latest stable release (no action needed).
+                        <span style="color: var(--warning); font-weight: 600;">⚠️ Outdated</span> indicates a newer version is available (update recommended for features and fixes).
+                        <span style="color: var(--danger); font-weight: 600;">❌ Deprecated</span> means end-of-life reached (migration required due to security risks).
+                        <strong>Hover over any technology card</strong> for detailed version information, CVE counts, and specific update recommendations.
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Technology Categories -->
-        <div style="display: grid; gap: 2rem;">
+        <div style="display: grid; gap: 2rem; margin-top: 2rem;">
             ${renderTechCategory('Frontend', '🎨', techStack.frontend || [])}
             ${renderTechCategory('Backend', '⚙️', techStack.backend || [])}
             ${renderTechCategory('Database', '💾', techStack.database || [])}
@@ -132,6 +171,30 @@ function renderTechCategory(categoryName, icon, technologies) {
 }
 
 /**
+ * Build technology tooltip explanation based on status
+ * @param {Object} tech - Technology object
+ * @returns {string} Explanation text
+ */
+function buildTechTooltipExplanation(tech) {
+    const status = tech.status || 'current';
+    const version = tech.version || 'N/A';
+    const latest = tech.latest || 'unknown';
+    
+    if (status === 'current') {
+        return `${tech.name} ${version} is the latest stable release. No updates required at this time.`;
+    } else if (status === 'outdated') {
+        if (latest !== 'unknown' && latest !== version) {
+            return `${tech.name} ${version} has a newer version available (${latest}). Consider updating to access latest features and security patches.`;
+        }
+        return `${tech.name} ${version} is outdated. A newer version is available with improvements and bug fixes.`;
+    } else if (status === 'deprecated') {
+        return `${tech.name} ${version} has reached end-of-life and is no longer supported. Plan migration to a supported alternative to avoid security vulnerabilities.`;
+    }
+    
+    return `${tech.name} ${version} - Status information unavailable.`;
+}
+
+/**
  * Render a technology card with hierarchical details
  * @param {Object} tech - Technology object
  * @returns {string} HTML string
@@ -151,13 +214,23 @@ function renderTechCard(tech) {
     // Generate unique ID for collapse functionality
     const cardId = `tech-${tech.name.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`;
     
+    // Build tooltip explanation
+    const explanation = buildTechTooltipExplanation(tech);
+    
     return `
-        <div style="
-            background: var(--glass-light);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1.5rem;
-        ">
+        <div 
+            class="tech-card-hoverable"
+            style="
+                background: var(--glass-light);
+                border: 1px solid var(--glass-border);
+                border-radius: 12px;
+                padding: 1.5rem;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            "
+            onmouseover="showTechTooltip(event, ${JSON.stringify(tech.name).replace(/"/g, '&quot;')}, ${JSON.stringify(tech.version || 'N/A').replace(/"/g, '&quot;')}, ${JSON.stringify(tech.status).replace(/"/g, '&quot;')}, ${tech.cve_count || 0}, ${JSON.stringify(explanation).replace(/"/g, '&quot;')}, this)"
+            onmouseout="hideTechTooltip(this)"
+        >
             <!-- Header -->
             <div style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 1rem;">
                 <div style="flex: 1;">
@@ -492,6 +565,175 @@ function renderFrameworks(frameworks) {
 }
 
 /**
+ * Build tooltip explanation for a technology
+ * @param {Object} tech - Technology object
+ * @returns {string} Explanation text
+ */
+function buildTechTooltipExplanation(tech) {
+    const status = tech.status || 'current';
+    const currentVersion = tech.version || 'N/A';
+    const latestVersion = tech.latest || 'unknown';
+    const cveCount = tech.cve_count || 0;
+    
+    let explanation = '';
+    
+    if (status === 'current') {
+        explanation = `This technology is running the latest version (${currentVersion}). No immediate action required.`;
+        if (cveCount > 0) {
+            explanation += ` However, ${cveCount} CVE${cveCount > 1 ? 's' : ''} detected - review security findings.`;
+        }
+    } else if (status === 'outdated') {
+        explanation = `Currently running version ${currentVersion}, but version ${latestVersion} is available. `;
+        explanation += `Consider upgrading to access new features, performance improvements, and security patches.`;
+        if (cveCount > 0) {
+            explanation += ` ${cveCount} known CVE${cveCount > 1 ? 's' : ''} affect this version - upgrade recommended.`;
+        }
+    } else if (status === 'deprecated') {
+        explanation = `This technology is deprecated and no longer supported. Version ${currentVersion} is running. `;
+        explanation += `Immediate migration to a supported alternative is strongly recommended to maintain security and compatibility.`;
+        if (cveCount > 0) {
+            explanation += ` ${cveCount} critical CVE${cveCount > 1 ? 's' : ''} detected - high security risk.`;
+        }
+    }
+    
+    return explanation;
+}
+
+/**
+ * Show technology tooltip on hover
+ * @param {Event} event - Mouse event
+ * @param {string} name - Technology name
+ * @param {string} version - Current version
+ * @param {string} status - Technology status
+ * @param {number} cveCount - CVE count
+ * @param {string} explanation - Tooltip explanation
+ * @param {HTMLElement} element - Hovered element
+ */
+window.showTechTooltip = function(event, name, version, status, cveCount, explanation, element) {
+    // Add hover effect to card
+    element.style.transform = 'translateY(-4px)';
+    element.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.2)';
+    
+    // Status configuration
+    const statusConfig = {
+        current: { icon: '✅', label: 'Current', color: 'var(--success)' },
+        outdated: { icon: '⚠️', label: 'Outdated', color: 'var(--warning)' },
+        deprecated: { icon: '❌', label: 'Deprecated', color: 'var(--danger)' }
+    };
+    
+    const statusInfo = statusConfig[status] || statusConfig.current;
+    
+    // Remove existing tooltip
+    const existing = document.getElementById('tech-tooltip');
+    if (existing) {
+        existing.remove();
+    }
+    
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.id = 'tech-tooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+        border: 1px solid ${statusInfo.color};
+        border-radius: 12px;
+        padding: 1.25rem;
+        max-width: 400px;
+        z-index: 10000;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        pointer-events: none;
+        animation: tooltipFadeIn 0.2s ease-out;
+        backdrop-filter: blur(10px);
+    `;
+    
+    tooltip.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+            <div style="font-size: 2rem;">${statusInfo.icon}</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">
+                    ${name}
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                    Version: <strong style="color: ${statusInfo.color};">${version}</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${statusInfo.color}22; border-radius: 8px; margin-bottom: 0.75rem;">
+                <span style="font-size: 1.25rem;">${statusInfo.icon}</span>
+                <span style="color: ${statusInfo.color}; font-weight: 600; font-size: 0.875rem;">
+                    ${statusInfo.label}
+                </span>
+            </div>
+            ${cveCount > 0 ? `
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--danger)22; border-radius: 8px; margin-left: 0.5rem;">
+                    <span style="font-size: 1.25rem;">🛡️</span>
+                    <span style="color: var(--danger); font-weight: 600; font-size: 0.875rem;">
+                        ${cveCount} CVE${cveCount > 1 ? 's' : ''}
+                    </span>
+                </div>
+            ` : ''}
+        </div>
+        
+        <div style="color: var(--text-secondary); line-height: 1.6; font-size: 0.875rem;">
+            ${explanation}
+        </div>
+        
+        ${status !== 'current' ? `
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+                <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600;">
+                    💡 Recommended Action
+                </div>
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                    ${status === 'deprecated' 
+                        ? 'Plan immediate migration to a supported alternative technology.' 
+                        : 'Schedule upgrade in next sprint to maintain security and performance.'}
+                </div>
+            </div>
+        ` : ''}
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const rect = element.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    let top = rect.top - tooltipRect.height - 12;
+    
+    // Keep tooltip on screen
+    if (left < 10) left = 10;
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+    }
+    
+    if (top < 10) {
+        top = rect.bottom + 12;
+    }
+    
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+};
+
+/**
+ * Hide technology tooltip
+ * @param {HTMLElement} element - Hovered element
+ */
+window.hideTechTooltip = function(element) {
+    // Remove hover effect
+    element.style.transform = '';
+    element.style.boxShadow = '';
+    
+    // Remove tooltip
+    const tooltip = document.getElementById('tech-tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+};
+
+/**
  * Toggle tech details visibility
  * @param {string} cardId - Card ID
  */
@@ -522,4 +764,170 @@ window.exportTechStack = function() {
     console.log('Export tech stack to CSV');
     // TODO: Implement CSV export
     alert('CSV export functionality coming soon!');
+};
+
+/**
+ * Show technology tooltip with detailed information
+ * @param {Event} event - Mouse event
+ * @param {string} name - Technology name
+ * @param {string} version - Current version
+ * @param {string} status - Technology status
+ * @param {number} cveCount - CVE count
+ * @param {string} explanation - Status explanation
+ * @param {HTMLElement} card - Card element
+ */
+window.showTechTooltip = function(event, name, version, status, cveCount, explanation, card) {
+    // Remove any existing tooltip
+    hideTechTooltip();
+    
+    // Status configurations
+    const statusConfig = {
+        'current': { color: 'var(--success)', icon: '✅', label: 'Current' },
+        'outdated': { color: 'var(--warning)', icon: '⚠️', label: 'Outdated' },
+        'deprecated': { color: 'var(--danger)', icon: '❌', label: 'Deprecated' }
+    };
+    
+    const statusInfo = statusConfig[status] || statusConfig['current'];
+    
+    // Generate recommendation based on status
+    let recommendation = '';
+    if (status === 'current') {
+        recommendation = 'No action needed - you\'re running the recommended version.';
+    } else if (status === 'outdated') {
+        recommendation = 'Update recommended to get latest features, performance improvements, and bug fixes.';
+    } else if (status === 'deprecated') {
+        recommendation = '⚠️ <strong>Action Required:</strong> Plan migration as this technology is no longer supported and may have security vulnerabilities.';
+    }
+    
+    // CVE warning
+    let cveWarning = '';
+    if (cveCount > 0) {
+        cveWarning = `
+            <div style="
+                background: var(--danger)22;
+                border: 1px solid var(--danger);
+                border-radius: 8px;
+                padding: 0.75rem;
+                margin-top: 0.75rem;
+            ">
+                <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--danger); font-weight: 600; margin-bottom: 0.25rem;">
+                    🛡️ Security Alert
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                    ${cveCount} known CVE${cveCount > 1 ? 's' : ''} detected. Review and update immediately to mitigate security risks.
+                </div>
+            </div>
+        `;
+    }
+    
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.id = 'tech-tooltip';
+    tooltip.innerHTML = `
+        <div style="
+            position: fixed;
+            background: linear-gradient(135deg, var(--glass-dark) 0%, var(--background-primary) 100%);
+            border: 2px solid ${statusInfo.color};
+            border-radius: 12px;
+            padding: 1.25rem;
+            max-width: 400px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            z-index: 10000;
+            animation: tooltipFadeIn 0.2s ease-out;
+        ">
+            <!-- Header -->
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--glass-border);">
+                <div style="font-size: 1.5rem;">${statusInfo.icon}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 1.125rem; margin-bottom: 0.25rem;">${name}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary);">Version ${version}</div>
+                </div>
+                <div style="
+                    padding: 0.375rem 0.75rem;
+                    border-radius: 8px;
+                    background: ${statusInfo.color}22;
+                    color: ${statusInfo.color};
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    white-space: nowrap;
+                ">
+                    ${statusInfo.label}
+                </div>
+            </div>
+            
+            <!-- Status Explanation -->
+            <div style="margin-bottom: 1rem;">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    Status Details
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                    ${explanation}
+                </div>
+            </div>
+            
+            <!-- Recommendation -->
+            <div style="
+                background: var(--glass-light);
+                border-radius: 8px;
+                padding: 0.75rem;
+            ">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; color: var(--accent-primary);">
+                    💡 Recommendation
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                    ${recommendation}
+                </div>
+            </div>
+            
+            ${cveWarning}
+        </div>
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const tooltipRect = tooltip.firstElementChild.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    
+    let left = cardRect.right + 10;
+    let top = cardRect.top;
+    
+    // Adjust if tooltip goes off screen
+    if (left + tooltipRect.width > window.innerWidth) {
+        left = cardRect.left - tooltipRect.width - 10;
+    }
+    
+    if (top + tooltipRect.height > window.innerHeight) {
+        top = window.innerHeight - tooltipRect.height - 10;
+    }
+    
+    if (top < 10) {
+        top = 10;
+    }
+    
+    tooltip.firstElementChild.style.left = `${left}px`;
+    tooltip.firstElementChild.style.top = `${top}px`;
+    
+    // Add hover effect to card
+    card.style.borderColor = statusInfo.color;
+    card.style.transform = 'translateY(-4px)';
+    card.style.boxShadow = `0 8px 24px ${statusInfo.color}33`;
+};
+
+/**
+ * Hide technology tooltip
+ * @param {HTMLElement} card - Card element
+ */
+window.hideTechTooltip = function(card) {
+    const tooltip = document.getElementById('tech-tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+    
+    // Reset card styling
+    if (card) {
+        card.style.borderColor = 'var(--glass-border)';
+        card.style.transform = 'translateY(0)';
+        card.style.boxShadow = 'none';
+    }
 };
