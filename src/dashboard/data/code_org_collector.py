@@ -191,33 +191,22 @@ class CodeOrganizationCollector(BaseDataCollector):
     def _get_change_frequency(self, file_path: Path) -> int:
         """
         Get change frequency from git history.
+        Skip git operations to avoid subprocess hanging issues.
         
         Args:
             file_path: Path to file
             
         Returns:
-            Number of commits modifying this file
+            Number of commits modifying this file (currently returns 0)
         """
-        try:
-            result = subprocess.run(
-                ["git", "log", "--oneline", "--", str(file_path)],
-                cwd=str(self.project_root),
-                capture_output=True,
-                text=True,
-                timeout=5
-            )
-            
-            if result.returncode == 0:
-                return len(result.stdout.strip().split('\n')) if result.stdout.strip() else 0
-            
-        except (subprocess.TimeoutExpired, FileNotFoundError, Exception):
-            pass
-        
+        # Disabled git operations due to subprocess hanging issues
+        # Can be re-enabled with GitPython library or proper subprocess handling
         return 0
     
     def _get_last_modified(self, file_path: Path) -> str:
         """
-        Get last modified date from git.
+        Get last modified date from file system.
+        Git operations disabled to avoid subprocess hanging issues.
         
         Args:
             file_path: Path to file
@@ -225,22 +214,7 @@ class CodeOrganizationCollector(BaseDataCollector):
         Returns:
             ISO format date string
         """
-        try:
-            result = subprocess.run(
-                ["git", "log", "-1", "--format=%ai", "--", str(file_path)],
-                cwd=str(self.project_root),
-                capture_output=True,
-                text=True,
-                timeout=5
-            )
-            
-            if result.returncode == 0 and result.stdout.strip():
-                return result.stdout.strip().split()[0]
-            
-        except (subprocess.TimeoutExpired, FileNotFoundError, Exception):
-            pass
-        
-        # Fallback to file system modification time
+        # Use file system modification time (git operations disabled)
         try:
             mtime = file_path.stat().st_mtime
             return datetime.fromtimestamp(mtime).strftime("%Y-%m-%d")
