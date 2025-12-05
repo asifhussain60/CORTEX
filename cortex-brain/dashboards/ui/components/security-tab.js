@@ -156,7 +156,7 @@ export function renderSecurity(data) {
                 color: var(--text-secondary);
                 margin-bottom: 1.5rem;
             ">
-                <strong style="color: var(--accent-primary);">📖 How to Read:</strong> Each card shows a security risk category with evidence-based scoring. 
+                Each card shows a security risk category with evidence-based scoring. 
                 ✅ <strong>Pass (80-100)</strong>: No issues found. 
                 ⚠️ <strong>Warning (60-79)</strong>: Minor issues detected. 
                 ❌ <strong>Fail (<60)</strong>: Critical vulnerabilities require immediate attention. Findings count shows actual issues discovered.
@@ -178,7 +178,7 @@ export function renderSecurity(data) {
                 color: var(--text-secondary);
                 margin-bottom: 1.5rem;
             ">
-                <strong style="color: #10b981;">📖 How to Read:</strong> Shows readiness for major compliance frameworks. 
+                Shows readiness for major compliance frameworks. 
                 ✅ <strong>Ready</strong>: Security posture meets framework requirements. 
                 ⚠️ <strong>Not Ready</strong>: Specific issues listed below prevent certification. Address blockers to achieve compliance.
             </div>

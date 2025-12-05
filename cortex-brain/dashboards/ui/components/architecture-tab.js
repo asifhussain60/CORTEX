@@ -89,38 +89,28 @@ export function renderArchitecture(data) {
 
         <!-- Metrics Dashboard -->
         <div class="glass-card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1rem;">📊 Architecture Metrics</h3>
+            <h3 style="margin-bottom: 0.5rem;">📊 Architecture Metrics</h3>
+            <div style="
+                background: rgba(251, 191, 36, 0.1);
+                border-left: 3px solid #fbbf24;
+                padding: 0.75rem 1rem;
+                border-radius: 6px;
+                font-size: 0.875rem;
+                color: var(--text-secondary);
+                margin-bottom: 1.5rem;
+            ">
+                Architecture quality scores based on industry best practices. 
+                🟢 <strong style="color: #10b981;">80-100 (Excellent)</strong>: Well-architected. 
+                🟡 <strong style="color: #fbbf24;">60-79 (Good)</strong>: Minor improvements needed. 
+                🔴 <strong style="color: #ef4444;"><60 (Needs Work)</strong>: Significant refactoring recommended. 
+                <strong>Hover over each card</strong> to see detailed explanations.
+            </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
-                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Overall Score</div>
-                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.overall_score || 0)};">
-                        ${metrics.overall_score || 0}
-                    </div>
-                </div>
-                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
-                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Layer Separation</div>
-                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.layer_separation || 0)};">
-                        ${metrics.layer_separation || 0}
-                    </div>
-                </div>
-                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
-                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Modularity</div>
-                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.modularity || 0)};">
-                        ${metrics.modularity || 0}
-                    </div>
-                </div>
-                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
-                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">API Design</div>
-                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.api_design || 0)};">
-                        ${metrics.api_design || 0}
-                    </div>
-                </div>
-                <div style="text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px;">
-                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Tier Balance</div>
-                    <div style="font-size: 2rem; font-weight: 600; color: ${getScoreColor(metrics.tier_balance || 0)};">
-                        ${metrics.tier_balance || 0}
-                    </div>
-                </div>
+                ${renderArchitectureMetricCard('Overall Score', metrics.overall_score || 0, metrics.overall_explanation || 'Weighted average of all architecture quality metrics.')}
+                ${renderArchitectureMetricCard('Layer Separation', metrics.layer_separation || 0, metrics.layer_separation_explanation || 'Measures how well tiers are separated with clear boundaries and minimal cross-layer dependencies.')}
+                ${renderArchitectureMetricCard('Modularity', metrics.modularity || 0, metrics.modularity_explanation || 'Evaluates component independence, reusability, and adherence to single responsibility principle.')}
+                ${renderArchitectureMetricCard('API Design', metrics.api_design || 0, metrics.api_design_explanation || 'Assesses endpoint consistency, RESTful principles, proper HTTP methods, and clear naming conventions.')}
+                ${renderArchitectureMetricCard('Tier Balance', metrics.tier_balance || 0, metrics.tier_balance_explanation || 'Checks if code is evenly distributed across tiers, avoiding bloated business logic or thin service layers.')}
             </div>
         </div>
 
@@ -170,7 +160,22 @@ export function renderArchitecture(data) {
 
         <!-- Component Dependency Graph -->
         <div class="glass-card">
-            <h3 style="margin-bottom: 1rem;">🔗 Component Dependencies</h3>
+            <h3 style="margin-bottom: 0.5rem;">🔗 Component Dependencies</h3>
+            <div style="
+                background: rgba(139, 92, 246, 0.1);
+                border-left: 3px solid #8b5cf6;
+                padding: 0.75rem 1rem;
+                border-radius: 6px;
+                font-size: 0.875rem;
+                color: var(--text-secondary);
+                margin-bottom: 1.5rem;
+            ">
+                Interactive force-directed graph showing how components depend on each other. 
+                <strong style="color: #8b5cf6;">Drag nodes</strong> to rearrange the layout. 
+                <strong style="color: #8b5cf6;">Node size</strong> represents lines of code. 
+                <strong style="color: #8b5cf6;">Lines</strong> show direct dependencies. 
+                Circular dependencies and tight coupling indicate potential refactoring opportunities.
+            </div>
             <div id="component-graph" style="width: 100%; height: 600px;"></div>
             <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -311,6 +316,127 @@ function renderEndpointCard(endpoint) {
         </div>
     `;
 }
+
+/**
+ * Render architecture metric card with hover tooltip
+ * @param {string} label - Metric label
+ * @param {number} score - Metric score (0-100)
+ * @param {string} explanation - Detailed explanation
+ * @returns {string} HTML string
+ */
+function renderArchitectureMetricCard(label, score, explanation) {
+    const color = getScoreColor(score);
+    return `
+        <div class="metric-card" style="
+            position: relative;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            cursor: help;
+            transition: all 0.3s ease;
+        " 
+        onmouseover="showMetricTooltip(event, '${label.replace(/'/g, "\\'")}', ${score}, '${explanation.replace(/'/g, "\\'")}', this)"
+        onmouseout="hideMetricTooltip(this)">
+            <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                ${label}
+            </div>
+            <div style="font-size: 2rem; font-weight: 600; color: ${color};">
+                ${score}
+            </div>
+            <div style="
+                margin-top: 0.5rem;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 2px;
+                overflow: hidden;
+            ">
+                <div style="
+                    height: 100%;
+                    width: ${score}%;
+                    background: ${color};
+                    transition: width 0.5s ease;
+                "></div>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Show metric tooltip on hover
+ */
+window.showMetricTooltip = function(event, label, score, explanation, element) {
+    // Enhanced hover effect
+    element.style.background = 'rgba(255, 255, 255, 0.08)';
+    element.style.transform = 'translateY(-4px)';
+    element.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)';
+    
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.id = 'metric-tooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        background: linear-gradient(135deg, rgba(26, 31, 58, 0.98) 0%, rgba(10, 14, 39, 0.98) 100%);
+        color: var(--text-primary);
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+        z-index: 10000;
+        max-width: 350px;
+        border: 1px solid ${getScoreColor(score)}44;
+        backdrop-filter: blur(10px);
+        pointer-events: none;
+        animation: tooltipFadeIn 0.2s ease-out;
+    `;
+    
+    const statusEmoji = score >= 80 ? '🟢' : score >= 60 ? '🟡' : '🔴';
+    const statusText = score >= 80 ? 'Excellent' : score >= 60 ? 'Good' : 'Needs Work';
+    
+    tooltip.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+            <div style="font-size: 2rem;">${statusEmoji}</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; font-size: 1rem; color: var(--accent-primary);">${label}</div>
+                <div style="font-size: 0.875rem; color: ${getScoreColor(score)}; font-weight: 600;">
+                    ${score}/100 - ${statusText}
+                </div>
+            </div>
+        </div>
+        <div style="font-size: 0.875rem; line-height: 1.6; color: var(--text-secondary);">
+            ${explanation}
+        </div>
+        ${score < 80 ? `
+            <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.75rem; color: #fbbf24;">
+                💡 <strong>Tip:</strong> ${score < 60 ? 'Consider significant refactoring to improve this metric.' : 'Minor adjustments can improve this score.'}
+            </div>
+        ` : ''}
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip near cursor
+    const x = event.clientX + 15;
+    const y = event.clientY + 15;
+    
+    // Ensure tooltip stays on screen
+    const rect = tooltip.getBoundingClientRect();
+    tooltip.style.left = (x + rect.width > window.innerWidth ? window.innerWidth - rect.width - 10 : x) + 'px';
+    tooltip.style.top = (y + rect.height > window.innerHeight ? window.innerHeight - rect.height - 10 : y) + 'px';
+};
+
+/**
+ * Hide metric tooltip
+ */
+window.hideMetricTooltip = function(element) {
+    element.style.background = 'rgba(255, 255, 255, 0.02)';
+    element.style.transform = 'translateY(0)';
+    element.style.boxShadow = 'none';
+    
+    const tooltip = document.getElementById('metric-tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+};
 
 /**
  * Get color based on score
@@ -561,29 +687,74 @@ function initComponentGraph(components) {
         .attr('stroke-width', 2)
         .attr('opacity', 0.6);
 
-    const node = svg.append('g')
-        .selectAll('circle')
+    // Create node groups for better interaction
+    const nodeGroup = svg.append('g')
+        .selectAll('g')
         .data(nodes)
         .enter()
-        .append('circle')
-        .attr('r', d => Math.sqrt(d.loc) / 5 + 10)
-        .attr('fill', d => colorMap[d.tier] || colorMap.other)
+        .append('g')
         .style('cursor', 'pointer')
         .call(d3.drag()
             .on('start', dragstarted)
             .on('drag', dragged)
             .on('end', dragended));
-
-    const label = svg.append('g')
-        .selectAll('text')
-        .data(nodes)
-        .enter()
-        .append('text')
+    
+    // Add circles with glow effect
+    nodeGroup.append('circle')
+        .attr('r', d => Math.sqrt(d.loc) / 5 + 10)
+        .attr('fill', d => colorMap[d.tier] || colorMap.other)
+        .attr('stroke', d => colorMap[d.tier] || colorMap.other)
+        .attr('stroke-width', 2)
+        .attr('opacity', 0.9)
+        .on('mouseover', function(event, d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('r', Math.sqrt(d.loc) / 5 + 15)
+                .attr('stroke-width', 3);
+            
+            // Show info tooltip
+            showNodeInfo(event, d);
+        })
+        .on('mouseout', function(event, d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('r', Math.sqrt(d.loc) / 5 + 10)
+                .attr('stroke-width', 2);
+            
+            hideNodeInfo();
+        });
+    
+    // Add labels with background for readability
+    const labelGroup = nodeGroup.append('g');
+    
+    // Background rect for text
+    labelGroup.append('rect')
+        .attr('fill', 'rgba(10, 14, 39, 0.9)')
+        .attr('rx', 4)
+        .attr('ry', 4)
+        .attr('x', d => -d.id.length * 3.5)
+        .attr('y', -22)
+        .attr('width', d => d.id.length * 7)
+        .attr('height', 16);
+    
+    // Text label
+    labelGroup.append('text')
         .text(d => d.id)
-        .attr('font-size', '12px')
+        .attr('font-size', '11px')
+        .attr('font-weight', '600')
         .attr('fill', '#e2e8f0')
         .attr('text-anchor', 'middle')
-        .attr('dy', '.35em');
+        .attr('dy', -10);
+    
+    // LOC indicator
+    labelGroup.append('text')
+        .text(d => `${d.loc} LOC`)
+        .attr('font-size', '9px')
+        .attr('fill', '#94a3b8')
+        .attr('text-anchor', 'middle')
+        .attr('dy', 25);
 
     simulation.on('tick', () => {
         link
@@ -592,14 +763,54 @@ function initComponentGraph(components) {
             .attr('x2', d => d.target.x)
             .attr('y2', d => d.target.y);
 
-        node
-            .attr('cx', d => d.x)
-            .attr('cy', d => d.y);
-
-        label
-            .attr('x', d => d.x)
-            .attr('y', d => d.y);
+        nodeGroup
+            .attr('transform', d => `translate(${d.x},${d.y})`);
     });
+    
+    // Node info tooltip functions
+    function showNodeInfo(event, d) {
+        const tooltip = document.createElement('div');
+        tooltip.id = 'node-info-tooltip';
+        tooltip.style.cssText = `
+            position: fixed;
+            background: linear-gradient(135deg, rgba(26, 31, 58, 0.98) 0%, rgba(10, 14, 39, 0.98) 100%);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            border: 1px solid ${colorMap[d.tier] || colorMap.other}44;
+            backdrop-filter: blur(10px);
+            pointer-events: none;
+            font-size: 0.875rem;
+        `;
+        
+        tooltip.innerHTML = `
+            <div style="font-weight: 600; margin-bottom: 0.5rem; color: ${colorMap[d.tier] || colorMap.other};">
+                ${d.id}
+            </div>
+            <div style="color: var(--text-secondary); font-size: 0.8rem;">
+                <div>📊 LOC: <strong style="color: var(--text-primary);">${d.loc.toLocaleString()}</strong></div>
+                <div>🏷️ Tier: <strong style="color: ${colorMap[d.tier] || colorMap.other};">${d.tier}</strong></div>
+            </div>
+        `;
+        
+        document.body.appendChild(tooltip);
+        
+        const x = event.pageX + 15;
+        const y = event.pageY + 15;
+        const rect = tooltip.getBoundingClientRect();
+        
+        tooltip.style.left = (x + rect.width > window.innerWidth ? window.innerWidth - rect.width - 10 : x) + 'px';
+        tooltip.style.top = (y + rect.height > window.innerHeight ? window.innerHeight - rect.height - 10 : y) + 'px';
+    }
+    
+    function hideNodeInfo() {
+        const tooltip = document.getElementById('node-info-tooltip');
+        if (tooltip) {
+            tooltip.remove();
+        }
+    }
 
     function dragstarted(event, d) {
         if (!event.active) simulation.alphaTarget(0.3).restart();
