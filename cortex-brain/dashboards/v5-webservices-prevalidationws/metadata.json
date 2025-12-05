@@ -2,10 +2,10 @@
   "app_name": "V5-WebServices-PrevalidationWS",
   "app_type": "external",
   "version": "1.0.0",
-  "last_updated": "2025-12-05T05:37:36.139517",
-  "last_scan": "2025-12-05T05:37:36.139525",
-  "scan_duration_seconds": 20.02,
-  "collection_time_seconds": 19.87,
+  "last_updated": "2025-12-05T06:56:14.842630",
+  "last_scan": "2025-12-05T06:56:14.842647",
+  "scan_duration_seconds": 14.02,
+  "collection_time_seconds": 13.94,
   "parallel_execution": true,
   "collectors": 6
 }

@@ -169,6 +169,9 @@ async function loadData(source) {
         appState.error = null;
         appState.loading = false;
         
+        // Store data globally for component access (e.g., vulnerability details)
+        window.currentDashboardData = appState.data;
+        
         console.log('Data loaded successfully:', appState.data);
         
     } catch (error) {

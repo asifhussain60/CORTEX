@@ -116,8 +116,7 @@
       "metadata": {
         "server": "LABDEV1013",
         "source": "web.config",
-        "evidence": "Found in web.config (active config, user: ww_ops) ⚠️ PASSWORD EXPOSED IN CONFIG",
-        "security_risk": true,
+        "evidence": "Found in web.config (active config, user: ww_ops)",
         "user": "ww_ops"
       }
     }
@@ -128,6 +127,6 @@
     "current_count": 1,
     "outdated_count": 2,
     "deprecated_count": 0,
-    "last_scan": "2025-12-05T05:37:18.512568"
+    "last_scan": "2025-12-05T06:56:02.295244"
   }
 }

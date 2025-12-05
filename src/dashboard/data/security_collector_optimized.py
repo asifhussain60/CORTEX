@@ -38,35 +38,75 @@ class SecurityCollectorOptimized(BaseDataCollector):
     
     def collect(self) -> Optional[Dict[str, Any]]:
         """
-        Collect security data with optimizations.
+        Collect security data with deep .NET-specific scanning.
         
         Returns:
-            Dict with keys: overall_score, categories, vulnerabilities, last_scan
-            Returns minimal structure if no data found.
+            Dict with comprehensive security findings
         """
-        self.logger.info("Collecting security data (optimized)...")
+        self.logger.info("Starting comprehensive .NET security scan...")
         
-        # Collect vulnerability data with timeout
-        vuln_data = self._collect_vulnerabilities_fast()
+        # Import scanning methods from main SecurityCollector
+        from src.dashboard.data.security_collector import SecurityCollector
         
-        # Calculate category scores with limited scanning
-        categories = self._calculate_category_scores_fast(vuln_data)
+        # Create temporary instance for scanning
+        scanner = SecurityCollector(self.project_root)
+        
+        # Use all the enhanced scanning methods
+        vuln_findings = scanner._scan_for_vulnerabilities()
+        hardcoded_secrets = scanner._scan_hardcoded_secrets()
+        config_issues = scanner._scan_configuration_issues()
+        dependency_vulns = scanner._scan_dependency_vulnerabilities()
+        
+        # Calculate vulnerability counts
+        vuln_data = {
+            "critical": len([f for f in vuln_findings if f.get("severity") == "critical"]),
+            "high": len([f for f in vuln_findings if f.get("severity") == "high"]),
+            "medium": len([f for f in vuln_findings if f.get("severity") == "medium"]),
+            "low": len([f for f in vuln_findings if f.get("severity") == "low"])
+        }
+        
+        # Compliance readiness with evidence
+        compliance_data = scanner._assess_compliance_readiness(
+            vuln_findings, hardcoded_secrets, config_issues
+        )
+        
+        # Calculate category scores with details
+        categories = scanner._calculate_category_scores_detailed(
+            vuln_findings, hardcoded_secrets, config_issues, dependency_vulns
+        )
+        
+        # OWASP compliance with actual findings
+        owasp_compliance = scanner._check_owasp_compliance_detailed(
+            vuln_findings, hardcoded_secrets, config_issues, dependency_vulns
+        )
         
         # Calculate overall score
-        overall_score = self._calculate_overall_score(categories, vuln_data)
+        overall_score = self._calculate_overall_score_detailed(categories, vuln_data)
         
         security_data = {
             "overall_score": overall_score,
             "last_scan": datetime.now().isoformat(),
-            "categories": [
-                {"name": cat_name, "score": cat_data["score"], "status": self._get_status(cat_data["score"])}
-                for cat_name, cat_data in categories.items()
-            ],
-            "vulnerabilities": self._format_vulnerabilities(vuln_data),
-            "scan_mode": "fast"
+            "categories": categories,
+            "vulnerabilities": vuln_data,
+            "owasp_top_10": {
+                "categories": owasp_compliance.get("categories", []),
+                "version": owasp_compliance.get("version", "2025"),
+                "overall_compliance": owasp_compliance.get("overall_compliance", 0),
+                "last_updated": owasp_compliance.get("last_updated", datetime.now().isoformat())
+            },
+            "compliance": compliance_data,
+            "findings": {
+                "vulnerabilities": vuln_findings[:20],  # Top 20
+                "hardcoded_secrets": hardcoded_secrets[:10],  # Top 10
+                "config_issues": config_issues[:15],  # Top 15
+                "dependency_vulns": dependency_vulns[:10]  # Top 10
+            },
+            "scan_mode": "deep"
         }
         
-        self.logger.info(f"Security scan complete. Overall score: {overall_score}")
+        self.logger.info(f"Security scan complete. Score: {overall_score}, "
+                        f"Findings: {len(vuln_findings)} vulns, {len(hardcoded_secrets)} secrets, "
+                        f"{len(config_issues)} config issues")
         return security_data
     
     def _collect_vulnerabilities_fast(self) -> Dict[str, int]:
@@ -232,6 +272,19 @@ class SecurityCollectorOptimized(BaseDataCollector):
                     continue
         
         return False
+    
+    def _calculate_overall_score_detailed(self, categories: List[Dict], vuln_data: Dict[str, int]) -> int:
+        """Calculate overall security score from detailed categories."""
+        # Calculate average from categories
+        category_scores = [cat["score"] for cat in categories]
+        avg_score = sum(category_scores) / len(category_scores) if category_scores else 50
+        
+        # Penalty for critical vulnerabilities
+        avg_score -= vuln_data.get("critical", 0) * 15
+        avg_score -= vuln_data.get("high", 0) * 7
+        avg_score -= vuln_data.get("medium", 0) * 2
+        
+        return max(0, min(100, int(avg_score)))
     
     def _calculate_overall_score(self, categories: Dict[str, Dict], vuln_data: Dict[str, int]) -> int:
         """Calculate overall security score."""

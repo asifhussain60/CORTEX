@@ -270,9 +270,46 @@
             to { transform: rotate(360deg); }
         }
         
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         .loading-text {
             margin-top: 1rem;
             color: var(--text-secondary);
+        }
+        
+        /* Vulnerability Card Hover Effects */
+        .vuln-card {
+            position: relative;
+        }
+        
+        .vuln-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        .vuln-card[data-severity="critical"]:hover {
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4) !important;
+        }
+        
+        .vuln-card[data-severity="high"]:hover {
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4) !important;
+        }
+        
+        .vuln-card[data-severity="medium"]:hover {
+            box-shadow: 0 8px 24px rgba(251, 191, 36, 0.4) !important;
+        }
+        
+        .vuln-card[data-severity="low"]:hover {
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4) !important;
         }
         
         /* Error State */
