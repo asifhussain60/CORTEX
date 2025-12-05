@@ -600,6 +600,291 @@ class AlignUtility:
                 severity="ERROR"
             )
     
+    def validate_feature_discovery(self) -> ValidationResult:
+        """Comprehensive feature discovery across 11 categories (admin context only)."""
+        try:
+            # Skip in user context
+            if self.context_type != "admin":
+                return ValidationResult(
+                    check_name="Feature Discovery",
+                    passed=True,
+                    message="Skipped in user context",
+                    severity="INFO"
+                )
+            
+            # Run comprehensive discovery
+            discovered = self.discover_all_features()
+            
+            # Calculate totals
+            category_counts = {}
+            total_features = 0
+            
+            for category, items in discovered.items():
+                if isinstance(items, list):
+                    count = len(items)
+                elif isinstance(items, dict):
+                    if all(isinstance(v, list) for v in items.values()):
+                        # Dashboard structure
+                        count = sum(len(v) for v in items.values())
+                    else:
+                        # YAML data
+                        count = len(items)
+                else:
+                    count = 0
+                
+                category_counts[category] = count
+                total_features += count
+            
+            # Format summary
+            summary_parts = []
+            for category, count in category_counts.items():
+                if count > 0:
+                    summary_parts.append(f"{category}={count}")
+            
+            summary = ", ".join(summary_parts)
+            
+            return ValidationResult(
+                check_name="Feature Discovery",
+                passed=True,
+                message=f"{total_features} features across 11 categories",
+                details=summary,
+                severity="INFO"
+            )
+        
+        except Exception as e:
+            return ValidationResult(
+                check_name="Feature Discovery",
+                passed=False,
+                message=f"Discovery error: {str(e)}",
+                severity="WARNING"
+            )
+    
+    def validate_feature_wiring(self) -> ValidationResult:
+        """
+        Validate that discovered features are properly wired into CORTEX.
+        
+        Checks wiring for:
+        - Orchestrators (response-templates.yaml)
+        - Agents (response-templates.yaml)
+        - Plugins (plugin_registry.py)
+        - Operation Modules (cortex-operations.yaml)
+        - Workflows (cortex-operations.yaml or response-templates.yaml)
+        - Scripts (cortex-operations.yaml for user-facing)
+        - Dashboards (dashboard operation exists)
+        - Templates (all operations have templates)
+        - Operations (all operations registered)
+        
+        Returns:
+            ValidationResult with wiring status
+        """
+        try:
+            # Skip in user context
+            if self.context_type != "admin":
+                return ValidationResult(
+                    check_name="Feature Wiring",
+                    passed=True,
+                    message="Skipped in user context",
+                    severity="INFO"
+                )
+            
+            discovered = self.discover_all_features()
+            unwired = []
+            wired_counts = {}
+            total_counts = {}
+            
+            # 1. Check Orchestrators
+            orchestrators = discovered.get('orchestrators', [])
+            total_counts['orchestrators'] = len(orchestrators)
+            wired_count = 0
+            for orch_path in orchestrators:
+                if self.check_wiring_in_templates(orch_path.stem):
+                    wired_count += 1
+                else:
+                    unwired.append(f"Orchestrator: {orch_path.stem}")
+            wired_counts['orchestrators'] = wired_count
+            
+            # 2. Check Agents
+            agents = discovered.get('agents', [])
+            total_counts['agents'] = len(agents)
+            wired_count = 0
+            for agent_path in agents:
+                if self.check_wiring_in_templates(agent_path.stem):
+                    wired_count += 1
+                else:
+                    unwired.append(f"Agent: {agent_path.stem}")
+            wired_counts['agents'] = wired_count
+            
+            # 3. Check Plugins
+            plugins = discovered.get('plugins', [])
+            total_counts['plugins'] = len(plugins)
+            wired_count = 0
+            for plugin_path in plugins:
+                if self.check_plugin_registration(plugin_path.stem):
+                    wired_count += 1
+                else:
+                    unwired.append(f"Plugin: {plugin_path.stem}")
+            wired_counts['plugins'] = wired_count
+            
+            # 4. Check Operation Modules
+            op_modules = discovered.get('operation_modules', [])
+            total_counts['operation_modules'] = len(op_modules)
+            wired_count = 0
+            for module_path in op_modules:
+                if self.check_operation_module_linkage(module_path.stem):
+                    wired_count += 1
+                else:
+                    unwired.append(f"Operation Module: {module_path.stem}")
+            wired_counts['operation_modules'] = wired_count
+            
+            # 5. Check Workflows
+            workflows = discovered.get('workflows', {})
+            total_counts['workflows'] = len(workflows)
+            wired_count = 0
+            for workflow_name in workflows.keys():
+                if self.check_workflow_triggers(workflow_name):
+                    wired_count += 1
+                else:
+                    unwired.append(f"Workflow: {workflow_name}")
+            wired_counts['workflows'] = wired_count
+            
+            # 6. Check Scripts (user-facing only)
+            scripts = discovered.get('scripts', [])
+            user_facing_scripts = [
+                'cortex-upgrade', 'deploy_cortex', 'validate_deployment',
+                'brain_transfer_cli', 'initialize_databases'
+            ]
+            user_facing_count = sum(1 for s in scripts if any(uf in s.stem for uf in user_facing_scripts))
+            total_counts['scripts'] = user_facing_count
+            wired_count = 0
+            for script_path in scripts:
+                if any(uf in script_path.stem for uf in user_facing_scripts):
+                    if self.check_script_operation_linkage(script_path.stem):
+                        wired_count += 1
+                    else:
+                        unwired.append(f"Script: {script_path.stem}")
+            wired_counts['scripts'] = wired_count
+            
+            # 7. Check Dashboards
+            dashboards = discovered.get('dashboards', {})
+            ui_pages = dashboards.get('ui_pages', [])
+            total_counts['dashboards'] = len(ui_pages)
+            # All dashboards share one operation, so if it exists, all are accessible
+            dashboard_op_exists = self.check_dashboard_accessibility('dashboard')
+            wired_counts['dashboards'] = len(ui_pages) if dashboard_op_exists else 0
+            if not dashboard_op_exists and len(ui_pages) > 0:
+                unwired.append(f"Dashboards: No 'dashboard' operation found ({len(ui_pages)} pages)")
+            
+            # Calculate overall wiring health
+            total_checkable = sum(total_counts.values())
+            total_wired = sum(wired_counts.values())
+            wiring_percentage = (total_wired / total_checkable * 100) if total_checkable > 0 else 100.0
+            
+            # Determine pass/fail
+            critical_unwired = len([u for u in unwired if 'Orchestrator:' in u or 'Agent:' in u or 'Plugin:' in u])
+            passed = critical_unwired == 0 and wiring_percentage >= 80.0
+            
+            if not passed:
+                severity = "ERROR" if critical_unwired > 0 else "WARNING"
+                message = f"{len(unwired)} features not wired ({wiring_percentage:.0f}% wiring coverage)"
+                details = "; ".join(unwired[:10])  # Show first 10
+            else:
+                severity = "INFO"
+                message = f"All critical features wired ({wiring_percentage:.0f}% coverage)"
+                details = ", ".join([f"{k}={v}/{total_counts[k]}" for k, v in wired_counts.items()])
+            
+            return ValidationResult(
+                check_name="Feature Wiring",
+                passed=passed,
+                message=message,
+                details=details,
+                severity=severity
+            )
+        
+        except Exception as e:
+            return ValidationResult(
+                check_name="Feature Wiring",
+                passed=False,
+                message=f"Wiring validation error: {str(e)}",
+                severity="WARNING"
+            )
+    
+    def scan_directory(
+        self, 
+        directory_path: str, 
+        pattern: str = "*.py", 
+        exclude: List[str] = None
+    ) -> List[Path]:
+        """
+        Scan directory for files matching pattern.
+        
+        Args:
+            directory_path: Relative path from root (e.g., 'src/plugins/')
+            pattern: Glob pattern to match (e.g., '*_plugin.py')
+            exclude: List of paths to exclude (e.g., ['__pycache__/', '_archive/'])
+        
+        Returns:
+            List of Path objects matching pattern
+        """
+        try:
+            base_path = self.root_path / directory_path if not Path(directory_path).is_absolute() else Path(directory_path)
+            
+            if not base_path.exists():
+                return []
+            
+            # Get all matching files
+            matches = list(base_path.rglob(pattern))
+            
+            # Apply exclusions
+            if exclude:
+                filtered = []
+                for match in matches:
+                    rel_path = str(match.relative_to(base_path))
+                    if not any(excl in rel_path for excl in exclude):
+                        filtered.append(match)
+                return filtered
+            
+            return matches
+        
+        except Exception as e:
+            logger.warning(f"Error scanning {directory_path}: {e}")
+            return []
+    
+    def scan_yaml(self, yaml_path: str) -> Dict[str, Any]:
+        """
+        Scan YAML file for feature metadata.
+        
+        Args:
+            yaml_path: Path to YAML file (supports glob patterns like 'workflows/*.yaml')
+        
+        Returns:
+            Dictionary of parsed YAML data or empty dict on error
+        """
+        try:
+            # Handle glob patterns
+            if '*' in yaml_path:
+                yaml_files = list(self.root_path.glob(yaml_path))
+                combined_data = {}
+                for yaml_file in yaml_files:
+                    with open(yaml_file, 'r', encoding='utf-8') as f:
+                        data = yaml.safe_load(f)
+                        if isinstance(data, dict):
+                            combined_data[yaml_file.stem] = data
+                return combined_data
+            
+            # Single file
+            yaml_file = self.root_path / yaml_path if not Path(yaml_path).is_absolute() else Path(yaml_path)
+            
+            if not yaml_file.exists():
+                return {}
+            
+            with open(yaml_file, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+                return data if isinstance(data, dict) else {}
+        
+        except Exception as e:
+            logger.warning(f"Error scanning YAML {yaml_path}: {e}")
+            return {}
+    
     def discover_python_modules(self) -> Tuple[List[Path], List[Path]]:
         """
         Discover Python orchestrators and agents.
@@ -637,6 +922,100 @@ class AlignUtility:
                             agent_paths.append(py_file)
         
         return orchestrator_paths, agent_paths
+    
+    def discover_all_features(self) -> Dict[str, Any]:
+        """
+        Comprehensive feature discovery across all 11 CORTEX categories.
+        
+        Returns:
+            Dictionary mapping feature categories to discovered items:
+            {
+                'orchestrators': List[Path],
+                'agents': List[Path],
+                'operations': Dict (from YAML),
+                'templates': Dict (from YAML),
+                'plugins': List[Path],
+                'scripts': List[Path],
+                'operation_modules': List[Path],
+                'workflows': Dict (from YAML),
+                'brain_operations': List[Path],
+                'dashboards': Dict[str, List[Path]],
+                'governance_rules': List[Path]
+            }
+        """
+        discovered = {}
+        
+        try:
+            # Existing scans (code-based)
+            orchestrator_paths, agent_paths = self.discover_python_modules()
+            discovered['orchestrators'] = orchestrator_paths
+            discovered['agents'] = agent_paths
+            
+            # Existing scans (YAML-based)
+            discovered['operations'] = self.scan_yaml('cortex-operations.yaml')
+            discovered['templates'] = self.scan_yaml('cortex-brain/response-templates.yaml')
+            
+            # NEW: Plugins (code-based)
+            discovered['plugins'] = self.scan_directory(
+                'src/plugins/', 
+                pattern='*_plugin.py'
+            )
+            
+            # NEW: Scripts (utility-based) - exclude archive and temp
+            discovered['scripts'] = self.scan_directory(
+                'scripts/', 
+                pattern='*.py',
+                exclude=['_archive/', 'temp/', '__pycache__/', 'completions/', 'misc/']
+            )
+            
+            # NEW: Operation modules (implementation-based)
+            discovered['operation_modules'] = self.scan_directory(
+                'src/operations/modules/', 
+                pattern='*_module.py'
+            )
+            
+            # NEW: Workflows (YAML-based)
+            discovered['workflows'] = self.scan_yaml('workflows/*.yaml')
+            
+            # NEW: Brain operations (data-based)
+            discovered['brain_operations'] = self.scan_directory(
+                'cortex-brain/operations/', 
+                pattern='*.json'
+            )
+            
+            # NEW: Dashboards (hybrid - UI + code)
+            discovered['dashboards'] = {
+                'ui_pages': self.scan_directory(
+                    'cortex-brain/dashboards/ui/', 
+                    pattern='*.html'
+                ),
+                'adapters': self.scan_directory(
+                    'cortex-brain/dashboards/', 
+                    pattern='*_adapter.py'
+                )
+            }
+            
+            # NEW: Tier 0 governance (code-based)
+            discovered['governance_rules'] = self.scan_directory(
+                'src/tier0/', 
+                pattern='*.py',
+                exclude=['__init__.py', '__pycache__/']
+            )
+            
+            # Log discovery summary
+            total_features = sum(
+                len(v) if isinstance(v, list) else 
+                (sum(len(vv) for vv in v.values()) if isinstance(v, dict) and all(isinstance(vv, list) for vv in v.values()) else 1)
+                for v in discovered.values()
+            )
+            
+            logger.info(f"Feature discovery complete: {total_features} features across 11 categories")
+            
+            return discovered
+        
+        except Exception as e:
+            logger.error(f"Error in feature discovery: {e}", exc_info=True)
+            return discovered
     
     def check_wiring_in_templates(self, module_name: str) -> bool:
         """
@@ -676,6 +1055,171 @@ class AlignUtility:
         
         except Exception as e:
             logger.warning(f"Error checking wiring for {module_name}: {e}")
+            return False
+    
+    def check_plugin_registration(self, plugin_name: str) -> bool:
+        """
+        Check if plugin is registered in plugin_registry.py.
+        
+        Args:
+            plugin_name: Name of plugin (e.g., 'performance_telemetry_plugin')
+            
+        Returns:
+            True if registered, False otherwise
+        """
+        try:
+            # Check if plugin_registry.py imports the plugin
+            registry_file = self.root_path / "src" / "plugins" / "plugin_registry.py"
+            
+            if not registry_file.exists():
+                return False
+            
+            content = registry_file.read_text(encoding='utf-8')
+            
+            # Check for import statement or registration
+            plugin_patterns = [
+                f"from .{plugin_name} import",
+                f"import {plugin_name}",
+                f"'{plugin_name}'",
+                f'"{plugin_name}"'
+            ]
+            
+            return any(pattern in content for pattern in plugin_patterns)
+        
+        except Exception as e:
+            logger.warning(f"Error checking plugin registration for {plugin_name}: {e}")
+            return False
+    
+    def check_operation_module_linkage(self, module_name: str) -> bool:
+        """
+        Check if operation module is referenced by parent operation.
+        
+        Args:
+            module_name: Name of module (e.g., 'dashboard_launcher_module')
+            
+        Returns:
+            True if linked, False otherwise
+        """
+        try:
+            # Check cortex-operations.yaml for module reference
+            ops_yaml = self.root_path / "cortex-operations.yaml"
+            
+            if not ops_yaml.exists():
+                return False
+            
+            content = ops_yaml.read_text(encoding='utf-8')
+            
+            # Module name might appear in various forms
+            # Try: exact match, without _module suffix, with hyphens, with underscores
+            module_stem = module_name.replace('_module', '')
+            module_hyphen = module_stem.replace('_', '-')
+            
+            # Check all variants
+            return (module_name in content or 
+                    module_stem in content or 
+                    module_hyphen in content)
+        
+        except Exception as e:
+            logger.warning(f"Error checking operation module linkage for {module_name}: {e}")
+            return False
+    
+    def check_workflow_triggers(self, workflow_name: str) -> bool:
+        """
+        Check if workflow has trigger configuration.
+        
+        Args:
+            workflow_name: Name of workflow (e.g., 'feature_development')
+            
+        Returns:
+            True if has triggers, False otherwise
+        """
+        try:
+            # Check if workflow is referenced in cortex-operations.yaml or response-templates.yaml
+            ops_yaml = self.root_path / "cortex-operations.yaml"
+            templates_yaml = self.brain_path / "response-templates.yaml"
+            
+            # Check operations file
+            if ops_yaml.exists():
+                ops_content = ops_yaml.read_text(encoding='utf-8')
+                if workflow_name in ops_content:
+                    return True
+            
+            # Check templates file
+            if templates_yaml.exists():
+                templates_content = templates_yaml.read_text(encoding='utf-8')
+                if workflow_name in templates_content:
+                    return True
+            
+            return False
+        
+        except Exception as e:
+            logger.warning(f"Error checking workflow triggers for {workflow_name}: {e}")
+            return False
+    
+    def check_dashboard_accessibility(self, dashboard_name: str) -> bool:
+        """
+        Check if dashboard is accessible via operation.
+        
+        Args:
+            dashboard_name: Name of dashboard (e.g., 'alignment-dashboard')
+            
+        Returns:
+            True if accessible, False otherwise
+        """
+        try:
+            # Check if 'dashboard' operation exists in cortex-operations.yaml
+            ops_yaml = self.root_path / "cortex-operations.yaml"
+            
+            if not ops_yaml.exists():
+                return False
+            
+            with open(ops_yaml, 'r', encoding='utf-8') as f:
+                ops_data = yaml.safe_load(f)
+            
+            # Look for dashboard operation
+            operations = ops_data.get('operations', {})
+            
+            return 'dashboard' in operations or 'load_dashboard' in operations
+        
+        except Exception as e:
+            logger.warning(f"Error checking dashboard accessibility for {dashboard_name}: {e}")
+            return False
+    
+    def check_script_operation_linkage(self, script_name: str) -> bool:
+        """
+        Check if user-facing script is linked to an operation.
+        
+        Args:
+            script_name: Name of script (e.g., 'cortex-upgrade')
+            
+        Returns:
+            True if linked, False otherwise
+        """
+        try:
+            # Only check scripts that appear to be user-facing
+            user_facing_scripts = [
+                'cortex-upgrade', 'deploy_cortex', 'validate_deployment',
+                'brain_transfer_cli', 'initialize_databases', 'monitor_brain_health',
+                'aggregate_team_telemetry', 'generate_docs_from_code'
+            ]
+            
+            script_stem = script_name.replace('.py', '').replace('_', '-')
+            
+            if script_stem not in user_facing_scripts:
+                return True  # Non-user-facing scripts don't need operation linkage
+            
+            # Check cortex-operations.yaml for reference
+            ops_yaml = self.root_path / "cortex-operations.yaml"
+            
+            if not ops_yaml.exists():
+                return False
+            
+            content = ops_yaml.read_text(encoding='utf-8')
+            
+            return script_stem in content or script_name in content
+        
+        except Exception as e:
+            logger.warning(f"Error checking script linkage for {script_name}: {e}")
             return False
     
     def compute_file_checksums(self, file_paths: List[Path]) -> Dict[str, Dict[str, Any]]:
@@ -764,6 +1308,11 @@ class AlignUtility:
         report.checks.append(self.validate_database("development_context.db", 3, "Development Context"))
         report.checks.append(self.validate_core_modules())
         report.checks.append(self.validate_configuration())
+        
+        # Execute comprehensive feature discovery (admin context only)
+        if self.context_type == "admin" and not self.quick_mode:
+            report.checks.append(self.validate_feature_discovery())
+            report.checks.append(self.validate_feature_wiring())
         
         # Skip feature validation in quick mode
         if self.quick_mode:

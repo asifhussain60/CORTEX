@@ -5583,3 +5583,146 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
+  context_control:
+    name: Context Control
+    description: Manage CORTEX memory with commands to show, forget, or clear context
+    deployment_tier: user
+    natural_language:
+    - show context
+    - what do you remember
+    - forget about
+    - clear context
+    - show memory
+    - context status
+    category: memory
+    modules:
+    - context_control_module
+    profiles:
+      standard:
+        description: Context control with user commands
+        modules:
+        - context_control_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: User control over Tier 1 memory
+  context_display:
+    name: Context Display
+    description: Display loaded Tier 1 context with transparency and control
+    deployment_tier: user
+    natural_language:
+    - display context
+    - view context
+    - show loaded context
+    - context visibility
+    - memory status
+    category: memory
+    modules:
+    - context_display_module
+    profiles:
+      standard:
+        description: Display context with relevance scores
+        modules:
+        - context_display_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Visibility into loaded conversations
+  conversation_capture:
+    name: Conversation Capture
+    description: Manually capture conversation to Tier 1 Working Memory
+    deployment_tier: user
+    natural_language:
+    - remember this
+    - capture conversation
+    - save chat
+    - store this conversation
+    - save context
+    category: memory
+    modules:
+    - conversation_capture_module
+    profiles:
+      standard:
+        description: Manual conversation capture
+        modules:
+        - conversation_capture_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Natural language conversation capture
+  evaluate_architecture:
+    name: Evaluate CORTEX Architecture
+    description: Comprehensive architecture health evaluation and scoring
+    deployment_tier: admin
+    natural_language:
+    - evaluate architecture
+    - check architecture
+    - architecture health
+    - score architecture
+    category: analysis
+    modules:
+    - evaluate_cortex_architecture_module
+    profiles:
+      standard:
+        description: Full architecture evaluation
+        modules:
+        - evaluate_cortex_architecture_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Architecture intelligence and scoring
+  tooling_detection:
+    name: Tooling Detection
+    description: Detect available development tools in environment
+    deployment_tier: user
+    natural_language:
+    - detect tools
+    - what tools are available
+    - check tooling
+    - scan environment
+    category: setup
+    modules:
+    - tooling_detection_module
+    profiles:
+      standard:
+        description: Environment tooling scan
+        modules:
+        - tooling_detection_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Development environment analysis
+  tooling_installer:
+    name: Tooling Installer
+    description: Install missing development tools automatically
+    deployment_tier: user
+    natural_language:
+    - install tools
+    - setup tools
+    - install missing tools
+    - configure tooling
+    category: setup
+    modules:
+    - tooling_installer_module
+    profiles:
+      standard:
+        description: Automated tool installation
+        modules:
+        - tooling_installer_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Development tool installer
+

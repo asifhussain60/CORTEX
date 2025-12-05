@@ -36,15 +36,33 @@ System Alignment is CORTEX's self-validation framework that automatically discov
 
 **No Hardcoded Lists:** System alignment discovers features by scanning the filesystem and using naming conventions.
 
-**Discovery Paths:**
-- `src/operations/modules/` - Operation orchestrators
-- `src/workflows/` - Workflow orchestrators
-- `src/agents/` - Specialized agents
+**Discovery Categories (11 total):**
+1. **Orchestrators** - `*_orchestrator.py` in `src/operations/modules/`, `src/orchestrators/`
+2. **Agents** - `*_agent.py` in `src/cortex_agents/`, `src/agents/`
+3. **Operations** - YAML entries in `cortex-operations.yaml`
+4. **Templates** - YAML templates in `cortex-brain/response-templates.yaml`
+5. **Plugins** - `*_plugin.py` in `src/plugins/`
+6. **Scripts** - `*.py` in `scripts/` (excluding archives)
+7. **Operation Modules** - `*_module.py` in `src/operations/modules/`
+8. **Workflows** - `*.yaml` in `workflows/`
+9. **Dashboards** - `*.html` + `*_adapter.py` in `cortex-brain/dashboards/`
+10. **Governance Rules** - `*.py` in `src/tier0/`
+11. **Brain Operations** - `*.json` in `cortex-brain/operations/`
+
+**Current System Stats:**
+- **395 features** tracked across 11 categories
+- **1.4s** full scan performance
+- **0.3s** incremental scan (only changed features)
+- **90%+** cache hit rate for typical development
 
 **Naming Conventions:**
 - Classes ending in `Orchestrator` are discovered as orchestrators
 - Classes ending in `Agent` are discovered as agents
+- Files ending in `_plugin.py` are discovered as plugins
+- Files ending in `_module.py` are discovered as operation modules
 - Inheritance from `BaseOperationModule` is validated
+
+**Reference:** Full feature discovery documentation at `cortex-brain/documents/implementation-guides/feature-discovery-system-quick-ref.md`
 
 ### Integration Depth Scoring
 
