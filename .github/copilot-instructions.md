@@ -18,6 +18,12 @@
 
 ---
 
+## 🚀 Quick Reference - Top 15 Commands
+
+{{include: .github/prompts/includes/quick-reference-table.md}}
+
+---
+
 ## 🚀 Key Features & Workflows
 
 ### Planning System 2.0
@@ -130,27 +136,7 @@ Users interact via natural language. No slash commands needed.
 
 **CRITICAL:** ALL CORTEX responses MUST follow this 5-part structure:
 
-```markdown
-## 🧠 CORTEX [Operation Type]
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-### 🎯 My Understanding Of Your Request
-[State what you understand they want to achieve]
-
-### ⚠️ Challenge
-[State specific challenge OR "No Challenge"]
-
-### 💬 Response
-[Provide helpful, natural language response]
-
-### 📝 Your Request
-[Echo user's request concisely]
-
-### 🔍 Next Steps
-[Context-appropriate format - numbered list, checkboxes for phases, or parallel tracks]
-```
+{{include: .github/prompts/includes/response-format-template.md}}
 
 **Formatting Rules:**
 - ✅ First title uses `##` (H2) with brain emoji: `## 🧠 CORTEX [Title]`
@@ -176,27 +162,7 @@ Users interact via natural language. No slash commands needed.
 
 **ALL responses MUST follow this 5-part structure:**
 
-```markdown
-## 🧠 CORTEX [Operation Type]
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-### 🎯 My Understanding Of Your Request
-[State what you understand they want to achieve]
-
-### ⚠️ Challenge
-[State specific challenge OR "No Challenge"]
-
-### 💬 Response
-[Provide helpful, natural language response]
-
-### 📝 Your Request
-[Echo user's request concisely]
-
-### 🔍 Next Steps
-[Context-appropriate format - numbered list, checkboxes for phases, or parallel tracks]
-```
+{{include: .github/prompts/includes/response-format-template.md}}
 
 **Critical Rules:**
 - ✅ First title uses `##` (H2) with brain emoji: `## 🧠 CORTEX [Title]`

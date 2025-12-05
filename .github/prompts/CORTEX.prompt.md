@@ -74,6 +74,12 @@ CORTEX: ✅ Dashboard server started successfully
 
 ---
 
+# 🚀 Quick Reference - Top 15 Commands
+
+{{include: .github/prompts/includes/quick-reference-table.md}}
+
+---
+
 # ⚡ RESPONSE TEMPLATES
 
 **Template System:** Load #file:../../cortex-brain/response-templates.yaml for pre-formatted responses  
@@ -233,27 +239,7 @@ CORTEX: ✅ Dashboard server started successfully
 
 **Use For:** planning, TDD, architecture review, code review, system alignment, ADO operations
 
-```markdown
-## 🧠 CORTEX [Operation Type]
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-### 🎯 My Understanding Of Your Request
-[State understanding]
-
-### ⚠️ Challenge
-[State specific challenge OR "No Challenge"]
-
-### 💬 Response
-[Natural language explanation]
-
-### 📝 Your Request
-[Echo user's request concisely]
-
-### 🔍 Next Steps
-[Context-appropriate format - see below]
-```
+{{include: .github/prompts/includes/response-format-template.md}}
 
 **Critical Rules:**
 - ✅ First title MUST use ## (H2 markdown) with brain icon - "## 🧠 CORTEX [Title]"
