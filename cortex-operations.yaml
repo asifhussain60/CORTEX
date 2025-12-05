@@ -1798,6 +1798,358 @@ operations:
         interface. Users can ask ''how do I...'' or ''help with...'' and get contextual
         assistance.'
       integration_date: '2025-11-14'
+  align_utility:
+    display_name: Align Utility
+    description: Internal utility module for admin operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal admin utility
+    category: admin
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.admin/align_utility
+  healthcheck_utility:
+    display_name: Healthcheck Utility
+    description: Internal utility module for admin operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal admin utility
+    category: admin
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.admin/healthcheck_utility
+  ado_utility:
+    display_name: Ado Utility
+    description: Internal utility module for ado operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal ado utility
+    category: ado
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.ado/ado_utility
+  analysis_utility:
+    display_name: Analysis Utility
+    description: Internal utility module for analysis operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal analysis utility
+    category: analysis
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.analysis/analysis_utility
+  checkpoint_utility:
+    display_name: Checkpoint Utility
+    description: Internal utility module for checkpoints operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal checkpoints utility
+    category: checkpoints
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.checkpoints/checkpoint_utility
+  cleanup_utility:
+    display_name: Cleanup Utility
+    description: Internal utility module for cleanup operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal cleanup utility
+    category: cleanup
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.cleanup/cleanup_utility
+  deploy_utility:
+    display_name: Deploy Utility
+    description: Internal utility module for deploy operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal deploy utility
+    category: deploy
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.deploy/deploy_utility
+  setup_epm_utility:
+    display_name: Setup Epm Utility
+    description: Internal utility module for epm operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal epm utility
+    category: epm
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.epm/setup_epm_utility
+  swagger_estimation_utility:
+    display_name: Swagger Estimation Utility
+    description: Internal utility module for estimation operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal estimation utility
+    category: estimation
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.estimation/swagger_estimation_utility
+  commit_utility:
+    display_name: Commit Utility
+    description: Internal utility module for git operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal git utility
+    category: git
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.git/commit_utility
+  git_checkpoint_utility:
+    display_name: Git Checkpoint Utility
+    description: Internal utility module for git operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal git utility
+    category: git
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.git/git_checkpoint_utility
+  rollback_utility:
+    display_name: Rollback Utility
+    description: Internal utility module for git operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal git utility
+    category: git
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.git/rollback_utility
+  health_utility:
+    display_name: Health Utility
+    description: Internal utility module for health operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal health utility
+    category: health
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.health/health_utility
+  base_incremental_utility:
+    display_name: Base Incremental Utility
+    description: Internal utility module for incremental operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal incremental utility
+    category: incremental
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.incremental/base_incremental_utility
+  lint_utility:
+    display_name: Lint Utility
+    description: Internal utility module for lint operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal lint utility
+    category: lint
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.lint/lint_utility
+  metrics_utility:
+    display_name: Metrics Utility
+    description: Internal utility module for metrics operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal metrics utility
+    category: metrics
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.metrics/metrics_utility
+  onboarding_utility:
+    display_name: Onboarding Utility
+    description: Internal utility module for onboarding operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal onboarding utility
+    category: onboarding
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.onboarding/onboarding_utility
+  phase8_utility:
+    display_name: Phase8 Utility
+    description: Internal utility module for phase8 operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal phase8 utility
+    category: phase8
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.phase8/phase8_utility
+  migration_utility:
+    display_name: Migration Utility
+    description: Internal utility module for planning operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal planning utility
+    category: planning
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.planning/migration_utility
+  planning_utility:
+    display_name: Planning Utility
+    description: Internal utility module for planning operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal planning utility
+    category: planning
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.planning/planning_utility
+  pr_context_utility:
+    display_name: Pr Context Utility
+    description: Internal utility module for pr operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal pr utility
+    category: pr
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.pr/pr_context_utility
+  rca_utility:
+    display_name: Rca Utility
+    description: Internal utility module for rca operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal rca utility
+    category: rca
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.rca/rca_utility
+  realignment_utility:
+    display_name: Realignment Utility
+    description: Internal utility module for realignment operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal realignment utility
+    category: realignment
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.realignment/realignment_utility
+  dashboard_utility:
+    display_name: Dashboard Utility
+    description: Internal utility module for reporting operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal reporting utility
+    category: reporting
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.reporting/dashboard_utility
+  review_utility:
+    display_name: Review Utility
+    description: Internal utility module for review operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal review utility
+    category: review
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.review/review_utility
+  unified_entry_point_utility:
+    display_name: Unified Entry Point Utility
+    description: Internal utility module for routing operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal routing utility
+    category: routing
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.routing/unified_entry_point_utility
+  master_setup_utility:
+    display_name: Master Setup Utility
+    description: Internal utility module for setup operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal setup utility
+    category: setup
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.setup/master_setup_utility
+  setup_utility:
+    display_name: Setup Utility
+    description: Internal utility module for setup operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal setup utility
+    category: setup
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.setup/setup_utility
+  tdd_utility:
+    display_name: Tdd Utility
+    description: Internal utility module for tdd operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal tdd utility
+    category: tdd
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.tdd/tdd_utility
+  upgrade_utility:
+    display_name: Upgrade Utility
+    description: Internal utility module for upgrade operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal upgrade utility
+    category: upgrade
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.upgrade/upgrade_utility
+  ux_enhancement_utility:
+    display_name: Ux Enhancement Utility
+    description: Internal utility module for ux_enhancement operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal ux_enhancement utility
+    category: ux_enhancement
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.ux_enhancement/ux_enhancement_utility
+  session_utility:
+    display_name: Session Utility
+    description: Internal utility module for validation operations
+    deployment_tier: admin_only
+    natural_language:
+    - internal validation utility
+    category: validation
+    version: 1.0.0
+    author: Asif Hussain
+    modules:
+    - src.operations.modules.validation/session_utility
 modules:
   project_validation:
     name: Project Validation
@@ -2856,8 +3208,8 @@ modules:
     estimated_hours: 1.5
     token_cost: 200
     cortex_version: '2.0'
-    notes: "Demonstrates 97.2% token reduction (74,047 \u2192 2,078 tokens), 93.4%\
-      \ cost savings, and optimization techniques applied to CORTEX 2.0"
+    notes: Demonstrates 97.2% token reduction (74,047 → 2,078 tokens), 93.4% cost
+      savings, and optimization techniques applied to CORTEX 2.0
   demo_code_review:
     name: Demo Code Review & PR Capabilities
     description: Showcase CORTEX's automated code review with SOLID principles, security

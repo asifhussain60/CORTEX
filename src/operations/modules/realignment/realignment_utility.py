@@ -565,36 +565,20 @@ def align_system_v2(
         }
         
         if not registration_result.passed:
-            # Only user-facing operations are CRITICAL
-            # Utility modules are internal helpers - WARNING only
-            if len(unregistered_user_facing) > 0:
-                logger.error(f"❌ {len(unregistered_user_facing)} USER-FACING operations unregistered (CRITICAL)")
-                
-                results["errors"].append({
-                    "category": "feature_registration",
-                    "severity": "CRITICAL",
-                    "message": f"{len(unregistered_user_facing)} user-facing operations unregistered",
-                    "details": {
-                        "user_facing_operations": unregistered_user_facing
-                    }
-                })
-                
-                # Mark as failed ONLY if user-facing operations are unregistered
-                results["success"] = False
+            # ALL unregistered operations are CRITICAL - no exceptions
+            logger.error(f"❌ {registration_result.unregistered_count} operations unregistered (CRITICAL)")
             
-            # Utility modules are internal - log as warning but don't fail
-            unregistered_utility_count = len(registration_result.unregistered_modules)
-            if unregistered_utility_count > 0:
-                logger.warning(f"⚠️  {unregistered_utility_count} utility modules not explicitly registered (internal helpers)")
-                
-                results["warnings"].append({
-                    "category": "utility_module_registration",
-                    "severity": "INFO",
-                    "message": f"{unregistered_utility_count} utility modules are internal helpers (registration optional)",
-                    "details": {
-                        "unregistered_modules": registration_result.unregistered_modules
-                    }
-                })
+            results["errors"].append({
+                "category": "feature_registration",
+                "severity": "CRITICAL",
+                "message": f"{registration_result.unregistered_count} operations unregistered - {len(unregistered_user_facing)} user-facing, {len(registration_result.unregistered_modules)} utility modules",
+                "details": {
+                    "user_facing_operations": unregistered_user_facing,
+                    "utility_modules": registration_result.unregistered_modules
+                }
+            })
+            
+            results["success"] = False
             
             # Auto-fix if enabled
             if auto_fix and not dry_run:
@@ -630,7 +614,7 @@ def align_system_v2(
         results["checks"]["intent_router"] = intent_router_coverage
         
         if intent_router_coverage["missing_count"] > 0:
-            # Calculate severity based on coverage percentage and type of operations
+            # ALL missing operations are CRITICAL - no exceptions
             coverage_pct = intent_router_coverage["coverage_percentage"]
             missing_ops = intent_router_coverage["missing_operations"]
             
@@ -639,33 +623,20 @@ def align_system_v2(
             user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
             missing_user_facing = [op for op in missing_ops if op in user_facing_ops]
             
-            # Severity based on user-facing operation coverage
-            if len(missing_user_facing) > 10:
-                severity = "CRITICAL"
-                logger.error(f"❌ {len(missing_user_facing)} user-facing operations not routable (CRITICAL)")
-                results["success"] = False  # Fail if many user-facing operations unmapped
-                
-                results["errors"].append({
-                    "category": "intent_router",
-                    "severity": severity,
-                    "message": f"{len(missing_user_facing)} user-facing operations not routable ({coverage_pct:.1f}% coverage)",
-                    "details": missing_user_facing
-                })
-            else:
-                # Most missing are internal orchestrators/workflows - WARNING only
-                severity = "MEDIUM"
-                logger.warning(f"⚠️  {intent_router_coverage['missing_count']} operations missing from intent router (mostly internal)")
-                logger.info(f"   User-facing: {len(missing_user_facing)}, Internal: {len(missing_ops) - len(missing_user_facing)}")
-                
-                results["warnings"].append({
-                    "category": "intent_router_coverage",
-                    "severity": severity,
-                    "message": f"{intent_router_coverage['missing_count']} operations not routable ({coverage_pct:.1f}% coverage) - {len(missing_user_facing)} user-facing, {len(missing_ops) - len(missing_user_facing)} internal",
-                    "details": {
-                        "user_facing": missing_user_facing,
-                        "internal": [op for op in missing_ops if op not in user_facing_ops]
-                    }
-                })
+            logger.error(f"❌ {intent_router_coverage['missing_count']} operations missing from intent router (CRITICAL)")
+            logger.info(f"   User-facing: {len(missing_user_facing)}, Internal: {len(missing_ops) - len(missing_user_facing)}")
+            
+            results["errors"].append({
+                "category": "intent_router",
+                "severity": "CRITICAL",
+                "message": f"{intent_router_coverage['missing_count']} operations missing from intent router ({coverage_pct:.1f}% coverage) - {len(missing_user_facing)} user-facing, {len(missing_ops) - len(missing_user_facing)} internal",
+                "details": {
+                    "user_facing": missing_user_facing,
+                    "internal": [op for op in missing_ops if op not in user_facing_ops]
+                }
+            })
+            
+            results["success"] = False
             
             # Auto-fix if enabled
             if auto_fix and not dry_run:
@@ -1001,7 +972,12 @@ def _check_specialist_router_wiring(cortex_root: Path) -> Dict[str, Any]:
 
 
 def _check_intent_router_coverage(cortex_root: Path) -> Dict[str, Any]:
-    """Check if all operations are covered in intent router."""
+    """
+    Check if all operations are covered in intent router.
+    
+    Operations are considered covered if they have 'natural_language' triggers
+    defined in cortex-operations.yaml, which the IntentRouter loads dynamically.
+    """
     try:
         import yaml
         
@@ -1009,35 +985,30 @@ def _check_intent_router_coverage(cortex_root: Path) -> Dict[str, Any]:
         ops_yaml = cortex_root / "cortex-operations.yaml"
         with open(ops_yaml, encoding='utf-8') as f:
             ops_data = yaml.safe_load(f)
-            operations = list(ops_data["operations"].keys())
+            operations = ops_data.get("operations", {})
         
-        # Load intent router (main router after consolidation)
-        router_file = cortex_root / "src" / "cortex_agents" / "intent_router.py"
-        router_content = router_file.read_text(encoding='utf-8')
-        
-        # Simple check: see if operation name appears in intent router
+        # Check which operations have natural_language triggers configured
         covered = []
         missing = []
         
-        for op in operations:
-            # Convert operation name to likely intent trigger
-            trigger_variants = [
-                op.replace("_", " "),
-                op.replace("_", "-"),
-                op.lower(),
-                op.upper()
-            ]
-            
-            if any(variant in router_content.lower() for variant in trigger_variants):
-                covered.append(op)
+        for op_name, op_config in operations.items():
+            if isinstance(op_config, dict) and 'natural_language' in op_config:
+                triggers = op_config['natural_language']
+                if triggers and isinstance(triggers, list) and len(triggers) > 0:
+                    covered.append(op_name)
+                else:
+                    missing.append(op_name)
             else:
-                missing.append(op)
+                missing.append(op_name)
+        
+        total = len(operations)
+        coverage_pct = (len(covered) / total * 100) if total > 0 else 100.0
         
         return {
-            "total_operations": len(operations),
+            "total_operations": total,
             "covered_count": len(covered),
             "missing_count": len(missing),
-            "coverage_percentage": (len(covered) / len(operations) * 100) if operations else 100.0,
+            "coverage_percentage": coverage_pct,
             "covered_operations": covered,
             "missing_operations": missing
         }

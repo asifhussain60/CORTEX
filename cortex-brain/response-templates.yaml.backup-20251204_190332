@@ -8771,741 +8771,741 @@ templates:
       next_steps:
         format: numbered
         auto_generate: true
-  session_utility:
+session_utility:
     trigger_phrases:
-    - session_utility
-    - session utility
-    response_profile: standard
+      - "session_utility"
+      - "session utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Session Utility
-        icon: 🧠
+        title: "Session Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the session utility operation.
+        content: "You want to execute the session utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Session Utility
+        content: "Session Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  ux_enhancement_utility:
+ux_enhancement_utility:
     trigger_phrases:
-    - ux_enhancement_utility
-    - ux enhancement utility
-    response_profile: standard
+      - "ux_enhancement_utility"
+      - "ux enhancement utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Ux Enhancement Utility
-        icon: 🧠
+        title: "Ux Enhancement Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the ux enhancement utility operation.
+        content: "You want to execute the ux enhancement utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: UX Enhancement Utility
+        content: "UX Enhancement Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  upgrade_utility:
+upgrade_utility:
     trigger_phrases:
-    - upgrade_utility
-    - upgrade utility
-    response_profile: standard
+      - "upgrade_utility"
+      - "upgrade utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Upgrade Utility
-        icon: 🧠
+        title: "Upgrade Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the upgrade utility operation.
+        content: "You want to execute the upgrade utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Upgrade Utility - CORTEX Auto-Upgrade with Brain Preservation
+        content: "Upgrade Utility - CORTEX Auto-Upgrade with Brain Preservation"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  tdd_utility:
+tdd_utility:
     trigger_phrases:
-    - tdd_utility
-    - tdd utility
-    response_profile: standard
+      - "tdd_utility"
+      - "tdd utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Tdd Utility
-        icon: 🧠
+        title: "Tdd Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the tdd utility operation.
+        content: "You want to execute the tdd utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: TDD Utility
+        content: "TDD Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  setup_utility:
+setup_utility:
     trigger_phrases:
-    - setup_utility
-    - setup utility
-    response_profile: standard
+      - "setup_utility"
+      - "setup utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Setup Utility
-        icon: 🧠
+        title: "Setup Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the setup utility operation.
+        content: "You want to execute the setup utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Setup Utility
+        content: "Setup Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  master_setup_utility:
+master_setup_utility:
     trigger_phrases:
-    - master_setup_utility
-    - master setup utility
-    response_profile: standard
+      - "master_setup_utility"
+      - "master setup utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Master Setup Utility
-        icon: 🧠
+        title: "Master Setup Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the master setup utility operation.
+        content: "You want to execute the master setup utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Master Setup Utility - Complete CORTEX Setup and Onboarding Operations
+        content: "Master Setup Utility - Complete CORTEX Setup and Onboarding Operations"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  unified_entry_point_utility:
+unified_entry_point_utility:
     trigger_phrases:
-    - unified_entry_point_utility
-    - unified entry point utility
-    response_profile: standard
+      - "unified_entry_point_utility"
+      - "unified entry point utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Unified Entry Point Utility
-        icon: 🧠
+        title: "Unified Entry Point Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the unified entry point utility operation.
+        content: "You want to execute the unified entry point utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Unified Entry Point Utility - CORTEX Operation Routing and Coordination
+        content: "Unified Entry Point Utility - CORTEX Operation Routing and Coordination"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  review_utility:
+review_utility:
     trigger_phrases:
-    - review_utility
-    - review utility
-    response_profile: standard
+      - "review_utility"
+      - "review utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Review Utility
-        icon: 🧠
+        title: "Review Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the review utility operation.
+        content: "You want to execute the review utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Code Review Utility
+        content: "Code Review Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  dashboard_utility:
+dashboard_utility:
     trigger_phrases:
-    - dashboard_utility
-    - dashboard utility
-    response_profile: standard
+      - "dashboard_utility"
+      - "dashboard utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Dashboard Utility
-        icon: 🧠
+        title: "Dashboard Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the dashboard utility operation.
+        content: "You want to execute the dashboard utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Dashboard Utility
+        content: "Dashboard Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  realignment_utility:
+realignment_utility:
     trigger_phrases:
-    - realignment_utility
-    - realignment utility
-    response_profile: standard
+      - "realignment_utility"
+      - "realignment utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Realignment Utility
-        icon: 🧠
+        title: "Realignment Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the realignment utility operation.
+        content: "You want to execute the realignment utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Realignment Utility
+        content: "Realignment Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  rca_utility:
+rca_utility:
     trigger_phrases:
-    - rca_utility
-    - rca utility
-    response_profile: standard
+      - "rca_utility"
+      - "rca utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Rca Utility
-        icon: 🧠
+        title: "Rca Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the rca utility operation.
+        content: "You want to execute the rca utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: RCA (Root Cause Analysis) Utility
+        content: "RCA (Root Cause Analysis) Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  pr_context_utility:
+pr_context_utility:
     trigger_phrases:
-    - pr_context_utility
-    - pr context utility
-    response_profile: standard
+      - "pr_context_utility"
+      - "pr context utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Pr Context Utility
-        icon: 🧠
+        title: "Pr Context Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the pr context utility operation.
+        content: "You want to execute the pr context utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: PR Context Utility
+        content: "PR Context Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  planning_utility:
+planning_utility:
     trigger_phrases:
-    - planning_utility
-    - planning utility
-    response_profile: standard
+      - "planning_utility"
+      - "planning utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Planning Utility
-        icon: 🧠
+        title: "Planning Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the planning utility operation.
+        content: "You want to execute the planning utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Planning Utility
+        content: "Planning Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  migration_utility:
+migration_utility:
     trigger_phrases:
-    - migration_utility
-    - migration utility
-    response_profile: standard
+      - "migration_utility"
+      - "migration utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Migration Utility
-        icon: 🧠
+        title: "Migration Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the migration utility operation.
+        content: "You want to execute the migration utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Planning Migration Utility
+        content: "Planning Migration Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  phase8_utility:
+phase8_utility:
     trigger_phrases:
-    - phase8_utility
-    - phase8 utility
-    response_profile: standard
+      - "phase8_utility"
+      - "phase8 utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Phase8 Utility
-        icon: 🧠
+        title: "Phase8 Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the phase8 utility operation.
+        content: "You want to execute the phase8 utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Phase 8 Operations Utility
+        content: "Phase 8 Operations Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  onboarding_utility:
+onboarding_utility:
     trigger_phrases:
-    - onboarding_utility
-    - onboarding utility
-    response_profile: standard
+      - "onboarding_utility"
+      - "onboarding utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Onboarding Utility
-        icon: 🧠
+        title: "Onboarding Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the onboarding utility operation.
+        content: "You want to execute the onboarding utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Onboarding Utility
+        content: "Onboarding Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  metrics_utility:
+metrics_utility:
     trigger_phrases:
-    - metrics_utility
-    - metrics utility
-    response_profile: standard
+      - "metrics_utility"
+      - "metrics utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Metrics Utility
-        icon: 🧠
+        title: "Metrics Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the metrics utility operation.
+        content: "You want to execute the metrics utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Metrics Utility
+        content: "Metrics Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  lint_utility:
+lint_utility:
     trigger_phrases:
-    - lint_utility
-    - lint utility
-    response_profile: standard
+      - "lint_utility"
+      - "lint utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Lint Utility
-        icon: 🧠
+        title: "Lint Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the lint utility operation.
+        content: "You want to execute the lint utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Lint Validation Utility
+        content: "Lint Validation Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  base_incremental_utility:
+base_incremental_utility:
     trigger_phrases:
-    - base_incremental_utility
-    - base incremental utility
-    response_profile: standard
+      - "base_incremental_utility"
+      - "base incremental utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Base Incremental Utility
-        icon: 🧠
+        title: "Base Incremental Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the base incremental utility operation.
+        content: "You want to execute the base incremental utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Base Incremental Utility - Layer 2 Incremental Work Management Operations
+        content: "Base Incremental Utility - Layer 2 Incremental Work Management Operations"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  health_utility:
+health_utility:
     trigger_phrases:
-    - health_utility
-    - health utility
-    response_profile: standard
+      - "health_utility"
+      - "health utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Health Utility
-        icon: 🧠
+        title: "Health Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the health utility operation.
+        content: "You want to execute the health utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Health Utility
+        content: "Health Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  rollback_utility:
+rollback_utility:
     trigger_phrases:
-    - rollback_utility
-    - rollback utility
-    response_profile: standard
+      - "rollback_utility"
+      - "rollback utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Rollback Utility
-        icon: 🧠
+        title: "Rollback Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the rollback utility operation.
+        content: "You want to execute the rollback utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Rollback Utility
+        content: "Rollback Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  git_checkpoint_utility:
+git_checkpoint_utility:
     trigger_phrases:
-    - git_checkpoint_utility
-    - git checkpoint utility
-    response_profile: standard
+      - "git_checkpoint_utility"
+      - "git checkpoint utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Git Checkpoint Utility
-        icon: 🧠
+        title: "Git Checkpoint Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the git checkpoint utility operation.
+        content: "You want to execute the git checkpoint utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Git Checkpoint Utility
+        content: "Git Checkpoint Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  commit_utility:
+commit_utility:
     trigger_phrases:
-    - commit_utility
-    - commit utility
-    response_profile: standard
+      - "commit_utility"
+      - "commit utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Commit Utility
-        icon: 🧠
+        title: "Commit Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the commit utility operation.
+        content: "You want to execute the commit utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: CommitUtility - Fast commit utility.
+        content: "CommitUtility - Fast commit utility."
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  swagger_estimation_utility:
+swagger_estimation_utility:
     trigger_phrases:
-    - swagger_estimation_utility
-    - swagger estimation utility
-    response_profile: standard
+      - "swagger_estimation_utility"
+      - "swagger estimation utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Swagger Estimation Utility
-        icon: 🧠
+        title: "Swagger Estimation Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the swagger estimation utility operation.
+        content: "You want to execute the swagger estimation utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: SWAGGER Estimation Utility
+        content: "SWAGGER Estimation Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  setup_epm_utility:
+setup_epm_utility:
     trigger_phrases:
-    - setup_epm_utility
-    - setup epm utility
-    response_profile: standard
+      - "setup_epm_utility"
+      - "setup epm utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Setup Epm Utility
-        icon: 🧠
+        title: "Setup Epm Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the setup epm utility operation.
+        content: "You want to execute the setup epm utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Setup EPM (Entry Point Module) Utility - Copilot Instructions Generation
+        content: "Setup EPM (Entry Point Module) Utility - Copilot Instructions Generation"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  deploy_utility:
+deploy_utility:
     trigger_phrases:
-    - deploy_utility
-    - deploy utility
-    response_profile: standard
+      - "deploy_utility"
+      - "deploy utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Deploy Utility
-        icon: 🧠
+        title: "Deploy Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the deploy utility operation.
+        content: "You want to execute the deploy utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Deploy Utility
+        content: "Deploy Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  cleanup_utility:
+cleanup_utility:
     trigger_phrases:
-    - cleanup_utility
-    - cleanup utility
-    response_profile: standard
+      - "cleanup_utility"
+      - "cleanup utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Cleanup Utility
-        icon: 🧠
+        title: "Cleanup Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the cleanup utility operation.
+        content: "You want to execute the cleanup utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Cleanup Utility
+        content: "Cleanup Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  checkpoint_utility:
+checkpoint_utility:
     trigger_phrases:
-    - checkpoint_utility
-    - checkpoint utility
-    response_profile: standard
+      - "checkpoint_utility"
+      - "checkpoint utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Checkpoint Utility
-        icon: 🧠
+        title: "Checkpoint Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the checkpoint utility operation.
+        content: "You want to execute the checkpoint utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Checkpoint Utility
+        content: "Checkpoint Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: checkboxes
+        format: "checkboxes"
         auto_generate: true
-  analysis_utility:
+analysis_utility:
     trigger_phrases:
-    - analysis_utility
-    - analysis utility
-    response_profile: standard
+      - "analysis_utility"
+      - "analysis utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Analysis Utility
-        icon: 🧠
+        title: "Analysis Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the analysis utility operation.
+        content: "You want to execute the analysis utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Code Analysis Utility
+        content: "Code Analysis Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  ado_utility:
+ado_utility:
     trigger_phrases:
-    - ado_utility
-    - ado utility
-    response_profile: standard
+      - "ado_utility"
+      - "ado utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Ado Utility
-        icon: 🧠
+        title: "Ado Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the ado utility operation.
+        content: "You want to execute the ado utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: ADO Work Item Utility
+        content: "ADO Work Item Utility"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  healthcheck_utility:
+healthcheck_utility:
     trigger_phrases:
-    - healthcheck_utility
-    - healthcheck utility
-    response_profile: standard
+      - "healthcheck_utility"
+      - "healthcheck utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Healthcheck Utility
-        icon: 🧠
+        title: "Healthcheck Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the healthcheck utility operation.
+        content: "You want to execute the healthcheck utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Minimal Health Check Utility - Fast & Reliable
+        content: "Minimal Health Check Utility - Fast & Reliable"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
-  align_utility:
+align_utility:
     trigger_phrases:
-    - align_utility
-    - align utility
-    response_profile: standard
+      - "align_utility"
+      - "align utility"
+    response_profile: "standard"
     template_sections:
       header:
-        title: Align Utility
-        icon: 🧠
+        title: "Align Utility"
+        icon: "🧠"
         include_author: true
       understanding:
-        content: You want to execute the align utility operation.
+        content: "You want to execute the align utility operation."
       challenge:
-        default: No Challenge
+        default: "No Challenge"
         auto_detect: true
       response:
-        content: Minimal System Alignment Utility - Fast & Reliable Replacement
+        content: "Minimal System Alignment Utility - Fast & Reliable Replacement"
         include_details: true
       request_echo:
         enabled: true
       next_steps:
-        format: numbered
+        format: "numbered"
         auto_generate: true
 routing:
   default: fallback

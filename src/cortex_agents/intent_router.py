@@ -84,269 +84,100 @@ class IntentRouter(BaseAgent):
             self.logger.warning(f"Could not initialize TDD Intent Router: {e}")
             self.tdd_router = None
         
-        # Intent classification keywords
-        self.INTENT_KEYWORDS = {
+        # Load intent keywords dynamically from cortex-operations.yaml
+        self.INTENT_KEYWORDS = self._load_intent_keywords_from_yaml()
+        
+        # Add hardcoded fallback keywords for core intent types
+        self._add_hardcoded_intent_keywords()
+    
+    def _load_intent_keywords_from_yaml(self) -> Dict:
+        """
+        Load intent keywords dynamically from cortex-operations.yaml.
+        
+        This allows the intent router to stay in sync with registered operations
+        without requiring code changes for each new operation.
+        
+        Returns:
+            Dictionary mapping operation names to their natural language triggers
+        """
+        import yaml
+        from pathlib import Path
+        
+        intent_keywords = {}
+        
+        try:
+            # Detect CORTEX root
+            cortex_root = Path(__file__).resolve().parents[2]
+            ops_yaml = cortex_root / "cortex-operations.yaml"
+            
+            if not ops_yaml.exists():
+                self.logger.warning(f"cortex-operations.yaml not found at {ops_yaml}")
+                return {}
+            
+            with open(ops_yaml, 'r', encoding='utf-8') as f:
+                config = yaml.safe_load(f) or {}
+            
+            if 'operations' not in config:
+                self.logger.warning("No 'operations' section in cortex-operations.yaml")
+                return {}
+            
+            # Extract natural_language triggers for each operation
+            for op_name, op_config in config['operations'].items():
+                if isinstance(op_config, dict) and 'natural_language' in op_config:
+                    triggers = op_config['natural_language']
+                    if triggers and isinstance(triggers, list):
+                        intent_keywords[op_name] = triggers
+            
+            self.logger.info(f"Loaded {len(intent_keywords)} operation intent mappings from YAML")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to load intent keywords from YAML: {e}")
+        
+        return intent_keywords
+    
+    def _add_hardcoded_intent_keywords(self):
+        """
+        Add hardcoded intent keywords for core IntentType enums.
+        
+        These are maintained for backward compatibility and to ensure
+        core routing functionality works even if YAML is misconfigured.
+        """
+        core_keywords = {
             IntentType.PLAN: [
-                # Core planning triggers
                 "plan", "planning", "feature", "breakdown", "design", "architect",
-                # Direct requests
-                "plan a feature", "plan this", "plan this feature", "lets plan",
-                "let's plan", "help me plan", "need help planning", "can you help me plan",
-                "i want to plan", "i need to plan", "start planning", "begin planning",
-                "create a plan", "make a plan", "build a plan",
-                # Collaborative
-                "plan together", "lets plan together", "let's plan together",
-                "work with me to plan", "collaborate on planning",
-                "help me break this down", "break this down for me", "break this down",
-                "help me structure this",
-                # Question forms
-                "how do i plan", "how should i plan", "how to plan this",
-                "what's the best way to plan", "whats the best way to plan",
-                "help planning this", "help planning this out",
-                # Implicit planning
-                "i need a roadmap", "create a roadmap", "build a roadmap", "roadmap",
-                "help me organize this work", "how should i approach this",
-                "what's the best approach", "whats the best approach",
-                "how do i tackle this"
+                "plan a feature", "plan this", "let's plan", "help me plan"
             ],
             IntentType.ARCHITECTURE: [
-                # Core architectural analysis triggers (NEW for CORTEX-BRAIN-001 fix)
-                "architecture", "architectural", "analyze", "analysis", "crawl", "understand",
-                "routing", "navigation", "structure", "layout", "components", "shell",
-                "view", "injection", "feature", "directory", "organization", "system",
-                "design", "pattern", "flow", "mapping",
-                # Direct architecture requests
-                "analyze architecture", "understand architecture", "crawl system",
-                "analyze structure", "understand structure", "map structure",
-                "analyze routing", "understand routing", "map routing",
-                "crawl shell", "analyze shell", "understand shell",
-                # Investigation patterns  
-                "how does this work", "how does", "what is the structure",
-                "show me the structure", "explain the architecture",
-                "document the architecture", "map the system"
+                "architecture", "architectural", "analyze", "analysis", "crawl",
+                "analyze architecture", "understand architecture", "analyze structure"
             ],
             IntentType.CODE: ["create", "implement", "build", "add", "make"],
             IntentType.EDIT_FILE: ["edit", "modify", "update", "change", "refactor"],
-            IntentType.TEST: ["test", "tdd", "verify"],  # Removed "testing" to avoid conflict with "plan testing"
+            IntentType.TEST: ["test", "tdd", "verify"],
             IntentType.RUN_TESTS: ["run test", "execute test", "test run"],
             IntentType.FIX: ["fix", "bug", "error", "issue", "problem"],
             IntentType.DEBUG: ["debug", "investigate", "trace", "diagnose"],
             IntentType.HEALTH_CHECK: [
-                "health", "status", "check", "validate", "healthcheck", "health check",
-                "system health", "cortex health", "health status"
+                "health", "status", "check", "validate", "healthcheck", "health check"
             ],
-            IntentType.RESUME: [
-                "resume", "continue", "restore", "recover", "resume conversation",
-                "continue conversation", "restore conversation", "resume our work",
-                "continue our work", "pick up where we left off"
-            ],
+            IntentType.RESUME: ["resume", "continue", "restore", "recover"],
             IntentType.SCREENSHOT: ["screenshot", "ui", "screen", "visual"],
-            IntentType.COMMIT: [
-                "commit", "git", "push", "save changes", "commit and push",
-                "git commit", "commit changes", "push changes", "save to git"
-            ],
+            IntentType.COMMIT: ["commit", "git", "push", "save changes"],
             IntentType.COMPLIANCE: ["rule", "governance", "compliance", "policy"],
-            # ADO (Azure DevOps) operations (NEW - ADO Integration)
-            IntentType.ADO_STORY: [
-                "plan ado story", "create ado story", "new ado story", "plan user story",
-                "create user story", "new user story", "ado story", "user story"
-            ],
-            IntentType.ADO_FEATURE: [
-                "plan ado feature", "create ado feature", "new ado feature", "plan feature",
-                "ado feature"
-            ],
-            IntentType.ADO_SUMMARY: [
-                "generate ado summary", "create work summary", "ado work summary",
-                "complete ado work", "ado summary", "work summary"
-            ],
-            IntentType.CODE_REVIEW: [
-                "code review", "review code", "pr review", "review pr", "pull request review",
-                "review pull request"
-            ],
-            # Profile management (NEW - User Profile System 3.2.1)
-            IntentType.UPDATE_PROFILE: [
-                "update profile", "change profile", "modify profile", "edit profile",
-                "update preferences", "change preferences", "modify preferences",
-                "update my profile", "change my profile", "update settings",
-                "change settings", "profile settings", "update tech stack",
-                "change tech stack", "update experience", "change experience",
-                "update mode", "change mode", "update interaction", "change interaction",
-                # Tech stack specific keywords (Phase 1: User Profile System)
-                "switch to azure", "switch to aws", "switch to gcp", "use azure stack",
-                "use aws stack", "use gcp stack", "prefer azure", "prefer aws", "prefer gcp",
-                "no tech preference", "custom tech stack", "configure stack", "set stack"
-            ],
-            # Timeframe estimation (NEW - SWAGGER Integration + 3.2.1 Scope Approval Gate)
-            IntentType.ESTIMATE: [
-                "estimate timeframe", "time estimate", "how long will this take",
-                "timeframe", "story points", "sprint estimate", "parallel tracks",
-                "timeline comparison", "delivery timeline", "effort estimate",
-                "estimate effort", "project timeline", "estimate this", "estimate",
-                "how many sprints", "team size estimate", "cost projection",
-                "what-if scenarios", "estimate hours", "estimate days"
-            ],
-            IntentType.TIMEFRAME: [
-                "timeframe for", "timeframe estimate", "delivery timeframe",
-                "timeframe analysis", "track timeframe"
-            ],
-            IntentType.STORY_POINTS: [
-                "story points for", "calculate story points", "how many points",
-                "point estimate", "fibonacci points"
-            ],
-            IntentType.APPROVE_SCOPE: [
-                "approve scope", "confirm scope", "scope approved", "scope looks good",
-                "approve estimation scope", "scope is correct", "yes approve",
-                "accept scope", "scope confirmation", "validate scope"
-            ],
-            # Application Health Dashboard (NEW - Application Onboarding)
-            IntentType.APPLICATION_HEALTH: [
-                "show health dashboard", "health dashboard", "application health",
-                "app health", "analyze application", "application analysis",
-                "code health", "project health", "codebase health"
-            ],
-            IntentType.ONBOARD_APPLICATION: [
-                "onboard application", "onboard app", "setup application",
-                "analyze my application", "scan application", "scan project",
-                "analyze project", "project analysis"
-            ],
-            # Additional operation keywords (Consolidated Alignment - wiring 39 user-facing ops)
-            "align": [
-                "align", "alignment", "align system", "system alignment", "cortex align",
-                "run alignment", "alignment check", "validate system", "check alignment",
-                "system check", "validate cortex"
-            ],
-            "cleanup": [
-                "cleanup", "clean up", "clean", "remove obsolete", "remove unused",
-                "delete obsolete", "purge old files", "clean workspace", "clean cortex"
-            ],
-            "deploy": [
-                "deploy", "deployment", "deploy cortex", "create build", "build package",
-                "publish", "release", "deploy production", "production deploy",
-                "build for production"
-            ],
-            "git_checkpoint": [
-                "checkpoint", "git checkpoint", "create checkpoint", "save checkpoint",
-                "checkpoint my work", "save progress", "checkpoint this", "save state"
-            ],
-            "optimize": [
-                "optimize", "optimization", "optimize cortex", "optimize system",
-                "performance", "improve performance", "speed up", "optimize code",
-                "make faster", "performance tuning"
-            ],
-            "rollback": [
-                "rollback", "roll back", "revert", "undo", "restore previous",
-                "go back", "rollback changes", "undo changes", "revert changes",
-                "restore state"
-            ],
-            "help_command": [
-                "help", "help me", "what can you do", "show commands", "list commands",
-                "available commands", "cortex help", "show help", "usage", "commands"
-            ],
-            "cache_dashboard": [
-                "cache dashboard", "dashboard cache", "cache metrics", "cache data"
-            ],
-            "dashboard_generator": [
-                "generate dashboard", "create dashboard", "dashboard", "show dashboard",
-                "display dashboard", "build dashboard"
-            ],
-            "environment_setup": [
-                "setup environment", "environment setup", "configure environment",
-                "setup dev environment", "dev environment", "environment config"
-            ],
-            "user_onboarding": [
-                "onboard", "onboarding", "user onboarding", "setup user",
-                "user setup", "onboard user", "get started"
-            ],
-            "application_onboarding_operation": [
-                "onboard application", "application onboarding", "app onboarding",
-                "setup application", "analyze application"
-            ],
-            "architecture_graph_builder": [
-                "architecture graph", "build architecture graph", "generate architecture",
-                "visualize architecture", "architecture diagram"
-            ],
-            "cache_commands": [
-                "cache commands", "command cache", "cache operations", "clear cache"
-            ],
-            "dashboard_validator": [
-                "validate dashboard", "dashboard validation", "check dashboard",
-                "verify dashboard", "dashboard check"
-            ],
-            "dependency_installer": [
-                "install dependencies", "install deps", "setup dependencies",
-                "install packages", "install requirements"
-            ],
-            "healthcheck_operation": [
-                "run healthcheck", "healthcheck operation", "system healthcheck"
-            ],
-            "optimize_operation": [
-                "optimize operation", "operation optimization"
-            ],
-            "optimize_tokens": [
-                "optimize tokens", "token optimization", "reduce tokens",
-                "optimize token usage"
-            ],
-            "policy_scanner": [
-                "scan policy", "policy scan", "check policies", "validate policies",
-                "scan for violations"
-            ],
-            "recommendations_engine": [
-                "recommendations", "suggest improvements", "suggestions",
-                "generate recommendations", "improvement suggestions"
-            ],
-            "techstack_analyzer": [
-                "analyze tech stack", "tech stack analysis", "analyze technology",
-                "technology analysis", "stack analysis"
-            ],
-            "user_consent_manager": [
-                "user consent", "manage consent", "consent manager", "permissions"
-            ],
-            "user_onboarding_operation": [
-                "user onboarding operation", "onboard user operation"
-            ],
-            "dashboard_data_adapter": [
-                "dashboard data", "adapt dashboard data", "dashboard adapter"
-            ],
-            "dashboard_validator_v2": [
-                "validate dashboard v2", "dashboard validator v2", "v2 validator"
-            ],
-            "documentation_component_registry": [
-                "documentation registry", "doc registry", "component registry",
-                "register documentation"
-            ],
-            "environment_setup_module": [
-                "environment module", "setup environment module"
-            ],
-            "header_formatter": [
-                "format header", "header formatting"
-            ],
-            "header_utils": [
-                "header utilities", "header utils"
-            ],
-            "operation_factory": [
-                "operation factory", "create operation"
-            ],
-            "operation_header_formatter": [
-                "operation header", "format operation header"
-            ],
-            "operations_orchestrator": [
-                "operations orchestrator", "orchestrate operations"
-            ],
-            "realtime_dashboard_auth": [
-                "realtime auth", "dashboard auth", "realtime authentication"
-            ],
-            "realtime_dashboard_server": [
-                "realtime server", "dashboard server", "realtime dashboard"
-            ],
-            "realtime_metrics_publisher": [
-                "realtime metrics", "publish metrics", "metrics publisher"
-            ],
-            "response_formatter": [
-                "format response", "response formatting"
-            ],
+            IntentType.ADO_STORY: ["plan ado story", "create ado story", "ado story"],
+            IntentType.ADO_FEATURE: ["plan ado feature", "create ado feature"],
+            IntentType.CODE_REVIEW: ["code review", "review code", "pr review"],
+            IntentType.UPDATE_PROFILE: ["update profile", "change profile"],
+            IntentType.ESTIMATE: ["estimate", "timeframe", "story points"],
+            IntentType.APPLICATION_HEALTH: ["health dashboard", "application health"],
+            IntentType.ONBOARD_APPLICATION: ["onboard application", "analyze application"],
         }
         
-        # Intent-based rule context mapping (CORTEX 3.0 - Phase 1)
+        # Merge core keywords with YAML-loaded keywords
+        # YAML keywords take precedence for matching operations
+        for intent, keywords in core_keywords.items():
+            if intent not in self.INTENT_KEYWORDS:
+                self.INTENT_KEYWORDS[intent] = keywords
         # Maps intents to applicable governance rules and behavioral flags
         self.INTENT_RULE_CONTEXT = {
             IntentType.CODE: {
