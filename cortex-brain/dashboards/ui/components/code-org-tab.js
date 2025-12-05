@@ -161,6 +161,17 @@ export function renderCodeOrganization(data) {
                 </table>
             </div>
         </div>
+        
+        <!-- Enhanced Metrics Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+            ${renderMaintainabilityCard(codeOrg.maintainability || {})}
+            ${renderTechnicalDebtCard(codeOrg.technical_debt || {})}
+            ${renderDuplicationCard(codeOrg.duplications || {})}
+            ${renderCodeSmellsCard(codeOrg.code_smells || [])}
+        </div>
+        
+        <!-- File Size Distribution -->
+        ${codeOrg.file_sizes ? renderFileSizeDistribution(codeOrg.file_sizes) : ''}
     `;
         
         // Initialize visualizations after DOM is updated
@@ -636,6 +647,263 @@ window.hideHotspotTooltip = function(element) {
         tooltip.remove();
     }
 };
+
+/**
+ * Render maintainability index card
+ * @param {Object} maintainability - Maintainability data
+ * @returns {string} HTML string
+ */
+function renderMaintainabilityCard(maintainability) {
+    const score = maintainability.overall_score || 0;
+    const filesByCategory = maintainability.files_by_category || {};
+    
+    let scoreColor = 'var(--success)';
+    let scoreLabel = 'Excellent';
+    if (score < 50) {
+        scoreColor = 'var(--danger)';
+        scoreLabel = 'Poor';
+    } else if (score < 65) {
+        scoreColor = 'var(--warning)';
+        scoreLabel = 'Fair';
+    } else if (score < 85) {
+        scoreColor = 'var(--accent-primary)';
+        scoreLabel = 'Good';
+    }
+    
+    return `
+        <div class="glass-card">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="font-size: 2.5rem;">📐</div>
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Maintainability Index</h4>
+                    <h2 style="font-size: 2rem; color: ${scoreColor};">${score}/100</h2>
+                    <p style="font-size: 0.75rem; color: ${scoreColor}; margin: 0;">${scoreLabel}</p>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; font-size: 0.75rem;">
+                <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px;">
+                    <span style="color: var(--success);">✅</span> ${filesByCategory.excellent || 0} Excellent
+                </div>
+                <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px;">
+                    <span style="color: var(--accent-primary);">🟢</span> ${filesByCategory.good || 0} Good
+                </div>
+                <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px;">
+                    <span style="color: var(--warning);">⚠️</span> ${filesByCategory.fair || 0} Fair
+                </div>
+                <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px;">
+                    <span style="color: var(--danger);">❌</span> ${filesByCategory.poor || 0} Poor
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Render technical debt card
+ * @param {Object} debt - Technical debt data
+ * @returns {string} HTML string
+ */
+function renderTechnicalDebtCard(debt) {
+    const totalHours = debt.total_hours || 0;
+    const byCategory = debt.by_category || {};
+    
+    let debtColor = 'var(--success)';
+    if (totalHours > 40) {
+        debtColor = 'var(--danger)';
+    } else if (totalHours > 20) {
+        debtColor = 'var(--warning)';
+    }
+    
+    return `
+        <div class="glass-card">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="font-size: 2.5rem;">⏱️</div>
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Technical Debt</h4>
+                    <h2 style="font-size: 2rem; color: ${debtColor};">${totalHours.toFixed(1)}h</h2>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0;">Est. Remediation Time</p>
+                </div>
+            </div>
+            <div style="display: grid; gap: 0.5rem; font-size: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--glass-light); border-radius: 6px;">
+                    <span>Complexity:</span>
+                    <strong>${(byCategory.complexity || 0).toFixed(1)}h</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--glass-light); border-radius: 6px;">
+                    <span>Duplication:</span>
+                    <strong>${(byCategory.duplication || 0).toFixed(1)}h</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--glass-light); border-radius: 6px;">
+                    <span>File Size:</span>
+                    <strong>${(byCategory.size || 0).toFixed(1)}h</strong>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Render code duplication card
+ * @param {Object} duplications - Duplication data
+ * @returns {string} HTML string
+ */
+function renderDuplicationCard(duplications) {
+    const dupRate = duplications.duplication_rate || 0;
+    const filesWithDups = duplications.files_with_duplicates || 0;
+    const dupBlocks = duplications.duplicate_blocks || [];
+    
+    let dupColor = 'var(--success)';
+    if (dupRate > 10) {
+        dupColor = 'var(--danger)';
+    } else if (dupRate > 5) {
+        dupColor = 'var(--warning)';
+    }
+    
+    return `
+        <div class="glass-card">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="font-size: 2.5rem;">📋</div>
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Code Duplication</h4>
+                    <h2 style="font-size: 2rem; color: ${dupColor};">${dupRate.toFixed(1)}%</h2>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0;">${filesWithDups} files affected</p>
+                </div>
+            </div>
+            ${dupBlocks.length > 0 ? `
+                <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    Top Duplicates:
+                </div>
+                <div style="max-height: 120px; overflow-y: auto;">
+                    ${dupBlocks.slice(0, 3).map(dup => `
+                        <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                            <div style="font-size: 0.7rem; font-family: monospace; color: var(--accent-primary);">${dup.function}</div>
+                            <div style="font-size: 0.65rem; color: var(--text-secondary); margin-top: 0.25rem;">${dup.lines} lines duplicated</div>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : `
+                <div style="text-align: center; padding: 1rem; color: var(--success); font-size: 0.875rem;">
+                    ✅ No significant duplications detected
+                </div>
+            `}
+        </div>
+    `;
+}
+
+/**
+ * Render code smells card
+ * @param {Array} smells - Array of code smells
+ * @returns {string} HTML string
+ */
+function renderCodeSmellsCard(smells) {
+    const smellCount = smells.length;
+    const severityCounts = {
+        high: smells.filter(s => s.severity === 'high').length,
+        medium: smells.filter(s => s.severity === 'medium').length,
+        low: smells.filter(s => s.severity === 'low').length
+    };
+    
+    let smellColor = 'var(--success)';
+    if (severityCounts.high > 0) {
+        smellColor = 'var(--danger)';
+    } else if (severityCounts.medium > 3) {
+        smellColor = 'var(--warning)';
+    }
+    
+    return `
+        <div class="glass-card">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="font-size: 2.5rem;">👃</div>
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Code Smells</h4>
+                    <h2 style="font-size: 2rem; color: ${smellColor};">${smellCount}</h2>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0;">Issues Detected</p>
+                </div>
+            </div>
+            <div style="display: grid; gap: 0.5rem; font-size: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--danger)22; border-radius: 6px;">
+                    <span><span style="color: var(--danger);">🔴</span> High:</span>
+                    <strong>${severityCounts.high}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--warning)22; border-radius: 6px;">
+                    <span><span style="color: var(--warning);">🟡</span> Medium:</span>
+                    <strong>${severityCounts.medium}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--glass-light); border-radius: 6px;">
+                    <span><span style="color: var(--text-secondary);">⚪</span> Low:</span>
+                    <strong>${severityCounts.low}</strong>
+                </div>
+            </div>
+            ${smellCount > 0 ? `
+                <div style="margin-top: 1rem; font-size: 0.7rem; color: var(--text-secondary);">
+                    ${smells[0]?.type}: ${smells[0]?.file?.split('/').pop()}
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+/**
+ * Render file size distribution
+ * @param {Object} sizes - File size data
+ * @returns {string} HTML string
+ */
+function renderFileSizeDistribution(sizes) {
+    const distribution = sizes.distribution || {};
+    const largestFiles = sizes.largest_files || [];
+    
+    const total = distribution.small + distribution.medium + distribution.large + distribution.very_large;
+    const smallPct = total > 0 ? ((distribution.small / total) * 100).toFixed(0) : 0;
+    const mediumPct = total > 0 ? ((distribution.medium / total) * 100).toFixed(0) : 0;
+    const largePct = total > 0 ? ((distribution.large / total) * 100).toFixed(0) : 0;
+    const veryLargePct = total > 0 ? ((distribution.very_large / total) * 100).toFixed(0) : 0;
+    
+    return `
+        <div class="glass-card" style="margin-top: 2rem;">
+            <h3 style="margin-bottom: 1rem;">📏 File Size Distribution</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="text-align: center; padding: 1rem; background: var(--glass-light); border-radius: 8px;">
+                    <div style="font-size: 1.5rem; font-weight: 600; color: var(--success);">${distribution.small || 0}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Small (&lt;100 LOC)</div>
+                    <div style="font-size: 0.7rem; color: var(--success); margin-top: 0.25rem;">${smallPct}%</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: var(--glass-light); border-radius: 8px;">
+                    <div style="font-size: 1.5rem; font-weight: 600; color: var(--accent-primary);">${distribution.medium || 0}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Medium (100-300)</div>
+                    <div style="font-size: 0.7rem; color: var(--accent-primary); margin-top: 0.25rem;">${mediumPct}%</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: var(--glass-light); border-radius: 8px;">
+                    <div style="font-size: 1.5rem; font-weight: 600; color: var(--warning);">${distribution.large || 0}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Large (300-500)</div>
+                    <div style="font-size: 0.7rem; color: var(--warning); margin-top: 0.25rem;">${largePct}%</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: var(--glass-light); border-radius: 8px;">
+                    <div style="font-size: 1.5rem; font-weight: 600; color: var(--danger);">${distribution.very_large || 0}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Very Large (&gt;500)</div>
+                    <div style="font-size: 0.7rem; color: var(--danger); margin-top: 0.25rem;">${veryLargePct}%</div>
+                </div>
+            </div>
+            ${largestFiles.length > 0 ? `
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">📊 Largest Files</h4>
+                    <div style="max-height: 200px; overflow-y: auto;">
+                        ${largestFiles.slice(0, 5).map(file => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-light); border-radius: 8px; margin-bottom: 0.5rem;">
+                                <div style="flex: 1; font-family: monospace; font-size: 0.75rem; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    ${file.file}
+                                </div>
+                                <div style="display: flex; gap: 1rem; margin-left: 1rem; font-size: 0.75rem;">
+                                    <span style="color: var(--accent-primary); font-weight: 600;">${file.loc.toLocaleString()} LOC</span>
+                                    <span style="color: var(--text-secondary);">${file.size_kb} KB</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
 
 /**
  * Export hotspots (placeholder)
