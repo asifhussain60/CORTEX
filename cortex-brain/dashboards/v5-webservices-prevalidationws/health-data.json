@@ -1,0 +1,33 @@
+{
+  "overall_health_score": 62,
+  "status": "fair",
+  "last_scan": "2025-12-05T05:37:36.138224",
+  "summary": {
+    "total_files": 96,
+    "total_loc": 5829,
+    "test_coverage": 0,
+    "critical_issues": 0,
+    "warnings": 0,
+    "maintainability_index": 62
+  },
+  "metrics": {
+    "code_quality_score": 50,
+    "security_score": 86,
+    "test_score": 0,
+    "documentation_score": 50
+  },
+  "component_scores": {
+    "security": 86,
+    "architecture": 50.0,
+    "code_quality": 50.0,
+    "team_health": 50.0,
+    "tech_stack": 70.0
+  },
+  "health_status": "Fair",
+  "last_updated": "2025-12-05T05:37:36.138250",
+  "trends": {
+    "health_trend": "stable",
+    "velocity_trend": "stable",
+    "quality_trend": "stable"
+  }
+}

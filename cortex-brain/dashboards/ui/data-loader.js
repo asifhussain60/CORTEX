@@ -18,7 +18,8 @@ const DATA_SOURCES = {
     cortex: '/cortex/',
     'noor-canvas': '/noor-canvas/',
     alist: '/alist/',
-    ksessions: '/ksessions/'
+    ksessions: '/ksessions/',
+    'v5-webservices-prevalidationws': '/v5-webservices-prevalidationws/'
 };
 
 // Data files to load

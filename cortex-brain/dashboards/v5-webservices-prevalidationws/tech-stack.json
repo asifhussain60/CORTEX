@@ -1,0 +1,133 @@
+{
+  "frontend": [],
+  "backend": [
+    {
+      "name": ".NET Framework",
+      "version": "4.8",
+      "latest": "unknown",
+      "status": "outdated",
+      "category": "framework",
+      "cve_count": 0,
+      "eol_date": null,
+      "metadata": {
+        "language": "C#",
+        "file_count": 48,
+        "project_count": 3,
+        "solution_count": 1,
+        "solutions": [
+          {
+            "name": "PSFPreValidation",
+            "path": "PSFPreValidation.sln",
+            "project_count": 4,
+            "projects": [
+              {
+                "name": "PrevalBusiness",
+                "path": "Business\\PrevalBusiness.csproj"
+              },
+              {
+                "name": "WebServiceAppl",
+                "path": "WebServiceAppl\\WebServiceAppl.csproj"
+              },
+              {
+                "name": "Tests",
+                "path": "Tests"
+              },
+              {
+                "name": "PSFPreValidationUnitTest",
+                "path": "PSFPreValidationTests\\PSFPreValidationUnitTest.csproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          }
+        ],
+        "projects": [
+          {
+            "name": "PrevalBusiness",
+            "path": "Business\\PrevalBusiness.csproj",
+            "framework": ".NET Framework 4.8",
+            "packages": 272
+          },
+          {
+            "name": "PSFPreValidationUnitTest",
+            "path": "PSFPreValidationTests\\PSFPreValidationUnitTest.csproj",
+            "framework": ".NET Framework 4.8",
+            "packages": 170
+          },
+          {
+            "name": "WebServiceAppl",
+            "path": "WebServiceAppl\\WebServiceAppl.csproj",
+            "framework": ".NET Framework 4.8",
+            "packages": 173
+          }
+        ],
+        "frameworks": [
+          "Autofac 6.4.0 (DI Container)",
+          "CommonServiceLocator 7",
+          "DevSecOps 2",
+          "EnterpriseLibrary 5.0.505.1 (Enterprise)",
+          "HQY 20",
+          "IdentityModel 6.0.0 (Security)",
+          "log4net 15 (Logging)",
+          "Microsoft 9.0.4",
+          "NETStandard 2.0.3",
+          "Newtonsoft 13.0.3 (JSON)",
+          "nsoftware 8317",
+          "Oracle 23.8.0",
+          "Polly 7.2.3",
+          "Serilog 8.4.0 (Logging)",
+          "System 9.0.4",
+          "Twilio 5.80.1",
+          "Unity 2.1.505.2 (DI Container)",
+          "VeracodeAttributes 1.2.1",
+          "WW 3.0.3",
+          "Castle 5.1.0"
+        ],
+        "all_versions": [
+          ".NET Framework 4.8"
+        ],
+        "package_count": 24
+      }
+    },
+    {
+      "name": "C#",
+      "version": "7.3",
+      "latest": "unknown",
+      "status": "outdated",
+      "category": "language",
+      "cve_count": 0,
+      "eol_date": null,
+      "metadata": {
+        "file_count": 48,
+        "lines_of_code": 5829,
+        "framework_version": "4.8"
+      }
+    }
+  ],
+  "database": [
+    {
+      "name": "Oracle Database",
+      "version": "unknown",
+      "latest": "unknown",
+      "status": "current",
+      "category": "database",
+      "cve_count": 0,
+      "eol_date": null,
+      "metadata": {
+        "server": "LABDEV1013",
+        "source": "web.config",
+        "evidence": "Found in web.config (active config, user: ww_ops) ⚠️ PASSWORD EXPOSED IN CONFIG",
+        "security_risk": true,
+        "user": "ww_ops"
+      }
+    }
+  ],
+  "devops": [],
+  "summary": {
+    "total_technologies": 3,
+    "current_count": 1,
+    "outdated_count": 2,
+    "deprecated_count": 0,
+    "last_scan": "2025-12-05T05:37:18.512568"
+  }
+}
