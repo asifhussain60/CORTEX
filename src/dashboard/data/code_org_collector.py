@@ -97,43 +97,101 @@ class CodeOrganizationCollector(BaseDataCollector):
     
     def _generate_heatmap(self) -> List[Dict[str, Any]]:
         """
-        Generate complexity heatmap for all Python files.
+        Generate complexity heatmap for all code files (multi-language support).
+        
+        Supports: Python, C#, Java, TypeScript, JavaScript, React, Angular, Vue, Go, Rust,
+                 PHP, Ruby, Swift, Kotlin, C, C++, Objective-C, Scala, Perl, R, Shell, etc.
         
         Returns:
             List of file data with complexity, LOC, change frequency
         """
         heatmap = []
-        src_path = self.project_root / "src"
         
-        if not src_path.exists():
-            return heatmap
-        
-        # Analyze all Python files
-        for py_file in src_path.glob("**/*.py"):
-            if "venv" in str(py_file) or "__pycache__" in str(py_file):
-                continue
+        # Define language file patterns (comprehensive list)
+        file_patterns = [
+            # Modern Web
+            ('**/*.py', 'python'),
+            ('**/*.js', 'javascript'),
+            ('**/*.jsx', 'react'),
+            ('**/*.ts', 'typescript'),
+            ('**/*.tsx', 'react-typescript'),
+            ('**/*.vue', 'vue'),
             
-            try:
-                complexity = self._calculate_complexity(py_file)
-                loc = self._count_loc(py_file)
-                change_freq = self._get_change_frequency(py_file)
-                last_modified = self._get_last_modified(py_file)
-                
-                # Calculate risk score (complexity × change_frequency)
-                risk_score = min(complexity * (change_freq / 10), 100)
-                
-                heatmap.append({
-                    "file": str(py_file.relative_to(self.project_root)),
-                    "complexity": complexity,
-                    "loc": loc,
-                    "change_frequency": change_freq,
-                    "last_modified": last_modified,
-                    "risk_score": int(risk_score)
-                })
-                
-            except Exception as e:
-                self.logger.debug(f"Error analyzing {py_file}: {e}")
-                continue
+            # .NET Stack
+            ('**/*.cs', 'csharp'),
+            ('**/*.vb', 'vb.net'),
+            ('**/*.fs', 'fsharp'),
+            
+            # JVM Languages
+            ('**/*.java', 'java'),
+            ('**/*.kt', 'kotlin'),
+            ('**/*.scala', 'scala'),
+            ('**/*.groovy', 'groovy'),
+            
+            # Systems Programming
+            ('**/*.c', 'c'),
+            ('**/*.cpp', 'cpp'),
+            ('**/*.cc', 'cpp'),
+            ('**/*.cxx', 'cpp'),
+            ('**/*.h', 'c-header'),
+            ('**/*.hpp', 'cpp-header'),
+            ('**/*.go', 'go'),
+            ('**/*.rs', 'rust'),
+            
+            # Mobile
+            ('**/*.swift', 'swift'),
+            ('**/*.m', 'objective-c'),
+            ('**/*.mm', 'objective-cpp'),
+            
+            # Web Backend
+            ('**/*.php', 'php'),
+            ('**/*.rb', 'ruby'),
+            ('**/*.pl', 'perl'),
+            ('**/*.pm', 'perl'),
+            
+            # Scripting
+            ('**/*.sh', 'shell'),
+            ('**/*.bash', 'bash'),
+            ('**/*.ps1', 'powershell'),
+            ('**/*.r', 'r'),
+            ('**/*.R', 'r'),
+            
+            # Other
+            ('**/*.sql', 'sql'),
+            ('**/*.lua', 'lua'),
+            ('**/*.dart', 'dart')
+        ]
+        
+        # Analyze files from project root
+        for pattern, language in file_patterns:
+            for code_file in self.project_root.glob(pattern):
+                # Skip common non-source directories
+                path_str = str(code_file)
+                if any(skip in path_str for skip in ['venv', '__pycache__', 'node_modules', 'bin', 'obj', '.git', 'packages']):
+                    continue
+            
+                try:
+                    complexity = self._calculate_complexity_generic(code_file, language)
+                    loc = self._count_loc(code_file)
+                    change_freq = self._get_change_frequency(code_file)
+                    last_modified = self._get_last_modified(code_file)
+                    
+                    # Calculate risk score (complexity × change_frequency)
+                    risk_score = min(complexity * (change_freq / 10), 100) if change_freq > 0 else complexity
+                    
+                    heatmap.append({
+                        "file": str(code_file.relative_to(self.project_root)),
+                        "complexity": complexity,
+                        "loc": loc,
+                        "change_frequency": change_freq,
+                        "last_modified": last_modified,
+                        "risk_score": int(risk_score),
+                        "language": language
+                    })
+                    
+                except Exception as e:
+                    self.logger.debug(f"Error analyzing {code_file}: {e}")
+                    continue
         
         # Sort by risk score descending
         heatmap.sort(key=lambda x: x["risk_score"], reverse=True)
@@ -142,7 +200,7 @@ class CodeOrganizationCollector(BaseDataCollector):
     
     def _calculate_complexity(self, file_path: Path) -> int:
         """
-        Calculate cyclomatic complexity for a file.
+        Calculate cyclomatic complexity for Python files (legacy method).
         
         Args:
             file_path: Path to Python file
@@ -150,38 +208,98 @@ class CodeOrganizationCollector(BaseDataCollector):
         Returns:
             Cyclomatic complexity score
         """
-        try:
-            content = file_path.read_text()
-            tree = ast.parse(content)
+        return self._calculate_complexity_generic(file_path, 'python')
+    
+    def _calculate_complexity_generic(self, file_path: Path, language: str) -> int:
+        """
+        Calculate cyclomatic complexity for multiple languages.
+        
+        Uses pattern matching for decision points (if, for, while, switch, case, catch, etc.)
+        Language-agnostic approach works for most C-style and modern languages.
+        
+        Args:
+            file_path: Path to code file
+            language: Programming language identifier
             
+        Returns:
+            Cyclomatic complexity score
+        """
+        try:
+            content = file_path.read_text(encoding='utf-8', errors='ignore')
+            
+            if language == 'python':
+                # Use AST for Python (most accurate)
+                try:
+                    tree = ast.parse(content)
+                    complexity = 1
+                    for node in ast.walk(tree):
+                        if isinstance(node, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
+                            complexity += 1
+                        elif isinstance(node, ast.BoolOp):
+                            complexity += len(node.values) - 1
+                    return complexity
+                except:
+                    pass
+            
+            # Pattern-based complexity for C#, Java, TypeScript, JavaScript
             complexity = 1  # Base complexity
             
-            for node in ast.walk(tree):
-                # Count decision points
-                if isinstance(node, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
-                    complexity += 1
-                elif isinstance(node, ast.BoolOp):
-                    complexity += len(node.values) - 1
-                elif isinstance(node, (ast.And, ast.Or)):
-                    complexity += 1
+            # Decision point patterns (language-agnostic)
+            patterns = [
+                r'\bif\s*\(',           # if statements
+                r'\belse\s+if\s*\(',    # else if
+                r'\bfor\s*\(',          # for loops
+                r'\bforeach\s*\(',      # foreach (C#)
+                r'\bwhile\s*\(',        # while loops
+                r'\bswitch\s*\(',       # switch statements
+                r'\bcase\s+',           # case statements
+                r'\bcatch\s*[\(\{]',    # catch blocks
+                r'\b\&\&\b',            # logical AND
+                r'\b\|\|\b',            # logical OR
+                r'\?.*:',               # ternary operators
+            ]
             
-            return complexity
+            for pattern in patterns:
+                matches = re.findall(pattern, content)
+                complexity += len(matches)
+            
+            return max(complexity, 1)
             
         except Exception as e:
             self.logger.debug(f"Error calculating complexity for {file_path}: {e}")
-            return 0
+            return 1
     
     def _count_loc(self, file_path: Path) -> int:
-        """Count lines of code (excluding comments and blanks)."""
+        """Count lines of code (excluding comments and blanks) - multi-language."""
         try:
-            content = file_path.read_text()
+            content = file_path.read_text(encoding='utf-8', errors='ignore')
             lines = content.split('\n')
             
             loc = 0
+            in_block_comment = False
+            
             for line in lines:
                 stripped = line.strip()
-                if stripped and not stripped.startswith('#'):
-                    loc += 1
+                
+                # Skip empty lines
+                if not stripped:
+                    continue
+                
+                # Handle block comments (/* */ or """ """)
+                if '/*' in stripped or stripped.startswith('"""') or stripped.startswith("'''"):
+                    in_block_comment = True
+                if '*/' in stripped or stripped.endswith('"""') or stripped.endswith("'''"):
+                    in_block_comment = False
+                    continue
+                
+                if in_block_comment:
+                    continue
+                
+                # Skip single-line comments
+                if stripped.startswith('#') or stripped.startswith('//') or stripped.startswith('*'):
+                    continue
+                
+                loc += 1
             
             return loc
             
@@ -483,47 +601,6 @@ class CodeOrganizationCollector(BaseDataCollector):
             "cost_estimate": round(debt_hours * 75, 0)  # $75/hour average
         }
     
-    def _analyze_file_sizes(self) -> Dict[str, Any]:
-        """
-        Analyze file size distribution.
-        
-        Returns:
-            Dict with file size statistics
-        """
-        src_path = self.project_root / "src"
-        if not src_path.exists():
-            return {"distribution": {}, "largest_files": []}
-        
-        sizes = []
-        for py_file in src_path.glob("**/*.py"):
-            if "venv" in str(py_file) or "__pycache__" in str(py_file):
-                continue
-            
-            try:
-                loc = self._count_loc(py_file)
-                sizes.append({
-                    "file": str(py_file.relative_to(self.project_root)),
-                    "loc": loc
-                })
-            except Exception:
-                continue
-        
-        # Distribution
-        distribution = {
-            "small": len([s for s in sizes if s["loc"] < 100]),
-            "medium": len([s for s in sizes if 100 <= s["loc"] < 300]),
-            "large": len([s for s in sizes if 300 <= s["loc"] < 500]),
-            "very_large": len([s for s in sizes if s["loc"] >= 500])
-        }
-        
-        # Largest files
-        largest = sorted(sizes, key=lambda x: x["loc"], reverse=True)[:10]
-        
-        return {
-            "distribution": distribution,
-            "largest_files": largest
-        }
-    
     def _detect_code_smells(self, heatmap: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
         Detect common code smells.
@@ -787,7 +864,9 @@ class CodeOrganizationCollector(BaseDataCollector):
     
     def _analyze_file_sizes(self) -> Dict[str, Any]:
         """
-        Analyze file sizes and identify oversized files.
+        Analyze file sizes and identify oversized files (multi-language support).
+        
+        Supports all languages defined in _generate_heatmap() method.
         
         Returns:
             Dict with file size statistics
@@ -802,39 +881,51 @@ class CodeOrganizationCollector(BaseDataCollector):
             "largest_files": []
         }
         
-        src_path = self.project_root / "src"
-        if not src_path.exists():
-            return sizes
-        
         file_list = []
         
-        for py_file in src_path.glob("**/*.py"):
-            if "venv" in str(py_file) or "__pycache__" in str(py_file):
-                continue
-            
-            try:
-                loc = self._count_loc(py_file)
-                file_size_kb = py_file.stat().st_size / 1024
+        # Use same multi-language patterns as _generate_heatmap
+        file_patterns = [
+            '**/*.py', '**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx', '**/*.vue',
+            '**/*.cs', '**/*.vb', '**/*.fs',
+            '**/*.java', '**/*.kt', '**/*.scala', '**/*.groovy',
+            '**/*.c', '**/*.cpp', '**/*.cc', '**/*.cxx', '**/*.h', '**/*.hpp',
+            '**/*.go', '**/*.rs',
+            '**/*.swift', '**/*.m', '**/*.mm',
+            '**/*.php', '**/*.rb', '**/*.pl', '**/*.pm',
+            '**/*.sh', '**/*.bash', '**/*.ps1', '**/*.r', '**/*.R',
+            '**/*.sql', '**/*.lua', '**/*.dart'
+        ]
+        
+        for pattern in file_patterns:
+            for code_file in self.project_root.glob(pattern):
+                # Skip common non-source directories
+                path_str = str(code_file)
+                if any(skip in path_str for skip in ['venv', '__pycache__', 'node_modules', 'bin', 'obj', '.git', 'packages']):
+                    continue
                 
-                file_list.append({
-                    "file": str(py_file.relative_to(self.project_root)),
-                    "loc": loc,
-                    "size_kb": round(file_size_kb, 2)
-                })
-                
-                # Categorize
-                if loc < 100:
-                    sizes["distribution"]["small"] += 1
-                elif loc < 300:
-                    sizes["distribution"]["medium"] += 1
-                elif loc < 500:
-                    sizes["distribution"]["large"] += 1
-                else:
-                    sizes["distribution"]["very_large"] += 1
+                try:
+                    loc = self._count_loc(code_file)
+                    file_size_kb = code_file.stat().st_size / 1024
                     
-            except Exception as e:
-                self.logger.debug(f"Error analyzing size of {py_file}: {e}")
-                continue
+                    file_list.append({
+                        "file": str(code_file.relative_to(self.project_root)),
+                        "loc": loc,
+                        "size_kb": round(file_size_kb, 2)
+                    })
+                    
+                    # Categorize
+                    if loc < 100:
+                        sizes["distribution"]["small"] += 1
+                    elif loc < 300:
+                        sizes["distribution"]["medium"] += 1
+                    elif loc < 500:
+                        sizes["distribution"]["large"] += 1
+                    else:
+                        sizes["distribution"]["very_large"] += 1
+                        
+                except Exception as e:
+                    self.logger.debug(f"Error analyzing size of {code_file}: {e}")
+                    continue
         
         # Get largest files
         file_list.sort(key=lambda x: x["loc"], reverse=True)

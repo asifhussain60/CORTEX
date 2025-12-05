@@ -1,7 +1,7 @@
 {
   "overall_health_score": 49,
   "status": "needs attention",
-  "last_scan": "2025-12-05T07:18:40.240374",
+  "last_scan": "2025-12-05T09:42:37.920619",
   "summary": {
     "total_files": 96,
     "total_loc": 5829,
@@ -24,7 +24,7 @@
     "tech_stack": 70.0
   },
   "health_status": "Needs Attention",
-  "last_updated": "2025-12-05T07:18:40.240388",
+  "last_updated": "2025-12-05T09:42:37.920640",
   "trends": {
     "health_trend": "stable",
     "velocity_trend": "stable",

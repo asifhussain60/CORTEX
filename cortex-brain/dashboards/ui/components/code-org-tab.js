@@ -396,50 +396,50 @@ window.showHeatmapTooltip = function(event, data) {
     tooltip.id = 'heatmap-tooltip';
     tooltip.style.cssText = `
         position: fixed;
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
-        border: 1px solid ${complexityColor};
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid ${complexityColor};
         border-radius: 12px;
         padding: 1.25rem;
         max-width: 400px;
         z-index: 10000;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 20px ${complexityColor}66;
         pointer-events: none;
         animation: tooltipFadeIn 0.2s ease-out;
-        backdrop-filter: blur(10px);
     `;
     
     tooltip.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #333333;">
             <div style="font-size: 2rem;">${complexityIcon}</div>
             <div style="flex: 1;">
-                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">
+                <div style="font-weight: 700; font-size: 1.1rem; color: #ffffff; margin-bottom: 0.25rem;">
                     ${fileName}
                 </div>
-                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                <div style="font-size: 0.875rem; color: #cccccc;">
                     ${loc.toLocaleString()} lines of code
                 </div>
             </div>
         </div>
         
         <div style="margin-bottom: 1rem;">
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${complexityColor}22; border-radius: 8px;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${complexityColor}33; border-radius: 8px; border: 1px solid ${complexityColor};">
                 <span style="font-size: 1.25rem;">${complexityIcon}</span>
-                <span style="color: ${complexityColor}; font-weight: 600; font-size: 0.875rem;">
+                <span style="color: #ffffff; font-weight: 600; font-size: 0.875rem;">
                     Complexity: ${complexity} (${complexityLabel})
                 </span>
             </div>
         </div>
         
-        <div style="color: var(--text-secondary); line-height: 1.6; font-size: 0.875rem;">
+        <div style="color: #dddddd; line-height: 1.6; font-size: 0.875rem;">
             ${recommendation}
         </div>
         
         ${complexity >= 50 ? `
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
-                <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600;">
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #333333;">
+                <div style="color: #ffd700; font-size: 0.875rem; font-weight: 600;">
                     💡 Refactoring Tips
                 </div>
-                <ul style="color: var(--text-secondary); font-size: 0.875rem; margin: 0.5rem 0 0 1.25rem; line-height: 1.6;">
+                <ul style="color: #dddddd; font-size: 0.875rem; margin: 0.5rem 0 0 1.25rem; line-height: 1.6;">
                     <li>Extract complex methods into smaller functions</li>
                     <li>Reduce nested conditional statements</li>
                     <li>Consider applying design patterns</li>
@@ -550,61 +550,61 @@ window.showHotspotTooltip = function(event, hotspot, element) {
     tooltip.id = 'hotspot-tooltip';
     tooltip.style.cssText = `
         position: fixed;
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
-        border: 1px solid ${riskColor};
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid ${riskColor};
         border-radius: 12px;
         padding: 1.25rem;
         max-width: 450px;
         z-index: 10000;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 20px ${riskColor}66;
         pointer-events: none;
         animation: tooltipFadeIn 0.2s ease-out;
-        backdrop-filter: blur(10px);
     `;
     
     tooltip.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #333333;">
             <div style="font-size: 2rem;">${riskIcon}</div>
             <div style="flex: 1;">
-                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">
+                <div style="font-weight: 700; font-size: 1.1rem; color: #ffffff; margin-bottom: 0.25rem;">
                     ${fileName}
                 </div>
-                <div style="font-size: 0.875rem; color: var(--text-secondary); font-family: monospace;">
+                <div style="font-size: 0.875rem; color: #cccccc; font-family: monospace;">
                     ${hotspot.file || 'Unknown'}
                 </div>
             </div>
         </div>
         
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${riskColor}22; border-radius: 8px;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${riskColor}33; border: 1px solid ${riskColor}; border-radius: 8px;">
                 <span style="font-size: 1.25rem;">${riskIcon}</span>
-                <span style="color: ${riskColor}; font-weight: 600; font-size: 0.875rem;">
+                <span style="color: #ffffff; font-weight: 600; font-size: 0.875rem;">
                     Risk: ${riskScore} (${riskLabel})
                 </span>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--glass-border); border-radius: 8px;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #333333; border: 1px solid #666666; border-radius: 8px;">
                 <span style="font-size: 1.25rem;">⚙️</span>
-                <span style="color: var(--text-primary); font-weight: 600; font-size: 0.875rem;">
+                <span style="color: #ffffff; font-weight: 600; font-size: 0.875rem;">
                     Complexity: ${complexity}
                 </span>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--glass-border); border-radius: 8px;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #333333; border: 1px solid #666666; border-radius: 8px;">
                 <span style="font-size: 1.25rem;">📊</span>
-                <span style="color: var(--text-primary); font-weight: 600; font-size: 0.875rem;">
+                <span style="color: #ffffff; font-weight: 600; font-size: 0.875rem;">
                     ${changeFreq} commits
                 </span>
             </div>
         </div>
         
-        <div style="color: var(--text-secondary); line-height: 1.6; font-size: 0.875rem; margin-bottom: 1rem;">
+        <div style="color: #dddddd; line-height: 1.6; font-size: 0.875rem; margin-bottom: 1rem;">
             ${explanation}
         </div>
         
-        <div style="padding-top: 1rem; border-top: 1px solid var(--glass-border);">
-            <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
+        <div style="padding-top: 1rem; border-top: 1px solid #333333;">
+            <div style="color: #ffd700; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
                 💡 Recommended Action
             </div>
-            <div style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">
+            <div style="color: #dddddd; font-size: 0.875rem; line-height: 1.6;">
                 ${recommendation}
             </div>
         </div>

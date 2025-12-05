@@ -40,19 +40,20 @@
       "loc": 2588,
       "technologies": [
         "Dependency Injection",
-        "JSON.NET"
+        "JSON.NET",
+        "Oracle Database"
       ],
       "key_files": [
-        "ValidationAutofacModule.cs",
-        "IFileEncryptionProvider.cs",
-        "AssemblyInfo.cs",
-        "EncryptionAutofacModule.cs",
         "FileSettings.cs",
-        "NonSeekableStreamLinesEnumerator.cs",
-        "Extensions.cs",
+        "ApplicationConfiguration.cs",
+        "PsfValidatorRepository.cs",
+        "LoggingAutofacModule.cs",
         "ValidationScheme.cs",
-        "AESFileEncryptionProvider.cs",
-        "ApplicationConfiguration.cs"
+        "PrevalidationData.cs",
+        "PSFValidator.cs",
+        "NonSeekableStreamLinesEnumerator.cs",
+        "ValidationAutofacModule.cs",
+        "PSFPrevalResult.cs"
       ],
       "folders": [
         "Business"
@@ -60,7 +61,7 @@
     },
     {
       "name": "Service Layer",
-      "path": "WebServiceAppl",
+      "path": "WebService",
       "file_count": 22,
       "loc": 1674,
       "technologies": [
@@ -68,20 +69,20 @@
         "Dependency Injection"
       ],
       "key_files": [
-        "AssemblyInfo.cs",
-        "PsfPreValidationControllerV2.cs",
-        "CustTokenManager.cs",
-        "InstrumentCallAttribute.cs",
-        "DataObjects.cs",
-        "PsfTempFileProvider.cs",
-        "JwtBearerTokenKeyProvider.cs",
+        "LegacyBasicAuthenticationAttribute.cs",
+        "SwaggerConfig.cs",
+        "ApiJwtBearerAuthorizationAttribute.cs",
         "Global.asax.cs",
+        "CustTokenManager.cs",
+        "PSFPreValidate.asmx.cs",
+        "AssemblyInfo.cs",
+        "PSFPreValidate.asmx.cs",
         "TempFileWatcherProvider.cs",
-        "ApiJwtBearerAuthorizationAttribute.cs"
+        "ApplicationConfigInvalidateCacheController.cs"
       ],
       "folders": [
-        "WebServiceAppl",
-        "WebService"
+        "WebService",
+        "WebServiceAppl"
       ]
     },
     {
@@ -94,12 +95,12 @@
         "JSON.NET"
       ],
       "key_files": [
+        "PSFUtilitiesTests.cs",
+        "PsfValidatorTests.cs",
+        "AssemblyInfo.cs",
         "OtherTests.cs",
         "FileSettingsTests.cs",
-        "PSFUtilitiesTests.cs",
-        "PsfPreValidationV2ControllerTests.cs",
-        "AssemblyInfo.cs",
-        "PsfValidatorTests.cs"
+        "PsfPreValidationV2ControllerTests.cs"
       ],
       "folders": [
         "PSFPreValidationTests"
@@ -128,8 +129,8 @@
         "Oracle Database"
       ],
       "key_files": [
-        "DataObjects.cs",
         "PrevalidationData.cs",
+        "DataObjects.cs",
         "PsfValidatorRepository.cs"
       ],
       "folders": []
@@ -142,21 +143,21 @@
       "loc": 2588,
       "file_count": 21,
       "dependencies": [
-        "Twilio",
-        "Microsoft.AspNet.WebApi.Client",
-        "HQY.Legacy.WW.Esp.DataAccess",
-        "System.Globalization",
-        "System.Runtime.Extensions",
-        "NETStandard.Library",
-        "Serilog.Enrichers.Thread",
-        "EnterpriseLibrary.ExceptionHandling",
-        "Microsoft.IdentityModel.Logging",
-        "EnterpriseLibrary.Data",
-        "System.Buffers",
-        "System.Text.Encoding.Extensions",
-        "System.Threading.Tasks",
-        "HQY.Legacy.CommonUtilities.Utilities",
-        "HQY.Legacy.WW.Common.BL.DomainManager"
+        "HQY.Legacy.Interop.CAPICOM",
+        "HQY.Legacy.WW.Common.DataAccess",
+        "HQY.FileCenter.Configuration",
+        "System.Net.Http",
+        "HQY.Legacy.WW.Common.Data",
+        "Autofac",
+        "HQY.Legacy.WW.Orchestration.Data",
+        "Microsoft.Build.Tasks.Git",
+        "Serilog.Extensions.Logging",
+        "System.Runtime.Numerics",
+        "System.ObjectModel",
+        "HQY.Legacy.PasswordHashingLib",
+        "System.Reflection.Primitives",
+        "DevSecOps.Validation",
+        "HQY.Legacy.WW.Esp.BL.DomainManager"
       ],
       "key_classes": [
         "AppConstants",
@@ -178,21 +179,21 @@
       "loc": 1570,
       "file_count": 6,
       "dependencies": [
-        "Microsoft.AspNet.WebApi.Client",
-        "xunit.extensibility.execution",
-        "EnterpriseLibrary.ExceptionHandling",
-        "Microsoft.IdentityModel.Logging",
-        "EnterpriseLibrary.Data",
-        "System.Buffers",
-        "Microsoft.Bcl.Memory",
-        "EnterpriseLibrary.Logging.Database",
+        "HQY.FileCenter.Configuration",
         "HQY.Legacy.WW.Common.Data",
-        "CommonServiceLocator",
-        "System.Numerics.Vectors",
+        "Autofac",
+        "HQY.Legacy.WW.Orchestration.Data",
+        "Microsoft.Build.Tasks.Git",
+        "Serilog.Extensions.Logging",
+        "xunit.analyzers",
+        "System.ComponentModel.Primitives",
         "DevSecOps.Validation",
-        "HQY.Legacy.WW.Commuter.Service.Contract",
-        "WW.ODPNetFramework",
-        "System.Formats.Asn1"
+        "HQY.Legacy.WW.EnterpriseLibrary",
+        "Newtonsoft.Json",
+        "HQY.Legacy.WW.Orchestration.Service.Contract",
+        "Microsoft.Extensions.DependencyInjection",
+        "Microsoft.IdentityModel.Abstractions",
+        "WW.ODPNetFramework"
       ],
       "key_classes": [
         "FileSettingsTests",
@@ -209,21 +210,21 @@
       "loc": 1252,
       "file_count": 17,
       "dependencies": [
-        "Microsoft.AspNet.WebApi.Client",
-        "Serilog.Enrichers.Thread",
-        "EnterpriseLibrary.ExceptionHandling",
-        "Microsoft.IdentityModel.Logging",
-        "Swashbuckle",
-        "EnterpriseLibrary.Data",
-        "System.Buffers",
-        "Microsoft.Bcl.Memory",
-        "EnterpriseLibrary.Logging.Database",
-        "Serilog.Enrichers.Environment",
-        "Serilog.Sinks.File",
+        "HQY.FileCenter.Configuration",
         "HQY.Legacy.WW.Common.Data",
-        "CommonServiceLocator",
-        "System.Numerics.Vectors",
-        "DevSecOps.Validation"
+        "Autofac",
+        "HQY.Legacy.WW.Orchestration.Data",
+        "Microsoft.Build.Tasks.Git",
+        "Swashbuckle.Core",
+        "Swashbuckle",
+        "DevSecOps.Validation",
+        "HQY.Legacy.WW.EnterpriseLibrary",
+        "Newtonsoft.Json",
+        "HQY.Legacy.WW.Orchestration.Service.Contract",
+        "Microsoft.Extensions.DependencyInjection",
+        "Microsoft.IdentityModel.Abstractions",
+        "WW.ODPNetFramework",
+        "Microsoft.Extensions.DependencyInjection.Abstractions"
       ],
       "key_classes": [
         "Global.asax",
@@ -321,6 +322,6 @@
     "endpoint_count": 7,
     "database_count": 0,
     "architecture_score": 73,
-    "last_analyzed": "2025-12-05T07:18:29.948299"
+    "last_analyzed": "2025-12-05T09:42:25.165170"
   }
 }
