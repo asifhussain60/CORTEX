@@ -44,16 +44,16 @@
         "Oracle Database"
       ],
       "key_files": [
-        "FileSettings.cs",
-        "ApplicationConfiguration.cs",
         "PsfValidatorRepository.cs",
-        "LoggingAutofacModule.cs",
-        "ValidationScheme.cs",
-        "PrevalidationData.cs",
-        "PSFValidator.cs",
+        "ServiceResolver.cs",
+        "IFileEncryptionProvider.cs",
+        "PgpFileEncryptionProvider.cs",
+        "AESFileEncryptionProvider.cs",
+        "AssemblyInfo.cs",
         "NonSeekableStreamLinesEnumerator.cs",
-        "ValidationAutofacModule.cs",
-        "PSFPrevalResult.cs"
+        "FileSettings.cs",
+        "PlainTextEncryptionProvider.cs",
+        "PrevalidationData.cs"
       ],
       "folders": [
         "Business"
@@ -69,16 +69,16 @@
         "Dependency Injection"
       ],
       "key_files": [
-        "LegacyBasicAuthenticationAttribute.cs",
-        "SwaggerConfig.cs",
-        "ApiJwtBearerAuthorizationAttribute.cs",
-        "Global.asax.cs",
-        "CustTokenManager.cs",
-        "PSFPreValidate.asmx.cs",
+        "ApplicationConfigInvalidateCacheController.cs",
+        "PsfPreValidationControllerV2.cs",
         "AssemblyInfo.cs",
-        "PSFPreValidate.asmx.cs",
+        "JwtBearerTokenKeyProvider.cs",
+        "CustTokenManager.cs",
+        "PsfTempFileProvider.cs",
+        "ServiceResolver.cs",
         "TempFileWatcherProvider.cs",
-        "ApplicationConfigInvalidateCacheController.cs"
+        "WebApiConfig.cs",
+        "GlobalExceptionFilterAttribute.cs"
       ],
       "folders": [
         "WebService",
@@ -99,8 +99,8 @@
         "PsfValidatorTests.cs",
         "AssemblyInfo.cs",
         "OtherTests.cs",
-        "FileSettingsTests.cs",
-        "PsfPreValidationV2ControllerTests.cs"
+        "PsfPreValidationV2ControllerTests.cs",
+        "FileSettingsTests.cs"
       ],
       "folders": [
         "PSFPreValidationTests"
@@ -143,21 +143,21 @@
       "loc": 2588,
       "file_count": 21,
       "dependencies": [
-        "HQY.Legacy.Interop.CAPICOM",
+        "System.Numerics.Vectors",
+        "System.Text.Encoding",
+        "System.Threading.Tasks",
+        "HQY.Legacy.WW.Commuter.BL.DomainManager",
+        "HQY.Legacy.WW.SA.Data",
         "HQY.Legacy.WW.Common.DataAccess",
-        "HQY.FileCenter.Configuration",
-        "System.Net.Http",
-        "HQY.Legacy.WW.Common.Data",
-        "Autofac",
-        "HQY.Legacy.WW.Orchestration.Data",
-        "Microsoft.Build.Tasks.Git",
         "Serilog.Extensions.Logging",
-        "System.Runtime.Numerics",
-        "System.ObjectModel",
-        "HQY.Legacy.PasswordHashingLib",
-        "System.Reflection.Primitives",
-        "DevSecOps.Validation",
-        "HQY.Legacy.WW.Esp.BL.DomainManager"
+        "Microsoft.Web.Services3",
+        "HQY.Legacy.WW.CFMS",
+        "System.Xml.XDocument",
+        "Microsoft.Extensions.Caching.Abstractions",
+        "HQY.Legacy.WW.CommonBusiness",
+        "CommonServiceLocator",
+        "Microsoft.IdentityModel.Abstractions",
+        "WW.ODPNetFramework"
       ],
       "key_classes": [
         "AppConstants",
@@ -179,21 +179,21 @@
       "loc": 1570,
       "file_count": 6,
       "dependencies": [
-        "HQY.FileCenter.Configuration",
-        "HQY.Legacy.WW.Common.Data",
-        "Autofac",
-        "HQY.Legacy.WW.Orchestration.Data",
-        "Microsoft.Build.Tasks.Git",
+        "System.Numerics.Vectors",
+        "System.Text.Encoding",
+        "HQY.Legacy.WW.SA.Data",
         "Serilog.Extensions.Logging",
-        "xunit.analyzers",
-        "System.ComponentModel.Primitives",
-        "DevSecOps.Validation",
-        "HQY.Legacy.WW.EnterpriseLibrary",
-        "Newtonsoft.Json",
-        "HQY.Legacy.WW.Orchestration.Service.Contract",
-        "Microsoft.Extensions.DependencyInjection",
+        "Microsoft.Web.Services3",
+        "HQY.Legacy.WW.CFMS",
+        "CommonServiceLocator",
         "Microsoft.IdentityModel.Abstractions",
-        "WW.ODPNetFramework"
+        "WW.ODPNetFramework",
+        "EnterpriseLibrary.Common",
+        "HQY.Legacy.WW.Orchestration.Data",
+        "HQY.Legacy.WW.Security.Service.Contract",
+        "Autofac",
+        "System.IdentityModel.Tokens.Jwt",
+        "HQY.FileCenter.Configuration"
       ],
       "key_classes": [
         "FileSettingsTests",
@@ -210,21 +210,21 @@
       "loc": 1252,
       "file_count": 17,
       "dependencies": [
-        "HQY.FileCenter.Configuration",
-        "HQY.Legacy.WW.Common.Data",
-        "Autofac",
-        "HQY.Legacy.WW.Orchestration.Data",
-        "Microsoft.Build.Tasks.Git",
-        "Swashbuckle.Core",
-        "Swashbuckle",
-        "DevSecOps.Validation",
-        "HQY.Legacy.WW.EnterpriseLibrary",
-        "Newtonsoft.Json",
-        "HQY.Legacy.WW.Orchestration.Service.Contract",
-        "Microsoft.Extensions.DependencyInjection",
+        "System.Numerics.Vectors",
+        "System.Text.Encoding",
+        "HQY.Legacy.WW.SA.Data",
+        "Microsoft.Web.Services3",
+        "HQY.Legacy.WW.CFMS",
+        "WebActivatorEx",
+        "CommonServiceLocator",
         "Microsoft.IdentityModel.Abstractions",
         "WW.ODPNetFramework",
-        "Microsoft.Extensions.DependencyInjection.Abstractions"
+        "EnterpriseLibrary.Common",
+        "HQY.Legacy.WW.Orchestration.Data",
+        "HQY.Legacy.WW.Security.Service.Contract",
+        "Autofac",
+        "System.IdentityModel.Tokens.Jwt",
+        "HQY.FileCenter.Configuration"
       ],
       "key_classes": [
         "Global.asax",
@@ -322,6 +322,6 @@
     "endpoint_count": 7,
     "database_count": 0,
     "architecture_score": 73,
-    "last_analyzed": "2025-12-05T09:42:25.165170"
+    "last_analyzed": "2025-12-05T09:56:31.038311"
   }
 }

@@ -146,8 +146,8 @@ class DashboardServer:
             self.server_thread.start()
             self._running = True
             
-            # Construct dashboard URL
-            url = f"http://localhost:{self.port}/index.html?source={source}"
+            # Construct dashboard URL (index.html is in ui/ subdirectory)
+            url = f"http://localhost:{self.port}/ui/index.html?source={source}"
             
             # Wait briefly for server to start
             time.sleep(0.5)
@@ -252,31 +252,40 @@ def launch_dashboard(
                 "url": None
             }
         
-        # Locate dashboard UI directory
-        dashboard_dir = cortex_root / "cortex-brain" / "dashboards" / "ui"
+        # Locate dashboard parent directory (contains ui/ and all data subdirs)
+        dashboard_parent = cortex_root / "cortex-brain" / "dashboards"
+        dashboard_ui = dashboard_parent / "ui"
         
-        if not dashboard_dir.exists():
+        if not dashboard_parent.exists():
             return {
                 "success": False,
-                "message": f"Dashboard UI directory not found: {dashboard_dir}",
+                "message": f"Dashboard directory not found: {dashboard_parent}",
+                "port": None,
+                "url": None
+            }
+        
+        if not dashboard_ui.exists():
+            return {
+                "success": False,
+                "message": f"Dashboard UI directory not found: {dashboard_ui}",
                 "port": None,
                 "url": None
             }
         
         # Check for index.html
-        index_file = dashboard_dir / "index.html"
+        index_file = dashboard_ui / "index.html"
         if not index_file.exists():
             return {
                 "success": False,
-                "message": f"Dashboard index.html not found in {dashboard_dir}",
+                "message": f"Dashboard index.html not found in {dashboard_ui}",
                 "port": None,
                 "url": None
             }
         
-        logger.info(f"Launching dashboard from {dashboard_dir}")
+        logger.info(f"Launching dashboard from {dashboard_parent}")
         
-        # Create and start server
-        server = DashboardServer(dashboard_dir, port)
+        # Create and start server (serve from parent to access all data subdirs)
+        server = DashboardServer(dashboard_parent, port)
         result = server.start(auto_open=auto_open, source=source)
         
         if result["success"]:
@@ -297,6 +306,14 @@ def launch_dashboard(
 
 def main():
     """CLI entry point for testing."""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="Launch CORTEX Dashboard")
+    parser.add_argument("--port", type=int, default=8080, help="Port to serve on (default: 8080)")
+    parser.add_argument("--source", type=str, default="mock", help="Data source to load (default: mock)")
+    parser.add_argument("--no-browser", action="store_true", help="Don't auto-open browser")
+    args = parser.parse_args()
+    
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -304,7 +321,11 @@ def main():
     
     print("🚀 Launching CORTEX Dashboard...\n")
     
-    result = launch_dashboard()
+    result = launch_dashboard(
+        port=args.port,
+        auto_open=not args.no_browser,
+        source=args.source
+    )
     
     if result["success"]:
         print(f"✅ {result['message']}")

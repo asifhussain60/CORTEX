@@ -19,6 +19,7 @@ from collections import defaultdict, Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from src.dashboard.data.base_collector import BaseDataCollector
+from src.dashboard.utils.recursive_scanner import RecursiveScanner
 
 
 class CodeOrganizationCollector(BaseDataCollector):
@@ -402,34 +403,39 @@ class CodeOrganizationCollector(BaseDataCollector):
             "total_directories": 0
         }
         
-        src_path = self.project_root / "src"
-        if not src_path.exists():
+        # Use RecursiveScanner to find all code files (not just Python)
+        scanner = RecursiveScanner(self.project_root, logger=self.logger)
+        all_files = scanner.scan_files()  # Scans from root, all languages
+        
+        if not all_files:
             return structure
         
-        # Analyze directory structure
-        for root, dirs, files in os.walk(src_path):
-            root_path = Path(root)
-            
-            # Skip venv and cache directories
-            dirs[:] = [d for d in dirs if d not in ['venv', '__pycache__', '.git']]
-            
-            if not files:
-                continue
-            
-            py_files = [f for f in files if f.endswith('.py')]
-            if not py_files:
-                continue
-            
-            structure["modules"].append({
-                "path": str(root_path.relative_to(self.project_root)),
-                "file_count": len(py_files),
-                "subdirectories": len(dirs)
-            })
-            
-            # Calculate depth
-            depth = len(root_path.relative_to(src_path).parts)
-            structure["depth"] = max(structure["depth"], depth)
+        # Group files by directory
+        dir_groups = {}
+        for file_path in all_files:
+            parent = file_path.parent
+            if parent not in dir_groups:
+                dir_groups[parent] = []
+            dir_groups[parent].append(file_path)
         
+        # Build structure
+        max_depth = 0
+        for directory, files in dir_groups.items():
+            try:
+                rel_path = directory.relative_to(self.project_root)
+                depth = len(rel_path.parts)
+                max_depth = max(max_depth, depth)
+                
+                structure["modules"].append({
+                    "path": str(rel_path),
+                    "file_count": len(files),
+                    "subdirectories": len([d for d in directory.iterdir() if d.is_dir()])
+                })
+            except ValueError:
+                # Directory outside project root, skip
+                continue
+        
+        structure["depth"] = max_depth
         structure["total_directories"] = len(structure["modules"])
         
         return structure
@@ -441,8 +447,11 @@ class CodeOrganizationCollector(BaseDataCollector):
         Returns:
             Dict with duplication metrics
         """
-        src_path = self.project_root / "src"
-        if not src_path.exists():
+        # Use RecursiveScanner to find all Python files from root
+        scanner = RecursiveScanner(self.project_root, logger=self.logger)
+        py_files = scanner.scan_python_files()
+        
+        if not py_files:
             return {"duplication_rate": 0, "duplicate_blocks": []}
         
         # Track line hashes
@@ -450,9 +459,7 @@ class CodeOrganizationCollector(BaseDataCollector):
         total_lines = 0
         duplicate_lines = 0
         
-        for py_file in src_path.glob("**/*.py"):
-            if "venv" in str(py_file) or "__pycache__" in str(py_file):
-                continue
+        for py_file in py_files:
             
             try:
                 content = py_file.read_text()
@@ -667,8 +674,11 @@ class CodeOrganizationCollector(BaseDataCollector):
             "files_with_duplicates": 0
         }
         
-        src_path = self.project_root / "src"
-        if not src_path.exists():
+        # Use RecursiveScanner to find all Python files from root
+        scanner = RecursiveScanner(self.project_root, logger=self.logger)
+        py_files = scanner.scan_python_files()
+        
+        if not py_files:
             return duplications
         
         # Simple duplication detection: look for identical function signatures
@@ -676,9 +686,7 @@ class CodeOrganizationCollector(BaseDataCollector):
         total_functions = 0
         duplicate_count = 0
         
-        for py_file in src_path.glob("**/*.py"):
-            if "venv" in str(py_file) or "__pycache__" in str(py_file):
-                continue
+        for py_file in py_files:
             
             try:
                 content = py_file.read_text()

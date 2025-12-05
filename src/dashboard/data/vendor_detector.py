@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional, Set
 
 from src.dashboard.data.base_collector import BaseDataCollector
+from src.dashboard.utils.recursive_scanner import RecursiveScanner
 
 
 class VendorDetector(BaseDataCollector):
@@ -307,13 +308,14 @@ class VendorDetector(BaseDataCollector):
         """Check for SDK imports in Python files."""
         result = {"found": False, "locations": [], "version": None}
         
-        src_path = self.project_root / "src"
-        if not src_path.exists():
+        # Use RecursiveScanner to find all Python files from root
+        scanner = RecursiveScanner(self.project_root, logger=self.logger)
+        py_files = scanner.scan_python_files()
+        
+        if not py_files:
             return result
         
-        for py_file in src_path.glob("**/*.py"):
-            if "venv" in str(py_file) or "__pycache__" in str(py_file):
-                continue
+        for py_file in py_files:
             
             try:
                 content = py_file.read_text()
@@ -346,13 +348,14 @@ class VendorDetector(BaseDataCollector):
         """Check for API endpoint usage in code."""
         result = {"found": False, "locations": []}
         
-        src_path = self.project_root / "src"
-        if not src_path.exists():
+        # Use RecursiveScanner to find all Python files from root
+        scanner = RecursiveScanner(self.project_root, logger=self.logger)
+        py_files = scanner.scan_python_files()
+        
+        if not py_files:
             return result
         
-        for py_file in src_path.glob("**/*.py"):
-            if "venv" in str(py_file):
-                continue
+        for py_file in py_files:
             
             content = self._read_file(str(py_file.relative_to(self.project_root)))
             if content:

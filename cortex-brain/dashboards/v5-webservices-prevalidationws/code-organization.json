@@ -450,9 +450,85 @@
     }
   ],
   "module_structure": {
-    "modules": [],
-    "depth": 0,
-    "total_directories": 0
+    "modules": [
+      {
+        "path": "PSFPreValidationTests",
+        "file_count": 5,
+        "subdirectories": 2
+      },
+      {
+        "path": "WebServiceAppl\\Controllers",
+        "file_count": 3,
+        "subdirectories": 0
+      },
+      {
+        "path": "Business",
+        "file_count": 15,
+        "subdirectories": 2
+      },
+      {
+        "path": "WebServiceAppl\\Properties",
+        "file_count": 1,
+        "subdirectories": 0
+      },
+      {
+        "path": "WebServiceAppl\\Repositories",
+        "file_count": 3,
+        "subdirectories": 0
+      },
+      {
+        "path": "WebService\\App_Code",
+        "file_count": 4,
+        "subdirectories": 0
+      },
+      {
+        "path": "Business\\EncryptionProviders",
+        "file_count": 4,
+        "subdirectories": 0
+      },
+      {
+        "path": "WebServiceAppl\\App_Start",
+        "file_count": 2,
+        "subdirectories": 0
+      },
+      {
+        "path": "WebServiceAppl\\Filters",
+        "file_count": 4,
+        "subdirectories": 0
+      },
+      {
+        "path": "WebServiceAppl",
+        "file_count": 3,
+        "subdirectories": 8
+      },
+      {
+        "path": "PSFPreValidationTests\\Properties",
+        "file_count": 1,
+        "subdirectories": 0
+      },
+      {
+        "path": "WebServiceAppl\\Old_App_Code",
+        "file_count": 1,
+        "subdirectories": 0
+      },
+      {
+        "path": "Business\\AutofacModules",
+        "file_count": 3,
+        "subdirectories": 0
+      },
+      {
+        "path": "WebServiceAppl\\AutofacModules",
+        "file_count": 1,
+        "subdirectories": 0
+      },
+      {
+        "path": "PSFPreValidationTests\\Controller",
+        "file_count": 1,
+        "subdirectories": 0
+      }
+    ],
+    "depth": 2,
+    "total_directories": 15
   },
   "file_complexity": [
     {
