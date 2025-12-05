@@ -357,6 +357,200 @@ function capitalizeFirst(str) {
 }
 
 /**
+ * Show overview metric tooltip with explanation and recommendations
+ * @param {Event} event - Mouse event
+ * @param {string} metricName - Name of the metric
+ * @param {number} score - Metric score
+ * @param {string} metricType - Type of metric for contextual info
+ * @param {HTMLElement} card - Card element
+ */
+window.showOverviewTooltip = function(event, metricName, score, metricType, card) {
+    hideOverviewTooltip();
+    
+    let scoreColor = 'var(--success)';
+    let scoreLabel = 'Excellent';
+    let scoreIcon = '🟢';
+    
+    if (score < 50) {
+        scoreColor = 'var(--danger)';
+        scoreLabel = 'Critical';
+        scoreIcon = '🔴';
+    } else if (score < 75) {
+        scoreColor = 'var(--warning)';
+        scoreLabel = 'Needs Improvement';
+        scoreIcon = '🟡';
+    } else if (score < 90) {
+        scoreColor = 'var(--info)';
+        scoreLabel = 'Good';
+        scoreIcon = '🟢';
+    }
+    
+    // Generate metric-specific explanations
+    const metricInfo = {
+        code_quality: {
+            description: 'Measures cyclomatic complexity, code duplication, maintainability index, and adherence to coding standards.',
+            factors: ['Cyclomatic Complexity', 'Code Duplication %', 'Maintainability Index', 'Coding Standards Compliance'],
+            recommendations: score < 75 
+                ? 'Refactor complex methods, eliminate code duplication, improve naming conventions, add documentation.'
+                : 'Continue following best practices, perform regular code reviews, maintain consistent style guide adherence.'
+        },
+        security: {
+            description: 'Evaluates OWASP compliance, vulnerability count, authentication/authorization patterns, and dependency security.',
+            factors: ['OWASP Top 10 Compliance', 'Known CVEs', 'Authentication Strength', 'Dependency Security'],
+            recommendations: score < 75
+                ? '⚠️ Address identified vulnerabilities immediately. Update insecure dependencies. Review authentication mechanisms.'
+                : 'Monitor for new CVEs, schedule regular security audits, keep dependencies updated.'
+        },
+        test_coverage: {
+            description: 'Percentage of code covered by automated tests (unit, integration, end-to-end).',
+            factors: ['Unit Test Coverage', 'Integration Test Coverage', 'Critical Path Coverage', 'Edge Case Coverage'],
+            recommendations: score < 75
+                ? 'Prioritize testing critical business logic. Add tests for edge cases. Aim for 80%+ coverage on core modules.'
+                : 'Maintain coverage levels, focus on testing new features, consider mutation testing.'
+        },
+        documentation: {
+            description: 'Assesses code comments, README quality, API documentation, and architectural decision records.',
+            factors: ['Inline Comments', 'API Documentation', 'README Completeness', 'Architecture Docs'],
+            recommendations: score < 75
+                ? 'Add XML comments to public APIs. Create/update README with setup instructions. Document architectural decisions.'
+                : 'Keep documentation in sync with code changes, maintain changelog, document design patterns used.'
+        }
+    };
+    
+    const info = metricInfo[metricType] || {
+        description: `${metricName} measures overall project health across multiple dimensions.`,
+        factors: ['Multiple factors contribute to this score'],
+        recommendations: score < 75 
+            ? 'Review individual metric tabs for detailed recommendations.'
+            : 'Continue maintaining high standards across all metrics.'
+    };
+    
+    const tooltip = document.createElement('div');
+    tooltip.id = 'overview-tooltip';
+    tooltip.innerHTML = `
+        <div style="
+            position: fixed;
+            background: linear-gradient(135deg, var(--glass-dark) 0%, var(--background-primary) 100%);
+            border: 2px solid ${scoreColor};
+            border-radius: 12px;
+            padding: 1.25rem;
+            max-width: 500px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            z-index: 10000;
+            animation: tooltipFadeIn 0.2s ease-out;
+        ">
+            <!-- Header -->
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--glass-border);">
+                <div style="font-size: 1.5rem;">${scoreIcon}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 1.125rem; margin-bottom: 0.25rem;">${metricName}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary);">Score: ${score}/100</div>
+                </div>
+                <div style="
+                    padding: 0.375rem 0.75rem;
+                    border-radius: 8px;
+                    background: ${scoreColor}22;
+                    color: ${scoreColor};
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    white-space: nowrap;
+                ">
+                    ${scoreLabel}
+                </div>
+            </div>
+            
+            <!-- Description -->
+            <div style="margin-bottom: 1rem;">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    📊 What This Measures
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                    ${info.description}
+                </div>
+            </div>
+            
+            <!-- Contributing Factors -->
+            <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    🎯 Contributing Factors
+                </div>
+                <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+                    ${info.factors.map(factor => `<li>${factor}</li>`).join('')}
+                </ul>
+            </div>
+            
+            <!-- Score Interpretation -->
+            <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    📈 Score Interpretation
+                </div>
+                <div style="display: grid; gap: 0.25rem; font-size: 0.75rem;">
+                    <div style="color: var(--success);">🟢 90-100: Excellent - Industry best practices</div>
+                    <div style="color: var(--info);">🟢 75-89: Good - Minor improvements possible</div>
+                    <div style="color: var(--warning);">🟡 50-74: Needs Work - Significant issues present</div>
+                    <div style="color: var(--danger);">🔴 0-49: Critical - Immediate action required</div>
+                </div>
+            </div>
+            
+            <!-- Recommendations -->
+            <div style="
+                background: ${scoreColor}11;
+                border: 1px solid ${scoreColor};
+                border-radius: 8px;
+                padding: 0.75rem;
+            ">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: ${scoreColor};">
+                    💡 Recommendations
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                    ${info.recommendations}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const tooltipRect = tooltip.firstElementChild.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    
+    let left = cardRect.right + 10;
+    let top = cardRect.top;
+    
+    if (left + tooltipRect.width > window.innerWidth) {
+        left = cardRect.left - tooltipRect.width - 10;
+    }
+    
+    if (top + tooltipRect.height > window.innerHeight) {
+        top = window.innerHeight - tooltipRect.height - 10;
+    }
+    
+    if (top < 10) top = 10;
+    
+    tooltip.firstElementChild.style.left = `${left}px`;
+    tooltip.firstElementChild.style.top = `${top}px`;
+    
+    // Add hover effect to card
+    card.style.transform = 'translateY(-4px)';
+    card.style.boxShadow = `0 8px 24px ${scoreColor}33`;
+};
+
+/**
+ * Hide overview tooltip
+ * @param {HTMLElement} card - Card element
+ */
+window.hideOverviewTooltip = function(card) {
+    const tooltip = document.getElementById('overview-tooltip');
+    if (tooltip) tooltip.remove();
+    
+    if (card) {
+        card.style.transform = 'translateY(0)';
+        card.style.boxShadow = 'none';
+    }
+};
+
+/**
  * Show overview metric tooltip
  * @param {Event} event - Mouse event
  * @param {string} metricName - Metric name
