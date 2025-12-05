@@ -36,14 +36,14 @@ export function renderArchitecture(data) {
         const deployment = architecture.deployment || {};
         const metrics = architecture.metrics || {};
         
+        // Determine if full-stack (has multiple layers/tiers)
+        const isFullStack = tiers.length >= 3 || (appType.type && appType.type.toLowerCase().includes('full'));
+        
         // Build HTML
         container.innerHTML = `
-        <div class="view-header">
-            <h2>🏗️ Architecture Overview</h2>
-        </div>
-
-        <!-- Application Type & Style -->
+        <!-- Application Overview -->
         <div class="glass-card" style="margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1rem;">🏭️ Application Overview</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; padding: 1.5rem;">
                 <div>
                     <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Application Type</h3>
@@ -124,6 +124,7 @@ export function renderArchitecture(data) {
             </div>
         ` : ''}
 
+        ${isFullStack ? `
         <!-- 3D Architecture Visualization -->
         <div class="glass-card" style="margin-bottom: 2rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -149,6 +150,7 @@ export function renderArchitecture(data) {
                 <button class="btn-secondary" onclick="autoRotate()">🔁 Auto Rotate</button>
             </div>
         </div>
+        ` : ''}
 
         <!-- Tier Breakdown -->
         <div style="margin-bottom: 2rem;">
@@ -158,6 +160,7 @@ export function renderArchitecture(data) {
             </div>
         </div>
 
+        ${isFullStack ? `
         <!-- Component Dependency Graph -->
         <div class="glass-card">
             <h3 style="margin-bottom: 0.5rem;">🔗 Component Dependencies</h3>
@@ -196,13 +199,16 @@ export function renderArchitecture(data) {
                 </div>
             </div>
         </div>
+        ` : ''}
     `;
         
-        // Initialize visualizations after DOM is updated
-        setTimeout(() => {
-            init3DArchitecture(tiers);
-            initComponentGraph(components);
-        }, 100);
+        // Initialize visualizations after DOM is updated (only for full-stack apps)
+        if (isFullStack) {
+            setTimeout(() => {
+                init3DArchitecture(tiers);
+                initComponentGraph(components);
+            }, 100);
+        }
     }, 250);
 }
 
