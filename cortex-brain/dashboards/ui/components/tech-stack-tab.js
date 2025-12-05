@@ -565,41 +565,6 @@ function renderFrameworks(frameworks) {
 }
 
 /**
- * Build tooltip explanation for a technology
- * @param {Object} tech - Technology object
- * @returns {string} Explanation text
- */
-function buildTechTooltipExplanation(tech) {
-    const status = tech.status || 'current';
-    const currentVersion = tech.version || 'N/A';
-    const latestVersion = tech.latest || 'unknown';
-    const cveCount = tech.cve_count || 0;
-    
-    let explanation = '';
-    
-    if (status === 'current') {
-        explanation = `This technology is running the latest version (${currentVersion}). No immediate action required.`;
-        if (cveCount > 0) {
-            explanation += ` However, ${cveCount} CVE${cveCount > 1 ? 's' : ''} detected - review security findings.`;
-        }
-    } else if (status === 'outdated') {
-        explanation = `Currently running version ${currentVersion}, but version ${latestVersion} is available. `;
-        explanation += `Consider upgrading to access new features, performance improvements, and security patches.`;
-        if (cveCount > 0) {
-            explanation += ` ${cveCount} known CVE${cveCount > 1 ? 's' : ''} affect this version - upgrade recommended.`;
-        }
-    } else if (status === 'deprecated') {
-        explanation = `This technology is deprecated and no longer supported. Version ${currentVersion} is running. `;
-        explanation += `Immediate migration to a supported alternative is strongly recommended to maintain security and compatibility.`;
-        if (cveCount > 0) {
-            explanation += ` ${cveCount} critical CVE${cveCount > 1 ? 's' : ''} detected - high security risk.`;
-        }
-    }
-    
-    return explanation;
-}
-
-/**
  * Show technology tooltip on hover
  * @param {Event} event - Mouse event
  * @param {string} name - Technology name
