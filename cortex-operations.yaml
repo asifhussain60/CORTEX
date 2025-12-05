@@ -109,6 +109,58 @@ operations:
     - interactive tutorial
     - show demo
     category: onboarding
+  load_dashboard:
+    name: Load Dashboard
+    description: Launch CORTEX dashboard with HTTP server and auto-open browser
+    deployment_tier: user
+    natural_language:
+    - load dashboard
+    - launch dashboard
+    - open dashboard
+    - show dashboard
+    - start dashboard
+    - dashboard
+    - view dashboard
+    - open cortex dashboard
+    category: visualization
+    modules:
+    - dashboard_launcher
+    profiles:
+      standard:
+        description: Launch dashboard with auto-open browser
+        modules:
+        - dashboard_launcher
+        options:
+          port: 8080
+          auto_open: true
+          source: mock
+      custom_port:
+        description: Launch dashboard on custom port
+        modules:
+        - dashboard_launcher
+        options:
+          port: 9000
+          auto_open: true
+          source: mock
+      no_browser:
+        description: Launch dashboard without opening browser
+        modules:
+        - dashboard_launcher
+        options:
+          port: 8080
+          auto_open: false
+          source: mock
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: HTTP server with CORS support, auto-port fallback (8080-8089), serves from cortex-brain/dashboards/ui/
+    examples:
+    - load dashboard
+    - launch dashboard
+    - open dashboard
+    - show me the dashboard
   ado:
     name: Ado
     description: ADO CLI - Azure DevOps Work Item Management

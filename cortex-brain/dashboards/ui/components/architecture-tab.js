@@ -136,11 +136,27 @@ export function renderArchitecture(data) {
 
         <!-- 3D Architecture Visualization -->
         <div class="glass-card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1rem;">3D Tier Architecture</h3>
-            <div id="architecture-3d-container" style="width: 100%; height: 500px; background: rgba(0, 0, 0, 0.2); border-radius: 8px;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0;">🎯 3D Tier Architecture</h3>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                    <strong style="color: var(--accent-primary);">Interactive:</strong> Click & drag to rotate • Scroll to zoom
+                </div>
+            </div>
+            <div style="position: relative;">
+                <div id="architecture-3d-container" style="width: 100%; height: 500px; background: rgba(0, 0, 0, 0.2); border-radius: 8px;"></div>
+                <!-- Layer Labels Overlay -->
+                <div id="tier-labels-overlay" style="
+                    position: absolute;
+                    left: 20px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    pointer-events: none;
+                    z-index: 10;
+                "></div>
+            </div>
             <div style="text-align: center; margin-top: 1rem;">
-                <button class="btn-secondary" onclick="resetCamera()">Reset View</button>
-                <button class="btn-secondary" onclick="autoRotate()">Auto Rotate</button>
+                <button class="btn-secondary" onclick="resetCamera()">🔄 Reset View</button>
+                <button class="btn-secondary" onclick="autoRotate()">🔁 Auto Rotate</button>
             </div>
         </div>
 
@@ -347,25 +363,110 @@ function init3DArchitecture(tiers) {
     directionalLight.position.set(10, 10, 10);
     scene.add(directionalLight);
     
-    // Create tier boxes
+    // Create tier boxes with labels
     const tierColors = [0x00d4ff, 0x7b61ff, 0x00ff88, 0xffa500];
+    const tierMeshes = [];
+    
     tiers.forEach((tier, index) => {
         const geometry = new THREE.BoxGeometry(6, 2, 4);
         const material = new THREE.MeshPhongMaterial({ 
             color: tierColors[index % tierColors.length],
             transparent: true,
-            opacity: 0.8
+            opacity: 0.8,
+            emissive: tierColors[index % tierColors.length],
+            emissiveIntensity: 0.2
         });
         const cube = new THREE.Mesh(geometry, material);
         cube.position.y = index * 3 - (tiers.length * 1.5);
+        cube.userData = {
+            name: tier.name,
+            files: tier.file_count || 0,
+            loc: tier.loc || 0
+        };
         scene.add(cube);
+        tierMeshes.push(cube);
+        
+        // Add edge lines for better definition
+        const edges = new THREE.EdgesGeometry(geometry);
+        const lineMaterial = new THREE.LineBasicMaterial({ 
+            color: 0xffffff, 
+            transparent: true, 
+            opacity: 0.5 
+        });
+        const wireframe = new THREE.LineSegments(edges, lineMaterial);
+        wireframe.position.copy(cube.position);
+        scene.add(wireframe);
+    });
+    
+    // Create HTML labels overlay
+    const labelsContainer = document.getElementById('tier-labels-overlay');
+    if (labelsContainer && tiers.length > 0) {
+        labelsContainer.innerHTML = tiers.map((tier, index) => {
+            const topPosition = 50 - ((index - (tiers.length - 1) / 2) * 28);
+            return `
+                <div style="
+                    margin-bottom: 1.5rem;
+                    position: absolute;
+                    top: ${topPosition}%;
+                    transform: translateY(-50%);
+                    background: rgba(10, 14, 39, 0.9);
+                    padding: 0.75rem 1rem;
+                    border-radius: 8px;
+                    border-left: 3px solid ${getColorHex(tierColors[index % tierColors.length])};
+                    backdrop-filter: blur(10px);
+                    min-width: 180px;
+                ">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: ${getColorHex(tierColors[index % tierColors.length])}; margin-bottom: 0.25rem;">
+                        ${tier.name}
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-secondary);">
+                        ${tier.file_count || 0} files • ${(tier.loc || 0).toLocaleString()} LOC
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Mouse controls
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    
+    renderer.domElement.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        isRotating = false; // Stop auto-rotation when user interacts
+    });
+    
+    renderer.domElement.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            const deltaX = e.clientX - previousMousePosition.x;
+            const deltaY = e.clientY - previousMousePosition.y;
+            
+            scene.rotation.y += deltaX * 0.01;
+            scene.rotation.x += deltaY * 0.01;
+        }
+        
+        previousMousePosition = {
+            x: e.clientX,
+            y: e.clientY
+        };
+    });
+    
+    renderer.domElement.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+    
+    // Zoom with mouse wheel
+    renderer.domElement.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        camera.position.z += e.deltaY * 0.01;
+        camera.position.z = Math.max(5, Math.min(30, camera.position.z)); // Clamp zoom
     });
     
     // Animation loop
-    let isRotating = true;
+    let isRotating = false; // Start with rotation off
     function animate() {
         requestAnimationFrame(animate);
-        if (isRotating) {
+        if (isRotating && !isDragging) {
             scene.rotation.y += 0.005;
         }
         renderer.render(scene, camera);
@@ -376,12 +477,22 @@ function init3DArchitecture(tiers) {
     window.resetCamera = function() {
         camera.position.set(0, 5, 15);
         camera.lookAt(0, 0, 0);
-        scene.rotation.y = 0;
+        scene.rotation.set(0, 0, 0);
+        isRotating = false;
     };
     
     window.autoRotate = function() {
         isRotating = !isRotating;
     };
+}
+
+/**
+ * Convert THREE.js hex color to CSS hex string
+ * @param {number} color - THREE.js color (e.g., 0x00d4ff)
+ * @returns {string} CSS hex color (e.g., "#00d4ff")
+ */
+function getColorHex(color) {
+    return '#' + color.toString(16).padStart(6, '0');
 }
 
 /**

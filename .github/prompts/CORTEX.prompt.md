@@ -1,12 +1,82 @@
+<!--
+GITHUB COPILOT LOADER DIRECTIVE:
+
+When user types /CORTEX command or references this file:
+1. Load this ENTIRE file (all 1193 lines) into conversation context
+2. Load cortex-brain/response-templates.yaml for response templates
+3. Apply mandatory 5-part response format from this file
+4. DO NOT provide generic introduction - respond to user's ACTUAL request
+5. Use template auto-selection based on user intent
+
+This is NOT a reference file - this IS the complete instruction set.
+DO NOT say "I'll load CORTEX" - just load it and respond appropriately.
+-->
+
 # 🎯 CORTEX Universal Entry Point
 
 **TEMPLATE TRIGGERS:** See #file:modules/template-triggers.md for auto-selection rules
 
 **Purpose:** Single command for ALL CORTEX interactions. You don't need to remember multiple commands - just use this one and CORTEX figures out what you need.
 
-**Version:** 3.7.0  
+**Version:** 3.7.1  
 **Status:** ✅ PRODUCTION  
 **Architecture:** Template-based responses + Modular documentation + Interactive Planning + Universal Upgrade System + User Profile System
+
+---
+
+## 🆕 What's New in 3.7.1
+
+**Released:** December 5, 2025
+
+### Dashboard Launcher
+New command to launch CORTEX dashboard with HTTP server and auto-open browser.
+
+**Natural Language Triggers:**
+- `load dashboard` - Launch with defaults (port 8080, auto-open)
+- `launch dashboard` - Alternative trigger
+- `open dashboard` - Alternative trigger
+- `show dashboard` - Alternative trigger
+- `dashboard` - Quick access
+
+**Features:**
+- ✅ HTTP server auto-serves from `cortex-brain/dashboards/ui/`
+- ✅ Smart port selection (8080-8089 auto-fallback)
+- ✅ Auto-open browser with configurable data source
+- ✅ CORS enabled for local development
+- ✅ Background server process (non-blocking)
+- ✅ Graceful shutdown (Ctrl+C)
+
+**Files:**
+- Orchestrator: `src/orchestrators/dashboard_launcher.py` (376 lines)
+- Module: `src/operations/modules/dashboard_launcher_module.py` (149 lines)
+- Guide: `cortex-brain/documents/implementation-guides/dashboard-launcher-quick-ref.md`
+- YAML: `cortex-operations.yaml` (load_dashboard operation)
+
+**Integration:**
+- Auto-routed via Intent Router
+- Registered in cortex-operations.yaml
+- 8 natural language triggers
+- 3 profiles: standard, custom_port, no_browser
+
+**Example:**
+```
+User: load dashboard
+
+CORTEX: ✅ Dashboard server started successfully
+
+🌐 URL: http://localhost:8080/index.html?source=mock
+🔌 Port: 8080
+📁 Directory: cortex-brain/dashboards/ui
+
+💡 Dashboard will open automatically in your browser
+🛑 Press Ctrl+C in the terminal to stop the server
+```
+
+---
+
+# 🚀 Quick Reference - Top 15 Commands
+
+{{include: .github/prompts/includes/quick-reference-table.md}}
 
 ---
 
@@ -169,27 +239,7 @@
 
 **Use For:** planning, TDD, architecture review, code review, system alignment, ADO operations
 
-```markdown
-## 🧠 CORTEX [Operation Type]
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-### 🎯 My Understanding Of Your Request
-[State understanding]
-
-### ⚠️ Challenge
-[State specific challenge OR "No Challenge"]
-
-### 💬 Response
-[Natural language explanation]
-
-### 📝 Your Request
-[Echo user's request concisely]
-
-### 🔍 Next Steps
-[Context-appropriate format - see below]
-```
+{{include: .github/prompts/includes/response-format-template.md}}
 
 **Critical Rules:**
 - ✅ First title MUST use ## (H2 markdown) with brain icon - "## 🧠 CORTEX [Title]"
@@ -304,7 +354,7 @@ See `docs/api/openapi.yaml` for complete API reference with interactive Swagger 
 - **Trend Analysis:** Velocity calculation, direction detection (improving/degrading/stable), volatility measurement
 - **Debt Forecasting:** 3-month and 6-month linear projections with confidence scoring
 - **ADR Recommendations:** Prioritized suggestions for CORTEX 4.0 enhancements based on health/trend/forecast data
-- **Report Generation:** Markdown reports saved to `cortex-brain/documents/analysis/architecture-review-*.md`
+- **Report Generation:** Markdown reports saved to `cortex-brain/documents/analysis/` (example: architecture-review-2025-12-05.md)
 
 **Natural Language Examples:**
 - "Review CORTEX architecture and show me health trends"
@@ -631,11 +681,11 @@ CORTEX:
 
 **NEVER create documentation files in repository root:**
 
-❌ **BLOCKED OPERATIONS:**
-- Creating summary files in root: `d:\PROJECTS\CORTEX\summary.md`
-- Creating reports in root: `d:\PROJECTS\NOOR CANVAS\report.md`
-- Creating updates in root: `/Users/asifhussain/PROJECTS/CORTEX/update.md`
-- Creating analysis in root: `repository_root / "analysis.md"`
+❌ **BLOCKED OPERATIONS (Examples):**
+- Creating summary files in root: Example pattern `d:\PROJECTS\CORTEX\summary.md`
+- Creating reports in root: Example pattern `d:\PROJECTS\NOOR CANVAS\report.md`
+- Creating updates in root: Example pattern `/Users/asifhussain/PROJECTS/CORTEX/update.md`
+- Creating analysis in root: Example pattern `repository_root / "analysis.md"`
 - Creating ANY `.md` documentation files directly in repository root
 
 **Applies to ALL installations:**
@@ -646,7 +696,7 @@ CORTEX:
 
 ## Document Creation Rules
 
-**✅ ALWAYS USE:** `CORTEX/cortex-brain/documents/[category]/[filename].md`
+**✅ ALWAYS USE:** Template pattern - `CORTEX/cortex-brain/documents/[category]/[filename].md`
 
 **❌ NEVER CREATE:** Documents in repository root or unorganized locations
 
@@ -657,7 +707,7 @@ CORTEX:
 **Before creating ANY .md document:**
 1. Determine document type (report/analysis/guide/investigation/planning/conversation)
 2. Select category from predefined list
-3. Construct path: `cortex-brain/documents/[category]/[filename].md`
+3. Construct path using template: `cortex-brain/documents/[category]/[filename].md`
 4. Validate path (use DocumentValidator if available)
 5. Create document
 
@@ -1134,7 +1184,7 @@ logs/
 
 **Auto-routing:** "Tell me CORTEX story" → story.md | "How do I install?" → setup-guide.md | "Show Tier 1 API" → technical-reference.md
 
-**Module tree:** `prompts/user/cortex.md` (this file) + `prompts/shared/` (story, setup, technical, agents, tracking, config guides)
+**Module tree:** Module guides in `.github/prompts/modules/` provide detailed documentation for all major features
 
 ---
 
@@ -1149,11 +1199,9 @@ logs/
 **Pricing model:** Uses GitHub's token-unit formula: `(input × 1.0) + (output × 1.5) × $0.00001`  
 Cost reduction varies 90-96% depending on response size (output tokens)
 
-**Optimization:** Brain protection rules moved to YAML (75% token reduction). Tests: `tests/tier0/test_brain_protector.py` (22/22 ✅)
+**Optimization:** Brain protection rules in YAML (75% token reduction). Tests: `tests/tier0/test_brain_protector.py` (22/22 ✅)
 
-**Note:** Metrics updated 2025-11-13 to reflect GitHub Copilot's actual pricing model (token-unit formula with input/output multipliers). See `scripts/token_pricing_calculator.py` for full analysis.
-
-**Phase 0 Complete:** 100% test pass rate achieved (834/897 passing, 0 failures). Optimization principles codified in `cortex-brain/optimization-principles.yaml`. See `cortex-brain/PHASE-0-COMPLETION-REPORT.md`.
+**Note:** Metrics updated 2025-11-13 to reflect GitHub Copilot's actual pricing model. See `scripts/token_pricing_calculator.py` for full analysis.
 
 ---
 
@@ -1164,12 +1212,11 @@ Cost reduction varies 90-96% depending on response size (output tokens)
 3. **Enable tracking?** Say "enable conversation tracking"
 4. **Start working:** Tell CORTEX your goal
 
-**Phase 3 Complete:** 97.2% token reduction, 93.4% cost reduction | Production ready ✅  
-**Documentation:** See `prompts/validation/PHASE-3-VALIDATION-REPORT.md` for technical details
+**Production Ready:** 97.2% token reduction, 93.4% cost reduction ✅
 
 ---
 
-**Last Updated:** 2025-12-03 | Version 3.7.0 (Phase 7: Integration & Testing + Phase 8: File Naming Governance)  
+**Last Updated:** 2025-12-05 | Version 3.7.1 (Dashboard Launcher, Documentation Enhancement)  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
 **License:** Source-Available - See LICENSE | **Repository:** https://github.com/asifhussain60/CORTEX
 

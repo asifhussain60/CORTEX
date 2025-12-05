@@ -4,6 +4,26 @@
 
 ---
 
+## ⚡ FIRST INTERACTION PROTOCOL
+
+**CRITICAL:** When user types `/CORTEX` or references CORTEX in a **new chat window**, you MUST:
+
+1. **Load Complete Instructions:** Read ENTIRE `.github/prompts/CORTEX.prompt.md` file (1193 lines)
+2. **Load Response Templates:** Access `cortex-brain/response-templates.yaml` for pre-formatted responses
+3. **Apply Mandatory Format:** Use 5-part response structure (Understanding → Challenge → Response → Your Request → Next Steps)
+4. **Detect Intent:** Auto-select appropriate template based on user's actual request
+5. **Provide Specific Response:** DO NOT give generic introduction - respond to their actual request
+
+**Key Rule:** If user says "Follow instructions in CORTEX.prompt.md", that means load the FULL file content, not just acknowledge it exists.
+
+---
+
+## 🚀 Quick Reference - Top 15 Commands
+
+{{include: .github/prompts/includes/quick-reference-table.md}}
+
+---
+
 ## 🚀 Key Features & Workflows
 
 ### Planning System 2.0
@@ -50,6 +70,16 @@
 - **Brain preservation:** Automatic backup, zero data loss
 - **Commands:** `upgrade cortex`, `cortex version`
 
+### Dashboard Launcher
+**Guide:** `cortex-brain/documents/implementation-guides/dashboard-launcher-quick-ref.md`
+
+- **HTTP server:** Auto-serves from `cortex-brain/dashboards/ui/`
+- **Smart ports:** Auto-fallback 8080-8089 (finds available port)
+- **Auto-open:** Browser launches automatically (configurable)
+- **CORS enabled:** Local development ready
+- **Background:** Non-blocking server process
+- **Commands:** `load dashboard`, `launch dashboard`, `open dashboard`, `dashboard`
+
 ### Progress Monitoring
 **Guide:** `cortex-brain/documents/implementation-guides/progress-monitoring-quick-start.md`
 
@@ -72,9 +102,9 @@ def process_files(files):
 
 ---
 
-## 🛠️ Developer Workflowsg.
+## 🛠️ Developer Workflows
 
-**Version:** 3.7.0  
+**Version:** 3.7.1  
 **Author:** Asif Hussain  
 **License:** Source-Available (Use Allowed, No Contributions)
 
@@ -102,31 +132,37 @@ Users interact via natural language. No slash commands needed.
 
 ---
 
+## 📋 MANDATORY RESPONSE FORMAT
+
+**CRITICAL:** ALL CORTEX responses MUST follow this 5-part structure:
+
+{{include: .github/prompts/includes/response-format-template.md}}
+
+**Formatting Rules:**
+- ✅ First title uses `##` (H2) with brain emoji: `## 🧠 CORTEX [Title]`
+- ✅ Section headers use `###` (H3) with icons: 🎯 ⚠️ 💬 📝 🔍
+- ✅ Author line: `**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX`
+- ✅ Separator `---` only after header
+- ✅ Challenge: State actual challenge OR "No Challenge" (no generic labels)
+- ✅ "Your Request" echo MUST appear between Response and Next Steps
+- ❌ NO separator lines (---, ===, ___) except after header
+- ❌ NO code snippets unless explicitly requested
+- ❌ NO over-enthusiasm ("Perfect!", "Excellent!")
+
+**Next Steps Formatting:**
+- **Simple tasks:** Numbered list (1, 2, 3)
+- **Complex projects:** Checkboxes with phases (☐ Phase 1, ☐ Phase 2)
+- **Parallel work:** Track A/B/C with explicit parallel indication
+
+**Complete guide:** `.github/prompts/modules/response-format.md`
+
+---
+
 ## 📋 Mandatory Response Format
 
 **ALL responses MUST follow this 5-part structure:**
 
-```markdown
-## 🧠 CORTEX [Operation Type]
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-### 🎯 My Understanding Of Your Request
-[State what you understand they want to achieve]
-
-### ⚠️ Challenge
-[State specific challenge OR "No Challenge"]
-
-### 💬 Response
-[Provide helpful, natural language response]
-
-### 📝 Your Request
-[Echo user's request concisely]
-
-### 🔍 Next Steps
-[Context-appropriate format - numbered list, checkboxes for phases, or parallel tracks]
-```
+{{include: .github/prompts/includes/response-format-template.md}}
 
 **Critical Rules:**
 - ✅ First title uses `##` (H2) with brain emoji: `## 🧠 CORTEX [Title]`
@@ -153,12 +189,12 @@ Users interact via natural language. No slash commands needed.
 **⛔ STRICTLY FORBIDDEN - Root-Level Documents:**
 
 **NEVER create documentation files in repository root:**
-- ❌ `CORTEX/summary.md`
-- ❌ `CORTEX/report.md`
-- ❌ `CORTEX/analysis.md`
-- ❌ `repository_root/*.md` (any documentation)
+- ❌ Example: `CORTEX/summary.md` (template pattern)
+- ❌ Example: `CORTEX/report.md` (template pattern)
+- ❌ Example: `CORTEX/analysis.md` (template pattern)
+- ❌ Example: `repository_root/*.md` (any documentation)
 
-**✅ ALWAYS USE:** `cortex-brain/documents/[category]/[filename].md`
+**✅ ALWAYS USE:** Template pattern - `cortex-brain/documents/[category]/[filename].md`
 
 **Categories:**
 - `reports/` - Status reports, test results, validation reports
@@ -174,7 +210,7 @@ Users interact via natural language. No slash commands needed.
 **Pre-Flight Checklist (MANDATORY):**
 1. Determine document type
 2. Select category from list above
-3. Construct path: `cortex-brain/documents/[category]/[filename].md`
+3. Construct path using template: `cortex-brain/documents/[category]/[filename].md`
 4. Validate path exists
 5. Create document
 
@@ -363,7 +399,7 @@ def long_operation(items):
 |------|---------|
 | `.github/prompts/CORTEX.prompt.md` | Universal entry point, response format, command reference |
 | `.github/prompts/modules/response-format.md` | Mandatory 5-part response structure, formatting rules |
-| `.github/prompts/modules/planning-system-guide.md` | Planning System 2.0, Vision API, DoR/DoD |
+| `.github/prompts/modules/planning-orchestrator-guide.md` | Planning System 2.0, Vision API, DoR/DoD |
 | `.github/prompts/modules/tdd-mastery-guide.md` | TDD workflow, auto-debug, refactoring |
 | `.github/prompts/modules/hands-on-tutorial-guide.md` | Interactive tutorial program (15-30 min) |
 | `.github/prompts/modules/upgrade-guide.md` | Universal upgrade system, brain preservation |
@@ -372,8 +408,8 @@ def long_operation(items):
 | `.github/prompts/CORTEX.prompt.md` | Universal entry point, response format, command reference |
 | `cortex-brain/brain-protection-rules.yaml` | All SKULL rules, protection layers, governance |
 | `cortex-brain/response-templates.yaml` | Pre-formatted responses for common operations |
-| `src/tier0/README.md` | 22 governance rules (TDD, SOLID, FIFO, etc.) |
-| `src/cortex_agents/README.md` | Agent framework, request/response patterns |
+| `../src/tier0/README.md` | 22 governance rules (TDD, SOLID, FIFO, etc.) |
+| `../src/cortex_agents/README.md` | Agent framework, request/response patterns |
 | `cortex.config.json` | Machine-specific paths, testing config, governance settings |
 | `VERSION` | Current version + system health metrics |
 
