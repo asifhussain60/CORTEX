@@ -80,6 +80,42 @@ export function renderVendors(data) {
             </div>
         </div>
 
+        <!-- How to Read Description -->
+        <div class="glass-card" style="margin-bottom: 2rem; background: linear-gradient(135deg, var(--glass-light) 0%, var(--background-secondary) 100%);">
+            <h3 style="margin-bottom: 1rem;">🔗 Dependencies & Integration Status</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                This view shows external service integrations and vendor dependencies detected in your project. 
+                <strong style="color: var(--success);">✅ Active</strong> integrations are in use, 
+                <strong style="color: var(--warning);">⚠️ Unused</strong> credentials should be removed, and 
+                <strong style="color: var(--danger);">❌ Not Configured</strong> services require setup.
+                <strong>Hover over each vendor card</strong> to see detailed integration information, security recommendations, and credential status.
+            </p>
+        </div>
+
+        <!-- Description Panel -->
+        <div style="
+            background: var(--glass-light);
+            border: 1px solid var(--glass-border);
+            border-left: 4px solid var(--accent-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        ">
+            <div style="display: flex; align-items: start; gap: 1rem;">
+                <div style="font-size: 2rem; line-height: 1; opacity: 0.8;">💡</div>
+                <div style="flex: 1;">
+                    <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                        External vendor integrations are detected through environment variables and code analysis.
+                        <span style="color: var(--success); font-weight: 600;">✅ Active</span> vendors have recent usage evidence.
+                        <span style="color: var(--warning); font-weight: 600;">⚠️ Unused</span> integrations have credentials but no recent activity (consider removing).
+                        <span style="color: var(--danger); font-weight: 600;">❌ Not Configured</span> means vendor code found without credentials.
+                        <strong>Detection confidence</strong> indicates reliability of automated detection. 
+                        <strong>Hover over vendor cards</strong> for security recommendations and integration details.
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Vendor Cards by Category -->
         ${renderVendorsByCategory(vendorList)}
     `;
@@ -155,12 +191,20 @@ function renderVendorCard(vendor) {
     const status = statusConfig[vendor.status] || statusConfig.not_configured;
     const confidence = vendor.detection_confidence || 0;
     
+    // Build tooltip explanation
+    const explanation = buildVendorTooltipExplanation(vendor);
+    
     return `
-        <div class="glass-card" style="
-            border-left: 4px solid ${status.borderColor};
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        " onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div 
+            class="vendor-card-hoverable glass-card" 
+            style="
+                border-left: 4px solid ${status.borderColor};
+                cursor: pointer;
+                transition: all 0.3s ease;
+            " 
+            onmouseover="showVendorTooltip(event, ${JSON.stringify(vendor).replace(/"/g, '&quot;')}, this); this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.3)'"
+            onmouseout="hideVendorTooltip(this); this.style.transform='translateY(0)'; this.style.boxShadow=''"
+        >
             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
                 <div>
                     <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary);">
@@ -266,6 +310,216 @@ function getConfidenceColor(confidence) {
     if (confidence >= 50) return 'var(--warning)';
     return 'var(--danger)';
 }
+
+/**
+ * Build tooltip explanation for a vendor
+ * @param {Object} vendor - Vendor object
+ * @returns {string} Explanation text
+ */
+function buildVendorTooltipExplanation(vendor) {
+    const status = vendor.status || 'not_configured';
+    const confidence = vendor.detection_confidence || 0;
+    const integrationPoints = vendor.integration_points || 0;
+    
+    let explanation = '';
+    
+    if (status === 'configured_active') {
+        explanation = `This vendor integration is <strong>actively used</strong> with ${integrationPoints} integration point${integrationPoints !== 1 ? 's' : ''}. `;
+        explanation += `Detection confidence is ${confidence}%, indicating reliable usage patterns. `;
+        if (vendor.last_used) {
+            explanation += `Last activity: ${vendor.last_used}. `;
+        }
+        explanation += 'Ensure credentials are rotated regularly per security policy.';
+    } else if (status === 'configured_unused') {
+        explanation = `Credentials are <strong>configured but not actively used</strong>. `;
+        explanation += `This represents a security risk - unused credentials should be removed to minimize attack surface. `;
+        if (vendor.last_used) {
+            explanation += `Last used: ${vendor.last_used}. `;
+        }
+        explanation += 'Consider removing credentials if integration is no longer needed.';
+    } else {
+        explanation = `This vendor was <strong>detected but not configured</strong>. `;
+        explanation += `Integration may be incomplete or credentials may be missing. `;
+        if (integrationPoints > 0) {
+            explanation += `${integrationPoints} integration point${integrationPoints !== 1 ? 's' : ''} detected in code. `;
+        }
+        explanation += 'Review integration requirements and configure credentials if needed.';
+    }
+    
+    return explanation;
+}
+
+/**
+ * Show vendor tooltip on hover
+ * @param {Event} event - Mouse event
+ * @param {Object} vendor - Vendor data
+ * @param {HTMLElement} element - Hovered element
+ */
+window.showVendorTooltip = function(event, vendor, element) {
+    // Parse vendor if it's a string (from JSON.stringify)
+    if (typeof vendor === 'string') {
+        try {
+            vendor = JSON.parse(vendor);
+        } catch (e) {
+            console.error('Failed to parse vendor data:', e);
+            return;
+        }
+    }
+    
+    // Remove existing tooltip
+    const existing = document.getElementById('vendor-tooltip');
+    if (existing) {
+        existing.remove();
+    }
+    
+    const status = vendor.status || 'not_configured';
+    let statusIcon = '✅';
+    let statusLabel = 'Active';
+    let statusColor = 'var(--success)';
+    
+    if (status === 'configured_unused') {
+        statusIcon = '⚠️';
+        statusLabel = 'Unused';
+        statusColor = 'var(--warning)';
+    } else if (status === 'not_configured') {
+        statusIcon = '❌';
+        statusLabel = 'Not Configured';
+        statusColor = 'var(--danger)';
+    }
+    
+    const confidence = vendor.detection_confidence || 0;
+    const confidenceColor = getConfidenceColor(confidence);
+    const explanation = buildVendorTooltipExplanation(vendor);
+    
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.id = 'vendor-tooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+        border: 1px solid ${statusColor};
+        border-radius: 12px;
+        padding: 1.25rem;
+        max-width: 450px;
+        z-index: 10000;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        pointer-events: none;
+        animation: tooltipFadeIn 0.2s ease-out;
+        backdrop-filter: blur(10px);
+    `;
+    
+    tooltip.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+            <div style="font-size: 2rem;">${statusIcon}</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">
+                    ${vendor.name || 'Unknown Vendor'}
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                    ${(vendor.category || 'other').replace('_', ' ')}
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${statusColor}22; border-radius: 8px;">
+                <span style="font-size: 1.25rem;">${statusIcon}</span>
+                <span style="color: ${statusColor}; font-weight: 600; font-size: 0.875rem;">
+                    ${statusLabel}
+                </span>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--glass-border); border-radius: 8px;">
+                <span style="font-size: 1.25rem;">🎯</span>
+                <span style="color: ${confidenceColor}; font-weight: 600; font-size: 0.875rem;">
+                    ${confidence}% confidence
+                </span>
+            </div>
+            ${vendor.integration_points ? `
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--glass-border); border-radius: 8px;">
+                    <span style="font-size: 1.25rem;">🔌</span>
+                    <span style="color: var(--text-primary); font-weight: 600; font-size: 0.875rem;">
+                        ${vendor.integration_points} integration${vendor.integration_points !== 1 ? 's' : ''}
+                    </span>
+                </div>
+            ` : ''}
+        </div>
+        
+        <div style="color: var(--text-secondary); line-height: 1.6; font-size: 0.875rem; margin-bottom: 1rem;">
+            ${explanation}
+        </div>
+        
+        ${vendor.env_vars && vendor.env_vars.length > 0 ? `
+            <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
+                    🔑 Environment Variables (${vendor.env_vars.length})
+                </div>
+                <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-secondary);">
+                    ${vendor.env_vars.slice(0, 3).join(', ')}
+                    ${vendor.env_vars.length > 3 ? ` <span style="color: var(--accent-primary);">+${vendor.env_vars.length - 3} more</span>` : ''}
+                </div>
+            </div>
+        ` : ''}
+        
+        ${vendor.files && vendor.files.length > 0 ? `
+            <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
+                    📁 Referenced Files (${vendor.files.length})
+                </div>
+                <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-secondary);">
+                    ${vendor.files.slice(0, 2).map(f => `<div style="margin-bottom: 0.25rem;">${f}</div>`).join('')}
+                    ${vendor.files.length > 2 ? `<div style="color: var(--accent-primary);">+${vendor.files.length - 2} more files</div>` : ''}
+                </div>
+            </div>
+        ` : ''}
+        
+        <div style="padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+            <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
+                ${status === 'configured_unused' ? '🔒 Security Recommendation' : '💡 Best Practice'}
+            </div>
+            <div style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">
+                ${status === 'configured_unused' 
+                    ? 'Remove unused credentials to reduce attack surface. Audit and clean up environment variables regularly.'
+                    : status === 'not_configured'
+                    ? 'If this integration is required, configure credentials in environment variables or secure key vault.'
+                    : 'Rotate credentials every 90 days. Monitor integration health and API rate limits.'}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const rect = element.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    let top = rect.top - tooltipRect.height - 12;
+    
+    // Keep tooltip on screen
+    if (left < 10) left = 10;
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+    }
+    
+    if (top < 10) {
+        top = rect.bottom + 12;
+    }
+    
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+};
+
+/**
+ * Hide vendor tooltip
+ * @param {HTMLElement} element - Hovered element
+ */
+window.hideVendorTooltip = function(element) {
+    // Remove tooltip
+    const tooltip = document.getElementById('vendor-tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+};
 
 /**
  * Export vendors (placeholder)
