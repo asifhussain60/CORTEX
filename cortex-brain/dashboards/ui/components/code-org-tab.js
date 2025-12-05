@@ -335,6 +335,309 @@ function initComplexityHeatmap(fileComplexity) {
 }
 
 /**
+ * Show heatmap tooltip for complexity cell
+ * @param {Event} event - Mouse event
+ * @param {Object} data - File data (name, value/LOC, complexity)
+ */
+window.showHeatmapTooltip = function(event, data) {
+    // Remove existing tooltip
+    const existing = document.getElementById('heatmap-tooltip');
+    if (existing) {
+        existing.remove();
+    }
+    
+    const complexity = data.complexity || 0;
+    let complexityColor = 'var(--success)';
+    let complexityLabel = 'Low';
+    let complexityIcon = '🟢';
+    
+    if (complexity >= 75) {
+        complexityColor = 'var(--danger)';
+        complexityLabel = 'Critical';
+        complexityIcon = '🔴';
+    } else if (complexity >= 50) {
+        complexityColor = 'var(--warning)';
+        complexityLabel = 'High';
+        complexityIcon = '🟡';
+    } else if (complexity >= 25) {
+        complexityColor = 'var(--accent-primary)';
+        complexityLabel = 'Medium';
+        complexityIcon = '🟠';
+    }
+    
+    const fileName = data.name.split('/').pop() || data.name;
+    const loc = data.value || 0;
+    
+    // Build recommendation
+    let recommendation = '';
+    if (complexity >= 75) {
+        recommendation = 'High priority for refactoring. Consider breaking into smaller functions or files.';
+    } else if (complexity >= 50) {
+        recommendation = 'Monitor this file. Plan refactoring if complexity continues to increase.';
+    } else if (complexity >= 25) {
+        recommendation = 'Moderate complexity. Review for potential simplification opportunities.';
+    } else {
+        recommendation = 'Maintainable complexity. No immediate action required.';
+    }
+    
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.id = 'heatmap-tooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+        border: 1px solid ${complexityColor};
+        border-radius: 12px;
+        padding: 1.25rem;
+        max-width: 400px;
+        z-index: 10000;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        pointer-events: none;
+        animation: tooltipFadeIn 0.2s ease-out;
+        backdrop-filter: blur(10px);
+    `;
+    
+    tooltip.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+            <div style="font-size: 2rem;">${complexityIcon}</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">
+                    ${fileName}
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                    ${loc.toLocaleString()} lines of code
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${complexityColor}22; border-radius: 8px;">
+                <span style="font-size: 1.25rem;">${complexityIcon}</span>
+                <span style="color: ${complexityColor}; font-weight: 600; font-size: 0.875rem;">
+                    Complexity: ${complexity} (${complexityLabel})
+                </span>
+            </div>
+        </div>
+        
+        <div style="color: var(--text-secondary); line-height: 1.6; font-size: 0.875rem;">
+            ${recommendation}
+        </div>
+        
+        ${complexity >= 50 ? `
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+                <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600;">
+                    💡 Refactoring Tips
+                </div>
+                <ul style="color: var(--text-secondary); font-size: 0.875rem; margin: 0.5rem 0 0 1.25rem; line-height: 1.6;">
+                    <li>Extract complex methods into smaller functions</li>
+                    <li>Reduce nested conditional statements</li>
+                    <li>Consider applying design patterns</li>
+                    ${complexity >= 75 ? '<li>Add comprehensive unit tests before refactoring</li>' : ''}
+                </ul>
+            </div>
+        ` : ''}
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const tooltipRect = tooltip.getBoundingClientRect();
+    let left = event.clientX + 15;
+    let top = event.clientY + 15;
+    
+    // Keep tooltip on screen
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = event.clientX - tooltipRect.width - 15;
+    }
+    
+    if (top + tooltipRect.height > window.innerHeight - 10) {
+        top = event.clientY - tooltipRect.height - 15;
+    }
+    
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+};
+
+/**
+ * Hide heatmap tooltip
+ */
+window.hideHeatmapTooltip = function() {
+    const tooltip = document.getElementById('heatmap-tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+};
+
+/**
+ * Show hotspot row tooltip
+ * @param {Event} event - Mouse event
+ * @param {Object} hotspot - Hotspot data
+ * @param {HTMLElement} element - Row element
+ */
+window.showHotspotTooltip = function(event, hotspot, element) {
+    // Parse hotspot if it's a string (from JSON.stringify)
+    if (typeof hotspot === 'string') {
+        try {
+            hotspot = JSON.parse(hotspot);
+        } catch (e) {
+            console.error('Failed to parse hotspot data:', e);
+            return;
+        }
+    }
+    
+    // Add hover effect to row
+    element.style.background = 'var(--glass-light)';
+    
+    // Remove existing tooltip
+    const existing = document.getElementById('hotspot-tooltip');
+    if (existing) {
+        existing.remove();
+    }
+    
+    const riskScore = hotspot.risk_score || 0;
+    let riskColor = 'var(--success)';
+    let riskLabel = 'Medium';
+    let riskIcon = '🟡';
+    
+    if (riskScore >= 80) {
+        riskColor = 'var(--danger)';
+        riskLabel = 'Critical';
+        riskIcon = '🔴';
+    } else if (riskScore >= 60) {
+        riskColor = 'var(--warning)';
+        riskLabel = 'High';
+        riskIcon = '🟠';
+    } else if (riskScore >= 40) {
+        riskIcon = '🟢';
+        riskLabel = 'Medium';
+    } else {
+        riskColor = 'var(--accent-primary)';
+        riskIcon = '🟢';
+        riskLabel = 'Low';
+    }
+    
+    const fileName = (hotspot.file || 'Unknown').split('/').pop();
+    const complexity = hotspot.complexity || 0;
+    const changeFreq = hotspot.change_frequency || 0;
+    const recommendation = hotspot.recommendation || 'Review recommended';
+    
+    // Build detailed explanation
+    let explanation = '';
+    if (riskScore >= 80) {
+        explanation = `This file is a <strong>critical hotspot</strong> with high complexity (${complexity}) and frequent changes (${changeFreq} commits). `;
+        explanation += 'It represents significant technical debt and is a prime candidate for immediate refactoring to prevent bugs and reduce maintenance costs.';
+    } else if (riskScore >= 60) {
+        explanation = `This file is a <strong>high-risk hotspot</strong> combining elevated complexity (${complexity}) with ${changeFreq} commits. `;
+        explanation += 'Schedule refactoring in the next sprint to improve maintainability and reduce bug potential.';
+    } else {
+        explanation = `This file has <strong>${riskLabel.toLowerCase()} risk</strong> with complexity ${complexity} and ${changeFreq} commits. `;
+        explanation += 'Monitor for increases in complexity or change frequency.';
+    }
+    
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.id = 'hotspot-tooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+        border: 1px solid ${riskColor};
+        border-radius: 12px;
+        padding: 1.25rem;
+        max-width: 450px;
+        z-index: 10000;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        pointer-events: none;
+        animation: tooltipFadeIn 0.2s ease-out;
+        backdrop-filter: blur(10px);
+    `;
+    
+    tooltip.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+            <div style="font-size: 2rem;">${riskIcon}</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">
+                    ${fileName}
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-family: monospace;">
+                    ${hotspot.file || 'Unknown'}
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${riskColor}22; border-radius: 8px;">
+                <span style="font-size: 1.25rem;">${riskIcon}</span>
+                <span style="color: ${riskColor}; font-weight: 600; font-size: 0.875rem;">
+                    Risk: ${riskScore} (${riskLabel})
+                </span>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--glass-border); border-radius: 8px;">
+                <span style="font-size: 1.25rem;">⚙️</span>
+                <span style="color: var(--text-primary); font-weight: 600; font-size: 0.875rem;">
+                    Complexity: ${complexity}
+                </span>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--glass-border); border-radius: 8px;">
+                <span style="font-size: 1.25rem;">📊</span>
+                <span style="color: var(--text-primary); font-weight: 600; font-size: 0.875rem;">
+                    ${changeFreq} commits
+                </span>
+            </div>
+        </div>
+        
+        <div style="color: var(--text-secondary); line-height: 1.6; font-size: 0.875rem; margin-bottom: 1rem;">
+            ${explanation}
+        </div>
+        
+        <div style="padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+            <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
+                💡 Recommended Action
+            </div>
+            <div style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">
+                ${recommendation}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const rect = element.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    let top = rect.top - tooltipRect.height - 12;
+    
+    // Keep tooltip on screen
+    if (left < 10) left = 10;
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+    }
+    
+    if (top < 10) {
+        top = rect.bottom + 12;
+    }
+    
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+};
+
+/**
+ * Hide hotspot row tooltip
+ * @param {HTMLElement} element - Row element
+ */
+window.hideHotspotTooltip = function(element) {
+    // Remove hover effect
+    element.style.background = 'transparent';
+    
+    // Remove tooltip
+    const tooltip = document.getElementById('hotspot-tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+};
+
+/**
  * Export hotspots (placeholder)
  */
 window.exportHotspots = function() {
