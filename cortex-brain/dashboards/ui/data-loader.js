@@ -19,7 +19,8 @@ const DATA_SOURCES = {
     'noor-canvas': '/noor-canvas/',
     alist: '/alist/',
     ksessions: '/ksessions/',
-    'v5-webservices-prevalidationws': '/v5-webservices-prevalidationws/'
+    'v5-webservices-prevalidationws': '/v5-webservices-prevalidationws/',
+    'v5-prevalidation': '/v5-webservices-prevalidationws/' // Alias for shorter name
 };
 
 // Data files to load
