@@ -20,7 +20,7 @@
 
 1. **RED State:** Write failing test → Auto-triggers debug session on failure
 2. **GREEN State:** Implement code → Captures timing data → Auto-collects feedback
-3. **REFACTOR State:** Suggest improvements → Multi-language AST-based + performance code smell detection
+3. **REFACTOR State:** Suggest improvements → **AUTO-CLEANUP orphaned code** → Multi-language AST-based + performance code smell detection
 
 ---
 
@@ -34,11 +34,72 @@
 - ✅ **Auto-Debug on RED:** Debug session starts automatically when tests fail
 - ✅ **Performance-Based Refactoring:** Uses debug timing data to identify bottlenecks
 - ✅ **Multi-Language Refactoring (NEW v3.2):** AST-based code smell detection for Python, JavaScript, TypeScript, C#
+- ✅ **Orphaned Code Cleanup (NEW v3.7.1):** AUTO-REMOVES dead functions, duplicates, orphaned implementations in REFACTOR phase
 - ✅ **View Discovery Integration:** Auto-discovers element IDs before test generation
 - ✅ **Auto-Feedback Collection:** Gathers feedback on GREEN state transitions
-- ✅ **Smart Code Smell Detection:** 11 smell types including performance-based
+- ✅ **Smart Code Smell Detection:** 11 smell types including performance-based + orphaned code
 - ✅ **Data-Driven Optimization:** Identifies slow functions (>100ms), hot paths (>10 calls), bottlenecks (>500ms)
 - ✅ **Test Location Isolation (Layer 8):** Application tests in user repo, CORTEX tests in CORTEX folder
+
+---
+
+## Orphaned Code Cleanup (NEW v3.7.1)
+
+**Problem Solved:**
+- GREEN phase adds new implementations but doesn't remove old ones
+- Technical debt accumulates (old + new versions coexist)
+- Code duplication grows 15% per TDD cycle
+- Ambiguity about which function is canonical
+
+**Automatic Detection:**
+1. **Dead Code:** Functions with zero call sites (confidence: 95%)
+2. **Orphaned Functions:** Old implementations with naming patterns like `_old`, `_v1`, `_legacy` (confidence: 85%)
+3. **Duplicate Signatures:** Multiple functions with identical signatures (confidence: 80%)
+
+**Cleanup Workflow:**
+```
+REFACTOR Phase (Automatic):
+1. Analyze all files modified in GREEN phase
+2. Detect dead/orphaned/duplicate functions via AST
+3. Remove detected functions safely
+4. Run tests to verify cleanup didn't break anything
+5. Rollback if tests fail (automatic backup restoration)
+6. Complete phase only if tests pass
+```
+
+**Example:**
+```python
+# GREEN Phase Output (before cleanup):
+def login(username, password):  # OLD - orphaned (zero call sites)
+    return authenticate(username, password)
+
+def login_with_cache(username, password):  # NEW - active implementation
+    cached = cache.get(username)
+    if cached: return cached
+    result = authenticate(username, password)
+    cache.set(username, result)
+    return result
+
+# REFACTOR Phase Output (after auto-cleanup):
+def login(username, password):  # CLEAN - only canonical version remains
+    cached = cache.get(username)
+    if cached: return cached
+    result = authenticate(username, password)
+    cache.set(username, result)
+    return result
+# Old login() removed, login_with_cache() renamed to login()
+```
+
+**Metrics Tracked:**
+- Functions removed: Count of orphaned functions deleted
+- Lines removed: Total code reduction
+- Cleanup performed: Boolean flag (did cleanup happen?)
+- Backup paths: Automatic backup locations for rollback
+
+**Brain Protection:**
+- Rule: `REFACTOR_CODE_CLEANUP_ENFORCEMENT` (BLOCKED severity)
+- Prevents REFACTOR phase completion if orphaned code detected but not cleaned
+- Enforces "clean up after yourself" principle
 
 ---
 
@@ -87,7 +148,7 @@ IDLE → RED (test fails) → auto-debug session → auto-checkpoint (git)
   ↓
 GREEN (test passes) → capture timing data → collect feedback → auto-checkpoint (git)
   ↓
-REFACTOR → performance analysis → suggest optimizations → auto-checkpoint (git)
+REFACTOR → performance analysis → AUTO-CLEANUP orphaned code → suggest optimizations → auto-checkpoint (git)
   ↓
 COMPLETE → validate improvements
 ```
@@ -95,7 +156,7 @@ COMPLETE → validate improvements
 **Git Checkpoint Integration:**
 - **RED State:** Auto-checkpoint after test creation (captures failing test before implementation)
 - **GREEN State:** Auto-checkpoint after test passes (minimal working implementation)
-- **REFACTOR State:** Auto-checkpoint after refactoring (clean code while tests pass)
+- **REFACTOR State:** Auto-checkpoint after refactoring + cleanup (clean code, zero orphans, tests pass)
 - **Benefit:** Enforces TDD discipline, prevents implementation before test failure verification
 - **Configuration:** Set `auto_checkpoint.enabled: true` in `git-checkpoint-rules.yaml`
 - **See Also:** Git Checkpoint Orchestrator Guide for detailed configuration

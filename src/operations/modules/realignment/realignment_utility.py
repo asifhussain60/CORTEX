@@ -924,6 +924,27 @@ def align_system_v2(
             logger.info("✅ Git checkpoint orchestrator properly wired")
         
         # ====================================================================
+        # CHECK 10: Component Discovery & Wiring
+        # ====================================================================
+        logger.info("📋 Check 10: Component Discovery & Wiring")
+        component_check = _check_component_discovery(cortex_root)
+        results["checks"]["component_discovery"] = component_check
+        
+        if not component_check["passed"]:
+            logger.error(f"❌ {component_check['unwired_count']} component(s) NOT wired")
+            for issue in component_check["issues"]:
+                logger.error(f"   - {issue['component']}: {issue['impact']}")
+            results["errors"].append({
+                "category": "component_wiring",
+                "severity": "HIGH",
+                "message": f"{component_check['unwired_count']} architectural component(s) not wired to workflows",
+                "details": component_check["issues"]
+            })
+            results["success"] = False
+        else:
+            logger.info("✅ All architectural components properly wired")
+        
+        # ====================================================================
         # Generate Comprehensive Report
         # ====================================================================
         report_path = _generate_alignment_report(cortex_root, results)
@@ -935,7 +956,7 @@ def align_system_v2(
         logger.info("\n" + "=" * 70)
         logger.info("📊 CORTEX Align v2.0 - Summary")
         logger.info("=" * 70)
-        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/9")
+        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/10")
         logger.info(f"⚠️  Warnings: {len(results['warnings'])}")
         logger.info(f"❌ Errors: {len(results['errors'])}")
         logger.info(f"🔧 Fixes Applied: {len(results['fixes_applied'])}")
@@ -1336,6 +1357,66 @@ def _check_git_checkpoint_wiring(cortex_root: Path) -> Dict[str, Any]:
     }
 
 
+def _check_component_discovery(cortex_root: Path) -> Dict[str, Any]:
+    """
+    Check 10: Discover unwired architectural components.
+    
+    Scans for SOLID analyzers, enforcers, and dependency graphs that exist
+    but are not integrated into workflows.
+    
+    Args:
+        cortex_root: Root directory of CORTEX
+        
+    Returns:
+        Check results with unwired components
+    """
+    from src.operations.modules.realignment.component_discovery_scanner import (
+        ComponentDiscoveryScanner,
+        format_discovery_report
+    )
+    
+    issues = []
+    
+    try:
+        # Run component discovery
+        scanner = ComponentDiscoveryScanner()
+        components = scanner.discover_components(cortex_root)
+        
+        # Format report
+        report = format_discovery_report(components)
+        
+        # Check for unwired components
+        if report["unwired_count"] > 0:
+            for unwired in report["unwired_components"]:
+                issues.append({
+                    "component": unwired["name"],
+                    "file": unwired["file"],
+                    "capabilities": unwired["capabilities"],
+                    "should_wire_to": unwired["should_wire_to"],
+                    "severity": "HIGH",
+                    "impact": f"Unused {', '.join(unwired['capabilities'])} detection capability"
+                })
+        
+        return {
+            "passed": report["unwired_count"] == 0,
+            "total_discovered": report["total_discovered"],
+            "wired_count": report["wired_count"],
+            "unwired_count": report["unwired_count"],
+            "issues": issues
+        }
+        
+    except Exception as e:
+        logger.error(f"Component discovery check failed: {e}")
+        return {
+            "passed": False,
+            "total_discovered": 0,
+            "wired_count": 0,
+            "unwired_count": 0,
+            "issues": [{"component": "Scanner", "impact": f"Check failed: {e}", "severity": "ERROR"}],
+            "error": str(e)
+        }
+
+
 def _generate_alignment_report(cortex_root: Path, results: Dict[str, Any]) -> Path:
     """Generate comprehensive alignment report."""
     from datetime import datetime
@@ -1356,7 +1437,7 @@ def _generate_alignment_report(cortex_root: Path, results: Dict[str, Any]) -> Pa
 
 ## Executive Summary
 
-- **Checks Passed:** {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/6
+- **Checks Passed:** {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/10
 - **Warnings:** {len(results['warnings'])}
 - **Errors:** {len(results['errors'])}
 - **Fixes Applied:** {len(results['fixes_applied'])}

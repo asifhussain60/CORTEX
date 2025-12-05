@@ -1,0 +1,38 @@
+[
+  {
+    "app_name": "BadMonolith",
+    "file_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\validation\\sample-apps\\BadMonolith\\monolith.py",
+    "overall_score": 46,
+    "srp_score": 100,
+    "ocp_score": 76,
+    "lsp_score": 100,
+    "isp_score": 100,
+    "dip_score": 80,
+    "coupling_score": 90,
+    "total_violations": 5,
+    "recommendations": [
+      "Line \\PROJECTS\\CORTEX\\cortex-brain\\validation\\sample-apps\\BadMonolith\\monolith.py: DIP Violation: Depend on abstractions, not concrete implementations. Use dependency injection and interface-based design.",
+      "Line \\PROJECTS\\CORTEX\\cortex-brain\\validation\\sample-apps\\BadMonolith\\monolith.py: Tight Coupling: Reduce dependencies between modules. Use dependency injection, events, or mediator patterns.",
+      "Line \\PROJECTS\\CORTEX\\cortex-brain\\validation\\sample-apps\\BadMonolith\\monolith.py: OCP Violation: Use abstraction and polymorphism instead of modifying existing code. Extend behavior through inheritance or composition."
+    ],
+    "passed": true
+  },
+  {
+    "app_name": "CleanSolidApp",
+    "file_path": "D:\\PROJECTS\\CORTEX\\cortex-brain\\validation\\sample-apps\\CleanSolidApp\\clean_solid.py",
+    "overall_score": 46,
+    "srp_score": 100,
+    "ocp_score": 76,
+    "lsp_score": 80,
+    "isp_score": 100,
+    "dip_score": 90,
+    "coupling_score": 100,
+    "total_violations": 5,
+    "recommendations": [
+      "Line \\PROJECTS\\CORTEX\\cortex-brain\\validation\\sample-apps\\CleanSolidApp\\clean_solid.py: LSP Violation: Ensure subclasses can replace base class without breaking behavior. Review method overrides and contracts.",
+      "Line \\PROJECTS\\CORTEX\\cortex-brain\\validation\\sample-apps\\CleanSolidApp\\clean_solid.py: DIP Violation: Depend on abstractions, not concrete implementations. Use dependency injection and interface-based design.",
+      "Line \\PROJECTS\\CORTEX\\cortex-brain\\validation\\sample-apps\\CleanSolidApp\\clean_solid.py: OCP Violation: Use abstraction and polymorphism instead of modifying existing code. Extend behavior through inheritance or composition."
+    ],
+    "passed": true
+  }
+]

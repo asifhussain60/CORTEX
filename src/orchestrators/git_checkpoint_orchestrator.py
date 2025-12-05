@@ -50,7 +50,7 @@ class GitCheckpointOrchestrator:
             session_id: TDD session identifier
             checkpoint_type: Type of checkpoint (e.g., "phase-RED", "phase-GREEN")
             message: Checkpoint message
-            metadata: Optional metadata dict
+            metadata: Optional metadata dict (supports: task_id, feature_name, work_item_id)
             
         Returns:
             Dict with success, checkpoint_id, commit_sha
@@ -59,7 +59,12 @@ class GitCheckpointOrchestrator:
             checkpoint_id = f"ckpt-{uuid.uuid4().hex[:8]}"
             timestamp = datetime.now(timezone.utc).isoformat()
             
-            # Format commit message
+            # Extract task attribution from metadata
+            task_id = metadata.get("task_id") if metadata else None
+            feature_name = metadata.get("feature_name") if metadata else None
+            work_item_id = metadata.get("work_item_id") if metadata else None
+            
+            # Format commit message with optional task attribution
             commit_message = (
                 f"{self.checkpoint_prefix}: {checkpoint_type}\n\n"
                 f"Session: {session_id}\n"
@@ -67,6 +72,14 @@ class GitCheckpointOrchestrator:
                 f"Message: {message}\n"
                 f"Timestamp: {timestamp}"
             )
+            
+            # Add task attribution if provided
+            if task_id:
+                commit_message += f"\nTask-ID: {task_id}"
+            if feature_name:
+                commit_message += f"\nFeature: {feature_name}"
+            if work_item_id:
+                commit_message += f"\nWork-Item: {work_item_id}"
             
             # Stage all changes
             subprocess.run(

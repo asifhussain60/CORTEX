@@ -30,6 +30,15 @@ class CodeSmellType(Enum):
     SLOW_FUNCTION = "slow_function"
     HOT_PATH = "hot_path"
     PERFORMANCE_BOTTLENECK = "performance_bottleneck"
+    # SOLID Integration: Architectural violations
+    SRP_VIOLATION = "srp_violation"
+    OCP_VIOLATION = "ocp_violation"
+    LSP_VIOLATION = "lsp_violation"
+    ISP_VIOLATION = "isp_violation"
+    DIP_VIOLATION = "dip_violation"
+    TIGHT_COUPLING = "tight_coupling"
+    LOW_COHESION = "low_cohesion"
+    SOLID_VIOLATION = "solid_violation"
 
 
 class RefactoringType(Enum):
@@ -159,6 +168,14 @@ class CodeSmellDetector:
             smells.extend(self._detect_slow_functions(tree, filepath))
             smells.extend(self._detect_hot_paths(tree, filepath))
             smells.extend(self._detect_performance_bottlenecks(tree, filepath))
+        
+        # CRITICAL: Code cleanup detection (fixes orphaned function bug)
+        smells.extend(self._detect_dead_code(tree, filepath, source_code))
+        smells.extend(self._detect_orphaned_functions(tree, filepath, source_code))
+        smells.extend(self._detect_duplicate_code(tree, filepath))
+        
+        # SOLID Integration: Architectural violation detection
+        smells.extend(self._detect_solid_violations(tree, filepath, source_code))
         
         return smells
     
@@ -436,6 +453,254 @@ class CodeSmellDetector:
                         metric_value=total_time,
                         confidence=0.95  # High confidence - measured data
                     ))
+        
+        return smells
+    
+    # CRITICAL FIX: Code cleanup detection for orphaned/duplicate code
+    
+    def _detect_dead_code(self, tree: ast.AST, filepath: str, source_code: str) -> List[CodeSmell]:
+        """
+        Detect dead code (functions with zero call sites).
+        
+        Finds functions that are defined but never called anywhere in the file.
+        This indicates orphaned implementations that should be removed.
+        """
+        smells = []
+        
+        # Build set of all function definitions
+        defined_functions = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef):
+                if not node.name.startswith('_'):  # Skip private functions
+                    defined_functions.add(node.name)
+        
+        # Build set of all function calls
+        called_functions = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
+                if isinstance(node.func, ast.Name):
+                    called_functions.add(node.func.id)
+                elif isinstance(node.func, ast.Attribute):
+                    called_functions.add(node.func.attr)
+        
+        # Find functions that are defined but never called
+        dead_functions = defined_functions - called_functions
+        
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef):
+                if node.name in dead_functions:
+                    # Calculate function size to assess severity
+                    func_lines = (node.end_lineno or node.lineno) - node.lineno + 1
+                    
+                    severity = "high" if func_lines > 20 else "medium"
+                    
+                    smells.append(CodeSmell(
+                        smell_type=CodeSmellType.DEAD_CODE,
+                        location=f"{filepath}:{node.lineno}:0",
+                        severity=severity,
+                        description=f"Function '{node.name}' has zero call sites (dead code) - should be removed",
+                        metric_value=float(func_lines),
+                        confidence=0.95  # High confidence - AST-based analysis
+                    ))
+        
+        return smells
+    
+    def _detect_orphaned_functions(self, tree: ast.AST, filepath: str, source_code: str) -> List[CodeSmell]:
+        """
+        Detect orphaned functions (old implementations likely replaced by new code).
+        
+        Heuristic: Functions with similar names or that appear to be "old versions"
+        (e.g., login_old, authenticate_v1, process_data_legacy)
+        """
+        smells = []
+        
+        orphan_patterns = ['_old', '_legacy', '_deprecated', '_backup', '_v1', '_v2', '_temp']
+        
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef):
+                func_name_lower = node.name.lower()
+                
+                # Check for orphan naming patterns
+                is_orphan = any(pattern in func_name_lower for pattern in orphan_patterns)
+                
+                if is_orphan:
+                    func_lines = (node.end_lineno or node.lineno) - node.lineno + 1
+                    
+                    smells.append(CodeSmell(
+                        smell_type=CodeSmellType.DEAD_CODE,
+                        location=f"{filepath}:{node.lineno}:0",
+                        severity="high",
+                        description=f"Function '{node.name}' appears to be orphaned implementation (naming suggests old version) - should be removed or renamed",
+                        metric_value=float(func_lines),
+                        confidence=0.85  # Good confidence based on naming
+                    ))
+        
+        return smells
+    
+    def _detect_duplicate_code(self, tree: ast.AST, filepath: str) -> List[CodeSmell]:
+        """
+        Detect duplicate function signatures.
+        
+        Finds functions with identical or very similar signatures that may
+        indicate duplicate implementations.
+        """
+        smells = []
+        
+        # Build map of function signatures
+        function_signatures: Dict[str, List[tuple]] = {}
+        
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef):
+                # Create signature: (param_count, param_names_normalized)
+                param_count = len(node.args.args)
+                param_names = tuple(sorted([arg.arg for arg in node.args.args if arg.arg not in ('self', 'cls')]))
+                
+                signature = (param_count, param_names)
+                
+                if signature not in function_signatures:
+                    function_signatures[signature] = []
+                function_signatures[signature].append((node.name, node.lineno))
+        
+        # Find duplicate signatures
+        for signature, functions in function_signatures.items():
+            if len(functions) > 1:
+                # Multiple functions with same signature
+                for func_name, line_num in functions:
+                    smells.append(CodeSmell(
+                        smell_type=CodeSmellType.DUPLICATE_CODE,
+                        location=f"{filepath}:{line_num}:0",
+                        severity="medium",
+                        description=f"Function '{func_name}' has duplicate signature with {len(functions)-1} other function(s) - possible code duplication",
+                        metric_value=float(len(functions)),
+                        confidence=0.80  # Moderate confidence - needs manual review
+                    ))
+        
+        return smells
+    
+    def _detect_solid_violations(self, tree: ast.AST, filepath: str, source_code: str) -> List[CodeSmell]:
+        """
+        Detect SOLID principle violations using SOLIDPrincipleEnforcer.
+        
+        Integrates with discovered SOLID components to detect:
+        - SRP: Single Responsibility Principle violations
+        - OCP: Open/Closed Principle violations  
+        - LSP: Liskov Substitution Principle violations
+        - ISP: Interface Segregation Principle violations
+        - DIP: Dependency Inversion Principle violations
+        - Coupling: Tight coupling and circular dependencies
+        
+        Returns:
+            List of detected SOLID violations
+        """
+        smells = []
+        
+        try:
+            # Import SOLIDPrincipleEnforcer (wire discovered component)
+            from src.cortex_agents.test_generator.solid_principle_enforcer import (
+                SOLIDPrincipleEnforcer,
+                SOLIDViolation,
+                SOLIDPrinciple
+            )
+            from pathlib import Path
+            import tempfile
+            
+            # Create enforcer instance
+            enforcer = SOLIDPrincipleEnforcer()
+            
+            # SOLIDPrincipleEnforcer needs a file path, so write to temp file
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
+                f.write(source_code)
+                temp_path = f.name
+            
+            try:
+                # Analyze file for SOLID violations
+                violations = enforcer.check_file(temp_path)
+                
+                # Convert violations to CodeSmell objects
+                for violation in violations:
+                    # Map violation type to smell type
+                    smell_type_map = {
+                        SOLIDPrinciple.SRP: CodeSmellType.SRP_VIOLATION,
+                        SOLIDPrinciple.OCP: CodeSmellType.OCP_VIOLATION,
+                        SOLIDPrinciple.LSP: CodeSmellType.LSP_VIOLATION,
+                        SOLIDPrinciple.ISP: CodeSmellType.ISP_VIOLATION,
+                        SOLIDPrinciple.DIP: CodeSmellType.DIP_VIOLATION,
+                    }
+                    
+                    smell_type = smell_type_map.get(
+                        violation.principle,
+                        CodeSmellType.SOLID_VIOLATION
+                    )
+                    
+                    # Map severity
+                    severity = violation.severity.value.lower()
+                    if severity == "critical":
+                        severity = "high"
+                    
+                    smells.append(CodeSmell(
+                        smell_type=smell_type,
+                        location=f"{filepath}:{violation.line_number}:0",
+                        severity=severity,
+                        description=f"{violation.principle.value.replace('_', ' ').title()}: {violation.description}",
+                        metric_value=None,
+                        confidence=0.90  # High confidence from enforcer
+                    ))
+            finally:
+                # Clean up temp file
+                import os
+                try:
+                    os.unlink(temp_path)
+                except:
+                    pass
+            
+            # Also detect coupling issues using DependencyGraph
+            smells.extend(self._detect_coupling_issues(filepath, source_code))
+            
+        except ImportError as e:
+            # SOLIDPrincipleEnforcer not available - skip SOLID detection
+            pass
+        except Exception as e:
+            # Log error but don't fail analysis
+            print(f"⚠️  SOLID detection failed for {filepath}: {e}")
+        
+        return smells
+    
+    def _detect_coupling_issues(self, filepath: str, source_code: str) -> List[CodeSmell]:
+        """
+        Detect tight coupling through import analysis.
+        
+        Returns:
+            List of coupling-related code smells
+        """
+        smells = []
+        
+        try:
+            # Analyze imports in file
+            tree = ast.parse(source_code)
+            imports = []
+            
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Import):
+                    for alias in node.names:
+                        imports.append(alias.name)
+                elif isinstance(node, ast.ImportFrom):
+                    if node.module:
+                        imports.append(node.module)
+            
+            # Check for excessive coupling (too many imports)
+            if len(imports) > 15:
+                smells.append(CodeSmell(
+                    smell_type=CodeSmellType.TIGHT_COUPLING,
+                    location=f"{filepath}:1:0",
+                    severity="medium",
+                    description=f"High coupling: {len(imports)} imports detected - consider reducing dependencies",
+                    metric_value=float(len(imports)),
+                    confidence=0.85
+                ))
+                
+        except Exception as e:
+            # Log error but don't fail analysis
+            print(f"⚠️  Coupling detection failed for {filepath}: {e}")
         
         return smells
 

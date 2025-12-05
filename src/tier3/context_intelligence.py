@@ -1394,5 +1394,223 @@ class ContextIntelligence:
         except Exception as e:
             print(f"Error retrieving all metrics: {e}")
             return []
+    
+    def extract_task_metrics_from_git(
+        self,
+        days: int = 30,
+        repo_path: Optional[Path] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Extract task-level metrics from git commit messages.
+        
+        Parses CORTEX-TDD checkpoint commits to extract:
+        - Task ID, Feature name, Work Item ID
+        - Time-to-RED, time-to-GREEN, time-to-REFACTOR
+        - Task completion velocity
+        
+        Args:
+            days: Number of days to analyze
+            repo_path: Optional path to git repository
+            
+        Returns:
+            List of task metric dicts
+        """
+        if repo_path is None:
+            repo_path = self.db_path.parent.parent.parent
+        
+        repo_path = Path(repo_path)
+        
+        try:
+            since_str = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
+            cmd = [
+                "git", "-C", str(repo_path), "log",
+                f"--since={since_str}",
+                "--grep=CORTEX-TDD",
+                "--pretty=format:%H|%ai|%B|||"
+            ]
+            
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            
+            # Parse commits and group by task
+            tasks = {}
+            
+            for commit_block in result.stdout.split('|||'):
+                if not commit_block.strip():
+                    continue
+                
+                lines = commit_block.strip().split('\n')
+                if len(lines) < 2:
+                    continue
+                
+                # First line: sha|timestamp
+                header = lines[0].split('|', 1)
+                if len(header) != 2:
+                    continue
+                
+                commit_sha = header[0]
+                commit_time = datetime.fromisoformat(header[1].replace(' +0000', '+00:00').replace(' ', 'T', 1))
+                
+                # Parse commit body for task attribution
+                task_id = None
+                feature_name = None
+                work_item_id = None
+                checkpoint_type = None
+                session_id = None
+                
+                for line in lines[1:]:
+                    if line.startswith('CORTEX-TDD:'):
+                        checkpoint_type = line.split(':', 1)[1].strip()
+                    elif line.startswith('Task-ID:'):
+                        task_id = line.split(':', 1)[1].strip()
+                    elif line.startswith('Feature:'):
+                        feature_name = line.split(':', 1)[1].strip()
+                    elif line.startswith('Work-Item:'):
+                        work_item_id = line.split(':', 1)[1].strip()
+                    elif line.startswith('Session:'):
+                        session_id = line.split(':', 1)[1].strip()
+                
+                # Group by task identifier (task_id or session_id)
+                task_key = task_id or session_id
+                if not task_key:
+                    continue
+                
+                if task_key not in tasks:
+                    tasks[task_key] = {
+                        'task_id': task_id,
+                        'feature_name': feature_name,
+                        'work_item_id': work_item_id,
+                        'session_id': session_id,
+                        'checkpoints': [],
+                        'red_time': None,
+                        'green_time': None,
+                        'refactor_time': None,
+                        'completion_time': None,
+                        'cycle_count': 0
+                    }
+                
+                tasks[task_key]['checkpoints'].append({
+                    'commit_sha': commit_sha,
+                    'timestamp': commit_time,
+                    'type': checkpoint_type
+                })
+            
+            # Calculate time metrics for each task
+            task_metrics = []
+            for task_key, task_data in tasks.items():
+                # Sort checkpoints by time
+                task_data['checkpoints'].sort(key=lambda x: x['timestamp'])
+                
+                # Calculate phase durations
+                red_start = None
+                green_start = None
+                refactor_start = None
+                
+                for checkpoint in task_data['checkpoints']:
+                    cp_type = checkpoint['type']
+                    cp_time = checkpoint['timestamp']
+                    
+                    if 'RED' in cp_type:
+                        red_start = cp_time
+                    elif 'GREEN' in cp_type and red_start:
+                        task_data['red_time'] = (cp_time - red_start).total_seconds()
+                        green_start = cp_time
+                        task_data['cycle_count'] += 1
+                    elif 'REFACTOR' in cp_type and green_start:
+                        task_data['green_time'] = (cp_time - green_start).total_seconds()
+                        refactor_start = cp_time
+                    elif 'COMPLETE' in cp_type and refactor_start:
+                        task_data['refactor_time'] = (cp_time - refactor_start).total_seconds()
+                        task_data['completion_time'] = cp_time
+                
+                # Calculate total task duration
+                if task_data['checkpoints']:
+                    start = task_data['checkpoints'][0]['timestamp']
+                    end = task_data['checkpoints'][-1]['timestamp']
+                    task_data['total_duration_seconds'] = (end - start).total_seconds()
+                
+                task_metrics.append(task_data)
+            
+            return task_metrics
+        
+        except Exception as e:
+            print(f"Error extracting task metrics: {e}")
+            return []
+    
+    def calculate_task_velocity(
+        self,
+        days: int = 30,
+        group_by: str = "week"
+    ) -> List[Dict[str, Any]]:
+        """
+        Calculate task completion velocity over time.
+        
+        Args:
+            days: Number of days to analyze
+            group_by: Grouping period ("day", "week", "month")
+            
+        Returns:
+            List of velocity data points
+        """
+        task_metrics = self.extract_task_metrics_from_git(days=days)
+        
+        # Group completed tasks by time period
+        velocity_data = {}
+        
+        for task in task_metrics:
+            if not task.get('completion_time'):
+                continue
+            
+            completion_time = task['completion_time']
+            
+            # Determine time bucket
+            if group_by == "day":
+                bucket = completion_time.date()
+            elif group_by == "week":
+                bucket = completion_time.date() - timedelta(days=completion_time.weekday())
+            elif group_by == "month":
+                bucket = completion_time.replace(day=1).date()
+            else:
+                bucket = completion_time.date()
+            
+            if bucket not in velocity_data:
+                velocity_data[bucket] = {
+                    'period': bucket.isoformat(),
+                    'tasks_completed': 0,
+                    'total_duration': 0.0,
+                    'total_cycles': 0,
+                    'avg_red_time': 0.0,
+                    'avg_green_time': 0.0,
+                    'avg_refactor_time': 0.0
+                }
+            
+            velocity_data[bucket]['tasks_completed'] += 1
+            velocity_data[bucket]['total_duration'] += task.get('total_duration_seconds', 0)
+            velocity_data[bucket]['total_cycles'] += task.get('cycle_count', 0)
+            
+            if task.get('red_time'):
+                velocity_data[bucket]['avg_red_time'] += task['red_time']
+            if task.get('green_time'):
+                velocity_data[bucket]['avg_green_time'] += task['green_time']
+            if task.get('refactor_time'):
+                velocity_data[bucket]['avg_refactor_time'] += task['refactor_time']
+        
+        # Calculate averages
+        result = []
+        for bucket, data in sorted(velocity_data.items()):
+            count = data['tasks_completed']
+            if count > 0:
+                data['avg_duration'] = data['total_duration'] / count
+                data['avg_red_time'] = data['avg_red_time'] / count
+                data['avg_green_time'] = data['avg_green_time'] / count
+                data['avg_refactor_time'] = data['avg_refactor_time'] / count
+            
+            result.append(data)
+        
+        return result
 
 

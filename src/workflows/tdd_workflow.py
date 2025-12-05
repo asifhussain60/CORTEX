@@ -4,10 +4,10 @@ TDD Workflow Orchestrator
 Orchestrates RED → GREEN → REFACTOR TDD cycle (Rule #5):
 - RED: Create failing test
 - GREEN: Minimum implementation to pass
-- REFACTOR: Improve code while keeping tests green
+- REFACTOR: Improve code while keeping tests green + CLEANUP orphaned code
 
 Author: CORTEX Development Team
-Version: 1.0
+Version: 1.1 - Added orphaned code cleanup (Dec 5, 2025)
 """
 
 from typing import Dict, Any, List
@@ -15,6 +15,8 @@ from src.cortex_agents.base_agent import AgentMessage
 from src.cortex_agents.test_generator import TestGenerator
 from src.cortex_agents.code_executor import CodeExecutor
 from src.cortex_agents.health_validator import HealthValidator
+from src.workflows.refactoring_intelligence import CodeSmellDetector, RefactoringEngine
+from src.workflows.orphaned_code_cleaner import OrphanedCodeCleaner
 
 
 class TDDWorkflow:
@@ -38,12 +40,15 @@ class TDDWorkflow:
     
     def __init__(self, orchestrator):
         """
-        Initialize TDD workflow
+        Initialize TDD workflow orchestrator
         
         Args:
-            orchestrator: Agent orchestrator for message routing
+            orchestrator: Parent orchestrator for agent routing
         """
         self.orchestrator = orchestrator
+        self.code_smell_detector = CodeSmellDetector()
+        self.refactoring_engine = RefactoringEngine()
+        self.code_cleaner = OrphanedCodeCleaner(backup_enabled=True)
         self.test_gen = TestGenerator()
         self.code_exec = CodeExecutor()
         self.validator = HealthValidator()
@@ -245,7 +250,12 @@ class TDDWorkflow:
                        test_file: str,
                        context: Dict[str, Any]) -> Dict[str, Any]:
         """
-        REFACTOR phase: Improve code while keeping tests green
+        REFACTOR phase: Improve code while keeping tests green + CLEANUP orphaned code
+        
+        NEW (v1.1): Automatically detects and removes:
+        - Dead code (functions with zero call sites)
+        - Orphaned functions (old implementations after GREEN phase)
+        - Duplicate function signatures
         
         Args:
             files: Files modified in GREEN phase
@@ -257,10 +267,53 @@ class TDDWorkflow:
                 'phase': 'REFACTOR',
                 'status': 'REFACTORED',
                 'files': ['path/to/impl.py', ...],
-                'improvements': ['Extracted method', ...]
+                'improvements': ['Extracted method', ...],
+                'cleanup_performed': True,
+                'functions_removed': ['old_login', 'authenticate_v1'],
+                'lines_removed': 45
             }
         """
-        # Use code-executor agent in refactor mode
+        improvements = []
+        cleanup_results = []
+        
+        # STEP 1: Detect code smells (including dead code, orphans, duplicates)
+        for file_path in files:
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    source_code = f.read()
+                
+                # Run code smell detection
+                code_smells = self.code_smell_detector.analyze_file(file_path, source_code)
+                
+                # STEP 2: Auto-cleanup orphaned/dead code
+                cleanup_result = self.code_cleaner.clean_file(file_path, code_smells)
+                cleanup_results.append(cleanup_result)
+                
+                if cleanup_result.success and cleanup_result.functions_removed:
+                    improvements.append(
+                        f"Removed {len(cleanup_result.functions_removed)} orphaned function(s): "
+                        f"{', '.join(cleanup_result.functions_removed)}"
+                    )
+                
+                # STEP 3: Generate traditional refactoring suggestions
+                remaining_smells = [
+                    smell for smell in code_smells
+                    if smell.smell_type.value not in ('dead_code', 'duplicate_code')
+                ]
+                
+                if remaining_smells:
+                    suggestions = self.refactoring_engine.generate_suggestions(
+                        remaining_smells,
+                        source_code
+                    )
+                    
+                    for suggestion in suggestions:
+                        improvements.append(suggestion.description)
+            
+            except Exception as e:
+                improvements.append(f"Warning: Could not analyze {file_path}: {e}")
+        
+        # STEP 4: Use code-executor agent for remaining refactoring (optional)
         message = AgentMessage(
             from_agent='tdd-workflow',
             to_agent='code-executor',
@@ -268,25 +321,54 @@ class TDDWorkflow:
             payload={
                 'files': files,
                 'test_file': test_file,
-                'context': context
+                'context': context,
+                'improvements_applied': improvements
             }
         )
         
         result = self.orchestrator.route_message(message)
         
-        # Verify tests still pass after refactor (Rule #5 requirement)
+        # STEP 5: Verify tests still pass after ALL changes (cleanup + refactoring)
         if not result.get('tests_passing'):
+            # ROLLBACK: Restore from backups
+            for cleanup_result in cleanup_results:
+                if cleanup_result.backup_path:
+                    self.code_cleaner.restore_from_backup(
+                        cleanup_result.backup_path,
+                        cleanup_result.file_path
+                    )
+            
             raise ValueError(
-                f"REFACTOR phase violation: Tests must remain passing. "
-                f"Test output: {result.get('test_output', '')}"
+                f"REFACTOR phase violation: Tests must remain passing after cleanup. "
+                f"Test output: {result.get('test_output', '')}. "
+                f"All changes have been rolled back."
             )
+        
+        # Calculate total cleanup metrics
+        total_functions_removed = sum(
+            len(r.functions_removed) for r in cleanup_results if r.success
+        )
+        total_lines_removed = sum(
+            r.lines_removed for r in cleanup_results if r.success
+        )
         
         return {
             'phase': 'REFACTOR',
             'status': 'REFACTORED',
             'files': result['files_modified'],
-            'improvements': result.get('improvements', []),
-            'tests_passing': True
+            'improvements': improvements + result.get('improvements', []),
+            'tests_passing': True,
+            'cleanup_performed': total_functions_removed > 0,
+            'functions_removed': total_functions_removed,
+            'lines_removed': total_lines_removed,
+            'cleanup_details': [
+                {
+                    'file': r.file_path,
+                    'functions': r.functions_removed,
+                    'lines': r.lines_removed
+                }
+                for r in cleanup_results if r.success and r.functions_removed
+            ]
         }
     
     def _validate_dod(self, files: List[str]) -> Dict[str, Any]:
