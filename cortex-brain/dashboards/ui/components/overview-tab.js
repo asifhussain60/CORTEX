@@ -30,6 +30,18 @@ export function renderOverview(data) {
     
     // Build HTML
     container.innerHTML = `
+        <!-- How to Read Description -->
+        <div class="glass-card" style="margin-bottom: 2rem; background: linear-gradient(135deg, var(--glass-light) 0%, var(--background-secondary) 100%);">
+            <h3 style="margin-bottom: 1rem;">📊 Dashboard Overview</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                This overview provides a comprehensive health assessment of your project. The 
+                <strong style="color: var(--success);">health score (🟢 >75)</strong>, 
+                <strong style="color: var(--warning);">needs attention (🟡 50-75)</strong>, or 
+                <strong style="color: var(--danger);">requires immediate action (🔴 <50)</strong>.
+                <strong>Hover over each metric card</strong> to see detailed explanations, scoring methodology, and actionable recommendations for improvement.
+            </p>
+        </div>
+
         <!-- Health Score Section -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
             <!-- Health Score Gauge -->
@@ -55,7 +67,12 @@ export function renderOverview(data) {
         <!-- Key Metrics Grid -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
             <!-- Code Quality -->
-            <div class="glass-card">
+            <div 
+                class="overview-metric-card glass-card"
+                style="cursor: pointer; transition: all 0.3s ease;"
+                onmouseover="showOverviewTooltip(event, 'Code Quality', ${healthData.metrics?.code_quality_score || 0}, 'code_quality', this)"
+                onmouseout="hideOverviewTooltip(this)"
+            >
                 <div style="display: flex; align-items: center; margin-bottom: 1rem;">
                     <span style="font-size: 2rem; margin-right: 1rem;">📝</span>
                     <div>
@@ -69,7 +86,12 @@ export function renderOverview(data) {
             </div>
             
             <!-- Security Score -->
-            <div class="glass-card">
+            <div 
+                class="overview-metric-card glass-card"
+                style="cursor: pointer; transition: all 0.3s ease;"
+                onmouseover="showOverviewTooltip(event, 'Security Score', ${security.overall_score || 0}, 'security', this)"
+                onmouseout="hideOverviewTooltip(this)"
+            >
                 <div style="display: flex; align-items: center; margin-bottom: 1rem;">
                     <span style="font-size: 2rem; margin-right: 1rem;">🔒</span>
                     <div>
@@ -83,7 +105,12 @@ export function renderOverview(data) {
             </div>
             
             <!-- Test Coverage -->
-            <div class="glass-card">
+            <div 
+                class="overview-metric-card glass-card"
+                style="cursor: pointer; transition: all 0.3s ease;"
+                onmouseover="showOverviewTooltip(event, 'Test Coverage', ${healthData.summary?.test_coverage || 0}, 'test_coverage', this)"
+                onmouseout="hideOverviewTooltip(this)"
+            >
                 <div style="display: flex; align-items: center; margin-bottom: 1rem;">
                     <span style="font-size: 2rem; margin-right: 1rem;">🧪</span>
                     <div>
@@ -97,7 +124,12 @@ export function renderOverview(data) {
             </div>
             
             <!-- Documentation -->
-            <div class="glass-card">
+            <div 
+                class="overview-metric-card glass-card"
+                style="cursor: pointer; transition: all 0.3s ease;"
+                onmouseover="showOverviewTooltip(event, 'Documentation', ${healthData.metrics?.documentation_score || 0}, 'documentation', this)"
+                onmouseout="hideOverviewTooltip(this)"
+            >
                 <div style="display: flex; align-items: center; margin-bottom: 1rem;">
                     <span style="font-size: 2rem; margin-right: 1rem;">📚</span>
                     <div>
@@ -323,3 +355,190 @@ function capitalizeFirst(str) {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+/**
+ * Show overview metric tooltip
+ * @param {Event} event - Mouse event
+ * @param {string} metricName - Metric name
+ * @param {number} score - Metric score
+ * @param {string} metricType - Type of metric
+ * @param {HTMLElement} element - Hovered element
+ */
+window.showOverviewTooltip = function(event, metricName, score, metricType, element) {
+    // Add hover effect
+    element.style.transform = 'translateY(-4px)';
+    element.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)';
+    
+    // Remove existing tooltip
+    const existing = document.getElementById('overview-tooltip');
+    if (existing) {
+        existing.remove();
+    }
+    
+    // Determine status
+    let statusIcon = '🟢';
+    let statusLabel = 'Excellent';
+    let statusColor = 'var(--success)';
+    
+    if (score < 50) {
+        statusIcon = '🔴';
+        statusLabel = 'Critical';
+        statusColor = 'var(--danger)';
+    } else if (score < 75) {
+        statusIcon = '🟡';
+        statusLabel = 'Needs Improvement';
+        statusColor = 'var(--warning)';
+    } else if (score < 90) {
+        statusIcon = '🟢';
+        statusLabel = 'Good';
+        statusColor = 'var(--success)';
+    }
+    
+    // Build explanation based on metric type
+    let explanation = '';
+    let methodology = '';
+    let recommendation = '';
+    
+    switch (metricType) {
+        case 'code_quality':
+            explanation = `Measures code maintainability, complexity, and adherence to best practices. `;
+            explanation += `Your score of ${score}/100 indicates ${score >= 75 ? 'well-structured, maintainable code' : score >= 50 ? 'code that could benefit from refactoring' : 'significant technical debt requiring immediate attention'}.`;
+            methodology = 'Calculated from cyclomatic complexity, code duplication, method length, and SOLID principles compliance.';
+            recommendation = score < 75 
+                ? 'Focus on reducing complexity in hotspots, extracting large methods, and eliminating code duplication.'
+                : 'Maintain current standards. Continue code reviews and refactoring practices.';
+            break;
+            
+        case 'security':
+            explanation = `Evaluates vulnerability exposure across OWASP Top 10 2025 categories. `;
+            explanation += `A score of ${score}/100 ${score >= 90 ? 'indicates strong security posture' : score >= 70 ? 'suggests some security gaps need attention' : 'reveals critical vulnerabilities requiring immediate remediation'}.`;
+            methodology = 'Based on OWASP compliance scores, CVE counts, exposed secrets, weak cryptography, and input validation gaps.';
+            recommendation = score < 90 
+                ? 'Review Security tab for specific vulnerabilities. Address critical findings first, then implement preventive controls.'
+                : 'Excellent security posture. Maintain regular audits and dependency updates.';
+            break;
+            
+        case 'test_coverage':
+            explanation = `Indicates percentage of code exercised by automated tests. `;
+            explanation += `${score}% coverage ${score >= 80 ? 'provides strong confidence in code reliability' : score >= 60 ? 'offers moderate protection but has gaps' : 'leaves significant portions untested and vulnerable to regressions'}.`;
+            methodology = 'Calculated from unit test line/branch coverage, integration test coverage, and critical path coverage.';
+            recommendation = score < 80 
+                ? 'Prioritize testing for critical business logic, hotspots, and frequently changed files. Target 80%+ coverage.'
+                : 'Strong test coverage. Focus on edge cases and integration scenarios.';
+            break;
+            
+        case 'documentation':
+            explanation = `Assesses completeness and quality of code documentation. `;
+            explanation += `${score}/100 means ${score >= 75 ? 'most code is well-documented' : score >= 50 ? 'documentation exists but has gaps' : 'significant documentation deficiencies exist'}.`;
+            methodology = 'Evaluated from XML doc comments, README files, API documentation, and inline comment density.';
+            recommendation = score < 75 
+                ? 'Add XML comments to public APIs, document complex algorithms, and maintain README with architecture overview.'
+                : 'Good documentation practices. Ensure new code maintains these standards.';
+            break;
+    }
+    
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.id = 'overview-tooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+        border: 1px solid ${statusColor};
+        border-radius: 12px;
+        padding: 1.25rem;
+        max-width: 500px;
+        z-index: 10000;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        pointer-events: none;
+        animation: tooltipFadeIn 0.2s ease-out;
+        backdrop-filter: blur(10px);
+    `;
+    
+    tooltip.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-top: 1px solid var(--glass-border);">
+            <div style="font-size: 2rem;">${statusIcon}</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">
+                    ${metricName}
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                    Score: <strong style="color: ${statusColor};">${score}/100</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${statusColor}22; border-radius: 8px;">
+                <span style="font-size: 1.25rem;">${statusIcon}</span>
+                <span style="color: ${statusColor}; font-weight: 600; font-size: 0.875rem;">
+                    ${statusLabel}
+                </span>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
+                📊 What This Means
+            </div>
+            <div style="color: var(--text-secondary); line-height: 1.6; font-size: 0.875rem;">
+                ${explanation}
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px;">
+            <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
+                🔍 Scoring Methodology
+            </div>
+            <div style="color: var(--text-secondary); line-height: 1.6; font-size: 0.875rem;">
+                ${methodology}
+            </div>
+        </div>
+        
+        <div style="padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+            <div style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
+                💡 Recommended Action
+            </div>
+            <div style="color: var(--text-secondary); line-height: 1.6; font-size: 0.875rem;">
+                ${recommendation}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const rect = element.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    let top = rect.top - tooltipRect.height - 12;
+    
+    // Keep tooltip on screen
+    if (left < 10) left = 10;
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+    }
+    
+    if (top < 10) {
+        top = rect.bottom + 12;
+    }
+    
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+};
+
+/**
+ * Hide overview metric tooltip
+ * @param {HTMLElement} element - Hovered element
+ */
+window.hideOverviewTooltip = function(element) {
+    // Remove hover effect
+    element.style.transform = '';
+    element.style.boxShadow = '';
+    
+    // Remove tooltip
+    const tooltip = document.getElementById('overview-tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+};
