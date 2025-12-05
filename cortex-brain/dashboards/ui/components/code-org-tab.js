@@ -83,6 +83,42 @@ export function renderCodeOrganization(data) {
             </div>
         </div>
 
+        <!-- Description Panel -->
+        <div style="
+            background: var(--glass-light);
+            border: 1px solid var(--glass-border);
+            border-left: 4px solid var(--accent-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        ">
+            <div style="display: flex; align-items: start; gap: 1rem;">
+                <div style="font-size: 2rem; line-height: 1; opacity: 0.8;">💡</div>
+                <div style="flex: 1;">
+                    <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                        Code organization metrics identify maintenance priorities.
+                        <span style="color: var(--success); font-weight: 600;">✅ Low Complexity</span> files (&lt;20) are easy to maintain.
+                        <span style="color: var(--warning); font-weight: 600;">⚠️ Medium Complexity</span> files (20-50) need monitoring.
+                        <span style="color: var(--danger); font-weight: 600;">🔥 High Complexity</span> files (&gt;50) require urgent refactoring.
+                        <strong>Hotspots</strong> combine high complexity with frequent changes, indicating technical debt accumulation.
+                        <strong>Hover over heatmap cells and table rows</strong> for detailed analysis and recommendations.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Read Description -->
+        <div class="glass-card" style="margin-bottom: 2rem; background: linear-gradient(135deg, var(--glass-light) 0%, var(--background-secondary) 100%);">
+            <h3 style="margin-bottom: 1rem;">📊 Code Organization Insights</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                This analysis identifies code quality hotspots based on complexity and change frequency. 
+                <strong style="color: var(--success);">🟢 Green areas</strong> are maintainable, 
+                <strong style="color: var(--warning);">🟡 Yellow areas</strong> need monitoring, and 
+                <strong style="color: var(--danger);">🔴 Red areas</strong> require immediate refactoring.
+                <strong>Hover over heatmap cells or table rows</strong> to see detailed complexity metrics, LOC, change history, and specific refactoring recommendations.
+            </p>
+        </div>
+
         <!-- Complexity Heatmap -->
         <div class="glass-card" style="margin-bottom: 2rem;">
             <h3 style="margin-bottom: 0.5rem;">🗺️ Complexity Heatmap</h3>
@@ -153,7 +189,15 @@ function renderHotspotRow(hotspot) {
     }
     
     return `
-        <tr style="border-bottom: 1px solid var(--glass-border);">
+        <tr 
+            style="
+                border-bottom: 1px solid var(--glass-border);
+                transition: all 0.2s;
+                cursor: pointer;
+            "
+            onmouseover="showHotspotTooltip(event, ${JSON.stringify(hotspot).replace(/"/g, '&quot;')}, this); this.style.background='var(--glass-light)'"
+            onmouseout="hideHotspotTooltip(this); this.style.background='transparent'"
+        >
             <td style="padding: 1rem; font-family: monospace; font-size: 0.875rem;">
                 ${hotspot.file || 'Unknown'}
             </td>
@@ -255,11 +299,14 @@ function initComplexityHeatmap(fileComplexity) {
         .attr('stroke', '#1a1f3a')
         .attr('stroke-width', 2)
         .style('opacity', 0.8)
+        .style('cursor', 'pointer')
         .on('mouseover', function(event, d) {
-            d3.select(this).style('opacity', 1);
+            d3.select(this).style('opacity', 1).attr('stroke-width', 3);
+            showHeatmapTooltip(event, d.data);
         })
         .on('mouseout', function(event, d) {
-            d3.select(this).style('opacity', 0.8);
+            d3.select(this).style('opacity', 0.8).attr('stroke-width', 2);
+            hideHeatmapTooltip();
         });
     
     cell.append('text')
@@ -293,4 +340,246 @@ function initComplexityHeatmap(fileComplexity) {
 window.exportHotspots = function() {
     console.log('Export hotspots');
     alert('Hotspots export functionality coming soon!');
+};
+
+/**
+ * Show hotspot tooltip with detailed analysis
+ * @param {Event} event - Mouse event
+ * @param {Object} hotspot - Hotspot data
+ * @param {HTMLElement} row - Table row element
+ */
+window.showHotspotTooltip = function(event, hotspot, row) {
+    hideHotspotTooltip();
+    
+    const riskScore = hotspot.risk_score || 0;
+    let riskColor = 'var(--success)';
+    let riskLabel = 'Medium Risk';
+    let riskIcon = '🟡';
+    let actionPriority = 'Monitor';
+    
+    if (riskScore >= 80) {
+        riskColor = 'var(--danger)';
+        riskLabel = 'Critical Risk';
+        riskIcon = '🔴';
+        actionPriority = 'Immediate Refactoring Required';
+    } else if (riskScore >= 60) {
+        riskColor = 'var(--warning)';
+        riskLabel = 'High Risk';
+        riskIcon = '🟠';
+        actionPriority = 'Schedule Refactoring Soon';
+    } else {
+        actionPriority = 'Monitor and Review Periodically';
+    }
+    
+    const complexity = hotspot.complexity || 0;
+    let complexityLevel = 'Low';
+    if (complexity > 50) complexityLevel = 'Very High';
+    else if (complexity > 30) complexityLevel = 'High';
+    else if (complexity > 20) complexityLevel = 'Medium';
+    
+    const changeFreq = hotspot.change_frequency || 0;
+    const fileName = hotspot.file ? hotspot.file.split('/').pop() : 'Unknown';
+    
+    const tooltip = document.createElement('div');
+    tooltip.id = 'hotspot-tooltip';
+    tooltip.innerHTML = `
+        <div style="
+            position: fixed;
+            background: linear-gradient(135deg, var(--glass-dark) 0%, var(--background-primary) 100%);
+            border: 2px solid ${riskColor};
+            border-radius: 12px;
+            padding: 1.25rem;
+            max-width: 450px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            z-index: 10000;
+            animation: tooltipFadeIn 0.2s ease-out;
+        ">
+            <!-- Header -->
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--glass-border);">
+                <div style="font-size: 1.5rem;">${riskIcon}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 1.125rem; margin-bottom: 0.25rem;">${fileName}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); font-family: monospace; overflow: hidden; text-overflow: ellipsis;">${hotspot.file || 'Unknown path'}</div>
+                </div>
+                <div style="
+                    padding: 0.375rem 0.75rem;
+                    border-radius: 8px;
+                    background: ${riskColor}22;
+                    color: ${riskColor};
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    white-space: nowrap;
+                ">
+                    ${riskLabel}
+                </div>
+            </div>
+            
+            <!-- Metrics Grid -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: 600; color: var(--accent-primary);">${riskScore}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Risk Score</div>
+                </div>
+                <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: 600; color: var(--warning);">${complexity}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">${complexityLevel}</div>
+                </div>
+                <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: 600; color: var(--info);">${changeFreq}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Commits</div>
+                </div>
+            </div>
+            
+            <!-- Analysis -->
+            <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    📊 Analysis
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                    This file is a hotspot due to ${complexityLevel.toLowerCase()} complexity (${complexity}) 
+                    combined with ${changeFreq} recent changes. Files that change frequently and have high 
+                    complexity accumulate technical debt rapidly and are prone to bugs.
+                </div>
+            </div>
+            
+            <!-- Recommendation -->
+            <div style="
+                background: ${riskScore >= 80 ? 'var(--danger)22' : riskScore >= 60 ? 'var(--warning)22' : 'var(--info)22'};
+                border: 1px solid ${riskColor};
+                border-radius: 8px;
+                padding: 0.75rem;
+            ">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: ${riskColor};">
+                    💡 ${actionPriority}
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                    ${hotspot.recommendation || 'Break down this file into smaller, focused modules. Extract reusable logic into separate functions. Add comprehensive unit tests before refactoring.'}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const tooltipRect = tooltip.firstElementChild.getBoundingClientRect();
+    const rowRect = row.getBoundingClientRect();
+    
+    let left = rowRect.right + 10;
+    let top = rowRect.top;
+    
+    if (left + tooltipRect.width > window.innerWidth) {
+        left = rowRect.left - tooltipRect.width - 10;
+    }
+    
+    if (top + tooltipRect.height > window.innerHeight) {
+        top = window.innerHeight - tooltipRect.height - 10;
+    }
+    
+    if (top < 10) top = 10;
+    
+    tooltip.firstElementChild.style.left = `${left}px`;
+    tooltip.firstElementChild.style.top = `${top}px`;
+};
+
+/**
+ * Hide hotspot tooltip
+ * @param {HTMLElement} row - Table row element
+ */
+window.hideHotspotTooltip = function(row) {
+    const tooltip = document.getElementById('hotspot-tooltip');
+    if (tooltip) tooltip.remove();
+};
+
+/**
+ * Show heatmap cell tooltip
+ * @param {Event} event - Mouse event
+ * @param {Object} data - Cell data
+ */
+window.showHeatmapTooltip = function(event, data) {
+    hideHeatmapTooltip();
+    
+    const complexity = data.complexity || 0;
+    let complexityColor = 'var(--success)';
+    let complexityLabel = 'Low Complexity';
+    let complexityIcon = '✅';
+    
+    if (complexity > 50) {
+        complexityColor = 'var(--danger)';
+        complexityLabel = 'Very High Complexity';
+        complexityIcon = '🔥';
+    } else if (complexity > 30) {
+        complexityColor = 'var(--warning)';
+        complexityLabel = 'High Complexity';
+        complexityIcon = '⚠️';
+    } else if (complexity > 20) {
+        complexityColor = 'var(--info)';
+        complexityLabel = 'Medium Complexity';
+        complexityIcon = 'ℹ️';
+    }
+    
+    const fileName = data.name.split('/').pop();
+    const loc = data.value || 0;
+    
+    const tooltip = document.createElement('div');
+    tooltip.id = 'heatmap-tooltip';
+    tooltip.innerHTML = `
+        <div style="
+            position: fixed;
+            background: linear-gradient(135deg, var(--glass-dark) 0%, var(--background-primary) 100%);
+            border: 2px solid ${complexityColor};
+            border-radius: 12px;
+            padding: 1rem;
+            max-width: 350px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            z-index: 10000;
+            animation: tooltipFadeIn 0.2s ease-out;
+        ">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-size: 1.5rem;">${complexityIcon}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 1rem;">${fileName}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">${complexityLabel}</div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 1.25rem; font-weight: 600; color: var(--accent-primary);">${loc.toLocaleString()}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Lines of Code</div>
+                </div>
+                <div style="background: var(--glass-light); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 1.25rem; font-weight: 600; color: ${complexityColor};">${complexity}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">Complexity</div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    const tooltipRect = tooltip.firstElementChild.getBoundingClientRect();
+    let left = event.pageX + 15;
+    let top = event.pageY - tooltipRect.height / 2;
+    
+    if (left + tooltipRect.width > window.innerWidth) {
+        left = event.pageX - tooltipRect.width - 15;
+    }
+    
+    if (top + tooltipRect.height > window.innerHeight) {
+        top = window.innerHeight - tooltipRect.height - 10;
+    }
+    
+    if (top < 10) top = 10;
+    
+    tooltip.firstElementChild.style.left = `${left}px`;
+    tooltip.firstElementChild.style.top = `${top}px`;
+};
+
+/**
+ * Hide heatmap tooltip
+ */
+window.hideHeatmapTooltip = function() {
+    const tooltip = document.getElementById('heatmap-tooltip');
+    if (tooltip) tooltip.remove();
 };
