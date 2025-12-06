@@ -1,5 +1,7 @@
 """Test autonomous plan execution"""
 import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.path.insert(0, 'd:/PROJECTS/CORTEX')
 from src.orchestrators.planning_orchestrator import PlanningOrchestrator
 

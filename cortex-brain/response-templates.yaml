@@ -214,6 +214,49 @@ base_templates:
 
       '
 templates:
+  autonomous_execution_progress:
+    base_structure: '## 🧠 CORTEX Autonomous Plan Execution
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ### 📊 Execution Progress
+
+
+      **Progress:** [{progress_bar}] {percentage}%
+
+
+      🔄 **Phase {current_phase} of {total_phases}:** {phase_name}
+
+      ✅ **Tasks Completed:** {completed_tasks}/{total_tasks}
+
+      ⏱️  **Elapsed Time:** {elapsed_time}
+
+      📋 **Current Task:** {current_task}
+
+
+      {execution_log}
+
+
+      ### 🎯 Plan Details
+
+
+      **Plan ID:** {plan_id}
+
+      **Status:** {status}
+
+      **Phases:** {phases_summary}
+
+
+      ### 🔍 Next Steps
+
+
+      {next_steps}
+
+      '
   onboarding:
     base_structure: '## 🧠 CORTEX {operation}
 
