@@ -7,6 +7,7 @@ Responsibilities:
 3. Generate onboarding analysis document
 4. Ask intelligent improvement questions
 5. Store analysis in CORTEX brain for future reference
+6. Enable educational mode for junior/mid-level developers
 
 This module brings the "onboard application" workflow into automated setup.
 
@@ -26,6 +27,7 @@ from ..base_setup_module import (
     SetupStatus,
     SetupPhase
 )
+from src.tier1.user_profile_manager import UserProfileManager
 
 
 class OnboardingModule(BaseSetupModule):
@@ -126,16 +128,20 @@ class OnboardingModule(BaseSetupModule):
             improvements = self._identify_improvements(user_root, project_info, tech_stack, testing_info)
             self.log_info(f"Found {len(improvements)} improvement opportunities")
             
-            # Step 5: Generate onboarding document
+            # Step 5: Check user experience level for educational enhancements
+            experience_level = self._get_user_experience_level(context)
+            
+            # Step 6: Generate onboarding document
             analysis_path = self._generate_onboarding_document(
-                project_root, user_root, project_info, tech_stack, testing_info, improvements
+                project_root, user_root, project_info, tech_stack, testing_info, improvements, experience_level
             )
             self.log_info(f"Generated onboarding analysis: {analysis_path}")
             
-            # Step 6: Store in context for other modules
+            # Step 7: Store in context for other modules
             context['onboarding_complete'] = True
             context['onboarding_analysis_path'] = str(analysis_path)
             context['improvement_count'] = len(improvements)
+            context['educational_mode'] = experience_level in ['junior', 'mid']
             
             return SetupResult(
                 module_id=self.metadata.module_id,
@@ -380,6 +386,31 @@ class OnboardingModule(BaseSetupModule):
         
         return improvements
     
+    def _get_user_experience_level(self, context: Dict[str, Any]) -> str:
+        """
+        Get user's experience level from profile.
+        
+        Args:
+            context: Shared context
+        
+        Returns:
+            Experience level (junior/mid/senior/expert), defaults to 'mid'
+        """
+        try:
+            db_path = context.get('brain_path')
+            if db_path:
+                db_path = Path(db_path) / 'tier1' / 'working_memory.db'
+            
+            profile_manager = UserProfileManager(str(db_path) if db_path else None)
+            profile = profile_manager.get_profile()
+            
+            if profile:
+                return profile.get('experience_level', 'mid')
+        except Exception as e:
+            self.log_warning(f"Could not get user experience level: {e}")
+        
+        return 'mid'  # Default to mid-level
+    
     def _generate_onboarding_document(
         self,
         project_root: Path,
@@ -387,7 +418,8 @@ class OnboardingModule(BaseSetupModule):
         project_info: Dict,
         tech_stack: Dict,
         testing: Dict,
-        improvements: List[Dict]
+        improvements: List[Dict],
+        experience_level: str = 'mid'
     ) -> Path:
         """
         Generate onboarding analysis markdown document.
@@ -399,6 +431,7 @@ class OnboardingModule(BaseSetupModule):
             tech_stack: Tech stack details
             testing: Testing infrastructure
             improvements: Improvement recommendations
+            experience_level: User's experience level
         
         Returns:
             Path to generated document
@@ -472,9 +505,44 @@ CORTEX can help implement these improvements. Just ask:
 - "Generate README.md"
 
 Or say **"let's plan a feature"** to start structured development with DoR/DoD enforcement.
-
+"""
+        
+        # Add educational addon for junior/mid developers
+        if experience_level in ['junior', 'mid']:
+            content += f"""
 ---
 
+## 💡 Learning Mode Active
+
+As a **{experience_level}** developer, CORTEX will provide educational support:
+
+**What to Expect:**
+- Inline comments in generated code explaining patterns and decisions
+- Links to learning path documents for deep dives
+- References to video tutorials and external resources
+- Best practice explanations
+
+**Your Learning Paths:**
+
+| Topic | Description | Time | Link |
+|-------|-------------|------|------|
+| SOLID Principles | Foundation for clean code | 20 min | [Learn More](file:///cortex-brain/documents/learning-paths/solid-principles.md) |
+| Dependency Injection | Essential pattern in CORTEX | 15 min | [Learn More](file:///cortex-brain/documents/learning-paths/dependency-injection.md) |
+| TDD Workflow | Test-driven development | 25 min | [Learn More](file:///cortex-brain/documents/learning-paths/tdd-workflow.md) |
+
+**Quick Start:**
+1. Review the [Learning Paths Index](file:///cortex-brain/documents/learning-paths/INDEX.md)
+2. Ask CORTEX: "explain [pattern name]" anytime you're curious
+3. Watch linked video tutorials for visual learning
+
+**Toggle Learning Mode:**
+- Disable: `update profile experience level senior`
+- Change level: `update profile experience level [junior|mid|senior|expert]`
+
+---
+"""
+        
+        content += """
 **Author:** CORTEX Onboarding Module  
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.
 """
