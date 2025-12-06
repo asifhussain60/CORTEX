@@ -177,51 +177,72 @@ class OnboardingOrchestrator:
         
         try:
             # Step 1: Gather project metadata
+            print("\n[Step 1/10] Gathering project metadata...")
             logger.info("Step 1: Gathering project metadata...")
             project_info = self._gather_project_info(project_path, project_name)
+            print(f"  ✓ Found {project_info['files']} files, {project_info['lines']} lines of code")
             
             # Step 2: Run code quality analysis
+            print("\n[Step 2/10] Running code quality analysis...")
             logger.info("Step 2: Running code quality analysis...")
             quality_issues, quality_score = self._run_quality_analysis(project_path)
+            print(f"  ✓ Analyzed files, found {len(quality_issues)} issues (Score: {quality_score:.1f}/100)")
             
             # Step 3: Run security scan
+            print("\n[Step 3/10] Running security scan...")
             logger.info("Step 3: Running security scan...")
             vulnerabilities = self._run_security_scan(project_path)
+            print(f"  ✓ Scanned for vulnerabilities, found {len(vulnerabilities)} security issues")
             
             # Step 4: Collect performance metrics
+            print("\n[Step 4/10] Collecting performance metrics...")
             logger.info("Step 4: Collecting performance metrics...")
             metrics = self._collect_performance_metrics(project_path)
+            print(f"  ✓ Collected {len(metrics)} performance metrics")
             
             # Step 5: Generate architecture graph
+            print("\n[Step 5/10] Generating architecture graph...")
             logger.info("Step 5: Generating architecture graph...")
             architecture = self._generate_architecture_graph(project_path)
+            print(f"  ✓ Generated graph with {len(architecture.get('nodes', []))} components")
             
             # Step 6: Analyze technology stack
+            print("\n[Step 6/10] Analyzing technology stack...")
             logger.info("Step 6: Analyzing technology stack...")
             tech_stack = self._analyze_tech_stack(project_path)
+            print(f"  ✓ Detected {len(tech_stack.get('languages', []))} languages, {len(tech_stack.get('frameworks', []))} frameworks")
             
             # Step 7: Generate recommendations
+            print("\n[Step 7/10] Generating recommendations...")
             logger.info("Step 7: Generating recommendations...")
             recommendations = self._generate_recommendations(
                 vulnerabilities, quality_issues, tech_stack, architecture
             )
+            print(f"  ✓ Generated {len(recommendations)} recommendations")
             
             # Step 8: Generate UML diagrams
+            print("\n[Step 8/10] Generating UML diagrams...")
             logger.info("Step 8: Generating UML diagrams...")
             uml_diagram = self._generate_uml_diagram(project_path)
+            diagram_status = "Generated" if uml_diagram else "Skipped (graphviz unavailable)"
+            print(f"  ✓ UML diagram: {diagram_status}")
             
             # Step 9: Generate dashboard data files
+            print("\n[Step 9/10] Generating dashboard data files...")
             logger.info("Step 9: Generating dashboard data files...")
             dashboard_url, output_path = self._generate_dashboard_data(
                 project_path,
                 project_name
             )
+            print(f"  ✓ Dashboard files written to {output_path.name}/")
             
             # Step 10: Validate dashboard functionality
+            print("\n[Step 10/10] Validating dashboard functionality...")
             logger.info("Step 10: Validating dashboard functionality...")
             validation_success, validation_report = self._validate_dashboard(output_path)
             
             if not validation_success:
+                print(f"  ⚠️ Validation found {validation_report['summary']['errors']} errors, {validation_report['summary']['warnings']} warnings")
                 logger.warning("⚠️ Dashboard validation found issues")
                 logger.warning(f"Errors: {validation_report['summary']['errors']}")
                 logger.warning(f"Warnings: {validation_report['summary']['warnings']}")
@@ -231,8 +252,10 @@ class OnboardingOrchestrator:
                 import json
                 with open(report_path, 'w', encoding='utf-8') as f:
                     json.dump(validation_report, f, indent=2)
+                print(f"  - Validation report saved: {report_path.name}")
                 logger.info(f"Validation report saved: {report_path}")
             else:
+                print("  ✅ All validation tests passed")
                 logger.info("✅ Dashboard validation passed all tests")
             
             logger.info(f"✅ Onboarding complete! Dashboard: {dashboard_url}")
@@ -271,6 +294,9 @@ class OnboardingOrchestrator:
         total_files = 0
         total_lines = 0
         languages = set()
+        processed_count = 0
+        
+        print("  - Scanning project files and counting lines...")
         
         # Language detection by extension
         extension_map = {
@@ -287,6 +313,9 @@ class OnboardingOrchestrator:
         for file_path in project_path.rglob('*'):
             if file_path.is_file() and self._should_scan_file(file_path):
                 total_files += 1
+                processed_count += 1
+                if processed_count % 200 == 0:
+                    print(f"    • Processed {processed_count} files ({total_lines:,} lines so far)...")
                 
                 # Count lines
                 try:
@@ -299,6 +328,8 @@ class OnboardingOrchestrator:
                 ext = file_path.suffix.lower()
                 if ext in extension_map:
                     languages.add(extension_map[ext])
+        
+        print(f"  - Project scan complete: {total_files} files, {total_lines:,} lines")
         
         return {
             "name": project_name,
@@ -321,9 +352,14 @@ class OnboardingOrchestrator:
             # Analyze all Python files (extend for other languages)
             quality_issues = []
             total_files = 0
+            analyzed_count = 0
+            print("  - Scanning Python files...")
             for file_path in project_path.rglob('*.py'):
                 if self._should_scan_file(file_path):
                     total_files += 1
+                    analyzed_count += 1
+                    if analyzed_count % 50 == 0:
+                        print(f"    • Analyzed {analyzed_count} files...")
                     try:
                         # Simple quality checks: file size, complexity indicators
                         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
@@ -357,6 +393,7 @@ class OnboardingOrchestrator:
             penalty = (critical_count * 10) + (high_count * 5) + (medium_count * 2)
             quality_score = max(0.0, min(100.0, 100.0 - penalty))
             
+            print(f"  - Quality analysis complete: {total_files} files analyzed")
             logger.info(f"Quality analysis complete: {total_files} files analyzed, {len(quality_issues)} issues found")
             
             return quality_issues, quality_score
@@ -379,8 +416,13 @@ class OnboardingOrchestrator:
             
             # Scan all source files
             vulnerabilities = []
+            scanned_count = 0
+            print("  - Scanning source files for vulnerabilities...")
             for file_path in project_path.rglob('*'):
                 if file_path.is_file() and self._should_scan_file(file_path):
+                    scanned_count += 1
+                    if scanned_count % 100 == 0:
+                        print(f"    • Scanned {scanned_count} files...")
                     try:
                         # Read file content
                         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
@@ -399,6 +441,7 @@ class OnboardingOrchestrator:
                     except Exception as e:
                         logger.warning(f"Failed to scan {file_path}: {e}")
             
+            print(f"  - Security scan complete: {scanned_count} files scanned")
             return vulnerabilities
             
         except ImportError as e:
@@ -438,8 +481,10 @@ class OnboardingOrchestrator:
                 if self._should_scan_file(f)
             ]
             
+            print(f"  - Building architecture graph from {len(python_files)} Python files...")
             logger.info(f"Building architecture graph from {len(python_files)} Python files...")
             architecture = builder.build_graph(python_files)
+            print(f"  - Architecture graph complete")
             
             return architecture
             
@@ -454,8 +499,10 @@ class OnboardingOrchestrator:
             sys.path.insert(0, str(self.cortex_root / "src"))
             from operations.techstack_analyzer import TechStackAnalyzer
             
+            print("  - Analyzing project dependencies and frameworks...")
             analyzer = TechStackAnalyzer(project_path)
             tech_stack = analyzer.analyze()
+            print("  - Tech stack analysis complete")
             
             return tech_stack
             
@@ -512,9 +559,11 @@ class OnboardingOrchestrator:
             
             # Limit to prevent performance issues (max 100 files)
             if len(python_files) > 100:
+                print(f"  - Limiting UML to 100 most relevant files (found {len(python_files)})")
                 logger.info(f"Limiting UML generation to 100 most relevant files (found {len(python_files)})")
                 python_files = python_files[:100]
             
+            print(f"  - Analyzing {len(python_files)} files for UML diagram...")
             for py_file in python_files:
                 try:
                     renderer.analyze_python_file(py_file)
@@ -566,6 +615,13 @@ class OnboardingOrchestrator:
             output_dir = self.cortex_root / "cortex-brain" / "dashboards" / repo_slug
             output_dir.mkdir(parents=True, exist_ok=True)
             
+            print("  - Starting parallel data collection (6 collectors)...")
+            print("    • Tech Stack Collector: Detecting languages & frameworks")
+            print("    • Security Collector: Scanning for vulnerabilities")
+            print("    • Architecture Collector: Analyzing component structure")
+            print("    • Code Organization Collector: Mapping file organization")
+            print("    • Team Metrics Collector: Calculating development metrics")
+            print("    • Vendor Detector: Identifying third-party libraries")
             logger.info(f"Collecting data using parallel collectors (6 threads)...")
             
             # Import parallel orchestrator
@@ -575,6 +631,7 @@ class OnboardingOrchestrator:
             parallel_orchestrator = ParallelCollectorOrchestrator(project_path)
             collected_data, collection_time = parallel_orchestrator.collect_all_parallel()
             
+            print(f"  ✓ All collectors completed in {collection_time:.2f}s")
             logger.info(f"  ✓ All collectors completed in {collection_time:.2f}s")
             
             # Write collected data to files
@@ -587,13 +644,37 @@ class OnboardingOrchestrator:
                 except Exception as e:
                     logger.error(f"    Failed to write {filename}: {e}")
             
-            # Generate health-data.json (overview)
+            # Generate health-data.json (overview) with validation
             logger.info("  Generating health-data.json...")
             health_data = self._calculate_health_metrics(collected_data)
+            
+            # CRITICAL: Confirm health data is valid before writing (leadership reporting)
+            is_valid, issues = self._confirm_health_data_valid(health_data, collected_data)
+            if not is_valid:
+                logger.error("❌ Health data validation FAILED - cannot write corrupt data for leadership reporting!")
+                for issue in issues:
+                    logger.error(f"   • {issue}")
+                print(f"  ❌ Health data validation FAILED:")
+                for issue in issues:
+                    print(f"     • {issue}")
+                raise ValueError(f"Health data validation failed: {len(issues)} issue(s) detected")
+            
+            # Additional quality gate for leadership reporting
+            is_ready, warnings = self._validate_for_leadership_reporting(health_data)
+            if not is_ready:
+                logger.warning("⚠️ Health data quality warnings (review before presenting to leadership):")
+                for warning in warnings:
+                    logger.warning(f"   • {warning}")
+                print(f"  ⚠️ Quality warnings detected (review before leadership reporting):")
+                for warning in warnings:
+                    print(f"     • {warning}")
+            
+            # Write validated health data
             health_file = output_dir / "health-data.json"
             with open(health_file, 'w', encoding='utf-8') as f:
                 json.dump(health_data, f, indent=2, ensure_ascii=False)
-            logger.info(f"    ✓ Written to {health_file}")
+            logger.info(f"    ✓ Validated health data written to {health_file}")
+            print(f"  ✓ Health data validated: {health_data['total_files']:,} files, {health_data['lines_of_code']:,} LOC")
             
             # Generate metadata.json
             metadata = {
@@ -646,8 +727,175 @@ class OnboardingOrchestrator:
         else:
             return {}
     
+    def _validate_collected_data(self, collected_data: Dict[str, Any]) -> bool:
+        """
+        Validate collected data structure before processing.
+        CRITICAL: Ensures data integrity for leadership reporting.
+        
+        Args:
+            collected_data: Dictionary with collector outputs
+        
+        Returns:
+            True if valid, False otherwise
+        """
+        required_collectors = [
+            "code-organization.json",
+            "security.json",
+            "tech-stack.json",
+            "team-metrics.json",
+            "architecture.json",
+            "vendors.json"
+        ]
+        
+        # Check all collectors present
+        for collector in required_collectors:
+            if collector not in collected_data:
+                logger.error(f"Missing required collector: {collector}")
+                return False
+        
+        # Verify data is dict, not list (防止 'list' object has no attribute 'get' error)
+        for collector, data in collected_data.items():
+            if not isinstance(data, dict):
+                logger.error(f"{collector} returned {type(data).__name__}, expected dict")
+                return False
+        
+        return True
+    
+    def _check_data_consistency(self, collected_data: Dict[str, Any]) -> list:
+        """
+        Check data consistency and return list of warnings.
+        
+        Args:
+            collected_data: Dictionary with collector outputs
+        
+        Returns:
+            List of warning messages
+        """
+        warnings = []
+        
+        code_org = collected_data.get("code-organization.json", {})
+        code_summary = code_org.get("summary", {})
+        
+        total_files = code_summary.get("total_files", 0)
+        total_loc = code_summary.get("total_loc", 0)
+        
+        # Convert None to 0 for comparison safety
+        total_files = 0 if total_files is None else total_files
+        total_loc = 0 if total_loc is None else total_loc
+        
+        # Check impossible combinations
+        if total_files > 0 and total_loc == 0:
+            warnings.append(f"Inconsistent: {total_files} files but 0 lines of code")
+        
+        if total_files == 0 and total_loc > 0:
+            warnings.append(f"Inconsistent: 0 files but {total_loc} lines of code")
+        
+        # Check suspicious ratios
+        if total_files > 0 and total_loc > 0:
+            avg_loc_per_file = total_loc / total_files
+            if avg_loc_per_file < 1:
+                warnings.append(f"Suspicious: Average {avg_loc_per_file:.1f} lines per file (too low)")
+            elif avg_loc_per_file > 10000:
+                warnings.append(f"Suspicious: Average {avg_loc_per_file:.1f} lines per file (too high)")
+        
+        return warnings
+    
+    def _confirm_health_data_valid(self, health_data: Dict[str, Any], source_data: Dict[str, Any]) -> tuple:
+        """
+        Confirm health data is valid before writing to file.
+        CRITICAL: Prevents writing zeros when source data clearly exists.
+        
+        Args:
+            health_data: Calculated health metrics
+            source_data: Original collected data
+        
+        Returns:
+            Tuple of (is_valid: bool, issues: list)
+        """
+        issues = []
+        
+        # Get source values
+        code_org = source_data.get("code-organization.json", {})
+        source_summary = code_org.get("summary", {})
+        source_files = source_summary.get("total_files", 0)
+        source_loc = source_summary.get("total_loc", 0)
+        
+        # CRITICAL CHECK: Detect zeros when source has data
+        if source_files > 0 and health_data.get("total_files", 0) == 0:
+            issues.append(f"DATA INTEGRITY VIOLATION: Health data shows 0 files but source has {source_files} files")
+        
+        if source_loc > 0 and health_data.get("lines_of_code", 0) == 0:
+            issues.append(f"DATA INTEGRITY VIOLATION: Health data shows 0 LOC but source has {source_loc} LOC")
+        
+        # Check for negative values (impossible)
+        for key, value in health_data.items():
+            if isinstance(value, (int, float)) and value < 0:
+                issues.append(f"Invalid negative value for {key}: {value}")
+        
+        is_valid = len(issues) == 0
+        return is_valid, issues
+    
+    def _validate_for_leadership_reporting(self, health_data: Dict[str, Any]) -> tuple:
+        """
+        Validate health data meets quality gates for leadership reporting.
+        CRITICAL: Data must be accurate and reasonable for executive decisions.
+        
+        Args:
+            health_data: Calculated health metrics
+        
+        Returns:
+            Tuple of (is_ready: bool, warnings: list)
+        """
+        warnings = []
+        
+        # Quality gate 1: Reasonable file count
+        total_files = health_data.get("total_files", 0)
+        if total_files < 10:
+            warnings.append(f"Suspiciously low file count: {total_files} (expected at least 10 for real project)")
+        
+        # Quality gate 2: Reasonable LOC
+        lines_of_code = health_data.get("lines_of_code", 0)
+        if lines_of_code < 100:
+            warnings.append(f"Suspiciously low LOC: {lines_of_code} (expected at least 100 for real project)")
+        
+        # Quality gate 3: Non-zero scores
+        overall_score = health_data.get("overall_health_score", 0)
+        if overall_score == 0 and total_files > 0:
+            warnings.append(f"Zero health score despite {total_files} files - calculation may have failed")
+        
+        # Quality gate 4: Contributors should exist for active project
+        contributors = health_data.get("contributors", 0)
+        if contributors == 0 and total_files > 100:
+            warnings.append(f"No contributors detected despite {total_files} files - git analysis may have failed")
+        
+        is_ready = len(warnings) == 0
+        return is_ready, warnings
+    
     def _calculate_health_metrics(self, collected_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Calculate overall health metrics from collected data."""
+        """
+        Calculate overall health metrics from collected data.
+        
+        CRITICAL: This data drives LEADERSHIP DECISIONS - must be 100% accurate.
+        
+        Uses actual structure from data collectors:
+        - code-organization.json: summary.total_files, summary.total_loc, hotspots
+        - security.json: overall_score, vulnerabilities (array)
+        - tech-stack.json: frontend/backend.languages, summary
+        - team-metrics.json: contributors (array), summary.total_commits
+        - architecture.json: components, tiers
+        - vendors.json: code_dependencies, external_vendors
+        """
+        # Validate structure first (防止 'list' object has no attribute 'get')
+        if not self._validate_collected_data(collected_data):
+            logger.error("Collected data failed validation - using safe defaults")
+            return self._get_safe_default_health_data()
+        
+        # Check for data consistency warnings
+        warnings = self._check_data_consistency(collected_data)
+        for warning in warnings:
+            logger.warning(f"Data consistency warning: {warning}")
+        
+        # Extract data safely with type checking
         security = collected_data.get("security.json", {})
         code_org = collected_data.get("code-organization.json", {})
         architecture = collected_data.get("architecture.json", {})
@@ -655,31 +903,163 @@ class OnboardingOrchestrator:
         team_metrics = collected_data.get("team-metrics.json", {})
         vendors = collected_data.get("vendors.json", {})
         
-        # Calculate health score (weighted average)
-        security_score = security.get("score", 0) * 0.3
-        code_score = min(100, max(0, 100 - len(code_org.get("hotspots", [])) * 5)) * 0.2
-        arch_score = min(100, max(0, 100 - len(architecture.get("components", [])) / 10)) * 0.2
-        tech_score = min(100, len(tech_stack.get("languages", [])) * 20) * 0.15
-        team_score = min(100, team_metrics.get("total_commits", 0) / 10) * 0.15
+        # Verify all are dicts
+        if not all(isinstance(d, dict) for d in [security, code_org, architecture, tech_stack, team_metrics, vendors]):
+            logger.error("One or more collectors returned non-dict data")
+            return self._get_safe_default_health_data()
         
-        overall_score = security_score + code_score + arch_score + tech_score + team_score
-        status = "healthy" if overall_score >= 80 else "warning" if overall_score >= 60 else "critical"
+        # Extract summary data safely (handle None and missing keys)
+        code_summary = code_org.get("summary", {}) if isinstance(code_org.get("summary"), dict) else {}
+        team_summary = team_metrics.get("summary", {}) if isinstance(team_metrics.get("summary"), dict) else {}
+        tech_summary = tech_stack.get("summary", {}) if isinstance(tech_stack.get("summary"), dict) else {}
         
-        return {
+        # Helper function to safely get numeric values (防止 None and negative values)
+        def safe_get_number(data: dict, key: str, default: int = 0) -> int:
+            value = data.get(key, default)
+            if value is None:
+                return default
+            try:
+                # Convert to number, clamp to minimum 0
+                num_value = float(value)
+                return max(0, int(num_value))
+            except (TypeError, ValueError):
+                return default
+        
+        # Security score (0-100)
+        security_score = safe_get_number(security, "overall_score", 0)
+        
+        # Code quality score based on maintainability
+        code_quality = safe_get_number(code_summary, "maintainability_score", 0)
+        
+        # Architecture complexity (more components = lower score)
+        arch_components_list = architecture.get("components", [])
+        arch_components = len(arch_components_list) if isinstance(arch_components_list, list) else 0
+        arch_score = max(0, 100 - (arch_components * 0.5))  # Penalize excessive components
+        
+        # Tech stack diversity (reasonable number of technologies)
+        tech_count = safe_get_number(tech_summary, "total_technologies", 0)
+        tech_score = min(100, tech_count * 20)  # Cap at 5 technologies = 100
+        
+        # Team activity (commits indicate active development)
+        total_commits = safe_get_number(team_summary, "total_commits", 0)
+        team_score = min(100, total_commits / 100) if total_commits > 0 else 0  # 10,000 commits = 100
+        
+        # Weighted average (security + code quality are most important)
+        overall_score = (
+            security_score * 0.35 +    # 35% - Security is critical
+            code_quality * 0.30 +      # 30% - Code quality matters
+            arch_score * 0.15 +        # 15% - Architecture complexity
+            tech_score * 0.10 +        # 10% - Tech stack diversity
+            team_score * 0.10          # 10% - Team activity
+        )
+        
+        # Status based on score
+        if overall_score >= 75:
+            status = "healthy"
+        elif overall_score >= 50:
+            status = "warning"
+        else:
+            status = "critical"
+        
+        # Count contributors safely (array length with type checking)
+        contributors = team_metrics.get("contributors", [])
+        contributor_count = len(contributors) if isinstance(contributors, list) else 0
+        
+        # Count languages from both frontend and backend safely
+        frontend_dict = tech_stack.get("frontend", {})
+        backend_dict = tech_stack.get("backend", {})
+        
+        if not isinstance(frontend_dict, dict):
+            frontend_dict = {}
+        if not isinstance(backend_dict, dict):
+            backend_dict = {}
+        
+        frontend_langs = frontend_dict.get("languages", [])
+        backend_langs = backend_dict.get("languages", [])
+        
+        all_languages = set()
+        if isinstance(frontend_langs, list):
+            all_languages.update(str(lang) for lang in frontend_langs if lang)  # Convert to string, filter None
+        if isinstance(backend_langs, list):
+            all_languages.update(str(lang) for lang in backend_langs if lang)
+        language_count = len(all_languages)
+        
+        # Count frameworks safely
+        frontend_frameworks = frontend_dict.get("frameworks", [])
+        backend_frameworks = backend_dict.get("frameworks", [])
+        framework_count = 0
+        if isinstance(frontend_frameworks, list):
+            framework_count += len([f for f in frontend_frameworks if f])  # Filter None/empty
+        if isinstance(backend_frameworks, list):
+            framework_count += len([f for f in backend_frameworks if f])
+        
+        # Count vendors safely
+        external_vendors = vendors.get("external_vendors", [])
+        vendor_count = len(external_vendors) if isinstance(external_vendors, list) else 0
+        
+        # Vulnerabilities count safely
+        vulnerabilities = security.get("vulnerabilities", [])
+        vuln_count = len(vulnerabilities) if isinstance(vulnerabilities, list) else 0
+        
+        # Build health data dictionary with safe numeric extraction
+        hotspots_list = code_org.get("hotspots", [])
+        hotspot_count = len(hotspots_list) if isinstance(hotspots_list, list) else 0
+        
+        health_data = {
             "overall_health_score": round(overall_score, 1),
             "status": status,
-            "total_files": code_org.get("total_files", 0),
-            "lines_of_code": code_org.get("total_lines", 0),
-            "contributors": team_metrics.get("contributor_count", 0),
-            "languages": len(tech_stack.get("languages", [])),
-            "frameworks": len(tech_stack.get("frameworks", [])),
-            "security_score": security.get("score", 0),
-            "security_issues": len(security.get("vulnerabilities", [])),
-            "architecture_components": len(architecture.get("components", [])),
-            "complexity_hotspots": len(code_org.get("hotspots", [])),
-            "external_vendors": len(vendors.get("vendors", [])),
-            "recent_commits": team_metrics.get("total_commits", 0),
-            "last_commit_date": team_metrics.get("last_commit_date", "N/A")
+            "total_files": safe_get_number(code_summary, "total_files", 0),
+            "lines_of_code": safe_get_number(code_summary, "total_loc", 0),
+            "contributors": contributor_count,
+            "languages": language_count,
+            "frameworks": framework_count,
+            "security_score": security_score,
+            "security_issues": vuln_count,
+            "architecture_components": arch_components,
+            "complexity_hotspots": hotspot_count,
+            "external_vendors": vendor_count,
+            "recent_commits": safe_get_number(team_summary, "total_commits", 0),
+            "last_commit_date": team_summary.get("last_commit_date", "N/A") or "N/A",
+            "metrics": {
+                "code_quality_score": round(code_quality, 1),
+                "maintainability_score": round(safe_get_number(code_summary, "maintainability_score", 0), 1),
+                "technical_debt_hours": round(safe_get_number(code_summary, "technical_debt_hours", 0), 1),
+                "duplication_percentage": round(safe_get_number(code_summary, "duplication_percentage", 0), 1),
+                "avg_complexity": round(safe_get_number(code_summary, "avg_complexity", 0), 1)
+            }
+        }
+        
+        return health_data
+    
+    def _get_safe_default_health_data(self) -> Dict[str, Any]:
+        """
+        Return safe default health data when calculation fails.
+        
+        Returns:
+            Dictionary with all metrics set to safe defaults
+        """
+        return {
+            "overall_health_score": 0.0,
+            "status": "critical",
+            "total_files": 0,
+            "lines_of_code": 0,
+            "contributors": 0,
+            "languages": 0,
+            "frameworks": 0,
+            "security_score": 0,
+            "security_issues": 0,
+            "architecture_components": 0,
+            "complexity_hotspots": 0,
+            "external_vendors": 0,
+            "recent_commits": 0,
+            "last_commit_date": "N/A",
+            "metrics": {
+                "code_quality_score": 0.0,
+                "maintainability_score": 0.0,
+                "technical_debt_hours": 0.0,
+                "duplication_percentage": 0.0,
+                "avg_complexity": 0.0
+            }
         }
     
     def _validate_dashboard(self, output_dir: Path) -> tuple:
@@ -712,10 +1092,12 @@ class OnboardingOrchestrator:
                     'path': str(dashboard_path)
                 }
             
+            print("  - Running comprehensive validation tests...")
             validator = DashboardValidator(output_dir, dashboard_path)
             success, report = validator.validate_all()
             
             # Print summary
+            print(f"  - Validation complete: {report['summary']['passed_tests']}/{report['summary']['total_tests']} tests passed")
             if success:
                 logger.info(f"✅ Dashboard validation: {report['summary']['passed_tests']}/{report['summary']['total_tests']} tests passed")
             else:

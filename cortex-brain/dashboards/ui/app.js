@@ -12,6 +12,7 @@ import { loadDashboardData, clearCache, exportToJson, exportToCsv, enrichDashboa
 import { initializeAdaptiveVisibility } from './adaptive-visibility.js';
 import { renderArchitecturePanels } from './components/architecture-panels.js';
 import { renderOverview } from './components/overview-tab.js';
+import { renderExecutiveSummary } from './components/executive-summary-tab.js';
 import { renderTechStack } from './components/tech-stack-tab.js';
 import { renderSecurity } from './components/security-tab.js';
 import { renderArchitecture } from './components/architecture-tab.js';
@@ -215,6 +216,9 @@ async function renderCurrentTab() {
         switch (appState.currentTab) {
             case 'overview':
                 await lazyRenderTab('overview', () => renderOverview(appState.data), appState.data);
+                break;
+            case 'executive':
+                await lazyRenderTab('executive', () => renderExecutiveSummary(appState.data), appState.data);
                 break;
             case 'tech-stack':
                 await lazyRenderTab('tech-stack', () => renderTechStack(appState.data), appState.data);
