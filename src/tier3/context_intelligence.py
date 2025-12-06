@@ -12,6 +12,10 @@ from typing import List, Optional, Dict, Any, Tuple
 from enum import Enum
 import json
 
+# Import new adoption analytics collectors
+from src.tier3.metrics.copilot_metrics import CopilotMetricsCollector, CopilotMetric
+from src.tier3.metrics.cortex_usage_tracker import CortexUsageTracker, CortexUsageMetric
+
 
 class InsightType(Enum):
     """Types of insights that can be generated."""
@@ -223,17 +227,21 @@ class ContextIntelligence:
         Initialize Context Intelligence.
         
         Args:
-            db_path: Path to SQLite database (default: cortex-brain/tier3/context.db)
+            db_path: Path to SQLite database (default: cortex-brain/tier3/development_context.db)
         """
         if db_path is None:
             brain_dir = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3"
             brain_dir.mkdir(parents=True, exist_ok=True)
-            db_path = brain_dir / "context.db"
+            db_path = brain_dir / "development_context.db"
         
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
         self._init_database()
+        
+        # Initialize adoption analytics collectors
+        self.copilot_collector = None  # Lazy initialization (requires GitHub token)
+        self.cortex_tracker = None  # Lazy initialization (requires working memory path)
     
     def _init_database(self):
         """Create database schema."""
@@ -1609,8 +1617,199 @@ class ContextIntelligence:
                 data['avg_green_time'] = data['avg_green_time'] / count
                 data['avg_refactor_time'] = data['avg_refactor_time'] / count
             
-            result.append(data)
+            result.append({
+                'week_start': bucket,
+                **data
+            })
         
         return result
-
+    
+    # ==== ADOPTION ANALYTICS INTEGRATION ====
+    
+    def init_copilot_collector(self, github_token: str, org_name: Optional[str] = None):
+        """
+        Initialize Copilot metrics collector.
+        
+        Args:
+            github_token: GitHub Personal Access Token with 'copilot' scope
+            org_name: Optional GitHub organization name
+        """
+        self.copilot_collector = CopilotMetricsCollector(
+            db_path=self.db_path,
+            github_token=github_token,
+            org_name=org_name
+        )
+        return self.copilot_collector
+    
+    def init_cortex_tracker(self, working_memory_db_path: Path):
+        """
+        Initialize CORTEX usage tracker.
+        
+        Args:
+            working_memory_db_path: Path to Tier 1 working memory database
+        """
+        self.cortex_tracker = CortexUsageTracker(
+            tier3_db_path=self.db_path,
+            working_memory_db_path=working_memory_db_path
+        )
+        return self.cortex_tracker
+    
+    def collect_copilot_metrics(
+        self,
+        engineer_id: str,
+        target_date: Optional[date] = None
+    ) -> List[CopilotMetric]:
+        """
+        Collect Copilot metrics for a date.
+        
+        Args:
+            engineer_id: Engineer identifier (will be anonymized)
+            target_date: Date to collect for (default: yesterday)
+            
+        Returns:
+            List of CopilotMetric objects
+            
+        Raises:
+            ValueError: If Copilot collector not initialized
+        """
+        if not self.copilot_collector:
+            raise ValueError("Copilot collector not initialized. Call init_copilot_collector() first.")
+        
+        if target_date is None:
+            target_date = date.today() - timedelta(days=1)
+        
+        # Fetch from GitHub API
+        usage_data = self.copilot_collector.fetch_copilot_usage(target_date=target_date)
+        
+        # Parse language breakdown
+        breakdowns = self.copilot_collector.parse_language_breakdown(usage_data)
+        
+        # Anonymize engineer ID
+        engineer_hash = self.copilot_collector.anonymize_engineer_id(engineer_id)
+        
+        # Convert to metrics
+        metrics = [
+            CopilotMetric(
+                metric_date=target_date,
+                engineer_hash=engineer_hash,
+                language=bd.language,
+                suggestions_shown=bd.suggestions_count,
+                suggestions_accepted=bd.acceptances_count,
+                acceptance_rate=bd.acceptance_rate
+            )
+            for bd in breakdowns
+        ]
+        
+        # Save to database
+        self.copilot_collector.save_metrics(metrics)
+        
+        return metrics
+    
+    def collect_cortex_usage(
+        self,
+        engineer_id: str,
+        target_date: Optional[date] = None
+    ) -> List[CortexUsageMetric]:
+        """
+        Collect CORTEX usage metrics for a date.
+        
+        Args:
+            engineer_id: Engineer identifier (will be anonymized)
+            target_date: Date to collect for (default: today)
+            
+        Returns:
+            List of CortexUsageMetric objects
+            
+        Raises:
+            ValueError: If CORTEX tracker not initialized
+        """
+        if not self.cortex_tracker:
+            raise ValueError("CORTEX tracker not initialized. Call init_cortex_tracker() first.")
+        
+        if target_date is None:
+            target_date = date.today()
+        
+        # Anonymize engineer ID
+        from src.tier3.metrics.copilot_metrics import CopilotMetricsCollector
+        engineer_hash = CopilotMetricsCollector.anonymize_engineer_id(None, engineer_id)
+        
+        # Extract from working memory
+        metrics = self.cortex_tracker.extract_from_working_memory(
+            target_date=target_date,
+            engineer_hash=engineer_hash
+        )
+        
+        # Save to database
+        if metrics:
+            self.cortex_tracker.save_metrics(metrics)
+        
+        return metrics
+    
+    def get_adoption_summary(
+        self,
+        engineer_id: str,
+        days: int = 30
+    ) -> Dict[str, Any]:
+        """
+        Get comprehensive adoption analytics summary.
+        
+        Args:
+            engineer_id: Engineer identifier
+            days: Number of days to analyze
+            
+        Returns:
+            Dictionary with Copilot and CORTEX usage statistics
+        """
+        from src.tier3.metrics.copilot_metrics import CopilotMetricsCollector
+        engineer_hash = CopilotMetricsCollector.anonymize_engineer_id(None, engineer_id)
+        
+        summary = {
+            'engineer_id': engineer_hash,
+            'analysis_period_days': days,
+            'copilot': {},
+            'cortex': {}
+        }
+        
+        # Copilot metrics
+        if self.copilot_collector:
+            copilot_metrics = self.copilot_collector.get_metrics(
+                days=days,
+                engineer_hash=engineer_hash
+            )
+            
+            if copilot_metrics:
+                total_shown = sum(m.suggestions_shown for m in copilot_metrics)
+                total_accepted = sum(m.suggestions_accepted for m in copilot_metrics)
+                
+                summary['copilot'] = {
+                    'total_suggestions': total_shown,
+                    'total_accepted': total_accepted,
+                    'overall_acceptance_rate': round(total_accepted / total_shown, 4) if total_shown > 0 else 0.0,
+                    'days_active': len(set(m.metric_date for m in copilot_metrics)),
+                    'languages_used': list(set(m.language for m in copilot_metrics))
+                }
+        
+        # CORTEX metrics
+        if self.cortex_tracker:
+            cortex_metrics = self.cortex_tracker.get_metrics(
+                days=days,
+                engineer_hash=engineer_hash
+            )
+            
+            if cortex_metrics:
+                total_requests = sum(m.requests_count for m in cortex_metrics)
+                total_successful = sum(m.successful_count for m in cortex_metrics)
+                total_tokens = sum(m.tokens_consumed for m in cortex_metrics)
+                
+                summary['cortex'] = {
+                    'total_requests': total_requests,
+                    'total_successful': total_successful,
+                    'overall_success_rate': round(total_successful / total_requests, 4) if total_requests > 0 else 0.0,
+                    'total_tokens_consumed': total_tokens,
+                    'days_active': len(set(m.metric_date for m in cortex_metrics)),
+                    'intents_used': list(set(m.intent_type for m in cortex_metrics)),
+                    'most_used_intent': self.cortex_tracker.get_most_used_intent(engineer_hash, days)
+                }
+        
+        return summary
 
