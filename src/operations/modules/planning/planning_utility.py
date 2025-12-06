@@ -110,6 +110,139 @@ def detect_execution_mode(user_input: str) -> str:
     return "approval_gated"
 
 
+def analyze_risks(plan_data: Dict[str, Any]) -> List[Dict[str, str]]:
+    """
+    Analyze plan for potential risks using heuristic patterns.
+    
+    Risk Categories:
+    - Technical: Complexity, dependencies, architecture
+    - Timeline: Duration estimates, resource availability
+    - Security: Data handling, authentication, authorization
+    - Quality: Testing coverage, code review, validation
+    - Operational: Deployment, monitoring, rollback
+    
+    Args:
+        plan_data: Plan dictionary to analyze
+        
+    Returns:
+        List of risk dictionaries with category, description, severity, mitigation
+    """
+    risks = []
+    
+    # Extract plan components
+    metadata = plan_data.get("metadata", {})
+    phases = plan_data.get("phases", [])
+    dor = plan_data.get("definition_of_ready", {})
+    dod = plan_data.get("definition_of_done", {})
+    description = metadata.get("description", "").lower()
+    feature_name = metadata.get("feature_name", "").lower()
+    complexity = metadata.get("complexity", "medium")
+    
+    # TECHNICAL RISKS
+    
+    # High complexity without clear architecture
+    if complexity == "high" and not dor.get("clean_architecture_planned"):
+        risks.append({
+            "category": "Technical",
+            "description": "High complexity feature without clean architecture plan",
+            "severity": "HIGH",
+            "mitigation": "Complete architecture design review before implementation. Document component boundaries, data flow, and dependency injection patterns."
+        })
+    
+    # Database/data risks
+    if any(keyword in description or keyword in feature_name for keyword in ["database", "data", "migration", "schema"]):
+        risks.append({
+            "category": "Technical",
+            "description": "Database operations require careful migration strategy",
+            "severity": "MEDIUM",
+            "mitigation": "Create rollback plan, test migrations in staging, implement blue-green deployment, backup before migration."
+        })
+    
+    # External API dependencies
+    if any(keyword in description or keyword in feature_name for keyword in ["api", "external", "third-party", "integration"]):
+        risks.append({
+            "category": "Technical",
+            "description": "External API dependency introduces failure points",
+            "severity": "MEDIUM",
+            "mitigation": "Implement circuit breaker pattern, fallback mechanisms, timeout configuration, retry logic with exponential backoff."
+        })
+    
+    # SECURITY RISKS
+    
+    # Authentication/Authorization
+    if any(keyword in description or keyword in feature_name for keyword in ["auth", "login", "password", "token", "session", "jwt"]):
+        risks.append({
+            "category": "Security",
+            "description": "Authentication/authorization requires security review",
+            "severity": "HIGH",
+            "mitigation": "Security audit before deployment, penetration testing, rate limiting, secure token storage, password hashing review (bcrypt/argon2)."
+        })
+    
+    # Data privacy
+    if any(keyword in description or keyword in feature_name for keyword in ["user data", "personal", "pii", "gdpr", "privacy"]):
+        risks.append({
+            "category": "Security",
+            "description": "Personal data handling requires compliance validation",
+            "severity": "HIGH",
+            "mitigation": "GDPR/compliance review, data encryption at rest and in transit, audit logging, data retention policy."
+        })
+    
+    # QUALITY RISKS
+    
+    # Missing TDD test scenarios
+    if not dor.get("tdd_test_scenarios_defined"):
+        risks.append({
+            "category": "Quality",
+            "description": "TDD test scenarios not defined - may miss edge cases",
+            "severity": "MEDIUM",
+            "mitigation": "Complete test scenario planning before RED phase. Document expected inputs, outputs, error cases, and boundary conditions."
+        })
+    
+    # Incomplete DoR
+    dor_complete = all(dor.values()) if isinstance(dor, dict) else False
+    if not dor_complete:
+        risks.append({
+            "category": "Quality",
+            "description": "Definition of Ready not fully satisfied - plan may be premature",
+            "severity": "HIGH",
+            "mitigation": "Complete all DoR items before execution OR create remediation plan to address gaps during implementation."
+        })
+    
+    # TIMELINE RISKS
+    
+    # Many phases indicate complexity
+    if len(phases) > 5:
+        risks.append({
+            "category": "Timeline",
+            "description": f"Plan has {len(phases)} phases - execution may take longer than estimated",
+            "severity": "MEDIUM",
+            "mitigation": "Break into smaller milestones, implement progress tracking, consider parallel execution for independent phases."
+        })
+    
+    # OPERATIONAL RISKS
+    
+    # Deployment/production changes
+    if any(keyword in description or keyword in feature_name for keyword in ["deploy", "production", "release", "infrastructure"]):
+        risks.append({
+            "category": "Operational",
+            "description": "Production deployment requires careful rollout strategy",
+            "severity": "MEDIUM",
+            "mitigation": "Implement canary deployment, feature flags, monitoring alerts, rollback procedure, post-deployment validation."
+        })
+    
+    # Performance-sensitive features
+    if any(keyword in description or keyword in feature_name for keyword in ["performance", "optimization", "cache", "rate limit", "load"]):
+        risks.append({
+            "category": "Operational",
+            "description": "Performance requirements need validation under load",
+            "severity": "MEDIUM",
+            "mitigation": "Load testing before production, performance benchmarks, monitoring dashboards, auto-scaling configuration."
+        })
+    
+    logger.info(f"🔍 Risk analysis complete: {len(risks)} risks identified")
+    return risks
+
+
 def _truncate_filename(name: str, max_length: int = 30) -> str:
     """
     Truncate filename to max_length while preserving meaning.
@@ -255,6 +388,15 @@ def create_plan(
             },
             "risks": []
         }
+        
+        # Perform risk analysis
+        risks = analyze_risks(plan_data)
+        plan_data["risks"] = risks
+        
+        if risks:
+            logger.info(f"⚠️  Identified {len(risks)} risks:")
+            for risk in risks:
+                logger.info(f"   [{risk['severity']}] {risk['category']}: {risk['description']}")
         
         # Save plan
         with open(plan_path, 'w', encoding='utf-8') as f:
