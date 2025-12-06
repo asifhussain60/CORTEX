@@ -76,38 +76,94 @@ class AdminDashboardLauncherModule:
             # Get last selected or default repository
             default_repo = self._get_last_selected_repo() or repos[0]
             
-            # Launch dashboard with selector
-            from src.orchestrators.dashboard_launcher import launch_dashboard
+            # Launch dashboard in persistent terminal window
+            import subprocess
+            import sys
+            import os
             
-            result = launch_dashboard(
-                port=context.get('port', 8080),
-                auto_open=context.get('auto_open', True),
-                source=default_repo['path']
-            )
+            port = context.get('port', 8080)
+            auto_open = context.get('auto_open', True)
+            source = default_repo['name']
             
-            if result['success']:
+            # Get current working directory
+            cortex_root = Path(__file__).parent.parent.parent.parent
+            
+            # Build command for dashboard launcher
+            python_cmd = f"python -m src.orchestrators.dashboard_launcher --port {port} --source {source}"
+            if not auto_open:
+                python_cmd += " --no-browser"
+            
+            # Launch in new terminal window (platform-specific)
+            try:
+                if sys.platform == "win32":
+                    # Windows: Use PowerShell Start-Process with -NoExit
+                    ps_cmd = [
+                        "powershell",
+                        "-Command",
+                        f"Start-Process powershell -ArgumentList '-NoExit', '-Command', 'cd {cortex_root}; {python_cmd}'"
+                    ]
+                    
+                    process = subprocess.Popen(
+                        ps_cmd,
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                        stdin=subprocess.DEVNULL
+                    )
+                else:
+                    # Unix: Use terminal emulator
+                    term_cmd = f"cd {cortex_root} && {python_cmd}"
+                    process = subprocess.Popen(
+                        ["x-terminal-emulator", "-e", "bash", "-c", term_cmd],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                        stdin=subprocess.DEVNULL,
+                        start_new_session=True
+                    )
+                
+                # Wait for server to start
+                import time
+                time.sleep(3)
+                
                 # Build repository selector info
                 repo_list = "\n".join([
                     f"  • {repo['name']} ({repo['type']}) - {repo['files']} files"
                     for repo in repos
                 ])
                 
-                result['message'] = (
-                    f"✅ Admin Dashboard launched successfully!\n\n"
-                    f"🌐 URL: {result['url']}\n"
-                    f"🔌 Port: {result['port']}\n"
+                url = f"http://localhost:{port}/ui/index.html?source={source}"
+                
+                message = (
+                    f"✅ Admin Dashboard launched in new terminal window!\n\n"
+                    f"🌐 URL: {url}\n"
+                    f"🔌 Port: {port}\n"
                     f"📊 Currently viewing: {default_repo['name']}\n\n"
                     f"📁 Available Repositories ({len(repos)}):\n{repo_list}\n\n"
                     f"💡 To switch repositories:\n"
                     f"  1. Use the dropdown selector in the dashboard UI\n"
-                    f"  2. Or stop server (Ctrl+C) and launch with:\n"
-                    f"     load admin dashboard --source \"<repo-path>\"\n"
+                    f"  2. Or close the terminal and relaunch with different source\n\n"
+                    f"🛑 To stop server:\n"
+                    f"  • Close the PowerShell window running the dashboard\n"
+                    f"  • Or press Ctrl+C in that window\n"
                 )
                 
                 # Save last selected
                 self._save_last_selected_repo(default_repo)
-            
-            return result
+                
+                # Return serializable result
+                return {
+                    "success": True,
+                    "port": port,
+                    "url": url,
+                    "message": message
+                }
+                
+            except Exception as e:
+                self.logger.error(f"Failed to launch background process: {e}")
+                return {
+                    "success": False,
+                    "error": "process_launch_failed",
+                    "message": f"❌ Failed to start dashboard process: {e}"
+                }
             
         except Exception as e:
             self.logger.error(f"Admin dashboard launch failed: {e}", exc_info=True)

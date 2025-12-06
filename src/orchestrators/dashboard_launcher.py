@@ -92,24 +92,80 @@ class DashboardServer:
         self._running = False
         self.logger = logging.getLogger(__name__)
     
-    def _find_available_port(self, start_port: int = 8080, max_attempts: int = 10) -> Optional[int]:
+    def _kill_process_on_port(self, port: int) -> bool:
         """
-        Find an available port starting from start_port.
+        Kill any process using the specified port.
         
         Args:
-            start_port: Port to start searching from
-            max_attempts: Maximum number of ports to try
+            port: Port number to free up
         
         Returns:
-            Available port number or None if none found
+            True if port was freed, False otherwise
         """
-        for port in range(start_port, start_port + max_attempts):
-            try:
-                with socketserver.TCPServer(("", port), None) as test_server:
-                    return port
-            except OSError:
-                continue
-        return None
+        try:
+            import subprocess
+            import platform
+            
+            if platform.system() == "Windows":
+                # Find process using the port
+                cmd = f'netstat -ano | findstr ":{port}"'
+                result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+                
+                if result.returncode == 0 and result.stdout:
+                    # Extract PIDs from netstat output
+                    pids = set()
+                    for line in result.stdout.strip().split('\n'):
+                        parts = line.split()
+                        if parts and parts[-1].isdigit():
+                            pids.add(int(parts[-1]))
+                    
+                    # Kill each process
+                    for pid in pids:
+                        try:
+                            subprocess.run(f'taskkill /F /PID {pid}', shell=True, capture_output=True)
+                            self.logger.info(f"Killed process {pid} on port {port}")
+                        except Exception as e:
+                            self.logger.debug(f"Failed to kill process {pid}: {e}")
+                    
+                    if pids:
+                        time.sleep(0.5)  # Wait for port to be released
+                        return True
+            else:
+                # Unix-like systems
+                cmd = f"lsof -ti:{port}"
+                result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+                
+                if result.returncode == 0 and result.stdout:
+                    pids = result.stdout.strip().split('\n')
+                    for pid in pids:
+                        if pid.isdigit():
+                            subprocess.run(f"kill -9 {pid}", shell=True, capture_output=True)
+                            self.logger.info(f"Killed process {pid} on port {port}")
+                    
+                    time.sleep(0.5)
+                    return True
+            
+            return False
+            
+        except Exception as e:
+            self.logger.warning(f"Error killing process on port {port}: {e}")
+            return False
+    
+    def _is_port_available(self, port: int) -> bool:
+        """
+        Check if a port is available.
+        
+        Args:
+            port: Port number to check
+        
+        Returns:
+            True if port is available, False otherwise
+        """
+        try:
+            with socketserver.TCPServer(("", port), None) as test_server:
+                return True
+        except OSError:
+            return False
     
     def _resolve_data_source(self, path_or_source: str) -> str:
         """
@@ -121,33 +177,48 @@ class DashboardServer:
         Returns:
             Valid data source key (e.g., 'mock', 'v5-webservices-prevalidationws')
         """
-        # If already a valid source key, return it
-        valid_sources = ['mock', 'cortex', 'noor-canvas', 'alist', 'ksessions']
+        from pathlib import Path
+        
+        # First, check if it's already a valid data directory name
+        # Scan existing data directories
+        valid_sources = []
+        for item in self.dashboard_dir.iterdir():
+            if item.is_dir() and item.name not in ['ui', 'schema', '.git']:
+                if (item / 'health-data.json').exists():
+                    valid_sources.append(item.name)
+        
+        # If source matches an existing directory name exactly, use it
         if path_or_source in valid_sources:
+            self.logger.info(f"Using existing data source: {path_or_source}")
             return path_or_source
         
-        # Extract directory name from path
-        from pathlib import Path
-        repo_path = Path(path_or_source)
-        if repo_path.exists():
-            repo_name = repo_path.name.lower().replace('.', '-')
+        # Try to extract repository name from path
+        try:
+            repo_path = Path(path_or_source)
             
-            # Check if data directory exists for this repo
-            # dashboard_dir is already cortex-brain/dashboards
-            data_dir = self.dashboard_dir / repo_name
-            
-            self.logger.debug(f"Looking for data in: {data_dir}")
-            
-            if data_dir.exists() and (data_dir / 'health-data.json').exists():
-                self.logger.info(f"Found existing data directory: {repo_name}")
-                return repo_name
-            else:
-                self.logger.warning(f"No data directory found for {repo_name} at {data_dir}, will trigger collection")
-                # Return special key to trigger collection
-                return f"collect:{path_or_source}"
+            # Get the last part of the path (directory name)
+            if repo_path.exists() or '\\' in path_or_source or '/' in path_or_source:
+                # Extract name and normalize (lowercase, dots to dashes)
+                repo_name = repo_path.name.lower().replace('.', '-')
+                
+                # Check if this normalized name matches any existing data directory
+                if repo_name in valid_sources:
+                    self.logger.info(f"Resolved path '{path_or_source}' to data source '{repo_name}'")
+                    return repo_name
+                
+                # Check if data directory exists
+                data_dir = self.dashboard_dir / repo_name
+                if data_dir.exists() and (data_dir / 'health-data.json').exists():
+                    self.logger.info(f"Found data directory for '{repo_name}'")
+                    return repo_name
+                else:
+                    self.logger.warning(f"No data found for '{repo_name}' at {data_dir}")
+                    self.logger.info(f"Available sources: {', '.join(valid_sources)}")
+        except Exception as e:
+            self.logger.debug(f"Path resolution error: {e}")
         
         # Default to mock if nothing matches
-        self.logger.warning(f"Unknown source '{path_or_source}', defaulting to 'mock'")
+        self.logger.warning(f"Could not resolve '{path_or_source}', using 'mock'. Available: {', '.join(valid_sources)}")
         return 'mock'
     
     def start(self, auto_open: bool = True, source: str = "mock") -> Dict[str, Any]:
@@ -164,17 +235,27 @@ class DashboardServer:
         # Resolve source to valid data source key
         resolved_source = self._resolve_data_source(source)
         try:
-            # Find available port
-            available_port = self._find_available_port(self.port)
-            if available_port is None:
+            # Check if port is in use and kill existing process
+            if not self._is_port_available(self.port):
+                self.logger.info(f"Port {self.port} is in use, attempting to free it...")
+                if self._kill_process_on_port(self.port):
+                    self.logger.info(f"Successfully freed port {self.port}")
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Port {self.port} is in use and could not be freed",
+                        "port": None,
+                        "url": None
+                    }
+            
+            # Verify port is now available
+            if not self._is_port_available(self.port):
                 return {
                     "success": False,
-                    "message": f"No available ports found in range {self.port}-{self.port + 9}",
+                    "message": f"Port {self.port} is still not available after cleanup",
                     "port": None,
                     "url": None
                 }
-            
-            self.port = available_port
             
             # Create handler with directory parameter
             import functools
