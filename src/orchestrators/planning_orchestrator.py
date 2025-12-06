@@ -83,6 +83,21 @@ class PlanningOrchestrator:
         
         # Load response templates for configuration
         self._load_template_flags()
+        
+        # TDD Requirements (SKULL enforcement)
+        self._tdd_dor_requirements = [
+            "TDD Mastery workflow MUST be followed (RED→GREEN→REFACTOR)",
+            "Tests MUST fail before implementation (RED phase validation)",
+            "All CORTEX brain protection rules apply (SKULL enforcement)",
+            "Reference: cortex-brain/brain-protection-rules.yaml for complete ruleset"
+        ]
+        
+        self._tdd_dod_requirements = [
+            "All code follows TDD workflow with git checkpoints at phase boundaries",
+            "No SKULL rule violations detected (brain protection compliance verified)",
+            "Test coverage meets CORTEX standards (RED→GREEN→REFACTOR documented)",
+            "Git history shows test-first commits (RED phase before GREEN phase)"
+        ]
     
     def _load_template_flags(self) -> None:
         """Load planning-related flags from response templates."""
@@ -462,6 +477,8 @@ class PlanningOrchestrator:
         """
         Save plan to YAML file (with validation).
         
+        AUTO-INJECTS TDD requirements into DoR/DoD before saving.
+        
         Args:
             plan_data: Plan data dictionary
             output_path: Optional custom output path (defaults to active plans dir)
@@ -469,6 +486,9 @@ class PlanningOrchestrator:
         Returns:
             Tuple of (success, message)
         """
+        # CRITICAL: Inject TDD requirements before validation/save
+        plan_data = self.inject_tdd_requirements(plan_data)
+        
         is_valid, errors = self.validate_plan(plan_data)
         if not is_valid:
             error_msg = "Plan validation failed:\n" + "\n".join([f"  - {e}" for e in errors])
@@ -879,7 +899,20 @@ class PlanningOrchestrator:
             if not phase_3_approved:
                 return (True, output_path, "Phase 3 complete, pending final approval")
             
-            # Step 5: Automatically add Integration & Consolidation phase
+            # Step 5: Inject TDD requirements into plan
+            logger.info("🧬 Injecting TDD requirements...")
+            with open(output_path, 'r', encoding='utf-8') as f:
+                plan_content = f.read()
+            
+            # Parse YAML if present, or convert markdown to plan_data
+            if output_path.suffix == '.yaml':
+                plan_data = yaml.safe_load(plan_content)
+                plan_data = self.inject_tdd_requirements(plan_data)
+                with open(output_path, 'w', encoding='utf-8') as f:
+                    yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False)
+                logger.info("✅ TDD requirements injected into YAML plan")
+            
+            # Step 6: Automatically add Integration & Consolidation phase
             logger.info("🔧 Adding Integration & Consolidation phase...")
             
             # Load the generated plan
@@ -1337,13 +1370,20 @@ class PlanningOrchestrator:
             except Exception as e:
                 logger.warning(f"Git checkpoint failed: {e}")
             
+            # Generate documentation reminder
+            documentation_reminder = self._generate_documentation_reminder(
+                context="plan_approval",
+                plan_name=plan_filename
+            )
+            
             return {
                 'success': True,
                 'message': f"Plan '{plan_filename}' approved successfully",
                 'old_status': 'active',
                 'new_status': 'approved',
                 'old_path': old_path,
-                'new_path': new_path
+                'new_path': new_path,
+                'documentation_reminder': documentation_reminder
             }
             
         except Exception as e:
@@ -1416,6 +1456,12 @@ class PlanningOrchestrator:
             except Exception as e:
                 logger.warning(f"Git checkpoint failed: {e}")
             
+            # Generate documentation reminder
+            documentation_reminder = self._generate_documentation_reminder(
+                context="plan_completion",
+                plan_name=plan_filename
+            )
+            
             return {
                 'success': True,
                 'message': f"Plan '{plan_filename}' completed successfully",
@@ -1423,7 +1469,8 @@ class PlanningOrchestrator:
                 'new_status': 'completed',
                 'old_path': old_path,
                 'new_path': new_path,
-                'completed_date': completion_date
+                'completed_date': completion_date,
+                'documentation_reminder': documentation_reminder
             }
             
         except Exception as e:
@@ -1434,6 +1481,49 @@ class PlanningOrchestrator:
                 'old_status': 'approved',
                 'new_status': 'completed'
             }
+    
+    def _generate_documentation_reminder(self, context: str, **kwargs) -> str:
+        """
+        Generate documentation reminder for learning library.
+        
+        Args:
+            context: Context of the reminder (plan_completion, plan_approval, ado_completion)
+            **kwargs: Additional context-specific parameters
+        
+        Returns:
+            Formatted documentation reminder string
+        """
+        reminders = {
+            "plan_completion": (
+                "\n📚 DOCUMENTATION REMINDER:\n"
+                "Please document this work in the learning library using docsify.\n"
+                "Location: cortex-brain/documents/learning/milestones/\n"
+                f"Plan: {kwargs.get('plan_name', 'N/A')}\n"
+                "Generate markdown documentation capturing key learnings, decisions, and outcomes.\n"
+                "The documentation will be accessible via the learning dashboard (load dashboard).\n"
+                "Cross-machine compatible: All docs are in cortex-brain/documents/learning/"
+            ),
+            "plan_approval": (
+                "\n📚 DOCUMENTATION REMINDER:\n"
+                "Consider documenting the planning strategy in the learning library.\n"
+                "Location: cortex-brain/documents/learning/planning_strategies/\n"
+                f"Plan: {kwargs.get('plan_name', 'N/A')}\n"
+                "Capture: Requirements, scope, approach, and any key decisions made during planning.\n"
+                "Access via: load dashboard\n"
+                "Cross-machine compatible: All docs are in cortex-brain/documents/learning/"
+            ),
+            "ado_completion": (
+                "\n📚 DOCUMENTATION REMINDER:\n"
+                "Document this ADO work item in the learning library.\n"
+                "Location: cortex-brain/documents/learning/ado_workflows/\n"
+                f"Work Item: {kwargs.get('work_item_id', 'N/A')} - {kwargs.get('title', 'N/A')}\n"
+                "Capture: Implementation details, technical decisions, and outcomes.\n"
+                "Access via: load dashboard\n"
+                "Cross-machine compatible: All docs are in cortex-brain/documents/learning/"
+            )
+        }
+        
+        return reminders.get(context, "")
     
     def _update_status_in_content(self, content: str, new_status: str) -> str:
         """
@@ -2684,16 +2774,84 @@ class PlanningOrchestrator:
                     "executed": False,
                     "message": "Plan updated with Integration & Consolidation phase. Use 'execute plan' to run."
                 })
+        except Exception as e:
+            logger.error(f"Failed to ensure consolidation: {e}")
+            return (False, {"error": str(e)})
+    
+    # ========================================
+    # TDD Requirements Injection (GREEN Phase)
+    # ========================================
+    
+    def inject_tdd_requirements(self, plan_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Inject mandatory TDD Mastery requirements into plan DoR/DoD.
         
-        except Exception as e:
-            logger.error(f"Failed to execute plan with consolidation: {e}", exc_info=True)
-            return (False, {
-                "error": str(e)
-            })
+        This ensures Copilot cannot miss TDD workflow and SKULL enforcement.
+        
+        SKULL Compliance:
+        - TDD_ENFORCEMENT: RED→GREEN→REFACTOR workflow
+        - RED_PHASE_VALIDATION: Tests must fail before implementation
+        - BRAIN_PROTECTION: All Tier 0 rules enforced
+        
+        Args:
+            plan_data: Plan dictionary with metadata, phases, DoR, DoD
             
-        except Exception as e:
-            logger.error(f"Challenge analysis failed: {e}")
-            return {
-                'has_challenges': False,
-                'error': str(e)
-            }
+        Returns:
+            Enriched plan with TDD requirements in DoR/DoD
+        """
+        # Get existing DoR/DoD or initialize
+        dor = plan_data.get("definition_of_ready", [])
+        dod = plan_data.get("definition_of_done", [])
+        
+        # Convert to list if not already (defensive)
+        if not isinstance(dor, list):
+            dor = []
+        if not isinstance(dod, list):
+            dod = []
+        
+        # REFACTOR: Pre-compute lowercased existing items for O(n) lookup instead of O(n²)
+        existing_dor_lower = [item.lower()[:30] for item in dor]
+        existing_dod_lower = [item.lower()[:30] for item in dod]
+        
+        # Inject TDD DoR requirements (avoid duplicates)
+        injected_dor_count = 0
+        for tdd_req in self._tdd_dor_requirements:
+            req_key = tdd_req.lower()[:30]
+            if req_key not in existing_dor_lower:
+                dor.append(tdd_req)
+                existing_dor_lower.append(req_key)  # Update for subsequent checks
+                injected_dor_count += 1
+                logger.debug(f"📋 Injected DoR: {tdd_req[:60]}...")
+        
+        # Inject TDD DoD requirements (avoid duplicates)
+        injected_dod_count = 0
+        for tdd_req in self._tdd_dod_requirements:
+            req_key = tdd_req.lower()[:30]
+            if req_key not in existing_dod_lower:
+                dod.append(tdd_req)
+                existing_dod_lower.append(req_key)
+                injected_dod_count += 1
+                logger.debug(f"✅ Injected DoD: {tdd_req[:60]}...")
+        
+        # Update plan
+        plan_data["definition_of_ready"] = dor
+        plan_data["definition_of_done"] = dod
+        
+        if injected_dor_count > 0 or injected_dod_count > 0:
+            logger.info(
+                f"🧬 TDD requirements injected: "
+                f"+{injected_dor_count} DoR, +{injected_dod_count} DoD "
+                f"(Total: DoR={len(dor)}, DoD={len(dod)})"
+            )
+        else:
+            logger.debug("✓ TDD requirements already present, no injection needed")
+        
+        return plan_data
+        
+        # Update plan
+        plan_data["definition_of_ready"] = dor
+        plan_data["definition_of_done"] = dod
+        
+        logger.info(f"🧬 TDD requirements injected: DoR={len(dor)} items, DoD={len(dod)} items")
+        
+        return plan_data

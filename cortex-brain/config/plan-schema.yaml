@@ -203,6 +203,10 @@ schema:
     item_type: string
     min_items: 1
     example:
+      - "TDD Mastery workflow MUST be followed (RED→GREEN→REFACTOR)"
+      - "Tests MUST fail before implementation (RED phase validation)"
+      - "All CORTEX brain protection rules apply (SKULL enforcement)"
+      - "Reference: cortex-brain/brain-protection-rules.yaml for complete ruleset"
       - "All dependencies identified and documented"
       - "User stories/requirements clearly defined"
       - "Technical approach agreed upon"
@@ -214,6 +218,10 @@ schema:
     item_type: string
     min_items: 1
     example:
+      - "All code follows TDD workflow with git checkpoints at phase boundaries"
+      - "No SKULL rule violations detected (brain protection compliance verified)"
+      - "Test coverage meets CORTEX standards (RED→GREEN→REFACTOR documented)"
+      - "Git history shows test-first commits (RED phase before GREEN phase)"
       - "All tasks implemented and tested"
       - "Documentation updated"
       - "Code review completed"

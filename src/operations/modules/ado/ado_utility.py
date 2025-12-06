@@ -194,6 +194,19 @@ def _slugify(text: str) -> str:
     return text.strip('-')
 
 
+def _generate_ado_documentation_reminder(work_item_id: str, title: str) -> str:
+    """Generate documentation reminder for ADO work item completion."""
+    return (
+        "\n📚 DOCUMENTATION REMINDER:\n"
+        "Document this ADO work item in the learning library.\n"
+        "Location: cortex-brain/documents/learning/ado_workflows/\n"
+        f"Work Item: {work_item_id} - {title}\n"
+        "Capture: Implementation details, technical decisions, and outcomes.\n"
+        "Access via: load dashboard\n"
+        "Cross-machine compatible: All docs are in cortex-brain/documents/learning/"
+    )
+
+
 # ===== CORE OPERATION 1: CREATE WORK ITEM =====
 
 def create_work_item(
@@ -480,21 +493,32 @@ def update_work_item(
             
             file_path = yaml_path
         
-        # Emit learning event for completion
-        if metadata.status == WorkItemStatus.COMPLETED and get_global_collector and LearningEvent and EventType:
-            try:
-                event = LearningEvent(
-                    event_type=EventType.ADO_WORK_ITEM_COMPLETED,
-                    component="ADOUtility",
-                    metadata={
-                        "work_item_id": work_item_id,
-                        "work_item_type": metadata.work_item_type.value,
-                        "title": metadata.title
-                    }
-                )
-                get_global_collector().capture_event(event)
-            except Exception as e:
-                logger.debug(f"Learning event capture failed: {e}")
+        # Emit learning event for completion and generate documentation reminder
+        documentation_reminder = None
+        if metadata.status == WorkItemStatus.COMPLETED:
+            if get_global_collector and LearningEvent and EventType:
+                try:
+                    event = LearningEvent(
+                        event_type=EventType.ADO_WORK_ITEM_COMPLETED,
+                        component="ADOUtility",
+                        metadata={
+                            "work_item_id": work_item_id,
+                            "work_item_type": metadata.work_item_type.value,
+                            "title": metadata.title
+                        }
+                    )
+                    get_global_collector().capture_event(event)
+                except Exception as e:
+                    logger.debug(f"Learning event capture failed: {e}")
+            
+            # Generate documentation reminder
+            documentation_reminder = _generate_ado_documentation_reminder(
+                work_item_id=work_item_id,
+                title=metadata.title
+            )
+            
+            # Log reminder for visibility
+            logger.info(documentation_reminder)
         
         return WorkItemResult(
             success=True,
