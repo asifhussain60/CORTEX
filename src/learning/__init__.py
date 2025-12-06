@@ -37,15 +37,42 @@ License: Source-Available (Use Allowed, No Contributions)
 Version: 1.0.0 (Phase 1 - Event Infrastructure)
 """
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 __author__ = "Asif Hussain"
 
-from src.learning.event_collector import LearningEventCollector
-from src.learning.event_taxonomy import EventType, EventTier, LearningEvent
+from src.learning.event_collector import (
+    LearningEventCollector,
+    get_global_collector,
+    reset_global_collector
+)
+from src.learning.event_taxonomy import (
+    EventType,
+    EventTier,
+    EventCategory,
+    LearningEvent,
+    get_must_have_events,
+    get_should_have_events,
+    get_events_by_category,
+    get_events_by_component
+)
+from src.learning.document_generator import DocumentGenerator
+from src.learning.resource_database import ResourceDatabase
 
 __all__ = [
+    # Event Collector
     "LearningEventCollector",
+    "get_global_collector",
+    "reset_global_collector",
+    # Event Taxonomy
     "EventType",
     "EventTier",
+    "EventCategory",
     "LearningEvent",
+    "get_must_have_events",
+    "get_should_have_events",
+    "get_events_by_category",
+    "get_events_by_component",
+    # Document Generation (Phase 2)
+    "DocumentGenerator",
+    "ResourceDatabase",
 ]
