@@ -66,6 +66,7 @@ tier0_instincts:
 - API_DOCUMENTATION_REQUIRED
 - OPERATIONAL_READINESS_ENFORCEMENT
 - DEBUG_MARKER_REMOVAL_ENFORCEMENT
+- ALIGNMENT_STATE_PROTECTION
 application_paths:
 - SPA/
 - KSESSIONS/
@@ -79,6 +80,7 @@ brain_state_files:
 - events.jsonl
 - development-context.yaml
 - protection-events.jsonl
+- alignment-state.json
 protection_layers:
 - layer_id: instinct_immutability
   name: Instinct Immutability

@@ -144,13 +144,10 @@ class IntentRouter(BaseAgent):
         """
         core_keywords = {
             IntentType.PLAN: [
-                # Multi-word phrases (checked first, score higher)
-                "create a plan", "make a plan", "build a plan", "put together a plan",
-                "create plan", "make plan", "build plan", "develop a plan",
+                "plan", "planning", "feature", "breakdown", "design", "architect",
                 "plan a feature", "plan this", "let's plan", "help me plan",
-                "plan it", "plan for it", "plan that", "planning for",
-                # Single words (fallback)
-                "plan", "planning", "feature", "breakdown", "design", "architect"
+                "create a plan", "create plan", "make a plan", "build a plan",
+                "comprehensive plan", "detailed plan", "we need a plan"
             ],
             IntentType.ARCHITECTURE: [
                 "architecture", "architectural", "analyze", "analysis", "crawl",

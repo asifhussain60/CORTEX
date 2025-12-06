@@ -31,6 +31,15 @@ from typing import Dict, List, Optional, Any, Tuple
 
 logger = logging.getLogger(__name__)
 
+# Import learning system
+try:
+    from src.learning.event_collector import get_global_collector
+    from src.learning.event_taxonomy import LearningEvent, EventType
+except ImportError:
+    get_global_collector = None
+    LearningEvent = None
+    EventType = None
+
 
 # ========================================
 # Enums and Data Classes
@@ -205,6 +214,18 @@ def execute_code_review(
         success=False
     )
     
+    # Emit WORKFLOW_STARTED event
+    if get_global_collector and LearningEvent and EventType:
+        try:
+            event = LearningEvent(
+                event_type=EventType.WORKFLOW_STARTED,
+                component="UnifiedEntryPointOrchestrator",
+                metadata={"operation_type": "code_review", "pr_info": pr_info, "depth": depth}
+            )
+            get_global_collector().capture_event(event)
+        except Exception as e:
+            logger.debug(f"Learning event capture failed: {e}")
+    
     try:
         if not registry.code_review:
             result.implementation_notes = "Code review orchestrator not available"
@@ -235,6 +256,22 @@ def execute_code_review(
         result.ado_summary = generate_code_review_summary(result)
         
         logger.info(f"✅ Code review complete: {len(result.files_analyzed)} files, risk {result.risk_score}")
+        
+        # Emit WORKFLOW_COMPLETED event
+        if get_global_collector and LearningEvent and EventType:
+            try:
+                event = LearningEvent(
+                    event_type=EventType.WORKFLOW_COMPLETED,
+                    component="UnifiedEntryPointOrchestrator",
+                    metadata={
+                        "operation_type": "code_review",
+                        "files_analyzed": len(result.files_analyzed),
+                        "risk_score": result.risk_score
+                    }
+                )
+                get_global_collector().capture_event(event)
+            except Exception as e:
+                logger.debug(f"Learning event capture failed: {e}")
         
     except Exception as e:
         logger.error(f"❌ Code review failed: {e}")

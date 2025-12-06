@@ -38,6 +38,16 @@ except ImportError:
     # Fallback if config not available
     CORTEX_ROOT = Path(__file__).resolve().parents[4]
 
+# Import learning system
+try:
+    from src.learning.event_collector import get_global_collector
+    from src.learning.event_taxonomy import LearningEvent, EventType
+except ImportError:
+    # Graceful degradation if learning system not available
+    get_global_collector = None
+    LearningEvent = None
+    EventType = None
+
 
 # ===== ENUMS & DATACLASSES =====
 
@@ -231,6 +241,19 @@ def create_work_item(
         # Save YAML metadata
         yaml_path = file_path.with_suffix('.yaml')
         _save_yaml_metadata(metadata, yaml_path)
+        
+        # Emit learning event
+        if get_global_collector and LearningEvent and EventType:
+            try:
+                event_type = EventType.ADO_STORY_CREATED if work_item_type == WorkItemType.STORY else EventType.ADO_FEATURE_CREATED
+                event = LearningEvent(
+                    event_type=event_type,
+                    component="ADOUtility",
+                    metadata={"work_item_id": work_item_id, "title": title, "type": work_item_type.value}
+                )
+                get_global_collector().capture_event(event)
+            except Exception as e:
+                logger.debug(f"Learning event capture failed: {e}")
         
         return WorkItemResult(
             success=True,
@@ -456,6 +479,22 @@ def update_work_item(
             md_path.write_text(content, encoding='utf-8')
             
             file_path = yaml_path
+        
+        # Emit learning event for completion
+        if metadata.status == WorkItemStatus.COMPLETED and get_global_collector and LearningEvent and EventType:
+            try:
+                event = LearningEvent(
+                    event_type=EventType.ADO_WORK_ITEM_COMPLETED,
+                    component="ADOUtility",
+                    metadata={
+                        "work_item_id": work_item_id,
+                        "work_item_type": metadata.work_item_type.value,
+                        "title": metadata.title
+                    }
+                )
+                get_global_collector().capture_event(event)
+            except Exception as e:
+                logger.debug(f"Learning event capture failed: {e}")
         
         return WorkItemResult(
             success=True,

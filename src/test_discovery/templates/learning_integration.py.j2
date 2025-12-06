@@ -1,0 +1,120 @@
+"""
+Integration tests for {{ component_name }}.
+
+Category: Learning System Integration
+Generated: {{ timestamp }}
+"""
+
+import pytest
+from pathlib import Path
+from {{ component_path.replace('/', '.').replace('.py', '') }} import {{ component_name }}
+{% if integration_points %}
+# Integration point imports
+{% for ip in integration_points %}
+from {{ ip.path|default('src.learning.event_collector') }} import {{ ip.name }}
+{% endfor %}
+{% endif %}
+
+
+@pytest.fixture
+def {{ component_name_lower }}(temp_project):
+    """Create {{ component_name }} instance for testing."""
+    return {{ component_name }}(project_root=temp_project)
+
+
+@pytest.fixture
+def learning_event():
+    """Create test learning event."""
+    return {
+        "event_type": "test_execution",
+        "outcome": "success",
+        "context": {"test_name": "test_example"},
+        "timestamp": "2025-12-06T12:00:00"
+    }
+
+
+def test_{{ component_name_lower }}_initialization({{ component_name_lower }}):
+    """Test {{ component_name }} initializes correctly."""
+    assert {{ component_name_lower }} is not None
+    {% if 'database' in component_name_lower or 'storage' in component_name_lower %}
+    assert {{ component_name_lower }}.storage_path.exists()
+    {% endif %}
+
+
+def test_{{ component_name_lower }}_learning_capture({{ component_name_lower }}, learning_event):
+    """Test {{ component_name }} captures learning events."""
+    result = {{ component_name_lower }}.capture(learning_event)
+    
+    assert result is not None
+    assert result.get("captured") is True
+    {% if 'confidence' in component_name_lower %}
+    assert result.get("confidence", 0) > 0.0
+    {% endif %}
+
+
+{% if integration_points %}
+def test_{{ component_name_lower }}_integration_points({{ component_name_lower }}):
+    """Test {{ component_name }} integrates with dependencies."""
+    {% for ip in integration_points %}
+    # Test integration with {{ ip.name }}
+    {% if ip.type == 'database' %}
+    result = {{ component_name_lower }}.query_{{ ip.name_lower }}()
+    assert result is not None
+    {% elif ip.type == 'event' %}
+    {{ component_name_lower }}.trigger_{{ ip.name_lower }}_event()
+    # Verify event was handled
+    {% else %}
+    {{ component_name_lower }}.interact_with_{{ ip.name_lower }}()
+    {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+def test_{{ component_name_lower }}_pattern_learning({{ component_name_lower }}):
+    """Test {{ component_name }} learns from patterns."""
+    # Create pattern events
+    events = [
+        {"type": "success", "context": {"iteration": i}}
+        for i in range(3)
+    ]
+    
+    # Process events
+    for event in events:
+        {{ component_name_lower }}.capture(event)
+    
+    # Verify pattern learned
+    patterns = {{ component_name_lower }}.get_patterns()
+    assert len(patterns) > 0
+
+
+def test_{{ component_name_lower }}_knowledge_storage({{ component_name_lower }}, learning_event):
+    """Test {{ component_name }} stores knowledge correctly."""
+    # Capture learning
+    {{ component_name_lower }}.capture(learning_event)
+    
+    # Retrieve stored knowledge
+    stored = {{ component_name_lower }}.retrieve(learning_event["event_type"])
+    
+    assert stored is not None
+    assert learning_event["event_type"] in str(stored)
+
+
+def test_{{ component_name_lower }}_error_handling({{ component_name_lower }}):
+    """Test {{ component_name }} handles errors gracefully."""
+    # Test with invalid event
+    result = {{ component_name_lower }}.capture({"invalid": "event"})
+    
+    # Should handle gracefully without crashing
+    assert result is not None
+    {% if 'error' in component_name_lower %}
+    assert result.get("error") is True
+    {% endif %}
+
+
+{% if has_async %}
+@pytest.mark.asyncio
+async def test_{{ component_name_lower }}_async_operations({{ component_name_lower }}, learning_event):
+    """Test {{ component_name }} async operations."""
+    result = await {{ component_name_lower }}.capture_async(learning_event)
+    assert result is not None
+{% endif %}

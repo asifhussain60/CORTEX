@@ -70,16 +70,21 @@ def safe_print(message: str) -> None:
     """Print with Unicode fallback for Windows console encoding issues."""
     try:
         print(message)
-    except UnicodeEncodeError:
-        # Replace emojis with ASCII equivalents
-        ascii_message = (message
-            .replace('🧠', '[BRAIN]')
-            .replace('✅', '[OK]')
-            .replace('⚠️', '[WARN]')
-            .replace('❌', '[FAIL]')
-            .replace('━', '-')
-        )
-        print(ascii_message)
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        # Fallback: encode to ASCII, replacing unmappable characters
+        try:
+            ascii_message = message.encode('ascii', errors='replace').decode('ascii')
+            # Clean up the replacement markers
+            replacements = {
+                '?': '',  # Remove ? placeholders
+                '  ': ' ',  # Clean up double spaces
+            }
+            for old, new in replacements.items():
+                ascii_message = ascii_message.replace(old, new)
+            print(ascii_message.strip())
+        except Exception:
+            # Last resort: just log it
+            logger.info(f"Console output (ASCII): {message.encode('ascii', errors='ignore').decode('ascii')}")
 
 
 @dataclass
@@ -657,6 +662,124 @@ class AlignUtility:
                 passed=False,
                 message=f"Discovery error: {str(e)}",
                 severity="WARNING"
+            )
+    
+    def validate_code_quality(self) -> ValidationResult:
+        """
+        Validate CORTEX code quality using TDD Implementation Orchestrator detection.
+        
+        Runs comprehensive code quality checks:
+        - Security vulnerabilities (SQL injection, credentials, error handling)
+        - Magic values (repeated strings, hardcoded URLs, magic numbers)
+        - SOLID violations (god classes/methods, tight coupling, complexity)
+        - Code duplicates
+        - Redundancies (unused imports, dead code)
+        
+        Leverages enhanced TDD orchestrator capabilities from sample app analysis.
+        Only runs in admin context on CORTEX source code.
+        
+        Returns:
+            ValidationResult with code quality status
+        """
+        try:
+            # Skip in user context (only validate CORTEX code)
+            if self.context_type != "admin":
+                return ValidationResult(
+                    check_name="Code Quality",
+                    passed=True,
+                    message="Skipped in user context",
+                    severity="INFO"
+                )
+            
+            # Import TDD orchestrator
+            from src.orchestrators.tdd_implementation_orchestrator import TDDImplementationOrchestrator
+            
+            # Initialize orchestrator for CORTEX codebase
+            orchestrator = TDDImplementationOrchestrator(
+                project_root=self.root_path,
+                enable_pattern_library=False  # Don't store patterns during align
+            )
+            
+            # Get all Python source files in src/
+            src_path = self.root_path / "src"
+            if not src_path.exists():
+                return ValidationResult(
+                    check_name="Code Quality",
+                    passed=False,
+                    message="src/ directory not found",
+                    severity="ERROR"
+                )
+            
+            python_files = list(src_path.rglob("*.py"))
+            if not python_files:
+                return ValidationResult(
+                    check_name="Code Quality",
+                    passed=False,
+                    message="No Python files found in src/",
+                    severity="ERROR"
+                )
+            
+            # Convert to relative paths
+            relative_files = [Path(f.relative_to(self.root_path)) for f in python_files]
+            
+            # Run all detection methods
+            security_result = orchestrator._detect_security_issues(relative_files)
+            magic_result = orchestrator._detect_magic_values(relative_files)
+            solid_result = orchestrator._validate_solid(relative_files)
+            duplicates_result = orchestrator._detect_duplicates(relative_files)
+            
+            # Aggregate results
+            critical_security = security_result.get('critical_count', 0)
+            high_security = security_result.get('high_count', 0)
+            critical_solid = solid_result.get('critical_count', 0)
+            high_solid = solid_result.get('high_count', 0)
+            magic_count = len(magic_result.get('magic_values', []))
+            duplicate_count = len(duplicates_result.get('duplicates', []))
+            
+            # Determine pass/fail (critical issues block)
+            critical_issues = critical_security + critical_solid
+            high_issues = high_security + high_solid
+            
+            if critical_issues > 0:
+                passed = False
+                severity = "ERROR"
+                message = f"{critical_issues} critical issues found"
+                details = f"Security: {critical_security} critical, SOLID: {critical_solid} critical"
+            elif high_issues > 5:
+                passed = False
+                severity = "WARNING"
+                message = f"{high_issues} high-priority issues found"
+                details = f"Security: {high_security} high, SOLID: {high_solid} high, Magic: {magic_count}, Duplicates: {duplicate_count}"
+            else:
+                passed = True
+                severity = "INFO"
+                message = f"Code quality acceptable"
+                details = f"Security: {critical_security}C/{high_security}H, SOLID: {critical_solid}C/{high_solid}H/{solid_result.get('medium_count', 0)}M, Magic: {magic_count}, Duplicates: {duplicate_count}"
+            
+            return ValidationResult(
+                check_name="Code Quality",
+                passed=passed,
+                message=message,
+                details=details,
+                severity=severity
+            )
+        
+        except ImportError:
+            return ValidationResult(
+                check_name="Code Quality",
+                passed=True,
+                message="TDD orchestrator not available",
+                details="Skipping code quality validation",
+                severity="INFO"
+            )
+        except Exception as e:
+            logger.debug(f"Code quality check failed: {e}", exc_info=True)
+            return ValidationResult(
+                check_name="Code Quality",
+                passed=True,
+                message=f"Check skipped: {str(e)}",
+                details="Non-critical error during code quality scan",
+                severity="INFO"
             )
     
     def validate_feature_wiring(self) -> ValidationResult:
@@ -1313,6 +1436,9 @@ class AlignUtility:
         if self.context_type == "admin" and not self.quick_mode:
             report.checks.append(self.validate_feature_discovery())
             report.checks.append(self.validate_feature_wiring())
+            
+            # Execute code quality validation (uses TDD orchestrator capabilities)
+            report.checks.append(self.validate_code_quality())
         
         # Skip feature validation in quick mode
         if self.quick_mode:

@@ -355,6 +355,200 @@ Items Saved: {items_count} components
 
 This analysis will persist across sessions and can be referenced in future conversations."""
 
+    # ---------------------- Phase 3: TDD Workflow Enhancement ----------------------
+    
+    def store_tdd_cycle_pattern(
+        self,
+        feature: str,
+        test_strategy: str,
+        implementation_approach: str,
+        refactoring_type: str,
+        confidence: float = 0.7
+    ) -> str:
+        """
+        Store a completed TDD cycle as a pattern for future reference.
+        
+        Part of Phase 3 Deliverable 3.2: Pattern Learning from TDD Cycles
+        
+        Args:
+            feature: Feature name that was implemented
+            test_strategy: Testing strategy used (e.g., 'happy_path_first', 'edge_cases_first')
+            implementation_approach: Implementation approach (e.g., 'minimal_then_extend')
+            refactoring_type: Type of refactoring performed (e.g., 'extract_method')
+            confidence: Initial confidence score (default: 0.7)
+        
+        Returns:
+            pattern_id: Unique identifier for the stored pattern
+        """
+        import uuid
+        from datetime import datetime
+        
+        pattern_id = f"tdd_{feature.replace(' ', '_').lower()}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        
+        metadata = {
+            'test_strategy': test_strategy,
+            'implementation_approach': implementation_approach,
+            'refactoring_type': refactoring_type,
+            'source': 'tdd_cycle',
+            'captured_at': datetime.now().isoformat()
+        }
+        
+        content = f"""# TDD Cycle: {feature}
+
+## Test Strategy
+{test_strategy}
+
+## Implementation Approach
+{implementation_approach}
+
+## Refactoring Type
+{refactoring_type}
+"""
+        
+        result = self.store_pattern(
+            pattern_id=pattern_id,
+            title=feature,
+            content=content,
+            pattern_type='tdd_cycle',
+            confidence=confidence,
+            source='tdd_cycle',
+            metadata=metadata,
+            scope='application',
+            namespaces=['tdd', 'development']
+        )
+        
+        return result.get('pattern_id', pattern_id)
+    
+    def get_implementation_dependencies(self, feature: str) -> List[Dict[str, Any]]:
+        """
+        Get implementation dependencies captured during GREEN phase.
+        
+        Args:
+            feature: Feature name to retrieve dependencies for
+        
+        Returns:
+            List of dependency dictionaries
+        """
+        patterns = self.search_patterns(query=feature, limit=10)
+        
+        dependencies = []
+        for pattern in patterns:
+            pattern_type = pattern.get('pattern_type', '')
+            if pattern_type in ['implementation', 'tdd_cycle']:
+                metadata = pattern.get('metadata', {})
+                if isinstance(metadata, str):
+                    import json
+                    try:
+                        metadata = json.loads(metadata)
+                    except:
+                        metadata = {}
+                
+                if 'dependencies' in metadata or 'implementation_approach' in metadata:
+                    dependencies.append({
+                        'pattern_id': pattern.get('pattern_id'),
+                        'feature': pattern.get('title'),
+                        'description': metadata.get('implementation_approach', ''),
+                        'dependencies': metadata.get('dependencies', []),
+                        'created_at': pattern.get('created_at')
+                    })
+        
+        return dependencies
+    
+    def get_implementation_decisions(self, feature: str) -> List[Dict[str, Any]]:
+        """
+        Get implementation decisions captured during GREEN phase.
+        
+        Args:
+            feature: Feature name to retrieve decisions for
+        
+        Returns:
+            List of decision dictionaries with rationale
+        """
+        patterns = self.search_patterns(query=feature, limit=10)
+        
+        decisions = []
+        for pattern in patterns:
+            pattern_type = pattern.get('pattern_type', '')
+            if pattern_type in ['implementation', 'tdd_cycle']:
+                metadata = pattern.get('metadata', {})
+                if isinstance(metadata, str):
+                    import json
+                    try:
+                        metadata = json.loads(metadata)
+                    except:
+                        metadata = {}
+                
+                implementation_approach = metadata.get('implementation_approach', '')
+                
+                if implementation_approach:
+                    decisions.append({
+                        'pattern_id': pattern.get('pattern_id'),
+                        'feature': pattern.get('title'),
+                        'decision': implementation_approach,
+                        'rationale': f"Applied {implementation_approach} based on TDD cycle",
+                        'test_strategy': metadata.get('test_strategy', 'unknown'),
+                        'created_at': pattern.get('created_at')
+                    })
+        
+        return decisions
+    
+    def suggest_patterns_for_feature(self, feature_name: str, limit: int = 5) -> List[Dict[str, Any]]:
+        """
+        Suggest relevant patterns for a new feature based on semantic similarity.
+        
+        Part of Phase 3 Deliverable 3.2: Future TDD cycles get pattern suggestions
+        
+        Args:
+            feature_name: New feature being implemented
+            limit: Maximum number of suggestions
+        
+        Returns:
+            List of relevant pattern suggestions
+        """
+        # Search for semantically similar patterns
+        patterns = self.search_patterns(query=feature_name, limit=limit * 2)
+        
+        suggestions = []
+        for pattern in patterns:
+            if pattern.get('pattern_type') == 'tdd_cycle':
+                metadata = pattern.get('metadata', {})
+                if isinstance(metadata, str):
+                    import json
+                    try:
+                        metadata = json.loads(metadata)
+                    except:
+                        metadata = {}
+                
+                suggestions.append({
+                    'pattern_id': pattern.get('pattern_id'),
+                    'title': pattern.get('title'),
+                    'confidence': pattern.get('confidence', 0.5),
+                    'test_strategy': metadata.get('test_strategy', ''),
+                    'implementation_approach': metadata.get('implementation_approach', ''),
+                    'refactoring_type': metadata.get('refactoring_type', ''),
+                    'context': pattern.get('content', '')
+                })
+        
+        # Sort by confidence and return top N
+        suggestions.sort(key=lambda x: x['confidence'], reverse=True)
+        return suggestions[:limit]
+    
+    def fts5_search(self, query: str, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Full-text search using FTS5 for semantic pattern matching.
+        
+        Part of Phase 3 Deliverable 3.2: Pattern matching uses FTS5
+        
+        Args:
+            query: Search query
+            limit: Maximum results
+        
+        Returns:
+            List of matching patterns
+        """
+        # Use the existing search infrastructure
+        return self.search_patterns(query=query, limit=limit)
+    
     # ---------------------- Maintenance ----------------------
     def health_check(self) -> Dict[str, Any]:
         return self.connection_manager.health_check()

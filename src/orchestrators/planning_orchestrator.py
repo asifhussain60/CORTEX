@@ -26,6 +26,9 @@ from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 from src.agents.security.threat_modeler_agent import ThreatModelerAgent
 from src.cortex_agents.base_agent import AgentRequest
+from src.orchestrators.session_model import PlanningSession, SessionFactory, SessionStatus
+from src.orchestrators.validation_framework import validate_plan, validate_task, ValidationResult
+from src.agents.estimation.scope_inference_engine import ScopeBoundary, ScopeEntities
 
 logger = logging.getLogger(__name__)
 
@@ -73,9 +76,9 @@ class PlanningOrchestrator:
             logger.warning(f"⚠️  PlanExecutionOrchestrator not available: {e}")
             self.plan_executor = None
         
-        # UX Enhancement: Planning mode state management
+        # UX Enhancement: Planning mode state management (MIGRATED to PlanningSession)
         self.planning_mode_active = False
-        self.current_plan_context: Optional[Dict[str, Any]] = None
+        self.current_plan_context: Optional[PlanningSession] = None  # Now uses PlanningSession
         self.session_restoration_enabled = True
         
         # Load response templates for configuration
@@ -123,12 +126,23 @@ class PlanningOrchestrator:
         """
         Validate plan against schema.
         
+        Now uses validation framework for consistent, centralized validation.
+        Legacy validation kept for backward compatibility.
+        
         Args:
             plan_data: Plan data dictionary
         
         Returns:
             Tuple of (is_valid, error_messages)
         """
+        # NEW: Use validation framework first
+        validation_result: ValidationResult = validate_plan(plan_data)
+        
+        if not validation_result.valid:
+            # Framework found errors - return immediately
+            return (False, validation_result.errors + validation_result.warnings)
+        
+        # Legacy validation (backward compatibility)
         errors = []
         
         required_fields = self.schema.get("schema", {}).get("required_fields", [])
@@ -160,7 +174,10 @@ class PlanningOrchestrator:
             risk_errors = self._validate_risks(plan_data["risks"])
             errors.extend(risk_errors)
         
-        return (len(errors) == 0, errors)
+        # Merge framework warnings with legacy errors
+        all_errors = errors + validation_result.warnings
+        
+        return (len(all_errors) == 0, all_errors)
     
     def _validate_metadata(self, metadata: Dict[str, Any]) -> List[str]:
         """Validate metadata section."""

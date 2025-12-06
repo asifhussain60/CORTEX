@@ -48,6 +48,12 @@ class ComponentDiscoveryScanner:
         "cortex-brain",
         "cortex-extension",
         "deploy-packages",
+        "examples",         # Research/demo code, not production
+        "scripts",          # Utility scripts, not components
+        "plugins",          # Plugin system, not yet integrated
+        "test_generator",   # Research code for TDD Phase 3 enhancements
+        "code_review",      # Plugin/research code
+        "validation",       # Internal validation utilities
         ".git",
         "__pycache__",
         ".pytest_cache",
@@ -77,6 +83,11 @@ class ComponentDiscoveryScanner:
         "COUPLING": ["RefactoringIntelligence", "DependencyAnalyzer"],
         "CIRCULAR_DEPS": ["RefactoringIntelligence", "DependencyAnalyzer"],
         "COHESION": ["RefactoringIntelligence", "CodeReviewAgent"]
+    }
+    
+    # Component patterns to exclude (intentional utilities, not architectural components)
+    EXCLUDE_COMPONENTS = {
+        "ObsoleteCodeDetector",  # Realignment utility, used by test_migrator
     }
     
     def __init__(self):
@@ -178,6 +189,10 @@ class ComponentDiscoveryScanner:
             # Find class definitions
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef):
+                    # Skip excluded components
+                    if node.name in self.EXCLUDE_COMPONENTS:
+                        continue
+                        
                     # Check if class looks like a component
                     if self._is_component_class(node):
                         component = self._create_component(

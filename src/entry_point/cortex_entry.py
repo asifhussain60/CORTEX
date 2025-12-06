@@ -692,14 +692,15 @@ class CortexEntry:
         
         Validates brain structure exists and prompts user if missing.
         This provides automatic guidance for first-time users.
+        
+        NOTE: Database files are created on-demand by Tier classes,
+        so we only check for tier directories, not specific DB files.
+        This ensures cross-platform compatibility.
         """
         required_paths = [
             self.brain_path / "tier1",
             self.brain_path / "tier2",
-            self.brain_path / "tier3",
-            self.brain_path / "tier1" / "working_memory.db",
-            self.brain_path / "tier2" / "knowledge_graph.db",
-            self.brain_path / "tier3" / "development_context.db"
+            self.brain_path / "tier3"
         ]
         
         missing_components = [p for p in required_paths if not p.exists()]

@@ -24,6 +24,15 @@ from .risk_assessor import RiskAssessor
 from .priority_calculator import PriorityCalculator
 from .pattern_storage import PatternStorage
 
+# Import learning system
+try:
+    from src.learning.event_collector import get_global_collector
+    from src.learning.event_taxonomy import LearningEvent, EventType
+except ImportError:
+    get_global_collector = None
+    LearningEvent = None
+    EventType = None
+
 
 class WorkPlanner(BaseAgent):
     """
@@ -70,6 +79,18 @@ class WorkPlanner(BaseAgent):
             self.log_request(request)
             self.logger.info("Starting work planning")
             
+            # Emit PLANNING_REQUEST event
+            if get_global_collector and LearningEvent and EventType:
+                try:
+                    event = LearningEvent(
+                        event_type=EventType.PLANNING_REQUEST,
+                        component="WorkPlanner",
+                        metadata={"intent": request.intent, "context_size": len(request.context)}
+                    )
+                    get_global_collector().capture_event(event)
+                except Exception as e:
+                    self.logger.debug(f"Learning event capture failed: {e}")
+            
             # Analyze complexity
             complexity = self.complexity_analyzer.analyze(request)
             self.logger.info(f"Detected complexity: {complexity}")
@@ -115,6 +136,22 @@ class WorkPlanner(BaseAgent):
                 complexity,
                 total_hours
             )
+            
+            # Emit PLAN_VALIDATED event
+            if get_global_collector and LearningEvent and EventType:
+                try:
+                    event = LearningEvent(
+                        event_type=EventType.PLAN_VALIDATED,
+                        component="WorkPlanner",
+                        metadata={
+                            "task_count": len(tasks),
+                            "total_hours": total_hours,
+                            "complexity": complexity
+                        }
+                    )
+                    get_global_collector().capture_event(event)
+                except Exception as e:
+                    self.logger.debug(f"Learning event capture failed: {e}")
             
             result = {
                 "success": True,
