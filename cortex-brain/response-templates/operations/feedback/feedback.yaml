@@ -12,9 +12,9 @@ templates:
     expected_orchestrator: feedback_agent
     operation_name: FeedbackCollection
     sections:
-      understanding_content: You want to provide feedback about CORTEX (bug, improvement,
+      understanding_scope_content: You want to provide feedback about CORTEX (bug, improvement,
         or question)
-      challenge_content: No Challenge - Structured feedback collection with auto-upload
+      approach_considerations_content: No significant challenges - Structured feedback collection with auto-upload
       response_content: '## 💬 Feedback Collection Agent
 
 
@@ -139,7 +139,7 @@ templates:
         ```
 
         '
-      request_echo_content: Provide feedback about CORTEX
+      impact_changes_content: Provide feedback about CORTEX
       next_steps_content: '**Feedback Commands:**
 
 

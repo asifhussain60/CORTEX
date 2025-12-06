@@ -7,14 +7,14 @@ standard_5_part:
     ---
 
 
-    ### 🎯 My Understanding Of Your Request
+    ### 🎯 Understanding & Scope
 
-    {understanding_content}
+    {understanding_scope_content}
 
 
     ### ⚠️ Challenge
 
-    {challenge_content}
+    {approach_considerations_content}
 
 
     ### 💬 Response
@@ -24,7 +24,7 @@ standard_5_part:
 
     ### 📝 Your Request
 
-    {request_echo_content}
+    {impact_changes_content}
 
 
     ### 🔍 Next Steps

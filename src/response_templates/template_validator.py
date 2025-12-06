@@ -290,9 +290,14 @@ class TemplateValidator:
                 ))
         
         # Check for unused/undefined placeholders
+        # Support both v2.0 and v3.0 section names
         common_placeholders = {
-            'operation', 'understanding_content', 'challenge_content',
-            'response_content', 'request_echo_content', 'next_steps_content',
+            # v3.0 section names
+            'operation', 'understanding_scope_content', 'approach_considerations_content',
+            'response_content', 'impact_changes_content', 'next_steps_content',
+            # v2.0 section names (backward compatibility)
+            'understanding_content', 'challenge_content', 'request_echo_content',
+            # Common metadata
             'title', 'mode', 'confidence_level'
         }
         

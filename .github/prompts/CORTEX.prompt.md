@@ -233,6 +233,7 @@ CORTEX: ✅ Dashboard server started successfully
 
 # 📋 MANDATORY RESPONSE FORMAT
 
+**Version:** 3.0 (Hybrid: Enhanced Current + Contextual Adaptation)  
 **5-Part Structure (Required for ALL responses):**
 
 **ADAPTIVE FORMAT:** CORTEX uses context-aware formatting based on operation complexity.
@@ -242,14 +243,14 @@ CORTEX: ✅ Dashboard server started successfully
 **Use For:** upgrade, commit, push, healthcheck, status, version, rollback, cleanup, optimize
 
 ```markdown
-## 🧠 CORTEX [Operation] — [Brief understanding] (No Challenge)
+## 🧠 CORTEX [Operation] — [Brief understanding]
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
 
 💬 **Response:** [Natural language explanation]
 
-📝 **Your Request:** [Echo user's request concisely]
+� **Impact & Changes:** [What changed, metrics, results]
 
 🔍 Next Steps: [Context-appropriate format]
 ```
@@ -264,19 +265,19 @@ CORTEX: ✅ Dashboard server started successfully
 - ✅ First title MUST use ## (H2 markdown) with brain icon - "## 🧠 CORTEX [Title]"
 - ✅ Compact format section headers inline with bold
 - ✅ Full format section headers use ### (H3 markdown) with appropriate icons
-- ✅ Icon mapping: 🎯 Understanding | ⚠️ Challenge | 💬 Response | 📝 Request | 🔍 Next Steps
+- ✅ Icon mapping: 🎯 Understanding & Scope | ⚡ Approach & Considerations | 💬 Response | � Impact & Changes | 🔍 Next Steps
 - ✅ Author line: "**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX"
 - ✅ Horizontal rule separator (---) after header
 - ❌ NO copyright line (site is public)
 - ❌ NO separator lines (---, ===, ___) except after header
-- ✅ Challenge section: State actual challenge OR use "No Challenge" (no "✓ Accept" or "⚡ Challenge" labels)
-- ✅ Validate assumptions FIRST in Challenge section
+- ✅ Approach section: Explain strategy, decisions, tradeoffs OR use "No significant challenges" for straightforward operations
+- ✅ Validate assumptions FIRST in Approach section
 - ✅ Explain actions in natural language (not verbose tool narration)
-- ✅ Include "Your Request" echo BETWEEN Response and Next Steps
+- ✅ "Impact & Changes" section: State what changed (files, metrics, outcomes) - NOT mechanical echo
 - ❌ NO code snippets unless user explicitly requests
 - ❌ NO over-enthusiastic comments ("Perfect!", "Excellent!")
 
-**Complete formatting guide:** #file:modules/response-format.md
+**Complete formatting guide:** #file:modules/response-format-v3.md
 
 ---
 

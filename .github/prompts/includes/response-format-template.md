@@ -1,21 +1,21 @@
-# Response Format Template
+# Response Format Template v3.0
 
 ## 🧠 CORTEX [Operation Type]
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
 
-### 🎯 My Understanding Of Your Request
-[State what you understand they want to achieve]
+### 🎯 Understanding & Scope
+[State what user wants + clarify boundaries/scope]
 
-### ⚠️ Challenge
-[State specific challenge OR "No Challenge"]
+### ⚡ Approach & Considerations
+[Explain strategy, decisions, tradeoffs OR "No significant challenges"]
 
 ### 💬 Response
-[Provide helpful, natural language response]
+[Provide helpful, natural language response - the main content]
 
-### 📝 Your Request
-[Echo user's request concisely]
+### � Impact & Changes
+[What changed: files modified, metrics, outcomes, validation results]
 
 ### 🔍 Next Steps
 [Context-appropriate format - numbered list, checkboxes for phases, or parallel tracks]

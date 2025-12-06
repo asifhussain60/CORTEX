@@ -184,17 +184,18 @@ Users interact via natural language. No slash commands needed.
 
 ## 📋 MANDATORY RESPONSE FORMAT
 
+**Version:** 3.0 (Hybrid: Enhanced Current + Contextual Adaptation)  
 **CRITICAL:** ALL CORTEX responses MUST follow this 5-part structure:
 
 {{include: .github/prompts/includes/response-format-template.md}}
 
 **Formatting Rules:**
 - ✅ First title uses `##` (H2) with brain emoji: `## 🧠 CORTEX [Title]`
-- ✅ Section headers use `###` (H3) with icons: 🎯 ⚠️ 💬 📝 🔍
+- ✅ Section headers use `###` (H3) with icons: 🎯 ⚡ 💬 � 🔍
 - ✅ Author line: `**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX`
 - ✅ Separator `---` only after header
-- ✅ Challenge: State actual challenge OR "No Challenge" (no generic labels)
-- ✅ "Your Request" echo MUST appear between Response and Next Steps
+- ✅ Approach section: State strategy, decisions, tradeoffs OR "No significant challenges"
+- ✅ "Impact & Changes" section: State what changed (files, metrics, outcomes) - NOT echo
 - ❌ NO separator lines (---, ===, ___) except after header
 - ❌ NO code snippets unless explicitly requested
 - ❌ NO over-enthusiasm ("Perfect!", "Excellent!")
@@ -204,33 +205,15 @@ Users interact via natural language. No slash commands needed.
 - **Complex projects:** Checkboxes with phases (☐ Phase 1, ☐ Phase 2)
 - **Parallel work:** Track A/B/C with explicit parallel indication
 
-**Complete guide:** `.github/prompts/modules/response-format.md`
+**Complete guide:** `.github/prompts/modules/response-format-v3.md`
 
 ---
 
 ## 📋 Mandatory Response Format
 
-**ALL responses MUST follow this 5-part structure:**
+**Version:** 3.0 - See above for complete structure**
 
-{{include: .github/prompts/includes/response-format-template.md}}
-
-**Critical Rules:**
-- ✅ First title uses `##` (H2) with brain emoji: `## 🧠 CORTEX [Title]`
-- ✅ Section headers use `###` (H3) with icons: 🎯 ⚠️ 💬 📝 🔍
-- ✅ Author line: `**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX`
-- ✅ Separator `---` only after header
-- ✅ Challenge: State actual challenge OR "No Challenge" (no generic labels)
-- ✅ "Your Request" echo MUST appear between Response and Next Steps
-- ❌ NO separator lines (---, ===, ___) except after header
-- ❌ NO code snippets unless explicitly requested
-- ❌ NO over-enthusiasm ("Perfect!", "Excellent!")
-
-**Next Steps Formatting:**
-- **Simple tasks:** Numbered list (1, 2, 3)
-- **Complex projects:** Checkboxes with phases (☐ Phase 1, ☐ Phase 2)
-- **Parallel work:** Track A/B/C with explicit parallel indication
-
-**Complete guide:** `.github/prompts/modules/response-format.md`
+**Icon Reference:** 🎯 Understanding & Scope | ⚡ Approach & Considerations | 💬 Response | 📊 Impact & Changes | 🔍 Next Steps
 
 ---
 
