@@ -9,6 +9,12 @@ metadata:
   created_date: "2025-12-06T00:00:00Z"
   created_by: "Asif Hussain"
   status: "approved"
+  title: "Phase 2: Auto-Documentation Generation for Learning Library"
+  description: "Automatically generate markdown documentation when workflows complete, using templates and context extraction"
+  author: "Asif Hussain"
+  created_date: "2025-12-06T00:00:00Z"
+  created_by: "Asif Hussain"
+  status: "approved"
   priority: "high"
   estimated_hours: 40
   complexity: "medium"
