@@ -116,8 +116,10 @@ ALL responses MUST use this 5-part structure:
 
 | Command | Description | Context |
 |---------|-------------|---------|
-| `plan [feature]` | Start interactive planning | All |
+| `plan [feature]` | Start interactive planning (auto-includes TDD) | All |
 | `plan ado` | Create ADO work items | All |
+| `execute all phases autonomously` | Run plan end-to-end without approval | All |
+| `auto chained` | Synonym for autonomous execution | All |
 | `start tdd` | Begin TDD workflow | All |
 | `run tests` | Execute tests + analysis | All |
 | `load dashboard` | Launch dashboard server | All |

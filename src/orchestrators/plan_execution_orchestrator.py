@@ -97,7 +97,8 @@ class PlanExecutionOrchestrator:
         self, 
         plan_path: Path,
         auto_consolidate: bool = True,
-        dry_run: bool = False
+        dry_run: bool = False,
+        execution_mode: str = "approval_gated"
     ) -> Tuple[bool, Dict[str, Any]]:
         """
         Execute a feature implementation plan.
@@ -106,11 +107,13 @@ class PlanExecutionOrchestrator:
             plan_path: Path to plan file (YAML or Markdown)
             auto_consolidate: Automatically add Integration & Consolidation phase
             dry_run: Preview execution without making changes
+            execution_mode: "autonomous" (run all phases without stopping) or 
+                          "approval_gated" (stop after each phase for approval)
         
         Returns:
             Tuple of (success, execution_report)
         """
-        logger.info(f"🚀 Starting plan execution: {plan_path.name}")
+        logger.info(f"🚀 Starting plan execution: {plan_path.name} (mode: {execution_mode})")
         
         # Create git checkpoint before starting
         if self.git_checkpoint and not dry_run:
@@ -137,6 +140,7 @@ class PlanExecutionOrchestrator:
             "plan_title": plan_data.get("metadata", {}).get("title", "Unknown"),
             "started_at": datetime.now().isoformat(),
             "dry_run": dry_run,
+            "execution_mode": execution_mode,
             "phases_executed": [],
             "integration_consolidation_executed": False,
             "success": False,
@@ -158,6 +162,21 @@ class PlanExecutionOrchestrator:
                 return (False, execution_report)
             
             logger.info(f"✅ Phase {phase.get('phase_number')} completed")
+            
+            # In approval_gated mode, pause after each phase for user approval
+            if execution_mode == "approval_gated" and phase != phases[-1]:
+                logger.info("⏸️  Phase complete. Awaiting approval to continue...")
+                logger.info("   → In approval_gated mode: User must approve to proceed to next phase")
+                logger.info("   → To enable autonomous execution, use triggers:")
+                logger.info("      • 'execute all phases autonomously'")
+                logger.info("      • 'auto chained'")
+                logger.info("      • 'without user intervention'")
+                # Return early - user must call execute_plan again to continue
+                execution_report["awaiting_approval"] = True
+                execution_report["next_phase"] = phases[phases.index(phase) + 1].get("phase_name")
+                execution_report["completed_at"] = datetime.now().isoformat()
+                self._save_execution_report(execution_report)
+                return (True, execution_report)  # Success but paused
         
         # Automatically add Integration & Consolidation phase
         if auto_consolidate:

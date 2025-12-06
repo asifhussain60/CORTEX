@@ -62,6 +62,54 @@ class ValidationResult:
 
 # ===== HELPER FUNCTIONS =====
 
+def detect_execution_mode(user_input: str) -> str:
+    """
+    Detect if user wants autonomous (chained) or approval-gated execution.
+    
+    Autonomous Triggers (case-insensitive):
+    - "execute all phases autonomously"
+    - "auto chained"
+    - "execute all phases auto chained"
+    - "all phases without user intervention"
+    - "without user intervention"
+    - "autonomous execution"
+    - "end to end"
+    - "run autonomously"
+    - "auto execute all"
+    
+    Args:
+        user_input: User's request/command text
+        
+    Returns:
+        "autonomous" if triggers detected, "approval_gated" otherwise
+        
+    Examples:
+        >>> detect_execution_mode("execute all phases autonomously")
+        'autonomous'
+        >>> detect_execution_mode("create plan for authentication")
+        'approval_gated'
+    """
+    triggers = [
+        r"execute\s+all\s+phases\s+autonomously",
+        r"auto\s+chained",
+        r"execute\s+all\s+phases\s+auto\s+chained",
+        r"all\s+phases\s+without\s+(?:user\s+)?intervention",
+        r"without\s+(?:user\s+)?intervention",
+        r"autonomous(?:ly)?\s+execution?",
+        r"end\s+to\s+end",
+        r"run\s+autonomously",
+        r"auto\s+execute\s+all"
+    ]
+    
+    user_input_lower = user_input.lower()
+    for pattern in triggers:
+        if re.search(pattern, user_input_lower):
+            logger.info(f"Autonomous execution mode detected: matched pattern '{pattern}'")
+            return "autonomous"
+    
+    return "approval_gated"
+
+
 def _truncate_filename(name: str, max_length: int = 30) -> str:
     """
     Truncate filename to max_length while preserving meaning.
@@ -130,7 +178,8 @@ def create_plan(
     feature_name: str,
     description: str = "",
     author: str = "CORTEX",
-    complexity: str = "medium"
+    complexity: str = "medium",
+    user_input: str = ""
 ) -> PlanResult:
     """
     Create new plan with metadata.
@@ -140,11 +189,16 @@ def create_plan(
         description: Feature description
         author: Plan author name
         complexity: Complexity level (low, medium, high)
+        user_input: Original user request (used to detect execution mode)
         
     Returns:
         PlanResult with plan creation outcome
     """
     logger.info(f"📋 Creating plan: {feature_name}")
+    
+    # Detect execution mode from user input
+    execution_mode = detect_execution_mode(user_input) if user_input else "approval_gated"
+    logger.info(f"   Execution mode: {execution_mode}")
     
     try:
         # Create plan directory structure
@@ -174,17 +228,27 @@ def create_plan(
                 "created_at": datetime.now().isoformat(),
                 "status": "draft",
                 "complexity": complexity,
-                "version": "1.0.0"
+                "version": "1.0.0",
+                "execution_mode": execution_mode,
+                "tdd_enforced": True,
+                "clean_architecture_required": True
             },
             "definition_of_ready": {
                 "requirements_clear": False,
                 "dependencies_identified": False,
                 "design_approved": False,
-                "resources_available": False
+                "resources_available": False,
+                "tdd_test_scenarios_defined": False,
+                "clean_architecture_planned": False,
+                "solid_principles_reviewed": False
             },
             "phases": [],
             "definition_of_done": {
-                "tests_passing": False,
+                "all_tests_passing_green_phase": False,
+                "tdd_cycle_completed_red_green_refactor": False,
+                "code_coverage_minimum_80_percent": False,
+                "clean_architecture_validated": False,
+                "solid_principles_verified": False,
                 "documentation_complete": False,
                 "code_reviewed": False,
                 "deployed_to_staging": False
@@ -361,7 +425,11 @@ def validate_plan(plan_data: Dict[str, Any]) -> ValidationResult:
         if not isinstance(dor, dict):
             errors.append("definition_of_ready must be a dictionary")
         else:
-            required_dor = ["requirements_clear", "dependencies_identified", "design_approved", "resources_available"]
+            required_dor = [
+                "requirements_clear", "dependencies_identified", "design_approved", 
+                "resources_available", "tdd_test_scenarios_defined", "clean_architecture_planned",
+                "solid_principles_reviewed"
+            ]
             for field in required_dor:
                 if field not in dor:
                     warnings.append(f"DoR missing field: {field}")
@@ -377,7 +445,11 @@ def validate_plan(plan_data: Dict[str, Any]) -> ValidationResult:
         if not isinstance(dod, dict):
             errors.append("definition_of_done must be a dictionary")
         else:
-            required_dod = ["tests_passing", "documentation_complete", "code_reviewed"]
+            required_dod = [
+                "all_tests_passing_green_phase", "tdd_cycle_completed_red_green_refactor",
+                "code_coverage_minimum_80_percent", "clean_architecture_validated",
+                "solid_principles_verified", "documentation_complete", "code_reviewed"
+            ]
             for field in required_dod:
                 if field not in dod:
                     warnings.append(f"DoD missing field: {field}")
