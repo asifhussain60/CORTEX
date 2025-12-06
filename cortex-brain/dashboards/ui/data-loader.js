@@ -137,8 +137,7 @@ export async function loadDashboardData(source = 'mock') {
             security: results[2],
             architecture: results[3],
             codeOrganization: results[4],
-            teamMetrics: results[5],
-            vendors: results[6]
+            vendors: results[5]  // Removed teamMetrics (index 5, now vendors)
         };
         
         // Validate data (temporarily disabled for debugging)
