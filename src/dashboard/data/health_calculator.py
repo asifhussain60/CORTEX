@@ -1,80 +1,70 @@
 """
-Health Score Calculator
+Health Score Calculator - Dashboard Overview Tab
 
-Calculates overall health scores from category scores using weighted averaging.
-Determines health status classification (healthy/warning/critical).
+Calculates overall health scores from category metrics.
+Determines status levels (healthy/warning/critical).
+
+Author: Asif Hussain
+Created: 2025-12-06
 """
 
-from typing import Dict, Optional
+from typing import Dict
 
 
 class HealthScoreCalculator:
-    """Calculator for project health scores and status determination."""
+    """
+    Calculates health scores using weighted averages.
     
-    # Default category weights (must sum to 1.0)
-    DEFAULT_WEIGHTS = {
+    Weights:
+        - Code Quality: 30%
+        - Security: 30%
+        - Tests: 25%
+        - Documentation: 15%
+    """
+    
+    WEIGHTS = {
         "code_quality": 0.30,
         "security": 0.30,
         "tests": 0.25,
         "documentation": 0.15
     }
     
-    # Status thresholds
-    HEALTHY_THRESHOLD = 80
-    WARNING_THRESHOLD = 50
-    
-    def __init__(self, weights: Optional[Dict[str, float]] = None):
+    def calculate_overall_health(self, category_scores: Dict[str, float]) -> float:
         """
-        Initialize health score calculator.
+        Calculate weighted overall health score.
         
         Args:
-            weights: Optional custom category weights (must sum to 1.0)
-                    If None, uses DEFAULT_WEIGHTS
-        
-        Raises:
-            ValueError: If weights don't sum to 1.0
-        """
-        self.weights = weights if weights is not None else self.DEFAULT_WEIGHTS.copy()
-        
-        # Validate weights sum to 1.0
-        weight_sum = sum(self.weights.values())
-        if not (0.99 <= weight_sum <= 1.01):  # Allow small floating point error
-            raise ValueError(f"Weights must sum to 1.0, got {weight_sum}")
-    
-    def calculate_overall_score(self, category_scores: Dict[str, float]) -> float:
-        """
-        Calculate weighted average overall health score.
-        
-        Args:
-            category_scores: Dictionary of category names to scores (0-100)
-        
+            category_scores: Dictionary of category names to scores
+            
         Returns:
             Overall health score (0-100)
-        
-        Raises:
-            KeyError: If required category is missing from scores
         """
         total_score = 0.0
+        total_weight = 0.0
         
-        for category, weight in self.weights.items():
-            score = category_scores[category]  # Will raise KeyError if missing
-            total_score += score * weight
+        for category, weight in self.WEIGHTS.items():
+            if category in category_scores:
+                total_score += category_scores[category] * weight
+                total_weight += weight
         
-        return round(total_score, 2)
+        if total_weight == 0:
+            return 0.0
+        
+        return round(total_score / total_weight * (1.0 / total_weight), 1)
     
     def determine_status(self, score: float) -> str:
         """
-        Determine health status from score.
+        Determine status based on score.
         
         Args:
             score: Health score (0-100)
-        
+            
         Returns:
-            Status string: "healthy", "warning", or "critical"
+            Status: "healthy", "warning", or "critical"
         """
-        if score >= self.HEALTHY_THRESHOLD:
+        if score >= 80:
             return "healthy"
-        elif score >= self.WARNING_THRESHOLD:
+        elif score >= 50:
             return "warning"
         else:
             return "critical"
