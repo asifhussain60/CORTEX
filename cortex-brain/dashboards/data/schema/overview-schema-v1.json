@@ -1,0 +1,227 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dashboard Overview Schema",
+  "description": "Schema for dashboard overview data providing project health at a glance",
+  "version": "1.0",
+  "type": "object",
+  "required": [
+    "project_name",
+    "overall_health",
+    "key_metrics",
+    "health_categories",
+    "critical_issues",
+    "composition",
+    "trends"
+  ],
+  "properties": {
+    "project_name": {
+      "type": "string",
+      "description": "Name of the project"
+    },
+    "overall_health": {
+      "type": "object",
+      "required": ["score", "status", "trend", "last_scan"],
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Overall health score (0-100)"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["healthy", "warning", "critical"],
+          "description": "Health status classification"
+        },
+        "trend": {
+          "type": "string",
+          "enum": ["improving", "stable", "declining"],
+          "description": "Health trend direction"
+        },
+        "last_scan": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of last scan"
+        }
+      }
+    },
+    "key_metrics": {
+      "type": "object",
+      "required": ["total_files", "total_loc", "test_coverage", "maintainability_index"],
+      "properties": {
+        "total_files": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of files in project"
+        },
+        "total_loc": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total lines of code"
+        },
+        "test_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Test coverage percentage"
+        },
+        "maintainability_index": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Maintainability index score"
+        },
+        "technical_debt_hours": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Estimated technical debt in hours"
+        }
+      }
+    },
+    "health_categories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "score", "status", "trend", "issues_count", "details"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": ["code_quality", "security", "tests", "documentation"],
+            "description": "Health category name"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Category score (0-100)"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["healthy", "warning", "critical"],
+            "description": "Category health status"
+          },
+          "trend": {
+            "type": "string",
+            "enum": ["improving", "stable", "declining"],
+            "description": "Category trend direction"
+          },
+          "issues_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of issues in category"
+          },
+          "details": {
+            "type": "string",
+            "description": "Human-readable category details"
+          }
+        }
+      }
+    },
+    "critical_issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "category", "message", "count"],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high"],
+            "description": "Issue severity level"
+          },
+          "category": {
+            "type": "string",
+            "description": "Issue category"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable issue message"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of occurrences"
+          }
+        }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "required": ["languages", "components"],
+      "properties": {
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "percentage", "loc"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Programming language name"
+              },
+              "percentage": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Percentage of total LOC"
+              },
+              "loc": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Lines of code in this language"
+              }
+            }
+          }
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "count", "technologies"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["frontend", "backend", "database", "services"],
+                "description": "Component type"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Number of components of this type"
+              },
+              "technologies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Technologies used in this component type"
+              }
+            }
+          }
+        }
+      }
+    },
+    "trends": {
+      "type": "object",
+      "required": ["health_trend", "velocity_trend", "quality_trend"],
+      "properties": {
+        "health_trend": {
+          "type": "string",
+          "enum": ["improving", "stable", "declining"],
+          "description": "Overall health trend"
+        },
+        "velocity_trend": {
+          "type": "string",
+          "enum": ["improving", "stable", "declining"],
+          "description": "Development velocity trend"
+        },
+        "quality_trend": {
+          "type": "string",
+          "enum": ["improving", "stable", "declining"],
+          "description": "Code quality trend"
+        }
+      }
+    }
+  }
+}
