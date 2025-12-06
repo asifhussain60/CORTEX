@@ -30,7 +30,8 @@ export function renderOverview(data) {
     const overallHealth = data.overall_health || {};
     const metrics = data.key_metrics || {};
     const categories = data.health_categories || [];
-    const composition = data.composition || {};
+    const compositionData = data.composition || {};
+    const compositionLanguages = compositionData.languages || [];
     const issues = data.critical_issues || [];
     
     // Build HTML
@@ -110,10 +111,10 @@ export function renderOverview(data) {
                 </h3>
                 <div id="composition-chart" style="width: 100%; height: 240px;"></div>
                 <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary);">
-                    ${Object.entries(composition).map(([lang, pct]) => 
+                    ${compositionLanguages.map(lang => 
                         `<div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-                            <span>${lang}</span>
-                            <span style="font-weight: 600;">${pct.toFixed(1)}%</span>
+                            <span>${lang.name}</span>
+                            <span style="font-weight: 600;">${lang.percentage.toFixed(1)}%</span>
                         </div>`
                     ).join('')}
                 </div>
@@ -141,16 +142,15 @@ export function renderOverview(data) {
                             align-items: center;
                         ">
                             <div>
-                                <div style="font-weight: 600; margin-bottom: 0.25rem;">${issue.title || 'Untitled Issue'}</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">${issue.description || 'No description'}</div>
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">
+                                    ${issue.severity ? `[${issue.severity.toUpperCase()}]` : ''} 
+                                    ${issue.category || 'Unknown Category'}
+                                </div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                                    ${issue.message || 'No description'} 
+                                    ${issue.count ? `(${issue.count} issue${issue.count > 1 ? 's' : ''})` : ''}
+                                </div>
                             </div>
-                            <button class="btn btn-sm" style="
-                                padding: 0.5rem 1rem;
-                                font-size: 0.75rem;
-                                white-space: nowrap;
-                            " onclick="viewIssueDetails('${issue.id || ''}')">
-                                View Details
-                            </button>
                         </div>
                     `).join('')}
                 </div>
@@ -184,7 +184,7 @@ export function renderOverview(data) {
     // Render charts after DOM is ready
     setTimeout(() => {
         renderHealthGauge(overallHealth.score, overallHealth.status);
-        renderCompositionChart(composition);
+        renderCompositionChart(compositionLanguages);
     }, 0);
 }
 
@@ -353,7 +353,7 @@ function renderHealthGauge(score, status) {
 /**
  * Render composition pie chart with D3.js
  */
-function renderCompositionChart(composition) {
+function renderCompositionChart(languages) {
     const container = document.getElementById('composition-chart');
     if (!container) return;
     
@@ -370,10 +370,10 @@ function renderCompositionChart(composition) {
         .append('g')
         .attr('transform', `translate(${width/2}, ${height/2})`);
     
-    // Prepare data
-    const data = Object.entries(composition).map(([lang, value]) => ({
-        name: lang,
-        value: value
+    // Prepare data from languages array
+    const data = languages.map(lang => ({
+        name: lang.name,
+        value: lang.percentage
     }));
     
     const pie = d3.pie()
