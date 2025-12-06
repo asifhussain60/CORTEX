@@ -12,6 +12,7 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/architecture-panels.css">
     
     <style>
         /* Glassmorphism Dark Mode Dashboard */
@@ -441,6 +442,9 @@
         
         <!-- Main Content Area -->
         <main class="main-content">
+            <!-- Project Type Badge -->
+            <div id="project-type-badge" class="project-type-badge">Analyzing...</div>
+            
             <!-- Content Header -->
             <div class="content-header">
                 <h2 class="content-title" id="contentTitle">Dashboard Overview</h2>
@@ -477,6 +481,12 @@
             
             <!-- Tab Content: Architecture -->
             <div class="tab-content" id="tab-architecture">
+                <!-- Dynamic Architecture Panels (Frontend/Backend/Database) -->
+                <div id="architecture-panels-container">
+                    <!-- Architecture panels will be dynamically rendered -->
+                </div>
+                
+                <!-- Legacy Architecture Container -->
                 <div id="architecture-container">
                     <!-- Architecture content will be dynamically loaded -->
                 </div>
@@ -500,6 +510,8 @@
     
     <!-- Application Scripts -->
     <script type="module" src="data-loader.js"></script>
+    <script type="module" src="adaptive-visibility.js"></script>
+    <script type="module" src="components/architecture-panels.js"></script>
     <script type="module" src="app.js"></script>
     <script type="module" src="components/overview-tab.js"></script>
     <script type="module" src="components/tech-stack-tab.js"></script>

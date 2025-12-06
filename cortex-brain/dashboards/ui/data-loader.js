@@ -358,6 +358,151 @@ export async function isSourceAvailable(source) {
     }
 }
 
+/**
+ * Extract architecture information from collected data
+ * @param {Object} data - Dashboard data
+ * @returns {Object} - Structured architecture info
+ */
+export function extractArchitectureInfo(data) {
+    const archInfo = {
+        frontend: extractFrontendInfo(data),
+        backend: extractBackendInfo(data),
+        database: extractDatabaseInfo(data),
+        type: 'unknown',
+        layers: []
+    };
+    
+    // Determine architecture type
+    const hasFrontend = archInfo.frontend && Object.keys(archInfo.frontend).length > 0;
+    const hasBackend = archInfo.backend && Object.keys(archInfo.backend).length > 0;
+    const hasDatabase = archInfo.database && Object.keys(archInfo.database).length > 0;
+    
+    if (hasFrontend && hasBackend && hasDatabase) {
+        archInfo.type = 'full_stack';
+        archInfo.layers = ['Presentation', 'Business Logic', 'Data Access'];
+    } else if (hasBackend && hasDatabase && !hasFrontend) {
+        archInfo.type = 'api_only';
+        archInfo.layers = ['API', 'Business Logic', 'Data Access'];
+    } else if (hasFrontend && !hasBackend) {
+        archInfo.type = 'spa_only';
+        archInfo.layers = ['Presentation', 'Client Services'];
+    } else if (hasDatabase && !hasFrontend && !hasBackend) {
+        archInfo.type = 'database_only';
+        archInfo.layers = ['Database Schema'];
+    }
+    
+    return archInfo;
+}
+
+/**
+ * Extract frontend information
+ */
+function extractFrontendInfo(data) {
+    const frontend = {};
+    
+    // Check architecture data
+    if (data.architecture && data.architecture.frontend) {
+        Object.assign(frontend, data.architecture.frontend);
+    }
+    
+    // Check tech stack for frontend frameworks
+    if (data.techStack) {
+        const frontendTech = data.techStack.frontend || [];
+        if (frontendTech.length > 0) {
+            frontend.technologies = frontendTech;
+            frontend.framework = frontendTech[0]?.name || 'Unknown';
+        }
+    }
+    
+    // Extract component counts if available
+    if (data.codeOrganization && data.codeOrganization.components) {
+        const components = data.codeOrganization.components;
+        frontend.componentCount = components.length || 0;
+    }
+    
+    return frontend;
+}
+
+/**
+ * Extract backend information
+ */
+function extractBackendInfo(data) {
+    const backend = {};
+    
+    // Check architecture data
+    if (data.architecture && data.architecture.backend) {
+        Object.assign(backend, data.architecture.backend);
+    }
+    
+    // Check tech stack for backend frameworks
+    if (data.techStack) {
+        const backendTech = data.techStack.backend || [];
+        if (backendTech.length > 0) {
+            backend.technologies = backendTech;
+            backend.framework = backendTech[0]?.name || 'Unknown';
+        }
+    }
+    
+    // Extract API information if available
+    if (data.architecture && data.architecture.apis) {
+        backend.apis = data.architecture.apis;
+        backend.endpointCount = data.architecture.apis.length || 0;
+    }
+    
+    return backend;
+}
+
+/**
+ * Extract database information
+ */
+function extractDatabaseInfo(data) {
+    const database = {};
+    
+    // Check architecture data
+    if (data.architecture && data.architecture.database) {
+        Object.assign(database, data.architecture.database);
+    }
+    
+    // Check tech stack for database platforms
+    if (data.techStack) {
+        const dbTech = data.techStack.database || [];
+        if (dbTech.length > 0) {
+            database.technologies = dbTech;
+            database.platform = dbTech[0]?.name || 'Unknown';
+        }
+    }
+    
+    // Extract schema information if available
+    if (data.codeOrganization && data.codeOrganization.database) {
+        const dbInfo = data.codeOrganization.database;
+        database.tableCount = dbInfo.tables || 0;
+        database.procedureCount = dbInfo.procedures || 0;
+        database.viewCount = dbInfo.views || 0;
+    }
+    
+    return database;
+}
+
+/**
+ * Enrich dashboard data with architecture detection
+ * @param {Object} data - Raw dashboard data
+ * @returns {Object} - Enriched data with architecture info
+ */
+export function enrichDashboardData(data) {
+    if (!data) return data;
+    
+    // Add architecture detection
+    if (!data.architecture || !data.architecture.type) {
+        const archInfo = extractArchitectureInfo(data);
+        data.architecture = {
+            ...data.architecture,
+            ...archInfo
+        };
+    }
+    
+    return data;
+}
+
 // Export utility functions
 export default {
     loadDashboardData,
@@ -367,5 +512,7 @@ export default {
     exportToJson,
     exportToCsv,
     getAvailableSources,
-    isSourceAvailable
+    isSourceAvailable,
+    extractArchitectureInfo,
+    enrichDashboardData
 };

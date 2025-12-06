@@ -8,7 +8,9 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
-import { loadDashboardData, clearCache, exportToJson, exportToCsv } from './data-loader.js';
+import { loadDashboardData, clearCache, exportToJson, exportToCsv, enrichDashboardData } from './data-loader.js';
+import { initializeAdaptiveVisibility } from './adaptive-visibility.js';
+import { renderArchitecturePanels } from './components/architecture-panels.js';
 import { renderOverview } from './components/overview-tab.js';
 import { renderTechStack } from './components/tech-stack-tab.js';
 import { renderSecurity } from './components/security-tab.js';
@@ -166,11 +168,23 @@ async function loadData(source) {
     try {
         appState.loading = true;
         appState.data = await loadDashboardData(source);
+        
+        // Enrich data with architecture detection
+        appState.data = enrichDashboardData(appState.data);
+        
         appState.error = null;
         appState.loading = false;
         
         // Store data globally for component access (e.g., vulnerability details)
         window.currentDashboardData = appState.data;
+        
+        // Initialize adaptive visibility based on detected architecture
+        initializeAdaptiveVisibility(appState.data);
+        
+        // Render architecture panels if architecture tab is visible
+        if (appState.data.architecture) {
+            renderArchitecturePanels(appState.data.architecture);
+        }
         
         console.log('Data loaded successfully:', appState.data);
         
