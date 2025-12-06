@@ -14,6 +14,8 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, Optional, Any
 import uuid
+from src.learning.event_collector import get_global_collector
+from src.learning.event_taxonomy import LearningEvent, EventType
 
 
 class GitCheckpointOrchestrator:
@@ -107,6 +109,22 @@ class GitCheckpointOrchestrator:
                 text=True
             )
             commit_sha = sha_result.stdout.strip()
+            
+            # Emit CHECKPOINT_COMMITTED event
+            try:
+                event = LearningEvent(
+                    event_type=EventType.CHECKPOINT_COMMITTED,
+                    component="GitCheckpointOrchestrator",
+                    metadata={
+                        "checkpoint_id": checkpoint_id,
+                        "checkpoint_type": checkpoint_type,
+                        "commit_sha": commit_sha,
+                        "session_id": session_id
+                    }
+                )
+                get_global_collector().capture_event(event)
+            except Exception as e:
+                pass  # Don't fail checkpoint on learning event error
             
             return {
                 "success": True,

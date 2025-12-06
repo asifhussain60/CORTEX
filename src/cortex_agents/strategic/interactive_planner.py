@@ -27,11 +27,14 @@ try:
 except ImportError:
     PLAN_SYNC_AVAILABLE = False
 
+# Import learning system
 try:
-    from src.operations.modules.planning.plan_sync_manager import PlanSyncManager
-    PLAN_SYNC_AVAILABLE = True
+    from src.learning.event_collector import get_global_collector
+    from src.learning.event_taxonomy import LearningEvent, EventType
 except ImportError:
-    PLAN_SYNC_AVAILABLE = False
+    get_global_collector = None
+    LearningEvent = None
+    EventType = None
 
 
 class PlanningState(Enum):
@@ -239,6 +242,18 @@ class InteractivePlannerAgent(BaseAgent):
                 session = self._create_session(request.user_message, confidence)
                 self.active_sessions[session.session_id] = session
                 self.logger.info(f"Created new session {session.session_id}, confidence: {confidence:.2f}")
+                
+                # Emit INTERACTIVE_PLANNING_STARTED event
+                if get_global_collector and LearningEvent and EventType:
+                    try:
+                        event = LearningEvent(
+                            event_type=EventType.INTERACTIVE_PLANNING_STARTED,
+                            component="InteractivePlanner",
+                            metadata={"session_id": session.session_id, "confidence": confidence}
+                        )
+                        get_global_collector().capture_event(event)
+                    except Exception as e:
+                        self.logger.debug(f"Learning event capture failed: {e}")
             
             # Route based on confidence
             if session.confidence >= self.HIGH_CONFIDENCE_THRESHOLD:

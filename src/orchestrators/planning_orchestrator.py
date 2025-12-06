@@ -26,6 +26,8 @@ from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 from src.agents.security.threat_modeler_agent import ThreatModelerAgent
 from src.cortex_agents.base_agent import AgentRequest
+from src.learning.event_collector import get_global_collector
+from src.learning.event_taxonomy import LearningEvent, EventType
 
 logger = logging.getLogger(__name__)
 
@@ -1311,6 +1313,17 @@ class PlanningOrchestrator:
             old_path.unlink()
             
             logger.info(f"Approved plan: {plan_filename} (active → approved)")
+            
+            # Emit learning event
+            try:
+                event = LearningEvent(
+                    event_type=EventType.PLAN_APPROVED,
+                    component="PlanningOrchestrator",
+                    metadata={"plan_filename": plan_filename, "status_transition": "active → approved"}
+                )
+                get_global_collector().capture_event(event)
+            except Exception as e:
+                logger.debug(f"Learning event capture failed: {e}")
             
             try:
                 self.git_checkpoint.create_auto_checkpoint(
