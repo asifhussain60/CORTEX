@@ -29,6 +29,7 @@ import {
 } from './performance-utils.js';
 import { showLoading, hideLoading, showErrorToast, showSuccessToast } from './shared-utils.js';
 import { generateFullReport } from './export-utils.js';
+import { progressiveLoader } from './progressive-loader.js';
 
 // Application state
 const appState = {
@@ -229,7 +230,7 @@ async function loadData(source) {
 }
 
 /**
- * Render the current active tab (with lazy loading)
+ * Render the current active tab (with progressive loading and skeletons)
  */
 async function renderCurrentTab() {
     if (!appState.data) {
@@ -240,32 +241,45 @@ async function renderCurrentTab() {
     console.log(`Rendering tab: ${appState.currentTab}`);
     
     try {
-        // Use lazy rendering to only render active tab
+        // Show skeleton while rendering
+        const containerId = getTabContainerId(appState.currentTab);
+        const skeletonType = progressiveLoader.getSkeletonTypeForTab(appState.currentTab);
+        progressiveLoader.showSkeleton(containerId, skeletonType);
+        
+        // Small delay to show skeleton (smooth UX)
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Render tab content
+        let contentHtml;
         switch (appState.currentTab) {
             case 'executive':
-                await lazyRenderTab('executive', () => renderExecutiveSummary(appState.data), appState.data);
+                contentHtml = renderExecutiveSummary(appState.data);
                 break;
             case 'overview':
-                await lazyRenderTab('overview', () => renderOverview(appState.data), appState.data);
+                contentHtml = renderOverview(appState.data);
                 break;
             case 'tech-stack':
-                await lazyRenderTab('tech-stack', () => renderTechStack(appState.data), appState.data);
+                contentHtml = renderTechStack(appState.data);
                 break;
             case 'security':
-                await lazyRenderTab('security', () => renderSecurity(appState.data), appState.data);
+                contentHtml = renderSecurity(appState.data);
                 break;
             case 'architecture':
-                await lazyRenderTab('architecture', () => renderArchitecture(appState.data), appState.data);
+                contentHtml = renderArchitecture(appState.data);
                 break;
             case 'code-org':
-                await lazyRenderTab('code-org', () => renderCodeOrganization(appState.data), appState.data);
+                contentHtml = renderCodeOrganization(appState.data);
                 break;
             case 'vendors':
-                await lazyRenderTab('vendors', () => renderVendors(appState.data), appState.data);
+                contentHtml = renderVendors(appState.data);
                 break;
             default:
                 console.warn(`Unknown tab: ${appState.currentTab}`);
+                return;
         }
+        
+        // Hide skeleton and show content with smooth transition
+        await progressiveLoader.hideSkeleton(containerId, contentHtml, 300);
     } catch (error) {
         console.error(`Error rendering tab ${appState.currentTab}:`, error);
         showError(`Failed to render ${appState.currentTab}`, error.message);
@@ -372,6 +386,28 @@ export function getAppState() {
  */
 export function updateAppState(updates) {
     Object.assign(appState, updates);
+}
+
+/**
+ * Get container ID for tab
+ * @param {string} tabName - Tab name
+ * @returns {string} - Container element ID
+ */
+function getTabContainerId(tabName) {
+    // Map tab names to their container IDs
+    const containerMap = {
+        'executive': 'executive-content',
+        'overview': 'overview-content',
+        'tech-stack': 'tech-stack-content',
+        'security': 'security-content',
+        'architecture': 'architecture-content',
+        'code-org': 'code-org-content',
+        'vendors': 'vendors-content',
+        'dependencies': 'dependencies-content',
+        'team': 'team-content'
+    };
+    
+    return containerMap[tabName] || `${tabName}-content`;
 }
 
 // Initialize app when DOM is ready

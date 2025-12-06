@@ -1,21 +1,891 @@
 {
-  "overall_health_score": 85,
+  "overall_health_score": 89.7,
   "status": "healthy",
-  "last_scan": "2025-12-06T08:05:51.918059",
   "summary": {
-    "total_files": 10569,
-    "total_loc": 0,
-    "test_coverage": 0,
-    "critical_issues": 0,
-    "warnings": 0,
-    "maintainability_index": 85
+    "total_files": 4186,
+    "total_loc": 24984,
+    "total_functions": 0,
+    "total_classes": 0,
+    "average_complexity": 3.16,
+    "high_complexity_files": 0,
+    "code_smell_count": 13,
+    "maintainability_index": 85.0
   },
+  "complexity_distribution": {
+    "low": 12406,
+    "medium": 1716,
+    "high": 463,
+    "very_high": 74
+  },
+  "code_smells": [
+    {
+      "type": "long_file",
+      "file": "AdjustmentManager\\fusebox40.transformer.cfmx.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 829 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "CatalogManager\\fusebox40.transformer.cfmx.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 829 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "CommuterPaymentManager\\fusebox40.transformer.cfmx.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 829 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FileConfigurationManager\\fusebox40.transformer.cfmx.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 829 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FulfillmentManager\\dsp_agency_create_payment_req.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 900 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FulfillmentManager\\dsp_agency_create_po.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 914 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FulfillmentManager\\dsp_agency_distrib.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 772 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FulfillmentManager\\dsp_agency_receiving.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 883 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FulfillmentManager\\dsp_agency_reconcile.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 1022 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FulfillmentManager\\dsp_select_pass_tracking_rec_from.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 588 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FulfillmentManager\\dsp_select_pass_tracking_rec_to.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 514 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FulfillmentManager\\dsp_supp_receipt.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 503 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "FulfillmentManager\\index.cfm",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 620 lines (>500)"
+    }
+  ],
+  "file_metrics": {
+    "AdjustmentManager\\Application.cfm": {
+      "loc": 7,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "AdjustmentManager\\app_globals.cfm": {
+      "loc": 49,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "AdjustmentManager\\fusebox.xml.cfm": {
+      "loc": 72,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "AdjustmentManager\\fusebox40.loader.cfmx.cfm": {
+      "loc": 304,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "AdjustmentManager\\fusebox40.parser.cfmx.cfm": {
+      "loc": 256,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "AdjustmentManager\\fusebox40.runtime.cfmx.cfm": {
+      "loc": 176,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "AdjustmentManager\\fusebox40.transformer.cfmx.cfm": {
+      "loc": 749,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "AdjustmentManager\\index.cfm": {
+      "loc": 25,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CatalogManager\\Application.cfm": {
+      "loc": 8,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CatalogManager\\app_globals.cfm": {
+      "loc": 42,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CatalogManager\\fusebox.xml.cfm": {
+      "loc": 69,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CatalogManager\\fusebox40.loader.cfmx.cfm": {
+      "loc": 304,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CatalogManager\\fusebox40.parser.cfmx.cfm": {
+      "loc": 256,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CatalogManager\\fusebox40.runtime.cfmx.cfm": {
+      "loc": 176,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CatalogManager\\fusebox40.transformer.cfmx.cfm": {
+      "loc": 749,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CatalogManager\\index.cfm": {
+      "loc": 17,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Common\\pagelogger.cfm": {
+      "loc": 31,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CommuterPaymentManager\\Application.cfm": {
+      "loc": 7,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CommuterPaymentManager\\app_globals.cfm": {
+      "loc": 53,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CommuterPaymentManager\\fusebox.xml.cfm": {
+      "loc": 67,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CommuterPaymentManager\\fusebox40.loader.cfmx.cfm": {
+      "loc": 304,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CommuterPaymentManager\\fusebox40.parser.cfmx.cfm": {
+      "loc": 256,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CommuterPaymentManager\\fusebox40.runtime.cfmx.cfm": {
+      "loc": 176,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CommuterPaymentManager\\fusebox40.transformer.cfmx.cfm": {
+      "loc": 749,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "CommuterPaymentManager\\index.cfm": {
+      "loc": 17,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FileConfigurationManager\\Application.cfm": {
+      "loc": 7,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FileConfigurationManager\\app_globals.cfm": {
+      "loc": 51,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FileConfigurationManager\\fusebox.xml.cfm": {
+      "loc": 60,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FileConfigurationManager\\fusebox40.loader.cfmx.cfm": {
+      "loc": 304,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FileConfigurationManager\\fusebox40.parser.cfmx.cfm": {
+      "loc": 256,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FileConfigurationManager\\fusebox40.runtime.cfmx.cfm": {
+      "loc": 176,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FileConfigurationManager\\fusebox40.transformer.cfmx.cfm": {
+      "loc": 749,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FileConfigurationManager\\index.cfm": {
+      "loc": 17,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_add_supp_order_submit.cfm": {
+      "loc": 81,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_agency_confirm_po.cfm": {
+      "loc": 46,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_agency_create_po.cfm": {
+      "loc": 35,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_agency_create_po_show_passes_submit.cfm": {
+      "loc": 16,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_agency_distrib_submit.cfm": {
+      "loc": 25,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_agency_receiving.cfm": {
+      "loc": 36,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_agency_request_submit_all.cfm": {
+      "loc": 23,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_agency_request_submit_one.cfm": {
+      "loc": 23,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_apply_pass_calc_method_changes.cfm": {
+      "loc": 21,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_approve_payment_req_submit.cfm": {
+      "loc": 71,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_change_payment_detail.cfm": {
+      "loc": 66,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_clear_sort_cookie.cfm": {
+      "loc": 29,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_confirm_inventory_submit.cfm": {
+      "loc": 47,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_consolidate_pass_tracking.cfm": {
+      "loc": 24,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_create_payment_req_submit.cfm": {
+      "loc": 26,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_delete_pass_tracking_record.cfm": {
+      "loc": 23,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_discard_fulfillment.cfm": {
+      "loc": 47,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_discard_preview_fulfilllment.cfm": {
+      "loc": 48,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_discontinue_pass_tracking.cfm": {
+      "loc": 30,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_fulfillment2.cfm": {
+      "loc": 67,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_get_token.cfm": {
+      "loc": 50,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_manage_supp_payment.cfm": {
+      "loc": 30,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_note_manager.cfm": {
+      "loc": 45,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_plog_management.cfm": {
+      "loc": 72,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_recalculate_agency_payment_details.cfm": {
+      "loc": 20,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_reconcile_detail_submit.cfm": {
+      "loc": 25,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_reconcile_submit.cfm": {
+      "loc": 25,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_remove_agency_from_matrix.cfm": {
+      "loc": 20,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_reset_supp_payment_status.cfm": {
+      "loc": 45,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_review_payment_req_submit.cfm": {
+      "loc": 78,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_send_po.cfm": {
+      "loc": 39,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_session.cfm": {
+      "loc": 22,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_supp_distribute_submit.cfm": {
+      "loc": 26,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_supp_receipt_submit.cfm": {
+      "loc": 31,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_update_agency_tracking_status.cfm": {
+      "loc": 36,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\act_update_supp_payment_status.cfm": {
+      "loc": 49,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\Application.cfm": {
+      "loc": 77,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\createMenu.cfm": {
+      "loc": 125,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\createMenu2.cfm": {
+      "loc": 386,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_add_supp_order.cfm": {
+      "loc": 245,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_approve_payment_req.cfm": {
+      "loc": 297,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_confirm_po.cfm": {
+      "loc": 280,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_confirm_projected_inv.cfm": {
+      "loc": 215,
+      "functions": 0,
+      "classes": 0,
+      "comments": 8,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_create_payment_req.cfm": {
+      "loc": 809,
+      "functions": 0,
+      "classes": 0,
+      "comments": 8,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_create_po.cfm": {
+      "loc": 811,
+      "functions": 0,
+      "classes": 0,
+      "comments": 3,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_create_po_delete_passes.cfm": {
+      "loc": 111,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_create_po_show_passes.cfm": {
+      "loc": 165,
+      "functions": 0,
+      "classes": 0,
+      "comments": 1,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_distrib.cfm": {
+      "loc": 693,
+      "functions": 0,
+      "classes": 0,
+      "comments": 6,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_receiving.cfm": {
+      "loc": 781,
+      "functions": 0,
+      "classes": 0,
+      "comments": 4,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_reconcile.cfm": {
+      "loc": 929,
+      "functions": 0,
+      "classes": 0,
+      "comments": 16,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_reconcile_detail.cfm": {
+      "loc": 304,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_request.cfm": {
+      "loc": 341,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_review_payment_req.cfm": {
+      "loc": 413,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_send_po.cfm": {
+      "loc": 234,
+      "functions": 0,
+      "classes": 0,
+      "comments": 9,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_tracking.cfm": {
+      "loc": 175,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_tracking_main.cfm": {
+      "loc": 44,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_agency_tracking_summary.cfm": {
+      "loc": 407,
+      "functions": 0,
+      "classes": 0,
+      "comments": 3,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_app_error.cfm": {
+      "loc": 3,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_comp_page_display_controls.cfm": {
+      "loc": 290,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_discard_fulfillment.cfm": {
+      "loc": 56,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_display_error.cfm": {
+      "loc": 45,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_download_excel_file.cfm": {
+      "loc": 50,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_duplicate_catalog_passes.cfm": {
+      "loc": 139,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_fulfillment.cfm": {
+      "loc": 159,
+      "functions": 0,
+      "classes": 0,
+      "comments": 1,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_fulfillment2.cfm": {
+      "loc": 200,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_fulfillment_links.cfm": {
+      "loc": 46,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "FulfillmentManager\\dsp_header.cfm": {
+      "loc": 41,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    }
+  },
+  "hotspots": [
+    {
+      "file": "FulfillmentManager\\dsp_agency_reconcile.cfm",
+      "reason": "large_file",
+      "loc": 929,
+      "complexity": 0
+    },
+    {
+      "file": "FulfillmentManager\\dsp_agency_create_po.cfm",
+      "reason": "large_file",
+      "loc": 811,
+      "complexity": 0
+    },
+    {
+      "file": "FulfillmentManager\\dsp_agency_create_payment_req.cfm",
+      "reason": "large_file",
+      "loc": 809,
+      "complexity": 0
+    },
+    {
+      "file": "FulfillmentManager\\dsp_agency_receiving.cfm",
+      "reason": "large_file",
+      "loc": 781,
+      "complexity": 0
+    },
+    {
+      "file": "AdjustmentManager\\fusebox40.transformer.cfmx.cfm",
+      "reason": "large_file",
+      "loc": 749,
+      "complexity": 0
+    },
+    {
+      "file": "CatalogManager\\fusebox40.transformer.cfmx.cfm",
+      "reason": "large_file",
+      "loc": 749,
+      "complexity": 0
+    },
+    {
+      "file": "CommuterPaymentManager\\fusebox40.transformer.cfmx.cfm",
+      "reason": "large_file",
+      "loc": 749,
+      "complexity": 0
+    },
+    {
+      "file": "FileConfigurationManager\\fusebox40.transformer.cfmx.cfm",
+      "reason": "large_file",
+      "loc": 749,
+      "complexity": 0
+    },
+    {
+      "file": "FulfillmentManager\\dsp_agency_distrib.cfm",
+      "reason": "large_file",
+      "loc": 693,
+      "complexity": 0
+    },
+    {
+      "file": "FulfillmentManager\\index.cfm",
+      "reason": "large_file",
+      "loc": 578,
+      "complexity": 0
+    },
+    {
+      "file": "FulfillmentManager\\dsp_select_pass_tracking_rec_from.cfm",
+      "reason": "large_file",
+      "loc": 535,
+      "complexity": 0
+    }
+  ],
   "metrics": {
-    "code_quality_score": 85,
-    "security_score": 90,
-    "test_score": 75,
-    "documentation_score": 70
+    "code_quality_score": 85.0,
+    "complexity_score": 100,
+    "documentation_score": 0.0
   },
+  "last_scan": "2025-12-06T11:04:36.903453",
   "trends": {
     "health_trend": "stable",
     "velocity_trend": "stable",

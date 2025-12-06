@@ -145,28 +145,17 @@ class TeamMetricsCollector(BaseDataCollector):
         }
         
         try:
-            # Get lines added/removed
-            result = subprocess.run(
-                ["git", "log", "--author", author, "--pretty=tformat:", "--numstat"],
-                cwd=str(self.project_root),
-                capture_output=True,
-                text=True,
-                timeout=10
-            )
+            # DISABLED: --numstat on large repos causes 60+ second hangs per contributor
+            # Use lightweight commit-count-only approach instead
+            # Lines added/removed stats are too expensive for dashboard collection
             
-            if result.returncode == 0:
-                for line in result.stdout.strip().split('\n'):
-                    parts = line.split('\t')
-                    if len(parts) >= 2:
-                        try:
-                            added = int(parts[0]) if parts[0].isdigit() else 0
-                            removed = int(parts[1]) if parts[1].isdigit() else 0
-                            stats["lines_added"] += added
-                            stats["lines_removed"] += removed
-                            if added > 0 or removed > 0:
-                                stats["files_changed"] += 1
-                        except ValueError:
-                            continue
+            # Skip detailed file stats - too slow
+            stats["lines_added"] = 0
+            stats["lines_removed"] = 0
+            stats["files_changed"] = 0
+        
+        except Exception as e:
+            self.logger.debug(f"Error getting stats for {author}: {e}")
             
             # Get first commit date
             result = subprocess.run(

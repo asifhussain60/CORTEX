@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/architecture-panels.css">
+    <link rel="stylesheet" href="styles/skeleton-loader.css">
     
     <style>
         /* Glassmorphism Dark Mode Dashboard */
@@ -406,12 +407,7 @@
                 <label for="sourceSelect">Data Source:</label>
                 <select id="sourceSelect" onchange="handleSourceChange(this.value)">
                     <option value="mock">Mock Data (Demo)</option>
-                    <option value="cortex">CORTEX Live</option>
-                    <option value="luum-fresh">LUUM-FRESH</option>
-                    <option value="noor-canvas">NOOR CANVAS</option>
-                    <option value="alist">ALIST</option>
-                    <option value="ksessions">KSESSIONS</option>
-                    <option value="v5-webservices-prevalidationws">V5 PrevalidationWS</option>
+                    <!-- Repository options populated dynamically from registry.json -->
                 </select>
             </div>
             

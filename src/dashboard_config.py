@@ -102,7 +102,7 @@ class DashboardConfig:
     def _load_config(self) -> None:
         """Load configuration from YAML file"""
         try:
-            # Determine config file path (src/dashboard_config.py -> CORTEX root is 1 level up)
+            # Determine config file path (src/dashboard_config.py -> CORTEX root)
             cortex_root = Path(__file__).parent.parent
             self._config_path = cortex_root / "cortex-brain" / "dashboards" / "config" / "dashboard-config.yaml"
 
@@ -176,7 +176,7 @@ class DashboardConfig:
         Returns:
             Absolute Path object
         """
-        cortex_root = Path(__file__).parent.parent.parent.parent
+        cortex_root = Path(__file__).parent.parent
         brain_path = cortex_root / "cortex-brain"
 
         relative_path = self._config.get('paths', {}).get(key, '')

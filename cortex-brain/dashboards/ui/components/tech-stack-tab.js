@@ -228,7 +228,7 @@ function renderTechCard(tech) {
                 transition: all 0.3s ease;
                 cursor: pointer;
             "
-            onmouseover="showTechTooltip(event, ${JSON.stringify(tech.name).replace(/"/g, '&quot;')}, ${JSON.stringify(tech.version || 'N/A').replace(/"/g, '&quot;')}, ${JSON.stringify(tech.status).replace(/"/g, '&quot;')}, ${tech.cve_count || 0}, ${JSON.stringify(explanation).replace(/"/g, '&quot;')}, this)"
+            onmouseover="showTechTooltip(event, ${JSON.stringify(tech.name).replace(/"/g, '&quot;')}, ${JSON.stringify(tech.version || 'N/A').replace(/"/g, '&quot;')}, ${JSON.stringify(tech.status || 'current').replace(/"/g, '&quot;')}, ${tech.cve_count || 0}, ${JSON.stringify(explanation).replace(/"/g, '&quot;')}, this)"
             onmouseout="hideTechTooltip(this)"
         >
             <!-- Header -->

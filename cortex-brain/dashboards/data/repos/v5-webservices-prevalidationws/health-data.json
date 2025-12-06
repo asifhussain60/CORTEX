@@ -1,30 +1,436 @@
 {
-  "overall_health_score": 49,
-  "status": "needs attention",
-  "last_scan": "2025-12-05T09:42:37.920619",
+  "overall_health_score": 94.0,
+  "status": "healthy",
   "summary": {
-    "total_files": 96,
-    "total_loc": 5829,
-    "test_coverage": 0,
-    "critical_issues": 0,
-    "warnings": 0,
-    "maintainability_index": 49
+    "total_files": 48,
+    "total_loc": 7603,
+    "total_functions": 0,
+    "total_classes": 0,
+    "average_complexity": 0,
+    "high_complexity_files": 0,
+    "code_smell_count": 6,
+    "maintainability_index": 85.0
   },
+  "complexity_distribution": {
+    "low": 0,
+    "medium": 0,
+    "high": 0,
+    "very_high": 0
+  },
+  "code_smells": [
+    {
+      "type": "excessive_comments",
+      "file": "Business\\PrevalidationData.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "22 commented lines"
+    },
+    {
+      "type": "long_file",
+      "file": "Business\\PSFUtilities.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 646 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Business\\PSFValidator.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 1328 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "PSFPreValidationTests\\PSFUtilitiesTests.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 504 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "PSFPreValidationTests\\PsfValidatorTests.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 934 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "WebServiceAppl\\PSFPreValidate.asmx.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 613 lines (>500)"
+    }
+  ],
+  "file_metrics": {
+    "Business\\AppConstants.cs": {
+      "loc": 120,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\ApplicationConfiguration.cs": {
+      "loc": 149,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "Business\\AssemblyInfo.cs": {
+      "loc": 54,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\EnumeratorExtensions.cs": {
+      "loc": 52,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\Extensions.cs": {
+      "loc": 48,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\FileSettings.cs": {
+      "loc": 106,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\NonSeekableStreamLinesEnumerator.cs": {
+      "loc": 58,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "Business\\PrevalidationData.cs": {
+      "loc": 278,
+      "functions": 0,
+      "classes": 0,
+      "comments": 22,
+      "max_complexity": 0
+    },
+    "Business\\PSFPrevalResult.cs": {
+      "loc": 44,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "Business\\PSFUtilities.cs": {
+      "loc": 567,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\PSFValidator.cs": {
+      "loc": 1185,
+      "functions": 0,
+      "classes": 0,
+      "comments": 8,
+      "max_complexity": 0
+    },
+    "Business\\PsfValidatorRepository.cs": {
+      "loc": 85,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\ServiceResolver.cs": {
+      "loc": 20,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\ValidationScheme.cs": {
+      "loc": 40,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "PSFPreValidationTests\\FileSettingsTests.cs": {
+      "loc": 90,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "PSFPreValidationTests\\OtherTests.cs": {
+      "loc": 37,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "PSFPreValidationTests\\PSFUtilitiesTests.cs": {
+      "loc": 455,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "PSFPreValidationTests\\PsfValidatorTests.cs": {
+      "loc": 796,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Global.asax.cs": {
+      "loc": 149,
+      "functions": 0,
+      "classes": 0,
+      "comments": 4,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\PSFPreValidate.asmx.cs": {
+      "loc": 539,
+      "functions": 0,
+      "classes": 0,
+      "comments": 4,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\App_Start\\SwaggerConfig.cs": {
+      "loc": 258,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\App_Start\\WebApiConfig.cs": {
+      "loc": 24,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\AutofacModules\\PsfPrevalidationAutofacModule.cs": {
+      "loc": 32,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Controllers\\ApplicationConfigInvalidateCacheController.cs": {
+      "loc": 45,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Controllers\\DataObjects.cs": {
+      "loc": 155,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Controllers\\PsfPreValidationControllerV2.cs": {
+      "loc": 180,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Filters\\ApiJwtBearerAuthorizationAttribute.cs": {
+      "loc": 126,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Filters\\GlobalExceptionFilterAttribute.cs": {
+      "loc": 48,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Filters\\InstrumentCallAttribute.cs": {
+      "loc": 50,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Filters\\LegacyBasicAuthenticationAttribute.cs": {
+      "loc": 97,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Old_App_Code\\CustTokenManager.cs": {
+      "loc": 40,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Properties\\AssemblyInfo.cs": {
+      "loc": 31,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Repositories\\JwtBearerTokenKeyProvider.cs": {
+      "loc": 15,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Repositories\\PsfTempFileProvider.cs": {
+      "loc": 206,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebServiceAppl\\Repositories\\TempFileWatcherProvider.cs": {
+      "loc": 162,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebService\\App_Code\\AssemblyInfo.cs": {
+      "loc": 58,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebService\\App_Code\\CustTokenManager.cs": {
+      "loc": 31,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "WebService\\App_Code\\Global.asax.cs": {
+      "loc": 58,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "WebService\\App_Code\\PSFPreValidate.asmx.cs": {
+      "loc": 408,
+      "functions": 0,
+      "classes": 0,
+      "comments": 4,
+      "max_complexity": 0
+    },
+    "PSFPreValidationTests\\Controller\\PsfPreValidationV2ControllerTests.cs": {
+      "loc": 213,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "PSFPreValidationTests\\Properties\\AssemblyInfo.cs": {
+      "loc": 16,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\AutofacModules\\EncryptionAutofacModule.cs": {
+      "loc": 18,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\AutofacModules\\LoggingAutofacModule.cs": {
+      "loc": 29,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\AutofacModules\\ValidationAutofacModule.cs": {
+      "loc": 13,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\EncryptionProviders\\AESFileEncryptionProvider.cs": {
+      "loc": 276,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "Business\\EncryptionProviders\\IFileEncryptionProvider.cs": {
+      "loc": 10,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Business\\EncryptionProviders\\PgpFileEncryptionProvider.cs": {
+      "loc": 109,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "Business\\EncryptionProviders\\PlainTextEncryptionProvider.cs": {
+      "loc": 23,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    }
+  },
+  "hotspots": [
+    {
+      "file": "Business\\PSFValidator.cs",
+      "reason": "large_file",
+      "loc": 1185,
+      "complexity": 0
+    },
+    {
+      "file": "PSFPreValidationTests\\PsfValidatorTests.cs",
+      "reason": "large_file",
+      "loc": 796,
+      "complexity": 0
+    },
+    {
+      "file": "Business\\PSFUtilities.cs",
+      "reason": "large_file",
+      "loc": 567,
+      "complexity": 0
+    },
+    {
+      "file": "WebServiceAppl\\PSFPreValidate.asmx.cs",
+      "reason": "large_file",
+      "loc": 539,
+      "complexity": 0
+    }
+  ],
   "metrics": {
-    "code_quality_score": 50,
-    "security_score": 14,
-    "test_score": 0,
-    "documentation_score": 50
+    "code_quality_score": 85.0,
+    "complexity_score": 100,
+    "documentation_score": 75.0
   },
-  "component_scores": {
-    "security": 14,
-    "architecture": 76.0,
-    "code_quality": 50.0,
-    "team_health": 50.0,
-    "tech_stack": 70.0
-  },
-  "health_status": "Needs Attention",
-  "last_updated": "2025-12-05T09:42:37.920640",
+  "last_scan": "2025-12-06T11:06:39.746676",
   "trends": {
     "health_trend": "stable",
     "velocity_trend": "stable",

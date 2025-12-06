@@ -27,7 +27,6 @@ const DATA_FILES = [
     'security.json',
     'architecture.json',
     'code-organization.json',
-    'team-metrics.json',
     'vendors.json'
 ];
 
@@ -51,11 +50,34 @@ async function loadRepositoryRegistry() {
             DATA_SOURCES[repo.id] = `/data/repos/${repo.id}/`;
         });
         
+        // Populate dropdown
+        populateSourceDropdown(registry);
+        
         return registry;
     } catch (error) {
         console.error('Failed to load registry:', error);
         return null;
     }
+}
+
+/**
+ * Populate source dropdown with repositories from registry
+ */
+function populateSourceDropdown(registry) {
+    const dropdown = document.getElementById('sourceSelect');
+    if (!dropdown || !registry || !registry.repositories) {
+        return;
+    }
+    
+    // Keep mock option, add repositories
+    registry.repositories.forEach(repo => {
+        const option = document.createElement('option');
+        option.value = repo.id;  // Use lowercase ID for data loading
+        option.textContent = repo.name;  // Display name for user
+        dropdown.appendChild(option);
+    });
+    
+    console.log(`Populated dropdown with ${registry.repositories.length} repositories`);
 }
 
 /**
@@ -524,12 +546,19 @@ function extractDatabaseInfo(data) {
 }
 
 /**
- * Enrich dashboard data with architecture detection
+ * Enrich dashboard data with architecture detection and normalize data structure
  * @param {Object} data - Raw dashboard data
- * @returns {Object} - Enriched data with architecture info
+ * @returns {Object} - Enriched data with architecture info and normalized structure
  */
 export function enrichDashboardData(data) {
     if (!data) return data;
+    
+    // Normalize health data structure (collector uses overall_health_score, UI expects overall_score)
+    if (data.healthData) {
+        if (data.healthData.overall_health_score !== undefined && data.healthData.overall_score === undefined) {
+            data.healthData.overall_score = data.healthData.overall_health_score;
+        }
+    }
     
     // Add architecture detection
     if (!data.architecture || !data.architecture.type) {

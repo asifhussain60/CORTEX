@@ -282,16 +282,17 @@ class VendorDetector(BaseDataCollector):
         return result
     
     def _check_config_files(self, config_keys: List[str]) -> Dict[str, Any]:
-        """Check for configuration in YAML/JSON files."""
+        """Check for configuration in .NET config files only (web.config, app.config)."""
         result = {"found": False, "location": None}
         
-        config_files = [
-            "config.json", "config.yaml", "config.yml",
-            "settings.json", "settings.yaml",
-            "app.config.json", "appsettings.json"
-        ]
+        # Only check .NET config files (common for vendor configuration)
+        config_files = ["web.config", "app.config", "Web.config", "App.config"]
         
         for config_file in config_files:
+            # Check existence first to avoid warning spam
+            if not self._file_exists(config_file):
+                continue
+                
             content = self._read_file(config_file)
             if content:
                 for key in config_keys:

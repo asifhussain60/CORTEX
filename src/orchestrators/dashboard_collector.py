@@ -58,152 +58,108 @@ class DashboardDataCollector:
         repos_path = self.config.get_path('repos')
         self.output_dir = repos_path / self.output_name
 
+        print(f"\n📂 Repository: {self.repo_path.name}")
+        print(f"📍 Path: {self.repo_path}")
+        print(f"💾 Output: {self.output_dir}")
+        print("")
         logger.info(f"Collecting data for: {self.repo_path}")
         logger.info(f"Output directory: {self.output_dir}")
 
     def collect_health_data(self) -> Dict[str, Any]:
-        """Collect overall health metrics with deep analysis."""
+        """Collect overall health metrics with deep analysis ONLY."""
+        print("🏥 Collecting health data...")
         logger.info("Collecting health data with deep analysis...")
+        import time
+        start = time.time()
 
-        try:
-            from src.orchestrators.enhanced_collectors import HealthDataCollector
-            collector = HealthDataCollector(self.repo_path)
-            data = collector.collect()
-            data["last_scan"] = datetime.now().isoformat()
-            data["trends"] = {
-                "health_trend": "stable",
-                "velocity_trend": "stable",
-                "quality_trend": "stable"
-            }
-            return data
-        except Exception as e:
-            logger.error(f"Enhanced health collection failed, using fallback: {e}")
-            # Fallback to basic implementation
-            return {
-                "overall_health_score": 85,
-                "status": "healthy",
-                "last_scan": datetime.now().isoformat(),
-                "summary": {
-                    "total_files": self._count_files(),
-                    "total_loc": 0,
-                    "maintainability_index": 85
-                },
-                "error": str(e)
-            }
+        from src.orchestrators.enhanced_collectors import HealthDataCollector
+        collector = HealthDataCollector(self.repo_path)
+        data = collector.collect()
+        data["last_scan"] = datetime.now().isoformat()
+        data["trends"] = {
+            "health_trend": "stable",
+            "velocity_trend": "stable",
+            "quality_trend": "stable"
+        }
+        
+        elapsed = time.time() - start
+        print(f"   ✓ Health data collected in {elapsed:.1f}s")
+        return data
 
     def collect_tech_stack(self) -> Dict[str, Any]:
-        """Collect technology stack information with deep analysis."""
-        logger.info("Collecting tech stack data with deep analysis...")
+        """Collect technology stack information with deep analysis ONLY."""
+        print("🔧 Collecting tech stack...")
+        logger.info("Collecting tech stack with deep analysis...")
+        import time
+        start = time.time()
 
-        try:
-            from src.orchestrators.enhanced_collectors import TechStackCollector
-            collector = TechStackCollector(self.repo_path)
-            return collector.collect()
-        except Exception as e:
-            logger.error(f"Enhanced tech stack collection failed, using fallback: {e}")
-            # Fallback to basic implementation
-            languages = self._detect_languages()
-            frameworks = self._detect_frameworks()
-            return {
-                "frontend": frameworks.get('frontend', []),
-                "backend": frameworks.get('backend', []),
-                "databases": frameworks.get('databases', []),
-                "testing": frameworks.get('testing', []),
-                "infrastructure": frameworks.get('infrastructure', []),
-                "languages": languages,
-                "summary": {
-                    "primary_language": languages[0]['name'] if languages else "Unknown",
-                    "total_frameworks": sum(len(v) for v in frameworks.values()),
-                    "modernization_score": 75
-                },
-                "error": str(e)
-            }
+        from src.orchestrators.enhanced_collectors import TechStackCollector
+        collector = TechStackCollector(self.repo_path)
+        data = collector.collect()
+        
+        elapsed = time.time() - start
+        print(f"   ✓ Tech stack collected in {elapsed:.1f}s")
+        return data
 
     def collect_architecture(self) -> Dict[str, Any]:
-        """Collect architecture information."""
+        """Collect architecture information with deep analysis ONLY."""
+        print("🏗️  Collecting architecture...")
         logger.info("Collecting architecture data...")
+        import time
+        start = time.time()
 
-        return {
-            "style": "n-tier",
-            "tiers": [],
-            "components": [],
-            "dependencies": [],
-            "patterns": [],
-            "summary": {
-                "architecture_score": 80,
-                "modularity_score": 75,
-                "coupling": "moderate"
-            }
-        }
+        from src.dashboard.data.architecture_collector import ArchitectureCollector
+        collector = ArchitectureCollector(self.repo_path)
+        data = collector.collect()
+        
+        elapsed = time.time() - start
+        print(f"   ✓ Architecture collected in {elapsed:.1f}s")
+        return data
 
     def collect_security(self) -> Dict[str, Any]:
-        """Collect security analysis."""
+        """Collect security analysis with deep analysis ONLY."""
+        print("🔒 Collecting security data...")
         logger.info("Collecting security data...")
+        import time
+        start = time.time()
 
-        return {
-            "overall_score": 90,
-            "vulnerabilities": {
-                "critical": 0,
-                "high": 0,
-                "medium": 0,
-                "low": 0
-            },
-            "security_practices": [],
-            "recommendations": [],
-            "scan_date": datetime.now().isoformat()
-        }
+        from src.dashboard.data.security_collector import SecurityCollector
+        collector = SecurityCollector(self.repo_path)
+        data = collector.collect()
+        
+        elapsed = time.time() - start
+        print(f"   ✓ Security data collected in {elapsed:.1f}s")
+        return data
 
     def collect_code_organization(self) -> Dict[str, Any]:
-        """Collect code organization metrics."""
-        logger.info("Collecting code organization data...")
+        """Collect code organization metrics with deep analysis ONLY."""
+        print("📋 Collecting code organization...")
+        logger.info("Collecting code organization with deep analysis...")
+        import time
+        start = time.time()
 
-        return {
-            "hotspots": [],
-            "duplications": [],
-            "complexity": {
-                "average_cyclomatic": 5.2,
-                "average_cognitive": 3.8,
-                "high_complexity_files": []
-            },
-            "summary": {
-                "total_functions": 0,
-                "average_function_length": 15,
-                "code_smell_count": 0
-            }
-        }
-
-    def collect_team_metrics(self) -> Dict[str, Any]:
-        """Collect team activity metrics."""
-        logger.info("Collecting team metrics data...")
-
-        return {
-            "contributors": [],
-            "activity": {
-                "commits_last_30_days": 0,
-                "active_contributors": 0,
-                "average_commit_size": 0
-            },
-            "summary": {
-                "team_size": 0,
-                "velocity": "N/A",
-                "collaboration_score": 0
-            }
-        }
+        from src.dashboard.data.code_org_collector import CodeOrganizationCollector
+        collector = CodeOrganizationCollector(self.repo_path)
+        data = collector.collect()
+        
+        elapsed = time.time() - start
+        print(f"   ✓ Code organization collected in {elapsed:.1f}s")
+        return data
 
     def collect_vendors(self) -> Dict[str, Any]:
-        """Collect vendor dependency information."""
-        logger.info("Collecting vendor data...")
+        """Collect vendor/dependency information with deep analysis ONLY."""
+        print("📦 Collecting vendor data...")
+        logger.info("Collecting vendor data with deep analysis...")
+        import time
+        start = time.time()
 
-        return {
-            "vendors": [],
-            "packages": [],
-            "licenses": [],
-            "summary": {
-                "total_packages": 0,
-                "outdated_packages": 0,
-                "security_advisories": 0
-            }
-        }
+        from src.dashboard.data.vendor_collector import VendorCollector
+        collector = VendorCollector(self.repo_path)
+        data = collector.collect()
+        
+        elapsed = time.time() - start
+        print(f"   ✓ Vendor data collected in {elapsed:.1f}s")
+        return data
 
     def collect_all(self) -> Dict[str, Dict[str, Any]]:
         """
@@ -220,24 +176,31 @@ class DashboardDataCollector:
             'architecture': self.collect_architecture,
             'security': self.collect_security,
             'code-organization': self.collect_code_organization,
-            'team-metrics': self.collect_team_metrics,
             'vendors': self.collect_vendors
         }
 
         results = {}
 
         # Execute collectors in parallel
+        print("⚡ Running 7 collectors in parallel (max 4 concurrent)...\n")
+        completed = 0
+        total = len(collectors)
+        
         with ThreadPoolExecutor(max_workers=4) as executor:
             futures = {executor.submit(func): name for name, func in collectors.items()}
 
             for future in as_completed(futures):
                 name = futures[future]
+                completed += 1
                 try:
                     results[name] = future.result()
                     logger.info(f"✓ Collected {name}")
                 except Exception as e:
+                    print(f"   ✗ Failed: {name} - {e}")
                     logger.error(f"✗ Failed to collect {name}: {e}")
                     results[name] = {"error": str(e)}
+        
+        print(f"\n✅ Completed {completed}/{total} collectors")
 
         # Add metadata
         results['metadata'] = {
@@ -249,7 +212,79 @@ class DashboardDataCollector:
         }
 
         logger.info("Data collection complete!")
+        
+        # CRITICAL: Run data consolidation and validation
+        print("\n🔍 Running data consolidation and validation...")
+        logger.info("🔍 Running data consolidation and validation...")
+        import time
+        start = time.time()
+        results = self._consolidate_data(results)
+        elapsed = time.time() - start
+        print(f"✅ Data consolidation complete in {elapsed:.1f}s")
+        logger.info("✅ Data consolidation complete")
+        
         return results
+    
+    def _consolidate_data(self, results: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+        """
+        Consolidate all collected data to ensure narrative consistency.
+        All metrics must tell the same story - no contradictions.
+        
+        Args:
+            results: Raw collected data
+            
+        Returns:
+            Consolidated data with narrative analysis
+        """
+        try:
+            from src.dashboard.data.narrative_consolidator import consolidate_dashboard_data
+            
+            # Prepare data in format expected by consolidator
+            all_data = {
+                'healthData': results.get('health-data', {}),
+                'security': results.get('security', {}),
+                'techStack': results.get('tech-stack', {}),
+                'architecture': results.get('architecture', {}),
+                'codeOrganization': results.get('code-organization', {}),
+                'vendors': results.get('vendors', {})
+            }
+            
+            # Run consolidation
+            consolidated = consolidate_dashboard_data(str(self.repo_path), all_data)
+            
+            # Extract narrative analysis for logging
+            narrative = consolidated.get('narrative_analysis', {})
+            holistic_score = narrative.get('holistic_score', 0)
+            theme = narrative.get('dominant_theme', 'unknown')
+            consistency = narrative.get('narrative_consistency', 0)
+            contradictions = narrative.get('contradictions', [])
+            
+            logger.info(f"  📊 Holistic Score: {holistic_score}/100")
+            logger.info(f"  📖 Narrative Theme: {theme}")
+            logger.info(f"  ✓ Consistency: {consistency}%")
+            
+            if contradictions:
+                logger.warning(f"  ⚠️  Found {len(contradictions)} contradictions:")
+                for issue in contradictions[:3]:  # Show top 3
+                    logger.warning(f"     - [{issue['severity'].upper()}] {issue['description']}")
+            
+            # Map back to original structure
+            results['health-data'] = consolidated.get('healthData', {})
+            results['security'] = consolidated.get('security', {})
+            results['tech-stack'] = consolidated.get('techStack', {})
+            results['architecture'] = consolidated.get('architecture', {})
+            results['code-organization'] = consolidated.get('codeOrganization', {})
+            results['vendors'] = consolidated.get('vendors', {})
+            
+            # Add narrative analysis as separate file
+            results['narrative-analysis'] = narrative
+            
+            return results
+            
+        except Exception as e:
+            logger.error(f"Data consolidation failed: {e}")
+            logger.warning("Continuing with unconsolidated data")
+            return results
 
     def save_results(self, results: Dict[str, Dict[str, Any]]) -> bool:
         """
@@ -361,10 +396,77 @@ class DashboardDataCollector:
         try:
             version_file = Path(__file__).parent.parent.parent / 'VERSION'
             if version_file.exists():
-                return version_file.read_text().strip().split()[0]
+                return version_file.read_text().strip()
         except Exception:
             pass
         return "unknown"
+    
+    def _consolidate_data(self, results: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Consolidate and validate collected data.
+        
+        This critical step:
+        - Validates each collector's output
+        - Cross-validates metrics for consistency
+        - Detects anomalies and contradictions
+        - Triggers specialized deep scans if needed
+        - Calculates accurate holistic scores
+        - Generates prioritized recommendations
+        
+        Args:
+            results: Raw collected data from all collectors
+            
+        Returns:
+            Consolidated data with validation, scoring, and recommendations
+        """
+        from src.dashboard.consolidation import DataConsolidator
+        
+        # Prepare data for consolidator
+        consolidated_input = {
+            'health_data': results.get('health-data', {}),
+            'tech_stack': results.get('tech-stack', {}),
+            'security': results.get('security', {}),
+            'architecture': results.get('architecture', {}),
+            'code_organization': results.get('code-organization', {}),
+            'vendors': results.get('vendors', {})
+        }
+        
+        # Run consolidation
+        consolidator = DataConsolidator(str(self.repo_path))
+        consolidated_data = consolidator.consolidate(consolidated_input)
+        
+        # Extract consolidation results
+        consolidation = consolidated_data.get('consolidation', {})
+        holistic_score = consolidation.get('holistic_score', {})
+        
+        # Update health data with accurate holistic score
+        if 'health-data' in results:
+            results['health-data']['overall_health_score'] = holistic_score.get('overall_health', 0)
+            results['health-data']['score_confidence'] = holistic_score.get('confidence', 1.0)
+            results['health-data']['consolidation_applied'] = True
+        
+        # Add consolidation metadata
+        results['consolidation'] = consolidation
+        
+        # Log key findings
+        validation_issues = consolidation.get('validation_issues', [])
+        recommendations = consolidation.get('recommendations', [])
+        
+        logger.info(f"  📊 Holistic Score: {holistic_score.get('overall_health', 0):.1f}")
+        logger.info(f"  🔍 Validation Issues: {len(validation_issues)}")
+        logger.info(f"  💡 Recommendations: {len(recommendations)}")
+        
+        if validation_issues:
+            critical_issues = [i for i in validation_issues if i['severity'] == 'critical']
+            if critical_issues:
+                logger.warning(f"  ⚠️  {len(critical_issues)} critical data quality issues detected")
+        
+        if recommendations:
+            critical_recs = [r for r in recommendations if r['priority'] == 'critical']
+            if critical_recs:
+                logger.warning(f"  🚨 {len(critical_recs)} critical recommendations generated")
+        
+        return results
 
 
 def main():
@@ -395,7 +497,7 @@ def main():
         format='%(message)s'
     )
 
-    print("🚀 CORTEX Dashboard Data Collector\n")
+    print("CORTEX Dashboard Data Collector\n")
 
     # Validate repository path
     repo_path = Path(args.path)

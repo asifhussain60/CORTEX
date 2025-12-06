@@ -266,6 +266,9 @@ class CodeOrganizationCollector(BaseDataCollector):
             
             return max(complexity, 1)
             
+        except PermissionError:
+            # Skip files/directories with permission issues (symlinks, restricted dirs)
+            return 1
         except Exception as e:
             self.logger.debug(f"Error calculating complexity for {file_path}: {e}")
             return 1

@@ -50,15 +50,13 @@ class ParallelCollectorOrchestrator:
             from dashboard.data.architecture_collector import ArchitectureCollector
             from dashboard.data.code_org_collector import CodeOrganizationCollector
             from dashboard.data.vendor_detector import VendorDetector
-            from dashboard.data.team_metrics_collector import TeamMetricsCollector
             
             self.collectors = {
                 "tech-stack": TechStackCollector(self.project_path),
-                "security": SecurityCollectorOptimized(self.project_path),
+                "security": SecurityCollector(self.project_path),
                 "architecture": ArchitectureCollector(self.project_path),
                 "code-organization": CodeOrganizationCollector(self.project_path),
-                "team-metrics": TeamMetricsCollector(self.project_path),
-                "vendors": VendorDetector(self.project_path)
+                "vendors": VendorCollector(self.project_path)
             }
             
             logger.info(f"Initialized {len(self.collectors)} collectors for parallel execution")
@@ -184,12 +182,6 @@ class ParallelCollectorOrchestrator:
                 "hotspots": [],
                 "file_types": {},
                 "directories": 0
-            },
-            "team-metrics": {
-                "total_commits": 0,
-                "contributor_count": 0,
-                "last_commit_date": "N/A",
-                "active_contributors": []
             },
             "vendors": {
                 "vendors": [],

@@ -257,9 +257,19 @@ class DashboardServer:
                     "url": None
                 }
             
-            # Create handler with directory parameter
+            # Serve from ui/ subdirectory (where index.html is located)
+            ui_dir = self.dashboard_dir / "ui"
+            if not ui_dir.exists():
+                return {
+                    "success": False,
+                    "message": f"Dashboard UI directory not found: {ui_dir}",
+                    "port": None,
+                    "url": None
+                }
+            
+            # Create handler with ui directory parameter
             import functools
-            handler = functools.partial(CORSHTTPRequestHandler, directory=str(self.dashboard_dir))
+            handler = functools.partial(CORSHTTPRequestHandler, directory=str(ui_dir))
             
             # Create server
             self.server = socketserver.TCPServer(("", self.port), handler)
@@ -274,9 +284,8 @@ class DashboardServer:
             self.server_thread.start()
             self._running = True
             
-            # Construct dashboard URL (index.html is in ui/ subdirectory)
-            # Server is running from dashboards/ directory, so path is relative
-            url = f"http://localhost:{self.port}/ui/index.html?source={resolved_source}"
+            # Construct dashboard URL (server serves from ui/, so index.html is at root)
+            url = f"http://localhost:{self.port}/index.html?source={resolved_source}"
             
             # Wait briefly for server to start
             time.sleep(0.5)

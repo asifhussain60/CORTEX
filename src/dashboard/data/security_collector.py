@@ -84,8 +84,11 @@ class SecurityCollector(BaseDataCollector):
             vuln_findings, hardcoded_secrets, config_issues, dependency_vulns
         )
         
+        # Convert list to dict for overall score calculation
+        categories_dict = {cat["name"]: cat for cat in categories} if isinstance(categories, list) else categories
+        
         # Calculate overall score
-        overall_score = self._calculate_overall_score(categories, vuln_data)
+        overall_score = self._calculate_overall_score(categories_dict, vuln_data)
         
         security_data = {
             "overall_score": overall_score,
@@ -152,7 +155,7 @@ class SecurityCollector(BaseDataCollector):
         return findings
     
     def _scan_file_for_sql_injection(self, cs_file: Path) -> List[Dict[str, Any]]:
-        """Scan a single file for SQL injection."""
+        """Scan a single file for SQL injection with comprehensive pattern matching."""
         findings = []
         import re
         
@@ -161,28 +164,67 @@ class SecurityCollector(BaseDataCollector):
             lines = content.split('\n')
             
             for i, line in enumerate(lines, 1):
-                # Check for string concatenation in SQL queries
-                if re.search(r'(SqlCommand|OracleCommand|DbCommand).*?".*?\+', line, re.IGNORECASE):
+                line_lower = line.lower().strip()
+                
+                # Pattern 1: SQL keywords with string concatenation (inline SQL building)
+                if re.search(r'(select|insert|update|delete|from|where).*?["\'].*?\+', line, re.IGNORECASE):
+                    if '"' in line or "'" in line:  # Must have SQL string
+                        findings.append({
+                            "type": "SQL Injection",
+                            "severity": "high",
+                            "file": str(cs_file.relative_to(self.project_root)),
+                            "line": i,
+                            "description": "Inline SQL with string concatenation detected",
+                            "code_snippet": line.strip()[:100],
+                            "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+                        })
+                
+                # Pattern 2: String interpolation in SQL ($"SELECT...")
+                if re.search(r'\$".*?(select|insert|update|delete|from|where)', line, re.IGNORECASE):
                     findings.append({
                         "type": "SQL Injection",
                         "severity": "high",
                         "file": str(cs_file.relative_to(self.project_root)),
                         "line": i,
-                        "description": "Potential SQL injection via string concatenation",
+                        "description": "SQL query using string interpolation - potential injection",
+                        "code_snippet": line.strip()[:100],
+                        "recommendation": "Replace string interpolation with parameterized queries"
+                    })
+                
+                # Pattern 3: SqlCommand/OracleCommand with concatenation
+                if re.search(r'(SqlCommand|OracleCommand|DbCommand).*?["\'].*?\+', line, re.IGNORECASE):
+                    findings.append({
+                        "type": "SQL Injection",
+                        "severity": "critical",
+                        "file": str(cs_file.relative_to(self.project_root)),
+                        "line": i,
+                        "description": "SQL command created with string concatenation",
                         "code_snippet": line.strip()[:100],
                         "recommendation": "Use parameterized queries instead"
                     })
                 
-                # Check for ExecuteReader/ExecuteNonQuery with concatenated strings
-                if re.search(r'Execute(Reader|NonQuery|Scalar).*?\+.*?["\']', line, re.IGNORECASE):
+                # Pattern 4: ExecuteReader/ExecuteNonQuery with concatenated strings
+                if re.search(r'Execute(Reader|NonQuery|Scalar).*?\+', line, re.IGNORECASE):
+                    findings.append({
+                        "type": "SQL Injection",
+                        "severity": "critical",
+                        "file": str(cs_file.relative_to(self.project_root)),
+                        "line": i,
+                        "description": "SQL execution with string concatenation",
+                        "code_snippet": line.strip()[:100],
+                        "recommendation": "Use SqlParameter or OracleParameter"
+                    })
+                
+                # Pattern 5: String.Format with SQL keywords (common in legacy code)
+                if re.search(r'string\.format.*?["\'].*?(select|insert|update|delete)', line, re.IGNORECASE):
                     findings.append({
                         "type": "SQL Injection",
                         "severity": "high",
                         "file": str(cs_file.relative_to(self.project_root)),
                         "line": i,
-                        "description": "SQL command execution with string concatenation",
+                        "description": "SQL query built with String.Format - injection risk",
                         "code_snippet": line.strip()[:100],
-                        "recommendation": "Use SqlParameter or OracleParameter"
+                        "recommendation": "Use parameterized queries instead of string formatting"
                     })
         
         except Exception as e:
@@ -796,6 +838,7 @@ class SecurityCollector(BaseDataCollector):
             "details": f"{len(config_issues)} configuration issues"
         })
         
+        # Return as list for JSON output (will be converted to dict for scoring)
         return categories
     
     def _check_owasp_compliance_detailed(
@@ -1127,11 +1170,19 @@ class SecurityCollector(BaseDataCollector):
         vuln_data: Dict[str, int]
     ) -> int:
         """Calculate overall security score."""
-        category_scores = [cat["score"] for cat in categories.values()]
+        # Handle case where categories might be a list (defensive)
+        if isinstance(categories, list):
+            category_scores = [cat["score"] for cat in categories if isinstance(cat, dict) and "score" in cat]
+        else:
+            category_scores = [cat["score"] for cat in categories.values()]
+        
+        if not category_scores:
+            return 0
+            
         avg_score = sum(category_scores) / len(category_scores)
         
         # Penalty for critical vulnerabilities
-        penalty = vuln_data["critical"] * 10 + vuln_data["high"] * 5
+        penalty = vuln_data.get("critical", 0) * 10 + vuln_data.get("high", 0) * 5
         
         return max(0, int(avg_score - penalty))
     

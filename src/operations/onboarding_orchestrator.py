@@ -540,9 +540,9 @@ class OnboardingOrchestrator:
         """
         Generate dashboard data files using optimized dashboard collectors.
         
-        Creates 7 JSON files matching dashboard UI format:
+        Creates 6 JSON files matching dashboard UI format:
         health-data.json, tech-stack.json, security.json, architecture.json,
-        code-organization.json, team-metrics.json, vendors.json
+        code-organization.json, vendors.json
         
         Args:
             project_path: Path to project
@@ -639,8 +639,6 @@ class OnboardingOrchestrator:
             return {"components": [], "layers": 0, "patterns": []}
         elif filename == "code-organization.json":
             return {"total_files": 0, "total_lines": 0, "hotspots": [], "file_types": {}}
-        elif filename == "team-metrics.json":
-            return {"total_commits": 0, "contributor_count": 0, "last_commit_date": "N/A", "active_contributors": []}
         elif filename == "vendors.json":
             return {"vendors": [], "total_vendors": 0}
         else:
@@ -652,17 +650,15 @@ class OnboardingOrchestrator:
         code_org = collected_data.get("code-organization.json", {})
         architecture = collected_data.get("architecture.json", {})
         tech_stack = collected_data.get("tech-stack.json", {})
-        team_metrics = collected_data.get("team-metrics.json", {})
         vendors = collected_data.get("vendors.json", {})
         
-        # Calculate health score (weighted average)
-        security_score = security.get("score", 0) * 0.3
-        code_score = min(100, max(0, 100 - len(code_org.get("hotspots", [])) * 5)) * 0.2
-        arch_score = min(100, max(0, 100 - len(architecture.get("components", [])) / 10)) * 0.2
-        tech_score = min(100, len(tech_stack.get("languages", [])) * 20) * 0.15
-        team_score = min(100, team_metrics.get("total_commits", 0) / 10) * 0.15
+        # Calculate health score (weighted average) - redistributed without team metrics
+        security_score = security.get("score", 0) * 0.35  # Increased from 0.3
+        code_score = min(100, max(0, 100 - len(code_org.get("hotspots", [])) * 5)) * 0.25  # Increased from 0.2
+        arch_score = min(100, max(0, 100 - len(architecture.get("components", [])) / 10)) * 0.25  # Increased from 0.2
+        tech_score = min(100, len(tech_stack.get("languages", [])) * 20) * 0.15  # Same
         
-        overall_score = security_score + code_score + arch_score + tech_score + team_score
+        overall_score = security_score + code_score + arch_score + tech_score
         status = "healthy" if overall_score >= 80 else "warning" if overall_score >= 60 else "critical"
         
         return {
@@ -670,7 +666,7 @@ class OnboardingOrchestrator:
             "status": status,
             "total_files": code_org.get("total_files", 0),
             "lines_of_code": code_org.get("total_lines", 0),
-            "contributors": team_metrics.get("contributor_count", 0),
+            "contributors": 0,  # Team metrics removed
             "languages": len(tech_stack.get("languages", [])),
             "frameworks": len(tech_stack.get("frameworks", [])),
             "security_score": security.get("score", 0),
@@ -678,8 +674,8 @@ class OnboardingOrchestrator:
             "architecture_components": len(architecture.get("components", [])),
             "complexity_hotspots": len(code_org.get("hotspots", [])),
             "external_vendors": len(vendors.get("vendors", [])),
-            "recent_commits": team_metrics.get("total_commits", 0),
-            "last_commit_date": team_metrics.get("last_commit_date", "N/A")
+            "recent_commits": 0,  # Team metrics removed
+            "last_commit_date": "N/A"  # Team metrics removed
         }
     
     def _validate_dashboard(self, output_dir: Path) -> tuple:
