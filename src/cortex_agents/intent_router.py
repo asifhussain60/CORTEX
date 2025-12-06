@@ -147,7 +147,11 @@ class IntentRouter(BaseAgent):
                 "plan", "planning", "feature", "breakdown", "design", "architect",
                 "plan a feature", "plan this", "let's plan", "help me plan",
                 "create a plan", "create plan", "make a plan", "build a plan",
-                "comprehensive plan", "detailed plan", "we need a plan"
+                "comprehensive plan", "detailed plan", "we need a plan",
+                "execute all phases autonomously", "execute autonomously",
+                "autonomous execution", "auto chained", "run autonomously",
+                "execute plan autonomously", "complete all phases",
+                "run all phases", "execute end to end", "execute without approval"
             ],
             IntentType.ARCHITECTURE: [
                 "architecture", "architectural", "analyze", "analysis", "crawl",

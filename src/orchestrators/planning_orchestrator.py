@@ -20,6 +20,7 @@ from typing import Dict, List, Optional, Any, Tuple, Callable
 from pathlib import Path
 import logging
 import re
+from src.utils.progress_decorator import with_progress, yield_progress
 from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
