@@ -81,10 +81,27 @@ url = f"http://localhost:{port}/ui/index.html?source={source}"
 
 ## 🚀 Launching the Dashboard
 
+### ⚠️ CRITICAL: Working Directory Requirement
+
+**ALWAYS run dashboard launcher from CORTEX root directory:**
+
+```bash
+cd /path/to/CORTEX  # MUST be CORTEX root, not cortex-brain/dashboards/
+python3 -m src.orchestrators.dashboard_launcher --port 8080 --source mock
+```
+
+**Why:**
+- Server auto-detects CORTEX root from current working directory
+- Locates `cortex-brain/dashboards/` relative to root
+- Serves from `cortex-brain/dashboards/` parent to access both `/ui/` and `/data/`
+- Running from wrong directory causes "CORTEX root not found" error
+
+**Reference:** This is documented in `dashboard_launcher.py` line 7-9
+
 ### Method 1: Interactive Mode (Recommended)
 
 ```bash
-cd /path/to/CORTEX
+cd /path/to/CORTEX  # MUST be CORTEX root
 python3 -m src.orchestrators.dashboard_launcher --port 8080 --source mock
 ```
 
@@ -96,7 +113,7 @@ python3 -m src.orchestrators.dashboard_launcher --port 8080 --source mock
 ### Method 2: Background Mode
 
 ```bash
-cd /path/to/CORTEX
+cd /path/to/CORTEX  # MUST be CORTEX root
 nohup python3 -m src.orchestrators.dashboard_launcher --port 8080 --source mock > /tmp/cortex-dashboard.log 2>&1 &
 ```
 
@@ -382,7 +399,133 @@ cortex-brain/dashboards/data/repos/my-repo-id/
 
 ---
 
-## 🔧 Maintenance
+## � Troubleshooting
+
+### Error: "CORTEX root directory not found"
+
+**Symptom:** Dashboard fails to launch with message "CORTEX root directory not found. Must contain cortex-brain/"
+
+**Cause:** Running from wrong directory (e.g., from `cortex-brain/dashboards/` instead of CORTEX root)
+
+**Solution:**
+```bash
+# Find CORTEX root (contains cortex-brain/, src/, tests/, etc.)
+pwd  # Should show something like /Users/username/PROJECTS/CORTEX
+
+# If in wrong directory:
+cd /path/to/CORTEX  # Move to CORTEX root
+
+# Verify you're in correct location:
+ls -la  # Should see: cortex-brain/, src/, tests/, VERSION, etc.
+
+# Now launch:
+python3 -m src.orchestrators.dashboard_launcher --port 8080 --source mock
+```
+
+**Prevention:** Always run from CORTEX root, never from subdirectories
+
+### Error: "Dashboard directory not found"
+
+**Symptom:** "Dashboard directory not found: /path/to/cortex-brain/dashboards"
+
+**Cause:** Missing dashboard directory or corrupted CORTEX installation
+
+**Solution:**
+```bash
+# Verify directory exists:
+ls -la cortex-brain/dashboards/
+
+# Should see:
+# - ui/ (frontend)
+# - data/ (data directories)
+# - config/ (configuration)
+
+# If missing, restore from repository
+```
+
+### Error: "Port XXXX is in use"
+
+**Symptom:** "Port 8080 is in use and could not be freed"
+
+**Cause:** Another process using the port, or previous dashboard server still running
+
+**Solution:**
+```bash
+# Method 1: Let dashboard launcher handle it (auto-kills process)
+python3 -m src.orchestrators.dashboard_launcher --port 8080 --source mock
+
+# Method 2: Manual kill
+lsof -ti:8080 | xargs kill -9
+
+# Method 3: Use different port
+python3 -m src.orchestrators.dashboard_launcher --port 8082 --source mock
+```
+
+### Error: "Failed to render overview - pct.toFixed is not a function"
+
+**Symptom:** Dashboard loads but Overview tab shows JavaScript error
+
+**Cause:** Schema mismatch between data files and rendering code
+
+**Solution:**
+```bash
+# Check data file schema:
+cat cortex-brain/dashboards/data/mock/overview.json | grep -A 10 "composition"
+
+# Should show:
+# "composition": {
+#   "languages": [
+#     {"name": "Python", "percentage": 75.2, "loc": 34340}
+#   ]
+# }
+
+# If schema is correct, clear browser cache and hard refresh (Cmd+Shift+R)
+```
+
+### Dashboard Shows Blank Page
+
+**Symptom:** Dashboard URL opens but shows empty white page
+
+**Causes:**
+1. Server serving from wrong directory
+2. Missing index.html
+3. JavaScript errors
+
+**Solution:**
+```bash
+# 1. Verify server directory:
+# Should serve from cortex-brain/dashboards/ (parent), NOT from ui/
+
+# 2. Check index.html exists:
+ls -la cortex-brain/dashboards/ui/index.html
+
+# 3. Check browser console (F12 > Console tab) for errors
+
+# 4. Verify URL structure:
+# Correct: http://localhost:8080/ui/index.html?source=mock
+# Wrong: http://localhost:8080/index.html?source=mock
+```
+
+### Data Files Not Loading (404 Errors)
+
+**Symptom:** Console shows "Failed to load /data/mock/executive-summary.json - 404"
+
+**Cause:** Server serving from wrong directory (ui/ instead of parent)
+
+**Solution:**
+```bash
+# Verify server directory in dashboard_launcher.py line 287:
+# dashboard_parent = cortex_root / "cortex-brain" / "dashboards"
+# server = DashboardServer(dashboard_parent, port)  # NOT dashboard_ui!
+
+# If code is correct, restart server from CORTEX root:
+cd /path/to/CORTEX  # CORTEX root, NOT cortex-brain/dashboards/
+python3 -m src.orchestrators.dashboard_launcher --port 8080 --source mock
+```
+
+---
+
+## �🔧 Maintenance
 
 ### Adding a New Repository
 
