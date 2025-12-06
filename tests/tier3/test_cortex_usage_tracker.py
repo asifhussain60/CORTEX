@@ -594,10 +594,11 @@ class TestIntegration:
         """Test complete workflow: extract → aggregate → save → retrieve"""
         tracker = integration_setup["tracker"]
         
-        # 1. Extract from working memory for last 30 days
+        # 1. Extract from working memory for last 30 days (data spans Nov 5 - Dec 4)
         metrics = tracker.extract_from_working_memory(
-            target_date=date(2025, 12, 5),
-            engineer_hash="integration_test_hash"
+            target_date=date(2025, 12, 4),  # Use Dec 4 since data ends there
+            engineer_hash="integration_test_hash",
+            days_window=30  # Need to specify window
         )
         
         # 2. Should have metrics
