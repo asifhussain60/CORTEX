@@ -183,7 +183,8 @@ class TDDImplementationOrchestrator:
     def __init__(
         self,
         project_root: Path,
-        cortex_root: Optional[Path] = None
+        cortex_root: Optional[Path] = None,
+        enable_pattern_library: bool = True
     ):
         """
         Initialize TDD Implementation Orchestrator.
@@ -191,6 +192,7 @@ class TDDImplementationOrchestrator:
         Args:
             project_root: Root directory of project being developed
             cortex_root: Root directory of CORTEX (defaults to auto-detect)
+            enable_pattern_library: Enable Tier 2 pattern learning (default: True)
         """
         self.project_root = Path(project_root)
         self.cortex_root = Path(cortex_root) if cortex_root else self._detect_cortex_root()
@@ -206,7 +208,7 @@ class TDDImplementationOrchestrator:
         # Lazy-load heavy dependencies
         self._code_analyzers = None
         self._brain_protector = None
-        self._pattern_library = None
+        self._pattern_library = enable_pattern_library
         self._metrics_collector = None
         
         logger.info(f"✅ TDDImplementationOrchestrator initialized for {self.project_root}")
@@ -1220,11 +1222,144 @@ class TDDImplementationOrchestrator:
         """
         Store refactoring patterns in Tier 2 for learning.
         
+        Learns project preferences:
+        - Accepted vs rejected refactorings
+        - Extract method naming conventions
+        - Class splitting strategies
+        - Duplicate consolidation approaches
+        
         Args:
             refactorings: All refactoring recommendations
             applied_refactorings: Refactorings that were applied
             state: Session state
         """
-        # Pattern library will be implemented in Phase 3 deliverable 3.6
-        # This is a placeholder for the learning infrastructure
-        logger.debug(f"Pattern storage: {len(applied_refactorings)} patterns stored")
+        if not self._pattern_library:
+            logger.debug("Pattern library not initialized")
+            return
+        
+        try:
+            from src.tier2.knowledge_graph import KnowledgeGraph
+            kg = KnowledgeGraph()
+            
+            # Store each refactoring pattern
+            for refactoring in refactorings:
+                was_applied = refactoring in applied_refactorings
+                
+                pattern_context = {
+                    "refactoring_type": refactoring["type"],
+                    "priority": refactoring["priority"],
+                    "reason": refactoring["reason"],
+                    "description": refactoring.get("description", ""),
+                    "applied": was_applied,
+                    "feature_name": state.feature_name,
+                    "task_id": state.task_id,
+                    "work_item_id": state.work_item_id,
+                    "file": refactoring.get("file", ""),
+                    "line": refactoring.get("line", 0)
+                }
+                
+                # Generate pattern title
+                pattern_title = f"refactor_{refactoring['type']}_{refactoring['reason']}"
+                
+                # Store pattern with confidence based on application
+                confidence = 0.8 if was_applied else 0.4
+                
+                pattern_id = kg.store_pattern(
+                    title=pattern_title,
+                    pattern_type="refactoring",
+                    confidence=confidence,
+                    context=pattern_context,
+                    scope="application",
+                    namespaces=[state.feature_name, f"task_{state.task_id}"]
+                )
+                
+                logger.debug(f"Stored refactoring pattern: {pattern_id} (applied={was_applied})")
+            
+            # Store aggregate metrics
+            if applied_refactorings:
+                aggregate_context = {
+                    "total_refactorings": len(refactorings),
+                    "applied_refactorings": len(applied_refactorings),
+                    "acceptance_rate": len(applied_refactorings) / len(refactorings),
+                    "feature_name": state.feature_name,
+                    "task_id": state.task_id,
+                    "phase_duration": state.metrics.get("phase_timings", {}).get("REFACTOR", 0)
+                }
+                
+                kg.store_pattern(
+                    title=f"refactor_session_{state.session_id}",
+                    pattern_type="refactoring_session",
+                    confidence=0.9,
+                    context=aggregate_context,
+                    scope="application",
+                    namespaces=[state.feature_name]
+                )
+            
+            logger.info(f"📚 Stored {len(refactorings)} refactoring patterns in Tier 2")
+            
+        except Exception as e:
+            logger.warning(f"Failed to store refactoring patterns: {e}")
+    
+    def get_learned_refactoring_patterns(
+        self,
+        feature_name: Optional[str] = None,
+        refactoring_type: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieve learned refactoring patterns from Tier 2.
+        
+        Used to suggest refactorings based on project history.
+        
+        Args:
+            feature_name: Filter by feature (optional)
+            refactoring_type: Filter by type (extract_method, split_class, etc.)
+            
+        Returns:
+            List of learned patterns with confidence scores
+        """
+        if not self._pattern_library:
+            return []
+        
+        try:
+            from src.tier2.knowledge_graph import KnowledgeGraph
+            kg = KnowledgeGraph()
+            
+            # Build search query
+            query_parts = ["refactoring"]
+            if refactoring_type:
+                query_parts.append(refactoring_type)
+            if feature_name:
+                query_parts.append(feature_name)
+            
+            query = " ".join(query_parts)
+            
+            # Search patterns
+            patterns = kg.search_patterns(
+                query=query,
+                pattern_type="refactoring",
+                min_confidence=0.5,
+                scope="application",
+                limit=20,
+                include_confidence_metadata=True
+            )
+            
+            # Filter by applied refactorings (learning from success)
+            learned_patterns = []
+            for pattern in patterns:
+                context = pattern.get("context", {})
+                if context.get("applied", False):
+                    learned_patterns.append({
+                        "pattern_id": pattern["pattern_id"],
+                        "refactoring_type": context.get("refactoring_type"),
+                        "reason": context.get("reason"),
+                        "description": context.get("description"),
+                        "confidence": pattern["confidence"],
+                        "success_rate": pattern.get("success_rate", 0.0),
+                        "usage_count": pattern.get("usage_count", 0)
+                    })
+            
+            return learned_patterns
+            
+        except Exception as e:
+            logger.warning(f"Failed to retrieve refactoring patterns: {e}")
+            return []

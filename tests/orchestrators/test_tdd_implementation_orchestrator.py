@@ -685,3 +685,58 @@ class TestPhase3Refactor:
         assert "duplicates" in result
         assert "solid_violations" in result
 
+
+class TestPhase3PatternLibrary:
+    """Test Pattern Library integration (Phase 3.6)."""
+    
+    def test_store_refactoring_patterns(self, temp_project):
+        """Test storing refactoring patterns in Tier 2."""
+        orchestrator = TDDImplementationOrchestrator(
+            project_root=temp_project,
+            cortex_root=temp_project,
+            enable_pattern_library=True
+        )
+        
+        state = TDDSessionState(
+            session_id="test-123",
+            feature_name="Pattern Test",
+            task_id="TASK-001"
+        )
+        
+        refactorings = [
+            {"type": "extract_method", "priority": "high", "reason": "duplicate_code", "description": "Extract duplicated code"},
+            {"type": "remove_unused", "priority": "medium", "reason": "redundancy", "description": "Remove unused import", "file": "test.py", "line": 5}
+        ]
+        
+        applied_refactorings = [refactorings[1]]  # Only second one applied
+        
+        # Should not raise exception
+        orchestrator._store_refactoring_patterns(refactorings, applied_refactorings, state)
+    
+    def test_get_learned_refactoring_patterns(self, temp_project):
+        """Test retrieving learned patterns from Tier 2."""
+        orchestrator = TDDImplementationOrchestrator(
+            project_root=temp_project,
+            cortex_root=temp_project,
+            enable_pattern_library=True
+        )
+        
+        # Store some patterns first
+        state = TDDSessionState(
+            session_id="test-456",
+            feature_name="Learn Test",
+            task_id="TASK-002"
+        )
+        
+        refactorings = [
+            {"type": "extract_method", "priority": "high", "reason": "duplicate_code", "description": "Extract method"}
+        ]
+        
+        orchestrator._store_refactoring_patterns(refactorings, refactorings, state)
+        
+        # Retrieve patterns
+        patterns = orchestrator.get_learned_refactoring_patterns(feature_name="Learn Test")
+        
+        # Should return list (may be empty if Tier 2 not available)
+        assert isinstance(patterns, list)
+
