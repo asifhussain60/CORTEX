@@ -1123,14 +1123,11 @@ class SecurityCollector(BaseDataCollector):
     
     def _calculate_overall_score(
         self, 
-        categories: List[Dict[str, Any]], 
+        categories: Dict[str, Dict[str, Any]], 
         vuln_data: Dict[str, int]
     ) -> int:
         """Calculate overall security score."""
-        if not categories:
-            return 0
-            
-        category_scores = [cat["score"] for cat in categories]
+        category_scores = [cat["score"] for cat in categories.values()]
         avg_score = sum(category_scores) / len(category_scores)
         
         # Penalty for critical vulnerabilities

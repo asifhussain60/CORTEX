@@ -24,7 +24,7 @@ def test_sqlite_repo_save_application(tmp_path):
         app_id="cortex",
         app_name="CORTEX",
         app_type="internal",
-        data_path="/cortex-brain/dashboards/cortex",
+        data_path="/cortex-brain/dashboards/data/repos/cortex",
         last_scan=datetime.now()
     )
     
@@ -48,7 +48,7 @@ def test_sqlite_repo_get_by_id_existing(tmp_path):
         app_id="cortex",
         app_name="CORTEX",
         app_type="internal",
-        data_path="/cortex-brain/dashboards/cortex",
+        data_path="/cortex-brain/dashboards/data/repos/cortex",
         last_scan=datetime(2025, 12, 4, 10, 30, 0)
     )
     repo.save(original)

@@ -35,6 +35,7 @@ from .base_operation_module import (
     OperationModuleMetadata,
 )
 from src.utils.skull_test_runner import run_skull_tests, format_skull_test_summary
+from src.utils.progress_decorator import with_progress, yield_progress
 
 
 logger = logging.getLogger(__name__)
@@ -108,9 +109,10 @@ class OptimizeOperation(BaseOperationModule):
             message="✓ Optimization prerequisites validated",
         )
     
+    @with_progress(operation_name="System Optimization")
     def execute(self, **kwargs) -> OperationResult:
         """
-        Execute comprehensive optimization operations.
+        Execute comprehensive optimization operations with progress monitoring.
         
         Implements all fixes from CORTEX-OPTIMIZATION-PLAN-2025-12-01.md:
         - Phase 1: File organization and cleanup (root files → proper directories)
@@ -134,6 +136,26 @@ class OptimizeOperation(BaseOperationModule):
         
         logger.info(f"Starting CORTEX optimization (target={target}, aggressive={aggressive}, dry_run={dry_run})")
         
+        # Calculate total phases for progress tracking
+        phases = []
+        if target in ['organization', 'all']:
+            phases.extend(['file_organization', 'build_artifacts', 'duplicates'])
+        if target in ['archives', 'cortex', 'all']:
+            phases.append('archives')
+        if target in ['cortex', 'all']:
+            phases.append('brain_cleanup')
+        if target in ['consolidation', 'all']:
+            phases.append('markdown_consolidation')
+        if target in ['cache', 'cortex', 'all']:
+            phases.append('cache')
+        if target in ['cortex', 'all']:
+            phases.append('database_vacuum')
+        if not skip_skull_tests and not dry_run:
+            phases.append('skull_validation')
+        
+        total_phases = len(phases)
+        current_phase = 0
+        
         results = {
             'optimizations_applied': [],
             'space_saved_mb': 0.0,
@@ -146,6 +168,8 @@ class OptimizeOperation(BaseOperationModule):
         try:
             # Phase 1: File Organization (CRITICAL - fixes root directory clutter)
             if target in ['organization', 'all']:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Phase 1: Organizing files")
                 org_result = self._organize_files(dry_run)
                 results['optimizations_applied'].extend(org_result['applied'])
                 results['space_saved_mb'] += org_result['space_saved_mb']
@@ -153,6 +177,8 @@ class OptimizeOperation(BaseOperationModule):
             
             # Phase 1: Build Artifacts Cleanup
             if target in ['organization', 'cortex', 'all']:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Phase 1: Cleaning build artifacts")
                 artifacts_result = self._cleanup_build_artifacts(dry_run)
                 results['optimizations_applied'].extend(artifacts_result['applied'])
                 results['space_saved_mb'] += artifacts_result['space_saved_mb']
@@ -160,6 +186,8 @@ class OptimizeOperation(BaseOperationModule):
             
             # Phase 1: Duplicate File Removal
             if target in ['organization', 'cortex', 'all']:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Phase 1: Removing duplicates")
                 dup_result = self._remove_duplicates(dry_run)
                 results['optimizations_applied'].extend(dup_result['applied'])
                 results['space_saved_mb'] += dup_result['space_saved_mb']
@@ -167,6 +195,8 @@ class OptimizeOperation(BaseOperationModule):
             
             # Phase 2: Archive Consolidation
             if target in ['archives', 'cortex', 'all']:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Phase 2: Consolidating archives")
                 archive_result = self._consolidate_archives(dry_run)
                 results['optimizations_applied'].extend(archive_result['applied'])
                 results['space_saved_mb'] += archive_result['space_saved_mb']
@@ -174,12 +204,16 @@ class OptimizeOperation(BaseOperationModule):
             
             # Brain cleanup (original functionality)
             if target in ['cortex', 'all']:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Optimizing brain storage")
                 cleanup_result = self._optimize_brain(dry_run)
                 results['optimizations_applied'].extend(cleanup_result['applied'])
                 results['space_saved_mb'] += cleanup_result['space_saved_mb']
             
             # Markdown consolidation (NEW - Phase 3)
             if target in ['consolidation', 'all']:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Phase 3: Consolidating documentation")
                 consolidation_result = self._consolidate_markdown_docs(dry_run)
                 results['optimizations_applied'].extend(consolidation_result['applied'])
                 results['space_saved_mb'] += consolidation_result['space_saved_mb']
@@ -187,12 +221,16 @@ class OptimizeOperation(BaseOperationModule):
             
             # Cache optimization
             if target in ['cache', 'cortex', 'all']:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Optimizing cache")
                 cache_result = self._optimize_cache(dry_run)
                 results['optimizations_applied'].extend(cache_result['applied'])
                 results['space_saved_mb'] += cache_result['space_saved_mb']
             
             # Database vacuum
             if target in ['cortex', 'all']:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Vacuuming databases")
                 db_result = self._vacuum_databases(aggressive, dry_run)
                 results['optimizations_applied'].extend(db_result['applied'])
                 results['space_saved_mb'] += db_result['space_saved_mb']
@@ -205,6 +243,8 @@ class OptimizeOperation(BaseOperationModule):
             # SKULL test validation (admin operations only)
             # Skip in dry-run mode or when skip_skull_tests=True (user operations)
             if not dry_run and not skip_skull_tests:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Running SKULL validation tests")
                 logger.info("\n" + "="*80)
                 logger.info("MANDATORY VALIDATION: Running SKULL test suite...")
                 logger.info("="*80)

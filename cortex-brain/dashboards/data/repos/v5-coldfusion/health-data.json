@@ -1,0 +1,24 @@
+{
+  "overall_health_score": 85,
+  "status": "healthy",
+  "last_scan": "2025-12-06T08:05:51.918059",
+  "summary": {
+    "total_files": 10569,
+    "total_loc": 0,
+    "test_coverage": 0,
+    "critical_issues": 0,
+    "warnings": 0,
+    "maintainability_index": 85
+  },
+  "metrics": {
+    "code_quality_score": 85,
+    "security_score": 90,
+    "test_score": 75,
+    "documentation_score": 70
+  },
+  "trends": {
+    "health_trend": "stable",
+    "velocity_trend": "stable",
+    "quality_trend": "stable"
+  }
+}

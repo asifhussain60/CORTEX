@@ -6,31 +6,19 @@
  * Author: Asif Hussain
  * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
  * License: Source-Available (Use Allowed, No Contributions)
- * 
- * Version: 2.0 - Auto-discovery and cache-busting support
  */
 
 // Data cache
 const dataCache = new Map();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-// Cache buster - increment when data sources change
-const DATA_LOADER_VERSION = '2.0.2';
-
-// Data source base paths - Auto-discovery friendly
-// Note: When adding new repos, just add a folder under /dashboards/ with JSON files
+// Data source base paths (will be populated from registry)
 const DATA_SOURCES = {
-    'alist': '/alist/',
-    'cortex': '/cortex/',
-    'kashkole': '/kashkole/',
-    'ksessions': '/ksessions/',
-    'luum-fresh': '/luum-fresh/',
-    'mock': '/mock/',
-    'noor-canvas': '/noor-canvas/',
-    'v5-webservices-prevalidationws': '/v5-webservices-prevalidationws/',
+    mock: '/data/mock/'
 };
 
-console.log(`[DataLoader v${DATA_LOADER_VERSION}] Initialized with sources:`, Object.keys(DATA_SOURCES));
+// Repository registry (loaded on page load)
+let REPOSITORY_REGISTRY = null;
 
 // Data files to load
 const DATA_FILES = [
@@ -40,9 +28,35 @@ const DATA_FILES = [
     'architecture.json',
     'code-organization.json',
     'team-metrics.json',
-    'vendors.json',
-    'executive-summary.json'
+    'vendors.json'
 ];
+
+/**
+ * Load repository registry and populate DATA_SOURCES
+ */
+async function loadRepositoryRegistry() {
+    try {
+        const response = await fetch('/data/repository-registry.json');
+        if (!response.ok) {
+            console.warn('Registry not found, using default sources');
+            return null;
+        }
+        
+        const registry = await response.json();
+        REPOSITORY_REGISTRY = registry;
+        console.log(`Loaded registry: ${registry.total_repositories} repositories`);
+        
+        // Update DATA_SOURCES from registry
+        registry.repositories.forEach(repo => {
+            DATA_SOURCES[repo.id] = `/data/repos/${repo.id}/`;
+        });
+        
+        return registry;
+    } catch (error) {
+        console.error('Failed to load registry:', error);
+        return null;
+    }
+}
 
 /**
  * Load all dashboard data for a given source
@@ -102,8 +116,7 @@ export async function loadDashboardData(source = 'mock') {
             architecture: results[3],
             codeOrganization: results[4],
             teamMetrics: results[5],
-            vendors: results[6],
-            executiveSummary: results[7]
+            vendors: results[6]
         };
         
         // Validate data (temporarily disabled for debugging)
@@ -126,23 +139,12 @@ export async function loadDashboardData(source = 'mock') {
 }
 
 /**
- * Load a single JSON file with cache-busting
+ * Load a single JSON file
  * @param {string} url - File URL
  * @returns {Promise<Object>} - Parsed JSON data
  */
 async function loadJsonFile(url) {
-    // Add cache-busting query parameter
-    const cacheBuster = `?v=${DATA_LOADER_VERSION}&t=${Date.now()}`;
-    const urlWithCache = url + cacheBuster;
-    
-    const response = await fetch(urlWithCache, {
-        cache: 'no-cache',
-        headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-        }
-    });
-    
+    const response = await fetch(url);
     if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
@@ -541,6 +543,12 @@ export function enrichDashboardData(data) {
     return data;
 }
 
+// Initialize registry on module load
+(async function initRegistry() {
+    await loadRepositoryRegistry();
+    console.log('Data loader initialized with registry');
+})();
+
 // Export utility functions
 export default {
     loadDashboardData,
@@ -552,5 +560,6 @@ export default {
     getAvailableSources,
     isSourceAvailable,
     extractArchitectureInfo,
-    enrichDashboardData
+    enrichDashboardData,
+    loadRepositoryRegistry
 };

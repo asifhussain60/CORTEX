@@ -1,195 +1,195 @@
 {
   "version": "3.2",
-  "last_alignment": "2025-12-05T18:22:05.788121",
-  "last_full_scan": "2025-12-05T18:22:05.788121",
+  "last_alignment": "2025-12-06T04:46:19.670576",
+  "last_full_scan": "2025-12-06T04:46:19.670576",
   "scan_mode": "full",
   "context_type": "admin",
   "file_checksums": {
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\hands_on_tutorial_orchestrator.py": {
-      "sha256": "3f4463911880c095530d90fc20292b6c9e9db9db62c9faa1f1529a400ff9a5f8",
-      "last_modified": "2025-12-01T12:25:31.745785",
-      "last_checked": "2025-12-05T18:22:05.800585",
-      "size_bytes": 28728
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/hands_on_tutorial_orchestrator.py": {
+      "sha256": "4b2965d17774f71e63d7a18d0135368437603b7aa142c04278f4ab40a5f53114",
+      "last_modified": "2025-12-02T16:42:54.977724",
+      "last_checked": "2025-12-06T04:46:19.673537",
+      "size_bytes": 28054
     },
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\cleanup\\cleanup_orchestrator.py": {
-      "sha256": "73ea4d41b408052de01b1417b6dd3d49b07f9c62fde7b51c84c557337a7cd5d4",
-      "last_modified": "2025-12-04T03:54:13.171340",
-      "last_checked": "2025-12-05T18:22:05.800994",
-      "size_bytes": 63593
-    },
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\cleanup\\holistic_cleanup_orchestrator.py": {
-      "sha256": "90c0d94fd7f42a8fafea13f1f9f94fec1c08c503f11ebdeca78195f06c5b32ea",
-      "last_modified": "2025-12-01T12:25:32.104082",
-      "last_checked": "2025-12-05T18:22:05.801365",
-      "size_bytes": 55808
-    },
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\cleanup\\user_cleanup_orchestrator.py": {
-      "sha256": "93d60f59f30acdd3a11f1cfb51b59002609eac017e501d141defe5f8891ee0ac",
-      "last_modified": "2025-12-01T12:25:32.131065",
-      "last_checked": "2025-12-05T18:22:05.801624",
-      "size_bytes": 16692
-    },
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\demo\\demo_orchestrator.py": {
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/demo/demo_orchestrator.py": {
       "sha256": "cb36f4453e4a2a0fbfce43e823719ea5d6aa4ae605f9d6abcc4b34525211de1b",
-      "last_modified": "2025-11-29T08:57:57.335796",
-      "last_checked": "2025-12-05T18:22:05.801878",
+      "last_modified": "2025-11-30T13:51:14.277151",
+      "last_checked": "2025-12-06T04:46:19.673767",
       "size_bytes": 15845
     },
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\design_sync\\design_sync_orchestrator.py": {
-      "sha256": "897eabf40044703dc1fd018503b183543b816f257c7a20dd166e63de75fbc54b",
-      "last_modified": "2025-12-01T12:25:32.273983",
-      "last_checked": "2025-12-05T18:22:05.802237",
-      "size_bytes": 53567
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/optimization/optimize_cortex_orchestrator.py": {
+      "sha256": "76507c1f352eda52a38d147ca4bce81335e3679e75598a754aa7f80ed03097ce",
+      "last_modified": "2025-12-02T16:42:54.979046",
+      "last_checked": "2025-12-06T04:46:19.674332",
+      "size_bytes": 41210
     },
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\diagrams\\diagram_regeneration_orchestrator.py": {
-      "sha256": "3daafc5314b16c4e5a3953fb524d07d6c8e4c1c37f2613a2b3ce5b8e9c40e0c1",
-      "last_modified": "2025-12-01T12:25:32.309961",
-      "last_checked": "2025-12-05T18:22:05.802505",
-      "size_bytes": 21556
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/diagrams/diagram_regeneration_orchestrator.py": {
+      "sha256": "5e6c99d2ee877a931ccdc3a29188ad64faa5c9144cbc4fc65d0523db94f97843",
+      "last_modified": "2025-12-02T16:42:54.976294",
+      "last_checked": "2025-12-06T04:46:19.674566",
+      "size_bytes": 21064
     },
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\optimization\\optimize_cortex_orchestrator.py": {
-      "sha256": "80db79d1dad3cf33dd98596c2604123aad5c907668691dbdc443e9b8dddc7b85",
-      "last_modified": "2025-12-01T12:25:32.504439",
-      "last_checked": "2025-12-05T18:22:05.802832",
-      "size_bytes": 42315
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/system/optimize_system_orchestrator.py": {
+      "sha256": "f34209c07c9738e5da584da13eb73f8113224a27abcc49f7c023b58e424fda0e",
+      "last_modified": "2025-12-02T16:42:54.981838",
+      "last_checked": "2025-12-06T04:46:19.675139",
+      "size_bytes": 39122
     },
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\publish\\publish_branch_orchestrator.py": {
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/publish/publish_branch_orchestrator.py": {
       "sha256": "aa3c06a17ea74dcd5fbf4bf75b96ab33887598380a9ac06587d1e9e6a65c6549",
-      "last_modified": "2025-12-03T12:49:25.884752",
-      "last_checked": "2025-12-05T18:22:05.803086",
+      "last_modified": "2025-12-03T18:24:37.437885",
+      "last_checked": "2025-12-06T04:46:19.675269",
       "size_bytes": 15452
     },
-    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\system\\optimize_system_orchestrator.py": {
-      "sha256": "a9076af71ebeea09a0245627f2590340bf3a44ca4131da36dada4b49d4560590",
-      "last_modified": "2025-12-01T12:25:32.600383",
-      "last_checked": "2025-12-05T18:22:05.803395",
-      "size_bytes": 40081
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/cleanup/user_cleanup_orchestrator.py": {
+      "sha256": "b056b440335bff7b2b7129a60872bee4740e6fd32b8f356e559d9c808efeeffd",
+      "last_modified": "2025-12-02T16:42:54.973850",
+      "last_checked": "2025-12-06T04:46:19.675415",
+      "size_bytes": 16229
     },
-    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\application_health_orchestrator.py": {
-      "sha256": "fd2e1565851c36b76170e7b61e82c1e968dd65d830b5a158eed10e22d34bf7b9",
-      "last_modified": "2025-12-04T03:54:13.175340",
-      "last_checked": "2025-12-05T18:22:05.803624",
-      "size_bytes": 10190
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/cleanup/cleanup_orchestrator.py": {
+      "sha256": "73ea4d41b408052de01b1417b6dd3d49b07f9c62fde7b51c84c557337a7cd5d4",
+      "last_modified": "2025-12-03T18:24:37.437701",
+      "last_checked": "2025-12-06T04:46:19.675866",
+      "size_bytes": 63593
     },
-    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\git_checkpoint_orchestrator.py": {
-      "sha256": "645782ee57dfb993df7d907d15f904c96e57b5025d55c1b429771af6f16f9239",
-      "last_modified": "2025-12-05T09:39:32.729438",
-      "last_checked": "2025-12-05T18:22:05.803852",
-      "size_bytes": 9135
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/cleanup/holistic_cleanup_orchestrator.py": {
+      "sha256": "6ebf67f976928f344b64fe1ede3f9d65a8905b8b085a2412e7a890ed1eba931f",
+      "last_modified": "2025-12-02T16:42:54.973472",
+      "last_checked": "2025-12-06T04:46:19.676581",
+      "size_bytes": 54588
     },
-    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\manager_report_orchestrator.py": {
+    "/Users/asifhussain/PROJECTS/CORTEX/src/operations/modules/design_sync/design_sync_orchestrator.py": {
+      "sha256": "c9f8ce9a7d03eaf549224a9cf94a9dd60529cf18594f726a5e9cc30147665b80",
+      "last_modified": "2025-12-02T16:42:54.975821",
+      "last_checked": "2025-12-06T04:46:19.677130",
+      "size_bytes": 52305
+    },
+    "/Users/asifhussain/PROJECTS/CORTEX/src/orchestrators/manager_report_orchestrator.py": {
       "sha256": "57650fcc6d030e0f245447429a2db2f67e948c311d76b69d1d08b637391d1cdf",
-      "last_modified": "2025-12-05T09:39:32.730437",
-      "last_checked": "2025-12-05T18:22:05.804256",
+      "last_modified": "2025-12-05T18:31:30.731364",
+      "last_checked": "2025-12-06T04:46:19.677263",
       "size_bytes": 13635
     },
-    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\onboarding_acknowledgment_orchestrator.py": {
-      "sha256": "c12b2763ec3c83c3125e401b2476fd48bfcfb82aaf5d6e22cab23e1f6360a97f",
-      "last_modified": "2025-12-04T03:54:13.218714",
-      "last_checked": "2025-12-05T18:22:05.804598",
-      "size_bytes": 11075
-    },
-    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\planning_orchestrator.py": {
-      "sha256": "d93812681f40328a3cc55461fede00cb5ab85b0061590fefdeb7d017d02a52ec",
-      "last_modified": "2025-12-04T14:56:46.772471",
-      "last_checked": "2025-12-05T18:22:05.805133",
-      "size_bytes": 114193
-    },
-    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\plan_execution_orchestrator.py": {
+    "/Users/asifhussain/PROJECTS/CORTEX/src/orchestrators/plan_execution_orchestrator.py": {
       "sha256": "01145a1fa02cf9bfaedf31d818dd54d6854930b772af14ec279529be2802ee68",
-      "last_modified": "2025-12-04T06:16:55.741126",
-      "last_checked": "2025-12-05T18:22:05.805404",
+      "last_modified": "2025-12-04T06:28:40.673900",
+      "last_checked": "2025-12-06T04:46:19.677464",
       "size_bytes": 24936
     },
-    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\ado_agent.py": {
-      "sha256": "5ebe6995f054defd9e6675ba6a3805f67dc6661e0acd23999e29faa157120a74",
-      "last_modified": "2025-12-01T12:25:28.269708",
-      "last_checked": "2025-12-05T18:22:05.805635",
-      "size_bytes": 12810
+    "/Users/asifhussain/PROJECTS/CORTEX/src/orchestrators/git_checkpoint_orchestrator.py": {
+      "sha256": "645782ee57dfb993df7d907d15f904c96e57b5025d55c1b429771af6f16f9239",
+      "last_modified": "2025-12-05T18:31:30.731295",
+      "last_checked": "2025-12-06T04:46:19.677706",
+      "size_bytes": 9135
     },
-    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\application_health_agent.py": {
-      "sha256": "5c6a16c5176f400c4ff734a26164faca0aeede897c74b874d38883b8bc9337fc",
-      "last_modified": "2025-12-01T12:25:28.272706",
-      "last_checked": "2025-12-05T18:22:05.805847",
-      "size_bytes": 5875
+    "/Users/asifhussain/PROJECTS/CORTEX/src/orchestrators/application_health_orchestrator.py": {
+      "sha256": "fd2e1565851c36b76170e7b61e82c1e968dd65d830b5a158eed10e22d34bf7b9",
+      "last_modified": "2025-12-03T18:02:33.162894",
+      "last_checked": "2025-12-06T04:46:19.677838",
+      "size_bytes": 10190
     },
-    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\base_agent.py": {
-      "sha256": "28f0742c63dd5ab9ec9457ffdefafe6f3175853feeabeb253c81933f2b33741f",
-      "last_modified": "2025-12-01T12:25:28.275705",
-      "last_checked": "2025-12-05T18:22:05.806129",
-      "size_bytes": 10644
+    "/Users/asifhussain/PROJECTS/CORTEX/src/orchestrators/onboarding_acknowledgment_orchestrator.py": {
+      "sha256": "c12b2763ec3c83c3125e401b2476fd48bfcfb82aaf5d6e22cab23e1f6360a97f",
+      "last_modified": "2025-12-03T18:02:33.210500",
+      "last_checked": "2025-12-06T04:46:19.677955",
+      "size_bytes": 11075
     },
-    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\compliance_dashboard_agent.py": {
-      "sha256": "1d37305ef1d31a2de065fe3120083318d4ce76fde374ee5a9a30ec12a6900bc7",
-      "last_modified": "2025-12-01T12:25:28.294693",
-      "last_checked": "2025-12-05T18:22:05.806368",
-      "size_bytes": 15813
+    "/Users/asifhussain/PROJECTS/CORTEX/src/orchestrators/planning_orchestrator.py": {
+      "sha256": "d93812681f40328a3cc55461fede00cb5ab85b0061590fefdeb7d017d02a52ec",
+      "last_modified": "2025-12-04T13:01:25.875899",
+      "last_checked": "2025-12-06T04:46:19.679023",
+      "size_bytes": 114193
     },
-    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\learning_capture_agent.py": {
-      "sha256": "d1a6b5c156ef6a81431d0bdb67d7c4cb44db2f63e0047d48cb4f1ee548870f0a",
-      "last_modified": "2025-12-01T12:25:28.357105",
-      "last_checked": "2025-12-05T18:22:05.806690",
-      "size_bytes": 21521
+    "/Users/asifhussain/PROJECTS/CORTEX/src/cortex_agents/application_health_agent.py": {
+      "sha256": "165bb7457b64c5c71e8e0146093351f5e98cf2e500ffe85c44c8791d172b04c1",
+      "last_modified": "2025-12-02T16:42:54.949716",
+      "last_checked": "2025-12-06T04:46:19.679178",
+      "size_bytes": 5724
     },
-    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\profile_agent.py": {
-      "sha256": "d415c6ff9dc8f61f7df42d622f777c1da38a6d660b604532b343dfe1448a5081",
-      "last_modified": "2025-12-01T12:25:28.366100",
-      "last_checked": "2025-12-05T18:22:05.806977",
-      "size_bytes": 15583
+    "/Users/asifhussain/PROJECTS/CORTEX/src/cortex_agents/rca_agent.py": {
+      "sha256": "cbc00d7c76b678c8a12846c5191454ecfa21ca301399770fbc28d457c0e56a23",
+      "last_modified": "2025-12-02T16:42:54.952711",
+      "last_checked": "2025-12-06T04:46:19.679333",
+      "size_bytes": 15436
     },
-    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\rca_agent.py": {
-      "sha256": "32a1c59ff03fc247c5b87d6e19f7b7117b1733d657afabcd794510e618be0f8d",
-      "last_modified": "2025-12-01T12:25:28.375095",
-      "last_checked": "2025-12-05T18:22:05.807234",
-      "size_bytes": 15926
+    "/Users/asifhussain/PROJECTS/CORTEX/src/cortex_agents/learning_capture_agent.py": {
+      "sha256": "1de90e619860ce4a294344bed1c8056ab9eafde4637cc88d7dfd056034e49b90",
+      "last_modified": "2025-12-02T16:42:54.952478",
+      "last_checked": "2025-12-06T04:46:19.679576",
+      "size_bytes": 20936
     },
-    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\welcome_banner_agent.py": {
-      "sha256": "9f3b02db0a52e693d9048ddb7116e177e313627a4eaa29cdc609a7b817fa5e40",
-      "last_modified": "2025-12-01T12:25:28.395083",
-      "last_checked": "2025-12-05T18:22:05.807515",
-      "size_bytes": 15289
+    "/Users/asifhussain/PROJECTS/CORTEX/src/cortex_agents/base_agent.py": {
+      "sha256": "ad463b5e93159d9c83405d1bd4b8f4e82c3059113c091a03fe8d4af66105bd75",
+      "last_modified": "2025-12-02T16:42:54.949835",
+      "last_checked": "2025-12-06T04:46:19.679625",
+      "size_bytes": 10335
     },
-    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\strategic\\architecture_intelligence_agent.py": {
-      "sha256": "99ea61a3ae95f9fe479856a2bb577a217ef79cc28aaf170d1be428766c625fb9",
-      "last_modified": "2025-12-01T12:25:33.250391",
-      "last_checked": "2025-12-05T18:22:05.807812",
-      "size_bytes": 19806
+    "/Users/asifhussain/PROJECTS/CORTEX/src/cortex_agents/compliance_dashboard_agent.py": {
+      "sha256": "fc25bff38148c65e0819de2f11a4a518c0b487206f8cb08d9687b6a7cdd1a4cf",
+      "last_modified": "2025-12-02T16:42:54.950585",
+      "last_checked": "2025-12-06T04:46:19.679826",
+      "size_bytes": 15371
     },
-    "D:\\PROJECTS\\CORTEX\\src\\agents\\base_agent.py": {
-      "sha256": "90b9e4a34930cedf2af1a407ee60c3cc4016e76f8db9e8a0cb31af8da19c9ede",
-      "last_modified": "2025-12-01T12:25:27.892847",
-      "last_checked": "2025-12-05T18:22:05.808219",
-      "size_bytes": 7234
+    "/Users/asifhussain/PROJECTS/CORTEX/src/cortex_agents/welcome_banner_agent.py": {
+      "sha256": "cae9eb819235d5f6c4d0bdb5944c7575eef4d7ee6e5a2085d923b698640eeccf",
+      "last_modified": "2025-12-02T16:42:54.953827",
+      "last_checked": "2025-12-06T04:46:19.679979",
+      "size_bytes": 14891
     },
-    "D:\\PROJECTS\\CORTEX\\src\\agents\\brain_ingestion_adapter_agent.py": {
+    "/Users/asifhussain/PROJECTS/CORTEX/src/cortex_agents/profile_agent.py": {
+      "sha256": "0347fafcdfdb310360f9a24e391e0b7e680238cdb66c4862306da8bae4d24415",
+      "last_modified": "2025-12-02T16:42:54.952592",
+      "last_checked": "2025-12-06T04:46:19.680470",
+      "size_bytes": 15227
+    },
+    "/Users/asifhussain/PROJECTS/CORTEX/src/cortex_agents/ado_agent.py": {
+      "sha256": "2740324f2973bd52664d0bd116bc55f96383581b75a511c61e27869bba8879bd",
+      "last_modified": "2025-12-02T16:42:54.949600",
+      "last_checked": "2025-12-06T04:46:19.680602",
+      "size_bytes": 12494
+    },
+    "/Users/asifhussain/PROJECTS/CORTEX/src/cortex_agents/strategic/architecture_intelligence_agent.py": {
+      "sha256": "3a3c90f0a378796a8e1eea6e4678804fcb78c1e3ca29a7905781e8a25d17b17d",
+      "last_modified": "2025-12-02T16:42:54.953153",
+      "last_checked": "2025-12-06T04:46:19.680677",
+      "size_bytes": 19286
+    },
+    "/Users/asifhussain/PROJECTS/CORTEX/src/agents/view_discovery_agent.py": {
+      "sha256": "f36f80a79698145150079d341b537c2802c524c6d9b2ff74e20294c87ee3b92c",
+      "last_modified": "2025-12-02T16:42:54.943891",
+      "last_checked": "2025-12-06T04:46:19.680911",
+      "size_bytes": 17370
+    },
+    "/Users/asifhussain/PROJECTS/CORTEX/src/agents/feedback_agent.py": {
+      "sha256": "c06d1596f685ae56a21927b2a651ae5e9b4748f3cbcf79000e6b9d708348c635",
+      "last_modified": "2025-12-02T16:42:54.943310",
+      "last_checked": "2025-12-06T04:46:19.681028",
+      "size_bytes": 9814
+    },
+    "/Users/asifhussain/PROJECTS/CORTEX/src/agents/brain_ingestion_agent.py": {
+      "sha256": "f717078536c375554c57bc0503787079ca4e7c6b524bdf948d7ee2dab8336f2c",
+      "last_modified": "2025-12-02T16:42:54.942264",
+      "last_checked": "2025-12-06T04:46:19.681247",
+      "size_bytes": 17378
+    },
+    "/Users/asifhussain/PROJECTS/CORTEX/src/agents/brain_ingestion_adapter_agent.py": {
       "sha256": "5b3c863bfc0f74fd851cf4af94f3e72ec398fcb7b3537bb7fb2bb54f0e447030",
-      "last_modified": "2025-11-29T08:57:55.769419",
-      "last_checked": "2025-12-05T18:22:05.808488",
+      "last_modified": "2025-11-30T13:51:14.206495",
+      "last_checked": "2025-12-06T04:46:19.681350",
       "size_bytes": 1691
     },
-    "D:\\PROJECTS\\CORTEX\\src\\agents\\brain_ingestion_agent.py": {
-      "sha256": "c2202d501fc733c12ebfbe857a4f60b82fc0bfd86d6a1dd1c2e58c2e93977b53",
-      "last_modified": "2025-12-01T12:25:27.901843",
-      "last_checked": "2025-12-05T18:22:05.808867",
-      "size_bytes": 17832
+    "/Users/asifhussain/PROJECTS/CORTEX/src/agents/base_agent.py": {
+      "sha256": "90d68d4a5e2dc16c045abbd2c2817335830aa6ac33729757810d6b5eeeef78a7",
+      "last_modified": "2025-12-02T16:42:54.942166",
+      "last_checked": "2025-12-06T04:46:19.681472",
+      "size_bytes": 7022
     },
-    "D:\\PROJECTS\\CORTEX\\src\\agents\\feedback_agent.py": {
-      "sha256": "449d7b665c19fb8b083cc5087952269c1a9e23c23c457709b644496b806d2085",
-      "last_modified": "2025-12-01T12:25:27.940821",
-      "last_checked": "2025-12-05T18:22:05.809224",
-      "size_bytes": 10102
-    },
-    "D:\\PROJECTS\\CORTEX\\src\\agents\\view_discovery_agent.py": {
-      "sha256": "83fa474fb1d711bb549813bbf509b0545d70400d21194f0dc33a44b8fc2300c6",
-      "last_modified": "2025-12-01T12:25:27.980796",
-      "last_checked": "2025-12-05T18:22:05.809576",
-      "size_bytes": 17854
-    },
-    "D:\\PROJECTS\\CORTEX\\src\\agents\\security\\threat_modeler_agent.py": {
-      "sha256": "4cf9c9dc1c426006e99c98397195789de80ba4ce862517f8efa914a395c6c1d9",
-      "last_modified": "2025-12-02T14:17:52.750144",
-      "last_checked": "2025-12-05T18:22:05.809938",
-      "size_bytes": 55790
+    "/Users/asifhussain/PROJECTS/CORTEX/src/agents/security/threat_modeler_agent.py": {
+      "sha256": "cc03eeb7c8d26d027ef5b58b61477c70448a994f6355449ad14b8f085803f599",
+      "last_modified": "2025-12-02T16:42:59.912734",
+      "last_checked": "2025-12-06T04:46:19.682040",
+      "size_bytes": 54530
     }
   },
   "feature_scores": {
@@ -873,20 +873,13 @@
     "features_impacted": []
   },
   "performance_metrics": {
-    "last_run_duration_seconds": 15.529184399987571,
+    "last_run_duration_seconds": 9.017116958,
     "features_checked": 0,
     "features_skipped": 0,
     "cache_hit_rate": 0.0
   },
   "overall_health": 90,
   "alignment_history": [
-    {
-      "timestamp": "2025-12-04T16:03:44.425797",
-      "overall_health": 100,
-      "total_features": 0,
-      "critical_issues": 0,
-      "warnings": 0
-    },
     {
       "timestamp": "2025-12-05T17:47:12.635439",
       "overall_health": 100,
@@ -949,6 +942,13 @@
       "total_features": 0,
       "critical_issues": 1,
       "warnings": 0
+    },
+    {
+      "timestamp": "2025-12-06T04:46:19.682051",
+      "overall_health": 90,
+      "total_features": 0,
+      "critical_issues": 1,
+      "warnings": 3
     }
   ]
 }

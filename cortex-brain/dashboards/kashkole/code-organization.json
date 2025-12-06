@@ -1,15 +1,7 @@
 {
-  "heatmap": [],
+  "total_files": 0,
+  "total_lines": 0,
   "hotspots": [],
-  "module_structure": {
-    "modules": [],
-    "depth": 0,
-    "total_directories": 0
-  },
-  "summary": {
-    "total_files": 0,
-    "high_complexity_files": 0,
-    "hotspot_count": 0,
-    "avg_complexity": 0
-  }
+  "file_types": {},
+  "directories": 0
 }

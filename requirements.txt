@@ -48,8 +48,5 @@ tree-sitter-languages>=1.10.2  # Pre-built language grammars
 # Application Onboarding System (CORTEX 3.2 - Phase 1)
 networkx>=3.1  # Graph analysis for architecture visualization
 toml>=0.10.2  # TOML parsing for pyproject.toml, Cargo.toml
-
-# Executive Summary Dashboard (CORTEX 3.7.2)
-GitPython>=3.1.40  # Rich git repository analytics and history extraction
 # Note: astroid and requirements-parser omitted (not strictly needed for simplified onboarding)
 

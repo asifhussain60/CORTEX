@@ -59,7 +59,14 @@ class AdminDashboardLauncherModule:
                     )
                 }
             
-            # Get all available repositories
+            # AUTO-DISCOVERY: Scan and register repositories
+            from src.operations.modules.dashboard.repository_discovery_service import discover_and_register_repositories
+            
+            self.logger.info("🔍 Auto-discovering repositories...")
+            discovered_repos = discover_and_register_repositories()
+            self.logger.info(f"✅ Discovered {len(discovered_repos)} repositories")
+            
+            # Get all available repositories (from registry)
             repos = self._discover_repositories()
             
             if not repos:
@@ -127,17 +134,22 @@ class AdminDashboardLauncherModule:
                 # Build repository selector info
                 repo_list = "\n".join([
                     f"  • {repo['name']} ({repo['type']}) - {repo['files']} files"
-                    for repo in repos
+                    for repo in repos[:5]  # Show first 5
                 ])
+                
+                if len(repos) > 5:
+                    repo_list += f"\n  ... and {len(repos) - 5} more"
                 
                 url = f"http://localhost:{port}/ui/index.html?source={source}"
                 
                 message = (
                     f"✅ Admin Dashboard launched in new terminal window!\n\n"
+                    f"🔍 Auto-discovered: {len(discovered_repos)} repositories\n"
+                    f"📊 Total available: {len(repos)} repositories\n\n"
                     f"🌐 URL: {url}\n"
                     f"🔌 Port: {port}\n"
-                    f"📊 Currently viewing: {default_repo['name']}\n\n"
-                    f"📁 Available Repositories ({len(repos)}):\n{repo_list}\n\n"
+                    f"📁 Currently viewing: {default_repo['name']}\n\n"
+                    f"📁 Available Repositories:\n{repo_list}\n\n"
                     f"💡 To switch repositories:\n"
                     f"  1. Use the dropdown selector in the dashboard UI\n"
                     f"  2. Or close the terminal and relaunch with different source\n\n"
@@ -207,8 +219,9 @@ class AdminDashboardLauncherModule:
             List of repository info dicts
         """
         try:
-            cortex_root = Path(__file__).parent.parent.parent.parent
-            dashboards_dir = cortex_root / "cortex-brain" / "dashboards"
+            from src.config.dashboard_config import get_config
+            config = get_config()
+            dashboards_dir = config.get_path('repos')
             
             if not dashboards_dir.exists():
                 return []
@@ -220,8 +233,8 @@ class AdminDashboardLauncherModule:
                 if not item.is_dir():
                     continue
                 
-                # Skip special directories
-                if item.name in ['ui', 'schema', '.git']:
+                # Skip special directories (none expected in repos/)
+                if item.name.startswith('.'):
                     continue
                 
                 # Check for health-data.json (indicates valid dashboard data)

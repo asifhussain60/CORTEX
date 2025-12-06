@@ -12,8 +12,8 @@ templates:
     expected_orchestrator: compliance_dashboard_agent
     operation_name: ComplianceDashboard
     sections:
-      understanding_content: You want to view compliance and security dashboard
-      challenge_content: No Challenge - Real-time compliance monitoring
+      understanding_scope_content: You want to view compliance and security dashboard
+      approach_considerations_content: No significant challenges - Real-time compliance monitoring
       response_content: '## 🛡️ Compliance Dashboard Agent
 
 
@@ -119,7 +119,7 @@ templates:
         - Low: Documentation gaps
 
         '
-      request_echo_content: View compliance and security dashboard
+      impact_changes_content: View compliance and security dashboard
       next_steps_content: '**Compliance Commands:**
 
 

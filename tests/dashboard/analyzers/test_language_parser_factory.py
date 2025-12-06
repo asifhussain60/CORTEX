@@ -45,9 +45,10 @@ def test_factory_singleton():
 
 def test_factory_initialization(factory):
     """Test factory initializes with all analyzers."""
-    assert len(factory._analyzers) == 4
+    assert len(factory._analyzers) == 5  # csharp, typescript, coldfusion, sql, python
     assert 'csharp' in factory._analyzers
     assert 'typescript' in factory._analyzers
+    assert 'python' in factory._analyzers
     assert 'coldfusion' in factory._analyzers
     assert 'sql' in factory._analyzers
 

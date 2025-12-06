@@ -149,14 +149,14 @@ def test_application_repository_get_all():
                     app_id="cortex",
                     app_name="CORTEX",
                     app_type="internal",
-                    data_path="/cortex-brain/dashboards/cortex",
+                    data_path="/cortex-brain/dashboards/data/repos/cortex",
                     last_scan=datetime.now()
                 ),
                 Application(
                     app_id="noor-canvas",
                     app_name="Noor-Canvas",
                     app_type="external",
-                    data_path="/cortex-brain/dashboards/noor-canvas",
+                    data_path="/cortex-brain/dashboards/data/repos/noor-canvas",
                     last_scan=datetime.now()
                 )
             ]
@@ -196,7 +196,7 @@ def test_application_repository_get_by_id():
                     app_id="cortex",
                     app_name="CORTEX",
                     app_type="internal",
-                    data_path="/cortex-brain/dashboards/cortex",
+                    data_path="/cortex-brain/dashboards/data/repos/cortex",
                     last_scan=datetime.now()
                 )
             return None

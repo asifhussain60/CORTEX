@@ -28,7 +28,7 @@ class TestJsonMultiAppRepository:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="dashboards/cortex",
+            dashboard_path="dashboards/data/repos/cortex",
             is_active=True
         )
     

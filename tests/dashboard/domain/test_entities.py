@@ -106,7 +106,7 @@ def test_application_entity_creation():
         app_id="cortex",
         app_name="CORTEX",
         app_type="internal",
-        data_path="/cortex-brain/dashboards/cortex",
+        data_path="/cortex-brain/dashboards/data/repos/cortex",
         last_scan=datetime(2025, 12, 4, 10, 0, 0)
     )
     
@@ -114,7 +114,7 @@ def test_application_entity_creation():
     assert app.app_id == "cortex"
     assert app.app_name == "CORTEX"
     assert app.app_type == "internal"
-    assert app.data_path == "/cortex-brain/dashboards/cortex"
+    assert app.data_path == "/cortex-brain/dashboards/data/repos/cortex"
     assert app.last_scan.year == 2025
 
 

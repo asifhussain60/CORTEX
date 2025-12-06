@@ -1,67 +1,13 @@
 {
   "frontend": [],
-  "backend": [
-    {
-      "name": ".NET",
-      "version": "unknown",
-      "latest": "unknown",
-      "status": "current",
-      "category": "framework",
-      "cve_count": 0,
-      "eol_date": null,
-      "metadata": {
-        "language": "C#",
-        "file_count": 231,
-        "project_count": 8,
-        "frameworks": []
-      }
-    },
-    {
-      "name": "C#",
-      "version": "unknown",
-      "latest": "unknown",
-      "status": "current",
-      "category": "language",
-      "cve_count": 0,
-      "eol_date": null,
-      "metadata": {
-        "file_count": 231,
-        "lines_of_code": 11603
-      }
-    }
-  ],
-  "database": [
-    {
-      "name": "SQL Server",
-      "version": "unknown",
-      "latest": "unknown",
-      "status": "current",
-      "category": "database",
-      "cve_count": 0,
-      "eol_date": null,
-      "metadata": {
-        "confidence_signals": 1
-      }
-    },
-    {
-      "name": "Microsoft Access",
-      "version": "unknown",
-      "latest": "unknown",
-      "status": "current",
-      "category": "database",
-      "cve_count": 0,
-      "eol_date": null,
-      "metadata": {
-        "confidence_signals": 2
-      }
-    }
-  ],
+  "backend": [],
+  "database": [],
   "devops": [],
   "summary": {
-    "total_technologies": 4,
-    "current_count": 4,
+    "total_technologies": 0,
+    "current_count": 0,
     "outdated_count": 0,
     "deprecated_count": 0,
-    "last_scan": "2025-12-04T18:18:38.960652"
+    "last_scan": "2025-12-06T09:18:04.039621"
   }
 }

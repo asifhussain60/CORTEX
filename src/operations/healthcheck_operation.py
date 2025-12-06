@@ -31,6 +31,7 @@ from .base_operation_module import (
     OperationPhase,
     OperationModuleMetadata,
 )
+from src.utils.progress_decorator import with_progress, yield_progress
 
 
 logger = logging.getLogger(__name__)
@@ -103,9 +104,10 @@ class HealthCheckOperation(BaseOperationModule):
                 error=str(e)
             )
     
+    @with_progress(operation_name="System Health Check")
     def execute(self, context: Optional[Dict[str, Any]] = None) -> OperationResult:
         """
-        Execute health check operation.
+        Execute health check operation with progress monitoring.
         
         Args:
             context: Optional execution context
@@ -116,16 +118,32 @@ class HealthCheckOperation(BaseOperationModule):
         try:
             logger.info("Starting CORTEX health check...")
             
+            # Total check phases
+            total_phases = 5
+            
+            yield_progress(1, total_phases, "Checking brain health (Tier 0-3)")
+            brain_health = self._check_brain_health()
+            
+            yield_progress(2, total_phases, "Analyzing database performance")
+            database_health = self._check_database_health()
+            
+            yield_progress(3, total_phases, "Evaluating cache status")
+            cache_health = self._check_cache_health()
+            
+            yield_progress(4, total_phases, "Gathering system metrics")
+            system_metrics = self._get_system_metrics()
+            
             health_report = {
                 "timestamp": datetime.now().isoformat(),
-                "brain_health": self._check_brain_health(),
-                "database_health": self._check_database_health(),
-                "cache_health": self._check_cache_health(),
-                "system_metrics": self._get_system_metrics(),
+                "brain_health": brain_health,
+                "database_health": database_health,
+                "cache_health": cache_health,
+                "system_metrics": system_metrics,
                 "recommendations": []
             }
             
             # Generate recommendations
+            yield_progress(5, total_phases, "Generating recommendations")
             health_report["recommendations"] = self._generate_recommendations(health_report)
             
             # Calculate overall health score

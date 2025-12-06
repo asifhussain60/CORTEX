@@ -104,10 +104,21 @@ def run_skull_tests(
         output = proc_result.stdout + proc_result.stderr
         result['output'] = output
         
-        # Parse results
-        passed_count = output.count(' PASSED')
-        failed_count = output.count(' FAILED')
-        total_count = passed_count + failed_count
+        # Parse results from pytest summary line
+        # Format: "===== X passed, Y failed, Z skipped, A xfailed, B xpassed in Xs ====="
+        import re
+        summary_pattern = r'=+\s*(\d+)\s+passed(?:,\s*(\d+)\s+failed)?'
+        match = re.search(summary_pattern, output)
+        
+        if match:
+            passed_count = int(match.group(1))
+            failed_count = int(match.group(2)) if match.group(2) else 0
+            total_count = passed_count + failed_count
+        else:
+            # Fallback: count individual test results (works with -v but not -q)
+            passed_count = output.count(' PASSED')
+            failed_count = output.count(' FAILED')
+            total_count = passed_count + failed_count
         
         result['tests_run'] = total_count
         result['tests_passed'] = passed_count

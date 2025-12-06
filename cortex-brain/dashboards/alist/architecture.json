@@ -1,15 +1,5 @@
 {
-  "style": "unknown",
-  "tiers": [],
   "components": [],
-  "database_schema": {
-    "tables": [],
-    "relationships": []
-  },
-  "summary": {
-    "total_components": 0,
-    "total_files": 0,
-    "total_loc": 0,
-    "architecture_score": 70
-  }
+  "layers": 0,
+  "patterns": []
 }

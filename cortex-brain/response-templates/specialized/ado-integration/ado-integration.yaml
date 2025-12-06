@@ -13,9 +13,9 @@ templates:
     expected_orchestrator: ado_agent
     operation_name: ADOIntegration
     sections:
-      understanding_content: You want to import Azure DevOps work items into CORTEX
+      understanding_scope_content: You want to import Azure DevOps work items into CORTEX
         planning
-      challenge_content: No Challenge - Vision API auto-extracts from ADO screenshots
+      approach_considerations_content: No significant challenges - Vision API auto-extracts from ADO screenshots
       response_content: "## \U0001F537 Azure DevOps Agent\n\n**Seamless ADO integration**\
         \ with Vision API screenshot extraction\n\n**Import Methods:**\n\n**1. Screenshot\
         \ Import (Recommended)**\n- Upload ADO work item screenshot\n- Vision API\
@@ -34,7 +34,7 @@ templates:
         \ sync (optional)\n- ✅ Status updates to ADO\n\n**Vision API Accuracy:**\n\
         - OCR: 95%+ accuracy\n- Field detection: 90%+ accuracy\n- Layout parsing:\
         \ 85%+ accuracy\n"
-      request_echo_content: Import Azure DevOps work items into CORTEX planning
+      impact_changes_content: Import Azure DevOps work items into CORTEX planning
       next_steps_content: '**ADO Import Commands:**
 
 

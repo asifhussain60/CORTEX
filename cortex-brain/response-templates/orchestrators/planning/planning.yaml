@@ -15,9 +15,9 @@ templates:
     expected_orchestrator: planning_orchestrator
     operation_name: Planning
     sections:
-      understanding_content: You want to create a comprehensive feature plan with
+      understanding_scope_content: You want to create a comprehensive feature plan with
         DoR/DoD validation
-      challenge_content: No Challenge - Structured planning with Vision API support
+      approach_considerations_content: No significant challenges - Structured planning with Vision API support
       response_content: "## \U0001F4CB CORTEX Planning System 2.0\n\n**Zero-ambiguity\
         \ planning** with Vision API, DoR validation, and file persistence\n\n**Key\
         \ Features:**\n\n**1. Vision API Integration**\n- Upload screenshots (UI mockups,\
@@ -43,7 +43,7 @@ templates:
         ```\ncortex-brain/documents/planning/\n├── user-authentication-plan-2025-12-05.md\n\
         ├── payment-integration-plan-2025-12-06.md\n└── api-optimization-plan-2025-12-07.md\n\
         ```\n"
-      request_echo_content: Create comprehensive feature plan with DoR/DoD validation
+      impact_changes_content: Create comprehensive feature plan with DoR/DoD validation
       next_steps_content: '**Planning Commands:**
 
 

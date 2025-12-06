@@ -17,14 +17,14 @@ class TestApplication:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
         assert app.id == "cortex"
         assert app.name == "CORTEX"
         assert app.display_name == "CORTEX Dashboard"
-        assert app.dashboard_path == "cortex-brain/dashboards/cortex"
+        assert app.dashboard_path == "cortex-brain/dashboards/data/repos/cortex"
         assert app.is_active is True
     
     def test_application_id_must_be_alphanumeric_with_hyphens(self):
@@ -34,7 +34,7 @@ class TestApplication:
                 id="cortex@2023",  # Invalid: contains @
                 name="CORTEX",
                 display_name="CORTEX Dashboard",
-                dashboard_path="cortex-brain/dashboards/cortex",
+                dashboard_path="cortex-brain/dashboards/data/repos/cortex",
                 is_active=True
             )
     
@@ -45,7 +45,7 @@ class TestApplication:
                 id="",
                 name="CORTEX",
                 display_name="CORTEX Dashboard",
-                dashboard_path="cortex-brain/dashboards/cortex",
+                dashboard_path="cortex-brain/dashboards/data/repos/cortex",
                 is_active=True
             )
     
@@ -56,7 +56,7 @@ class TestApplication:
                 id="cortex",
                 name="",
                 display_name="CORTEX Dashboard",
-                dashboard_path="cortex-brain/dashboards/cortex",
+                dashboard_path="cortex-brain/dashboards/data/repos/cortex",
                 is_active=True
             )
     
@@ -66,7 +66,7 @@ class TestApplication:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -85,7 +85,7 @@ class TestApplication:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True,
             metadata=metadata
         )
@@ -99,7 +99,7 @@ class TestApplication:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -107,7 +107,7 @@ class TestApplication:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -119,7 +119,7 @@ class TestApplication:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -144,7 +144,7 @@ class TestApplicationRegistry:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -160,7 +160,7 @@ class TestApplicationRegistry:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -168,7 +168,7 @@ class TestApplicationRegistry:
             id="cortex",
             name="CORTEX Modified",
             display_name="CORTEX Dashboard Modified",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -190,7 +190,7 @@ class TestApplicationRegistry:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -209,7 +209,7 @@ class TestApplicationRegistry:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -236,7 +236,7 @@ class TestApplicationRegistry:
             id="cortex",
             name="CORTEX",
             display_name="CORTEX Dashboard",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         
@@ -246,7 +246,7 @@ class TestApplicationRegistry:
             id="cortex",
             name="CORTEX Updated",
             display_name="CORTEX Dashboard v2",
-            dashboard_path="cortex-brain/dashboards/cortex",
+            dashboard_path="cortex-brain/dashboards/data/repos/cortex",
             is_active=True
         )
         

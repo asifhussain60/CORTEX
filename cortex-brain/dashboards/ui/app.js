@@ -11,8 +11,8 @@
 import { loadDashboardData, clearCache, exportToJson, exportToCsv, enrichDashboardData } from './data-loader.js';
 import { initializeAdaptiveVisibility } from './adaptive-visibility.js';
 import { renderArchitecturePanels } from './components/architecture-panels.js';
+import { renderExecutiveSummary } from './components/executive-tab.js';
 import { renderOverview } from './components/overview-tab.js';
-import { renderExecutiveSummary } from './components/executive-summary-tab.js';
 import { renderTechStack } from './components/tech-stack-tab.js';
 import { renderSecurity } from './components/security-tab.js';
 import { renderArchitecture } from './components/architecture-tab.js';
@@ -63,6 +63,9 @@ async function initializeApp() {
         
         // Set up event listeners
         setupEventListeners();
+        
+        // Update source selector with discovered repositories
+        await updateSourceSelector();
         
         // Show loading overlay
         showLoading('Loading dashboard data...');
@@ -155,6 +158,31 @@ function setupEventListeners() {
             switchTab(tab);
         }
     });
+    
+    // Repository monitoring events
+    window.addEventListener('repository-added', (event) => {
+        console.log('Repository added:', event.detail);
+        updateSourceSelector();
+    });
+    
+    window.addEventListener('repository-removed', (event) => {
+        console.log('Repository removed:', event.detail);
+        updateSourceSelector();
+        
+        // If currently viewing removed repository, switch to mock
+        if (appState.currentSource === event.detail.name) {
+            handleSourceChange('mock');
+        }
+    });
+    
+    window.addEventListener('repository-updated', (event) => {
+        console.log('Repository updated:', event.detail);
+        
+        // Refresh data if currently viewing updated repository
+        if (appState.currentSource === event.detail.name) {
+            window.dispatchEvent(new CustomEvent('refreshData'));
+        }
+    });
 }
 
 /**
@@ -214,11 +242,11 @@ async function renderCurrentTab() {
     try {
         // Use lazy rendering to only render active tab
         switch (appState.currentTab) {
-            case 'overview':
-                await lazyRenderTab('overview', () => renderOverview(appState.data), appState.data);
-                break;
             case 'executive':
                 await lazyRenderTab('executive', () => renderExecutiveSummary(appState.data), appState.data);
+                break;
+            case 'overview':
+                await lazyRenderTab('overview', () => renderOverview(appState.data), appState.data);
                 break;
             case 'tech-stack':
                 await lazyRenderTab('tech-stack', () => renderTechStack(appState.data), appState.data);
@@ -290,6 +318,43 @@ function clearError() {
     const errorContainer = document.getElementById('errorContainer');
     if (errorContainer) {
         errorContainer.innerHTML = '';
+    }
+}
+
+/**
+ * Update source selector dropdown with current repositories
+ */
+async function updateSourceSelector() {
+    try {
+        const response = await fetch('../data/registry.json');
+        const registry = await response.json();
+        
+        const select = document.getElementById('sourceSelect');
+        if (!select) return;
+        
+        // Store current selection
+        const currentValue = select.value;
+        
+        // Clear existing options except mock
+        select.innerHTML = '<option value="mock">Mock Data (Demo)</option>';
+        
+        // Add repositories from registry
+        if (registry.repositories && Array.isArray(registry.repositories)) {
+            registry.repositories.forEach(repo => {
+                const option = document.createElement('option');
+                option.value = repo.name;
+                option.textContent = repo.display_name || repo.name;
+                select.appendChild(option);
+            });
+        }
+        
+        // Restore selection if still available
+        if (currentValue && [...select.options].some(opt => opt.value === currentValue)) {
+            select.value = currentValue;
+        }
+        
+    } catch (error) {
+        console.error('Failed to update source selector:', error);
     }
 }
 

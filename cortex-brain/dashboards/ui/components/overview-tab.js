@@ -191,6 +191,10 @@ export function renderOverview(data) {
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">📁</div>
                     <div style="font-size: 0.875rem;">Code Org</div>
                 </button>
+                <button class="btn" onclick="switchTab('team')" style="padding: 1rem;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
+                    <div style="font-size: 0.875rem;">Team</div>
+                </button>
                 <button class="btn" onclick="switchTab('vendors')" style="padding: 1rem;">
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔌</div>
                     <div style="font-size: 0.875rem;">Dependencies</div>

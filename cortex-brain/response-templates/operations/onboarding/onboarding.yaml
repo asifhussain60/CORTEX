@@ -12,8 +12,8 @@ templates:
     expected_orchestrator: onboarding_acknowledgment_orchestrator
     operation_name: OnboardingAck
     sections:
-      understanding_content: You want to acknowledge completion of CORTEX onboarding
-      challenge_content: No Challenge - Simple acknowledgment with profile creation
+      understanding_scope_content: You want to acknowledge completion of CORTEX onboarding
+      approach_considerations_content: No significant challenges - Simple acknowledgment with profile creation
       response_content: "## \U0001F44B Onboarding Acknowledgment\n\n**Confirm onboarding\
         \ completion** and create user profile\n\n**Onboarding Checklist:**\n\n✅ **System\
         \ Setup**\n- CORTEX installed\n- Brain tiers initialized\n- Configuration\
@@ -30,7 +30,7 @@ templates:
         \ ✅ Dashboard customization available\n\n**Welcome Message:**\n\"Congratulations!\
         \ You've completed CORTEX onboarding. Your personalized AI assistant is now\
         \ fully configured and ready to accelerate your development workflow.\"\n"
-      request_echo_content: Acknowledge completion of CORTEX onboarding
+      impact_changes_content: Acknowledge completion of CORTEX onboarding
       next_steps_content: '**Next Steps:**
 
 

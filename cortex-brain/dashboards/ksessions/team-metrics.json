@@ -1,48 +1,6 @@
 {
-  "contributors": [
-    {
-      "name": "Asif Hussain",
-      "commits": 1573,
-      "lines_added": 0,
-      "lines_removed": 0,
-      "files_changed": 0,
-      "first_commit": "unknown",
-      "last_commit": "unknown"
-    }
-  ],
-  "velocity": {
-    "commits_per_week": 6.583333333333333,
-    "trend": "decreasing",
-    "recent_activity": [
-      2,
-      0,
-      0,
-      0,
-      0,
-      26,
-      25,
-      5,
-      4,
-      17,
-      0,
-      0
-    ]
-  },
-  "knowledge_distribution": {
-    "files": [],
-    "concentration_score": 0
-  },
-  "bus_factor": {
-    "factor": 1,
-    "risk": "critical",
-    "top_contributors": [
-      "Asif Hussain"
-    ]
-  },
-  "summary": {
-    "total_contributors": 1,
-    "active_contributors": 1,
-    "total_commits": 1573,
-    "avg_commits_per_contributor": 1573.0
-  }
+  "total_commits": 0,
+  "contributor_count": 0,
+  "last_commit_date": "N/A",
+  "active_contributors": []
 }
