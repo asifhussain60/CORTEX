@@ -1,11 +1,11 @@
-**Status:** approved
-
 metadata:
   plan_id: PLAN-2025-12-06-AUTO-DOC-GEN
   title: "Phase 2: Auto-Documentation Generation for Learning Library"
+  description: "Automatically generate markdown documentation when workflows complete, using templates and context extraction"
+  author: "Asif Hussain"
   created_date: "2025-12-06T00:00:00Z"
   created_by: "Asif Hussain"
-  status: "proposed"
+  status: "approved"
   priority: "high"
   estimated_hours: 40
   complexity: "medium"
@@ -35,6 +35,7 @@ vision:
 
 phases:
   - phase_number: 1
+    name: "Template System & Context Extraction"
     phase_name: "Template System & Context Extraction"
     estimated_hours: 12
     description: "Create documentation templates and context extraction utilities"
@@ -97,6 +98,7 @@ phases:
           - "Output validated against markdown linting"
   
   - phase_number: 2
+    name: "Integration with Completion Workflows"
     phase_name: "Integration with Completion Workflows"
     estimated_hours: 10
     description: "Replace reminders with automatic generation in PlanningOrchestrator and ADO utility"
@@ -155,6 +157,7 @@ phases:
           - "Replaces current reminder with generation"
   
   - phase_number: 3
+    name: "AI-Assisted Content Generation (Optional Enhancement)"
     phase_name: "AI-Assisted Content Generation (Optional Enhancement)"
     estimated_hours: 8
     description: "Use AI to generate key learnings and insights from context"
@@ -206,6 +209,7 @@ phases:
           - "Generation algorithm adapts based on feedback"
   
   - phase_number: 4
+    name: "Testing, Documentation, and Dashboard Integration"
     phase_name: "Testing, Documentation, and Dashboard Integration"
     estimated_hours: 10
     description: "Comprehensive testing and user-facing documentation"
