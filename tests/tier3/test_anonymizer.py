@@ -125,7 +125,7 @@ class TestAnonymizer:
     
     def test_strip_pii_preserves_structure(self):
         """Test PII stripping maintains text structure"""
-        anon = Anonomizer()
+        anon = Anonymizer()
         
         text = "User john@example.com requested feature X on 2025-12-05"
         result = anon.strip_pii(text)
