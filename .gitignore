@@ -156,3 +156,4 @@ dmypy.json
 
 # Optimization reports (generated, can be recreated)
 cortex-brain/documents/reports/optimization-report-*.json
+cortex-brain/.alignment-state.json
