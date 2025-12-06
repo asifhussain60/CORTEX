@@ -63,7 +63,7 @@ class DatabaseSchema:
                 scope TEXT DEFAULT 'cortex',
                 namespaces TEXT DEFAULT '["CORTEX-core"]',
                 CHECK (confidence >= 0.0 AND confidence <= 1.0),
-                CHECK (pattern_type IN ('workflow', 'principle', 'anti_pattern', 'solution', 'context')),
+                CHECK (pattern_type IN ('workflow', 'principle', 'anti_pattern', 'solution', 'context', 'tdd_cycle', 'implementation', 'architectural')),
                 CHECK (scope IN ('cortex', 'application'))
             )
         """)

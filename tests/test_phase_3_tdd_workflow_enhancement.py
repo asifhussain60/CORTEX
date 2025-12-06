@@ -52,7 +52,7 @@ class TestRedPhaseTierFeeding:
         
         # Act
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        red_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.RED.value][0]
+        red_chunk = [c for c in chunks if c.chunk_type == 'test' and c.metadata.get('phase') == TDDPhase.RED.value][0]
         result = tdd_orchestrator.execute_chunk(red_chunk)
         
         # Assert
@@ -102,7 +102,7 @@ class TestRedPhaseTierFeeding:
         
         # Act
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        red_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.RED.value][0]
+        red_chunk = [c for c in chunks if c.chunk_type == 'test' and c.metadata.get('phase') == TDDPhase.RED.value][0]
         
         # Execute RED chunk BEFORE any commit
         result = tdd_orchestrator.execute_chunk(red_chunk)
@@ -140,7 +140,7 @@ class TestGreenPhaseTierFeeding:
         
         # Act - Execute RED then GREEN
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        green_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.GREEN.value][0]
+        green_chunk = [c for c in chunks if c.chunk_type == 'method' and c.metadata.get('phase') == TDDPhase.GREEN.value][0]
         result = tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert
@@ -165,8 +165,8 @@ class TestGreenPhaseTierFeeding:
         
         # Act
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        green_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.GREEN.value][0]
-        result = tdd_orchestrator.execute_chunk(green_chunk)
+        green_chunk = [c for c in chunks if c.chunk_type == 'method' and c.metadata.get('phase') == TDDPhase.GREEN.value][0]
+        tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert
         dependencies = tdd_orchestrator.tier2.get_implementation_dependencies(feature="Database Connection")
@@ -185,7 +185,7 @@ class TestGreenPhaseTierFeeding:
         
         # Act
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        green_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.GREEN.value][0]
+        green_chunk = [c for c in chunks if c.chunk_type == 'method' and c.metadata.get('phase') == TDDPhase.GREEN.value][0]
         result = tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert
@@ -218,7 +218,7 @@ class TestRefactorPhaseTierFeeding:
         
         # Act - Execute RED, GREEN, then REFACTOR
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        refactor_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.REFACTOR.value][0]
+        refactor_chunk = [c for c in chunks if c.chunk_type == 'section' and c.metadata.get('phase') == TDDPhase.REFACTOR.value][0]
         result = tdd_orchestrator.execute_chunk(refactor_chunk)
         
         # Assert
@@ -242,8 +242,8 @@ class TestRefactorPhaseTierFeeding:
         
         # Act
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        refactor_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.REFACTOR.value][0]
-        result = tdd_orchestrator.execute_chunk(refactor_chunk)
+        refactor_chunk = [c for c in chunks if c.chunk_type == 'section' and c.metadata.get('phase') == TDDPhase.REFACTOR.value][0]
+        tdd_orchestrator.execute_chunk(refactor_chunk)
         
         # Assert
         metrics = tdd_orchestrator.tier3.get_performance_metrics(feature="Data Processor")
@@ -265,7 +265,7 @@ class TestRefactorPhaseTierFeeding:
         
         # Act
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        refactor_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.REFACTOR.value][0]
+        refactor_chunk = [c for c in chunks if c.chunk_type == 'section' and c.metadata.get('phase') == TDDPhase.REFACTOR.value][0]
         result = tdd_orchestrator.execute_chunk(refactor_chunk)
         
         # Assert
@@ -449,7 +449,7 @@ class TestRealTimeContextUpdates:
         
         # Act - Execute GREEN phase
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        green_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.GREEN.value][0]
+        green_chunk = [c for c in chunks if c.chunk_type == 'method' and c.metadata.get('phase') == TDDPhase.GREEN.value][0]
         result = tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert - Tier 3 should have metrics BEFORE commit
@@ -481,7 +481,7 @@ class TestRealTimeContextUpdates:
         
         # Act - Execute REFACTOR phase
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        refactor_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.REFACTOR.value][0]
+        refactor_chunk = [c for c in chunks if c.chunk_type == 'section' and c.metadata.get('phase') == TDDPhase.REFACTOR.value][0]
         result = tdd_orchestrator.execute_chunk(refactor_chunk)
         
         # Assert - Tier 3 should have before/after comparison
@@ -520,7 +520,7 @@ class TestRealTimeContextUpdates:
         # Act - Execute multiple TDD cycles on same file
         for work_request in work_requests:
             chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-            green_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.GREEN.value][0]
+            green_chunk = [c for c in chunks if c.chunk_type == 'method' and c.metadata.get('phase') == TDDPhase.GREEN.value][0]
             tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert - src/auth.py should be detected as hotspot
@@ -544,7 +544,7 @@ class TestRealTimeContextUpdates:
         
         # Act - Execute GREEN phase (no git commit yet)
         chunks = tdd_orchestrator.break_into_chunks(work_request.__dict__)
-        green_chunk = [c for c in chunks if c.metadata.get('phase') == TDDPhase.GREEN.value][0]
+        green_chunk = [c for c in chunks if c.chunk_type == 'method' and c.metadata.get('phase') == TDDPhase.GREEN.value][0]
         result = tdd_orchestrator.execute_chunk(green_chunk)
         
         # Assert - Tier 3 should have data BEFORE commit

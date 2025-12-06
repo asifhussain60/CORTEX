@@ -1,10 +1,29 @@
 schema_version: '3.2'
-last_updated: '2025-12-03'
+last_updated: '2025-12-06'
 optimization:
   type: aggressive_minimal
   original_templates: 107
   minimal_templates: 18
   reduction_strategy: Core essentials only + fallback pattern
+
+# Operation → Template Name Mappings
+# Maps cortex-operations.yaml operation names to template names in templates: section
+operation_aliases:
+  resume_conversation: resume-conversation
+  align: realignment
+  cache_dashboard: cache-implementation
+  commit: git-checkpoint
+  deploy: deployment-validation
+  healthcheck: status-check
+  help_command: help
+  optimize_tokens: optimize-token-efficiency
+  review: code-review
+  rollback: rollback-recovery
+  tdd: tdd-mastery
+  planning: planning-workflow
+  ado: ado-work-items
+  cleanup: cleanup-operation
+  git_checkpoint: git-checkpoint
 shared:
   standard_header: '## 🧠 CORTEX {title}
 
@@ -4767,30 +4786,12 @@ templates:
     - commit and sync
     response_type: detailed
     expected_orchestrator: CommitOrchestrator
-    handler: src.orchestrators.commit_orchestrator.CommitOrchestrator
-    understanding_content: You want to synchronize your local repository with origin
-      by pulling, merging, and pushing changes while ensuring no untracked files remain.
-    challenge_content: No Challenge - Commit workflow will handle pre-flight validation,
-      untracked files, merge conflicts, and create safety checkpoints automatically.
-    response_content: "**Commit Workflow Steps:**\n   \n   1. **Pre-flight Check**\
-      \ - Validate current repository state\n   2. **Handle Untracked Files** - Prompt\
-      \ to add or ignore untracked files\n   3. **Commit Local Changes** - Create\
-      \ commit with auto-generated or custom message\n   4. **Create Checkpoint**\
-      \ - Safety checkpoint for rollback capability\n   5. **Pull from Origin** -\
-      \ Fetch and merge/rebase with remote changes\n   6. **Push to Origin** - Upload\
-      \ merged changes to remote repository\n   \n   **Safety Features:**\n   • Git\
-      \ checkpoint before pull (rollback if needed)\n   • Merge conflict detection\
-      \ with clear guidance\n   • Untracked file validation (zero untracked files\
-      \ guarantee)\n   • Progress reporting for each step"
-    request_echo_content: Sync repository with origin (pull, merge, push)
-    next_steps_content: "**Execution Options:**\n   \n   1. **Standard Sync** - Say\
-      \ \"commit\" to start with interactive prompts\n   2. **Auto-add Untracked**\
-      \ - Say \"commit --auto-add\" to automatically stage untracked files\n   3.\
-      \ **Rebase Strategy** - Say \"commit --rebase\" to use rebase instead of merge\n\
-      \   4. **Custom Message** - Say \"commit --message 'your message'\" for custom\
-      \ commit message\n   \n   **Rollback Safety:**\n   If issues occur, say \"rollback\
-      \ to checkpoint\" to restore pre-sync state.\n   \n   Ready to sync? Say \"\
-      commit\" to begin."
+    handler: src.operations.commit.run_commit
+    understanding_content: "You want to synchronize your local repository with origin using stash-pull-merge-push workflow that intelligently preserves both local and remote work, especially for split-machine scenarios."
+    challenge_content: "No Challenge - Commit workflow will handle pre-flight validation, untracked files, stash local changes, intelligent merge with conflict resolution, and create safety checkpoints automatically."
+    response_content: "**Stash-Pull-Merge-Push Workflow:**\n   \n   1. **Pre-flight Check** - Validate current repository state\n   2. **Handle Untracked Files** - Prompt to add or ignore untracked files\n   3. **Stash Local Changes** - Preserve uncommitted work before pull\n   4. **Pull from Origin** - Fetch and merge/rebase with remote changes\n   5. **Apply Stash** - Restore local changes with intelligent conflict resolution\n   6. **Create Checkpoint** - Safety checkpoint for rollback capability\n   7. **Push to Origin** - Upload merged changes to remote repository\n   \n   **Safety Features:**\n   • Stash before pull (preserves local work)\n   • Intelligent conflict resolution (split-machine work)\n   • Git checkpoint after merge (rollback if needed)\n   • Merge conflict detection with clear guidance\n   • Untracked file validation (zero untracked files guarantee)\n   • Progress reporting for each step\n   \n   **Split-Machine Intelligence:**\n   • Python files: Preserves both local and remote changes\n   • Other files: Prefers local version (safer default)\n   • Auto-resolves stash conflicts when work split across machines"
+    request_echo_content: "Sync repository with origin (pull, merge, push)"
+    next_steps_content: "**Execution Options:**\n   \n   1. **Standard Sync** - Say \"commit\" to start with interactive prompts\n   2. **Auto-add Untracked** - Say \"commit --auto-add\" to automatically stage untracked files\n   3. **Rebase Strategy** - Say \"commit --rebase\" to use rebase instead of merge\n   4. **Custom Message** - Say \"commit --message 'your message'\" for custom commit message\n   \n   **Rollback Safety:**\n   If issues occur, say \"rollback to checkpoint\" to restore pre-sync state.\n   \n   Ready to sync? Say \"commit\" to begin."
   rollback_operation:
     base_structure: '## 🧠 CORTEX {operation}
 

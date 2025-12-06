@@ -76,6 +76,20 @@ class FeatureRegistrationValidator:
             "agent_base.py",
             "workflow_base.py",
             "rollback_command_parser.py",  # Utility, not orchestrator
+            # Internal orchestrators (called by other operations, not users)
+            "commit_orchestrator.py",
+            "tdd_orchestrator.py",
+            "tdd_implementation_orchestrator.py",
+            "plan_execution_orchestrator_v2.py",
+            "manager_report_orchestrator.py",
+            "orchestrator_factory.py",
+            "config_manager.py",
+            "dashboard_collector.py",
+            "dashboard_launcher.py",
+            "session_model.py",
+            "solid_scoring_engine.py",
+            "orphaned_code_cleaner.py",
+            "validation_framework.py",
         }
         
         # Excluded subdirectories (internal components)

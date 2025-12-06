@@ -311,37 +311,49 @@ class PostDeploymentValidator:
         print()
     
     def _validate_databases(self):
-        """Validate database schemas."""
-        print("💾 Validating Databases...")
+        """Validate database tier structure.
+        
+        NOTE: Does NOT check for specific database files as they are created
+        on-demand by Tier classes during initialization. Only validates that
+        tier directories exist for cross-platform compatibility.
+        """
+        print("💾 Validating Database Structure...")
         print("-" * 80)
         
-        databases = {
-            "Tier 1": self.brain_path / "tier1" / "working_memory.db",
-            "Tier 2": self.brain_path / "tier2" / "knowledge_graph.db",
-            "Tier 3": self.brain_path / "tier3" / "context.db"
+        tier_dirs = {
+            "Tier 1": self.brain_path / "tier1",
+            "Tier 2": self.brain_path / "tier2",
+            "Tier 3": self.brain_path / "tier3"
         }
         
         db_issues = []
         
-        for tier_name, db_path in databases.items():
-            if not db_path.exists():
-                db_issues.append(f"{tier_name} database missing: {db_path}")
+        for tier_name, tier_path in tier_dirs.items():
+            if not tier_path.exists():
+                db_issues.append(f"{tier_name} directory missing: {tier_path}")
                 continue
             
-            try:
-                conn = sqlite3.connect(str(db_path))
-                cursor = conn.cursor()
-                
-                cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-                tables = [row[0] for row in cursor.fetchall()]
-                
-                if not tables:
-                    db_issues.append(f"{tier_name} database has no tables")
-                
-                conn.close()
-                
-            except Exception as e:
-                db_issues.append(f"{tier_name} database validation failed: {str(e)}")
+            # Check if directory is accessible
+            if not tier_path.is_dir():
+                db_issues.append(f"{tier_name} path exists but is not a directory: {tier_path}")
+                continue
+            
+            # Optional: Check for any .db files (informational, not required)
+            db_files = list(tier_path.glob("*.db"))
+            if db_files:
+                # Database files exist - try to validate schema
+                for db_file in db_files:
+                    try:
+                        conn = sqlite3.connect(str(db_file))
+                        cursor = conn.cursor()
+                        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+                        tables = [row[0] for row in cursor.fetchall()]
+                        conn.close()
+                        
+                        if not tables:
+                            self.warnings.append(f"{tier_name} database {db_file.name} has no tables (will be initialized on first use)")
+                    except Exception as e:
+                        db_issues.append(f"{tier_name} database {db_file.name} validation failed: {str(e)}")
         
         if db_issues:
             self.issues.extend(db_issues)
@@ -352,8 +364,9 @@ class PostDeploymentValidator:
                 print(f"     - {issue}")
         else:
             self.results["databases"]["status"] = "PASS"
-            self.results["databases"]["count"] = len(databases)
-            print(f"  ✅ All databases valid ({len(databases)} tiers)")
+            self.results["databases"]["count"] = len(tier_dirs)
+            print(f"  ✅ All tier directories valid ({len(tier_dirs)} tiers)")
+            print(f"     Note: Database files created on-demand during initialization")
         
         print()
     

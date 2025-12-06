@@ -3,10 +3,13 @@ Initialize CORTEX database files.
 
 This script creates the required database files for CORTEX's 3-tier memory architecture:
 - tier1/working_memory.db (Working Memory)
-- tier2/knowledge_graph.db (Knowledge Graph)
-- tier3/development_context.db (Context Intelligence)
+- tier2/knowledge_graph.db (Knowledge Graph)  
+- tier3/context.db (Context Intelligence)
 
 The classes handle schema initialization automatically via CREATE TABLE IF NOT EXISTS.
+
+NOTE: This script explicitly uses the same database filenames that CortexEntry passes
+to the Tier classes for cross-platform compatibility.
 """
 
 import sys
@@ -53,7 +56,7 @@ def initialize_databases():
     
     # Tier 3: Context Intelligence
     print("\n🎯 Initializing Tier 3: Context Intelligence...")
-    tier3_db = brain_path / "tier3" / "development_context.db"
+    tier3_db = brain_path / "tier3" / "context.db"
     try:
         ci = ContextIntelligence(db_path=tier3_db)
         print(f"   ✅ Created: {tier3_db}")

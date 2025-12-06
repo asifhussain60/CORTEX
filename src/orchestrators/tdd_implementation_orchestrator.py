@@ -45,6 +45,7 @@ Version: 1.0.0 (CORTEX 3.8.2)
 import logging
 import subprocess
 import ast
+import re
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Any, Tuple
@@ -53,13 +54,16 @@ import uuid
 import json
 
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
+from src.orchestrators.session_model import TDDSession, TDDPhase as NewTDDPhase, SessionStatus, SessionFactory
+from src.orchestrators.validation_framework import validate_tdd_transition, validate_code_quality, TDDTestValidator
 from src.utils.progress_decorator import with_progress, yield_progress
 
 logger = logging.getLogger(__name__)
 
 
+# Backward compatibility: Keep old enum for existing code
 class TDDPhase(Enum):
-    """TDD workflow phases."""
+    """TDD workflow phases (DEPRECATED - use session_model.TDDPhase)."""
     NOT_STARTED = "not_started"
     RED = "red"
     GREEN = "green"
@@ -67,8 +71,13 @@ class TDDPhase(Enum):
     COMPLETE = "complete"
 
 
-class TDDSessionState:
-    """State tracker for TDD session."""
+class TDDSessionState(TDDSession):
+    """
+    State tracker for TDD session (MIGRATED to session_model.TDDSession).
+    
+    This class now inherits from TDDSession for type safety and consistency.
+    Maintains backward compatibility with existing code.
+    """
     
     def __init__(
         self,
@@ -77,14 +86,22 @@ class TDDSessionState:
         task_id: Optional[str] = None,
         work_item_id: Optional[str] = None
     ):
-        self.session_id = session_id
-        self.feature_name = feature_name
+        # Initialize parent TDDSession
+        super().__init__(
+            session_id=session_id,
+            session_type="tdd",
+            status=SessionStatus.NOT_STARTED,
+            started_at=datetime.now(timezone.utc),
+            feature_name=feature_name
+        )
+        
+        # Additional fields specific to implementation orchestrator
         self.task_id = task_id
         self.work_item_id = work_item_id
-        self.current_phase = TDDPhase.NOT_STARTED
-        self.phase_history: List[Dict[str, Any]] = []
-        self.checkpoints: List[str] = []
-        self.metrics: Dict[str, Any] = {
+        self.blockers: List[Dict[str, Any]] = []
+        
+        # Override metrics with extended structure
+        self.metrics = {
             "phase_timings": {},
             "duplicates_removed": 0,
             "violations_fixed": 0,
@@ -92,34 +109,46 @@ class TDDSessionState:
             "refactorings_applied": 0,
             "refactorings_rejected": 0
         }
+        
+        # Convert Path lists to str lists for parent class compatibility
         self.implementation_scope: List[Path] = []
         self.test_scope: List[Path] = []
-        self.blockers: List[Dict[str, Any]] = []
-        self.started_at = datetime.now(timezone.utc)
-        self.completed_at: Optional[datetime] = None
+        
+        # Maintain backward-compatible current_phase field
+        self.current_phase = TDDPhase.NOT_STARTED
     
     def transition_to(self, new_phase: TDDPhase, checkpoint_id: Optional[str] = None):
         """
         Transition to new phase with history tracking.
         
+        Uses validation framework to ensure valid transitions.
+        
         Args:
-            new_phase: Phase to transition to
+            new_phase: Phase to transition to (old enum)
             checkpoint_id: Optional checkpoint ID for rollback
         """
-        self.phase_history.append({
-            "from_phase": self.current_phase.value,
-            "to_phase": new_phase.value,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "checkpoint_id": checkpoint_id
-        })
-        self.current_phase = new_phase
+        # Convert old enum to new enum for validation
+        phase_mapping = {
+            TDDPhase.NOT_STARTED: NewTDDPhase.NOT_STARTED,
+            TDDPhase.RED: NewTDDPhase.RED,
+            TDDPhase.GREEN: NewTDDPhase.GREEN,
+            TDDPhase.REFACTOR: NewTDDPhase.REFACTOR,
+            TDDPhase.COMPLETE: NewTDDPhase.COMPLETED
+        }
         
-        if checkpoint_id:
-            self.checkpoints.append(checkpoint_id)
+        new_phase_enum = phase_mapping.get(new_phase, NewTDDPhase.NOT_STARTED)
+        
+        # Use parent class transition method
+        self.transition_to_phase(new_phase_enum, checkpoint_id)
+        
+        # Update old enum for backward compatibility
+        self.current_phase = new_phase
     
     def can_transition_to(self, target_phase: TDDPhase) -> Tuple[bool, str]:
         """
         Validate if transition to target phase is allowed.
+        
+        Now uses validation framework for consistent rules.
         
         Args:
             target_phase: Phase to validate transition to
@@ -127,44 +156,42 @@ class TDDSessionState:
         Returns:
             Tuple of (allowed, reason)
         """
-        current = self.current_phase
+        # Map old enum values to new enum values for validation
+        phase_value_mapping = {
+            "not_started": "not_started",
+            "red": "red",
+            "green": "green",
+            "refactor": "refactor",
+            "complete": "completed"  # OLD enum uses "complete", NEW uses "completed"
+        }
         
-        # NOT_STARTED -> RED (always allowed)
-        if current == TDDPhase.NOT_STARTED and target_phase == TDDPhase.RED:
-            return True, "Starting TDD workflow"
+        current_value = phase_value_mapping.get(self.current_phase.value, self.current_phase.value)
+        target_value = phase_value_mapping.get(target_phase.value, target_phase.value)
         
-        # RED -> GREEN (only after RED validated)
-        if current == TDDPhase.RED and target_phase == TDDPhase.GREEN:
-            return True, "Tests failed, ready for implementation"
+        # Use validation framework
+        result = validate_tdd_transition(current_value, target_value)
         
-        # GREEN -> REFACTOR (only after GREEN validated)
-        if current == TDDPhase.GREEN and target_phase == TDDPhase.REFACTOR:
-            return True, "Tests pass, ready for refactoring"
-        
-        # REFACTOR -> COMPLETE (only after REFACTOR validated)
-        if current == TDDPhase.REFACTOR and target_phase == TDDPhase.COMPLETE:
-            return True, "Refactoring complete, TDD cycle finished"
-        
-        # Invalid transitions
-        return False, f"Cannot transition from {current.value} to {target_phase.value}"
+        if result.valid:
+            return True, "Valid transition"
+        else:
+            return False, result.errors[0] if result.errors else "Invalid transition"
     
     def to_dict(self) -> Dict[str, Any]:
-        """Convert state to dictionary for persistence."""
-        return {
-            "session_id": self.session_id,
-            "feature_name": self.feature_name,
+        """Convert state to dictionary for persistence (uses parent serialization)."""
+        # Get base serialization from parent
+        data = super().to_dict()
+        
+        # Add orchestrator-specific fields
+        data.update({
             "task_id": self.task_id,
             "work_item_id": self.work_item_id,
-            "current_phase": self.current_phase.value,
-            "phase_history": self.phase_history,
-            "checkpoints": self.checkpoints,
-            "metrics": self.metrics,
             "implementation_scope": [str(p) for p in self.implementation_scope],
             "test_scope": [str(p) for p in self.test_scope],
             "blockers": self.blockers,
-            "started_at": self.started_at.isoformat(),
-            "completed_at": self.completed_at.isoformat() if self.completed_at else None
-        }
+            "metrics": self.metrics  # Override with extended metrics
+        })
+        
+        return data
 
 
 class TDDImplementationOrchestrator:
@@ -227,20 +254,32 @@ class TDDImplementationOrchestrator:
         self,
         feature_name: str,
         task_id: Optional[str] = None,
-        work_item_id: Optional[str] = None
+        work_item_id: Optional[str] = None,
+        test_files: Optional[List[Path]] = None,
+        require_tests_upfront: bool = True
     ) -> Dict[str, Any]:
         """
         Start a new TDD session.
+        
+        TIER 0 ENFORCEMENT: By default, requires test file paths to enforce test-first.
         
         Args:
             feature_name: Name of feature being implemented
             task_id: Optional task identifier
             work_item_id: Optional ADO work item ID
+            test_files: Test files that MUST exist before RED phase (test-first enforcement)
+            require_tests_upfront: If True, blocks session start until test files specified
             
         Returns:
             Dict with session_id and initial state
         """
         session_id = f"tdd-{uuid.uuid4().hex[:8]}"
+        
+        # SKULL PROTECTION: TDD_ENFORCEMENT
+        if require_tests_upfront and not test_files:
+            logger.warning(f"⚠️ TDD_ENFORCEMENT: Session starting without test files specified")
+            logger.warning("   Best practice: Specify test_files to enforce test-first discipline")
+            logger.warning(f"   Session {session_id} will require test validation before GREEN phase")
         
         state = TDDSessionState(
             session_id=session_id,
@@ -249,16 +288,23 @@ class TDDImplementationOrchestrator:
             work_item_id=work_item_id
         )
         
+        # Store test scope for validation
+        if test_files:
+            state.test_scope = test_files
+        
         self.active_sessions[session_id] = state
         self._save_session_state(state)
         
         logger.info(f"🚀 Started TDD session {session_id} for '{feature_name}'")
+        if test_files:
+            logger.info(f"   Test scope: {len(test_files)} file(s) - test-first enforced")
         
         return {
             "success": True,
             "session_id": session_id,
             "feature_name": feature_name,
             "current_phase": state.current_phase.value,
+            "test_files_required": len(test_files) if test_files else 0,
             "message": f"TDD session started for '{feature_name}'"
         }
     
@@ -316,14 +362,18 @@ class TDDImplementationOrchestrator:
     def execute_red_phase(
         self,
         session_id: str,
-        test_command: Optional[str] = None
+        test_command: Optional[str] = None,
+        test_files: Optional[List[Path]] = None
     ) -> Dict[str, Any]:
         """
         Execute RED phase: Verify tests fail before implementation.
         
+        TIER 0 ENFORCEMENT: Tests MUST be written and failing before implementation.
+        
         Args:
             session_id: TDD session identifier
             test_command: Optional test command (auto-detected if not provided)
+            test_files: Optional list of test files to validate (enforces test-first)
             
         Returns:
             Dict with success, message, test results
@@ -342,6 +392,21 @@ class TDDImplementationOrchestrator:
         phase_start = datetime.now(timezone.utc)
         
         try:
+            # SKULL PROTECTION: Verify tests exist before running
+            if test_files:
+                missing_tests = [tf for tf in test_files if not tf.exists()]
+                if missing_tests:
+                    logger.error(f"❌ RED_PHASE_VALIDATION violation: Test files missing")
+                    for mt in missing_tests:
+                        logger.error(f"   Missing: {mt}")
+                    return {
+                        "success": False,
+                        "phase": "RED",
+                        "message": "RED phase blocked: Tests must be written BEFORE implementation",
+                        "missing_test_files": [str(mt) for mt in missing_tests],
+                        "challenge": "Brain Protector: TDD_ENFORCEMENT requires test-first. Write failing tests now."
+                    }
+            
             # Run tests
             test_result = self._run_tests(test_command)
             
@@ -531,29 +596,88 @@ class TDDImplementationOrchestrator:
             scope_result = self._analyze_scope(state)
             logger.info(f"📁 Scope: {len(scope_result['implementation_files'])} implementation, {len(scope_result['test_files'])} test, {len(scope_result['out_of_scope'])} out-of-scope")
             
-            # Step 2: Duplicate Detection
+            # Step 2: Security Scan (CRITICAL - blocks refactoring if issues found)
+            security_result = self._detect_security_issues(scope_result['implementation_files'])
+            critical_security = security_result.get('critical_count', 0)
+            if critical_security > 0:
+                logger.error(f"🚨 CRITICAL: {critical_security} security issues found - must fix before refactoring")
+            logger.info(f"🔒 Security: {critical_security} critical, {security_result.get('high_count', 0)} high")
+            
+            # Step 3: Magic Values Detection
+            magic_result = self._detect_magic_values(scope_result['implementation_files'])
+            logger.info(f"🔢 Magic values: {len(magic_result['magic_values'])} found ({magic_result['repeated_strings']} repeated strings, {magic_result['hardcoded_urls']} URLs)")
+            
+            # Step 4: Duplicate Detection
             duplicates_result = self._detect_duplicates(scope_result['implementation_files'])
             logger.info(f"🔍 Found {len(duplicates_result['duplicates'])} duplicate code blocks")
             
-            # Step 3: Redundancy Check
+            # Step 5: Redundancy Check
             redundancies_result = self._detect_redundancies(scope_result['implementation_files'])
             logger.info(f"🧹 Found {len(redundancies_result['redundancies'])} redundancies")
             
-            # Step 4: SOLID Validation
+            # Step 6: SOLID Validation
             solid_result = self._validate_solid(scope_result['implementation_files'])
-            logger.info(f"🏛️ Found {len(solid_result['violations'])} SOLID violations")
+            logger.info(f"🏛️ SOLID: {solid_result.get('critical_count', 0)} critical, {solid_result.get('high_count', 0)} high, {solid_result.get('medium_count', 0)} medium violations")
             
-            # Step 5: Out-of-Scope Blocker Detection
+            # NEW Step 6a: Anemic Domain Model Detection (from CRITICAL-ARCHITECTURE-REVIEW.md)
+            anemic_result = self._detect_anemic_domain_models(scope_result['implementation_files'])
+            anemic_count = anemic_result.get('count', 0)
+            logger.info(f"🎭 Anemic Models: {anemic_count} detected")
+            
+            # NEW Step 6b: Configuration Management Issues (using validation framework)
+            config_issues_from_framework = []
+            for impl_file in scope_result['implementation_files']:
+                try:
+                    file_content = (self.project_root / impl_file).read_text(encoding='utf-8')
+                    validation_result = validate_code_quality(file_content)
+                    
+                    if validation_result.warnings:
+                        config_issues_from_framework.extend([
+                            {
+                                "type": "config_issue",
+                                "severity": "HIGH",
+                                "file": str(impl_file),
+                                "message": warning,
+                                "recommendation": "Externalize configuration to environment files"
+                            }
+                            for warning in validation_result.warnings
+                        ])
+                except Exception as e:
+                    logger.debug(f"Validation framework skipped for {impl_file}: {e}")
+            
+            logger.info(f"⚙️ Configuration (framework): {len(config_issues_from_framework)} issues detected")
+            
+            # Legacy config detection (keep for backward compatibility)
+            config_result = self._detect_configuration_issues(scope_result['implementation_files'])
+            config_issues = config_result.get('config_issues', [])
+            logger.info(f"⚙️ Configuration (legacy): {len(config_issues)} issues")
+            
+            # Merge framework and legacy results
+            all_config_issues = config_issues_from_framework + config_issues
+            config_result['config_issues'] = all_config_issues
+            config_result['count'] = len(all_config_issues)
+            
+            # NEW Step 6c: Transaction Management Issues (from CRITICAL-ARCHITECTURE-REVIEW.md)
+            transaction_result = self._detect_transaction_issues(scope_result['implementation_files'])
+            transaction_issues = transaction_result.get('transaction_issues', [])
+            logger.info(f"🔄 Transactions: {len(transaction_issues)} issues detected")
+            
+            # Step 7: Out-of-Scope Blocker Detection
             blockers_result = self._detect_blockers(scope_result['out_of_scope'])
             if blockers_result['blockers']:
                 logger.warning(f"⚠️ Found {len(blockers_result['blockers'])} out-of-scope blockers")
                 state.blockers.extend(blockers_result['blockers'])
             
-            # Step 6: Generate Refactoring Recommendations
+            # Step 8: Generate Refactoring Recommendations
             refactorings = self._generate_refactorings(
+                security_result,
+                magic_result,
                 duplicates_result,
                 redundancies_result,
-                solid_result
+                solid_result,
+                anemic_result,
+                config_result,
+                transaction_result
             )
             
             # Step 7: Apply Refactorings (if auto_apply or user approval)
@@ -590,6 +714,8 @@ class TDDImplementationOrchestrator:
                 "phase": "REFACTOR",
                 "message": f"REFACTOR phase complete: {len(applied_refactorings)} refactorings applied",
                 "scope": scope_result,
+                "security": security_result,
+                "magic_values": magic_result,
                 "duplicates": duplicates_result,
                 "redundancies": redundancies_result,
                 "solid_violations": solid_result,
@@ -597,7 +723,9 @@ class TDDImplementationOrchestrator:
                 "refactorings": refactorings,
                 "applied_refactorings": applied_refactorings,
                 "checkpoint_id": checkpoint_result.get("checkpoint_id"),
-                "phase_duration_seconds": phase_duration
+                "phase_duration_seconds": phase_duration,
+                "critical_security_count": security_result.get('critical_count', 0),
+                "total_refactorings_recommended": len(refactorings)
             }
             
         except Exception as e:
@@ -965,6 +1093,268 @@ class TDDImplementationOrchestrator:
             "total_files": len(changed_files)
         }
     
+    def _detect_security_issues(self, files: List[Path]) -> Dict[str, Any]:
+        """
+        Detect security vulnerabilities in implementation files.
+        
+        Detection rules from BadMonolith analysis + CRITICAL-ARCHITECTURE-REVIEW.md:
+        - SQL injection (string concatenation with SQL keywords)
+        - Hard-coded credentials (passwords, API keys)
+        - Missing error handling in async methods
+        - Unvalidated user input
+        - Missing authorization checks (NEW)
+        - No rate limiting (NEW)
+        - HTTP instead of HTTPS (NEW)
+        - Missing CSRF protection (NEW)
+        - No audit logging for state changes (NEW)
+        
+        Args:
+            files: List of implementation files
+            
+        Returns:
+            Dict with security_issues list, enhanced with architectural gaps
+        """
+        import re
+        
+        security_issues = []
+        
+        # SQL injection patterns
+        sql_keywords = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'WHERE', 'FROM', 'JOIN']
+        sql_concat_patterns = [
+            r'["\']\s*\+\s*\w+',  # "SELECT " + variable
+            r'\w+\s*\+\s*["\']',  # variable + " WHERE"
+            r'["\'].*?(SELECT|INSERT|UPDATE|DELETE).*?["\'].*?\+',  # "SELECT * FROM " +
+        ]
+        
+        # Credential patterns
+        credential_patterns = [
+            r'[Pp]assword\s*=\s*["\'][^"\']+["\']',
+            r'[Aa]pi[Kk]ey\s*=\s*["\'][^"\']+["\']',
+            r'[Ss]ecret\s*=\s*["\'][^"\']+["\']',
+            r'pwd\s*=\s*["\'][^"\']+["\']',
+        ]
+        
+        for file_path in files:
+            try:
+                content = (self.project_root / file_path).read_text(encoding='utf-8')
+                lines = content.split('\n')
+                
+                for i, line in enumerate(lines, start=1):
+                    # Check SQL injection patterns
+                    for pattern in sql_concat_patterns:
+                        if re.search(pattern, line, re.IGNORECASE):
+                            # Verify it's SQL-related
+                            if any(kw in line.upper() for kw in sql_keywords):
+                                security_issues.append({
+                                    "type": "sql_injection",
+                                    "severity": "CRITICAL",
+                                    "file": str(file_path),
+                                    "line": i,
+                                    "message": "Potential SQL injection: String concatenation with SQL keywords detected",
+                                    "line_content": line.strip()
+                                })
+                    
+                    # Check hard-coded credentials
+                    for pattern in credential_patterns:
+                        if re.search(pattern, line):
+                            security_issues.append({
+                                "type": "hardcoded_credential",
+                                "severity": "CRITICAL",
+                                "file": str(file_path),
+                                "line": i,
+                                "message": "Hard-coded credential detected in source code",
+                                "line_content": line.strip()
+                            })
+                
+                # Check missing error handling in async/await
+                if file_path.suffix in ['.py', '.cs', '.ts', '.js']:
+                    async_pattern = r'async\s+(def|function|Task|void)\s+\w+'
+                    try_pattern = r'try\s*[:{]'
+                    
+                    async_matches = list(re.finditer(async_pattern, content))
+                    try_blocks = list(re.finditer(try_pattern, content))
+                    
+                    # If we have async methods but very few try blocks, flag it
+                    if len(async_matches) > 0 and len(try_blocks) < len(async_matches) / 2:
+                        security_issues.append({
+                            "type": "missing_error_handling",
+                            "severity": "HIGH",
+                            "file": str(file_path),
+                            "line": 1,
+                            "message": f"{len(async_matches)} async methods but only {len(try_blocks)} try blocks found",
+                            "line_content": ""
+                        })
+            
+            except Exception as e:
+                logger.debug(f"Security scan skipped for {file_path}: {e}")
+        
+        # NEW: Enhanced architectural security checks from CRITICAL-ARCHITECTURE-REVIEW.md
+        for file_path in files:
+            try:
+                content = (self.project_root / file_path).read_text(encoding='utf-8')
+                file_lower = str(file_path).lower()
+                
+                # Check 1: Authorization in controllers/services
+                if 'controller' in file_lower or 'service' in file_lower:
+                    if 'delete' in content.lower() or 'update' in content.lower():
+                        if not any(keyword in content.lower() for keyword in ['authorize', 'permission', 'role', 'claim']):
+                            security_issues.append({
+                                "type": "missing_authorization",
+                                "severity": "HIGH",
+                                "file": str(file_path),
+                                "line": 1,
+                                "message": "State-changing operations without authorization checks detected",
+                                "line_content": "[File performs DELETE/UPDATE without auth]"
+                            })
+                
+                # Check 2: Audit logging for state changes
+                if 'service' in file_lower or 'repository' in file_lower:
+                    has_state_change = any(kw in content.lower() for kw in ['create', 'update', 'delete', 'save'])
+                    has_logging = any(kw in content for kw in ['ILogger', 'logger', 'log.', 'Logger'])
+                    
+                    if has_state_change and not has_logging:
+                        security_issues.append({
+                            "type": "missing_audit_logging",
+                            "severity": "MEDIUM",
+                            "file": str(file_path),
+                            "line": 1,
+                            "message": "State-changing operations without audit logging (cannot trace who did what)",
+                            "line_content": "[File modifies data without logging]"
+                        })
+                
+                # Check 3: HTTP vs HTTPS in frontend services
+                if file_path.suffix in ['.ts', '.js'] and 'service' in file_lower:
+                    http_pattern = re.search(r'http://[^"\s]+', content)
+                    if http_pattern:
+                        security_issues.append({
+                            "type": "insecure_http",
+                            "severity": "HIGH",
+                            "file": str(file_path),
+                            "line": content[:http_pattern.start()].count('\n') + 1,
+                            "message": "HTTP endpoint detected (should use HTTPS to prevent man-in-the-middle attacks)",
+                            "line_content": http_pattern.group(0)
+                        })
+                
+                # Check 4: No input validation in API methods
+                if file_path.suffix in ['.cs', '.py', '.ts', '.js']:
+                    # Find methods that accept parameters
+                    method_pattern = r'(public|async|def|function)\s+\w+\s*\([^)]*\w+[^)]*\)'
+                    methods_with_params = re.finditer(method_pattern, content)
+                    
+                    for method_match in methods_with_params:
+                        method_start = method_match.start()
+                        method_end = content.find('}' if file_path.suffix == '.cs' else '\n\n', method_start, method_start + 500)
+                        if method_end == -1:
+                            method_end = method_start + 500
+                        
+                        method_body = content[method_start:method_end]
+                        
+                        # Check if method validates input
+                        has_validation = any(kw in method_body.lower() for kw in [
+                            'validate', 'isnullorempty', 'throw', 'argumentnull', 
+                            'required', 'maxlength', 'minlength', 'range'
+                        ])
+                        
+                        has_param = '(' in method_body and any(c.isalnum() for c in method_body.split('(')[1].split(')')[0])
+                        
+                        if has_param and not has_validation:
+                            line_num = content[:method_start].count('\n') + 1
+                            security_issues.append({
+                                "type": "missing_input_validation",
+                                "severity": "MEDIUM",
+                                "file": str(file_path),
+                                "line": line_num,
+                                "message": "Method accepts parameters but has no visible validation",
+                                "line_content": method_match.group(0)[:80]
+                            })
+                            break  # Only report once per file
+            
+            except Exception as e:
+                logger.debug(f"Enhanced security scan skipped for {file_path}: {e}")
+        
+        return {
+            "security_issues": security_issues,
+            "critical_count": len([i for i in security_issues if i["severity"] == "CRITICAL"]),
+            "high_count": len([i for i in security_issues if i["severity"] == "HIGH"]),
+            "medium_count": len([i for i in security_issues if i["severity"] == "MEDIUM"])
+        }
+    
+    def _detect_magic_values(self, files: List[Path]) -> Dict[str, Any]:
+        """
+        Detect magic strings/numbers in implementation files.
+        
+        Detection rules from BadMonolith analysis:
+        - String literals used >5 times (should be constants)
+        - Numeric literals in business logic (except 0, 1, -1)
+        - Hard-coded URLs/endpoints
+        
+        Args:
+            files: List of implementation files
+            
+        Returns:
+            Dict with magic_values list
+        """
+        import re
+        
+        magic_values = []
+        string_frequency: Dict[str, List[Tuple[Path, int]]] = {}
+        
+        for file_path in files:
+            try:
+                content = (self.project_root / file_path).read_text(encoding='utf-8')
+                lines = content.split('\n')
+                
+                for i, line in enumerate(lines, start=1):
+                    # Extract string literals
+                    string_literals = re.findall(r'["\']([^"\']{3,})["\']', line)
+                    for literal in string_literals:
+                        # Skip common patterns (log messages, etc.)
+                        if literal.startswith('http'):
+                            magic_values.append({
+                                "type": "hardcoded_url",
+                                "file": str(file_path),
+                                "line": i,
+                                "value": literal,
+                                "message": "Hard-coded URL should be in configuration"
+                            })
+                        
+                        if literal not in string_frequency:
+                            string_frequency[literal] = []
+                        string_frequency[literal].append((file_path, i))
+                    
+                    # Extract numeric literals (excluding trivial values)
+                    numeric_literals = re.findall(r'\b(\d{2,})\b', line)
+                    for num in numeric_literals:
+                        if int(num) not in [0, 1, -1, 10, 100, 1000]:  # Common values
+                            magic_values.append({
+                                "type": "magic_number",
+                                "file": str(file_path),
+                                "line": i,
+                                "value": num,
+                                "message": f"Magic number '{num}' should be a named constant"
+                            })
+            
+            except Exception as e:
+                logger.debug(f"Magic value detection skipped for {file_path}: {e}")
+        
+        # Flag frequently repeated strings
+        for string, locations in string_frequency.items():
+            if len(locations) > 5 and len(string) > 5:
+                magic_values.append({
+                    "type": "repeated_string",
+                    "value": string,
+                    "occurrences": len(locations),
+                    "locations": [(str(f), line) for f, line in locations[:3]],  # Show first 3
+                    "message": f"String '{string}' repeated {len(locations)} times - extract to constant"
+                })
+        
+        return {
+            "magic_values": magic_values,
+            "repeated_strings": len([m for m in magic_values if m["type"] == "repeated_string"]),
+            "hardcoded_urls": len([m for m in magic_values if m["type"] == "hardcoded_url"]),
+            "magic_numbers": len([m for m in magic_values if m["type"] == "magic_number"])
+        }
+    
     def _detect_duplicates(self, files: List[Path]) -> Dict[str, Any]:
         """
         Detect duplicate code blocks in implementation files.
@@ -1050,9 +1440,232 @@ class TDDImplementationOrchestrator:
             "redundancies": redundancies
         }
     
+    def _detect_anemic_domain_models(self, files: List[Path]) -> Dict[str, Any]:
+        """
+        Detect anemic domain models (entities with no behavior).
+        
+        Based on CRITICAL-ARCHITECTURE-REVIEW.md finding:
+        - Entities with only properties/fields (no methods)
+        - Missing domain logic (Complete(), Reopen(), Validate())
+        - No value objects or domain services
+        
+        Args:
+            files: List of implementation files
+            
+        Returns:
+            Dict with anemic_models list
+        """
+        anemic_models = []
+        
+        for file_path in files:
+            file_lower = str(file_path).lower()
+            
+            # Only check files likely to be domain entities
+            if not any(keyword in file_lower for keyword in ['domain', 'entity', 'entities', 'model']):
+                continue
+            
+            try:
+                content = (self.project_root / file_path).read_text(encoding='utf-8')
+                
+                # Check C# entities
+                if file_path.suffix == '.cs':
+                    # Find class definitions
+                    class_match = re.search(r'class\s+(\w+)', content)
+                    if not class_match:
+                        continue
+                    
+                    class_name = class_match.group(1)
+                    
+                    # Count properties vs methods
+                    properties = len(re.findall(r'public\s+\w+\s+\w+\s*{\s*get;\s*set;', content))
+                    methods = len(re.findall(r'public\s+(?:void|\w+)\s+\w+\s*\([^)]*\)\s*{', content))
+                    
+                    # Anemic if >3 properties but 0 methods
+                    if properties >= 3 and methods == 0:
+                        anemic_models.append({
+                            "type": "anemic_domain_model",
+                            "severity": "MEDIUM",
+                            "file": str(file_path),
+                            "class_name": class_name,
+                            "message": f"Entity '{class_name}' has {properties} properties but no behavior methods",
+                            "recommendation": f"Add domain methods like {class_name}.Complete(), {class_name}.Validate(), etc."
+                        })
+                
+                # Check TypeScript models
+                elif file_path.suffix == '.ts':
+                    # Check if interface (no methods) or class with only getters/setters
+                    if 'interface' in content:
+                        interface_match = re.search(r'interface\s+(\w+)', content)
+                        if interface_match:
+                            interface_name = interface_match.group(1)
+                            anemic_models.append({
+                                "type": "anemic_domain_model",
+                                "severity": "LOW",
+                                "file": str(file_path),
+                                "class_name": interface_name,
+                                "message": f"Interface '{interface_name}' has no methods (TypeScript interfaces are data-only)",
+                                "recommendation": f"Consider using class with methods instead of interface"
+                            })
+            
+            except Exception as e:
+                logger.debug(f"Anemic model check skipped for {file_path}: {e}")
+        
+        return {
+            "anemic_models": anemic_models,
+            "count": len(anemic_models)
+        }
+    
+    def _detect_configuration_issues(self, files: List[Path]) -> Dict[str, Any]:
+        """
+        Detect configuration management issues.
+        
+        Based on CRITICAL-ARCHITECTURE-REVIEW.md findings:
+        - Hard-coded URLs in source code
+        - Configuration not externalized to environment files
+        - Connection strings in code
+        
+        Args:
+            files: List of implementation files
+            
+        Returns:
+            Dict with config_issues list
+        """
+        config_issues = []
+        
+        # Hard-coded URL patterns
+        url_patterns = [
+            r'http://localhost:\d+',
+            r'https://[\w.-]+\.[a-z]{2,}',
+            r'baseUrl\s*[:=]\s*["\'][^"\']+["\']'
+        ]
+        
+        # Connection string patterns
+        connection_patterns = [
+            r'Server\s*=',
+            r'Database\s*=',
+            r'Data Source\s*=',
+            r'mongodb://',
+            r'postgresql://'
+        ]
+        
+        for file_path in files:
+            # Skip config files themselves
+            if any(name in str(file_path).lower() for name in ['config', 'environment', 'settings', 'appsettings']):
+                continue
+            
+            try:
+                content = (self.project_root / file_path).read_text(encoding='utf-8')
+                lines = content.split('\n')
+                
+                for i, line in enumerate(lines, start=1):
+                    # Check for hard-coded URLs
+                    for pattern in url_patterns:
+                        if re.search(pattern, line):
+                            config_issues.append({
+                                "type": "hardcoded_url",
+                                "severity": "HIGH",
+                                "file": str(file_path),
+                                "line": i,
+                                "message": "Hard-coded URL detected (should use environment configuration)",
+                                "line_content": line.strip()[:80]
+                            })
+                    
+                    # Check for connection strings
+                    for pattern in connection_patterns:
+                        if re.search(pattern, line, re.IGNORECASE):
+                            config_issues.append({
+                                "type": "hardcoded_connection_string",
+                                "severity": "CRITICAL",
+                                "file": str(file_path),
+                                "line": i,
+                                "message": "Connection string in source code (major security risk)",
+                                "line_content": "[REDACTED - Connection string detected]"
+                            })
+            
+            except Exception as e:
+                logger.debug(f"Configuration check skipped for {file_path}: {e}")
+        
+        return {
+            "config_issues": config_issues,
+            "critical_count": len([i for i in config_issues if i["severity"] == "CRITICAL"]),
+            "high_count": len([i for i in config_issues if i["severity"] == "HIGH"])
+        }
+    
+    def _detect_transaction_issues(self, files: List[Path]) -> Dict[str, Any]:
+        """
+        Detect missing transaction management.
+        
+        Based on CRITICAL-ARCHITECTURE-REVIEW.md findings:
+        - Multiple database operations not atomic
+        - Race conditions in update operations
+        - No Unit of Work pattern
+        
+        Args:
+            files: List of implementation files
+            
+        Returns:
+            Dict with transaction_issues list
+        """
+        transaction_issues = []
+        
+        for file_path in files:
+            file_lower = str(file_path).lower()
+            
+            # Only check service/repository files
+            if not any(keyword in file_lower for keyword in ['service', 'repository']):
+                continue
+            
+            try:
+                content = (self.project_root / file_path).read_text(encoding='utf-8')
+                
+                # Find methods with multiple operations
+                method_pattern = r'(async\s+)?(?:public\s+)?(?:async\s+)?\w+\s+(\w+)\s*\([^)]*\)\s*{([^}]{100,})}'
+                methods = re.finditer(method_pattern, content, re.DOTALL)
+                
+                for method in methods:
+                    method_name = method.group(2)
+                    method_body = method.group(3)
+                    
+                    # Count database operations
+                    db_operations = len(re.findall(r'(await|\.)\s*(Add|Update|Delete|Save|Remove)', method_body))
+                    
+                    # Check for transaction keywords
+                    has_transaction = any(kw in method_body for kw in [
+                        'BeginTransaction', 'using (var transaction', 'CommitAsync',
+                        'TransactionScope', 'UnitOfWork', '@Transactional'
+                    ])
+                    
+                    # Flag if multiple operations without transaction
+                    if db_operations >= 2 and not has_transaction:
+                        line_num = content[:method.start()].count('\n') + 1
+                        transaction_issues.append({
+                            "type": "missing_transaction",
+                            "severity": "HIGH",
+                            "file": str(file_path),
+                            "line": line_num,
+                            "method_name": method_name,
+                            "message": f"Method '{method_name}' has {db_operations} database operations without transaction",
+                            "recommendation": "Wrap operations in transaction or use Unit of Work pattern"
+                        })
+            
+            except Exception as e:
+                logger.debug(f"Transaction check skipped for {file_path}: {e}")
+        
+        return {
+            "transaction_issues": transaction_issues,
+            "count": len(transaction_issues)
+        }
+    
     def _validate_solid(self, files: List[Path]) -> Dict[str, Any]:
         """
-        Validate SOLID principles (basic heuristics).
+        Validate SOLID principles with enhanced detection.
+        
+        Enhanced with BadMonolith learnings:
+        - God class/method detection (>300 lines, >10 methods)
+        - Deep nesting (>3 levels indicates complexity)
+        - Long parameter lists (>4 parameters)
+        - Tight coupling (concrete type dependencies)
+        - Interface bloat (>7 methods in interface)
         
         Args:
             files: List of implementation files
@@ -1063,42 +1676,178 @@ class TDDImplementationOrchestrator:
         violations = []
         
         for file_path in files:
-            if file_path.suffix != '.py':
-                continue
-            
             try:
                 content = (self.project_root / file_path).read_text(encoding='utf-8')
-                tree = ast.parse(content)
+                lines = content.split('\n')
                 
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.ClassDef):
-                        # SRP: Class with too many methods
-                        methods = [n for n in node.body if isinstance(n, ast.FunctionDef)]
-                        if len(methods) > 10:
+                # Python-specific analysis
+                if file_path.suffix == '.py':
+                    try:
+                        tree = ast.parse(content)
+                        
+                        for node in ast.walk(tree):
+                            if isinstance(node, ast.ClassDef):
+                                # SRP: Class with too many methods
+                                methods = [n for n in node.body if isinstance(n, ast.FunctionDef)]
+                                if len(methods) > 10:
+                                    violations.append({
+                                        "principle": "SRP",
+                                        "file": str(file_path),
+                                        "line": node.lineno,
+                                        "class": node.name,
+                                        "severity": "HIGH",
+                                        "message": f"Class '{node.name}' has {len(methods)} methods (SRP violation, consider splitting)"
+                                    })
+                                
+                                # ISP: Interface/base class with too many methods
+                                if any(base.id in ['ABC', 'Interface'] for base in node.bases if isinstance(base, ast.Name)):
+                                    if len(methods) > 7:
+                                        violations.append({
+                                            "principle": "ISP",
+                                            "file": str(file_path),
+                                            "line": node.lineno,
+                                            "class": node.name,
+                                            "severity": "MEDIUM",
+                                            "message": f"Interface '{node.name}' has {len(methods)} methods (ISP violation, consider segregation)"
+                                        })
+                                
+                                # Check for concrete dependencies (DIP)
+                                for method in methods:
+                                    if isinstance(method, ast.FunctionDef) and method.name == '__init__':
+                                        # Look for 'new' instantiations or concrete types
+                                        for stmt in ast.walk(method):
+                                            if isinstance(stmt, ast.Call) and isinstance(stmt.func, ast.Name):
+                                                # Direct instantiation in constructor suggests tight coupling
+                                                violations.append({
+                                                    "principle": "DIP",
+                                                    "file": str(file_path),
+                                                    "line": stmt.lineno,
+                                                    "class": node.name,
+                                                    "severity": "MEDIUM",
+                                                    "message": f"Direct instantiation in __init__ suggests tight coupling (consider DI)"
+                                                })
+                                                break  # Only report once per class
+                            
+                            elif isinstance(node, ast.FunctionDef):
+                                # God method detection
+                                method_lines = node.end_lineno - node.lineno if hasattr(node, 'end_lineno') else 0
+                                if method_lines > 50:
+                                    violations.append({
+                                        "principle": "SRP",
+                                        "file": str(file_path),
+                                        "line": node.lineno,
+                                        "function": node.name,
+                                        "severity": "HIGH",
+                                        "message": f"Function '{node.name}' is {method_lines} lines (god method, consider splitting)"
+                                    })
+                                
+                                # Long parameter list
+                                if len(node.args.args) > 4:
+                                    violations.append({
+                                        "principle": "SRP",
+                                        "file": str(file_path),
+                                        "line": node.lineno,
+                                        "function": node.name,
+                                        "severity": "MEDIUM",
+                                        "message": f"Function '{node.name}' has {len(node.args.args)} parameters (consider parameter object)"
+                                    })
+                                
+                                # Deep nesting (complexity)
+                                max_depth = self._calculate_nesting_depth(node)
+                                if max_depth > 3:
+                                    violations.append({
+                                        "principle": "Complexity",
+                                        "file": str(file_path),
+                                        "line": node.lineno,
+                                        "function": node.name,
+                                        "severity": "MEDIUM",
+                                        "message": f"Function '{node.name}' has nesting depth {max_depth} (consider flattening)"
+                                    })
+                    
+                    except SyntaxError:
+                        pass  # Skip files with syntax errors
+                
+                # C#-specific analysis
+                elif file_path.suffix == '.cs':
+                    import re
+                    
+                    # Detect god endpoint pattern (MapMethods with long handler)
+                    mapmethods_pattern = r'app\.MapMethods\([^)]+\)\s*,'
+                    if re.search(mapmethods_pattern, content):
+                        # Count lines between MapMethods and next top-level statement
+                        violations.append({
+                            "principle": "SRP",
+                            "file": str(file_path),
+                            "line": 1,
+                            "severity": "CRITICAL",
+                            "message": "God endpoint detected: MapMethods with inline handler (extract to controller)"
+                        })
+                    
+                    # Detect direct SqlConnection usage (should use repository pattern)
+                    if re.search(r'new\s+SqlConnection', content):
+                        violations.append({
+                            "principle": "DIP",
+                            "file": str(file_path),
+                            "line": 1,
+                            "severity": "HIGH",
+                            "message": "Direct SqlConnection instantiation (use repository pattern with DI)"
+                        })
+                
+                # TypeScript/JavaScript-specific analysis
+                elif file_path.suffix in ['.ts', '.js']:
+                    import re
+                    
+                    # Detect HttpClient in components (should be in service)
+                    if re.search(r'constructor\([^)]*HttpClient[^)]*\)', content):
+                        if 'Component' in content:
                             violations.append({
                                 "principle": "SRP",
                                 "file": str(file_path),
-                                "line": node.lineno,
-                                "class": node.name,
-                                "message": f"Class '{node.name}' has {len(methods)} methods (SRP violation, consider splitting)"
+                                "line": 1,
+                                "severity": "HIGH",
+                                "message": "HttpClient injected in component (extract to service layer)"
                             })
-                        
-                        # DRY: Methods with similar names
-                        method_names = [m.name for m in methods]
-                        if len(method_names) != len(set(method_names)):
-                            violations.append({
-                                "principle": "DRY",
-                                "file": str(file_path),
-                                "line": node.lineno,
-                                "class": node.name,
-                                "message": f"Duplicate method names detected in '{node.name}'"
-                            })
+                    
+                    # Detect 'any' type overuse
+                    any_count = len(re.findall(r':\s*any\b', content))
+                    if any_count > 3:
+                        violations.append({
+                            "principle": "Type Safety",
+                            "file": str(file_path),
+                            "line": 1,
+                            "severity": "MEDIUM",
+                            "message": f"{any_count} uses of 'any' type (define proper interfaces)"
+                        })
+            
             except Exception as e:
                 logger.debug(f"SOLID validation skipped for {file_path}: {e}")
         
         return {
-            "violations": violations
+            "violations": violations,
+            "critical_count": len([v for v in violations if v.get("severity") == "CRITICAL"]),
+            "high_count": len([v for v in violations if v.get("severity") == "HIGH"]),
+            "medium_count": len([v for v in violations if v.get("severity") == "MEDIUM"])
         }
+    
+    def _calculate_nesting_depth(self, node: ast.AST, current_depth: int = 0) -> int:
+        """
+        Calculate maximum nesting depth in AST node.
+        
+        Args:
+            node: AST node to analyze
+            current_depth: Current depth level
+            
+        Returns:
+            Maximum nesting depth
+        """
+        max_depth = current_depth
+        
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, (ast.If, ast.For, ast.While, ast.With, ast.Try)):
+                child_depth = self._calculate_nesting_depth(child, current_depth + 1)
+                max_depth = max(max_depth, child_depth)
+        
+        return max_depth
     
     def _detect_blockers(self, out_of_scope_files: List[Path]) -> Dict[str, Any]:
         """
@@ -1133,22 +1882,104 @@ class TDDImplementationOrchestrator:
     
     def _generate_refactorings(
         self,
+        security_result: Dict[str, Any],
+        magic_result: Dict[str, Any],
         duplicates_result: Dict[str, Any],
         redundancies_result: Dict[str, Any],
-        solid_result: Dict[str, Any]
+        solid_result: Dict[str, Any],
+        anemic_result: Dict[str, Any] = None,
+        config_result: Dict[str, Any] = None,
+        transaction_result: Dict[str, Any] = None
     ) -> List[Dict[str, Any]]:
         """
         Generate refactoring recommendations from analysis results.
         
+        Enhanced with CRITICAL-ARCHITECTURE-REVIEW.md findings:
+        - Anemic domain model fixes
+        - Configuration externalization
+        - Transaction management
+        
         Args:
+            security_result: Security scan results
+            magic_result: Magic value detection results
             duplicates_result: Duplicate detection results
             redundancies_result: Redundancy detection results
             solid_result: SOLID validation results
+            anemic_result: Anemic domain model detection results (NEW)
+            config_result: Configuration issues results (NEW)
+            transaction_result: Transaction management issues (NEW)
             
         Returns:
-            List of refactoring recommendations
+            List of refactoring recommendations with enhanced architecture guidance
         """
         refactorings = []
+        
+        # Security issues (HIGHEST PRIORITY)
+        for issue in security_result.get('security_issues', []):
+            priority = "critical" if issue['severity'] == "CRITICAL" else "high"
+            
+            if issue['type'] == 'sql_injection':
+                refactorings.append({
+                    "type": "fix_sql_injection",
+                    "priority": priority,
+                    "reason": "security_vulnerability",
+                    "file": issue['file'],
+                    "line": issue['line'],
+                    "description": issue['message'],
+                    "auto_fixable": True,
+                    "fix_strategy": "Replace string concatenation with parameterized queries or ORM"
+                })
+            
+            elif issue['type'] == 'hardcoded_credential':
+                refactorings.append({
+                    "type": "externalize_credential",
+                    "priority": priority,
+                    "reason": "security_vulnerability",
+                    "file": issue['file'],
+                    "line": issue['line'],
+                    "description": issue['message'],
+                    "auto_fixable": False,  # Requires manual config setup
+                    "fix_strategy": "Move to configuration file/environment variable"
+                })
+            
+            elif issue['type'] == 'missing_error_handling':
+                refactorings.append({
+                    "type": "add_error_handling",
+                    "priority": "high",
+                    "reason": "reliability",
+                    "file": issue['file'],
+                    "line": issue['line'],
+                    "description": issue['message'],
+                    "auto_fixable": True,
+                    "fix_strategy": "Wrap async methods in try-catch blocks"
+                })
+        
+        # Magic values
+        for magic in magic_result.get('magic_values', []):
+            if magic['type'] == 'repeated_string':
+                refactorings.append({
+                    "type": "extract_constant",
+                    "priority": "medium",
+                    "reason": "maintainability",
+                    "value": magic['value'],
+                    "occurrences": magic['occurrences'],
+                    "description": magic['message'],
+                    "auto_fixable": True,
+                    "fix_strategy": f"Extract '{magic['value']}' to named constant"
+                })
+            
+            elif magic['type'] == 'hardcoded_url':
+                refactorings.append({
+                    "type": "externalize_url",
+                    "priority": "medium",
+                    "reason": "configuration",
+                    "file": magic['file'],
+                    "line": magic['line'],
+                    "value": magic['value'],
+                    "description": magic['message'],
+                    "auto_fixable": False,
+                    "fix_strategy": "Move URL to configuration/environment"
+                })
         
         # Duplicates -> Extract method
         for dup in duplicates_result.get('duplicates', []):
@@ -1158,7 +1989,9 @@ class TDDImplementationOrchestrator:
                     "priority": "high",
                     "reason": "duplicate_code",
                     "locations": dup['locations'],
-                    "description": f"Extract duplicated code into shared method ({dup['count']} occurrences)"
+                    "description": f"Extract duplicated code into shared method ({dup['count']} occurrences)",
+                    "auto_fixable": True,
+                    "fix_strategy": "Create shared method, replace duplicates with calls"
                 })
         
         # Redundancies -> Remove unused
@@ -1169,21 +2002,113 @@ class TDDImplementationOrchestrator:
                 "reason": "redundancy",
                 "file": red['file'],
                 "line": red['line'],
-                "description": red['message']
+                "description": red['message'],
+                "auto_fixable": True,
+                "fix_strategy": "Remove unused import/variable"
             })
         
         # SOLID violations -> Suggest split/refactor
         for viol in solid_result.get('violations', []):
+            priority = "critical" if viol.get('severity') == "CRITICAL" else "high" if viol.get('severity') == "HIGH" else "medium"
+            
             if viol['principle'] == 'SRP':
+                if 'class' in viol:
+                    refactorings.append({
+                        "type": "split_class",
+                        "priority": priority,
+                        "reason": "srp_violation",
+                        "file": viol['file'],
+                        "line": viol['line'],
+                        "class": viol['class'],
+                        "description": viol['message'],
+                        "auto_fixable": False,
+                        "fix_strategy": "Split class into smaller, focused classes"
+                    })
+                elif 'function' in viol:
+                    refactorings.append({
+                        "type": "split_function",
+                        "priority": priority,
+                        "reason": "god_method",
+                        "file": viol['file'],
+                        "line": viol['line'],
+                        "function": viol['function'],
+                        "description": viol['message'],
+                        "auto_fixable": True,
+                        "fix_strategy": "Extract logical sections into separate methods"
+                    })
+            
+            elif viol['principle'] == 'DIP':
                 refactorings.append({
-                    "type": "split_class",
-                    "priority": "high",
-                    "reason": "srp_violation",
+                    "type": "introduce_di",
+                    "priority": priority,
+                    "reason": "tight_coupling",
                     "file": viol['file'],
                     "line": viol['line'],
-                    "class": viol['class'],
-                    "description": viol['message']
+                    "description": viol['message'],
+                    "auto_fixable": False,
+                    "fix_strategy": "Replace direct instantiation with dependency injection"
                 })
+            
+            elif viol['principle'] == 'ISP':
+                refactorings.append({
+                    "type": "segregate_interface",
+                    "priority": priority,
+                    "reason": "interface_bloat",
+                    "file": viol['file'],
+                    "line": viol['line'],
+                    "class": viol.get('class', ''),
+                    "description": viol['message'],
+                    "auto_fixable": False,
+                    "fix_strategy": "Split interface into smaller, focused interfaces"
+                })
+        
+        # NEW: Anemic Domain Model fixes (from CRITICAL-ARCHITECTURE-REVIEW.md)
+        if anemic_result:
+            for model in anemic_result.get('anemic_models', []):
+                refactorings.append({
+                    "type": "enrich_domain_model",
+                    "priority": "medium",
+                    "reason": "anemic_domain_model",
+                    "file": model['file'],
+                    "class": model['class_name'],
+                    "description": model['message'],
+                    "auto_fixable": False,
+                    "fix_strategy": model['recommendation']
+                })
+        
+        # NEW: Configuration Management fixes (from CRITICAL-ARCHITECTURE-REVIEW.md)
+        if config_result:
+            for issue in config_result.get('config_issues', []):
+                priority = "critical" if issue['severity'] == "CRITICAL" else "high"
+                refactorings.append({
+                    "type": "externalize_configuration",
+                    "priority": priority,
+                    "reason": "hardcoded_configuration",
+                    "file": issue['file'],
+                    "line": issue['line'],
+                    "description": issue['message'],
+                    "auto_fixable": False,
+                    "fix_strategy": "Move to appsettings.json/environment.ts/config file"
+                })
+        
+        # NEW: Transaction Management fixes (from CRITICAL-ARCHITECTURE-REVIEW.md)
+        if transaction_result:
+            for issue in transaction_result.get('transaction_issues', []):
+                refactorings.append({
+                    "type": "add_transaction_management",
+                    "priority": "high",
+                    "reason": "missing_transaction",
+                    "file": issue['file'],
+                    "line": issue['line'],
+                    "method": issue['method_name'],
+                    "description": issue['message'],
+                    "auto_fixable": False,
+                    "fix_strategy": issue['recommendation']
+                })
+        
+        # Sort by priority (critical > high > medium > low)
+        priority_order = {"critical": 0, "high": 1, "medium": 2, "low": 3}
+        refactorings.sort(key=lambda r: priority_order.get(r['priority'], 4))
         
         return refactorings
     

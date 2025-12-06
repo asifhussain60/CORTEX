@@ -93,7 +93,8 @@ class PlanExecutionOrchestrator:
             self.cleanup_orchestrator = CleanupOrchestrator(str(self.cortex_root))
             logger.info("✅ CleanupOrchestrator initialized")
         except ImportError as e:
-            logger.warning(f"⚠️  CleanupOrchestrator not available: {e}")
+            # CleanupOrchestrator is optional - uses inline cleanup if not available
+            logger.debug(f"CleanupOrchestrator not available (optional): {e}")
             self.cleanup_orchestrator = None
         
         try:
@@ -298,8 +299,15 @@ class PlanExecutionOrchestrator:
             Task execution result
         """
         task_id = task.get("task_id", "?")
+        
+        # NEW: Pre-execution validation from CRITICAL-ARCHITECTURE-REVIEW.md findings
+        validation_result = self._validate_task_implementation_requirements(task)
+        if not validation_result["valid"]:
+            logger.warning(f"⚠️  Task {task_id} validation warnings: {validation_result['warnings']}")
+            # Log warnings but continue - these are guidelines not blockers
         task_name = task.get("task_name", "Unknown")
-        use_tdd = task.get("use_tdd", False) or task.get("tdd_enabled", False)
+        # TIER 0: TDD_ENFORCEMENT - TDD is MANDATORY unless explicitly disabled
+        use_tdd = task.get("use_tdd", True) and task.get("tdd_enabled", True)
         
         logger.info(f"  ⚙️  Executing task {task_id}: {task_name} (TDD: {use_tdd})")
         
@@ -315,7 +323,12 @@ class PlanExecutionOrchestrator:
         if use_tdd and self.tdd_orchestrator:
             return self._execute_task_with_tdd(task, task_result)
         
-        # Fallback to CodeExecutor
+        # SKULL PROTECTION: TDD bypass is a Tier 0 violation
+        if not use_tdd:
+            logger.warning(f"⚠️  SKULL VIOLATION: Task {task_id} bypassing TDD (TDD_ENFORCEMENT instinct)")
+            logger.warning("   This violates Tier 0 governance - tests MUST be written first")
+        
+        # Fallback to CodeExecutor (only when TDD orchestrator unavailable)
         if not self.code_executor:
             task_result["error"] = "CodeExecutor not available"
             task_result["completed_at"] = datetime.now().isoformat()
@@ -374,11 +387,26 @@ class PlanExecutionOrchestrator:
         task_name = task.get("task_name", "Unknown")
         
         try:
-            # Start TDD session
+            # Extract test files from task metadata (enforce test-first)
+            test_files = []
+            files_affected = task.get("files_affected", [])
+            for file_path in files_affected:
+                # Identify test files (common patterns)
+                if any(pattern in str(file_path).lower() for pattern in ["test_", "_test", "tests/"]):
+                    test_files.append(Path(file_path))
+            
+            # TIER 0 ENFORCEMENT: Warn if no test files specified
+            if not test_files:
+                logger.warning(f"⚠️ Task {task_id} has no test files in 'files_affected'")
+                logger.warning("   Best practice: Include test files to enforce test-first discipline")
+            
+            # Start TDD session with test file validation
             session = self.tdd_orchestrator.start_session(
                 feature_name=task_name,
                 task_id=task_id,
-                work_item_id=task.get("work_item_id")
+                work_item_id=task.get("work_item_id"),
+                test_files=test_files if test_files else None,
+                require_tests_upfront=True
             )
             
             session_id = session["session_id"]
@@ -595,6 +623,69 @@ class PlanExecutionOrchestrator:
         result["completed_at"] = datetime.now().isoformat()
         
         return result
+    
+    def _validate_task_implementation_requirements(self, task: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Validate task specifies necessary implementation requirements.
+        
+        Based on CORTEX-Clean-v2 review findings:
+        - Security requirements (auth, validation, sanitization)
+        - Error handling strategy
+        - Configuration externalization
+        - Transaction management (for data operations)
+        - Domain model richness (behavior vs data)
+        
+        Args:
+            task: Task data from plan
+            
+        Returns:
+            Dict with validation results and warnings
+        """
+        warnings = []
+        task_name = task.get("task_name", "").lower()
+        files_affected = task.get("files_affected", [])
+        acceptance_criteria = task.get("acceptance_criteria", [])
+        
+        # Check 1: Security requirements for data operations
+        if any(keyword in task_name for keyword in ['create', 'update', 'delete', 'save', 'persist']):
+            if not any('validat' in str(criterion).lower() for criterion in acceptance_criteria):
+                warnings.append("DATA_OPERATION_MISSING_VALIDATION: Task performs data operations but has no validation criteria")
+            if not any('auth' in str(criterion).lower() for criterion in acceptance_criteria):
+                warnings.append("DATA_OPERATION_MISSING_AUTH: Task performs state changes but has no authorization criteria")
+        
+        # Check 2: Error handling strategy
+        if any(keyword in task_name for keyword in ['api', 'service', 'handler', 'controller']):
+            if not any('error' in str(criterion).lower() for criterion in acceptance_criteria):
+                warnings.append("SERVICE_LAYER_MISSING_ERROR_HANDLING: Service/API task has no error handling criteria")
+        
+        # Check 3: Configuration externalization
+        if any(keyword in task_name for keyword in ['url', 'endpoint', 'connection', 'config']):
+            if not any('environment' in str(criterion).lower() or 'config' in str(criterion).lower() for criterion in acceptance_criteria):
+                warnings.append("HARDCODED_CONFIG_RISK: Task involves configuration but has no externalization criteria")
+        
+        # Check 4: Transaction management for repositories
+        if any('repository' in file_path.lower() or 'dbcontext' in file_path.lower() for file_path in files_affected):
+            if not any('transaction' in str(criterion).lower() or 'atomic' in str(criterion).lower() for criterion in acceptance_criteria):
+                warnings.append("REPOSITORY_MISSING_TRANSACTION: Repository implementation has no transaction criteria")
+        
+        # Check 5: Domain model behavior
+        if any('domain' in file_path.lower() or 'entity' in file_path.lower() or 'entities' in file_path.lower() for file_path in files_affected):
+            if not any('method' in str(criterion).lower() or 'behavior' in str(criterion).lower() for criterion in acceptance_criteria):
+                warnings.append("ANEMIC_DOMAIN_RISK: Domain entity task has no behavior/method criteria (may create anemic model)")
+        
+        # Check 6: Integration/infrastructure completeness
+        files_lower = [f.lower() for f in files_affected]
+        has_interface = any('interface' in f or 'irepository' in f for f in files_lower)
+        has_implementation = any('repository' in f and 'interface' not in f for f in files_lower)
+        
+        if has_interface and not has_implementation:
+            warnings.append("INCOMPLETE_ABSTRACTION: Task creates interface but has no concrete implementation")
+        
+        return {
+            "valid": True,  # Warnings don't block execution
+            "warnings": warnings,
+            "checks_performed": 6
+        }
     
     def _gather_affected_files(self, plan_data: Dict[str, Any]) -> List[Path]:
         """Gather list of files affected by plan implementation."""

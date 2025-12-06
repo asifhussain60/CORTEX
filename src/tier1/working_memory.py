@@ -1960,6 +1960,20 @@ class WorkingMemory:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
+            # Ensure table exists before querying
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS test_intents (
+                    intent_id TEXT PRIMARY KEY,
+                    feature_name TEXT NOT NULL,
+                    requirement TEXT NOT NULL,
+                    test_phase TEXT DEFAULT 'RED',
+                    edge_cases_json TEXT,
+                    metadata_json TEXT,
+                    source TEXT DEFAULT 'tdd_red_phase',
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
             cursor.execute('''
                 SELECT intent_id, feature_name, requirement, test_phase, 
                        edge_cases_json, metadata_json, source, created_at
@@ -2002,6 +2016,20 @@ class WorkingMemory:
         try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
+            
+            # Ensure table exists before querying
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS test_intents (
+                    intent_id TEXT PRIMARY KEY,
+                    feature_name TEXT NOT NULL,
+                    requirement TEXT NOT NULL,
+                    test_phase TEXT DEFAULT 'RED',
+                    edge_cases_json TEXT,
+                    metadata_json TEXT,
+                    source TEXT DEFAULT 'tdd_red_phase',
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
             
             cursor.execute('''
                 SELECT intent_id, requirement, edge_cases_json, created_at
