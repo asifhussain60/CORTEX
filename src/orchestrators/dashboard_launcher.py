@@ -2,14 +2,26 @@
 Dashboard Launcher Orchestrator
 
 Purpose: Launch CORTEX dashboard with HTTP server and auto-open browser.
-         Serves dashboard UI from cortex-brain/dashboards/ui/ directory.
+         Serves dashboard UI from cortex-brain/dashboards/ parent directory.
+
+📖 COMPLETE DOCUMENTATION: cortex-brain/documents/implementation-guides/dashboard-operation-guide.md
+   Read this guide for:
+   - Launch commands and options
+   - Data structure and file locations
+   - Server configuration details
+   - Troubleshooting common issues
 
 Trigger: "load dashboard", "/CORTEX load dashboard", "launch dashboard", "open dashboard"
 
+CRITICAL CONFIGURATION:
+- Server MUST serve from cortex-brain/dashboards/ (parent directory)
+- NOT from cortex-brain/dashboards/ui/ (breaks data file access)
+- This allows both /ui/index.html and /data/mock/*.json to work
+
 Features:
-- Auto-detect cortex-brain/dashboards/ui/ directory
+- Auto-detect cortex-brain/dashboards/ directory
 - Launch HTTP server on available port (default: 8080, fallback: 8081-8089)
-- Auto-open browser to dashboard with mock data source
+- Auto-open browser to dashboard with specified data source
 - Background server process (non-blocking)
 - Graceful shutdown on Ctrl+C
 - CORS support for local development
@@ -26,6 +38,13 @@ Usage:
     
     # Launch without auto-opening browser
     result = launch_dashboard(auto_open=False)
+    
+    # Launch with specific data source
+    result = launch_dashboard(source="luum-fresh")
+
+Data Sources:
+    - "mock" - Demo data in cortex-brain/dashboards/data/mock/
+    - "{repo-id}" - Repository data in cortex-brain/dashboards/data/repos/{repo-id}/
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -257,19 +276,21 @@ class DashboardServer:
                     "url": None
                 }
             
-            # Serve from ui/ subdirectory (where index.html is located)
-            ui_dir = self.dashboard_dir / "ui"
-            if not ui_dir.exists():
+            # ⚠️ CRITICAL: Serve from parent directory (dashboards/) to access both ui/ and data/
+            # This allows /ui/index.html and /data/mock/executive-summary.json to both work
+            # DO NOT change to serve from ui/ subdirectory - it will break data file access
+            # See: cortex-brain/documents/implementation-guides/dashboard-operation-guide.md
+            if not self.dashboard_dir.exists():
                 return {
                     "success": False,
-                    "message": f"Dashboard UI directory not found: {ui_dir}",
+                    "message": f"Dashboard directory not found: {self.dashboard_dir}",
                     "port": None,
                     "url": None
                 }
             
-            # Create handler with ui directory parameter
+            # Create handler with dashboard directory parameter
             import functools
-            handler = functools.partial(CORSHTTPRequestHandler, directory=str(ui_dir))
+            handler = functools.partial(CORSHTTPRequestHandler, directory=str(self.dashboard_dir))
             
             # Create server
             self.server = socketserver.TCPServer(("", self.port), handler)
@@ -284,8 +305,8 @@ class DashboardServer:
             self.server_thread.start()
             self._running = True
             
-            # Construct dashboard URL (server serves from ui/, so index.html is at root)
-            url = f"http://localhost:{self.port}/index.html?source={resolved_source}"
+            # Construct dashboard URL (server serves from parent, so need ui/index.html path)
+            url = f"http://localhost:{self.port}/ui/index.html?source={resolved_source}"
             
             # Wait briefly for server to start
             time.sleep(0.5)
