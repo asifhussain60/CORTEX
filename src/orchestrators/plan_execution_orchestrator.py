@@ -76,6 +76,18 @@ class PlanExecutionOrchestrator:
             self.code_executor = None
         
         try:
+            # TDD Implementation Orchestrator for TDD workflow
+            from src.orchestrators.tdd_implementation_orchestrator import TDDImplementationOrchestrator
+            self.tdd_orchestrator = TDDImplementationOrchestrator(
+                project_root=self.cortex_root,
+                enable_pattern_library=True
+            )
+            logger.info("✅ TDDImplementationOrchestrator initialized")
+        except ImportError as e:
+            logger.warning(f"⚠️  TDDImplementationOrchestrator not available: {e}")
+            self.tdd_orchestrator = None
+        
+        try:
             # Cleanup orchestrator for Integration & Consolidation phase
             from src.orchestrators.cleanup_orchestrator import CleanupOrchestrator
             self.cleanup_orchestrator = CleanupOrchestrator(str(self.cortex_root))
@@ -277,6 +289,8 @@ class PlanExecutionOrchestrator:
         """
         Execute a single task.
         
+        Uses TDD workflow if task specifies TDD mode, otherwise uses CodeExecutor.
+        
         Args:
             task: Task data from phase
         
@@ -285,16 +299,23 @@ class PlanExecutionOrchestrator:
         """
         task_id = task.get("task_id", "?")
         task_name = task.get("task_name", "Unknown")
+        use_tdd = task.get("use_tdd", False) or task.get("tdd_enabled", False)
         
-        logger.info(f"  ⚙️  Executing task {task_id}: {task_name}")
+        logger.info(f"  ⚙️  Executing task {task_id}: {task_name} (TDD: {use_tdd})")
         
         task_result = {
             "task_id": task_id,
             "task_name": task_name,
             "success": False,
-            "started_at": datetime.now().isoformat()
+            "started_at": datetime.now().isoformat(),
+            "tdd_enabled": use_tdd
         }
         
+        # Route to TDD orchestrator if enabled
+        if use_tdd and self.tdd_orchestrator:
+            return self._execute_task_with_tdd(task, task_result)
+        
+        # Fallback to CodeExecutor
         if not self.code_executor:
             task_result["error"] = "CodeExecutor not available"
             task_result["completed_at"] = datetime.now().isoformat()
@@ -330,6 +351,82 @@ class PlanExecutionOrchestrator:
         except Exception as e:
             task_result["error"] = str(e)
             logger.error(f"    ❌ Task {task_id} exception: {e}")
+        
+        task_result["completed_at"] = datetime.now().isoformat()
+        return task_result
+    
+    def _execute_task_with_tdd(
+        self,
+        task: Dict[str, Any],
+        task_result: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Execute task using TDD workflow (RED→GREEN→REFACTOR).
+        
+        Args:
+            task: Task data
+            task_result: Pre-initialized task result dict
+            
+        Returns:
+            Updated task result with TDD execution data
+        """
+        task_id = task.get("task_id", "?")
+        task_name = task.get("task_name", "Unknown")
+        
+        try:
+            # Start TDD session
+            session = self.tdd_orchestrator.start_session(
+                feature_name=task_name,
+                task_id=task_id,
+                work_item_id=task.get("work_item_id")
+            )
+            
+            session_id = session["session_id"]
+            logger.info(f"    🧪 Started TDD session: {session_id}")
+            
+            # Execute RED phase
+            red_result = self.tdd_orchestrator.execute_red_phase(session_id=session_id)
+            if not red_result["success"]:
+                task_result["error"] = f"RED phase failed: {red_result.get('message')}"
+                task_result["completed_at"] = datetime.now().isoformat()
+                return task_result
+            
+            logger.info(f"    🔴 RED phase complete: {red_result.get('failing_tests', 0)} tests failing")
+            
+            # Execute GREEN phase
+            green_result = self.tdd_orchestrator.execute_green_phase(session_id=session_id)
+            if not green_result["success"]:
+                task_result["error"] = f"GREEN phase failed: {green_result.get('message')}"
+                task_result["completed_at"] = datetime.now().isoformat()
+                return task_result
+            
+            logger.info(f"    🟢 GREEN phase complete: {green_result.get('passing_tests', 0)} tests passing")
+            
+            # Execute REFACTOR phase (THE INNOVATION)
+            refactor_result = self.tdd_orchestrator.execute_refactor_phase(session_id=session_id)
+            if not refactor_result["success"]:
+                task_result["error"] = f"REFACTOR phase failed: {refactor_result.get('message')}"
+                task_result["completed_at"] = datetime.now().isoformat()
+                return task_result
+            
+            logger.info(f"    🔵 REFACTOR phase complete: {len(refactor_result.get('applied_refactorings', []))} refactorings applied")
+            
+            # Complete session
+            complete_result = self.tdd_orchestrator.complete_session(session_id=session_id)
+            
+            task_result["success"] = True
+            task_result["tdd_session_id"] = session_id
+            task_result["tdd_metrics"] = {
+                "red_phase": red_result,
+                "green_phase": green_result,
+                "refactor_phase": refactor_result
+            }
+            task_result["message"] = f"TDD workflow complete: {session_id}"
+            logger.info(f"    ✅ Task {task_id} completed via TDD")
+            
+        except Exception as e:
+            task_result["error"] = f"TDD execution exception: {str(e)}"
+            logger.error(f"    ❌ Task {task_id} TDD exception: {e}")
         
         task_result["completed_at"] = datetime.now().isoformat()
         return task_result
