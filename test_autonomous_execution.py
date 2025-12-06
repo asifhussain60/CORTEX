@@ -20,7 +20,13 @@ print(f"📝 Total Tasks: {result.get('total_tasks')}")
 print(f"✔️  Completed Tasks: {result.get('completed_tasks')}")
 print(f"💬 Message: {result.get('message')}")
 
-if result.get('execution_log'):
+# Display rendered template output if available
+if result.get('rendered_output'):
+    print('\n' + '='*70)
+    print('🎨 FORMATTED OUTPUT (Response Template)')
+    print('='*70)
+    print(result['rendered_output'])
+elif result.get('execution_log'):
     print('\n📜 Execution Log (last 5 entries):')
     for entry in result['execution_log'][-5:]:
         print(f"  - {entry}")

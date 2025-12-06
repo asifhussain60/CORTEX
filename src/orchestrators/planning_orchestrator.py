@@ -15,12 +15,13 @@ Created: 2024-01-15
 import os
 import yaml
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Tuple, Callable
 from pathlib import Path
 import logging
 import re
 from src.utils.progress_decorator import with_progress, yield_progress
+from src.response_templates.response_template_manager import ResponseTemplateManager
 from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
@@ -48,6 +49,13 @@ class PlanningOrchestrator:
         self.schema_path = self.cortex_root / "cortex-brain" / "config" / "plan-schema.yaml"
         self.plans_dir = self.cortex_root / "cortex-brain" / "documents" / "planning" / "features"
         self.active_plans_dir = self.plans_dir / "active"
+        
+        # Initialize response template manager for progress visualization
+        try:
+            self.template_manager = ResponseTemplateManager()
+        except Exception as e:
+            logger.warning(f"Failed to initialize template manager: {e}")
+            self.template_manager = None
         self.completed_plans_dir = self.plans_dir / "completed"
         self.schema = self._load_schema()
         
@@ -1513,7 +1521,8 @@ class PlanningOrchestrator:
             # Complete the plan
             completion_result = self.complete_plan(plan_filename)
             
-            return {
+            # Generate visual progress output using response template
+            result = {
                 'success': True,
                 'message': f"Plan '{plan_id}' executed autonomously",
                 'total_phases': total_phases,
@@ -1523,6 +1532,44 @@ class PlanningOrchestrator:
                 'completion_result': completion_result,
                 'documentation_reminder': completion_result.get('documentation_reminder', '')
             }
+            
+            # Render progress template if available
+            if self.template_manager:
+                try:
+                    progress_bar = self._generate_progress_bar(completed_tasks, total_tasks, width=10)
+                    percentage = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 100
+                    
+                    # Get phase names summary
+                    phases_summary = ", ".join([f"Phase {i+1}: {phase.get('name', phase.get('phase_name', 'N/A'))}" for i, phase in enumerate(phases)])
+                    
+                    template_context = {
+                        'progress_bar': progress_bar,
+                        'percentage': percentage,
+                        'current_phase': total_phases,
+                        'total_phases': total_phases,
+                        'phase_name': phases[-1].get('name', phases[-1].get('phase_name', 'Final Phase')) if phases else 'N/A',
+                        'completed_tasks': completed_tasks,
+                        'total_tasks': total_tasks,
+                        'elapsed_time': 'N/A',  # Would need start_time tracking
+                        'current_task': 'All tasks completed',
+                        'execution_log': self._format_execution_log(execution_log),
+                        'plan_id': plan_id,
+                        'status': 'completed',
+                        'phases_summary': phases_summary,
+                        'next_steps': f"1. Review execution log\n2. Check git history for phase checkpoints\n3. {completion_result.get('documentation_reminder', 'Document learnings')}"
+                    }
+                    
+                    rendered = self.template_manager.render_template(
+                        template_id='autonomous_execution_progress',
+                        context=template_context
+                    )
+                    
+                    result['rendered_output'] = rendered
+                    logger.info(f"\n{rendered}")
+                except Exception as e:
+                    logger.warning(f"Failed to render progress template: {e}")
+            
+            return result
             
         except Exception as e:
             logger.error(f"Autonomous execution failed for '{plan_filename}': {e}")
@@ -1619,6 +1666,49 @@ class PlanningOrchestrator:
                 'old_status': 'approved',
                 'new_status': 'completed'
             }
+    
+    def _generate_progress_bar(self, current: int, total: int, width: int = 10) -> str:
+        """
+        Generate ASCII progress bar.
+        
+        Args:
+            current: Current progress value
+            total: Total value for 100%
+            width: Width of progress bar in characters
+        
+        Returns:
+            Progress bar string like [████████░░]
+        """
+        if total == 0:
+            return "[" + "░" * width + "]"
+        
+        filled = int((current / total) * width)
+        empty = width - filled
+        return "[" + "█" * filled + "░" * empty + "]"
+    
+    def _format_execution_log(self, execution_log: List[Dict], max_entries: int = 5) -> str:
+        """
+        Format execution log for display.
+        
+        Args:
+            execution_log: List of execution log entries
+            max_entries: Maximum number of entries to show
+        
+        Returns:
+            Formatted log string
+        """
+        if not execution_log:
+            return "No execution log entries."
+        
+        log_lines = []
+        for entry in execution_log[-max_entries:]:
+            if entry.get('action') == 'git_checkpoint':
+                status_icon = "✅" if entry.get('status') == 'success' else "❌"
+                log_lines.append(f"  {status_icon} Git checkpoint at Phase {entry['phase']}")
+            else:
+                log_lines.append(f"  ✔️  Phase {entry['phase']}: {entry.get('task_name', 'Task')}")
+        
+        return "\n".join(log_lines)
     
     def _generate_documentation_reminder(self, context: str, **kwargs) -> str:
         """
