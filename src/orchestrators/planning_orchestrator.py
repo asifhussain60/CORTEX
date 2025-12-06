@@ -1521,7 +1521,44 @@ class PlanningOrchestrator:
             # Complete the plan
             completion_result = self.complete_plan(plan_filename)
             
-            # Generate visual progress output using response template
+            # Generate visual progress output
+            progress_bar = self._generate_progress_bar(completed_tasks, total_tasks, width=10)
+            percentage = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 100
+            phases_summary = ", ".join([f"Phase {i+1}: {phase.get('name', phase.get('phase_name', 'N/A'))}" for i, phase in enumerate(phases)])
+            
+            # Format output directly (template system fallback not working reliably)
+            rendered_output = f"""## 🧠 CORTEX Autonomous Plan Execution
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
+
+### 📊 Execution Progress
+
+**Progress:** {progress_bar} {percentage}%
+
+🔄 **Phase {total_phases} of {total_phases}:** {phases[-1].get('name', phases[-1].get('phase_name', 'Final Phase')) if phases else 'N/A'}
+✅ **Tasks Completed:** {completed_tasks}/{total_tasks}
+⏱️  **Elapsed Time:** Complete
+📋 **Current Task:** All tasks completed
+
+**Execution Log:**
+{self._format_execution_log(execution_log)}
+
+### 🎯 Plan Details
+
+**Plan ID:** {plan_id}
+**Status:** completed
+**Phases:** {phases_summary}
+
+### 🔍 Next Steps
+
+1. Review execution log
+2. Check git history for phase checkpoints
+3. {completion_result.get('documentation_reminder', 'Document learnings')}
+"""
+            
+            logger.info(f"\n{rendered_output}")
+            
             result = {
                 'success': True,
                 'message': f"Plan '{plan_id}' executed autonomously",
@@ -1530,44 +1567,9 @@ class PlanningOrchestrator:
                 'completed_tasks': completed_tasks,
                 'execution_log': execution_log,
                 'completion_result': completion_result,
-                'documentation_reminder': completion_result.get('documentation_reminder', '')
+                'documentation_reminder': completion_result.get('documentation_reminder', ''),
+                'rendered_output': rendered_output
             }
-            
-            # Render progress template if available
-            if self.template_manager:
-                try:
-                    progress_bar = self._generate_progress_bar(completed_tasks, total_tasks, width=10)
-                    percentage = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 100
-                    
-                    # Get phase names summary
-                    phases_summary = ", ".join([f"Phase {i+1}: {phase.get('name', phase.get('phase_name', 'N/A'))}" for i, phase in enumerate(phases)])
-                    
-                    template_context = {
-                        'progress_bar': progress_bar,
-                        'percentage': percentage,
-                        'current_phase': total_phases,
-                        'total_phases': total_phases,
-                        'phase_name': phases[-1].get('name', phases[-1].get('phase_name', 'Final Phase')) if phases else 'N/A',
-                        'completed_tasks': completed_tasks,
-                        'total_tasks': total_tasks,
-                        'elapsed_time': 'N/A',  # Would need start_time tracking
-                        'current_task': 'All tasks completed',
-                        'execution_log': self._format_execution_log(execution_log),
-                        'plan_id': plan_id,
-                        'status': 'completed',
-                        'phases_summary': phases_summary,
-                        'next_steps': f"1. Review execution log\n2. Check git history for phase checkpoints\n3. {completion_result.get('documentation_reminder', 'Document learnings')}"
-                    }
-                    
-                    rendered = self.template_manager.render_template(
-                        template_id='autonomous_execution_progress',
-                        context=template_context
-                    )
-                    
-                    result['rendered_output'] = rendered
-                    logger.info(f"\n{rendered}")
-                except Exception as e:
-                    logger.warning(f"Failed to render progress template: {e}")
             
             return result
             
