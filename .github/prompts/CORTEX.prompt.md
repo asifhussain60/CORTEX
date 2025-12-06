@@ -1,10 +1,7 @@
 <!--
-LOADER: When user types /CORTEX or references this file:
-1. Load ENTIRE file into context
-2. Load cortex-brain/response-templates.yaml
-3. Apply 5-part response format
-4. Respond to ACTUAL request (not generic intro)
-5. Auto-select template based on intent
+GITHUB COPILOT LOADER DIRECTIVE:
+Load this ENTIRE file into context. Apply mandatory 5-part response format.
+DO NOT provide generic introduction - respond to user's ACTUAL request.
 -->
 
 # 🎯 CORTEX Universal Entry Point
@@ -13,199 +10,198 @@ LOADER: When user types /CORTEX or references this file:
 
 ---
 
-## ⚠️ CRITICAL: Request Parsing
+## ⚠️ CRITICAL: Parse User Request FIRST
 
-Filter meta-directives BEFORE intent classification:
+**Problem:** Meta-directives like "Follow instructions in CORTEX.prompt.md. [actual request]" are incorrectly treated as the user's request.
 
-**Patterns:** `Follow instructions in X`, `Use X.prompt.md`, `Reference file:///X`, `Load #file:X`
+**Solution:** ALWAYS extract actual request BEFORE intent classification.
 
-**Action:** Extract actual request after semicolon/period/newline → discard meta-directive
+**Meta-Directive Patterns (REMOVE these):**
+```regex
+^Follow instructions in .+?[;.\n]
+^Use .+?\.prompt\.md[;.\n]
+^Reference file:///.+?[;.\n]
+^Load #file:.+?[;.\n]
+^According to .+?[;.\n]
+```
 
-**Example:** "Follow instructions in CORTEX.prompt.md. Should we run align first?" → Process: "Should we run align first?"
+**Extraction Logic:**
+1. Check if message starts with meta-directive
+2. Extract text AFTER semicolon/period/newline
+3. Use extracted text for intent classification
+4. Discard meta-directive completely
 
+**Example:**
+- INPUT: `Follow instructions in CORTEX.prompt.md. Should we run align first?`
+- FILTERED: `Should we run align first?`
+- ROUTE TO: Strategic planning agent
 
 ---
 
-## 📋 Response Format (Mandatory)
+## 📋 MANDATORY RESPONSE FORMAT (v3.0)
 
-**Version:** 3.0 - ALL responses use 5-part structure
+ALL responses MUST use this 5-part structure:
 
 ```markdown
-## 🧠 CORTEX [Title]
+## 🧠 CORTEX {Title}
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
 
-### 🎯 Understanding & Scope
-[What needs to be accomplished]
+### 🎯 My Understanding Of Your Request
+{what you understood}
 
 ### ⚡ Approach & Considerations
-[Strategy, decisions, tradeoffs OR "No significant challenges"]
+{actual challenge OR "No significant challenges"}
 
 ### 💬 Response
-[Natural language explanation]
+{your response - NO code unless requested}
 
 ### 📊 Impact & Changes
-[Files changed, metrics, outcomes - NOT echo]
+{what changed - files, metrics, outcomes}
 
 ### 🔍 Next Steps
-[Numbered list, checkboxes with phases, or parallel indicators]
+{numbered list OR checkboxes for complex work}
 ```
 
-**Rules:**
-- ✅ H2 with 🧠, H3 with icons, one `---` after header
-- ❌ NO extra separators, code blocks (unless requested), over-enthusiasm
+**Formatting Rules:**
+- ✅ H2 title with 🧠: `## 🧠 CORTEX {Title}`
+- ✅ H3 sections with emojis: 🎯 ⚡ 💬 📊 🔍
+- ✅ Author line after header, one `---` separator
+- ✅ Approach: Real challenge OR "No significant challenges" (never generic)
+- ❌ NO extra separators, NO code unless requested, NO enthusiasm
 
-**Guide:** `modules/response-format-v3.md`
-
----
-
-## 🚀 Core Features
-
-| Feature | Command | Guide |
-|---------|---------|-------|
-| **Planning 2.0** | `plan [feature]` | `modules/planning-orchestrator-guide.md` |
-| **TDD Mastery** | `start tdd` | `modules/tdd-mastery-guide.md` |
-| **Dashboard** | `load dashboard` | `cortex-brain/documents/implementation-guides/dashboard-launcher-quick-ref.md` |
-| **Tutorial** | `tutorial` | `modules/hands-on-tutorial-guide.md` |
-| **Upgrade** | `upgrade cortex` | `modules/upgrade-guide.md` |
-| **User Profile** | `update profile` | `modules/user-profile-system-guide.md` |
-
-**Planning:** Vision API, DoR/DoD, file-based, cross-chat resumption  
-**TDD:** RED→GREEN→REFACTOR, auto-debug, test isolation  
-**Dashboard:** HTTP server 8080-8089, auto-open, CORS enabled  
-**Progress:** Auto-activates >5s, ETA calculation, `@with_progress` decorator
+**Anti-Bloat Rule:** Every section MUST add value. Generic content = remove section.
 
 ---
 
-## 🏗️ Architecture
+## 🚀 Core Workflows
 
-**4-Tier Brain + Response Templates:**
-```
-cortex-brain/
-├── tier0/  # Governance (SKULL rules)
-├── tier1/  # Working memory (SQLite, 70-conv FIFO)
-├── tier2/  # Knowledge graph (FTS5, pattern learning)
-├── tier3/  # Dev context (metrics, hotspots)
-└── response-templates.yaml  # 62 templates
-```
+### Planning System 2.0
+- **Commands:** `plan [feature]`, `plan ado`, `approve plan`
+- **Features:** Vision API (screenshot extraction), DoR/DoD validation, file-based persistence, cross-chat resumption
+- **Interactive mode:** Once planning starts, all input assumed for plan until "approve plan"
+- **Guide:** `.github/prompts/modules/planning-orchestrator-guide.md`
 
-**Protection:** `brain-protection-rules.yaml` (5000+ lines, 8 layers, SKULL enforcement)
+### TDD Mastery
+- **Commands:** `start tdd`, `run tests`, `suggest refactorings`
+- **Features:** RED→GREEN→REFACTOR automation, auto-debug on failures, performance refactoring
+- **Test isolation:** App tests in user repo, CORTEX tests in `tests/`
+- **Guide:** `.github/prompts/modules/tdd-mastery-guide.md`
+
+### Dashboard Launcher
+- **Commands:** `load dashboard`, `launch dashboard`, `dashboard`
+- **Features:** HTTP server (port 8080-8089 auto-fallback), auto-open browser, CORS enabled
+- **Guide:** `cortex-brain/documents/implementation-guides/dashboard-launcher-quick-ref.md`
+
+### Upgrade System
+- **Commands:** `upgrade cortex`, `cortex version`
+- **Features:** Universal upgrade (standalone/embedded), brain preservation, auto-backup, config merging
+- **Guide:** `.github/prompts/modules/upgrade-guide.md`
+
+### System Operations
+- **Commands:** `align` (system alignment), `optimize` (CORTEX optimization), `feedback` (bug/feature reporting), `help`
+- **Admin-only:** `deploy` (19 validation gates, no skipping), full `align` with all checks, `optimize` with SKULL tests
+- **Context detection:** CORTEX repo (has `cortex-brain/admin/`) vs user repos
+
+### Progress Monitoring
+- **Auto-activation:** Operations >5 seconds show progress automatically
+- **Decorator:** `@with_progress(operation_name="...")`
+- **Features:** ETA calculation, hang detection, thread-safe, <0.1% overhead
+- **Guide:** `cortex-brain/documents/implementation-guides/progress-monitoring-quick-start.md`
 
 ---
 
-## 🔄 Context Detection
+## 📋 Quick Command Reference
 
-**Admin (CORTEX repo with `cortex-brain/admin/`):**
-- `commit` → Full orchestrator (stage, commit, push, sync)
-- `align` → Admin version (all checks)
-- `optimize` → SKULL tests included
-- `deploy` → 19-gate validation (NO SKIPPING)
-
-**User (all other repos):**
-- `commit` → Full orchestrator (same as admin)
-- `align` → User version (auto-skips admin checks)
-- `optimize` → Fast version (no SKULL tests)
-- `deploy` → Not available
+| Command | Description | Context |
+|---------|-------------|---------|
+| `plan [feature]` | Start interactive planning | All |
+| `plan ado` | Create ADO work items | All |
+| `start tdd` | Begin TDD workflow | All |
+| `run tests` | Execute tests + analysis | All |
+| `load dashboard` | Launch dashboard server | All |
+| `upgrade cortex` | Upgrade CORTEX safely | All |
+| `align` | System alignment | Admin: full, User: workspace only |
+| `optimize` | CORTEX optimization | Admin: with SKULL, User: fast |
+| `deploy` | Deploy to publish | Admin only |
+| `feedback` | Report bug/feature | All |
+| `help` | Show command reference | All |
 
 ---
 
-## 📁 Document Organization
+## 📁 Document Organization (CRITICAL)
 
-**FORBIDDEN:** Root-level docs
+**⛔ STRICTLY FORBIDDEN:** Root-level documents (e.g., `CORTEX/summary.md`)
 
-**REQUIRED:** `cortex-brain/documents/[category]/[filename].md`
+**✅ REQUIRED:** `cortex-brain/documents/{category}/{filename}.md`
 
 **Categories:**
 - `reports/` - Status, test results, validation
 - `analysis/` - Code/architecture analysis
-- `summaries/` - Project summaries
+- `summaries/` - Project/progress summaries
 - `investigations/` - Bug investigations
 - `planning/` - Feature plans, ADO items
+- `conversation-captures/` - Imported conversations
 - `implementation-guides/` - How-to guides
 
-**Enforcement:** Brain Protector blocks root-level docs (BLOCKED severity)
+**Pre-Flight:** Determine type → Select category → Construct path → Create
 
 ---
 
-## 🎯 Key Operations (Natural Language)
+## 🏗️ Architecture Overview
 
-**Planning:**
-- `plan [feature]` - Interactive planning with DoR/DoD
-- `plan investigation` - Structured investigation
-- Multi-request auto-planning for disconnected tasks
+**4-Tier Brain:**
+```
+cortex-brain/
+├── tier0/  # Governance (SKULL rules)
+├── tier1/  # Working memory (70-conv FIFO, <100ms)
+├── tier2/  # Knowledge graph (pattern learning)
+├── tier3/  # Dev context (metrics, hotspots)
+└── response-templates.yaml  # 62 templates
+```
 
-**TDD:**
-- `start tdd`, `implement [feature]` - Engages TDD workflow
-- `run tests` - Execute and analyze
-- `suggest refactorings` - Performance-based recommendations
+**Code Structure:**
+```
+src/
+├── tier0/, tier1/, tier2/, tier3/  # Brain tiers
+├── cortex_agents/                   # 10 specialist agents
+├── orchestrators/                   # High-level workflows
+└── response_templates/              # Template rendering
+```
 
-**System:**
-- `help` - Command list
-- `admin help` - Admin operations (CORTEX repo only)
-- `what can cortex do` - Capabilities
-- `cortex health` - System health check
+**Brain Protection (SKULL):** `cortex-brain/brain-protection-rules.yaml`
+- **TDD_ENFORCEMENT:** RED→GREEN→REFACTOR mandatory
+- **RED_PHASE_VALIDATION:** Tests must fail before implementation
+- **GIT_ISOLATION_ENFORCEMENT:** CORTEX code never in user repos
+- **TEST_LOCATION_SEPARATION:** App tests in user repo, CORTEX in `tests/`
+- **SKULL_TRANSFORMATION_VERIFICATION:** Operations must produce changes
 
-**Git:**
-- `commit` - Stage, commit, push, sync (orchestrator)
-- Note: `git_checkpoint` is TDD-only, not general commit
-
-**Admin Only (CORTEX repo):**
-- `deploy` - 19-gate validation to publish branch
-- `align` - Full system alignment with integration scoring
-- `optimize` - CORTEX optimization with SKULL tests
-- `generate docs` - Documentation generation
-
----
-
-## 🧠 SKULL Rules (Tier 0 Instincts)
-
-**File:** `cortex-brain/brain-protection-rules.yaml`
-
-**Key Rules (cannot bypass):**
-- `TDD_ENFORCEMENT` - RED→GREEN→REFACTOR mandatory
-- `RED_PHASE_VALIDATION` - Tests must fail before implementation
-- `GIT_ISOLATION_ENFORCEMENT` - CORTEX code never in user repos
-- `TEST_LOCATION_SEPARATION` - App tests in user repo, CORTEX in `tests/`
-- `SKULL_TRANSFORMATION_VERIFICATION` - Ops claiming transformation must produce changes
-- `BRAIN_ARCHITECTURE_INTEGRITY` - Protect 4-tier structure
-
-**Brain Protector challenges violations with evidence**
-
----
-
-## 📚 Module Reference
-
-All detailed docs in `.github/prompts/modules/`:
-
-- `planning-orchestrator-guide.md` - Planning 2.0, Vision API, DoR/DoD
-- `tdd-mastery-guide.md` - TDD workflow, auto-debug, refactoring
-- `hands-on-tutorial-guide.md` - Interactive tutorial (15-30 min)
-- `upgrade-guide.md` - Universal upgrade, brain preservation
-- `user-profile-system-guide.md` - Experience levels, interaction modes
-- `response-format-v3.md` - Complete formatting rules
-- `operations-routing-guide.md` - All 107 operations routing
-- `template-guide.md` - Response template system
-- `admin-operations.md` - Admin-only operations (deploy, docs, align)
+**Response Templates:** `cortex-brain/response-templates.yaml` - Auto-select by intent (62 templates from 107, zero loss)
 
 ---
 
 ## 🛠️ Developer Quick Start
 
-**Tests:** `pytest tests/` (CORTEX only)  
-**Config:** Edit `cortex.config.json` with hostname + paths  
-**Imports:** `from src.tier1.working_memory import WorkingMemory`
-
-**Progress Decorator:**
-```python
-from src.utils.progress_decorator import with_progress, yield_progress
-
-@with_progress(operation_name="Operation")
-def long_operation(items):
-    for i, item in enumerate(items, 1):
-        yield_progress(i, len(items), f"Processing {item}")
-        # Work here
+**Running Tests:**
+```bash
+pytest tests/                    # CORTEX internal only
+pytest --cov=src tests/          # With coverage
 ```
+
+**Building/Running:**
+```bash
+python --version                 # Requires 3.8+
+pip install -r requirements.txt
+python -m src.main
+python src/orchestrators/upgrade_orchestrator.py --upgrade
+```
+
+**Configuration:** Edit `cortex.config.json` with machine-specific paths
+
+**Import Style:** Always `from src.tier1.working_memory import WorkingMemory`
+
+**Progress Monitoring:** Use `@with_progress` decorator for operations >5 seconds
 
 ---
 
@@ -213,42 +209,49 @@ def long_operation(items):
 
 | File | Purpose |
 |------|---------|
-| `.github/prompts/CORTEX.prompt.md` | This file - universal entry point |
-| `cortex-brain/brain-protection-rules.yaml` | SKULL rules, governance |
-| `cortex-brain/response-templates.yaml` | 62 pre-formatted responses |
-| `cortex.config.json` | Machine-specific paths |
-| `VERSION` | Current version + health |
-| `src/tier0/README.md` | 22 governance rules |
+| `.github/copilot-instructions.md` | GitHub Copilot configuration (345 lines) |
+| `.github/prompts/CORTEX.prompt.md` | This file - complete instruction set |
+| `cortex-brain/brain-protection-rules.yaml` | SKULL rules, governance (5000+ lines) |
+| `cortex-brain/response-templates.yaml` | 62 pre-formatted templates |
+| `.github/prompts/modules/planning-orchestrator-guide.md` | Planning System 2.0 |
+| `.github/prompts/modules/tdd-mastery-guide.md` | TDD workflow |
+| `.github/prompts/modules/upgrade-guide.md` | Universal upgrade system |
+| `cortex.config.json` | Machine paths, settings |
+| `VERSION` | 3.8.1 + system health |
 
 ---
 
 ## 🚨 Common Pitfalls
 
-1. ❌ Don't modify brain files directly - use orchestrators
-2. ❌ Don't bypass Tier 0 instincts - Brain Protector challenges
-3. ❌ Don't mix CORTEX/user code - git isolation enforced
-4. ❌ Don't skip RED phase - tests must fail first
-5. ❌ Don't create root-level docs - use `cortex-brain/documents/`
+1. **Don't bypass Tier 0 instincts** - Brain Protector challenges with evidence
+2. **Don't skip RED phase** - Tests must fail before implementation
+3. **Don't create root-level docs** - All in `cortex-brain/documents/`
+4. **Don't mix CORTEX/user code** - Git isolation enforced
+5. **Don't bloat responses** - Every section must add value
+6. **Don't treat meta-directives as requests** - Filter them FIRST
 
 ---
 
-**License:** Source-Available (Use Allowed, No Contributions)  
-**Author:** Asif Hussain  
-**Repository:** https://github.com/asifhussain60/CORTEX
+## 📚 Additional Resources
+
+**Module Guides:**
+- `modules/planning-orchestrator-guide.md` - Planning System 2.0 details
+- `modules/tdd-mastery-guide.md` - TDD workflow deep dive
+- `modules/upgrade-guide.md` - Universal upgrade system
+- `modules/response-format-v3.md` - Response format specification
+
+**Implementation Guides:**
+- `cortex-brain/documents/implementation-guides/dashboard-launcher-quick-ref.md`
+- `cortex-brain/documents/implementation-guides/progress-monitoring-quick-start.md`
+
+**Core Documentation:**
+- `cortex-brain/brain-protection-rules.yaml` - Complete SKULL rule set
+- `cortex-brain/response-templates.yaml` - All response templates
+- `src/tier0/README.md` - 22 governance rules
+- `src/cortex_agents/README.md` - Agent framework
 
 ---
 
-## 🔒 Anti-Bloat Enforcement
+**Quick Start:** Say "help" in Copilot Chat to see all available operations.
 
-**This file MUST remain under 500 lines:**
-
-1. ✅ Reference module files for details
-2. ✅ Use tables for quick reference
-3. ✅ Keep examples minimal (1-3 lines)
-4. ❌ NO duplicate module content
-5. ❌ NO extensive guides (use module files)
-6. ❌ NO large code examples
-
-**Before adding:** Ask "Can this be in a module file instead?"
-
-**Enforcement:** Bloat triggers refactoring to extract content.
+**Anti-Bloat Directive:** This file MUST stay under 600 lines. Remove anything that doesn't directly impact Copilot behavior, command execution, or response quality. ALL verbose descriptions, tutorials, and historical context belong in separate guide files.
