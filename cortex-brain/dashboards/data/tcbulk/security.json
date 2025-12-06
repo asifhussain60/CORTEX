@@ -1,0 +1,570 @@
+{
+  "overall_score": 0,
+  "last_scan": "2025-12-06T15:05:47.546009",
+  "categories": [
+    {
+      "name": "code_security",
+      "score": 0,
+      "status": "critical",
+      "issues": 51,
+      "details": "51 code-level vulnerabilities found"
+    },
+    {
+      "name": "dependencies",
+      "score": 100,
+      "status": "healthy",
+      "issues": 0,
+      "details": "0 vulnerable dependencies"
+    },
+    {
+      "name": "authentication",
+      "score": 0,
+      "status": "critical",
+      "issues": 69,
+      "details": "69 hardcoded credentials, 0 auth issues"
+    },
+    {
+      "name": "configuration",
+      "score": 100,
+      "status": "healthy",
+      "issues": 0,
+      "details": "0 configuration issues"
+    }
+  ],
+  "vulnerabilities": {
+    "critical": 0,
+    "high": 51,
+    "medium": 0,
+    "low": 0
+  },
+  "owasp_top_10": {
+    "categories": [
+      {
+        "risk": "A01",
+        "name": "Broken Access Control",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A02",
+        "name": "Cryptographic Failures",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 69,
+        "findings": [
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 452,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Buf*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 615,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Pas*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 616,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Pas*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 617,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Pas*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 642,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Pas*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          }
+        ]
+      },
+      {
+        "risk": "A03",
+        "name": "Injection",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 51,
+        "findings": [
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\AccountController.cs",
+            "line": 198,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "_logger.LogInformation($\"Password sucessfully updated for account {request.Username}\");",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\AccountController.cs",
+            "line": 291,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "_logger.LogError($\"User {authUserId} is not authorized to Update User Accounts\");",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\AccountController.cs",
+            "line": 363,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "_logger.LogInformation($\"Password reset request from user: {user.Id}. Temporary password sent to {us",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\CardController.cs",
+            "line": 583,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "_logger.LogInformation($\"Unable to retrieve proxy information from vendor. Token: {vendorResponse.To",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\CardController.cs",
+            "line": 697,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "$\" for proxyId: {request.FromCard.ProxyId}, error: {error.ErrorMessage}\");",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          }
+        ]
+      },
+      {
+        "risk": "A04",
+        "name": "Insecure Design",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A05",
+        "name": "Security Misconfiguration",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A06",
+        "name": "Vulnerable and Outdated Components",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A07",
+        "name": "Identification and Authentication Failures",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 68,
+        "findings": [
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 452,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Buf*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 615,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Pas*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 616,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Pas*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 617,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Pas*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Password",
+            "severity": "critical",
+            "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+            "line": 642,
+            "description": "Hardcoded Password found in plain text",
+            "masked_value": "Pas*********",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          }
+        ]
+      },
+      {
+        "risk": "A08",
+        "name": "Software and Data Integrity Failures",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A09",
+        "name": "Security Logging and Monitoring Failures",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A10",
+        "name": "Server-Side Request Forgery (SSRF)",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A11",
+        "name": "Insecure AI/ML Model Deployment",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      }
+    ],
+    "overall_compliance": 72.72727272727273,
+    "version": "2025",
+    "last_updated": "2025-12-06T15:05:47.522292"
+  },
+  "compliance": {
+    "gdpr_ready": false,
+    "gdpr_issues": [
+      "Hardcoded credentials found - violates data protection"
+    ],
+    "soc2_ready": false,
+    "soc2_issues": [
+      "72 high-severity vulnerabilities"
+    ],
+    "hipaa_ready": false,
+    "hipaa_issues": [
+      "Encryption keys/credentials not secured"
+    ],
+    "pci_dss_ready": false,
+    "pci_dss_issues": [
+      "Sensitive data stored in plain text"
+    ]
+  },
+  "findings": {
+    "vulnerabilities": [
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\AccountController.cs",
+        "line": 198,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logger.LogInformation($\"Password sucessfully updated for account {request.Username}\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\AccountController.cs",
+        "line": 291,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logger.LogError($\"User {authUserId} is not authorized to Update User Accounts\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\AccountController.cs",
+        "line": 363,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logger.LogInformation($\"Password reset request from user: {user.Id}. Temporary password sent to {us",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\CardController.cs",
+        "line": 583,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logger.LogInformation($\"Unable to retrieve proxy information from vendor. Token: {vendorResponse.To",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\CardController.cs",
+        "line": 697,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "$\" for proxyId: {request.FromCard.ProxyId}, error: {error.ErrorMessage}\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\CardController.cs",
+        "line": 699,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "response.Messages.Add(\"From Card: \" + validationResult.Errors[0].ErrorMessage);",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\CardController.cs",
+        "line": 742,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "$\"UserId: {request.UserId} FromCard proxyId: {request.FromCard.ProxyId} ToCardproxyId: {request.ToCa",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\PaymentController.cs",
+        "line": 74,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "_logger.LogDebug($\"From Add funds - about to process card load for user: {ccPaymentInfo.UserId}, \" +",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\PaymentController.cs",
+        "line": 74,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logger.LogDebug($\"From Add funds - about to process card load for user: {ccPaymentInfo.UserId}, \" +",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Web\\Controllers\\PaymentController.cs",
+        "line": 88,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logger.LogDebug($\"From Add funds - about to Get new car balances for user: {ccPaymentInfo.UserId}, ",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\AccountService.cs",
+        "line": 77,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logger.LogInformation($\"Updated cardInfoRequest counter for user: {userId}, to: {newUserRequestCoun",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\CardManagementService.cs",
+        "line": 147,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "_logService.LogDebug($\"Before changing card status for proxy Id: {updateRequest.ProxyId}, to: {updat",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\CardManagementService.cs",
+        "line": 147,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logService.LogDebug($\"Before changing card status for proxy Id: {updateRequest.ProxyId}, to: {updat",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\CardManagementService.cs",
+        "line": 148,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "$\", reason: {updateRequest.Reason}, reference Code: {updateRequest.TransactionId}\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\CardManagementService.cs",
+        "line": 162,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "_logService.LogDebug($\"After Status Change WSC for proxy Id: {updateRequest.ProxyId}, new status: {u",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\CardManagementService.cs",
+        "line": 162,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logService.LogDebug($\"After Status Change WSC for proxy Id: {updateRequest.ProxyId}, new status: {u",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\CardManagementService.cs",
+        "line": 163,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "$\"response message: {updateResponse.ErrorMessage}\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\CardManagementService.cs",
+        "line": 175,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "_logService.LogError($\"Unable to change card status for proxy Id: {updateRequest.ProxyId}, to: {upda",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\CardManagementService.cs",
+        "line": 175,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "_logService.LogError($\"Unable to change card status for proxy Id: {updateRequest.ProxyId}, to: {upda",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "HQY.TCCARD\\HQY.TCCARD.Business\\Services\\CardManagementService.cs",
+        "line": 176,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "$\" errorMessage: {ex.Message}, reference Code: {updateRequest.TransactionId}\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      }
+    ],
+    "hardcoded_secrets": [
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 452,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Buf*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 615,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Pas*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 616,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Pas*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 617,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Pas*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 642,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Pas*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 643,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Pas*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 644,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Pas*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 686,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Pas*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 687,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Pas*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Password",
+        "severity": "critical",
+        "file": "HQY.TCCARD\\HQY.TCCARD.UnitTest\\Controllers\\AccountControllerTests.cs",
+        "line": 688,
+        "description": "Hardcoded Password found in plain text",
+        "masked_value": "Pas*********",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      }
+    ],
+    "config_issues": [],
+    "dependency_vulns": []
+  },
+  "scan_mode": "deep"
+}

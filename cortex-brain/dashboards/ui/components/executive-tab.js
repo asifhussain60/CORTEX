@@ -19,11 +19,271 @@ export function renderExecutiveSummary(data) {
         return;
     }
     
+    // Check if we have new executive summary format
+    const execSummary = data.executiveSummary || {};
+    
+    if (execSummary.project_name) {
+        // Render new narrative format
+        renderNarrativeExecutiveSummary(container, execSummary);
+    } else {
+        // Fallback to old format
+        renderLegacyExecutiveSummary(container, data);
+    }
+}
+
+/**
+ * Render new narrative executive summary format
+ * @param {HTMLElement} container - Container element
+ * @param {Object} execSummary - Executive summary data
+ */
+function renderNarrativeExecutiveSummary(container, execSummary) {
+    const whatItDoes = execSummary.what_it_does || {};
+    const composition = execSummary.composition || {};
+    const capabilities = execSummary.capabilities || [];
+    const techFoundation = execSummary.technical_foundation || {};
+    const healthSnapshot = execSummary.health_snapshot || {};
+    const quickInsights = execSummary.quick_insights || [];
+    const recommendedSteps = execSummary.recommended_next_steps || [];
+    
+    container.innerHTML = `
+        <!-- Project Header -->
+        <div class="glass-card" style="margin-bottom: 2rem; padding: 2rem;">
+            <h1 style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.5rem;">
+                ${execSummary.project_name || 'Project'}
+            </h1>
+            <p style="font-size: 1.25rem; color: var(--text-secondary); font-style: italic;">
+                ${execSummary.tagline || ''}
+            </p>
+        </div>
+        
+        <!-- What It Does Section -->
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                <span style="font-size: 2rem; margin-right: 1rem;">📋</span>
+                <h2 style="font-size: 1.75rem; color: var(--accent-primary);">What It Does</h2>
+            </div>
+            <div style="font-size: 1.125rem; line-height: 1.8; color: var(--text-primary); white-space: pre-line; margin-bottom: 1.5rem;">
+                ${whatItDoes.summary || ''}
+            </div>
+            ${whatItDoes.key_points && whatItDoes.key_points.length > 0 ? `
+                <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid var(--accent-primary);">
+                    <h3 style="font-size: 1.125rem; color: var(--accent-primary); margin-bottom: 1rem;">Key Highlights</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        ${whatItDoes.key_points.map(point => `
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: start;">
+                                <span style="color: var(--accent-primary); margin-right: 0.75rem; font-size: 1.25rem;">✓</span>
+                                <span style="color: var(--text-primary);">${point}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+        </div>
+        
+        <!-- Health Snapshot -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="glass-card" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 0.5rem;">${getHealthEmoji(healthSnapshot.overall_score || 0)}</div>
+                <h3 style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.5rem;">${healthSnapshot.overall_score || 0}</h3>
+                <p style="color: var(--text-secondary); font-weight: 600;">Overall Health Score</p>
+                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                    ${healthSnapshot.status || getHealthStatus(healthSnapshot.overall_score || 0)}
+                </p>
+            </div>
+            
+            <div class="glass-card" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔒</div>
+                <h3 style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.5rem;">${healthSnapshot.security_issues || 0}</h3>
+                <p style="color: var(--text-secondary); font-weight: 600;">Security Issues</p>
+                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                    ${healthSnapshot.security_issues === 0 ? 'No issues detected' : 'Review recommended'}
+                </p>
+            </div>
+            
+            <div class="glass-card" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 0.5rem;">📊</div>
+                <h3 style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.5rem;">${healthSnapshot.code_quality_score || 'N/A'}</h3>
+                <p style="color: var(--text-secondary); font-weight: 600;">Code Quality</p>
+                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                    ${healthSnapshot.test_coverage ? `${healthSnapshot.test_coverage}% coverage` : 'Out of 10'}
+                </p>
+            </div>
+        </div>
+        
+        <!-- Composition & Architecture -->
+        ${composition.components && composition.components.length > 0 ? `
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <span style="font-size: 2rem; margin-right: 1rem;">🏗️</span>
+                    <h2 style="font-size: 1.75rem; color: var(--accent-primary);">Composition & Architecture</h2>
+                </div>
+                <p style="font-size: 1.125rem; color: var(--text-primary); margin-bottom: 1.5rem;">
+                    This application is built using <strong>${composition.architecture_style || 'modern architecture'}</strong> 
+                    and consists of the following components:
+                </p>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="text-align: left; padding: 1rem; color: var(--accent-primary);">Component</th>
+                                <th style="text-align: left; padding: 1rem; color: var(--accent-primary);">Technology</th>
+                                <th style="text-align: left; padding: 1rem; color: var(--accent-primary);">Purpose</th>
+                                <th style="text-align: center; padding: 1rem; color: var(--accent-primary);">Files</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${composition.components.map(comp => `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 1rem; color: var(--text-primary); font-weight: 600;">${comp.name}</td>
+                                    <td style="padding: 1rem; color: var(--text-secondary);">${comp.technology}</td>
+                                    <td style="padding: 1rem; color: var(--text-secondary);">${comp.purpose}</td>
+                                    <td style="padding: 1rem; text-align: center; color: var(--accent-primary);">${comp.files_count || 'N/A'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        ` : ''}
+        
+        <!-- Key Capabilities -->
+        ${capabilities.length > 0 ? `
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <span style="font-size: 2rem; margin-right: 1rem;">⚡</span>
+                    <h2 style="font-size: 1.75rem; color: var(--accent-primary);">Key Capabilities</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                    ${capabilities.map(cap => `
+                        <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 0.5rem; border-left: 3px solid var(--accent-primary);">
+                            <h3 style="font-size: 1.125rem; color: var(--accent-primary); margin-bottom: 0.5rem;">${cap.name}</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6;">${cap.description}</p>
+                            ${cap.confidence ? `
+                                <div style="margin-top: 0.75rem;">
+                                    <div style="background: var(--bg-primary); height: 4px; border-radius: 2px; overflow: hidden;">
+                                        <div style="background: var(--accent-primary); height: 100%; width: ${(cap.confidence * 100).toFixed(0)}%;"></div>
+                                    </div>
+                                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                        Confidence: ${(cap.confidence * 100).toFixed(0)}%
+                                    </p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        ` : ''}
+        
+        <!-- Technical Foundation -->
+        ${techFoundation.languages ? `
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <span style="font-size: 2rem; margin-right: 1rem;">🛠️</span>
+                    <h2 style="font-size: 1.75rem; color: var(--accent-primary);">Technical Foundation</h2>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="text-align: left; padding: 1rem; color: var(--accent-primary);">Category</th>
+                                <th style="text-align: left; padding: 1rem; color: var(--accent-primary);">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem; color: var(--text-primary); font-weight: 600;">Languages</td>
+                                <td style="padding: 1rem; color: var(--text-secondary);">
+                                    ${Object.entries(techFoundation.languages).map(([lang, pct]) => `${lang} (${pct})`).join(', ')}
+                                </td>
+                            </tr>
+                            ${techFoundation.frameworks && techFoundation.frameworks.length > 0 ? `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 1rem; color: var(--text-primary); font-weight: 600;">Frameworks</td>
+                                    <td style="padding: 1rem; color: var(--text-secondary);">${techFoundation.frameworks.join(', ')}</td>
+                                </tr>
+                            ` : ''}
+                            ${techFoundation.architecture_type ? `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 1rem; color: var(--text-primary); font-weight: 600;">Architecture</td>
+                                    <td style="padding: 1rem; color: var(--text-secondary);">${techFoundation.architecture_type}</td>
+                                </tr>
+                            ` : ''}
+                            ${techFoundation.dependencies ? `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 1rem; color: var(--text-primary); font-weight: 600;">Dependencies</td>
+                                    <td style="padding: 1rem; color: var(--text-secondary);">
+                                        ${techFoundation.dependencies.total || 0} total 
+                                        (${techFoundation.dependencies.production || 0} production, 
+                                        ${techFoundation.dependencies.development || 0} development)
+                                    </td>
+                                </tr>
+                            ` : ''}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        ` : ''}
+        
+        <!-- Quick Insights -->
+        ${quickInsights.length > 0 ? `
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <span style="font-size: 2rem; margin-right: 1rem;">💡</span>
+                    <h2 style="font-size: 1.75rem; color: var(--accent-primary);">Quick Insights</h2>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    ${quickInsights.map(insight => `
+                        <div style="display: flex; align-items: start; padding: 1rem; background: var(--bg-secondary); border-radius: 0.5rem; border-left: 3px solid ${getSeverityColor(insight.severity)};">
+                            <span style="font-size: 1.5rem; margin-right: 1rem;">${getSeverityIcon(insight.severity)}</span>
+                            <div style="flex: 1;">
+                                <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">${insight.category}</p>
+                                <p style="color: var(--text-secondary); font-size: 0.9375rem;">${insight.insight}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        ` : ''}
+        
+        <!-- Recommended Next Steps -->
+        ${recommendedSteps.length > 0 ? `
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <span style="font-size: 2rem; margin-right: 1rem;">🎯</span>
+                    <h2 style="font-size: 1.75rem; color: var(--accent-primary);">Recommended Next Steps</h2>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    ${recommendedSteps.map((step, index) => `
+                        <div style="display: flex; align-items: start; padding: 1.25rem; background: var(--bg-secondary); border-radius: 0.5rem; border-left: 4px solid ${getPriorityColor(step.priority)};">
+                            <span style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary); margin-right: 1rem; min-width: 2rem;">${index + 1}</span>
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                    <span style="background: ${getPriorityColor(step.priority)}; color: white; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">
+                                        ${step.priority}
+                                    </span>
+                                    <span style="color: var(--text-secondary); font-size: 0.875rem;">${step.estimated_effort}</span>
+                                </div>
+                                <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">${step.action}</p>
+                                <p style="color: var(--text-secondary); font-size: 0.875rem;">Category: ${step.category}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        ` : ''}
+    `;
+}
+
+/**
+ * Render legacy executive summary format (fallback)
+ * @param {HTMLElement} container - Container element
+ * @param {Object} data - Dashboard data
+ */
+function renderLegacyExecutiveSummary(container, data) {
     const healthData = data.healthData || {};
     const techStack = data.techStack || {};
     const security = data.security || {};
     const codeOrg = data.codeOrganization || {};
-    const architecture = data.architecture || {};
     
     const overallScore = healthData.overall_score || 0;
     const projectType = data.projectType || 'Unknown';
@@ -77,18 +337,6 @@ export function renderExecutiveSummary(data) {
                 <p style="color: var(--text-secondary); font-weight: 600;">Security Issues</p>
                 <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
                     ${(security.vulnerabilities?.critical || 0)} critical • ${(security.vulnerabilities?.high || 0)} high
-                </p>
-            </div>
-            
-            <!-- Tech Stack -->
-            <div class="glass-card" style="text-align: center; padding: 2rem;">
-                <div style="font-size: 3rem; margin-bottom: 0.5rem;">🛠️</div>
-                <h3 style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.5rem;">
-                    ${Object.keys(techStack.languages || {}).length}
-                </h3>
-                <p style="color: var(--text-secondary); font-weight: 600;">Languages</p>
-                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
-                    ${Object.keys(techStack.frameworks || {}).length} frameworks • ${techStack.dependencies?.total || 0} deps
                 </p>
             </div>
         </div>
@@ -404,4 +652,42 @@ function getSecurityEmoji(security) {
     if (critical > 0) return '🔴';
     if (high > 5) return '🟡';
     return '🟢';
+}
+
+/**
+ * Get severity color
+ */
+function getSeverityColor(severity) {
+    const colorMap = {
+        'info': '#3b82f6',
+        'warning': '#f59e0b',
+        'error': '#ef4444',
+        'critical': '#dc2626'
+    };
+    return colorMap[severity] || '#3b82f6';
+}
+
+/**
+ * Get severity icon
+ */
+function getSeverityIcon(severity) {
+    const iconMap = {
+        'info': 'ℹ️',
+        'warning': '⚠️',
+        'error': '❌',
+        'critical': '🚨'
+    };
+    return iconMap[severity] || 'ℹ️';
+}
+
+/**
+ * Get priority color
+ */
+function getPriorityColor(priority) {
+    const colorMap = {
+        'high': '#ef4444',
+        'medium': '#f59e0b',
+        'low': '#10b981'
+    };
+    return colorMap[priority] || '#6b7280';
 }

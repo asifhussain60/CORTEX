@@ -22,6 +22,7 @@ let REPOSITORY_REGISTRY = null;
 
 // Data files to load
 const DATA_FILES = [
+    'executive-summary.json',
     'health-data.json',
     'tech-stack.json',
     'security.json',
@@ -132,12 +133,13 @@ export async function loadDashboardData(source = 'mock') {
         const data = {
             source,
             timestamp: new Date().toISOString(),
-            healthData: results[0],
-            techStack: results[1],
-            security: results[2],
-            architecture: results[3],
-            codeOrganization: results[4],
-            vendors: results[5]  // Removed teamMetrics (index 5, now vendors)
+            executiveSummary: results[0],
+            healthData: results[1],
+            techStack: results[2],
+            security: results[3],
+            architecture: results[4],
+            codeOrganization: results[5],
+            vendors: results[6]
         };
         
         // Validate data (temporarily disabled for debugging)

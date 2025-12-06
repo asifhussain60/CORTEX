@@ -1,0 +1,711 @@
+{
+  "overall_score": 0,
+  "last_scan": "2025-12-06T15:04:33.775165",
+  "categories": [
+    {
+      "name": "code_security",
+      "score": 0,
+      "status": "critical",
+      "issues": 704,
+      "details": "704 code-level vulnerabilities found"
+    },
+    {
+      "name": "dependencies",
+      "score": 100,
+      "status": "healthy",
+      "issues": 0,
+      "details": "0 vulnerable dependencies"
+    },
+    {
+      "name": "authentication",
+      "score": 0,
+      "status": "critical",
+      "issues": 626,
+      "details": "626 hardcoded credentials, 0 auth issues"
+    },
+    {
+      "name": "configuration",
+      "score": 20,
+      "status": "critical",
+      "issues": 8,
+      "details": "8 configuration issues"
+    }
+  ],
+  "vulnerabilities": {
+    "critical": 0,
+    "high": 712,
+    "medium": 139,
+    "low": 0
+  },
+  "owasp_top_10": {
+    "categories": [
+      {
+        "risk": "A01",
+        "name": "Broken Access Control",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A02",
+        "name": "Cryptographic Failures",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 754,
+        "findings": [
+          {
+            "type": "Weak Encryption Algorithm",
+            "severity": "high",
+            "file": "Tools\\Source\\Luum.Lazor.DesignTime\\DesignTimeMethodCodeGenerator.cs",
+            "line": 50,
+            "description": "Weak Encryption Algorithm detected",
+            "code_snippet": "method.Name = \"__DESIGN_TIME__\" + this.MethodName;",
+            "recommendation": "Use SHA256/SHA512 for hashing, AES for encryption, RNGCryptoServiceProvider for random numbers"
+          },
+          {
+            "type": "Weak Hashing Algorithm",
+            "severity": "medium",
+            "file": "Tools\\Source\\Luum.Tools.Migrator\\DatabaseCommands.cs",
+            "line": 487,
+            "description": "Weak Hashing Algorithm detected",
+            "code_snippet": "[ExportMetadata(\"Description\", \"Calculates the MD5, content type, and length of the specified file.\"",
+            "recommendation": "Use SHA256/SHA512 for hashing, AES for encryption, RNGCryptoServiceProvider for random numbers"
+          },
+          {
+            "type": "Weak Hashing Algorithm",
+            "severity": "medium",
+            "file": "Tools\\Source\\Luum.Tools.Migrator\\DatabaseCommands.cs",
+            "line": 511,
+            "description": "Weak Hashing Algorithm detected",
+            "code_snippet": "Console.WriteLine(\"    MD5 GUID: \" + metadata.ContentMD5.ToString(\"D\"));",
+            "recommendation": "Use SHA256/SHA512 for hashing, AES for encryption, RNGCryptoServiceProvider for random numbers"
+          },
+          {
+            "type": "Weak Hashing Algorithm",
+            "severity": "medium",
+            "file": "Tools\\Source\\Luum.Tools.Migrator\\DatabaseCommands.cs",
+            "line": 512,
+            "description": "Weak Hashing Algorithm detected",
+            "code_snippet": "Console.WriteLine(\"  MD5 Base64: \" + Convert.ToBase64String(metadata.ContentMD5.ToByteArray()));",
+            "recommendation": "Use SHA256/SHA512 for hashing, AES for encryption, RNGCryptoServiceProvider for random numbers"
+          },
+          {
+            "type": "Weak Hashing Algorithm",
+            "severity": "medium",
+            "file": "Tools\\Source\\Luum.Tools.Migrator\\StorageCommands.cs",
+            "line": 379,
+            "description": "Weak Hashing Algorithm detected",
+            "code_snippet": "ContentMD5 = mapFile.ContentMD5,",
+            "recommendation": "Use SHA256/SHA512 for hashing, AES for encryption, RNGCryptoServiceProvider for random numbers"
+          }
+        ]
+      },
+      {
+        "risk": "A03",
+        "name": "Injection",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 505,
+        "findings": [
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\LocalXmlEntityFactory.cs",
+            "line": 70,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "Console.WriteLine($\"\\tDownloaded {this.count} entities from table storage...\");",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\LocalXmlExtendedDataService.cs",
+            "line": 61,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "throw new InvalidOperationException($\"Latest roster update timestamp mismatched between the command ",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\RosterFeatureEligibilityRebaseliner.cs",
+            "line": 110,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "Console.WriteLine($\"{updates.Count} updates needed...\");",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\Program.cs",
+            "line": 1403,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "throw new NotImplementedException($\"BulkUpdateType {type} is not implemented.\");",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\Program.cs",
+            "line": 1594,
+            "description": "SQL query using string interpolation - potential injection",
+            "code_snippet": "Console.WriteLine($\"Successfully rebased with bulk roster update {bulkUpdate.Id:D} @ {bulkUpdate.Con",
+            "recommendation": "Replace string interpolation with parameterized queries"
+          }
+        ]
+      },
+      {
+        "risk": "A04",
+        "name": "Insecure Design",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A05",
+        "name": "Security Misconfiguration",
+        "score": 60,
+        "status": "warn",
+        "findings_count": 8,
+        "findings": [
+          {
+            "type": "Security Misconfiguration",
+            "severity": "medium",
+            "file": "Source\\Luum.Api\\Web.config",
+            "description": "Debug mode enabled in production config",
+            "recommendation": "Set debug=false in production"
+          },
+          {
+            "type": "Information Disclosure",
+            "severity": "medium",
+            "file": "Source\\Luum.Api\\Web.config",
+            "description": "Custom errors disabled - exposes stack traces",
+            "recommendation": "Set customErrors mode to RemoteOnly or On"
+          },
+          {
+            "type": "Security Misconfiguration",
+            "severity": "medium",
+            "file": "Source\\Luum.Api\\Web.config",
+            "description": "HTTPS not enforced for cookies",
+            "recommendation": "Set httpCookies requireSSL=true"
+          },
+          {
+            "type": "Security Misconfiguration",
+            "severity": "medium",
+            "file": "Source\\Luum.SharedViews\\Web.config",
+            "description": "HTTPS not enforced for cookies",
+            "recommendation": "Set httpCookies requireSSL=true"
+          },
+          {
+            "type": "Security Misconfiguration",
+            "severity": "medium",
+            "file": "Source\\Luum.Web\\Web.config",
+            "description": "Debug mode enabled in production config",
+            "recommendation": "Set debug=false in production"
+          }
+        ]
+      },
+      {
+        "risk": "A06",
+        "name": "Vulnerable and Outdated Components",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A07",
+        "name": "Identification and Authentication Failures",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 623,
+        "findings": [
+          {
+            "type": "Hardcoded Token",
+            "severity": "high",
+            "file": "Tools\\ILSpy\\ILSpy.exe.config",
+            "line": 12,
+            "description": "Hardcoded Token found in plain text",
+            "masked_value": "d4b*************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Token",
+            "severity": "high",
+            "file": "Tools\\ILSpy\\ILSpy.exe.config",
+            "line": 16,
+            "description": "Hardcoded Token found in plain text",
+            "masked_value": "9cc*************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Token",
+            "severity": "high",
+            "file": "Tools\\ILSpy\\ILSpy.exe.config",
+            "line": 20,
+            "description": "Hardcoded Token found in plain text",
+            "masked_value": "d4b*************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Token",
+            "severity": "high",
+            "file": "Tools\\ILSpy\\ILSpy.exe.config",
+            "line": 24,
+            "description": "Hardcoded Token found in plain text",
+            "masked_value": "d4b*************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Hardcoded Token",
+            "severity": "high",
+            "file": "Tools\\ILSpy\\ILSpy.exe.config",
+            "line": 28,
+            "description": "Hardcoded Token found in plain text",
+            "masked_value": "d4b*************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          }
+        ]
+      },
+      {
+        "risk": "A08",
+        "name": "Software and Data Integrity Failures",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 199,
+        "findings": [
+          {
+            "type": "Insecure Deserialization",
+            "severity": "high",
+            "file": "Source\\Luum.Networking\\Sftp\\SftpSubSystem.cs",
+            "line": 46,
+            "description": "Insecure deserialization method detected",
+            "code_snippet": "private SshBinaryFormatter channelWriteFormatter;",
+            "recommendation": "Use DataContractSerializer or JSON.NET instead"
+          },
+          {
+            "type": "Insecure Deserialization",
+            "severity": "high",
+            "file": "Source\\Luum.Networking\\Sftp\\SftpSubSystem.cs",
+            "line": 89,
+            "description": "Insecure deserialization method detected",
+            "code_snippet": "this.channelWriteFormatter = new SshBinaryFormatter(this.channelWriteBuffer);",
+            "recommendation": "Use DataContractSerializer or JSON.NET instead"
+          },
+          {
+            "type": "Insecure Deserialization",
+            "severity": "high",
+            "file": "Source\\Luum.Networking\\Sftp\\SftpSubSystem.cs",
+            "line": 312,
+            "description": "Insecure deserialization method detected",
+            "code_snippet": "using (SshBinaryFormatter formatter = new SshBinaryFormatter(buffer))",
+            "recommendation": "Use DataContractSerializer or JSON.NET instead"
+          },
+          {
+            "type": "Insecure Deserialization",
+            "severity": "high",
+            "file": "Source\\Luum.Networking\\Sftp\\SftpSubSystem.cs",
+            "line": 499,
+            "description": "Insecure deserialization method detected",
+            "code_snippet": "using (SshBinaryFormatter messageFormatter = new SshBinaryFormatter(messageBuffer))",
+            "recommendation": "Use DataContractSerializer or JSON.NET instead"
+          },
+          {
+            "type": "Insecure Deserialization",
+            "severity": "high",
+            "file": "Source\\Luum.Networking\\Ssh\\SshBinaryFormatter.cs",
+            "line": 13,
+            "description": "Insecure deserialization method detected",
+            "code_snippet": "public class SshBinaryFormatter : IDisposable",
+            "recommendation": "Use DataContractSerializer or JSON.NET instead"
+          }
+        ]
+      },
+      {
+        "risk": "A09",
+        "name": "Security Logging and Monitoring Failures",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A10",
+        "name": "Server-Side Request Forgery (SSRF)",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      },
+      {
+        "risk": "A11",
+        "name": "Insecure AI/ML Model Deployment",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": []
+      }
+    ],
+    "overall_compliance": 60.0,
+    "version": "2025",
+    "last_updated": "2025-12-06T15:04:33.746682"
+  },
+  "compliance": {
+    "gdpr_ready": false,
+    "gdpr_issues": [
+      "Hardcoded credentials found - violates data protection",
+      "Security misconfigurations detected"
+    ],
+    "soc2_ready": false,
+    "soc2_issues": [
+      "1262 high-severity vulnerabilities"
+    ],
+    "hipaa_ready": false,
+    "hipaa_issues": [
+      "Encryption keys/credentials not secured"
+    ],
+    "pci_dss_ready": false,
+    "pci_dss_issues": [
+      "Sensitive data stored in plain text",
+      "Security configuration weaknesses"
+    ]
+  },
+  "findings": {
+    "vulnerabilities": [
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\LocalXmlEntityFactory.cs",
+        "line": 70,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "Console.WriteLine($\"\\tDownloaded {this.count} entities from table storage...\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\LocalXmlExtendedDataService.cs",
+        "line": 61,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "throw new InvalidOperationException($\"Latest roster update timestamp mismatched between the command ",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\RosterFeatureEligibilityRebaseliner.cs",
+        "line": 110,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "Console.WriteLine($\"{updates.Count} updates needed...\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 1403,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "throw new NotImplementedException($\"BulkUpdateType {type} is not implemented.\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 1594,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "Console.WriteLine($\"Successfully rebased with bulk roster update {bulkUpdate.Id:D} @ {bulkUpdate.Con",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 1783,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(\"Error: Could not parse DateTimeOffset from: \" + args.UnboundArguments[0]);",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 1875,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(\"Error: Could not parse DateTimeOffset from: \" + args.UnboundArguments[0]);",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 2003,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "[BulkUpdates].[Type]=\" + ((int)type) + @\"",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 2019,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "[BulkUpdates].[Type]=\" + ((int)type) + @\"",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 2038,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "[BulkUpdates].[Type]=\" + ((int)type) + @\"",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 2124,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(\"Deleted blob assets {0}-{1} of {2} from table storage.\", (batchTaskStartIndex + 1",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 3413,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(\"Deleted Achievements: \" + batch.AchievementsToDelete.Count);",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 3543,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(String.Join(Environment.NewLine, duplicateCompanyEmployeeIDs.Select(tuple => tuple",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 3551,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(String.Join(Environment.NewLine, duplicateCardNumbers.Select(tuple => tuple.Item1.",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 4945,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "processingResultsContent.AppendLine($\"\\tPermit {assignments.LastAssignment.ParkingPermitType.Name} f",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 4945,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "processingResultsContent.AppendLine($\"\\tPermit {assignments.LastAssignment.ParkingPermitType.Name} f",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 4952,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "processingResultsContent.AppendLine($\"{assignmentProcessingResult.ParkingPermitAssignments.Count} va",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 5500,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "database.Execute(\"DELETE FROM [TableRow] WHERE [TableName]='\" + ExtendedDataService.TableName.ToLowe",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 5575,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "[BulkUpdates].[BulkUpdateType]=\" + ((int)BulkUpdateType.Roster) + @\" AND",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 5858,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "writer.WriteLine($\"DECLARE @employeeResolutionType INT = {String.Join(\"|\", employeeResolutionTypes.S",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      }
+    ],
+    "hardcoded_secrets": [
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 12,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "d4b*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 16,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "9cc*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 20,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "d4b*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 24,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "d4b*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 28,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "d4b*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 32,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "d4b*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 36,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "d4b*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 40,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "073*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 44,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "073*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Hardcoded Token",
+        "severity": "high",
+        "file": "Tools\\ILSpy\\ILSpy.exe.config",
+        "line": 50,
+        "description": "Hardcoded Token found in plain text",
+        "masked_value": "b03*************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      }
+    ],
+    "config_issues": [
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Api\\Web.config",
+        "description": "Debug mode enabled in production config",
+        "recommendation": "Set debug=false in production"
+      },
+      {
+        "type": "Information Disclosure",
+        "severity": "medium",
+        "file": "Source\\Luum.Api\\Web.config",
+        "description": "Custom errors disabled - exposes stack traces",
+        "recommendation": "Set customErrors mode to RemoteOnly or On"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Api\\Web.config",
+        "description": "HTTPS not enforced for cookies",
+        "recommendation": "Set httpCookies requireSSL=true"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.SharedViews\\Web.config",
+        "description": "HTTPS not enforced for cookies",
+        "recommendation": "Set httpCookies requireSSL=true"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Web\\Web.config",
+        "description": "Debug mode enabled in production config",
+        "recommendation": "Set debug=false in production"
+      },
+      {
+        "type": "Information Disclosure",
+        "severity": "medium",
+        "file": "Source\\Luum.Web\\Web.config",
+        "description": "Custom errors disabled - exposes stack traces",
+        "recommendation": "Set customErrors mode to RemoteOnly or On"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Web\\Web.config",
+        "description": "HTTPS not enforced for cookies",
+        "recommendation": "Set httpCookies requireSSL=true"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Web\\Content\\Web.config",
+        "description": "HTTPS not enforced for cookies",
+        "recommendation": "Set httpCookies requireSSL=true"
+      }
+    ],
+    "dependency_vulns": []
+  },
+  "scan_mode": "deep"
+}

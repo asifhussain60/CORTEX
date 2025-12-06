@@ -1,0 +1,766 @@
+{
+  "frontend": [],
+  "backend": [
+    {
+      "name": ".NET",
+      "version": "8.0",
+      "latest": "unknown",
+      "status": "current",
+      "category": "framework",
+      "cve_count": 0,
+      "eol_date": null,
+      "metadata": {
+        "language": "C#",
+        "file_count": 5375,
+        "project_count": 109,
+        "solution_count": 20,
+        "solutions": [
+          {
+            "name": "Luum.Console",
+            "path": "Source\\Luum.Console.sln",
+            "project_count": 1,
+            "projects": [
+              {
+                "name": "Luum.Console",
+                "path": "Luum.Console\\Luum.Console.csproj"
+              }
+            ],
+            "vs_version": "16",
+            "format_version": "12.00"
+          },
+          {
+            "name": "Luum",
+            "path": "Source\\Luum.sln",
+            "project_count": 28,
+            "projects": [
+              {
+                "name": "Shared",
+                "path": "Shared"
+              },
+              {
+                "name": "Solution Items",
+                "path": "Solution Items"
+              },
+              {
+                "name": "Luum.Sql",
+                "path": "Luum.Sql\\Luum.Sql.csproj"
+              },
+              {
+                "name": "Luum.UnitTests",
+                "path": "Luum.UnitTests\\Luum.UnitTests.csproj"
+              },
+              {
+                "name": "Luum",
+                "path": "Luum\\Luum.csproj"
+              },
+              {
+                "name": "Luum.Web",
+                "path": "Luum.Web\\Luum.Web.csproj"
+              },
+              {
+                "name": "Luum.Azure",
+                "path": "Luum.Azure\\Luum.Azure.ccproj"
+              },
+              {
+                "name": "Luum.Core",
+                "path": "Luum.Core\\Luum.Core.csproj"
+              },
+              {
+                "name": "Luum.Core.Mvc",
+                "path": "Luum.Core.Mvc\\Luum.Core.Mvc.csproj"
+              },
+              {
+                "name": "Luum.BackgroundQueue",
+                "path": "Luum.BackgroundQueue\\Luum.BackgroundQueue.csproj"
+              },
+              {
+                "name": "Luum.Lazor",
+                "path": "Luum.Lazor\\Luum.Lazor.csproj"
+              },
+              {
+                "name": "Luum.AzureAPI",
+                "path": "Luum.AzureAPI\\Luum.AzureAPI.ccproj"
+              },
+              {
+                "name": "Luum.Api",
+                "path": "Luum.Api\\Luum.Api.csproj"
+              },
+              {
+                "name": "Luum.Lazor.Mvc",
+                "path": "Luum.Lazor.Mvc\\Luum.Lazor.Mvc.csproj"
+              },
+              {
+                "name": "Luum.SharedViews",
+                "path": "Luum.SharedViews\\Luum.SharedViews.csproj"
+              },
+              {
+                "name": "Luum.Networking",
+                "path": "Luum.Networking\\Luum.Networking.csproj"
+              },
+              {
+                "name": "Luum.Seed",
+                "path": "Luum.Seed\\Luum.Seed.csproj"
+              },
+              {
+                "name": "Luum.Environments",
+                "path": "Luum.Environments\\Luum.Environments.csproj"
+              },
+              {
+                "name": "Luum.Tools.CommandLine",
+                "path": "..\\Tools\\Source\\Luum.Tools.CommandLine\\Luum.Tools.CommandLine.csproj"
+              },
+              {
+                "name": "Luum.Tools",
+                "path": "..\\Tools\\Source\\Luum.Tools\\Luum.Tools.csproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          },
+          {
+            "name": "Luum.VSCode",
+            "path": "Source\\Luum.VSCode.sln",
+            "project_count": 25,
+            "projects": [
+              {
+                "name": "Shared",
+                "path": "Shared"
+              },
+              {
+                "name": "Solution Items",
+                "path": "Solution Items"
+              },
+              {
+                "name": "Luum.Sql",
+                "path": "Luum.Sql\\Luum.Sql.csproj"
+              },
+              {
+                "name": "Luum.UnitTests",
+                "path": "Luum.UnitTests\\Luum.UnitTests.csproj"
+              },
+              {
+                "name": "Luum",
+                "path": "Luum\\Luum.csproj"
+              },
+              {
+                "name": "Luum.Web",
+                "path": "Luum.Web\\Luum.Web.csproj"
+              },
+              {
+                "name": "Luum.Core",
+                "path": "Luum.Core\\Luum.Core.csproj"
+              },
+              {
+                "name": "Luum.Core.Mvc",
+                "path": "Luum.Core.Mvc\\Luum.Core.Mvc.csproj"
+              },
+              {
+                "name": "Luum.BackgroundQueue",
+                "path": "Luum.BackgroundQueue\\Luum.BackgroundQueue.csproj"
+              },
+              {
+                "name": "Luum.Lazor",
+                "path": "Luum.Lazor\\Luum.Lazor.csproj"
+              },
+              {
+                "name": "Luum.Api",
+                "path": "Luum.Api\\Luum.Api.csproj"
+              },
+              {
+                "name": "Luum.Lazor.Mvc",
+                "path": "Luum.Lazor.Mvc\\Luum.Lazor.Mvc.csproj"
+              },
+              {
+                "name": "Luum.SharedViews",
+                "path": "Luum.SharedViews\\Luum.SharedViews.csproj"
+              },
+              {
+                "name": "Luum.Networking",
+                "path": "Luum.Networking\\Luum.Networking.csproj"
+              },
+              {
+                "name": "Luum.Seed",
+                "path": "Luum.Seed\\Luum.Seed.csproj"
+              },
+              {
+                "name": "Luum.Environments",
+                "path": "Luum.Environments\\Luum.Environments.csproj"
+              },
+              {
+                "name": "Luum.Tools.CommandLine",
+                "path": "..\\Tools\\Source\\Luum.Tools.CommandLine\\Luum.Tools.CommandLine.csproj"
+              },
+              {
+                "name": "Luum.Tools",
+                "path": "..\\Tools\\Source\\Luum.Tools\\Luum.Tools.csproj"
+              },
+              {
+                "name": "LegacyTools",
+                "path": "..\\Tools\\Source\\LegacyTools\\LegacyTools.csproj"
+              },
+              {
+                "name": "Luum.Console",
+                "path": "Luum.Console\\Luum.Console.csproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          },
+          {
+            "name": "ReceivedBenefitsFixer",
+            "path": "Tools\\ReceivedBenefitsFixer\\ReceivedBenefitsFixer.sln",
+            "project_count": 4,
+            "projects": [
+              {
+                "name": "ReceivedBenefitsFixer",
+                "path": "ReceivedBenefitsFixer.csproj"
+              },
+              {
+                "name": "Luum",
+                "path": "..\\..\\Source\\Luum\\Luum.csproj"
+              },
+              {
+                "name": "Luum.Core",
+                "path": "..\\..\\Source\\Luum.Core\\Luum.Core.csproj"
+              },
+              {
+                "name": "Luum.Sql",
+                "path": "..\\..\\Source\\Luum.Sql\\Luum.Sql.csproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          },
+          {
+            "name": "Tools",
+            "path": "Tools\\Source\\Tools.sln",
+            "project_count": 16,
+            "projects": [
+              {
+                "name": "Luum.Tools.Migrator",
+                "path": "Luum.Tools.Migrator\\Luum.Tools.Migrator.csproj"
+              },
+              {
+                "name": "Luum.Sql",
+                "path": "..\\..\\Source\\Luum.Sql\\Luum.Sql.csproj"
+              },
+              {
+                "name": "Luum.BuildTasks",
+                "path": "Luum.BuildTasks\\Luum.BuildTasks.csproj"
+              },
+              {
+                "name": "OrderedGuidTool",
+                "path": "OrderedGuidTool\\OrderedGuidTool.csproj"
+              },
+              {
+                "name": "PerformanceCounters",
+                "path": "PerformanceCounters\\PerformanceCounters.csproj"
+              },
+              {
+                "name": "Luum.Core",
+                "path": "..\\..\\Source\\Luum.Core\\Luum.Core.csproj"
+              },
+              {
+                "name": "Luum.Lazor",
+                "path": "..\\..\\Source\\Luum.Lazor\\Luum.Lazor.csproj"
+              },
+              {
+                "name": "Luum.Lazor.Mvc",
+                "path": "..\\..\\Source\\Luum.Lazor.Mvc\\Luum.Lazor.Mvc.csproj"
+              },
+              {
+                "name": "Luum.Lazor.DesignTime",
+                "path": "Luum.Lazor.DesignTime\\Luum.Lazor.DesignTime.csproj"
+              },
+              {
+                "name": "Luum.Networking",
+                "path": "..\\..\\Source\\Luum.Networking\\Luum.Networking.csproj"
+              },
+              {
+                "name": "Launcher",
+                "path": "Launcher\\Launcher.csproj"
+              },
+              {
+                "name": "Luum.Tools.CommandLine",
+                "path": "Luum.Tools.CommandLine\\Luum.Tools.CommandLine.csproj"
+              },
+              {
+                "name": "BackupImporter",
+                "path": "BackupImporter\\BackupImporter.csproj"
+              },
+              {
+                "name": "Luum.Environments",
+                "path": "..\\..\\Source\\Luum.Environments\\Luum.Environments.csproj"
+              },
+              {
+                "name": "LegacyTools",
+                "path": "LegacyTools\\LegacyTools.csproj"
+              },
+              {
+                "name": "Luum.Api",
+                "path": "..\\..\\Source\\Luum.Api\\Luum.Api.csproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          },
+          {
+            "name": "IISConfig",
+            "path": "Tools\\IISConfig\\Source\\IISConfig.sln",
+            "project_count": 3,
+            "projects": [
+              {
+                "name": "IISConfig",
+                "path": "IISConfig\\IISConfig.csproj"
+              },
+              {
+                "name": "CertChecker",
+                "path": "CertChecker\\CertChecker.csproj"
+              },
+              {
+                "name": "Luum.Core",
+                "path": "..\\..\\..\\Source\\Luum.Core\\Luum.Core.csproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          },
+          {
+            "name": "CertChecker",
+            "path": "Tools\\IISConfig\\Source\\CertChecker\\CertChecker.sln",
+            "project_count": 1,
+            "projects": [
+              {
+                "name": "CertChecker",
+                "path": "CertChecker.csproj"
+              }
+            ],
+            "vs_version": "14",
+            "format_version": "12.00"
+          },
+          {
+            "name": "DeltaDentalWARosterTransform",
+            "path": "Tools\\External\\DeltaDentalWARosterTransform\\DeltaDentalWARosterTransform.sln",
+            "project_count": 1,
+            "projects": [
+              {
+                "name": "DeltaDentalWARosterTransform",
+                "path": "RosterTransform\\DeltaDentalWARosterTransform.csproj"
+              }
+            ],
+            "vs_version": "14",
+            "format_version": "12.00"
+          },
+          {
+            "name": "RosterXMLGenerator",
+            "path": "Tools\\External\\RosterXMLGenerator\\RosterXMLGenerator.sln",
+            "project_count": 2,
+            "projects": [
+              {
+                "name": "RosterXMLGenerator",
+                "path": "RosterXMLGenerator\\RosterXMLGenerator.csproj"
+              },
+              {
+                "name": "Luum.Core",
+                "path": "..\\..\\..\\Source\\Luum.Core\\Luum.Core.csproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          },
+          {
+            "name": "DeltaDentalWARosterTransform",
+            "path": "Tools\\External\\DeltaDentalWARosterTransform\\DeltaDentalWARosterTransform\\DeltaDentalWARosterTransform.sln",
+            "project_count": 1,
+            "projects": [
+              {
+                "name": "DeltaDentalWARosterTransform",
+                "path": "DeltaDentalWARosterTransform.csproj"
+              }
+            ],
+            "vs_version": "14",
+            "format_version": "12.00"
+          },
+          {
+            "name": "dotless",
+            "path": "Tools\\dotless-v1.3.0.3\\Source\\dotless\\src\\dotless.sln",
+            "project_count": 3,
+            "projects": [
+              {
+                "name": "Solution Items",
+                "path": "Solution Items"
+              },
+              {
+                "name": "dotless.Core",
+                "path": "dotless.Core\\dotless.Core.csproj"
+              },
+              {
+                "name": "dotless.Compiler",
+                "path": "dotless.Compiler\\dotless.Compiler.csproj"
+              }
+            ],
+            "vs_version": "2012",
+            "format_version": "12.00"
+          },
+          {
+            "name": "T4Css",
+            "path": "Tools\\dotless-v1.3.0.3\\Source\\dotless\\t4less\\T4Css.sln",
+            "project_count": 2,
+            "projects": [
+              {
+                "name": "T4CssWeb",
+                "path": "T4CssWeb\\T4CssWeb.csproj"
+              },
+              {
+                "name": "lib",
+                "path": "lib"
+              }
+            ],
+            "vs_version": "2008",
+            "format_version": "10.00"
+          },
+          {
+            "name": "PEG_GrammarExplorer",
+            "path": "Tools\\dotless-v1.3.0.3\\Source\\dotless\\lib\\PEG_GrammarExplorer\\PEG_GrammarExplorer\\PEG_GrammarExplorer.sln",
+            "project_count": 4,
+            "projects": [
+              {
+                "name": "PEG Explorer",
+                "path": "PEG Explorer\\PEG Explorer.csproj"
+              },
+              {
+                "name": "PEG Base",
+                "path": "PegBase\\PEG Base.csproj"
+              },
+              {
+                "name": "PEG Samples",
+                "path": "PegSamples\\PEG Samples.csproj"
+              },
+              {
+                "name": "Sample PEG Console Parser",
+                "path": "Sample PEG Console Parser\\PEG Console Parser\\Sample PEG Console Parser.csproj"
+              }
+            ],
+            "vs_version": "unknown",
+            "format_version": "10.00"
+          },
+          {
+            "name": "Sample PEG Console Parser",
+            "path": "Tools\\dotless-v1.3.0.3\\Source\\dotless\\lib\\PEG_GrammarExplorer\\PEG_GrammarExplorer\\Sample PEG Console Parser\\Sample PEG Console Parser.sln",
+            "project_count": 1,
+            "projects": [
+              {
+                "name": "Sample PEG Console Parser",
+                "path": "PEG Console Parser\\Sample PEG Console Parser.csproj"
+              }
+            ],
+            "vs_version": "unknown",
+            "format_version": "10.00"
+          },
+          {
+            "name": "CleanViews",
+            "path": "Tools\\CleanViews\\Source\\CleanViews.sln",
+            "project_count": 1,
+            "projects": [
+              {
+                "name": "CleanViews",
+                "path": "CleanViews.csproj"
+              }
+            ],
+            "vs_version": "2012",
+            "format_version": "12.00"
+          },
+          {
+            "name": "CertTool",
+            "path": "Tools\\Certificates\\Source\\CertTool.sln",
+            "project_count": 2,
+            "projects": [
+              {
+                "name": "CertTool",
+                "path": "CertTool.csproj"
+              },
+              {
+                "name": "Luum.Core",
+                "path": "..\\..\\..\\Source\\Luum.Core\\Luum.Core.csproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          },
+          {
+            "name": "Luum.Database",
+            "path": "Source\\Luum.Database\\Luum.Database.sln",
+            "project_count": 1,
+            "projects": [
+              {
+                "name": "Luum.Database",
+                "path": "Luum.Database.sqlproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          },
+          {
+            "name": "Luum.DataWarehouse.Database",
+            "path": "Source\\Luum.DataWarehouse.Database\\Luum.DataWarehouse.Database.sln",
+            "project_count": 1,
+            "projects": [
+              {
+                "name": "Luum.DataWarehouse.Database",
+                "path": "Luum.DataWarehouse.Database.sqlproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          },
+          {
+            "name": "Marmoset",
+            "path": "Source\\Marmoset\\Marmoset.sln",
+            "project_count": 2,
+            "projects": [
+              {
+                "name": "Marmoset",
+                "path": "Marmoset\\Marmoset.csproj"
+              },
+              {
+                "name": "Marmoset.Tests",
+                "path": "Marmoset.Tests\\Marmoset.Tests.csproj"
+              }
+            ],
+            "vs_version": "11",
+            "format_version": "12.00"
+          },
+          {
+            "name": "Luum.ApiSync",
+            "path": "Source\\Luum.ApiSync\\Source\\Luum.ApiSync.sln",
+            "project_count": 64,
+            "projects": [
+              {
+                "name": "Luum.ApiSync.Core",
+                "path": "Luum.ApiSync.Core\\Luum.ApiSync.Core.csproj"
+              },
+              {
+                "name": "Microsoft.LincolnSquare.OpenOptions",
+                "path": "Microsoft.LincolnSquare.OpenOptions\\Microsoft.LincolnSquare.OpenOptions.csproj"
+              },
+              {
+                "name": "Amazon.Slu.DataPark",
+                "path": "Amazon.Slu.DataPark\\Amazon.Slu.DataPark.csproj"
+              },
+              {
+                "name": "Swedish.DataPark",
+                "path": "Swedish.DataPark\\Swedish.DataPark.csproj"
+              },
+              {
+                "name": "Expedia.Hq.DataPark",
+                "path": "Expedia.Hq.DataPark\\Expedia.Hq.DataPark.csproj"
+              },
+              {
+                "name": "Expedia.Skyline.SkiData",
+                "path": "Expedia.Skyline.SkiData\\Expedia.Skyline.SkiData.csproj"
+              },
+              {
+                "name": "DeltaDentalWA.FourHundredFairview.DataPark",
+                "path": "DeltaDentalWA.400Fairview.DataPark\\DeltaDentalWA.FourHundredFairview.DataPark.csproj"
+              },
+              {
+                "name": "Google.Evanston.Maxxess",
+                "path": "Google.Evanston.Maxxess\\Google.Evanston.Maxxess.csproj"
+              },
+              {
+                "name": "Google.PkvWat.Lenel",
+                "path": "Google.PkvWat.Lenel\\Google.PkvWat.Lenel.csproj"
+              },
+              {
+                "name": "Expedia.Civica.DataPark",
+                "path": "Expedia.Civica.DataPark\\Expedia.Civica.DataPark.csproj"
+              },
+              {
+                "name": "Amazon.Gatsby.DataPark",
+                "path": "Amazon.Gatsby.DataPark\\Amazon.Gatsby.DataPark.csproj"
+              },
+              {
+                "name": "Amazon.Oscar.DataPark",
+                "path": "Amazon.Oscar.DataPark\\Amazon.Oscar.DataPark.csproj"
+              },
+              {
+                "name": "Amazon.Pemco.DataPark",
+                "path": "Amazon.Pemco.DataPark\\Amazon.Pemco.DataPark.csproj"
+              },
+              {
+                "name": "Amazon.Day1.DataPark",
+                "path": "Amazon.Day1.DataPark\\Amazon.Day1.DataPark.csproj"
+              },
+              {
+                "name": "Amazon.Olive.SkiData",
+                "path": "Amazon.Olive.SkiData\\Amazon.Olive.SkiData.csproj"
+              },
+              {
+                "name": "Amazon.Lowflyinghawk.DataPark",
+                "path": "Amazon.Lowflyinghawk.DataPark\\Amazon.Lowflyinghawk.DataPark.csproj"
+              },
+              {
+                "name": "Amazon.Alexandria.SkiData",
+                "path": "Amazon.Alexandria.SkiData\\Amazon.Alexandria.SkiData.csproj"
+              },
+              {
+                "name": "Amazon.Blackfoot.DataPark",
+                "path": "Amazon.Blackfoot.DataPark\\Amazon.Blackfoot.DataPark.csproj"
+              },
+              {
+                "name": "Swedish.Amano",
+                "path": "Swedish.Amano\\Swedish.Amano.csproj"
+              },
+              {
+                "name": "Amazon.TwentyTwoHundredWestlake.DataPark",
+                "path": "Amazon.TwentyTwoHundredWestlake.DataPark\\Amazon.TwentyTwoHundredWestlake.DataPark.csproj"
+              }
+            ],
+            "vs_version": "17",
+            "format_version": "12.00"
+          }
+        ],
+        "projects": [
+          {
+            "name": "ReceivedBenefitsFixer",
+            "path": "Tools\\ReceivedBenefitsFixer\\ReceivedBenefitsFixer.csproj",
+            "framework": ".NET Framework 4.7.2",
+            "packages": 0
+          },
+          {
+            "name": "BackupImporter",
+            "path": "Tools\\Source\\BackupImporter\\BackupImporter.csproj",
+            "framework": ".NET Framework 4.7.2",
+            "packages": 6
+          },
+          {
+            "name": "Badger",
+            "path": "Tools\\Source\\Badger\\Badger.csproj",
+            "framework": null,
+            "packages": 0
+          },
+          {
+            "name": "Launcher",
+            "path": "Tools\\Source\\Launcher\\Launcher.csproj",
+            "framework": null,
+            "packages": 4
+          },
+          {
+            "name": "LegacyTools",
+            "path": "Tools\\Source\\LegacyTools\\LegacyTools.csproj",
+            "framework": null,
+            "packages": 8
+          },
+          {
+            "name": "Luum.BuildTasks",
+            "path": "Tools\\Source\\Luum.BuildTasks\\Luum.BuildTasks.csproj",
+            "framework": null,
+            "packages": 0
+          },
+          {
+            "name": "Luum.Lazor.DesignTime",
+            "path": "Tools\\Source\\Luum.Lazor.DesignTime\\Luum.Lazor.DesignTime.csproj",
+            "framework": null,
+            "packages": 0
+          },
+          {
+            "name": "Luum.Tools",
+            "path": "Tools\\Source\\Luum.Tools\\Luum.Tools.csproj",
+            "framework": null,
+            "packages": 8
+          },
+          {
+            "name": "Luum.Tools.CommandLine",
+            "path": "Tools\\Source\\Luum.Tools.CommandLine\\Luum.Tools.CommandLine.csproj",
+            "framework": null,
+            "packages": 2
+          },
+          {
+            "name": "Luum.Tools.Migrator",
+            "path": "Tools\\Source\\Luum.Tools.Migrator\\Luum.Tools.Migrator.csproj",
+            "framework": null,
+            "packages": 8
+          }
+        ],
+        "frameworks": [
+          "Microsoft 160.1000.6",
+          "System 9.0.5",
+          "Azure 11.7.0",
+          "Newtonsoft 13.0.3 (JSON)",
+          "CommandLineParser 2.8.0",
+          "Dapper 2.0.123 (ORM)",
+          "DevSecOps 0.3.1",
+          "DotNetSeleniumExtras 3.11.0",
+          "Selenium 4.27.0",
+          "WebDriverManager 2.17.4",
+          "MSTest 10",
+          "QRCoder 1.6.0"
+        ],
+        "all_versions": [
+          ".NET Framework 4.0",
+          ".NET Framework 4.5.2",
+          ".NET 8.0",
+          ".NET Framework 4.7.2",
+          ".NET 5.0",
+          ".NET Framework 3.5",
+          ".NET Framework 4.8"
+        ],
+        "package_count": 12
+      }
+    },
+    {
+      "name": "C#",
+      "version": "12.0",
+      "latest": "unknown",
+      "status": "current",
+      "category": "language",
+      "cve_count": 0,
+      "eol_date": null,
+      "metadata": {
+        "file_count": 5375,
+        "lines_of_code": 28102,
+        "framework_version": "8.0"
+      }
+    }
+  ],
+  "database": [
+    {
+      "name": "SQL Server",
+      "version": "unknown",
+      "latest": "unknown",
+      "status": "current",
+      "category": "database",
+      "cve_count": 0,
+      "eol_date": null,
+      "metadata": {
+        "server": ".\\SQLEXPRESS",
+        "source": "web.config",
+        "evidence": "Found in web.config (active config)",
+        "database": "Luum"
+      }
+    },
+    {
+      "name": "Oracle Database",
+      "version": "unknown",
+      "latest": "unknown",
+      "status": "current",
+      "category": "database",
+      "cve_count": 0,
+      "eol_date": null,
+      "metadata": {
+        "server": "PRDSDCAPP41352",
+        "source": "app.config",
+        "evidence": "Found in app.config (active config, user: LUUM)",
+        "user": "LUUM"
+      }
+    }
+  ],
+  "devops": [],
+  "summary": {
+    "total_technologies": 4,
+    "current_count": 4,
+    "outdated_count": 0,
+    "deprecated_count": 0,
+    "last_scan": "2025-12-06T14:56:57.291212"
+  }
+}
