@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CORTEX Health Dashboard</title>
     
+    <!-- Cache Control - Force fresh load of JS modules -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <!-- External Libraries -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -13,6 +18,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/architecture-panels.css">
+    <link rel="stylesheet" href="styles/executive-summary.css">
     
     <style>
         /* Glassmorphism Dark Mode Dashboard */
@@ -402,12 +408,14 @@
             <div class="source-selector">
                 <label for="sourceSelect">Data Source:</label>
                 <select id="sourceSelect" onchange="handleSourceChange(this.value)">
-                    <option value="mock">Mock Data (Demo)</option>
-                    <option value="cortex">CORTEX Live</option>
-                    <option value="noor-canvas">NOOR CANVAS</option>
-                    <option value="alist">ALIST</option>
-                    <option value="ksessions">KSESSIONS</option>
-                    <option value="v5-webservices-prevalidationws">V5 PrevalidationWS</option>
+                    <option value="alist">Alist (External)</option>
+                    <option value="cortex">Cortex (Application)</option>
+                    <option value="kashkole">Kashkole (External)</option>
+                    <option value="ksessions">Ksessions (External)</option>
+                    <option value="luum-fresh">Luum Fresh (External)</option>
+                    <option value="mock">Mock (Application)</option>
+                    <option value="noor-canvas">Noor Canvas (Application)</option>
+                    <option value="v5-webservices-prevalidationws">V5 Webservices Prevalidationws (Application)</option>
                 </select>
             </div>
             
@@ -416,6 +424,10 @@
                 <a class="nav-tab active" data-tab="overview" onclick="switchTab('overview')">
                     <span class="nav-tab-icon">📊</span>
                     <span class="nav-tab-text">Overview</span>
+                </a>
+                <a class="nav-tab" data-tab="executive" onclick="switchTab('executive')">
+                    <span class="nav-tab-icon">📋</span>
+                    <span class="nav-tab-text">Executive Summary</span>
                 </a>
                 <a class="nav-tab" data-tab="tech-stack" onclick="switchTab('tech-stack')">
                     <span class="nav-tab-icon">🛠️</span>
@@ -465,6 +477,13 @@
                 </div>
             </div>
             
+            <!-- Tab Content: Executive Summary -->
+            <div class="tab-content" id="tab-executive">
+                <div id="executive-summary-container">
+                    <!-- Executive summary content will be dynamically loaded -->
+                </div>
+            </div>
+            
             <!-- Tab Content: Tech Stack -->
             <div class="tab-content" id="tab-tech-stack">
                 <div id="tech-stack-container">
@@ -508,17 +527,18 @@
         </main>
     </div>
     
-    <!-- Application Scripts -->
-    <script type="module" src="data-loader.js"></script>
-    <script type="module" src="adaptive-visibility.js"></script>
-    <script type="module" src="components/architecture-panels.js"></script>
-    <script type="module" src="app.js"></script>
-    <script type="module" src="components/overview-tab.js"></script>
-    <script type="module" src="components/tech-stack-tab.js"></script>
-    <script type="module" src="components/security-tab.js"></script>
-    <script type="module" src="components/architecture-tab.js"></script>
-    <script type="module" src="components/code-org-tab.js"></script>
-    <script type="module" src="components/vendors-tab.js"></script>
+    <!-- Application Scripts with cache-busting -->
+    <script type="module" src="data-loader.js?v=2.0.2"></script>
+    <script type="module" src="adaptive-visibility.js?v=2.0.2"></script>
+    <script type="module" src="components/architecture-panels.js?v=2.0.2"></script>
+    <script type="module" src="app.js?v=2.0.2"></script>
+    <script type="module" src="components/overview-tab.js?v=2.0.2"></script>
+    <script type="module" src="components/executive-summary-tab.js?v=2.0.3"></script>
+    <script type="module" src="components/tech-stack-tab.js?v=2.0.2"></script>
+    <script type="module" src="components/security-tab.js?v=2.0.2"></script>
+    <script type="module" src="components/architecture-tab.js?v=2.0.2"></script>
+    <script type="module" src="components/code-org-tab.js?v=2.0.2"></script>
+    <script type="module" src="components/vendors-tab.js?v=2.0.2"></script>
     
     <script>
         // Global tab switching function
@@ -538,6 +558,7 @@
             // Update title
             const titles = {
                 'overview': 'Dashboard Overview',
+                'executive': 'Executive Summary',
                 'tech-stack': 'Technology Stack',
                 'security': 'Security Analysis',
                 'architecture': 'Architecture Overview',

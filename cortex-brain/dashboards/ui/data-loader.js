@@ -6,23 +6,31 @@
  * Author: Asif Hussain
  * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
  * License: Source-Available (Use Allowed, No Contributions)
+ * 
+ * Version: 2.0 - Auto-discovery and cache-busting support
  */
 
 // Data cache
 const dataCache = new Map();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-// Data source base paths
+// Cache buster - increment when data sources change
+const DATA_LOADER_VERSION = '2.0.2';
+
+// Data source base paths - Auto-discovery friendly
+// Note: When adding new repos, just add a folder under /dashboards/ with JSON files
 const DATA_SOURCES = {
-    mock: '/mock/',
-    cortex: '/cortex/',
+    'alist': '/alist/',
+    'cortex': '/cortex/',
+    'kashkole': '/kashkole/',
+    'ksessions': '/ksessions/',
+    'luum-fresh': '/luum-fresh/',
+    'mock': '/mock/',
     'noor-canvas': '/noor-canvas/',
-    alist: '/alist/',
-    ksessions: '/ksessions/',
     'v5-webservices-prevalidationws': '/v5-webservices-prevalidationws/',
-    'v5-prevalidation': '/v5-webservices-prevalidationws/', // Alias for shorter name
-    kashkole: '/kashkole/'
 };
+
+console.log(`[DataLoader v${DATA_LOADER_VERSION}] Initialized with sources:`, Object.keys(DATA_SOURCES));
 
 // Data files to load
 const DATA_FILES = [
@@ -32,7 +40,8 @@ const DATA_FILES = [
     'architecture.json',
     'code-organization.json',
     'team-metrics.json',
-    'vendors.json'
+    'vendors.json',
+    'executive-summary.json'
 ];
 
 /**
@@ -93,7 +102,8 @@ export async function loadDashboardData(source = 'mock') {
             architecture: results[3],
             codeOrganization: results[4],
             teamMetrics: results[5],
-            vendors: results[6]
+            vendors: results[6],
+            executiveSummary: results[7]
         };
         
         // Validate data (temporarily disabled for debugging)
@@ -116,12 +126,23 @@ export async function loadDashboardData(source = 'mock') {
 }
 
 /**
- * Load a single JSON file
+ * Load a single JSON file with cache-busting
  * @param {string} url - File URL
  * @returns {Promise<Object>} - Parsed JSON data
  */
 async function loadJsonFile(url) {
-    const response = await fetch(url);
+    // Add cache-busting query parameter
+    const cacheBuster = `?v=${DATA_LOADER_VERSION}&t=${Date.now()}`;
+    const urlWithCache = url + cacheBuster;
+    
+    const response = await fetch(urlWithCache, {
+        cache: 'no-cache',
+        headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+        }
+    });
+    
     if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }

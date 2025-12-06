@@ -97,7 +97,9 @@ class PlanExecutionOrchestrator:
         self, 
         plan_path: Path,
         auto_consolidate: bool = True,
-        dry_run: bool = False
+        dry_run: bool = False,
+        execution_mode: str = "approval_gated",
+        force_execution: bool = False
     ) -> Tuple[bool, Dict[str, Any]]:
         """
         Execute a feature implementation plan.
@@ -106,11 +108,14 @@ class PlanExecutionOrchestrator:
             plan_path: Path to plan file (YAML or Markdown)
             auto_consolidate: Automatically add Integration & Consolidation phase
             dry_run: Preview execution without making changes
+            execution_mode: "autonomous" (run all phases without stopping) or 
+                          "approval_gated" (stop after each phase for approval)
+            force_execution: Skip DoR validation (DANGEROUS - use only with remediation plan)
         
         Returns:
             Tuple of (success, execution_report)
         """
-        logger.info(f"🚀 Starting plan execution: {plan_path.name}")
+        logger.info(f"🚀 Starting plan execution: {plan_path.name} (mode: {execution_mode})")
         
         # Create git checkpoint before starting
         if self.git_checkpoint and not dry_run:
@@ -131,12 +136,36 @@ class PlanExecutionOrchestrator:
                 "plan_path": str(plan_path)
             })
         
+        # VALIDATION GATE: Check Definition of Ready
+        if not force_execution:
+            dor_satisfied, dor_violations = self._check_definition_of_ready(plan_data)
+            
+            if not dor_satisfied:
+                logger.error("❌ Definition of Ready not satisfied - execution BLOCKED")
+                logger.error(f"   Violations: {len(dor_violations)}")
+                for violation in dor_violations:
+                    logger.error(f"   - {violation}")
+                
+                # Generate remediation plan
+                remediation_plan = self._generate_remediation_plan(plan_data, dor_violations)
+                
+                return (False, {
+                    "error": "Definition of Ready not satisfied",
+                    "dor_violations": dor_violations,
+                    "remediation_plan": remediation_plan,
+                    "plan_path": str(plan_path),
+                    "message": "Execution blocked. Complete DoR items OR review remediation plan and execute with force_execution=True"
+                })
+            else:
+                logger.info("✅ Definition of Ready satisfied - proceeding with execution")
+        
         # Initialize execution report
         execution_report = {
             "plan_path": str(plan_path),
             "plan_title": plan_data.get("metadata", {}).get("title", "Unknown"),
             "started_at": datetime.now().isoformat(),
             "dry_run": dry_run,
+            "execution_mode": execution_mode,
             "phases_executed": [],
             "integration_consolidation_executed": False,
             "success": False,
@@ -158,6 +187,21 @@ class PlanExecutionOrchestrator:
                 return (False, execution_report)
             
             logger.info(f"✅ Phase {phase.get('phase_number')} completed")
+            
+            # In approval_gated mode, pause after each phase for user approval
+            if execution_mode == "approval_gated" and phase != phases[-1]:
+                logger.info("⏸️  Phase complete. Awaiting approval to continue...")
+                logger.info("   → In approval_gated mode: User must approve to proceed to next phase")
+                logger.info("   → To enable autonomous execution, use triggers:")
+                logger.info("      • 'execute all phases autonomously'")
+                logger.info("      • 'auto chained'")
+                logger.info("      • 'without user intervention'")
+                # Return early - user must call execute_plan again to continue
+                execution_report["awaiting_approval"] = True
+                execution_report["next_phase"] = phases[phases.index(phase) + 1].get("phase_name")
+                execution_report["completed_at"] = datetime.now().isoformat()
+                self._save_execution_report(execution_report)
+                return (True, execution_report)  # Success but paused
         
         # Automatically add Integration & Consolidation phase
         if auto_consolidate:
@@ -535,6 +579,189 @@ class PlanExecutionOrchestrator:
         """Run integration tests to validate production readiness."""
         # Placeholder - real implementation would run pytest
         return {"success": True, "passed": 0, "failed": 0}
+    
+    def _check_definition_of_ready(self, plan_data: Dict[str, Any]) -> Tuple[bool, List[str]]:
+        """
+        Check if Definition of Ready is satisfied.
+        
+        Args:
+            plan_data: Plan dictionary
+        
+        Returns:
+            Tuple of (satisfied, list of violations)
+        """
+        dor = plan_data.get("definition_of_ready", {})
+        violations = []
+        
+        required_fields = [
+            "requirements_clear",
+            "dependencies_identified",
+            "design_approved",
+            "resources_available",
+            "tdd_test_scenarios_defined",
+            "clean_architecture_planned",
+            "solid_principles_reviewed"
+        ]
+        
+        for field in required_fields:
+            if field not in dor:
+                violations.append(f"Missing DoR field: {field}")
+            elif not dor[field]:
+                violations.append(f"DoR not satisfied: {field}")
+        
+        return (len(violations) == 0, violations)
+    
+    def _generate_remediation_plan(
+        self, 
+        plan_data: Dict[str, Any], 
+        dor_violations: List[str]
+    ) -> Dict[str, Any]:
+        """
+        Generate remediation plan to address DoR violations.
+        
+        Args:
+            plan_data: Original plan data
+            dor_violations: List of DoR violations
+        
+        Returns:
+            Remediation plan dictionary
+        """
+        metadata = plan_data.get("metadata", {})
+        feature_name = metadata.get("feature_name", "Unknown")
+        
+        remediation_plan = {
+            "type": "remediation",
+            "target_plan": feature_name,
+            "purpose": "Address Definition of Ready violations before execution",
+            "violations": dor_violations,
+            "phases": []
+        }
+        
+        # Generate remediation phases based on violation types
+        phase_number = 1
+        
+        if any("requirements_clear" in v for v in dor_violations):
+            remediation_plan["phases"].append({
+                "phase_number": phase_number,
+                "phase_name": "Requirements Clarification",
+                "tasks": [
+                    {
+                        "task_id": f"R{phase_number}.1",
+                        "task_name": "Document detailed requirements",
+                        "description": "Create comprehensive requirements document with acceptance criteria, constraints, and success metrics"
+                    },
+                    {
+                        "task_id": f"R{phase_number}.2",
+                        "task_name": "Stakeholder review",
+                        "description": "Review requirements with stakeholders and obtain approval"
+                    }
+                ]
+            })
+            phase_number += 1
+        
+        if any("dependencies_identified" in v for v in dor_violations):
+            remediation_plan["phases"].append({
+                "phase_number": phase_number,
+                "phase_name": "Dependency Analysis",
+                "tasks": [
+                    {
+                        "task_id": f"R{phase_number}.1",
+                        "task_name": "Identify technical dependencies",
+                        "description": "List all libraries, services, APIs, and infrastructure required"
+                    },
+                    {
+                        "task_id": f"R{phase_number}.2",
+                        "task_name": "Verify dependency availability",
+                        "description": "Confirm all dependencies are available, licensed, and compatible"
+                    }
+                ]
+            })
+            phase_number += 1
+        
+        if any("design_approved" in v for v in dor_violations):
+            remediation_plan["phases"].append({
+                "phase_number": phase_number,
+                "phase_name": "Architecture Design",
+                "tasks": [
+                    {
+                        "task_id": f"R{phase_number}.1",
+                        "task_name": "Create architecture diagram",
+                        "description": "Design component structure, data flow, and integration points"
+                    },
+                    {
+                        "task_id": f"R{phase_number}.2",
+                        "task_name": "Technical design review",
+                        "description": "Present design to technical team and obtain approval"
+                    }
+                ]
+            })
+            phase_number += 1
+        
+        if any("tdd_test_scenarios_defined" in v for v in dor_violations):
+            remediation_plan["phases"].append({
+                "phase_number": phase_number,
+                "phase_name": "TDD Test Planning",
+                "tasks": [
+                    {
+                        "task_id": f"R{phase_number}.1",
+                        "task_name": "Define test scenarios",
+                        "description": "Document all test cases: happy path, error cases, edge cases, boundary conditions"
+                    },
+                    {
+                        "task_id": f"R{phase_number}.2",
+                        "task_name": "Create test data fixtures",
+                        "description": "Prepare test data, mocks, and fixtures for RED phase"
+                    }
+                ]
+            })
+            phase_number += 1
+        
+        if any("clean_architecture_planned" in v for v in dor_violations):
+            remediation_plan["phases"].append({
+                "phase_number": phase_number,
+                "phase_name": "Clean Architecture Planning",
+                "tasks": [
+                    {
+                        "task_id": f"R{phase_number}.1",
+                        "task_name": "Define layer boundaries",
+                        "description": "Document domain, application, infrastructure layers and their responsibilities"
+                    },
+                    {
+                        "task_id": f"R{phase_number}.2",
+                        "task_name": "Plan dependency injection",
+                        "description": "Design DI container, interfaces, and dependency flow"
+                    }
+                ]
+            })
+            phase_number += 1
+        
+        if any("solid_principles_reviewed" in v for v in dor_violations):
+            remediation_plan["phases"].append({
+                "phase_number": phase_number,
+                "phase_name": "SOLID Principles Review",
+                "tasks": [
+                    {
+                        "task_id": f"R{phase_number}.1",
+                        "task_name": "SRP and OCP validation",
+                        "description": "Review design for Single Responsibility and Open/Closed principles"
+                    },
+                    {
+                        "task_id": f"R{phase_number}.2",
+                        "task_name": "LSP, ISP, DIP validation",
+                        "description": "Validate Liskov Substitution, Interface Segregation, and Dependency Inversion"
+                    }
+                ]
+            })
+            phase_number += 1
+        
+        remediation_plan["execution_note"] = (
+            "Execute this remediation plan first to satisfy DoR requirements. "
+            "Once complete, re-run original plan with force_execution=True OR "
+            "update original plan's DoR fields and execute normally."
+        )
+        
+        logger.info(f"📋 Generated remediation plan with {len(remediation_plan['phases'])} phases")
+        return remediation_plan
     
     def _load_plan(self, plan_path: Path) -> Tuple[bool, Optional[Dict[str, Any]], List[str]]:
         """

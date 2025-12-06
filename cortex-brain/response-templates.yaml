@@ -13221,3 +13221,130 @@ templates:
       **Schedule Demo:** Contact for 30-min live walkthrough with real metrics
       
       **Start Trial:** Say "tutorial" for hands-on learning (15-30 min)
+  
+  risk_analysis_report:
+    name: Risk Analysis Report
+    triggers:
+    - risk analysis
+    - analyze risks
+    - risk assessment
+    understanding_content: You want to see risk analysis results for the feature plan with severity levels and mitigation strategies.
+    challenge_content: No significant challenges - automated risk detection using heuristic patterns across technical, security, quality, timeline, and operational categories.
+    response_content: |
+      **🔍 Risk Analysis Complete**
+      
+      {{#if has_risks}}
+      Identified **{{risk_count}} risks** across {{category_count}} categories:
+      
+      {{#each risks_by_severity}}
+      ### {{severity_icon}} {{severity}} Severity Risks
+      
+      {{#each risks}}
+      **{{category}}:** {{description}}
+      
+      **Mitigation:** {{mitigation}}
+      
+      ---
+      
+      {{/each}}
+      {{/each}}
+      
+      **Risk Summary:**
+      - 🔴 High Severity: {{high_count}} risks
+      - 🟡 Medium Severity: {{medium_count}} risks
+      - 🟢 Low Severity: {{low_count}} risks
+      
+      **Top Priority Actions:**
+      {{#each top_priority_mitigations}}
+      {{number}}. {{mitigation}}
+      {{/each}}
+      {{else}}
+      ✅ **No risks identified** - Plan appears low-risk based on automated analysis.
+      
+      **Note:** Manual security and compliance review still recommended for production deployments.
+      {{/if}}
+      
+      **Risk Categories Analyzed:**
+      - ✅ Technical (complexity, dependencies, architecture)
+      - ✅ Security (authentication, data privacy, authorization)
+      - ✅ Quality (TDD coverage, DoR completeness, testing)
+      - ✅ Timeline (phase count, resource availability)
+      - ✅ Operational (deployment, performance, monitoring)
+    
+    request_echo_content: Perform automated risk analysis on feature plan
+    next_steps_content: |
+      **Risk Mitigation Options:**
+      
+      1. **Address HIGH severity risks first** - These block execution
+      2. **Review remediation plan** - If DoR incomplete, CORTEX generates remediation steps
+      3. **Update plan** - Mark DoR fields as complete after addressing risks
+      4. **Force execution** - Use `force_execution=True` ONLY with approved remediation plan
+      
+      **Definition of Ready (DoR) Enforcement:**
+      - ❌ DoR incomplete → Execution BLOCKED
+      - ✅ DoR complete → Execution ALLOWED
+      - ⚠️ DoR incomplete + Remediation Plan → Execution with `force_execution=True`
+      
+      Ready to proceed with risk mitigation?
+  
+  dor_validation_blocked:
+    name: DoR Validation Blocked
+    triggers:
+    - dor blocked
+    - definition of ready failed
+    - dor not satisfied
+    understanding_content: Plan execution was blocked because Definition of Ready (DoR) requirements are not satisfied.
+    challenge_content: DoR violations indicate the plan may be premature. CORTEX enforces DoR to prevent execution of under-prepared plans, reducing implementation risk.
+    response_content: |
+      **❌ Execution BLOCKED - Definition of Ready Not Satisfied**
+      
+      **Violations Found ({{violation_count}}):**
+      {{#each dor_violations}}
+      {{number}}. {{violation}}
+      {{/each}}
+      
+      **Why DoR Matters:**
+      - Prevents premature implementation
+      - Reduces rework and bugs
+      - Ensures resources and design are ready
+      - Enforces TDD test planning upfront
+      
+      **📋 Remediation Plan Generated**
+      
+      CORTEX has created a {{phase_count}}-phase remediation plan to address DoR gaps:
+      
+      {{#each remediation_phases}}
+      **Phase {{phase_number}}: {{phase_name}}**
+      {{#each tasks}}
+      - {{task_id}}: {{task_name}}
+        {{description}}
+      {{/each}}
+      
+      {{/each}}
+      
+      **Execution Options:**
+      
+      **Option 1: Complete DoR (RECOMMENDED)**
+      1. Execute remediation plan
+      2. Update original plan's DoR fields to `true`
+      3. Re-run execution normally
+      
+      **Option 2: Force Execution (WITH APPROVED REMEDIATION)**
+      1. Review and approve remediation plan
+      2. Execute original plan with `force_execution=True`
+      3. Address DoR gaps during implementation (higher risk)
+      
+      **Option 3: Cancel Execution**
+      - Return to planning phase
+      - Complete DoR items before implementation
+    
+    request_echo_content: Execute plan despite DoR validation failure
+    next_steps_content: |
+      **Choose Your Path:**
+      
+      1. **Execute remediation plan** - Address DoR gaps first (safest)
+      2. **Force execution** - Proceed with risks accepted (requires approval)
+      3. **Cancel and replan** - Return to planning phase
+      
+      Which option do you prefer?
+

@@ -57,7 +57,7 @@ This guide provides:
 - **Common mistakes to avoid**
 - **Python code examples**
 
-### Required Data Files (7 files)
+### Required Data Files (8 files)
 
 Your scanner must generate these in `cortex-brain/dashboards/{source}/`:
 
@@ -68,6 +68,7 @@ Your scanner must generate these in `cortex-brain/dashboards/{source}/`:
 5. **code-organization.json** - Complexity, hotspots
 6. **team-metrics.json** - Git activity, contributors
 7. **vendors.json** - Third-party services
+8. **executive-summary.json** - Executive overview (purpose, history, composition)
 
 ---
 
@@ -75,13 +76,14 @@ Your scanner must generate these in `cortex-brain/dashboards/{source}/`:
 
 ```
 dashboards/
-├── ui/                 # Dashboard application (49 files)
+├── ui/                 # Dashboard application (53 files)
 │   ├── index.html
 │   ├── app.js
 │   ├── data-loader.js
-│   ├── components/     # 7 tab components
+│   ├── components/     # 8 tab components (including executive-summary-tab.js)
+│   ├── styles/         # CSS stylesheets (including executive-summary.css)
 │   └── tests/          # 170 tests
-├── mock/               # Example data (7 JSON files)
+├── mock/               # Example data (8 JSON files)
 ├── cortex/             # CORTEX data
 ├── noor-canvas/        # Noor Canvas data
 ├── alist/              # Alist data

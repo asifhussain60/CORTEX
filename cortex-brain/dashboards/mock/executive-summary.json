@@ -1,0 +1,262 @@
+{
+  "purpose": {
+    "title": "CORTEX - Cognitive Operations and Reasoning TEXture",
+    "tagline": "AI Assistant Enhancement System",
+    "description": "Gives GitHub Copilot long-term memory, context awareness, and strategic planning capabilities. Transforms Copilot from an amnesiac intern into a continuously improving, context-aware, quality-focused development partner.",
+    "value_proposition": [
+      "Eliminates Copilot's amnesia - remembers 70 conversations across sessions",
+      "Pattern learning system - each feature teaches the next",
+      "Quality protection - challenges risky changes with evidence-based recommendations",
+      "Dual-hemisphere processing - tactical execution + strategic planning coordination",
+      "Real-time health monitoring - track metrics, health scores, and trends"
+    ],
+    "target_users": [
+      "Development teams using GitHub Copilot",
+      "Solo developers seeking AI-enhanced productivity",
+      "Engineering managers tracking code quality",
+      "Stakeholders requiring project visibility"
+    ]
+  },
+  "history": {
+    "project_inception": "2025-11-04",
+    "last_update": "2025-12-06",
+    "days_active": 33,
+    "total_commits": 1381,
+    "commits_per_day": 42.0,
+    "commits_last_7_days": 30,
+    "commits_last_30_days": 200,
+    "primary_author": "Asif Hussain",
+    "total_contributors": 3,
+    "major_milestones": [
+      {
+        "date": "2025-12-06",
+        "version": "3.7.2",
+        "description": "Executive Summary Dashboard - GitPython analytics integration",
+        "type": "feature"
+      },
+      {
+        "date": "2025-12-04",
+        "version": "3.7.1",
+        "description": "Documentation enhancement (0 broken links, 96% faster command discovery)",
+        "type": "feature"
+      },
+      {
+        "date": "2025-11-23",
+        "version": "3.7.0",
+        "description": "Dashboard launcher with HTTP server and auto-open browser",
+        "type": "feature"
+      },
+      {
+        "date": "2025-11-20",
+        "version": "3.6.0",
+        "description": "Response Format v3.0 - Hybrid enhancement system",
+        "type": "release"
+      },
+      {
+        "date": "2025-11-15",
+        "version": "3.5.0",
+        "description": "Adoption Analytics System with privacy anonymization",
+        "type": "feature"
+      },
+      {
+        "date": "2025-11-10",
+        "version": "3.0.0",
+        "description": "CORTEX 3.0 - Complete architecture redesign",
+        "type": "release"
+      },
+      {
+        "date": "2025-11-04",
+        "version": "1.0.0",
+        "description": "Initial release - Core brain architecture with 4-tier system",
+        "type": "release"
+      }
+    ],
+    "evolution": {
+      "development_phase": "Active Development",
+      "velocity_trend": "High",
+      "activity_level": "High"
+    }
+  },
+  "composition": {
+    "architecture_layers": [
+      {
+        "name": "Tier 0 - Instinct",
+        "purpose": "Immutable governance rules (TDD, SOLID, SKULL)",
+        "components": [
+          "brain-protection-rules.yaml",
+          "22 governance instincts"
+        ],
+        "icon": "🛡️"
+      },
+      {
+        "name": "Tier 1 - Working Memory",
+        "purpose": "Short-term conversation history (70-conv FIFO capacity)",
+        "components": [
+          "working_memory.db",
+          "SQLite with <100ms queries",
+          "Entity extraction"
+        ],
+        "icon": "🧠"
+      },
+      {
+        "name": "Tier 2 - Knowledge Graph",
+        "purpose": "Pattern learning and semantic search",
+        "components": [
+          "knowledge_graph.db",
+          "FTS5 full-text search",
+          "Pattern storage"
+        ],
+        "icon": "🕸️"
+      },
+      {
+        "name": "Tier 3 - Development Context",
+        "purpose": "Code metrics, git activity, project insights",
+        "components": [
+          "context.db",
+          "Architecture health",
+          "Performance tracking"
+        ],
+        "icon": "📊"
+      }
+    ],
+    "agent_system": {
+      "architecture": "Dual-hemisphere processing",
+      "left_brain": {
+        "role": "Tactical Execution",
+        "capabilities": [
+          "Code execution",
+          "Testing",
+          "Error correction",
+          "Debugging"
+        ],
+        "agent_count": 5
+      },
+      "right_brain": {
+        "role": "Strategic Planning",
+        "capabilities": [
+          "Planning",
+          "Governance",
+          "Decision-making",
+          "Architecture design"
+        ],
+        "agent_count": 5
+      },
+      "total_agents": 10,
+      "specialized_agents": [
+        "Intent Router",
+        "Planning Orchestrator",
+        "Execution Agent",
+        "Test Generator",
+        "Debug Assistant",
+        "Governance Validator",
+        "Pattern Recognizer",
+        "Context Manager",
+        "Quality Guardian",
+        "Performance Monitor"
+      ]
+    },
+    "technology_stack": {
+      "backend": [
+        {
+          "name": "Python",
+          "version": "3.8+",
+          "purpose": "Core logic & orchestration"
+        },
+        {
+          "name": "SQLite",
+          "version": "3.x",
+          "purpose": "Brain storage (3 databases)"
+        },
+        {
+          "name": "FTS5",
+          "version": "Built-in",
+          "purpose": "Semantic search"
+        },
+        {
+          "name": "GitPython",
+          "version": "3.1+",
+          "purpose": "Repository analytics"
+        }
+      ],
+      "frontend": [
+        {
+          "name": "JavaScript ES6",
+          "version": "Modern",
+          "purpose": "Dashboard logic"
+        },
+        {
+          "name": "D3.js",
+          "version": "7.x",
+          "purpose": "Data visualization"
+        },
+        {
+          "name": "Chart.js",
+          "version": "4.x",
+          "purpose": "Charts & graphs"
+        },
+        {
+          "name": "Three.js",
+          "version": "r128",
+          "purpose": "3D visualizations"
+        }
+      ],
+      "dashboard": [
+        {
+          "name": "HTML5",
+          "version": "Modern",
+          "purpose": "Structure"
+        },
+        {
+          "name": "CSS3",
+          "version": "Modern",
+          "purpose": "Glassmorphic styling"
+        },
+        {
+          "name": "HTTP Server",
+          "version": "Python Built-in",
+          "purpose": "Local serving"
+        }
+      ],
+      "integration": [
+        {
+          "name": "GitHub Copilot",
+          "version": "Latest",
+          "purpose": "AI enhancement"
+        },
+        {
+          "name": "VS Code",
+          "version": "Latest",
+          "purpose": "Editor integration"
+        }
+      ]
+    },
+    "file_statistics": {
+      "python": 2389,
+      "javascript": 35,
+      "html": 42,
+      "css": 18,
+      "yaml": 156,
+      "json": 89,
+      "markdown": 178,
+      "total": 3247
+    },
+    "key_features": [
+      "4-Tier Brain Architecture",
+      "10 Specialist Agents",
+      "Dual-Hemisphere Processing",
+      "Context Continuity (70-conversation capacity)",
+      "Pattern Learning System",
+      "TDD Enforcement with Brain Protection",
+      "Planning System 2.0 with Vision API",
+      "Real-Time Health Dashboard",
+      "Universal Upgrade System",
+      "Multi-Language Support"
+    ]
+  },
+  "metadata": {
+    "generated_at": "2025-12-06T10:30:00.000000",
+    "generator_version": "1.0.0",
+    "data_source": "mock",
+    "schema_version": "1.0"
+  }
+}

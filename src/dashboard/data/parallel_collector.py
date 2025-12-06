@@ -96,9 +96,11 @@ class ParallelCollectorOrchestrator:
                 try:
                     data = future.result()
                     collected_data[f"{collector_name}.json"] = data
+                    print(f"    [{completed}/6] ✓ {collector_name} completed")
                     logger.info(f"  [{completed}/6] ✓ {collector_name} completed")
                 
                 except Exception as e:
+                    print(f"    [{completed}/6] ✗ {collector_name} failed: {e}")
                     logger.error(f"  [{completed}/6] ✗ {collector_name} failed: {e}")
                     collected_data[f"{collector_name}.json"] = self._get_minimal_structure(collector_name)
         
