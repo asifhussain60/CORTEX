@@ -26,6 +26,8 @@ import json
 
 from src.cortex_agents.base_agent import AgentRequest, AgentResponse
 from src.cortex_agents.agent_types import IntentType
+from src.learning.event_collector import get_global_collector
+from src.learning.event_taxonomy import LearningEvent, EventType
 
 logger = logging.getLogger(__name__)
 
@@ -259,6 +261,17 @@ class PlanExecutionOrchestrator:
         
         logger.info(f"📋 Executing Phase {phase_number}: {phase_name} ({len(tasks)} tasks)")
         
+        # Emit PHASE_STARTED event
+        try:
+            event = LearningEvent(
+                event_type=EventType.PHASE_STARTED,
+                component="PlanExecutionOrchestrator",
+                metadata={"phase_number": phase_number, "phase_name": phase_name, "task_count": len(tasks)}
+            )
+            get_global_collector().capture_event(event)
+        except Exception as e:
+            logger.debug(f"Learning event capture failed: {e}")
+        
         phase_result = {
             "phase_number": phase_number,
             "phase_name": phase_name,
@@ -284,6 +297,23 @@ class PlanExecutionOrchestrator:
                 break
         
         phase_result["completed_at"] = datetime.now().isoformat()
+        
+        # Emit PHASE_COMPLETED event
+        if phase_result["success"]:
+            try:
+                event = LearningEvent(
+                    event_type=EventType.PHASE_COMPLETED,
+                    component="PlanExecutionOrchestrator",
+                    metadata={
+                        "phase_number": phase_number,
+                        "phase_name": phase_name,
+                        "tasks_completed": len(phase_result["tasks_executed"])
+                    }
+                )
+                get_global_collector().capture_event(event)
+            except Exception as e:
+                logger.debug(f"Learning event capture failed: {e}")
+        
         return phase_result
     
     def _execute_task(self, task: Dict[str, Any]) -> Dict[str, Any]:

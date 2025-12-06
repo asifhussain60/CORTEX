@@ -12,9 +12,9 @@ templates:
     expected_orchestrator: diagram_regeneration_orchestrator
     operation_name: DiagramRegeneration
     sections:
-      understanding_content: You want to regenerate UML and architecture diagrams
+      understanding_scope_content: You want to regenerate UML and architecture diagrams
         from code
-      challenge_content: No Challenge - Automated diagram generation from source code
+      approach_considerations_content: No significant challenges - Automated diagram generation from source code
       response_content: "## \U0001F4CA Architecture Diagram Regeneration\n\n**Automated\
         \ diagram generation** from source code using PlantUML and Mermaid\n\n**Diagram\
         \ Types:**\n\n1. **Class Diagrams** (UML)\n   - Class hierarchies\n   - Method\
@@ -29,7 +29,7 @@ templates:
         3. Generate PlantUML/Mermaid syntax\n4. Render to PNG/SVG\n5. Update documentation\n\
         \n**Output Locations:**\n- docs/diagrams/ - Generated diagrams\n- docs/architecture/\
         \ - Architecture docs\n- cortex-brain/documents/ - Technical docs\n"
-      request_echo_content: Regenerate all architecture diagrams from current code
+      impact_changes_content: Regenerate all architecture diagrams from current code
       next_steps_content: '**Diagram Commands:**
 
 

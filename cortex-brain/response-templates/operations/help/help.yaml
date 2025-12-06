@@ -14,9 +14,9 @@ templates:
     expected_orchestrator: hands_on_tutorial_orchestrator
     operation_name: Tutorial
     sections:
-      understanding_content: You want to learn CORTEX through hands-on practice with
+      understanding_scope_content: You want to learn CORTEX through hands-on practice with
         real feature implementation
-      challenge_content: No Challenge - Clear learning path with practical exercises
+      approach_considerations_content: No significant challenges - Clear learning path with practical exercises
       response_content: "## \U0001F393 CORTEX Hands-On Tutorial System\n\n**Interactive\
         \ learning program:** Build real features while learning CORTEX capabilities\n\
         \n**Tutorial Modes:**\n\n1. **Quick Tutorial (15 min)** - Core concepts only\n\
@@ -33,7 +33,7 @@ templates:
         \ production-ready code\n\n**Tutorial Features:**\n- Real code (not mock examples)\n\
         - Automated validation checks\n- Progress tracking\n- Rollback capability\n\
         - Certificate of completion\n"
-      request_echo_content: Start interactive hands-on tutorial to learn CORTEX
+      impact_changes_content: Start interactive hands-on tutorial to learn CORTEX
       next_steps_content: '**Choose Tutorial Mode:**
 
 

@@ -12,8 +12,8 @@ templates:
     expected_orchestrator: git_checkpoint_orchestrator
     operation_name: GitCheckpoint
     sections:
-      understanding_content: You want to create a git checkpoint during TDD workflow
-      challenge_content: No Challenge - Automated checkpoint with TDD phase detection
+      understanding_scope_content: You want to create a git checkpoint during TDD workflow
+      approach_considerations_content: No significant challenges - Automated checkpoint with TDD phase detection
       response_content: '## 🔖 Git Checkpoint (TDD Workflow)
 
 
@@ -82,7 +82,7 @@ templates:
         commits, use "commit" command which runs commit_push_sync orchestrator.
 
         '
-      request_echo_content: Create git checkpoint during TDD workflow
+      impact_changes_content: Create git checkpoint during TDD workflow
       next_steps_content: '**Git Checkpoint Usage:**
 
 

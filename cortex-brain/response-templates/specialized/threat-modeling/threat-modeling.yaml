@@ -13,9 +13,9 @@ templates:
     expected_orchestrator: threat_modeler_agent
     operation_name: ThreatModeling
     sections:
-      understanding_content: You want to perform security threat analysis using STRIDE
+      understanding_scope_content: You want to perform security threat analysis using STRIDE
         framework
-      challenge_content: Security Risk - Threats must be identified before implementation
+      approach_considerations_content: Security Risk - Threats must be identified before implementation
       response_content: "## \U0001F6E1️ Threat Modeling Agent\n\n**Enhanced security\
         \ analysis** using STRIDE framework + OWASP Top 10\n\n**Threat Analysis Framework:**\n\
         \n**STRIDE Categories:**\n\n**S - Spoofing Identity**\n- Authentication bypass\n\
@@ -49,7 +49,7 @@ templates:
         \ Coverage (threats per category)\n3. OWASP Mapping (compliance status)\n\
         4. Critical Threats (CRITICAL and HIGH only)\n5. Mitigation Roadmap (prioritized\
         \ action plan)\n6. Implementation Guidance (code examples)\n"
-      request_echo_content: Perform security threat analysis using STRIDE framework
+      impact_changes_content: Perform security threat analysis using STRIDE framework
       next_steps_content: '**Threat Modeling Commands:**
 
 

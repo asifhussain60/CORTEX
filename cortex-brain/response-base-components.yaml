@@ -34,29 +34,29 @@ shared_components:
       
       ---
 
-  # Understanding section (what we interpreted from user's request)
+  # Understanding & Scope section (v3.0)
   section_understanding:
     id: section_understanding
     type: section
     icon: "🎯"
-    title: "My Understanding Of Your Request"
-    content: "{{understanding_content}}"
+    title: "Understanding & Scope"
+    content: "{{understanding_scope_content}}"
     variants:
       concise: "{{understanding_brief}}"
-      balanced: "{{understanding_content}}"
-      verbose: "{{understanding_content}}\n\n**Context:** {{context_details}}"
+      balanced: "{{understanding_scope_content}}"
+      verbose: "{{understanding_scope_content}}\n\n**Context:** {{context_details}}"
 
-  # Challenge section (obstacles or "No Challenge")
+  # Approach & Considerations section (v3.0)
   section_challenge:
     id: section_challenge
     type: section
-    icon: "⚠️"
-    title: "Challenge"
-    content: "{{challenge_content}}"
+    icon: "⚡"
+    title: "Approach & Considerations"
+    content: "{{approach_considerations_content}}"
     variants:
-      concise: "{{challenge_brief}}"
-      balanced: "{{challenge_content}}"
-      verbose: "{{challenge_content}}\n\n**Impact:** {{challenge_impact}}\n**Mitigation:** {{challenge_mitigation}}"
+      concise: "{{approach_brief}}"
+      balanced: "{{approach_considerations_content}}"
+      verbose: "{{approach_considerations_content}}\n\n**Impact:** {{approach_impact}}\n**Mitigation:** {{approach_mitigation}}"
 
   # Response section (main content)
   section_response:
@@ -76,7 +76,7 @@ shared_components:
     type: section
     icon: "📝"
     title: "Your Request"
-    content: "{{request_echo_content}}"
+    content: "{{impact_changes_content}}"
     variants:
 
   # -------------------------------------------------------------------------
@@ -161,8 +161,8 @@ shared_components:
 
   # Request echo section (mirror user's request)
       concise: "{{request_brief}}"
-      balanced: "{{request_echo_content}}"
-      verbose: "{{request_echo_content}}\n\n**Interpreted As:** {{request_interpretation}}"
+      balanced: "{{impact_changes_content}}"
+      verbose: "{{impact_changes_content}}\n\n**Interpreted As:** {{request_interpretation}}"
 
   # Next steps section (actionable items)
   section_next_steps:

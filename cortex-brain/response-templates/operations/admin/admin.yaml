@@ -13,9 +13,9 @@ templates:
     expected_orchestrator: publish_branch_orchestrator
     operation_name: Publish
     sections:
-      understanding_content: You want to deploy CORTEX to the publish branch with
+      understanding_scope_content: You want to deploy CORTEX to the publish branch with
         full validation
-      challenge_content: Deployment Risk - 19 validation gates must pass before publish
+      approach_considerations_content: Deployment Risk - 19 validation gates must pass before publish
       response_content: '## 🚀 CORTEX Publish Branch Deployment
 
 
@@ -86,7 +86,7 @@ templates:
         **Success Criteria:** All 19 gates pass + zero critical issues
 
         '
-      request_echo_content: Deploy CORTEX to publish branch with full validation
+      impact_changes_content: Deploy CORTEX to publish branch with full validation
       next_steps_content: '**Deployment Commands:**
 
 

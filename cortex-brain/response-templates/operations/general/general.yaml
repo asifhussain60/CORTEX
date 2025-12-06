@@ -14,9 +14,9 @@ templates:
     expected_orchestrator: cleanup_orchestrator
     operation_name: Cleanup
     sections:
-      understanding_content: You want to clean up obsolete files, temporary data,
+      understanding_scope_content: You want to clean up obsolete files, temporary data,
         and optimize CORTEX storage
-      challenge_content: No Challenge - Safe cleanup with automatic backup
+      approach_considerations_content: No significant challenges - Safe cleanup with automatic backup
       response_content: "## \U0001F9F9 CORTEX System Cleanup\n\n**Automated cleanup\
         \ orchestration** across multiple categories\n\n**Cleanup Targets:**\n\n1.\
         \ **Obsolete Code** (deprecated modules, unused files)\n   - Auto-detection\
@@ -32,7 +32,7 @@ templates:
         \ space recovery\n\n**Safety Features:**\n- ✅ Automatic backup to cortex-brain/archives/\n\
         - ✅ Rollback capability\n- ✅ Dependency validation\n- ✅ User confirmation\
         \ for critical deletions\n"
-      request_echo_content: Run system cleanup to remove obsolete files and optimize
+      impact_changes_content: Run system cleanup to remove obsolete files and optimize
         storage
       next_steps_content: '**Cleanup Options:**
 
@@ -59,9 +59,9 @@ templates:
     expected_orchestrator: optimize_cortex_orchestrator
     operation_name: Optimize
     sections:
-      understanding_content: You want to optimize CORTEX performance and reduce resource
+      understanding_scope_content: You want to optimize CORTEX performance and reduce resource
         usage
-      challenge_content: No Challenge - Safe optimization with performance validation
+      approach_considerations_content: No significant challenges - Safe optimization with performance validation
       response_content: "## ⚡ CORTEX Performance Optimization\n\n**Comprehensive system\
         \ optimization** targeting speed, memory, and disk usage\n\n**Optimization\
         \ Categories:**\n\n1. **Database Optimization**\n   - VACUUM SQLite databases\
@@ -78,7 +78,7 @@ templates:
         - Startup time: <3 seconds\n- Query response: <100ms\n- Memory usage: <200\
         \ MB\n- Disk footprint: <100 MB\n\n**SKULL Tests Included:** Full test suite\
         \ execution to validate no regressions\n"
-      request_echo_content: Optimize CORTEX system performance and resource usage
+      impact_changes_content: Optimize CORTEX system performance and resource usage
       next_steps_content: '**Optimization Options:**
 
 
@@ -107,8 +107,8 @@ templates:
     expected_orchestrator: design_sync_orchestrator
     operation_name: DesignSync
     sections:
-      understanding_content: You want to synchronize design documentation with implementation
-      challenge_content: Documentation Drift - Design docs may be out of sync with
+      understanding_scope_content: You want to synchronize design documentation with implementation
+      approach_considerations_content: Documentation Drift - Design docs may be out of sync with
         code
       response_content: "## \U0001F4D0 Design Documentation Synchronization\n\n**Automated\
         \ synchronization** between design documents and implementation\n\n**Sync\
@@ -125,7 +125,7 @@ templates:
         \ Compare with existing design docs\n4. Generate diff report\n5. Update design\
         \ docs (with approval)\n6. Regenerate diagrams\n\n**Output Formats:**\n- Markdown\
         \ (.md)\n- PlantUML diagrams (.puml)\n- Mermaid diagrams (.mmd)\n- HTML documentation\n"
-      request_echo_content: Synchronize design documentation with current implementation
+      impact_changes_content: Synchronize design documentation with current implementation
       next_steps_content: '**Sync Options:**
 
 
@@ -153,9 +153,9 @@ templates:
     expected_orchestrator: demo_orchestrator
     operation_name: DemoGeneration
     sections:
-      understanding_content: You want to generate demo content for presentations or
+      understanding_scope_content: You want to generate demo content for presentations or
         testing
-      challenge_content: No Challenge - Automated demo generation with realistic data
+      approach_considerations_content: No significant challenges - Automated demo generation with realistic data
       response_content: "## \U0001F3AC Demo Content Generation\n\n**Automated demo\
         \ generation** for presentations, testing, and training\n\n**Demo Types:**\n\
         \n1. **Planning Demo**\n   - Sample ADO work items\n   - Vision API screenshot\
@@ -168,7 +168,7 @@ templates:
         \   - Video recording capability\n\n**Demo Features:**\n- Realistic mock data\n\
         - Step-by-step execution\n- Automatic screenshots\n- Narrated walkthrough\n\
         - Reset capability\n"
-      request_echo_content: Generate demo content for presentations or testing
+      impact_changes_content: Generate demo content for presentations or testing
       next_steps_content: '**Demo Commands:**
 
 
@@ -193,9 +193,9 @@ templates:
     expected_orchestrator: holistic_cleanup_orchestrator
     operation_name: HolisticCleanup
     sections:
-      understanding_content: You want comprehensive system-wide cleanup across all
+      understanding_scope_content: You want comprehensive system-wide cleanup across all
         CORTEX components
-      challenge_content: Deep Cleanup - More thorough than standard cleanup
+      approach_considerations_content: Deep Cleanup - More thorough than standard cleanup
       response_content: "## \U0001F52C Holistic System Cleanup\n\n**Comprehensive\
         \ cleanup** across all CORTEX components with deep analysis\n\n**Cleanup Scope\
         \ (Beyond Standard Cleanup):**\n\n1. **Code Analysis & Cleanup**\n   - Dead\
@@ -210,7 +210,7 @@ templates:
         \ templates\n   - Invalid operations\n\n**Holistic Analysis:**\n- Cross-component\
         \ impact analysis\n- Dependency graph validation\n- System health scoring\n\
         - Cleanup recommendations\n"
-      request_echo_content: Run holistic system-wide cleanup with deep analysis
+      impact_changes_content: Run holistic system-wide cleanup with deep analysis
       next_steps_content: '**Holistic Cleanup Options:**
 
 
@@ -235,9 +235,9 @@ templates:
     expected_orchestrator: user_cleanup_orchestrator
     operation_name: UserCleanup
     sections:
-      understanding_content: You want to clean up your user workspace without affecting
+      understanding_scope_content: You want to clean up your user workspace without affecting
         CORTEX internals
-      challenge_content: No Challenge - Safe user-space cleanup
+      approach_considerations_content: No significant challenges - Safe user-space cleanup
       response_content: "## \U0001F9F9 User Workspace Cleanup\n\n**User-facing cleanup**\
         \ for project workspaces (not CORTEX internals)\n\n**User Workspace Targets:**\n\
         \n1. **Project Temporary Files**\n   - Build artifacts\n   - Node modules\
@@ -249,7 +249,7 @@ templates:
         \ CORTEX core files\n- ✅ Respects .gitignore\n- ✅ Confirmation for deletions\n\
         - ✅ Automatic backup option\n\n**User Context:** Automatically detects if\
         \ running in user workspace vs CORTEX repo\n"
-      request_echo_content: Clean up user workspace without affecting CORTEX core
+      impact_changes_content: Clean up user workspace without affecting CORTEX core
       next_steps_content: '**User Cleanup Commands:**
 
 
@@ -273,8 +273,8 @@ templates:
     expected_orchestrator: optimize_system_orchestrator
     operation_name: SystemOptimization
     sections:
-      understanding_content: You want comprehensive system-wide performance optimization
-      challenge_content: No Challenge - Multi-phase optimization with validation
+      understanding_scope_content: You want comprehensive system-wide performance optimization
+      approach_considerations_content: No significant challenges - Multi-phase optimization with validation
       response_content: '## ⚡ System-Wide Optimization
 
 
@@ -350,7 +350,7 @@ templates:
         - Disk: 25-35% reduction
 
         '
-      request_echo_content: Run comprehensive system-wide performance optimization
+      impact_changes_content: Run comprehensive system-wide performance optimization
       next_steps_content: '**System Optimization Commands:**
 
 
@@ -376,9 +376,9 @@ templates:
     expected_orchestrator: application_health_orchestrator
     operation_name: HealthCheck
     sections:
-      understanding_content: You want to check application health status across all
+      understanding_scope_content: You want to check application health status across all
         components
-      challenge_content: No Challenge - Comprehensive health monitoring
+      approach_considerations_content: No significant challenges - Comprehensive health monitoring
       response_content: '## 🏥 Application Health Check
 
 
@@ -465,7 +465,7 @@ templates:
         ```
 
         '
-      request_echo_content: Check application health status across all components
+      impact_changes_content: Check application health status across all components
       next_steps_content: '**Health Commands:**
 
 
@@ -491,8 +491,8 @@ templates:
     expected_orchestrator: manager_report_orchestrator
     operation_name: ManagerReport
     sections:
-      understanding_content: You want to generate a progress report for management
-      challenge_content: No Challenge - Automated report generation from telemetry
+      understanding_scope_content: You want to generate a progress report for management
+      approach_considerations_content: No significant challenges - Automated report generation from telemetry
         data
       response_content: '## 📊 Manager Report Generation
 
@@ -605,7 +605,7 @@ templates:
         ```
 
         '
-      request_echo_content: Generate progress report for management
+      impact_changes_content: Generate progress report for management
       next_steps_content: '**Report Commands:**
 
 
@@ -631,8 +631,8 @@ templates:
     expected_orchestrator: plan_execution_orchestrator
     operation_name: PlanExecution
     sections:
-      understanding_content: You want to execute a saved feature plan
-      challenge_content: No Challenge - Automated execution with TDD integration
+      understanding_scope_content: You want to execute a saved feature plan
+      approach_considerations_content: No significant challenges - Automated execution with TDD integration
       response_content: '## ▶️ Plan Execution
 
 
@@ -719,7 +719,7 @@ templates:
         - **Review:** Pause at each phase for review
 
         '
-      request_echo_content: Execute saved feature plan with TDD integration
+      impact_changes_content: Execute saved feature plan with TDD integration
       next_steps_content: '**Plan Execution Commands:**
 
 
@@ -753,8 +753,8 @@ templates:
     expected_orchestrator: learning_capture_agent
     operation_name: LearningCapture
     sections:
-      understanding_content: You want to capture lessons learned for future reference
-      challenge_content: No Challenge - Automated pattern learning and knowledge retention
+      understanding_scope_content: You want to capture lessons learned for future reference
+      approach_considerations_content: No significant challenges - Automated pattern learning and knowledge retention
       response_content: "## \U0001F4DA Learning Capture Agent\n\n**Automated learning\
         \ capture** for pattern recognition and knowledge retention\n\n**Capture Categories:**\n\
         \n**1. Bug Patterns**\n- Root cause analysis\n- Resolution steps\n- Prevention\
@@ -775,7 +775,7 @@ templates:
         \  confidence: 0.95\n```\n\n**Auto-Capture Triggers:**\n- Bug resolution\n\
         - Feature completion\n- Code review insights\n- Test failures\n- Performance\
         \ issues\n"
-      request_echo_content: Capture lessons learned for future reference
+      impact_changes_content: Capture lessons learned for future reference
       next_steps_content: '**Learning Capture Commands:**
 
 
@@ -804,8 +804,8 @@ templates:
     expected_orchestrator: profile_agent
     operation_name: ProfileManagement
     sections:
-      understanding_content: You want to update your user profile preferences
-      challenge_content: No Challenge - Simple profile configuration
+      understanding_scope_content: You want to update your user profile preferences
+      approach_considerations_content: No significant challenges - Simple profile configuration
       response_content: "## \U0001F464 User Profile Management\n\n**Personalize CORTEX**\
         \ with your preferences and tech stack\n\n**Profile Settings:**\n\n**1. Tech\
         \ Stack Preferences**\n- Azure Stack (Azure DevOps, App Services, SQL Azure)\n\
@@ -826,7 +826,7 @@ templates:
         \  experience_level: senior\n  response_style: standard\n  preferences:\n\
         \    auto_checkpoint: true\n    telemetry: enabled\n    auto_docs: true\n\
         ```\n"
-      request_echo_content: Update user profile preferences
+      impact_changes_content: Update user profile preferences
       next_steps_content: '**Profile Commands:**
 
 
@@ -853,9 +853,9 @@ templates:
     expected_orchestrator: rca_agent
     operation_name: RootCauseAnalysis
     sections:
-      understanding_content: You want to perform root cause analysis using 5 Whys
+      understanding_scope_content: You want to perform root cause analysis using 5 Whys
         method
-      challenge_content: No Challenge - Structured RCA with document import
+      approach_considerations_content: No significant challenges - Structured RCA with document import
       response_content: '## 🔍 Root Cause Analysis (RCA)
 
 
@@ -951,7 +951,7 @@ templates:
         **RCA Storage:** `cortex-brain/documents/rca/`
 
         '
-      request_echo_content: Perform root cause analysis using 5 Whys method
+      impact_changes_content: Perform root cause analysis using 5 Whys method
       next_steps_content: '**RCA Commands:**
 
 
@@ -976,9 +976,9 @@ templates:
     expected_orchestrator: welcome_banner_agent
     operation_name: WelcomeBanner
     sections:
-      understanding_content: You want to see the CORTEX welcome banner and governance
+      understanding_scope_content: You want to see the CORTEX welcome banner and governance
         rules
-      challenge_content: No Challenge - Session-based banner display
+      approach_considerations_content: No significant challenges - Session-based banner display
       response_content: '## 👋 CORTEX Welcome Banner
 
 
@@ -1055,7 +1055,7 @@ templates:
         ```
 
         '
-      request_echo_content: Show CORTEX welcome banner and governance rules
+      impact_changes_content: Show CORTEX welcome banner and governance rules
       next_steps_content: '**Banner Commands:**
 
 
@@ -1078,8 +1078,8 @@ templates:
     expected_orchestrator: architecture_intelligence_agent
     operation_name: ArchitectureIntelligence
     sections:
-      understanding_content: You want holistic architecture review with trend analysis
-      challenge_content: No Challenge - Read-only architecture analysis
+      understanding_scope_content: You want holistic architecture review with trend analysis
+      approach_considerations_content: No significant challenges - Read-only architecture analysis
       response_content: '## 🏗️ Architecture Intelligence Agent
 
 
@@ -1167,7 +1167,7 @@ templates:
         - Provides strategic insights
 
         '
-      request_echo_content: Perform holistic architecture review with trend analysis
+      impact_changes_content: Perform holistic architecture review with trend analysis
       next_steps_content: '**Architecture Intelligence Commands:**
 
 
@@ -1193,9 +1193,9 @@ templates:
     expected_orchestrator: view_discovery_agent
     operation_name: ViewDiscovery
     sections:
-      understanding_content: You want to discover UI element IDs from Razor/Blazor
+      understanding_scope_content: You want to discover UI element IDs from Razor/Blazor
         views before test generation
-      challenge_content: Critical Gap - Tests fail without real element IDs
+      approach_considerations_content: Critical Gap - Tests fail without real element IDs
       response_content: "## \U0001F50D View Discovery Agent\n\n**Automated UI element\
         \ discovery** from Razor/Blazor views\n\n**Problem Solved:**\n- TDD workflow\
         \ previously generated tests with **assumed selectors**\n- Tests failed immediately\
@@ -1225,7 +1225,7 @@ templates:
         \      \"element_type\": \"button\",\n      \"selector_strategy\": \"By.Id('login-button')\"\
         ,\n      \"user_facing_text\": \"Sign In\",\n      \"line_number\": 58\n \
         \   }\n  ]\n}\n```\n"
-      request_echo_content: Discover UI element IDs from Razor/Blazor views
+      impact_changes_content: Discover UI element IDs from Razor/Blazor views
       next_steps_content: '**View Discovery Commands:**
 
 
@@ -1258,10 +1258,10 @@ templates:
     response_type: executive
     operation_name: Business Value Demonstration
     sections:
-      understanding_content: You want to demonstrate CORTEX's value to leadership
+      understanding_scope_content: You want to demonstrate CORTEX's value to leadership
         and stakeholders across different roles (product owners, dev managers, engineers,
         testers, documenters).
-      challenge_content: No Challenge - CORTEX provides measurable business value
+      approach_considerations_content: No significant challenges - CORTEX provides measurable business value
         through automation, quality enforcement, and intelligent assistance across
         the entire development lifecycle.
       response_content: "# \U0001F3AF CORTEX: AI-Enhanced Development Assistant for\
@@ -1516,7 +1516,7 @@ templates:
         \  \n\n**Most Impressive Feature:** Interactive Dashboard (D3.js) provides\
         \ visual proof of quality and progress - not just text reports. Launch with\
         \ single command: `load dashboard`\n"
-      request_echo_content: Demonstrate CORTEX business value to leadership and stakeholders
+      impact_changes_content: Demonstrate CORTEX business value to leadership and stakeholders
         across multiple roles
       next_steps_content: '**Choose Your Role to See Detailed Value:**
 
