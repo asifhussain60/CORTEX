@@ -1,0 +1,120 @@
+"""
+Integration tests for {{ component_name }}.
+
+Category: Error Handling Integration
+Generated: {{ timestamp }}
+"""
+
+import pytest
+from pathlib import Path
+from {{ component_path.replace('/', '.').replace('.py', '') }} import {{ component_name }}
+{% if integration_points %}
+# Integration point imports
+{% for ip in integration_points %}
+from {{ ip.path|default('src.utils') }} import {{ ip.name }}
+{% endfor %}
+{% endif %}
+
+
+@pytest.fixture
+def {{ component_name_lower }}(temp_project):
+    """Create {{ component_name }} instance for testing."""
+    return {{ component_name }}(project_root=temp_project)
+
+
+def test_{{ component_name_lower }}_initialization({{ component_name_lower }}):
+    """Test {{ component_name }} initializes correctly."""
+    assert {{ component_name_lower }} is not None
+
+
+def test_{{ component_name_lower }}_exception_handling({{ component_name_lower }}):
+    """Test {{ component_name }} handles exceptions correctly."""
+    # Trigger exception
+    try:
+        {{ component_name_lower }}.handle_error(Exception("Test error"))
+        handled = True
+    except Exception:
+        handled = False
+    
+    assert handled is True
+
+
+def test_{{ component_name_lower }}_error_recovery({{ component_name_lower }}):
+    """Test {{ component_name }} recovers from errors."""
+    # Simulate error condition
+    error_state = {"error": "simulated_failure"}
+    
+    result = {{ component_name_lower }}.recover(error_state)
+    
+    assert result is not None
+    assert result.get("recovered") is True
+
+
+def test_{{ component_name_lower }}_error_logging({{ component_name_lower }}, caplog):
+    """Test {{ component_name }} logs errors appropriately."""
+    test_error = ValueError("Test error message")
+    
+    {{ component_name_lower }}.handle_error(test_error)
+    
+    assert "Test error message" in caplog.text or len(caplog.records) > 0
+
+
+{% if integration_points %}
+def test_{{ component_name_lower }}_integration_error_propagation({{ component_name_lower }}):
+    """Test {{ component_name }} propagates errors correctly."""
+    {% for ip in integration_points %}
+    # Test error propagation to {{ ip.name }}
+    try:
+        {{ component_name_lower }}.propagate_to_{{ ip.name_lower }}(Exception("Test"))
+        propagated = True
+    except Exception:
+        propagated = False
+    
+    assert propagated is True
+    {% endfor %}
+{% endif %}
+
+
+def test_{{ component_name_lower }}_error_context({{ component_name_lower }}):
+    """Test {{ component_name }} preserves error context."""
+    error = Exception("Test error")
+    context = {"operation": "test_op", "user": "test_user"}
+    
+    result = {{ component_name_lower }}.handle_error(error, context=context)
+    
+    assert result is not None
+    {% if 'context' in component_name_lower %}
+    assert result.get("context") == context
+    {% endif %}
+
+
+def test_{{ component_name_lower }}_retry_logic({{ component_name_lower }}):
+    """Test {{ component_name }} retry logic on errors."""
+    fail_count = 0
+    max_retries = 3
+    
+    def failing_operation():
+        nonlocal fail_count
+        fail_count += 1
+        if fail_count < max_retries:
+            raise Exception("Temporary failure")
+        return "success"
+    
+    result = {{ component_name_lower }}.with_retry(failing_operation, max_retries=max_retries)
+    
+    assert result == "success"
+    assert fail_count == max_retries
+
+
+def test_{{ component_name_lower }}_error_classification({{ component_name_lower }}):
+    """Test {{ component_name }} classifies errors correctly."""
+    errors = [
+        ValueError("Invalid value"),
+        FileNotFoundError("File missing"),
+        RuntimeError("Runtime error")
+    ]
+    
+    for error in errors:
+        classification = {{ component_name_lower }}.classify_error(error)
+        assert classification is not None
+        assert isinstance(classification, str)

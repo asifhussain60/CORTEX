@@ -46,8 +46,15 @@ class TestManifest:
     
     def load(self):
         """Load manifest from file."""
+        if not self.manifest_path.exists():
+            return self.data
+        
         with open(self.manifest_path, "r", encoding="utf-8") as f:
-            self.data = yaml.safe_load(f) or {}
+            loaded = yaml.safe_load(f)
+            if loaded:
+                self.data = loaded
+        
+        return self.data
     
     def save(self):
         """Save manifest to file."""
@@ -120,6 +127,16 @@ class TestManifest:
             "critical_paths_uncovered": 0,  # To be enhanced with Tier 2
             "learning_gaps": learning_untested
         }
+    
+    def update_component(self, component_name: str, test_file: str, test_status: str, risk_score: float = 0.0):
+        """Update a component's test information."""
+        for category_data in self.data.get("categories", {}).values():
+            for component in category_data.get("components", []):
+                if component.get("name") == component_name:
+                    component["test_file"] = test_file
+                    component["status"] = test_status
+                    component["risk_score"] = risk_score
+                    return
     
     def get_untested_components(self, category: Optional[str] = None) -> List[Dict[str, Any]]:
         """Get untested components, optionally filtered by category."""

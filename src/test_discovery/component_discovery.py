@@ -323,6 +323,12 @@ class ComponentDiscoveryEngine:
                 return decorator.func.id
         return "unknown"
     
+    def discover_by_category(self, category: str) -> List[Component]:
+        """Discover components in a specific category."""
+        if not self.discovered_components:
+            self.discover_all()
+        return self.get_components_by_category(category)
+    
     def get_components_by_category(self, category: str) -> List[Component]:
         """Get all components in a specific category."""
         return [c for c in self.discovered_components if c.category == category]

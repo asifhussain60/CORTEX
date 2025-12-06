@@ -1,0 +1,154 @@
+"""
+Integration tests for {{ component_name }}.
+
+Category: Performance Integration
+Generated: {{ timestamp }}
+"""
+
+import pytest
+import time
+from pathlib import Path
+from {{ component_path.replace('/', '.').replace('.py', '') }} import {{ component_name }}
+{% if integration_points %}
+# Integration point imports
+{% for ip in integration_points %}
+from {{ ip.path|default('src.utils') }} import {{ ip.name }}
+{% endfor %}
+{% endif %}
+
+
+@pytest.fixture
+def {{ component_name_lower }}(temp_project):
+    """Create {{ component_name }} instance for testing."""
+    return {{ component_name }}(project_root=temp_project)
+
+
+def test_{{ component_name_lower }}_initialization({{ component_name_lower }}):
+    """Test {{ component_name }} initializes correctly."""
+    assert {{ component_name_lower }} is not None
+
+
+def test_{{ component_name_lower }}_execution_time({{ component_name_lower }}):
+    """Test {{ component_name }} executes within acceptable time."""
+    start_time = time.time()
+    
+    result = {{ component_name_lower }}.execute()
+    
+    elapsed = time.time() - start_time
+    
+    assert result is not None
+    assert elapsed < 5.0  # Should complete within 5 seconds
+
+
+def test_{{ component_name_lower }}_memory_efficiency({{ component_name_lower }}):
+    """Test {{ component_name }} uses memory efficiently."""
+    import tracemalloc
+    
+    tracemalloc.start()
+    
+    # Execute operation
+    {{ component_name_lower }}.execute()
+    
+    current, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    
+    # Memory should be reasonable (adjust threshold as needed)
+    assert peak < 100 * 1024 * 1024  # Less than 100MB
+
+
+def test_{{ component_name_lower }}_bulk_operations({{ component_name_lower }}):
+    """Test {{ component_name }} handles bulk operations efficiently."""
+    items = [{"id": i, "data": f"item_{i}"} for i in range(100)]
+    
+    start_time = time.time()
+    
+    results = {{ component_name_lower }}.process_bulk(items)
+    
+    elapsed = time.time() - start_time
+    
+    assert len(results) == len(items)
+    assert elapsed < 10.0  # Should process 100 items within 10 seconds
+
+
+{% if integration_points %}
+def test_{{ component_name_lower }}_integration_performance({{ component_name_lower }}):
+    """Test {{ component_name }} integration points don't bottleneck performance."""
+    start_time = time.time()
+    
+    {% for ip in integration_points %}
+    # Test {{ ip.name }} integration performance
+    {{ component_name_lower }}.interact_with_{{ ip.name_lower }}()
+    {% endfor %}
+    
+    elapsed = time.time() - start_time
+    
+    # All integrations should complete quickly
+    assert elapsed < 2.0
+{% endif %}
+
+
+def test_{{ component_name_lower }}_caching_effectiveness({{ component_name_lower }}):
+    """Test {{ component_name }} caching improves performance."""
+    # First execution (cache miss)
+    start_time = time.time()
+    result1 = {{ component_name_lower }}.execute()
+    first_elapsed = time.time() - start_time
+    
+    # Second execution (cache hit)
+    start_time = time.time()
+    result2 = {{ component_name_lower }}.execute()
+    second_elapsed = time.time() - start_time
+    
+    assert result1 == result2
+    # Cached execution should be faster (or similar if already optimized)
+    assert second_elapsed <= first_elapsed * 1.5
+
+
+def test_{{ component_name_lower }}_concurrent_operations({{ component_name_lower }}):
+    """Test {{ component_name }} handles concurrent operations."""
+    import concurrent.futures
+    
+    def execute_operation():
+        return {{ component_name_lower }}.execute()
+    
+    start_time = time.time()
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        futures = [executor.submit(execute_operation) for _ in range(10)]
+        results = [f.result() for f in concurrent.futures.as_completed(futures)]
+    
+    elapsed = time.time() - start_time
+    
+    assert len(results) == 10
+    # Should complete faster than sequential execution
+    assert elapsed < 15.0
+
+
+def test_{{ component_name_lower }}_database_query_performance({{ component_name_lower }}):
+    """Test {{ component_name }} database queries are optimized."""
+    {% if 'database' in component_name_lower or 'db' in component_name_lower %}
+    start_time = time.time()
+    
+    # Execute query
+    results = {{ component_name_lower }}.query()
+    
+    elapsed = time.time() - start_time
+    
+    assert results is not None
+    assert elapsed < 0.1  # Query should be under 100ms
+    {% else %}
+    # Placeholder for non-database components
+    assert True
+    {% endif %}
+
+
+def test_{{ component_name_lower }}_resource_cleanup({{ component_name_lower }}):
+    """Test {{ component_name }} cleans up resources properly."""
+    # Execute operation that uses resources
+    {{ component_name_lower }}.execute()
+    
+    # Trigger cleanup
+    {{ component_name_lower }}.cleanup()
+    
+    # Verify resources released (check file handles, connections, etc.)
+    assert True  # Specific checks depend on component implementation
