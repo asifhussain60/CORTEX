@@ -126,21 +126,22 @@ class TestTDDSessionState:
         assert len(data["implementation_scope"]) == 1
 
 
+@pytest.fixture
+def temp_project():
+    """Create temporary project directory for testing."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        project_root = Path(tmpdir) / "test-project"
+        project_root.mkdir()
+        
+        # Create cortex-brain structure
+        cortex_brain = project_root / "cortex-brain"
+        cortex_brain.mkdir()
+        
+        yield project_root
+
+
 class TestTDDImplementationOrchestrator:
     """Test TDDImplementationOrchestrator class."""
-    
-    @pytest.fixture
-    def temp_project(self):
-        """Create temporary project directory."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            project_root = Path(tmpdir) / "test-project"
-            project_root.mkdir()
-            
-            # Create cortex-brain structure
-            cortex_brain = project_root / "cortex-brain"
-            cortex_brain.mkdir()
-            
-            yield project_root
     
     def test_init(self, temp_project):
         """Test orchestrator initialization."""
@@ -505,3 +506,182 @@ class TestPhase2RedGreen:
         changed = orchestrator._get_changed_files()
         # Should detect unstaged change (if git tracks it)
         assert isinstance(changed, list)
+
+
+class TestPhase3Refactor:
+    """Test REFACTOR phase implementation."""
+    
+    def test_analyze_scope_categorizes_files(self, temp_project):
+        """Test scope analysis categorizes files correctly."""
+        orchestrator = TDDImplementationOrchestrator(
+            project_root=temp_project,
+            cortex_root=temp_project
+        )
+        
+        # Mock changed files
+        state = TDDSessionState(
+            session_id="test-123",
+            feature_name="Test Feature",
+            task_id="TASK-001"
+        )
+        state.implementation_scope = [
+            Path("src/module.py"),
+            Path("tests/test_module.py"),
+            Path("config.yaml"),
+            Path("cortex-brain/data.json"),
+            Path("src/tier1/working_memory.py")
+        ]
+        
+        result = orchestrator._analyze_scope(state)
+        
+        # tier1 is NOT out-of-scope in test context (no cortex-brain check)
+        assert len(result["implementation_files"]) == 2  # src/module.py + src/tier1/working_memory.py
+        assert Path("src/module.py") in result["implementation_files"]
+        assert len(result["test_files"]) == 1
+        assert Path("tests/test_module.py") in result["test_files"]
+        assert len(result["config_files"]) == 2  # config.yaml + cortex-brain/data.json
+        assert len(result["out_of_scope"]) == 0
+    
+    def test_detect_duplicates(self, temp_project):
+        """Test duplicate code detection."""
+        orchestrator = TDDImplementationOrchestrator(
+            project_root=temp_project,
+            cortex_root=temp_project
+        )
+        
+        # Create file with duplicate code
+        file1 = temp_project / "file1.py"
+        file2 = temp_project / "file2.py"
+        
+        duplicate_code = """def hello():
+    print("Hello")
+    print("World")
+    print("Test")
+    print("Duplicate")
+    return True"""
+        
+        file1.write_text(f"{duplicate_code}\\n\\ndef unique1():\\n    pass")
+        file2.write_text(f"{duplicate_code}\\n\\ndef unique2():\\n    pass")
+        
+        result = orchestrator._detect_duplicates([Path("file1.py"), Path("file2.py")])
+        
+        # Should find at least 1 duplicate 5-line block
+        assert "duplicates" in result
+        assert len(result["duplicates"]) >= 1
+    
+    def test_detect_redundancies(self, temp_project):
+        """Test redundancy detection (unused imports)."""
+        orchestrator = TDDImplementationOrchestrator(
+            project_root=temp_project,
+            cortex_root=temp_project
+        )
+        
+        # Create file with unused import
+        file1 = temp_project / "test_redundancy.py"
+        file1.write_text("import os\\nimport sys\\n\\ndef main():\\n    print('hello')")
+        
+        result = orchestrator._detect_redundancies([Path("test_redundancy.py")])
+        
+        assert "redundancies" in result
+        # May or may not find redundancies (basic heuristic)
+        assert isinstance(result["redundancies"], list)
+    
+    def test_validate_solid_srp(self, temp_project):
+        """Test SOLID validation detects SRP violations."""
+        orchestrator = TDDImplementationOrchestrator(
+            project_root=temp_project,
+            cortex_root=temp_project
+        )
+        
+        # Create class with too many methods (SRP violation - >10 methods)
+        file1 = temp_project / "test_solid.py"
+        methods = "\n".join([f"    def method{i}(self):\n        pass" for i in range(11)])  # 11 methods
+        file1.write_text(f"class TooBig:\n{methods}")
+        
+        result = orchestrator._validate_solid([Path("test_solid.py")])
+        
+        assert "violations" in result
+        assert len(result["violations"]) >= 1
+        assert result["violations"][0]["principle"] == "SRP"
+    
+    def test_detect_blockers(self, temp_project):
+        """Test out-of-scope blocker detection."""
+        orchestrator = TDDImplementationOrchestrator(
+            project_root=temp_project,
+            cortex_root=temp_project
+        )
+        
+        # Create file with syntax error
+        file1 = temp_project / "broken.py"
+        file1.write_text("def broken(\\n    pass")  # Syntax error
+        
+        result = orchestrator._detect_blockers([Path("broken.py")])
+        
+        assert "blockers" in result
+        assert len(result["blockers"]) > 0
+        assert result["blockers"][0]["type"] == "syntax_error"
+    
+    def test_generate_refactorings(self, temp_project):
+        """Test refactoring recommendation generation."""
+        orchestrator = TDDImplementationOrchestrator(
+            project_root=temp_project,
+            cortex_root=temp_project
+        )
+        
+        duplicates_result = {
+            "duplicates": [
+                {"locations": [("file1.py", 10), ("file2.py", 20)], "count": 2}
+            ]
+        }
+        redundancies_result = {
+            "redundancies": [
+                {"type": "unused_import", "file": "test.py", "line": 5, "message": "Unused import"}
+            ]
+        }
+        solid_result = {
+            "violations": [
+                {"principle": "SRP", "file": "big.py", "line": 1, "class": "TooBig", "message": "Too many methods"}
+            ]
+        }
+        
+        refactorings = orchestrator._generate_refactorings(
+            duplicates_result,
+            redundancies_result,
+            solid_result
+        )
+        
+        assert len(refactorings) == 3
+        assert any(r["type"] == "extract_method" for r in refactorings)
+        assert any(r["type"] == "remove_unused" for r in refactorings)
+        assert any(r["type"] == "split_class" for r in refactorings)
+    
+    def test_execute_refactor_phase_integration(self, temp_project):
+        """Test REFACTOR phase end-to-end."""
+        orchestrator = TDDImplementationOrchestrator(
+            project_root=temp_project,
+            cortex_root=temp_project
+        )
+        
+        # Start session
+        session = orchestrator.start_session(
+            feature_name="Test Feature",
+            task_id="TASK-001"
+        )
+        session_id = session["session_id"]
+        
+        # Load and advance to GREEN phase (prerequisite for REFACTOR)
+        state = orchestrator.get_session(session_id)
+        state.transition_to(TDDPhase.RED, checkpoint_id="ckpt-red")
+        state.transition_to(TDDPhase.GREEN, checkpoint_id="ckpt-green")
+        orchestrator._save_session_state(state)
+        
+        # Execute REFACTOR
+        result = orchestrator.execute_refactor_phase(session_id=session_id)
+        
+        # Should succeed (even with no files to refactor)
+        assert result["success"] is True
+        assert result["phase"] == "REFACTOR"
+        assert "scope" in result
+        assert "duplicates" in result
+        assert "solid_violations" in result
+
