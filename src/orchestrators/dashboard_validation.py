@@ -166,9 +166,8 @@ class CollectionValidator:
 
         if validation["success"]:
             return (
-                f"✅ Validation PASSED: {
-                    validation['passed']}/{
-                    validation['files_checked']} files meet standards"
+                f"✅ Validation PASSED: "
+                f"{validation['passed']}/{validation['files_checked']} files meet standards"
             )
         else:
             summary = f"❌ Validation FAILED: {validation['failed']} files below minimum\n"
@@ -201,9 +200,7 @@ class CollectionValidator:
 
             report += f"{status_icon} {file_type}.json\n"
             report += f"   Size: {details['size']:,} bytes ({details['size'] / 1024:.1f} KB)\n"
-            report += f"   Target: {
-                details['target']:,} bytes ({
-                details['target'] / 1024:.1f} KB)\n"
+            report += f"   Target: {details['target']:,} bytes ({details['target'] / 1024:.1f} KB)\n"
             report += f"   Progress: {details['percentage_of_target']}% of target\n"
             report += f"   Status: {details['message']}\n\n"
 
