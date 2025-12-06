@@ -48,8 +48,11 @@ class QuickTestCollector(CodeOrganizationCollector):
 print("Testing enhanced collector with LIMITED FILES (10 max)...")
 print("="*60)
 
+# Use dynamic project root detection
+CORTEX_ROOT = Path(__file__).parent.parent.parent
+
 try:
-    collector = QuickTestCollector(Path('C:/PROJECTS/CORTEX'))
+    collector = QuickTestCollector(CORTEX_ROOT)
     result = collector.collect()
     
     print("✅ Collection successful!")
