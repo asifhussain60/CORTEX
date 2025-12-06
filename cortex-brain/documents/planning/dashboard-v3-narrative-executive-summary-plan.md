@@ -1,39 +1,70 @@
-# Dashboard v3: Narrative Executive Summary Enhancement
+# Dashboard v3: Narrative Executive Summary + Overview Tab + Tech Stack Enhancements
 
 **Feature ID:** DASH-V3-001  
 **Created:** 2025-12-06  
-**Status:** ✅ COMPLETE  
-**Completed:** 2025-12-06  
+**Status:** 🔄 IN PROGRESS (70% Complete)  
+**Phases Complete:** 1-4.2 (Backend + Overview UI)  
+**Phases Remaining:** 4.3-6 (Testing, Docs, Tech Stack)  
 **Complexity:** HIGH  
-**Actual Effort:** 5-7 days
+**Original Estimate:** 5-7 days (Executive Summary)  
+**Expanded Scope:** 16 days (+ Overview Tab + Tech Stack Enhancements)
 
 ---
 
 ## Executive Summary
 
-Transform the Dashboard Executive Summary tab from metrics-focused display to comprehensive narrative format that explains what applications do, their composition, capabilities, and technical foundation through automated documentation extraction and intelligent synthesis.
+**Original Scope:** Transform the Dashboard Executive Summary tab from metrics-focused display to comprehensive narrative format
+
+**Expanded Scope (Dec 6, 2025):**
+1. ✅ Executive Summary Tab (narrative format) - COMPLETE
+2. 🔄 Overview Tab (health monitoring) - 70% COMPLETE (Backend done, UI done, testing in progress)
+3. ⏳ Tech Stack Enhancements (12 improvements) - PENDING
+
+**Current Status:** Phase 4.3 (Overview Tab browser testing) in progress. Backend collectors operational (26/26 tests passing). UI components implemented with D3.js visualizations. Dashboard running on port 8082 for testing.
+
+**Data Review Finding:** All 5 repositories (mock, luum-fresh, tcbulk, v5-prevalidation-ws, v5-coldfusion) contain sufficient data to generate Overview tab. Tech Stack data reveals 12 high-value enhancement opportunities (solution structure, framework ecosystem, technology risk scoring).
 
 ---
 
 ## Vision & Goals
 
-### Problem Statement
+### Problem Statement (Original)
 Current dashboard executive summary shows health scores and metrics without context. Stakeholders cannot understand:
 - What the application actually does
 - How it's architecturally composed
 - What technologies power it
 - What key capabilities it provides
 
+### Expanded Problem Statement (Overview Tab)
+Stakeholders need real-time health monitoring to:
+- Quickly assess overall system health (single score + trend)
+- Identify critical issues requiring immediate attention
+- Understand composition breakdown (languages, components)
+- Track health across multiple categories (quality, security, tests, docs)
+
+### Expanded Problem Statement (Tech Stack)
+Current Tech Stack tab shows basic version/status but misses rich context available in data:
+- Solution/project structure visualization (20 solutions, 109 projects in luum-fresh)
+- Framework ecosystem mapping (detect duplicate DI containers, logging frameworks)
+- Technology risk scoring (EOL proximity, CVE count, community health)
+- Migration roadmap intelligence (.NET Framework 4.8 → .NET 8)
+
 ### Solution Vision
-Automated narrative generation system that:
+Automated narrative generation + health monitoring + tech intelligence system that:
 1. Extracts project descriptions from documentation
 2. Analyzes codebase architecture and composition
 3. Identifies key capabilities and features
 4. Synthesizes technical foundation details
-5. Presents everything in natural, readable format
+5. **Monitors system health in real-time with actionable insights**
+6. **Visualizes solution/project structure with dependency mapping**
+7. **Maps framework ecosystem with consolidation recommendations**
+8. **Scores technology risk with migration roadmaps**
+9. Presents everything in natural, readable format
 
-### Success Criteria
+### Success Criteria (Expanded)
 - Non-technical stakeholders understand the application in <3 minutes
+- Technical stakeholders identify critical issues in <30 seconds (Overview tab)
+- Architects visualize solution structure and make migration decisions (Tech Stack)
 - Technical details remain accurate and auto-update
 - Works across multiple project types (web, API, CLI, library)
 - Generation completes in <2 seconds
@@ -901,8 +932,411 @@ Automated narrative generation system that:
 
 ---
 
-**Plan Status:** ✅ APPROVED - Ready for implementation  
-**Estimated Completion:** 2025-12-13 (7 days from approval)  
+**Plan Status:** 🔄 IN PROGRESS (70% Complete)  
+**Phase 1-4.2 Complete:** 2025-12-06 (Backend + Overview UI)  
+**Phase 4.3-6 In Progress:** Testing, Documentation, Tech Stack  
+**Estimated Completion:** 2025-12-22 (16 days total)  
 **Risk Level:** MEDIUM (well-mitigated)  
-**Business Value:** HIGH (improves stakeholder comprehension)
+**Business Value:** VERY HIGH (improves stakeholder comprehension + decision-making)
+
+---
+
+## PHASE 7-9: TECH STACK ENHANCEMENTS (ADDED 2025-12-06)
+
+### Data Review Summary
+
+**Repositories Analyzed:** 5 (mock, luum-fresh, tcbulk, v5-prevalidation-ws, v5-coldfusion)  
+**Data Availability:** ✅ EXCELLENT - Rich metadata buried in tech-stack.json  
+**Enhancement Opportunities:** 12 identified across 4 categories  
+**Complete Analysis:** `cortex-brain/documents/analysis/dashboard-data-review-and-tech-stack-enhancements.md`
+
+**Key Findings:**
+- luum-fresh: 20 solutions, 109 projects, 766 lines of tech-stack metadata
+- v5-prevalidation-ws: Duplicate frameworks detected (Autofac + Unity, log4net + Serilog)
+- All repos: Package counts per project available (272 packages in PrevalBusiness = bloat risk)
+- Missing: EOL dates, CVE details, migration paths (requires external data enrichment)
+
+---
+
+### Phase 7: Tech Stack Quick Wins (Days 8-9)
+
+**Duration:** 2 days  
+**Objective:** Implement high-value enhancements with existing data  
+**Risk:** LOW - All data available, no backend changes required
+
+#### 7.1 Multi-Solution Dashboard
+
+**Duration:** 4 hours  
+**Deliverable:** `MultiSolutionDashboard.js`
+
+**Features:**
+- Card grid showing all solutions in repository
+- Each card: Solution name, project count, VS version, path
+- Click to expand: Project list with frameworks
+- Summary stats: Total solutions, total projects, VS version distribution
+
+**Data Source:**
+```json
+tech-stack.json → backend[].metadata.solutions[]
+```
+
+**UI Design:**
+- Responsive card grid (3 columns desktop, 2 tablet, 1 mobile)
+- Color-coded by VS version (17=green, 16=yellow, <16=red)
+- Expandable sections for project details
+
+**Tests:**
+- Render with 20 solutions (luum-fresh)
+- Render with 1 solution (v5-prevalidation-ws)
+- Expand/collapse functionality
+- Responsive breakpoints
+
+**Git Checkpoint:** After completion
+
+#### 7.2 Package Health Dashboard
+
+**Duration:** 3 hours  
+**Deliverable:** `PackageHealthDashboard.js`
+
+**Features:**
+- Bar chart: Package count per project
+- Average line overlay
+- Outlier detection (>1.5x average = warning, >2x = critical)
+- Project detail cards for outliers
+
+**Data Source:**
+```json
+tech-stack.json → backend[].metadata.projects[].packages
+```
+
+**Analysis Logic:**
+```javascript
+const average = sum(packages) / projects.length
+const outliers = projects.filter(p => p.packages > average * 1.5)
+```
+
+**UI Design:**
+- Horizontal bar chart with D3.js
+- Color-coded bars: Green (<avg), Yellow (1-1.5x), Orange (1.5-2x), Red (>2x)
+- Tooltip: Project name, package count, % above average
+
+**Tests:**
+- Calculate average correctly (272, 170, 173 → avg 205)
+- Detect outliers (PrevalBusiness = 272 = 1.33x = warning)
+- Render chart with scale
+- Responsive resize
+
+**Git Checkpoint:** After completion
+
+#### 7.3 Framework Ecosystem Dashboard
+
+**Duration:** 5 hours  
+**Deliverable:** `FrameworkEcosystemMap.js`
+
+**Features:**
+- Grouped cards by category (Logging, DI Container, JSON, Security, etc.)
+- Framework count per category
+- Redundancy detection (multiple frameworks in same category)
+- Consolidation recommendations
+
+**Data Source:**
+```json
+tech-stack.json → backend[].metadata.frameworks[]
+// Parse category from name: "Autofac 6.4.0 (DI Container)"
+```
+
+**Category Extraction:**
+```javascript
+const parseFramework = (name) => {
+  const match = name.match(/(.+?)\s+[\d.]+\s+\((.+?)\)/)
+  return {
+    name: match[1],
+    version: name.match(/[\d.]+/)[0],
+    category: match[2] || 'Uncategorized'
+  }
+}
+```
+
+**UI Design:**
+- Category accordion (collapsed by default)
+- Badge showing framework count per category
+- Warning icon for categories with >1 framework
+- Recommendations panel for consolidation
+
+**Tests:**
+- Parse framework strings correctly
+- Group by category
+- Detect redundancy (Autofac + Unity = duplicate DI)
+- Render accordion UI
+
+**Git Checkpoint:** After completion
+
+**Phase 7 Total:** 12 hours
+
+---
+
+### Phase 8: Tech Stack Advanced (Days 10-12)
+
+**Duration:** 3 days  
+**Objective:** Add rich visualizations and risk intelligence  
+**Risk:** MEDIUM - Requires backend data enrichment for EOL dates
+
+#### 8.1 Solution Explorer with Tree Visualization
+
+**Duration:** 8 hours  
+**Deliverable:** `SolutionStructureExplorer.js`
+
+**Features:**
+- D3.js tree diagram: Solutions → Projects → Frameworks
+- Interactive: Click to expand/collapse branches
+- Visual indicators: Node size = LOC, color = status
+- Dependency edges between projects (if available)
+
+**Data Source:**
+```json
+tech-stack.json → backend[].metadata.solutions[]
+```
+
+**D3.js Implementation:**
+```javascript
+// Hierarchical data structure
+{
+  name: "Repository",
+  children: [
+    {
+      name: "Luum.sln",
+      children: [
+        { name: "Luum.Web", value: 12000 },
+        { name: "Luum.Api", value: 8000 }
+      ]
+    }
+  ]
+}
+```
+
+**UI Design:**
+- Zoomable tree (pan + zoom controls)
+- Collapsible nodes
+- Tooltip on hover: Project details
+- Export as SVG button
+
+**Tests:**
+- Build hierarchy from flat data
+- Render tree with D3.js
+- Expand/collapse nodes
+- Zoom/pan functionality
+
+**Git Checkpoint:** After completion
+
+#### 8.2 Technology Risk Scorecard
+
+**Duration:** 10 hours (6 backend + 4 frontend)  
+**Deliverable:** Backend: `tech_stack_risk_scorer.py`, Frontend: `TechnologyRiskScorecard.js`
+
+**Backend Enhancement:**
+- Scrape EOL dates from endoflife.date API
+- Calculate risk score per technology:
+  - Age factor: Months since last update
+  - EOL proximity: Months until EOL (<12 = HIGH)
+  - CVE count: Security vulnerabilities
+  - Community health: GitHub stars, release frequency
+- Add to tech-stack.json schema
+
+**Risk Score Formula:**
+```python
+def calculate_risk_score(tech):
+    age_score = min(months_since_update / 24, 1.0) * 30
+    eol_score = max(0, (12 - months_to_eol) / 12) * 40 if has_eol else 0
+    cve_score = min(cve_count / 10, 1.0) * 30
+    return age_score + eol_score + cve_score  # Max 100
+```
+
+**Frontend Features:**
+- Risk matrix: Technologies plotted by risk score and impact (project count)
+- Scorecard table: Technology, risk score, EOL date, recommendations
+- Color-coded: Green (<30), Yellow (30-60), Red (>60)
+- Priority queue: Top 5 technologies needing attention
+
+**Tests:**
+- Backend: Risk score calculation accuracy
+- Backend: EOL date API integration
+- Frontend: Risk matrix rendering
+- Frontend: Scorecard sorting/filtering
+
+**Git Checkpoint:** After completion
+
+**Phase 8 Total:** 18 hours
+
+---
+
+### Phase 9: Tech Stack Intelligence (Days 13-16)
+
+**Duration:** 4 days  
+**Objective:** Advanced analytics and recommendations  
+**Risk:** HIGH - Requires AI/rules engine and external data sources
+
+#### 9.1 Migration Roadmap Generator
+
+**Duration:** 12 hours  
+**Deliverable:** `MigrationRoadmapGenerator.js` + `migration_path_matrix.yaml`
+
+**Features:**
+- Detect outdated technologies (.NET Framework 4.8, C# 7.3)
+- Suggest migration paths (matrix-based):
+  - .NET Framework 4.8 → .NET 8
+  - C# 7.3 → C# 12
+  - log4net → Serilog
+- Estimate effort: Project count × complexity factor
+- Generate phased roadmap (Phase 1-3)
+
+**Migration Matrix (YAML):**
+```yaml
+migrations:
+  - from: ".NET Framework 4.8"
+    to: ".NET 8"
+    complexity: HIGH
+    effort_per_project: 40h
+    blockers: ["WCF", "Remoting", "AppDomains"]
+    steps:
+      - Assess compatibility with .NET Upgrade Assistant
+      - Migrate to .NET Core 3.1 (intermediate)
+      - Upgrade to .NET 8
+```
+
+**Roadmap Generator Logic:**
+```javascript
+const generateRoadmap = (outdatedTechs, projectCounts) => {
+  const migrations = outdatedTechs.map(tech => ({
+    technology: tech.name,
+    path: findMigrationPath(tech),
+    effort: projectCounts[tech] * effortMatrix[tech],
+    priority: calculatePriority(tech.risk, projectCounts[tech])
+  }))
+  
+  return groupByPhase(sortByPriority(migrations))
+}
+```
+
+**UI Design:**
+- Timeline visualization (3 phases over 12-18 months)
+- Phase cards: Technologies to migrate, effort estimate, blockers
+- Interactive: Drag to reorder priorities
+- Export as roadmap document
+
+**Tests:**
+- Migration path lookup
+- Effort estimation
+- Phasing algorithm
+- Timeline rendering
+
+**Git Checkpoint:** After completion
+
+#### 9.2 Framework Health Heatmap
+
+**Duration:** 8 hours  
+**Deliverable:** `FrameworkHealthHeatmap.js`
+
+**Features:**
+- 2D heatmap: Frameworks (rows) × Health factors (columns)
+- Health factors: Version currency, CVE count, EOL proximity, community health
+- Color intensity: Green (healthy) → Red (critical)
+- Click cell: Drill down to details
+
+**Data Requirements:**
+- Version currency: `status` field (already have)
+- CVE count: `cve_count` field (already have)
+- EOL proximity: From risk scorecard (Phase 8.2)
+- Community health: GitHub stars, release frequency (requires scraping)
+
+**Heatmap Implementation (D3.js):**
+```javascript
+const heatmap = d3.select("#heatmap")
+  .selectAll("rect")
+  .data(flattenData(frameworks, healthFactors))
+  .enter().append("rect")
+  .attr("fill", d => colorScale(d.value))
+```
+
+**UI Design:**
+- Interactive heatmap with zoom
+- Legend: Health score scale
+- Tooltip: Framework name, factor name, score, recommendation
+- Filter: Show only critical (score <50)
+
+**Tests:**
+- Data flattening (frameworks × factors)
+- Color scale accuracy
+- Tooltip content
+- Filter functionality
+
+**Git Checkpoint:** After completion
+
+#### 9.3 Dependency Bloat Analyzer
+
+**Duration:** 4 hours  
+**Deliverable:** `DependencyBloatAnalyzer.js`
+
+**Features:**
+- Distribution chart: Package count histogram
+- Statistical analysis: Mean, median, std dev, outliers
+- Bloat score per project: `(packages - median) / std_dev`
+- Recommendations: Projects with bloat score >2
+
+**Analysis Logic:**
+```javascript
+const analyzeBloat = (projects) => {
+  const packageCounts = projects.map(p => p.packages)
+  const mean = calculateMean(packageCounts)
+  const median = calculateMedian(packageCounts)
+  const stdDev = calculateStdDev(packageCounts)
+  
+  return projects.map(p => ({
+    ...p,
+    bloatScore: (p.packages - median) / stdDev,
+    recommendation: p.bloatScore > 2 ? "Review dependencies" : "OK"
+  }))
+}
+```
+
+**UI Design:**
+- Histogram: Package count distribution (bins of 25)
+- Box plot: Show median, quartiles, outliers
+- Table: Projects with bloat score, recommendations
+- Drill-down: Top 10 packages per project (requires package list)
+
+**Tests:**
+- Statistical calculation accuracy
+- Bloat score formula
+- Histogram binning
+- Outlier detection
+
+**Git Checkpoint:** After completion
+
+**Phase 9 Total:** 24 hours
+
+---
+
+### Tech Stack Phases Summary
+
+| Phase | Duration | Deliverables | Risk | Value |
+|-------|----------|--------------|------|-------|
+| Phase 7 | 2 days (12h) | 3 dashboards (Solution, Package, Framework) | LOW | HIGH |
+| Phase 8 | 3 days (18h) | Solution Explorer + Risk Scorecard | MEDIUM | VERY HIGH |
+| Phase 9 | 4 days (24h) | Migration Roadmap + Heatmap + Bloat Analyzer | HIGH | HIGH |
+| **TOTAL** | **9 days (54h)** | **12 enhancements** | **MEDIUM** | **VERY HIGH** |
+
+**Combined Project Timeline:**
+- Overview Tab (Phases 1-6): 7 days
+- Tech Stack Enhancements (Phases 7-9): 9 days
+- **Total: 16 days (3.2 weeks)**
+
+---
+
+**Plan Status:** 🔄 IN PROGRESS (70% Complete)  
+**Phase 1-4.2 Complete:** 2025-12-06 (Backend + Overview UI)  
+**Phase 4.3-6 Remaining:** Testing, Documentation (2 days)  
+**Phase 7-9 Planned:** Tech Stack Enhancements (9 days)  
+**Estimated Completion:** 2025-12-22 (16 days total)  
+**Risk Level:** MEDIUM (well-mitigated)  
+**Business Value:** VERY HIGH (improves stakeholder comprehension + decision-making)
 
