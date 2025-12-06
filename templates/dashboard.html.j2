@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Dashboard - {{ metadata.generated_at[:10] }}</title>
+    <script src="https://d3js.org/d3.v{{ d3_version }}.min.js"></script>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <header>
+        <h1>🧠 CORTEX System Dashboard</h1>
+        <p class="timestamp">Generated: {{ metadata.generated_at }}</p>
+        <p class="version">CORTEX v{{ metadata.cortex_version }}</p>
+    </header>
+    
+    <main class="dashboard-grid">
+        {% for chart_id, config in charts.items() %}
+        <div class="chart-container" id="{{ chart_id }}-container">
+            <h2>{{ config.title }}</h2>
+            <svg id="{{ chart_id }}"></svg>
+        </div>
+        {% endfor %}
+    </main>
+    
+    <script>
+        // Chart data and configs
+        const data = {{ data | tojson }};
+        const charts = {{ charts | tojson }};
+        const colorPalette = {{ color_palette | tojson }};
+        
+        // Render each chart
+        Object.keys(charts).forEach(chartId => {
+            renderChart(chartId, charts[chartId], data);
+        });
+        
+        function renderChart(chartId, config, data) {
+            // Chart rendering logic will be implemented in Phase 1
+            console.log(`Rendering ${chartId}:`, config);
+        }
+    </script>
+</body>
+</html>

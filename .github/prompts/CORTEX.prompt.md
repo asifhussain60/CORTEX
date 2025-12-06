@@ -78,7 +78,7 @@ ALL responses MUST use this 5-part structure:
 ## 🚀 Core Workflows
 
 ### Planning System 2.0
-- **Commands:** `plan [feature]`, `plan ado`, `approve plan`
+- **Commands:** `plan [feature]`, `create a plan`, `make a plan`, `plan ado`, `approve plan`
 - **Features:** Vision API (screenshot extraction), DoR/DoD validation, file-based persistence, cross-chat resumption
 - **Interactive mode:** Once planning starts, all input assumed for plan until "approve plan"
 - **Guide:** `.github/prompts/modules/planning-orchestrator-guide.md`
@@ -117,6 +117,7 @@ ALL responses MUST use this 5-part structure:
 | Command | Description | Context |
 |---------|-------------|---------|
 | `plan [feature]` | Start interactive planning (auto-includes TDD) | All |
+| `create a plan` | Alternative planning trigger | All |
 | `plan ado` | Create ADO work items | All |
 | `execute all phases autonomously` | Run plan end-to-end without approval | All |
 | `auto chained` | Synonym for autonomous execution | All |
