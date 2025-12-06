@@ -1,0 +1,432 @@
+/**
+ * Dependency Bloat Analyzer - Styles
+ * 
+ * Author: Asif Hussain
+ * Date: December 6, 2025
+ */
+
+/* Container */
+.dependency-bloat-analyzer {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* Header */
+.bloat-header {
+    margin-bottom: 30px;
+}
+
+.bloat-header h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+/* Statistics Summary */
+.bloat-stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.stat-unit {
+    font-size: 12px;
+    color: #95a5a6;
+}
+
+/* Histogram Section */
+.bloat-histogram-section {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.bloat-histogram-section h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+}
+
+.bloat-histogram {
+    display: block;
+    margin: 0 auto;
+}
+
+.bloat-histogram .bar {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.bloat-histogram .bar:hover {
+    opacity: 1 !important;
+}
+
+.bloat-histogram .x-axis text,
+.bloat-histogram .y-axis text {
+    font-size: 12px;
+    fill: #2c3e50;
+}
+
+.bloat-histogram .x-axis path,
+.bloat-histogram .x-axis line,
+.bloat-histogram .y-axis path,
+.bloat-histogram .y-axis line {
+    stroke: #95a5a6;
+}
+
+.bloat-histogram .bar-label {
+    fill: #2c3e50;
+    font-weight: 600;
+}
+
+/* Box Plot Section */
+.bloat-boxplot-section {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.bloat-boxplot-section h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+}
+
+.bloat-boxplot {
+    display: block;
+    margin: 0 auto;
+}
+
+.bloat-boxplot .y-axis text {
+    font-size: 12px;
+    fill: #2c3e50;
+}
+
+.bloat-boxplot .y-axis path,
+.bloat-boxplot .y-axis line {
+    stroke: #95a5a6;
+}
+
+.bloat-boxplot .outlier {
+    cursor: pointer;
+    transition: r 0.2s;
+}
+
+.bloat-boxplot .outlier:hover {
+    r: 7;
+}
+
+/* Tooltip */
+.bloat-tooltip {
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    pointer-events: none;
+    z-index: 1000;
+    max-width: 300px;
+}
+
+.bloat-tooltip .tooltip-header {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 5px;
+}
+
+.bloat-tooltip .tooltip-solutions {
+    margin-top: 8px;
+    font-size: 11px;
+    color: #bdc3c7;
+    font-style: italic;
+}
+
+/* Solutions Table */
+.bloat-solutions-table {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.bloat-solutions-table h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+}
+
+.bloat-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bloat-table thead tr {
+    background: #ecf0f1;
+}
+
+.bloat-table th {
+    padding: 12px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #bdc3c7;
+}
+
+.bloat-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #34495e;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.bloat-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.bloat-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.bloat-table tbody tr.category-critical {
+    background-color: #ffe6e6;
+}
+
+.bloat-table tbody tr.category-warning {
+    background-color: #fff4e6;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.badge-critical {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.badge-warning {
+    background-color: #f39c12;
+    color: white;
+}
+
+.badge-normal {
+    background-color: #27ae60;
+    color: white;
+}
+
+/* Recommendations */
+.bloat-recommendations {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bloat-recommendations h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+}
+
+.recommendations-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.recommendations-list li {
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #ecf0f1;
+    border-left: 4px solid #3498db;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #2c3e50;
+}
+
+.recommendations-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* Emoji icons in recommendations */
+.recommendations-list li:has(⚠️) {
+    border-left-color: #e74c3c;
+    background: #ffe6e6;
+}
+
+.recommendations-list li:has(📊) {
+    border-left-color: #f39c12;
+    background: #fff4e6;
+}
+
+.recommendations-list li:has(✅) {
+    border-left-color: #27ae60;
+    background: #e8f5e9;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .bloat-stats-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .bloat-histogram,
+    .bloat-boxplot {
+        width: 100%;
+        max-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .bloat-stats-summary {
+        grid-template-columns: 1fr;
+    }
+    
+    .bloat-histogram-section,
+    .bloat-boxplot-section,
+    .bloat-solutions-table,
+    .bloat-recommendations {
+        padding: 20px;
+    }
+    
+    .bloat-table {
+        font-size: 12px;
+    }
+    
+    .bloat-table th,
+    .bloat-table td {
+        padding: 8px;
+    }
+    
+    /* Hide less critical columns on mobile */
+    .bloat-table th:nth-child(3),
+    .bloat-table td:nth-child(3) {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-value {
+        font-size: 24px;
+    }
+    
+    .bloat-header h2 {
+        font-size: 22px;
+    }
+    
+    .bloat-histogram-section h3,
+    .bloat-boxplot-section h3,
+    .bloat-solutions-table h3,
+    .bloat-recommendations h3 {
+        font-size: 18px;
+    }
+    
+    /* Stack table layout for very small screens */
+    .bloat-table,
+    .bloat-table thead,
+    .bloat-table tbody,
+    .bloat-table th,
+    .bloat-table td,
+    .bloat-table tr {
+        display: block;
+    }
+    
+    .bloat-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    .bloat-table tr {
+        margin-bottom: 15px;
+        border: 1px solid #ecf0f1;
+        border-radius: 4px;
+    }
+    
+    .bloat-table td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+    }
+    
+    .bloat-table td:before {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 600;
+        content: attr(data-label);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .bloat-header,
+    .bloat-stats-summary,
+    .bloat-histogram-section,
+    .bloat-boxplot-section,
+    .bloat-solutions-table,
+    .bloat-recommendations {
+        page-break-inside: avoid;
+    }
+    
+    .bloat-tooltip {
+        display: none;
+    }
+}
