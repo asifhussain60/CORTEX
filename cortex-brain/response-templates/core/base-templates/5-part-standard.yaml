@@ -1,0 +1,34 @@
+standard_5_part:
+  base_structure: '## 🧠 CORTEX {operation}
+
+    **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+    ---
+
+
+    ### 🎯 My Understanding Of Your Request
+
+    {understanding_content}
+
+
+    ### ⚠️ Challenge
+
+    {challenge_content}
+
+
+    ### 💬 Response
+
+    {response_content}
+
+
+    ### 📝 Your Request
+
+    {request_echo_content}
+
+
+    ### 🔍 Next Steps
+
+    {next_steps_content}
+
+    '

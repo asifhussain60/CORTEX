@@ -1,0 +1,63 @@
+category: orchestrators/planning
+templates:
+  planning:
+    inherits_from: core/base-templates/5-part-standard.yaml
+    name: Planning System 2.0
+    triggers:
+    - plan
+    - planning
+    - plan feature
+    - plan ado
+    - create plan
+    - start planning
+    - planning system
+    response_type: operational
+    expected_orchestrator: planning_orchestrator
+    operation_name: Planning
+    sections:
+      understanding_content: You want to create a comprehensive feature plan with
+        DoR/DoD validation
+      challenge_content: No Challenge - Structured planning with Vision API support
+      response_content: "## \U0001F4CB CORTEX Planning System 2.0\n\n**Zero-ambiguity\
+        \ planning** with Vision API, DoR validation, and file persistence\n\n**Key\
+        \ Features:**\n\n**1. Vision API Integration**\n- Upload screenshots (UI mockups,\
+        \ ADO items, error messages)\n- Auto-extract requirements from images\n- OCR\
+        \ text extraction\n- Visual context for planning\n\n**2. File-Based Planning**\n\
+        - Plans saved to `cortex-brain/documents/planning/`\n- Git-trackable for version\
+        \ control\n- Resumable across sessions\n- Markdown format for portability\n\
+        \n**3. Definition of Ready (DoR) Validation**\n- ✅ Clear acceptance criteria\n\
+        - ✅ Technical approach defined\n- ✅ Dependencies identified\n- ✅ Test strategy\
+        \ outlined\n- ✅ Security considerations (OWASP review)\n- ✅ Performance targets\
+        \ set\n- ✅ Estimate provided\n\n**4. Definition of Done (DoD) Validation**\n\
+        - ✅ All tests pass (100%)\n- ✅ Code reviewed\n- ✅ Documentation updated\n\
+        - ✅ Security scan clean\n- ✅ Performance benchmarks met\n- ✅ Git checkpoint\
+        \ completed\n\n**Planning Modes:**\n\n1. **Interactive Planning** - Step-by-step\
+        \ guided planning\n   - Requirements gathering\n   - Technical design\n  \
+        \ - Task breakdown\n   - Estimate calculation\n\n2. **ADO Planning** - Import\
+        \ Azure DevOps work items\n   - Auto-extract from screenshots\n   - Parse\
+        \ ADO fields\n   - Generate implementation plan\n\n3. **Quick Planning** -\
+        \ Minimal viable plan\n   - Fast-track for small features\n   - Essential\
+        \ validation only\n\n**Plan Execution:**\n- Say \"approve plan [name]\" to\
+        \ start implementation\n- Say \"resume plan [name]\" to continue existing\
+        \ plan\n- Plan guides TDD Mastery workflow automatically\n\n**Output Example:**\n\
+        ```\ncortex-brain/documents/planning/\n├── user-authentication-plan-2025-12-05.md\n\
+        ├── payment-integration-plan-2025-12-06.md\n└── api-optimization-plan-2025-12-07.md\n\
+        ```\n"
+      request_echo_content: Create comprehensive feature plan with DoR/DoD validation
+      next_steps_content: '**Planning Commands:**
+
+
+        1. Say "plan [feature name]" for interactive planning
+
+        2. Say "plan ado" to import Azure DevOps work item (upload screenshot)
+
+        3. Say "plan quick [feature]" for fast-track planning
+
+        4. Say "resume plan [name]" to continue existing plan
+
+        5. Say "list plans" to see all saved plans
+
+
+        **Vision API:** Upload screenshots directly in chat for auto-extraction
+
+        '

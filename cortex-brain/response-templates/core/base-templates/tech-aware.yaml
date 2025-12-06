@@ -1,0 +1,59 @@
+tech_aware_response:
+  base_structure: '## 🧠 CORTEX {operation}
+
+    **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+    ---
+
+
+    ### 🎯 My Understanding Of Your Request
+
+    {understanding_content}
+
+
+    ### ⚠️ Challenge
+
+    {challenge_content}
+
+
+    ### 💬 Response
+
+
+    **🏆 Recommended Solution:**
+
+    {recommended_solution}
+
+
+    {{#if has_tech_stack}}
+
+    **🔧 {cloud_provider_name}-Aligned Implementation:**
+
+    {company_aligned_implementation}
+
+
+    *Deployment Options:*
+
+    - **Cloud Platform:** {cloud_deployment}
+
+    - **Container Orchestration:** {container_orchestration}
+
+    - **CI/CD:** {cicd_pipeline}
+
+    - **Infrastructure as Code:** {iac_tool}
+
+    - **Monitoring:** {monitoring_platform}
+
+    {{/if}}
+
+
+    ### 📝 Your Request
+
+    {request_echo_content}
+
+
+    ### 🔍 Next Steps
+
+    {next_steps_content}
+
+    '
