@@ -12,7 +12,7 @@ import { loadDashboardData, clearCache, exportToJson, exportToCsv, enrichDashboa
 import { initializeAdaptiveVisibility } from './adaptive-visibility.js';
 import { renderArchitecturePanels } from './components/architecture-panels.js';
 import { renderExecutiveSummary } from './components/executive-tab.js';
-import { renderOverview } from './components/overview-tab.js';
+import { renderOverview } from './components/overview-tab-v3.js'; // UPDATED: Use new v3 component
 import { renderTechStack } from './components/tech-stack-tab.js';
 import { renderSecurity } from './components/security-tab.js';
 import { renderArchitecture } from './components/architecture-tab.js';
@@ -256,7 +256,8 @@ async function renderCurrentTab() {
                 contentHtml = renderExecutiveSummary(appState.data);
                 break;
             case 'overview':
-                contentHtml = renderOverview(appState.data);
+                // Pass overview data specifically to new v3 component
+                contentHtml = renderOverview(appState.data.overview || appState.data);
                 break;
             case 'tech-stack':
                 contentHtml = renderTechStack(appState.data);

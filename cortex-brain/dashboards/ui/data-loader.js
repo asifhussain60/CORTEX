@@ -22,6 +22,7 @@ let REPOSITORY_REGISTRY = null;
 
 // Data files to load
 const DATA_FILES = [
+    'overview.json',                // NEW: Overview Tab data (OverviewCollector output)
     'executive-summary.json',
     'health-data.json',
     'tech-stack.json',
@@ -133,13 +134,14 @@ export async function loadDashboardData(source = 'mock') {
         const data = {
             source,
             timestamp: new Date().toISOString(),
-            executiveSummary: results[0],
-            healthData: results[1],
-            techStack: results[2],
-            security: results[3],
-            architecture: results[4],
-            codeOrganization: results[5],
-            vendors: results[6]
+            overview: results[0],            // NEW: Overview data (OverviewCollector output)
+            executiveSummary: results[1],
+            healthData: results[2],
+            techStack: results[3],
+            security: results[4],
+            architecture: results[5],
+            codeOrganization: results[6],
+            vendors: results[7]
         };
         
         // Validate data (temporarily disabled for debugging)
