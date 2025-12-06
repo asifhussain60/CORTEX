@@ -252,7 +252,14 @@ class DeploymentGates:
         elif gate23["severity"] == "WARNING" and not gate23["passed"]:
             results["warnings"].append(gate23["message"])
         
-        # ALL 23 GATES MANDATORY - No skipping allowed
+        # Gate 24: Admin Operations Exclusion (ERROR - security/privacy)
+        gate24 = self._validate_admin_operations_excluded()
+        results["gates"].append(gate24)
+        if gate24["severity"] == "ERROR" and not gate24["passed"]:
+            results["passed"] = False
+            results["errors"].append(gate24["message"])
+        
+        # ALL 24 GATES MANDATORY - No skipping allowed
         # Enforced by DEPLOYMENT_GATE_ENFORCEMENT Tier 0 instinct
         # See: cortex-brain/brain-protection-rules.yaml (rule_id: DEPLOYMENT_GATE_ENFORCEMENT)
         
@@ -3464,5 +3471,135 @@ class DeploymentGates:
             gate["message"] = f"Plan execution orchestrator validation error: {str(e)}"
             gate["details"]["error_type"] = type(e).__name__
             logger.error(f"Gate 23 validation error: {e}", exc_info=True)
+        
+        return gate
+    
+    def _validate_admin_operations_excluded(self) -> Dict[str, Any]:
+        """
+        Gate 24: Validate admin-only operations are excluded from production build.
+        
+        Ensures:
+        - Admin operations in publish-config.yaml are not in production package
+        - Admin modules don't exist in publish directory
+        - Admin dashboard launcher excluded
+        - No admin markers in published content
+        
+        Returns:
+            Gate validation result
+        """
+        gate = {
+            "gate_number": 24,
+            "name": "Admin Operations Exclusion",
+            "severity": "ERROR",
+            "passed": True,
+            "message": "",
+            "details": {
+                "admin_operations_listed": False,
+                "admin_modules_excluded": False,
+                "admin_dashboard_excluded": False,
+                "admin_markers_absent": False,
+                "issues": []
+            }
+        }
+        
+        try:
+            # Check 1: Load publish config and verify admin operations listed
+            publish_config_path = self.project_root / "cortex-brain" / "publish-config.yaml"
+            if publish_config_path.exists():
+                import yaml
+                with open(publish_config_path, 'r', encoding='utf-8') as f:
+                    config = yaml.safe_load(f)
+                
+                admin_ops = config.get('admin_content_patterns', {}).get('admin_operations', [])
+                
+                # Verify admin_dashboard is in exclusion list
+                if 'admin_dashboard' in admin_ops:
+                    gate["details"]["admin_operations_listed"] = True
+                else:
+                    gate["details"]["issues"].append("admin_dashboard not in publish-config.yaml admin_operations exclusion list")
+            else:
+                gate["details"]["issues"].append("publish-config.yaml not found")
+            
+            # Check 2: Verify admin modules don't exist in publish directory (if it exists)
+            publish_dir = self.project_root / "publish"
+            if publish_dir.exists():
+                admin_module_path = publish_dir / "src" / "operations" / "modules" / "admin_dashboard_launcher_module.py"
+                
+                if admin_module_path.exists():
+                    gate["details"]["issues"].append("admin_dashboard_launcher_module.py found in publish directory - MUST BE EXCLUDED")
+                else:
+                    gate["details"]["admin_modules_excluded"] = True
+            else:
+                # If publish doesn't exist yet, check source location has admin marker
+                source_module = self.project_root / "src" / "operations" / "modules" / "admin_dashboard_launcher_module.py"
+                if source_module.exists():
+                    content = source_module.read_text(encoding='utf-8')
+                    if "ADMIN ONLY" in content and "deployment_tier: admin" in content:
+                        gate["details"]["admin_modules_excluded"] = True
+                    else:
+                        gate["details"]["issues"].append("admin_dashboard_launcher_module.py missing ADMIN ONLY markers")
+            
+            # Check 3: Verify cortex-operations.yaml has admin_dashboard with deployment_tier: admin
+            operations_path = self.project_root / "cortex-operations.yaml"
+            if operations_path.exists():
+                import yaml
+                with open(operations_path, 'r', encoding='utf-8') as f:
+                    operations = yaml.safe_load(f)
+                
+                admin_dash_op = operations.get('operations', {}).get('admin_dashboard', {})
+                
+                if admin_dash_op.get('deployment_tier') == 'admin':
+                    gate["details"]["admin_dashboard_excluded"] = True
+                else:
+                    gate["details"]["issues"].append("admin_dashboard operation missing or not marked as deployment_tier: admin")
+            else:
+                gate["details"]["issues"].append("cortex-operations.yaml not found")
+            
+            # Check 4: Verify no admin markers leak into user operations
+            user_operations_to_check = ['load_dashboard', 'align', 'optimize', 'plan']
+            if operations_path.exists():
+                import yaml
+                with open(operations_path, 'r', encoding='utf-8') as f:
+                    operations = yaml.safe_load(f)
+                
+                admin_markers_found = []
+                for op_name in user_operations_to_check:
+                    op_config = operations.get('operations', {}).get(op_name, {})
+                    
+                    # Check if accidentally marked as admin
+                    if op_config.get('deployment_tier') == 'admin':
+                        admin_markers_found.append(f"{op_name} incorrectly marked as admin tier")
+                
+                if admin_markers_found:
+                    gate["details"]["issues"].extend(admin_markers_found)
+                else:
+                    gate["details"]["admin_markers_absent"] = True
+            
+            # Count passed checks
+            passed_checks = sum(1 for k, v in gate["details"].items() if k != "issues" and v is True)
+            total_checks = 4
+            
+            # Determine pass/fail
+            if gate["details"]["issues"]:
+                gate["passed"] = False
+                gate["message"] = (
+                    f"Admin Operations Exclusion validation failed: {len(gate['details']['issues'])} issues "
+                    f"({passed_checks}/{total_checks} checks passed). "
+                    f"DEPLOYMENT BLOCKED - admin-only operations MUST NOT be published to users. "
+                    f"Issues: {'; '.join(gate['details']['issues'])}"
+                )
+                logger.error(f"Gate 24 FAILED: {gate['message']}")
+            else:
+                gate["message"] = (
+                    f"Admin Operations Exclusion validated: All admin-only features properly excluded "
+                    f"({total_checks}/{total_checks} checks passed). admin_dashboard operation protected from production."
+                )
+                logger.info("Gate 24 PASSED: Admin operations exclusion validated")
+        
+        except Exception as e:
+            gate["passed"] = False
+            gate["message"] = f"Admin operations exclusion validation error: {str(e)}"
+            gate["details"]["error_type"] = type(e).__name__
+            logger.error(f"Gate 24 validation error: {e}", exc_info=True)
         
         return gate

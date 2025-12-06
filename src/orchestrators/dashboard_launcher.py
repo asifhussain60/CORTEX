@@ -50,6 +50,12 @@ logger = logging.getLogger(__name__)
 class CORSHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     """HTTP request handler with CORS support for local development."""
     
+    def __init__(self, *args, directory=None, **kwargs):
+        """Initialize handler with specific directory."""
+        # Store directory before calling super().__init__
+        self.directory = directory
+        super().__init__(*args, directory=directory, **kwargs)
+    
     def end_headers(self):
         """Add CORS headers to all responses."""
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -84,6 +90,7 @@ class DashboardServer:
         self.server = None
         self.server_thread = None
         self._running = False
+        self.logger = logging.getLogger(__name__)
     
     def _find_available_port(self, start_port: int = 8080, max_attempts: int = 10) -> Optional[int]:
         """
@@ -104,23 +111,59 @@ class DashboardServer:
                 continue
         return None
     
+    def _resolve_data_source(self, path_or_source: str) -> str:
+        """
+        Resolve a file path or source name to a valid data source key.
+        
+        Args:
+            path_or_source: Repository path or data source key
+        
+        Returns:
+            Valid data source key (e.g., 'mock', 'v5-webservices-prevalidationws')
+        """
+        # If already a valid source key, return it
+        valid_sources = ['mock', 'cortex', 'noor-canvas', 'alist', 'ksessions']
+        if path_or_source in valid_sources:
+            return path_or_source
+        
+        # Extract directory name from path
+        from pathlib import Path
+        repo_path = Path(path_or_source)
+        if repo_path.exists():
+            repo_name = repo_path.name.lower().replace('.', '-')
+            
+            # Check if data directory exists for this repo
+            # dashboard_dir is already cortex-brain/dashboards
+            data_dir = self.dashboard_dir / repo_name
+            
+            self.logger.debug(f"Looking for data in: {data_dir}")
+            
+            if data_dir.exists() and (data_dir / 'health-data.json').exists():
+                self.logger.info(f"Found existing data directory: {repo_name}")
+                return repo_name
+            else:
+                self.logger.warning(f"No data directory found for {repo_name} at {data_dir}, will trigger collection")
+                # Return special key to trigger collection
+                return f"collect:{path_or_source}"
+        
+        # Default to mock if nothing matches
+        self.logger.warning(f"Unknown source '{path_or_source}', defaulting to 'mock'")
+        return 'mock'
+    
     def start(self, auto_open: bool = True, source: str = "mock") -> Dict[str, Any]:
         """
         Start HTTP server and optionally open browser.
         
         Args:
             auto_open: Auto-open browser to dashboard
-            source: Data source to load (mock, noor-canvas, etc.)
+            source: Data source to load (mock, noor-canvas, etc.) or repository path
         
         Returns:
             Result dict with success, port, url, message
         """
+        # Resolve source to valid data source key
+        resolved_source = self._resolve_data_source(source)
         try:
-            # Change to dashboard directory
-            import os
-            original_dir = os.getcwd()
-            os.chdir(str(self.dashboard_dir))
-            
             # Find available port
             available_port = self._find_available_port(self.port)
             if available_port is None:
@@ -133,8 +176,12 @@ class DashboardServer:
             
             self.port = available_port
             
+            # Create handler with directory parameter
+            import functools
+            handler = functools.partial(CORSHTTPRequestHandler, directory=str(self.dashboard_dir))
+            
             # Create server
-            self.server = socketserver.TCPServer(("", self.port), CORSHTTPRequestHandler)
+            self.server = socketserver.TCPServer(("", self.port), handler)
             self.server.allow_reuse_address = True
             
             # Start server in background thread
@@ -147,7 +194,8 @@ class DashboardServer:
             self._running = True
             
             # Construct dashboard URL (index.html is in ui/ subdirectory)
-            url = f"http://localhost:{self.port}/ui/index.html?source={source}"
+            # Server is running from dashboards/ directory, so path is relative
+            url = f"http://localhost:{self.port}/ui/index.html?source={resolved_source}"
             
             # Wait briefly for server to start
             time.sleep(0.5)
@@ -159,9 +207,6 @@ class DashboardServer:
                     logger.info(f"Opened dashboard in browser: {url}")
                 except Exception as e:
                     logger.warning(f"Failed to auto-open browser: {e}")
-            
-            # Restore original directory
-            os.chdir(original_dir)
             
             return {
                 "success": True,

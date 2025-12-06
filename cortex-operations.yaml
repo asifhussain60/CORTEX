@@ -161,6 +161,46 @@ operations:
     - launch dashboard
     - open dashboard
     - show me the dashboard
+  admin_dashboard:
+    name: Admin Dashboard
+    description: Launch enhanced CORTEX dashboard with all repositories in dropdown selector (ADMIN ONLY)
+    deployment_tier: admin
+    natural_language:
+    - load admin dashboard
+    - launch admin dashboard
+    - open admin dashboard
+    - show admin dashboard
+    - admin dashboard
+    - dashboard admin
+    category: visualization
+    modules:
+    - admin_dashboard_launcher
+    profiles:
+      standard:
+        description: Launch admin dashboard with repository selector
+        modules:
+        - admin_dashboard_launcher
+        options:
+          port: 8080
+          auto_open: true
+          with_selector: true
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: |
+        Admin-only feature. Launches dashboard with dropdown of all available repositories.
+        Blocked from production by deployment tier validation.
+        Only available in CORTEX development repository.
+    examples:
+    - load admin dashboard
+    - launch admin dashboard
+    - show admin dashboard
+    admin_validation:
+      requires_admin_repo: true
+      blocked_in_publish: true
+      validation_gate: deployment_tier_check
   ado:
     name: Ado
     description: ADO CLI - Azure DevOps Work Item Management

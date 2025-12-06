@@ -20,7 +20,8 @@ const DATA_SOURCES = {
     alist: '/alist/',
     ksessions: '/ksessions/',
     'v5-webservices-prevalidationws': '/v5-webservices-prevalidationws/',
-    'v5-prevalidation': '/v5-webservices-prevalidationws/' // Alias for shorter name
+    'v5-prevalidation': '/v5-webservices-prevalidationws/', // Alias for shorter name
+    kashkole: '/kashkole/'
 };
 
 // Data files to load
@@ -50,9 +51,25 @@ export async function loadDashboardData(source = 'mock') {
     }
     
     try {
+        // Check if this is a collection trigger
+        if (source.startsWith('collect:')) {
+            const repoPath = source.substring(8);
+            throw new Error(
+                `Dashboard data not found for repository: ${repoPath}\n\n` +
+                `To generate dashboard data, run:\n` +
+                `python -m src.orchestrators.dashboard_collector --path "${repoPath}"`
+            );
+        }
+        
         const basePath = DATA_SOURCES[source];
         if (!basePath) {
-            throw new Error(`Unknown data source: ${source}`);
+            // Provide helpful error with available sources
+            const availableSources = Object.keys(DATA_SOURCES).join(', ');
+            throw new Error(
+                `Unknown data source: ${source}\n\n` +
+                `Available sources: ${availableSources}\n\n` +
+                `If this is a repository path, ensure dashboard data has been collected first.`
+            );
         }
         
         // Load all data files in parallel

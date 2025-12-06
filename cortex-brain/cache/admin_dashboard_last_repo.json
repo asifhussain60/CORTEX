@@ -1,0 +1,6 @@
+{
+  "name": "test-repo",
+  "path": "/path/to/test",
+  "type": "Test",
+  "files": 100
+}
