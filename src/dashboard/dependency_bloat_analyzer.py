@@ -145,12 +145,16 @@ class DependencyBloatAnalyzer:
         mean = statistics.mean(sorted_counts)
         median = statistics.median(sorted_counts)
         
-        # Calculate quartiles
-        q1 = statistics.median(sorted_counts[:n//2])
-        if n % 2 == 0:
-            q3 = statistics.median(sorted_counts[n//2:])
+        # Calculate quartiles (handle single value case)
+        if n == 1:
+            q1 = sorted_counts[0]
+            q3 = sorted_counts[0]
         else:
-            q3 = statistics.median(sorted_counts[n//2 + 1:])
+            q1 = statistics.median(sorted_counts[:n//2]) if n//2 > 0 else sorted_counts[0]
+            if n % 2 == 0:
+                q3 = statistics.median(sorted_counts[n//2:]) if len(sorted_counts[n//2:]) > 0 else sorted_counts[-1]
+            else:
+                q3 = statistics.median(sorted_counts[n//2 + 1:]) if len(sorted_counts[n//2 + 1:]) > 0 else sorted_counts[-1]
         
         iqr = q3 - q1
         outlier_threshold = q3 + (1.5 * iqr)
