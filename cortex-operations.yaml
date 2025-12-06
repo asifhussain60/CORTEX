@@ -406,6 +406,11 @@ operations:
     - markdown generated
     - plan loaded
     - create new plan
+    - execute all phases autonomously
+    - auto chained
+    - without user intervention
+    - autonomous execution
+    - execute plan autonomously
     category: planning
   policy_scanner:
     name: Policy Scanner

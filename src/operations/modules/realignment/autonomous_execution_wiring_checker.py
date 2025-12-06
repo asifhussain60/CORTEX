@@ -170,7 +170,12 @@ class AutonomousExecutionWiringChecker:
                 return False, "❌ No templates section in response-templates.yaml"
             
             # Check for autonomous/planning templates
-            template_names = [t.get('name', '').lower() for t in templates['templates']]
+            # Templates are structured as dict keys, not list of objects
+            if isinstance(templates['templates'], dict):
+                template_names = [name.lower() for name in templates['templates'].keys()]
+            else:
+                # Fallback for list structure
+                template_names = [t.get('name', '').lower() for t in templates['templates']]
             
             autonomous_templates = [n for n in template_names if 'autonomous' in n or 'execute' in n]
             planning_templates = [n for n in template_names if 'planning' in n or 'plan' in n]
