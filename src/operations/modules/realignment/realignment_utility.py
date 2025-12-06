@@ -951,6 +951,40 @@ def align_system_v2(
             logger.info("✅ All architectural components properly wired")
         
         # ====================================================================
+        # CHECK 11: Autonomous Execution Wiring
+        # ====================================================================
+        logger.info("📋 Check 11: Autonomous Execution Wiring")
+        try:
+            from src.operations.modules.realignment.autonomous_execution_wiring_checker import (
+                check_autonomous_execution_wiring
+            )
+            auto_exec_result = check_autonomous_execution_wiring(cortex_root)
+            results["checks"]["autonomous_execution_wiring"] = auto_exec_result
+            
+            if auto_exec_result["all_passed"]:
+                logger.info("✅ Autonomous execution fully wired")
+            else:
+                warning_count = len(auto_exec_result.get("warnings", []))
+                logger.warning(f"⚠️  Autonomous execution wiring incomplete: {warning_count} issue(s)")
+                
+                # Add warnings to results
+                for warning in auto_exec_result.get("warnings", []):
+                    results["warnings"].append({
+                        "category": "autonomous_execution_wiring",
+                        "severity": "MEDIUM",
+                        "message": warning,
+                        "details": {}
+                    })
+        except Exception as e:
+            logger.error(f"❌ Autonomous execution wiring check failed: {e}")
+            results["errors"].append({
+                "category": "autonomous_execution_wiring",
+                "severity": "HIGH",
+                "message": f"Autonomous execution wiring check failed: {str(e)}",
+                "details": {}
+            })
+        
+        # ====================================================================
         # Generate Comprehensive Report
         # ====================================================================
         report_path = _generate_alignment_report(cortex_root, results)
@@ -962,7 +996,7 @@ def align_system_v2(
         logger.info("\n" + "=" * 70)
         logger.info("📊 CORTEX Align v2.0 - Summary")
         logger.info("=" * 70)
-        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/10")
+        logger.info(f"✅ Checks Passed: {sum(1 for c in results['checks'].values() if isinstance(c, dict) and c.get('passed', True))}/11")
         logger.info(f"⚠️  Warnings: {len(results['warnings'])}")
         logger.info(f"❌ Errors: {len(results['errors'])}")
         logger.info(f"🔧 Fixes Applied: {len(results['fixes_applied'])}")
@@ -1461,6 +1495,8 @@ def _check_component_discovery(cortex_root: Path) -> Dict[str, Any]:
     
     Scans for SOLID analyzers, enforcers, and dependency graphs that exist
     but are not integrated into workflows.
+    
+    NOTE: This is check 10 of 11 in the alignment system.
     
     Args:
         cortex_root: Root directory of CORTEX
