@@ -122,6 +122,9 @@ cortex-brain/**/*.db
 cortex-brain/**/*.db-shm
 cortex-brain/**/*.db-wal
 
+# Alignment state (machine-local, not shared across machines)
+cortex-brain/admin/alignment-state.json
+
 # Ambient capture logs (runtime state)
 logs/ambient_capture.log
 

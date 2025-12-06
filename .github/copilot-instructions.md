@@ -110,6 +110,12 @@ ALL responses MUST use this 5-part structure:
 - Decorator: `@with_progress(operation_name="...")`
 - Guide: `cortex-brain/documents/implementation-guides/progress-monitoring-quick-start.md`
 
+**Multi-Machine Alignment**
+- Alignment state is machine-local (not shared via git)
+- Add `cortex-brain/admin/alignment-state.json` to `.gitignore`
+- Run align after every pull for incremental scans
+- Guide: `cortex-brain/documents/implementation-guides/multi-machine-alignment.md`
+
 ---
 
 ## 📁 Document Organization (CRITICAL)
