@@ -119,7 +119,7 @@ class TemplateValidator:
     Usage:
         validator = TemplateValidator(
             template_dir=Path("cortex-brain/response-templates"),
-            required_placeholders=['operation', 'understanding_content']
+            required_placeholders=['operation', 'understanding_scope_content']
         )
         
         result = validator.validate_template(template_def, template_id)
@@ -290,14 +290,10 @@ class TemplateValidator:
                 ))
         
         # Check for unused/undefined placeholders
-        # Support both v2.0 and v3.0 section names
+        # v3.0 section names only
         common_placeholders = {
-            # v3.0 section names
             'operation', 'understanding_scope_content', 'approach_considerations_content',
             'response_content', 'impact_changes_content', 'next_steps_content',
-            # v2.0 section names (backward compatibility)
-            'understanding_content', 'challenge_content', 'request_echo_content',
-            # Common metadata
             'title', 'mode', 'confidence_level'
         }
         

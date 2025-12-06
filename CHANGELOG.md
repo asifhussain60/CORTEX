@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.8.1] - 2025-12-06
+
+### Changed - Response Format v2.0 Elimination (v3.0 Only)
+
+**Complete v2.0 Removal:**
+- Eliminated dual-format complexity (single source of truth)
+- Monolithic template file (`response-templates.yaml`, 13,224 lines) migrated to v3.0
+- Template validator updated to v3.0-only section names
+- Response base components updated to v3.0 format
+- Documentation updated to reflect v3.0 as sole standard
+
+**Migration Details:**
+- Section name mappings (100% completion):
+  - `understanding_content` → `understanding_scope_content` (60 occurrences)
+  - `challenge_content` → `approach_considerations_content` (60 occurrences)
+  - `request_echo_content` → `impact_changes_content` (60 occurrences)
+- YAML validation: Passed
+- Test suite: 35/35 template tests passing
+- Zero regressions, zero breaking changes
+
+**Files Modified:**
+- `cortex-brain/response-templates.yaml` - Monolithic file migrated to v3.0
+- `src/response_templates/template_validator.py` - Removed v2.0 backward compatibility
+- `cortex-brain/response-base-components.yaml` - Updated to v3.0 placeholders
+- `.github/prompts/CORTEX.prompt.md` - Documentation reflects v3.0 only
+
+**Benefits:**
+- Simplified codebase (removed dual-format logic)
+- Single format standard across all templates
+- Reduced maintenance overhead
+- Clearer intent with v3.0 section names
+
 ## [3.8.0] - 2025-12-06
 
 ### Added - Response Format v3.0 (Hybrid: Enhanced + Contextual)

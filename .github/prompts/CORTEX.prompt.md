@@ -107,7 +107,7 @@ CORTEX: ✅ Dashboard server started successfully
 **Architecture (v3.2):**
 - **Base Template Composition:** Templates inherit from base structures using YAML anchors (`&standard_5_part_base`)
 - **Component Reuse:** Shared header, footer, and section components reduce duplication by 43%
-- **Placeholder Substitution:** Dynamic content injection via `{operation}`, `{understanding_content}`, etc.
+- **Placeholder Substitution:** Dynamic content injection via `{operation}`, `{understanding_scope_content}`, etc. (v3.0 format)
 - **Single Source:** One file (`response-templates.yaml`) replaces multiple variants
 
 **Quick Reference:**
