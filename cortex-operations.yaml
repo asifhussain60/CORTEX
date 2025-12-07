@@ -138,6 +138,94 @@ operations:
     natural_language:
     - operation name
     category: reporting
+  validate_dashboard_data:
+    name: Validate Dashboard Data
+    description: Independent validation of dashboard collector output against ground truth
+    deployment_tier: admin
+    natural_language:
+    - validate dashboard data
+    - check dashboard accuracy
+    - verify collector output
+    - dashboard data validation
+    - validate collectors
+    modules:
+    - dashboard.validators.data_validator
+    profiles:
+      standard:
+        description: Full validation with ground truth scan
+        modules:
+        - dashboard.validators.data_validator
+    category: validation
+  generate_executive_summary:
+    name: Generate Executive Summary
+    description: Project-adaptive executive summary from all collectors
+    deployment_tier: admin
+    natural_language:
+    - generate executive summary
+    - create executive summary
+    - aggregate executive summary
+    - executive summary
+    modules:
+    - dashboard.aggregators.executive_summary_aggregator
+    profiles:
+      standard:
+        description: Generate executive summary from all collectors
+        modules:
+        - dashboard.aggregators.executive_summary_aggregator
+    category: reporting
+  generate_overview:
+    name: Generate Overview
+    description: Cross-collector overview with health scoring
+    deployment_tier: admin
+    natural_language:
+    - generate overview
+    - create overview
+    - aggregate overview
+    - dashboard overview
+    modules:
+    - dashboard.aggregators.overview_aggregator
+    profiles:
+      standard:
+        description: Generate overview from all collectors
+        modules:
+        - dashboard.aggregators.overview_aggregator
+    category: reporting
+  reconcile_dashboard_data:
+    name: Reconcile Dashboard Data
+    description: Cross-collector gap analysis and consistency checks
+    deployment_tier: admin
+    natural_language:
+    - reconcile dashboard data
+    - check data consistency
+    - gap analysis
+    - cross-collector reconciliation
+    - validate data consistency
+    modules:
+    - dashboard.aggregators.reconciliation_aggregator
+    profiles:
+      standard:
+        description: Full reconciliation with violation detection
+        modules:
+        - dashboard.aggregators.reconciliation_aggregator
+    category: validation
+  scan_security_comprehensive:
+    name: Comprehensive Security Scan
+    description: Enhanced security scanning with 22 validated patterns
+    deployment_tier: admin
+    natural_language:
+    - comprehensive security scan
+    - deep security scan
+    - enhanced security scan
+    - scan for all vulnerabilities
+    - complete security check
+    modules:
+    - dashboard.data.security_collector
+    profiles:
+      standard:
+        description: Full security scan with all 22 patterns
+        modules:
+        - dashboard.data.security_collector
+    category: security
   documentation_orchestrator:
     name: Documentation Orchestrator
     description: Documentation Orchestrator for CORTEX Learning Library
