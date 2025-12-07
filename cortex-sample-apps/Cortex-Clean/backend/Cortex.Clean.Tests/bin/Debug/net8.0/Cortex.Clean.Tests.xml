@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cortex.Clean.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:Cortex.Clean.Tests.Domain.TaskEntityTests">
+            <summary>
+            Tests for Task entity validation rules.
+            Following TDD: These tests will FAIL until we implement the Task entity.
+            </summary>
+        </member>
+        <member name="T:Cortex.Clean.Tests.Factories.TaskFactory">
+            <summary>
+            Factory for creating test Task entities with valid data.
+            </summary>
+        </member>
+        <member name="M:Cortex.Clean.Tests.Factories.TaskFactory.CreateValid(System.String,System.Boolean)">
+            <summary>
+            Creates a valid task entity for testing.
+            </summary>
+        </member>
+        <member name="M:Cortex.Clean.Tests.Factories.TaskFactory.CreateMany(System.Int32)">
+            <summary>
+            Creates multiple valid task entities.
+            </summary>
+        </member>
+        <member name="T:Cortex.Clean.Tests.TestFixtureBase">
+            <summary>
+            Base test fixture providing common test setup and utilities.
+            </summary>
+        </member>
+        <member name="T:Cortex.Clean.Tests.AutoMoqDataAttribute">
+            <summary>
+            AutoFixture data attribute for xUnit tests.
+            </summary>
+        </member>
+    </members>
+</doc>

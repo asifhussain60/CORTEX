@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cortex.Clean.Domain</name>
+    </assembly>
+    <members>
+        <member name="T:Cortex.Clean.Domain.Entities.TaskEntity">
+            <summary>
+            Represents a task in the task management system.
+            Domain entity with validation rules enforced.
+            </summary>
+        </member>
+        <member name="P:Cortex.Clean.Domain.Entities.TaskEntity.Id">
+            <summary>
+            Gets the unique identifier for this task.
+            </summary>
+        </member>
+        <member name="P:Cortex.Clean.Domain.Entities.TaskEntity.Title">
+            <summary>
+            Gets or sets the task title.
+            Must be non-empty and less than or equal to 255 characters.
+            </summary>
+        </member>
+        <member name="P:Cortex.Clean.Domain.Entities.TaskEntity.IsCompleted">
+            <summary>
+            Gets or sets whether the task is completed.
+            </summary>
+        </member>
+        <member name="P:Cortex.Clean.Domain.Entities.TaskEntity.CreatedAt">
+            <summary>
+            Gets the date and time when the task was created.
+            </summary>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Entities.TaskEntity.#ctor(System.String)">
+            <summary>
+            Creates a new task with the specified title.
+            </summary>
+            <param name="title">The task title (required, max 255 chars).</param>
+            <exception cref="T:Cortex.Clean.Domain.Exceptions.InvalidTaskException">Thrown when title is invalid.</exception>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Entities.TaskEntity.ToggleCompletion">
+            <summary>
+            Toggles the completion status of the task.
+            </summary>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Entities.TaskEntity.UpdateTitle(System.String)">
+            <summary>
+            Updates the task title.
+            </summary>
+            <param name="newTitle">The new title (required, max 255 chars).</param>
+            <exception cref="T:Cortex.Clean.Domain.Exceptions.InvalidTaskException">Thrown when title is invalid.</exception>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Entities.TaskEntity.ValidateTitle(System.String)">
+            <summary>
+            Validates the task title using the domain validation service.
+            </summary>
+            <param name="title">The title to validate.</param>
+            <exception cref="T:Cortex.Clean.Domain.Exceptions.InvalidTaskException">Thrown when title is invalid.</exception>
+        </member>
+        <member name="T:Cortex.Clean.Domain.Exceptions.InvalidTaskException">
+            <summary>
+            Exception thrown when task validation fails.
+            </summary>
+        </member>
+        <member name="T:Cortex.Clean.Domain.Exceptions.TaskNotFoundException">
+            <summary>
+            Exception thrown when a task is not found.
+            </summary>
+        </member>
+        <member name="T:Cortex.Clean.Domain.Interfaces.ITaskRepository">
+            <summary>
+            Repository interface for Task entity operations.
+            Defines contract for data access without implementation details.
+            </summary>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Interfaces.ITaskRepository.GetAllAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets all tasks, optionally filtered by title.
+            </summary>
+            <param name="filter">Optional title filter (case-insensitive contains).</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>List of tasks matching the filter.</returns>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Interfaces.ITaskRepository.GetByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a task by ID.
+            </summary>
+            <param name="id">The task ID.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>The task, or null if not found.</returns>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Interfaces.ITaskRepository.AddAsync(Cortex.Clean.Domain.Entities.TaskEntity,System.Threading.CancellationToken)">
+            <summary>
+            Adds a new task.
+            </summary>
+            <param name="task">The task to add.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>The added task with generated ID.</returns>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Interfaces.ITaskRepository.UpdateAsync(Cortex.Clean.Domain.Entities.TaskEntity,System.Threading.CancellationToken)">
+            <summary>
+            Updates an existing task.
+            </summary>
+            <param name="task">The task to update.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Interfaces.ITaskRepository.DeleteAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes a task by ID.
+            </summary>
+            <param name="id">The task ID to delete.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>True if deleted; false if not found.</returns>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Interfaces.ITaskRepository.SaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Saves all pending changes to the database.
+            </summary>
+            <param name="cancellationToken">Cancellation token.</param>
+        </member>
+        <member name="T:Cortex.Clean.Domain.Services.TaskValidationService">
+            <summary>
+            Domain service for task validation logic.
+            Encapsulates business rules that don't naturally fit in entities.
+            </summary>
+        </member>
+        <member name="F:Cortex.Clean.Domain.Services.TaskValidationService.MaxTitleLength">
+            <summary>
+            Maximum allowed length for task title.
+            </summary>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Services.TaskValidationService.ValidateTitle(System.String)">
+            <summary>
+            Validates a task title.
+            </summary>
+            <param name="title">The title to validate.</param>
+            <exception cref="T:Cortex.Clean.Domain.Exceptions.InvalidTaskException">Thrown when title is invalid.</exception>
+        </member>
+        <member name="M:Cortex.Clean.Domain.Services.TaskValidationService.IsValidTitle(System.String,System.String@)">
+            <summary>
+            Checks if a title is valid without throwing an exception.
+            </summary>
+            <param name="title">The title to check.</param>
+            <param name="errorMessage">The validation error message if invalid.</param>
+            <returns>True if valid; otherwise, false.</returns>
+        </member>
+    </members>
+</doc>

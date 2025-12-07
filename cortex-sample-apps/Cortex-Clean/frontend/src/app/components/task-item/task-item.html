@@ -1,0 +1,13 @@
+<div class="task-item" [class.completed]="task.isCompleted">
+  <div class="task-content">
+    <input 
+      type="checkbox" 
+      [checked]="task.isCompleted" 
+      (change)="onToggle()"
+      class="task-checkbox">
+    <span class="task-title">{{ task.title }}</span>
+  </div>
+  <button class="btn-delete" (click)="onDelete()" title="Delete task">
+    ✕
+  </button>
+</div>

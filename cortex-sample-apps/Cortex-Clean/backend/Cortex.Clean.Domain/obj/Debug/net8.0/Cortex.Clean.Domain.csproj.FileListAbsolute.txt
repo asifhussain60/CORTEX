@@ -1,0 +1,14 @@
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\bin\Debug\net8.0\Cortex.Clean.Domain.deps.json
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\bin\Debug\net8.0\Cortex.Clean.Domain.dll
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\bin\Debug\net8.0\Cortex.Clean.Domain.pdb
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\bin\Debug\net8.0\Cortex.Clean.Domain.xml
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\Cortex.Clean.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\Cortex.Clean.Domain.AssemblyInfoInputs.cache
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\Cortex.Clean.Domain.AssemblyInfo.cs
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\Cortex.Clean.Domain.csproj.CoreCompileInputs.cache
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\Cortex.Clean.Domain.sourcelink.json
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\Cortex.Clean.Domain.dll
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\refint\Cortex.Clean.Domain.dll
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\Cortex.Clean.Domain.xml
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\Cortex.Clean.Domain.pdb
+D:\PROJECTS\CORTEX\cortex-sample-apps\Cortex-Clean\backend\Cortex.Clean.Domain\obj\Debug\net8.0\ref\Cortex.Clean.Domain.dll

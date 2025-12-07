@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cortex.Clean.API</name>
+    </assembly>
+    <members>
+        <member name="M:Cortex.Clean.API.Controllers.TasksController.GetTasks(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets all tasks, optionally filtered by title.
+            </summary>
+            <param name="filter">Optional title filter (case-insensitive contains).</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>List of tasks.</returns>
+        </member>
+        <member name="M:Cortex.Clean.API.Controllers.TasksController.GetTask(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a specific task by ID.
+            </summary>
+            <param name="id">The task ID.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>The task, or 404 if not found.</returns>
+        </member>
+        <member name="M:Cortex.Clean.API.Controllers.TasksController.CreateTask(Cortex.Clean.Application.DTOs.CreateTaskRequest,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new task.
+            </summary>
+            <param name="request">The task creation request.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>The created task.</returns>
+        </member>
+        <member name="M:Cortex.Clean.API.Controllers.TasksController.UpdateTask(System.Int32,Cortex.Clean.Application.DTOs.UpdateTaskRequest,System.Threading.CancellationToken)">
+            <summary>
+            Updates an existing task.
+            </summary>
+            <param name="id">The task ID.</param>
+            <param name="request">The update request.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>No content on success.</returns>
+        </member>
+        <member name="M:Cortex.Clean.API.Controllers.TasksController.ToggleTask(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Toggles task completion status.
+            </summary>
+            <param name="id">The task ID.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>No content on success.</returns>
+        </member>
+        <member name="M:Cortex.Clean.API.Controllers.TasksController.DeleteTask(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes a task.
+            </summary>
+            <param name="id">The task ID.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>No content on success.</returns>
+        </member>
+    </members>
+</doc>
