@@ -9,11 +9,14 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/architecture-panels.css">
     <link rel="stylesheet" href="styles/skeleton-loader.css">
+    <link rel="stylesheet" href="styles/overview-tab.css">
+    <link rel="stylesheet" href="styles/engineering-onboarding.css">
     
     <style>
         /* Glassmorphism Dark Mode Dashboard */
@@ -417,6 +420,10 @@
                     <span class="nav-tab-icon">📋</span>
                     <span class="nav-tab-text">Executive Summary</span>
                 </a>
+                    <a class="nav-tab" data-tab="engineering" onclick="switchTab('engineering')">
+                        <span class="nav-tab-icon">🎓</span>
+                        <span class="nav-tab-text">Engineering</span>
+                    </a>
                 <a class="nav-tab" data-tab="overview" onclick="switchTab('overview')">
                     <span class="nav-tab-icon">📊</span>
                     <span class="nav-tab-text">Overview</span>
@@ -489,6 +496,13 @@
                     <!-- Security content will be dynamically loaded -->
                 </div>
             </div>
+
+            <!-- Tab Content: Engineering Onboarding -->
+            <div class="tab-content" id="tab-engineering">
+                <div id="engineering-container">
+                    <div id="engineering-onboarding-content"></div>
+                </div>
+            </div>
             
             <!-- Tab Content: Architecture -->
             <div class="tab-content" id="tab-architecture">
@@ -556,7 +570,8 @@
                 'security': 'Security Analysis',
                 'architecture': 'Architecture Overview',
                 'code-org': 'Code Organization',
-                'vendors': 'Dependencies & Vendors'
+                'vendors': 'Dependencies & Vendors',
+                'engineering': 'Engineering Onboarding'
             };
             document.getElementById('contentTitle').textContent = titles[tabName] || 'Dashboard';
             

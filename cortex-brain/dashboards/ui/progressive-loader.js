@@ -259,8 +259,10 @@ export class ProgressiveLoadingManager {
             'security': 'security',
             'architecture': 'architecture',
             'code-organization': 'codeOrganization',
+            'code-org': 'codeOrganization',
             'dependencies': 'table',
-            'team': 'metricCards'
+            'team': 'metricCards',
+            'engineering': 'metricCards'
         };
 
         return skeletonMap[tabName] || 'metricCards';

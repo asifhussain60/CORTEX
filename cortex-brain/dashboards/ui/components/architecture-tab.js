@@ -41,165 +41,141 @@ export function renderArchitecture(data) {
         
         // Build HTML
         container.innerHTML = `
-        <!-- Application Overview -->
-        <div class="glass-card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1rem;">🏭️ Application Overview</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; padding: 1.5rem;">
-                <div>
-                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Application Type</h3>
-                    <p style="font-size: 1.25rem; font-weight: 600; color: var(--accent-primary); margin-bottom: 0.5rem;">
-                        ${appType.type || 'Unknown'}
-                    </p>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary);">
-                        Confidence: <span style="color: ${appType.confidence >= 70 ? '#10b981' : '#f59e0b'}; font-weight: 600;">${appType.confidence || 0}%</span>
-                    </div>
-                    ${appType.evidence && appType.evidence.length > 0 ? `
-                        <ul style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--text-secondary); padding-left: 1.25rem;">
-                            ${appType.evidence.slice(0, 3).map(ev => `<li>${ev}</li>`).join('')}
-                        </ul>
-                    ` : ''}
+        <!-- Application Overview - Compact Header -->
+        <div style="
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 1rem; 
+            margin-bottom: 1.5rem;
+        ">
+            <div class="glass-card" style="padding: 1.25rem; text-align: center;">
+                <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    Application Type
                 </div>
-                <div>
-                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Architecture Style</h3>
-                    <p style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">
-                        ${style.name || 'Unknown'}
-                    </p>
-                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
-                        ${style.description || ''}
-                    </p>
-                    ${style.characteristics && style.characteristics.length > 0 ? `
-                        <ul style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 1.25rem;">
-                            ${style.characteristics.slice(0, 3).map(ch => `<li>${ch}</li>`).join('')}
-                        </ul>
-                    ` : ''}
+                <div style="font-size: 1.75rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.25rem;">
+                    ${appType.type || 'Unknown'}
                 </div>
-                <div>
-                    <h3 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Deployment</h3>
-                    <div style="margin-bottom: 0.5rem;">
-                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Hosting:</span>
-                        <span style="font-size: 0.875rem; font-weight: 600; display: block;">${deployment.hosting || 'Unknown'}</span>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Platform:</span>
-                        <span style="font-size: 0.875rem; font-weight: 600; display: block;">${deployment.platform || 'Unknown'}</span>
-                    </div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                    ${appType.confidence || 0}% confidence
+                </div>
+            </div>
+            <div class="glass-card" style="padding: 1.25rem; text-align: center;">
+                <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    Architecture Style
+                </div>
+                <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">
+                    ${style.name || 'Unknown'}
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                    ${style.description || 'Pattern-based design'}
+                </div>
+            </div>
+            <div class="glass-card" style="padding: 1.25rem; text-align: center;">
+                <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    Deployment
+                </div>
+                <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">
+                    ${deployment.platform || 'Unknown'}
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                    ${deployment.hosting || 'Standard hosting'}
                 </div>
             </div>
         </div>
 
-        <!-- Metrics Dashboard -->
-        <div class="glass-card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 0.5rem;">📊 Architecture Metrics</h3>
-            <div style="
-                background: rgba(251, 191, 36, 0.1);
-                border-left: 3px solid #fbbf24;
-                padding: 0.75rem 1rem;
-                border-radius: 6px;
-                font-size: 0.875rem;
-                color: var(--text-secondary);
-                margin-bottom: 1.5rem;
-            ">
-                Architecture quality scores based on industry best practices. 
-                🟢 <strong style="color: #10b981;">80-100 (Excellent)</strong>: Well-architected. 
-                🟡 <strong style="color: #fbbf24;">60-79 (Good)</strong>: Minor improvements needed. 
-                🔴 <strong style="color: #ef4444;"><60 (Needs Work)</strong>: Significant refactoring recommended. 
-                <strong>Hover over each card</strong> to see detailed explanations.
+        <!-- Architecture Quality Metrics -->
+        <div class="glass-card" style="margin-bottom: 1.5rem; padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700;">📊 Quality Metrics</h3>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                    Hover for details
+                </div>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                ${renderArchitectureMetricCard('Overall Score', metrics.overall_score || 0, metrics.overall_explanation || 'Weighted average of all architecture quality metrics.')}
-                ${renderArchitectureMetricCard('Layer Separation', metrics.layer_separation || 0, metrics.layer_separation_explanation || 'Measures how well tiers are separated with clear boundaries and minimal cross-layer dependencies.')}
-                ${renderArchitectureMetricCard('Modularity', metrics.modularity || 0, metrics.modularity_explanation || 'Evaluates component independence, reusability, and adherence to single responsibility principle.')}
-                ${renderArchitectureMetricCard('API Design', metrics.api_design || 0, metrics.api_design_explanation || 'Assesses endpoint consistency, RESTful principles, proper HTTP methods, and clear naming conventions.')}
-                ${renderArchitectureMetricCard('Tier Balance', metrics.tier_balance || 0, metrics.tier_balance_explanation || 'Checks if code is evenly distributed across tiers, avoiding bloated business logic or thin service layers.')}
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+                ${renderArchitectureMetricCard('Overall', metrics.overall_score || 0, metrics.overall_explanation || 'Weighted average of all architecture quality metrics.')}
+                ${renderArchitectureMetricCard('Separation', metrics.layer_separation || 0, metrics.layer_separation_explanation || 'Measures how well tiers are separated with clear boundaries.')}
+                ${renderArchitectureMetricCard('Modularity', metrics.modularity || 0, metrics.modularity_explanation || 'Evaluates component independence and reusability.')}
+                ${renderArchitectureMetricCard('API Design', metrics.api_design || 0, metrics.api_design_explanation || 'Assesses endpoint consistency and RESTful principles.')}
+                ${renderArchitectureMetricCard('Balance', metrics.tier_balance || 0, metrics.tier_balance_explanation || 'Checks if code is evenly distributed across tiers.')}
             </div>
         </div>
 
-        <!-- API Endpoints -->
-        ${endpoints.length > 0 ? `
-            <div class="glass-card" style="margin-bottom: 2rem;">
-                <h3 style="margin-bottom: 1rem;">🔌 API Endpoints (${endpoints.length})</h3>
-                <div style="max-height: 400px; overflow-y: auto;">
+        ${isFullStack ? `
+        <!-- 3D Visualization & Component Graph - Side by Side -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <!-- 3D Tier Visualization -->
+            <div class="glass-card" style="padding: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h3 style="margin: 0; font-size: 1rem; font-weight: 700;">🎯 3D Tier Architecture</h3>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn-secondary" onclick="resetCamera()" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">🔄</button>
+                        <button class="btn-secondary" onclick="autoRotate()" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">🔁</button>
+                    </div>
+                </div>
+                <div id="architecture-3d-container" style="width: 100%; height: 350px; background: rgba(0, 0, 0, 0.2); border-radius: 6px; position: relative;">
+                    <div id="tier-labels-overlay" style="
+                        position: absolute;
+                        left: 12px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        pointer-events: none;
+                        z-index: 10;
+                    "></div>
+                </div>
+                <div style="font-size: 0.7rem; color: var(--text-secondary); text-align: center; margin-top: 0.5rem;">
+                    Drag to rotate • Scroll to zoom
+                </div>
+            </div>
+
+            <!-- Component Dependencies -->
+            <div class="glass-card" style="padding: 1.25rem;">
+                <h3 style="margin: 0 0 0.75rem 0; font-size: 1rem; font-weight: 700;">🔗 Component Dependencies</h3>
+                <div id="component-graph" style="width: 100%; height: 350px; border-radius: 6px; background: rgba(0, 0, 0, 0.1);"></div>
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.375rem;">
+                        <div style="width: 10px; height: 10px; background: #ec4899; border-radius: 50%;"></div>
+                        <span style="font-size: 0.7rem;">Presentation</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.375rem;">
+                        <div style="width: 10px; height: 10px; background: #3b82f6; border-radius: 50%;"></div>
+                        <span style="font-size: 0.7rem;">Application</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.375rem;">
+                        <div style="width: 10px; height: 10px; background: #10b981; border-radius: 50%;"></div>
+                        <span style="font-size: 0.7rem;">Domain</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.375rem;">
+                        <div style="width: 10px; height: 10px; background: #f59e0b; border-radius: 50%;"></div>
+                        <span style="font-size: 0.7rem;">Infrastructure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        ` : ''}
+
+        <!-- Tier Breakdown & API Endpoints - Combined -->
+        <div style="display: grid; grid-template-columns: ${endpoints.length > 0 ? '2fr 1fr' : '1fr'}; gap: 1.5rem;">
+            <!-- Tier Breakdown -->
+            <div>
+                <h3 style="margin: 0 0 1rem 0; font-size: 1.25rem; font-weight: 700;">📊 Tier Breakdown</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                    ${tiers.map(tier => renderTierCard(tier)).join('')}
+                </div>
+            </div>
+
+            ${endpoints.length > 0 ? `
+            <!-- API Endpoints -->
+            <div class="glass-card" style="padding: 1.25rem;">
+                <h3 style="margin: 0 0 0.75rem 0; font-size: 1rem; font-weight: 700;">🔌 API Endpoints</h3>
+                <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                    ${endpoints.length} total endpoints
+                </div>
+                <div style="max-height: 400px; overflow-y: auto; padding-right: 0.5rem;">
                     ${endpoints.map(ep => renderEndpointCard(ep)).join('')}
                 </div>
             </div>
-        ` : ''}
-
-        ${isFullStack ? `
-        <!-- 3D Architecture Visualization -->
-        <div class="glass-card" style="margin-bottom: 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="margin: 0;">🎯 3D Tier Architecture</h3>
-                <div style="font-size: 0.75rem; color: var(--text-secondary);">
-                    <strong style="color: var(--accent-primary);">Interactive:</strong> Click & drag to rotate • Scroll to zoom
-                </div>
-            </div>
-            <div style="position: relative;">
-                <div id="architecture-3d-container" style="width: 100%; height: 500px; background: rgba(0, 0, 0, 0.2); border-radius: 8px;"></div>
-                <!-- Layer Labels Overlay -->
-                <div id="tier-labels-overlay" style="
-                    position: absolute;
-                    left: 20px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    pointer-events: none;
-                    z-index: 10;
-                "></div>
-            </div>
-            <div style="text-align: center; margin-top: 1rem;">
-                <button class="btn-secondary" onclick="resetCamera()">🔄 Reset View</button>
-                <button class="btn-secondary" onclick="autoRotate()">🔁 Auto Rotate</button>
-            </div>
+            ` : ''}
         </div>
-        ` : ''}
-
-        <!-- Tier Breakdown -->
-        <div style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1.5rem;">📊 Tier Breakdown</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                ${tiers.map(tier => renderTierCard(tier)).join('')}
-            </div>
-        </div>
-
-        ${isFullStack ? `
-        <!-- Component Dependency Graph -->
-        <div class="glass-card">
-            <h3 style="margin-bottom: 0.5rem;">🔗 Component Dependencies</h3>
-            <div style="
-                background: rgba(139, 92, 246, 0.1);
-                border-left: 3px solid #8b5cf6;
-                padding: 0.75rem 1rem;
-                border-radius: 6px;
-                font-size: 0.875rem;
-                color: var(--text-secondary);
-                margin-bottom: 1.5rem;
-            ">
-                Interactive force-directed graph showing how components depend on each other. 
-                <strong style="color: #8b5cf6;">Drag nodes</strong> to rearrange the layout. 
-                <strong style="color: #8b5cf6;">Node size</strong> represents lines of code. 
-                <strong style="color: #8b5cf6;">Lines</strong> show direct dependencies. 
-                Circular dependencies and tight coupling indicate potential refactoring opportunities.
-            </div>
-            <div id="component-graph" style="width: 100%; height: 600px;"></div>
-            <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 1rem;">
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width: 16px; height: 16px; background: #ec4899; border-radius: 50%;"></div>
-                    <span style="font-size: 0.875rem;">Presentation</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width: 16px; height: 16px; background: #3b82f6; border-radius: 50%;"></div>
-                    <span style="font-size: 0.875rem;">Application</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width: 16px; height: 16px; background: #10b981; border-radius: 50%;"></div>
-                    <span style="font-size: 0.875rem;">Domain</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width: 16px; height: 16px; background: #f59e0b; border-radius: 50%;"></div>
-                    <span style="font-size: 0.875rem;">Infrastructure</span>
-                </div>
-            </div>
-        </div>
-        ` : ''}
     `;
         
         // Initialize visualizations after DOM is updated (only for full-stack apps)
@@ -220,43 +196,50 @@ export function renderArchitecture(data) {
 function renderTierCard(tier) {
     const locPercentage = tier.loc_percentage || 0;
     return `
-        <div class="glass-card" style="transition: transform 0.2s; position: relative;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-            <h4 style="margin-bottom: 0.75rem; color: var(--accent-primary); font-size: 1.1rem;">
-                ${tier.name || 'Unknown Tier'}
-            </h4>
-            <div style="margin-bottom: 1rem;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <span style="color: var(--text-secondary); font-size: 0.875rem;">Files:</span>
-                    <span style="font-weight: 600;">${tier.file_count || 0}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <span style="color: var(--text-secondary); font-size: 0.875rem;">LOC:</span>
-                    <span style="font-weight: 600;">${(tier.loc || 0).toLocaleString()}</span>
-                </div>
+        <div class="glass-card" style="
+            padding: 1rem; 
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        " 
+        onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.3)'" 
+        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                <h4 style="margin: 0; color: var(--accent-primary); font-size: 1rem; font-weight: 700;">
+                    ${tier.name || 'Unknown'}
+                </h4>
+                <div style="
+                    background: var(--accent-primary)20;
+                    color: var(--accent-primary);
+                    padding: 0.25rem 0.5rem;
+                    border-radius: 4px;
+                    font-size: 0.7rem;
+                    font-weight: 600;
+                ">${tier.file_count || 0} files</div>
+            </div>
+            <div style="font-size: 1.5rem; font-weight: 800; font-family: 'SF Mono', monospace; margin-bottom: 0.75rem;">
+                ${(tier.loc || 0).toLocaleString()} <span style="font-size: 0.75rem; font-weight: 500; color: var(--text-secondary);">LOC</span>
             </div>
             ${tier.technologies && tier.technologies.length > 0 ? `
-                <div style="margin-bottom: 1rem;">
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Technologies:</div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        ${tier.technologies.map(tech => `
-                            <span style="
-                                background: rgba(0, 212, 255, 0.1);
-                                color: var(--accent-primary);
-                                padding: 0.25rem 0.75rem;
-                                border-radius: 12px;
-                                font-size: 0.75rem;
-                                font-weight: 500;
-                            ">${tech}</span>
-                        `).join('')}
-                    </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.375rem; margin-bottom: 0.75rem;">
+                    ${tier.technologies.slice(0, 4).map(tech => `
+                        <span style="
+                            background: rgba(0, 212, 255, 0.1);
+                            color: var(--accent-primary);
+                            padding: 0.25rem 0.5rem;
+                            border-radius: 10px;
+                            font-size: 0.7rem;
+                            font-weight: 500;
+                        ">${tech}</span>
+                    `).join('')}
+                    ${tier.technologies.length > 4 ? `<span style="font-size: 0.7rem; color: var(--text-secondary);">+${tier.technologies.length - 4}</span>` : ''}
                 </div>
             ` : ''}
             ${tier.key_files && tier.key_files.length > 0 ? `
-                <div style="padding-top: 1rem; border-top: 1px solid var(--glass-border);">
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Key Files:</div>
-                    <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.75rem; color: var(--text-secondary);">
-                        ${tier.key_files.slice(0, 5).map(file => `<li style="margin: 0.25rem 0;">${file}</li>`).join('')}
-                        ${tier.key_files.length > 5 ? `<li style="color: var(--accent-primary); margin: 0.25rem 0;">+${tier.key_files.length - 5} more...</li>` : ''}
+                <div style="padding-top: 0.75rem; border-top: 1px solid var(--glass-border);">
+                    <div style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 0.375rem;">Key Files:</div>
+                    <ul style="margin: 0; padding-left: 1rem; font-size: 0.7rem; color: var(--text-secondary); line-height: 1.4;">
+                        ${tier.key_files.slice(0, 3).map(file => `<li style="margin: 0.125rem 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${file}</li>`).join('')}
+                        ${tier.key_files.length > 3 ? `<li style="color: var(--accent-primary); margin: 0.125rem 0;">+${tier.key_files.length - 3} more...</li>` : ''}
                     </ul>
                 </div>
             ` : ''}
@@ -279,44 +262,36 @@ function renderEndpointCard(endpoint) {
     
     return `
         <div style="
-            padding: 1rem;
-            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
             background: rgba(255, 255, 255, 0.02);
-            border-left: 3px solid ${color};
-            border-radius: 6px;
-            transition: transform 0.2s, background 0.2s;
-        " onmouseover="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.transform='translateX(4px)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.02)'; this.style.transform='translateX(0)'">
-            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
-                <div style="flex: 1;">
-                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">
+            border-left: 2px solid ${color};
+            border-radius: 4px;
+            transition: all 0.2s;
+        " onmouseover="this.style.background='rgba(255, 255, 255, 0.05)'; this.style.transform='translateX(2px)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.02)'; this.style.transform='translateX(0)'">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.375rem;">
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         ${endpoint.method || endpoint.service || 'Unknown'}
                     </div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary);">
-                        📁 ${endpoint.file}
-                    </div>
                 </div>
-                <div style="text-align: right;">
-                    <span style="
-                        background: ${color}22;
-                        color: ${color};
-                        padding: 0.25rem 0.75rem;
-                        border-radius: 12px;
-                        font-size: 0.75rem;
-                        font-weight: 600;
-                        display: inline-block;
-                        margin-bottom: 0.25rem;
-                    ">${endpoint.type}</span>
-                    ${endpoint.http_method ? `
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                            ${endpoint.http_method}
-                        </div>
-                    ` : ''}
-                </div>
+                <span style="
+                    background: ${color}25;
+                    color: ${color};
+                    padding: 0.125rem 0.5rem;
+                    border-radius: 10px;
+                    font-size: 0.65rem;
+                    font-weight: 600;
+                    white-space: nowrap;
+                    margin-left: 0.5rem;
+                ">${endpoint.type}</span>
             </div>
-            ${endpoint.protocol ? `
-                <div style="font-size: 0.75rem; color: var(--text-secondary);">
-                    Protocol: <span style="color: var(--accent-primary);">${endpoint.protocol}</span>
-                    ${endpoint.url ? ` | URL: <code style="background: rgba(0,0,0,0.3); padding: 0.125rem 0.5rem; border-radius: 4px;">${endpoint.url}</code>` : ''}
+            <div style="font-size: 0.7rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                📁 ${endpoint.file}
+            </div>
+            ${endpoint.http_method ? `
+                <div style="font-size: 0.65rem; color: var(--accent-primary); margin-top: 0.25rem; font-weight: 600;">
+                    ${endpoint.http_method}
                 </div>
             ` : ''}
         </div>
@@ -332,27 +307,32 @@ function renderEndpointCard(endpoint) {
  */
 function renderArchitectureMetricCard(label, score, explanation) {
     const color = getScoreColor(score);
+    const statusEmoji = score >= 80 ? '🟢' : score >= 60 ? '🟡' : '🔴';
+    
     return `
         <div class="metric-card" style="
             position: relative;
             text-align: center;
-            padding: 1rem;
+            padding: 0.875rem;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: help;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
         " 
         onmouseover="showMetricTooltip(event, '${label.replace(/'/g, "\\'")}', ${score}, '${explanation.replace(/'/g, "\\'")}', this)"
         onmouseout="hideMetricTooltip(this)">
-            <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                ${label}
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.375rem; margin-bottom: 0.5rem;">
+                <span style="font-size: 1rem;">${statusEmoji}</span>
+                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.03em;">
+                    ${label}
+                </div>
             </div>
-            <div style="font-size: 2rem; font-weight: 600; color: ${color};">
+            <div style="font-size: 2.5rem; font-weight: 800; color: ${color}; font-family: 'SF Mono', monospace; line-height: 1; margin-bottom: 0.5rem;">
                 ${score}
             </div>
             <div style="
-                margin-top: 0.5rem;
-                height: 4px;
+                height: 3px;
                 background: rgba(255, 255, 255, 0.1);
                 border-radius: 2px;
                 overflow: hidden;
@@ -362,6 +342,7 @@ function renderArchitectureMetricCard(label, score, explanation) {
                     width: ${score}%;
                     background: ${color};
                     transition: width 0.5s ease;
+                    box-shadow: 0 0 8px ${color}50;
                 "></div>
             </div>
         </div>
@@ -473,15 +454,15 @@ function init3DArchitecture(tiers) {
     container.innerHTML = '';
     
     const width = container.clientWidth;
-    const height = 500;
+    const height = 350; // Reduced from 500
     
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0a0e27);
     
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.z = 15;
-    camera.position.y = 5;
+    camera.position.z = 12; // Closer zoom
+    camera.position.y = 4;
     
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
@@ -500,16 +481,16 @@ function init3DArchitecture(tiers) {
     const tierMeshes = [];
     
     tiers.forEach((tier, index) => {
-        const geometry = new THREE.BoxGeometry(6, 2, 4);
+        const geometry = new THREE.BoxGeometry(5, 1.5, 3.5); // Slightly smaller
         const material = new THREE.MeshPhongMaterial({ 
             color: tierColors[index % tierColors.length],
             transparent: true,
-            opacity: 0.8,
+            opacity: 0.85,
             emissive: tierColors[index % tierColors.length],
-            emissiveIntensity: 0.2
+            emissiveIntensity: 0.25
         });
         const cube = new THREE.Mesh(geometry, material);
-        cube.position.y = index * 3 - (tiers.length * 1.5);
+        cube.position.y = index * 2.5 - (tiers.length * 1.25); // Tighter spacing
         cube.userData = {
             name: tier.name,
             files: tier.file_count || 0,
@@ -523,7 +504,7 @@ function init3DArchitecture(tiers) {
         const lineMaterial = new THREE.LineBasicMaterial({ 
             color: 0xffffff, 
             transparent: true, 
-            opacity: 0.5 
+            opacity: 0.6 
         });
         const wireframe = new THREE.LineSegments(edges, lineMaterial);
         wireframe.position.copy(cube.position);
@@ -534,24 +515,24 @@ function init3DArchitecture(tiers) {
     const labelsContainer = document.getElementById('tier-labels-overlay');
     if (labelsContainer && tiers.length > 0) {
         labelsContainer.innerHTML = tiers.map((tier, index) => {
-            const topPosition = 50 - ((index - (tiers.length - 1) / 2) * 28);
+            const topPosition = 50 - ((index - (tiers.length - 1) / 2) * 22); // Adjusted spacing
             return `
                 <div style="
-                    margin-bottom: 1.5rem;
+                    margin-bottom: 0.75rem;
                     position: absolute;
                     top: ${topPosition}%;
                     transform: translateY(-50%);
-                    background: rgba(10, 14, 39, 0.9);
-                    padding: 0.75rem 1rem;
-                    border-radius: 8px;
-                    border-left: 3px solid ${getColorHex(tierColors[index % tierColors.length])};
+                    background: rgba(10, 14, 39, 0.92);
+                    padding: 0.5rem 0.75rem;
+                    border-radius: 6px;
+                    border-left: 2px solid ${getColorHex(tierColors[index % tierColors.length])};
                     backdrop-filter: blur(10px);
-                    min-width: 180px;
+                    min-width: 140px;
                 ">
-                    <div style="font-weight: 600; font-size: 0.9rem; color: ${getColorHex(tierColors[index % tierColors.length])}; margin-bottom: 0.25rem;">
+                    <div style="font-weight: 700; font-size: 0.8rem; color: ${getColorHex(tierColors[index % tierColors.length])}; margin-bottom: 0.125rem;">
                         ${tier.name}
                     </div>
-                    <div style="font-size: 0.7rem; color: var(--text-secondary);">
+                    <div style="font-size: 0.65rem; color: var(--text-secondary);">
                         ${tier.file_count || 0} files • ${(tier.loc || 0).toLocaleString()} LOC
                     </div>
                 </div>
@@ -591,7 +572,7 @@ function init3DArchitecture(tiers) {
     renderer.domElement.addEventListener('wheel', (e) => {
         e.preventDefault();
         camera.position.z += e.deltaY * 0.01;
-        camera.position.z = Math.max(5, Math.min(30, camera.position.z)); // Clamp zoom
+        camera.position.z = Math.max(5, Math.min(25, camera.position.z)); // Clamp zoom
     });
     
     // Animation loop
@@ -607,7 +588,7 @@ function init3DArchitecture(tiers) {
     
     // Store controls globally for button handlers
     window.resetCamera = function() {
-        camera.position.set(0, 5, 15);
+        camera.position.set(0, 4, 12);
         camera.lookAt(0, 0, 0);
         scene.rotation.set(0, 0, 0);
         isRotating = false;
@@ -663,7 +644,7 @@ function initComponentGraph(components) {
     });
 
     const width = container.clientWidth;
-    const height = 600;
+    const height = 350; // Reduced from 600
 
     const colorMap = {
         'presentation': '#ec4899',
@@ -680,8 +661,8 @@ function initComponentGraph(components) {
         .attr('height', height);
 
     const simulation = d3.forceSimulation(nodes)
-        .force('link', d3.forceLink(links).id(d => d.id).distance(100))
-        .force('charge', d3.forceManyBody().strength(-300))
+        .force('link', d3.forceLink(links).id(d => d.id).distance(80)) // Tighter
+        .force('charge', d3.forceManyBody().strength(-250)) // Less repulsion
         .force('center', d3.forceCenter(width / 2, height / 2));
 
     const link = svg.append('g')
@@ -690,8 +671,8 @@ function initComponentGraph(components) {
         .enter()
         .append('line')
         .attr('stroke', '#475569')
-        .attr('stroke-width', 2)
-        .attr('opacity', 0.6);
+        .attr('stroke-width', 1.5)
+        .attr('opacity', 0.5);
 
     // Create node groups for better interaction
     const nodeGroup = svg.append('g')
@@ -707,17 +688,17 @@ function initComponentGraph(components) {
     
     // Add circles with glow effect
     nodeGroup.append('circle')
-        .attr('r', d => Math.sqrt(d.loc) / 5 + 10)
+        .attr('r', d => Math.sqrt(d.loc) / 6 + 8) // Smaller nodes
         .attr('fill', d => colorMap[d.tier] || colorMap.other)
         .attr('stroke', d => colorMap[d.tier] || colorMap.other)
-        .attr('stroke-width', 2)
+        .attr('stroke-width', 1.5)
         .attr('opacity', 0.9)
         .on('mouseover', function(event, d) {
             d3.select(this)
                 .transition()
-                .duration(200)
-                .attr('r', Math.sqrt(d.loc) / 5 + 15)
-                .attr('stroke-width', 3);
+                .duration(150)
+                .attr('r', Math.sqrt(d.loc) / 6 + 12)
+                .attr('stroke-width', 2.5);
             
             // Show info tooltip
             showNodeInfo(event, d);
@@ -725,9 +706,9 @@ function initComponentGraph(components) {
         .on('mouseout', function(event, d) {
             d3.select(this)
                 .transition()
-                .duration(200)
-                .attr('r', Math.sqrt(d.loc) / 5 + 10)
-                .attr('stroke-width', 2);
+                .duration(150)
+                .attr('r', Math.sqrt(d.loc) / 6 + 8)
+                .attr('stroke-width', 1.5);
             
             hideNodeInfo();
         });
@@ -737,30 +718,30 @@ function initComponentGraph(components) {
     
     // Background rect for text
     labelGroup.append('rect')
-        .attr('fill', 'rgba(10, 14, 39, 0.9)')
-        .attr('rx', 4)
-        .attr('ry', 4)
-        .attr('x', d => -d.id.length * 3.5)
-        .attr('y', -22)
-        .attr('width', d => d.id.length * 7)
-        .attr('height', 16);
+        .attr('fill', 'rgba(10, 14, 39, 0.92)')
+        .attr('rx', 3)
+        .attr('ry', 3)
+        .attr('x', d => -d.id.length * 3)
+        .attr('y', -18)
+        .attr('width', d => d.id.length * 6)
+        .attr('height', 14);
     
     // Text label
     labelGroup.append('text')
         .text(d => d.id)
-        .attr('font-size', '11px')
+        .attr('font-size', '10px')
         .attr('font-weight', '600')
         .attr('fill', '#e2e8f0')
         .attr('text-anchor', 'middle')
-        .attr('dy', -10);
+        .attr('dy', -9);
     
     // LOC indicator
     labelGroup.append('text')
         .text(d => `${d.loc} LOC`)
-        .attr('font-size', '9px')
+        .attr('font-size', '8px')
         .attr('fill', '#94a3b8')
         .attr('text-anchor', 'middle')
-        .attr('dy', 25);
+        .attr('dy', 20);
 
     simulation.on('tick', () => {
         link
@@ -781,21 +762,21 @@ function initComponentGraph(components) {
             position: fixed;
             background: linear-gradient(135deg, rgba(26, 31, 58, 0.98) 0%, rgba(10, 14, 39, 0.98) 100%);
             color: var(--text-primary);
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            padding: 0.625rem 0.875rem;
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
             z-index: 10000;
             border: 1px solid ${colorMap[d.tier] || colorMap.other}44;
             backdrop-filter: blur(10px);
             pointer-events: none;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
         `;
         
         tooltip.innerHTML = `
-            <div style="font-weight: 600; margin-bottom: 0.5rem; color: ${colorMap[d.tier] || colorMap.other};">
+            <div style="font-weight: 700; margin-bottom: 0.375rem; color: ${colorMap[d.tier] || colorMap.other}; font-size: 0.85rem;">
                 ${d.id}
             </div>
-            <div style="color: var(--text-secondary); font-size: 0.8rem;">
+            <div style="color: var(--text-secondary); font-size: 0.75rem;">
                 <div>📊 LOC: <strong style="color: var(--text-primary);">${d.loc.toLocaleString()}</strong></div>
                 <div>🏷️ Tier: <strong style="color: ${colorMap[d.tier] || colorMap.other};">${d.tier}</strong></div>
             </div>
@@ -803,8 +784,8 @@ function initComponentGraph(components) {
         
         document.body.appendChild(tooltip);
         
-        const x = event.pageX + 15;
-        const y = event.pageY + 15;
+        const x = event.pageX + 12;
+        const y = event.pageY + 12;
         const rect = tooltip.getBoundingClientRect();
         
         tooltip.style.left = (x + rect.width > window.innerWidth ? window.innerWidth - rect.width - 10 : x) + 'px';

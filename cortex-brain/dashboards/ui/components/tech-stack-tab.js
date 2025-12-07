@@ -115,8 +115,8 @@ export function renderTechStack(data) {
             </div>
         </div>
 
-        <!-- Technology Categories -->
-        <div style="display: grid; gap: 2rem; margin-top: 2rem;">
+        <!-- Technology Categories - Compact 2-Column Layout -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
             ${renderTechCategory('Frontend', '🎨', techStack.frontend || [])}
             ${renderTechCategory('Backend', '⚙️', techStack.backend || [])}
             ${renderTechCategory('Database', '💾', techStack.database || [])}
@@ -161,9 +161,49 @@ function renderTechCategory(categoryName, icon, technologies) {
     }
     
     return `
-        <div class="glass-card">
-            <h3 style="margin-bottom: 1.5rem;">${icon} ${categoryName}</h3>
-            <div style="display: grid; gap: 1.5rem;">
+        <div class="glass-card" style="padding: 2rem;">
+            <div style="
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 1.75rem;
+                padding-bottom: 1.25rem;
+                border-bottom: 2px solid var(--accent-primary)30;
+            ">
+                <span style="
+                    font-size: 2.5rem;
+                    filter: drop-shadow(0 2px 8px rgba(0, 212, 255, 0.3));
+                ">${icon}</span>
+                <h3 style="
+                    margin: 0;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    letter-spacing: -0.01em;
+                    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+                ">${categoryName}</h3>
+                <div style="
+                    margin-left: auto;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+                    <span style="
+                        font-size: 1.75rem;
+                        font-weight: 800;
+                        color: var(--accent-primary);
+                        font-family: 'SF Mono', monospace;
+                    ">${technologies.length}</span>
+                    <span style="
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                        color: var(--text-secondary);
+                        font-weight: 600;
+                    ">items</span>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem;">
                 ${technologies.map(tech => renderTechCard(tech)).join('')}
             </div>
         </div>
@@ -219,62 +259,189 @@ function renderTechCard(tech) {
     
     return `
         <div 
-            class="tech-card-hoverable"
+            class="tech-card-clickable"
+            data-tech-name="${tech.name}"
+            data-tech-version="${tech.version || 'N/A'}"
+            data-tech-status="${tech.status || 'current'}"
+            data-tech-cve="${tech.cve_count || 0}"
+            data-tech-explanation="${explanation.replace(/"/g, '&quot;')}"
             style="
-                background: var(--glass-light);
+                background: linear-gradient(135deg, var(--glass-light) 0%, rgba(26, 31, 58, 0.5) 100%);
                 border: 1px solid var(--glass-border);
                 border-radius: 12px;
                 padding: 1.5rem;
-                transition: all 0.3s ease;
                 cursor: pointer;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                overflow: hidden;
             "
-            onmouseover="showTechTooltip(event, ${JSON.stringify(tech.name).replace(/"/g, '&quot;')}, ${JSON.stringify(tech.version || 'N/A').replace(/"/g, '&quot;')}, ${JSON.stringify(tech.status || 'current').replace(/"/g, '&quot;')}, ${tech.cve_count || 0}, ${JSON.stringify(explanation).replace(/"/g, '&quot;')}, this)"
-            onmouseout="hideTechTooltip(this)"
+            onclick="toggleTechTooltip(this)"
+            onmouseenter="animateTechCard(this, true)"
+            onmouseleave="animateTechCard(this, false)"
         >
-            <!-- Header -->
-            <div style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 1rem;">
-                <div style="flex: 1;">
-                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1.25rem;">${tech.name || 'Unknown'}</h4>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-                        <span style="color: var(--text-secondary); font-size: 0.875rem;">
-                            Version: <strong style="color: var(--text-primary);">${tech.version || 'N/A'}</strong>
-                        </span>
-                        ${tech.latest && tech.latest !== 'unknown' ? `
-                            <span style="color: var(--text-secondary); font-size: 0.875rem;">
-                                Latest: <strong style="color: var(--accent-primary);">${tech.latest}</strong>
-                            </span>
-                        ` : ''}
-                    </div>
-                </div>
-                <div style="display: flex; gap: 0.75rem; align-items: center;">
-                    <span style="
-                        padding: 0.375rem 0.875rem;
-                        border-radius: 12px;
-                        font-size: 0.875rem;
-                        font-weight: 600;
-                        background: ${status.color}22;
-                        color: ${status.color};
-                        white-space: nowrap;
-                    ">
-                        ${status.icon} ${status.label}
-                    </span>
-                    ${cveCount > 0 ? `
-                        <span style="
-                            padding: 0.375rem 0.875rem;
-                            border-radius: 12px;
-                            font-size: 0.875rem;
-                            font-weight: 600;
-                            background: var(--danger)22;
-                            color: var(--danger);
-                            white-space: nowrap;
-                        ">
-                            🛡️ ${cveCount} CVEs
-                        </span>
-                    ` : ''}
-                </div>
+            <!-- Status Icon (Top Right) -->
+            <div style="
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                font-size: 2rem;
+                opacity: 0.9;
+                filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+            ">${status.icon}</div>
+            
+            <!-- Technology Name -->
+            <h4 style="
+                margin: 0 0 1rem 0;
+                font-size: 1.25rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                line-height: 1.2;
+                padding-right: 3rem;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            ">${tech.name || 'Unknown'}</h4>
+            
+            <!-- Current Version (Prominent) -->
+            <div style="margin-bottom: ${tech.latest && tech.latest !== 'unknown' && tech.latest !== tech.version ? '0.75rem' : '0'};">
+                <div style="
+                    font-size: 3rem;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                    font-family: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+                    line-height: 1;
+                    letter-spacing: -0.02em;
+                    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    margin-bottom: 0.25rem;
+                ">${tech.version || 'N/A'}</div>
+                <div style="
+                    font-size: 0.75rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    color: var(--text-secondary);
+                    font-weight: 600;
+                ">CURRENT VERSION</div>
             </div>
             
-            ${hasMetadata ? renderTechMetadata(tech, cardId) : ''}
+            <!-- Latest Version Badge -->
+            ${tech.latest && tech.latest !== 'unknown' && tech.latest !== tech.version ? `
+                <div style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    padding: 0.5rem 1rem;
+                    background: linear-gradient(135deg, var(--accent-primary)20 0%, var(--accent-primary)10 100%);
+                    border: 1px solid var(--accent-primary)40;
+                    border-radius: 8px;
+                    margin-bottom: ${cveCount > 0 ? '0.75rem' : '0'};
+                ">
+                    <span style="
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                        color: var(--text-secondary);
+                        font-weight: 600;
+                    ">Latest:</span>
+                    <span style="
+                        font-size: 1.125rem;
+                        font-weight: 700;
+                        color: var(--accent-primary);
+                        font-family: 'SF Mono', monospace;
+                    ">${tech.latest}</span>
+                </div>
+            ` : ''}
+            
+            <!-- CVE Warning -->
+            ${cveCount > 0 ? `
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.625rem;
+                    padding: 0.75rem 1rem;
+                    background: linear-gradient(135deg, var(--danger)15 0%, var(--danger)08 100%);
+                    border: 1px solid var(--danger)40;
+                    border-radius: 8px;
+                    margin-top: 0.75rem;
+                ">
+                    <span style="font-size: 1.5rem;">🛡️</span>
+                    <div>
+                        <div style="
+                            font-size: 1rem;
+                            font-weight: 700;
+                            color: var(--danger);
+                            line-height: 1.2;
+                        ">${cveCount} Security Alert${cveCount > 1 ? 's' : ''}</div>
+                        <div style="
+                            font-size: 0.7rem;
+                            color: var(--text-secondary);
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                            margin-top: 0.125rem;
+                        ">CVE DETECTED</div>
+                    </div>
+                </div>
+            ` : ''}
+            
+            ${hasMetadata ? renderCompactMetadata(tech, cardId) : ''}
+            
+            <!-- Subtle gradient overlay -->
+            <div style="
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 60px;
+                background: linear-gradient(to top, var(--glass-border) 0%, transparent 100%);
+                opacity: 0.3;
+                pointer-events: none;
+            "></div>
+        </div>
+    `;
+}
+
+/**
+ * Render compact technology metadata
+ * @param {Object} tech - Technology object
+ * @param {string} cardId - Unique card ID
+ * @returns {string} HTML string
+ */
+function renderCompactMetadata(tech, cardId) {
+    const metadata = tech.metadata || {};
+    
+    // Build stats array with icons
+    const stats = [];
+    if (metadata.solution_count) stats.push({ icon: '📁', value: metadata.solution_count, label: 'Solutions' });
+    if (metadata.project_count) stats.push({ icon: '📦', value: metadata.project_count, label: 'Projects' });
+    if (metadata.package_count) stats.push({ icon: '📚', value: metadata.package_count, label: 'Packages' });
+    
+    if (stats.length === 0) return '';
+    
+    return `
+        <div style="
+            margin-top: 1.25rem;
+            padding-top: 1.25rem;
+            border-top: 2px solid var(--glass-border);
+            display: grid;
+            grid-template-columns: repeat(${Math.min(stats.length, 3)}, 1fr);
+            gap: 1rem;
+        ">
+            ${stats.map(stat => `
+                <div style="text-align: center;">
+                    <div style="
+                        font-size: 2rem;
+                        font-weight: 800;
+                        color: var(--accent-primary);
+                        line-height: 1;
+                        margin-bottom: 0.375rem;
+                        text-shadow: 0 2px 4px rgba(0, 212, 255, 0.3);
+                    ">${stat.value}</div>
+                    <div style="
+                        font-size: 0.7rem;
+                        text-transform: uppercase;
+                        letter-spacing: 0.08em;
+                        color: var(--text-secondary);
+                        font-weight: 600;
+                    ">${stat.label}</div>
+                </div>
+            `).join('')}
         </div>
     `;
 }
@@ -732,18 +899,46 @@ window.exportTechStack = function() {
 };
 
 /**
- * Show technology tooltip with detailed information
- * @param {Event} event - Mouse event
- * @param {string} name - Technology name
- * @param {string} version - Current version
- * @param {string} status - Technology status
- * @param {number} cveCount - CVE count
- * @param {string} explanation - Status explanation
+ * Animate tech card on hover
+ * @param {HTMLElement} card - Card element
+ * @param {boolean} isEnter - True if mouse entering, false if leaving
+ */
+window.animateTechCard = function(card, isEnter) {
+    if (isEnter) {
+        card.style.transform = 'translateY(-4px)';
+        card.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)';
+    } else {
+        card.style.transform = 'translateY(0)';
+        card.style.boxShadow = 'none';
+    }
+};
+
+/**
+ * Toggle technology tooltip on click
  * @param {HTMLElement} card - Card element
  */
-window.showTechTooltip = function(event, name, version, status, cveCount, explanation, card) {
-    // Remove any existing tooltip
+window.toggleTechTooltip = function(card) {
+    const name = card.dataset.techName;
+    const version = card.dataset.techVersion;
+    const status = card.dataset.techStatus;
+    const cveCount = parseInt(card.dataset.techCve) || 0;
+    const explanation = card.dataset.techExplanation;
+    
+    // Check if tooltip already exists for this card
+    const existingTooltip = document.getElementById('tech-tooltip');
+    if (existingTooltip && existingTooltip.dataset.cardElement === card.id) {
+        // Close if clicking same card
+        hideTechTooltip();
+        return;
+    }
+    
+    // Close any existing tooltip
     hideTechTooltip();
+    
+    // Assign unique ID to card if it doesn't have one
+    if (!card.id) {
+        card.id = `card-${Math.random().toString(36).substr(2, 9)}`;
+    }
     
     // Status configurations
     const statusConfig = {
@@ -788,24 +983,26 @@ window.showTechTooltip = function(event, name, version, status, cveCount, explan
     // Create tooltip
     const tooltip = document.createElement('div');
     tooltip.id = 'tech-tooltip';
+    tooltip.dataset.cardElement = card.id;
     tooltip.innerHTML = `
         <div style="
             position: fixed;
-            background: linear-gradient(135deg, var(--glass-dark) 0%, var(--background-primary) 100%);
+            background: rgba(0, 0, 0, 0.95);
             border: 2px solid ${statusInfo.color};
             border-radius: 12px;
             padding: 1.25rem;
             max-width: 400px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
             z-index: 10000;
             animation: tooltipFadeIn 0.2s ease-out;
+            backdrop-filter: blur(10px);
         ">
             <!-- Header -->
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--glass-border);">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
                 <div style="font-size: 1.5rem;">${statusInfo.icon}</div>
                 <div style="flex: 1;">
-                    <div style="font-weight: 600; font-size: 1.125rem; margin-bottom: 0.25rem;">${name}</div>
-                    <div style="font-size: 0.875rem; color: var(--text-secondary);">Version ${version}</div>
+                    <div style="font-weight: 600; font-size: 1.125rem; margin-bottom: 0.25rem; color: #ffffff;">${name}</div>
+                    <div style="font-size: 0.875rem; color: #a0a6c0;">Version ${version}</div>
                 </div>
                 <div style="
                     padding: 0.375rem 0.75rem;
@@ -822,77 +1019,102 @@ window.showTechTooltip = function(event, name, version, status, cveCount, explan
             
             <!-- Status Explanation -->
             <div style="margin-bottom: 1rem;">
-                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: #ffffff;">
                     Status Details
                 </div>
-                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                <div style="font-size: 0.875rem; color: #a0a6c0; line-height: 1.5;">
                     ${explanation}
                 </div>
             </div>
             
             <!-- Recommendation -->
             <div style="
-                background: var(--glass-light);
+                background: rgba(255, 255, 255, 0.05);
                 border-radius: 8px;
                 padding: 0.75rem;
             ">
-                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; color: var(--accent-primary);">
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; color: #00d4ff;">
                     💡 Recommendation
                 </div>
-                <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                <div style="font-size: 0.875rem; color: #a0a6c0; line-height: 1.5;">
                     ${recommendation}
                 </div>
             </div>
             
             ${cveWarning}
+            
+            <!-- Close hint -->
+            <div style="
+                margin-top: 1rem;
+                padding-top: 0.75rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                text-align: center;
+                font-size: 0.75rem;
+                color: #a0a6c0;
+            ">
+                Click anywhere to close
+            </div>
         </div>
     `;
     
     document.body.appendChild(tooltip);
     
-    // Position tooltip
-    const tooltipRect = tooltip.firstElementChild.getBoundingClientRect();
+    // Position tooltip - centered above/below the card
+    const tooltipElement = tooltip.firstElementChild;
+    const tooltipRect = tooltipElement.getBoundingClientRect();
     const cardRect = card.getBoundingClientRect();
     
-    let left = cardRect.right + 10;
-    let top = cardRect.top;
+    // Center horizontally relative to card
+    let left = cardRect.left + (cardRect.width / 2) - (tooltipRect.width / 2);
     
-    // Adjust if tooltip goes off screen
-    if (left + tooltipRect.width > window.innerWidth) {
-        left = cardRect.left - tooltipRect.width - 10;
+    // Position above card by default
+    let top = cardRect.top - tooltipRect.height - 12;
+    
+    // If tooltip goes off top of screen, show below card instead
+    if (top < 10) {
+        top = cardRect.bottom + 12;
     }
     
-    if (top + tooltipRect.height > window.innerHeight) {
+    // Keep tooltip horizontally on screen
+    if (left < 10) {
+        left = 10;
+    }
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+    }
+    
+    // Ensure tooltip doesn't go off bottom of screen
+    if (top + tooltipRect.height > window.innerHeight - 10) {
         top = window.innerHeight - tooltipRect.height - 10;
     }
     
-    if (top < 10) {
-        top = 10;
-    }
+    tooltipElement.style.left = `${left}px`;
+    tooltipElement.style.top = `${top}px`;
     
-    tooltip.firstElementChild.style.left = `${left}px`;
-    tooltip.firstElementChild.style.top = `${top}px`;
-    
-    // Add hover effect to card
-    card.style.borderColor = statusInfo.color;
-    card.style.transform = 'translateY(-4px)';
-    card.style.boxShadow = `0 8px 24px ${statusInfo.color}33`;
+    // Close tooltip when clicking outside
+    setTimeout(() => {
+        document.addEventListener('click', closeTooltipOutside, true);
+    }, 100);
 };
 
 /**
- * Hide technology tooltip
- * @param {HTMLElement} card - Card element
+ * Close tooltip when clicking outside
+ * @param {Event} e - Click event
  */
-window.hideTechTooltip = function(card) {
+function closeTooltipOutside(e) {
+    const tooltip = document.getElementById('tech-tooltip');
+    if (tooltip && !tooltip.contains(e.target) && !e.target.closest('.tech-card-clickable')) {
+        hideTechTooltip();
+    }
+}
+
+/**
+ * Hide technology tooltip
+ */
+window.hideTechTooltip = function() {
     const tooltip = document.getElementById('tech-tooltip');
     if (tooltip) {
         tooltip.remove();
-    }
-    
-    // Reset card styling
-    if (card) {
-        card.style.borderColor = 'var(--glass-border)';
-        card.style.transform = 'translateY(0)';
-        card.style.boxShadow = 'none';
+        document.removeEventListener('click', closeTooltipOutside, true);
     }
 };

@@ -4,6 +4,13 @@ Admin Dashboard Launcher Module
 Purpose: Launch enhanced CORTEX dashboard with repository selector dropdown.
          ADMIN ONLY - not included in production builds.
 
+📖 COMPLETE DOCUMENTATION: cortex-brain/documents/implementation-guides/dashboard-operation-guide.md
+   Read this guide for:
+   - Launch commands and options
+   - Data structure and file locations
+   - Server configuration details
+   - Troubleshooting common issues
+
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)

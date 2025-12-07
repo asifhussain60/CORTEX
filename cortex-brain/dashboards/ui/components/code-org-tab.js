@@ -41,44 +41,44 @@ export function renderCodeOrganization(data) {
         </div>
 
         <!-- Summary Cards -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-            <div class="glass-card" style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem;">
-                <div style="font-size: 2.5rem;">📁</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="glass-card" style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem;">
+                <div style="font-size: 2rem;">📁</div>
                 <div>
-                    <h3 style="font-size: 2rem; margin: 0; color: var(--accent-primary);">
+                    <h3 style="font-size: 1.75rem; margin: 0; color: var(--accent-primary);">
                         ${summary.total_files || 0}
                     </h3>
-                    <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary);">Total Files</p>
+                    <p style="margin: 0.15rem 0 0 0; color: var(--text-secondary); font-size: 0.8rem;">Total Files</p>
                 </div>
             </div>
             
-            <div class="glass-card" style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem;">
-                <div style="font-size: 2.5rem;">⚠️</div>
+            <div class="glass-card" style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem;">
+                <div style="font-size: 2rem;">⚠️</div>
                 <div>
-                    <h3 style="font-size: 2rem; margin: 0; color: var(--warning);">
+                    <h3 style="font-size: 1.75rem; margin: 0; color: var(--warning);">
                         ${summary.high_complexity_files || 0}
                     </h3>
-                    <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary);">High Complexity</p>
+                    <p style="margin: 0.15rem 0 0 0; color: var(--text-secondary); font-size: 0.8rem;">High Complexity</p>
                 </div>
             </div>
             
-            <div class="glass-card" style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem;">
-                <div style="font-size: 2.5rem;">🔥</div>
+            <div class="glass-card" style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem;">
+                <div style="font-size: 2rem;">🔥</div>
                 <div>
-                    <h3 style="font-size: 2rem; margin: 0; color: var(--danger);">
+                    <h3 style="font-size: 1.75rem; margin: 0; color: var(--danger);">
                         ${summary.hotspot_count || 0}
                     </h3>
-                    <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary);">Hotspots</p>
+                    <p style="margin: 0.15rem 0 0 0; color: var(--text-secondary); font-size: 0.8rem;">Hotspots</p>
                 </div>
             </div>
             
-            <div class="glass-card" style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem;">
-                <div style="font-size: 2.5rem;">📈</div>
+            <div class="glass-card" style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem;">
+                <div style="font-size: 2rem;">📈</div>
                 <div>
-                    <h3 style="font-size: 2rem; margin: 0; color: var(--accent-primary);">
+                    <h3 style="font-size: 1.75rem; margin: 0; color: var(--accent-primary);">
                         ${(summary.avg_complexity || 0).toFixed(1)}
                     </h3>
-                    <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary);">Avg Complexity</p>
+                    <p style="margin: 0.15rem 0 0 0; color: var(--text-secondary); font-size: 0.8rem;">Avg Complexity</p>
                 </div>
             </div>
         </div>
@@ -88,71 +88,53 @@ export function renderCodeOrganization(data) {
             background: var(--glass-light);
             border: 1px solid var(--glass-border);
             border-left: 4px solid var(--accent-primary);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
         ">
-            <div style="display: flex; align-items: start; gap: 1rem;">
-                <div style="font-size: 2rem; line-height: 1; opacity: 0.8;">💡</div>
-                <div style="flex: 1;">
-                    <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
-                        Code organization metrics identify maintenance priorities.
-                        <span style="color: var(--success); font-weight: 600;">✅ Low Complexity</span> files (&lt;20) are easy to maintain.
-                        <span style="color: var(--warning); font-weight: 600;">⚠️ Medium Complexity</span> files (20-50) need monitoring.
-                        <span style="color: var(--danger); font-weight: 600;">🔥 High Complexity</span> files (&gt;50) require urgent refactoring.
-                        <strong>Hotspots</strong> combine high complexity with frequent changes, indicating technical debt accumulation.
-                        <strong>Hover over heatmap cells and table rows</strong> for detailed analysis and recommendations.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- How to Read Description -->
-        <div class="glass-card" style="margin-bottom: 2rem; background: linear-gradient(135deg, var(--glass-light) 0%, var(--background-secondary) 100%);">
-            <h3 style="margin-bottom: 1rem;">📊 Code Organization Insights</h3>
-            <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
-                This analysis identifies code quality hotspots based on complexity and change frequency. 
-                <strong style="color: var(--success);">🟢 Green areas</strong> are maintainable, 
-                <strong style="color: var(--warning);">🟡 Yellow areas</strong> need monitoring, and 
-                <strong style="color: var(--danger);">🔴 Red areas</strong> require immediate refactoring.
-                <strong>Hover over heatmap cells or table rows</strong> to see detailed complexity metrics, LOC, change history, and specific refactoring recommendations.
-            </p>
+            <strong>💡 Quick Guide:</strong>
+            <span style="color: var(--success); font-weight: 600;">✅ Low</span> (&lt;20),
+            <span style="color: var(--warning); font-weight: 600;">⚠️ Medium</span> (20-50),
+            <span style="color: var(--danger); font-weight: 600;">🔥 High</span> (&gt;50) complexity.
+            <strong>Click cells/rows</strong> for details.
         </div>
 
         <!-- Complexity Heatmap -->
-        <div class="glass-card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 0.5rem;">🗺️ Complexity Heatmap</h3>
-            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 1.5rem;">
-                Files are sized by LOC and colored by complexity. Larger, redder files need attention.
+        <div class="glass-card" style="margin-bottom: 1.5rem; padding: 1rem;">
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1rem;">🗺️ Complexity Heatmap</h3>
+            <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0 0 0.75rem 0;">
+                Files sized by LOC, colored by complexity. Click cells for details.
             </p>
-            <div id="complexity-heatmap" style="width: 100%; height: 600px;"></div>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.5rem;">
-                <span style="color: var(--text-secondary); font-size: 0.875rem;">Low Complexity</span>
+            <div id="complexity-heatmap" style="width: 100%; height: 400px;"></div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.8rem;">Low</span>
                 <div style="
-                    width: 200px;
-                    height: 20px;
+                    width: 150px;
+                    height: 16px;
                     background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
-                    border-radius: 4px;
+                    border-radius: 3px;
                 "></div>
-                <span style="color: var(--text-secondary); font-size: 0.875rem;">High Complexity</span>
+                <span style="color: var(--text-secondary); font-size: 0.8rem;">High</span>
             </div>
         </div>
 
         <!-- Hotspots Table -->
-        <div class="glass-card">
-            <h3 style="margin-bottom: 0.5rem;">🔥 Critical Hotspots</h3>
-            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 1.5rem;">
-                Files with high complexity and frequent changes - highest refactoring priority.
+        <div class="glass-card" style="margin-bottom: 1.5rem; padding: 1rem;">
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1rem;">🔥 Critical Hotspots</h3>
+            <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0 0 0.75rem 0;">
+                High complexity + frequent changes = refactoring priority.
             </p>
             <div style="overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse;">
                     <thead>
                         <tr style="border-bottom: 1px solid var(--glass-border);">
-                            <th style="padding: 1rem; text-align: left; color: var(--text-secondary); font-weight: 600;">File</th>
-                            <th style="padding: 1rem; text-align: left; color: var(--text-secondary); font-weight: 600;">Risk Score</th>
-                            <th style="padding: 1rem; text-align: left; color: var(--text-secondary); font-weight: 600;">Complexity</th>
-                            <th style="padding: 1rem; text-align: left; color: var(--text-secondary); font-weight: 600;">Changes</th>
-                            <th style="padding: 1rem; text-align: left; color: var(--text-secondary); font-weight: 600;">Recommendation</th>
+                            <th style="padding: 0.5rem 0.75rem; text-align: left; color: var(--text-secondary); font-weight: 600; font-size: 0.875rem;">File</th>
+                            <th style="padding: 0.5rem 0.75rem; text-align: left; color: var(--text-secondary); font-weight: 600; font-size: 0.875rem;">Risk</th>
+                            <th style="padding: 0.5rem 0.75rem; text-align: left; color: var(--text-secondary); font-weight: 600; font-size: 0.875rem;">Complexity</th>
+                            <th style="padding: 0.5rem 0.75rem; text-align: left; color: var(--text-secondary); font-weight: 600; font-size: 0.875rem;">Changes</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -163,7 +145,7 @@ export function renderCodeOrganization(data) {
         </div>
         
         <!-- Enhanced Metrics Grid -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 0;">
             ${renderMaintainabilityCard(codeOrg.maintainability || {})}
             ${renderTechnicalDebtCard(codeOrg.technical_debt || {})}
             ${renderDuplicationCard(codeOrg.duplications || {})}
@@ -199,6 +181,9 @@ function renderHotspotRow(hotspot) {
         riskLabel = 'High';
     }
     
+    // Truncate filename to last part only
+    const fileName = (hotspot.file || 'Unknown').split('/').pop();
+    
     return `
         <tr 
             style="
@@ -206,18 +191,19 @@ function renderHotspotRow(hotspot) {
                 transition: all 0.2s;
                 cursor: pointer;
             "
-            onmouseover="showHotspotTooltip(event, ${JSON.stringify(hotspot).replace(/"/g, '&quot;')}, this); this.style.background='var(--glass-light)'"
-            onmouseout="hideHotspotTooltip(this); this.style.background='transparent'"
+            onclick="toggleHotspotTooltip(event, ${JSON.stringify(hotspot).replace(/"/g, '&quot;')}, this)"
+            onmouseenter="this.style.background='var(--glass-light)'"
+            onmouseleave="this.style.background='transparent'"
         >
-            <td style="padding: 1rem; font-family: monospace; font-size: 0.875rem;">
-                ${hotspot.file || 'Unknown'}
+            <td style="padding: 0.5rem 0.75rem; font-family: monospace; font-size: 0.8rem;">
+                ${fileName}
             </td>
-            <td style="padding: 1rem;">
+            <td style="padding: 0.5rem 0.75rem;">
                 <div style="
                     display: inline-block;
-                    padding: 0.25rem 0.75rem;
-                    border-radius: 12px;
-                    font-size: 0.875rem;
+                    padding: 0.15rem 0.5rem;
+                    border-radius: 8px;
+                    font-size: 0.75rem;
                     font-weight: 600;
                     background: ${riskColor}22;
                     color: ${riskColor};
@@ -225,14 +211,11 @@ function renderHotspotRow(hotspot) {
                     ${riskScore} - ${riskLabel}
                 </div>
             </td>
-            <td style="padding: 1rem; color: var(--text-secondary);">
+            <td style="padding: 0.5rem 0.75rem; color: var(--text-secondary); font-size: 0.875rem;">
                 ${hotspot.complexity || 'N/A'}
             </td>
-            <td style="padding: 1rem; color: var(--text-secondary);">
-                ${hotspot.change_frequency || 0} commits
-            </td>
-            <td style="padding: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
-                ${hotspot.recommendation || 'Review recommended'}
+            <td style="padding: 0.5rem 0.75rem; color: var(--text-secondary); font-size: 0.875rem;">
+                ${hotspot.change_frequency || 0}
             </td>
         </tr>
     `;
@@ -311,13 +294,15 @@ function initComplexityHeatmap(fileComplexity) {
         .attr('stroke-width', 2)
         .style('opacity', 0.8)
         .style('cursor', 'pointer')
-        .on('mouseover', function(event, d) {
-            d3.select(this).style('opacity', 1).attr('stroke-width', 3);
-            showHeatmapTooltip(event, d.data);
+        .on('click', function(event, d) {
+            event.stopPropagation();
+            toggleHeatmapTooltip(event, d.data, this);
         })
-        .on('mouseout', function(event, d) {
+        .on('mouseenter', function(event, d) {
+            d3.select(this).style('opacity', 1).attr('stroke-width', 3);
+        })
+        .on('mouseleave', function(event, d) {
             d3.select(this).style('opacity', 0.8).attr('stroke-width', 2);
-            hideHeatmapTooltip();
         });
     
     cell.append('text')
@@ -346,15 +331,17 @@ function initComplexityHeatmap(fileComplexity) {
 }
 
 /**
- * Show heatmap tooltip for complexity cell
+ * Toggle heatmap tooltip for complexity cell (click-based)
  * @param {Event} event - Mouse event
  * @param {Object} data - File data (name, value/LOC, complexity)
+ * @param {Element} element - The clicked element
  */
-window.showHeatmapTooltip = function(event, data) {
-    // Remove existing tooltip
+window.toggleHeatmapTooltip = function(event, data, element) {
+    // Check if tooltip already exists
     const existing = document.getElementById('heatmap-tooltip');
     if (existing) {
         existing.remove();
+        return;
     }
     
     const complexity = data.complexity || 0;
@@ -391,31 +378,64 @@ window.showHeatmapTooltip = function(event, data) {
         recommendation = 'Maintainable complexity. No immediate action required.';
     }
     
-    // Create tooltip
+    // Create tooltip container
     const tooltip = document.createElement('div');
     tooltip.id = 'heatmap-tooltip';
     tooltip.style.cssText = `
         position: fixed;
-        background: #000000;
+        z-index: 10000;
+        pointer-events: auto;
+    `;
+    
+    // Create tooltip content
+    const tooltipContent = document.createElement('div');
+    tooltipContent.style.cssText = `
+        background: #1a1f3a;
         color: #ffffff;
         border: 3px solid ${complexityColor};
         border-radius: 12px;
         padding: 1.25rem;
         max-width: 400px;
-        z-index: 10000;
         box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 20px ${complexityColor}66;
-        pointer-events: none;
         animation: tooltipFadeIn 0.2s ease-out;
     `;
     
-    tooltip.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #333333;">
+    tooltipContent.innerHTML = `
+        <div style="position: relative;">
+            <button 
+                onclick="hideHeatmapTooltip(); event.stopPropagation();"
+                style="
+                    position: absolute;
+                    top: -0.5rem;
+                    right: -0.5rem;
+                    background: ${complexityColor};
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 50%;
+                    width: 28px;
+                    height: 28px;
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                    transition: all 0.2s;
+                    z-index: 10001;
+                "
+                onmouseenter="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.5)'"
+                onmouseleave="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(0, 0, 0, 0.3)'"
+            >×</button>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
             <div style="font-size: 2rem;">${complexityIcon}</div>
             <div style="flex: 1;">
                 <div style="font-weight: 700; font-size: 1.1rem; color: #ffffff; margin-bottom: 0.25rem;">
                     ${fileName}
                 </div>
-                <div style="font-size: 0.875rem; color: #cccccc;">
+                <div style="font-size: 0.875rem; color: #a0a6c0;">
                     ${loc.toLocaleString()} lines of code
                 </div>
             </div>
@@ -430,16 +450,16 @@ window.showHeatmapTooltip = function(event, data) {
             </div>
         </div>
         
-        <div style="color: #dddddd; line-height: 1.6; font-size: 0.875rem;">
+        <div style="color: #d0d4e0; line-height: 1.6; font-size: 0.875rem;">
             ${recommendation}
         </div>
         
         ${complexity >= 50 ? `
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #333333;">
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
                 <div style="color: #ffd700; font-size: 0.875rem; font-weight: 600;">
                     💡 Refactoring Tips
                 </div>
-                <ul style="color: #dddddd; font-size: 0.875rem; margin: 0.5rem 0 0 1.25rem; line-height: 1.6;">
+                <ul style="color: #d0d4e0; font-size: 0.875rem; margin: 0.5rem 0 0 1.25rem; line-height: 1.6;">
                     <li>Extract complex methods into smaller functions</li>
                     <li>Reduce nested conditional statements</li>
                     <li>Consider applying design patterns</li>
@@ -447,12 +467,24 @@ window.showHeatmapTooltip = function(event, data) {
                 </ul>
             </div>
         ` : ''}
+        
+        <div style="
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.75rem;
+            color: #a0a6c0;
+        ">
+            Click anywhere or scroll to close
+        </div>
     `;
     
+    tooltip.appendChild(tooltipContent);
     document.body.appendChild(tooltip);
     
     // Position tooltip
-    const tooltipRect = tooltip.getBoundingClientRect();
+    const tooltipRect = tooltipContent.getBoundingClientRect();
     let left = event.clientX + 15;
     let top = event.clientY + 15;
     
@@ -467,7 +499,24 @@ window.showHeatmapTooltip = function(event, data) {
     
     tooltip.style.left = left + 'px';
     tooltip.style.top = top + 'px';
+    
+    // Close tooltip when clicking outside
+    setTimeout(() => {
+        document.addEventListener('click', closeHeatmapTooltipOutside, true);
+        document.addEventListener('scroll', hideHeatmapTooltip, true);
+    }, 100);
 };
+
+/**
+ * Close heatmap tooltip when clicking outside
+ * @param {Event} e - Click event
+ */
+function closeHeatmapTooltipOutside(e) {
+    const tooltip = document.getElementById('heatmap-tooltip');
+    if (tooltip && !tooltip.contains(e.target)) {
+        hideHeatmapTooltip();
+    }
+}
 
 /**
  * Hide heatmap tooltip
@@ -476,16 +525,27 @@ window.hideHeatmapTooltip = function() {
     const tooltip = document.getElementById('heatmap-tooltip');
     if (tooltip) {
         tooltip.remove();
+        document.removeEventListener('click', closeHeatmapTooltipOutside, true);
+        document.removeEventListener('scroll', hideHeatmapTooltip, true);
     }
 };
 
 /**
- * Show hotspot row tooltip
+ * Toggle hotspot row tooltip (click-based)
  * @param {Event} event - Mouse event
  * @param {Object} hotspot - Hotspot data
  * @param {HTMLElement} element - Row element
  */
-window.showHotspotTooltip = function(event, hotspot, element) {
+window.toggleHotspotTooltip = function(event, hotspot, element) {
+    event.stopPropagation();
+    
+    // Check if tooltip already exists
+    const existing = document.getElementById('hotspot-tooltip');
+    if (existing) {
+        existing.remove();
+        return;
+    }
+    
     // Parse hotspot if it's a string (from JSON.stringify)
     if (typeof hotspot === 'string') {
         try {
@@ -494,15 +554,6 @@ window.showHotspotTooltip = function(event, hotspot, element) {
             console.error('Failed to parse hotspot data:', e);
             return;
         }
-    }
-    
-    // Add hover effect to row
-    element.style.background = 'var(--glass-light)';
-    
-    // Remove existing tooltip
-    const existing = document.getElementById('hotspot-tooltip');
-    if (existing) {
-        existing.remove();
     }
     
     const riskScore = hotspot.risk_score || 0;
@@ -545,31 +596,64 @@ window.showHotspotTooltip = function(event, hotspot, element) {
         explanation += 'Monitor for increases in complexity or change frequency.';
     }
     
-    // Create tooltip
+    // Create tooltip container
     const tooltip = document.createElement('div');
     tooltip.id = 'hotspot-tooltip';
     tooltip.style.cssText = `
         position: fixed;
-        background: #000000;
+        z-index: 10000;
+        pointer-events: auto;
+    `;
+    
+    // Create tooltip content
+    const tooltipContent = document.createElement('div');
+    tooltipContent.style.cssText = `
+        background: #1a1f3a;
         color: #ffffff;
         border: 3px solid ${riskColor};
         border-radius: 12px;
         padding: 1.25rem;
         max-width: 450px;
-        z-index: 10000;
         box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 20px ${riskColor}66;
-        pointer-events: none;
         animation: tooltipFadeIn 0.2s ease-out;
     `;
     
-    tooltip.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #333333;">
+    tooltipContent.innerHTML = `
+        <div style="position: relative;">
+            <button 
+                onclick="hideHotspotTooltip(); event.stopPropagation();"
+                style="
+                    position: absolute;
+                    top: -0.5rem;
+                    right: -0.5rem;
+                    background: ${riskColor};
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 50%;
+                    width: 28px;
+                    height: 28px;
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                    transition: all 0.2s;
+                    z-index: 10001;
+                "
+                onmouseenter="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.5)'"
+                onmouseleave="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(0, 0, 0, 0.3)'"
+            >×</button>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
             <div style="font-size: 2rem;">${riskIcon}</div>
             <div style="flex: 1;">
                 <div style="font-weight: 700; font-size: 1.1rem; color: #ffffff; margin-bottom: 0.25rem;">
                     ${fileName}
                 </div>
-                <div style="font-size: 0.875rem; color: #cccccc; font-family: monospace;">
+                <div style="font-size: 0.875rem; color: #a0a6c0; font-family: monospace;">
                     ${hotspot.file || 'Unknown'}
                 </div>
             </div>
@@ -582,13 +666,13 @@ window.showHotspotTooltip = function(event, hotspot, element) {
                     Risk: ${riskScore} (${riskLabel})
                 </span>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #333333; border: 1px solid #666666; border-radius: 8px;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px;">
                 <span style="font-size: 1.25rem;">⚙️</span>
                 <span style="color: #ffffff; font-weight: 600; font-size: 0.875rem;">
                     Complexity: ${complexity}
                 </span>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #333333; border: 1px solid #666666; border-radius: 8px;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px;">
                 <span style="font-size: 1.25rem;">📊</span>
                 <span style="color: #ffffff; font-weight: 600; font-size: 0.875rem;">
                     ${changeFreq} commits
@@ -596,25 +680,37 @@ window.showHotspotTooltip = function(event, hotspot, element) {
             </div>
         </div>
         
-        <div style="color: #dddddd; line-height: 1.6; font-size: 0.875rem; margin-bottom: 1rem;">
+        <div style="color: #d0d4e0; line-height: 1.6; font-size: 0.875rem; margin-bottom: 1rem;">
             ${explanation}
         </div>
         
-        <div style="padding-top: 1rem; border-top: 1px solid #333333;">
+        <div style="padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
             <div style="color: #ffd700; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">
                 💡 Recommended Action
             </div>
-            <div style="color: #dddddd; font-size: 0.875rem; line-height: 1.6;">
+            <div style="color: #d0d4e0; font-size: 0.875rem; line-height: 1.6;">
                 ${recommendation}
             </div>
         </div>
+        
+        <div style="
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.75rem;
+            color: #a0a6c0;
+        ">
+            Click anywhere or scroll to close
+        </div>
     `;
     
+    tooltip.appendChild(tooltipContent);
     document.body.appendChild(tooltip);
     
     // Position tooltip
     const rect = element.getBoundingClientRect();
-    const tooltipRect = tooltip.getBoundingClientRect();
+    const tooltipRect = tooltipContent.getBoundingClientRect();
     
     let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
     let top = rect.top - tooltipRect.height - 12;
@@ -631,20 +727,34 @@ window.showHotspotTooltip = function(event, hotspot, element) {
     
     tooltip.style.left = left + 'px';
     tooltip.style.top = top + 'px';
+    
+    // Close tooltip when clicking outside or scrolling
+    setTimeout(() => {
+        document.addEventListener('click', closeHotspotTooltipOutside, true);
+        document.addEventListener('scroll', hideHotspotTooltip, true);
+    }, 100);
 };
 
 /**
- * Hide hotspot row tooltip
- * @param {HTMLElement} element - Row element
+ * Close hotspot tooltip when clicking outside
+ * @param {Event} e - Click event
  */
-window.hideHotspotTooltip = function(element) {
-    // Remove hover effect
-    element.style.background = 'transparent';
-    
-    // Remove tooltip
+function closeHotspotTooltipOutside(e) {
+    const tooltip = document.getElementById('hotspot-tooltip');
+    if (tooltip && !tooltip.contains(e.target) && !e.target.closest('tr[onclick*="toggleHotspotTooltip"]')) {
+        hideHotspotTooltip();
+    }
+}
+
+/**
+ * Hide hotspot row tooltip
+ */
+window.hideHotspotTooltip = function() {
     const tooltip = document.getElementById('hotspot-tooltip');
     if (tooltip) {
         tooltip.remove();
+        document.removeEventListener('click', closeHotspotTooltipOutside, true);
+        document.removeEventListener('scroll', hideHotspotTooltip, true);
     }
 };
 
@@ -671,27 +781,27 @@ function renderMaintainabilityCard(maintainability) {
     }
     
     return `
-        <div class="glass-card">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                <div style="font-size: 2.5rem;">📐</div>
+        <div class="glass-card" style="padding: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-size: 2rem;">📐</div>
                 <div>
-                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Maintainability Index</h4>
-                    <h2 style="font-size: 2rem; color: ${scoreColor};">${score}/100</h2>
-                    <p style="font-size: 0.75rem; color: ${scoreColor}; margin: 0;">${scoreLabel}</p>
+                    <h4 style="font-size: 0.75rem; color: var(--text-secondary); margin: 0 0 0.15rem 0; text-transform: uppercase; letter-spacing: 0.05em;">Maintainability</h4>
+                    <h2 style="font-size: 2.25rem; font-weight: 800; color: ${scoreColor}; margin: 0; line-height: 1;">${score}<span style="font-size: 1.25rem; opacity: 0.6;">/100</span></h2>
+                    <p style="font-size: 0.7rem; color: ${scoreColor}; margin: 0.15rem 0 0 0; font-weight: 600;">${scoreLabel}</p>
                 </div>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; font-size: 0.75rem;">
-                <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px;">
-                    <span style="color: var(--success);">✅</span> ${filesByCategory.excellent || 0} Excellent
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem; font-size: 0.7rem;">
+                <div style="background: var(--glass-light); padding: 0.35rem 0.5rem; border-radius: 4px;">
+                    <span style="color: var(--success);">✅</span> <strong>${filesByCategory.excellent || 0}</strong>
                 </div>
-                <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px;">
-                    <span style="color: var(--accent-primary);">🟢</span> ${filesByCategory.good || 0} Good
+                <div style="background: var(--glass-light); padding: 0.35rem 0.5rem; border-radius: 4px;">
+                    <span style="color: var(--accent-primary);">🟢</span> <strong>${filesByCategory.good || 0}</strong>
                 </div>
-                <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px;">
-                    <span style="color: var(--warning);">⚠️</span> ${filesByCategory.fair || 0} Fair
+                <div style="background: var(--glass-light); padding: 0.35rem 0.5rem; border-radius: 4px;">
+                    <span style="color: var(--warning);">⚠️</span> <strong>${filesByCategory.fair || 0}</strong>
                 </div>
-                <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px;">
-                    <span style="color: var(--danger);">❌</span> ${filesByCategory.poor || 0} Poor
+                <div style="background: var(--glass-light); padding: 0.35rem 0.5rem; border-radius: 4px;">
+                    <span style="color: var(--danger);">❌</span> <strong>${filesByCategory.poor || 0}</strong>
                 </div>
             </div>
         </div>
@@ -715,27 +825,27 @@ function renderTechnicalDebtCard(debt) {
     }
     
     return `
-        <div class="glass-card">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                <div style="font-size: 2.5rem;">⏱️</div>
+        <div class="glass-card" style="padding: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-size: 2rem;">⏱️</div>
                 <div>
-                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Technical Debt</h4>
-                    <h2 style="font-size: 2rem; color: ${debtColor};">${totalHours.toFixed(1)}h</h2>
-                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0;">Est. Remediation Time</p>
+                    <h4 style="font-size: 0.75rem; color: var(--text-secondary); margin: 0 0 0.15rem 0; text-transform: uppercase; letter-spacing: 0.05em;">Technical Debt</h4>
+                    <h2 style="font-size: 2.25rem; font-weight: 800; color: ${debtColor}; margin: 0; line-height: 1;">${totalHours.toFixed(1)}<span style="font-size: 1.25rem; opacity: 0.6;">h</span></h2>
+                    <p style="font-size: 0.7rem; color: var(--text-secondary); margin: 0.15rem 0 0 0; font-weight: 600;">Remediation Time</p>
                 </div>
             </div>
-            <div style="display: grid; gap: 0.5rem; font-size: 0.75rem;">
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--glass-light); border-radius: 6px;">
-                    <span>Complexity:</span>
-                    <strong>${(byCategory.complexity || 0).toFixed(1)}h</strong>
+            <div style="display: grid; gap: 0.4rem; font-size: 0.7rem;">
+                <div style="display: flex; justify-content: space-between; padding: 0.35rem 0.5rem; background: var(--glass-light); border-radius: 4px;">
+                    <span>Complexity</span>
+                    <strong style="color: var(--accent-primary);">${(byCategory.complexity || 0).toFixed(1)}h</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--glass-light); border-radius: 6px;">
-                    <span>Duplication:</span>
-                    <strong>${(byCategory.duplication || 0).toFixed(1)}h</strong>
+                <div style="display: flex; justify-content: space-between; padding: 0.35rem 0.5rem; background: var(--glass-light); border-radius: 4px;">
+                    <span>Duplication</span>
+                    <strong style="color: var(--accent-primary);">${(byCategory.duplication || 0).toFixed(1)}h</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--glass-light); border-radius: 6px;">
-                    <span>File Size:</span>
-                    <strong>${(byCategory.size || 0).toFixed(1)}h</strong>
+                <div style="display: flex; justify-content: space-between; padding: 0.35rem 0.5rem; background: var(--glass-light); border-radius: 4px;">
+                    <span>File Size</span>
+                    <strong style="color: var(--accent-primary);">${(byCategory.size || 0).toFixed(1)}h</strong>
                 </div>
             </div>
         </div>
@@ -760,29 +870,26 @@ function renderDuplicationCard(duplications) {
     }
     
     return `
-        <div class="glass-card">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                <div style="font-size: 2.5rem;">📋</div>
+        <div class="glass-card" style="padding: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-size: 2rem;">📋</div>
                 <div>
-                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Code Duplication</h4>
-                    <h2 style="font-size: 2rem; color: ${dupColor};">${dupRate.toFixed(1)}%</h2>
-                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0;">${filesWithDups} files affected</p>
+                    <h4 style="font-size: 0.75rem; color: var(--text-secondary); margin: 0 0 0.15rem 0; text-transform: uppercase; letter-spacing: 0.05em;">Duplication</h4>
+                    <h2 style="font-size: 2.25rem; font-weight: 800; color: ${dupColor}; margin: 0; line-height: 1;">${dupRate.toFixed(1)}<span style="font-size: 1.25rem; opacity: 0.6;">%</span></h2>
+                    <p style="font-size: 0.7rem; color: var(--text-secondary); margin: 0.15rem 0 0 0; font-weight: 600;">${filesWithDups} files</p>
                 </div>
             </div>
             ${dupBlocks.length > 0 ? `
-                <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                    Top Duplicates:
-                </div>
-                <div style="max-height: 120px; overflow-y: auto;">
+                <div style="max-height: 100px; overflow-y: auto;">
                     ${dupBlocks.slice(0, 3).map(dup => `
-                        <div style="background: var(--glass-light); padding: 0.5rem; border-radius: 6px; margin-bottom: 0.5rem;">
-                            <div style="font-size: 0.7rem; font-family: monospace; color: var(--accent-primary);">${dup.function}</div>
-                            <div style="font-size: 0.65rem; color: var(--text-secondary); margin-top: 0.25rem;">${dup.lines} lines duplicated</div>
+                        <div style="background: var(--glass-light); padding: 0.35rem 0.5rem; border-radius: 4px; margin-bottom: 0.4rem;">
+                            <div style="font-size: 0.7rem; font-family: monospace; color: var(--accent-primary); font-weight: 600;">${dup.function}</div>
+                            <div style="font-size: 0.65rem; color: var(--text-secondary); margin-top: 0.15rem;"><strong>${dup.lines}</strong> lines</div>
                         </div>
                     `).join('')}
                 </div>
             ` : `
-                <div style="text-align: center; padding: 1rem; color: var(--success); font-size: 0.875rem;">
+                <div style="text-align: center; padding: 1rem; color: var(--success); font-size: 0.8rem;">
                     ✅ No significant duplications detected
                 </div>
             `}
@@ -811,32 +918,32 @@ function renderCodeSmellsCard(smells) {
     }
     
     return `
-        <div class="glass-card">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                <div style="font-size: 2.5rem;">👃</div>
+        <div class="glass-card" style="padding: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-size: 2rem;">👃</div>
                 <div>
-                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Code Smells</h4>
-                    <h2 style="font-size: 2rem; color: ${smellColor};">${smellCount}</h2>
-                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0;">Issues Detected</p>
+                    <h4 style="font-size: 0.75rem; color: var(--text-secondary); margin: 0 0 0.15rem 0; text-transform: uppercase; letter-spacing: 0.05em;">Code Smells</h4>
+                    <h2 style="font-size: 2.25rem; font-weight: 800; color: ${smellColor}; margin: 0; line-height: 1;">${smellCount}</h2>
+                    <p style="font-size: 0.7rem; color: var(--text-secondary); margin: 0.15rem 0 0 0; font-weight: 600;">Issues</p>
                 </div>
             </div>
-            <div style="display: grid; gap: 0.5rem; font-size: 0.75rem;">
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--danger)22; border-radius: 6px;">
-                    <span><span style="color: var(--danger);">🔴</span> High:</span>
-                    <strong>${severityCounts.high}</strong>
+            <div style="display: grid; gap: 0.4rem; font-size: 0.7rem;">
+                <div style="display: flex; justify-content: space-between; padding: 0.35rem 0.5rem; background: var(--danger)22; border-radius: 4px;">
+                    <span><span style="color: var(--danger);">🔴</span> High</span>
+                    <strong style="color: var(--danger);">${severityCounts.high}</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--warning)22; border-radius: 6px;">
-                    <span><span style="color: var(--warning);">🟡</span> Medium:</span>
-                    <strong>${severityCounts.medium}</strong>
+                <div style="display: flex; justify-content: space-between; padding: 0.35rem 0.5rem; background: var(--warning)22; border-radius: 4px;">
+                    <span><span style="color: var(--warning);">🟡</span> Medium</span>
+                    <strong style="color: var(--warning);">${severityCounts.medium}</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: var(--glass-light); border-radius: 6px;">
-                    <span><span style="color: var(--text-secondary);">⚪</span> Low:</span>
-                    <strong>${severityCounts.low}</strong>
+                <div style="display: flex; justify-content: space-between; padding: 0.35rem 0.5rem; background: var(--glass-light); border-radius: 4px;">
+                    <span><span style="color: var(--success);">🟢</span> Low</span>
+                    <strong style="color: var(--success);">${severityCounts.low}</strong>
                 </div>
             </div>
             ${smellCount > 0 ? `
-                <div style="margin-top: 1rem; font-size: 0.7rem; color: var(--text-secondary);">
-                    ${smells[0]?.type}: ${smells[0]?.file?.split('/').pop()}
+                <div style="margin-top: 0.75rem; font-size: 0.65rem; color: var(--text-secondary); padding: 0.35rem 0.5rem; background: var(--glass-light); border-radius: 4px;">
+                    ${smells[0]?.type}: <strong>${smells[0]?.file?.split('/').pop()}</strong>
                 </div>
             ` : ''}
         </div>

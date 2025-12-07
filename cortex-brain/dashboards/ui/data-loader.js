@@ -14,7 +14,7 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 // Data source base paths (will be populated from registry)
 const DATA_SOURCES = {
-    mock: '/data/mock/'
+    mock: '../data/mock/'
 };
 
 // Repository registry (loaded on page load)
@@ -22,6 +22,7 @@ let REPOSITORY_REGISTRY = null;
 
 // Data files to load
 const DATA_FILES = [
+    'overview.json',                // NEW: Overview Tab data (OverviewCollector output)
     'executive-summary.json',
     'health-data.json',
     'tech-stack.json',
@@ -133,13 +134,14 @@ export async function loadDashboardData(source = 'mock') {
         const data = {
             source,
             timestamp: new Date().toISOString(),
-            executiveSummary: results[0],
-            healthData: results[1],
-            techStack: results[2],
-            security: results[3],
-            architecture: results[4],
-            codeOrganization: results[5],
-            vendors: results[6]
+            overview: results[0],            // NEW: Overview data (OverviewCollector output)
+            executiveSummary: results[1],
+            healthData: results[2],
+            techStack: results[3],
+            security: results[4],
+            architecture: results[5],
+            codeOrganization: results[6],
+            vendors: results[7]
         };
         
         // Validate data (temporarily disabled for debugging)
@@ -157,6 +159,29 @@ export async function loadDashboardData(source = 'mock') {
         
     } catch (error) {
         console.error(`Error loading dashboard data from ${source}:`, error);
+        throw error;
+    }
+}
+
+/**
+ * Load an additional JSON dataset for a given source (e.g., engineering-onboarding)
+ * @param {string} source - Data source key (e.g., 'mock')
+ * @param {string} fileName - File name without path (e.g., 'engineering-onboarding.json')
+ * @returns {Promise<Object>} - Parsed JSON
+ */
+export async function loadAdditionalData(source = 'mock', fileName) {
+    if (!fileName) throw new Error('fileName is required');
+    const basePath = DATA_SOURCES[source];
+    if (!basePath) {
+        const availableSources = Object.keys(DATA_SOURCES).join(', ');
+        throw new Error(`Unknown data source: ${source}. Available: ${availableSources}`);
+    }
+    const url = `${basePath}${fileName}`;
+    try {
+        const json = await loadJsonFile(url);
+        return json;
+    } catch (error) {
+        console.error(`Failed to load additional data ${fileName} from ${source}:`, error);
         throw error;
     }
 }
@@ -582,6 +607,7 @@ export function enrichDashboardData(data) {
 // Export utility functions
 export default {
     loadDashboardData,
+    loadAdditionalData,
     validateDataStructure,
     cacheData,
     clearCache,

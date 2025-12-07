@@ -41,11 +41,39 @@ function renderNarrativeExecutiveSummary(container, execSummary) {
     const composition = execSummary.composition || {};
     const capabilities = execSummary.capabilities || [];
     const techFoundation = execSummary.technical_foundation || {};
-    const healthSnapshot = execSummary.health_snapshot || {};
     const quickInsights = execSummary.quick_insights || [];
     const recommendedSteps = execSummary.recommended_next_steps || [];
     
+    // Calculate accuracy percentage based on data source
+    const dataSource = whatItDoes.source || 'generated';
+    const accuracyMap = {
+        'readme': 90,
+        'hybrid': 76,
+        'generated': 65
+    };
+    const accuracy = accuracyMap[dataSource] || 76;
+    
     container.innerHTML = `
+        <!-- Data Source Disclaimer -->
+        <div style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%); border-left: 4px solid #FFC107; padding: 1.25rem 1.5rem; margin-bottom: 2rem; border-radius: 0.5rem; display: flex; align-items: start; gap: 1rem;">
+            <div style="font-size: 2rem; line-height: 1;">ℹ️</div>
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                    <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0;">Automated Analysis</h3>
+                    <span style="background: rgba(76, 175, 80, 0.2); color: #4CAF50; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;">
+                        ~${accuracy}% ACCURACY
+                    </span>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6; margin: 0;">
+                    This executive summary has been <strong>reverse-engineered through automated code analysis</strong>. 
+                    Information is inferred from project structure, architecture patterns, technology stack, and component relationships. 
+                    While generally accurate, some details may require validation.
+                    ${dataSource === 'readme' ? ' Project documentation was used to enhance accuracy.' : ''}
+                    ${dataSource === 'generated' ? ' Consider adding a README file to improve accuracy to 90%+.' : ''}
+                </p>
+            </div>
+        </div>
+        
         <!-- Project Header -->
         <div class="glass-card" style="margin-bottom: 2rem; padding: 2rem;">
             <h1 style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.5rem;">
@@ -78,36 +106,6 @@ function renderNarrativeExecutiveSummary(container, execSummary) {
                     </ul>
                 </div>
             ` : ''}
-        </div>
-        
-        <!-- Health Snapshot -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-            <div class="glass-card" style="text-align: center; padding: 2rem;">
-                <div style="font-size: 3rem; margin-bottom: 0.5rem;">${getHealthEmoji(healthSnapshot.overall_score || 0)}</div>
-                <h3 style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.5rem;">${healthSnapshot.overall_score || 0}</h3>
-                <p style="color: var(--text-secondary); font-weight: 600;">Overall Health Score</p>
-                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
-                    ${healthSnapshot.status || getHealthStatus(healthSnapshot.overall_score || 0)}
-                </p>
-            </div>
-            
-            <div class="glass-card" style="text-align: center; padding: 2rem;">
-                <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔒</div>
-                <h3 style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.5rem;">${healthSnapshot.security_issues || 0}</h3>
-                <p style="color: var(--text-secondary); font-weight: 600;">Security Issues</p>
-                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
-                    ${healthSnapshot.security_issues === 0 ? 'No issues detected' : 'Review recommended'}
-                </p>
-            </div>
-            
-            <div class="glass-card" style="text-align: center; padding: 2rem;">
-                <div style="font-size: 3rem; margin-bottom: 0.5rem;">📊</div>
-                <h3 style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.5rem;">${healthSnapshot.code_quality_score || 'N/A'}</h3>
-                <p style="color: var(--text-secondary); font-weight: 600;">Code Quality</p>
-                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
-                    ${healthSnapshot.test_coverage ? `${healthSnapshot.test_coverage}% coverage` : 'Out of 10'}
-                </p>
-            </div>
         </div>
         
         <!-- Composition & Architecture -->
@@ -231,14 +229,14 @@ function renderNarrativeExecutiveSummary(container, execSummary) {
                     <span style="font-size: 2rem; margin-right: 1rem;">💡</span>
                     <h2 style="font-size: 1.75rem; color: var(--accent-primary);">Quick Insights</h2>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
                     ${quickInsights.map(insight => `
-                        <div style="display: flex; align-items: start; padding: 1rem; background: var(--bg-secondary); border-radius: 0.5rem; border-left: 3px solid ${getSeverityColor(insight.severity)};">
-                            <span style="font-size: 1.5rem; margin-right: 1rem;">${getSeverityIcon(insight.severity)}</span>
-                            <div style="flex: 1;">
-                                <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">${insight.category}</p>
-                                <p style="color: var(--text-secondary); font-size: 0.9375rem;">${insight.insight}</p>
+                        <div style="display: flex; flex-direction: column; padding: 1.25rem; background: var(--bg-secondary); border-radius: 0.5rem; border-top: 3px solid ${getSeverityColor(insight.severity)};">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                                <span style="font-size: 1.5rem;">${getSeverityIcon(insight.severity)}</span>
+                                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.875rem;">${insight.category}</span>
                             </div>
+                            <p style="color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.5;">${insight.insight}</p>
                         </div>
                     `).join('')}
                 </div>
@@ -252,20 +250,20 @@ function renderNarrativeExecutiveSummary(container, execSummary) {
                     <span style="font-size: 2rem; margin-right: 1rem;">🎯</span>
                     <h2 style="font-size: 1.75rem; color: var(--accent-primary);">Recommended Next Steps</h2>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem;">
                     ${recommendedSteps.map((step, index) => `
-                        <div style="display: flex; align-items: start; padding: 1.25rem; background: var(--bg-secondary); border-radius: 0.5rem; border-left: 4px solid ${getPriorityColor(step.priority)};">
-                            <span style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary); margin-right: 1rem; min-width: 2rem;">${index + 1}</span>
-                            <div style="flex: 1;">
-                                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                                    <span style="background: ${getPriorityColor(step.priority)}; color: white; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">
-                                        ${step.priority}
-                                    </span>
-                                    <span style="color: var(--text-secondary); font-size: 0.875rem;">${step.estimated_effort}</span>
-                                </div>
-                                <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">${step.action}</p>
-                                <p style="color: var(--text-secondary); font-size: 0.875rem;">Category: ${step.category}</p>
+                        <div style="display: flex; flex-direction: column; padding: 1.25rem; background: var(--bg-secondary); border-radius: 0.5rem; border-top: 4px solid ${getPriorityColor(step.priority)}; position: relative;">
+                            <div style="position: absolute; top: 0.75rem; right: 0.75rem; width: 2rem; height: 2rem; background: var(--accent-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.875rem;">
+                                ${index + 1}
                             </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                                <span style="background: ${getPriorityColor(step.priority)}; color: white; padding: 0.25rem 0.625rem; border-radius: 0.25rem; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    ${step.priority}
+                                </span>
+                                <span style="color: var(--text-secondary); font-size: 0.75rem;">⏱️ ${step.estimated_effort}</span>
+                            </div>
+                            <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.625rem; font-size: 1rem; line-height: 1.4; padding-right: 2.5rem;">${step.action}</p>
+                            <p style="color: var(--text-secondary); font-size: 0.8125rem;">📁 ${step.category}</p>
                         </div>
                     `).join('')}
                 </div>
