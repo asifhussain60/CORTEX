@@ -617,10 +617,39 @@
             // Set initial source
             document.getElementById('sourceSelect').value = source;
             
-            // Set initial tab
-            if (tab !== 'executive') {
-                switchTab(tab);
-            }
+            // NOTE: Do NOT call switchTab() here - app.js initializeApp() handles initial tab rendering
+            // after data is loaded. Calling it here causes race condition where rendering happens
+            // before data is available, resulting in "container not found" errors.
+            
+            // Scroll to top button functionality
+            const scrollButton = document.createElement('button');
+            scrollButton.id = 'scrollToTop';
+            scrollButton.className = 'scroll-to-top';
+            scrollButton.setAttribute('aria-label', 'Scroll to top');
+            scrollButton.setAttribute('title', 'Scroll to top');
+            scrollButton.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 15l-6-6-6 6"/>
+                </svg>
+            `;
+            document.body.appendChild(scrollButton);
+            
+            // Show/hide button based on scroll position
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+            
+            // Scroll to top on click
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>

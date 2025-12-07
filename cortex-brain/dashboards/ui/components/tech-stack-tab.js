@@ -26,7 +26,8 @@ export function renderTechStack(data) {
     
     // Render after brief delay to show spinner
     setTimeout(() => {
-        const techStack = data.techStack || {};
+        // Handle both nested (data.techStack) and direct (data.frontend/backend) structures
+        const techStack = data.techStack || data;
         const summary = techStack.summary || {};
         
         // Calculate actual status counts from data
@@ -34,11 +35,8 @@ export function renderTechStack(data) {
         
         // Build HTML
         container.innerHTML = `
-        <div class="view-header">
-            <h2>🛠️ Technology Stack</h2>
-            <div class="header-actions">
-                <button class="btn-secondary" onclick="exportTechStack()">Export CSV</button>
-            </div>
+        <div class="header-actions" style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem;">
+            <button class="btn-secondary" onclick="exportTechStack()">Export CSV</button>
         </div>
 
         <!-- Summary Cards -->

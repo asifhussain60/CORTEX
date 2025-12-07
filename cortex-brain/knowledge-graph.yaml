@@ -1,17 +1,17 @@
 # CORTEX Knowledge Graph
 # Validation insights, patterns, and strategic knowledge for CORTEX operations
 # 
-# Version: 2.1
+# Version: 2.2
 # Type: Knowledge Graph
 # Purpose: Capture patterns and learnings from CORTEX operations
 
-version: "2.1"
-last_updated: "2025-12-04"
+version: "2.2"
+last_updated: "2025-12-07"
 type: "knowledge_graph"
 
 # Summary of learned patterns across all categories
 patterns:
-  total_count: 55
+  total_count: 57
   categories: ["validation_insights", "workflow_patterns", "architectural_patterns", "intent_patterns", "file_relationships", "common_mistakes", "quality_gates", "documentation_patterns", "ui_patterns"]
   learning_method: "automatic extraction from Tier 1 conversations"
   confidence_decay: "5% per 90 days unused"
@@ -1310,4 +1310,147 @@ ui_patterns:
     reusability: 100
     last_seen: "2025-12-04"
     lesson: "HTTP server working directory matters - 404 errors often indicate wrong CWD, not missing files"
+
+  dashboard_progressive_loader_incompatibility:
+    issue: "Progressive loader pattern incompatible with direct DOM manipulation components"
+    root_cause: "app.js expected HTML string returns, but components used container.innerHTML and returned void"
+    symptom: "All tabs except Engineering showed 'container not found' errors, progressive loader received undefined"
+    incident_date: "2025-12-07"
+    impact: "Critical - 7 of 8 dashboard tabs failed to render, only Engineering worked"
+    solution: "Remove progressive loader, show tab first via classList, then call render functions"
+    broken_pattern: |
+      // app.js - BROKEN PATTERN
+      const containerId = getTabContainerId(appState.currentTab);
+      progressiveLoader.showSkeleton(containerId, skeletonType);
+      
+      let contentHtml;  // Expected HTML string
+      switch (appState.currentTab) {
+          case 'tech-stack':
+              contentHtml = renderTechStack(data);  // Returns undefined!
+              break;
+      }
+      
+      await progressiveLoader.hideSkeleton(containerId, contentHtml);  // undefined HTML!
+    working_pattern: |
+      // app.js - WORKING PATTERN (all tabs now use this)
+      async function renderCurrentTab() {
+          // STEP 1: Make tab VISIBLE first
+          const tabElement = document.getElementById(tabId);
+          document.querySelectorAll('.tab-content').forEach(tab => {
+              tab.classList.remove('active');
+          });
+          tabElement.classList.add('active');
+          
+          // STEP 2: Call render functions (find visible containers)
+          switch (appState.currentTab) {
+              case 'tech-stack':
+                  renderTechStack(appState.data);  // Direct call
+                  break;
+          }
+      }
+      
+      // tech-stack-tab.js - Component pattern
+      export function renderTechStack(data) {
+          const container = document.getElementById('tech-stack-container');
+          container.innerHTML = `...`;  // Direct DOM manipulation
+          // NO return statement - returns undefined
+      }
+    why_engineering_worked: "Special case created container first with contentHtml wrapper, then called init() method"
+    component_contract:
+      pattern: "Direct DOM manipulation via getElementById + innerHTML"
+      return_value: "void (undefined)"
+      visibility_requirement: "Container must be visible BEFORE render call"
+      data_access: "Defensive extraction (data.nested || data)"
+    architectural_fix:
+      removed: "Progressive loader (showSkeleton, hideSkeleton, contentHtml variable)"
+      added: "Tab visibility management via classList.add('active')"
+      pattern_change: "Show tab → call render → components find containers"
+      consistency: "All tabs now follow same pattern (including Engineering)"
+    css_visibility_pattern: |
+      .tab-content {
+          display: none;  /* Hidden by default */
+      }
+      
+      .tab-content.active {
+          display: block;  /* Visible when active */
+      }
+    detection_method: "Browser console shows 'container not found' errors, getElementById returns null"
+    prevention_rules:
+      - "Document component contract (return types, DOM manipulation pattern)"
+      - "Verify tab visibility before calling render functions"
+      - "Test all tabs, not just first one (avoid special case masking)"
+      - "Ensure architectural patterns match across framework layers"
+    validation_steps:
+      - "Check browser console for getElementById null errors"
+      - "Verify classList.contains('active') on tab element"
+      - "Inspect render function return values (should be undefined for DOM manipulation)"
+      - "Test tab switching across all tabs"
+    files_modified:
+      - "cortex-brain/dashboards/ui/app.js (lines 235-305)"
+      - "All tab components updated with defensive data access"
+    documentation_created:
+      - "cortex-brain/documents/reports/dashboard-rendering-architecture-fix.md"
+      - "cortex-brain/documents/implementation-guides/dashboard-launcher-quick-ref.md (updated)"
+    frequency: 1
+    confidence: 1.0
+    severity: "critical"
+    strategic_value: "high"
+    reusability: 100
+    last_seen: "2025-12-07"
+    lessons_learned:
+      architectural: "Framework layers must have compatible contracts - progressive loader + DOM manipulation = incompatible"
+      timing: "Component visibility timing matters - show before render, not after"
+      debugging: "Special cases that work can mask broader architectural problems"
+      consistency: "Verify patterns across ALL components, not just one"
+      documentation: "Component contracts must be explicit (return types, side effects, requirements)"
+
+  dashboard_server_parent_directory_requirement:
+    issue: "Dashboard loads blank when HTTP server runs from /ui/ subdirectory instead of parent"
+    root_cause: "Dashboard needs access to both /ui/ (HTML/CSS/JS) and /data/ (JSON files), server must be parent of both"
+    symptom: "Dashboard loads HTML/CSS but shows 'Failed to load resource' for data/*.json files"
+    incident_date: "2025-12-07"
+    impact: "Critical - Dashboard appears to load but has no data, all tabs empty"
+    solution: "Always run HTTP server from cortex-brain/dashboards/ parent directory, not from /ui/ subdirectory"
+    incorrect_approach: |
+      # WRONG - Breaks data access
+      cd cortex-brain/dashboards/ui/
+      python3 -m http.server 8080
+      # URL: http://localhost:8080/index.html
+      # Cannot access ../data/*.json (outside server root)
+    correct_approach: |
+      # CORRECT - Access to both /ui/ and /data/
+      cd cortex-brain/dashboards/
+      python3 -m http.server 8080
+      # URL: http://localhost:8080/ui/index.html?source=mock
+      # Can access both ui/* and data/* paths
+    directory_structure: |
+      cortex-brain/dashboards/    ← Server must run HERE
+      ├── ui/                     ← HTML/CSS/JS files
+      │   ├── index.html
+      │   ├── app.js
+      │   └── components/
+      └── data/                   ← JSON data files
+          └── mock/
+              ├── overview.json
+              ├── tech-stack.json
+              └── ...
+    url_structure:
+      ui_files: "http://localhost:8080/ui/index.html"
+      data_files: "http://localhost:8080/data/mock/overview.json"
+      requirement: "Server root must contain both /ui/ and /data/ directories"
+    detection_method: "Browser console shows 'Failed to load resource' errors for data files"
+    prevention_rule: "Use dashboard_launcher orchestrator - handles correct directory automatically"
+    validation_steps:
+      - "Check browser network tab for 404 on data/*.json"
+      - "Verify server running from parent directory (not /ui/)"
+      - "Test data file access: curl http://localhost:8080/data/mock/overview.json"
+    orchestrator_solution: "dashboard_launcher automatically changes to correct directory before starting server"
+    frequency: 1
+    confidence: 1.0
+    severity: "critical"
+    strategic_value: "high"
+    reusability: 100
+    last_seen: "2025-12-07"
+    lesson: "HTTP server must be parent of all required paths - single subdirectory breaks sibling access"
+
 

@@ -26,18 +26,16 @@ export function renderCodeOrganization(data) {
     
     // Render after brief delay to show spinner
     setTimeout(() => {
-        const codeOrg = data.codeOrganization || {};
+        // Handle both nested (data.codeOrganization) and direct structure
+        const codeOrg = data.codeOrganization || data;
         const summary = codeOrg.summary || {};
         const hotspots = codeOrg.hotspots || [];
         const fileComplexity = codeOrg.file_complexity || [];
         
         // Build HTML
         container.innerHTML = `
-        <div class="view-header">
-            <h2>📊 Code Organization & Hotspots</h2>
-            <div class="header-actions">
-                <button class="btn-secondary" onclick="exportHotspots()">Export Hotspots</button>
-            </div>
+        <div class="header-actions" style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem;">
+            <button class="btn-secondary" onclick="exportHotspots()">Export Hotspots</button>
         </div>
 
         <!-- Summary Cards -->

@@ -24,17 +24,15 @@ export function renderVendors(data) {
     showPanelSpinner(container, 'Loading vendor data...');
     
     setTimeout(() => {
-        const vendors = data.vendors || {};
+        // Handle both nested (data.vendors) and direct structure
+        const vendors = data.vendors || data;
         const summary = vendors.summary || {};
         const vendorList = vendors.vendors || [];
         
         // Build HTML
         container.innerHTML = `
-        <div class="view-header">
-            <h2>🔗 Dependencies & Vendors</h2>
-            <div class="header-actions">
-                <button class="btn-secondary" onclick="exportVendors()">Export Report</button>
-            </div>
+        <div class="header-actions" style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem;">
+            <button class="btn-secondary" onclick="exportVendors()">Export Report</button>
         </div>
 
         <!-- Summary Cards -->

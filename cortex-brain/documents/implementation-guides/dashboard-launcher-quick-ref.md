@@ -199,8 +199,174 @@ CORTEX: ✅ Dashboard server started successfully
 - Check browser console for specific errors
 - Verify files are being served from correct directory
 
+### ⚠️ CRITICAL: Server Directory Must Be Parent of `/ui/`
+
+**Problem:** Dashboard loads blank or shows "Failed to load resource" errors
+
+**Root Cause:** Server running from wrong directory
+
+**WRONG (Breaks data access):**
+```bash
+cd cortex-brain/dashboards/ui/
+python3 -m http.server 8080
+# ❌ URL: http://localhost:8080/index.html
+# ❌ Cannot access ../data/*.json
+```
+
+**CORRECT (Works):**
+```bash
+cd cortex-brain/dashboards/
+python3 -m http.server 8080
+# ✅ URL: http://localhost:8080/ui/index.html?source=mock
+# ✅ Can access data/*.json at http://localhost:8080/data/
+```
+
+**Why:** Dashboard needs access to both `/ui/` (HTML/CSS/JS) and `/data/` (JSON files). Server must run from parent directory to serve both paths.
+
+**Fix:** Always use `dashboard_launcher` orchestrator - it handles correct directory automatically.
+
+---
+
+## 🏗️ Dashboard Architecture (December 2025)
+
+### Critical Rendering Pattern
+
+**Component Contract:**
+- All tab components use **direct DOM manipulation**
+- Components find containers via `getElementById()` and set `innerHTML`
+- Components **return void** (no HTML string returns)
+
+**Working Pattern (ALL TABS):**
+```javascript
+// app.js - renderCurrentTab()
+async function renderCurrentTab() {
+    // STEP 1: Make tab VISIBLE first
+    const tabElement = document.getElementById(tabId);
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    tabElement.classList.add('active');
+    
+    // STEP 2: Call render functions (find visible containers)
+    switch (appState.currentTab) {
+        case 'tech-stack':
+            renderTechStack(appState.data);  // Direct call
+            break;
+    }
+}
+
+// tech-stack-tab.js
+export function renderTechStack(data) {
+    const container = document.getElementById('tech-stack-container');
+    container.innerHTML = `...`;  // Direct DOM manipulation
+    // NO return statement
+}
+```
+
+### ❌ BROKEN Pattern (Removed Dec 2025)
+
+**What was wrong:**
+```javascript
+// ❌ BROKEN: Expected HTML string returns
+const containerId = getTabContainerId(appState.currentTab);
+progressiveLoader.showSkeleton(containerId, skeletonType);
+
+let contentHtml;  // Expected string
+switch (appState.currentTab) {
+    case 'tech-stack':
+        contentHtml = renderTechStack(data);  // Returns undefined!
+        break;
+}
+
+await progressiveLoader.hideSkeleton(containerId, contentHtml);  // undefined!
+```
+
+**Why it failed:**
+- Progressive loader expected `contentHtml` as string
+- Components actually return `undefined` (direct DOM manipulation)
+- Loader tried to inject `undefined` → failed
+- Only Engineering tab worked (special case created container first)
+
+**Fix Applied:**
+- ✅ Removed progressive loader completely
+- ✅ Show tab first (make visible) via `classList.add('active')`
+- ✅ Then call render functions - they find visible containers
+- ✅ All tabs now use same pattern
+
+### Tab Visibility Management
+
+**CSS Pattern:**
+```css
+.tab-content {
+    display: none;  /* Hidden by default */
+}
+
+.tab-content.active {
+    display: block;  /* Visible when active */
+}
+```
+
+**JavaScript Pattern:**
+```javascript
+// Hide all tabs
+document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+});
+
+// Show current tab
+tabElement.classList.add('active');
+
+// Now components can find their containers
+renderTechStack(data);  // Finds #tech-stack-container (now visible)
+```
+
+### Data Access Pattern
+
+**Defensive extraction:**
+```javascript
+// Components handle both flat and nested data
+export function renderTechStack(data) {
+    const techStack = data.techStack || data;  // Defensive
+    const container = document.getElementById('tech-stack-container');
+    container.innerHTML = `...`;
+}
+```
+
+**Why needed:** `appState.data` structure varies by source:
+- Mock data: Nested (`data.techStack`)
+- Some sources: Flat (`data` itself is tech stack)
+- Pattern handles both without errors
+
+---
+
+## 📋 Lessons Learned (December 2025)
+
+### 1. Server Directory Matters
+- **Lesson:** HTTP server directory determines accessible paths
+- **Impact:** Wrong directory = blank dashboard
+- **Solution:** Always serve from parent of `/ui/` directory
+- **Prevention:** Use orchestrator, never manual `python3 -m http.server`
+
+### 2. Component Patterns Must Match Framework
+- **Lesson:** Progressive loader expected string returns, components used DOM manipulation
+- **Impact:** Architectural mismatch broke all tabs except special-cased Engineering
+- **Solution:** Remove incompatible layer, use direct visibility management
+- **Prevention:** Document component contract, verify pattern consistency
+
+### 3. Tab Visibility Timing
+- **Lesson:** Components must find visible containers
+- **Impact:** Calling render while tab hidden = getElementById fails
+- **Solution:** Show tab FIRST, then render
+- **Prevention:** Always manage visibility before component calls
+
+### 4. Engineering Tab Special Case
+- **Lesson:** Engineering worked because it created container first
+- **Impact:** Masked the broader architectural problem
+- **Solution:** Made all tabs follow same working pattern
+- **Prevention:** Consistent patterns across all components
+
 ---
 
 **Author:** Asif Hussain  
-**Version:** 1.0  
-**Updated:** December 5, 2025
+**Version:** 2.0  
+**Updated:** December 7, 2025
