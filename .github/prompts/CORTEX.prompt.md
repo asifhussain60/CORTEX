@@ -86,45 +86,40 @@ ALL responses MUST use this 5-part structure:
 - **Examples:** "introduce yourself to leadership", "present cortex to product owners"
 
 ### Planning System 2.0
-- **Commands:** `plan [feature]`, `create a plan`, `make a plan`, `plan ado`, `approve plan`
-- **Features:** Vision API (screenshot extraction), DoR/DoD validation, file-based persistence, cross-chat resumption
-- **Interactive mode:** Once planning starts, all input assumed for plan until "approve plan"
-- **Complete Guide:** #file:modules/planning-orchestrator-guide.md
+- **Commands:** `plan [feature]`, `plan ado`, `approve plan`, `execute all phases autonomously`
+- **Guide:** #file:modules/planning-orchestrator-guide.md
 
 ### TDD Mastery
-- **Commands:** `start tdd`, `run tests`, `suggest refactorings`
-- **Features:** RED→GREEN→REFACTOR automation, auto-debug on failures, performance refactoring
-- **Test isolation:** App tests in user repo, CORTEX tests in `tests/`
-- **Guide:** See TDD enforcement in `cortex-brain/brain-protection-rules.yaml`
+- **Commands:** `start tdd`, `run tests`
+- **Guide:** `cortex-brain/brain-protection-rules.yaml` (TDD_ENFORCEMENT)
 
 ### Dashboard Launcher
-- **Commands:** `load dashboard`, `launch dashboard`, `dashboard`
-- **Features:** HTTP server (port 8080-8089 auto-fallback), auto-open browser, CORS enabled
-- **Plugin Support:** Extensible dashboard plugin system for custom visualizations
-- **Complete Guide:** #file:../../cortex-brain/documents/implementation-guides/dashboard-launcher-quick-ref.md
+- **Commands:** `load dashboard`, `dashboard`
+- **Guide:** #file:../../cortex-brain/documents/implementation-guides/dashboard-launcher-quick-ref.md
 
 ### Upgrade System
 - **Commands:** `upgrade cortex`, `cortex version`
-- **Features:** Universal upgrade (standalone/embedded), brain preservation, auto-backup, config merging
-- **Guide:** See `docs/reference/scripts/operations/upgrade-orchestrator.md`
+- **Guide:** `docs/reference/scripts/operations/upgrade-orchestrator.md`
 
 ### System Operations
-- **Commands:** `align` (system alignment), `optimize` (CORTEX optimization), `feedback` (bug/feature reporting), `help`
-- **Admin-only:** `deploy` (19 validation gates, no skipping), full `align` with all checks, `optimize` with SKULL tests
-- **Context detection:** CORTEX repo (has `cortex-brain/admin/`) vs user repos
-- **Admin Operations:** #file:modules/admin-operations.md
+- **Commands:** `align`, `optimize`, `feedback`, `help`
+- **Admin-only:** `deploy` - #file:modules/admin-operations.md
+
+### Architectural Review
+- **Commands:** `review`, `review architecture`
+- **Features:** 6-phase analysis (0-100 scoring), git protection enabled
+
+### Git Pull Protection
+- **Auto-Protection:** Aligned/reviewed files tracked (machine-local)
+- **Guide:** #file:../../cortex-brain/documents/implementation-guides/git-pull-protection.md
 
 ### Progress Monitoring
-- **Auto-activation:** Operations >5 seconds show progress automatically
-- **Decorator:** `@with_progress(operation_name="...")`
-- **Features:** ETA calculation, hang detection, thread-safe, <0.1% overhead
-- **Complete Guide:** #file:../../cortex-brain/documents/implementation-guides/progress-monitoring-quick-start.md
+- **Auto-activation:** Operations >5 seconds
+- **Guide:** #file:../../cortex-brain/documents/implementation-guides/progress-monitoring-quick-start.md
 
 ### System Maintenance
-- **Commands:** `system maintenance`, `full maintenance`, `maintain system`, `run maintenance`
-- **Features:** 4-phase workflow (pre-healthcheck → align → optimize → post-healthcheck), conditional execution, comprehensive reporting
-- **Phases:** Pre-healthcheck (baseline), alignment (auto-fix), optimization (conditional), post-healthcheck (validation)
-- **Complete Guide:** #file:../../cortex-brain/documents/implementation-guides/system-maintenance-orchestrator.md
+- **Commands:** `system maintenance`, `maintain system`
+- **Guide:** #file:../../cortex-brain/documents/implementation-guides/system-maintenance-orchestrator.md
 
 ---
 
@@ -138,6 +133,8 @@ ALL responses MUST use this 5-part structure:
 | `execute all phases autonomously` | Run plan end-to-end without approval | All |
 | `auto chained` | Synonym for autonomous execution | All |
 | `start tdd` | Begin TDD workflow | All |
+| `review` | Comprehensive architectural review | All |
+| `review architecture` | Analyze architecture and code quality | All |
 | `run tests` | Execute tests + analysis | All |
 | `load dashboard` | Launch dashboard server | All |
 | `upgrade cortex` | Upgrade CORTEX safely | All |
@@ -213,38 +210,12 @@ Say **"help"** in Copilot Chat to see all available operations.
 **Developer Setup:**
 
 ```bash
-# Running Tests
 pytest tests/                    # CORTEX internal only
-pytest --cov=src tests/          # With coverage
-
-# Building/Running
-python --version                 # Requires 3.8+
 pip install -r requirements.txt
 python -m src.main
-python src/orchestrators/upgrade_orchestrator.py --upgrade
 ```
 
 **Configuration:** Edit `cortex.config.json` with machine-specific paths
-
-**Import Style:** Always `from src.tier1.working_memory import WorkingMemory`
-
-**Progress Monitoring:** Use `@with_progress` decorator for operations >5 seconds
-
----
-
-## 🗺️ Key Files
-
-| File | Purpose |
-|------|---------|
-| `.github/copilot-instructions.md` | GitHub Copilot configuration (345 lines) |
-| `.github/prompts/CORTEX.prompt.md` | This file - complete instruction set |
-| `cortex-brain/brain-protection-rules.yaml` | SKULL rules, governance (5000+ lines) |
-| `cortex-brain/response-templates.yaml` | 62 pre-formatted templates |
-| `.github/prompts/modules/planning-orchestrator-guide.md` | Planning System 2.0 |
-| `.github/prompts/modules/tdd-mastery-guide.md` | TDD workflow |
-| `.github/prompts/modules/upgrade-guide.md` | Universal upgrade system |
-| `cortex.config.json` | Machine paths, settings |
-| `VERSION` | 3.8.1 + system health |
 
 ---
 

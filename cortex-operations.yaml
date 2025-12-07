@@ -1,4 +1,38 @@
 operations:
+  review:
+    name: Architectural Review
+    description: Comprehensive architectural and code quality review from senior architect perspective
+    deployment_tier: user
+    natural_language:
+    - review
+    - review code
+    - review architecture
+    - architectural review
+    - code review
+    - analyze architecture
+    - assess code quality
+    - review application
+    - holistic review
+    - comprehensive review
+    category: analysis
+    modules:
+    - architectural.review_orchestrator
+    profiles:
+      standard:
+        description: Full architectural review with all analysis phases
+        modules:
+        - architectural.review_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Multi-phase analysis covering architecture, code quality, SOLID, security, and performance
+    examples:
+    - review
+    - review this application
+    - architectural review
+    - analyze code quality
   system_maintenance:
     name: System Maintenance
     description: Comprehensive system maintenance - runs healthcheck, align, optimize

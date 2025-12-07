@@ -48,6 +48,9 @@ cortex-publish/
 # Database files (local only - should be in cortex-brain/ subdirs, not root)
 *.db
 *.db-shm
+
+# Alignment state (machine-local - never commit)
+cortex-brain/admin/alignment-state.json
 *.db-wal
 
 # Logs
