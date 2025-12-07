@@ -1552,7 +1552,11 @@ ${diagram.mermaid_code}
         this.render();
         this.attachEventListeners();
         this.renderAllDiagrams(); // Re-render diagrams after navigation
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Scroll to top after DOM updates
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 50);
     }
 
     /**
