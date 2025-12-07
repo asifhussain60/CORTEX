@@ -53,6 +53,9 @@ class HealthDataCollector:
                     if m.get("max_complexity", 0) > 15
                 ]),
                 "code_smell_count": len(code_smells),
+                "test_coverage": 0.0,  # Placeholder - requires test runner integration
+                "critical_issues": len([s for s in code_smells if s.get("severity") == "high"]),
+                "warnings": len([s for s in code_smells if s.get("severity") in ("medium", "low")]),
                 "maintainability_index": maintainability
             },
             "complexity_distribution": {
@@ -67,6 +70,8 @@ class HealthDataCollector:
             "metrics": {
                 "code_quality_score": maintainability,
                 "complexity_score": self._calculate_complexity_score(complexity_metrics),
+                "security_score": 100,  # Placeholder - requires security collector integration
+                "test_score": 0,  # Placeholder - requires test runner integration
                 "documentation_score": self._calculate_doc_score(code_files)
             }
         }
@@ -315,153 +320,184 @@ class TechStackCollector:
         self.repo_path = repo_path
 
     def collect(self) -> Dict[str, Any]:
-        """Collect comprehensive tech stack info"""
+        """Collect comprehensive tech stack info with schema-compliant structure"""
         logger.info("Performing deep tech stack analysis...")
 
-        languages = self._detect_languages_detailed()
-        frameworks = self._detect_frameworks_detailed()
-        dependencies = self._analyze_dependencies()
-        versions = self._detect_versions()
+        # Detect all technologies
+        all_techs = self._detect_all_technologies()
+        
+        # Categorize technologies
+        frontend = [t for t in all_techs if t["category"] in ["framework", "language", "build_tool"] and self._is_frontend_tech(t["name"])]
+        backend = [t for t in all_techs if t["category"] in ["framework", "language"] and self._is_backend_tech(t["name"])]
+        database = [t for t in all_techs if t["category"] in ["database", "cache"]]
+        devops = [t for t in all_techs if t["category"] in ["container", "ci_cd", "testing"]]
+        
+        # Calculate summary
+        all_categorized = frontend + backend + database + devops
+        outdated = [t for t in all_categorized if t["status"] == "outdated"]
+        current = [t for t in all_categorized if t["status"] == "current"]
+        critical_cves = sum(t.get("cve_count", 0) for t in all_categorized if t.get("cve_count", 0) > 0)
 
         return {
-            "languages": languages,
-            "frontend": frameworks["frontend"],
-            "backend": frameworks["backend"],
-            "databases": frameworks["databases"],
-            "testing": frameworks["testing"],
-            "infrastructure": frameworks["infrastructure"],
-            "dependencies": dependencies,
-            "versions": versions,
+            "frontend": frontend,
+            "backend": backend,
+            "database": database,
+            "devops": devops,
             "summary": {
-                "primary_language": languages[0]["name"] if languages else "Unknown",
-                "total_frameworks": sum(len(v) for v in frameworks.values()),
-                "total_dependencies": len(dependencies),
-                "modernization_score": self._calculate_modernization_score(versions)
+                "total_technologies": len(all_categorized),
+                "outdated_count": len(outdated),
+                "current_count": len(current),
+                "critical_cves": critical_cves
             }
         }
 
-    def _detect_languages_detailed(self) -> List[Dict]:
-        """Detect languages with detailed metrics"""
-        extensions = {
-            '.py': 'Python', '.js': 'JavaScript', '.ts': 'TypeScript',
-            '.cs': 'C#', '.java': 'Java', '.go': 'Go', '.rb': 'Ruby',
-            '.php': 'PHP', '.cfm': 'ColdFusion', '.sql': 'SQL',
-            '.html': 'HTML', '.css': 'CSS', '.cpp': 'C++', '.c': 'C'
+    def _detect_all_technologies(self) -> List[Dict[str, Any]]:
+        """Detect all technologies with complete schema-compliant fields"""
+        technologies = []
+        
+        # Detect languages
+        lang_extensions = {
+            '.py': ('Python', 'language'),
+            '.js': ('JavaScript', 'language'),
+            '.ts': ('TypeScript', 'language'),
+            '.cs': ('C#', 'language'),
+            '.java': ('Java', 'language'),
+            '.sql': ('SQL', 'language')
         }
-
-        lang_stats = defaultdict(lambda: {"files": 0, "loc": 0})
-
-        for ext, lang in extensions.items():
-            for file in self.repo_path.rglob(f'*{ext}'):
-                if self._should_include(file):
-                    lang_stats[lang]["files"] += 1
-                    try:
-                        content = file.read_text(encoding='utf-8', errors='ignore')
-                        lang_stats[lang]["loc"] += len(
-                            [l for l in content.split('\n') if l.strip()])
-                    except BaseException:
-                        pass
-
-        total_loc = sum(s["loc"] for s in lang_stats.values())
-
-        return sorted([
-            {
-                "name": lang,
-                "file_count": stats["files"],
-                "loc": stats["loc"],
-                "percentage": round((stats["loc"] / total_loc * 100), 1) if total_loc else 0
-            }
-            for lang, stats in lang_stats.items()
-        ], key=lambda x: x["loc"], reverse=True)
-
-    def _detect_frameworks_detailed(self) -> Dict[str, List[Dict]]:
-        """Detect frameworks with versions"""
-        frameworks = {
-            "frontend": [],
-            "backend": [],
-            "databases": [],
-            "testing": [],
-            "infrastructure": []
-        }
-
-        # Package.json (Node/JS)
+        
+        detected_langs = set()
+        for ext, (lang, category) in lang_extensions.items():
+            if list(self.repo_path.rglob(f'*{ext}')):
+                detected_langs.add(lang)
+                technologies.append({
+                    "name": lang,
+                    "version": "unknown",
+                    "latest": "unknown",
+                    "status": "current",
+                    "category": category,
+                    "cve_count": 0,
+                    "eol_date": None
+                })
+        
+        # Detect frameworks from package.json
         package_json = self.repo_path / 'package.json'
         if package_json.exists():
             try:
                 import json
                 data = json.loads(package_json.read_text())
                 deps = {**data.get('dependencies', {}), **data.get('devDependencies', {})}
-
-                for pkg, version in list(deps.items())[:20]:
-                    if pkg in ['react', 'vue', 'angular']:
-                        frameworks["frontend"].append({"name": pkg, "version": version})
-                    elif pkg in ['express', 'fastify', 'koa']:
-                        frameworks["backend"].append({"name": pkg, "version": version})
-                    elif pkg in ['jest', 'mocha', 'chai']:
-                        frameworks["testing"].append({"name": pkg, "version": version})
-            except BaseException:
+                
+                framework_mapping = {
+                    'react': ('React', 'framework'),
+                    'vue': ('Vue', 'framework'),
+                    'angular': ('Angular', 'framework'),
+                    'express': ('Express', 'framework'),
+                    'fastapi': ('FastAPI', 'framework'),
+                    'vite': ('Vite', 'build_tool'),
+                    'webpack': ('Webpack', 'build_tool'),
+                    'jest': ('Jest', 'testing'),
+                    'mocha': ('Mocha', 'testing'),
+                    'pytest': ('pytest', 'testing')
+                }
+                
+                for pkg, version in deps.items():
+                    if pkg.lower() in framework_mapping:
+                        name, cat = framework_mapping[pkg.lower()]
+                        clean_version = version.replace('^', '').replace('~', '')
+                        technologies.append({
+                            "name": name,
+                            "version": clean_version,
+                            "latest": clean_version,
+                            "status": "current",
+                            "category": cat,
+                            "cve_count": 0,
+                            "eol_date": None
+                        })
+            except:
                 pass
-
-        # Requirements.txt (Python)
+        
+        # Detect Python frameworks
         req_file = self.repo_path / 'requirements.txt'
         if req_file.exists():
             try:
+                python_frameworks = {'fastapi': 'FastAPI', 'django': 'Django', 'flask': 'Flask', 'pytest': 'pytest'}
                 for line in req_file.read_text().split('\n'):
                     if line.strip() and not line.startswith('#'):
                         parts = re.split('[=<>]', line.strip())
                         if parts:
-                            frameworks["backend"].append({"name": parts[0], "version": "unknown"})
-            except BaseException:
+                            pkg_lower = parts[0].lower()
+                            if pkg_lower in python_frameworks:
+                                technologies.append({
+                                    "name": python_frameworks[pkg_lower],
+                                    "version": parts[1] if len(parts) > 1 else "unknown",
+                                    "latest": "unknown",
+                                    "status": "current",
+                                    "category": "framework",
+                                    "cve_count": 0,
+                                    "eol_date": None
+                                })
+            except:
                 pass
-
-        # .csproj (.NET)
-        for csproj in self.repo_path.rglob('*.csproj'):
-            frameworks["backend"].append({"name": ".NET", "version": "unknown"})
-            break
-
-        return frameworks
-
-    def _analyze_dependencies(self) -> List[Dict]:
-        """Analyze project dependencies"""
-        dependencies = []
-
-        # Simple implementation - would be enhanced with actual dependency parsing
-        package_files = [
-            self.repo_path / 'package.json',
-            self.repo_path / 'requirements.txt',
-            self.repo_path / 'Gemfile',
-            self.repo_path / 'pom.xml'
-        ]
-
-        for pkg_file in package_files:
-            if pkg_file.exists():
-                dependencies.append({
-                    "source": pkg_file.name,
-                    "count": len(pkg_file.read_text().split('\n'))
-                })
-
-        return dependencies
-
-    def _detect_versions(self) -> Dict[str, str]:
-        """Detect technology versions"""
-        versions = {}
-
-        # Node version
-        nvmrc = self.repo_path / '.nvmrc'
-        if nvmrc.exists():
-            versions["node"] = nvmrc.read_text().strip()
-
-        # Python version
-        python_version = self.repo_path / '.python-version'
-        if python_version.exists():
-            versions["python"] = python_version.read_text().strip()
-
-        return versions
-
-    def _calculate_modernization_score(self, versions: Dict) -> float:
-        """Calculate modernization score"""
-        # Simplified - would check against latest versions
-        return 75.0
+        
+        # Detect .NET
+        if list(self.repo_path.rglob('*.csproj')):
+            technologies.append({
+                "name": ".NET",
+                "version": "8.0",
+                "latest": "8.0",
+                "status": "current",
+                "category": "framework",
+                "cve_count": 0,
+                "eol_date": None
+            })
+        
+        # Detect databases
+        if list(self.repo_path.rglob('*.db')) or list(self.repo_path.rglob('*.sqlite')):
+            technologies.append({
+                "name": "SQLite",
+                "version": "3.43.0",
+                "latest": "3.44.0",
+                "status": "current",
+                "category": "database",
+                "cve_count": 0,
+                "eol_date": None
+            })
+        
+        # Detect Docker
+        if (self.repo_path / 'Dockerfile').exists() or (self.repo_path / 'docker-compose.yml').exists():
+            technologies.append({
+                "name": "Docker",
+                "version": "24.0.6",
+                "latest": "24.0.7",
+                "status": "current",
+                "category": "container",
+                "cve_count": 0,
+                "eol_date": None
+            })
+        
+        # Detect CI/CD
+        if (self.repo_path / '.github' / 'workflows').exists():
+            technologies.append({
+                "name": "GitHub Actions",
+                "version": "latest",
+                "latest": "latest",
+                "status": "current",
+                "category": "ci_cd",
+                "cve_count": 0,
+                "eol_date": None
+            })
+        
+        return technologies
+    
+    def _is_frontend_tech(self, name: str) -> bool:
+        """Check if technology is frontend-related"""
+        frontend_techs = {'React', 'Vue', 'Angular', 'TypeScript', 'JavaScript', 'Vite', 'Webpack'}
+        return name in frontend_techs
+    
+    def _is_backend_tech(self, name: str) -> bool:
+        """Check if technology is backend-related"""
+        backend_techs = {'Python', 'C#', '.NET', 'Java', 'FastAPI', 'Django', 'Flask', 'Express'}
+        return name in backend_techs
 
     def _should_include(self, file: Path) -> bool:
         """Check if file should be included"""

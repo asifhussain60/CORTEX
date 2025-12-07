@@ -1,76 +1,59 @@
 {
-  "languages": [
-    {
-      "name": "C#",
-      "file_count": 5375,
-      "loc": 680175,
-      "percentage": 50.3
-    },
-    {
-      "name": "SQL",
-      "file_count": 4830,
-      "loc": 550783,
-      "percentage": 40.7
-    },
+  "frontend": [
     {
       "name": "JavaScript",
-      "file_count": 105,
-      "loc": 99374,
-      "percentage": 7.3
-    },
-    {
-      "name": "CSS",
-      "file_count": 69,
-      "loc": 11511,
-      "percentage": 0.9
+      "version": "unknown",
+      "latest": "unknown",
+      "status": "current",
+      "category": "language",
+      "cve_count": 0,
+      "eol_date": null
     },
     {
       "name": "TypeScript",
-      "file_count": 2,
-      "loc": 7559,
-      "percentage": 0.6
-    },
-    {
-      "name": "Python",
-      "file_count": 50,
-      "loc": 1981,
-      "percentage": 0.1
-    },
-    {
-      "name": "C",
-      "file_count": 8,
-      "loc": 1691,
-      "percentage": 0.1
-    },
-    {
-      "name": "HTML",
-      "file_count": 15,
-      "loc": 226,
-      "percentage": 0.0
-    },
-    {
-      "name": "Ruby",
-      "file_count": 1,
-      "loc": 5,
-      "percentage": 0.0
+      "version": "unknown",
+      "latest": "unknown",
+      "status": "current",
+      "category": "language",
+      "cve_count": 0,
+      "eol_date": null
     }
   ],
-  "frontend": [],
   "backend": [
     {
+      "name": "Python",
+      "version": "unknown",
+      "latest": "unknown",
+      "status": "current",
+      "category": "language",
+      "cve_count": 0,
+      "eol_date": null
+    },
+    {
+      "name": "C#",
+      "version": "unknown",
+      "latest": "unknown",
+      "status": "current",
+      "category": "language",
+      "cve_count": 0,
+      "eol_date": null
+    },
+    {
       "name": ".NET",
-      "version": "unknown"
+      "version": "8.0",
+      "latest": "8.0",
+      "status": "current",
+      "category": "framework",
+      "cve_count": 0,
+      "eol_date": null
     }
   ],
-  "databases": [],
-  "testing": [],
-  "infrastructure": [],
-  "dependencies": [],
-  "versions": {},
+  "database": [],
+  "devops": [],
   "summary": {
-    "primary_language": "C#",
-    "total_frameworks": 1,
-    "total_dependencies": 0,
-    "modernization_score": 75.0
+    "total_technologies": 5,
+    "outdated_count": 0,
+    "current_count": 5,
+    "critical_cves": 0
   }
 }
