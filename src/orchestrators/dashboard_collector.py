@@ -39,16 +39,18 @@ logger = logging.getLogger(__name__)
 class DashboardDataCollector:
     """Orchestrates collection of all dashboard data for a repository."""
 
-    def __init__(self, repo_path: Path, output_name: Optional[str] = None):
+    def __init__(self, repo_path: Path, output_name: Optional[str] = None, skip_consolidation: bool = False):
         """
         Initialize collector.
 
         Args:
             repo_path: Path to repository to analyze
             output_name: Optional custom name for output directory
+            skip_consolidation: Skip consolidation/reconciliation steps (faster, raw data only)
         """
         self.repo_path = Path(repo_path)
         self.output_name = output_name or self.repo_path.name.lower().replace('.', '-')
+        self.skip_consolidation = skip_consolidation
 
         # Load configuration
         from src.dashboard_config import get_config
@@ -213,10 +215,29 @@ class DashboardDataCollector:
 
         logger.info("Data collection complete!")
         
-        # CRITICAL: Run data consolidation and validation
+        # Skip consolidation if requested (for faster iteration/testing)
+        if self.skip_consolidation:
+            print("\n⚡ Skipping consolidation and reconciliation (--skip-consolidation enabled)")
+            print("   Raw collector output will be saved directly")
+            logger.info("Consolidation skipped per --skip-consolidation flag")
+            return results
+        
+        # STEP 1: Independent data validation (ground truth verification)
+        print("\n🔍 Running independent data validation...")
+        logger.info("🔍 Running independent data validation (ground truth check)...")
+        import time
+        start = time.time()
+        results = self._validate_collector_data(results)
+        elapsed = time.time() - start
+        print(f"✅ Data validation complete in {elapsed:.1f}s")
+        if '_validation' in results and results['_validation'].get('corrections_applied'):
+            corrections_count = len(results['_validation']['corrections_applied'])
+            print(f"   🔧 Applied {corrections_count} corrections")
+            logger.info(f"✅ Data validation: {corrections_count} corrections applied")
+        
+        # STEP 2: Data consolidation and narrative validation
         print("\n🔍 Running data consolidation and validation...")
         logger.info("🔍 Running data consolidation and validation...")
-        import time
         start = time.time()
         results = self._consolidate_data(results)
         elapsed = time.time() - start
@@ -246,6 +267,57 @@ class DashboardDataCollector:
             logger.warning("Reconciliation failed or skipped")
         
         return results
+    
+    def _validate_collector_data(self, results: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+        """
+        Independent validation layer - verifies collector data against ground truth.
+        
+        Fixes common issues:
+        - False positive languages (files in Tools/, External/)
+        - Version hallucinations (.NET 8.0 when actually Framework 4.7.2)
+        - Third-party noise (type definition files, library internals)
+        - Incorrect primary language ordering
+        - Narrative mismatches (mentioning non-existent languages)
+        
+        Args:
+            results: Raw collector data
+            
+        Returns:
+            Validated and corrected data
+        """
+        try:
+            from src.dashboard.validators.data_validator import validate_dashboard_data
+            
+            logger.info("  🔍 Scanning repository for ground truth...")
+            validated_results = validate_dashboard_data(self.repo_path, results)
+            
+            # Log corrections applied
+            if '_validation' in validated_results:
+                validation_info = validated_results['_validation']
+                corrections = validation_info.get('corrections_applied', [])
+                
+                if corrections:
+                    logger.info(f"  🔧 Applied {len(corrections)} corrections:")
+                    for correction in corrections[:5]:  # Show first 5
+                        logger.info(f"     - {correction}")
+                    if len(corrections) > 5:
+                        logger.info(f"     ... and {len(corrections) - 5} more")
+                else:
+                    logger.info("  ✅ No corrections needed - data matches ground truth")
+                
+                # Log ground truth languages
+                gt_langs = validation_info.get('ground_truth_languages', [])
+                if gt_langs:
+                    logger.info(f"  📋 Ground truth languages: {', '.join(gt_langs)}")
+            
+            return validated_results
+            
+        except Exception as e:
+            logger.error(f"Data validation failed: {e}")
+            logger.warning("Continuing with unvalidated collector data")
+            import traceback
+            logger.debug(traceback.format_exc())
+            return results
     
     def _consolidate_data(self, results: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
         """
@@ -392,6 +464,9 @@ class DashboardDataCollector:
 
                 logger.info(f"  ✓ Saved {output_file.name}")
 
+            # Post-save: Fix executive summary narrative if needed
+            self._fix_executive_summary_narrative(results)
+
             logger.info(f"\n✅ Dashboard data saved successfully to: {self.output_dir}")
             logger.info(f"\nTo view dashboard, run:")
             logger.info(
@@ -402,6 +477,65 @@ class DashboardDataCollector:
         except Exception as e:
             logger.error(f"Failed to save results: {e}")
             return False
+
+    def _fix_executive_summary_narrative(self, results: Dict[str, Any]):
+        """
+        Post-save fix: Ensure executive summary narrative uses primary language from tech-stack.
+        Fixes issue where consolidation generates narrative before validator runs.
+        """
+        try:
+            # Get primary language from validated tech-stack
+            tech_stack = results.get('tech-stack', {})
+            backend = tech_stack.get('backend', [])
+            
+            if not backend:
+                return
+            
+            # Primary language is first in backend list (validator sorted by file count)
+            primary_lang = backend[0].get('name', 'C#')
+            
+            # Check if executive summary exists
+            exec_summary_file = self.output_dir / 'executive-summary.json'
+            if not exec_summary_file.exists():
+                return
+            
+            # Load executive summary
+            with open(exec_summary_file, 'r', encoding='utf-8') as f:
+                exec_data = json.load(f)
+            
+            # Fix narrative if it mentions wrong languages
+            wrong_languages = ['Python', 'TypeScript', 'Ruby', 'Go', 'Rust']
+            actual_languages = [t['name'] for t in backend]
+            fixed = False
+            
+            # Fix what_it_does.summary
+            if 'what_it_does' in exec_data and 'summary' in exec_data['what_it_does']:
+                summary = exec_data['what_it_does']['summary']
+                for wrong_lang in wrong_languages:
+                    if wrong_lang not in actual_languages and wrong_lang in summary:
+                        summary = summary.replace(f"built with {wrong_lang}", f"built with {primary_lang}")
+                        summary = summary.replace(f"using {wrong_lang}", f"using {primary_lang}")
+                        exec_data['what_it_does']['summary'] = summary
+                        fixed = True
+                        logger.info(f"  🔧 Fixed executive summary: replaced {wrong_lang} with {primary_lang}")
+            
+            # Fix tagline if needed
+            if 'tagline' in exec_data:
+                tagline = exec_data['tagline']
+                for wrong_lang in wrong_languages:
+                    if wrong_lang not in actual_languages and wrong_lang in tagline:
+                        tagline = tagline.replace(wrong_lang, primary_lang)
+                        exec_data['tagline'] = tagline
+                        fixed = True
+            
+            # Save if fixed
+            if fixed:
+                with open(exec_summary_file, 'w', encoding='utf-8') as f:
+                    json.dump(exec_data, f, indent=2, ensure_ascii=False)
+                logger.info(f"  ✓ Updated executive-summary.json with correct language")
+        
+        except Exception as e:
+            logger.warning(f"Failed to fix executive summary narrative: {e}")
 
     # Helper methods
 
@@ -567,6 +701,11 @@ def main():
         action='store_true',
         help='Enable verbose logging'
     )
+    parser.add_argument(
+        '--skip-consolidation',
+        action='store_true',
+        help='Skip consolidation and reconciliation (save raw collector output only)'
+    )
 
     args = parser.parse_args()
 
@@ -589,7 +728,7 @@ def main():
         return 1
 
     # Create collector and collect data
-    collector = DashboardDataCollector(repo_path, args.output)
+    collector = DashboardDataCollector(repo_path, args.output, skip_consolidation=args.skip_consolidation)
     results = collector.collect_all()
 
     # Save results
