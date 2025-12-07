@@ -26,9 +26,10 @@ export function renderSecurity(data) {
     
     // Render after brief delay to show spinner
     setTimeout(() => {
-        const security = data.security || {};
-    const score = security.overall_score || 0;
-    const vulnerabilities = security.vulnerabilities || {};
+        // Handle both nested (data.security) and direct structure
+        const security = data.security || data;
+        const score = security.overall_score || 0;
+        const vulnerabilities = security.vulnerabilities || {};
     
     // Handle owasp_top_10 structure - new format with metadata
     let owaspTop10 = [];
@@ -51,11 +52,8 @@ export function renderSecurity(data) {
     
     // Build HTML
     container.innerHTML = `
-        <div class="view-header">
-            <h2>🔒 Security Dashboard</h2>
-            <div class="header-actions">
-                <button class="btn-secondary" onclick="refreshSecurityScan()">🔄 Refresh Scan</button>
-            </div>
+        <div class="header-actions" style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem;">
+            <button class="btn-secondary" onclick="refreshSecurityScan()">🔄 Refresh Scan</button>
         </div>
 
         <!-- Security Score and Vulnerabilities -->

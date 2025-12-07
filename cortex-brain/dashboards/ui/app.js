@@ -233,7 +233,7 @@ async function loadData(source) {
 }
 
 /**
- * Render the current active tab (with progressive loading and skeletons)
+ * Render the current active tab
  */
 async function renderCurrentTab() {
     if (!appState.data) {
@@ -244,43 +244,46 @@ async function renderCurrentTab() {
     console.log(`Rendering tab: ${appState.currentTab}`);
     
     try {
-        // Show skeleton while rendering
-    const containerId = getTabContainerId(appState.currentTab);
-        const skeletonType = progressiveLoader.getSkeletonTypeForTab(appState.currentTab);
-        progressiveLoader.showSkeleton(containerId, skeletonType);
+        // CRITICAL: Make tab visible FIRST before components try to find containers
+        const tabId = getTabContainerId(appState.currentTab);
+        const tabElement = document.getElementById(tabId);
         
-        // Small delay to show skeleton (smooth UX)
-        await new Promise(resolve => setTimeout(resolve, 100));
+        if (!tabElement) {
+            console.error(`Tab element not found: ${tabId}`);
+            return;
+        }
         
-        // Render tab content
-        let contentHtml;
+        // Hide all tabs and show current one
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        tabElement.classList.add('active');
+        
+        // Now render content - components will find their visible containers
         switch (appState.currentTab) {
             case 'executive':
-                contentHtml = renderExecutiveSummary(appState.data);
+                renderExecutiveSummary(appState.data);
                 break;
             case 'overview':
-                // Pass overview data specifically to new v3 component
-                contentHtml = renderOverview(appState.data.overview || appState.data);
+                renderOverview(appState.data.overview || appState.data);
                 break;
             case 'tech-stack':
-                contentHtml = renderTechStack(appState.data);
+                renderTechStack(appState.data);
                 break;
             case 'security':
-                contentHtml = renderSecurity(appState.data);
+                renderSecurity(appState.data);
                 break;
             case 'architecture':
-                contentHtml = renderArchitecture(appState.data);
+                renderArchitecture(appState.data);
                 break;
             case 'code-org':
-                contentHtml = renderCodeOrganization(appState.data);
+                renderCodeOrganization(appState.data);
                 break;
             case 'vendors':
-                contentHtml = renderVendors(appState.data);
+                renderVendors(appState.data);
                 break;
             case 'engineering': {
-                // Render container then initialize onboarding component with mock data
-                contentHtml = '<div id="engineering-onboarding-content"></div>';
-                await progressiveLoader.hideSkeleton(containerId, contentHtml, 150);
+                // Special case: Load engineering data separately
                 try {
                     const onboardingData = await loadAdditionalData('mock', 'engineering-onboarding.json');
                     const tab = new EngineeringOnboardingTab();
@@ -288,15 +291,12 @@ async function renderCurrentTab() {
                 } catch (e) {
                     console.error('Failed to load onboarding data:', e);
                 }
-                return; // Early return because we already hid skeleton
+                break;
             }
             default:
                 console.warn(`Unknown tab: ${appState.currentTab}`);
                 return;
         }
-        
-        // Hide skeleton and show content with smooth transition
-        await progressiveLoader.hideSkeleton(containerId, contentHtml, 300);
     } catch (error) {
         console.error(`Error rendering tab ${appState.currentTab}:`, error);
         showError(`Failed to render ${appState.currentTab}`, error.message);

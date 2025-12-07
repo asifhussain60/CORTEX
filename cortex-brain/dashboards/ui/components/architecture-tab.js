@@ -26,7 +26,8 @@ export function renderArchitecture(data) {
     
     // Render after brief delay to show spinner
     setTimeout(() => {
-        const architecture = data.architecture || {};
+        // Handle both nested (data.architecture) and direct structure
+        const architecture = data.architecture || data;
         const summary = architecture.summary || {};
         const tiers = architecture.tiers || [];
         const components = architecture.components || [];

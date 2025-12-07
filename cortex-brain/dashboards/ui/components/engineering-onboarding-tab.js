@@ -149,21 +149,15 @@ class EngineeringOnboardingTab {
     }
 
     /**
-     * Render header with title and stats
+     * Render header with progress stats (no duplicate title)
      */
     renderHeader() {
         const completionPct = this.getCompletionPercentage();
         return `
             <div class="onboarding-header">
-                <div class="onboarding-title-section">
-                    <h2 class="onboarding-main-title">
-                        <span class="onboarding-icon">🎓</span>
-                        Engineering Onboarding
-                    </h2>
-                    <p class="onboarding-subtitle">
-                        Progressive learning path for ${this.data.metadata.repository} repository
-                    </p>
-                </div>
+                <p class="onboarding-subtitle">
+                    Progressive learning path for ${this.data.metadata.repository} repository
+                </p>
                 <div class="onboarding-stats">
                     <div class="stat-card">
                         <div class="stat-value">${completionPct}%</div>
@@ -314,6 +308,7 @@ ${diagram.mermaid_code}
                 <div class="stage-content" id="stage-content-${stage.id}" role="tabpanel">
                     ${this.renderStageHeader(stage)}
                     ${this[contentMethod](stage.content, stage)}
+                    ${this.renderCompletionFooter(stage)}
                 </div>
             `;
         }
@@ -324,7 +319,6 @@ ${diagram.mermaid_code}
      * Render stage header with centered icon and yellow badge
      */
     renderStageHeader(stage) {
-        const isCompleted = this.completedStages.has(stage.id);
         return `
             <div class="step-badge">
                 <div class="step-badge-label">STEP</div>
@@ -336,10 +330,26 @@ ${diagram.mermaid_code}
                 <p class="stage-description">${stage.description}</p>
                 <div class="stage-actions">
                     <span class="stage-duration-badge">⏱️ ${stage.duration_minutes} minutes</span>
-                    <button class="btn-mark-complete ${isCompleted ? 'completed' : ''}" data-stage-id="${stage.id}">
-                        ${isCompleted ? '✅ Completed' : '☐ Mark as Complete'}
-                    </button>
                 </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Render completion footer with Mark as Complete button
+     */
+    renderCompletionFooter(stage) {
+        const isCompleted = this.completedStages.has(stage.id);
+        const nextStage = this.data.stages.find(s => s.order === stage.order + 1);
+        
+        return `
+            <div class="stage-completion-footer">
+                <button class="btn-mark-complete ${isCompleted ? 'completed' : ''}" 
+                        data-stage-id="${stage.id}"
+                        data-has-next="${nextStage ? 'true' : 'false'}"
+                        data-next-stage-id="${nextStage ? nextStage.id : ''}">
+                    ${isCompleted ? '✅ Completed' : '☐ Mark as Complete'}
+                </button>
             </div>
         `;
     }
@@ -719,6 +729,7 @@ ${diagram.mermaid_code}
 
     renderController(controller, idx) {
         const riskClass = this.getRiskClass(controller.risk_level);
+        const riskIcon = this.getRiskIcon(controller.risk_level);
         
         return `
             <details class="controller-panel ${riskClass}">
@@ -726,16 +737,16 @@ ${diagram.mermaid_code}
                     <div class="controller-info">
                         <h4 class="controller-name">${controller.name}</h4>
                         ${controller.alert ? `<div class="controller-alert">${controller.alert}</div>` : ''}
+                        <div class="controller-meta-aligned">
+                            <span class="complexity-badge ${this.getComplexityClass(controller.complexity)}">
+                                Complexity: ${controller.complexity}
+                            </span>
+                            <span class="risk-badge ${riskClass}" title="${controller.risk_level}">${riskIcon}</span>
+                        </div>
                     </div>
-                    <div class="controller-meta">
-                        <span class="complexity-badge ${this.getComplexityClass(controller.complexity)}">
-                            Complexity: ${controller.complexity}
-                        </span>
-                        <span class="risk-badge ${riskClass}">${controller.risk_level}</span>
-                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
+                    <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </summary>
                 <div class="controller-content">
                     <div class="controller-stats">
@@ -844,6 +855,7 @@ ${diagram.mermaid_code}
 
     renderService(service, idx) {
         const riskClass = this.getRiskClass(service.risk_level);
+        const riskIcon = this.getRiskIcon(service.risk_level);
         
         return `
             <details class="service-panel ${riskClass}">
@@ -852,16 +864,16 @@ ${diagram.mermaid_code}
                         <h4 class="service-name">${service.name}</h4>
                         ${service.alert ? `<div class="service-alert">${service.alert}</div>` : ''}
                         <div class="service-file">${service.file}</div>
+                        <div class="service-meta-aligned">
+                            <span class="complexity-badge ${this.getComplexityClass(service.complexity)}">
+                                Complexity: ${service.complexity}
+                            </span>
+                            <span class="risk-badge ${riskClass}" title="${service.risk_level}">${riskIcon}</span>
+                        </div>
                     </div>
-                    <div class="service-meta">
-                        <span class="complexity-badge ${this.getComplexityClass(service.complexity)}">
-                            ${service.complexity}
-                        </span>
-                        <span class="risk-badge ${riskClass}">${service.risk_level}</span>
-                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
+                    <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </summary>
                 <div class="service-content">
                     <div class="service-stats">
@@ -1537,14 +1549,45 @@ ${diagram.mermaid_code}
             });
         });
 
-        // Mark complete button
+        // Mark complete button with auto-navigation
         document.querySelectorAll('.btn-mark-complete').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const stageId = parseInt(e.currentTarget.dataset.stageId);
+                const hasNext = e.currentTarget.dataset.hasNext === 'true';
+                const nextStageId = parseInt(e.currentTarget.dataset.nextStageId);
+                
+                // Toggle completion
                 this.toggleStageCompletion(stageId);
+                
+                // Auto-navigate to next step if exists and current step is now complete
+                if (hasNext && this.completedStages.has(stageId)) {
+                    setTimeout(() => {
+                        this.navigateToStage(nextStageId);
+                    }, 300); // Brief delay for completion animation
+                }
             });
         });
+
+        // Accordion behavior: close other panels when one opens
+        document.addEventListener('toggle', (e) => {
+            if (e.target.matches('details.service-panel, details.controller-panel, details.entity-panel, details.solution-panel, details.pattern-panel, details.hotspot-panel')) {
+                if (e.target.open) {
+                    // Close all sibling details elements in the same container
+                    const container = e.target.parentElement;
+                    container.querySelectorAll('details').forEach(detail => {
+                        if (detail !== e.target && detail.open) {
+                            detail.open = false;
+                        }
+                    });
+                    
+                    // Scroll panel into view smoothly
+                    setTimeout(() => {
+                        e.target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }
+            }
+        }, true);
     }
 
     /**
@@ -1623,6 +1666,18 @@ ${diagram.mermaid_code}
     getRiskClass(riskLevel) {
         if (!riskLevel) return '';
         return riskLevel.replace(' ', '-').toLowerCase();
+    }
+
+    /**
+     * Utility: Get risk icon
+     */
+    getRiskIcon(riskLevel) {
+        if (!riskLevel) return '🔵';
+        const level = riskLevel.toLowerCase();
+        if (level.includes('very high')) return '🔴';
+        if (level.includes('high')) return '🟠';
+        if (level.includes('medium')) return '🟡';
+        return '🟢';
     }
 }
 
