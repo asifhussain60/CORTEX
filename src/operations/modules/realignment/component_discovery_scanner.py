@@ -88,6 +88,7 @@ class ComponentDiscoveryScanner:
     # Component patterns to exclude (intentional utilities, not architectural components)
     EXCLUDE_COMPONENTS = {
         "ObsoleteCodeDetector",  # Realignment utility, used by test_migrator
+        "DependencyBloatAnalyzer",  # Dashboard component, not RefactoringIntelligence
     }
     
     def __init__(self):

@@ -98,7 +98,10 @@ class AutonomousExecutionWiringChecker:
         if not orchestrator_path.exists():
             return False, "❌ planning_orchestrator.py not found"
         
-        content = orchestrator_path.read_text()
+        try:
+            content = orchestrator_path.read_text(encoding='utf-8', errors='ignore')
+        except Exception as e:
+            return False, f"❌ Failed to read planning_orchestrator.py: {str(e)}"
         
         if "def execute_plan_autonomously" in content:
             # Check for progress decorator
@@ -136,7 +139,10 @@ class AutonomousExecutionWiringChecker:
         if not router_path.exists():
             return False, "❌ intent_router.py not found"
         
-        content = router_path.read_text()
+        try:
+            content = router_path.read_text(encoding='utf-8', errors='ignore')
+        except Exception as e:
+            return False, f"❌ Failed to read intent_router.py: {str(e)}"
         
         # Check for autonomous execution patterns
         autonomous_patterns = [
@@ -163,7 +169,7 @@ class AutonomousExecutionWiringChecker:
             return False, "❌ response-templates.yaml not found"
         
         try:
-            with open(templates_path, 'r') as f:
+            with open(templates_path, 'r', encoding='utf-8', errors='ignore') as f:
                 templates = yaml.safe_load(f)
             
             if not templates or 'templates' not in templates:
@@ -197,7 +203,10 @@ class AutonomousExecutionWiringChecker:
         if not orchestrator_path.exists():
             return False, "❌ planning_orchestrator.py not found"
         
-        content = orchestrator_path.read_text()
+        try:
+            content = orchestrator_path.read_text(encoding='utf-8', errors='ignore')
+        except Exception as e:
+            return False, f"❌ Failed to read planning_orchestrator.py: {str(e)}"
         
         # Check for git checkpoint integration
         has_import = "GitCheckpointOrchestrator" in content

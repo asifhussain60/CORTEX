@@ -214,10 +214,14 @@ class ObsoleteCodeDetector:
             # test_planning_orchestrator.py -> planning_orchestrator
             orch_name = test_file.stem.replace('test_', '')
             
-            # Check if orchestrator file exists
-            orch_file = self.orchestrators_dir / f"{orch_name}.py"
+            # Check if orchestrator file exists in multiple locations
+            possible_locations = [
+                self.orchestrators_dir / f"{orch_name}.py",  # src/orchestrators/
+                self.project_root / "src" / "tier3" / "orchestrators" / f"{orch_name}.py",  # src/tier3/orchestrators/
+                self.project_root / "src" / "tier2" / "orchestrators" / f"{orch_name}.py",  # src/tier2/orchestrators/
+            ]
             
-            if not orch_file.exists():
+            if not any(loc.exists() for loc in possible_locations):
                 obsolete.append(test_file)
                 logger.info(f"Found obsolete test: {test_file.name} (orchestrator deleted)")
         

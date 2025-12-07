@@ -49,6 +49,8 @@ from src.operations.modules.cleanup.file_scanner import FileScanner, FileCategor
 from src.operations.modules.cleanup.reference_tracker import ReferenceTracker
 from src.operations.modules.cleanup.smart_deletion_engine import SmartDeletionEngine, DeletionRisk
 from src.operations.modules.cleanup.file_reorganization_engine import FileReorganizationEngine
+from src.operations.modules.cleanup.reference_checker import ReferenceChecker
+from src.operations.modules.cleanup.git_recovery_manifest import GitRecoveryManifest
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +71,7 @@ class CleanupOrchestrator(BaseOperationModule):
         self.project_root = project_root or Path.cwd()
         self.metrics = CleanupMetrics(timestamp=datetime.now())
         self.actions_log: List[Dict[str, Any]] = []
+        self.git_recovery = GitRecoveryManifest(self.project_root)
         
         # Protected paths - NEVER touch these
         self.protected_paths = {
@@ -697,6 +700,16 @@ class CleanupOrchestrator(BaseOperationModule):
         
         logger.info(f"Found {len(backup_files)} backup files")
         
+        # Create git recovery manifest BEFORE deletion
+        if backup_files and not dry_run:
+            logger.info("  Creating git recovery manifest...")
+            manifest_path = self.git_recovery.create_deletion_manifest(
+                backup_files,
+                operation_type="backup_cleanup",
+                dry_run=dry_run
+            )
+            logger.info(f"  ✓ Git manifest: {manifest_path.relative_to(self.project_root)}")
+        
         # Archive to GitHub
         if not dry_run:
             archive_result = self._archive_backups_to_github(backup_files)
@@ -742,6 +755,8 @@ class CleanupOrchestrator(BaseOperationModule):
         
         root_files = [f for f in self.project_root.iterdir() if f.is_file()]
         
+        misplaced_files = []
+        
         for file_path in root_files:
             if file_path.name.startswith('.'):
                 continue
@@ -749,6 +764,21 @@ class CleanupOrchestrator(BaseOperationModule):
             if file_path.name in allowed_root_files:
                 continue
             
+            misplaced_files.append(file_path)
+        
+        # Create git recovery manifest for files being moved
+        if misplaced_files and not dry_run:
+            dest_dir = self.project_root / 'scripts' / 'temp'
+            file_moves = [(f, dest_dir / f.name) for f in misplaced_files]
+            
+            manifest_path = self.git_recovery.create_reorganization_manifest(
+                file_moves,
+                dry_run=False
+            )
+            logger.info(f"  ✓ Reorganization manifest: {manifest_path.relative_to(self.project_root)}")
+        
+        # Move misplaced files
+        for file_path in misplaced_files:
             # Misplaced file - move to scripts/temp/
             dest_dir = self.project_root / 'scripts' / 'temp'
             dest_path = dest_dir / file_path.name
@@ -873,6 +903,14 @@ class CleanupOrchestrator(BaseOperationModule):
             
             logger.info(f"  Consolidating {len(duplicates)} versions of {base_name}:")
             logger.info(f"    Keeping: {newest.name}")
+            
+            # Create git recovery manifest for duplicates
+            if duplicates and not dry_run:
+                self.git_recovery.create_deletion_manifest(
+                    duplicates,
+                    operation_type="md_consolidation",
+                    dry_run=False
+                )
             
             for dup in duplicates:
                 if not dry_run:

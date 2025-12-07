@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-12-07T15:28:18.207262",
+  "duration_seconds": 13.119834,
+  "dry_run": false,
+  "summary": {
+    "files_moved": 8,
+    "files_removed": 4,
+    "references_updated": 0,
+    "issues_fixed": 8,
+    "space_freed_mb": 0.25,
+    "errors": 0
+  },
+  "moved_files": [
+    {
+      "from": "test_architectural_review.py",
+      "to": "tests\\integration\\test_architectural_review.py"
+    },
+    {
+      "from": "test_autonomous_execution.py",
+      "to": "tests\\integration\\test_autonomous_execution.py"
+    },
+    {
+      "from": "test_dashboard_load.py",
+      "to": "tests\\integration\\test_dashboard_load.py"
+    },
+    {
+      "from": "test_git_pull_protection.py",
+      "to": "tests\\integration\\test_git_pull_protection.py"
+    },
+    {
+      "from": "test_phase3_debug.py",
+      "to": "tests\\integration\\test_phase3_debug.py"
+    },
+    {
+      "from": "test_system_maintenance.py",
+      "to": "tests\\integration\\test_system_maintenance.py"
+    },
+    {
+      "from": "test_tier2_debug.py",
+      "to": "tests\\integration\\test_tier2_debug.py"
+    },
+    {
+      "from": ".cortex-resume.md",
+      "to": "cortex-brain\\documents\\summaries\\.cortex-resume.md"
+    }
+  ],
+  "removed_files": [
+    "cortex-operations.yaml.backup",
+    "tests\\dashboard\\presentation\\test_integration.py.backup",
+    "cortex-brain\\archives\\template-architecture-v1\\backups\\response-templates.yaml.backup",
+    "cortex-brain\\documents\\.DS_Store"
+  ],
+  "updated_references": [],
+  "validation": {
+    "passed": true,
+    "issues": []
+  },
+  "errors": []
+}

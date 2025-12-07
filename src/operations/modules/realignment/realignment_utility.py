@@ -1850,6 +1850,36 @@ if __name__ == "__main__":
         
         if maintenance_result.success:
             print(f"SUCCESS - system_maintenance: PASSED")
+            print(f"   Phases: {maintenance_result.data['phases_completed']}/{maintenance_result.data['metrics']['phases_total']}")
+            print(f"   Improvements: {len(maintenance_result.data['improvements'])}")
+            print(f"   Warnings: {len(maintenance_result.data['warnings'])}")
+        else:
+            print(f"WARNING - system_maintenance: FAILED - {maintenance_result.message}")
+    except Exception as e:
+        print(f"WARNING - system_maintenance: {e}")
+    
+    # Test 8: Cleanup Orchestrator
+    print("\nTest 8: Cleanup Orchestrator")
+    try:
+        from src.operations.modules.orchestration.cleanup_orchestrator import CleanupOrchestrator
+        
+        cleanup_orchestrator = CleanupOrchestrator()
+        cleanup_result = cleanup_orchestrator.execute({'dry_run': True})  # Dry run to avoid moving files
+        
+        if cleanup_result.success:
+            print(f"SUCCESS - cleanup_orchestrator: PASSED")
+            metrics = cleanup_result.data['metrics']
+            print(f"   Files to Move: {metrics['files_moved']}")
+            print(f"   Files to Remove: {metrics['files_removed']}")
+            print(f"   References to Update: {metrics['references_updated']}")
+            print(f"   Validation: {'PASS' if cleanup_result.data['validation']['passed'] else 'FAIL'}")
+        else:
+            print(f"WARNING - cleanup_orchestrator: FAILED - {cleanup_result.message}")
+    except Exception as e:
+        print(f"WARNING - cleanup_orchestrator: {e}")
+        
+        if maintenance_result.success:
+            print(f"SUCCESS - system_maintenance: PASSED")
             print(f"   Phases: {maintenance_result.data['phases_completed']}/{maintenance_result.data['phases_total']}")
             print(f"   Improvements: {len(maintenance_result.data.get('improvements', []))}")
             print(f"   Warnings: {len(maintenance_result.data.get('warnings', []))}")

@@ -119,7 +119,13 @@ ALL responses MUST use this 5-part structure:
 
 ### System Maintenance
 - **Commands:** `system maintenance`, `maintain system`
+- **Phases:** Pre-healthcheck → align → cleanup → optimize → post-healthcheck
 - **Guide:** #file:../../cortex-brain/documents/implementation-guides/system-maintenance-orchestrator.md
+
+### Cleanup & Organization
+- **Auto-runs:** Part of system maintenance (Phase 3)
+- **Features:** File organization, reference updates, obsolete cleanup, validation
+- **Guide:** #file:../../cortex-brain/documents/implementation-guides/cleanup-orchestrator-quick-ref.md
 
 ---
 
@@ -138,7 +144,7 @@ ALL responses MUST use this 5-part structure:
 | `run tests` | Execute tests + analysis | All |
 | `load dashboard` | Launch dashboard server | All |
 | `upgrade cortex` | Upgrade CORTEX safely | All |
-| `system maintenance` | Comprehensive maintenance (4 phases) | Admin |
+| `system maintenance` | Comprehensive maintenance (5 phases) | Admin |
 | `align` | System alignment | Admin: full, User: workspace only |
 | `optimize` | CORTEX optimization | Admin: with SKULL, User: fast |
 | `deploy` | Deploy to publish | Admin only |

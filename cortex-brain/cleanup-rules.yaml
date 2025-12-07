@@ -527,7 +527,147 @@ categories:
       allow_rollback: true
   
   # --------------------------------------------------------------------------
-  # Category 19: Documentation Pattern Cleanup
+  # Category 19: Root-Level Backup Files (NEW - Enhanced)
+  # --------------------------------------------------------------------------
+  root_backup_files:
+    enabled: true
+    priority: high
+    risk_level: low
+    
+    paths:
+      - ".github/prompts/CORTEX.prompt.md.backup"
+      - ".github/copilot-instructions.md.backup"
+      - "*.backup"
+      - "*.bak"
+      - "*.old"
+    
+    action: delete_all
+    reason: "Root-level backup files - Git history provides versioning"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: true
+      recursive: false
+    
+    safety:
+      require_confirmation: false
+      create_manifest: true
+  
+  # --------------------------------------------------------------------------
+  # Category 20: Root-Level Test Outputs (NEW)
+  # --------------------------------------------------------------------------
+  root_test_outputs:
+    enabled: true
+    priority: high
+    risk_level: low
+    
+    paths:
+      - "test_output.txt"
+      - "test_*.txt"
+      - "test_*.html"
+      - "*_test_output.*"
+    
+    action: delete_all
+    reason: "Test output files in root directory"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+      recursive: false
+    
+    safety:
+      require_confirmation: false
+      create_manifest: true
+  
+  # --------------------------------------------------------------------------
+  # Category 21: Empty or Near-Empty Directories (NEW)
+  # --------------------------------------------------------------------------
+  empty_directories:
+    enabled: true
+    priority: medium
+    risk_level: low
+    
+    paths:
+      - "test_merge/**"
+    
+    action: delete_all
+    reason: "Empty or near-empty directories"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: true
+      recursive: true
+      verify_empty_ok: true
+    
+    safety:
+      require_confirmation: false
+      create_manifest: false
+  
+  # --------------------------------------------------------------------------
+  # Category 22: Redundant System Alignment Reports (NEW)
+  # --------------------------------------------------------------------------
+  redundant_alignment_reports:
+    enabled: true
+    priority: high
+    risk_level: medium
+    
+    paths:
+      - "cortex-brain/documents/reports/system-alignment-v2-*.md"
+      - "cortex-brain/documents/reports/system-maintenance-*.json"
+      - "cortex-brain/documents/reports/cleanup-*.json"
+      - "cortex-brain/documents/reports/deployment-validation-*.md"
+      - "cortex-brain/documents/reports/architectural-review-*.md"
+      - "cortex-brain/documents/reports/architectural-review-*.json"
+    
+    action: retain_recent
+    retention:
+      keep_count: 5  # Keep 5 most recent per type
+      sort_by: mtime
+      order: descending
+    
+    reason: "Excessive auto-generated reports - retain 5 most recent per type"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+    
+    safety:
+      require_confirmation: true
+      create_manifest: true
+      allow_rollback: true
+  
+  # --------------------------------------------------------------------------
+  # Category 23: Duplicate Cleanup Reports in Brain (NEW)
+  # --------------------------------------------------------------------------
+  duplicate_cleanup_reports:
+    enabled: true
+    priority: high
+    risk_level: medium
+    
+    paths:
+      - "cortex-brain/cleanup-reports/cleanup-*.json"
+      - "cortex-brain/cleanup-reports/cleanup-dryrun-*.json"
+      - "cortex-brain/cleanup-reports/deletion-manifest-*.json"
+      - "cortex-brain/cleanup-reports/enhanced-cleanup-report-*.json"
+    
+    action: retain_recent
+    retention:
+      keep_count: 10  # Keep 10 most recent
+      sort_by: mtime
+      order: descending
+    
+    reason: "Excessive cleanup execution logs - retain 10 most recent"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+    
+    safety:
+      require_confirmation: false
+      create_manifest: true
+  
+  # --------------------------------------------------------------------------
+  # Category 24: Documentation Pattern Cleanup
   # --------------------------------------------------------------------------
   doc_pattern_cleanup:
     enabled: true
@@ -635,6 +775,12 @@ protected_patterns:
   - "package.json"
   - "*.config.*"
   - "cortex.config.*"
+  - "VERSION"  # Version file
+  - "CHANGELOG.md"  # Changelog
+  - ".gitignore"  # Git configuration
+  - ".gitattributes"
+  - "mkdocs.yml"  # Documentation config
+  - "pytest.ini"  # Test configuration
   
   # CRITICAL: Orchestrator files (restored 2025-12-03, required for TDD/deployment)
   - "src/orchestrators/git_checkpoint_orchestrator.py"

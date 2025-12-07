@@ -179,7 +179,12 @@ class OperationHeaderFormatter:
         header = OperationHeaderFormatter.format_minimalist(
             operation_name, version, profile, mode, timestamp, purpose
         )
-        print(header)
+        # Use UTF-8 encoding for console output
+        try:
+            print(header)
+        except UnicodeEncodeError:
+            # Fallback to ASCII if UTF-8 fails
+            print(header.encode('ascii', 'replace').decode('ascii'))
     
     @staticmethod
     def print_banner(

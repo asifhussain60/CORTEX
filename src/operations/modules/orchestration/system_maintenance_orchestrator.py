@@ -46,9 +46,10 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         self.project_root = project_root or Path.cwd()
         self.metrics: Dict[str, Any] = {
             'phases_completed': 0,
-            'phases_total': 4,
+            'phases_total': 5,
             'healthcheck_pre': {},
             'alignment': {},
+            'cleanup': {},
             'optimization': {},
             'healthcheck_post': {},
             'improvements': [],
@@ -61,7 +62,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         return OperationModuleMetadata(
             module_id="system_maintenance",
             name="System Maintenance Orchestrator",
-            description="Comprehensive system maintenance: healthcheck → align → optimize → healthcheck",
+            description="Comprehensive system maintenance: healthcheck → align → cleanup → optimize → healthcheck",
             phase=OperationPhase.PROCESSING,
             priority=100,
             version="3.8.1",
@@ -94,27 +95,33 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
                 logger.warning("⚠️  Pre-healthcheck identified issues - proceeding with maintenance")
             
             # Phase 2: System alignment
-            yield_progress(2, 4, "Phase 2: System alignment")
+            yield_progress(2, 5, "Phase 2: System alignment")
             alignment = self._run_alignment()
             self.metrics['alignment'] = alignment
             self.metrics['phases_completed'] = 2
             
+            # Phase 3: Cleanup and organization
+            yield_progress(3, 5, "Phase 3: Cleanup and organization")
+            cleanup = self._run_cleanup()
+            self.metrics['cleanup'] = cleanup
+            self.metrics['phases_completed'] = 3
+            
             # Only optimize if alignment succeeded
             if alignment.get('success'):
-                # Phase 3: CORTEX optimization
-                yield_progress(3, 4, "Phase 3: CORTEX optimization")
+                # Phase 4: CORTEX optimization
+                yield_progress(4, 5, "Phase 4: CORTEX optimization")
                 optimization = self._run_optimization()
                 self.metrics['optimization'] = optimization
-                self.metrics['phases_completed'] = 3
+                self.metrics['phases_completed'] = 4
             else:
                 logger.warning("⚠️  Skipping optimization - alignment had issues")
                 self.metrics['warnings'].append("Optimization skipped due to alignment issues")
             
-            # Phase 4: Post-maintenance healthcheck
-            yield_progress(4, 4, "Phase 4: Post-maintenance healthcheck")
+            # Phase 5: Post-maintenance healthcheck
+            yield_progress(5, 5, "Phase 5: Post-maintenance healthcheck")
             post_check = self._run_post_healthcheck()
             self.metrics['healthcheck_post'] = post_check
-            self.metrics['phases_completed'] = 4
+            self.metrics['phases_completed'] = 5
             
             # Generate report
             report = self._generate_report(start_time)
@@ -122,12 +129,12 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             # Save report
             report_path = self._save_report(report)
             
-            success = self.metrics['phases_completed'] == 4
+            success = self.metrics['phases_completed'] == 5
             
             return OperationResult(
                 success=success,
                 status=OperationStatus.SUCCESS if success else OperationStatus.WARNING,
-                message=f"System maintenance completed: {self.metrics['phases_completed']}/4 phases",
+                message=f"System maintenance completed: {self.metrics['phases_completed']}/5 phases",
                 data={
                     'phases_completed': self.metrics['phases_completed'],
                     'metrics': self.metrics,
@@ -147,7 +154,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             return OperationResult(
                 success=False,
                 status=OperationStatus.FAILED,
-                message=f"Maintenance failed at phase {self.metrics['phases_completed']}/4: {str(e)}",
+                message=f"Maintenance failed at phase {self.metrics['phases_completed']}/5: {str(e)}",
                 data={'metrics': self.metrics},
                 errors=[str(e)],
                 warnings=self.metrics['warnings'],
@@ -196,6 +203,37 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         except Exception as e:
             logger.error(f"Alignment failed: {e}")
             self.metrics['errors'].append(f"Alignment error: {str(e)}")
+            return {'success': False, 'error': str(e)}
+    
+    def _run_cleanup(self) -> Dict[str, Any]:
+        """Run cleanup and organization."""
+        logger.info("🧹 Phase 3: Cleanup and organization")
+        
+        try:
+            from src.operations.modules.orchestration.cleanup_orchestrator import CleanupOrchestrator
+            
+            cleanup = CleanupOrchestrator(self.project_root)
+            result = cleanup.execute({'dry_run': False})
+            
+            if result.success:
+                files_moved = result.data.get('metrics', {}).get('files_moved', 0)
+                files_removed = result.data.get('metrics', {}).get('files_removed', 0)
+                self.metrics['improvements'].append(
+                    f"Cleanup organized {files_moved} files and removed {files_removed} obsolete files"
+                )
+                return {
+                    'success': True,
+                    'files_moved': files_moved,
+                    'files_removed': files_removed,
+                    'space_freed_mb': result.data.get('metrics', {}).get('space_freed_mb', 0)
+                }
+            else:
+                self.metrics['warnings'].append(f"Cleanup had issues: {result.message}")
+                return {'success': False, 'message': result.message}
+                
+        except Exception as e:
+            logger.error(f"Cleanup failed: {e}")
+            self.metrics['errors'].append(f"Cleanup error: {str(e)}")
             return {'success': False, 'error': str(e)}
     
     def _run_optimization(self) -> Dict[str, Any]:
@@ -272,6 +310,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             'phases': {
                 'pre_healthcheck': self._summarize_healthcheck(self.metrics['healthcheck_pre']),
                 'alignment': self._summarize_alignment(self.metrics['alignment']),
+                'cleanup': self._summarize_cleanup(self.metrics['cleanup']),
                 'optimization': self._summarize_optimization(self.metrics['optimization']),
                 'post_healthcheck': self._summarize_healthcheck(self.metrics['healthcheck_post'])
             },
@@ -303,6 +342,18 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             'status': 'success' if data.get('success') else 'failed',
             'fixes_applied': data.get('fixes_applied', 0),
             'issues_found': data.get('issues_found', 0)
+        }
+    
+    def _summarize_cleanup(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Summarize cleanup results."""
+        if not data:
+            return {'status': 'not_run'}
+        
+        return {
+            'status': 'success' if data.get('success') else 'failed',
+            'files_moved': data.get('files_moved', 0),
+            'files_removed': data.get('files_removed', 0),
+            'space_freed_mb': data.get('space_freed_mb', 0)
         }
     
     def _summarize_optimization(self, data: Dict[str, Any]) -> Dict[str, Any]:
