@@ -79,6 +79,11 @@
           "Testing coverage is good but could be improved in business logic layer",
           "System handles 50K+ daily active users with high performance requirements"
         ]
+      },
+      "diagram": {
+        "title": "N-Tier Architecture Overview",
+        "type": "architecture",
+        "mermaid_code": "graph TD\n    A[Client Browser<br/>Blazor WebAssembly] -->|HTTP/HTTPS| B[API Gateway<br/>ASP.NET Core]\n    B --> C[Service Layer<br/>Business Logic]\n    C --> D[Data Access Layer<br/>EF Core Repositories]\n    D --> E[(SQL Server 2022<br/>Primary Database)]\n    C --> F[(Redis Cache<br/>Session & Data)]\n    C --> G[(Elasticsearch<br/>Full-text Search)]\n    B -->|WebSocket| H[SignalR Hub<br/>Real-time Updates]\n    \n    style A fill:#00d4ff22,stroke:#00d4ff,stroke-width:2px\n    style B fill:#7b61ff22,stroke:#7b61ff,stroke-width:2px\n    style C fill:#ffa50022,stroke:#ffa500,stroke-width:2px\n    style D fill:#00ff8822,stroke:#00ff88,stroke-width:2px\n    style E fill:#ff444422,stroke:#ff4444,stroke-width:2px\n    style F fill:#ff444422,stroke:#ff4444,stroke-width:2px\n    style G fill:#ff444422,stroke:#ff4444,stroke-width:2px\n    style H fill:#7b61ff22,stroke:#7b61ff,stroke-width:2px"
       }
     },
     {
@@ -101,16 +106,27 @@
                 "name": "TimeTracking.Web",
                 "type": "ASP.NET Core Web Application",
                 "path": "Source/TimeTracking.Web",
-                "responsibilities": ["Web UI", "API endpoints", "Authentication"],
+                "responsibilities": [
+                  "Web UI",
+                  "API endpoints",
+                  "Authentication"
+                ],
                 "file_count": 347,
                 "loc": 52840,
-                "dependencies": ["TimeTracking.Core", "TimeTracking.Infrastructure"]
+                "dependencies": [
+                  "TimeTracking.Core",
+                  "TimeTracking.Infrastructure"
+                ]
               },
               {
                 "name": "TimeTracking.Core",
                 "type": "Class Library",
                 "path": "Source/TimeTracking.Core",
-                "responsibilities": ["Business logic", "Domain models", "Service interfaces"],
+                "responsibilities": [
+                  "Business logic",
+                  "Domain models",
+                  "Service interfaces"
+                ],
                 "file_count": 523,
                 "loc": 78125,
                 "dependencies": []
@@ -119,19 +135,32 @@
                 "name": "TimeTracking.Infrastructure",
                 "type": "Class Library",
                 "path": "Source/TimeTracking.Infrastructure",
-                "responsibilities": ["Data access", "External services", "Infrastructure concerns"],
+                "responsibilities": [
+                  "Data access",
+                  "External services",
+                  "Infrastructure concerns"
+                ],
                 "file_count": 284,
                 "loc": 41650,
-                "dependencies": ["TimeTracking.Core"]
+                "dependencies": [
+                  "TimeTracking.Core"
+                ]
               },
               {
                 "name": "TimeTracking.Api",
                 "type": "ASP.NET Core Web API",
                 "path": "Source/TimeTracking.Api",
-                "responsibilities": ["REST API", "GraphQL endpoints", "API versioning"],
+                "responsibilities": [
+                  "REST API",
+                  "GraphQL endpoints",
+                  "API versioning"
+                ],
                 "file_count": 198,
                 "loc": 28740,
-                "dependencies": ["TimeTracking.Core", "TimeTracking.Infrastructure"]
+                "dependencies": [
+                  "TimeTracking.Core",
+                  "TimeTracking.Infrastructure"
+                ]
               }
             ]
           },
@@ -146,7 +175,11 @@
                 "name": "TimeTracking.UnitTests",
                 "type": "xUnit Test Project",
                 "path": "Tests/TimeTracking.UnitTests",
-                "responsibilities": ["Unit tests for business logic", "Service tests", "Model validation"],
+                "responsibilities": [
+                  "Unit tests for business logic",
+                  "Service tests",
+                  "Model validation"
+                ],
                 "file_count": 412,
                 "loc": 64820,
                 "test_count": 1247
@@ -155,7 +188,11 @@
                 "name": "TimeTracking.IntegrationTests",
                 "type": "xUnit Test Project",
                 "path": "Tests/TimeTracking.IntegrationTests",
-                "responsibilities": ["API integration tests", "Database integration", "End-to-end flows"],
+                "responsibilities": [
+                  "API integration tests",
+                  "Database integration",
+                  "End-to-end flows"
+                ],
                 "file_count": 187,
                 "loc": 31260,
                 "test_count": 423
@@ -173,7 +210,11 @@
                 "name": "TimeTracking.Workers",
                 "type": "Worker Service",
                 "path": "Source/TimeTracking.Workers",
-                "responsibilities": ["Report generation", "Data aggregation", "Email notifications"],
+                "responsibilities": [
+                  "Report generation",
+                  "Data aggregation",
+                  "Email notifications"
+                ],
                 "file_count": 94,
                 "loc": 18740
               }
@@ -193,6 +234,11 @@
           "Infrastructure project has all external dependencies",
           "Tests mirror the main solution structure"
         ]
+      },
+      "diagram": {
+        "title": "Solution & Project Structure",
+        "type": "structure",
+        "mermaid_code": "graph LR\n    subgraph Core[\"Core Solution (12 projects)\"]\n        API[API Project<br/>.NET 8]\n        Services[Services Layer<br/>Business Logic]\n        Domain[Domain Models<br/>Entities]\n        Data[Data Access<br/>EF Core]\n    end\n    \n    subgraph Frontend[\"Frontend Solution (8 projects)\"]\n        Blazor[Blazor WASM<br/>UI Components]\n        Shared[Shared Models<br/>DTOs]\n    end\n    \n    subgraph Tests[\"Test Solutions (18 projects)\"]\n        Unit[Unit Tests<br/>xUnit]\n        Integration[Integration Tests]\n        E2E[E2E Tests]\n    end\n    \n    subgraph Infrastructure[\"Infrastructure (10 projects)\"]\n        Auth[Authentication<br/>Identity]\n        Cache[Caching<br/>Redis]\n        Search[Search<br/>Elasticsearch]\n    end\n    \n    API --> Services\n    Services --> Domain\n    Services --> Data\n    Data --> Domain\n    Blazor --> API\n    Blazor --> Shared\n    \n    style API fill:#00d4ff22,stroke:#00d4ff,stroke-width:2px\n    style Services fill:#ffa50022,stroke:#ffa500,stroke-width:2px\n    style Domain fill:#00ff8822,stroke:#00ff88,stroke-width:2px\n    style Data fill:#7b61ff22,stroke:#7b61ff,stroke-width:2px"
       }
     },
     {
@@ -207,7 +253,12 @@
           "web_app": {
             "file": "Source/TimeTracking.Web/Program.cs",
             "loc": 187,
-            "responsibilities": ["Application startup", "Dependency registration", "Middleware pipeline", "Configuration"],
+            "responsibilities": [
+              "Application startup",
+              "Dependency registration",
+              "Middleware pipeline",
+              "Configuration"
+            ],
             "key_configurations": [
               "Authentication (JWT + Cookie)",
               "CORS policies",
@@ -218,7 +269,12 @@
           "api": {
             "file": "Source/TimeTracking.Api/Program.cs",
             "loc": 142,
-            "responsibilities": ["API startup", "Swagger/OpenAPI", "API versioning", "Request validation"]
+            "responsibilities": [
+              "API startup",
+              "Swagger/OpenAPI",
+              "API versioning",
+              "Request validation"
+            ]
           }
         },
         "controllers": [
@@ -349,6 +405,11 @@
           "Follow existing patterns when adding new endpoints",
           "All controllers use async/await for database operations"
         ]
+      },
+      "diagram": {
+        "title": "Service Layer Request Flow",
+        "type": "sequence",
+        "mermaid_code": "sequenceDiagram\n    participant Client as Client App\n    participant API as API Controller\n    participant Service as Service Layer\n    participant Validator as Business Rules\n    participant Repo as Repository\n    participant Cache as Redis Cache\n    participant DB as SQL Database\n    \n    Client->>+API: POST /api/timesheet/submit\n    API->>API: Authenticate & Authorize\n    API->>+Service: SubmitTimesheetAsync(dto)\n    Service->>+Validator: ValidateBusinessRules()\n    Validator-->>-Service: Validation Result\n    \n    alt Rules Valid\n        Service->>+Cache: CheckCache(key)\n        Cache-->>-Service: Cache Miss\n        Service->>+Repo: GetEmployeeData()\n        Repo->>+DB: SELECT * FROM Employees\n        DB-->>-Repo: Employee Data\n        Repo-->>-Service: Employee Entity\n        Service->>Service: Apply Business Logic\n        Service->>+Repo: SaveTimesheet()\n        Repo->>+DB: INSERT INTO Timesheets\n        DB-->>-Repo: Success\n        Repo-->>-Service: Saved Entity\n        Service->>Cache: UpdateCache(key, data)\n        Service-->>-API: Success Result\n        API-->>-Client: 200 OK + Response\n    else Rules Invalid\n        Service-->>API: Validation Errors\n        API-->>Client: 400 Bad Request\n    end"
       }
     },
     {
@@ -546,6 +607,11 @@
           "CommutingService needs refactoring - don't follow its pattern for new code",
           "Test coverage is strong - read tests to understand service behavior"
         ]
+      },
+      "diagram": {
+        "title": "Core Module Dependencies",
+        "type": "dependency",
+        "mermaid_code": "graph TB\n    subgraph Presentation[\"Presentation Layer\"]\n        Controllers[API Controllers<br/>48 controllers]\n        Blazor[Blazor Components<br/>203 components]\n    end\n    \n    subgraph Business[\"Business Logic Layer\"]\n        TimeService[TimeTrackingService<br/>892 complexity]\n        CommuteService[CommutingService<br/>723 complexity]\n        ReportService[ReportingService<br/>456 complexity]\n        AuthService[AuthService<br/>234 complexity]\n    end\n    \n    subgraph Data[\"Data Access Layer\"]\n        TimeRepo[TimeRepo]\n        CommuteRepo[CommuteRepo]\n        ReportRepo[ReportRepo]\n        UserRepo[UserRepo]\n    end\n    \n    subgraph Domain[\"Domain Models\"]\n        Entities[Core Entities<br/>67 classes]\n        DTOs[Data Transfer Objects<br/>124 classes]\n    end\n    \n    Controllers --> TimeService\n    Controllers --> CommuteService\n    Controllers --> ReportService\n    Controllers --> AuthService\n    Blazor --> Controllers\n    \n    TimeService --> TimeRepo\n    CommuteService --> CommuteRepo\n    ReportService --> ReportRepo\n    AuthService --> UserRepo\n    \n    TimeRepo --> Entities\n    CommuteRepo --> Entities\n    ReportRepo --> Entities\n    UserRepo --> Entities\n    \n    TimeService -.-> DTOs\n    CommuteService -.-> DTOs\n    \n    style TimeService fill:#ff444422,stroke:#ff4444,stroke-width:3px\n    style CommuteService fill:#ffa50022,stroke:#ffa500,stroke-width:3px\n    style ReportService fill:#00d4ff22,stroke:#00d4ff,stroke-width:2px\n    style AuthService fill:#00ff8822,stroke:#00ff88,stroke-width:2px"
       }
     },
     {
@@ -722,6 +788,11 @@
           "Performance: Use Include() wisely, avoid lazy loading traps",
           "Read existing repository methods before writing new queries"
         ]
+      },
+      "diagram": {
+        "title": "Testing Strategy Pyramid",
+        "type": "testing",
+        "mermaid_code": "graph TB\n    subgraph E2E[\"E2E Tests (15%)\"]\n        E2E1[User Journeys<br/>32 scenarios]\n        E2E2[Critical Flows<br/>18 scenarios]\n    end\n    \n    subgraph Integration[\"Integration Tests (25%)\"]\n        INT1[API Tests<br/>145 tests]\n        INT2[Database Tests<br/>89 tests]\n        INT3[Service Integration<br/>67 tests]\n    end\n    \n    subgraph Unit[\"Unit Tests (60%)\"]\n        UNIT1[Service Tests<br/>523 tests]\n        UNIT2[Repository Tests<br/>198 tests]\n        UNIT3[Model Tests<br/>156 tests]\n        UNIT4[Helper Tests<br/>245 tests]\n    end\n    \n    E2E1 --> INT1\n    E2E2 --> INT2\n    INT1 --> UNIT1\n    INT2 --> UNIT2\n    INT3 --> UNIT1\n    \n    style E2E1 fill:#ff444422,stroke:#ff4444,stroke-width:2px\n    style INT1 fill:#ffa50022,stroke:#ffa500,stroke-width:2px\n    style UNIT1 fill:#00ff8822,stroke:#00ff88,stroke-width:2px\n    style UNIT2 fill:#00ff8822,stroke:#00ff88,stroke-width:2px\n    style UNIT3 fill:#00ff8822,stroke:#00ff88,stroke-width:2px\n    style UNIT4 fill:#00ff8822,stroke:#00ff88,stroke-width:2px"
       }
     },
     {
@@ -1060,6 +1131,11 @@
           "Technical debt is tracked - we're actively improving the codebase",
           "Don't be afraid to ask why something is complex - often there's history"
         ]
+      },
+      "diagram": {
+        "title": "System Evolution Roadmap",
+        "type": "roadmap",
+        "mermaid_code": "graph LR\n    subgraph Current[\"Current State (Q4 2025)\"]\n        Legacy[Legacy Code<br/>Technical Debt: 1847h]\n        Monolith[Monolithic Services<br/>High Complexity]\n    end\n    \n    subgraph Phase1[\"Phase 1: Stabilize (Q1 2026)\"]\n        Refactor1[Refactor Hot Spots<br/>892→450 complexity]\n        Tests1[Increase Coverage<br/>68%→80%]\n    end\n    \n    subgraph Phase2[\"Phase 2: Modernize (Q2-Q3 2026)\"]\n        Microservices[Extract Microservices<br/>4 services]\n        API[Redesign API<br/>RESTful + GraphQL]\n    end\n    \n    subgraph Phase3[\"Phase 3: Scale (Q4 2026)\"]\n        Cloud[Cloud Native<br/>Kubernetes]\n        Performance[Performance Tuning<br/>2x throughput]\n    end\n    \n    Legacy --> Refactor1\n    Monolith --> Refactor1\n    Refactor1 --> Tests1\n    Tests1 --> Microservices\n    Microservices --> API\n    API --> Cloud\n    Cloud --> Performance\n    \n    style Legacy fill:#ff444422,stroke:#ff4444,stroke-width:2px\n    style Refactor1 fill:#ffa50022,stroke:#ffa500,stroke-width:2px\n    style Tests1 fill:#ffa50022,stroke:#ffa500,stroke-width:2px\n    style Microservices fill:#00d4ff22,stroke:#00d4ff,stroke-width:2px\n    style API fill:#00d4ff22,stroke:#00d4ff,stroke-width:2px\n    style Cloud fill:#00ff8822,stroke:#00ff88,stroke-width:2px\n    style Performance fill:#00ff8822,stroke:#00ff88,stroke-width:2px"
       }
     }
   ],

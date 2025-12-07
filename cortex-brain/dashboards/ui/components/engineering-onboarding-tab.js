@@ -22,9 +22,65 @@ class EngineeringOnboardingTab {
      */
     async init(data) {
         this.data = data;
+        this.initializeMermaid();
         this.render();
         this.attachEventListeners();
         this.restoreScrollPosition();
+        this.renderAllDiagrams();
+    }
+
+    /**
+     * Initialize Mermaid with custom theme
+     */
+    initializeMermaid() {
+        if (typeof mermaid !== 'undefined') {
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'dark',
+                themeVariables: {
+                    primaryColor: '#00d4ff',
+                    primaryTextColor: '#fff',
+                    primaryBorderColor: '#00d4ff',
+                    lineColor: '#00d4ff',
+                    secondaryColor: '#7b61ff',
+                    tertiaryColor: '#ffa500',
+                    background: '#1a1a2e',
+                    mainBkg: '#1a1a2e',
+                    secondBkg: '#16213e',
+                    border1: '#00d4ff',
+                    border2: '#7b61ff'
+                },
+                flowchart: {
+                    curve: 'basis',
+                    padding: 20
+                },
+                sequence: {
+                    diagramMarginX: 20,
+                    diagramMarginY: 20,
+                    actorMargin: 100,
+                    width: 200,
+                    height: 65,
+                    boxMargin: 10,
+                    boxTextMargin: 5,
+                    noteMargin: 10,
+                    messageMargin: 35
+                }
+            });
+        }
+    }
+
+    /**
+     * Render all diagrams after DOM update
+     */
+    async renderAllDiagrams() {
+        if (typeof mermaid !== 'undefined') {
+            // Use setTimeout to ensure DOM is ready
+            setTimeout(() => {
+                mermaid.run({
+                    querySelector: '.mermaid'
+                });
+            }, 100);
+        }
     }
 
     /**
@@ -144,6 +200,25 @@ class EngineeringOnboardingTab {
     }
 
     /**
+     * Render diagram container
+     */
+    renderDiagram(diagram) {
+        if (!diagram || !diagram.mermaid_code) return '';
+        
+        // Generate unique ID for this diagram
+        const diagramId = `diagram-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        
+        return `
+            <div class="diagram-container">
+                <h3 class="diagram-title">📊 ${diagram.title}</h3>
+                <div class="mermaid" id="${diagramId}">
+${diagram.mermaid_code}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
      * Render stage navigation pills
      */
     renderStageNavigation() {
@@ -194,7 +269,7 @@ class EngineeringOnboardingTab {
             return `
                 <div class="stage-content" id="stage-content-${stage.id}" role="tabpanel">
                     ${this.renderStageHeader(stage)}
-                    ${this[contentMethod](stage.content)}
+                    ${this[contentMethod](stage.content, stage)}
                 </div>
             `;
         }
@@ -228,9 +303,10 @@ class EngineeringOnboardingTab {
     /**
      * Stage 1: Project Overview
      */
-    renderStage1Content(content) {
+    renderStage1Content(content, stage) {
         return `
             <div class="stage-content-body">
+                ${stage.diagram ? this.renderDiagram(stage.diagram) : ''}
                 ${this.renderProjectInfo(content.project_info)}
                 ${this.renderProjectScale(content.scale)}
                 ${this.renderTechStack(content.tech_stack)}
@@ -439,9 +515,10 @@ class EngineeringOnboardingTab {
     /**
      * Stage 2: Solution Structure
      */
-    renderStage2Content(content) {
+    renderStage2Content(content, stage) {
         return `
             <div class="stage-content-body">
+                ${stage.diagram ? this.renderDiagram(stage.diagram) : ''}
                 ${this.renderSolutions(content.solutions)}
                 ${this.renderArchitecturePatterns(content.architecture_patterns)}
                 ${this.renderNavigationTips(content.navigation_tips)}
@@ -538,9 +615,10 @@ class EngineeringOnboardingTab {
     /**
      * Stage 3: Entry Points & Controllers
      */
-    renderStage3Content(content) {
+    renderStage3Content(content, stage) {
         return `
             <div class="stage-content-body">
+                ${stage.diagram ? this.renderDiagram(stage.diagram) : ''}
                 ${this.renderEntryPoints(content.entry_points)}
                 ${this.renderControllers(content.controllers)}
                 ${this.renderRequestFlow(content.request_flow)}
@@ -681,9 +759,10 @@ class EngineeringOnboardingTab {
     /**
      * Stage 4: Core Business Logic
      */
-    renderStage4Content(content) {
+    renderStage4Content(content, stage) {
         return `
             <div class="stage-content-body">
+                ${stage.diagram ? this.renderDiagram(stage.diagram) : ''}
                 ${this.renderServiceLayer(content.service_layer)}
                 ${this.renderKeyServices(content.key_services)}
                 ${this.renderDesignPatterns(content.design_patterns)}
@@ -840,9 +919,10 @@ class EngineeringOnboardingTab {
     /**
      * Stage 5: Data Layer & Persistence
      */
-    renderStage5Content(content) {
+    renderStage5Content(content, stage) {
         return `
             <div class="stage-content-body">
+                ${stage.diagram ? this.renderDiagram(stage.diagram) : ''}
                 ${this.renderDataAccessOverview(content)}
                 ${this.renderDbContext(content.db_context)}
                 ${this.renderKeyEntities(content.key_entities)}
@@ -1035,9 +1115,10 @@ class EngineeringOnboardingTab {
     /**
      * Stage 6: Advanced Topics & Best Practices
      */
-    renderStage6Content(content) {
+    renderStage6Content(content, stage) {
         return `
             <div class="stage-content-body">
+                ${stage.diagram ? this.renderDiagram(stage.diagram) : ''}
                 ${this.renderComplexityHotspots(content.complexity_hotspots)}
                 ${this.renderCodeSmells(content.code_smells)}
                 ${this.renderTechnicalDebt(content.technical_debt)}
