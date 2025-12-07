@@ -179,8 +179,8 @@ export function renderSecurity(data) {
                 margin-bottom: 1.5rem;
             ">
                 Shows readiness for major compliance frameworks. 
-                ✅ <strong>Ready</strong>: Security posture meets framework requirements. 
-                ⚠️ <strong>Not Ready</strong>: Specific issues listed below prevent certification. Address blockers to achieve compliance.
+                ✅ <strong>Compliant</strong>: Security posture meets framework requirements. 
+                ⚠️ <strong>Not Compliant</strong>: Specific issues listed below prevent certification. Address blockers to achieve compliance.
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
                 ${renderComplianceCard('GDPR', compliance.gdpr_ready, compliance.gdpr_issues)}
@@ -294,7 +294,7 @@ function renderOwaspItem(item) {
  */
 function renderComplianceCard(name, ready, issues = []) {
     const icon = ready ? '✅' : '⚠️';
-    const status = ready ? 'Ready' : 'Not Ready';
+    const status = ready ? 'Compliant' : 'Not Compliant';
     const borderColor = ready ? '#10b981' : '#f59e0b';
     const issuesHtml = issues && issues.length > 0 
         ? `<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.75rem; text-align: left; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 6px;">

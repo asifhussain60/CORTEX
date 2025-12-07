@@ -10,7 +10,8 @@
 
 import { loadDashboardData, clearCache, exportToJson, exportToCsv, enrichDashboardData } from './data-loader.js';
 import { initializeAdaptiveVisibility } from './adaptive-visibility.js';
-import { renderArchitecturePanels } from './components/architecture-panels.js';
+// REMOVED: Frontend/Backend/Database panels now consolidated in architecture-tab.js
+// import { renderArchitecturePanels } from './components/architecture-panels.js';
 import { renderExecutiveSummary } from './components/executive-tab.js';
 import { renderOverview } from './components/overview-tab-v3.js'; // UPDATED: Use new v3 component
 import { renderTechStack } from './components/tech-stack-tab.js';
@@ -212,9 +213,10 @@ async function loadData(source) {
         initializeAdaptiveVisibility(appState.data);
         
         // Render architecture panels if architecture tab is visible
-        if (appState.data.architecture) {
-            renderArchitecturePanels(appState.data.architecture);
-        }
+        // REMOVED: Frontend/Backend/Database panels now consolidated in architecture-tab.js
+        // if (appState.data.architecture) {
+        //     renderArchitecturePanels(appState.data.architecture);
+        // }
         
         console.log('Data loaded successfully:', appState.data);
         

@@ -206,8 +206,9 @@ function renderHotspotRow(hotspot) {
                 transition: all 0.2s;
                 cursor: pointer;
             "
-            onmouseover="showHotspotTooltip(event, ${JSON.stringify(hotspot).replace(/"/g, '&quot;')}, this); this.style.background='var(--glass-light)'"
-            onmouseout="hideHotspotTooltip(this); this.style.background='transparent'"
+            onclick="toggleHotspotTooltip(event, ${JSON.stringify(hotspot).replace(/"/g, '&quot;')}, this)"
+            onmouseover="this.style.background='var(--glass-light)'"
+            onmouseout="this.style.background='transparent'"
         >
             <td style="padding: 1rem; font-family: monospace; font-size: 0.875rem;">
                 ${hotspot.file || 'Unknown'}
@@ -311,13 +312,15 @@ function initComplexityHeatmap(fileComplexity) {
         .attr('stroke-width', 2)
         .style('opacity', 0.8)
         .style('cursor', 'pointer')
+        .on('click', function(event, d) {
+            event.stopPropagation();
+            toggleHeatmapTooltip(event, d.data, this);
+        })
         .on('mouseover', function(event, d) {
             d3.select(this).style('opacity', 1).attr('stroke-width', 3);
-            showHeatmapTooltip(event, d.data);
         })
         .on('mouseout', function(event, d) {
             d3.select(this).style('opacity', 0.8).attr('stroke-width', 2);
-            hideHeatmapTooltip();
         });
     
     cell.append('text')
@@ -346,15 +349,19 @@ function initComplexityHeatmap(fileComplexity) {
 }
 
 /**
- * Show heatmap tooltip for complexity cell
+ * Toggle heatmap tooltip for complexity cell (click-based)
  * @param {Event} event - Mouse event
  * @param {Object} data - File data (name, value/LOC, complexity)
+ * @param {HTMLElement} element - Cell element
  */
-window.showHeatmapTooltip = function(event, data) {
+window.toggleHeatmapTooltip = function(event, data, element) {
+    event.stopPropagation();
+    
     // Remove existing tooltip
     const existing = document.getElementById('heatmap-tooltip');
     if (existing) {
         existing.remove();
+        return;
     }
     
     const complexity = data.complexity || 0;
@@ -396,8 +403,114 @@ window.showHeatmapTooltip = function(event, data) {
     tooltip.id = 'heatmap-tooltip';
     tooltip.style.cssText = `
         position: fixed;
-        background: #000000;
+        background: rgba(0, 0, 0, 0.98);
         color: #ffffff;
+        border: 3px solid ${complexityColor};
+        border-radius: 12px;
+        padding: 1.25rem;
+        max-width: 400px;
+        z-index: 10000;
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 20px ${complexityColor}66;
+        pointer-events: auto;
+        animation: tooltipFadeIn 0.2s ease-out;
+    `;
+    
+    tooltip.innerHTML = `
+        <button 
+            onclick="event.stopPropagation(); document.getElementById('heatmap-tooltip').remove();"
+            style="
+                position: absolute;
+                top: 0.75rem;
+                right: 0.75rem;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: #ffffff;
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.25rem;
+                line-height: 1;
+                padding: 0;
+                transition: all 0.2s;
+            "
+            onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.transform='scale(1.1)';"
+            onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='scale(1)';"
+        >×</button>
+        
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+            <div style="font-size: 2rem;">${complexityIcon}</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 700; font-size: 1.1rem; color: #ffffff; margin-bottom: 0.25rem;">
+                    ${fileName}
+                </div>
+                <div style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">
+                    ${loc.toLocaleString()} lines of code
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: ${complexityColor}33; border-radius: 8px; border: 1px solid ${complexityColor};">
+                <span style="font-size: 1.25rem;">${complexityIcon}</span>
+                <span style="color: #ffffff; font-weight: 600; font-size: 0.875rem;">
+                    Complexity: ${complexity} (${complexityLabel})
+                </span>
+            </div>
+        </div>
+        
+        <div style="color: rgba(255, 255, 255, 0.9); line-height: 1.6; font-size: 0.875rem;">
+            ${recommendation}
+        </div>
+        
+        ${complexity >= 50 ? `
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                <div style="color: #ffd700; font-size: 0.875rem; font-weight: 600;">
+                    💡 Refactoring Tips
+                </div>
+                <ul style="color: rgba(255, 255, 255, 0.9); font-size: 0.875rem; margin: 0.5rem 0 0 1.25rem; line-height: 1.6;">
+                    <li>Extract complex methods into smaller functions</li>
+                    <li>Reduce nested conditional statements</li>
+                    <li>Consider applying design patterns</li>
+                    ${complexity >= 75 ? '<li>Add comprehensive unit tests before refactoring</li>' : ''}
+                </ul>
+            </div>
+        ` : ''}
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip (centered below click point)
+    const tooltipRect = tooltip.getBoundingClientRect();
+    let left = event.clientX - (tooltipRect.width / 2);
+    let top = event.clientY + 20;
+    
+    // Keep tooltip on screen
+    if (left < 10) left = 10;
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+    }
+    
+    if (top + tooltipRect.height > window.innerHeight - 10) {
+        top = event.clientY - tooltipRect.height - 20;
+    }
+    
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+    
+    // Close on outside click
+    setTimeout(() => {
+        document.addEventListener('click', function closeTooltip(e) {
+            if (!tooltip.contains(e.target)) {
+                tooltip.remove();
+                document.removeEventListener('click', closeTooltip);
+            }
+        });
+    }, 100);
+};
         border: 3px solid ${complexityColor};
         border-radius: 12px;
         padding: 1.25rem;

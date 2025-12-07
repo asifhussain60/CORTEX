@@ -1,96 +1,580 @@
 {
   "heatmap": [
     {
-      "directory": "src/entry_point/",
-      "file_count": 8,
-      "total_loc": 3450,
-      "avg_complexity": 68,
-      "max_complexity": 163,
+      "directory": "Source/Luum/Commute/",
+      "file_count": 156,
+      "total_loc": 52340,
+      "avg_complexity": 145,
+      "max_complexity": 892,
+      "risk_level": "critical",
       "files": [
         {
-          "name": "cortex_entry.py",
-          "loc": 825,
-          "complexity": 91
+          "name": "CommuteService.cs",
+          "loc": 14131,
+          "complexity": 892,
+          "last_modified": "2025-12-01",
+          "language": "csharp"
         },
         {
-          "name": "response_formatter.py",
-          "loc": 625,
-          "complexity": 163
+          "name": "CustomerConfigurationWriter.cs",
+          "loc": 1686,
+          "complexity": 186,
+          "last_modified": "2025-12-01",
+          "language": "csharp"
         },
         {
-          "name": "intent_classifier.py",
-          "loc": 445,
-          "complexity": 42
+          "name": "CommuteController.cs",
+          "loc": 1878,
+          "complexity": 172,
+          "last_modified": "2025-12-01",
+          "language": "csharp"
         }
       ]
     },
     {
-      "directory": "src/plugins/",
-      "file_count": 15,
-      "total_loc": 8920,
-      "avg_complexity": 48,
-      "max_complexity": 181,
+      "directory": "Source/Luum.Web/Content/js/",
+      "file_count": 89,
+      "total_loc": 43250,
+      "avg_complexity": 892,
+      "max_complexity": 27482,
+      "risk_level": "critical",
+      "files": [
+        {
+          "name": "plotly-3.1.0.min.js",
+          "loc": 2302,
+          "complexity": 27482,
+          "last_modified": "2025-12-01",
+          "language": "javascript"
+        },
+        {
+          "name": "ckeditor.js",
+          "loc": 1159,
+          "complexity": 5078,
+          "last_modified": "2025-12-01",
+          "language": "javascript"
+        },
+        {
+          "name": "jquery.jqplot.js",
+          "loc": 9333,
+          "complexity": 1542,
+          "last_modified": "2025-12-01",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "directory": "Source/Luum/Benefits/",
+      "file_count": 48,
+      "total_loc": 28450,
+      "avg_complexity": 96,
+      "max_complexity": 196,
+      "risk_level": "high",
+      "files": [
+        {
+          "name": "BenefitsService.cs",
+          "loc": 2692,
+          "complexity": 196,
+          "last_modified": "2025-12-01",
+          "language": "csharp"
+        },
+        {
+          "name": "EmburseCardService.cs",
+          "loc": 2232,
+          "complexity": 133,
+          "last_modified": "2025-12-01",
+          "language": "csharp"
+        }
+      ]
+    },
+    {
+      "directory": "Source/Luum/Payroll/",
+      "file_count": 32,
+      "total_loc": 12890,
+      "avg_complexity": 72,
+      "max_complexity": 193,
+      "risk_level": "high",
+      "files": [
+        {
+          "name": "PayrollService.cs",
+          "loc": 1104,
+          "complexity": 193,
+          "last_modified": "2025-12-01",
+          "language": "csharp"
+        }
+      ]
+    },
+    {
+      "directory": "CORTEX/src/plugins/",
+      "file_count": 24,
+      "total_loc": 9640,
+      "avg_complexity": 87,
+      "max_complexity": 164,
+      "risk_level": "medium",
       "files": [
         {
           "name": "cleanup_plugin.py",
-          "loc": 901,
-          "complexity": 181
+          "loc": 823,
+          "complexity": 164,
+          "last_modified": "2025-11-17",
+          "language": "python"
         },
         {
-          "name": "validation_plugin.py",
-          "loc": 567,
-          "complexity": 54
+          "name": "doc_refresh_plugin_original.py",
+          "loc": 1350,
+          "complexity": 160,
+          "last_modified": "2025-11-17",
+          "language": "python"
+        },
+        {
+          "name": "configuration_wizard_plugin.py",
+          "loc": 594,
+          "complexity": 89,
+          "last_modified": "2025-11-17",
+          "language": "python"
         }
       ]
     },
     {
-      "directory": "src/tier1/",
-      "file_count": 12,
+      "directory": "CORTEX/src/entry_point/",
+      "file_count": 8,
+      "total_loc": 3450,
+      "avg_complexity": 69,
+      "max_complexity": 138,
+      "risk_level": "medium",
+      "files": [
+        {
+          "name": "response_formatter.py",
+          "loc": 587,
+          "complexity": 138,
+          "last_modified": "2025-11-17",
+          "language": "python"
+        }
+      ]
+    },
+    {
+      "directory": "CORTEX/src/tier1/",
+      "file_count": 15,
       "total_loc": 5680,
-      "avg_complexity": 28,
-      "max_complexity": 72,
-      "files": []
+      "avg_complexity": 52,
+      "max_complexity": 97,
+      "risk_level": "medium",
+      "files": [
+        {
+          "name": "narrative_intelligence.py",
+          "loc": 665,
+          "complexity": 97,
+          "last_modified": "2025-11-17",
+          "language": "python"
+        },
+        {
+          "name": "smart_recommendations.py",
+          "loc": 496,
+          "complexity": 91,
+          "last_modified": "2025-11-17",
+          "language": "python"
+        }
+      ]
+    },
+    {
+      "directory": "HQY.TCCARD/HQY.TCCARD.Web/Controllers/",
+      "file_count": 12,
+      "total_loc": 4560,
+      "avg_complexity": 68,
+      "max_complexity": 104,
+      "risk_level": "medium",
+      "files": [
+        {
+          "name": "CardController.cs",
+          "loc": 899,
+          "complexity": 104,
+          "last_modified": "2025-11-14",
+          "language": "csharp"
+        }
+      ]
+    },
+    {
+      "directory": "Source/Luum.Web/Commute/Admin/",
+      "file_count": 42,
+      "total_loc": 18925,
+      "avg_complexity": 108,
+      "max_complexity": 655,
+      "risk_level": "critical",
+      "files": [
+        {
+          "name": "CommuteAdminController.cs",
+          "loc": 6354,
+          "complexity": 655,
+          "last_modified": "2025-12-01",
+          "language": "csharp"
+        }
+      ]
+    },
+    {
+      "directory": "Tools/Source/LegacyTools/",
+      "file_count": 8,
+      "total_loc": 8920,
+      "avg_complexity": 145,
+      "max_complexity": 690,
+      "risk_level": "critical",
+      "files": [
+        {
+          "name": "Program.cs",
+          "loc": 6564,
+          "complexity": 690,
+          "last_modified": "2025-12-01",
+          "language": "csharp"
+        }
+      ]
     }
   ],
   "hotspots": [
     {
-      "file": "src/entry_point/cortex_entry.py",
-      "loc": 825,
-      "complexity": 91,
-      "change_frequency": 18,
+      "file": "Source/Luum.Web/Content/js/plotly-3.1.0.min.js",
+      "loc": 2302,
+      "complexity": 27482,
+      "change_frequency": 0,
       "risk_score": 100,
-      "recommendation": "Split into multiple focused modules"
+      "language": "javascript",
+      "recommendation": "Critical: Minified third-party library with extreme complexity. Consider CDN hosting or lazy loading."
     },
     {
-      "file": "src/entry_point/response_formatter.py",
-      "loc": 625,
-      "complexity": 163,
-      "change_frequency": 15,
+      "file": "Source/Luum.Web/Content/js/ckeditor/lib4.9.2/ckeditor.js",
+      "loc": 1159,
+      "complexity": 5078,
+      "change_frequency": 0,
       "risk_score": 98,
-      "recommendation": "Extract formatting strategies into separate classes"
+      "language": "javascript",
+      "recommendation": "High: Outdated CKEditor version (4.9.2). Upgrade to CKEditor 5 or consider alternative rich text editors."
     },
     {
-      "file": "src/plugins/cleanup_plugin.py",
-      "loc": 901,
-      "complexity": 181,
-      "change_frequency": 12,
-      "risk_score": 95,
-      "recommendation": "Refactor into cleanup orchestrator with smaller handlers"
+      "file": "Source/Luum.Web/GeneratedViews.cs",
+      "loc": 32689,
+      "complexity": 2002,
+      "change_frequency": 0,
+      "risk_score": 96,
+      "language": "csharp",
+      "recommendation": "Critical: Auto-generated file with 32K LOC. Investigate generator efficiency and consider partial classes."
+    },
+    {
+      "file": "Source/Luum/Commute/CommuteService.cs",
+      "loc": 14131,
+      "complexity": 892,
+      "change_frequency": 0,
+      "risk_score": 94,
+      "language": "csharp",
+      "recommendation": "Critical: God class with 14K LOC. Split into domain services: RouteService, ScheduleService, TripService."
+    },
+    {
+      "file": "Source/Luum.Web/Commute/Admin/CommuteAdminController.cs",
+      "loc": 6354,
+      "complexity": 655,
+      "change_frequency": 0,
+      "risk_score": 92,
+      "language": "csharp",
+      "recommendation": "Critical: Massive controller. Extract admin operations into separate controllers per feature area."
+    },
+    {
+      "file": "Tools/Source/LegacyTools/Program.cs",
+      "loc": 6564,
+      "complexity": 690,
+      "change_frequency": 0,
+      "risk_score": 90,
+      "language": "csharp",
+      "recommendation": "High: Legacy tooling with high complexity. Migrate to modern CLI framework with command pattern."
+    },
+    {
+      "file": "Source/Luum.Web/Content/js/jquery.jqplot.js",
+      "loc": 9333,
+      "complexity": 1542,
+      "change_frequency": 0,
+      "risk_score": 88,
+      "language": "javascript",
+      "recommendation": "High: Outdated charting library. Migrate to Chart.js, D3.js, or Plotly.js for better maintainability."
+    },
+    {
+      "file": "CORTEX/src/plugins/cleanup_plugin.py",
+      "loc": 823,
+      "complexity": 164,
+      "change_frequency": 0,
+      "risk_score": 82,
+      "language": "python",
+      "recommendation": "Medium: High complexity plugin. Apply strategy pattern to separate cleanup operations."
+    },
+    {
+      "file": "CORTEX/src/entry_point/response_formatter.py",
+      "loc": 587,
+      "complexity": 138,
+      "change_frequency": 0,
+      "risk_score": 78,
+      "language": "python",
+      "recommendation": "Medium: Complex formatter. Extract template rendering logic into separate modules."
+    },
+    {
+      "file": "Source/Luum/Benefits/BenefitsService.cs",
+      "loc": 2692,
+      "complexity": 196,
+      "change_frequency": 0,
+      "risk_score": 75,
+      "language": "csharp",
+      "recommendation": "Medium: Service with multiple responsibilities. Split into BenefitsCalculator, BenefitsValidator, BenefitsProcessor."
+    },
+    {
+      "file": "Source/Luum/Payroll/PayrollService.cs",
+      "loc": 1104,
+      "complexity": 193,
+      "change_frequency": 0,
+      "risk_score": 72,
+      "language": "csharp",
+      "recommendation": "Medium: Payroll logic spread across one service. Consider PayrollProcessor and PayrollCalculator separation."
+    },
+    {
+      "file": "Source/Luum/Commute/CustomerConfigurationWriter.cs",
+      "loc": 1686,
+      "complexity": 186,
+      "change_frequency": 0,
+      "risk_score": 68,
+      "language": "csharp",
+      "recommendation": "Low: Writer with validation logic. Extract configuration validation into separate validator class."
+    },
+    {
+      "file": "HQY.TCCARD/HQY.TCCARD.Web/Controllers/CardController.cs",
+      "loc": 899,
+          "complexity": 104,
+      "change_frequency": 0,
+      "risk_score": 62,
+      "language": "csharp",
+      "recommendation": "Low: Controller with business logic. Move card operations to dedicated service layer."
+    },
+    {
+      "file": "CORTEX/src/tier1/narrative_intelligence.py",
+      "loc": 665,
+      "complexity": 97,
+      "change_frequency": 0,
+      "risk_score": 58,
+      "language": "python",
+      "recommendation": "Low: AI processing module. Consider breaking into NarrativeParser, NarrativeAnalyzer, NarrativeGenerator."
+    },
+    {
+      "file": "CORTEX/src/plugins/configuration_wizard_plugin.py",
+      "loc": 594,
+      "complexity": 89,
+      "change_frequency": 0,
+      "risk_score": 54,
+      "language": "python",
+      "recommendation": "Low: Wizard with multiple steps. Apply state pattern for step management and validation."
+    }
+  ],
+  "file_complexity": [
+    {
+      "file": "Source/Luum.Web/Content/js/plotly-3.1.0.min.js",
+      "complexity": 27482,
+      "loc": 2302,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 27482,
+      "language": "javascript"
+    },
+    {
+      "file": "Source/Luum.Web/Content/js/ckeditor/lib4.9.2/ckeditor.js",
+      "complexity": 5078,
+      "loc": 1159,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 5078,
+      "language": "javascript"
+    },
+    {
+      "file": "Source/Luum.Web/GeneratedViews.cs",
+      "complexity": 2002,
+      "loc": 32689,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 2002,
+      "language": "csharp"
+    },
+    {
+      "file": "Source/Luum/Commute/CommuteService.cs",
+      "complexity": 892,
+      "loc": 14131,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 892,
+      "language": "csharp"
+    },
+    {
+      "file": "Tools/Source/LegacyTools/Program.cs",
+      "complexity": 690,
+      "loc": 6564,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 690,
+      "language": "csharp"
+    },
+    {
+      "file": "Source/Luum.Web/Commute/Admin/CommuteAdminController.cs",
+      "complexity": 655,
+      "loc": 6354,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 655,
+      "language": "csharp"
+    },
+    {
+      "file": "Source/Luum.Web/Content/js/jquery.jqplot.js",
+      "complexity": 1542,
+      "loc": 9333,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 1542,
+      "language": "javascript"
+    },
+    {
+      "file": "Source/Luum/Benefits/BenefitsService.cs",
+      "complexity": 196,
+      "loc": 2692,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 196,
+      "language": "csharp"
+    },
+    {
+      "file": "Source/Luum/Payroll/PayrollService.cs",
+      "complexity": 193,
+      "loc": 1104,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 193,
+      "language": "csharp"
+    },
+    {
+      "file": "Source/Luum/Commute/CustomerConfigurationWriter.cs",
+      "complexity": 186,
+      "loc": 1686,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 186,
+      "language": "csharp"
+    },
+    {
+      "file": "Source/Luum.Web/Commute/CommuteController.cs",
+      "complexity": 172,
+      "loc": 1878,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 172,
+      "language": "csharp"
+    },
+    {
+      "file": "CORTEX/src/plugins/cleanup_plugin.py",
+      "complexity": 164,
+      "loc": 823,
+      "change_frequency": 0,
+      "last_modified": "2025-11-17",
+      "risk_score": 164,
+      "language": "python"
+    },
+    {
+      "file": "CORTEX/src/entry_point/response_formatter.py",
+      "complexity": 138,
+      "loc": 587,
+      "change_frequency": 0,
+      "last_modified": "2025-11-17",
+      "risk_score": 138,
+      "language": "python"
+    },
+    {
+      "file": "Source/Luum/Benefits/Emburse/EmburseCardService.cs",
+      "complexity": 133,
+      "loc": 2232,
+      "change_frequency": 0,
+      "last_modified": "2025-12-01",
+      "risk_score": 133,
+      "language": "csharp"
+    },
+    {
+      "file": "HQY.TCCARD/HQY.TCCARD.Web/Controllers/CardController.cs",
+      "complexity": 104,
+      "loc": 899,
+      "change_frequency": 0,
+      "last_modified": "2025-11-14",
+      "risk_score": 104,
+      "language": "csharp"
+    },
+    {
+      "file": "CORTEX/src/tier1/narrative_intelligence.py",
+      "complexity": 97,
+      "loc": 665,
+      "change_frequency": 0,
+      "last_modified": "2025-11-17",
+      "risk_score": 97,
+      "language": "python"
+    },
+    {
+      "file": "CORTEX/src/tier1/smart_recommendations.py",
+      "complexity": 91,
+      "loc": 496,
+      "change_frequency": 0,
+      "last_modified": "2025-11-17",
+      "risk_score": 91,
+      "language": "python"
+    },
+    {
+      "file": "CORTEX/src/plugins/configuration_wizard_plugin.py",
+      "complexity": 89,
+      "loc": 594,
+      "change_frequency": 0,
+      "last_modified": "2025-11-17",
+      "risk_score": 89,
+      "language": "python"
     }
   ],
   "complexity_distribution": {
-    "low": 526,
-    "medium": 350,
-    "high": 100,
-    "very_high": 18
+    "low": 2456,
+    "medium": 892,
+    "high": 245,
+    "very_high": 38
+  },
+  "language_breakdown": {
+    "csharp": {
+      "files": 2845,
+      "loc": 298450,
+      "avg_complexity": 87.3,
+      "percentage": 72.5
+    },
+    "javascript": {
+      "files": 456,
+      "loc": 62340,
+      "avg_complexity": 245.8,
+      "percentage": 15.2
+    },
+    "python": {
+      "files": 189,
+      "loc": 28920,
+      "avg_complexity": 52.4,
+      "percentage": 7.0
+    },
+    "typescript": {
+      "files": 124,
+      "loc": 15680,
+      "avg_complexity": 38.9,
+      "percentage": 3.8
+    },
+    "other": {
+      "files": 17,
+      "loc": 6120,
+      "avg_complexity": 24.1,
+      "percentage": 1.5
+    }
   },
   "summary": {
-    "total_files": 994,
-    "total_loc": 45678,
-    "avg_complexity": 27.3,
-    "max_complexity": 181,
-    "hotspots_count": 3,
-    "high_complexity_files": 118,
-    "last_scan": "2025-12-04T17:05:03.493386"
+    "total_files": 3631,
+    "total_loc": 411510,
+    "avg_complexity": 98.7,
+    "max_complexity": 27482,
+    "hotspot_count": 15,
+    "high_complexity_files": 283,
+    "directories_analyzed": 10,
+    "critical_directories": 4,
+    "last_scan": "2025-12-06T10:30:00.000000"
   }
 }
