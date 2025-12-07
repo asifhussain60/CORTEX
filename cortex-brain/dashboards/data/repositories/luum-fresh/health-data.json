@@ -1,0 +1,924 @@
+{
+  "overall_health_score": 91.3,
+  "status": "healthy",
+  "summary": {
+    "total_files": 5532,
+    "total_loc": 35173,
+    "total_functions": 0,
+    "total_classes": 0,
+    "average_complexity": 1.33,
+    "high_complexity_files": 0,
+    "code_smell_count": 14,
+    "test_coverage": 0.0,
+    "critical_issues": 0,
+    "warnings": 14,
+    "maintainability_index": 85.0
+  },
+  "complexity_distribution": {
+    "low": 3,
+    "medium": 0,
+    "high": 0,
+    "very_high": 0
+  },
+  "code_smells": [
+    {
+      "type": "long_file",
+      "file": "Tools\\ReceivedBenefitsFixer\\Program.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 688 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\LegacyTools\\Program.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 7649 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\LegacyTools\\WorksitePolicyUpdater.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 770 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.BuildTasks\\AssemblyInfoTask.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 794 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.BuildTasks\\GenerateControllerHelpersTask.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 633 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.BuildTasks\\VersionTask.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 560 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.Tools\\BenefitsPartnerTools.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 879 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.Tools\\BenefitsTools.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 753 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.Tools\\ParkingTools.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 1433 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.Tools\\RosterTools.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 3145 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.Tools\\Tools.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 2085 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.Tools.Migrator\\ApiCallCommands.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 590 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.Tools.Migrator\\ClientEntityCommands.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 1262 lines (>500)"
+    },
+    {
+      "type": "long_file",
+      "file": "Tools\\Source\\Luum.Tools.Migrator\\DatabaseCommands.cs",
+      "line": 1,
+      "severity": "low",
+      "description": "File has 1420 lines (>500)"
+    }
+  ],
+  "file_metrics": {
+    "Tools\\ReceivedBenefitsFixer\\Benefit.cs": {
+      "loc": 82,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\EdenredBenefit.cs": {
+      "loc": 20,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\EdenredDelta.cs": {
+      "loc": 200,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\EmployeeExpenseDeltas.cs": {
+      "loc": 77,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\EmployeeInfo.cs": {
+      "loc": 20,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\EmployeeMonth.cs": {
+      "loc": 189,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\EmployeeMonthKey.cs": {
+      "loc": 34,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\ExpenseBenefit.cs": {
+      "loc": 184,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\ExpenseDelta.cs": {
+      "loc": 73,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\ExpenseDeltaType.cs": {
+      "loc": 10,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\ExpenseInfo.cs": {
+      "loc": 23,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\ExpenseTypeDeltas.cs": {
+      "loc": 81,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\ExpenseTypeTaxMonthDeltas.cs": {
+      "loc": 85,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\Program.cs": {
+      "loc": 610,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\ReceivedBenefitPair.cs": {
+      "loc": 129,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\ReceivedBenefitsFixer\\SqlValue.cs": {
+      "loc": 246,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\BackupImporter\\BackupImporter.cs": {
+      "loc": 185,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Badger\\Badger.cs": {
+      "loc": 241,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Launcher\\ConfigurationFiles.cs": {
+      "loc": 31,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Launcher\\Launcher.cs": {
+      "loc": 268,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\DevelopmentStorageEntityFactory.cs": {
+      "loc": 74,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\LocalXmlEntityFactory.cs": {
+      "loc": 62,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\LocalXmlExtendedDataService.cs": {
+      "loc": 216,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\Program.cs": {
+      "loc": 6696,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\RemoteEntityFinder.cs": {
+      "loc": 46,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\RosterFeatureEligibilityRebaseliner.cs": {
+      "loc": 374,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\RosterRebaseliner.cs": {
+      "loc": 79,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\SshPublicKeyInfo.cs": {
+      "loc": 136,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\TimeZoneDifference.cs": {
+      "loc": 239,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\Utf8Reader.cs": {
+      "loc": 162,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\LegacyTools\\WorksitePolicyUpdater.cs": {
+      "loc": 671,
+      "functions": 0,
+      "classes": 0,
+      "comments": 4,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\AssemblyInfoTask.cs": {
+      "loc": 687,
+      "functions": 0,
+      "classes": 0,
+      "comments": 19,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\CodeDomTextWriter.cs": {
+      "loc": 83,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\DifferencingMemoryStream.cs": {
+      "loc": 122,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\DirectoryNode.cs": {
+      "loc": 118,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\DotlessCompileTask.cs": {
+      "loc": 49,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\DotlessImporter.cs": {
+      "loc": 67,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\DotlessMSBuildLogger.cs": {
+      "loc": 71,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\FileNode.cs": {
+      "loc": 74,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\FileNodeCodeGenerator.cs": {
+      "loc": 171,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\GenerateControllerHelpersTask.cs": {
+      "loc": 532,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\GenerateRouteUrlGeneratorTask.cs": {
+      "loc": 158,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\GenerateStaticResourceHelpersTask.cs": {
+      "loc": 82,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\GenerateViewHelpersTask.cs": {
+      "loc": 168,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\GenerateViewsTask.cs": {
+      "loc": 243,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\LazorSetLayoutChecker.cs": {
+      "loc": 80,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\LuumCompileViewsTask.cs": {
+      "loc": 68,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\LuumTask.cs": {
+      "loc": 102,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\MethodSignature.cs": {
+      "loc": 55,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\MigrateDatabaseFileTask.cs": {
+      "loc": 168,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\RemoteRoute.cs": {
+      "loc": 65,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\RemoteRouteFinder.cs": {
+      "loc": 141,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\StaticResourcesCodeGenerator.cs": {
+      "loc": 75,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\TypeScriptCompileTask.cs": {
+      "loc": 98,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\VersionTask.cs": {
+      "loc": 505,
+      "functions": 0,
+      "classes": 0,
+      "comments": 13,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.BuildTasks\\ViewHelpersCodeGenerator.cs": {
+      "loc": 79,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Lazor.DesignTime\\DesignTimeCodeParser.cs": {
+      "loc": 100,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Lazor.DesignTime\\DesignTimeHost.cs": {
+      "loc": 147,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Lazor.DesignTime\\DesignTimeHostFactory.cs": {
+      "loc": 12,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Lazor.DesignTime\\DesignTimeMethodCodeGenerator.cs": {
+      "loc": 50,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Lazor.DesignTime\\DesignTimePreCompiledHostFactory.cs": {
+      "loc": 12,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Lazor.DesignTime\\DesignTimeSetTypedLayoutCodeGenerator.cs": {
+      "loc": 46,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\AutomatedReportsTools.cs": {
+      "loc": 234,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\BenefitsPartnerTools.cs": {
+      "loc": 757,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\BenefitsRosterBlobService.cs": {
+      "loc": 201,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\BenefitsTools.cs": {
+      "loc": 641,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\LocalExceptionLoggingService.cs": {
+      "loc": 62,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\MobileApiTools.cs": {
+      "loc": 109,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\ParkingTools.cs": {
+      "loc": 1233,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\PayrollTools.cs": {
+      "loc": 80,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\RosterTools.cs": {
+      "loc": 2773,
+      "functions": 0,
+      "classes": 0,
+      "comments": 4,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\SmartBenefitsTools.cs": {
+      "loc": 394,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\StorageTools.cs": {
+      "loc": 253,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\Tools.cs": {
+      "loc": 1825,
+      "functions": 0,
+      "classes": 0,
+      "comments": 4,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools\\ToolsHelpers.cs": {
+      "loc": 192,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\ArgumentExtensions.cs": {
+      "loc": 49,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\Arguments.cs": {
+      "loc": 140,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\ConfigEnvironmentSettingsProvider.cs": {
+      "loc": 120,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\ConfigurationHelpers.cs": {
+      "loc": 30,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\EnvironmentPromptHelpers.cs": {
+      "loc": 47,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\GitHelper.cs": {
+      "loc": 74,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\ICommandMetadata.cs": {
+      "loc": 9,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\ICommandWithArgumentsMetadata.cs": {
+      "loc": 8,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\PromptHelpers.cs": {
+      "loc": 79,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.CommandLine\\UsageException.cs": {
+      "loc": 11,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\AccessDeviceCommands.cs": {
+      "loc": 91,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\AccessDeviceRebaseliner.cs": {
+      "loc": 233,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\AddBlob.cs": {
+      "loc": 58,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\ApiCallCommands.cs": {
+      "loc": 507,
+      "functions": 0,
+      "classes": 0,
+      "comments": 2,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\BulkInsertColumn.cs": {
+      "loc": 12,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\BulkInsertTable.cs": {
+      "loc": 191,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\ClientEntityCommands.cs": {
+      "loc": 1148,
+      "functions": 0,
+      "classes": 0,
+      "comments": 8,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\CmdletLogger.cs": {
+      "loc": 22,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\CompareBlobs.cs": {
+      "loc": 38,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\ContentChange.cs": {
+      "loc": 17,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\DatabaseCommands.cs": {
+      "loc": 1235,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\EntityTvpDifference.cs": {
+      "loc": 171,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\ExecutedMigration.cs": {
+      "loc": 32,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\GetEnvironmentSettings.cs": {
+      "loc": 25,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    },
+    "Tools\\Source\\Luum.Tools.Migrator\\GetExecutedMigrations.cs": {
+      "loc": 36,
+      "functions": 0,
+      "classes": 0,
+      "comments": 0,
+      "max_complexity": 0
+    }
+  },
+  "hotspots": [
+    {
+      "file": "Tools\\Source\\LegacyTools\\Program.cs",
+      "reason": "large_file",
+      "loc": 6696,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.Tools\\RosterTools.cs",
+      "reason": "large_file",
+      "loc": 2773,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.Tools\\Tools.cs",
+      "reason": "large_file",
+      "loc": 1825,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.Tools.Migrator\\DatabaseCommands.cs",
+      "reason": "large_file",
+      "loc": 1235,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.Tools\\ParkingTools.cs",
+      "reason": "large_file",
+      "loc": 1233,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.Tools.Migrator\\ClientEntityCommands.cs",
+      "reason": "large_file",
+      "loc": 1148,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.Tools\\BenefitsPartnerTools.cs",
+      "reason": "large_file",
+      "loc": 757,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.BuildTasks\\AssemblyInfoTask.cs",
+      "reason": "large_file",
+      "loc": 687,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\LegacyTools\\WorksitePolicyUpdater.cs",
+      "reason": "large_file",
+      "loc": 671,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.Tools\\BenefitsTools.cs",
+      "reason": "large_file",
+      "loc": 641,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\ReceivedBenefitsFixer\\Program.cs",
+      "reason": "large_file",
+      "loc": 610,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.BuildTasks\\GenerateControllerHelpersTask.cs",
+      "reason": "large_file",
+      "loc": 532,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.Tools.Migrator\\ApiCallCommands.cs",
+      "reason": "large_file",
+      "loc": 507,
+      "complexity": 0
+    },
+    {
+      "file": "Tools\\Source\\Luum.BuildTasks\\VersionTask.cs",
+      "reason": "large_file",
+      "loc": 505,
+      "complexity": 0
+    }
+  ],
+  "metrics": {
+    "code_quality_score": 85.0,
+    "complexity_score": 100,
+    "security_score": 100,
+    "test_score": 0,
+    "documentation_score": 7.0
+  },
+  "last_scan": "2025-12-07T16:00:00",
+  "trends": {
+    "health_trend": "stable",
+    "velocity_trend": "stable",
+    "quality_trend": "stable"
+  }
+}

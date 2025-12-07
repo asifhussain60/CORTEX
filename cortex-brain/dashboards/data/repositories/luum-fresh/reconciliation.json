@@ -1,0 +1,66 @@
+{
+  "reconciliation_timestamp": "2025-12-07T16:06:32.568126",
+  "reconciliation_version": "1.0.0",
+  "repository": "luum-fresh",
+  "execution_time_ms": 0.0,
+  "reconciled_data": {
+    "security_score": 0,
+    "quality_score": 85.0,
+    "maintainability_score": 77,
+    "architecture_score": 81,
+    "test_coverage": 0.0,
+    "critical_vulnerabilities": 0,
+    "high_vulnerabilities": 0,
+    "code_smells": 25,
+    "cyclomatic_complexity": 9.518333172938119,
+    "security_hotspots": 0,
+    "overall_score": 54
+  },
+  "violations": [
+    {
+      "rule_id": "R12_QUALITY_TEST_COVERAGE",
+      "severity": "medium",
+      "category": "quality",
+      "message": "Test coverage (0.0%) is low despite high quality score (85.0)",
+      "original_score": 85.0,
+      "adjusted_score": 65.0,
+      "adjustment": -20,
+      "rationale": "Quality score should reflect inadequate test coverage"
+    }
+  ],
+  "anomalies": [
+    {
+      "type": "score_inconsistency",
+      "confidence": 0.95,
+      "category": "architecture_security",
+      "message": "Architecture score (81) is high but security score (0) is low",
+      "recommendation": "Review architecture for security design patterns (defense in depth, least privilege, etc.)",
+      "z_score": null,
+      "metadata": {
+        "architecture_score": 81,
+        "security_score": 0,
+        "gap": 81
+      }
+    }
+  ],
+  "audit_trail": {
+    "changes": [
+      {
+        "category": "quality",
+        "field": "score",
+        "before": 85.0,
+        "after": 65.0,
+        "reason": "R12_QUALITY_TEST_COVERAGE: Test coverage (0.0%) is low despite high quality score (85.0)",
+        "timestamp": "2025-12-07T16:06:32.568016"
+      }
+    ],
+    "rules_triggered": 1,
+    "anomalies_detected": 1,
+    "execution_time_ms": 0.0
+  },
+  "metrics": {
+    "total_adjustments": 1,
+    "total_anomalies": 1,
+    "data_quality_score": 92
+  }
+}
