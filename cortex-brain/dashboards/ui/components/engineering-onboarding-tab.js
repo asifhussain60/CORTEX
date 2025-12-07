@@ -1551,6 +1551,7 @@ ${diagram.mermaid_code}
         this.saveProgress();
         this.render();
         this.attachEventListeners();
+        this.renderAllDiagrams(); // Re-render diagrams after navigation
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1566,6 +1567,7 @@ ${diagram.mermaid_code}
         this.saveProgress();
         this.render();
         this.attachEventListeners();
+        this.renderAllDiagrams(); // Re-render diagrams after completion toggle
     }
 
     /**
@@ -1579,6 +1581,7 @@ ${diagram.mermaid_code}
         }
         this.render();
         this.attachEventListeners();
+        this.renderAllDiagrams(); // Re-render diagrams after section toggle
     }
 
     /**
