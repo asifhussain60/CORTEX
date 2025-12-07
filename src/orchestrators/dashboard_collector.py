@@ -223,6 +223,28 @@ class DashboardDataCollector:
         print(f"✅ Data consolidation complete in {elapsed:.1f}s")
         logger.info("✅ Data consolidation complete")
         
+        # Run reconciliation engine
+        print("\n🔍 Running reconciliation engine...")
+        logger.info("Running reconciliation engine...")
+        start = time.time()
+        reconciliation_result = self._reconcile_data(results)
+        elapsed = time.time() - start
+        
+        if reconciliation_result:
+            results['reconciliation'] = reconciliation_result
+            violations_count = len(reconciliation_result.get('violations', []))
+            anomalies_count = len(reconciliation_result.get('anomalies', []))
+            overall_score = reconciliation_result.get('reconciled_data', {}).get('overall_score', 0)
+            
+            print(f"✅ Reconciliation complete in {elapsed:.1f}s")
+            print(f"   📊 Overall Score: {overall_score}/100")
+            print(f"   ⚠️  Violations: {violations_count}")
+            print(f"   🔍 Anomalies: {anomalies_count}")
+            logger.info(f"✅ Reconciliation complete: {violations_count} violations, {anomalies_count} anomalies")
+        else:
+            print(f"⚠️  Reconciliation skipped (elapsed: {elapsed:.1f}s)")
+            logger.warning("Reconciliation failed or skipped")
+        
         return results
     
     def _consolidate_data(self, results: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
@@ -285,6 +307,63 @@ class DashboardDataCollector:
             logger.error(f"Data consolidation failed: {e}")
             logger.warning("Continuing with unconsolidated data")
             return results
+    
+    def _reconcile_data(self, results: Dict[str, Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+        """
+        Reconcile dashboard data for accuracy and consistency.
+        Uses industry standards (CVSS, OWASP) to validate metrics.
+        
+        Args:
+            results: Consolidated dashboard data
+            
+        Returns:
+            Reconciliation result dictionary or None if failed
+        """
+        try:
+            from src.dashboard.reconciliation import ReconciliationEngine
+            
+            # Extract scores from nested structure and flatten for reconciliation
+            health_data = results.get('health-data', {})
+            security_data = results.get('security', {})
+            architecture_data = results.get('architecture', {})
+            
+            # Build flat data structure for reconciliation
+            flat_data = {
+                # Core scores
+                'security_score': security_data.get('summary', {}).get('score', 0),
+                'quality_score': health_data.get('summary', {}).get('overall_score', 0),
+                'maintainability_score': health_data.get('summary', {}).get('maintainability_score', 0),
+                'architecture_score': architecture_data.get('summary', {}).get('score', 0),
+                'test_coverage': health_data.get('testing', {}).get('coverage_percentage', 0),
+                
+                # Vulnerability counts
+                'critical_vulnerabilities': security_data.get('summary', {}).get('critical_count', 0),
+                'high_vulnerabilities': security_data.get('summary', {}).get('high_count', 0),
+                'security_hotspots': len(security_data.get('hotspots', [])),
+                
+                # Quality metrics
+                'code_smells': health_data.get('summary', {}).get('code_smells', 0),
+                'cyclomatic_complexity': health_data.get('summary', {}).get('average_complexity', 0),
+                
+                # Architecture metrics (if available)
+                'modularity_score': architecture_data.get('summary', {}).get('modularity', 0),
+            }
+            
+            # Run reconciliation engine
+            engine = ReconciliationEngine()
+            repo_name = self.repo_path.name
+            result = engine.reconcile(flat_data, repository=repo_name)
+            
+            # Convert to serializable dict
+            return result.to_dict()
+            
+        except ImportError as e:
+            logger.warning(f"Reconciliation engine not available: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"Reconciliation failed: {e}")
+            logger.debug(f"Reconciliation error details:", exc_info=True)
+            return None
 
     def save_results(self, results: Dict[str, Dict[str, Any]]) -> bool:
         """

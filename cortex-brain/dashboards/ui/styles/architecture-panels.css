@@ -244,20 +244,52 @@
     color: var(--accent-primary);
 }
 
-/* Project Type Badge */
-.project-type-badge {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.5rem 1rem;
+/* Repository Header */
+.repo-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--glass-border);
+}
+
+.repo-name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.repo-type {
+    display: inline-block;
+    padding: 0.375rem 0.875rem;
     background: var(--glass-bg);
     backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
-    border-radius: 0.5rem;
+    border-radius: 0.375rem;
     font-size: 0.875rem;
     font-weight: 600;
-    z-index: 1001;
-    box-shadow: var(--shadow);
+    color: var(--text-secondary);
+}
+
+.repo-type.api_only {
+    border-left: 3px solid var(--accent-primary);
+}
+
+.repo-type.spa_only {
+    border-left: 3px solid var(--accent-secondary);
+}
+
+.repo-type.full_stack {
+    border-left: 3px solid var(--success);
+}
+
+.repo-type.database_only {
+    border-left: 3px solid var(--warning);
+}
+
+/* Project Type Badge (Legacy - Hidden) */
+.project-type-badge {
+    display: none;
 }
 
 .project-type-badge.api_only {

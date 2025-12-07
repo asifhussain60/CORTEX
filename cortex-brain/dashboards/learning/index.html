@@ -3,179 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="CORTEX Learning Library - AI-generated learning documentation">
-  <meta name="keywords" content="CORTEX, learning, documentation, AI, planning, TDD, workflows">
-  
   <title>CORTEX Learning Library</title>
-  
-  <!-- Docsify Theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/themes/vue.css">
-  
-  <!-- Custom Styles -->
   <style>
-    :root {
-      --base-font-size: 16px;
-      --theme-color: #0066cc;
-      --theme-color-dark: #004d99;
-    }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    }
-    
-    .sidebar-toggle {
-      background-color: var(--theme-color);
-    }
-    
-    .sidebar {
-      border-right: 1px solid #e8e8e8;
-    }
-    
-    .sidebar ul li.active > a {
-      color: var(--theme-color);
-      font-weight: 600;
-    }
-    
-    .markdown-section h1 {
-      color: var(--theme-color-dark);
-      border-bottom: 2px solid var(--theme-color);
-      padding-bottom: 0.5rem;
-    }
-    
-    .markdown-section h2 {
-      color: var(--theme-color);
-      margin-top: 2rem;
-    }
-    
-    .search .input-wrap input {
-      border: 2px solid #e8e8e8;
-      border-radius: 4px;
-    }
-    
-    .search .input-wrap input:focus {
-      border-color: var(--theme-color);
-    }
-    
-    /* Category badges */
-    .category-badge {
-      display: inline-block;
-      padding: 0.25rem 0.5rem;
-      margin: 0.25rem;
-      background: #f0f0f0;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-    
-    /* Event metadata styling */
-    .event-metadata {
-      background: #f8f9fa;
-      padding: 1rem;
-      border-left: 4px solid var(--theme-color);
-      margin: 1rem 0;
-    }
+    :root { --theme-color: #42b983; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .sidebar { background: #f8f9fa; border-right: 1px solid #e9ecef; }
+    .sidebar-nav ul li a { transition: color 0.2s; }
+    .sidebar-nav ul li a:hover { color: var(--theme-color); }
+    .markdown-section h1 { border-bottom: 2px solid var(--theme-color); }
+    .markdown-section h2 { border-left: 4px solid var(--theme-color); padding-left: 0.75rem; }
+    .search .input-wrap input { border: 2px solid #e9ecef; border-radius: 8px; }
+    .search .input-wrap input:focus { border-color: var(--theme-color); box-shadow: 0 0 0 3px rgba(66,185,131,0.1); }
   </style>
 </head>
-
 <body>
-  <!-- Loading Message -->
-  <div id="app">🎓 Loading CORTEX Learning Library...</div>
-  
-  <!-- Docsify Configuration -->
+  <div id="app">Loading...</div>
   <script>
-    window.$docsify = {
-      // Basic Configuration
+    window.\ = {
       name: 'CORTEX Learning Library',
       repo: 'asifhussain60/CORTEX',
-      homepage: 'README.md',
       loadSidebar: true,
       subMaxLevel: 3,
       auto2top: true,
-      
-      // Theme
-      themeColor: '#0066cc',
-      
-      // Search Plugin
-      search: {
-        maxAge: 86400000, // 1 day
-        paths: 'auto',
-        placeholder: 'Search learning docs...',
-        noData: 'No results found',
-        depth: 6,
-        hideOtherSidebarContent: false
-      },
-      
-      // Pagination
-      pagination: {
-        previousText: '← Previous',
-        nextText: 'Next →',
-        crossChapter: true,
-        crossChapterText: true
-      },
-      
-      // Copy Code Plugin
-      copyCode: {
-        buttonText: 'Copy',
-        errorText: 'Error',
-        successText: 'Copied!'
-      },
-      
-      // External Links
-      externalLinkTarget: '_blank',
-      externalLinkRel: 'noopener',
-      
-      // 404 Page
-      notFoundPage: true,
-      
-      // Markdown Configuration
-      markdown: {
-        smartypants: true,
-        breaks: true
-      },
-      
-      // Navigation
-      relativePath: true,
-      
-      // Footer
-      footer: {
-        copy: '<span>© 2024-2025 Asif Hussain. All rights reserved.</span>',
-        auth: 'Source-Available License',
-        pre: '<hr/>',
-        style: 'text-align: center; margin-top: 2rem; padding: 1rem; border-top: 1px solid #e8e8e8;'
-      }
+      themeColor: '#42b983',
+      search: { paths: 'auto', placeholder: 'Search...' },
+      pagination: { previousText: '← Previous', nextText: 'Next →' },
+      copyCode: { buttonText: 'Copy', successText: 'Copied!' }
     }
   </script>
-  
-  <!-- Docsify Core -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/docsify.min.js"></script>
-  
-  <!-- Search Plugin -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/plugins/search.min.js"></script>
-  
-  <!-- Copy Code Plugin -->
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2.1.1/dist/docsify-copy-code.min.js"></script>
-  
-  <!-- Pagination Plugin -->
   <script src="https://cdn.jsdelivr.net/npm/docsify-pagination@2.6.1/dist/docsify-pagination.min.js"></script>
-  
-  <!-- Syntax Highlighting -->
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-yaml.min.js"></script>
-  
-  <!-- Footer Plugin -->
-  <script src="https://cdn.jsdelivr.net/npm/docsify-footer-enh@1.0.2/dist/docsify-footer-enh.min.js"></script>
-  
-  <!-- Analytics (Optional - uncomment if needed) -->
-  <!-- 
-  <script>
-    window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
-    ga.l = +new Date;
-    ga('create', 'UA-XXXXX-Y', 'auto');
-    ga('send', 'pageview');
-  </script>
-  <script async src='https://www.google-analytics.com/analytics.js'></script>
-  -->
 </body>
 </html>

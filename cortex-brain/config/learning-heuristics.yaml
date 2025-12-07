@@ -1,0 +1,63 @@
+# Learning Library Heuristics Configuration
+# Used by CommitFilter to identify learning-worthy commits
+# Version: 1.0.0
+# Author: Asif Hussain
+
+heuristics:
+  line_count:
+    threshold: 100  # Minimum total lines (added + deleted) to consider significant
+    weight: 0.3     # Contribution to confidence score
+    description: "Large commits likely involve significant work"
+    
+  test_changes:
+    patterns:
+      - "test_*.py"       # Python test files (prefix)
+      - "*_test.py"       # Python test files (suffix)
+      - "tests/"          # Test directories
+      - "test/"           # Alternative test directory
+      - "spec/"           # RSpec-style test directory
+      - "*.test.ts"       # TypeScript test files
+      - "*.test.js"       # JavaScript test files
+      - "*.spec.ts"       # TypeScript spec files
+      - "*.spec.js"       # JavaScript spec files
+    weight: 0.4
+    description: "Test changes indicate problem-solving and validation work"
+    
+  error_keywords:
+    patterns:
+      - "fix"
+      - "bug"
+      - "error"
+      - "crash"
+      - "fail"
+      - "failure"
+      - "debug"
+      - "issue"
+      - "problem"
+      - "hotfix"
+      - "patch"
+      - "broken"
+    weight: 0.5  # Highest weight - errors are valuable learning moments
+    description: "Error-related commits capture lessons learned from failures"
+    
+  refactor_keywords:
+    patterns:
+      - "refactor"
+      - "cleanup"
+      - "optimize"
+      - "improve"
+      - "restructure"
+      - "reorganize"
+      - "simplify"
+      - "enhance"
+    weight: 0.3
+    description: "Refactorings document better approaches and design improvements"
+
+# Usage notes:
+# - Weights are additive: a commit can match multiple heuristics
+# - Maximum theoretical score: 1.4 (all heuristics match)
+# - Typical high-value commit: 0.8-1.0 (2-3 heuristics)
+# - Minimum for candidacy: Any non-zero score
+# - Patterns are case-insensitive
+# - File patterns support simple wildcards: prefix*, *suffix, directory/
+# - Keyword patterns use word boundaries for accuracy

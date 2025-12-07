@@ -8,6 +8,8 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
+import { renderReconciliationWidget } from './reconciliation-widget-collapsible.js';
+
 /**
  * Render executive summary tab
  * @param {Object} data - Dashboard data
@@ -24,7 +26,7 @@ export function renderExecutiveSummary(data) {
     
     if (execSummary.project_name) {
         // Render new narrative format
-        renderNarrativeExecutiveSummary(container, execSummary);
+        renderNarrativeExecutiveSummary(container, execSummary, data.reconciliation);
     } else {
         // Fallback to old format
         renderLegacyExecutiveSummary(container, data);
@@ -35,8 +37,9 @@ export function renderExecutiveSummary(data) {
  * Render new narrative executive summary format
  * @param {HTMLElement} container - Container element
  * @param {Object} execSummary - Executive summary data
+ * @param {Object} reconciliation - Reconciliation report data
  */
-function renderNarrativeExecutiveSummary(container, execSummary) {
+function renderNarrativeExecutiveSummary(container, execSummary, reconciliation) {
     const whatItDoes = execSummary.what_it_does || {};
     const composition = execSummary.composition || {};
     const capabilities = execSummary.capabilities || [];
@@ -54,25 +57,8 @@ function renderNarrativeExecutiveSummary(container, execSummary) {
     const accuracy = accuracyMap[dataSource] || 76;
     
     container.innerHTML = `
-        <!-- Data Source Disclaimer -->
-        <div style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%); border-left: 4px solid #FFC107; padding: 1.25rem 1.5rem; margin-bottom: 2rem; border-radius: 0.5rem; display: flex; align-items: start; gap: 1rem;">
-            <div style="font-size: 2rem; line-height: 1;">ℹ️</div>
-            <div style="flex: 1;">
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                    <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0;">Automated Analysis</h3>
-                    <span style="background: rgba(76, 175, 80, 0.2); color: #4CAF50; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;">
-                        ~${accuracy}% ACCURACY
-                    </span>
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6; margin: 0;">
-                    This executive summary has been <strong>reverse-engineered through automated code analysis</strong>. 
-                    Information is inferred from project structure, architecture patterns, technology stack, and component relationships. 
-                    While generally accurate, some details may require validation.
-                    ${dataSource === 'readme' ? ' Project documentation was used to enhance accuracy.' : ''}
-                    ${dataSource === 'generated' ? ' Consider adding a README file to improve accuracy to 90%+.' : ''}
-                </p>
-            </div>
-        </div>
+        <!-- Combined Automated Analysis & Reconciliation Panel -->
+        ${renderReconciliationWidget(reconciliation, dataSource, accuracy)}
         
         <!-- Project Header -->
         <div class="glass-card" style="margin-bottom: 2rem; padding: 2rem;">

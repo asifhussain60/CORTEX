@@ -3,12 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORTEX Health Dashboard</title>
+    <title>CORTEX System Overview</title>
     
     <!-- External Libraries -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0                </a>
+                <a class="nav-tab" data-tab="security" onclick="switchTab('security')">
+                    <span class="nav-tab-icon">🔒</span>
+                    <span class="nav-tab-text">Security</span>
+                </a>
+                <a class="nav-tab" data-tab="code-org" onclick="switchTab('code-org')">
+                    <span class="nav-tab-icon">📁</span>
+                    <span class="nav-tab-text">Code Organization</span>
+                </a>
+                <a class="nav-tab" data-tab="vendors" onclick="switchTab('vendors')">
+                    <span class="nav-tab-icon">🔌</span>
+                    <span class="nav-tab-text">Dependencies</span>
+                </a>
+                <a class="nav-tab" data-tab="engineering" onclick="switchTab('engineering')">
+                    <span class="nav-tab-icon">🎓</span>
+                    <span class="nav-tab-text">Onboarding</span>
+                </a>
+            </nav>
+        </aside>.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     
     <!-- Styles -->
@@ -402,7 +420,7 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <img src="assets/images/cortex-logo.svg" alt="CORTEX Health Dashboard" class="dashboard-logo">
+                <img src="assets/images/CORTEX-logo.png" alt="CORTEX" class="dashboard-logo">
             </div>
             
             <!-- Source Selector -->
@@ -420,45 +438,48 @@
                     <span class="nav-tab-icon">📋</span>
                     <span class="nav-tab-text">Executive Summary</span>
                 </a>
-                    <a class="nav-tab" data-tab="engineering" onclick="switchTab('engineering')">
-                        <span class="nav-tab-icon">🎓</span>
-                        <span class="nav-tab-text">Engineering</span>
-                    </a>
                 <a class="nav-tab" data-tab="overview" onclick="switchTab('overview')">
                     <span class="nav-tab-icon">📊</span>
-                    <span class="nav-tab-text">Overview</span>
+                    <span class="nav-tab-text">System Overview</span>
                 </a>
                 <a class="nav-tab" data-tab="tech-stack" onclick="switchTab('tech-stack')">
-                    <span class="nav-tab-icon">🛠️</span>
+                    <span class="nav-tab-icon">�️</span>
                     <span class="nav-tab-text">Tech Stack</span>
-                </a>
-                <a class="nav-tab" data-tab="security" onclick="switchTab('security')">
-                    <span class="nav-tab-icon">🔒</span>
-                    <span class="nav-tab-text">Security</span>
                 </a>
                 <a class="nav-tab" data-tab="architecture" onclick="switchTab('architecture')">
                     <span class="nav-tab-icon">🏗️</span>
                     <span class="nav-tab-text">Architecture</span>
                 </a>
                 <a class="nav-tab" data-tab="code-org" onclick="switchTab('code-org')">
-                    <span class="nav-tab-icon">📁</span>
+                    <span class="nav-tab-icon">�</span>
                     <span class="nav-tab-text">Code Organization</span>
                 </a>
                 <a class="nav-tab" data-tab="vendors" onclick="switchTab('vendors')">
                     <span class="nav-tab-icon">🔌</span>
                     <span class="nav-tab-text">Dependencies</span>
                 </a>
+                <a class="nav-tab" data-tab="engineering" onclick="switchTab('engineering')">
+                    <span class="nav-tab-icon">🎓</span>
+                    <span class="nav-tab-text">Onboarding</span>
+                </a>
+                <a class="nav-tab" data-tab="security" onclick="switchTab('security')">
+                    <span class="nav-tab-icon">�</span>
+                    <span class="nav-tab-text">Security</span>
+                </a>
             </nav>
         </aside>
         
         <!-- Main Content Area -->
         <main class="main-content">
-            <!-- Project Type Badge -->
-            <div id="project-type-badge" class="project-type-badge">Analyzing...</div>
+            <!-- Repository Header -->
+            <div class="repo-header">
+                <h1 class="repo-name">Luum Fresh</h1>
+                <span class="repo-type" id="project-type-badge">Analyzing...</span>
+            </div>
             
             <!-- Content Header -->
             <div class="content-header">
-                <h2 class="content-title" id="contentTitle">Dashboard Overview</h2>
+                <h2 class="content-title" id="contentTitle">System Overview</h2>
                 <div class="content-actions">
                     <button class="btn" onclick="refreshData()">🔄 Refresh</button>
                     <button class="btn" onclick="exportData()">📥 Export</button>
@@ -537,6 +558,7 @@
     <script src="services/repository-monitor.js"></script>
     <script type="module" src="data-loader.js"></script>
     <script type="module" src="adaptive-visibility.js"></script>
+    <script type="module" src="components/reconciliation-widget-collapsible.js"></script>
     <script type="module" src="components/architecture-panels.js"></script>
     <script type="module" src="app.js"></script>
     <script type="module" src="components/executive-tab.js"></script>
@@ -565,15 +587,15 @@
             // Update title
             const titles = {
                 'executive': 'Executive Summary',
-                'overview': 'Dashboard Overview',
+                'overview': 'System Overview',
                 'tech-stack': 'Technology Stack',
-                'security': 'Security Analysis',
                 'architecture': 'Architecture Overview',
                 'code-org': 'Code Organization',
                 'vendors': 'Dependencies & Vendors',
-                'engineering': 'Engineering Onboarding'
+                'engineering': 'Onboarding',
+                'security': 'Security Analysis'
             };
-            document.getElementById('contentTitle').textContent = titles[tabName] || 'Dashboard';
+            document.getElementById('contentTitle').textContent = titles[tabName] || 'System Overview';
             
             // Update URL
             const url = new URL(window.location);
