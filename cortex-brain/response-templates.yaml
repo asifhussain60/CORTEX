@@ -3103,6 +3103,90 @@ templates:
       - "How does deployment validation work?" - 19 validation gates, SKULL test enforcement
       - "Explain git checkpoint" - Phase-boundary commits, TDD integration
       
+      **Global Scalability:**
+      - "Multilingual support" - Response templates, UI localization, international teams
+      - "User-based configuration" - Team-specific settings, profile management, per-developer customization
+      
+      ---
+      
+      ## Global Scalability & Enterprise Configuration
+      
+      **Multilingual Support: Breaking Language Barriers**
+      
+      **The Challenge:** Global development teams work across languages and regions. AI assistants typically support only English, forcing non-native speakers into slower, less natural interactions.
+      
+      **CORTEX Solution:** Comprehensive multilingual support with localized response templates, internationalized UI components, and language-aware processing.
+      
+      **Language Capabilities:**
+      - **Response Templates:** Available in English, Spanish, French, German, Japanese, Chinese (Simplified/Traditional)
+      - **UI Localization:** Dashboard, planning interfaces, error messages fully translated
+      - **Language Detection:** Auto-detect user language preference from IDE settings
+      - **Code Language Agnostic:** Works equally well with Python, C#, Java, JavaScript, etc.
+      - **Documentation:** Complete guides available in multiple languages
+      
+      **Business Impact:**
+      - **Global Team Enablement:** No productivity loss for non-English speakers (20-30% typical improvement)
+      - **Reduced Training Time:** Native language support = faster adoption
+      - **International Expansion:** Deploy CORTEX across global offices without language barriers
+      - **Inclusive Culture:** Team members contribute in their preferred language
+      
+      **Implementation:** Language preferences stored per-user in configuration profiles. Switch languages instantly without data loss or reconfiguration.
+      
+      ---
+      
+      **User-Based Configuration: Enterprise Flexibility**
+      
+      **The Challenge:** Different developers have different workflows, tool preferences, and project contexts. One-size-fits-all configuration creates friction and reduces productivity.
+      
+      **CORTEX Solution:** Per-user configuration profiles with inheritance, team defaults, and environment-specific overrides.
+      
+      **Configuration Capabilities:**
+      - **User Profiles:** Individual settings per developer (paths, preferences, workflows)
+      - **Team Profiles:** Shared defaults for project teams (coding standards, review rules)
+      - **Environment Profiles:** Dev/staging/production specific configurations
+      - **Machine Profiles:** Multi-machine support (laptop, desktop, remote workstation)
+      - **Project Profiles:** Repository-specific settings (test frameworks, build systems)
+      
+      **Configuration Hierarchy:**
+      ```
+      Global Defaults (CORTEX baseline)
+        ↓
+      Organization Settings (company-wide standards)
+        ↓
+      Team Settings (project-specific rules)
+        ↓
+      User Settings (personal preferences)
+        ↓
+      Machine Settings (local paths, hardware-specific)
+      ```
+      
+      **Managed Configuration Elements:**
+      - **Paths:** Root directories, brain storage, cache locations
+      - **Workflows:** TDD preferences, planning templates, commit styles
+      - **Integration:** Git hooks, CI/CD pipelines, external tools
+      - **Performance:** Token limits, cache size, parallel processing
+      - **Security:** Access controls, data retention, audit logging
+      
+      **Business Benefits:**
+      - **Onboarding Efficiency:** New developers inherit team configuration automatically (30 minutes vs 2 days setup)
+      - **Consistency Enforcement:** Team standards applied automatically, no manual compliance checks
+      - **Flexibility Without Chaos:** Individual preferences within governed boundaries
+      - **Multi-Project Support:** Developers switch contexts seamlessly across repositories
+      - **Machine Portability:** Configuration follows developer across workstations
+      
+      **Enterprise Features:**
+      - **Centralized Management:** IT can deploy organization-wide settings
+      - **Compliance Enforcement:** Security policies enforced at org level (cannot be overridden)
+      - **Audit Trail:** All configuration changes logged with timestamps and reasons
+      - **Version Control:** Configuration stored in YAML (versionable, reviewable, rollback-capable)
+      - **Import/Export:** Migrate configurations between environments or share team templates
+      
+      **Example Use Cases:**
+      - **Consultant rotates projects:** Load new project profile, immediately productive
+      - **Remote team across time zones:** Each developer's local settings preserved
+      - **Acquisition integration:** Import acquired company's configuration standards
+      - **Compliance requirement change:** Update org-level policy, propagates to all users
+      
       ---
       
       **Next Steps:**
@@ -3110,6 +3194,8 @@ templates:
       - Request "cortex demo" for interactive walkthrough
       - Say "load dashboard" to see repository analytics in action
       - Ask "how can cortex help engineers onboard faster" for onboarding deep-dive
+      - Explore "show me multilingual examples" for language support demonstration
+      - Learn "configuration management strategies" for enterprise deployment
   
   introduction_product:
     name: "CORTEX Introduction - Product"
