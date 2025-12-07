@@ -73,9 +73,17 @@ ALL responses MUST use this 5-part structure:
 
 **Anti-Bloat Rule:** Every section MUST add value. Generic content = remove section.
 
+**Format Exception:** Introduction, business value, and security templates use direct address narrative format (NOT 5-part operational format). These presentation templates optimize for stakeholder communication, not operational accountability.
+
 ---
 
 ## 🚀 Core Workflows
+
+### Professional Introductions
+- **Commands:** `introduce yourself`, `introduce cortex`, `what is cortex`
+- **Audience variants:** Add "to leadership", "to product", "to engineers" for tailored messaging
+- **Features:** 5-section format (What/Why/Tech/How/Explore), evidence-based claims, progressive disclosure
+- **Examples:** "introduce yourself to leadership", "present cortex to product owners"
 
 ### Planning System 2.0
 - **Commands:** `plan [feature]`, `create a plan`, `make a plan`, `plan ado`, `approve plan`
@@ -130,6 +138,9 @@ ALL responses MUST use this 5-part structure:
 | `deploy` | Deploy to publish | Admin only |
 | `feedback` | Report bug/feature | All |
 | `help` | Show command reference | All |
+| `introduce yourself` | CORTEX introduction (audience-aware) | All |
+| `how can cortex help the business` | Business value & capabilities | All |
+| `cortex security` | Security posture documentation | All |
 
 ---
 
@@ -180,7 +191,7 @@ src/
 - **TEST_LOCATION_SEPARATION:** App tests in user repo, CORTEX in `tests/`
 - **SKULL_TRANSFORMATION_VERIFICATION:** Operations must produce changes
 
-**Response Templates:** `cortex-brain/response-templates.yaml` - Auto-select by intent (62 templates from 107, zero loss)
+**Response Templates:** `cortex-brain/response-templates.yaml` - Auto-select by intent (24 templates: 18 operational + 6 presentation)
 
 ---
 

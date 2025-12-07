@@ -13,9 +13,77 @@ refactor_phase: 'modular_architecture'
 
 intent_detection:
   # -------------------------------------------------------------------------
-  # HIGH PRIORITY - Exact matches (admin, help, onboarding)
+  # HIGH PRIORITY - Exact matches (admin, help, onboarding, introductions)
   # -------------------------------------------------------------------------
   priority_1_exact_match:
+    - intent: "introduction_professional"
+      keywords:
+        - "introduce yourself"
+        - "introduce cortex"
+        - "what is cortex"
+        - "tell me about cortex"
+        - "present cortex"
+      audience_detection:
+        explicit:
+          leadership: ["to leadership", "for leadership", "to executives"]
+          product: ["to product", "for product", "to product owners"]
+          engineering: ["to engineers", "for engineers", "to developers", "to engineering"]
+        implicit:
+          leadership: ["ROI", "cost", "velocity", "metrics", "business value"]
+          product: ["features", "delivery", "sprint", "backlog", "roadmap"]
+          engineering: ["architecture", "code", "implementation", "technical"]
+        default: "introduction_professional"
+      template: "introduction_professional"  # Default, overridden by audience detection
+      orchestrator: null
+      note: "Audience detection: explicit phrase > implicit keywords > default"
+    
+    - intent: "introduction_leadership"
+      keywords:
+        - "introduce yourself to leadership"
+        - "introduce cortex to leadership"
+        - "present cortex to leadership"
+        - "cortex for leadership"
+      template: "introduction_leadership"
+      orchestrator: null
+    
+    - intent: "introduction_product"
+      keywords:
+        - "introduce yourself to product"
+        - "introduce cortex to product"
+        - "present cortex to product owners"
+        - "cortex for product"
+      template: "introduction_product"
+      orchestrator: null
+    
+    - intent: "introduction_engineering"
+      keywords:
+        - "introduce yourself to engineers"
+        - "introduce cortex to engineering"
+        - "present cortex to developers"
+        - "cortex for engineers"
+      template: "introduction_engineering"
+      orchestrator: null
+    
+    - intent: "business_value"
+      keywords:
+        - "how can cortex help the business"
+        - "business value"
+        - "what can cortex do"
+        - "cortex capabilities"
+        - "cortex features"
+      template: "business_value"
+      orchestrator: null
+    
+    - intent: "security_posture"
+      keywords:
+        - "security concerns"
+        - "how does cortex address security"
+        - "cortex security"
+        - "is cortex secure"
+        - "security posture"
+      template: "security_posture"
+      orchestrator: null
+    
     - intent: "onboarding"
       keywords:
         - "onboard"
@@ -53,7 +121,13 @@ intent_detection:
       keywords:
         - "plan"
         - "create plan"
+        - "create a plan"
+        - "make a plan"
         - "planning"
+        - "comprehensive plan"
+        - "detailed plan"
+        - "full plan"
+        - "plan for"
       template: "template_planning_dor_incomplete"
       orchestrator: "PlanningOrchestrator"
       validation: "check_dor"

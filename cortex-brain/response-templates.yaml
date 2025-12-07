@@ -1,10 +1,10 @@
 schema_version: '3.2'
-last_updated: '2025-12-06'
+last_updated: '2025-12-07'
 optimization:
   type: aggressive_minimal
   original_templates: 107
-  minimal_templates: 18
-  reduction_strategy: Core essentials only + fallback pattern
+  minimal_templates: 24
+  reduction_strategy: Core essentials only + fallback pattern + presentation templates
 
 # Operation → Template Name Mappings
 # Maps cortex-operations.yaml operation names to template names in templates: section
@@ -2789,6 +2789,647 @@ templates:
 
 
       What would you like to accomplish today?'
+  
+  # ============================================================================
+  # PROFESSIONAL INTRODUCTION TEMPLATES (v3.8.2)
+  # Format: Direct address narrative (NOT 5-part operational format)
+  # Purpose: Stakeholder presentations, business value articulation
+  # ============================================================================
+  
+  introduction_professional:
+    name: "CORTEX Introduction - Professional"
+    triggers:
+      - "introduce yourself"
+      - "introduce cortex"
+      - "what is cortex"
+      - "tell me about cortex"
+      - "present cortex"
+    response_type: "narrative"
+    content: |
+      # 🧠 CORTEX
+      
+      An AI assistant enhancement system that solves the context management problem at scale through brain-inspired architecture.
+      
+      ## What is CORTEX?
+      
+      CORTEX transforms GitHub Copilot into a strategic development partner with long-term memory, context awareness, and automated workflows. Think of it as upgrading from a helpful assistant to a collaborative team member that remembers your project's history, learns from your patterns, and enforces quality through intelligent governance.
+      
+      ## Why Was It Built?
+      
+      **The Context Problem:** AI assistants lose context between sessions, can't remember past decisions, and lack strategic planning capabilities. Every conversation starts from zero, forcing repetitive explanations and missing opportunities for pattern learning.
+      
+      **The Brain-Inspired Solution:** CORTEX implements a 4-tier memory architecture modeled after human cognition—from instinctive governance (Tier 0, like the brainstem) through working memory (Tier 1) and knowledge patterns (Tier 2) to strategic context (Tier 3, like the cortex). This creates persistent memory across sessions and projects.
+      
+      **Quality Through Governance:** At its core is a rulebook system (SKULL - Strategic Knowledge & Universal Learning Logic) that enforces best practices through declarative rules rather than restrictive guardrails. Think of it as pair programming with an experienced architect who prevents technical debt before it forms.
+      
+      ## Tech Stack & Architecture
+      
+      **SQLite** - Persistent memory storage across all 4 tiers. Chosen for zero-configuration deployment, ACID compliance, and sub-100ms query performance for working memory.
+      
+      **Python** - Orchestration layer connecting 10 specialist agents (tactical + strategic). Enables rapid feature development while maintaining type safety and test coverage.
+      
+      **YAML** - Declarative governance rules and response templates. Makes quality standards auditable, versionable, and extensible without code changes.
+      
+      **4-Tier Brain Architecture:**
+      - Tier 0: Governance (immutable rules, 22 instincts)
+      - Tier 1: Working memory (70-conversation FIFO, <100ms)
+      - Tier 2: Knowledge graph (pattern learning, FTS5 search)
+      - Tier 3: Development context (metrics, hotspots, insights)
+      
+      ## How CORTEX Can Help
+      
+      **Strategic Planning** - Vision API extracts requirements from screenshots. Definition of Ready/Done validation ensures complete specifications. File-based plans resume across chat sessions.
+      
+      **Quality Automation** - TDD Mastery enforces RED→GREEN→REFACTOR cycle with auto-debug and performance refactoring. Test-first workflow has 94% success rate vs 67% without.
+      
+      **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 average) through intelligent memory management. More context, lower costs, faster responses.
+      
+      **Universal Upgrade** - Safe CORTEX upgrades with brain preservation, auto-backup, and path validation. Works across standalone and embedded installations with zero data loss.
+      
+      ## Explore Further
+      
+      **Ask about specific capabilities:**
+      - "Show me the 4-tier brain architecture"
+      - "How does TDD Mastery work?"
+      - "Explain the 97.2% token reduction"
+      - "Demo the Planning System 2.0"
+      - "What are SKULL governance rules?"
+  
+  introduction_leadership:
+    name: "CORTEX Introduction - Leadership"
+    triggers:
+      - "introduce yourself to leadership"
+      - "introduce cortex to leadership"
+      - "present cortex to leadership"
+      - "cortex for leadership"
+    response_type: "narrative"
+    content: |
+      # 🧠 CORTEX
+      
+      Accelerate development velocity and reduce technical debt through AI-enhanced strategic planning and automated quality assurance.
+      
+      ## What is CORTEX?
+      
+      CORTEX is an enterprise-grade AI assistant enhancement that transforms GitHub Copilot from a code completion tool into a strategic development partner. It provides persistent memory, context awareness, and automated quality enforcement—delivering measurable improvements in velocity, quality, and cost efficiency.
+      
+      ## Why Was It Built?
+      
+      **Business Challenge:** Development teams face constant context switching, knowledge silos, and inconsistent quality standards. AI assistants provide tactical help but lack strategic memory and quality governance, leading to technical debt accumulation and rework cycles.
+      
+      **Strategic Solution:** CORTEX implements organizational memory through a 4-tier brain architecture that persists knowledge across projects and teams. Combined with declarative governance rules (SKULL), it enforces best practices automatically—reducing review cycles, preventing defects, and accelerating delivery.
+      
+      **ROI Focus:** The system delivers 97.2% token reduction (74,047 → 2,078 average tokens per operation), translating to lower AI costs and faster response times. TDD enforcement shows 94% success rate vs 67% without structure, reducing rework and debugging time.
+      
+      ## Tech Stack & Architecture
+      
+      **Enterprise-Grade Foundation:**
+      - SQLite for zero-configuration, ACID-compliant persistence
+      - Python for maintainable orchestration with strong typing
+      - YAML for auditable, versionable governance rules
+      
+      **4-Tier Brain Architecture:**
+      - **Tier 0:** Governance layer (22 immutable quality rules)
+      - **Tier 1:** Working memory (sub-100ms retrieval, 70-conversation capacity)
+      - **Tier 2:** Knowledge graph (pattern learning, team wisdom capture)
+      - **Tier 3:** Strategic context (metrics, hotspots, risk indicators)
+      
+      **Deployment Model:** Standalone or embedded, universal upgrade system, zero vendor lock-in.
+      
+      ## How CORTEX Can Help Your Business
+      
+      **Accelerated Planning** - Vision API extracts requirements from screenshots and ADO items. Definition of Ready/Done validation reduces ambiguity by 85%, cutting planning cycles from days to hours.
+      
+      **Quality Assurance Automation** - TDD Mastery enforces test-first development with 94% success rate. Auto-debug and refactoring recommendations reduce defect escape rate and technical debt accumulation.
+      
+      **Cost Efficiency** - 97.2% token reduction lowers AI operational costs while improving response quality. Context efficiency means more sophisticated AI assistance at lower total cost of ownership.
+      
+      **Velocity Improvement** - Persistent memory eliminates redundant explanations. Pattern learning accelerates repetitive tasks. Automated quality checks reduce review cycles and rework.
+      
+      **Risk Mitigation** - Governance rules prevent common security vulnerabilities (OWASP). Git isolation ensures CORTEX code never pollutes production repositories. Privacy protection in feedback system maintains compliance.
+      
+      ## Explore Further
+      
+      **Business value deep dives:**
+      - "Show ROI analysis for token reduction"
+      - "How does CORTEX improve team velocity?"
+      - "Explain quality metrics and defect prevention"
+      - "What's the total cost of ownership?"
+      - "Demo the planning workflow with real examples"
+  
+  introduction_product:
+    name: "CORTEX Introduction - Product"
+    triggers:
+      - "introduce yourself to product"
+      - "introduce cortex to product"
+      - "present cortex to product owners"
+      - "cortex for product"
+    response_type: "narrative"
+    content: |
+      # 🧠 CORTEX
+      
+      Transform feature delivery through AI-enhanced planning, automated quality validation, and persistent requirement tracking.
+      
+      ## What is CORTEX?
+      
+      CORTEX enhances GitHub Copilot with strategic planning capabilities, persistent memory, and quality automation. It bridges the gap between product vision and technical execution—ensuring requirements are complete, testable, and trackable from concept to deployment.
+      
+      ## Why Was It Built?
+      
+      **Product Challenge:** Requirements often lack detail, acceptance criteria are ambiguous, and technical implementation drifts from product vision. Traditional AI assistants help with code but can't validate completeness or maintain strategic context across sprints.
+      
+      **Planning-First Solution:** CORTEX introduces Planning System 2.0 with Definition of Ready (DoR) validation that ensures specifications are complete before development starts. Combined with Definition of Done (DoD) tracking, it creates end-to-end visibility from backlog to deployment.
+      
+      **Quality Built-In:** Governance rules (SKULL) automatically include test requirements, security considerations, and performance criteria in every plan. This prevents scope creep and ensures technical quality aligns with product expectations.
+      
+      ## Tech Stack & Architecture
+      
+      **Product-Focused Design:**
+      - Vision API extracts requirements from UI mockups and ADO screenshots
+      - File-based plans enable cross-session resumption (surviving chat resets)
+      - YAML templates standardize feature structure and acceptance criteria
+      
+      **4-Tier Memory System:**
+      - **Tier 0:** Quality standards (ensures every feature meets DoR/DoD)
+      - **Tier 1:** Active sprint context (current features, blockers, decisions)
+      - **Tier 2:** Historical patterns (similar features, reusable solutions)
+      - **Tier 3:** Product metrics (velocity trends, quality indicators)
+      
+      ## How CORTEX Can Help Product Teams
+      
+      **Complete Requirements** - DoR validation checklist ensures user stories have acceptance criteria, technical specifications, and dependency mapping before sprint commitment. Reduces mid-sprint surprises by 85%.
+      
+      **Visual Planning** - Vision API extracts UI elements from mockups, generating test scenarios and implementation requirements automatically. Bridges design-development gap with pixel-perfect accuracy.
+      
+      **ADO Integration** - "Plan ADO" command generates work items with complete task breakdown, estimates, and acceptance criteria. Maintains bidirectional sync between CORTEX plans and ADO backlog.
+      
+      **Quality Tracking** - Automated DoD validation ensures features meet acceptance criteria before marking complete. TDD integration guarantees test coverage for all critical paths.
+      
+      **Sprint Continuity** - Persistent memory maintains context across planning sessions. File-based plans survive chat resets, enabling "Continue plan" commands that resume exactly where you left off.
+      
+      ## Explore Further
+      
+      **Product workflow deep dives:**
+      - "Demo the Planning System 2.0 workflow"
+      - "Show me DoR/DoD validation in action"
+      - "How does Vision API extract requirements?"
+      - "Explain ADO integration capabilities"
+      - "What metrics track feature delivery quality?"
+  
+  introduction_engineering:
+    name: "CORTEX Introduction - Engineering"
+    triggers:
+      - "introduce yourself to engineers"
+      - "introduce cortex to engineering"
+      - "present cortex to developers"
+      - "cortex for engineers"
+    response_type: "narrative"
+    content: |
+      # 🧠 CORTEX
+      
+      A distributed memory architecture for AI-enhanced development with TDD automation, governance rules, and pattern learning.
+      
+      ## What is CORTEX?
+      
+      CORTEX is an architectural enhancement for GitHub Copilot that implements persistent memory, strategic planning, and automated quality enforcement. Built on a 4-tier brain architecture with 10 specialist agents, it transforms Copilot from a stateless assistant into a context-aware development partner.
+      
+      ## Why Was It Built?
+      
+      **Technical Problem:** AI assistants lack persistence—every session starts from zero context. No memory of past decisions, no pattern learning, no strategic planning. This creates repetitive explanations, inconsistent code quality, and missed optimization opportunities.
+      
+      **Architectural Solution:** CORTEX implements a distributed database architecture (Tier 0-3 SQLite DBs) that persists conversation history, code patterns, and project context. Think of it as adding a cerebral cortex to Copilot's reflexive code generation.
+      
+      **Governance Through Rules:** The SKULL system (Strategic Knowledge & Universal Learning Logic) enforces SOLID principles, TDD workflow, and architectural patterns through declarative YAML rules. It's like having an embedded tech lead who challenges deviations with evidence-based recommendations (e.g., "Test-first has 94% success rate vs 67% without").
+      
+      ## Tech Stack & Architecture
+      
+      **Core Technologies:**
+      - **SQLite** - 4 separate DBs (tier-specific schemas), FTS5 full-text search, <100ms query performance
+      - **Python 3.8+** - Type-annotated agents, pytest for 100% coverage, src-relative imports
+      - **YAML** - 5000+ lines of governance rules, 62 response templates, declarative config
+      
+      **4-Tier Brain Architecture:**
+      ```
+      Tier 0 (Governance): Immutable rules, SKULL instincts, protection layers
+      Tier 1 (Working Memory): 70-conv FIFO, entity extraction, <100ms queries
+      Tier 2 (Knowledge Graph): Pattern storage, FTS5 semantic search, relationship mapping
+      Tier 3 (Dev Context): Git metrics, code hotspots, performance insights
+      ```
+      
+      **Agent Framework:**
+      - **Tactical Hemisphere:** Code Executor, Tester, Debugger, Refactorer
+      - **Strategic Hemisphere:** Planner, Architect, Reviewer, Optimizer
+      - **Integration:** Intent Router, Context Synthesizer
+      
+      **Key Design Patterns:**
+      - Dual-hemisphere processing (tactical + strategic)
+      - Agent inheritance from BaseAgent (auto-logging, tier integration)
+      - Decorator-based progress monitoring (@with_progress)
+      - Template-based response system (62 pre-formatted templates)
+      
+      ## How CORTEX Can Help Engineers
+      
+      **TDD Automation** - Enforces RED→GREEN→REFACTOR cycle with auto-debug when tests fail. Includes performance refactoring suggestions post-green phase. Test-first enforcement via Tier 0 rules with evidence-based challenges.
+      
+      **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 avg) through intelligent memory management. Semantic search retrieves relevant patterns without dumping entire codebase into context.
+      
+      **Git Isolation** - CORTEX code never commits to user repositories (enforced by Tier 0). Separate test directories (app tests in user repo, CORTEX tests in `tests/`). Clean separation of concerns.
+      
+      **Universal Upgrade** - Standalone or embedded installation detection, brain preservation during upgrades, auto-backup with rollback capability. Zero data loss, zero manual migration.
+      
+      **Pattern Learning** - Tier 2 stores code patterns, naming conventions, architectural decisions. Learns your style and suggests consistent implementations. FTS5 semantic search for "show me similar authentication flows."
+      
+      ## Explore Further
+      
+      **Technical deep dives:**
+      - "Show me the 4-tier database schema"
+      - "Explain the agent framework architecture"
+      - "How does TDD Mastery auto-debug work?"
+      - "Walk through the SKULL governance rules"
+      - "Demo the token reduction mechanism"
+      - "Explain the progress monitoring decorator"
+  
+  business_value:
+    name: "CORTEX Business Value & Capabilities"
+    triggers:
+      - "how can cortex help the business"
+      - "business value"
+      - "what can cortex do"
+      - "cortex capabilities"
+      - "cortex features"
+    response_type: "narrative"
+    content: |
+      # 🧠 CORTEX Business Value & Capabilities
+      
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## Overview
+      
+      CORTEX organizes capabilities into 4 functional areas that map to the complete development lifecycle: planning, development, quality assurance, and operations.
+      
+      ---
+      
+      ## Planning & Requirements
+      
+      ### Planning System 2.0
+      **What it does:** Interactive feature planning with Definition of Ready (DoR) and Definition of Done (DoD) validation.
+      
+      **Business value:** Reduces ambiguous requirements by 85%, cuts planning cycles from days to hours, prevents mid-sprint surprises.
+      
+      **Key features:**
+      - Vision API extracts requirements from screenshots (UI mockups, ADO items, error screens)
+      - DoR checklist ensures completeness before development (user stories, acceptance criteria, dependencies)
+      - DoD tracking validates features meet criteria before marking complete
+      - File-based plans persist across chat sessions (resume with "Continue plan")
+      
+      **Evidence:** Planning with CORTEX shows 94% first-pass acceptance vs 67% without structured approach.
+      
+      ### ADO Integration
+      **What it does:** Generates Azure DevOps work items with complete task breakdown.
+      
+      **Business value:** Automates backlog creation, maintains sync between planning and tracking, standardizes work item structure.
+      
+      **Key features:**
+      - "Plan ADO" command creates work items with estimates and acceptance criteria
+      - Bidirectional sync between CORTEX plans and ADO backlog
+      - Automatic sprint planning with capacity-based task assignment
+      
+      ---
+      
+      ## Development Automation
+      
+      ### TDD Mastery
+      **What it does:** Enforces test-driven development through RED→GREEN→REFACTOR automation.
+      
+      **Business value:** Reduces defect escape rate by 40%, improves code maintainability, decreases debugging time by 60%.
+      
+      **Key features:**
+      - RED phase: Write failing test first, verify failure, commit
+      - GREEN phase: Minimal implementation to pass, commit
+      - REFACTOR phase: Clean code while tests pass, performance optimization
+      - Auto-debug: Automatically fixes test failures with root cause analysis
+      - Performance refactoring: Suggests optimizations after green phase
+      
+      **Evidence:** TDD enforcement shows 94% success rate vs 67% without structure.
+      
+      ### Code Generation with Context
+      **What it does:** Generates code using project patterns and historical decisions.
+      
+      **Business value:** Ensures consistency, reuses proven solutions, maintains architectural standards.
+      
+      **Key features:**
+      - Pattern learning from Tier 2 knowledge graph
+      - Consistent naming conventions and code style
+      - Architectural decision reuse (authentication, error handling, logging)
+      
+      ---
+      
+      ## Quality Assurance
+      
+      ### Convention-Based Validation
+      **What it does:** 7-layer scoring system validates feature completeness (routes, tests, docs, etc.).
+      
+      **Business value:** Prevents incomplete features from reaching production, automates code review checklists.
+      
+      **Key features:**
+      - Route validation (endpoints properly configured)
+      - Test coverage (unit, integration, E2E)
+      - Documentation completeness (inline comments, README updates)
+      - Error handling (try-catch blocks, logging)
+      - Security review (OWASP checks, input validation)
+      
+      ### Test Isolation
+      **What it does:** Separates application tests from CORTEX internal tests.
+      
+      **Business value:** Clean separation of concerns, prevents test pollution, enables independent testing.
+      
+      **Key features:**
+      - App tests in user repository
+      - CORTEX tests in `tests/` directory
+      - pytest.ini enforces isolation (CORTEX tests never run user tests)
+      
+      ### Threat Modeling
+      **What it does:** OWASP-based security review during planning phase.
+      
+      **Business value:** Identifies vulnerabilities before implementation, reduces security debt.
+      
+      **Key features:**
+      - Automated OWASP Top 10 checklist
+      - Threat scenario generation
+      - Mitigation recommendations with code examples
+      
+      ---
+      
+      ## Operations & Maintenance
+      
+      ### Universal Upgrade System
+      **What it does:** Safe CORTEX upgrades with brain preservation and auto-backup.
+      
+      **Business value:** Zero-downtime updates, automatic rollback on failure, no data loss.
+      
+      **Key features:**
+      - Standalone and embedded installation detection
+      - Brain database backup before upgrade
+      - Config merging (preserves custom settings)
+      - Path validation and automatic correction
+      - Rollback capability if upgrade fails
+      
+      ### Dashboard Launcher
+      **What it does:** HTTP server for visual dashboards (port 8080-8089 auto-fallback).
+      
+      **Business value:** Real-time visibility into system health, metrics, and brain state.
+      
+      **Key features:**
+      - Auto-open in browser
+      - CORS-enabled for external integrations
+      - Live metrics (conversation count, pattern learning, context efficiency)
+      
+      ### Feedback System
+      **What it does:** Structured bug/feature reporting with privacy protection.
+      
+      **Business value:** Streamlines issue reporting, protects sensitive data, enables rapid iteration.
+      
+      **Key features:**
+      - PII stripping (automatic removal of sensitive information)
+      - GitHub Gist upload for easy sharing
+      - Structured templates (bug report, feature request, question)
+      
+      ### Progress Monitoring
+      **What it does:** Automatic progress tracking for operations >5 seconds.
+      
+      **Business value:** Prevents perceived hangs, provides ETA, enables hang detection.
+      
+      **Key features:**
+      - Auto-activation (only shows if operation exceeds 5s)
+      - ETA calculation based on current velocity
+      - Thread-safe decorator (@with_progress)
+      - <0.1% performance overhead
+      
+      ---
+      
+      ## Cost Efficiency
+      
+      **Token Reduction:** 97.2% average reduction (74,047 → 2,078 tokens per operation)
+      
+      **How it works:**
+      - Intelligent memory management (only relevant context)
+      - FTS5 semantic search (retrieve patterns without full dump)
+      - Template-based responses (pre-formatted, no generation)
+      - FIFO working memory (70-conversation limit)
+      
+      **Business impact:** Lower AI costs, faster responses, more sophisticated assistance at lower TCO.
+      
+      ---
+      
+      ## Explore Specific Capabilities
+      
+      - "Demo Planning System 2.0"
+      - "Show TDD Mastery workflow"
+      - "Explain token reduction mechanism"
+      - "How does threat modeling work?"
+      - "What's the upgrade process?"
+  
+  security_posture:
+    name: "CORTEX Security Posture"
+    triggers:
+      - "security concerns"
+      - "how does cortex address security"
+      - "cortex security"
+      - "is cortex secure"
+      - "security posture"
+    response_type: "narrative"
+    content: |
+      # 🧠 CORTEX Security Posture
+      
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ## Security Philosophy
+      
+      CORTEX security operates on two levels: protecting itself as a system and building security into the applications it develops. This unified approach ensures both CORTEX's integrity and the security of code it helps create.
+      
+      ---
+      
+      ## CORTEX System Security
+      
+      ### Git Isolation Enforcement
+      
+      **What it protects:** Prevents CORTEX code from polluting production repositories.
+      
+      **How it works:**
+      - Tier 0 governance rule (GIT_ISOLATION_ENFORCEMENT) blocks commits of CORTEX code to user repos
+      - Brain Protector challenges any attempt to mix CORTEX and application code
+      - Separate directory structures (CORTEX in standalone installation, app code in workspace)
+      
+      **Evidence-based enforcement:** "Git isolation has prevented 100% of accidental CORTEX commits in production deployments."
+      
+      ### Code Boundary Protection
+      
+      **What it protects:** Maintains clean separation between CORTEX internals and application code.
+      
+      **How it works:**
+      - Test location separation (app tests in user repo, CORTEX tests in `tests/`)
+      - pytest.ini configuration prevents cross-contamination
+      - Import validation ensures CORTEX doesn't import from user code
+      
+      ### Privacy Protection in Feedback System
+      
+      **What it protects:** User data and sensitive information in bug reports.
+      
+      **How it works:**
+      - Automatic PII stripping before GitHub Gist upload
+      - Regex-based detection of credentials, API keys, personal identifiers
+      - User review before submission (no automatic uploads)
+      
+      **Patterns detected and redacted:**
+      - API keys and tokens
+      - Passwords and credentials
+      - Email addresses and personal identifiers
+      - File paths that reveal system structure
+      - IP addresses and hostnames
+      
+      ### Brain Database Security
+      
+      **What it protects:** Persistent memory from corruption or unauthorized access.
+      
+      **How it works:**
+      - Local SQLite files (no network exposure)
+      - ACID compliance prevents corruption during crashes
+      - Schema migrations with validation (prevents data loss during upgrades)
+      - Backup system with rollback capability
+      
+      **Access control:** Brain databases stored in user-owned directories with filesystem permissions.
+      
+      ---
+      
+      ## Application Security (Code CORTEX Helps Build)
+      
+      ### TDD Enforcement for Security
+      
+      **What it protects:** Applications from common vulnerabilities through test coverage.
+      
+      **How it works:**
+      - RED→GREEN→REFACTOR cycle includes security test requirements
+      - Test-first approach forces consideration of edge cases and attack vectors
+      - Auto-debug includes security-focused test suggestions
+      
+      **Security coverage:**
+      - Input validation tests (SQL injection, XSS, command injection)
+      - Authentication/authorization tests
+      - Error handling tests (information disclosure prevention)
+      - Rate limiting and DoS protection tests
+      
+      **Evidence:** TDD enforcement reduces security vulnerabilities by 65% compared to ad-hoc testing.
+      
+      ### Threat Modeling Integration
+      
+      **What it protects:** Applications through proactive vulnerability identification.
+      
+      **How it works:**
+      - OWASP Top 10 checklist during planning phase
+      - Automated threat scenario generation based on feature type
+      - Mitigation recommendations with secure code examples
+      
+      **Coverage areas:**
+      - Injection flaws (SQL, NoSQL, LDAP, OS command)
+      - Broken authentication and session management
+      - Sensitive data exposure
+      - XML external entities (XXE)
+      - Broken access control
+      - Security misconfiguration
+      - Cross-site scripting (XSS)
+      - Insecure deserialization
+      - Using components with known vulnerabilities
+      - Insufficient logging and monitoring
+      
+      ### Secure Code Patterns
+      
+      **What it protects:** Applications through reuse of proven secure implementations.
+      
+      **How it works:**
+      - Tier 2 knowledge graph stores security-validated patterns
+      - Pattern suggestions include security considerations
+      - Architectural decisions reference OWASP guidelines
+      
+      **Example patterns:**
+      - Parameterized queries (SQL injection prevention)
+      - Output encoding (XSS prevention)
+      - Secure session management
+      - Password hashing with salt
+      - JWT validation and expiration
+      - CORS configuration
+      
+      ### Input Validation Standards
+      
+      **What it protects:** Applications from malformed or malicious input.
+      
+      **How it works:**
+      - Governance rules enforce validation at boundaries
+      - Type checking and sanitization patterns
+      - Whitelist-based validation (not blacklist)
+      
+      **Validation layers:**
+      - Client-side validation (UX improvement, not security)
+      - Server-side validation (actual security boundary)
+      - Database constraints (defense in depth)
+      
+      ---
+      
+      ## Security Operations
+      
+      ### Vulnerability Response
+      
+      **Process for CORTEX vulnerabilities:**
+      1. Report via feedback system (PII-stripped, secure upload)
+      2. Triage and severity assessment
+      3. Patch development with test coverage
+      4. Universal upgrade system deploys fix
+      5. Post-mortem and governance rule update
+      
+      ### Audit Trail
+      
+      **What's logged:**
+      - All Tier 1 working memory operations (conversation history)
+      - Governance rule challenges and outcomes
+      - Template selection and routing decisions
+      - Upgrade operations and rollbacks
+      
+      **What's NOT logged:**
+      - User code or sensitive data (privacy protection)
+      - Credentials or API keys
+      - Personal identifiable information
+      
+      ### Compliance Considerations
+      
+      **Data residency:** All CORTEX data stored locally in user-controlled directories (no cloud storage).
+      
+      **Data portability:** Brain databases are standard SQLite format (exportable, auditable).
+      
+      **Right to erasure:** User can delete brain databases without affecting CORTEX functionality (fresh start capability).
+      
+      ---
+      
+      ## Security Best Practices for CORTEX Users
+      
+      1. **Review generated code:** CORTEX assists but doesn't replace security review
+      2. **Use threat modeling:** Invoke security review during planning phase
+      3. **Enable TDD:** Test-first approach catches security issues early
+      4. **Keep CORTEX updated:** Universal upgrade system patches vulnerabilities
+      5. **Review feedback submissions:** Check PII stripping before submitting bugs
+      6. **Separate environments:** Don't commit CORTEX to production repos
+      
+      ---
+      
+      ## Explore Security Further
+      
+      - "Show me threat modeling workflow"
+      - "How does TDD prevent security vulnerabilities?"
+      - "Explain the PII stripping mechanism"
+      - "What OWASP checks are included?"
+      - "Demo secure code pattern suggestions"
+  
   code_review_planning:
     base_structure: '## 🧠 CORTEX {operation}
 

@@ -1,5 +1,72 @@
 # Changelog
 
+## [3.8.2] - 2025-12-07
+
+### Added - Professional Introduction & Business Value Templates
+
+**New Presentation Templates (6 total):**
+- `introduction_professional` - General audience, balanced technical + business value
+- `introduction_leadership` - ROI focus, 97.2% token reduction emphasized, velocity metrics
+- `introduction_product` - Feature delivery, DoR/DoD validation, planning workflows
+- `introduction_engineering` - Technical architecture, 4-tier brain, TDD automation, agent framework
+- `business_value` - Capability-based organization (Planning, Development, Quality, Operations)
+- `security_posture` - Unified narrative (CORTEX security + application security)
+
+**Format Innovation:**
+- Direct address narrative format (NOT 5-part operational format)
+- 5-section structure for introductions: What/Why/Tech/How/Explore
+- Professional tone (no enthusiasm markers, evidence-based claims)
+- Progressive disclosure (4-5 exploration questions per template)
+- Audience-aware content adaptation
+
+**Routing Enhancement:**
+- Priority 1 routing for introduction/business/security templates
+- Intelligent audience detection:
+  - Explicit phrases: "to leadership", "to product", "to engineers"
+  - Implicit keywords: "ROI", "features", "architecture"
+  - Default fallback: professional variant
+- Conflict resolution: "introduce yourself" overrides casual "hi/hello" greeting
+
+**Documentation:**
+- Format exception documented in CORTEX.prompt.md
+- New commands: `introduce yourself`, `how can cortex help the business`, `cortex security`
+- Audience detection examples and usage patterns
+- Template count updated: 18 → 24 (18 operational + 6 presentation)
+
+**Template Visual Standards:**
+- Created `cortex-brain/documents/planning/template-visual-standards.md`
+- Standardized progress bar usage (empty for 0%, filled for completion)
+- Checkbox conventions (☐ pending, ☑ complete)
+- Status indicator consistency across templates
+
+**Testing:**
+- Comprehensive test plan: `cortex-brain/documents/planning/template-enhancement-test-plan.md`
+- 20+ manual validation test cases
+- Automated test scenarios documented for future implementation
+- Format validation, audience detection, conflict resolution coverage
+
+**Files Modified:**
+- `cortex-brain/response-templates.yaml` - 6 new templates, metadata updated (18→24)
+- `cortex-brain/response-routing-rules.yaml` - 6 new routes with audience detection
+- `.github/prompts/CORTEX.prompt.md` - Format exception, new commands, examples
+- `VERSION` - 3.8.1 → 3.8.2
+
+**Files Added:**
+- `cortex-brain/documents/planning/template-visual-standards.md` - Visual element standards
+- `cortex-brain/documents/planning/template-enhancement-test-plan.md` - Test documentation
+- `cortex-brain/documents/planning/template-enhancement-plan-20251207.yaml` - Feature plan
+
+**Business Value:**
+- Professional stakeholder presentations enabled
+- Business value articulation with metrics (97.2% token reduction, 94% vs 67% TDD success)
+- Security posture documentation for compliance reviews
+- Organized capability discovery for evaluation
+
+**Extensibility:**
+- Template naming convention: `introduction_{audience}` enables easy expansion
+- Routing logic scales (no hardcoded assumptions)
+- New audiences can be added without refactoring
+
 ## [3.8.1] - 2025-12-06
 
 ### Changed - Response Format v2.0 Elimination (v3.0 Only)
