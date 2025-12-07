@@ -4,9 +4,8 @@
     padding: 0; 
     display: flex;
     gap: 1.5rem;
-    height: calc(100vh - 200px);
-    min-height: 600px;
-    overflow: hidden;
+    min-height: calc(100vh - 200px);
+    align-items: flex-start;
 }
 
 .onboarding-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
@@ -20,11 +19,13 @@
 .onboarding-progress-bar { height: 8px; background: rgba(255,255,255,.08); border-radius: 6px; margin: .75rem 0 1rem; overflow: hidden; }
 .onboarding-progress-bar .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); transition: width 0.3s ease; }
 
-/* Wizard Stepper Navigation (Left Sidebar) */
+/* Wizard Stepper Navigation (Left Sidebar - Fixed Position) */
 .wizard-stepper { 
     width: 220px;
     flex-shrink: 0;
-    height: 100%;
+    position: sticky;
+    top: 20px;
+    max-height: calc(100vh - 100px);
     overflow-y: auto;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
@@ -140,33 +141,14 @@
     margin-left: auto;
 }
 
-/* Wizard Content Area (Right Side) */
+/* Wizard Content Area (Right Side - Natural Flow) */
 .wizard-content-area {
     flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
+    min-width: 0;
+    padding-bottom: 2rem;
 }
 
-.wizard-content-area::-webkit-scrollbar {
-    width: 8px;
-}
-
-.wizard-content-area::-webkit-scrollbar-track {
-    background: rgba(255,255,255,.05);
-    border-radius: 10px;
-}
-
-.wizard-content-area::-webkit-scrollbar-thumb {
-    background: var(--accent-primary);
-    border-radius: 10px;
-}
-
-.wizard-content-area::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-secondary);
-}
+/* Remove all custom scrollbars for content area - let page scroll naturally */
 
 /* Step Badge (Yellow, Top-Right) */
 .step-badge {
@@ -208,40 +190,13 @@
     border-radius: 12px; 
     padding: 2rem 1.5rem;
     backdrop-filter: blur(10px);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.stage-content-body {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 0.5rem;
-}
-
-.stage-content-body::-webkit-scrollbar {
-    width: 6px;
-}
-
-.stage-content-body::-webkit-scrollbar-track {
-    background: rgba(255,255,255,.05);
-    border-radius: 10px;
-}
-
-.stage-content-body::-webkit-scrollbar-thumb {
-    background: rgba(0,212,255,.5);
-    border-radius: 10px;
-}
-
-.stage-content-body::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-primary);
+    margin-bottom: 2rem;
 }
 
 .stage-header { 
     text-align: center;
     margin-bottom: 2rem;
     padding-top: 1rem;
-    flex-shrink: 0;
 }
 
 .stage-icon-large {
@@ -525,13 +480,12 @@
 @media (max-width: 1024px) {
     .onboarding-container {
         flex-direction: column;
-        height: auto;
-        min-height: calc(100vh - 200px);
+        min-height: auto;
     }
     
     .wizard-stepper {
+        position: static;
         width: 100%;
-        height: auto;
         max-height: 150px;
         display: flex;
         overflow-x: auto;
@@ -541,8 +495,7 @@
     }
     
     .wizard-content-area {
-        height: auto;
-        min-height: 500px;
+        width: 100%;
     }
     
     .wizard-step {
