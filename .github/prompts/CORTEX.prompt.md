@@ -92,6 +92,8 @@ ALL responses MUST use this 5-part structure:
 ### TDD Mastery
 - **Commands:** `start tdd`, `run tests`
 - **Guide:** `cortex-brain/brain-protection-rules.yaml` (TDD_ENFORCEMENT)
+- **NEW v3.8.1:** Enhanced with test file validation and quality detection
+- **Features:** RED→GREEN→REFACTOR automation, per-layer coverage validation, empty test detection
 
 ### Dashboard Launcher
 - **Commands:** `load dashboard`, `dashboard`
@@ -199,6 +201,8 @@ src/
 **Brain Protection (SKULL):** `cortex-brain/brain-protection-rules.yaml`
 - **TDD_ENFORCEMENT:** RED→GREEN→REFACTOR mandatory
 - **RED_PHASE_VALIDATION:** Tests must fail before implementation
+- **TDD_TEST_FILE_VALIDATION:** All production code must have test files (NEW v3.8.1)
+- **TDD_EMPTY_TEST_DETECTION:** No placeholder/empty tests allowed (NEW v3.8.1)
 - **GIT_ISOLATION_ENFORCEMENT:** CORTEX code never in user repos
 - **TEST_LOCATION_SEPARATION:** App tests in user repo, CORTEX in `tests/`
 - **SKULL_TRANSFORMATION_VERIFICATION:** Operations must produce changes

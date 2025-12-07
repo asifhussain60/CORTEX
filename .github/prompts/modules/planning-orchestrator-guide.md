@@ -89,21 +89,79 @@ Each autonomous execution generates a detailed log:
 
 ## TDD Requirements
 
-All plans automatically include 4 DoR + 4 DoD TDD requirements:
+**ENHANCED in v3.8.1:** New validation rules ensure comprehensive test coverage.
+
+All plans automatically include 6 DoR + 6 DoD TDD requirements:
 
 **Definition of Ready:**
 1. TDD Mastery workflow MUST be followed (RED→GREEN→REFACTOR)
 2. Tests MUST fail before implementation (RED phase validation)
 3. Git checkpoints required at RED, GREEN, REFACTOR phases
 4. Test coverage targets defined for all new code
+5. **NEW:** Test files MUST exist for all production code (per-layer validation)
+6. **NEW:** No empty/placeholder tests allowed (quality validation)
 
 **Definition of Done:**
 1. All code follows TDD workflow with git checkpoints
 2. Git history shows test-first commits (RED phase before GREEN phase)
 3. All tests pass with minimum coverage thresholds met
 4. No test skips or ignores without documented justification
+5. **NEW:** Per-layer coverage thresholds met (Domain: 90%, Application: 85%, Infrastructure: 70%, API: 80%)
+6. **NEW:** No empty placeholder tests (UnitTest1, Test1, etc.) in codebase
 
 **Cannot Be Bypassed:** TDD requirements injected automatically before validation.
+
+### Coverage Validation (NEW)
+
+The planning system now validates test coverage using two Tier 0 instincts:
+
+**TDD_TEST_FILE_VALIDATION (Severity: BLOCKED)**
+- Scans production code by architectural layer
+- Validates corresponding test files exist
+- Enforces minimum coverage per layer:
+  - Domain: 90% minimum
+  - Application: 85% minimum
+  - Infrastructure: 70% minimum
+  - API: 80% minimum
+- Blocks commit/deployment if thresholds not met
+
+**TDD_EMPTY_TEST_DETECTION (Severity: WARNING)**
+- Detects empty test methods
+- Identifies placeholder test names (Test1, UnitTest1)
+- Flags meaningless assertions (Assert.True(true))
+- Warns about tests with zero assertions
+- Provides cleanup guidance
+
+### Validation During Execution
+
+Autonomous execution now includes test validation at each phase:
+
+**After RED Phase:**
+- Validates test file created in correct location
+- Scans for empty/placeholder patterns
+- Ensures test actually fails
+
+**After GREEN Phase:**
+- Validates coverage increase per layer
+- Checks minimum test count per production file
+- Verifies test file completeness
+
+**After REFACTOR Phase:**
+- Validates test file completeness across all layers
+- Scans for and reports empty/placeholder tests
+- Ensures tests still pass after cleanup
+
+**Example Validation Output:**
+```
+Phase 2 Complete - Running TDD Validation...
+✅ Domain Layer: 92% coverage (threshold: 90%)
+✅ Application Layer: 87% coverage (threshold: 85%)
+❌ Infrastructure Layer: 65% coverage (threshold: 70%)
+⚠️  Warning: 2 placeholder tests detected in Tests/UnitTest1.cs
+
+⏸️  Execution Paused - Infrastructure coverage below threshold
+Required: Add TaskRepositoryTests.cs (3 tests minimum)
+```
 
 ---
 
