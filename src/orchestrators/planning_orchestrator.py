@@ -833,6 +833,16 @@ class PlanningOrchestrator:
             except Exception as e:
                 logger.warning(f"Git checkpoint failed for Phase 1: {e}")
             
+            # Phase 1 always gets documented (foundation phase)
+            if self._should_document_phase(1, 3, "Phase 1: Foundation"):
+                phase_doc_reminder = self._generate_documentation_reminder(
+                    context="phase_completion",
+                    plan_name=feature_name,
+                    phase_num=1,
+                    phase_name="Foundation"
+                )
+                logger.info(phase_doc_reminder)
+            
             if not phase_1_approved:
                 return (True, output_path, "Phase 1 complete, Phase 2 pending user approval")
             
@@ -869,6 +879,9 @@ class PlanningOrchestrator:
             except Exception as e:
                 logger.warning(f"Git checkpoint failed for Phase 2: {e}")
             
+            # Phase 2 documentation skipped (routine implementation - not milestone)
+            # Intelligence filter: Only document foundation and final phases
+            
             if not phase_2_approved:
                 return (True, output_path, "Phase 2 complete, Phase 3 pending user approval")
             
@@ -904,6 +917,16 @@ class PlanningOrchestrator:
                 logger.info("✅ Git checkpoint created for Phase 3")
             except Exception as e:
                 logger.warning(f"Git checkpoint failed for Phase 3: {e}")
+            
+            # Phase 3 always gets documented (final phase)
+            if self._should_document_phase(3, 3, "Phase 3: Validation & Deployment"):
+                phase_doc_reminder = self._generate_documentation_reminder(
+                    context="phase_completion",
+                    plan_name=feature_name,
+                    phase_num=3,
+                    phase_name="Validation & Deployment"
+                )
+                logger.info(phase_doc_reminder)
             
             if not phase_3_approved:
                 return (True, output_path, "Phase 3 complete, pending final approval")
@@ -1517,6 +1540,9 @@ class PlanningOrchestrator:
                         'error': str(e),
                         'timestamp': datetime.now().isoformat()
                     })
+                
+                # Intelligent documentation: Only document significant phases
+                # (Not in autonomous mode - documented at end instead)
             
             # Complete the plan
             completion_result = self.complete_plan(plan_filename)
@@ -1525,6 +1551,9 @@ class PlanningOrchestrator:
             progress_bar = self._generate_progress_bar(completed_tasks, total_tasks, width=10)
             percentage = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 100
             phases_summary = ", ".join([f"Phase {i+1}: {phase.get('name', phase.get('phase_name', 'N/A'))}" for i, phase in enumerate(phases)])
+            
+            # Generate learning library link for autonomous completion
+            learning_library_link = self._generate_learning_library_link(plan_id)
             
             # Format output directly (template system fallback not working reliably)
             rendered_output = f"""## 🧠 CORTEX Autonomous Plan Execution
@@ -1550,11 +1579,15 @@ class PlanningOrchestrator:
 **Status:** completed
 **Phases:** {phases_summary}
 
+{completion_result.get('documentation_reminder', '')}
+{learning_library_link}
+
 ### 🔍 Next Steps
 
 1. Review execution log
 2. Check git history for phase checkpoints
-3. {completion_result.get('documentation_reminder', 'Document learnings')}
+3. Launch learning library dashboard: `load dashboard`
+4. Review documented learnings and outcomes
 """
             
             logger.info(f"\n{rendered_output}")
@@ -1568,6 +1601,7 @@ class PlanningOrchestrator:
                 'execution_log': execution_log,
                 'completion_result': completion_result,
                 'documentation_reminder': completion_result.get('documentation_reminder', ''),
+                'learning_library_link': learning_library_link,
                 'rendered_output': rendered_output
             }
             
@@ -1712,44 +1746,115 @@ class PlanningOrchestrator:
         
         return "\n".join(log_lines)
     
+    def _should_document_phase(self, phase_num: int, total_phases: int, phase_name: str) -> bool:
+        """
+        Determine if a phase warrants learning library documentation.
+        
+        Intelligence Filter:
+        - Phase 1 (Foundation): Always document (sets architectural direction)
+        - Final phase: Always document (captures completion state)
+        - Integration/Consolidation phase: Always document (refactoring insights)
+        - Middle phases: Only if explicitly marked as milestone
+        
+        Args:
+            phase_num: Current phase number (1-indexed)
+            total_phases: Total number of phases in plan
+            phase_name: Name of the phase
+        
+        Returns:
+            True if phase should trigger documentation
+        """
+        # Always document foundation phase
+        if phase_num == 1:
+            return True
+        
+        # Always document final phase
+        if phase_num == total_phases:
+            return True
+        
+        # Always document integration/consolidation phases
+        if "integration" in phase_name.lower() or "consolidation" in phase_name.lower():
+            return True
+        
+        # Document milestone phases (keywords: milestone, major, critical)
+        milestone_keywords = ["milestone", "major", "critical", "core"]
+        if any(keyword in phase_name.lower() for keyword in milestone_keywords):
+            return True
+        
+        # Skip documentation for routine implementation phases
+        return False
+    
+    def _generate_learning_library_link(self, plan_name: str, phase_num: Optional[int] = None) -> str:
+        """
+        Generate learning library dashboard link.
+        
+        Args:
+            plan_name: Name of the plan
+            phase_num: Optional phase number (for phase-specific links)
+        
+        Returns:
+            Formatted dashboard link with launch instructions
+        """
+        phase_suffix = f" - Phase {phase_num}" if phase_num else ""
+        return (
+            f"\n\n📚 **View Learning Library:**\n"
+            f"Launch dashboard to review documentation: `load dashboard`\n"
+            f"Documentation for: {plan_name}{phase_suffix}\n"
+            f"Location: cortex-brain/documents/learning/\n"
+        )
+    
     def _generate_documentation_reminder(self, context: str, **kwargs) -> str:
         """
         Generate documentation reminder for learning library.
         
         Args:
-            context: Context of the reminder (plan_completion, plan_approval, ado_completion)
+            context: Context of the reminder (plan_completion, plan_approval, ado_completion, phase_completion)
             **kwargs: Additional context-specific parameters
+                - plan_name: Name of the plan
+                - phase_num: Phase number (for phase completions)
+                - total_phases: Total phases (for intelligence filtering)
+                - phase_name: Phase name (for intelligence filtering)
+                - work_item_id: ADO work item ID
+                - title: ADO work item title
         
         Returns:
-            Formatted documentation reminder string
+            Formatted documentation reminder string with learning library link
         """
+        plan_name = kwargs.get('plan_name', 'N/A')
+        phase_num = kwargs.get('phase_num')
+        
         reminders = {
             "plan_completion": (
-                "\n📚 DOCUMENTATION REMINDER:\n"
-                "Please document this work in the learning library using docsify.\n"
+                "\n📚 DOCUMENTATION & LEARNING LIBRARY:\n"
+                "Documentation has been created in the learning library.\n"
                 "Location: cortex-brain/documents/learning/milestones/\n"
-                f"Plan: {kwargs.get('plan_name', 'N/A')}\n"
-                "Generate markdown documentation capturing key learnings, decisions, and outcomes.\n"
-                "The documentation will be accessible via the learning dashboard (load dashboard).\n"
-                "Cross-machine compatible: All docs are in cortex-brain/documents/learning/"
+                f"Plan: {plan_name}\n"
+                "Content: Key learnings, decisions, and outcomes captured.\n"
+                f"{self._generate_learning_library_link(plan_name)}"
+            ),
+            "phase_completion": (
+                "\n📚 PHASE DOCUMENTATION:\n"
+                f"Phase {phase_num} documentation created in learning library.\n"
+                "Location: cortex-brain/documents/learning/milestones/\n"
+                f"Plan: {plan_name}\n"
+                "Content: Phase-specific decisions, challenges, and solutions.\n"
+                f"{self._generate_learning_library_link(plan_name, phase_num)}"
             ),
             "plan_approval": (
                 "\n📚 DOCUMENTATION REMINDER:\n"
                 "Consider documenting the planning strategy in the learning library.\n"
                 "Location: cortex-brain/documents/learning/planning_strategies/\n"
-                f"Plan: {kwargs.get('plan_name', 'N/A')}\n"
+                f"Plan: {plan_name}\n"
                 "Capture: Requirements, scope, approach, and any key decisions made during planning.\n"
-                "Access via: load dashboard\n"
-                "Cross-machine compatible: All docs are in cortex-brain/documents/learning/"
+                f"{self._generate_learning_library_link(plan_name)}"
             ),
             "ado_completion": (
-                "\n📚 DOCUMENTATION REMINDER:\n"
-                "Document this ADO work item in the learning library.\n"
+                "\n📚 DOCUMENTATION & LEARNING LIBRARY:\n"
+                "ADO work item documentation created in learning library.\n"
                 "Location: cortex-brain/documents/learning/ado_workflows/\n"
                 f"Work Item: {kwargs.get('work_item_id', 'N/A')} - {kwargs.get('title', 'N/A')}\n"
-                "Capture: Implementation details, technical decisions, and outcomes.\n"
-                "Access via: load dashboard\n"
-                "Cross-machine compatible: All docs are in cortex-brain/documents/learning/"
+                "Content: Implementation details, technical decisions, and outcomes.\n"
+                + self._generate_learning_library_link(f"ADO-{kwargs.get('work_item_id', 'N/A')}")
             )
         }
         
