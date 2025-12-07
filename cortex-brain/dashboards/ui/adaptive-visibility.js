@@ -149,7 +149,7 @@ function updateProjectTypeBadge(projectType) {
     };
     
     badge.textContent = typeLabels[projectType] || typeLabels.unknown;
-    badge.className = `project-type-badge ${projectType}`;
+    badge.className = `repo-type ${projectType}`;
 }
 
 /**

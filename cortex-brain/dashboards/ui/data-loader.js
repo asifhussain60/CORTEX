@@ -29,7 +29,8 @@ const DATA_FILES = [
     'security.json',
     'architecture.json',
     'code-organization.json',
-    'vendors.json'
+    'vendors.json',
+    'reconciliation.json'           // NEW: Reconciliation report
 ];
 
 /**
@@ -141,7 +142,8 @@ export async function loadDashboardData(source = 'mock') {
             security: results[4],
             architecture: results[5],
             codeOrganization: results[6],
-            vendors: results[7]
+            vendors: results[7],
+            reconciliation: results[8]       // NEW: Reconciliation report
         };
         
         // Validate data (temporarily disabled for debugging)
