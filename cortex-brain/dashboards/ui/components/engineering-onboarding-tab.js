@@ -595,7 +595,7 @@ ${diagram.mermaid_code}
                     </div>
                     <div class="solution-meta">
                         <span class="solution-project-count">${solution.project_count} projects</span>
-                        <span class="expand-icon">${isExpanded ? '▼' : '▶'}</span>
+                        <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
                     </div>
                 </div>
                 <div class="solution-projects ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">
@@ -736,7 +736,7 @@ ${diagram.mermaid_code}
                             Complexity: ${controller.complexity}
                         </span>
                         <span class="risk-badge ${riskClass}">${controller.risk_level}</span>
-                        <span class="expand-icon">${isExpanded ? '▼' : '▶'}</span>
+                        <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
                     </div>
                 </div>
                 <div class="controller-details ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">
@@ -862,7 +862,7 @@ ${diagram.mermaid_code}
                             ${service.complexity}
                         </span>
                         <span class="risk-badge ${riskClass}">${service.risk_level}</span>
-                        <span class="expand-icon">${isExpanded ? '▼' : '▶'}</span>
+                        <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
                     </div>
                 </div>
                 <div class="service-details ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">
@@ -1045,7 +1045,7 @@ ${diagram.mermaid_code}
                         <h4 class="entity-name">${entity.name}</h4>
                         <span class="entity-table">Table: ${entity.table}</span>
                     </div>
-                    <span class="expand-icon">${isExpanded ? '▼' : '▶'}</span>
+                    <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
                 </div>
                 <div class="entity-details ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">
                     ${entity.properties ? `
@@ -1203,7 +1203,7 @@ ${diagram.mermaid_code}
                     <div class="hotspot-metrics">
                         <span class="complexity-badge very-high">${hotspot.complexity}</span>
                         <span class="loc-badge">${this.formatNumber(hotspot.loc)} LOC</span>
-                        <span class="expand-icon">${isExpanded ? '▼' : '▶'}</span>
+                        <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
                     </div>
                 </div>
                 <div class="hotspot-details ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">

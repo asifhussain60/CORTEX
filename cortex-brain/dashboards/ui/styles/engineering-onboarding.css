@@ -19,37 +19,18 @@
 .onboarding-progress-bar { height: 8px; background: rgba(255,255,255,.08); border-radius: 6px; margin: .75rem 0 1rem; overflow: hidden; }
 .onboarding-progress-bar .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); transition: width 0.3s ease; }
 
-/* Wizard Stepper Navigation (Left Sidebar - Fixed Position) */
+/* Wizard Stepper Navigation (Left Sidebar - Sticky, No Scrollbar) */
 .wizard-stepper { 
     width: 220px;
     flex-shrink: 0;
     position: sticky;
     top: 20px;
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
     padding: 1.5rem 1rem;
     backdrop-filter: blur(10px);
-}
-
-.wizard-stepper::-webkit-scrollbar {
-    width: 6px;
-}
-
-.wizard-stepper::-webkit-scrollbar-track {
-    background: rgba(255,255,255,.05);
-    border-radius: 10px;
-}
-
-.wizard-stepper::-webkit-scrollbar-thumb {
-    background: var(--accent-primary);
-    border-radius: 10px;
-}
-
-.wizard-stepper::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-secondary);
+    align-self: flex-start;
 }
 
 .wizard-step {
@@ -340,9 +321,29 @@
 .controllers-list, .services-list, .entities-list, .repositories-list, .optimizations-list, .hotspots-list, .code-smells-list, .best-practices-list { display: grid; grid-template-columns: 1fr; gap: .5rem; }
 .controller-card, .service-card, .entity-card, .repository-card, .optimization-card, .code-smell-card, .best-practice-card, .pattern-card, .test-type-card, .security-area-card, .performance-area-card, .roadmap-quarter { background: rgba(255,255,255,.06); border: 1px solid var(--glass-border); border-radius: 10px; padding: .75rem; }
 .controller-header, .service-header, .entity-header, .solution-header, .hotspot-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-.controller-details, .service-details, .entity-details, .solution-projects, .hotspot-details { display: none; }
-.controller-details.expanded, .service-details.expanded, .entity-details.expanded, .solution-projects.expanded, .hotspot-details.expanded { display: block; animation: slideDown .2s ease; }
-.expand-icon { color: var(--text-secondary); }
+
+/* Smooth Collapsible Panels */
+.controller-details, .service-details, .entity-details, .solution-projects, .hotspot-details { 
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 0;
+}
+
+.controller-details.expanded, .service-details.expanded, .entity-details.expanded, .solution-projects.expanded, .hotspot-details.expanded { 
+    max-height: 3000px; /* Large enough for content */
+    opacity: 1;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+}
+
+.expand-icon { 
+    color: var(--text-secondary);
+    transition: transform 0.3s ease;
+}
+
+.expand-icon.expanded {
+    transform: rotate(90deg);
+}
 
 .complexity-badge { display: inline-block; border-radius: 6px; padding: .125rem .375rem; font-size: .75rem; border: 1px solid var(--glass-border); }
 .complexity-badge.low { color: var(--success); border-color: var(--success); }
