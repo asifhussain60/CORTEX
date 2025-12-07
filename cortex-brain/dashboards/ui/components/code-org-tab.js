@@ -9,6 +9,7 @@
  */
 
 import { showPanelSpinner } from '../shared-utils.js';
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
 
 /**
  * Render code organization tab
@@ -1261,8 +1262,6 @@ window.hideHeatmapTooltip = function() {
 };
 
 // BaseTabComponent wrapper
-import { BaseTabComponent } from '../core/BaseTabComponent.js';
-
 class CodeOrgTab extends BaseTabComponent {
     constructor() {
         super('code-org-container');

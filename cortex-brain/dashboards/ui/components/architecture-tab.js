@@ -9,6 +9,7 @@
  */
 
 import { showPanelSpinner } from '../shared-utils.js';
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
 
 /**
  * Render architecture tab
@@ -827,8 +828,6 @@ window.toggle3DView = function() {
 };
 
 // BaseTabComponent wrapper
-import { BaseTabComponent } from '../core/BaseTabComponent.js';
-
 class ArchitectureTab extends BaseTabComponent {
     constructor() {
         super('architecture-container');

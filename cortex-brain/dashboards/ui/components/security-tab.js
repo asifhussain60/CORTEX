@@ -9,6 +9,7 @@
  */
 
 import { showPanelSpinner } from '../shared-utils.js';
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
 
 /**
  * Render security tab
@@ -533,8 +534,6 @@ window.refreshSecurityScan = function() {
 };
 
 // BaseTabComponent wrapper
-import { BaseTabComponent } from '../core/BaseTabComponent.js';
-
 class SecurityTab extends BaseTabComponent {
     constructor() {
         super('security-container');

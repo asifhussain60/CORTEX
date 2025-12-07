@@ -9,6 +9,7 @@
  */
 
 import { showPanelSpinner } from '../shared-utils.js';
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
 
 /**
  * Render tech stack tab
@@ -1118,8 +1119,6 @@ window.hideTechTooltip = function() {
 };
 
 // BaseTabComponent wrapper
-import { BaseTabComponent } from '../core/BaseTabComponent.js';
-
 class TechStackTab extends BaseTabComponent {
     constructor() {
         super('tech-stack-container');

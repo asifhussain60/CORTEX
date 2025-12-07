@@ -9,6 +9,7 @@
  */
 
 import { showPanelSpinner } from '../shared-utils.js';
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
 
 /**
  * Render vendors tab
@@ -697,8 +698,6 @@ window.hideVendorTooltip = function(card) {
 };
 
 // BaseTabComponent wrapper
-import { BaseTabComponent } from '../core/BaseTabComponent.js';
-
 class VendorsTab extends BaseTabComponent {
     constructor() {
         super('vendors-container');

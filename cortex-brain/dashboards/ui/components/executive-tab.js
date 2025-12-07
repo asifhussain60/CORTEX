@@ -9,6 +9,7 @@
  */
 
 import { renderReconciliationWidget } from './reconciliation-widget-collapsible.js';
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
 
 /**
  * Render executive summary tab
@@ -677,8 +678,6 @@ function getPriorityColor(priority) {
 }
 
 // BaseTabComponent wrapper
-import { BaseTabComponent } from '../core/BaseTabComponent.js';
-
 class ExecutiveTab extends BaseTabComponent {
     constructor() {
         super('executive-container');

@@ -37,7 +37,6 @@ class OverviewTab extends BaseTabComponent {
  */
 export function renderOverview(data, container = null) {
     container = container || document.getElementById('overview-container');
-    const container = document.getElementById('overview-container');
     if (!container) {
         console.error('Overview container not found');
         return;
