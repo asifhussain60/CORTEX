@@ -235,7 +235,15 @@ class DataConsolidator:
         # Check for SQL injection vulnerabilities
         sql_injection_found = False
         for vuln in security.get('vulnerabilities', []):
-            if 'sql' in vuln.get('type', '').lower() or 'injection' in vuln.get('type', '').lower():
+            # Handle both dict and string vulnerability formats
+            if isinstance(vuln, dict):
+                vuln_type = vuln.get('type', '').lower()
+            elif isinstance(vuln, str):
+                vuln_type = vuln.lower()
+            else:
+                continue
+            
+            if 'sql' in vuln_type or 'injection' in vuln_type:
                 sql_injection_found = True
                 break
         
@@ -396,10 +404,20 @@ class DataConsolidator:
     
     def _get_security_hotspots(self, data: Dict[str, Any]) -> List[str]:
         """Extract files with security issues"""
-        vulns = data.get('security', {}).get('vulnerabilities', [])
+        vulns_data = data.get('security', {}).get('vulnerabilities', [])
         files = []
-        for vuln in vulns[:10]:  # Top 10
-            if 'file' in vuln:
+        
+        # Handle both list and dict formats
+        if isinstance(vulns_data, dict):
+            # If it's a dict with 'by_package' or similar structure
+            vulns_list = vulns_data.get('by_package', [])
+        elif isinstance(vulns_data, list):
+            vulns_list = vulns_data
+        else:
+            return files
+        
+        for vuln in vulns_list[:10]:  # Top 10
+            if isinstance(vuln, dict) and 'file' in vuln:
                 files.append(vuln['file'])
         return files
     
