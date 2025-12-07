@@ -1,8 +1,8 @@
 {
   "project_name": "Luum Fresh",
-  "tagline": "Enterprise-grade Python SOAP service",
+  "tagline": "Enterprise-grade C# SOAP service",
   "what_it_does": {
-    "summary": "An enterprise legacy service built with Python, serving critical business operations. The system follows a n-tier architecture pattern with 240,255 lines of code, providing SOAP-based web services for external integration. This mature application handles core business logic and data processing with database persistence.",
+    "summary": "An enterprise legacy service built with C#, serving critical business operations. The system follows a n-tier architecture pattern with 240,255 lines of code, providing SOAP-based web services for external integration. This mature application handles core business logic and data processing with database persistence.",
     "key_points": [
       "Found 4 Web.config files",
       "Found 47 API controllers",

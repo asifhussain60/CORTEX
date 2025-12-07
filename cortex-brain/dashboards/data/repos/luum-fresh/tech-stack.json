@@ -8,27 +8,9 @@
       "category": "language",
       "cve_count": 0,
       "eol_date": null
-    },
-    {
-      "name": "TypeScript",
-      "version": "unknown",
-      "latest": "unknown",
-      "status": "current",
-      "category": "language",
-      "cve_count": 0,
-      "eol_date": null
     }
   ],
   "backend": [
-    {
-      "name": "Python",
-      "version": "unknown",
-      "latest": "unknown",
-      "status": "current",
-      "category": "language",
-      "cve_count": 0,
-      "eol_date": null
-    },
     {
       "name": "C#",
       "version": "unknown",
@@ -40,8 +22,8 @@
     },
     {
       "name": ".NET",
-      "version": "8.0",
-      "latest": "8.0",
+      "version": "4.7.2",
+      "latest": "4.7.2",
       "status": "current",
       "category": "framework",
       "cve_count": 0,
@@ -51,7 +33,7 @@
   "database": [],
   "devops": [],
   "summary": {
-    "total_technologies": 5,
+    "total_technologies": 3,
     "outdated_count": 0,
     "current_count": 5,
     "critical_cves": 0

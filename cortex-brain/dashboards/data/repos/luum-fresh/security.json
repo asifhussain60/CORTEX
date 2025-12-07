@@ -1,6 +1,6 @@
 {
   "overall_score": 0,
-  "last_scan": "2025-12-07T15:27:28.335767",
+  "last_scan": "2025-12-07T17:04:48.095068",
   "categories": [
     {
       "name": "code_security",
@@ -267,15 +267,6 @@
           {
             "type": "Connection String with Password",
             "severity": "critical",
-            "file": "Source\\Luum.ApiSync\\Source\\Allina.Midtown.SkiData\\App.config",
-            "line": 11,
-            "description": "Connection String with Password found in plain text",
-            "masked_value": "Dat***************************************************************************************************************",
-            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-          },
-          {
-            "type": "Connection String with Password",
-            "severity": "critical",
             "file": "Source\\Luum.ApiSync\\Source\\Amazon.Bingo.DataPark\\App.config",
             "line": 11,
             "description": "Connection String with Password found in plain text",
@@ -289,6 +280,15 @@
             "line": 11,
             "description": "Connection String with Password found in plain text",
             "masked_value": "Dat**********************************************************************************************************************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Connection String with Password",
+            "severity": "critical",
+            "file": "Source\\Luum.ApiSync\\Source\\Allina.Midtown.SkiData\\App.config",
+            "line": 11,
+            "description": "Connection String with Password found in plain text",
+            "masked_value": "Dat***************************************************************************************************************",
             "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
           }
         ],
@@ -384,7 +384,7 @@
     ],
     "overall_compliance": 60.0,
     "version": "2025",
-    "last_updated": "2025-12-07T15:27:28.277341"
+    "last_updated": "2025-12-07T17:04:48.052221"
   },
   "compliance": {
     "gdpr_ready": false,
@@ -611,15 +611,6 @@
       {
         "type": "Connection String with Password",
         "severity": "critical",
-        "file": "Source\\Luum.ApiSync\\Source\\Allina.Midtown.SkiData\\App.config",
-        "line": 11,
-        "description": "Connection String with Password found in plain text",
-        "masked_value": "Dat***************************************************************************************************************",
-        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-      },
-      {
-        "type": "Connection String with Password",
-        "severity": "critical",
         "file": "Source\\Luum.ApiSync\\Source\\Amazon.Bingo.DataPark\\App.config",
         "line": 11,
         "description": "Connection String with Password found in plain text",
@@ -638,7 +629,25 @@
       {
         "type": "Connection String with Password",
         "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Allina.Midtown.SkiData\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat***************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
         "file": "Source\\Luum.ApiSync\\Source\\Amazon.EightOneEightStewart.DataPark\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat**********************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Amazon.Day1.DataPark\\App.config",
         "line": 11,
         "description": "Connection String with Password found in plain text",
         "masked_value": "Dat**********************************************************************************************************************",
@@ -657,15 +666,6 @@
         "type": "Connection String with Password",
         "severity": "critical",
         "file": "Source\\Luum.ApiSync\\Source\\Amazon.Gatsby.DataPark\\App.config",
-        "line": 11,
-        "description": "Connection String with Password found in plain text",
-        "masked_value": "Dat**********************************************************************************************************************",
-        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-      },
-      {
-        "type": "Connection String with Password",
-        "severity": "critical",
-        "file": "Source\\Luum.ApiSync\\Source\\Amazon.Day1.DataPark\\App.config",
         "line": 11,
         "description": "Connection String with Password found in plain text",
         "masked_value": "Dat**********************************************************************************************************************",
