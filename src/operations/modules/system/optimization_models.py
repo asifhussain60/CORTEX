@@ -16,6 +16,12 @@ from typing import Dict, List, Any
 @dataclass
 class OptimizationMetrics:
     """Comprehensive optimization metrics from all phases."""
+    # Phase 0: Instruction File Review
+    instruction_optimizations: int = 0
+    instruction_redundancies: int = 0
+    instruction_outdated_refs: int = 0
+    instruction_token_savings: int = 0
+    
     # Phase 1: Design Sync
     design_drift_resolved: int = 0
     modules_synced: int = 0
@@ -73,6 +79,12 @@ class SystemHealthReport:
             'overall_health': self.overall_health,
             'health_score': self.health_score,
             'metrics': {
+                'instruction_review': {
+                    'optimizations': self.metrics.instruction_optimizations,
+                    'redundancies': self.metrics.instruction_redundancies,
+                    'outdated_refs': self.metrics.instruction_outdated_refs,
+                    'token_savings': self.metrics.instruction_token_savings
+                },
                 'design_sync': {
                     'drift_resolved': self.metrics.design_drift_resolved,
                     'modules_synced': self.metrics.modules_synced,

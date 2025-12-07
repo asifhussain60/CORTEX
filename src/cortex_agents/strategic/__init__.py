@@ -13,7 +13,7 @@ Key CORTEX-BRAIN-001 Fix:
 - User confirmation of brain saves to build confidence in memory system
 """
 
-from .intent_router import IntentRouter
+# from .intent_router import IntentRouter  # TODO: Module missing
 from .architect import ArchitectAgent
 
-__all__ = ['IntentRouter', 'ArchitectAgent']
+__all__ = ['ArchitectAgent']  # 'IntentRouter' removed until module is created

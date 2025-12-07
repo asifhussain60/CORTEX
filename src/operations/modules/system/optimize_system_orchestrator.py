@@ -62,7 +62,13 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
     """
     Meta-level orchestrator for comprehensive CORTEX system optimization.
     
-    Coordinates 7 optimization phases:
+    Coordinates 8 optimization phases:
+    
+    Phase 0: Instruction File Review
+        - Holistic review of CORTEX.prompt.md + copilot-instructions.md
+        - Detect redundancy, outdated references, bloat
+        - Validate trigger coverage and consistency
+        - Optimize for token efficiency
     
     Phase 1: Design Sync
         - Run design_sync_orchestrator
@@ -100,7 +106,7 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         - Generate recommendations
         - Save to cortex-brain/system-optimization-report.md
     
-    Phase 7: Governance Health Check (NEW - CORTEX 3.1)
+    Phase 7: Governance Health Check
         - Check rule position drift vs optimal ordering
         - Count forward references (target: <3)
         - Detect file bloat (target: <1200 lines)
@@ -316,8 +322,22 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         logger.info(f"System Optimization started | Profile: {profile} | Mode: {mode_display}")
         
         try:
-            # Phase 0: Quick health check (use cached results if recent)
-            logger.info("\n[Phase 0/7] Checking system health...")
+            # Phase 0: Holistic Review of Instruction Files
+            logger.info("\n[Phase 0/8] Reviewing instruction files holistically...")
+            instruction_review_result = self._review_instruction_files()
+            
+            if instruction_review_result['success']:
+                optimizations = instruction_review_result.get('optimizations_applied', 0)
+                if optimizations > 0:
+                    logger.info(f"✅ Applied {optimizations} instruction file optimizations")
+                    self.metrics.instruction_optimizations = optimizations
+                else:
+                    logger.info("ℹ️  Instruction files are lean and complete")
+            else:
+                logger.warning(f"⚠️ Instruction file review: {instruction_review_result.get('message', 'Review incomplete')}")
+            
+            # Phase 0.5: Quick health check (use cached results if recent)
+            logger.info("\n[Phase 0.5/8] Checking system health...")
             health_status = self._check_cached_health_status()
             
             if health_status and health_status.get('score', 0) > 0:
@@ -334,49 +354,49 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                     logger.info(f"✅ Health check passed")
             
             # Phase 1: Validate prerequisites
-            logger.info("\n[Phase 1/6] Validating prerequisites...")
+            logger.info("\n[Phase 1/8] Validating prerequisites...")
             prereq_result = self.validate_prerequisites(context)
             if not prereq_result.success:
                 return prereq_result
             
             # Phase 2: Design Sync
             if 'design_sync' not in skip_phases:
-                logger.info("\n[Phase 2/6] Running design synchronization...")
+                logger.info("\n[Phase 2/8] Running design synchronization...")
                 self._run_design_sync(context)
             else:
-                logger.info("\n[Phase 2/6] Design sync skipped (per user request)")
+                logger.info("\n[Phase 2/8] Design sync skipped (per user request)")
             
             # Phase 3: Code Health
             if 'code_health' not in skip_phases:
-                logger.info("\n[Phase 3/6] Analyzing code health...")
+                logger.info("\n[Phase 3/8] Analyzing code health...")
                 self._run_code_health_analysis(context)
             else:
-                logger.info("\n[Phase 3/6] Code health analysis skipped (per user request)")
+                logger.info("\n[Phase 3/8] Code health analysis skipped (per user request)")
             
             # Phase 4: Brain Tuning
             if 'brain_tuning' not in skip_phases:
-                logger.info("\n[Phase 4/6] Tuning brain tiers...")
+                logger.info("\n[Phase 4/8] Tuning brain tiers...")
                 self._run_brain_tuning(context)
             else:
-                logger.info("\n[Phase 4/6] Brain tuning skipped (per user request)")
+                logger.info("\n[Phase 4/8] Brain tuning skipped (per user request)")
             
             # Phase 5: Entry Point Alignment
             if 'entry_point_alignment' not in skip_phases:
-                logger.info("\n[Phase 5/6] Aligning entry points...")
+                logger.info("\n[Phase 5/8] Aligning entry points...")
                 self._run_entry_point_alignment(context)
             else:
-                logger.info("\n[Phase 5/6] Entry point alignment skipped (per user request)")
+                logger.info("\n[Phase 5/8] Entry point alignment skipped (per user request)")
             
             # Phase 6: Test Suite Optimization
             if 'test_suite' not in skip_phases:
-                logger.info("\n[Phase 6/7] Optimizing test suite...")
+                logger.info("\n[Phase 6/8] Optimizing test suite...")
                 self._run_test_suite_optimization(context)
             else:
-                logger.info("\n[Phase 6/7] Test suite optimization skipped (per user request)")
+                logger.info("\n[Phase 6/8] Test suite optimization skipped (per user request)")
             
             # Phase 7: Governance Health Check
             if 'governance' not in skip_phases:
-                logger.info("\n[Phase 7/7] Checking governance drift...")
+                logger.info("\n[Phase 7/8] Checking governance drift...")
                 governance_result = self._check_governance_drift(context)
                 if governance_result['has_issues']:
                     logger.warning(f"⚠️  Governance issues detected (score: {governance_result['health_score']:.1f}/100)")
@@ -385,7 +405,7 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 else:
                     logger.info(f"✅ Governance health: {governance_result['health_score']:.1f}/100")
             else:
-                logger.info("\n[Phase 7/7] Governance check skipped (per user request)")
+                logger.info("\n[Phase 7/8] Governance check skipped (per user request)")
             
             end_time = datetime.now()
             self.metrics.execution_time_seconds = (end_time - self.start_time).total_seconds()
@@ -943,6 +963,252 @@ Report: cortex-brain/system-optimization-report.md
 © 2024-2025 Asif Hussain │ Proprietary │ github.com/asifhussain60/CORTEX
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
+    
+    def _review_instruction_files(self) -> Dict[str, Any]:
+        """
+        Review instruction files holistically for optimization opportunities.
+        
+        This Phase 0 step analyzes:
+        - .github/prompts/CORTEX.prompt.md (primary instruction file)
+        - .github/copilot-instructions.md (GitHub Copilot integration)
+        
+        Goals:
+        - Keep files lean (remove bloat, redundancy, outdated content)
+        - Ensure all triggers are recognizable by Copilot
+        - Maintain pairing consistency (no contradictions)
+        - Optimize for token efficiency
+        
+        Strategy:
+        - Read both files as a pair
+        - Identify redundancies between files
+        - Check for outdated references
+        - Validate trigger coverage
+        - Suggest consolidations
+        
+        Returns:
+            Dict with keys:
+                - success: bool
+                - message: str
+                - optimizations_applied: int
+                - recommendations: List[str]
+        """
+        try:
+            cortex_prompt = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
+            copilot_instructions = self.project_root / ".github" / "copilot-instructions.md"
+            
+            if not cortex_prompt.exists() or not copilot_instructions.exists():
+                return {
+                    'success': False,
+                    'message': 'Instruction files not found',
+                    'optimizations_applied': 0,
+                    'recommendations': []
+                }
+            
+            logger.info("📄 Reading instruction files...")
+            cortex_content = cortex_prompt.read_text(encoding='utf-8')
+            copilot_content = copilot_instructions.read_text(encoding='utf-8')
+            
+            # Analysis metrics
+            cortex_lines = len(cortex_content.splitlines())
+            copilot_lines = len(copilot_content.splitlines())
+            
+            logger.info(f"   CORTEX.prompt.md: {cortex_lines} lines")
+            logger.info(f"   copilot-instructions.md: {copilot_lines} lines")
+            
+            recommendations = []
+            optimizations = 0
+            
+            # Check 1: Detect redundant content between files
+            logger.info("🔍 Analyzing content redundancy...")
+            redundancy_data = self._check_redundancy(cortex_content, copilot_content)
+            
+            if redundancy_data['has_redundancy']:
+                recommendations.extend(redundancy_data['recommendations'])
+                logger.info(f"   ⚠️  Found {len(redundancy_data['duplicates'])} redundant sections")
+            
+            # Check 2: Validate trigger recognition
+            logger.info("🔍 Validating trigger patterns...")
+            trigger_data = self._validate_triggers(cortex_content, copilot_content)
+            
+            if not trigger_data['all_triggers_covered']:
+                recommendations.extend(trigger_data['recommendations'])
+                logger.info(f"   ⚠️  {len(trigger_data['missing_triggers'])} triggers need attention")
+            
+            # Check 3: Detect outdated references
+            logger.info("🔍 Checking for outdated references...")
+            outdated_data = self._check_outdated_refs(cortex_content, copilot_content)
+            
+            if outdated_data['has_outdated']:
+                recommendations.extend(outdated_data['recommendations'])
+                logger.info(f"   ⚠️  Found {len(outdated_data['outdated_refs'])} outdated references")
+            
+            # Check 4: Token efficiency analysis
+            logger.info("🔍 Analyzing token efficiency...")
+            token_data = self._analyze_tokens(cortex_content, copilot_content)
+            
+            if token_data['has_bloat']:
+                recommendations.extend(token_data['recommendations'])
+                logger.info(f"   ⚠️  Potential token savings: ~{token_data['potential_savings']} tokens")
+            
+            # Generate summary
+            if recommendations:
+                logger.info("\n📋 Instruction File Optimization Recommendations:")
+                for i, rec in enumerate(recommendations[:5], 1):  # Limit to top 5
+                    logger.info(f"   {i}. {rec}")
+                
+                if len(recommendations) > 5:
+                    logger.info(f"   ... and {len(recommendations) - 5} more")
+            
+            return {
+                'success': True,
+                'message': f'Analyzed instruction files ({len(recommendations)} recommendations)',
+                'optimizations_applied': optimizations,
+                'recommendations': recommendations,
+                'metrics': {
+                    'cortex_lines': cortex_lines,
+                    'copilot_lines': copilot_lines,
+                    'redundancies': len(redundancy_data.get('duplicates', [])),
+                    'outdated_refs': len(outdated_data.get('outdated_refs', [])),
+                    'token_savings': token_data.get('potential_savings', 0)
+                }
+            }
+        
+        except Exception as e:
+            logger.error(f"Instruction file review failed: {e}", exc_info=True)
+            return {
+                'success': False,
+                'message': f'Review failed: {str(e)}',
+                'optimizations_applied': 0,
+                'recommendations': []
+            }
+    
+    def _check_redundancy(self, cortex: str, copilot: str) -> Dict[str, Any]:
+        """Check for redundant content between instruction files."""
+        import re
+        duplicates = []
+        
+        # Extract sections
+        cortex_sections = self._extract_sections(cortex)
+        copilot_sections = self._extract_sections(copilot)
+        
+        # Compare
+        for c_title, c_text in cortex_sections.items():
+            for p_title, p_text in copilot_sections.items():
+                similarity = self._text_similarity(c_text, p_text)
+                if similarity > 0.8 and len(c_text) > 200:
+                    duplicates.append({
+                        'cortex_section': c_title,
+                        'copilot_section': p_title,
+                        'similarity': similarity,
+                        'size': len(c_text)
+                    })
+        
+        recommendations = []
+        for dup in duplicates:
+            recommendations.append(
+                f"Consolidate '{dup['cortex_section']}' and '{dup['copilot_section']}' "
+                f"({dup['similarity']*100:.0f}% similar)"
+            )
+        
+        return {
+            'has_redundancy': len(duplicates) > 0,
+            'duplicates': duplicates,
+            'recommendations': recommendations
+        }
+    
+    def _validate_triggers(self, cortex: str, copilot: str) -> Dict[str, Any]:
+        """Validate command triggers are documented."""
+        import re
+        pattern = r'\*\*Commands?:\*\*\s*`([^`]+)`'
+        
+        cortex_triggers = set(re.findall(pattern, cortex))
+        copilot_triggers = set(re.findall(pattern, copilot))
+        
+        missing = (cortex_triggers - copilot_triggers) | (copilot_triggers - cortex_triggers)
+        
+        recommendations = []
+        for trigger in missing:
+            recommendations.append(f"Synchronize trigger '{trigger}' across both files")
+        
+        return {
+            'all_triggers_covered': len(missing) == 0,
+            'missing_triggers': list(missing),
+            'recommendations': recommendations
+        }
+    
+    def _check_outdated_refs(self, cortex: str, copilot: str) -> Dict[str, Any]:
+        """Detect references to files that no longer exist."""
+        import re
+        pattern = r'`([^`]+\.(md|py|yaml|json))`'
+        
+        all_refs = {m[0] for m in re.findall(pattern, cortex + copilot)}
+        outdated = []
+        
+        for ref in all_refs:
+            paths = [
+                self.project_root / ref,
+                self.project_root / ref.lstrip('./')
+            ]
+            if not any(p.exists() for p in paths):
+                outdated.append(ref)
+        
+        recommendations = [f"Remove/update outdated: {ref}" for ref in outdated]
+        
+        return {
+            'has_outdated': len(outdated) > 0,
+            'outdated_refs': outdated,
+            'recommendations': recommendations
+        }
+    
+    def _analyze_tokens(self, cortex: str, copilot: str) -> Dict[str, Any]:
+        """Analyze token usage and identify bloat."""
+        total_tokens = (len(cortex) + len(copilot)) // 4
+        recommendations = []
+        potential_savings = 0
+        
+        # Check verbose lines
+        verbose_count = sum(1 for line in (cortex + copilot).splitlines() if len(line) > 100)
+        if verbose_count > 40:
+            recommendations.append(f"{verbose_count} verbose lines (>100 chars) - consider breaking up")
+            potential_savings += verbose_count * 10
+        
+        # Check repetitive phrases
+        phrases = ['For more information', 'See the guide', 'Refer to', 'As mentioned', 'Note that']
+        combined = cortex + copilot
+        
+        for phrase in phrases:
+            count = combined.lower().count(phrase.lower())
+            if count > 5:
+                recommendations.append(f"Phrase '{phrase}' appears {count}x - consolidate")
+                potential_savings += count * 5
+        
+        return {
+            'has_bloat': len(recommendations) > 0,
+            'total_tokens': total_tokens,
+            'potential_savings': potential_savings,
+            'recommendations': recommendations
+        }
+    
+    def _extract_sections(self, content: str) -> Dict[str, str]:
+        """Extract markdown sections."""
+        import re
+        sections = {}
+        pattern = r'^##\s+(.+?)$(.+?)(?=^##|\Z)'
+        
+        for match in re.finditer(pattern, content, re.MULTILINE | re.DOTALL):
+            sections[match.group(1).strip()] = match.group(2).strip()
+        
+        return sections
+    
+    def _text_similarity(self, text1: str, text2: str) -> float:
+        """Calculate text similarity."""
+        words1 = set(text1.lower().split())
+        words2 = set(text2.lower().split())
+        
+        if not words1 or not words2:
+            return 0.0
+        
+        return len(words1 & words2) / len(words1 | words2)
 
 
 def register() -> OptimizeSystemOrchestrator:

@@ -1,4 +1,34 @@
 operations:
+  system_maintenance:
+    name: System Maintenance
+    description: Comprehensive system maintenance - runs healthcheck, align, optimize
+      in optimal sequence
+    deployment_tier: admin
+    natural_language:
+    - system maintenance
+    - full maintenance
+    - maintain system
+    - run maintenance
+    - comprehensive maintenance
+    category: system
+    modules:
+    - system_maintenance_orchestrator
+    profiles:
+      standard:
+        description: "Full maintenance workflow (healthcheck \u2192 align \u2192 optimize\
+          \ \u2192 healthcheck)"
+        modules:
+        - system_maintenance_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Orchestrates healthcheck, alignment, and optimization in optimal sequence
+    examples:
+    - system maintenance
+    - run full maintenance
+    - maintain cortex system
   resume_conversation:
     name: Resume Conversation
     description: Resume previous conversation from new chat session with full context
@@ -83,6 +113,54 @@ operations:
     - generate diagrams
     - create diagrams
     category: documentation
+  dashboard_validation:
+    name: Dashboard Validation
+    description: Dashboard Data Collection Validator
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
+    category: reporting
+  documentation_orchestrator:
+    name: Documentation Orchestrator
+    description: Documentation Orchestrator for CORTEX Learning Library
+    deployment_tier: dual_context
+    natural_language:
+    - operation name
+    category: documentation
+  enhanced_collectors:
+    name: Enhanced Collectors
+    description: Enhanced Dashboard Data Collectors
+    deployment_tier: user_facing
+    natural_language:
+    - analyze code complexity
+    - analyze individual file metrics
+    - analyze project dependencies
+    - check if file should be included
+    category: general
+
+  learning_librarian_agent:
+    name: Learning Librarian Agent
+    description: Learning Librarian Agent (Phase 6)
+    deployment_tier: user_facing
+    natural_language:
+    - "update learning library"
+    - ""update learning library""
+    - ""capture lessons""
+    - ""document learnings""
+    category: general
+    modules:
+    - learning_librarian_agent_utility
+    profiles:
+      standard:
+        description: Learning Librarian Agent (Phase 6)
+        modules:
+        - learning_librarian_agent_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Auto-discovered and registered by align orchestrator on 2025-12-07
     modules:
     - diagram_regeneration
     profiles:
@@ -155,7 +233,8 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: HTTP server with CORS support, auto-port fallback (8080-8089), serves from cortex-brain/dashboards/ui/
+      notes: HTTP server with CORS support, auto-port fallback (8080-8089), serves
+        from cortex-brain/dashboards/ui/
     examples:
     - load dashboard
     - launch dashboard
@@ -163,7 +242,8 @@ operations:
     - show me the dashboard
   admin_dashboard:
     name: Admin Dashboard
-    description: Launch enhanced CORTEX dashboard with all repositories in dropdown selector (ADMIN ONLY)
+    description: Launch enhanced CORTEX dashboard with all repositories in dropdown
+      selector (ADMIN ONLY)
     deployment_tier: admin
     natural_language:
     - load admin dashboard
@@ -189,10 +269,14 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: |
-        Admin-only feature. Launches dashboard with dropdown of all available repositories.
+      notes: 'Admin-only feature. Launches dashboard with dropdown of all available
+        repositories.
+
         Blocked from production by deployment tier validation.
+
         Only available in CORTEX development repository.
+
+        '
     examples:
     - load admin dashboard
     - launch admin dashboard
@@ -3305,8 +3389,8 @@ modules:
     estimated_hours: 1.5
     token_cost: 200
     cortex_version: '2.0'
-    notes: Demonstrates 97.2% token reduction (74,047 → 2,078 tokens), 93.4% cost
-      savings, and optimization techniques applied to CORTEX 2.0
+    notes: "Demonstrates 97.2% token reduction (74,047 \u2192 2,078 tokens), 93.4%\
+      \ cost savings, and optimization techniques applied to CORTEX 2.0"
   demo_code_review:
     name: Demo Code Review & PR Capabilities
     description: Showcase CORTEX's automated code review with SOLID principles, security
@@ -3832,6 +3916,18 @@ metadata:
   last_updated: '2025-12-03'
   description: Universal operations registry for CORTEX 2.0 + 2.1 + 3.0
   changelog:
+  - version: auto-registered
+    date: 2025-12-07
+    changes:
+    - Auto-registered enhanced_collectors operation
+  - version: auto-registered
+    date: 2025-12-07
+    changes:
+    - Auto-registered documentation_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-07
+    changes:
+    - Auto-registered dashboard_validation operation
   - version: auto-registered
     date: 2025-12-04
     changes:
@@ -4845,8 +4941,8 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 122
-  total_modules: 73
+  total_operations: 160
+  total_modules: 108
   total_phases: 9
   cortex_2_0_operations: 9
   cortex_2_1_operations: 6
@@ -4881,7 +4977,7 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
-  last_updated: '2025-12-04 11:06:41'
+  last_updated: '2025-12-07 14:39:07'
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper
@@ -5770,4 +5866,3 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Development tool installer
-

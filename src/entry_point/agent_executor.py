@@ -173,6 +173,15 @@ class AgentExecutor:
                 tier2_kg=self.tier2,
                 tier3_context=self.tier3
             )
+        elif agent_type == AgentType.ROUTER:
+            # ROUTER agent for orchestrator operations (system maintenance, etc.)
+            from src.cortex_agents.operational.router_agent import RouterAgent
+            agent = RouterAgent(
+                name="RouterAgent",
+                tier1_api=self.tier1,
+                tier2_kg=self.tier2,
+                tier3_context=self.tier3
+            )
         # Add other agents as needed
         else:
             self.logger.warning(f"Agent type {agent_type} not implemented yet")
