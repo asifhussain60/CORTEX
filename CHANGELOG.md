@@ -1,5 +1,33 @@
 # Changelog
 
+## [3.8.3] - 2025-12-07
+
+### Fixed - Response Template Format Standardization
+
+**Header Hierarchy Standardization:**
+- Standardized 809 section headers across all 68 templates
+- Changed H3 section headers (`###`) to H2 (`##`) for consistency
+- Matches planning template's excellent header hierarchy
+- Main titles use H2 (`## 🧠 CORTEX {title}`)
+- Section headers use H2 (`## 🎯`, `## ⚡`, `## 💬`, `## 📊`, `## 🔍`)
+
+**Benefits:**
+- Consistent visual hierarchy across all templates
+- Better readability in rendered Markdown
+- Aligns with CORTEX response format v3.0 standard
+- Improved content-to-header ratio
+
+**Impact:**
+- All 68 templates now follow uniform header structure
+- No functional changes, purely formatting enhancement
+- YAML syntax validated (no errors)
+
+**Files Modified:**
+- `cortex-brain/response-templates.yaml` - 809 header standardizations
+- `VERSION` - Updated to 3.8.3
+
+---
+
 ## [3.8.2] - 2025-12-07
 
 ### Added - Professional Introduction & Business Value Templates
