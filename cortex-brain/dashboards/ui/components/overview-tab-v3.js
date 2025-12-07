@@ -508,6 +508,3 @@ if (typeof module !== 'undefined' && module.exports) {
 
 // Export class for BaseTabComponent pattern
 export { OverviewTab };
-
-// Export class for BaseTabComponent pattern
-export { OverviewTab };
