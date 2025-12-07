@@ -13,9 +13,9 @@ const dataCache = new Map();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 // Data source base paths (will be populated from registry)
-// PHASE 2 REFACTOR: All repositories now in data/repositories/ subfolder
+// Updated to use repos/ directory (dashboard_collector output path)
 const DATA_SOURCES = {
-    mock: '../data/repositories/mock/'
+    mock: '../data/repos/mock/'
 };
 
 // Repository registry (loaded on page load)
@@ -50,9 +50,9 @@ async function loadRepositoryRegistry() {
         console.log(`Loaded registry: ${registry.total_repositories} repositories`);
         
         // Update DATA_SOURCES from registry
-        // PHASE 2 REFACTOR: Updated to use repositories/ subfolder
+        // Updated to use repos/ directory (dashboard_collector output path)
         registry.repositories.forEach(repo => {
-            DATA_SOURCES[repo.id] = `/data/repositories/${repo.id}/`;
+            DATA_SOURCES[repo.id] = `/data/repos/${repo.id}/`;
         });
         
         // Populate dropdown
