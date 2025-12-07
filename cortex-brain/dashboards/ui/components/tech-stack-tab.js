@@ -1116,3 +1116,18 @@ window.hideTechTooltip = function() {
         document.removeEventListener('click', closeTooltipOutside, true);
     }
 };
+
+// BaseTabComponent wrapper
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
+
+class TechStackTab extends BaseTabComponent {
+    constructor() {
+        super('tech-stack-container');
+    }
+    
+    render() {
+        renderTechStack(this.data);
+    }
+}
+
+export { TechStackTab };

@@ -689,3 +689,18 @@ function getPriorityColor(priority) {
     };
     return colorMap[priority] || '#6b7280';
 }
+
+// BaseTabComponent wrapper
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
+
+class ExecutiveTab extends BaseTabComponent {
+    constructor() {
+        super('executive-container');
+    }
+    
+    render() {
+        renderExecutiveSummary(this.data);
+    }
+}
+
+export { ExecutiveTab };

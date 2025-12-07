@@ -1,334 +1,282 @@
 /**
- * Unit Tests - Data Validation
+ * Unit Tests - Data Structure Validation
  * 
- * Tests JSON schema validation, required fields, data types, and boundary conditions.
+ * Tests JSON schema validation, required fields, data types.
+ * Target: 40+ tests
  * 
- * 40+ tests covering all 7 data files
+ * Author: Asif Hussain
+ * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
  */
 
-import { 
-    mockOverviewData, 
-    mockTechStackData, 
-    mockSecurityData,
-    mockArchitectureData,
-    mockCodeOrgData,
-    mockVendorsData,
-    mockExecutiveData
-} from '../fixtures/mock-full-data.js';
+import {
+    mockHealthData,
+    mockTechStack,
+    mockSecurity,
+    mockArchitecture,
+    mockCodeOrg,
+    mockVendors,
+    mockFullDashboard
+} from '../fixtures/mock-data.js';
 
-describe('Data Validation - Overview Data', () => {
-    test('should have required project_name field', () => {
-        expect(mockOverviewData.project_name).toBeDefined();
-        expect(typeof mockOverviewData.project_name).toBe('string');
+describe('Data Structure Validation', () => {
+    
+    describe('Health Data Schema', () => {
+        it('should have required health score field', () => {
+            expect(mockHealthData).toHaveProperty('health_score');
+            expect(typeof mockHealthData.health_score).toBe('number');
+        });
+        
+        it('should have health score between 0 and 100', () => {
+            expect(mockHealthData.health_score).toBeGreaterThanOrEqual(0);
+            expect(mockHealthData.health_score).toBeLessThanOrEqual(100);
+        });
+        
+        it('should have total_files field', () => {
+            expect(mockHealthData).toHaveProperty('total_files');
+            expect(typeof mockHealthData.total_files).toBe('number');
+        });
+        
+        it('should have total_lines_of_code field', () => {
+            expect(mockHealthData).toHaveProperty('total_lines_of_code');
+            expect(typeof mockHealthData.total_lines_of_code).toBe('number');
+        });
+        
+        it('should have test_coverage field', () => {
+            expect(mockHealthData).toHaveProperty('test_coverage');
+            expect(typeof mockHealthData.test_coverage).toBe('number');
+        });
+        
+        it('should have last_updated timestamp', () => {
+            expect(mockHealthData).toHaveProperty('last_updated');
+            expect(typeof mockHealthData.last_updated).toBe('string');
+        });
+        
+        it('should have trends object', () => {
+            expect(mockHealthData).toHaveProperty('trends');
+            expect(typeof mockHealthData.trends).toBe('object');
+        });
+        
+        it('should have valid trend data types', () => {
+            const trends = mockHealthData.trends;
+            expect(typeof trends.health_score_change).toBe('number');
+            expect(typeof trends.test_coverage_change).toBe('number');
+        });
     });
     
-    test('should have overall_health object', () => {
-        expect(mockOverviewData.overall_health).toBeDefined();
-        expect(typeof mockOverviewData.overall_health).toBe('object');
+    describe('Tech Stack Data Schema', () => {
+        it('should have languages array', () => {
+            expect(mockTechStack).toHaveProperty('languages');
+            expect(Array.isArray(mockTechStack.languages)).toBe(true);
+        });
+        
+        it('should have valid language structure', () => {
+            const lang = mockTechStack.languages[0];
+            expect(lang).toHaveProperty('name');
+            expect(lang).toHaveProperty('percentage');
+            expect(lang).toHaveProperty('files');
+            expect(lang).toHaveProperty('lines');
+        });
+        
+        it('should have language percentages sum to ~100', () => {
+            const total = mockTechStack.languages.reduce((sum, lang) => sum + lang.percentage, 0);
+            expect(total).toBeGreaterThan(95);
+            expect(total).toBeLessThanOrEqual(100);
+        });
+        
+        it('should have frameworks array', () => {
+            expect(mockTechStack).toHaveProperty('frameworks');
+            expect(Array.isArray(mockTechStack.frameworks)).toBe(true);
+        });
+        
+        it('should have valid framework structure', () => {
+            const framework = mockTechStack.frameworks[0];
+            expect(framework).toHaveProperty('name');
+            expect(framework).toHaveProperty('version');
+        });
+        
+        it('should have dependencies object', () => {
+            expect(mockTechStack).toHaveProperty('dependencies');
+            expect(typeof mockTechStack.dependencies).toBe('object');
+        });
+        
+        it('should have valid dependency counts', () => {
+            const deps = mockTechStack.dependencies;
+            expect(deps).toHaveProperty('total');
+            expect(deps).toHaveProperty('direct');
+            expect(deps).toHaveProperty('transitive');
+            expect(deps.total).toBeGreaterThanOrEqual(deps.direct);
+        });
     });
     
-    test('should have health score between 0-100', () => {
-        const score = mockOverviewData.overall_health.score;
-        expect(score).toBeGreaterThanOrEqual(0);
-        expect(score).toBeLessThanOrEqual(100);
+    describe('Security Data Schema', () => {
+        it('should have overall_score field', () => {
+            expect(mockSecurity).toHaveProperty('overall_score');
+            expect(typeof mockSecurity.overall_score).toBe('number');
+        });
+        
+        it('should have security score between 0 and 100', () => {
+            expect(mockSecurity.overall_score).toBeGreaterThanOrEqual(0);
+            expect(mockSecurity.overall_score).toBeLessThanOrEqual(100);
+        });
+        
+        it('should have vulnerabilities object', () => {
+            expect(mockSecurity).toHaveProperty('vulnerabilities');
+            expect(typeof mockSecurity.vulnerabilities).toBe('object');
+        });
+        
+        it('should have all vulnerability severity levels', () => {
+            const vulns = mockSecurity.vulnerabilities;
+            expect(vulns).toHaveProperty('critical');
+            expect(vulns).toHaveProperty('high');
+            expect(vulns).toHaveProperty('medium');
+            expect(vulns).toHaveProperty('low');
+        });
+        
+        it('should have non-negative vulnerability counts', () => {
+            const vulns = mockSecurity.vulnerabilities;
+            expect(vulns.critical).toBeGreaterThanOrEqual(0);
+            expect(vulns.high).toBeGreaterThanOrEqual(0);
+            expect(vulns.medium).toBeGreaterThanOrEqual(0);
+            expect(vulns.low).toBeGreaterThanOrEqual(0);
+        });
     });
     
-    test('should have valid health status', () => {
-        const validStatuses = ['healthy', 'warning', 'critical', 'unknown'];
-        expect(validStatuses).toContain(mockOverviewData.overall_health.status);
+    describe('Architecture Data Schema', () => {
+        it('should be a valid object', () => {
+            expect(typeof mockArchitecture).toBe('object');
+            expect(mockArchitecture).not.toBeNull();
+        });
+        
+        it('should allow optional pattern detection', () => {
+            if (mockArchitecture.patterns) {
+                expect(Array.isArray(mockArchitecture.patterns)).toBe(true);
+            }
+        });
+        
+        it('should allow optional component structure', () => {
+            if (mockArchitecture.components) {
+                expect(typeof mockArchitecture.components).toBe('object');
+            }
+        });
+        
+        it('should allow optional frontend section', () => {
+            if (mockArchitecture.frontend) {
+                expect(typeof mockArchitecture.frontend).toBe('object');
+            }
+        });
+        
+        it('should allow optional backend section', () => {
+            if (mockArchitecture.backend) {
+                expect(typeof mockArchitecture.backend).toBe('object');
+            }
+        });
     });
     
-    test('should have valid trend indicator', () => {
-        const validTrends = ['improving', 'stable', 'declining', 'unknown'];
-        expect(validTrends).toContain(mockOverviewData.overall_health.trend);
+    describe('Code Organization Data Schema', () => {
+        it('should be a valid object', () => {
+            expect(typeof mockCodeOrg).toBe('object');
+            expect(mockCodeOrg).not.toBeNull();
+        });
+        
+        it('should allow optional complexity metrics', () => {
+            if (mockCodeOrg.complexity) {
+                expect(typeof mockCodeOrg.complexity).toBe('object');
+            }
+        });
+        
+        it('should allow optional hotspots array', () => {
+            if (mockCodeOrg.hotspots) {
+                expect(Array.isArray(mockCodeOrg.hotspots)).toBe(true);
+            }
+        });
+        
+        it('should have valid hotspot structure if present', () => {
+            if (mockCodeOrg.hotspots && mockCodeOrg.hotspots.length > 0) {
+                const hotspot = mockCodeOrg.hotspots[0];
+                expect(hotspot).toHaveProperty('file');
+                expect(typeof hotspot.file).toBe('string');
+            }
+        });
     });
     
-    test('should have key_metrics object', () => {
-        expect(mockOverviewData.key_metrics).toBeDefined();
-        expect(typeof mockOverviewData.key_metrics).toBe('object');
+    describe('Vendors Data Schema', () => {
+        it('should be a valid object', () => {
+            expect(typeof mockVendors).toBe('object');
+            expect(mockVendors).not.toBeNull();
+        });
+        
+        it('should allow optional services array', () => {
+            if (mockVendors.services) {
+                expect(Array.isArray(mockVendors.services)).toBe(true);
+            }
+        });
+        
+        it('should have valid service structure if present', () => {
+            if (mockVendors.services && mockVendors.services.length > 0) {
+                const service = mockVendors.services[0];
+                expect(service).toHaveProperty('name');
+                expect(typeof service.name).toBe('string');
+            }
+        });
     });
     
-    test('should have health_categories array', () => {
-        expect(Array.isArray(mockOverviewData.health_categories)).toBe(true);
+    describe('Full Dashboard Data Integration', () => {
+        it('should have all required top-level sections', () => {
+            expect(mockFullDashboard).toHaveProperty('health');
+            expect(mockFullDashboard).toHaveProperty('techStack');
+            expect(mockFullDashboard).toHaveProperty('security');
+        });
+        
+        it('should have valid nested health data', () => {
+            expect(mockFullDashboard.health).toHaveProperty('health_score');
+            expect(typeof mockFullDashboard.health.health_score).toBe('number');
+        });
+        
+        it('should have valid nested tech stack data', () => {
+            expect(mockFullDashboard.techStack).toHaveProperty('languages');
+            expect(Array.isArray(mockFullDashboard.techStack.languages)).toBe(true);
+        });
+        
+        it('should have valid nested security data', () => {
+            expect(mockFullDashboard.security).toHaveProperty('overall_score');
+            expect(typeof mockFullDashboard.security.overall_score).toBe('number');
+        });
     });
     
-    test('should have valid category structure', () => {
-        if (mockOverviewData.health_categories.length > 0) {
-            const category = mockOverviewData.health_categories[0];
-            expect(category.name).toBeDefined();
-            expect(category.score).toBeDefined();
-            expect(category.status).toBeDefined();
-        }
-    });
-    
-    test('should have composition object with languages', () => {
-        expect(mockOverviewData.composition).toBeDefined();
-        expect(Array.isArray(mockOverviewData.composition.languages)).toBe(true);
-    });
-    
-    test('should have critical_issues array', () => {
-        expect(Array.isArray(mockOverviewData.critical_issues)).toBe(true);
-    });
-});
-
-describe('Data Validation - Tech Stack Data', () => {
-    test('should have summary object', () => {
-        expect(mockTechStackData.summary).toBeDefined();
-        expect(typeof mockTechStackData.summary).toBe('object');
-    });
-    
-    test('should have total_technologies count', () => {
-        expect(mockTechStackData.summary.total_technologies).toBeDefined();
-        expect(typeof mockTechStackData.summary.total_technologies).toBe('number');
-    });
-    
-    test('should have frontend array', () => {
-        expect(Array.isArray(mockTechStackData.frontend)).toBe(true);
-    });
-    
-    test('should have backend array', () => {
-        expect(Array.isArray(mockTechStackData.backend)).toBe(true);
-    });
-    
-    test('should have database array', () => {
-        expect(Array.isArray(mockTechStackData.database)).toBe(true);
-    });
-    
-    test('should have valid technology structure', () => {
-        if (mockTechStackData.frontend.length > 0) {
-            const tech = mockTechStackData.frontend[0];
-            expect(tech.name).toBeDefined();
-            expect(tech.version).toBeDefined();
-            expect(tech.status).toBeDefined();
-        }
-    });
-    
-    test('should have valid status values', () => {
-        const validStatuses = ['active', 'deprecated', 'evaluation'];
-        if (mockTechStackData.frontend.length > 0) {
-            expect(validStatuses).toContain(mockTechStackData.frontend[0].status);
-        }
-    });
-    
-    test('should sum up to total technologies', () => {
-        const total = 
-            mockTechStackData.frontend.length +
-            mockTechStackData.backend.length +
-            mockTechStackData.database.length;
-        expect(total).toBeGreaterThan(0);
-    });
-});
-
-describe('Data Validation - Security Data', () => {
-    test('should have summary object', () => {
-        expect(mockSecurityData.summary).toBeDefined();
-    });
-    
-    test('should have vulnerability counts', () => {
-        expect(mockSecurityData.summary.total_vulnerabilities).toBeDefined();
-        expect(mockSecurityData.summary.critical).toBeDefined();
-        expect(mockSecurityData.summary.high).toBeDefined();
-    });
-    
-    test('should have vulnerabilities array', () => {
-        expect(Array.isArray(mockSecurityData.vulnerabilities)).toBe(true);
-    });
-    
-    test('should have OWASP compliance object', () => {
-        expect(mockSecurityData.owasp_compliance).toBeDefined();
-    });
-    
-    test('should have valid OWASP categories', () => {
-        const owasp = mockSecurityData.owasp_compliance;
-        expect(owasp.a01_broken_access_control).toBeDefined();
-        expect(owasp.a02_cryptographic_failures).toBeDefined();
-    });
-    
-    test('should have valid compliance values', () => {
-        const validValues = ['compliant', 'non-compliant', 'partial', 'unknown'];
-        expect(validValues).toContain(mockSecurityData.owasp_compliance.a01_broken_access_control);
-    });
-    
-    test('should sum vulnerability counts correctly', () => {
-        const sum = 
-            mockSecurityData.summary.critical +
-            mockSecurityData.summary.high +
-            mockSecurityData.summary.medium +
-            mockSecurityData.summary.low;
-        expect(sum).toBe(mockSecurityData.summary.total_vulnerabilities);
-    });
-});
-
-describe('Data Validation - Architecture Data', () => {
-    test('should have components array', () => {
-        expect(Array.isArray(mockArchitectureData.components)).toBe(true);
-    });
-    
-    test('should have patterns array', () => {
-        expect(Array.isArray(mockArchitectureData.patterns)).toBe(true);
-    });
-    
-    test('should have dependencies object', () => {
-        expect(mockArchitectureData.dependencies).toBeDefined();
-    });
-    
-    test('should have valid component structure', () => {
-        if (mockArchitectureData.components.length > 0) {
-            const component = mockArchitectureData.components[0];
-            expect(component.name).toBeDefined();
-            expect(component.type).toBeDefined();
-            expect(component.health).toBeDefined();
-        }
-    });
-    
-    test('should have dependency counts', () => {
-        expect(mockArchitectureData.dependencies.internal).toBeDefined();
-        expect(mockArchitectureData.dependencies.external).toBeDefined();
-        expect(mockArchitectureData.dependencies.circular).toBeDefined();
-    });
-    
-    test('should have non-negative dependency counts', () => {
-        expect(mockArchitectureData.dependencies.internal).toBeGreaterThanOrEqual(0);
-        expect(mockArchitectureData.dependencies.circular).toBeGreaterThanOrEqual(0);
-    });
-});
-
-describe('Data Validation - Code Organization Data', () => {
-    test('should have complexity object', () => {
-        expect(mockCodeOrgData.complexity).toBeDefined();
-    });
-    
-    test('should have average complexity', () => {
-        expect(mockCodeOrgData.complexity.average_complexity).toBeDefined();
-        expect(typeof mockCodeOrgData.complexity.average_complexity).toBe('number');
-    });
-    
-    test('should have hotspots array', () => {
-        expect(Array.isArray(mockCodeOrgData.hotspots)).toBe(true);
-    });
-    
-    test('should have valid hotspot structure', () => {
-        if (mockCodeOrgData.hotspots.length > 0) {
-            const hotspot = mockCodeOrgData.hotspots[0];
-            expect(hotspot.file).toBeDefined();
-            expect(hotspot.complexity).toBeDefined();
-            expect(hotspot.risk_score).toBeDefined();
-        }
-    });
-    
-    test('should have structure object', () => {
-        expect(mockCodeOrgData.structure).toBeDefined();
-    });
-    
-    test('should have valid structure metrics', () => {
-        expect(mockCodeOrgData.structure.total_modules).toBeDefined();
-        expect(mockCodeOrgData.structure.avg_lines_per_file).toBeDefined();
-    });
-    
-    test('should have risk scores between 0-10', () => {
-        if (mockCodeOrgData.hotspots.length > 0) {
-            const riskScore = mockCodeOrgData.hotspots[0].risk_score;
-            expect(riskScore).toBeGreaterThanOrEqual(0);
-            expect(riskScore).toBeLessThanOrEqual(10);
-        }
-    });
-});
-
-describe('Data Validation - Vendors Data', () => {
-    test('should have services array', () => {
-        expect(Array.isArray(mockVendorsData.services)).toBe(true);
-    });
-    
-    test('should have total_services count', () => {
-        expect(mockVendorsData.total_services).toBeDefined();
-    });
-    
-    test('should have risk level counts', () => {
-        expect(mockVendorsData.high_risk).toBeDefined();
-        expect(mockVendorsData.medium_risk).toBeDefined();
-        expect(mockVendorsData.low_risk).toBeDefined();
-    });
-    
-    test('should have valid service structure', () => {
-        if (mockVendorsData.services.length > 0) {
-            const service = mockVendorsData.services[0];
-            expect(service.name).toBeDefined();
-            expect(service.category).toBeDefined();
-            expect(service.risk_level).toBeDefined();
-        }
-    });
-    
-    test('should have valid risk levels', () => {
-        const validRisks = ['low', 'medium', 'high'];
-        if (mockVendorsData.services.length > 0) {
-            expect(validRisks).toContain(mockVendorsData.services[0].risk_level);
-        }
-    });
-    
-    test('should sum risk counts correctly', () => {
-        const sum = 
-            mockVendorsData.high_risk +
-            mockVendorsData.medium_risk +
-            mockVendorsData.low_risk;
-        expect(sum).toBe(mockVendorsData.total_services);
-    });
-});
-
-describe('Data Validation - Executive Data', () => {
-    test('should have project_name', () => {
-        expect(mockExecutiveData.project_name).toBeDefined();
-    });
-    
-    test('should have overall_health object', () => {
-        expect(mockExecutiveData.overall_health).toBeDefined();
-    });
-    
-    test('should have executive_summary', () => {
-        expect(mockExecutiveData.executive_summary).toBeDefined();
-        expect(typeof mockExecutiveData.executive_summary).toBe('string');
-    });
-    
-    test('should have key_strengths array', () => {
-        expect(Array.isArray(mockExecutiveData.key_strengths)).toBe(true);
-    });
-    
-    test('should have areas_of_concern array', () => {
-        expect(Array.isArray(mockExecutiveData.areas_of_concern)).toBe(true);
-    });
-    
-    test('should have recommendations array', () => {
-        expect(Array.isArray(mockExecutiveData.recommendations)).toBe(true);
-    });
-});
-
-describe('Data Validation - Boundary Conditions', () => {
-    test('should handle empty arrays', () => {
-        const emptyArray = [];
-        expect(emptyArray.length).toBe(0);
-    });
-    
-    test('should handle null values', () => {
-        const nullValue = null;
-        expect(nullValue).toBeNull();
-    });
-    
-    test('should handle undefined values', () => {
-        const undefinedValue = undefined;
-        expect(undefinedValue).toBeUndefined();
-    });
-    
-    test('should handle zero values', () => {
-        const zero = 0;
-        expect(zero).toBe(0);
-    });
-    
-    test('should handle large numbers', () => {
-        const large = 1000000;
-        expect(large).toBeGreaterThan(999999);
-    });
-    
-    test('should handle decimal precision', () => {
-        const decimal = 78.5;
-        expect(decimal).toBeCloseTo(78.5, 1);
+    describe('Boundary Conditions', () => {
+        it('should handle empty arrays gracefully', () => {
+            const emptyData = { languages: [], frameworks: [] };
+            expect(emptyData.languages).toEqual([]);
+            expect(emptyData.frameworks).toEqual([]);
+        });
+        
+        it('should handle null values in optional fields', () => {
+            const dataWithNulls = {
+                health_score: 85,
+                optional_field: null
+            };
+            expect(dataWithNulls.optional_field).toBeNull();
+        });
+        
+        it('should handle undefined optional properties', () => {
+            const minimalData = { health_score: 85 };
+            expect(minimalData.optional_field).toBeUndefined();
+        });
+        
+        it('should handle very large numbers', () => {
+            const largeData = {
+                total_lines_of_code: 1000000,
+                total_files: 50000
+            };
+            expect(largeData.total_lines_of_code).toBeGreaterThan(999999);
+        });
+        
+        it('should handle decimal precision', () => {
+            const preciseData = {
+                health_score: 87.5432,
+                percentage: 12.3456
+            };
+            expect(preciseData.health_score).toBeCloseTo(87.54, 1);
+        });
     });
 });

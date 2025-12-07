@@ -15,11 +15,28 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
+
+/**
+ * Overview Tab Component (extends BaseTabComponent)
+ */
+class OverviewTab extends BaseTabComponent {
+    constructor() {
+        super('overview-container');
+    }
+    
+    render() {
+        renderOverview(this.data, this.container);
+    }
+}
+
 /**
  * Render overview tab with compact health hero design
  * @param {Object} data - Overview data from OverviewCollector
+ * @param {HTMLElement} container - Container element (optional, for backward compatibility)
  */
-export function renderOverview(data) {
+export function renderOverview(data, container = null) {
+    container = container || document.getElementById('overview-container');
     const container = document.getElementById('overview-container');
     if (!container) {
         console.error('Overview container not found');
@@ -489,3 +506,9 @@ function viewIssueDetails(issueId) {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { renderOverview };
 }
+
+// Export class for BaseTabComponent pattern
+export { OverviewTab };
+
+// Export class for BaseTabComponent pattern
+export { OverviewTab };

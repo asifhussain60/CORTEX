@@ -1259,3 +1259,18 @@ window.hideHeatmapTooltip = function() {
     const tooltip = document.getElementById('heatmap-tooltip');
     if (tooltip) tooltip.remove();
 };
+
+// BaseTabComponent wrapper
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
+
+class CodeOrgTab extends BaseTabComponent {
+    constructor() {
+        super('code-org-container');
+    }
+    
+    render() {
+        renderCodeOrganization(this.data);
+    }
+}
+
+export { CodeOrgTab };

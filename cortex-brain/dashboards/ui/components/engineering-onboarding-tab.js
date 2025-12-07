@@ -5,24 +5,26 @@
  * Features: Stage navigation, completion tracking, interactive content,
  * responsive design, accessibility support.
  * 
- * @version 1.0.0
- * @date 2025-12-06
+ * @version 1.1.0
+ * @date 2025-12-07
+ * @extends BaseTabComponent
  */
 
-class EngineeringOnboardingTab {
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
+
+class EngineeringOnboardingTab extends BaseTabComponent {
     constructor() {
+        super('engineering-onboarding-content');
         this.currentStage = 1;
         this.completedStages = this.loadProgress();
-        this.data = null;
     }
 
     /**
-     * Initialize tab with data
+     * Initialize tab with data (override BaseTabComponent)
      */
     async init(data) {
-        this.data = data;
+        await super.init(data); // Handles container setup, loading state, error handling
         this.initializeMermaid();
-        this.render();
         this.attachEventListeners();
         this.restoreScrollPosition();
         this.renderAllDiagrams();
@@ -125,16 +127,16 @@ class EngineeringOnboardingTab {
     }
 
     /**
-     * Render the tab with wizard layout
+     * Render the tab with wizard layout (override BaseTabComponent)
      */
     render() {
-        const container = document.getElementById('engineering-onboarding-content');
-        if (!container || !this.data) return;
+        // BaseTabComponent.init() already set this.container
+        if (!this.container || !this.data) return;
 
         const stage = this.data.stages.find(s => s.id === this.currentStage);
         if (!stage) return;
 
-        container.innerHTML = `
+        this.container.innerHTML = `
             <div style="margin-bottom: 1rem;">
                 ${this.renderHeader()}
                 ${this.renderProgressBar()}

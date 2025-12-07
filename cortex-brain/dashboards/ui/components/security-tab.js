@@ -531,3 +531,18 @@ window.refreshSecurityScan = function() {
     console.log('Refresh security scan');
     alert('Security scan refresh functionality coming soon!');
 };
+
+// BaseTabComponent wrapper
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
+
+class SecurityTab extends BaseTabComponent {
+    constructor() {
+        super('security-container');
+    }
+    
+    render() {
+        renderSecurity(this.data);
+    }
+}
+
+export { SecurityTab };

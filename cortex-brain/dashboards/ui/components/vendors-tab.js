@@ -695,3 +695,18 @@ window.hideVendorTooltip = function(card) {
     const tooltip = document.getElementById('vendor-tooltip');
     if (tooltip) tooltip.remove();
 };
+
+// BaseTabComponent wrapper
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
+
+class VendorsTab extends BaseTabComponent {
+    constructor() {
+        super('vendors-container');
+    }
+    
+    render() {
+        renderVendors(this.data);
+    }
+}
+
+export { VendorsTab };

@@ -825,3 +825,18 @@ window.toggle3DView = function() {
     console.log('Toggle 3D/2D view');
     alert('3D/2D toggle functionality coming soon!');
 };
+
+// BaseTabComponent wrapper
+import { BaseTabComponent } from '../core/BaseTabComponent.js';
+
+class ArchitectureTab extends BaseTabComponent {
+    constructor() {
+        super('architecture-container');
+    }
+    
+    render() {
+        renderArchitecture(this.data);
+    }
+}
+
+export { ArchitectureTab };
