@@ -131,20 +131,64 @@ class ExecutiveSummaryAggregator:
                 except:
                     pass
         
-        # Extract first meaningful paragraph
-        summary = "A software application"
+        # Extract first meaningful paragraph from README
+        summary = None
         if readme_content:
-            lines = [l.strip() for l in readme_content.split('\n') if l.strip() and not l.strip().startswith('#')]
-            if lines:
-                summary = lines[0][:500]  # First paragraph, max 500 chars
+            # Remove markdown headers and extract first substantial paragraph
+            lines = [l.strip() for l in readme_content.split('\n') if l.strip()]
+            for line in lines:
+                if not line.startswith('#') and not line.startswith('<!--') and len(line) > 50:
+                    summary = line[:800]  # First meaningful paragraph, max 800 chars
+                    break
         
-        # Build key points from evidence
-        key_points = evidence[:5] if evidence else [
-            f"Built with {tech.get('backend', [{}])[0].get('name', 'modern technologies')}",
-            f"Uses {tech.get('database', [{}])[0].get('name', 'database')} for data storage" if tech.get('database') else "Database-backed application",
-            f"{architecture.get('summary', {}).get('total_components', 0)} components",
-            f"{architecture.get('summary', {}).get('total_loc', 0)} lines of code"
-        ]
+        # Fallback: Generate from architecture and tech stack
+        if not summary:
+            backend_techs = tech.get('backend', [])
+            primary_tech = backend_techs[0].get('name', '') if backend_techs else 'modern technologies'
+            db_tech = tech.get('database', [{}])[0].get('name', 'database') if tech.get('database') else 'database'
+            
+            arch_style = architecture.get('style', {}).get('name', 'architecture')
+            total_loc = architecture.get('summary', {}).get('total_loc', 0)
+            
+            if project_type == "legacy_service":
+                summary = f"An enterprise legacy service built with {primary_tech}, serving critical business operations. The system follows a {arch_style.lower()} pattern with {total_loc:,} lines of code, providing SOAP-based web services for external integration. This mature application handles core business logic and data processing with {db_tech} persistence."
+            elif project_type == "full_stack_app":
+                summary = f"A full-stack web application built with {primary_tech}, providing modern user interfaces and backend services. The application implements {arch_style.lower()} with {total_loc:,} lines of code, combining frontend components, RESTful APIs, and {db_tech} data storage to deliver comprehensive functionality."
+            elif project_type == "api_service":
+                summary = f"A RESTful API service powered by {primary_tech}, providing programmatic access to core functionality. The service follows {arch_style.lower()} principles with {total_loc:,} lines of code, handling business logic, data validation, and {db_tech} integration."
+            else:
+                summary = f"A software application built with {primary_tech} and {arch_style.lower()}. The system encompasses {total_loc:,} lines of code and uses {db_tech} for data persistence."
+        
+        # Build key points from evidence or generate from data
+        if evidence and len(evidence) >= 3:
+            key_points = evidence[:5]
+        else:
+            key_points = []
+            
+            # Add architecture highlights
+            if architecture.get('endpoints'):
+                endpoint_count = len(architecture.get('endpoints', []))
+                key_points.append(f"{endpoint_count} API endpoints for external integration")
+            
+            # Add component count
+            component_count = architecture.get('summary', {}).get('total_components', 0)
+            if component_count > 0:
+                key_points.append(f"{component_count} architectural components organized in tiers")
+            
+            # Add tech stack highlights
+            total_techs = tech.get('summary', {}).get('total_technologies', 0)
+            if total_techs > 0:
+                key_points.append(f"{total_techs} technologies across frontend, backend, database, and DevOps")
+            
+            # Add database info
+            db_tables = architecture.get('database_schema', {}).get('total_tables', 0)
+            if db_tables > 0:
+                key_points.append(f"{db_tables} database tables managing domain entities and relationships")
+            
+            # Add deployment info
+            deployment = architecture.get('deployment', {})
+            if deployment.get('platform'):
+                key_points.append(f"Deployed on {deployment.get('platform', 'production infrastructure')}")
         
         return {
             "summary": summary,
