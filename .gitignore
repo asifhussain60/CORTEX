@@ -160,3 +160,7 @@ cortex-brain/.alignment-state.json
 
 # Dashboard launcher shortcuts (machine-specific)
 *.lnk
+.vscode/
+cortex-brain/backups/obsolete-code/
+cortex-brain/documents/reports/system-alignment-*.md
+cortex-brain/documents/reports/system-maintenance-*.json
