@@ -105,6 +105,7 @@ class UserProfileManager:
                 experience_level TEXT NOT NULL CHECK(experience_level IN ('junior', 'mid', 'senior', 'expert')) DEFAULT 'mid',
                 response_detail TEXT NOT NULL CHECK(response_detail IN ('concise', 'balanced', 'verbose')) DEFAULT 'balanced',
                 tech_stack_preference TEXT DEFAULT NULL,
+                testing_frameworks TEXT DEFAULT NULL,
                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 persistent_flag BOOLEAN NOT NULL DEFAULT 1
@@ -424,4 +425,84 @@ class UserProfileManager:
         }
         
         return inference_map.get(interaction_mode, 'balanced')
+    
+    def set_testing_frameworks(self, frameworks: Dict[str, str]) -> bool:
+        """
+        Set user's preferred testing frameworks for different test types.
+        
+        Args:
+            frameworks: Dict mapping test type to framework name
+                       e.g., {"unit": "pytest", "e2e_browser": "Playwright"}
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            frameworks_json = json.dumps(frameworks)
+            
+            cursor.execute("""
+                UPDATE user_profile
+                SET testing_frameworks = ?,
+                    last_updated = CURRENT_TIMESTAMP
+                WHERE id = 1
+            """, (frameworks_json,))
+            
+            conn.commit()
+            conn.close()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Failed to set testing frameworks: {e}")
+            return False
+    
+    def get_testing_frameworks(self) -> Optional[Dict[str, str]]:
+        """
+        Get user's preferred testing frameworks.
+        
+        Returns:
+            Dict mapping test type to framework name, or None if not set
+        """
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT testing_frameworks 
+                FROM user_profile 
+                WHERE id = 1
+            """)
+            
+            result = cursor.fetchone()
+            conn.close()
+            
+            if result and result[0]:
+                return json.loads(result[0])
+            return None
+            
+        except Exception as e:
+            print(f"Failed to get testing frameworks: {e}")
+            return None
+    
+    def update_testing_framework(self, test_type: str, framework: str) -> bool:
+        """
+        Update a single testing framework preference.
+        
+        Args:
+            test_type: Type of test (unit, e2e_browser, etc.)
+            framework: Framework name (pytest, Playwright, etc.)
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            frameworks = self.get_testing_frameworks() or {}
+            frameworks[test_type] = framework
+            return self.set_testing_frameworks(frameworks)
+        except Exception as e:
+            print(f"Failed to update testing framework: {e}")
+            return False
 

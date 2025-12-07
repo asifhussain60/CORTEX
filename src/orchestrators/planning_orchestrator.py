@@ -31,6 +31,8 @@ from src.cortex_agents.base_agent import AgentRequest
 from src.orchestrators.session_model import PlanningSession, SessionFactory, SessionStatus
 from src.orchestrators.validation_framework import validate_plan, validate_task, ValidationResult
 from src.agents.estimation.scope_inference_engine import ScopeBoundary, ScopeEntities
+from src.orchestrators.test_intelligence import TestIntelligence, detect_test_requirements
+from src.tier1.user_profile_manager import UserProfileManager
 
 logger = logging.getLogger(__name__)
 
@@ -79,13 +81,11 @@ class PlanningOrchestrator:
         # NEW: Initialize Plan Execution Orchestrator V2 for automatic execution
         try:
             from src.orchestrators.plan_execution_orchestrator_v2 import PlanExecutionOrchestratorV2
-            from src.orchestrators.orchestrator_factory import OrchestratorFactory
             
-            # Use factory to create V2 with injected dependencies
-            factory = OrchestratorFactory(str(self.cortex_root))
-            self.plan_executor = factory.create_plan_execution_orchestrator()
+            # Direct instantiation (factory initialization complex, not needed for test intelligence)
+            self.plan_executor = PlanExecutionOrchestratorV2(cortex_root=str(self.cortex_root))
             logger.info("✅ PlanExecutionOrchestratorV2 initialized for auto-execution")
-        except ImportError as e:
+        except (ImportError, Exception) as e:
             logger.warning(f"⚠️  PlanExecutionOrchestratorV2 not available: {e}")
             self.plan_executor = None
         
@@ -96,6 +96,11 @@ class PlanningOrchestrator:
         
         # Load response templates for configuration
         self._load_template_flags()
+        
+        # NEW: Initialize test intelligence module for test requirement detection
+        self.test_intelligence = TestIntelligence()
+        self.user_profile = UserProfileManager()
+        logger.info("✅ Test intelligence initialized for smart test planning")
         
         # TDD Requirements (SKULL enforcement)
         self._tdd_dor_requirements = [
@@ -3114,7 +3119,7 @@ class PlanningOrchestrator:
     
     def inject_tdd_requirements(self, plan_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Inject mandatory TDD Mastery requirements into plan DoR/DoD.
+        Inject mandatory TDD Mastery requirements AND intelligent test strategy into plan DoR/DoD.
         
         This ensures Copilot cannot miss TDD workflow and SKULL enforcement.
         
@@ -3123,11 +3128,16 @@ class PlanningOrchestrator:
         - RED_PHASE_VALIDATION: Tests must fail before implementation
         - BRAIN_PROTECTION: All Tier 0 rules enforced
         
+        NEW (v3.8.4): Test Intelligence Integration
+        - Detects test types from feature description
+        - Recommends frameworks based on user preferences
+        - Provides headed/headless execution guidance
+        
         Args:
             plan_data: Plan dictionary with metadata, phases, DoR, DoD
             
         Returns:
-            Enriched plan with TDD requirements in DoR/DoD
+            Enriched plan with TDD requirements AND test strategy in DoR/DoD
         """
         # Get existing DoR/DoD or initialize
         dor = plan_data.get("definition_of_ready", [])
@@ -3138,6 +3148,9 @@ class PlanningOrchestrator:
             dor = []
         if not isinstance(dod, list):
             dod = []
+        
+        # NEW: Detect test requirements from feature description
+        test_strategy_injected = self._inject_test_strategy(plan_data, dor, dod)
         
         # REFACTOR: Pre-compute lowercased existing items for O(n) lookup instead of O(n²)
         existing_dor_lower = [item.lower()[:30] for item in dor]
@@ -3167,16 +3180,105 @@ class PlanningOrchestrator:
         plan_data["definition_of_ready"] = dor
         plan_data["definition_of_done"] = dod
         
-        if injected_dor_count > 0 or injected_dod_count > 0:
+        if injected_dor_count > 0 or injected_dod_count > 0 or test_strategy_injected:
             logger.info(
-                f"🧬 TDD requirements injected: "
-                f"+{injected_dor_count} DoR, +{injected_dod_count} DoD "
+                f"🧬 Requirements injected: "
+                f"TDD +{injected_dor_count} DoR, +{injected_dod_count} DoD "
+                f"{'| Test strategy ✓' if test_strategy_injected else ''} "
                 f"(Total: DoR={len(dor)}, DoD={len(dod)})"
             )
         else:
-            logger.debug("✓ TDD requirements already present, no injection needed")
+            logger.debug("✓ TDD and test requirements already present, no injection needed")
         
         return plan_data
+    
+    def _inject_test_strategy(self, plan_data: Dict[str, Any], dor: List[str], dod: List[str]) -> bool:
+        """
+        Detect test requirements from feature description and inject into DoR/DoD.
+        
+        Uses test intelligence module to:
+        1. Analyze feature description for test types
+        2. Recommend execution modes (headed/headless)
+        3. Suggest frameworks based on user preferences
+        4. Format requirements for DoR/DoD
+        
+        Args:
+            plan_data: Plan dictionary with metadata
+            dor: Definition of Ready list (modified in place)
+            dod: Definition of Done list (modified in place)
+            
+        Returns:
+            True if test strategy was injected, False if skipped
+        """
+        try:
+            # Extract feature description from metadata or phases
+            feature_description = ""
+            
+            if "metadata" in plan_data:
+                metadata = plan_data["metadata"]
+                feature_description = metadata.get("description", "") or metadata.get("title", "")
+            
+            # If no description in metadata, try to extract from phases
+            if not feature_description and "phases" in plan_data:
+                phases = plan_data.get("phases", [])
+                if phases and isinstance(phases, list) and len(phases) > 0:
+                    first_phase = phases[0]
+                    if isinstance(first_phase, dict):
+                        feature_description = first_phase.get("description", "")
+            
+            if not feature_description:
+                logger.debug("⚠️  No feature description found, skipping test intelligence")
+                return False
+            
+            # Detect test requirements
+            logger.debug(f"🔍 Analyzing feature for test requirements: {feature_description[:100]}...")
+            requirements = self.test_intelligence.analyze_requirements(feature_description)
+            
+            if not requirements:
+                logger.debug("ℹ️  No specific test requirements detected beyond unit tests")
+                return False
+            
+            # Get user's testing framework preferences
+            user_prefs = self.user_profile.get_testing_frameworks() or {}
+            
+            # Format test strategy for DoR/DoD
+            test_strategy = self.test_intelligence.format_for_planning_template(
+                requirements,
+                user_preferences=user_prefs
+            )
+            
+            # Check if test strategy already exists in DoR
+            has_test_strategy = any(
+                "test strategy" in item.lower() or "testing framework" in item.lower()
+                for item in dor
+            )
+            
+            if has_test_strategy:
+                logger.debug("✓ Test strategy already present in DoR")
+                return False
+            
+            # Inject test strategy into DoR (requirements before implementation)
+            dor_entry = f"🧪 Test Strategy: {test_strategy}"
+            dor.append(dor_entry)
+            logger.info(f"🧪 Test strategy injected: {len(requirements)} test types detected")
+            
+            # Inject test validation into DoD
+            test_types = [req.test_type.value for req in requirements]
+            dod_entry = f"✅ All test types validated: {', '.join(test_types)}"
+            dod.append(dod_entry)
+            
+            # Log detected test types for visibility
+            for req in requirements:
+                logger.debug(
+                    f"  - {req.test_type.value}: {req.execution_mode.value} "
+                    f"({'✓ ' + user_prefs.get(req.test_type.value, 'Not set') if user_prefs else 'No preference'})"
+                )
+            
+            return True
+            
+        except Exception as e:
+            logger.warning(f"⚠️  Failed to inject test strategy: {e}")
+            return False
         
         # Update plan
         plan_data["definition_of_ready"] = dor
