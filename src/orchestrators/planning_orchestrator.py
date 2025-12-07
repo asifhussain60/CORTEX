@@ -76,13 +76,17 @@ class PlanningOrchestrator:
         # NEW: Initialize ThreatModelerAgent for security analysis
         self.threat_modeler = ThreatModelerAgent()
         
-        # NEW: Initialize Plan Execution Orchestrator for automatic execution
+        # NEW: Initialize Plan Execution Orchestrator V2 for automatic execution
         try:
-            from src.orchestrators.plan_execution_orchestrator import PlanExecutionOrchestrator
-            self.plan_executor = PlanExecutionOrchestrator(str(self.cortex_root))
-            logger.info("✅ PlanExecutionOrchestrator initialized for auto-execution")
+            from src.orchestrators.plan_execution_orchestrator_v2 import PlanExecutionOrchestratorV2
+            from src.orchestrators.orchestrator_factory import OrchestratorFactory
+            
+            # Use factory to create V2 with injected dependencies
+            factory = OrchestratorFactory(str(self.cortex_root))
+            self.plan_executor = factory.create_plan_execution_orchestrator()
+            logger.info("✅ PlanExecutionOrchestratorV2 initialized for auto-execution")
         except ImportError as e:
-            logger.warning(f"⚠️  PlanExecutionOrchestrator not available: {e}")
+            logger.warning(f"⚠️  PlanExecutionOrchestratorV2 not available: {e}")
             self.plan_executor = None
         
         # UX Enhancement: Planning mode state management (MIGRATED to PlanningSession)
@@ -833,15 +837,16 @@ class PlanningOrchestrator:
             except Exception as e:
                 logger.warning(f"Git checkpoint failed for Phase 1: {e}")
             
-            # Phase 1 always gets documented (foundation phase)
-            if self._should_document_phase(1, 3, "Phase 1: Foundation"):
-                phase_doc_reminder = self._generate_documentation_reminder(
-                    context="phase_completion",
-                    plan_name=feature_name,
-                    phase_num=1,
-                    phase_name="Foundation"
-                )
-                logger.info(phase_doc_reminder)
+            # Show learning library link after significant phase (Phase 1 = Foundation)
+            phase_1_doc_reminder = self._generate_documentation_reminder(
+                "phase_completion",
+                phase_name="Phase 1: Foundation",
+                phase_number=1,
+                plan_name=feature_name,
+                is_final_phase=False
+            )
+            if phase_1_doc_reminder:
+                logger.info(phase_1_doc_reminder)
             
             if not phase_1_approved:
                 return (True, output_path, "Phase 1 complete, Phase 2 pending user approval")
@@ -879,8 +884,17 @@ class PlanningOrchestrator:
             except Exception as e:
                 logger.warning(f"Git checkpoint failed for Phase 2: {e}")
             
-            # Phase 2 documentation skipped (routine implementation - not milestone)
-            # Intelligence filter: Only document foundation and final phases
+            # Phase 2 documentation reminder (less critical than Phase 1 or 3)
+            # Only show if user explicitly wants per-phase docs
+            phase_2_doc_reminder = self._generate_documentation_reminder(
+                "phase_completion",
+                phase_name="Phase 2: Development",
+                phase_number=2,
+                plan_name=feature_name,
+                is_final_phase=False
+            )
+            if phase_2_doc_reminder:
+                logger.debug(phase_2_doc_reminder)  # Debug level since Phase 2 is routine
             
             if not phase_2_approved:
                 return (True, output_path, "Phase 2 complete, Phase 3 pending user approval")
@@ -918,15 +932,16 @@ class PlanningOrchestrator:
             except Exception as e:
                 logger.warning(f"Git checkpoint failed for Phase 3: {e}")
             
-            # Phase 3 always gets documented (final phase)
-            if self._should_document_phase(3, 3, "Phase 3: Validation & Deployment"):
-                phase_doc_reminder = self._generate_documentation_reminder(
-                    context="phase_completion",
-                    plan_name=feature_name,
-                    phase_num=3,
-                    phase_name="Validation & Deployment"
-                )
-                logger.info(phase_doc_reminder)
+            # Show learning library link after Phase 3 (Validation = significant)
+            phase_3_doc_reminder = self._generate_documentation_reminder(
+                "phase_completion",
+                phase_name="Phase 3: Validation & Deployment",
+                phase_number=3,
+                plan_name=feature_name,
+                is_final_phase=False
+            )
+            if phase_3_doc_reminder:
+                logger.info(phase_3_doc_reminder)
             
             if not phase_3_approved:
                 return (True, output_path, "Phase 3 complete, pending final approval")
@@ -1540,20 +1555,22 @@ class PlanningOrchestrator:
                         'error': str(e),
                         'timestamp': datetime.now().isoformat()
                     })
-                
-                # Intelligent documentation: Only document significant phases
-                # (Not in autonomous mode - documented at end instead)
             
             # Complete the plan
             completion_result = self.complete_plan(plan_filename)
+            
+            # Generate dashboard link for autonomous execution (show at end only)
+            dashboard_link = (
+                "\n\n🌐 VIEW LEARNING LIBRARY:\n"
+                "   Say: 'load dashboard' to browse all documentation\n"
+                "   Direct: http://localhost:8080/learning/ (after dashboard launch)\n"
+                "\n💡 Document your learnings from this autonomous execution for future reference."
+            )
             
             # Generate visual progress output
             progress_bar = self._generate_progress_bar(completed_tasks, total_tasks, width=10)
             percentage = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 100
             phases_summary = ", ".join([f"Phase {i+1}: {phase.get('name', phase.get('phase_name', 'N/A'))}" for i, phase in enumerate(phases)])
-            
-            # Generate learning library link for autonomous completion
-            learning_library_link = self._generate_learning_library_link(plan_id)
             
             # Format output directly (template system fallback not working reliably)
             rendered_output = f"""## 🧠 CORTEX Autonomous Plan Execution
@@ -1579,15 +1596,13 @@ class PlanningOrchestrator:
 **Status:** completed
 **Phases:** {phases_summary}
 
-{completion_result.get('documentation_reminder', '')}
-{learning_library_link}
+{dashboard_link}
 
 ### 🔍 Next Steps
 
 1. Review execution log
 2. Check git history for phase checkpoints
-3. Launch learning library dashboard: `load dashboard`
-4. Review documented learnings and outcomes
+3. Document learnings: {completion_result.get('documentation_reminder', 'Update learning library')}
 """
             
             logger.info(f"\n{rendered_output}")
@@ -1601,7 +1616,6 @@ class PlanningOrchestrator:
                 'execution_log': execution_log,
                 'completion_result': completion_result,
                 'documentation_reminder': completion_result.get('documentation_reminder', ''),
-                'learning_library_link': learning_library_link,
                 'rendered_output': rendered_output
             }
             
@@ -1746,119 +1760,100 @@ class PlanningOrchestrator:
         
         return "\n".join(log_lines)
     
-    def _should_document_phase(self, phase_num: int, total_phases: int, phase_name: str) -> bool:
-        """
-        Determine if a phase warrants learning library documentation.
-        
-        Intelligence Filter:
-        - Phase 1 (Foundation): Always document (sets architectural direction)
-        - Final phase: Always document (captures completion state)
-        - Integration/Consolidation phase: Always document (refactoring insights)
-        - Middle phases: Only if explicitly marked as milestone
-        
-        Args:
-            phase_num: Current phase number (1-indexed)
-            total_phases: Total number of phases in plan
-            phase_name: Name of the phase
-        
-        Returns:
-            True if phase should trigger documentation
-        """
-        # Always document foundation phase
-        if phase_num == 1:
-            return True
-        
-        # Always document final phase
-        if phase_num == total_phases:
-            return True
-        
-        # Always document integration/consolidation phases
-        if "integration" in phase_name.lower() or "consolidation" in phase_name.lower():
-            return True
-        
-        # Document milestone phases (keywords: milestone, major, critical)
-        milestone_keywords = ["milestone", "major", "critical", "core"]
-        if any(keyword in phase_name.lower() for keyword in milestone_keywords):
-            return True
-        
-        # Skip documentation for routine implementation phases
-        return False
-    
-    def _generate_learning_library_link(self, plan_name: str, phase_num: Optional[int] = None) -> str:
-        """
-        Generate learning library dashboard link.
-        
-        Args:
-            plan_name: Name of the plan
-            phase_num: Optional phase number (for phase-specific links)
-        
-        Returns:
-            Formatted dashboard link with launch instructions
-        """
-        phase_suffix = f" - Phase {phase_num}" if phase_num else ""
-        return (
-            f"\n\n📚 **View Learning Library:**\n"
-            f"Launch dashboard to review documentation: `load dashboard`\n"
-            f"Documentation for: {plan_name}{phase_suffix}\n"
-            f"Location: cortex-brain/documents/learning/\n"
-        )
-    
     def _generate_documentation_reminder(self, context: str, **kwargs) -> str:
         """
-        Generate documentation reminder for learning library.
+        Generate documentation reminder for learning library with dashboard link.
+        
+        Intelligently determines when documentation is valuable:
+        - plan_completion: Always document (major milestone)
+        - phase_completion: Only document phases with significant learnings
+        - plan_approval: Only if plan has novel approach
         
         Args:
-            context: Context of the reminder (plan_completion, plan_approval, ado_completion, phase_completion)
+            context: Context of the reminder (plan_completion, phase_completion, plan_approval, ado_completion)
             **kwargs: Additional context-specific parameters
-                - plan_name: Name of the plan
-                - phase_num: Phase number (for phase completions)
-                - total_phases: Total phases (for intelligence filtering)
-                - phase_name: Phase name (for intelligence filtering)
-                - work_item_id: ADO work item ID
-                - title: ADO work item title
         
         Returns:
-            Formatted documentation reminder string with learning library link
+            Formatted documentation reminder string with dashboard link
         """
-        plan_name = kwargs.get('plan_name', 'N/A')
-        phase_num = kwargs.get('phase_num')
-        
         reminders = {
             "plan_completion": (
-                "\n📚 DOCUMENTATION & LEARNING LIBRARY:\n"
-                "Documentation has been created in the learning library.\n"
-                "Location: cortex-brain/documents/learning/milestones/\n"
-                f"Plan: {plan_name}\n"
-                "Content: Key learnings, decisions, and outcomes captured.\n"
-                f"{self._generate_learning_library_link(plan_name)}"
+                "\n📚 LEARNING LIBRARY UPDATE:\n"
+                "Document this work in the learning library for future reference.\n"
+                f"📂 Location: cortex-brain/documents/learning/milestones/{kwargs.get('plan_name', 'unnamed')}.md\n"
+                f"📋 Plan: {kwargs.get('plan_name', 'N/A')}\n"
+                "✨ Capture: Key learnings, decisions, outcomes, and challenges overcome.\n"
+                "\n🌐 VIEW LEARNING LIBRARY:\n"
+                "   Say: 'load dashboard' or 'launch learning library'\n"
+                "   Direct: http://localhost:8080/learning/ (after dashboard launch)\n"
+                "\n💡 Cross-machine: All docs sync via cortex-brain/documents/learning/"
             ),
-            "phase_completion": (
-                "\n📚 PHASE DOCUMENTATION:\n"
-                f"Phase {phase_num} documentation created in learning library.\n"
-                "Location: cortex-brain/documents/learning/milestones/\n"
-                f"Plan: {plan_name}\n"
-                "Content: Phase-specific decisions, challenges, and solutions.\n"
-                f"{self._generate_learning_library_link(plan_name, phase_num)}"
-            ),
+            "phase_completion": self._generate_phase_documentation_reminder(**kwargs),
             "plan_approval": (
-                "\n📚 DOCUMENTATION REMINDER:\n"
-                "Consider documenting the planning strategy in the learning library.\n"
-                "Location: cortex-brain/documents/learning/planning_strategies/\n"
-                f"Plan: {plan_name}\n"
-                "Capture: Requirements, scope, approach, and any key decisions made during planning.\n"
-                f"{self._generate_learning_library_link(plan_name)}"
+                "\n📚 PLANNING STRATEGY (Optional):\n"
+                f"Plan: {kwargs.get('plan_name', 'N/A')}\n"
+                "If this plan introduces novel approaches or patterns, document in:\n"
+                f"📂 cortex-brain/documents/learning/planning_strategies/{kwargs.get('plan_name', 'unnamed')}-strategy.md\n"
+                "\n🌐 VIEW DOCUMENTATION:\n"
+                "   Say: 'load dashboard' to browse learning library\n"
             ),
             "ado_completion": (
-                "\n📚 DOCUMENTATION & LEARNING LIBRARY:\n"
-                "ADO work item documentation created in learning library.\n"
-                "Location: cortex-brain/documents/learning/ado_workflows/\n"
+                "\n📚 ADO WORKFLOW DOCUMENTATION:\n"
                 f"Work Item: {kwargs.get('work_item_id', 'N/A')} - {kwargs.get('title', 'N/A')}\n"
-                "Content: Implementation details, technical decisions, and outcomes.\n"
-                + self._generate_learning_library_link(f"ADO-{kwargs.get('work_item_id', 'N/A')}")
+                f"📂 Location: cortex-brain/documents/learning/ado_workflows/ado-{kwargs.get('work_item_id', 'unknown')}.md\n"
+                "✨ Capture: Implementation approach, technical decisions, integration points.\n"
+                "\n🌐 VIEW LEARNING LIBRARY:\n"
+                "   Say: 'load dashboard' to access all ADO workflow documentation\n"
             )
         }
         
         return reminders.get(context, "")
+    
+    def _generate_phase_documentation_reminder(self, **kwargs) -> str:
+        """
+        Intelligently determine if phase warrants documentation.
+        
+        Only suggest documentation for phases with:
+        - Novel technical approaches
+        - Complex problem-solving
+        - Significant architectural decisions
+        - Integration challenges overcome
+        
+        Args:
+            **kwargs: Phase context (phase_name, phase_number, tasks_completed, etc.)
+        
+        Returns:
+            Documentation reminder string or empty if phase doesn't warrant docs
+        """
+        phase_name = kwargs.get('phase_name', '')
+        phase_number = kwargs.get('phase_number', 0)
+        plan_name = kwargs.get('plan_name', 'N/A')
+        
+        # Only document significant phases (not every phase)
+        significant_phases = [
+            'foundation', 'architecture', 'integration', 'consolidation',
+            'deployment', 'validation', 'security'
+        ]
+        
+        # Check if phase name contains significant keywords
+        is_significant = any(keyword in phase_name.lower() for keyword in significant_phases)
+        
+        # Always document final phase
+        is_final_phase = kwargs.get('is_final_phase', False)
+        
+        if not (is_significant or is_final_phase):
+            return ""  # No documentation needed for routine phases
+        
+        return (
+            f"\n📚 PHASE {phase_number} DOCUMENTATION (Significant Milestone):\n"
+            f"Phase: {phase_name}\n"
+            f"Plan: {plan_name}\n"
+            f"📂 Location: cortex-brain/documents/learning/milestones/{plan_name}-phase{phase_number}.md\n"
+            "✨ Capture: Technical decisions, challenges, and solutions from this phase.\n"
+            "\n🌐 VIEW LEARNING LIBRARY:\n"
+            "   Say: 'load dashboard' to browse phase documentation\n"
+            "   Direct: http://localhost:8080/learning/ (after dashboard launch)\n"
+        )
     
     def _update_status_in_content(self, content: str, new_status: str) -> str:
         """

@@ -3325,7 +3325,7 @@ class DeploymentGates:
                 if str(self.project_root) not in sys.path:
                     sys.path.insert(0, str(self.project_root))
                 
-                from src.orchestrators.plan_execution_orchestrator import PlanExecutionOrchestrator
+                from src.orchestrators.plan_execution_orchestrator_v2 import PlanExecutionOrchestratorV2
                 gate["details"]["orchestrator_imports"] = True
                 
                 # Check 3: Required methods present
@@ -3344,7 +3344,7 @@ class DeploymentGates:
                 
                 missing_methods = []
                 for method in required_methods:
-                    if not hasattr(PlanExecutionOrchestrator, method):
+                    if not hasattr(PlanExecutionOrchestratorV2, method):
                         missing_methods.append(method)
                 
                 if missing_methods:
@@ -3353,9 +3353,9 @@ class DeploymentGates:
                     gate["details"]["required_methods_present"] = True
                 
             except ImportError as e:
-                gate["details"]["issues"].append(f"Cannot import PlanExecutionOrchestrator: {e}")
+                gate["details"]["issues"].append(f"Cannot import PlanExecutionOrchestratorV2: {e}")
             except Exception as e:
-                gate["details"]["issues"].append(f"Error inspecting PlanExecutionOrchestrator: {e}")
+                gate["details"]["issues"].append(f"Error inspecting PlanExecutionOrchestratorV2: {e}")
             
             # Check 4: Consolidation phase implementation
             if orchestrator_path.exists():

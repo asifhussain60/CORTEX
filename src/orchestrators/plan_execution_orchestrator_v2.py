@@ -166,6 +166,17 @@ class PlanExecutionOrchestratorV2:
             
             logger.info(f"✅ Phase {phase.get('phase_number')} completed")
             
+            # Show dashboard link after significant phases
+            phase_name = phase.get('phase_name', '').lower()
+            significant_phases = ['foundation', 'architecture', 'integration', 'consolidation', 'validation', 'deployment', 'security']
+            if any(keyword in phase_name for keyword in significant_phases):
+                dashboard_reminder = (
+                    f"\n🌐 PHASE {phase.get('phase_number')} COMPLETE - View in Learning Library:\n"
+                    "   Say: 'load dashboard' to browse phase documentation\n"
+                    "   Direct: http://localhost:8080/learning/ (after dashboard launch)\n"
+                )
+                logger.info(dashboard_reminder)
+            
             # In approval_gated mode, pause after each phase
             if execution_mode == "approval_gated" and phase != phases[-1]:
                 logger.info("⏸️  Phase complete. Awaiting approval to continue...")
@@ -195,6 +206,15 @@ class PlanExecutionOrchestratorV2:
         execution_report["success"] = True
         execution_report["completed_at"] = datetime.now().isoformat()
         self._save_execution_report(execution_report)
+        
+        # Show final dashboard link for completed plan (autonomous mode)
+        final_dashboard_link = (
+            "\n\n🌐 PLAN EXECUTION COMPLETE - View Learning Library:\n"
+            "   Say: 'load dashboard' to browse all documentation\n"
+            "   Direct: http://localhost:8080/learning/ (after dashboard launch)\n"
+            "\n💡 Document your learnings and outcomes from this execution.\n"
+        )
+        logger.info(final_dashboard_link)
         
         logger.info(f"✅ Plan execution completed (V2): {plan_path.name}")
         return (True, execution_report)
