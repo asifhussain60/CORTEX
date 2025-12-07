@@ -15,9 +15,6 @@
     <link rel="stylesheet" href="styles/architecture-panels.css">
     <link rel="stylesheet" href="styles/skeleton-loader.css">
     <link rel="stylesheet" href="styles/overview-tab.css">
-    <link rel="stylesheet" href="styles/migration-roadmap-generator.css">
-    <link rel="stylesheet" href="styles/framework-health-heatmap.css">
-    <link rel="stylesheet" href="styles/dependency-bloat-analyzer.css">
     
     <style>
         /* Glassmorphism Dark Mode Dashboard */
@@ -445,18 +442,6 @@
                     <span class="nav-tab-icon">🔌</span>
                     <span class="nav-tab-text">Dependencies</span>
                 </a>
-                <a class="nav-tab" data-tab="migration-roadmap" onclick="switchTab('migration-roadmap')">
-                    <span class="nav-tab-icon">🗺️</span>
-                    <span class="nav-tab-text">Migration Roadmap</span>
-                </a>
-                <a class="nav-tab" data-tab="framework-health" onclick="switchTab('framework-health')">
-                    <span class="nav-tab-icon">🏥</span>
-                    <span class="nav-tab-text">Framework Health</span>
-                </a>
-                <a class="nav-tab" data-tab="dependency-bloat" onclick="switchTab('dependency-bloat')">
-                    <span class="nav-tab-icon">📦</span>
-                    <span class="nav-tab-text">Dependency Bloat</span>
-                </a>
             </nav>
         </aside>
         
@@ -532,27 +517,6 @@
                     <!-- Vendors/dependencies content will be dynamically loaded -->
                 </div>
             </div>
-            
-            <!-- Tab Content: Migration Roadmap -->
-            <div class="tab-content" id="tab-migration-roadmap">
-                <div id="migration-roadmap-container">
-                    <!-- Migration roadmap content will be dynamically loaded -->
-                </div>
-            </div>
-            
-            <!-- Tab Content: Framework Health -->
-            <div class="tab-content" id="tab-framework-health">
-                <div id="framework-health-container">
-                    <!-- Framework health heatmap content will be dynamically loaded -->
-                </div>
-            </div>
-            
-            <!-- Tab Content: Dependency Bloat -->
-            <div class="tab-content" id="tab-dependency-bloat">
-                <div id="dependency-bloat-container">
-                    <!-- Dependency bloat analyzer content will be dynamically loaded -->
-                </div>
-            </div>
         </main>
     </div>
     
@@ -569,12 +533,6 @@
     <script type="module" src="components/architecture-tab.js"></script>
     <script type="module" src="components/code-org-tab.js"></script>
     <script type="module" src="components/vendors-tab.js"></script>
-    <script src="components/migration-roadmap-generator.js"></script>
-    <script src="components/framework-health-heatmap.js"></script>
-    <script src="components/dependency-bloat-analyzer.js"></script>
-    <script type="module" src="components/migration-roadmap-tab.js"></script>
-    <script type="module" src="components/framework-health-tab.js"></script>
-    <script type="module" src="components/dependency-bloat-tab.js"></script>
     
     <script>
         // Global tab switching function
@@ -599,10 +557,7 @@
                 'security': 'Security Analysis',
                 'architecture': 'Architecture Overview',
                 'code-org': 'Code Organization',
-                'vendors': 'Dependencies & Vendors',
-                'migration-roadmap': 'Migration Roadmap',
-                'framework-health': 'Framework Health Heatmap',
-                'dependency-bloat': 'Dependency Bloat Analyzer'
+                'vendors': 'Dependencies & Vendors'
             };
             document.getElementById('contentTitle').textContent = titles[tabName] || 'Dashboard';
             

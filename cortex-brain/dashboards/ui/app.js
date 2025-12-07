@@ -18,9 +18,6 @@ import { renderSecurity } from './components/security-tab.js';
 import { renderArchitecture } from './components/architecture-tab.js';
 import { renderCodeOrganization } from './components/code-org-tab.js';
 import { renderVendors } from './components/vendors-tab.js';
-import { renderMigrationRoadmap } from './components/migration-roadmap-tab.js';
-import { renderFrameworkHealth } from './components/framework-health-tab.js';
-import { renderDependencyBloat } from './components/dependency-bloat-tab.js';
 import { initKeyboardNavigation } from './keyboard-navigation.js';
 import { 
     initPerformanceMonitoring, 
@@ -276,15 +273,6 @@ async function renderCurrentTab() {
                 break;
             case 'vendors':
                 contentHtml = renderVendors(appState.data);
-                break;
-            case 'migration-roadmap':
-                contentHtml = renderMigrationRoadmap(appState.data);
-                break;
-            case 'framework-health':
-                contentHtml = renderFrameworkHealth(appState.data);
-                break;
-            case 'dependency-bloat':
-                contentHtml = renderDependencyBloat(appState.data);
                 break;
             default:
                 console.warn(`Unknown tab: ${appState.currentTab}`);

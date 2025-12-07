@@ -10,7 +10,6 @@ Features:
 - Safe vs approval-required action classification
 - Interactive approval prompts for destructive changes
 - Realignment report generation with compliance tracking
-- Learning library integration for automatic documentation
 
 Operations:
 1. realign - Main realignment workflow
@@ -22,7 +21,7 @@ Operations:
 7. apply_action - Execute single realignment action
 8. generate_report - Create realignment report
 
-Version: 3.1.0 (Learning Library Integration)
+Version: 3.0.0 (Utility Migration)
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)
@@ -33,11 +32,6 @@ from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
-
-# Learning library integration
-from src.learning.event_collector import get_global_collector
-from src.learning.event_taxonomy import LearningEvent, EventType
-from src.learning.document_generator import DocumentGenerator
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -515,7 +509,6 @@ def align_system_v2(
     - Obsolete code detection and cleanup
     - Test migration to new architecture
     - CORTEX.prompt.md optimization validation
-    - Learning library integration (automatic documentation)
     
     Args:
         project_root: Root directory of project to align
@@ -527,20 +520,6 @@ def align_system_v2(
         Dictionary with alignment results and report path
     """
     logger.info("🧠 CORTEX Align v2.0 - Starting holistic system alignment...")
-    
-    # Capture alignment start event for learning library
-    start_time = datetime.now()
-    collector = get_global_collector()
-    start_event = LearningEvent(
-        event_type=EventType.WORKFLOW_STARTED,
-        component="SystemAlignment",
-        metadata={
-            "auto_fix": auto_fix,
-            "dry_run": dry_run,
-            "version": "2.0"
-        }
-    )
-    collector.capture_event(start_event)
     
     results = {
         "success": True,
@@ -1028,43 +1007,6 @@ def align_system_v2(
         logger.error(f"❌ Alignment failed: {e}")
         results["success"] = False
         results["errors"].append(f"System error: {str(e)}")
-    
-    # Capture alignment completion event for learning library
-    duration_ms = int((datetime.now() - start_time).total_seconds() * 1000)
-    completion_event = LearningEvent(
-        event_type=EventType.WORKFLOW_COMPLETED,
-        component="SystemAlignment",
-        metadata={
-            "success": results["success"],
-            "checks_passed": sum(1 for check in results["checks"].values() if isinstance(check, dict) and check.get("passed", False)),
-            "total_checks": len(results["checks"]),
-            "warnings": len(results["warnings"]),
-            "errors": len(results["errors"]),
-            "fixes_applied": len(results["fixes_applied"]),
-            "duration_ms": duration_ms
-        }
-    )
-    collector.capture_event(completion_event)
-    
-    # Generate learning documentation if enabled
-    try:
-        doc_generator = DocumentGenerator(enabled=True)
-        learning_doc = doc_generator.generate_document(completion_event)
-        
-        # Save learning documentation if generated successfully
-        if learning_doc and len(learning_doc) > 0:
-            learning_docs_dir = cortex_root / "cortex-brain" / "learning" / "alignment"
-            learning_docs_dir.mkdir(parents=True, exist_ok=True)
-            
-            doc_filename = f"alignment-{datetime.now().strftime('%Y%m%d-%H%M%S')}.md"
-            doc_path = learning_docs_dir / doc_filename
-            
-            with open(doc_path, 'w') as f:
-                f.write(learning_doc)
-            
-            logger.info(f"📚 Learning documentation generated: {doc_path}")
-    except Exception as e:
-        logger.debug(f"Learning documentation generation skipped: {e}")
     
     return results
 
