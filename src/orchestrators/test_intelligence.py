@@ -9,9 +9,10 @@ Features:
 - Headed vs headless recommendations
 - Framework-agnostic guidance
 - Integration with user profile for framework preferences
+- Selenium test template generation (Planning System 3.0)
 
 Author: Asif Hussain
-Version: 3.8.4
+Version: 3.9.0
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)
 """
