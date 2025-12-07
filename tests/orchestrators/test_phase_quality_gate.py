@@ -55,7 +55,7 @@ class TestPhaseQualityGateRED:
         
         gate = PhaseQualityGate(workspace_path=Path("/test"))
         
-        with patch('src.orchestrators.phase_quality_gate.ReviewOrchestrator') as mock_review:
+        with patch('src.operations.modules.architectural.review_orchestrator.ReviewOrchestrator') as mock_review:
             mock_review_instance = Mock()
             mock_review_instance.execute.return_value = Mock(
                 success=True,
@@ -171,7 +171,7 @@ class TestPhaseQualityGateRED:
         
         gate = PhaseQualityGate(workspace_path=Path("/test"), threshold=70)
         
-        with patch('src.orchestrators.phase_quality_gate.ReviewOrchestrator') as mock_review:
+        with patch('src.operations.modules.architectural.review_orchestrator.ReviewOrchestrator') as mock_review:
             mock_review_instance = Mock()
             mock_review_instance.execute.return_value = Mock(
                 success=True,
