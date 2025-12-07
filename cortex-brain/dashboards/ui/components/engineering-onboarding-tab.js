@@ -126,7 +126,7 @@ class EngineeringOnboardingTab {
     }
 
     /**
-     * Render the tab
+     * Render the tab with wizard layout
      */
     render() {
         const container = document.getElementById('engineering-onboarding-content');
@@ -136,12 +136,15 @@ class EngineeringOnboardingTab {
         if (!stage) return;
 
         container.innerHTML = `
-            <div class="onboarding-container">
+            <div style="margin-bottom: 1rem;">
                 ${this.renderHeader()}
                 ${this.renderProgressBar()}
-                ${this.renderStageNavigation()}
-                ${this.renderStageContent(stage)}
-                ${this.renderFooterNavigation(stage)}
+            </div>
+            <div class="onboarding-container">
+                ${this.renderWizardStepper()}
+                <div class="wizard-content-area">
+                    ${this.renderStageContent(stage)}
+                </div>
             </div>
         `;
     }
@@ -200,6 +203,76 @@ class EngineeringOnboardingTab {
     }
 
     /**
+     * Render wizard stepper navigation (left sidebar)
+     */
+    renderWizardStepper() {
+        return `
+            <div class="wizard-stepper">
+                ${this.data.stages.map(stage => this.renderWizardStep(stage)).join('')}
+            </div>
+        `;
+    }
+
+    /**
+     * Render individual wizard step
+     */
+    renderWizardStep(stage) {
+        const isActive = stage.id === this.currentStage;
+        const isCompleted = this.completedStages.has(stage.id);
+        const statusClass = isCompleted ? 'completed' : '';
+        const activeClass = isActive ? 'active' : '';
+        const statusIcon = isCompleted ? '✅' : (isActive ? '⏳' : '◻️');
+
+        return `
+            <div class="wizard-step ${statusClass} ${activeClass}" data-stage-id="${stage.id}">
+                <div class="wizard-step-header">
+                    <div class="wizard-step-icon">${stage.icon}</div>
+                    <div class="wizard-step-info">
+                        <div class="wizard-step-title">${stage.title}</div>
+                        <div class="wizard-step-duration">⏱️ ${stage.duration_minutes} min</div>
+                    </div>
+                    <div class="wizard-step-status">${statusIcon}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Render wizard stepper navigation (left sidebar)
+     */
+    renderWizardStepper() {
+        return `
+            <div class="wizard-stepper">
+                ${this.data.stages.map(stage => this.renderWizardStep(stage)).join('')}
+            </div>
+        `;
+    }
+
+    /**
+     * Render individual wizard step
+     */
+    renderWizardStep(stage) {
+        const isActive = stage.id === this.currentStage;
+        const isCompleted = this.completedStages.has(stage.id);
+        const statusClass = isCompleted ? 'completed' : '';
+        const activeClass = isActive ? 'active' : '';
+        const statusIcon = isCompleted ? '✅' : (isActive ? '⏳' : '◻️');
+
+        return `
+            <div class="wizard-step ${statusClass} ${activeClass}" data-stage-id="${stage.id}">
+                <div class="wizard-step-header">
+                    <div class="wizard-step-icon">${stage.icon}</div>
+                    <div class="wizard-step-info">
+                        <div class="wizard-step-title">${stage.title}</div>
+                        <div class="wizard-step-duration">⏱️ ${stage.duration_minutes} min</div>
+                    </div>
+                    <div class="wizard-step-status">${statusIcon}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
      * Render diagram container
      */
     renderDiagram(diagram) {
@@ -219,45 +292,17 @@ ${diagram.mermaid_code}
     }
 
     /**
-     * Render stage navigation pills
+     * Render stage navigation pills (DEPRECATED - replaced by wizard stepper)
      */
     renderStageNavigation() {
-        return `
-            <div class="stage-navigation" role="tablist" aria-label="Learning stages">
-                ${this.data.stages.map(stage => this.renderStageCard(stage)).join('')}
-            </div>
-        `;
+        return ''; // Removed in wizard design
     }
 
     /**
-     * Render individual stage card
+     * Render individual stage card (DEPRECATED)
      */
     renderStageCard(stage) {
-        const isActive = stage.id === this.currentStage;
-        const isCompleted = this.completedStages.has(stage.id);
-        const statusClass = isCompleted ? 'completed' : 'pending';
-        const activeClass = isActive ? 'active' : '';
-        const statusIcon = isCompleted ? '✅' : (isActive ? '⏳' : '◻️');
-
-        return `
-            <button 
-                class="stage-card ${statusClass} ${activeClass}" 
-                data-stage-id="${stage.id}"
-                role="tab"
-                aria-selected="${isActive}"
-                aria-controls="stage-content-${stage.id}"
-            >
-                <div class="stage-card-header">
-                    <span class="stage-icon">${stage.icon}</span>
-                    <span class="stage-number">Stage ${stage.order}</span>
-                    <span class="stage-status">${statusIcon}</span>
-                </div>
-                <div class="stage-card-body">
-                    <h3 class="stage-title">${stage.title}</h3>
-                    <p class="stage-duration">⏱️ ${stage.duration_minutes} min</p>
-                </div>
-            </button>
-        `;
+        return ''; // Removed in wizard design
     }
 
     /**
@@ -277,19 +322,19 @@ ${diagram.mermaid_code}
     }
 
     /**
-     * Render stage header
+     * Render stage header with centered icon and yellow badge
      */
     renderStageHeader(stage) {
         const isCompleted = this.completedStages.has(stage.id);
         return `
+            <div class="step-badge">
+                <div class="step-badge-label">STEP</div>
+                <div>${stage.id}</div>
+            </div>
             <div class="stage-header">
-                <div class="stage-header-main">
-                    <h2 class="stage-content-title">
-                        <span class="stage-icon-large">${stage.icon}</span>
-                        ${stage.title}
-                    </h2>
-                    <p class="stage-description">${stage.description}</p>
-                </div>
+                <span class="stage-icon-large">${stage.icon}</span>
+                <h2 class="stage-content-title">${stage.title}</h2>
+                <p class="stage-description">${stage.description}</p>
                 <div class="stage-actions">
                     <span class="stage-duration-badge">⏱️ ${stage.duration_minutes} minutes</span>
                     <button class="btn-mark-complete ${isCompleted ? 'completed' : ''}" data-stage-id="${stage.id}">
@@ -1445,17 +1490,17 @@ ${diagram.mermaid_code}
         const nextStage = this.data.stages.find(s => s.order === stage.order + 1);
         
         return `
-            <div class="stage-footer-navigation">
+            <div class="wizard-navigation">
                 ${prevStage ? `
                     <button class="btn-nav btn-prev" data-stage-id="${prevStage.id}">
-                        ← Previous: ${prevStage.title}
+                        Previous
                     </button>
-                ` : '<div></div>'}
+                ` : '<button class="btn-nav btn-prev" disabled>Previous</button>'}
                 ${nextStage ? `
                     <button class="btn-nav btn-next" data-stage-id="${nextStage.id}">
-                        Next: ${nextStage.title} →
+                        Next
                     </button>
-                ` : '<div></div>'}
+                ` : '<button class="btn-nav btn-next" disabled>Next</button>'}
             </div>
         `;
     }
@@ -1464,16 +1509,16 @@ ${diagram.mermaid_code}
      * Attach event listeners
      */
     attachEventListeners() {
-        // Stage navigation
-        document.querySelectorAll('.stage-card').forEach(card => {
-            card.addEventListener('click', (e) => {
+        // Wizard step navigation
+        document.querySelectorAll('.wizard-step').forEach(step => {
+            step.addEventListener('click', (e) => {
                 const stageId = parseInt(e.currentTarget.dataset.stageId);
                 this.navigateToStage(stageId);
             });
         });
 
-        // Footer navigation
-        document.querySelectorAll('.btn-nav').forEach(btn => {
+        // Navigation buttons
+        document.querySelectorAll('.btn-nav:not([disabled])').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const stageId = parseInt(e.currentTarget.dataset.stageId);
                 this.navigateToStage(stageId);
