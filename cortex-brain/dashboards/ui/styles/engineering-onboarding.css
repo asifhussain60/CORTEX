@@ -5,7 +5,7 @@
     display: flex;
     gap: 1.5rem;
     min-height: calc(100vh - 200px);
-    align-items: flex-start;
+    align-items: stretch;
 }
 
 .onboarding-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
@@ -19,18 +19,26 @@
 .onboarding-progress-bar { height: 8px; background: rgba(255,255,255,.08); border-radius: 6px; margin: .75rem 0 1rem; overflow: hidden; }
 .onboarding-progress-bar .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); transition: width 0.3s ease; }
 
-/* Wizard Stepper Navigation (Left Sidebar - Sticky, No Scrollbar) */
+/* Wizard Stepper Navigation (Left Sidebar - Balanced Height) */
 .wizard-stepper { 
     width: 220px;
     flex-shrink: 0;
-    position: sticky;
-    top: 20px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
     padding: 1.5rem 1rem;
     backdrop-filter: blur(10px);
-    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Sticky wrapper inside stepper for navigation */
+.wizard-stepper::before {
+    content: '';
+    position: sticky;
+    top: 20px;
+    height: 0;
 }
 
 .wizard-step {
@@ -122,11 +130,19 @@
     margin-left: auto;
 }
 
-/* Wizard Content Area (Right Side - Natural Flow) */
+/* Wizard Content Area (Right Side - Balanced Height) */
 .wizard-content-area {
     flex: 1;
     min-width: 0;
     padding-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Stage content takes full available space */
+.stage-content {
+    flex: 1;
+    margin-bottom: 2rem;
 }
 
 /* Remove all custom scrollbars for content area - let page scroll naturally */
