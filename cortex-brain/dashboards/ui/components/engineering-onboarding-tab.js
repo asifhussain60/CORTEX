@@ -14,7 +14,6 @@ class EngineeringOnboardingTab {
         this.currentStage = 1;
         this.completedStages = this.loadProgress();
         this.data = null;
-        this.expandedSections = new Set();
     }
 
     /**
@@ -583,25 +582,24 @@ ${diagram.mermaid_code}
     }
 
     renderSolution(solution, idx) {
-        const sectionId = `solution-${idx}`;
-        const isExpanded = this.expandedSections.has(sectionId);
-        
         return `
-            <div class="solution-card">
-                <div class="solution-header" data-toggle="${sectionId}">
+            <details class="solution-panel">
+                <summary class="solution-summary">
                     <div class="solution-info">
                         <h4 class="solution-name">${solution.name}</h4>
                         <p class="solution-description">${solution.description}</p>
                     </div>
                     <div class="solution-meta">
                         <span class="solution-project-count">${solution.project_count} projects</span>
-                        <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                </div>
-                <div class="solution-projects ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">
+                </summary>
+                <div class="solution-content">
                     ${solution.projects ? solution.projects.map(proj => this.renderProject(proj)).join('') : ''}
                 </div>
-            </div>
+            </details>
         `;
     }
 
@@ -721,12 +719,10 @@ ${diagram.mermaid_code}
 
     renderController(controller, idx) {
         const riskClass = this.getRiskClass(controller.risk_level);
-        const sectionId = `controller-${idx}`;
-        const isExpanded = this.expandedSections.has(sectionId);
         
         return `
-            <div class="controller-card ${riskClass}">
-                <div class="controller-header" data-toggle="${sectionId}">
+            <details class="controller-panel ${riskClass}">
+                <summary class="controller-summary">
                     <div class="controller-info">
                         <h4 class="controller-name">${controller.name}</h4>
                         ${controller.alert ? `<div class="controller-alert">${controller.alert}</div>` : ''}
@@ -736,10 +732,12 @@ ${diagram.mermaid_code}
                             Complexity: ${controller.complexity}
                         </span>
                         <span class="risk-badge ${riskClass}">${controller.risk_level}</span>
-                        <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                </div>
-                <div class="controller-details ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">
+                </summary>
+                <div class="controller-content">
                     <div class="controller-stats">
                         <span>📄 ${controller.loc} LOC</span>
                         <span>🔌 ${controller.endpoints} endpoints</span>
@@ -775,7 +773,7 @@ ${diagram.mermaid_code}
                         </div>
                     ` : ''}
                 </div>
-            </div>
+            </details>
         `;
     }
 
@@ -846,12 +844,10 @@ ${diagram.mermaid_code}
 
     renderService(service, idx) {
         const riskClass = this.getRiskClass(service.risk_level);
-        const sectionId = `service-${idx}`;
-        const isExpanded = this.expandedSections.has(sectionId);
         
         return `
-            <div class="service-card ${riskClass}">
-                <div class="service-header" data-toggle="${sectionId}">
+            <details class="service-panel ${riskClass}">
+                <summary class="service-summary">
                     <div class="service-info">
                         <h4 class="service-name">${service.name}</h4>
                         ${service.alert ? `<div class="service-alert">${service.alert}</div>` : ''}
@@ -862,10 +858,12 @@ ${diagram.mermaid_code}
                             ${service.complexity}
                         </span>
                         <span class="risk-badge ${riskClass}">${service.risk_level}</span>
-                        <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                </div>
-                <div class="service-details ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">
+                </summary>
+                <div class="service-content">
                     <div class="service-stats">
                         <span>📄 ${this.formatNumber(service.loc)} LOC</span>
                     </div>
@@ -906,7 +904,7 @@ ${diagram.mermaid_code}
                         </div>
                     ` : ''}
                 </div>
-            </div>
+            </details>
         `;
     }
 
@@ -933,20 +931,36 @@ ${diagram.mermaid_code}
         return `
             <div class="content-section">
                 <h3 class="section-title">🎨 Design Patterns</h3>
-                <div class="patterns-grid">
-                    ${patterns.map(pattern => this.renderPattern(pattern)).join('')}
+                <div class="patterns-list">
+                    ${patterns.map((pattern, idx) => this.renderPattern(pattern, idx)).join('')}
                 </div>
             </div>
         `;
     }
 
-    renderPattern(pattern) {
+    renderPattern(pattern, idx) {
         return `
-            <div class="pattern-card">
-                <h4 class="pattern-name">${pattern.pattern}</h4>
-                <p class="pattern-usage">${pattern.usage}</p>
-                <p class="pattern-example"><strong>Example:</strong> ${pattern.example}</p>
-            </div>
+            <details class="pattern-panel">
+                <summary class="pattern-summary">
+                    <div class="pattern-info">
+                        <h4 class="pattern-name">${pattern.pattern}</h4>
+                        <p class="pattern-usage-brief">${pattern.usage}</p>
+                    </div>
+                    <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </summary>
+                <div class="pattern-content">
+                    <div class="pattern-usage-full">
+                        <strong>Usage:</strong>
+                        <p>${pattern.usage}</p>
+                    </div>
+                    <div class="pattern-example">
+                        <strong>Example:</strong>
+                        <p>${pattern.example}</p>
+                    </div>
+                </div>
+            </details>
         `;
     }
 
@@ -1035,19 +1049,18 @@ ${diagram.mermaid_code}
     }
 
     renderEntity(entity, idx) {
-        const sectionId = `entity-${idx}`;
-        const isExpanded = this.expandedSections.has(sectionId);
-        
         return `
-            <div class="entity-card">
-                <div class="entity-header" data-toggle="${sectionId}">
+            <details class="entity-panel">
+                <summary class="entity-summary">
                     <div class="entity-info">
                         <h4 class="entity-name">${entity.name}</h4>
                         <span class="entity-table">Table: ${entity.table}</span>
                     </div>
-                    <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
-                </div>
-                <div class="entity-details ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">
+                    <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </summary>
+                <div class="entity-content">
                     ${entity.properties ? `
                         <div class="entity-properties">
                             <strong>Properties:</strong>
@@ -1073,7 +1086,7 @@ ${diagram.mermaid_code}
                         </div>
                     ` : ''}
                 </div>
-            </div>
+            </details>
         `;
     }
 
@@ -1189,12 +1202,9 @@ ${diagram.mermaid_code}
     }
 
     renderHotspot(hotspot, idx) {
-        const sectionId = `hotspot-${idx}`;
-        const isExpanded = this.expandedSections.has(sectionId);
-        
         return `
-            <div class="hotspot-card rank-${hotspot.rank}">
-                <div class="hotspot-header" data-toggle="${sectionId}">
+            <details class="hotspot-panel rank-${hotspot.rank}">
+                <summary class="hotspot-summary">
                     <div class="hotspot-info">
                         <span class="hotspot-rank">#${hotspot.rank}</span>
                         <h4 class="hotspot-file">${hotspot.file}</h4>
@@ -1203,10 +1213,12 @@ ${diagram.mermaid_code}
                     <div class="hotspot-metrics">
                         <span class="complexity-badge very-high">${hotspot.complexity}</span>
                         <span class="loc-badge">${this.formatNumber(hotspot.loc)} LOC</span>
-                        <span class="expand-icon ${isExpanded ? 'expanded' : ''}">${isExpanded ? '▼' : '▶'}</span>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                </div>
-                <div class="hotspot-details ${isExpanded ? 'expanded' : 'collapsed'}" id="${sectionId}">
+                </summary>
+                <div class="hotspot-content">
                     ${hotspot.issues ? `
                         <div class="hotspot-issues">
                             <strong>⚠️ Issues:</strong>
@@ -1244,7 +1256,7 @@ ${diagram.mermaid_code}
                         </div>
                     ` : ''}
                 </div>
-            </div>
+            </details>
         `;
     }
 
@@ -1533,14 +1545,6 @@ ${diagram.mermaid_code}
                 this.toggleStageCompletion(stageId);
             });
         });
-
-        // Expandable sections
-        document.querySelectorAll('[data-toggle]').forEach(toggle => {
-            toggle.addEventListener('click', (e) => {
-                const sectionId = e.currentTarget.dataset.toggle;
-                this.toggleSection(sectionId);
-            });
-        });
     }
 
     /**
@@ -1572,20 +1576,6 @@ ${diagram.mermaid_code}
         this.render();
         this.attachEventListeners();
         this.renderAllDiagrams(); // Re-render diagrams after completion toggle
-    }
-
-    /**
-     * Toggle expandable section
-     */
-    toggleSection(sectionId) {
-        if (this.expandedSections.has(sectionId)) {
-            this.expandedSections.delete(sectionId);
-        } else {
-            this.expandedSections.add(sectionId);
-        }
-        this.render();
-        this.attachEventListeners();
-        this.renderAllDiagrams(); // Re-render diagrams after section toggle
     }
 
     /**

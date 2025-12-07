@@ -334,42 +334,192 @@
 .vuln-badge.medium { border-color: #ffa500; color: #ffa500; }
 .vuln-badge.low { border-color: #cccccc; color: #cccccc; }
 
-.controllers-list, .services-list, .entities-list, .repositories-list, .optimizations-list, .hotspots-list, .code-smells-list, .best-practices-list { display: grid; grid-template-columns: 1fr; gap: .5rem; }
-.controller-card, .service-card, .entity-card, .repository-card, .optimization-card, .code-smell-card, .best-practice-card, .pattern-card, .test-type-card, .security-area-card, .performance-area-card, .roadmap-quarter { background: rgba(255,255,255,.06); border: 1px solid var(--glass-border); border-radius: 10px; padding: .75rem; }
-.controller-header, .service-header, .entity-header, .solution-header, .hotspot-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.controllers-list, .services-list, .entities-list, .repositories-list, .optimizations-list, .hotspots-list, .code-smells-list, .best-practices-list { display: grid; grid-template-columns: 1fr; gap: .75rem; }
 
-/* Smooth Collapsible Panels */
-.controller-details, .service-details, .entity-details, .solution-projects, .hotspot-details { 
-    max-height: 0;
+/* Modern Native Collapsible Panels */
+details.service-panel,
+details.controller-panel,
+details.entity-panel,
+details.solution-panel,
+details.pattern-panel,
+details.hotspot-panel {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    margin-bottom: .75rem;
     overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.controller-details.expanded, .service-details.expanded, .entity-details.expanded, .solution-projects.expanded, .hotspot-details.expanded { 
-    max-height: 3000px; /* Large enough for content */
-    opacity: 1;
-    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+details.service-panel:hover,
+details.controller-panel:hover,
+details.entity-panel:hover,
+details.solution-panel:hover,
+details.pattern-panel:hover,
+details.hotspot-panel:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
 }
 
-.expand-icon { 
+details[open].service-panel,
+details[open].controller-panel,
+details[open].entity-panel,
+details[open].solution-panel,
+details[open].pattern-panel,
+details[open].hotspot-panel {
+    border-color: rgba(0, 212, 255, 0.4);
+    background: rgba(255,255,255,.06);
+}
+
+summary.service-summary,
+summary.controller-summary,
+summary.entity-summary,
+summary.solution-summary,
+summary.pattern-summary,
+summary.hotspot-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    transition: background 0.2s ease;
+}
+
+summary.service-summary:hover,
+summary.controller-summary:hover,
+summary.entity-summary:hover,
+summary.solution-summary:hover,
+summary.pattern-summary:hover,
+summary.hotspot-summary:hover {
+    background: rgba(0, 212, 255, 0.05);
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+.chevron-icon {
+    color: var(--accent-primary);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    margin-left: 0.75rem;
+}
+
+details[open] .chevron-icon {
+    transform: rotate(180deg);
+}
+
+.service-content,
+.controller-content,
+.entity-content,
+.solution-content,
+.pattern-content,
+.hotspot-content {
+    padding: 0 1.25rem 1.25rem;
+    animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.service-info,
+.controller-info,
+.entity-info,
+.solution-info,
+.pattern-info,
+.hotspot-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.service-name,
+.controller-name,
+.entity-name,
+.solution-name,
+.pattern-name,
+.hotspot-file {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #fff;
+}
+
+.service-file,
+.entity-table,
+.pattern-usage-brief {
+    font-size: 0.85rem;
     color: var(--text-secondary);
-    transition: transform 0.3s ease;
+    margin-top: 0.25rem;
 }
 
-.expand-icon.expanded {
-    transform: rotate(90deg);
+.service-meta,
+.controller-meta,
+.hotspot-metrics {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
 }
 
-.complexity-badge { display: inline-block; border-radius: 6px; padding: .125rem .375rem; font-size: .75rem; border: 1px solid var(--glass-border); }
+.solution-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.complexity-badge { display: inline-block; border-radius: 6px; padding: .125rem .375rem; font-size: .75rem; border: 1px solid var(--glass-border); background: rgba(0,0,0,.2); }
 .complexity-badge.low { color: var(--success); border-color: var(--success); }
 .complexity-badge.medium { color: #ffd166; border-color: #ffd166; }
 .complexity-badge.high { color: #ff7f50; border-color: #ff7f50; }
 .complexity-badge.very-high { color: var(--danger); border-color: var(--danger); }
+.risk-badge { font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 6px; background: rgba(0,0,0,.2); }
 .risk-badge.low { color: var(--success); }
 .risk-badge.medium { color: #ffd166; }
 .risk-badge.medium-high, .risk-badge.high { color: #ff7f50; }
 .risk-badge.very-high { color: var(--danger); }
+
+.service-responsibilities,
+.controller-responsibilities,
+.service-methods,
+.controller-methods,
+.service-dependencies,
+.controller-dependencies,
+.entity-properties,
+.entity-relationships,
+.entity-indexes,
+.pattern-usage-full,
+.pattern-example,
+.hotspot-issues,
+.hotspot-impact {
+    margin-top: 1rem;
+}
+
+.service-responsibilities ul,
+.controller-responsibilities ul,
+.service-dependencies ul,
+.controller-dependencies ul,
+.entity-properties ul,
+.entity-relationships ul,
+.entity-indexes ul,
+.hotspot-issues ul {
+    margin: 0.5rem 0 0 1.5rem;
+    color: var(--text-secondary);
+}
+
+.service-responsibilities li,
+.controller-responsibilities li {
+    margin: 0.25rem 0;
+}
 
 .request-flow-diagram .flow-steps { margin-top: .5rem; padding-left: 1rem; }
 .flow-steps li { margin: .25rem 0; }
