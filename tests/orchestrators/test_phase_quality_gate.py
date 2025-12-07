@@ -167,7 +167,7 @@ class TestPhaseQualityGateRED:
     
     def test_execute_full_workflow(self):
         """Should execute complete workflow: review → validate → decision."""
-        from src.orchestrators.phase_quality_gate import PhaseQualityGate
+        from src.orchestrators.phase_quality_gate import PhaseQualityGate, QualityGateResult
         
         gate = PhaseQualityGate(workspace_path=Path("/test"), threshold=70)
         
@@ -181,7 +181,8 @@ class TestPhaseQualityGateRED:
             
             result = gate.execute_full_workflow()
             
-            assert result['review_executed'] is True
-            assert result['score'] == 85
-            assert result['validation_passed'] is True
-            assert result['should_block_checkpoint'] is False
+            assert isinstance(result, QualityGateResult)
+            assert result.success is True
+            assert result.score == 85
+            assert result.validation_passed is True
+            assert result.should_block_checkpoint is False

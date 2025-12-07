@@ -206,7 +206,7 @@ class PhaseQualityGate:
         
         return "\n".join(lines)
     
-    def execute_full_workflow(self) -> Dict[str, Any]:
+    def execute_full_workflow(self) -> QualityGateResult:
         """
         Execute complete quality gate workflow.
         
@@ -217,21 +217,21 @@ class PhaseQualityGate:
         4. Return comprehensive result
         
         Returns:
-            Dictionary with complete workflow result
+            QualityGateResult with complete workflow outcome
         """
         # Step 1: Execute review
         review_result = self.execute_review()
         
         if not review_result['success']:
-            return {
-                'review_executed': False,
-                'score': None,
-                'validation_passed': False,
-                'should_block_checkpoint': False,
-                'findings': [],
-                'bypassed': review_result.get('bypassed', False),
-                'message': review_result['message']
-            }
+            return QualityGateResult(
+                success=False,
+                score=None,
+                validation_passed=False,
+                should_block_checkpoint=False,
+                findings=[],
+                bypassed=review_result.get('bypassed', False),
+                message=review_result['message']
+            )
         
         # Step 2: Validate threshold
         score = review_result['score']
@@ -241,12 +241,12 @@ class PhaseQualityGate:
         should_block = self.should_block_checkpoint(score)
         
         # Step 4: Comprehensive result
-        return {
-            'review_executed': True,
-            'score': score,
-            'validation_passed': validation_result['passed'],
-            'should_block_checkpoint': should_block,
-            'findings': review_result['findings'],
-            'bypassed': review_result.get('bypassed', False),
-            'message': validation_result['message']
-        }
+        return QualityGateResult(
+            success=True,
+            score=score,
+            validation_passed=validation_result['passed'],
+            should_block_checkpoint=should_block,
+            findings=review_result['findings'],
+            bypassed=review_result.get('bypassed', False),
+            message=validation_result['message']
+        )
