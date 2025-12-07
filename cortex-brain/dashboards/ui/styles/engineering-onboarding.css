@@ -1,0 +1,89 @@
+/* Engineering Onboarding Tab Styles */
+
+.onboarding-container { padding: 1rem 0 2rem; }
+.onboarding-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.onboarding-main-title { font-size: 1.75rem; display: flex; align-items: center; gap: .5rem; }
+.onboarding-subtitle { color: var(--text-secondary); margin-top: .25rem; }
+.onboarding-stats { display: flex; gap: 1rem; }
+.stat-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: .75rem 1rem; text-align: center; min-width: 110px; }
+.stat-value { font-size: 1.25rem; font-weight: 700; }
+.stat-label { font-size: .8rem; color: var(--text-secondary); }
+
+.onboarding-progress-bar { height: 8px; background: rgba(255,255,255,.08); border-radius: 6px; margin: .75rem 0 1rem; overflow: hidden; }
+.onboarding-progress-bar .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); }
+
+.stage-navigation { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .75rem; margin-bottom: 1rem; }
+.stage-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: .75rem; width: 100%; text-align: left; cursor: pointer; color: var(--text-primary); }
+.stage-card.active { border-color: var(--accent-primary); box-shadow: 0 0 0 2px rgba(0,212,255,.25); }
+.stage-card.completed { border-color: var(--success); }
+.stage-card-header { display: flex; align-items: center; justify-content: space-between; }
+.stage-card-body { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.stage-title { font-size: 1rem; }
+.stage-duration { font-size: .85rem; color: var(--text-secondary); }
+
+.stage-content { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1rem; }
+.stage-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
+.stage-content-title { display: flex; align-items: center; gap: .5rem; font-size: 1.25rem; }
+.stage-actions { display: flex; align-items: center; gap: .5rem; }
+.btn-mark-complete { background: rgba(255,255,255,.08); border: 1px solid var(--glass-border); color: var(--text-primary); padding: .5rem .75rem; border-radius: 8px; cursor: pointer; }
+.btn-mark-complete.completed { border-color: var(--success); color: var(--success); }
+.btn-nav { background: rgba(255,255,255,.08); border: 1px solid var(--glass-border); color: var(--text-primary); padding: .5rem .75rem; border-radius: 8px; cursor: pointer; }
+.btn-prev { justify-self: start; }
+.btn-next { justify-self: end; }
+.stage-footer-navigation { display: grid; grid-template-columns: 1fr 1fr; margin-top: 1rem; }
+
+.content-section { margin: .75rem 0; }
+.section-title { font-size: 1rem; margin-bottom: .5rem; }
+.info-grid, .metrics-grid, .tech-stack-grid, .team-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .5rem; }
+.info-card, .metric-card, .tech-category, .team-stat { background: rgba(255,255,255,.06); border: 1px solid var(--glass-border); border-radius: 10px; padding: .5rem .75rem; }
+.info-label { font-size: .75rem; color: var(--text-secondary); }
+.info-value { font-size: .95rem; font-weight: 600; }
+.metric-icon { margin-right: .25rem; }
+.tech-badge { display: inline-block; background: rgba(255,255,255,.1); border: 1px solid var(--glass-border); border-radius: 999px; padding: .25rem .5rem; margin: .125rem; font-size: .8rem; }
+.tech-badge.primary { background: rgba(0,212,255,.15); border-color: var(--accent-primary); }
+.tech-status-badge.success { color: var(--success); margin-left: .5rem; font-size: .8rem; }
+
+.health-metrics { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .5rem; }
+.health-metric-label { font-size: .8rem; color: var(--text-secondary); margin-bottom: .25rem; }
+.health-metric-bar { height: 10px; background: rgba(255,255,255,.08); border-radius: 6px; overflow: hidden; }
+.health-metric-fill { height: 100%; display: flex; align-items: center; justify-content: center; font-size: .75rem; }
+.health-metric-fill.excellent { background: linear-gradient(90deg, #00ff88, #00d4ff); }
+.health-metric-fill.good { background: linear-gradient(90deg, #7b61ff, #00d4ff); }
+.health-metric-fill.fair { background: linear-gradient(90deg, #ffa500, #7b61ff); }
+.health-metric-fill.poor { background: linear-gradient(90deg, #ff4444, #ffa500); }
+.health-metric-value.success { color: var(--success); }
+.health-metric-value.warning { color: var(--warning); }
+
+.vulnerability-badges { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .5rem; }
+.vuln-badge { background: rgba(255,255,255,.08); border: 1px solid var(--glass-border); border-radius: 999px; padding: .25rem .5rem; font-size: .8rem; }
+.vuln-badge.critical { border-color: var(--danger); color: var(--danger); }
+.vuln-badge.high { border-color: #ff7f50; color: #ff7f50; }
+.vuln-badge.medium { border-color: #ffa500; color: #ffa500; }
+.vuln-badge.low { border-color: #cccccc; color: #cccccc; }
+
+.controllers-list, .services-list, .entities-list, .repositories-list, .optimizations-list, .hotspots-list, .code-smells-list, .best-practices-list { display: grid; grid-template-columns: 1fr; gap: .5rem; }
+.controller-card, .service-card, .entity-card, .repository-card, .optimization-card, .code-smell-card, .best-practice-card, .pattern-card, .test-type-card, .security-area-card, .performance-area-card, .roadmap-quarter { background: rgba(255,255,255,.06); border: 1px solid var(--glass-border); border-radius: 10px; padding: .75rem; }
+.controller-header, .service-header, .entity-header, .solution-header, .hotspot-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.controller-details, .service-details, .entity-details, .solution-projects, .hotspot-details { display: none; }
+.controller-details.expanded, .service-details.expanded, .entity-details.expanded, .solution-projects.expanded, .hotspot-details.expanded { display: block; animation: slideDown .2s ease; }
+.expand-icon { color: var(--text-secondary); }
+
+.complexity-badge { display: inline-block; border-radius: 6px; padding: .125rem .375rem; font-size: .75rem; border: 1px solid var(--glass-border); }
+.complexity-badge.low { color: var(--success); border-color: var(--success); }
+.complexity-badge.medium { color: #ffd166; border-color: #ffd166; }
+.complexity-badge.high { color: #ff7f50; border-color: #ff7f50; }
+.complexity-badge.very-high { color: var(--danger); border-color: var(--danger); }
+.risk-badge.low { color: var(--success); }
+.risk-badge.medium { color: #ffd166; }
+.risk-badge.medium-high, .risk-badge.high { color: #ff7f50; }
+.risk-badge.very-high { color: var(--danger); }
+
+.request-flow-diagram .flow-steps { margin-top: .5rem; padding-left: 1rem; }
+.flow-steps li { margin: .25rem 0; }
+
+.stage-content .code { background: rgba(0,0,0,.3); border: 1px solid var(--glass-border); border-radius: 8px; padding: .5rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+@media (max-width: 900px) {
+  .onboarding-header { flex-direction: column; align-items: flex-start; gap: .75rem; }
+  .stage-footer-navigation { grid-template-columns: 1fr; }
+}

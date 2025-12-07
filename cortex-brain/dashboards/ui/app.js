@@ -8,7 +8,7 @@
  * License: Source-Available (Use Allowed, No Contributions)
  */
 
-import { loadDashboardData, clearCache, exportToJson, exportToCsv, enrichDashboardData } from './data-loader.js';
+import { loadDashboardData, loadAdditionalData, clearCache, exportToJson, exportToCsv, enrichDashboardData } from './data-loader.js';
 import { initializeAdaptiveVisibility } from './adaptive-visibility.js';
 // REMOVED: Frontend/Backend/Database panels now consolidated in architecture-tab.js
 // import { renderArchitecturePanels } from './components/architecture-panels.js';
@@ -19,6 +19,7 @@ import { renderSecurity } from './components/security-tab.js';
 import { renderArchitecture } from './components/architecture-tab.js';
 import { renderCodeOrganization } from './components/code-org-tab.js';
 import { renderVendors } from './components/vendors-tab.js';
+import EngineeringOnboardingTab from './components/engineering-onboarding-tab.js';
 import { initKeyboardNavigation } from './keyboard-navigation.js';
 import { 
     initPerformanceMonitoring, 
@@ -244,7 +245,7 @@ async function renderCurrentTab() {
     
     try {
         // Show skeleton while rendering
-        const containerId = getTabContainerId(appState.currentTab);
+    const containerId = getTabContainerId(appState.currentTab);
         const skeletonType = progressiveLoader.getSkeletonTypeForTab(appState.currentTab);
         progressiveLoader.showSkeleton(containerId, skeletonType);
         
@@ -276,6 +277,19 @@ async function renderCurrentTab() {
             case 'vendors':
                 contentHtml = renderVendors(appState.data);
                 break;
+            case 'engineering': {
+                // Render container then initialize onboarding component with mock data
+                contentHtml = '<div id="engineering-onboarding-content"></div>';
+                await progressiveLoader.hideSkeleton(containerId, contentHtml, 150);
+                try {
+                    const onboardingData = await loadAdditionalData('mock', 'engineering-onboarding.json');
+                    const tab = new EngineeringOnboardingTab();
+                    await tab.init(onboardingData);
+                } catch (e) {
+                    console.error('Failed to load onboarding data:', e);
+                }
+                return; // Early return because we already hid skeleton
+            }
             default:
                 console.warn(`Unknown tab: ${appState.currentTab}`);
                 return;
@@ -296,6 +310,23 @@ function showDashboard() {
     const container = document.getElementById('dashboardContainer');
     if (container) {
         container.style.display = 'flex';
+    }
+}
+
+/**
+ * Helper: Map tab key to container id used by progressive loader
+ */
+function getTabContainerId(tabKey) {
+    switch (tabKey) {
+        case 'executive': return 'tab-executive';
+        case 'overview': return 'tab-overview';
+        case 'tech-stack': return 'tab-tech-stack';
+        case 'security': return 'tab-security';
+        case 'architecture': return 'tab-architecture';
+        case 'code-org': return 'tab-code-org';
+        case 'vendors': return 'tab-vendors';
+        case 'engineering': return 'tab-engineering';
+        default: return 'tab-overview';
     }
 }
 
@@ -391,27 +422,7 @@ export function updateAppState(updates) {
     Object.assign(appState, updates);
 }
 
-/**
- * Get container ID for tab
- * @param {string} tabName - Tab name
- * @returns {string} - Container element ID
- */
-function getTabContainerId(tabName) {
-    // Map tab names to their container IDs
-    const containerMap = {
-        'executive': 'executive-content',
-        'overview': 'overview-content',
-        'tech-stack': 'tech-stack-content',
-        'security': 'security-content',
-        'architecture': 'architecture-content',
-        'code-org': 'code-org-content',
-        'vendors': 'vendors-content',
-        'dependencies': 'dependencies-content',
-        'team': 'team-content'
-    };
-    
-    return containerMap[tabName] || `${tabName}-content`;
-}
+// Note: Single getTabContainerId defined above; removed duplicate mapping to avoid confusion.
 
 // Initialize app when DOM is ready
 if (document.readyState === 'loading') {
