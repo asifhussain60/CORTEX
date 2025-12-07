@@ -67,11 +67,18 @@ class SecurityCollector(BaseDataCollector):
         )
         
         # Calculate vulnerability counts
+        critical_count = len([f for f in vuln_findings if f.get("severity") == "critical"])
+        high_count = len([f for f in vuln_findings if f.get("severity") == "high"])
+        medium_count = len([f for f in vuln_findings if f.get("severity") == "medium"])
+        low_count = len([f for f in vuln_findings if f.get("severity") == "low"])
+        
         vuln_data = {
-            "critical": len([f for f in vuln_findings if f.get("severity") == "critical"]),
-            "high": len([f for f in vuln_findings if f.get("severity") == "high"]),
-            "medium": len([f for f in vuln_findings if f.get("severity") == "medium"]),
-            "low": len([f for f in vuln_findings if f.get("severity") == "low"])
+            "total": critical_count + high_count + medium_count + low_count,
+            "critical": critical_count,
+            "high": high_count,
+            "medium": medium_count,
+            "low": low_count,
+            "by_package": []  # Placeholder for dependency-based vulnerabilities
         }
         
         # Compliance readiness with evidence
@@ -179,17 +186,19 @@ class SecurityCollector(BaseDataCollector):
                             "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
                         })
                 
-                # Pattern 2: String interpolation in SQL ($"SELECT...")
+                # Pattern 2: String interpolation in SQL ($"SELECT...") - with context exclusions
                 if re.search(r'\$".*?(select|insert|update|delete|from|where)', line, re.IGNORECASE):
-                    findings.append({
-                        "type": "SQL Injection",
-                        "severity": "high",
-                        "file": str(cs_file.relative_to(self.project_root)),
-                        "line": i,
-                        "description": "SQL query using string interpolation - potential injection",
-                        "code_snippet": line.strip()[:100],
-                        "recommendation": "Replace string interpolation with parameterized queries"
-                    })
+                    # Exclude false positives: Console, Logger, throw, Exception messages
+                    if not re.search(r'(Console\.|Logger\.|Log\.|throw |Exception\(|WriteLine|Write\()', line, re.IGNORECASE):
+                        findings.append({
+                            "type": "SQL Injection",
+                            "severity": "high",
+                            "file": str(cs_file.relative_to(self.project_root)),
+                            "line": i,
+                            "description": "SQL query using string interpolation - potential injection",
+                            "code_snippet": line.strip()[:100],
+                            "recommendation": "Replace string interpolation with parameterized queries"
+                        })
                 
                 # Pattern 3: SqlCommand/OracleCommand with concatenation
                 if re.search(r'(SqlCommand|OracleCommand|DbCommand).*?["\'].*?\+', line, re.IGNORECASE):
@@ -233,14 +242,19 @@ class SecurityCollector(BaseDataCollector):
         return findings
     
     def _scan_xss(self) -> List[Dict[str, Any]]:
-        """Scan for XSS vulnerabilities with parallel processing."""
+        """Scan for XSS vulnerabilities with comprehensive file type coverage."""
         findings = []
         import re
         
-        # Scan web config and code files
-        config_files = list(self.project_root.glob("**/Web.config")) + list(self.project_root.glob("**/*.aspx"))
-        cs_files = list(self.project_root.glob("**/*.cs"))
-        all_files = config_files + cs_files
+        # Comprehensive file extension coverage for all XSS-prone file types
+        all_files = (
+            list(self.project_root.glob("**/Web.config")) +
+            list(self.project_root.glob("**/*.aspx")) +
+            list(self.project_root.glob("**/*.cs")) +
+            list(self.project_root.glob("**/*.cshtml")) +
+            list(self.project_root.glob("**/*.js")) +
+            list(self.project_root.glob("**/*.html"))
+        )
         
         self.logger.info(f"Scanning {len(all_files)} files for XSS vulnerabilities...")
         
@@ -258,15 +272,63 @@ class SecurityCollector(BaseDataCollector):
         return findings
     
     def _scan_file_for_xss(self, file: Path) -> List[Dict[str, Any]]:
-        """Scan a single file for XSS vulnerabilities."""
+        """Scan a single file for XSS vulnerabilities with file-type-specific patterns."""
         findings = []
         import re
         
-        for file in [file]:
-            try:
-                content = file.read_text(encoding='utf-8', errors='ignore')
+        try:
+            content = file.read_text(encoding='utf-8', errors='ignore')
+            lines = content.split('\n')
+            file_ext = file.suffix.lower()
+            
+            # JavaScript patterns (.js, .cshtml, .html)
+            if file_ext in ['.js', '.cshtml', '.html']:
+                js_patterns = [
+                    (r'\.innerHTML\s*=', "innerHTML Assignment", "high", "Use textContent or sanitize with DOMPurify"),
+                    (r'document\.write\(', "document.write Usage", "high", "Avoid document.write, use DOM methods"),
+                    (r'\$\(.+?\)\.html\(', "jQuery html() Method", "high", "Use .text() or sanitize input"),
+                    (r'\beval\(', "eval() Usage", "critical", "Never use eval() with user input"),
+                    (r'new\s+Function\(', "Function Constructor", "critical", "Avoid Function constructor"),
+                    (r'\.outerHTML\s*=', "outerHTML Assignment", "high", "Use createElement or sanitize"),
+                    (r'insertAdjacentHTML\(', "insertAdjacentHTML Usage", "medium", "Sanitize HTML before insertion"),
+                ]
                 
-                # Check for ValidateRequest=false
+                for i, line in enumerate(lines, 1):
+                    for pattern, desc, severity, recommendation in js_patterns:
+                        if re.search(pattern, line):
+                            findings.append({
+                                "type": "XSS",
+                                "severity": severity,
+                                "file": str(file.relative_to(self.project_root)),
+                                "line": i,
+                                "description": desc,
+                                "code_snippet": line.strip()[:100],
+                                "recommendation": recommendation
+                            })
+            
+            # ASPX/Razor patterns (.aspx, .cshtml)
+            if file_ext in ['.aspx', '.cshtml']:
+                aspx_patterns = [
+                    (r'<%=\s*Request\.(QueryString|Form|Params)', "ASPX Output Without Encoding", "high", "Use <%: %> or Server.HtmlEncode()"),
+                    (r'@Html\.Raw\(', "Razor Html.Raw", "high", "Sanitize input or use @Html.Encode()"),
+                    (r'Response\.Output\.Write\(', "Response.Output.Write", "high", "Use HtmlEncode wrapper"),
+                ]
+                
+                for i, line in enumerate(lines, 1):
+                    for pattern, desc, severity, recommendation in aspx_patterns:
+                        if re.search(pattern, line):
+                            findings.append({
+                                "type": "XSS",
+                                "severity": severity,
+                                "file": str(file.relative_to(self.project_root)),
+                                "line": i,
+                                "description": desc,
+                                "code_snippet": line.strip()[:100],
+                                "recommendation": recommendation
+                            })
+            
+            # Web.config patterns
+            if file.name == 'Web.config':
                 if re.search(r'ValidateRequest\s*=\s*["\']false["\']', content, re.IGNORECASE):
                     findings.append({
                         "type": "XSS",
@@ -277,44 +339,69 @@ class SecurityCollector(BaseDataCollector):
                         "code_snippet": "ValidateRequest=false",
                         "recommendation": "Enable request validation or implement custom sanitization"
                     })
-                
-                # Check for HttpUtility.HtmlEncode missing
-                if 'Response.Write' in content and 'HtmlEncode' not in content:
-                    findings.append({
-                        "type": "XSS",
-                        "severity": "medium",
-                        "file": str(file.relative_to(self.project_root)),
-                        "line": 0,
-                        "description": "Response.Write without HtmlEncode - potential XSS",
-                        "code_snippet": "Response.Write without encoding",
-                        "recommendation": "Use HttpUtility.HtmlEncode for all user input"
-                    })
             
-            except Exception as e:
-                self.logger.debug(f"Error scanning {file}: {e}")
+            # .NET code patterns (.cs) - context-aware
+            if file_ext == '.cs':
+                for i, line in enumerate(lines, 1):
+                    if re.search(r'Response\.Write\([^)]*Request\.(QueryString|Form|Params)', line):
+                        # Check if HtmlEncode is in nearby lines (context-aware)
+                        context = '\n'.join(lines[max(0, i-2):min(len(lines), i+2)])
+                        if 'HtmlEncode' not in context and 'Encode(' not in context:
+                            findings.append({
+                                "type": "XSS",
+                                "severity": "high",
+                                "file": str(file.relative_to(self.project_root)),
+                                "line": i,
+                                "description": "Response.Write with User Input",
+                                "code_snippet": line.strip()[:100],
+                                "recommendation": "Use Server.HtmlEncode()"
+                            })
+        
+        except Exception as e:
+            self.logger.debug(f"Error scanning {file}: {e}")
         
         return findings
     
     def _scan_hardcoded_secrets(self) -> List[Dict[str, Any]]:
-        """Scan for hardcoded passwords, API keys, connection strings with parallel processing."""
+        """Scan for hardcoded passwords, API keys, connection strings with comprehensive patterns."""
         secrets = []
         import re
         
-        # Patterns for secrets
+        # Comprehensive secret patterns
         patterns = [
+            # Basic secrets (existing)
             (r'password\s*=\s*["\']([^"\']{4,})["\']', "Hardcoded Password", "critical"),
             (r'pwd\s*=\s*["\']([^"\']{4,})["\']', "Hardcoded Password", "critical"),
             (r'api[_-]?key\s*=\s*["\']([^"\']{10,})["\']', "Hardcoded API Key", "high"),
             (r'secret\s*=\s*["\']([^"\']{10,})["\']', "Hardcoded Secret", "high"),
-            (r'token\s*=\s*["\']([^"\']{10,})["\']', "Hardcoded Token", "high"),
-            (r'connectionString\s*=\s*["\']([^"\']*password[^"\']*)["\']', "Connection String with Password", "critical")
+            (r'connectionString\s*=\s*["\']([^"\']*password[^"\']*)["\']', "Connection String with Password", "critical"),
+            
+            # New comprehensive patterns
+            (r'Authorization["\']?,\s*["\']Basic\s+([A-Za-z0-9+/=]{20,})["\']', "Basic Auth Header", "critical"),
+            (r'(AKIA[0-9A-Z]{16})', "AWS Access Key", "critical"),
+            (r'AccountKey\s*=\s*([A-Za-z0-9+/=]{6,})', "Azure Storage Key", "critical"),
+            (r'eyJ([A-Za-z0-9_-]{10,})\.([A-Za-z0-9_-]{10,})', "JWT Token", "high"),
+            (r'sk_live_[0-9a-zA-Z]{24,}', "Stripe Secret Key", "critical"),
+            (r'ghp_[0-9a-zA-Z]{36}', "GitHub Personal Access Token", "critical"),
         ]
         
-        config_files = list(self.project_root.glob("**/*.config")) + list(self.project_root.glob("**/*.cs"))
-        self.logger.info(f"Scanning {len(config_files)} files for hardcoded secrets...")
+        # Comprehensive file extension coverage
+        secret_files = (
+            list(self.project_root.glob("**/*.config")) +
+            list(self.project_root.glob("**/*.cs")) +
+            list(self.project_root.glob("**/*.xml")) +
+            list(self.project_root.glob("**/*.json")) +
+            list(self.project_root.glob("**/*.yml")) +
+            list(self.project_root.glob("**/*.yaml")) +
+            list(self.project_root.glob("**/*.env")) +
+            list(self.project_root.glob("**/*.pem")) +
+            list(self.project_root.glob("**/*.key"))
+        )
+        
+        self.logger.info(f"Scanning {len(secret_files)} files for hardcoded secrets...")
         
         with ThreadPoolExecutor(max_workers=4) as executor:
-            futures = {executor.submit(self._scan_file_for_secrets, file, patterns): file for file in config_files}
+            futures = {executor.submit(self._scan_file_for_secrets, file, patterns): file for file in secret_files}
             
             for future in as_completed(futures):
                 try:
@@ -331,35 +418,46 @@ class SecurityCollector(BaseDataCollector):
         secrets = []
         import re
         
-        for file in [file]:
-            try:
-                content = file.read_text(encoding='utf-8', errors='ignore')
-                lines = content.split('\n')
-                
-                for i, line in enumerate(lines, 1):
-                    for pattern, secret_type, severity in patterns:
-                        matches = re.finditer(pattern, line, re.IGNORECASE)
-                        for match in matches:
-                            # Skip commented lines
-                            if line.strip().startswith('//') or line.strip().startswith('<!--'):
-                                continue
-                            
-                            # Mask the secret value
-                            secret_value = match.group(1) if len(match.groups()) > 0 else ""
-                            masked_value = secret_value[:3] + '*' * (len(secret_value) - 3) if len(secret_value) > 3 else "***"
-                            
-                            secrets.append({
-                                "type": secret_type,
-                                "severity": severity,
-                                "file": str(file.relative_to(self.project_root)),
-                                "line": i,
-                                "description": f"{secret_type} found in plain text",
-                                "masked_value": masked_value,
-                                "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-                            })
+        try:
+            content = file.read_text(encoding='utf-8', errors='ignore')
+            lines = content.split('\n')
             
-            except Exception as e:
-                self.logger.debug(f"Error scanning {file}: {e}")
+            # Check for PEM private keys (full file check)
+            if re.search(r'-----BEGIN\s+(RSA\s+)?PRIVATE\s+KEY-----', content):
+                secrets.append({
+                    "type": "Private Key in PEM",
+                    "severity": "critical",
+                    "file": str(file.relative_to(self.project_root)),
+                    "line": 1,
+                    "description": "Private key found in PEM file",
+                    "masked_value": "***PRIVATE_KEY***",
+                    "recommendation": "Remove from repository, use secure key management"
+                })
+            
+            for i, line in enumerate(lines, 1):
+                for pattern, secret_type, severity in patterns:
+                    matches = re.finditer(pattern, line, re.IGNORECASE)
+                    for match in matches:
+                        # Skip commented lines
+                        if line.strip().startswith('//') or line.strip().startswith('<!--'):
+                            continue
+                        
+                        # Mask the secret value
+                        secret_value = match.group(1) if len(match.groups()) > 0 else ""
+                        masked_value = secret_value[:3] + '*' * (len(secret_value) - 3) if len(secret_value) > 3 else "***"
+                        
+                        secrets.append({
+                            "type": secret_type,
+                            "severity": severity,
+                            "file": str(file.relative_to(self.project_root)),
+                            "line": i,
+                            "description": f"{secret_type} found in plain text",
+                            "masked_value": masked_value,
+                            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+                        })
+        
+        except Exception as e:
+            self.logger.debug(f"Error scanning {file}: {e}")
         
         return secrets
     
@@ -575,15 +673,28 @@ class SecurityCollector(BaseDataCollector):
         return vulns
     
     def _scan_weak_cryptography(self) -> List[Dict[str, Any]]:
-        """Scan for weak cryptography usage with parallel processing."""
+        """Scan for weak cryptography usage with comprehensive pattern detection."""
         findings = []
         import re
         
         cs_files = list(self.project_root.glob("**/*.cs"))
+        
+        # Comprehensive cryptography patterns
         weak_patterns = [
-            (r'MD5|SHA1(?!256)', "Weak Hashing Algorithm", "medium"),
-            (r'DES(?!C)|3DES', "Weak Encryption Algorithm", "high"),
-            (r'Random\(\)', "Weak Random Number Generator", "medium")
+            # Hashing algorithms
+            (r'\bMD5\b|MD5CryptoServiceProvider|MD5\.Create', "Weak Cryptography - MD5 Hashing", "high", "Use SHA256 or SHA512"),
+            (r'\bSHA1\b|SHA1Managed|HMACSHA1|SHA1CryptoServiceProvider', "Weak Cryptography - SHA1 Hashing", "high", "Use SHA256 or SHA512"),
+            
+            # Encryption algorithms
+            (r'\bDES\b|DESCryptoServiceProvider|DES\.Create', "Weak Cryptography - DES Encryption", "critical", "Use AES-256"),
+            (r'TripleDES|3DES|TripleDESCryptoServiceProvider', "Weak Cryptography - 3DES Encryption", "high", "Use AES-256"),
+            (r'RC2|RC4', "Weak Cryptography - RC2/RC4", "high", "Use AES-256"),
+            
+            # Cipher modes
+            (r'CipherMode\.ECB', "Weak Cryptography - ECB Mode", "high", "Use CBC or GCM mode"),
+            
+            # Random number generation
+            (r'new\s+Random\(\)', "Weak Random Number Generator", "medium", "Use RNGCryptoServiceProvider"),
         ]
         
         self.logger.info(f"Scanning {len(cs_files)} C# files for weak cryptography...")
@@ -606,26 +717,25 @@ class SecurityCollector(BaseDataCollector):
         findings = []
         import re
         
-        for cs_file in [cs_file]:
-            try:
-                content = cs_file.read_text(encoding='utf-8', errors='ignore')
-                lines = content.split('\n')
-                
-                for i, line in enumerate(lines, 1):
-                    for pattern, issue_type, severity in weak_patterns:
-                        if re.search(pattern, line):
-                            findings.append({
-                                "type": issue_type,
-                                "severity": severity,
-                                "file": str(cs_file.relative_to(self.project_root)),
-                                "line": i,
-                                "description": f"{issue_type} detected",
-                                "code_snippet": line.strip()[:100],
-                                "recommendation": "Use SHA256/SHA512 for hashing, AES for encryption, RNGCryptoServiceProvider for random numbers"
-                            })
+        try:
+            content = cs_file.read_text(encoding='utf-8', errors='ignore')
+            lines = content.split('\n')
             
-            except Exception as e:
-                self.logger.debug(f"Error scanning {cs_file}: {e}")
+            for i, line in enumerate(lines, 1):
+                for pattern, issue_type, severity, recommendation in weak_patterns:
+                    if re.search(pattern, line):
+                        findings.append({
+                            "type": issue_type,
+                            "severity": severity,
+                            "file": str(cs_file.relative_to(self.project_root)),
+                            "line": i,
+                            "description": f"{issue_type} detected",
+                            "code_snippet": line.strip()[:100],
+                            "recommendation": recommendation
+                        })
+        
+        except Exception as e:
+            self.logger.debug(f"Error scanning {cs_file}: {e}")
         
         return findings
     
@@ -652,21 +762,49 @@ class SecurityCollector(BaseDataCollector):
         return findings
     
     def _scan_file_for_input_validation(self, cs_file: Path) -> List[Dict[str, Any]]:
-        """Scan a single file for input validation issues."""
+        """Scan a single file for input validation issues with comprehensive patterns."""
         findings = []
         import re
         
-        for cs_file in [cs_file]:
-            try:
-                content = cs_file.read_text(encoding='utf-8', errors='ignore')
-                lines = content.split('\n')
+        try:
+            content = cs_file.read_text(encoding='utf-8', errors='ignore')
+            lines = content.split('\n')
+            
+            # Comprehensive validation patterns
+            validation_patterns = [
+                # Unvalidated Redirects
+                (r'Response\.Redirect\([^)]*Request\.(QueryString|Form|Params)\[', "Unvalidated Open Redirect", "high", "Validate redirect URLs against whitelist"),
                 
-                for i, line in enumerate(lines, 1):
-                    # Check for Request.QueryString/Form without validation
-                    if re.search(r'Request\.(QueryString|Form|Params)\[', line):
-                        # Check if next few lines have validation
-                        context = '\n'.join(lines[max(0, i-1):min(len(lines), i+5)])
-                        if not re.search(r'(IsNull|IsEmpty|Validate|Check|if\s*\()', context):
+                # Path Traversal
+                (r'Path\.Combine\([^)]*Request\.(QueryString|Form|Params)\[', "Path Traversal Vulnerability", "high", "Validate file paths, use Path.GetFileName()"),
+                (r'File\.(Read|Write|Open|Delete)\([^)]*Request\.', "File Operation with User Input", "high", "Validate and sanitize file paths"),
+                (r'Directory\.(Create|Delete|Move)\([^)]*Request\.', "Directory Operation with User Input", "high", "Validate directory paths"),
+                
+                # Command Injection
+                (r'Process\.Start\([^)]*Request\.', "Command Injection Risk", "critical", "Never use user input in process execution"),
+                (r'cmd\.exe|powershell\.exe.*Request\.', "Shell Command with User Input", "critical", "Avoid shell commands with user input"),
+            ]
+            
+            for i, line in enumerate(lines, 1):
+                for pattern, desc, severity, recommendation in validation_patterns:
+                    if re.search(pattern, line):
+                        findings.append({
+                            "type": "Missing Input Validation",
+                            "severity": severity,
+                            "file": str(cs_file.relative_to(self.project_root)),
+                            "line": i,
+                            "description": desc,
+                            "code_snippet": line.strip()[:100],
+                            "recommendation": recommendation
+                        })
+                
+                # Check for Request.QueryString/Form without validation (existing pattern)
+                if re.search(r'Request\.(QueryString|Form|Params)\[', line):
+                    # Check if next few lines have validation
+                    context = '\n'.join(lines[max(0, i-1):min(len(lines), i+5)])
+                    if not re.search(r'(IsNull|IsEmpty|Validate|Check|if\s*\()', context):
+                        # Only add if not already flagged by specific patterns above
+                        if not any(re.search(pat, line) for pat, _, _, _ in validation_patterns):
                             findings.append({
                                 "type": "Missing Input Validation",
                                 "severity": "medium",
@@ -676,9 +814,9 @@ class SecurityCollector(BaseDataCollector):
                                 "code_snippet": line.strip()[:100],
                                 "recommendation": "Validate and sanitize all user inputs"
                             })
-            
-            except Exception as e:
-                self.logger.debug(f"Error scanning {cs_file}: {e}")
+        
+        except Exception as e:
+            self.logger.debug(f"Error scanning {cs_file}: {e}")
         
         return findings
     
@@ -709,26 +847,33 @@ class SecurityCollector(BaseDataCollector):
         findings = []
         import re
         
-        for cs_file in [cs_file]:
-            try:
-                content = cs_file.read_text(encoding='utf-8', errors='ignore')
-                lines = content.split('\n')
-                
-                for i, line in enumerate(lines, 1):
-                    # Check for BinaryFormatter (known insecure)
-                    if re.search(r'BinaryFormatter|SoapFormatter|NetDataContractSerializer', line):
+        try:
+            content = cs_file.read_text(encoding='utf-8', errors='ignore')
+            lines = content.split('\n')
+            
+            # Comprehensive deserialization patterns
+            deser_patterns = [
+                (r'BinaryFormatter|SoapFormatter|NetDataContractSerializer', "Insecure Binary Deserialization", "critical", "Use DataContractSerializer or JSON.NET"),
+                (r'TypeNameHandling\s*=\s*TypeNameHandling\.(All|Auto)', "JSON.NET TypeNameHandling Insecure", "high", "Set TypeNameHandling to None or Objects"),
+                (r'JavaScriptSerializer|__type', ".NET JavaScriptSerializer Type Handling", "high", "Use JSON.NET with secure settings"),
+                (r'ObjectStateFormatter', "ObjectStateFormatter Insecure", "high", "Avoid ObjectStateFormatter"),
+            ]
+            
+            for i, line in enumerate(lines, 1):
+                for pattern, desc, severity, recommendation in deser_patterns:
+                    if re.search(pattern, line):
                         findings.append({
                             "type": "Insecure Deserialization",
-                            "severity": "high",
+                            "severity": severity,
                             "file": str(cs_file.relative_to(self.project_root)),
                             "line": i,
-                            "description": "Insecure deserialization method detected",
+                            "description": desc,
                             "code_snippet": line.strip()[:100],
-                            "recommendation": "Use DataContractSerializer or JSON.NET instead"
+                            "recommendation": recommendation
                         })
-            
-            except Exception as e:
-                self.logger.debug(f"Error scanning {cs_file}: {e}")
+        
+        except Exception as e:
+            self.logger.debug(f"Error scanning {cs_file}: {e}")
         
         return findings
     
@@ -874,16 +1019,31 @@ class SecurityCollector(BaseDataCollector):
             
             score = max(0, min(100, score))  # Clamp between 0-100
             
+            # Get breakdown by vulnerability type
+            type_breakdown = {}
+            for finding in findings:
+                vuln_type = finding.get("type", "Unknown")
+                type_breakdown[vuln_type] = type_breakdown.get(vuln_type, 0) + 1
+            
             categories.append({
                 "risk": risk_id,
                 "name": risk_name,
                 "score": score,
                 "status": "pass" if score >= 80 else "warn" if score >= 60 else "fail",
                 "findings_count": findings_count,
-                "findings": findings[:5]  # Top 5 findings per category
+                "findings": findings[:5],  # Top 5 findings per category
+                "findings_by_type": type_breakdown  # NEW: Show count by vulnerability type
             })
         
+        # Calculate aggregate status counts
+        pass_count = len([c for c in categories if c["status"] == "pass"])
+        warn_count = len([c for c in categories if c["status"] == "warn"])
+        fail_count = len([c for c in categories if c["status"] == "fail"])
+        
         return {
+            "pass_count": pass_count,
+            "warn_count": warn_count,
+            "fail_count": fail_count,
             "categories": categories,
             "overall_compliance": sum(c["score"] for c in categories) / len(categories),
             "version": "2025",

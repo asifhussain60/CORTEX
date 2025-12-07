@@ -35,66 +35,66 @@
   "tiers": [
     {
       "name": "Service Layer",
-      "path": "External\\Microsoft.Data.Services.Client.5.6.4",
+      "path": "Source\\Luum.Core\\Services",
       "file_count": 292,
       "loc": 85432,
       "technologies": [
-        "JSON.NET",
-        "SQL Server",
-        "WCF"
+        "ASP.NET MVC",
+        "JSON.NET"
       ],
       "key_files": [
-        "ElmahCoreLoggingService.cs",
-        "CarpoolServiceTests.cs",
-        "BenefitApplicationsService.cs",
+        "ITripLoggingReminderService.cs",
+        "ServiceProviderSsoDescriptor.cs",
+        "LyftRideProgramService.cs",
+        "PublishServiceMessage.cs",
         "HelpContentService.cs",
-        "HostedServiceProperties.cs",
-        "OhsuReportService.cs",
-        "CityOfSeattlePayrollFileService.cs",
-        "LocalAzureQueueService.cs",
-        "GatesPayrollFileService.cs",
-        "ICommuteExpenseService.cs"
+        "DataService.cs",
+        "SCHReportService.cs",
+        "ICacheAwareService.cs",
+        "SplitCommuteService.cs",
+        "RosterServiceTests.cs"
       ],
       "folders": [
+        "Source\\Luum.Core\\Services",
         "External\\Microsoft.Data.Services.Client.5.6.4",
         "Tools\\ServiceBusExplorer",
-        "Source\\Luum.Core\\Services",
-        "Source\\Luum.UnitTests\\Core\\Services",
-        "Source\\Luum.Core.Mvc\\Services"
+        "Source\\Luum.Core.Mvc\\Services",
+        "Source\\Luum.UnitTests\\Core\\Services"
       ]
     },
     {
       "name": "Tests",
-      "path": "Source\\Luum.Core\\Test",
+      "path": "Source\\Luum.ApiSync\\Source\\Luum.ApiSyncUnitTests\\Luum.ApiSyncUnitTests",
       "file_count": 379,
       "loc": 79358,
       "technologies": [
         "ASP.NET MVC",
+        "JSON.NET",
         "SQL Server"
       ],
       "key_files": [
-        "ConfigurationTests.cs",
-        "AsyncDatabaseTest.cs",
-        "DateTimeFormatTests.cs",
-        "CharitableGivingSettingsViewModelTests.cs",
-        "AsyncDatabaseTest.cs",
-        "CommuteServiceTests.cs",
-        "TableTests.cs",
-        "HttpProtocolHelperTests.cs",
-        "TestControllerContext.cs",
-        "ParkAssistTestFixtures.cs"
+        "TestApiApplication.cs",
+        "TIBATestFixtures.cs",
+        "CurrentUser.cs",
+        "DatabaseTest.cs",
+        "TestBase.cs",
+        "LoggedExceptionEntityTests.cs",
+        "CommuteEmployerIdTests.cs",
+        "StatsHelperTests.cs",
+        "RosterUpdateOperationTests.cs",
+        "AmazonRideTestFixtures.cs"
       ],
       "folders": [
-        "Source\\Luum.Core\\Test",
         "Source\\Luum.ApiSync\\Source\\Luum.ApiSyncUnitTests\\Luum.ApiSyncUnitTests",
+        "Source\\Luum.Api.FunctionalTests",
+        "Source\\Luum.Api.FunctionalTests\\TestData",
         "Source\\Luum.EndToEndTests\\Tests",
-        "Source\\Luum.UnitTests",
-        "Source\\Luum.Database\\test"
+        "Source\\Luum.Api.FunctionalTests\\TestDataContracts"
       ]
     },
     {
       "name": "Infrastructure",
-      "path": "Source\\Luum.EndToEndTests\\Helpers",
+      "path": "External\\Microsoft.Web.Infrastructure.1.0.0.0",
       "file_count": 55,
       "loc": 40494,
       "technologies": [
@@ -102,77 +102,75 @@
         "JSON.NET"
       ],
       "key_files": [
-        "UpdateOperationMockBuilder.cs",
-        "GeneratorHelpers.cs",
-        "PromptHelpers.cs",
-        "GenerateStaticResourceHelpersTask.cs",
+        "RosterTestHelpers.cs",
+        "ControllerHelpers.cs",
+        "StaticContentHelpers.cs",
         "StreamHelpers.cs",
-        "ConfigurationHelpers.cs",
-        "SqlUtilities.cs",
-        "ToolsHelpers.cs",
-        "EnvironmentPromptHelpers.cs",
-        "RosterTestHelpers.cs"
+        "LuumControllerTests.cs",
+        "RegexMatchResult.cs",
+        "QueueMessageMockBuilder.cs",
+        "GenerateControllerHelpersTask.cs",
+        "INodeProvider.cs",
+        "ConfigurationHelpers.cs"
       ],
       "folders": [
-        "Source\\Luum.EndToEndTests\\Helpers",
-        "Tools\\dotless-v1.3.0.3\\Source\\dotless\\src\\dotless.Core\\Parser\\Infrastructure",
         "External\\Microsoft.Web.Infrastructure.1.0.0.0",
-        "Source\\Luum.UnitTests\\TestHelpers",
-        "Source\\Luum.Console\\Common"
+        ".pipelines\\Infrastructure",
+        "Tools\\dotless-v1.3.0.3\\Source\\dotless\\src\\dotless.Core\\Parser\\Infrastructure",
+        "Source\\Luum.Core\\SqlHelpers",
+        "Source\\Luum.EndToEndTests\\Helpers"
       ]
     },
     {
       "name": "Data Access",
-      "path": "Source\\Luum.ApiSync\\Source\\Amazon.Blackfoot.DataPark",
+      "path": "Source\\Luum.ApiSync\\Source\\Kaiser.OFarrell.DataPark",
       "file_count": 493,
       "loc": 30214,
-      "technologies": [
-        "JSON.NET"
-      ],
+      "technologies": [],
       "key_files": [
-        "RushUniversityConfiguration.cs",
-        "GetHistoryListRequestContext.cs",
-        "ICommandMetadata.cs",
-        "AsyncDatabaseTest.cs",
-        "ScalarMapping.cs",
-        "ScriptDataDoubleEscapedDashDashState.cs",
-        "AmazonCanadaConfiguration.cs",
-        "BedrockConfiguration.cs",
-        "AsyncDatabaseTest.cs",
-        "AssemblyInfo.cs"
+        "Program.cs",
+        "DDWAConfiguration.cs",
+        "TeslaConfiguration.cs",
+        "LazorViewMetadataAttribute.cs",
+        "DataService.cs",
+        "LuumConfiguration.cs",
+        "GatesSeattleConfiguration.cs",
+        "SwedishConfiguration.cs",
+        "ExtendedDataColumnMapping.cs",
+        "TableBaseInfo.cs"
       ],
       "folders": [
-        "Source\\Luum.ApiSync\\Source\\Amazon.Blackfoot.DataPark",
-        "Source\\Luum.ApiSync\\Source\\Amazon.Invent.DataPark",
-        "External\\Microsoft.Data.Edm.5.6.4",
-        "Source\\Luum.ApiSync\\Source\\Amazon.Olive.SkiData",
-        "Source\\Luum.ApiSync\\Source\\Amazon.CrystalCity.SkiData"
+        "Source\\Luum.ApiSync\\Source\\Kaiser.OFarrell.DataPark",
+        "Source\\Luum.Core.Mvc\\Metadata",
+        "Source\\Luum.ApiSync\\Source\\Amazon.Alexandria.SkiData",
+        "Source\\Luum\\ExtendedData",
+        "Source\\Luum.Api.FunctionalTests\\TestDataContracts"
       ]
     },
     {
       "name": "Models/Entities",
-      "path": "Source\\Luum\\Commute\\Leaderboards\\Entities",
+      "path": "Source\\Luum.Core\\Azure\\Tables\\Entities",
       "file_count": 52,
       "loc": 3895,
       "technologies": [],
       "key_files": [
-        "BaseTest.cs",
-        "EmployeeEntity.cs",
-        "GuidToken.cs",
         "SendParkingOfferTest.cs",
+        "PackedEntity.cs",
+        "VehicleDeleteRegistrationTest.cs",
+        "CompetitionEntityBase.cs",
+        "CreateDemoCustomerTest.cs",
         "Paths.cs",
-        "Program.cs",
-        "PackedEntityPropertyType.cs",
-        "AssemblyInfo.cs",
-        "LuumModalDialog.cs",
-        "CreateDemoCustomerTest.cs"
+        "DeltaEntity.cs",
+        "IBatchAwareEntity.cs",
+        "TransitCardRequestCreateTest.cs",
+        "EmployeeEntity.cs"
       ],
       "folders": [
-        "Source\\Luum\\Commute\\Leaderboards\\Entities",
-        "Source\\Luum.EndToEndTests",
-        "Tools\\OrderedGuidTool",
+        "Source\\Luum.Core\\Azure\\Tables\\Entities",
         "Tools\\Source\\OrderedGuidTool",
-        "Source\\Luum.ApiSync\\Source\\Allina.Midtown.SkiData"
+        "Tools\\OrderedGuidTool",
+        "Source\\Luum.ApiSync\\Source\\Allina.Midtown.SkiData",
+        "Source\\Luum.EndToEndTests"
       ]
     },
     {
@@ -185,16 +183,16 @@
         "SQL Server"
       ],
       "key_files": [
-        "DomainRedirectModule.cs",
         "AccessControlDomainEvent.cs",
-        "LogicalOr.cs",
-        "CommuteEmployerDomain.cs",
-        "DomainEventIdentifierType.cs",
-        "CanonicalDomain.cs",
-        "ParkingLogicSynchronizer.cs",
-        "AccessControlDomainGuidEvent.cs",
         "PayPeriodBusinessDayIterator.cs",
-        "RequiredSubdomainBehavior.cs"
+        "CommuteEmployerDomain.cs",
+        "ParkingLogicSynchronizer.cs",
+        "SubdomainAttribute.cs",
+        "CanonicalDomain.cs",
+        "ParkingLogicConfigurationElement.cs",
+        "RequiredSubdomainBehavior.cs",
+        "DomainRedirectModule.cs",
+        "AccessControlDomainGuidEvent.cs"
       ],
       "folders": []
     }
@@ -227,8 +225,8 @@
       "file_count": 2,
       "dependencies": [
         "Microsoft.Data.Edm",
-        "Microsoft.Data.OData",
-        "System.Spatial"
+        "System.Spatial",
+        "Microsoft.Data.OData"
       ],
       "key_classes": [
         "BackupImporter"
@@ -267,10 +265,10 @@
       "loc": 9240,
       "file_count": 22,
       "dependencies": [
-        "Microsoft.SqlServer.Types",
         "Microsoft.Data.Edm",
-        "Microsoft.Data.OData",
-        "System.Spatial"
+        "Microsoft.SqlServer.Types",
+        "System.Spatial",
+        "Microsoft.Data.OData"
       ],
       "key_classes": [
         "DevelopmentStorageEntityFactory",
@@ -328,10 +326,10 @@
       "loc": 10576,
       "file_count": 25,
       "dependencies": [
-        "Microsoft.SqlServer.Types",
         "Microsoft.Data.Edm",
-        "Microsoft.Data.OData",
-        "System.Spatial"
+        "Microsoft.SqlServer.Types",
+        "System.Spatial",
+        "Microsoft.Data.OData"
       ],
       "key_classes": [
         "AutomatedReportsTools",
@@ -375,10 +373,10 @@
       "loc": 9825,
       "file_count": 119,
       "dependencies": [
-        "Microsoft.SqlServer.Types",
         "Microsoft.Data.Edm",
-        "Microsoft.Data.OData",
-        "System.Spatial"
+        "Microsoft.SqlServer.Types",
+        "System.Spatial",
+        "Microsoft.Data.OData"
       ],
       "key_classes": [
         "AccessDeviceCommands",
@@ -597,21 +595,21 @@
       "loc": 180745,
       "file_count": 1715,
       "dependencies": [
-        "System.Threading.Tasks.Extensions",
-        "System.Text.Encodings.Web",
-        "System.Diagnostics.DiagnosticSource",
-        "Microsoft.Data.OData",
-        "System.Numerics.Vectors",
-        "Microsoft.Bcl.AsyncInterfaces",
-        "System.Text.Json",
-        "System.ValueTuple",
-        "Azure.Search.Documents",
         "Azure.Core",
+        "Microsoft.Data.OData",
+        "System.Buffers",
         "System.Spatial",
+        "System.ClientModel",
+        "System.Text.Json",
         "Microsoft.SqlServer.Types",
         "System.Threading.Channels",
+        "System.Memory.Data",
+        "Microsoft.Data.Edm",
+        "Azure.Search.Documents",
         "Microsoft.Extensions.Logging.Abstractions",
-        "System.Buffers"
+        "Microsoft.Bcl.AsyncInterfaces",
+        "Microsoft.Extensions.DependencyInjection.Abstractions",
+        "System.Text.Encodings.Web"
       ],
       "key_classes": [
         "DatabaseEnumTypeAttribute",
@@ -633,10 +631,10 @@
       "loc": 8015,
       "file_count": 53,
       "dependencies": [
-        "Microsoft.SqlServer.Types",
         "Microsoft.Data.Edm",
-        "Microsoft.Data.OData",
-        "System.Spatial"
+        "Microsoft.SqlServer.Types",
+        "System.Spatial",
+        "Microsoft.Data.OData"
       ],
       "key_classes": [
         "ApiAuthenticationService",
@@ -658,17 +656,17 @@
       "loc": 1169,
       "file_count": 14,
       "dependencies": [
-        "Microsoft.Bcl.AsyncInterfaces",
-        "System.Threading.Tasks.Extensions",
-        "Microsoft.SqlServer.Types",
-        "System.Text.Json",
-        "System.Text.Encodings.Web",
-        "System.ValueTuple",
         "System.Buffers",
-        "System.Memory",
         "System.Numerics.Vectors",
+        "System.Memory",
+        "Microsoft.Bcl.AsyncInterfaces",
+        "Microsoft.SqlServer.Types",
+        "System.Text.Encodings.Web",
+        "System.Threading.Tasks.Extensions",
+        "System.ValueTuple",
+        "System.Runtime.CompilerServices.Unsafe",
         "Newtonsoft.Json",
-        "System.Runtime.CompilerServices.Unsafe"
+        "System.Text.Json"
       ],
       "key_classes": [
         "AccessControlControllerFunctionalTests",
@@ -690,21 +688,21 @@
       "loc": 188,
       "file_count": 3,
       "dependencies": [
-        "System.Threading.Tasks.Extensions",
-        "System.Text.Encodings.Web",
-        "System.Diagnostics.DiagnosticSource",
-        "Microsoft.Data.OData",
-        "System.Numerics.Vectors",
-        "Microsoft.Bcl.AsyncInterfaces",
-        "System.Text.Json",
-        "System.ValueTuple",
-        "Azure.Search.Documents",
         "Azure.Core",
+        "Microsoft.Data.OData",
+        "System.Buffers",
         "System.Spatial",
+        "System.ClientModel",
+        "System.Text.Json",
         "Microsoft.SqlServer.Types",
         "System.Threading.Channels",
+        "System.Memory.Data",
+        "Microsoft.Data.Edm",
+        "Azure.Search.Documents",
         "Microsoft.Extensions.Logging.Abstractions",
-        "System.Buffers"
+        "Microsoft.Bcl.AsyncInterfaces",
+        "Microsoft.Extensions.DependencyInjection.Abstractions",
+        "System.Text.Encodings.Web"
       ],
       "key_classes": [
         "LuumBackgroundApplication",
@@ -718,16 +716,16 @@
       "loc": 156,
       "file_count": 5,
       "dependencies": [
-        "Azure.Identity",
-        "CommandLineParser",
-        "Microsoft.SqlServer.Types",
-        "System.Runtime.CompilerServices.Unsafe",
+        "Microsoft.Identity.Client",
+        "System.Security.AccessControl",
         "Dapper",
+        "Microsoft.SqlServer.Types",
         "System.Diagnostics.DiagnosticSource",
         "Microsoft.IdentityModel.Abstractions",
-        "Microsoft.Identity.Client",
-        "Microsoft.Data.SqlClient",
-        "System.Security.AccessControl"
+        "Azure.Identity",
+        "CommandLineParser",
+        "System.Runtime.CompilerServices.Unsafe",
+        "Microsoft.Data.SqlClient"
       ],
       "key_classes": [
         "Program",
@@ -744,21 +742,21 @@
       "loc": 47587,
       "file_count": 681,
       "dependencies": [
-        "Azure.Identity",
-        "Azure.Security.KeyVault.Secrets",
-        "System.IO.FileSystem.AccessControl",
-        "System.Threading.Tasks.Extensions",
-        "System.Runtime.CompilerServices.Unsafe",
-        "System.Text.Encodings.Web",
-        "System.Security.Cryptography.Primitives",
-        "System.Diagnostics.DiagnosticSource",
-        "System.Runtime.InteropServices.RuntimeInformation",
+        "Azure.Core",
         "Microsoft.Data.OData",
-        "System.Numerics.Vectors",
         "Microsoft.Identity.Client",
-        "Microsoft.Bcl.AsyncInterfaces",
-        "DevSecOps.Validation",
-        "System.Text.Json"
+        "System.Buffers",
+        "System.Runtime",
+        "System.Spatial",
+        "System.ClientModel",
+        "System.Text.Json",
+        "System.Runtime.InteropServices.RuntimeInformation",
+        "Microsoft.SqlServer.Types",
+        "Microsoft.IdentityModel.Abstractions",
+        "System.Memory.Data",
+        "Microsoft.Data.Edm",
+        "Azure.Security.KeyVault.Secrets",
+        "System.Security.Cryptography.ProtectedData"
       ],
       "key_classes": [
         "CoreApplication",
@@ -780,10 +778,10 @@
       "loc": 7390,
       "file_count": 133,
       "dependencies": [
-        "Microsoft.SqlServer.Types",
         "Microsoft.Data.Edm",
-        "Microsoft.Data.OData",
-        "System.Spatial"
+        "Microsoft.SqlServer.Types",
+        "System.Spatial",
+        "Microsoft.Data.OData"
       ],
       "key_classes": [
         "ActionHelper",
@@ -805,13 +803,13 @@
       "loc": 743,
       "file_count": 21,
       "dependencies": [
-        "DotNetSeleniumExtras.WaitHelpers",
-        "CommandLineParser",
-        "Microsoft.SqlServer.Types",
-        "Selenium.Support",
-        "WebDriverManager",
+        "System.Security.AccessControl",
         "Selenium.WebDriver",
-        "System.Security.AccessControl"
+        "Selenium.Support",
+        "Microsoft.SqlServer.Types",
+        "WebDriverManager",
+        "CommandLineParser",
+        "DotNetSeleniumExtras.WaitHelpers"
       ],
       "key_classes": [
         "Paths",
@@ -848,10 +846,10 @@
       "loc": 116,
       "file_count": 2,
       "dependencies": [
-        "MSTest.TestFramework",
         "Microsoft.SqlServer.Types",
+        "MSTest.TestAdapter",
         "Newtonsoft.Json",
-        "MSTest.TestAdapter"
+        "MSTest.TestFramework"
       ],
       "key_classes": [
         "TMobileParkingTests"
@@ -907,8 +905,8 @@
       "file_count": 284,
       "dependencies": [
         "Microsoft.Data.Edm",
-        "Microsoft.Data.OData",
-        "System.Spatial"
+        "System.Spatial",
+        "Microsoft.Data.OData"
       ],
       "key_classes": [
         "ExceptionHelper",
@@ -947,10 +945,10 @@
       "loc": 129,
       "file_count": 2,
       "dependencies": [
-        "Microsoft.SqlServer.Types",
         "Microsoft.Data.Edm",
-        "Microsoft.Data.OData",
-        "System.Spatial"
+        "Microsoft.SqlServer.Types",
+        "System.Spatial",
+        "Microsoft.Data.OData"
       ],
       "key_classes": [
         "WorkerRole"
@@ -963,10 +961,10 @@
       "loc": 20357,
       "file_count": 73,
       "dependencies": [
-        "Microsoft.SqlServer.Types",
         "Microsoft.Data.Edm",
-        "Microsoft.Data.OData",
-        "System.Spatial"
+        "Microsoft.SqlServer.Types",
+        "System.Spatial",
+        "Microsoft.Data.OData"
       ],
       "key_classes": [
         "ConnectedAccountContentMetadata",
@@ -1010,21 +1008,21 @@
       "loc": 2620,
       "file_count": 18,
       "dependencies": [
-        "System.Threading.Tasks.Extensions",
-        "System.Text.Encodings.Web",
-        "System.Diagnostics.DiagnosticSource",
-        "System.Numerics.Vectors",
-        "Microsoft.Bcl.AsyncInterfaces",
-        "System.Text.Json",
-        "System.ValueTuple",
-        "Azure.Search.Documents",
         "Azure.Core",
+        "System.Buffers",
+        "System.ClientModel",
         "Newtonsoft.Json",
+        "System.Text.Json",
         "Microsoft.SqlServer.Types",
         "System.Threading.Channels",
+        "System.Memory.Data",
+        "Azure.Search.Documents",
         "Microsoft.Extensions.Logging.Abstractions",
-        "System.Buffers",
-        "System.Memory"
+        "Microsoft.Bcl.AsyncInterfaces",
+        "Microsoft.Extensions.DependencyInjection.Abstractions",
+        "System.Text.Encodings.Web",
+        "System.Threading.Tasks.Extensions",
+        "System.ValueTuple"
       ],
       "key_classes": [
         "AsyncDatabaseTest",
@@ -1046,21 +1044,21 @@
       "loc": 61941,
       "file_count": 235,
       "dependencies": [
-        "System.Threading.Tasks.Extensions",
-        "System.Text.Encodings.Web",
-        "System.Diagnostics.DiagnosticSource",
-        "Microsoft.Data.OData",
-        "System.Numerics.Vectors",
-        "Microsoft.Bcl.AsyncInterfaces",
-        "System.Text.Json",
-        "System.ValueTuple",
-        "Azure.Search.Documents",
         "Azure.Core",
-        "System.Spatial",
-        "System.Threading.Channels",
-        "Microsoft.Extensions.Logging.Abstractions",
+        "Microsoft.Data.OData",
         "System.Buffers",
-        "System.Memory"
+        "System.Spatial",
+        "System.ClientModel",
+        "System.Text.Json",
+        "System.Threading.Channels",
+        "System.Memory.Data",
+        "Microsoft.Data.Edm",
+        "Azure.Search.Documents",
+        "Microsoft.Extensions.Logging.Abstractions",
+        "Microsoft.Bcl.AsyncInterfaces",
+        "Microsoft.Extensions.DependencyInjection.Abstractions",
+        "System.Text.Encodings.Web",
+        "System.Threading.Tasks.Extensions"
       ],
       "key_classes": [
         "AssemblyInitializer",
@@ -1082,21 +1080,21 @@
       "loc": 141716,
       "file_count": 577,
       "dependencies": [
-        "QRCoder",
-        "System.Threading.Tasks.Extensions",
-        "System.Text.Encodings.Web",
-        "System.Diagnostics.DiagnosticSource",
-        "Microsoft.Data.OData",
-        "System.Numerics.Vectors",
-        "Microsoft.Bcl.AsyncInterfaces",
-        "System.Text.Json",
-        "System.ValueTuple",
-        "Azure.Search.Documents",
         "Azure.Core",
+        "Microsoft.Data.OData",
+        "System.Buffers",
         "System.Spatial",
+        "System.ClientModel",
+        "System.Text.Json",
         "Microsoft.SqlServer.Types",
         "System.Threading.Channels",
-        "Microsoft.Extensions.Logging.Abstractions"
+        "System.Memory.Data",
+        "Microsoft.Data.Edm",
+        "Azure.Search.Documents",
+        "Microsoft.Extensions.Logging.Abstractions",
+        "Microsoft.Bcl.AsyncInterfaces",
+        "Microsoft.Extensions.DependencyInjection.Abstractions",
+        "System.Text.Encodings.Web"
       ],
       "key_classes": [
         "AssetStaticContentService",
@@ -1857,21 +1855,21 @@
       "loc": 132,
       "file_count": 4,
       "dependencies": [
-        "System.Threading.Tasks.Extensions",
-        "Microsoft.Testing.Extensions.TrxReport.Abstractions",
-        "Microsoft.TestPlatform.ObjectModel",
-        "System.Diagnostics.DiagnosticSource",
-        "System.Numerics.Vectors",
-        "System.Reflection.Metadata",
-        "System.Collections.Immutable",
-        "Microsoft.TestPlatform.AdapterUtilities",
-        "Microsoft.Testing.Extensions.Telemetry",
-        "MSTest.Analyzers",
-        "MSTest.TestFramework",
-        "Microsoft.Testing.Extensions.VSTestBridge",
-        "Microsoft.Testing.Platform.MSBuild",
         "System.Buffers",
-        "System.Memory"
+        "Microsoft.ApplicationInsights",
+        "Microsoft.TestPlatform.AdapterUtilities",
+        "Microsoft.Testing.Extensions.TrxReport.Abstractions",
+        "System.Collections.Immutable",
+        "System.Reflection.Metadata",
+        "Microsoft.TestPlatform.ObjectModel",
+        "System.Threading.Tasks.Extensions",
+        "System.Runtime.CompilerServices.Unsafe",
+        "MSTest.TestFramework",
+        "System.Numerics.Vectors",
+        "MSTest.TestAdapter",
+        "Microsoft.Testing.Extensions.Telemetry",
+        "System.Memory",
+        "System.Diagnostics.DiagnosticSource"
       ],
       "key_classes": [
         "TestLogger",
@@ -4067,7 +4065,32 @@
       "returns": "ActionResult"
     }
   ],
-  "database": {
+  "deployment": {
+    "hosting": "IIS (Internet Information Services)",
+    "platform": ".NET Framework",
+    "configs": [
+      "Web.config found - IIS hosting"
+    ],
+    "build_outputs": []
+  },
+  "metrics": {
+    "layer_separation": 90,
+    "modularity": 85,
+    "api_design": 100,
+    "tier_balance": 46,
+    "overall_score": 81
+  },
+  "summary": {
+    "total_components": 108,
+    "total_tiers": 6,
+    "total_files": 1285,
+    "total_loc": 240255,
+    "endpoint_count": 273,
+    "database_count": 60,
+    "architecture_score": 81,
+    "last_analyzed": "2025-12-07T15:28:15.956261"
+  },
+  "database_schema": {
     "connections": [
       {
         "name": "DefaultDB",
@@ -4556,30 +4579,5 @@
       "SQL Server connection 'DefaultDB' to (DESCRIPTION =(ADDRESS = (PROTOCOL = TCP) (HOST = localhost)  (PORT = 1521) )(CONNECT_DATA =(SERVICE_NAME = CBPRD) (SERVER = dedicated) ))/Unknown",
       "SQL Server connection 'DefaultDB' to AMI5215-SQL.AMIParking5215.Local/McGANN"
     ]
-  },
-  "deployment": {
-    "hosting": "IIS (Internet Information Services)",
-    "platform": ".NET Framework",
-    "configs": [
-      "Web.config found - IIS hosting"
-    ],
-    "build_outputs": []
-  },
-  "metrics": {
-    "layer_separation": 90,
-    "modularity": 85,
-    "api_design": 100,
-    "tier_balance": 46,
-    "overall_score": 81
-  },
-  "summary": {
-    "total_components": 108,
-    "total_tiers": 6,
-    "total_files": 1285,
-    "total_loc": 240255,
-    "endpoint_count": 273,
-    "database_count": 60,
-    "architecture_score": 81,
-    "last_analyzed": "2025-12-06T12:14:20.762755"
   }
 }

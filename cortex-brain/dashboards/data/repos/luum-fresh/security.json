@@ -1,3 +1,745 @@
 {
-  "error": "'list' object has no attribute 'values'"
+  "overall_score": 0,
+  "last_scan": "2025-12-07T15:27:28.335767",
+  "categories": [
+    {
+      "name": "code_security",
+      "score": 0,
+      "status": "critical",
+      "issues": 736,
+      "details": "736 code-level vulnerabilities found"
+    },
+    {
+      "name": "dependencies",
+      "score": 100,
+      "status": "healthy",
+      "issues": 0,
+      "details": "0 vulnerable dependencies"
+    },
+    {
+      "name": "authentication",
+      "score": 0,
+      "status": "critical",
+      "issues": 245,
+      "details": "245 hardcoded credentials, 0 auth issues"
+    },
+    {
+      "name": "configuration",
+      "score": 20,
+      "status": "critical",
+      "issues": 8,
+      "details": "8 configuration issues"
+    }
+  ],
+  "vulnerabilities": {
+    "total": 794,
+    "critical": 210,
+    "high": 567,
+    "medium": 17,
+    "low": 0,
+    "by_package": []
+  },
+  "owasp_top_10": {
+    "pass_count": 6,
+    "warn_count": 1,
+    "fail_count": 4,
+    "categories": [
+      {
+        "risk": "A01",
+        "name": "Broken Access Control",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": [],
+        "findings_by_type": {}
+      },
+      {
+        "risk": "A02",
+        "name": "Cryptographic Failures",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 287,
+        "findings": [
+          {
+            "type": "Weak Cryptography - MD5 Hashing",
+            "severity": "high",
+            "file": "Tools\\Source\\Luum.Tools.Migrator\\DatabaseCommands.cs",
+            "line": 487,
+            "description": "Weak Cryptography - MD5 Hashing detected",
+            "code_snippet": "[ExportMetadata(\"Description\", \"Calculates the MD5, content type, and length of the specified file.\"",
+            "recommendation": "Use SHA256 or SHA512"
+          },
+          {
+            "type": "Weak Cryptography - MD5 Hashing",
+            "severity": "high",
+            "file": "Tools\\Source\\Luum.Tools.Migrator\\DatabaseCommands.cs",
+            "line": 511,
+            "description": "Weak Cryptography - MD5 Hashing detected",
+            "code_snippet": "Console.WriteLine(\"    MD5 GUID: \" + metadata.ContentMD5.ToString(\"D\"));",
+            "recommendation": "Use SHA256 or SHA512"
+          },
+          {
+            "type": "Weak Cryptography - MD5 Hashing",
+            "severity": "high",
+            "file": "Tools\\Source\\Luum.Tools.Migrator\\DatabaseCommands.cs",
+            "line": 512,
+            "description": "Weak Cryptography - MD5 Hashing detected",
+            "code_snippet": "Console.WriteLine(\"  MD5 Base64: \" + Convert.ToBase64String(metadata.ContentMD5.ToByteArray()));",
+            "recommendation": "Use SHA256 or SHA512"
+          },
+          {
+            "type": "Weak Cryptography - SHA1 Hashing",
+            "severity": "high",
+            "file": "Tools\\dotless-v1.3.0.3\\Source\\dotless\\src\\dotless.Core\\Engine\\CacheDecorator.cs",
+            "line": 49,
+            "description": "Weak Cryptography - SHA1 Hashing detected",
+            "code_snippet": "SHA1 sha1 = SHA1.Create();",
+            "recommendation": "Use SHA256 or SHA512"
+          },
+          {
+            "type": "Weak Cryptography - SHA1 Hashing",
+            "severity": "high",
+            "file": "Tools\\Certificates\\Source\\CertificateFactory.cs",
+            "line": 169,
+            "description": "Weak Cryptography - SHA1 Hashing detected",
+            "code_snippet": "case HashAlgorithmType.SHA1:",
+            "recommendation": "Use SHA256 or SHA512"
+          }
+        ],
+        "findings_by_type": {
+          "Weak Cryptography - MD5 Hashing": 16,
+          "Weak Cryptography - SHA1 Hashing": 21,
+          "Weak Cryptography - RC2/RC4": 5,
+          "Connection String with Password": 45,
+          "Hardcoded Password": 197,
+          "Hardcoded Secret": 3
+        }
+      },
+      {
+        "risk": "A03",
+        "name": "Injection",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 535,
+        "findings": [
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\Program.cs",
+            "line": 1783,
+            "description": "Inline SQL with string concatenation detected",
+            "code_snippet": "Console.WriteLine(\"Error: Could not parse DateTimeOffset from: \" + args.UnboundArguments[0]);",
+            "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\Program.cs",
+            "line": 1875,
+            "description": "Inline SQL with string concatenation detected",
+            "code_snippet": "Console.WriteLine(\"Error: Could not parse DateTimeOffset from: \" + args.UnboundArguments[0]);",
+            "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\Program.cs",
+            "line": 2003,
+            "description": "Inline SQL with string concatenation detected",
+            "code_snippet": "[BulkUpdates].[Type]=\" + ((int)type) + @\"",
+            "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\Program.cs",
+            "line": 2019,
+            "description": "Inline SQL with string concatenation detected",
+            "code_snippet": "[BulkUpdates].[Type]=\" + ((int)type) + @\"",
+            "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Tools\\Source\\LegacyTools\\Program.cs",
+            "line": 2038,
+            "description": "Inline SQL with string concatenation detected",
+            "code_snippet": "[BulkUpdates].[Type]=\" + ((int)type) + @\"",
+            "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+          }
+        ],
+        "findings_by_type": {
+          "SQL Injection": 346,
+          "XSS": 189
+        }
+      },
+      {
+        "risk": "A04",
+        "name": "Insecure Design",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": [],
+        "findings_by_type": {}
+      },
+      {
+        "risk": "A05",
+        "name": "Security Misconfiguration",
+        "score": 60,
+        "status": "warn",
+        "findings_count": 8,
+        "findings": [
+          {
+            "type": "Security Misconfiguration",
+            "severity": "medium",
+            "file": "Source\\Luum.Api\\Web.config",
+            "description": "Debug mode enabled in production config",
+            "recommendation": "Set debug=false in production"
+          },
+          {
+            "type": "Information Disclosure",
+            "severity": "medium",
+            "file": "Source\\Luum.Api\\Web.config",
+            "description": "Custom errors disabled - exposes stack traces",
+            "recommendation": "Set customErrors mode to RemoteOnly or On"
+          },
+          {
+            "type": "Security Misconfiguration",
+            "severity": "medium",
+            "file": "Source\\Luum.Api\\Web.config",
+            "description": "HTTPS not enforced for cookies",
+            "recommendation": "Set httpCookies requireSSL=true"
+          },
+          {
+            "type": "Security Misconfiguration",
+            "severity": "medium",
+            "file": "Source\\Luum.SharedViews\\Web.config",
+            "description": "HTTPS not enforced for cookies",
+            "recommendation": "Set httpCookies requireSSL=true"
+          },
+          {
+            "type": "Security Misconfiguration",
+            "severity": "medium",
+            "file": "Source\\Luum.Web\\Web.config",
+            "description": "Debug mode enabled in production config",
+            "recommendation": "Set debug=false in production"
+          }
+        ],
+        "findings_by_type": {
+          "Security Misconfiguration": 6,
+          "Information Disclosure": 2
+        }
+      },
+      {
+        "risk": "A06",
+        "name": "Vulnerable and Outdated Components",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": [],
+        "findings_by_type": {}
+      },
+      {
+        "risk": "A07",
+        "name": "Identification and Authentication Failures",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 242,
+        "findings": [
+          {
+            "type": "Connection String with Password",
+            "severity": "critical",
+            "file": "Source\\Luum.ApiSync\\Source\\Akamai.Amano\\App.config",
+            "line": 11,
+            "description": "Connection String with Password found in plain text",
+            "masked_value": "Dat*******************************************************************************************************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Connection String with Password",
+            "severity": "critical",
+            "file": "Source\\Luum.ApiSync\\Source\\Adidas.CCure\\App.config",
+            "line": 11,
+            "description": "Connection String with Password found in plain text",
+            "masked_value": "Dat*******************************************************************************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Connection String with Password",
+            "severity": "critical",
+            "file": "Source\\Luum.ApiSync\\Source\\Allina.Midtown.SkiData\\App.config",
+            "line": 11,
+            "description": "Connection String with Password found in plain text",
+            "masked_value": "Dat***************************************************************************************************************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Connection String with Password",
+            "severity": "critical",
+            "file": "Source\\Luum.ApiSync\\Source\\Amazon.Bingo.DataPark\\App.config",
+            "line": 11,
+            "description": "Connection String with Password found in plain text",
+            "masked_value": "Dat**********************************************************************************************************************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Connection String with Password",
+            "severity": "critical",
+            "file": "Source\\Luum.ApiSync\\Source\\Amazon.Blackfoot.DataPark\\App.config",
+            "line": 11,
+            "description": "Connection String with Password found in plain text",
+            "masked_value": "Dat**********************************************************************************************************************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          }
+        ],
+        "findings_by_type": {
+          "Connection String with Password": 45,
+          "Hardcoded Password": 197
+        }
+      },
+      {
+        "risk": "A08",
+        "name": "Software and Data Integrity Failures",
+        "score": 0,
+        "status": "fail",
+        "findings_count": 201,
+        "findings": [
+          {
+            "type": "Insecure Deserialization",
+            "severity": "high",
+            "file": "Source\\Marmoset\\Marmoset\\Html\\Names\\HtmlAttributeName.cs",
+            "line": 231,
+            "description": ".NET JavaScriptSerializer Type Handling",
+            "code_snippet": "HtmlAttributeName.AddForeignAttribute(results, HtmlAttributeNamespace.XLink, HtmlNameAtom.XLink__typ",
+            "recommendation": "Use JSON.NET with secure settings"
+          },
+          {
+            "type": "Insecure Deserialization",
+            "severity": "high",
+            "file": "Source\\Marmoset\\Marmoset\\Html\\Names\\HtmlNameAtom.cs",
+            "line": 147,
+            "description": ".NET JavaScriptSerializer Type Handling",
+            "code_snippet": "XLink__type,",
+            "recommendation": "Use JSON.NET with secure settings"
+          },
+          {
+            "type": "Insecure Deserialization",
+            "severity": "critical",
+            "file": "Source\\Luum.Networking\\Sftp\\SftpSubSystem.cs",
+            "line": 46,
+            "description": "Insecure Binary Deserialization",
+            "code_snippet": "private SshBinaryFormatter channelWriteFormatter;",
+            "recommendation": "Use DataContractSerializer or JSON.NET"
+          },
+          {
+            "type": "Insecure Deserialization",
+            "severity": "critical",
+            "file": "Source\\Luum.Networking\\Sftp\\SftpSubSystem.cs",
+            "line": 89,
+            "description": "Insecure Binary Deserialization",
+            "code_snippet": "this.channelWriteFormatter = new SshBinaryFormatter(this.channelWriteBuffer);",
+            "recommendation": "Use DataContractSerializer or JSON.NET"
+          },
+          {
+            "type": "Insecure Deserialization",
+            "severity": "critical",
+            "file": "Source\\Luum.Networking\\Sftp\\SftpSubSystem.cs",
+            "line": 312,
+            "description": "Insecure Binary Deserialization",
+            "code_snippet": "using (SshBinaryFormatter formatter = new SshBinaryFormatter(buffer))",
+            "recommendation": "Use DataContractSerializer or JSON.NET"
+          }
+        ],
+        "findings_by_type": {
+          "Insecure Deserialization": 201
+        }
+      },
+      {
+        "risk": "A09",
+        "name": "Security Logging and Monitoring Failures",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": [],
+        "findings_by_type": {}
+      },
+      {
+        "risk": "A10",
+        "name": "Server-Side Request Forgery (SSRF)",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": [],
+        "findings_by_type": {}
+      },
+      {
+        "risk": "A11",
+        "name": "Insecure AI/ML Model Deployment",
+        "score": 100,
+        "status": "pass",
+        "findings_count": 0,
+        "findings": [],
+        "findings_by_type": {}
+      }
+    ],
+    "overall_compliance": 60.0,
+    "version": "2025",
+    "last_updated": "2025-12-07T15:27:28.277341"
+  },
+  "compliance": {
+    "gdpr_ready": false,
+    "gdpr_issues": [
+      "Hardcoded credentials found - violates data protection",
+      "Security misconfigurations detected"
+    ],
+    "soc2_ready": false,
+    "soc2_issues": [
+      "570 high-severity vulnerabilities"
+    ],
+    "hipaa_ready": false,
+    "hipaa_issues": [
+      "Encryption keys/credentials not secured"
+    ],
+    "pci_dss_ready": false,
+    "pci_dss_issues": [
+      "Sensitive data stored in plain text",
+      "Security configuration weaknesses"
+    ]
+  },
+  "findings": {
+    "vulnerabilities": [
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 1783,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(\"Error: Could not parse DateTimeOffset from: \" + args.UnboundArguments[0]);",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 1875,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(\"Error: Could not parse DateTimeOffset from: \" + args.UnboundArguments[0]);",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 2003,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "[BulkUpdates].[Type]=\" + ((int)type) + @\"",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 2019,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "[BulkUpdates].[Type]=\" + ((int)type) + @\"",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 2038,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "[BulkUpdates].[Type]=\" + ((int)type) + @\"",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 2124,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(\"Deleted blob assets {0}-{1} of {2} from table storage.\", (batchTaskStartIndex + 1",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 3413,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(\"Deleted Achievements: \" + batch.AchievementsToDelete.Count);",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 3543,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(String.Join(Environment.NewLine, duplicateCompanyEmployeeIDs.Select(tuple => tuple",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 3551,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "Console.WriteLine(String.Join(Environment.NewLine, duplicateCardNumbers.Select(tuple => tuple.Item1.",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 4945,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "processingResultsContent.AppendLine($\"\\tPermit {assignments.LastAssignment.ParkingPermitType.Name} f",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 4945,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "processingResultsContent.AppendLine($\"\\tPermit {assignments.LastAssignment.ParkingPermitType.Name} f",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 4952,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "processingResultsContent.AppendLine($\"{assignmentProcessingResult.ParkingPermitAssignments.Count} va",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 5500,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "database.Execute(\"DELETE FROM [TableRow] WHERE [TableName]='\" + ExtendedDataService.TableName.ToLowe",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 5575,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "[BulkUpdates].[BulkUpdateType]=\" + ((int)BulkUpdateType.Roster) + @\" AND",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 5858,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "writer.WriteLine($\"DECLARE @employeeResolutionType INT = {String.Join(\"|\", employeeResolutionTypes.S",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\LegacyTools\\Program.cs",
+        "line": 5859,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "$\" -- {String.Join(\"|\", employeeResolutionTypes.Select(type => $\"{type.GetEnumDescription()}({(int)t",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\Luum.Tools\\AutomatedReportsTools.cs",
+        "line": 102,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "if (!PromptHelpers.Prompt($\"Current status of {report.ReportFileName}:{report.Id}'s IsEnabled flag i",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\Luum.Tools\\BenefitsPartnerTools.cs",
+        "line": 388,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "if (PromptHelpers.Prompt($\"Do you want to create {inserts.Count} BenefitsPartnerSubsidyDefinition en",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\Luum.Tools\\BenefitsPartnerTools.cs",
+        "line": 505,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "if (PromptHelpers.Prompt($\"Do you want to create {inserts.Count} BenefitsPartnerSubsidyDefinition en",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Tools\\Source\\Luum.Tools\\ParkingTools.cs",
+        "line": 309,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "if (PromptHelpers.Prompt($\"Are you sure you want to move ALL ParkingLocationAssignments ({oldAssignm",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      }
+    ],
+    "hardcoded_secrets": [
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Akamai.Amano\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat*******************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Adidas.CCure\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat*******************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Allina.Midtown.SkiData\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat***************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Amazon.Bingo.DataPark\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat**********************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Amazon.Blackfoot.DataPark\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat**********************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Amazon.EightOneEightStewart.DataPark\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat**********************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Amazon.Galaxy.DataPark\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat**********************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Amazon.Gatsby.DataPark\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat**********************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Amazon.Day1.DataPark\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat**********************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source\\Luum.ApiSync\\Source\\Amazon.Lowflyinghawk.DataPark\\App.config",
+        "line": 11,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat**********************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      }
+    ],
+    "config_issues": [
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Api\\Web.config",
+        "description": "Debug mode enabled in production config",
+        "recommendation": "Set debug=false in production"
+      },
+      {
+        "type": "Information Disclosure",
+        "severity": "medium",
+        "file": "Source\\Luum.Api\\Web.config",
+        "description": "Custom errors disabled - exposes stack traces",
+        "recommendation": "Set customErrors mode to RemoteOnly or On"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Api\\Web.config",
+        "description": "HTTPS not enforced for cookies",
+        "recommendation": "Set httpCookies requireSSL=true"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.SharedViews\\Web.config",
+        "description": "HTTPS not enforced for cookies",
+        "recommendation": "Set httpCookies requireSSL=true"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Web\\Web.config",
+        "description": "Debug mode enabled in production config",
+        "recommendation": "Set debug=false in production"
+      },
+      {
+        "type": "Information Disclosure",
+        "severity": "medium",
+        "file": "Source\\Luum.Web\\Web.config",
+        "description": "Custom errors disabled - exposes stack traces",
+        "recommendation": "Set customErrors mode to RemoteOnly or On"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Web\\Web.config",
+        "description": "HTTPS not enforced for cookies",
+        "recommendation": "Set httpCookies requireSSL=true"
+      },
+      {
+        "type": "Security Misconfiguration",
+        "severity": "medium",
+        "file": "Source\\Luum.Web\\Content\\Web.config",
+        "description": "HTTPS not enforced for cookies",
+        "recommendation": "Set httpCookies requireSSL=true"
+      }
+    ],
+    "dependency_vulns": []
+  },
+  "scan_mode": "deep"
 }

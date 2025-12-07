@@ -306,13 +306,11 @@ class TestArchitectureSchema:
         return load_mock_schema("architecture.json")
     
     def test_architecture_root_keys(self, mock_architecture):
-        """FAILING TEST: Architecture must have all root-level keys."""
-        required_keys = ["style", "patterns", "layers", "components", "dependencies"]
+        """Architecture must have all root-level keys matching mock schema."""
+        required_keys = ["application_type", "style", "deployment", "metrics", "tiers", "components", "endpoints", "database_schema", "summary"]
         
-        collector_output = {
-            "style": "Unknown"
-            # Missing other keys
-        }
+        # Load actual collector output
+        collector_output = load_collector_output("architecture.json")
         
         errors = validate_keys(collector_output, required_keys)
         assert len(errors) == 0, f"Schema validation failed:\n" + "\n".join(errors)
@@ -326,13 +324,11 @@ class TestCodeOrganizationSchema:
         return load_mock_schema("code-organization.json")
     
     def test_code_org_root_keys(self, mock_code_org):
-        """FAILING TEST: Code organization must have all root-level keys."""
-        required_keys = ["directory_structure", "file_distribution", "complexity_metrics", "hotspots"]
+        """Code organization must have all root-level keys matching mock schema."""
+        required_keys = ["heatmap", "hotspots", "file_complexity", "complexity_distribution", "language_breakdown", "summary"]
         
-        collector_output = {
-            "directory_structure": []
-            # Missing other keys
-        }
+        # Load actual collector output
+        collector_output = load_collector_output("code-organization.json")
         
         errors = validate_keys(collector_output, required_keys)
         assert len(errors) == 0, f"Schema validation failed:\n" + "\n".join(errors)
@@ -346,13 +342,11 @@ class TestVendorsSchema:
         return load_mock_schema("vendors.json")
     
     def test_vendors_root_keys(self, mock_vendors):
-        """FAILING TEST: Vendors must have all root-level keys."""
-        required_keys = ["external_dependencies", "api_integrations", "services", "summary"]
+        """Vendors must have all root-level keys matching mock schema."""
+        required_keys = ["vendors", "by_category", "by_status", "summary"]
         
-        collector_output = {
-            "external_dependencies": []
-            # Missing other keys
-        }
+        # Load actual collector output
+        collector_output = load_collector_output("vendors.json")
         
         errors = validate_keys(collector_output, required_keys)
         assert len(errors) == 0, f"Schema validation failed:\n" + "\n".join(errors)

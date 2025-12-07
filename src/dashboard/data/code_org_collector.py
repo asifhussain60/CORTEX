@@ -69,11 +69,19 @@ class CodeOrganizationCollector(BaseDataCollector):
         # Detect code smells
         code_smells = self._detect_code_smells(heatmap)
         
+        # Calculate complexity distribution
+        complexity_distribution = self._calculate_complexity_distribution(heatmap)
+        
+        # Calculate language breakdown
+        language_breakdown = self._calculate_language_breakdown(heatmap)
+        
         code_org_data = {
             "heatmap": heatmap,
             "hotspots": hotspots,
             "module_structure": module_structure,
             "file_complexity": heatmap[:50],  # Top 50 files by complexity
+            "complexity_distribution": complexity_distribution,
+            "language_breakdown": language_breakdown,
             "duplications": duplications,
             "maintainability": maintainability,
             "technical_debt": technical_debt,
@@ -1027,3 +1035,45 @@ class CodeOrganizationCollector(BaseDataCollector):
         smells.sort(key=lambda x: (severity_order.get(x["severity"], 3), x["file"]))
         
         return smells[:25]  # Top 25 code smells
+    
+    def _calculate_complexity_distribution(self, heatmap: List[Dict[str, Any]]) -> Dict[str, int]:
+        """Calculate distribution of complexity levels"""
+        distribution = {"low": 0, "medium": 0, "high": 0, "very_high": 0}
+        
+        for file_data in heatmap:
+            complexity = file_data.get("complexity", 0)
+            if complexity < 10:
+                distribution["low"] += 1
+            elif complexity < 20:
+                distribution["medium"] += 1
+            elif complexity < 50:
+                distribution["high"] += 1
+            else:
+                distribution["very_high"] += 1
+        
+        return distribution
+    
+    def _calculate_language_breakdown(self, heatmap: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+        """Calculate breakdown by programming language"""
+        lang_stats = defaultdict(lambda: {"files": 0, "loc": 0, "complexities": []})
+        
+        for file_data in heatmap:
+            lang = file_data.get("language", "unknown")
+            lang_stats[lang]["files"] += 1
+            lang_stats[lang]["loc"] += file_data.get("loc", 0)
+            lang_stats[lang]["complexities"].append(file_data.get("complexity", 0))
+        
+        # Calculate averages and percentages
+        total_loc = sum(stats["loc"] for stats in lang_stats.values())
+        
+        breakdown = {}
+        for lang, stats in lang_stats.items():
+            avg_complexity = sum(stats["complexities"]) / len(stats["complexities"]) if stats["complexities"] else 0
+            breakdown[lang] = {
+                "files": stats["files"],
+                "loc": stats["loc"],
+                "avg_complexity": round(avg_complexity, 1),
+                "percentage": round((stats["loc"] / total_loc * 100), 1) if total_loc else 0
+            }
+        
+        return breakdown

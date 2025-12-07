@@ -75,7 +75,7 @@ class ArchitectureCollector(BaseDataCollector):
             "tiers": tiers,
             "components": components,
             "endpoints": endpoints,
-            "database": database_info,
+            "database_schema": database_info,
             "deployment": deployment,
             "metrics": metrics,
             "summary": {
