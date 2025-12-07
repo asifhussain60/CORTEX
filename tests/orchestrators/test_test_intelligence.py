@@ -206,3 +206,160 @@ class TestTestIntelligence:
         # Unit tests always 100% confidence
         unit_req = next((r for r in strong_reqs if r.test_type == TestType.UNIT), None)
         assert unit_req.confidence == 1.0
+
+
+class TestSeleniumTemplateGeneration:
+    """
+    RED PHASE: Tests for Selenium test template generation (Planning System 3.0)
+    
+    These tests should FAIL until GREEN phase implementation.
+    Author: Asif Hussain
+    Version: 3.9.0
+    """
+    
+    def test_generate_selenium_test_template_exists(self):
+        """Should have generate_selenium_test_template method."""
+        intelligence = TestIntelligence()
+        assert hasattr(intelligence, 'generate_selenium_test_template')
+    
+    def test_generate_selenium_template_for_login(self):
+        """Should generate Selenium template for login flow."""
+        intelligence = TestIntelligence()
+        
+        ui_patterns = {
+            'feature_name': 'User Login',
+            'actions': ['click login button', 'fill email', 'fill password', 'submit form'],
+            'elements': ['email_input', 'password_input', 'login_button']
+        }
+        
+        template = intelligence.generate_selenium_test_template(ui_patterns)
+        
+        # Template should contain pytest-selenium structure
+        assert 'import pytest' in template
+        assert 'from selenium import webdriver' in template
+        assert 'from selenium.webdriver.common.by import By' in template
+        
+        # Should have headless configuration
+        assert '--headless' in template or 'headless=True' in template
+        
+        # Should have test function
+        assert 'def test_' in template
+        assert 'driver' in template
+        
+        # Should reference UI elements
+        assert 'email' in template.lower()
+        assert 'password' in template.lower()
+        assert 'login' in template.lower()
+    
+    def test_generate_selenium_template_with_headless_config(self):
+        """Should include headless Chrome configuration."""
+        intelligence = TestIntelligence()
+        
+        ui_patterns = {
+            'feature_name': 'Form Submission',
+            'actions': ['fill form', 'click submit'],
+            'headless_mode': True
+        }
+        
+        template = intelligence.generate_selenium_test_template(ui_patterns)
+        
+        # Should have Chrome options
+        assert 'ChromeOptions' in template or 'Options' in template
+        assert '--headless' in template
+        assert '--no-sandbox' in template  # CI/CD compatibility
+        assert '--disable-dev-shm-usage' in template
+    
+    def test_generate_selenium_template_with_waits(self):
+        """Should include explicit waits for reliability."""
+        intelligence = TestIntelligence()
+        
+        ui_patterns = {
+            'feature_name': 'Dynamic Content',
+            'actions': ['wait for element', 'click button']
+        }
+        
+        template = intelligence.generate_selenium_test_template(ui_patterns)
+        
+        # Should have WebDriverWait
+        assert 'WebDriverWait' in template
+        assert 'expected_conditions' in template or 'EC' in template
+    
+    def test_generate_selenium_template_with_pytest_fixtures(self):
+        """Should use pytest fixtures for driver management."""
+        intelligence = TestIntelligence()
+        
+        ui_patterns = {
+            'feature_name': 'Navigation Test',
+            'actions': ['navigate', 'click link']
+        }
+        
+        template = intelligence.generate_selenium_test_template(ui_patterns)
+        
+        # Should have pytest fixture
+        assert '@pytest.fixture' in template
+        assert 'def driver' in template or 'def selenium' in template
+        assert 'yield' in template  # Proper teardown
+        assert 'quit()' in template or 'close()' in template
+    
+    def test_generate_selenium_template_integrated_with_format_for_planning(self):
+        """Should integrate Selenium templates into planning format."""
+        intelligence = TestIntelligence()
+        
+        description = "User clicks login button and fills credentials"
+        requirements = intelligence.analyze_requirements(description)
+        
+        formatted = intelligence.format_for_planning_template(
+            requirements,
+            include_selenium_template=True
+        )
+        
+        # Should include Selenium template section
+        assert '```python' in formatted or 'Selenium Test Template' in formatted
+    
+    def test_selenium_template_detects_ui_patterns(self):
+        """Should detect common UI patterns from description."""
+        intelligence = TestIntelligence()
+        
+        descriptions = [
+            "User logs in with email and password",
+            "Fill out registration form and submit",
+            "Navigate to settings page and click save",
+            "Select items from dropdown menu"
+        ]
+        
+        for desc in descriptions:
+            patterns = intelligence.detect_ui_patterns(desc)
+            assert 'actions' in patterns
+            assert len(patterns['actions']) > 0
+    
+    def test_selenium_template_headless_by_default(self):
+        """Should default to headless mode for CI/CD."""
+        intelligence = TestIntelligence()
+        
+        ui_patterns = {
+            'feature_name': 'Button Click',
+            'actions': ['click button']
+            # headless_mode not specified - should default to True
+        }
+        
+        template = intelligence.generate_selenium_test_template(ui_patterns)
+        
+        # Should include headless configuration by default
+        assert '--headless' in template
+    
+    def test_selenium_template_error_handling(self):
+        """Should include error handling and assertions."""
+        intelligence = TestIntelligence()
+        
+        ui_patterns = {
+            'feature_name': 'Error Scenario',
+            'actions': ['submit invalid form']
+        }
+        
+        template = intelligence.generate_selenium_test_template(ui_patterns)
+        
+        # Should have assertions
+        assert 'assert' in template
+        
+        # Should have error handling or timeouts
+        assert 'try' in template or 'timeout' in template.lower()
