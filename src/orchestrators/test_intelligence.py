@@ -260,7 +260,8 @@ class TestIntelligence:
     def format_for_planning_template(
         self,
         requirements: List[TestRequirement],
-        user_preferences: Optional[Dict[str, str]] = None
+        user_preferences: Optional[Dict[str, str]] = None,
+        include_selenium_template: bool = False
     ) -> str:
         """
         Format test requirements for planning template.
@@ -268,6 +269,7 @@ class TestIntelligence:
         Args:
             requirements: Detected test requirements
             user_preferences: User's preferred frameworks from profile
+            include_selenium_template: Whether to include generated Selenium template
             
         Returns:
             Formatted string for template insertion
@@ -297,6 +299,27 @@ class TestIntelligence:
             
             lines.append("")
         
+        # Add Selenium template if requested and E2E browser tests detected
+        if include_selenium_template:
+            has_e2e_browser = any(req.test_type == TestType.E2E_BROWSER for req in requirements)
+            if has_e2e_browser:
+                lines.append("---")
+                lines.append("")
+                lines.append("### 🌐 Selenium Test Template (pytest-selenium)")
+                lines.append("")
+                lines.append("```python")
+                # Generate simple template for planning purposes
+                template_patterns = {
+                    'feature_name': 'UI Workflow',
+                    'actions': ['click', 'fill', 'wait'],
+                    'elements': ['button', 'input']
+                }
+                template_code = self.generate_selenium_test_template(template_patterns)
+                lines.append(template_code)
+                lines.append("```")
+                lines.append("")
+                lines.append("**Note:** Update selectors (By.ID, By.CSS_SELECTOR) to match your application.")
+        
         return "\n".join(lines)
     
     def _get_test_type_icon(self, test_type: TestType) -> str:
@@ -311,6 +334,188 @@ class TestIntelligence:
             TestType.SECURITY: "🔒"
         }
         return icons.get(test_type, "🧪")
+    
+    def detect_ui_patterns(self, description: str) -> Dict[str, Any]:
+        """
+        Detect UI patterns from feature description for Selenium template generation.
+        
+        Args:
+            description: Feature description text
+            
+        Returns:
+            Dictionary with detected patterns (actions, elements, feature_name)
+        """
+        description_lower = description.lower()
+        
+        # Extract actions from description
+        actions = []
+        action_keywords = {
+            'click': ['click', 'clicks', 'clicking'],
+            'fill': ['fill', 'fills', 'enter', 'enters', 'type', 'types'],
+            'navigate': ['navigate', 'navigates', 'go to', 'goes to', 'visit'],
+            'select': ['select', 'selects', 'choose', 'chooses'],
+            'submit': ['submit', 'submits'],
+            'wait': ['wait', 'waits for', 'see', 'sees'],
+            'login': ['log in', 'logs in', 'login', 'logins', 'sign in']
+        }
+        
+        for action_type, keywords in action_keywords.items():
+            for keyword in keywords:
+                if keyword in description_lower:
+                    actions.append(action_type)
+                    break
+        
+        # Extract common UI elements
+        elements = []
+        element_patterns = {
+            'button': r'\b(button|btn)\b',
+            'input': r'\b(input|field|textbox)\b',
+            'email': r'\b(email)\b',
+            'password': r'\b(password|pwd|credentials)\b',
+            'form': r'\b(form|registration|signup)\b',
+            'link': r'\b(link)\b',
+            'dropdown': r'\b(dropdown|select menu)\b',
+            'checkbox': r'\b(checkbox|check box)\b',
+            'page': r'\b(page|settings)\b'
+        }
+        
+        for element_name, pattern in element_patterns.items():
+            if re.search(pattern, description_lower):
+                elements.append(element_name)
+        
+        # Extract feature name (first few words or common patterns)
+        feature_name = "UI Test"
+        if 'login' in description_lower or 'log in' in description_lower:
+            feature_name = "User Login"
+        elif 'registration' in description_lower or 'register' in description_lower:
+            feature_name = "User Registration"
+        elif 'form' in description_lower:
+            feature_name = "Form Submission"
+        elif 'navigation' in description_lower or 'navigate' in description_lower:
+            feature_name = "Navigation"
+        
+        return {
+            'feature_name': feature_name,
+            'actions': list(set(actions)),  # Remove duplicates
+            'elements': list(set(elements))
+        }
+    
+    def generate_selenium_test_template(self, ui_patterns: Dict[str, Any]) -> str:
+        """
+        Generate pytest-selenium test template for UI testing.
+        
+        Args:
+            ui_patterns: Dictionary with feature_name, actions, elements, headless_mode (optional)
+            
+        Returns:
+            Python code string with pytest-selenium test template
+        """
+        feature_name = ui_patterns.get('feature_name', 'UI Test')
+        actions = ui_patterns.get('actions', [])
+        elements = ui_patterns.get('elements', [])
+        headless_mode = ui_patterns.get('headless_mode', True)  # Default to headless
+        
+        # Sanitize feature name for function name
+        test_name = feature_name.lower().replace(' ', '_').replace('-', '_')
+        
+        template = f'''"""
+Selenium UI Tests for {feature_name}
+
+Generated by CORTEX Planning System 3.0
+Framework: pytest-selenium
+Mode: {'Headless' if headless_mode else 'Headed'}
+"""
+
+import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+
+
+@pytest.fixture
+def driver():
+    """Selenium WebDriver fixture with headless Chrome configuration."""
+    options = Options()
+    {'options.add_argument("--headless")' if headless_mode else '# Headed mode - GUI visible'}
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+    
+    driver = webdriver.Chrome(options=options)
+    driver.implicitly_wait(10)
+    
+    yield driver
+    
+    driver.quit()
+
+
+def test_{test_name}(driver):
+    """
+    Test {feature_name} functionality.
+    
+    Actions: {', '.join(actions) if actions else 'UI interactions'}
+    Elements: {', '.join(elements) if elements else 'UI elements'}
+    """
+    # Navigate to application
+    driver.get("http://localhost:8080")  # Update with your app URL
+    
+    try:
+'''
+        
+        # Add action-specific code
+        if 'click' in actions and 'button' in elements:
+            template += '''        # Wait for and click button
+        button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, "button_id"))  # Update selector
+        )
+        button.click()
+        
+'''
+        
+        if 'fill' in actions and ('email' in elements or 'input' in elements):
+            template += '''        # Fill input fields
+        email_input = driver.find_element(By.ID, "email")  # Update selector
+        email_input.send_keys("test@example.com")
+        
+'''
+        
+        if 'fill' in actions and 'password' in elements:
+            template += '''        password_input = driver.find_element(By.ID, "password")  # Update selector
+        password_input.send_keys("testpassword123")
+        
+'''
+        
+        if 'submit' in actions or ('click' in actions and 'form' in elements):
+            template += '''        # Submit form
+        submit_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+        submit_button.click()
+        
+'''
+        
+        if 'wait' in actions:
+            template += '''        # Wait for expected result
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "success_message"))  # Update selector
+        )
+        
+'''
+        
+        # Add assertions
+        template += '''        # Verify expected outcome
+        assert driver.current_url  # Add specific URL check
+        # assert "expected text" in driver.page_source
+        
+    except TimeoutException:
+        pytest.fail("Element not found within timeout period")
+    except Exception as e:
+        pytest.fail(f"Test failed with error: {{e}}")
+'''
+        
+        return template
 
 
 def detect_test_requirements(feature_description: str) -> List[TestRequirement]:
