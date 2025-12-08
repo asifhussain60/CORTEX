@@ -1,0 +1,838 @@
+metadata:
+  plan_id: "dashboard-code-intel-v3.9-001"
+  title: "Comprehensive Dashboard & Code Intelligence Enhancement"
+  created: "2025-12-08T00:00:00Z"
+  status: "active"
+  priority: "critical"
+  estimated_effort: "140-180 hours"
+  owner: "CORTEX Development Team"
+  tags: ["dashboard", "code-intelligence", "multi-language", "validation", "reconciliation", "reverse-engineering", "v3.9"]
+  consolidates:
+    - "executive-summary-enhancement-v2.yaml"
+    - "onboarding-tab-enhancement.yaml"
+    - "CORTEX-GAP-REMEDIATION-COMPREHENSIVE-PLAN.yaml"
+
+summary:
+  problem: |
+    CRITICAL BUSINESS NEED: Analyze 4 legacy code repositories (TCBULK, V5.ColdFusion, 
+    V5.WebServices.PrevalidationWS, V5.CommuterOpsWeb) to reverse-engineer business logic 
+    and generate comprehensive documentation.
+    
+    CURRENT STATE:
+    - TCBULK: 243 C# files, 107 SQL files - No documentation
+    - V5.ColdFusion: 2,694 CFM files, 79 CFC files - Outdated docs in Docs/ folder
+    - V5.WebServices.PrevalidationWS: 48 C# files, 2 ASMX files - No documentation
+    - V5.CommuterOpsWeb: 237 C# files, 92 JS files, 57 ASPX files - No documentation
+    
+    DASHBOARD GAPS:
+    - Executive summaries are generic templates with file counts
+    - No AST-based docstring mining or business domain inference
+    - No git commit pattern analysis for feature evolution
+    - No README deep-parsing for purpose statements
+    - Onboarding tab lacks automated setup validation
+    - No tool recommendations based on tech stack detection
+    - No team discovery via git blame/commit frequency
+    
+    DATA QUALITY GAPS:
+    - Data collectors have no independent validation cycle
+    - Cross-tab reconciliation limited to R8/R9/R10 rules only
+    - No holistic data integrity verification across all dashboard tabs
+    - False positive languages, version hallucinations, third-party noise
+    
+    CODE ANALYSIS GAPS:
+    - CORTEX has Python/JS/TS/C# AST analyzers but NO ColdFusion support
+    - No unified reverse engineering toolchain for all 4 repos
+    - No automated instructional manual generation from code
+    - Multi-language documentation generator not integrated with dashboard
+    
+  goal: |
+    Transform CORTEX into a comprehensive code intelligence platform that can:
+    
+    1. **REVERSE ENGINEER LEGACY REPOS** (Primary Business Driver)
+       - Scan TCBULK, V5.ColdFusion, PrevalidationWS, CommuterOpsWeb
+       - Extract business logic from code structure (classes, methods, APIs)
+       - Mine documentation from docstrings, XML comments, JSDoc
+       - Infer business domains from naming patterns (ParkingController → Parking domain)
+       - Generate instructional manuals from code → documentation
+    
+    2. **ENHANCE DASHBOARD INTELLIGENCE** (Executive Summary & Onboarding)
+       - AST-based docstring extraction (Python, C#, JavaScript, TypeScript)
+       - Git commit pattern analysis for feature evolution narratives
+       - README deep-parsing with section extraction (Features, Overview, Purpose)
+       - Business domain inference from class/service/controller names
+       - Multi-language support for all analyzed repositories
+    
+    3. **AUTOMATE ONBOARDING** (Developer Experience)
+       - Dependency detection from 8 file types (requirements.txt, *.csproj, etc.)
+       - Cross-platform setup script generation (Windows PowerShell, macOS/Linux Bash)
+       - Environment validation framework (runtime versions, package installation)
+       - Tool recommendation engine (IDE, linters, debuggers per tech stack)
+       - Team discovery via git blame and commit frequency analysis
+    
+    4. **ENSURE DATA INTEGRITY** (Quality & Reliability)
+       - Independent validation cycle that DOESN'T reuse collector code
+       - Enhanced reconciliation covering ALL dashboard tabs (not just R8/R9/R10)
+       - Cross-tab correlation verification (exec summary ↔ tech stack ↔ onboarding)
+       - Ground truth verification via direct repository scanning
+       - Schema validation and false positive elimination
+    
+    5. **UNIFIED CODE ANALYSIS TOOLCHAIN** (Multi-Language Support)
+       - Add ColdFusion parser (CFScript/Tag-based syntax)
+       - Integrate tree-sitter for robust multi-language AST parsing
+       - Leverage existing CORTEX intelligence analyzers (Python/JS/TS/C#)
+       - Build documentation generator that works across all 5 languages
+       - Create lightweight, extensible, reusable analysis framework
+
+  success_criteria:
+    code_intelligence:
+      - "ColdFusion parser integrated (supports .cfm, .cfc, CFScript, tags)"
+      - "All 4 repos analyzed with business domain extraction (>90% accuracy)"
+      - "Instructional manuals generated from code (1 per repo, <30 min generation)"
+      - "Multi-language documentation generator outputs Markdown + HTML + JSON"
+      - "Toolchain reusable for any C#/JS/Python/ColdFusion/ASPX repository"
+    
+    dashboard_enhancements:
+      - "Executive summaries score 8/10 quality (vs current 3/10)"
+      - "Business domains clearly identified (e.g., 'Employee benefits platform')"
+      - "5-8 specific business capabilities listed from code structure"
+      - "Feature evolution insights from git commit analysis"
+      - "Narrative includes README insights + docstring summaries"
+      - "Processing time <30s for 240K LOC repositories"
+    
+    onboarding_automation:
+      - "New developer onboarded in <30 min with zero senior dev help"
+      - "90%+ setup steps automated (dependency install, config, build verification)"
+      - "Tool recommendations specific to project (C# → ReSharper, Python → Pylance)"
+      - "Team contacts auto-populated from git blame + commit frequency"
+      - "Interactive checklist tracks completion (persisted across sessions)"
+      - "Good first issues identified automatically (low complexity areas)"
+    
+    data_quality:
+      - "Independent validation cycle catches 95%+ collector errors"
+      - "Reconciliation covers all 8+ dashboard tabs with cross-correlation"
+      - "False positive rate for languages <5% (currently ~30%)"
+      - "Version hallucination eliminated (ground truth verification)"
+      - "Third-party noise filtered (node_modules, packages, vendor excluded)"
+    
+    user_feedback:
+      - "Developers rate onboarding 9/10 ('productive immediately')"
+      - "Executive summary quality verified by 3 reviewers (8/10 average)"
+      - "Code analysis generates actionable insights (not just metrics)"
+      - "Documentation useful for new team members without code access"
+
+definition_of_ready:
+  - TDD Mastery workflow MUST be followed (RED→GREEN→REFACTOR)
+  - Tests MUST fail before implementation (RED phase validation)
+  - All CORTEX brain protection rules apply (SKULL enforcement)
+  - Reference cortex-brain/brain-protection-rules.yaml for complete ruleset
+  - All 4 external repos accessible: C:\PROJECTS\TCBULK, C:\PROJECTS\V5.ColdFusion, C:\PROJECTS\V5.WebServices.PrevalidationWS, C:\PROJECTS\V5.CommuterOpsWeb
+  - Existing CORTEX intelligence analyzers reviewed (Python, JS, TS, C#)
+  - Current dashboard collectors mapped (BaseDataCollector hierarchy)
+  - Existing reconciliation engine understood (R8/R9/R10 rules)
+  - DashboardDataValidator architecture analyzed
+  - Sample repos identified for testing (luum-fresh, mock, TCBULK, V5.ColdFusion)
+  - Baseline metrics captured for all 4 repos (file counts, LOC, tech stack)
+  - User interviews completed (3 developers on onboarding pain points)
+
+definition_of_done:
+  - All code follows TDD workflow with git checkpoints at phase boundaries
+  - No SKULL rule violations detected (brain protection compliance verified)
+  - Test coverage meets CORTEX standards (RED→GREEN→REFACTOR documented)
+  - Git history shows test-first commits (RED phase before GREEN phase)
+  - All 4 repos successfully analyzed with generated documentation
+  - Executive summaries for 3 test repos show 80%+ improvement in specificity
+  - Onboarding tab tested with 3 repositories (Python, C#, TypeScript)
+  - Independent validation cycle tested with 10 repositories (95%+ accuracy)
+  - Reconciliation engine validates all dashboard tabs (no false negatives)
+  - ColdFusion parser handles 100 sample .cfm/.cfc files (syntax errors <5%)
+  - Multi-language doc generator outputs reviewed by 3 developers (quality 8/10+)
+  - Performance benchmarks met (<30s for 240K LOC, <2 min for 2M LOC)
+  - Documentation includes architecture decisions, API reference, troubleshooting
+  - Dashboard displays all enhancements with no visual regressions
+
+phases:
+  - phase: 1
+    name: "Multi-Language Code Intelligence Foundation"
+    description: "Build ColdFusion parser and unified code analysis framework"
+    estimated_duration: "24-30 hours"
+    dependencies: []
+    
+    tasks:
+      - id: "1.1"
+        title: "ColdFusion Parser Development"
+        description: |
+          Create ColdFusion parser supporting both tag-based (.cfm) and CFScript (.cfc) syntax.
+          
+          APPROACH:
+          - Use regex + custom tokenizer (ColdFusion too niche for tree-sitter support)
+          - Handle <cfcomponent>, <cffunction>, <cfquery> tags
+          - Parse CFScript syntax (similar to JavaScript)
+          - Extract component metadata (displayname, hint, returntype)
+          - Support both ColdFusion 9 and ColdFusion 2018 syntax variations
+          
+          IMPLEMENTATION:
+          - src/intelligence/parsers/coldfusion_parser.py
+          - src/intelligence/analyzers/coldfusion_analyzer.py
+          - Integration with ParserRegistry and LanguageDetector
+          
+          OUTPUT STRUCTURE:
+          ```json
+          {
+            "language": "coldfusion",
+            "file_path": "Employee.cfc",
+            "components": [{
+              "name": "Employee",
+              "type": "component",
+              "hint": "Manages employee data",
+              "functions": [{
+                "name": "getEmployeeByID",
+                "access": "public",
+                "returntype": "query",
+                "parameters": [{"name": "employeeID", "type": "numeric"}],
+                "hint": "Retrieves employee record by ID",
+                "line_number": 42
+              }]
+            }]
+          }
+          ```
+        acceptance_criteria:
+          - Parses .cfm files with tag-based syntax (90%+ success rate)
+          - Parses .cfc files with CFScript syntax (90%+ success rate)
+          - Extracts component names, functions, parameters, hints
+          - Handles ColdFusion 9 and 2018 syntax variations
+          - Unit tests with 50 sample CFM/CFC files from V5.ColdFusion repo
+          - Performance: <100ms per file for files <1000 LOC
+        estimated_hours: 12
+        
+      - id: "1.2"
+        title: "Enhanced AST Docstring Extractor (Multi-Language)"
+        description: |
+          Extend existing AST extractors to support comprehensive docstring mining.
+          
+          LANGUAGES TO ENHANCE:
+          - **Python**: Already exists, add top-N ranking by informativeness
+          - **C#**: XML documentation comments (///)
+          - **TypeScript/JavaScript**: JSDoc comments (/** */)
+          - **ColdFusion**: Hint attributes and <cfcomment> tags (NEW)
+          
+          EXTRACTION STRATEGY:
+          - Scan top 20 controller/service files by LOC
+          - Extract class and function docstrings
+          - Parse first paragraph of each docstring (summary)
+          - Rank by length, detail, and keyword density
+          - Return top 10 most informative docstrings
+          
+          INTEGRATION:
+          - Leverage existing src/intelligence/analyzers/* modules
+          - Add get_top_docstrings() method to each analyzer
+          - Normalize output format across all languages
+        acceptance_criteria:
+          - Extracts docstrings from Python (.py), C# (.cs), JS/TS (.js/.ts), ColdFusion (.cfm/.cfc)
+          - Handles syntax errors gracefully (skip file, log warning, continue)
+          - Returns top 10 docstrings ranked by informativeness score
+          - Consistent output schema: {file, class/function, docstring, line_number, score}
+          - Test coverage with multi-language sample files (20 per language)
+          - Performance: <5s for 500 files
+        estimated_hours: 10
+        
+      - id: "1.3"
+        title: "Business Domain Inference Engine"
+        description: |
+          Analyze code structure to automatically infer business domains and capabilities.
+          
+          PATTERN MATCHING:
+          - Class/Service/Controller names: {Domain}Controller, {Domain}Service, I{Domain}Repository
+          - Namespace/Package patterns: Company.Product.Domain.Feature
+          - API endpoint paths: /api/parking/*, /api/rewards/*
+          - Database table names: tbl_Parking_Transactions, Rewards_Summary
+          
+          DOMAIN EXTRACTION:
+          - Extract domain nouns: Parking, Engagement, Commute, Reward, Payroll, Employee
+          - Build frequency map across all code artifacts
+          - Filter generic terms (Base, Helper, Utility, Common, Shared)
+          - Generate capability list: "Manages parking, rewards, and payroll operations"
+          
+          CONFIDENCE SCORING:
+          - High confidence: Found in 5+ locations (class + API + DB table)
+          - Medium confidence: Found in 2-4 locations
+          - Low confidence: Found in 1 location only
+        acceptance_criteria:
+          - Identifies 5-10 business domains from 240K LOC repository
+          - Generates human-readable capability list
+          - Confidence scoring for each domain (high/medium/low)
+          - Handles edge cases (generic names excluded)
+          - 85%+ accuracy on hand-labeled test set of 50 repositories
+          - Test with all 4 target repos (TCBULK, V5.ColdFusion, PrevalidationWS, CommuterOpsWeb)
+        estimated_hours: 8
+
+  - phase: 2
+    name: "Executive Summary Intelligence"
+    description: "Transform executive summaries from templates to intelligent narratives"
+    estimated_duration: "20-24 hours"
+    dependencies: ["1"]
+    
+    tasks:
+      - id: "2.1"
+        title: "Git Commit Pattern Analyzer"
+        description: |
+          Analyze commit messages to identify feature themes and development trends.
+          
+          APPROACH:
+          - Extract verbs and nouns from commit messages (NLP-lite)
+          - Group commits by theme: feature, bugfix, refactor, docs, test
+          - Identify active development areas from recent commits (last 90 days)
+          - Detect feature evolution patterns (e.g., "Adding X" → "Fixing X" → "Optimizing X")
+          - Generate evolution narrative: "Recent work focuses on X, Y, Z"
+          
+          KEYWORD EXTRACTION:
+          - Feature words: "add", "implement", "create", "new", "feature"
+          - Refactor words: "refactor", "improve", "optimize", "clean"
+          - Fix words: "fix", "bug", "issue", "error", "crash"
+          
+          NARRATIVE GENERATION:
+          - "Recent development focuses on [top 3 themes]"
+          - "Active work areas include [domains from commit files]"
+          - "Team has completed [feature count] features and [fix count] fixes in last 90 days"
+        acceptance_criteria:
+          - Processes 100 commits in <2 seconds
+          - Identifies 3-5 development themes from commit history
+          - Generates 2-3 sentence evolution narrative
+          - Test with luum-fresh git history (Swedish T&C, Engagement charts)
+          - Test with all 4 target repos (if git history available)
+          - Handles repos with no git history gracefully (fallback to file analysis)
+        estimated_hours: 6
+        
+      - id: "2.2"
+        title: "README Deep Parser & Section Extractor"
+        description: |
+          Parse README.md to extract structured information for executive summaries.
+          
+          SECTION EXTRACTION:
+          - Identify H2/H3 sections: "Features", "Overview", "Purpose", "What is", "About"
+          - Extract content under each heading
+          - Prioritize sections by informativeness: Features > Overview > Installation > License
+          - Fall back to first 3 paragraphs if no structured headings
+          
+          CONTENT PROCESSING:
+          - Remove markdown formatting (##, **, `, etc.)
+          - Extract bullet points and numbered lists
+          - Identify key capabilities from feature lists
+          - Extract business purpose from Overview/About sections
+          
+          SYNTHESIS:
+          - Merge README content with docstring summaries
+          - Prioritize README if detailed (>200 chars), use docstrings as fallback
+          - Deduplicate similar phrases across sources
+          - Generate 150-300 word coherent summary
+        acceptance_criteria:
+          - Extracts all H2/H3 sections from markdown files
+          - Returns prioritized list of sections with content and informativeness score
+          - Handles malformed markdown gracefully (best-effort parsing)
+          - Test with 15 diverse README files (short, long, unstructured, multi-language)
+          - Fallback logic works when README missing or minimal
+          - Synthesis produces coherent 150-300 word summaries
+          - Human evaluation: 8/10 quality score from 3 reviewers
+        estimated_hours: 8
+        
+      - id: "2.3"
+        title: "Integration into Executive Summary Aggregator"
+        description: |
+          Refactor executive_summary_aggregator.py to use all 5 intelligence sources.
+          
+          INTELLIGENCE SOURCES:
+          1. AST docstring extractor (Phase 1.2)
+          2. Business domain inference (Phase 1.3)
+          3. Git commit pattern analyzer (Phase 2.1)
+          4. README deep parser (Phase 2.2)
+          5. Existing architecture and tech stack data
+          
+          ORCHESTRATION:
+          - Call all 5 sources in parallel (ThreadPoolExecutor)
+          - Graceful degradation if any source fails (log warning, continue)
+          - Synthesize results into enhanced executive-summary.json
+          - Backward compatible with existing dashboard renderer
+          
+          NEW FIELDS IN executive-summary.json:
+          - business_domains: ["Parking", "Rewards", "Payroll"]
+          - key_capabilities: ["Manages employee benefits", "Tracks parking usage"]
+          - recent_developments: "Recent work focuses on engagement charts and T&C"
+          - code_insights: [{source: "ParkingController.cs", insight: "Handles parking operations"}]
+          - documentation_quality: "high" | "medium" | "low"
+        acceptance_criteria:
+          - All 5 intelligence sources integrated successfully
+          - Parallel execution reduces processing time by 50%
+          - Graceful degradation tested (disable 1 source at a time)
+          - Outputs enhanced executive-summary.json with new fields
+          - Backward compatible with existing dashboard renderer (no breaking changes)
+          - Test with luum-fresh (240K LOC) processes in <30 seconds
+          - Test with all 4 target repos, verify quality improvement
+        estimated_hours: 10
+
+  - phase: 3
+    name: "Onboarding Automation & Intelligence"
+    description: "Automate developer onboarding with environment setup and validation"
+    estimated_duration: "28-32 hours"
+    dependencies: ["1"]
+    
+    tasks:
+      - id: "3.1"
+        title: "Dependency Detection Engine"
+        description: |
+          Scan project files to detect all required dependencies and runtime versions.
+          
+          FILE TYPES TO SCAN:
+          - **Python**: requirements.txt, Pipfile, pyproject.toml, setup.py
+          - **C#**: *.csproj, packages.config, .NET SDK version from global.json
+          - **Node.js**: package.json, .nvmrc, yarn.lock, package-lock.json
+          - **ColdFusion**: Application.cfc (datasources, mappings), server.json
+          - **Docker**: Dockerfile, docker-compose.yml
+          - **Database**: Connection strings in config files (web.config, appsettings.json)
+          
+          OUTPUT STRUCTURE:
+          ```json
+          {
+            "runtime": {
+              "python": "3.8",
+              "dotnet": "4.7.2",
+              "node": "16.14.0",
+              "coldfusion": "2018"
+            },
+            "packages": {
+              "python": ["flask==2.0.0", "sqlalchemy==1.4.0"],
+              "nuget": ["Newtonsoft.Json", "EntityFramework"],
+              "npm": ["react@18.0.0", "typescript@4.9.0"]
+            },
+            "services": ["PostgreSQL 13", "Redis 6.2", "IIS 10"],
+            "tools": ["Git", "Docker", "VS Code"]
+          }
+          ```
+        acceptance_criteria:
+          - Detects dependencies from 12 file types (requirements.txt, *.csproj, package.json, etc.)
+          - Correctly identifies runtime versions (Python 3.8+, .NET 4.7.2, Node 16+)
+          - Handles missing dependency files gracefully (warns user, continues)
+          - Test coverage with 20 sample projects across 5 tech stacks
+          - Performance: <5s for 1000 files
+          - Test with all 4 target repos, verify accuracy
+        estimated_hours: 8
+        
+      - id: "3.2"
+        title: "Cross-Platform Setup Script Generator"
+        description: |
+          Generate executable setup scripts for Windows, macOS, and Linux.
+          
+          PLATFORM-SPECIFIC SCRIPTS:
+          - **Windows**: PowerShell (.ps1) with Chocolatey/winget commands
+          - **macOS**: Bash (.sh) with Homebrew commands
+          - **Linux**: Bash (.sh) with apt/yum commands
+          
+          SCRIPT CAPABILITIES:
+          - Runtime installation (Python, .NET, Node, ColdFusion)
+          - Package manager setup (pip, npm, NuGet, dotnet restore)
+          - Dependency installation from requirements/package files
+          - Environment variable configuration (.env file creation)
+          - Git hooks setup (pre-commit, pre-push)
+          - Database setup (create databases, run migrations)
+          
+          SAFETY FEATURES:
+          - Idempotent (safe to run multiple times)
+          - Error handling and rollback on failure
+          - Dry-run mode (--dry-run flag shows what would be done)
+          - Backup existing configs before modification
+        acceptance_criteria:
+          - Generates working scripts for Windows, macOS, Linux
+          - Scripts are idempotent (re-running causes no issues)
+          - Includes comprehensive error handling and logging
+          - Tested on Windows 10/11, macOS 12+, Ubuntu 20.04+
+          - Dry-run mode accurately predicts actions
+          - Test with 5 diverse projects (Python, C#, Node, multi-stack)
+        estimated_hours: 12
+        
+      - id: "3.3"
+        title: "Environment Validation Framework"
+        description: |
+          Automated checks to verify environment setup success.
+          
+          VALIDATION CHECKS:
+          - Runtime versions: python --version, dotnet --version, node --version
+          - Package installation: pip list, npm list, dotnet list package
+          - Database connectivity: Test connection strings, ping databases
+          - Build success: dotnet build, npm run build, python -m pytest --collect-only
+          - Test execution: pytest, dotnet test, npm test (smoke tests only)
+          - IDE/Tool availability: Check for VS Code, Visual Studio, Git
+          
+          OUTPUT:
+          - Markdown report with pass/fail status for each check
+          - Status badges (✅ Pass, ⚠️ Warning, ❌ Fail)
+          - Remediation steps for failed checks
+          - Overall readiness score (0-100%)
+        acceptance_criteria:
+          - Runs 15+ validation checks in <60 seconds
+          - Clear error messages with remediation steps for failures
+          - Generates markdown report with status badges
+          - 95%+ accuracy on correctly configured environments
+          - Test with 10 projects in various states (clean, partial, complete)
+        estimated_hours: 6
+        
+      - id: "3.4"
+        title: "Tool Recommendation Engine"
+        description: |
+          Recommend IDE extensions, linters, and debuggers based on detected tech stack.
+          
+          TOOL DATABASE (cortex-brain/config/tool-recommendations.yaml):
+          - **Python**: PyCharm, VS Code + Pylance, Ruff, Black, MyPy, pytest, coverage.py
+          - **C#**: Visual Studio 2022, Rider, ReSharper, StyleCop, xUnit, NUnit, Moq
+          - **JavaScript/TypeScript**: VS Code, WebStorm, ESLint, Prettier, Jest, Playwright
+          - **ColdFusion**: CFBuilder, VS Code + ColdFusion extension, CFLint
+          
+          SELECTION LOGIC:
+          - Project size: Small (<10K LOC) → lightweight tools, Large (>100K LOC) → full IDE
+          - Tech stack complexity: Multi-language → unified tools (VS Code)
+          - Team preferences: Check .editorconfig, .vscode/extensions.json for existing tools
+          - Operating system: Windows → Visual Studio, macOS/Linux → VS Code/Rider
+          
+          OUTPUT:
+          - Prioritized list of 3-5 tools per category (IDE, linter, debugger, testing)
+          - One-click install scripts (.vscode/extensions.json for VS Code extensions)
+          - Configuration snippets (.eslintrc.json, .prettierrc, etc.)
+        acceptance_criteria:
+          - Database covers Python, C#, JS/TS, ColdFusion, Java (5 languages)
+          - 5-10 tool recommendations per language
+          - Each tool entry includes: name, category, install command, config snippet, cost (free/paid)
+          - Selection logic prioritizes existing tools from repo config files
+          - Generates VS Code extensions.json for one-click install
+          - Test with 10 diverse projects, validate relevance with 3 developers
+        estimated_hours: 6
+
+  - phase: 4
+    name: "Independent Validation & Reconciliation"
+    description: "Ensure dashboard data integrity with independent validation and cross-tab reconciliation"
+    estimated_duration: "24-28 hours"
+    dependencies: ["1", "2"]
+    
+    tasks:
+      - id: "4.1"
+        title: "Enhanced Independent Validation Cycle"
+        description: |
+          Create validation logic that DOESN'T reuse collector code to avoid confirming false data.
+          
+          CURRENT STATE:
+          - DashboardDataValidator scans ground truth independently (GOOD)
+          - Uses similar scanning logic as collectors (BAD - confirms false data)
+          
+          ENHANCED APPROACH:
+          - Use DIFFERENT scanning strategies than collectors
+          - Schema validation against JSON Schema
+          - Cross-reference with external sources (package registries, CVE databases)
+          - Statistical anomaly detection (outlier scores, impossible values)
+          - File content sampling (random file analysis to verify language detection)
+          
+          VALIDATION RULES:
+          - R1: Language Detection - Sample 10 random files per detected language, verify syntax
+          - R2: Version Verification - Check package versions against registry APIs (PyPI, npm, NuGet)
+          - R3: Third-Party Filtering - Exclude node_modules, packages, vendor, Tools directories
+          - R4: Complexity Validation - Cyclomatic complexity must be 1-50 range (outlier detection)
+          - R5: LOC Sanity Check - Files >10K LOC flagged for review (likely generated code)
+          - R6: Dependency Count - >500 dependencies flagged (likely including dev/test deps)
+          - R7: Security Score - Cross-check CVE counts with National Vulnerability Database
+          
+          IMPLEMENTATION:
+          - Extend DashboardDataValidator with new validation methods
+          - Add validate_language_detection(), validate_versions(), validate_complexity()
+          - Generate detailed validation report: {rule, status, confidence, evidence}
+        acceptance_criteria:
+          - Implements 7 independent validation rules (R1-R7)
+          - Uses different scanning strategies than collectors
+          - Catches 95%+ of false positives (tested with synthetic bad data)
+          - Generates detailed validation report with evidence and confidence scores
+          - Performance: <10s validation for 1000-file repository
+          - Test with 10 repositories (5 clean, 5 with injected errors)
+        estimated_hours: 12
+        
+      - id: "4.2"
+        title: "Comprehensive Cross-Tab Reconciliation"
+        description: |
+          Expand reconciliation engine to validate ALL dashboard tabs, not just R8/R9/R10.
+          
+          CURRENT STATE:
+          - ReconciliationEngine has 3 rules: R8 (security-quality), R9 (arch-security), R10 (maintainability-complexity)
+          - Only covers 3 of 8+ dashboard tabs
+          
+          NEW RECONCILIATION RULES:
+          - R11: Executive Summary ↔ Tech Stack Alignment
+            - Business domains in summary must match technologies in tech stack
+            - "Parking management" requires database + backend tech
+          
+          - R12: Onboarding ↔ Architecture Alignment
+            - Dependency count in onboarding must match component count in architecture
+            - Multi-tier architecture requires multiple package.json/requirements.txt files
+          
+          - R13: Health Data Correlation
+            - High security issues (>10) should lower health score (<70%)
+            - High test coverage (>80%) should raise maintainability score
+          
+          - R14: Commit Activity ↔ Technical Debt
+            - High commit frequency (>50/month) with rising complexity → increasing tech debt
+            - Low commit frequency (<5/month) with high complexity → maintenance risk
+          
+          - R15: Team Metrics ↔ Code Ownership
+            - Single contributor (>80% commits) → bus factor risk
+            - >10 contributors but low LOC/contributor → coordination overhead
+          
+          RECONCILIATION WORKFLOW:
+          1. Load data from ALL dashboard tabs (executive-summary, tech-stack, architecture, health, security, team-metrics, onboarding)
+          2. Run all 15 rules (R8-R10 existing + R11-R15 new)
+          3. Generate violations list with severity (critical, high, medium, low)
+          4. Calculate overall data quality score (0-100%)
+          5. Produce reconciliation report with recommendations
+        acceptance_criteria:
+          - Implements 5 new reconciliation rules (R11-R15)
+          - Covers ALL 8+ dashboard tabs with cross-correlation
+          - Generates violations with severity and remediation recommendations
+          - Calculates overall data quality score (0-100%)
+          - Test with 10 repositories (5 clean data, 5 inconsistent data)
+          - Performance: <5s reconciliation for complete dashboard dataset
+        estimated_hours: 12
+
+  - phase: 5
+    name: "Unified Documentation Generator"
+    description: "Generate instructional manuals from code for all 4 target repositories"
+    estimated_duration: "28-32 hours"
+    dependencies: ["1", "2", "3", "4"]
+    
+    tasks:
+      - id: "5.1"
+        title: "Multi-Language Documentation Orchestrator"
+        description: |
+          Create orchestrator that coordinates documentation generation across all languages.
+          
+          WORKFLOW:
+          1. Scan repository to detect languages (Python, C#, JS/TS, ColdFusion, ASPX)
+          2. Invoke appropriate parser for each language (Phase 1.1, 1.2)
+          3. Extract business domains (Phase 1.3)
+          4. Mine documentation from docstrings, XML comments, JSDoc, hints
+          5. Analyze git history for feature evolution (Phase 2.1)
+          6. Parse README and other docs (Phase 2.2)
+          7. Generate unified documentation (Markdown + HTML + JSON)
+          
+          DOCUMENTATION STRUCTURE:
+          - **Executive Summary**: Business purpose, key capabilities, tech stack
+          - **Architecture Overview**: High-level components, data flow, deployment
+          - **Business Domains**: Detailed breakdown of each domain with code references
+          - **API Reference**: All public classes, methods, parameters, return types
+          - **Feature Evolution**: Timeline of major features from git history
+          - **Developer Guide**: Setup instructions, build process, testing
+          - **Appendices**: Glossary, acronyms, external references
+          
+          OUTPUT FORMATS:
+          - **Markdown**: Developer-friendly, version control friendly
+          - **HTML**: Browseable with navigation, search, syntax highlighting
+          - **JSON**: Machine-readable for further processing
+        acceptance_criteria:
+          - Orchestrator coordinates all 5 parsers (Python, C#, JS/TS, ColdFusion, ASPX)
+          - Generates complete documentation with all 7 sections
+          - Outputs in 3 formats: Markdown, HTML, JSON
+          - HTML includes navigation, TOC, search functionality
+          - Test with all 4 target repos (TCBULK, V5.ColdFusion, PrevalidationWS, CommuterOpsWeb)
+          - Documentation generation completes in <30 min per repo (up to 3K files)
+        estimated_hours: 14
+        
+      - id: "5.2"
+        title: "Template-Based Documentation Generation"
+        description: |
+          Create customizable templates for different documentation styles.
+          
+          TEMPLATE TYPES:
+          - **Technical Specification**: Detailed API docs, architecture diagrams, data models
+          - **User Manual**: End-user focused, feature descriptions, screenshots
+          - **Developer Onboarding**: Setup guide, coding standards, contribution guidelines
+          - **Executive Briefing**: High-level overview, business value, roadmap
+          
+          TEMPLATE ENGINE:
+          - Use Jinja2 for template rendering
+          - Templates stored in cortex-brain/templates/documentation/
+          - Support variables: {{project_name}}, {{business_domains}}, {{tech_stack}}
+          - Support loops: {% for domain in domains %} ... {% endfor %}
+          - Support conditionals: {% if has_api %} ... {% endif %}
+          
+          CUSTOMIZATION:
+          - User can select template via CLI flag: --template technical-spec
+          - Templates can be extended/overridden by users
+          - Default template auto-selected based on repository type
+        acceptance_criteria:
+          - 4 template types implemented (technical, user-manual, dev-onboarding, executive)
+          - Templates support variables, loops, conditionals (Jinja2)
+          - Templates stored in versioned location (cortex-brain/templates/documentation/)
+          - User can override templates via --template flag
+          - Default template auto-selected based on repo characteristics
+          - Test with all 4 target repos using different templates
+        estimated_hours: 8
+        
+      - id: "5.3"
+        title: "Integration with Dashboard & CLI"
+        description: |
+          Integrate documentation generator with CORTEX dashboard and CLI.
+          
+          DASHBOARD INTEGRATION:
+          - Add "Generate Documentation" button to onboarding tab
+          - Show progress indicator during generation (with_progress decorator)
+          - Display generated documentation preview in dashboard
+          - Provide download links for Markdown/HTML/JSON outputs
+          
+          CLI INTEGRATION:
+          - New command: `cortex generate docs --repo <path> --template <type>`
+          - Options: --output-dir, --format (markdown|html|json), --verbose
+          - Progress output: "Scanning repository... 50% complete"
+          - Success message: "Documentation generated: <output_path>"
+          
+          AUTOMATION:
+          - Auto-generate docs during onboarding workflow
+          - Schedule periodic regeneration (weekly via cron/Task Scheduler)
+          - Git hook to regenerate docs on merge to main branch
+        acceptance_criteria:
+          - Dashboard button triggers documentation generation
+          - Progress indicator shows ETA and current phase
+          - Documentation preview renders in dashboard
+          - CLI command works with all options
+          - Auto-generation during onboarding tested with 3 repos
+          - Periodic regeneration via scheduler tested
+        estimated_hours: 10
+
+  - phase: 6
+    name: "Performance Optimization & Deployment"
+    description: "Optimize for large repositories and deploy to production"
+    estimated_duration: "16-20 hours"
+    dependencies: ["1", "2", "3", "4", "5"]
+    
+    tasks:
+      - id: "6.1"
+        title: "Performance Benchmarking & Optimization"
+        description: |
+          Measure performance and optimize for large repositories (>500K LOC).
+          
+          BENCHMARKING:
+          - Test with repositories of varying sizes: 10K, 50K, 100K, 240K, 500K, 1M LOC
+          - Measure time for: parsing, analysis, validation, reconciliation, doc generation
+          - Profile memory usage, identify bottlenecks
+          - Generate performance report: {size, time, memory, bottlenecks}
+          
+          OPTIMIZATION STRATEGIES:
+          - **Parallel Processing**: Use ThreadPoolExecutor for file scanning, parsing
+          - **Caching**: Cache AST parse trees, reuse for multiple extractors
+          - **Sampling**: Limit file scanning to top 50-100 files by LOC or relevance
+          - **Lazy Loading**: Defer expensive operations until needed
+          - **Streaming**: Process large files in chunks, not all in memory
+          - **Indexing**: Build file index for fast lookup
+          
+          PERFORMANCE TARGETS:
+          - 10K LOC: <5 seconds
+          - 50K LOC: <15 seconds
+          - 100K LOC: <25 seconds
+          - 240K LOC (luum-fresh): <30 seconds
+          - 500K LOC: <60 seconds
+          - 1M LOC: <2 minutes
+          
+          MEMORY TARGETS:
+          - <200MB for 100K LOC
+          - <500MB for 500K LOC
+          - <1GB for 1M LOC
+        acceptance_criteria:
+          - All performance targets met for 6 repository sizes
+          - Memory targets met for all sizes
+          - Parallel processing reduces time by 60%+
+          - Caching eliminates redundant AST parsing
+          - Benchmark report generated with detailed metrics
+          - Profiling identifies and resolves top 3 bottlenecks
+        estimated_hours: 10
+        
+      - id: "6.2"
+        title: "Production Deployment & Testing"
+        description: |
+          Deploy all enhancements to production with comprehensive testing.
+          
+          DEPLOYMENT CHECKLIST:
+          - All 19 deployment gates pass (Gate 14: Application Onboarding Dashboard)
+          - No SKULL rule violations
+          - Test coverage >80% for new code
+          - Documentation complete (API docs, user guide, troubleshooting)
+          - Performance benchmarks documented
+          - Backward compatibility verified (existing dashboards still render)
+          
+          END-TO-END TESTING:
+          1. Onboard TCBULK repository
+          2. Verify enhanced executive summary (business domains, git insights)
+          3. Generate onboarding guide with setup scripts
+          4. Run independent validation cycle
+          5. Execute cross-tab reconciliation
+          6. Generate comprehensive documentation
+          7. Verify dashboard renders all tabs without errors
+          
+          USER ACCEPTANCE TESTING:
+          - 3 developers test onboarding workflow
+          - 3 executives review executive summaries
+          - 2 new developers use generated documentation
+          - Collect feedback, measure satisfaction scores
+        acceptance_criteria:
+          - All 19 deployment gates pass
+          - End-to-end testing completes without errors
+          - User acceptance testing achieves 8/10+ satisfaction
+          - No production incidents in first week post-deployment
+          - Rollback plan tested and documented
+          - Monitoring alerts configured for new features
+        estimated_hours: 10
+
+risks:
+  - description: "ColdFusion parser may struggle with complex tag-based syntax"
+    mitigation: "Start with CFScript (.cfc) which is similar to JavaScript, add tag support iteratively"
+    impact: "medium"
+    
+  - description: "Independent validation cycle may have false negatives (miss real issues)"
+    mitigation: "Compare validation results with manual code review for 10 repos, tune thresholds"
+    impact: "medium"
+    
+  - description: "Performance <30s target challenging for 500K+ LOC repositories"
+    mitigation: "Implement aggressive caching, file sampling, parallel processing"
+    impact: "high"
+    
+  - description: "Multi-language documentation may have inconsistent quality across languages"
+    mitigation: "Define quality rubric, test each language independently, iterate based on feedback"
+    impact: "medium"
+    
+  - description: "Cross-tab reconciliation may generate false positives (flag valid data as inconsistent)"
+    mitigation: "Start with high-confidence rules (R8-R10 proven), add R11-R15 iteratively with testing"
+    impact: "low"
+    
+  - description: "All 4 target repos may not have git history (especially V5.* repos)"
+    mitigation: "Graceful degradation - use file analysis when git unavailable"
+    impact: "low"
+
+dependencies:
+  internal:
+    - "src/intelligence/analyzers/* - Existing Python/JS/TS/C# analyzers"
+    - "src/intelligence/parsers/* - ParserRegistry, LanguageDetector"
+    - "src/dashboard/aggregators/executive_summary_aggregator.py - Refactor target"
+    - "src/dashboard/data/base_collector.py - BaseDataCollector hierarchy"
+    - "src/dashboard/validators/data_validator.py - DashboardDataValidator"
+    - "src/dashboard/reconciliation/reconciliation_engine.py - ReconciliationEngine"
+    - "src/operations/onboarding_orchestrator.py - Onboarding workflow"
+    - "src/utils/progress_decorator.py - Progress monitoring"
+  
+  external:
+    - "Python ast module (stdlib)"
+    - "esprima (JavaScript parser, already in requirements.txt)"
+    - "tree-sitter (TypeScript/C# parser, already in requirements.txt)"
+    - "gitpython (git history analysis, already in requirements.txt)"
+    - "jinja2 (template rendering, already in requirements.txt)"
+    - "Optional: lizard (code complexity, evaluate in Phase 6)"
+    - "Optional: radon (Python complexity, evaluate in Phase 6)"
+
+notes:
+  - "This plan consolidates 3 separate plans: executive-summary-enhancement-v2.yaml, onboarding-tab-enhancement.yaml, CORTEX-GAP-REMEDIATION-COMPREHENSIVE-PLAN.yaml"
+  - "Primary business driver: Analyze 4 legacy repos (TCBULK, V5.ColdFusion, PrevalidationWS, CommuterOpsWeb) to generate documentation"
+  - "Secondary goals: Enhance dashboard intelligence, automate onboarding, ensure data quality"
+  - "All 4 repos accessible at C:\\PROJECTS\\* for testing and validation"
+  - "ColdFusion support is NEW - no existing parser in CORTEX, requires ground-up implementation"
+  - "Independent validation cycle is CRITICAL - must use different logic than collectors to avoid confirming false data"
+  - "Performance optimization is HIGH PRIORITY - large repos (500K+ LOC) must be handled efficiently"
+  - "User feedback and satisfaction scores will measure success - aim for 8/10+"
+  - "TDD Mastery workflow mandatory - all code must follow RED→GREEN→REFACTOR with git checkpoints"
+  - "Consider A/B testing for executive summaries: show old vs new side-by-side for comparison"

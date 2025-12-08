@@ -1,0 +1,456 @@
+metadata:
+  plan_id: "onboard-tab-enhance-001"
+  title: "Onboarding Tab Intelligence & Automation"
+  created: "2025-12-07T00:00:00Z"
+  status: "active"
+  priority: "high"
+  estimated_effort: "50-60 hours"
+  owner: "CORTEX Development Team"
+  tags: ["dashboard", "onboarding", "developer-experience", "automation", "tooling", "v3.9"]
+
+summary:
+  problem: |
+    Current onboarding tab provides static information extracted from other dashboard tabs.
+    For a new developer joining luum-fresh (240K LOC C# SOAP service), the onboarding:
+    - Lists file counts and architecture tiers (generic metrics)
+    - Shows recent commits (raw git log data)
+    - No actionable setup instructions
+    - No automated environment validation
+    - No team contact discovery
+    - No interactive learning paths
+    - No tooling recommendations for the specific tech stack
+    
+    Goal: "Enable new team member to get up and running as soon as possible"
+    Reality: Current tab requires senior developer intervention to interpret and act on data.
+    
+  goal: |
+    Transform onboarding tab from informational to operational:
+    1. **Automated Environment Setup** - Detect dependencies, generate setup scripts
+    2. **Interactive Checklists** - Step-by-step onboarding with completion tracking
+    3. **Tool Recommendations** - IDE extensions, linters, debuggers for detected stack
+    4. **Team Discovery** - Identify experts by code ownership, active contributors
+    5. **Learning Paths** - Generate custom learning resources based on tech stack
+    6. **Setup Validation** - Run automated checks (dependencies installed, repos cloned, build works)
+    7. **Quick Wins** - Surface "good first issue" candidates from code analysis
+
+  success_criteria:
+    - New developer can complete environment setup in <30 minutes with zero senior dev help
+    - 90%+ setup steps automated (dependency install, config file generation, build verification)
+    - Tool recommendations specific to project (e.g., C# → ReSharper, Python → PyCharm/Pylance)
+    - Team contacts automatically populated from git blame + commit frequency
+    - Interactive checklist tracks completion state (persisted across sessions)
+    - "Good first issues" identified automatically (low complexity, high test coverage areas)
+    - User feedback: 9/10 "This onboarding made me productive immediately"
+
+definition_of_ready:
+  - TDD Mastery workflow MUST be followed (RED→GREEN→REFACTOR)
+  - Tests MUST fail before implementation (RED phase validation)
+  - All CORTEX brain protection rules apply (SKULL enforcement)
+  - Reference cortex-brain/brain-protection-rules.yaml for complete ruleset
+  - Current onboarding.json structure reviewed and understood
+  - Survey 5-10 popular onboarding tools (Backstage, Gitpod, DevContainers)
+  - Interview 3 developers about their last onboarding experience (pain points)
+  - Baseline metrics captured (time to first commit, setup friction points)
+  - Tech stack detection accuracy validated (correctly identifies Python, C#, Node.js, Docker)
+
+definition_of_done:
+  - All code follows TDD workflow with git checkpoints at phase boundaries
+  - No SKULL rule violations detected (brain protection compliance verified)
+  - Test coverage meets CORTEX standards (RED→GREEN→REFACTOR documented)
+  - Git history shows test-first commits (RED phase before GREEN phase)
+  - Onboarding tab tested with 3 real repositories (Python, C#, TypeScript)
+  - 90%+ automation achieved for setup steps (measured by manual intervention count)
+  - Tool recommendations validated by 3 developers (relevance score 8/10+)
+  - Documentation includes screenshots, video walkthrough, and troubleshooting guide
+  - Dashboard displays enhanced onboarding with no visual regressions
+
+phases:
+  - phase: 1
+    name: "Smart Setup Script Generation"
+    description: "Automatically generate environment setup scripts from tech stack detection"
+    estimated_duration: "14-18 hours"
+    dependencies: []
+    
+    tasks:
+      - id: "1.1"
+        title: "Dependency Detection Engine"
+        description: |
+          Analyze project files to detect all required dependencies:
+          - **Python**: requirements.txt, Pipfile, pyproject.toml
+          - **C#**: *.csproj, packages.config, .NET SDK version
+          - **Node.js**: package.json, .nvmrc, yarn.lock/package-lock.json
+          - **Docker**: Dockerfile, docker-compose.yml
+          - **Database**: Connection strings in config files
+          
+          Output structured dependency manifest:
+          ```json
+          {
+            "runtime": {"python": "3.8", "dotnet": "4.7.2"},
+            "packages": {"python": ["flask==2.0.0"], "nuget": ["Newtonsoft.Json"]},
+            "services": ["PostgreSQL 13", "Redis 6.2"]
+          }
+          ```
+        acceptance_criteria:
+          - Detects dependencies from 8 file types (requirements.txt, package.json, etc.)
+          - Correctly identifies Python 3.8+, .NET 4.7.2, Node 16+ from luum-fresh
+          - Handles missing dependency files gracefully (warns user)
+          - Test coverage with 15 sample projects across 5 tech stacks
+        estimated_hours: 6
+        
+      - id: "1.2"
+        title: "Cross-Platform Setup Script Generator"
+        description: |
+          Generate executable setup scripts for Windows, macOS, and Linux.
+          - **Windows**: PowerShell (.ps1) with Chocolatey/winget commands
+          - **macOS**: Bash (.sh) with Homebrew commands
+          - **Linux**: Bash (.sh) with apt/yum commands
+          
+          Scripts handle:
+          - Runtime installation (Python, .NET, Node)
+          - Package manager setup (pip, npm, NuGet)
+          - Dependency installation
+          - Environment variable configuration
+          - Git hooks setup
+        acceptance_criteria:
+          - Generates working scripts for all 3 platforms
+          - Scripts are idempotent (safe to run multiple times)
+          - Includes error handling and rollback on failure
+          - Tested on Windows 10/11, macOS 12+, Ubuntu 20.04+
+        estimated_hours: 8
+        
+      - id: "1.3"
+        title: "Setup Validation Framework"
+        description: |
+          Automated checks to verify environment setup success:
+          - Runtime versions (python --version, dotnet --version)
+          - Package installation (pip list, npm list)
+          - Database connectivity (connection string test)
+          - Build success (dotnet build, npm run build)
+          - Test execution (pytest, dotnet test)
+          
+          Output validation report with pass/fail for each check.
+        acceptance_criteria:
+          - Runs 10+ validation checks in <60 seconds
+          - Clear error messages for failed checks with remediation steps
+          - Generates markdown report with status badges
+          - 95%+ accuracy on correctly configured environments
+        estimated_hours: 4
+
+  - phase: 2
+    name: "Tool Recommendation Engine"
+    description: "Recommend IDE extensions, linters, and debuggers based on detected tech stack"
+    estimated_duration: "12-16 hours"
+    dependencies: ["1"]
+    
+    tasks:
+      - id: "2.1"
+        title: "Tech Stack → Tool Mapping Database"
+        description: |
+          Build curated database of tools for each technology:
+          
+          **Python**:
+          - IDE: PyCharm, VS Code with Pylance
+          - Linters: Ruff, Black, MyPy
+          - Debuggers: pdb, VS Code debugger
+          - Testing: pytest, coverage.py
+          
+          **C#**:
+          - IDE: Visual Studio 2022, Rider
+          - Extensions: ReSharper, CodeMaid
+          - Linters: StyleCop, Roslyn analyzers
+          - Testing: xUnit, NUnit, Moq
+          
+          **JavaScript/TypeScript**:
+          - IDE: VS Code, WebStorm
+          - Linters: ESLint, Prettier
+          - Debuggers: Chrome DevTools, VS Code
+          - Testing: Jest, Vitest, Playwright
+          
+          Store in YAML file: `cortex-brain/config/tool-recommendations.yaml`
+        acceptance_criteria:
+          - Database covers Python, C#, TypeScript, JavaScript, Java, Go
+          - 5-10 tool recommendations per language
+          - Each tool has: name, category, install command, config snippet
+          - Includes both free and paid options (labeled clearly)
+        estimated_hours: 6
+        
+      - id: "2.2"
+        title: "Intelligent Tool Selector"
+        description: |
+          Select most relevant tools based on project characteristics:
+          - Project size (small: VS Code, large: full IDE)
+          - Tech stack complexity (multi-language: unified tools)
+          - Team preferences (check existing .editorconfig, .vscode/extensions.json)
+          - Operating system (platform-specific tools)
+          
+          Output prioritized list with installation instructions.
+        acceptance_criteria:
+          - Recommends 3-5 tools per category (IDE, linter, debugger)
+          - Prioritizes tools already configured in repo (.editorconfig, etc.)
+          - Generates one-click install scripts (VS Code extensions.json)
+          - Test with 10 diverse projects, validate relevance with developers
+        estimated_hours: 6
+
+  - phase: 3
+    name: "Team Discovery & Expert Finder"
+    description: "Automatically identify team members, their expertise, and contact information"
+    estimated_duration: "10-12 hours"
+    dependencies: []
+    
+    tasks:
+      - id: "3.1"
+        title: "Code Ownership Analyzer"
+        description: |
+          Use git blame and commit history to determine code ownership:
+          - Top 5 contributors by file count
+          - Top 5 contributors by LOC
+          - Expertise mapping: contributor → files/modules owned
+          - Activity recency (last commit date per contributor)
+          
+          Output:
+          ```json
+          {
+            "experts": [
+              {
+                "name": "Jacob Patton",
+                "email": "jpatton@healthequity.com",
+                "expertise": ["Parking", "Terms & Conditions", "Localization"],
+                "files_owned": 142,
+                "last_active": "2025-11-26"
+              }
+            ]
+          }
+          ```
+        acceptance_criteria:
+          - Identifies top 5-10 contributors accurately from git history
+          - Maps contributors to expertise areas (inferred from file paths)
+          - Filters out inactive contributors (no commits in 6+ months)
+          - Test with luum-fresh (should identify Jacob Patton, Carlos Romero, etc.)
+        estimated_hours: 6
+        
+      - id: "3.2"
+        title: "Contact Information Extractor"
+        description: |
+          Extract contact details from multiple sources:
+          - Git commit emails
+          - CODEOWNERS file (GitHub)
+          - README.md (Maintainers section)
+          - Slack/Teams integration (optional, future)
+          
+          Enrich with:
+          - GitHub profile URLs
+          - Gravatar images
+          - Timezone (infer from commit timestamps)
+        acceptance_criteria:
+          - Extracts email + name from git commits
+          - Parses CODEOWNERS file if present
+          - Generates contact card for each team member
+          - Privacy-aware (only show data already in git history)
+        estimated_hours: 4
+
+  - phase: 4
+    name: "Interactive Onboarding Checklist"
+    description: "Step-by-step checklist with completion tracking and guidance"
+    estimated_duration: "12-14 hours"
+    dependencies: ["1", "2", "3"]
+    
+    tasks:
+      - id: "4.1"
+        title: "Checklist Generator"
+        description: |
+          Generate custom onboarding checklist based on project:
+          
+          **Universal Steps**:
+          ☐ Clone repository
+          ☐ Install dependencies
+          ☐ Configure environment variables
+          ☐ Run local build
+          ☐ Run test suite
+          ☐ Meet the team
+          
+          **Tech Stack-Specific**:
+          - Python: Set up virtual environment, install pre-commit hooks
+          - C#: Configure NuGet sources, install SQL Server LocalDB
+          - Docker: Install Docker Desktop, pull base images
+          
+          Each step includes:
+          - Description + rationale
+          - Automated command (click-to-run)
+          - Validation check
+          - Links to docs/videos
+        acceptance_criteria:
+          - Generates 10-15 step checklist customized per project
+          - Each step has automated command or validation check
+          - Checklist persisted in cortex-brain/cache/onboarding-state.json
+          - UI supports click-to-run commands, checkbox completion tracking
+        estimated_hours: 6
+        
+      - id: "4.2"
+        title: "Progress Persistence & Session Resume"
+        description: |
+          Save checklist completion state across browser sessions:
+          - Store in cortex-brain/cache/{repo-name}/onboarding-state.json
+          - Track: step_id, completed (bool), timestamp, user
+          - Support multiple users (keyed by git config user.email)
+          - Display progress bar: "3/12 steps complete"
+        acceptance_criteria:
+          - State persists across page refreshes
+          - Multi-user support (different completion states per developer)
+          - Progress bar updates in real-time
+          - Reset button to start over
+        estimated_hours: 4
+        
+      - id: "4.3"
+        title: "Guided Walkthroughs (Video/Screenshot)"
+        description: |
+          Embed rich guidance for complex setup steps:
+          - Animated GIFs for multi-step processes
+          - Embedded YouTube videos for IDE setup
+          - Expandable "Need help?" sections with troubleshooting
+          - Links to external docs (official installation guides)
+        acceptance_criteria:
+          - 3-5 steps have embedded GIF/video guidance
+          - Troubleshooting section for common errors (port conflicts, permission issues)
+          - External links validated (no 404s)
+          - Loads in <2 seconds (videos lazy-loaded)
+        estimated_hours: 4
+
+  - phase: 5
+    name: "Good First Issues Finder"
+    description: "Automatically identify beginner-friendly tasks from code analysis"
+    estimated_duration: "8-10 hours"
+    dependencies: ["1"]
+    
+    tasks:
+      - id: "5.1"
+        title: "Code Complexity Analyzer"
+        description: |
+          Identify low-complexity files suitable for first contributions:
+          - Cyclomatic complexity <10
+          - File length <200 LOC
+          - High test coverage (>80%)
+          - Recent activity (touched in last 90 days)
+          - No critical business logic (not in "Core", "Critical" paths)
+          
+          Output:
+          ```json
+          {
+            "good_first_issues": [
+              {
+                "file": "src/utils/string_helpers.py",
+                "complexity": 4,
+                "test_coverage": 92,
+                "suggested_task": "Add docstrings to all functions",
+                "estimated_hours": 2
+              }
+            ]
+          }
+          ```
+        acceptance_criteria:
+          - Analyzes all files, surfaces 5-10 beginner-friendly candidates
+          - Complexity calculation matches Radon/Lizard tools
+          - Filters out critical paths (payment, auth, core business logic)
+          - Test with luum-fresh, validate suggestions with senior developers
+        estimated_hours: 6
+        
+      - id: "5.2"
+        title: "Task Suggestion Engine"
+        description: |
+          For each low-complexity file, suggest concrete tasks:
+          - Missing docstrings
+          - Low test coverage (add unit tests)
+          - TODO/FIXME comments (resolve technical debt)
+          - Code style violations (linting errors)
+          - Outdated dependencies (safe upgrades)
+        acceptance_criteria:
+          - Generates 1-3 task suggestions per candidate file
+          - Tasks are actionable (clear scope, estimated effort)
+          - Links to file location on GitHub/local path
+          - Estimated effort accurate within 50% (validated post-completion)
+        estimated_hours: 4
+
+  - phase: 6
+    name: "Tooling Integration & Automation"
+    description: "Evaluate and integrate external onboarding tools"
+    estimated_duration: "8-10 hours"
+    dependencies: ["1", "2", "3", "4"]
+    
+    tasks:
+      - id: "6.1"
+        title: "Evaluate Onboarding Platforms"
+        description: |
+          Research and prototype integration with:
+          
+          **Backstage (Spotify)**:
+          - Developer portal for service cataloging
+          - Templates for project scaffolding
+          - TechDocs for documentation
+          - Integration: REST API, YAML catalogs
+          
+          **Gitpod / GitHub Codespaces**:
+          - Cloud-based dev environments
+          - One-click workspace setup
+          - Pre-configured containers
+          - Integration: .gitpod.yml generation
+          
+          **DevContainers (VS Code)**:
+          - Containerized dev environments
+          - Consistent setup across machines
+          - Integration: .devcontainer.json generation
+          
+          **Earthly**:
+          - Reproducible builds
+          - Cross-platform compatibility
+          - Integration: Earthfile generation
+          
+          For each tool:
+          - Assess fit with CORTEX dashboard
+          - Prototype integration with 1 sample repo
+          - Document pros/cons, integration complexity
+        acceptance_criteria:
+          - Evaluation matrix: 4 tools × 8 criteria (cost, complexity, value-add)
+          - Working prototype for 1-2 tools with luum-fresh
+          - Decision documented: integrate now, defer, or reject
+          - ADR created in cortex-brain/documents/
+        estimated_hours: 8
+
+risks:
+  - description: "Cross-platform setup scripts may fail on edge cases (older OS versions)"
+    mitigation: "Test matrix: Windows 10/11, macOS 12/13, Ubuntu 20.04/22.04, include fallback manual steps"
+    impact: "medium"
+    
+  - description: "Tool recommendations may not match team preferences"
+    mitigation: "Check for existing config files (.editorconfig, .vscode/extensions.json) and prioritize team choices"
+    impact: "low"
+    
+  - description: "Git history may have incomplete contributor info (missing emails, names)"
+    mitigation: "Graceful degradation - use what's available, prompt user to fill gaps"
+    impact: "low"
+    
+  - description: "Good first issues may misjudge difficulty (complexity metrics imperfect)"
+    mitigation: "Add human review step - senior dev validates suggestions before showing to new hires"
+    impact: "medium"
+    
+  - description: "External tool integration (Backstage, Gitpod) adds maintenance burden"
+    mitigation: "Phase 6 is evaluation-only, defer integration until user demand validated"
+    impact: "low"
+
+dependencies:
+  internal:
+    - "src/dashboard/aggregators/ (create onboarding_aggregator.py)"
+    - "cortex-brain/dashboards/data/repos/{repo}/onboarding.json (refactor target)"
+    - "src/dashboard/presentation/dashboard_renderer.py (UI integration)"
+    - "src/tier3/code_metrics.py (complexity analysis)"
+  
+  external:
+    - "radon or lizard (code complexity analysis)"
+    - "pre-commit (git hooks automation)"
+    - "docker (DevContainers, optional)"
+    - "backstage CLI (evaluation only, Phase 6)"
+
+notes:
+  - "Onboarding is the #1 pain point for new developers (industry surveys)"
+  - "Goal: Zero senior dev intervention for basic environment setup"
+  - "Success metric: Time to first PR <4 hours (industry benchmark: 2-5 days)"
+  - "This plan focuses on automation + intelligence, not content creation (docs separate concern)"
+  - "Consider A/B testing: track onboarding completion time before/after enhancements"
