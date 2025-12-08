@@ -1,7 +1,7 @@
 """
 AST Docstring Extractor
 
-Extracts docstrings from Python source code using Abstract Syntax Trees (AST).
+Extracts docstrings from source code (Python, C#, TypeScript, JavaScript).
 Identifies classes and functions with documentation, ranks by informativeness.
 
 Author: Asif Hussain
@@ -11,6 +11,7 @@ License: Proprietary - Source-Available
 
 import ast
 import logging
+import re
 from pathlib import Path
 from typing import List, Optional
 from dataclasses import dataclass
@@ -31,7 +32,7 @@ class DocstringInfo:
 
 
 class AstDocstringExtractor:
-    """Extract docstrings from Python source code using AST parsing."""
+    """Extract docstrings from source code (Python, C#, TypeScript, JavaScript)."""
     
     def __init__(self):
         """Initialize extractor."""
@@ -43,10 +44,10 @@ class AstDocstringExtractor:
         top_n: int = 10
     ) -> List[DocstringInfo]:
         """
-        Extract docstrings from a Python file.
+        Extract docstrings from source file (Python, C#, TypeScript, JavaScript).
         
         Args:
-            file_path: Path to Python source file
+            file_path: Path to source file (.py, .cs, .ts, .js)
             top_n: Maximum number of results to return (most informative)
         
         Returns:
@@ -58,22 +59,21 @@ class AstDocstringExtractor:
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
         
+        # Detect language by extension
+        suffix = file_path.suffix.lower()
+        
         try:
-            # Read source code
-            source_code = file_path.read_text(encoding='utf-8', errors='ignore')
-            
-            # Parse AST
-            tree = ast.parse(source_code, filename=str(file_path))
-            
-            # Extract docstrings
-            docstrings = self._extract_docstrings(tree, str(file_path))
-            
-            # Rank by informativeness
-            ranked = self._rank_docstrings(docstrings)
-            
-            # Return top N
-            return ranked[:top_n]
-            
+            if suffix == '.py':
+                return self._extract_python_docstrings(file_path, top_n)
+            elif suffix == '.cs':
+                return self._extract_csharp_docstrings(file_path, top_n)
+            elif suffix in ['.ts', '.js']:
+                return self._extract_jsdoc_docstrings(file_path, top_n)
+            else:
+                # Unsupported file type
+                self.logger.debug(f"Unsupported file type: {suffix}")
+                return []
+        
         except SyntaxError as e:
             self.logger.warning(f"Syntax error in {file_path}: {e}")
             return []
@@ -88,7 +88,7 @@ class AstDocstringExtractor:
         top_n: int = 10
     ) -> List[DocstringInfo]:
         """
-        Extract docstrings from all Python files in directory.
+        Extract docstrings from all source files in directory (Python, C#, TypeScript, JavaScript).
         
         Args:
             directory: Directory to scan
@@ -100,17 +100,21 @@ class AstDocstringExtractor:
         """
         all_docstrings = []
         
-        # Find Python files
-        python_files = list(directory.rglob('*.py'))
+        # Find source files (Python, C#, TypeScript, JavaScript)
+        source_files = []
+        source_files.extend(directory.rglob('*.py'))
+        source_files.extend(directory.rglob('*.cs'))
+        source_files.extend(directory.rglob('*.ts'))
+        source_files.extend(directory.rglob('*.js'))
         
         # Sort by file size (larger files likely more important)
-        python_files.sort(key=lambda p: p.stat().st_size, reverse=True)
+        source_files.sort(key=lambda p: p.stat().st_size, reverse=True)
         
         # Limit to max_files
-        python_files = python_files[:max_files]
+        source_files = source_files[:max_files]
         
         # Extract from each file
-        for file_path in python_files:
+        for file_path in source_files:
             try:
                 docstrings = self.extract_from_file(file_path, top_n=top_n)
                 all_docstrings.extend(docstrings)
@@ -213,3 +217,157 @@ class AstDocstringExtractor:
         
         # Sort by score (descending)
         return sorted(docstrings, key=lambda d: d.informativeness_score, reverse=True)
+    
+    def _extract_python_docstrings(
+        self,
+        file_path: Path,
+        top_n: int = 10
+    ) -> List[DocstringInfo]:
+        """
+        Extract docstrings from Python file using AST.
+        
+        Args:
+            file_path: Path to Python file
+            top_n: Maximum number of results
+        
+        Returns:
+            List of DocstringInfo objects
+        """
+        source_code = file_path.read_text(encoding='utf-8', errors='ignore')
+        tree = ast.parse(source_code, filename=str(file_path))
+        docstrings = self._extract_docstrings(tree, str(file_path))
+        ranked = self._rank_docstrings(docstrings)
+        return ranked[:top_n]
+    
+    def _extract_csharp_docstrings(
+        self,
+        file_path: Path,
+        top_n: int = 10
+    ) -> List[DocstringInfo]:
+        """
+        Extract XML documentation comments from C# file using regex.
+        
+        Supports:
+        - /// <summary>...</summary>
+        - Multi-line XML doc comments
+        
+        Args:
+            file_path: Path to C# file
+            top_n: Maximum number of results
+        
+        Returns:
+            List of DocstringInfo objects
+        """
+        source_code = file_path.read_text(encoding='utf-8', errors='ignore')
+        docstrings = []
+        
+        # Pattern: XML doc comment followed by class/method declaration
+        # Matches: /// <summary>...</summary> followed by class/interface/method
+        pattern = r'///\s*<summary>(.*?)</summary>.*?(?:class|interface|struct|enum)\s+(\w+)'
+        
+        for match in re.finditer(pattern, source_code, re.DOTALL | re.MULTILINE):
+            doc_text = match.group(1).strip()
+            name = match.group(2)
+            
+            # Find line number
+            line_number = source_code[:match.start()].count('\n') + 1
+            
+            docstrings.append(DocstringInfo(
+                name=name,
+                type='class',
+                docstring=doc_text,
+                line_number=line_number,
+                file_path=str(file_path),
+                informativeness_score=0.0
+            ))
+        
+        # Also match method documentation
+        method_pattern = r'///\s*<summary>(.*?)</summary>.*?(?:public|private|protected|internal)\s+\w+\s+(\w+)\s*\('
+        
+        for match in re.finditer(method_pattern, source_code, re.DOTALL | re.MULTILINE):
+            doc_text = match.group(1).strip()
+            name = match.group(2)
+            
+            line_number = source_code[:match.start()].count('\n') + 1
+            
+            docstrings.append(DocstringInfo(
+                name=name,
+                type='function',
+                docstring=doc_text,
+                line_number=line_number,
+                file_path=str(file_path),
+                informativeness_score=0.0
+            ))
+        
+        ranked = self._rank_docstrings(docstrings)
+        return ranked[:top_n]
+    
+    def _extract_jsdoc_docstrings(
+        self,
+        file_path: Path,
+        top_n: int = 10
+    ) -> List[DocstringInfo]:
+        """
+        Extract JSDoc comments from TypeScript/JavaScript file using regex.
+        
+        Supports:
+        - /** ... */
+        - Multi-line JSDoc comments
+        - Class, function, and interface documentation
+        
+        Args:
+            file_path: Path to TypeScript or JavaScript file
+            top_n: Maximum number of results
+        
+        Returns:
+            List of DocstringInfo objects
+        """
+        source_code = file_path.read_text(encoding='utf-8', errors='ignore')
+        docstrings = []
+        
+        # Pattern: JSDoc comment followed by class/interface/function
+        # Matches: /** ... */ followed by class/interface/function declaration
+        
+        # Class/Interface pattern
+        class_pattern = r'/\*\*(.*?)\*/\s*(?:export\s+)?(?:class|interface)\s+(\w+)'
+        
+        for match in re.finditer(class_pattern, source_code, re.DOTALL | re.MULTILINE):
+            doc_text = match.group(1).strip()
+            # Remove leading * from each line
+            doc_text = '\n'.join(line.lstrip('* ') for line in doc_text.split('\n'))
+            doc_text = doc_text.strip()
+            
+            name = match.group(2)
+            line_number = source_code[:match.start()].count('\n') + 1
+            
+            docstrings.append(DocstringInfo(
+                name=name,
+                type='class',
+                docstring=doc_text,
+                line_number=line_number,
+                file_path=str(file_path),
+                informativeness_score=0.0
+            ))
+        
+        # Function pattern
+        func_pattern = r'/\*\*(.*?)\*/\s*(?:export\s+)?(?:function|const|let|var)\s+(\w+)\s*[=(]'
+        
+        for match in re.finditer(func_pattern, source_code, re.DOTALL | re.MULTILINE):
+            doc_text = match.group(1).strip()
+            doc_text = '\n'.join(line.lstrip('* ') for line in doc_text.split('\n'))
+            doc_text = doc_text.strip()
+            
+            name = match.group(2)
+            line_number = source_code[:match.start()].count('\n') + 1
+            
+            docstrings.append(DocstringInfo(
+                name=name,
+                type='function',
+                docstring=doc_text,
+                line_number=line_number,
+                file_path=str(file_path),
+                informativeness_score=0.0
+            ))
+        
+        ranked = self._rank_docstrings(docstrings)
+        return ranked[:top_n]
