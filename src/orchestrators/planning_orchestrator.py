@@ -1588,8 +1588,52 @@ class PlanningOrchestrator:
             percentage = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 100
             phases_summary = ", ".join([f"Phase {i+1}: {phase.get('name', phase.get('phase_name', 'N/A'))}" for i, phase in enumerate(phases)])
             
-            # Format output directly (template system fallback not working reliably)
-            rendered_output = f"""## 🧠 CORTEX Autonomous Plan Execution
+            # Extract threat analysis if present
+            threat_analysis = plan_data.get('threat_analysis', {})
+            threat_section = self._render_threat_section_for_progress(threat_analysis) if threat_analysis else ""
+            
+            # Use template system for consistent formatting
+            if self.template_manager:
+                try:
+                    template_context = {
+                        'progress_bar': progress_bar,
+                        'percentage': percentage,
+                        'current_phase': total_phases,
+                        'total_phases': total_phases,
+                        'phase_name': phases[-1].get('name', phases[-1].get('phase_name', 'Final Phase')) if phases else 'N/A',
+                        'completed_tasks': completed_tasks,
+                        'total_tasks': total_tasks,
+                        'elapsed_time': 'Complete',
+                        'current_task': 'All tasks completed',
+                        'execution_log': self._format_execution_log(execution_log),
+                        'plan_id': plan_id,
+                        'status': 'completed',
+                        'phases_summary': phases_summary,
+                        'threat_analysis_enabled': '✅ Enabled' if threat_analysis else 'Not analyzed',
+                        'stride_categories': self._format_stride_summary(threat_analysis.get('stride_summary', {})),
+                        'threat_count': len(threat_analysis.get('threats', [])),
+                        'critical_count': threat_analysis.get('critical_count', 0),
+                        'high_count': threat_analysis.get('high_count', 0),
+                        'medium_count': sum(1 for t in threat_analysis.get('threats', []) if t.get('risk_rating') == 'MEDIUM'),
+                        'low_count': sum(1 for t in threat_analysis.get('threats', []) if t.get('risk_rating') == 'LOW'),
+                        'owasp_categories': ', '.join(threat_analysis.get('owasp_coverage', {}).keys()) if threat_analysis else 'N/A',
+                        'mitigation_progress_bar': self._generate_mitigation_progress_bar(threat_analysis),
+                        'mitigations_implemented': 0,  # Would track actual implementation
+                        'total_mitigations': len(threat_analysis.get('threats', [])),
+                        'next_steps': f"1. Review execution log\n2. Check git history for phase checkpoints\n3. Document learnings: {completion_result.get('documentation_reminder', 'Update learning library')}"
+                    }
+                    
+                    rendered_output = self.template_manager.render('autonomous_execution_progress', template_context)
+                    logger.info("✅ Used template system for progress rendering")
+                except Exception as e:
+                    logger.warning(f"Template rendering failed, using fallback: {e}")
+                    rendered_output = None
+            else:
+                rendered_output = None
+            
+            # Fallback to direct formatting if template fails
+            if not rendered_output:
+                rendered_output = f"""## 🧠 CORTEX Autonomous Plan Execution
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
@@ -1611,6 +1655,8 @@ class PlanningOrchestrator:
 **Plan ID:** {plan_id}
 **Status:** completed
 **Phases:** {phases_summary}
+
+{threat_section}
 
 {dashboard_link}
 
@@ -1751,6 +1797,83 @@ class PlanningOrchestrator:
         filled = int((current / total) * width)
         empty = width - filled
         return "[" + "█" * filled + "░" * empty + "]"
+    
+    def _generate_mitigation_progress_bar(self, threat_analysis: Dict[str, Any]) -> str:
+        """
+        Generate progress bar for threat mitigation implementation.
+        
+        Args:
+            threat_analysis: Threat analysis data
+            
+        Returns:
+            Progress bar showing mitigation status
+        """
+        if not threat_analysis:
+            return "[░░░░░░░░░░]"
+        
+        # In real implementation, track which mitigations are implemented
+        # For now, show 0% (all mitigations pending)
+        total_threats = len(threat_analysis.get('threats', []))
+        implemented = 0  # Would query actual implementation status
+        
+        return self._generate_progress_bar(implemented, total_threats, width=10)
+    
+    def _format_stride_summary(self, stride_summary: Dict[str, int]) -> str:
+        """
+        Format STRIDE summary for display.
+        
+        Args:
+            stride_summary: Dict with STRIDE category counts
+            
+        Returns:
+            Formatted string like "Spoofing: 3, Tampering: 0, ..."
+        """
+        if not stride_summary:
+            return "No analysis"
+        
+        stride_names = {
+            'spoofing': 'Spoofing',
+            'tampering': 'Tampering',
+            'repudiation': 'Repudiation',
+            'information_disclosure': 'Info Disclosure',
+            'denial_of_service': 'DoS',
+            'elevation_of_privilege': 'Elevation'
+        }
+        
+        parts = []
+        for key, name in stride_names.items():
+            count = stride_summary.get(key, 0)
+            if count > 0:
+                parts.append(f"{name}: {count}")
+        
+        return ", ".join(parts) if parts else "No threats identified"
+    
+    def _render_threat_section_for_progress(self, threat_analysis: Dict[str, Any]) -> str:
+        """
+        Render threat analysis section for progress template.
+        
+        Args:
+            threat_analysis: Threat analysis data
+            
+        Returns:
+            Formatted markdown section
+        """
+        if not threat_analysis:
+            return ""
+        
+        threats = threat_analysis.get('threats', [])
+        critical_count = threat_analysis.get('critical_count', 0)
+        high_count = threat_analysis.get('high_count', 0)
+        
+        risk_icon = '🔴' if critical_count > 0 or high_count > 0 else '🟡' if threats else '🟢'
+        
+        return f"""
+### 🔒 Threat Analysis Summary
+
+**Status:** {risk_icon} {len(threats)} threat{'s' if len(threats) != 1 else ''} identified
+**Risk Level:** {threat_analysis.get('risk_level', 'UNKNOWN')}
+**See full analysis in plan document**
+"""
     
     def _format_execution_log(self, execution_log: List[Dict], max_entries: int = 5) -> str:
         """
