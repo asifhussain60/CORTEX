@@ -29,6 +29,7 @@ schema:
       - related_plans
       - related_issues
       - notes
+      - threat_analysis_enabled
     
     field_definitions:
       plan_id:
@@ -97,6 +98,12 @@ schema:
         item_type: string
         description: "GitHub issue URLs or numbers"
         example: ["#67", "#80", "#108"]
+      
+      threat_analysis_enabled:
+        type: boolean
+        description: "Enable threat modeling analysis (auto-detects security-sensitive features)"
+        default: true
+        example: true
 
   phases:
     description: "Sequential implementation phases"
@@ -227,6 +234,68 @@ schema:
       - "Code review completed"
       - "Acceptance criteria met"
       - "No regressions introduced"
+  
+  threat_analysis:
+    description: "Threat modeling analysis results (auto-generated if enabled)"
+    type: object
+    optional: true
+    field_definitions:
+      feature_name:
+        type: string
+        description: "Feature being analyzed"
+      
+      threats:
+        type: list
+        description: "Identified security threats"
+        item_schema:
+          required_fields:
+            - category
+            - name
+            - description
+            - risk_rating
+          field_definitions:
+            category:
+              type: enum
+              values: ['Spoofing', 'Tampering', 'Repudiation', 'Information Disclosure', 'Denial of Service', 'Elevation of Privilege']
+            name:
+              type: string
+            description:
+              type: string
+            attack_scenario:
+              type: string
+            risk_rating:
+              type: enum
+              values: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']
+            risk_score:
+              type: integer
+              min: 0
+              max: 10
+            owasp_categories:
+              type: list
+              item_type: string
+            mitigation_strategies:
+              type: list
+              item_schema:
+                required_fields:
+                  - name
+                  - effort_hours
+                  - effectiveness_percent
+      
+      stride_summary:
+        type: object
+        description: "Count of threats by STRIDE category"
+      
+      owasp_coverage:
+        type: object
+        description: "OWASP Top 10 categories mapped"
+      
+      risk_level:
+        type: enum
+        values: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']
+      
+      recommendations:
+        type: list
+        item_type: string
 
   risks:
     description: "Potential issues and mitigation strategies"

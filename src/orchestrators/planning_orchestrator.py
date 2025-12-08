@@ -951,6 +951,17 @@ class PlanningOrchestrator:
             if not phase_3_approved:
                 return (True, output_path, "Phase 3 complete, pending final approval")
             
+            # Step 4.5: Run threat modeling analysis
+            logger.info("🔒 Running threat modeling analysis...")
+            threat_analysis = self._run_threat_analysis(feature_requirements, feature_name)
+            
+            if threat_analysis and threat_analysis.get('threats'):
+                # Append threat modeling section to plan
+                self._append_threat_analysis_to_plan(output_path, threat_analysis)
+                logger.info(f"✅ Threat analysis complete: {len(threat_analysis['threats'])} threats identified")
+            else:
+                logger.info("ℹ️  Threat analysis skipped or no threats identified")
+            
             # Step 5: Inject TDD requirements into plan
             logger.info("🧬 Injecting TDD requirements...")
             with open(output_path, 'r', encoding='utf-8') as f:
@@ -3277,8 +3288,220 @@ class PlanningOrchestrator:
             return True
             
         except Exception as e:
-            logger.warning(f"⚠️  Failed to inject test strategy: {e}")
+            logger.error(f"Failed to inject test intelligence: {e}")
             return False
+    
+    def _run_threat_analysis(self, feature_description: str, feature_name: str) -> Optional[Dict[str, Any]]:
+        """
+        Run threat modeling analysis using ThreatModelerAgent.
+        
+        Args:
+            feature_description: Description of the feature to analyze
+            feature_name: Name of the feature
+            
+        Returns:
+            Threat analysis results or None if analysis fails
+        """
+        try:
+            # Determine if threat analysis should be enabled based on feature keywords
+            security_keywords = [
+                'auth', 'authentication', 'login', 'password', 'token', 'jwt', 'oauth',
+                'payment', 'credit card', 'financial', 'billing',
+                'user', 'account', 'profile', 'permission', 'role', 'access',
+                'api', 'endpoint', 'service', 'integration',
+                'database', 'sql', 'data', 'storage'
+            ]
+            
+            feature_lower = feature_description.lower()
+            should_analyze = any(keyword in feature_lower for keyword in security_keywords)
+            
+            if not should_analyze:
+                logger.info("ℹ️  Feature does not match security-sensitive patterns, skipping threat analysis")
+                return None
+            
+            logger.info("🔒 Feature matches security-sensitive patterns, running threat analysis...")
+            
+            # Create agent request
+            request = AgentRequest(
+                intent='analyze_threats',
+                user_message=f'Analyze threats for {feature_name}',
+                context={
+                    'feature_description': feature_description,
+                    'feature_name': feature_name
+                }
+            )
+            
+            # Execute threat analysis
+            response = self.threat_modeler.execute(request)
+            
+            if response.success and response.result:
+                return response.result
+            else:
+                logger.warning(f"⚠️  Threat analysis failed: {response.message}")
+                return None
+                
+        except Exception as e:
+            logger.error(f"Threat analysis error: {e}")
+            return None
+    
+    def _append_threat_analysis_to_plan(self, plan_path: Path, threat_analysis: Dict[str, Any]):
+        """
+        Append threat modeling section to plan file.
+        
+        Args:
+            plan_path: Path to plan file
+            threat_analysis: Threat analysis results from ThreatModelerAgent
+        """
+        try:
+            threat_section = self._format_threat_section(threat_analysis)
+            
+            with open(plan_path, 'a', encoding='utf-8') as f:
+                f.write("\n\n")
+                f.write(threat_section)
+            
+            logger.info(f"✅ Threat modeling section appended to {plan_path.name}")
+            
+        except Exception as e:
+            logger.error(f"Failed to append threat analysis: {e}")
+    
+    def _format_threat_section(self, threat_analysis: Dict[str, Any]) -> str:
+        """
+        Format threat analysis results as markdown section.
+        
+        Args:
+            threat_analysis: Threat analysis results
+            
+        Returns:
+            Formatted markdown string
+        """
+        threats = threat_analysis.get('threats', [])
+        stride_summary = threat_analysis.get('stride_summary', {})
+        owasp_coverage = threat_analysis.get('owasp_coverage', {})
+        recommendations = threat_analysis.get('recommendations', [])
+        critical_count = threat_analysis.get('critical_count', 0)
+        high_count = threat_analysis.get('high_count', 0)
+        
+        # Count threats by severity
+        medium_count = sum(1 for t in threats if t.get('risk_rating') == 'MEDIUM')
+        low_count = sum(1 for t in threats if t.get('risk_rating') == 'LOW')
+        
+        # Build section
+        lines = [
+            "---",
+            "",
+            "## 🔒 Threat Modeling Analysis",
+            "",
+            f"**Security Assessment:** ✅ STRIDE + OWASP Top 10 2021",
+            "",
+            "### STRIDE Categories",
+            ""
+        ]
+        
+        stride_names = {
+            'spoofing': 'Spoofing',
+            'tampering': 'Tampering',
+            'repudiation': 'Repudiation',
+            'information_disclosure': 'Information Disclosure',
+            'denial_of_service': 'Denial of Service',
+            'elevation_of_privilege': 'Elevation of Privilege'
+        }
+        
+        for key, name in stride_names.items():
+            count = stride_summary.get(key, 0)
+            icon = "⚠️" if count > 0 else "✅"
+            lines.append(f"- **{name}:** {count} threat{'s' if count != 1 else ''} {icon}")
+        
+        lines.extend([
+            "",
+            f"**Total Threats:** {len(threats)} ({critical_count} Critical, {high_count} High, {medium_count} Medium, {low_count} Low)",
+            "",
+            f"**Risk Level:** {'🔴 HIGH' if critical_count > 0 or high_count > 0 else '🟡 MEDIUM' if medium_count > 0 else '🟢 LOW'}",
+            "",
+            "### OWASP Top 10 Coverage",
+            ""
+        ])
+        
+        owasp_names = {
+            'A01': 'Broken Access Control',
+            'A02': 'Cryptographic Failures',
+            'A03': 'Injection',
+            'A04': 'Insecure Design',
+            'A05': 'Security Misconfiguration',
+            'A06': 'Vulnerable Components',
+            'A07': 'Identification and Authentication Failures',
+            'A08': 'Software and Data Integrity Failures',
+            'A09': 'Security Logging and Monitoring Failures',
+            'A10': 'Server-Side Request Forgery'
+        }
+        
+        for code, count in owasp_coverage.items():
+            name = owasp_names.get(code, code)
+            lines.append(f"- **{code}:** {name} ({count} threat{'s' if count != 1 else ''})")
+        
+        lines.extend([
+            "",
+            "### Identified Threats",
+            ""
+        ])
+        
+        # Group threats by severity
+        critical_threats = [t for t in threats if t.get('risk_rating') == 'CRITICAL']
+        high_threats = [t for t in threats if t.get('risk_rating') == 'HIGH']
+        medium_threats = [t for t in threats if t.get('risk_rating') == 'MEDIUM']
+        low_threats = [t for t in threats if t.get('risk_rating') == 'LOW']
+        
+        for severity, threat_list in [
+            ('Critical', critical_threats),
+            ('High', high_threats),
+            ('Medium', medium_threats),
+            ('Low', low_threats)
+        ]:
+            if threat_list:
+                lines.append(f"#### {severity} Severity Threats ({len(threat_list)})")
+                lines.append("")
+                
+                for i, threat in enumerate(threat_list, 1):
+                    lines.append(f"**{i}. [{threat.get('risk_rating')}] {threat.get('name')} ({threat.get('category')})**")
+                    lines.append(f"- **OWASP:** {', '.join(threat.get('owasp_categories', []))}")
+                    lines.append(f"- **Risk Score:** {threat.get('risk_score')}/10")
+                    lines.append(f"- **Attack Scenario:** {threat.get('attack_scenario')}")
+                    lines.append(f"- **Impact:** {threat.get('impact').title()} | **Likelihood:** {threat.get('likelihood').title()}")
+                    
+                    # Add mitigation strategies
+                    mitigations = threat.get('mitigation_strategies', [])
+                    if mitigations:
+                        mitigation = mitigations[0]  # Primary mitigation
+                        lines.append(f"- **Mitigation:** {mitigation.get('name')}")
+                        lines.append(f"  - **Effort:** {mitigation.get('effort_hours')}h | **Effectiveness:** {mitigation.get('effectiveness_percent')}%")
+                        
+                        steps = mitigation.get('implementation_steps', [])
+                        if steps:
+                            lines.append(f"  - **Steps:** {', '.join(steps[:3])}")
+                    
+                    lines.append("")
+        
+        # Calculate total mitigation effort
+        total_effort = sum(
+            m.get('effort_hours', 0)
+            for t in threats
+            for m in t.get('mitigation_strategies', [])[:1]  # Primary mitigation only
+        )
+        
+        lines.extend([
+            "### Recommendations",
+            ""
+        ])
+        
+        for rec in recommendations:
+            lines.append(f"- {rec}")
+        
+        lines.extend([
+            "",
+            f"**Total Mitigation Effort:** {total_effort} hours (included in DoD)",
+            ""
+        ])
+        
+        return "\n".join(lines)
         
         # Update plan
         plan_data["definition_of_ready"] = dor
