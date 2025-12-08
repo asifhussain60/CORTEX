@@ -28,6 +28,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Optional, Any
 from enum import Enum
+from src.utils.safe_print import safe_print
 
 
 class TestComplexity(Enum):
@@ -155,12 +156,12 @@ class TestAnalyzer:
             TestSuiteAnalysis with complete results
         """
         if verbose:
-            print(f"🔍 Analyzing test suite in: {self.test_dir}")
+            safe_print(f"[SCAN] Analyzing test suite in: {self.test_dir}")
         
         # Discover and parse all test files
         test_files = list(self.test_dir.rglob("test_*.py"))
         if verbose:
-            print(f"📂 Found {len(test_files)} test files")
+            safe_print(f"[DIR] Found {len(test_files)} test files")
         
         for test_file in test_files:
             if verbose:
@@ -169,7 +170,7 @@ class TestAnalyzer:
         
         # Detect redundancies
         if verbose:
-            print("\n🔎 Detecting redundancies...")
+            safe_print("\n[SEARCH] Detecting redundancies...")
         redundancies = self._detect_redundancies()
         
         # Calculate complexity distribution
@@ -190,7 +191,7 @@ class TestAnalyzer:
         )
         
         if verbose:
-            print(f"\n✅ Analysis complete:")
+            safe_print(f"\n[OK] Analysis complete:")
             print(f"   Tests: {analysis.total_tests}")
             print(f"   Files: {analysis.total_files}")
             print(f"   Redundancies: {len(redundancies)}")
@@ -278,7 +279,7 @@ class TestAnalyzer:
             return analysis
             
         except Exception as e:
-            print(f"⚠️  Error parsing {file_path}: {e}")
+            safe_print(f"[WARN] Error parsing {file_path}: {e}")
             return TestFileAnalysis(
                 file_path=file_path,
                 test_count=0,
@@ -639,7 +640,7 @@ class TestAnalyzer:
             output_path.parent.mkdir(parents=True, exist_ok=True)
             with open(output_path, 'w', encoding='utf-8') as f:
                 f.write(report)
-            print(f"📄 Report written to: {output_path}")
+            safe_print(f"[FILE] Report written to: {output_path}")
         
         return report
     
@@ -674,7 +675,7 @@ class TestAnalyzer:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2)
-        print(f"💾 JSON export written to: {output_path}")
+        safe_print(f"[SAVE] JSON export written to: {output_path}")
 
 
 def main():

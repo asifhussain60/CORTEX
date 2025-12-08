@@ -15,6 +15,7 @@ import tempfile
 import shutil
 from pathlib import Path
 from datetime import datetime
+from src.utils.safe_print import safe_print
 
 
 def test_cortex_cli_tracks_conversations():
@@ -45,7 +46,7 @@ def test_cortex_cli_tracks_conversations():
         script_path = project_root / "scripts" / "cortex_cli.py"
         
         if not script_path.exists():
-            print(f"❌ FAILED: cortex_cli.py not found: {script_path}")
+            safe_print(f"[FAIL] FAILED: cortex_cli.py not found: {script_path}")
             return False
         
         # Test message
@@ -68,20 +69,20 @@ def test_cortex_cli_tracks_conversations():
         print(f"   Return code: {result.returncode}")
         
         if result.returncode != 0:
-            print(f"❌ FAILED: CLI exited with error")
+            safe_print(f"[FAIL] FAILED: CLI exited with error")
             print(f"   STDOUT: {result.stdout}")
             print(f"   STDERR: {result.stderr}")
             return False
         
-        print(f"✅ CLI executed successfully")
+        safe_print(f"[OK] CLI executed successfully")
         
         # Verify database was created
         db_path = temp_brain / "tier1" / "conversations.db"
         if not db_path.exists():
-            print(f"❌ FAILED: Database not created: {db_path}")
+            safe_print(f"[FAIL] FAILED: Database not created: {db_path}")
             return False
         
-        print(f"✅ Database created: {db_path}")
+        safe_print(f"[OK] Database created: {db_path}")
         
         # Verify conversation was logged
         conn = sqlite3.connect(db_path)
@@ -90,20 +91,20 @@ def test_cortex_cli_tracks_conversations():
         # Check conversations
         cursor.execute("SELECT COUNT(*) FROM conversations")
         conv_count = cursor.fetchone()[0]
-        print(f"✅ Conversations logged: {conv_count}")
+        safe_print(f"[OK] Conversations logged: {conv_count}")
         
         if conv_count == 0:
-            print(f"❌ FAILED: No conversations in database")
+            safe_print(f"[FAIL] FAILED: No conversations in database")
             conn.close()
             return False
         
         # Check messages
         cursor.execute("SELECT COUNT(*) FROM messages WHERE content LIKE ?", (f"%{test_message}%",))
         msg_count = cursor.fetchone()[0]
-        print(f"✅ Messages logged: {msg_count}")
+        safe_print(f"[OK] Messages logged: {msg_count}")
         
         if msg_count == 0:
-            print(f"❌ FAILED: Test message not found in database")
+            safe_print(f"[FAIL] FAILED: Test message not found in database")
             conn.close()
             return False
         
@@ -126,7 +127,7 @@ def test_cortex_cli_tracks_conversations():
         conn.close()
         
         print(f"\n{'='*60}")
-        print(f"✅ ALL TESTS PASSED")
+        safe_print(f"[OK] ALL TESTS PASSED")
         print(f"{'='*60}")
         print(f"\n✅ Rule #24 Validated: Conversation tracking is operational")
         
@@ -148,7 +149,7 @@ def test_validation_command():
     script_path = project_root / "scripts" / "cortex_cli.py"
     
     if not script_path.exists():
-        print(f"❌ SKIP: cortex_cli.py not found")
+        safe_print(f"[FAIL] SKIP: cortex_cli.py not found")
         return True  # Skip, not a failure
     
     # Run validation
@@ -167,7 +168,7 @@ def test_validation_command():
     
     # Validation may pass or fail depending on whether real database has messages
     # Just verify command runs without crashing
-    print(f"✅ Validation command executed")
+    safe_print(f"[OK] Validation command executed")
     
     return True
 
@@ -182,10 +183,10 @@ def test_powershell_capture_script():
     script_path = project_root / "scripts" / "cortex-capture.ps1"
     
     if not script_path.exists():
-        print(f"❌ FAILED: cortex-capture.ps1 not found: {script_path}")
+        safe_print(f"[FAIL] FAILED: cortex-capture.ps1 not found: {script_path}")
         return False
     
-    print(f"✅ Script exists: {script_path}")
+    safe_print(f"[OK] Script exists: {script_path}")
     
     # Read and verify key functions exist
     content = script_path.read_text(encoding='utf-8')
@@ -198,16 +199,16 @@ def test_powershell_capture_script():
     
     for func in required_functions:
         if func in content:
-            print(f"✅ Function found: {func}")
+            safe_print(f"[OK] Function found: {func}")
         else:
-            print(f"❌ FAILED: Missing function: {func}")
+            safe_print(f"[FAIL] FAILED: Missing function: {func}")
             return False
     
     # Verify it accepts required parameters
     if '-Message' in content and '-Intent' in content and '-Validate' in content:
-        print(f"✅ Required parameters defined")
+        safe_print(f"[OK] Required parameters defined")
     else:
-        print(f"❌ FAILED: Missing required parameters")
+        safe_print(f"[FAIL] FAILED: Missing required parameters")
         return False
     
     print(f"\n✅ PowerShell script structure validated")
@@ -254,10 +255,10 @@ def main():
     
     print("\n" + "="*70)
     if all_passed:
-        print("✅ ALL TESTS PASSED - Rule #24 Validated")
+        safe_print("[OK] ALL TESTS PASSED - Rule #24 Validated")
         print("   Conversation tracking is operational")
     else:
-        print("❌ SOME TESTS FAILED - Rule #24 Violation")
+        safe_print("[FAIL] SOME TESTS FAILED - Rule #24 Violation")
         print("   Conversation tracking is NOT working correctly")
     print("="*70)
     
@@ -266,3 +267,4 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+

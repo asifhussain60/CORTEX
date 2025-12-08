@@ -79,9 +79,8 @@ class HealthCheckOperation(BaseOperationModule):
             OperationResult with validation status
         """
         try:
-            from src.config import Config
-            config = Config()
-            brain_path = Path(config.get_brain_path())
+            from src.config import config
+            brain_path = Path(config.brain_path)
             
             if not brain_path.exists():
                 return OperationResult(
@@ -170,9 +169,8 @@ class HealthCheckOperation(BaseOperationModule):
     def _check_brain_health(self) -> Dict[str, Any]:
         """Check brain tier health."""
         try:
-            from src.config import Config
-            config = Config()
-            brain_path = Path(config.get_brain_path())
+            from src.config import config
+            brain_path = Path(config.brain_path)
             
             return {
                 "tier1_db": self._check_db_file(brain_path / "tier1" / "working_memory.db"),
@@ -187,9 +185,8 @@ class HealthCheckOperation(BaseOperationModule):
     def _check_database_health(self) -> Dict[str, Any]:
         """Check database performance metrics."""
         try:
-            from src.config import Config
-            config = Config()
-            brain_path = Path(config.get_brain_path())
+            from src.config import config
+            brain_path = Path(config.brain_path)
             
             metrics = {}
             for tier, db_name in [
@@ -217,9 +214,8 @@ class HealthCheckOperation(BaseOperationModule):
     def _get_system_metrics(self) -> Dict[str, Any]:
         """Get system-level metrics."""
         try:
-            from src.config import Config
-            config = Config()
-            brain_path = Path(config.get_brain_path())
+            from src.config import config
+            brain_path = Path(config.brain_path)
             
             return {
                 "brain_size_mb": self._get_directory_size(brain_path),
