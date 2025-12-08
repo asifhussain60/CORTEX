@@ -730,6 +730,7 @@ class PlanningOrchestrator:
             logger.error(error_msg)
             return (False, error_msg)
     
+    @with_progress(operation_name="Incremental Plan Generation", threshold_seconds=3.0)
     def generate_incremental_plan(
         self,
         feature_requirements: str,
@@ -792,6 +793,9 @@ class PlanningOrchestrator:
             
             skeleton, token_count = self.incremental_generator.generate_skeleton(requirements_dict)
             
+            # Progress: Skeleton complete (1 of 5 steps)
+            yield_progress(1, 5, "Skeleton generated (200 tokens)")
+            
             # Checkpoint 1: Skeleton approval
             skeleton_preview = self.incremental_generator._serialize_skeleton(skeleton)
             skeleton_approved = self._handle_checkpoint(
@@ -823,6 +827,9 @@ class PlanningOrchestrator:
             ]
             self._append_phase_to_plan(output_path, "Phase 1: Foundation", phase_1_data)
             logger.info("✅ Phase 1 written to file")
+            
+            # Progress: Phase 1 complete (2 of 5 steps)
+            yield_progress(2, 5, "Phase 1: Foundation complete (Requirements, Dependencies, Architecture)")
             
             # Checkpoint 2: Phase 1 approval
             phase_1_approved = self._handle_phase_checkpoint(
@@ -871,6 +878,9 @@ class PlanningOrchestrator:
             self._append_phase_to_plan(output_path, "Phase 2: Development", phase_2_data)
             logger.info("✅ Phase 2 written to file")
             
+            # Progress: Phase 2 complete (3 of 5 steps)
+            yield_progress(3, 5, "Phase 2: Development complete (Implementation, Tests, Integration)")
+            
             # Checkpoint 3: Phase 2 approval
             phase_2_approved = self._handle_phase_checkpoint(
                 checkpoint_callback,
@@ -918,6 +928,9 @@ class PlanningOrchestrator:
             ]
             self._append_phase_to_plan(output_path, "Phase 3: Validation & Deployment", phase_3_data)
             logger.info("✅ Phase 3 written to file")
+            
+            # Progress: Phase 3 complete (4 of 5 steps)
+            yield_progress(4, 5, "Phase 3: Validation & Deployment complete (Acceptance, Security, Deployment)")
             
             # Checkpoint 4: Phase 3 approval
             phase_3_approved = self._handle_phase_checkpoint(
@@ -993,6 +1006,9 @@ class PlanningOrchestrator:
             # Step 6: Mark plan as complete (file already written incrementally)
             logger.info("💾 All phases written incrementally to disk")
             
+            # Progress: Finalization complete (5 of 5 steps)
+            yield_progress(5, 5, "Plan finalized with TDD requirements and Integration phase")
+            
             # Auto-organize using DocumentOrganizer
             try:
                 organized_path, organize_message = self.document_organizer.organize_document(output_path)
@@ -1009,6 +1025,79 @@ class PlanningOrchestrator:
             error_msg = f"Failed to generate incremental plan: {e}"
             logger.error(error_msg)
             return (False, None, error_msg)
+    
+    def _create_empty_plan_file(self, feature_name: str, output_filename: Optional[str] = None) -> Path:
+        """
+        Create empty plan file with minimal metadata.
+        
+        Args:
+            feature_name: Feature name for the plan
+            output_filename: Optional custom filename
+            
+        Returns:
+            Path to created plan file
+        """
+        # Generate filename
+        if output_filename:
+            filename = output_filename
+        else:
+            safe_name = re.sub(r'[^a-z0-9-]', '-', feature_name.lower())
+            safe_name = re.sub(r'-+', '-', safe_name).strip('-')
+            timestamp = datetime.now().strftime("%Y%m%d")
+            filename = f"{safe_name[:30]}-{timestamp}.yaml"
+        
+        # Create path in active plans directory
+        plans_dir = self.plans_base_dir / "features" / "active"
+        plans_dir.mkdir(parents=True, exist_ok=True)
+        output_path = plans_dir / filename
+        
+        # Create minimal plan structure
+        plan_data = {
+            "metadata": {
+                "feature_name": feature_name,
+                "created_at": datetime.now().isoformat(),
+                "status": "draft",
+                "version": "1.0.0"
+            },
+            "definition_of_ready": {},
+            "phases": [],
+            "definition_of_done": {}
+        }
+        
+        # Write empty plan
+        with open(output_path, 'w', encoding='utf-8') as f:
+            yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False)
+        
+        return output_path
+    
+    def _append_phase_to_plan(self, plan_path: Path, phase_name: str, sections: List[Dict[str, str]]):
+        """
+        Append a phase to an existing plan file.
+        
+        Args:
+            plan_path: Path to plan file
+            phase_name: Name of phase to append
+            sections: List of section dicts with 'name' and 'content' keys
+        """
+        # Load existing plan
+        with open(plan_path, 'r', encoding='utf-8') as f:
+            plan_data = yaml.safe_load(f)
+        
+        # Create phase structure
+        phase = {
+            "name": phase_name,
+            "sections": sections,
+            "status": "pending"
+        }
+        
+        # Append phase
+        if "phases" not in plan_data:
+            plan_data["phases"] = []
+        plan_data["phases"].append(phase)
+        
+        # Write updated plan
+        with open(plan_path, 'w', encoding='utf-8') as f:
+            yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False)
     
     def _handle_checkpoint(
         self,

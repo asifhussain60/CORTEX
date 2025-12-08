@@ -85,10 +85,13 @@ ALL responses MUST use this 5-part structure:
 
 **Planning System 2.0**
 - Commands: `plan [feature]`, `plan ado`, `approve plan`, `execute all phases autonomously`
+- **AUTO-COMPLEXITY DETECTION:** HIGH (security/auth/migrations) → incremental, MEDIUM (refactor/APIs) → conditional, LOW → skeleton
+- **Incremental Generation:** Prevents response length failures via phase-by-phase generation (skeleton→P1→P2→P3)
 - Vision API (screenshot extraction), DoR/DoD validation, file-based persistence
 - **TDD Auto-Inclusion:** All plans automatically include TDD Mastery requirements in DoR/DoD
 - **Autonomous Execution:** Supports "execute all phases autonomously", "auto chained", "without user intervention"
 - Guide: `.github/prompts/modules/planning-orchestrator-guide.md`
+- Integration: `cortex-brain/documents/implementation-guides/incremental-planning-integration.md`
 
 **TDD Mastery**
 - Commands: `start tdd`, `run tests`, `suggest refactorings`

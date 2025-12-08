@@ -87,7 +87,11 @@ ALL responses MUST use this 5-part structure:
 
 ### Planning System 2.0
 - **Commands:** `plan [feature]`, `plan ado`, `approve plan`, `execute all phases autonomously`
+- **AUTO-DETECTION:** Complexity-based routing (HIGH→incremental, MEDIUM→conditional, LOW→skeleton)
+- **Incremental Generation:** Phase-by-phase (skeleton→Phase 1→Phase 2→Phase 3) prevents response length failures
+- **Triggers:** Security, auth, migrations, APIs, multi-phase, detailed descriptions auto-route to incremental
 - **Guide:** #file:modules/planning-orchestrator-guide.md
+- **Integration:** #file:../../cortex-brain/documents/implementation-guides/incremental-planning-integration.md
 
 ### TDD Mastery
 - **Commands:** `start tdd`, `run tests`
