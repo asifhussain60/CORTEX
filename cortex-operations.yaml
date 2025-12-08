@@ -381,11 +381,11 @@ operations:
     description: ADO CLI - Azure DevOps Work Item Management
     deployment_tier: dual_context
     natural_language:
-    - create
+    - create ado work item
     - create new work item
-    - update
+    - update ado work item
     - update work item
-    - generate completion summary
+    - generate ado completion summary
     category: general
   align:
     name: Align
@@ -576,8 +576,8 @@ operations:
     description: Planning CLI Wrapper
     deployment_tier: user_facing
     natural_language:
-    - create
-    - validate
+    - create plan
+    - validate plan
     - markdown generated
     - plan loaded
     - create new plan

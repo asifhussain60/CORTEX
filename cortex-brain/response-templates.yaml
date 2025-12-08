@@ -20,8 +20,8 @@ operation_aliases:
   review: code-review
   rollback: rollback-recovery
   tdd: tdd-mastery
-  planning: planning-workflow
-  ado: ado-work-items
+  planning: planning
+  ado: ado_agent
   cleanup: cleanup-operation
   git_checkpoint: git-checkpoint
 shared:
