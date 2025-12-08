@@ -1,5 +1,18 @@
 # GitHub Copilot Instructions for CORTEX
 
+<!--
+⚠️  PROTECTED FILE - Contains manual enhancements
+    This file has been manually enhanced with orchestrator documentation.
+    DO NOT regenerate with scripts/regenerate_cortex_prompts.py unless using --force.
+    Protected by: .github/.prompt-preserve marker file
+    
+    Manual enhancements:
+    - ADO Operations orchestrator-level integration
+    - Planning System 2.0 manifest references
+    - DoR/DoD compliance requirements
+    - Manifest inheritance structure
+-->
+
 **Purpose:** AI Assistant enhancement with long-term memory, context awareness, and strategic planning
 
 **Version:** 3.8.1 | **Updated:** December 08, 2025

@@ -2,14 +2,28 @@
 """
 CORTEX Prompt Regeneration Script
 
+⚠️  WARNING: MANUAL ENHANCEMENTS PRESENT
+    copilot-instructions.md and CORTEX.prompt.md now contain manually crafted
+    orchestrator documentation (Planning System 2.0, ADO Operations) with
+    manifest references and compliance requirements.
+    
+    DO NOT regenerate these files unless you want to lose:
+    - ADO orchestrator-level integration
+    - Manifest reference documentation
+    - DoR/DoD compliance instructions
+    - Planning System 2.0 enhancements
+    
+    Regeneration is only needed for version updates or architecture changes.
+
 Deletes existing Copilot instructions and regenerates them from current codebase state.
 
 Usage:
     python scripts/regenerate_cortex_prompts.py
     python scripts/regenerate_cortex_prompts.py --dry-run
+    python scripts/regenerate_cortex_prompts.py --force  (override preservation)
 
 Author: Asif Hussain
-Version: 1.0
+Version: 1.1
 Date: December 8, 2025
 """
 
@@ -29,19 +43,35 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 class PromptRegenerator:
     """Regenerates Copilot prompt files from current CORTEX state."""
     
-    def __init__(self, cortex_root: Path, dry_run: bool = False):
+    def __init__(self, cortex_root: Path, dry_run: bool = False, force: bool = False):
         self.cortex_root = cortex_root
         self.dry_run = dry_run
+        self.force = force
         self.github_dir = cortex_root / ".github"
         self.prompts_dir = self.github_dir / "prompts"
         self.copilot_instructions = self.github_dir / "copilot-instructions.md"
         self.cortex_prompt = self.prompts_dir / "CORTEX.prompt.md"
         self.brain_dir = cortex_root / "cortex-brain"
+        self.preserve_marker = self.github_dir / ".prompt-preserve"
         
     def execute(self) -> Dict[str, any]:
         """Execute full regeneration workflow."""
         print("🔄 CORTEX Prompt Regeneration")
         print("=" * 60)
+        
+        # Check for preservation marker
+        if self.preserve_marker.exists() and not self.force:
+            print("\n⚠️  PRESERVATION MODE ACTIVE")
+            print("   Prompt files contain manual enhancements and are protected.")
+            print("   Use --force to override and regenerate anyway.")
+            print("\n   Protected files:")
+            print("   - .github/copilot-instructions.md (ADO orchestrator integration)")
+            print("   - .github/prompts/CORTEX.prompt.md (manifest references)")
+            return {
+                'success': True,
+                'preserved': True,
+                'message': 'Files preserved - manual enhancements protected'
+            }
         
         results = {
             'success': True,
@@ -720,10 +750,11 @@ def main():
     
     parser = argparse.ArgumentParser(description="Regenerate CORTEX Copilot prompt files")
     parser.add_argument('--dry-run', action='store_true', help="Preview changes without executing")
+    parser.add_argument('--force', action='store_true', help="Override preservation and regenerate anyway")
     args = parser.parse_args()
     
     cortex_root = Path(__file__).parent.parent
-    regenerator = PromptRegenerator(cortex_root, dry_run=args.dry_run)
+    regenerator = PromptRegenerator(cortex_root, dry_run=args.dry_run, force=args.force)
     
     try:
         results = regenerator.execute()

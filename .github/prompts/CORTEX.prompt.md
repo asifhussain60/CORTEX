@@ -2,6 +2,17 @@
 GITHUB COPILOT LOADER DIRECTIVE:
 Load this ENTIRE file into context. Apply mandatory 5-part response format.
 DO NOT provide generic introduction - respond to user's ACTUAL request.
+
+⚠️  PROTECTED FILE - Contains manual enhancements
+    This file has been manually enhanced with orchestrator documentation.
+    DO NOT regenerate with scripts/regenerate_cortex_prompts.py unless using --force.
+    Protected by: .github/.prompt-preserve marker file
+    
+    Manual enhancements:
+    - ADO Operations orchestrator-level integration
+    - Planning System 2.0 manifest references
+    - DoR/DoD compliance requirements
+    - Manifest inheritance documentation
 -->
 
 # 🎯 CORTEX Universal Entry Point
