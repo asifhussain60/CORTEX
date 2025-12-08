@@ -253,6 +253,98 @@ class PlanningSession(BaseSession):
         
         self.approved = True
         self.metadata["approved_at"] = datetime.now().isoformat()
+    
+    def get_phase_progress(self) -> Dict[str, Any]:
+        """
+        Get phase completion progress for visual rendering (REQ-005).
+        
+        Returns:
+            Dictionary with phase progress details for rendering
+        """
+        if not self.phases:
+            return {
+                'total_phases': 0,
+                'completed_phases': 0,
+                'in_progress_phase': None,
+                'progress_percentage': 0.0,
+                'phases_summary': []
+            }
+        
+        completed = 0
+        in_progress = None
+        phases_summary = []
+        
+        for idx, phase in enumerate(self.phases, 1):
+            phase_status = phase.get('status', 'pending')
+            phase_progress = phase.get('progress', 0)
+            
+            summary = {
+                'phase_number': idx,
+                'name': phase['name'],
+                'status': phase_status,
+                'progress': phase_progress,
+                'tasks_total': len(phase.get('tasks', [])),
+                'tasks_completed': len([t for t in phase.get('tasks', []) if t.get('completed', False)])
+            }
+            
+            if phase_status == 'completed':
+                completed += 1
+                summary['icon'] = '✅'
+            elif phase_status == 'in_progress':
+                in_progress = phase['name']
+                summary['icon'] = '🔄'
+            else:
+                summary['icon'] = '⏳'
+            
+            phases_summary.append(summary)
+        
+        progress_pct = (completed / len(self.phases)) * 100 if self.phases else 0
+        
+        return {
+            'total_phases': len(self.phases),
+            'completed_phases': completed,
+            'in_progress_phase': in_progress,
+            'progress_percentage': round(progress_pct, 1),
+            'phases_summary': phases_summary
+        }
+    
+    def render_progress_table(self) -> str:
+        """
+        Render visual progress table in Markdown (REQ-005).
+        
+        Returns:
+            Markdown table with phase progress
+        """
+        progress = self.get_phase_progress()
+        
+        if progress['total_phases'] == 0:
+            return "_No phases defined yet_"
+        
+        lines = [
+            "### 📊 Phase Progress",
+            "",
+            f"**Overall:** {progress['progress_percentage']:.1f}% complete ({progress['completed_phases']}/{progress['total_phases']} phases)",
+            "",
+            "| Phase | Name | Status | Progress | Tasks |",
+            "|-------|------|--------|----------|-------|"
+        ]
+        
+        for phase in progress['phases_summary']:
+            task_ratio = f"{phase['tasks_completed']}/{phase['tasks_total']}"
+            progress_bar = self._render_mini_progress_bar(phase['progress'])
+            
+            lines.append(
+                f"| {phase['icon']} Phase {phase['phase_number']} | {phase['name']} | "
+                f"{phase['status'].title()} | {progress_bar} {phase['progress']}% | {task_ratio} |"
+            )
+        
+        return "\n".join(lines)
+    
+    def _render_mini_progress_bar(self, percentage: float, width: int = 10) -> str:
+        """Render a mini progress bar for tables."""
+        filled = int((percentage / 100) * width)
+        empty = width - filled
+        return f"[{'█' * filled}{'░' * empty}]"
 
 
 # ============================================================================

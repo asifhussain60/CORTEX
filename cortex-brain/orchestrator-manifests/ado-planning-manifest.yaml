@@ -1,0 +1,485 @@
+# ADO Planning Orchestrator Manifest
+# Ensures parity with Planning System 2.0 for ADO work item generation
+#
+# Version: 2.0.0
+# Author: CORTEX Development Team
+# Updated: 2025-12-08
+# Status: ACTIVE - Must maintain parity with planning-system-2.0-manifest.yaml
+
+schema_version: "1.0"
+inherits_from: "planning-system-2.0-manifest.yaml"
+
+# ========================================
+# Metadata
+# ========================================
+
+metadata:
+  orchestrator_name: "ado_planning_orchestrator"
+  version: "2.0.0"
+  description: "ADO work item generation with same quality standards as Planning System 2.0"
+  category: "planning"
+  deployment_tier: "user"
+  status: "active"
+  last_updated: "2025-12-08"
+  maintainer: "CORTEX Planning Team"
+  related_orchestrators:
+    - "planning_system_2.0"
+    - "ado_agent"
+  documentation_path: ".github/prompts/modules/ado-planning-guide.md"
+  parity_requirement: |
+    This orchestrator MUST maintain feature parity with planning-system-2.0.
+    Any requirement added to Planning System 2.0 must be mirrored here.
+
+# ========================================
+# Requirements (Inherited + ADO-Specific)
+# ========================================
+
+requirements:
+  # ===== Inherited from Planning System 2.0 =====
+  
+  - requirement_id: "REQ-001"
+    name: "Acceptance Criteria Approval Gate"
+    inherited_from: "planning-system-2.0"
+    priority: "critical"
+    status: "missing"
+    validation_method: "method_exists"
+    validation_criteria: "ADOPlanningOrchestrator.approve_acceptance_criteria()"
+    ado_specific_note: "Must work with ADO work item format"
+    
+  - requirement_id: "REQ-002"
+    name: "Interactive DoR Workflow"
+    inherited_from: "planning-system-2.0"
+    priority: "critical"
+    status: "missing"
+    validation_method: "method_exists"
+    validation_criteria: "ADOPlanningOrchestrator.refine_dor_interactive()"
+    
+  - requirement_id: "REQ-003"
+    name: "Review Orchestrator Integration"
+    inherited_from: "planning-system-2.0"
+    priority: "critical"
+    status: "missing"
+    validation_method: "integration_test"
+    validation_criteria: "Review orchestrator called before ADO item creation"
+    
+  - requirement_id: "REQ-004"
+    name: "SWAG Estimation via Swagger"
+    inherited_from: "planning-system-2.0"
+    priority: "high"
+    status: "missing"
+    validation_method: "method_exists"
+    validation_criteria: "ADOPlanningOrchestrator.estimate_from_swagger()"
+    ado_specific_note: "Estimation values mapped to ADO story points"
+    
+  - requirement_id: "REQ-005"
+    name: "Visual Progress Rendering"
+    inherited_from: "planning-system-2.0"
+    priority: "high"
+    status: "missing"
+    ado_specific_note: "Show ADO work item creation progress"
+    
+  - requirement_id: "REQ-006"
+    name: "Learning Library Auto-Documentation"
+    inherited_from: "planning-system-2.0"
+    priority: "high"
+    status: "missing"
+    ado_specific_note: "Document ADO planning strategies"
+    
+  - requirement_id: "REQ-007"
+    name: "Interactive Threat Modeling"
+    inherited_from: "planning-system-2.0"
+    priority: "medium"
+    status: "missing"
+    ado_specific_note: "Threats added as ADO work items (type: Risk)"
+    
+  - requirement_id: "REQ-008"
+    name: "TDD Reminders Visibility"
+    inherited_from: "planning-system-2.0"
+    priority: "medium"
+    status: "missing"
+    ado_specific_note: "TDD requirements in ADO acceptance criteria"
+    
+  # ===== ADO-Specific Requirements =====
+  
+  - requirement_id: "REQ-ADO-001"
+    name: "ADO API Authentication"
+    description: "Secure authentication with Azure DevOps API using PAT"
+    priority: "critical"
+    status: "implemented"
+    validation_method: "integration_test"
+    validation_criteria: "ADO API calls succeed with valid PAT"
+    
+  - requirement_id: "REQ-ADO-002"
+    name: "Work Item Type Mapping"
+    description: |
+      Map plan sections to ADO work item types:
+      - Feature → Epic
+      - Phase → Feature
+      - Task → Task/User Story
+      - Threat → Risk
+    priority: "critical"
+    status: "partial"
+    validation_method: "method_exists"
+    validation_criteria: "ADOPlanningOrchestrator.map_to_ado_types()"
+    
+  - requirement_id: "REQ-ADO-003"
+    name: "Parent-Child Relationship Management"
+    description: "Maintain hierarchical relationships in ADO (Epic > Feature > Task)"
+    priority: "high"
+    status: "implemented"
+    validation_method: "integration_test"
+    validation_criteria: "ADO work items linked correctly"
+    
+  - requirement_id: "REQ-ADO-004"
+    name: "Story Point Estimation"
+    description: "Convert effort hours to story points using Fibonacci scale"
+    priority: "high"
+    status: "partial"
+    validation_method: "method_exists"
+    validation_criteria: "ADOPlanningOrchestrator.convert_to_story_points()"
+    
+  - requirement_id: "REQ-ADO-005"
+    name: "Area Path and Iteration Assignment"
+    description: "Assign work items to correct area path and iteration"
+    priority: "medium"
+    status: "missing"
+    validation_method: "method_exists"
+    validation_criteria: "ADOPlanningOrchestrator.assign_area_and_iteration()"
+    
+  - requirement_id: "REQ-ADO-006"
+    name: "Bulk Work Item Creation"
+    description: "Create multiple ADO work items in batch for performance"
+    priority: "high"
+    status: "missing"
+    validation_method: "method_exists"
+    validation_criteria: "ADOPlanningOrchestrator.create_items_batch()"
+    
+  - requirement_id: "REQ-ADO-007"
+    name: "Work Item Link Generation"
+    description: "Generate clickable ADO work item links in response"
+    priority: "medium"
+    status: "partial"
+    validation_method: "template_validation"
+    validation_criteria: "ADO links rendered in response template"
+
+# ========================================
+# Integrations
+# ========================================
+
+integrations:
+  # Inherited integrations with ADO-specific notes
+  
+  - integration_id: "INT-001"
+    target_component: "review_orchestrator"
+    inherited_from: "planning-system-2.0"
+    integration_type: "required"
+    trigger_condition: "before_ado_planning_starts"
+    ado_specific: "Review score added to Epic description"
+    status: "missing"
+    
+  - integration_id: "INT-002"
+    target_component: "threat_modeler_agent"
+    inherited_from: "planning-system-2.0"
+    integration_type: "conditional"
+    trigger_condition: "feature_matches_security_keywords"
+    ado_specific: "Each threat becomes ADO work item (type: Risk)"
+    status: "missing"
+    
+  - integration_id: "INT-003"
+    target_component: "git_checkpoint_orchestrator"
+    inherited_from: "planning-system-2.0"
+    integration_type: "required"
+    trigger_condition: "after_ado_items_created"
+    ado_specific: "Checkpoint after successful ADO API calls"
+    status: "missing"
+    
+  # ADO-specific integrations
+  
+  - integration_id: "INT-ADO-001"
+    target_component: "azure_devops_api"
+    integration_type: "required"
+    trigger_condition: "always"
+    expected_behavior: "Create, update, link ADO work items via REST API"
+    validation_method: "integration_test"
+    status: "implemented"
+    
+  - integration_id: "INT-ADO-002"
+    target_component: "ado_agent"
+    integration_type: "required"
+    trigger_condition: "always"
+    expected_behavior: "Use ADO agent for API interactions and validation"
+    validation_method: "method_exists"
+    status: "partial"
+    
+  - integration_id: "INT-ADO-003"
+    target_component: "planning_system_2.0"
+    integration_type: "required"
+    trigger_condition: "always"
+    expected_behavior: "Share DoR/DoD, phases, TDD requirements with Planning System 2.0"
+    validation_method: "integration_test"
+    status: "partial"
+    notes: "Parity requirement - must use same planning logic"
+
+# ========================================
+# Quality Gates
+# ========================================
+
+quality_gates:
+  # Inherited gates
+  
+  - gate_id: "GATE-001"
+    name: "Skeleton Approval"
+    inherited_from: "planning-system-2.0"
+    gate_type: "approval"
+    blocking: true
+    status: "missing"
+    
+  - gate_id: "GATE-005"
+    name: "Acceptance Criteria Approval"
+    inherited_from: "planning-system-2.0"
+    gate_type: "approval"
+    trigger_point: "before_ado_item_creation"
+    blocking: true
+    status: "missing"
+    priority: "critical"
+    
+  - gate_id: "GATE-006"
+    name: "DoR Completeness Validation"
+    inherited_from: "planning-system-2.0"
+    gate_type: "validation"
+    blocking: true
+    status: "missing"
+    priority: "critical"
+    
+  # ADO-specific gates
+  
+  - gate_id: "GATE-ADO-001"
+    name: "ADO Authentication Validation"
+    gate_type: "validation"
+    trigger_point: "before_api_calls"
+    blocking: true
+    validation_criteria: "PAT token valid, project accessible"
+    status: "implemented"
+    
+  - gate_id: "GATE-ADO-002"
+    name: "Work Item Hierarchy Validation"
+    gate_type: "validation"
+    trigger_point: "after_item_creation"
+    blocking: false
+    validation_criteria: "All parent-child links established correctly"
+    status: "partial"
+    
+  - gate_id: "GATE-ADO-003"
+    name: "Story Point Validation"
+    gate_type: "validation"
+    trigger_point: "before_item_creation"
+    blocking: false
+    validation_criteria: "All work items have valid story points (Fibonacci)"
+    status: "missing"
+
+# ========================================
+# Workflows
+# ========================================
+
+workflows:
+  - workflow_id: "WF-ADO-001"
+    name: "ADO Planning Workflow"
+    description: "Complete ADO work item generation workflow"
+    phases:
+      - phase_id: "PHASE-ADO-0"
+        name: "Pre-ADO Planning"
+        sequence: 0
+        required: true
+        steps:
+          - step_id: "STEP-ADO-0.1"
+            name: "Run Architectural Review"
+            required: true
+            validation: "review_orchestrator.execute() called"
+            status: "missing"
+          - step_id: "STEP-ADO-0.2"
+            name: "Interactive DoR Refinement"
+            required: true
+            validation: "refine_dor_interactive() completes"
+            status: "missing"
+          - step_id: "STEP-ADO-0.3"
+            name: "Authenticate with ADO"
+            required: true
+            validation: "ADO API authentication succeeds"
+            status: "implemented"
+            
+      - phase_id: "PHASE-ADO-1"
+        name: "Work Item Planning"
+        sequence: 1
+        required: true
+        steps:
+          - step_id: "STEP-ADO-1.1"
+            name: "Generate Work Item Structure"
+            required: true
+            validation: "Epic/Feature/Task hierarchy generated"
+            status: "implemented"
+          - step_id: "STEP-ADO-1.2"
+            name: "Map Effort to Story Points"
+            required: true
+            validation: "Hours converted to Fibonacci story points"
+            status: "partial"
+          - step_id: "STEP-ADO-1.3"
+            name: "Inject TDD Requirements"
+            required: true
+            validation: "TDD acceptance criteria added to work items"
+            status: "missing"
+          - step_id: "STEP-ADO-1.4"
+            name: "Run Threat Modeling"
+            required: false
+            validation: "Threats converted to Risk work items"
+            status: "missing"
+            
+      - phase_id: "PHASE-ADO-2"
+        name: "Work Item Creation"
+        sequence: 2
+        required: true
+        steps:
+          - step_id: "STEP-ADO-2.1"
+            name: "Acceptance Criteria Approval Gate"
+            required: true
+            validation: "User approves before ADO API calls"
+            status: "missing"
+          - step_id: "STEP-ADO-2.2"
+            name: "Create ADO Work Items (Batch)"
+            required: true
+            validation: "All work items created via API"
+            status: "partial"
+          - step_id: "STEP-ADO-2.3"
+            name: "Establish Parent-Child Links"
+            required: true
+            validation: "Hierarchy links established"
+            status: "implemented"
+          - step_id: "STEP-ADO-2.4"
+            name: "Git Checkpoint After Creation"
+            required: true
+            validation: "git_checkpoint.create_auto_checkpoint() called"
+            status: "missing"
+            
+      - phase_id: "PHASE-ADO-3"
+        name: "Documentation & Finalization"
+        sequence: 3
+        required: true
+        steps:
+          - step_id: "STEP-ADO-3.1"
+            name: "Generate ADO Work Item Links"
+            required: true
+            validation: "Clickable links in response"
+            status: "partial"
+          - step_id: "STEP-ADO-3.2"
+            name: "Document to Learning Library"
+            required: false
+            validation: "ADO planning strategy documented"
+            status: "missing"
+          - step_id: "STEP-ADO-3.3"
+            name: "Show Visual Progress Summary"
+            required: false
+            validation: "Progress table in response"
+            status: "missing"
+
+# ========================================
+# Response Templates
+# ========================================
+
+response_templates:
+  - template_id: "TPL-ADO-001"
+    template_name: "ado_agent"
+    required_sections:
+      - "understanding_content"
+      - "ado_items_created"
+      - "work_item_links"
+      - "progress_visualization"
+      - "tdd_requirements_section"
+    progress_visualization: true
+    status: "partial"
+    missing_elements:
+      - "progress_visualization"
+      - "tdd_requirements_section"
+
+# ========================================
+# Compliance Rules
+# ========================================
+
+compliance_rules:
+  - rule_id: "PARITY_WITH_PLANNING_2.0"
+    source: "planning-system-2.0-manifest.yaml"
+    enforcement_level: "mandatory"
+    validation_method: "feature_comparison"
+    description: "Must implement all Planning System 2.0 features for ADO context"
+    
+  - rule_id: "TDD_ENFORCEMENT"
+    inherited_from: "planning-system-2.0"
+    enforcement_level: "mandatory"
+    validation_method: "TDD requirements in ADO acceptance criteria"
+    
+  - rule_id: "DOCUMENT_ORGANIZATION"
+    inherited_from: "planning-system-2.0"
+    enforcement_level: "mandatory"
+    validation_method: "ADO planning docs organized correctly"
+
+# ========================================
+# Parity Checklist
+# ========================================
+
+parity_checklist:
+  description: "Features that MUST match Planning System 2.0"
+  items:
+    - feature: "Interactive DoR Workflow"
+      planning_status: "missing"
+      ado_status: "missing"
+      parity: true
+    - feature: "Review Orchestrator Integration"
+      planning_status: "missing"
+      ado_status: "missing"
+      parity: true
+    - feature: "Threat Modeling"
+      planning_status: "implemented"
+      ado_status: "missing"
+      parity: false
+    - feature: "TDD Requirements Injection"
+      planning_status: "implemented"
+      ado_status: "missing"
+      parity: false
+    - feature: "Learning Library Documentation"
+      planning_status: "partial"
+      ado_status: "missing"
+      parity: false
+    - feature: "Visual Progress Rendering"
+      planning_status: "partial"
+      ado_status: "missing"
+      parity: false
+    - feature: "Acceptance Criteria Gate"
+      planning_status: "missing"
+      ado_status: "missing"
+      parity: true
+    - feature: "SWAG Estimation"
+      planning_status: "missing"
+      ado_status: "missing"
+      parity: true
+
+# ========================================
+# Validation Configuration
+# ========================================
+
+validation:
+  on_initialization:
+    enabled: true
+    strict_mode: true
+    fail_on_parity_violations: true
+    log_level: "warning"
+    
+  on_execution:
+    enabled: true
+    validate_gates: true
+    validate_ado_connectivity: true
+    validate_parity_with_planning: true
+    
+  drift_detection:
+    enabled: true
+    check_frequency: "on_healthcheck"
+    report_missing_features: true
+    report_path: "cortex-brain/documents/reports/ado-planning-drift-report.md"
+    compare_with_planning_2.0: true
