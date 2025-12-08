@@ -2,11 +2,11 @@ metadata:
   plan_id: "dashboard-code-intel-v3.9-001"
   title: "Comprehensive Dashboard & Code Intelligence Enhancement (MASTER PLAN)"
   created: "2025-12-08T00:00:00Z"
-  updated: "2025-12-08T23:30:00Z"
+  updated: "2025-12-09T00:00:00Z"
   status: "in_progress"
   priority: "critical"
   estimated_effort: "160-204 hours"
-  actual_effort: "58 hours (Phase 1-2 complete, Phase 2.5 40% - 36%)"
+  actual_effort: "62 hours (Phase 1-2 complete, Phase 2.5 58% - 39%)"
   owner: "CORTEX Development Team"
   tags: ["dashboard", "code-intelligence", "multi-language", "validation", "reconciliation", "reverse-engineering", "onboarding", "admin-dashboard", "v3.9"]
   consolidates:
@@ -29,8 +29,8 @@ consolidated_status:
   rationale: "Eliminated confusion by merging all dashboard/onboarding work into single master plan with unified timeline"
   
 progress_summary:
-  overall_completion: "36% (58h / 160-204h estimated)"
-  overall_progress_bar: "[█████░░░░░░░░░░░] 36%"
+  overall_completion: "39% (62h / 160-204h estimated)"
+  overall_progress_bar: "[█████░░░░░░░░░░░] 39%"
   
   phase_1_foundation:
     status: "✅ COMPLETE"
@@ -46,10 +46,9 @@ progress_summary:
   
   phase_2_5_test_coverage:
     status: "🔄 IN PROGRESS"
-    completion: "40% (2/5 tasks)"
-    hours: "10h / 20-24h"
-    progress_bar: "[███████░░░░░░░░] 40%"
-    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    completion: "58% (3/5 tasks)"
+    hours: "14h / 20-24h"
+    progress_bar: "[█████████░░░░░░] 58%"
     
   phase_3_onboarding:
     status: "⏳ NOT STARTED"
@@ -578,15 +577,15 @@ phases:
     description: "Analyze test coverage, identify gaps, prioritize untested code, generate coverage roadmap"
     status: "in_progress"
     estimated_duration: "20-24 hours"
-    actual_duration: "10 hours"
+    actual_duration: "14 hours"
     dependencies: ["1", "2"]
-    progress_bar: "[███████░░░░░░░░] 40%"
+    progress_bar: "[█████████░░░░░░] 58%"
     
     visual_progress: |
-      Phase 2.5: [███████░░░░░░░░] 40% 🔄
+      Phase 2.5: [█████████░░░░░░] 58% 🔄
       ├─ Task 2.5.1: Test Discovery      [███████████████] 100% ✅ (6h)
       ├─ Task 2.5.2: Coverage Baseline   [███████████████] 100% ✅ (4h)
-      ├─ Task 2.5.3: Gap Prioritization  [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
+      ├─ Task 2.5.3: Gap Prioritization  [███████████████] 100% ✅ (4h)
       ├─ Task 2.5.4: Roadmap Generator   [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
       └─ Task 2.5.5: Dashboard Viz       [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
     
@@ -718,6 +717,7 @@ phases:
         
       - id: "2.5.3"
         title: "Test Gap Prioritization Matrix"
+        status: "complete"
         description: |
           Categorize untested/undertested code by business criticality and risk.
           
