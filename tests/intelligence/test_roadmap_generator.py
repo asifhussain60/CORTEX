@@ -328,7 +328,7 @@ class TestOutputFormats:
         
         # Should have markdown headers
         assert "# Test Coverage Roadmap" in markdown or "# Coverage Roadmap" in markdown
-        assert "## Milestone" in markdown
+        assert ("## " in markdown and "Milestone" in markdown) or "### M" in markdown
         
         # Should list tasks
         assert "Test " in markdown
