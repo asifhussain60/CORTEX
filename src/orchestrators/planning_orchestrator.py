@@ -1522,6 +1522,30 @@ class PlanningOrchestrator:
                 phase_name = phase.get('phase_name', f'Phase {phase_idx}')
                 phase_tasks = phase.get('tasks', [])
                 
+                # Render phase progress in chat using template
+                if self.template_manager:
+                    try:
+                        progress_bar = self._generate_progress_bar(completed_tasks, total_tasks, width=10)
+                        percentage = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 0
+                        
+                        phase_progress_context = {
+                            'progress_bar': progress_bar,
+                            'percentage': percentage,
+                            'current_phase': phase_idx,
+                            'total_phases': total_phases,
+                            'phase_name': phase_name,
+                            'completed_tasks': completed_tasks,
+                            'total_tasks': total_tasks,
+                            'current_task': f'Starting {phase_name}',
+                            'plan_id': plan_id,
+                            'status': 'executing'
+                        }
+                        
+                        rendered_progress = self.template_manager.render('autonomous_execution_progress', phase_progress_context)
+                        print(f"\n{rendered_progress}\n")
+                    except Exception as e:
+                        logger.debug(f"Template rendering skipped: {e}")
+                
                 yield_progress(
                     phase_idx,
                     total_phases,
@@ -1552,10 +1576,27 @@ class PlanningOrchestrator:
                 
                 # Create git checkpoint at phase boundary
                 try:
-                    self.git_checkpoint.create_auto_checkpoint(
+                    checkpoint_result = self.git_checkpoint.create_auto_checkpoint(
                         operation="autonomous_execution",
                         message=f"Completed {phase_name} of plan {plan_id}"
                     )
+                    
+                    # Render checkpoint status in chat
+                    if self.template_manager and checkpoint_result.get('success'):
+                        try:
+                            checkpoint_context = {
+                                'operation': 'autonomous_execution',
+                                'status': '✅ Success',
+                                'commit_message': f"Completed {phase_name} of plan {plan_id}",
+                                'files_changed': checkpoint_result.get('files_changed', 'N/A'),
+                                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                'error_details': ''
+                            }
+                            rendered_checkpoint = self.template_manager.render('checkpoint_status', checkpoint_context)
+                            print(f"\n{rendered_checkpoint}\n")
+                        except Exception as e:
+                            logger.debug(f"Checkpoint template rendering skipped: {e}")
+                    
                     execution_log.append({
                         'phase': phase_idx,
                         'action': 'git_checkpoint',
@@ -1564,6 +1605,22 @@ class PlanningOrchestrator:
                     })
                 except Exception as e:
                     logger.warning(f"Git checkpoint failed at phase {phase_idx}: {e}")
+                    
+                    # Render checkpoint failure
+                    if self.template_manager:
+                        try:
+                            checkpoint_context = {
+                                'operation': 'autonomous_execution',
+                                'status': '❌ Failed',
+                                'commit_message': f"Completed {phase_name} of plan {plan_id}",
+                                'files_changed': 'N/A',
+                                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                'error_details': f"**Error:** {str(e)}"
+                            }
+                            rendered_checkpoint = self.template_manager.render('checkpoint_status', checkpoint_context)
+                            print(f"\n{rendered_checkpoint}\n")
+                        except Exception as render_e:
+                            logger.debug(f"Checkpoint error template rendering skipped: {render_e}")
                     execution_log.append({
                         'phase': phase_idx,
                         'action': 'git_checkpoint',

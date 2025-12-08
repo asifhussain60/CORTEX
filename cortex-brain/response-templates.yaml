@@ -96,6 +96,60 @@ shared:
       💡 **Session Restoration:** Open new chat → Reference this plan → Say "Continue"
 
       '
+  maintenance_phase_progress:
+    format: '## 🔧 System Maintenance Progress
+
+
+      **Phase {current_phase} of {total_phases}:** {phase_name}
+
+
+      ### 📊 Phase Status
+
+
+      {phase_status_list}
+
+
+      ### 📈 Metrics Summary
+
+
+      ✅ **Improvements Applied:** {total_improvements}
+
+      ⚠️  **Warnings:** {total_warnings}
+
+      ❌ **Errors:** {total_errors}
+
+
+      ### ⏱️ Progress
+
+
+      **Elapsed Time:** {elapsed_time}
+
+      **Current Operation:** {current_operation}
+
+
+      '
+  checkpoint_status:
+    format: '## 🔖 Git Checkpoint
+
+
+      **Operation:** {operation}
+
+      **Status:** {status}
+
+
+      ### 📝 Commit Details
+
+
+      **Message:** {commit_message}
+
+      **Files Changed:** {files_changed}
+
+      **Timestamp:** {timestamp}
+
+
+      {error_details}
+
+      '
 base_templates:
   standard_5_part:
     base_structure: '## 🧠 CORTEX {operation}

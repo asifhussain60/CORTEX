@@ -63,6 +63,14 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             'warnings': [],
             'errors': []
         }
+        
+        # Initialize template manager for progress visualization
+        try:
+            from src.response_templates.response_template_manager import ResponseTemplateManager
+            self.template_manager = ResponseTemplateManager()
+        except Exception as e:
+            logger.warning(f"Failed to initialize template manager: {e}")
+            self.template_manager = None
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Get module metadata."""
@@ -90,6 +98,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             OperationResult with maintenance metrics and report
         """
         start_time = datetime.now()
+        self.metrics['start_time'] = start_time  # Track for elapsed time
         include_epm = context.get('include_epm_discovery', False)
         total_phases = 6 if include_epm else 5
         current_phase = 0
@@ -104,6 +113,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
                 epm_discovery = self._run_epm_discovery()
                 self.metrics['epm_discovery'] = epm_discovery
                 self.metrics['phases_completed'] = current_phase
+                self._render_phase_progress(current_phase, total_phases, "EPM Feature Discovery", "Completed")
             
             # Phase 1: Pre-maintenance healthcheck
             current_phase += 1
@@ -111,6 +121,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             pre_check = self._run_pre_healthcheck()
             self.metrics['healthcheck_pre'] = pre_check
             self.metrics['phases_completed'] = current_phase
+            self._render_phase_progress(current_phase, total_phases, "Pre-maintenance Healthcheck", "Completed")
             
             if not pre_check.get('overall_health', {}).get('is_healthy'):
                 logger.warning("⚠️  Pre-healthcheck identified issues - proceeding with maintenance")
@@ -121,6 +132,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             alignment = self._run_alignment()
             self.metrics['alignment'] = alignment
             self.metrics['phases_completed'] = current_phase
+            self._render_phase_progress(current_phase, total_phases, "System Alignment", "Completed")
             
             # Phase 3: Cleanup and organization
             current_phase += 1
@@ -128,6 +140,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             cleanup = self._run_cleanup()
             self.metrics['cleanup'] = cleanup
             self.metrics['phases_completed'] = current_phase
+            self._render_phase_progress(current_phase, total_phases, "Cleanup and Organization", "Completed")
             
             # Only optimize if alignment succeeded
             if alignment.get('success'):
@@ -137,6 +150,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
                 optimization = self._run_optimization()
                 self.metrics['optimization'] = optimization
                 self.metrics['phases_completed'] = current_phase
+                self._render_phase_progress(current_phase, total_phases, "CORTEX Optimization", "Completed")
             else:
                 logger.warning("⚠️  Skipping optimization - alignment had issues")
                 self.metrics['warnings'].append("Optimization skipped due to alignment issues")
@@ -147,6 +161,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             post_check = self._run_post_healthcheck()
             self.metrics['healthcheck_post'] = post_check
             self.metrics['phases_completed'] = current_phase
+            self._render_phase_progress(current_phase, total_phases, "Post-maintenance Healthcheck", "Completed")
             
             # Generate report
             report = self._generate_report(start_time, include_epm)
@@ -456,6 +471,60 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         reports_dir.mkdir(parents=True, exist_ok=True)
         
         timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+        report_path = reports_dir / f'system-maintenance-{timestamp}.json'
+        
+        with open(report_path, 'w', encoding='utf-8') as f:
+            json.dump(report, f, indent=2)
+        
+        logger.info(f"[REPORT] Saved to: {report_path}")
+        return report_path
+    
+    def _render_phase_progress(self, current_phase: int, total_phases: int, phase_name: str, current_operation: str):
+        """Render phase progress using template system."""
+        if not self.template_manager:
+            return
+        
+        try:
+            # Build phase status list
+            phase_names = [
+                "EPM Feature Discovery" if self.metrics.get('epm_discovery') else None,
+                "Pre-maintenance Healthcheck",
+                "System Alignment",
+                "Cleanup and Organization",
+                "CORTEX Optimization",
+                "Post-maintenance Healthcheck"
+            ]
+            phase_names = [p for p in phase_names if p]  # Remove None
+            
+            phase_status_list = []
+            for i, name in enumerate(phase_names, 1):
+                if i < current_phase:
+                    status = "✅ Complete"
+                elif i == current_phase:
+                    status = "🔄 In Progress"
+                else:
+                    status = "⏳ Pending"
+                phase_status_list.append(f"**Phase {i}:** {name} - {status}")
+            
+            elapsed = (datetime.now() - self.metrics.get('start_time', datetime.now())).total_seconds()
+            elapsed_str = f"{int(elapsed // 60)}m {int(elapsed % 60)}s"
+            
+            context = {
+                'current_phase': current_phase,
+                'total_phases': total_phases,
+                'phase_name': phase_name,
+                'phase_status_list': '\n'.join(phase_status_list),
+                'total_improvements': len(self.metrics['improvements']),
+                'total_warnings': len(self.metrics['warnings']),
+                'total_errors': len(self.metrics['errors']),
+                'elapsed_time': elapsed_str,
+                'current_operation': current_operation
+            }
+            
+            rendered = self.template_manager.render('maintenance_phase_progress', context)
+            print(f"\n{rendered}\n")
+        except Exception as e:
+            logger.debug(f"Phase progress template rendering skipped: {e}")
         report_path = reports_dir / f'system-maintenance-{timestamp}.json'
         
         with open(report_path, 'w', encoding='utf-8') as f:
