@@ -326,6 +326,66 @@ templates:
       {next_steps}
 
       '
+  checkpoint_status:
+    base_structure: '## 🔖 Git Checkpoint
+
+
+      **Operation:** {operation}
+
+      **Status:** {status}
+
+
+      ### 📝 Commit Details
+
+
+      **Message:** {commit_message}
+
+      **Files Changed:** {files_changed}
+
+      **Timestamp:** {timestamp}
+
+
+      {error_details}
+
+      '
+    name: Git Checkpoint Status
+    response_type: progress
+    operation_name: git_checkpoint
+  maintenance_phase_progress:
+    base_structure: '## 🔧 System Maintenance Progress
+
+
+      **Phase {current_phase} of {total_phases}:** {phase_name}
+
+
+      ### 📊 Phase Status
+
+
+      {phase_status_list}
+
+
+      ### 📈 Metrics Summary
+
+
+      ✅ **Improvements Applied:** {total_improvements}
+
+      ⚠️  **Warnings:** {total_warnings}
+
+      ❌ **Errors:** {total_errors}
+
+
+      ### ⏱️ Progress
+
+
+      **Elapsed Time:** {elapsed_time}
+
+      **Current Operation:** {current_operation}
+
+
+      '
+    name: System Maintenance Phase Progress
+    response_type: progress
+    operation_name: system_maintenance
   onboarding:
     base_structure: '## 🧠 CORTEX {operation}
 
