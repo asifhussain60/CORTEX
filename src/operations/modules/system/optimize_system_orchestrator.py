@@ -354,7 +354,7 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 # Run quick health check (system + brain only)
                 from src.operations.healthcheck_operation import HealthCheckOperation
                 health_check = HealthCheckOperation()
-                result = health_check.execute(component='brain', quick=True)
+                result = health_check.execute({'quick': True})
                 
                 if not result.success:
                     logger.warning(f"⚠️ Health check warning: {result.message}")
@@ -795,8 +795,12 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 brain_rules = yaml.safe_load(f)
             
             # Extract Tier 0 instinct names (rules that should have tests)
-            tier0_instincts = brain_rules.get('tier0_instincts', {})
-            rule_names = set(tier0_instincts.keys())
+            tier0_instincts = brain_rules.get('tier0_instincts', [])
+            if isinstance(tier0_instincts, list):
+                rule_names = set(tier0_instincts)
+            else:
+                # If it's a dict, use keys
+                rule_names = set(tier0_instincts.keys())
             logger.info(f"📋 Found {len(rule_names)} Tier 0 instincts in brain protection rules")
             
             # Step 2: Scan for SKULL tests
