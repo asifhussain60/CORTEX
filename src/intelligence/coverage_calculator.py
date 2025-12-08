@@ -239,26 +239,30 @@ class CoverageCalculator:
             line = line.strip()
             
             if line.startswith('SF:'):
-                # New source file
+                # Save previous file if exists
                 if current_file:
                     files.append(FileCoverage(
                         file_path=current_file,
                         lines_covered=covered_lines,
                         lines_missed=missed_lines
                     ))
+                # Start new file
                 current_file = line[3:]
                 covered_lines = 0
                 missed_lines = 0
             
             elif line.startswith('DA:'):
                 # Data line: DA:line_num,hit_count
-                parts = line[3:].split(',')
-                if len(parts) == 2:
-                    hit_count = int(parts[1])
-                    if hit_count > 0:
-                        covered_lines += 1
-                    else:
-                        missed_lines += 1
+                try:
+                    parts = line[3:].split(',')
+                    if len(parts) >= 2:
+                        hit_count = int(parts[1])
+                        if hit_count > 0:
+                            covered_lines += 1
+                        else:
+                            missed_lines += 1
+                except ValueError:
+                    pass  # Skip malformed lines
             
             elif line == 'end_of_record':
                 if current_file:
@@ -268,6 +272,14 @@ class CoverageCalculator:
                         lines_missed=missed_lines
                     ))
                     current_file = None
+        
+        # Handle last file if no end_of_record
+        if current_file:
+            files.append(FileCoverage(
+                file_path=current_file,
+                lines_covered=covered_lines,
+                lines_missed=missed_lines
+            ))
         
         return CoverageReport(CoverageFormat.LCOV, language, files)
     
@@ -370,10 +382,15 @@ class CoverageCalculator:
         module_stats = defaultdict(lambda: {'covered': 0, 'total': 0})
         
         for file_cov in file_coverages:
-            # Extract module from file path (first directory)
-            parts = Path(file_cov.file_path).parts
-            if len(parts) > 1:
-                module = parts[0] if parts[0] != 'src' else (parts[1] if len(parts) > 2 else parts[0])
+            # Extract module from file path (first directory after src/)
+            path = Path(file_cov.file_path)
+            parts = path.parts
+            
+            # Skip 'src' prefix if present
+            if len(parts) > 1 and parts[0] == 'src':
+                module = parts[1] if len(parts) > 2 else parts[0]
+            elif len(parts) > 1:
+                module = parts[0]
             else:
                 module = 'root'
             
@@ -381,12 +398,11 @@ class CoverageCalculator:
             module_stats[module]['total'] += file_cov.total_lines
         
         # Calculate percentages
-        module_coverage = {}
-        for module, stats in module_stats.items():
-            if stats['total'] > 0:
-                module_coverage[module] = (stats['covered'] / stats['total']) * 100
-        
-        return module_coverage
+        return {
+            module: (stats['covered'] / stats['total']) * 100
+            for module, stats in module_stats.items()
+            if stats['total'] > 0
+        }
     
     def estimate_coverage_static(self, source_dir: Path) -> CoverageBaseline:
         """
