@@ -138,16 +138,16 @@ class WiringGenerator:
     
     ---
     
-    ## My Understanding Of Your Request
+    ### 🎯 Understanding & Scope
     {{{{understanding}}}}
     
-    ## Challenge
+    ### ⚡ Approach & Considerations
     {{{{challenge}}}}
     
-    ## Response
+    ### 💬 Response
     {purpose}
     
-    ## Your Request
+    ### 📊 Impact & Changes
     {{{{user_request}}}}
     
     ## Next Steps

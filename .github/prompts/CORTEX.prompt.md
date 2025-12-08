@@ -46,8 +46,8 @@ ALL responses MUST use this 5-part structure:
 
 ---
 
-### 🎯 My Understanding Of Your Request
-{what you understood}
+### 🎯 Understanding & Scope
+{what you understood + boundaries/scope clarified}
 
 ### ⚡ Approach & Considerations
 {actual challenge OR "No significant challenges"}

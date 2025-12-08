@@ -72,7 +72,7 @@ class TestIntroductionDiscoveryTemplate:
         
         # Check for mandatory response format sections
         assert '# 🧠 CORTEX' in content
-        assert '## 🎯 My Understanding Of Your Request' in content
+        assert '### 🎯 Understanding & Scope' in content
         assert '## ⚠️ Challenge' in content
         assert '## 💬 Response' in content
         assert '## 📝 Your Request' in content

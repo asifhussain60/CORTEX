@@ -205,7 +205,7 @@ class TemplateMigrator:
         # Determine if this should inherit from a base template
         if 'base_structure' in template_data:
             structure = template_data['base_structure']
-            if '### 🎯 My Understanding Of Your Request' in structure:
+            if '### 🎯 Understanding & Scope' in structure:
                 migrated['inherits_from'] = 'core/base-templates/5-part-standard.yaml'
         
         # Copy metadata fields

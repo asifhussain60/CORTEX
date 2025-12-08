@@ -151,7 +151,7 @@ class TestGuidedSectionFormatter:
         formatted = formatter.format_understanding(content, {})
         
         # Guided mode: full header with emoji
-        assert "### 🎯 My Understanding Of Your Request" in formatted
+        assert "### 🎯 Understanding & Scope" in formatted
         assert content in formatted
     
     def test_challenge_section_is_visible(self, formatter_registry):
@@ -198,7 +198,7 @@ class TestEducationalSectionFormatter:
         formatted = formatter.format_understanding(content, {})
         
         # Educational mode: includes context or explanation
-        assert "### 🎯 My Understanding Of Your Request" in formatted
+        assert "### 🎯 Understanding & Scope" in formatted
         assert content in formatted
         # May include additional context
         assert len(formatted) > len(content) + 50  # Has enrichment
@@ -249,7 +249,7 @@ class TestPairSectionFormatter:
         
         formatted = formatter.format_understanding(content, {})
         
-        assert "### 🎯 My Understanding Of Your Request" in formatted
+        assert "### 🎯 Understanding & Scope" in formatted
         assert content in formatted
     
     def test_challenge_presents_options(self, formatter_registry):

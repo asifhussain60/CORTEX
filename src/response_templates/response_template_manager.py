@@ -244,7 +244,7 @@ class ResponseTemplateManager:
 
 ---
 
-## 🎯 My Understanding Of Your Request
+### 🎯 Understanding & Scope
 I understand you have a request, but I'm unable to load the appropriate response template.
 
 ## ⚠️ Challenge
@@ -280,7 +280,7 @@ I apologize, but I'm having trouble accessing my response templates. This is an 
 
 ---
 
-## 🎯 My Understanding Of Your Request
+### 🎯 Understanding & Scope
 I encountered an error while rendering your response.
 
 ## ⚠️ Challenge

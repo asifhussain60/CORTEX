@@ -12,7 +12,7 @@ print(f'🔄 Last updated: {data.get("last_updated")}')
 # Check for any remaining rigid headers
 content = open('cortex-brain/response-templates.yaml', 'r', encoding='utf-8').read()
 rigid_patterns = [
-    "## 🎯 My Understanding Of Your Request",
+    "### 🎯 Understanding & Scope",
     "## ⚡ Approach & Considerations",
     "## 💬 Response",
     "## 📊 Impact & Changes"
