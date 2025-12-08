@@ -51,11 +51,12 @@ function Find-CortexRoot {
     $CurrentDir = $PWD.Path
     $ScriptDir = if ($StartPath) { Split-Path -Parent $StartPath } else { $CurrentDir }
     
-    # Try script directory first
-    $TestDir = $ScriptDir
+    # Try current directory first (most reliable)
+    $TestDir = $CurrentDir
     while ($TestDir) {
         $MarkerPath = Join-Path $TestDir "cortex-brain"
-        if (Test-Path $MarkerPath) {
+        $DashboardPath = Join-Path $MarkerPath "dashboards"
+        if ((Test-Path $MarkerPath) -and (Test-Path $DashboardPath)) {
             return $TestDir
         }
         $Parent = Split-Path -Parent $TestDir
@@ -63,11 +64,12 @@ function Find-CortexRoot {
         $TestDir = $Parent
     }
     
-    # Try current directory
-    $TestDir = $CurrentDir
+    # Try script directory
+    $TestDir = $ScriptDir
     while ($TestDir) {
         $MarkerPath = Join-Path $TestDir "cortex-brain"
-        if (Test-Path $MarkerPath) {
+        $DashboardPath = Join-Path $MarkerPath "dashboards"
+        if ((Test-Path $MarkerPath) -and (Test-Path $DashboardPath)) {
             return $TestDir
         }
         $Parent = Split-Path -Parent $TestDir
