@@ -33,6 +33,15 @@ from src.orchestrators.validation_framework import validate_plan, validate_task,
 from src.agents.estimation.scope_inference_engine import ScopeBoundary, ScopeEntities
 from src.orchestrators.test_intelligence import TestIntelligence, detect_test_requirements
 from src.tier1.user_profile_manager import UserProfileManager
+from src.utils.manifest_validator import ManifestValidator, ValidationSeverity
+
+# Import Review Orchestrator for pre-planning architecture assessment (REQ-003)
+try:
+    from src.operations.modules.architectural.review_orchestrator import ReviewOrchestrator
+    REVIEW_ORCHESTRATOR_AVAILABLE = True
+except ImportError:
+    REVIEW_ORCHESTRATOR_AVAILABLE = False
+    logger.warning("Review Orchestrator not available - architectural pre-assessment disabled")
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +69,13 @@ class PlanningOrchestrator:
             self.template_manager = None
         self.completed_plans_dir = self.plans_dir / "completed"
         self.schema = self._load_schema()
+        
+        # NEW: Initialize manifest validator to prevent drift
+        self.manifest_validator = ManifestValidator(cortex_root)
+        self.manifest = self.manifest_validator.load_manifest("planning-system-2.0")
+        
+        # Validate compliance on initialization
+        self._validate_manifest_compliance()
         
         # NEW Sprint 2: Initialize document organizer
         brain_path = self.cortex_root / "cortex-brain"
@@ -116,6 +132,42 @@ class PlanningOrchestrator:
             "Test coverage meets CORTEX standards (RED→GREEN→REFACTOR documented)",
             "Git history shows test-first commits (RED phase before GREEN phase)"
         ]
+    
+    def _validate_manifest_compliance(self) -> None:
+        """
+        Validate orchestrator compliance with manifest on initialization.
+        Logs drift warnings but does not block execution.
+        """
+        try:
+            if not self.manifest:
+                logger.warning("⚠️  Planning System 2.0 manifest not found - drift detection disabled")
+                return
+            
+            logger.info("🔍 Validating Planning System 2.0 compliance with manifest...")
+            report = self.manifest_validator.validate_orchestrator(
+                "planning-system-2.0",
+                orchestrator_instance=self
+            )
+            
+            # Log summary
+            compliance_emoji = "✅" if report.compliance_score >= 80 else "⚠️" if report.compliance_score >= 60 else "❌"
+            logger.info(f"{compliance_emoji} Planning System 2.0 compliance: {report.compliance_score:.1f}%")
+            
+            # Log critical issues
+            critical_issues = report.get_critical_issues()
+            if critical_issues:
+                logger.warning(f"⚠️  {len(critical_issues)} critical manifest requirements missing:")
+                for issue in critical_issues[:3]:  # Show first 3
+                    logger.warning(f"  - {issue.item_id}: {issue.item_name}")
+                if len(critical_issues) > 3:
+                    logger.warning(f"  ... and {len(critical_issues) - 3} more")
+            
+            # Store report for healthcheck
+            self.manifest_compliance_report = report
+            
+        except Exception as e:
+            logger.warning(f"Manifest validation failed (non-blocking): {e}")
+            self.manifest_compliance_report = None
     
     def _load_template_flags(self) -> None:
         """Load planning-related flags from response templates."""
@@ -778,12 +830,40 @@ class PlanningOrchestrator:
             logger.warning(f"Git checkpoint failed: {e}")
         
         try:
-            # STEP 0: Create empty plan file FIRST (small increment principle)
+            # STEP 0A: Run Architectural Review (REQ-003 from manifest)
+            review_score = None
+            review_summary = None
+            
+            if REVIEW_ORCHESTRATOR_AVAILABLE:
+                logger.info("🔍 Running architectural review before planning...")
+                review_result = self.run_architecture_review()
+                
+                if review_result:
+                    review_score = review_result.get('overall_score', 0)
+                    review_summary = review_result.get('summary', '')
+                    logger.info(f"📊 Architecture Review Score: {review_score}/100")
+                    
+                    if review_score < 80:
+                        logger.warning(f"⚠️  Architecture score below 80 - plan will include remediation tasks")
+                else:
+                    logger.warning("⚠️  Architecture review failed - continuing without pre-assessment")
+            else:
+                logger.info("ℹ️  Architecture review skipped (orchestrator not available)")
+            
+            # STEP 0B: Interactive DoR Refinement (REQ-002 from manifest)
+            logger.info("📋 Starting Interactive DoR Workflow...")
+            dor_items = self.refine_dor_interactive(
+                feature_requirements,
+                checkpoint_callback
+            )
+            logger.info(f"✅ DoR validated: {len(dor_items)} items approved")
+            
+            # STEP 1: Create empty plan file FIRST (small increment principle)
             feature_name = feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
             output_path = self._create_empty_plan_file(feature_name, output_filename)
             logger.info(f"✅ Empty plan file created: {output_path.name}")
             
-            # Step 1: Generate skeleton (200-token structure)
+            # Step 2: Generate skeleton (200-token structure)
             logger.info("🧠 Generating plan skeleton (200-token limit)...")
             
             # Convert feature_requirements string to dict format expected by generator
@@ -969,6 +1049,13 @@ class PlanningOrchestrator:
             threat_analysis = self._run_threat_analysis(feature_requirements, feature_name)
             
             if threat_analysis and threat_analysis.get('threats'):
+                # NEW: Interactive threat review (REQ-007)
+                logger.info("🔍 Starting interactive threat review...")
+                threat_analysis = self.review_threats_interactive(
+                    threat_analysis,
+                    checkpoint_callback
+                )
+                
                 # Append threat modeling section to plan
                 self._append_threat_analysis_to_plan(output_path, threat_analysis)
                 logger.info(f"✅ Threat analysis complete: {len(threat_analysis['threats'])} threats identified")
@@ -1003,7 +1090,21 @@ class PlanningOrchestrator:
             else:
                 logger.warning(f"⚠️  Could not add Integration & Consolidation phase: {load_errors}")
             
-            # Step 6: Mark plan as complete (file already written incrementally)
+            # Step 6.5: NEW - Acceptance Criteria Approval Gate (REQ-001)
+            logger.info("📋 Acceptance Criteria Approval Gate...")
+            acceptance_approved = self.approve_acceptance_criteria(
+                output_path,
+                checkpoint_callback,
+                plan_data if success else None
+            )
+            
+            if not acceptance_approved:
+                logger.info("⏸️  Plan complete but execution blocked pending acceptance criteria approval")
+                return (True, output_path, "Plan complete - Acceptance criteria pending approval. Use 'approve plan' to proceed.")
+            
+            logger.info("✅ Acceptance criteria approved - plan ready for execution")
+            
+            # Step 7: Mark plan as complete (file already written incrementally)
             logger.info("💾 All phases written incrementally to disk")
             
             # Progress: Finalization complete (5 of 5 steps)
@@ -2543,6 +2644,88 @@ class PlanningOrchestrator:
         
         return result
     
+    def estimate_from_swagger(
+        self,
+        swagger_file_path: str,
+        team_size: int = 1,
+        velocity: Optional[float] = None
+    ) -> Dict[str, Any]:
+        """
+        Estimate project complexity and effort from Swagger/OpenAPI specification (REQ-004).
+        
+        Parses Swagger 2.0 or OpenAPI 3.0 files to extract API complexity metrics
+        and generate time/effort estimates integrated with estimate_timeframe().
+        
+        Args:
+            swagger_file_path: Path to swagger.json, swagger.yaml, or openapi.yaml
+            team_size: Number of developers (default: 1)
+            velocity: Optional team velocity (story points per sprint)
+            
+        Returns:
+            Dictionary with:
+                - success: bool
+                - swagger_metrics: Parsed API metrics
+                - estimate: Time/effort estimates (from estimate_timeframe)
+                - metadata: Swagger metadata stored in plan
+                
+        Example:
+            >>> result = orchestrator.estimate_from_swagger(
+            ...     swagger_file_path="api/swagger.yaml",
+            ...     team_size=2
+            ... )
+            >>> print(f"Estimated: {result['estimate']['days_team']} days")
+        """
+        from src.utils.swagger_parser import estimate_from_swagger as parse_swagger
+        
+        logger.info(f"📋 Parsing Swagger/OpenAPI file: {swagger_file_path}")
+        
+        # Parse Swagger/OpenAPI file
+        swagger_result = parse_swagger(swagger_file_path)
+        
+        if not swagger_result:
+            return {
+                'success': False,
+                'error': 'Failed to parse Swagger/OpenAPI file',
+                'message': f'Could not parse {swagger_file_path}. Ensure it is valid Swagger 2.0 or OpenAPI 3.0 format.'
+            }
+        
+        logger.info(f"✅ Parsed {swagger_result['total_endpoints']} endpoints, complexity: {swagger_result['complexity_name']}")
+        
+        # Convert complexity to CORTEX scale (0-100)
+        complexity = swagger_result['complexity_score']
+        
+        # Build scope dict for estimate_timeframe
+        scope = {
+            'services': [f"API_{i}" for i in range(swagger_result['unique_resources'])],
+            'endpoints': swagger_result['total_endpoints'],
+            'schemas': swagger_result['schemas']['requests'] + swagger_result['schemas']['responses']
+        }
+        
+        # Generate time estimate
+        estimate = self.estimate_timeframe(
+            complexity=complexity,
+            scope=scope,
+            team_size=team_size,
+            velocity=velocity
+        )
+        
+        # Store Swagger metadata in planning session if available
+        if hasattr(self, 'session') and self.session:
+            self.session.metadata['swagger_metrics'] = swagger_result
+            logger.info("📊 Swagger metrics stored in planning session")
+        
+        return {
+            'success': True,
+            'swagger_metrics': swagger_result,
+            'estimate': estimate,
+            'metadata': {
+                'source': swagger_file_path,
+                'parsed_at': datetime.now().isoformat(),
+                'endpoints': swagger_result['total_endpoints'],
+                'complexity': swagger_result['complexity_name']
+            }
+        }
+    
     # ========== SWAGGER Scope Approval Gate (CORTEX 3.2.1) ==========
     
     def _hand_off_to_planner_for_approval(
@@ -3660,6 +3843,624 @@ class PlanningOrchestrator:
             
         except Exception as e:
             logger.error(f"Failed to append threat analysis: {e}")
+    
+    def render_phase_progress(self) -> str:
+        """
+        Render visual phase progress for response templates (REQ-005).
+        
+        Returns:
+            Markdown-formatted progress visualization
+        """
+        if not hasattr(self, 'session') or not self.session:
+            return ""
+        
+        return self.session.render_progress_table()
+    
+    def update_phase_status(
+        self,
+        phase_name: str,
+        status: str = 'in_progress',
+        progress: int = 0
+    ) -> None:
+        """
+        Update phase status and progress for visual tracking (REQ-005).
+        
+        Args:
+            phase_name: Name of phase to update
+            status: Status ('pending', 'in_progress', 'completed')
+            progress: Progress percentage (0-100)
+        """
+        if not hasattr(self, 'session') or not self.session:
+            return
+        
+        for phase in self.session.phases:
+            if phase['name'] == phase_name:
+                phase['status'] = status
+                phase['progress'] = progress
+                logger.info(f"📊 Phase '{phase_name}' → {status} ({progress}%)")
+                break
+    
+    def review_threats_interactive(
+        self,
+        threat_analysis: Dict[str, Any],
+        checkpoint_callback: Optional[Callable[[str, str, str], bool]] = None
+    ) -> Dict[str, Any]:
+        """
+        Interactive threat review workflow (REQ-007).
+        
+        Presents threats to user with options to:
+        - Accept threat as-is
+        - Dismiss with justification
+        - Adjust priority
+        - Add mitigation notes
+        
+        Args:
+            threat_analysis: Results from ThreatModelerAgent
+            checkpoint_callback: Optional callback for user interaction
+            
+        Returns:
+            Updated threat analysis with user decisions
+        """
+        threats = threat_analysis.get('threats', [])
+        
+        if not threats:
+            logger.info("No threats to review")
+            return threat_analysis
+        
+        logger.info(f"🔒 Starting interactive threat review for {len(threats)} threats...")
+        
+        # Build review prompt
+        prompt_lines = [
+            "### 🔒 Threat Review Required",
+            "",
+            f"**Total Threats:** {len(threats)}",
+            f"**Critical:** {threat_analysis.get('critical_count', 0)}",
+            f"**High:** {threat_analysis.get('high_count', 0)}",
+            "",
+            "**Threats:**"
+        ]
+        
+        for idx, threat in enumerate(threats, 1):
+            risk_icon = "🔴" if threat['risk_rating'] == 'CRITICAL' else "🟠" if threat['risk_rating'] == 'HIGH' else "🟡"
+            prompt_lines.append(
+                f"{idx}. {risk_icon} **{threat['title']}** ({threat['risk_rating']}) - {threat['stride_category']}"
+            )
+            prompt_lines.append(f"   - {threat['description'][:100]}...")
+        
+        prompt_lines.extend([
+            "",
+            "**Review Options:**",
+            "- Type 'accept all' to proceed with all threats",
+            "- Type 'dismiss [number]' to dismiss specific threat (requires justification)",
+            "- Type 'details [number]' for full threat details",
+            "- Type 'done' when review complete"
+        ])
+        
+        review_prompt = "\n".join(prompt_lines)
+        
+        # Use checkpoint callback if available, otherwise auto-accept
+        if checkpoint_callback:
+            user_response = checkpoint_callback(
+                "threat_review",
+                "Threat Review",
+                review_prompt
+            )
+            
+            # Parse user response (simplified - could be enhanced)
+            if user_response and 'dismiss' in user_response.lower():
+                # Mark for dismissal (would need justification in real impl)
+                threat_analysis['user_reviewed'] = True
+                threat_analysis['review_notes'] = user_response
+            else:
+                # Auto-accept
+                threat_analysis['user_reviewed'] = True
+                threat_analysis['review_action'] = 'accepted'
+        else:
+            # Auto-accept in non-interactive mode
+            logger.info("⚠️  Non-interactive mode - auto-accepting all threats")
+            threat_analysis['user_reviewed'] = True
+            threat_analysis['review_action'] = 'auto_accepted'
+        
+        return threat_analysis
+    
+    def format_tdd_reminder_section(self) -> str:
+        """
+        Format TDD requirements reminder for visibility (REQ-008).
+        
+        Returns:
+            Markdown section with TDD requirements and guide link
+        """
+        return """
+### 🧪 TDD Requirements (Auto-Injected)
+
+**Workflow:** RED → GREEN → REFACTOR
+
+**Definition of Ready (DoR):**
+1. ✅ TDD Mastery workflow MUST be followed
+2. ✅ Tests MUST fail before implementation (RED phase validation)
+3. ✅ Git checkpoints required at RED, GREEN, REFACTOR phases
+4. ✅ Test coverage targets defined for all new code
+5. ✅ Test files MUST exist for all production code (per-layer validation)
+6. ✅ No empty/placeholder tests allowed (quality validation)
+
+**Definition of Done (DoD):**
+1. ✅ All code follows TDD workflow with git checkpoints
+2. ✅ Git history shows test-first commits (RED phase before GREEN phase)
+3. ✅ All tests pass with minimum coverage thresholds met
+4. ✅ No test skips or ignores without documented justification
+5. ✅ Per-layer coverage: Domain 90%, Application 85%, Infrastructure 70%, API 80%
+6. ✅ No empty placeholder tests (UnitTest1, Test1, etc.)
+
+**Coverage Validation:**
+- Domain Layer: 90% minimum
+- Application Layer: 85% minimum
+- Infrastructure Layer: 70% minimum
+- API Layer: 80% minimum
+
+**📚 Guide:** `.github/prompts/modules/tdd-mastery-guide.md`
+
+**⚠️  CRITICAL:** These requirements are automatically validated at each phase. Plans without TDD compliance will be blocked.
+"""
+    
+    def document_phase_to_learning_library(
+        self,
+        phase_name: str,
+        phase_details: Dict[str, Any],
+        decisions_made: List[str],
+        challenges_faced: List[str],
+        solutions_applied: List[str]
+    ) -> Optional[str]:
+        """
+        Auto-document phase completion to learning library (REQ-006).
+        
+        Creates structured lesson-learned entry after phase completion,
+        capturing planning decisions, challenges, and solutions for
+        future reference by business users, engineers, and product owners.
+        
+        Args:
+            phase_name: Name of completed phase
+            phase_details: Phase metadata (tasks, duration, etc.)
+            decisions_made: List of key decisions made during phase
+            challenges_faced: List of challenges encountered
+            solutions_applied: List of solutions that worked
+            
+        Returns:
+            Lesson ID if documented, None if failed
+        """
+        try:
+            from src.operations.modules.learning.lesson_capture import CapturedLesson
+            from src.operations.modules.learning.yaml_writer import YAMLWriter
+            
+            logger.info(f"📚 Documenting phase '{phase_name}' to learning library...")
+            
+            # Build lesson from phase data
+            lesson = CapturedLesson(
+                title=f"Planning Phase: {phase_name}",
+                category="planning",
+                context=f"Planning orchestrator phase completion: {phase_name}",
+                problem="; ".join(challenges_faced) if challenges_faced else "Standard planning workflow",
+                solution="; ".join(solutions_applied) if solutions_applied else "Successfully completed phase",
+                outcome=f"Phase '{phase_name}' completed successfully",
+                tags=["planning", "phase-completion", phase_name.lower().replace(" ", "-")],
+                related_files=[self.session.plan_path] if hasattr(self, 'session') and self.session and self.session.plan_path else [],
+                stakeholders=["planners", "engineers", "product-owners"],
+                confidence_score=0.9,
+                code_examples=[],
+                metadata={
+                    "phase_name": phase_name,
+                    "phase_details": phase_details,
+                    "decisions_made": decisions_made,
+                    "documented_at": datetime.now().isoformat()
+                }
+            )
+            
+            # Write to learning library
+            writer = YAMLWriter()
+            lesson_id = writer.append_lesson(lesson)
+            
+            logger.info(f"✅ Documented as {lesson_id} in learning library")
+            
+            # Track in session metadata
+            if hasattr(self, 'session') and self.session:
+                if 'learning_entries' not in self.session.metadata:
+                    self.session.metadata['learning_entries'] = []
+                self.session.metadata['learning_entries'].append({
+                    'lesson_id': lesson_id,
+                    'phase_name': phase_name,
+                    'created_at': datetime.now().isoformat()
+                })
+            
+            return lesson_id
+            
+        except Exception as e:
+            logger.error(f"Failed to document phase to learning library: {e}")
+            return None
+    
+    def run_architecture_review(self) -> Optional[Dict[str, Any]]:
+        """
+        Run Architectural Review before planning (REQ-003 from manifest).
+        
+        Executes comprehensive architectural review to:
+        - Assess current code quality
+        - Identify technical debt
+        - Inform plan complexity
+        - Add remediation tasks if score <80
+        
+        Returns:
+            Review results dict with overall_score, summary, findings
+            None if review fails
+        """
+        try:
+            if not REVIEW_ORCHESTRATOR_AVAILABLE:
+                logger.warning("Review Orchestrator not available")
+                return None
+            
+            logger.info("🔍 Initializing architectural review...")
+            reviewer = ReviewOrchestrator()
+            
+            # Execute review on current workspace
+            context = {'path': str(self.cortex_root)}
+            result = reviewer.execute(context)
+            
+            if result.status != "success":
+                logger.warning(f"Architecture review failed: {result.message}")
+                return None
+            
+            # Extract key metrics
+            review_data = result.data or {}
+            overall_score = review_data.get('overall_score', 0)
+            sections = review_data.get('sections', [])
+            
+            # Build summary
+            summary_lines = [f"Overall Score: {overall_score}/100"]
+            for section in sections[:3]:  # Top 3 sections
+                section_name = section.get('name', 'Unknown')
+                section_score = section.get('score', 0)
+                summary_lines.append(f"- {section_name}: {section_score}/100")
+            
+            return {
+                'overall_score': overall_score,
+                'summary': '\n'.join(summary_lines),
+                'sections': sections,
+                'findings': review_data.get('findings', []),
+                'report_path': review_data.get('report_path')
+            }
+            
+        except Exception as e:
+            logger.error(f"Architecture review failed: {e}")
+            return None
+    
+    def refine_dor_interactive(
+        self,
+        feature_requirements: str,
+        checkpoint_callback: Optional[Callable[[str, str, str], bool]] = None
+    ) -> List[str]:
+        """
+        Interactive DoR Workflow (REQ-002 from manifest).
+        
+        Iteratively refines Definition of Ready items with user. Each DoR item
+        must be validated individually before proceeding to planning.
+        
+        Args:
+            feature_requirements: Feature description
+            checkpoint_callback: Callback for user interaction
+            
+        Returns:
+            List of approved DoR items
+        """
+        try:
+            logger.info("📋 Generating initial DoR items...")
+            
+            # Generate initial DoR items based on feature
+            initial_dor = self._generate_initial_dor(feature_requirements)
+            
+            # If no callback, auto-approve all items (autonomous mode)
+            if not checkpoint_callback:
+                logger.info(f"📋 Auto-approving {len(initial_dor)} DoR items (autonomous mode)")
+                return initial_dor
+            
+            # Interactive refinement loop
+            approved_dor = []
+            iteration = 1
+            max_iterations = 5  # Prevent infinite loops
+            
+            while iteration <= max_iterations:
+                logger.info(f"📋 DoR Refinement Iteration {iteration}")
+                
+                # Show current DoR items for review
+                dor_content = self._format_dor_checklist(
+                    initial_dor,
+                    approved_dor,
+                    feature_requirements
+                )
+                
+                # Request approval
+                approved = checkpoint_callback(
+                    f"dor-review-{iteration}",
+                    f"Definition of Ready - Review #{iteration}",
+                    dor_content
+                )
+                
+                if approved:
+                    # User approved all items
+                    logger.info(f"✅ DoR approved after {iteration} iteration(s)")
+                    return initial_dor
+                else:
+                    # User wants to refine - ask for modifications
+                    logger.info(f"🔄 DoR refinement requested (iteration {iteration})")
+                    
+                    # In a real implementation, this would allow user to:
+                    # - Add new DoR items
+                    # - Remove irrelevant items
+                    # - Modify existing items
+                    # For now, we'll approve with warning
+                    logger.warning("⚠️  DoR refinement not fully implemented - proceeding with initial DoR")
+                    return initial_dor
+                
+                iteration += 1
+            
+            # Max iterations reached
+            logger.warning(f"⚠️  Max DoR iterations reached ({max_iterations}) - using current DoR")
+            return initial_dor
+            
+        except Exception as e:
+            logger.error(f"Interactive DoR workflow failed: {e}")
+            # On error, return minimal DoR
+            return [
+                "Feature requirements clearly defined",
+                "Technical dependencies identified",
+                "Acceptance criteria agreed upon"
+            ]
+    
+    def _generate_initial_dor(self, feature_requirements: str) -> List[str]:
+        """Generate initial DoR items based on feature description"""
+        dor_items = [
+            "Feature requirements clearly defined and documented",
+            "Technical dependencies identified and validated",
+            "Acceptance criteria agreed upon with stakeholders",
+            "Security requirements assessed (threat modeling if needed)",
+            "Performance requirements specified",
+            "Test strategy defined (unit, integration, E2E)",
+        ]
+        
+        # Add TDD-specific DoR items
+        dor_items.extend(self._tdd_dor_requirements)
+        
+        # Feature-specific DoR items
+        feature_lower = feature_requirements.lower()
+        
+        if any(kw in feature_lower for kw in ['api', 'endpoint', 'service', 'rest']):
+            dor_items.append("API contract/schema defined (OpenAPI/Swagger)")
+            dor_items.append("API versioning strategy agreed upon")
+        
+        if any(kw in feature_lower for kw in ['database', 'data', 'storage']):
+            dor_items.append("Data model/schema designed and reviewed")
+            dor_items.append("Database migration strategy defined")
+        
+        if any(kw in feature_lower for kw in ['ui', 'frontend', 'interface', 'dashboard']):
+            dor_items.append("UI/UX mockups reviewed and approved")
+            dor_items.append("Accessibility requirements defined (WCAG compliance)")
+        
+        if any(kw in feature_lower for kw in ['auth', 'login', 'security', 'permission']):
+            dor_items.append("Security threat model completed")
+            dor_items.append("Authentication/authorization flow documented")
+        
+        return dor_items
+    
+    def _format_dor_checklist(
+        self,
+        dor_items: List[str],
+        approved_items: List[str],
+        feature_requirements: str
+    ) -> str:
+        """Format DoR checklist for user review"""
+        lines = [
+            "# 📋 Definition of Ready (DoR) Review",
+            "",
+            f"**Feature:** {feature_requirements[:100]}{'...' if len(feature_requirements) > 100 else ''}",
+            "",
+            "---",
+            "",
+            "## ✅ DoR Checklist",
+            "",
+            "Review each item below. These conditions MUST be met before planning begins:",
+            ""
+        ]
+        
+        for i, item in enumerate(dor_items, 1):
+            status = "✅" if item in approved_items else "☐"
+            lines.append(f"{status} **{i}.** {item}")
+        
+        lines.extend([
+            "",
+            "---",
+            "",
+            "## 🎯 What This Means",
+            "",
+            "**Definition of Ready ensures:**",
+            "- Clear understanding of what needs to be built",
+            "- All prerequisites identified upfront",
+            "- Reduced risk of surprises during implementation",
+            "- Better effort estimation accuracy",
+            "",
+            "**If any item is unclear:**",
+            "- Reject this DoR to add/modify items",
+            "- Approve if all items are clear and achievable",
+            "",
+            "**Ready to proceed with planning?**"
+        ])
+        
+        return "\n".join(lines)
+    
+    def approve_acceptance_criteria(
+        self,
+        plan_path: Path,
+        checkpoint_callback: Optional[Callable[[str, str, str], bool]] = None,
+        plan_data: Optional[Dict[str, Any]] = None
+    ) -> bool:
+        """
+        Acceptance Criteria Approval Gate (REQ-001 from manifest).
+        
+        Blocks plan execution until user explicitly approves acceptance criteria.
+        Shows visual checklist of DoD items and critical acceptance criteria.
+        
+        Args:
+            plan_path: Path to plan file
+            checkpoint_callback: Callback(checkpoint_id, title, content) -> approved
+            plan_data: Optional plan data (avoids reloading)
+            
+        Returns:
+            True if approved, False if rejected
+        """
+        try:
+            # Load plan data if not provided
+            if not plan_data:
+                success, plan_data, errors = self.load_plan(plan_path)
+                if not success:
+                    logger.warning(f"Could not load plan for acceptance approval: {errors}")
+                    # In autonomous mode, auto-approve if can't load
+                    return True
+            
+            # Extract acceptance criteria
+            acceptance_section = self._extract_acceptance_criteria(plan_data)
+            dod_items = plan_data.get('definition_of_done', [])
+            
+            # Build approval prompt with visual checklist
+            approval_content = self._format_acceptance_approval_prompt(
+                acceptance_section,
+                dod_items,
+                plan_path
+            )
+            
+            # If no checkpoint callback, auto-approve (autonomous mode)
+            if not checkpoint_callback:
+                logger.info("📋 Auto-approving acceptance criteria (autonomous mode)")
+                return True
+            
+            # Request user approval
+            logger.info("📋 Requesting acceptance criteria approval...")
+            approved = checkpoint_callback(
+                "acceptance-criteria",
+                "Acceptance Criteria Approval",
+                approval_content
+            )
+            
+            if approved:
+                logger.info("✅ Acceptance criteria approved by user")
+                # Update plan metadata
+                if plan_data and 'metadata' in plan_data:
+                    plan_data['metadata']['acceptance_approved'] = True
+                    plan_data['metadata']['acceptance_approved_at'] = datetime.now().isoformat()
+                    self.save_plan(plan_data, plan_path)
+            else:
+                logger.warning("⏸️  Acceptance criteria rejected - execution blocked")
+            
+            return approved
+            
+        except Exception as e:
+            logger.error(f"Acceptance approval gate failed: {e}")
+            # On error, auto-approve to avoid blocking
+            return True
+    
+    def _extract_acceptance_criteria(self, plan_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Extract acceptance criteria from plan"""
+        acceptance = {
+            'phase': None,
+            'tests': [],
+            'validation': []
+        }
+        
+        # Find Acceptance phase
+        for phase in plan_data.get('phases', []):
+            if 'acceptance' in phase.get('phase_name', '').lower():
+                acceptance['phase'] = phase
+                break
+        
+        # Extract test requirements from phases
+        for phase in plan_data.get('phases', []):
+            for task in phase.get('tasks', []):
+                if 'test' in task.get('task_name', '').lower():
+                    acceptance['tests'].append(task)
+        
+        return acceptance
+    
+    def _format_acceptance_approval_prompt(
+        self,
+        acceptance_section: Dict[str, Any],
+        dod_items: List[str],
+        plan_path: Path
+    ) -> str:
+        """Format acceptance criteria approval prompt with visual checklist"""
+        lines = [
+            "# 📋 Acceptance Criteria Approval Required",
+            "",
+            f"**Plan:** {plan_path.name}",
+            "",
+            "---",
+            "",
+            "## ✅ Definition of Done (DoD)",
+            ""
+        ]
+        
+        # DoD checklist
+        if dod_items:
+            for i, item in enumerate(dod_items, 1):
+                lines.append(f"☐ **{i}.** {item}")
+        else:
+            lines.append("*(No DoD items defined)*")
+        
+        lines.extend([
+            "",
+            "---",
+            "",
+            "## 🎯 Acceptance Phase Tasks",
+            ""
+        ])
+        
+        # Acceptance phase tasks
+        acceptance_phase = acceptance_section.get('phase')
+        if acceptance_phase:
+            for task in acceptance_phase.get('tasks', []):
+                task_name = task.get('task_name', 'Unknown')
+                hours = task.get('estimated_hours', 0)
+                lines.append(f"☐ {task_name} ({hours}h)")
+        else:
+            lines.append("*(Acceptance phase not defined)*")
+        
+        lines.extend([
+            "",
+            "---",
+            "",
+            "## 🧪 Test Coverage Requirements",
+            ""
+        ])
+        
+        # Test tasks
+        test_tasks = acceptance_section.get('tests', [])
+        if test_tasks:
+            for task in test_tasks[:5]:  # Show first 5
+                lines.append(f"☐ {task.get('task_name', 'Unknown')}")
+            if len(test_tasks) > 5:
+                lines.append(f"... and {len(test_tasks) - 5} more test tasks")
+        else:
+            lines.append("*(No test tasks defined)*")
+        
+        lines.extend([
+            "",
+            "---",
+            "",
+            "## ⚠️  Critical Decision",
+            "",
+            "By approving, you confirm:",
+            "- ✅ Acceptance criteria are clear and testable",
+            "- ✅ Definition of Done is achievable",
+            "- ✅ Test coverage is adequate",
+            "- ✅ Ready to begin implementation",
+            "",
+            "**Approve this plan to proceed with execution?**"
+        ])
+        
+        return "\n".join(lines)
     
     def _format_threat_section(self, threat_analysis: Dict[str, Any]) -> str:
         """

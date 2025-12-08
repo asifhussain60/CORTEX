@@ -18,12 +18,16 @@ Repository: https://github.com/asifhussain60/CORTEX
 import os
 import re
 import ast
+import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Set
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 
 from .policy_analyzer import PolicyDocument, PolicyRule, PolicyLevel, PolicyCategory
+
+# Initialize logger
+logger = logging.getLogger(__name__)
 
 
 class ViolationSeverity:
@@ -152,24 +156,23 @@ class ComplianceValidator:
         Returns:
             ComplianceReport with violations, gaps, and actions
         """
-        print(f"\n🔍 Starting Compliance Validation (3-Act WOW Workflow)")
-        print(f"Policy: {policy_doc.title or 'Untitled'} v{policy_doc.version or '?'}")
-        print(f"Codebase: {codebase_path}\n")
+        logger.info(f"Starting compliance validation: {policy_doc.title or 'Untitled'} v{policy_doc.version or '?'}")
+        logger.debug(f"Codebase path: {codebase_path}")
         
         # Act 1: Recognition - Detect violations
-        print("⚡ Act 1: Recognition (Detecting Violations)")
+        logger.info("Act 1: Recognition - Detecting violations")
         violations = self._recognize_violations(policy_doc, codebase_path)
-        print(f"   Found {len(violations)} violations\n")
+        logger.info(f"Found {len(violations)} violations")
         
         # Act 2: Gap Analysis - Compare current vs required
-        print("📊 Act 2: Gap Analysis (Comparing State)")
+        logger.info("Act 2: Gap Analysis - Comparing state")
         gap_analyses = self._analyze_gaps(policy_doc, violations, codebase_path)
-        print(f"   Identified {len(gap_analyses)} gaps\n")
+        logger.info(f"Identified {len(gap_analyses)} gaps")
         
         # Act 3: Enforcement - Generate remediation actions
-        print("🎯 Act 3: Enforcement (Generating Actions)")
+        logger.info("Act 3: Enforcement - Generating actions")
         remediation_actions = self._generate_remediation(violations, gap_analyses)
-        print(f"   Created {len(remediation_actions)} actionable recommendations\n")
+        logger.info(f"Created {len(remediation_actions)} remediation actions")
         
         compliance_score = self._calculate_compliance_score(policy_doc, violations)
         
@@ -736,7 +739,7 @@ class ComplianceValidator:
 
 def main():
     """Test compliance validator"""
-    from .policy_analyzer import PolicyAnalyzer
+    from src.policy.policy_analyzer import PolicyAnalyzer
     
     sample_policy = """# Security Policy
 Version: 1.0
