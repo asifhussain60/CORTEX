@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 
 from src.intelligence.parsers.coldfusion_tokenizer import ColdFusionTokenizer
+from src.intelligence.docstring_extractor import DocstringInfo, DocstringSource, InformativenessScorer
 
 
 class ColdFusionAnalyzer:
@@ -318,5 +319,54 @@ class ColdFusionAnalyzer:
             properties.append(prop)
         
         return properties
+    
+    def get_top_docstrings(self, file_path: Path, limit: int = 10) -> List[DocstringInfo]:
+        """Extract hints and JavaDoc comments from ColdFusion files"""
+        if not file_path.exists():
+            raise FileNotFoundError(f"File not found: {file_path}")
+        
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            code = f.read()
+        
+        docstrings = []
+        scorer = InformativenessScorer()
+        
+        # Extract JavaDoc comments
+        for match in self.javadoc_pattern.finditer(code):
+            doc_text = match.group(1).strip()
+            if doc_text:
+                line_number = code[:match.start()].count('\n') + 1
+                score = scorer.calculate_score(doc_text)
+                docstrings.append(DocstringInfo(
+                    source_file=file_path,
+                    object_name=f"javadoc_{line_number}",
+                    object_type="function",
+                    docstring_text=doc_text,
+                    line_number=line_number,
+                    language="coldfusion",
+                    source_type=DocstringSource.COLDFUSION_COMMENT,
+                    informativeness_score=score
+                ))
+        
+        # Extract hint attributes from functions
+        analysis = self.analyze_code(code)
+        for component in analysis.get('components', []):
+            for func in component.get('functions', []):
+                if 'hint' in func:
+                    hint_text = func['hint']
+                    score = scorer.calculate_score(hint_text)
+                    docstrings.append(DocstringInfo(
+                        source_file=file_path,
+                        object_name=func['name'],
+                        object_type="function",
+                        docstring_text=hint_text,
+                        line_number=1,
+                        language="coldfusion",
+                        source_type=DocstringSource.COLDFUSION_HINT,
+                        informativeness_score=score
+                    ))
+        
+        ranked = sorted(docstrings, key=lambda d: d.informativeness_score, reverse=True)
+        return ranked[:limit]
     
 

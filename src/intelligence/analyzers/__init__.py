@@ -13,6 +13,7 @@ from .python_analyzer import PythonAnalyzer
 from .javascript_analyzer import JavaScriptAnalyzer
 from .typescript_analyzer import TypeScriptAnalyzer
 from .csharp_analyzer import CSharpAnalyzer
+from .coldfusion_analyzer import ColdFusionAnalyzer
 
 __all__ = [
     'BaseAnalyzer',
@@ -22,4 +23,5 @@ __all__ = [
     'JavaScriptAnalyzer',
     'TypeScriptAnalyzer',
     'CSharpAnalyzer',
+    'ColdFusionAnalyzer',
 ]
