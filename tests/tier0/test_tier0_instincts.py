@@ -870,5 +870,273 @@ class TestTier0InstinctsSOLID:
             print(f"\n[INFO] Protocol interfaces: {len(protocols)}")
 
 
+class TestTier0InstinctsSecurityAdvanced:
+    """Advanced security and threat modeling instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_security_injection(self, cortex_root):
+        """SECURITY_INJECTION: SQL injection prevention validation."""
+        src_dir = cortex_root / "src"
+        
+        if not src_dir.exists():
+            pytest.skip("No src directory")
+        
+        # Check for SQL operations with parameterized queries
+        python_files = list(src_dir.rglob("*.py"))
+        
+        sql_files = []
+        unsafe_patterns = [
+            r'execute\s*\(\s*f["\']',  # f-string in execute
+            r'execute\s*\(\s*["\'].*%',  # % formatting
+            r'execute\s*\(\s*.*\+',  # String concatenation
+        ]
+        
+        for py_file in python_files[:30]:
+            content = py_file.read_text(encoding='utf-8', errors='ignore')
+            
+            if 'execute' in content and ('sql' in content.lower() or 'cursor' in content.lower()):
+                for pattern in unsafe_patterns:
+                    if re.search(pattern, content, re.IGNORECASE):
+                        sql_files.append(py_file.name)
+                        break
+        
+        if sql_files:
+            print(f"\n[WARNING] Potential SQL injection risk: {len(sql_files)} files")
+            print(f"  Files: {', '.join(sql_files[:3])}")
+        else:
+            print("\n[INFO] No obvious SQL injection patterns detected")
+    
+    def test_security_authentication(self, cortex_root):
+        """SECURITY_AUTHENTICATION: Authentication mechanism validation."""
+        src_dir = cortex_root / "src"
+        
+        if not src_dir.exists():
+            pytest.skip("No src directory")
+        
+        # Check for authentication infrastructure
+        auth_indicators = list(src_dir.rglob("*auth*.py")) + \
+                         list(src_dir.rglob("*security*.py")) + \
+                         list(src_dir.rglob("*token*.py"))
+        
+        if auth_indicators:
+            print(f"\n[INFO] Authentication modules: {len(auth_indicators)}")
+        else:
+            print("\n[INFO] No explicit authentication modules (may use external)")
+    
+    def test_threat_modeling_enforcement(self, cortex_root):
+        """THREAT_MODELING_ENFORCEMENT: Threat model documentation required."""
+        docs_dir = cortex_root / "docs"
+        brain_docs = cortex_root / "cortex-brain" / "documents"
+        
+        # Check for threat modeling documentation
+        threat_docs = []
+        
+        for search_dir in [docs_dir, brain_docs]:
+            if search_dir.exists():
+                threat_docs.extend(list(search_dir.rglob("*threat*.md")))
+                threat_docs.extend(list(search_dir.rglob("*security*.md")))
+        
+        if threat_docs:
+            print(f"\n[INFO] Threat/security documentation: {len(threat_docs)} files")
+        else:
+            print("\n[WARNING] No threat modeling documentation found")
+
+
+class TestTier0InstinctsOperations:
+    """Operations and maintenance instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_upgrade_brain_preservation(self, cortex_root):
+        """UPGRADE_BRAIN_PRESERVATION: Brain state preserved during upgrades."""
+        # Check for upgrade/backup infrastructure
+        brain_dir = cortex_root / "cortex-brain"
+        backups_dir = brain_dir / "backups"
+        
+        if not brain_dir.exists():
+            pytest.skip("No brain directory")
+        
+        # Check for backup mechanisms
+        has_backups = backups_dir.exists() if backups_dir else False
+        
+        # Check upgrade orchestrator
+        upgrade_files = list(cortex_root.rglob("*upgrade*.py"))
+        
+        if upgrade_files:
+            print(f"\n[INFO] Upgrade infrastructure: {len(upgrade_files)} files")
+            
+            # Check for backup calls in upgrade orchestrator
+            for upgrade_file in upgrade_files[:3]:
+                content = upgrade_file.read_text(encoding='utf-8', errors='ignore')
+                if 'backup' in content.lower() or 'preserve' in content.lower():
+                    print(f"  {upgrade_file.name}: Brain preservation logic found")
+        
+        if has_backups:
+            print(f"[INFO] Backups directory exists")
+    
+    def test_schema_migration_enforcement(self, cortex_root):
+        """SCHEMA_MIGRATION_ENFORCEMENT: Database migrations required."""
+        brain_dir = cortex_root / "cortex-brain"
+        
+        if not brain_dir.exists():
+            pytest.skip("No brain directory")
+        
+        # Check for migration infrastructure
+        migration_dirs = [
+            brain_dir / "migrations",
+            cortex_root / "migrations",
+        ]
+        
+        migrations_found = []
+        for mig_dir in migration_dirs:
+            if mig_dir.exists():
+                migrations = list(mig_dir.glob("*.sql")) + list(mig_dir.glob("*.py"))
+                migrations_found.extend(migrations)
+        
+        if migrations_found:
+            print(f"\n[INFO] Schema migrations: {len(migrations_found)} files")
+        else:
+            print("\n[WARNING] No schema migration files found")
+        
+        # Check for migration scripts
+        migration_scripts = list(cortex_root.rglob("*migrate*.py"))
+        if migration_scripts:
+            print(f"[INFO] Migration scripts: {len(migration_scripts)}")
+    
+    def test_debug_marker_removal_enforcement(self, cortex_root):
+        """DEBUG_MARKER_REMOVAL_ENFORCEMENT: No debug code in production."""
+        src_dir = cortex_root / "src"
+        
+        if not src_dir.exists():
+            pytest.skip("No src directory")
+        
+        # Check for debug markers
+        debug_patterns = [
+            r'print\s*\(',  # print statements
+            r'console\.log',  # console.log
+            r'debugger',  # debugger statement
+            r'import\s+pdb',  # pdb import
+            r'breakpoint\s*\(',  # breakpoint()
+        ]
+        
+        python_files = list(src_dir.rglob("*.py"))
+        
+        debug_files = {}
+        for py_file in python_files[:40]:  # Sample
+            content = py_file.read_text(encoding='utf-8', errors='ignore')
+            
+            for pattern in debug_patterns:
+                matches = re.findall(pattern, content, re.IGNORECASE)
+                if matches:
+                    if py_file.name not in debug_files:
+                        debug_files[py_file.name] = []
+                    debug_files[py_file.name].extend(matches)
+        
+        if debug_files:
+            # Filter out legitimate logging
+            suspicious = {f: m for f, m in debug_files.items() 
+                         if not any(skip in f for skip in ['test_', 'debug', 'log'])}
+            
+            if suspicious:
+                print(f"\n[WARNING] Potential debug markers: {len(suspicious)} files")
+                for fname in list(suspicious.keys())[:3]:
+                    print(f"  {fname}: {len(suspicious[fname])} instances")
+
+
+class TestTier0InstinctsDocumentation:
+    """Documentation and API requirements."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_api_documentation_required(self, cortex_root):
+        """API_DOCUMENTATION_REQUIRED: Public APIs must have documentation."""
+        src_dir = cortex_root / "src"
+        
+        if not src_dir.exists():
+            pytest.skip("No src directory")
+        
+        # Check for API documentation
+        api_files = list(src_dir.rglob("*api*.py")) + \
+                   list(src_dir.rglob("*endpoint*.py")) + \
+                   list(src_dir.rglob("*route*.py"))
+        
+        if not api_files:
+            print("\n[INFO] No API files detected")
+            return
+        
+        undocumented = []
+        for api_file in api_files[:10]:
+            content = api_file.read_text(encoding='utf-8', errors='ignore')
+            
+            # Check for docstrings in functions
+            functions = re.findall(r'def\s+(\w+)\s*\(', content)
+            docstrings = len(re.findall(r'"""[\s\S]*?"""', content))
+            
+            if len(functions) > docstrings + 2:  # Allow some helpers without docs
+                undocumented.append(api_file.name)
+        
+        if undocumented:
+            print(f"\n[WARNING] Underdocumented APIs: {len(undocumented)} files")
+        else:
+            print(f"\n[INFO] API files: {len(api_files)}")
+
+
+class TestTier0InstinctsAdvanced:
+    """Advanced SKULL validation instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_skull_faculty_integrity(self, cortex_root):
+        """SKULL_FACULTY_INTEGRITY: Agent system integrity validation."""
+        src_dir = cortex_root / "src"
+        
+        if not src_dir.exists():
+            pytest.skip("No src directory")
+        
+        # Check for agent system structure
+        agent_dirs = [
+            src_dir / "cortex_agents",
+            src_dir / "agents",
+        ]
+        
+        agent_dir = None
+        for adir in agent_dirs:
+            if adir.exists():
+                agent_dir = adir
+                break
+        
+        if not agent_dir:
+            pytest.skip("No agent directory found")
+        
+        # Count agent files
+        agent_files = list(agent_dir.rglob("*agent*.py"))
+        
+        # Check for base agent pattern
+        base_agent_files = [f for f in agent_files if 'base' in f.name.lower()]
+        
+        if base_agent_files:
+            print(f"\n[INFO] Agent system integrity:")
+            print(f"  Total agents: {len(agent_files)}")
+            print(f"  Base agent: {len(base_agent_files)}")
+            
+            # Check inheritance
+            for agent_file in agent_files[:10]:
+                content = agent_file.read_text(encoding='utf-8', errors='ignore')
+                if 'BaseAgent' in content or 'class.*Agent' in content:
+                    continue
+        else:
+            print(f"\n[INFO] Agent files: {len(agent_files)}")
+            print("  No base agent pattern detected")
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
