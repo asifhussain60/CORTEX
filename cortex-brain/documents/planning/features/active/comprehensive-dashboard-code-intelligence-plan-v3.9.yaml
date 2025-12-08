@@ -1,22 +1,99 @@
 metadata:
   plan_id: "dashboard-code-intel-v3.9-001"
-  title: "Comprehensive Dashboard & Code Intelligence Enhancement"
+  title: "Comprehensive Dashboard & Code Intelligence Enhancement (MASTER PLAN)"
   created: "2025-12-08T00:00:00Z"
-  updated: "2025-12-08T16:30:00Z"
+  updated: "2025-12-08T20:00:00Z"
   status: "in_progress"
   priority: "critical"
-  estimated_effort: "140-180 hours"
-  actual_effort: "24 hours (Phase 1 complete)"
+  estimated_effort: "160-204 hours"
+  actual_effort: "24 hours (Phase 1 complete - 15%)"
   owner: "CORTEX Development Team"
-  tags: ["dashboard", "code-intelligence", "multi-language", "validation", "reconciliation", "reverse-engineering", "v3.9"]
+  tags: ["dashboard", "code-intelligence", "multi-language", "validation", "reconciliation", "reverse-engineering", "onboarding", "admin-dashboard", "v3.9"]
   consolidates:
-    - "executive-summary-enhancement-v2.yaml"
-    - "onboarding-tab-enhancement.yaml"
-    - "CORTEX-GAP-REMEDIATION-COMPREHENSIVE-PLAN.yaml"
+    - "executive-summary-enhancement-v2.yaml (ARCHIVED - integrated into Phase 1-2)"
+    - "onboarding-tab-enhancement.yaml (ARCHIVED - integrated into Phase 3)"
+    - "CORTEX-GAP-REMEDIATION-COMPREHENSIVE-PLAN.yaml (ARCHIVED - integrated into Phase 4)"
+    - "PLAN-2025-11-30-ONBOARDING-APP-DASHBOARD-COMPREHENSIVE.md (ARCHIVED - superseded)"
+    - "PLAN-2025-11-29-APPLICATION-HEALTH-DASHBOARD-COMPREHENSIVE.md (ARCHIVED - superseded)"
   phase1_completion:
     date: "2025-12-08T16:30:00Z"
     report: "cortex-brain/documents/reports/phase1-complete-2025-12-08.md"
     git_commits: ["54eefd85", "f11d8fa6", "8de80a7a", "b2443a77", "541ad80f", "c7502198"]
+  note: "THIS IS THE SINGLE ACTIVE PLAN - All onboarding, dashboard, and code intelligence work consolidated here"
+  
+consolidated_status:
+  consolidation_date: "2025-12-08T18:00:00Z"
+  archived_plans: 5
+  total_archived_lines: 5553
+  archive_location: "cortex-brain/documents/planning/features/.archive/2025-12-08-consolidation/"
+  rationale: "Eliminated confusion by merging all dashboard/onboarding work into single master plan with unified timeline"
+  
+progress_summary:
+  overall_completion: "15% (24h / 160-204h estimated)"
+  overall_progress_bar: "[██░░░░░░░░░░░░░░] 15%"
+  
+  phase_1_foundation:
+    status: "✅ COMPLETE"
+    completion: "100% (3/3 tasks)"
+    hours: "24h / 24h"
+    progress_bar: "[███████████████] 100%"
+    
+  phase_2_executive_summary:
+    status: "🔄 NOT STARTED"
+    completion: "0% (0/3 tasks)"
+    hours: "0h / 20-24h"
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+  
+  phase_2_5_test_coverage:
+    status: "⏳ NOT STARTED"
+    completion: "0% (0/5 tasks)"
+    hours: "0h / 20-24h"
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+  phase_3_onboarding:
+    status: "⏳ NOT STARTED"
+    completion: "0% (0/4 tasks)"
+    hours: "0h / 28-32h"
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+  phase_4_validation:
+    status: "⏳ NOT STARTED"
+    completion: "0% (0/3 tasks)"
+    hours: "0h / 24-28h"
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+  phase_5_documentation:
+    status: "⏳ NOT STARTED"
+    completion: "0% (0/3 tasks)"
+    hours: "0h / 28-32h"
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+  phase_6_production:
+    status: "⏳ NOT STARTED"
+    completion: "0% (0/2 tasks)"
+    hours: "0h / 16-20h"
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+  next_milestone: "Phase 2.1 - Git Commit Pattern Analyzer (6h estimated)"
+  
+  visual_summary: |
+    📊 MASTER PLAN PROGRESS
+    ════════════════════════════════════════════════════════════════
+    
+    Overall Progress: [██░░░░░░░░░░░░░░] 15% (24h / 160-204h)
+    
+    Phase 1: Foundation           [███████████████] 100% ✅ COMPLETE
+    Phase 2: Executive Summary    [░░░░░░░░░░░░░░░]   0% 🔄 NEXT
+    Phase 2.5: Test Coverage      [░░░░░░░░░░░░░░░]   0% ⏳ NEW
+    Phase 3: Onboarding           [░░░░░░░░░░░░░░░]   0% ⏳ PENDING
+    Phase 4: Validation           [░░░░░░░░░░░░░░░]   0% ⏳ PENDING
+    Phase 5: Documentation        [░░░░░░░░░░░░░░░]   0% ⏳ PENDING
+    Phase 6: Production           [░░░░░░░░░░░░░░░]   0% ⏳ PENDING
+    
+    ════════════════════════════════════════════════════════════════
+    ⏱️  Time Invested: 24 hours
+    📅 Remaining: 136-180 hours (85%)
+    🎯 Next: Phase 2.1 - Git Commit Pattern Analyzer (6h)
 
 summary:
   problem: |
@@ -75,14 +152,21 @@ summary:
        - Tool recommendation engine (IDE, linters, debuggers per tech stack)
        - Team discovery via git blame and commit frequency analysis
     
-    4. **ENSURE DATA INTEGRITY** (Quality & Reliability)
+    4. **TEST COVERAGE INTELLIGENCE** (Quality & Visibility)
+       - Multi-language test framework detection (pytest, xUnit, Jest, TestBox)
+       - Coverage baseline calculation (execution data or static analysis)
+       - Gap prioritization (P0 critical, P1 high, P2 medium, P3 low)
+       - Roadmap generation with effort estimates and milestones
+       - Dashboard visualization (heatmaps, priority matrix, Gantt charts)
+    
+    5. **ENSURE DATA INTEGRITY** (Quality & Reliability)
        - Independent validation cycle that DOESN'T reuse collector code
        - Enhanced reconciliation covering ALL dashboard tabs (not just R8/R9/R10)
        - Cross-tab correlation verification (exec summary ↔ tech stack ↔ onboarding)
        - Ground truth verification via direct repository scanning
        - Schema validation and false positive elimination
     
-    5. **UNIFIED CODE ANALYSIS TOOLCHAIN** (Multi-Language Support)
+    6. **UNIFIED CODE ANALYSIS TOOLCHAIN** (Multi-Language Support)
        - Add ColdFusion parser (CFScript/Tag-based syntax)
        - Integrate tree-sitter for robust multi-language AST parsing
        - Leverage existing CORTEX intelligence analyzers (Python/JS/TS/C#)
@@ -96,6 +180,15 @@ summary:
       - "Instructional manuals generated from code (1 per repo, <30 min generation)"
       - "Multi-language documentation generator outputs Markdown + HTML + JSON"
       - "Toolchain reusable for any C#/JS/Python/ColdFusion/ASPX repository"
+    
+    test_coverage_intelligence:
+      - "Test frameworks detected in Python, C#, JS/TS, ColdFusion, Ruby (95%+ accuracy)"
+      - "Coverage baseline calculated for 10 repos (execution or static analysis)"
+      - "P0 critical gaps identified with 90%+ accuracy (API/auth/financial/security)"
+      - "Roadmap effort estimates within ±25% of actual (validated on 5 projects)"
+      - "Dashboard visualizations interactive and responsive (<2s render for 500 files)"
+      - "Quick wins identified (10+ tasks with <3h effort, >5% impact)"
+      - "Test skeleton generation for Python, C#, JavaScript (pytest, xUnit, Jest templates)"
     
     dashboard_enhancements:
       - "Executive summaries score 8/10 quality (vs current 3/10)"
@@ -165,6 +258,7 @@ phases:
     actual_duration: "24 hours"
     completed_date: "2025-12-08T16:30:00Z"
     dependencies: []
+    progress_bar: "[███████████████] 100%"
     
     completion_summary:
       tasks_completed: 3
@@ -173,6 +267,11 @@ phases:
       test_code_lines: 1220
       git_commits: 6
       validation: "All 3 tasks complete with 100% test success rate, validated on 1.38M LOC production code"
+      visual_progress: |
+        Phase 1: [███████████████] 100% ✅
+        ├─ Task 1.1: ColdFusion Parser      [███████████████] 100% ✅ (8h)
+        ├─ Task 1.2: AST Docstring Extract  [███████████████] 100% ✅ (10h)
+        └─ Task 1.3: Domain Inference       [███████████████] 100% ✅ (6h)
     
     tasks:
       - id: "1.1"
@@ -342,8 +441,17 @@ phases:
   - phase: 2
     name: "Executive Summary Intelligence"
     description: "Transform executive summaries from templates to intelligent narratives"
+    status: "not_started"
     estimated_duration: "20-24 hours"
+    actual_duration: "0 hours"
     dependencies: ["1"]
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+    visual_progress: |
+      Phase 2: [░░░░░░░░░░░░░░░] 0% 🔄 NEXT
+      ├─ Task 2.1: Git Commit Analyzer    [░░░░░░░░░░░░░░░] 0% ⏳ (6h)
+      ├─ Task 2.2: README Deep Parser     [░░░░░░░░░░░░░░░] 0% ⏳ (8h)
+      └─ Task 2.3: Integration            [░░░░░░░░░░░░░░░] 0% ⏳ (10h)
     
     tasks:
       - id: "2.1"
@@ -442,11 +550,439 @@ phases:
           - Test with all 4 target repos, verify quality improvement
         estimated_hours: 10
 
+  - phase: 2.5
+    name: "Test Coverage Intelligence & Gap Analysis"
+    description: "Analyze test coverage, identify gaps, prioritize untested code, generate coverage roadmap"
+    status: "not_started"
+    estimated_duration: "20-24 hours"
+    actual_duration: "0 hours"
+    dependencies: ["1", "2"]
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+    visual_progress: |
+      Phase 2.5: [░░░░░░░░░░░░░░░] 0% ⏳ NEW
+      ├─ Task 2.5.1: Test Discovery      [░░░░░░░░░░░░░░░] 0% ⏳ (6h)
+      ├─ Task 2.5.2: Coverage Baseline   [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
+      ├─ Task 2.5.3: Gap Prioritization  [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
+      ├─ Task 2.5.4: Roadmap Generator   [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
+      └─ Task 2.5.5: Dashboard Viz       [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
+    
+    tasks:
+      - id: "2.5.1"
+        title: "Multi-Language Test Discovery Engine"
+        description: |
+          Detect and analyze test files across all supported languages.
+          
+          TEST FRAMEWORK DETECTION:
+          - **Python**: pytest (test_*.py, *_test.py), unittest (TestCase classes), nose
+          - **C#**: xUnit ([Fact], [Theory]), NUnit ([Test], [TestFixture]), MSTest ([TestMethod])
+          - **JavaScript/TypeScript**: Jest (describe/it/test), Mocha (describe/it), Jasmine
+          - **ColdFusion**: TestBox (component extends="testbox.system.BaseSpec")
+          - **Ruby**: RSpec (describe/it/expect), Minitest (test_*)
+          
+          PATTERN MATCHING:
+          - File naming: test_*, *_test.*, *Test.*, *Spec.*, *.spec.*, *.test.*
+          - Directory conventions: tests/, test/, spec/, __tests__/, TestProject/
+          - Decorators/attributes: @Test, [Fact], @pytest.mark, describe()
+          - Assertion libraries: assert, expect, Should, verify, assertEquals
+          
+          EXTRACTION:
+          - Test file count per framework
+          - Test function/method count
+          - Test class count (for OOP frameworks)
+          - Assertion count (proxy for test depth)
+          - Test file LOC vs production LOC ratio
+          
+          OUTPUT STRUCTURE:
+          ```json
+          {
+            "test_frameworks": {
+              "pytest": {
+                "files": 45,
+                "test_functions": 312,
+                "assertions": 847,
+                "test_loc": 8432,
+                "coverage_file": ".coverage"
+              },
+              "xunit": {
+                "files": 12,
+                "test_classes": 38,
+                "test_methods": 156,
+                "assertions": 423,
+                "test_loc": 3456
+              }
+            },
+            "test_directories": ["tests/", "src/tests/", "TestProject/"],
+            "test_to_code_ratio": 0.28,
+            "frameworks_detected": ["pytest", "xunit", "jest"]
+          }
+          ```
+        acceptance_criteria:
+          - Detects test frameworks in Python, C#, JS/TS, ColdFusion, Ruby
+          - Identifies test files with 95%+ accuracy (tested on 20 repos)
+          - Counts test functions, classes, assertions correctly
+          - Calculates test-to-code ratio (test LOC / production LOC)
+          - Handles mixed frameworks (e.g., pytest + unittest in same repo)
+          - Performance: <5s for 1000 files
+          - Test with all 4 target repos + luum-fresh, worklight-foundation
+        estimated_hours: 6
+        
+      - id: "2.5.2"
+        title: "Coverage Baseline Calculator"
+        description: |
+          Calculate existing test coverage baseline from static analysis and execution data.
+          
+          COVERAGE SOURCES:
+          1. **Execution Coverage** (if available):
+             - Python: Parse .coverage file or coverage.xml
+             - C#: Parse coverage.cobertura.xml or coverage.opencover.xml
+             - JavaScript: Parse coverage/lcov.info or coverage-final.json
+             - ColdFusion: Parse TestBox JSON report
+          
+          2. **Static Coverage Estimation** (when no execution data):
+             - Match test files to source files by naming convention
+             - Detect which classes/functions have corresponding tests
+             - Calculate "test existence coverage" (not execution coverage)
+          
+          COVERAGE METRICS:
+          - **Line Coverage**: % of executable lines covered by tests
+          - **Function Coverage**: % of functions with at least one test
+          - **Class Coverage**: % of classes with test files
+          - **Branch Coverage**: % of conditional branches tested (if available)
+          - **Domain Coverage**: Coverage % per business domain (Phase 1.3)
+          
+          CALCULATION METHODS:
+          - **Method 1**: Parse coverage reports (gold standard, requires test execution)
+          - **Method 2**: AST analysis - match test names to source names
+          - **Method 3**: Import analysis - detect which modules are imported by tests
+          - **Method 4**: Fallback - test file count / source file count ratio
+          
+          OUTPUT:
+          ```json
+          {
+            "overall_coverage": {
+              "line_coverage": 67.3,
+              "function_coverage": 72.1,
+              "class_coverage": 58.9,
+              "branch_coverage": 54.2,
+              "method": "execution"
+            },
+            "coverage_by_domain": {
+              "Parking": {"line_coverage": 82.1, "function_coverage": 89.3},
+              "Rewards": {"line_coverage": 45.2, "function_coverage": 51.7},
+              "Payroll": {"line_coverage": 23.1, "function_coverage": 18.9}
+            },
+            "coverage_by_file": [
+              {"file": "ParkingController.cs", "line_coverage": 91.2, "tested": true},
+              {"file": "RewardService.cs", "line_coverage": 38.5, "tested": true},
+              {"file": "PayrollCalculator.cs", "line_coverage": 0.0, "tested": false}
+            ],
+            "baseline_date": "2025-12-08",
+            "data_source": "execution"
+          }
+          ```
+        acceptance_criteria:
+          - Parses coverage reports for Python, C#, JS/TS (4 formats each)
+          - Calculates static coverage when no execution data available
+          - Maps coverage to business domains (from Phase 1.3)
+          - Identifies completely untested files (0% coverage)
+          - Calculates 4 coverage metrics: line, function, class, branch
+          - Test with 10 repos (5 with coverage data, 5 without)
+          - Accuracy within ±5% of ground truth for static estimation
+        estimated_hours: 4
+        
+      - id: "2.5.3"
+        title: "Test Gap Prioritization Matrix"
+        description: |
+          Categorize untested/undertested code by business criticality and risk.
+          
+          PRIORITIZATION CRITERIA:
+          
+          **P0 - CRITICAL (Must Test)**:
+          - API endpoints (REST/SOAP/GraphQL)
+          - Authentication/authorization logic
+          - Data mutation operations (INSERT/UPDATE/DELETE)
+          - Financial calculations (money, tax, payroll)
+          - Security-sensitive code (encryption, validation, permissions)
+          - Public interfaces (exported classes, public methods)
+          - Criteria: High business impact + High risk + Low current coverage (<30%)
+          
+          **P1 - HIGH (Should Test)**:
+          - Business logic services
+          - Data validation and transformation
+          - Workflow orchestration
+          - Report generation
+          - Integration points (external APIs, databases)
+          - Criteria: Medium-high business impact + Medium risk + Low-medium coverage (30-60%)
+          
+          **P2 - MEDIUM (Nice to Test)**:
+          - Utility functions and helpers
+          - Data access layer (CRUD operations)
+          - Configuration loaders
+          - Logging and monitoring
+          - UI controllers with minimal logic
+          - Criteria: Medium business impact + Low-medium risk + Medium coverage (60-80%)
+          
+          **P3 - LOW (Optional)**:
+          - DTOs and POCOs (data transfer objects)
+          - Simple getters/setters
+          - Constants and enums
+          - Generated code
+          - Third-party wrapper classes (minimal logic)
+          - Criteria: Low business impact + Low risk + High coverage (>80%) or trivial code
+          
+          RISK SCORING FACTORS:
+          - **Complexity**: Cyclomatic complexity >10 → higher risk
+          - **Change Frequency**: >10 commits in last 90 days → higher risk
+          - **Bug History**: >3 bug fixes in last 6 months → higher risk
+          - **Dependencies**: Used by >5 other modules → higher risk
+          - **Data Sensitivity**: Handles PII/financial data → higher risk
+          
+          DETECTION PATTERNS:
+          - API endpoints: Route attributes ([HttpGet], @app.route, @RequestMapping)
+          - Auth code: Keywords (authorize, authenticate, permission, role, token)
+          - Money operations: Decimal/Money types, currency symbols, tax/fee keywords
+          - Security: encrypt, hash, sanitize, validate, escape keywords
+          - Public APIs: public class/method, exported functions
+          
+          OUTPUT:
+          ```json
+          {
+            "p0_critical": {
+              "count": 47,
+              "total_loc": 8234,
+              "estimated_hours": 94,
+              "examples": [
+                {
+                  "file": "PayrollCalculator.cs",
+                  "class": "PayrollCalculator",
+                  "method": "CalculateNetPay",
+                  "reason": "Financial calculation with 0% coverage",
+                  "complexity": 18,
+                  "risk_score": 95,
+                  "current_coverage": 0,
+                  "effort_hours": 3
+                }
+              ]
+            },
+            "p1_high": {...},
+            "p2_medium": {...},
+            "p3_low": {...},
+            "summary": {
+              "total_untested_methods": 312,
+              "p0_percentage": 15.1,
+              "total_effort_hours": 234
+            }
+          }
+          ```
+        acceptance_criteria:
+          - Categorizes all untested code into P0/P1/P2/P3
+          - Detection patterns identify API/auth/money/security code with 90%+ accuracy
+          - Risk scoring incorporates complexity, change frequency, bug history
+          - Effort estimates based on code complexity and test requirements
+          - P0 examples include clear reason and remediation guidance
+          - Test with all 4 target repos, validate categorization with 3 developers
+          - Performance: <10s for 500-file repository
+        estimated_hours: 4
+        
+      - id: "2.5.4"
+        title: "Coverage Roadmap Generator"
+        description: |
+          Generate actionable test coverage improvement roadmap with milestones and effort estimates.
+          
+          ROADMAP STRUCTURE:
+          
+          **Milestone 1: Critical Coverage (P0)**
+          - Goal: Test all P0 critical paths
+          - Target: 90%+ coverage for P0 code
+          - Effort: Calculated from P0 tasks
+          - Timeline: 1-3 sprints (2-6 weeks)
+          - Deliverables:
+            - API endpoint tests (all REST/SOAP/GraphQL endpoints)
+            - Authentication/authorization tests
+            - Financial calculation tests
+            - Security validation tests
+          
+          **Milestone 2: High Priority Coverage (P1)**
+          - Goal: Test business logic and integrations
+          - Target: 70%+ coverage for P1 code
+          - Effort: Calculated from P1 tasks
+          - Timeline: 2-4 sprints (4-8 weeks)
+          - Deliverables:
+            - Service layer tests
+            - Data validation tests
+            - Workflow orchestration tests
+            - Integration tests
+          
+          **Milestone 3: Standard Coverage (P2)**
+          - Goal: Test utilities and data access
+          - Target: 50%+ coverage for P2 code
+          - Effort: Calculated from P2 tasks
+          - Timeline: 2-3 sprints (4-6 weeks)
+          - Deliverables:
+            - Utility function tests
+            - Data access layer tests
+            - Configuration tests
+          
+          **Milestone 4: Complete Coverage (P3)**
+          - Goal: Achieve 80%+ overall coverage
+          - Target: Test remaining code
+          - Effort: P3 tasks + backlog
+          - Timeline: Ongoing maintenance
+          
+          EFFORT ESTIMATION:
+          - **Simple function**: 0.5 hours (1 test file, 3-5 test cases)
+          - **Medium complexity**: 2 hours (1 test file, 10-15 test cases, mocking)
+          - **Complex service**: 4 hours (2-3 test files, 20+ test cases, integration)
+          - **API endpoint**: 1 hour (happy path, error cases, validation)
+          - **High complexity**: 6+ hours (multiple files, complex mocking, edge cases)
+          
+          TASK GENERATION:
+          - Each P0/P1/P2 item becomes a task with:
+            - Title: "Test [ClassName].[MethodName]"
+            - Description: Why it's important, what to test
+            - Acceptance criteria: Test cases to implement
+            - Effort estimate: Hours based on complexity
+            - Priority: P0/P1/P2/P3
+            - Dependencies: Tests needed before this one
+          
+          OUTPUT FORMATS:
+          - **JSON**: Machine-readable for dashboard integration
+          - **Markdown**: Human-readable roadmap document
+          - **CSV**: Import into project management tools (Jira, Azure DevOps)
+          - **Gantt Chart Data**: Timeline visualization
+          
+          EXAMPLE OUTPUT:
+          ```json
+          {
+            "roadmap_id": "test-coverage-roadmap-2025-12-08",
+            "repository": "TCBULK",
+            "baseline_coverage": 23.1,
+            "target_coverage": 80.0,
+            "total_effort_hours": 234,
+            "estimated_weeks": 12,
+            "milestones": [
+              {
+                "id": "M1",
+                "name": "Critical Coverage (P0)",
+                "goal": "Test all critical paths",
+                "target_coverage": 90.0,
+                "effort_hours": 94,
+                "timeline_weeks": 3,
+                "tasks": 47,
+                "tasks_list": [...]
+              },
+              {...}
+            ],
+            "quick_wins": [
+              {
+                "task": "Test RewardCalculator.CalculatePoints",
+                "effort_hours": 2,
+                "impact": "Covers 8% of untested P1 code",
+                "reason": "Simple logic, high reuse"
+              }
+            ]
+          }
+          ```
+        acceptance_criteria:
+          - Generates 4-milestone roadmap with effort estimates
+          - Task breakdown includes title, description, acceptance criteria, effort
+          - Effort estimates within ±25% of actual time (validated on 5 completed projects)
+          - Identifies "quick wins" (high impact, low effort)
+          - Outputs in 4 formats: JSON, Markdown, CSV, Gantt
+          - Timeline realistic (assumes 20 hrs/week testing capacity)
+          - Test with all 4 target repos, validate estimates with 3 developers
+        estimated_hours: 4
+        
+      - id: "2.5.5"
+        title: "Dashboard Visualization & Reporting"
+        description: |
+          Add test coverage tab to dashboard with interactive visualizations.
+          
+          VISUALIZATIONS:
+          
+          1. **Coverage Heatmap**:
+             - Treemap showing files colored by coverage % (red <30%, yellow 30-70%, green >70%)
+             - Size = file LOC, color = coverage %, click to drill down
+             - Group by business domain or directory structure
+          
+          2. **Priority Matrix**:
+             - 2D scatter plot: X-axis = coverage %, Y-axis = risk score
+             - Quadrants: P0 (low coverage, high risk), P1, P2, P3
+             - Hover shows file/class/method details
+          
+          3. **Coverage Trends** (if historical data):
+             - Line chart showing coverage % over time
+             - Separate lines for overall, P0, P1, P2
+             - Annotations for milestones/releases
+          
+          4. **Roadmap Gantt Chart**:
+             - Timeline view of milestones and tasks
+             - Color-coded by priority (P0=red, P1=orange, P2=yellow, P3=gray)
+             - Progress bars for in-progress milestones
+          
+          5. **Domain Coverage Table**:
+             - Table showing coverage by business domain
+             - Columns: Domain, Files, LOC, Coverage %, P0 Count, Status
+             - Sortable and filterable
+          
+          6. **Quick Wins List**:
+             - Cards showing high-impact, low-effort test tasks
+             - "Test this in 2 hours, cover 8% of P1 code"
+             - One-click to generate test skeleton
+          
+          INTERACTIVITY:
+          - Click file in heatmap → Show untested methods
+          - Click P0 task → Show code snippet and suggested test cases
+          - Filter by priority (show only P0/P1)
+          - Export roadmap as PDF or CSV
+          - Generate test skeleton for selected task
+          
+          DATA INTEGRATION:
+          - Load from test-coverage-analysis.json (Phase 2.5.2 output)
+          - Load from test-gap-prioritization.json (Phase 2.5.3 output)
+          - Load from coverage-roadmap.json (Phase 2.5.4 output)
+          - Update on every dashboard refresh (or cache for 1 hour)
+          
+          NEW DASHBOARD TAB:
+          ```
+          cortex-brain/dashboards/ui/
+          ├── test-coverage-tab.html
+          ├── test-coverage-tab.js
+          ├── test-coverage-tab.css
+          └── components/
+              ├── coverage-heatmap.js
+              ├── priority-matrix.js
+              ├── roadmap-gantt.js
+              └── quick-wins-cards.js
+          ```
+        acceptance_criteria:
+          - New "Test Coverage" tab in dashboard
+          - 6 visualizations implemented and interactive
+          - Heatmap renders for 500+ files in <2s
+          - Priority matrix updates on filter change in <500ms
+          - Gantt chart supports drag-to-reschedule (optional)
+          - Quick wins generate test skeletons (Python/C#/JS templates)
+          - Export roadmap to PDF with charts and tables
+          - Test with luum-fresh and all 4 target repos
+          - User testing: 3 developers rate usability 8/10+
+        estimated_hours: 4
+
   - phase: 3
     name: "Onboarding Automation & Intelligence"
     description: "Automate developer onboarding with environment setup and validation"
+    status: "not_started"
     estimated_duration: "28-32 hours"
+    actual_duration: "0 hours"
     dependencies: ["1"]
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+    visual_progress: |
+      Phase 3: [░░░░░░░░░░░░░░░] 0% ⏳
+      ├─ Task 3.1: Dependency Detection   [░░░░░░░░░░░░░░░] 0% ⏳ (8h)
+      ├─ Task 3.2: Setup Script Gen       [░░░░░░░░░░░░░░░] 0% ⏳ (12h)
+      ├─ Task 3.3: Validation Framework   [░░░░░░░░░░░░░░░] 0% ⏳ (6h)
+      └─ Task 3.4: Tool Recommendations   [░░░░░░░░░░░░░░░] 0% ⏳ (6h)
     
     tasks:
       - id: "3.1"
@@ -580,8 +1116,16 @@ phases:
   - phase: 4
     name: "Independent Validation & Reconciliation"
     description: "Ensure dashboard data integrity with independent validation and cross-tab reconciliation"
+    status: "not_started"
     estimated_duration: "24-28 hours"
+    actual_duration: "0 hours"
     dependencies: ["1", "2"]
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+    visual_progress: |
+      Phase 4: [░░░░░░░░░░░░░░░] 0% ⏳
+      ├─ Task 4.1: Independent Validation [░░░░░░░░░░░░░░░] 0% ⏳ (12h)
+      └─ Task 4.2: Cross-Tab Reconcile    [░░░░░░░░░░░░░░░] 0% ⏳ (12h)
     
     tasks:
       - id: "4.1"
@@ -670,8 +1214,17 @@ phases:
   - phase: 5
     name: "Unified Documentation Generator"
     description: "Generate instructional manuals from code for all 4 target repositories"
+    status: "not_started"
     estimated_duration: "28-32 hours"
+    actual_duration: "0 hours"
     dependencies: ["1", "2", "3", "4"]
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+    visual_progress: |
+      Phase 5: [░░░░░░░░░░░░░░░] 0% ⏳
+      ├─ Task 5.1: Multi-Lang Orchestrate [░░░░░░░░░░░░░░░] 0% ⏳ (14h)
+      ├─ Task 5.2: Template Generation    [░░░░░░░░░░░░░░░] 0% ⏳ (8h)
+      └─ Task 5.3: Dashboard Integration  [░░░░░░░░░░░░░░░] 0% ⏳ (10h)
     
     tasks:
       - id: "5.1"
@@ -774,8 +1327,16 @@ phases:
   - phase: 6
     name: "Performance Optimization & Deployment"
     description: "Optimize for large repositories and deploy to production"
+    status: "not_started"
     estimated_duration: "16-20 hours"
+    actual_duration: "0 hours"
     dependencies: ["1", "2", "3", "4", "5"]
+    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    
+    visual_progress: |
+      Phase 6: [░░░░░░░░░░░░░░░] 0% ⏳
+      ├─ Task 6.1: Performance Benchmark  [░░░░░░░░░░░░░░░] 0% ⏳ (10h)
+      └─ Task 6.2: Production Deployment  [░░░░░░░░░░░░░░░] 0% ⏳ (10h)
     
     tasks:
       - id: "6.1"
@@ -858,6 +1419,18 @@ risks:
   - description: "ColdFusion parser may struggle with complex tag-based syntax"
     mitigation: "Start with CFScript (.cfc) which is similar to JavaScript, add tag support iteratively"
     impact: "medium"
+  
+  - description: "Test coverage static analysis may have 20-30% error rate without execution data"
+    mitigation: "Clearly label as 'estimated coverage' when no execution data, prioritize repos with coverage reports"
+    impact: "medium"
+  
+  - description: "P0/P1/P2 prioritization may misclassify some code (false positives/negatives)"
+    mitigation: "Manual review of P0 list with 3 developers, tune detection patterns based on feedback"
+    impact: "medium"
+  
+  - description: "Effort estimates may be inaccurate for unfamiliar codebases"
+    mitigation: "Calibrate estimates using 5 completed test projects, provide ±25% confidence intervals"
+    impact: "low"
     
   - description: "Independent validation cycle may have false negatives (miss real issues)"
     mitigation: "Compare validation results with manual code review for 10 repos, tune thresholds"
