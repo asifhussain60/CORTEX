@@ -22,7 +22,7 @@ import os
 import yaml
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Any, Tuple, Set
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
@@ -64,6 +64,28 @@ class ValidationReport:
     compliance_score: float  # 0.0-100.0
     issues: List[ValidationIssue] = field(default_factory=list)
     summary: Dict[str, int] = field(default_factory=dict)
+    total_requirements: int = 0
+    implemented_count: int = 0
+    
+    @property
+    def compliance_percentage(self) -> float:
+        """Get compliance as percentage"""
+        return self.compliance_score
+    
+    @property
+    def status(self) -> str:
+        """Get status text"""
+        if self.compliance_score >= 80:
+            return "Compliant"
+        elif self.compliance_score >= 60:
+            return "Drift Detected"
+        else:
+            return "Non-Compliant"
+    
+    @property
+    def requirement_id(self) -> str:
+        """Compatibility property for alignment checks"""
+        return f"{self.orchestrator_name}_manifest"
     
     def add_issue(self, issue: ValidationIssue):
         """Add validation issue and update summary"""
@@ -122,6 +144,12 @@ class ManifestValidator:
         self.schema_path = self.manifests_dir / "manifest-schema.yaml"
         self.orchestrators_dir = self.cortex_root / "src" / "orchestrators"
         
+        # Caching for performance optimization
+        self._manifest_cache: Dict[str, Dict[str, Any]] = {}
+        self._file_content_cache: Dict[str, str] = {}
+        self._method_cache: Dict[str, set] = {}
+        self._validation_report_cache: Dict[str, ValidationReport] = {}
+        
         # Load schema
         self.schema = self._load_schema()
     
@@ -138,28 +166,69 @@ class ManifestValidator:
             logger.error(f"Failed to load schema: {e}")
             return {}
     
-    def load_manifest(self, orchestrator_name: str) -> Optional[Dict[str, Any]]:
+    def load_manifest(self, manifest_path: str) -> Optional[Dict[str, Any]]:
         """
-        Load manifest for specific orchestrator.
+        Load manifest file with caching.
         
         Args:
-            orchestrator_name: Name of orchestrator (e.g., "planning_system_2.0")
+            manifest_path: Path to manifest YAML file
             
         Returns:
             Manifest dict or None if not found
         """
-        manifest_path = self.manifests_dir / f"{orchestrator_name}-manifest.yaml"
+        # Check cache first
+        if manifest_path in self._manifest_cache:
+            return self._manifest_cache[manifest_path]
         
         try:
-            if not manifest_path.exists():
+            path = Path(manifest_path)
+            if not path.exists():
                 logger.warning(f"Manifest not found: {manifest_path}")
                 return None
             
-            with open(manifest_path, 'r', encoding='utf-8') as f:
-                return yaml.safe_load(f)
+            with open(path, 'r', encoding='utf-8') as f:
+                manifest = yaml.safe_load(f)
+            
+            # Cache the result
+            self._manifest_cache[manifest_path] = manifest
+            return manifest
+            
         except Exception as e:
-            logger.error(f"Failed to load manifest {orchestrator_name}: {e}")
+            logger.error(f"Failed to load manifest {manifest_path}: {e}")
             return None
+    
+    def _read_file_cached(self, file_path: str) -> Optional[str]:
+        """Read file with caching to avoid repeated file I/O"""
+        if file_path in self._file_content_cache:
+            return self._file_content_cache[file_path]
+        
+        try:
+            path = Path(file_path)
+            if not path.exists():
+                return None
+            
+            content = path.read_text(encoding='utf-8')
+            self._file_content_cache[file_path] = content
+            return content
+        except Exception as e:
+            logger.error(f"Failed to read {file_path}: {e}")
+            return None
+    
+    def _extract_methods_cached(self, file_path: str) -> Set[str]:
+        """Extract method names with caching"""
+        if file_path in self._method_cache:
+            return self._method_cache[file_path]
+        
+        content = self._read_file_cached(file_path)
+        if not content:
+            return set()
+        
+        import re
+        pattern = r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\('
+        methods = set(re.findall(pattern, content))
+        
+        self._method_cache[file_path] = methods
+        return methods
     
     def validate_orchestrator(
         self,
@@ -184,8 +253,9 @@ class ManifestValidator:
             compliance_score=0.0
         )
         
-        # Load manifest
-        manifest = self.load_manifest(orchestrator_name)
+        # Load manifest - construct path from name
+        manifest_path = self.manifests_dir / f"{orchestrator_name}-manifest.yaml"
+        manifest = self.load_manifest(str(manifest_path))
         if not manifest:
             report.add_issue(ValidationIssue(
                 severity=ValidationSeverity.CRITICAL,
