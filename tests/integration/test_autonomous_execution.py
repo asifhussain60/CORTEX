@@ -1,38 +1,64 @@
-"""Test autonomous plan execution"""
+"""
+Test autonomous execution with progress templates
+"""
 import sys
-import io
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-sys.path.insert(0, 'd:/PROJECTS/CORTEX')
+import os
+from pathlib import Path
+
+# Set UTF-8 encoding for Windows console
+if os.name == 'nt':
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
+
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent))
+
 from src.orchestrators.planning_orchestrator import PlanningOrchestrator
 
-orchestrator = PlanningOrchestrator('d:/PROJECTS/CORTEX')
-print('🚀 CORTEX Autonomous Execution Starting...')
-print('='*70)
-print('Plan: Phase 2 Auto-Documentation Generation')
-print('='*70 + '\n')
+def test_autonomous_execution():
+    """Test autonomous execution with progress template rendering."""
+    try:
+        # First, check both approved and completed directories
+        from pathlib import Path
+        approved_path = Path('cortex-brain/documents/planning/approved/PLAN-2025-12-08-progress-template-test.yaml')
+        completed_path = Path('cortex-brain/documents/planning/completed/PLAN-2025-12-08-progress-template-test.yaml')
+        
+        # Move from completed to approved if needed
+        if completed_path.exists() and not approved_path.exists():
+            print(f'Moving plan from completed to approved...')
+            approved_path.parent.mkdir(parents=True, exist_ok=True)
+            import shutil
+            shutil.move(str(completed_path), str(approved_path))
+        
+        orchestrator = PlanningOrchestrator(cortex_root='D:/PROJECTS/CORTEX')
+        print('\n' + '='*80)
+        print('AUTONOMOUS EXECUTION TEST - Progress Template Integration')
+        print('='*80 + '\n')
+        
+        print('Loading plan...')
+        result = orchestrator.execute_plan_autonomously('PLAN-2025-12-08-template-test.yaml')
+        
+        print('\n' + '='*80)
+        print('EXECUTION COMPLETE')
+        print('='*80)
+        print(f'\n✅ Success: {result.get("success")}')
+        print(f'📝 Message: {result.get("message", "No message")}')
+        print(f'📊 Total Phases: {result.get("total_phases")}')
+        print(f'✅ Tasks Completed: {result.get("completed_tasks")}/{result.get("total_tasks")}')
+        
+        if result.get('rendered_output'):
+            print('\n' + '-'*80)
+            print('FINAL RENDERED OUTPUT')
+            print('-'*80)
+            print(result['rendered_output'])
+        
+        return 0 if result.get('success') else 1
+        
+    except Exception as e:
+        print(f'\n❌ Error: {e}')
+        import traceback
+        traceback.print_exc()
+        return 1
 
-result = orchestrator.execute_plan_autonomously('PLAN-2025-12-06-auto-documentation-generation.yaml')
-
-print('\n' + '='*70)
-print('📊 EXECUTION RESULTS')
-print('='*70)
-print(f"✅ Success: {result.get('success')}")
-print(f"📋 Total Phases: {result.get('total_phases')}")
-print(f"📝 Total Tasks: {result.get('total_tasks')}")
-print(f"✔️  Completed Tasks: {result.get('completed_tasks')}")
-print(f"💬 Message: {result.get('message')}")
-
-# Display rendered template output if available
-if result.get('rendered_output'):
-    print('\n' + '='*70)
-    print('🎨 FORMATTED OUTPUT (Response Template)')
-    print('='*70)
-    print(result['rendered_output'])
-elif result.get('execution_log'):
-    print('\n📜 Execution Log (last 5 entries):')
-    for entry in result['execution_log'][-5:]:
-        print(f"  - {entry}")
-
-if result.get('documentation_reminder'):
-    print('\n📚 Documentation Reminder:')
-    print(result['documentation_reminder'])
+if __name__ == '__main__':
+    sys.exit(test_autonomous_execution())

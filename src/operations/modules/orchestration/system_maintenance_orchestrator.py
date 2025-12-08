@@ -528,10 +528,3 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             print(f"\n{rendered}\n")
         except Exception as e:
             logger.debug(f"Phase progress template rendering skipped: {e}")
-        report_path = reports_dir / f'system-maintenance-{timestamp}.json'
-        
-        with open(report_path, 'w', encoding='utf-8') as f:
-            json.dump(report, f, indent=2)
-        
-        logger.info(f"📄 Report saved: {report_path}")
-        return report_path
