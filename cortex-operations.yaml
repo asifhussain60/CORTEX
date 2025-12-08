@@ -411,16 +411,51 @@ operations:
       blocked_in_publish: true
       validation_gate: deployment_tier_check
   ado:
-    name: Ado
-    description: ADO CLI - Azure DevOps Work Item Management
-    deployment_tier: dual_context
+    name: ADO Operations
+    description: Azure DevOps work item management orchestrator - Stories, Features, Tasks, Code Reviews
+    deployment_tier: user_facing
     natural_language:
+    - plan ado
+    - plan ado story
+    - plan ado feature
     - create ado work item
     - create new work item
     - update ado work item
     - update work item
     - generate ado completion summary
-    category: general
+    - generate ado summary
+    - ado code review
+    - create plan ado
+    category: planning
+    modules:
+    - ado_agent
+    profiles:
+      story:
+        description: Create ADO User Story with acceptance criteria
+        command: plan ado story
+      feature:
+        description: Create ADO Feature with epic breakdown
+        command: plan ado feature
+      task:
+        description: Create ADO Task with implementation steps
+        command: plan ado task
+      summary:
+        description: Generate work completion summary for ADO
+        command: generate ado summary
+      code_review:
+        description: Create ADO code review work item
+        command: ado code review
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Integrated with ADOAgent for work item orchestration, matches Planning System 2.0 capabilities
+    examples:
+    - plan ado story for user authentication
+    - plan ado feature for payment processing
+    - generate ado completion summary
+    - ado code review for PR #123
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper

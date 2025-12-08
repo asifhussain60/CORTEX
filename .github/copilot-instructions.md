@@ -76,6 +76,12 @@ ALL responses MUST use this 5-part structure:
 - Commands: `plan [feature]`, `execute all phases autonomously`
 - AUTO-COMPLEXITY: HIGH→incremental, MEDIUM→conditional, LOW→skeleton
 - TDD auto-included in all plans
+- Manifest: `planning-system-2.0-manifest.yaml` (DoR/DoD/TDD compliance)
+
+**ADO Operations**
+- Commands: `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`
+- Works like Planning System 2.0 with ADO-formatted output
+- Manifest: `ado-planning-manifest.yaml` (inherits Planning System 2.0 + ADO formatting)
 
 **TDD Mastery**
 - Commands: `start tdd`, `run tests`

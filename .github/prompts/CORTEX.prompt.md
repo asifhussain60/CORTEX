@@ -73,10 +73,19 @@ ALL responses MUST use this 5-part structure:
 - **Features:** 5-section format, evidence-based claims
 
 ### Planning System 2.0
-- **Commands:** `plan [feature]`, `plan ado`, `execute all phases autonomously`
+- **Commands:** `plan [feature]`, `execute all phases autonomously`
 - **AUTO-DETECTION:** Complexity-based routing (HIGH→incremental, LOW→skeleton)
 - **Triggers:** Security, auth, migrations, APIs auto-route to incremental
 - **TDD:** Auto-included in all plans
+- **Manifest:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **Compliance:** MUST follow DoR/DoD requirements, acceptance criteria gates, TDD integration
+
+### ADO Operations
+- **Commands:** `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`
+- **Features:** Story/Feature/Task creation, completion summaries, code reviews
+- **Integration:** Works like Planning System 2.0 with ADO-formatted output
+- **Manifest:** `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
+- **Compliance:** Inherits all Planning System 2.0 requirements + ADO-specific formatting
 
 ### TDD Mastery
 - **Commands:** `start tdd`, `run tests`
@@ -106,6 +115,7 @@ ALL responses MUST use this 5-part structure:
 | Command | Description | Context |
 |---------|-------------|---------|
 | `plan [feature]` | Interactive planning (auto-TDD) | All |
+| `plan ado` | ADO work item (story/feature/task) | All |
 | `execute all phases autonomously` | Run plan end-to-end | All |
 | `start tdd` | Begin TDD workflow | All |
 | `review` | Architectural review | All |
