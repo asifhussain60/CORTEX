@@ -18,6 +18,7 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+from src.utils.safe_print import safe_print
 import subprocess
 import sys
 import re
@@ -341,9 +342,9 @@ class CoverageReporter:
         
         # Threshold check
         if report.threshold_passed:
-            print(f"✅ Threshold PASSED: {report.overall.percentage:.1f}% >= {report.threshold_value}%")
+            safe_print(f"[OK] Threshold PASSED: {report.overall.percentage:.1f}% >= {report.threshold_value}%")
         else:
-            print(f"❌ Threshold FAILED: {report.overall.percentage:.1f}% < {report.threshold_value}%")
+            safe_print(f"[FAIL] Threshold FAILED: {report.overall.percentage:.1f}% < {report.threshold_value}%")
         print()
         
         # By tier
@@ -370,7 +371,7 @@ class CoverageReporter:
         
         # HTML report
         if report.html_report_path and report.html_report_path.exists():
-            print(f"📄 HTML Report: {report.html_report_path}")
+            safe_print(f"[FILE] HTML Report: {report.html_report_path}")
             print()
     
     def _get_status_icon(self, status: CoverageStatus) -> str:

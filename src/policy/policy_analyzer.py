@@ -20,11 +20,15 @@ Repository: https://github.com/asifhussain60/CORTEX
 import os
 import re
 import hashlib
+import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime
 from dataclasses import dataclass, field, asdict
 from enum import Enum
+
+# Initialize logger
+logger = logging.getLogger(__name__)
 
 
 class PolicyLevel(Enum):

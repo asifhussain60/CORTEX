@@ -757,6 +757,11 @@ class OptimizeOperation(BaseOperationModule):
                 duplicate_files = files_sorted[1:]
                 
                 for dup_file in duplicate_files:
+                    # Skip files already in .archive directories to prevent nested archiving
+                    if '.archive' in dup_file.parts:
+                        self.logger.debug(f"Skipping already archived file: {dup_file.relative_to(root_path)}")
+                        continue
+                    
                     file_size_mb = dup_file.stat().st_size / (1024 * 1024)
                     
                     if dry_run:
@@ -770,6 +775,13 @@ class OptimizeOperation(BaseOperationModule):
                         timestamp = datetime.now().strftime("%Y%m%d")
                         archive_name = f"{dup_file.stem}_{timestamp}{dup_file.suffix}"
                         archive_path = archive_dir / archive_name
+                        
+                        # Ensure archive path doesn't exist to prevent overwriting
+                        counter = 1
+                        while archive_path.exists():
+                            archive_name = f"{dup_file.stem}_{timestamp}_{counter}{dup_file.suffix}"
+                            archive_path = archive_dir / archive_name
+                            counter += 1
                         
                         shutil.move(str(dup_file), str(archive_path))
                         self.logger.info(f"Archived duplicate: {dup_file.relative_to(root_path)} → {archive_path.relative_to(root_path)}")

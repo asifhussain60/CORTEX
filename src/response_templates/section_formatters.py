@@ -196,7 +196,7 @@ class GuidedSectionFormatter(SectionFormatter):
     
     def format_understanding(self, content: str, context: Dict[str, Any]) -> str:
         """Format understanding section - standard with full header."""
-        return self._format_with_header("🎯", "My Understanding Of Your Request", content)
+        return self._format_with_header("🎯", "Understanding & Scope", content)
     
     def format_challenge(self, content: str, context: Dict[str, Any]) -> str:
         """Format challenge section - always visible."""
@@ -236,7 +236,7 @@ class EducationalSectionFormatter(SectionFormatter):
                    "**Context:** This helps us establish shared understanding before proceeding. "
                    "I want to ensure we're aligned on the requirements and approach.")
         
-        return self._format_with_header("🎯", "My Understanding Of Your Request", enriched)
+        return self._format_with_header("🎯", "Understanding & Scope", enriched)
     
     def format_challenge(self, content: str, context: Dict[str, Any]) -> str:
         """Format challenge section - includes explanation."""
@@ -295,7 +295,7 @@ class PairSectionFormatter(SectionFormatter):
         if context.get('collaborative_tone'):
             enriched += "\n\n**Does this match your thinking?**"
         
-        return f"### 🎯 My Understanding Of Your Request\n{enriched}"
+        return f"### 🎯 Understanding & Scope\n{enriched}"
     
     def format_challenge(self, content: str, context: Dict[str, Any]) -> str:
         """Format challenge section - presents options."""

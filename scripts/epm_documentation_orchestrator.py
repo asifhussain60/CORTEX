@@ -7,6 +7,9 @@ Enterprise-grade documentation generation with:
 - Stub marker removal (coming soon, TODO, TBD, placeholder)
 - Progress tracking with EPM-style reporting
 - Rollback safety with automatic backups
+- NEW: Feature discovery integration with OrchestratorScanner
+- NEW: Auto-registration with FeatureAutoRegistrar
+- NEW: DALL-E image prompt generation for documentation
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -15,10 +18,18 @@ License: Source-Available (Use Allowed, No Contributions)
 
 import re
 import yaml
+import sys
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Tuple, Optional
 import json
+
+# Add project root to path for imports
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+
+from src.discovery.orchestrator_scanner import OrchestratorScanner
+from src.operations.modules.realignment.feature_auto_registrar import FeatureAutoRegistrar
 
 
 class DocumentationOrchestrator:
@@ -37,30 +48,47 @@ class DocumentationOrchestrator:
             "errors": []
         }
         
-    def orchestrate(self) -> Dict:
-        """Main orchestration workflow"""
-        print("🚀 CORTEX Documentation Quality Orchestrator")
+    def orchestrate(self, include_discovery: bool = True) -> Dict:
+        """
+        Main orchestration workflow
+        
+        Args:
+            include_discovery: Whether to run feature discovery phase (default: True)
+        """
+        print("[*] CORTEX Documentation Quality Orchestrator")
         print("=" * 60)
         print(f"Workspace: {self.workspace_root}")
         print(f"Target: 90%+ quality score\n")
         
+        # Phase 0: Feature Discovery (NEW)
+        discovered_features = None
+        if include_discovery:
+            print("[DISCOVER] Phase 0: Discovering new features...")
+            discovered_features = self._discover_new_features()
+            print(f"   Found {len(discovered_features.get('orchestrators', {}))} orchestrators")
+            print(f"   Found {len(discovered_features.get('unregistered', []))} unregistered features\n")
+        
         # Phase 1: Discovery
-        print("📊 Phase 1: Discovering files with issues...")
+        print("[SCAN] Phase 1: Discovering files with issues...")
         files_to_fix = self._discover_files_with_issues()
         print(f"   Found {len(files_to_fix)} files needing attention\n")
         
         # Phase 2: Backup
-        print("💾 Phase 2: Creating safety backup...")
+        print("[BACKUP] Phase 2: Creating safety backup...")
         self._create_backup()
-        print("   ✅ Backup complete\n")
+        print("   [OK] Backup complete\n")
         
         # Phase 3: Processing
-        print("🔧 Phase 3: Processing files...")
+        print("[PROCESS] Phase 3: Processing files...")
         for file_info in files_to_fix:
             self._process_file(file_info)
         
+        # Add discovery results to stats before generating report
+        if discovered_features:
+            self.stats['discovered_features'] = discovered_features
+        
         # Phase 4: Validation
-        print("\n📊 Phase 4: Validation & Reporting...")
+        print("\n[VALIDATE] Phase 4: Validation & Reporting...")
         report = self._generate_report()
         
         return report
@@ -186,7 +214,7 @@ class DocumentationOrchestrator:
         issues = file_info['issues']
         category = file_info['category']
         
-        print(f"\n   📄 {file_path}")
+        print(f"\n   [FILE] {file_path}")
         
         with open(full_path, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -200,7 +228,7 @@ class DocumentationOrchestrator:
             changes_made += stub_count
             self.stats['stub_markers_removed'] += stub_count
             if stub_count > 0:
-                print(f"      ✅ Removed {stub_count} stub markers")
+                print(f"      [OK] Removed {stub_count} stub markers")
         
         # Fill empty sections
         if issues['empty_sections']:
@@ -213,7 +241,7 @@ class DocumentationOrchestrator:
             changes_made += fill_count
             self.stats['empty_sections_filled'] += fill_count
             if fill_count > 0:
-                print(f"      ✅ Filled {fill_count} empty sections")
+                print(f"      [OK] Filled {fill_count} empty sections")
         
         # Write back if changes were made
         if content != original_content:
@@ -221,7 +249,7 @@ class DocumentationOrchestrator:
                 f.write(content)
             self.stats['files_processed'] += 1
         else:
-            print(f"      ℹ️  No changes needed")
+            print(f"      [INFO] No changes needed")
     
     def _remove_stub_markers(self, content: str, markers: List[Dict]) -> Tuple[str, int]:
         """Remove stub markers and replace with contextual content"""
@@ -601,11 +629,93 @@ See related guides in the navigation menu for additional help.
         
         print(f"   Backup created: {backup_path}")
     
+    def _discover_new_features(self) -> Dict:
+        """
+        Discover new features using OrchestratorScanner and FeatureAutoRegistrar
+        
+        Returns:
+            Dict with discovered orchestrators and unregistered features
+        """
+        try:
+            # Discover orchestrators
+            scanner = OrchestratorScanner(self.workspace_root)
+            orchestrators = scanner.discover()
+            
+            # Check for unregistered features
+            registrar = FeatureAutoRegistrar(self.workspace_root)
+            
+            # Load existing operations
+            operations_yaml = self.workspace_root / "cortex-operations.yaml"
+            if operations_yaml.exists():
+                with open(operations_yaml, 'r') as f:
+                    existing_ops = yaml.safe_load(f) or {}
+            else:
+                existing_ops = {}
+            
+            # Find unregistered orchestrators
+            unregistered = []
+            for orch_name, orch_info in orchestrators.items():
+                # Convert class name to operation name (e.g., TDDWorkflowOrchestrator -> tdd_workflow)
+                op_name = self._class_to_operation_name(orch_name)
+                
+                if op_name not in existing_ops:
+                    unregistered.append({
+                        'class_name': orch_name,
+                        'operation_name': op_name,
+                        'path': str(orch_info['path']),
+                        'module_path': orch_info['module_path'],
+                        'docstring': orch_info.get('docstring', '')[:200]  # First 200 chars
+                    })
+            
+            return {
+                'orchestrators': orchestrators,
+                'unregistered': unregistered,
+                'total_discovered': len(orchestrators),
+                'total_unregistered': len(unregistered)
+            }
+            
+        except Exception as e:
+            print(f"   [WARN] Feature discovery failed: {e}")
+            return {
+                'orchestrators': {},
+                'unregistered': [],
+                'total_discovered': 0,
+                'total_unregistered': 0,
+                'error': str(e)
+            }
+    
+    def _class_to_operation_name(self, class_name: str) -> str:
+        """
+        Convert class name to operation name
+        
+        Example: TDDWorkflowOrchestrator -> tdd_workflow
+        """
+        # Remove 'Orchestrator' suffix
+        name = class_name.replace('Orchestrator', '')
+        
+        # Convert CamelCase to snake_case
+        result = []
+        for i, char in enumerate(name):
+            if char.isupper() and i > 0:
+                result.append('_')
+            result.append(char.lower())
+        
+        return ''.join(result)
+    
     def _generate_report(self) -> Dict:
         """Generate final quality report"""
+        # Create clean copy of stats without discovered_features (not serializable)
+        stats_copy = {
+            "files_processed": self.stats["files_processed"],
+            "empty_sections_filled": self.stats["empty_sections_filled"],
+            "stub_markers_removed": self.stats["stub_markers_removed"],
+            "false_positives_skipped": self.stats["false_positives_skipped"],
+            "errors": self.stats["errors"]
+        }
+        
         report = {
             "timestamp": datetime.now().isoformat(),
-            "statistics": self.stats,
+            "statistics": stats_copy,
             "quality_metrics": {
                 "files_processed": self.stats["files_processed"],
                 "empty_sections_filled": self.stats["empty_sections_filled"],
@@ -613,6 +723,26 @@ See related guides in the navigation menu for additional help.
                 "errors": len(self.stats["errors"])
             }
         }
+        
+        # Add feature discovery summary if available
+        if 'discovered_features' in self.stats:
+            df = self.stats['discovered_features']
+            # Make sure all data is JSON serializable
+            sample_unregistered = []
+            for item in df.get('unregistered', [])[:5]:
+                sample_unregistered.append({
+                    'class_name': item['class_name'],
+                    'operation_name': item['operation_name'],
+                    'path': str(item['path']),  # Convert Path to string
+                    'module_path': item['module_path'],
+                    'docstring': item.get('docstring', '')[:100]  # Truncate
+                })
+            
+            report['feature_discovery'] = {
+                "total_orchestrators": df.get('total_discovered', 0),
+                "unregistered_features": df.get('total_unregistered', 0),
+                "sample_unregistered": sample_unregistered
+            }
         
         # Save report
         report_dir = self.workspace_root / "cortex-brain" / "documents" / "reports"
@@ -624,7 +754,7 @@ See related guides in the navigation menu for additional help.
         
         # Print summary
         print("\n" + "=" * 60)
-        print("📊 DOCUMENTATION QUALITY REPORT")
+        print("[REPORT] DOCUMENTATION QUALITY REPORT")
         print("=" * 60)
         print(f"Files Processed: {self.stats['files_processed']}")
         print(f"Empty Sections Filled: {self.stats['empty_sections_filled']}")
@@ -632,10 +762,18 @@ See related guides in the navigation menu for additional help.
         print(f"False Positives Skipped: {self.stats['false_positives_skipped']}")
         if self.stats['errors']:
             print(f"Errors: {len(self.stats['errors'])}")
+        
+        # Print feature discovery summary
+        if 'discovered_features' in self.stats:
+            print()
+            print("[DISCOVERY] Feature Discovery Results:")
+            print(f"Total Orchestrators: {report['feature_discovery']['total_orchestrators']}")
+            print(f"Unregistered Features: {report['feature_discovery']['unregistered_features']}")
+        
         print()
         print(f"Report saved: {report_file}")
         print()
-        print("✅ Documentation quality orchestration complete!")
+        print("[SUCCESS] Documentation quality orchestration complete!")
         print("\nNext step: Run validation tests:")
         print("  python3 -m pytest tests/test_mkdocs_links.py -v")
         

@@ -18,19 +18,16 @@ Repository: https://github.com/asifhussain60/CORTEX
 """
 
 import os
+import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 
-try:
-    from .policy_analyzer import PolicyDocument, PolicyRule, PolicyLevel, PolicyCategory
-    from .compliance_validator import ComplianceValidator
-except ImportError:
-    # For standalone execution
-    import sys
-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-    from src.policy.policy_analyzer import PolicyDocument, PolicyRule, PolicyLevel, PolicyCategory
-    from src.policy.compliance_validator import ComplianceValidator
+from src.policy.policy_analyzer import PolicyDocument, PolicyRule, PolicyLevel, PolicyCategory
+from src.policy.compliance_validator import ComplianceValidator
+
+# Initialize logger
+logger = logging.getLogger(__name__)
 
 
 class PolicyTestGenerator:
@@ -71,10 +68,8 @@ class PolicyTestGenerator:
         Returns:
             Path to generated test file
         """
-        print(f"\n🧪 Generating Pytest Tests from Policy")
-        print(f"Policy: {policy_doc.title or 'Untitled'}")
-        print(f"Output: {output_path}")
-        print(f"Rules: {len(policy_doc.rules)}\n")
+        logger.info(f"Generating pytest tests from policy: {policy_doc.title or 'Untitled'}")
+        logger.debug(f"Output: {output_path}, Rules: {len(policy_doc.rules)}")
         
         # Build test file content
         content = self._build_test_file_content(
@@ -90,8 +85,7 @@ class PolicyTestGenerator:
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(content)
         
-        print(f"✅ Generated {len(policy_doc.rules)} test functions")
-        print(f"📝 Test file: {output_path}\n")
+        logger.info(f"Generated {len(policy_doc.rules)} test functions in {output_path}")
         
         return str(output_path)
     
@@ -425,12 +419,7 @@ def pytest_collection_modifyitems(config, items):
 
 def main():
     """Test policy test generator"""
-    try:
-        from .policy_analyzer import PolicyAnalyzer
-    except ImportError:
-        import sys
-        sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-        from src.policy.policy_analyzer import PolicyAnalyzer
+    from src.policy.policy_analyzer import PolicyAnalyzer
     
     # Create sample policy
     sample_policy = """# Code Quality Policy

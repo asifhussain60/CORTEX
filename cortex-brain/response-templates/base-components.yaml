@@ -22,17 +22,17 @@ components:
   
   understanding_section:
     format: |
-      ### 🎯 My Understanding Of Your Request
+      ### 🎯 Understanding & Scope
       {{understanding_content}}
     required: true
-    description: "Restates user intent to confirm understanding"
+    description: "Restates user intent and clarifies boundaries/scope"
   
   challenge_section:
     format: |
-      ### ⚠️ Challenge
+      ### ⚡ Approach & Considerations
       {{challenge_content}}
     required: true
-    description: "Identifies specific challenge or states 'No Challenge'"
+    description: "Explains strategy, decisions, tradeoffs OR 'No significant challenges'"
   
   response_section:
     format: |
@@ -43,10 +43,10 @@ components:
   
   request_echo_section:
     format: |
-      ### 📝 Your Request
+      ### 📊 Impact & Changes
       {{request_echo_content}}
     required: true
-    description: "Echo of refined user request"
+    description: "States what changed - files, metrics, outcomes (not echo)"
   
   next_steps_section:
     format: |

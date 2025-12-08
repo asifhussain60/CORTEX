@@ -211,6 +211,16 @@ class AlignUtility:
         # Performance tracking
         self.features_checked = 0
         self.features_skipped = 0
+        
+        # Manifest validation (NEW)
+        try:
+            from src.utils.manifest_validator import ManifestValidator
+            self.manifest_validator = ManifestValidator(cortex_root=self.root_path)
+            self.manifest_validation_enabled = True
+        except ImportError:
+            logger.warning("ManifestValidator not available - skipping manifest checks")
+            self.manifest_validator = None
+            self.manifest_validation_enabled = False
     
     def validate_prompt_sync(self) -> ValidationResult:
         """
@@ -1308,6 +1318,110 @@ class AlignUtility:
             logger.warning(f"Error checking dashboard accessibility for {dashboard_name}: {e}")
             return False
     
+    def validate_manifest_compliance(self) -> ValidationResult:
+        """
+        Validate orchestrator manifest compliance.
+        
+        Checks:
+        - Manifest files exist
+        - Planning System 2.0 manifest compliance
+        - ADO planning manifest inheritance
+        
+        Returns:
+            ValidationResult with compliance status
+        """
+        try:
+            from src.utils.manifest_validator import ManifestValidator
+            
+            # Initialize validator
+            validator = ManifestValidator(cortex_root=self.root_path)
+            
+            # Check manifest directory exists
+            manifest_dir = self.brain_path / "orchestrator-manifests"
+            if not manifest_dir.exists():
+                return ValidationResult(
+                    check_name="Manifest Compliance",
+                    passed=False,
+                    message="Orchestrator manifests directory not found",
+                    details=f"Expected at: {manifest_dir}",
+                    severity="WARNING"
+                )
+            
+            # Load Planning System 2.0 manifest
+            planning_manifest_path = manifest_dir / "planning-system-2.0-manifest.yaml"
+            if not planning_manifest_path.exists():
+                return ValidationResult(
+                    check_name="Manifest Compliance",
+                    passed=False,
+                    message="Planning System 2.0 manifest not found",
+                    details=f"Expected at: {planning_manifest_path}",
+                    severity="WARNING"
+                )
+            
+            planning_manifest = validator.load_manifest(str(planning_manifest_path))
+            
+            # Validate Planning System 2.0 orchestrator
+            planning_orchestrator_path = self.root_path / "src" / "orchestrators" / "planning_orchestrator.py"
+            
+            if not planning_orchestrator_path.exists():
+                return ValidationResult(
+                    check_name="Manifest Compliance",
+                    passed=True,
+                    message="Planning orchestrator not found (skipping validation)",
+                    severity="INFO"
+                )
+            
+            report = validator.validate_orchestrator(
+                "PlanningOrchestrator",
+                planning_manifest,
+                str(planning_orchestrator_path)
+            )
+            
+            # Determine result based on compliance
+            if report.compliance_percentage >= 80:
+                message = f"Planning System 2.0: {report.compliance_percentage:.0f}% compliant ({report.implemented_count}/{report.total_requirements})"
+                details = f"Status: {report.status}"
+                
+                if report.compliance_percentage >= 95:
+                    details += " - EXCELLENT"
+                elif report.compliance_percentage >= 90:
+                    details += " - GOOD"
+                
+                return ValidationResult(
+                    check_name="Manifest Compliance",
+                    passed=True,
+                    message=message,
+                    details=details,
+                    severity="INFO"
+                )
+            else:
+                missing_critical = [i for i in report.issues if i.severity == "CRITICAL"]
+                message = f"Planning System 2.0: {report.compliance_percentage:.0f}% compliant (below 80% threshold)"
+                details = f"{len(missing_critical)} critical requirements missing"
+                
+                return ValidationResult(
+                    check_name="Manifest Compliance",
+                    passed=False,
+                    message=message,
+                    details=details,
+                    severity="WARNING"
+                )
+        
+        except ImportError:
+            return ValidationResult(
+                check_name="Manifest Compliance",
+                passed=True,
+                message="ManifestValidator not available (skipping)",
+                severity="INFO"
+            )
+        except Exception as e:
+            return ValidationResult(
+                check_name="Manifest Compliance",
+                passed=False,
+                message=f"Manifest validation error: {str(e)}",
+                severity="WARNING"
+            )
+    
     def check_script_operation_linkage(self, script_name: str) -> bool:
         """
         Check if user-facing script is linked to an operation.
@@ -1436,6 +1550,9 @@ class AlignUtility:
         if self.context_type == "admin" and not self.quick_mode:
             report.checks.append(self.validate_feature_discovery())
             report.checks.append(self.validate_feature_wiring())
+            
+            # Execute manifest compliance validation (NEW)
+            report.checks.append(self.validate_manifest_compliance())
             
             # Execute code quality validation (uses TDD orchestrator capabilities)
             report.checks.append(self.validate_code_quality())

@@ -91,6 +91,40 @@ operations:
     - publish cortex production
     - package for deployment
     category: deployment
+  regenerate_prompts:
+    name: Regenerate Copilot Prompts
+    description: Delete and regenerate copilot-instructions.md and CORTEX.prompt.md from current codebase state
+    deployment_tier: admin
+    natural_language:
+    - regenerate prompts
+    - regenerate copilot prompts
+    - refresh prompts
+    - refresh instructions
+    - refresh copilot instructions
+    - rebuild copilot instructions
+    - regenerate prompts dry run
+    - refresh prompts dry run
+    - refresh instructions dry run
+    category: system
+    modules:
+    - regenerate_cortex_prompts
+    profiles:
+      standard:
+        description: Backup, delete, scan codebase, regenerate prompt files
+        command: python scripts/regenerate_cortex_prompts.py
+      dry_run:
+        description: Preview regeneration without modifying files
+        command: python scripts/regenerate_cortex_prompts.py --dry-run
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Regenerates lean prompt files from actual codebase scan
+    examples:
+    - regenerate prompts
+    - refresh copilot instructions
+    - regenerate prompts dry run
   test_intelligence:
     name: Test Intelligence
     description: Test Intelligence Module for CORTEX Planning System
@@ -138,6 +172,94 @@ operations:
     natural_language:
     - operation name
     category: reporting
+  validate_dashboard_data:
+    name: Validate Dashboard Data
+    description: Independent validation of dashboard collector output against ground truth
+    deployment_tier: admin
+    natural_language:
+    - validate dashboard data
+    - check dashboard accuracy
+    - verify collector output
+    - dashboard data validation
+    - validate collectors
+    modules:
+    - dashboard.validators.data_validator
+    profiles:
+      standard:
+        description: Full validation with ground truth scan
+        modules:
+        - dashboard.validators.data_validator
+    category: validation
+  generate_executive_summary:
+    name: Generate Executive Summary
+    description: Project-adaptive executive summary from all collectors
+    deployment_tier: admin
+    natural_language:
+    - generate executive summary
+    - create executive summary
+    - aggregate executive summary
+    - executive summary
+    modules:
+    - dashboard.aggregators.executive_summary_aggregator
+    profiles:
+      standard:
+        description: Generate executive summary from all collectors
+        modules:
+        - dashboard.aggregators.executive_summary_aggregator
+    category: reporting
+  generate_overview:
+    name: Generate Overview
+    description: Cross-collector overview with health scoring
+    deployment_tier: admin
+    natural_language:
+    - generate overview
+    - create overview
+    - aggregate overview
+    - dashboard overview
+    modules:
+    - dashboard.aggregators.overview_aggregator
+    profiles:
+      standard:
+        description: Generate overview from all collectors
+        modules:
+        - dashboard.aggregators.overview_aggregator
+    category: reporting
+  reconcile_dashboard_data:
+    name: Reconcile Dashboard Data
+    description: Cross-collector gap analysis and consistency checks
+    deployment_tier: admin
+    natural_language:
+    - reconcile dashboard data
+    - check data consistency
+    - gap analysis
+    - cross-collector reconciliation
+    - validate data consistency
+    modules:
+    - dashboard.aggregators.reconciliation_aggregator
+    profiles:
+      standard:
+        description: Full reconciliation with violation detection
+        modules:
+        - dashboard.aggregators.reconciliation_aggregator
+    category: validation
+  scan_security_comprehensive:
+    name: Comprehensive Security Scan
+    description: Enhanced security scanning with 22 validated patterns
+    deployment_tier: admin
+    natural_language:
+    - comprehensive security scan
+    - deep security scan
+    - enhanced security scan
+    - scan for all vulnerabilities
+    - complete security check
+    modules:
+    - dashboard.data.security_collector
+    profiles:
+      standard:
+        description: Full security scan with all 22 patterns
+        modules:
+        - dashboard.data.security_collector
+    category: security
   documentation_orchestrator:
     name: Documentation Orchestrator
     description: Documentation Orchestrator for CORTEX Learning Library
@@ -289,16 +411,51 @@ operations:
       blocked_in_publish: true
       validation_gate: deployment_tier_check
   ado:
-    name: Ado
-    description: ADO CLI - Azure DevOps Work Item Management
-    deployment_tier: dual_context
+    name: ADO Operations
+    description: Azure DevOps work item management orchestrator - Stories, Features, Tasks, Code Reviews
+    deployment_tier: user_facing
     natural_language:
-    - create
+    - plan ado
+    - plan ado story
+    - plan ado feature
+    - create ado work item
     - create new work item
-    - update
+    - update ado work item
     - update work item
-    - generate completion summary
-    category: general
+    - generate ado completion summary
+    - generate ado summary
+    - ado code review
+    - create plan ado
+    category: planning
+    modules:
+    - ado_agent
+    profiles:
+      story:
+        description: Create ADO User Story with acceptance criteria
+        command: plan ado story
+      feature:
+        description: Create ADO Feature with epic breakdown
+        command: plan ado feature
+      task:
+        description: Create ADO Task with implementation steps
+        command: plan ado task
+      summary:
+        description: Generate work completion summary for ADO
+        command: generate ado summary
+      code_review:
+        description: Create ADO code review work item
+        command: ado code review
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Integrated with ADOAgent for work item orchestration, matches Planning System 2.0 capabilities
+    examples:
+    - plan ado story for user authentication
+    - plan ado feature for payment processing
+    - generate ado completion summary
+    - ado code review for PR #123
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper
@@ -488,8 +645,8 @@ operations:
     description: Planning CLI Wrapper
     deployment_tier: user_facing
     natural_language:
-    - create
-    - validate
+    - create plan
+    - validate plan
     - markdown generated
     - plan loaded
     - create new plan

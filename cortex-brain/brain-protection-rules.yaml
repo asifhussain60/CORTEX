@@ -3,7 +3,7 @@ type: governance
 name: Brain Protection Rules
 description: Automated architectural protection challenges
 rules:
-  total_count: 44
+  total_count: 46
   layers: 17
   severity_levels:
   - blocked
@@ -31,6 +31,8 @@ tier0_instincts:
 - RED_PHASE_VALIDATION
 - GREEN_PHASE_VALIDATION
 - REFACTOR_CODE_CLEANUP_ENFORCEMENT
+- TDD_TEST_FILE_VALIDATION
+- TDD_EMPTY_TEST_DETECTION
 - DEFINITION_OF_READY
 - DEFINITION_OF_DONE
 - SOLID_PRINCIPLES
@@ -315,6 +317,370 @@ protection_layers:
       - Orphaned Functions: 85% (zero references in codebase)
       
       This rule completes the TDD cycle: RED → GREEN → REFACTOR (with cleanup).
+  - rule_id: TDD_TEST_FILE_VALIDATION
+    name: Test File Existence Validation
+    severity: blocked
+    description: "All production code files MUST have corresponding test files. Validates test coverage completeness across all architectural layers (Domain, Application, Infrastructure, API)."
+    detection:
+      combined_keywords:
+        production_code:
+        - "*Handler.cs"
+        - "*Validator.cs"
+        - "*Repository.cs"
+        - "*Controller.cs"
+        - "*Service.cs"
+        - "*Entity.cs"
+        missing_tests:
+        - "no test file"
+        - "test file missing"
+        - "untested code"
+      scope:
+      - file_analysis
+      - coverage_report
+    alternatives:
+    - "Create test file for each production file using pattern: Tests/{Layer}/{FileName}Tests.cs"
+    - "Domain layer: Tests/Domain/*EntityTests.cs, Tests/Domain/*ServiceTests.cs"
+    - "Application layer: Tests/Application/Handlers/*Tests.cs, Tests/Application/Validators/*Tests.cs"
+    - "Infrastructure layer: Tests/Infrastructure/Repositories/*Tests.cs"
+    - "API layer: Tests/API/Controllers/*Tests.cs, Tests/Integration/*Tests.cs"
+    - "Minimum 3 test methods per production file"
+    evidence_template: |
+      Test file validation failure detected!
+      
+      Production files without tests: {missing_count}
+      
+      ❌ BLOCKED: Cannot proceed with incomplete test coverage
+      
+      **Gap Analysis (Cortex-Clean Example):**
+      
+      Domain Layer: ✅ 90% coverage
+      - TaskEntity.cs → TaskEntityTests.cs ✓
+      - TaskValidationService.cs → Tests exist ✓
+      
+      Application Layer: ❌ 0% coverage
+      - CreateTaskCommandHandler.cs → ❌ NO TESTS
+      - UpdateTaskCommandHandler.cs → ❌ NO TESTS
+      - DeleteTaskCommandHandler.cs → ❌ NO TESTS
+      - ToggleTaskCompletionCommandHandler.cs → ❌ NO TESTS
+      - CreateTaskCommandValidator.cs → ❌ NO TESTS
+      - UpdateTaskCommandValidator.cs → ❌ NO TESTS
+      
+      Infrastructure Layer: ❌ 0% coverage
+      - TaskRepository.cs → ❌ NO TESTS
+      - ApplicationDbContext.cs → ❌ NO TESTS
+      
+      API Layer: ❌ 0% coverage
+      - TasksController.cs → ❌ NO TESTS
+      - GlobalExceptionMiddleware.cs → ❌ NO TESTS
+      - Integration tests → ❌ NONE
+      
+      **Required Test Files:**
+      
+      Application Layer:
+      - Tests/Application/Handlers/CreateTaskCommandHandlerTests.cs
+      - Tests/Application/Handlers/UpdateTaskCommandHandlerTests.cs
+      - Tests/Application/Handlers/DeleteTaskCommandHandlerTests.cs
+      - Tests/Application/Handlers/ToggleTaskCompletionCommandHandlerTests.cs
+      - Tests/Application/Validators/CreateTaskCommandValidatorTests.cs
+      - Tests/Application/Validators/UpdateTaskCommandValidatorTests.cs
+      
+      Infrastructure Layer:
+      - Tests/Infrastructure/Repositories/TaskRepositoryTests.cs
+      
+      API Layer:
+      - Tests/API/Controllers/TasksControllerTests.cs
+      - Tests/Integration/TasksApiIntegrationTests.cs
+      
+      **Impact:**
+      - Claimed Coverage: 90%+
+      - Actual Coverage: ~15-20%
+      - Gap: 70-75% untested code
+      - Risk: High (handlers, validators, repositories untested)
+      
+      **Detection Method:**
+      - Scan production code directories
+      - Match files against test naming patterns
+      - Validate minimum test count per file
+      - Calculate per-layer coverage
+      - Block if any layer below threshold
+      
+      **Next Steps:**
+      1. Create missing test files using TDD workflow
+      2. Write failing tests first (RED phase)
+      3. Implement to pass tests (GREEN phase)
+      4. Refactor with confidence (tests validate)
+      5. Re-run validation to verify coverage
+    rationale: |
+      TDD_TEST_FILE_VALIDATION: Prevent Coverage Claims vs Reality Gap
+      
+      **Real-World Problem (Cortex-Clean):**
+      - README claims 90%+ test coverage
+      - Only Domain layer has tests
+      - Application, Infrastructure, API layers: 0% coverage
+      - Actual coverage: ~15-20%
+      - Credibility gap: 70-75%
+      
+      **Why This Happens:**
+      - Focus on "happy path" testing (entities)
+      - Handlers/validators assumed "too simple to test"
+      - Integration tests skipped ("takes too long")
+      - No enforcement of coverage requirements
+      - Manual coverage claims (no verification)
+      
+      **Impact Without This Rule:**
+      - False confidence in code quality
+      - Bugs in untested layers
+      - Difficult refactoring (no test safety net)
+      - Production failures in handlers/repositories
+      - Loss of credibility
+      
+      **Impact With This Rule:**
+      - Enforced test file creation
+      - Per-layer coverage validation
+      - No "simple" code escapes testing
+      - Integration tests mandatory for APIs
+      - Real coverage matches claims
+      
+      **Enforcement Strategy:**
+      
+      Layer-Specific Requirements:
+      - Domain: 90% minimum (entities, services, exceptions)
+      - Application: 85% minimum (handlers, validators, commands, queries)
+      - Infrastructure: 70% minimum (repositories, DbContext)
+      - API: 80% minimum (controllers, middleware, integration tests)
+      
+      File Naming Patterns:
+      - Handler → *HandlerTests.cs (Tests/Application/Handlers/)
+      - Validator → *ValidatorTests.cs (Tests/Application/Validators/)
+      - Repository → *RepositoryTests.cs (Tests/Infrastructure/Repositories/)
+      - Controller → *ControllerTests.cs (Tests/API/Controllers/)
+      - Entity → *EntityTests.cs (Tests/Domain/)
+      
+      Validation Logic:
+      1. Scan production code by layer
+      2. Check for corresponding test file
+      3. Verify minimum 3 test methods per file
+      4. Calculate per-layer coverage
+      5. Block if layer below threshold
+      6. Report missing test files with paths
+      
+      **Benefits:**
+      - 100% visibility into test gaps
+      - Prevents coverage inflation
+      - Enforces comprehensive testing
+      - Builds confidence in refactoring
+      - Catches bugs early (handlers, validators)
+      
+      This rule ensures CLAIMED coverage matches ACTUAL coverage.
+  - rule_id: TDD_EMPTY_TEST_DETECTION
+    name: Empty/Placeholder Test Detection
+    severity: warning
+    description: "Detects and blocks low-quality tests: empty test methods, placeholder tests (Test1), meaningless assertions (Assert.True(true)), tests with zero assertions."
+    detection:
+      combined_keywords:
+        test_files:
+        - "*Tests.cs"
+        - "*Test.cs"
+        - "test_*.py"
+        placeholder_patterns:
+        - "void Test1()"
+        - "def test_1():"
+        - "Assert.True(true)"
+        - "assert True"
+        - "[Fact] public void Test"
+      scope:
+      - test_content
+      - code_analysis
+    alternatives:
+    - "Replace placeholder test with meaningful test name"
+    - "Add at least one assertion per test method"
+    - "Test actual behavior, not always-true conditions"
+    - "Use descriptive test names: Should_ReturnTask_When_IdExists"
+    - "Follow AAA pattern: Arrange, Act, Assert"
+    evidence_template: |
+      Low-quality test detected!
+      
+      File: {test_file}
+      Issues found: {issue_count}
+      
+      ⚠️ WARNING: Test quality issues must be addressed
+      
+      **Issue Types:**
+      
+      1. Empty Test Methods:
+      ```csharp
+      [Fact]
+      public void Test1()  // ❌ Placeholder name
+      {
+          // ❌ No implementation
+      }
+      ```
+      
+      2. Meaningless Assertions:
+      ```csharp
+      [Fact]
+      public void TestSomething()
+      {
+          Assert.True(true);  // ❌ Always passes, tests nothing
+      }
+      ```
+      
+      3. Zero Assertions:
+      ```csharp
+      [Fact]
+      public void TestFeature()
+      {
+          var result = GetData();
+          // ❌ No assertion - test can't fail
+      }
+      ```
+      
+      4. Placeholder Names:
+      ```csharp
+      public void Test1() { }  // ❌
+      public void UnitTest1() { }  // ❌
+      public void TestMethod1() { }  // ❌
+      ```
+      
+      **Real Example (Cortex-Clean):**
+      
+      File: UnitTest1.cs
+      ```csharp
+      namespace Cortex.Clean.Tests;
+      
+      public class UnitTest1  // ❌ Placeholder class name
+      {
+          [Fact]
+          public void Test1()  // ❌ Placeholder method name
+          {
+              // ❌ Empty body - no test logic
+          }
+      }
+      ```
+      
+      **Impact:**
+      - Test count inflated (1 test exists)
+      - Test quality: 0% (test does nothing)
+      - Coverage calculation misleading
+      - False sense of security
+      - No actual validation
+      
+      **Required Fixes:**
+      
+      ✅ Good Test Example:
+      ```csharp
+      public class TaskEntityTests
+      {
+          [Fact]
+          public void Should_CreateTask_When_ValidTitleProvided()
+          {
+              // Arrange
+              var title = "Test Task";
+              
+              // Act
+              var task = new TaskEntity(title);
+              
+              // Assert
+              task.Should().NotBeNull();
+              task.Title.Should().Be(title);
+              task.IsCompleted.Should().BeFalse();
+          }
+      }
+      ```
+      
+      **Test Quality Checklist:**
+      - ✅ Descriptive name (Should_[Expected]_When_[Condition])
+      - ✅ AAA pattern (Arrange, Act, Assert)
+      - ✅ At least one meaningful assertion
+      - ✅ Tests actual behavior
+      - ✅ Can fail if code breaks
+      - ✅ Clear, focused purpose
+      
+      **Detection Patterns:**
+      - Regex: `void Test\d+\(\)` → Placeholder names
+      - Regex: `Assert\.True\(true\)` → Meaningless assertions
+      - AST: Zero assertion statements → No validation
+      - AST: Empty method body → No implementation
+      - Pattern: UnitTest1, TestMethod1 → Generic names
+      
+      **Auto-Fixes Available:**
+      - Delete empty test files/methods
+      - Suggest descriptive names
+      - Generate test templates
+      - Add assertion examples
+      
+      **Next Steps:**
+      1. Delete or implement empty tests
+      2. Rename placeholder tests descriptively
+      3. Add meaningful assertions
+      4. Follow AAA pattern
+      5. Verify test can actually fail
+    rationale: |
+      TDD_EMPTY_TEST_DETECTION: Prevent Test Quality Degradation
+      
+      **Problem Scenario:**
+      - Developer creates test file (good intent)
+      - Adds placeholder Test1() method
+      - Gets distracted, never implements test
+      - Test file committed with empty tests
+      - Coverage tool counts it as "1 test"
+      - Reality: Zero validation happening
+      
+      **Real-World Example (Cortex-Clean):**
+      
+      File: UnitTest1.cs (committed to repo)
+      - Placeholder class name
+      - Placeholder test name (Test1)
+      - Empty test body
+      - Contributes to "test count"
+      - Provides zero value
+      - Misleading quality metric
+      
+      **Why Empty Tests Are Harmful:**
+      - Inflate test counts without value
+      - Create false sense of security
+      - Waste CI/CD execution time
+      - Confuse developers ("What does Test1 do?")
+      - Reduce trust in test suite
+      - Mask actual coverage gaps
+      
+      **Detection Confidence:**
+      - Empty methods: 100% (AST analysis)
+      - Placeholder names: 95% (regex pattern)
+      - Meaningless assertions: 90% (Assert.True(true) pattern)
+      - Zero assertions: 95% (AST statement count)
+      
+      **Enforcement Strategy:**
+      
+      Detection Phase:
+      1. Scan all test files
+      2. Parse methods with test attributes
+      3. Check method body (empty = violation)
+      4. Check assertion count (zero = violation)
+      5. Check for known meaningless patterns
+      6. Check for placeholder naming patterns
+      
+      Warning Phase:
+      - Report all detected issues
+      - Show file locations
+      - Suggest fixes
+      - Block commit if critical issues
+      
+      **Benefits:**
+      - Real test quality visibility
+      - Prevent test suite degradation
+      - Enforce meaningful tests
+      - Improve developer discipline
+      - Accurate coverage metrics
+      - Trustworthy test suite
+      
+      **Severity: WARNING (not BLOCKED)**
+      - Allows incremental improvement
+      - Doesn't block urgent work
+      - Encourages cleanup
+      - Escalates to BLOCKED if count grows
+      
+      This rule ensures test suite quality, not just quantity.
   - rule_id: SOLID_SRP
     name: Single Responsibility Principle
     severity: blocked

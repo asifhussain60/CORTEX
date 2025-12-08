@@ -318,6 +318,26 @@ class PlanExecutionOrchestrator:
         
         phase_result["completed_at"] = datetime.now().isoformat()
         
+        # Planning System 3.0: Post-Execution Quality Gate
+        # Run review after phase completion if enabled in configuration
+        quality_gate_enabled = phase.get("quality_gate_enabled", True)  # Default: enabled
+        if quality_gate_enabled and phase_result["success"]:
+            logger.info("🔍 Running post-execution quality gate...")
+            quality_result = self._run_post_execution_quality_gate(phase)
+            phase_result["quality_gate"] = quality_result
+            
+            # Block git checkpoint if review score below threshold
+            if quality_result.get("should_block_checkpoint", False):
+                logger.warning(
+                    f"⚠️  Quality gate blocked git checkpoint - "
+                    f"Score {quality_result.get('score')}/100 below threshold "
+                    f"{quality_result.get('threshold', 70)}"
+                )
+                phase_result["checkpoint_blocked"] = True
+                phase_result["checkpoint_blocked_reason"] = quality_result.get("message")
+            else:
+                logger.info(f"✅ Quality gate passed - Score: {quality_result.get('score', 'N/A')}/100")
+        
         # Emit PHASE_COMPLETED event
         if phase_result["success"]:
             try:
@@ -1028,6 +1048,61 @@ class PlanExecutionOrchestrator:
         
         except Exception as e:
             return (False, None, [f"Failed to load plan: {e}"])
+    
+    def _run_post_execution_quality_gate(self, phase: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Run post-execution quality gate using Review Orchestrator.
+        
+        Planning System 3.0 feature: Optional quality validation after phase execution.
+        Reviews code quality and provides score for decision-making.
+        
+        Args:
+            phase: Phase data (for configuration)
+            
+        Returns:
+            Quality gate result with score, validation status, checkpoint decision
+        """
+        try:
+            from src.orchestrators.phase_quality_gate import PhaseQualityGate
+            
+            # Get configuration from phase or use defaults
+            threshold = phase.get("quality_gate_threshold", 70)
+            timeout = phase.get("quality_gate_timeout", 60)
+            
+            # Create and execute quality gate
+            gate = PhaseQualityGate(
+                workspace_path=self.cortex_root,
+                threshold=threshold,
+                timeout_seconds=timeout,
+                enabled=True
+            )
+            
+            result = gate.execute_full_workflow()
+            
+            # Convert dataclass to dict for JSON serialization
+            return {
+                "success": result.success,
+                "score": result.score,
+                "validation_passed": result.validation_passed,
+                "should_block_checkpoint": result.should_block_checkpoint,
+                "findings": result.findings,
+                "bypassed": result.bypassed,
+                "message": result.message,
+                "threshold": threshold
+            }
+            
+        except Exception as e:
+            logger.warning(f"Quality gate execution failed: {e}")
+            return {
+                "success": False,
+                "score": None,
+                "validation_passed": False,
+                "should_block_checkpoint": False,
+                "findings": [],
+                "bypassed": False,
+                "message": f"Quality gate error: {str(e)}",
+                "threshold": 70
+            }
     
     def _parse_markdown_plan(self, plan_path: Path) -> Dict[str, Any]:
         """Parse Markdown plan into structured data."""

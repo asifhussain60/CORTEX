@@ -86,7 +86,7 @@ class TestUserProfileIntegration:
         composed = renderer_with_profile.compose_template("help")
         
         # Should use default 'guided' mode
-        assert "### 🎯 My Understanding Of Your Request" in composed
+        assert "### 🎯 Understanding & Scope" in composed
         assert "### 🔍 Next Steps" in composed
     
     def test_explicit_mode_overrides_profile(self, renderer_with_profile, profile_manager):
@@ -125,7 +125,7 @@ class TestUserProfileIntegration:
         # Should fall back to 'guided'
         composed = renderer_with_profile.compose_template("planning")
         
-        assert "### 🎯 My Understanding Of Your Request" in composed
+        assert "### 🎯 Understanding & Scope" in composed
 
 
 class TestProfileCaching:
@@ -236,7 +236,7 @@ class TestErrorHandling:
         # Should not crash, should use default 'guided' mode
         composed = renderer.compose_template("planning")
         
-        assert "### 🎯 My Understanding Of Your Request" in composed
+        assert "### 🎯 Understanding & Scope" in composed
     
     def test_corrupted_profile_falls_back_to_default(self, renderer_with_profile, profile_manager, monkeypatch):
         """Test corrupted profile data falls back to 'guided' mode."""
@@ -250,7 +250,7 @@ class TestErrorHandling:
         composed = renderer_with_profile.compose_template("planning")
         
         assert "CORTEX" in composed
-        assert "### 🎯 My Understanding Of Your Request" in composed
+        assert "### 🎯 Understanding & Scope" in composed
     
     def test_missing_profile_manager_uses_default_mode(self):
         """Test TemplateRenderer works without profile_manager (backward compatibility)."""
@@ -260,7 +260,7 @@ class TestErrorHandling:
         # Should work with default 'guided' mode
         composed = renderer.compose_template("planning", mode="guided")
         
-        assert "### 🎯 My Understanding Of Your Request" in composed
+        assert "### 🎯 Understanding & Scope" in composed
 
 
 class TestModeResolution:
@@ -311,9 +311,9 @@ class TestModeResolution:
         # No profile set, no explicit mode
         composed = renderer_with_profile.compose_template("planning")
         
-        # Should use guided mode (standard 5-part format)
-        assert "### 🎯 My Understanding Of Your Request" in composed
-        assert "### ⚠️ Challenge" in composed
+        # Should use guided mode (standard 5-part format) - v3.0 section names
+        assert "### 🎯 Understanding & Scope" in composed
+        assert "### ⚡ Approach & Considerations" in composed  # v3.0: was "Challenge"
         assert "### 💬 Response" in composed
-        assert "### 📝 Your Request" in composed
+        assert "### 📊 Impact & Changes" in composed  # v3.0: was "Your Request"
         assert "### 🔍 Next Steps" in composed

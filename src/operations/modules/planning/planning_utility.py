@@ -40,6 +40,15 @@ except ImportError:
     CORTEX_ROOT = Path(__file__).resolve().parents[4]
     BRAIN_PATH = CORTEX_ROOT / "cortex-brain"
 
+# Import PlanningOrchestrator for incremental generation
+try:
+    from src.orchestrators.planning_orchestrator import PlanningOrchestrator
+    ORCHESTRATOR_AVAILABLE = True
+except ImportError:
+    logger.warning("PlanningOrchestrator not available - incremental planning disabled")
+    ORCHESTRATOR_AVAILABLE = False
+    PlanningOrchestrator = None
+
 
 @dataclass
 class PlanResult:
@@ -305,6 +314,85 @@ def _truncate_filename(name: str, max_length: int = 30) -> str:
     return f"{truncated}-{timestamp}{extension}"
 
 
+def detect_plan_complexity(feature_name: str, description: str, user_input: str) -> Tuple[str, bool, str]:
+    """
+    Detect if feature requires incremental plan generation.
+    
+    Complexity Indicators:
+    - HIGH: Authentication, security, data migration, external APIs, multi-phase
+    - MEDIUM: Refactoring, new endpoints, UI changes, database changes
+    - LOW: Bug fixes, small enhancements, config changes
+    
+    Args:
+        feature_name: Feature name
+        description: Feature description
+        user_input: Original user request
+        
+    Returns:
+        Tuple of (complexity_level, use_incremental, reason)
+        
+    Examples:
+        >>> detect_plan_complexity("JWT Authentication", "Add JWT auth", "plan auth")
+        ('high', True, 'Security-critical authentication feature')
+        >>> detect_plan_complexity("Fix typo", "Fix typo in UI", "plan fix")
+        ('low', False, 'Simple bug fix')
+    """
+    combined = f"{feature_name} {description} {user_input}".lower()
+    
+    # HIGH COMPLEXITY - Always use incremental
+    high_keywords = [
+        # Security
+        (r"\bauth(?:entication|orization)?\b", "Security-critical authentication feature"),
+        (r"\bjwt\b|\btoken\b|\bsession\b", "Token-based authentication system"),
+        (r"\bsecurity\b|\bencrypt\b|\bhash\b", "Security-sensitive implementation"),
+        (r"\bpermission\b|\brole\b|\baccess control\b", "Access control system"),
+        # Data/Database
+        (r"\bmigrat(?:e|ion)\b", "Database migration requires careful planning"),
+        (r"\bschema change\b|\balter table\b", "Schema changes need rollback strategy"),
+        (r"\bdata model\b|\bentity\b.*\brelationship\b", "Complex data modeling"),
+        # Architecture
+        (r"\bmicroservice\b|\bapi gateway\b", "Distributed system architecture"),
+        (r"\bevent\s+driven\b|\bmessage\s+queue\b", "Event-driven architecture"),
+        (r"\bexternal\s+api\b|\bthird[\s-]?party\b", "External API integration"),
+        # Multi-phase
+        (r"\bmulti[\s-]?phase\b|\bstep\s+\d+\b.*\bstep\s+\d+\b", "Multi-phase implementation"),
+        (r"\ball\s+phases\b|\bend\s+to\s+end\b", "Comprehensive end-to-end feature"),
+    ]
+    
+    for pattern, reason in high_keywords:
+        if re.search(pattern, combined):
+            logger.info(f"🎯 HIGH complexity detected: {reason}")
+            return ("high", True, reason)
+    
+    # MEDIUM COMPLEXITY - Use incremental for detailed descriptions
+    medium_keywords = [
+        (r"\brefactor\b|\brestructur\b", "Refactoring requires careful planning"),
+        (r"\bnew\s+endpoint\b|\bnew\s+route\b", "New API endpoint"),
+        (r"\bui\s+change\b|\bfrontend\b|\breact\b|\bvue\b", "Frontend changes"),
+        (r"\bdatabase\b|\bquery\b|\bindex\b", "Database operations"),
+        (r"\bperformance\b|\boptimiz\b|\bcache\b", "Performance-sensitive changes"),
+        (r"\bdeployment\b|\bci\s?cd\b|\bpipeline\b", "Deployment infrastructure"),
+    ]
+    
+    # Check description length (>100 chars suggests complexity)
+    description_length = len(description)
+    if description_length > 100:
+        logger.info(f"📝 MEDIUM complexity: Detailed description ({description_length} chars)")
+        return ("medium", True, f"Detailed description suggests complexity ({description_length} chars)")
+    
+    for pattern, reason in medium_keywords:
+        if re.search(pattern, combined):
+            # Use incremental only if description is substantial (>50 chars)
+            use_incremental = description_length > 50
+            if use_incremental:
+                logger.info(f"📊 MEDIUM complexity detected: {reason}")
+            return ("medium", use_incremental, reason)
+    
+    # LOW COMPLEXITY - Use simple skeleton
+    logger.info("✅ LOW complexity: Using simple plan skeleton")
+    return ("low", False, "Simple feature - skeleton sufficient")
+
+
 # ===== CORE OPERATION 1: CREATE PLAN =====
 
 def create_plan(
@@ -317,12 +405,17 @@ def create_plan(
     """
     Create new plan with metadata.
     
+    Automatically detects complexity and delegates to incremental generator for:
+    - HIGH complexity: Security, auth, migrations, external APIs, multi-phase
+    - MEDIUM complexity: Refactoring, endpoints, UI, DB changes (with detailed description)
+    - LOW complexity: Simple features (uses skeleton generation)
+    
     Args:
         feature_name: Name of feature being planned
         description: Feature description
         author: Plan author name
-        complexity: Complexity level (low, medium, high)
-        user_input: Original user request (used to detect execution mode)
+        complexity: Complexity level (low, medium, high) - overridden by auto-detection
+        user_input: Original user request (used to detect execution mode and complexity)
         
     Returns:
         PlanResult with plan creation outcome
@@ -332,6 +425,31 @@ def create_plan(
     # Detect execution mode from user input
     execution_mode = detect_execution_mode(user_input) if user_input else "approval_gated"
     logger.info(f"   Execution mode: {execution_mode}")
+    
+    # AUTO-DETECT COMPLEXITY and decide on incremental vs skeleton
+    detected_complexity, use_incremental, reason = detect_plan_complexity(
+        feature_name, description, user_input
+    )
+    
+    # Override provided complexity with detected complexity
+    if detected_complexity != complexity:
+        logger.info(f"   Complexity override: {complexity} → {detected_complexity} ({reason})")
+        complexity = detected_complexity
+    
+    # DELEGATE TO INCREMENTAL GENERATOR for complex plans
+    if use_incremental and ORCHESTRATOR_AVAILABLE:
+        logger.info(f"🔄 Delegating to incremental generator: {reason}")
+        return _create_plan_incremental(
+            feature_name=feature_name,
+            description=description,
+            author=author,
+            complexity=complexity,
+            user_input=user_input,
+            execution_mode=execution_mode
+        )
+    
+    # SIMPLE SKELETON for low complexity
+    logger.info(f"📄 Creating simple plan skeleton: {reason}")
     
     try:
         # Create plan directory structure
@@ -414,6 +532,91 @@ def create_plan(
         return PlanResult(
             success=False,
             message=f"Plan creation failed: {str(e)}",
+            errors=[str(e)]
+        )
+
+
+def _create_plan_incremental(
+    feature_name: str,
+    description: str,
+    author: str,
+    complexity: str,
+    user_input: str,
+    execution_mode: str
+) -> PlanResult:
+    """
+    Create plan using incremental generator with phase-by-phase generation.
+    
+    Args:
+        feature_name: Feature name
+        description: Feature description
+        author: Plan author
+        complexity: Complexity level
+        user_input: Original user input
+        execution_mode: "autonomous" or "approval_gated"
+        
+    Returns:
+        PlanResult with incremental plan generation outcome
+    """
+    try:
+        # Initialize orchestrator
+        orchestrator = PlanningOrchestrator(str(CORTEX_ROOT))
+        logger.info("✅ PlanningOrchestrator initialized")
+        
+        # Combine feature name and description for requirements
+        feature_requirements = f"{feature_name}"
+        if description:
+            feature_requirements += f": {description}"
+        
+        # Add complexity and author to requirements
+        feature_requirements += f"\n\nComplexity: {complexity}\nAuthor: {author}"
+        if user_input:
+            feature_requirements += f"\nOriginal Request: {user_input}"
+        
+        # Create checkpoint callback based on execution mode
+        if execution_mode == "autonomous":
+            logger.info("🤖 Autonomous mode: Auto-approving all checkpoints")
+            checkpoint_callback = None  # Auto-approve
+        else:
+            # Approval-gated: Auto-approve for now (TODO: Add interactive approval)
+            logger.info("✋ Approval-gated mode: Auto-approving (interactive approval coming soon)")
+            checkpoint_callback = None
+        
+        # Generate incremental plan
+        logger.info("🚀 Starting incremental plan generation...")
+        success, plan_path, message = orchestrator.generate_incremental_plan(
+            feature_requirements=feature_requirements,
+            checkpoint_callback=checkpoint_callback,
+            output_filename=None  # Auto-generate filename
+        )
+        
+        if success:
+            logger.info(f"✅ Incremental plan created: {plan_path.name if plan_path else 'N/A'}")
+            
+            # Load the generated plan to return data
+            if plan_path and plan_path.exists():
+                return load_plan(plan_path)
+            else:
+                return PlanResult(
+                    success=True,
+                    message=message,
+                    plan_path=plan_path
+                )
+        else:
+            logger.error(f"❌ Incremental plan generation failed: {message}")
+            return PlanResult(
+                success=False,
+                message=f"Incremental generation failed: {message}",
+                errors=[message]
+            )
+            
+    except Exception as e:
+        logger.error(f"❌ Incremental generation error: {e}")
+        # Fallback to skeleton generation
+        logger.info("⚠️  Falling back to skeleton generation")
+        return PlanResult(
+            success=False,
+            message=f"Incremental generation failed, use skeleton: {str(e)}",
             errors=[str(e)]
         )
 

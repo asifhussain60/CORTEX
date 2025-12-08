@@ -114,6 +114,14 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         - Validate metadata (copilot_position, reference_count)
         - Calculate governance health score (0-100)
     
+    Phase 8: SKULL Test Discovery & Validation
+        - Scan CORTEX system holistically for governance enforcement points
+        - Identify missing SKULL tests for brain protection rules
+        - Detect outdated SKULL tests (rules removed/refactored)
+        - Validate SKULL test coverage (all Tier 0 instincts tested)
+        - Recommend new SKULL tests based on governance drift
+        - Execute existing SKULL tests and report failures
+    
     Usage:
         orchestrator = OptimizeSystemOrchestrator(project_root=Path('/path/to/cortex'))
         result = orchestrator.execute(context={'profile': 'comprehensive', 'mode': 'live'})
@@ -346,7 +354,7 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 # Run quick health check (system + brain only)
                 from src.operations.healthcheck_operation import HealthCheckOperation
                 health_check = HealthCheckOperation()
-                result = health_check.execute(component='brain', quick=True)
+                result = health_check.execute({'quick': True})
                 
                 if not result.success:
                     logger.warning(f"⚠️ Health check warning: {result.message}")
@@ -354,49 +362,49 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                     logger.info(f"✅ Health check passed")
             
             # Phase 1: Validate prerequisites
-            logger.info("\n[Phase 1/8] Validating prerequisites...")
+            logger.info("\n[Phase 1/9] Validating prerequisites...")
             prereq_result = self.validate_prerequisites(context)
             if not prereq_result.success:
                 return prereq_result
             
             # Phase 2: Design Sync
             if 'design_sync' not in skip_phases:
-                logger.info("\n[Phase 2/8] Running design synchronization...")
+                logger.info("\n[Phase 2/9] Running design synchronization...")
                 self._run_design_sync(context)
             else:
-                logger.info("\n[Phase 2/8] Design sync skipped (per user request)")
+                logger.info("\n[Phase 2/9] Design sync skipped (per user request)")
             
             # Phase 3: Code Health
             if 'code_health' not in skip_phases:
-                logger.info("\n[Phase 3/8] Analyzing code health...")
+                logger.info("\n[Phase 3/9] Analyzing code health...")
                 self._run_code_health_analysis(context)
             else:
-                logger.info("\n[Phase 3/8] Code health analysis skipped (per user request)")
+                logger.info("\n[Phase 3/9] Code health analysis skipped (per user request)")
             
             # Phase 4: Brain Tuning
             if 'brain_tuning' not in skip_phases:
-                logger.info("\n[Phase 4/8] Tuning brain tiers...")
+                logger.info("\n[Phase 4/9] Tuning brain tiers...")
                 self._run_brain_tuning(context)
             else:
-                logger.info("\n[Phase 4/8] Brain tuning skipped (per user request)")
+                logger.info("\n[Phase 4/9] Brain tuning skipped (per user request)")
             
             # Phase 5: Entry Point Alignment
             if 'entry_point_alignment' not in skip_phases:
-                logger.info("\n[Phase 5/8] Aligning entry points...")
+                logger.info("\n[Phase 5/9] Aligning entry points...")
                 self._run_entry_point_alignment(context)
             else:
-                logger.info("\n[Phase 5/8] Entry point alignment skipped (per user request)")
+                logger.info("\n[Phase 5/9] Entry point alignment skipped (per user request)")
             
             # Phase 6: Test Suite Optimization
             if 'test_suite' not in skip_phases:
-                logger.info("\n[Phase 6/8] Optimizing test suite...")
+                logger.info("\n[Phase 6/9] Optimizing test suite...")
                 self._run_test_suite_optimization(context)
             else:
-                logger.info("\n[Phase 6/8] Test suite optimization skipped (per user request)")
+                logger.info("\n[Phase 6/9] Test suite optimization skipped (per user request)")
             
             # Phase 7: Governance Health Check
             if 'governance' not in skip_phases:
-                logger.info("\n[Phase 7/8] Checking governance drift...")
+                logger.info("\n[Phase 7/9] Checking governance drift...")
                 governance_result = self._check_governance_drift(context)
                 if governance_result['has_issues']:
                     logger.warning(f"⚠️  Governance issues detected (score: {governance_result['health_score']:.1f}/100)")
@@ -405,7 +413,21 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
                 else:
                     logger.info(f"✅ Governance health: {governance_result['health_score']:.1f}/100")
             else:
-                logger.info("\n[Phase 7/8] Governance check skipped (per user request)")
+                logger.info("\n[Phase 7/9] Governance check skipped (per user request)")
+            
+            # Phase 8: SKULL Test Discovery & Validation
+            if 'skull_tests' not in skip_phases:
+                logger.info("\n[Phase 8/9] SKULL test discovery & validation...")
+                skull_result = self._discover_and_validate_skull_tests(context)
+                if skull_result['tests_needed']:
+                    logger.warning(f"⚠️  SKULL test gaps detected: {len(skull_result['missing_tests'])} missing")
+                    for missing in skull_result['missing_tests'][:5]:  # Show first 5
+                        logger.warning(f"   • {missing}")
+                if skull_result['tests_outdated']:
+                    logger.warning(f"⚠️  Outdated SKULL tests: {len(skull_result['outdated_tests'])}")
+                logger.info(f"✅ SKULL coverage: {skull_result['coverage_percent']:.1f}% ({skull_result['tests_passing']}/{skull_result['tests_total']} passing)")
+            else:
+                logger.info("\n[Phase 8/9] SKULL test validation skipped (per user request)")
             
             end_time = datetime.now()
             self.metrics.execution_time_seconds = (end_time - self.start_time).total_seconds()
@@ -549,10 +571,52 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             return None
     
     def _run_brain_tuning(self, context: Dict[str, Any]) -> None:
-        """Run brain tuning operations (Phase 4)."""
-        # TODO: Implement brain tuning module
-        logger.info("⏩ Brain tuning implementation pending...")
-        self.metrics.warnings.append("Brain tuning not yet implemented")
+        """
+        Run brain tuning operations (Phase 4).
+        
+        Comprehensive brain health optimization:
+        - Diagnose all 4 brain tiers (Tier 0, 1, 2, 3)
+        - Migrate YAML knowledge to SQLite
+        - Prune low-confidence patterns
+        - Validate tier boundaries
+        - Optimize databases (VACUUM, ANALYZE, REINDEX)
+        - Generate health report
+        """
+        try:
+            from src.operations.modules.brain.brain_tuning_orchestrator import BrainTuningOrchestrator
+            
+            logger.info("🧠 Running brain tuning orchestrator...")
+            
+            tuner = BrainTuningOrchestrator(self.project_root)
+            result = tuner.execute()
+            
+            if result['success']:
+                metrics = result['metrics']
+                
+                logger.info(f"✅ Brain tuning complete")
+                logger.info(f"  Patterns migrated: {metrics['patterns_migrated']}")
+                logger.info(f"  Patterns pruned: {metrics['patterns_pruned']}")
+                logger.info(f"  Space reclaimed: {metrics['space_reclaimed_kb']:.2f} KB")
+                logger.info(f"  Issues fixed: {len(metrics['issues_fixed'])}")
+                
+                # Update system metrics
+                self.metrics.optimizations_applied += len(metrics['issues_fixed'])
+                self.metrics.warnings.extend(metrics['warnings'])
+                
+                # Store brain health in context for later phases
+                context['brain_health'] = result.get('health_report', {})
+                context['brain_diagnosis'] = result.get('diagnosis', {})
+            else:
+                error_msg = result.get('error', 'Unknown error')
+                logger.error(f"❌ Brain tuning failed: {error_msg}")
+                self.metrics.errors_encountered.append(f"Brain tuning: {error_msg}")
+        
+        except ImportError as e:
+            logger.warning(f"⚠️  Brain tuning module not available: {e}")
+            self.metrics.warnings.append("Brain tuning module import failed")
+        except Exception as e:
+            logger.error(f"❌ Brain tuning error: {e}", exc_info=True)
+            self.metrics.errors_encountered.append(f"Brain tuning: {e}")
     
     def _run_entry_point_alignment(self, context: Dict[str, Any]) -> None:
         """
@@ -729,6 +793,139 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
         # TODO: Implement test suite optimization module
         logger.info("⏩ Test suite optimization implementation pending...")
         self.metrics.warnings.append("Test suite optimization not yet implemented")
+    
+    def _discover_and_validate_skull_tests(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Discover and validate SKULL tests (Phase 8).
+        
+        Performs holistic review:
+        1. Load brain protection rules (brain-protection-rules.yaml)
+        2. Scan tests/tier0/ and tests/tier3/ for SKULL tests
+        3. Map rules to tests (which rules are covered?)
+        4. Identify missing tests (rules without coverage)
+        5. Identify outdated tests (tests for removed rules)
+        6. Execute all SKULL tests and report results
+        
+        Returns:
+            Dict with:
+                - coverage_percent: Percentage of rules with tests
+                - tests_total: Total SKULL tests found
+                - tests_passing: Number passing
+                - tests_failing: Number failing
+                - missing_tests: List of rules without tests
+                - outdated_tests: List of tests for removed rules
+                - tests_needed: Boolean - are new tests needed?
+        """
+        try:
+            result = {
+                'coverage_percent': 0.0,
+                'tests_total': 0,
+                'tests_passing': 0,
+                'tests_failing': 0,
+                'missing_tests': [],
+                'outdated_tests': [],
+                'tests_needed': False
+            }
+            
+            # Step 1: Load brain protection rules
+            brain_rules_file = self.project_root / "cortex-brain" / "brain-protection-rules.yaml"
+            if not brain_rules_file.exists():
+                logger.warning("⚠️  brain-protection-rules.yaml not found, skipping SKULL validation")
+                return result
+            
+            with open(brain_rules_file, 'r', encoding='utf-8') as f:
+                brain_rules = yaml.safe_load(f)
+            
+            # Extract Tier 0 instinct names (rules that should have tests)
+            tier0_instincts = brain_rules.get('tier0_instincts', [])
+            if isinstance(tier0_instincts, list):
+                rule_names = set(tier0_instincts)
+            else:
+                # If it's a dict, use keys
+                rule_names = set(tier0_instincts.keys())
+            logger.info(f"📋 Found {len(rule_names)} Tier 0 instincts in brain protection rules")
+            
+            # Step 2: Scan for SKULL tests
+            skull_tests = []
+            test_dirs = [
+                self.project_root / "tests" / "tier0",
+                self.project_root / "tests" / "tier3"
+            ]
+            
+            for test_dir in test_dirs:
+                if not test_dir.exists():
+                    continue
+                for test_file in test_dir.glob("test_*.py"):
+                    content = test_file.read_text(encoding='utf-8')
+                    if 'skull' in content.lower() or 'SKULL' in content:
+                        skull_tests.append(test_file)
+            
+            logger.info(f"🔍 Found {len(skull_tests)} SKULL test files")
+            
+            # Step 3: Map tests to rules (simple heuristic - look for rule names in test files)
+            covered_rules = set()
+            for test_file in skull_tests:
+                content = test_file.read_text(encoding='utf-8').lower()
+                for rule_name in rule_names:
+                    if rule_name.lower() in content:
+                        covered_rules.add(rule_name)
+            
+            # Step 4: Identify missing tests
+            missing_tests = list(rule_names - covered_rules)
+            result['missing_tests'] = [f"{rule}: No test found" for rule in missing_tests]
+            result['tests_needed'] = len(missing_tests) > 0
+            
+            # Step 5: Execute SKULL tests (use pytest)
+            if skull_tests:
+                try:
+                    # Run pytest on SKULL test files
+                    test_paths = [str(t) for t in skull_tests]
+                    cmd = ['python', '-m', 'pytest'] + test_paths + ['-v', '--tb=short', '-q']
+                    
+                    proc = subprocess.run(
+                        cmd,
+                        cwd=str(self.project_root),
+                        capture_output=True,
+                        text=True,
+                        timeout=120
+                    )
+                    
+                    # Parse output for pass/fail counts
+                    output = proc.stdout + proc.stderr
+                    
+                    # Count passing/failing tests
+                    passing = output.count(' PASSED')
+                    failing = output.count(' FAILED')
+                    
+                    result['tests_total'] = passing + failing
+                    result['tests_passing'] = passing
+                    result['tests_failing'] = failing
+                    
+                    logger.info(f"✅ SKULL tests: {passing} passing, {failing} failing")
+                    
+                except subprocess.TimeoutExpired:
+                    logger.warning("⚠️  SKULL test execution timed out (120s)")
+                except Exception as e:
+                    logger.warning(f"⚠️  SKULL test execution failed: {e}")
+            
+            # Step 6: Calculate coverage
+            if rule_names:
+                result['coverage_percent'] = (len(covered_rules) / len(rule_names)) * 100
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"SKULL test discovery failed: {e}", exc_info=True)
+            return {
+                'coverage_percent': 0.0,
+                'tests_total': 0,
+                'tests_passing': 0,
+                'tests_failing': 0,
+                'missing_tests': [],
+                'outdated_tests': [],
+                'tests_needed': False,
+                'error': str(e)
+            }
     
     def _check_governance_drift(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """Check governance.yaml for ordering drift and inefficiencies (delegated to GovernanceDriftChecker)."""

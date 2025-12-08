@@ -1,0 +1,313 @@
+plan_id: PLAN-2025-12-07-duplicate-consolidation
+title: Safe Duplicate Functionality Consolidation
+created: 2025-12-07T19:20:00
+status: approved
+priority: high
+estimated_hours: 12-16
+
+description: |
+  Systematically consolidate 277 duplicate files while protecting active functionality.
+  Uses 5-layer safety system to prevent accidental deletion of production code.
+
+scope:
+  - 277 duplicate files identified
+  - 1,233 duplicate functions
+  - 631 duplicate classes
+  - 58 files requiring manual review (active code)
+  - 0 files currently safe for auto-deletion
+
+out_of_scope:
+  - Refactoring functionality (consolidation only)
+  - Performance optimization
+  - Test coverage improvements
+  - Documentation updates beyond what's necessary
+
+definition_of_ready:
+  - ✅ Duplicate analysis complete (duplicate-analysis-20251207-191415.json)
+  - ✅ Safety scoring system validated
+  - ✅ Active import detection working (1,160 modules tracked)
+  - ✅ Git history analysis functional (30-day window)
+  - ✅ Backup system tested and verified
+  - ✅ TDD workflow integrated (RED→GREEN→REFACTOR)
+  - ✅ Tests exist for all consolidation logic
+  - ✅ Git checkpoint system enabled
+  - ✅ Rollback plan documented
+  - ✅ Per-layer coverage targets defined (Domain: 90%, Application: 85%, Infrastructure: 70%)
+  - ✅ No empty/placeholder tests in consolidation code
+
+definition_of_done:
+  - ✅ All safe duplicates removed (archived copies)
+  - ✅ Active duplicates consolidated with import redirects
+  - ✅ All tests passing after consolidation
+  - ✅ Zero broken imports or references
+  - ✅ Git history shows test-first commits (RED→GREEN→REFACTOR)
+  - ✅ System alignment passes all 11 checks
+  - ✅ Performance benchmarks maintained or improved
+  - ✅ Documentation updated with consolidation map
+  - ✅ Per-layer coverage thresholds met (no regression)
+  - ✅ No empty placeholder tests remaining in codebase
+
+phases:
+  - phase: 1
+    name: Analysis & Categorization
+    description: Deep analysis of duplicates to create consolidation strategy
+    estimated_hours: 3-4
+    tasks:
+      - id: 1.1
+        name: Review duplicate analysis report
+        description: |
+          Analyze cortex-brain/documents/analysis/duplicate-analysis-20251207-191415.json
+          to understand duplicate patterns and categorize by risk level
+        estimated_hours: 1
+        
+      - id: 1.2
+        name: Categorize duplicates by safety level
+        description: |
+          Group duplicates into 4 categories:
+          - Auto-safe: Archived copies, no imports, old (0 files currently)
+          - Semi-safe: Test duplicates, backup copies (TBD)
+          - Manual-review: Active code, mixed locations (58 files)
+          - Keep-both: Intentional duplicates, different contexts
+        estimated_hours: 1
+        
+      - id: 1.3
+        name: Create consolidation map
+        description: |
+          For each duplicate set, identify:
+          - Primary version (most recent, most tested, best location)
+          - Versions to remove
+          - Import redirect strategy
+          - Affected modules (from active import tracking)
+        estimated_hours: 1-2
+
+  - phase: 2
+    name: Automated Safe Deletion
+    description: Remove archived and obviously safe duplicates
+    estimated_hours: 2-3
+    tasks:
+      - id: 2.1
+        name: Delete archived duplicates
+        description: |
+          Remove duplicates in cortex-brain/archives/ with safety score < -50
+          (archived location penalty) and no active imports
+        estimated_hours: 0.5
+        
+      - id: 2.2
+        name: Remove backup files
+        description: |
+          Delete *.backup, *.old, *.bak duplicates that duplicate analysis
+          confirms are safe (no active references)
+        estimated_hours: 0.5
+        
+      - id: 2.3
+        name: Clean test duplicates
+        description: |
+          Remove duplicate test files in wrong locations (e.g., root-level tests
+          already moved to tests/integration/)
+        estimated_hours: 1
+        
+      - id: 2.4
+        name: Validate Phase 2 cleanup
+        description: |
+          Run align and verify:
+          - All tests still passing
+          - No broken imports
+          - System alignment 11/11 checks pass
+        estimated_hours: 0.5-1
+
+  - phase: 3
+    name: Manual Review & Consolidation
+    description: Human-reviewed consolidation of active duplicates
+    estimated_hours: 4-5
+    tasks:
+      - id: 3.1
+        name: Review 58 active duplicates
+        description: |
+          For each of 58 files needing manual review:
+          - Compare functionality and code quality
+          - Identify primary version (best location, most recent, most tested)
+          - Document why duplication exists
+          - Create consolidation strategy (merge vs redirect vs keep-both)
+        estimated_hours: 2-3
+        
+      - id: 3.2
+        name: Create import redirect map
+        description: |
+          For duplicates to be removed, create import redirects:
+          - Update all importing modules to use primary version
+          - Add deprecation warnings to secondary versions
+          - Document redirect in consolidation-map.json
+        estimated_hours: 1
+        
+      - id: 3.3
+        name: Execute consolidation with git checkpoints
+        description: |
+          For each duplicate set:
+          - Create git checkpoint before changes
+          - Update imports to primary version
+          - Remove secondary version
+          - Run tests
+          - If tests fail, rollback via git checkpoint
+          - If tests pass, commit consolidation
+        estimated_hours: 1-2
+
+  - phase: 4
+    name: Validation & Testing
+    description: Comprehensive validation of consolidation
+    estimated_hours: 2-3
+    tasks:
+      - id: 4.1
+        name: Run full test suite
+        description: |
+          Execute pytest tests/ with coverage:
+          - Verify all tests passing
+          - Check coverage maintained (>80%)
+          - Validate no new test failures
+        estimated_hours: 0.5
+        
+      - id: 4.2
+        name: Run system alignment
+        description: |
+          Execute align to verify:
+          - All 11 checks pass
+          - No broken imports
+          - All features registered
+          - Intent router coverage maintained
+        estimated_hours: 0.5
+        
+      - id: 4.3
+        name: Performance benchmark
+        description: |
+          Run performance tests to ensure consolidation didn't degrade performance:
+          - Import time benchmarks
+          - Operation execution time
+          - Memory usage
+        estimated_hours: 0.5
+        
+      - id: 4.4
+        name: Manual smoke testing
+        description: |
+          Test key workflows:
+          - Plan creation
+          - TDD workflow
+          - Cleanup execution
+          - Dashboard launch
+          - Alignment
+        estimated_hours: 0.5-1
+
+  - phase: 5
+    name: Documentation & Cleanup
+    description: Document consolidation and clean up artifacts
+    estimated_hours: 1-2
+    tasks:
+      - id: 5.1
+        name: Create consolidation report
+        description: |
+          Document:
+          - Files removed (with reasons)
+          - Import redirects applied
+          - Consolidation decisions made
+          - Manual review notes
+          - Before/after metrics
+        estimated_hours: 0.5-1
+        
+      - id: 5.2
+        name: Update CORTEX documentation
+        description: |
+          Update relevant docs:
+          - Architecture overview (if structure changed)
+          - Developer guide (if import paths changed)
+          - Cleanup orchestrator docs (lessons learned)
+        estimated_hours: 0.5
+        
+      - id: 5.3
+        name: Archive analysis artifacts
+        description: |
+          Move analysis reports to cortex-brain/archives/consolidation-2025-12-07/
+          for historical reference
+        estimated_hours: 0.5
+
+risks:
+  - risk: Breaking active imports during consolidation
+    probability: medium
+    impact: high
+    mitigation: |
+      - Use git checkpoints before each consolidation
+      - Run tests after each change
+      - Maintain import redirect map
+      - Keep backups of all removed files
+    
+  - risk: Consolidating intentionally separate code
+    probability: low
+    impact: medium
+    mitigation: |
+      - Manual review of all 58 active duplicates
+      - Check git history for intentional duplication
+      - Validate with code comments/docs
+      - When in doubt, keep both versions
+    
+  - risk: Performance degradation from import redirects
+    probability: low
+    impact: low
+    mitigation: |
+      - Benchmark before/after
+      - Remove redirects after all imports updated
+      - Monitor import times post-consolidation
+
+rollback_plan: |
+  Each phase has rollback capability:
+  
+  Phase 2: Restore from cortex-brain/backups/cleanup/20251207_191415/
+  Phase 3: Git checkpoint before each consolidation, revert via git reset
+  Phase 4: If validation fails, revert all Phase 3 commits
+  
+  Full rollback: git reset --hard <commit-before-consolidation>
+
+success_criteria:
+  - Duplicate count reduced by at least 60% (from 277 to <111)
+  - All 11 alignment checks pass
+  - Zero broken imports or test failures
+  - Performance maintained or improved
+  - Documentation complete
+
+dependencies:
+  - Duplicate analysis system (analyze_duplicates_v2.py)
+  - Cleanup orchestrator with Phase 0 integration
+  - Git checkpoint system
+  - System alignment tooling
+  - Test suite coverage
+
+notes: |
+  This plan prioritizes safety over aggressive consolidation. The 5-layer safety
+  system correctly identified that all 277 duplicates require careful review -
+  none are safe for blind deletion. This is a multi-day effort that should be
+  executed in phases with validation gates.
+  
+  Key insight: "Duplicate" doesn't always mean "redundant". Many duplicates exist
+  for valid architectural reasons (separation of concerns, different contexts,
+  backwards compatibility). The goal is consolidation where appropriate, not
+  maximum deletion.
+
+autonomous_execution: false
+reason: Manual review required for 58 active duplicates - human judgment needed
+
+tdd_requirements:
+  workflow: RED→GREEN→REFACTOR
+  phases:
+    - RED: Write tests for consolidation logic first
+    - GREEN: Implement import redirects and consolidation
+    - REFACTOR: Clean up redirect code after validation
+  git_checkpoints:
+    - After RED phase (failing tests)
+    - After GREEN phase (passing tests)
+    - After REFACTOR phase (clean code)
+  coverage_targets:
+    domain: 90%
+    application: 85%
+    infrastructure: 70%
+    api: 80%
+  validation_rules:
+    - Test files must exist for all consolidation logic
+    - No empty/placeholder tests (Test1, UnitTest1, etc.)
+    - Per-layer coverage thresholds enforced
+    - Tests must fail before implementation (RED validation)

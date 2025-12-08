@@ -21,20 +21,17 @@ import os
 import sqlite3
 import json
 import hashlib
+import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime
 from dataclasses import asdict
 
-try:
-    from .policy_analyzer import PolicyAnalyzer, PolicyDocument
-    from .compliance_validator import ComplianceValidator, ComplianceReport
-except ImportError:
-    # For standalone execution
-    import sys
-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-    from src.policy.policy_analyzer import PolicyAnalyzer, PolicyDocument
-    from src.policy.compliance_validator import ComplianceValidator, ComplianceReport
+from src.policy.policy_analyzer import PolicyAnalyzer, PolicyDocument
+from src.policy.compliance_validator import ComplianceValidator, ComplianceReport
+
+# Initialize logger
+logger = logging.getLogger(__name__)
 
 
 class PolicyStorage:
@@ -218,10 +215,9 @@ class PolicyStorage:
         conn.commit()
         conn.close()
         
-        print(f"{'✅ Updated' if changed else '✓ Stored'} policy: {policy_name}")
-        print(f"   ID: {policy_id}")
-        print(f"   Rules: {len(policy_doc.rules)}")
-        print(f"   Hash: {file_hash[:16]}...")
+        status = 'Updated' if changed else 'Stored'
+        logger.info(f"{status} policy: {policy_name}")
+        logger.debug(f"Policy ID: {policy_id}, Rules: {len(policy_doc.rules)}, Hash: {file_hash[:16]}...")
         
         return policy_id, changed
     
@@ -243,66 +239,67 @@ class PolicyStorage:
             ComplianceReport object
         """
         conn = self.get_db_connection(repo_name)
-        cursor = conn.cursor()
         
-        cursor.execute('SELECT file_path FROM policies WHERE policy_id = ?', (policy_id,))
-        row = cursor.fetchone()
+        try:
+            cursor = conn.cursor()
+            
+            cursor.execute('SELECT file_path FROM policies WHERE policy_id = ?', (policy_id,))
+            row = cursor.fetchone()
+            
+            if not row:
+                raise ValueError(f"Policy not found: {policy_id}")
+            
+            policy_file = row['file_path']
+            
+            # Parse and validate
+            policy_doc = self.analyzer.analyze_file(policy_file)
+            report = self.validator.validate(policy_doc, codebase_path)
+            
+            # Store report
+            repo_path = self.get_repo_path(repo_name)
+            timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+            report_file = repo_path / "reports" / f"{policy_id}-{timestamp}.json"
+            
+            # Convert report to dict
+            report_dict = self._report_to_dict(report)
+            
+            with open(report_file, 'w', encoding='utf-8') as f:
+                json.dump(report_dict, f, indent=2)
+            
+            # Also save as latest
+            latest_file = repo_path / "latest-report.json"
+            with open(latest_file, 'w', encoding='utf-8') as f:
+                json.dump(report_dict, f, indent=2)
+            
+            # Update database
+            cursor.execute('''
+                INSERT INTO validations (
+                    policy_id, timestamp, codebase_path, compliance_score,
+                    violations_count, critical_violations, high_violations,
+                    medium_violations, low_violations, report_path
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                policy_id,
+                datetime.now().isoformat(),
+                codebase_path,
+                report.compliance_score,
+                len(report.violations),
+                len([v for v in report.violations if v.severity == "critical"]),
+                len([v for v in report.violations if v.severity == "high"]),
+                len([v for v in report.violations if v.severity == "medium"]),
+                len([v for v in report.violations if v.severity == "low"]),
+                str(report_file)
+            ))
+            
+            conn.commit()
+            
+            logger.info(f"Validation complete - Score: {report.compliance_score}%, Violations: {len(report.violations)}")
+            logger.debug(f"Report saved to: {report_file}")
+            
+            return report
         
-        if not row:
+        finally:
             conn.close()
-            raise ValueError(f"Policy not found: {policy_id}")
-        
-        policy_file = row['file_path']
-        
-        # Parse and validate
-        policy_doc = self.analyzer.analyze_file(policy_file)
-        report = self.validator.validate(policy_doc, codebase_path)
-        
-        # Store report
-        repo_path = self.get_repo_path(repo_name)
-        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        report_file = repo_path / "reports" / f"{policy_id}-{timestamp}.json"
-        
-        # Convert report to dict
-        report_dict = self._report_to_dict(report)
-        
-        with open(report_file, 'w', encoding='utf-8') as f:
-            json.dump(report_dict, f, indent=2)
-        
-        # Also save as latest
-        latest_file = repo_path / "latest-report.json"
-        with open(latest_file, 'w', encoding='utf-8') as f:
-            json.dump(report_dict, f, indent=2)
-        
-        # Update database
-        cursor.execute('''
-            INSERT INTO validations (
-                policy_id, timestamp, codebase_path, compliance_score,
-                violations_count, critical_violations, high_violations,
-                medium_violations, low_violations, report_path
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (
-            policy_id,
-            datetime.now().isoformat(),
-            codebase_path,
-            report.compliance_score,
-            len(report.violations),
-            len([v for v in report.violations if v.severity == "critical"]),
-            len([v for v in report.violations if v.severity == "high"]),
-            len([v for v in report.violations if v.severity == "medium"]),
-            len([v for v in report.violations if v.severity == "low"]),
-            str(report_file)
-        ))
-        
-        conn.commit()
-        conn.close()
-        
-        print(f"\n✅ Validation Complete")
-        print(f"   Score: {report.compliance_score}%")
-        print(f"   Violations: {len(report.violations)}")
-        print(f"   Report: {report_file}")
-        
-        return report
     
     def _report_to_dict(self, report: ComplianceReport) -> Dict[str, Any]:
         """Convert ComplianceReport to dictionary"""
@@ -364,7 +361,7 @@ class PolicyStorage:
             # Compare with stored hash
             if current_hash != policy['file_hash']:
                 changed.append((policy['policy_id'], policy['policy_name']))
-                print(f"⚠️  Policy changed: {policy['policy_name']}")
+                logger.warning(f"Policy changed: {policy['policy_name']}")
         
         return changed
     

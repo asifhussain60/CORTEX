@@ -49,6 +49,10 @@ tree-sitter-languages>=1.10.2  # Pre-built language grammars
 networkx>=3.1  # Graph analysis for architecture visualization
 toml>=0.10.2  # TOML parsing for pyproject.toml, Cargo.toml
 
+# Dashboard UI Testing (CORTEX 3.8+)
+selenium>=4.15.0  # Browser automation for dashboard testing
+pytest-selenium>=4.0.0  # pytest integration for Selenium
+
 # Dashboard System - Technology Risk Scorer (CORTEX 3.8)
 requests>=2.31.0  # HTTP client for endoflife.date API integration
 # Note: astroid and requirements-parser omitted (not strictly needed for simplified onboarding)

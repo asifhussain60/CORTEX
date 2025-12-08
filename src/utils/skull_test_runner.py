@@ -16,6 +16,11 @@ SKULL tests validate:
 - Context management
 - Template architecture
 
+Windows Console Compatibility:
+- Uses ASCII symbols instead of Unicode emojis
+- Prevents UnicodeEncodeError on Windows cp1252 encoding
+- All test output is ASCII-safe
+
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Proprietary
@@ -139,11 +144,11 @@ def run_skull_tests(
         
         if result['success']:
             logger.info("=" * 80)
-            logger.info("✅ ALL SKULL TESTS PASSED - Brain protection intact")
+            logger.info("[OK] ALL SKULL TESTS PASSED - Brain protection intact")
             logger.info("=" * 80)
         else:
             logger.error("=" * 80)
-            logger.error("❌ SKULL TESTS FAILED - Brain protection compromised!")
+            logger.error("[FAIL] SKULL TESTS FAILED - Brain protection compromised!")
             logger.error("=" * 80)
             logger.error(f"Failed tests: {failed_count}/{total_count}")
             

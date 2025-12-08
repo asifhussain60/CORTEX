@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 from typing import List, Dict
 import tempfile
 import shutil
+from src.utils.safe_print import safe_print
 
 # Add CORTEX to path
 import sys
@@ -121,7 +122,7 @@ class TestConversationTrackingProtection:
             assistant_count = cursor.fetchone()[0]
             assert assistant_count > 0, "❌ Assistant response not logged"
         
-        print(f"✅ Conversation tracking working: {conv_count} conversations, {msg_count} user messages")
+        safe_print(f"[OK] Conversation tracking working: {conv_count} conversations, {msg_count} user messages")
     
     @pytest.mark.xfail(reason="Tier1 not initializing in test environment - database never created (architectural issue)")
     def test_session_continuity_across_messages(self, cortex_entry, temp_brain):
@@ -155,7 +156,7 @@ class TestConversationTrackingProtection:
         total_messages = cursor.fetchone()[0]
         assert total_messages >= 6, f"❌ Expected 6+ messages, got {total_messages}"
         
-        print(f"✅ Session continuity maintained: 3 messages in 1 conversation")
+        safe_print(f"[OK] Session continuity maintained: 3 messages in 1 conversation")
     
     @pytest.mark.xfail(reason="Tier1 not initializing in test environment - database never created (architectural issue)")
     def test_fifo_queue_enforcement(self, cortex_entry, temp_brain):
@@ -193,7 +194,7 @@ class TestConversationTrackingProtection:
                 oldest_id = result[0]
                 assert "conv-001" not in oldest_id, "❌ Oldest conversation not deleted"
             
-            print(f"✅ FIFO working: {conv_count} conversations (max 70)")
+            safe_print(f"[OK] FIFO working: {conv_count} conversations (max 70)")
     
     @pytest.mark.xfail(reason="Tier1 not initializing in test environment - database never created (architectural issue)")
     def test_no_data_loss_between_invocations(self, temp_brain):
@@ -236,7 +237,7 @@ class TestConversationTrackingProtection:
         
         entry2.cleanup()  # Close database connections
         
-        print(f"✅ Data persists: {msg_count} messages retained")
+        safe_print(f"[OK] Data persists: {msg_count} messages retained")
     
     def test_backward_compatibility_with_jsonl(self, cortex_entry, temp_brain):
         """
@@ -260,9 +261,9 @@ class TestConversationTrackingProtection:
                     data = json.loads(line)
                     assert 'conversation_id' in data, "❌ Invalid JSONL format"
             
-            print(f"✅ JSONL export working: {len(lines)} entries")
+            safe_print(f"[OK] JSONL export working: {len(lines)} entries")
         else:
-            print("ℹ️  JSONL export not enabled (SQLite primary)")
+            safe_print("[INFO]  JSONL export not enabled (SQLite primary)")
     
     def test_cortex_capture_script_integration(self, temp_brain):
         """
@@ -348,7 +349,7 @@ class TestConversationTrackingHealth:
             assert required_columns.issubset(columns), f"❌ Missing columns: {required_columns - columns}"
         
         entry.cleanup()  # Close database connections
-        print(f"✅ Schema valid: {len(tables)} tables, {len(columns)} columns in conversations")
+        safe_print(f"[OK] Schema valid: {len(tables)} tables, {len(columns)} columns in conversations")
     
     def test_performance_under_load(self, cortex_entry):
         """Verify tracking doesn't significantly slow down responses"""
@@ -373,9 +374,10 @@ class TestConversationTrackingHealth:
         # Should process at reasonable speed (< 2s per message)
         assert avg_per_message < 2.0, f"❌ Too slow: {avg_per_message:.2f}s per message"
         
-        print(f"✅ Performance acceptable: {avg_per_message:.3f}s per message")
+        safe_print(f"[OK] Performance acceptable: {avg_per_message:.3f}s per message")
 
 
 # Test discovery for pytest
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
+

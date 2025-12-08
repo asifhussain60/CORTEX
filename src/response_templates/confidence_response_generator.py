@@ -232,17 +232,17 @@ class ConfidenceResponseGenerator:
 
 {confidence_indicator}
 
-## My Understanding Of Your Request
+### 🎯 Understanding & Scope
 {user_request}
 
-## Challenge
+### ⚡ Approach & Considerations
 ✓ **Accept**
 Processing your request using learned patterns.
 
-## Response
+### 💬 Response
 [Response content]
 
-## Your Request
+### 📊 Impact & Changes
 {user_request}
 
 ## Next Steps
@@ -307,17 +307,17 @@ Processing your request using learned patterns.
 
 {confidence_indicator}
 
-## My Understanding Of Your Request
+### 🎯 Understanding & Scope
 {user_request}
 
-## Challenge
+### ⚡ Approach & Considerations
 ⚡ **Challenge**
 This is new territory for CORTEX. No previous patterns exist.
 
-## Response
+### 💬 Response
 [Fresh response content]
 
-## Your Request
+### 📊 Impact & Changes
 {user_request}
 
 ## Next Steps
