@@ -58,6 +58,8 @@ class BusinessDomainInferenceEngine:
         re.compile(r'(?:class|interface)\s+(\w+)Manager', re.IGNORECASE),
         re.compile(r'(?:class|interface)\s+(\w+)Handler', re.IGNORECASE),
         re.compile(r'(?:class|interface)\s+(\w+)Provider', re.IGNORECASE),
+        re.compile(r'(?:class|interface)\s+(\w+)Validator', re.IGNORECASE),
+        re.compile(r'(?:class|interface)\s+(\w+)Processor', re.IGNORECASE),
     ]
     
     # Namespace patterns (C#, Java style)
@@ -108,7 +110,7 @@ class BusinessDomainInferenceEngine:
         self.domain_examples = {}
         
         # Scan code files
-        code_extensions = ['.py', '.cs', '.js', '.ts', '.java', '.cfc', '.cfm']
+        code_extensions = ['.py', '.cs', '.js', '.ts', '.java', '.cfc', '.cfm', '.sql']
         code_files = []
         for ext in code_extensions:
             code_files.extend(repo_path.rglob(f"*{ext}"))
@@ -165,6 +167,9 @@ class BusinessDomainInferenceEngine:
     
     def _record_domain(self, domain: str, source_type: str, file_path: str):
         """Record a discovered domain with its source"""
+        # Normalize domain name first (remove underscores, capitalize)
+        domain = domain.strip('_').capitalize()
+        
         # Filter out generic terms
         if domain.lower() in self.GENERIC_TERMS:
             return
@@ -172,9 +177,6 @@ class BusinessDomainInferenceEngine:
         # Filter out very short names (likely abbreviations)
         if len(domain) < 4:
             return
-        
-        # Normalize domain name (capitalize first letter)
-        domain = domain.capitalize()
         
         # Update frequency
         self.domain_frequencies[domain] += 1
@@ -204,7 +206,7 @@ class BusinessDomainInferenceEngine:
             source_count = len(sources)
             if source_count >= 3 or frequency >= 5:
                 confidence = "high"
-            elif source_count >= 2 or frequency >= 3:
+            elif source_count >= 2 or frequency >= 2:
                 confidence = "medium"
             else:
                 confidence = "low"
