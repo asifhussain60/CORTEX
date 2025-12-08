@@ -193,8 +193,15 @@ class EnhancedExecutiveSummaryAggregator:
             if not python_files:
                 return None
             
-            # Limit to first 50 files for performance
-            python_files = python_files[:50]
+            # Limit to first 10 files for performance (<30s target)
+            # For large repos, prioritize src/ and app/ directories
+            if len(python_files) > 10:
+                priority_files = [f for f in python_files if '/src/' in str(f) or '/app/' in str(f)]
+                if priority_files:
+                    python_files = priority_files[:10]
+                else:
+                    python_files = python_files[:10]
+            python_files = python_files[:10]
             
             # Extract docstrings
             results = self.docstring_orchestrator.extract_from_files(
@@ -240,6 +247,14 @@ class EnhancedExecutiveSummaryAggregator:
             return None
         
         try:
+            # NOTE: Business domain inference can be slow on large repos
+            # For executive summary, we only need top domains
+            # Skip if repo is too large (>500 files) to stay under 30s target
+            code_files = list(self.repo_path.rglob("*.py")) + list(self.repo_path.rglob("*.cs")) + list(self.repo_path.rglob("*.js"))
+            if len(code_files) > 500:
+                print(f"   ⚠️  Skipping domain analysis ({len(code_files)} files, >500 limit for performance)")
+                return None
+            
             # analyze_repository returns List[DomainEntity]
             domain_entities = self.domain_engine.analyze_repository(self.repo_path)
             
@@ -282,9 +297,9 @@ class EnhancedExecutiveSummaryAggregator:
         priorities = []
         
         # README priority (highest - explicit documentation)
-        if readme:
-            purpose_len = len(readme.get('purpose', ''))
-            desc_len = len(readme.get('description', ''))
+        if readme and isinstance(readme, dict):
+            purpose_len = len(readme.get('purpose') or '')
+            desc_len = len(readme.get('description') or '')
             # Detailed README: purpose>50 OR description>50 (lowered for shorter READMEs)
             # Rationale: Any README content is better than tech-only fallback
             if purpose_len > 50 or desc_len > 50:
@@ -479,8 +494,8 @@ class EnhancedExecutiveSummaryAggregator:
             score += 1
         
         # README depth (0-2 points) - weighted higher
-        if readme_insights:
-            purpose_len = len(readme_insights.get('purpose', ''))
+        if readme_insights and isinstance(readme_insights, dict):
+            purpose_len = len(readme_insights.get('purpose') or '')
             if purpose_len > 200:
                 score += 2
             elif purpose_len > 100:
