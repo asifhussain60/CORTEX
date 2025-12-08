@@ -1541,7 +1541,10 @@ class PlanningOrchestrator:
                             'status': 'executing'
                         }
                         
-                        rendered_progress = self.template_manager.render('autonomous_execution_progress', phase_progress_context)
+                        rendered_progress = self.template_manager.render_template(
+                            template_id='autonomous_execution_progress',
+                            context=phase_progress_context
+                        )
                         print(f"\n{rendered_progress}\n")
                     except Exception as e:
                         logger.debug(f"Template rendering skipped: {e}")
@@ -1592,7 +1595,10 @@ class PlanningOrchestrator:
                                 'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                                 'error_details': ''
                             }
-                            rendered_checkpoint = self.template_manager.render('checkpoint_status', checkpoint_context)
+                            rendered_checkpoint = self.template_manager.render_template(
+                                template_id='checkpoint_status',
+                                context=checkpoint_context
+                            )
                             print(f"\n{rendered_checkpoint}\n")
                         except Exception as e:
                             logger.debug(f"Checkpoint template rendering skipped: {e}")
@@ -1617,7 +1623,10 @@ class PlanningOrchestrator:
                                 'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                                 'error_details': f"**Error:** {str(e)}"
                             }
-                            rendered_checkpoint = self.template_manager.render('checkpoint_status', checkpoint_context)
+                            rendered_checkpoint = self.template_manager.render_template(
+                                template_id='checkpoint_status',
+                                context=checkpoint_context
+                            )
                             print(f"\n{rendered_checkpoint}\n")
                         except Exception as render_e:
                             logger.debug(f"Checkpoint error template rendering skipped: {render_e}")
@@ -1680,7 +1689,10 @@ class PlanningOrchestrator:
                         'next_steps': f"1. Review execution log\n2. Check git history for phase checkpoints\n3. Document learnings: {completion_result.get('documentation_reminder', 'Update learning library')}"
                     }
                     
-                    rendered_output = self.template_manager.render('autonomous_execution_progress', template_context)
+                    rendered_output = self.template_manager.render_template(
+                        template_id='autonomous_execution_progress',
+                        context=template_context
+                    )
                     logger.info("✅ Used template system for progress rendering")
                 except Exception as e:
                     logger.warning(f"Template rendering failed, using fallback: {e}")

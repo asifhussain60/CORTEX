@@ -1,10 +1,14 @@
 plan_id: PLAN-2025-12-08-progress-template-test
-**Completed:** 2025-12-08
 title: Progress Template Integration Test
 created: 2025-12-08T00:00:00
-Status: completed
+status: approved
 priority: high
 estimated_hours: 0.25
+
+metadata:
+  author: Asif Hussain
+  category: testing
+  tags: [templates, progress, autonomous-execution]
 
 description: |
   Test plan to verify autonomous execution progress templates render correctly in Copilot Chat.
@@ -21,80 +25,88 @@ out_of_scope:
   - Production code changes
 
 definition_of_ready:
-  - ✅ Progress templates added to response-templates.yaml
-  - ✅ PlanningOrchestrator integration complete
-  - ✅ Template manager initialized correctly
-  - ✅ Git checkpoint orchestrator functional
+  - Progress templates added to response-templates.yaml
+  - PlanningOrchestrator integration complete
+  - Template manager initialized correctly
+  - Git checkpoint orchestrator functional
 
 definition_of_done:
-  - ✅ All phases execute successfully
-  - ✅ Progress templates render in chat at each phase
-  - ✅ Git checkpoint templates show after each phase
-  - ✅ Final completion template displays
-  - ✅ All progress data accurate (phases, tasks, percentages)
+  - All phases execute successfully
+  - Progress templates render in chat at each phase
+  - Git checkpoint templates show after each phase
+  - Final completion template displays
+  - All progress data accurate (phases, tasks, percentages)
 
 phases:
   - phase_id: 1
-    phase_name: Initialization
+    name: Initialization
     description: Initialize test environment and validate setup
     estimated_hours: 0.05
     tasks:
       - task_id: "1.1"
         task: Validate template manager initialization
+        description: Ensure template manager loads successfully
         estimated_hours: 0.02
         acceptance_criteria:
           - Template manager loaded successfully
           - Response templates accessible
       - task_id: "1.2"
         task: Verify progress bar generation
+        description: Test progress bar rendering function
         estimated_hours: 0.03
         acceptance_criteria:
           - Progress bar function returns valid output
           - Percentage calculation accurate
     
   - phase_id: 2
-    phase_name: Phase Progress Testing
+    name: Phase Progress Testing
     description: Test phase-level progress template rendering
     estimated_hours: 0.08
     tasks:
       - task_id: "2.1"
         task: Render phase 1 progress template
+        description: Test first phase progress rendering
         estimated_hours: 0.02
         acceptance_criteria:
           - Template renders without errors
           - All fields populated correctly
       - task_id: "2.2"
         task: Render phase 2 progress template
+        description: Test second phase progress rendering
         estimated_hours: 0.02
         acceptance_criteria:
           - Progress bar updates correctly
           - Task count increments
       - task_id: "2.3"
         task: Validate elapsed time calculation
+        description: Ensure time tracking works
         estimated_hours: 0.02
         acceptance_criteria:
           - Elapsed time format correct
           - Time advances between phases
       - task_id: "2.4"
         task: Test current task display
+        description: Verify task name rendering
         estimated_hours: 0.02
         acceptance_criteria:
           - Current task name shows correctly
           - Updates for each task
   
   - phase_id: 3
-    phase_name: Checkpoint Testing
+    name: Checkpoint Testing
     description: Test git checkpoint status template rendering
     estimated_hours: 0.07
     tasks:
       - task_id: "3.1"
         task: Trigger git checkpoint after phase 1
+        description: Create checkpoint at phase boundary
         estimated_hours: 0.02
         acceptance_criteria:
           - Checkpoint created successfully
           - Files changed count accurate
       - task_id: "3.2"
         task: Render checkpoint success template
+        description: Display checkpoint status
         estimated_hours: 0.02
         acceptance_criteria:
           - Success status displays
@@ -102,18 +114,20 @@ phases:
           - Timestamp present
       - task_id: "3.3"
         task: Test checkpoint failure handling
+        description: Verify error template rendering
         estimated_hours: 0.03
         acceptance_criteria:
           - Failure template renders
           - Error details visible
   
   - phase_id: 4
-    phase_name: Completion Verification
+    name: Completion Verification
     description: Verify final completion template and metrics
     estimated_hours: 0.05
     tasks:
       - task_id: "4.1"
         task: Render completion progress template
+        description: Show final execution status
         estimated_hours: 0.02
         acceptance_criteria:
           - All phases marked complete
@@ -121,6 +135,7 @@ phases:
           - Total task count correct
       - task_id: "4.2"
         task: Validate execution log format
+        description: Check execution history
         estimated_hours: 0.02
         acceptance_criteria:
           - All phases logged
@@ -128,6 +143,7 @@ phases:
           - Checkpoint entries included
       - task_id: "4.3"
         task: Verify plan completion
+        description: Confirm plan status update
         estimated_hours: 0.01
         acceptance_criteria:
           - Plan moved to completed directory

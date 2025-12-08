@@ -521,7 +521,10 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
                 'current_operation': current_operation
             }
             
-            rendered = self.template_manager.render('maintenance_phase_progress', context)
+            rendered = self.template_manager.render_template(
+                template_id='maintenance_phase_progress',
+                context=context
+            )
             print(f"\n{rendered}\n")
         except Exception as e:
             logger.debug(f"Phase progress template rendering skipped: {e}")
