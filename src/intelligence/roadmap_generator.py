@@ -233,47 +233,80 @@ class RoadmapGenerator:
         return task
     
     def _generate_acceptance_criteria(self, gap: Dict) -> List[str]:
-        """Generate test acceptance criteria based on code patterns."""
+        """
+        Generate test acceptance criteria based on code patterns.
+        
+        Analyzes priority, reason, and complexity to suggest relevant test cases:
+        - API endpoints: HTTP methods, status codes, validation
+        - Authentication: Success/failure, roles, tokens
+        - Financial: Decimal precision, edge cases, calculations
+        - Security: Sanitization, encryption, vulnerabilities
+        - High complexity: Branch coverage, mocking
+        
+        Args:
+            gap: Test gap dictionary with priority, reason, complexity
+        
+        Returns:
+            List of 3-5 acceptance criteria strings
+        """
         criteria = []
         
         priority = gap.get("priority", "")
         reason = gap.get("reason", "").lower()
         complexity = gap.get("complexity", 1)
         
-        # Basic test cases
+        # Basic test cases (always included)
         criteria.append("Write tests covering happy path scenarios")
         criteria.append("Write tests for error/exception cases")
         
         # Pattern-specific criteria
         if "api" in reason or "endpoint" in reason:
-            criteria.append("Test HTTP methods (GET, POST, PUT, DELETE)")
-            criteria.append("Verify response status codes and payloads")
-            criteria.append("Test input validation and error responses")
-        
-        if "auth" in reason or "permission" in reason:
-            criteria.append("Test authentication success and failure")
-            criteria.append("Verify authorization for different roles")
-            criteria.append("Test token expiration and refresh")
-        
-        if "financial" in reason or "money" in reason or "payroll" in reason:
-            criteria.append("Test calculation accuracy with decimal precision")
-            criteria.append("Verify edge cases (zero, negative, overflow)")
-            criteria.append("Test tax calculations and deductions")
-        
-        if "security" in reason:
-            criteria.append("Test input sanitization and validation")
-            criteria.append("Verify encryption/decryption correctness")
-            criteria.append("Test against common security vulnerabilities")
+            criteria.extend([
+                "Test HTTP methods (GET, POST, PUT, DELETE)",
+                "Verify response status codes and payloads"
+            ])
+        elif "auth" in reason or "permission" in reason:
+            criteria.extend([
+                "Test authentication success and failure",
+                "Verify authorization for different roles"
+            ])
+        elif "financial" in reason or "money" in reason or "payroll" in reason:
+            criteria.extend([
+                "Test calculation accuracy with decimal precision",
+                "Verify edge cases (zero, negative, overflow)"
+            ])
+        elif "security" in reason:
+            criteria.extend([
+                "Test input sanitization and validation",
+                "Verify encryption/decryption correctness"
+            ])
         
         # Complexity-based criteria
         if complexity > 10:
             criteria.append("Test all code branches and conditional paths")
-            criteria.append("Use mocking for external dependencies")
         
         return criteria[:5]  # Limit to 5 criteria
     
     def _identify_quick_wins(self, gaps: List[Dict]) -> List[QuickWin]:
-        """Identify high-impact, low-effort test tasks."""
+        """
+        Identify high-impact, low-effort test tasks (quick wins).
+        
+        Criteria for quick wins:
+        - Priority P0 (Critical) or P1 (High)
+        - Estimated effort ≤ 3 hours (achievable in single session)
+        - High impact-to-effort ratio
+        
+        Typical quick wins:
+        - Critical authentication gaps (2h effort, prevents security issues)
+        - High-priority API validation (1h effort, prevents data corruption)
+        - Payment calculation edge cases (3h effort, prevents financial errors)
+        
+        Args:
+            gaps: List of gap dictionaries with priority, effort, complexity
+        
+        Returns:
+            Sorted list of QuickWin objects (by effort ascending)
+        """
         quick_wins = []
         
         # Quick win criteria: P0 or P1 priority, effort <= 3 hours
@@ -408,7 +441,29 @@ class RoadmapGenerator:
         return output.getvalue()
     
     def export_gantt_json(self, roadmap: RoadmapOutput) -> str:
-        """Export roadmap as Gantt chart JSON data."""
+        """
+        Export roadmap as Gantt chart JSON data.
+        
+        Generates timeline data for project management tools (MS Project,
+        Monday.com, Asana, etc.). Each milestone becomes a parent task with
+        start/end dates calculated from effort estimates.
+        
+        Args:
+            roadmap: RoadmapOutput with milestones and tasks
+        
+        Returns:
+            JSON string with Gantt chart structure
+        
+        Example output:
+            [{
+                "id": "M1",
+                "text": "Critical Coverage",
+                "start_date": "2024-01-15",
+                "end_date": "2024-02-12",
+                "duration": 4,
+                "progress": 0
+            }, ...]
+        """
         gantt_data = []
         
         start_date = datetime.now()
@@ -450,7 +505,22 @@ class RoadmapGenerator:
             return f"# Test skeleton for {language} not implemented yet"
     
     def _generate_python_skeleton(self, task: Dict) -> str:
-        """Generate pytest skeleton."""
+        """
+        Generate pytest test skeleton for Python code.
+        
+        Creates comprehensive test file with:
+        - Module docstring with author and date
+        - Pytest imports and fixtures
+        - Test class with setup/teardown methods
+        - Placeholder test methods for happy path and error cases
+        - TODO comments for acceptance criteria
+        
+        Args:
+            task: Task dictionary with class, method, file path
+        
+        Returns:
+            Python test code string with pytest structure
+        """
         class_name = task.get("class", "MyClass")
         method_name = task.get("method", "my_method")
         file_path = task.get("file", "")
@@ -496,7 +566,22 @@ class RoadmapGenerator:
         return '\n'.join(lines)
     
     def _generate_csharp_skeleton(self, task: Dict) -> str:
-        """Generate xUnit/NUnit skeleton."""
+        """
+        Generate xUnit/NUnit test skeleton for C# code.
+        
+        Creates comprehensive test file with:
+        - xUnit and NUnit namespace imports (NUnit commented)
+        - Test class with constructor for dependency injection
+        - Placeholder test methods (Fact/Test attributes)
+        - TODO comments for acceptance criteria
+        - Assert statements with examples
+        
+        Args:
+            task: Task dictionary with class, method information
+        
+        Returns:
+            C# test code string with xUnit/NUnit structure
+        """
         class_name = task.get("class", "MyClass")
         method_name = task.get("method", "MyMethod")
         
