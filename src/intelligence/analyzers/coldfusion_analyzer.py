@@ -2,15 +2,17 @@
 ColdFusion CFScript Analyzer
 =============================
 
-Minimal implementation to pass RED phase tests.
 Analyzes ColdFusion CFScript syntax (.cfc files).
 
-GREEN Phase Implementation - Minimal Viable Product
+REFACTOR Phase - Optimized implementation with shared tokenizer and logging
 """
 
 import re
+import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+
+from src.intelligence.parsers.coldfusion_tokenizer import ColdFusionTokenizer
 
 
 class ColdFusionAnalyzer:
@@ -18,6 +20,8 @@ class ColdFusionAnalyzer:
     
     def __init__(self):
         """Initialize analyzer with regex patterns"""
+        self.logger = logging.getLogger(__name__)
+        self.tokenizer = ColdFusionTokenizer()
         # Component pattern (CFScript style)
         self.component_pattern = re.compile(
             r'component\s+([^{]*)\{(.*?)\}(?:\s*$)',
@@ -165,14 +169,14 @@ class ColdFusionAnalyzer:
             attrs_str = match.group(1)
             body = match.group(2)
             
-            # Parse component attributes
-            attrs = self._parse_cfscript_attributes(attrs_str)
+            # Parse component attributes using shared tokenizer
+            attrs = self.tokenizer.parse_cfscript_attributes(attrs_str)
             
             component = {
                 'displayname': attrs.get('displayname', ''),
                 'hint': attrs.get('hint', ''),
-                'output': self._parse_boolean(attrs.get('output', 'true')),
-                'persistent': self._parse_boolean(attrs.get('persistent', 'false')),
+                'output': self.tokenizer.parse_boolean(attrs.get('output', 'true')),
+                'persistent': self.tokenizer.parse_boolean(attrs.get('persistent', 'false')),
                 'properties': self._extract_cfscript_properties(body),
                 'functions': self._extract_cfscript_functions(body)
             }
@@ -195,8 +199,8 @@ class ColdFusionAnalyzer:
             attrs_str = match.group(1)
             body = match.group(2)
             
-            # Parse tag attributes
-            attrs = self._parse_tag_attributes(attrs_str)
+            # Parse tag attributes using shared tokenizer
+            attrs = self.tokenizer.parse_tag_attributes(attrs_str)
             
             component = {
                 'name': attrs.get('displayname', 'Component'),
@@ -219,12 +223,8 @@ class ColdFusionAnalyzer:
         """Extract CFScript function definitions"""
         functions = []
         
-        # Look for JavaDoc comments before functions
-        doc_comments = {}
-        for match in self.javadoc_pattern.finditer(code):
-            doc_text = match.group(1).strip()
-            # Store doc at position for later matching
-            doc_comments[match.end()] = doc_text
+        # Look for JavaDoc comments before functions using shared tokenizer
+        doc_comments = self.tokenizer.extract_javadoc_comments(code)
         
         for match in self.function_pattern.finditer(code):
             access = match.group(1) or 'public'
@@ -234,14 +234,14 @@ class ColdFusionAnalyzer:
             attrs_str = match.group(5) or ''
             body = match.group(6) or ''
             
-            # Parse additional attributes (hint, returnformat, etc.)
-            attrs = self._parse_cfscript_attributes(attrs_str)
+            # Parse additional attributes (hint, returnformat, etc.) using shared tokenizer
+            attrs = self.tokenizer.parse_cfscript_attributes(attrs_str)
             
             function = {
                 'name': name,
                 'access': access.lower() if access else 'public',
                 'returntype': returntype,
-                'parameters': self._parse_cfscript_parameters(params_str)
+                'parameters': self.tokenizer.parse_cfscript_parameters(params_str)
             }
             
             # Add optional attributes
@@ -281,7 +281,7 @@ class ColdFusionAnalyzer:
         for match in self.tag_function_pattern.finditer(code):
             attrs_str = match.group(1)
             body = match.group(2) or ''
-            attrs = self._parse_tag_attributes(attrs_str)
+            attrs = self.tokenizer.parse_tag_attributes(attrs_str)
             
             function = {
                 'name': attrs.get('name', 'unnamed'),
@@ -300,7 +300,7 @@ class ColdFusionAnalyzer:
         
         for match in self.property_pattern.finditer(code):
             prop_str = match.group(1)
-            attrs = self._parse_cfscript_attributes(prop_str)
+            attrs = self.tokenizer.parse_cfscript_attributes(prop_str)
             
             prop = {
                 'name': attrs.get('name', 'unnamed'),
@@ -309,7 +309,7 @@ class ColdFusionAnalyzer:
             
             # Add optional attributes
             if 'required' in attrs:
-                prop['required'] = self._parse_boolean(attrs['required'])
+                prop['required'] = self.tokenizer.parse_boolean(attrs['required'])
             if 'default' in attrs:
                 prop['default'] = attrs['default']
             if 'pattern' in attrs:
@@ -319,82 +319,4 @@ class ColdFusionAnalyzer:
         
         return properties
     
-    def _parse_cfscript_parameters(self, params_str: str) -> List[Dict[str, Any]]:
-        """Parse CFScript function parameters"""
-        parameters = []
-        
-        if not params_str.strip():
-            return parameters
-        
-        # Split by comma (basic approach)
-        param_parts = params_str.split(',')
-        
-        for part in param_parts:
-            part = part.strip()
-            if not part:
-                continue
-            
-            # Pattern: [required] [type] name[=default]
-            param = {'name': '', 'type': 'any', 'required': False}
-            
-            # Check for 'required'
-            if 'required' in part.lower():
-                param['required'] = True
-                part = re.sub(r'\brequired\b', '', part, flags=re.IGNORECASE).strip()
-            
-            # Check for default value
-            if '=' in part:
-                part, default = part.split('=', 1)
-                param['default'] = default.strip()
-                part = part.strip()
-            
-            # Split remaining into type and name
-            tokens = part.split()
-            if len(tokens) >= 2:
-                param['type'] = tokens[0]
-                param['name'] = tokens[1]
-            elif len(tokens) == 1:
-                param['name'] = tokens[0]
-            
-            if param['name']:
-                parameters.append(param)
-        
-        return parameters
-    
-    def _parse_cfscript_attributes(self, attrs_str: str) -> Dict[str, str]:
-        """
-        Parse CFScript attribute string
-        
-        Example: 'displayname="Test" hint="My hint" output=false'
-        """
-        attrs = {}
-        
-        # Pattern: attr="value" or attr='value' or attr=value
-        attr_pattern = re.compile(r'(\w+)\s*=\s*(?:["\']([^"\']*)["\']|(\w+))')
-        
-        for match in attr_pattern.finditer(attrs_str):
-            key = match.group(1).lower()
-            value = match.group(2) or match.group(3) or ''
-            attrs[key] = value
-        
-        return attrs
-    
-    def _parse_tag_attributes(self, attrs_str: str) -> Dict[str, str]:
-        """Parse tag-based attribute string"""
-        attrs = {}
-        
-        # Pattern: attribute="value" or attribute='value'
-        attr_pattern = re.compile(r'(\w+)\s*=\s*["\']([^"\']*)["\']')
-        
-        for match in attr_pattern.finditer(attrs_str):
-            key = match.group(1).lower()
-            value = match.group(2)
-            attrs[key] = value
-        
-        return attrs
-    
-    def _parse_boolean(self, value: str) -> bool:
-        """Parse string boolean value"""
-        if isinstance(value, bool):
-            return value
-        return value.lower() in ('true', 'yes', '1')
+

@@ -2,51 +2,55 @@
 ColdFusion Tag-Based Parser
 ============================
 
-Minimal implementation to pass RED phase tests.
 Parses ColdFusion tag-based syntax (.cfm files).
 
-GREEN Phase Implementation - Minimal Viable Product
+REFACTOR Phase - Optimized implementation with caching and shared tokenizer
 """
 
 import re
+import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+from functools import lru_cache
+
+from src.intelligence.parsers.coldfusion_tokenizer import ColdFusionTokenizer
 
 
 class ColdFusionParser:
     """Parser for ColdFusion tag-based syntax (.cfm files)"""
     
-    def __init__(self):
-        """Initialize parser with regex patterns"""
-        # Component extraction pattern (handles both with and without attributes)
-        self.component_pattern = re.compile(
-            r'<cfcomponent(?:\s+([^>]*))?\s*>(.*?)</cfcomponent>',
-            re.DOTALL | re.IGNORECASE
-        )
+    # Class-level compiled patterns (shared across instances)
+    _component_pattern = re.compile(
+        r'<cfcomponent(?:\s+([^>]*))?\s*>(.*?)</cfcomponent>',
+        re.DOTALL | re.IGNORECASE
+    )
+    _function_pattern = re.compile(
+        r'<cffunction\s+([^>]*)>(.*?)</cffunction>',
+        re.DOTALL | re.IGNORECASE
+    )
+    _argument_pattern = re.compile(
+        r'<cfargument\s+([^/>]*)/?>',
+        re.IGNORECASE
+    )
+    _property_pattern = re.compile(
+        r'<cfproperty\s+([^/>]*)/?>',
+        re.IGNORECASE
+    )
+    _tag_pattern = re.compile(
+        r'<(cf\w+)\s+([^>]*)(?:>(.*?)</\1>|/>)',
+        re.DOTALL | re.IGNORECASE
+    )
+    
+    def __init__(self, enable_caching: bool = True):
+        """
+        Initialize parser
         
-        # Function extraction pattern
-        self.function_pattern = re.compile(
-            r'<cffunction\s+([^>]*)>(.*?)</cffunction>',
-            re.DOTALL | re.IGNORECASE
-        )
-        
-        # Argument extraction pattern
-        self.argument_pattern = re.compile(
-            r'<cfargument\s+([^/>]*)/?>',
-            re.IGNORECASE
-        )
-        
-        # Property extraction pattern
-        self.property_pattern = re.compile(
-            r'<cfproperty\s+([^/>]*)/?>',
-            re.IGNORECASE
-        )
-        
-        # Generic tag pattern for basic parsing
-        self.tag_pattern = re.compile(
-            r'<(cf\w+)\s+([^>]*)(?:>(.*?)</\1>|/>)',
-            re.DOTALL | re.IGNORECASE
-        )
+        Args:
+            enable_caching: Enable LRU caching for parse results (default: True)
+        """
+        self.logger = logging.getLogger(__name__)
+        self.tokenizer = ColdFusionTokenizer()
+        self._cache_enabled = enable_caching
     
     def parse_file(self, file_path: Path) -> Dict[str, Any]:
         """
@@ -109,18 +113,18 @@ class ColdFusionParser:
         """Extract component definitions from code"""
         components = []
         
-        for match in self.component_pattern.finditer(code):
+        for match in self._component_pattern.finditer(code):
             attrs_str = match.group(1) or ''
             body = match.group(2)
             
-            # Parse component attributes
-            attrs = self._parse_attributes(attrs_str)
+            # Parse component attributes using shared tokenizer
+            attrs = self.tokenizer.parse_tag_attributes(attrs_str)
             
             component = {
                 'name': attrs.get('displayname', 'Component'),
                 'hint': attrs.get('hint', ''),
-                'output': self._parse_boolean(attrs.get('output', 'true')),
-                'persistent': self._parse_boolean(attrs.get('persistent', 'false')),
+                'output': self.tokenizer.parse_boolean(attrs.get('output', 'true')),
+                'persistent': self.tokenizer.parse_boolean(attrs.get('persistent', 'false')),
                 'properties': self._extract_properties(body),
                 'functions': self._extract_functions(body)
             }
@@ -132,19 +136,19 @@ class ColdFusionParser:
     def _extract_standalone_functions(self, code: str) -> List[Dict[str, Any]]:
         """Extract functions that are outside components"""
         # Remove component blocks first
-        code_without_components = self.component_pattern.sub('', code)
+        code_without_components = self._component_pattern.sub('', code)
         return self._extract_functions(code_without_components)
     
     def _extract_functions(self, code: str) -> List[Dict[str, Any]]:
         """Extract function definitions from code"""
         functions = []
         
-        for match in self.function_pattern.finditer(code):
+        for match in self._function_pattern.finditer(code):
             attrs_str = match.group(1)
             body = match.group(2)
             
-            # Parse function attributes
-            attrs = self._parse_attributes(attrs_str)
+            # Parse function attributes using shared tokenizer
+            attrs = self.tokenizer.parse_tag_attributes(attrs_str)
             
             function = {
                 'name': attrs.get('name', 'unnamed'),
@@ -169,14 +173,14 @@ class ColdFusionParser:
         """Extract function parameters from cfargument tags"""
         parameters = []
         
-        for match in self.argument_pattern.finditer(code):
+        for match in self._argument_pattern.finditer(code):
             attrs_str = match.group(1)
-            attrs = self._parse_attributes(attrs_str)
+            attrs = self.tokenizer.parse_tag_attributes(attrs_str)
             
             param = {
                 'name': attrs.get('name', 'unnamed'),
                 'type': attrs.get('type', 'any'),
-                'required': self._parse_boolean(attrs.get('required', 'false'))
+                'required': self.tokenizer.parse_boolean(attrs.get('required', 'false'))
             }
             
             # Add optional attributes if present
@@ -191,9 +195,9 @@ class ColdFusionParser:
         """Extract property definitions from code"""
         properties = []
         
-        for match in self.property_pattern.finditer(code):
+        for match in self._property_pattern.finditer(code):
             attrs_str = match.group(1)
-            attrs = self._parse_attributes(attrs_str)
+            attrs = self.tokenizer.parse_tag_attributes(attrs_str)
             
             prop = {
                 'name': attrs.get('name', 'unnamed'),
@@ -202,7 +206,7 @@ class ColdFusionParser:
             
             # Add optional attributes
             if 'required' in attrs:
-                prop['required'] = self._parse_boolean(attrs['required'])
+                prop['required'] = self.tokenizer.parse_boolean(attrs['required'])
             if 'default' in attrs:
                 prop['default'] = attrs['default']
             if 'pattern' in attrs:
@@ -223,7 +227,7 @@ class ColdFusionParser:
         tags = []
         
         # Simple extraction - just detect presence of tags
-        for match in self.tag_pattern.finditer(code):
+        for match in self._tag_pattern.finditer(code):
             tag_name = match.group(1)
             tags.append({
                 'name': tag_name.lower(),
@@ -231,28 +235,3 @@ class ColdFusionParser:
             })
         
         return tags
-    
-    def _parse_attributes(self, attrs_str: str) -> Dict[str, str]:
-        """
-        Parse attribute string into dictionary
-        
-        Example: 'name="test" type="string" required="true"'
-        Returns: {'name': 'test', 'type': 'string', 'required': 'true'}
-        """
-        attrs = {}
-        
-        # Pattern to match attribute="value" or attribute='value'
-        attr_pattern = re.compile(r'(\w+)\s*=\s*["\']([^"\']*)["\']')
-        
-        for match in attr_pattern.finditer(attrs_str):
-            key = match.group(1).lower()
-            value = match.group(2)
-            attrs[key] = value
-        
-        return attrs
-    
-    def _parse_boolean(self, value: str) -> bool:
-        """Parse string boolean value"""
-        if isinstance(value, bool):
-            return value
-        return value.lower() in ('true', 'yes', '1')
