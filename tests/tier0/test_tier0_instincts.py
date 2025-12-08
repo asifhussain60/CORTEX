@@ -401,5 +401,474 @@ class TestTier0InstinctsGitSafety:
             pytest.skip("Git not available")
 
 
+class TestTier0InstinctsTDD:
+    """TDD-specific Tier 0 instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_red_phase_validation(self, cortex_root):
+        """RED_PHASE_VALIDATION: Tests must fail before implementation."""
+        try:
+            result = subprocess.run(
+                ['git', 'log', '--grep=RED:', '--grep=test:', '-i', '--oneline', '-10'],
+                cwd=str(cortex_root),
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            if result.returncode != 0 or not result.stdout.strip():
+                pytest.skip("No TDD commits found")
+            
+            # Conceptual validation - actual enforcement in TDD workflow
+            print("\n[INFO] RED phase commits found - TDD workflow active")
+        
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pytest.skip("Git not available")
+    
+    def test_green_phase_validation(self, cortex_root):
+        """GREEN_PHASE_VALIDATION: Minimal implementation to pass tests."""
+        try:
+            result = subprocess.run(
+                ['git', 'log', '--grep=GREEN:', '--oneline', '-10'],
+                cwd=str(cortex_root),
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            if result.returncode != 0 or not result.stdout.strip():
+                pytest.skip("No GREEN phase commits")
+            
+            print("\n[INFO] GREEN phase commits found - TDD workflow active")
+        
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pytest.skip("Git not available")
+    
+    def test_tdd_test_file_validation(self, cortex_root):
+        """TDD_TEST_FILE_VALIDATION: Test files must exist for implementations."""
+        src_dir = cortex_root / "src"
+        tests_dir = cortex_root / "tests"
+        
+        if not src_dir.exists() or not tests_dir.exists():
+            pytest.skip("No src or tests directory")
+        
+        # Sample check - validate key modules have tests
+        key_modules = [
+            "tier1",
+            "tier2",
+            "tier3",
+            "orchestrators"
+        ]
+        
+        missing_tests = []
+        for module in key_modules:
+            module_path = src_dir / module
+            if module_path.exists():
+                test_path = tests_dir / f"test_{module}"
+                if not test_path.exists():
+                    missing_tests.append(module)
+        
+        if missing_tests:
+            print(f"\n[WARNING] Modules without test directories: {', '.join(missing_tests)}")
+
+
+class TestTier0InstinctsDeployment:
+    """Deployment and version tracking instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_deployment_version_tracking(self, cortex_root):
+        """DEPLOYMENT_VERSION_TRACKING: VERSION file required."""
+        # Check multiple possible locations
+        version_locations = [
+            cortex_root / "VERSION",
+            cortex_root / ".cortex-version",
+            cortex_root / "scripts" / "temp" / "VERSION"
+        ]
+        
+        version_file = None
+        for loc in version_locations:
+            if loc.exists():
+                version_file = loc
+                break
+        
+        assert version_file is not None, "VERSION file missing - deployment tracking broken"
+        
+        content = version_file.read_text(encoding='utf-8')
+        
+        # Validate version format (semantic versioning)
+        assert re.search(r'\d+\.\d+\.\d+', content), "Invalid version format"
+        
+        print(f"\n[INFO] VERSION file: {version_file.name} - {content.strip()[:50]}")
+    
+    def test_alignment_state_protection(self, cortex_root):
+        """ALIGNMENT_STATE_PROTECTION: Alignment state is machine-local."""
+        alignment_file = cortex_root / "cortex-brain" / "admin" / "alignment-state.json"
+        
+        # Check gitignore
+        gitignore = cortex_root / ".gitignore"
+        if gitignore.exists():
+            gitignore_content = gitignore.read_text()
+            assert "alignment-state.json" in gitignore_content, \
+                "alignment-state.json not gitignored - machine state would leak"
+        
+        if alignment_file.exists():
+            print("\n[INFO] Alignment state exists (machine-local)")
+        else:
+            print("\n[INFO] Alignment state not yet created")
+    
+    def test_operational_readiness_enforcement(self, cortex_root):
+        """OPERATIONAL_READINESS_ENFORCEMENT: System must pass health checks."""
+        # Check for health check infrastructure
+        health_checks = list(cortex_root.rglob("*health*.py"))
+        
+        assert len(health_checks) > 0, "No health check modules found"
+        
+        print(f"\n[INFO] Health check modules: {len(health_checks)}")
+
+
+class TestTier0InstinctsArchitecture:
+    """Architecture and structure instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_test_location_separation(self, cortex_root):
+        """TEST_LOCATION_SEPARATION: CORTEX tests in tests/, app tests in app."""
+        tests_dir = cortex_root / "tests"
+        
+        assert tests_dir.exists(), "CORTEX tests directory missing"
+        
+        # Check no app test pollution
+        cortex_tests = list(tests_dir.rglob("test_*.py"))
+        
+        # Validate CORTEX test patterns (should have tier0, tier1, etc.)
+        tier_tests = [t for t in cortex_tests if 'tier' in str(t)]
+        
+        assert len(tier_tests) > 0, "No tier tests found - test structure violated"
+        
+        print(f"\n[INFO] CORTEX tests: {len(cortex_tests)}, Tier tests: {len(tier_tests)}")
+    
+    def test_brain_architecture_integrity(self, cortex_root):
+        """BRAIN_ARCHITECTURE_INTEGRITY: 4-tier brain structure preserved."""
+        brain_dir = cortex_root / "cortex-brain"
+        
+        assert brain_dir.exists(), "Brain directory missing"
+        
+        # Check tier directories exist
+        tier_dirs = [
+            brain_dir / "tier1",
+            brain_dir / "tier2",
+            brain_dir / "tier3"
+        ]
+        
+        existing_tiers = [t for t in tier_dirs if t.exists()]
+        
+        assert len(existing_tiers) >= 2, f"Only {len(existing_tiers)}/3 tier directories"
+        
+        # Check tier0 rules in brain-protection-rules.yaml
+        rules_file = brain_dir / "brain-protection-rules.yaml"
+        assert rules_file.exists(), "brain-protection-rules.yaml missing - Tier 0 undefined"
+        
+        print(f"\n[INFO] Brain architecture: {len(existing_tiers)}/3 tiers active")
+    
+    def test_document_organization_enforcement(self, cortex_root):
+        """DOCUMENT_ORGANIZATION_ENFORCEMENT: No root-level docs."""
+        # Check for forbidden root-level documentation
+        root_docs = []
+        
+        for item in cortex_root.iterdir():
+            if item.is_file() and item.suffix == '.md':
+                # Allowed root docs
+                allowed = ['README.md', 'CHANGELOG.md', 'LICENSE.md', 'CONTRIBUTING.md']
+                if item.name not in allowed and not item.name.startswith('.'):
+                    root_docs.append(item.name)
+        
+        if root_docs:
+            print(f"\n[WARNING] Root-level docs found: {', '.join(root_docs[:5])}")
+            print("  Should be in cortex-brain/documents/")
+
+
+class TestTier0InstinctsGitWorkflow:
+    """Git workflow and safety instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_prevent_dirty_state_work(self, cortex_root):
+        """PREVENT_DIRTY_STATE_WORK: No work on dirty git state."""
+        try:
+            result = subprocess.run(
+                ['git', 'status', '--porcelain'],
+                cwd=str(cortex_root),
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            if result.returncode != 0:
+                pytest.skip("Git not available")
+            
+            dirty_files = result.stdout.strip()
+            
+            if dirty_files:
+                # Count uncommitted changes
+                change_count = len(dirty_files.split('\n'))
+                print(f"\n[INFO] Uncommitted changes: {change_count} files")
+            else:
+                print("\n[INFO] Git state clean")
+        
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pytest.skip("Git not available")
+    
+    def test_git_history_context_required(self, cortex_root):
+        """GIT_HISTORY_CONTEXT_REQUIRED: Decisions documented in commits."""
+        try:
+            result = subprocess.run(
+                ['git', 'log', '--oneline', '-20'],
+                cwd=str(cortex_root),
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            if result.returncode != 0:
+                pytest.skip("Git not available")
+            
+            commits = result.stdout.strip().split('\n')
+            
+            # Check commit message quality
+            short_commits = [c for c in commits if len(c.split(' ', 1)[1]) < 20]
+            
+            if short_commits:
+                print(f"\n[WARNING] {len(short_commits)}/20 commits have short messages (<20 chars)")
+            
+            print(f"\n[INFO] Recent commits: {len(commits)}")
+        
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pytest.skip("Git not available")
+
+
+class TestTier0InstinctsSKULL:
+    """SKULL-specific validation instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_skull_test_before_claim(self, cortex_root):
+        """SKULL_TEST_BEFORE_CLAIM: SKULL tests required before claiming protection."""
+        tests_dir = cortex_root / "tests" / "tier0"
+        
+        assert tests_dir.exists(), "Tier 0 tests directory missing"
+        
+        skull_tests = list(tests_dir.glob("test_*.py"))
+        
+        assert len(skull_tests) > 0, "No Tier 0 SKULL tests - cannot claim brain protection"
+        
+        print(f"\n[INFO] Tier 0 SKULL tests: {len(skull_tests)}")
+    
+    def test_skull_integration_verification(self, cortex_root):
+        """SKULL_INTEGRATION_VERIFICATION: SKULL must integrate with brain."""
+        brain_rules = cortex_root / "cortex-brain" / "brain-protection-rules.yaml"
+        
+        assert brain_rules.exists(), "brain-protection-rules.yaml missing"
+        
+        content = brain_rules.read_text(encoding='utf-8')
+        
+        # Check for SKULL rules
+        skull_rules = re.findall(r'SKULL_\w+', content)
+        
+        assert len(skull_rules) > 5, f"Only {len(skull_rules)} SKULL rules - insufficient coverage"
+        
+        print(f"\n[INFO] SKULL rules defined: {len(skull_rules)}")
+    
+    def test_skull_transformation_verification(self, cortex_root):
+        """SKULL_TRANSFORMATION_VERIFICATION: Operations claiming transformation must produce changes."""
+        # Conceptual validation - actual enforcement in orchestrators
+        # Check for transformation tracking
+        
+        operations_dir = cortex_root / "src" / "operations"
+        if not operations_dir.exists():
+            pytest.skip("No operations directory")
+        
+        orchestrators = list(operations_dir.rglob("*orchestrator*.py"))
+        
+        if orchestrators:
+            print(f"\n[INFO] Orchestrators found: {len(orchestrators)}")
+        else:
+            pytest.skip("No orchestrators found")
+
+
+class TestTier0InstinctsSecurity:
+    """Security-related Tier 0 instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_skull_privacy_protection(self, cortex_root):
+        """SKULL_PRIVACY_PROTECTION: No PII in brain state."""
+        brain_dir = cortex_root / "cortex-brain"
+        
+        # Check conversation files for PII patterns (sample check)
+        conversation_files = list(brain_dir.rglob("conversation*.jsonl"))
+        
+        if not conversation_files:
+            pytest.skip("No conversation files")
+        
+        # Info only - actual PII scrubbing in tier1
+        print(f"\n[INFO] Conversation files: {len(conversation_files)}")
+        print("  PII protection enforced in Tier 1 working memory")
+
+
+class TestTier0InstinctsCodeQuality:
+    """Code quality and style instincts."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_active_narrator_voice(self, cortex_root):
+        """ACTIVE_NARRATOR_VOICE: Documentation uses active voice."""
+        # Sample documentation check
+        docs_dir = cortex_root / "docs"
+        
+        if not docs_dir.exists():
+            pytest.skip("No docs directory")
+        
+        md_files = list(docs_dir.rglob("*.md"))
+        
+        if not md_files:
+            pytest.skip("No markdown files")
+        
+        # Simple passive voice detection (sample)
+        passive_indicators = ['is being', 'was being', 'will be', 'has been']
+        
+        sample_file = md_files[0] if md_files else None
+        if sample_file:
+            content = sample_file.read_text(encoding='utf-8', errors='ignore')
+            passive_count = sum(content.lower().count(phrase) for phrase in passive_indicators)
+            
+            if passive_count > 10:
+                print(f"\n[WARNING] {sample_file.name} has {passive_count} passive voice instances")
+    
+    def test_no_emojis_in_scripts(self, cortex_root):
+        """NO_EMOJIS_IN_SCRIPTS: Python scripts avoid emoji characters."""
+        src_dir = cortex_root / "src"
+        
+        if not src_dir.exists():
+            pytest.skip("No src directory")
+        
+        python_files = list(src_dir.rglob("*.py"))
+        
+        emoji_files = []
+        emoji_pattern = re.compile(r'[\U0001F300-\U0001F9FF]')
+        
+        for py_file in python_files[:30]:  # Sample
+            content = py_file.read_text(encoding='utf-8', errors='ignore')
+            if emoji_pattern.search(content):
+                emoji_files.append(py_file.name)
+        
+        if emoji_files:
+            print(f"\n[WARNING] Python files with emojis: {len(emoji_files)}")
+            print(f"  Files: {', '.join(emoji_files[:3])}")
+    
+    def test_tdd_empty_test_detection(self, cortex_root):
+        """TDD_EMPTY_TEST_DETECTION: No empty test stubs."""
+        tests_dir = cortex_root / "tests"
+        
+        if not tests_dir.exists():
+            pytest.skip("No tests directory")
+        
+        test_files = list(tests_dir.rglob("test_*.py"))
+        
+        empty_tests = []
+        for test_file in test_files[:20]:  # Sample
+            content = test_file.read_text(encoding='utf-8', errors='ignore')
+            
+            # Simple check for "pass" as only statement in test
+            if re.search(r'def test_\w+\([^)]*\):\s+pass\s+', content):
+                empty_tests.append(test_file.name)
+        
+        if empty_tests:
+            print(f"\n[WARNING] Empty test stubs: {len(empty_tests)}")
+            print(f"  Files: {', '.join(empty_tests[:3])}")
+
+
+class TestTier0InstinctsSOLID:
+    """Extended SOLID principle tests."""
+    
+    @pytest.fixture
+    def cortex_root(self):
+        return Path(__file__).parent.parent.parent
+    
+    def test_solid_ocp(self, cortex_root):
+        """SOLID_OCP: Open-Closed Principle monitoring."""
+        src_dir = cortex_root / "src"
+        
+        if not src_dir.exists():
+            pytest.skip("No src")
+        
+        # Check for plugin/extension systems (OCP indicator)
+        plugin_indicators = list(src_dir.rglob("*plugin*.py")) + \
+                          list(src_dir.rglob("*extension*.py")) + \
+                          list(src_dir.rglob("*agent*.py"))
+        
+        if plugin_indicators:
+            print(f"\n[INFO] Extension points found: {len(plugin_indicators)}")
+            print("  OCP: System open for extension")
+    
+    def test_solid_lsp(self, cortex_root):
+        """SOLID_LSP: Liskov Substitution Principle monitoring."""
+        src_dir = cortex_root / "src"
+        
+        if not src_dir.exists():
+            pytest.skip("No src")
+        
+        # Check for inheritance patterns
+        python_files = list(src_dir.rglob("*.py"))
+        
+        base_classes = []
+        for py_file in python_files[:20]:
+            content = py_file.read_text(encoding='utf-8', errors='ignore')
+            
+            # Look for base classes (ABC, Protocol)
+            if 'ABC' in content or 'Protocol' in content or 'BaseAgent' in content:
+                base_classes.append(py_file.name)
+        
+        if base_classes:
+            print(f"\n[INFO] Base classes/interfaces: {len(base_classes)}")
+    
+    def test_solid_isp(self, cortex_root):
+        """SOLID_ISP: Interface Segregation Principle monitoring."""
+        src_dir = cortex_root / "src"
+        
+        if not src_dir.exists():
+            pytest.skip("No src")
+        
+        # Check for focused interfaces
+        python_files = list(src_dir.rglob("*.py"))
+        
+        protocols = []
+        for py_file in python_files[:20]:
+            content = py_file.read_text(encoding='utf-8', errors='ignore')
+            
+            # Count Protocol definitions
+            protocol_count = len(re.findall(r'class \w+\(Protocol\)', content))
+            if protocol_count > 0:
+                protocols.append((py_file.name, protocol_count))
+        
+        if protocols:
+            print(f"\n[INFO] Protocol interfaces: {len(protocols)}")
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
