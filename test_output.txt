@@ -1,0 +1,1 @@
+Plan has validation warnings but proceeding with execution: ['Missing or empty plan title', 'Missing plan description', "Missing 'definition_of_ready' section", "Missing 'definition_of_done' section"]
