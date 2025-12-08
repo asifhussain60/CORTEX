@@ -329,34 +329,32 @@ class ReadmeParser:
             
             kg = KnowledgeGraph()
             
-            # Store successful section patterns
-            for section in metadata.sections:
-                kg.add_pattern(
-                    pattern_type='readme_section',
-                    pattern=section.title.lower(),
+            # Store common section patterns (only if we have multiple sections)
+            if len(metadata.sections) >= 3:
+                kg.store_pattern(
+                    title=f"readme_sections_{len(metadata.sections)}",
+                    pattern_type='readme_structure',
+                    confidence=0.8,
                     context={
-                        'level': section.level,
-                        'has_content': len(section.content) > 0
+                        'section_count': len(metadata.sections),
+                        'section_titles': [s.title for s in metadata.sections[:5]]  # Top 5
                     },
-                    confidence=0.8
+                    scope='intelligence',
+                    namespaces=['readme', 'structure']
                 )
             
-            # Store feature extraction success
-            if metadata.features:
-                kg.add_lesson_learned(
-                    lesson_type='readme_parsing',
-                    lesson=f"Successfully extracted {len(metadata.features)} features",
-                    context={'method': 'list_extraction'},
-                    success=True
-                )
-            
-            # Store installation steps success
-            if metadata.installation_steps:
-                kg.add_lesson_learned(
-                    lesson_type='readme_parsing',
-                    lesson=f"Successfully extracted {len(metadata.installation_steps)} installation steps",
-                    context={'method': 'list_extraction'},
-                    success=True
+            # Store feature extraction effectiveness
+            if metadata.features and len(metadata.features) >= 3:
+                kg.store_pattern(
+                    title=f"readme_features_{len(metadata.features)}",
+                    pattern_type='readme_extraction',
+                    confidence=0.9,
+                    context={
+                        'feature_count': len(metadata.features),
+                        'extraction_method': 'list_parsing'
+                    },
+                    scope='intelligence',
+                    namespaces=['readme', 'features']
                 )
         
         except ImportError:

@@ -1,0 +1,409 @@
+"""
+Executive Summary Orchestrator
+
+Integrates multiple intelligence sources to generate rich executive summaries:
+- Git commit patterns (themes, evolution, velocity)
+- README metadata (purpose, features, tech stack)
+- Business domain inference (capabilities, domains)
+
+Includes knowledge graph integration to track effectiveness.
+
+Author: Asif Hussain
+Copyright: © 2025 Asif Hussain. All rights reserved.
+License: Proprietary - Source-Available
+"""
+
+from pathlib import Path
+from typing import Dict, List, Optional, Any
+from dataclasses import dataclass, asdict
+import json
+
+from src.intelligence.git_commit_analyzer import GitCommitAnalyzer, DevelopmentNarrative
+from src.intelligence.readme_parser import ReadmeParser, ReadmeMetadata, find_readme
+from src.intelligence.business_domain_inference import BusinessDomainInferenceEngine, DomainEntity
+
+
+@dataclass
+class ExecutiveSummary:
+    """Enhanced executive summary with multi-source intelligence."""
+    
+    # Repository metadata
+    repo_name: str
+    repo_path: str
+    
+    # High-level overview
+    title: str
+    description: str
+    purpose: Optional[str] = None
+    
+    # Business context
+    primary_domains: List[str] = None
+    capabilities: List[str] = None
+    
+    # Technical details
+    features: List[str] = None
+    technologies: List[str] = None
+    
+    # Development insights
+    development_focus: str = None
+    active_areas: List[str] = None
+    recent_velocity: Dict[str, Any] = None
+    
+    # Quality metrics
+    has_readme: bool = False
+    has_git_history: bool = False
+    summary_quality_score: float = 0.0
+    
+    # Source data (optional, for debugging)
+    git_narrative: Optional[DevelopmentNarrative] = None
+    readme_metadata: Optional[ReadmeMetadata] = None
+    domain_entities: Optional[List[DomainEntity]] = None
+    
+    def __post_init__(self):
+        """Initialize empty lists."""
+        if self.primary_domains is None:
+            self.primary_domains = []
+        if self.capabilities is None:
+            self.capabilities = []
+        if self.features is None:
+            self.features = []
+        if self.technologies is None:
+            self.technologies = []
+        if self.active_areas is None:
+            self.active_areas = []
+        if self.recent_velocity is None:
+            self.recent_velocity = {}
+
+
+class ExecutiveSummaryOrchestrator:
+    """Orchestrates intelligence gathering for executive summaries."""
+    
+    def __init__(self):
+        """Initialize orchestrator with all analyzers."""
+        self.git_analyzer = None  # Lazy init
+        self.readme_parser = ReadmeParser()
+        self.domain_engine = BusinessDomainInferenceEngine()
+    
+    def generate_summary(
+        self,
+        repo_path: Path,
+        include_git: bool = True,
+        include_readme: bool = True,
+        include_domains: bool = True,
+        git_days: int = 90
+    ) -> ExecutiveSummary:
+        """
+        Generate comprehensive executive summary.
+        
+        Args:
+            repo_path: Path to repository
+            include_git: Include git commit analysis
+            include_readme: Include README parsing
+            include_domains: Include domain inference
+            git_days: Days of git history to analyze
+        
+        Returns:
+            ExecutiveSummary with integrated intelligence
+        """
+        repo_path = Path(repo_path)
+        repo_name = repo_path.name
+        
+        # Initialize summary
+        summary = ExecutiveSummary(
+            repo_name=repo_name,
+            repo_path=str(repo_path),
+            title=repo_name,
+            description=""
+        )
+        
+        # 1. Parse README (fastest, most informative)
+        readme_metadata = None
+        if include_readme:
+            readme_metadata = self._analyze_readme(repo_path)
+            if readme_metadata:
+                summary.has_readme = True
+                self._integrate_readme(summary, readme_metadata)
+                summary.readme_metadata = readme_metadata
+        
+        # 2. Analyze git history (medium speed)
+        git_narrative = None
+        if include_git:
+            git_narrative = self._analyze_git_history(repo_path, git_days)
+            if git_narrative:
+                summary.has_git_history = True
+                self._integrate_git(summary, git_narrative)
+                summary.git_narrative = git_narrative
+        
+        # 3. Infer business domains (slower, scans code)
+        domain_entities = None
+        if include_domains:
+            domain_entities = self._infer_domains(repo_path)
+            if domain_entities:
+                self._integrate_domains(summary, domain_entities)
+                summary.domain_entities = domain_entities
+        
+        # Calculate quality score
+        summary.summary_quality_score = self._calculate_quality_score(
+            summary, readme_metadata, git_narrative, domain_entities
+        )
+        
+        # Update knowledge graph with effectiveness
+        self._update_knowledge_graph(summary)
+        
+        return summary
+    
+    def _analyze_readme(self, repo_path: Path) -> Optional[ReadmeMetadata]:
+        """Parse README file if exists."""
+        try:
+            readme_path = find_readme(repo_path)
+            if readme_path:
+                return self.readme_parser.parse_file(readme_path)
+        except Exception as e:
+            print(f"Warning: README parsing failed: {e}")
+        
+        return None
+    
+    def _analyze_git_history(self, repo_path: Path, days: int) -> Optional[DevelopmentNarrative]:
+        """Analyze git commit history."""
+        try:
+            if not (repo_path / '.git').exists():
+                return None
+            
+            self.git_analyzer = GitCommitAnalyzer(repo_path)
+            return self.git_analyzer.analyze(days=days, limit=100)
+        except Exception as e:
+            print(f"Warning: Git analysis failed: {e}")
+        
+        return None
+    
+    def _infer_domains(self, repo_path: Path) -> Optional[List[DomainEntity]]:
+        """Infer business domains from code structure."""
+        try:
+            result = self.domain_engine.analyze_repository(str(repo_path))
+            return result.get('domains', [])
+        except Exception as e:
+            print(f"Warning: Domain inference failed: {e}")
+        
+        return None
+    
+    def _integrate_readme(self, summary: ExecutiveSummary, readme: ReadmeMetadata) -> None:
+        """Integrate README metadata into summary."""
+        # Use README title if better than folder name
+        if readme.title and len(readme.title) > len(summary.repo_name):
+            summary.title = readme.title
+        
+        # Description from README
+        if readme.description:
+            summary.description = readme.description
+        
+        # Purpose statement
+        if readme.purpose:
+            summary.purpose = readme.purpose
+        
+        # Features
+        if readme.features:
+            summary.features = readme.features[:10]  # Top 10 features
+        
+        # Technologies
+        if readme.technologies:
+            summary.technologies = readme.technologies
+    
+    def _integrate_git(self, summary: ExecutiveSummary, git: DevelopmentNarrative) -> None:
+        """Integrate git analysis into summary."""
+        # Development focus from themes
+        if git.top_themes:
+            theme_names = [t.theme for t in git.top_themes[:3]]
+            summary.development_focus = f"Recent work focuses on {', '.join(theme_names)}"
+        
+        # Active development areas
+        if git.active_areas:
+            summary.active_areas = git.active_areas[:5]
+        
+        # Velocity metrics
+        summary.recent_velocity = git.velocity_metrics
+    
+    def _integrate_domains(self, summary: ExecutiveSummary, domains: List[DomainEntity]) -> None:
+        """Integrate domain inference into summary."""
+        # High confidence domains only
+        high_confidence = [d for d in domains if d.get('confidence') == 'high']
+        
+        if high_confidence:
+            summary.primary_domains = [d['name'] for d in high_confidence[:5]]
+            
+            # Extract capabilities
+            capabilities = []
+            for domain in high_confidence[:5]:
+                if domain.get('capabilities'):
+                    capabilities.extend(domain['capabilities'])
+            summary.capabilities = capabilities[:8]  # Top 8 capabilities
+    
+    def _calculate_quality_score(
+        self,
+        summary: ExecutiveSummary,
+        readme: Optional[ReadmeMetadata],
+        git: Optional[DevelopmentNarrative],
+        domains: Optional[List[DomainEntity]]
+    ) -> float:
+        """
+        Calculate summary quality score (0-10).
+        
+        Scoring factors:
+        - Has README: +3
+        - Has purpose statement: +1
+        - Has features (5+): +1
+        - Has git history: +2
+        - Has development insights: +1
+        - Has domain inference: +1
+        - Has high confidence domains: +1
+        """
+        score = 0.0
+        
+        # README presence
+        if readme:
+            score += 3.0
+            if readme.purpose:
+                score += 1.0
+            if readme.features and len(readme.features) >= 5:
+                score += 1.0
+        
+        # Git history
+        if git:
+            score += 2.0
+            if git.velocity_metrics.get('total_commits', 0) > 10:
+                score += 1.0
+        
+        # Domain inference
+        if domains:
+            score += 1.0
+            high_conf = [d for d in domains if d.get('confidence') == 'high']
+            if len(high_conf) >= 3:
+                score += 1.0
+        
+        return round(score, 1)
+    
+    def _update_knowledge_graph(self, summary: ExecutiveSummary) -> None:
+        """Update tier2 knowledge graph with summary effectiveness."""
+        try:
+            from src.tier2.knowledge_graph import KnowledgeGraph
+            
+            kg = KnowledgeGraph()
+            
+            # Track effective patterns using store_pattern (correct API)
+            if summary.summary_quality_score >= 8.0:
+                kg.store_pattern(
+                    title=f"high_quality_summary_{summary.repo_name}",
+                    pattern_type='executive_summary',
+                    confidence=summary.summary_quality_score / 10.0,
+                    context={
+                        'repo': summary.repo_name,
+                        'score': summary.summary_quality_score,
+                        'sources': {
+                            'readme': summary.has_readme,
+                            'git': summary.has_git_history,
+                            'domains': len(summary.primary_domains) > 0
+                        },
+                        'feature_count': len(summary.features),
+                        'domain_count': len(summary.primary_domains)
+                    },
+                    scope='intelligence',
+                    namespaces=['executive_summary', 'high_quality']
+                )
+        
+        except ImportError:
+            pass
+        except Exception as e:
+            print(f"Warning: Could not update knowledge graph: {e}")
+    
+    def to_dict(self, summary: ExecutiveSummary) -> Dict:
+        """Convert summary to dictionary."""
+        result = asdict(summary)
+        
+        # Remove source data objects (too verbose)
+        result.pop('git_narrative', None)
+        result.pop('readme_metadata', None)
+        result.pop('domain_entities', None)
+        
+        return result
+    
+    def to_json(self, summary: ExecutiveSummary, indent: int = 2) -> str:
+        """Convert summary to JSON."""
+        return json.dumps(self.to_dict(summary), indent=indent)
+    
+    def to_markdown(self, summary: ExecutiveSummary) -> str:
+        """Generate markdown summary report."""
+        lines = []
+        
+        # Title
+        lines.append(f"# {summary.title}")
+        lines.append("")
+        
+        # Description
+        if summary.description:
+            lines.append(summary.description)
+            lines.append("")
+        
+        # Purpose
+        if summary.purpose:
+            lines.append("## Purpose")
+            lines.append("")
+            lines.append(summary.purpose)
+            lines.append("")
+        
+        # Business Domains
+        if summary.primary_domains:
+            lines.append("## Business Domains")
+            lines.append("")
+            for domain in summary.primary_domains:
+                lines.append(f"- **{domain}**")
+            lines.append("")
+        
+        # Capabilities
+        if summary.capabilities:
+            lines.append("## Capabilities")
+            lines.append("")
+            for capability in summary.capabilities:
+                lines.append(f"- {capability}")
+            lines.append("")
+        
+        # Features
+        if summary.features:
+            lines.append("## Features")
+            lines.append("")
+            for feature in summary.features:
+                lines.append(f"- {feature}")
+            lines.append("")
+        
+        # Technology Stack
+        if summary.technologies:
+            lines.append("## Technology Stack")
+            lines.append("")
+            for tech in summary.technologies:
+                lines.append(f"- {tech}")
+            lines.append("")
+        
+        # Development Activity
+        if summary.development_focus:
+            lines.append("## Development Activity")
+            lines.append("")
+            lines.append(summary.development_focus)
+            lines.append("")
+            
+            if summary.active_areas:
+                lines.append("**Active Areas:**")
+                for area in summary.active_areas:
+                    lines.append(f"- `{area}`")
+                lines.append("")
+            
+            if summary.recent_velocity:
+                vel = summary.recent_velocity
+                lines.append("**Recent Velocity:**")
+                lines.append(f"- Total commits: {vel.get('total_commits', 0)}")
+                lines.append(f"- Features completed: {vel.get('features_completed', 0)}")
+                lines.append(f"- Bugs fixed: {vel.get('bugs_fixed', 0)}")
+                lines.append("")
+        
+        # Quality score
+        lines.append(f"---")
+        lines.append(f"**Summary Quality Score:** {summary.summary_quality_score}/10")
+        
+        return "\n".join(lines)

@@ -401,7 +401,7 @@ class GitCommitAnalyzer:
         commits: List[Dict[str, str]],
         themes: List[CommitTheme],
         evolutions: List[FeatureEvolution],
-        active_areas: List[str]
+                active_areas: List[str]
     ) -> None:
         """Update tier2 knowledge graph with commit pattern insights."""
         try:
@@ -409,50 +409,52 @@ class GitCommitAnalyzer:
             
             kg = KnowledgeGraph()
             
-            # Store successful commit patterns
+            # Store high-frequency commit themes
             for theme in themes:
                 if theme.count >= 5:  # High-frequency theme
-                    kg.add_pattern(
-                        pattern_type='commit_theme',
-                        pattern=theme.theme,
+                    kg.store_pattern(
+                        title=f"commit_theme_{theme.theme}",
+                        pattern_type='commit_analysis',
+                        confidence=min(theme.percentage / 100, 1.0),
                         context={
+                            'theme': theme.theme,
                             'keywords': theme.keywords,
                             'examples': theme.example_commits,
                             'frequency': theme.count
                         },
-                        confidence=min(theme.percentage / 100, 1.0)
+                        scope='intelligence',
+                        namespaces=['git_commit', 'theme']
                     )
             
-            # Store feature evolution patterns
+            # Store multi-stage feature evolutions
             for evolution in evolutions:
-                if len(evolution.stages) >= 2:  # Multi-stage evolution
-                    kg.add_pattern(
-                        pattern_type='feature_evolution',
-                        pattern=evolution.feature_name,
+                if len(evolution.stages) >= 2:
+                    kg.store_pattern(
+                        title=f"feature_evolution_{evolution.feature_name}",
+                        pattern_type='feature_lifecycle',
+                        confidence=0.8,
                         context={
+                            'feature': evolution.feature_name,
                             'stages': evolution.stages,
                             'commits': evolution.commit_count,
                             'duration_days': (evolution.last_commit_date - evolution.first_commit_date).days
                         },
-                        confidence=0.8
+                        scope='intelligence',
+                        namespaces=['git_commit', 'evolution']
                     )
             
             # Store active development areas
-            for area in active_areas[:3]:
-                kg.add_pattern(
-                    pattern_type='active_area',
-                    pattern=area,
-                    context={'commit_frequency': 'high'},
-                    confidence=0.9
-                )
-            
-            # Log lessons learned
-            if len(commits) >= 10:
-                kg.add_lesson_learned(
-                    lesson_type='commit_analysis',
-                    lesson=f"Successfully analyzed {len(commits)} commits, extracted {len(themes)} themes",
-                    context={'repo_path': str(self.repo_path)},
-                    success=True
+            if active_areas and len(commits) >= 10:
+                kg.store_pattern(
+                    title=f"active_areas_{len(commits)}_commits",
+                    pattern_type='development_hotspot',
+                    confidence=0.9,
+                    context={
+                        'areas': active_areas[:3],
+                        'total_commits': len(commits)
+                    },
+                    scope='intelligence',
+                    namespaces=['git_commit', 'activity']
                 )
         
         except ImportError:
