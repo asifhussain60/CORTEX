@@ -22,6 +22,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from src.intelligence.git_commit_analyzer import GitCommitAnalyzer, DevelopmentNarrative
 from src.intelligence.readme_parser import ReadmeParser, ReadmeMetadata, find_readme
 from src.intelligence.business_domain_inference import BusinessDomainInferenceEngine, DomainEntity
+from src.intelligence.ast_docstring_extractor import AstDocstringExtractor, DocstringInfo
 from src.utils.progress_decorator import with_progress, yield_progress
 
 
@@ -85,6 +86,7 @@ class ExecutiveSummaryOrchestrator:
         self.git_analyzer = None  # Lazy init
         self.readme_parser = ReadmeParser()
         self.domain_engine = BusinessDomainInferenceEngine()
+        self.docstring_extractor = AstDocstringExtractor()
     
     @with_progress(operation_name="Executive Summary Generation", threshold_seconds=3.0)
     def generate_summary(
@@ -93,6 +95,7 @@ class ExecutiveSummaryOrchestrator:
         include_git: bool = True,
         include_readme: bool = True,
         include_domains: bool = True,
+        include_docstrings: bool = True,
         git_days: int = 90,
         parallel: bool = True
     ) -> ExecutiveSummary:
@@ -104,6 +107,7 @@ class ExecutiveSummaryOrchestrator:
             include_git: Include git commit analysis
             include_readme: Include README parsing
             include_domains: Include domain inference
+            include_docstrings: Include AST docstring extraction
             git_days: Days of git history to analyze
             parallel: Use parallel processing (3x faster)
         
@@ -123,14 +127,15 @@ class ExecutiveSummaryOrchestrator:
         
         if parallel:
             # Parallel execution (3x faster: 17s → 5s)
-            readme_metadata, git_narrative, domain_entities = self._parallel_analysis(
-                repo_path, include_readme, include_git, include_domains, git_days
+            readme_metadata, git_narrative, domain_entities, docstrings = self._parallel_analysis(
+                repo_path, include_readme, include_git, include_domains, include_docstrings, git_days
             )
         else:
             # Sequential execution (legacy)
             readme_metadata = self._analyze_readme(repo_path) if include_readme else None
             git_narrative = self._analyze_git_history(repo_path, git_days) if include_git else None
             domain_entities = self._infer_domains(repo_path) if include_domains else None
+            docstrings = self._extract_docstrings(repo_path) if include_docstrings else None
         
         # Integrate results
         yield_progress(3, 4, "Integrating results")
@@ -166,17 +171,19 @@ class ExecutiveSummaryOrchestrator:
         include_readme: bool,
         include_git: bool,
         include_domains: bool,
+        include_docstrings: bool,
         git_days: int
     ) -> tuple:
         """
         Execute all analyses in parallel using ThreadPoolExecutor.
         
         Returns:
-            (readme_metadata, git_narrative, domain_entities)
+            (readme_metadata, git_narrative, domain_entities, docstrings)
         """
         readme_metadata = None
         git_narrative = None
         domain_entities = None
+        docstrings = None
         
         # Build task list
         tasks = []
@@ -194,13 +201,17 @@ class ExecutiveSummaryOrchestrator:
             tasks.append(('domains', repo_path))
             task_names.append('Domains')
         
+        if include_docstrings:
+            tasks.append(('docstrings', repo_path))
+            task_names.append('Docstrings')
+        
         if not tasks:
-            return (None, None, None)
+            return (None, None, None, None)
         
         # Execute in parallel
         yield_progress(1, 4, "Analyzing sources in parallel")
         
-        with ThreadPoolExecutor(max_workers=3) as executor:
+        with ThreadPoolExecutor(max_workers=4) as executor:
             futures = {}
             
             for task in tasks:
@@ -215,6 +226,9 @@ class ExecutiveSummaryOrchestrator:
                 elif task_type == 'domains':
                     future = executor.submit(self._infer_domains, task[1])
                     futures[future] = 'domains'
+                elif task_type == 'docstrings':
+                    future = executor.submit(self._extract_docstrings, task[1])
+                    futures[future] = 'docstrings'
             
             # Collect results as they complete
             completed = 0
@@ -231,13 +245,15 @@ class ExecutiveSummaryOrchestrator:
                         git_narrative = result
                     elif task_type == 'domains':
                         domain_entities = result
+                    elif task_type == 'docstrings':
+                        docstrings = result
                     
                     yield_progress(1 + completed, 4, f"Completed {task_type} analysis")
                 
                 except Exception as e:
                     print(f"Warning: {task_type} analysis failed: {e}")
         
-        return (readme_metadata, git_narrative, domain_entities)
+        return (readme_metadata, git_narrative, domain_entities, docstrings)
     
     def _analyze_readme(self, repo_path: Path) -> Optional[ReadmeMetadata]:
         """Parse README file if exists."""
@@ -270,6 +286,19 @@ class ExecutiveSummaryOrchestrator:
             return result.get('domains', [])
         except Exception as e:
             print(f"Warning: Domain inference failed: {e}")
+        
+        return None
+    
+    def _extract_docstrings(self, repo_path: Path) -> Optional[List[DocstringInfo]]:
+        """Extract docstrings from Python source code using AST."""
+        try:
+            return self.docstring_extractor.extract_from_directory(
+                repo_path,
+                max_files=20,
+                top_n=10
+            )
+        except Exception as e:
+            print(f"Warning: Docstring extraction failed: {e}")
         
         return None
     
