@@ -3427,22 +3427,38 @@ class PlanningOrchestrator:
         """
         try:
             # Determine if threat analysis should be enabled based on feature keywords
-            security_keywords = [
-                'auth', 'authentication', 'login', 'password', 'token', 'jwt', 'oauth',
-                'payment', 'credit card', 'financial', 'billing',
-                'user', 'account', 'profile', 'permission', 'role', 'access',
+            # High-confidence security keywords (core security features)
+            high_confidence_keywords = [
+                'auth', 'authentication', 'login', 'password', 'token', 'jwt', 'oauth', 'sso', 'saml',
+                'payment', 'credit card', 'financial', 'billing', 'transaction',
+                'encryption', 'decrypt', 'cipher', 'crypto', 'certificate', 'ssl', 'tls',
+                'permission', 'role', 'access control', 'authorization', 'rbac'
+            ]
+            
+            # Medium-confidence keywords (potentially security-related with context)
+            medium_confidence_keywords = [
                 'api', 'endpoint', 'service', 'integration',
-                'database', 'sql', 'data', 'storage'
+                'database', 'sql', 'data storage', 'sensitive data',
+                'user account', 'profile data', 'session', 'cookie'
             ]
             
             feature_lower = feature_description.lower()
-            should_analyze = any(keyword in feature_lower for keyword in security_keywords)
+            
+            # High confidence match
+            high_confidence_match = any(keyword in feature_lower for keyword in high_confidence_keywords)
+            
+            # Medium confidence requires at least 2 keyword matches
+            medium_matches = sum(1 for keyword in medium_confidence_keywords if keyword in feature_lower)
+            medium_confidence_match = medium_matches >= 2
+            
+            should_analyze = high_confidence_match or medium_confidence_match
             
             if not should_analyze:
                 logger.info("ℹ️  Feature does not match security-sensitive patterns, skipping threat analysis")
                 return None
             
-            logger.info("🔒 Feature matches security-sensitive patterns, running threat analysis...")
+            confidence = "high" if high_confidence_match else "medium"
+            logger.info(f"🔒 Feature matches security-sensitive patterns ({confidence} confidence), running threat analysis...")
             
             # Create agent request
             request = AgentRequest(
