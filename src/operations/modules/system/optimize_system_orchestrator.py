@@ -571,10 +571,52 @@ class OptimizeSystemOrchestrator(BaseOperationModule):
             return None
     
     def _run_brain_tuning(self, context: Dict[str, Any]) -> None:
-        """Run brain tuning operations (Phase 4)."""
-        # TODO: Implement brain tuning module
-        logger.info("⏩ Brain tuning implementation pending...")
-        self.metrics.warnings.append("Brain tuning not yet implemented")
+        """
+        Run brain tuning operations (Phase 4).
+        
+        Comprehensive brain health optimization:
+        - Diagnose all 4 brain tiers (Tier 0, 1, 2, 3)
+        - Migrate YAML knowledge to SQLite
+        - Prune low-confidence patterns
+        - Validate tier boundaries
+        - Optimize databases (VACUUM, ANALYZE, REINDEX)
+        - Generate health report
+        """
+        try:
+            from src.operations.modules.brain.brain_tuning_orchestrator import BrainTuningOrchestrator
+            
+            logger.info("🧠 Running brain tuning orchestrator...")
+            
+            tuner = BrainTuningOrchestrator(self.project_root)
+            result = tuner.execute()
+            
+            if result['success']:
+                metrics = result['metrics']
+                
+                logger.info(f"✅ Brain tuning complete")
+                logger.info(f"  Patterns migrated: {metrics['patterns_migrated']}")
+                logger.info(f"  Patterns pruned: {metrics['patterns_pruned']}")
+                logger.info(f"  Space reclaimed: {metrics['space_reclaimed_kb']:.2f} KB")
+                logger.info(f"  Issues fixed: {len(metrics['issues_fixed'])}")
+                
+                # Update system metrics
+                self.metrics.optimizations_applied += len(metrics['issues_fixed'])
+                self.metrics.warnings.extend(metrics['warnings'])
+                
+                # Store brain health in context for later phases
+                context['brain_health'] = result.get('health_report', {})
+                context['brain_diagnosis'] = result.get('diagnosis', {})
+            else:
+                error_msg = result.get('error', 'Unknown error')
+                logger.error(f"❌ Brain tuning failed: {error_msg}")
+                self.metrics.errors_encountered.append(f"Brain tuning: {error_msg}")
+        
+        except ImportError as e:
+            logger.warning(f"⚠️  Brain tuning module not available: {e}")
+            self.metrics.warnings.append("Brain tuning module import failed")
+        except Exception as e:
+            logger.error(f"❌ Brain tuning error: {e}", exc_info=True)
+            self.metrics.errors_encountered.append(f"Brain tuning: {e}")
     
     def _run_entry_point_alignment(self, context: Dict[str, Any]) -> None:
         """

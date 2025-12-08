@@ -226,6 +226,18 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
                     logger.warning(f"⚠️ System alignment issues detected: {alignment_result.get('message', 'Unknown')}")
                     logger.info("Run 'align' command for detailed analysis and remediation options")
             
+            # Phase 2.7: Brain Health Check (NEW)
+            logger.info("\n[Phase 2.7] Checking brain health...")
+            brain_health_result = self._check_brain_health(project_root, metrics)
+            
+            if brain_health_result.get('needs_tuning', False):
+                logger.warning(f"⚠️ Brain health issues detected:")
+                for issue in brain_health_result.get('issues', []):
+                    logger.warning(f"  - {issue}")
+                logger.info("💡 Run 'optimize cortex system' with brain_tuning enabled for full remediation")
+            else:
+                logger.info("✅ Brain health is good")
+            
             # Phase 3: Analyze architecture
             logger.info("\n[Phase 3] Analyzing CORTEX architecture...")
             analysis_result = self._analyze_architecture(project_root, metrics)
@@ -1396,6 +1408,101 @@ class OptimizeCortexOrchestrator(BaseOperationModule):
             logger.info(f"Created git commit for path cleanup: {commit_hash[:8]}")
         else:
             logger.warning("Failed to create git commit for path cleanup")
+    
+    def _check_brain_health(
+        self,
+        project_root: Path,
+        metrics: OptimizationMetrics
+    ) -> Dict[str, Any]:
+        """
+        Check brain health across all 4 tiers.
+        
+        Quick health assessment without full tuning:
+        - Tier 0: Check governance rules exist
+        - Tier 1: Check for dormant working memory
+        - Tier 2: Check YAML vs SQLite pattern migration status
+        - Tier 3: Check metrics collection status
+        
+        Args:
+            project_root: CORTEX project root
+            metrics: Optimization metrics
+        
+        Returns:
+            Dict with health status and issues
+        """
+        brain_path = project_root / "cortex-brain"
+        issues = []
+        needs_tuning = False
+        
+        try:
+            # Tier 0: Governance
+            protection_rules = brain_path / "brain-protection-rules.yaml"
+            if not protection_rules.exists():
+                issues.append("Tier 0: Brain protection rules missing")
+                needs_tuning = True
+            
+            # Tier 1: Working Memory
+            tier1_db = brain_path / "tier1" / "working_memory.db"
+            if tier1_db.exists():
+                import sqlite3
+                conn = sqlite3.connect(tier1_db)
+                cursor = conn.cursor()
+                cursor.execute("SELECT COUNT(*) FROM conversations")
+                conv_count = cursor.fetchone()[0]
+                conn.close()
+                
+                if conv_count == 0:
+                    issues.append("Tier 1: Working memory dormant (0 conversations)")
+            
+            # Tier 2: Knowledge Graph
+            tier2_db = brain_path / "tier2" / "knowledge_graph.db"
+            knowledge_yaml = brain_path / "knowledge-graph.yaml"
+            
+            if tier2_db.exists() and knowledge_yaml.exists():
+                import sqlite3
+                conn = sqlite3.connect(tier2_db)
+                cursor = conn.cursor()
+                cursor.execute("SELECT COUNT(*) FROM patterns")
+                sqlite_patterns = cursor.fetchone()[0]
+                conn.close()
+                
+                import yaml
+                with open(knowledge_yaml, 'r', encoding='utf-8') as f:
+                    knowledge = yaml.safe_load(f)
+                    yaml_patterns = knowledge.get('patterns', {}).get('total_count', 0)
+                
+                if yaml_patterns > sqlite_patterns:
+                    issues.append(f"Tier 2: {yaml_patterns - sqlite_patterns} YAML patterns need migration to SQLite")
+                    needs_tuning = True
+            
+            # Tier 3: Development Context
+            tier3_db = brain_path / "tier3" / "development_context.db"
+            if tier3_db.exists():
+                import sqlite3
+                conn = sqlite3.connect(tier3_db)
+                cursor = conn.cursor()
+                cursor.execute("SELECT COUNT(*) FROM context_git_metrics")
+                git_count = cursor.fetchone()[0]
+                conn.close()
+                
+                if git_count == 0:
+                    issues.append("Tier 3: Git metrics collection inactive")
+            
+            return {
+                'healthy': not needs_tuning,
+                'needs_tuning': needs_tuning,
+                'issues': issues,
+                'issues_count': len(issues)
+            }
+        
+        except Exception as e:
+            logger.error(f"Brain health check error: {e}", exc_info=True)
+            return {
+                'healthy': False,
+                'needs_tuning': True,
+                'issues': [f"Health check error: {e}"],
+                'issues_count': 1
+            }
     
     def _deduplicate_documentation(
         self,
