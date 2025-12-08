@@ -37,7 +37,7 @@ def validate_git_commit_analyzer():
     
     try:
         # Generate narrative
-        narrative = analyzer.analyze_commits(days=90)
+        narrative = analyzer.analyze(days=90)
         
         print(f"\n📊 Analysis Results:")
         print(f"  - Total commits analyzed: {narrative.velocity_metrics.get('total_commits', 0)}")
