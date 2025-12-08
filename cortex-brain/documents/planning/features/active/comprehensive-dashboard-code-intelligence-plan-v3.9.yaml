@@ -2,11 +2,11 @@ metadata:
   plan_id: "dashboard-code-intel-v3.9-001"
   title: "Comprehensive Dashboard & Code Intelligence Enhancement (MASTER PLAN)"
   created: "2025-12-08T00:00:00Z"
-  updated: "2025-12-08T22:00:00Z"
+  updated: "2025-12-08T23:30:00Z"
   status: "in_progress"
   priority: "critical"
   estimated_effort: "160-204 hours"
-  actual_effort: "48 hours (Phase 1-2 complete - 30%)"
+  actual_effort: "58 hours (Phase 1-2 complete, Phase 2.5 40% - 36%)"
   owner: "CORTEX Development Team"
   tags: ["dashboard", "code-intelligence", "multi-language", "validation", "reconciliation", "reverse-engineering", "onboarding", "admin-dashboard", "v3.9"]
   consolidates:
@@ -29,8 +29,8 @@ consolidated_status:
   rationale: "Eliminated confusion by merging all dashboard/onboarding work into single master plan with unified timeline"
   
 progress_summary:
-  overall_completion: "30% (48h / 160-204h estimated)"
-  overall_progress_bar: "[████░░░░░░░░░░░░] 30%"
+  overall_completion: "36% (58h / 160-204h estimated)"
+  overall_progress_bar: "[█████░░░░░░░░░░░] 36%"
   
   phase_1_foundation:
     status: "✅ COMPLETE"
@@ -45,9 +45,10 @@ progress_summary:
     progress_bar: "[███████████████] 100%"
   
   phase_2_5_test_coverage:
-    status: "⏳ NOT STARTED"
-    completion: "0% (0/5 tasks)"
-    hours: "0h / 20-24h"
+    status: "🔄 IN PROGRESS"
+    completion: "40% (2/5 tasks)"
+    hours: "10h / 20-24h"
+    progress_bar: "[███████░░░░░░░░] 40%"
     progress_bar: "[░░░░░░░░░░░░░░░] 0%"
     
   phase_3_onboarding:
@@ -575,16 +576,16 @@ phases:
   - phase: 2.5
     name: "Test Coverage Intelligence & Gap Analysis"
     description: "Analyze test coverage, identify gaps, prioritize untested code, generate coverage roadmap"
-    status: "not_started"
+    status: "in_progress"
     estimated_duration: "20-24 hours"
-    actual_duration: "0 hours"
+    actual_duration: "10 hours"
     dependencies: ["1", "2"]
-    progress_bar: "[░░░░░░░░░░░░░░░] 0%"
+    progress_bar: "[███████░░░░░░░░] 40%"
     
     visual_progress: |
-      Phase 2.5: [░░░░░░░░░░░░░░░] 0% ⏳ NEW
-      ├─ Task 2.5.1: Test Discovery      [░░░░░░░░░░░░░░░] 0% ⏳ (6h)
-      ├─ Task 2.5.2: Coverage Baseline   [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
+      Phase 2.5: [███████░░░░░░░░] 40% 🔄
+      ├─ Task 2.5.1: Test Discovery      [███████████████] 100% ✅ (6h)
+      ├─ Task 2.5.2: Coverage Baseline   [███████████████] 100% ✅ (4h)
       ├─ Task 2.5.3: Gap Prioritization  [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
       ├─ Task 2.5.4: Roadmap Generator   [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
       └─ Task 2.5.5: Dashboard Viz       [░░░░░░░░░░░░░░░] 0% ⏳ (4h)
@@ -592,6 +593,7 @@ phases:
     tasks:
       - id: "2.5.1"
         title: "Multi-Language Test Discovery Engine"
+        status: "complete"
         description: |
           Detect and analyze test files across all supported languages.
           
@@ -651,6 +653,7 @@ phases:
         
       - id: "2.5.2"
         title: "Coverage Baseline Calculator"
+        status: "complete"
         description: |
           Calculate existing test coverage baseline from static analysis and execution data.
           
