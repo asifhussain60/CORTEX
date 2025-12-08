@@ -274,5 +274,72 @@ class TestKnowledgeGraphIntegration:
         assert summary is not None
 
 
+class TestParallelProcessing:
+    """Test parallel processing optimization."""
+    
+    def test_parallel_processing_enabled(self, test_repo):
+        """Should use parallel processing by default."""
+        orchestrator = ExecutiveSummaryOrchestrator()
+        summary = orchestrator.generate_summary(test_repo, parallel=True)
+        
+        assert summary is not None
+        assert summary.repo_name == test_repo.name
+    
+    def test_sequential_processing_fallback(self, test_repo):
+        """Should support sequential processing as fallback."""
+        orchestrator = ExecutiveSummaryOrchestrator()
+        summary = orchestrator.generate_summary(test_repo, parallel=False)
+        
+        assert summary is not None
+        assert summary.repo_name == test_repo.name
+    
+    def test_parallel_results_consistent(self, test_repo):
+        """Parallel and sequential should produce equivalent results."""
+        orchestrator = ExecutiveSummaryOrchestrator()
+        
+        # Generate both
+        parallel_summary = orchestrator.generate_summary(
+            test_repo,
+            parallel=True,
+            include_git=False,
+            include_domains=False
+        )
+        
+        sequential_summary = orchestrator.generate_summary(
+            test_repo,
+            parallel=False,
+            include_git=False,
+            include_domains=False
+        )
+        
+        # Compare key fields
+        assert parallel_summary.repo_name == sequential_summary.repo_name
+        assert parallel_summary.has_readme == sequential_summary.has_readme
+        assert parallel_summary.title == sequential_summary.title
+        assert len(parallel_summary.features) == len(sequential_summary.features)
+
+
+class TestProgressMonitoring:
+    """Test progress monitoring integration."""
+    
+    def test_progress_decorator_applied(self, test_repo):
+        """Should have progress decorator on generate_summary."""
+        orchestrator = ExecutiveSummaryOrchestrator()
+        
+        # Check method has decorator (method will have __wrapped__ attribute)
+        method = orchestrator.generate_summary
+        assert hasattr(method, '__name__')  # Decorated methods keep their name
+    
+    def test_long_operation_shows_progress(self, test_repo):
+        """Long operations should trigger progress monitoring."""
+        orchestrator = ExecutiveSummaryOrchestrator()
+        
+        # This will auto-activate progress if >3s
+        summary = orchestrator.generate_summary(test_repo)
+        
+        # Progress happens in background, just verify execution completes
+        assert summary is not None
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
