@@ -92,6 +92,9 @@ class FeatureRegistrationValidator:
             "validation_framework.py",
         }
         
+        # Security agents that should be discovered
+        self.security_agents_dir = self.project_root / "src" / "agents" / "security"
+        
         # Excluded subdirectories (internal components)
         self.excluded_subdirs = {
             "stages",          # Workflow stages are internal
@@ -228,6 +231,15 @@ class FeatureRegistrationValidator:
                     if self._is_registerable_operation(file):
                         operations.append(file.stem)
                         logger.debug(f"Found registerable agent: {file.stem}")
+        
+        # Scan src/agents/security/*.py for security agents
+        if self.security_agents_dir.exists():
+            for file in self.security_agents_dir.glob("*_agent.py"):
+                if file.name not in self.excluded_files:
+                    operations.append(file.stem)
+                    logger.debug(f"Found registerable security agent: {file.stem}")
+        else:
+            logger.info(f"Security agents directory not found: {self.security_agents_dir} (optional)")
         
         logger.info(f"Found {len(operations)} operation/orchestrator/workflow/agent files")
         return sorted(operations)

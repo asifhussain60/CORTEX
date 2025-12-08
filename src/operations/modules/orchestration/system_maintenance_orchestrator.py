@@ -52,7 +52,8 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         self.project_root = project_root or Path.cwd()
         self.metrics: Dict[str, Any] = {
             'phases_completed': 0,
-            'phases_total': 5,
+            'phases_total': 6,  # Increased from 5 to 6 (added Phase 0)
+            'epm_discovery': {},  # New phase for feature discovery
             'healthcheck_pre': {},
             'alignment': {},
             'cleanup': {},
@@ -82,67 +83,86 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         Execute comprehensive system maintenance.
         
         Args:
-            context: Operation context (unused, for interface compatibility)
+            context: Operation context with optional flags:
+                - include_epm_discovery (bool): Run EPM feature discovery (default: False)
             
         Returns:
             OperationResult with maintenance metrics and report
         """
         start_time = datetime.now()
+        include_epm = context.get('include_epm_discovery', False)
+        total_phases = 6 if include_epm else 5
+        current_phase = 0
+        
         logger.info("🔧 Starting comprehensive system maintenance")
         
         try:
+            # Phase 0 (Optional): EPM Feature Discovery
+            if include_epm:
+                current_phase += 1
+                yield_progress(current_phase, total_phases, "Phase 0: EPM feature discovery")
+                epm_discovery = self._run_epm_discovery()
+                self.metrics['epm_discovery'] = epm_discovery
+                self.metrics['phases_completed'] = current_phase
+            
             # Phase 1: Pre-maintenance healthcheck
-            yield_progress(1, 4, "Phase 1: Pre-maintenance healthcheck")
+            current_phase += 1
+            yield_progress(current_phase, total_phases, f"Phase {current_phase}: Pre-maintenance healthcheck")
             pre_check = self._run_pre_healthcheck()
             self.metrics['healthcheck_pre'] = pre_check
-            self.metrics['phases_completed'] = 1
+            self.metrics['phases_completed'] = current_phase
             
             if not pre_check.get('overall_health', {}).get('is_healthy'):
                 logger.warning("⚠️  Pre-healthcheck identified issues - proceeding with maintenance")
             
             # Phase 2: System alignment
-            yield_progress(2, 5, "Phase 2: System alignment")
+            current_phase += 1
+            yield_progress(current_phase, total_phases, f"Phase {current_phase}: System alignment")
             alignment = self._run_alignment()
             self.metrics['alignment'] = alignment
-            self.metrics['phases_completed'] = 2
+            self.metrics['phases_completed'] = current_phase
             
             # Phase 3: Cleanup and organization
-            yield_progress(3, 5, "Phase 3: Cleanup and organization")
+            current_phase += 1
+            yield_progress(current_phase, total_phases, f"Phase {current_phase}: Cleanup and organization")
             cleanup = self._run_cleanup()
             self.metrics['cleanup'] = cleanup
-            self.metrics['phases_completed'] = 3
+            self.metrics['phases_completed'] = current_phase
             
             # Only optimize if alignment succeeded
             if alignment.get('success'):
                 # Phase 4: CORTEX optimization
-                yield_progress(4, 5, "Phase 4: CORTEX optimization")
+                current_phase += 1
+                yield_progress(current_phase, total_phases, f"Phase {current_phase}: CORTEX optimization")
                 optimization = self._run_optimization()
                 self.metrics['optimization'] = optimization
-                self.metrics['phases_completed'] = 4
+                self.metrics['phases_completed'] = current_phase
             else:
                 logger.warning("⚠️  Skipping optimization - alignment had issues")
                 self.metrics['warnings'].append("Optimization skipped due to alignment issues")
             
             # Phase 5: Post-maintenance healthcheck
-            yield_progress(5, 5, "Phase 5: Post-maintenance healthcheck")
+            current_phase += 1
+            yield_progress(current_phase, total_phases, f"Phase {current_phase}: Post-maintenance healthcheck")
             post_check = self._run_post_healthcheck()
             self.metrics['healthcheck_post'] = post_check
-            self.metrics['phases_completed'] = 5
+            self.metrics['phases_completed'] = current_phase
             
             # Generate report
-            report = self._generate_report(start_time)
+            report = self._generate_report(start_time, include_epm)
             
             # Save report
             report_path = self._save_report(report)
             
-            success = self.metrics['phases_completed'] == 5
+            success = self.metrics['phases_completed'] == total_phases
             
             return OperationResult(
                 success=success,
                 status=OperationStatus.SUCCESS if success else OperationStatus.WARNING,
-                message=f"System maintenance completed: {self.metrics['phases_completed']}/5 phases",
+                message=f"System maintenance completed: {self.metrics['phases_completed']}/{total_phases} phases",
                 data={
                     'phases_completed': self.metrics['phases_completed'],
+                    'phases_total': total_phases,
                     'metrics': self.metrics,
                     'report_path': str(report_path),
                     'improvements': self.metrics['improvements']
@@ -299,7 +319,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             self.metrics['errors'].append(f"Post-healthcheck error: {str(e)}")
             return {'success': False, 'error': str(e)}
     
-    def _generate_report(self, start_time: datetime) -> Dict[str, Any]:
+    def _generate_report(self, start_time: datetime, include_epm: bool = False) -> Dict[str, Any]:
         """Generate comprehensive maintenance report."""
         duration = (datetime.now() - start_time).total_seconds()
         
@@ -324,6 +344,10 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             'warnings': self.metrics['warnings'],
             'errors': self.metrics['errors']
         }
+        
+        # Add EPM discovery if included
+        if include_epm:
+            report['phases']['epm_discovery'] = self._summarize_epm_discovery(self.metrics['epm_discovery'])
         
         return report
     
@@ -369,9 +393,62 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         
         return {
             'status': 'success' if data.get('success') else 'failed',
-            'optimizations_applied': data.get('optimizations_applied', 0),
-            'performance_gain': data.get('performance_gain', '0%')
+            'improvements_made': data.get('improvements_made', 0)
         }
+    
+    def _summarize_epm_discovery(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Summarize EPM feature discovery results."""
+        if not data:
+            return {'status': 'not_run'}
+        
+        return {
+            'status': 'success' if data.get('success') else 'failed',
+            'orchestrators_discovered': data.get('orchestrators_discovered', 0),
+            'unregistered_features': data.get('unregistered_features', 0),
+            'report_path': data.get('report_path')
+        }
+    
+    def _run_epm_discovery(self) -> Dict[str, Any]:
+        """Run EPM feature discovery to identify new orchestrators."""
+        logger.info("[DISCOVER] Phase 0: EPM feature discovery")
+        
+        try:
+            # Import EPM orchestrator
+            import sys
+            from pathlib import Path
+            scripts_path = self.project_root / "scripts"
+            if str(scripts_path) not in sys.path:
+                sys.path.insert(0, str(scripts_path))
+            
+            from epm_documentation_orchestrator import EPMDocumentationOrchestrator
+            
+            # Run discovery only (skip other phases)
+            epm = EPMDocumentationOrchestrator(str(self.project_root))
+            discovery_result = epm._discover_new_features()
+            
+            if discovery_result['success']:
+                discovered = discovery_result.get('orchestrators_discovered', 0)
+                unregistered = discovery_result.get('unregistered_features', 0)
+                
+                self.metrics['improvements'].append(
+                    f"EPM Discovery: Found {discovered} orchestrators, {unregistered} unregistered"
+                )
+                
+                return {
+                    'success': True,
+                    'orchestrators_discovered': discovered,
+                    'unregistered_features': unregistered,
+                    'features': discovery_result.get('features', []),
+                    'report_path': discovery_result.get('report_path')
+                }
+            else:
+                self.metrics['warnings'].append(f"EPM discovery had issues: {discovery_result.get('message')}")
+                return {'success': False, 'message': discovery_result.get('message')}
+                
+        except Exception as e:
+            logger.error(f"EPM discovery failed: {e}", exc_info=True)
+            self.metrics['errors'].append(f"EPM discovery error: {str(e)}")
+            return {'success': False, 'error': str(e)}
     
     def _save_report(self, report: Dict[str, Any]) -> Path:
         """Save maintenance report to file."""

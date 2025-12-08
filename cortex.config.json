@@ -146,6 +146,16 @@
     "repository_owner": "asifhussain60",
     "repository_name": "CORTEX"
   },
+  "openai": {
+    "comment": "OpenAI API configuration for DALL-E image generation and GPT features",
+    "api_key_env": "OPENAI_API_KEY",
+    "dalle": {
+      "model": "dall-e-3",
+      "size": "1792x1024",
+      "quality": "hd",
+      "output_dir": "cortex-brain/documents/images/features-dec-2025"
+    }
+  },
   "plugins": {
     "cleanup_plugin": {
       "enabled": true,

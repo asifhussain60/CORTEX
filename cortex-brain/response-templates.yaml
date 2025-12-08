@@ -251,6 +251,21 @@ templates:
       **Phases:** {phases_summary}
 
 
+      ### 🔒 Threat Modeling Analysis
+
+
+      **Security Assessment:** {threat_analysis_enabled}
+
+      **STRIDE Categories:** {stride_categories}
+
+      **Threats Identified:** {threat_count} ({critical_count} Critical, {high_count} High, {medium_count} Medium, {low_count} Low)
+
+      **OWASP Coverage:** {owasp_categories}
+
+
+      **Mitigation Status:** [{mitigation_progress_bar}] {mitigations_implemented}/{total_mitigations}
+
+
       ### 🔍 Next Steps
 
 
@@ -1995,6 +2010,24 @@ templates:
     planning_mode_active: true
     mode_indicator: 📋 **Planning Mode Active** - All input will be treated as plan
       refinement until you say 'approve plan'
+    threat_modeling_section: |
+      
+      ### 🔒 Threat Modeling Analysis
+      
+      **Security Assessment:** {threat_analysis_enabled}
+      **STRIDE Categories Analyzed:** {stride_categories}
+      **Threats Identified:** {threat_count} ({critical_count} Critical, {high_count} High, {medium_count} Medium, {low_count} Low)
+      **OWASP Top 10 Coverage:** {owasp_categories}
+      
+      **Key Threats:**
+      {threat_list}
+      
+      **Recommended Mitigations:**
+      {mitigation_strategies}
+      
+      **Security DoR/DoD:**
+      - DoR: Threat model reviewed and approved
+      - DoD: Critical and High severity mitigations implemented
   planning_dor_incomplete:
     base_structure: '## 🧠 CORTEX {operation}
 
@@ -2093,6 +2126,33 @@ templates:
       ### 💬 Response
 
       {response_content}
+
+
+      ### 🔒 Threat Modeling Results
+
+      **Analysis Complete:** ThreatModelerAgent analyzed feature using STRIDE framework
+
+      **Threats Identified:** {threat_count} total threats
+      - Critical: {critical_count}
+      - High: {high_count}
+      - Medium: {medium_count}
+      - Low: {low_count}
+
+      **STRIDE Coverage:**
+      - Spoofing: {spoofing_threats}
+      - Tampering: {tampering_threats}
+      - Repudiation: {repudiation_threats}
+      - Information Disclosure: {info_disclosure_threats}
+      - Denial of Service: {dos_threats}
+      - Elevation of Privilege: {elevation_threats}
+
+      **OWASP Top 10 Mapping:** {owasp_mapping}
+
+      **Top Threats:**
+      {top_threats_list}
+
+      **Mitigation Plan:**
+      {mitigation_plan}
 
 
       ### 📊 Impact & Changes

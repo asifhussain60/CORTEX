@@ -135,6 +135,13 @@ ALL responses MUST use this 5-part structure:
 - **Features:** Auto-logging, tier integration, execution timing, error handling
 - **Guide:** `src/cortex_agents/README.md`
 
+### EPM Documentation Orchestrator
+- **Commands:** `generate docs`, `document features`
+- **NEW:** Feature discovery with OrchestratorScanner integration
+- **Features:** Empty section detection, stub marker removal, context-aware content generation
+- **Auto-Registration:** Discovers unregistered orchestrators (27 found in Dec 2025)
+- **Guide:** `scripts/epm_documentation_orchestrator.py`
+
 ---
 
 ## 📋 Quick Command Reference
@@ -161,6 +168,8 @@ ALL responses MUST use this 5-part structure:
 | `introduce yourself` | CORTEX introduction (audience-aware) | All |
 | `how can cortex help the business` | Business value & capabilities | All |
 | `cortex security` | Security posture documentation | All |
+| `generate docs` | EPM documentation with feature discovery | Admin |
+| `document features` | Auto-discover and document new orchestrators | Admin |
 
 ---
 

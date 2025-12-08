@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-12-08T07:11:50.922652",
+  "statistics": {
+    "files_processed": 1,
+    "empty_sections_filled": 1,
+    "stub_markers_removed": 0,
+    "false_positives_skipped": 0,
+    "errors": [],
+    "discovered_features": {
+      "orchestrators": {
+        "HandsOnTutorialOrchestrator": {
+          "path": 
