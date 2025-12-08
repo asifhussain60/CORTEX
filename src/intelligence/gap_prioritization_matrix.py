@@ -82,14 +82,23 @@ class GapPrioritizer:
     to classify gaps as P0/P1/P2/P3 with effort estimates.
     """
     
-    # Pattern detection regexes
-    API_PATTERNS = [
-        r'\[HttpGet\]', r'\[HttpPost\]', r'\[HttpPut\]', r'\[HttpDelete\]',
-        r'\[Route\(', r'\[ApiController\]',
-        r'@app\.route\(', r'@router\.(get|post|put|delete)',
-        r'@RequestMapping', r'@GetMapping', r'@PostMapping',
-        r'@RestController'
-    ]
+    # Pattern detection regexes (compiled for performance)
+    _API_PATTERNS_COMPILED = None
+    
+    @classmethod
+    def _get_api_patterns(cls):
+        """Get compiled API patterns (cached)."""
+        if cls._API_PATTERNS_COMPILED is None:
+            cls._API_PATTERNS_COMPILED = [
+                re.compile(pattern) for pattern in [
+                    r'\[HttpGet\]', r'\[HttpPost\]', r'\[HttpPut\]', r'\[HttpDelete\]',
+                    r'\[Route\(', r'\[ApiController\]',
+                    r'@app\.route\(', r'@router\.(get|post|put|delete)',
+                    r'@RequestMapping', r'@GetMapping', r'@PostMapping',
+                    r'@RestController'
+                ]
+            ]
+        return cls._API_PATTERNS_COMPILED
     
     AUTH_KEYWORDS = [
         'authenticate', 'authorization', 'authorize', 'permission',
@@ -181,6 +190,13 @@ class GapPrioritizer:
         """
         Detect code patterns indicating criticality.
         
+        Uses regex patterns and keyword matching to identify:
+        - API endpoints (REST/SOAP/GraphQL attributes)
+        - Authentication/authorization logic
+        - Financial/money operations  
+        - Security-sensitive code
+        - DTOs and utility classes
+        
         Args:
             code: Source code content
             file_path: Path to file
@@ -191,9 +207,9 @@ class GapPrioritizer:
         patterns = []
         code_lower = code.lower()
         
-        # API Endpoint detection
-        for pattern in self.API_PATTERNS:
-            if re.search(pattern, code):
+        # API Endpoint detection (compiled regex for performance)
+        for pattern in self._get_api_patterns():
+            if pattern.search(code):
                 patterns.append(CodePattern.API_ENDPOINT)
                 break
         
