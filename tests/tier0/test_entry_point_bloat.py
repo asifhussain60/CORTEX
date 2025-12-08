@@ -88,11 +88,11 @@ class TestEntryPointBloat:
         tokens = self.calculate_tokens(entry_point_content)
         percentage_of_target = (tokens / TARGET_TOKENS) * 100
         
-        # This is informational, not blocking
+        # This is informational, not blocking - use ASCII to avoid PowerShell encoding issues
         if tokens > TARGET_TOKENS:
-            print(f"\n⚠️  INFO: Entry point is {percentage_of_target:.1f}% of target ({tokens}/{TARGET_TOKENS} tokens)")
+            print(f"\n[INFO] Entry point is {percentage_of_target:.1f}% of target ({tokens}/{TARGET_TOKENS} tokens)")
         else:
-            print(f"\n✅ OPTIMAL: Entry point is {percentage_of_target:.1f}% of target ({tokens}/{TARGET_TOKENS} tokens)")
+            print(f"\n[OPTIMAL] Entry point is {percentage_of_target:.1f}% of target ({tokens}/{TARGET_TOKENS} tokens)")
     
     def test_line_count_limit(self, entry_point_content):
         """SKULL-001: Entry point should not exceed line count limit."""

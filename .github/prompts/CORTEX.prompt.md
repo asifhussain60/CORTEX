@@ -129,6 +129,12 @@ ALL responses MUST use this 5-part structure:
 - **Features:** File organization, reference updates, obsolete cleanup, validation
 - **Guide:** #file:../../cortex-brain/documents/implementation-guides/cleanup-orchestrator-quick-ref.md
 
+### Agent Plugin System
+- **Auto-discovery:** Agents in `src/cortex_agents/` automatically registered
+- **Pattern:** Inherit from `BaseAgent`, implement `can_handle()` and `execute()`
+- **Features:** Auto-logging, tier integration, execution timing, error handling
+- **Guide:** `src/cortex_agents/README.md`
+
 ---
 
 ## 📋 Quick Command Reference
