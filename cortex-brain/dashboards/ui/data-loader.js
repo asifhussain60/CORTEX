@@ -25,6 +25,7 @@ let REPOSITORY_REGISTRY = null;
 const DATA_FILES = [
     'overview.json',                // NEW: Overview Tab data (OverviewCollector output)
     'executive-summary.json',
+    'executive-intelligence.json',  // PHASE 2: Intelligence-based summary
     'health-data.json',
     'tech-stack.json',
     'security.json',
@@ -139,13 +140,14 @@ export async function loadDashboardData(source = 'mock') {
             timestamp: new Date().toISOString(),
             overview: results[0],            // NEW: Overview data (OverviewCollector output)
             executiveSummary: results[1],
-            healthData: results[2],
-            techStack: results[3],
-            security: results[4],
-            architecture: results[5],
-            codeOrganization: results[6],
-            vendors: results[7],
-            reconciliation: results[8]       // NEW: Reconciliation report
+            executiveIntelligence: results[2], // PHASE 2: Intelligence summary
+            healthData: results[3],
+            techStack: results[4],
+            security: results[5],
+            architecture: results[6],
+            codeOrganization: results[7],
+            vendors: results[8],
+            reconciliation: results[9]       // NEW: Reconciliation report
         };
         
         // Validate data (temporarily disabled for debugging)
