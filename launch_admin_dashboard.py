@@ -7,19 +7,18 @@ import time
 from pathlib import Path
 
 def kill_python_processes():
-    """Kill other Python processes to free ports."""
-    print('🧹 Cleaning up Python processes...')
+    """Kill ALL Python processes to free ports."""
+    print('🧹 Cleaning up ALL Python processes...')
     try:
-        import os
-        current_pid = os.getpid()
+        # Kill all Python processes (including this script will exit after launching new window)
         subprocess.run(
             ['powershell', '-Command', 
-             f'Get-Process python -ErrorAction SilentlyContinue | Where-Object {{$_.Id -ne {current_pid}}} | Stop-Process -Force'],
+             'Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force'],
             capture_output=True,
-            timeout=3
+            timeout=5
         )
-        print('  ✅ Cleanup complete\n')
-        time.sleep(1)
+        print('  ✅ All Python processes stopped\n')
+        time.sleep(2)  # Wait for ports to be released
     except Exception as e:
         print(f'  ⚠️  Cleanup skipped: {e}\n')
 
@@ -27,7 +26,7 @@ def create_dashboard_script():
     """Create temporary PowerShell script to launch dashboard."""
     script_content = '''
 # CORTEX Admin Dashboard Server
-$Host.UI.RawUI.WindowTitle = "CORTEX Admin Dashboard - Port 8085"
+$Host.UI.RawUI.WindowTitle = "CORTEX Admin Dashboard - Port 8086"
 
 Write-Host "🚀 CORTEX Admin Dashboard Server" -ForegroundColor Cyan
 Write-Host "=" * 60 -ForegroundColor Cyan
@@ -43,45 +42,41 @@ sys.path.insert(0, str(Path.cwd() / 'src'))
 
 from orchestrators.dashboard_launcher import launch_dashboard
 
-print('🌐 Starting dashboard server...')
+print('🌐 Starting dashboard server on port 8086...')
 print('')
 
-# Launch on first available port 8085-8089
-for port in range(8085, 8090):
-    result = launch_dashboard(port=port, auto_open=True, source='mock')
-    if result['success']:
-        dashboard_url = result['url']
-        dashboard_port = result['port']
-        dashboard_dir = result['directory']
-        server_instance = result['server']
-        
-        print(f'✅ Dashboard running at: {dashboard_url}')
-        print(f'🔌 Port: {dashboard_port}')
-        print(f'📁 Directory: {dashboard_dir}')
+# Launch on fixed port 8086
+result = launch_dashboard(port=8086, auto_open=True, source='mock')
+
+if result['success']:
+    dashboard_url = result['url']
+    dashboard_port = result['port']
+    dashboard_dir = result['directory']
+    server_instance = result['server']
+    
+    print(f'✅ Dashboard running at: {dashboard_url}')
+    print(f'🔌 Port: {dashboard_port}')
+    print(f'📁 Directory: {dashboard_dir}')
+    print('')
+    print('💡 Dashboard opened in your browser')
+    print('🛑 Press Ctrl+C to stop server')
+    print('')
+    print('⏳ Server running...')
+    
+    # Keep server running
+    try:
+        import time
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
         print('')
-        print('💡 Dashboard opened in your browser')
-        print('🛑 Press Ctrl+C to stop server')
-        print('')
-        print('⏳ Server running...')
-        
-        # Keep server running
-        try:
-            import time
-            while True:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            print('')
-            print('🛑 Shutting down server...')
-            server_instance.stop()
-            print('✅ Server stopped')
-        break
-    else:
-        if port < 8089:
-            print(f'⚠️  Port {port} unavailable, trying next...')
-        else:
-            print(f'❌ All ports 8085-8089 are in use')
-            input('Press Enter to close...')
-            sys.exit(1)
+        print('🛑 Shutting down server...')
+        server_instance.stop()
+        print('✅ Server stopped')
+else:
+    print(f'❌ Failed to start dashboard: {result.get(\"error\", \"Unknown error\")}')
+    input('Press Enter to close...')
+    sys.exit(1)
 "@
 
 Write-Host ""
@@ -118,12 +113,12 @@ try:
     print('')
     print('💡 Tips:')
     print('  - Dashboard will open automatically in your browser')
-    print('  - Close the PowerShell window to stop the server')
-    print('  - Server runs on port 8085 (or next available)')
+    print('  ✅ Dashboard server started in separate window')
     print('')
-except Exception as e:
-    print(f'  ❌ Failed to launch: {e}')
-    sys.exit(1)
-
+    print('💡 Dashboard Info:')
+    print('  - URL: http://localhost:8086/ui/index.html?source=mock')
+    print('  - Port: 8086 (fixed)')
+    print('  - Close the PowerShell window to stop the server')
+    print('')
 print('✅ Launch complete - dashboard is running independently')
 print('')
