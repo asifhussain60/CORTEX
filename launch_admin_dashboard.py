@@ -32,6 +32,13 @@ Write-Host "🚀 CORTEX Admin Dashboard Server" -ForegroundColor Cyan
 Write-Host "=" * 60 -ForegroundColor Cyan
 Write-Host ""
 
+# Kill any existing Python processes first
+Write-Host "🧹 Cleaning up existing Python processes..." -ForegroundColor Yellow
+Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force
+Start-Sleep -Seconds 2
+Write-Host "  ✅ Cleanup complete" -ForegroundColor Green
+Write-Host ""
+
 # Add src to Python path and launch
 $env:PYTHONPATH = "$PWD\\src;$env:PYTHONPATH"
 
@@ -93,9 +100,6 @@ print('🚀 CORTEX Admin Dashboard Launcher')
 print('=' * 60)
 print('')
 
-# Kill existing Python processes
-kill_python_processes()
-
 # Create dashboard script
 print('📝 Creating launch script...')
 script_path = create_dashboard_script()
@@ -111,14 +115,14 @@ try:
     )
     print('  ✅ Dashboard server started in separate window')
     print('')
-    print('💡 Tips:')
-    print('  - Dashboard will open automatically in your browser')
-    print('  ✅ Dashboard server started in separate window')
-    print('')
     print('💡 Dashboard Info:')
     print('  - URL: http://localhost:8086/ui/index.html?source=mock')
     print('  - Port: 8086 (fixed)')
     print('  - Close the PowerShell window to stop the server')
     print('')
+except Exception as e:
+    print(f'  ❌ Failed to launch: {e}')
+    sys.exit(1)
+
 print('✅ Launch complete - dashboard is running independently')
 print('')
