@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-12-09T07:22:11.580488",
+  "duration_seconds": 111.201598,
+  "dry_run": false,
+  "summary": {
+    "files_moved": 1,
+    "files_removed": 0,
+    "references_updated": 0,
+    "issues_fixed": 1,
+    "space_freed_mb": 0.0,
+    "errors": 0
+  },
+  "moved_files": [
+    {
+      "from": "fix_test_ids.py",
+      "to": "scripts\\utilities\\fix_test_ids.py"
+    }
+  ],
+  "removed_files": [],
+  "updated_references": [],
+  "validation": {
+    "passed": true,
+    "issues": []
+  },
+  "errors": [],
+  "duplicate_analysis": {
+    "duplicates_found": 122,
+    "safe_to_delete": 0,
+    "needs_review": 61,
+    "duplicates_deleted": 0,
+    "summary": {
+      "duplicate_files": 122,
+      "duplicate_functions": 732,
+      "duplicate_classes": 338,
+      "similar_module_pairs": 1822
+    },
+    "analysis_timestamp": ""
+  }
+}

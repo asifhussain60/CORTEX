@@ -57,20 +57,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-md) 0;
+    padding: 0 0 var(--spacing-xl) 0;
     border-bottom: 1px solid var(--glass-border);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
 }
 
 .dashboard-logo {
-    height: 48px;
+    height: 140px;
     width: auto;
-    filter: drop-shadow(0 2px 8px rgba(0, 212, 255, 0.3));
-    transition: filter var(--transition-base);
+    max-width: 90%;
+    filter: drop-shadow(0 6px 20px rgba(0, 212, 255, 0.5));
+    transition: all var(--transition-base);
 }
 
 .dashboard-logo:hover {
-    filter: drop-shadow(0 4px 12px rgba(0, 212, 255, 0.5));
+    filter: drop-shadow(0 8px 24px rgba(0, 212, 255, 0.7));
+    transform: scale(1.08);
 }
 
 /* ============================================

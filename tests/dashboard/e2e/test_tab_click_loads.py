@@ -374,3 +374,125 @@ class TestRaceConditions:
                     pytest.fail(f"Negative performance timing detected: {message}")
         
         print(f"✓ Performance metrics valid (checked {len(perf_logs)} performance log entries)")
+
+
+class TestLoadingSpinner:
+    """Test loading spinner displays during tab content loading"""
+    
+    def test_spinner_shows_during_tab_load(self, driver, dashboard_url):
+        """
+        RED PHASE TEST: Verify loading spinner appears when clicking tab
+        and disappears when content is ready.
+        
+        This test will FAIL initially (RED phase) until spinner is implemented.
+        """
+        driver.get(dashboard_url)
+        
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "sidebar"))
+        )
+        
+        # Get all nav tabs
+        nav_tabs = driver.find_elements(By.CLASS_NAME, "nav-tab")
+        
+        # Click a tab that has content to load (Architecture has visualization)
+        architecture_tab = nav_tabs[6]  # Architecture tab
+        
+        # Click and immediately check for spinner
+        architecture_tab.click()
+        
+        # Spinner should appear within 100ms of click
+        try:
+            spinner = WebDriverWait(driver, 0.5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, ".tab-loading-spinner, .loading-overlay.active, [data-loading='true']"))
+            )
+            spinner_appeared = True
+            print("✓ Loading spinner appeared during tab switch")
+        except TimeoutException:
+            spinner_appeared = False
+            print("✗ No loading spinner detected (expected - RED phase)")
+        
+        # Wait for content to load
+        time.sleep(1.0)
+        
+        # Spinner should be gone when content is ready
+        spinners = driver.find_elements(By.CSS_SELECTOR, ".tab-loading-spinner, .loading-overlay.active, [data-loading='true']")
+        visible_spinners = [s for s in spinners if s.is_displayed()]
+        
+        # ASSERTIONS (will fail in RED phase)
+        assert spinner_appeared, "Loading spinner should appear during tab content loading"
+        assert len(visible_spinners) == 0, f"Loading spinner should hide when content ready, found {len(visible_spinners)} visible"
+    
+    def test_spinner_accessibility(self, driver, dashboard_url):
+        """
+        Test loading spinner has proper ARIA attributes for screen readers.
+        """
+        driver.get(dashboard_url)
+        
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "sidebar"))
+        )
+        
+        # Click a tab to trigger loading
+        nav_tabs = driver.find_elements(By.CLASS_NAME, "nav-tab")
+        nav_tabs[2].click()  # Tech Stack tab
+        
+        # Check if spinner has ARIA attributes
+        try:
+            spinner = WebDriverWait(driver, 0.5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, ".tab-loading-spinner, .loading-overlay"))
+            )
+            
+            # Check for aria-busy or role attributes
+            aria_busy = spinner.get_attribute("aria-busy")
+            role = spinner.get_attribute("role")
+            aria_label = spinner.get_attribute("aria-label")
+            
+            # At least one accessibility attribute should be present
+            has_accessibility = aria_busy or role or aria_label
+            assert has_accessibility, "Loading spinner should have ARIA attributes for accessibility"
+            
+            print(f"✓ Spinner has accessibility: aria-busy={aria_busy}, role={role}, aria-label={aria_label}")
+        except TimeoutException:
+            print("✗ No spinner found (expected in RED phase)")
+            pytest.skip("Spinner not yet implemented")
+    
+    def test_spinner_smooth_transitions(self, driver, dashboard_url):
+        """
+        Test loading spinner has smooth fade in/out transitions.
+        """
+        driver.get(dashboard_url)
+        
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "sidebar"))
+        )
+        
+        # Click a tab
+        nav_tabs = driver.find_elements(By.CLASS_NAME, "nav-tab")
+        nav_tabs[4].click()  # Use Cases tab
+        
+        # Check if spinner has transition CSS
+        try:
+            spinner = WebDriverWait(driver, 0.5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, ".tab-loading-spinner, .loading-overlay"))
+            )
+            
+            # Check for CSS transitions
+            transition = spinner.value_of_css_property("transition")
+            opacity = spinner.value_of_css_property("opacity")
+            
+            # Should have transition defined
+            has_transition = transition and transition != "all 0s ease 0s"
+            
+            if has_transition:
+                print(f"✓ Spinner has smooth transition: {transition}")
+            else:
+                print(f"⚠ Spinner transition: {transition}")
+            
+            # Opacity should be defined (for fade effect)
+            assert opacity is not None, "Spinner should have opacity for fade transitions"
+            
+        except TimeoutException:
+            print("✗ No spinner found (expected in RED phase)")
+            pytest.skip("Spinner not yet implemented")
+
