@@ -1,8 +1,8 @@
 # 🚀 Dashboard v3 Enhancement - Quick Start
 
 **Branch:** `admin-dashboard` ✅ **Pushed to Remote**  
-**Status:** Planning Complete, Ready for Phase 7.4  
-**Last Updated:** December 8, 2025
+**Status:** Phase 7.5 Complete, Ready for Phase 7.6  
+**Last Updated:** January 6, 2025
 
 ---
 
@@ -38,16 +38,20 @@ code cortex-brain/documents/implementation-guides/dashboard-v3-handoff-instructi
 - Multi-language support (Python, C#, TypeScript, SQL, ColdFusion)
 - Confidence scoring (🟢🟡🔴)
 
-**Phase 7.5: Recommendations Tab** (14 hours)
-- 5 recommendation categories
-- **E2E Test Prioritization** with 8 extensible criteria:
+**Phase 7.5: Recommendations Tab** (14 hours) ✅ COMPLETE
+- 5 recommendation categories: health, performance, security, technical_debt, business_capabilities
+- **RecommendationCollector:** Priority/impact/effort classification (19 tests passing)
+- **E2E Test Prioritization** with 8 extensible criteria (25 tests passing):
   - Code complexity (from heatmap)
   - Risk score (complexity × change frequency)
   - Business value (payment, order keywords)
-  - Regulatory compliance (PCI, GDPR, HIPAA, SOX)
-  - Financial impact
-  - User impact
-  - Dependency risk
+  - Regulatory compliance (PCI-DSS, GDPR, HIPAA, SOX) - auto-promotes to P0
+  - User impact (endpoint traffic)
+  - Data integrity (financial keywords)
+  - External dependency risk
+  - Change frequency (regression risk)
+- Priority levels: P0 (Critical) → P1 (High) → P2 (Medium) → P3 (Low)
+- Configurable weights and thresholds via `e2e-criteria-config.json`
   - Change frequency
 - Priority: P0 (Critical) → P1 (High) → P2 (Medium) → P3 (Low)
 
@@ -72,12 +76,14 @@ code cortex-brain/documents/implementation-guides/dashboard-v3-handoff-instructi
   - ✅ 7.4.1: Business Capability Detector (16 tests)
   - ✅ 7.4.2: Semantic Analyzer (23 tests)
   - ✅ 7.4.3: Narrative Consolidator Integration
-- 📋 **Phase 7.5:** Recommendations Tab (PLANNED)
+- ✅ **Phase 7.5:** Recommendations Tab (COMPLETE - 44 tests passing)
+  - ✅ 7.5.1: Recommendation Collector (19 tests)
+  - ✅ 7.5.2: E2E Test Prioritizer (25 tests)
 - 📋 **Phase 7.6:** Use Cases Tab (PLANNED)
 - 📋 **Phase 7.7:** Integration (PLANNED)
 - 📋 **Phases 8-9:** Tech Stack Advanced (PLANNED)
 
-**Completion:** 28% (7 of 25 days) - Phase 7.4 complete ahead of schedule!
+**Completion:** 33% (8.25 of 25 days) - Phase 7.5 complete ahead of schedule!
 
 ---
 
@@ -94,13 +100,15 @@ code cortex-brain/documents/implementation-guides/dashboard-v3-handoff-instructi
 
 ## 🎯 Next Steps
 
-**Start with Phase 7.4 (Business Capability Intelligence):**
+**Start with Phase 7.6 (Use Cases Tab):**
 
-1. Create `src/dashboard/data/business_capability_detector.py`
-2. Create `src/dashboard/intelligence/semantic_analyzer.py`
-3. Update `src/dashboard/data/narrative_consolidator.py`
-4. Write tests in `tests/dashboard/test_business_capability_detector.py`
-5. Run tests: `pytest tests/dashboard/test_business_capability_detector.py -v`
+1. Create `src/dashboard/intelligence/use_case_generator.py` (AST + pattern matching)
+2. Create `src/dashboard/data/use_case_collector.py` (API + frontend integration)
+3. Write tests in `tests/dashboard/test_use_case_generator.py`
+4. Create frontend `static/js/components/UseCasesTab.js`
+5. Run tests: `pytest tests/dashboard/ -v`
+
+**Phase 7.6 estimated: 14 hours**
 
 **See handoff instructions for complete details.**
 
