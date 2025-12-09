@@ -14,67 +14,15 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Navigation Bar -->
-    <nav id="navbar" class="bg-white shadow-lg">
-        <!-- Navbar will be rendered here by navbar.js component -->
-    </nav>
+    <div id="navbar"></div>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-        <!-- Loading Spinner (hidden by default) -->
-        <div id="loading-spinner" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500"></div>
-        </div>
-
-        <!-- Toast Notifications Container -->
-        <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2">
-            <!-- Toast messages will be appended here -->
-        </div>
-
-        <!-- Page Title -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">Task Management</h1>
-            <p class="text-gray-600">Manage your tasks efficiently with clean architecture</p>
-        </div>
-
-        <!-- Filter and Create Section -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-                <!-- Filter Input -->
-                <div class="flex-1 w-full md:w-auto">
-                    <label for="task-filter" class="block text-sm font-medium text-gray-700 mb-2">
-                        Filter Tasks
-                    </label>
-                    <input 
-                        type="text" 
-                        id="task-filter" 
-                        placeholder="Search by title..."
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                </div>
-
-                <!-- Create Task Button -->
-                <div class="w-full md:w-auto">
-                    <button 
-                        id="create-task-btn"
-                        class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 shadow-md hover:shadow-lg"
-                    >
-                        <span class="inline-block mr-2">+</span> Create Task
-                    </button>
-                </div>
-            </div>
-        </div>
+    <main class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- Task Form Container -->
+        <div id="task-form-container"></div>
 
         <!-- Task List Container -->
-        <div id="task-list-container">
-            <!-- Task list will be rendered here by task-list.js component -->
-        </div>
-
-        <!-- Task Form Modal (hidden by default) -->
-        <div id="task-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
-            <div class="bg-white rounded-lg shadow-2xl max-w-md w-full mx-4 transform transition-all">
-                <!-- Task form will be rendered here by task-form.js component -->
-            </div>
-        </div>
+        <div id="task-list-container"></div>
     </main>
 
     <!-- Footer -->
@@ -93,11 +41,8 @@
         </div>
     </noscript>
 
-    <!-- Core JavaScript Modules (ES6) -->
-    <script type="module" src="js/config.js"></script>
-    <script type="module" src="js/utils/logger.js"></script>
-    <script type="module" src="js/utils/storage.js"></script>
-    <script type="module" src="js/utils/http-client.js"></script>
+    <!-- Application Bootstrap -->
+    <script type="module" src="js/app.js"></script>
     <script type="module" src="js/domain/enums.js"></script>
     <script type="module" src="js/domain/entities.js"></script>
     <script type="module" src="js/infrastructure/mock-db.js"></script>

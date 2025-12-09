@@ -1,317 +1,171 @@
 /**
  * Data Transfer Objects (DTOs)
- * Define data structures for transferring data between layers
+ * Clean data contracts for API communication
  * 
+ * @module application/dtos
  * @author Asif Hussain
  * @version 1.0.0
  */
 
 /**
- * Task Data Transfer Object
+ * Task DTO Factory
  */
-export class TaskDTO {
-    constructor(data = {}) {
-        this.id = data.id || null;
-        this.title = data.title || '';
-        this.description = data.description || '';
-        this.priority = data.priority || 2; // Default to Medium
-        this.status = data.status || 1; // Default to Open
-        this.assignedTo = data.assignedTo || null;
-        this.createdBy = data.createdBy || null;
-        this.createdDate = data.createdDate || null;
-        this.dueDate = data.dueDate || null;
-        this.tags = data.tags || [];
-        this.comments = data.comments || [];
-    }
+export const TaskDto = {
+    /**
+     * Create a new task DTO
+     * @param {Object} data - Task data
+     * @returns {Object} Task DTO
+     */
+    create(data = {}) {
+        return {
+            id: data.id || null,
+            title: data.title || '',
+            isCompleted: data.isCompleted || false,
+            createdAt: data.createdAt || null,
+            updatedAt: data.updatedAt || null,
+            userId: data.userId || null,
+            userName: data.userName || null
+        };
+    },
 
     /**
-     * Create DTO from domain entity
+     * Map Task entity to DTO
      * @param {Task} task - Task entity
-     * @returns {TaskDTO} Task DTO
+     * @param {User} user - Optional user entity
+     * @returns {Object} Task DTO
      */
-    static fromEntity(task) {
-        return new TaskDTO({
+    fromEntity(task, user = null) {
+        return {
             id: task.id,
             title: task.title,
-            description: task.description,
-            priority: task.priority,
-            status: task.status,
-            assignedTo: task.assignedTo,
-            createdBy: task.createdBy,
-            createdDate: task.createdDate,
-            dueDate: task.dueDate,
-            tags: task.tags,
-            comments: task.comments
-        });
-    }
+            isCompleted: task.isCompleted,
+            createdAt: task.createdAt,
+            updatedAt: task.updatedAt,
+            userId: task.userId,
+            userName: user ? user.username : null
+        };
+    },
 
     /**
-     * Convert to plain object
-     * @returns {Object} Plain object
+     * Map DTO to Task entity data
+     * @param {Object} dto - Task DTO
+     * @returns {Object} Task entity data
      */
-    toObject() {
+    toEntity(dto) {
         return {
-            id: this.id,
-            title: this.title,
-            description: this.description,
-            priority: this.priority,
-            status: this.status,
-            assignedTo: this.assignedTo,
-            createdBy: this.createdBy,
-            createdDate: this.createdDate,
-            dueDate: this.dueDate,
-            tags: this.tags,
-            comments: this.comments
+            title: dto.title,
+            isCompleted: dto.isCompleted || false,
+            userId: dto.userId
         };
     }
-}
+};
 
 /**
- * User Data Transfer Object
+ * User DTO Factory
  */
-export class UserDTO {
-    constructor(data = {}) {
-        this.id = data.id || null;
-        this.username = data.username || '';
-        this.email = data.email || '';
-        this.role = data.role || 1; // Default to User
-        this.fullName = data.fullName || '';
-        this.createdDate = data.createdDate || null;
-        this.isActive = data.isActive !== undefined ? data.isActive : true;
-    }
+export const UserDto = {
+    /**
+     * Create a new user DTO
+     * @param {Object} data - User data
+     * @returns {Object} User DTO
+     */
+    create(data = {}) {
+        return {
+            id: data.id || null,
+            username: data.username || '',
+            email: data.email || '',
+            roleName: data.roleName || 'User',
+            createdAt: data.createdAt || null
+        };
+    },
 
     /**
-     * Create DTO from domain entity
+     * Map User entity to DTO (excludes password)
      * @param {User} user - User entity
-     * @returns {UserDTO} User DTO
+     * @param {Role} role - Optional role entity
+     * @returns {Object} User DTO
      */
-    static fromEntity(user) {
-        return new UserDTO({
+    fromEntity(user, role = null) {
+        return {
             id: user.id,
             username: user.username,
             email: user.email,
-            role: user.role,
-            fullName: user.fullName,
-            createdDate: user.createdDate,
-            isActive: user.isActive
-        });
-    }
-
-    /**
-     * Convert to plain object
-     * @returns {Object} Plain object
-     */
-    toObject() {
-        return {
-            id: this.id,
-            username: this.username,
-            email: this.email,
-            role: this.role,
-            fullName: this.fullName,
-            createdDate: this.createdDate,
-            isActive: this.isActive
+            roleName: role ? role.name : 'User',
+            createdAt: user.createdAt
         };
     }
-}
+};
 
 /**
  * Login Request DTO
  */
-export class LoginDTO {
-    constructor(username, password) {
-        this.username = username || '';
-        this.password = password || '';
-    }
-
+export const LoginDto = {
     /**
-     * Validate login data
-     * @returns {Object} Validation result
+     * Create login DTO
+     * @param {string} usernameOrEmail - Username or email
+     * @param {string} password - Password
+     * @returns {Object} Login DTO
      */
-    validate() {
-        const errors = [];
-
-        if (!this.username || this.username.trim() === '') {
-            errors.push('Username is required');
-        }
-
-        if (!this.password || this.password.trim() === '') {
-            errors.push('Password is required');
-        }
-
+    create(usernameOrEmail, password) {
         return {
-            isValid: errors.length === 0,
-            errors
+            usernameOrEmail: usernameOrEmail || '',
+            password: password || ''
         };
     }
-}
+};
 
 /**
  * Register Request DTO
  */
-export class RegisterDTO {
-    constructor(data = {}) {
-        this.username = data.username || '';
-        this.email = data.email || '';
-        this.password = data.password || '';
-        this.confirmPassword = data.confirmPassword || '';
-        this.fullName = data.fullName || '';
-        this.role = data.role || 1; // Default to User
-    }
-
+export const RegisterDto = {
     /**
-     * Validate registration data
-     * @returns {Object} Validation result
+     * Create register DTO
+     * @param {Object} data - Registration data
+     * @returns {Object} Register DTO
      */
-    validate() {
-        const errors = [];
-
-        if (!this.username || this.username.trim() === '') {
-            errors.push('Username is required');
-        } else if (this.username.length < 3) {
-            errors.push('Username must be at least 3 characters');
-        } else if (this.username.length > 50) {
-            errors.push('Username must be 50 characters or less');
-        }
-
-        if (!this.email || this.email.trim() === '') {
-            errors.push('Email is required');
-        } else {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(this.email)) {
-                errors.push('Invalid email format');
-            }
-        }
-
-        if (!this.password || this.password.trim() === '') {
-            errors.push('Password is required');
-        }
-
-        if (this.password !== this.confirmPassword) {
-            errors.push('Passwords do not match');
-        }
-
+    create(data = {}) {
         return {
-            isValid: errors.length === 0,
-            errors
+            username: data.username || '',
+            email: data.email || '',
+            password: data.password || '',
+            confirmPassword: data.confirmPassword || ''
         };
     }
-}
+};
 
 /**
  * Authentication Response DTO
  */
-export class AuthResponseDTO {
-    constructor(token, user) {
-        this.token = token;
-        this.user = UserDTO.fromEntity(user);
-        this.timestamp = new Date();
-    }
-
+export const AuthResponseDto = {
     /**
-     * Convert to plain object
-     * @returns {Object} Plain object
+     * Create auth response DTO
+     * @param {Object} user - User DTO
+     * @param {string} token - JWT token
+     * @returns {Object} Auth response DTO
      */
-    toObject() {
+    create(user, token) {
         return {
-            token: this.token,
-            user: this.user.toObject(),
-            timestamp: this.timestamp
+            user: user,
+            token: token,
+            expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString() // 15 minutes
         };
     }
-}
+};
 
 /**
  * Task Filter DTO
  */
-export class TaskFilterDTO {
-    constructor(data = {}) {
-        this.status = data.status || null;
-        this.priority = data.priority || null;
-        this.assignedTo = data.assignedTo || null;
-        this.createdBy = data.createdBy || null;
-        this.tag = data.tag || null;
-        this.overdue = data.overdue || false;
-        this.searchKeyword = data.searchKeyword || null;
-    }
-
+export const TaskFilterDto = {
     /**
-     * Check if any filters are active
-     * @returns {boolean} True if filters active
+     * Create task filter DTO
+     * @param {Object} filters - Filter criteria
+     * @returns {Object} Task filter DTO
      */
-    hasFilters() {
-        return this.status !== null ||
-               this.priority !== null ||
-               this.assignedTo !== null ||
-               this.createdBy !== null ||
-               this.tag !== null ||
-               this.overdue ||
-               this.searchKeyword !== null;
-    }
-
-    /**
-     * Convert to repository filter object
-     * @returns {Object} Filter object
-     */
-    toRepositoryFilter() {
-        const filter = {};
-        
-        if (this.status !== null) filter.status = this.status;
-        if (this.priority !== null) filter.priority = this.priority;
-        if (this.assignedTo) filter.assignedTo = this.assignedTo;
-        if (this.createdBy) filter.createdBy = this.createdBy;
-        if (this.tag) filter.tag = this.tag;
-        if (this.overdue) filter.overdue = true;
-
-        return filter;
-    }
-}
-
-/**
- * Password Change DTO
- */
-export class PasswordChangeDTO {
-    constructor(currentPassword, newPassword, confirmPassword) {
-        this.currentPassword = currentPassword || '';
-        this.newPassword = newPassword || '';
-        this.confirmPassword = confirmPassword || '';
-    }
-
-    /**
-     * Validate password change data
-     * @returns {Object} Validation result
-     */
-    validate() {
-        const errors = [];
-
-        if (!this.currentPassword) {
-            errors.push('Current password is required');
-        }
-
-        if (!this.newPassword) {
-            errors.push('New password is required');
-        }
-
-        if (this.newPassword !== this.confirmPassword) {
-            errors.push('New passwords do not match');
-        }
-
-        if (this.currentPassword === this.newPassword) {
-            errors.push('New password must be different from current password');
-        }
-
+    create(filters = {}) {
         return {
-            isValid: errors.length === 0,
-            errors
+            userId: filters.userId || null,
+            isCompleted: filters.isCompleted !== undefined ? filters.isCompleted : null,
+            searchTerm: filters.searchTerm || ''
         };
     }
-}
-
-export default {
-    TaskDTO,
-    UserDTO,
-    LoginDTO,
-    RegisterDTO,
-    AuthResponseDTO,
-    TaskFilterDTO,
-    PasswordChangeDTO
 };

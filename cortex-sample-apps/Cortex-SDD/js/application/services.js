@@ -1,579 +1,370 @@
 /**
- * Application Services
- * Business logic and use case orchestration
+ * Application Services Layer
+ * Business logic and authorization
  * 
+ * @module application/services
  * @author Asif Hussain
  * @version 1.0.0
  */
 
-import { Logger } from '../utils/logger.js';
-import { TaskRepository, UserRepository } from '../infrastructure/repositories.js';
-import { PasswordHasher, JWTManager, AuthManager, AuthorizationHelper } from '../infrastructure/security.js';
-import { TaskValidator, UserValidator } from './validators.js';
-import { TaskDTO, UserDTO, AuthResponseDTO, TaskFilterDTO } from './dtos.js';
-import { Status, Role } from '../domain/enums.js';
-import { Comment } from '../domain/entities.js';
+import { TaskRepository, UserRepository, RoleRepository } from '../infrastructure/repositories.js';
+import { JwtSimulator, PasswordHasher } from '../infrastructure/security.js';
+import { TaskDto, UserDto, AuthResponseDto } from './dtos.js';
+import { TaskValidator, LoginValidator, RegisterValidator } from './validators.js';
+import { UserRole } from '../domain/enums.js';
 
 /**
  * Task Service
- * Manages task-related business logic
+ * Handles task business logic and authorization
  */
 export class TaskService {
     constructor() {
-        this.taskRepo = new TaskRepository();
-        this.userRepo = new UserRepository();
-        Logger.info('TaskService initialized');
+        this.taskRepository = new TaskRepository();
+        this.userRepository = new UserRepository();
     }
 
     /**
-     * Get all tasks
-     * @returns {Promise<TaskDTO[]>} Array of task DTOs
+     * Get all tasks for a user
+     * @param {number} userId - User ID
+     * @param {Object} filters - Optional filters
+     * @returns {Array<Object>} Task DTOs
      */
-    async getAllTasks() {
-        Logger.debug('TaskService.getAllTasks called');
-        const tasks = await this.taskRepo.getAll();
-        return tasks.map(t => TaskDTO.fromEntity(t));
+    async getAllTasks(userId, filters = {}) {
+        const user = await this.userRepository.getById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        let tasks;
+        
+        // Admin can see all tasks
+        if (user.roleId === UserRole.ADMIN) {
+            tasks = await this.taskRepository.getAll();
+        } else {
+            // Regular users see only their tasks
+            tasks = await this.taskRepository.getByUserId(userId);
+        }
+
+        // Apply filters
+        if (filters.isCompleted !== undefined && filters.isCompleted !== null) {
+            tasks = tasks.filter(t => t.isCompleted === filters.isCompleted);
+        }
+
+        if (filters.searchTerm) {
+            const searchLower = filters.searchTerm.toLowerCase();
+            tasks = tasks.filter(t => t.title.toLowerCase().includes(searchLower));
+        }
+
+        // Map to DTOs
+        return tasks.map(task => TaskDto.fromEntity(task));
     }
 
     /**
      * Get task by ID
-     * @param {string} id - Task ID
-     * @returns {Promise<TaskDTO|null>} Task DTO or null
+     * @param {number} taskId - Task ID
+     * @param {number} userId - Current user ID
+     * @returns {Object} Task DTO
      */
-    async getTaskById(id) {
-        Logger.debug(`TaskService.getTaskById called: ${id}`);
-        
-        if (!id) {
-            throw new Error('Task ID is required');
+    async getTaskById(taskId, userId) {
+        const task = await this.taskRepository.getById(taskId);
+        if (!task) {
+            throw new Error('Task not found');
         }
 
-        const task = await this.taskRepo.getById(id);
-        return task ? TaskDTO.fromEntity(task) : null;
+        // Authorization check
+        const user = await this.userRepository.getById(userId);
+        if (user.roleId !== UserRole.ADMIN && task.userId !== userId) {
+            throw new Error('Unauthorized: You can only access your own tasks');
+        }
+
+        return TaskDto.fromEntity(task);
     }
 
     /**
-     * Get tasks with filters
-     * @param {TaskFilterDTO} filterDto - Filter criteria
-     * @returns {Promise<TaskDTO[]>} Filtered tasks
+     * Create a new task
+     * @param {Object} taskDto - Task DTO
+     * @param {number} userId - Current user ID
+     * @returns {Object} Created task DTO
      */
-    async getTasks(filterDto) {
-        Logger.debug('TaskService.getTasks called', filterDto);
-
-        // Validate filters
-        const validation = TaskValidator.validateFilter(filterDto.toRepositoryFilter());
+    async createTask(taskDto, userId) {
+        // Validation
+        const validation = TaskValidator.validate(taskDto);
         if (!validation.isValid) {
-            throw new Error(`Invalid filters: ${validation.errors.join(', ')}`);
+            throw new Error(`Validation failed: ${validation.errors.map(e => e.message).join(', ')}`);
         }
 
-        // Get filtered tasks
-        let tasks = await this.taskRepo.getFiltered(filterDto.toRepositoryFilter());
-
-        // Apply search if provided
-        if (filterDto.searchKeyword) {
-            tasks = tasks.filter(t => 
-                t.title.toLowerCase().includes(filterDto.searchKeyword.toLowerCase()) ||
-                t.description.toLowerCase().includes(filterDto.searchKeyword.toLowerCase()) ||
-                t.tags.some(tag => tag.toLowerCase().includes(filterDto.searchKeyword.toLowerCase()))
-            );
-        }
-
-        return tasks.map(t => TaskDTO.fromEntity(t));
-    }
-
-    /**
-     * Get tasks assigned to user
-     * @param {string} userId - User ID
-     * @returns {Promise<TaskDTO[]>} User's tasks
-     */
-    async getMyTasks(userId) {
-        Logger.debug(`TaskService.getMyTasks called: ${userId}`);
-        
-        if (!userId) {
-            throw new Error('User ID is required');
-        }
-
-        const tasks = await this.taskRepo.getByAssignee(userId);
-        return tasks.map(t => TaskDTO.fromEntity(t));
-    }
-
-    /**
-     * Create new task
-     * @param {TaskDTO} taskDto - Task data
-     * @param {string} currentUserId - Current user ID
-     * @returns {Promise<TaskDTO>} Created task
-     */
-    async createTask(taskDto, currentUserId) {
-        Logger.debug('TaskService.createTask called');
-
-        // Validate input
-        const validation = TaskValidator.validateCreate(taskDto.toObject());
-        if (!validation.isValid) {
-            const errorMsg = `Validation failed: ${validation.errors.join(', ')}`;
-            Logger.warn(errorMsg);
-            throw new Error(errorMsg);
-        }
-
-        // Check if assignee exists (if provided)
-        if (taskDto.assignedTo) {
-            const assignee = await this.userRepo.getById(taskDto.assignedTo);
-            if (!assignee) {
-                throw new Error('Assigned user does not exist');
-            }
-            if (!assignee.isActive) {
-                throw new Error('Cannot assign task to inactive user');
-            }
-        }
-
-        // Set creator
-        taskDto.createdBy = currentUserId;
+        // Set user ID
+        const taskData = TaskDto.toEntity(taskDto);
+        taskData.userId = userId;
 
         // Create task
-        const task = await this.taskRepo.create(taskDto.toObject());
-        Logger.info(`Task created: ${task.id}`);
-
-        return TaskDTO.fromEntity(task);
+        const task = await this.taskRepository.create(taskData);
+        return TaskDto.fromEntity(task);
     }
 
     /**
-     * Update existing task
-     * @param {string} id - Task ID
-     * @param {Object} updates - Fields to update
-     * @param {string} currentUserId - Current user ID
-     * @returns {Promise<TaskDTO|null>} Updated task
+     * Update an existing task
+     * @param {number} taskId - Task ID
+     * @param {Object} taskDto - Updated task DTO
+     * @param {number} userId - Current user ID
+     * @returns {Object} Updated task DTO
      */
-    async updateTask(id, updates, currentUserId) {
-        Logger.debug(`TaskService.updateTask called: ${id}`);
-
-        // Validate ID
-        if (!id) {
-            throw new Error('Task ID is required');
-        }
-
-        // Validate updates
-        const validation = TaskValidator.validateUpdate(updates);
-        if (!validation.isValid) {
-            const errorMsg = `Validation failed: ${validation.errors.join(', ')}`;
-            Logger.warn(errorMsg);
-            throw new Error(errorMsg);
-        }
-
-        // Check task exists
-        const existingTask = await this.taskRepo.getById(id);
+    async updateTask(taskId, taskDto, userId) {
+        // Get existing task
+        const existingTask = await this.taskRepository.getById(taskId);
         if (!existingTask) {
             throw new Error('Task not found');
         }
 
-        // Check authorization
-        const currentUser = await this.userRepo.getById(currentUserId);
-        if (!AuthorizationHelper.canEditTask(currentUser, existingTask)) {
-            throw new Error('Not authorized to edit this task');
+        // Authorization check
+        const user = await this.userRepository.getById(userId);
+        if (user.roleId !== UserRole.ADMIN && existingTask.userId !== userId) {
+            throw new Error('Unauthorized: You can only modify your own tasks');
         }
 
-        // Check assignee exists (if changing)
-        if (updates.assignedTo) {
-            const assignee = await this.userRepo.getById(updates.assignedTo);
-            if (!assignee) {
-                throw new Error('Assigned user does not exist');
-            }
-            if (!assignee.isActive) {
-                throw new Error('Cannot assign task to inactive user');
-            }
+        // Validation
+        const validation = TaskValidator.validate(taskDto);
+        if (!validation.isValid) {
+            throw new Error(`Validation failed: ${validation.errors.map(e => e.message).join(', ')}`);
         }
 
         // Update task
-        const updated = await this.taskRepo.update(id, updates);
-        Logger.info(`Task updated: ${id}`);
-
-        return updated ? TaskDTO.fromEntity(updated) : null;
+        const updateData = {
+            title: taskDto.title,
+            isCompleted: taskDto.isCompleted
+        };
+        const updatedTask = await this.taskRepository.update(taskId, updateData);
+        return TaskDto.fromEntity(updatedTask);
     }
 
     /**
-     * Delete task
-     * @param {string} id - Task ID
-     * @param {string} currentUserId - Current user ID
-     * @returns {Promise<boolean>} True if deleted
+     * Delete a task
+     * @param {number} taskId - Task ID
+     * @param {number} userId - Current user ID
+     * @returns {boolean} Success
      */
-    async deleteTask(id, currentUserId) {
-        Logger.debug(`TaskService.deleteTask called: ${id}`);
-
-        // Validate ID
-        if (!id) {
-            throw new Error('Task ID is required');
-        }
-
-        // Check task exists
-        const existingTask = await this.taskRepo.getById(id);
+    async deleteTask(taskId, userId) {
+        // Get existing task
+        const existingTask = await this.taskRepository.getById(taskId);
         if (!existingTask) {
             throw new Error('Task not found');
         }
 
-        // Check authorization
-        const currentUser = await this.userRepo.getById(currentUserId);
-        if (!AuthorizationHelper.canDeleteTask(currentUser, existingTask)) {
-            throw new Error('Not authorized to delete this task');
+        // Authorization check
+        const user = await this.userRepository.getById(userId);
+        if (user.roleId !== UserRole.ADMIN && existingTask.userId !== userId) {
+            throw new Error('Unauthorized: You can only delete your own tasks');
         }
 
-        // Delete task
-        const result = await this.taskRepo.delete(id);
-        Logger.info(`Task deleted: ${id}`);
-
-        return result;
+        return await this.taskRepository.delete(taskId);
     }
 
     /**
-     * Add comment to task
-     * @param {string} taskId - Task ID
-     * @param {string} commentText - Comment text
-     * @param {string} userId - User ID
-     * @returns {Promise<TaskDTO>} Updated task
+     * Toggle task completion status
+     * @param {number} taskId - Task ID
+     * @param {number} userId - Current user ID
+     * @returns {Object} Updated task DTO
      */
-    async addComment(taskId, commentText, userId) {
-        Logger.debug(`TaskService.addComment called: ${taskId}`);
+    async toggleTaskCompletion(taskId, userId) {
+        const task = await this.taskRepository.getById(taskId);
+        if (!task) {
+            throw new Error('Task not found');
+        }
 
-        // Validate inputs
-        if (!taskId) throw new Error('Task ID is required');
-        if (!commentText || commentText.trim() === '') throw new Error('Comment text is required');
-        if (!userId) throw new Error('User ID is required');
+        // Authorization check
+        const user = await this.userRepository.getById(userId);
+        if (user.roleId !== UserRole.ADMIN && task.userId !== userId) {
+            throw new Error('Unauthorized: You can only modify your own tasks');
+        }
 
-        // Get task
-        const task = await this.taskRepo.getById(taskId);
-        if (!task) throw new Error('Task not found');
-
-        // Create comment
-        const comment = new Comment(commentText, userId);
-        task.addComment(comment);
-
-        // Save
-        await this.taskRepo.update(taskId, { comments: task.comments });
-        Logger.info(`Comment added to task: ${taskId}`);
-
-        return TaskDTO.fromEntity(task);
-    }
-
-    /**
-     * Get task statistics
-     * @returns {Promise<Object>} Statistics
-     */
-    async getStatistics() {
-        Logger.debug('TaskService.getStatistics called');
-
-        const allTasks = await this.taskRepo.getAll();
-
-        const stats = {
-            total: allTasks.length,
-            byStatus: {},
-            byPriority: {},
-            overdue: allTasks.filter(t => t.isOverdue()).length,
-            completed: allTasks.filter(t => t.isCompleted()).length,
-            completionRate: 0
-        };
-
-        // Count by status
-        allTasks.forEach(task => {
-            stats.byStatus[task.status] = (stats.byStatus[task.status] || 0) + 1;
-            stats.byPriority[task.priority] = (stats.byPriority[task.priority] || 0) + 1;
+        const updatedTask = await this.taskRepository.update(taskId, {
+            isCompleted: !task.isCompleted
         });
-
-        // Calculate completion rate
-        if (stats.total > 0) {
-            stats.completionRate = Math.round((stats.completed / stats.total) * 100);
-        }
-
-        return stats;
+        return TaskDto.fromEntity(updatedTask);
     }
 }
 
 /**
  * Authentication Service
- * Manages authentication and user registration
+ * Handles user authentication and authorization
  */
 export class AuthService {
     constructor() {
-        this.userRepo = new UserRepository();
-        Logger.info('AuthService initialized');
+        this.userRepository = new UserRepository();
+        this.roleRepository = new RoleRepository();
+        this.jwtSimulator = new JwtSimulator();
+        this.passwordHasher = new PasswordHasher();
     }
 
     /**
-     * Authenticate user
-     * @param {string} username - Username
-     * @param {string} password - Password
-     * @returns {Promise<AuthResponseDTO>} Authentication result
+     * Login user
+     * @param {Object} loginDto - Login credentials
+     * @returns {Object} Auth response DTO
      */
-    async login(username, password) {
-        Logger.debug(`AuthService.login called: ${username}`);
-
-        // Validate input
-        const validation = UserValidator.validateLogin(username, password);
+    async login(loginDto) {
+        // Validation
+        const validation = LoginValidator.validate(loginDto);
         if (!validation.isValid) {
-            const errorMsg = `Validation failed: ${validation.errors.join(', ')}`;
-            Logger.warn(errorMsg);
-            throw new Error(errorMsg);
+            throw new Error(`Validation failed: ${validation.errors.map(e => e.message).join(', ')}`);
         }
 
-        // Find user
-        const user = await this.userRepo.getByUsername(username);
+        // Find user by username or email
+        let user = await this.userRepository.getByUsername(loginDto.usernameOrEmail);
         if (!user) {
-            Logger.warn(`Login failed: User not found - ${username}`);
-            throw new Error('Invalid username or password');
+            user = await this.userRepository.getByEmail(loginDto.usernameOrEmail);
         }
 
-        // Check if user is active
-        if (!user.isActive) {
-            Logger.warn(`Login failed: User inactive - ${username}`);
-            throw new Error('User account is inactive');
+        if (!user) {
+            throw new Error('Invalid credentials');
         }
 
         // Verify password
-        const passwordValid = PasswordHasher.verify(password, user.passwordHash);
-        if (!passwordValid) {
-            Logger.warn(`Login failed: Invalid password - ${username}`);
-            throw new Error('Invalid username or password');
+        const isValid = await this.passwordHasher.verify(loginDto.password, user.passwordHash);
+        if (!isValid) {
+            throw new Error('Invalid credentials');
         }
 
-        // Generate token
-        const token = JWTManager.generate({
+        // Get role
+        const role = await this.roleRepository.getById(user.roleId);
+
+        // Generate JWT token
+        const token = this.jwtSimulator.generate({
             userId: user.id,
             username: user.username,
-            role: user.role
+            email: user.email,
+            roleId: user.roleId,
+            roleName: role.name
         });
 
-        // Save authentication state
-        AuthManager.saveAuth(token, user);
-
-        Logger.info(`User logged in: ${username}`);
-        return new AuthResponseDTO(token, user);
+        // Create response
+        const userDto = UserDto.fromEntity(user, role);
+        return AuthResponseDto.create(userDto, token);
     }
 
     /**
      * Register new user
-     * @param {RegisterDTO} registerDto - Registration data
-     * @returns {Promise<AuthResponseDTO>} Registration result
+     * @param {Object} registerDto - Registration data
+     * @returns {Object} Auth response DTO
      */
     async register(registerDto) {
-        Logger.debug('AuthService.register called', { username: registerDto.username });
-
-        // Validate input
-        const validation = UserValidator.validateRegister(registerDto);
+        // Validation
+        const validation = RegisterValidator.validate(registerDto);
         if (!validation.isValid) {
-            const errorMsg = `Validation failed: ${validation.errors.join(', ')}`;
-            Logger.warn(errorMsg);
-            throw new Error(errorMsg);
+            throw new Error(`Validation failed: ${validation.errors.map(e => e.message).join(', ')}`);
         }
 
         // Check if username exists
-        const existingUsername = await this.userRepo.getByUsername(registerDto.username);
+        const existingUsername = await this.userRepository.getByUsername(registerDto.username);
         if (existingUsername) {
             throw new Error('Username already exists');
         }
 
         // Check if email exists
-        const existingEmail = await this.userRepo.getByEmail(registerDto.email);
+        const existingEmail = await this.userRepository.getByEmail(registerDto.email);
         if (existingEmail) {
             throw new Error('Email already exists');
         }
 
         // Hash password
-        const passwordHash = PasswordHasher.hash(registerDto.password);
+        const passwordHash = await this.passwordHasher.hash(registerDto.password);
 
-        // Create user
+        // Create user with default User role
         const userData = {
             username: registerDto.username,
             email: registerDto.email,
             passwordHash: passwordHash,
-            role: registerDto.role || Role.User,
-            fullName: registerDto.fullName
+            roleId: UserRole.USER
         };
 
-        const user = await this.userRepo.create(userData);
+        const user = await this.userRepository.create(userData);
+        const role = await this.roleRepository.getById(user.roleId);
 
-        // Generate token
-        const token = JWTManager.generate({
+        // Generate JWT token
+        const token = this.jwtSimulator.generate({
             userId: user.id,
             username: user.username,
-            role: user.role
+            email: user.email,
+            roleId: user.roleId,
+            roleName: role.name
         });
 
-        // Save authentication state
-        AuthManager.saveAuth(token, user);
-
-        Logger.info(`User registered: ${user.username}`);
-        return new AuthResponseDTO(token, user);
+        // Create response
+        const userDto = UserDto.fromEntity(user, role);
+        return AuthResponseDto.create(userDto, token);
     }
 
     /**
-     * Logout current user
+     * Validate JWT token
+     * @param {string} token - JWT token
+     * @returns {Object} Token payload
      */
-    logout() {
-        Logger.debug('AuthService.logout called');
-        AuthManager.clearAuth();
-        Logger.info('User logged out');
+    validateToken(token) {
+        return this.jwtSimulator.validate(token);
     }
 
     /**
-     * Get current authenticated user
-     * @returns {UserDTO|null} Current user or null
+     * Get current user from token
+     * @param {string} token - JWT token
+     * @returns {Object} User DTO
      */
-    getCurrentUser() {
-        Logger.debug('AuthService.getCurrentUser called');
-        const user = AuthManager.getCurrentUser();
-        return user ? new UserDTO(user) : null;
-    }
+    async getCurrentUser(token) {
+        const payload = this.validateToken(token);
+        if (!payload) {
+            throw new Error('Invalid token');
+        }
 
-    /**
-     * Check if user is authenticated
-     * @returns {boolean} True if authenticated
-     */
-    isAuthenticated() {
-        return AuthManager.isAuthenticated();
-    }
-
-    /**
-     * Refresh authentication token
-     * @returns {boolean} True if refreshed
-     */
-    refreshToken() {
-        return AuthManager.refreshTokenIfNeeded();
-    }
-
-    /**
-     * Change user password
-     * @param {string} userId - User ID
-     * @param {string} currentPassword - Current password
-     * @param {string} newPassword - New password
-     * @returns {Promise<boolean>} True if changed
-     */
-    async changePassword(userId, currentPassword, newPassword) {
-        Logger.debug(`AuthService.changePassword called: ${userId}`);
-
-        // Get user
-        const user = await this.userRepo.getById(userId);
+        const user = await this.userRepository.getById(payload.userId);
         if (!user) {
             throw new Error('User not found');
         }
 
-        // Verify current password
-        const passwordValid = PasswordHasher.verify(currentPassword, user.passwordHash);
-        if (!passwordValid) {
-            throw new Error('Current password is incorrect');
-        }
-
-        // Validate new password
-        const validation = PasswordHasher.validateStrength(newPassword);
-        if (!validation.isValid) {
-            throw new Error(`Password validation failed: ${validation.errors.join(', ')}`);
-        }
-
-        // Hash new password
-        const newPasswordHash = PasswordHasher.hash(newPassword);
-
-        // Update user
-        await this.userRepo.update(userId, { passwordHash: newPasswordHash });
-
-        Logger.info(`Password changed for user: ${userId}`);
-        return true;
+        const role = await this.roleRepository.getById(user.roleId);
+        return UserDto.fromEntity(user, role);
     }
 }
 
 /**
  * User Service
- * Manages user-related operations
+ * Handles user management operations
  */
 export class UserService {
     constructor() {
-        this.userRepo = new UserRepository();
-        Logger.info('UserService initialized');
-    }
-
-    /**
-     * Get all users
-     * @returns {Promise<UserDTO[]>} Array of users
-     */
-    async getAllUsers() {
-        Logger.debug('UserService.getAllUsers called');
-        const users = await this.userRepo.getAll();
-        return users.map(u => UserDTO.fromEntity(u));
+        this.userRepository = new UserRepository();
+        this.roleRepository = new RoleRepository();
     }
 
     /**
      * Get user by ID
-     * @param {string} id - User ID
-     * @returns {Promise<UserDTO|null>} User DTO or null
+     * @param {number} userId - User ID
+     * @returns {Object} User DTO
      */
-    async getUserById(id) {
-        Logger.debug(`UserService.getUserById called: ${id}`);
-        const user = await this.userRepo.getById(id);
-        return user ? UserDTO.fromEntity(user) : null;
+    async getUserById(userId) {
+        const user = await this.userRepository.getById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const role = await this.roleRepository.getById(user.roleId);
+        return UserDto.fromEntity(user, role);
     }
 
     /**
-     * Get active users
-     * @returns {Promise<UserDTO[]>} Active users
+     * Get all users (admin only)
+     * @param {number} currentUserId - Current user ID
+     * @returns {Array<Object>} User DTOs
      */
-    async getActiveUsers() {
-        Logger.debug('UserService.getActiveUsers called');
-        const users = await this.userRepo.getActive();
-        return users.map(u => UserDTO.fromEntity(u));
-    }
-
-    /**
-     * Update user profile
-     * @param {string} id - User ID
-     * @param {Object} updates - Updates
-     * @param {string} currentUserId - Current user ID
-     * @returns {Promise<UserDTO|null>} Updated user
-     */
-    async updateUser(id, updates, currentUserId) {
-        Logger.debug(`UserService.updateUser called: ${id}`);
-
-        // Validate updates
-        const validation = UserValidator.validateUpdate(updates);
-        if (!validation.isValid) {
-            throw new Error(`Validation failed: ${validation.errors.join(', ')}`);
+    async getAllUsers(currentUserId) {
+        const currentUser = await this.userRepository.getById(currentUserId);
+        if (currentUser.roleId !== UserRole.ADMIN) {
+            throw new Error('Unauthorized: Admin access required');
         }
 
-        // Check authorization (users can only update themselves unless admin)
-        const currentUser = await this.userRepo.getById(currentUserId);
-        if (id !== currentUserId && !AuthorizationHelper.canManageUsers(currentUser)) {
-            throw new Error('Not authorized to update this user');
-        }
-
-        // Update user
-        const updated = await this.userRepo.update(id, updates);
-        Logger.info(`User updated: ${id}`);
-
-        return updated ? UserDTO.fromEntity(updated) : null;
-    }
-
-    /**
-     * Deactivate user
-     * @param {string} id - User ID
-     * @param {string} currentUserId - Current user ID
-     * @returns {Promise<boolean>} True if deactivated
-     */
-    async deactivateUser(id, currentUserId) {
-        Logger.debug(`UserService.deactivateUser called: ${id}`);
-
-        // Check authorization
-        const currentUser = await this.userRepo.getById(currentUserId);
-        if (!AuthorizationHelper.canManageUsers(currentUser)) {
-            throw new Error('Not authorized to deactivate users');
-        }
-
-        // Cannot deactivate self
-        if (id === currentUserId) {
-            throw new Error('Cannot deactivate your own account');
-        }
-
-        // Deactivate
-        const updated = await this.userRepo.update(id, { isActive: false });
-        Logger.info(`User deactivated: ${id}`);
-
-        return updated !== null;
+        const users = await this.userRepository.getAll();
+        const roles = await this.roleRepository.getAll();
+        
+        return users.map(user => {
+            const role = roles.find(r => r.id === user.roleId);
+            return UserDto.fromEntity(user, role);
+        });
     }
 }
-
-export default {
-    TaskService,
-    AuthService,
-    UserService
-};

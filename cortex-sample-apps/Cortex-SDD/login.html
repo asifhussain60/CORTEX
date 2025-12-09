@@ -12,42 +12,37 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
 </head>
-<body class="bg-gradient-to-br from-blue-500 to-purple-600 min-h-screen flex items-center justify-center">
-    <!-- Loading Spinner (hidden by default) -->
-    <div id="loading-spinner" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-white"></div>
-    </div>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Authentication Form Container -->
+    <div id="auth-form-container"></div>
 
-    <!-- Toast Notifications Container -->
-    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2">
-        <!-- Toast messages will be appended here -->
-    </div>
-
-    <!-- Authentication Container -->
-    <div class="w-full max-w-md mx-4">
-        <!-- Logo and Title -->
-        <div class="text-center mb-8">
-            <h1 class="text-5xl font-bold text-white mb-2">Cortex-SDD</h1>
-            <p class="text-blue-100">Task Management with Clean Architecture</p>
+    <!-- NoScript Warning -->
+    <noscript>
+        <div style="padding: 20px; background: #fee; border: 2px solid #c00; margin: 20px; text-align: center;">
+            <strong>JavaScript is disabled!</strong>
+            <p>This application requires JavaScript to function. Please enable JavaScript in your browser settings.</p>
         </div>
+    </noscript>
 
-        <!-- Auth Form Card -->
-        <div class="bg-white rounded-lg shadow-2xl overflow-hidden">
-            <!-- Tab Switcher -->
-            <div class="flex border-b border-gray-200">
-                <button 
-                    id="login-tab"
-                    class="flex-1 py-4 text-center font-semibold text-blue-600 border-b-2 border-blue-600 transition"
-                    onclick="showLoginForm()"
-                >
-                    Login
-                </button>
-                <button 
-                    id="register-tab"
-                    class="flex-1 py-4 text-center font-semibold text-gray-500 hover:text-gray-700 transition"
-                    onclick="showRegisterForm()"
-                >
-                    Register
+    <!-- Auth Form Bootstrap -->
+    <script type="module">
+        import { AuthForm } from './js/presentation/components/auth-form.js';
+        import { MockDatabase } from './js/infrastructure/mock-db.js';
+        import { StorageService } from './js/utils/storage.js';
+        
+        // Initialize database
+        const storageService = new StorageService();
+        const isSeeded = storageService.getItem('dbSeeded');
+        if (!isSeeded) {
+            await MockDatabase.seed();
+            storageService.setItem('dbSeeded', true);
+        }
+        
+        // Render auth form
+        const authForm = new AuthForm();
+        const container = document.getElementById('auth-form-container');
+        authForm.render(container);
+    </script>
                 </button>
             </div>
 
