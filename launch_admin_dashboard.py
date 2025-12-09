@@ -3,27 +3,10 @@
 
 import sys
 import subprocess
-import time
 from pathlib import Path
 
-def kill_python_processes():
-    """Kill ALL Python processes to free ports."""
-    print('🧹 Cleaning up ALL Python processes...')
-    try:
-        # Kill all Python processes (including this script will exit after launching new window)
-        subprocess.run(
-            ['powershell', '-Command', 
-             'Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force'],
-            capture_output=True,
-            timeout=5
-        )
-        print('  ✅ All Python processes stopped\n')
-        time.sleep(2)  # Wait for ports to be released
-    except Exception as e:
-        print(f'  ⚠️  Cleanup skipped: {e}\n')
-
 def create_dashboard_script():
-    """Create temporary PowerShell script to launch dashboard."""
+    """Create PowerShell script to launch dashboard in new window."""
     script_content = '''
 # CORTEX Admin Dashboard Server
 $Host.UI.RawUI.WindowTitle = "CORTEX Admin Dashboard - Port 8086"
@@ -32,11 +15,23 @@ Write-Host "🚀 CORTEX Admin Dashboard Server" -ForegroundColor Cyan
 Write-Host "=" * 60 -ForegroundColor Cyan
 Write-Host ""
 
-# Kill any existing Python processes first
-Write-Host "🧹 Cleaning up existing Python processes..." -ForegroundColor Yellow
-Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force
-Start-Sleep -Seconds 2
-Write-Host "  ✅ Cleanup complete" -ForegroundColor Green
+# Kill only dashboard processes (check port 8086)
+Write-Host "🧹 Cleaning up existing dashboard on port 8086..." -ForegroundColor Yellow
+try {
+    $netstat = netstat -ano | Select-String ":8086" | Select-String "LISTENING"
+    if ($netstat) {
+        $pid = ($netstat -split '\\s+')[-1]
+        if ($pid -match '^\\d+$') {
+            Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+            Start-Sleep -Seconds 1
+            Write-Host "  ✅ Port 8086 freed" -ForegroundColor Green
+        }
+    } else {
+        Write-Host "  ✅ Port 8086 is available" -ForegroundColor Green
+    }
+} catch {
+    Write-Host "  ℹ️  Cleanup skipped" -ForegroundColor Gray
+}
 Write-Host ""
 
 # Add src to Python path and launch
@@ -81,8 +76,7 @@ if result['success']:
         server_instance.stop()
         print('✅ Server stopped')
 else:
-    error_msg = result.get('error', 'Unknown error')
-    print(f'❌ Failed to start dashboard: {error_msg}')
+    print(f'❌ Failed to start dashboard: {result.get(\"error\", \"Unknown error\")}')
     input('Press Enter to close...')
     sys.exit(1)
 "@
@@ -116,10 +110,10 @@ try:
     )
     print('  ✅ Dashboard server started in separate window')
     print('')
-    print('💡 Dashboard Info:')
-    print('  - URL: http://localhost:8086/ui/index.html?source=mock')
-    print('  - Port: 8086 (fixed)')
+    print('💡 Tips:')
+    print('  - Dashboard will open automatically in your browser')
     print('  - Close the PowerShell window to stop the server')
+    print('  - Server runs on port 8086')
     print('')
 except Exception as e:
     print(f'  ❌ Failed to launch: {e}')
