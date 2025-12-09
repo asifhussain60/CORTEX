@@ -136,7 +136,7 @@ class DashboardOrchestrator:
         
         # Use Cases
         print("  - Extracting use cases...")
-        use_case_collector = UseCaseCollector(str(self.repo_path))
+        use_case_collector = UseCaseCollector()
         use_cases_data = use_case_collector.collect(phase7_combined)
         
         # ===== PHASE 8: Solution Structure + Risk Scoring =====

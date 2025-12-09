@@ -149,6 +149,10 @@ class FrameworkHealthHeatmap:
         heatmap_data = []
         
         for framework in frameworks:
+            # Skip if framework is a string
+            if isinstance(framework, str):
+                continue
+                
             name = framework.get("name", "")
             version = framework.get("version", "")
             framework_key = f"{name} {version}".strip() if version else name
@@ -216,6 +220,10 @@ class FrameworkHealthHeatmap:
         critical_count = 0
         
         for framework in all_frameworks:
+            # Skip if framework is a string
+            if isinstance(framework, str):
+                continue
+                
             name = framework.get("name", "")
             version = framework.get("version", "")
             framework_key = f"{name} {version}".strip() if version else name

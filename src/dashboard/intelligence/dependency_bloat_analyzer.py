@@ -239,6 +239,10 @@ class DependencyBloatAnalyzer:
         Returns:
             Total package count
         """
+        # Handle string projects (tech stack format inconsistency)
+        if isinstance(project, str):
+            return 0
+            
         dependencies = project.get("dependencies", {})
         total = 0
         
@@ -277,6 +281,10 @@ class DependencyBloatAnalyzer:
         package_counts = []
         
         for project in projects:
+            # Skip string entries (format inconsistency)
+            if isinstance(project, str):
+                continue
+                
             package_count = self._count_packages(project)
             projects_with_counts.append({
                 **project,

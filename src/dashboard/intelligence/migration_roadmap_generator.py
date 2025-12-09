@@ -86,7 +86,15 @@ class MigrationRoadmapGenerator:
         outdated = []
         
         for category, technologies in tech_stack.items():
+            # Skip if not a list (could be metadata fields)
+            if not isinstance(technologies, list):
+                continue
+                
             for tech in technologies:
+                # Skip if tech is a string (simple format)
+                if isinstance(tech, str):
+                    continue
+                    
                 # Check status field
                 if tech.get("status") == "outdated":
                     outdated.append(tech)

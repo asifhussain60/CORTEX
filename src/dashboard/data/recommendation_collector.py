@@ -289,12 +289,14 @@ class RecommendationCollector:
             })
         
         # General vulnerabilities
-        vulnerabilities = security_data.get('vulnerabilities', 0)
-        if vulnerabilities > 0:
+        vulnerabilities = security_data.get('vulnerabilities', [])
+        # Handle both list and int formats
+        vuln_count = len(vulnerabilities) if isinstance(vulnerabilities, list) else (vulnerabilities if isinstance(vulnerabilities, int) else 0)
+        if vuln_count > 0:
             recommendations.append({
                 'category': 'security',
                 'priority': 'P1',
-                'description': f'Address {vulnerabilities} security vulnerabilities',
+                'description': f'Address {vuln_count} security vulnerabilities',
                 'impact': 'high',
                 'effort': 'medium',
                 'rationale': 'Unpatched vulnerabilities increase security risk'
@@ -380,7 +382,16 @@ class RecommendationCollector:
     def _sort_by_priority(self, recommendations: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Sort recommendations by priority (P0 > P1 > P2 > P3)"""
         priority_order = {'P0': 0, 'P1': 1, 'P2': 2, 'P3': 3}
-        return sorted(recommendations, key=lambda x: priority_order.get(x.get('priority', 'P3'), 3))
+        
+        def get_priority_value(rec):
+            """Extract priority value safely"""
+            priority = rec.get('priority', 'P3')
+            # Handle case where priority is a dict or other non-string type
+            if not isinstance(priority, str):
+                return 3  # Default to lowest priority
+            return priority_order.get(priority.upper(), 3)
+        
+        return sorted(recommendations, key=get_priority_value)
     
     def _deduplicate_recommendations(self):
         """Remove duplicate recommendations across categories"""
