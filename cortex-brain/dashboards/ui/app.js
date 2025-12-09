@@ -103,6 +103,69 @@ async function initializeApp() {
 }
 
 /**
+ * Global function to switch tabs (called from inline onclick and event listeners)
+ * Shows loading indicator, renders content, and updates UI
+ * @param {string} tabName - Name of the tab to switch to
+ */
+async function switchTab(tabName) {
+    if (!appState.data && tabName !== 'executive') {
+        console.warn('No data available to render tab:', tabName);
+        return;
+    }
+    
+    try {
+        // Show loading indicator
+        showLoading(`Loading ${tabName}...`);
+        
+        // Update app state
+        appState.currentTab = tabName;
+        
+        // Update UI - nav tabs
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
+        if (activeTab) {
+            activeTab.classList.add('active');
+        }
+        
+        // Update UI - content visibility
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        const targetContent = document.getElementById(`tab-${tabName}`);
+        if (targetContent) {
+            targetContent.classList.add('active');
+        }
+        
+        // Update title
+        const titles = {
+            'executive': 'Executive Summary',
+            'overview': 'System Overview',
+            'tech-stack': 'Tech Stack',
+            'security': 'Security',
+            'use-cases': 'Use Cases',
+            'recommendations': 'Recommendations',
+            'architecture': 'Architecture',
+            'code-org': 'Code Organization',
+            'vendors': 'Dependencies',
+            'engineering': 'Engineering Onboarding'
+        };
+        const titleElement = document.getElementById('contentTitle');
+        if (titleElement && titles[tabName]) {
+            titleElement.textContent = titles[tabName];
+        }
+        
+        // Render tab content automatically
+        await renderCurrentTab();
+        
+        // Hide loading indicator
+        hideLoading();
+        
+    } catch (error) {
+        console.error(`Failed to switch to tab ${tabName}:`, error);
+        hideLoading();
+        showErrorToast(`Failed to load ${tabName} tab`);
+    }
+}
+
+/**
  * Set up tab navigation event listeners
  */
 function setupTabNavigation() {
@@ -112,43 +175,7 @@ function setupTabNavigation() {
         tab.addEventListener('click', (e) => {
             e.preventDefault();
             const tabName = tab.getAttribute('data-tab');
-            
-            // Update app state
-            appState.currentTab = tabName;
-            
-            // Update UI - nav tabs
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            // Update UI - content
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            const targetContent = document.getElementById(`tab-${tabName}`);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            }
-            
-            // Update title
-            const titles = {
-                'executive': 'Executive Summary',
-                'overview': 'System Overview',
-                'tech-stack': 'Tech Stack',
-                'security': 'Security',
-                'use-cases': 'Use Cases',
-                'recommendations': 'Recommendations',
-                'architecture': 'Architecture',
-                'code-org': 'Code Organization',
-                'vendors': 'Dependencies',
-                'engineering': 'Engineering Onboarding'
-            };
-            const titleElement = document.getElementById('contentTitle');
-            if (titleElement && titles[tabName]) {
-                titleElement.textContent = titles[tabName];
-            }
-            
-            // Render content if needed (for special cases like engineering)
-            if (tabName === 'engineering') {
-                renderEngineeringTab();
-            }
+            switchTab(tabName);
         });
     });
 }
@@ -514,7 +541,11 @@ window.addEventListener('resize', optimizeResizeHandler(async () => {
     await renderCurrentTab();
 }, 300));
 
-// Export for debugging
+// Export for debugging and global access
 window.appState = appState;
 window.loadData = loadData;
 window.logPerformanceReport = logPerformanceReport;
+window.switchTab = switchTab;
+
+// Export for module usage
+export { switchTab };

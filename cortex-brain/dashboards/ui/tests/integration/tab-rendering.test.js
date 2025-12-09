@@ -29,25 +29,29 @@ describe('Tab Rendering - All 8 Tabs', () => {
         // Setup complete DOM structure
         document.body.innerHTML = `
             <div class="dashboard-container">
-                <div id="sourceSelect"></div>
-                <div class="tabs">
-                    <button class="tab-button" data-tab="executive">Executive</button>
-                    <button class="tab-button" data-tab="overview">Overview</button>
-                    <button class="tab-button" data-tab="tech-stack">Tech Stack</button>
-                    <button class="tab-button" data-tab="security">Security</button>
-                    <button class="tab-button" data-tab="architecture">Architecture</button>
-                    <button class="tab-button" data-tab="code-org">Code Organization</button>
-                    <button class="tab-button" data-tab="vendors">Vendors</button>
-                    <button class="tab-button" data-tab="engineering">Engineering</button>
+                <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+                    <div class="loading-spinner">Loading...</div>
                 </div>
-                <div id="executive-tab" class="tab-content"></div>
-                <div id="overview-tab" class="tab-content"></div>
-                <div id="tech-stack-tab" class="tab-content"></div>
-                <div id="security-tab" class="tab-content"></div>
-                <div id="architecture-tab" class="tab-content"></div>
-                <div id="code-org-tab" class="tab-content"></div>
-                <div id="vendors-tab" class="tab-content"></div>
-                <div id="engineering-tab" class="tab-content"></div>
+                <div id="sourceSelect"></div>
+                <nav class="nav-tabs">
+                    <a class="nav-tab active" data-tab="executive">Executive</a>
+                    <a class="nav-tab" data-tab="overview">Overview</a>
+                    <a class="nav-tab" data-tab="tech-stack">Tech Stack</a>
+                    <a class="nav-tab" data-tab="security">Security</a>
+                    <a class="nav-tab" data-tab="architecture">Architecture</a>
+                    <a class="nav-tab" data-tab="code-org">Code Organization</a>
+                    <a class="nav-tab" data-tab="vendors">Vendors</a>
+                    <a class="nav-tab" data-tab="engineering">Engineering</a>
+                </nav>
+                <div id="tab-executive" class="tab-content active"></div>
+                <div id="tab-overview" class="tab-content"></div>
+                <div id="tab-tech-stack" class="tab-content"></div>
+                <div id="tab-security" class="tab-content"></div>
+                <div id="tab-architecture" class="tab-content"></div>
+                <div id="tab-code-org" class="tab-content"></div>
+                <div id="tab-vendors" class="tab-content"></div>
+                <div id="tab-engineering" class="tab-content"></div>
+                <div id="contentTitle">Executive Summary</div>
             </div>
         `;
         
@@ -59,6 +63,88 @@ describe('Tab Rendering - All 8 Tabs', () => {
     
     afterEach(() => {
         jest.restoreAllMocks();
+    });
+    
+    describe('Tab Click Auto-Loading (RED Phase)', () => {
+        it('should show loading indicator when tab is clicked', async () => {
+            // Arrange: Setup app with data
+            window.appState = { data: mockFullDashboard, currentTab: 'executive', currentSource: 'mock' };
+            
+            // Act: Click on architecture tab
+            const architectureTab = document.querySelector('[data-tab="architecture"]');
+            architectureTab.click();
+            
+            // Assert: Loading overlay should appear
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            expect(loadingOverlay.style.display).not.toBe('none');
+        });
+        
+        it('should automatically render tab content when clicked', async () => {
+            // Arrange: Setup app with data
+            window.appState = { data: mockFullDashboard, currentTab: 'executive', currentSource: 'mock' };
+            
+            // Act: Click on overview tab
+            const overviewTab = document.querySelector('[data-tab="overview"]');
+            overviewTab.click();
+            
+            // Wait for async rendering
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            // Assert: Tab content should be populated
+            const tabContent = document.getElementById('tab-overview');
+            expect(tabContent.innerHTML).not.toBe('');
+            expect(tabContent.classList.contains('active')).toBe(true);
+        });
+        
+        it('should hide loading indicator after tab renders', async () => {
+            // Arrange: Setup app with data
+            window.appState = { data: mockFullDashboard, currentTab: 'executive', currentSource: 'mock' };
+            
+            // Act: Click on tech-stack tab
+            const techStackTab = document.querySelector('[data-tab="tech-stack"]');
+            techStackTab.click();
+            
+            // Wait for async rendering
+            await new Promise(resolve => setTimeout(resolve, 200));
+            
+            // Assert: Loading should be hidden
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            expect(loadingOverlay.style.display).toBe('none');
+        });
+        
+        it('should not require separate refresh button click', async () => {
+            // Arrange: Setup app with data
+            window.appState = { data: mockFullDashboard, currentTab: 'executive', currentSource: 'mock' };
+            
+            // Act: Click on security tab (no refresh click)
+            const securityTab = document.querySelector('[data-tab="security"]');
+            securityTab.click();
+            
+            // Wait for async rendering
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            // Assert: Tab should be rendered immediately
+            const tabContent = document.getElementById('tab-security');
+            expect(tabContent.classList.contains('active')).toBe(true);
+            // Content should exist (not empty)
+            expect(tabContent.innerHTML.trim()).not.toBe('');
+        });
+        
+        it('should update active tab styling immediately', async () => {
+            // Arrange: Setup app with data
+            window.appState = { data: mockFullDashboard, currentTab: 'executive', currentSource: 'mock' };
+            
+            // Act: Click on vendors tab
+            const vendorsTab = document.querySelector('[data-tab="vendors"]');
+            vendorsTab.click();
+            
+            // Assert: Tab should be marked as active
+            expect(vendorsTab.classList.contains('active')).toBe(true);
+            
+            // Previous tab should not be active
+            const executiveTab = document.querySelector('[data-tab="executive"]');
+            expect(executiveTab.classList.contains('active')).toBe(false);
+        });
     });
     
     describe('Executive Tab', () => {
