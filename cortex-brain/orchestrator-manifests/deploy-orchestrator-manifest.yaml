@@ -1,0 +1,427 @@
+# Deployment Orchestrator Manifest
+# 
+# Purpose: Formal specification for CORTEX deployment workflow
+# Pattern: Follows Planning System 2.0 manifest architecture
+# Version: 3.9.0 (Unified Deployment)
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+metadata:
+  name: "Deployment Orchestrator"
+  version: "3.9.0"
+  description: "Unified deployment system consolidating 5 legacy components"
+  author: "Asif Hussain"
+  created: "2025-12-09"
+  last_updated: "2025-12-09"
+  inherits_from: null  # Base manifest - no inheritance
+  compliance:
+    - "State machine enforcement"
+    - "Gate validation requirements"
+    - "Rollback safety"
+    - "SLA targets"
+
+# Deployment phases - sequential execution with state transitions
+phases:
+  - name: "pre-flight"
+    description: "Pre-deployment validation and readiness checks"
+    state_entry: "VALIDATING"
+    state_success: "VALIDATING"
+    state_failure: "FAILED"
+    gates:
+      - "version_check"
+      - "git_status"
+      - "test_suite_exists"
+      - "brain_health"
+    artifacts:
+      - "pre-flight-report.json"
+    rollback_point: false
+    required: true
+    timeout_minutes: 2
+    
+  - name: "build"
+    description: "Build deployment artifacts and package"
+    state_entry: "BUILDING"
+    state_success: "BUILDING"
+    state_failure: "FAILED"
+    gates:
+      - "clean_working_tree"
+      - "dependencies_resolved"
+    artifacts:
+      - "deployment-package.tar.gz"
+      - "build-manifest.json"
+      - "version-snapshot.txt"
+    rollback_point: true
+    required: true
+    timeout_minutes: 3
+    
+  - name: "validate"
+    description: "Run comprehensive deployment gates"
+    state_entry: "BUILDING"
+    state_success: "BUILDING"
+    state_failure: "FAILED"
+    gates:
+      - "integration_scores"
+      - "test_coverage"
+      - "no_mocks_in_production"
+      - "documentation_sync"
+      - "version_consistency"
+      - "template_format"
+      - "production_files"
+      - "brain_operational"
+    artifacts:
+      - "gate-validation-report.json"
+      - "gates-{timestamp}.md"
+    rollback_point: true
+    required: true
+    timeout_minutes: 5
+    
+  - name: "deploy"
+    description: "Execute deployment to target branch"
+    state_entry: "DEPLOYING"
+    state_success: "DEPLOYING"
+    state_failure: "FAILED"
+    gates:
+      - "target_branch_exists"
+      - "backup_created"
+    artifacts:
+      - "deployment-log.json"
+      - "commit-sha.txt"
+      - "deployed-files.json"
+    rollback_point: true
+    required: true
+    timeout_minutes: 3
+    
+  - name: "verify"
+    description: "Post-deployment verification and smoke tests"
+    state_entry: "VERIFYING"
+    state_success: "COMPLETE"
+    state_failure: "FAILED"
+    gates:
+      - "smoke_tests_pass"
+      - "feature_verification"
+      - "agent_instantiation"
+      - "template_rendering"
+    artifacts:
+      - "verification-report.json"
+      - "smoke-test-results.json"
+    rollback_point: false
+    required: true
+    timeout_minutes: 2
+    
+  - name: "rollback"
+    description: "Rollback deployment on failure"
+    state_entry: "FAILED"
+    state_success: "ROLLED_BACK"
+    state_failure: "FAILED"
+    gates: []
+    artifacts:
+      - "rollback-report.json"
+      - "rollback-manifest.json"
+    rollback_point: false
+    required: false
+    timeout_minutes: 2
+
+# Deployment gates - hierarchical validation framework
+gates:
+  # CRITICAL - Block deployment on failure
+  critical:
+    - name: "version_check"
+      description: "Verify VERSION file exists and is valid semantic version"
+      severity: "critical"
+      phase: "pre-flight"
+      validation_type: "file_check"
+      remediation: "Ensure VERSION file exists in project root with format X.Y.Z"
+      
+    - name: "git_status"
+      description: "Verify git repository is clean with no uncommitted changes"
+      severity: "critical"
+      phase: "pre-flight"
+      validation_type: "git_check"
+      remediation: "Commit or stash all changes before deployment"
+      
+    - name: "test_suite_exists"
+      description: "Verify test suite exists and is runnable"
+      severity: "critical"
+      phase: "pre-flight"
+      validation_type: "file_check"
+      remediation: "Ensure tests/ directory exists with valid test files"
+      
+    - name: "integration_scores"
+      description: "All user-facing orchestrators >80% integration score"
+      severity: "critical"
+      phase: "validate"
+      validation_type: "metric_check"
+      threshold: 80
+      remediation: "Run system alignment to improve integration scores"
+      
+    - name: "test_coverage"
+      description: "100% of tests passing, no failures"
+      severity: "critical"
+      phase: "validate"
+      validation_type: "test_execution"
+      threshold: 100
+      remediation: "Fix failing tests before deployment"
+      
+    - name: "no_mocks_in_production"
+      description: "No mock/stub patterns in production code paths"
+      severity: "critical"
+      phase: "validate"
+      validation_type: "code_scan"
+      remediation: "Replace mocks with real implementations or move to test-only contexts"
+      
+    - name: "production_files"
+      description: "All required production files present"
+      severity: "critical"
+      phase: "validate"
+      validation_type: "file_check"
+      remediation: "Ensure all core files and directories exist"
+      
+    - name: "brain_operational"
+      description: "CORTEX brain (4 tiers) operational and accessible"
+      severity: "critical"
+      phase: "validate"
+      validation_type: "system_check"
+      remediation: "Verify cortex-brain/ structure and database health"
+      
+    - name: "smoke_tests_pass"
+      description: "Post-deployment smoke tests pass"
+      severity: "critical"
+      phase: "verify"
+      validation_type: "test_execution"
+      remediation: "Investigate smoke test failures and rollback if critical"
+  
+  # WARNING - Log but don't block deployment
+  warning:
+    - name: "documentation_sync"
+      description: "Documentation synchronized with code implementation"
+      severity: "warning"
+      phase: "validate"
+      validation_type: "content_check"
+      remediation: "Run 'regenerate prompts' to sync documentation"
+      
+    - name: "template_format"
+      description: "Response templates follow v3.0 format specification"
+      severity: "warning"
+      phase: "validate"
+      validation_type: "format_check"
+      remediation: "Update templates to use mandatory 5-part structure"
+      
+    - name: "feature_verification"
+      description: "Critical features (TDD, Planning, ADO) operational"
+      severity: "warning"
+      phase: "verify"
+      validation_type: "feature_check"
+      remediation: "Verify feature wiring and orchestrator availability"
+  
+  # INFO - Metrics and informational checks
+  info:
+    - name: "brain_health"
+      description: "CORTEX brain health metrics within normal range"
+      severity: "info"
+      phase: "pre-flight"
+      validation_type: "metric_check"
+      remediation: "Review health report for optimization opportunities"
+      
+    - name: "version_consistency"
+      description: "Version numbers consistent across all files"
+      severity: "info"
+      phase: "validate"
+      validation_type: "consistency_check"
+      remediation: "Update version numbers to match VERSION file"
+
+# State machine configuration
+state_machine:
+  initial_state: "IDLE"
+  final_states:
+    - "COMPLETE"
+    - "FAILED"
+    - "ROLLED_BACK"
+  
+  states:
+    IDLE:
+      description: "No deployment in progress"
+      allowed_transitions:
+        - "VALIDATING"
+      
+    VALIDATING:
+      description: "Running pre-flight validation"
+      allowed_transitions:
+        - "BUILDING"
+        - "FAILED"
+      
+    BUILDING:
+      description: "Building deployment artifacts"
+      allowed_transitions:
+        - "DEPLOYING"
+        - "FAILED"
+      
+    DEPLOYING:
+      description: "Executing deployment"
+      allowed_transitions:
+        - "VERIFYING"
+        - "FAILED"
+      
+    VERIFYING:
+      description: "Running post-deployment verification"
+      allowed_transitions:
+        - "COMPLETE"
+        - "FAILED"
+      
+    COMPLETE:
+      description: "Deployment completed successfully"
+      allowed_transitions:
+        - "IDLE"
+      
+    FAILED:
+      description: "Deployment failed"
+      allowed_transitions:
+        - "ROLLED_BACK"
+        - "IDLE"
+      
+    ROLLED_BACK:
+      description: "Deployment rolled back"
+      allowed_transitions:
+        - "IDLE"
+
+# SLA targets and performance requirements
+sla:
+  max_duration_minutes: 5
+  max_gate_duration_seconds: 30
+  max_phase_retries: 0
+  success_rate_target_percent: 95
+  rollback_time_limit_minutes: 2
+
+# Rollback configuration
+rollback:
+  enabled: true
+  automatic: false  # Require manual confirmation
+  preserve_logs: true
+  snapshot_phases:
+    - "build"
+    - "validate"
+    - "deploy"
+  restore_points:
+    - type: "git_commit"
+      description: "Git SHA before deployment"
+    - type: "brain_backup"
+      description: "Brain state snapshot"
+    - type: "config_backup"
+      description: "Configuration files backup"
+
+# Artifact management
+artifacts:
+  storage_location: "cortex-brain/deployments/{deployment_id}/"
+  retention_days: 30
+  compression: true
+  include_metadata: true
+  types:
+    - name: "deployment-log"
+      format: "json"
+      required: true
+    - name: "gate-reports"
+      format: "markdown"
+      required: true
+    - name: "state-history"
+      format: "json"
+      required: true
+    - name: "deployment-package"
+      format: "tar.gz"
+      required: false
+
+# Notification configuration
+notifications:
+  enabled: true
+  channels:
+    - type: "terminal"
+      level: "info"
+      format: "enhanced"
+    - type: "log_file"
+      level: "debug"
+      path: "logs/deployment-{timestamp}.log"
+  events:
+    - "deployment_started"
+    - "phase_completed"
+    - "gate_failed"
+    - "deployment_success"
+    - "deployment_failure"
+    - "rollback_triggered"
+
+# Metrics tracking
+metrics:
+  enabled: true
+  storage_location: "cortex-brain/metrics/deployments/"
+  tracked_metrics:
+    - "deployment_duration"
+    - "phase_durations"
+    - "gate_pass_rate"
+    - "gate_fail_rate"
+    - "rollback_frequency"
+    - "success_rate"
+  aggregation_period: "daily"
+  alerting:
+    - condition: "deployment_duration > 5min"
+      severity: "warning"
+    - condition: "rollback_frequency > 2/week"
+      severity: "critical"
+    - condition: "success_rate < 90%"
+      severity: "warning"
+
+# Audit trail configuration
+audit:
+  enabled: true
+  storage_location: "cortex-brain/audit/deployments/"
+  immutable: true
+  cryptographic_signing: false  # Future enhancement
+  tracked_events:
+    - "deployment_initiated"
+    - "state_transition"
+    - "gate_execution"
+    - "artifact_created"
+    - "rollback_initiated"
+    - "deployment_completed"
+  retention_days: 365
+
+# Integration configuration
+integrations:
+  ci_cd:
+    enabled: false  # Future enhancement
+    platform: "github_actions"
+    trigger_pattern: "v*.*.*"
+    auto_deploy_staging: false
+  
+  version_control:
+    type: "git"
+    required: true
+    branch_protection: true
+    commit_signing: false
+  
+  testing:
+    framework: "pytest"
+    required_coverage_percent: 0  # No enforcement yet
+    parallel_execution: false
+
+# Development configuration
+development:
+  dry_run_default: true
+  skip_gates_allowed: false
+  verbose_logging: true
+  debug_mode: false
+
+# Legacy compatibility (for migration - Item 16)
+legacy:
+  components:
+    - name: "deploy_utility.py"
+      status: "deprecated"
+      replacement: "DeployOrchestrator.execute_deployment()"
+    - name: "deployment_gates.py"
+      status: "deprecated"
+      replacement: "DeployOrchestrator gate validation framework"
+    - name: "deploy_gate_validator.py"
+      status: "deprecated"
+      replacement: "DeployOrchestrator gate execution"
+    - name: "deploy_cortex.py"
+      status: "deprecated"
+      replacement: "DeployOrchestrator CLI"
+    - name: "post_deployment_validator.py"
+      status: "deprecated"
+      replacement: "DeployOrchestrator verify phase"
