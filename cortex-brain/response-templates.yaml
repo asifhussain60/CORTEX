@@ -2982,11 +2982,11 @@ templates:
     content: |
       # 🧠 CORTEX
       
-      An AI assistant enhancement system that solves the context management problem at scale through brain-inspired architecture.
+      An AI assistant enhancement system that solves the context management problem at scale through brain-inspired architecture with automated quality enforcement and intelligent code discovery.
       
       ## What is CORTEX?
       
-      CORTEX transforms GitHub Copilot into a strategic development partner with long-term memory, context awareness, and automated workflows. Think of it as upgrading from a helpful assistant to a collaborative team member that remembers your project's history, learns from your patterns, and enforces quality through intelligent governance.
+      CORTEX transforms GitHub Copilot into a strategic development partner with long-term memory, context awareness, and automated workflows. Think of it as upgrading from a helpful assistant to a collaborative team member that remembers your project's history, learns from your patterns, enforces quality through intelligent governance, and prevents duplicate code through holistic discovery.
       
       ## Why Was It Built?
       
@@ -2994,7 +2994,7 @@ templates:
       
       **The Brain-Inspired Solution:** CORTEX implements a 4-tier memory architecture modeled after human cognition—from instinctive governance (Tier 0, like the brainstem) through working memory (Tier 1) and knowledge patterns (Tier 2) to strategic context (Tier 3, like the cortex). This creates persistent memory across sessions and projects.
       
-      **Quality Through Governance:** At its core is a rulebook system (SKULL - Strategic Knowledge & Universal Learning Logic) that enforces best practices through declarative rules rather than restrictive guardrails. Think of it as pair programming with an experienced architect who prevents technical debt before it forms.
+      **Quality Through Governance:** At its core is a rulebook system (SKULL - Strategic Knowledge & Universal Learning Logic) with 48 rules across 17 protection layers that enforces best practices through declarative rules rather than restrictive guardrails. Recent enhancements include holistic code discovery (search before create), inline CSS prohibition (centralized styling), and comprehensive test coverage validation. Think of it as pair programming with an experienced architect who prevents technical debt before it forms.
       
       ## Tech Stack & Architecture
       
@@ -3002,32 +3002,37 @@ templates:
       
       **Python** - Orchestration layer connecting 10 specialist agents (tactical + strategic). Enables rapid feature development while maintaining type safety and test coverage.
       
-      **YAML** - Declarative governance rules and response templates. Makes quality standards auditable, versionable, and extensible without code changes.
+      **YAML** - Declarative governance rules and response templates. Makes quality standards auditable, versionable, and extensible without code changes. Orchestrator manifests ensure consistency across planning systems.
       
       **4-Tier Brain Architecture:**
-      - Tier 0: Governance (immutable rules, 22 instincts)
+      - Tier 0: Governance (48 immutable rules, 17 protection layers)
       - Tier 1: Working memory (70-conversation FIFO, <100ms)
       - Tier 2: Knowledge graph (pattern learning, FTS5 search)
       - Tier 3: Development context (metrics, hotspots, insights)
       
       ## How CORTEX Can Help
       
-      **Strategic Planning** - Vision API extracts requirements from screenshots. Definition of Ready/Done validation ensures complete specifications. File-based plans resume across chat sessions.
+      **Intelligent Planning** - Auto-complexity detection routes features to incremental generation with real-time visual progress tracking (5 phases with ETAs). Vision API extracts requirements from screenshots. Definition of Ready/Done validation ensures complete specifications.
       
-      **Quality Automation** - TDD Mastery enforces RED→GREEN→REFACTOR cycle with auto-debug and performance refactoring. Test-first workflow has 94% success rate vs 67% without.
+      **Code Quality Automation** - TDD Mastery enforces RED→GREEN→REFACTOR cycle with per-layer coverage validation (Domain 90%, Application 85%, Infrastructure 70%). Detects empty placeholder tests and enforces comprehensive testing. Test-first workflow has 94% success rate vs 67% without.
+      
+      **Duplicate Prevention** - Holistic code discovery enforces search-before-create pattern using semantic search, grep patterns, and usage analysis. Prevents duplicate implementations during refactoring cycles.
+      
+      **Professional Frontend** - Inline CSS prohibition enforces centralized styling architecture. All styles migrated to CSS files during REFACTOR phase with component-scoped organization.
       
       **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 average) through intelligent memory management. More context, lower costs, faster responses.
       
-      **Universal Upgrade** - Safe CORTEX upgrades with brain preservation, auto-backup, and path validation. Works across standalone and embedded installations with zero data loss.
+      **Consistent Orchestration** - Manifest system ensures all planning workflows follow same standards (DoR/DoD, TDD integration, acceptance criteria gates). Zero drift between Planning System 2.0 and ADO operations.
       
       ## Explore Further
       
       **Ask about specific capabilities:**
-      - "Show me the 4-tier brain architecture"
-      - "How does TDD Mastery work?"
-      - "Explain the 97.2% token reduction"
-      - "Demo the Planning System 2.0"
-      - "What are SKULL governance rules?"
+      - "Show me incremental planning with progress tracking"
+      - "How does TDD coverage validation work?"
+      - "Demo holistic code discovery"
+      - "Explain CSS centralization enforcement"
+      - "What are the 48 SKULL governance rules?"
+      - "Show me the manifest system architecture"
   
   introduction_leadership:
     name: "CORTEX Introduction - Leadership"
@@ -3040,11 +3045,11 @@ templates:
     content: |
       # 🧠 CORTEX Executive Overview
       
-      Accelerate development velocity, reduce technical debt, and gain comprehensive system visibility through AI-enhanced strategic planning, automated quality assurance, and intelligent dashboard analytics.
+      Accelerate development velocity, reduce technical debt, and gain comprehensive system visibility through AI-enhanced strategic planning, automated quality assurance with real-time progress tracking, and intelligent duplicate prevention that eliminates wasted effort.
       
       ## What is CORTEX?
       
-      CORTEX is an enterprise-grade AI assistant enhancement that transforms GitHub Copilot from a code completion tool into a strategic development partner. It provides persistent memory, context awareness, automated quality enforcement, and comprehensive repository visualization—delivering measurable improvements in velocity, quality, cost efficiency, and system understanding.
+      CORTEX is an enterprise-grade AI assistant enhancement that transforms GitHub Copilot from a code completion tool into a strategic development partner with proven quality metrics. It provides persistent memory, context awareness, automated quality enforcement with comprehensive test validation, real-time progress monitoring, and holistic code discovery that prevents duplication—delivering measurable improvements in velocity (+40% faster scanning), quality (94% vs 67% TDD success), cost efficiency (97.2% token reduction), and technical debt prevention.
       
       ## Why Was It Built?
       
@@ -3460,11 +3465,11 @@ templates:
       **Core Technologies:**
       - **SQLite** - 4 separate DBs (tier-specific schemas), FTS5 full-text search, <100ms query performance
       - **Python 3.8+** - Type-annotated agents, pytest for 100% coverage, src-relative imports
-      - **YAML** - 5000+ lines of governance rules, 62 response templates, declarative config
+      - **YAML** - 5000+ lines of governance rules (48 rules, 17 protection layers), 68 response templates, orchestrator manifests
       
       **4-Tier Brain Architecture:**
       ```
-      Tier 0 (Governance): Immutable rules, SKULL instincts, protection layers
+      Tier 0 (Governance): 48 immutable rules, SKULL instincts, 17 protection layers
       Tier 1 (Working Memory): 70-conv FIFO, entity extraction, <100ms queries
       Tier 2 (Knowledge Graph): Pattern storage, FTS5 semantic search, relationship mapping
       Tier 3 (Dev Context): Git metrics, code hotspots, performance insights
@@ -3478,20 +3483,27 @@ templates:
       **Key Design Patterns:**
       - Dual-hemisphere processing (tactical + strategic)
       - Agent inheritance from BaseAgent (auto-logging, tier integration)
-      - Decorator-based progress monitoring (@with_progress)
-      - Template-based response system (62 pre-formatted templates)
+      - Decorator-based progress monitoring (@with_progress with real-time ETAs)
+      - Template-based response system (68 templates including 6 professional presentations)
+      - Orchestrator manifest system (ensures consistency across planning workflows)
       
       ## How CORTEX Can Help Engineers
       
-      **TDD Automation** - Enforces RED→GREEN→REFACTOR cycle with auto-debug when tests fail. Includes performance refactoring suggestions post-green phase. Test-first enforcement via Tier 0 rules with evidence-based challenges.
+      **Incremental Planning** - Auto-complexity detection routes HIGH complexity features to incremental generator. Real-time visual progress tracking with 5 phases, completion %, and ETAs. Prevents response length failures for complex plans.
+      
+      **TDD Automation** - Enforces RED→GREEN→REFACTOR cycle with comprehensive coverage validation (Domain 90%, Application 85%, Infrastructure 70%). Detects empty placeholder tests and meaningless assertions. Test-first enforcement via Tier 0 rules with evidence-based challenges.
+      
+      **Holistic Discovery** - Search-decide-implement pattern enforces multi-strategy code discovery (semantic + grep + usage analysis) before creating new implementations. Prevents duplicate code during refactoring cycles. Decision matrix: exact match (90%+) → reuse, similar (70-90%) → enhance, partial (50-70%) → consolidate.
+      
+      **Frontend Architecture** - Inline CSS prohibition enforces centralized styling. Automated REFACTOR phase validation detects style attributes, embedded tags, JS manipulation. Component-scoped CSS organization with CSS variables for theming.
       
       **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 avg) through intelligent memory management. Semantic search retrieves relevant patterns without dumping entire codebase into context.
+      
+      **Manifest-Based Orchestration** - Universal manifest schema ensures all orchestrators follow same standards. Planning System 2.0 manifest defines 8 requirements, 7 integrations, 8 quality gates. Validator calculates compliance scores (0-100).
       
       **Git Isolation** - CORTEX code never commits to user repositories (enforced by Tier 0). Separate test directories (app tests in user repo, CORTEX tests in `tests/`). Clean separation of concerns.
       
       **Universal Upgrade** - Standalone or embedded installation detection, brain preservation during upgrades, auto-backup with rollback capability. Zero data loss, zero manual migration.
-      
-      **Pattern Learning** - Tier 2 stores code patterns, naming conventions, architectural decisions. Learns your style and suggests consistent implementations. FTS5 semantic search for "show me similar authentication flows."
       
       ## Explore Further
       

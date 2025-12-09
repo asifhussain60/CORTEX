@@ -1,0 +1,675 @@
+# Debug Orchestrator Manifest
+# Defines all requirements, integrations, and quality gates for debug workflow
+#
+# Version: 1.0.0
+# Author: Asif Hussain
+# Created: 2025-12-09
+# Status: ACTIVE - Phase 5.2 Implementation
+
+schema_version: "1.0"
+
+# ========================================
+# Metadata
+# ========================================
+
+metadata:
+  orchestrator_name: "debug_orchestrator"
+  version: "2.0.0"
+  description: "Orchestrated bug resolution with full Planning/TDD parity (quality gates, autonomous execution, git checkpoints)"
+  category: "debugging"
+  deployment_tier: "user"
+  status: "active"
+  created_date: "2025-12-09"
+  compliance_baseline: "TDD Mastery Phase 5"
+  maintainer: "CORTEX Debug Team"
+  related_orchestrators:
+    - "tdd_workflow_orchestrator"
+    - "review_orchestrator"
+    - "planning_orchestrator"
+  documentation_path: "cortex-brain/documents/implementation-guides/debug-orchestrator-guide.md"
+  parent_plan: "TDD-MASTERY-PHASE-5-PLAN.yaml"
+
+# ========================================
+# Requirements
+# ========================================
+
+requirements:
+  # ===== Critical Requirements =====
+  
+  - requirement_id: "DBG-001"
+    name: "Bug Report Intake and Parsing"
+    description: |
+      Accept bug reports in natural language or structured format (test failures).
+      Parse to extract affected components, error messages, stack traces.
+    priority: "critical"
+    status: "planned"
+    validation_method: "method_exists"
+    validation_criteria: "DebugOrchestrator.parse_bug_report()"
+    implementation_notes: |
+      - Support natural language bug descriptions
+      - Parse pytest/unittest failure output
+      - Extract component names, error types
+      - Correlate with test file locations
+    estimated_effort_hours: 8
+    
+  - requirement_id: "DBG-002"
+    name: "Review Orchestrator Integration"
+    description: |
+      Trigger contextual architectural review scoped to bug context.
+      Classify findings as BLOCKER/CRITICAL/INFO for prioritization.
+    priority: "critical"
+    status: "planned"
+    validation_method: "integration_test"
+    validation_criteria: "Bug report triggers review with scoped findings"
+    implementation_notes: |
+      - Extract scope keywords from bug description
+      - Call ReviewOrchestrator.run_contextual_review()
+      - Classify findings by relevance to bug
+      - Present findings in debug session context
+    estimated_effort_hours: 6
+    
+  - requirement_id: "DBG-003"
+    name: "Template-Based Debug Injection"
+    description: |
+      Inject debug code at strategic locations using pre-defined templates.
+      All injected code must have CORTEX_DEBUG_ markers for cleanup.
+    priority: "critical"
+    status: "planned"
+    validation_method: "method_exists"
+    validation_criteria: "DebugTemplateInjector.inject_at_locations()"
+    implementation_notes: |
+      - Function entry/exit logging template
+      - Variable state capture template
+      - Exception boundary wrapping
+      - Browser console.log for UI bugs
+      - Python logging for backend bugs
+    estimated_effort_hours: 12
+    
+  - requirement_id: "DBG-004"
+    name: "One-Shot Marker Cleanup"
+    description: |
+      Remove ALL debug markers in one operation with 100% accuracy.
+      Verify zero markers remain after cleanup.
+    priority: "critical"
+    status: "planned"
+    validation_method: "method_exists"
+    validation_criteria: "DebugMarkerCleanup.cleanup_all_markers()"
+    implementation_notes: |
+      - Scan codebase for CORTEX_DEBUG_ prefix
+      - Remove marker blocks (Python and JavaScript)
+      - Validate no markers remain
+      - Generate cleanup report
+    estimated_effort_hours: 8
+    
+  - requirement_id: "DBG-005"
+    name: "Fix Verification Loop"
+    description: |
+      Apply fix → run tests → re-debug on failure OR cleanup on success.
+      Loop until tests pass or user aborts.
+    priority: "critical"
+    status: "planned"
+    validation_method: "integration_test"
+    validation_criteria: "Full loop executes with passing tests"
+    implementation_notes: |
+      - Apply fix programmatically or guide user
+      - Run tests via TestExecutionManager
+      - On failure: inject new debug markers
+      - On success: cleanup all markers + git checkpoint
+    estimated_effort_hours: 10
+
+  # ===== High Priority Requirements =====
+  
+  - requirement_id: "DBG-006"
+    name: "Holistic Root Cause Analysis"
+    description: |
+      Combine review findings, debug logs, and test failures to generate
+      root cause hypothesis with confidence score.
+    priority: "high"
+    status: "planned"
+    validation_method: "method_exists"
+    validation_criteria: "DebugOrchestrator.analyze_root_cause()"
+    implementation_notes: |
+      - Correlate review findings with debug logs
+      - Identify common patterns across failures
+      - Generate hypothesis ranking
+      - Present top 3 likely causes
+    estimated_effort_hours: 10
+    
+  - requirement_id: "DBG-007"
+    name: "Browser Console Bridge"
+    description: |
+      Generate JavaScript console.log statements for UI debugging.
+      Provide WebSocket stub for future real-time streaming (CORTEX 4.0).
+    priority: "high"
+    status: "planned"
+    validation_method: "method_exists"
+    validation_criteria: "BrowserConsoleBridge.generate_console_logs()"
+    implementation_notes: |
+      - Structured console.log format (timestamp, component, data)
+      - Insert at UI event handlers
+      - WebSocket stub for future CDP integration
+    estimated_effort_hours: 8
+    
+  - requirement_id: "DBG-008"
+    name: "Log File Instrumentation"
+    description: |
+      Inject Python logging.debug() calls at function boundaries.
+      Use correlation IDs for distributed tracing.
+    priority: "high"
+    status: "planned"
+    validation_method: "method_exists"
+    validation_criteria: "LogInstrumentor.inject_logging()"
+    implementation_notes: |
+      - Structured log format with correlation IDs
+      - Function entry/exit logging
+      - Variable state capture
+      - Log aggregation stub for future ML analysis (4.0)
+    estimated_effort_hours: 8
+
+  # ===== Medium Priority Requirements =====
+  
+  - requirement_id: "DBG-009"
+    name: "Debug Session Persistence"
+    description: |
+      Store debug session data in Tier 1 for resumption and analysis.
+      Track marker locations, logs generated, fixes attempted.
+    priority: "medium"
+    status: "planned"
+    validation_method: "database_check"
+    validation_criteria: "Debug sessions stored in Tier 1 working_memory.db"
+    implementation_notes: |
+      - Session schema in Tier 1
+      - Track marker injection points
+      - Store debug logs
+      - Record fix attempts
+    estimated_effort_hours: 6
+    
+  - requirement_id: "DBG-010"
+    name: "Pattern Learning from Debug Sessions"
+    description: |
+      Capture debugging patterns to Tier 2 Knowledge Graph.
+      Learn common bug types, effective debug strategies.
+    priority: "medium"
+    status: "planned"
+    validation_method: "integration_test"
+    validation_criteria: "Debug patterns appear in Tier 2 after session"
+    implementation_notes: |
+      - Extract patterns on successful fix
+      - Store: bug type, debug strategy, fix approach
+      - Use LearningObserver for decoupled capture
+    estimated_effort_hours: 4
+  
+  - requirement_id: "DBG-011"
+    name: "Template-Based Event Tracing (Hybrid Approach)"
+    description: |
+      Capture full user interaction trace using template-based event listeners.
+      Provides 80% of full trace value with 20% of the effort.
+      Defers real-time streaming and structured storage to CORTEX 4.0.
+    priority: "high"
+    status: "planned"
+    validation_method: "integration_test"
+    validation_criteria: "Event trace captures all interactions with timeline correlation"
+    implementation_notes: |
+      - Inject global event listeners (click, input, change, submit)
+      - Capture state snapshots before/after key actions
+      - Intercept API calls (fetch, XMLHttpRequest, axios)
+      - Generate structured console logs with ISO timestamps
+      - Python backend execution tracing with decorators
+      - Aggregate console logs into timeline report
+      - Correlate events with test failures
+      
+      Limitations (acceptable for CORTEX 3.0):
+      - Console-based logging (no structured DB)
+      - Manual timeline aggregation
+      - Post-mortem analysis (not real-time)
+      - No automatic state diffing
+      
+      Deferred to CORTEX 4.0:
+      - Chrome DevTools Protocol integration
+      - Real-time event streaming via WebSocket
+      - Automatic timeline generation with state diffs
+      - Structured event storage and query engine
+    estimated_effort_hours: 12
+    architecture_boundary: "Template-based (CORTEX 3.0) vs Runtime CDP (CORTEX 4.0)"
+  
+  # ===== Orchestrator Parity Requirements (Planning/TDD Pattern Matching) =====
+  
+  - requirement_id: "DBG-012"
+    name: "Phase Completion Event System"
+    description: |
+      Emit events at debug workflow milestones for LearningObserver integration.
+      Matches Planning Orchestrator pattern (lines 969, 1020, 1070).
+    priority: "critical"
+    status: "planned"
+    validation_method: "integration_test"
+    validation_criteria: "Events emitted and captured by LearningObserver automatically"
+    implementation_notes: |
+      - Event on bug report intake
+      - Event on template injection complete
+      - Event on fix verification (success/failure)
+      - Event on marker cleanup complete
+      - Payload: session_id, phase, timestamp, metrics
+      - Integration with LearningObserver from Phase 5.1
+    estimated_effort_hours: 4
+    pattern_reference: "Planning Orchestrator phase_completion events"
+  
+  - requirement_id: "DBG-013"
+    name: "Debug Response Templates"
+    description: |
+      Professional template-based responses matching Planning System 2.0 quality.
+      5 templates for debug workflow stages.
+    priority: "high"
+    status: "planned"
+    validation_method: "template_validation"
+    validation_criteria: "All templates render correctly via ResponseTemplateManager"
+    implementation_notes: |
+      - bug_report_received.yaml
+      - debug_session_progress.yaml
+      - fix_proposal.yaml
+      - debug_complete.yaml
+      - debug_failed.yaml
+      - All follow 5-part response format
+      - Visual progress indicators included
+    estimated_effort_hours: 6
+    pattern_reference: "Planning Orchestrator template integration"
+  
+  - requirement_id: "DBG-014"
+    name: "Git Checkpoint Integration"
+    description: |
+      Create git checkpoints at debug milestones for rollback capability.
+      Matches TDD Workflow pattern (tdd-red, tdd-green, tdd-refactor).
+    priority: "critical"
+    status: "planned"
+    validation_method: "integration_test"
+    validation_criteria: "Checkpoints created and rollback works"
+    implementation_notes: |
+      - Checkpoint before marker injection
+      - Checkpoint after fix application
+      - Checkpoint after marker cleanup
+      - Commit pattern: '🐛 DEBUG: [phase] - [description]'
+      - Integration with GitCheckpointOrchestrator
+      - Rollback on failure
+    estimated_effort_hours: 4
+    pattern_reference: "TDD Workflow git checkpoint pattern"
+  
+  - requirement_id: "DBG-015"
+    name: "Debug Session Quality Gates (DoR/DoD)"
+    description: |
+      Definition of Ready and Definition of Done for debug sessions.
+      Matches Planning System 2.0 quality gate pattern.
+    priority: "high"
+    status: "planned"
+    validation_method: "method_exists"
+    validation_criteria: "DebugOrchestrator.validate_dor() and validate_dod() exist"
+    implementation_notes: |
+      DoR criteria:
+      - Bug is reproducible
+      - Affected files identified
+      - Tests failing consistently
+      
+      DoD criteria:
+      - All tests passing
+      - Zero debug markers remaining
+      - Patterns learned to Tier 2
+      - Git checkpoint created
+      
+      - Visual checklists shown to user
+      - Integration with SKULL rules
+    estimated_effort_hours: 6
+    pattern_reference: "Planning Orchestrator DoR/DoD (REQ-002)"
+  
+  - requirement_id: "DBG-016"
+    name: "Autonomous Debug Workflow"
+    description: |
+      Execute full debug workflow without user intervention.
+      Matches Planning Orchestrator execute_all_phases_autonomously().
+    priority: "high"
+    status: "planned"
+    validation_method: "method_exists"
+    validation_criteria: "DebugOrchestrator.execute_debug_workflow_autonomously() exists"
+    implementation_notes: |
+      - Single command: 'debug this bug autonomously'
+      - Auto-inject → analyze → fix → verify → cleanup
+      - User approval at: fix proposal, cleanup
+      - Automatic rollback on failure
+      - Progress via ResponseTemplateManager
+      - Integration with plan_execution_orchestrator_v2 pattern
+    estimated_effort_hours: 8
+    pattern_reference: "Planning Orchestrator autonomous execution (line 1770)"
+
+# ========================================
+# Integrations
+# ========================================
+
+integrations:
+  tdd_workflow_orchestrator:
+    integration_type: "bidirectional"
+    integration_points:
+      - method: "on_bug_reported"
+        description: "TDD orchestrator triggers debug session on test failure"
+        data_flow: "Bug description + failing tests → DebugOrchestrator"
+      
+      - method: "inject_debug_context"
+        description: "Debug orchestrator provides context to TDD workflow"
+        data_flow: "Debug logs + review findings → TDD state machine"
+    
+    implementation_location: "src/workflows/tdd_workflow_orchestrator.py"
+    
+  review_orchestrator:
+    integration_type: "one-way"
+    integration_points:
+      - method: "run_contextual_review"
+        description: "Debug orchestrator triggers scoped architectural review"
+        data_flow: "Bug context + scope keywords → ReviewOrchestrator"
+      
+      - method: "classify_findings"
+        description: "Review findings classified by debug relevance"
+        data_flow: "Review results → DebugOrchestrator (BLOCKER/CRITICAL/INFO)"
+    
+    implementation_location: "src/operations/modules/architectural/review_orchestrator.py"
+    
+  knowledge_graph:
+    integration_type: "bidirectional"
+    integration_points:
+      - method: "query_debug_patterns"
+        description: "Retrieve similar past bug resolutions"
+        data_flow: "Bug type → Tier 2 → Similar patterns"
+      
+      - method: "learn_debug_pattern"
+        description: "Store successful debug strategies"
+        data_flow: "Debug session outcome → Tier 2 pattern storage"
+    
+    implementation_location: "src/tier2/knowledge_graph.py"
+    
+  git_checkpoint_orchestrator:
+    integration_type: "one-way"
+    integration_points:
+      - method: "create_auto_checkpoint"
+        description: "Create git checkpoint on successful fix"
+        data_flow: "Fix complete event → Git checkpoint"
+    
+    implementation_location: "src/orchestrators/git_checkpoint_orchestrator.py"
+
+# ========================================
+# Brain Protection Compliance
+# ========================================
+
+brain_protection:
+  skull_rules_enforced:
+    - rule: "TDD_ENFORCEMENT"
+      compliance: "Debug orchestrator follows RED→GREEN→REFACTOR"
+      validation: "Tests run before and after debug injection"
+      
+    - rule: "REFACTOR_CODE_CLEANUP_ENFORCEMENT"
+      compliance: "All debug markers removed after fix"
+      validation: "Zero markers remain post-cleanup"
+      
+    - rule: "TEST_LOCATION_SEPARATION"
+      compliance: "Debug logs respect app/CORTEX isolation"
+      validation: "User repo tests debugged separately from CORTEX tests"
+      
+    - rule: "GIT_ISOLATION_ENFORCEMENT"
+      compliance: "Debug markers never committed to git"
+      validation: "Pre-commit hook blocks CORTEX_DEBUG_ markers"
+      
+    - rule: "SKULL_PRIVACY_PROTECTION"
+      compliance: "Debug logs sanitized for PII"
+      validation: "No sensitive data in stored logs"
+
+# ========================================
+# Quality Gates
+# ========================================
+
+quality_gates:
+  entry_gates:
+    - gate: "Bug report validated"
+      criteria: "Contains component name OR test failure OR error message"
+      blocker: true
+      
+    - gate: "Test failure reproducible"
+      criteria: "Tests fail consistently (not flaky)"
+      blocker: true
+      
+    - gate: "No existing debug session active"
+      criteria: "Only one debug session per repo at a time"
+      blocker: true
+  
+  execution_gates:
+    - gate: "Marker injection succeeds"
+      criteria: "All templates inject without syntax errors"
+      blocker: true
+      
+    - gate: "Debug logs generated"
+      criteria: "At least one log entry per injected marker"
+      blocker: false
+      
+    - gate: "Review findings available"
+      criteria: "Review orchestrator returns structured findings"
+      blocker: false
+  
+  exit_gates:
+    - gate: "Tests passing"
+      criteria: "All tests pass after fix"
+      blocker: true
+      
+    - gate: "Zero markers remaining"
+      criteria: "100% marker cleanup validated"
+      blocker: true
+      
+    - gate: "Git checkpoint created"
+      criteria: "Fix committed with TDD workflow metadata"
+      blocker: false
+
+# ========================================
+# Performance Requirements
+# ========================================
+
+performance:
+  latency_targets:
+    - operation: "Bug report parsing"
+      target: "<2 seconds"
+      measurement: "Time from intake to session start"
+      
+    - operation: "Template injection"
+      target: "<5 seconds"
+      measurement: "Time to inject markers in typical codebase"
+      
+    - operation: "Marker cleanup"
+      target: "<10 seconds"
+      measurement: "Time to remove all markers from large repo"
+      
+    - operation: "Root cause analysis"
+      target: "<30 seconds"
+      measurement: "Time to generate hypothesis from logs + review"
+  
+  throughput_targets:
+    - operation: "Concurrent debug sessions"
+      target: "1 session per repository"
+      constraint: "Avoid marker conflicts"
+      
+    - operation: "Debug log volume"
+      target: "<100 MB per session"
+      constraint: "Prevent log storage overflow"
+
+# ========================================
+# Security Considerations
+# ========================================
+
+security:
+  threats:
+    - threat: "Sensitive data in debug logs"
+      mitigation: "PII detection and sanitization"
+      skull_rule: "SKULL_PRIVACY_PROTECTION"
+      
+    - threat: "Debug markers in production"
+      mitigation: "Pre-commit hook blocks CORTEX_DEBUG_ markers"
+      skull_rule: "GIT_ISOLATION_ENFORCEMENT"
+      
+    - threat: "Malicious template injection"
+      mitigation: "Template validation before injection"
+      skull_rule: "TDD_ENFORCEMENT"
+  
+  pii_handling:
+    - "Detect email addresses, phone numbers, SSNs in logs"
+    - "Replace with placeholders (e.g., [EMAIL_REDACTED])"
+    - "Store PII detection patterns in Tier 2"
+
+# ========================================
+# Monitoring and Observability
+# ========================================
+
+monitoring:
+  metrics:
+    - metric: "Debug sessions started"
+      type: "counter"
+      alert_threshold: null
+      
+    - metric: "Template injection success rate"
+      type: "percentage"
+      alert_threshold: "<95%"
+      
+    - metric: "Marker cleanup accuracy"
+      type: "percentage"
+      alert_threshold: "<100%"
+      
+    - metric: "Fix verification loop iterations"
+      type: "histogram"
+      alert_threshold: ">5 iterations"
+      
+    - metric: "Root cause hypothesis accuracy"
+      type: "percentage (user feedback)"
+      alert_threshold: "<70%"
+  
+  logging:
+    - "Debug session lifecycle events"
+    - "Template injection operations"
+    - "Marker cleanup results"
+    - "Review orchestrator integration"
+
+# ========================================
+# Testing Strategy
+# ========================================
+
+testing_strategy:
+  unit_tests:
+    - "Bug report parsing"
+    - "Template generation"
+    - "Marker detection and removal"
+    - "Root cause hypothesis generation"
+  
+  integration_tests:
+    - "Bug report → Review + Debug orchestrators"
+    - "Template injection → Execution → Cleanup"
+    - "Fix verification loop (full cycle)"
+    - "Pattern learning after successful fix"
+  
+  performance_tests:
+    - "Template injection latency (<5s)"
+    - "Marker cleanup latency (<10s)"
+    - "Root cause analysis latency (<30s)"
+  
+  validation_tests:
+    - "Zero markers after cleanup (100% accuracy)"
+    - "Injected code is syntactically valid"
+    - "No false positives in marker detection"
+    - "PII sanitization effectiveness"
+
+# ========================================
+# Rollback Strategy
+# ========================================
+
+rollback:
+  triggers:
+    - "Marker cleanup fails validation (false negatives)"
+    - "Performance degradation (>10s injection time)"
+    - "Integration breaks TDD workflow"
+  
+  procedure:
+    - step: "Disable DebugOrchestrator in orchestrator factory"
+      estimated_time: "5 minutes"
+      
+    - step: "Remove integration hooks from TDD orchestrator"
+      estimated_time: "10 minutes"
+      
+    - step: "Git revert to last stable checkpoint"
+      estimated_time: "5 minutes"
+      
+    - step: "Document rollback reason in CHANGELOG.md"
+      estimated_time: "10 minutes"
+  
+  recovery_time: "<30 minutes"
+
+# ========================================
+# Deferred to CORTEX 4.0
+# ========================================
+
+deferred_features:
+  - feature: "Full AST-based dynamic instrumentation"
+    reason: "Requires new AST transformation subsystem"
+    estimated_effort: "3-4 weeks"
+    
+  - feature: "Real-time log aggregation with ML analysis"
+    reason: "Needs log streaming infrastructure + ML models"
+    estimated_effort: "4-5 weeks"
+    
+  - feature: "Browser DevTools Protocol integration"
+    reason: "WebSocket server + CDP protocol = new subsystem"
+    estimated_effort: "2-3 weeks"
+    
+  - feature: "Distributed debug session coordination"
+    reason: "Multi-service tracing requires distributed infrastructure"
+    estimated_effort: "3-4 weeks"
+
+# ========================================
+# Success Criteria
+# ========================================
+
+success_criteria:
+  quantitative:
+    - "Debug time reduced by 40-50%"
+    - "Marker cleanup accuracy: 100% (zero false negatives)"
+    - "Template injection completes in <5 seconds"
+    - "Root cause hypothesis accuracy >70% (user feedback)"
+  
+  qualitative:
+    - "Bug resolution workflow is fully orchestrated"
+    - "Debug markers never left in code"
+    - "Integration with TDD and Review is seamless"
+    - "User feedback is positive"
+
+# ========================================
+# Change Log
+# ========================================
+
+changelog:
+  - version: "2.0.0"
+    date: "2025-12-09"
+    author: "Asif Hussain"
+    changes:
+      - "MAJOR: Orchestrator Parity with Planning/TDD patterns"
+      - "Added DBG-012: Phase Completion Event System"
+      - "Added DBG-013: Debug Response Templates (5 templates)"
+      - "Added DBG-014: Git Checkpoint Integration"
+      - "Added DBG-015: Debug Session Quality Gates (DoR/DoD)"
+      - "Added DBG-016: Autonomous Debug Workflow"
+      - "Updated to 16 requirements (6 critical, 8 high, 2 medium)"
+      - "Phase 5 duration: 4.5 weeks → 6 weeks (28h additional)"
+      - "100% feature parity with Planning System 2.0 and TDD Mastery"
+  
+  - version: "1.1.0"
+    date: "2025-12-09"
+    author: "Asif Hussain"
+    changes:
+      - "Added DBG-011: Template-Based Event Tracing (hybrid approach)"
+      - "Approved user request for full interaction trace"
+      - "Documented 3.0 vs 4.0 architecture boundary"
+      - "Updated to 11 requirements (4 critical, 5 high, 2 medium)"
+  
+  - version: "1.0.0"
+    date: "2025-12-09"
+    author: "Asif Hussain"
+    changes:
+      - "Initial manifest creation"
+      - "Defined 10 requirements (4 critical, 4 high, 2 medium)"
+      - "Documented integrations with TDD, Review, KG, Git"
+      - "Established quality gates and performance targets"

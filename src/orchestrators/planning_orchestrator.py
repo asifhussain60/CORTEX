@@ -94,6 +94,9 @@ class PlanningOrchestrator:
         # NEW: Initialize ThreatModelerAgent for security analysis
         self.threat_modeler = ThreatModelerAgent()
         
+        # NEW: Initialize observers list for event subscription (Phase 5.1)
+        self.observers = []
+        
         # NEW: Initialize Plan Execution Orchestrator V2 for automatic execution
         try:
             from src.orchestrators.plan_execution_orchestrator_v2 import PlanExecutionOrchestratorV2
@@ -964,6 +967,16 @@ class PlanningOrchestrator:
             except Exception as e:
                 logger.warning(f"Git checkpoint failed for Phase 1: {e}")
             
+            # Emit phase completion event for observers (Phase 5.1.2)
+            self._emit_phase_completion_event(
+                phase_id="1",
+                phase_name="Phase 1: Foundation",
+                dor_compliant=True,  # DoR validated before phase start
+                dod_compliant=phase_1_approved,
+                threat_model_applied=True,  # Threat modeling in Phase 1
+                acceptance_criteria_defined=True
+            )
+            
             # Show learning library link after significant phase (Phase 1 = Foundation)
             phase_1_doc_reminder = self._generate_documentation_reminder(
                 "phase_completion",
@@ -1014,6 +1027,16 @@ class PlanningOrchestrator:
             except Exception as e:
                 logger.warning(f"Git checkpoint failed for Phase 2: {e}")
             
+            # Emit phase completion event for observers (Phase 5.1.2)
+            self._emit_phase_completion_event(
+                phase_id="2",
+                phase_name="Phase 2: Development",
+                dor_compliant=True,
+                dod_compliant=phase_2_approved,
+                threat_model_applied=False,  # No threat modeling in Phase 2
+                acceptance_criteria_defined=True
+            )
+            
             # Phase 2 documentation reminder (less critical than Phase 1 or 3)
             # Only show if user explicitly wants per-phase docs
             phase_2_doc_reminder = self._generate_documentation_reminder(
@@ -1045,17 +1068,27 @@ class PlanningOrchestrator:
             logger.info("✅ Phase 3 written to file")
             
             # Progress: Phase 3 complete (4 of 5 steps)
-            yield_progress(4, 5, "Phase 3: Validation & Deployment complete (Acceptance, Security, Deployment)")
+            # Git checkpoint after Phase 3 completion
+            try:
+                self.git_checkpoint.create_auto_checkpoint(
+                    operation="plan-phase-3",
+                    message=f"Planning Phase 3 complete: {feature_name}"
+                )
+                logger.info("✅ Git checkpoint created for Phase 3")
+            except Exception as e:
+                logger.warning(f"Git checkpoint failed for Phase 3: {e}")
             
-            # Checkpoint 4: Phase 3 approval
-            phase_3_approved = self._handle_phase_checkpoint(
-                checkpoint_callback,
-                "phase-3",
-                "Phase 3: Validation & Deployment",
-                phase_3_sections
+            # Emit phase completion event for observers (Phase 5.1.2)
+            self._emit_phase_completion_event(
+                phase_id="3",
+                phase_name="Phase 3: Validation & Deployment",
+                dor_compliant=True,
+                dod_compliant=phase_3_approved,
+                threat_model_applied=False,
+                acceptance_criteria_defined=True
             )
             
-            # Git checkpoint after Phase 3 completion
+            # Show learning library link after Phase 3 (Validation = significant)
             try:
                 self.git_checkpoint.create_auto_checkpoint(
                     operation="plan-phase-3",
@@ -5021,3 +5054,72 @@ class PlanningOrchestrator:
             {"name": "Critical Issues", "content": "\n".join(critical_lines)},
             {"name": "Validation", "content": "\n".join(validation_lines)}
         ]
+    
+    # ==================== Observer Pattern Methods (Phase 5.1.2) ====================
+    
+    def subscribe(self, observer) -> None:
+        """
+        Subscribe observer to planning events.
+        
+        Args:
+            observer: Observer instance with on_phase_completion method
+        """
+        if observer not in self.observers:
+            self.observers.append(observer)
+            logger.info(f"✅ Observer subscribed: {observer.__class__.__name__}")
+    
+    def unsubscribe(self, observer) -> None:
+        """
+        Unsubscribe observer from planning events.
+        
+        Args:
+            observer: Observer instance to remove
+        """
+        if observer in self.observers:
+            self.observers.remove(observer)
+            logger.info(f"Observer unsubscribed: {observer.__class__.__name__}")
+    
+    def _emit_phase_completion_event(
+        self,
+        phase_id: str,
+        phase_name: str,
+        duration_seconds: float = 0.0,
+        dor_compliant: bool = False,
+        dod_compliant: bool = False,
+        threat_model_applied: bool = False,
+        acceptance_criteria_defined: bool = False,
+        estimated_hours: int = 0,
+        actual_hours: int = 0
+    ) -> None:
+        """
+        Emit phase completion event to all observers.
+        
+        Args:
+            phase_id: Phase identifier (e.g., "1.1", "2.3")
+            phase_name: Human-readable phase name
+            duration_seconds: Phase duration in seconds
+            dor_compliant: Whether DoR criteria met
+            dod_compliant: Whether DoD criteria met
+            threat_model_applied: Whether threat modeling was performed
+            acceptance_criteria_defined: Whether acceptance criteria exist
+            estimated_hours: Original time estimate
+            actual_hours: Actual time spent (if completed)
+        """
+        event = {
+            "phase_id": phase_id,
+            "phase_name": phase_name,
+            "duration_seconds": duration_seconds,
+            "dor_compliant": dor_compliant,
+            "dod_compliant": dod_compliant,
+            "threat_model_applied": threat_model_applied,
+            "acceptance_criteria_defined": acceptance_criteria_defined,
+            "estimated_hours": estimated_hours,
+            "actual_hours": actual_hours,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        for observer in self.observers:
+            try:
+                observer.on_phase_completion(event)
+            except Exception as e:
+                logger.error(f"❌ Observer {observer.__class__.__name__} failed: {e}")

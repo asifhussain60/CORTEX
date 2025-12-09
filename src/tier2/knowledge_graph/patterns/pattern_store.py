@@ -47,6 +47,7 @@ class PatternType(Enum):
     ANTI_PATTERN = "anti_pattern"  # What to avoid
     SOLUTION = "solution"           # Proven solutions to problems
     CONTEXT = "context"            # Contextual knowledge
+    BUG_RESOLUTION = "bug_resolution"  # RCA patterns from debug sessions
 
 
 class PatternStore:

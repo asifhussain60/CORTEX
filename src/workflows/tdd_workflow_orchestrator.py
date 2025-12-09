@@ -291,6 +291,9 @@ class TDDWorkflowOrchestrator:
         # Phase 4 - User Path Configuration (2025-12-04)
         self.path_resolver = PathResolver(workspace_root=config.project_root)
         self.path_adapter = TDDWorkflowPathAdapter(config.project_root)
+        
+        # Phase 5.1 - Observer Pattern for Learning (2025-12-09)
+        self.observers = []
     
     def _detect_test_location(self, source_file: str) -> Path:
         """
@@ -850,12 +853,25 @@ class TDDWorkflowOrchestrator:
         if self.config.enable_session_tracking:
             self.page_tracker.save_context(self.current_context, self.state_machine)
         
-        return {
-            "cycle_number": latest_cycle.cycle_number if latest_cycle else 0,
-            "tests_written": latest_cycle.tests_written if latest_cycle else 0,
-            "tests_passing": latest_cycle.tests_passing if latest_cycle else 0,
-            "duration_seconds": latest_cycle.total_duration if latest_cycle else 0
-        }
+        # Phase 5.1 - Emit TDD cycle completion event for observers
+        if latest_cycle:
+            self._emit_tdd_cycle_completion_event(latest_cycle)
+        
+        # Extract cycle data for return (handle both dict and object)
+        if isinstance(latest_cycle, dict):
+            return {
+                "cycle_number": latest_cycle.get('cycle_number', 0),
+                "tests_written": latest_cycle.get('tests_written', 0),
+                "tests_passing": latest_cycle.get('tests_passing', 0),
+                "duration_seconds": latest_cycle.get('total_duration', 0)
+            }
+        else:
+            return {
+                "cycle_number": latest_cycle.cycle_number if latest_cycle else 0,
+                "tests_written": latest_cycle.tests_written if latest_cycle else 0,
+                "tests_passing": latest_cycle.tests_passing if latest_cycle else 0,
+                "duration_seconds": latest_cycle.total_duration if latest_cycle else 0
+            }
     
     def save_progress(self, location: Optional[PageLocation] = None, notes: str = "") -> bool:
         """
@@ -1107,3 +1123,109 @@ class TDDWorkflowOrchestrator:
                     )
         except Exception as e:
             print(f"⚠️  Failed to store test results in brain: {e}")
+    
+    # ========================================================================
+    # Phase 5.1 - Observer Pattern Methods
+    # ========================================================================
+    
+    def subscribe(self, observer) -> None:
+        """
+        Subscribe an observer to TDD cycle completion events.
+        
+        Phase 5.1: Observer pattern for automated learning from TDD cycles.
+        
+        Args:
+            observer: Observer instance with on_tdd_cycle_completion(event_data) method
+        """
+        if observer not in self.observers:
+            self.observers.append(observer)
+            print(f"✅ Observer subscribed to TDD workflow: {observer.__class__.__name__}")
+    
+    def unsubscribe(self, observer) -> None:
+        """
+        Unsubscribe an observer from TDD cycle completion events.
+        
+        Args:
+            observer: Observer instance to remove
+        """
+        if observer in self.observers:
+            self.observers.remove(observer)
+            print(f"✅ Observer unsubscribed from TDD workflow: {observer.__class__.__name__}")
+    
+    def _emit_tdd_cycle_completion_event(self, cycle_metrics) -> None:
+        """
+        Emit event to all observers when TDD cycle completes.
+        
+        Phase 5.1: Event emission for observer pattern integration.
+        
+        Event payload includes:
+        - session_id: TDD session identifier
+        - feature_name: Feature being developed
+        - cycle_number: Cycle number in session
+        - red_duration: Time in RED phase (seconds)
+        - green_duration: Time in GREEN phase (seconds)
+        - refactor_duration: Time in REFACTOR phase (seconds)
+        - total_duration: Total cycle duration (seconds)
+        - tests_written: Number of tests written
+        - tests_passing: Number of tests passing
+        - code_lines_added: Lines of code added
+        - code_lines_refactored: Lines refactored
+        - test_to_code_ratio: Tests written / code lines added
+        - refactoring_frequency: Number of refactoring iterations
+        - timestamp: ISO 8601 timestamp
+        
+        Args:
+            cycle_metrics: TDDCycleMetrics object or dict with cycle data
+        """
+        if not self.observers:
+            return
+        
+        # Handle both TDDCycleMetrics object and dict
+        if isinstance(cycle_metrics, dict):
+            cycle_data = cycle_metrics
+        else:
+            cycle_data = {
+                'cycle_number': cycle_metrics.cycle_number,
+                'red_duration': cycle_metrics.red_duration,
+                'green_duration': cycle_metrics.green_duration,
+                'refactor_duration': cycle_metrics.refactor_duration,
+                'total_duration': cycle_metrics.total_duration,
+                'tests_written': cycle_metrics.tests_written,
+                'tests_passing': cycle_metrics.tests_passing,
+                'code_lines_added': cycle_metrics.code_lines_added,
+                'code_lines_refactored': cycle_metrics.code_lines_refactored,
+                'refactoring_iterations': cycle_metrics.refactoring_iterations
+            }
+        
+        # Calculate test-to-code ratio
+        test_to_code_ratio = 0.0
+        code_lines = cycle_data.get('code_lines_added', 0)
+        tests_written = cycle_data.get('tests_written', 0)
+        if code_lines > 0:
+            test_to_code_ratio = tests_written / code_lines
+        
+        event_data = {
+            "session_id": self.current_session_id,
+            "feature_name": self.state_machine.feature_name if self.state_machine else "unknown",
+            "cycle_number": cycle_data.get('cycle_number', 0),
+            "red_duration": cycle_data.get('red_duration', 0.0),
+            "green_duration": cycle_data.get('green_duration', 0.0),
+            "refactor_duration": cycle_data.get('refactor_duration', 0.0),
+            "total_duration": cycle_data.get('total_duration', 0.0),
+            "tests_written": tests_written,
+            "tests_passing": cycle_data.get('tests_passing', 0),
+            "code_lines_added": code_lines,
+            "code_lines_refactored": cycle_data.get('code_lines_refactored', 0),
+            "test_to_code_ratio": test_to_code_ratio,
+            "refactoring_frequency": cycle_data.get('refactoring_iterations', 0),
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # Notify all observers
+        for observer in self.observers:
+            try:
+                if hasattr(observer, 'on_tdd_cycle_completion'):
+                    observer.on_tdd_cycle_completion(event_data)
+            except Exception as e:
+                # Log error but don't break other observers
+                print(f"⚠️  Observer {observer.__class__.__name__} failed to process TDD cycle event: {e}")
