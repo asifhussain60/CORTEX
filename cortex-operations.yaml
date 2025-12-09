@@ -3,7 +3,7 @@ operations:
     name: Review
     description: Code Review CLI
     deployment_tier: dual_context
-    execution_method: cli_wrapper  # System operation requiring CLI wrapper
+    execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/review_wrapper.py
     natural_language:
     - feature review
@@ -17,7 +17,7 @@ operations:
     description: Comprehensive system maintenance - runs healthcheck, align, optimize
       in optimal sequence
     deployment_tier: admin
-    execution_method: cli_wrapper  # System operation with existing CLI wrapper
+    execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/system_maintenance_wrapper.py
     natural_language:
     - system maintenance
@@ -85,7 +85,7 @@ operations:
     description: Build clean production package and publish to downloadable repository
       for user deployment
     deployment_tier: admin
-    execution_method: cli_wrapper  # System operation requiring CLI wrapper
+    execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/deploy_wrapper.py
     natural_language:
     - deploy cortex
@@ -101,7 +101,7 @@ operations:
     description: Delete and regenerate copilot-instructions.md and CORTEX.prompt.md
       from current codebase state
     deployment_tier: admin
-    execution_method: cli_wrapper  # System operation requiring CLI wrapper
+    execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/regenerate_prompts_wrapper.py
     natural_language:
     - regenerate prompts
@@ -125,6 +125,20 @@ operations:
     - update
     - create
     - checkout
+    category: general
+  debug_workflow_orchestrator:
+    name: Debug Workflow Orchestrator
+    description: CORTEX Debug Workflow Orchestrator
+    deployment_tier: user_facing
+    natural_language:
+    - added null check before session access
+    category: development
+  learning_observer:
+    name: Learning Observer
+    description: CORTEX Learning Observer
+    deployment_tier: user_facing
+    natural_language:
+    - operation name
     category: general
     modules:
     - regenerate_cortex_prompts
@@ -500,7 +514,7 @@ operations:
     name: Align
     description: CORTEX Align v2.0 - Holistic system alignment with intelligent maintenance
     deployment_tier: admin_only
-    execution_method: cli_wrapper  # System operation with NEW CLI wrapper
+    execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/align_wrapper.py
     natural_language:
     - align
@@ -635,7 +649,7 @@ operations:
     name: Healthcheck
     description: CORTEX Health Check - System health monitoring and diagnostics
     deployment_tier: admin_only
-    execution_method: cli_wrapper  # System operation with NEW CLI wrapper
+    execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/healthcheck_wrapper.py
     natural_language:
     - healthcheck
@@ -688,7 +702,7 @@ operations:
     name: Optimize
     description: CORTEX Optimize - System optimization and performance improvements
     deployment_tier: admin_only
-    execution_method: cli_wrapper  # System operation requiring CLI wrapper
+    execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/optimize_wrapper.py
     natural_language:
     - optimize
@@ -2059,9 +2073,8 @@ operations:
     description: '[INTEGRATED] Interactive planning integrated into feature_planning
       operation with CORTEX 2.1 capabilities'
     deployment_tier: integrated
-    execution_method: internal
-    status: integrated
     execution_method: copilot_chat
+    status: integrated
     integration_target: feature_planning
     natural_language:
     - let's plan a feature (integrated into feature planning)
@@ -2092,9 +2105,8 @@ operations:
     description: '[FUTURE] Collaborative architecture design with guided questions
       - Advanced planning feature'
     deployment_tier: future
-    execution_method: internal
-    status: future
     execution_method: copilot_chat
+    status: future
     future_reason: Advanced architecture planning with guided questionnaire system.
       Feature planning operation currently handles basic planning needs.
     natural_language:
@@ -2249,9 +2261,8 @@ operations:
     description: '[FUTURE] Interactive refactoring with clarification questions -
       Advanced refactoring assistance'
     deployment_tier: future
-    execution_method: internal
-    status: future
     execution_method: copilot_chat
+    status: future
     future_reason: Advanced refactoring planning with interactive guidance. Feature
       planning operation can handle basic refactoring tasks.
     natural_language:
@@ -2270,9 +2281,8 @@ operations:
     description: '[INTEGRATED] Command discovery integrated into CORTEX help system
       and natural language interface'
     deployment_tier: integrated
-    execution_method: internal
-    status: integrated
     execution_method: copilot_chat
+    status: integrated
     integration_target: Natural language interface and help system
     natural_language:
     - help (integrated into help system)
@@ -2288,9 +2298,8 @@ operations:
     description: '[INTEGRATED] Command search integrated into CORTEX help system and
       natural language interface'
     deployment_tier: integrated
-    execution_method: internal
-    status: integrated
     execution_method: copilot_chat
+    status: integrated
     integration_target: Natural language interface and help system
     natural_language:
     - find command (integrated into help system)
@@ -4357,6 +4366,14 @@ metadata:
   - version: auto-registered
     date: 2025-12-09
     changes:
+    - Auto-registered learning_observer operation
+  - version: auto-registered
+    date: 2025-12-09
+    changes:
+    - Auto-registered debug_workflow_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-09
+    changes:
     - Auto-registered threat_modeler_agent operation
   - version: auto-registered
     date: 2025-12-07
@@ -5387,7 +5404,7 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 169
+  total_operations: 171
   total_modules: 115
   total_phases: 9
   cortex_2_0_operations: 9
@@ -5424,7 +5441,7 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
-  last_updated: '2025-12-09 04:49:14'
+  last_updated: '2025-12-09 10:12:10'
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper
@@ -6354,19 +6371,12 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Automated development tooling setup
-
-# ============================================================================
-# PHASE 5 ORCHESTRATORS - OBSERVER PATTERN (INTERNAL)
-# ============================================================================
-# These orchestrators implement the observer pattern for event-driven learning.
-# They are NOT directly user-invoked. execution_method: internal
-
   learning_observer:
     name: Learning Observer
     description: Event-driven pattern capture for Knowledge Graph (Phase 5.1)
     deployment_tier: internal
     execution_method: internal
-    natural_language: []  # No direct invocation
+    natural_language: []
     category: infrastructure
     modules:
     - learning_observer
@@ -6375,23 +6385,27 @@ statistics:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: |
-        Observer pattern implementation for Phase 5.1/5.2
+      notes: 'Observer pattern implementation for Phase 5.1/5.2
+
         Subscribes to events from Planning, TDD, and Debug orchestrators
+
         Automatically captures patterns to Tier 2 Knowledge Graph
+
         Event types: phase_completion, tdd_cycle_completion, debug_session_completion
+
         Performance: <50ms event handling overhead
+
+        '
     related_orchestrators:
-    - planning_orchestrator  # Emits phase_completion events
-    - tdd_implementation_orchestrator  # Emits tdd_cycle_completion events
-    - debug_workflow_orchestrator  # Emits debug_session_completion events
-  
+    - planning_orchestrator
+    - tdd_implementation_orchestrator
+    - debug_workflow_orchestrator
   debug_workflow_orchestrator:
     name: Debug Workflow Orchestrator
     description: Session-based debugging with RCA pattern capture (Phase 5.2)
     deployment_tier: internal
     execution_method: internal
-    natural_language: []  # No direct invocation
+    natural_language: []
     category: infrastructure
     modules:
     - debug_workflow_orchestrator
@@ -6400,21 +6414,26 @@ statistics:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: |
-        Observer pattern implementation for Phase 5.2
+      notes: 'Observer pattern implementation for Phase 5.2
+
         Session-based debugging with UUID tracking
+
         Automatic RCA (Root Cause Analysis) pattern capture
+
         Notifies LearningObserver on session completion
+
         Performance: <50ms event emission (<10ms typical)
+
         Tests: 11/11 passing (100%)
+
+        '
     related_orchestrators:
-    - learning_observer  # Receives debug_session_completion events
-  
+    - learning_observer
   tdd_workflow_orchestrator:
     name: TDD Workflow Orchestrator
     description: TDD workflow orchestration with observer support (Phase 5.1)
     deployment_tier: internal
-    execution_method: copilot_chat  # Interactive workflow via chat
+    execution_method: copilot_chat
     natural_language:
     - start tdd
     - begin tdd workflow
@@ -6430,16 +6449,6 @@ statistics:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: |
-        Interactive TDD workflow with RED→GREEN→REFACTOR enforcement
-        Emits tdd_cycle_completion events to LearningObserver
-        Per-layer coverage validation
-        Empty test detection
-    related_orchestrators:
-    - learning_observer  # Receives tdd_cycle_completion events
-    implementation_status:
-      status: ready
-      modules_implemented: 1
-      modules_total: 1
-      completion_percentage: 100
       notes: Development tool installer
+    related_orchestrators:
+    - learning_observer
