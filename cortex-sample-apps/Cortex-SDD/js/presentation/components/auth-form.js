@@ -2,252 +2,458 @@
  * Authentication Form Component
  * Handles login and registration forms
  * 
- * @module presentation/components/auth-form
  * @author Asif Hussain
  * @version 1.0.0
  */
 
-import { AuthService } from '../../application/services.js';
-import { LoginDto, RegisterDto } from '../../application/dtos.js';
-import { StorageService } from '../../utils/storage.js';
 import { Logger } from '../../utils/logger.js';
+import { AuthService } from '../../application/services.js';
 
-export class AuthForm {
+export class AuthFormComponent {
     constructor() {
         this.authService = new AuthService();
-        this.storageService = new StorageService();
-        this.logger = new Logger('AuthForm');
-        this.isLoginMode = true;
+        this.currentMode = 'login'; // 'login' or 'register'
+        Logger.debug('AuthFormComponent initialized');
     }
 
     /**
-     * Render the authentication form
+     * Render login form
      * @param {HTMLElement} container - Container element
      */
-    render(container) {
+    renderLogin(container) {
+        if (!container) {
+            Logger.error('AuthFormComponent.renderLogin: container is null');
+            return;
+        }
+
+        this.currentMode = 'login';
         container.innerHTML = `
-            <div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-                <div class="max-w-md w-full space-y-8">
-                    <div>
-                        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                            Cortex-SDD Task Manager
-                        </h2>
-                        <p class="mt-2 text-center text-sm text-gray-600">
-                            ${this.isLoginMode ? 'Sign in to your account' : 'Create a new account'}
+            <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+                    <!-- Logo/Title -->
+                    <div class="text-center mb-8">
+                        <h1 class="text-4xl font-bold text-gray-800 mb-2">Cortex-SDD</h1>
+                        <p class="text-gray-600">Task Management System</p>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="login-form" class="space-y-6">
+                        <!-- Username Field -->
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                                Username
+                            </label>
+                            <input 
+                                type="text" 
+                                id="username" 
+                                name="username"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="Enter your username"
+                            />
+                            <span class="text-red-500 text-sm hidden" id="username-error"></span>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                                Password
+                            </label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="Enter your password"
+                            />
+                            <span class="text-red-500 text-sm hidden" id="password-error"></span>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="form-error" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button 
+                            type="submit"
+                            id="submit-btn"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                        >
+                            <span id="submit-text">Sign In</span>
+                            <span id="submit-spinner" class="hidden ml-2">
+                                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </form>
+
+                    <!-- Toggle to Register -->
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600 text-sm">
+                            Don't have an account? 
+                            <button 
+                                id="toggle-register" 
+                                class="text-blue-600 hover:text-blue-800 font-medium"
+                            >
+                                Register here
+                            </button>
                         </p>
                     </div>
-                    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                        <form id="auth-form" class="space-y-6">
-                            ${this.renderFormFields()}
-                            <div>
-                                <button type="submit" 
-                                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    ${this.isLoginMode ? 'Sign in' : 'Register'}
-                                </button>
-                            </div>
-                            <div class="text-center">
-                                <button type="button" id="toggle-mode" class="text-sm text-indigo-600 hover:text-indigo-500">
-                                    ${this.isLoginMode ? "Don't have an account? Register" : 'Already have an account? Sign in'}
-                                </button>
-                            </div>
-                        </form>
-                        <div id="error-message" class="hidden mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                            <span class="block sm:inline" id="error-text"></span>
-                        </div>
-                        <div id="loading" class="hidden mt-4 text-center">
-                            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+
+                    <!-- Demo Credentials -->
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-xs font-medium text-gray-700 mb-2">Demo Credentials:</p>
+                        <div class="text-xs text-gray-600 space-y-1">
+                            <div><strong>Admin:</strong> admin / Admin@123</div>
+                            <div><strong>Team Lead:</strong> teamlead / TeamLead@123</div>
+                            <div><strong>User:</strong> user / User@123</div>
                         </div>
                     </div>
                 </div>
             </div>
         `;
 
-        this.attachEventListeners();
+        this._attachLoginHandlers(container);
     }
 
     /**
-     * Render form fields based on mode
-     * @returns {string} HTML string
+     * Render registration form
+     * @param {HTMLElement} container - Container element
      */
-    renderFormFields() {
-        if (this.isLoginMode) {
-            return `
-                <div>
-                    <label for="usernameOrEmail" class="block text-sm font-medium text-gray-700">
-                        Username or Email
-                    </label>
-                    <input id="usernameOrEmail" name="usernameOrEmail" type="text" required
-                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="Username or Email">
+    renderRegister(container) {
+        if (!container) {
+            Logger.error('AuthFormComponent.renderRegister: container is null');
+            return;
+        }
+
+        this.currentMode = 'register';
+        container.innerHTML = `
+            <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-600 p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+                    <!-- Logo/Title -->
+                    <div class="text-center mb-8">
+                        <h1 class="text-4xl font-bold text-gray-800 mb-2">Join Cortex-SDD</h1>
+                        <p class="text-gray-600">Create your account</p>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <form id="register-form" class="space-y-4">
+                        <!-- Username Field -->
+                        <div>
+                            <label for="reg-username" class="block text-sm font-medium text-gray-700 mb-2">
+                                Username
+                            </label>
+                            <input 
+                                type="text" 
+                                id="reg-username" 
+                                name="username"
+                                required
+                                minlength="3"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                placeholder="Choose a username"
+                            />
+                            <span class="text-red-500 text-sm hidden" id="reg-username-error"></span>
+                        </div>
+
+                        <!-- Email Field -->
+                        <div>
+                            <label for="reg-email" class="block text-sm font-medium text-gray-700 mb-2">
+                                Email
+                            </label>
+                            <input 
+                                type="email" 
+                                id="reg-email" 
+                                name="email"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                placeholder="your.email@example.com"
+                            />
+                            <span class="text-red-500 text-sm hidden" id="reg-email-error"></span>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div>
+                            <label for="reg-password" class="block text-sm font-medium text-gray-700 mb-2">
+                                Password
+                            </label>
+                            <input 
+                                type="password" 
+                                id="reg-password" 
+                                name="password"
+                                required
+                                minlength="8"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                placeholder="Create a strong password"
+                            />
+                            <span class="text-xs text-gray-500">Min 8 characters, include uppercase, number, special char</span>
+                            <span class="text-red-500 text-sm hidden block" id="reg-password-error"></span>
+                        </div>
+
+                        <!-- Confirm Password Field -->
+                        <div>
+                            <label for="reg-confirm-password" class="block text-sm font-medium text-gray-700 mb-2">
+                                Confirm Password
+                            </label>
+                            <input 
+                                type="password" 
+                                id="reg-confirm-password" 
+                                name="confirmPassword"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                placeholder="Confirm your password"
+                            />
+                            <span class="text-red-500 text-sm hidden" id="reg-confirm-password-error"></span>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="form-error" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button 
+                            type="submit"
+                            id="submit-btn"
+                            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                        >
+                            <span id="submit-text">Create Account</span>
+                            <span id="submit-spinner" class="hidden ml-2">
+                                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </form>
+
+                    <!-- Toggle to Login -->
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600 text-sm">
+                            Already have an account? 
+                            <button 
+                                id="toggle-login" 
+                                class="text-purple-600 hover:text-purple-800 font-medium"
+                            >
+                                Sign in here
+                            </button>
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">
-                        Password
-                    </label>
-                    <input id="password" name="password" type="password" required
-                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="Password">
-                </div>
-            `;
-        } else {
-            return `
-                <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700">
-                        Username
-                    </label>
-                    <input id="username" name="username" type="text" required
-                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="Username">
-                </div>
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">
-                        Email
-                    </label>
-                    <input id="email" name="email" type="email" required
-                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="Email address">
-                </div>
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">
-                        Password
-                    </label>
-                    <input id="password" name="password" type="password" required
-                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="Password (min 6 chars, 1 uppercase, 1 number)">
-                </div>
-                <div>
-                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700">
-                        Confirm Password
-                    </label>
-                    <input id="confirmPassword" name="confirmPassword" type="password" required
-                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="Confirm password">
-                </div>
-            `;
+            </div>
+        `;
+
+        this._attachRegisterHandlers(container);
+    }
+
+    /**
+     * Attach login form handlers
+     * @param {HTMLElement} container - Container element
+     */
+    _attachLoginHandlers(container) {
+        const form = container.querySelector('#login-form');
+        const toggleBtn = container.querySelector('#toggle-register');
+
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await this._handleLogin(e.target);
+            });
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                this.renderRegister(container.parentElement || container);
+            });
         }
     }
 
     /**
-     * Attach event listeners
+     * Attach registration form handlers
+     * @param {HTMLElement} container - Container element
      */
-    attachEventListeners() {
-        const form = document.getElementById('auth-form');
-        const toggleButton = document.getElementById('toggle-mode');
+    _attachRegisterHandlers(container) {
+        const form = container.querySelector('#register-form');
+        const toggleBtn = container.querySelector('#toggle-login');
 
-        form.addEventListener('submit', (e) => this.handleSubmit(e));
-        toggleButton.addEventListener('click', () => this.toggleMode());
-    }
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await this._handleRegister(e.target);
+            });
+        }
 
-    /**
-     * Toggle between login and registration modes
-     */
-    toggleMode() {
-        this.isLoginMode = !this.isLoginMode;
-        const container = document.querySelector('.min-h-screen').parentElement;
-        this.render(container);
-    }
-
-    /**
-     * Handle form submission
-     * @param {Event} event - Form submit event
-     */
-    async handleSubmit(event) {
-        event.preventDefault();
-        this.hideError();
-        this.showLoading();
-
-        try {
-            if (this.isLoginMode) {
-                await this.handleLogin();
-            } else {
-                await this.handleRegistration();
-            }
-        } catch (error) {
-            this.logger.error('Authentication failed', error);
-            this.showError(error.message);
-        } finally {
-            this.hideLoading();
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                this.renderLogin(container.parentElement || container);
+            });
         }
     }
 
     /**
      * Handle login submission
+     * @param {HTMLFormElement} form - Form element
      */
-    async handleLogin() {
-        const usernameOrEmail = document.getElementById('usernameOrEmail').value;
-        const password = document.getElementById('password').value;
+    async _handleLogin(form) {
+        const formData = new FormData(form);
+        const username = formData.get('username')?.trim();
+        const password = formData.get('password');
 
-        const loginDto = LoginDto.create(usernameOrEmail, password);
-        const result = await this.authService.login(loginDto);
+        // Clear previous errors
+        this._clearErrors();
 
-        // Store authentication data
-        this.storageService.setItem('authToken', result.token);
-        this.storageService.setItem('currentUser', result.user);
+        // Validate
+        if (!username || !password) {
+            this._showError('Please fill in all fields');
+            return;
+        }
 
-        this.logger.info('Login successful', result.user);
+        // Show loading state
+        this._setLoading(true);
 
-        // Redirect to main application
-        window.location.href = 'index.html';
+        try {
+            // Call auth service
+            const result = await this.authService.login(username, password);
+            
+            if (result.success) {
+                Logger.info('Login successful');
+                // Redirect to main page
+                window.location.href = 'index.html';
+            } else {
+                this._showError(result.message || 'Invalid credentials');
+            }
+        } catch (error) {
+            Logger.error('Login error:', error);
+            this._showError(error.message || 'Login failed. Please try again.');
+        } finally {
+            this._setLoading(false);
+        }
     }
 
     /**
      * Handle registration submission
+     * @param {HTMLFormElement} form - Form element
      */
-    async handleRegistration() {
-        const username = document.getElementById('username').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
+    async _handleRegister(form) {
+        const formData = new FormData(form);
+        const username = formData.get('username')?.trim();
+        const email = formData.get('email')?.trim();
+        const password = formData.get('password');
+        const confirmPassword = formData.get('confirmPassword');
 
-        const registerDto = RegisterDto.create({
-            username,
-            email,
-            password,
-            confirmPassword
-        });
+        // Clear previous errors
+        this._clearErrors();
 
-        const result = await this.authService.register(registerDto);
+        // Validate
+        if (!username || !email || !password || !confirmPassword) {
+            this._showError('Please fill in all fields');
+            return;
+        }
 
-        // Store authentication data
-        this.storageService.setItem('authToken', result.token);
-        this.storageService.setItem('currentUser', result.user);
+        if (password !== confirmPassword) {
+            this._showFieldError('reg-confirm-password', 'Passwords do not match');
+            return;
+        }
 
-        this.logger.info('Registration successful', result.user);
+        // Show loading state
+        this._setLoading(true);
 
-        // Redirect to main application
-        window.location.href = 'index.html';
+        try {
+            // Call auth service
+            const result = await this.authService.register(username, email, password);
+            
+            if (result.success) {
+                Logger.info('Registration successful');
+                // Show success message and switch to login
+                this._showSuccess('Account created successfully! Please login.');
+                setTimeout(() => {
+                    this.renderLogin(form.closest('.min-h-screen').parentElement);
+                }, 2000);
+            } else {
+                this._showError(result.message || 'Registration failed');
+            }
+        } catch (error) {
+            Logger.error('Registration error:', error);
+            this._showError(error.message || 'Registration failed. Please try again.');
+        } finally {
+            this._setLoading(false);
+        }
     }
 
     /**
      * Show error message
      * @param {string} message - Error message
      */
-    showError(message) {
-        const errorDiv = document.getElementById('error-message');
-        const errorText = document.getElementById('error-text');
-        errorText.textContent = message;
-        errorDiv.classList.remove('hidden');
+    _showError(message) {
+        const errorDiv = document.querySelector('#form-error');
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
     }
 
     /**
-     * Hide error message
+     * Show success message
+     * @param {string} message - Success message
      */
-    hideError() {
-        const errorDiv = document.getElementById('error-message');
-        errorDiv.classList.add('hidden');
+    _showSuccess(message) {
+        const errorDiv = document.querySelector('#form-error');
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden', 'bg-red-50', 'border-red-200', 'text-red-700');
+            errorDiv.classList.add('bg-green-50', 'border-green-200', 'text-green-700');
+        }
     }
 
     /**
-     * Show loading spinner
+     * Show field-specific error
+     * @param {string} fieldId - Field ID
+     * @param {string} message - Error message
      */
-    showLoading() {
-        document.getElementById('loading').classList.remove('hidden');
+    _showFieldError(fieldId, message) {
+        const errorSpan = document.querySelector(`#${fieldId}-error`);
+        if (errorSpan) {
+            errorSpan.textContent = message;
+            errorSpan.classList.remove('hidden');
+        }
     }
 
     /**
-     * Hide loading spinner
+     * Clear all errors
      */
-    hideLoading() {
-        document.getElementById('loading').classList.add('hidden');
+    _clearErrors() {
+        const errorDiv = document.querySelector('#form-error');
+        if (errorDiv) {
+            errorDiv.classList.add('hidden');
+            errorDiv.classList.remove('bg-green-50', 'border-green-200', 'text-green-700');
+            errorDiv.classList.add('bg-red-50', 'border-red-200', 'text-red-700');
+        }
+
+        document.querySelectorAll('[id$="-error"]').forEach(span => {
+            span.classList.add('hidden');
+        });
+    }
+
+    /**
+     * Set loading state
+     * @param {boolean} isLoading - Loading state
+     */
+    _setLoading(isLoading) {
+        const submitBtn = document.querySelector('#submit-btn');
+        const submitText = document.querySelector('#submit-text');
+        const submitSpinner = document.querySelector('#submit-spinner');
+
+        if (submitBtn) {
+            submitBtn.disabled = isLoading;
+        }
+
+        if (submitText) {
+            submitText.classList.toggle('hidden', isLoading);
+        }
+
+        if (submitSpinner) {
+            submitSpinner.classList.toggle('hidden', !isLoading);
+        }
     }
 }

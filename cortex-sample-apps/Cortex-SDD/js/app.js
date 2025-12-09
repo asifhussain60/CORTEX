@@ -7,20 +7,20 @@
  * @version 1.0.0
  */
 
-import { Navbar } from './presentation/components/navbar.js';
-import { TaskForm } from './presentation/components/task-form.js';
-import { TaskList } from './presentation/components/task-list.js';
-import { MockDatabase } from './infrastructure/mock-db.js';
+import { NavbarComponent } from './presentation/components/navbar.js';
+import { TaskFormComponent } from './presentation/components/task-form.js';
+import { TaskListComponent } from './presentation/components/task-list.js';
+import { initializeDatabase } from './infrastructure/mock-db.js';
 import { StorageService } from './utils/storage.js';
 import { Logger } from './utils/logger.js';
 
 class App {
     constructor() {
-        this.logger = new Logger('App');
         this.storageService = new StorageService();
         this.navbar = null;
         this.taskForm = null;
         this.taskList = null;
+        this.currentUser = null;
     }
 
     /**
@@ -28,76 +28,169 @@ class App {
      */
     async init() {
         try {
-            this.logger.info('Initializing Cortex-SDD Application');
+            Logger.info('Initializing Cortex-SDD Application');
 
             // Check authentication
-            const authToken = this.storageService.getItem('authToken');
-            if (!authToken) {
-                this.logger.warn('No auth token found, redirecting to login');
+            const userJson = this.storageService.get('currentUser');
+            if (!userJson) {
+                Logger.warn('No auth token found, redirecting to login');
                 window.location.href = 'login.html';
                 return;
             }
 
+            this.currentUser = JSON.parse(userJson);
+
             // Initialize database (seed if needed)
-            await this.initializeDatabase();
+            await this._initializeDatabase();
 
             // Render components
-            this.renderComponents();
+            await this._renderComponents();
 
-            this.logger.info('Application initialized successfully');
+            // Setup global event listeners
+            this._setupEventListeners();
+
+            Logger.info('Application initialized successfully');
         } catch (error) {
-            this.logger.error('Failed to initialize application', error);
-            alert('Failed to initialize application: ' + error.message);
+            Logger.error('Failed to initialize application', error);
+            this._showToast('Failed to initialize application: ' + error.message, 'error');
         }
     }
 
     /**
      * Initialize mock database
      */
-    async initializeDatabase() {
-        const isSeeded = this.storageService.getItem('dbSeeded');
-        if (!isSeeded) {
-            this.logger.info('Database not seeded, seeding now');
-            await MockDatabase.seed();
-            this.storageService.setItem('dbSeeded', true);
+    async _initializeDatabase() {
+        const dbSeeded = this.storageService.get('dbSeeded');
+        if (!dbSeeded) {
+            Logger.info('Database not seeded, seeding now');
+            await initializeDatabase();
+            this.storageService.set('dbSeeded', 'true');
         }
     }
 
     /**
      * Render all components
      */
-    renderComponents() {
+    async _renderComponents() {
         // Render navbar
         const navbarContainer = document.getElementById('navbar');
         if (navbarContainer) {
-            this.navbar = new Navbar();
-            this.navbar.render(navbarContainer);
+            this.navbar = new NavbarComponent();
+            this.navbar.render(navbarContainer, this.currentUser);
         }
 
-        // Render task form
-        const formContainer = document.getElementById('task-form-container');
-        if (formContainer) {
-            this.taskForm = new TaskForm((newTask) => this.onTaskCreated(newTask));
-            this.taskForm.render(formContainer);
-        }
+        // Initialize task form (modal-based, not rendered yet)
+        this.taskForm = new TaskFormComponent();
 
         // Render task list
-        const listContainer = document.getElementById('task-list-container');
-        if (listContainer) {
-            this.taskList = new TaskList();
-            this.taskList.render(listContainer);
+        const taskListContainer = document.getElementById('task-list-container');
+        if (taskListContainer) {
+            this.taskList = new TaskListComponent();
+            await this.taskList.render(taskListContainer, this.currentUser.id);
         }
     }
 
     /**
-     * Handle task created event
-     * @param {Object} newTask - Newly created task
+     * Setup global event listeners
      */
-    onTaskCreated(newTask) {
-        this.logger.info('New task created, refreshing list', newTask);
-        if (this.taskList) {
-            this.taskList.refresh();
+    _setupEventListeners() {
+        // Create task button
+        const createBtn = document.getElementById('create-task-btn');
+        if (createBtn) {
+            createBtn.addEventListener('click', () => {
+                this.taskForm.showCreate(this.currentUser.id);
+            });
         }
+
+        // Filter input with debounce
+        const filterInput = document.getElementById('task-filter');
+        if (filterInput) {
+            let debounceTimer;
+            filterInput.addEventListener('input', (e) => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(async () => {
+                    await this.taskList.applyFilter(e.target.value);
+                    const taskListContainer = document.getElementById('task-list-container');
+                    if (taskListContainer) {
+                        await this.taskList.render(taskListContainer, this.currentUser.id);
+                    }
+                }, 300);
+            });
+        }
+
+        // Task changed event (from form)
+        window.addEventListener('taskChanged', async () => {
+            const taskListContainer = document.getElementById('task-list-container');
+            if (taskListContainer && this.taskList) {
+                await this.taskList.render(taskListContainer, this.currentUser.id);
+            }
+        });
+
+        // Edit task event (from task list)
+        window.addEventListener('editTask', (e) => {
+            if (e.detail && e.detail.taskId) {
+                this.taskForm.showEdit(e.detail.taskId, this.currentUser.id);
+            }
+        });
+
+        // Show toast event
+        window.addEventListener('showToast', (e) => {
+            if (e.detail) {
+                this._showToast(e.detail.message, e.detail.type || 'info');
+            }
+        });
+    }
+
+    /**
+     * Show toast notification
+     * @param {string} message - Message to display
+     * @param {string} type - Toast type (success, error, info)
+     */
+    _showToast(message, type = 'info') {
+        const toastContainer = document.getElementById('toast-container');
+        if (!toastContainer) return;
+
+        const colors = {
+            success: 'bg-green-500',
+            error: 'bg-red-500',
+            info: 'bg-blue-500'
+        };
+
+        const toast = document.createElement('div');
+        toast.className = `${colors[type] || colors.info} text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 slide-in-right`;
+        toast.innerHTML = `
+            <span>${this._escapeHtml(message)}</span>
+            <button class="ml-2 text-white hover:text-gray-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        `;
+
+        toastContainer.appendChild(toast);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            toast.classList.add('fade-out');
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
+
+        // Manual close
+        toast.querySelector('button').addEventListener('click', () => {
+            toast.classList.add('fade-out');
+            setTimeout(() => toast.remove(), 300);
+        });
+    }
+
+    /**
+     * Escape HTML to prevent XSS
+     * @param {string} text - Text to escape
+     * @returns {string} Escaped text
+     */
+    _escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 }
 

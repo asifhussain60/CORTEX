@@ -1,75 +1,185 @@
 /**
  * Navigation Bar Component
- * Top navigation with user info and logout
+ * Renders navigation with user info and logout
  * 
- * @module presentation/components/navbar
  * @author Asif Hussain
  * @version 1.0.0
  */
 
-import { StorageService } from '../../utils/storage.js';
 import { Logger } from '../../utils/logger.js';
+import { StorageService } from '../../utils/storage.js';
 
-export class Navbar {
+export class NavbarComponent {
     constructor() {
         this.storageService = new StorageService();
-        this.logger = new Logger('Navbar');
-        this.currentUser = this.storageService.getItem('currentUser');
+        Logger.debug('NavbarComponent initialized');
     }
 
     /**
-     * Render the navbar
+     * Render navbar
      * @param {HTMLElement} container - Container element
+     * @param {Object} currentUser - Current user object
      */
-    render(container) {
-        if (!this.currentUser) {
-            // Redirect to login if not authenticated
-            window.location.href = 'login.html';
+    render(container, currentUser) {
+        if (!container) {
+            Logger.error('NavbarComponent.render: container is null');
             return;
         }
 
-        container.innerHTML = `
-            <nav class="bg-indigo-600 shadow-lg">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                        <div class="flex items-center">
-                            <h1 class="text-white text-2xl font-bold">📋 Cortex-SDD</h1>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <span class="text-white text-sm">
-                                👤 ${this.currentUser.username} 
-                                <span class="text-indigo-200">(${this.currentUser.roleName})</span>
-                            </span>
-                            <button id="logout-btn" 
-                                class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                                Logout
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        `;
+        if (!currentUser) {
+            Logger.warn('NavbarComponent.render: no current user');
+            this._renderGuestNav(container);
+            return;
+        }
 
-        this.attachEventListeners();
+        this._renderAuthenticatedNav(container, currentUser);
     }
 
     /**
-     * Attach event listeners
+     * Render guest navigation (login link)
+     * @param {HTMLElement} container - Container element
      */
-    attachEventListeners() {
-        const logoutBtn = document.getElementById('logout-btn');
+    _renderGuestNav(container) {
+        container.innerHTML = `
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <span class="text-2xl font-bold text-blue-600">Cortex-SDD</span>
+                        <span class="ml-3 text-sm text-gray-500">Task Management</span>
+                    </div>
+                    <div>
+                        <a href="login.html" class="text-blue-600 hover:text-blue-800 font-medium">
+                            Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Render authenticated navigation
+     * @param {HTMLElement} container - Container element
+     * @param {Object} currentUser - Current user object
+     */
+    _renderAuthenticatedNav(container, currentUser) {
+        const roleDisplay = this._getRoleDisplay(currentUser.role);
+        const roleColor = this._getRoleColor(currentUser.role);
+
+        container.innerHTML = `
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Logo and Brand -->
+                    <div class="flex items-center">
+                        <span class="text-2xl font-bold text-blue-600">Cortex-SDD</span>
+                        <span class="ml-3 text-sm text-gray-500 hidden md:inline">Task Management</span>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="flex items-center gap-4">
+                        <!-- User Info -->
+                        <div class="hidden md:flex items-center gap-3">
+                            <div class="text-right">
+                                <div class="text-sm font-medium text-gray-700">
+                                    ${this._escapeHtml(currentUser.username)}
+                                </div>
+                                <div class="text-xs ${roleColor}">
+                                    ${roleDisplay}
+                                </div>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                                ${this._getInitials(currentUser.username)}
+                            </div>
+                        </div>
+
+                        <!-- Mobile User Initial -->
+                        <div class="md:hidden w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                            ${this._getInitials(currentUser.username)}
+                        </div>
+
+                        <!-- Logout Button -->
+                        <button 
+                            id="logout-btn"
+                            class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-200 text-sm font-medium"
+                        >
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Attach logout event
+        const logoutBtn = container.querySelector('#logout-btn');
         if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => this.handleLogout());
+            logoutBtn.addEventListener('click', () => this._handleLogout());
         }
     }
 
     /**
-     * Handle logout
+     * Handle logout action
      */
-    handleLogout() {
-        this.logger.info('User logging out', this.currentUser);
-        this.storageService.removeItem('authToken');
-        this.storageService.removeItem('currentUser');
+    _handleLogout() {
+        Logger.info('User logging out');
+        
+        // Clear storage
+        this.storageService.remove('currentUser');
+        this.storageService.remove('authToken');
+        
+        // Redirect to login
         window.location.href = 'login.html';
+    }
+
+    /**
+     * Get user initials
+     * @param {string} username - Username
+     * @returns {string} Initials (2 chars max)
+     */
+    _getInitials(username) {
+        if (!username) return '?';
+        const parts = username.split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+        }
+        return username.substring(0, 2).toUpperCase();
+    }
+
+    /**
+     * Get role display name
+     * @param {number} role - Role enum value
+     * @returns {string} Role display name
+     */
+    _getRoleDisplay(role) {
+        const roles = {
+            1: 'Administrator',
+            2: 'Team Lead',
+            3: 'User'
+        };
+        return roles[role] || 'Unknown';
+    }
+
+    /**
+     * Get role color class
+     * @param {number} role - Role enum value
+     * @returns {string} Tailwind color class
+     */
+    _getRoleColor(role) {
+        const colors = {
+            1: 'text-purple-600',  // Admin
+            2: 'text-blue-600',    // Team Lead
+            3: 'text-gray-600'     // User
+        };
+        return colors[role] || 'text-gray-600';
+    }
+
+    /**
+     * Escape HTML to prevent XSS
+     * @param {string} text - Text to escape
+     * @returns {string} Escaped text
+     */
+    _escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 }

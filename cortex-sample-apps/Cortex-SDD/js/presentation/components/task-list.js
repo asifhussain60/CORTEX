@@ -1,236 +1,401 @@
 /**
  * Task List Component
- * Display and manage tasks
+ * Displays tasks in responsive grid with filtering
  * 
- * @module presentation/components/task-list
  * @author Asif Hussain
  * @version 1.0.0
  */
 
-import { TaskService } from '../../application/services.js';
-import { StorageService } from '../../utils/storage.js';
 import { Logger } from '../../utils/logger.js';
+import { TaskService } from '../../application/services.js';
+import { TaskFilterDTO } from '../../application/dtos.js';
+import { Status, Priority } from '../../domain/enums.js';
 
-export class TaskList {
+export class TaskListComponent {
     constructor() {
         this.taskService = new TaskService();
-        this.storageService = new StorageService();
-        this.logger = new Logger('TaskList');
-        this.currentUser = this.storageService.getItem('currentUser');
         this.tasks = [];
-        this.filter = { isCompleted: null, searchTerm: '' };
+        this.currentFilter = new TaskFilterDTO();
+        Logger.debug('TaskListComponent initialized');
     }
 
     /**
-     * Render the task list
+     * Render task list
      * @param {HTMLElement} container - Container element
+     * @param {string} userId - Current user ID
      */
-    async render(container) {
-        container.innerHTML = `
-            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-gray-800">📝 My Tasks</h2>
-                    <div class="flex gap-2">
-                        <button id="filter-all" class="px-4 py-2 rounded-md text-sm font-medium transition-colors bg-indigo-600 text-white">
-                            All
-                        </button>
-                        <button id="filter-active" class="px-4 py-2 rounded-md text-sm font-medium transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300">
-                            Active
-                        </button>
-                        <button id="filter-completed" class="px-4 py-2 rounded-md text-sm font-medium transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300">
-                            Completed
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="mb-4">
-                    <input type="text" 
-                        id="search-tasks" 
-                        placeholder="Search tasks..." 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
-
-                <div id="tasks-container">
-                    <div class="text-center py-8">
-                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                        <p class="mt-2 text-gray-600">Loading tasks...</p>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        this.attachEventListeners();
-        await this.loadTasks();
-    }
-
-    /**
-     * Attach event listeners
-     */
-    attachEventListeners() {
-        document.getElementById('filter-all').addEventListener('click', () => this.setFilter(null));
-        document.getElementById('filter-active').addEventListener('click', () => this.setFilter(false));
-        document.getElementById('filter-completed').addEventListener('click', () => this.setFilter(true));
-        
-        const searchInput = document.getElementById('search-tasks');
-        searchInput.addEventListener('input', (e) => this.handleSearch(e.target.value));
-    }
-
-    /**
-     * Set completion filter
-     * @param {boolean|null} isCompleted - Filter value
-     */
-    async setFilter(isCompleted) {
-        this.filter.isCompleted = isCompleted;
-        
-        // Update button styles
-        document.getElementById('filter-all').className = isCompleted === null 
-            ? 'px-4 py-2 rounded-md text-sm font-medium transition-colors bg-indigo-600 text-white'
-            : 'px-4 py-2 rounded-md text-sm font-medium transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300';
-        
-        document.getElementById('filter-active').className = isCompleted === false
-            ? 'px-4 py-2 rounded-md text-sm font-medium transition-colors bg-indigo-600 text-white'
-            : 'px-4 py-2 rounded-md text-sm font-medium transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300';
-        
-        document.getElementById('filter-completed').className = isCompleted === true
-            ? 'px-4 py-2 rounded-md text-sm font-medium transition-colors bg-indigo-600 text-white'
-            : 'px-4 py-2 rounded-md text-sm font-medium transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300';
-
-        await this.loadTasks();
-    }
-
-    /**
-     * Handle search input
-     * @param {string} searchTerm - Search term
-     */
-    async handleSearch(searchTerm) {
-        this.filter.searchTerm = searchTerm;
-        await this.loadTasks();
-    }
-
-    /**
-     * Load tasks from service
-     */
-    async loadTasks() {
-        try {
-            this.tasks = await this.taskService.getAllTasks(this.currentUser.id, this.filter);
-            this.renderTasks();
-        } catch (error) {
-            this.logger.error('Failed to load tasks', error);
-            this.renderError(error.message);
-        }
-    }
-
-    /**
-     * Render tasks in the container
-     */
-    renderTasks() {
-        const container = document.getElementById('tasks-container');
-
-        if (this.tasks.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-8 text-gray-500">
-                    <p class="text-lg">No tasks found</p>
-                    <p class="text-sm">Create your first task above!</p>
-                </div>
-            `;
+    async render(container, userId) {
+        if (!container) {
+            Logger.error('TaskListComponent.render: container is null');
             return;
         }
 
+        if (!userId) {
+            Logger.error('TaskListComponent.render: userId is required');
+            return;
+        }
+
+        try {
+            // Load tasks for user
+            this.tasks = await this.taskService.getMyTasks(userId);
+            Logger.debug(`Loaded ${this.tasks.length} tasks for user ${userId}`);
+
+            this._renderTaskGrid(container);
+        } catch (error) {
+            Logger.error('TaskListComponent.render error:', error);
+            this._renderError(container, error.message);
+        }
+    }
+
+    /**
+     * Apply filter and re-render
+     * @param {string} searchKeyword - Search keyword
+     */
+    async applyFilter(searchKeyword) {
+        Logger.debug(`Applying filter: ${searchKeyword}`);
+        this.currentFilter.searchKeyword = searchKeyword;
+        
+        // Re-render will be triggered externally
+    }
+
+    /**
+     * Render task grid
+     * @param {HTMLElement} container - Container element
+     */
+    _renderTaskGrid(container) {
+        if (this.tasks.length === 0) {
+            this._renderEmptyState(container);
+            return;
+        }
+
+        const filteredTasks = this._filterTasks(this.tasks);
+
         container.innerHTML = `
-            <div class="space-y-3">
-                ${this.tasks.map(task => this.renderTaskItem(task)).join('')}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                ${filteredTasks.map(task => this._renderTaskCard(task)).join('')}
             </div>
         `;
 
-        // Attach task-specific event listeners
-        this.tasks.forEach(task => {
-            document.getElementById(`toggle-${task.id}`).addEventListener('click', () => this.toggleTask(task.id));
-            document.getElementById(`delete-${task.id}`).addEventListener('click', () => this.deleteTask(task.id));
+        // Attach event handlers
+        this._attachTaskHandlers(container);
+    }
+
+    /**
+     * Filter tasks by search keyword
+     * @param {Array} tasks - Tasks to filter
+     * @returns {Array} Filtered tasks
+     */
+    _filterTasks(tasks) {
+        if (!this.currentFilter.searchKeyword) {
+            return tasks;
+        }
+
+        const keyword = this.currentFilter.searchKeyword.toLowerCase();
+        return tasks.filter(task =>
+            task.title.toLowerCase().includes(keyword) ||
+            task.description.toLowerCase().includes(keyword) ||
+            (task.tags && task.tags.some(tag => tag.toLowerCase().includes(keyword)))
+        );
+    }
+
+    /**
+     * Render single task card
+     * @param {Object} task - Task DTO
+     * @returns {string} HTML string
+     */
+    _renderTaskCard(task) {
+        const statusColor = this._getStatusColor(task.status);
+        const priorityColor = this._getPriorityColor(task.priority);
+        const statusText = this._getStatusText(task.status);
+        const priorityText = this._getPriorityText(task.priority);
+        const isCompleted = task.status === Status.Completed;
+        const isOverdue = task.isOverdue && !isCompleted;
+
+        return `
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden" data-task-id="${task.id}">
+                <!-- Task Header -->
+                <div class="p-6">
+                    <!-- Priority Badge -->
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-3 py-1 ${priorityColor} text-white text-xs font-semibold rounded-full">
+                            ${priorityText}
+                        </span>
+                        ${isOverdue ? '<span class="text-red-600 text-xs font-semibold">⚠ OVERDUE</span>' : ''}
+                    </div>
+
+                    <!-- Task Title -->
+                    <h3 class="text-lg font-bold text-gray-800 mb-2 ${isCompleted ? 'line-through text-gray-500' : ''}">
+                        ${this._escapeHtml(task.title)}
+                    </h3>
+
+                    <!-- Task Description -->
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                        ${this._escapeHtml(task.description || 'No description')}
+                    </p>
+
+                    <!-- Status Badge -->
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-3 py-1 ${statusColor} text-white text-xs font-medium rounded-full">
+                            ${statusText}
+                        </span>
+                    </div>
+
+                    <!-- Task Meta (Due Date, Tags) -->
+                    <div class="space-y-2 mb-4">
+                        ${task.dueDate ? `
+                            <div class="flex items-center text-xs text-gray-500">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Due: ${new Date(task.dueDate).toLocaleDateString()}
+                            </div>
+                        ` : ''}
+                        
+                        ${task.tags && task.tags.length > 0 ? `
+                            <div class="flex flex-wrap gap-1">
+                                ${task.tags.map(tag => `
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">
+                                        #${this._escapeHtml(tag)}
+                                    </span>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- Task Actions -->
+                <div class="px-6 py-4 bg-gray-50 flex items-center justify-between border-t border-gray-200">
+                    <button 
+                        class="task-toggle-btn px-4 py-2 ${isCompleted ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-green-500 hover:bg-green-600'} text-white rounded-lg text-sm font-medium transition-colors duration-200"
+                        data-task-id="${task.id}"
+                    >
+                        ${isCompleted ? 'Reopen' : 'Complete'}
+                    </button>
+                    
+                    <div class="flex gap-2">
+                        <button 
+                            class="task-edit-btn p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                            data-task-id="${task.id}"
+                            title="Edit task"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </button>
+                        
+                        <button 
+                            class="task-delete-btn p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                            data-task-id="${task.id}"
+                            title="Delete task"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Render empty state
+     * @param {HTMLElement} container - Container element
+     */
+    _renderEmptyState(container) {
+        container.innerHTML = `
+            <div class="text-center py-12">
+                <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <h3 class="mt-4 text-lg font-medium text-gray-900">No tasks found</h3>
+                <p class="mt-2 text-sm text-gray-500">
+                    ${this.currentFilter.searchKeyword ? 'Try a different search term' : 'Get started by creating a new task'}
+                </p>
+            </div>
+        `;
+    }
+
+    /**
+     * Render error state
+     * @param {HTMLElement} container - Container element
+     * @param {string} message - Error message
+     */
+    _renderError(container, message) {
+        container.innerHTML = `
+            <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                <p class="text-red-700 font-medium">${this._escapeHtml(message)}</p>
+            </div>
+        `;
+    }
+
+    /**
+     * Attach event handlers to task cards
+     * @param {HTMLElement} container - Container element
+     */
+    _attachTaskHandlers(container) {
+        // Toggle complete/reopen
+        container.querySelectorAll('.task-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const taskId = e.target.closest('.task-toggle-btn').dataset.taskId;
+                this._handleToggleTask(taskId);
+            });
+        });
+
+        // Edit task
+        container.querySelectorAll('.task-edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const taskId = e.target.closest('.task-edit-btn').dataset.taskId;
+                this._handleEditTask(taskId);
+            });
+        });
+
+        // Delete task
+        container.querySelectorAll('.task-delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const taskId = e.target.closest('.task-delete-btn').dataset.taskId;
+                this._handleDeleteTask(taskId);
+            });
         });
     }
 
     /**
-     * Render a single task item
-     * @param {Object} task - Task DTO
-     * @returns {string} HTML string
+     * Handle toggle task completion
+     * @param {string} taskId - Task ID
      */
-    renderTaskItem(task) {
-        const completedClass = task.isCompleted 
-            ? 'bg-green-50 border-green-200' 
-            : 'bg-white border-gray-200';
-        const textClass = task.isCompleted 
-            ? 'line-through text-gray-500' 
-            : 'text-gray-800';
-        const checkboxClass = task.isCompleted 
-            ? 'text-green-600' 
-            : 'text-gray-400';
-
-        return `
-            <div class="flex items-center justify-between p-4 border-2 ${completedClass} rounded-md hover:shadow-md transition-shadow">
-                <div class="flex items-center gap-3 flex-1">
-                    <button id="toggle-${task.id}" class="focus:outline-none">
-                        <svg class="w-6 h-6 ${checkboxClass}" fill="currentColor" viewBox="0 0 20 20">
-                            ${task.isCompleted 
-                                ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>'
-                                : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd"/>'}
-                        </svg>
-                    </button>
-                    <span class="${textClass} flex-1">${this.escapeHtml(task.title)}</span>
-                </div>
-                <button id="delete-${task.id}" 
-                    class="ml-4 text-red-600 hover:text-red-800 focus:outline-none">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-            </div>
-        `;
-    }
-
-    /**
-     * Toggle task completion status
-     * @param {number} taskId - Task ID
-     */
-    async toggleTask(taskId) {
+    async _handleToggleTask(taskId) {
+        Logger.debug(`Toggling task: ${taskId}`);
+        
         try {
-            await this.taskService.toggleTaskCompletion(taskId, this.currentUser.id);
-            await this.loadTasks();
+            const task = this.tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            const newStatus = task.status === Status.Completed ? Status.InProgress : Status.Completed;
+            
+            await this.taskService.updateTask(taskId, { status: newStatus }, task.createdBy);
+            
+            // Reload tasks
+            const container = document.querySelector('[data-task-id]')?.parentElement?.parentElement;
+            if (container) {
+                await this.render(container, task.createdBy);
+            }
+
+            // Show toast (handled externally)
+            window.dispatchEvent(new CustomEvent('showToast', {
+                detail: { message: `Task ${newStatus === Status.Completed ? 'completed' : 'reopened'}`, type: 'success' }
+            }));
         } catch (error) {
-            this.logger.error('Failed to toggle task', error);
-            alert(`Error: ${error.message}`);
+            Logger.error('Toggle task error:', error);
+            window.dispatchEvent(new CustomEvent('showToast', {
+                detail: { message: error.message, type: 'error' }
+            }));
         }
     }
 
     /**
-     * Delete a task
-     * @param {number} taskId - Task ID
+     * Handle edit task
+     * @param {string} taskId - Task ID
      */
-    async deleteTask(taskId) {
+    _handleEditTask(taskId) {
+        Logger.debug(`Editing task: ${taskId}`);
+        window.dispatchEvent(new CustomEvent('editTask', { detail: { taskId } }));
+    }
+
+    /**
+     * Handle delete task
+     * @param {string} taskId - Task ID
+     */
+    async _handleDeleteTask(taskId) {
         if (!confirm('Are you sure you want to delete this task?')) {
             return;
         }
 
+        Logger.debug(`Deleting task: ${taskId}`);
+        
         try {
-            await this.taskService.deleteTask(taskId, this.currentUser.id);
-            await this.loadTasks();
+            const task = this.tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            await this.taskService.deleteTask(taskId, task.createdBy);
+            
+            // Reload tasks
+            const container = document.querySelector('[data-task-id]')?.parentElement?.parentElement;
+            if (container) {
+                await this.render(container, task.createdBy);
+            }
+
+            // Show toast
+            window.dispatchEvent(new CustomEvent('showToast', {
+                detail: { message: 'Task deleted successfully', type: 'success' }
+            }));
         } catch (error) {
-            this.logger.error('Failed to delete task', error);
-            alert(`Error: ${error.message}`);
+            Logger.error('Delete task error:', error);
+            window.dispatchEvent(new CustomEvent('showToast', {
+                detail: { message: error.message, type: 'error' }
+            }));
         }
     }
 
     /**
-     * Render error message
-     * @param {string} message - Error message
+     * Get status color class
+     * @param {number} status - Status enum value
+     * @returns {string} Tailwind color class
      */
-    renderError(message) {
-        const container = document.getElementById('tasks-container');
-        container.innerHTML = `
-            <div class="text-center py-8">
-                <p class="text-red-600 font-medium">Error loading tasks</p>
-                <p class="text-gray-600 text-sm">${this.escapeHtml(message)}</p>
-            </div>
-        `;
+    _getStatusColor(status) {
+        const colors = {
+            [Status.NotStarted]: 'bg-gray-500',
+            [Status.InProgress]: 'bg-blue-500',
+            [Status.Blocked]: 'bg-red-500',
+            [Status.Completed]: 'bg-green-500',
+            [Status.Cancelled]: 'bg-gray-400'
+        };
+        return colors[status] || 'bg-gray-500';
+    }
+
+    /**
+     * Get priority color class
+     * @param {number} priority - Priority enum value
+     * @returns {string} Tailwind color class
+     */
+    _getPriorityColor(priority) {
+        const colors = {
+            [Priority.Low]: 'bg-green-600',
+            [Priority.Medium]: 'bg-yellow-600',
+            [Priority.High]: 'bg-orange-600',
+            [Priority.Critical]: 'bg-red-600'
+        };
+        return colors[priority] || 'bg-gray-600';
+    }
+
+    /**
+     * Get status text
+     * @param {number} status - Status enum value
+     * @returns {string} Status text
+     */
+    _getStatusText(status) {
+        const texts = {
+            [Status.NotStarted]: 'Not Started',
+            [Status.InProgress]: 'In Progress',
+            [Status.Blocked]: 'Blocked',
+            [Status.Completed]: 'Completed',
+            [Status.Cancelled]: 'Cancelled'
+        };
+        return texts[status] || 'Unknown';
+    }
+
+    /**
+     * Get priority text
+     * @param {number} priority - Priority enum value
+     * @returns {string} Priority text
+     */
+    _getPriorityText(priority) {
+        const texts = {
+            [Priority.Low]: 'Low',
+            [Priority.Medium]: 'Medium',
+            [Priority.High]: 'High',
+            [Priority.Critical]: 'Critical'
+        };
+        return texts[priority] || 'Unknown';
     }
 
     /**
@@ -238,16 +403,9 @@ export class TaskList {
      * @param {string} text - Text to escape
      * @returns {string} Escaped text
      */
-    escapeHtml(text) {
+    _escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
-    }
-
-    /**
-     * Refresh task list (called from parent)
-     */
-    async refresh() {
-        await this.loadTasks();
     }
 }
