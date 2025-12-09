@@ -1586,35 +1586,35 @@ templates:
 
       **Core Philosophy:**
 
-      - 🧠 **Brain Architecture** - 4-tier memory system (Tier 0: Governance, Tier
+      - 🧠 **Brain Architecture** - 4-tier memory system (Tier 0: Governance with 48 SKULL rules, Tier
       1: Working Memory, Tier 2: Knowledge Graph, Tier 3: Dev Context)
 
-      - 🎯 **Zero Ambiguity** - Planning with Definition of Ready (DoR) and Definition
-      of Done (DoD) enforcement
+      - 🎯 **Zero Ambiguity** - Planning System 2.0 with Definition of Ready (DoR) and Definition
+      of Done (DoD) enforcement, auto-complexity detection, real-time visual progress tracking
 
-      - 🔴🟢🔵 **TDD Mastery** - RED→GREEN→REFACTOR automation with performance-based
-      refactoring
+      - 🔴🟢🔵 **TDD Mastery** - RED→GREEN→REFACTOR automation with per-layer coverage validation (Domain 90%, Application 85%, Infrastructure 70%), empty test detection, auto-debug via debugging orchestrator
 
       - 📊 **Pattern Learning** - Learns from your coding patterns and improves accuracy
       over time
 
-      - 🛡️ **Brain Protection** - SKULL rules prevent degradation and enforce best
-      practices
+      - 🛡️ **Brain Protection** - SKULL rules (48 rules, 17 protection layers) prevent degradation and enforce best
+      practices including SKULL-001 through SKULL-010
 
 
       **Key Differentiators:**
 
       - **97.2% token reduction** (74,047 → 2,078 avg) through intelligent memory
-      management
+      management saves $183K annually for typical team
 
-      - **Universal upgrade system** works across all installation types with zero
-      data loss
+      - **Planning System 2.0** with auto-complexity detection, real-time visual progress tracking (5 phases with ETAs), DoR/DoD validation, Vision API integration
 
-      - **Vision API integration** extracts requirements from screenshots (UI mockups,
-      errors, ADO items)
+      - **ADO Operations** generates Azure DevOps work items with complete task breakdown, inherits Planning System 2.0 compliance
 
-      - **Convention-based feature validation** ensures complete integration (7-layer
-      scoring)
+      - **Dashboard Intelligence** cuts engineer onboarding from 2 weeks to 2 hours (60-80% faster) via automated repository discovery
+
+      - **Holistic Code Discovery** enforces search-before-create pattern to prevent duplicate implementations
+
+      - **System Maintenance** 6-phase automated workflow with auto-fix capabilities
 
 
       ### 📊 Impact & Changes
@@ -1631,67 +1631,77 @@ templates:
 
       ### 🚀 Quick Demos (5-10 min each)
 
-      1. **`demo planning`** - See Planning System 2.0 with DoR/DoD enforcement and
-      Vision API
+      1. **`demo planning`** - See Planning System 2.0 with auto-complexity detection, real-time visual progress (5 phases with ETAs), DoR/DoD enforcement, and Vision API
 
-      2. **`demo tdd`** - Watch RED→GREEN→REFACTOR cycle with auto-debug and performance
-      refactoring
+      2. **`demo ado`** - Watch ADO work item generation with complete task breakdown, estimates, and acceptance criteria
 
-      3. **`demo view discovery`** - Auto-extract UI elements for testing (60+ min
-      → <5 min, 92% time savings)
+      3. **`demo tdd`** - Watch TDD Mastery: RED→GREEN→REFACTOR cycle with auto-debug, per-layer coverage validation (Domain 90%, Application 85%, Infrastructure 70%), and empty test detection
 
-      4. **`demo feedback`** - Structured issue reporting with privacy protection
-      and GitHub Gist upload
+      4. **`demo dashboard`** - See Dashboard Intelligence with automated repository discovery, technology stack analysis, and architecture visualization
 
-      5. **`demo upgrade`** - Universal upgrade system with brain preservation and
-      auto-detection
+      5. **`demo discovery`** - Auto-extract holistic code discovery with search-before-create pattern (semantic + grep + usage analysis)
+
+      6. **`demo maintenance`** - System Maintenance 6-phase workflow with auto-fix (pre-healthcheck → align → cleanup → optimize → refresh prompts → post-healthcheck)
+
+      7. **`demo feedback`** - Structured issue reporting with privacy protection (SKULL-006) and GitHub Gist upload
 
 
       ### 🎓 Deep Dives (15-30 min each)
 
-      6. **`tutorial`** - Hands-on interactive tutorial (build real authentication
-      feature with tests)
+      8. **`tutorial`** - Hands-on interactive tutorial (build real authentication
+      feature with tests using TDD Mastery)
 
-      7. **`show brain architecture`** - Understand 4-tier memory system and SKULL
-      protection rules
+      9. **`show brain architecture`** - Understand 4-tier memory system and 48 SKULL
+      protection rules (17 protection layers)
 
-      8. **`explain upgrade system`** - Universal upgrade with brain preservation
+      10. **`explain planning system 2.0`** - Auto-complexity detection, DoR/DoD validation, real-time visual progress, manifest-based orchestration
+
+      11. **`explain ado operations`** - Work item generation, completion summaries, manifest inheritance from Planning System 2.0
+
+      12. **`explain upgrade system`** - Universal upgrade with brain preservation
       and path validation
 
-      9. **`system alignment demo`** - Convention-based feature validation (admin
+      13. **`system alignment demo`** - Convention-based feature validation (admin
       only - CORTEX repo)
 
-      10. **`show context`** - See what CORTEX remembers about your project and conversations
+      14. **`show context`** - See what CORTEX remembers about your project and conversations
 
 
       ### 📖 Documentation (Read at your pace)
 
-      11. **Planning Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/planning/)
+      15. **Planning System 2.0 Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/planning/)
       (Coming Soon)
 
-      12. **TDD Mastery** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/tdd/)
+      16. **ADO Operations Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/ado/)
       (Coming Soon)
 
-      13. **Response Format** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/format/)
+      17. **TDD Mastery Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/tdd/)
       (Coming Soon)
 
-      14. **Brain Architecture** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/architecture/)
+      18. **Dashboard Intelligence** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/dashboard/)
       (Coming Soon)
 
-      15. **Full Documentation** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/)
+      19. **Response Format** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/format/)
+      (Coming Soon)
+
+      20. **Brain Architecture** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/architecture/)
+      (Coming Soon)
+
+      21. **Full Documentation** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/)
       (Coming Soon)
 
 
       ### 🎓 Learning Paths
 
-      16. **`beginner path`** - New to CORTEX? → Start here: `help` → `tutorial` →
+      22. **`beginner path`** - New to CORTEX? → Start here: `help` → `tutorial` →
       `demo planning`
 
-      17. **`advanced path`** - Experienced user? → Explore: `system alignment` →
+      23. **`advanced path`** - Experienced user? → Explore: `system alignment` →
       `show context` → `admin help` (CORTEX repo only)
 
-      18. **`developer path`** - Building features? → Learn: `demo tdd` → `demo view
-      discovery` → `git checkpoint`
+      24. **`developer path`** - Building features? → Learn: `demo tdd` → `demo discovery` → `git checkpoint`
+
+      25. **`product owner path`** - Planning features? → Learn: `demo planning` → `demo ado` → `explain planning system 2.0`
 
 
       ---
@@ -2994,7 +3004,7 @@ templates:
       
       **The Brain-Inspired Solution:** CORTEX implements a 4-tier memory architecture modeled after human cognition—from instinctive governance (Tier 0, like the brainstem) through working memory (Tier 1) and knowledge patterns (Tier 2) to strategic context (Tier 3, like the cortex). This creates persistent memory across sessions and projects.
       
-      **Quality Through Governance:** At its core is a rulebook system (SKULL - Strategic Knowledge & Universal Learning Logic) with 48 rules across 17 protection layers that enforces best practices through declarative rules rather than restrictive guardrails. Recent enhancements include holistic code discovery (search before create), inline CSS prohibition (centralized styling), and comprehensive test coverage validation. Think of it as pair programming with an experienced architect who prevents technical debt before it forms.
+      **Quality Through Governance:** At its core is a rulebook system (SKULL - Strategic Knowledge & Universal Learning Logic) with 48 rules across 17 protection layers that enforces best practices through declarative rules rather than restrictive guardrails. Key protections include TDD Mastery (RED→GREEN→REFACTOR), holistic code discovery (search before create), inline CSS prohibition (centralized styling), and comprehensive test coverage validation. Think of it as pair programming with an experienced architect who prevents technical debt before it forms.
       
       ## Tech Stack & Architecture
       
@@ -3005,34 +3015,34 @@ templates:
       **YAML** - Declarative governance rules and response templates. Makes quality standards auditable, versionable, and extensible without code changes. Orchestrator manifests ensure consistency across planning systems.
       
       **4-Tier Brain Architecture:**
-      - Tier 0: Governance (48 immutable rules, 17 protection layers)
+      - Tier 0: Governance (48 immutable rules, 17 protection layers including SKULL-001 through SKULL-010)
       - Tier 1: Working memory (70-conversation FIFO, <100ms)
       - Tier 2: Knowledge graph (pattern learning, FTS5 search)
       - Tier 3: Development context (metrics, hotspots, insights)
       
       ## How CORTEX Can Help
       
-      **Intelligent Planning** - Auto-complexity detection routes features to incremental generation with real-time visual progress tracking (5 phases with ETAs). Vision API extracts requirements from screenshots. Definition of Ready/Done validation ensures complete specifications.
+      **Planning System 2.0** - Interactive feature planning with auto-complexity detection, real-time visual progress tracking (5 phases with ETAs), and Definition of Ready/Done validation. Vision API extracts requirements from screenshots (UI mockups, ADO items, errors). Manifest-based orchestration ensures consistency.
       
-      **Code Quality Automation** - TDD Mastery enforces RED→GREEN→REFACTOR cycle with per-layer coverage validation (Domain 90%, Application 85%, Infrastructure 70%). Detects empty placeholder tests and enforces comprehensive testing. Test-first workflow has 94% success rate vs 67% without.
+      **ADO Integration** - Generates Azure DevOps work items with complete task breakdown, estimates, and acceptance criteria. Commands: `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`. Inherits Planning System 2.0 compliance with ADO-specific formatting.
       
-      **Duplicate Prevention** - Holistic code discovery enforces search-before-create pattern using semantic search, grep patterns, and usage analysis. Prevents duplicate implementations during refactoring cycles.
+      **TDD Mastery** - Enforces RED→GREEN→REFACTOR cycle with per-layer coverage validation (Domain 90%, Application 85%, Infrastructure 70%). Detects empty placeholder tests and enforces comprehensive testing. Auto-debug fixes test failures with root cause analysis. Test-first workflow has 94% success rate vs 67% without.
       
-      **Professional Frontend** - Inline CSS prohibition enforces centralized styling architecture. All styles migrated to CSS files during REFACTOR phase with component-scoped organization.
+      **Dashboard Intelligence** - Automated repository discovery generates interactive dashboards revealing system architecture, technology stack, security posture, code health metrics. Cuts engineer onboarding from 2 weeks to 2 hours (60-80% faster).
       
-      **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 average) through intelligent memory management. More context, lower costs, faster responses.
+      **Holistic Code Discovery** - Search-before-create pattern using semantic search, grep patterns, and usage analysis prevents duplicate implementations. Decision matrix: exact match (90%+) → reuse, similar (70-90%) → enhance, partial (50-70%) → consolidate.
       
-      **Consistent Orchestration** - Manifest system ensures all planning workflows follow same standards (DoR/DoD, TDD integration, acceptance criteria gates). Zero drift between Planning System 2.0 and ADO operations.
+      **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 average) through intelligent memory management. More context, lower costs, faster responses. Saves $183K annually for typical team.
       
       ## Explore Further
       
       **Ask about specific capabilities:**
-      - "Show me incremental planning with progress tracking"
-      - "How does TDD coverage validation work?"
-      - "Demo holistic code discovery"
-      - "Explain CSS centralization enforcement"
+      - "Show me Planning System 2.0 with progress tracking"
+      - "Demo ADO integration workflow"
+      - "How does TDD Mastery auto-debug work?"
+      - "Explain dashboard intelligence"
       - "What are the 48 SKULL governance rules?"
-      - "Show me the manifest system architecture"
+      - "Show me the token optimization strategy"
   
   introduction_leadership:
     name: "CORTEX Introduction - Leadership"
@@ -3060,23 +3070,43 @@ templates:
       **ROI Focus:** 
       - **97.2% token reduction** (74,047 → 2,078 avg tokens/operation) = Lower AI operational costs
       - **94% TDD success rate** vs 67% without structure = Reduced rework and debugging time
-      - **85% reduction in requirements ambiguity** = Fewer mid-sprint surprises
-      - **60-80% faster engineer onboarding** = Rapid productivity for new hires via dashboard discovery
+      - **85% reduction in requirements ambiguity** (via Planning System 2.0 DoR validation) = Fewer mid-sprint surprises
+      - **60-80% faster engineer onboarding** (2 hours vs 2 weeks) = Rapid productivity for new hires via dashboard discovery
+      - **$183K annual savings** for typical team executing 100 operations daily
       
       ## Tech Stack & Architecture
       
       **Enterprise-Grade Foundation:**
       - SQLite for zero-configuration, ACID-compliant persistence
       - Python for maintainable orchestration with strong typing
-      - YAML for auditable, versionable governance rules (44 rules across 17 protection layers)
+      - YAML for auditable, versionable governance rules (48 rules across 17 protection layers)
       
       **4-Tier Brain Architecture:**
-      - **Tier 0:** Governance layer (44 immutable quality rules across 17 protection layers)
+      - **Tier 0:** Governance layer (48 immutable quality rules including SKULL-001 through SKULL-010: Test Before Claim, Integration Verification, Visual Regression, Retry Without Learning, Transformation Verification, Privacy Protection, Faculty Integrity, All Tests Must Pass, Multi-Track Configuration, Track Work Isolation)
       - **Tier 1:** Working memory (sub-100ms retrieval, 70-conversation capacity)
       - **Tier 2:** Knowledge graph (pattern learning, team wisdom capture)
       - **Tier 3:** Strategic context (metrics, hotspots, risk indicators, repository analytics)
       
       **Deployment Model:** Standalone or embedded, universal upgrade system, zero vendor lock-in.
+      
+      ## Planning System 2.0: Strategic Feature Delivery
+      
+      **The Planning Problem:** Traditional planning lacks completeness validation, has no visibility into progress, and can't handle complex features that exceed AI response limits. Requirements often incomplete, acceptance criteria ambiguous.
+      
+      **CORTEX Solution:** Planning System 2.0 with Definition of Ready (DoR) validation, auto-complexity detection, and real-time visual progress tracking.
+      
+      **Planning Capabilities:**
+      - **Auto-Complexity Detection:** HIGH complexity → incremental generation, MEDIUM → conditional, LOW → skeleton
+      - **Definition of Ready (DoR):** 8 validation gates ensure specifications complete before development
+      - **Definition of Done (DoD):** 7 quality gates validate features meet acceptance criteria
+      - **Real-Time Progress:** Visual tracking with 5 phases, completion %, and ETAs
+      - **Vision API Integration:** Extract requirements from screenshots (UI mockups, ADO items, errors)
+      - **File-Based Plans:** Persist across chat sessions, enable "Continue plan" resumption
+      - **TDD Auto-Integration:** Test requirements automatically included in all plans
+      
+      **ADO Operations:** Commands like `plan ado story`, `plan ado feature` generate Azure DevOps work items with complete task breakdown. Inherits all Planning System 2.0 compliance with ADO-specific formatting.
+      
+      **Planning Impact:** 85% reduction in requirements ambiguity, zero response length failures for complex features, complete traceability from concept to deployment.
       
       ## Dashboard Intelligence: System Discovery & Visualization
       
@@ -3116,7 +3146,7 @@ templates:
       
       ## Governance Rulebook: The SKULL System
       
-      **Strategic Knowledge & Universal Learning Logic (SKULL)** - 44 immutable governance rules across 17 protection layers that enforce quality, security, and architectural standards automatically.
+      **Strategic Knowledge & Universal Learning Logic (SKULL)** - 48 immutable governance rules across 17 protection layers that enforce quality, security, and architectural standards automatically.
       
       **Key Rule Categories:**
       
@@ -3387,53 +3417,74 @@ templates:
     content: |
       # 🧠 CORTEX
       
-      Transform feature delivery through AI-enhanced planning, automated quality validation, and persistent requirement tracking.
+      Transform feature delivery through AI-enhanced Planning System 2.0, automated quality validation, and persistent requirement tracking with real-time visual progress monitoring.
       
       ## What is CORTEX?
       
-      CORTEX enhances GitHub Copilot with strategic planning capabilities, persistent memory, and quality automation. It bridges the gap between product vision and technical execution—ensuring requirements are complete, testable, and trackable from concept to deployment.
+      CORTEX enhances GitHub Copilot with strategic planning capabilities, persistent memory, and quality automation. It bridges the gap between product vision and technical execution—ensuring requirements are complete, testable, and trackable from concept to deployment with zero ambiguity.
       
       ## Why Was It Built?
       
       **Product Challenge:** Requirements often lack detail, acceptance criteria are ambiguous, and technical implementation drifts from product vision. Traditional AI assistants help with code but can't validate completeness or maintain strategic context across sprints.
       
-      **Planning-First Solution:** CORTEX introduces Planning System 2.0 with Definition of Ready (DoR) validation that ensures specifications are complete before development starts. Combined with Definition of Done (DoD) tracking, it creates end-to-end visibility from backlog to deployment.
+      **Planning-First Solution:** CORTEX introduces Planning System 2.0 with Definition of Ready (DoR) validation that ensures specifications are complete before development starts. Combined with Definition of Done (DoD) tracking and real-time visual progress monitoring (5 phases with ETAs), it creates end-to-end visibility from backlog to deployment.
       
-      **Quality Built-In:** Governance rules (SKULL) automatically include test requirements, security considerations, and performance criteria in every plan. This prevents scope creep and ensures technical quality aligns with product expectations.
+      **Quality Built-In:** Governance rules (SKULL - 48 rules across 17 protection layers) automatically include test requirements, security considerations, and performance criteria in every plan. This prevents scope creep and ensures technical quality aligns with product expectations.
       
       ## Tech Stack & Architecture
       
       **Product-Focused Design:**
       - Vision API extracts requirements from UI mockups and ADO screenshots
       - File-based plans enable cross-session resumption (surviving chat resets)
-      - YAML templates standardize feature structure and acceptance criteria
+      - YAML orchestrator manifests standardize feature structure and acceptance criteria
+      - Auto-complexity detection routes HIGH complexity features to incremental generation
       
       **4-Tier Memory System:**
-      - **Tier 0:** Quality standards (ensures every feature meets DoR/DoD)
+      - **Tier 0:** Quality standards (48 SKULL rules ensure every feature meets DoR/DoD)
       - **Tier 1:** Active sprint context (current features, blockers, decisions)
       - **Tier 2:** Historical patterns (similar features, reusable solutions)
-      - **Tier 3:** Product metrics (velocity trends, quality indicators)
+      - **Tier 3:** Product metrics (velocity trends, quality indicators, delivery analytics)
+      
+      ## Planning System 2.0: Complete Feature Delivery
+      
+      **Interactive Planning with Validation:**
+      - **Definition of Ready (DoR):** 8 validation gates ensure user stories complete before sprint commitment (user story, acceptance criteria, dependencies, technical specs, test strategy, security review, performance criteria, resource availability)
+      - **Definition of Done (DoD):** 7 quality gates validate features meet criteria (acceptance tests pass, code reviewed, documentation complete, performance validated, security verified, deployment ready, stakeholder approved)
+      - **Auto-Complexity Detection:** HIGH → incremental generation, MEDIUM → conditional, LOW → skeleton
+      - **Real-Time Progress:** Visual tracking with 5 phases, completion %, and ETAs
+      - **Vision API:** Extract requirements from screenshots (UI mockups, ADO work items, error screens)
+      - **TDD Auto-Integration:** Test requirements automatically included in all plans
+      
+      **ADO Operations:** Generate Azure DevOps work items with complete task breakdown:
+      - Commands: `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`
+      - Work item types: Story, Feature, Task with estimates and acceptance criteria
+      - Bidirectional sync: CORTEX plans ↔ ADO backlog
+      - Completion summaries: Generate code review summaries and completion reports
+      - Manifest compliance: Inherits all Planning System 2.0 standards + ADO formatting
       
       ## How CORTEX Can Help Product Teams
       
-      **Complete Requirements** - DoR validation checklist ensures user stories have acceptance criteria, technical specifications, and dependency mapping before sprint commitment. Reduces mid-sprint surprises by 85%.
+      **Complete Requirements** - DoR validation checklist ensures user stories have acceptance criteria, technical specifications, and dependency mapping before sprint commitment. Reduces mid-sprint surprises by 85%. Risk analysis identifies blockers early.
       
-      **Visual Planning** - Vision API extracts UI elements from mockups, generating test scenarios and implementation requirements automatically. Bridges design-development gap with pixel-perfect accuracy.
+      **Visual Planning** - Vision API extracts UI elements from mockups, generating test scenarios and implementation requirements automatically. Bridges design-development gap with pixel-perfect accuracy. Supports UI mockups, ADO screenshots, error screens.
       
-      **ADO Integration** - "Plan ADO" command generates work items with complete task breakdown, estimates, and acceptance criteria. Maintains bidirectional sync between CORTEX plans and ADO backlog.
+      **ADO Integration** - `plan ado story` and `plan ado feature` commands generate work items with complete task breakdown, estimates, and acceptance criteria. Maintains bidirectional sync between CORTEX plans and ADO backlog. Generate completion summaries for stakeholders.
       
-      **Quality Tracking** - Automated DoD validation ensures features meet acceptance criteria before marking complete. TDD integration guarantees test coverage for all critical paths.
+      **Quality Tracking** - Automated DoD validation ensures features meet acceptance criteria before marking complete. TDD integration guarantees test coverage for all critical paths (Domain 90%, Application 85%, Infrastructure 70%). SKULL rules prevent incomplete features from reaching production.
       
-      **Sprint Continuity** - Persistent memory maintains context across planning sessions. File-based plans survive chat resets, enabling "Continue plan" commands that resume exactly where you left off.
+      **Sprint Continuity** - Persistent memory maintains context across planning sessions. File-based plans survive chat resets, enabling "Continue plan" commands that resume exactly where you left off. Zero context loss between sessions.
+      
+      **Progress Visibility** - Real-time visual progress tracking shows 5 phases (Planning, Implementation, Testing, Integration, Deployment) with completion % and ETAs. Product owners see exactly where features are without status meetings.
       
       ## Explore Further
       
       **Product workflow deep dives:**
-      - "Demo the Planning System 2.0 workflow"
-      - "Show me DoR/DoD validation in action"
-      - "How does Vision API extract requirements?"
-      - "Explain ADO integration capabilities"
+      - "Demo the Planning System 2.0 workflow with DoR/DoD"
+      - "Show me real-time progress tracking with ETAs"
+      - "How does Vision API extract requirements from mockups?"
+      - "Explain ADO integration and work item generation"
       - "What metrics track feature delivery quality?"
+      - "Show me auto-complexity detection in action"
   
   introduction_engineering:
     name: "CORTEX Introduction - Engineering"
@@ -3450,7 +3501,7 @@ templates:
       
       ## What is CORTEX?
       
-      CORTEX is an architectural enhancement for GitHub Copilot that implements persistent memory, strategic planning, and automated quality enforcement. Built on a 4-tier brain architecture with 10 specialist agents, it transforms Copilot from a stateless assistant into a context-aware development partner.
+      CORTEX is an architectural enhancement for GitHub Copilot that implements persistent memory, strategic planning, and automated quality enforcement. Built on a 4-tier brain architecture with 10 specialist agents, it transforms Copilot from a stateless assistant into a context-aware development partner with Planning System 2.0 and ADO Operations integration.
       
       ## Why Was It Built?
       
@@ -3458,7 +3509,7 @@ templates:
       
       **Architectural Solution:** CORTEX implements a distributed database architecture (Tier 0-3 SQLite DBs) that persists conversation history, code patterns, and project context. Think of it as adding a cerebral cortex to Copilot's reflexive code generation.
       
-      **Governance Through Rules:** The SKULL system (Strategic Knowledge & Universal Learning Logic) enforces SOLID principles, TDD workflow, and architectural patterns through declarative YAML rules. It's like having an embedded tech lead who challenges deviations with evidence-based recommendations (e.g., "Test-first has 94% success rate vs 67% without").
+      **Governance Through Rules:** The SKULL system (Strategic Knowledge & Universal Learning Logic) enforces SOLID principles, TDD workflow, and architectural patterns through declarative YAML rules. 48 rules across 17 protection layers including SKULL-001 (Test Before Claim), SKULL-002 (Integration Verification), SKULL-007 (All Tests Must Pass). It's like having an embedded tech lead who challenges deviations with evidence-based recommendations (e.g., "Test-first has 94% success rate vs 67% without").
       
       ## Tech Stack & Architecture
       
@@ -3469,7 +3520,7 @@ templates:
       
       **4-Tier Brain Architecture:**
       ```
-      Tier 0 (Governance): 48 immutable rules, SKULL instincts, 17 protection layers
+      Tier 0 (Governance): 48 immutable rules, SKULL instincts (SKULL-001 through SKULL-010), 17 protection layers
       Tier 1 (Working Memory): 70-conv FIFO, entity extraction, <100ms queries
       Tier 2 (Knowledge Graph): Pattern storage, FTS5 semantic search, relationship mapping
       Tier 3 (Dev Context): Git metrics, code hotspots, performance insights
@@ -3487,21 +3538,81 @@ templates:
       - Template-based response system (68 templates including 6 professional presentations)
       - Orchestrator manifest system (ensures consistency across planning workflows)
       
+      ## Planning System 2.0: Engineering Implementation
+      
+      **Auto-Complexity Detection:**
+      - HIGH complexity → Incremental generator (prevents response length failures)
+      - MEDIUM complexity → Conditional routing
+      - LOW complexity → Skeleton generator
+      - Triggers: Security, auth, migrations, APIs auto-route to incremental
+      
+      **Definition of Ready (DoR) - 8 Gates:**
+      1. User story with acceptance criteria
+      2. Technical specifications complete
+      3. Dependencies identified and resolved
+      4. Test strategy defined
+      5. Security review completed
+      6. Performance criteria established
+      7. Resource availability confirmed
+      8. Risk analysis performed
+      
+      **Definition of Done (DoD) - 7 Gates:**
+      1. All acceptance tests pass
+      2. Code reviewed and approved
+      3. Documentation complete
+      4. Performance validated
+      5. Security verified
+      6. Deployment ready
+      7. Stakeholder approved
+      
+      **Real-Time Progress Tracking:**
+      - 5 phases: Planning → Implementation → Testing → Integration → Deployment
+      - Visual progress bars with completion % and ETAs
+      - Decorator: `@with_progress` for automatic tracking
+      - File-based plans persist across chat sessions
+      
+      **Manifest-Based Orchestration:**
+      - Universal schema: `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+      - 8 requirements, 7 integrations, 8 quality gates
+      - Validator calculates compliance scores (0-100)
+      - ADO manifest inherits Planning System 2.0 + ADO-specific formatting
+      
+      ## ADO Operations: Azure DevOps Integration
+      
+      **Commands:**
+      - `plan ado` - Interactive work item selection (Story/Feature/Task)
+      - `plan ado story` - Generate user story with acceptance criteria
+      - `plan ado feature` - Generate feature with epic breakdown
+      - `generate ado summary` - Create completion summary for code reviews
+      
+      **Features:**
+      - Work item generation with complete task breakdown
+      - Effort estimates (story points, hours)
+      - Acceptance criteria auto-generation
+      - Bidirectional sync: CORTEX plans ↔ ADO backlog
+      - Completion summaries for stakeholders
+      - Manifest compliance: Inherits all Planning System 2.0 requirements
+      
+      **Orchestrator Manifest:**
+      - Location: `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
+      - Inherits: Planning System 2.0 manifest (DoR/DoD, TDD, acceptance gates)
+      - Adds: ADO-specific formatting, work item types, state transitions
+      
       ## How CORTEX Can Help Engineers
       
-      **Incremental Planning** - Auto-complexity detection routes HIGH complexity features to incremental generator. Real-time visual progress tracking with 5 phases, completion %, and ETAs. Prevents response length failures for complex plans.
+      **Incremental Planning** - Auto-complexity detection routes HIGH complexity features to incremental generator. Real-time visual progress tracking with 5 phases, completion %, and ETAs. Prevents response length failures for complex plans. Manifest validation ensures compliance with DoR/DoD.
       
-      **TDD Automation** - Enforces RED→GREEN→REFACTOR cycle with comprehensive coverage validation (Domain 90%, Application 85%, Infrastructure 70%). Detects empty placeholder tests and meaningless assertions. Test-first enforcement via Tier 0 rules with evidence-based challenges.
+      **TDD Automation** - Enforces RED→GREEN→REFACTOR cycle with comprehensive coverage validation (Domain 90%, Application 85%, Infrastructure 70%). Detects empty placeholder tests and meaningless assertions. Test-first enforcement via Tier 0 rules with evidence-based challenges. SKULL-001 (Test Before Claim) and SKULL-007 (All Tests Must Pass) prevent premature success claims.
       
       **Holistic Discovery** - Search-decide-implement pattern enforces multi-strategy code discovery (semantic + grep + usage analysis) before creating new implementations. Prevents duplicate code during refactoring cycles. Decision matrix: exact match (90%+) → reuse, similar (70-90%) → enhance, partial (50-70%) → consolidate.
       
       **Frontend Architecture** - Inline CSS prohibition enforces centralized styling. Automated REFACTOR phase validation detects style attributes, embedded tags, JS manipulation. Component-scoped CSS organization with CSS variables for theming.
       
-      **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 avg) through intelligent memory management. Semantic search retrieves relevant patterns without dumping entire codebase into context.
+      **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 avg) through intelligent memory management. Semantic search retrieves relevant patterns without dumping entire codebase into context. Parallel batch reads (3-5 files), consolidated regex searches, large context windows (300-500 lines).
       
-      **Manifest-Based Orchestration** - Universal manifest schema ensures all orchestrators follow same standards. Planning System 2.0 manifest defines 8 requirements, 7 integrations, 8 quality gates. Validator calculates compliance scores (0-100).
+      **Manifest-Based Orchestration** - Universal manifest schema ensures all orchestrators follow same standards. Planning System 2.0 manifest defines 8 requirements, 7 integrations, 8 quality gates. Validator calculates compliance scores (0-100). ADO manifest inherits + extends with ADO-specific formatting.
       
-      **Git Isolation** - CORTEX code never commits to user repositories (enforced by Tier 0). Separate test directories (app tests in user repo, CORTEX tests in `tests/`). Clean separation of concerns.
+      **Git Isolation** - CORTEX code never commits to user repositories (enforced by Tier 0 CORTEX_WORKSPACE_ISOLATION). Separate test directories (app tests in user repo, CORTEX tests in `tests/`). Clean separation of concerns.
       
       **Universal Upgrade** - Standalone or embedded installation detection, brain preservation during upgrades, auto-backup with rollback capability. Zero data loss, zero manual migration.
       
@@ -3510,10 +3621,11 @@ templates:
       **Technical deep dives:**
       - "Show me the 4-tier database schema"
       - "Explain the agent framework architecture"
-      - "How does TDD Mastery auto-debug work?"
-      - "Walk through the SKULL governance rules"
-      - "Demo the token reduction mechanism"
-      - "Explain the progress monitoring decorator"
+      - "How does Planning System 2.0 auto-complexity detection work?"
+      - "Demo ADO work item generation"
+      - "Walk through the 48 SKULL governance rules"
+      - "Explain the manifest-based orchestration system"
+      - "Show me the @with_progress decorator implementation"
   
   business_value:
     name: "CORTEX Business Value & Capabilities"
@@ -3540,48 +3652,72 @@ templates:
       ## Planning & Requirements
       
       ### Planning System 2.0
-      **What it does:** Interactive feature planning with Definition of Ready (DoR) and Definition of Done (DoD) validation.
+      **What it does:** Interactive feature planning with auto-complexity detection, real-time visual progress tracking (5 phases with ETAs), and Definition of Ready (DoR) / Definition of Done (DoD) validation.
       
-      **Business value:** Reduces ambiguous requirements by 85%, cuts planning cycles from days to hours, prevents mid-sprint surprises.
+      **Business value:** Reduces ambiguous requirements by 85%, cuts planning cycles from days to hours, prevents mid-sprint surprises, eliminates response length failures for complex features.
       
       **Key features:**
-      - Vision API extracts requirements from screenshots (UI mockups, ADO items, error screens)
-      - DoR checklist ensures completeness before development (user stories, acceptance criteria, dependencies)
-      - DoD tracking validates features meet criteria before marking complete
-      - File-based plans persist across chat sessions (resume with "Continue plan")
+      - **Auto-Complexity Detection:** HIGH → incremental generation, MEDIUM → conditional, LOW → skeleton
+      - **Real-Time Progress:** Visual tracking with 5 phases (Planning, Implementation, Testing, Integration, Deployment), completion %, and ETAs
+      - **Vision API:** Extracts requirements from screenshots (UI mockups, ADO items, error screens)
+      - **DoR Validation:** 8 gates ensure completeness (user story, acceptance criteria, dependencies, technical specs, test strategy, security review, performance criteria, resource availability)
+      - **DoD Tracking:** 7 gates validate features meet criteria (acceptance tests pass, code reviewed, documentation complete, performance validated, security verified, deployment ready, stakeholder approved)
+      - **File-Based Plans:** Persist across chat sessions, resume with "Continue plan"
+      - **TDD Auto-Integration:** Test requirements automatically included in all plans
+      - **Manifest Compliance:** Universal orchestrator manifest ensures consistency
       
-      **Evidence:** Planning with CORTEX shows 94% first-pass acceptance vs 67% without structured approach.
+      **Commands:** `plan [feature]`, `execute all phases autonomously`
+      
+      **Evidence:** Planning with CORTEX shows 94% first-pass acceptance vs 67% without structured approach. Zero response length failures since incremental generator introduction.
       
       ### ADO Integration
-      **What it does:** Generates Azure DevOps work items with complete task breakdown.
+      **What it does:** Generates Azure DevOps work items with complete task breakdown, estimates, and acceptance criteria. Works like Planning System 2.0 with ADO-formatted output.
       
-      **Business value:** Automates backlog creation, maintains sync between planning and tracking, standardizes work item structure.
+      **Business value:** Automates backlog creation, maintains sync between planning and tracking, standardizes work item structure, generates completion summaries for stakeholders.
       
       **Key features:**
-      - "Plan ADO" command creates work items with estimates and acceptance criteria
-      - Bidirectional sync between CORTEX plans and ADO backlog
-      - Automatic sprint planning with capacity-based task assignment
+      - **Work Item Types:** Story, Feature, Task with effort estimates
+      - **Commands:** `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`
+      - **Bidirectional Sync:** CORTEX plans ↔ ADO backlog
+      - **Completion Summaries:** Generate code review summaries and completion reports
+      - **Manifest Inheritance:** Inherits all Planning System 2.0 standards + ADO-specific formatting
+      
+      **Integration:** Located in `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
       
       ---
       
       ## Development Automation
       
       ### TDD Mastery
-      **What it does:** Enforces test-driven development through RED→GREEN→REFACTOR automation.
+      **What it does:** Enforces test-driven development through RED→GREEN→REFACTOR automation with per-layer coverage validation and empty test detection.
       
-      **Business value:** Reduces defect escape rate by 40%, improves code maintainability, decreases debugging time by 60%.
+      **Business value:** Reduces defect escape rate by 40%, improves code maintainability, decreases debugging time by 60%, prevents incomplete test suites.
       
       **Key features:**
-      - RED phase: Write failing test first, verify failure, commit
-      - GREEN phase: Minimal implementation to pass, commit
-      - REFACTOR phase: Clean code while tests pass, performance optimization
-      - Auto-debug: Automatically fixes test failures with root cause analysis
-      - Performance refactoring: Suggests optimizations after green phase
+      - **RED Phase:** Write failing test first, verify failure (SKULL-001: Test Before Claim), commit
+      - **GREEN Phase:** Minimal implementation to pass (SKULL-007: All Tests Must Pass), commit
+      - **REFACTOR Phase:** Clean code while tests pass, performance optimization, remove orphaned code
+      - **Auto-Debug:** Automatically fixes test failures with root cause analysis via debugging orchestrator
+      - **Coverage Validation:** Domain 90%, Application 85%, Infrastructure 70% with per-layer enforcement
+      - **Empty Test Detection:** Prevents placeholder tests and meaningless assertions
+      - **TDD_TEST_FILE_VALIDATION:** All production code must have test files
+      - **Commands:** `start tdd`, `run tests`, `trace`, `debug`
       
-      **Evidence:** TDD enforcement shows 94% success rate vs 67% without structure.
+      **Evidence:** TDD enforcement shows 94% success rate vs 67% without structure. Empty test detection prevents 30+ placeholder test scenarios.
+      
+      ### Holistic Code Discovery
+      **What it does:** Enforces search-before-create pattern using semantic search, grep patterns, and usage analysis to prevent duplicate implementations.
+      
+      **Business value:** Eliminates wasted effort on duplicate code, reduces refactoring cycles, maintains consistency across codebase.
+      
+      **Key features:**
+      - **Multi-Strategy Discovery:** Semantic search + grep patterns + usage analysis
+      - **Decision Matrix:** Exact match (90%+) → reuse, similar (70-90%) → enhance, partial (50-70%) → consolidate
+      - **Enforcement:** HOLISTIC_CODE_DISCOVERY_ENFORCEMENT rule blocks creation without discovery
+      - **Evidence Collection:** Documents search attempts and similarity scores
       
       ### Code Generation with Context
-      **What it does:** Generates code using project patterns and historical decisions.
+      **What it does:** Generates code using project patterns and historical decisions from Tier 2 knowledge graph.
       
       **Business value:** Ensures consistency, reuses proven solutions, maintains architectural standards.
       
@@ -3593,6 +3729,22 @@ templates:
       ---
       
       ## Quality Assurance
+      
+      ### SKULL Governance (48 Rules, 17 Protection Layers)
+      **What it does:** Enforces quality, security, and architectural standards through declarative YAML rules with evidence-based challenges.
+      
+      **Business value:** Prevents technical debt before it forms, automates code review checklists, maintains architectural integrity.
+      
+      **Key rules:**
+      - **SKULL-001:** Test Before Claim (prevents premature success claims)
+      - **SKULL-002:** Integration Verification (end-to-end validation required)
+      - **SKULL-003:** Visual Regression (CSS changes require browser validation)
+      - **SKULL-004:** Retry Without Learning (root cause analysis before retries)
+      - **SKULL-007:** All Tests Must Pass (no claiming "done" with failures)
+      - **TDD_ENFORCEMENT:** RED→GREEN→REFACTOR mandatory
+      - **HOLISTIC_CODE_DISCOVERY_ENFORCEMENT:** Search before create
+      - **INLINE_CSS_PROHIBITION:** Centralized styling only
+      - **GIT_ISOLATION_ENFORCEMENT:** CORTEX code never in user repos
       
       ### Convention-Based Validation
       **What it does:** 7-layer scoring system validates feature completeness (routes, tests, docs, etc.).
@@ -3607,7 +3759,7 @@ templates:
       - Security review (OWASP checks, input validation)
       
       ### Test Isolation
-      **What it does:** Separates application tests from CORTEX internal tests.
+      **What it does:** Separates application tests from CORTEX internal tests via TEST_LOCATION_SEPARATION rule.
       
       **Business value:** Clean separation of concerns, prevents test pollution, enables independent testing.
       
@@ -3617,7 +3769,7 @@ templates:
       - pytest.ini enforces isolation (CORTEX tests never run user tests)
       
       ### Threat Modeling
-      **What it does:** OWASP-based security review during planning phase.
+      **What it does:** OWASP-based security review during planning phase with SKULL THREAT_MODELING_ENFORCEMENT.
       
       **Business value:** Identifies vulnerabilities before implementation, reduces security debt.
       
@@ -3629,6 +3781,31 @@ templates:
       ---
       
       ## Operations & Maintenance
+      
+      ### Dashboard Intelligence
+      **What it does:** Automated repository discovery generates interactive dashboards revealing system architecture, technology stack, security posture, code health metrics.
+      
+      **Business value:** Cuts engineer onboarding from 2 weeks to 2 hours (60-80% faster), provides leadership visibility into portfolio health.
+      
+      **Key features:**
+      - **Technology Stack Analysis:** Auto-detects languages, frameworks, dependencies, build systems
+      - **Architecture Visualization:** Dependency graphs, module relationships, coupling metrics
+      - **Security Posture:** Vulnerability scanning, outdated dependencies, security hotspots
+      - **Code Health Metrics:** Test coverage, complexity analysis, technical debt quantification
+      - **Development Velocity:** Commit patterns, hotspot analysis, contributor activity
+      - **Multi-Repository View:** Compare health/metrics across entire organization
+      - **Commands:** `load dashboard`, `dashboard`
+      
+      ### System Maintenance
+      **What it does:** 6-phase automated maintenance workflow with auto-fix capabilities.
+      
+      **Business value:** Proactive system health management, automatic issue resolution, comprehensive validation.
+      
+      **Key features:**
+      - **Phases:** Pre-healthcheck → align (auto-fix) → cleanup → optimize → refresh prompts → post-healthcheck
+      - **Auto-Fix:** Alignment automatically applies fixes for common issues
+      - **Prompt Refresh:** Regenerates prompts at end to include latest changes
+      - **Commands:** `system maintenance`, `maintain system`
       
       ### Universal Upgrade System
       **What it does:** Safe CORTEX upgrades with brain preservation and auto-backup.
@@ -3642,18 +3819,8 @@ templates:
       - Path validation and automatic correction
       - Rollback capability if upgrade fails
       
-      ### Dashboard Launcher
-      **What it does:** HTTP server for visual dashboards (port 8080-8089 auto-fallback).
-      
-      **Business value:** Real-time visibility into system health, metrics, and brain state.
-      
-      **Key features:**
-      - Auto-open in browser
-      - CORS-enabled for external integrations
-      - Live metrics (conversation count, pattern learning, context efficiency)
-      
       ### Feedback System
-      **What it does:** Structured bug/feature reporting with privacy protection.
+      **What it does:** Structured bug/feature reporting with privacy protection (SKULL-006: Privacy Protection).
       
       **Business value:** Streamlines issue reporting, protects sensitive data, enables rapid iteration.
       
@@ -3663,7 +3830,7 @@ templates:
       - Structured templates (bug report, feature request, question)
       
       ### Progress Monitoring
-      **What it does:** Automatic progress tracking for operations >5 seconds.
+      **What it does:** Automatic progress tracking for operations >5 seconds with real-time visual updates.
       
       **Business value:** Prevents perceived hangs, provides ETA, enables hang detection.
       
@@ -3672,6 +3839,7 @@ templates:
       - ETA calculation based on current velocity
       - Thread-safe decorator (@with_progress)
       - <0.1% performance overhead
+      - Real-time visual progress bars with completion % and phase tracking
       
       ---
       
@@ -3684,18 +3852,22 @@ templates:
       - FTS5 semantic search (retrieve patterns without full dump)
       - Template-based responses (pre-formatted, no generation)
       - FIFO working memory (70-conversation limit)
+      - Large context windows (300-500 lines) read once, not repeatedly
+      - Parallel batch reads (3-5 files simultaneously)
+      - Consolidated regex searches (single comprehensive pattern)
       
-      **Business impact:** Lower AI costs, faster responses, more sophisticated assistance at lower TCO.
+      **Business impact:** Lower AI costs ($183K annual savings for typical team), faster responses, more sophisticated assistance at lower TCO.
       
       ---
       
       ## Explore Specific Capabilities
       
-      - "Demo Planning System 2.0"
-      - "Show TDD Mastery workflow"
-      - "Explain token reduction mechanism"
-      - "How does threat modeling work?"
-      - "What's the upgrade process?"
+      - "Demo Planning System 2.0 with progress tracking"
+      - "Show ADO integration workflow"
+      - "Explain TDD Mastery auto-debug"
+      - "Walk through Dashboard Intelligence"
+      - "What are the 48 SKULL governance rules?"
+      - "How does System Maintenance work?"
   
   security_posture:
     name: "CORTEX Security Posture"
