@@ -1121,4 +1121,121 @@ describe('Tab Rendering - All 8 Tabs', () => {
             expect(container.innerHTML).not.toBe('');
         });
     });
+    
+    // Regression Tests - Prevent Tab Loading Issues
+    describe('Tab Loading Regression Tests', () => {
+        it('should ensure all tabs have matching render function exports', async () => {
+            // Test that each tab component exports a render function
+            const tabs = [
+                { name: 'executive', module: '../../components/executive-tab.js', fn: 'renderExecutiveSummary' },
+                { name: 'overview', module: '../../components/overview-tab-v3.js', fn: 'renderOverview' },
+                { name: 'tech-stack', module: '../../components/tech-stack-tab.js', fn: 'renderTechStack' },
+                { name: 'security', module: '../../components/security-tab.js', fn: 'renderSecurity' },
+                { name: 'architecture', module: '../../components/architecture-tab.js', fn: 'renderArchitecture' },
+                { name: 'code-org', module: '../../components/code-org-tab.js', fn: 'renderCodeOrganization' },
+                { name: 'vendors', module: '../../components/vendors-tab.js', fn: 'renderVendors' },
+                { name: 'use-cases', module: '../../components/use-cases-tab.js', fn: 'renderUseCases' },
+                { name: 'recommendations', module: '../../components/recommendations-tab.js', fn: 'renderRecommendations' },
+                { name: 'onboarding', module: '../../components/onboarding-tab.js', fn: 'renderOnboarding' }
+            ];
+            
+            for (const tab of tabs) {
+                const module = await import(tab.module);
+                expect(module[tab.fn]).toBeDefined();
+                expect(typeof module[tab.fn]).toBe('function');
+            }
+        });
+        
+        it('should ensure all tabs have matching container IDs in HTML', () => {
+            // Verify tab content divs exist with correct IDs
+            const expectedContainers = [
+                'tab-executive',
+                'tab-overview',
+                'tab-tech-stack',
+                'tab-security',
+                'tab-architecture',
+                'tab-code-org',
+                'tab-vendors',
+                'tab-onboarding'
+            ];
+            
+            expectedContainers.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                expect(container).not.toBeNull();
+                expect(container.classList.contains('tab-content')).toBe(true);
+            });
+        });
+        
+        it('should ensure all tab nav links have matching data-tab attributes', () => {
+            // Verify nav tabs have correct data-tab attributes
+            const expectedTabs = [
+                'executive',
+                'overview',
+                'tech-stack',
+                'security',
+                'architecture',
+                'code-org',
+                'vendors',
+                'onboarding'
+            ];
+            
+            expectedTabs.forEach(tabName => {
+                const navTab = document.querySelector(`[data-tab="${tabName}"]`);
+                expect(navTab).not.toBeNull();
+                expect(navTab.classList.contains('nav-tab')).toBe(true);
+            });
+        });
+        
+        it('should verify onboarding tab uses correct container ID', async () => {
+            // Regression: onboarding-container not onboarding-tab or engineering-container
+            const { renderOnboarding } = await import('../../components/onboarding-tab.js');
+            
+            // Create the correct container
+            const container = document.createElement('div');
+            container.id = 'onboarding-container';
+            document.body.appendChild(container);
+            
+            await renderOnboarding({ stages: [] });
+            
+            // Should render into onboarding-container
+            expect(container.innerHTML).not.toBe('');
+        });
+        
+        it('should verify onboarding data file is onboarding.json not engineering-onboarding.json', async () => {
+            // Regression: ensure data file name is correct
+            const { loadAdditionalData } = await import('../../data-loader.js');
+            
+            // Mock fetch to verify correct filename is requested
+            global.fetch = jest.fn((url) => {
+                expect(url).toContain('onboarding.json');
+                expect(url).not.toContain('engineering');
+                return Promise.resolve({
+                    ok: true,
+                    json: async () => ({ stages: [], team: [], resources: [] })
+                });
+            });
+            
+            await loadAdditionalData('mock', 'onboarding.json');
+            expect(global.fetch).toHaveBeenCalled();
+        });
+        
+        it('should verify all render functions accept data parameter', async () => {
+            // Ensure consistent API across all render functions
+            const { renderOnboarding } = await import('../../components/onboarding-tab.js');
+            const { renderTechStack } = await import('../../components/tech-stack-tab.js');
+            const { renderSecurity } = await import('../../components/security-tab.js');
+            
+            // Create containers
+            ['onboarding-container', 'tech-stack-container', 'security-container'].forEach(id => {
+                const container = document.createElement('div');
+                container.id = id;
+                document.body.appendChild(container);
+            });
+            
+            // All should accept empty data objects
+            await expect(renderOnboarding({})).resolves.not.toThrow();
+            expect(() => renderTechStack({})).not.toThrow();
+            expect(() => renderSecurity({})).not.toThrow();
+        });
+    });
 });

@@ -170,9 +170,9 @@ export async function loadDashboardData(source = 'mock') {
 }
 
 /**
- * Load an additional JSON dataset for a given source (e.g., engineering-onboarding)
+ * Load an additional JSON dataset for a given source (e.g., onboarding, recommendations)
  * @param {string} source - Data source key (e.g., 'mock')
- * @param {string} fileName - File name without path (e.g., 'engineering-onboarding.json')
+ * @param {string} fileName - File name without path (e.g., 'onboarding.json')
  * @returns {Promise<Object>} - Parsed JSON
  */
 export async function loadAdditionalData(source = 'mock', fileName) {
