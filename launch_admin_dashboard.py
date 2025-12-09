@@ -50,9 +50,14 @@ print('')
 for port in range(8085, 8090):
     result = launch_dashboard(port=port, auto_open=True, source='mock')
     if result['success']:
-        print(f'✅ Dashboard running at: {result[\"url\"]}')
-        print(f'🔌 Port: {result[\"port\"]}')
-        print(f'📁 Directory: {result[\"directory\"]}')
+        dashboard_url = result['url']
+        dashboard_port = result['port']
+        dashboard_dir = result['directory']
+        server_instance = result['server']
+        
+        print(f'✅ Dashboard running at: {dashboard_url}')
+        print(f'🔌 Port: {dashboard_port}')
+        print(f'📁 Directory: {dashboard_dir}')
         print('')
         print('💡 Dashboard opened in your browser')
         print('🛑 Press Ctrl+C to stop server')
@@ -67,7 +72,7 @@ for port in range(8085, 8090):
         except KeyboardInterrupt:
             print('')
             print('🛑 Shutting down server...')
-            result['server'].stop()
+            server_instance.stop()
             print('✅ Server stopped')
         break
     else:
