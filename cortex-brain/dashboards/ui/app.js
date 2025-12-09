@@ -344,12 +344,14 @@ function getTabContainerId(tabKey) {
     switch (tabKey) {
         case 'executive': return 'tab-executive';
         case 'overview': return 'tab-overview';
+        case 'use-cases': return 'tab-use-cases';
         case 'tech-stack': return 'tab-tech-stack';
         case 'security': return 'tab-security';
         case 'architecture': return 'tab-architecture';
         case 'code-org': return 'tab-code-org';
         case 'vendors': return 'tab-vendors';
         case 'engineering': return 'tab-engineering';
+        case 'recommendations': return 'tab-recommendations';
         default: return 'tab-overview';
     }
 }

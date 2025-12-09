@@ -15,7 +15,7 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 // Data source base paths (will be populated from registry)
 // Updated to use repos/ directory (dashboard_collector output path)
 const DATA_SOURCES = {
-    mock: '../data/repos/mock/'
+    mock: '/data/repos/mock/'
 };
 
 // Repository registry (loaded on page load)
