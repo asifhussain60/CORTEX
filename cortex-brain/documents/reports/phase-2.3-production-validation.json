@@ -1,0 +1,78 @@
+[
+  {
+    "repo": "luum-fresh",
+    "repo_path": "C:\\PROJECTS\\luum-fresh",
+    "data_dir": "C:\\PROJECTS\\CORTEX\\cortex-brain\\dashboards\\data\\repos\\luum-fresh",
+    "baseline": {
+      "time_seconds": 0.48,
+      "summary_length": 514,
+      "has_tagline": true,
+      "has_composition": true,
+      "quality_score": 4
+    },
+    "enhanced": {
+      "time_seconds": 2.24,
+      "summary_length": 176,
+      "quality_score": 3,
+      "sources_used": 4,
+      "source_list": [
+        "tech_stack",
+        "git_commits",
+        "docstrings",
+        "business_domains"
+      ],
+      "has_generic_phrases": false,
+      "key_points_count": 2,
+      "source_priority": [
+        "git",
+        "tech_stack",
+        "docstrings"
+      ]
+    },
+    "improvement": {
+      "quality_delta": -1,
+      "length_delta": -338,
+      "time_delta": 1.7600000000000002,
+      "percentage_improvement": -25.0
+    },
+    "status": "success"
+  },
+  {
+    "repo": "mock",
+    "repo_path": "cortex-brain\\dashboards\\data\\repos\\mock",
+    "data_dir": "cortex-brain\\dashboards\\data\\repos\\mock",
+    "baseline": {
+      "time_seconds": 0.13,
+      "summary_length": 461,
+      "has_tagline": true,
+      "has_composition": true,
+      "quality_score": 4
+    },
+    "enhanced": {
+      "time_seconds": 0.05,
+      "summary_length": 61,
+      "quality_score": 1,
+      "sources_used": 4,
+      "source_list": [
+        "tech_stack",
+        "readme",
+        "docstrings",
+        "business_domains"
+      ],
+      "has_generic_phrases": false,
+      "key_points_count": 2,
+      "source_priority": [
+        "readme",
+        "tech_stack",
+        "domains"
+      ]
+    },
+    "improvement": {
+      "quality_delta": -3,
+      "length_delta": -400,
+      "time_delta": -0.08,
+      "percentage_improvement": -75.0
+    },
+    "status": "success"
+  }
+]

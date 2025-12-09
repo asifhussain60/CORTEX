@@ -19,6 +19,8 @@ import { renderSecurity } from './components/security-tab.js';
 import { renderArchitecture } from './components/architecture-tab.js';
 import { renderCodeOrganization } from './components/code-org-tab.js';
 import { renderVendors } from './components/vendors-tab.js';
+import { renderUseCases } from './components/use-cases-tab.js';
+import { renderRecommendations } from './components/recommendations-tab.js';
 import EngineeringOnboardingTab from './components/engineering-onboarding-tab.js';
 import { initKeyboardNavigation } from './keyboard-navigation.js';
 import { 
@@ -282,6 +284,28 @@ async function renderCurrentTab() {
             case 'vendors':
                 renderVendors(appState.data);
                 break;
+            case 'use-cases': {
+                // Load use cases data separately
+                try {
+                    const useCasesData = await loadAdditionalData(appState.currentSource, 'use-cases.json');
+                    renderUseCases(useCasesData);
+                } catch (e) {
+                    console.error('Failed to load use cases data:', e);
+                    renderUseCases({ use_cases: [], roles: [], domains: [], counts: {} });
+                }
+                break;
+            }
+            case 'recommendations': {
+                // Load recommendations data separately
+                try {
+                    const recommendationsData = await loadAdditionalData(appState.currentSource, 'recommendations.json');
+                    renderRecommendations(recommendationsData);
+                } catch (e) {
+                    console.error('Failed to load recommendations data:', e);
+                    renderRecommendations({ recommendations: [], top_recommendations: [], counts: {} });
+                }
+                break;
+            }
             case 'engineering': {
                 // Special case: Load engineering data separately
                 try {
@@ -320,12 +344,14 @@ function getTabContainerId(tabKey) {
     switch (tabKey) {
         case 'executive': return 'tab-executive';
         case 'overview': return 'tab-overview';
+        case 'use-cases': return 'tab-use-cases';
         case 'tech-stack': return 'tab-tech-stack';
         case 'security': return 'tab-security';
         case 'architecture': return 'tab-architecture';
         case 'code-org': return 'tab-code-org';
         case 'vendors': return 'tab-vendors';
         case 'engineering': return 'tab-engineering';
+        case 'recommendations': return 'tab-recommendations';
         default: return 'tab-overview';
     }
 }

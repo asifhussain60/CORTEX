@@ -10,7 +10,9 @@ License: Source-Available (Use Allowed, No Contributions)
 
 import ast
 from typing import List, Any
+from pathlib import Path
 from .base_analyzer import BaseAnalyzer, CodeSmell, SmellType
+from ..docstring_extractor import DocstringInfo, DocstringSource, InformativenessScorer
 
 
 class PythonAnalyzer(BaseAnalyzer):
@@ -198,3 +200,114 @@ class PythonAnalyzer(BaseAnalyzer):
                     if child is target:
                         return node
         return None
+    
+    def get_top_docstrings(self, file_path: Path, limit: int = 10) -> List[DocstringInfo]:
+        """
+        Extract and rank the most informative docstrings from a Python file.
+        
+        Args:
+            file_path: Path to Python file to analyze
+            limit: Maximum number of docstrings to return (default: 10)
+            
+        Returns:
+            List of DocstringInfo objects, sorted by informativeness score (descending)
+            
+        Raises:
+            FileNotFoundError: If file doesn't exist
+            SyntaxError: If file has Python syntax errors
+        """
+        if not file_path.exists():
+            raise FileNotFoundError(f"File not found: {file_path}")
+        
+        # Read source code
+        with open(file_path, 'r', encoding='utf-8') as f:
+            source_code = f.read()
+        
+        # Parse AST
+        try:
+            tree = ast.parse(source_code, filename=str(file_path))
+        except SyntaxError:
+            # Return empty list for files with syntax errors
+            return []
+        
+        docstrings = []
+        scorer = InformativenessScorer()
+        
+        # Extract module-level docstring
+        module_docstring = ast.get_docstring(tree)
+        if module_docstring:
+            score = scorer.calculate_score(module_docstring)
+            docstrings.append(DocstringInfo(
+                source_file=file_path,
+                object_name=file_path.stem,
+                object_type="module",
+                docstring_text=module_docstring,
+                line_number=1,
+                language="python",
+                source_type=DocstringSource.MODULE_LEVEL,
+                informativeness_score=score
+            ))
+        
+        # Extract class and function docstrings
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ClassDef):
+                class_docstring = ast.get_docstring(node)
+                if class_docstring:
+                    score = scorer.calculate_score(class_docstring)
+                    docstrings.append(DocstringInfo(
+                        source_file=file_path,
+                        object_name=node.name,
+                        object_type="class",
+                        docstring_text=class_docstring,
+                        line_number=node.lineno,
+                        language="python",
+                        source_type=DocstringSource.CLASS_LEVEL,
+                        informativeness_score=score
+                    ))
+                
+                # Extract method docstrings
+                for item in node.body:
+                    if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                        method_docstring = ast.get_docstring(item)
+                        if method_docstring:
+                            score = scorer.calculate_score(method_docstring)
+                            docstrings.append(DocstringInfo(
+                                source_file=file_path,
+                                object_name=item.name,
+                                object_type="method",
+                                docstring_text=method_docstring,
+                                line_number=item.lineno,
+                                language="python",
+                                source_type=DocstringSource.METHOD_LEVEL,
+                                informativeness_score=score,
+                                metadata={'parent_class': node.name}
+                            ))
+            
+            elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                # Only process top-level functions (not methods)
+                # Check if this function is not inside a class
+                is_top_level = True
+                for parent_node in ast.walk(tree):
+                    if isinstance(parent_node, ast.ClassDef):
+                        if node in parent_node.body:
+                            is_top_level = False
+                            break
+                
+                if is_top_level:
+                    func_docstring = ast.get_docstring(node)
+                    if func_docstring:
+                        score = scorer.calculate_score(func_docstring)
+                        docstrings.append(DocstringInfo(
+                            source_file=file_path,
+                            object_name=node.name,
+                            object_type="function",
+                            docstring_text=func_docstring,
+                            line_number=node.lineno,
+                            language="python",
+                            source_type=DocstringSource.FUNCTION_LEVEL,
+                            informativeness_score=score
+                        ))
+        
+        # Sort by informativeness score (descending) and return top N
+        ranked = sorted(docstrings, key=lambda d: d.informativeness_score, reverse=True)
+        return ranked[:limit]

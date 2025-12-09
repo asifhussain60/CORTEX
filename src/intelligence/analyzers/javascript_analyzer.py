@@ -9,7 +9,10 @@ License: Source-Available (Use Allowed, No Contributions)
 """
 
 from typing import List, Any, Dict
+from pathlib import Path
+import re
 from .base_analyzer import BaseAnalyzer, CodeSmell, SmellType
+from ..docstring_extractor import DocstringInfo, DocstringSource, InformativenessScorer
 
 
 class JavaScriptAnalyzer(BaseAnalyzer):
@@ -259,3 +262,39 @@ class JavaScriptAnalyzer(BaseAnalyzer):
                 max_depth = max(max_depth, child_depth)
         
         return max_depth
+    
+    def get_top_docstrings(self, file_path: Path, limit: int = 10) -> List[DocstringInfo]:
+        """Extract JSDoc comments from JavaScript/TypeScript files"""
+        if not file_path.exists():
+            raise FileNotFoundError(f"File not found: {file_path}")
+        
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            code = f.read()
+        
+        docstrings = []
+        scorer = InformativenessScorer()
+        
+        # Extract JSDoc comments (/** ... */)
+        jsdoc_pattern = re.compile(r'/\*\*(.*?)\*/', re.DOTALL)
+        for match in jsdoc_pattern.finditer(code):
+            doc_text = match.group(1).strip()
+            # Clean up asterisks from line starts
+            doc_text = re.sub(r'^\s*\*\s?', '', doc_text, flags=re.MULTILINE)
+            
+            if doc_text:
+                line_number = code[:match.start()].count('\n') + 1
+                score = scorer.calculate_score(doc_text)
+                
+                docstrings.append(DocstringInfo(
+                    source_file=file_path,
+                    object_name=f"jsdoc_{line_number}",
+                    object_type="function",
+                    docstring_text=doc_text,
+                    line_number=line_number,
+                    language="javascript" if file_path.suffix == ".js" else "typescript",
+                    source_type=DocstringSource.JSDOC_COMMENT,
+                    informativeness_score=score
+                ))
+        
+        ranked = sorted(docstrings, key=lambda d: d.informativeness_score, reverse=True)
+        return ranked[:limit]

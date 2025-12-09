@@ -2,6 +2,7 @@
  * Executive Summary Tab Component
  * 
  * Renders high-level project summary with key insights and recommendations.
+ * Integrates Phase 2 intelligence when available.
  * 
  * Author: Asif Hussain
  * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -10,6 +11,7 @@
 
 import { renderReconciliationWidget } from './reconciliation-widget-collapsible.js';
 import { BaseTabComponent } from '../core/BaseTabComponent.js';
+import { renderExecutiveIntelligencePanel } from './executive-intelligence-panel.js';
 
 /**
  * Render executive summary tab
@@ -19,6 +21,12 @@ export function renderExecutiveSummary(data) {
     const container = document.getElementById('executive-container');
     if (!container) {
         console.error('Executive summary container not found');
+        return;
+    }
+    
+    // Check for Phase 2 executive intelligence (priority)
+    if (data.executiveIntelligence && data.executiveIntelligence.repo_name) {
+        renderExecutiveIntelligencePanel(container, data.executiveIntelligence);
         return;
     }
     

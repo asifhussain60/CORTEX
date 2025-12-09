@@ -14,9 +14,9 @@ def pytest_runtest_protocol(item, nextitem):
     """Show test progress for long-running tests."""
     test_name = item.nodeid.split("::")[-1]
     
-    # Print start marker for visibility
+    # Print start marker for visibility (ASCII only for cross-platform compatibility)
     print(f"\n{'='*60}")
-    print(f"⏳ Starting: {test_name}")
+    print(f"[START] {test_name}")
     print(f"   Time: {datetime.now().strftime('%H:%M:%S')}")
     print(f"{'='*60}")
     sys.stdout.flush()
@@ -26,7 +26,7 @@ def pytest_runtest_protocol(item, nextitem):
     
     # Print completion marker
     print(f"\n{'='*60}")
-    print(f"✅ Completed: {test_name}")
+    print(f"[DONE] {test_name}")
     print(f"   Time: {datetime.now().strftime('%H:%M:%S')}")
     print(f"{'='*60}\n")
     sys.stdout.flush()
@@ -43,10 +43,10 @@ def pytest_runtest_makereport(item, call):
         duration = f"{report.duration:.1f}s"
         
         if report.passed:
-            print(f"   ✓ Test execution completed in {duration}")
+            print(f"   [PASS] Test execution completed in {duration}")
         elif report.failed:
-            print(f"   ✗ Test failed after {duration}")
+            print(f"   [FAIL] Test failed after {duration}")
         elif report.skipped:
-            print(f"   ⊘ Test skipped")
+            print(f"   [SKIP] Test skipped")
         
         sys.stdout.flush()
