@@ -177,7 +177,7 @@ function renderTopRecommendations(topRecommendations) {
                     </p>
                     <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
                         <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 4px; background: ${getPriorityColor(rec.priority)}20; color: ${getPriorityColor(rec.priority)};">
-                            ${rec.priority.toUpperCase()}
+                            ${(rec.priority || 'P2').toUpperCase()}
                         </span>
                         <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 4px; background: ${getCategoryColor(rec.category)}20; color: ${getCategoryColor(rec.category)};">
                             ${formatCategory(rec.category)}
@@ -248,6 +248,10 @@ function getPriorityColor(priority) {
         'p2': '#3b82f6',
         'p3': '#6b7280'
     };
+    // Handle undefined/null priority
+    if (!priority || typeof priority !== 'string') {
+        return colors.p2; // Default to P2 color
+    }
     return colors[priority.toLowerCase()] || colors.p2;
 }
 
