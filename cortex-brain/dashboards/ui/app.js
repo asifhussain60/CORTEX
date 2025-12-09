@@ -45,6 +45,74 @@ const appState = {
 };
 
 /**
+ * Transform backend recommendations structure to UI-expected format
+ * Backend: {recommendations: {category: [rec, ...]}, summary: {...}}
+ * UI: {recommendations: [], top_recommendations: [], counts: {}}
+ */
+function transformRecommendationsData(rawData) {
+    console.log('[TRANSFORM] Raw recommendations data:', rawData);
+    
+    if (!rawData || !rawData.recommendations) {
+        console.warn('[TRANSFORM] No recommendations data to transform');
+        return { recommendations: [], top_recommendations: [], counts: {} };
+    }
+
+    // Calculate ROI score from impact and effort
+    const calculateROI = (impact, effort) => {
+        const impactScore = { high: 3, medium: 2, low: 1 }[impact?.toLowerCase()] || 1;
+        const effortScore = { low: 3, medium: 2, high: 1 }[effort?.toLowerCase()] || 1;
+        return impactScore * effortScore; // Higher is better (high impact + low effort = 9)
+    };
+
+    // Generate title from description
+    const generateTitle = (description) => {
+        if (!description) return 'Recommendation';
+        const cleaned = description.replace(/^(Consider|Add|Remove|Update|Fix|Improve)\s+/i, '');
+        return cleaned.length > 60 ? cleaned.substring(0, 57) + '...' : cleaned;
+    };
+
+    // Flatten nested categories into single array
+    const flatRecommendations = [];
+    for (const [category, recs] of Object.entries(rawData.recommendations)) {
+        if (Array.isArray(recs)) {
+            recs.forEach(rec => {
+                flatRecommendations.push({
+                    ...rec,
+                    title: generateTitle(rec.description),
+                    roi_score: calculateROI(rec.impact, rec.effort),
+                    category: rec.category || category // Ensure category is set
+                });
+            });
+        }
+    }
+
+    // Sort by ROI score (highest first)
+    flatRecommendations.sort((a, b) => b.roi_score - a.roi_score);
+
+    // Extract top recommendations
+    const topRecommendations = flatRecommendations.slice(0, 10);
+
+    // Build counts from summary
+    const counts = {
+        total: rawData.summary?.total_recommendations || flatRecommendations.length,
+        by_priority: rawData.summary?.by_priority || {},
+        by_category: rawData.summary?.by_category || {}
+    };
+
+    console.log('[TRANSFORM] Transformed to:', {
+        count: flatRecommendations.length,
+        topCount: topRecommendations.length,
+        counts
+    });
+
+    return {
+        recommendations: flatRecommendations,
+        top_recommendations: topRecommendations,
+        counts: counts
+    };
+}
+
+/**
  * Initialize the dashboard application
  */
 async function initializeApp() {
@@ -383,8 +451,9 @@ async function renderCurrentTab() {
             case 'recommendations': {
                 // Load recommendations data separately
                 try {
-                    const recommendationsData = await loadAdditionalData(appState.currentSource, 'recommendations.json');
-                    renderRecommendations(recommendationsData);
+                    const rawData = await loadAdditionalData(appState.currentSource, 'recommendations.json');
+                    const transformedData = transformRecommendationsData(rawData);
+                    renderRecommendations(transformedData);
                 } catch (e) {
                     console.error('Failed to load recommendations data:', e);
                     renderRecommendations({ recommendations: [], top_recommendations: [], counts: {} });

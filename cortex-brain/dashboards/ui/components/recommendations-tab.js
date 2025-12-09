@@ -157,7 +157,16 @@ function renderPriorityMatrix(recommendations, byPriority) {
  * Render top recommendations by ROI
  */
 function renderTopRecommendations(topRecommendations) {
-    return topRecommendations.map((rec, index) => `
+    console.log('[TRACE] renderTopRecommendations called with', topRecommendations.length, 'recommendations');
+    return topRecommendations.map((rec, index) => {
+        console.log(`[TRACE] Processing recommendation #${index + 1}:`, {
+            priority: rec.priority,
+            category: rec.category,
+            impact: rec.impact,
+            effort: rec.effort,
+            description: rec.description?.substring(0, 50)
+        });
+        return `
         <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.1); border-left: 4px solid ${getPriorityColor(rec.priority)};">
             <div style="display: flex; align-items: start; gap: 1rem; margin-bottom: 1rem;">
                 <div style="font-size: 1.5rem; font-weight: 600; color: var(--accent-primary); min-width: 2rem;">
@@ -192,7 +201,8 @@ function renderTopRecommendations(topRecommendations) {
                 </div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 /**
@@ -259,6 +269,10 @@ function getPriorityColor(priority) {
  * Get color for category
  */
 function getCategoryColor(category) {
+    if (!category || typeof category !== 'string') {
+        console.warn('[TRACE] getCategoryColor received invalid category:', category);
+        return '#6b7280'; // Default gray
+    }
     const colors = {
         'health': '#10b981',
         'performance': '#f59e0b',
@@ -273,6 +287,11 @@ function getCategoryColor(category) {
  * Format category name
  */
 function formatCategory(category) {
+    // Handle undefined/null category
+    if (!category || typeof category !== 'string') {
+        console.warn('[TRACE] formatCategory received invalid category:', category);
+        return 'Other'; // Default category
+    }
     return category
         .split('_')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
