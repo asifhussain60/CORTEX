@@ -55,12 +55,18 @@ requirements:
     validation_criteria: "ADOPlanningOrchestrator.refine_dor_interactive()"
     
   - requirement_id: "REQ-003"
-    name: "Review Orchestrator Integration"
+    name: "Contextual Review Orchestrator Integration"
     inherited_from: "planning-system-2.0"
     priority: "critical"
-    status: "missing"
+    status: "implemented"
     validation_method: "integration_test"
-    validation_criteria: "Review orchestrator called before ADO item creation"
+    validation_criteria: "Review orchestrator called before ADO item creation with context"
+    ado_specific_note: |
+      Context-aware review findings integrated into ADO work items.
+      - Blocking issues → ADO Impediments
+      - Critical issues → Linked tasks in story
+      - Improvements → Optional tasks (lower priority)
+    enhancement_date: "2025-12-09"
     
   - requirement_id: "REQ-004"
     name: "SWAG Estimation via Swagger"
@@ -174,8 +180,17 @@ integrations:
     inherited_from: "planning-system-2.0"
     integration_type: "required"
     trigger_condition: "before_ado_planning_starts"
-    ado_specific: "Review score added to Epic description"
-    status: "missing"
+    ado_specific: |
+      Context-aware review findings mapped to ADO work items:
+      - Blocking issues → Impediment work items (blocks feature)
+      - Critical issues → Task work items (linked to story, high priority)
+      - Improvements → Task work items (linked to backlog, low priority)
+      - Review score added to Epic/Feature description
+    status: "implemented"
+    enhancement_date: "2025-12-09"
+    implementation_notes: |
+      Inherits all contextual review capabilities from Planning System 2.0.
+      ADO-specific mapping ensures findings become actionable work items.
     
   - integration_id: "INT-002"
     target_component: "threat_modeler_agent"
