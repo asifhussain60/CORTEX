@@ -2,10 +2,11 @@
 Unified Entry Point Utility - CORTEX Operation Routing and Coordination
 
 Universal routing system for all CORTEX operations with workflow execution,
-summary generation, and ADO-formatted output.
+summary generation, ADO-formatted output, and CLI wrapper routing.
 
 Part of CORTEX 3.2.1 - Unified Entry Point System
 Sprint 13a Migration: unified_entry_point_orchestrator (544 lines) → unified_entry_point_utility (~600 lines)
+Phase 3 & 4 Enhancement: CLI wrapper routing for execution_method-based dispatch
 Author: Asif Hussain
 
 Operations:
@@ -19,10 +20,14 @@ Operations:
 - generate_feature_summary: Format feature creation for ADO
 - save_summary: Persist summary to filesystem
 - format_priority: Convert priority number to label
+- route_operation: Dispatch based on execution_method (cli_wrapper|copilot_chat|internal)
+- invoke_cli_wrapper: Execute CLI wrapper script with arguments
 """
 
 import json
 import logging
+import subprocess
+import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -986,6 +991,241 @@ def _run_self_tests() -> None:
         # Cleanup
         import shutil
         shutil.rmtree(temp_dir)
+
+
+# ========================================
+# CLI Wrapper Routing (Phase 3 & 4)
+# ========================================
+
+def route_operation(
+    operation_id: str,
+    cortex_root: Path,
+    operation_config: Dict[str, Any],
+    **kwargs
+) -> Dict[str, Any]:
+    """
+    Route operation based on execution_method field.
+    
+    Dispatches to appropriate handler:
+    - cli_wrapper: Invoke CLI wrapper script
+    - copilot_chat: Return chat routing metadata
+    - internal: Log and reject (not user-invokable)
+    
+    Args:
+        operation_id: Operation identifier from cortex-operations.yaml
+        cortex_root: CORTEX root directory
+        operation_config: Operation configuration from YAML
+        **kwargs: Additional arguments to pass to CLI wrapper
+    
+    Returns:
+        Dict with execution result:
+        {
+            "success": bool,
+            "execution_method": str,
+            "output": str,
+            "exit_code": int,
+            "message": str
+        }
+    
+    Example:
+        >>> config = {"execution_method": "cli_wrapper", "cli_script": "scripts/cli_wrappers/align_wrapper.py"}
+        >>> result = route_operation("align", Path("/cortex"), config)
+        >>> result['success']
+        True
+    """
+    execution_method = operation_config.get("execution_method")
+    
+    if not execution_method:
+        logger.error(f"❌ Operation '{operation_id}' missing execution_method field")
+        return {
+            "success": False,
+            "execution_method": "unknown",
+            "output": "",
+            "exit_code": 1,
+            "message": f"Operation '{operation_id}' missing execution_method field"
+        }
+    
+    logger.info(f"📍 Routing operation '{operation_id}' via {execution_method}")
+    
+    # Dispatch based on execution method
+    if execution_method == "cli_wrapper":
+        cli_script = operation_config.get("cli_script")
+        if not cli_script:
+            logger.error(f"❌ CLI wrapper operation '{operation_id}' missing cli_script field")
+            return {
+                "success": False,
+                "execution_method": "cli_wrapper",
+                "output": "",
+                "exit_code": 1,
+                "message": f"CLI wrapper operation '{operation_id}' missing cli_script field"
+            }
+        
+        return invoke_cli_wrapper(operation_id, cortex_root, cli_script, **kwargs)
+    
+    elif execution_method == "copilot_chat":
+        logger.info(f"💬 Operation '{operation_id}' routes to Copilot Chat")
+        return {
+            "success": True,
+            "execution_method": "copilot_chat",
+            "output": f"Operation '{operation_id}' should be invoked via Copilot Chat",
+            "exit_code": 0,
+            "message": "Chat-based operations must be invoked through Copilot Chat interface"
+        }
+    
+    elif execution_method == "internal":
+        logger.warning(f"⚠️  Operation '{operation_id}' is internal (not user-invokable)")
+        return {
+            "success": False,
+            "execution_method": "internal",
+            "output": "",
+            "exit_code": 1,
+            "message": f"Operation '{operation_id}' is internal infrastructure (not directly invokable)"
+        }
+    
+    else:
+        logger.error(f"❌ Unknown execution_method '{execution_method}' for operation '{operation_id}'")
+        return {
+            "success": False,
+            "execution_method": execution_method,
+            "output": "",
+            "exit_code": 1,
+            "message": f"Unknown execution_method '{execution_method}'"
+        }
+
+
+def invoke_cli_wrapper(
+    operation_id: str,
+    cortex_root: Path,
+    cli_script: str,
+    output_format: str = "text",
+    verbose: bool = False,
+    **kwargs
+) -> Dict[str, Any]:
+    """
+    Invoke CLI wrapper script and capture output.
+    
+    Executes CLI wrapper with standard arguments (--output, --verbose, --project-root)
+    plus any custom arguments from kwargs.
+    
+    Args:
+        operation_id: Operation identifier
+        cortex_root: CORTEX root directory
+        cli_script: Relative path to CLI wrapper script
+        output_format: Output format (text|json)
+        verbose: Enable verbose output
+        **kwargs: Additional CLI arguments (converted to --key value)
+    
+    Returns:
+        Dict with execution result:
+        {
+            "success": bool,
+            "execution_method": "cli_wrapper",
+            "output": str,
+            "exit_code": int,
+            "message": str,
+            "duration_seconds": float
+        }
+    
+    Example:
+        >>> result = invoke_cli_wrapper("align", Path("/cortex"), "scripts/cli_wrappers/align_wrapper.py", auto_fix=True)
+        >>> result['success']
+        True
+        >>> result['exit_code']
+        0
+    """
+    import time
+    start_time = time.time()
+    
+    # Construct full script path
+    script_path = cortex_root / cli_script
+    
+    if not script_path.exists():
+        logger.error(f"❌ CLI wrapper script not found: {script_path}")
+        return {
+            "success": False,
+            "execution_method": "cli_wrapper",
+            "output": "",
+            "exit_code": 1,
+            "message": f"CLI wrapper script not found: {cli_script}",
+            "duration_seconds": time.time() - start_time
+        }
+    
+    # Build command
+    cmd = [sys.executable, str(script_path)]
+    
+    # Add standard arguments
+    cmd.extend(["--output", output_format])
+    if verbose:
+        cmd.append("--verbose")
+    cmd.extend(["--project-root", str(cortex_root)])
+    
+    # Add custom arguments from kwargs
+    for key, value in kwargs.items():
+        # Convert Python naming (auto_fix) to CLI naming (--auto-fix)
+        cli_arg = f"--{key.replace('_', '-')}"
+        
+        # Handle boolean flags
+        if isinstance(value, bool):
+            if value:
+                cmd.append(cli_arg)
+        else:
+            cmd.extend([cli_arg, str(value)])
+    
+    logger.info(f"🚀 Executing CLI wrapper: {' '.join(cmd)}")
+    
+    try:
+        # Execute CLI wrapper
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            cwd=str(cortex_root),
+            timeout=300  # 5 minute timeout
+        )
+        
+        duration = time.time() - start_time
+        success = result.returncode == 0
+        
+        if success:
+            logger.info(f"✅ CLI wrapper '{operation_id}' completed in {duration:.2f}s")
+        else:
+            logger.error(f"❌ CLI wrapper '{operation_id}' failed with exit code {result.returncode}")
+        
+        return {
+            "success": success,
+            "execution_method": "cli_wrapper",
+            "output": result.stdout,
+            "stderr": result.stderr,
+            "exit_code": result.returncode,
+            "message": f"CLI wrapper executed {'successfully' if success else 'with errors'}",
+            "duration_seconds": duration
+        }
+    
+    except subprocess.TimeoutExpired:
+        duration = time.time() - start_time
+        logger.error(f"❌ CLI wrapper '{operation_id}' timed out after {duration:.0f}s")
+        return {
+            "success": False,
+            "execution_method": "cli_wrapper",
+            "output": "",
+            "stderr": "Process timed out (300s limit)",
+            "exit_code": 124,  # Standard timeout exit code
+            "message": "CLI wrapper execution timed out",
+            "duration_seconds": duration
+        }
+    
+    except Exception as e:
+        duration = time.time() - start_time
+        logger.error(f"❌ CLI wrapper '{operation_id}' execution failed: {e}")
+        return {
+            "success": False,
+            "execution_method": "cli_wrapper",
+            "output": "",
+            "stderr": str(e),
+            "exit_code": 1,
+            "message": f"CLI wrapper execution error: {str(e)}",
+            "duration_seconds": duration
+        }
 
 
 if __name__ == "__main__":
