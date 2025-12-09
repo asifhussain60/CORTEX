@@ -103,7 +103,7 @@ ALL responses MUST use this 5-part structure:
 
 **System Maintenance**
 - Commands: `system maintenance`
-- 5 phases: healthcheck → align → cleanup → optimize → healthcheck
+- 6 phases: healthcheck → align (auto-fix) → cleanup → optimize → refresh prompts → healthcheck
 
 **Dashboard Launcher**
 - Commands: `load dashboard`, `dashboard`

@@ -21,6 +21,13 @@ from pathlib import Path
 from typing import Dict, Any, List
 from enum import Enum
 
+# DependencyDetector integration
+try:
+    from src.intelligence.dependency_detector import DependencyDetector
+    DEPENDENCY_DETECTOR_AVAILABLE = True
+except ImportError:
+    DEPENDENCY_DETECTOR_AVAILABLE = False
+
 
 class Platform(str, Enum):
     """Supported platforms."""
@@ -43,6 +50,27 @@ class SetupScriptGenerator:
         self.dependencies = dependencies
         self.by_language = dependencies.get("by_language", {})
         self.env_vars = dependencies.get("env_vars", {})
+    
+    @classmethod
+    def from_repository(cls, repo_path: Path) -> 'SetupScriptGenerator':
+        """
+        Create setup script generator by detecting dependencies from repository.
+        
+        Args:
+            repo_path: Path to repository root
+        
+        Returns:
+            SetupScriptGenerator instance with detected dependencies
+        """
+        if not DEPENDENCY_DETECTOR_AVAILABLE:
+            raise ImportError(
+                "DependencyDetector not available. "
+                "Required for automatic dependency detection."
+            )
+        
+        detector = DependencyDetector(repo_path)
+        dependencies = detector.detect()
+        return cls(dependencies)
     
     def generate(self) -> Dict[str, str]:
         """

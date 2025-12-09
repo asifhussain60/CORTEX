@@ -1,0 +1,71 @@
+{
+  "timestamp": "2025-12-09T04:24:40.486899",
+  "duration_seconds": 81.949779,
+  "dry_run": false,
+  "summary": {
+    "files_moved": 9,
+    "files_removed": 0,
+    "references_updated": 0,
+    "issues_fixed": 9,
+    "space_freed_mb": 0.0,
+    "errors": 0
+  },
+  "moved_files": [
+    {
+      "from": "test_domain_inference.py",
+      "to": "tests\\integration\\test_domain_inference.py"
+    },
+    {
+      "from": "analyze_all_repos_task1.3.py",
+      "to": "scripts\\utilities\\analyze_all_repos_task1.3.py"
+    },
+    {
+      "from": "benchmark_parallel.py",
+      "to": "scripts\\utilities\\benchmark_parallel.py"
+    },
+    {
+      "from": "profile_aggregator.py",
+      "to": "scripts\\utilities\\profile_aggregator.py"
+    },
+    {
+      "from": "validate_phase2_completion.py",
+      "to": "scripts\\utilities\\validate_phase2_completion.py"
+    },
+    {
+      "from": "validate_phase_2.1_production.py",
+      "to": "scripts\\utilities\\validate_phase_2.1_production.py"
+    },
+    {
+      "from": "validate_phase_2.2_production.py",
+      "to": "scripts\\utilities\\validate_phase_2.2_production.py"
+    },
+    {
+      "from": "validate_phase_2.3_production.py",
+      "to": "scripts\\utilities\\validate_phase_2.3_production.py"
+    },
+    {
+      "from": "DASHBOARD-V3-PROGRESS.md",
+      "to": "cortex-brain\\documents\\summaries\\DASHBOARD-V3-PROGRESS.md"
+    }
+  ],
+  "removed_files": [],
+  "updated_references": [],
+  "validation": {
+    "passed": true,
+    "issues": []
+  },
+  "errors": [],
+  "duplicate_analysis": {
+    "duplicates_found": 302,
+    "safe_to_delete": 0,
+    "needs_review": 61,
+    "duplicates_deleted": 0,
+    "summary": {
+      "duplicate_files": 302,
+      "duplicate_functions": 1264,
+      "duplicate_classes": 663,
+      "similar_module_pairs": 2681
+    },
+    "analysis_timestamp": ""
+  }
+}

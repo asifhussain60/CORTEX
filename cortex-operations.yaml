@@ -93,7 +93,8 @@ operations:
     category: deployment
   regenerate_prompts:
     name: Regenerate Copilot Prompts
-    description: Delete and regenerate copilot-instructions.md and CORTEX.prompt.md from current codebase state
+    description: Delete and regenerate copilot-instructions.md and CORTEX.prompt.md
+      from current codebase state
     deployment_tier: admin
     natural_language:
     - regenerate prompts
@@ -106,6 +107,17 @@ operations:
     - refresh prompts dry run
     - refresh instructions dry run
     category: system
+  threat_modeler_agent:
+    name: Threat Modeler Agent
+    description: Threat Modeler Agent
+    deployment_tier: admin_only
+    natural_language:
+    - review critical threats first
+    - update dod checklist with security items
+    - update
+    - create
+    - checkout
+    category: general
     modules:
     - regenerate_cortex_prompts
     profiles:
@@ -174,7 +186,8 @@ operations:
     category: reporting
   validate_dashboard_data:
     name: Validate Dashboard Data
-    description: Independent validation of dashboard collector output against ground truth
+    description: Independent validation of dashboard collector output against ground
+      truth
     deployment_tier: admin
     natural_language:
     - validate dashboard data
@@ -412,7 +425,8 @@ operations:
       validation_gate: deployment_tier_check
   ado:
     name: ADO Operations
-    description: Azure DevOps work item management orchestrator - Stories, Features, Tasks, Code Reviews
+    description: Azure DevOps work item management orchestrator - Stories, Features,
+      Tasks, Code Reviews
     deployment_tier: user_facing
     natural_language:
     - plan ado
@@ -450,12 +464,13 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: Integrated with ADOAgent for work item orchestration, matches Planning System 2.0 capabilities
+      notes: Integrated with ADOAgent for work item orchestration, matches Planning
+        System 2.0 capabilities
     examples:
     - plan ado story for user authentication
     - plan ado feature for payment processing
     - generate ado completion summary
-    - ado code review for PR #123
+    - ado code review for PR
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper
@@ -4066,6 +4081,10 @@ metadata:
   description: Universal operations registry for CORTEX 2.0 + 2.1 + 3.0
   changelog:
   - version: auto-registered
+    date: 2025-12-09
+    changes:
+    - Auto-registered threat_modeler_agent operation
+  - version: auto-registered
     date: 2025-12-07
     changes:
     - Auto-registered test_intelligence operation
@@ -5094,8 +5113,8 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 162
-  total_modules: 108
+  total_operations: 169
+  total_modules: 115
   total_phases: 9
   cortex_2_0_operations: 9
   cortex_2_1_operations: 6
@@ -5130,7 +5149,7 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
-  last_updated: '2025-12-07 15:54:29'
+  last_updated: '2025-12-09 04:49:14'
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper

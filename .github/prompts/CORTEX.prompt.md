@@ -109,7 +109,8 @@ ALL responses MUST use this 5-part structure:
 
 ### System Maintenance
 - **Commands:** `system maintenance`, `maintain system`
-- **Phases:** Pre-healthcheck → align → cleanup → optimize → post-healthcheck
+- **Phases:** Pre-healthcheck → align (auto-fix) → cleanup → optimize → refresh prompts → post-healthcheck
+- **Auto-Fix:** Alignment automatically applies fixes, prompts refreshed at end
 
 ### Architectural Review
 - **Commands:** `review`, `review architecture`
@@ -131,7 +132,7 @@ ALL responses MUST use this 5-part structure:
 | `start tdd` | Begin TDD workflow | All |
 | `review` | Architectural review | All |
 | `load dashboard` | Launch dashboard | All |
-| `system maintenance` | 5-phase maintenance | Admin |
+| `system maintenance` | 6-phase maintenance (auto-fix) | Admin |
 | `align` | System alignment | Admin/User |
 | `optimize` | CORTEX optimization | Admin/User |
 | `deploy` | Deploy to publish | Admin only |
