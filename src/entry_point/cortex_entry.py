@@ -110,6 +110,13 @@ class CortexEntry:
         self._brain_protector = None
         self._template_loader = None
         
+        # Phase 5.1/5.2: Observer pattern components (lazy-loaded)
+        self._learning_observer = None
+        self._planning_orchestrator = None
+        self._tdd_orchestrator = None
+        self._debug_orchestrator = None
+        self._observers_wired = False
+        
         # Always initialize lightweight components
         self.parser = RequestParser()
         self.formatter = ResponseFormatter()
@@ -233,6 +240,96 @@ class CortexEntry:
             )
             self.logger.debug("Brain Protector loaded")
         return self._brain_protector
+    
+    @property
+    def learning_observer(self):
+        """Lazy-load Learning Observer (Phase 5.1)."""
+        if self._learning_observer is None:
+            try:
+                from src.orchestrators.learning_observer import LearningObserver
+                self._learning_observer = LearningObserver(knowledge_graph=self.tier2)
+                self.logger.debug("Learning Observer loaded (Phase 5.1)")
+            except ImportError as e:
+                self.logger.warning(f"Learning Observer not available: {e}")
+                self._learning_observer = None
+        return self._learning_observer
+    
+    @property
+    def planning_orchestrator(self):
+        """Lazy-load Planning Orchestrator with observer wiring."""
+        if self._planning_orchestrator is None:
+            try:
+                from src.orchestrators.planning_orchestrator import PlanningOrchestrator
+                self._planning_orchestrator = PlanningOrchestrator(cortex_root=str(config.root_path))
+                self._wire_observers()  # Subscribe observer
+                self.logger.debug("Planning Orchestrator loaded with observer")
+            except ImportError as e:
+                self.logger.warning(f"Planning Orchestrator not available: {e}")
+                self._planning_orchestrator = None
+        return self._planning_orchestrator
+    
+    @property
+    def tdd_orchestrator(self):
+        """Lazy-load TDD Workflow Orchestrator with observer wiring."""
+        if self._tdd_orchestrator is None:
+            try:
+                from src.workflows.tdd_workflow_orchestrator import TDDWorkflowOrchestrator, TDDWorkflowConfig
+                tdd_config = TDDWorkflowConfig(
+                    project_root=str(config.root_path),
+                    enable_session_tracking=True,
+                    enable_refactoring=True,
+                    enable_git_checkpoints=True,
+                    enable_terminal_integration=True,
+                    enable_programmatic_execution=True,
+                    enable_caching=True
+                )
+                self._tdd_orchestrator = TDDWorkflowOrchestrator(config=tdd_config)
+                self._wire_observers()  # Subscribe observer
+                self.logger.debug("TDD Workflow Orchestrator loaded with observer")
+            except ImportError as e:
+                self.logger.warning(f"TDD Workflow Orchestrator not available: {e}")
+                self._tdd_orchestrator = None
+        return self._tdd_orchestrator
+    
+    @property
+    def debug_orchestrator(self):
+        """Lazy-load Debug Workflow Orchestrator (Phase 5.2)."""
+        if self._debug_orchestrator is None:
+            try:
+                from src.orchestrators.debug_workflow_orchestrator import DebugWorkflowOrchestrator
+                self._debug_orchestrator = DebugWorkflowOrchestrator()
+                self._wire_observers()  # Subscribe observer
+                self.logger.debug("Debug Workflow Orchestrator loaded (Phase 5.2)")
+            except ImportError as e:
+                self.logger.warning(f"Debug Workflow Orchestrator not available: {e}")
+                self._debug_orchestrator = None
+        return self._debug_orchestrator
+    
+    def _wire_observers(self):
+        """Wire learning observer to all orchestrators (Phase 5.1/5.2)."""
+        if self._observers_wired or self.learning_observer is None:
+            return
+        
+        try:
+            # Subscribe to Planning Orchestrator
+            if self._planning_orchestrator is not None:
+                self._planning_orchestrator.subscribe(self.learning_observer)
+                self.logger.debug("Observer subscribed to Planning Orchestrator")
+            
+            # Subscribe to TDD Orchestrator
+            if self._tdd_orchestrator is not None:
+                self._tdd_orchestrator.subscribe(self.learning_observer)
+                self.logger.debug("Observer subscribed to TDD Orchestrator")
+            
+            # Subscribe to Debug Orchestrator
+            if self._debug_orchestrator is not None:
+                self._debug_orchestrator.subscribe(self.learning_observer)
+                self.logger.debug("Observer subscribed to Debug Orchestrator")
+            
+            self._observers_wired = True
+            self.logger.info("✓ Observer pattern wired to all orchestrators (Phase 5.1/5.2)")
+        except Exception as e:
+            self.logger.warning(f"Failed to wire observers: {e}")
     
     def process(
         self,
