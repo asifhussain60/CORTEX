@@ -116,41 +116,53 @@ function transformRecommendationsData(rawData) {
  * Initialize the dashboard application
  */
 async function initializeApp() {
-    console.log('Initializing dashboard application...');
+    console.log('[INIT] 🚀 Starting dashboard initialization...');
     
     try {
         // Initialize performance monitoring
+        console.log('[INIT] Initializing performance monitoring...');
         initPerformanceMonitoring();
         
         // Initialize keyboard navigation
+        console.log('[INIT] Initializing keyboard navigation...');
         initKeyboardNavigation();
         
         // Parse URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const source = urlParams.get('source') || 'mock';
         const tab = urlParams.get('tab') || 'executive';
+        console.log(`[INIT] URL params - source: ${source}, tab: ${tab}`);
         
         // Update state
         appState.currentSource = source;
         appState.currentTab = tab;
+        console.log('[INIT] App state:', JSON.stringify(appState, null, 2));
         
         // Set up event listeners
+        console.log('[INIT] Setting up event listeners...');
         setupEventListeners();
         
         // Set up tab navigation (MUST be after DOM ready)
+        console.log('[INIT] Setting up tab navigation...');
         setupTabNavigation();
+        console.log('[INIT] Tab navigation setup complete');
         
         // Update source selector with discovered repositories
+        console.log('[INIT] Updating source selector...');
         await updateSourceSelector();
         
         // Show loading overlay
         showLoading('Loading dashboard data...');
         
         // Load initial data
+        console.log(`[INIT] Loading data from source: ${source}...`);
         await loadData(source);
+        console.log('[INIT] ✓ Data loaded successfully');
         
         // Render initial tab using switchTab to properly manage visibility
+        console.log(`[INIT] Rendering initial tab: ${tab}...`);
         await switchTab(tab);
+        console.log('[INIT] ✓ Initial tab rendered');
         
         // Hide loading overlay and show dashboard
         hideLoading();
@@ -161,10 +173,11 @@ async function initializeApp() {
             logPerformanceReport();
         }, 1000);
         
-        console.log('Dashboard initialized successfully');
+        console.log('[INIT] ✅ Dashboard initialized successfully');
         
     } catch (error) {
-        console.error('Failed to initialize dashboard:', error);
+        console.error('[INIT] ❌ Failed to initialize dashboard:', error);
+        console.error('[INIT] Error stack:', error.stack);
         showError('Failed to load dashboard', error.message);
         hideLoading();
     }
@@ -254,8 +267,9 @@ function setupTabNavigation() {
         tab.addEventListener('click', (e) => {
             e.preventDefault();
             const tabName = tab.getAttribute('data-tab');
+            console.log(`[NAV] Tab clicked: ${tabName}`);
             switchTab(tabName);
-        }
+        });
     });
 }
 
