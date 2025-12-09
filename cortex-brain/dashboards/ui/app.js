@@ -149,8 +149,8 @@ async function initializeApp() {
         // Load initial data
         await loadData(source);
         
-        // Render initial tab
-        await renderCurrentTab();
+        // Render initial tab using switchTab to properly manage visibility
+        await switchTab(tab);
         
         // Hide loading overlay and show dashboard
         hideLoading();
@@ -176,8 +176,10 @@ async function initializeApp() {
  * @param {string} tabName - Name of the tab to switch to
  */
 async function switchTab(tabName) {
+    console.log(`[SWITCH] Tab switch requested: ${tabName}`);
+    
     if (!appState.data && tabName !== 'executive') {
-        console.warn('No data available to render tab:', tabName);
+        console.warn('[SWITCH] No data available to render tab:', tabName);
         return;
     }
     
@@ -186,6 +188,7 @@ async function switchTab(tabName) {
         showLoading(`Loading ${tabName}...`);
         
         // Update app state
+        console.log(`[SWITCH] Updating app state to: ${tabName}`);
         appState.currentTab = tabName;
         
         // Update UI - nav tabs
@@ -193,6 +196,9 @@ async function switchTab(tabName) {
         const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
         if (activeTab) {
             activeTab.classList.add('active');
+            console.log(`[VISIBILITY] Nav tab activated: ${tabName}`);
+        } else {
+            console.warn(`[VISIBILITY] Nav tab not found: ${tabName}`);
         }
         
         // Update UI - content visibility
@@ -200,6 +206,9 @@ async function switchTab(tabName) {
         const targetContent = document.getElementById(`tab-${tabName}`);
         if (targetContent) {
             targetContent.classList.add('active');
+            console.log(`[VISIBILITY] Content container activated: tab-${tabName}`);
+        } else {
+            console.error(`[VISIBILITY] Content container not found: tab-${tabName}`);
         }
         
         // Update title
@@ -221,7 +230,9 @@ async function switchTab(tabName) {
         }
         
         // Render tab content automatically
+        console.log(`[SWITCH] Calling renderCurrentTab for: ${tabName}`);
         await renderCurrentTab();
+        console.log(`[SWITCH] Completed rendering: ${tabName}`);
         
         // Hide loading indicator
         hideLoading();
@@ -254,8 +265,7 @@ function setupTabNavigation() {
 function setupEventListeners() {
     // Tab change event
     window.addEventListener('tabChanged', async (event) => {
-        appState.currentTab = event.detail.tab;
-        await renderCurrentTab();
+        await switchTab(event.detail.tab);
     });
     
     // Source change event
@@ -264,7 +274,7 @@ function setupEventListeners() {
         appState.currentSource = event.detail.source;
         clearRenderCache(); // Force re-render all tabs with new data
         await loadData(event.detail.source);
-        await renderCurrentTab();
+        await switchTab(appState.currentTab);
         hideLoading();
     });
     
@@ -275,7 +285,7 @@ function setupEventListeners() {
         clearRenderCache();
         await loadData(appState.currentSource);
         forceRerender(appState.currentTab); // Force re-render current tab
-        await renderCurrentTab();
+        await switchTab(appState.currentTab);
         hideLoading();
         showSuccessToast('Data refreshed successfully');
     });
@@ -387,73 +397,93 @@ async function loadData(source) {
  * Render the current active tab
  */
 async function renderCurrentTab() {
+    console.log(`[RENDER] renderCurrentTab called for: ${appState.currentTab}`);
+    
     if (!appState.data) {
-        console.warn('No data available to render');
+        console.warn('[RENDER] No data available to render');
         return;
     }
     
     try {
         const tabId = getTabContainerId(appState.currentTab);
+        console.log(`[RENDER] Resolved tab container ID: ${tabId}`);
         const tabElement = document.getElementById(tabId);
         
         if (!tabElement) {
-            console.error(`Tab element not found: ${tabId}`);
+            console.error(`[RENDER] Tab element not found: ${tabId}`);
             return;
         }
         
-        // Render content - tab visibility already managed by setupTabNavigation()
+        // Render content - tab visibility already managed by switchTab()
+        console.log(`[RENDER] Entering switch statement for: ${appState.currentTab}`);
         switch (appState.currentTab) {
             case 'executive':
+                console.log('[RENDER] Rendering executive tab');
                 renderExecutiveSummary(appState.data);
                 break;
             case 'overview':
+                console.log('[RENDER] Rendering overview tab');
                 renderOverview(appState.data.overview || appState.data);
                 break;
             case 'tech-stack':
+                console.log('[RENDER] Rendering tech-stack tab');
                 renderTechStack(appState.data);
                 break;
             case 'security':
+                console.log('[RENDER] Rendering security tab');
                 renderSecurity(appState.data);
                 break;
             case 'architecture':
+                console.log('[RENDER] Rendering architecture tab');
                 renderArchitecture(appState.data);
                 break;
             case 'code-org':
+                console.log('[RENDER] Rendering code-org tab');
                 renderCodeOrganization(appState.data);
                 break;
             case 'vendors':
+                console.log('[RENDER] Rendering vendors tab');
                 renderVendors(appState.data);
                 break;
             case 'use-cases': {
                 // Load use cases data separately
+                console.log('[DATA] Loading use-cases.json');
                 try {
                     const useCasesData = await loadAdditionalData(appState.currentSource, 'use-cases.json');
+                    console.log('[DATA] Use cases data loaded, rendering...');
                     renderUseCases(useCasesData);
                 } catch (e) {
-                    console.error('Failed to load use cases data:', e);
+                    console.error('[DATA] Failed to load use cases data:', e);
                     renderUseCases({ use_cases: [], roles: [], domains: [], counts: {} });
                 }
                 break;
             }
             case 'recommendations': {
                 // Load recommendations data separately
+                console.log('[DATA] Loading recommendations.json');
                 try {
                     const rawData = await loadAdditionalData(appState.currentSource, 'recommendations.json');
+                    console.log('[DATA] Transforming recommendations data...');
                     const transformedData = transformRecommendationsData(rawData);
+                    console.log('[DATA] Recommendations data transformed, rendering...');
                     renderRecommendations(transformedData);
                 } catch (e) {
-                    console.error('Failed to load recommendations data:', e);
+                    console.error('[DATA] Failed to load recommendations data:', e);
                     renderRecommendations({ recommendations: [], top_recommendations: [], counts: {} });
                 }
                 break;
             }
             case 'onboarding': {
                 // Load onboarding data separately
+                console.log('[DATA] Loading onboarding.json');
                 try {
                     const onboardingData = await loadAdditionalData('mock', 'onboarding.json');
+                    console.log('[DATA] Onboarding data loaded:', onboardingData);
+                    console.log('[RENDER] Calling renderOnboarding function...');
                     await renderOnboarding(onboardingData);
+                    console.log('[RENDER] Onboarding tab rendered successfully');
                 } catch (e) {
-                    console.error('Failed to load onboarding data:', e);
+                    console.error('[DATA] Failed to load onboarding data:', e);
                     // Render with empty data on error
                     await renderOnboarding({ stages: [], team: [], resources: [] });
                 }
