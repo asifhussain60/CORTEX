@@ -1,0 +1,209 @@
+# Deployment Strategies Configuration
+# Defines progressive deployment strategies for safe production rollouts
+
+# Canary Deployment Strategy
+# Gradual rollout with validation at each stage
+canary:
+  # Deployment stages as percentages (must end with 100)
+  stages:
+    - 10   # Initial canary: 10% of traffic
+    - 50   # Half rollout: 50% of traffic
+    - 100  # Full rollout: 100% of traffic
+  
+  # Duration to monitor each stage before advancing
+  stage_duration_minutes: 5
+  
+  # Interval between health checks during stage monitoring
+  health_check_interval_seconds: 30
+  
+  # Require smoke tests to pass before advancing to next stage
+  smoke_tests_required: true
+  
+  # Automatically rollback if smoke tests or health checks fail
+  auto_rollback_on_failure: true
+  
+  # Health thresholds for automatic rollback
+  health_thresholds:
+    max_error_rate: 0.05  # 5% error rate triggers rollback
+    min_success_rate: 0.95  # Below 95% success triggers rollback
+    max_response_time_ms: 500  # Above 500ms average triggers warning
+
+# Blue-Green Deployment Strategy
+# Zero-downtime deployment with environment switching
+blue_green:
+  # Duration to warm up green environment before switching
+  warmup_duration_minutes: 2
+  
+  # Require smoke tests on green environment before switch
+  smoke_tests_required: true
+  
+  # Automatically switch traffic if smoke tests pass
+  auto_switch_on_success: true
+  
+  # Keep old (blue) environment for this duration before cleanup
+  keep_old_environment_hours: 24
+  
+  # Monitor green environment health after switch
+  monitor_duration_after_switch_minutes: 10
+  
+  # Automatically rollback if post-switch health degrades
+  auto_rollback_on_degradation: true
+  
+  # Health thresholds for automatic rollback after switch
+  health_thresholds:
+    max_error_rate: 0.02  # 2% error rate triggers rollback
+    min_success_rate: 0.98  # Below 98% success triggers rollback
+    max_response_time_ms: 300  # Above 300ms average triggers rollback
+
+# Direct Deployment Strategy
+# Standard deployment without progressive stages (for low-risk changes)
+direct:
+  # Run smoke tests after deployment
+  smoke_tests_required: true
+  
+  # Rollback if smoke tests fail
+  auto_rollback_on_failure: true
+
+# Smoke Test Suites
+# Different test suites for various validation scenarios
+smoke_tests:
+  # Standard smoke tests (run for all strategies)
+  standard:
+    - health_check
+    - api_validation
+    - database_connectivity
+  
+  # Critical features that must work in production
+  critical_features:
+    - tdd_workflow
+    - planning_system
+    - ado_operations
+    - response_template_rendering
+    - agent_instantiation
+  
+  # Health check tests
+  health_check:
+    - system_health
+    - disk_space
+    - memory_usage
+    - cpu_usage
+  
+  # API validation tests
+  api_validation:
+    - response_templates
+    - agent_endpoints
+    - orchestrator_endpoints
+    - operation_endpoints
+  
+  # Database connectivity tests
+  database_connectivity:
+    - brain_database
+    - conversation_context
+    - knowledge_graph
+    - metrics_storage
+
+# Strategy Recommendation Rules
+# Automatic strategy selection based on deployment characteristics
+recommendation_rules:
+  # High-risk deployments (major version changes, breaking changes)
+  high_risk:
+    recommended_strategy: canary
+    reason: "Gradual rollout minimizes impact of potential issues"
+    canary_stages: [5, 25, 50, 100]  # More conservative stages
+    stage_duration_minutes: 10  # Longer monitoring
+  
+  # Large deployments (many files changed, significant refactoring)
+  large_deployment:
+    recommended_strategy: canary
+    reason: "Progressive validation reduces risk of widespread issues"
+    canary_stages: [10, 50, 100]
+    stage_duration_minutes: 5
+  
+  # Zero-downtime requirement (production services)
+  zero_downtime_required:
+    recommended_strategy: blue_green
+    reason: "Environment switching ensures no service interruption"
+    warmup_duration_minutes: 3
+    monitor_duration_after_switch_minutes: 15
+  
+  # Medium-risk production deployments
+  medium_risk_production:
+    recommended_strategy: canary
+    reason: "Balanced approach for production changes"
+    canary_stages: [10, 50, 100]
+    stage_duration_minutes: 5
+  
+  # Low-risk deployments (bug fixes, minor updates, dev environment)
+  low_risk:
+    recommended_strategy: direct
+    reason: "Low risk allows direct deployment"
+    smoke_tests_required: true
+
+# Integration with Deploy Orchestrator
+orchestrator_integration:
+  # Default strategy if none specified
+  default_strategy: canary
+  
+  # Automatically select strategy based on deployment characteristics
+  auto_select_strategy: true
+  
+  # Require explicit strategy override for high-risk deployments
+  require_explicit_override_for_high_risk: true
+  
+  # Save strategy state for resume/rollback
+  persist_strategy_state: true
+  
+  # Strategy state storage location
+  strategy_states_dir: "cortex-brain/deployments/strategies"
+
+# Rollback Configuration
+rollback:
+  # Maximum time window for automatic rollback after deployment
+  auto_rollback_window_minutes: 30
+  
+  # Preserve green environment after rollback for investigation
+  preserve_failed_environment_hours: 48
+  
+  # Rollback triggers
+  triggers:
+    - high_error_rate
+    - low_success_rate
+    - high_response_time
+    - smoke_test_failure
+    - health_check_failure
+    - manual_trigger
+
+# Metrics & Monitoring
+metrics:
+  # Track deployment strategy metrics
+  track_strategy_metrics: true
+  
+  # Metrics to collect during progressive deployment
+  collect:
+    - deployment_duration_per_stage
+    - smoke_test_pass_rate_per_stage
+    - health_check_status_per_stage
+    - error_rate_per_stage
+    - rollback_frequency_by_strategy
+    - strategy_success_rate
+  
+  # Alert on strategy-related issues
+  alerts:
+    - multiple_rollbacks_in_canary
+    - blue_green_switch_failures
+    - consistent_smoke_test_failures
+    - stage_duration_exceeded
+
+# Advanced Features
+advanced:
+  # Enable traffic shadowing (mirror traffic to green before switch)
+  enable_traffic_shadowing: false
+  
+  # Enable feature flags for gradual feature rollout
+  enable_feature_flags: false
+  
+  # Enable A/B testing during canary deployment
+  enable_ab_testing: false
+  
+  # Enable automatic capacity scaling during rollout
+  enable_auto_scaling: false
