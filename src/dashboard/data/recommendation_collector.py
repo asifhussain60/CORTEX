@@ -73,7 +73,8 @@ class RecommendationCollector:
         }
         
         # Generate recommendations from each data source
-        health_data = all_data.get('healthData', {})
+        # Support both old keys (healthData) and new keys (overview)
+        health_data = all_data.get('healthData', all_data.get('overview', {}))
         if health_data:
             self.recommendations['health_improvements'].extend(
                 self.generate_health_recommendations(health_data)
@@ -81,7 +82,14 @@ class RecommendationCollector:
         
         architecture_data = all_data.get('architecture', {})
         code_org_data = all_data.get('codeOrganization', {})
-        if architecture_data or code_org_data:
+        # Use overview data if architecture/codeOrganization not available
+        if not architecture_data and not code_org_data:
+            overview_data = all_data.get('overview', {})
+            if overview_data:
+                self.recommendations['performance'].extend(
+                    self.generate_performance_recommendations(overview_data)
+                )
+        elif architecture_data or code_org_data:
             self.recommendations['performance'].extend(
                 self.generate_performance_recommendations({**architecture_data, **code_org_data})
             )
@@ -92,11 +100,37 @@ class RecommendationCollector:
                 self.generate_security_recommendations(security_data)
             )
         
+        # Tech stack recommendations
+        tech_stack_data = all_data.get('tech_stack', {})
+        if tech_stack_data:
+            self.recommendations['technical_debt'].extend(
+                self.generate_tech_stack_recommendations(tech_stack_data)
+            )
+        
         heatmap_data = code_org_data.get('heatmap', code_org_data)
         if heatmap_data:
             self.recommendations['technical_debt'].extend(
                 self.generate_technical_debt_recommendations(heatmap_data)
             )
+        
+        # Add baseline recommendations if no data found
+        if sum(len(recs) for recs in self.recommendations.values()) == 0:
+            self.recommendations['technical_debt'].append({
+                'category': 'technical_debt',
+                'priority': 'P3',
+                'description': 'Set up automated code quality monitoring',
+                'impact': 'medium',
+                'effort': 'low',
+                'rationale': 'Continuous monitoring helps catch issues early'
+            })
+            self.recommendations['health_improvements'].append({
+                'category': 'health',
+                'priority': 'P2',
+                'description': 'Establish baseline testing framework',
+                'impact': 'high',
+                'effort': 'medium',
+                'rationale': 'Testing framework is essential for maintaining code quality'
+            })
         
         # Sort each category by priority
         for category in self.recommendations:
@@ -312,6 +346,41 @@ class RecommendationCollector:
                 'impact': 'high',
                 'effort': 'high',
                 'rationale': 'Low security score indicates multiple vulnerabilities'
+            })
+        
+        return recommendations
+    
+    def generate_tech_stack_recommendations(self, tech_stack: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Generate recommendations from tech stack analysis"""
+        recommendations = []
+        
+        # Outdated dependencies
+        dependencies = tech_stack.get('dependencies', {})
+        outdated_count = 0
+        for dep_list in dependencies.values():
+            if isinstance(dep_list, list):
+                outdated_count += sum(1 for dep in dep_list if isinstance(dep, dict) and dep.get('is_outdated', False))
+        
+        if outdated_count > 0:
+            recommendations.append({
+                'category': 'technical_debt',
+                'priority': 'P2',
+                'description': f'Update {outdated_count} outdated dependencies',
+                'impact': 'medium',
+                'effort': 'low',
+                'rationale': 'Outdated dependencies may have security vulnerabilities and miss performance improvements'
+            })
+        
+        # Missing frameworks
+        frameworks = tech_stack.get('frameworks', [])
+        if isinstance(frameworks, list) and len(frameworks) < 2:
+            recommendations.append({
+                'category': 'technical_debt',
+                'priority': 'P3',
+                'description': 'Consider adding testing framework for better code quality',
+                'impact': 'medium',
+                'effort': 'medium',
+                'rationale': 'Testing frameworks improve code quality and reduce bugs'
             })
         
         return recommendations

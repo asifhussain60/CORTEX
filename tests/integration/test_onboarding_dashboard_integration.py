@@ -214,11 +214,40 @@ def test_onboarding_dashboard_generation():
         
         print(f"✅ Dashboard URL format correct")
         
+        # Validate recommendations data
+        print(f"\n📋 Validating recommendations data...")
+        recommendations_path = expected_output / "recommendations.json"
+        with open(recommendations_path, 'r', encoding='utf-8') as f:
+            recommendations_data = json.load(f)
+        
+        total_recommendations = recommendations_data.get('summary', {}).get('total_recommendations', 0)
+        if total_recommendations > 0:
+            print(f"✅ Found {total_recommendations} recommendations")
+            # Show breakdown by category
+            by_category = recommendations_data.get('summary', {}).get('by_category', {})
+            for category, count in by_category.items():
+                if count > 0:
+                    print(f"   - {category}: {count}")
+        else:
+            print(f"⚠️  No recommendations generated (expected at least 1)")
+        
+        # Validate overview data
+        print(f"\n📊 Validating overview data...")
+        overview_path = expected_output / "overview.json"
+        with open(overview_path, 'r', encoding='utf-8') as f:
+            overview_data = json.load(f)
+        
+        project_name = overview_data.get('project_name')
+        health_score = overview_data.get('overall_health', {}).get('score', 0)
+        print(f"✅ Project: {project_name}")
+        print(f"✅ Health Score: {health_score}")
+        
         # Summary
         print("\n" + "="*70)
         print("✅ ALL TESTS PASSED")
         print("="*70)
         print(f"Files Generated: {len(present_files)}/{len(required_files)}")
+        print(f"Recommendations: {total_recommendations}")
         print(f"Output Location: {expected_output}")
         print(f"Dashboard URL: {result.dashboard_url}")
         print("="*70)
