@@ -1,0 +1,393 @@
+# CORTEX Deployment System Migration Manifest
+# Version: 3.0
+# Date: December 9, 2025
+# Purpose: Legacy code cleanup and new orchestrator integration
+
+migration_metadata:
+  version: "3.0"
+  date: "2025-12-09"
+  migration_type: "deployment_system_v3"
+  backward_compatible: true
+  rollback_supported: true
+  estimated_duration_minutes: 30
+
+# ============================================================================
+# PHASE 1: File Deprecation Mapping (Old → New)
+# ============================================================================
+file_mapping:
+  deprecated:
+    # Old deployment scripts → New orchestrator
+    - old_path: "src/operations/deploy_utility.py"
+      new_path: "src/orchestrators/deploy_orchestrator.py"
+      reason: "Replaced by unified orchestrator with state machine"
+      archive_to: "cortex-brain/archive/deployment-legacy/deploy_utility.py"
+      
+    - old_path: "src/operations/deployment_gates.py"
+      new_path: "src/deployment/gate_validator.py"
+      reason: "Refactored into hierarchical gate system with 19 gates"
+      archive_to: "cortex-brain/archive/deployment-legacy/deployment_gates.py"
+      
+    - old_path: "src/operations/deploy_gate_validator.py"
+      new_path: "src/deployment/gate_validator.py"
+      reason: "Consolidated gate validation logic"
+      archive_to: "cortex-brain/archive/deployment-legacy/deploy_gate_validator.py"
+      
+    - old_path: "scripts/deploy_cortex.py"
+      new_path: "src/deployment/deployment_cli.py"
+      reason: "Replaced by unified CLI with 6 commands"
+      archive_to: "cortex-brain/archive/deployment-legacy/deploy_cortex.py"
+      
+    - old_path: "src/operations/post_deployment_validator.py"
+      new_path: "src/deployment/post_deployment_validator.py"
+      reason: "Enhanced with smoke tests and critical feature verification"
+      archive_to: "cortex-brain/archive/deployment-legacy/post_deployment_validator.py"
+  
+  preserved:
+    # Files to keep but update
+    - path: "src/operations/deploy.py"
+      update_required: true
+      changes: "Update imports to use new orchestrator"
+    
+    - path: "git/rollback_utility.py"
+      update_required: true
+      changes: "Integrate with DeploymentRollbackManager"
+
+# ============================================================================
+# PHASE 2: Entry Point Updates
+# ============================================================================
+entry_points:
+  - name: "cortex-operations.yaml"
+    location: "cortex-operations.yaml"
+    changes:
+      - operation: "deploy"
+        old_entry: "src.operations.deploy_utility:main"
+        new_entry: "src.deployment.deployment_cli:main"
+        
+      - operation: "validate_deployment"
+        old_entry: "src.operations.deploy_gate_validator:validate"
+        new_entry: "src.deployment.gate_validator:validate_all_gates"
+        
+      - operation: "rollback_deployment"
+        old_entry: "git.rollback_utility:rollback"
+        new_entry: "src.deployment.deployment_rollback:rollback_latest"
+  
+  - name: "src/operations/deploy.py"
+    location: "src/operations/deploy.py"
+    changes:
+      - section: "imports"
+        old: |
+          from src.operations.deploy_utility import DeploymentManager
+          from src.operations.deployment_gates import validate_gates
+        new: |
+          from src.orchestrators.deploy_orchestrator import DeployOrchestrator
+          from src.deployment.gate_validator import GateValidator
+      
+      - section: "main function"
+        old: |
+          manager = DeploymentManager()
+          result = manager.deploy()
+        new: |
+          orchestrator = DeployOrchestrator()
+          result = orchestrator.deploy(strategy='canary')
+  
+  - name: "README.md"
+    location: "README.md"
+    changes:
+      - section: "Deployment"
+        old_command: "python scripts/deploy_cortex.py"
+        new_command: "python -m src.deployment.deployment_cli deploy"
+      
+      - section: "Deployment Strategies"
+        add_content: |
+          ## Deployment Strategies
+          
+          CORTEX supports three deployment strategies:
+          
+          1. **Direct**: Fast deployment for low-risk changes
+          2. **Canary**: Progressive rollout (10% → 50% → 100%) for production
+          3. **Blue-Green**: Zero-downtime deployment with environment switching
+          
+          See [Deployment Guide](cortex-brain/documents/implementation-guides/deployment-orchestrator.md)
+  
+  - name: ".github/workflows/"
+    location: ".github/workflows/"
+    changes:
+      - file: "deploy.yml"
+        status: "created"
+        description: "New CI/CD pipeline with gate validation and canary deployment"
+      
+      - file: "legacy-deploy.yml"
+        status: "deprecated"
+        action: "Archive to .github/workflows-archive/"
+
+# ============================================================================
+# PHASE 3: Import References Update
+# ============================================================================
+import_references:
+  scan_locations:
+    - "src/**/*.py"
+    - "tests/**/*.py"
+    - "scripts/**/*.py"
+  
+  replacements:
+    - old_import: "from src.operations.deploy_utility import"
+      new_import: "from src.orchestrators.deploy_orchestrator import"
+      affected_files: ~15
+    
+    - old_import: "from src.operations.deployment_gates import"
+      new_import: "from src.deployment.gate_validator import"
+      affected_files: ~8
+    
+    - old_import: "from git.rollback_utility import rollback"
+      new_import: "from src.deployment.deployment_rollback import execute_rollback"
+      affected_files: ~5
+
+# ============================================================================
+# PHASE 4: Configuration Updates
+# ============================================================================
+configuration_changes:
+  - file: "cortex.config.json"
+    changes:
+      - add_section: "deployment"
+        content: |
+          "deployment": {
+            "default_strategy": "canary",
+            "auto_select_strategy": true,
+            "enable_metrics": true,
+            "enable_audit_trail": true,
+            "rollback_retention_days": 30
+          }
+  
+  - file: "cortex-brain/config/deployment-strategies.yaml"
+    status: "created"
+    description: "Strategy configuration for canary, blue-green, direct"
+
+# ============================================================================
+# PHASE 5: Documentation Updates
+# ============================================================================
+documentation_updates:
+  created:
+    - path: "cortex-brain/documents/implementation-guides/deployment-orchestrator.md"
+      description: "Comprehensive deployment guide with CLI usage, strategies, troubleshooting"
+      lines: 950
+    
+    - path: ".github/workflows/deploy.yml"
+      description: "CI/CD pipeline template for GitHub Actions"
+      lines: 380
+  
+  updated:
+    - path: "README.md"
+      sections: ["Deployment", "CLI Commands"]
+    
+    - path: "CHANGELOG.md"
+      add_entry: |
+        ## [3.0.0] - 2025-12-09
+        
+        ### Added
+        - Unified deployment orchestrator with 8-state machine
+        - Progressive deployment strategies (Canary, Blue-Green)
+        - Deployment CLI with 6 commands
+        - 19 hierarchical deployment gates
+        - Phase-level rollback system
+        - Deployment metrics and health monitoring
+        - Holistic component discovery
+        - Audit trail with cryptographic signatures
+        - CI/CD GitHub Actions workflow
+        
+        ### Changed
+        - Deployment workflow: Sequential scripts → Orchestrator
+        - Gate validation: 24 flat gates → 19 hierarchical gates
+        - Rollback: Basic git revert → Phase-level snapshots (CODE/BRAIN/CONFIG)
+        - Metrics: None → Comprehensive tracking with health scores
+        
+        ### Deprecated
+        - `scripts/deploy_cortex.py` → Use `python -m src.deployment.deployment_cli`
+        - `src.operations.deploy_utility` → Use `src.orchestrators.deploy_orchestrator`
+        - `src.operations.deployment_gates` → Use `src.deployment.gate_validator`
+        
+        ### Removed
+        - None (all legacy code archived for rollback safety)
+
+# ============================================================================
+# PHASE 6: Validation Checklist
+# ============================================================================
+validation_steps:
+  pre_migration:
+    - step: "Run existing tests"
+      command: "pytest tests/ -v"
+      expected: "All existing tests pass"
+    
+    - step: "Validate git is clean"
+      command: "git status"
+      expected: "No uncommitted changes"
+    
+    - step: "Create migration branch"
+      command: "git checkout -b deployment-migration-v3"
+      expected: "Branch created successfully"
+  
+  post_migration:
+    - step: "Run new deployment tests"
+      command: "pytest tests/deployment/ tests/orchestrators/test_deploy_orchestrator.py -v"
+      expected: "154 tests passing"
+    
+    - step: "Validate gate execution"
+      command: "python -m src.deployment.deployment_cli validate-gates"
+      expected: "19/19 gates pass"
+    
+    - step: "Test dry-run deployment"
+      command: "python -m src.deployment.deployment_cli deploy --dry-run"
+      expected: "Validation successful, no errors"
+    
+    - step: "Verify CLI commands"
+      command: |
+        python -m src.deployment.deployment_cli status
+        python -m src.deployment.deployment_cli history --limit 5
+        python -m src.deployment.deployment_cli metrics --days 7
+      expected: "All commands execute without errors"
+    
+    - step: "Check no broken imports"
+      command: "python -c 'from src.orchestrators.deploy_orchestrator import DeployOrchestrator; print(\"OK\")'"
+      expected: "OK"
+    
+    - step: "Validate CI/CD workflow"
+      command: "actionlint .github/workflows/deploy.yml"
+      expected: "No errors (install: brew install actionlint)"
+
+# ============================================================================
+# PHASE 7: Rollback Plan
+# ============================================================================
+rollback_plan:
+  condition: "If post-migration validation fails"
+  
+  steps:
+    - step: "Restore from migration branch"
+      command: "git reset --hard HEAD~1"
+      description: "Undo migration commit"
+    
+    - step: "Restore legacy files from archive"
+      commands:
+        - "cp cortex-brain/archive/deployment-legacy/deploy_utility.py src/operations/"
+        - "cp cortex-brain/archive/deployment-legacy/deployment_gates.py src/operations/"
+        - "cp cortex-brain/archive/deployment-legacy/deploy_cortex.py scripts/"
+      description: "Restore old deployment scripts"
+    
+    - step: "Revert cortex-operations.yaml"
+      command: "git checkout HEAD~1 -- cortex-operations.yaml"
+      description: "Restore old entry points"
+    
+    - step: "Run legacy tests"
+      command: "pytest tests/operations/ -v"
+      expected: "Legacy tests pass"
+    
+    - step: "Validate legacy deployment"
+      command: "python scripts/deploy_cortex.py --dry-run"
+      expected: "Legacy deployment works"
+
+  recovery_time: "10 minutes"
+  data_loss_risk: "None (all changes versioned in git)"
+
+# ============================================================================
+# PHASE 8: Migration Execution Report Template
+# ============================================================================
+execution_report_template:
+  location: "cortex-brain/documents/reports/deployment-migration-report.md"
+  
+  sections:
+    - title: "Migration Summary"
+      content: |
+        - **Version**: 3.0
+        - **Date**: {execution_date}
+        - **Duration**: {duration_minutes} minutes
+        - **Status**: {SUCCESS/FAILED}
+        - **Rollback Required**: {YES/NO}
+    
+    - title: "Files Archived"
+      content: "List of {count} files moved to cortex-brain/archive/deployment-legacy/"
+    
+    - title: "Entry Points Updated"
+      content: "Updated {count} entry points in cortex-operations.yaml, README.md, etc."
+    
+    - title: "Tests Results"
+      content: |
+        - Pre-migration: {pre_test_pass}/{pre_test_total} passing
+        - Post-migration: {post_test_pass}/{post_test_total} passing
+        - New tests: {new_test_count} added
+    
+    - title: "Validation Results"
+      content: |
+        - Gate validation: {gates_passed}/19
+        - Import checks: {imports_status}
+        - CLI commands: {cli_status}
+        - Dry-run deployment: {dryrun_status}
+    
+    - title: "Issues Encountered"
+      content: "List any issues encountered during migration"
+    
+    - title: "Rollback Instructions"
+      content: |
+        If rollback needed:
+        1. git reset --hard {commit_before_migration}
+        2. Follow rollback_plan steps in deployment-migration-v3.yaml
+        3. Validate legacy system
+
+# ============================================================================
+# PHASE 9: Post-Migration Monitoring
+# ============================================================================
+monitoring:
+  duration_days: 7
+  
+  metrics_to_watch:
+    - metric: "Deployment success rate"
+      baseline: "95%"
+      alert_threshold: "<90%"
+    
+    - metric: "Deployment duration"
+      baseline: "175 seconds"
+      alert_threshold: ">300 seconds"
+    
+    - metric: "Gate pass rate"
+      baseline: "100%"
+      alert_threshold: "<75%"
+    
+    - metric: "Rollback frequency"
+      baseline: "0-1 per week"
+      alert_threshold: "≥2 per week"
+  
+  checkpoints:
+    - day: 1
+      action: "Review first 3 deployments with new system"
+    
+    - day: 3
+      action: "Validate metrics dashboard accuracy"
+    
+    - day: 7
+      action: "Generate migration success report"
+      report: "cortex-brain/documents/reports/deployment-migration-success-report.md"
+
+# ============================================================================
+# PHASE 10: Cleanup (After 30 days)
+# ============================================================================
+cleanup_after_30_days:
+  condition: "If no rollback needed and system stable"
+  
+  actions:
+    - action: "Delete archived legacy files"
+      path: "cortex-brain/archive/deployment-legacy/"
+      confirmation_required: true
+    
+    - action: "Remove migration branch"
+      command: "git branch -D deployment-migration-v3"
+    
+    - action: "Update this manifest"
+      change: "migration_status: 'completed' → 'archived'"
+
+# ============================================================================
+# Execution Instructions
+# ============================================================================
+# To execute this migration:
+# 1. Review this manifest thoroughly
+# 2. Run: python -m src.migration.deployment_migration execute
+# 3. Follow validation steps
+# 4. Monitor for 7 days
+# 5. Archive legacy files after 30 days if stable
+# ============================================================================

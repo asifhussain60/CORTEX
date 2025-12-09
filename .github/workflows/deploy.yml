@@ -1,0 +1,381 @@
+# GitHub Actions Deployment Workflow for CORTEX
+# Trigger: Tag creation (v*.*.*)
+# Workflow: Validate → Deploy Staging → Deploy Production (Canary)
+
+name: CORTEX Deployment Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Matches v1.0.0, v3.0.0, etc.
+  
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      strategy:
+        description: 'Deployment strategy'
+        required: true
+        default: 'direct'
+        type: choice
+        options:
+          - direct
+          - canary
+          - blue-green
+
+env:
+  PYTHON_VERSION: '3.9'
+  CORTEX_ROOT: ${{ github.workspace }}
+
+jobs:
+  # ============================================================================
+  # JOB 1: Pre-Deployment Validation
+  # ============================================================================
+  validate:
+    name: 🔍 Validate Deployment Gates
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Full history for changelog analysis
+      
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run gate validation
+        id: gates
+        run: |
+          python -m src.deployment.deployment_cli validate-gates
+        continue-on-error: false
+      
+      - name: Upload gate validation report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: gate-validation-report
+          path: cortex-brain/documents/reports/deployment-gates-*.md
+          retention-days: 30
+      
+      - name: Run holistic discovery
+        run: |
+          python -m src.deployment.holistic_discovery scan
+      
+      - name: Upload discovery report
+        uses: actions/upload-artifact@v3
+        with:
+          name: discovery-report
+          path: cortex-brain/documents/reports/deployment-discovery-*.md
+          retention-days: 30
+      
+      - name: Security vulnerability scan
+        run: |
+          pip install safety
+          safety check --json > security-report.json || true
+      
+      - name: Upload security report
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-report
+          path: security-report.json
+          retention-days: 30
+
+  # ============================================================================
+  # JOB 2: Build Deployment Package
+  # ============================================================================
+  build:
+    name: 📦 Build Deployment Package
+    needs: validate
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Create deployment package
+        run: |
+          python -m src.deployment.package_builder \
+            --version ${{ github.ref_name }} \
+            --output deploy-packages/
+      
+      - name: Upload deployment package
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-package-${{ github.ref_name }}
+          path: deploy-packages/cortex-${{ github.ref_name }}-*
+          retention-days: 90
+
+  # ============================================================================
+  # JOB 3: Deploy to Staging
+  # ============================================================================
+  deploy-staging:
+    name: 🚀 Deploy to Staging
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.cortex.example.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Download deployment package
+        uses: actions/download-artifact@v3
+        with:
+          name: deployment-package-${{ github.ref_name }}
+          path: deploy-packages/
+      
+      - name: Deploy to staging (Direct strategy)
+        run: |
+          python -m src.deployment.deployment_cli deploy \
+            --strategy direct
+        env:
+          CORTEX_ENV: staging
+          CORTEX_WORKSPACE: ${{ env.CORTEX_ROOT }}
+      
+      - name: Run smoke tests
+        run: |
+          python -m pytest tests/smoke/ -v --tb=short
+      
+      - name: Upload staging deployment report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: staging-deployment-report
+          path: cortex-brain/metrics/deployments/
+          retention-days: 30
+
+  # ============================================================================
+  # JOB 4: Deploy to Production (Canary Strategy)
+  # ============================================================================
+  deploy-production:
+    name: 🎯 Deploy to Production (Canary)
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')  # Only for version tags
+    environment:
+      name: production
+      url: https://cortex.example.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Download deployment package
+        uses: actions/download-artifact@v3
+        with:
+          name: deployment-package-${{ github.ref_name }}
+          path: deploy-packages/
+      
+      - name: Deploy to production (Canary strategy)
+        id: deploy
+        run: |
+          python -m src.deployment.deployment_cli deploy \
+            --strategy canary
+        env:
+          CORTEX_ENV: production
+          CORTEX_WORKSPACE: ${{ env.CORTEX_ROOT }}
+      
+      - name: Monitor deployment health
+        run: |
+          python -m src.deployment.deployment_cli metrics --days 1
+      
+      - name: Upload production deployment report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: production-deployment-report
+          path: |
+            cortex-brain/metrics/deployments/
+            cortex-brain/audit/deployments/
+          retention-days: 365  # Keep production logs for 1 year
+      
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "🔴 Deployment failed - triggering automatic rollback"
+          python -m src.deployment.deployment_cli rollback
+
+  # ============================================================================
+  # JOB 5: Post-Deployment Verification
+  # ============================================================================
+  verify:
+    name: ✅ Post-Deployment Verification
+    needs: deploy-production
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Run critical feature verification
+        run: |
+          python -m tests.smoke.critical_features_test
+      
+      - name: Verify TDD workflow
+        run: |
+          python -c "
+          from src.orchestrators.tdd_orchestrator import TDDOrchestrator
+          tdd = TDDOrchestrator()
+          assert tdd is not None, 'TDD workflow initialization failed'
+          print('✓ TDD workflow verified')
+          "
+      
+      - name: Verify Planning System
+        run: |
+          python -c "
+          from src.orchestrators.planning_orchestrator import PlanningOrchestrator
+          planning = PlanningOrchestrator()
+          assert planning is not None, 'Planning System initialization failed'
+          print('✓ Planning System verified')
+          "
+      
+      - name: Verify ADO Operations
+        run: |
+          python -c "
+          from src.orchestrators.ado_orchestrator import ADOOrchestrator
+          ado = ADOOrchestrator()
+          assert ado is not None, 'ADO Operations initialization failed'
+          print('✓ ADO Operations verified')
+          "
+      
+      - name: Generate verification report
+        if: always()
+        run: |
+          python -m src.deployment.post_deployment_validator \
+            --generate-report
+      
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: verification-report
+          path: cortex-brain/documents/reports/deployment-verification-*.md
+          retention-days: 90
+
+  # ============================================================================
+  # JOB 6: Notify Deployment Status
+  # ============================================================================
+  notify:
+    name: 📢 Notify Deployment Status
+    needs: [validate, build, deploy-staging, deploy-production, verify]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Calculate deployment status
+        id: status
+        run: |
+          if [ "${{ needs.verify.result }}" == "success" ]; then
+            echo "status=✅ SUCCESS" >> $GITHUB_OUTPUT
+            echo "color=28a745" >> $GITHUB_OUTPUT
+          else
+            echo "status=❌ FAILED" >> $GITHUB_OUTPUT
+            echo "color=dc3545" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create deployment summary
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ${{ steps.status.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Jobs Status" >> $GITHUB_STEP_SUMMARY
+          echo "- Validate: ${{ needs.validate.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Build: ${{ needs.build.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Deploy Staging: ${{ needs.deploy-staging.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Deploy Production: ${{ needs.deploy-production.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Verify: ${{ needs.verify.result }}" >> $GITHUB_STEP_SUMMARY
+      
+      # Optional: Send notification to Slack/Discord/Email
+      # Uncomment and configure webhook URL in repository secrets
+      
+      # - name: Send Slack notification
+      #   if: always()
+      #   uses: slackapi/slack-github-action@v1
+      #   with:
+      #     payload: |
+      #       {
+      #         "text": "CORTEX Deployment ${{ steps.status.outputs.status }}",
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "*CORTEX Deployment ${{ steps.status.outputs.status }}*\n*Version:* ${{ github.ref_name }}\n*Triggered by:* ${{ github.actor }}"
+      #             }
+      #           }
+      #         ]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+# ============================================================================
+# Manual Rollback Workflow
+# ============================================================================
+# Trigger via GitHub UI: Actions → CORTEX Deployment Pipeline → Run workflow
+# Select "rollback" from strategy dropdown (when implemented)
+# ============================================================================
