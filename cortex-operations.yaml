@@ -6420,6 +6420,8 @@ statistics:
     - begin tdd workflow
     - tdd implementation
     - test driven development
+    - trace
+    - debug
     category: development
     modules:
     - tdd_workflow_orchestrator

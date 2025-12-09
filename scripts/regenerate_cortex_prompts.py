@@ -53,6 +53,68 @@ class PromptRegenerator:
         self.cortex_prompt = self.prompts_dir / "CORTEX.prompt.md"
         self.brain_dir = cortex_root / "cortex-brain"
         self.preserve_marker = self.github_dir / ".prompt-preserve"
+        self.current_backup_dir = None  # Set during backup phase
+        
+    def _extract_manual_enhancements(self, filename: str) -> str:
+        """Extract manual enhancement sections from backed-up file."""
+        if not hasattr(self, 'current_backup_dir') or not self.current_backup_dir:
+            # Try to find most recent backup
+            backups_dir = self.brain_dir / "backups"
+            if backups_dir.exists():
+                backup_folders = sorted([d for d in backups_dir.glob("prompts_*")], reverse=True)
+                if backup_folders:
+                    self.current_backup_dir = backup_folders[0]
+        
+        if not self.current_backup_dir:
+            return ""
+        
+        backup_file = self.current_backup_dir / filename
+        if not backup_file.exists():
+            return ""
+        
+        try:
+            content = backup_file.read_text(encoding='utf-8')
+            
+            # Extract protected content comment block
+            if filename == 'copilot-instructions.md':
+                # Look for protection comment between # title and **Purpose:**
+                if '⚠️  PROTECTED FILE' in content:
+                    start_marker = '<!--'
+                    end_marker = '-->'
+                    start_idx = content.find(start_marker)
+                    if start_idx != -1:
+                        end_idx = content.find(end_marker, start_idx)
+                        if end_idx != -1:
+                            protected_block = content[start_idx:end_idx + len(end_marker)]
+                            print(f"  📋 Preserved manual enhancements from {filename}")
+                            return protected_block
+            
+            elif filename == 'CORTEX.prompt.md':
+                # Look for protection comment in opening HTML comment
+                if '⚠️  PROTECTED FILE' in content:
+                    # Find the protection comment within the first HTML comment
+                    first_comment_end = content.find('-->')
+                    if first_comment_end != -1:
+                        first_comment = content[:first_comment_end]
+                        if '⚠️  PROTECTED FILE' in first_comment:
+                            # Extract just the protection notice, not the loader directive
+                            lines = first_comment.split('\n')
+                            protected_lines = []
+                            in_protected = False
+                            for line in lines:
+                                if '⚠️  PROTECTED FILE' in line:
+                                    in_protected = True
+                                if in_protected and line.strip() and 'GITHUB COPILOT LOADER' not in line:
+                                    protected_lines.append(line)
+                            if protected_lines:
+                                protected_block = '\n'.join(protected_lines)
+                                print(f"  📋 Preserved manual enhancements from {filename}")
+                                return protected_block
+        
+        except Exception as e:
+            print(f"  ⚠️  Could not extract enhancements from {filename}: {e}")
+        
+        return ""
         
     def execute(self) -> Dict[str, any]:
         """Execute full regeneration workflow."""
@@ -135,6 +197,9 @@ class PromptRegenerator:
             shutil.copy2(self.cortex_prompt, backup_dir / "CORTEX.prompt.md")
             print(f"  ✅ Backed up: CORTEX.prompt.md")
             files_backed_up += 1
+        
+        # Store backup path for later reference
+        self.current_backup_dir = backup_dir
         
         return {
             'success': True,
@@ -273,7 +338,12 @@ class PromptRegenerator:
     def _generate_copilot_instructions(self, design_data: Dict[str, any]) -> Dict[str, any]:
         """Generate lean copilot-instructions.md (entry point)."""
         
+        # Check for manual enhancements in backup
+        manual_enhancements = self._extract_manual_enhancements('copilot-instructions.md')
+        
         content = f'''# GitHub Copilot Instructions for CORTEX
+
+{manual_enhancements}
 
 **Purpose:** AI Assistant enhancement with long-term memory, context awareness, and strategic planning
 
@@ -466,10 +536,15 @@ python -m src.main
     def _generate_cortex_prompt(self, design_data: Dict[str, any]) -> Dict[str, any]:
         """Generate comprehensive CORTEX.prompt.md."""
         
+        # Check for manual enhancements in backup
+        manual_enhancements = self._extract_manual_enhancements('CORTEX.prompt.md')
+        
         content = f'''<!--
 GITHUB COPILOT LOADER DIRECTIVE:
 Load this ENTIRE file into context. Apply mandatory 5-part response format.
 DO NOT provide generic introduction - respond to user's ACTUAL request.
+
+{manual_enhancements}
 -->
 
 # 🎯 CORTEX Universal Entry Point

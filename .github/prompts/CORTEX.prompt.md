@@ -101,8 +101,8 @@ ALL responses MUST use this 5-part structure:
 - **Execution Method:** `copilot_chat` (interactive workflow)
 
 ### TDD Mastery
-- **Commands:** `start tdd`, `run tests`
-- **Features:** RED→GREEN→REFACTOR, per-layer coverage, empty test detection
+- **Commands:** `start tdd`, `run tests`, `trace`, `debug`
+- **Features:** RED→GREEN→REFACTOR, per-layer coverage, empty test detection, debugging orchestrator integration
 - **Guide:** `cortex-brain/brain-protection-rules.yaml` (TDD_ENFORCEMENT)
 - **Execution Method:** `copilot_chat` (interactive workflow)
 
