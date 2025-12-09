@@ -1,0 +1,20 @@
+# Dashboard E2E Testing Requirements
+# Install with: pip install -r requirements.txt
+
+# Selenium WebDriver for browser automation
+selenium>=4.15.0
+
+# Pytest for test framework
+pytest>=7.4.0
+pytest-html>=4.1.0        # HTML test reports
+pytest-xdist>=3.5.0       # Parallel test execution
+pytest-timeout>=2.2.0     # Timeout support
+
+# Chrome WebDriver Manager (auto-downloads chromedriver)
+webdriver-manager>=4.0.1
+
+# Optional: Screenshot comparison
+Pillow>=10.1.0
+
+# Optional: Performance testing
+pytest-benchmark>=4.0.0

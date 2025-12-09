@@ -40,21 +40,23 @@ const renderedTabs = new Set();
  * Initialize performance monitoring
  */
 export function initPerformanceMonitoring() {
-    // Record page load time
-    if (performance && performance.timing) {
-        window.addEventListener('load', () => {
-            const timing = performance.timing;
-            performanceMetrics.pageLoadTime = timing.loadEventEnd - timing.navigationStart;
-            console.log(`Page load time: ${performanceMetrics.pageLoadTime}ms`);
-            
-            // Check if load time exceeds target
-            if (performanceMetrics.pageLoadTime > 3000) {
-                showWarningToast(`Load time: ${(performanceMetrics.pageLoadTime / 1000).toFixed(2)}s (target: <3s)`);
-            } else {
-                showSuccessToast(`Load time: ${(performanceMetrics.pageLoadTime / 1000).toFixed(2)}s`);
-            }
-        });
-    }
+    // Record page load start time using modern API
+    const loadStartTime = performance.now();
+    
+    window.addEventListener('load', () => {
+        // Calculate load time using performance.now()
+        performanceMetrics.pageLoadTime = performance.now() - loadStartTime;
+        
+        console.group('🚀 Performance Metrics');
+        console.log(`Page load time: ${performanceMetrics.pageLoadTime.toFixed(2)}ms`);
+        console.log(`Load timestamp: ${new Date().toISOString()}`);
+        console.groupEnd();
+        
+        // Check if load time exceeds target
+        if (performanceMetrics.pageLoadTime > 3000) {
+            console.warn(`⚠️ Load time exceeds target: ${(performanceMetrics.pageLoadTime / 1000).toFixed(2)}s (target: <3s)`);
+        }
+    });
     
     // Monitor memory usage (if available)
     if (performance.memory) {
@@ -450,17 +452,24 @@ export function logPerformanceReport() {
     const metrics = getPerformanceMetrics();
     
     console.group('📊 Performance Report');
-    console.log(`Page Load Time: ${metrics.pageLoadTime.toFixed(2)}ms`);
-    console.log(`Average Tab Render: ${metrics.averageTabRenderTime.toFixed(2)}ms`);
-    console.log(`Average Viz Render: ${metrics.averageVisualizationRenderTime.toFixed(2)}ms`);
-    console.log(`Total Render Cycles: ${metrics.renderCycleCount}`);
+    console.log(`⏱️  Page Load Time: ${metrics.pageLoadTime.toFixed(2)}ms`);
+    console.log(`📑 Average Tab Render: ${metrics.averageTabRenderTime.toFixed(2)}ms`);
+    console.log(`📊 Average Viz Render: ${metrics.averageVisualizationRenderTime.toFixed(2)}ms`);
+    console.log(`🔄 Total Render Cycles: ${metrics.renderCycleCount}`);
     
     if (metrics.currentMemoryUsage) {
-        console.log(`Memory Usage: ${metrics.currentMemoryUsage.toFixed(2)} MB (${metrics.memoryUtilization.toFixed(1)}%)`);
+        console.log(`💾 Memory Usage: ${metrics.currentMemoryUsage.toFixed(2)} MB (${metrics.memoryUtilization.toFixed(1)}%)`);
     }
     
-    console.log('Tab Render Times:', metrics.tabRenderTimes);
-    console.log('Visualization Render Times:', metrics.visualizationRenderTimes);
+    if (Object.keys(metrics.tabRenderTimes).length > 0) {
+        console.log('📑 Tab Render Times:', metrics.tabRenderTimes);
+    } else {
+        console.log('📑 Tab Render Times: No data (tabs not yet rendered)');
+    }
+    
+    if (Object.keys(metrics.visualizationRenderTimes).length > 0) {
+        console.log('📊 Visualization Render Times:', metrics.visualizationRenderTimes);
+    }
     console.groupEnd();
     
     return metrics;

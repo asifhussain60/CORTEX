@@ -1,0 +1,276 @@
+/**
+ * Badge Component Styles
+ * 
+ * Status indicators and labels consolidated from main.css and other files
+ * Success, warning, danger, info variants with consistent styling
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+ * Date: December 9, 2025
+ */
+
+/* ============================================
+   BASE BADGE STYLES
+   ============================================ */
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* ============================================
+   BADGE VARIANTS
+   ============================================ */
+
+.badge-success {
+    background: rgba(0, 255, 136, 0.2);
+    color: var(--success);
+}
+
+.badge-warning {
+    background: rgba(255, 165, 0, 0.2);
+    color: var(--warning);
+}
+
+.badge-danger {
+    background: rgba(255, 68, 68, 0.2);
+    color: var(--danger);
+}
+
+.badge-info {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--info);
+}
+
+.badge-primary {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--accent-primary);
+}
+
+.badge-secondary {
+    background: rgba(123, 97, 255, 0.2);
+    color: var(--accent-secondary);
+}
+
+.badge-neutral {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+/* ============================================
+   BADGE SIZES
+   ============================================ */
+
+.badge-sm {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.5rem;
+}
+
+.badge-md {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+}
+
+.badge-lg {
+    font-size: 0.875rem;
+    padding: 0.375rem 1rem;
+}
+
+/* ============================================
+   BADGE SHAPES
+   ============================================ */
+
+.badge-square {
+    border-radius: var(--radius-sm);
+}
+
+.badge-rounded {
+    border-radius: var(--radius-full);
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border-radius: 50%;
+}
+
+/* ============================================
+   BADGE WITH ICON
+   ============================================ */
+
+.badge-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.badge-icon .icon {
+    width: 0.875em;
+    height: 0.875em;
+}
+
+/* ============================================
+   PROJECT TYPE BADGE (Special)
+   ============================================ */
+
+.project-type-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.2), 
+        rgba(123, 97, 255, 0.2)
+    );
+    border: 1px solid var(--accent-primary);
+    animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(0, 212, 255, 0);
+    }
+}
+
+/* ============================================
+   BADGE POSITIONING
+   ============================================ */
+
+.badge-absolute {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}
+
+.badge-relative {
+    position: relative;
+}
+
+/* ============================================
+   BADGE GROUP
+   ============================================ */
+
+.badge-group {
+    display: inline-flex;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+}
+
+/* ============================================
+   INTERACTIVE BADGES
+   ============================================ */
+
+.badge-clickable {
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.badge-clickable:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+.badge-clickable:active {
+    transform: scale(0.95);
+}
+
+/* ============================================
+   BADGE WITH CLOSE BUTTON
+   ============================================ */
+
+.badge-dismissible {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.badge-dismissible .badge-close {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    width: 1em;
+    height: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: opacity var(--transition-base);
+}
+
+.badge-dismissible .badge-close:hover {
+    opacity: 1;
+}
+
+/* ============================================
+   BADGE ANIMATION
+   ============================================ */
+
+.badge-bounce {
+    animation: badge-bounce 0.5s ease-in-out;
+}
+
+@keyframes badge-bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+
+@media (max-width: 768px) {
+    .badge {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.5rem;
+    }
+    
+    .badge-lg {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+    }
+    
+    .project-type-badge {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.75rem;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    .badge {
+        border: 1px solid currentColor;
+        background: white !important;
+    }
+    
+    .badge-clickable:hover {
+        transform: none;
+    }
+    
+    .project-type-badge {
+        animation: none;
+    }
+}

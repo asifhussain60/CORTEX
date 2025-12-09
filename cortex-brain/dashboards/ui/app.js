@@ -38,7 +38,7 @@ import { progressiveLoader } from './progressive-loader.js';
 // Application state
 const appState = {
     currentSource: 'mock',
-    currentTab: 'overview',
+    currentTab: 'executive',
     data: null,
     loading: false,
     error: null
@@ -60,7 +60,7 @@ async function initializeApp() {
         // Parse URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const source = urlParams.get('source') || 'mock';
-        const tab = urlParams.get('tab') || 'overview';
+        const tab = urlParams.get('tab') || 'executive';
         
         // Update state
         appState.currentSource = source;
@@ -68,6 +68,9 @@ async function initializeApp() {
         
         // Set up event listeners
         setupEventListeners();
+        
+        // Set up tab navigation (MUST be after DOM ready)
+        setupTabNavigation();
         
         // Update source selector with discovered repositories
         await updateSourceSelector();
@@ -96,6 +99,70 @@ async function initializeApp() {
         console.error('Failed to initialize dashboard:', error);
         showError('Failed to load dashboard', error.message);
         hideLoading();
+    }
+}
+
+/**
+ * Set up tab navigation event listeners
+ */
+function setupTabNavigation() {
+    // Add click listeners to all nav tabs
+    const navTabs = document.querySelectorAll('.nav-tab');
+    navTabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tabName = tab.getAttribute('data-tab');
+            
+            // Update app state
+            appState.currentTab = tabName;
+            
+            // Update UI - nav tabs
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Update UI - content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            const targetContent = document.getElementById(`tab-${tabName}`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+            
+            // Update title
+            const titles = {
+                'executive': 'Executive Summary',
+                'overview': 'System Overview',
+                'tech-stack': 'Tech Stack',
+                'security': 'Security',
+                'use-cases': 'Use Cases',
+                'recommendations': 'Recommendations',
+                'architecture': 'Architecture',
+                'code-org': 'Code Organization',
+                'vendors': 'Dependencies',
+                'engineering': 'Engineering Onboarding'
+            };
+            const titleElement = document.getElementById('contentTitle');
+            if (titleElement && titles[tabName]) {
+                titleElement.textContent = titles[tabName];
+            }
+            
+            // Render content if needed (for special cases like engineering)
+            if (tabName === 'engineering') {
+                renderEngineeringTab();
+            }
+        });
+    });
+}
+
+/**
+ * Render engineering tab (special case with async data loading)
+ */
+async function renderEngineeringTab() {
+    try {
+        const onboardingData = await loadAdditionalData('mock', 'engineering-onboarding.json');
+        const tab = new EngineeringOnboardingTab();
+        await tab.init(onboardingData);
+    } catch (e) {
+        console.error('Failed to load onboarding data:', e);
     }
 }
 
@@ -243,10 +310,7 @@ async function renderCurrentTab() {
         return;
     }
     
-    console.log(`Rendering tab: ${appState.currentTab}`);
-    
     try {
-        // CRITICAL: Make tab visible FIRST before components try to find containers
         const tabId = getTabContainerId(appState.currentTab);
         const tabElement = document.getElementById(tabId);
         
@@ -255,13 +319,7 @@ async function renderCurrentTab() {
             return;
         }
         
-        // Hide all tabs and show current one
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        tabElement.classList.add('active');
-        
-        // Now render content - components will find their visible containers
+        // Render content - tab visibility already managed by setupTabNavigation()
         switch (appState.currentTab) {
             case 'executive':
                 renderExecutiveSummary(appState.data);
@@ -306,17 +364,9 @@ async function renderCurrentTab() {
                 }
                 break;
             }
-            case 'engineering': {
-                // Special case: Load engineering data separately
-                try {
-                    const onboardingData = await loadAdditionalData('mock', 'engineering-onboarding.json');
-                    const tab = new EngineeringOnboardingTab();
-                    await tab.init(onboardingData);
-                } catch (e) {
-                    console.error('Failed to load onboarding data:', e);
-                }
+            case 'engineering':
+                // Content loaded by click handler in setupTabNavigation()
                 break;
-            }
             default:
                 console.warn(`Unknown tab: ${appState.currentTab}`);
                 return;

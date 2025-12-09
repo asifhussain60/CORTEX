@@ -1,0 +1,327 @@
+/**
+ * Sidebar Navigation Styles
+ * 
+ * Left navigation panel with logo, data source selector, and tab navigation
+ * FIXES: User reported issue - navigation tabs not displaying correctly
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+ * Date: December 9, 2025
+ */
+
+/* ============================================
+   SIDEBAR CONTAINER
+   ============================================ */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);  /* 280px from variables.css */
+    height: 100vh;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+    z-index: var(--z-sticky);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* ============================================
+   SIDEBAR HEADER (LOGO)
+   ============================================ */
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: var(--spacing-md);
+}
+
+.dashboard-logo {
+    height: 48px;
+    width: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 212, 255, 0.3));
+    transition: filter var(--transition-base);
+}
+
+.dashboard-logo:hover {
+    filter: drop-shadow(0 4px 12px rgba(0, 212, 255, 0.5));
+}
+
+/* ============================================
+   DATA SOURCE SELECTOR
+   ============================================ */
+
+.source-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+}
+
+.source-selector label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.source-selector select {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.source-selector select:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-primary);
+}
+
+.source-selector select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+/* ============================================
+   PROJECT TYPE BADGE
+   ============================================ */
+
+.project-type-badge {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 16px rgba(0, 212, 255, 0.5);
+    }
+}
+
+/* ============================================
+   NAVIGATION TABS (CRITICAL FIX)
+   ============================================ */
+
+.nav-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-tab {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover state */
+.nav-tab:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    transform: translateX(4px);
+}
+
+/* Active state */
+.nav-tab.active {
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.15), 
+        rgba(123, 97, 255, 0.15));
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+/* Active state glow effect */
+.nav-tab.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+/* Focus state for accessibility */
+.nav-tab:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* ============================================
+   NAVIGATION TAB ICON & TEXT
+   ============================================ */
+
+.nav-tab-icon {
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    transition: transform var(--transition-base);
+}
+
+.nav-tab:hover .nav-tab-icon {
+    transform: scale(1.1);
+}
+
+.nav-tab.active .nav-tab-icon {
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6));
+}
+
+.nav-tab-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ============================================
+   RESPONSIVE BEHAVIOR
+   ============================================ */
+
+/* Tablet and below - collapse sidebar */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 80px;
+        padding: var(--spacing-md);
+    }
+    
+    .sidebar-header {
+        padding: var(--spacing-sm) 0;
+    }
+    
+    .dashboard-logo {
+        height: 32px;
+    }
+    
+    /* Hide text elements when collapsed */
+    .source-selector label,
+    .nav-tab-text {
+        display: none;
+    }
+    
+    .source-selector select {
+        padding: var(--spacing-sm);
+        font-size: 0;  /* Hide text but keep functionality */
+    }
+    
+    .project-type-badge {
+        font-size: 0;
+        padding: var(--spacing-xs);
+        min-height: 32px;
+    }
+    
+    .nav-tab {
+        padding: var(--spacing-md);
+        justify-content: center;
+    }
+    
+    .nav-tab:hover {
+        transform: translateX(0);
+    }
+}
+
+/* Mobile - hide sidebar completely, show hamburger menu */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform var(--transition-base);
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* ============================================
+   SIDEBAR FOOTER (if needed)
+   ============================================ */
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--glass-border);
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    text-align: center;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    .sidebar {
+        display: none;
+    }
+}

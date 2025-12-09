@@ -1,1230 +1,328 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Health Dashboard</title>
+    
+    <!-- External Libraries -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <!-- Styles -->
+    <!-- Base CSS Layer -->
+    <link rel="stylesheet" href="styles/base/reset.css">
+    <link rel="stylesheet" href="styles/base/variables.css">
+    <link rel="stylesheet" href="styles/base/typography.css">
+    
+    <!-- Layouts Layer -->
+    <link rel="stylesheet" href="styles/layouts/sidebar.css">
+    <link rel="stylesheet" href="styles/layouts/dashboard-container.css">
+    <link rel="stylesheet" href="styles/layouts/main-content.css">
+    
+    <!-- Components Layer -->
+    <link rel="stylesheet" href="styles/components/buttons.css">
+    <link rel="stylesheet" href="styles/components/cards.css">
+    <link rel="stylesheet" href="styles/components/badges.css">
+    <link rel="stylesheet" href="styles/components/forms.css">
+    <link rel="stylesheet" href="styles/components/tabs.css">
+    <link rel="stylesheet" href="styles/components/loading.css">
+    
+    <!-- Utils Layer -->
+    <link rel="stylesheet" href="styles/utils/animations.css">
+    <link rel="stylesheet" href="styles/utils/accessibility.css">
+    
+    <!-- Legacy CSS (Phase 5-7) -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/architecture-panels.css">
+    <link rel="stylesheet" href="styles/skeleton-loader.css">
+    <link rel="stylesheet" href="styles/overview-tab.css">
+    <link rel="stylesheet" href="styles/engineering-onboarding.css">
+</head>
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="visually-hidden">Skip to main content</a>
 
-<html lang="en"><html lang="en">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div style="text-align: center; color: white;">
+                <div class="spinner"></div>
+                <div class="loading-message">Loading dashboard...</div>
+            </div>
+        </div>
+    </div>
 
-<head><head>
-
-    <meta charset="UTF-8">    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>CORTEX System Overview</title>    <title>CORTEX Health Dashboard</title>
-
+    <!-- Dashboard Container -->
+    <div class="dashboard-container" id="dashboardContainer">
         
-
-    <!-- External Libraries -->    <!-- External Libraries -->
-
-    <script src="https://d3js.org/d3.v7.min.js"></script>    <script src="https://d3js.org/d3.v7.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-
-        
-
-    <!-- Styles -->    <!-- Styles -->
-
-    <link rel="stylesheet" href="styles/main.css">    <link rel="stylesheet" href="styles/main.css">
-
-    <link rel="stylesheet" href="styles/architecture-panels.css">    <link rel="stylesheet" href="styles/architecture-panels.css">
-
-    <link rel="stylesheet" href="styles/skeleton-loader.css">    <link rel="stylesheet" href="styles/skeleton-loader.css">
-
-    <link rel="stylesheet" href="styles/overview-tab.css">    <link rel="stylesheet" href="styles/overview-tab.css">
-
-    <link rel="stylesheet" href="styles/engineering-onboarding.css">    <link rel="stylesheet" href="styles/engineering-onboarding.css">
-
-        
-
-    <style>    <style>
-
-        /* Glassmorphism Dark Mode Dashboard */        /* Glassmorphism Dark Mode Dashboard */
-
-        * {        * {
-
-            margin: 0;            margin: 0;
-
-            padding: 0;            padding: 0;
-
-            box-sizing: border-box;            box-sizing: border-box;
-
-        }        }
-
-                
-
-        :root {        :root {
-
-            --bg-primary: #0a0e27;            --bg-primary: #0a0e27;
-
-            --bg-secondary: #1a1f3a;            --bg-secondary: #1a1f3a;
-
-            --glass-bg: rgba(26, 31, 58, 0.7);            --glass-bg: rgba(26, 31, 58, 0.7);
-
-            --glass-border: rgba(255, 255, 255, 0.1);            --glass-border: rgba(255, 255, 255, 0.1);
-
-            --accent-primary: #00d4ff;            --accent-primary: #00d4ff;
-
-            --accent-secondary: #7b61ff;            --accent-secondary: #7b61ff;
-
-            --text-primary: #ffffff;            --text-primary: #ffffff;
-
-            --text-secondary: #a0a6c0;            --text-secondary: #a0a6c0;
-
-            --success: #00ff88;            --success: #00ff88;
-
-            --warning: #ffa500;            --warning: #ffa500;
-
-            --danger: #ff4444;            --danger: #ff4444;
-
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-
-        }        }
-
-                
-
-        body {        body {
-
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-
-            color: var(--text-primary);            color: var(--text-primary);
-
-            min-height: 100vh;            min-height: 100vh;
-
-            overflow-x: hidden;            overflow-x: hidden;
-
-        }        }
-
-                
-
-        /* Layout */        /* Layout */
-
-        .dashboard-container {        .dashboard-container {
-
-            display: flex;            display: flex;
-
-            height: 100vh;            height: 100vh;
-
-        }        }
-
-                
-
-        /* Sidebar Navigation */        /* Sidebar Navigation */
-
-        .sidebar {        .sidebar {
-
-            width: 280px;            width: 280px;
-
-            background: var(--glass-bg);            background: var(--glass-bg);
-
-            backdrop-filter: blur(10px);            backdrop-filter: blur(10px);
-
-            border-right: 1px solid var(--glass-border);            border-right: 1px solid var(--glass-border);
-
-            padding: 2rem 0;            padding: 2rem 0;
-
-            box-shadow: var(--shadow);            box-shadow: var(--shadow);
-
-            position: fixed;            position: fixed;
-
-            height: 100vh;            height: 100vh;
-
-            overflow-y: auto;            overflow-y: auto;
-
-            z-index: 1000;            z-index: 1000;
-
-        }        }
-
-                
-
-        .sidebar-header {        .sidebar-header {
-
-            padding: 0 2rem 2rem 2rem;            padding: 0 2rem 2rem 2rem;
-
-            border-bottom: 1px solid var(--glass-border);            border-bottom: 1px solid var(--glass-border);
-
-        }        }
-
-                
-
-        .dashboard-logo {        .dashboard-logo {
-
-            width: 180px;            width: 180px;
-
-            height: auto;            height: auto;
-
-            filter: drop-shadow(0 4px 12px rgba(0, 212, 255, 0.3));            filter: drop-shadow(0 4px 12px rgba(0, 212, 255, 0.3));
-
-            transition: transform 0.3s ease, filter 0.3s ease;            transition: transform 0.3s ease, filter 0.3s ease;
-
-        }        }
-
-                
-
-        .dashboard-logo:hover {        .dashboard-logo:hover {
-
-            transform: scale(1.05);            transform: scale(1.05);
-
-            filter: drop-shadow(0 6px 16px rgba(0, 212, 255, 0.5));            filter: drop-shadow(0 6px 16px rgba(0, 212, 255, 0.5));
-
-        }        }
-
-                
-
-        @media (max-width: 768px) {        @media (max-width: 768px) {
-
-            .dashboard-logo {            .dashboard-logo {
-
-                width: 140px;                width: 140px;
-
-            }            }
-
-        }        }
-
-                
-
-        /* Source Selector */        /* Source Selector */
-
-        .source-selector {        .source-selector {
-
-            padding: 1.5rem 2rem;            padding: 1.5rem 2rem;
-
-            border-bottom: 1px solid var(--glass-border);            border-bottom: 1px solid var(--glass-border);
-
-        }        }
-
-                
-
-        .source-selector label {        .source-selector label {
-
-            display: block;            display: block;
-
-            font-size: 0.875rem;            font-size: 0.875rem;
-
-            color: var(--text-secondary);            color: var(--text-secondary);
-
-            margin-bottom: 0.5rem;            margin-bottom: 0.5rem;
-
-        }        }
-
-                
-
-        .source-selector select {        .source-selector select {
-
-            width: 100%;            width: 100%;
-
-            padding: 0.75rem;            padding: 0.75rem;
-
-            background: var(--glass-bg);            background: var(--glass-bg);
-
-            border: 1px solid var(--glass-border);            border: 1px solid var(--glass-border);
-
-            border-radius: 8px;            border-radius: 8px;
-
-            color: var(--text-primary);            color: var(--text-primary);
-
-            font-size: 1rem;            font-size: 1rem;
-
-            cursor: pointer;            cursor: pointer;
-
-            transition: all 0.2s;            transition: all 0.2s;
-
-        }        }
-
-                
-
-        .source-selector select:hover {        .source-selector select:hover {
-
-            border-color: var(--accent-primary);            border-color: var(--accent-primary);
-
-        }        }
-
-                
-
-        /* Navigation Tabs */        /* Navigation Tabs */
-
-        .nav-tabs {        .nav-tabs {
-
-            padding: 1.5rem 0;            padding: 1.5rem 0;
-
-        }        }
-
-                
-
-        .nav-tab {        .nav-tab {
-
-            display: flex;            display: flex;
-
-            align-items: center;            align-items: center;
-
-            padding: 1rem 2rem;            padding: 1rem 2rem;
-
-            color: var(--text-secondary);            color: var(--text-secondary);
-
-            text-decoration: none;            text-decoration: none;
-
-            transition: all 0.2s;            transition: all 0.2s;
-
-            cursor: pointer;            cursor: pointer;
-
-            border-left: 3px solid transparent;            border-left: 3px solid transparent;
-
-        }        }
-
-                
-
-        .nav-tab:hover {        .nav-tab:hover {
-
-            background: rgba(255, 255, 255, 0.05);            background: rgba(255, 255, 255, 0.05);
-
-            color: var(--text-primary);            color: var(--text-primary);
-
-        }        }
-
-                
-
-        .nav-tab.active {        .nav-tab.active {
-
-            background: rgba(0, 212, 255, 0.1);            background: rgba(0, 212, 255, 0.1);
-
-            color: var(--accent-primary);            color: var(--accent-primary);
-
-            border-left-color: var(--accent-primary);            border-left-color: var(--accent-primary);
-
-        }        }
-
-                
-
-        .nav-tab-icon {        .nav-tab-icon {
-
-            font-size: 1.5rem;            font-size: 1.5rem;
-
-            margin-right: 1rem;            margin-right: 1rem;
-
-        }        }
-
-                
-
-        .nav-tab-text {        .nav-tab-text {
-
-            font-size: 1rem;            font-size: 1rem;
-
-            font-weight: 500;            font-weight: 500;
-
-        }        }
-
-                
-
-        /* Main Content Area */        /* Main Content Area */
-
-        .main-content {        .main-content {
-
-            flex: 1;            flex: 1;
-
-            margin-left: 280px;            margin-left: 280px;
-
-            padding: 2rem;            padding: 2rem;
-
-            overflow-y: auto;            overflow-y: auto;
-
-            height: 100vh;            height: 100vh;
-
-        }        }
-
-                
-
-        /* Content Header */        /* Content Header */
-
-        .content-header {        .content-header {
-
-            display: flex;            display: flex;
-
-            justify-content: space-between;            justify-content: space-between;
-
-            align-items: center;            align-items: center;
-
-            margin-bottom: 2rem;            margin-bottom: 2rem;
-
-            padding-bottom: 1rem;            padding-bottom: 1rem;
-
-            border-bottom: 1px solid var(--glass-border);            border-bottom: 1px solid var(--glass-border);
-
-        }        }
-
-                
-
-        .content-title {        .content-title {
-
-            font-size: 2rem;            font-size: 2rem;
-
-            font-weight: 600;            font-weight: 600;
-
-        }        }
-
-                
-
-        .content-actions {        .content-actions {
-
-            display: flex;            display: flex;
-
-            gap: 1rem;            gap: 1rem;
-
-        }        }
-
-                
-
-        .btn {        .btn {
-
-            padding: 0.75rem 1.5rem;            padding: 0.75rem 1.5rem;
-
-            background: var(--glass-bg);            background: var(--glass-bg);
-
-            border: 1px solid var(--glass-border);            backdrop-filter: blur(10px);
-
-            border-radius: 8px;            border: 1px solid var(--glass-border);
-
-            color: var(--text-primary);            border-radius: 8px;
-
-            cursor: pointer;            color: var(--text-primary);
-
-            transition: all 0.2s;            font-size: 0.875rem;
-
-            font-size: 0.875rem;            cursor: pointer;
-
-            font-weight: 500;            transition: all 0.2s;
-
-        }        }
-
-                
-
-        .btn:hover {        .btn:hover {
-
-            background: rgba(0, 212, 255, 0.1);            background: rgba(0, 212, 255, 0.1);
-
-            border-color: var(--accent-primary);            border-color: var(--accent-primary);
-
-            transform: translateY(-2px);            transform: translateY(-2px);
-
-        }        }
-
-                
-
-        .btn-primary {        .btn-primary {
-
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-
-            border: none;            border: none;
-
-        }        }
-
-                
-
-        .btn-primary:hover {        .btn-primary:hover {
-
-            transform: translateY(-2px);            transform: translateY(-2px);
-
-            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.4);            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
-
-        }        }
-
-                
-
-        /* Tab Content */        /* Tab Content */
-
-        .tab-content {        .tab-content {
-
-            display: none;            display: none;
-
-        }        }
-
-                
-
-        .tab-content.active {        .tab-content.active {
-
-            display: block;            display: block;
-
-        }            animation: fadeIn 0.3s ease-in-out;
-
-                }
-
-        /* Loading State */        
-
-        .loading {        @keyframes fadeIn {
-
-            display: flex;            from {
-
-            justify-content: center;                opacity: 0;
-
-            align-items: center;                transform: translateY(10px);
-
-            height: 400px;            }
-
-        }            to {
-
-                        opacity: 1;
-
-        .spinner {                transform: translateY(0);
-
-            width: 50px;            }
-
-            height: 50px;        }
-
-            border: 4px solid var(--glass-border);        
-
-            border-top-color: var(--accent-primary);        /* Glass Cards */
-
-            border-radius: 50%;        .glass-card {
-
-            animation: spin 1s linear infinite;            background: var(--glass-bg);
-
-        }            backdrop-filter: blur(10px);
-
-                    border: 1px solid var(--glass-border);
-
-        @keyframes spin {            border-radius: 12px;
-
-            to { transform: rotate(360deg); }            padding: 1.5rem;
-
-        }            box-shadow: var(--shadow);
-
-                    transition: all 0.2s;
-
-        /* Responsive Design */        }
-
-        @media (max-width: 1024px) {        
-
-            .sidebar {        .glass-card:hover {
-
-                width: 240px;            transform: translateY(-4px);
-
-            }            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
-
-                    }
-
-            .main-content {        
-
-                margin-left: 240px;        /* Loading State */
-
-            }        .loading-overlay {
-
-        }            position: fixed;
-
-                    top: 0;
-
-        @media (max-width: 768px) {            left: 0;
-
-            .sidebar {            right: 0;
-
-                width: 100%;            bottom: 0;
-
-                position: relative;            background: rgba(10, 14, 39, 0.95);
-
-                height: auto;            display: flex;
-
-            }            align-items: center;
-
-                        justify-content: center;
-
-            .main-content {            z-index: 9999;
-
-                margin-left: 0;        }
-
-            }        
-
-                    .loading-spinner {
-
-            .dashboard-container {            width: 60px;
-
-                flex-direction: column;            height: 60px;
-
-            }            border: 4px solid var(--glass-border);
-
-        }            border-top-color: var(--accent-primary);
-
-    </style>            border-radius: 50%;
-
-</head>            animation: spin 1s linear infinite;
-
-<body>        }
-
-    <div class="dashboard-container">        
-
-        <!-- Sidebar Navigation -->        @keyframes spin {
-
-        <aside class="sidebar">            to { transform: rotate(360deg); }
-
-            <div class="sidebar-header">        }
-
-                <img src="assets/cortex-logo.svg" alt="CORTEX Logo" class="dashboard-logo" onerror="this.style.display='none'">        
-
-            </div>        @keyframes slideDown {
-
-                        from {
-
-            <div class="source-selector">                opacity: 0;
-
-                <label for="data-source">Data Source:</label>                transform: translateY(-10px);
-
-                <select id="data-source">            }
-
-                    <option value="mock">Mock Data (Demo)</option>            to {
-
-                    <option value="CORTEX">CORTEX</option>                opacity: 1;
-
-                    <option value="luum-fresh">Luum Fresh</option>                transform: translateY(0);
-
-                    <option value="tcbulk">TC Bulk</option>            }
-
-                    <option value="v5-coldfusion">V5 ColdFusion</option>        }
-
-                    <option value="v5-webservices-prevalidationws">V5 WebServices</option>        
-
-                </select>        @keyframes tooltipFadeIn {
-
-            </div>            from {
-
-                            opacity: 0;
-
-            <nav class="nav-tabs">                transform: scale(0.95);
-
-                <a class="nav-tab active" data-tab="executive" onclick="switchTab('executive')">            }
-
-                    <span class="nav-tab-icon">📊</span>            to {
-
-                    <span class="nav-tab-text">Executive Summary</span>                opacity: 1;
-
-                </a>                transform: scale(1);
-
-                <a class="nav-tab" data-tab="overview" onclick="switchTab('overview')">            }
-
-                    <span class="nav-tab-icon">🏠</span>        }
-
-                    <span class="nav-tab-text">System Overview</span>        
-
-                </a>        .loading-text {
-
-                <a class="nav-tab" data-tab="tech-stack" onclick="switchTab('tech-stack')">            margin-top: 1rem;
-
-                    <span class="nav-tab-icon">⚙️</span>            color: var(--text-secondary);
-
-                    <span class="nav-tab-text">Tech Stack</span>        }
-
-                </a>        
-
-                <a class="nav-tab" data-tab="security" onclick="switchTab('security')">        /* Technology Card Hover Effects */
-
-                    <span class="nav-tab-icon">🔒</span>        .tech-card-hoverable {
-
-                    <span class="nav-tab-text">Security</span>            position: relative;
-
-                </a>        }
-
-                <a class="nav-tab" data-tab="use-cases" onclick="switchTab('use-cases')">        
-
-                    <span class="nav-tab-icon">🎯</span>        .tech-card-hoverable:hover {
-
-                    <span class="nav-tab-text">Use Cases</span>            border-color: var(--accent-primary) !important;
-
-                </a>            background: var(--glass-border) !important;
-
-                <a class="nav-tab" data-tab="recommendations" onclick="switchTab('recommendations')">        }
-
-                    <span class="nav-tab-icon">💡</span>        
-
-                    <span class="nav-tab-text">Recommendations</span>        /* Vulnerability Card Hover Effects */
-
-                </a>        .vuln-card {
-
-                <a class="nav-tab" data-tab="architecture" onclick="switchTab('architecture')">            position: relative;
-
-                    <span class="nav-tab-icon">🏗️</span>        }
-
-                    <span class="nav-tab-text">Architecture</span>        
-
-                </a>        .vuln-card:hover {
-
-                <a class="nav-tab" data-tab="code-org" onclick="switchTab('code-org')">            transform: translateY(-2px);
-
-                    <span class="nav-tab-icon">📁</span>            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
-
-                    <span class="nav-tab-text">Code Organization</span>        }
-
-                </a>        
-
-                <a class="nav-tab" data-tab="vendors" onclick="switchTab('vendors')">        .vuln-card[data-severity="critical"]:hover {
-
-                    <span class="nav-tab-icon">🔌</span>            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4) !important;
-
-                    <span class="nav-tab-text">Dependencies</span>        }
-
-                </a>        
-
-                <a class="nav-tab" data-tab="engineering" onclick="switchTab('engineering')">        .vuln-card[data-severity="high"]:hover {
-
-                    <span class="nav-tab-icon">🎓</span>            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4) !important;
-
-                    <span class="nav-tab-text">Onboarding</span>        }
-
-                </a>        
-
-            </nav>        .vuln-card[data-severity="medium"]:hover {
-
-        </aside>            box-shadow: 0 8px 24px rgba(251, 191, 36, 0.4) !important;
-
-        }
-
-        <!-- Main Content -->        
-
-        <main class="main-content">        .vuln-card[data-severity="low"]:hover {
-
-            <!-- Executive Summary Tab -->            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4) !important;
-
-            <div id="executive-tab" class="tab-content active">        }
-
-                <div class="content-header">        
-
-                    <h1 class="content-title">Executive Summary</h1>        /* Error State */
-
-                    <div class="content-actions">        .error-message {
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>            background: rgba(255, 68, 68, 0.1);
-
-                        <button class="btn btn-primary" onclick="exportReport()">📥 Export</button>            border: 1px solid var(--danger);
-
-                    </div>            border-radius: 8px;
-
-                </div>            padding: 1.5rem;
-
-                <div id="executive-content"></div>            color: var(--danger);
-
-            </div>            margin-bottom: 1rem;
-
-        }
-
-            <!-- System Overview Tab -->        
-
-            <div id="overview-tab" class="tab-content">        .error-message h3 {
-
-                <div class="content-header">            margin-bottom: 0.5rem;
-
-                    <h1 class="content-title">System Overview</h1>        }
-
-                    <div class="content-actions">        
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>        /* Responsive */
-
-                        <button class="btn btn-primary" onclick="generateReport()">📊 Generate Report</button>        @media (max-width: 768px) {
-
-                    </div>            .sidebar {
-
-                </div>                width: 100%;
-
-                <div id="overview-content"></div>                height: auto;
-
-            </div>                position: relative;
-
-            }
-
-            <!-- Tech Stack Tab -->            
-
-            <div id="tech-stack-tab" class="tab-content">            .main-content {
-
-                <div class="content-header">                margin-left: 0;
-
-                    <h1 class="content-title">Tech Stack</h1>            }
-
-                    <div class="content-actions">            
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>            .nav-tabs {
-
-                        <button class="btn btn-primary" onclick="exportTechStack()">📥 Export</button>                display: flex;
-
-                    </div>                overflow-x: auto;
-
-                </div>                padding: 0;
-
-                <div id="tech-stack-content"></div>            }
-
-            </div>            
-
-            .nav-tab {
-
-            <!-- Security Tab -->                flex-direction: column;
-
-            <div id="security-tab" class="tab-content">                text-align: center;
-
-                <div class="content-header">                padding: 1rem;
-
-                    <h1 class="content-title">Security Analysis</h1>                min-width: 100px;
-
-                    <div class="content-actions">            }
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>            
-
-                        <button class="btn btn-primary" onclick="exportSecurityReport()">📥 Export</button>            .nav-tab-icon {
-
-                    </div>                margin-right: 0;
-
-                </div>                margin-bottom: 0.5rem;
-
-                <div id="security-content"></div>            }
-
-            </div>        }
-
-    </style>
-
-            <!-- Use Cases Tab --></head>
-
-            <div id="use-cases-tab" class="tab-content"><body>
-
-                <div class="content-header">    <!-- Loading Overlay -->
-
-                    <h1 class="content-title">Use Cases</h1>    <div class="loading-overlay" id="loadingOverlay">
-
-                    <div class="content-actions">        <div style="text-align: center;">
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>            <div class="loading-spinner"></div>
-
-                        <button class="btn btn-primary" onclick="exportUseCases()">📥 Export</button>            <div class="loading-text">Loading dashboard...</div>
-
-                    </div>        </div>
-
-                </div>    </div>
-
-                <div id="use-cases-content"></div>
-
-            </div>    <!-- Dashboard Container -->
-
-    <div class="dashboard-container" style="display: none;" id="dashboardContainer">
-
-            <!-- Recommendations Tab -->        <!-- Sidebar Navigation -->
-
-            <div id="recommendations-tab" class="tab-content">        <aside class="sidebar">
-
-                <div class="content-header">            <div class="sidebar-header">
-
-                    <h1 class="content-title">Recommendations</h1>                <img src="assets/images/cortex-logo.svg" alt="CORTEX Health Dashboard" class="dashboard-logo">
-
-                    <div class="content-actions">            </div>
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>            
-
-                        <button class="btn btn-primary" onclick="exportRecommendations()">📥 Export</button>            <!-- Source Selector -->
-
-                    </div>            <div class="source-selector">
-
-                </div>                <label for="sourceSelect">Data Source:</label>
-
-                <div id="recommendations-content"></div>                <select id="sourceSelect" onchange="handleSourceChange(this.value)">
-
-            </div>                    <option value="mock">Mock Data (Demo)</option>
-
-                    <!-- Repository options populated dynamically from registry.json -->
-
-            <!-- Architecture Tab -->                </select>
-
-            <div id="architecture-tab" class="tab-content">            </div>
-
-                <div class="content-header">            
-
-                    <h1 class="content-title">Architecture</h1>            <!-- Navigation Tabs -->
-
-                    <div class="content-actions">            <nav class="nav-tabs">
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>                <a class="nav-tab active" data-tab="executive" onclick="switchTab('executive')">
-
-                        <button class="btn btn-primary" onclick="exportArchitecture()">📥 Export</button>                    <span class="nav-tab-icon">📋</span>
-
-                    </div>                    <span class="nav-tab-text">Executive Summary</span>
-
-                </div>                </a>
-
-                <div id="architecture-content"></div>                    <a class="nav-tab" data-tab="engineering" onclick="switchTab('engineering')">
-
-            </div>                        <span class="nav-tab-icon">🎓</span>
-
-                        <span class="nav-tab-text">Engineering</span>
-
-            <!-- Code Organization Tab -->                    </a>
-
-            <div id="code-org-tab" class="tab-content">                <a class="nav-tab" data-tab="overview" onclick="switchTab('overview')">
-
-                <div class="content-header">                    <span class="nav-tab-icon">📊</span>
-
-                    <h1 class="content-title">Code Organization</h1>                    <span class="nav-tab-text">Overview</span>
-
-                    <div class="content-actions">                </a>
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>                <a class="nav-tab" data-tab="tech-stack" onclick="switchTab('tech-stack')">
-
-                        <button class="btn btn-primary" onclick="exportCodeOrg()">📥 Export</button>                    <span class="nav-tab-icon">🛠️</span>
-
-                    </div>                    <span class="nav-tab-text">Tech Stack</span>
-
-                </div>                </a>
-
-                <div id="code-org-content"></div>                <a class="nav-tab" data-tab="security" onclick="switchTab('security')">
-
-            </div>                    <span class="nav-tab-icon">🔒</span>
-
-                    <span class="nav-tab-text">Security</span>
-
-            <!-- Dependencies Tab -->                </a>
-
-            <div id="vendors-tab" class="tab-content">                <a class="nav-tab" data-tab="architecture" onclick="switchTab('architecture')">
-
-                <div class="content-header">                    <span class="nav-tab-icon">🏗️</span>
-
-                    <h1 class="content-title">Dependencies</h1>                    <span class="nav-tab-text">Architecture</span>
-
-                    <div class="content-actions">                </a>
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>                <a class="nav-tab" data-tab="code-org" onclick="switchTab('code-org')">
-
-                        <button class="btn btn-primary" onclick="exportDependencies()">📥 Export</button>                    <span class="nav-tab-icon">📁</span>
-
-                    </div>                    <span class="nav-tab-text">Code Organization</span>
-
-                </div>                </a>
-
-                <div id="vendors-content"></div>                <a class="nav-tab" data-tab="vendors" onclick="switchTab('vendors')">
-
-            </div>                    <span class="nav-tab-icon">🔌</span>
-
-                    <span class="nav-tab-text">Dependencies</span>
-
-            <!-- Engineering Onboarding Tab -->                </a>
-
-            <div id="engineering-tab" class="tab-content">            </nav>
-
-                <div class="content-header">        </aside>
-
-                    <h1 class="content-title">Engineering Onboarding</h1>        
-
-                    <div class="content-actions">        <!-- Main Content Area -->
-
-                        <button class="btn" onclick="refreshData()">🔄 Refresh</button>        <main class="main-content">
-
-                        <button class="btn btn-primary" onclick="exportOnboarding()">📥 Export</button>            <!-- Project Type Badge -->
-
-                    </div>            <div id="project-type-badge" class="project-type-badge">Analyzing...</div>
-
-                </div>            
-
-                <div id="engineering-content"></div>            <!-- Content Header -->
-
-            </div>            <div class="content-header">
-
-        </main>                <h2 class="content-title" id="contentTitle">Dashboard Overview</h2>
-
-    </div>                <div class="content-actions">
-
-                    <button class="btn" onclick="refreshData()">🔄 Refresh</button>
-
-    <!-- Core Application Script -->                    <button class="btn" onclick="exportData()">📥 Export</button>
-
-    <script type="module" src="app.js"></script>                    <button class="btn-primary btn" onclick="generateReport()">📄 Generate Report</button>
-
-                    </div>
-
-    <!-- Tab Component Scripts -->            </div>
-
-    <script type="module" src="components/executive-tab.js"></script>            
-
-    <script type="module" src="components/overview-tab.js"></script>            <!-- Error Container -->
-
-    <script type="module" src="components/overview-tab-v3.js"></script>            <div id="errorContainer"></div>
-
-    <script type="module" src="components/tech-stack-tab.js"></script>            
-
-    <script type="module" src="components/security-tab.js"></script>            <!-- Tab Content: Executive Summary -->
-
-    <script type="module" src="components/use-cases-tab.js"></script>            <div class="tab-content active" id="tab-executive">
-
-    <script type="module" src="components/recommendations-tab.js"></script>                <div id="executive-container">
-
-    <script type="module" src="components/architecture-tab.js"></script>                    <!-- Executive Summary content will be dynamically loaded -->
-
-    <script type="module" src="components/code-org-tab.js"></script>                </div>
-
-    <script type="module" src="components/vendors-tab.js"></script>            </div>
-
-    <script type="module" src="components/engineering-onboarding-tab.js"></script>            
-
-    <script type="module" src="components/onboarding-tab.js"></script>            <!-- Tab Content: Overview -->
-
-                <div class="tab-content" id="tab-overview">
-
-    <!-- Utility Components -->                <div id="overview-container">
-
-    <script type="module" src="components/executive-intelligence-panel.js"></script>                    <!-- Overview content will be dynamically loaded -->
-
-    <script type="module" src="components/reconciliation-widget.js"></script>                </div>
-
-    <script type="module" src="components/package-health-dashboard.js"></script>            </div>
-
-            
-
-    <script>            <!-- Tab Content: Tech Stack -->
-
-        // Tab switching functionality            <div class="tab-content" id="tab-tech-stack">
-
-        function switchTab(tabName) {                <div id="tech-stack-container">
-
-            // Remove active class from all tabs and content                    <!-- Tech stack content will be dynamically loaded -->
-
-            document.querySelectorAll('.nav-tab').forEach(tab => {                </div>
-
-                tab.classList.remove('active');            </div>
-
-            });            
-
-            document.querySelectorAll('.tab-content').forEach(content => {            <!-- Tab Content: Security -->
-
-                content.classList.remove('active');            <div class="tab-content" id="tab-security">
-
-            });                <div id="security-container">
-
-                                <!-- Security content will be dynamically loaded -->
-
-            // Add active class to selected tab and content                </div>
-
-            const selectedTab = document.querySelector(`[data-tab="${tabName}"]`);            </div>
-
-            const selectedContent = document.getElementById(`${tabName}-tab`);
-
-                        <!-- Tab Content: Engineering Onboarding -->
-
-            if (selectedTab) selectedTab.classList.add('active');            <div class="tab-content" id="tab-engineering">
-
-            if (selectedContent) selectedContent.classList.add('active');                <div id="engineering-container">
-
-                                <div id="engineering-onboarding-content"></div>
-
-            // Trigger tab load event                </div>
-
-            window.dispatchEvent(new CustomEvent('tabSwitch', { detail: { tab: tabName } }));            </div>
-
-        }            
-
-                    <!-- Tab Content: Architecture -->
-
-        // Data source switching            <div class="tab-content" id="tab-architecture">
-
-        document.getElementById('data-source')?.addEventListener('change', (e) => {                <!-- Dynamic Architecture Panels (Frontend/Backend/Database) -->
-
-            const source = e.target.value;                <div id="architecture-panels-container">
-
-            window.dispatchEvent(new CustomEvent('dataSourceChange', { detail: { source } }));                    <!-- Architecture panels will be dynamically rendered -->
-
-        });                </div>
-
-                        
-
-        // Utility functions (will be overridden by component scripts)                <!-- Legacy Architecture Container -->
-
-        function refreshData() {                <div id="architecture-container">
-
-            window.dispatchEvent(new CustomEvent('refreshData'));                    <!-- Architecture content will be dynamically loaded -->
-
-        }                </div>
-
-                    </div>
-
-        function exportReport() {            
-
-            window.dispatchEvent(new CustomEvent('exportReport'));            <!-- Tab Content: Code Organization -->
-
-        }            <div class="tab-content" id="tab-code-org">
-
-                        <div id="code-org-container">
-
-        function generateReport() {                    <!-- Code organization content will be dynamically loaded -->
-
-            window.dispatchEvent(new CustomEvent('generateReport'));                </div>
-
-        }            </div>
-
-                    
-
-        function exportTechStack() {            <!-- Tab Content: Vendors/Dependencies -->
-
-            window.dispatchEvent(new CustomEvent('exportTechStack'));            <div class="tab-content" id="tab-vendors">
-
-        }                <div id="vendors-container">
-
-                            <!-- Vendors/dependencies content will be dynamically loaded -->
-
-        function exportSecurityReport() {                </div>
-
-            window.dispatchEvent(new CustomEvent('exportSecurityReport'));            </div>
-
-        }        </main>
-
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/images/cortex-logo.svg" alt="CORTEX Logo" class="dashboard-logo">
             </div>
 
-        function exportUseCases() {    
+            <!-- Source Selector -->
+            <div class="source-selector">
+                <label for="sourceSelect">Data Source</label>
+                <select id="sourceSelect" onchange="handleSourceChange(this.value)">
+                    <option value="mock">Mock Data (Demo)</option>
+                    <option value="cortex">CORTEX</option>
+                    <option value="noor-canvas">Noor Canvas</option>
+                    <option value="alist">Alist</option>
+                    <option value="ksessions">K-Sessions</option>
+                </select>
+            </div>
 
-            window.dispatchEvent(new CustomEvent('exportUseCases'));    <!-- Application Scripts -->
+            <!-- Project Type Badge -->
+            <div id="project-type-badge" class="project-type-badge">Analyzing...</div>
 
-        }    <script src="services/repository-monitor.js"></script>
+            <!-- Navigation Tabs -->
+            <nav class="nav-tabs">
+                <a class="nav-tab active" data-tab="executive" onclick="switchTab('executive')">
+                    <span class="nav-tab-icon">📊</span>
+                    <span class="nav-tab-text">Executive Summary</span>
+                </a>
+                <a class="nav-tab" data-tab="overview" onclick="switchTab('overview')">
+                    <span class="nav-tab-icon">🏠</span>
+                    <span class="nav-tab-text">System Overview</span>
+                </a>
+                <a class="nav-tab" data-tab="tech-stack" onclick="switchTab('tech-stack')">
+                    <span class="nav-tab-icon">⚙️</span>
+                    <span class="nav-tab-text">Tech Stack</span>
+                </a>
+                <a class="nav-tab" data-tab="security" onclick="switchTab('security')">
+                    <span class="nav-tab-icon">🔒</span>
+                    <span class="nav-tab-text">Security</span>
+                </a>
+                <a class="nav-tab" data-tab="use-cases" onclick="switchTab('use-cases')">
+                    <span class="nav-tab-icon">🎯</span>
+                    <span class="nav-tab-text">Use Cases</span>
+                </a>
+                <a class="nav-tab" data-tab="recommendations" onclick="switchTab('recommendations')">
+                    <span class="nav-tab-icon">💡</span>
+                    <span class="nav-tab-text">Recommendations</span>
+                </a>
+                <a class="nav-tab" data-tab="architecture" onclick="switchTab('architecture')">
+                    <span class="nav-tab-icon">🏗️</span>
+                    <span class="nav-tab-text">Architecture</span>
+                </a>
+                <a class="nav-tab" data-tab="code-org" onclick="switchTab('code-org')">
+                    <span class="nav-tab-icon">📁</span>
+                    <span class="nav-tab-text">Code Organization</span>
+                </a>
+                <a class="nav-tab" data-tab="vendors" onclick="switchTab('vendors')">
+                    <span class="nav-tab-icon">🔌</span>
+                    <span class="nav-tab-text">Dependencies</span>
+                </a>
+                <a class="nav-tab" data-tab="engineering" onclick="switchTab('engineering')">
+                    <span class="nav-tab-icon">🎓</span>
+                    <span class="nav-tab-text">Onboarding</span>
+                </a>
+            </nav>
+        </aside>
 
-            <script type="module" src="data-loader.js"></script>
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Content Header -->
+            <div class="content-header">
+                <h1 class="content-title" id="contentTitle">Executive Summary</h1>
+                <div class="content-actions">
+                    <button class="btn" onclick="refreshData()" aria-label="Refresh">🔄 Refresh</button>
+                    <button class="btn" onclick="exportData()" aria-label="Export">📥 Export</button>
+                    <button class="btn btn-primary" onclick="generateReport()" aria-label="Generate Report">📄 Generate Report</button>
+                </div>
+            </div>
 
-        function exportRecommendations() {    <script type="module" src="adaptive-visibility.js"></script>
+            <!-- Error Container -->
+            <div id="errorContainer"></div>
 
-            window.dispatchEvent(new CustomEvent('exportRecommendations'));    <script type="module" src="components/architecture-panels.js"></script>
+            <!-- Tab Content: Executive Summary -->
+            <div class="tab-content active" id="tab-executive">
+                <div id="executive-container"></div>
+            </div>
 
-        }    <script type="module" src="app.js"></script>
+            <!-- Tab Content: Overview -->
+            <div class="tab-content" id="tab-overview">
+                <div id="overview-container"></div>
+            </div>
 
-            <script type="module" src="components/executive-tab.js"></script>
+            <!-- Tab Content: Tech Stack -->
+            <div class="tab-content" id="tab-tech-stack">
+                <div id="tech-stack-container"></div>
+            </div>
 
-        function exportArchitecture() {    <script type="module" src="components/overview-tab.js"></script>
+            <!-- Tab Content: Security -->
+            <div class="tab-content" id="tab-security">
+                <div id="security-container"></div>
+            </div>
 
-            window.dispatchEvent(new CustomEvent('exportArchitecture'));    <script type="module" src="components/tech-stack-tab.js"></script>
+            <!-- Tab Content: Use Cases -->
+            <div class="tab-content" id="tab-use-cases">
+                <div id="use-cases-container"></div>
+            </div>
 
-        }    <script type="module" src="components/security-tab.js"></script>
+            <!-- Tab Content: Recommendations -->
+            <div class="tab-content" id="tab-recommendations">
+                <div id="recommendations-container"></div>
+            </div>
 
-            <script type="module" src="components/architecture-tab.js"></script>
+            <!-- Tab Content: Architecture -->
+            <div class="tab-content" id="tab-architecture">
+                <div id="architecture-container"></div>
+            </div>
 
-        function exportCodeOrg() {    <script type="module" src="components/code-org-tab.js"></script>
+            <!-- Tab Content: Code Organization -->
+            <div class="tab-content" id="tab-code-org">
+                <div id="code-org-container"></div>
+            </div>
 
-            window.dispatchEvent(new CustomEvent('exportCodeOrg'));    <script type="module" src="components/vendors-tab.js"></script>
+            <!-- Tab Content: Dependencies -->
+            <div class="tab-content" id="tab-vendors">
+                <div id="vendors-container"></div>
+            </div>
 
-        }    
+            <!-- Tab Content: Onboarding -->
+            <div class="tab-content" id="tab-engineering">
+                <div id="engineering-container"></div>
+            </div>
+        </main>
+    </div>
 
-            <script>
+    <!-- Core Application Script -->
+    <script type="module" src="app.js"></script>
 
-        function exportDependencies() {        // Global tab switching function
+    <!-- Tab Component Scripts -->
+    <script type="module" src="components/executive-tab.js"></script>
+    <script type="module" src="components/overview-tab.js"></script>
+    <script type="module" src="components/overview-tab-v3.js"></script>
+    <script type="module" src="components/tech-stack-tab.js"></script>
+    <script type="module" src="components/security-tab.js"></script>
+    <script type="module" src="components/use-cases-tab.js"></script>
+    <script type="module" src="components/recommendations-tab.js"></script>
+    <script type="module" src="components/architecture-tab.js"></script>
+    <script type="module" src="components/code-org-tab.js"></script>
+    <script type="module" src="components/vendors-tab.js"></script>
+    <script type="module" src="components/engineering-onboarding-tab.js"></script>
+    <script type="module" src="components/onboarding-tab.js"></script>
 
-            window.dispatchEvent(new CustomEvent('exportDependencies'));        function switchTab(tabName) {
+    <!-- Utility Components -->
+    <script type="module" src="components/architecture-panels.js"></script>
+    <script type="module" src="components/executive-intelligence-panel.js"></script>
+    <script type="module" src="components/reconciliation-widget.js"></script>
+    <script type="module" src="components/package-health-dashboard.js"></script>
 
-        }            // Update navigation
+    <!-- Global Functions -->
+    <script>
+        /**
+         * Switch between dashboard tabs
+         * @param {string} tabName - The tab to switch to
+         */
+        function switchTab(tabName) {
+            // Note: This function is now deprecated - tab switching handled by setupTabNavigation() in app.js
+            // Kept for backwards compatibility but not called by nav tabs
+            
+            // Update active nav tab
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            const activeNav = document.querySelector(`.nav-tab[data-tab="${tabName}"]`);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
 
-                    document.querySelectorAll('.nav-tab').forEach(tab => {
+            // Update active content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            const activeContent = document.getElementById(`tab-${tabName}`);
+            if (activeContent) {
+                activeContent.classList.add('active');
+            }
 
-        function exportOnboarding() {                tab.classList.remove('active');
-
-            window.dispatchEvent(new CustomEvent('exportOnboarding'));            });
-
-        }            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-                    
-
-        // Initialize Mermaid            // Update content
-
-        mermaid.initialize({             document.querySelectorAll('.tab-content').forEach(content => {
-
-            startOnLoad: true,                content.classList.remove('active');
-
-            theme: 'dark',            });
-
-            themeVariables: {            document.getElementById(`tab-${tabName}`).classList.add('active');
-
-                primaryColor: '#00d4ff',            
-
-                primaryTextColor: '#fff',            // Update title
-
-                primaryBorderColor: '#7b61ff',            const titles = {
-
-                lineColor: '#a0a6c0',                'executive': 'Executive Summary',
-
-                secondaryColor: '#7b61ff',                'overview': 'Dashboard Overview',
-
-                tertiaryColor: '#1a1f3a'                'tech-stack': 'Technology Stack',
-
-            }                'security': 'Security Analysis',
-
-        });                'architecture': 'Architecture Overview',
-
-    </script>                'code-org': 'Code Organization',
-
-</body>                'vendors': 'Dependencies & Vendors',
-
-</html>                'engineering': 'Engineering Onboarding'
-
+            // Update title
+            const titles = {
+                'executive': 'Executive Summary',
+                'overview': 'System Overview',
+                'tech-stack': 'Tech Stack',
+                'security': 'Security',
+                'use-cases': 'Use Cases',
+                'recommendations': 'Recommendations',
+                'architecture': 'Architecture',
+                'code-org': 'Code Organization',
+                'vendors': 'Dependencies',
+                'engineering': 'Engineering Onboarding'
             };
-            document.getElementById('contentTitle').textContent = titles[tabName] || 'Dashboard';
-            
-            // Update URL
-            const url = new URL(window.location);
-            url.searchParams.set('tab', tabName);
-            window.history.pushState({}, '', url);
-            
-            // Trigger tab load event
-            window.dispatchEvent(new CustomEvent('tabChanged', { detail: { tab: tabName } }));
+            const titleElement = document.getElementById('contentTitle');
+            if (titleElement && titles[tabName]) {
+                titleElement.textContent = titles[tabName];
+            }
+
+            // Trigger tab change event for app.js
+            window.dispatchEvent(new CustomEvent('tabChange', { detail: { tab: tabName } }));
         }
-        
-        // Global source change handler
+
+        /**
+         * Handle data source change
+         * @param {string} source - The data source to switch to
+         */
         function handleSourceChange(source) {
-            const url = new URL(window.location);
-            url.searchParams.set('source', source);
-            window.history.pushState({}, '', url);
-            
-            // Trigger source change event
-            window.dispatchEvent(new CustomEvent('sourceChanged', { detail: { source } }));
+            console.log('Changing data source to:', source);
+            window.dispatchEvent(new CustomEvent('sourceChange', { detail: { source } }));
         }
-        
-        // Global action handlers
+
+        /**
+         * Refresh dashboard data
+         */
         function refreshData() {
+            console.log('Refreshing dashboard data');
             window.dispatchEvent(new CustomEvent('refreshData'));
         }
-        
+
+        /**
+         * Export dashboard data
+         */
         function exportData() {
+            console.log('Exporting dashboard data');
             window.dispatchEvent(new CustomEvent('exportData'));
         }
-        
+
+        /**
+         * Generate full dashboard report
+         */
         function generateReport() {
+            console.log('Generating dashboard report');
             window.dispatchEvent(new CustomEvent('generateReport'));
         }
-        
-        // Initialize on load
-        window.addEventListener('DOMContentLoaded', () => {
-            // Parse URL parameters
-            const url = new URL(window.location);
-            const source = url.searchParams.get('source') || 'mock';
-            const tab = url.searchParams.get('tab') || 'executive';
-            
-            // Set initial source
-            document.getElementById('sourceSelect').value = source;
-            
-            // NOTE: Do NOT call switchTab() here - app.js initializeApp() handles initial tab rendering
-            // after data is loaded. Calling it here causes race condition where rendering happens
-            // before data is available, resulting in "container not found" errors.
-            
-            // Scroll to top button functionality
-            const scrollButton = document.createElement('button');
-            scrollButton.id = 'scrollToTop';
-            scrollButton.className = 'scroll-to-top';
-            scrollButton.setAttribute('aria-label', 'Scroll to top');
-            scrollButton.setAttribute('title', 'Scroll to top');
-            scrollButton.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 15l-6-6-6 6"/>
-                </svg>
-            `;
-            document.body.appendChild(scrollButton);
-            
-            // Show/hide button based on scroll position
-            window.addEventListener('scroll', () => {
-                if (window.pageYOffset > 300) {
-                    scrollButton.classList.add('visible');
-                } else {
-                    scrollButton.classList.remove('visible');
-                }
-            });
-            
-            // Scroll to top on click
-            scrollButton.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-        });
+
+        /**
+         * Export specific tab data
+         */
+        function exportExecutive() {
+            window.dispatchEvent(new CustomEvent('exportExecutive'));
+        }
+
+        function exportSecurity() {
+            window.dispatchEvent(new CustomEvent('exportSecurity'));
+        }
+
+        function exportRecommendations() {
+            window.dispatchEvent(new CustomEvent('exportRecommendations'));
+        }
+
+        function exportArchitecture() {
+            window.dispatchEvent(new CustomEvent('exportArchitecture'));
+        }
+
+        function exportCodeOrg() {
+            window.dispatchEvent(new CustomEvent('exportCodeOrg'));
+        }
+
+        function exportVendors() {
+            window.dispatchEvent(new CustomEvent('exportVendors'));
+        }
     </script>
 </body>
 </html>
