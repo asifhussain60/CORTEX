@@ -131,7 +131,7 @@ class DashboardRenderer:
         dashboard_data = self._gather_dashboard_data()
         
         # Load main template
-        template = self.jinja_env.get_template("onboarding_dashboard.html.j2")
+        template = self.jinja_env.get_template("project_onboarding_dashboard.html.j2")
         
         # Helper to safely get data with defaults
         def safe_get(data_dict, key, default=0):

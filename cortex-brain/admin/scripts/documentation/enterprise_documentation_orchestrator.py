@@ -50,8 +50,8 @@ from src.discovery.enhancement_discovery import EnhancementDiscoveryEngine
 # Import centralized config for cross-platform path resolution
 from src.config import config
 
-# Import Interactive Dashboard Generator for D3.js visualization
-from src.utils.interactive_dashboard_generator import InteractiveDashboardGenerator
+# Import Report Dashboard Generator for D3.js visualization (orchestrator reports)
+from src.utils.report_dashboard_generator import ReportDashboardGenerator
 
 # Import base operation result structures
 try:
@@ -359,7 +359,7 @@ class EnterpriseDocumentationOrchestrator:
         }
         
         # Generate dashboard HTML
-        generator = InteractiveDashboardGenerator()
+        generator = ReportDashboardGenerator()
         output_path = self.workspace_root / "cortex-brain" / "admin" / "reports" / "enterprise-documentation-dashboard.html"
         output_path.parent.mkdir(parents=True, exist_ok=True)
         

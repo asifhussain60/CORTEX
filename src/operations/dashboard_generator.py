@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-Dashboard Generator
+Dashboard Generator (Legacy)
 
 Generates self-contained HTML dashboards by embedding JSON data
-into the interactive-dashboard-template.html.
+into the report-dashboard-template.html (for orchestrator reports).
+NOT used by admin dashboard.
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.

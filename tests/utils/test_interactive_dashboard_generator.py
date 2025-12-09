@@ -17,7 +17,7 @@ import sys
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from src.utils.interactive_dashboard_generator import InteractiveDashboardGenerator
+from src.utils.report_dashboard_generator import ReportDashboardGenerator
 
 
 # Test Fixtures

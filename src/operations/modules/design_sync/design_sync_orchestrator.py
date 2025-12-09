@@ -30,7 +30,7 @@ from src.operations.base_operation_module import (
     OperationResult,
     OperationStatus
 )
-from src.utils.interactive_dashboard_generator import InteractiveDashboardGenerator
+from src.utils.report_dashboard_generator import ReportDashboardGenerator
 from src.operations.operation_header_formatter import print_minimalist_header, print_completion_footer
 from src.operations.operation_header_formatter import OperationHeaderFormatter
 from src.operations.modules.design_sync.design_sync_models import (
@@ -1017,7 +1017,7 @@ class DesignSyncOrchestrator(BaseOperationModule):
             'recommendations': self._build_design_sync_recommendations(impl_state, design_state, gaps, metrics)
         }
         
-        generator = InteractiveDashboardGenerator()
+        generator = ReportDashboardGenerator()
         output_path = project_root / "cortex-brain" / "admin" / "reports" / "design-sync-dashboard.html"
         output_path.parent.mkdir(parents=True, exist_ok=True)
         

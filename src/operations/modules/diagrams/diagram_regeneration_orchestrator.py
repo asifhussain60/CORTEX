@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 
-from src.utils.interactive_dashboard_generator import InteractiveDashboardGenerator
+from src.utils.report_dashboard_generator import ReportDashboardGenerator
 
 logger = logging.getLogger(__name__)
 
@@ -174,7 +174,7 @@ class DiagramRegenerationOrchestrator:
     def _generate_interactive_dashboard(self, report: DiagramRegenerationReport):
         """Generate interactive D3.js dashboard from regeneration report"""
         try:
-            generator = InteractiveDashboardGenerator()
+            generator = ReportDashboardGenerator()
             
             dashboard_data = {
                 "metadata": {

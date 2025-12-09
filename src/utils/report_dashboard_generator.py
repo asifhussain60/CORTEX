@@ -1,7 +1,9 @@
 """
-Interactive Dashboard Generator
+Report Dashboard Generator
 
-Generates D3.js interactive dashboards conforming to DOCUMENTATION-FORMAT-SPEC-v1.0.
+Generates D3.js report dashboards for orchestrator outputs (NOT the admin dashboard).
+Used by: enterprise_documentation_orchestrator, diagram_regeneration_orchestrator, design_sync_orchestrator
+Conforming to DOCUMENTATION-FORMAT-SPEC-v1.0.
 
 Author: Asif Hussain
 License: Source-Available (Use Allowed, No Contributions)
@@ -15,9 +17,10 @@ import subprocess
 import sys
 
 
-class InteractiveDashboardGenerator:
+class ReportDashboardGenerator:
     """
-    Reference implementation of D3.js dashboard generator.
+    Reference implementation of D3.js report dashboard generator for orchestrator outputs.
+    NOT used by admin dashboard (cortex-brain/dashboards/ui/).
     
     Features:
     - 5-tab structure (Overview, Visualizations, Diagrams, Data, Recommendations)
@@ -30,7 +33,7 @@ class InteractiveDashboardGenerator:
     def __init__(self):
         """Initialize dashboard generator."""
         self.version = "1.0.0"
-        self.template_path = Path(__file__).parent.parent.parent / "templates" / "interactive-dashboard-template.html"
+        self.template_path = Path(__file__).parent.parent.parent / "templates" / "report-dashboard-template.html"
         
     def generate_dashboard(
         self,
