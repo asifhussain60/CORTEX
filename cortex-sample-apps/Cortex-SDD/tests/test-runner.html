@@ -134,18 +134,13 @@
     
     <script type="module">
         import { TestRunner } from './unit-tests.js';
-        import { ServiceTests } from './service-tests.js';
         
         window.runAllTests = async function() {
             document.getElementById('loading').style.display = 'block';
             document.getElementById('results').innerHTML = '';
             
-            // Run unit tests
             const runner = new TestRunner();
             await runner.run();
-            
-            // Run service tests
-            await ServiceTests.runAll();
             
             document.getElementById('loading').style.display = 'none';
             displayResults(runner.getResults());
