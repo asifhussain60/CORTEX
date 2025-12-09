@@ -830,21 +830,35 @@ class PlanningOrchestrator:
             logger.warning(f"Git checkpoint failed: {e}")
         
         try:
-            # STEP 0A: Run Architectural Review (REQ-003 from manifest)
-            review_score = None
-            review_summary = None
+            # STEP 0A: Run Contextual Architectural Review (REQ-003 Enhanced from manifest)
+            review_result = None
+            blocking_issues = []
+            critical_issues = []
             
             if REVIEW_ORCHESTRATOR_AVAILABLE:
-                logger.info("🔍 Running architectural review before planning...")
-                review_result = self.run_architecture_review()
+                logger.info("🔍 Running contextual architectural review before planning...")
+                review_result = self.run_contextual_review(feature_requirements)
                 
                 if review_result:
                     review_score = review_result.get('overall_score', 0)
-                    review_summary = review_result.get('summary', '')
+                    blocking_issues = review_result.get('blocking_issues', [])
+                    critical_issues = review_result.get('critical_issues', [])
                     logger.info(f"📊 Architecture Review Score: {review_score}/100")
+                    logger.info(f"⚠️  Found {len(blocking_issues)} blockers, {len(critical_issues)} critical issues")
                     
-                    if review_score < 80:
-                        logger.warning(f"⚠️  Architecture score below 80 - plan will include remediation tasks")
+                    # Challenge user if blockers detected
+                    if blocking_issues:
+                        challenge_response = self._challenge_blockers(
+                            blocking_issues,
+                            feature_requirements,
+                            checkpoint_callback
+                        )
+                        
+                        if challenge_response == 'abort':
+                            return (False, None, "User aborted planning due to blocking issues")
+                        elif challenge_response == 'skip':
+                            logger.warning("User chose to continue despite blockers (not recommended)")
+                            blocking_issues = []  # Clear blockers if user overrides
                 else:
                     logger.warning("⚠️  Architecture review failed - continuing without pre-assessment")
             else:
@@ -857,6 +871,27 @@ class PlanningOrchestrator:
                 checkpoint_callback
             )
             logger.info(f"✅ DoR validated: {len(dor_items)} items approved")
+            
+            # STEP 0C: Inject Remediation Phase if blockers detected (REQ-003 Enhanced)
+            if blocking_issues:
+                logger.info(f"🔧 Injecting Phase 0: Remediation ({len(blocking_issues)} blockers)")
+                remediation_phase = self._generate_remediation_phase(blocking_issues, critical_issues)
+                
+                # Create plan file with remediation phase first
+                feature_name = feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
+                output_path = self._create_empty_plan_file(feature_name, output_filename)
+                
+                # Write Phase 0: Remediation
+                self._append_phase_to_plan(output_path, "Phase 0: Remediation (Pre-Feature)", remediation_phase)
+                logger.info("✅ Phase 0: Remediation injected into plan")
+            else:
+                # STEP 1: Create empty plan file FIRST (small increment principle)
+                feature_name = feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
+                output_path = self._create_empty_plan_file(feature_name, output_filename)
+            
+            # Add critical issues to Phase 1 if present
+            if critical_issues:
+                logger.info(f"⚠️  Adding {len(critical_issues)} critical issues to Phase 1 tasks")
             
             # STEP 1: Create empty plan file FIRST (small increment principle)
             feature_name = feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
@@ -4080,14 +4115,37 @@ class PlanningOrchestrator:
         """
         Run Architectural Review before planning (REQ-003 from manifest).
         
-        Executes comprehensive architectural review to:
-        - Assess current code quality
-        - Identify technical debt
-        - Inform plan complexity
-        - Add remediation tasks if score <80
+        DEPRECATED: Use run_contextual_review() for feature-scoped analysis.
         
         Returns:
             Review results dict with overall_score, summary, findings
+            None if review fails
+        """
+        return self.run_contextual_review(None)
+    
+    def run_contextual_review(
+        self,
+        feature_requirements: Optional[str] = None
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Run context-aware architectural review before planning (REQ-003 Enhanced).
+        
+        Executes comprehensive review with scope filtering:
+        - Assess code quality in context of user request
+        - Identify blockers that prevent feature implementation
+        - Classify findings by relevance (blocker/critical/improvement)
+        - Add remediation tasks for blocking issues
+        
+        Args:
+            feature_requirements: User's feature request for scope filtering
+        
+        Returns:
+            Review results dict with:
+            - overall_score: 0-100
+            - blocking_issues: List of findings that prevent feature
+            - critical_issues: List of findings that should be fixed
+            - improvements: List of optional enhancements
+            - report_path: Path to detailed report
             None if review fails
         """
         try:
@@ -4095,39 +4153,50 @@ class PlanningOrchestrator:
                 logger.warning("Review Orchestrator not available")
                 return None
             
-            logger.info("🔍 Initializing architectural review...")
+            logger.info("🔍 Initializing contextual architectural review...")
             reviewer = ReviewOrchestrator()
             
-            # Execute review on current workspace
-            context = {'path': str(self.cortex_root)}
+            # Extract scope keywords from feature requirements
+            scope_keywords = self._extract_scope_keywords(feature_requirements) if feature_requirements else []
+            
+            # Execute review on current workspace with scope context
+            context = {
+                'path': str(self.cortex_root),
+                'scope_filter': scope_keywords,
+                'request_context': feature_requirements or "General review"
+            }
+            
             result = reviewer.execute(context)
             
             if result.status != "success":
                 logger.warning(f"Architecture review failed: {result.message}")
                 return None
             
-            # Extract key metrics
+            # Extract raw findings from review
             review_data = result.data or {}
             overall_score = review_data.get('overall_score', 0)
-            sections = review_data.get('sections', [])
+            raw_findings = self._extract_findings_from_sections(review_data.get('sections', []))
             
-            # Build summary
-            summary_lines = [f"Overall Score: {overall_score}/100"]
-            for section in sections[:3]:  # Top 3 sections
-                section_name = section.get('name', 'Unknown')
-                section_score = section.get('score', 0)
-                summary_lines.append(f"- {section_name}: {section_score}/100")
+            # Classify findings by relevance to feature request
+            classified = self._classify_findings_by_relevance(
+                raw_findings,
+                feature_requirements or ""
+            )
+            
+            logger.info(f"📊 Classified findings: {len(classified['blockers'])} blockers, "
+                       f"{len(classified['critical'])} critical, {len(classified['improvements'])} improvements")
             
             return {
                 'overall_score': overall_score,
-                'summary': '\n'.join(summary_lines),
-                'sections': sections,
-                'findings': review_data.get('findings', []),
-                'report_path': review_data.get('report_path')
+                'blocking_issues': classified['blockers'],
+                'critical_issues': classified['critical'],
+                'improvements': classified['improvements'],
+                'report_path': review_data.get('report_path'),
+                'scope_keywords': scope_keywords
             }
             
         except Exception as e:
-            logger.error(f"Architecture review failed: {e}")
+            logger.error(f"Contextual architecture review failed: {e}")
             return None
     
     def refine_dor_interactive(
@@ -4608,3 +4677,347 @@ class PlanningOrchestrator:
         logger.info(f"🧬 TDD requirements injected: DoR={len(dor)} items, DoD={len(dod)} items")
         
         return plan_data
+    
+    def _extract_scope_keywords(self, feature_requirements: Optional[str]) -> List[str]:
+        """
+        Extract scope keywords from feature requirements for focused review.
+        
+        Args:
+            feature_requirements: User's feature description
+            
+        Returns:
+            List of keywords (e.g., ['auth', 'api', 'database'])
+        """
+        if not feature_requirements:
+            return []
+        
+        # Common domain keywords that indicate scope
+        scope_patterns = {
+            'authentication': ['auth', 'login', 'token', 'jwt', 'oauth', 'saml', 'session'],
+            'authorization': ['permission', 'role', 'rbac', 'access control', 'policy'],
+            'api': ['api', 'endpoint', 'rest', 'graphql', 'swagger', 'openapi'],
+            'database': ['database', 'db', 'sql', 'query', 'schema', 'migration', 'orm'],
+            'security': ['security', 'encrypt', 'hash', 'secure', 'vulnerability', 'xss', 'csrf'],
+            'performance': ['performance', 'cache', 'optimize', 'scale', 'throughput', 'latency'],
+            'testing': ['test', 'tdd', 'unit test', 'integration test', 'coverage'],
+            'ui': ['ui', 'interface', 'frontend', 'react', 'vue', 'angular', 'component'],
+            'deployment': ['deploy', 'ci/cd', 'docker', 'kubernetes', 'pipeline', 'release']
+        }
+        
+        requirements_lower = feature_requirements.lower()
+        detected_scopes = []
+        
+        for scope, keywords in scope_patterns.items():
+            if any(keyword in requirements_lower for keyword in keywords):
+                detected_scopes.append(scope)
+        
+        logger.info(f"📍 Detected scopes: {detected_scopes}")
+        return detected_scopes
+    
+    def _extract_findings_from_sections(self, sections: List[Dict]) -> List[Dict]:
+        """
+        Extract individual findings from review sections.
+        
+        Args:
+            sections: List of ReviewSection dicts from review orchestrator
+            
+        Returns:
+            Flattened list of finding dicts
+        """
+        findings = []
+        
+        for section in sections:
+            section_findings = section.get('findings', [])
+            for finding in section_findings:
+                # Ensure finding is dict (convert from dataclass if needed)
+                if hasattr(finding, '__dict__'):
+                    finding_dict = finding.__dict__
+                else:
+                    finding_dict = finding
+                
+                findings.append(finding_dict)
+        
+        return findings
+    
+    def _classify_findings_by_relevance(
+        self,
+        findings: List[Dict],
+        feature_requirements: str
+    ) -> Dict[str, List[Dict]]:
+        """
+        Classify findings by relevance to user's feature request.
+        
+        Classification rules:
+        - BLOCKER: Prevents feature implementation (e.g., broken auth when adding auth)
+        - CRITICAL: Will cause issues if not fixed (e.g., security flaw in related code)
+        - IMPROVEMENT: Nice-to-have cleanup (e.g., refactor unrelated code)
+        
+        Args:
+            findings: List of ReviewFinding dicts
+            feature_requirements: User's feature request
+            
+        Returns:
+            Dict with 'blockers', 'critical', 'improvements' lists
+        """
+        scope_keywords = self._extract_scope_keywords(feature_requirements)
+        requirements_lower = feature_requirements.lower()
+        
+        blockers = []
+        critical = []
+        improvements = []
+        
+        for finding in findings:
+            # Calculate relevance score (0.0 - 1.0)
+            relevance_score = self._calculate_finding_relevance(
+                finding,
+                scope_keywords,
+                requirements_lower
+            )
+            
+            severity = finding.get('severity', 'LOW')
+            category = finding.get('category', '').lower()
+            
+            # BLOCKER: High relevance + CRITICAL severity + matching category
+            if relevance_score > 0.7 and severity == 'CRITICAL':
+                blockers.append(finding)
+            # CRITICAL: Medium-high relevance + HIGH/CRITICAL severity
+            elif relevance_score > 0.4 and severity in ['HIGH', 'CRITICAL']:
+                critical.append(finding)
+            # IMPROVEMENT: Low relevance or low severity
+            else:
+                improvements.append(finding)
+        
+        logger.info(f"📊 Classification: {len(blockers)} blockers, {len(critical)} critical, {len(improvements)} improvements")
+        
+        return {
+            'blockers': blockers,
+            'critical': critical,
+            'improvements': improvements
+        }
+    
+    def _calculate_finding_relevance(
+        self,
+        finding: Dict,
+        scope_keywords: List[str],
+        requirements_lower: str
+    ) -> float:
+        """
+        Calculate how relevant a finding is to the user's request.
+        
+        Args:
+            finding: ReviewFinding dict
+            scope_keywords: Detected scope keywords
+            requirements_lower: Lowercase feature requirements
+            
+        Returns:
+            Relevance score 0.0 - 1.0
+        """
+        score = 0.0
+        
+        # Check category match
+        category = finding.get('category', '').lower()
+        if any(scope in category for scope in scope_keywords):
+            score += 0.4
+        
+        # Check title/description match
+        title = finding.get('title', '').lower()
+        description = finding.get('description', '').lower()
+        location = finding.get('location', '').lower()
+        
+        combined_text = f"{title} {description} {location}"
+        
+        # Check if any scope keyword appears in finding text
+        keyword_matches = sum(1 for scope in scope_keywords if scope in combined_text)
+        if keyword_matches > 0:
+            score += min(0.5, keyword_matches * 0.15)
+        
+        # Check if words from requirements appear in finding
+        requirement_words = set(requirements_lower.split())
+        finding_words = set(combined_text.split())
+        overlap = requirement_words & finding_words
+        
+        if len(overlap) > 2:
+            score += 0.2
+        
+        return min(1.0, score)
+    
+    def _challenge_blockers(
+        self,
+        blocking_issues: List[Dict],
+        feature_requirements: str,
+        checkpoint_callback: Optional[Callable[[str, str, str], bool]] = None
+    ) -> str:
+        """
+        Challenge user when critical blockers are detected.
+        
+        Presents blocking issues and asks user to:
+        - Auto-fix: Add remediation tasks to plan (recommended)
+        - Skip: Continue with blockers (not recommended)
+        - Abort: Cancel planning
+        
+        Args:
+            blocking_issues: List of blocking findings
+            feature_requirements: User's original request
+            checkpoint_callback: Callback for user interaction
+            
+        Returns:
+            'auto-fix', 'skip', or 'abort'
+        """
+        challenge_msg = self._format_blocker_challenge(blocking_issues, feature_requirements)
+        
+        logger.warning("⚠️  BLOCKER CHALLENGE: Critical issues detected")
+        logger.warning(challenge_msg)
+        
+        # If checkpoint callback available, use it for user choice
+        if checkpoint_callback:
+            user_approved = checkpoint_callback(
+                "blocker_challenge",
+                "Critical Blockers Detected",
+                challenge_msg
+            )
+            
+            if user_approved:
+                return 'auto-fix'
+            else:
+                return 'abort'
+        
+        # Default: auto-fix (add remediation to plan)
+        logger.info("✅ Auto-fixing: Adding remediation tasks to plan")
+        return 'auto-fix'
+    
+    def _format_blocker_challenge(
+        self,
+        blocking_issues: List[Dict],
+        feature_requirements: str
+    ) -> str:
+        """Format blocker challenge message for user."""
+        lines = [
+            "═" * 80,
+            "⚠️  CORTEX CHALLENGE: Critical Blockers Detected",
+            "═" * 80,
+            "",
+            f"**Your Request:** {feature_requirements}",
+            "",
+            "**Blocking Issues Found:**",
+            ""
+        ]
+        
+        for i, issue in enumerate(blocking_issues, 1):
+            lines.extend([
+                f"{i}. **[{issue.get('severity')}] {issue.get('title')}**",
+                f"   Category: {issue.get('category')}",
+                f"   Description: {issue.get('description')}",
+                f"   Recommendation: {issue.get('recommendation', 'See report')}",
+                ""
+            ])
+        
+        lines.extend([
+            "═" * 80,
+            "**Options:**",
+            "1. **Auto-fix** (Recommended) - CORTEX will add remediation tasks to plan",
+            "2. **Skip** - Continue anyway (may cause feature implementation to fail)",
+            "3. **Abort** - Cancel planning until issues are resolved manually",
+            "",
+            "**Recommendation:** Choose Auto-fix to ensure plan addresses blockers.",
+            "═" * 80
+        ])
+        
+        return "\n".join(lines)
+    
+    def _generate_remediation_phase(
+        self,
+        blocking_issues: List[Dict],
+        critical_issues: List[Dict]
+    ) -> List[Dict[str, str]]:
+        """
+        Generate Phase 0: Remediation tasks from blocking/critical issues.
+        
+        Args:
+            blocking_issues: List of blocking findings
+            critical_issues: List of critical findings
+            
+        Returns:
+            List of section dicts for Phase 0
+        """
+        # Section 1: Blocking Issues (MUST fix)
+        blocker_lines = [
+            "## Critical Blockers (MUST Fix Before Feature)",
+            "",
+            "The following issues will prevent feature implementation and must be resolved first:",
+            ""
+        ]
+        
+        for i, issue in enumerate(blocking_issues, 1):
+            blocker_lines.extend([
+                f"### Blocker {i}: {issue.get('title')}",
+                "",
+                f"**Category:** {issue.get('category')}",
+                f"**Severity:** {issue.get('severity')}",
+                "",
+                f"**Description:**",
+                f"{issue.get('description')}",
+                "",
+                f"**Location:** `{issue.get('location', 'See report')}`",
+                "",
+                f"**Remediation Steps:**",
+                f"{issue.get('recommendation', 'See architectural review report')}",
+                "",
+                f"**Estimated Effort:** 1-2 hours",
+                "",
+                "**Acceptance Criteria:**",
+                f"- [ ] {issue.get('title')} resolved",
+                "- [ ] Code review confirms fix",
+                "- [ ] Related tests pass",
+                ""
+            ])
+        
+        # Section 2: Critical Issues (Should fix)
+        critical_lines = [
+            "## Critical Issues (Should Fix With Feature)",
+            "",
+            "The following issues should be addressed during feature implementation:",
+            ""
+        ]
+        
+        for i, issue in enumerate(critical_issues, 1):
+            critical_lines.extend([
+                f"### Issue {i}: {issue.get('title')}",
+                "",
+                f"**Category:** {issue.get('category')}",
+                f"**Severity:** {issue.get('severity')}",
+                "",
+                f"**Description:** {issue.get('description')}",
+                "",
+                f"**Recommendation:** {issue.get('recommendation', 'See report')}",
+                "",
+                "**Will be addressed in:** Phase 1 (Foundation)",
+                ""
+            ])
+        
+        # Section 3: Validation checklist
+        validation_lines = [
+            "## Phase 0 Completion Criteria",
+            "",
+            "**Blockers Resolved:**",
+            ""
+        ]
+        
+        for i, issue in enumerate(blocking_issues, 1):
+            validation_lines.append(f"- [ ] Blocker {i}: {issue.get('title')}")
+        
+        validation_lines.extend([
+            "",
+            "**Verification:**",
+            "- [ ] Architectural review score improved",
+            "- [ ] All blocking tests pass",
+            "- [ ] Code review approved",
+            "",
+            "**Ready to Proceed:** All blockers must be ✅ before Phase 1",
+            ""
+        ])
+        
+        return [
+            {"name": "Blocking Issues", "content": "\n".join(blocker_lines)},
+            {"name": "Critical Issues", "content": "\n".join(critical_lines)},
+            {"name": "Validation", "content": "\n".join(validation_lines)}
+        ]

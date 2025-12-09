@@ -70,21 +70,39 @@ requirements:
     current_implementation: "Basic DoR validation exists in _validate_definition_of_ready()"
     
   - requirement_id: "REQ-003"
-    name: "Review Orchestrator Integration"
+    name: "Contextual Review Orchestrator Integration"
     description: |
-      Run architectural review before planning starts. Use review score to inform
-      plan complexity and add remediation tasks if score <80.
+      Run context-aware architectural review before planning starts.
+      - Scope review to feature request (authentication, API, database, etc.)
+      - Classify findings: BLOCKER (prevents feature), CRITICAL (should fix), IMPROVEMENT (optional)
+      - Challenge user if blockers detected with auto-fix option
+      - Inject Phase 0: Remediation for blocking issues
+      - Add critical issues to Phase 1 tasks
     priority: "critical"
     status: "implemented"
     validation_method: "integration_test"
-    validation_criteria: "Review orchestrator called in plan initialization"
+    validation_criteria: "run_contextual_review() called in plan initialization"
     implementation_notes: |
-      - Import ReviewOrchestrator in __init__
-      - Call before create_plan_incremental()
-      - Store review results in plan metadata
-      - Add architecture improvement phase if score <80
-      - Show review summary in response
-    estimated_effort_hours: 4
+      ENHANCEMENT from original REQ-003 (2025-12-09):
+      - Replaced run_architecture_review() with run_contextual_review()
+      - Added _extract_scope_keywords() for feature-scoped analysis
+      - Added _classify_findings_by_relevance() for blocker detection
+      - Added _challenge_blockers() for user interaction
+      - Added _generate_remediation_phase() for auto-fix
+      - Phase 0 auto-injected when blockers detected
+      - User can choose: auto-fix (add remediation), skip (risky), or abort
+    implementation_file: "src/orchestrators/planning_orchestrator.py"
+    implementation_methods:
+      - run_contextual_review()
+      - _extract_scope_keywords()
+      - _extract_findings_from_sections()
+      - _classify_findings_by_relevance()
+      - _calculate_finding_relevance()
+      - _challenge_blockers()
+      - _format_blocker_challenge()
+      - _generate_remediation_phase()
+    estimated_effort_hours: 7
+    actual_effort_hours: 7
     
   # ===== Important Requirements (Phase 2) =====
   
@@ -185,12 +203,21 @@ integrations:
     integration_type: "required"
     trigger_condition: "before_planning_starts"
     expected_behavior: |
-      Run architectural review, capture score (0-100), use score to inform
-      plan complexity. Add architecture improvement phase if score <80.
+      Run context-aware architectural review with feature scope filtering.
+      - Extract scope keywords from feature request (auth, api, database, etc.)
+      - Execute review with scope_filter context
+      - Classify findings by relevance (blocker/critical/improvement)
+      - Challenge user if blockers detected (auto-fix/skip/abort)
+      - Inject Phase 0: Remediation if auto-fix chosen
+      - Add critical issues to Phase 1 tasks
     validation_method: "integration_test"
-    status: "missing"
+    status: "implemented"
     implementation_file: "src/orchestrators/planning_orchestrator.py"
-    implementation_method: "__init__() or create_plan_incremental()"
+    implementation_method: "run_contextual_review() at line ~830 in generate_incremental_plan()"
+    enhancement_date: "2025-12-09"
+    enhancement_description: |
+      Enhanced from basic score-based review to context-aware blocker detection.
+      Now actively prevents planning when blocking issues exist.
     
   - integration_id: "INT-002"
     target_component: "threat_modeler_agent"
@@ -527,6 +554,18 @@ workflows:
             required: true
             validation: "add_integration_consolidation_phase() called"
             status: "implemented"
+          - step_id: "STEP-5.5.1"
+            name: "Add REFACTOR Phase CSS Validation"
+            required: true
+            validation: "REFACTOR phase includes inline CSS migration check"
+            status: "implemented"
+            notes: |
+              REFACTOR phase MUST validate:
+              - No inline style="" attributes
+              - No <style> embedded tags
+              - No .style.property JS manipulation
+              - All styles centralized to CSS files
+              Enforced by INLINE_CSS_PROHIBITION rule
           - step_id: "STEP-5.6"
             name: "Acceptance Criteria Approval Gate"
             required: true

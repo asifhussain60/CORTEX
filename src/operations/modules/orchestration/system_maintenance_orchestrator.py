@@ -3,10 +3,11 @@ System Maintenance Orchestrator
 
 Runs comprehensive system maintenance in optimal sequence:
 1. Pre-maintenance healthcheck (baseline)
-2. System alignment (fix issues)  
+2. System alignment with auto-fix (resolve issues)  
 3. Cleanup and organization (file management)
 4. CORTEX optimization (improve performance)
-5. Post-maintenance healthcheck (validation)
+5. Refresh Copilot prompts (reflect all changes)
+6. Post-maintenance healthcheck (validation)
 
 Windows Console Compatibility:
 - All output uses ASCII-safe characters
@@ -41,9 +42,11 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
     
     Executes maintenance in optimal sequence:
     1. Pre-healthcheck (baseline)
-    2. Alignment (fixes)
-    3. Optimization (improvements)  
-    4. Post-healthcheck (validation)
+    2. Alignment with auto-fix (automatic fixes)
+    3. Cleanup (organization)
+    4. Optimization (improvements)
+    5. Refresh prompts (reflect changes)
+    6. Post-healthcheck (validation)
     """
     
     def __init__(self, project_root: Path = None):
@@ -52,12 +55,13 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         self.project_root = project_root or Path.cwd()
         self.metrics: Dict[str, Any] = {
             'phases_completed': 0,
-            'phases_total': 6,  # Increased from 5 to 6 (added Phase 0)
-            'epm_discovery': {},  # New phase for feature discovery
+            'phases_total': 7,  # Healthcheck → align → cleanup → optimize → refresh → healthcheck (+ optional EPM)
+            'epm_discovery': {},  # Phase 0: Optional feature discovery
             'healthcheck_pre': {},
             'alignment': {},
             'cleanup': {},
             'optimization': {},
+            'prompt_refresh': {},  # Phase 5: Refresh prompts after all fixes
             'healthcheck_post': {},
             'improvements': [],
             'warnings': [],
@@ -77,7 +81,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         return OperationModuleMetadata(
             module_id="system_maintenance",
             name="System Maintenance Orchestrator",
-            description="Comprehensive system maintenance: healthcheck → align → cleanup → optimize → healthcheck",
+            description="Comprehensive system maintenance: healthcheck → align (auto-fix) → cleanup → optimize → refresh prompts → healthcheck",
             phase=OperationPhase.PROCESSING,
             priority=100,
             version="3.8.1",
@@ -100,7 +104,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         start_time = datetime.now()
         self.metrics['start_time'] = start_time  # Track for elapsed time
         include_epm = context.get('include_epm_discovery', False)
-        total_phases = 6 if include_epm else 5
+        total_phases = 7 if include_epm else 6  # 6 standard phases (+ optional EPM)
         current_phase = 0
         
         logger.info("🔧 Starting comprehensive system maintenance")
@@ -155,7 +159,15 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
                 logger.warning("⚠️  Skipping optimization - alignment had issues")
                 self.metrics['warnings'].append("Optimization skipped due to alignment issues")
             
-            # Phase 5: Post-maintenance healthcheck
+            # Phase 5: Refresh prompts (reflect all changes made)
+            current_phase += 1
+            yield_progress(current_phase, total_phases, f"Phase {current_phase}: Refresh prompts")
+            prompt_refresh = self._run_prompt_refresh()
+            self.metrics['prompt_refresh'] = prompt_refresh
+            self.metrics['phases_completed'] = current_phase
+            self._render_phase_progress(current_phase, total_phases, "Refresh Prompts", "Completed")
+            
+            # Phase 6: Post-maintenance healthcheck
             current_phase += 1
             yield_progress(current_phase, total_phases, f"Phase {current_phase}: Post-maintenance healthcheck")
             post_check = self._run_post_healthcheck()
@@ -226,11 +238,11 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             return {'success': False, 'error': str(e)}
     
     def _run_alignment(self) -> Dict[str, Any]:
-        """Run system alignment to fix issues."""
-        logger.info("🔧 Phase 2: System alignment")
+        """Run system alignment with automatic fixes."""
+        logger.info("🔧 Phase 2: System alignment (auto-fix enabled)")
         
         try:
-            # Run alignment with auto-fix enabled
+            # Run alignment with auto-fix to automatically resolve issues
             result = run_align(auto_fix=True, dry_run=False)
             
             if result.get('success'):
@@ -300,9 +312,49 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             self.metrics['errors'].append(f"Optimization error: {str(e)}")
             return {'success': False, 'error': str(e)}
     
+    def _run_prompt_refresh(self) -> Dict[str, Any]:
+        """Refresh Copilot prompts to reflect all changes made during maintenance."""
+        logger.info("🔄 Phase 5: Refreshing Copilot prompts")
+        
+        try:
+            from pathlib import Path
+            import subprocess
+            
+            script_path = self.project_root / "scripts" / "regenerate_cortex_prompts.py"
+            
+            if not script_path.exists():
+                self.metrics['warnings'].append("Prompt refresh script not found - skipping")
+                return {'success': False, 'message': 'Script not found'}
+            
+            # Run prompt regeneration script
+            result = subprocess.run(
+                ["python", str(script_path)],
+                cwd=str(self.project_root),
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            
+            if result.returncode == 0:
+                self.metrics['improvements'].append("Copilot prompts refreshed successfully")
+                return {'success': True, 'message': 'Prompts refreshed'}
+            else:
+                error_msg = result.stderr[:200] if result.stderr else 'Unknown error'
+                self.metrics['warnings'].append(f"Prompt refresh had issues: {error_msg}")
+                return {'success': False, 'message': error_msg}
+                
+        except subprocess.TimeoutExpired:
+            logger.error("Prompt refresh timed out")
+            self.metrics['warnings'].append("Prompt refresh timed out (>60s)")
+            return {'success': False, 'error': 'Timeout'}
+        except Exception as e:
+            logger.error(f"Prompt refresh failed: {e}")
+            self.metrics['warnings'].append(f"Prompt refresh error: {str(e)}")
+            return {'success': False, 'error': str(e)}
+    
     def _run_post_healthcheck(self) -> Dict[str, Any]:
         """Run post-maintenance healthcheck to validate improvements."""
-        logger.info("📊 Phase 4: Post-maintenance healthcheck")
+        logger.info("📊 Phase 6: Post-maintenance healthcheck")
         
         try:
             healthcheck = HealthCheckOperation()

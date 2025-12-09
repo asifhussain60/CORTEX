@@ -66,6 +66,10 @@ class ReviewOrchestrator(BaseOperationModule):
         self.findings: List[ReviewFinding] = []
         self.sections: List[ReviewSection] = []
         self.alignment_tracker = AlignmentStateTracker(self.workspace_path)
+        
+        # Context-aware review support (added 2025-12-09)
+        self.scope_filter: List[str] = []
+        self.request_context: str = ""
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Return module metadata."""
@@ -88,7 +92,10 @@ class ReviewOrchestrator(BaseOperationModule):
         Execute comprehensive architectural review.
         
         Args:
-            context: Operation context with optional 'path' key
+            context: Operation context with optional keys:
+                - 'path': Workspace path override
+                - 'scope_filter': List of scope keywords (e.g., ['auth', 'api'])
+                - 'request_context': User's feature request for contextual analysis
             
         Returns:
             OperationResult with review findings and report path
@@ -97,6 +104,13 @@ class ReviewOrchestrator(BaseOperationModule):
             # Override workspace path if provided in context
             if 'path' in context:
                 self.workspace_path = Path(context['path'])
+            
+            # Store scope context for filtering
+            self.scope_filter = context.get('scope_filter', [])
+            self.request_context = context.get('request_context', '')
+            
+            if self.scope_filter:
+                logger.info(f"🎯 Scoped review: {', '.join(self.scope_filter)}")
             
             # Phase 1: Architecture & Structure Analysis
             yield_progress(1, 6, "Phase 1: Analyzing architecture and structure")
@@ -133,18 +147,43 @@ class ReviewOrchestrator(BaseOperationModule):
             # Mark reviewed files in alignment tracker
             self._mark_reviewed_files(overall_score)
             
+            # Convert sections to dicts for serialization (include findings)
+            sections_data = []
+            for section in self.sections:
+                findings_data = []
+                for finding in section.findings:
+                    findings_data.append({
+                        'severity': finding.severity,
+                        'category': finding.category,
+                        'title': finding.title,
+                        'description': finding.description,
+                        'location': finding.location,
+                        'recommendation': finding.recommendation,
+                        'root_cause': finding.root_cause
+                    })
+                
+                sections_data.append({
+                    'name': section.name,
+                    'score': section.score,
+                    'findings': findings_data,
+                    'summary': section.summary,
+                    'recommendations': section.recommendations
+                })
+            
             return OperationResult(
                 success=True,
                 status=OperationStatus.SUCCESS,
                 message=f"Architectural review completed. Overall score: {overall_score}/100",
                 data={
                     'overall_score': overall_score,
-                    'sections': len(self.sections),
+                    'sections': sections_data,
                     'total_findings': sum(len(s.findings) for s in self.sections),
                     'critical_findings': sum(1 for s in self.sections for f in s.findings if f.severity == 'CRITICAL'),
                     'high_findings': sum(1 for s in self.sections for f in s.findings if f.severity == 'HIGH'),
                     'report_path': str(report_path),
                     'workspace': str(self.workspace_path),
+                    'scope_filter': self.scope_filter,
+                    'request_context': self.request_context,
                     'alignment_protected': True
                 }
             )

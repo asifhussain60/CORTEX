@@ -103,7 +103,7 @@ ALL responses MUST use this 5-part structure:
 
 **System Maintenance**
 - Commands: `system maintenance`
-- 5 phases: healthcheck → align → cleanup → optimize → healthcheck
+- 6 phases: healthcheck → align (auto-fix) → cleanup → optimize → refresh prompts → healthcheck
 
 **Dashboard Launcher**
 - Commands: `load dashboard`, `dashboard`
@@ -145,6 +145,8 @@ src/
 **Brain Protection (SKULL):**
 - TDD_ENFORCEMENT: RED→GREEN→REFACTOR mandatory
 - RED_PHASE_VALIDATION: Tests must fail first
+- HOLISTIC_CODE_DISCOVERY_ENFORCEMENT: Search before create (prevent duplication)
+- REFACTOR_CODE_CLEANUP_ENFORCEMENT: Remove orphaned/duplicate code
 - GIT_ISOLATION_ENFORCEMENT: CORTEX code never in user repos
 - TEST_LOCATION_SEPARATION: App tests in user repo, CORTEX in `tests/`
 

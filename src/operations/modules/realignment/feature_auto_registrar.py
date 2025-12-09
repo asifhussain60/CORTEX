@@ -64,6 +64,9 @@ class FeatureAutoRegistrar:
         self.agents_dir = self.project_root / "src" / "cortex_agents"
         self.modules_dir = self.operations_dir / "modules"
         self.operations_yaml = self.project_root / "cortex-operations.yaml"
+        
+        # Security agents directory (src/agents/security/)
+        self.security_agents_dir = self.project_root / "src" / "agents" / "security"
     
     def _detect_project_root(self) -> Path:
         """Auto-detect CORTEX project root."""
@@ -523,6 +526,7 @@ class FeatureAutoRegistrar:
                 (self.orchestrators_dir, "orchestrators"),
                 (self.workflows_dir, "workflows"),
                 (self.agents_dir, "cortex_agents"),
+                (self.security_agents_dir, "security_agents"),
             ]
             
             file_path = None

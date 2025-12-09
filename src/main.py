@@ -69,13 +69,13 @@ def _is_phase8_operation(message: str) -> bool:
 
 def _handle_utility_command(command: str) -> str:
     """
-    Handle fast utility commands (commit, align, healthcheck, optimize, deploy).
+    Handle fast utility commands (commit, align, healthcheck, optimize, deploy, system-maintenance).
     
     These commands bypass full CortexEntry initialization for speed.
     Context-aware operations automatically detect CORTEX repo vs user repo.
     
     Args:
-        command: Utility command name (commit/align/healthcheck/optimize/deploy)
+        command: Utility command name (commit/align/healthcheck/optimize/deploy/system-maintenance)
     
     Returns:
         Formatted response text
@@ -151,6 +151,21 @@ def _handle_utility_command(command: str) -> str:
                 return f"✅ Deployment complete\n   Branch: {result.get('branch', 'main')}\n   {result.get('validation', 'All 19 gates passed')}"
             else:
                 return f"[ERROR] {result.get('message', 'Deployment failed')}"
+        
+        elif command == 'system-maintenance':
+            # System maintenance is CORTEX-only operation
+            if not is_cortex:
+                return "[ERROR] System maintenance operation is only available in CORTEX repository. Run this command from the CORTEX development repository."
+            
+            # Run full system maintenance workflow
+            from src.operations.modules.orchestration.system_maintenance_orchestrator import SystemMaintenanceOrchestrator
+            orchestrator = SystemMaintenanceOrchestrator(project_root=project_root)
+            result = orchestrator.execute(context={})
+            
+            if result.success:
+                return f"✅ {result.message}\n\n{result.formatted_footer}"
+            else:
+                return f"[ERROR] {result.message}"
         
         else:
             return f"Unknown utility command: {command}"
@@ -337,9 +352,13 @@ Examples:
         try:
             command_start = time.perf_counter()
             
-            # Check for fast utility commands (commit, align, healthcheck, optimize, deploy)
-            if args.message.lower() in ['commit', 'align', 'healthcheck', 'optimize', 'deploy']:
-                response = _handle_utility_command(args.message.lower())
+            # Check for fast utility commands (commit, align, healthcheck, optimize, deploy, system-maintenance)
+            if args.message.lower() in ['commit', 'align', 'healthcheck', 'optimize', 'deploy', 'system-maintenance', 'system maintenance', 'maintenance']:
+                # Normalize system maintenance commands
+                command = args.message.lower()
+                if command in ['system-maintenance', 'system maintenance', 'maintenance']:
+                    command = 'system-maintenance'
+                response = _handle_utility_command(command)
             # Check for Phase 8 operations
             elif _is_phase8_operation(args.message):
                 response = _handle_phase8_operation(
