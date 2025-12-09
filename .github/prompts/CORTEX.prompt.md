@@ -90,6 +90,7 @@ ALL responses MUST use this 5-part structure:
 - **TDD:** Auto-included in all plans
 - **Manifest:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
 - **Compliance:** MUST follow DoR/DoD requirements, acceptance criteria gates, TDD integration
+- **Execution Method:** `copilot_chat` (interactive workflow)
 
 ### ADO Operations
 - **Commands:** `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`
@@ -97,28 +98,61 @@ ALL responses MUST use this 5-part structure:
 - **Integration:** Works like Planning System 2.0 with ADO-formatted output
 - **Manifest:** `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
 - **Compliance:** Inherits all Planning System 2.0 requirements + ADO-specific formatting
+- **Execution Method:** `copilot_chat` (interactive workflow)
 
 ### TDD Mastery
 - **Commands:** `start tdd`, `run tests`
 - **Features:** RED→GREEN→REFACTOR, per-layer coverage, empty test detection
 - **Guide:** `cortex-brain/brain-protection-rules.yaml` (TDD_ENFORCEMENT)
+- **Execution Method:** `copilot_chat` (interactive workflow)
 
 ### Dashboard Launcher
 - **Commands:** `load dashboard`, `dashboard`
 - **Features:** HTTP server (8080-8089), auto-open browser, CORS
+- **Execution Method:** `cli_wrapper` (system operation)
+- **CLI Script:** `scripts/cli_wrappers/dashboard_wrapper.py`
 
 ### System Maintenance
 - **Commands:** `system maintenance`, `maintain system`
 - **Phases:** Pre-healthcheck → align (auto-fix) → cleanup → optimize → refresh prompts → post-healthcheck
 - **Auto-Fix:** Alignment automatically applies fixes, prompts refreshed at end
+- **Execution Method:** `cli_wrapper` (system operation)
+- **CLI Script:** `scripts/cli_wrappers/system_maintenance_wrapper.py`
 
 ### Architectural Review
 - **Commands:** `review`, `review architecture`
 - **Features:** 6-phase analysis (0-100 scoring), git protection
+- **Execution Method:** `cli_wrapper` (system operation)
+- **CLI Script:** `scripts/cli_wrappers/review_wrapper.py`
 
 ### System Operations
-- **Commands:** `align`, `optimize`, `feedback`, `help`
-- **Admin-only:** `deploy`
+- **Commands:** `align`, `optimize`, `healthcheck`, `cleanup`, `feedback`, `help`
+- **Admin-only:** `deploy`, `regenerate_prompts`
+- **Execution Method:** `cli_wrapper` for file operations, `copilot_chat` for interactive
+
+---
+
+## 🔀 Execution Methods (Phase 3 & 4)
+
+**ALL operations in cortex-operations.yaml now have execution_method classification:**
+
+### cli_wrapper (System Operations - 10 operations)
+- **Purpose:** File I/O, git operations, system maintenance
+- **Operations:** align, healthcheck, optimize, review, cleanup, deploy, regenerate_prompts, system_maintenance, load_dashboard, admin_dashboard
+- **Implementation:** CLI wrapper scripts in `scripts/cli_wrappers/`
+- **Routing:** `unified_entry_point_utility.py:route_operation()` → `invoke_cli_wrapper()`
+
+### copilot_chat (Interactive Workflows - 16 operations)
+- **Purpose:** Multi-turn conversations, user guidance
+- **Operations:** planning, ado, tdd, feedback, help, command_search, feature_planning, application_onboarding, user_onboarding, refactoring_planning, interactive_planning, architecture_planning
+- **Implementation:** Copilot Chat interface
+- **Routing:** `unified_entry_point_utility.py:route_operation()` → return chat metadata
+
+### internal (Infrastructure - 276 operations)
+- **Purpose:** Orchestrators, agents, utilities not directly invoked by users
+- **Operations:** All orchestrators in `src/orchestrators/`, utilities in `src/operations/utilities/`, dashboard collectors, learning modules
+- **Implementation:** Called by other orchestrators via API
+- **Routing:** `unified_entry_point_utility.py:route_operation()` → reject with message
 
 ---
 
