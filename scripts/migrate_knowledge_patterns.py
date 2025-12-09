@@ -41,7 +41,7 @@ def load_yaml_patterns():
             'pattern_id': f"yaml_{pattern_name}",
             'title': pattern_name.replace('_', ' ').title(),
             'content': json.dumps(pattern_data),
-            'pattern_type': 'validation_insight',
+            'pattern_type': 'principle',  # Changed from 'validation_insight' to match schema
             'confidence': pattern_data.get('confidence', 1.0),
             'created_at': pattern_data.get('last_seen', datetime.now().isoformat()),
             'last_accessed': pattern_data.get('last_seen', datetime.now().isoformat()),
@@ -53,7 +53,7 @@ def load_yaml_patterns():
                 'frequency': pattern_data.get('frequency', 0)
             }),
             'is_pinned': 1 if pattern_data.get('impact') == 'critical' else 0,
-            'scope': 'global',
+            'scope': 'cortex',  # Changed from 'global' to match schema
             'namespaces': 'validation,patterns,best-practices'
         }
         patterns.append(pattern)
