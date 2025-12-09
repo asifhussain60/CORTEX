@@ -262,7 +262,7 @@ export class ProgressiveLoadingManager {
             'code-org': 'codeOrganization',
             'dependencies': 'table',
             'team': 'metricCards',
-            'engineering': 'metricCards'
+            'onboarding': 'metricCards'
         };
 
         return skeletonMap[tabName] || 'metricCards';

@@ -41,7 +41,7 @@ describe('Tab Rendering - All 8 Tabs', () => {
                     <a class="nav-tab" data-tab="architecture">Architecture</a>
                     <a class="nav-tab" data-tab="code-org">Code Organization</a>
                     <a class="nav-tab" data-tab="vendors">Vendors</a>
-                    <a class="nav-tab" data-tab="engineering">Engineering</a>
+                    <a class="nav-tab" data-tab="onboarding">Onboarding</a>
                 </nav>
                 <div id="tab-executive" class="tab-content active"></div>
                 <div id="tab-overview" class="tab-content"></div>
@@ -50,7 +50,7 @@ describe('Tab Rendering - All 8 Tabs', () => {
                 <div id="tab-architecture" class="tab-content"></div>
                 <div id="tab-code-org" class="tab-content"></div>
                 <div id="tab-vendors" class="tab-content"></div>
-                <div id="tab-engineering" class="tab-content"></div>
+                <div id="tab-onboarding" class="tab-content"></div>
                 <div id="contentTitle">Executive Summary</div>
             </div>
         `;
@@ -970,40 +970,40 @@ describe('Tab Rendering - All 8 Tabs', () => {
         });
     });
     
-    describe('Engineering Tab', () => {
-        it('should render engineering onboarding content', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+    describe('Onboarding Tab', () => {
+        it('should render onboarding content', async () => {
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             tab.render({});
             
-            expect(container.innerHTML).toContain('Engineering');
+            expect(container.innerHTML).toContain('Onboarding');
         });
         
         it('should display onboarding checklist', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             tab.render({});
             
             expect(container.innerHTML).toMatch(/checklist|onboard/i);
         });
         
         it('should render setup instructions', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             tab.render({});
             
             expect(container.innerHTML).toMatch(/setup|install|configure/i);
         });
         
         it('should display key contacts section', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
             const dataWithContacts = {
                 contacts: [
@@ -1011,17 +1011,17 @@ describe('Tab Rendering - All 8 Tabs', () => {
                 ]
             };
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             tab.render(dataWithContacts);
             
             expect(container.innerHTML).toMatch(/contact/i);
         });
         
         it('should render documentation links', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             tab.render({});
             
             const links = container.querySelectorAll('a');
@@ -1029,48 +1029,48 @@ describe('Tab Rendering - All 8 Tabs', () => {
         });
         
         it('should display development workflow', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             tab.render({});
             
             expect(container.innerHTML).toMatch(/workflow|process/i);
         });
         
         it('should render tools and environment setup', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             tab.render({});
             
             expect(container.innerHTML).toMatch(/tool|environment/i);
         });
         
-        it('should handle missing engineering data', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+        it('should handle missing onboarding data', async () => {
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             tab.render({});
             
             expect(container.innerHTML).not.toBe('');
         });
         
-        it('should render engineering tab without errors', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+        it('should render onboarding tab without errors', async () => {
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             expect(() => tab.render({})).not.toThrow();
         });
         
         it('should display best practices section', async () => {
-            const EngineeringTab = (await import('../../components/engineering-onboarding-tab.js')).default;
-            const container = document.getElementById('engineering-tab');
+            const OnboardingTab = (await import('../../components/onboarding-tab.js')).default;
+            const container = document.getElementById('onboarding-tab');
             
-            const tab = new EngineeringTab(container);
+            const tab = new OnboardingTab(container);
             tab.render({});
             
             expect(container.innerHTML).toMatch(/best practice|guideline/i);

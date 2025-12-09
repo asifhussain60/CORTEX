@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="styles/architecture-panels.css">
     <link rel="stylesheet" href="styles/skeleton-loader.css">
     <link rel="stylesheet" href="styles/overview-tab.css">
-    <link rel="stylesheet" href="styles/engineering-onboarding.css">
+    <link rel="stylesheet" href="styles/onboarding.css">
 </head>
 <body>
     <!-- Skip to main content link for accessibility -->
@@ -117,7 +117,7 @@
                     <span class="nav-tab-icon">🔌</span>
                     <span class="nav-tab-text">Dependencies</span>
                 </a>
-                <a class="nav-tab" data-tab="engineering" onclick="switchTab('engineering')">
+                <a class="nav-tab" data-tab="onboarding" onclick="switchTab('onboarding')">
                     <span class="nav-tab-icon">🎓</span>
                     <span class="nav-tab-text">Onboarding</span>
                 </a>
@@ -185,8 +185,8 @@
             </div>
 
             <!-- Tab Content: Onboarding -->
-            <div class="tab-content" id="tab-engineering">
-                <div id="engineering-container"></div>
+            <div class="tab-content" id="tab-onboarding">
+                <div id="onboarding-container"></div>
             </div>
         </main>
     </div>
@@ -205,7 +205,6 @@
     <script type="module" src="components/architecture-tab.js"></script>
     <script type="module" src="components/code-org-tab.js"></script>
     <script type="module" src="components/vendors-tab.js"></script>
-    <script type="module" src="components/engineering-onboarding-tab.js"></script>
     <script type="module" src="components/onboarding-tab.js"></script>
 
     <!-- Utility Components -->
@@ -253,7 +252,7 @@
                 'architecture': 'Architecture',
                 'code-org': 'Code Organization',
                 'vendors': 'Dependencies',
-                'engineering': 'Engineering Onboarding'
+                'onboarding': 'Onboarding'
             };
             const titleElement = document.getElementById('contentTitle');
             if (titleElement && titles[tabName]) {

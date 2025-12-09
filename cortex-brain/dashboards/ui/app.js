@@ -496,7 +496,7 @@ function getTabContainerId(tabKey) {
         case 'architecture': return 'tab-architecture';
         case 'code-org': return 'tab-code-org';
         case 'vendors': return 'tab-vendors';
-        case 'engineering': return 'tab-engineering';
+        case 'onboarding': return 'tab-onboarding';
         case 'recommendations': return 'tab-recommendations';
         default: return 'tab-overview';
     }

@@ -14,7 +14,7 @@ import { BaseTabComponent } from '../core/BaseTabComponent.js';
 
 class OnboardingTab extends BaseTabComponent {
     constructor() {
-        super('engineering-onboarding-content');
+        super('onboarding-container');
         this.currentStage = 1;
         this.completedStages = this.loadProgress();
     }
