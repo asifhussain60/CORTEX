@@ -10,6 +10,7 @@ import { Logger } from '../../utils/logger.js';
 import { TaskService } from '../../application/services.js';
 import { TaskFilterDTO } from '../../application/dtos.js';
 import { Status, Priority } from '../../domain/enums.js';
+import { escapeHtml } from '../../utils/html-utils.js';
 
 export class TaskListComponent {
     constructor() {
@@ -155,7 +156,7 @@ export class TaskListComponent {
                             <div class="flex flex-wrap gap-1">
                                 ${task.tags.map(tag => `
                                     <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">
-                                        #${this._escapeHtml(tag)}
+                                        #${escapeHtml(tag)}
                                     </span>
                                 `).join('')}
                             </div>
@@ -224,7 +225,7 @@ export class TaskListComponent {
     _renderError(container, message) {
         container.innerHTML = `
             <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-                <p class="text-red-700 font-medium">${this._escapeHtml(message)}</p>
+                <p class="text-red-700 font-medium">${escapeHtml(message)}</p>
             </div>
         `;
     }
@@ -398,14 +399,4 @@ export class TaskListComponent {
         return texts[priority] || 'Unknown';
     }
 
-    /**
-     * Escape HTML to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
-     */
-    _escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
 }

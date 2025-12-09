@@ -9,6 +9,7 @@
 import { Logger } from '../../utils/logger.js';
 import { TaskService } from '../../application/services.js';
 import { Priority, Status } from '../../domain/enums.js';
+import { escapeHtml } from '../../utils/html-utils.js';
 
 export class TaskFormComponent {
     constructor() {
@@ -116,7 +117,7 @@ export class TaskFormComponent {
                                 rows="4"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
                                 placeholder="Enter task description"
-                            >${task ? this._escapeHtml(task.description || '') : ''}</textarea>
+                            >${task ? escapeHtml(task.description || '') : ''}</textarea>
                         </div>
 
                         <!-- Priority & Status Row -->
@@ -393,16 +394,5 @@ export class TaskFormComponent {
      */
     _escapeAttr(text) {
         return text.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    }
-
-    /**
-     * Escape HTML content
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
-     */
-    _escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 }

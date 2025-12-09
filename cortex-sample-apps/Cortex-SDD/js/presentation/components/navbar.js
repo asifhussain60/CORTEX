@@ -8,6 +8,7 @@
 
 import { Logger } from '../../utils/logger.js';
 import { StorageService } from '../../utils/storage.js';
+import { escapeHtml } from '../../utils/html-utils.js';
 
 export class NavbarComponent {
     constructor() {
@@ -81,7 +82,7 @@ export class NavbarComponent {
                         <div class="hidden md:flex items-center gap-3">
                             <div class="text-right">
                                 <div class="text-sm font-medium text-gray-700">
-                                    ${this._escapeHtml(currentUser.username)}
+                                    ${escapeHtml(currentUser.username)}
                                 </div>
                                 <div class="text-xs ${roleColor}">
                                     ${roleDisplay}
@@ -172,14 +173,4 @@ export class NavbarComponent {
         return colors[role] || 'text-gray-600';
     }
 
-    /**
-     * Escape HTML to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
-     */
-    _escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
 }

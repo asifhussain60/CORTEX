@@ -159,7 +159,7 @@ class App {
         const toast = document.createElement('div');
         toast.className = `${colors[type] || colors.info} text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 slide-in-right`;
         toast.innerHTML = `
-            <span>${this._escapeHtml(message)}</span>
+            <span>${escapeHtml(message)}</span>
             <button class="ml-2 text-white hover:text-gray-200">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -182,16 +182,6 @@ class App {
         });
     }
 
-    /**
-     * Escape HTML to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
-     */
-    _escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
 }
 
 // Initialize app when DOM is ready
