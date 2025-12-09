@@ -4,11 +4,15 @@
   - ✅ 7.6.1: Use Case Collector (21 tests) - Role/domain inference, unified data model
   - 📋 7.6.2-7.6.4: Frontend Views (DEFERRED - RoleMatrix, ProcessWorkflow, DomainHierarchy)
 - ✅ **Phase 7.7:** Integration & Testing (COMPLETE - 6 tests passing)
-- 📋 **Phases 8-9:** Tech Stack Advanced (PLANNED)
+- ✅ **Phase 8:** Tech Stack Advanced (COMPLETE - 62 tests passing)
+  - ✅ 8.1: Solution Structure Collector (23 tests) - D3.js hierarchy + dependency graph
+  - ✅ 8.2: Technology Risk Scorecard (27 tests) - EOL API + risk scoring
+  - ✅ 8.3: Integration Tests (12 tests) - End-to-end validation
+- 📋 **Phase 9:** Tech Stack Intelligence (PLANNED)
 
-**Completion:** 40% (10 of 25 days) - Phase 7 COMPLETE! 110/110 tests passing ✅ Remote**  
-**Status:** Phase 7 COMPLETE - Ready for Phase 8  
-**Last Updated:** January 6, 2025
+**Completion:** 48% (12 of 25 days) - Phase 8 COMPLETE! 172/172 tests passing ✅ Remote**  
+**Status:** Phase 8 COMPLETE - Ready for Phase 9  
+**Last Updated:** December 8, 2025
 
 ---
 
@@ -88,10 +92,14 @@ code cortex-brain/documents/implementation-guides/dashboard-v3-handoff-instructi
 - ✅ **Phase 7.6:** Use Cases Tab (BACKEND COMPLETE - 21 tests passing)
   - ✅ 7.6.1: Use Case Collector (21 tests) - Role/domain inference, unified data model
   - 📋 7.6.2-7.6.4: Frontend Views (DEFERRED - RoleMatrix, ProcessWorkflow, DomainHierarchy)
-- � **Phase 7.7:** Integration & Testing (IN PROGRESS)
-- 📋 **Phases 8-9:** Tech Stack Advanced (PLANNED)
+- ✅ **Phase 7.7:** Integration & Testing (COMPLETE - 6 tests passing)
+- ✅ **Phase 8:** Tech Stack Advanced (COMPLETE - 62 tests passing)
+  - ✅ 8.1: Solution Structure Collector (23 tests)
+  - ✅ 8.2: Technology Risk Scorecard (27 tests)
+  - ✅ 8.3: Integration Tests (12 tests)
+- 📋 **Phase 9:** Tech Stack Intelligence (PLANNED)
 
-**Completion:** 36% (9 of 25 days) - Phase 7 backend complete!
+**Completion:** 48% (12 of 25 days) - Phase 8 COMPLETE!
 
 ---
 
@@ -108,21 +116,27 @@ code cortex-brain/documents/implementation-guides/dashboard-v3-handoff-instructi
 
 ## 🎯 Next Steps
 
-**Phase 7 Complete!** Ready for Phase 8-9 (Tech Stack Advanced)
+**Phase 8 Complete!** Ready for Phase 9 (Tech Stack Intelligence)
 
-Phase 7 Achievements:
-- 110 tests passing (39 + 44 + 21 + 6)
-- Business Capability Intelligence: AST-based + Semantic analysis
-- Recommendations: 5 categories + E2E prioritization
-- Use Cases: Role/domain inference + unified data model
-- Integration: All collectors validated
+Phase 8 Achievements:
+- 62 tests passing (23 + 27 + 12)
+- Solution Structure: D3.js hierarchy + dependency graph
+- Risk Scorecard: EOL API integration + multi-factor scoring (Age 30% + EOL 40% + CVE 30%)
+- Integration: Complete pipeline validation
+
+**Phase 7+8 Combined:**
+- 172 total tests passing (47 overview + 110 Phase 7 + 15 unused + 62 Phase 8 = 234 TOTAL)
+- Backend infrastructure complete
+- D3.js data formats validated
 
 **Frontend Backlog** (deferred to separate sprint):
 - RoleMatrixView.js (3 hours)
 - ProcessWorkflowView.js with Mermaid.js (4 hours)
 - DomainHierarchyView.js with D3.js (3 hours)
+- SolutionTreeView.js with D3.js (4 hours)
+- RiskScorecardView.js (3 hours)
 
-**Next: Phase 8-9 Tech Stack Advanced** or frontend implementation.
+**Next: Phase 9 Tech Stack Intelligence** - Migration roadmaps, health heatmaps, bloat analyzer.
 
 ---
 
