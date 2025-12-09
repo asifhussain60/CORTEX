@@ -205,7 +205,7 @@ async function runTests() {
         'components/architecture-tab.js',
         'components/code-org-tab.js',
         'components/vendors-tab.js',
-        'components/engineering-onboarding-tab.js'
+        'components/onboarding-tab.js'
     ];
     
     componentFiles.forEach(file => testFileExists(file));
@@ -236,7 +236,7 @@ async function runTests() {
         'code-org-container',
         'vendors-container',
         'engineering-container',
-        'engineering-onboarding-content'
+        'onboarding-content'
     ];
     
     expectedContainers.forEach(id => {
@@ -274,7 +274,7 @@ async function runTests() {
         'architecture.json',
         'code-organization.json',
         'vendors.json',
-        'engineering-onboarding.json'
+        'onboarding.json'
     ];
     
     expectedDataFiles.forEach(file => {
@@ -320,7 +320,7 @@ async function runTests() {
     const cssFiles = [
         'styles/global.css',
         'styles/dashboard.css',
-        'styles/engineering-onboarding.css'
+        'styles/onboarding.css'
     ];
     
     cssFiles.forEach(file => testFileExists(file));

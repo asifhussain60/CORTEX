@@ -77,7 +77,7 @@ node /path/to/cortex-brain/dashboards/tests/integration-test.js
 - `architecture-tab.js`
 - `code-org-tab.js`
 - `vendors-tab.js`
-- `engineering-onboarding-tab.js`
+- `onboarding-tab.js`
 
 ### 4. App.js Imports
 - All `import ... from '...'` statements
@@ -92,7 +92,7 @@ node /path/to/cortex-brain/dashboards/tests/integration-test.js
 - `code-org-container`
 - `vendors-container`
 - `engineering-container`
-- `engineering-onboarding-content`
+- `onboarding-content`
 
 ### 6. Component Imports
 - Validates imports in each component file
@@ -106,7 +106,7 @@ node /path/to/cortex-brain/dashboards/tests/integration-test.js
 - `architecture.json`
 - `code-organization.json`
 - `vendors.json`
-- `engineering-onboarding.json`
+- `onboarding.json`
 
 ### 8. Repository Registry
 - `data/repository-registry.json`
@@ -118,7 +118,7 @@ node /path/to/cortex-brain/dashboards/tests/integration-test.js
 ### 10. CSS Files
 - `styles/global.css`
 - `styles/dashboard.css`
-- `styles/engineering-onboarding.css`
+- `styles/onboarding.css`
 
 ---
 
