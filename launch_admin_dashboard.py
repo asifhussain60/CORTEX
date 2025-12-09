@@ -81,7 +81,8 @@ if result['success']:
         server_instance.stop()
         print('✅ Server stopped')
 else:
-    print(f'❌ Failed to start dashboard: {result.get(\"error\", \"Unknown error\")}')
+    error_msg = result.get('error', 'Unknown error')
+    print(f'❌ Failed to start dashboard: {error_msg}')
     input('Press Enter to close...')
     sys.exit(1)
 "@
