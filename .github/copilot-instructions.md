@@ -145,6 +145,8 @@ src/
 **Brain Protection (SKULL):**
 - TDD_ENFORCEMENT: RED→GREEN→REFACTOR mandatory
 - RED_PHASE_VALIDATION: Tests must fail first
+- HOLISTIC_CODE_DISCOVERY_ENFORCEMENT: Search before create (prevent duplication)
+- REFACTOR_CODE_CLEANUP_ENFORCEMENT: Remove orphaned/duplicate code
 - GIT_ISOLATION_ENFORCEMENT: CORTEX code never in user repos
 - TEST_LOCATION_SEPARATION: App tests in user repo, CORTEX in `tests/`
 

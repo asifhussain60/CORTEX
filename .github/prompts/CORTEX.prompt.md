@@ -181,6 +181,8 @@ src/
 **Brain Protection (SKULL):** `cortex-brain/brain-protection-rules.yaml`
 - **TDD_ENFORCEMENT:** RED→GREEN→REFACTOR mandatory
 - **RED_PHASE_VALIDATION:** Tests must fail before implementation
+- **HOLISTIC_CODE_DISCOVERY_ENFORCEMENT:** Search before create (prevent duplication)
+- **REFACTOR_CODE_CLEANUP_ENFORCEMENT:** Remove orphaned/duplicate code
 - **TDD_TEST_FILE_VALIDATION:** All production code must have test files
 - **TDD_EMPTY_TEST_DETECTION:** No placeholder/empty tests
 - **GIT_ISOLATION_ENFORCEMENT:** CORTEX code never in user repos

@@ -527,6 +527,18 @@ workflows:
             required: true
             validation: "add_integration_consolidation_phase() called"
             status: "implemented"
+          - step_id: "STEP-5.5.1"
+            name: "Add REFACTOR Phase CSS Validation"
+            required: true
+            validation: "REFACTOR phase includes inline CSS migration check"
+            status: "implemented"
+            notes: |
+              REFACTOR phase MUST validate:
+              - No inline style="" attributes
+              - No <style> embedded tags
+              - No .style.property JS manipulation
+              - All styles centralized to CSS files
+              Enforced by INLINE_CSS_PROHIBITION rule
           - step_id: "STEP-5.6"
             name: "Acceptance Criteria Approval Gate"
             required: true
