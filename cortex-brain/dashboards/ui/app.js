@@ -21,7 +21,7 @@ import { renderCodeOrganization } from './components/code-org-tab.js';
 import { renderVendors } from './components/vendors-tab.js';
 import { renderUseCases } from './components/use-cases-tab.js';
 import { renderRecommendations } from './components/recommendations-tab.js';
-import OnboardingTab from './components/onboarding-tab.js';
+import { renderOnboarding } from './components/onboarding-tab.js';
 import { initKeyboardNavigation } from './keyboard-navigation.js';
 import { 
     initPerformanceMonitoring, 
@@ -244,21 +244,8 @@ function setupTabNavigation() {
             e.preventDefault();
             const tabName = tab.getAttribute('data-tab');
             switchTab(tabName);
-        });
+        }
     });
-}
-
-/**
- * Render onboarding tab (special case with async data loading)
- */
-async function renderOnboardingTab() {
-    try {
-        const onboardingData = await loadAdditionalData('mock', 'onboarding.json');
-        const tab = new OnboardingTab();
-        await tab.init(onboardingData);
-    } catch (e) {
-        console.error('Failed to load onboarding data:', e);
-    }
 }
 
 /**
@@ -460,9 +447,18 @@ async function renderCurrentTab() {
                 }
                 break;
             }
-            case 'onboarding':
-                await renderOnboardingTab();
+            case 'onboarding': {
+                // Load onboarding data separately
+                try {
+                    const onboardingData = await loadAdditionalData('mock', 'onboarding.json');
+                    await renderOnboarding(onboardingData);
+                } catch (e) {
+                    console.error('Failed to load onboarding data:', e);
+                    // Render with empty data on error
+                    await renderOnboarding({ stages: [], team: [], resources: [] });
+                }
                 break;
+            }
             default:
                 console.warn(`Unknown tab: ${appState.currentTab}`);
                 return;

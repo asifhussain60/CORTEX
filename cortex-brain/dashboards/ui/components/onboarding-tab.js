@@ -1683,5 +1683,14 @@ ${diagram.mermaid_code}
     }
 }
 
+/**
+ * Render onboarding tab (wrapper function for consistency with other tabs)
+ * @param {Object} data - Onboarding data
+ */
+export async function renderOnboarding(data) {
+    const tab = new OnboardingTab();
+    await tab.init(data);
+}
+
 // ES6 default export for browser modules
 export default OnboardingTab;
