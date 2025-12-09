@@ -1,0 +1,697 @@
+<!-- Use Cases Tab Content -->
+<div class="use-cases-container">
+    <!-- Summary Stats -->
+    <div class="card card-primary">
+        <h2 class="card-title">🎯 Use Cases Overview</h2>
+        <div class="stats-grid">
+            <div class="stat-card stat-primary">
+                <div class="stat-icon">📋</div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ use_cases | length }}</div>
+                    <div class="stat-label">Total Use Cases</div>
+                </div>
+            </div>
+            <div class="stat-card stat-success">
+                <div class="stat-icon">👥</div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ roles | length }}</div>
+                    <div class="stat-label">User Roles</div>
+                </div>
+            </div>
+            <div class="stat-card stat-warning">
+                <div class="stat-icon">🏢</div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ domains | length }}</div>
+                    <div class="stat-label">Business Domains</div>
+                </div>
+            </div>
+            <div class="stat-card stat-danger">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ critical_use_cases_count }}</div>
+                    <div class="stat-label">Critical Use Cases</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Role Matrix -->
+    <div class="card">
+        <h2 class="card-title">👥 Role Capabilities Matrix</h2>
+        <div class="role-matrix">
+            {% for role in roles %}
+            <div class="role-card role-{{ role.id }}">
+                <div class="role-header">
+                    <span class="role-icon">
+                        {% if role.id == 'admin' %}👑
+                        {% elif role.id == 'manager' %}👔
+                        {% elif role.id == 'api_consumer' %}🔌
+                        {% else %}👤{% endif %}
+                    </span>
+                    <h3 class="role-name">{{ role.name }}</h3>
+                </div>
+                <p class="role-description">{{ role.description }}</p>
+                
+                <!-- Role's use cases -->
+                <div class="role-use-cases">
+                    <strong>Assigned Use Cases:</strong>
+                    <ul>
+                        {% for uc in use_cases %}
+                            {% if role.id in uc.roles %}
+                            <li class="use-case-item value-{{ uc.business_value }}">
+                                <span class="use-case-id">{{ uc.id }}</span>
+                                <span class="use-case-name">{{ uc.name }}</span>
+                                <span class="business-value-badge badge-{{ uc.business_value }}">
+                                    {{ uc.business_value | upper }}
+                                </span>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Use Cases by Domain -->
+    <div class="card">
+        <h2 class="card-title">🏢 Use Cases by Business Domain</h2>
+        
+        {% for domain in domains %}
+        <div class="domain-section">
+            <div class="domain-header">
+                <h3 class="domain-name">
+                    <span class="domain-icon">
+                        {% if domain.id == 'security_authentication' %}🔒
+                        {% elif domain.id == 'e_commerce' %}🛒
+                        {% elif domain.id == 'reporting' %}📊
+                        {% elif domain.id == 'user_management' %}👥
+                        {% else %}📦{% endif %}
+                    </span>
+                    {{ domain.name }}
+                </h3>
+                <p class="domain-description">{{ domain.description }}</p>
+            </div>
+            
+            <div class="domain-use-cases">
+                {% set domain_use_cases = use_cases | selectattr('domain', 'equalto', domain.id) | list %}
+                {% if domain_use_cases %}
+                <div class="use-cases-grid">
+                    {% for uc in domain_use_cases %}
+                    <div class="use-case-card value-{{ uc.business_value }}">
+                        <div class="use-case-header">
+                            <span class="use-case-id">{{ uc.id }}</span>
+                            <span class="business-value-badge badge-{{ uc.business_value }}">
+                                {{ uc.business_value | upper }}
+                            </span>
+                        </div>
+                        
+                        <h4 class="use-case-title">{{ uc.name }}</h4>
+                        <p class="use-case-description">{{ uc.description }}</p>
+                        
+                        <div class="use-case-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Roles:</span>
+                                <span class="detail-value">
+                                    {% for role_id in uc.roles %}
+                                    <span class="role-badge role-{{ role_id }}">{{ role_id | replace('_', ' ') | title }}</span>
+                                    {% endfor %}
+                                </span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="detail-label">Complexity:</span>
+                                <span class="detail-value">
+                                    <span class="complexity-badge complexity-{{ 'high' if uc.complexity > 10 else ('medium' if uc.complexity > 5 else 'low') }}">
+                                        {{ uc.complexity }}
+                                    </span>
+                                </span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="detail-label">Confidence:</span>
+                                <span class="detail-value">
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill" style="width: {{ uc.confidence }}%;"></div>
+                                    </div>
+                                    <span class="confidence-percentage">{{ uc.confidence }}%</span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Endpoints -->
+                        {% if uc.endpoints %}
+                        <div class="use-case-endpoints">
+                            <strong>API Endpoints:</strong>
+                            <ul>
+                                {% for endpoint in uc.endpoints[:3] %}
+                                <li><code>{{ endpoint }}</code></li>
+                                {% endfor %}
+                                {% if uc.endpoints | length > 3 %}
+                                <li class="more-endpoints">... +{{ uc.endpoints | length - 3 }} more</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Files -->
+                        {% if uc.files %}
+                        <div class="use-case-files">
+                            <strong>Implementation Files:</strong>
+                            <ul>
+                                {% for file in uc.files[:3] %}
+                                <li><code>{{ file | basename }}</code></li>
+                                {% endfor %}
+                                {% if uc.files | length > 3 %}
+                                <li class="more-files">... +{{ uc.files | length - 3 }} more</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="no-data">No use cases found for this domain.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Business Value Distribution -->
+    <div class="card">
+        <h2 class="card-title">📊 Business Value Distribution</h2>
+        <div class="value-distribution">
+            <div class="value-chart">
+                <canvas id="business-value-chart"></canvas>
+            </div>
+            <div class="value-legend">
+                <div class="legend-item">
+                    <span class="legend-color legend-critical"></span>
+                    <span class="legend-label">Critical</span>
+                    <span class="legend-count">{{ use_cases | selectattr('business_value', 'equalto', 'critical') | list | length }}</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color legend-high"></span>
+                    <span class="legend-label">High</span>
+                    <span class="legend-count">{{ use_cases | selectattr('business_value', 'equalto', 'high') | list | length }}</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color legend-medium"></span>
+                    <span class="legend-label">Medium</span>
+                    <span class="legend-count">{{ use_cases | selectattr('business_value', 'equalto', 'medium') | list | length }}</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color legend-low"></span>
+                    <span class="legend-label">Low</span>
+                    <span class="legend-count">{{ use_cases | selectattr('business_value', 'equalto', 'low') | list | length }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Controls -->
+    <div class="card">
+        <h2 class="card-title">💾 Export Use Cases</h2>
+        <div class="export-buttons">
+            <button class="btn btn-primary" onclick="exportUseCases('json')">
+                📄 Export JSON
+            </button>
+            <button class="btn btn-secondary" onclick="exportUseCases('csv')">
+                📊 Export CSV
+            </button>
+            <button class="btn btn-secondary" onclick="exportUseCases('markdown')">
+                📝 Export Markdown
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Use Cases Specific Styles */
+    .use-cases-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .stat-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        color: white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .stat-card.stat-primary { --gradient-start: #667eea; --gradient-end: #764ba2; }
+    .stat-card.stat-success { --gradient-start: #11998e; --gradient-end: #38ef7d; }
+    .stat-card.stat-warning { --gradient-start: #f093fb; --gradient-end: #f5576c; }
+    .stat-card.stat-danger { --gradient-start: #fa709a; --gradient-end: #fee140; }
+
+    .stat-icon {
+        font-size: 36px;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .role-matrix {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .role-card {
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        padding: 20px;
+        background: white;
+    }
+
+    .role-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .role-icon {
+        font-size: 32px;
+    }
+
+    .role-name {
+        font-size: 20px;
+        color: var(--primary-color);
+    }
+
+    .role-description {
+        color: #666;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .role-use-cases ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 10px;
+    }
+
+    .use-case-item {
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        border-radius: 4px;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .use-case-id {
+        font-family: monospace;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .use-case-name {
+        flex: 1;
+        font-weight: 500;
+    }
+
+    .business-value-badge {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .badge-critical { background: #f44336; color: white; }
+    .badge-high { background: #ff9800; color: white; }
+    .badge-medium { background: #2196f3; color: white; }
+    .badge-low { background: #4caf50; color: white; }
+
+    .domain-section {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .domain-section:last-child {
+        border-bottom: none;
+    }
+
+    .domain-header {
+        margin-bottom: 20px;
+    }
+
+    .domain-name {
+        font-size: 20px;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .domain-icon {
+        font-size: 28px;
+    }
+
+    .domain-description {
+        color: #666;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    .use-cases-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+    }
+
+    .use-case-card {
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        padding: 20px;
+        background: white;
+        transition: all 0.2s ease;
+    }
+
+    .use-case-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    .use-case-card.value-critical { border-left: 4px solid #f44336; }
+    .use-case-card.value-high { border-left: 4px solid #ff9800; }
+    .use-case-card.value-medium { border-left: 4px solid #2196f3; }
+    .use-case-card.value-low { border-left: 4px solid #4caf50; }
+
+    .use-case-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .use-case-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .use-case-description {
+        color: #666;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .use-case-details {
+        margin-bottom: 15px;
+    }
+
+    .detail-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        min-width: 90px;
+        color: #666;
+    }
+
+    .detail-value {
+        flex: 1;
+    }
+
+    .role-badge {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        margin-right: 4px;
+        display: inline-block;
+        background: #e0e0e0;
+        color: #333;
+    }
+
+    .complexity-badge {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .complexity-high { background: #f44336; color: white; }
+    .complexity-medium { background: #ff9800; color: white; }
+    .complexity-low { background: #4caf50; color: white; }
+
+    .confidence-bar {
+        display: inline-block;
+        width: 100px;
+        height: 8px;
+        background: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+        vertical-align: middle;
+        margin-right: 8px;
+    }
+
+    .confidence-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #11998e, #38ef7d);
+        transition: width 0.3s ease;
+    }
+
+    .confidence-percentage {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .use-case-endpoints,
+    .use-case-files {
+        margin-top: 12px;
+        font-size: 13px;
+    }
+
+    .use-case-endpoints strong,
+    .use-case-files strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #666;
+    }
+
+    .use-case-endpoints ul,
+    .use-case-files ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .use-case-endpoints li,
+    .use-case-files li {
+        padding: 4px 0;
+    }
+
+    .use-case-endpoints code,
+    .use-case-files code {
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 12px;
+    }
+
+    .more-endpoints,
+    .more-files {
+        color: #666;
+        font-style: italic;
+    }
+
+    .no-data {
+        color: #999;
+        font-style: italic;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .value-distribution {
+        display: flex;
+        gap: 40px;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .value-chart {
+        flex: 1;
+        max-width: 400px;
+    }
+
+    .value-legend {
+        flex: 1;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+    }
+
+    .legend-critical { background: #f44336; }
+    .legend-high { background: #ff9800; }
+    .legend-medium { background: #2196f3; }
+    .legend-low { background: #4caf50; }
+
+    .legend-label {
+        flex: 1;
+        font-weight: 500;
+    }
+
+    .legend-count {
+        font-weight: bold;
+        color: #666;
+    }
+
+    .export-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #1976d2;
+    }
+
+    .btn-secondary {
+        background: #e0e0e0;
+        color: #333;
+    }
+
+    .btn-secondary:hover {
+        background: #bdbdbd;
+    }
+</style>
+
+<script>
+    // Export Use Cases functionality
+    function exportUseCases(format) {
+        const useCases = {{ use_cases | tojson }};
+        
+        if (format === 'json') {
+            const dataStr = JSON.stringify(useCases, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            downloadFile(blob, 'use-cases.json');
+        } else if (format === 'csv') {
+            let csv = 'ID,Name,Description,Domain,Business Value,Confidence,Roles,Endpoints\n';
+            useCases.forEach(uc => {
+                csv += `"${uc.id}","${uc.name}","${uc.description}","${uc.domain}","${uc.business_value}",${uc.confidence},"${uc.roles.join('; ')}","${uc.endpoints.join('; ')}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            downloadFile(blob, 'use-cases.csv');
+        } else if (format === 'markdown') {
+            let md = '# Use Cases Report\n\n';
+            useCases.forEach(uc => {
+                md += `## ${uc.id}: ${uc.name}\n\n`;
+                md += `**Description:** ${uc.description}\n\n`;
+                md += `**Domain:** ${uc.domain}\n\n`;
+                md += `**Business Value:** ${uc.business_value}\n\n`;
+                md += `**Roles:** ${uc.roles.join(', ')}\n\n`;
+                md += `**Confidence:** ${uc.confidence}%\n\n`;
+                if (uc.endpoints.length > 0) {
+                    md += '**Endpoints:**\n';
+                    uc.endpoints.forEach(ep => md += `- \`${ep}\`\n`);
+                    md += '\n';
+                }
+                md += '---\n\n';
+            });
+            const blob = new Blob([md], { type: 'text/markdown' });
+            downloadFile(blob, 'use-cases.md');
+        }
+    }
+
+    function downloadFile(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // Initialize business value chart if Chart.js is available
+    if (typeof Chart !== 'undefined') {
+        const ctx = document.getElementById('business-value-chart');
+        if (ctx) {
+            const useCases = {{ use_cases | tojson }};
+            const valueCounts = {
+                critical: useCases.filter(uc => uc.business_value === 'critical').length,
+                high: useCases.filter(uc => uc.business_value === 'high').length,
+                medium: useCases.filter(uc => uc.business_value === 'medium').length,
+                low: useCases.filter(uc => uc.business_value === 'low').length
+            };
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Critical', 'High', 'Medium', 'Low'],
+                    datasets: [{
+                        data: [valueCounts.critical, valueCounts.high, valueCounts.medium, valueCounts.low],
+                        backgroundColor: ['#f44336', '#ff9800', '#2196f3', '#4caf50']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    }
+</script>
