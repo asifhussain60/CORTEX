@@ -416,6 +416,109 @@ def filter_admin_operations(staging_dir: Path):
         raise
 
 
+def remove_admin_features_from_dashboard(staging_dir: Path):
+    """
+    Remove admin-only features from dashboard HTML for user deployment.
+    
+    SECURITY: Users get single-source dashboard. Admin gets multi-source dropdown.
+    
+    Removes:
+    1. Source selector dropdown (lines 67-76 in index.html)
+    2. Executive summary tab (admin-only intelligence)
+    """
+    dashboard_html = staging_dir / "cortex-brain" / "dashboards" / "ui" / "index.html"
+    
+    if not dashboard_html.exists():
+        logger.warning("⚠️  Dashboard HTML not found - skipping admin feature removal")
+        return
+    
+    try:
+        with open(dashboard_html, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        
+        modified = False
+        
+        # Remove source selector dropdown (lines 67-76)
+        dropdown_start = '<!-- Source Selector -->'
+        dropdown_end = '</div>'  # Closing tag for source-selector div
+        
+        if dropdown_start in html_content:
+            # Find the complete dropdown section
+            start_idx = html_content.find(dropdown_start)
+            # Find the closing </div> for the .source-selector div
+            # Look for the next </div> after the <select> closing tag
+            select_close = html_content.find('</select>', start_idx)
+            if select_close != -1:
+                end_idx = html_content.find(dropdown_end, select_close)
+                if end_idx != -1:
+                    end_idx += len(dropdown_end)
+                    # Also remove trailing newlines
+                    while end_idx < len(html_content) and html_content[end_idx] in ('\n', '\r'):
+                        end_idx += 1
+                    
+                    # Remove the dropdown section
+                    html_content = html_content[:start_idx] + html_content[end_idx:]
+                    modified = True
+                    logger.info("  ✓ Removed source selector dropdown")
+        
+        # Remove executive summary tab from navigation
+        exec_tab_pattern = '''<a class="nav-tab active" data-tab="executive" onclick="switchTab('executive')">
+                    <span class="nav-tab-icon">📊</span>
+                    <span class="nav-tab-text">Executive Summary</span>
+                </a>'''
+        
+        if exec_tab_pattern in html_content:
+            html_content = html_content.replace(exec_tab_pattern, '')
+            modified = True
+            logger.info("  ✓ Removed executive summary tab")
+        
+        # Also remove the executive tab content div
+        exec_content_start = '<!-- Tab Content: Executive Summary -->'
+        if exec_content_start in html_content:
+            start_idx = html_content.find(exec_content_start)
+            # Find the closing div for this tab-content
+            end_marker = '<div id="executive-container"></div>'
+            end_idx = html_content.find(end_marker, start_idx)
+            if end_idx != -1:
+                end_idx = html_content.find('</div>', end_idx) + len('</div>')
+                # Include trailing newlines
+                while end_idx < len(html_content) and html_content[end_idx] in ('\n', '\r'):
+                    end_idx += 1
+                
+                html_content = html_content[:start_idx] + html_content[end_idx:]
+                modified = True
+                logger.info("  ✓ Removed executive summary content section")
+        
+        # Make Overview tab the default active tab (since we removed Executive)
+        # Change Overview tab to active
+        html_content = html_content.replace(
+            '<a class="nav-tab" data-tab="overview"',
+            '<a class="nav-tab active" data-tab="overview"'
+        )
+        # Change Overview tab content to active
+        html_content = html_content.replace(
+            '<div class="tab-content" id="tab-overview">',
+            '<div class="tab-content active" id="tab-overview">'
+        )
+        # Update default title
+        html_content = html_content.replace(
+            '<h1 class="content-title" id="contentTitle">Executive Summary</h1>',
+            '<h1 class="content-title" id="contentTitle">System Overview</h1>'
+        )
+        
+        if modified:
+            # Write modified HTML back
+            with open(dashboard_html, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+            logger.info("✓ Dashboard admin features removed for user deployment")
+        else:
+            logger.info("✓ Dashboard already configured for user deployment")
+        
+    except Exception as e:
+        logger.error(f"Failed to remove admin features from dashboard: {e}")
+        raise
+
+
 def branch_exists(branch_name: str, project_root: Path) -> bool:
     """Check if branch exists locally or remotely."""
     # Check local
@@ -608,6 +711,9 @@ def build_publish_content(project_root: Path, staging_dir: Path) -> Dict[str, in
     
     # Filter admin operations from cortex-operations.yaml
     filter_admin_operations(staging_dir)
+    
+    # Remove admin features from dashboard HTML
+    remove_admin_features_from_dashboard(staging_dir)
     
     # Create SETUP-CORTEX.md guide
     create_setup_guide(staging_dir)
