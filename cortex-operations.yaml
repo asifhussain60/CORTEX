@@ -140,6 +140,17 @@ operations:
     natural_language:
     - operation name
     category: general
+  deploy_orchestrator:
+    name: Deploy Orchestrator
+    description: Deployment Orchestrator - Unified Deployment System
+    deployment_tier: admin_only
+    natural_language:
+    - deploying
+    - deployments
+    - deployment orchestrator
+    - build deployment artifacts
+    - validate
+    category: deployment
     modules:
     - regenerate_cortex_prompts
     profiles:
@@ -4366,6 +4377,10 @@ metadata:
   - version: auto-registered
     date: 2025-12-09
     changes:
+    - Auto-registered deploy_orchestrator operation
+  - version: auto-registered
+    date: 2025-12-09
+    changes:
     - Auto-registered learning_observer operation
   - version: auto-registered
     date: 2025-12-09
@@ -5404,7 +5419,7 @@ metadata:
     - Migrated setup operation (4 modules functional)
     - Defined 6 operations with 48 modules total
 statistics:
-  total_operations: 171
+  total_operations: 172
   total_modules: 115
   total_phases: 9
   cortex_2_0_operations: 9
@@ -5441,7 +5456,7 @@ statistics:
       modules_total: 1
       completion_percentage: 100
       notes: Auto-discovered and registered by align orchestrator on 2025-12-03
-  last_updated: '2025-12-09 09:58:30'
+  last_updated: '2025-12-09 18:08:16'
   align:
     name: Align
     description: CORTEX Align v2.0 Command - Entry Point Wrapper
