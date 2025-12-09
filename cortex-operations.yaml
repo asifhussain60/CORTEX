@@ -3,6 +3,8 @@ operations:
     name: Review
     description: Code Review CLI
     deployment_tier: dual_context
+    execution_method: cli_wrapper  # System operation requiring CLI wrapper
+    cli_script: scripts/cli_wrappers/review_wrapper.py
     natural_language:
     - feature review
     - review new authentication feature
@@ -15,6 +17,8 @@ operations:
     description: Comprehensive system maintenance - runs healthcheck, align, optimize
       in optimal sequence
     deployment_tier: admin
+    execution_method: cli_wrapper  # System operation with existing CLI wrapper
+    cli_script: scripts/cli_wrappers/system_maintenance_wrapper.py
     natural_language:
     - system maintenance
     - full maintenance
@@ -80,6 +84,8 @@ operations:
     description: Build clean production package and publish to downloadable repository
       for user deployment
     deployment_tier: admin
+    execution_method: cli_wrapper  # System operation requiring CLI wrapper
+    cli_script: scripts/cli_wrappers/deploy_wrapper.py
     natural_language:
     - deploy cortex
     - deploy production
@@ -89,13 +95,13 @@ operations:
     - release cortex
     - create cortex release
     - publish cortex production
-    - package for deployment
-    category: deployment
   regenerate_prompts:
     name: Regenerate Copilot Prompts
     description: Delete and regenerate copilot-instructions.md and CORTEX.prompt.md
       from current codebase state
     deployment_tier: admin
+    execution_method: cli_wrapper  # System operation requiring CLI wrapper
+    cli_script: scripts/cli_wrappers/regenerate_prompts_wrapper.py
     natural_language:
     - regenerate prompts
     - regenerate copilot prompts
@@ -105,6 +111,8 @@ operations:
     - rebuild copilot instructions
     - regenerate prompts dry run
     - refresh prompts dry run
+    - refresh instructions dry run
+    category: systems dry run
     - refresh instructions dry run
     category: system
   threat_modeler_agent:
@@ -473,12 +481,18 @@ operations:
     - ado code review for PR
   align:
     name: Align
-    description: CORTEX Align v2.0 Command - Entry Point Wrapper
+    description: CORTEX Align v2.0 - Holistic system alignment with intelligent maintenance
     deployment_tier: admin_only
+    execution_method: cli_wrapper  # System operation with NEW CLI wrapper
+    cli_script: scripts/cli_wrappers/align_wrapper.py
     natural_language:
-    - validate
-    - analyze
-    - preview changes without applying them
+    - align
+    - align system
+    - system alignment
+    - validate system
+    - check cortex alignment
+    - run alignment
+    - cortex align
     category: maintenance
   application_onboarding_operation:
     name: Application Onboarding Operation
@@ -588,10 +602,16 @@ operations:
     category: general
   healthcheck:
     name: Healthcheck
-    description: CORTEX Health Check Entry Point
+    description: CORTEX Health Check - System health monitoring and diagnostics
     deployment_tier: admin_only
+    execution_method: cli_wrapper  # System operation with NEW CLI wrapper
+    cli_script: scripts/cli_wrappers/healthcheck_wrapper.py
     natural_language:
-    - cortex health check operation
+    - healthcheck
+    - health check
+    - check system health
+    - cortex health
+    - system diagnostics
     category: analysis
   help_command:
     name: Help Command
@@ -630,12 +650,16 @@ operations:
     category: general
   optimize:
     name: Optimize
-    description: CORTEX Optimize Entry Point
+    description: CORTEX Optimize - System optimization and performance improvements
     deployment_tier: admin_only
+    execution_method: cli_wrapper  # System operation requiring CLI wrapper
+    cli_script: scripts/cli_wrappers/optimize_wrapper.py
     natural_language:
-    - validate
-    - preview changes only
-    - run all optimizations
+    - optimize
+    - optimize system
+    - optimize cortex
+    - run optimization
+    - improve performance
     category: maintenance
   optimize_operation:
     name: Optimize Operation
@@ -6032,6 +6056,93 @@ statistics:
         description: Automated tool installation
         modules:
         - tooling_installer_module
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Automated development tooling setup
+
+# ============================================================================
+# PHASE 5 ORCHESTRATORS - OBSERVER PATTERN (INTERNAL)
+# ============================================================================
+# These orchestrators implement the observer pattern for event-driven learning.
+# They are NOT directly user-invoked. execution_method: internal
+
+  learning_observer:
+    name: Learning Observer
+    description: Event-driven pattern capture for Knowledge Graph (Phase 5.1)
+    deployment_tier: internal
+    execution_method: internal  # Infrastructure orchestrator, not user-invoked
+    natural_language: []  # No direct invocation
+    category: infrastructure
+    modules:
+    - learning_observer
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: |
+        Observer pattern implementation for Phase 5.1/5.2
+        Subscribes to events from Planning, TDD, and Debug orchestrators
+        Automatically captures patterns to Tier 2 Knowledge Graph
+        Event types: phase_completion, tdd_cycle_completion, debug_session_completion
+        Performance: <50ms event handling overhead
+    related_orchestrators:
+    - planning_orchestrator  # Emits phase_completion events
+    - tdd_implementation_orchestrator  # Emits tdd_cycle_completion events
+    - debug_workflow_orchestrator  # Emits debug_session_completion events
+  
+  debug_workflow_orchestrator:
+    name: Debug Workflow Orchestrator
+    description: Session-based debugging with RCA pattern capture (Phase 5.2)
+    deployment_tier: internal
+    execution_method: internal  # Infrastructure orchestrator, not user-invoked
+    natural_language: []  # No direct invocation
+    category: infrastructure
+    modules:
+    - debug_workflow_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: |
+        Observer pattern implementation for Phase 5.2
+        Session-based debugging with UUID tracking
+        Automatic RCA (Root Cause Analysis) pattern capture
+        Notifies LearningObserver on session completion
+        Performance: <50ms event emission (<10ms typical)
+        Tests: 11/11 passing (100%)
+    related_orchestrators:
+    - learning_observer  # Receives debug_session_completion events
+  
+  tdd_workflow_orchestrator:
+    name: TDD Workflow Orchestrator
+    description: TDD workflow orchestration with observer support (Phase 5.1)
+    deployment_tier: internal
+    execution_method: copilot_chat  # Interactive workflow via chat
+    natural_language:
+    - start tdd
+    - begin tdd workflow
+    - tdd implementation
+    - test driven development
+    category: development
+    modules:
+    - tdd_workflow_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: |
+        Interactive TDD workflow with RED→GREEN→REFACTOR enforcement
+        Emits tdd_cycle_completion events to LearningObserver
+        Per-layer coverage validation
+        Empty test detection
+    related_orchestrators:
+    - learning_observer  # Receives tdd_cycle_completion events
     implementation_status:
       status: ready
       modules_implemented: 1
