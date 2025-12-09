@@ -21,7 +21,7 @@ import { renderCodeOrganization } from './components/code-org-tab.js';
 import { renderVendors } from './components/vendors-tab.js';
 import { renderUseCases } from './components/use-cases-tab.js';
 import { renderRecommendations } from './components/recommendations-tab.js';
-import EngineeringOnboardingTab from './components/engineering-onboarding-tab.js';
+import OnboardingTab from './components/onboarding-tab.js';
 import { initKeyboardNavigation } from './keyboard-navigation.js';
 import { 
     initPerformanceMonitoring, 
@@ -213,7 +213,7 @@ async function switchTab(tabName) {
             'architecture': 'Architecture',
             'code-org': 'Code Organization',
             'vendors': 'Dependencies',
-            'engineering': 'Engineering Onboarding'
+            'onboarding': 'Onboarding'
         };
         const titleElement = document.getElementById('contentTitle');
         if (titleElement && titles[tabName]) {
@@ -249,12 +249,12 @@ function setupTabNavigation() {
 }
 
 /**
- * Render engineering tab (special case with async data loading)
+ * Render onboarding tab (special case with async data loading)
  */
-async function renderEngineeringTab() {
+async function renderOnboardingTab() {
     try {
-        const onboardingData = await loadAdditionalData('mock', 'engineering-onboarding.json');
-        const tab = new EngineeringOnboardingTab();
+        const onboardingData = await loadAdditionalData('mock', 'onboarding.json');
+        const tab = new OnboardingTab();
         await tab.init(onboardingData);
     } catch (e) {
         console.error('Failed to load onboarding data:', e);
@@ -460,8 +460,8 @@ async function renderCurrentTab() {
                 }
                 break;
             }
-            case 'engineering':
-                // Content loaded by click handler in setupTabNavigation()
+            case 'onboarding':
+                await renderOnboardingTab();
                 break;
             default:
                 console.warn(`Unknown tab: ${appState.currentTab}`);
