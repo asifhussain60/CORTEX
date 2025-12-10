@@ -500,10 +500,37 @@ docs/ (GitHub Pages root)
   - Module structure scan → identify all orchestrators, agents, tiers
   
 - [ ] **Design Change Detection System:**
-  - Compare previous run manifest vs current discovery results
-  - Identify: new operations, updated operations, removed operations
-  - Track file changes (git diff) to detect scope modifications
-  - Generate change report for each regeneration run
+  - **Feature Change Detection:**
+    - Compare previous run manifest vs current discovery results
+    - Identify: new operations, updated operations, removed operations
+    - Track file changes (git diff) to detect scope modifications
+  
+  - **DALL-E Prompt Change Detection (NEW - Intelligent Regeneration):**
+    - **Technical Diagrams (Architecture-Driven):**
+      - Map each prompt to source modules (e.g., `03-agent-system.md` → `src/cortex_agents/`)
+      - Calculate content hash of source modules (git SHA + file sizes)
+      - Compare with previous manifest: `{prompt: {hash, modules[], last_modified}}`
+      - **IF hash differs:** Mark for regeneration (delete prompt + PNG)
+      - **IF hash same:** Preserve (no code change, no regeneration needed)
+    
+    - **Comic Illustrations (Narrative-Driven):**
+      - Map each chapter prompt to story chapter text
+      - Calculate hash of chapter content (text only, ignore whitespace)
+      - Compare with previous manifest: `{prompt: {chapter_hash, last_modified}}`
+      - **IF hash differs:** Mark for regeneration (story chapter changed)
+      - **IF hash same:** Preserve (narrative unchanged)
+    
+    - **Protected Files (Never Regenerate):**
+      - Foundation files (`00-*.md`) - Visual consistency baseline
+      - Manually refined prompts (marked in manifest)
+      - These establish character designs, never auto-regenerate
+  
+  - **Change Report Generation:**
+    - Operations: "3 new, 2 updated, 1 removed"
+    - Technical diagrams: "3 of 10 need regeneration (agent system, orchestrators, SKULL)"
+    - Comic illustrations: "2 of 10 need regeneration (Ch4, Ch7)"
+    - Story content: "4 chapters modified, 6 unchanged"
+    - Total regeneration: "5 prompts + 5 images (50% of content preserved)"
   
 - [ ] **Design Template Registry:**
   - Feature page template (Jinja2) - one template for all feature pages
@@ -567,10 +594,72 @@ docs/ (GitHub Pages root)
   - **Generation Rules:** `generation-rules.yaml` (what content to generate, what to skip)
   
 - [ ] **Design Manifest Format:**
-  - **Previous Run State:** Feature list, file list, git SHA, timestamp
-  - **Change Detection:** Diff between previous and current run
-  - **Metrics Tracking:** Page count, image count, operation count per run
+  - **Previous Run State:**
+    - Feature list with metadata (name, description, status)
+    - File list with checksums (generated files only)
+    - Git SHA of last regeneration
+    - Timestamp and operation count
+  
+  - **DALL-E Prompt Tracking (NEW - Intelligent Regeneration):**
+    ```json
+    {
+      "dalle_prompts": {
+        "technical_diagrams": {
+          "03-agent-system.md": {
+            "content_hash": "a1b2c3d4",
+            "source_modules": ["src/cortex_agents/", "src/orchestrators/intent_router/"],
+            "last_modified": "2025-12-08T10:30:00Z",
+            "generated_images": ["03-agent-system.png"],
+            "status": "unchanged"
+          },
+          "05-orchestrator-ecosystem.md": {
+            "content_hash": "e5f6g7h8",
+            "source_modules": ["src/orchestrators/"],
+            "last_modified": "2025-12-09T14:20:00Z",
+            "generated_images": ["05-orchestrator-ecosystem.png"],
+            "status": "modified"
+          }
+        },
+        "comic_illustrations": {
+          "ch4-agent-chaos.md": {
+            "content_hash": "i9j0k1l2",
+            "story_chapter": "Chapter 4: The Agent Uprising",
+            "chapter_text_hash": "m3n4o5p6",
+            "last_modified": "2025-12-07T09:15:00Z",
+            "generated_images": ["ch4-agent-chaos.png", "ch4-agent-chaos.webp"],
+            "status": "unchanged"
+          },
+          "ch7-capture-moment.md": {
+            "content_hash": "q7r8s9t0",
+            "story_chapter": "Chapter 7: The Lightbulb Moment",
+            "chapter_text_hash": "u1v2w3x4",
+            "last_modified": "2025-12-10T11:45:00Z",
+            "generated_images": ["ch7-capture-moment.png", "ch7-capture-moment.webp"],
+            "status": "modified"
+          }
+        },
+        "protected_foundation": [
+          "00-character-sheet.md",
+          "00-basement-laboratory.md",
+          "00-coffee-timeline.md",
+          "prologue-deadline.md"
+        ]
+      }
+    }
+    ```
+  
+  - **Change Detection Fields:**
+    - Previous hash vs current hash comparison
+    - Status: `unchanged`, `modified`, `new`, `deleted`
+    - Regeneration flag: `true` if prompt needs regeneration
+  
+  - **Metrics Tracking:**
+    - Page count, image count, operation count per run
+    - Regeneration stats: "5 of 10 prompts regenerated (50% preserved)"
+    - Performance: Time per stage, total regeneration time
+  
   - **Storage Location:** `cortex-brain/orchestrator-manifests/enterprise-docs-manifest.json`
+  - **Version Control:** Track manifest in git (enables history analysis, rollback)
 
 **Deliverables:**
 - Configuration file schemas (4 YAML files)
@@ -1620,12 +1709,38 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
     - Preserve files in `protected-files.yaml` registry
     - Delete feature pages: `docs/gh-pages/features/*.html` (except protected)
     - Delete architecture pages: `docs/gh-pages/architecture/*.html` (except protected)
-  - **Image Prompt Cleanup:**
-    - Delete `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/prompts/*.md`
-    - Delete `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/narratives/*.png`
-    - Delete `docs/gh-pages/story/illustrations/prompts/ch*.md` (preserve `00-*.md` foundation files)
-    - Delete `docs/gh-pages/story/illustrations/images/*.png` and `*.webp`
-  - **Navigation Cleanup:** Delete auto-generated navigation JSON
+  - **Image Prompt Cleanup (INTELLIGENT - Change-Driven):**
+    - **Technical DALL-E Diagrams:**
+      - Load previous manifest: `{prompt_file: {content_hash, source_modules, last_modified}}`
+      - For each technical prompt (01-10):
+        - Calculate current hash of source modules (e.g., `src/orchestrators/` for 05-orchestrator-ecosystem)
+        - Compare with manifest hash
+        - **IF CHANGED:** Delete prompt + matching PNG (e.g., `03-agent-system.md` + `03-agent-system.png`)
+        - **IF UNCHANGED:** Preserve both files (no regeneration needed)
+      - Report: "3 of 10 technical diagrams need regeneration"
+    
+    - **Comic Story Illustrations:**
+      - Load previous manifest: `{prompt_file: {story_chapter_hash, last_modified}}`
+      - For each chapter prompt (ch1-ch10):
+        - Calculate hash of corresponding story chapter text
+        - Compare with manifest hash
+        - **IF CHANGED:** Delete prompt + matching images (e.g., `ch4-agent-chaos.md` + `ch4-agent-chaos.png/webp`)
+        - **IF UNCHANGED:** Preserve both files (story hasn't changed)
+      - Report: "2 of 10 chapter illustrations need regeneration"
+    
+    - **Protected Foundation Files (NEVER DELETE):**
+      - `00-character-sheet.md` + PNG - Character consistency baseline
+      - `00-basement-laboratory.md` + PNG - Setting reference
+      - `00-coffee-timeline.md` + PNG - Visual metaphor guide
+      - `prologue-deadline.md` + PNG - Story opener (manually refined)
+    
+    - **Deletion Strategy:**
+      - Only delete if: `current_hash != manifest_hash`
+      - Match by filename: `ch4-agent-chaos.md` → delete `ch4-agent-chaos.{png,webp}`
+      - Log deletions: "Deleted ch4-agent-chaos (Agent system code changed)"
+      - Preserve if unchanged: "Kept ch5-graph-overload (Knowledge graph unchanged)"
+  
+  - **Navigation Cleanup:** Delete auto-generated navigation JSON (always regenerate)
   
 - [ ] **Implement Template-Based Generation:**
   - **Feature Pages:** One Jinja2 template → generate N pages (one per operation)
@@ -1640,20 +1755,39 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
     - Technical diagrams: One prompt per discovered architecture component
     - Comic illustrations: One prompt per story chapter
   
-- [ ] **Implement Story Auto-Update System:**
-  - **Feature Reference Insertion:**
+- [ ] **Implement Story Auto-Update System (INTELLIGENT - Change-Driven):**
+  - **Chapter Change Detection:**
+    - Load previous manifest: `{chapter: {content_hash, template_sections[], last_modified}}`
+    - Calculate current hash for each chapter
+    - **IF CHANGED:** Update template sections only (preserve narrative prose)
+    - **IF UNCHANGED:** Skip chapter entirely (no modifications needed)
+    - Report: "4 of 11 chapters modified (Ch3, Ch7, Ch9, Ch11)"
+  
+  - **Feature Reference Insertion (Selective):**
     - Scan story for `{{% feature:operation_name %}}` template markers
-    - Replace with current feature description + metrics
-    - Preserve surrounding narrative prose (character dialogue, scene descriptions)
-  - **Chapter Section Updates:**
-    - `{{% technical_achievements %}}` → auto-generate from git history
-    - `{{% coffee_mug_count %}}` → calculate from complexity metrics
-    - `{{% teachable_moment:topic %}}` → insert feature explanation
-  - **Protected Content:** Never modify:
+    - Check if operation changed in manifest
+    - **IF operation updated:** Replace with current feature description + metrics
+    - **IF operation unchanged:** Preserve existing text (no re-insertion needed)
+    - Example: "Operation 'planning_orchestrator' unchanged → kept existing Ch6 reference"
+  
+  - **Chapter Section Updates (Only Modified Chapters):**
+    - `{{% technical_achievements %}}` → auto-generate from git history (last 90 days)
+    - `{{% coffee_mug_count %}}` → recalculate only if new features added
+    - `{{% teachable_moment:topic %}}` → update only if topic feature changed
+    - Skip update if section content hash unchanged
+  
+  - **Protected Content (NEVER Modify - Even if Chapter Changed):**
     - Character descriptions (Mr. Codenstein, Miss G, Copilot)
     - Dialogue and voice (first-person narrative, humor, tone)
     - Chapter structure (titles, scene transitions)
     - Name origin story and manual enhancements
+    - Prose between template markers (narrative flow)
+  
+  - **Intelligent Update Strategy:**
+    - Only replace template marker content (between `{{% %}}` tags)
+    - Preserve everything outside markers (narrative prose)
+    - Track which markers updated: "Ch7: Updated technical_achievements, kept feature references"
+    - Log skipped chapters: "Ch1-2, Ch4-6, Ch8, Ch10 unchanged (preserved completely)"
   
 - [ ] **Implement GitHub Actions Workflow:**
   - **Triggers:**
