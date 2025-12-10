@@ -99,10 +99,20 @@ operations:
   regenerate_prompts:
     name: Regenerate Copilot Prompts
     description: Delete and regenerate copilot-instructions.md and CORTEX.prompt.md
-      from current codebase state
+      from current codebase state with intelligent incremental regeneration
     deployment_tier: admin
     execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/regenerate_prompts_wrapper.py
+    flags:
+      - name: incremental
+        description: Only regenerate files that changed (default behavior)
+        default: true
+      - name: force
+        description: Force full regeneration (overrides incremental and preservation)
+        default: false
+      - name: dry-run
+        description: Preview changes without applying
+        default: false
     natural_language:
     - regenerate prompts
     - regenerate copilot prompts
@@ -113,6 +123,8 @@ operations:
     - regenerate prompts dry run
     - refresh prompts dry run
     - refresh instructions dry run
+    - regenerate prompts incremental
+    - regenerate prompts force
     category: system
   threat_modeler_agent:
     name: Threat Modeler Agent
