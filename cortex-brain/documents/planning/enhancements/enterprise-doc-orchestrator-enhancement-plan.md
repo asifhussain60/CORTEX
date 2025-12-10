@@ -2,10 +2,64 @@
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 **Date:** December 10, 2025  
-**Version:** 1.3.0 - PHASE 2 COMPLETE | PHASE 3 IN PROGRESS  
+**Version:** 1.5.0 - PHASE 2 COMPLETE | PHASE 3 ACTIVE (Story Integration with Dual Image System)  
 **Plan Type:** Strategic Enhancement - Documentation System Redesign  
 **Estimated Duration:** 10-12 weeks  
 **Priority:** HIGH
+
+**Recent Major Updates:**
+- **Story Character Revision:** Miss G (imaginary muse) replacing real wife character throughout
+- **Comic Illustration System:** 12 B&W cartoon prompts created (separate from technical diagrams)
+- **Dual Image Strategy:** Entertainment (comic) vs Education (technical) clearly distinguished
+- **Character Designs:** Einstein professor, ethereal apparition, friendly robot specifications documented
+
+---
+
+## 📸 Quick Status Snapshot (December 10, 2025)
+
+**Current Focus:** Phase 3 - The Awakening Story Integration with Dual Image System
+
+**Story Revision Progress (Phase 3.1):**
+- ✅ **Character Nomenclature:** "Miss G" finalized (not just "G")
+- ✅ **Name Origin Story:** Developer variable naming humor added to Prologue
+- ✅ **Prologue:** Miss G introduction complete with meta-comedy
+- ✅ **Chapter 1:** Goldfish theory with Miss G vision/apparition
+- ✅ **Chapter 2:** SKULL rules with Miss G manifestation
+- ✅ **Chapter 3:** SQLite intervention enhanced with Miss G teachings
+- ⏳ **Chapters 4-10:** Character names replaced (sed), vision scene enhancement pending
+- 📋 **Chapter 11:** The 3.0 Revolution (not yet started)
+- 📊 **Progress:** ~600/1,600 lines revised (38% complete)
+
+**Comic Illustration System (Phase 3.3 Prep):**
+- ✅ **Folder Structure:** `docs/gh-pages/story/illustrations/prompts/` + `images/`
+- ✅ **12 DALL-E Prompts:** Complete with character design specifications
+  - Foundation: Character sheet, basement lab, coffee timeline
+  - Chapters: Prologue + Ch1-10 chapter openers
+- ✅ **Character Designs:** Einstein professor, ethereal muse, friendly robot
+- ✅ **README Documentation:** Clear distinction from technical diagrams
+- ⏳ **Image Generation:** Ready for DALL-E 3 (prompts complete)
+
+**Dual Image System Architecture:**
+- **System 1 - Technical Diagrams** (EXISTING): Professional presentation for education
+  - Location: `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/`
+  - Count: 10 images (architecture/feature documentation)
+  - Usage: GitHub Pages feature/architecture pages
+- **System 2 - Comic Illustrations** (NEW): B&W cartoons for entertainment
+  - Location: `docs/gh-pages/story/illustrations/`
+  - Count: 12 images (story humor/character moments)
+  - Usage: Story page ONLY (`docs/gh-pages/story/index.html`)
+
+**Recent Achievements:**
+- Chapter revision pattern established: Vision/apparition scenes for teachable moments
+- Enhancement plan holistically updated with dual image strategy
+- All character references consistent (Mr. Codenstein, Miss G, Copilot)
+- Git commits: 2 story revisions + 1 comic system setup
+
+**Next Immediate Steps:**
+1. Generate 12 comic illustrations with DALL-E 3 (use prompts in order)
+2. Complete Ch4-10 Miss G vision scene enhancements
+3. Draft Chapter 11 (The 3.0 Revolution) - Phase 2 achievements
+4. Build story page HTML with dual image integration (comic tops + technical callouts)
 
 ---
 
@@ -151,27 +205,40 @@ Transform the Enterprise Documentation Orchestrator from an admin-only utility i
   - `layouts/` - Sidebar, dashboard container, main content
   - Color variables: `--accent-primary: #00d4ff`, `--accent-secondary: #7b61ff`
   
-- **DALL-E Image Prompts & Narratives:**
-  - **CORTEX Brain:** 10 prompts in `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/prompts/`
-    - 01-four-tier-architecture.md, 02-skull-protection.md, 03-agent-system.md, etc.
-  - **CORTEX Brain Narratives:** 10 narratives in `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/narratives/`
-    - Presentation format with "Opening Statement", "What you see", "Key Takeaways"
-    - Includes metrics: 22 SKULL rules, 70 conversations, 8,429 nodes, 24,817 connections
-  - **User Features:** 8 prompts in `cortex-brain/documents/analysis/dalle-prompts/user-features/prompts/`
-    - 01-tdd-mastery.md, 02-dashboard-system.md, 03-skull-achievement.md, etc.
-**⚠️ Current Limitations:**
-- Documentation generated as MkDocs site (not optimized for GitHub Pages)
-- Admin-only access (not public-facing)
-- Scattered documentation files (no unified presentation)
-- Story outdated (doesn't cover CORTEX 3.0 features)
-- No CORTEX 4.0 roadmap visualization
-- **No mock data elimination process** (risk of placeholder content in production)
-- **No continuous refresh automation** (docs become stale after feature additions)
-- **No real content validation** (links may point to non-existent features)
-  - Master narrative: `cortex-brain/documents/narratives/THE-AWAKENING-OF-CORTEX-MASTER.md`
-  - Hilarious first-person narrative (Asif "Codenstein" Hussain)
-  - Mrs. Codenstein character, coffee mug timeline, basement chaos
-  - Currently tells CORTEX 1.0-2.0 story - **NEEDS UPDATE to 3.0**
+- **DALL-E Image Systems (TWO DISTINCT SYSTEMS):**
+  
+  **System 1: Technical Architecture Diagrams** (EXISTING)
+  - **Location:** `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/`
+  - **Subfolders:** `prompts/` + `narratives/`
+  - **Purpose:** Professional diagrams for architecture/feature documentation
+  - **Style:** Technical presentation format (polished, corporate)
+  - **Count:** 10 images covering Four-Tier Brain, SKULL Protection, Agent System, etc.
+  - **Usage:** GitHub Pages architecture pages, feature documentation, technical callouts
+  - **Metrics Included:** 22 SKULL rules, 70 conversations, 8,429 nodes, 24,817 connections
+  
+  **System 2: Comic Story Illustrations** (NEW - PHASE 3)
+  - **Location:** `docs/gh-pages/story/illustrations/`
+  - **Subfolders:** `prompts/` + `images/`
+  - **Purpose:** Visual comedy for "The Awakening" story page entertainment
+  - **Style:** Black & white cartoons (newspaper comic strip aesthetic)
+  - **Count:** 12 images (character sheet + 11 chapter openers)
+  - **Usage:** Story page ONLY, NOT for technical documentation
+  - **Character Designs:**
+    - **Mr. Codenstein:** Einstein-style crazy professor (wild white hair, thick glasses, lab coat)
+    - **Miss G:** Pretty ethereal apparition (elegant, translucent, shimmer effect)
+    - **Copilot:** Friendly robot (rounded design, emoji-screen face, evolving personality)
+  - **Status:** Prompts complete (9 files, 1,086 lines), ready for DALL-E generation
+
+- **The Awakening Story Assets:**
+  - **Master narrative:** `cortex-brain/documents/narratives/THE-AWAKENING-OF-CORTEX-MASTER.md` (1,769 lines)
+  - **Status:** Partial revision complete (Prologue + Ch1-3 with Miss G character)
+  - **Character Updates:**
+    - ✅ "Asif" → "Mr. Codenstein" (Einstein-style professor)
+    - ✅ "Mrs. Codenstein" → "Miss G" (imaginary girlfriend/muse, ethereal apparition)
+    - ✅ Name origin story: Shortened "girlfriend" to "G" like a variable (developer efficiency humor)
+    - ⏳ Ch4-10: Sed replacements complete, selective Miss G vision scene enhancements pending
+  - **Educational Purpose:** Each chapter teaches specific CORTEX concept through comedy
+  - **Coffee Mug Timeline:** 17 mugs (1.0-2.0) → 23 mugs (includes 3.0) - visual metaphor for Tier evolution
 
 - **Admin Dashboard Components:**
   - `components/onboarding-tab.js` (1,697 lines) - 6-stage progressive learning
@@ -934,9 +1001,10 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 - Complete story page with 11 chapters (including new Chapter 11)
 - Chapter navigation sidebar + reading progress bar
 - Coffee mug timeline visualization (D3.js)
-- **12 comic illustrations** (black & white cartoons) for story humor/character moments
-- **10 technical DALL-E diagrams** (presentation style) for educational callouts
-- Both image systems optimized and integrated with clear distinction
+- **DUAL IMAGE SYSTEM:**
+  - **12 comic illustrations** (B&W cartoons, newspaper style) - Entertainment, chapter openers, story page ONLY
+  - **10 technical DALL-E diagrams** (professional presentation style) - Education, technical callouts, feature/architecture pages
+  - **Clear separation:** Different folders, different styling, different usage contexts
 - Character reference sidebar explaining narrative devices
 - Print stylesheet
 - Social sharing functionality
@@ -944,9 +1012,14 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 **Phase 3 Acceptance Criteria (Summary):**
 - **Educational Objective Met:** Story effectively teaches CORTEX architecture/features through entertaining narrative
 - **Character Revision Complete:** All "Asif" → "Mr. Codenstein", all "Mrs. Codenstein" → "Miss G" (imaginary muse)
-- **Character Designs Consistent:** Einstein-style professor, pretty ethereal apparition, friendly robot maintained across all comic illustrations
+- **Character Designs Consistent:** Einstein-style professor, ethereal apparition, friendly robot maintained across all 12 comic illustrations
 - **Teachable Moments Clear:** Each chapter explains specific technical concept (Tiers, SKULL, agents, optimization, etc.)
-- **Image Systems Distinguished:** Comic illustrations (entertainment) clearly separated from technical diagrams (education) in both location and presentation
+- **IMAGE SYSTEMS VALIDATED:**
+  - **Comic illustrations** (entertainment): B&W cartoons, <100KB each, character-consistent, newspaper aesthetic
+  - **Technical diagrams** (education): Professional presentation, <150KB each, metrics visible
+  - **Separation enforced:** Comic images ONLY on story page, technical diagrams ONLY on feature/architecture pages
+  - **Visual distinction clear:** Different CSS styling (.comic-illustration vs .technical-diagram), different borders/shadows
+  - **Beta reader validation:** Readers can distinguish entertainment images from educational diagrams without confusion
 - Story readable and engaging (humor maintains reader interest)
 - All 11 chapters present with continuity maintained
 - Navigation functional (sidebar, progress bar)
@@ -957,7 +1030,6 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 - Mobile responsive
 - Print version clean
 - Performance optimized (lazy loading, <2s load)
-- **Validation:** Beta readers confirm story makes CORTEX easier to understand vs traditional docs AND can distinguish entertainment images from educational diagrams
 
 ---
 
@@ -1517,13 +1589,17 @@ Code: 'SF Mono', 'Monaco', 'Cascadia Code', monospace
 1. **Stakeholder Review** - Present this plan for feedback
 2. **Resource Allocation** - Confirm developer availability
 3. **Tool Setup** - Configure GitHub Pages, local Jekyll environment, Lighthouse CI, testing tools
-4. **Asset Inventory** - Verify all DALL-E prompts and images
-5. **Story Review** - Re-read "The Awakening" master document
+4. **Asset Inventory:**
+   - ✅ Comic illustration prompts: 12 prompts created (9 files, 1,086 lines) in `docs/gh-pages/story/illustrations/prompts/`
+   - ✅ Technical diagram prompts: 10 prompts in `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/`
+   - ⏳ Image generation: Both systems ready for DALL-E 3 generation
+5. **Story Review** - Re-read "The Awakening" master document (current: 38% revised with Miss G character)
 6. **Real Content Audit** - Identify what real content exists vs. what's aspirational
 7. **Mock Data Policy** - Establish zero-tolerance policy for placeholder content
 8. **Performance Budget** - Document target metrics (FCP < 1.5s, TTI < 3.5s, Lighthouse > 90)
 9. **Testing Strategy** - Define automated vs. manual testing approach
 10. **SEO Checklist** - Prepare sitemap, structured data templates, social preview images
+11. **Image System Validation** - Ensure dual image strategy documented in all relevant sections
 
 ### Week 1 Kickoff Tasks
 
@@ -1538,8 +1614,12 @@ Code: 'SF Mono', 'Monaco', 'Cascadia Code', monospace
 - **Recommendation:** Start with GitHub Pages default, add custom domain later
 
 **Decision 2: Image Generation**
-- Generate all 19 DALL-E images now or use placeholders?
-- **Recommendation:** If not generated by Phase 2, remove image placeholders (zero mock data policy)
+- Generate all DALL-E images now or use placeholders?
+- **TWO SEPARATE SYSTEMS:**
+  - **Comic illustrations (12):** Must generate in Phase 3 for story page launch
+  - **Technical diagrams (10):** Can be generated incrementally in Phase 2-3 as feature pages are built
+- **Recommendation:** Comic illustrations first (story dependency), technical diagrams as needed
+- **Zero Mock Data:** If not generated by page launch, remove image placeholders entirely
 
 **Decision 6: Testing Automation**
 - Automated testing in CI/CD or manual testing only?
@@ -1715,11 +1795,13 @@ Code: 'SF Mono', 'Monaco', 'Cascadia Code', monospace
    - Expand: `features/planning-system.html`, `features/dashboard-system.html`, `features/ado-operations.html`
    - Add full content for: `architecture/index.html`, `future/index.html`
 
-2. **DALL-E Image Integration:**
-   - Extract 19 prompts from `cortex-brain/documents/analysis/dalle-prompts/`
-   - Generate images with DALL-E 3
-   - Optimize as WebP format (<200KB each)
-   - Add to pages with narrative overlays
+2. **Technical DALL-E Diagram Integration:**
+   - Extract 10 prompts from `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/`
+   - Generate images with DALL-E 3 (professional presentation style)
+   - Optimize as WebP format (<150KB each)
+   - Add to architecture/feature pages with narrative overlays
+   - **Location:** `docs/gh-pages/architecture/diagrams/` or `docs/gh-pages/features/diagrams/`
+   - **NOT on story page** - technical diagrams for educational pages only
 
 3. **D3.js Visualizations:**
    - Architecture force graph (4-Tier Brain interactive)
@@ -1730,6 +1812,27 @@ Code: 'SF Mono', 'Monaco', 'Cascadia Code', monospace
    - 15+ feature detail pages (currently have 1: TDD Mastery)
    - API reference auto-generation from docstrings
    - Getting Started tutorial (5-minute setup)
+
+### Next Steps for Phase 3
+
+1. **Complete Story Revision:**
+   - Enhance Ch4-10 with Miss G vision scenes (following established pattern from Prologue+Ch1-3)
+   - Draft Chapter 11: The 3.0 Revolution (150-200 lines)
+   - Final character consistency pass
+
+2. **Generate Comic Illustrations:**
+   - Use 12 prompts in `docs/gh-pages/story/illustrations/prompts/`
+   - Generate with DALL-E 3 (B&W cartoon style)
+   - Save to `docs/gh-pages/story/illustrations/images/`
+   - Optimize as WebP (<100KB each)
+   - **ONLY for story page** - entertainment images separate from technical diagrams
+
+3. **Build Story Page:**
+   - Implement `docs/gh-pages/story/index.html` with dual image system
+   - Comic illustrations at chapter tops (entertainment)
+   - Technical diagrams in callouts (education, links to architecture pages)
+   - Coffee mug timeline (D3.js)
+   - Navigation sidebar + progress bar
 
 ---
 
