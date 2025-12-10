@@ -669,7 +669,7 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 "The Awakening of CORTEX" is a 1,603-line tech comedy chronicling CORTEX's evolution from 1.0 to 2.0 through the eyes of Mr. Codenstein. Written as a first-person narrative, the story follows the journey from Copilot's amnesia crisis to the breakthrough Four-Tier Brain architecture. Key elements include:
 - **Characters:** 
   - **Mr. Codenstein** (protagonist) - Solo developer building CORTEX in basement laboratory
-  - **"G"** (imaginary girlfriend/muse) - Appears in visions providing wisdom, asking hard questions, keeping him honest (narrative device for teaching moments)
+  - **"Miss G"** (imaginary girlfriend/muse) - Appears in visions/apparitions providing wisdom, asking hard questions, keeping him honest (narrative device for teaching moments). Name origin: Mr. Codenstein shortened "girlfriend" to "G" like a variable—developer efficiency applied to emotional support.
   - **Copilot** (amnesiac AI) - Evolves from frustrated assistant to personality-aware partner
   - **Coffee Mugs** (17 → 23) - Visual metaphor for Tier architecture evolution
 - **Setting:** New Jersey basement "cognitive architecture laboratory"
@@ -678,16 +678,20 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 - **Educational Integration:** Each chapter = teachable moment mapping to DALL-E narrative images and real CORTEX features
 - **Target Audience:** Developers learning CORTEX who prefer engaging narrative over dry documentation
 
-#### Increment 3.1: Story Content Preparation (1 day)
+#### Increment 3.1: Story Content Preparation (1 day) ⏳ IN PROGRESS
 **Tasks:**
-- [ ] **Revise Complete Awakening Narrative** (`THE-AWAKENING-OF-CORTEX-MASTER.md`, 1,603 lines):
-  - Replace "Asif" with "Mr. Codenstein" throughout
-  - Replace "Mrs. Codenstein" (real wife, Lichfield UK) with "G" (imaginary girlfriend/muse)
-  - Transform video call scenes into vision/apparition comedy (G appears when needed for teachable moments)
-  - Document 10 chapter themes emphasizing educational value
-  - Identify technical achievements mapped to story beats
-  - Extract character arc: Mr. Codenstein's journey with imaginary muse guiding him
-  - Note coffee mug metaphor instances (17 mugs = Tier timeline)
+- [x] **Revise Complete Awakening Narrative** (`THE-AWAKENING-OF-CORTEX-MASTER.md`, 1,603 lines):
+  - ✅ Character nomenclature finalized: "Miss G" (not just "G")
+  - ✅ Name origin story added: Developer efficiency humor (shortened "girlfriend" to "G" like a variable)
+  - ✅ Prologue revised with Miss G character introduction and meta-comedy
+  - ✅ Chapter 1 revised with Miss G vision/apparition during goldfish theory breakthrough
+  - ✅ Chapter 2 revised with Miss G manifestation during SKULL rules creation
+  - ⏳ Chapters 3-10: Character names replaced via sed, selective enhancement pending
+  - ⏳ Vision scenes to add: SQLite intervention (Ch3), agent coordination (Ch4), knowledge graph (Ch5), token crisis (Ch6), conversation capture (Ch7), cross-platform (Ch8), performance (Ch9), awakening (Ch10)
+  - [x] Document 10 chapter themes emphasizing educational value (see `phase-3-awakening-chapter-summary.md`)
+  - [x] Identify technical achievements mapped to story beats
+  - [x] Extract character arc: Mr. Codenstein's journey with imaginary muse guiding him
+  - [x] Note coffee mug metaphor instances (17 mugs = Tier timeline)
 - [ ] **Map DALL-E Narratives to Chapters:**
   - Chapter 1 (Amnesia Crisis) → `06-working-memory.md` (70 conversations, FIFO queue) - **Teaches:** Working memory persistence
   - Chapter 2 (Gatekeeper) → `02-skull-protection.md` + `09-protection-layers.md` (8 layers, 22 rules) - **Teaches:** Safety-first architecture

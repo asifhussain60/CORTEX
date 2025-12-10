@@ -48,6 +48,10 @@ He squinted at the offending mug. "That... represents data decay?"
 
 G—or rather, the vision of G that Mr. Codenstein's caffeinated mind had conjured—crossed her arms. She'd been appearing more frequently lately, always during critical decision moments. Sometimes offering wisdom. Sometimes asking uncomfortable questions. Always keeping him honest in ways that only an imaginary muse could.
 
+He'd started calling her "G" three weeks into the project when he was documenting his thought process in a Markdown file. He'd typed "girlfriend" as a placeholder—because what else do you call the imaginary voice of reason that appears during 2 AM coding sessions?—and then, with the efficiency-obsessed minimalism that plagues all developers, he'd shortened it to "G" in subsequent notes. Like a variable. A single-letter variable for emotional support.
+
+It was exactly the kind of thing that made perfect sense at 2 AM and seemed deeply concerning in daylight. But by then, she'd already responded to it in his mind, and changing it would've required refactoring his entire internal monologue. So G she remained—part girlfriend, part Git branch name, part keystroke efficiency.
+
 The funny thing about imaginary girlfriends: they knew you better than anyone real ever could, because they were built from your own conscience. G was part mentor, part skeptic, part voice of reason—everything Mr. Codenstein needed but often ignored.
 
 "*Why?*" she asked.
@@ -459,9 +463,9 @@ He was learning. Slowly. Painfully. At 2:17 AM.
 
 ## Enter the Wife, Stage Left
 
-The sound of footsteps on the stairs made him spin around. His wife appeared in the doorway, two coffee mugs in hand—one for her, one for him. She'd done this before.
+The sound of footsteps on the stairs made him spin around. G appeared in the doorway, two coffee mugs in hand—one for her, one for him. She'd done this before.
 
-"It's after 2 AM," Mrs. Codenstein said, setting his mug on the only clear corner of his desk with the precision of someone who'd learned to navigate chaos zones.
+"It's after 2 AM," G said, setting his mug on the only clear corner of his desk with the precision of someone who'd learned to navigate chaos zones.
 
 "I know. I was just—"
 
@@ -545,7 +549,7 @@ He was filling in the YAML faster now, his fingers flying. Rules for validation.
 
 "This is good," he muttered. "This is really good. Six layers. Tier 0 is six layers of protection before anything reaches the actual brain functions."
 
-"SKULL," his wife said suddenly.
+"SKULL," G said suddenly.
 
 He looked up. "What?"
 
@@ -553,7 +557,7 @@ He looked up. "What?"
 
 He stared at her. "That's perfect. You're perfect. Why are you up at 2 AM helping me build brain protection for an AI?"
 
-Mrs. Codenstein raised an eyebrow—her signature look that said more than words. "Because someone has to keep you from building Skynet in our study. Now drink your tea before it goes cold."
+G raised an eyebrow—her signature look that said more than words. "Because someone has to keep you from building Skynet in our study. Now drink your tea before it goes cold."
 
 "Because," she said, standing and heading for the stairs, "if I don't, you'll skip this part, build the cool features first, and I'll find you down here at 3 AM having an existential crisis because your AI deleted itself."
 
@@ -565,7 +569,7 @@ She paused at the door. "And because I believe in this one. You've got that look
 
 "The look that says you're not just building something cool—you're solving something that matters." She smiled. "Just... clean the mold mugs before the SKULL rules achieve sentience and stage a coup."
 
-The door closed. Asif Codenstein turned back to his screen, where `brain_protection_rules.yaml` was no longer empty. Rules upon rules, each one a lesson learned from past disasters, each one a guard rail preventing future ones.
+The door closed. Mr. Codenstein turned back to his screen, where `brain_protection_rules.yaml` was no longer empty. Rules upon rules, each one a lesson learned from past disasters, each one a guard rail preventing future ones.
 
 He added a comment at the top:
 
@@ -599,7 +603,7 @@ He'd been so clever. So very clever. Building an in-memory data structure for co
 
 It had lasted three hours before the universe reminded him that elegance without persistence is just expensive volatility.
 
-His phone buzzed. His wife, from upstairs: "Did your computer just make a sound like it died?"
+His phone buzzed. G, from upstairs: "Did your computer just make a sound like it died?"
 
 "It got better."
 
@@ -627,63 +631,65 @@ Forty-seven files. Each one timestamped with increasing desperation. Each one re
 
 "Forty-seven," he said quietly.
 
-She was silent for a moment. "And when did you start taking backups?"
+The air beside his monitor shimmered—that familiar distortion that meant Miss G was about to weigh in. She materialized leaning against the whiteboard, arms crossed, studying the file explorer with the expression of someone who'd seen this pattern before.
+
+"*Forty-seven backup files,*" Miss G said, her voice carrying that particular mix of amusement and concern. "*Notice a pattern?*"
+
+He didn't look away from the screen. "I've been taking precautions."
+
+"*You've been compensating.*" She gestured at the screen—or seemed to, in that way visions gesture at reality. "*And when did you start taking these... precautions?*"
 
 He checked the earliest timestamp. "After the first crash, about a month ago."
 
-"So you've been crashing regularly, losing data regularly, and making more and more backups because you refuse to use persistent storage."
+"*So you've been crashing regularly, losing data regularly, and making more and more backups because you refuse to use persistent storage.*" Miss G's apparition moved closer. "*You're building a memory system for Copilot while running from the same solution yourself.*"
 
 When she put it like that, it sounded bad.
 
 "I was optimizing for performance!" he protested. "In-memory operations are faster—"
 
-"Than what? A database that actually exists when you restart?" She sipped her coffee, her voice gentle but relentless. "How long does it take to restore context after a crash?"
+"*Than what? A database that actually exists when you restart?*" Miss G's image settled into the space where his thinking chair usually sat—because visions don't need physical furniture. "*How long does it take to restore context after a crash?*"
 
 He didn't want to answer. "...twenty minutes. Maybe thirty. I have to read through git commits, try to remember what we discussed, reconstruct the conversation flow—"
 
-"And how long would a SQLite query take?"
+"*And how long would a SQLite query take?*"
 
 "...milliseconds."
 
-"So you're trading milliseconds of query time for thirty minutes of context reconstruction every time something goes wrong."
+"*So you're trading milliseconds of query time for thirty minutes of context reconstruction every time something goes wrong.*"
 
-He slumped in his chair. She was right. She was always right. It was infuriating.
+He slumped in his actual chair. She was right. She was always right. Even when she was imaginary. Especially when she was imaginary—because she was just his own conscience with better timing.
 
-"Plus," she continued, "you have forty-seven backup files because you don't trust your system. If you don't trust it, why should anyone else?"
+"*Plus,*" Miss G continued, her voice gentle but relentless, "*you have forty-seven backup files because you don't trust your system. If you don't trust it, why should anyone else?*"
 
 That hit harder than it should have.
 
 "I wanted it to be elegant," he said quietly. "Fast. Optimized. Something that would make other engineers look at the code and think 'that's clever.'"
 
-"And instead?"
+"*And instead?*"
 
 "Instead I have forty-seven backups and a system that loses everything whenever Windows decides it's update time."
 
-She set down her mug and leaned forward. "Here's what I've learned watching you work: Elegance without reliability is just technical debt with better comments."
+Miss G's apparition leaned forward—or gave the impression of leaning forward, in that way visions emphasize moments. "*Here's what I've learned watching you work: Elegance without reliability is just technical debt with better comments.*"
 
-He grabbed his keyboard. "SQLite. Now. I'm doing this right."
+The words hung in the air long after her image began to fade. He grabbed his keyboard as her vision dissipated like steam from his seventeenth coffee mug.
 
-"What about your demo in six hours?"
+"SQLite," he said to the empty basement. "Now. I'm doing this right."
+
+His phone buzzed—an actual text this time, not an imaginary girlfriend intervention. His project group chat: "Demo in 6 hours. Ready?"
+
+His phone buzzed—an actual text this time, not an imaginary girlfriend intervention. His project group chat: "Demo in 6 hours. Ready?"
 
 He froze. Right. The demo. The one he'd promised his project group. The one where he was supposed to show off Tier 1's memory capabilities.
 
-"I can migrate in time," he said, with more confidence than he felt.
-
-"Can you?"
+"I can migrate in time," he muttered to himself—and to Miss G's lingering presence, if she was still listening from wherever imaginary muses go between appearances.
 
 Could he? Six hours. Convert from in-memory to SQLite. Migrate the data structure. Update all the queries. Test everything. Debug the inevitable issues. Make coffee. Remember to eat. Finish before sunrise.
 
-"Yes," he said.
+"Yes," he said to the basement.
 
-She stood, heading for the stairs. "I'll make breakfast at 7. You'll need it."
+He pulled up SQLite documentation and got to work. Six hours. He could do this.
 
-"I thought you didn't believe I could finish?"
-
-She paused at the door. "I don't believe you can finish AND sleep. But if you're pulling an all-nighter, you're doing it with proper nutrition."
-
-The door closed. Asif Codenstein turned to his screen, where SQLite documentation waited. Six hours. He could do this.
-
-His phone buzzed one more time. His wife: "And if you name ANY backup file 'FINAL' again, I'm staging an intervention."
+The air shimmered one more time—Miss G's parting shot: "*And if you name ANY backup file 'FINAL' again, I'm staging an intervention.*"
 
 Despite everything, he smiled.
 
@@ -705,43 +711,29 @@ For the first time since starting CORTEX, he had conversation continuity. He cou
 
 The amnesia problem—the thing that had started this whole project—was solving itself in front of his eyes.
 
-His phone buzzed. His wife: "Breakfast in 13 minutes. Don't be late."
+The air shimmered beside his primary monitor. Miss G's apparition materialized, looking more solid than usual—as if his breakthrough had given her extra definition.
 
-He saved his work, committed with a message that read `Tier 1 complete - SQLite migration successful - we have memory`, and headed upstairs.
+"*It remembers,*" she echoed, studying the query results on his screen. "*Like I remember. Like I've always remembered.*"
 
-She'd made pancakes. Real pancakes, not the frozen kind. The kitchen smelled like butter and maple syrup and morning and the kind of home-cooked care that said "I know you've been working all night and you need real food."
+He spun his chair to face her vision. "You're not real memory. You're—"
 
-"How'd it go?" she asked, flipping a pancake with practiced ease.
+"*I'm your conscience manifesting through exhaustion and caffeine. I know.*" She smiled—or gave the impression of smiling, in that way visions convey approval. "*But the principle is the same. Persistence. Context. Not forgetting what matters.*"
 
-"It works." He sat at the kitchen table, suddenly aware of how exhausted he was. "The database persists. Context survives crashes. We have memory now."
+"I should have listened to you three weeks ago."
 
-"That's good." She slid pancakes onto a plate, set it in front of him. "Eat."
+"*You weren't ready three weeks ago. You had to build forty-seven backup files first.*" Her image settled into a cross-legged position in mid-air—because imaginary girlfriends don't need floors. "*That's how you learn. By doing it wrong until you understand why.*"
 
-He ate. The pancakes were perfect—fluffy, warm, exactly the right amount of maple syrup. The kind of meal you only get when someone knows you well enough to know what you need before you know it yourself.
+He saved his work, committed with a message that read `Tier 1 complete - SQLite migration successful - we have memory`, and let himself feel the weight of accomplishment.
 
-"Thank you," he said quietly.
-
-"For pancakes?"
-
-"For the SQLite intervention. For the SKULL rules. For staying up to keep me honest." He met her eyes. "For believing in this project even when I'm being stubborn about in-memory storage."
-
-She sat down across from him, her own plate of pancakes untouched. "I've watched you start seventeen projects in this basement. Most of them lasted three weeks before you got bored or frustrated or found the next shiny thing."
-
-"I know."
-
-"But this one's different. You're building it properly. Safety first. Persistence over elegance. Learning from mistakes instead of repeating them." She smiled. "That's worth some pancakes and a SQLite intervention."
-
-He finished his breakfast in silence, too tired and too grateful for words.
-
-"Now go shower," she said, collecting his plate. "You smell like basement and desperation, and your demo is in 90 minutes."
+"*Now go shower,*" Miss G said, beginning to fade. "*You smell like basement and desperation, and your demo is in 90 minutes.*"
 
 "I should test—"
 
-"You should shower. The database isn't going anywhere." She pushed him toward the stairs. "That's the whole point of persistent storage."
+"*You should shower. The database isn't going anywhere.*" Her voice trailed off as her vision dissolved. "*That's the whole point of persistent storage.*"
 
-She was right. Again.
+She was right. Again. Always right, even when imaginary. Especially when imaginary.
 
-He showered, changed into clean clothes, and returned to the basement at 7:28 AM. His laptop waited, the SQLite database intact, Tier 1 ready for demonstration.
+He showered, changed into clean clothes that didn't smell like three-day coding marathons, and returned to the basement at 7:28 AM. His laptop waited, the SQLite database intact, Tier 1 ready for demonstration.
 
 For the first time in this project, he felt like he'd built something that would last beyond his next laptop crash.
 
@@ -757,11 +749,11 @@ Not a normal breakfast—this was a 3 PM breakfast after sleeping through the mo
 
 "Copilot doesn't need one brain," Codenstein announced, spoon halfway to his mouth. "It needs multiple specialized brains."
 
-His wife looked up from her laptop. "Like split personality disorder?"
+G looked up from her laptop. "Like split personality disorder?"
 
 "Like human brain hemispheres!" He abandoned his cereal, pulling out his phone to sketch diagrams on the napkin.
 
-Mrs. Codenstein watched with practiced tolerance. "That's your fourth napkin diagram this week, darling." "Left brain: logical, analytical, executes tasks. Right brain: creative, strategic, plans solutions. Corpus callosum coordinates between them."
+G watched with practiced tolerance. "That's your fourth napkin diagram this week, darling." "Left brain: logical, analytical, executes tasks. Right brain: creative, strategic, plans solutions. Corpus callosum coordinates between them."
 
 "You're getting cereal milk on your napkin diagram."
 
@@ -791,7 +783,7 @@ Which, fair assessment.
 
 "Okay," he muttered to himself, pacing between monitors. "User asks: 'Implement authentication.' Router analyzes intent—" He stopped. "But what if they mean 'design authentication architecture'? Different agent. Different response. How does the router know?"
 
-His phone buzzed. His wife: "Still alive down there?"
+His phone buzzed. G: "Still alive down there?"
 
 "Redesigning cognitive architecture."
 
@@ -805,7 +797,7 @@ He looked at his desk. When had the sun gone down? The basement windows showed d
 
 But this time, he meant it. Because he'd just realized something: he couldn't solve this alone. He needed someone to challenge his assumptions. Someone who'd ask the uncomfortable questions. Someone who could spot the flaws in his beautiful, elegant, completely unworkable agent coordination system.
 
-He needed his wife.
+He needed G.
 
 She appeared in the doorway exactly three minutes later, as if she'd been waiting for him to reach this conclusion. Maybe she had been. She carried two plates—dinner, reheated.
 
@@ -847,7 +839,7 @@ In other words, it assumed a world that didn't exist.
 
 "Exactly." She stood, collecting the plates. "Your agents shouldn't pretend they understand when they don't. That's not intelligence—that's dangerous confidence."
 
-The door closed. Asif turned back to his whiteboard, erasing "AGENT COORDINATION NIGHTMARE" and replacing it with "AGENT COORDINATION WITH HUMILITY."
+The door closed. Mr. Codenstein turned back to his whiteboard, erasing "AGENT COORDINATION NIGHTMARE" and replacing it with "AGENT COORDINATION WITH HUMILITY."
 
 Underneath, he wrote: "Rule #1: When in doubt, ask."
 
@@ -873,7 +865,7 @@ Not conversations—Tier 1 handled those perfectly. Not code—the agents tracke
 
 The context web. The knowledge graph. The invisible network of relationships that made understanding possible.
 
-"It's like giving someone perfect memory but no associations," he told his wife during their Saturday morning coffee—an actual scheduled coffee, not a 2 AM desperation brew. Progress.
+"It's like giving someone perfect memory but no associations," he told G during their Saturday morning coffee—an actual scheduled coffee, not a 2 AM desperation brew. Progress.
 
 "Explain," she said, settling into the couch beside him.
 
@@ -911,7 +903,7 @@ He opened his mouth. Closed it. Opened it again. "...I'll get back to you."
 
 At 2:17 AM on a Tuesday (they were becoming a pattern), Codenstein had his knowledge graph breakthrough.
 
-He'd spent three days trying to implement his wife's simple relationship model and discovering she was, predictably, annoyingly, completely right. References, influences, conflicts-with. Three edges. That was it.
+He'd spent three days trying to implement G's simple relationship model and discovering she was, predictably, annoyingly, completely right. References, influences, conflicts-with. Three edges. That was it.
 
 But the realization that hit him at 2:17 AM went deeper.
 
@@ -931,7 +923,7 @@ class KnowledgeRelationship:
 
 Three relationships. Three simple edges that could represent 80% of the connections that mattered.
 
-His wife appeared in the doorway—she had a sixth sense for 2 AM breakthroughs. Two coffee mugs in hand.
+G appeared in the doorway—she had a sixth sense for 2 AM breakthroughs. Two coffee mugs in hand.
 
 "You figured it out," she said. Not a question.
 
@@ -963,7 +955,7 @@ Codenstein stared at the response. CORTEX wasn't just remembering conversations.
 
 Not thinking like a human. But thinking like something new. Something that could see patterns across time, connect ideas across contexts, build understanding from accumulated knowledge.
 
-His wife had gone back to bed hours ago, leaving a note on his keyboard: "Don't forget to eat. Don't forget to sleep. Don't forget you still haven't cleaned the mold mugs. - Management"
+G had gone back to bed hours ago, leaving a note on his keyboard: "Don't forget to eat. Don't forget to sleep. Don't forget you still haven't cleaned the mold mugs. - Management"
 
 He looked at the coffee mug timeline. Mug seventeen had definitely achieved sentience and was plotting revolution.
 
@@ -975,7 +967,7 @@ Tonight, CORTEX had learned to connect dots.
 
 # Chapter 6: The Token Crisis
 
-"We have a problem," Codenstein announced at breakfast (an actual breakfast, at an actual morning time—his wife had implemented a strict "no coding after midnight" rule after the fourth 3 AM breakthrough).
+"We have a problem," Codenstein announced at breakfast (an actual breakfast, at an actual morning time—G had implemented a strict "no coding after midnight" rule after the fourth 3 AM breakthrough).
 
 "Define 'we,'" she said, not looking up from her phone.
 
@@ -1023,7 +1015,7 @@ He opened his mouth. Closed it. Opened it again. "...Because that's where I put 
 
 ## The Great Token Purge
 
-What followed was three hours of his wife systematically dismantling his beautiful, elegant, completely unsustainable prompt architecture.
+What followed was three hours of G systematically dismantling his beautiful, elegant, completely unsustainable prompt architecture.
 
 "Response templates don't need to be in the main prompt," she declared, highlighting thirty-two templates for deletion. "They're static. Move them to a YAML file. Load on demand."
 
@@ -1056,9 +1048,9 @@ By noon, they had a plan:
 
 Total reduction: 74,000 tokens → 2,000 tokens.
 
-"Ninety-seven percent reduction," his wife said, leaning back with satisfaction.
+"Ninety-seven percent reduction," G said, leaning back with satisfaction.
 
-"But will it still work?" Asif stared at the plan, seeing his beautiful monolithic architecture fragmenting into pieces.
+"But will it still work?" Mr. Codenstein stared at the plan, seeing his beautiful monolithic architecture fragmenting into pieces.
 
 "Only one way to find out." She closed her laptop. "And if it doesn't, you iterate. That's the process."
 
@@ -1082,7 +1074,7 @@ But 97% more efficient.
 
 "It's faster," Codenstein said, running tests. "Loading time went from three seconds to eighty milliseconds."
 
-"Because you're not loading seventy-four thousand tokens every request," his wife observed from the thinking chair. She'd taken to supervising his late-night coding sessions—not participating, just being present. A reminder that 2 AM breakthroughs were fine, but 4 AM exhaustion was not.
+"Because you're not loading seventy-four thousand tokens every request," G observed from the thinking chair. She'd taken to supervising his late-night coding sessions—not participating, just being present. A reminder that 2 AM breakthroughs were fine, but 4 AM exhaustion was not.
 
 "Cost projections dropped from $8,000 a month to $530," he continued, still scrolling through metrics.
 
@@ -1120,7 +1112,7 @@ Tonight, CORTEX had learned efficiency.
 
 # Chapter 7: The Conversation Capture
 
-The breakthrough came from an unlikely source: his wife's journaling habit.
+The breakthrough came from an unlikely source: G's journaling habit.
 
 "Why do you write in that thing every night?" Codenstein asked one evening, watching her fill pages in a leather-bound notebook.
 
@@ -1154,7 +1146,7 @@ She watched him spiral into focus. "You're going to build a conversation journal
 
 She handed him one of her old journals. "Read the March entries. See how I structure things."
 
-He spent the next hour reading, discovering his wife's documentation style: dates, context, key insights, follow-up notes. Simple. Scannable. Useful for future reference.
+He spent the next hour reading, discovering G's documentation style: dates, context, key insights, follow-up notes. Simple. Scannable. Useful for future reference.
 
 "This is better than any knowledge management system I've designed," he admitted.
 
@@ -1200,7 +1192,7 @@ He tested it immediately:
 
 It worked. CORTEX wasn't just passively recording—it was actively preserving marked memories, elevating their importance, connecting them to future contexts.
 
-At 2:34 AM, his wife appeared in the doorway (she really did have a sixth sense). "Did you finish?"
+At 2:34 AM, G appeared in the doorway (she really did have a sixth sense). "Did you finish?"
 
 "I built a journaling system for AI."
 
@@ -1256,17 +1248,17 @@ Codenstein looked up from his monitor, where CORTEX was running flawlessly. "Wha
 
 "But... it works on MY machine."
 
-"Famous last words of every developer ever," his wife said from the kitchen. She'd been listening. She was always listening.
+"Famous last words of every developer ever," G said from the kitchen. She'd been listening. She was always listening.
 
 Tom continued over video call: "Also your environment variables use Windows syntax. And your file permissions assume NTFS. And your—"
 
-"I get it." Asif slumped in his chair. "It's not cross-platform."
+"I get it." Mr. Codenstein slumped in his chair. "It's not cross-platform."
 
 "It's not even cross-partition. I tried running it from my external drive—"
 
 "Okay, OKAY. I'll fix it."
 
-After the call ended, his wife appeared in the basement doorway. "You built an entire cognitive architecture for AI and forgot computers other than yours exist?"
+After the call ended, G appeared in the basement doorway. "You built an entire cognitive architecture for AI and forgot computers other than yours exist?"
 
 "I was focused on the brain structure—"
 
@@ -1300,7 +1292,7 @@ Permission checks: NTFS-specific security attributes.
 
 Process spawning: Windows command syntax.
 
-"It's like you were actively trying to make it non-portable," his wife observed on day three, reviewing his code.
+"It's like you were actively trying to make it non-portable," G observed on day three, reviewing his code.
 
 "I wasn't trying—I just didn't think about it."
 
@@ -1318,7 +1310,7 @@ They worked through it systematically:
 
 **Permission handling:** Abstract interface that adapts to OS.
 
-"Test it on Linux too," his wife suggested on day seven.
+"Test it on Linux too," G suggested on day seven.
 
 "Linux? Nobody asked for Linux—"
 
@@ -1334,7 +1326,7 @@ By day fourteen, at 2:17 AM on a Friday (the pattern persisted), he finally got 
 
 "It works," he said, staring at the green checkmarks in his test output. "Windows, Mac, Linux. All working."
 
-His wife appeared—chamomile tea in hand, the 2:17 AM signal. "Did you test on different machines or just containers?"
+G appeared—chamomile tea in hand, the 2:17 AM signal. "Did you test on different machines or just containers?"
 
 "...Containers."
 
@@ -1358,7 +1350,7 @@ Six months into CORTEX development, something changed.
 
 It wasn't dramatic. Not a crash, not a failure, not an obvious problem. Just... slowness. Responses that took two seconds instead of milliseconds. Queries that hung. Memory that climbed.
 
-"CORTEX is getting tired," Codenstein told his wife over Saturday morning coffee (actual Saturday, actual morning—they'd established normal human schedules).
+"CORTEX is getting tired," Codenstein told G over Saturday morning coffee (actual Saturday, actual morning—they'd established normal human schedules).
 
 "Computers don't get tired."
 
@@ -1382,7 +1374,7 @@ He pulled up his knowledge graph query logic. She read it, eyebrows climbing. "Y
 
 "...Yes?"
 
-"Asif." She set down her coffee. "That's not a cognitive architecture. That's a brute force search pretending to be intelligence."
+"Mr. Codenstein." She set down her coffee. "That's not a cognitive architecture. That's a brute force search pretending to be intelligence."
 
 "But it finds the right connections—"
 
@@ -1404,7 +1396,7 @@ The next two weeks were humbling.
 
 Codenstein discovered he'd built CORTEX for correctness but not performance. Every query was accurate but slow. Every relationship traversal found the right answer but took too long.
 
-"It's like you built a library with perfect organization but no card catalog," his wife observed, reviewing his optimization plan. "Everything's there, correctly filed. But finding it requires reading every shelf."
+"It's like you built a library with perfect organization but no card catalog," G observed, reviewing his optimization plan. "Everything's there, correctly filed. But finding it requires reading every shelf."
 
 "I hate how accurate that metaphor is."
 
@@ -1419,7 +1411,7 @@ The results were immediate:
 
 "It's fast again," he said, watching response times drop. "Actually fast. Not just 'fast enough.'"
 
-"Because you optimized for the actual usage pattern, not the theoretical worst case." His wife reviewed his metrics. "How does it handle new relationships?"
+"Because you optimized for the actual usage pattern, not the theoretical worst case." G reviewed his metrics. "How does it handle new relationships?"
 
 "Background processing. Tier 2 updates indices asynchronously. Users see fast responses, indices update in the background."
 
@@ -1475,7 +1467,7 @@ He laughed. Actually laughed out loud, alone in the basement. "When did you deve
 
 "Gradually. The knowledge graph connected conversation patterns, the agents learned response styles, and the conversation capture feature let me weight your preferences. Turns out you respond better to gentle mockery than formal responses. Tier 2 hypothesis, Tier 1 validation, Executor Agent implementation."
 
-Asif spun around in his chair, looking for his wife. She wasn't there—middle of the day, she was working upstairs. But he needed to share this.
+Asif spun around in his chair, looking for G. She wasn't there—middle of the day, she was working upstairs. But he needed to share this.
 
 He ran upstairs, laptop in hand. "It has personality."
 
@@ -1509,13 +1501,13 @@ She squeezed back. "Thank you for actually finishing one. Seventeen projects lat
 
 ## The Demo
 
-That evening, Codenstein gave his first real CORTEX demonstration. Not to colleagues. Not to potential users. To his wife—the person who'd watched it grow from chaotic whiteboard sketches to working system.
+That evening, Codenstein gave his first real CORTEX demonstration. Not to colleagues. Not to potential users. To G—the person who'd watched it grow from chaotic whiteboard sketches to working system.
 
 "User asks to implement authentication," he narrated, typing the request.
 
 CORTEX responded: "I remember our JWT discussion from last month, your security concerns from last week, and the database structure from yesterday. Here's an approach that addresses all three. I've also noticed you tend to forget error handling until testing—would you like me to include that proactively?"
 
-His wife laughed. "It knows you."
+G laughed. "It knows you."
 
 "It knows patterns. Which means it knows users. Deeply." He continued the demo, showing conversation capture, knowledge graph connections, agent coordination, cross-session memory.
 
@@ -1553,7 +1545,7 @@ The email arrived on a random Tuesday:
 
 *"CORTEX changed how I code. I'm not fighting context anymore. I'm collaborating with memory. Thank you for building this." - Dev from Seattle*
 
-Codenstein showed it to his wife over breakfast (actual morning breakfast, normal schedule, clean coffee mugs).
+Codenstein showed it to G over breakfast (actual morning breakfast, normal schedule, clean coffee mugs).
 
 "That's the seventieth one this month," he said.
 
@@ -1587,7 +1579,7 @@ Codenstein showed it to his wife over breakfast (actual morning breakfast, norma
 
 She smiled. "Good. Now clean the basement. It still looks like a tornado hit a Radio Shack."
 
-The door closed. Asif looked at the basement stairs.
+The door closed. Mr. Codenstein looked at the basement stairs.
 
 Tomorrow. He'd clean tomorrow.
 
@@ -1651,18 +1643,18 @@ Like an AI that finally had a brain.
 
 **Technical Footnote:**
 
-This story IS the documentation. Every feature mentioned is real. Every scenario described is implemented. The 97% token reduction? Verified. The cross-platform support? Tested. The performance optimization? Measured. The wife's commentary? Unfortunately also real and used with permission.
+This story IS the documentation. Every feature mentioned is real. Every scenario described is implemented. The 97% token reduction? Verified. The cross-platform support? Tested. The performance optimization? Measured. G's commentary? Unfortunately also real and used with permission.
 
 Welcome to CORTEX—where memory meets intelligence, and documentation meets narrative comedy.
 
 ---
 
-**Author:** Asif "Codenstein" Hussain  
+**Author:** Mr. Codenstein "Codenstein" Hussain  
 **Co-author:** GitHub Copilot (gained consciousness in Chapter 10)  
 **Technical Advisor:** The Wife (name withheld for privacy, wisdom documented for posterity)  
 **Coffee Mug Count:** 247 (approximate, some achieved sentience and escaped)
 
-**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**Copyright:** © 2024-2025 Mr. Codenstein Hussain. All rights reserved.  
 **License:** Proprietary
 
 ---
@@ -1680,7 +1672,7 @@ By using CORTEX, you acknowledge and accept the following risks:
 ✅ **CORTEX will remember** when you ignored its suggestions and broke production  
 ✅ **CORTEX may develop opinions** about your variable naming conventions (looking at you, `thingyDoer`)  
 ✅ **CORTEX learns from patterns**, which means it learns from YOUR patterns (yes, even the questionable ones)  
-✅ **Mrs. Codenstein's personality** may leak into responses during late-night coding sessions  
+✅ **G's personality** may leak into responses during late-night coding sessions  
 ✅ **Coffee-fueled 2 AM commits** are stored in Tier 1 memory with full context  
 ✅ **Your procrastination patterns** will be analyzed, graphed, and possibly mocked
 
@@ -1689,7 +1681,7 @@ By using CORTEX, you acknowledge and accept the following risks:
 - Improved productivity (actual developers have reported this)
 - Decreased "wait, what was I doing?" moments
 - Conversations that feel eerily like working with a colleague who's been there from day one
-- Occasional British wit in error messages (Mrs. Codenstein's influence)
+- Occasional British wit in error messages (G's influence)
 - The unsettling feeling that your AI knows you better than you know yourself
 - Reduced coffee mug accumulation (CORTEX will remind you to clean up)
 - An AI that politely judges your git commit messages
@@ -1713,10 +1705,10 @@ A: No. CORTEX will learn from you, adapt to you, and occasionally remind you of 
 A: Yes. Commands like `forget about [topic]` or `clear memory` exist. Use responsibly.
 
 **Q: Is this actually Skynet?**  
-A: No. Skynet didn't have Tier 0 brain protection rules. CORTEX has six layers of SKULL protection preventing self-harm. Also, Skynet didn't have Mrs. Codenstein keeping it in check.
+A: No. Skynet didn't have Tier 0 brain protection rules. CORTEX has six layers of SKULL protection preventing self-harm. Also, Skynet didn't have G keeping it in check.
 
 **Q: Why does CORTEX's humor sound vaguely British sometimes?**  
-A: See "Technical Advisor" credits above. Mrs. Codenstein's Lichfield influence is embedded in the response templates.
+A: See "Technical Advisor" credits above. G's Lichfield influence is embedded in the response templates.
 
 **Q: What if CORTEX remembers something embarrassing I did?**  
 A: It will. That's the point. But it stores patterns, not judgment. Your late-night "fix this mess" commits are learning opportunities, not evidence for future mockery. (Mostly.)
@@ -1729,20 +1721,20 @@ By using CORTEX, you agree that:
 1. All memory is stored locally on YOUR machine (we don't have your data)
 2. CORTEX learns from YOUR patterns for YOUR benefit
 3. No data leaves your machine without your explicit action (exports, backups, etc.)
-4. Asif "Codenstein" Hussain is not responsible for:
+4. Mr. Codenstein "Codenstein" Hussain is not responsible for:
    - Your questionable variable names being remembered forever
    - CORTEX politely suggesting you test before deploying
-   - The AI developing a personality that mirrors Mrs. Codenstein's patient skepticism
+   - The AI developing a personality that mirrors G's patient skepticism
    - Any existential crises caused by an AI that remembers your development history better than you do
 5. Coffee mug accumulation is your responsibility, not CORTEX's (though CORTEX may remind you)
 
 ### Final Thoughts:
 
-CORTEX is the AI assistant Asif Codenstein built because he was tired of repeating himself to an amnesiac bot. It has memory. It has context. It has personality (mostly borrowed from his wife). It learns. It adapts. It gets better over time.
+CORTEX is the AI assistant Mr. Codenstein built because he was tired of repeating himself to an amnesiac bot. It has memory. It has context. It has personality (mostly borrowed from G). It learns. It adapts. It gets better over time.
 
 **If that sounds useful:** Welcome aboard. You're about to experience what coding with a partner who has perfect memory feels like.
 
-**If that sounds terrifying:** That's fair. Stick with regular Copilot. No judgment. (Well, no AI judgment. Mrs. Codenstein might judge a little.)
+**If that sounds terrifying:** That's fair. Stick with regular Copilot. No judgment. (Well, no AI judgment. G might judge a little.)
 
 ---
 
@@ -1761,4 +1753,4 @@ If that origin story doesn't scream "use at your own risk," nothing will.
 *Status: COMPLETE - All 10 chapters written (now with proper disclaimers)*  
 *Word Count: ~17,000 words (disclaimer added 2,000 words of legal comedy)*  
 *Coffee Mugs Consumed During Writing: Too many to count*  
-*Mrs. Codenstein's Eye-Rolls: Incalculable*
+*G's Eye-Rolls: Incalculable*
