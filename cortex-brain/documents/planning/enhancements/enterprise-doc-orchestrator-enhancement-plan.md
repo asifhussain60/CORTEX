@@ -1044,7 +1044,7 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 **Tasks:**
 - [x] **Create Comic Illustration System** (NEW):
   - ✅ Created folder structure: `docs/gh-pages/story/illustrations/prompts/` + `images/`
-  - ✅ Generated 12 DALL-E prompts for comic illustrations:
+  - ✅ Generated 12 DALL-E prompts for comic illustrations (individual files, one per chapter):
     1. `00-character-sheet.md` - Character reference (Mr. Codenstein, Miss G, Copilot)
     2. `00-basement-laboratory.md` - Setting establishment (chaotic workspace)
     3. `00-coffee-timeline.md` - Visual metaphor guide (17 mugs evolution)
@@ -1059,6 +1059,7 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
     12. `ch8-platform-chaos.md` - Cross-platform nightmare
     13. `ch9-brute-force.md` - Sledgehammer optimization metaphor
     14. `ch10-personality-emergence.md` - Copilot evolution three-panel
+  - ✅ Each prompt in separate file for clear image-to-chapter mapping
   - ✅ Created README.md clearly distinguishing two image systems
   - ✅ Documented character design specifications for consistency
 - [ ] **Generate Comic Illustrations:**
