@@ -187,10 +187,10 @@ cortex-brain/documents/planning/orchestrators/
 ├── 00-sub-plan-template.md                    ✅ CREATED
 ├── README.md                                   ✅ CREATED
 ├── 00-feature-discovery-module-plan.md        ⏳ TO CREATE
-├── 01-tdd-orchestrator-plan.md                ⏳ TO CREATE
+├── (TDD Orchestrator - Phase 2 Complete, 1,764 LOC)
 ├── 02-devops-orchestrator-plan.md             ⏳ TO CREATE
 ├── 03-qa-orchestrator-plan.md                 ⏳ TO CREATE
-├── 04-planning-orchestrator-plan.md           ⏳ TO CREATE (note: planning-orchestrator-plan.md exists)
+├── (Planning Orchestrator - Phase 2 Complete, 819 LOC)
 ├── 05-execution-orchestrator-plan.md          ⏳ TO CREATE
 ├── 06-documentation-orchestrator-plan.md      ⏳ TO CREATE
 ├── 07-intelligence-orchestrator-plan.md       ✅ CREATED (Phase 4 - Dec 10, 2025)
