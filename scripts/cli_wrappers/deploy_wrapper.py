@@ -69,6 +69,7 @@ class DeployWrapper(BaseCLIWrapper):
                     message_parts.append(f"Package: {result['package_path']}")
                 
                 return OperationResult(
+                    success=result.get('success', False),
                     status=status,
                     message='\n'.join(message_parts),
                     data=result,
