@@ -144,32 +144,46 @@ Old MkDocs-based orchestrator files moved to `cortex-brain/archives/deprecated-o
 ## 🎯 Vision & Objectives
 
 ### Executive Vision
-Transform the Enterprise Documentation Orchestrator from an admin-only utility into a **world-class documentation platform** that showcases CORTEX 3.0 as the definitive solution for next-generation AI development. Deploy as a beautiful, fully functional **GitHub Pages site** with the same glassmorphism design system used in the Admin Dashboard.
+Transform the Enterprise Documentation Orchestrator into a **fully autonomous regeneration engine** that continuously maintains a world-class GitHub Pages documentation platform. The orchestrator discovers features from the codebase, regenerates ALL documentation from scratch (including story content and DALL-E image prompts), and ensures the site always reflects the current state of CORTEX.
 
 ### Core Objectives
 
-**1. Professional Documentation Website (GitHub Pages)**
+**1. Autonomous Regeneration System**
+- **Discovery-First Architecture:** Scan `cortex-operations.yaml`, brain protection rules, git history, test coverage
+- **Full Rebuild Strategy:** Delete existing pages → regenerate from templates → deploy (no incremental updates)
+- **Change Detection:** Identify new features, updated features, removed features
+- **Zero Manual Intervention:** Orchestrator runs end-to-end without human input
+- **Repeatable Execution:** Can run daily/weekly to keep docs synchronized with codebase
+
+**2. Dynamic Content Generation**
+- **Feature Pages:** Auto-generate one page per operation from `cortex-operations.yaml`
+- **Story Integration:** Auto-update "The Awakening" chapters with new feature references
+- **DALL-E Prompt Lifecycle:** Generate prompts → delete old PNGs → signal regeneration needed
+- **Template-Based Output:** All content from Jinja2 templates (no hardcoded pages)
+- **Real Metrics Only:** Pull actual data (test pass rates, coverage %, operation counts)
+
+**3. Professional Documentation Website (GitHub Pages)**
 - Beautiful, responsive design matching Admin Dashboard CSS
 - Fully functional navigation with working links
 - Professional presentation for leadership and enterprise clients
 - Mobile-responsive with accessibility features
 
-**2. Visual Excellence**
+**4. Visual Excellence**
 - **CORTEX Logo** - Prominent display in hero section with animated entrance
-- Integrate DALL-E generated images from existing prompts (cortex-brain & user-features)
+- **DALL-E Image Regeneration:** Both technical diagrams + comic illustrations regenerated on feature changes
 - Rich D3.js interactive visualizations
 - Mermaid diagrams for architecture flows
 - Glassmorphism design system with dark mode
 - Favicon and social media preview images
 
-**3. Comprehensive Content**
-- Complete CORTEX 3.0 feature showcase
-- **SKULL Rulebook** - Prominent showcase of 22 Tier 0 governance rules (CORTEX's secret sauce)
-- "The Awakening of CORTEX" story (hilarious narrative updated for 3.0)
+**5. Comprehensive Content**
+- Complete CORTEX feature showcase (auto-discovered from codebase)
+- **SKULL Rulebook** - Auto-updated with current Tier 0 governance rules
+- "The Awakening of CORTEX" story (auto-updated with new features as story moments)
 - Technical documentation with real API references
 - User guides and getting started materials
 
-**4. CORTEX 4.0 Future Vision**
+**6. CORTEX 4.0 Future Vision**
 - Dedicated "FUTURE" section showcasing CORTEX 4.0 roadmap
 - Executive-level summaries with visual clarity
 - Strategic planning with D3.js timelines and dependency graphs
@@ -181,20 +195,61 @@ Transform the Enterprise Documentation Orchestrator from an admin-only utility i
 
 ### Critical Requirements
 
+**🚨 FULL REGENERATION STRATEGY:**
+- **Discovery Phase First:** Scan `cortex-operations.yaml` (302+ operations), brain protection rules, git history, test metrics
+- **Delete Before Generate:** Remove existing feature pages, regenerate from templates (clean slate every run)
+- **Change Detection:** 
+  - **New Features:** Generate new pages, add to navigation, integrate into story
+  - **Updated Features:** Regenerate existing pages with current data
+  - **Removed Features:** Delete pages, remove from navigation, remove from story references
+- **Template-Driven:** ALL content from Jinja2 templates (no hardcoded HTML pages)
+- **Autonomous Execution:** Orchestrator runs end-to-end without manual intervention
+
+**🔄 CONTINUOUS REGENERATION TRIGGERS:**
+- **Manual:** `cortex docs refresh` command
+- **Automated (GitHub Actions):**
+  - On push to `cortex-operations.yaml` (feature added/removed)
+  - On push to `cortex-brain/brain-protection-rules.yaml` (SKULL rule changes)
+  - On push to story master file (narrative updates)
+  - Weekly scheduled run (ensure sync even without code changes)
+- **Post-Feature Delivery:** Part of feature completion workflow
+
 **🚨 ZERO MOCK DATA POLICY:**
 - **No placeholder content** - All text must be real, accurate documentation
 - **No broken links** - Every link must point to existing content or be removed
 - **No stub APIs** - Only document APIs that exist in codebase
 - **Real metrics only** - Pull actual data from system (git, tests, catalog)
 - **Validated code examples** - All examples must be tested and working
-- **Continuous refresh** - Documentation auto-updates when features added
+- **Auto-cleanup** - Remove documentation for deleted features
 
-**🔄 CONTINUOUS REFRESH STRATEGY:**
-- **Trigger:** Enterprise Documentation Orchestrator execution
-- **Frequency:** On-demand (manual) + automated (GitHub Actions on feature add)
-- **Scope:** Full regeneration OR incremental update (detect changes)
-- **Integration:** Part of feature delivery workflow (add feature → refresh docs)
-- **Versioning:** Track last updated timestamp, CORTEX version alignment
+**�️ DALL-E IMAGE PROMPT REGENERATION:**
+- **System 1 - Technical Diagrams:**
+  - **Location:** `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/`
+  - **Regeneration Strategy:** 
+    - Delete ALL existing `*.md` prompt files in `prompts/`
+    - Regenerate prompts based on current architecture (scan src/ directories)
+    - Delete ALL `*.png` files in `narratives/` (signal: regeneration required)
+    - Generate new narrative text files matching current features
+  - **Discovery:** Scan orchestrator modules, agent modules, tier implementations
+  
+- **System 2 - Comic Story Illustrations:**
+  - **Location:** `docs/gh-pages/story/illustrations/`
+  - **Regeneration Strategy:**
+    - Preserve `00-character-sheet.md`, `00-basement-laboratory.md`, `00-coffee-timeline.md` (foundational)
+    - Delete chapter-specific prompts (`prologue-deadline.md`, `ch1-*.md`, etc.)
+    - Regenerate chapter prompts based on current story content
+    - Delete ALL `*.png`/`*.webp` files in `images/` (signal: regeneration required)
+  - **Story Integration:** Auto-generate prompts from story chapter content
+
+**📖 STORY AUTO-UPDATE STRATEGY:**
+- **Protected Content:** Character descriptions, name origin story, tone/voice preserved
+- **Auto-Generated Content:**
+  - Chapter sections mentioning specific CORTEX features (updated when features change)
+  - Technical achievement lists (regenerated from git history, test metrics)
+  - Coffee mug count (calculated from architecture complexity metrics)
+  - Feature teachable moments (auto-inserted based on chapter theme + feature mapping)
+- **New Chapter Detection:** If major features added (e.g., CORTEX 4.0 content), auto-draft new chapter outline
+- **Feature Removal:** Remove references to deleted operations from story text
 
 ### Existing Assets
 
@@ -430,7 +485,193 @@ docs/ (GitHub Pages root)
 
 ## 📊 Implementation Phases
 
-### Phase 1: Foundation (Week 1-2) ✅ COMPLETE
+### Phase 0: Orchestrator Architecture Design (NEW - Week 0)
+**Duration:** 3-4 days  
+**Complexity:** HIGH  
+**Objective:** Design the autonomous regeneration engine before implementing content
+
+#### Increment 0.1: Discovery System Design (1 day)
+**Tasks:**
+- [ ] **Design Feature Discovery Module:**
+  - Parse `cortex-operations.yaml` → extract all operations (302+)
+  - Scan `cortex-brain/brain-protection-rules.yaml` → extract SKULL rules
+  - Git history analysis → identify recent features (last 3 months)
+  - Test coverage scan → calculate per-operation coverage %
+  - Module structure scan → identify all orchestrators, agents, tiers
+  
+- [ ] **Design Change Detection System:**
+  - **Feature Change Detection:**
+    - Compare previous run manifest vs current discovery results
+    - Identify: new operations, updated operations, removed operations
+    - Track file changes (git diff) to detect scope modifications
+  
+  - **DALL-E Prompt Change Detection (NEW - Intelligent Regeneration):**
+    - **Technical Diagrams (Architecture-Driven):**
+      - Map each prompt to source modules (e.g., `03-agent-system.md` → `src/cortex_agents/`)
+      - Calculate content hash of source modules (git SHA + file sizes)
+      - Compare with previous manifest: `{prompt: {hash, modules[], last_modified}}`
+      - **IF hash differs:** Mark for regeneration (delete prompt + PNG)
+      - **IF hash same:** Preserve (no code change, no regeneration needed)
+    
+    - **Comic Illustrations (Narrative-Driven):**
+      - Map each chapter prompt to story chapter text
+      - Calculate hash of chapter content (text only, ignore whitespace)
+      - Compare with previous manifest: `{prompt: {chapter_hash, last_modified}}`
+      - **IF hash differs:** Mark for regeneration (story chapter changed)
+      - **IF hash same:** Preserve (narrative unchanged)
+    
+    - **Protected Files (Never Regenerate):**
+      - Foundation files (`00-*.md`) - Visual consistency baseline
+      - Manually refined prompts (marked in manifest)
+      - These establish character designs, never auto-regenerate
+  
+  - **Change Report Generation:**
+    - Operations: "3 new, 2 updated, 1 removed"
+    - Technical diagrams: "3 of 10 need regeneration (agent system, orchestrators, SKULL)"
+    - Comic illustrations: "2 of 10 need regeneration (Ch4, Ch7)"
+    - Story content: "4 chapters modified, 6 unchanged"
+    - Total regeneration: "5 prompts + 5 images (50% of content preserved)"
+  
+- [ ] **Design Template Registry:**
+  - Feature page template (Jinja2) - one template for all feature pages
+  - Architecture page template - dynamic tier/component rendering
+  - Story chapter template - auto-insert feature references
+  - DALL-E prompt template - consistent prompt structure
+  - Navigation template - auto-generate from feature catalog
+
+**Deliverables:**
+- Discovery module specification (Python class design)
+- Change detection algorithm (diff logic)
+- Template registry structure (Jinja2 template hierarchy)
+- Manifest schema (JSON format for tracking state)
+
+**Acceptance Criteria:**
+- Discovery spec covers all data sources (YAML, git, tests, modules)
+- Change detection handles all scenarios (add, update, delete)
+- Template structure supports full regeneration
+- Manifest tracks enough state for intelligent diff
+
+#### Increment 0.2: Regeneration Pipeline Design (1 day)
+**Tasks:**
+- [ ] **Design 6-Stage Pipeline:**
+  - **Stage 1:** Discovery (scan codebase, build feature inventory)
+  - **Stage 2:** Cleanup (delete existing generated files)
+  - **Stage 3:** Generation (render templates with discovered data)
+  - **Stage 4:** Story Update (auto-insert feature references)
+  - **Stage 5:** Image Prompt Regeneration (delete old PNGs, generate new prompts)
+  - **Stage 6:** Deployment (commit changes, push to GitHub)
+  
+- [ ] **Design File Management Strategy:**
+  - **Generated Files Marker:** Add `<!-- AUTO-GENERATED -->` comment to all generated files
+  - **Protected Files List:** Maintain registry of manually-enhanced files (don't delete)
+  - **Deletion Safety:** Only delete files with auto-generated marker
+  - **Backup Strategy:** Git commit before deletion (easy rollback)
+  
+- [ ] **Design Story Integration System:**
+  - **Feature-to-Chapter Mapping:** YAML config mapping operations to chapters
+  - **Auto-Insert Points:** Template markers in story for feature mentions
+  - **Preservation Rules:** Never modify character descriptions, dialogue, tone
+  - **Update Strategy:** Replace template sections, preserve narrative prose
+
+**Deliverables:**
+- Pipeline architecture diagram (6 stages with data flow)
+- File management rules (generated vs protected)
+- Story integration specification (mapping config, insertion rules)
+- Safety mechanisms (backup, rollback, validation)
+
+**Acceptance Criteria:**
+- Pipeline supports full end-to-end regeneration
+- File management prevents accidental deletion of manual work
+- Story integration preserves narrative quality
+- Safety mechanisms enable easy rollback
+
+#### Increment 0.3: Configuration System Design (1 day)
+**Tasks:**
+- [ ] **Design Orchestrator Configuration:**
+  - **Feature Mapping Config:** `feature-to-chapter-mapping.yaml` (which features go in which chapters)
+  - **Protected Files Config:** `protected-files.yaml` (manual enhancements to preserve)
+  - **Template Variables:** `template-variables.yaml` (site-wide variables: logo path, colors, metrics)
+  - **Generation Rules:** `generation-rules.yaml` (what content to generate, what to skip)
+  
+- [ ] **Design Manifest Format:**
+  - **Previous Run State:**
+    - Feature list with metadata (name, description, status)
+    - File list with checksums (generated files only)
+    - Git SHA of last regeneration
+    - Timestamp and operation count
+  
+  - **DALL-E Prompt Tracking (NEW - Intelligent Regeneration):**
+    ```json
+    {
+      "dalle_prompts": {
+        "technical_diagrams": {
+          "03-agent-system.md": {
+            "content_hash": "a1b2c3d4",
+            "source_modules": ["src/cortex_agents/", "src/orchestrators/intent_router/"],
+            "last_modified": "2025-12-08T10:30:00Z",
+            "generated_images": ["03-agent-system.png"],
+            "status": "unchanged"
+          },
+          "05-orchestrator-ecosystem.md": {
+            "content_hash": "e5f6g7h8",
+            "source_modules": ["src/orchestrators/"],
+            "last_modified": "2025-12-09T14:20:00Z",
+            "generated_images": ["05-orchestrator-ecosystem.png"],
+            "status": "modified"
+          }
+        },
+        "comic_illustrations": {
+          "ch4-agent-chaos.md": {
+            "content_hash": "i9j0k1l2",
+            "story_chapter": "Chapter 4: The Agent Uprising",
+            "chapter_text_hash": "m3n4o5p6",
+            "last_modified": "2025-12-07T09:15:00Z",
+            "generated_images": ["ch4-agent-chaos.png", "ch4-agent-chaos.webp"],
+            "status": "unchanged"
+          },
+          "ch7-capture-moment.md": {
+            "content_hash": "q7r8s9t0",
+            "story_chapter": "Chapter 7: The Lightbulb Moment",
+            "chapter_text_hash": "u1v2w3x4",
+            "last_modified": "2025-12-10T11:45:00Z",
+            "generated_images": ["ch7-capture-moment.png", "ch7-capture-moment.webp"],
+            "status": "modified"
+          }
+        },
+        "protected_foundation": [
+          "00-character-sheet.md",
+          "00-basement-laboratory.md",
+          "00-coffee-timeline.md",
+          "prologue-deadline.md"
+        ]
+      }
+    }
+    ```
+  
+  - **Change Detection Fields:**
+    - Previous hash vs current hash comparison
+    - Status: `unchanged`, `modified`, `new`, `deleted`
+    - Regeneration flag: `true` if prompt needs regeneration
+  
+  - **Metrics Tracking:**
+    - Page count, image count, operation count per run
+    - Regeneration stats: "5 of 10 prompts regenerated (50% preserved)"
+    - Performance: Time per stage, total regeneration time
+  
+  - **Storage Location:** `cortex-brain/orchestrator-manifests/enterprise-docs-manifest.json`
+  - **Version Control:** Track manifest in git (enables history analysis, rollback)
+
+**Deliverables:**
+- Configuration file schemas (4 YAML files)
+- Manifest format specification (JSON schema)
+- Sample configuration files with documentation
+- Configuration validation rules
+
+**Acceptance Criteria:**
+- Configuration covers all orchestrator behavior
+- Manifest enables intelligent change detection
+- Configuration files are human-readable and documented
+- Validation prevents invalid configuration
 **Duration:** 1 day (Actual: December 10, 2025)  
 **Complexity:** MEDIUM  
 **Objective:** Set up GitHub Pages infrastructure and design system  
@@ -892,7 +1133,7 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 **Tasks:**
 - [x] **Create Comic Illustration System** (NEW):
   - ✅ Created folder structure: `docs/gh-pages/story/illustrations/prompts/` + `images/`
-  - ✅ Generated 12 DALL-E prompts for comic illustrations:
+  - ✅ Generated 12 DALL-E prompts for comic illustrations (individual files, one per chapter):
     1. `00-character-sheet.md` - Character reference (Mr. Codenstein, Miss G, Copilot)
     2. `00-basement-laboratory.md` - Setting establishment (chaotic workspace)
     3. `00-coffee-timeline.md` - Visual metaphor guide (17 mugs evolution)
@@ -907,6 +1148,7 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
     12. `ch8-platform-chaos.md` - Cross-platform nightmare
     13. `ch9-brute-force.md` - Sledgehammer optimization metaphor
     14. `ch10-personality-emergence.md` - Copilot evolution three-panel
+  - ✅ Each prompt in separate file for clear image-to-chapter mapping
   - ✅ Created README.md clearly distinguishing two image systems
   - ✅ Documented character design specifications for consistency
 - [ ] **Generate Comic Illustrations:**
@@ -1161,51 +1403,219 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 **Complexity:** HIGH  
 **Objective:** Create executive-ready roadmap presentation
 
-#### Increment 4.1: Strategic Vision Document (4 days)
+#### Increment 4.1: Strategic Vision Document (Template-Driven) (4 days)
 **Tasks:**
-- [ ] Research CORTEX 4.0 possibilities (AI-first, multi-model, cloud-native)
-- [ ] Create executive summary (1-page)
-- [ ] Define strategic goals:
-  - Multi-model LLM support (GPT-4, Claude, Gemini, local models)
-  - Cloud-native deployment (Azure, AWS, GCP)
-  - Team collaboration features (shared brain, team workspaces)
-  - Enterprise SSO and RBAC
-  - Real-time collaboration (pair programming AI)
-  - Plugin marketplace (community extensions)
-- [ ] Timeline: Q1 2026 - Q4 2026
-- [ ] Resource requirements
-- [ ] Risk assessment
+- [ ] **Create Vision Data Configuration File:**
+  - **File:** `cortex-brain/documents/planning/cortex-4.0-vision.yaml`
+  - **Protected Content:** Manually curated (never auto-generated)
+  - **Structure:**
+    ```yaml
+    vision:
+      natural_language_evolution:
+        description: "Talk to CORTEX like a teammate"
+        capabilities: ["Intent understanding", "Context preservation", "Conversational debugging"]
+      self_optimizing_operations:
+        description: "CORTEX learns from every interaction"
+        examples: ["Auto-refine prompts based on success rate", "Suggest better workflows"]
+      multi_model_support:
+        description: "Choose the best LLM for each task"
+        models: ["GPT-4", "Claude", "Gemini", "Local models"]
+      cloud_native_deployment:
+        platforms: ["Azure", "AWS", "GCP"]
+        features: ["Auto-scaling", "Team workspaces", "Shared brain"]
+      enterprise_features:
+        security: ["SSO", "RBAC", "Audit logs"]
+        collaboration: ["Pair programming AI", "Team chat integration"]
+      community_expansion:
+        marketplace: ["Plugin system", "Community extensions", "Template gallery"]
+    roadmap:
+      milestones:
+        - name: "CORTEX 3.1"
+          target: "Q1 2025"
+          features: ["Enhanced story system", "Comic illustrations", "Improved discovery"]
+        - name: "CORTEX 3.2"
+          target: "Q2 2025"
+          features: ["Multi-model support", "Plugin architecture"]
+        - name: "CORTEX 4.0"
+          target: "Q4 2025"
+          features: ["Cloud-native", "Enterprise SSO", "Team collaboration"]
+    ```
+
+- [ ] **Research CORTEX 4.0 Possibilities (Discovery-Based):**
+  - **Scan Enhancement Catalog:** Filter for `status: planned` + `priority: high`
+  - **GitHub Issues Analysis:** Extract feature requests with most upvotes
+  - **Community Feedback:** Scan `cortex-brain/feedback/` for patterns
+  - **Technology Trends:** Research emerging AI capabilities (not implemented yet, but document for future)
+  
+- [ ] **Generate Executive Summary Page (Template-Driven):**
+  - **Template:** `templates/vision/executive-summary.html.jinja2`
+  - **Data Source:** `cortex-4.0-vision.yaml`
+  - **Content Sections:**
+    - One-page overview (≤ 1000 words)
+    - Strategic goals (6+ from vision YAML)
+    - Timeline (Q1 2025 - Q4 2026, calculated from roadmap milestones)
+    - Resource requirements (estimated from enhancement complexity)
+    - Risk assessment (technical risks, dependency risks)
+  - **Dynamic Elements:**
+    - Feature count: `{{ enhancements | selectattr('status', 'planned') | count }}`
+    - Estimated delivery: `{{ calculate_timeline(enhancements, velocity) }}`
+  
+- [ ] **Auto-Generate Strategic Goals:**
+  - Pull from vision YAML + enhancement catalog
+  - Group by category (AI-first, cloud-native, collaboration, security)
+  - For each goal: description, success metrics, dependencies
+  - Link to detailed feature pages
+  
+- [ ] **Calculate Timeline & Resources:**
+  - **Velocity-Based Projection:**
+    - Use manifest data: features/month (from git history)
+    - Project each milestone based on complexity + dependencies
+    - Add buffer (±1 month per quarter)
+  - **Resource Estimation:**
+    - High complexity features: 2-3 weeks
+    - Medium: 1 week
+    - Low: 2-3 days
+    - Total estimated effort: sum of all planned enhancements
+  
+- [ ] **Risk Assessment (Auto-Generated):**
+  - **Technical Risks:** Extract from enhancement notes (dependency risks, complexity risks)
+  - **Timeline Risks:** Velocity fluctuation, blocked dependencies
+  - **Resource Risks:** Team capacity, external dependencies (LLM APIs)
+  - Render as risk matrix (likelihood × impact)
 
 **Deliverables:**
-- Executive summary
-- Strategic goals document
-- Timeline draft
+- `cortex-brain/documents/planning/cortex-4.0-vision.yaml` (vision data configuration)
+- `docs/gh-pages/vision/executive-summary.html` (template-driven executive summary)
+- `docs/gh-pages/vision/strategic-goals.html` (auto-generated goals from YAML + enhancements)
+- Timeline projection module (Python script calculating delivery dates)
+- Risk assessment page (auto-generated from enhancement metadata)
 
 **Acceptance Criteria:**
-- Executive summary ≤ 1 page
-- 6+ strategic goals defined
-- Timeline spans 12 months
-- Risk assessment complete
+- Executive summary ≤ 1 page (1000 words max)
+- Strategic goals: 6+ defined (pulled from vision YAML)
+- Timeline: 12 months (Q1 2025 - Q4 2025) with calculated delivery dates
+- Resource requirements: Auto-estimated from enhancement complexity
+- Risk assessment: Auto-generated from enhancement notes + dependencies
+- Vision YAML protected (preserved during regeneration)
+- All pages regenerated every run (reflect current backlog)
 
-#### Increment 4.2: Interactive Roadmap (4 days)
+#### Increment 4.2: Interactive Roadmap (Manifest-Driven) (4 days)
 **Tasks:**
-- [ ] Design D3.js timeline visualization
-- [ ] Add interactive milestones (hover for details)
-- [ ] Create dependency graph (what depends on what)
-- [ ] Add progress indicators (planned, in-progress, completed)
-- [ ] Integrate Gantt chart for phases
-- [ ] Add filtering (by team, by priority, by quarter)
-- [ ] Create printable roadmap version
+- [ ] **Implement Roadmap Calculation Logic:**
+  - **Data Sources:**
+    - Enhancement Catalog (all planned work)
+    - Manifest history (previous run velocity)
+    - Git history (feature delivery rate, cycle time)
+  - **Velocity Calculation:**
+    - Scan git history: enhancements closed in last 90 days
+    - Calculate: features/month = closed_enhancements / 3
+    - Project: remaining backlog ÷ velocity = months to completion
+  - **Priority Sorting Algorithm:**
+    - High priority enhancements first (from `priority` field)
+    - Dependencies satisfied before dependents
+    - Community-requested higher (GitHub issue upvotes if available)
+  - **Timeline Projection:**
+    - Use velocity + priority to estimate when each feature ships
+    - Add confidence intervals (±1 month buffer per quarter)
+    - Handle dependency chains (Feature B can't start until Feature A done)
+
+- [ ] **Design D3.js Timeline Visualization (Template-Driven):**
+  - **Data Format:** JSON generated from manifest + enhancement catalog
+  - **Visual Elements:**
+    - Timeline axis (quarters: Q1 2025 → Q4 2025)
+    - Milestone markers (CORTEX 3.1, 3.2, 4.0)
+    - Feature bars (length = estimated duration)
+    - Color coding: Priority (red = high, yellow = medium, green = low)
+  - **Interactivity:**
+    - Hover: Show feature details (title, description, estimated effort)
+    - Click: Navigate to feature detail page
+    - Filter: By category (AI, cloud, security, UI)
+    - Zoom: Focus on specific quarter
+  - **Template:** `templates/vision/roadmap-timeline.html.jinja2`
+  - **Data Binding:** `{{ roadmap_data | tojson }}` (JSON passed to D3.js)
+
+- [ ] **Create Dependency Graph (Auto-Generated):**
+  - **Extract Dependencies:**
+    - From enhancement metadata: `depends_on: [feature-id-1, feature-id-2]`
+    - From code analysis: scan imports, module dependencies
+  - **Graph Rendering:**
+    - Nodes: Features (colored by status: planned/in-progress/completed)
+    - Edges: Dependencies (arrows showing "A requires B")
+    - Layout: Hierarchical (top = no dependencies, bottom = many dependencies)
+  - **Interactivity:**
+    - Click node: Show feature details
+    - Highlight path: Show all dependencies for a feature
+    - Filter: Show only high-priority features
+  - **Library:** D3.js force-directed graph or Cytoscape.js
+  - **Template:** `templates/vision/dependency-graph.html.jinja2`
+
+- [ ] **Add Progress Indicators (Real-Time):**
+  - **Status Calculation:**
+    - Planned: Enhancement exists in catalog, not started
+    - In-Progress: Git branch exists + recent commits (last 7 days)
+    - Completed: Merged to main + closed in enhancement catalog
+  - **Visual Representation:**
+    - Progress bars (% complete per milestone)
+    - Status badges (planned/in-progress/completed)
+    - Color coding (gray/yellow/green)
+  - **Auto-Update:** Regenerated every orchestrator run (always current)
+
+- [ ] **Integrate Gantt Chart (Template-Driven):**
+  - **Data Source:** Enhancement catalog + velocity calculation
+  - **Chart Elements:**
+    - Rows: Features (grouped by milestone)
+    - Columns: Time (weeks or months)
+    - Bars: Estimated duration (start date → end date)
+    - Dependencies: Lines connecting dependent features
+  - **Library:** D3.js Gantt or Frappe Gantt
+  - **Interactivity:**
+    - Drag to adjust timeline (read-only in this version)
+    - Hover: Show feature details
+    - Filter: By team, priority, category
+  - **Template:** `templates/vision/gantt-chart.html.jinja2`
+
+- [ ] **Add Filtering Capabilities:**
+  - **Filter Dimensions:**
+    - By team: Tier 0/1/2/3 teams, orchestrators, agents
+    - By priority: High, medium, low
+    - By quarter: Q1, Q2, Q3, Q4
+    - By category: AI, cloud, security, UI, performance
+    - By status: Planned, in-progress, completed
+  - **UI:** Checkbox/dropdown filters above visualization
+  - **Implementation:** JavaScript filter function, re-render on change
+
+- [ ] **Create Printable Roadmap Version:**
+  - **Print-Friendly CSS:** Hide navigation, optimize for paper
+  - **Static Snapshot:** Render current roadmap state (no interactivity)
+  - **Format:** Letter (8.5×11) or A4
+  - **Sections:**
+    - Executive summary (1 page)
+    - Timeline visualization (1 page)
+    - Feature list by milestone (2-3 pages)
+    - Dependency graph (1 page)
+    - Risk assessment (1 page)
+  - **Generation:** PDF export via print dialog or wkhtmltopdf
+  - **Auto-Dated:** Include "Generated: [timestamp]" on each page
 
 **Deliverables:**
-- Interactive D3.js timeline
-- Dependency graph
-- Gantt chart
+- Roadmap calculation module (Python script, velocity + timeline projection)
+- `docs/gh-pages/vision/interactive-roadmap.html` (D3.js timeline)
+- `docs/gh-pages/vision/dependency-graph.html` (feature dependency visualization)
+- `docs/gh-pages/vision/gantt-chart.html` (Gantt chart with filtering)
+- `docs/gh-pages/vision/roadmap-print.html` (print-friendly static version)
+- `static/js/roadmap-visualization.js` (D3.js visualization logic)
+- `static/data/roadmap-data.json` (auto-generated from manifest + enhancements)
 
 **Acceptance Criteria:**
-- Timeline interactive (click/hover)
-- Dependencies clear
-- Gantt chart accurate
+- Timeline interactive (hover shows details, click navigates to feature)
+- Dependencies clear (arrows show "A requires B")
+- Gantt chart accurate (dates calculated from velocity + priority)
+- Progress indicators reflect current state (planned/in-progress/completed)
+- Filtering works (by team, priority, quarter, category, status)
+- Printable version ≤ 8 pages, professionally formatted
+- Roadmap data auto-generated every run (no manual updates)
+- Timeline updates reflect current backlog (no stale features)
+- Confidence intervals visible (±1 month buffer per quarter)
 - Filters working
 
 #### Increment 4.3: Future Vision Pages (3 days)
@@ -1277,48 +1687,161 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 - All code examples tested and working
 - Navigation only includes real, existing content
 
-#### Increment 5.2: Continuous Refresh Automation (2 days)
+#### Increment 5.2: Continuous Refresh Automation & Full Regeneration (3 days)
 **Tasks:**
-- [ ] **Design auto-refresh trigger system:**
-  - GitHub Actions workflow triggered on:
-    - New feature added to `cortex-operations.yaml`
-    - New module in `src/operations/modules/`
-    - Changes to `cortex-brain/brain-protection-rules.yaml`
-    - Updates to Enhancement Catalog
-  - Manual trigger: Run Enterprise Documentation Orchestrator
-- [ ] **Create documentation refresh pipeline:**
-  - Step 1: Feature discovery (scan `cortex-operations.yaml`)
-  - Step 2: API documentation regeneration (from docstrings)
-  - Step 3: Metrics update (from git history, test results)
-  - Step 4: Navigation rebuild (only real content)
-  - Step 5: Deploy to GitHub Pages
-- [ ] **Implement incremental update strategy:**
-  - Detect what changed (git diff)
-  - Regenerate only affected pages
-  - Update navigation if new features added
-  - Rebuild search index
-- [ ] **Add refresh documentation:**
-  - README: "How to refresh documentation"
-  - Command: `python -m cortex_brain.admin.scripts.documentation.enterprise_documentation_orchestrator`
-  - CI/CD: GitHub Actions workflow file
-  - Schedule: Weekly automated refresh (optional)
-- [ ] **Version tracking:**
-  - Add "Last Updated" timestamp to each page
-  - Show CORTEX version on site (match `CORTEX.prompt.md` version)
-  - Track documentation build history
+- [ ] **Implement Discovery-First Regeneration:**
+  - **Pre-Run Discovery:** Scan all data sources before any generation
+    - Parse `cortex-operations.yaml` → build operation catalog (302+ ops)
+    - Extract SKULL rules from `brain-protection-rules.yaml`
+    - Git log analysis → recent feature additions (last 90 days)
+    - Test coverage scan → per-operation metrics
+    - Module structure scan → orchestrators, agents, tiers inventory
+  - **Change Detection:** Compare with previous run manifest
+    - New operations → generate new pages
+    - Removed operations → delete pages + remove nav links
+    - Updated operations → regenerate pages with fresh data
+  - **Generate Change Report:** Document what changed this run
+  
+- [ ] **Implement Destructive Cleanup Phase:**
+  - **Safety First:** Git commit before any deletion (rollback point)
+  - **Selective Deletion:** 
+    - Delete files with `<!-- AUTO-GENERATED -->` marker only
+    - Preserve files in `protected-files.yaml` registry
+    - Delete feature pages: `docs/gh-pages/features/*.html` (except protected)
+    - Delete architecture pages: `docs/gh-pages/architecture/*.html` (except protected)
+  - **Image Prompt Cleanup (INTELLIGENT - Change-Driven):**
+    - **Technical DALL-E Diagrams:**
+      - Load previous manifest: `{prompt_file: {content_hash, source_modules, last_modified}}`
+      - For each technical prompt (01-10):
+        - Calculate current hash of source modules (e.g., `src/orchestrators/` for 05-orchestrator-ecosystem)
+        - Compare with manifest hash
+        - **IF CHANGED:** Delete prompt + matching PNG (e.g., `03-agent-system.md` + `03-agent-system.png`)
+        - **IF UNCHANGED:** Preserve both files (no regeneration needed)
+      - Report: "3 of 10 technical diagrams need regeneration"
+    
+    - **Comic Story Illustrations:**
+      - Load previous manifest: `{prompt_file: {story_chapter_hash, last_modified}}`
+      - For each chapter prompt (ch1-ch10):
+        - Calculate hash of corresponding story chapter text
+        - Compare with manifest hash
+        - **IF CHANGED:** Delete prompt + matching images (e.g., `ch4-agent-chaos.md` + `ch4-agent-chaos.png/webp`)
+        - **IF UNCHANGED:** Preserve both files (story hasn't changed)
+      - Report: "2 of 10 chapter illustrations need regeneration"
+    
+    - **Protected Foundation Files (NEVER DELETE):**
+      - `00-character-sheet.md` + PNG - Character consistency baseline
+      - `00-basement-laboratory.md` + PNG - Setting reference
+      - `00-coffee-timeline.md` + PNG - Visual metaphor guide
+      - `prologue-deadline.md` + PNG - Story opener (manually refined)
+    
+    - **Deletion Strategy:**
+      - Only delete if: `current_hash != manifest_hash`
+      - Match by filename: `ch4-agent-chaos.md` → delete `ch4-agent-chaos.{png,webp}`
+      - Log deletions: "Deleted ch4-agent-chaos (Agent system code changed)"
+      - Preserve if unchanged: "Kept ch5-graph-overload (Knowledge graph unchanged)"
+  
+  - **Navigation Cleanup:** Delete auto-generated navigation JSON (always regenerate)
+  
+- [ ] **Implement Template-Based Generation:**
+  - **Feature Pages:** One Jinja2 template → generate N pages (one per operation)
+    - Pull operation metadata from catalog
+    - Render with real metrics (test coverage, usage count, etc.)
+    - Auto-generate code examples from actual codebase
+  - **Architecture Pages:** Dynamic rendering based on discovered modules
+    - Tier pages: Generated from actual tier implementations
+    - SKULL page: Generated from brain-protection-rules.yaml
+    - Orchestrator ecosystem: Generated from src/orchestrators/ scan
+  - **DALL-E Prompts:** Template-based prompt generation
+    - Technical diagrams: One prompt per discovered architecture component
+    - Comic illustrations: One prompt per story chapter
+  
+- [ ] **Implement Story Auto-Update System (INTELLIGENT - Change-Driven):**
+  - **Chapter Change Detection:**
+    - Load previous manifest: `{chapter: {content_hash, template_sections[], last_modified}}`
+    - Calculate current hash for each chapter
+    - **IF CHANGED:** Update template sections only (preserve narrative prose)
+    - **IF UNCHANGED:** Skip chapter entirely (no modifications needed)
+    - Report: "4 of 11 chapters modified (Ch3, Ch7, Ch9, Ch11)"
+  
+  - **Feature Reference Insertion (Selective):**
+    - Scan story for `{{% feature:operation_name %}}` template markers
+    - Check if operation changed in manifest
+    - **IF operation updated:** Replace with current feature description + metrics
+    - **IF operation unchanged:** Preserve existing text (no re-insertion needed)
+    - Example: "Operation 'planning_orchestrator' unchanged → kept existing Ch6 reference"
+  
+  - **Chapter Section Updates (Only Modified Chapters):**
+    - `{{% technical_achievements %}}` → auto-generate from git history (last 90 days)
+    - `{{% coffee_mug_count %}}` → recalculate only if new features added
+    - `{{% teachable_moment:topic %}}` → update only if topic feature changed
+    - Skip update if section content hash unchanged
+  
+  - **Protected Content (NEVER Modify - Even if Chapter Changed):**
+    - Character descriptions (Mr. Codenstein, Miss G, Copilot)
+    - Dialogue and voice (first-person narrative, humor, tone)
+    - Chapter structure (titles, scene transitions)
+    - Name origin story and manual enhancements
+    - Prose between template markers (narrative flow)
+  
+  - **Intelligent Update Strategy:**
+    - Only replace template marker content (between `{{% %}}` tags)
+    - Preserve everything outside markers (narrative prose)
+    - Track which markers updated: "Ch7: Updated technical_achievements, kept feature references"
+    - Log skipped chapters: "Ch1-2, Ch4-6, Ch8, Ch10 unchanged (preserved completely)"
+  
+- [ ] **Implement GitHub Actions Workflow:**
+  - **Triggers:**
+    - Manual: `workflow_dispatch` (on-demand regeneration)
+    - Automatic: Push to `cortex-operations.yaml`, `brain-protection-rules.yaml`
+    - Scheduled: Weekly cron job (every Monday 8 AM UTC)
+  - **Pipeline Steps:**
+    1. Checkout code
+    2. Setup Python environment
+    3. Run orchestrator (discovery → cleanup → generate)
+    4. Validate output (link checker, HTML validator)
+    5. Commit changes (`docs: auto-regenerate documentation [skip ci]`)
+    6. Push to `CORTEX-3.0` branch
+  - **Notifications:** Slack/email on failure, success summary
+  
+- [ ] **Add Manual Regeneration Command:**
+  - Command: `cortex docs refresh` or `cortex docs regenerate`
+  - Options:
+    - `--full` - Full regeneration (delete all, rebuild from scratch)
+    - `--incremental` - Only regenerate changed content
+    - `--dry-run` - Show what would change without executing
+    - `--skip-images` - Don't regenerate DALL-E prompts
+  - Output: Change report, metrics, file counts
+  
+- [ ] **Implement Manifest Tracking:**
+  - **Pre-Run:** Load previous manifest (if exists)
+  - **Post-Run:** Save current state to manifest
+    - Feature list with metadata
+    - Generated file list with checksums
+    - Git SHA, timestamp, operation count
+    - Metrics: pages generated, images deleted, story updates
+  - **Location:** `cortex-brain/orchestrator-manifests/enterprise-docs-manifest.json`
+  - **Version Control:** Track manifest in git (enables history analysis)
 
 **Deliverables:**
-- GitHub Actions workflow for auto-refresh
-- Incremental update system (fast regeneration)
-- Refresh documentation for maintainers
-- Version tracking system
+- Discovery-first regeneration engine (Python orchestrator)
+- Destructive cleanup module (safe deletion with rollback)
+- Template-based generation system (Jinja2 templates)
+- Story auto-update module (feature insertion, protected content preservation)
+- GitHub Actions workflow (automated regeneration)
+- Manual regeneration command (CLI interface)
+- Manifest tracking system (state persistence)
 
 **Acceptance Criteria:**
-- GitHub Actions workflow triggers on relevant changes
-- Incremental refresh < 60 seconds (vs. 120s full regen)
-- Manual refresh command documented
-- "Last Updated" timestamps on all pages
-- Documentation stays in sync with codebase
+- **Discovery Completeness:** Finds 100% of operations in cortex-operations.yaml
+- **Change Detection Accuracy:** Correctly identifies new/updated/removed features
+- **Cleanup Safety:** Never deletes protected files, always commits before deletion
+- **Generation Correctness:** All pages render with real data (no mock/placeholder content)
+- **Story Preservation:** Character work and narrative prose unchanged after regeneration
+- **Image Prompt Regeneration:** Old PNGs deleted, new prompts generated based on current features
+- **Automation Reliability:** GitHub Actions workflow runs successfully end-to-end
+- **Rollback Capability:** Git history enables easy rollback to pre-regeneration state
+- **Repeatability:** Can run daily/weekly without manual intervention
+- **Validation:** Output passes link checker, HTML validator, accessibility checks
 
 #### Increment 5.3: Comprehensive Testing & QA (4 days)
 **Tasks:**
