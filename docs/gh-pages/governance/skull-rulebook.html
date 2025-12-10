@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKULL Rulebook - CORTEX 3.0 Governance</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">SKULL Rulebook</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+                    <div class="icon" style="font-size: 4rem;">🛡️</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">SKULL Rulebook</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
+                            Tier 0 Governance Rules That Make CORTEX Enterprise-Grade
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="metrics-grid" style="margin-top: 2rem;">
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2rem;">22</div>
+                        <div class="metric-label">Protection Rules</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2rem;">100%</div>
+                        <div class="metric-label">Enforcement Rate</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2rem;">0</div>
+                        <div class="metric-label">Violations Allowed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is SKULL Protection -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>What is SKULL Protection?</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    SKULL (Strategic Knowledge & Universal Logic Layer) is CORTEX's Tier 0 governance system—22 
+                    immutable rules enforced by the Brain Protector that prevent common development anti-patterns. 
+                    These rules are <strong>never bypassed</strong>, operating as fundamental instincts that protect 
+                    code quality, maintain TDD discipline, prevent duplication, and enforce Git isolation.
+                </p>
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary); margin-top: 1rem;">
+                    When a developer attempts an action that would violate a SKULL rule, the Brain Protector intervenes 
+                    with evidence-based reasoning, explaining why the action is problematic and suggesting the correct approach.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The 22 Rules -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>The 22 SKULL Rules</h2>
+
+            <!-- TDD Rules -->
+            <h3 style="color: var(--accent-primary); margin-top: 2rem;">🎯 TDD Enforcement (6 rules)</h3>
+            
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>1. TDD_ENFORCEMENT</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> RED→GREEN→REFACTOR cycle is mandatory. Implementation blocked until failing tests exist.</p>
+                    <p><strong>Why:</strong> Prevents "implementation-first" development that leads to untestable code.</p>
+                    <p><strong>Enforcement:</strong> Brain Protector alerts if implementation starts without failing tests.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>2. RED_PHASE_VALIDATION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Tests must fail before implementation begins. Prevents false-positive passing tests.</p>
+                    <p><strong>Why:</strong> Validates tests actually check the functionality (not just passing due to bugs).</p>
+                    <p><strong>Enforcement:</strong> CORTEX runs tests and confirms failures before GREEN phase.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>3. TDD_TEST_FILE_VALIDATION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> All production code must have corresponding test files.</p>
+                    <p><strong>Why:</strong> Ensures complete test coverage infrastructure exists.</p>
+                    <p><strong>Enforcement:</strong> Automated validation checks for matching test files.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>4. TDD_EMPTY_TEST_DETECTION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> No placeholder or empty test files allowed.</p>
+                    <p><strong>Why:</strong> Prevents false sense of test coverage with stub tests.</p>
+                    <p><strong>Enforcement:</strong> Scans test files for actual assertions and logic.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>5. TDD_LAYER_COVERAGE_VALIDATION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Tests must cover all 4 layers: unit, integration, system, acceptance.</p>
+                    <p><strong>Why:</strong> Ensures comprehensive testing from micro to macro level.</p>
+                    <p><strong>Enforcement:</strong> Per-layer coverage validation with specific targets.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>6. TEST_LOCATION_SEPARATION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Application tests in user repo, CORTEX tests in <code>tests/</code>.</p>
+                    <p><strong>Why:</strong> Maintains clean separation between CORTEX internal tests and user app tests.</p>
+                    <p><strong>Enforcement:</strong> File path validation during test creation.</p>
+                </div>
+            </div>
+
+            <!-- Code Discovery & Duplication Prevention -->
+            <h3 style="color: var(--accent-primary); margin-top: 3rem;">🔍 Code Discovery & Duplication Prevention (4 rules)</h3>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>7. HOLISTIC_CODE_DISCOVERY_ENFORCEMENT</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Search entire codebase before creating new code. Prevents duplication.</p>
+                    <p><strong>Why:</strong> Reduces code bloat and maintenance burden from duplicate implementations.</p>
+                    <p><strong>Enforcement:</strong> Brain Protector requires search evidence before creation.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>8. REFACTOR_CODE_CLEANUP_ENFORCEMENT</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Remove orphaned and duplicate code during refactoring phase.</p>
+                    <p><strong>Why:</strong> Keeps codebase clean and maintainable over time.</p>
+                    <p><strong>Enforcement:</strong> Automated dead code detection during refactoring.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>9. DUPLICATE_DETECTION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Alert on similar code patterns across codebase.</p>
+                    <p><strong>Why:</strong> Identifies opportunities for abstraction and reuse.</p>
+                    <p><strong>Enforcement:</strong> Similarity analysis on new code contributions.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>10. SEMANTIC_SEARCH_FIRST</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Use semantic search to find existing implementations before creating new ones.</p>
+                    <p><strong>Why:</strong> Leverages AI-powered search to find conceptually similar code.</p>
+                    <p><strong>Enforcement:</strong> Semantic search results must be reviewed first.</p>
+                </div>
+            </div>
+
+            <!-- Git Isolation & Repository Management -->
+            <h3 style="color: var(--accent-primary); margin-top: 3rem;">🔀 Git Isolation & Repository Management (4 rules)</h3>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>11. GIT_ISOLATION_ENFORCEMENT</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> CORTEX code never committed to user repositories.</p>
+                    <p><strong>Why:</strong> Prevents CORTEX internals from polluting user projects.</p>
+                    <p><strong>Enforcement:</strong> Git pre-commit hooks validate commit scope.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>12. CHECKPOINT_VALIDATION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Automated checkpoints only on clean working directory.</p>
+                    <p><strong>Why:</strong> Ensures checkpoints represent stable states.</p>
+                    <p><strong>Enforcement:</strong> Git status check before checkpoint creation.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>13. BRANCH_PROTECTION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Protected branches require specific permissions for modifications.</p>
+                    <p><strong>Why:</strong> Prevents accidental changes to stable branches.</p>
+                    <p><strong>Enforcement:</strong> Branch validation before operations.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>14. COMMIT_MESSAGE_QUALITY</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Commit messages must follow conventional format with context.</p>
+                    <p><strong>Why:</strong> Maintains readable git history for team collaboration.</p>
+                    <p><strong>Enforcement:</strong> Commit message validation before acceptance.</p>
+                </div>
+            </div>
+
+            <!-- Documentation & Knowledge Management -->
+            <h3 style="color: var(--accent-primary); margin-top: 3rem;">📚 Documentation & Knowledge Management (4 rules)</h3>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>15. DOCUMENT_ORGANIZATION_ENFORCEMENT</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> All docs in <code>cortex-brain/documents/{category}/</code>, never at root.</p>
+                    <p><strong>Why:</strong> Maintains organized, discoverable documentation structure.</p>
+                    <p><strong>Enforcement:</strong> File path validation during document creation.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>16. RESPONSE_FORMAT_COMPLIANCE</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> All responses use mandatory 5-part format (v3.0).</p>
+                    <p><strong>Why:</strong> Ensures consistent, professional communication.</p>
+                    <p><strong>Enforcement:</strong> Template validation before response delivery.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>17. KNOWLEDGE_GRAPH_VALIDATION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> All captured knowledge must link to existing nodes or create valid new ones.</p>
+                    <p><strong>Why:</strong> Maintains graph integrity and prevents orphaned knowledge.</p>
+                    <p><strong>Enforcement:</strong> Graph validation during Tier 2 updates.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>18. CONTEXT_FRESHNESS</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Working memory (Tier 1) maintains 70-conversation FIFO with timestamps.</p>
+                    <p><strong>Why:</strong> Balances context depth with query performance (&lt;100ms).</p>
+                    <p><strong>Enforcement:</strong> Automated FIFO cleanup and timestamp tracking.</p>
+                </div>
+            </div>
+
+            <!-- Planning & Execution -->
+            <h3 style="color: var(--accent-primary); margin-top: 3rem;">🗺️ Planning & Execution (4 rules)</h3>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>19. DOR_DOD_COMPLIANCE</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> All plans must include Definition of Ready and Definition of Done.</p>
+                    <p><strong>Why:</strong> Ensures clear acceptance criteria before execution starts.</p>
+                    <p><strong>Enforcement:</strong> Plan validation rejects plans without DoR/DoD.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>20. TDD_IN_PLANS</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> TDD automatically included in all feature plans.</p>
+                    <p><strong>Why:</strong> Makes test-driven development the default, not an afterthought.</p>
+                    <p><strong>Enforcement:</strong> Planning System 2.0 auto-adds TDD phases.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>21. COMPLEXITY_ROUTING</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Automatic complexity detection routes to appropriate planning strategy.</p>
+                    <p><strong>Why:</strong> High-complexity features get incremental planning; low-complexity get skeleton.</p>
+                    <p><strong>Enforcement:</strong> Complexity analyzer determines routing automatically.</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h4>22. PHASE_GATE_VALIDATION</h4>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Rule:</strong> Each phase must pass validation gates before next phase starts.</p>
+                    <p><strong>Why:</strong> Prevents cascading failures from incomplete phases.</p>
+                    <p><strong>Enforcement:</strong> Automated gate checks between phases.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How SKULL Protection Works -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>How SKULL Protection Works</h2>
+            <div class="glass-card">
+                <h3>Brain Protector: The Enforcement Engine</h3>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem;">
+                    The Brain Protector is CORTEX's enforcement engine that monitors all operations against the 22 SKULL rules. 
+                    When a violation is detected, it intervenes immediately with evidence-based reasoning.
+                </p>
+
+                <h4>Intervention Example:</h4>
+                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: var(--radius-md); border-left: 3px solid var(--warning); margin: 1.5rem 0;">
+                    <p style="color: var(--warning); font-weight: 600; margin-bottom: 1rem;">⚠️ SKULL Rule Violation Detected</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;"><strong>Rule:</strong> TDD_ENFORCEMENT</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;"><strong>Issue:</strong> Implementation started without failing tests</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>Evidence:</strong> No test files found for <code>new_feature.py</code></p>
+                    <p style="color: var(--accent-primary);"><strong>Recommended Action:</strong> Create failing tests in RED phase before implementing <code>new_feature.py</code></p>
+                </div>
+
+                <h4>Zero Tolerance Policy:</h4>
+                <ul style="color: var(--text-secondary); line-height: 2; margin-top: 1rem;">
+                    <li>SKULL rules are <strong>never</strong> bypassed or overridden</li>
+                    <li>No "just this once" exceptions</li>
+                    <li>100% enforcement across all operations</li>
+                    <li>Rules operate as fundamental instincts, not suggestions</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why SKULL Makes CORTEX Enterprise-Grade -->
+    <section class="section" style="padding-top: 0; background: rgba(0, 0, 0, 0.2); padding: 4rem 0;">
+        <div class="container">
+            <h2 class="text-center">Why SKULL Makes CORTEX Enterprise-Grade</h2>
+            <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 2rem;">
+                <div class="glass-card" style="text-align: center;">
+                    <h3 style="color: var(--accent-primary);">🎯 Code Quality</h3>
+                    <p style="color: var(--text-secondary);">
+                        TDD enforcement and duplication prevention ensure high-quality, maintainable code
+                    </p>
+                </div>
+                <div class="glass-card" style="text-align: center;">
+                    <h3 style="color: var(--accent-primary);">🔒 Risk Mitigation</h3>
+                    <p style="color: var(--text-secondary);">
+                        Git isolation and branch protection prevent accidental damage to repositories
+                    </p>
+                </div>
+                <div class="glass-card" style="text-align: center;">
+                    <h3 style="color: var(--accent-primary);">📚 Knowledge Integrity</h3>
+                    <p style="color: var(--text-secondary);">
+                        Organized documentation and graph validation maintain long-term knowledge
+                    </p>
+                </div>
+                <div class="glass-card" style="text-align: center;">
+                    <h3 style="color: var(--accent-primary);">⚡ Consistency</h3>
+                    <p style="color: var(--text-secondary);">
+                        Response format compliance and planning rules ensure predictable behavior
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section">
+        <div class="container">
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+                <a href="../architecture/index.html" class="btn btn-primary">Explore Architecture →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 3.0</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -23,13 +23,16 @@ Transform the Enterprise Documentation Orchestrator from an admin-only utility i
 - Mobile-responsive with accessibility features
 
 **2. Visual Excellence**
+- **CORTEX Logo** - Prominent display in hero section with animated entrance
 - Integrate DALL-E generated images from existing prompts (cortex-brain & user-features)
 - Rich D3.js interactive visualizations
 - Mermaid diagrams for architecture flows
 - Glassmorphism design system with dark mode
+- Favicon and social media preview images
 
 **3. Comprehensive Content**
 - Complete CORTEX 3.0 feature showcase
+- **SKULL Rulebook** - Prominent showcase of 22 Tier 0 governance rules (CORTEX's secret sauce)
 - "The Awakening of CORTEX" story (hilarious narrative updated for 3.0)
 - Technical documentation with real API references
 - User guides and getting started materials
@@ -123,8 +126,16 @@ docs/ (GitHub Pages root)
 ├── index.html                      # TIER 1: Executive Landing (30-second overview)
 │                                   #   - What is CORTEX? (1 paragraph)
 │                                   #   - Key metrics dashboard (4-Tier stats)
+│                                   #   - 🛡️ SKULL Rulebook CTA (prominent button)
 │                                   #   - 6 feature cards (click to drill down)
 │                                   #   - "Learn More" → features/index.html
+│
+├── governance/
+│   └── skull-rulebook.html         # TIER 1/2: SKULL Rulebook (CORTEX's Secret Sauce)
+│                                   #   - 22 governance rules with expand/collapse
+│                                   #   - Brain Protector enforcement examples
+│                                   #   - Why SKULL makes CORTEX enterprise-grade
+│                                   #   - Zero-tolerance policy explanation
 │
 ├── story.html                      # TIER 1: The Awakening (narrative entry point)
 │                                   #   - Hilarious story with chapter TOC
@@ -318,8 +329,14 @@ docs/ (GitHub Pages root)
 
 #### Increment 1.2: Landing Page with Drill-Down Architecture (4 days)
 **Tasks:**
+- [ ] **Integrate CORTEX Logo:**
+  - Display logo prominently in hero section (200px, animated entrance)
+  - Add favicon to all pages
+  - Configure Open Graph image for social media sharing
+  - Apply glow effect consistent with design system
 - [ ] **Design Tier 1 Executive Landing Page:**
   - Hero section with animated gradient + CORTEX tagline
+  - **🛡️ SKULL Rulebook CTA** - Prominent primary button in hero section
   - "What is CORTEX?" - 1 paragraph executive summary
   - Key metrics dashboard (real-time stats from system):
     - 302 operations, 4-Tier brain, 22 SKULL rules
@@ -327,8 +344,10 @@ docs/ (GitHub Pages root)
     - 94% test-first success rate
   - 6 feature cards (executive summary format):
     - Each card: Icon + Title + 2-sentence description + "Learn More →"
-    - Cards: TDD Mastery, Planning 2.0, Dashboard, SKULL, 4-Tier Brain, ADO Ops
+    - **SKULL Rulebook card** - Highlighted with special border/glow (CORTEX's secret sauce)
+    - Cards: SKULL Rulebook, TDD Mastery, Planning 2.0, Dashboard, 4-Tier Brain, ADO Ops
 - [ ] **Implement drill-down navigation:**
+  - **SKULL Rulebook** → `governance/skull-rulebook.html` (prominent landing page)
   - Feature cards link to `features/index.html` (Tier 2 catalog)
   - "Read Full Story" → `story.html` (narrative entry point)
   - "Explore Architecture" → `architecture/index.html` (visual overview)
@@ -339,25 +358,31 @@ docs/ (GitHub Pages root)
   - Animated scroll-reveal for sections
 - [ ] **Add breadcrumb navigation system:**
   - JavaScript component for `Home > Section > Page` tracking
-  - Click any level to return up hierarchy
-- [ ] **Integrate sidebar navigation:**
-  - Shows current location in 3-tier hierarchy
-  - Highlights active page, shows parent/children
-- [ ] Create footer with links and copyright
-
 **Deliverables:**
-- Tier 1 executive landing page
+- Tier 1 executive landing page with CORTEX logo and SKULL Rulebook prominence
+- SKULL Rulebook showcase page (22 rules with expand/collapse)
+- CORTEX logo integrated across all pages (hero, favicon, Open Graph)
 - Drill-down navigation framework (breadcrumbs, sidebar)
 - Progressive disclosure UI components
-- Feature grid with executive summaries
-
+- Feature grid with executive summaries and SKULL highlight
+- Tier 1 executive landing page with SKULL Rulebook prominence
+- SKULL Rulebook showcase page (22 rules with expand/collapse)
+- Drill-down navigation framework (breadcrumbs, sidebar)
+- Progressive disclosure UI components
+- Feature grid with executive summaries and SKULL highlight
 **Acceptance Criteria:**
 - Landing page = 30-second executive overview (Tier 1)
+- **CORTEX logo** displayed in hero with animated entrance and glow effect
+- **SKULL Rulebook** prominently featured (hero button + highlighted card)
+- Favicon and Open Graph images configured
 - 6 feature cards with 2-sentence summaries
-- All "Learn More" links drill to Tier 2 pages
+- All "Learn More" links drill to Tier 2/3 pages
 - Breadcrumbs show navigation hierarchy
 - Sidebar tracks current location
 - Real metrics from system (no mock data)
+- Mobile-responsive layout
+- **Stub pages** have `<!-- STUB_PAGE: Created YYYY-MM-DD - Needs full content -->` identifier
+- **Stub pages** have `<!-- STUB_PAGE: Created YYYY-MM-DD - Needs full content -->` identifier (no mock data)
 - Mobile-responsive layout
 
 #### Increment 1.3: Image Asset Pipeline (2 days)

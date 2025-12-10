@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDD Mastery - CORTEX 3.0</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Features</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">TDD Mastery</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+                    <div class="icon" style="font-size: 4rem;">🎯</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">TDD Mastery</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
+                            Automated Test-Driven Development with RED-GREEN-REFACTOR enforcement
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="metrics-grid" style="margin-top: 2rem;">
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2rem;">94%</div>
+                        <div class="metric-label">Test-First Success Rate</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2rem;">4</div>
+                        <div class="metric-label">Coverage Layers</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2rem;">100%</div>
+                        <div class="metric-label">RED Phase Validation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Executive Summary -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Executive Summary</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    TDD Mastery transforms test-driven development from a manual discipline into an automated workflow. 
+                    CORTEX enforces the RED-GREEN-REFACTOR cycle through SKULL Protection rules, ensuring tests are 
+                    written first and fail before implementation. The system validates coverage across 4 layers 
+                    (unit, integration, system, acceptance) and maintains a 94% success rate for test-first development.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>How It Works</h2>
+            
+            <!-- RED Phase -->
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>🔴 RED Phase: Write Failing Tests</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>What happens:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li>CORTEX generates comprehensive test cases before any implementation</li>
+                        <li>Tests MUST fail initially (verified by RED_PHASE_VALIDATION rule)</li>
+                        <li>Covers all 4 layers: unit, integration, system, acceptance</li>
+                        <li>Tests are executable immediately with clear failure messages</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Enforcement:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><code>TDD_ENFORCEMENT</code>: Blocks implementation without failing tests</li>
+                        <li><code>RED_PHASE_VALIDATION</code>: Validates tests fail before GREEN phase</li>
+                        <li>Brain Protector alerts if implementation starts too early</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- GREEN Phase -->
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>🟢 GREEN Phase: Implement Solution</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>What happens:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li>Write minimal code to make tests pass</li>
+                        <li>Focus on functionality, not perfection</li>
+                        <li>Run tests continuously to verify progress</li>
+                        <li>All tests must pass before moving to REFACTOR</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Success criteria:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li>All RED phase tests now pass</li>
+                        <li>No new test failures introduced</li>
+                        <li>Code coverage targets met (per-layer validation)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- REFACTOR Phase -->
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>♻️ REFACTOR Phase: Optimize & Clean</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>What happens:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li>Improve code quality without changing behavior</li>
+                        <li>Remove duplication (enforced by HOLISTIC_CODE_DISCOVERY_ENFORCEMENT)</li>
+                        <li>Optimize performance and readability</li>
+                        <li>Clean up orphaned code (enforced by REFACTOR_CODE_CLEANUP_ENFORCEMENT)</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Enforcement:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><code>REFACTOR_CODE_CLEANUP_ENFORCEMENT</code>: Mandates removal of dead code</li>
+                        <li>Tests must continue passing throughout refactoring</li>
+                        <li>Brain Protector prevents refactoring that breaks tests</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKULL Protection Rules -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>SKULL Protection Rules</h2>
+            <div class="glass-card">
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                    TDD Mastery is enforced by 3 core SKULL rules that protect the TDD workflow:
+                </p>
+                
+                <div style="display: grid; gap: 1.5rem;">
+                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
+                        <h4>TDD_ENFORCEMENT</h4>
+                        <p style="color: var(--text-secondary);">
+                            Mandates RED→GREEN→REFACTOR cycle. Implementation blocked until failing tests exist.
+                        </p>
+                    </div>
+                    
+                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
+                        <h4>RED_PHASE_VALIDATION</h4>
+                        <p style="color: var(--text-secondary);">
+                            Validates tests fail before implementation begins. Prevents false-positive passing tests.
+                        </p>
+                    </div>
+                    
+                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
+                        <h4>REFACTOR_CODE_CLEANUP_ENFORCEMENT</h4>
+                        <p style="color: var(--text-secondary);">
+                            Requires removal of orphaned and duplicate code during refactoring phase.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World Results -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Real-World Results</h2>
+            <div class="glass-card">
+                <div class="metrics-grid">
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">94%</div>
+                        <div class="metric-label">Test-first success rate across all CORTEX features</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">100%</div>
+                        <div class="metric-label">RED phase validation compliance</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">4-Layer</div>
+                        <div class="metric-label">Coverage validation (unit, integration, system, acceptance)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section">
+        <div class="container">
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="index.html" class="btn btn-secondary">← Back to Features</a>
+                <a href="planning-system.html" class="btn btn-secondary">Next: Planning System 2.0 →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 3.0</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
