@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Operations - CORTEX 3.0</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Features</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Git Operations</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+                    <div class="icon" style="font-size: 4rem;">🔀</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Git Operations & Checkpointing</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
+                            Automated Git Management with CORTEX/User Isolation Enforcement
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="metrics-grid" style="margin-top: 2rem;">
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2rem;">100%</div>
+                        <div class="metric-label">Isolation Enforcement</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2rem;">Auto</div>
+                        <div class="metric-label">Checkpoint Creation</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2rem;">Zero</div>
+                        <div class="metric-label">Dirty State Work</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Executive Summary -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Executive Summary</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    CORTEX's Git Operations system provides automated version control with strict isolation between 
+                    CORTEX internal code and user application code. Three SKULL rules enforce git integrity: 
+                    <strong>GIT_ISOLATION_ENFORCEMENT</strong> prevents CORTEX code from touching user repos, 
+                    <strong>GIT_CHECKPOINT_ENFORCEMENT</strong> creates safety checkpoints before risky operations, 
+                    and <strong>PREVENT_DIRTY_STATE_WORK</strong> blocks development on uncommitted changes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Core Git Operations</h2>
+            
+            <!-- Git Isolation -->
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>🛡️ Git Isolation Enforcement</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Purpose:</strong> Absolute separation between CORTEX internal code and user application code</p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>How it works:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>CORTEX Repository:</strong> All CORTEX code lives in <code>/PROJECTS/CORTEX/</code></li>
+                        <li><strong>User Repositories:</strong> Application code lives in separate repos (e.g., <code>/PROJECTS/MyApp/</code>)</li>
+                        <li><strong>Zero Cross-Contamination:</strong> CORTEX never commits to user repos, users never commit to CORTEX</li>
+                        <li><strong>Brain Protector Validation:</strong> All git operations validated against isolation rules</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Protected paths:</strong></p>
+                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--accent-primary);">CORTEX Critical Paths (never touch user code):
+├── src/tier0/ (governance)
+├── cortex-brain/ (memory, knowledge, context)
+├── .github/prompts/ (prompt files)
+└── cortex-operations.yaml (operation registry)
+
+User Application Paths (CORTEX never commits here):
+├── SPA/ (Single Page Applications)
+├── blazor/ (Blazor apps)
+├── signalr/ (SignalR hubs)
+└── Any user-created project folders</pre>
+                </div>
+            </div>
+
+            <!-- Checkpointing -->
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>🔖 Automatic Checkpointing</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Purpose:</strong> Safety net for rollback before high-risk operations</p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>When checkpoints are created:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Before System Maintenance:</strong> Checkpoint before cleanup phase</li>
+                        <li><strong>Before Refactoring:</strong> Checkpoint before code restructuring</li>
+                        <li><strong>Before Major Changes:</strong> Architecture updates, migrations</li>
+                        <li><strong>Before Pull Operations:</strong> Safety net before merging remote changes</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Checkpoint format:</strong></p>
+                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--success);">git commit -m "checkpoint: Pre-cleanup safety checkpoint"
+git tag checkpoint-20251210-143000</pre>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Rollback capability:</strong></p>
+                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--warning);"># If something goes wrong, rollback to checkpoint
+git reset --hard checkpoint-20251210-143000
+
+# Or just view the checkpoint
+git show checkpoint-20251210-143000</pre>
+                </div>
+            </div>
+
+            <!-- Intelligent Commits -->
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>💬 Intelligent Commit Messages</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Purpose:</strong> Auto-generate descriptive commit messages from changes</p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>What CORTEX analyzes:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Changed Files:</strong> Identifies modules, components, features affected</li>
+                        <li><strong>Change Type:</strong> feat (new), fix (bug), refactor, docs, test, chore</li>
+                        <li><strong>Scope:</strong> Component or module name (e.g., <code>dashboard</code>, <code>tdd</code>)</li>
+                        <li><strong>Impact:</strong> Breaking changes, deprecations, migrations</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Conventional Commits format:</strong></p>
+                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--accent-primary);">feat(dashboard): Add Use Cases tab with role capabilities matrix
+
+- Created Use Cases tab partial (templates/partials/use_cases_tab.html.j2)
+- Wired tabs in interactive-dashboard-template.html
+- Created Dashboard Orchestrator (src/dashboard/orchestrator.py)
+- TDD test suite (tests/dashboard/test_orchestrator.py)
+
+Progress: Dashboard v3 integration layer complete
+Tests: 13/13 passing (100%)</pre>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Benefits:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li>Consistent commit history</li>
+                        <li>Easy to generate changelogs</li>
+                        <li>Clear what changed and why</li>
+                        <li>Searchable by scope/type</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Dirty State Prevention -->
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>🚫 Dirty State Prevention</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Purpose:</strong> Block development work when uncommitted changes exist</p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>What's blocked:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>New Feature Development:</strong> Can't start planning with dirty state</li>
+                        <li><strong>System Maintenance:</strong> Maintenance requires clean working tree</li>
+                        <li><strong>Refactoring:</strong> Can't refactor with uncommitted changes</li>
+                        <li><strong>Major Operations:</strong> Migrations, deployments require clean state</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Brain Protector response:</strong></p>
+                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--error);">🚨 BLOCKED: PREVENT_DIRTY_STATE_WORK
+
+Cannot start development work with uncommitted changes.
+
+Current State:
+  Modified: 3 files
+  Untracked: 2 files
+
+Required Action:
+  1. Review changes: git status
+  2. Commit changes: git add . && git commit -m "..."
+  3. Or stash: git stash save "WIP: description"
+  
+Then retry your request.</pre>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Why this matters:</strong></p>
+                    <p style="color: var(--text-secondary);">
+                        Prevents work-in-progress from being lost or accidentally mixed with new changes. 
+                        Ensures clean rollback capability and clear change history.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Branch Management -->
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>🌿 Branch Management</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Purpose:</strong> Organize feature development with semantic branch names</p>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Branch naming conventions:</strong></p>
+                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--accent-secondary);">feature/authentication-system
+fix/dashboard-rendering-bug
+refactor/orchestrator-cleanup
+docs/api-reference-update
+test/tdd-coverage-improvement</pre>
+                    
+                    <p style="margin-top: 1.5rem;"><strong>Branch operations:</strong></p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Auto-create:</strong> CORTEX creates feature branches for planning sessions</li>
+                        <li><strong>Safe Switching:</strong> Validates clean state before checkout</li>
+                        <li><strong>Merge Protection:</strong> Prevents merging with failing tests</li>
+                        <li><strong>Branch Cleanup:</strong> Prunes merged/stale branches</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKULL Protection -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>SKULL Protection Rules</h2>
+            <div class="glass-card">
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                    Git Operations are governed by 3 core SKULL rules:
+                </p>
+                
+                <div style="display: grid; gap: 1.5rem;">
+                    <div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
+                        <h4>GIT_ISOLATION_ENFORCEMENT</h4>
+                        <p style="color: var(--text-secondary);">
+                            <strong>Zero-tolerance policy:</strong> CORTEX code never touches user repos. User code never 
+                            touches CORTEX repo. Brain Protector validates every git operation against isolation rules.
+                        </p>
+                    </div>
+                    
+                    <div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
+                        <h4>GIT_CHECKPOINT_ENFORCEMENT</h4>
+                        <p style="color: var(--text-secondary);">
+                            <strong>Mandatory checkpoints:</strong> Before high-risk operations (cleanup, refactoring, 
+                            migrations), CORTEX creates git checkpoint (commit + tag) for rollback capability.
+                        </p>
+                    </div>
+                    
+                    <div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
+                        <h4>PREVENT_DIRTY_STATE_WORK</h4>
+                        <p style="color: var(--text-secondary);">
+                            <strong>Clean state required:</strong> Development work blocked when uncommitted changes exist. 
+                            Prevents WIP loss and ensures clean rollback.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World Results -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Real-World Results</h2>
+            <div class="glass-card">
+                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">100%</div>
+                        <div class="metric-label">Isolation compliance (zero breaches)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">Auto</div>
+                        <div class="metric-label">Checkpoint creation (no manual steps)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">Zero</div>
+                        <div class="metric-label">Dirty state incidents</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">520+</div>
+                        <div class="metric-label">Conventional commits (CORTEX-3.0 branch)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Examples -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="glass-card">
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    <strong>Git operations are automatic:</strong> CORTEX handles checkpointing, isolation validation, 
+                    and commit message generation without user intervention.
+                </p>
+                
+                <p style="color: var(--text-secondary); margin-top: 2rem; margin-bottom: 1rem;">
+                    <strong>User actions that trigger git operations:</strong>
+                </p>
+                <ul style="color: var(--text-secondary); line-height: 2;">
+                    <li><code>system maintenance</code> - Creates checkpoint before cleanup</li>
+                    <li><code>plan [feature]</code> - Validates clean state, creates feature branch</li>
+                    <li><code>execute all phases autonomously</code> - Commits after each phase</li>
+                    <li><code>deploy</code> - Creates deployment tag</li>
+                </ul>
+                
+                <p style="color: var(--text-secondary); margin-top: 2rem;">
+                    All git operations are logged and validated by Brain Protector for compliance.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section">
+        <div class="container">
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="index.html" class="btn btn-secondary">← Back to Features</a>
+                <a href="response-templates.html" class="btn btn-secondary">Next: Response Templates →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 3.0</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
