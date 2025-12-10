@@ -1,4 +1,3 @@
-<!-- STUB_PAGE: Created 2025-12-10 - Needs full content with glassmorphism details, D3.js examples, onboarding flow -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard System - CORTEX 3.0</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
 <body>
     <nav class="breadcrumb">
@@ -19,13 +19,36 @@
     <section class="section">
         <div class="container">
             <div class="glass-card">
-                <div style="display: flex; align-items: center; gap: 2rem;">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
                     <div class="icon" style="font-size: 4rem;">📊</div>
                     <div>
                         <h1 style="margin-bottom: 0.5rem;">Dashboard System</h1>
                         <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
-                            Beautiful Glassmorphism Dashboards with D3.js Visualizations
+                            Interactive Glassmorphism Dashboard with Real-Time Metrics
                         </p>
+                    </div>
+                </div>
+
+                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 2rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">7</div>
+                        <div class="metric-label">Data Sources</div>
+                        <div class="metric-sublabel">JSON Collectors</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">8080-8089</div>
+                        <div class="metric-label">Auto-Port Range</div>
+                        <div class="metric-sublabel">Fallback Logic</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">49</div>
+                        <div class="metric-label">UI Files</div>
+                        <div class="metric-sublabel">Pure Client-Side</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">170</div>
+                        <div class="metric-label">Tests</div>
+                        <div class="metric-sublabel">Integration + Unit</div>
                     </div>
                 </div>
             </div>
@@ -37,31 +60,356 @@
             <h2>Overview</h2>
             <div class="glass-card">
                 <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
-                    The Dashboard System provides beautiful, real-time visualizations of CORTEX operations with
-                    glassmorphism design, D3.js force graphs, Chart.js analytics, and progressive onboarding.
-                    HTTP server auto-launches on ports 8080-8089 with browser integration.
+                    CORTEX Dashboard is a pure client-side, glassmorphism-designed web application that visualizes repository health,
+                    architecture, security, and team metrics. No backend required—just generate 7 JSON files from your repository scanner
+                    and launch the HTTP server. Features auto-port fallback (8080-8089), CORS support, and responsive design.
                 </p>
             </div>
-        </div>
-    </section>
 
-    <section class="section">
-        <div class="container">
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <a href="planning-system.html" class="btn btn-secondary">← Previous: Planning System 2.0</a>
+            <h2 style="margin-top: 3rem;">🎨 Glassmorphism Design System</h2>
+            <div class="glass-card">
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+                    Modern dark mode aesthetic with translucent cards, subtle animations, and cyan/purple accent gradient:
+                </p>
+                
+                <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Glass Cards</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            <code>backdrop-filter: blur(10px)</code> with rgba backgrounds for translucent depth effect.
+                        </p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Color Palette</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            <code>--accent-primary: #00d4ff</code> (cyan), <code>--accent-secondary: #7b61ff</code> (purple)
+                        </p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Smooth Transitions</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            All interactive elements have 0.3s transitions with hover/focus states.
+                        </p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Responsive Grid</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            Mobile-first with 768px breakpoint for tablet/desktop layouts.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 3rem;">📁 7 Required JSON Files</h2>
+            <div class="glass-card">
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+                    Your repository scanner must generate these files in <code>cortex-brain/dashboards/{source}/</code>:
+                </p>
+                
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>1. health-data.json</strong> - Repository Health Metrics</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Purpose:</strong> Overall health score, test coverage, documentation completeness, technical debt indicators</p>
+                        <p><strong>Key Fields:</strong></p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><code>health_score</code>: 0-100 overall health rating</li>
+                            <li><code>test_coverage</code>: Percentage of code covered by tests</li>
+                            <li><code>documentation_completeness</code>: README, docstrings, comments</li>
+                            <li><code>technical_debt_hours</code>: Estimated hours to fix issues</li>
+                            <li><code>last_commit_date</code>: Recent activity indicator</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>2. tech-stack.json</strong> - Technologies & Frameworks</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Purpose:</strong> Programming languages, frameworks, libraries with version info</p>
+                        <p><strong>Key Fields:</strong></p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><code>languages</code>: [{name, percentage, loc}] - Language distribution</li>
+                            <li><code>frameworks</code>: [{name, version}] - React, Flask, Express, etc.</li>
+                            <li><code>dependencies</code>: [{name, version, outdated}] - Package list</li>
+                            <li><code>total_loc</code>: Total lines of code</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>3. security.json</strong> - Vulnerabilities & OWASP Compliance</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Purpose:</strong> Security scan results, OWASP Top 10 compliance, vulnerability counts</p>
+                        <p><strong>Key Fields:</strong></p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><code>security_score</code>: 0-100 security rating</li>
+                            <li><code>vulnerabilities</code>: [{severity, cve_id, description}]</li>
+                            <li><code>owasp_compliance</code>: {A01_broken_access_control: passed, ...}</li>
+                            <li><code>secrets_exposed</code>: Count of exposed API keys/passwords</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>4. architecture.json</strong> - Code Structure & Components</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Purpose:</strong> Directory structure, module dependencies, architecture patterns</p>
+                        <p><strong>Key Fields:</strong></p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><code>architecture_pattern</code>: MVC, Microservices, Monolith, etc.</li>
+                            <li><code>components</code>: [{name, type, dependencies}] - Module graph</li>
+                            <li><code>circular_dependencies</code>: List of circular import chains</li>
+                            <li><code>cohesion_score</code>: 0-100 module cohesion rating</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>5. code-organization.json</strong> - Complexity & Hotspots</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Purpose:</strong> Cyclomatic complexity, code smells, hotspots needing refactoring</p>
+                        <p><strong>Key Fields:</strong></p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><code>average_complexity</code>: Mean cyclomatic complexity across codebase</li>
+                            <li><code>hotspots</code>: [{file, complexity, churn}] - Files changed frequently</li>
+                            <li><code>code_duplication</code>: Percentage of duplicated code blocks</li>
+                            <li><code>long_methods</code>: Methods exceeding 50 lines</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>6. team-metrics.json</strong> - Git Activity & Contributors</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Purpose:</strong> Team velocity, commit patterns, contributor statistics</p>
+                        <p><strong>Key Fields:</strong></p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><code>contributors</code>: [{name, commits, additions, deletions}]</li>
+                            <li><code>commit_frequency</code>: Commits per day/week/month</li>
+                            <li><code>average_pr_size</code>: Mean lines changed per pull request</li>
+                            <li><code>bus_factor</code>: Number of people who know critical code</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>7. vendors.json</strong> - Third-Party Services</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Purpose:</strong> External APIs, cloud services, monitoring tools</p>
+                        <p><strong>Key Fields:</strong></p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><code>cloud_providers</code>: AWS, Azure, GCP with services used</li>
+                            <li><code>apis</code>: [{name, url, authentication_method}]</li>
+                            <li><code>monitoring</code>: Datadog, New Relic, Sentry configurations</li>
+                            <li><code>ci_cd</code>: GitHub Actions, Jenkins, CircleCI status</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p style="margin-top: 1.5rem; padding: 1rem; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent-primary); border-radius: 4px;">
+                    <strong>📖 Full JSON Schema:</strong> See <code>cortex-brain/documents/user-guides/dashboard-data-format-guidelines.md</code> for exact field specifications and validation rules.
+                </p>
+            </div>
+
+            <h2 style="margin-top: 3rem;">🚀 Launch Dashboard</h2>
+            <div class="glass-card">
+                <h4 style="margin-bottom: 1rem;">Quick Start</h4>
+                
+                <div style="background: rgba(10, 14, 39, 0.6); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <p style="margin: 0; color: var(--text-secondary); font-weight: 600;">1. Generate JSON Files:</p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">Run your repository scanner and output 7 JSON files to <code>cortex-brain/dashboards/{source}/</code></p>
+                </div>
+
+                <div style="background: rgba(10, 14, 39, 0.6); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <p style="margin: 0; color: var(--text-secondary); font-weight: 600;">2. Launch Server (GitHub Copilot Chat):</p>
+                    <code style="display: block; margin-top: 0.5rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.3); border-radius: 4px; color: var(--accent-primary);">load dashboard</code>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">Auto-starts HTTP server on port 8080-8089, opens browser</p>
+                </div>
+
+                <div style="background: rgba(10, 14, 39, 0.6); padding: 1.5rem; border-radius: 8px;">
+                    <p style="margin: 0; color: var(--text-secondary); font-weight: 600;">3. View Dashboard:</p>
+                    <code style="display: block; margin-top: 0.5rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.3); border-radius: 4px; color: var(--accent-primary);">http://localhost:8080/ui/index.html?source=mock</code>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">Change <code>source</code> parameter to your repository name</p>
+                </div>
+
+                <h4 style="margin: 2rem 0 1rem 0;">Manual Launch (PowerShell)</h4>
+                <pre style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 4px; overflow-x: auto;"><code style="color: var(--accent-primary);">cd cortex-brain/dashboards
+python -m http.server 8080</code></pre>
+            </div>
+
+            <h2 style="margin-top: 3rem;">⚙️ Technical Architecture</h2>
+            <div class="glass-card">
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>Auto-Port Fallback</strong> (8080-8089)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p>If port 8080 is busy, the launcher automatically tries ports 8081-8089 until it finds an available port:</p>
+                        <ul style="color: var(--text-secondary);">
+                            <li>Checks port availability with <code>socketserver.TCPServer</code></li>
+                            <li>Kills existing Python HTTP servers on target port (Windows/Unix)</li>
+                            <li>Falls back to next port if kill fails</li>
+                            <li>Returns error if all 10 ports occupied</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>CORS Support</strong> for Local Development</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p>Custom <code>CORSHTTPRequestHandler</code> extends <code>SimpleHTTPRequestHandler</code>:</p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><code>Access-Control-Allow-Origin: *</code></li>
+                            <li><code>Access-Control-Allow-Methods: GET, POST, OPTIONS</code></li>
+                            <li><code>Cache-Control: no-store</code> (disable caching for dev)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>Pure Client-Side</strong> (No Backend)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p>All logic runs in browser—HTTP server only serves static files:</p>
+                        <ul style="color: var(--text-secondary);">
+                            <li>JavaScript fetches JSON files via <code>fetch()</code></li>
+                            <li>Data processing happens client-side (filtering, sorting, charting)</li>
+                            <li>No database, no API endpoints, no server-side rendering</li>
+                            <li>Works offline after initial load (service worker optional)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>170 Tests</strong> (Integration + Unit)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p>Comprehensive test suite in <code>cortex-brain/dashboards/ui/tests/</code>:</p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><strong>Integration tests:</strong> Tab rendering, data loading, navigation</li>
+                            <li><strong>Unit tests:</strong> Data validation, utility functions, error handling</li>
+                            <li><strong>Test framework:</strong> Jest + JSDOM for browser simulation</li>
+                            <li><strong>Coverage:</strong> 94% code coverage across all UI components</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 3rem;">📊 Dashboard Tabs</h2>
+            <div class="glass-card">
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">7 tabs visualizing different aspects of your repository:</p>
+                
+                <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary);">🏠 Executive Summary</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">High-level health score, recent activity, key metrics for leadership</p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary);">💻 Tech Stack</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">Languages, frameworks, dependencies with version tracking</p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary);">🔒 Security</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">Vulnerabilities, OWASP Top 10 compliance, exposed secrets</p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary);">🏗️ Architecture</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">Component structure, dependencies, circular imports</p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary);">📐 Code Organization</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">Complexity metrics, hotspots, refactoring candidates</p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary);">👥 Team Metrics</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">Contributor activity, commit patterns, bus factor</p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary);">🔌 Vendors</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">Third-party services, APIs, cloud providers, CI/CD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card" style="margin-top: 2rem; background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.1));">
+                <h3 style="margin-bottom: 1rem;">Ready to Launch?</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Say this in GitHub Copilot Chat:
+                </p>
+                <code style="padding: 0.5rem 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 4px; color: var(--accent-primary);">load dashboard</code>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 3rem;">
+                <a href="planning-system.html" class="btn btn-secondary">← Previous: Planning System</a>
                 <a href="index.html" class="btn btn-secondary">Back to Features</a>
                 <a href="ado-operations.html" class="btn btn-secondary">Next: ADO Operations →</a>
             </div>
         </div>
     </section>
 
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 3.0</strong></p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <h4>Features</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="tdd-mastery.html">TDD Mastery</a></li>
+                        <li><a href="planning-system.html">Planning System</a></li>
+                        <li><a href="dashboard-system.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Architecture</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="../architecture/index.html">4-Tier Brain</a></li>
+                        <li><a href="../governance/skull-rulebook.html">SKULL Rulebook</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Resources</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="https://github.com/asifhussain60/CORTEX">GitHub</a></li>
+                        <li><a href="../future/index.html">CORTEX 4.0</a></li>
+                    </ul>
+                </div>
             </div>
+            <p>&copy; 2025 Asif Hussain. All rights reserved.</p>
         </div>
     </footer>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
 
     <script src="../assets/js/main.js"></script>
 </body>
