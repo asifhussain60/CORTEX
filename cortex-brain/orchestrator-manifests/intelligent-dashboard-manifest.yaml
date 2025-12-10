@@ -1,0 +1,891 @@
+name: "Intelligent Dashboard Orchestrator"
+version: "1.0.0"
+description: "Reverse-engineer repository insights using AST analysis for dashboard auto-population"
+author: "Asif Hussain"
+created: "2025-12-10"
+
+# Manifest Type
+type: "orchestrator"
+category: "intelligence"
+
+# Trigger Configuration
+trigger:
+  commands:
+    - "analyze dashboard"
+    - "generate dashboard data"
+    - "rebuild dashboard intelligence"
+    - "dashboard intelligence"
+  
+  aliases:
+    - "dash intel"
+    - "smart dashboard"
+    - "auto dashboard"
+
+# Inheritance
+inheritance:
+  parent: "planning-system-2.0-manifest.yaml"
+  reason: "Shares holistic discovery, TDD compliance, DoR/DoD validation"
+  inherited_features:
+    - "complexity_detection"
+    - "holistic_code_discovery"
+    - "tdd_enforcement"
+    - "dor_dod_compliance"
+
+# Execution Phases
+phases:
+  - id: "repository_scan"
+    name: "Repository Discovery"
+    description: "Scan repository structure and detect languages/frameworks"
+    duration_estimate: "10-30 seconds"
+    tasks:
+      - name: "Detect programming languages"
+        method: "file_extension_scan"
+        output: "language_statistics"
+      
+      - name: "Identify frameworks"
+        method: "package_file_analysis"
+        files_to_check:
+          - "package.json"
+          - "requirements.txt"
+          - "*.csproj"
+          - "pom.xml"
+          - "build.gradle"
+      
+      - name: "Locate entry points"
+        method: "pattern_matching"
+        patterns:
+          - "main.py"
+          - "Program.cs"
+          - "app.js"
+          - "index.js"
+          - "Application.java"
+      
+      - name: "Build file tree"
+        method: "recursive_scan"
+        exclude_patterns:
+          - "node_modules/"
+          - "venv/"
+          - "bin/"
+          - "obj/"
+          - ".git/"
+    
+    success_criteria:
+      - "At least one programming language detected"
+      - "File tree built with >0 files"
+      - "Entry points identified (or marked as unknown)"
+
+  - id: "ast_analysis"
+    name: "AST Intelligence Extraction"
+    description: "Parse code files and extract semantic information"
+    duration_estimate: "30-180 seconds"
+    dependencies:
+      - "repository_scan"
+    
+    tasks:
+      - name: "Parse Python files"
+        analyzer: "PythonAnalyzer"
+        module: "src.intelligence.analyzers.python_analyzer"
+        confidence: 0.90
+        capabilities:
+          - "code_smell_detection"
+          - "docstring_extraction"
+          - "dependency_analysis"
+          - "class_method_extraction"
+      
+      - name: "Parse JavaScript/TypeScript files"
+        analyzer: "JavaScriptAnalyzer / TypeScriptAnalyzer"
+        module: "src.intelligence.analyzers.javascript_analyzer"
+        confidence: 0.85
+        parser: "esprima / tree-sitter"
+        capabilities:
+          - "code_smell_detection"
+          - "jsdoc_extraction"
+          - "module_dependency_analysis"
+      
+      - name: "Parse C# files"
+        analyzer: "CSharpAnalyzer"
+        module: "src.intelligence.analyzers.csharp_analyzer"
+        confidence: 0.80
+        parser: "tree-sitter"
+        capabilities:
+          - "code_smell_detection"
+          - "xml_doc_extraction"
+          - "class_hierarchy_analysis"
+      
+      - name: "Extract docstrings (multi-language)"
+        module: "src.intelligence.docstring_extractor"
+        output: "ranked_docstrings"
+        ranking_criteria:
+          - "length (20%)"
+          - "vocabulary_richness (25%)"
+          - "technical_keywords (20%)"
+          - "structure (15%)"
+          - "code_examples (10%)"
+          - "type_information (10%)"
+      
+      - name: "Detect code smells"
+        module: "src.workflows.refactoring_intelligence"
+        detectors:
+          - "long_methods"
+          - "complex_conditionals"
+          - "deep_nesting"
+          - "long_parameter_lists"
+          - "magic_numbers"
+          - "god_classes"
+        output: "code_smell_inventory"
+      
+      - name: "Build dependency graph"
+        module: "src.operations.modules.cleanup.reference_tracker"
+        graph_types:
+          - "import_dependencies"
+          - "class_inheritance"
+          - "method_call_chains"
+    
+    caching:
+      enabled: true
+      module: "src.workflows.ast_cache"
+      strategy: "LRU"
+      max_size: 100
+      invalidation: "file_hash_change"
+    
+    parallelization:
+      enabled: true
+      method: "ProcessPoolExecutor"
+      max_workers: 4
+    
+    success_criteria:
+      - "At least 70% of files parsed successfully"
+      - "Code smells detected (or none found)"
+      - "Dependency graph has >0 nodes"
+
+  - id: "use_case_inference"
+    name: "Use Case Generation"
+    description: "Reverse-engineer use cases from code structure"
+    duration_estimate: "20-60 seconds"
+    dependencies:
+      - "ast_analysis"
+    
+    tasks:
+      - name: "Extract API endpoints"
+        method: "ast_pattern_matching"
+        patterns:
+          python:
+            - "@app.route"
+            - "@router.get/post/put/delete"
+            - "class.*APIView"
+          javascript:
+            - "app.get/post/put/delete"
+            - "router.route"
+            - "express.Router"
+          csharp:
+            - "[HttpGet]"
+            - "[HttpPost]"
+            - "[Route]"
+        confidence: 0.95
+        output: "api_use_cases"
+      
+      - name: "Analyze controller actions"
+        method: "class_method_analysis"
+        target_patterns:
+          - "*Controller"
+          - "*Handler"
+          - "*Service"
+        confidence: 0.90
+        output: "controller_use_cases"
+      
+      - name: "Analyze service methods"
+        method: "service_layer_detection"
+        patterns:
+          - "class *Service"
+          - "class *Manager"
+          - "class *Repository"
+        confidence: 0.85
+        output: "service_use_cases"
+      
+      - name: "Enrich with docstrings"
+        method: "docstring_mapping"
+        source: "ranked_docstrings"
+        enhancement: "add_descriptions"
+      
+      - name: "Calculate confidence scores"
+        scoring_rules:
+          - "API endpoint with docstring: 0.95"
+          - "API endpoint without docstring: 0.90"
+          - "Controller action with docstring: 0.88"
+          - "Controller action without docstring: 0.80"
+          - "Service method with docstring: 0.83"
+          - "Service method without docstring: 0.75"
+          - "Inferred from class name: 0.70"
+      
+      - name: "Classify by domain"
+        domains:
+          - "authentication"
+          - "authorization"
+          - "user_management"
+          - "data_processing"
+          - "reporting"
+          - "integration"
+          - "administration"
+        method: "keyword_matching"
+    
+    output:
+      format: "use_cases.json"
+      schema:
+        - "id"
+        - "title"
+        - "description"
+        - "target_role"
+        - "business_value"
+        - "complexity"
+        - "confidence"
+        - "source"
+        - "domain"
+    
+    success_criteria:
+      - "At least 10 use cases detected (or repo is trivial)"
+      - "All use cases have confidence scores"
+      - "At least 50% have descriptions"
+
+  - id: "executive_generation"
+    name: "Executive Summary Generation"
+    description: "Auto-generate executive summary from AST insights"
+    duration_estimate: "15-45 seconds"
+    dependencies:
+      - "ast_analysis"
+      - "use_case_inference"
+    
+    tasks:
+      - name: "Generate 'What It Does' narrative"
+        method: "semantic_synthesis"
+        inputs:
+          - "entry_points"
+          - "api_endpoints"
+          - "key_business_entities"
+          - "service_methods"
+        output: "what_it_does_summary"
+        components:
+          - "natural_language_summary"
+          - "key_highlights (top 5)"
+          - "confidence_score"
+      
+      - name: "Generate composition"
+        method: "architecture_pattern_detection"
+        inputs:
+          - "file_structure"
+          - "ast_analysis"
+          - "dependency_graph"
+        detection_patterns:
+          - "layered_architecture"
+          - "microservices"
+          - "mvc_pattern"
+          - "clean_architecture"
+          - "monolithic"
+        output: "composition_summary"
+        components:
+          - "component_list_with_technologies"
+          - "files_count_per_component"
+          - "inter_component_dependencies"
+      
+      - name: "Extract key capabilities"
+        method: "capability_inference"
+        sources:
+          - "public_apis"
+          - "major_workflows"
+          - "integration_points"
+        ranking_criteria:
+          - "public_visibility"
+          - "complexity"
+          - "frequency_of_use"
+        output: "capability_cards"
+        limit: 10
+      
+      - name: "Build technical foundation summary"
+        method: "tech_stack_aggregation"
+        inputs:
+          - "language_statistics"
+          - "framework_detection"
+          - "architecture_patterns"
+        output: "technical_foundation"
+    
+    output:
+      format: "executive_summary.json"
+      schema:
+        - "project_name"
+        - "tagline"
+        - "what_it_does"
+        - "composition"
+        - "capabilities"
+        - "technical_foundation"
+        - "quick_insights"
+        - "recommended_next_steps"
+    
+    success_criteria:
+      - "Summary has >200 characters"
+      - "At least 3 capabilities identified"
+      - "Technical foundation has language breakdown"
+
+  - id: "recommendation_intelligence"
+    name: "Recommendation Generation"
+    description: "Transform code smells into actionable recommendations"
+    duration_estimate: "10-30 seconds"
+    dependencies:
+      - "ast_analysis"
+    
+    tasks:
+      - name: "Transform code smells to recommendations"
+        mapping:
+          long_method:
+            title: "Extract method"
+            category: "maintainability"
+            impact: "medium"
+            effort: "low"
+          
+          complex_conditional:
+            title: "Simplify logic"
+            category: "maintainability"
+            impact: "medium"
+            effort: "medium"
+          
+          deep_nesting:
+            title: "Flatten structure"
+            category: "maintainability"
+            impact: "medium"
+            effort: "low"
+          
+          long_parameter_list:
+            title: "Introduce parameter object"
+            category: "maintainability"
+            impact: "low"
+            effort: "medium"
+          
+          magic_number:
+            title: "Extract constants"
+            category: "maintainability"
+            impact: "low"
+            effort: "low"
+          
+          god_class:
+            title: "Split responsibilities"
+            category: "architecture"
+            impact: "high"
+            effort: "high"
+      
+      - name: "Calculate ROI scores"
+        formula: "impact_score * effort_multiplier"
+        impact_scores:
+          high: 3
+          medium: 2
+          low: 1
+        effort_multipliers:
+          low: 3
+          medium: 2
+          high: 1
+        result: "roi_score (1-9, higher is better)"
+      
+      - name: "Prioritize by impact"
+        rules:
+          - "high_impact + low_effort = P0 (critical)"
+          - "high_impact + medium_effort = P1 (important)"
+          - "medium_impact + any_effort = P2 (optional)"
+          - "low_impact + any_effort = P3 (deferred)"
+      
+      - name: "Categorize by type"
+        categories:
+          - "security"
+          - "performance"
+          - "maintainability"
+          - "architecture"
+          - "testing"
+          - "documentation"
+    
+    output:
+      format: "recommendations.json"
+      schema:
+        - "id"
+        - "title"
+        - "description"
+        - "category"
+        - "priority"
+        - "impact"
+        - "effort"
+        - "roi_score"
+        - "affected_files"
+        - "confidence"
+    
+    success_criteria:
+      - "All code smells mapped to recommendations"
+      - "ROI scores calculated for all"
+      - "Priority assigned (P0/P1/P2/P3)"
+
+  - id: "onboarding_generation"
+    name: "Onboarding Auto-Generation"
+    description: "Generate progressive onboarding from codebase structure"
+    duration_estimate: "20-60 seconds"
+    dependencies:
+      - "repository_scan"
+      - "ast_analysis"
+      - "use_case_inference"
+    
+    tasks:
+      - name: "Stage 1: Setup & Running"
+        method: "dependency_detection"
+        detect:
+          - "requirements.txt"
+          - "package.json"
+          - "*.csproj"
+          - "Gemfile"
+          - "go.mod"
+        generate:
+          - "installation_commands"
+          - "run_instructions"
+          - "prerequisite_list"
+      
+      - name: "Stage 2: Project Structure"
+        method: "directory_analysis"
+        analyze:
+          - "folder_hierarchy"
+          - "module_purposes"
+        generate:
+          - "folder_descriptions"
+          - "architecture_diagram (Mermaid)"
+      
+      - name: "Stage 3: Key Concepts"
+        method: "entity_extraction"
+        extract_from:
+          - "class_definitions"
+          - "main_entities"
+        generate:
+          - "business_domain_explanations"
+          - "entity_relationship_diagram (Mermaid)"
+      
+      - name: "Stage 4: API & Workflows"
+        method: "endpoint_workflow_analysis"
+        extract:
+          - "api_endpoints"
+          - "controller_actions"
+        generate:
+          - "sequence_diagrams (Mermaid)"
+          - "api_documentation"
+      
+      - name: "Stage 5: Data Models"
+        method: "data_model_extraction"
+        extract:
+          - "entity_classes"
+          - "dtos"
+          - "database_models"
+        generate:
+          - "er_diagrams (Mermaid)"
+          - "relationship_mappings"
+      
+      - name: "Stage 6: Testing & Deployment"
+        method: "config_file_analysis"
+        detect:
+          - "pytest.ini"
+          - "jest.config.js"
+          - ".github/workflows"
+          - "Dockerfile"
+        generate:
+          - "test_running_instructions"
+          - "deployment_guide"
+          - "ci_cd_explanation"
+    
+    diagram_generation:
+      engine: "Mermaid"
+      types:
+        - "flowchart (call graphs)"
+        - "classDiagram (class relationships)"
+        - "sequenceDiagram (API flows)"
+        - "erDiagram (entity relationships)"
+    
+    output:
+      format: "onboarding.json"
+      schema:
+        - "stages (array of 6)"
+        - "each_stage: {id, title, description, sections, diagrams, exercises}"
+    
+    success_criteria:
+      - "All 6 stages generated"
+      - "At least 2 Mermaid diagrams created"
+      - "Setup instructions present"
+
+  - id: "validation"
+    name: "Quality Validation"
+    description: "Verify generated data meets quality standards"
+    duration_estimate: "5-15 seconds"
+    dependencies:
+      - "use_case_inference"
+      - "executive_generation"
+      - "recommendation_intelligence"
+      - "onboarding_generation"
+    
+    tasks:
+      - name: "Verify confidence thresholds"
+        rule: "All items must have confidence >= 0.70"
+        action_on_failure: "flag_low_confidence"
+      
+      - name: "Check data completeness"
+        required_fields:
+          use_cases:
+            - "title"
+            - "confidence"
+            - "source"
+          executive_summary:
+            - "what_it_does"
+            - "composition"
+          recommendations:
+            - "priority"
+            - "roi_score"
+          onboarding:
+            - "all 6 stages present"
+      
+      - name: "Validate JSON schema"
+        schemas:
+          - "use_cases_schema.json"
+          - "executive_summary_schema.json"
+          - "recommendations_schema.json"
+          - "onboarding_schema.json"
+      
+      - name: "Run dashboard smoke tests"
+        tests:
+          - "Dashboard loads without errors"
+          - "All tabs render"
+          - "Confidence badges display"
+          - "Data source indicators visible"
+    
+    success_criteria:
+      - "No schema validation errors"
+      - "Confidence thresholds met"
+      - "Dashboard smoke tests pass"
+
+# Definition of Ready (DoR)
+dor_compliance:
+  - condition: "AST analyzers are production-ready"
+    validation: "Existing unit tests pass"
+    files:
+      - "tests/intelligence/test_python_analyzer.py"
+      - "tests/intelligence/test_javascript_analyzer.py"
+      - "tests/intelligence/test_csharp_analyzer.py"
+  
+  - condition: "AST cache is implemented and tested"
+    validation: "Cache tests pass"
+    files:
+      - "tests/workflows/test_ast_cache.py"
+  
+  - condition: "Docstring extractor is functional"
+    validation: "Docstring extraction tests pass"
+    files:
+      - "tests/intelligence/test_docstring_extractor.py"
+  
+  - condition: "Code smell detector is validated"
+    validation: "Code smell detection tests pass"
+    files:
+      - "tests/workflows/test_refactoring_intelligence.py"
+
+# Definition of Done (DoD)
+dod_compliance:
+  - condition: "All 4 tabs enhanced"
+    tabs:
+      - "Executive Summary"
+      - "Use Cases"
+      - "Recommendations"
+      - "Onboarding"
+    validation: "Each tab displays AST-derived data"
+  
+  - condition: "Confidence scores displayed in UI"
+    implementation: "confidence-badge component"
+    validation: "Badges visible in browser"
+  
+  - condition: "AST-derived badges visible"
+    icons:
+      - "🧠 = AST Analysis"
+      - "📝 = Docstring Extracted"
+      - "🔍 = Pattern Detection"
+    validation: "Icons render correctly"
+  
+  - condition: "Dashboard loads without errors"
+    validation: "No console errors, all tabs load"
+  
+  - condition: "Performance target met"
+    target: "<10 seconds for 1000-file repo"
+    validation: "Performance benchmark test passes"
+
+# TDD Requirements
+tdd_requirements:
+  unit_tests:
+    - name: "test_use_case_inference_engine"
+      file: "tests/intelligence/test_use_case_inference.py"
+      coverage_target: 90
+    
+    - name: "test_executive_summary_generator"
+      file: "tests/intelligence/test_executive_summary_generator.py"
+      coverage_target: 85
+    
+    - name: "test_recommendation_intelligence"
+      file: "tests/intelligence/test_recommendation_intelligence.py"
+      coverage_target: 90
+    
+    - name: "test_onboarding_generator"
+      file: "tests/intelligence/test_onboarding_generator.py"
+      coverage_target: 85
+  
+  integration_tests:
+    - name: "test_full_orchestrator_run"
+      file: "tests/orchestrators/test_intelligent_dashboard_orchestrator.py"
+      scenario: "Analyze sample repository end-to-end"
+      validation:
+        - "All phases execute"
+        - "Data files generated"
+        - "No exceptions raised"
+  
+  smoke_tests:
+    - name: "test_dashboard_displays_generated_data"
+      file: "tests/dashboard/test_dashboard_integration.py"
+      scenario: "Load dashboard with AST-generated data"
+      validation:
+        - "Dashboard loads"
+        - "All tabs populated"
+        - "Confidence badges visible"
+
+# Extensibility Design
+extensibility:
+  design_principles:
+    - "Language-agnostic: Add new analyzer = add language support"
+    - "Modular: Each intelligence module is independent"
+    - "Cacheable: AST parsing results are cached (LRU)"
+    - "Fallback: Manual data used if AST fails"
+    - "Progressive: Can run partial analysis"
+  
+  plugin_architecture:
+    analyzer_interface: "src.intelligence.analyzers.base_analyzer.BaseAnalyzer"
+    registration: "Automatic via subclass detection"
+    required_methods:
+      - "analyze(ast_tree, code) -> List[CodeSmell]"
+      - "detect_long_methods()"
+      - "detect_complex_methods()"
+      - "detect_deep_nesting()"
+  
+  future_languages:
+    - language: "Java"
+      parser: "tree-sitter-java"
+      confidence: 0.80
+    
+    - language: "PHP"
+      parser: "tree-sitter-php"
+      confidence: 0.75
+    
+    - language: "Ruby"
+      parser: "tree-sitter-ruby"
+      confidence: 0.75
+    
+    - language: "Go"
+      parser: "tree-sitter-go"
+      confidence: 0.80
+  
+  future_enhancements:
+    - name: "ML-based use case classification"
+      technology: "scikit-learn or transformers"
+      benefit: "Higher accuracy in domain classification"
+    
+    - name: "Natural language generation for summaries"
+      technology: "GPT-4 or local LLM"
+      benefit: "Human-quality executive summaries"
+    
+    - name: "Code complexity heatmaps"
+      technology: "D3.js visualization"
+      benefit: "Visual identification of hot spots"
+    
+    - name: "Security vulnerability scanning"
+      technology: "CodeQL or Semgrep integration"
+      benefit: "Automated security recommendations"
+    
+    - name: "Real-time incremental updates"
+      technology: "File watcher + incremental AST"
+      benefit: "Dashboard stays current"
+
+# Scalability
+scalability:
+  performance_targets:
+    small_repo:
+      size: "<100 files"
+      target: "<2 seconds"
+    
+    medium_repo:
+      size: "100-1000 files"
+      target: "<10 seconds"
+    
+    large_repo:
+      size: "1000-10000 files"
+      target: "<60 seconds"
+    
+    extra_large_repo:
+      size: ">10000 files"
+      target: "<5 minutes"
+      note: "Consider database caching"
+  
+  optimization_strategies:
+    - name: "Parallel AST parsing"
+      method: "ProcessPoolExecutor"
+      workers: "CPU count - 1"
+      benefit: "4x speedup on 4-core machine"
+    
+    - name: "Incremental analysis"
+      method: "Git diff detection"
+      trigger: "Only re-analyze changed files"
+      benefit: "90% time reduction on updates"
+    
+    - name: "AST cache reuse"
+      method: "SHA256 hash validation"
+      storage: "In-memory LRU cache"
+      benefit: "Instant results for unchanged files"
+    
+    - name: "Lazy loading"
+      method: "Analyze on-demand per tab"
+      trigger: "User clicks tab"
+      benefit: "Faster initial load"
+    
+    - name: "Database caching"
+      method: "SQLite for large repos"
+      threshold: ">5000 files"
+      benefit: "Persistent cache across sessions"
+  
+  distributed_option:
+    name: "Celery task queue (future)"
+    use_case: "Enterprise repos with 50k+ files"
+    architecture: "Redis backend + worker pool"
+    benefit: "Horizontal scaling"
+
+# Dependencies
+dependencies:
+  existing_code:
+    - path: "src/intelligence/analyzers/*"
+      purpose: "Multi-language AST analysis"
+      status: "production-ready"
+    
+    - path: "src/workflows/ast_cache.py"
+      purpose: "AST caching system"
+      status: "production-ready"
+    
+    - path: "src/intelligence/docstring_extractor.py"
+      purpose: "Multi-language docstring extraction"
+      status: "production-ready"
+    
+    - path: "src/workflows/refactoring_intelligence.py"
+      purpose: "Code smell detection"
+      status: "production-ready"
+    
+    - path: "src/operations/modules/cleanup/reference_tracker.py"
+      purpose: "Dependency graph generation"
+      status: "production-ready"
+  
+  new_code_required:
+    - path: "src/orchestrators/intelligent_dashboard_orchestrator.py"
+      purpose: "Main orchestrator"
+      estimated_loc: 500
+    
+    - path: "src/intelligence/dashboard_ast_engine.py"
+      purpose: "Orchestrate AST analyzers"
+      estimated_loc: 300
+    
+    - path: "src/intelligence/use_case_inference.py"
+      purpose: "Infer use cases from code"
+      estimated_loc: 400
+    
+    - path: "src/intelligence/executive_summary_generator.py"
+      purpose: "Generate executive summary"
+      estimated_loc: 350
+    
+    - path: "src/intelligence/recommendation_intelligence.py"
+      purpose: "Transform code smells to recommendations"
+      estimated_loc: 250
+    
+    - path: "src/intelligence/onboarding_generator.py"
+      purpose: "Generate onboarding stages"
+      estimated_loc: 450
+  
+  external_dependencies:
+    - none: "Reuses existing infrastructure"
+
+# Metrics & Telemetry
+metrics:
+  collection:
+    - "Total files analyzed"
+    - "AST parsing success rate"
+    - "Use cases detected"
+    - "Recommendations generated"
+    - "Average confidence score"
+    - "Execution time per phase"
+  
+  dashboards:
+    - "Admin Dashboard (Intelligence Panel)"
+    - "Orchestrator execution logs"
+  
+  alerts:
+    - "Confidence score drops below 70%"
+    - "Execution time exceeds target"
+    - "AST parsing failure rate >30%"
+
+# Error Handling
+error_handling:
+  strategy: "Graceful degradation"
+  
+  scenarios:
+    - error: "AST parsing fails for a file"
+      action: "Log warning, continue with remaining files"
+      fallback: "Skip that file, reduce coverage metric"
+    
+    - error: "No use cases detected"
+      action: "Generate warning message"
+      fallback: "Display 'No use cases found' in UI"
+    
+    - error: "Docstring extraction fails"
+      action: "Use method names as fallback"
+      fallback: "Lower confidence scores"
+    
+    - error: "Orchestrator crashes mid-execution"
+      action: "Save partial results to disk"
+      fallback: "Allow resume from last checkpoint"
+
+# Security Considerations
+security:
+  - "AST parsing is read-only (no code execution)"
+  - "File scanning respects .gitignore patterns"
+  - "No network calls during analysis"
+  - "All data stays local (no cloud transmission)"
+  - "User can review generated data before publishing"
+
+# Documentation
+documentation:
+  user_guide: "cortex-brain/documents/implementation-guides/intelligent-dashboard-guide.md"
+  api_reference: "Auto-generated from docstrings"
+  examples: "cortex-brain/examples/intelligent-dashboard-examples/"
+  troubleshooting: "cortex-brain/documents/troubleshooting/intelligent-dashboard-issues.md"
+
+# Success Criteria
+success_criteria:
+  must_have:
+    - "Orchestrator executes without errors"
+    - "Use cases auto-generated from code (>50 detected for medium repos)"
+    - "Executive summary 95%+ automated"
+    - "Recommendations 100% AST-based"
+    - "Onboarding stages auto-generated (6 stages complete)"
+    - "Confidence scores displayed in UI"
+    - "Performance: <10 seconds for 1000-file repo"
+  
+  nice_to_have:
+    - "ML-based use case classification"
+    - "GPT integration for natural language generation"
+    - "Real-time incremental updates"
+    - "Multi-repo comparison dashboard"
+    - "Export to ADO work items"
+
+# Version History
+version_history:
+  - version: "1.0.0"
+    date: "2025-12-10"
+    author: "Asif Hussain"
+    changes:
+      - "Initial manifest creation"
+      - "Defined 6 execution phases"
+      - "Specified DoR/DoD compliance"
+      - "Added TDD requirements"
+      - "Designed extensibility framework"

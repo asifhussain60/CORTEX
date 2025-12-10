@@ -36,6 +36,9 @@ PyGithub>=2.5.0  # GitHub Gist integration for feedback sharing (enhanced_feedba
 
 # Multi-Language Refactoring System (CORTEX 3.2)
 tree-sitter>=0.20.1  # Universal parser for C#, TypeScript, Java, Go
+tree-sitter-python>=0.21.0  # Python language grammar for Tree-sitter AST parsing
+tree-sitter-javascript>=0.21.0  # JavaScript/TypeScript grammar for Tree-sitter
+tree-sitter-c-sharp>=0.21.0  # C# language grammar for Tree-sitter
 
 # Universal Document Conversion (Word/PDF to Markdown)
 python-docx>=1.1.0  # Word document parsing (document_converter, policy_analyzer)

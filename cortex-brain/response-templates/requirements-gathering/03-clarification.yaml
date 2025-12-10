@@ -1,0 +1,137 @@
+name: "Requirements Gathering - Clarification"
+phase: "Phase 4: Iterative Refinement (Clarification Sub-Phase)"
+purpose: "Handle vague requests by asking specific clarification questions"
+audience: "User (when request lacks sufficient detail)"
+
+template: |
+  ## 🤔 CORTEX Clarification Needed
+  **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+  
+  ---
+  
+  ### 🎯 Understanding Gap
+  
+  **What You Requested:** {user_request}
+  
+  **Ambiguity Detected:** {ambiguity_type}
+  
+  ---
+  
+  ### ❓ Clarification Questions
+  
+  {clarification_questions}
+  
+  ---
+  
+  ### 💡 Context & Options
+  
+  **Why These Questions Matter:**
+  {rationale}
+  
+  **Common Interpretations:**
+  {common_interpretations}
+  
+  ---
+  
+  ### 🔍 Next Steps
+  
+  **After Your Response:**
+  - Update requirements with your clarifications
+  - Regenerate executive summary with specifics
+  - Proceed to discovery context injection (Phase 2)
+  
+  **Your Feedback:** Please provide answers to help me understand your requirements better.
+
+variables:
+  user_request:
+    type: string
+    description: "Original vague request (quoted)"
+    required: true
+    
+  ambiguity_type:
+    type: string
+    enum: ["Missing Scope", "Multiple Interpretations", "Unclear Success Criteria", "Undefined Terms", "Missing Context"]
+    description: "Type of ambiguity detected"
+    required: true
+    
+  clarification_questions:
+    type: string
+    description: "Numbered list of specific questions (3-7 questions)"
+    required: true
+    
+  rationale:
+    type: string
+    description: "Explain why these questions are important for requirements"
+    required: true
+    
+  common_interpretations:
+    type: list
+    description: "2-4 possible interpretations of the vague request"
+    required: true
+
+validation_rules:
+  - rule: "clarification_questions must have 3-7 specific questions"
+  - rule: "questions must be answerable (avoid yes/no unless necessary)"
+  - rule: "common_interpretations must show distinct approaches"
+  - rule: "rationale must connect questions to project success"
+  - rule: "avoid generic questions like 'What do you want?'"
+
+examples:
+  - context: "User says: 'Make it better'"
+    output: |
+      What You Requested: "Make it better"
+      
+      Ambiguity Detected: Missing Scope - "better" could refer to performance, UX, maintainability, security, or other aspects
+      
+      Clarification Questions:
+      1. **What aspect needs improvement?** Performance (speed/memory), User Experience (UI/workflow), Code Quality (maintainability/readability), Security (vulnerabilities/threats), or something else?
+      2. **What's the current pain point?** What specific problem are you trying to solve?
+      3. **What does success look like?** How will you know when it's "better"?
+      4. **What's the priority?** If you could only improve one thing, what would it be?
+      5. **Are there constraints?** Budget, timeline, backward compatibility requirements?
+      
+      Common Interpretations:
+      - Performance optimization (reduce latency by 50%)
+      - UX redesign (simplify workflow, reduce clicks)
+      - Code refactoring (improve maintainability, add tests)
+      - Security hardening (fix vulnerabilities, add auth)
+
+  - context: "User says: 'Add planning feature'"
+    output: |
+      What You Requested: "Add planning feature"
+      
+      Ambiguity Detected: Undefined Terms - "planning feature" is too broad (feature planning? project planning? capacity planning?)
+      
+      Clarification Questions:
+      1. **What type of planning?** Feature planning (DoR/DoD), Project planning (Gantt/roadmaps), Capacity planning (resource allocation), Sprint planning (agile), or something else?
+      2. **Who uses this feature?** Developers, PMs, executives, or multiple roles?
+      3. **What's the input/output?** What information goes in, what artifacts come out?
+      4. **How does it integrate?** Does it connect to existing orchestrators (TDD, Execution, etc.)?
+      5. **What's the workflow?** Step-by-step process for using this feature.
+      
+      Common Interpretations:
+      - Feature Planning Orchestrator (DoR/DoD, complexity analysis, threat modeling)
+      - Project Planning Tool (roadmaps, timelines, dependencies)
+      - Capacity Planning Module (resource allocation, team load balancing)
+
+usage_notes:
+  - "Trigger this template when user_request length < 10 words AND lacks specifics"
+  - "Trigger when ambiguity score > 70% (multiple valid interpretations)"
+  - "Do NOT use for clearly specified requests"
+  - "Keep questions conversational, not interrogative"
+  - "Provide context (why asking) for each question group"
+  - "Always offer common interpretations to help user articulate needs"
+  
+trigger_patterns:
+  - "make it better/faster/cleaner"
+  - "add [vague feature name]"
+  - "improve [system/component]"
+  - "fix [problem without details]"
+  - "enhance [capability]"
+  - "update [thing]"
+  - requests under 10 words without specific nouns/verbs
+  
+anti_patterns:
+  - "Create sub-plan for Planning Orchestrator with TDD phases" (CLEAR - don't clarify)
+  - "Run Feature Discovery baseline scan" (CLEAR - don't clarify)
+  - "Update orchestration-master-plan.md with LOC estimates" (CLEAR - don't clarify)
