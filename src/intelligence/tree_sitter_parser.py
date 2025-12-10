@@ -19,7 +19,7 @@ from typing import Optional, Dict, Any, List, Tuple
 import logging
 
 try:
-    from tree_sitter import Language, Parser, Node, Tree
+    from tree_sitter import Language, Parser, Node, Tree, Query, QueryCursor
     from tree_sitter_python import language as python_language
     from tree_sitter_javascript import language as js_language
     from tree_sitter_c_sharp import language as csharp_language
@@ -30,6 +30,8 @@ except ImportError:
     Parser = None
     Node = None
     Tree = None
+    Query = None
+    QueryCursor = None
 
 logger = logging.getLogger(__name__)
 
@@ -185,9 +187,19 @@ class TreeSitterParser:
         """
         try:
             parser = self._parsers[language]
-            # Tree-sitter v0.21+ API: Use parser.language directly
-            query = parser.language.query(query_string)
-            captures = query.captures(tree.root_node)
+            # Tree-sitter v0.25 API: Query constructor + QueryCursor
+            query = Query(parser.language, query_string)
+            cursor = QueryCursor(query)
+            
+            # Execute query with QueryCursor.matches() -> list[(pattern_index, {capture_name: [nodes]})]
+            matches = cursor.matches(tree.root_node)
+            
+            # Extract captures from matches
+            captures = []
+            for pattern_index, captures_dict in matches:
+                for capture_name, nodes in captures_dict.items():
+                    for node in nodes:
+                        captures.append((node, capture_name))
             
             return captures
         

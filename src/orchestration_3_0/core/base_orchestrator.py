@@ -18,6 +18,14 @@ from .state_machine import StateMachine, OrchestratorStates
 from .dependency_container import DependencyContainer
 from ..session.session_manager import SessionManager, WorkflowSession
 
+# Response template integration for visual progress
+try:
+    from src.response_templates.response_template_manager import ResponseTemplateManager
+    RESPONSE_TEMPLATES_AVAILABLE = True
+except ImportError:
+    RESPONSE_TEMPLATES_AVAILABLE = False
+    ResponseTemplateManager = None
+
 logger = logging.getLogger(__name__)
 
 
@@ -101,6 +109,12 @@ class BaseOrchestrator(ABC):
         self.session_manager = session_manager
         self.container = container
         self._start_time: Optional[datetime] = None
+        
+        # Initialize response template manager for visual progress
+        if RESPONSE_TEMPLATES_AVAILABLE:
+            self.template_manager = ResponseTemplateManager()
+        else:
+            self.template_manager = None
         
         logger.info(f"{orchestrator_name} initialized")
     
@@ -255,6 +269,85 @@ class BaseOrchestrator(ABC):
             Dictionary of output values
         """
         pass
+    
+    def report_progress(
+        self,
+        current_phase: int,
+        total_phases: int,
+        phase_name: str,
+        completed_tasks: int,
+        total_tasks: int,
+        current_task: str = "",
+        execution_log: str = ""
+    ) -> str:
+        """
+        Report execution progress with visual progress bar.
+        
+        Args:
+            current_phase: Current phase number (1-indexed)
+            total_phases: Total number of phases
+            phase_name: Name of current phase
+            completed_tasks: Number of completed tasks
+            total_tasks: Total number of tasks
+            current_task: Description of current task
+            execution_log: Optional execution log text
+            
+        Returns:
+            Rendered progress message
+        """
+        # Calculate percentages
+        percentage = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 0
+        
+        # Generate ASCII progress bar (20 characters)
+        filled = percentage // 5
+        bar = '█' * filled + '░' * (20 - filled)
+        
+        # Calculate elapsed time
+        elapsed_seconds = 0.0
+        if self._start_time:
+            elapsed_seconds = (datetime.now() - self._start_time).total_seconds()
+        
+        elapsed_minutes = int(elapsed_seconds // 60)
+        elapsed_secs = int(elapsed_seconds % 60)
+        elapsed_time = f"{elapsed_minutes}m {elapsed_secs}s" if elapsed_minutes > 0 else f"{elapsed_secs}s"
+        
+        # Try to use response template if available
+        if RESPONSE_TEMPLATES_AVAILABLE and self.template_manager:
+            try:
+                rendered = self.template_manager.render_template(
+                    template_id='autonomous_execution_progress',
+                    mode='autonomous',
+                    context={
+                        'progress_bar': bar,
+                        'percentage': percentage,
+                        'current_phase': current_phase,
+                        'total_phases': total_phases,
+                        'phase_name': phase_name,
+                        'completed_tasks': completed_tasks,
+                        'total_tasks': total_tasks,
+                        'elapsed_time': elapsed_time,
+                        'current_task': current_task,
+                        'execution_log': execution_log
+                    }
+                )
+                logger.info(rendered)
+                return rendered
+            except Exception as e:
+                logger.warning(f"Failed to render progress template: {e}")
+        
+        # Fallback to simple progress
+        simple_progress = (
+            f"Progress: [{bar}] {percentage}% - "
+            f"Phase {current_phase}/{total_phases}: {phase_name} - "
+            f"Tasks {completed_tasks}/{total_tasks} - "
+            f"Elapsed: {elapsed_time}"
+        )
+        
+        if current_task:
+            simple_progress += f"\nCurrent: {current_task}"
+        
+        logger.info(simple_progress)
+        return simple_progress
     
     def _create_error_result(
         self,
