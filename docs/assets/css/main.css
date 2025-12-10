@@ -413,6 +413,77 @@ body {
 }
 
 /* ============================================
+   EVOLUTION BANNER (Architecture Transition Alert)
+   ============================================ */
+.evolution-banner {
+    background: linear-gradient(135deg, 
+        rgba(251, 191, 36, 0.15), 
+        rgba(245, 158, 11, 0.15));
+    border: 2px solid rgba(251, 191, 36, 0.3);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(251, 191, 36, 0.1);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.evolution-banner::before {
+    content: '🚧';
+    font-size: 1.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.evolution-banner strong {
+    color: #fbbf24; /* Amber-400 */
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.evolution-banner p {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.evolution-banner a {
+    color: var(--accent-primary);
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.evolution-banner a:hover {
+    color: #00ffff;
+    text-decoration: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .evolution-banner {
+        padding: 1rem;
+        font-size: 0.9rem;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .evolution-banner::before {
+        font-size: 1.25rem;
+    }
+    
+    .evolution-banner strong {
+        font-size: 1rem;
+    }
+}
+
+/* ============================================
    FEATURE GRID
    ============================================ */
 .feature-grid {

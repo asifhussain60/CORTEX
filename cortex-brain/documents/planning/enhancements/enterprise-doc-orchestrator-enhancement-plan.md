@@ -2,10 +2,17 @@
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 **Date:** December 10, 2025  
-**Version:** 1.8.0 - PHASE 4 COMPLETE | Phase 5 Ready (Autonomous Regeneration System)  
-**Plan Type:** Strategic Enhancement - Documentation System Redesign  
+**Version:** 1.9.0 - PHASE 4 COMPLETE | Phase 5 Ready (Autonomous Regeneration System)  
+**Plan Type:** Strategic Enhancement - Documentation System Redesign (CORTEX 4.0 Orchestrator #7)  
 **Estimated Duration:** 10-12 weeks (Phases 1-4 complete, Phase 5 in planning)  
 **Priority:** HIGH
+
+**🎯 CORTEX 4.0 Positioning:**
+- **Orchestrator #7** in the [Orchestration Master Plan](../orchestration-master-plan.md)
+- **Phase 3 Implementation:** Intelligence & Documentation (Week 4-5)
+- **Consolidates:** 5+ orchestrators (6,718 LOC → 700 LOC target)
+- **From:** enterprise_documentation_orchestrator (4,668 LOC - replaced by GitHub Pages), enterprise_documentation_orchestrator_module (300 LOC), documentation (2 files), manager_report, executive_summary, multi_language_docstring
+- **Integration:** Works with Intelligence Orchestrator (#8) for AI-powered content, Observability (#9) for dashboard metrics, feeds into Onboarding (#10)
 
 **Recent Major Updates:**
 - **Phase 4 Completion:** CORTEX 4.0 Future Vision section complete (6 pages, 58KB)
@@ -52,17 +59,93 @@
 - ✅ **Phase 3:** Story Integration (The Awakening with navigation + 15 comic prompts)
 - ✅ **Phase 4:** CORTEX 4.0 Future Vision (6 pages with D3.js visualizations)
 
-**Next Immediate Steps:**
-1. ⚠️ **CRITICAL:** Execute Phase 5.1 Tone Recalibration (4 days priority work)
-   - Audit 25+ pages for "enterprise-grade" overstatements
-   - Apply realistic team-level positioning (2-10 developers)
-   - Add 4.0 Vision disclaimers to aspirational content
-   - Follow `documentation-positioning-guidelines.md`
-2. Define Phase 5.2-5.4: Autonomous Regeneration System architecture
-3. Design discovery engine (scan operations.yaml, git, tests, modules)
-4. Build template registry (Jinja2 templates for all page types)
-5. Implement change detection (manifest-based diff system)
-6. Create regeneration pipeline (6-stage: discover → generate → deploy)
+**Documentation Evolution Strategy (3-Stage Phased Approach):**
+1. ✅ **Stage 1 - Evolution Banners (TODAY - 1 hour):**
+   - Add prominent banners to 8 architecture pages alerting users to CORTEX 3.0 → 4.0 transition
+   - Link to existing Future Vision section for roadmap details
+   - Update CSS with `.evolution-banner` responsive styles
+   - **Status:** Ready to implement
+   
+2. ⏳ **Stage 2 - Comparison Documentation (Week 5-6 - Post-Consolidation):**
+   - Create `architecture/migration-guide.html` (side-by-side: 15+ orchestrators → 10 unified)
+   - Create `architecture/orchestrator-comparison.html` (LOC reduction metrics, feature parity)
+   - Update `orchestrator-ecosystem.html` with toggleable 3.0 vs 4.0 architecture views
+   - Expand `future/technical-evolution.html` with actual implementation details
+   - **Timing:** After Documentation Orchestrator (#7) consolidation complete
+   
+3. ⏳ **Stage 3 - Autonomous Regeneration System (Weeks 10-12):**
+   - Design discovery engine (scan operations.yaml, git, tests, modules)
+   - Build template registry (Jinja2 templates for all page types)
+   - Implement change detection (manifest-based diff system)
+   - Create regeneration pipeline (6-stage: discover → generate → deploy)
+   - Enable DALL-E prompt auto-regeneration on architecture changes
+
+---
+
+## 🔗 CORTEX 4.0 Orchestration Integration
+
+**Orchestrator #7 Position in Master Plan:**
+- **Phase:** Phase 3 (Intelligence & Documentation) - Week 4-5
+- **Sequence:** After Planning (#4), Execution (#5), Scaffolding (#6)
+- **Master Plan:** [orchestration-master-plan.md](../orchestration-master-plan.md)
+- **Sub-Plans:** [orchestrators/](../orchestrators/) directory
+
+**Consolidation Strategy:**
+This orchestrator consolidates **5+ legacy orchestrators** (6,718 LOC) into a unified **700 LOC** implementation:
+
+| Legacy Orchestrator | LOC | Status |
+|---------------------|-----|--------|
+| `enterprise_documentation_orchestrator.py` | 4,668 | ✅ Replaced by GitHub Pages |
+| `enterprise_documentation_orchestrator_module.py` | 300 | ✅ Archived |
+| `documentation` (2 files) | 1,200 | ⏳ Consolidating |
+| `manager_report` | 300 | ⏳ Consolidating |
+| `executive_summary` | 150 | ⏳ Consolidating |
+| `multi_language_docstring` | 100 | ⏳ Consolidating |
+| **Total** | **6,718** | **→ 700 LOC (90% reduction)** |
+
+**Integration Points with Other Orchestrators:**
+
+1. **Intelligence Orchestrator (#8)** - AI-Powered Content
+   - **Receives:** AI-generated feature descriptions, architectural insights
+   - **Provides:** Documentation structure for intelligence analysis
+   - **Example:** Intelligence generates feature explanation → Documentation renders as GitHub Pages content
+
+2. **Observability Orchestrator (#9)** - Dashboard Metrics
+   - **Receives:** Real-time metrics, health status, analytics data
+   - **Provides:** Metrics display requirements, dashboard layouts
+   - **Example:** Observability reports 847 commits → Documentation displays in Development Context page
+
+3. **Onboarding Orchestrator (#10)** - Tutorial Content
+   - **Receives:** Tutorial templates, onboarding flows
+   - **Provides:** Getting started guides, quick reference docs
+   - **Example:** Onboarding wizard steps → Documentation renders as interactive tutorials
+
+4. **TDD Orchestrator (#1)** - Test Documentation
+   - **Receives:** Test coverage reports, RED-GREEN-REFACTOR workflows
+   - **Provides:** TDD guide pages with coverage visualization
+   - **Example:** TDD reports 81.4% coverage → Documentation displays in TDD Mastery page
+
+5. **Planning Orchestrator (#4)** - DoR/DoD Templates
+   - **Receives:** Planning artifacts, DoR/DoD checklists
+   - **Provides:** Planning System 2.0 documentation
+   - **Example:** Planning creates feature plan → Documentation renders planning workflow guide
+
+**Architecture Components (CORTEX 4.0):**
+- **State Machine:** FSM-based workflow (IDLE → SCANNING → GENERATING → VALIDATING → DEPLOYING → COMPLETE)
+- **Dependency Injection:** Container-managed services (discovery engine, template renderer, deployment manager)
+- **Session Management:** Persistent state across crashes, resume from last checkpoint
+- **BaseOrchestrator:** Inherits report_progress() for visual feedback
+
+**Success Metrics Contribution:**
+
+| Metric | Documentation Orchestrator Contribution |
+|--------|----------------------------------------|
+| Orchestrator count reduction | 5+ → 1 (83% reduction in doc orchestrators) |
+| Code reduction | 6,718 LOC → 700 LOC (90% reduction) |
+| Workflow completion rate | GitHub Pages: 4/4 phases complete (100%) |
+| Multi-tenant ready | Yes (organization-level deployment planned) |
+| Feature discovery | Phase 5: Auto-regeneration system |
+| Dashboard manual work | 60% → 15% (75% automation via Phase 5) |
 
 ---
 
@@ -1667,104 +1750,268 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 
 ---
 
-### Phase 5: Tone Recalibration & Autonomous Regeneration Prep (Week 8-10)
-**Duration:** 12-16 days  
-**Complexity:** MEDIUM-HIGH  
-**Objective:** Recalibrate documentation positioning + prepare autonomous regeneration infrastructure  
-**Priority:** CRITICAL (tone accuracy) + HIGH (automation foundation)
+### Phase 5: Documentation Evolution - 3-Stage Strategy (Weeks 8-12)
+**Duration:** 4 weeks (Stage 1: 1 hour, Stage 2: 1 week, Stage 3: 3 weeks)  
+**Complexity:** HIGH (autonomous regeneration system)  
+**Objective:** Manage CORTEX 3.0 → 4.0 transition with phased documentation evolution  
+**Priority:** HIGH (strategic approach to architecture transition)
 
-#### Increment 5.1: Documentation Tone Audit & Recalibration (4 days) 🔥 **NEW - CRITICAL**
-**Objective:** Establish realistic positioning for CORTEX 3.0 (team-level) vs 4.0 (organization-level)
-
-**Tasks:**
-- [ ] **Create Positioning Guidelines Document:**
-  - **File:** `cortex-brain/documents/planning/documentation-positioning-guidelines.md`
-  - **CORTEX 3.0 Descriptors (APPROVED):**
-    - ✅ "Team collaboration tool"
-    - ✅ "Small team (2-10 developers)"
-    - ✅ "Proof of concept validated"
-    - ✅ "Local deployment"
-    - ✅ "Single-user or small team workflows"
-    - ✅ "Development assistant for individuals/pairs"
-    - ❌ "Enterprise-grade" (reserve for 4.0)
-    - ❌ "Organization-scale" (reserve for 4.0)
-    - ❌ "Production-ready for Fortune 500" (reserve for 4.0)
-  - **CORTEX 4.0 Descriptors (ASPIRATIONAL):**
-    - ✅ "Organization-scale platform"
-    - ✅ "Enterprise deployment"
-    - ✅ "Multi-team coordination"
-    - ✅ "SSO, RBAC, audit logs"
-    - ✅ "Cloud-native infrastructure"
-    - ✅ "Cross-department collaboration"
-  
-- [ ] **Audit All Existing Pages (Content Review):**
-  - **Landing Page (`index.html`):**
-    - Change: "Enterprise AI Development Platform" → "Team-Level AI Development Assistant"
-    - Change: "Transform your development workflow" → "Enhance your team's development workflow"
-    - Keep: Real metrics (302 operations, 4-Tier Brain, 22 SKULL rules) - these are factual
-    - Add disclaimer: "CORTEX 3.0 is optimized for teams of 2-10 developers. See CORTEX 4.0 Vision for organization-scale roadmap."
-  
-  - **Feature Pages:**
-    - TDD Mastery: Keep "94% test-first success" (real metric), remove "enterprise validation"
-    - Planning System 2.0: Emphasize "team planning", not "enterprise portfolio management"
-    - Dashboard System: "Team metrics dashboard", not "executive analytics platform"
-    - ADO Operations: "Team story management", not "organization-wide work tracking"
-  
-  - **Architecture Pages:**
-    - Four-Tier Brain: Honest about "single-user or small team deployment" vs future "distributed architecture"
-    - SKULL Protection: Keep enforcement claims (real), add "tested in team environments (2-10 devs)"
-    - Orchestrator Ecosystem: "15+ workflows for team-level automation" (not "enterprise orchestration")
-  
-  - **Future Vision Pages:**
-    - `future/index.html`: Add banner: "CORTEX 4.0 = Organization-Scale Evolution (2025-2026 Roadmap)"
-    - Strategic Goals: Clearly label each goal with "4.0 Target" badges
-    - Technical Evolution: Emphasize "3.0 = Team-Level Foundation → 4.0 = Organization-Scale Platform"
-  
-  - **Story Page:**
-    - Keep narrative tone (humor preserved)
-    - Add intro: "This story documents the evolution of a team-level tool with organization-scale ambitions"
-    - Chapter context: Each chapter ends with "What we built (team-level)" vs "What's next (org-scale)"
-
-- [ ] **Create Tone Validation Checklist:**
-  - **Automated Checks (grep-based):**
-    ```bash
-    # Forbidden phrases in 3.0 content (docs/features/, docs/architecture/)
-    grep -r "enterprise-grade" docs/features/ docs/architecture/ docs/index.html
-    grep -r "Fortune 500" docs/
-    grep -r "organization-scale" docs/features/ docs/architecture/
-    
-    # Required disclaimers
-    grep -r "team-level\|small team\|2-10 developers" docs/index.html docs/features/index.html
-    ```
-  - **Manual Review:**
-    - [ ] All hero sections use "team" language
-    - [ ] All feature descriptions grounded in team-level use cases
-    - [ ] All future content clearly labeled "4.0 = Aspirational"
-    - [ ] No overstated claims (e.g., "replaces enterprise tools")
-
-- [ ] **Update Template Generators (for future automation):**
-  - **Feature Template:** Add maturity level parameter (`team_level` vs `org_level`)
-  - **Architecture Template:** Include deployment scale context
-  - **Future Template:** Auto-inject "4.0 Vision" badges on aspirational content
-
-**Deliverables:**
-- Positioning guidelines document (team vs org descriptors)
-- 25+ pages audited and updated (realistic tone applied)
-- Tone validation checklist (automated + manual checks)
-- Updated templates with maturity-level awareness
-
-**Acceptance Criteria:**
-- [ ] NO "enterprise-grade" language on 3.0 feature pages
-- [ ] Landing page clearly states "team-level tool"
-- [ ] Future vision section has "4.0 = Organization-Scale" banner
-- [ ] All metrics remain factually accurate (no reduction of real achievements)
-- [ ] Story maintains humor while adding maturity-level context
-- [ ] Disclaimers added to high-visibility pages (landing, feature catalog)
-- [ ] Template generators enforce tone guidelines programmatically
+**Strategic Context:**
+CORTEX is consolidating from 15+ orchestrators → 10 unified orchestrators as part of the Orchestration Master Plan. Rather than regenerate documentation prematurely (documenting features that don't exist yet), this 3-stage strategy acknowledges the transition, waits for implementation, then automates future updates.
 
 ---
 
-#### Increment 5.2: Content Validation & Link Integrity (3 days)
+#### Stage 1: Evolution Banners (1 hour) - ✅ **READY TO IMPLEMENT**
+**Objective:** Alert users to architecture transition without invalidating existing Phase 1-4 work
+
+**Tasks:**
+- [ ] **Design Evolution Banner Component:**
+  - **Visual Design:** Glass card with amber warning color (`--accent-warning: #fbbf24`)
+  - **Content Template:**
+    ```html
+    <div class="evolution-banner">
+      🚧 <strong>Architecture Evolution in Progress</strong>
+      <p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
+         This page reflects current (3.0) architecture. See 
+         <a href="/future/technical-evolution.html">Technical Evolution</a> for CORTEX 4.0 plans.</p>
+    </div>
+    ```
+  - **CSS Styling:** Responsive, glassmorphism aesthetic, mobile-optimized
+  
+- [ ] **Add Banners to 8 Architecture Pages:**
+  1. `docs/gh-pages/architecture/orchestrator-ecosystem.html` (primary affected page)
+  2. `docs/gh-pages/architecture/agent-system.html` (mentions orchestrator integration)
+  3. `docs/gh-pages/architecture/index.html` (architecture overview)
+  4. `docs/gh-pages/architecture/four-tier-brain.html` (references orchestrators)
+  5. `docs/gh-pages/architecture/skull-protection.html` (orchestrator governance)
+  6. `docs/gh-pages/architecture/working-memory.html` (orchestrator queries)
+  7. `docs/gh-pages/architecture/knowledge-graph.html` (orchestrator patterns)
+  8. `docs/gh-pages/architecture/development-context.html` (orchestrator metrics)
+  
+- [ ] **Update CSS (`docs/gh-pages/assets/css/main.css`):**
+  ```css
+  .evolution-banner {
+      background: linear-gradient(135deg, 
+          rgba(251, 191, 36, 0.15), 
+          rgba(245, 158, 11, 0.15));
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      backdrop-filter: blur(10px);
+  }
+  
+  .evolution-banner strong {
+      color: var(--accent-warning, #fbbf24);
+      font-size: 1.1rem;
+  }
+  
+  .evolution-banner p {
+      margin: 0.5rem 0 0 0;
+      line-height: 1.6;
+  }
+  
+  .evolution-banner a {
+      color: var(--accent-primary, #00d4ff);
+      text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+      .evolution-banner {
+          padding: 1rem;
+          font-size: 0.9rem;
+      }
+  }
+  ```
+  
+- [ ] **Test Responsive Design:**
+  - Desktop view (banner prominent, easy to read)
+  - Mobile view (banner adapts, text remains legible)
+  - Link functionality (clicks to technical-evolution.html work)
+
+**Deliverables:**
+- Evolution banner component (HTML + CSS)
+- 8 architecture pages updated with banner
+- Responsive CSS styles added to main.css
+- Local preview testing complete
+
+**Acceptance Criteria:**
+- [ ] Banner appears at top of all 8 architecture pages
+- [ ] Banner styling matches glassmorphism aesthetic
+- [ ] Link to technical-evolution.html works on all pages
+- [ ] Mobile view renders banner without layout breakage
+- [ ] No content changes to existing pages (banners are additive only)
+- [ ] Zero broken links introduced
+
+**Timing:** TODAY (1 hour implementation)
+
+---
+
+#### Stage 2: Comparison Documentation (Week 5-6) - ⏳ **POST-CONSOLIDATION**
+**Objective:** Document actual implementation after Documentation Orchestrator (#7) consolidation complete
+
+**Timing Trigger:** After Phase 3 of Orchestration Master Plan (Documentation Orchestrator consolidation)
+
+**Tasks:**
+- [ ] **Create Migration Guide Page:**
+  - **File:** `docs/gh-pages/architecture/migration-guide.html`
+  - **Content:**
+    - Side-by-side comparison: Old 15+ orchestrators → New 10 unified
+    - What changed: Consolidation strategy, LOC reduction metrics
+    - What stayed the same: Feature parity, API compatibility
+    - Migration impact: User-facing changes (if any)
+    - Code examples: Before/after orchestrator invocations
+  - **Visualizations:** D3.js Sankey diagram (15 old → 10 new with flow arrows)
+  
+- [ ] **Create Orchestrator Comparison Table Page:**
+  - **File:** `docs/gh-pages/architecture/orchestrator-comparison.html`
+  - **Content:**
+    - Comprehensive table: Old orchestrator → New consolidated orchestrator
+    - LOC reduction metrics: 
+      - `enterprise_documentation_orchestrator` (4,668 LOC) → `Documentation` (700 LOC)
+      - Similar breakdown for all 5+ doc orchestrators → 1 unified
+    - Feature parity matrix: Which features moved where
+    - Integration points: How new orchestrators connect
+  - **Interactive Features:** Filter by orchestrator type, search functionality
+  
+- [ ] **Update Existing Pages:**
+  - **orchestrator-ecosystem.html:**
+    - Add toggle button: "View 3.0 Architecture" vs "View 4.0 Architecture"
+    - 3.0 view: Current 15+ orchestrator diagram (preserved)
+    - 4.0 view: New 10 orchestrator diagram (side-by-side)
+    - Evolution timeline showing transition progress
+  
+  - **future/technical-evolution.html:**
+    - Expand from vision → actual implementation details
+    - Add "Implementation Status" section with checkboxes
+    - Include real code snippets from consolidated orchestrators
+    - Add business case metrics: LOC reduction %, performance improvements
+  
+- [ ] **Update Navigation:**
+  - Add "Migration Guide" link to architecture index
+  - Add "Architecture Evolution" section to sidebar
+  - Update breadcrumbs to include new pages
+
+**Deliverables:**
+- 2 new pages: migration-guide.html (estimated 600 lines), orchestrator-comparison.html (estimated 600 lines)
+- 2 updated pages: orchestrator-ecosystem.html (+200 lines), technical-evolution.html (+300 lines)
+- D3.js Sankey diagram for migration visualization
+- Navigation updates across architecture section
+
+**Acceptance Criteria:**
+- [ ] Side-by-side comparison accurate (real orchestrator names, real LOC)
+- [ ] Feature parity matrix complete (no lost functionality)
+- [ ] Toggle functionality works on orchestrator-ecosystem.html
+- [ ] All metrics pulled from actual codebase (no mock data)
+- [ ] Code examples tested and working
+- [ ] Migration guide useful for future consolidations (template for other orchestrators)
+
+**Timing:** Week 5-6 (after Documentation Orchestrator #7 complete)
+
+---
+
+#### Stage 3: Autonomous Regeneration System (Weeks 10-12) - ⏳ **LONG-TERM**
+**Objective:** Build discovery-first regeneration engine to prevent future documentation drift
+
+**This solves the root cause:** Documentation will auto-update when orchestrators change, eliminating manual synchronization work.
+
+**Architecture Components:**
+
+1. **Discovery Engine (`src/orchestrators/documentation/discovery_engine.py`):**
+   - **Scan `cortex-operations.yaml`:** Extract all operations (302+), orchestrator mapping
+   - **Scan git history:** Commit counts, contributor activity, feature timeline
+   - **Scan test metrics:** Coverage %, test pass rates, per-module stats
+   - **Scan module structure:** Orchestrator files, agent files, tier implementations
+   - **Output:** Feature inventory JSON with metadata
+
+2. **Change Detection System (`src/orchestrators/documentation/change_detector.py`):**
+   - **Compare manifests:** Previous run → Current run
+   - **Detect changes:**
+     - New features added (generate new pages)
+     - Features updated (regenerate existing pages)
+     - Features removed (delete pages, remove from navigation)
+     - Orchestrator count changed (trigger architecture page regeneration)
+   - **Output:** Change report with actions (create/update/delete)
+
+3. **Template Registry (`src/orchestrators/documentation/templates/`):**
+   - **Jinja2 templates for all page types:**
+     - `feature-page.html.j2` (one template for all feature pages)
+     - `architecture-component.html.j2` (orchestrators, agents, tiers)
+     - `story-chapter.html.j2` (story integration with feature references)
+     - `navigation.html.j2` (auto-generate nav from feature catalog)
+   - **Template variables:** `{{feature_name}}`, `{{orchestrator_count}}`, `{{loc_metrics}}`
+   - **Conditional sections:** `{% if maturity_level == '4.0' %}` for future content
+
+4. **Regeneration Pipeline (`src/orchestrators/documentation/regeneration_pipeline.py`):**
+   - **6-Stage FSM Workflow:**
+     1. **IDLE** → **SCANNING**: Run discovery engine
+     2. **SCANNING** → **ANALYZING**: Run change detection
+     3. **ANALYZING** → **GENERATING**: Render templates with real data
+     4. **GENERATING** → **VALIDATING**: Check links, validate HTML, test responsiveness
+     5. **VALIDATING** → **DEPLOYING**: Git commit, push to GitHub Pages
+     6. **DEPLOYING** → **COMPLETE**: Report success, update manifest
+   - **State persistence:** Resume from last checkpoint on crash
+   - **Rollback mechanism:** Git revert on validation failure
+
+5. **DALL-E Prompt Regeneration (`src/orchestrators/documentation/dalle_regenerator.py`):**
+   - **System 1 - Technical Diagrams:**
+     - Detect orchestrator count change (15 → 10)
+     - Regenerate prompts in `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/`
+     - Delete old PNGs, signal DALL-E API call needed
+   - **System 2 - Comic Story Illustrations:**
+     - Scan story chapters for feature references
+     - Auto-generate illustration prompts based on chapter theme + feature mapping
+     - Update `docs/gh-pages/story/illustrations/` prompts
+
+6. **Story Auto-Update System (`src/orchestrators/documentation/story_integrator.py`):**
+   - **Protected content:** Character descriptions, name origin, tone/voice (never change)
+   - **Auto-generated content:**
+     - Feature mentions in chapters (update when features change)
+     - Teachable moments (insert based on chapter theme + feature mapping)
+     - Timeline references (update coffee mug count, version numbers)
+   - **Feature removal:** Scan story text, remove references to deleted operations
+
+**Tasks:**
+- [ ] Implement discovery engine (3 days)
+- [ ] Implement change detection system (2 days)
+- [ ] Create Jinja2 template library (4 days - one template per page type)
+- [ ] Build regeneration pipeline with FSM (5 days)
+- [ ] Implement DALL-E prompt regeneration (2 days)
+- [ ] Build story auto-update system (3 days)
+- [ ] Add CLI command: `cortex docs refresh` (1 day)
+- [ ] Set up GitHub Actions automation (2 days - trigger on cortex-operations.yaml push)
+- [ ] Integration testing (3 days - test full regeneration cycle)
+
+**Deliverables:**
+- 700 LOC autonomous regeneration orchestrator
+- Jinja2 template library for all page types
+- CLI command for manual regeneration
+- GitHub Actions workflow for automated regeneration
+- Manifest system for change tracking
+- DALL-E prompt lifecycle automation
+- Story integration with feature mapping
+
+**Acceptance Criteria:**
+- [ ] Discovery engine scans all data sources (YAML, git, tests, modules)
+- [ ] Change detection identifies add/update/delete scenarios
+- [ ] Templates generate valid HTML matching glassmorphism design
+- [ ] Regeneration pipeline completes end-to-end without errors
+- [ ] Story updates preserve narrative quality
+- [ ] DALL-E prompts regenerate on architecture changes
+- [ ] CLI command: `cortex docs refresh` runs full regeneration
+- [ ] GitHub Actions trigger on cortex-operations.yaml push
+- [ ] Rollback mechanism works (revert on validation failure)
+- [ ] Documentation always reflects current codebase reality
+
+**Success Metrics:**
+- Dashboard manual work: 60% → 15% (75% automation)
+- Documentation drift: Common problem → Zero occurrences
+- Update frequency: Manual/rare → Automated/daily
+- Orchestrator changes: Manual doc updates → Auto-regeneration
+
+**Timing:** Weeks 10-12 (after Stage 2 comparison pages complete)
+
+---
 **Duration:** 12-15 days  
 **Complexity:** HIGH  
 **Objective:** Eliminate all mock/stub data, validate real content, ensure continuous refresh capability, comprehensive testing & QA, SEO optimization
