@@ -8,7 +8,7 @@ import time
 from datetime import datetime, timedelta
 from orchestration_3_0.session.session_manager import (
     SessionManager,
-    Session,
+    WorkflowSession,
     SessionStatus,
     get_session_manager
 )
