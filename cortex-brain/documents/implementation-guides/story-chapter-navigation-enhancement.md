@@ -190,7 +190,7 @@ const chapters = [
 ## 📚 Related Documentation
 
 - Story Page Implementation: `cortex-brain/documents/implementation-guides/story-page-implementation-summary.md`
-- Enhancement Plan: `cortex-brain/documents/planning/enhancements/enterprise-doc-orchestrator-enhancement-plan.md`
+- Documentation Enhancement Plan: `cortex-brain/documents/planning/enterprise-documentation-enhancement-plan.md`
 - Story Content: `cortex-brain/documents/narratives/THE-AWAKENING-OF-CORTEX-MASTER.md`
 
 ---
