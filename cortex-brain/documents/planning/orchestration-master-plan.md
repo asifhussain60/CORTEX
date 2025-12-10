@@ -9,7 +9,11 @@
 - **Documentation Orchestrator (#6):** GitHub Pages site implementation active on separate machine (Phase 1-2 complete, Phase 3-4 in progress)
 
 **✅ ALL SUB-PLANS COMPLETE (December 10, 2025):**
-- **Phase 0:** Feature Discovery (00) ✅
+- **Phase 0:** Feature Discovery (00) ✅ + **Baseline Scan Complete** 🎉
+  - **Found:** 29 orchestrators + 6 operation files = **35 total files**
+  - **vs Estimate:** 71+ orchestrators (51% less than estimated)
+  - **Actual Reduction:** 35 files → 10 orchestrators = **71% reduction**
+  - **Report:** [Baseline Scan 2025-12-10](../discovery-reports/baseline-scan-2025-12-10.md)
 - **Phase 1:** DevOps (02), QA (03) ✅
 - **Phase 2:** TDD (01-implemented ✅), Planning (04-implemented ✅), Execution (05-implemented ✅), Scaffolding (10) ✅
 - **Phase 3:** Documentation (06) ✅, Intelligence (07) ✅
@@ -46,10 +50,10 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 ### Current State Problems
 
-- **71+ orchestrators** scattered across 7 directories with 40,400+ lines of code *(baseline - may increase after discovery scan)*
+- **35 files found** (29 orchestrators + 6 operation files) - down from 71+ estimated ✅
 - **60-75% reliability scores** - workflows skip phases, bypass gates
-- **Massive fragmentation** - 5 dashboard orchestrators, 2 git orchestrators, 4 cleanup orchestrators
-- **Unknown orchestrators** - Feature Discovery scan may reveal additional orchestrators
+- **Massive fragmentation** - 5 dashboard orchestrators, 2 git orchestrators, 3 cleanup orchestrators
+- **Baseline scan complete** - All orchestrators discovered and documented
 - **No organization architecture** - single-project focus, no multi-tenant, no RBAC
 - **Manual state tracking** causing lost progress between sessions
 
@@ -70,14 +74,14 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 | Metric | Current | Target | Impact |
 |--------|---------|--------|--------|
-| Orchestrator count | 71+ | 10 | 86%+ reduction |
-| Total code | 40,400+ LOC | 13,300+ LOC | 67%+ reduction |
+| Orchestrator count | 35 | 10 | 71% reduction |
+| Total code | ~10,000 LOC | 13,300 LOC | Consolidation + new features |
 | Workflow completion rate | 65% | 100% | +35% reliability |
 | Phases skipped | 15% | 0% | Zero missed steps |
 | Test coverage approach | Comprehensive TDD | Core + Smoke | Pragmatic validation |
 | Multi-tenant ready | No | Yes | Org scalability |
-| Feature discovery | No | Yes | Auto-enhancement + baseline scan |
-| Requirements gathering | Manual | Interactive | 5-phase pre-orchestrator (discovery + clarification) |
+| Feature discovery | Manual | Automated | Continuous enhancement |
+| Requirements gathering | Manual | Interactive | 5-phase pre-orchestrator |
 | Dashboard manual work | 60% | 15% | 75% automation |
 | Dashboard analysis speed | File scan | AST | 85% faster |
 | Legacy modernization | Manual | Orchestrated | Incremental scaffolding |
@@ -88,7 +92,10 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 ## 📋 Orchestrator Portfolio: 10 Unified Orchestrators
 
-**71 orchestrators consolidated into 10 domain-driven orchestrators (reordered for efficient implementation):**
+**35 files consolidated into 10 domain-driven orchestrators:**
+- **Baseline Scan:** 29 orchestrators + 6 operation files = 35 total files discovered
+- **Target:** 10 unified orchestrators (71% reduction)
+- **Report:** [Baseline Scan 2025-12-10](../discovery-reports/baseline-scan-2025-12-10.md)
 
 ### Phase 0: Foundation (Week 0) - PREREQUISITE ✅ SUB-PLAN COMPLETE
 
