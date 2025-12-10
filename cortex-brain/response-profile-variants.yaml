@@ -1,10 +1,10 @@
 # Response Profile Variants
-# Version: 3.3.0
+# Version: 3.0
 # Purpose: Profile-based response adaptations (interaction mode + detail level)
 # Part of: Response Template System Refactor (Phase 5)
 
-schema_version: '3.3'
-last_updated: '2025-12-02'
+schema_version: '3.0'
+last_updated: '2025-12-10'
 refactor_phase: 'modular_architecture'
 
 # ============================================================================

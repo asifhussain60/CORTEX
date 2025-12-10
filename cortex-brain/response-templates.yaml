@@ -1,5 +1,5 @@
-schema_version: '3.2'
-last_updated: '2025-12-07'
+schema_version: '3.0'
+last_updated: '2025-12-10'
 optimization:
   type: aggressive_minimal
   original_templates: 107
@@ -12768,7 +12768,7 @@ templates:
           auto_checkpoint: true
           telemetry: enabled
         onboarding_date: 2025-12-05
-        onboarding_version: 3.7.1
+        onboarding_version: 3.0
       ```
       
       **Profile Location:** `cortex-brain/user-profile.yaml`
@@ -13765,7 +13765,7 @@ templates:
       [User's detailed description]
       
       ## Context
-      - CORTEX Version: 3.7.1
+      - CORTEX Version: 3.0
       - Python Version: 3.11
       - OS: Windows 11
       
@@ -14517,7 +14517,7 @@ templates:
       - Telemetry guide: `cortex-brain/documents/implementation-guides/PERFORMANCE-TELEMETRY-GUIDE.md`
 
       **System Health (Current):**
-      - Version: 3.7.1
+      - Version: 3.0
       - Brain Databases: Operational (Tier 1-3)
       - Test Pass Rate: 100% (latest validation)
       - Documentation: 0 broken links
