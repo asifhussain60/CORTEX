@@ -20,7 +20,7 @@ Features:
 
 Author: Asif Hussain
 Date: December 10, 2025
-Version: 4.0.0
+Version: 3.0.0
 """
 
 from typing import Dict, Any, List, Optional, Callable

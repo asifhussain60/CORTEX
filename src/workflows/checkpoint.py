@@ -6,8 +6,8 @@ allowing workflows to be resumed from last successful stage
 after interruption or failure.
 
 Author: CORTEX Development Team
-Date: 2025-11-08
-Version: 2.0.0
+Date: 2025-12-10
+Version: 3.0.0
 """
 
 import json

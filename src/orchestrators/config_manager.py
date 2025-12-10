@@ -4,7 +4,7 @@ Extended Orchestrator Configuration
 Adds Phase 5 configuration management features to OrchestratorConfig.
 Supports environment-specific configs, file-based loading, feature flags.
 
-Version: 2.0.0
+Version: 3.0.0
 Author: Asif Hussain
 """
 

@@ -6,8 +6,8 @@ chaining tasks in any order with dependency management, state sharing,
 checkpoint/resume, and context injection optimization.
 
 Author: CORTEX Development Team
-Date: 2025-11-08
-Version: 2.0.0
+Date: 2025-12-10
+Version: 3.0.0
 """
 
 import json

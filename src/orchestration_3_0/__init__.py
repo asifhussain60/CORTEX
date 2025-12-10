@@ -1,22 +1,22 @@
 """
-CORTEX Orchestration 3.0 → 4.0 Architecture
+CORTEX Orchestration 3.0 Architecture
 
-This package contains the unified CORTEX 4.0 orchestration architecture,
-consolidating 71 legacy orchestrators into 9 domain-driven orchestrators.
+This package contains the unified CORTEX 3.0 orchestration architecture,
+consolidating 35 legacy orchestrators into 10 unified orchestrators.
 
 Key Components:
 - core: State machine, DI container, session manager
-- orchestrators: 9 unified orchestrators
+- orchestrators: 10 unified orchestrators
 - multi_tenant: Multi-tenant infrastructure
 - session: Session management
 - workflows: YAML workflow definitions
 
 Author: Asif Hussain
-Version: 4.0.0
+Version: 3.0.0
 Date: December 10, 2025
 """
 
-__version__ = "4.0.0"
+__version__ = "3.0.0"
 __author__ = "Asif Hussain"
 
 from .core.base_orchestrator import BaseOrchestrator

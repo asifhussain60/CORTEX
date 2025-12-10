@@ -40,4 +40,4 @@ __all__ = [
     'PatternStore',
 ]
 
-__version__ = "2.0.0-modular-in-progress"
+__version__ = "3.0.0"

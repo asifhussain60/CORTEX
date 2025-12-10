@@ -1,5 +1,5 @@
-version: "2.2"
-last_updated: "2025-11-16T12:00:00Z"
+version: "3.0"
+last_updated: "2025-12-10T12:00:00Z"
 rule_count: 29
 immutable: true
 source: "KDS v8 governance/rules.md"
@@ -17,12 +17,12 @@ future_location: "cortex-brain.db → governance.rules table"
 export_location: "docs/governance-export.yaml (read-only reference)"
 
 # =============================================================================
-# CORTEX TIER 0: INSTINCT LAYER (COPILOT-OPTIMIZED v2.2)
+# CORTEX TIER 0: INSTINCT LAYER (COPILOT-OPTIMIZED v3.0)
 # =============================================================================
 # These rules are IMMUTABLE and form the cognitive DNA of CORTEX.
 # They cannot be overridden and protect system integrity.
 #
-# COPILOT OPTIMIZATION (v2.2):
+# COPILOT OPTIMIZATION (v3.0):
 # Rules are ordered for sequential reading efficiency (not human logic).
 # Most-referenced rules appear FIRST to minimize forward-reference lookups.
 # This reduces token usage by 85-95% during governance validation.

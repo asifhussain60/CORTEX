@@ -4,7 +4,7 @@ This module handles rendering templates with placeholders and verbosity control.
 Enhanced in Phase 5.2 to support modular YAML composition.
 
 Author: Asif Hussain
-Version: 2.0 (Phase 5.2)
+Version: 3.0 (Phase 5.2)
 """
 
 import re
