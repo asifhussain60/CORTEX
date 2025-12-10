@@ -111,7 +111,7 @@
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: var(--shadow-lg);
-    z-index: 100;
+    z-index: 10; /* Reduced from 100 to allow content to sit on top */
 }
 
 .story-toc h3 {
@@ -184,6 +184,9 @@
     margin: 0 auto;
     padding: 2rem 2rem 4rem;
     margin-left: calc(250px + 6rem); /* Account for sidebar */
+    position: relative; /* Ensure proper stacking context */
+    z-index: 20; /* Higher than sidebar to appear on top */
+    background: var(--bg-primary); /* Ensure opaque background */
 }
 
 /* Story Chapter */

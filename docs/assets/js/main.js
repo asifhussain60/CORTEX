@@ -11,7 +11,31 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeScrollToTop();
     initializeCollapsibles();
     initializeAnimations();
+    initializeNavigationScrollEffect();
 });
+
+/**
+ * Navigation glassmorphism scroll effect
+ */
+function initializeNavigationScrollEffect() {
+    const nav = document.querySelector('.main-nav');
+    if (!nav) return;
+    
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        
+        // Add scrolled class after 50px
+        if (currentScroll > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+        
+        lastScroll = currentScroll;
+    });
+}
 
 /**
  * Scroll to top button functionality
