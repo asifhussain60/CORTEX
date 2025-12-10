@@ -27,7 +27,10 @@ Files include:
 - `00-character-sheet.md` - Character reference (GENERATE FIRST)
 - `00-basement-laboratory.md` - Setting establishment
 - `00-coffee-timeline.md` - Visual metaphor guide
-- `prologue-deadline.md` through `ch10-personality-emergence.md`
+- `prologue-deadline.md` - Prologue opener
+- `ch1-goldfish-theory.md` through `ch10-personality-emergence.md` - Chapter 1-10 openers
+- `ch11-the-revolution.md` - Chapter 11 (CORTEX 3.0 completion)
+- `epilogue-six-months-later.md` - Epilogue (six months after launch)
 
 **Step 2: Generate with DALL-E 3**
 1. Open each `.md` file
@@ -147,7 +150,10 @@ sharp -i 06-working-memory.png -o 06-working-memory.webp --resize 1400 -f webp -
 
 | Chapter | Comic Illustration | Technical Diagram | Teaches |
 |---------|-------------------|-------------------|---------|
-| Prologue | `01-prologue.png` | None | Setting the scene |
+| Foundation | `00-character-sheet.png` | None | Character reference (GENERATE FIRST) |
+| Foundation | `00-basement-laboratory.png` | None | Setting establishment |
+| Foundation | `00-coffee-timeline.png` | None | Visual metaphor guide |
+| Prologue | `prologue-deadline.png` | None | The crisis that started everything |
 | Chapter 1 | `ch1-goldfish-theory.png` | `06-working-memory.webp` | Memory persistence |
 | Chapter 2 | `ch2-skull-moment.png` | `02-skull-protection.webp` + `09-protection-layers.webp` | Safety-first architecture |
 | Chapter 3 | `ch3-backup-chaos.png` | `06-working-memory.webp` | Reliability > elegance |
@@ -158,6 +164,10 @@ sharp -i 06-working-memory.png -o 06-working-memory.webp --resize 1400 -f webp -
 | Chapter 8 | `ch8-platform-chaos.png` | `08-development-context.webp` | Portable architecture |
 | Chapter 9 | `ch9-brute-force.png` | `08-development-context.webp` | Performance optimization |
 | Chapter 10 | `ch10-personality-emergence.png` | `10-complete-system.webp` | System integration |
+| Chapter 11 | `ch11-the-revolution.png` | `10-complete-system.webp` | CORTEX 3.0 completion triumph |
+| Epilogue | `epilogue-six-months-later.png` | None | Six months after launch - evolution complete |
+
+**Total:** 15 comic illustrations + 10 technical diagrams = 25 images
 
 ---
 
@@ -212,7 +222,7 @@ echo "🎨 DALL-E Image Generation Workflow"
 echo "===================================="
 echo ""
 echo "1. Comic Illustrations: $COMIC_PROMPTS"
-echo "   → Generate 14 black & white cartoons"
+echo "   → Generate 15 black & white cartoons (3 foundation + 1 prologue + 10 chapters + 1 chapter 11 + 1 epilogue)"
 echo "   → Save to $COMIC_IMAGES"
 echo ""
 echo "2. Technical Diagrams: $TECH_PROMPTS"
@@ -262,12 +272,13 @@ echo "🎉 Optimization complete!"
 Before marking images as complete, verify:
 
 ### Comic Illustrations
-- [ ] All 14 prompts generated (00-character-sheet through ch10-personality-emergence)
-- [ ] Black & white newspaper comic aesthetic
-- [ ] Characters consistent with reference sheet
-- [ ] Clean lines, good contrast
-- [ ] Optimized to WebP < 100KB
-- [ ] Integrated in story HTML with proper alt text
+- [ ] All 15 prompts generated (00-character-sheet → 00-basement-laboratory → 00-coffee-timeline → prologue → ch1-10 → ch11 → epilogue)
+- [ ] Character sheet generated FIRST for consistency
+- [ ] Black & white newspaper comic aesthetic maintained
+- [ ] Characters consistent with reference sheet across all images
+- [ ] Clean lines, good contrast for web viewing
+- [ ] Optimized to WebP < 100KB each
+- [ ] Integrated in story HTML with proper alt text and captions
 
 ### Technical Diagrams
 - [ ] All 10 diagrams generated (01-four-tier through 10-complete-system)
@@ -290,10 +301,27 @@ Before marking images as complete, verify:
 ## 🎯 Next Steps
 
 1. **Generate Character Sheet FIRST** (`00-character-sheet.png`)
-2. **Generate Foundation Images** (basement lab, coffee timeline)
-3. **Generate Chapter Comics** (prologue through ch10)
-4. **Generate Technical Diagrams** (from cortex-brain prompts)
-5. **Optimize All Images** (WebP conversion, size targets)
-6. **Integrate & Test** (verify loading, fallbacks, mobile responsive)
+2. **Generate Foundation Images** (`00-basement-laboratory.png`, `00-coffee-timeline.png`)
+3. **Generate Prologue** (`prologue-deadline.png`)
+4. **Generate Chapter Comics 1-10** (`ch1-goldfish-theory.png` through `ch10-personality-emergence.png`)
+5. **Generate Chapter 11** (`ch11-the-revolution.png`)
+6. **Generate Epilogue** (`epilogue-six-months-later.png`)
+7. **Generate Technical Diagrams** (from `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/prompts/`)
+8. **Optimize All Images** (WebP conversion, size targets)
+9. **Integrate & Test** (verify loading, fallbacks, mobile responsive)
 
-**Estimated Time:** 3-4 hours for complete generation + optimization
+**Generation Order Summary:**
+- 3 foundation images (character sheet → laboratory → coffee timeline)
+- 1 prologue image
+- 10 chapter images (ch1-10)
+- 1 chapter 11 image (CORTEX 3.0 completion)
+- 1 epilogue image (six months later)
+- 10 technical diagrams
+
+**Total:** 15 comic illustrations + 10 technical diagrams = 25 images
+
+**Estimated Time:** 
+- Comic illustrations: 2.5-3 hours (15 images × 10-12 minutes each)
+- Technical diagrams: 1.5-2 hours (10 diagrams × 9-12 minutes each)
+- Optimization: 30 minutes (batch WebP conversion)
+- **Total:** 4.5-5.5 hours for complete generation + optimization
