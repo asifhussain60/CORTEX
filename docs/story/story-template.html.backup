@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Awakening of CORTEX - A Tech Comedy in Ten Chapters. Follow Mr. Codenstein's hilarious journey building an AI with memory, featuring basement labs, coffee mugs, and Miss G's ethereal wisdom.">
+    
+    <title>The Awakening of CORTEX | A Tech Comedy</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="The Awakening of CORTEX - A Tech Comedy">
+    <meta property="og:description" content="A hilarious story about building an AI with memory, featuring basement labs, coffee mugs, and imaginary muses.">
+    <meta property="og:image" content="../assets/images/og-image-story.png">
+    <meta property="og:type" content="article">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/story.css">
+    <link rel="stylesheet" href="../assets/css/story-print.css" media="print">
+    
+    <!-- Fonts (async to prevent render blocking) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Story Hero -->
+    <section class="story-hero">
+        <div class="hero-content">
+            <!-- Small Logo -->
+            <a href="../index.html" class="story-logo-link">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="story-logo">
+            </a>
+            <h1 class="hero-title">The Awakening of CORTEX</h1>
+            <p class="hero-subtitle">A Tech Comedy in Ten Chapters</p>
+            <p class="hero-author">By Mr. Codenstein</p>
+            <p class="hero-tagline">with Copilot's existential crisis and Miss G's ethereal wisdom</p>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator">
+            <span>Scroll to begin the journey</span>
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </section>
+
+    <!-- Table of Contents (Sticky Sidebar) -->
+    <aside class="story-toc" id="storyToc">
+        <h3>Chapters</h3>
+        <nav class="toc-nav">
+            <a href="index.html" class="toc-link">Prologue: The Basement Laboratory</a>
+            <a href="chapter-chapter1.html" class="toc-link">1. The Goldfish Theory</a>
+            <a href="chapter-chapter2.html" class="toc-link">2. The Brain Protector</a>
+            <a href="chapter-chapter3.html" class="toc-link">3. The SQLite Intervention</a>
+            <a href="chapter-chapter4.html" class="toc-link">4. The Agent Uprising</a>
+            <a href="chapter-chapter5.html" class="toc-link">5. The Knowledge Graph Incident</a>
+            <a href="chapter-chapter6.html" class="toc-link">6. The Token Crisis</a>
+            <a href="chapter-chapter7.html" class="toc-link">7. The Hebb's Law Revelation</a>
+            <a href="chapter-chapter8.html" class="toc-link">8. The Response Template Evolution</a>
+            <a href="chapter-chapter9.html" class="toc-link">9. The Cross-Platform Challenge</a>
+            <a href="chapter-chapter10.html" class="toc-link">10. The Awakening</a>
+            <a href="chapter-chapter11.html" class="toc-link">11. The 3.0 Revolution</a>
+        </nav>
+        
+        <!-- Coffee Mug Counter -->
+        <div class="coffee-counter">
+            <h4>☕ Coffee Mugs</h4>
+            <div class="mug-count" id="mugCount">17 → 23</div>
+            <p class="mug-note">Visual metaphor for Tier evolution</p>
+        </div>
+    </aside>
+
+    <!-- Main Story Content -->
+    <main class="story-content">
+        {{STORY_CHAPTERS}}
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About CORTEX</h4>
+                <p>A team-level AI assistant enhancement system that transforms GitHub Copilot into a strategic development partner with memory, context, and learning capabilities.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../features/index.html">Features</a></li>
+                    <li><a href="../architecture/index.html">Architecture</a></li>
+                    <li><a href="index.html">Story</a></li>
+                    <li><a href="../getting-started/index.html">Get Started</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../governance/skull-rulebook.html">SKULL Rulebook</a></li>
+                    <li><a href="../future/index.html">CORTEX 4.0 Vision</a></li>
+                    <li><a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub Repository</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024-2025 CORTEX Project. Built with 🧠 and ☕ in a New Jersey basement.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/navigation.js"></script>
+    <script src="../assets/js/story.js"></script>
+</body>
+</html>
