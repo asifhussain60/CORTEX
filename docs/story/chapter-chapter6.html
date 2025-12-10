@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Awakening of CORTEX - A Tech Comedy in Ten Chapters. Follow Mr. Codenstein's hilarious journey building an AI with memory, featuring basement labs, coffee mugs, and Miss G's ethereal wisdom.">
+    
+    <title>The Awakening of CORTEX | A Tech Comedy</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="The Awakening of CORTEX - A Tech Comedy">
+    <meta property="og:description" content="A hilarious story about building an AI with memory, featuring basement labs, coffee mugs, and imaginary muses.">
+    <meta property="og:image" content="../assets/images/og-image-story.png">
+    <meta property="og:type" content="article">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/story.css">
+    <link rel="stylesheet" href="../assets/css/story-print.css" media="print">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Story Hero -->
+    <section class="story-hero">
+        <div class="hero-content">
+            <!-- Small Logo -->
+            <a href="../index.html" class="story-logo-link">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="story-logo">
+            </a>
+            <h1 class="hero-title">The Awakening of CORTEX</h1>
+            <p class="hero-subtitle">A Tech Comedy in Ten Chapters</p>
+            <p class="hero-author">By Mr. Codenstein</p>
+            <p class="hero-tagline">with Copilot's existential crisis and Miss G's ethereal wisdom</p>
+            
+            <!-- Character Sheet Image -->
+            <div class="story-image-comic">
+                <picture>
+                    <source srcset="illustrations/images/00-character-sheet.webp" type="image/webp">
+                    <img src="illustrations/images/00-character-sheet.png" 
+                         alt="CORTEX Character Sheet - Mr. Codenstein in Einstein-style professor attire, Miss G as an ethereal muse with flowing gown, and Copilot as a friendly robot companion"
+                         loading="lazy"
+                         onerror="this.src='../assets/images/placeholder-comic.png'">
+                </picture>
+                <p class="image-caption">Meet the cast: An Einstein-style professor, an ethereal muse, and a friendly robot</p>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator">
+            <span>Scroll to begin the journey</span>
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </section>
+
+    <!-- Table of Contents (Sticky Sidebar) -->
+    <aside class="story-toc" id="storyToc">
+        <h3>Chapters</h3>
+        <nav class="toc-nav">
+            <a href="#prologue" class="toc-link" data-chapter="prologue">Prologue: The Basement Laboratory</a>
+            <a href="#chapter1" class="toc-link" data-chapter="chapter1">1. The Goldfish Theory</a>
+            <a href="#chapter2" class="toc-link" data-chapter="chapter2">2. The Brain Protector</a>
+            <a href="#chapter3" class="toc-link" data-chapter="chapter3">3. The SQLite Intervention</a>
+            <a href="#chapter4" class="toc-link" data-chapter="chapter4">4. The Agent Uprising</a>
+            <a href="#chapter5" class="toc-link" data-chapter="chapter5">5. The Knowledge Graph Incident</a>
+            <a href="#chapter6" class="toc-link" data-chapter="chapter6">6. The Token Crisis</a>
+            <a href="#chapter7" class="toc-link" data-chapter="chapter7">7. The Hebb's Law Revelation</a>
+            <a href="#chapter8" class="toc-link" data-chapter="chapter8">8. The Response Template Evolution</a>
+            <a href="#chapter9" class="toc-link" data-chapter="chapter9">9. The Cross-Platform Challenge</a>
+            <a href="#chapter10" class="toc-link" data-chapter="chapter10">10. The Awakening</a>
+            <a href="#chapter11" class="toc-link" data-chapter="chapter11">11. The 3.0 Revolution</a>
+            <a href="#epilogue" class="toc-link" data-chapter="epilogue">Epilogue: Six Months Later</a>
+        </nav>
+        
+        <!-- Coffee Mug Counter -->
+        <div class="coffee-counter">
+            <h4>☕ Coffee Mugs</h4>
+            <div class="mug-count" id="mugCount">17 → 23</div>
+            <p class="mug-note">Visual metaphor for Tier evolution</p>
+        </div>
+    </aside>
+
+    <!-- Main Story Content -->
+    <main class="story-content">
+        
+        <!-- Chapter 6: The Token Crisis -->
+        <article id="chapter6" class="story-chapter">
+            <div class="chapter-image-comic">
+                <picture>
+                    <source srcset="illustrations/images/ch6-token-crisis.webp" type="image/webp">
+                    <img src="illustrations/images/ch6-token-crisis.png" 
+                         alt="Chapter 6: The Token Crisis - Story illustration"
+                         loading="lazy"
+                         onerror="this.src='../assets/images/placeholder-comic.png'">
+                </picture>
+                <p class="image-caption-comic">Chapter illustration</p>
+            </div>
+            
+            <h2 class="chapter-title">Chapter 6: The Token Crisis</h2>
+            
+            <div class="story-text">
+                <p class="story-dialogue">"We have a problem," Codenstein announced at breakfast (an actual breakfast, at an actual morning time—G had implemented a strict "no coding after midnight" rule after the fourth 3 AM breakthrough).</p>
+
+                <p class="story-dialogue">"Define 'we,'" she said, not looking up from her phone.</p>
+
+                <p class="story-dialogue">"CORTEX is becoming expensive."</p>
+
+                <p>That got her attention. "Expensive how?"</p>
+
+                <p>He pulled up his laptop, showing her the token analytics. "The main prompt file. It started at 8,000 tokens. Then I added the agent definitions—12,000 tokens. Then Tier architecture documentation—19,000 tokens. Then response templates—"</p>
+
+                <p class="story-dialogue">"How many tokens is it now?"</p>
+
+                <p class="story-dialogue">"Seventy-four thousand."</p>
+
+                <p>She set down her coffee. "Tokens are... expensive?"</p>
+
+                <p class="story-dialogue">"Very. And every request loads the full prompt. Seventy-four thousand tokens, every single time. We're burning through API costs like—"</p>
+
+                <p class="story-dialogue">"Like you burn through coffee?"</p>
+
+                <p class="story-dialogue">"Worse. Coffee is cheap. Tokens are not." He showed her the cost analysis. "At current usage, CORTEX would cost about $8,000 a month to run."</p>
+
+                <p class="story-dialogue">"For one user?"</p>
+
+                <p class="story-dialogue">"For one user."</p>
+
+                <p>She was quiet for a moment, processing. "So your brilliant AI assistant that gives Copilot perfect memory and specialized agents and knowledge graphs... costs more per month than our mortgage?"</p>
+
+                <p class="story-dialogue">"Technically yes, but—"</p>
+
+                <p class="story-dialogue">"No buts. That's not sustainable." She took his laptop, scrolling through the token breakdown. "What's taking up the most space?"</p>
+
+                <p class="story-dialogue">"Response templates. Thirty-two templates, each with examples, variations, conditions—"</p>
+
+                <p class="story-dialogue">"Do you load all thirty-two templates every time?"</p>
+
+                <p class="story-dialogue">"Yes? They're in the main prompt file—"</p>
+
+                <p class="story-dialogue">"Why?"</p>
+
+                <p>He opened his mouth. Closed it. Opened it again. "...Because that's where I put them?"</p>
+
+                <p class="story-dialogue">"That's not a reason. That's a tautology." She stood, grabbing her own laptop. "Show me these templates."</p>
+
+                <p>---</p>
+
+                <p>What followed was three hours of G systematically dismantling his beautiful, elegant, completely unsustainable prompt architecture.</p>
+
+                <p class="story-dialogue">"Response templates don't need to be in the main prompt," she declared, highlighting thirty-two templates for deletion. "They're static. Move them to a YAML file. Load on demand."</p>
+
+                <p class="story-dialogue">"But then we need logic to—"</p>
+
+                <p class="story-dialogue">"Yes. Write logic. That's what developers do." She moved to the next section. "Agent definitions. Do you need the full implementation details in the prompt?"</p>
+
+                <p class="story-dialogue">"It helps Copilot understand—"</p>
+
+                <p class="story-dialogue">"Does it? Or does it help YOU feel like you've documented everything?" She didn't wait for an answer. "Move implementations to separate files. Keep only the interface contracts in the main prompt."</p>
+
+                <p class="story-dialogue">"But—"</p>
+
+                <p class="story-dialogue">"No buts. We're cutting fat. This is liposuction for your prompt." She scrolled faster, ruthlessly identifying bloat. "Example conversations. Why are there seventeen example conversations in here?"</p>
+
+                <p class="story-dialogue">"To show Copilot how to respond—"</p>
+
+                <p class="story-dialogue">"Three examples. Maximum. Move the rest to a training guide." Her cursor highlighted more sections. "Tier architecture. Full implementation details. Why?"</p>
+
+                <p class="story-dialogue">"For context—"</p>
+
+                <p class="story-dialogue">"Context is great. Seventeen hundred tokens of context is overkill." She was in full audit mode now, the same mode that had once reorganized their entire garage in an afternoon. "Summary only. Link to full docs if needed."</p>
+
+                <p>By noon, they had a plan:
+- Move response templates to YAML (32,000 tokens saved)
+- Move agent implementations to separate files (18,000 tokens saved)
+- Condense Tier documentation (12,000 tokens saved)
+- Reduce example conversations (8,000 tokens saved)
+- Modularize everything else (4,000 tokens saved)</p>
+
+                <p class="dramatic">Total reduction: 74,000 tokens → 2,000 tokens.</p>
+
+                <p class="story-dialogue">"Ninety-seven percent reduction," G said, leaning back with satisfaction.</p>
+
+                <p class="story-dialogue">"But will it still work?" Mr. Codenstein stared at the plan, seeing his beautiful monolithic architecture fragmenting into pieces.</p>
+
+                <p class="story-dialogue">"Only one way to find out." She closed her laptop. "And if it doesn't, you iterate. That's the process."</p>
+
+                <p class="story-dialogue">"When did you become an expert in prompt engineering?"</p>
+
+                <p class="story-dialogue">"About three years ago when I watched you build seventeen projects that all had the same flaw: elegant design, terrible efficiency." She smiled. "I've been taking notes."</p>
+
+                <p>---</p>
+
+                <p class="dramatic">The refactoring took two weeks.</p>
+
+                <p>Two weeks of splitting files, extracting modules, building lazy-loading systems, testing edge cases, discovering bugs, fixing bugs, discovering the fixes created new bugs, and finally—FINALLY—getting everything working again.</p>
+
+                <p class="dramatic">The result: CORTEX 2.0.</p>
+
+                <p class="dramatic">Same features. Same intelligence. Same memory, agents, and knowledge graphs.</p>
+
+                <p class="dramatic">But 97% more efficient.</p>
+
+                <p class="story-dialogue">"It's faster," Codenstein said, running tests. "Loading time went from three seconds to eighty milliseconds."</p>
+
+                <p class="story-dialogue">"Because you're not loading seventy-four thousand tokens every request," G observed from the thinking chair. She'd taken to supervising his late-night coding sessions—not participating, just being present. A reminder that 2 AM breakthroughs were fine, but 4 AM exhaustion was not.</p>
+
+                <p>The air beside the monitor shimmered. Miss G's apparition materialized, studying the terminal output with the expression of someone watching a student finally solve a problem they'd been hinting at for weeks.</p>
+
+                <p class="story-dialogue">"<em>Modular architecture,</em>" Miss G said, her voice carrying satisfaction. "<em>You finally learned to let go.</em>"</p>
+
+                <p>Mr. Codenstein glanced between his wife (real, in the thinking chair) and his muse (imaginary, floating beside the screen). "You two are coordinating now?"</p>
+
+                <p class="story-dialogue">"I don't see anyone," G (real) said, not looking up from her phone. "But if your imaginary girlfriend is congratulating you on not building monoliths anymore, tell her I said 'about time.'"</p>
+
+                <p class="story-dialogue">"<em>She can't hear me,</em>" Miss G (imaginary) said. "<em>But she's right. Took you six months and seventy-four thousand tokens to learn what every experienced engineer knows: monoliths are elegant until they're not.</em>"</p>
+
+                <p class="story-dialogue">"It felt wrong," he admitted, gesturing at his newly modular codebase. "Breaking apart something that worked. Like destroying art."</p>
+
+                <p class="story-dialogue">"<em>It wasn't art. It was a museum.</em>" Miss G's apparition drifted closer to the screen, seeming to trace the file structure with her finger. "<em>Beautiful to look at, expensive to maintain, and nobody actually uses most of what's inside. You turned your museum into a library—organized, accessible, efficient.</em>"</p>
+
+                <p class="story-dialogue">"But what if I need all those features? All those templates, examples, documentation—"</p>
+
+                <p class="story-dialogue">"<em>Then you load them. On demand. When needed.</em>" Her voice took on that patient-teacher quality. "<em>You confused 'available' with 'always loaded.' Your response templates don't need to sit in memory 24/7 waiting to be used. They're not anxious dogs. They're tools. Call them when you need them.</em>"</p>
+
+                <p>Mr. Codenstein stared at his newly efficient system. 2,000 tokens. Lightning-fast loading. Same functionality.</p>
+
+                <p class="story-dialogue">"G was right," he said quietly. "Both of you."</p>
+
+                <p class="story-dialogue">"<em>We're usually right,</em>" Miss G said, beginning to fade. "<em>You're usually stubborn. But you're learning. Slowly.</em>"</p>
+
+                <p class="story-dialogue">"Thanks for the encouragement."</p>
+
+                <p class="story-dialogue">"<em>Thanks for finally optimizing.</em>" Her image dissolved like mist. "<em>Now go celebrate with your actual wife. She earned it more than I did.</em>"</p>
+
+                <p>He turned to G (real, patient, still in the thinking chair). "Want to see the performance metrics?"</p>
+
+                <p class="story-dialogue">"I want to see you close the laptop and have dinner like a normal human," she said. "But yes, show me the metrics first. I earned bragging rights."</p>
+
+                <p class="story-dialogue">"Cost projections dropped from $8,000 a month to $530," he continued, still scrolling through metrics.</p>
+
+                <p class="story-dialogue">"That's still expensive."</p>
+
+                <p class="story-dialogue">"But sustainable. That's one user. Scale to a hundred users, costs stay the same because we're reusing modules. Scale to a thousand—"</p>
+
+                <p class="story-dialogue">"You're getting ahead of yourself." But she was smiling. "First make it work for one user. You. Then worry about scale."</p>
+
+                <p class="git-commit">He saved his work, committed with a message that read CORTEX 2.0 - 97% token reduction - modular architecture complete, and turned off his monitors.</p>
+
+                <p class="story-dialogue">"You know what the best part is?" he said, heading for the stairs.</p>
+
+                <p class="story-dialogue">"That you didn't argue when I said your architecture was bloated?"</p>
+
+                <p class="story-dialogue">"That too. But the best part is: CORTEX learned to optimize itself. Tier 2 tracked the refactoring decisions. Next time I build something, it'll remember that modular design beats monolithic elegance."</p>
+
+                <p>She paused at the top of the stairs. "It's learning from its own mistakes?"</p>
+
+                <p class="story-dialogue">"It's learning from OUR mistakes. Mine and yours. The whole refactoring conversation is now in memory."</p>
+
+                <p class="story-dialogue">"So if you try to build a seventy-four-thousand token monolith again—"</p>
+
+                <p class="story-dialogue">"CORTEX will remind me that my wife suggested modular architecture and was right." He grinned. "It's like having you in the codebase forever."</p>
+
+                <p class="story-dialogue">"Terrifying for you. Reassuring for me." She turned off the basement lights. "Now go sleep. Tomorrow you're cleaning those mold mugs. They've achieved sentience and are filing for independence."</p>
+
+                <p>He looked back at the <span class="coffee-ref">coffee mug</span> timeline. <span class="coffee-ref">Mug twenty</span>-three was definitely planning something.</p>
+
+                <p class="dramatic">But that was a problem for tomorrow.</p>
+
+                <p class="dramatic">Tonight, CORTEX had learned efficiency.</p>
+
+                <p>---</p>
+
+                <div class="story-callout">
+                    <p class="callout-title">⚡ What You're Learning:</p>
+                    <p>Token Optimization - CORTEX's strategies for maintaining sub-100ms query performance despite growing memory.</p>
+                    <a href="../architecture/performance.html" class="callout-link">Performance Architecture →</a>
+                </div>
+            </div>
+        </article>
+
+            <nav class="chapter-navigation">
+                
+                <a href="chapter-chapter5.html" class="chapter-nav-btn chapter-nav-prev">
+                    <span class="nav-arrow">←</span>
+                    <div>
+                        <div class="nav-direction">Previous</div>
+                        <div class="nav-title">Chapter 5: The Knowledge Graph Incident</div>
+                    </div>
+                </a>
+                <span class="spacer"></span>
+                
+                <a href="chapter-chapter7.html" class="chapter-nav-btn chapter-nav-next">
+                    <div>
+                        <div class="nav-direction">Next</div>
+                        <div class="nav-title">Chapter 7: The Hebb's Law Revelation</div>
+                    </div>
+                    <span class="nav-arrow">→</span>
+                </a>
+            </nav>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About CORTEX</h4>
+                <p>A team-level AI assistant enhancement system that transforms GitHub Copilot into a strategic development partner with memory, context, and learning capabilities.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../features/index.html">Features</a></li>
+                    <li><a href="../architecture/index.html">Architecture</a></li>
+                    <li><a href="index.html">Story</a></li>
+                    <li><a href="../getting-started/index.html">Get Started</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../governance/skull-rulebook.html">SKULL Rulebook</a></li>
+                    <li><a href="../future/index.html">CORTEX 4.0 Vision</a></li>
+                    <li><a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub Repository</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024-2025 CORTEX Project. Built with 🧠 and ☕ in a New Jersey basement.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/navigation.js"></script>
+    <script src="../assets/js/story.js"></script>
+</body>
+</html>

@@ -1,16 +1,27 @@
 #!/usr/bin/env python3
 """
-Story HTML Generator - Template-Based Orchestrator
-Converts THE-AWAKEN ING-OF-CORTEX-MASTER.md into docs/story/index.html
+Story HTML Generator - Paginated Template-Based Orchestrator
+Converts THE-AWAKENING-OF-CORTEX-MASTER.md into paginated story pages
 using story-template.html for structure separation.
 
-This is the orchestrator-level solution for story generation that:
-- Maintains clean separation between structure (template) and content (markdown)
-- Enables easy regeneration when master narrative is updated
-- Supports future multi-format output (HTML, PDF, ePub)
+This orchestrator generates:
+- docs/story/index.html (landing page with full story or chapter 1)
+- docs/story/chapter-{id}.html (individual chapter pages)
+- Previous/Next navigation between chapters
+- TOC sidebar for quick chapter access
+
+Performance Benefits:
+- Loads one chapter at a time (~15KB HTML + 1-2 images vs 175KB + 32 images)
+- Faster initial page load
+- Better mobile experience
+- Improved SEO with separate URLs per chapter
 
 Usage:
-    python scripts/generate_story_html.py [--dry-run] [--verbose]
+    python scripts/generate_story_html.py [--dry-run] [--verbose] [--mode {paginated|single}]
+    
+Modes:
+    paginated: Generate separate page per chapter (default)
+    single: Generate monolithic page with all chapters
 """
 
 import re
@@ -373,12 +384,133 @@ def update_story_html(chapters: Dict[str, str], dry_run: bool = False, verbose: 
         return True
 
 
+def generate_paginated_story(chapters: Dict[str, str], dry_run: bool = False, verbose: bool = False) -> bool:
+    """Generate paginated story with one HTML file per chapter."""
+    
+    if not STORY_TEMPLATE.exists():
+        print(f"❌ Story template not found: {STORY_TEMPLATE}")
+        return False
+    
+    # Read template
+    if verbose:
+        print(f"📄 Reading template: {STORY_TEMPLATE}")
+    template_content = STORY_TEMPLATE.read_text(encoding='utf-8')
+    
+    # Chapter ordering
+    chapter_order = [
+        ('prologue', 'Prologue: The Basement Laboratory'),
+        ('chapter1', 'Chapter 1: The Goldfish Theory'),
+        ('chapter2', 'Chapter 2: The Brain Protector'),
+        ('chapter3', 'Chapter 3: The SQLite Intervention'),
+        ('chapter4', 'Chapter 4: The Agent Uprising'),
+        ('chapter5', 'Chapter 5: The Knowledge Graph Incident'),
+        ('chapter6', 'Chapter 6: The Token Crisis'),
+        ('chapter7', 'Chapter 7: The Hebb\'s Law Revelation'),
+        ('chapter8', 'Chapter 8: The Response Template Evolution'),
+        ('chapter9', 'Chapter 9: The Cross-Platform Challenge'),
+        ('chapter10', 'Chapter 10: The Awakening'),
+        ('chapter11', 'Chapter 11: The 3.0 Revolution'),
+        ('epilogue', 'Epilogue: Six Months Later')
+    ]
+    
+    # Generate a page for each chapter
+    generated_files = []
+    
+    for idx, (chapter_id, chapter_title) in enumerate(chapter_order):
+        if chapter_id not in chapters or chapter_id not in CHAPTER_IMAGES:
+            if chapter_id not in chapters:
+                print(f"⚠️  Missing content for {chapter_id}")
+            continue
+        
+        if verbose:
+            print(f"  ✓ Generating {chapter_id}")
+        
+        # Generate chapter HTML
+        chapter_html = generate_chapter_html(
+            chapter_id, 
+            chapter_title, 
+            chapters[chapter_id],
+            CHAPTER_IMAGES[chapter_id]
+        )
+        
+        # Build navigation buttons
+        prev_btn = ""
+        next_btn = ""
+        
+        if idx > 0:
+            prev_id, prev_title = chapter_order[idx - 1]
+            prev_file = "index.html" if idx == 1 else f"chapter-{prev_id}.html"
+            prev_btn = f'''
+                <a href="{prev_file}" class="chapter-nav-btn chapter-nav-prev">
+                    <span class="nav-arrow">←</span>
+                    <div>
+                        <div class="nav-direction">Previous</div>
+                        <div class="nav-title">{prev_title}</div>
+                    </div>
+                </a>'''
+        
+        if idx < len(chapter_order) - 1:
+            next_id, next_title = chapter_order[idx + 1]
+            if next_id in chapters:  # Only show if next chapter exists
+                next_file = f"chapter-{next_id}.html"
+                next_btn = f'''
+                <a href="{next_file}" class="chapter-nav-btn chapter-nav-next">
+                    <div>
+                        <div class="nav-direction">Next</div>
+                        <div class="nav-title">{next_title}</div>
+                    </div>
+                    <span class="nav-arrow">→</span>
+                </a>'''
+        
+        # Add navigation to chapter HTML
+        nav_html = f'''
+            <nav class="chapter-navigation">
+                {prev_btn}
+                <span class="spacer"></span>
+                {next_btn}
+            </nav>
+        </article>'''
+        
+        chapter_with_nav = chapter_html + nav_html
+        
+        # Inject into template
+        final_html = template_content.replace('{{STORY_CHAPTERS}}', chapter_with_nav)
+        
+        # Determine output filename
+        output_file = STORY_HTML if idx == 0 else (STORY_HTML.parent / f"chapter-{chapter_id}.html")
+        
+        if not dry_run:
+            output_file.write_text(final_html, encoding='utf-8')
+            generated_files.append(output_file.name)
+        else:
+            generated_files.append(f"{output_file.name} ({len(final_html):,} chars)")
+    
+    if dry_run:
+        print("\n📋 DRY RUN - Would generate paginated story:")
+        print(f"   - Template: {STORY_TEMPLATE.name}")
+        print(f"   - Pages: {len(generated_files)}")
+        for filename in generated_files:
+            print(f"     • {filename}")
+        return True
+    else:
+        print(f"\n✅ Generated {len(generated_files)} chapter pages:")
+        for filename in generated_files:
+            print(f"   • {filename}")
+        return True
+
+
 def main():
     """Main execution."""
     dry_run = '--dry-run' in sys.argv
     verbose = '--verbose' in sys.argv or '-v' in sys.argv
+    mode = 'paginated'  # Default to paginated mode
     
-    print("🎭 CORTEX Story HTML Generator (Template-Based)")
+    # Check for mode flag
+    for arg in sys.argv:
+        if arg.startswith('--mode='):
+            mode = arg.split('=')[1]
+    
+    print(f"🎭 CORTEX Story HTML Generator ({'Paginated' if mode == 'paginated' else 'Single-Page'})")
     print("=" * 60)
     
     # Check files exist
@@ -411,14 +543,20 @@ def main():
             word_count = len(chapters[chapter_id].split())
             print(f"   - {chapter_id}: {word_count:,} words")
     
-    # Generate HTML
+    # Generate HTML based on mode
     print(f"\n🔨 Generating story HTML from template...")
-    success = update_story_html(chapters, dry_run=dry_run, verbose=verbose)
+    
+    if mode == 'paginated':
+        success = generate_paginated_story(chapters, dry_run=dry_run, verbose=verbose)
+    else:
+        success = update_story_html(chapters, dry_run=dry_run, verbose=verbose)
     
     if success:
         print("\n✅ Story generation complete!")
         if not dry_run:
             print(f"\n🌐 View at: http://localhost:8080/story/index.html")
+            if mode == 'paginated':
+                print(f"📄 Generated {len(chapters)} paginated chapter files")
             print(f"📁 Output: {STORY_HTML.relative_to(REPO_ROOT)}")
         return 0
     else:

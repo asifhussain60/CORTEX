@@ -2,6 +2,23 @@
    STORY PAGE STYLES
    ============================================ */
 
+/* Story Logo */
+.story-logo-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.story-logo-link:hover {
+    transform: scale(1.05);
+}
+
+.story-logo {
+    width: 300px;
+    height: auto;
+    display: block;
+}
+
 /* Story Hero Section */
 .story-hero {
     min-height: 80vh;
@@ -994,6 +1011,10 @@
 }
 
 @media (max-width: 768px) {
+    .story-logo {
+        width: 200px;
+    }
+    
     .social-share {
         bottom: 1rem;
         right: 1rem;

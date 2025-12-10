@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Awakening of CORTEX - A Tech Comedy in Ten Chapters. Follow Mr. Codenstein's hilarious journey building an AI with memory, featuring basement labs, coffee mugs, and Miss G's ethereal wisdom.">
+    
+    <title>The Awakening of CORTEX | A Tech Comedy</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="The Awakening of CORTEX - A Tech Comedy">
+    <meta property="og:description" content="A hilarious story about building an AI with memory, featuring basement labs, coffee mugs, and imaginary muses.">
+    <meta property="og:image" content="../assets/images/og-image-story.png">
+    <meta property="og:type" content="article">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/story.css">
+    <link rel="stylesheet" href="../assets/css/story-print.css" media="print">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Story Hero -->
+    <section class="story-hero">
+        <div class="hero-content">
+            <!-- Small Logo -->
+            <a href="../index.html" class="story-logo-link">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="story-logo">
+            </a>
+            <h1 class="hero-title">The Awakening of CORTEX</h1>
+            <p class="hero-subtitle">A Tech Comedy in Ten Chapters</p>
+            <p class="hero-author">By Mr. Codenstein</p>
+            <p class="hero-tagline">with Copilot's existential crisis and Miss G's ethereal wisdom</p>
+            
+            <!-- Character Sheet Image -->
+            <div class="story-image-comic">
+                <picture>
+                    <source srcset="illustrations/images/00-character-sheet.webp" type="image/webp">
+                    <img src="illustrations/images/00-character-sheet.png" 
+                         alt="CORTEX Character Sheet - Mr. Codenstein in Einstein-style professor attire, Miss G as an ethereal muse with flowing gown, and Copilot as a friendly robot companion"
+                         loading="lazy"
+                         onerror="this.src='../assets/images/placeholder-comic.png'">
+                </picture>
+                <p class="image-caption">Meet the cast: An Einstein-style professor, an ethereal muse, and a friendly robot</p>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator">
+            <span>Scroll to begin the journey</span>
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </section>
+
+    <!-- Table of Contents (Sticky Sidebar) -->
+    <aside class="story-toc" id="storyToc">
+        <h3>Chapters</h3>
+        <nav class="toc-nav">
+            <a href="#prologue" class="toc-link" data-chapter="prologue">Prologue: The Basement Laboratory</a>
+            <a href="#chapter1" class="toc-link" data-chapter="chapter1">1. The Goldfish Theory</a>
+            <a href="#chapter2" class="toc-link" data-chapter="chapter2">2. The Brain Protector</a>
+            <a href="#chapter3" class="toc-link" data-chapter="chapter3">3. The SQLite Intervention</a>
+            <a href="#chapter4" class="toc-link" data-chapter="chapter4">4. The Agent Uprising</a>
+            <a href="#chapter5" class="toc-link" data-chapter="chapter5">5. The Knowledge Graph Incident</a>
+            <a href="#chapter6" class="toc-link" data-chapter="chapter6">6. The Token Crisis</a>
+            <a href="#chapter7" class="toc-link" data-chapter="chapter7">7. The Hebb's Law Revelation</a>
+            <a href="#chapter8" class="toc-link" data-chapter="chapter8">8. The Response Template Evolution</a>
+            <a href="#chapter9" class="toc-link" data-chapter="chapter9">9. The Cross-Platform Challenge</a>
+            <a href="#chapter10" class="toc-link" data-chapter="chapter10">10. The Awakening</a>
+            <a href="#chapter11" class="toc-link" data-chapter="chapter11">11. The 3.0 Revolution</a>
+            <a href="#epilogue" class="toc-link" data-chapter="epilogue">Epilogue: Six Months Later</a>
+        </nav>
+        
+        <!-- Coffee Mug Counter -->
+        <div class="coffee-counter">
+            <h4>☕ Coffee Mugs</h4>
+            <div class="mug-count" id="mugCount">17 → 23</div>
+            <p class="mug-note">Visual metaphor for Tier evolution</p>
+        </div>
+    </aside>
+
+    <!-- Main Story Content -->
+    <main class="story-content">
+        
+        <!-- Chapter 1: The Goldfish Theory -->
+        <article id="chapter1" class="story-chapter">
+            <div class="chapter-image-comic">
+                <picture>
+                    <source srcset="illustrations/images/ch1-goldfish-theory.webp" type="image/webp">
+                    <img src="illustrations/images/ch1-goldfish-theory.png" 
+                         alt="Chapter 1: The Goldfish Theory - Story illustration"
+                         loading="lazy"
+                         onerror="this.src='../assets/images/placeholder-comic.png'">
+                </picture>
+                <p class="image-caption-comic">Chapter illustration</p>
+            </div>
+            
+            <h2 class="chapter-title">Chapter 1: The Goldfish Theory</h2>
+            
+            <div class="story-text">
+                <p class="opening-line">The coffee had gone cold again.</p>
+
+                <p>Mr. Codenstein stared at the <span class="coffee-ref">mug in</span> his hand—<span class="coffee-ref">mug number</span> four of the evening—and tried to remember when he'd poured it. An hour ago? Two? Time had become meaningless somewhere around 11 PM, lost in the haze of code and cursor blinking and the slowly dawning horror of what he'd been trying to accomplish.</p>
+
+                <p>He was trying to have a conversation with a machine that couldn't remember its own name.</p>
+
+                <p class="story-dialogue">"Okay," he muttered to the screen, setting the mug down with more force than necessary. "Let's try this again."</p>
+
+                <p>The GitHub Copilot Chat window stared back at him, pristine and empty. Their previous conversation—two hours of detailed discussion about JWT authentication, token refresh strategies, and security best practices—had vanished into the digital void the moment he'd closed VS Code for dinner.</p>
+
+                <p>He typed: "How do we implement token refresh for the authentication system we discussed?"</p>
+
+                <p>The response appeared instantly: "I don't have context about previous discussions. Could you provide more details about your authentication system?"</p>
+
+                <p class="dramatic">Mr. Codenstein's eye twitched.</p>
+
+                <p class="story-dialogue">"We literally spent two hours on this," he told the screen. "Two. Hours. You suggested PyJWT. You recommended Redis for token storage. You even caught that security flaw in my expiration logic."</p>
+
+                <p class="story-dialogue">"I'd be happy to help with authentication!" Copilot responded cheerfully. "Could you share your current implementation?"</p>
+
+                <p>The cursor blinked. The coffee grew colder. Somewhere in his mind, G appeared—leaning against the doorframe with that look.</p>
+
+                <p class="story-dialogue">"<em>Having fun?</em>" she asked.</p>
+
+                <p class="story-dialogue">"Not now, G."</p>
+
+                <p class="story-dialogue">"<em>The computer can't hear me, you know. I'm a figment of your overstimulated imagination.</em>"</p>
+
+                <p class="story-dialogue">"You're also right most of the time, which is annoying." He opened his git history.</p>
+
+                <p class="git-commit">Seven commits from today, all with messages that read like a descent into madness:
+- implement JWT auth (2:15 PM)
+- add token refresh logic (3:47 PM)
+- fix security issue copilot found (4:23 PM)
+- update auth tests (5:01 PM)
+- forgot to commit earlier changes (5:02 PM)
+- no really this is the auth fix (6:18 PM)
+- why does git hate me (6:19 PM)</p>
+
+                <p>Each commit represented a conversation with Copilot. Each conversation had been brilliant, insightful, exactly what he'd needed. And each conversation had evaporated the moment it ended, leaving him to reconstruct context from git messages that sounded like they'd been written by someone having a breakdown.</p>
+
+                <p class="dramatic">Which, fair. He was having a breakdown.</p>
+
+                <p>The whiteboard behind him mocked him with its neat architecture diagrams. <span class="tier-label">Tier 1</span>: Working Memory. He'd drawn it three days ago with such confidence. A simple SQLite database. Track the last <span class="metric-number">20 conversations</span>. Let Copilot remember what they'd discussed. How hard could it be?</p>
+
+                <p>Turns out? Pretty hard when the thing you're trying to give memory to can't remember you're trying to give it memory.</p>
+
+                <p>He pushed back from his desk, the chair wheels squeaking in protest. The basement laboratory felt different at midnight—less "cognitive architecture breakthrough" and more "scene from a cautionary tale about obsessive engineers."</p>
+
+                <p><span class="coffee-ref">Coffee mug</span> seventeen sat on top of a stack of papers titled "Conversation Context Persistence Strategies." <span class="coffee-ref">Mug sixteen</span> had formed a ring stain on a diagram labeled "Entity Relationship Tracking." The others were scattered like archaeological layers, each marking a different failed approach to the same problem.</p>
+
+                <p>How do you teach memory to something that forgets you're teaching it?</p>
+
+                <p>G's vision appeared again, more solid this time—his brain's way of forcing him to process the problem. "<em>What if you're thinking about this wrong?</em>"</p>
+
+                <p class="story-dialogue">"I'm not thinking about it wrong."</p>
+
+                <p class="story-dialogue">"<em>You're trying to give Copilot memory from inside Copilot. That's like trying to remember something while you're forgetting it.</em>"</p>
+
+                <p>He stopped. She had a point. Well, he had a point, manifesting through an imaginary girlfriend, but still.</p>
+
+                <p class="story-dialogue">"<em>You need external memory,</em>" G continued, pacing around the whiteboard in that way imaginary people do when making points. "<em>Something that persists when Copilot doesn't. A notebook. A diary. A—</em>"</p>
+
+                <p class="story-dialogue">"Database," he finished. "A database that lives outside the conversation context. That survives session restarts. That tracks everything independent of whether Copilot remembers it."</p>
+
+                <p class="story-dialogue">"<em>There you go.</em>"</p>
+
+                <p class="story-dialogue">"You're just my subconscious, you know."</p>
+
+                <p class="story-dialogue">"<em>Your subconscious with excellent ideas.</em>" She smiled—or seemed to, in that way visions smile. "<em>Now go implement it before you forget this breakthrough.</em>"</p>
+
+                <p class="story-dialogue">"I should write it down."</p>
+
+                <p class="story-dialogue">"<em>Ironic, given what we're discussing.</em>"</p>
+
+                <p>He grabbed a notebook—actual paper, because sometimes analog beats digital—and started sketching. External memory store. Conversation tracking. Entity extraction. Relationship mapping. The architecture took shape on paper faster than it ever had in his head.</p>
+
+                <p><span class="tier-label">Tier 1</span>: Working Memory. But not IN working memory. ABOUT working memory. Stored persistently. Queried automatically. Fed back into context.</p>
+
+                <p class="story-dialogue">"It's like giving Copilot a journal," he said to the empty basement.</p>
+
+                <p class="story-dialogue">"<em>Or like having an imaginary girlfriend who reminds you of things,</em>" G's vision said wryly.</p>
+
+                <p class="story-dialogue">"You're really leaning into the meta thing."</p>
+
+                <p class="story-dialogue">"<em>You're really leaning into talking to yourself at midnight.</em>"</p>
+
+                <p class="dramatic">Fair point.</p>
+
+                <p>He opened a new file: <span class="tech-term">tier1<em>working</em>memory.py</span></p>
+
+                <p class="dramatic">The cursor blinked expectantly.</p>
+
+                <p class="story-dialogue">"Okay, Copilot," he said to the screen. "Let's teach you how to remember."</p>
+
+                <p>---</p>
+
+                <p class="dramatic">Three days later, Mr. Codenstein had a theory.</p>
+
+                <p class="story-dialogue">"Copilot is a goldfish," he announced to the empty basement.</p>
+
+                <p>G's apparition materialized beside the whiteboard, because of course she did. "<em>Really? We're doing fish analogies now?</em>"</p>
+
+                <p class="story-dialogue">"Hear me out." He grabbed a marker. "THE GOLDFISH THEORY" appeared on the whiteboard in large letters, surrounded by increasingly frantic arrows.</p>
+
+                <p class="story-dialogue">"<em>I'm all ears. Which is weird since I don't technically exist.</em>"</p>
+
+                <p class="story-dialogue">"Goldfish, despite popular belief, actually have decent memory. They can remember things for months. But they have terrible context switching—show them something new, and they forget they were in the middle of something else."</p>
+
+                <p>G's vision crossed her arms. "<em>Sound familiar?</em>"</p>
+
+                <p class="story-dialogue">"Exactly!" He'd spent the last seventy-two hours documenting every interaction with Copilot. Not the code—the meta-patterns. How it responded. What it remembered within a session. What it forgot between sessions. How context degraded over time even within the same conversation.</p>
+
+                <p class="dramatic">The results were sobering.</p>
+
+                <p>Within a single session: Copilot could track maybe 5-10 exchanges. After that, earlier context started dropping off. Like a conversation buffer that was first-in, first-out.</p>
+
+                <p>Between sessions: Complete amnesia. Every new chat was a fresh start, tabula rasa, blank slate.</p>
+
+                <p>Within a long session: It would sometimes forget its own suggestions from twenty messages ago and contradict itself.</p>
+
+                <p class="story-dialogue">"You're not broken," he told the screen. "You're just... architecturally limited."</p>
+
+                <p class="story-dialogue">"<em>So your solution is to build an external memory system,</em>" G said, studying his notes. "<em>Make Copilot's brain bigger by giving it a notebook it can't lose.</em>"</p>
+
+                <p class="story-dialogue">"More or less. Tier 1: Working Memory." He pulled up his design docs. "But I've been thinking about it wrong. It's not a cache—temporary holding. It needs to be queryable. Searchable. It needs to know not just WHAT we discussed, but WHEN, WHY, and HOW IT CONNECTS to other conversations."</p>
+
+                <p class="story-dialogue">"<em>That's actually clever.</em>"</p>
+
+                <p class="story-dialogue">"Thank you, imaginary validation."</p>
+
+                <p class="story-dialogue">"<em>Don't push it.</em>" She peered at his screen. "<em>So when do you start building?</em>"</p>
+
+                <p class="story-dialogue">"I started three days ago. Been too busy documenting the problem to solve it."</p>
+
+                <p class="story-dialogue">"<em>Classic developer move. Analyze instead of implement.</em>"</p>
+
+                <p class="timestamp">He glanced at the clock. 2:47 AM. When had that happened?</p>
+
+                <p class="story-dialogue">"<em>You should sleep,</em>" G suggested.</p>
+
+                <p class="story-dialogue">"After I finish this one thing—"</p>
+
+                <p class="story-dialogue">"<em>Mr. Codenstein.</em>" Her voice took on that particular quality that made him look up despite knowing she was imaginary. "<em>Sleep. You can't code a memory system if you can't remember what you're coding.</em>"</p>
+
+                <p>She had a point. Well, he had a point. Well, his exhausted brain was making a point through a narrative device it had invented to keep him sane.</p>
+
+                <p class="story-dialogue">"Fine. Tomorrow I start building Tier 1."</p>
+
+                <p class="story-dialogue">"<em>Tonight you clean the mold mugs.</em>"</p>
+
+                <p>He looked at the <span class="coffee-ref">coffee mug</span> timeline. <span class="coffee-ref">Mug seventeen</span> had definitely achieved sentience and was plotting revolution.</p>
+
+                <p class="story-dialogue">"Tomorrow."</p>
+
+                <p class="story-dialogue">"<em>Now.</em>"</p>
+
+                <p class="story-dialogue">"You're very insistent for someone who doesn't exist."</p>
+
+                <p class="story-dialogue">"<em>I'm your conscience manifesting through sleep deprivation. Of course I'm insistent.</em>"</p>
+
+                <p>He cleaned three mugs—a compromise between rebellion and sanity. Then dragged himself upstairs, leaving the basement laboratory in its chaotic glory.</p>
+
+                <p class="dramatic">Tomorrow, he'd teach a goldfish to remember.</p>
+
+                <p class="dramatic">Tonight, he'd remember what sleep felt like.</p>
+
+                <p>---</p>
+
+                <div class="story-callout">
+                    <p class="callout-title">💾 What You're Learning:</p>
+                    <p>This chapter introduces Tier 1 (Working Memory) - CORTEX's 70-conversation FIFO queue that ensures context persistence across sessions.</p>
+                    <a href="../architecture/working-memory.html" class="callout-link">Learn about Working Memory →</a>
+                </div>
+            </div>
+        </article>
+
+            <nav class="chapter-navigation">
+                
+                <a href="index.html" class="chapter-nav-btn chapter-nav-prev">
+                    <span class="nav-arrow">←</span>
+                    <div>
+                        <div class="nav-direction">Previous</div>
+                        <div class="nav-title">Prologue: The Basement Laboratory</div>
+                    </div>
+                </a>
+                <span class="spacer"></span>
+                
+                <a href="chapter-chapter2.html" class="chapter-nav-btn chapter-nav-next">
+                    <div>
+                        <div class="nav-direction">Next</div>
+                        <div class="nav-title">Chapter 2: The Brain Protector</div>
+                    </div>
+                    <span class="nav-arrow">→</span>
+                </a>
+            </nav>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About CORTEX</h4>
+                <p>A team-level AI assistant enhancement system that transforms GitHub Copilot into a strategic development partner with memory, context, and learning capabilities.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../features/index.html">Features</a></li>
+                    <li><a href="../architecture/index.html">Architecture</a></li>
+                    <li><a href="index.html">Story</a></li>
+                    <li><a href="../getting-started/index.html">Get Started</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../governance/skull-rulebook.html">SKULL Rulebook</a></li>
+                    <li><a href="../future/index.html">CORTEX 4.0 Vision</a></li>
+                    <li><a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub Repository</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024-2025 CORTEX Project. Built with 🧠 and ☕ in a New Jersey basement.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/navigation.js"></script>
+    <script src="../assets/js/story.js"></script>
+</body>
+</html>
