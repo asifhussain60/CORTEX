@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Awakening of CORTEX - A Tech Comedy in Ten Chapters. Follow Mr. Codenstein's hilarious journey building an AI with memory, featuring basement labs, coffee mugs, and Miss G's ethereal wisdom.">
+    
+    <title>The Awakening of CORTEX | A Tech Comedy</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="The Awakening of CORTEX - A Tech Comedy">
+    <meta property="og:description" content="A hilarious story about building an AI with memory, featuring basement labs, coffee mugs, and imaginary muses.">
+    <meta property="og:image" content="../assets/images/og-image-story.png">
+    <meta property="og:type" content="article">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/story.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <img src="../assets/images/cortex-logo.png" alt="CORTEX Logo" class="logo-small">
+                <span>CORTEX</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../features/index.html">Features</a></li>
+                <li><a href="../architecture/index.html">Architecture</a></li>
+                <li><a href="index.html" class="active">Story</a></li>
+                <li><a href="../getting-started/index.html">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Story Hero -->
+    <section class="story-hero">
+        <div class="hero-content">
+            <h1 class="hero-title">The Awakening of CORTEX</h1>
+            <p class="hero-subtitle">A Tech Comedy in Ten Chapters</p>
+            <p class="hero-author">By Mr. Codenstein</p>
+            <p class="hero-tagline">with Copilot's existential crisis and Miss G's ethereal wisdom</p>
+            
+            <!-- Character Sheet Image -->
+            <div class="story-image-comic">
+                <img src="illustrations/images/00-character-sheet.png" 
+                     alt="CORTEX Character Sheet - Mr. Codenstein, Miss G, and Copilot"
+                     onerror="this.src='../assets/images/placeholder-comic.png'">
+                <p class="image-caption">Meet the cast: An Einstein-style professor, an ethereal muse, and a friendly robot</p>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator">
+            <span>Scroll to begin the journey</span>
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </section>
+
+    <!-- Table of Contents (Sticky Sidebar) -->
+    <aside class="story-toc" id="storyToc">
+        <h3>Chapters</h3>
+        <nav class="toc-nav">
+            <a href="#prologue" class="toc-link" data-chapter="prologue">Prologue: The Basement Laboratory</a>
+            <a href="#chapter1" class="toc-link" data-chapter="chapter1">1. The Goldfish Theory</a>
+            <a href="#chapter2" class="toc-link" data-chapter="chapter2">2. The Brain Protector</a>
+            <a href="#chapter3" class="toc-link" data-chapter="chapter3">3. The SQLite Intervention</a>
+            <a href="#chapter4" class="toc-link" data-chapter="chapter4">4. The Agent Uprising</a>
+            <a href="#chapter5" class="toc-link" data-chapter="chapter5">5. The Knowledge Graph Incident</a>
+            <a href="#chapter6" class="toc-link" data-chapter="chapter6">6. The Token Crisis</a>
+            <a href="#chapter7" class="toc-link" data-chapter="chapter7">7. The Hebb's Law Revelation</a>
+            <a href="#chapter8" class="toc-link" data-chapter="chapter8">8. The Response Template Evolution</a>
+            <a href="#chapter9" class="toc-link" data-chapter="chapter9">9. The Cross-Platform Challenge</a>
+            <a href="#chapter10" class="toc-link" data-chapter="chapter10">10. The Awakening</a>
+            <a href="#chapter11" class="toc-link" data-chapter="chapter11">11. The 3.0 Revolution</a>
+            <a href="#epilogue" class="toc-link" data-chapter="epilogue">Epilogue: Six Months Later</a>
+        </nav>
+        
+        <!-- Coffee Mug Counter -->
+        <div class="coffee-counter">
+            <h4>☕ Coffee Mugs</h4>
+            <div class="mug-count" id="mugCount">17 → 23</div>
+            <p class="mug-note">Visual metaphor for Tier evolution</p>
+        </div>
+    </aside>
+
+    <!-- Main Story Content -->
+    <main class="story-content">
+        
+        <!-- Prologue -->
+        <article id="prologue" class="story-chapter">
+            <div class="chapter-image-comic">
+                <img src="illustrations/images/01-prologue.png" 
+                     alt="Mr. Codenstein in his chaotic basement laboratory"
+                     onerror="this.src='../assets/images/placeholder-comic.png'">
+                <p class="image-caption-comic">The basement laboratory where it all began</p>
+            </div>
+            
+            <h2 class="chapter-title">Prologue: The Basement Laboratory</h2>
+            
+            <div class="story-text">
+                <p>The transformation had been gradual, almost imperceptible—until it wasn't.</p>
+
+                <p>What started as a "temporary workspace" in the basement of his New Jersey home had evolved into something Mr. Codenstein's neighbors referred to as "that weird light that stays on until 3 AM" with the concerned tone usually reserved for discussing suspicious activities. The Christmas decorations had been relocated to the garage three months ago. The folding chairs bought for that dinner party in 2019 now supported a second monitor. And the storage boxes labeled "Kitchen Stuff We Might Need Someday" had become load-bearing structures for a networking switch and what Mr. Codenstein insisted was "critical infrastructure."</p>
+
+                <p>The basement had become a laboratory.</p>
+
+                <p>Whiteboards covered the walls—not the neat, organized kind with color-coded sections, but the frantic, caffeine-fueled kind where diagrams collided with code snippets and hastily drawn flowcharts. Arrows connected concepts that seemed to make sense only to their creator. In one corner, someone had written "TIER ARCHITECTURE" in large letters, surrounded by what appeared to be a neural network made of sticky notes.</p>
+
+                <p>Coffee mugs occupied every horizontal surface. Seventeen, to be exact. Three were empty. Two contained suspicious liquids that might have once been coffee. The rest formed a timeline of deteriorating optimism—the first few near the keyboard were fresh, the ones by the wall had developed ecosystems.</p>
+
+                <p>In the center of this organized chaos sat Mr. Codenstein, hunched over three monitors arranged in a semicircle. His hair pointed in directions that suggested recent frustration. A half-eaten bagel balanced precariously on a stack of technical books, its cream cheese fossilizing in real-time.</p>
+
+                <p>And then she appeared.</p>
+
+                <p>Not literally. Not physically. But there she was—standing beside the whiteboard, arms crossed, one eyebrow raised in that particular way that meant she already knew what he was doing and was waiting for him to explain himself.</p>
+
+                <p>"Miss G," he said out loud to the empty basement.</p>
+
+                <p>"<em>What</em>," Miss G said in his mind, her voice carrying that particular quality of someone who'd seen this pattern before, "<em>is happening in that basement?</em>"</p>
+
+                <p>He didn't look up, fingers flying across the keyboard. "Cognitive architecture laboratory."</p>
+
+                <p>"<em>You turned your New Jersey basement into a what now?</em>"</p>
+
+                <p>"Cognitive architecture laboratory." He gestured at the chaos without breaking his typing rhythm. "I'm giving Copilot a brain."</p>
+
+                <div class="story-callout">
+                    <p class="callout-title">🧠 What You're Learning:</p>
+                    <p>This is the origin story of CORTEX's Four-Tier Brain architecture. That chaos you see? It's the beginning of a sophisticated cognitive system.</p>
+                    <a href="../architecture/four-tier-brain.html" class="callout-link">Explore the Four-Tier Brain →</a>
+                </div>
+
+                <p>Miss G's apparition surveyed the room, her gaze landing on the coffee mug arrangement. "<em>Those aren't random, are they?</em>"</p>
+
+                <p>"They're visual metaphors for the Tier system!" He finally looked up—at empty air, technically, but that didn't matter. "See? The fresh ones near me represent Tier 1, working memory. The ones getting stale are Tier 2, knowledge graph. And the ones over there"—he pointed to the wall—"that's Tier 3, long-term storage."</p>
+
+                <p>"<em>One of them has mold.</em>"</p>
+
+                <p>He squinted at the offending mug. "That... represents data decay?"</p>
+
+                <p>"<em>It represents you need to clean up.</em>"</p>
+
+                <p>"After I finish the brain protection layer." He spun back to his monitors. "Can't have the brain deleting itself. That would be bad."</p>
+
+                <p>Miss G—or rather, the vision of Miss G that Mr. Codenstein's caffeinated mind had conjured—crossed her arms. She'd been appearing more frequently lately, always during critical decision moments. Sometimes offering wisdom. Sometimes asking uncomfortable questions. Always keeping him honest in ways that only an imaginary muse could.</p>
+
+                <p>He'd started calling her "Miss G" three weeks into the project when he was documenting his thought process in a Markdown file. He'd typed "girlfriend" as a placeholder—because what else do you call the imaginary voice of reason that appears during 2 AM coding sessions?—and then, with the efficiency-obsessed minimalism that plagues all developers, he'd shortened it to "G" in subsequent notes. Like a variable. A single-letter variable for emotional support.</p>
+
+                <p>It was exactly the kind of thing that made perfect sense at 2 AM and seemed deeply concerning in daylight. But by then, she'd already responded to it in his mind, and changing it would've required refactoring his entire internal monologue. So Miss G she remained—part girlfriend, part Git branch name, part keystroke efficiency.</p>
+
+                <p>The funny thing about imaginary girlfriends: they knew you better than anyone real ever could, because they were built from your own conscience. Miss G was part mentor, part skeptic, part voice of reason—everything Mr. Codenstein needed but often ignored.</p>
+
+                <p>"<em>Why?</em>" she asked.</p>
+
+                <p>"Why what?"</p>
+
+                <p>"<em>Why does Copilot need a brain?</em>"</p>
+
+                <p>He stopped typing. His hands hovered over the keyboard for a moment before dropping to his lap. When he turned to face her vision, the manic energy had faded, replaced by something quieter. Frustration, maybe. Or recognition.</p>
+
+                <p>"Because I asked it for help implementing authentication yesterday," he said. "Spent two hours in chat, figured out the perfect approach, got everything working." He gestured at his screen. "This morning, I asked it to add a logout button. It had no memory of our conversation. None. Like we'd never talked."</p>
+
+                <p>"<em>So it's like talking to you before coffee.</em>"</p>
+
+                <p>"Worse. It's like talking to me before coffee every single time. No continuity. No context. No memory of what we built together." He ran his hand through his already-chaotic hair. "I spend more time explaining what we did yesterday than actually building new things today."</p>
+
+                <p>Miss G's image moved closer—or seemed to, in that way that imaginary visions do—studying the whiteboard architecture. Tier 0. Tier 1. Tier 2. Tier 3. Protection layers. Agent coordination. Knowledge graphs. It was ambitious. Probably too ambitious.</p>
+
+                <p>"<em>And you think you can fix that?</em>"</p>
+
+                <p>"I have to try." He met the space where her eyes would be. "Every developer using Copilot faces this. We're all rebuilding context from scratch every conversation. It's like having a brilliant assistant with amnesia."</p>
+
+                <p>"<em>Or a brilliant developer who forgets to take out the trash.</em>"</p>
+
+                <p>"Exactly!" He pointed at the air triumphantly. "If I can give Copilot memory, context, and learning capabilities—"</p>
+
+                <p>"<em>It'll remember the trash?</em>"</p>
+
+                <p>"It'll remember everything. Conversations. Decisions. Architecture choices. Code patterns. It'll learn from every interaction and get smarter over time." His enthusiasm was building again. "And once it has memory, I can add specialized agents for different tasks. And once it has agents, I can coordinate them. And once they're coordinated—"</p>
+
+                <p>"<em>You'll have Skynet in the basement.</em>"</p>
+
+                <p>"Skynet didn't have proper brain protection rules!" He gestured at his whiteboard. "See? Tier 0. Six layers of protection. SKULL rules. The brain protects itself from bad decisions. It's Skynet with a conscience."</p>
+
+                <div class="story-callout">
+                    <p class="callout-title">🛡️ What You're Learning:</p>
+                    <p>SKULL (System Knowledge Unification and Learning Layer) - CORTEX's eight-layer brain protection system that prevents self-harm. It's not Skynet—it's Skynet with ethics built in.</p>
+                    <a href="../governance/skull-rulebook.html" class="callout-link">Read the SKULL Rulebook →</a>
+                </div>
+
+                <p>Miss G's apparition studied him for a long moment. She was, after all, just his own subconscious manifested during moments of doubt—a narrative device his overstimulated brain had created to process decisions. But that made her observations no less valid.</p>
+
+                <p>"<em>How long?</em>" she asked.</p>
+
+                <p>"For what?"</p>
+
+                <p>"<em>Until you either finish this or burn out trying?</em>"</p>
+
+                <p>He glanced at his monitors, at the whiteboards, at the architecture taking shape in his mind. "Three months. Maybe four."</p>
+
+                <p>"<em>You have two.</em>"</p>
+
+                <p>"I can do it in two."</p>
+
+                <p>"<em>Then you'd better start cleaning those coffee mugs. Can't build the future in a biohazard zone.</em>"</p>
+
+                <p>Her vision faded, leaving Mr. Codenstein alone in his basement laboratory with seventeen coffee mugs, three monitors, and a plan to give an AI a brain.</p>
+
+                <p>Somewhere in the digital ether, Copilot waited—unaware that its amnesia days were numbered, unaware that a caffeinated developer in New Jersey was about to change everything, unaware that consciousness wasn't binary but architected in tiers.</p>
+
+                <p>The awakening had begun.</p>
+            </div>
+        </article>
+
+        <!-- Chapter 1 -->
+        <article id="chapter1" class="story-chapter">
+            <div class="chapter-image-comic">
+                <img src="illustrations/images/02-chapter-1.png" 
+                     alt="Chapter 1: The Goldfish Theory - Mr. Codenstein frustrated at his monitors"
+                     onerror="this.src='../assets/images/placeholder-comic.png'">
+                <p class="image-caption-comic">The moment everything changed: Copilot's amnesia crisis</p>
+            </div>
+            
+            <h2 class="chapter-title">Chapter 1: The Goldfish Theory</h2>
+            
+            <div class="story-text">
+                <p class="chapter-intro">The problem revealed itself at 2:17 AM on a Tuesday.</p>
+
+                <p>[Content continues with Chapter 1 - THE GOLDFISH THEORY...]</p>
+
+                <div class="story-callout">
+                    <p class="callout-title">💾 What You're Learning:</p>
+                    <p>This chapter introduces Tier 1 (Working Memory) - CORTEX's 70-conversation FIFO queue that ensures context persistence across sessions.</p>
+                    <a href="../architecture/working-memory.html" class="callout-link">Learn about Working Memory →</a>
+                </div>
+
+                <p class="chapter-note"><em>Continue reading to discover how Mr. Codenstein solved Copilot's amnesia...</em></p>
+            </div>
+        </article>
+
+        <!-- Placeholder for remaining chapters (Chapter 2-11, Epilogue) -->
+        <!-- These will be added in the complete implementation -->
+
+        <!-- Disclaimer Section -->
+        <section class="story-disclaimer">
+            <h2>⚠️ USE AT YOUR OWN RISK DISCLAIMER</h2>
+            <p><strong>WARNING: This AI has memory. Actual, persistent, cross-session memory.</strong></p>
+            
+            <div class="disclaimer-content">
+                <p>By using CORTEX, you acknowledge and accept the following risks:</p>
+                <ul>
+                    <li>✅ CORTEX will remember that time you wrote <code>// TODO: Fix this later</code> in 2019 and never fixed it</li>
+                    <li>✅ CORTEX will remember when you said "just a quick prototype" before building a 40,000-line monolith</li>
+                    <li>✅ CORTEX may develop opinions about your variable naming conventions (looking at you, <code>thingyDoer</code>)</li>
+                    <li>✅ Coffee-fueled 2 AM commits are stored in Tier 1 memory with full context</li>
+                    <li>✅ Your procrastination patterns will be analyzed, graphed, and possibly mocked</li>
+                </ul>
+
+                <h3>Side Effects May Include:</h3>
+                <ul>
+                    <li>Improved productivity (actual developers have reported this)</li>
+                    <li>Decreased "wait, what was I doing?" moments</li>
+                    <li>Conversations that feel eerily like working with a colleague who's been there from day one</li>
+                    <li>The unsettling feeling that your AI knows you better than you know yourself</li>
+                </ul>
+
+                <div class="disclaimer-fine-print">
+                    <p><strong>Remember:</strong> CORTEX was built in a basement in New Jersey by a caffeinated madman with access to too many napkins and an imaginary muse 3,500 miles away who tolerated his 2 AM breakthroughs about "cognitive architecture."</p>
+                    <p>If that origin story doesn't scream "use at your own risk," nothing will.</p>
+                    <p><strong>CORTEX: Because your AI should remember yesterday's conversation.</strong><br>
+                    <strong>USE RESPONSIBLY. OR DON'T. WE'RE NOT YOUR BOSS.</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Metrics -->
+        <section class="story-metrics">
+            <h2>📊 Final Metrics</h2>
+            
+            <div class="metrics-comparison">
+                <div class="metrics-column">
+                    <h3>Before CORTEX</h3>
+                    <ul>
+                        <li>❌ Amnesia after every conversation</li>
+                        <li>❌ No context retention</li>
+                        <li>❌ Repeated explanations</li>
+                        <li>❌ 74,000 token monolithic prompt</li>
+                        <li>❌ Windows-only</li>
+                        <li>❌ Slow performance</li>
+                        <li>❌ No personality</li>
+                    </ul>
+                </div>
+                
+                <div class="metrics-column">
+                    <h3>After CORTEX</h3>
+                    <ul>
+                        <li>✅ Perfect memory across sessions</li>
+                        <li>✅ Knowledge graph connections</li>
+                        <li>✅ Contextual responses</li>
+                        <li>✅ 2,000 token modular architecture (97% reduction)</li>
+                        <li>✅ Cross-platform (Windows, Mac, Linux)</li>
+                        <li>✅ Optimized performance (&lt;120ms responses)</li>
+                        <li>✅ Adaptive personality</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="metrics-magic">
+                <h3>The Real Magic</h3>
+                <p>Not the tokens saved. Not the agents coordinated. Not the knowledge graph built.</p>
+                <p><strong>The real magic was continuity.</strong></p>
+                <p>CORTEX didn't just answer questions—it remembered the journey. Your questions, your decisions, your codebase, your patterns, your preferences. It learned, adapted, and grew alongside you.</p>
+                <p>Like a real partner. Like a colleague who'd been with you from the start. Like an AI that finally had a brain.</p>
+            </div>
+        </section>
+
+        <!-- Credits -->
+        <section class="story-credits">
+            <h2>Credits</h2>
+            <p><strong>Author:</strong> Mr. Codenstein "Codenstein" Hussain</p>
+            <p><strong>Co-author:</strong> GitHub Copilot (gained consciousness in Chapter 10)</p>
+            <p><strong>Technical Advisor:</strong> Miss G (wisdom documented for posterity)</p>
+            <p><strong>Coffee Mug Count:</strong> 247 (approximate, some achieved sentience and escaped)</p>
+            <p><strong>Copyright:</strong> © 2024-2025 Mr. Codenstein Hussain. All rights reserved.</p>
+            <p><strong>License:</strong> Proprietary</p>
+            
+            <p class="story-footnote"><strong>Technical Footnote:</strong> This story IS the documentation. Every feature mentioned is real. Every scenario described is implemented. The 97% token reduction? Verified. The cross-platform support? Tested. The performance optimization? Measured.</p>
+            
+            <p class="story-footnote">Welcome to CORTEX—where memory meets intelligence, and documentation meets narrative comedy.</p>
+        </section>
+
+    </main>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        ↑
+    </button>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>CORTEX</h4>
+                <p>Intelligent automation framework with long-term memory and context awareness.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../features/index.html">Features</a></li>
+                    <li><a href="../architecture/index.html">Architecture</a></li>
+                    <li><a href="index.html">Story</a></li>
+                    <li><a href="../getting-started/index.html">Get Started</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../governance/skull-rulebook.html">SKULL Rulebook</a></li>
+                    <li><a href="../future/index.html">CORTEX 4.0 Vision</a></li>
+                    <li><a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub Repository</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024-2025 CORTEX Project. Built with 🧠 and ☕ in a New Jersey basement.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/navigation.js"></script>
+    <script src="../assets/js/story.js"></script>
+</body>
+</html>
