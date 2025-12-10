@@ -128,6 +128,46 @@ MCP Gateway
 
 ---
 
+### 5. Centralized Deployment Architecture
+**From:** Per-developer local installations (10,000+ copies, maintenance nightmare)  
+**To:** Central platform + thin edge agents (zero-install experience)
+
+**Architecture:**
+```
+CORTEX Central Platform (Kubernetes)
+    ├── Core Engine (Stateless, Auto-scale)
+    ├── Company Brain Storage (Postgres, Redis, Elasticsearch)
+    └── MCP Gateway (Tool Federation)
+           ↕ HTTPS/gRPC API
+    VS Code Extension (5MB thin client)
+           └── Local Cache (Tier 3 only)
+```
+
+**Key Components:**
+- **Central Platform:** Kubernetes-hosted CORTEX services (all code runs centrally)
+- **Edge Agent:** VS Code Extension as thin client (~5MB, no Python required)
+- **Hybrid Storage:** Company/Team brains centralized, Project brains cached locally
+- **Zero-Install:** Developers install extension from marketplace, auto-connects to platform
+
+**Benefits:**
+- Single version across organization (no version drift)
+- Zero-downtime updates (rolling Kubernetes deployments)
+- Shared infrastructure (economies of scale)
+- No local Python/dependencies required
+- Centralized monitoring and compliance
+
+**Business Value:**
+- 95% reduction in maintenance overhead (1 platform vs 10,000 installs)
+- 80% cost savings (shared compute resources)
+- Instant updates for all developers
+- Zero version drift or configuration inconsistencies
+- 99.9% uptime with Kubernetes HA
+
+**Documents:**
+- 🟡 [07-centralized-deployment-architecture.md](./07-centralized-deployment-architecture.md) - Planned
+
+---
+
 ## 🏗️ Technical Architecture
 
 ### Current CORTEX 3.8.1 Foundation
@@ -173,25 +213,43 @@ MCP Gateway
    - Access control and authentication
    - Request routing and load balancing
 
+5. **Central Deployment Platform**
+   - Kubernetes cluster (stateless services, auto-scaling)
+   - Central brain storage (Postgres cluster, Redis 1TB, Elasticsearch 50 nodes)
+   - VS Code Extension (thin client, 5MB)
+   - API Gateway (HTTPS/gRPC, load-balanced)
+
 **Documents:**
-- 🟡 [07-technical-architecture.md](./07-technical-architecture.md) - Planned
+- 🟡 [07-centralized-deployment-architecture.md](./07-centralized-deployment-architecture.md) - Planned
+- 🟡 [08-technical-architecture.md](./08-technical-architecture.md) - Planned
 
 ---
 
 ## 📅 Implementation Roadmap
 
-### Phase 1: Foundation (Months 1-3)
-**Goal:** Team orchestrator framework operational
+### Phase 1: Foundation + Central Platform (Months 1-4)
+**Goal:** Team orchestrator framework + central deployment infrastructure operational
 
 **Deliverables:**
-- Team orchestrator base classes
-- 3 specialist teams implemented (Feature, Bug Fix, Refactoring)
-- Collaborative planning workflow
-- Pilot with 10 users
+- **Central Platform:**
+  - Kubernetes cluster deployment (3 regions: US, EU, APAC)
+  - Central brain storage (Postgres, Redis, Elasticsearch)
+  - API Gateway with authentication (SSO integration)
+  - VS Code Extension v1.0 (thin client, marketplace published)
+- **Team Orchestration:**
+  - Team orchestrator base classes
+  - 3 specialist teams implemented (Feature, Bug Fix, Refactoring)
+  - Collaborative planning workflow
+- **Pilot Program:**
+  - 10 users with VS Code Extension
+  - Zero-install experience validation
 
 **Success Criteria:**
+- ✅ Central platform operational with 99.9% uptime
+- ✅ VS Code Extension connects successfully for all pilot users
 - ✅ Teams can form and execute tasks
 - ✅ 5+ successful collaborative projects
+- ✅ <100ms API latency (P95)
 - ✅ Positive feedback (4+/5 average)
 
 ---
@@ -248,15 +306,28 @@ MCP Gateway
 **Goal:** Company-wide deployment
 
 **Deliverables:**
-- Deployment to all development teams
-- Performance optimization
-- Advanced analytics dashboard
-- Training and documentation
+- **Central Platform Scaling:**
+  - Horizontal scaling to 50+ API replicas
+  - Multi-region deployment (US, EU, APAC)
+  - CDN for static assets
+- **Organization Rollout:**
+  - VS Code Extension published to company marketplace
+  - SSO integration with all identity providers
+  - Decommission local CORTEX 3.x installations
+- **Performance:**
+  - Advanced analytics dashboard
+  - Real-time monitoring (Prometheus/Grafana)
+- **Enablement:**
+  - Training and documentation
+  - Champion program (10+ advocates)
 
 **Success Criteria:**
-- ✅ 500+ users onboarded
+- ✅ 500+ users onboarded via VS Code Extension
+- ✅ Zero local CORTEX installations remaining
 - ✅ 90%+ developer satisfaction
 - ✅ 25%+ measurable productivity gain
+- ✅ 99.9%+ platform uptime
+- ✅ <100ms API latency across all regions
 
 ---
 
@@ -514,32 +585,47 @@ docs/cortex-4.0/
 **Development:**
 - Development environments (5 machines)
 - Test infrastructure (CI/CD pipeline)
-- Staging environment (AWS/Azure)
+- Staging Kubernetes cluster (AWS/Azure EKS/AKS)
 
 **Production:**
-- CORTEX 4.0 deployment infrastructure
-- Federated brain storage (~/.cortex/)
-- GitHub Pages hosting (free)
-- LLM API access (OpenAI/Anthropic)
+- **Central Platform Infrastructure:**
+  - Kubernetes clusters (3 regions: US, EU, APAC)
+  - PostgreSQL managed service (1TB, HA replicas)
+  - Redis Enterprise cluster (500GB, 50 nodes)
+  - Elasticsearch cluster (5TB, 50 nodes)
+  - Load balancers and API gateways
+  - Monitoring stack (Prometheus, Grafana, ELK)
+- **Edge Deployment:**
+  - VS Code Extension (marketplace hosting - free)
+  - CDN for static assets
+- **External Services:**
+  - GitHub Pages hosting (free)
+  - LLM API access (OpenAI/Anthropic)
+  - SSO integration (Azure AD/Okta)
 
 ### Budget Breakdown
 
 | Category | Cost | Duration | Total |
 |----------|------|----------|-------|
 | Development Team | $600K | 15 months | $600K |
-| Infrastructure | $10K/month | 15 months | $150K |
+| **Central Platform Infrastructure** | **$50K/month** | **15 months** | **$750K** |
+| - Kubernetes (3 regions) | $20K/month | 15 months | $300K |
+| - PostgreSQL (managed, HA) | $8K/month | 15 months | $120K |
+| - Redis Enterprise (500GB) | $10K/month | 15 months | $150K |
+| - Elasticsearch (50 nodes) | $12K/month | 15 months | $180K |
 | LLM API Costs | $5K/month | 15 months | $75K |
 | Tools & Licenses | $10K | One-time | $10K |
+| VS Code Extension Dev | $40K | One-time | $40K |
 | Training & Docs | $50K | One-time | $50K |
-| Contingency (20%) | - | - | $177K |
-| **Total** | - | - | **$1,062K** |
+| Contingency (20%) | - | - | $305K |
+| **Total** | - | - | **$1,830K** |
 
 ---
 
 ## 💰 ROI Analysis
 
 ### Investment
-**Total Cost:** $1,062,000 over 15 months
+**Total Cost:** $1,830,000 over 15 months
 
 ### Returns (Year 1 Post-Launch)
 
@@ -563,13 +649,22 @@ docs/cortex-4.0/
 - Faster time-to-market for features
 - Estimated value: **$800,000/year**
 
-**Total Annual Value:** **$5,500,000**
+**Maintenance Cost Savings (Central vs Local):**
+- Eliminate per-developer support: **$200,000/year saved**
+- No version drift issues: **$100,000/year saved**
+- Reduced infrastructure duplication: **$150,000/year saved**
+- Value: **$450,000/year**
+
+**Total Annual Value:** **$6,150,000**
 
 **ROI Calculation:**
-- Year 1 Return: $5.5M
-- Investment: $1.06M
-- ROI: **419%** (5.2× return)
-- Break-even: **2-3 months** after deployment
+- Year 1 Return: $6.15M
+- Investment: $1.83M
+- ROI: **236%** (3.4× return)
+- Break-even: **3-4 months** after deployment
+- **Year 2+ ROI:** Even higher (ongoing infrastructure costs ~$600K/year vs $6.15M value)
+
+**Note:** Central deployment has higher upfront infrastructure costs but dramatically lower ongoing maintenance costs and eliminates version drift issues entirely.
 
 ---
 
@@ -651,16 +746,21 @@ docs/cortex-4.0/
    - Complete remaining documentation:
      - [ ] LLM Intent Discovery detailed design
      - [ ] MCP Server Architecture specification
+     - [ ] **Centralized Deployment Architecture specification**
      - [ ] Technical Architecture deep-dive
      - [ ] Implementation Roadmap with tasks
      - [ ] Migration Strategy procedures
      - [ ] Testing & Validation plan
      - [ ] Interactive Docs Site implementation plan
+     - [ ] **VS Code Extension architecture and implementation plan**
 
 4. **Infrastructure Setup**
    - Provision development environments
    - Set up CI/CD pipeline
-   - Configure staging environment
+   - **Provision Kubernetes staging cluster (1 region)**
+   - **Configure PostgreSQL, Redis, Elasticsearch (dev instances)**
+   - **Set up API Gateway with SSO integration**
+   - **Create VS Code Extension project scaffold**
 
 ### Phase 1 Kickoff (Week 3-4)
 
@@ -681,11 +781,12 @@ docs/cortex-4.0/
 | 4 | Federated Brain System | ✅ Complete | P0 |
 | 5 | LLM Intent Discovery | 🟡 Planned | P1 |
 | 6 | MCP Server Architecture | 🟡 Planned | P1 |
-| 7 | Technical Architecture | 🟡 Planned | P0 |
-| 8 | Implementation Roadmap | 🟡 Planned | P0 |
-| 9 | Migration Strategy | 🟡 Planned | P1 |
-| 10 | Testing & Validation | 🟡 Planned | P1 |
-| 11 | Interactive Docs Site | 🟡 Planned | P2 |
+| 7 | **Centralized Deployment Architecture** | **🟡 Planned** | **P0** |
+| 8 | Technical Architecture | 🟡 Planned | P0 |
+| 9 | Implementation Roadmap | 🟡 Planned | P0 |
+| 10 | Migration Strategy | 🟡 Planned | P1 |
+| 11 | Testing & Validation | 🟡 Planned | P1 |
+| 12 | Interactive Docs Site | 🟡 Planned | P2 |
 
 ---
 
