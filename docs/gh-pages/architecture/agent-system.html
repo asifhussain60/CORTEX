@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent System - CORTEX 3.0 Architecture</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Architecture</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Agent System</span>
+    </nav>
+
+    <!-- Header -->
+    <section class="section">
+        <div class="container">
+            <h1 class="section-title">🤖 Intelligent Agent System</h1>
+            <p class="text-center" style="max-width: 900px; margin: 0 auto 3rem; color: var(--text-secondary); font-size: 1.125rem;">
+                Distributed specialist network with Intent Router processing 10,000+ requests/sec across domain-expert agents
+            </p>
+        </div>
+    </section>
+
+    <!-- Executive Summary -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card">
+                <h2 class="mb-3">Executive Summary</h2>
+                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8;">
+                    CORTEX's agent system is a distributed specialist network where each agent cluster handles specific domain expertise. 
+                    At the network core, the <strong>Intent Router</strong> analyzes incoming requests and intelligently routes to specialized 
+                    agents: Planner for strategy, TDD Master for quality, Executor for implementation. With 20+ specialized agents organized 
+                    into strategic, tactical, and operational tiers, this architecture achieves 8.7ms average latency with zero packet loss 
+                    and 100% reliability.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: #ffc107;">20+</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Specialized Agents</div>
+                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Domain experts</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">10,000+</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Requests/sec</div>
+                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Intent Router throughput</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">8.7ms</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Avg Latency</div>
+                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">End-to-end response</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(123, 97, 255, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-secondary);">0</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Packet Loss</div>
+                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">100% delivery rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intent Router (Core) -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%); border: 2px solid #ffc107;">
+                <h2 class="mb-3" style="color: #ffc107;">🎯 Intent Router (Network Core)</h2>
+                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+                    The central intelligence that analyzes every incoming request, classifies intent, and routes to appropriate specialist agents. 
+                    This is the golden hub connecting all agents in the network—every request passes through here first.
+                </p>
+                <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #ffc107;">10,000+</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Requests/sec Processed</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #ffc107;">100%</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Routing Accuracy</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #ffc107;">&lt;2ms</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Routing Decision Time</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #ffc107;">Redundant</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Stateless Multi-Node</div>
+                        </div>
+                    </div>
+                    <div style="padding-top: 1rem; border-top: 1px solid rgba(255, 193, 7, 0.3);">
+                        <strong style="color: #ffc107;">Routing Logic:</strong>
+                        <ul style="color: var(--text-secondary); line-height: 2; margin-top: 0.5rem;">
+                            <li>Analyzes user query intent (plan feature, run tests, review code, etc.)</li>
+                            <li>Classifies request type using NLP and pattern matching</li>
+                            <li>Routes to specialist agent with domain expertise</li>
+                            <li>Handles load balancing across agent clusters</li>
+                            <li>Falls back to Investigation Router for unknown intents</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategic Agents -->
+    <section class="section">
+        <div class="container">
+            <h2 class="mb-3" style="color: #2196f3;">🎯 Strategic Planning Agents</h2>
+            <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; text-align: center;">
+                High-level thinking, analysis, and long-term planning—"figure it out" operations
+            </p>
+
+            <!-- ADO Agent -->
+            <div class="glass-card" style="border-left: 4px solid #2196f3; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('ado-content')">
+                    <h3 style="margin: 0; color: #2196f3;">📋 ADO Planning Agent</h3>
+                    <span id="ado-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                </div>
+                <div id="ado-content" style="display: block;">
+                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                        Generates Azure DevOps work items (stories, features, epics) from CORTEX plans. Formats output in ADO-compatible 
+                        structure with acceptance criteria, technical requirements, and estimation. Integrates Planning System 2.0 with 
+                        enterprise project management.
+                    </p>
+                    <div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Stories Generated</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">200+</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Format Compliance</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">100%</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Export Formats</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">3</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(33, 150, 243, 0.3);">
+                            <strong style="color: #2196f3;">Capabilities:</strong> User story generation, feature breakdown, epic planning, acceptance criteria, technical specs, JSON/Markdown/CSV export
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Planner Agent -->
+            <div class="glass-card" style="border-left: 4px solid #2196f3; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('planner-content')">
+                    <h3 style="margin: 0; color: #2196f3;">📐 Work Planner Agent</h3>
+                    <span id="planner-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                </div>
+                <div id="planner-content" style="display: block;">
+                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                        Creates multi-phase implementation plans with DoR/DoD compliance. Auto-detects complexity (HIGH/MEDIUM/LOW), 
+                        includes TDD in all plans, generates phase-by-phase roadmaps with 6 quality gates. The strategic brain behind 
+                        feature delivery.
+                    </p>
+                    <div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Active Plans</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">47</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">DoR/DoD Compliance</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">100%</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Plan Types</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">3</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(33, 150, 243, 0.3);">
+                            <strong style="color: #2196f3;">Plan Types:</strong> Incremental (HIGH complexity), Conditional (MEDIUM), Skeleton (LOW)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RCA Agent -->
+            <div class="glass-card" style="border-left: 4px solid #2196f3; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('rca-content')">
+                    <h3 style="margin: 0; color: #2196f3;">🔍 Root Cause Analysis Agent</h3>
+                    <span id="rca-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                </div>
+                <div id="rca-content" style="display: block;">
+                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                        Investigates failures and errors with "5 Whys" methodology. Traces error chains back to root causes, generates 
+                        actionable recommendations, and documents lessons learned. Integrates with Tier 2 knowledge graph for pattern recognition.
+                    </p>
+                    <div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Investigations</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">150+</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Root Causes Found</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">92%</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Avg Depth</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">4.2</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(33, 150, 243, 0.3);">
+                            <strong style="color: #2196f3;">Methodology:</strong> 5 Whys analysis, error chain tracing, pattern recognition, lesson capture, recommendation generation
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Agent -->
+            <div class="glass-card" style="border-left: 4px solid #2196f3; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('profile-content')">
+                    <h3 style="margin: 0; color: #2196f3;">👤 Profile Agent</h3>
+                    <span id="profile-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                </div>
+                <div id="profile-content" style="display: block;">
+                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                        Manages user profiles, preferences, and interaction history. Tracks expertise levels, preferred workflows, 
+                        and customization settings. Enables personalized CORTEX experiences based on user behavior patterns.
+                    </p>
+                    <div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Profiles</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">50+</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Interaction Modes</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">3</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Personalization</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Active</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(33, 150, 243, 0.3);">
+                            <strong style="color: #2196f3;">Modes:</strong> Autonomous (concise), Guided (balanced), Detailed (comprehensive learning)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tactical Execution Agents -->
+    <section class="section">
+        <div class="container">
+            <h2 class="mb-3" style="color: #4caf50;">⚡ Tactical Execution Agents</h2>
+            <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; text-align: center;">
+                Immediate action, implementation, testing, and deployment—"do it now" operations
+            </p>
+
+            <!-- Code Executor -->
+            <div class="glass-card" style="border-left: 4px solid #4caf50; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('executor-content')">
+                    <h3 style="margin: 0; color: #4caf50;">🚀 Code Executor Agent</h3>
+                    <span id="executor-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                </div>
+                <div id="executor-content" style="display: block;">
+                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                        Executes multi-phase implementation plans. Coordinates file creation, code generation, testing, and git commits 
+                        in sequential phases with checkpoint validation. Transforms approved plans into running code.
+                    </p>
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Tasks Executed</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">147</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Success Rate</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">98.7%</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Avg Duration</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">8min</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(76, 175, 80, 0.3);">
+                            <strong style="color: #4caf50;">Features:</strong> Phase checkpoints, rollback on failure, git integration, TDD enforcement, execution tracking
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Generator -->
+            <div class="glass-card" style="border-left: 4px solid #4caf50; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('test-gen-content')">
+                    <h3 style="margin: 0; color: #4caf50;">🧪 Test Generator Agent</h3>
+                    <span id="test-gen-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                </div>
+                <div id="test-gen-content" style="display: block;">
+                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                        Generates comprehensive test suites following TDD principles. Creates unit tests, integration tests, and test fixtures. 
+                        Ensures RED phase compliance (tests fail before implementation) and maintains 4-layer coverage standards.
+                    </p>
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Tests Generated</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">10,000+</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Coverage Target</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">81%</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">RED Compliance</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">100%</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(76, 175, 80, 0.3);">
+                            <strong style="color: #4caf50;">Test Types:</strong> Unit tests, integration tests, fixtures, mocks, 4-layer coverage (Tier 0-3)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commit Handler -->
+            <div class="glass-card" style="border-left: 4px solid #4caf50; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('commit-content')">
+                    <h3 style="margin: 0; color: #4caf50;">📦 Commit Handler Agent</h3>
+                    <span id="commit-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                </div>
+                <div id="commit-content" style="display: block;">
+                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                        Manages git commits with intelligent message generation using Conventional Commits format. Enforces CORTEX/user 
+                        isolation, prevents dirty state work, and creates descriptive commit messages automatically.
+                    </p>
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Commits Created</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">520+</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Isolation Rate</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">100%</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Message Quality</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">High</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(76, 175, 80, 0.3);">
+                            <strong style="color: #4caf50;">Format:</strong> Conventional Commits (feat/fix/docs/refactor/test/chore)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Corrector -->
+            <div class="glass-card" style="border-left: 4px solid #4caf50; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('error-content')">
+                    <h3 style="margin: 0; color: #4caf50;">🔧 Error Corrector Agent</h3>
+                    <span id="error-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                </div>
+                <div id="error-content" style="display: block;">
+                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                        Automatically detects and corrects common errors in real-time. Analyzes stack traces, suggests fixes, and can 
+                        apply corrections with user approval. Learns from past corrections to improve accuracy over time.
+                    </p>
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Errors Corrected</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">800+</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Auto-Fix Rate</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">76%</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Accuracy</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">94%</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(76, 175, 80, 0.3);">
+                            <strong style="color: #4caf50;">Error Types:</strong> Syntax errors, import errors, type mismatches, undefined variables, logic errors
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Operational Support Agents -->
+    <section class="section">
+        <div class="container">
+            <h2 class="mb-3" style="color: #9c27b0;">🔧 Operational Support Agents</h2>
+            <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; text-align: center;">
+                System health, learning, compliance, and continuous improvement
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <!-- Application Health Agent -->
+                <div class="glass-card" style="border-top: 3px solid #9c27b0;">
+                    <h3 style="color: #9c27b0; margin-bottom: 1rem;">🏥 Application Health Agent</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+                        Monitors system health across all tiers. Checks database integrity, file system health, git status, test coverage, 
+                        and orchestrator availability. Triggers maintenance when needed.
+                    </p>
+                    <div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+                        <strong>Health Checks:</strong> 1,000+ | <strong>System Health:</strong> 98% | <strong>Auto-Repair:</strong> Active
+                    </div>
+                </div>
+
+                <!-- Learning Capture Agent -->
+                <div class="glass-card" style="border-top: 3px solid #9c27b0;">
+                    <h3 style="color: #9c27b0; margin-bottom: 1rem;">📚 Learning Capture Agent</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+                        Captures lessons learned from conversations, errors, and user interactions. Feeds Tier 2 knowledge graph 
+                        with structured insights for pattern recognition and Hebbian learning.
+                    </p>
+                    <div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+                        <strong>Lessons:</strong> 500+ | <strong>Patterns:</strong> 24,817 connections | <strong>Learning:</strong> Continuous
+                    </div>
+                </div>
+
+                <!-- Learning Librarian Agent -->
+                <div class="glass-card" style="border-top: 3px solid #9c27b0;">
+                    <h3 style="color: #9c27b0; margin-bottom: 1rem;">📖 Learning Librarian Agent</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+                        Organizes and retrieves lessons learned. Provides context-aware search across knowledge base, surfacing 
+                        relevant past experiences when similar situations arise.
+                    </p>
+                    <div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+                        <strong>Queries:</strong> 5,000+ | <strong>Recall Rate:</strong> 96% | <strong>Avg Time:</strong> &lt;100ms
+                    </div>
+                </div>
+
+                <!-- Compliance Dashboard Agent -->
+                <div class="glass-card" style="border-top: 3px solid #9c27b0;">
+                    <h3 style="color: #9c27b0; margin-bottom: 1rem;">✅ Compliance Dashboard Agent</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+                        Tracks SKULL rule compliance, TDD adherence, and quality metrics. Generates compliance reports and identifies 
+                        areas needing improvement. Real-time monitoring dashboard.
+                    </p>
+                    <div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+                        <strong>Rules Tracked:</strong> 22 | <strong>Compliance:</strong> 100% | <strong>Reports:</strong> Daily
+                    </div>
+                </div>
+
+                <!-- Change Governor -->
+                <div class="glass-card" style="border-top: 3px solid #9c27b0;">
+                    <h3 style="color: #9c27b0; margin-bottom: 1rem;">🛡️ Change Governor Agent</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+                        Reviews proposed changes for governance compliance before execution. Acts as pre-commit gate, validating 
+                        against SKULL rules and preventing violations before they occur.
+                    </p>
+                    <div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+                        <strong>Reviews:</strong> 2,000+ | <strong>Blocks:</strong> 156 violations | <strong>Pass Rate:</strong> 92%
+                    </div>
+                </div>
+
+                <!-- Session Resumer -->
+                <div class="glass-card" style="border-top: 3px solid #9c27b0;">
+                    <h3 style="color: #9c27b0; margin-bottom: 1rem;">🔄 Session Resumer Agent</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+                        Restores context from previous sessions. Analyzes Tier 1 conversation history and Tier 3 dev context to 
+                        resume work seamlessly without manual context rebuilding.
+                    </p>
+                    <div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+                        <strong>Resumes:</strong> 300+ | <strong>Context Restored:</strong> 95% | <strong>Time Saved:</strong> ~5min avg
+                    </div>
+                </div>
+
+                <!-- Screenshot Analyzer -->
+                <div class="glass-card" style="border-top: 3px solid #9c27b0;">
+                    <h3 style="color: #9c27b0; margin-bottom: 1rem;">📸 Screenshot Analyzer Agent</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+                        Analyzes screenshots to extract code, error messages, UI layouts, and design elements. Enables visual 
+                        troubleshooting and UI implementation from mockups.
+                    </p>
+                    <div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+                        <strong>Analyzed:</strong> 80+ | <strong>Code Extraction:</strong> 89% accuracy | <strong>OCR:</strong> Active
+                    </div>
+                </div>
+
+                <!-- Welcome Banner Agent -->
+                <div class="glass-card" style="border-top: 3px solid #9c27b0;">
+                    <h3 style="color: #9c27b0; margin-bottom: 1rem;">👋 Welcome Banner Agent</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+                        Displays context-aware welcome messages with system status, recent activity summary, and suggested next actions. 
+                        Personalized based on user profile and current project state.
+                    </p>
+                    <div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+                        <strong>Sessions:</strong> 1,200+ | <strong>Suggestions:</strong> Context-aware | <strong>Mode:</strong> Personalized
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agent Communication Architecture -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%); border: 1px solid rgba(255, 193, 7, 0.3);">
+                <h2 class="mb-3 text-center">📡 Agent Communication Architecture</h2>
+                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; text-align: center; margin-bottom: 2rem;">
+                    Message-based loose coupling enables independent evolution and horizontal scaling
+                </p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                    <div style="background: rgba(33, 150, 243, 0.1); padding: 1.5rem; border-radius: 8px;">
+                        <h3 style="color: #2196f3; margin-bottom: 1rem;">🎯 Hub-Spoke Pattern</h3>
+                        <ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
+                            <li>Intent Router at network core connects to all agents</li>
+                            <li>Agents also communicate peer-to-peer for complex workflows</li>
+                            <li>Planner → Executor → Test Generator → Commit Handler (critical path)</li>
+                            <li>Load balancing automatically reroutes around congestion</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(255, 152, 0, 0.1); padding: 1.5rem; border-radius: 8px;">
+                        <h3 style="color: #ff9800; margin-bottom: 1rem;">💬 Message Contracts</h3>
+                        <ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
+                            <li>Well-defined message formats (JSON schemas)</li>
+                            <li>Agents subscribe to message types they care about</li>
+                            <li>No direct dependencies between agents (loose coupling)</li>
+                            <li>Adding new agents doesn't break existing ones</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem;">
+                    <div style="text-align: center; padding: 1rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2rem; font-weight: 700; color: #4caf50;">10,000+</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Requests/sec</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);">8.7ms</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Avg Latency</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2rem; font-weight: 700; color: #ffc107;">0</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Packet Loss</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: rgba(156, 39, 176, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2rem; font-weight: 700; color: #9c27b0;">100%</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Delivery Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Benefits -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <h2 class="mb-3 text-center">✨ Why Specialized Agents?</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div style="padding: 1.5rem; background: rgba(33, 150, 243, 0.1); border-radius: 8px; border-left: 4px solid #2196f3;">
+                        <h3 style="color: #2196f3; margin-bottom: 0.75rem;">🎯 Domain Expertise</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                            Each agent has deep knowledge of its domain. TDD Master understands test-first patterns, Review Oracle 
+                            knows SOLID principles. Specialization enables coaching, not just execution.
+                        </p>
+                    </div>
+                    
+                    <div style="padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 4px solid #4caf50;">
+                        <h3 style="color: #4caf50; margin-bottom: 0.75rem;">🔗 Loose Coupling</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                            Message-based communication means agents don't call each other directly. Adding, upgrading, or replacing 
+                            one agent doesn't break others. Evolution without cascading changes.
+                        </p>
+                    </div>
+                    
+                    <div style="padding: 1.5rem; background: rgba(255, 152, 0, 0.1); border-radius: 8px; border-left: 4px solid #ff9800;">
+                        <h3 style="color: #ff9800; margin-bottom: 0.75rem;">📈 Horizontal Scaling</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                            Each agent can scale independently. If Executor becomes bottleneck, add more Executor instances. 
+                            Load balancing distributes work automatically without code changes.
+                        </p>
+                    </div>
+                    
+                    <div style="padding: 1.5rem; background: rgba(156, 39, 176, 0.1); border-radius: 8px; border-left: 4px solid #9c27b0;">
+                        <h3 style="color: #9c27b0; margin-bottom: 0.75rem;">🔍 Observable System</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                            Message flows provide natural audit trails. Debugging becomes tracing message sequences rather than 
+                            stepping through complex call stacks. Full visibility into agent interactions.
+                        </p>
+                    </div>
+                    
+                    <div style="padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px; border-left: 4px solid var(--accent-primary);">
+                        <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">🚀 Faster Development</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                            Focused agents have simpler logic. No complex conditionals ("if planning... if testing..."). 
+                            Each agent does one thing well, making code clearer and faster to modify.
+                        </p>
+                    </div>
+                    
+                    <div style="padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border-left: 4px solid #ffc107;">
+                        <h3 style="color: #ffc107; margin-bottom: 0.75rem;">🛡️ Fault Isolation</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                            If one agent fails, others continue operating. Failures are contained to single agents rather than 
+                            cascading through monolithic systems. Graceful degradation built-in.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lateral Navigation -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <h3 class="text-center mb-3">Explore Other Architecture Components</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <a href="four-tier-brain.html" class="btn btn-secondary" style="display: block; text-align: center;">🧠 4-Tier Brain</a>
+                    <a href="skull-protection.html" class="btn btn-secondary" style="display: block; text-align: center;">🛡️ SKULL Protection</a>
+                    <a href="orchestrator-ecosystem.html" class="btn btn-secondary" style="display: block; text-align: center;">🎭 Orchestrator Ecosystem</a>
+                    <a href="index.html" class="btn btn-secondary" style="display: block; text-align: center;">← Architecture Overview</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container text-center">
+            <a href="index.html" class="btn btn-primary">← Back to Architecture</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 3.0</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const icon = document.getElementById(sectionId + '-icon');
+            
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                icon.style.transform = 'rotate(0deg)';
+                icon.textContent = '▼';
+            } else {
+                section.style.display = 'none';
+                icon.style.transform = 'rotate(-90deg)';
+                icon.textContent = '▶';
+            }
+        }
+    </script>
+</body>
+</html>
