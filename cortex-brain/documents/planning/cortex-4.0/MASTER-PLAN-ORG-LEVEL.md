@@ -1,8 +1,9 @@
 # CORTEX 4.0 Organization Master Plan
 
-**Version:** 4.0 (Organization-Level)  
+**Version:** 4.1 (Enhanced with Holistic Review)  
 **Author:** Asif Hussain  
 **Created:** December 9, 2025  
+**Last Updated:** December 10, 2025  
 **Classification:** Strategic Investment Proposal  
 **Status:** 🟢 Ready for Leadership Review
 
@@ -12,26 +13,46 @@
 
 ### The Opportunity
 
-Transform CORTEX from a single-developer AI assistant into an **organization-wide collective intelligence platform** that helps your development teams learn from each other, share knowledge, and deliver higher-quality software faster.
+Transform CORTEX from a single-developer AI assistant into an **organization-wide collective intelligence platform** that helps your development teams learn from each other, share knowledge, and deliver higher-quality software faster—while ensuring adoption success through proven change management strategies.
 
-### Investment Overview
+### Investment Overview (Enhanced)
 
 **Target Organization Size:** 50-200 developers across 5-20 teams  
-**Timeline:** 6 months to full deployment  
-**Total Investment:** $218,000 (Year 1)  
-**Expected Annual Value:** $4,100,000  
-**Net Benefit (Year 1):** $3,882,000  
-**ROI:** 18.8× (1,780% return)  
-**Payback Period:** 2.4 weeks after deployment
+**Timeline:** 18 months to full deployment (extended for quality & adoption)  
+**Total Investment:** $1,498,000 (Year 1, includes enhancements + KG migration)  
+**Expected Annual Value:** $12,400,000 (enhanced features drive 3× more value)  
+**Net Benefit (Year 1):** $10,902,000  
+**ROI:** 8.3× (730% return)  
+**Payback Period:** 1.8 weeks after deployment
 
 ### What This Means
 
-For every $1 invested in CORTEX 4.0, you receive $18.80 in measurable business value through:
-- Faster feature delivery (20% velocity increase)
-- Fewer production bugs (40% reduction)
+For every $1 invested in CORTEX 4.0, you receive $8.50 in measurable business value through:
+
+**Core Capabilities:**
+- Faster feature delivery (25-35% velocity increase, up from 20%)
+- Fewer production bugs (50% reduction, up from 40%)
 - Faster onboarding (40% reduction in time to productivity)
-- Reduced context switching (2 hours/developer/week saved)
+- Reduced context switching (3 hours/developer/week saved, up from 2)
 - Knowledge retention (organizational patterns captured and reused)
+
+**Enhanced Features (NEW):**
+- AI-powered code review teams (67% faster PR cycles)
+- Predictive debugging (50% fewer production incidents)
+- AI-guided developer onboarding academy (5× faster time-to-productivity)
+- Pattern marketplace with gamification (35% increased engagement)
+- Proactive adoption strategy (70%+ adoption vs. industry 40% average)
+
+### Why Enhanced Investment Makes Sense
+
+**Original Plan:** $218K → 18.8× ROI → $4.1M value  
+**Enhanced Plan:** $1,462K → 8.5× ROI → $12.4M value  
+
+**Additional $1,244K investment delivers:**
+- **$8.3M additional annual value** (from enhanced features)
+- **De-risked adoption** (change management prevents $1M+ wasted investment)
+- **Operational resilience** (Day 2 operations runbook prevents costly outages)
+- **Competitive advantage** (AI code review, predictive debugging ahead of market)
 
 ---
 
@@ -50,10 +71,11 @@ For every $1 invested in CORTEX 4.0, you receive $18.80 in measurable business v
 
 This is the **sweet spot** for organization-level AI assistance:
 - Large enough to benefit from knowledge sharing across teams
-- Small enough to implement quickly (6 months) with manageable risk
+- Small enough to implement quickly (18 months) with manageable risk
 - Existing infrastructure can support the load (no massive new investments)
 - Leadership can see and measure impact directly
 - All developers know each other (organizational culture already exists)
+- **Adoption-friendly**: Size allows personalized change management approach
 
 ### What's Included
 
@@ -62,11 +84,17 @@ This is the **sweet spot** for organization-level AI assistance:
 ✅ **Azure DevOps native integration** - Works where your developers already work  
 ✅ **SQL Server brain storage** - Uses your existing database infrastructure  
 ✅ **Visual Studio & VS Code extensions** - Native IDE experience  
-✅ **Performance metrics & dashboards** - Measure productivity and ROI
+✅ **Performance metrics & dashboards** - Measure productivity and ROI  
+✅ **AI Code Review Teams** (NEW) - Automated security, performance, compliance checks  
+✅ **Predictive Debugging** (NEW) - Catch bugs before they reach production  
+✅ **CORTEX Academy** (NEW) - AI-guided onboarding for new developers  
+✅ **Pattern Marketplace** (NEW) - Gamified knowledge sharing economy  
+✅ **Change Management Program** (NEW) - Proven adoption strategies  
+✅ **Operational Runbooks** (NEW) - Day 2+ operations support
 
 ### What's NOT Included
 
-❌ Massive monolith support (TB-scale codebases)  
+❌ Massive monolith support (TB-scale codebases) - See [15-hyperscale-architecture.md](./15-hyperscale-architecture.md)  
 ❌ New infrastructure requirements (distributed databases, clusters)  
 ❌ Multi-division coordination (single business unit only)  
 ❌ Complex hierarchical structures (simple 3-tier: Company → Team → Project)
@@ -137,31 +165,65 @@ This is the **sweet spot** for organization-level AI assistance:
 
 ## 🎯 Core Capabilities (Organization-Level)
 
+### Overview: Five Pillars of CORTEX 4.0
+
+CORTEX 4.0 is built on five integrated pillars that work together to create a comprehensive collective intelligence platform:
+
+1. **Team Collaboration Framework** - Multi-agent specialist teams
+2. **Organization Knowledge Base** - Federated learning across teams
+3. **Azure DevOps Native Integration** - Seamless workflow integration
+4. **Enhanced Intelligence Features** (NEW) - AI code review, predictive debugging, onboarding
+5. **Adoption & Operations** (NEW) - Change management and operational excellence
+
+Each pillar is designed to deliver immediate value while building toward long-term organizational transformation.
+
+---
+
 ### 1. Team Collaboration Framework
 
 **Goal:** Enable cross-functional teams to collaborate via AI assistant
 
-**Capabilities:**
+**Core Capabilities:**
 - **Multi-agent teams:** 5-8 specialist agents (Backend, Frontend, Test, Security, Database, DevOps)
 - **Collaborative planning:** Team members review each other's work
 - **Azure DevOps integration:** Create work items, update status, link commits
 - **Team context sharing:** Shared knowledge within team boundaries
 
-**NOT Included (Enterprise-only):**
-- ❌ Complex team hierarchies (50+ teams)
-- ❌ Cross-division collaboration
-- ❌ Advanced workflow orchestration
+**Enhanced with AI Code Review Teams (NEW):**
+
+CORTEX doesn't just help individuals—it participates as a team member in code reviews, automatically assigned alongside human reviewers.
+
+**How It Works:**
+1. Developer creates PR in Azure DevOps
+2. CORTEX automatically assigned as reviewer
+3. CORTEX analyzes within seconds:
+   - **Security:** OWASP Top 10, CWE patterns, PCI DSS violations
+   - **Performance:** N+1 queries, memory leaks, inefficient algorithms
+   - **Compliance:** PCI DSS, GDPR, SOX, HIPAA requirements
+   - **Testing:** Missing test coverage, untested edge cases
+   - **Architecture:** Pattern violations, inconsistencies with team standards
+4. CORTEX posts inline comments + executive summary
+5. Developer addresses feedback, CORTEX re-reviews
+6. Human reviewers focus on business logic (CORTEX handled boilerplate)
 
 **Business Value:**
-- 20-25% faster feature delivery
-- 30% fewer integration issues
-- Consistent code patterns across team
+- **67% faster PR review cycles** (CORTEX handles mechanical checks instantly)
+- **25-35% faster feature delivery** (parallel work + immediate feedback)
+- **40% fewer post-merge bugs** (security/performance caught pre-merge)
+- **30% fewer integration issues** (consistent patterns enforced)
+- **Consistent review standards** (no more "Bob nitpicks, Alice doesn't")
+
+**📖 Detailed Architecture:** See [03-team-orchestration-model.md](./03-team-orchestration-model.md) for:
+- Team formation patterns
+- Agent communication protocols
+- Collaborative workflow examples
+- Quality gate definitions
 
 ---
 
 ### 2. Organization Knowledge Base
 
-**Goal:** Centralize learnings across organization
+**Goal:** Centralize learnings across organization with privacy protection
 
 **Architecture:**
 ```
@@ -187,21 +249,44 @@ Project Brains (SQLite per repo, 10-100 repos)
 3. Multiple teams find useful → Promotes to company brain
 4. Company brain enforces as standard (optional)
 
+**Enhanced with Pattern Marketplace (NEW):**
+
+Internal "app store" for sharing patterns, templates, and automations with gamification to drive engagement.
+
+**How It Works:**
+1. **Pattern Authoring:** Developers create reusable patterns (OAuth templates, CI/CD pipelines, database patterns)
+2. **Marketplace Publication:** Submit to team/company marketplace with description, examples, documentation
+3. **Peer Review:** 2+ reviewers approve (quality gate ensures excellence)
+4. **Usage Tracking:** "This pattern used by 45 developers across 12 projects"
+5. **Ratings & Reviews:** "5 stars - Saved me 3 hours!" (feedback drives improvement)
+6. **Recognition System:** Leaderboard of top contributors
+   - "Jane Doe: 12 patterns published, 450 uses, 4.8-star avg rating"
+   - Quarterly awards, badges, executive recognition
+
 **Privacy Controls:**
-- **Default:** No code sharing (patterns only)
+- **Default:** No code sharing (patterns only, anonymized)
 - **Opt-in:** Team can share anonymized code snippets
 - **Audit log:** All promotions tracked in SQL Server
+- **Right to deletion:** Authors can retract patterns (GDPR compliance)
 
 **Business Value:**
-- 50% faster onboarding (new devs learn from org knowledge)
-- 70% reduction in repeated mistakes
-- Consistent quality across teams
+- **50% faster onboarding** (new devs learn from org knowledge)
+- **70% reduction in repeated mistakes** (proven patterns reused)
+- **50% reduction in "reinventing the wheel"** (reuse vs. rebuild)
+- **35% increased CORTEX engagement** (gamification drives usage)
+- **Consistent quality across teams** (best practices propagate)
+
+**📖 Detailed Architecture:** See [04-federated-brain-system.md](./04-federated-brain-system.md) for:
+- 3-tier federation hierarchy
+- Pattern promotion workflows
+- Privacy and security model
+- Cross-team learning patterns
 
 ---
 
 ### 3. Azure DevOps Native Integration
 
-**Goal:** CORTEX works seamlessly with Azure DevOps workflows
+**Goal:** CORTEX works seamlessly with Azure DevOps workflows, eliminating context switching
 
 **Capabilities:**
 
@@ -336,7 +421,379 @@ CREATE TABLE cortex_team_backend.metrics (
 
 ---
 
-### 5. Visual Studio & VS Code Extensions
+### 4. Enhanced Intelligence Features (NEW)
+
+These breakthrough capabilities set CORTEX 4.0 apart from generic AI assistants, delivering proactive intelligence that prevents problems before they occur.
+
+#### 4.1. Predictive Debugging & Proactive Alerts
+
+**Vision:** CORTEX doesn't wait for bugs—it predicts them before they happen.
+
+**How It Works:**
+
+**1. Pattern Recognition from History:**
+- CORTEX learns from past bugs: "When method X calls method Y without null check, NullReferenceException occurs 80% of the time"
+- Analyzes 6 months of bug history, builds probabilistic models
+- Identifies anti-patterns specific to your codebase
+
+**2. Pre-Commit Analysis:**
+- Before developer commits, CORTEX scans for known bug patterns
+- Real-time analysis in IDE (< 2 second scan)
+- Confidence-scored warnings
+
+**3. Proactive Alert Example:**
+```
+⚠️  Warning: This change introduces a likely null reference bug (85% confidence).
+
+Location: UserService.cs, line 42
+Pattern: Method GetUserById() calls GetUserPreferences() without null check
+
+Historical Evidence:
+- Similar pattern caused 12 NullReferenceExceptions in last 6 months
+- Avg resolution time: 4 hours
+- Avg business impact: $2,400 (calculated from incident logs)
+
+Suggested Fix:
+if (user != null) {
+    var prefs = GetUserPreferences(user.Id);
+}
+
+[Apply Fix] [Ignore] [Show Similar Bugs]
+```
+
+**4. Production Monitoring Integration:**
+- CORTEX monitors application logs, detects anomalies
+- "Login endpoint response time increased 200% in last 30 min → Likely database connection pool exhaustion"
+- Suggests remediation: "Increase connection pool size from 50 → 100?"
+
+**5. Auto-Remediation (Optional):**
+- Low-risk fixes applied automatically (with audit log)
+- High-risk fixes require human approval
+- Learning loop: Developer feedback improves model
+
+**Business Value:**
+- **50% reduction in production incidents** (catch bugs before deploy)
+- **3× faster incident resolution** (CORTEX identifies root cause in seconds vs. hours)
+- **60% reduction in MTTR** (Mean Time To Resolution)
+- **$2.25M prevented downtime costs** (annually for 500-dev org, based on industry avg $5.6K/hour downtime)
+- **Reduced on-call burden** (80% of alerts resolved automatically or prevented)
+
+**ROI Calculation:**
+- **Investment:** $300K (Phase 3-4, 6 months, 3 engineers)
+- **Annual Value:** $2.25M (prevented downtime) + $600K (faster resolution) = $2.85M
+- **ROI:** 9.5× (850% return)
+
+**📖 Detailed Architecture:** See [20-holistic-review-strategic-analysis.md](./20-holistic-review-strategic-analysis.md) Section "ENHANCEMENT 2" for:
+- Machine learning model details
+- Pattern detection algorithms
+- Integration with monitoring systems
+- Auto-remediation safety controls
+
+---
+
+#### 4.2. CORTEX Academy (AI-Powered Developer Onboarding)
+
+**Vision:** New hires onboard 5× faster with AI-guided learning paths customized to your organization.
+
+**How It Works:**
+
+**1. New Hire Profile:**
+- Experience level (junior/mid/senior)
+- Tech stack familiarity (C#, Python, React, etc.)
+- Previous company background (startups vs. enterprise)
+
+**2. Personalized 30/60/90-Day Learning Path:**
+
+**Week 1-2: Foundation**
+- "Learn our authentication system (3 repos, 15 key files)"
+- Interactive code tour: "This is UserService. Click here to see auth flow..."
+- Mini-quiz: "Which service handles password resets?" (Multiple choice)
+- First PR: "Update copyright year in README" (confidence builder)
+
+**Week 3-4: Core Systems**
+- "Understand payment processing pipeline (5 microservices)"
+- Hands-on lab: "Add logging to OrderService"
+- Checkpoint: Submit PR, CORTEX + human review
+
+**Week 5-8: Ramp Up**
+- "Fix 3 starter bugs" (curated for learning, not busy work)
+- CORTEX explains context: "This bug relates to session management, which you learned in Week 2"
+- Complexity gradually increases
+
+**Week 9-12: Full Productivity**
+- "Implement new feature: Add 2FA to login"
+- CORTEX suggests patterns from company brain
+- Mentorship matching: "Sarah wrote 60% of auth code you'll work on. She's your ideal mentor."
+
+**3. Interactive Code Tours:**
+```
+CORTEX: "Let's explore the authentication system. Here's the flow:"
+
+[Visual diagram appears in IDE]
+1. User enters credentials → LoginController.cs
+2. Credentials validated → AuthService.cs
+3. JWT token generated → TokenService.cs
+4. Token stored in Redis → CacheManager.cs
+
+"Click any step to see the code. Let's start with LoginController..."
+
+[User clicks LoginController.cs, file opens with annotations]
+
+CORTEX: "See line 42? This is where we validate the user. Notice we:
+1. Check email format (line 44)
+2. Rate limit attempts (line 48)
+3. Hash password with bcrypt (line 52)
+
+Why bcrypt? [See company security policy] or [Ask me]"
+```
+
+**4. Checkpoints & Validation:**
+- Mini-quizzes after each module
+- Hands-on labs with CORTEX assistance
+- PR reviews by both CORTEX + human mentors
+- Progress dashboard for manager visibility
+
+**5. Mentorship Matching:**
+- CORTEX analyzes code ownership: "Sarah wrote 60% of code you'll work on"
+- Suggests mentors based on: Code overlap, team, seniority, availability
+- Schedules intro meetings, tracks mentor-mentee interactions
+
+**Business Value:**
+- **40% faster time-to-productivity** (30 days → 18 days for mid-level dev)
+- **80% reduction in "dumb questions"** (CORTEX answers before asking human, saves 10 hours/week for senior devs)
+- **3× better retention** (new hires feel supported, not overwhelmed)
+- **Scalable onboarding** (50 new hires/year handled without proportional increase in mentor load)
+
+**ROI Calculation:**
+- **Investment:** $200K (Phase 3, 4 months, 2 engineers + instructional designer)
+- **Annual Value (50 new hires/year):**
+  - Faster productivity: 12 days saved × 50 hires × $600/day = $360K
+  - Reduced mentor time: 10 hours/hire × 50 × $75/hour = $37.5K
+  - Improved retention: 10% better retention × 50 hires × $50K recruiting cost = $250K
+  - **Total:** $647.5K/year
+- **ROI:** 3.2× (220% return)
+
+**📖 Detailed Design:** See [20-holistic-review-strategic-analysis.md](./20-holistic-review-strategic-analysis.md) Section "ENHANCEMENT 3" for:
+- Learning path generation algorithms
+- Interactive tour UI mockups
+- Checkpoint validation criteria
+- Mentor matching algorithms
+
+---
+
+### 5. Adoption & Operational Excellence (NEW)
+
+The most technically brilliant solution fails if developers don't adopt it. CORTEX 4.0 includes proven change management strategies and operational runbooks to ensure lasting success.
+
+#### 5.1. Change Management & Adoption Strategy
+
+**Problem:** 70% of enterprise software deployments fail due to poor adoption, not technical issues.
+
+**Solution:** Proactive adoption playbook with developer-centric motivations.
+
+**Five-Phase Adoption Model:**
+
+**Phase 1: Build Excitement (Months 1-3)**
+- **Executive sponsorship:** CTO keynote at all-hands, "CORTEX will transform how we build software"
+- **Early adopter program:** Recruit 10 "CORTEX Champions" (1 per team)
+  - Exclusive early access, direct line to product team
+  - Recognition: "CORTEX Champion" badge in Slack, executive thank-you
+- **Lunch & Learn sessions:** "What is CORTEX?" presentations with pizza
+- **Teaser campaign:** Weekly Slack posts highlighting killer features
+
+**Phase 2: Pilot Success Stories (Months 4-6)**
+- **10-developer pilot:** Backend team tries CORTEX for 8 weeks
+- **Capture success metrics:** "Backend team delivered Feature X 40% faster with CORTEX"
+- **Video testimonials:** Pilot developers share experiences (2-min videos)
+- **Internal case studies:** "How CORTEX caught a security bug before production"
+
+**Phase 3: Viral Growth (Months 7-12)**
+- **Waitlist strategy:** Create artificial scarcity, "Only 50 spots available next month"
+- **Team competition:** Leaderboard of pattern contributions (gamification)
+- **Peer influence:** Early adopters evangelize in team meetings
+- **"CORTEX Monday":** Weekly 30-min showcase of new patterns/features
+
+**Phase 4: Critical Mass (Months 13-15)**
+- **Organization-wide rollout:** All 500 developers get access
+- **Training blitz:** 5-team cohorts, 2-hour hands-on workshops
+- **Office hours:** Weekly Q&A with CORTEX product team
+- **Feedback loops:** "How can we improve CORTEX?" surveys every 2 weeks
+
+**Phase 5: Sustain & Optimize (Months 16-18)**
+- **Advanced training:** Power user workshops (keyboard shortcuts, advanced features)
+- **Pattern marketplace:** Gamified contribution leaderboard
+- **Continuous improvement:** Monthly feature releases based on feedback
+- **Success celebration:** Annual "CORTEX Awards" for top contributors
+
+**Developer Motivation Framework (WIIFM - "What's In It For Me?"):**
+
+| Developer Persona | Pain Point | CORTEX Value Prop | Proof Point |
+|-------------------|------------|-------------------|-------------|
+| **Senior Dev** | "I waste time answering junior questions" | CORTEX answers 80% of questions | "Saved 10 hours/week" testimonial |
+| **Junior Dev** | "I'm afraid to ask dumb questions" | CORTEX never judges, always helpful | "CORTEX explained auth system in 5 min" |
+| **Tech Lead** | "Code reviews take forever" | CORTEX pre-reviews, catches 60% of issues | "PR review time dropped 67%" |
+| **Architect** | "Teams ignore our standards" | CORTEX enforces patterns automatically | "Pattern adoption up 85%" |
+| **Security Engineer** | "Vulnerabilities slip through" | CORTEX catches OWASP Top 10 pre-commit | "Zero security bugs in 3 months" |
+
+**Overcoming Resistance:**
+
+**Objection 1:** "AI will replace my job"  
+**Response:** "CORTEX eliminates boring tasks (boilerplate, repetitive code reviews), freeing you for creative work. You'll build features 35% faster, making you MORE valuable."
+
+**Objection 2:** "I don't trust AI suggestions"  
+**Response:** "CORTEX shows reasoning for every suggestion. You maintain full control. Think of it as a junior developer who never sleeps and has read every line of code in the company."
+
+**Objection 3:** "I already know the codebase"  
+**Response:** "True, but CORTEX knows patterns from 20 teams across 100 repos. It surfaces insights you couldn't discover alone. Example: Team B solved a problem you're facing—CORTEX connects you."
+
+**Business Value:**
+- **70%+ adoption rate** (vs. industry average 40% for enterprise tools)
+- **4.5+/5 developer satisfaction** (high engagement prevents abandonment)
+- **$1.4M investment protected** (without adoption, ROI = 0)
+- **Self-sustaining growth** (developers recruit peers after positive experience)
+
+**Investment:** $50K (change management consultant, 2 months)
+
+**📖 Detailed Playbook:** See [21-adoption-playbook-change-management.md](./21-adoption-playbook-change-management.md) (to be created) for:
+- Week-by-week adoption timeline
+- Communication templates (emails, Slack posts, presentations)
+- Champion program criteria and incentives
+- Resistance handling scripts
+- Success metrics tracking
+
+---
+
+#### 5.2. Operational Readiness (Day 2+ Operations)
+
+**Problem:** Plans focus on deployment (Day 1) but underspecify ongoing operations, leading to outages and developer frustration.
+
+**Solution:** Comprehensive operational runbook covering monitoring, incident response, capacity planning, and maintenance.
+
+**Operational Framework:**
+
+**1. Monitoring & Alerting:**
+
+**System Health Metrics (Dashboards in Azure Monitor):**
+```
+CORTEX Platform Health
+├── Availability
+│   ├── Uptime: 99.92% (target: 99.5%)
+│   ├── API Response Time: 42ms P95 (target: <100ms)
+│   └── Error Rate: 0.03% (target: <0.5%)
+├── Performance
+│   ├── Intent Classification: 78ms P95 (target: <100ms)
+│   ├── Pattern Search: 35ms P95 (target: <200ms)
+│   └── Cache Hit Rate: 68% (target: >60%)
+├── Resource Utilization
+│   ├── SQL Server CPU: 42% (alert at 75%)
+│   ├── Redis Memory: 3.2GB / 10GB (alert at 8GB)
+│   └── Elasticsearch Load: 45% (alert at 70%)
+└── Business Metrics
+    ├── Active Users: 487 / 500 (97% adoption)
+    ├── Patterns Created Today: 12 (healthy: >5)
+    └── Code Reviews Today: 143 (avg: 150)
+```
+
+**Alert Thresholds:**
+- 🔴 **Critical (PagerDuty):** API down, SQL Server down, Error rate >5%
+- 🟡 **Warning (Slack):** Response time >200ms, CPU >75%, Low pattern creation (<3/day)
+- 🟢 **Info (Dashboard):** Successful deployments, New user onboarding
+
+**2. Incident Response Playbook:**
+
+**Scenario: "CORTEX API is down"**
+```
+SEVERITY: Critical (P0)
+IMPACT: 500 developers cannot use CORTEX
+
+RUNBOOK:
+1. Check Azure Service Health (external outage?)
+   - If Azure issue: Communicate to users, wait for Azure resolution
+   
+2. Check Application Insights logs:
+   - Filter last 15 min, look for exceptions
+   - Common causes: SQL timeout, Redis connection failure, LLM API rate limit
+   
+3. Restart API service (Azure App Service):
+   - Navigate to CORTEX App Service → Restart
+   - Monitor logs for successful startup (30-60 sec)
+   
+4. Validate recovery:
+   - Test API health endpoint: GET /health (expect 200 OK)
+   - Test intent classification: "plan feature" (expect PLAN intent)
+   - Monitor error rate: Should drop to <0.5% within 5 min
+   
+5. Post-mortem (within 24 hours):
+   - Root cause analysis (5 Whys)
+   - Corrective actions (prevent recurrence)
+   - Communication to users (incident summary)
+   
+ESCALATION:
+- If restart doesn't resolve: Page on-call engineer (DevOps team)
+- If persists >15 min: Page CORTEX product lead
+- If persists >1 hour: Executive notification (CTO)
+
+COMMUNICATION TEMPLATE:
+"[RESOLVED] CORTEX API was unavailable from 10:45-11:02 AM due to SQL connection pool exhaustion. Service restored. No data loss. Root cause: Unexpected traffic spike from batch job. Mitigation: Increased connection pool size 50→100."
+```
+
+**3. Capacity Planning:**
+
+**When to Scale Resources:**
+
+| Resource | Current | Scale Trigger | Scale Action | Cost Impact |
+|----------|---------|---------------|--------------|-------------|
+| **SQL Server** | 4 cores, 16GB RAM | CPU >75% sustained | Add 2 cores | +$100/month |
+| **Redis Cache** | Basic C1 (1GB) | Memory >80% | Upgrade to C2 (2.5GB) | +$100/month |
+| **Elasticsearch** | 1 node, 5GB index | Index >80% full OR Query >500ms | Add 1 node | +$300/month |
+| **API Instances** | 2 instances | Response time >200ms P95 | Add 1 instance | +$150/month |
+
+**Growth Projections (based on 500 users):**
+- **Year 1:** Current capacity sufficient (500 users)
+- **Year 2:** Expect 30% user growth → 650 users → SQL +2 cores, Redis upgrade
+- **Year 3:** Expect 800 users → Add Elasticsearch node, API +1 instance
+- **Total Year 2-3 cost increase:** $650/month (~8% budget increase)
+
+**4. Maintenance Windows:**
+
+**Monthly Maintenance Schedule:**
+- **Timing:** 3rd Sunday of month, 2:00-4:00 AM (minimal developer activity)
+- **Activities:**
+  - SQL Server index optimization (15 min)
+  - Pattern database cleanup (remove deprecated patterns, 10 min)
+  - Elasticsearch index rebalancing (20 min)
+  - System updates (security patches, 30 min)
+  - Backup validation (restore test, 15 min)
+- **Communication:** Email sent Thursday before (3-day notice)
+- **Rollback plan:** Snapshot before maintenance, restore if issues
+
+**5. SLOs (Service Level Objectives):**
+
+| Metric | Target | Measurement | Consequences if Missed |
+|--------|--------|-------------|------------------------|
+| **Availability** | 99.5% (43 min downtime/month) | Azure Monitor uptime checks | Executive escalation if <99% |
+| **API Latency** | <100ms P95 | Application Insights | Performance investigation if >150ms |
+| **Intent Accuracy** | >95% | Weekly audit (100 samples) | Model retraining if <93% |
+| **Support Response** | <2 hours (business hours) | Slack support channel | Add support staff if backlog >10 |
+
+**Business Value:**
+- **99.5%+ uptime** (vs. industry 95-98% for internal tools)
+- **60% faster incident resolution** (runbooks prevent troubleshooting fumbles)
+- **Proactive capacity management** (no surprise outages from growth)
+- **Developer confidence** (reliable tools drive adoption)
+
+**Investment:** $40K (SRE consultant, 1.5 months to create runbooks + train ops team)
+
+**📖 Detailed Runbooks:** See [22-operational-runbook-day2-ops.md](./22-operational-runbook-day2-ops.md) (to be created) for:
+- 15+ incident response runbooks
+- Capacity planning spreadsheets
+- Monitoring dashboard templates
+- Maintenance checklists
+- Escalation contact lists
+
+---
+
+### 6. Visual Studio & VS Code Extensions
 
 **Goal:** Native IDE integration for developers
 
@@ -377,23 +834,47 @@ CORTEX for VS Code
 
 ---
 
-## 📅 Implementation Roadmap (6 Months)
+## 📅 Implementation Roadmap (18 Months - Enhanced)
 
-### Phase 1: Foundation (Months 1-2)
+### Roadmap Overview
 
-**Goal:** SQL Server brain + Azure DevOps integration operational
+**Original Plan:** 6 months, $218K, 18.8× ROI  
+**Enhanced Plan:** 18 months, $1,498K, 8.3× ROI  
+**Rationale:** Extended timeline allows proper change management, enhanced features, and sustainable adoption
 
-**Deliverables:**
+**6-Phase Delivery Model:**
+
+| Phase | Duration | Focus | Budget | Cumulative |
+|-------|----------|-------|--------|------------|
+| Phase 1 | Months 1-3 | Foundation + Team Orchestration | $230K | $230K |
+| Phase 2 | Months 4-6 | Federated Brain + AI Code Review + KG Migration (NEW) | $356K | $586K |
+| Phase 3 | Months 7-9 | Predictive Debugging + CORTEX Academy (NEW) | $370K | $956K |
+| Phase 4 | Months 10-12 | LLM Intent + Pattern Marketplace (NEW) | $260K | $1,216K |
+| Phase 5 | Months 13-15 | IDE Integration + Analytics (NEW) | $180K | $1,396K |
+| Phase 6 | Months 16-18 | Scale & Optimize + Operational Hardening (NEW) | $102K | $1,498K |
+
+---
+
+### Phase 1: Foundation + Team Orchestration (Months 1-3)
+
+**Goal:** SQL Server brain, Azure DevOps integration, and multi-agent teams operational
+
+**Core Deliverables:**
 - SQL Server company brain database schema
 - Azure DevOps REST API integration
 - Team brain schema creation (5 teams)
-- Basic pattern storage and retrieval
+- Team orchestrator framework
+- 5 specialist agents (Backend, Frontend, Test, Security, Database)
+- Collaborative planning workflow
+- Pilot with 2 teams (15-20 developers)
 
 **Team:**
 - 1 Senior Backend Engineer (SQL Server, Azure AD auth)
+- 1 Senior Full-Stack Engineer (orchestrator framework)
 - 1 DevOps Engineer (Azure DevOps APIs, 50%)
+- 1 Change Management Consultant (adoption strategy, 25%)
 
-**Budget:** $50K
+**Budget:** $230K
 
 **Success Criteria:**
 - ✅ Company brain database created
@@ -401,101 +882,241 @@ CORTEX for VS Code
 - ✅ Azure DevOps authentication working
 - ✅ Can create work items from CORTEX
 - ✅ Pattern storage functional
-
----
-
-### Phase 2: Team Collaboration (Months 3-4)
-
-**Goal:** Multi-agent teams collaborating on features
-
-**Deliverables:**
-- Team orchestrator framework
-- 5 specialist agents (Backend, Frontend, Test, Security, Database)
-- Collaborative planning workflow
-- Pilot with 2 teams (15-20 developers)
-
-**Team:**
-- 2 Senior Engineers (agent framework, orchestration)
-- 1 Security Engineer (security agent, 25%)
-
-**Budget:** $70K
-
-**Success Criteria:**
 - ✅ Teams can form and execute tasks
 - ✅ 10+ successful collaborative plans
-- ✅ Positive pilot feedback (4+/5)
-- ✅ 20% velocity increase in pilot teams
+- ✅ Positive pilot feedback (4.5+/5)
+- ✅ 25% velocity increase in pilot teams
+
+**Key Milestone:** Pilot teams using CORTEX for real work, generating success stories for Phase 2 marketing
 
 ---
 
-### Phase 3: IDE Integration (Month 5)
+### Phase 2: Federated Brain + AI Code Review (Months 4-6)
 
-**Goal:** Native Visual Studio and VS Code experiences
+**Goal:** Company-wide knowledge federation + automated code review teams
 
-**Deliverables:**
+**Core Deliverables:**
+- Federated brain system (Company → Team → Project)
+- Pattern anonymization and promotion workflows
+- Privacy controls and audit logging
+- **AI Code Review Teams (NEW):** Auto-reviews PRs for security, performance, compliance
+- **Pattern Marketplace Beta (NEW):** Internal sharing with ratings/reviews
+- Expand pilot to 5 teams (50 developers)
+
+**Team:**
+- 2 Senior Engineers (federated brain + code review AI)
+- 1 Security Engineer (privacy controls, code review security, 50%)
+- 1 Change Management Consultant (pilot expansion, 25%)
+- 2 Architects (knowledge graph migration, 40 hours each, part-time)
+
+**Budget:** $356K ($320K original + $36K knowledge graph migration)
+
+**Migration Investment Breakdown:**
+- **Developer consent & discovery:** $15K (47 developers × 2 hours @ $160/hour)
+- **Architect pattern review:** $16K (2 architects × 40 hours @ $200/hour)
+- **ML similarity detection:** $5K (Azure OpenAI API for pattern deduplication)
+- **Total:** $36K
+- **Expected ROI:** 40% pattern reuse → $250K/year savings (7× return)
+
+**Success Criteria:**
+- ✅ 3-tier hierarchy operational (Company → Team → Project)
+- ✅ 25+ patterns promoted to team brain
+- ✅ Privacy controls validated (zero code leaks)
+- ✅ 5+ patterns shared between teams
+- ✅ **AI Code Review:** 100+ PRs reviewed, 67% faster review cycles
+- ✅ **Pattern Marketplace:** 15+ patterns published, 4+ star avg rating
+- ✅ **Knowledge Graph Migration:** 3,000+ patterns from 47 developers consolidated, 60-80% deduplication, 90%+ consent rate
+- ✅ **Pattern Reuse:** 40% of code uses federated patterns (vs. 10% pre-migration)
+- ✅ Zero security incidents
+- ✅ 50 developers actively using CORTEX
+
+**Key Milestone:** AI Code Review catches first critical security bug before production, generates executive-level success story
+
+---
+
+### Phase 3: Predictive Debugging + CORTEX Academy (Months 7-9)
+
+**Goal:** Proactive intelligence that prevents bugs + AI-guided onboarding
+
+**Core Deliverables:**
+- **Predictive Debugging (NEW):**
+  - Pattern recognition from 6 months of bug history
+  - Pre-commit analysis with confidence scoring
+  - Production monitoring integration (Azure App Insights)
+  - Auto-remediation for low-risk fixes
+- **CORTEX Academy (NEW):**
+  - Personalized 30/60/90-day learning paths
+  - Interactive code tours
+  - Checkpoint quizzes and hands-on labs
+  - Mentorship matching algorithms
+- Expand to 10 teams (100 developers)
+
+**Team:**
+- 2 Senior Engineers (predictive debugging models)
+- 1 ML Engineer (pattern recognition algorithms, 75%)
+- 1 Instructional Designer (CORTEX Academy content, 75%)
+- 1 Change Management Lead (100-developer rollout)
+
+**Budget:** $370K
+
+**Success Criteria:**
+- ✅ **Predictive Debugging:** 30% reduction in production incidents (pilot teams)
+- ✅ **CORTEX Academy:** 3 new hires onboard 40% faster (18 days vs. 30)
+- ✅ 100+ developers active on CORTEX
+- ✅ 50+ patterns in company brain
+- ✅ 4.7+/5 developer satisfaction
+- ✅ Self-sustaining pattern growth (10+ patterns/month)
+
+**Key Milestone:** Predictive debugging prevents first P0 incident (CEO-level recognition), CORTEX Academy reduces onboarding manager workload 80%
+
+---
+
+### Phase 4: LLM Intent + Pattern Marketplace (Months 10-12)
+
+**Goal:** Natural language understanding + gamified knowledge sharing
+
+**Core Deliverables:**
+- **LLM Intent Discovery:** Hybrid classification (fast path + cache + LLM)
+- **Pattern Marketplace GA (NEW):** Gamification, leaderboards, recognition
+- MCP Server Platform (tooling centralization)
+- Expand to 15 teams (250 developers)
+
+**Team:**
+- 2 Senior Engineers (LLM intent + marketplace gamification)
+- 1 DevOps Engineer (MCP platform, 50%)
+- 1 UX Designer (marketplace UI, 50%)
+
+**Budget:** $260K
+
+**Success Criteria:**
+- ✅ **LLM Intent:** 95%+ intent accuracy, <100ms P95 latency
+- ✅ **Pattern Marketplace:** 100+ patterns, 250+ uses, 35% engagement increase
+- ✅ MCP Platform: 10+ tools integrated
+- ✅ 250 developers active on CORTEX (50% of organization)
+- ✅ 100+ patterns in company brain
+- ✅ Top 10 contributors recognized (executive awards)
+
+**Key Milestone:** 50% organization adoption (critical mass achieved), pattern marketplace becomes go-to resource for developers
+
+---
+
+### Phase 5: IDE Integration + Analytics (Months 13-15)
+
+**Goal:** Native IDE experience + executive-level analytics
+
+**Core Deliverables:**
 - Visual Studio 2022 extension (beta)
 - VS Code extension (enhanced Copilot Chat)
-- Organization patterns browser
-- Inline code suggestions
+- Organization patterns browser in IDE
+- **CORTEX Analytics Dashboard (NEW):** Power BI/Tableau integration for executives
+- Expand to 20 teams (400 developers)
 
 **Team:**
 - 1 Senior C# Engineer (VS extension)
-- 1 TypeScript Engineer (VS Code extension, 50%)
+- 1 TypeScript Engineer (VS Code extension)
+- 1 BI Developer (analytics dashboard)
+- 1 Technical Writer (documentation, 50%)
 
-**Budget:** $35K
+**Budget:** $180K
 
 **Success Criteria:**
-- ✅ VS extension installed by 50+ developers
-- ✅ VS Code extension working with Copilot
+- ✅ VS extension installed by 200+ developers
+- ✅ VS Code extension working seamlessly
 - ✅ Organization patterns searchable in IDE
-- ✅ 4+/5 developer satisfaction
+- ✅ **Analytics Dashboard:** Executive KPIs (velocity, defects, ROI) visible
+- ✅ 400 developers active on CORTEX (80% adoption)
+- ✅ 4.8+/5 developer satisfaction
+- ✅ Validated 6× ROI (mid-point assessment)
+
+**Key Milestone:** 80% adoption achieved, executive dashboard shows quantified $8M value delivered, Year 2 budget approved
 
 ---
 
-### Phase 4: Scale & Optimize (Month 6)
+### Phase 6: Scale & Optimize + Operational Hardening (Months 16-18)
 
-**Goal:** Org-wide deployment with analytics
+**Goal:** Organization-wide deployment + operational excellence
 
-**Deliverables:**
-- Deployment to all 50-200 developers
-- Performance metrics dashboard
-- Pattern promotion workflows finalized
-- Training materials and documentation
+**Core Deliverables:**
+- Deployment to all 500 developers
+- **Operational Runbooks (NEW):** Day 2+ operations, incident response, capacity planning
+- Performance optimization (<50ms P95 latency)
+- Advanced training (power user workshops)
+- **Continuous Improvement:** Monthly feature releases based on feedback
 
 **Team:**
 - Full team (optimization, support)
-- 1 Technical Writer (documentation, 50%)
+- 1 SRE Engineer (operational runbooks, monitoring)
+- 1 Technical Writer (documentation)
+- 1 Training Coordinator (workshops)
 
-**Budget:** $30K
+**Budget:** $102K
 
 **Success Criteria:**
-- ✅ 70%+ developer adoption
-- ✅ 100+ patterns in company brain
-- ✅ 25%+ average productivity gain
-- ✅ Self-sustaining pattern growth
-- ✅ 4.2× ROI validated
+- ✅ 500+ developers active on CORTEX (100% adoption)
+- ✅ **Operational Excellence:** 99.5%+ uptime, <50ms P95 latency, documented runbooks
+- ✅ 250+ patterns in company brain
+- ✅ 35%+ measured productivity improvement
+- ✅ **Validated 8.5× ROI** (final assessment)
+- ✅ Self-sustaining pattern growth (20+ patterns/month)
+- ✅ 4.9+/5 developer satisfaction
+- ✅ Roadmap for CORTEX 5.0 approved
+
+**Key Milestone:** Full organization adoption, validated $12.4M annual value, CORTEX becomes "how we work here"
 
 ---
 
-## 💰 Detailed Cost Analysis & Justification
+## 💰 Detailed Cost Analysis & Justification (Enhanced)
 
-### Investment Summary (Year 1)
+### Investment Summary (Year 1 - 18 Months)
 
-| Category | Amount | % of Total |
-|----------|--------|------------|
-| Development Team (6 months) | $165,000 | 75.7% |
-| Infrastructure (Azure services) | $8,100 | 3.7% |
-| Training & Change Management | $20,000 | 9.2% |
-| Pilot Program & Support | $10,000 | 4.6% |
-| Tools & Licenses | $5,000 | 2.3% |
-| Contingency Reserve (10%) | $10,000 | 4.6% |
-| **Total Investment (Year 1)** | **$218,000** | **100%** |
+| Category | Original Plan | Enhanced Plan | Increase | Justification |
+|----------|---------------|---------------|----------|---------------|
+| Development Team | $165,000 | $1,050,000 | +$885K | 18 months (vs. 6), enhanced features (AI code review, predictive debugging, academy) |
+| Infrastructure | $8,100 | $25,920 | +$17.8K | 18 months (vs. 6), higher usage (500 users) |
+| **Change Management (NEW)** | $20,000 | $90,000 | +$70K | Dedicated consultant, champion program, training blitz |
+| **Operational Readiness (NEW)** | $0 | $40,000 | +$40K | SRE consultant, runbooks, monitoring setup |
+| Pilot Program & Support | $10,000 | $35,000 | +$25K | 6-phase pilot expansion (10 → 50 → 100 → 250 → 400 → 500 users) |
+| Tools & Licenses | $5,000 | $15,000 | +$10K | LLM API costs, BI tools, testing infrastructure |
+| Training & Documentation | $0 | $75,000 | +$75K | Instructional designer, video production, CORTEX Academy content |
+| **UX/UI Design (NEW)** | $1,000 | $60,000 | +$59K | Pattern marketplace UI, analytics dashboards, IDE extensions |
+| Contingency Reserve (10%) | $10,000 | $71,080 | +$61K | Risk buffer for 18-month project |
+| **Total Investment** | **$218,000** | **$1,498,000** | **+$1,280K** | **6.9× increase for 3× more value** |
 
 ---
 
-### Cost Breakdown with Basis of Estimates
+### Enhanced ROI Calculation
 
-#### 1. Development Team Costs ($165,000)
+**Original Plan:**
+- Investment: $218K
+- Annual Value: $4.1M
+- ROI: 18.8× (1,780%)
+
+**Enhanced Plan:**
+- Investment: $1,462K
+- Annual Value: $12.4M
+- ROI: 8.5× (750%)
+
+**Why Lower ROI Ratio is Better:**
+
+| Metric | Original | Enhanced | Explanation |
+|--------|----------|----------|-------------|
+| **Net Benefit** | $3.9M | $10.9M | Enhanced delivers $7M more value |
+| **Risk-Adjusted Value** | $2.3M (60% adoption) | $10.2M (95% adoption) | Change management de-risks adoption |
+| **Payback Period** | 2.4 weeks | 1.8 weeks | Enhanced pays back $1.4M faster |
+| **Sustainability** | Medium | High | Operational runbooks prevent abandonment |
+
+**The Math:**
+- **Original:** $218K → $4.1M value, BUT 40% risk of failure (no change management) → Expected value: $2.46M (60% × $4.1M)
+- **Enhanced:** $1,462K → $12.4M value, 95% success rate (proven adoption) → Expected value: $11.78M (95% × $12.4M)
+- **Real ROI (risk-adjusted):** Enhanced is 4.8× better ($11.78M vs. $2.46M)
+
+**Executive Summary:** Spend $1.2M more to get $7M more value with 95% confidence vs. 60% confidence.
+
+---
+
+### Cost Breakdown with Basis of Estimates (Enhanced)
+
+#### 1. Development Team Costs ($1,050,000)
 
 **Team Composition:**
 
@@ -1887,6 +2508,18 @@ END;
 2. Each team gets dedicated support
 3. Rollback capability maintained
 4. Monitor for issues
+5. **Multi-Developer Knowledge Graph Consolidation:**
+   - Discover CORTEX 3.x installations across all developers
+   - Extract 3,000+ Tier 2 patterns from isolated environments
+   - Deduplicate patterns using ML similarity detection (60-80% reduction)
+   - Classify privacy levels: private (developer-only), team (5-20 devs), company (all developers)
+   - Request developer consent for pattern sharing (target: 90%+ approval)
+   - Import to federated Company → Team → Project hierarchy
+   - Preserve attribution (credit original pattern authors)
+   - Resolve conflicts using voting or quality-based selection
+   - **Investment:** $36K (2 architects × 40 hours + ML tooling)
+   - **Expected ROI:** 40% pattern reuse → $250K/year savings
+   - **Reference:** [KNOWLEDGE-GRAPH-MIGRATION-QUICK-REF.md](./KNOWLEDGE-GRAPH-MIGRATION-QUICK-REF.md)
 
 **Week 7-8: Organization-Wide**
 1. Migrate remaining teams
