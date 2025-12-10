@@ -74,6 +74,7 @@ class WorkflowContext:
     session_id: str
     inputs: Dict[str, Any]
     metadata: Dict[str, Any]
+    outputs: Optional[Dict[str, Any]] = None  # Set by execute_workflow for DoD validation
 
 
 class BaseOrchestrator(ABC):
@@ -205,7 +206,9 @@ class BaseOrchestrator(ABC):
             
             # Success!
             self.state_machine.transition_to(OrchestratorStates.COMPLETED)
-            self.session_manager.complete_session(session_id, {'outputs': outputs})
+            # Don't pass outputs dict to session_manager - it contains non-serializable result objects
+            # SessionManager already has JSON-safe metadata from execute_workflow
+            self.session_manager.complete_session(session_id, {})
             
             execution_time = (datetime.now() - self._start_time).total_seconds()
             
