@@ -656,55 +656,74 @@ docs/ (GitHub Pages root)
 ### Phase 3: The Awakening Story (Week 5)
 **Duration:** 3-4 days  
 **Complexity:** MEDIUM-HIGH  
-**Objective:** Transform "The Awakening of CORTEX" narrative into engaging story experience with timeline visualization and character references
+**Objective:** Transform "The Awakening of CORTEX" narrative into engaging educational story experience that makes learning CORTEX architecture fun and accessible
+
+**Educational Purpose:**
+The primary goal is to **teach CORTEX features, architecture, and evolution through entertaining narrative**. The story serves as:
+- **Onboarding tool:** New users learn CORTEX capabilities through relatable journey
+- **Architecture guide:** Complex technical concepts (Tiers, SKULL, agents) explained through story moments
+- **Feature showcase:** Each chapter demonstrates specific CORTEX features solving real problems
+- **Engagement driver:** Humor and narrative keep readers interested while learning technical details
 
 **Story Context:**
-"The Awakening of CORTEX" is a 1,603-line tech comedy chronicling CORTEX's evolution from 1.0 to 2.0 through the eyes of Asif "Codenstein" Hussain. Written as a first-person narrative, the story follows the journey from Copilot's amnesia crisis to the breakthrough Four-Tier Brain architecture. Key elements include:
-- **Characters:** Asif "Codenstein" Hussain (protagonist), Mrs. Codenstein (Lichfield, UK - deadline enforcer), Copilot (amnesiac AI assistant), Roomba (autonomous comic relief)
-- **Setting:** New Jersey basement "cognitive architecture laboratory" with 17 coffee mugs as visual metaphor for Tier architecture
-- **Story Arc:** 10 chapters covering CORTEX 1.0-2.0 evolution
-- **Tone:** Hilarious first-person tech comedy with coffee mug metaphors, basement chaos, British wit
-- **Technical Integration:** Story moments map to DALL-E narrative images (70 conversations, 8,429 nodes, 22 SKULL rules)
+"The Awakening of CORTEX" is a 1,603-line tech comedy chronicling CORTEX's evolution from 1.0 to 2.0 through the eyes of Mr. Codenstein. Written as a first-person narrative, the story follows the journey from Copilot's amnesia crisis to the breakthrough Four-Tier Brain architecture. Key elements include:
+- **Characters:** 
+  - **Mr. Codenstein** (protagonist) - Solo developer building CORTEX in basement laboratory
+  - **"G"** (imaginary girlfriend/muse) - Appears in visions providing wisdom, asking hard questions, keeping him honest (narrative device for teaching moments)
+  - **Copilot** (amnesiac AI) - Evolves from frustrated assistant to personality-aware partner
+  - **Coffee Mugs** (17 → 23) - Visual metaphor for Tier architecture evolution
+- **Setting:** New Jersey basement "cognitive architecture laboratory"
+- **Story Arc:** 10 chapters covering CORTEX 1.0-2.0 evolution, each teaching specific technical concepts
+- **Tone:** Hilarious first-person tech comedy with imaginary muse comedy, coffee mug metaphors, basement chaos
+- **Educational Integration:** Each chapter = teachable moment mapping to DALL-E narrative images and real CORTEX features
+- **Target Audience:** Developers learning CORTEX who prefer engaging narrative over dry documentation
 
 #### Increment 3.1: Story Content Preparation (1 day)
 **Tasks:**
-- [ ] **Read Complete Awakening Narrative** (`THE-AWAKENING-OF-CORTEX-MASTER.md`, 1,603 lines):
-  - Document 10 chapter themes and key moments
+- [ ] **Revise Complete Awakening Narrative** (`THE-AWAKENING-OF-CORTEX-MASTER.md`, 1,603 lines):
+  - Replace "Asif" with "Mr. Codenstein" throughout
+  - Replace "Mrs. Codenstein" (real wife, Lichfield UK) with "G" (imaginary girlfriend/muse)
+  - Transform video call scenes into vision/apparition comedy (G appears when needed for teachable moments)
+  - Document 10 chapter themes emphasizing educational value
   - Identify technical achievements mapped to story beats
-  - Extract character arcs (Codenstein evolution, Mrs. Codenstein patience test, Copilot awakening)
+  - Extract character arc: Mr. Codenstein's journey with imaginary muse guiding him
   - Note coffee mug metaphor instances (17 mugs = Tier timeline)
 - [ ] **Map DALL-E Narratives to Chapters:**
-  - Chapter 1 (Amnesia Crisis) → `06-working-memory.md` (70 conversations, FIFO queue)
-  - Chapter 2 (Breakthrough) → `01-four-tier-architecture.md` (4 tiers, 87ms round-trip)
-  - Chapter 3 (Protection) → `02-skull-protection.md` + `09-protection-layers.md` (8 layers, 22 rules)
-  - Chapter 4 (Agents) → `03-agent-system.md` (Intent Router, 10,000+ req/sec)
-  - Chapter 5 (Orchestrators) → `05-orchestrator-ecosystem.md` (8 orchestrators, message bus)
-  - Chapter 6 (Knowledge) → `07-knowledge-graph.md` (8,429 nodes, Hebbian learning)
-  - Chapter 7 (Context) → `08-development-context.md` (847 commits, thermal heatmap)
-  - Chapter 8 (Integration) → `10-complete-system.md` (end-to-end flow)
-  - Chapter 9 (Scaling) → `04-planning-system.md` (DoR/DoD compliance)
-  - Chapter 10 (Celebration) → All narratives combined
+  - Chapter 1 (Amnesia Crisis) → `06-working-memory.md` (70 conversations, FIFO queue) - **Teaches:** Working memory persistence
+  - Chapter 2 (Gatekeeper) → `02-skull-protection.md` + `09-protection-layers.md` (8 layers, 22 rules) - **Teaches:** Safety-first architecture
+  - Chapter 3 (SQLite) → `06-working-memory.md` (SQLite vs in-memory) - **Teaches:** Reliability over elegance
+  - Chapter 4 (Agents) → `03-agent-system.md` (Intent Router, 10,000+ req/sec) - **Teaches:** Multi-agent coordination
+  - Chapter 5 (Knowledge Graph) → `07-knowledge-graph.md` (8,429 nodes, Hebbian learning) - **Teaches:** Relationship modeling
+  - Chapter 6 (Token Crisis) → `05-orchestrator-ecosystem.md` (97% reduction) - **Teaches:** Optimization strategies
+  - Chapter 7 (Conversation Capture) → `06-working-memory.md` (collaborative curation) - **Teaches:** User-centered design
+  - Chapter 8 (Cross-Platform) → `08-development-context.md` (Windows/Mac/Linux) - **Teaches:** Portable architecture
+  - Chapter 9 (Performance) → `08-development-context.md` (120ms queries) - **Teaches:** Performance optimization
+  - Chapter 10 (Awakening) → `10-complete-system.md` (personality emergence) - **Teaches:** System integration
 - [ ] **Draft Chapter 11: The 3.0 Revolution** (new chapter, 150-200 lines):
-  - **Opening:** "The documentation was beautiful." (Mrs. Codenstein reviews GitHub Pages)
-  - **Setting:** Two months after Prologue deadline
-  - **Content:** Mrs. Codenstein discovers 16 delivered pages, glassmorphism design, Zero Mock Data Policy
-  - **Technical Reveals:** Planning System 2.0, ADO Operations, Enhanced Package Management
-  - **Character Moments:** Codenstein explains Phase 2 achievements, Mrs. Codenstein impressed but skeptical
+  - **Opening:** "The documentation was beautiful." (G's vision appears, reviews GitHub Pages)
+  - **Setting:** Two months after initial deadline
+  - **Content:** G (in vision) discovers 16 delivered pages, glassmorphism design, Zero Mock Data Policy
+  - **Technical Reveals:** Planning System 2.0, ADO Operations, Enhanced Package Management - **Teaches:** Phase 2 achievements
+  - **Character Moments:** Mr. Codenstein explains achievements to imaginary G, self-reflection on growth
   - **Coffee Mug Update:** Now 23 mugs (6 new from Phase 2 work)
-  - **Closing:** Setup for Phase 4 (CORTEX 4.0 vision), Mrs. Codenstein: "Show me the future."
-  - **Tone:** Maintain hilarious first-person style, British wit, coffee metaphors
+  - **Closing:** Setup for Phase 4 (CORTEX 4.0 vision), G: "Show me the future."
+  - **Tone:** Maintain hilarious first-person style with imaginary muse comedy, coffee metaphors
 
 **Deliverables:**
-- Chapter theme documentation
-- DALL-E image mapping table (chapter → narrative → image)
+- Revised narrative with "Mr. Codenstein" and imaginary "G" character
+- Chapter theme documentation emphasizing educational objectives
+- DALL-E image mapping table (chapter → narrative → image → lesson taught)
 - Chapter 11 draft (The 3.0 Revolution)
 
 **Acceptance Criteria:**
-- All 10 chapters summarized with key moments
-- DALL-E narratives mapped to appropriate chapters
+- All character references updated (Asif → Mr. Codenstein, Mrs. Codenstein → G)
+- Imaginary girlfriend narrative works as comedy device and teaching tool
+- All 10 chapters maintain educational focus (each teaches specific CORTEX concept)
+- DALL-E narratives mapped with explicit "Teaches:" labels
 - Chapter 11 complete with story continuity maintained
-- Tone consistent with original narrative
+- Tone funny and engaging while preserving technical accuracy
 - Technical achievements from Phase 2 integrated naturally
+- Story serves as effective onboarding tool for new CORTEX users
 
 #### Increment 3.2: Story Page Design & Implementation (1-2 days)
 **Tasks:**
@@ -738,8 +757,11 @@ docs/ (GitHub Pages root)
   - **Character Reference Sidebar:**
     - Right sidebar (desktop only)
     - Character portraits (AI-generated or text descriptions)
-    - Codenstein, Mrs. Codenstein, Copilot, Roomba
-    - One-line character descriptions
+    - **Mr. Codenstein:** Solo developer, basement laboratory, coffee mug collector
+    - **"G":** Imaginary girlfriend/muse (appears in visions for teachable moments)
+    - **Copilot:** AI assistant evolving from amnesia to personality
+    - **Coffee Mugs (17 → 23):** Visual metaphor for Tier architecture
+    - One-line character descriptions with educational context
     - Collapsible, hidden on mobile
 - [ ] **Create Print Stylesheet:**
   - Clean version without navigation/sidebars
@@ -812,24 +834,29 @@ docs/ (GitHub Pages root)
 - Page load time <2 seconds (first paint)
 
 **Phase 3 Deliverables (Summary):**
+- Revised narrative with educational focus (Mr. Codenstein + imaginary "G" as teaching device)
 - Complete story page with 11 chapters (including new Chapter 11)
 - Chapter navigation sidebar + reading progress bar
 - Coffee mug timeline visualization (D3.js)
-- 10 DALL-E images optimized and integrated
-- Character reference sidebar
+- 10 DALL-E images optimized and integrated with educational captions
+- Character reference sidebar explaining narrative devices
 - Print stylesheet
 - Social sharing functionality
 
 **Phase 3 Acceptance Criteria (Summary):**
-- Story readable and engaging
+- **Educational Objective Met:** Story effectively teaches CORTEX architecture/features through entertaining narrative
+- **Character Revision Complete:** All "Asif" → "Mr. Codenstein", all "Mrs. Codenstein" → "G" (imaginary muse)
+- **Teachable Moments Clear:** Each chapter explains specific technical concept (Tiers, SKULL, agents, optimization, etc.)
+- Story readable and engaging (humor maintains reader interest)
 - All 11 chapters present with continuity maintained
 - Navigation functional (sidebar, progress bar)
-- DALL-E images integrated as chapter headers with captions
-- Coffee mug timeline interactive
-- Technical callouts link to architecture pages
+- DALL-E images integrated as chapter headers with educational captions (technical concept → story moment)
+- Coffee mug timeline interactive (visual metaphor for Tier evolution)
+- Technical callouts link to architecture pages (seamless learning path)
 - Mobile responsive
 - Print version clean
 - Performance optimized (lazy loading, <2s load)
+- **Validation:** Beta readers confirm story makes CORTEX easier to understand vs traditional docs
 
 ---
 
