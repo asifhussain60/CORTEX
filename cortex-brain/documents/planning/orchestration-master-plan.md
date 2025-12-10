@@ -5,6 +5,9 @@
 **Date:** December 10, 2025  
 **Status:** 🎯 STRATEGIC REDESIGN - EXECUTIVE SUMMARY
 
+**Active Implementations:**
+- **Documentation Orchestrator (#6):** GitHub Pages site implementation active on separate machine (Phase 1-2 complete, Phase 3-4 in progress)
+
 ---
 
 ## 🎯 Executive Summary
@@ -13,110 +16,128 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 ### Current State Problems
 
-- **71 orchestrators** scattered across 7 directories with 40,400+ lines of code
+- **71+ orchestrators** scattered across 7 directories with 40,400+ lines of code *(baseline - may increase after discovery scan)*
 - **60-75% reliability scores** - workflows skip phases, bypass gates
 - **Massive fragmentation** - 5 dashboard orchestrators, 2 git orchestrators, 4 cleanup orchestrators
-- **Missing orchestrators** - Deploy, System Maintenance, Review, Cleanup not in original analysis
+- **Unknown orchestrators** - Feature Discovery scan may reveal additional orchestrators
 - **No organization architecture** - single-project focus, no multi-tenant, no RBAC
 - **Manual state tracking** causing lost progress between sessions
 
 ### Proposed Solution
 
-- **9 unified orchestrators** - 87% reduction (71 → 9)
+- **9+ unified orchestrators** - 87%+ reduction (71+ → 9+)
 - **State machine-based execution** - validated transitions, no skipped steps
 - **Multi-tenant architecture** - organization-level deployment with RBAC
-- **Feature discovery** - EPM auto-registration for continuous enhancement
+- **Feature discovery** - EPM auto-registration for continuous enhancement + baseline scan
+- **Interactive requirements gathering** - Pre-orchestrator runs before ALL workflows (5-phase with discovery injection)
 - **Quality assurance** - architectural reviews, code reviews, security
-- **AI intelligence** - feature completion, clarification, multi-language refactoring
-- **98% test coverage** - 2,000+ tests enforced by pre-commit hooks
+- **AI intelligence** - feature completion, runtime clarification, multi-language refactoring
+- **AST-powered dashboard** - reverse engineering, business logic extraction, 85% faster
+- **98% test coverage** - 2,400+ tests enforced by pre-commit hooks
 
 ### Success Metrics
 
 | Metric | Current | Target | Impact |
 |--------|---------|--------|--------|
-| Orchestrator count | 71 | 9 | 87% reduction |
-| Total code | 40,400 LOC | 9,200 LOC | 77% reduction |
+| Orchestrator count | 71+ | 9+ | 87%+ reduction |
+| Total code | 40,400+ LOC | 12,500+ LOC | 69%+ reduction |
 | Workflow completion rate | 65% | 100% | +35% reliability |
 | Phases skipped | 15% | 0% | Zero missed steps |
 | Test coverage | 65% | 98% | +33% quality |
 | Multi-tenant ready | No | Yes | Org scalability |
-| Feature discovery | No | Yes | Auto-enhancement |
+| Feature discovery | No | Yes | Auto-enhancement + baseline scan |
+| Requirements gathering | Manual | Interactive | 5-phase pre-orchestrator (discovery + clarification) |
+| Dashboard manual work | 60% | 15% | 75% automation |
+| Dashboard analysis speed | File scan | AST | 85% faster |
+
+**Note:** Metrics marked with "+" indicate baseline values subject to update after Phase 0 Feature Discovery baseline scan.
 
 ---
 
 ## 📋 Orchestrator Portfolio: 9 Unified Orchestrators
 
-**71 orchestrators consolidated into 9 domain-driven orchestrators:**
+**71 orchestrators consolidated into 9 domain-driven orchestrators (reordered for efficient implementation):**
 
-### Phase 1: Infrastructure Orchestrators (Week 1) - CRITICAL
+### Phase 0: Foundation (Week 0) - PREREQUISITE
 
-**4. [DevOps Orchestrator](orchestrators/devops-orchestrator-plan.md)**
-- **Consolidates:** 8 orchestrators (5,200 LOC → 1,500 LOC)
-- **From:** git_checkpoint, git_sync, publish_branch, system_maintenance, holistic_cleanup, cleanup (3 variants)
-- **Purpose:** Git operations, CI/CD, deployments, system maintenance, cleanup
-- **Why Critical:** Deploy to production, system health, repository hygiene
+**0. [Feature Discovery Module](orchestrators/00-feature-discovery-module-plan.md)** 🔍
+- **File:** `src/operations/modules/epm/auto_registration_orchestrator.py` (378 LOC - already exists)
+- **Purpose:** Auto-discover new orchestrators, register in cortex-operations.yaml
+- **Capabilities:** Extract metadata, generate NL triggers, approval workflow
+- **Integration:** Runs during system maintenance, reports to Intelligence Orchestrator
+- **Why First:** Enables continuous enhancement as we build other orchestrators
+- **CRITICAL:** Run baseline discovery scan after implementation to update this master plan with any missed orchestrators
 
-**5. [Quality Assurance Orchestrator](orchestrators/qa-orchestrator-plan.md)** ⭐ NEW
-- **Consolidates:** 2 orchestrators (1,580 LOC → 800 LOC)
-- **From:** review_orchestrator, code_review_orchestrator
-- **Purpose:** Architectural reviews, code reviews, security assessments
-- **Why Critical:** Quality gates, security compliance, technical debt tracking
+### Phase 1: Core Infrastructure (Week 1) - CRITICAL FOUNDATION
 
-### Phase 2: Workflow Orchestrators (Week 2) - HIGH PRIORITY
-
-**1. [Planning Orchestrator](orchestrators/planning-orchestrator-plan.md)**
-- **Consolidates:** 1 orchestrator (5,126 LOC → 800 LOC)
-- **From:** planning_orchestrator
-- **Purpose:** Feature planning, DoR/DoD, complexity analysis, threat modeling
-- **Enhancements:** Multi-tenant, cross-project dependencies, role-based templates
-
-**2. [Execution Orchestrator](orchestrators/execution-orchestrator-plan.md)**
-- **Consolidates:** 3 orchestrators (1,370 LOC → 600 LOC)
-- **From:** plan_execution_v2, workflow_pipeline, workflow_engine
-- **Purpose:** Execute plans, coordinate workflows, dependency blocking
-- **Enhancements:** Resource locking, progress streaming, rollback capability
-
-**3. [TDD Orchestrator](orchestrators/tdd-orchestrator-plan.md)**
+**1. [TDD Orchestrator](orchestrators/tdd-orchestrator-plan.md)**
 - **Consolidates:** 2 orchestrators (2,691 LOC → 2,000 LOC)
 - **From:** tdd_implementation, tdd_workflow
 - **Purpose:** RED→GREEN→REFACTOR, per-layer coverage, empty test detection
 - **Enhancements:** Team metrics, test template library, cross-project test reuse
+- **Why First:** All subsequent orchestrators need TDD workflow for development
 
-### Phase 3: Observability & Documentation (Week 3) - MEDIUM PRIORITY
+**2. [DevOps Orchestrator](orchestrators/devops-orchestrator-plan.md)**
+- **Consolidates:** 8 orchestrators (5,200 LOC → 1,500 LOC)
+- **From:** git_checkpoint, git_sync, publish_branch, system_maintenance, holistic_cleanup, cleanup (3 variants)
+- **Purpose:** Git operations, CI/CD, deployments, system maintenance, cleanup
+- **Why Second:** Provides git checkpointing, deployment pipeline for all other work
 
-**6. [Observability Orchestrator](orchestrators/observability-orchestrator-plan.md)**
-- **Consolidates:** 10 orchestrators (4,263 LOC → 1,200 LOC)
-- **From:** 5 dashboard files, application_health, 2 crawler orchestrators, adoption_analytics, parallel_collector
-- **Purpose:** Dashboards (org/team/project), health monitoring, analytics, crawling
-- **Enhancements:** Multi-level dashboards, real-time metrics, custom alerts
+### Phase 2: Quality & Workflow (Week 2-3) - ENABLE DEVELOPMENT
 
-**7. [Documentation Orchestrator](orchestrators/documentation-orchestrator-plan.md)**
-- **Consolidates:** 5 orchestrators (2,050 LOC → 700 LOC)
-- **From:** documentation (2 files), manager_report, executive_summary, multi_language_docstring
-- **Purpose:** Auto-generated docs, reports, summaries, API documentation
-- **Enhancements:** Doc templates, versioning, full-text search
+**3. [Quality Assurance Orchestrator](orchestrators/qa-orchestrator-plan.md)** ⭐ NEW
+- **Consolidates:** 2 orchestrators (1,580 LOC → 800 LOC)
+- **From:** review_orchestrator, code_review_orchestrator
+- **Purpose:** Architectural reviews, code reviews, security assessments
+- **Why Third:** Quality gates needed before building complex orchestrators
 
-### Phase 4: Intelligence & Onboarding (Week 4) - MEDIUM PRIORITY
+**4. [Planning Orchestrator](orchestrators/04-planning-orchestrator-plan.md)**
+- **Consolidates:** 1 orchestrator (5,126 LOC → 800 LOC)
+- **From:** planning_orchestrator
+- **Purpose:** Feature planning, DoR/DoD, complexity analysis, threat modeling
+- **Enhancements:** Multi-tenant, cross-project dependencies, role-based templates
+- **Why Fourth:** Planning system used to design remaining orchestrators
+- **Prerequisites:** Requirements Gathering Engine (pre-orchestrator) runs BEFORE this orchestrator
 
-**9. [Intelligence Orchestrator](orchestrators/intelligence-orchestrator-plan.md)** ⭐ NEW
+**5. [Execution Orchestrator](orchestrators/execution-orchestrator-plan.md)**
+- **Consolidates:** 3 orchestrators (1,370 LOC → 600 LOC)
+- **From:** plan_execution_v2, workflow_pipeline, workflow_engine
+- **Purpose:** Execute plans, coordinate workflows, dependency blocking
+- **Enhancements:** Resource locking, progress streaming, rollback capability
+- **Why Fifth:** Executes plans from Planning Orchestrator
+
+### Phase 3: Intelligence & Documentation (Week 4-5) - VALUE DELIVERY
+
+**6. [Documentation Orchestrator](orchestrators/documentation-orchestrator-plan.md)**
+- **Consolidates:** 5+ orchestrators (6,718 LOC → 700 LOC)
+- **From:** enterprise_documentation_orchestrator (4,668 LOC - replaced by GitHub Pages), enterprise_documentation_orchestrator_module (300 LOC), documentation (2 files), manager_report, executive_summary, multi_language_docstring
+- **Purpose:** Auto-generated docs, reports, summaries, API documentation, GitHub Pages site generation
+- **Enhancements:** GitHub Pages integration, glassmorphism design, drill-down architecture, autonomous regeneration
+- **Active Implementation:** GitHub Pages site (Phase 1-2 complete on separate machine)
+- **Why Sixth:** Documents all previous orchestrators as they're built
+
+**7. [Intelligence Orchestrator](orchestrators/intelligence-orchestrator-plan.md)** ⭐ NEW
 - **Consolidates:** 5 orchestrators (2,600 LOC → 1,000 LOC)
 - **From:** feature_completion, clarification, multi_language_refactoring, llm, multi_agent
 - **Purpose:** AI-powered feature completion, requirement clarification, refactoring
-- **Why New:** Centralizes all AI/ML-powered operations
+- **Why Seventh:** AI assists in building remaining complex orchestrators
 
-**8. [Onboarding Orchestrator](orchestrators/onboarding-orchestrator-plan.md)**
+### Phase 4: Observability & Onboarding (Week 6-7) - USER EXPERIENCE
+
+**8. [Observability Orchestrator](orchestrators/observability-orchestrator-plan.md)**
+- **Consolidates:** 10 orchestrators (4,263 LOC → 1,800 LOC)
+- **From:** 5 dashboard files, application_health, 2 crawler orchestrators, adoption_analytics, parallel_collector
+- **Purpose:** Dashboards (org/team/project), health monitoring, analytics, crawling
+- **Enhancements:** Multi-level dashboards, real-time metrics, custom alerts
+- **NEW:** **Intelligent Dashboard Orchestrator** - AST-powered reverse engineering (see detailed plan below)
+- **Why Eighth:** Monitors all previously built orchestrators
+
+**9. [Onboarding Orchestrator](orchestrators/onboarding-orchestrator-plan.md)**
 - **Consolidates:** 4 orchestrators (2,250 LOC → 600 LOC)
 - **From:** onboarding (2 files), hands_on_tutorial, setup
 - **Purpose:** Project/team/user onboarding with guided tutorials
 - **Enhancements:** Onboarding wizard, template projects, training modules
-
-### Phase 0: Feature Discovery (Continuous) - STRATEGIC
-
-**[Feature Discovery Module](orchestrators/feature-discovery-module-plan.md)** 🔍
-- **File:** `src/operations/modules/epm/auto_registration_orchestrator.py`
-- **Purpose:** Auto-discover new orchestrators, register in cortex-operations.yaml
-- **Capabilities:** Extract metadata, generate NL triggers, approval workflow
-- **Integration:** Runs during system maintenance, reports to Intelligence Orchestrator
+- **Why Last:** Onboards users to the complete CORTEX 4.0 system
 
 ---
 
@@ -194,7 +215,49 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 - Approval workflow for registration
 - Integration with cortex-operations.yaml
 
-### 7. Quality Assurance Engine ⭐ NEW
+### 7. Requirements Gathering Engine 🤝 NEW
+**Purpose:** Interactive requirements elicitation for all planning workflows  
+**Benefit:** Ensure complete understanding before implementation  
+**Files:** `src/orchestration_3_0/planning/requirements_gathering.py` (400 lines)
+
+**Key Features:**
+- **Phase 1: Analysis & Summary**
+  - Parse user request and current state
+  - Generate executive summary of current process
+  - Identify sub-steps, dependencies, edge cases
+  - High-level workflow visualization
+  
+- **Phase 2: Enhancement Proposal**
+  - CORTEX analyzes gaps and opportunities
+  - Propose enhancements with rationale
+  - Estimate complexity and impact
+  - Suggest alternative approaches
+  
+- **Phase 3: Iterative Refinement**
+  - Present summary + enhancements to user
+  - Accept modifications and feedback
+  - Repeat analysis → proposal → review cycle
+  - Track requirement evolution
+  
+- **Phase 4: Approval Gate**
+  - Final requirements review
+  - Explicit user approval required
+  - Lock requirements for planning
+  - Generate requirements manifest
+  
+- **Response Templates:**
+  - Executive Summary Template (current state)
+  - Enhancement Proposal Template (CORTEX suggestions)
+  - Refinement Template (iterative changes)
+  - Approval Template (final sign-off)
+
+**Integration:**
+- Mandatory first step in Planning Orchestrator
+- Works with Intelligence Engine for AI-powered clarification
+- Feeds requirements manifest to planning phases
+- Used by all plan types (feature, ADO, architecture, refactoring)
+
+### 8. Quality Assurance Engine ⭐ NEW
 **Purpose:** Comprehensive quality gates  
 **Benefit:** Security, performance, maintainability validation  
 **Files:** `src/orchestration_3_0/qa/*.py` (800 lines)
@@ -206,30 +269,163 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 - Code review (PR analysis)
 - Technical debt tracking
 
-### 8. Intelligence Engine ⭐ NEW
-**Purpose:** AI-powered operations  
-**Benefit:** Auto-completion, clarification, refactoring  
+### 9. Intelligence Engine ⭐ NEW
+**Purpose:** AI-powered operations DURING execution  
+**Benefit:** Auto-completion, real-time clarification, refactoring  
 **Files:** `src/orchestration_3_0/intelligence/*.py` (1,000 lines)
 
 **Key Features:**
 - Feature auto-completion (AI suggests implementation)
-- Requirement clarification (extract missing requirements)
+- Real-time requirement clarification (extract missing details during execution)
 - Multi-language refactoring (Python, C#, JS, TS)
 - LLM operations (prompt engineering)
 - Multi-agent coordination
+
+**Note:** Works WITH Requirements Gathering Engine - Requirements Gathering handles UPFRONT collaboration (before orchestrators), Intelligence provides RUNTIME clarification (during orchestrator execution).
+
+### 10. Intelligent Dashboard Engine 🧠 NEW
+**Purpose:** AST-powered reverse engineering for dashboard auto-population  
+**Benefit:** Eliminate 75% manual work, 4x use case coverage, semantic code analysis  
+**Files:** `src/intelligence/dashboard_ast_engine.py` + specialized extractors (2,800 lines)
+
+**Key Features:**
+- **AST Analysis (file scanning eliminated):** Multi-language parsing (Python 90%, JS/TS 85%, C# 80%)
+- **Parallel Processing:** ProcessPoolExecutor + worker pools for 100k+ LOC codebases
+- **Specialized Extractors:**
+  - **Use Case Inference:** API endpoints → use cases, controller actions, service methods
+  - **Business Logic Extractor:** Identify business rules, formulas, financial calculations
+  - **Executive Summary Generator:** Auto-generate "What It Does" narratives from AST
+  - **Recommendation Intelligence:** Transform code smells → actionable recommendations
+  - **Onboarding Generator:** Auto-create 6-stage onboarding with Mermaid diagrams
+- **Scalability Features:**
+  - Incremental analysis (Git diff detection - only changed files)
+  - 3-tier caching: AST cache (LRU) → Result cache → SQLite (10k+ files)
+  - Streaming results (render-as-you-go, no blocking)
+  - Distributed option (Celery for 50k+ files)
+- **Performance Targets:**
+  - Small repos (<100 files): <2 seconds
+  - Medium repos (100-1k files): <10 seconds
+  - Large repos (1k-10k files): <60 seconds
+  - Extra-large repos (10k-100k files): <5 minutes
+- **Confidence Scoring:** All insights tagged with 0.0-1.0 confidence (AST-derived vs inferred)
+- **No File Scanning:** Pure semantic analysis via AST - eliminates redundant file operations
+
+**Why File Scanning Eliminated:**
+- AST provides **semantic understanding** (not just regex patterns)
+- Single parse yields: code structure + dependencies + smells + docstrings + business logic
+- File scanning = redundant I/O (read file → scan → parse → analyze)
+- AST path = parse once → extract everything → cache result
+- **85% faster** for repos with >1k files
+
+**Specialized Extractors Detail:**
+
+1. **Business Logic Extractor** (`src/intelligence/business_logic_extractor.py` - 400 LOC)
+   - **Formula Detection:** Identify mathematical operations, complex calculations
+   - **Financial Code Patterns:** Interest calculations, tax computations, currency conversions
+   - **Business Rules:** Conditionals that encode business decisions
+   - **Confidence:** 0.88 (high - based on AST node types)
+   - **Output:** Annotated business logic map with file/line references
+
+2. **Financial Data Detector** (`src/intelligence/financial_data_detector.py` - 350 LOC)
+   - **Pattern Matching:** Regex + AST for currency symbols, decimal patterns, financial terms
+   - **Entity Recognition:** Account, Transaction, Payment, Invoice classes
+   - **Calculation Flows:** Trace data through financial pipelines
+   - **Compliance Markers:** Identify PCI/SOX-sensitive code
+   - **Output:** Financial code inventory with risk scores
+
+3. **Use Case Inference Engine** (`src/intelligence/use_case_inference.py` - 400 LOC)
+   - **API Endpoint Analysis:** @app.route, [HttpGet], express.Router → use cases
+   - **Controller Actions:** Analyze method signatures + docstrings
+   - **Service Layer Detection:** *Service, *Manager, *Repository patterns
+   - **Confidence:** 0.95 (API) → 0.90 (controller) → 0.85 (service) → 0.70 (inferred)
+   - **Output:** Use case list with roles, domains, confidence
+
+4. **Executive Summary Generator** (`src/intelligence/executive_summary_generator.py` - 350 LOC)
+   - **Narrative Synthesis:** Entry points + APIs + entities → natural language
+   - **Architecture Detection:** Layered, microservices, MVC, clean architecture
+   - **Capability Extraction:** Public APIs, workflows, integrations
+   - **Output:** Executive summary JSON (95%+ automated)
+
+**Integration with Existing Collectors:**
+- **Replaces:** Manual use case collection, template-based summaries
+- **Enhances:** Tech stack collector (AST finds frameworks), security collector (AST detects vulnerabilities)
+- **Complements:** Vendor collector (still needs package.json parsing), architecture collector (AST improves accuracy)
+
+**Manifest:** `cortex-brain/orchestrator-manifests/intelligent-dashboard-manifest.yaml`  
+**Full Plan:** `cortex-brain/documents/planning/intelligent-dashboard-enhancement-plan.md`
 
 ---
 
 ## 📊 Implementation Timeline
 
-### Phase 0: Feature Discovery Setup (Week 0)
-**Goal:** Enable continuous orchestrator discovery
+### Phase 0: Feature Discovery Setup & Baseline Scan (Week 0)
+**Goal:** Enable continuous orchestrator discovery and establish baseline inventory
 
+**Setup (Days 1-2):**
 - Activate auto-registration orchestrator
 - Configure EPM discovery rules
 - Set up approval workflows
 - Test discovery on sample orchestrators
-- **Deliverable:** Auto-discovery operational
+
+**Baseline Discovery Scan (Day 3):**
+- **RUN Feature Discovery Module** to scan entire CORTEX codebase
+- Discover all existing orchestrators (71 legacy + any new)
+- Generate comprehensive orchestrator inventory
+- Extract metadata (triggers, capabilities, dependencies)
+- Identify any orchestrators missed in original audit
+
+**Master Plan Update (Day 4):**
+- **UPDATE orchestration-master-plan.md** with discovered orchestrators
+- Add any newly discovered orchestrators to consolidation plan
+- Update orchestrator count if > 71
+- Update LOC metrics if additional code found
+- Adjust timeline if significant new orchestrators discovered
+
+**Validation (Day 5):**
+- Review updated master plan with stakeholders
+- Approve additions/modifications to consolidation strategy
+- Finalize implementation timeline
+
+**Deliverable:** Auto-discovery operational + Complete orchestrator inventory + Updated master plan
+
+### 🔄 Post-Discovery Plan Update Protocol
+
+**IMPORTANT:** After Phase 0 Feature Discovery baseline scan completes, this master plan MUST be updated:
+
+**Baseline Scan Checklist:** See [feature-discovery-baseline-scan-checklist.md](orchestrators/feature-discovery-baseline-scan-checklist.md) for complete execution and validation steps.
+
+#### Discovery Scan Outputs
+1. **Orchestrator Inventory Report** (`cortex-brain/documents/reports/orchestrator-discovery-baseline-scan.md`)
+   - Complete list of all discovered orchestrators
+   - Metadata: triggers, LOC, capabilities, dependencies
+   - Comparison with original 71-orchestrator audit
+   - New orchestrators not in original plan
+
+2. **Gap Analysis Report** (`cortex-brain/documents/reports/orchestrator-discovery-gap-analysis.md`)
+   - Orchestrators in audit but not found by scanner (if any)
+   - Orchestrators found by scanner but not in audit (if any)
+   - Recommendations for consolidation strategy adjustments
+
+#### Master Plan Update Checklist
+After baseline scan, update this document:
+- [ ] **Executive Summary metrics** - Update "71+ orchestrators" to actual count
+- [ ] **Success Metrics table** - Update baseline orchestrator count and LOC
+- [ ] **Orchestrator Portfolio** - Add any newly discovered orchestrators to consolidation plan
+- [ ] **Implementation Timeline** - Adjust phases if significant new orchestrators found
+- [ ] **Test Coverage Strategy** - Update test counts if additional orchestrators discovered
+- [ ] **Removal Timeline** - Update batch counts if orchestrator count changes
+- [ ] **Sub-Plans** - Create additional sub-plans for any new orchestrators
+
+#### Approval Process
+1. Technical lead reviews discovery scan results
+2. Architect reviews gap analysis and recommendations
+3. Stakeholders approve adjusted consolidation strategy
+4. Update all sub-plan documents to reflect changes
+5. Proceed with Phase 1 implementation
+
+**Timeline Impact:** If >10 additional orchestrators discovered, add 1 week to Phase 0 for planning adjustments.
+
+---
 
 ### Phase 1: Infrastructure Orchestrators (Week 1)
 **Goal:** Build critical infrastructure
@@ -252,27 +448,37 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 **Deliverable:** Planning, execution, TDD fully migrated
 
-### Phase 3: Observability & Documentation (Week 4)
-**Goal:** Migrate observability and docs
+### Phase 3: Observability & Documentation (Week 4-5)
+**Goal:** Migrate observability and docs + Intelligent Dashboard
 
 - **Observability Orchestrator:** Dashboards, health, analytics (10 files → 1,200 LOC)
-- **Documentation Orchestrator:** Docs, reports (5 files → 700 LOC)
+- **Intelligent Dashboard Engine:** AST-powered reverse engineering (NEW - 2,800 LOC)
+  - Business Logic Extractor (400 LOC)
+  - Financial Data Detector (350 LOC)
+  - Use Case Inference (400 LOC)
+  - Executive Summary Generator (350 LOC)
+  - Recommendation Intelligence (250 LOC)
+  - Onboarding Generator (450 LOC)
+  - Dashboard AST Engine (600 LOC)
+- **Documentation Orchestrator:** Docs, reports, GitHub Pages (5+ files → 700 LOC, replaces enterprise_documentation_orchestrator 4,668 LOC)
 - Multi-level dashboards (org → team → project)
-- 400 tests
+- **600 tests** (400 original + 200 intelligent dashboard)
 
-**Deliverable:** Unified dashboards, auto-generated docs
+**Deliverable:** Unified dashboards, AST-powered intelligence, auto-generated docs
 
-### Phase 4: Intelligence & Onboarding (Week 5)
-**Goal:** AI and onboarding
+### Phase 4: Intelligence & Onboarding (Week 6)
+**Goal:** AI-powered operations (Intelligent Dashboard already in Phase 3)
 
 - **Intelligence Orchestrator:** AI-powered operations (5 files → 1,000 LOC)
+  - Feature auto-completion
+  - Requirement clarification
+  - Multi-language refactoring coordination
 - **Onboarding Orchestrator:** Project/team/user onboarding (4 files → 600 LOC)
-- Multi-language refactoring
 - 400 tests
 
-**Deliverable:** AI intelligence, guided onboarding
+**Deliverable:** AI orchestration, guided onboarding (dashboard intelligence complete in Phase 3)
 
-### Phase 5: Multi-Tenant Architecture (Week 6-7)
+### Phase 5: Multi-Tenant Architecture (Week 7-8)
 **Goal:** Organization-level capabilities
 
 - Tenant isolation (tenant_id, project_id, user_id)
@@ -283,18 +489,20 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 **Deliverable:** Org-ready CORTEX 4.0
 
-### Phase 6: Migration & Cleanup (Week 8-10)
+### Phase 6: Migration & Cleanup (Week 9-11)
 **Goal:** Remove legacy orchestrators
 
 - 30-day grace period per orchestrator (staggered)
-- Archive 71 old orchestrators
+- Archive 71+ old orchestrators (updated count from discovery scan)
 - Validate production stability
 - Emergency rollback capability
 - Final cleanup
 
 **Deliverable:** Legacy code deleted, system stable
 
-### Phase 7: Documentation & Training (Week 11)
+**Note:** Orchestrator count (71+) will be finalized after Phase 0 Feature Discovery baseline scan.
+
+### Phase 7: Documentation & Training (Week 12)
 **Goal:** Update documentation
 
 - Update Enterprise Documentation Orchestrator
@@ -308,18 +516,19 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 ## 🧪 Test Coverage Strategy
 
-**Total Test Suite:** 2,000+ tests (increased from 1,200 due to expanded scope)
+**Total Test Suite:** 2,400+ tests (includes intelligent dashboard + requirements gathering)
 
 ### Test Categories
 
 | Category | Tests | Coverage Target | Purpose |
 |----------|-------|-----------------|---------|
-| Unit Tests | 600 | 100% | Test each component in isolation |
-| Integration Tests | 400 | 95% | Test components working together |
+| Unit Tests | 780 | 100% | Test each component in isolation (+80 requirements gathering in core, +100 dashboard) |
+| Integration Tests | 450 | 95% | Test components working together (+50 requirements gathering integration) |
 | Migration Tests | 600 | 100% | Verify legacy behavior preserved (71 orchestrators) |
 | Multi-Tenant Tests | 200 | 100% | Tenant isolation, RBAC, cross-project deps |
-| Performance Tests | 50 | N/A | Benchmark execution time |
-| Regression Tests | 150 | 95% | Prevent reintroduction of bugs |
+| Dashboard Intelligence Tests | 200 | 100% | AST parsing, extractors, scalability, caching |
+| Performance Tests | 50 | N/A | Benchmark execution time (dashboard: <10s for 1k files) |
+| Regression Tests | 120 | 95% | Prevent reintroduction of bugs |
 
 ### Enforcement Mechanisms
 
@@ -331,20 +540,33 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 ### Test Distribution by Orchestrator
 
-| Orchestrator | Unit | Integration | Migration | Total |
-|--------------|------|-------------|-----------|-------|
-| Planning | 80 | 40 | 50 | 170 |
-| Execution | 60 | 40 | 40 | 140 |
-| TDD | 120 | 50 | 80 | 250 |
-| DevOps | 100 | 60 | 100 | 260 |
-| Quality Assurance | 80 | 30 | 40 | 150 |
-| Observability | 80 | 60 | 120 | 260 |
-| Documentation | 50 | 40 | 60 | 150 |
-| Intelligence | 80 | 40 | 60 | 180 |
-| Onboarding | 50 | 40 | 50 | 140 |
-| **TOTAL** | **700** | **400** | **600** | **1,700** |
+| Orchestrator | Unit | Integration | Migration | Dashboard Intel | Total |
+|--------------|------|-------------|-----------|-----------------|-------|
+| **Core Infrastructure** | **80** | **50** | - | - | **130** |
+| Planning | 80 | 40 | 50 | - | 170 |
+| Execution | 60 | 40 | 40 | - | 140 |
+| TDD | 120 | 50 | 80 | - | 250 |
+| DevOps | 100 | 60 | 100 | - | 260 |
+| Quality Assurance | 80 | 30 | 40 | - | 150 |
+| Observability | 80 | 60 | 120 | **200** | 460 |
+| Documentation | 50 | 40 | 60 | - | 150 |
+| Intelligence | 80 | 40 | 60 | - | 180 |
+| Onboarding | 50 | 40 | 50 | - | 140 |
+| **TOTAL** | **780** | **450** | **600** | **200** | **2,030** |
 
-**Additional:** 200 multi-tenant tests, 50 performance tests, 150 regression tests = **2,100 total tests**
+**Core Infrastructure Tests Breakdown (130 tests):**
+- Requirements Gathering Engine: 80 tests (Executive Summary: 20, Discovery Context Injection: 15, Clarification: 15, Enhancement Proposal: 15, Refinement: 10, Approval Gate: 5)
+- Requirements Gathering Integration: 50 tests (orchestrator integration, manifest generation, error handling)
+
+**Dashboard Intelligence Tests Breakdown (200 tests):**
+- Business Logic Extractor: 40 tests
+- Financial Data Detector: 35 tests
+- Use Case Inference: 45 tests
+- Executive Summary Generator: 35 tests
+- Recommendation Intelligence: 25 tests
+- Onboarding Generator: 20 tests
+
+**Additional:** 200 multi-tenant tests, 50 performance tests (dashboard: 10), 120 regression tests = **2,400 total tests**
 
 ---
 
@@ -352,15 +574,18 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 **Grace Period:** 30 days per orchestrator batch after migration (staggered deletions)
 
+**NOTE:** Orchestrator counts below are baseline estimates. Final counts will be updated after Phase 0 Feature Discovery baseline scan completes.
+
 | Batch | Orchestrators | Archive Date | Grace Period Ends | Permanent Deletion |
 |-------|---------------|--------------|-------------------|---------------------|
-| **Batch 1: Infrastructure** | DevOps (8 files), QA (2 files) | Dec 17, 2025 | Jan 16, 2026 | Jan 16, 2026 |
-| **Batch 2: Workflows** | Planning, Execution (3), TDD (2) | Dec 24, 2025 | Jan 23, 2026 | Jan 23, 2026 |
-| **Batch 3: Observability** | Observability (10), Documentation (5) | Dec 31, 2025 | Jan 30, 2026 | Jan 30, 2026 |
-| **Batch 4: Intelligence** | Intelligence (5), Onboarding (4) | Jan 7, 2026 | Feb 6, 2026 | Feb 6, 2026 |
+| **Batch 1: Infrastructure** | DevOps (8+ files), QA (2+ files) | Dec 17, 2025 | Jan 16, 2026 | Jan 16, 2026 |
+| **Batch 2: Workflows** | Planning, Execution (3+), TDD (2+) | Dec 24, 2025 | Jan 23, 2026 | Jan 23, 2026 |
+| **Batch 3: Observability** | Observability (10+), Documentation (5+) | Dec 31, 2025 | Jan 30, 2026 | Jan 30, 2026 |
+| **Batch 4: Intelligence** | Intelligence (5+), Onboarding (4+) | Jan 7, 2026 | Feb 6, 2026 | Feb 6, 2026 |
 | **Batch 5: Remaining** | Other orchestrators (35+) | Jan 14, 2026 | Feb 13, 2026 | Feb 13, 2026 |
 
-**Total Deletions:** 71 orchestrator files, 40,400 LOC
+**Total Deletions (Baseline):** 71+ orchestrator files, 40,400+ LOC  
+**Final Totals:** To be confirmed after Feature Discovery baseline scan (Phase 0)
 
 ### Safety Mechanisms
 
@@ -374,7 +599,7 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 - ✅ Week 1-2: Archive to `cortex-brain/archives/orchestrators-legacy/`
 - ✅ Week 2: Update all imports to new orchestrators
-- ✅ Week 2-4: Run full test suite (2,000+ tests)
+- ✅ Week 2-4: Run full test suite (2,400+ tests)
 - ✅ Week 3-4: Monitor production (error rate < 0.1%)
 - ✅ Week 4: User feedback collection
 - ✅ Grace period end: Final validation checks
@@ -382,36 +607,332 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 ---
 
-## 📚 Sub-Plans
+## 📚 Sub-Plan Structure & Requirements
 
-Each orchestrator has a detailed sub-plan document with:
+### Mandatory Sub-Plan Template
 
-1. **Current Implementation** - Executive summary (no code) of how it works today
-2. **Issues & Pain Points** - Why migration is necessary
-3. **New Implementation** - Architecture with enhancements
-4. **Migration Plan** - 5-phase migration with TDD (RED→GREEN→REFACTOR)
-5. **Removal Strategy** - Archive, grace period, permanent deletion
+**ALL 9 orchestrators MUST have individual sub-plan documents following this structure:**
 
-### Navigate to Individual Plans
+#### 1. Existing State (Summarized)
+- **Current Files:** List all files being consolidated (with LOC counts)
+- **Current Workflow:** High-level steps (no code blocks)
+- **Current Triggers:** How users invoke today
+- **Current Issues:** Pain points, technical debt, fragmentation
 
-**Critical Priority:**
-- [Planning Orchestrator Plan](orchestrators/planning-orchestrator-plan.md)
-- [Execution Orchestrator Plan](orchestrators/execution-orchestrator-plan.md)
-- [TDD Orchestrator Plan](orchestrators/tdd-orchestrator-plan.md)
-- [Git Checkpoint Plan](orchestrators/git-checkpoint-orchestrator-plan.md)
+#### 2. New Structure
+- **Target Architecture:** Component diagram with responsibilities
+- **New File Organization:** Folder structure in `src/orchestration_3_0/`
+- **API Contracts:** Public interfaces (method signatures only)
+- **Configuration:** YAML workflow definitions
+- **State Machine Integration:** FSM states and transitions
 
-**High Priority:**
-- [Application Health Plan](orchestrators/application-health-orchestrator-plan.md)
-- [Onboarding Plan](orchestrators/onboarding-orchestrator-plan.md)
+#### 3. Migration Strategy (5 Phases with TDD)
+**Phase 1: RED (Tests First)**
+- Write failing integration tests for new orchestrator
+- Write failing unit tests for each component
+- Test count: [X unit tests + Y integration tests]
+- Validation: All tests RED
 
-**Medium Priority:**
-- [Debug Workflow Plan](orchestrators/debug-orchestrator-plan.md)
-- [Git Sync Plan](orchestrators/git-sync-orchestrator-plan.md)
-- [Documentation Plan](orchestrators/documentation-orchestrator-plan.md)
-- [Manager Report Plan](orchestrators/manager-report-orchestrator-plan.md)
+**Phase 2: GREEN (Core Implementation)**
+- Implement state machine integration
+- Implement DI container registration
+- Implement core orchestrator logic
+- Validation: Tests pass, old code still active
 
-**Low Priority:**
-- [Dashboard Orchestrators Plan](orchestrators/dashboard-orchestrators-plan.md)
+**Phase 3: REFACTOR (Parallel Operation)**
+- Run old and new orchestrators in parallel
+- Compare outputs for equivalence
+- Performance benchmarking (old vs new)
+- Validation: New orchestrator matches old behavior
+
+**Phase 4: CUTOVER (Switch to New)**
+- Update cortex-operations.yaml triggers
+- Archive old orchestrator files
+- 30-day grace period begins
+- Validation: Production monitoring (error rate <0.1%)
+
+**Phase 5: CLEANUP (Remove Old)**
+- Grace period expires
+- Delete archived orchestrator files
+- Remove rollback scripts
+- Validation: System stable for 30+ days
+
+#### 4. Test Coverage Requirements
+- **Unit Tests:** [X tests] - 100% coverage of orchestrator components
+- **Integration Tests:** [Y tests] - End-to-end workflow validation
+- **Migration Tests:** [Z tests] - Verify legacy behavior preserved
+- **Performance Tests:** [P tests] - Benchmark against old implementation
+- **Total Tests:** [X+Y+Z+P tests]
+
+#### 5. Wiring Validation Checklist
+- ✅ State machine transitions registered
+- ✅ DI container bindings configured
+- ✅ cortex-operations.yaml updated with triggers
+- ✅ YAML workflow definition created
+- ✅ Session manager integration complete
+- ✅ Multi-tenant isolation verified (tenant_id, project_id)
+- ✅ RBAC permissions configured
+- ✅ Logging and monitoring instrumented
+- ✅ Error handling and rollback tested
+- ✅ Documentation generated
+
+#### 6. Complete Removal Strategy
+- **Archive Location:** `cortex-brain/archives/orchestrators-legacy/[orchestrator-name]/`
+- **Grace Period:** 30 days (monitoring for errors)
+- **Rollback Script:** `scripts/rollback/rollback_[orchestrator-name].py`
+- **Deletion Checklist:**
+  - ✅ Week 1-2: Archive old files
+  - ✅ Week 2: Update all imports
+  - ✅ Week 2-4: Run full test suite (2,400+ tests)
+  - ✅ Week 3-4: Production monitoring (error rate <0.1%)
+  - ✅ Week 4: User feedback collection
+  - ✅ Grace period end: Final validation
+  - ❌ Permanent deletion: Remove archive, delete rollback scripts
+
+---
+
+## 📂 Folder Structure for New Orchestrators
+
+**ALL new orchestrators MUST follow this clean folder structure:**
+
+```
+src/
+└── orchestration_3_0/
+    ├── core/                          # Shared infrastructure
+    │   ├── state_machine.py           # FSM engine (400 LOC)
+    │   ├── dependency_container.py    # DI container (450 LOC)
+    │   ├── session_manager.py         # State persistence (400 LOC)
+    │   ├── requirements_gathering.py  # Pre-orchestrator (500 LOC) ⭐ NEW
+    │   └── base_orchestrator.py       # Abstract base class
+    │
+    ├── orchestrators/                 # 9 unified orchestrators
+    │   ├── planning/                  # Planning Orchestrator
+    │   │   ├── __init__.py
+    │   │   ├── planning_orchestrator.py        (800 LOC)
+    │   │   ├── complexity_analyzer.py
+    │   │   ├── threat_modeler.py
+    │   │   └── dor_dod_validator.py
+    │   │
+    │   ├── execution/                 # Execution Orchestrator
+    │   │   ├── __init__.py
+    │   │   ├── execution_orchestrator.py       (600 LOC)
+    │   │   ├── workflow_coordinator.py
+    │   │   ├── dependency_resolver.py
+    │   │   └── progress_streamer.py
+    │   │
+    │   ├── tdd/                       # TDD Orchestrator
+    │   │   ├── __init__.py
+    │   │   ├── tdd_orchestrator.py             (2,000 LOC)
+    │   │   ├── red_phase_validator.py
+    │   │   ├── coverage_analyzer.py
+    │   │   └── test_template_library.py
+    │   │
+    │   ├── devops/                    # DevOps Orchestrator
+    │   │   ├── __init__.py
+    │   │   ├── devops_orchestrator.py          (1,500 LOC)
+    │   │   ├── git_operations.py
+    │   │   ├── ci_cd_pipeline.py
+    │   │   ├── deployment_manager.py
+    │   │   └── system_maintenance.py
+    │   │
+    │   ├── qa/                        # Quality Assurance Orchestrator
+    │   │   ├── __init__.py
+    │   │   ├── qa_orchestrator.py              (800 LOC)
+    │   │   ├── architectural_reviewer.py
+    │   │   ├── security_assessor.py
+    │   │   └── code_reviewer.py
+    │   │
+    │   ├── observability/             # Observability Orchestrator
+    │   │   ├── __init__.py
+    │   │   ├── observability_orchestrator.py   (1,800 LOC)
+    │   │   ├── dashboard_engine.py
+    │   │   ├── health_monitor.py
+    │   │   ├── analytics_collector.py
+    │   │   └── intelligent_dashboard/  # AST-powered intelligence
+    │   │       ├── dashboard_ast_engine.py     (600 LOC)
+    │   │       ├── business_logic_extractor.py (400 LOC)
+    │   │       ├── financial_data_detector.py  (350 LOC)
+    │   │       ├── use_case_inference.py       (400 LOC)
+    │   │       ├── executive_summary_generator.py (350 LOC)
+    │   │       ├── recommendation_intelligence.py (250 LOC)
+    │   │       └── onboarding_generator.py     (450 LOC)
+    │   │
+    │   ├── documentation/             # Documentation Orchestrator
+    │   │   ├── __init__.py
+    │   │   ├── documentation_orchestrator.py   (700 LOC)
+    │   │   ├── doc_generator.py
+    │   │   ├── report_builder.py
+    │   │   └── api_doc_builder.py
+    │   │
+    │   ├── intelligence/              # Intelligence Orchestrator
+    │   │   ├── __init__.py
+    │   │   ├── intelligence_orchestrator.py    (1,000 LOC)
+    │   │   ├── feature_completion_engine.py
+    │   │   ├── clarification_engine.py
+    │   │   ├── refactoring_coordinator.py
+    │   │   └── llm_operations.py
+    │   │
+    │   └── onboarding/                # Onboarding Orchestrator
+    │       ├── __init__.py
+    │       ├── onboarding_orchestrator.py      (600 LOC)
+    │       ├── onboarding_wizard.py
+    │       ├── tutorial_generator.py
+    │       └── template_projects.py
+    │
+    ├── multi_tenant/                  # Multi-tenant infrastructure
+    │   ├── __init__.py
+    │   ├── tenant_manager.py          # Tenant isolation (800 LOC)
+    │   ├── rbac_enforcer.py
+    │   ├── cross_project_resolver.py
+    │   └── quota_manager.py
+    │
+    ├── session/                       # Session management
+    │   ├── __init__.py
+    │   ├── session_manager.py         # State persistence (400 LOC)
+    │   ├── checkpoint_manager.py
+    │   └── recovery_manager.py
+    │
+    └── workflows/                     # YAML workflow definitions
+        ├── planning_workflow.yaml
+        ├── execution_workflow.yaml
+        ├── tdd_workflow.yaml
+        ├── devops_workflow.yaml
+        ├── qa_workflow.yaml
+        ├── observability_workflow.yaml
+        ├── documentation_workflow.yaml
+        ├── intelligence_workflow.yaml
+        └── onboarding_workflow.yaml
+```
+
+**Legacy Code Archive Structure:**
+
+```
+cortex-brain/
+└── archives/
+    └── orchestrators-legacy/
+        ├── planning/                  # Old planning orchestrator
+        │   └── planning_orchestrator.py (5,126 LOC)
+        │
+        ├── execution/                 # Old execution orchestrators
+        │   ├── plan_execution_v2.py
+        │   ├── workflow_pipeline.py
+        │   └── workflow_engine.py
+        │
+        ├── tdd/                       # Old TDD orchestrators
+        │   ├── tdd_implementation.py
+        │   └── tdd_workflow.py
+        │
+        ├── devops/                    # Old DevOps orchestrators
+        │   ├── git_checkpoint.py
+        │   ├── git_sync.py
+        │   ├── publish_branch.py
+        │   ├── system_maintenance.py
+        │   ├── holistic_cleanup.py
+        │   └── cleanup_*.py (3 variants)
+        │
+        ├── qa/                        # Old QA orchestrators
+        │   ├── review_orchestrator.py
+        │   └── code_review_orchestrator.py
+        │
+        ├── observability/             # Old observability orchestrators
+        │   ├── dashboard_*.py (5 files)
+        │   ├── application_health.py
+        │   ├── crawler_*.py (2 files)
+        │   ├── adoption_analytics.py
+        │   └── parallel_collector.py
+        │
+        ├── documentation/             # Old documentation orchestrators
+        │   ├── documentation_*.py (2 files)
+        │   ├── manager_report.py
+        │   ├── executive_summary.py
+        │   └── multi_language_docstring.py
+        │
+        ├── intelligence/              # Old intelligence orchestrators
+        │   ├── feature_completion.py
+        │   ├── clarification.py
+        │   ├── multi_language_refactoring.py
+        │   ├── llm.py
+        │   └── multi_agent.py
+        │
+        └── onboarding/                # Old onboarding orchestrators
+            ├── onboarding_*.py (2 files)
+            ├── hands_on_tutorial.py
+            └── setup.py
+```
+
+---
+
+## 📋 Sub-Plan Document Locations
+
+**ALL sub-plan documents MUST be created in:**
+
+```
+cortex-brain/
+└── documents/
+    └── planning/
+        └── orchestrators/
+            ├── 01-tdd-orchestrator-plan.md
+            ├── 02-devops-orchestrator-plan.md
+            ├── 03-qa-orchestrator-plan.md
+            ├── 04-planning-orchestrator-plan.md
+            ├── 05-execution-orchestrator-plan.md
+            ├── 06-documentation-orchestrator-plan.md
+            ├── 07-intelligence-orchestrator-plan.md
+            ├── 08-observability-orchestrator-plan.md
+            └── 09-onboarding-orchestrator-plan.md
+```
+
+**Naming Convention:** `[priority-number]-[orchestrator-name]-orchestrator-plan.md`
+
+**Navigation Index:** Each sub-plan document includes:
+- Link to master plan
+- Link to previous orchestrator (if applicable)
+- Link to next orchestrator (if applicable)
+- Link to orchestrator-specific manifest (YAML workflow)
+
+---
+
+## 📝 Sub-Plan Creation Checklist
+
+**For EACH of the 9 orchestrators, copilot MUST:**
+
+- ✅ Create sub-plan document using mandatory template (6 sections)
+- ✅ Document existing state (summarized, no code blocks)
+- ✅ Design new structure (folder layout, API contracts)
+- ✅ Plan 5-phase migration (RED→GREEN→REFACTOR→CUTOVER→CLEANUP)
+- ✅ Define test coverage requirements (unit + integration + migration + performance)
+- ✅ Create wiring validation checklist (10 items)
+- ✅ Document removal strategy (archive → grace period → deletion)
+- ✅ Create YAML workflow definition in `src/orchestration_3_0/workflows/`
+- ✅ Create orchestrator folder in `src/orchestration_3_0/orchestrators/`
+- ✅ Create rollback script in `scripts/rollback/`
+
+**Validation:** Sub-plan document MUST be reviewed and approved before implementation begins.
+
+---
+
+## 🔗 Navigate to Individual Sub-Plans
+
+**Phase 1: Core Infrastructure (Week 1)**
+1. [TDD Orchestrator Plan](orchestrators/01-tdd-orchestrator-plan.md) - 2,000 LOC (2 files consolidated)
+2. [DevOps Orchestrator Plan](orchestrators/02-devops-orchestrator-plan.md) - 1,500 LOC (8 files consolidated)
+
+**Phase 2: Quality & Workflow (Week 2-3)**
+3. [Quality Assurance Orchestrator Plan](orchestrators/03-qa-orchestrator-plan.md) - 800 LOC (2 files consolidated)
+4. [Planning Orchestrator Plan](orchestrators/04-planning-orchestrator-plan.md) - 800 LOC (1 file refactored)
+5. [Execution Orchestrator Plan](orchestrators/05-execution-orchestrator-plan.md) - 600 LOC (3 files consolidated)
+
+**Phase 3: Intelligence & Documentation (Week 4-5)**
+6. [Documentation Orchestrator Plan](orchestrators/06-documentation-orchestrator-plan.md) - 700 LOC (5+ files consolidated, replaces enterprise_documentation_orchestrator 4,668 LOC with GitHub Pages)
+7. [Intelligence Orchestrator Plan](orchestrators/07-intelligence-orchestrator-plan.md) - 1,000 LOC (5 files consolidated)
+
+**Phase 4: Observability & Onboarding (Week 6-7)**
+8. [Observability Orchestrator Plan](orchestrators/08-observability-orchestrator-plan.md) - 1,800 LOC (10 files consolidated + 2,800 LOC intelligent dashboard)
+9. [Onboarding Orchestrator Plan](orchestrators/09-onboarding-orchestrator-plan.md) - 600 LOC (4 files consolidated)
+
+**Supporting Documents:**
+- [Feature Discovery Module Plan](orchestrators/00-feature-discovery-module-plan.md) - 378 LOC (already exists)
+- [Complete Orchestrator Audit](orchestrators/cortex-4.0-complete-orchestrator-audit.md) - All 71 orchestrators inventory
 
 ---
 
@@ -420,34 +941,39 @@ Each orchestrator has a detailed sub-plan document with:
 ### For Executives
 
 1. Review [Executive Summary](#-executive-summary)
-2. Check [Success Metrics](#success-metrics) - 87% orchestrator reduction, 77% code reduction
-3. Review [Timeline](#-implementation-timeline) - 11 weeks total
-4. Review [Complete Audit](orchestrators/cortex-4.0-complete-orchestrator-audit.md) - All 71 orchestrators
-5. Approve resource allocation for CORTEX 4.0
+2. Check [Success Metrics](#success-metrics) - 87% orchestrator reduction, 70% code reduction
+3. Review [Timeline](#-implementation-timeline) - 12 weeks total
+4. Review [Sub-Plan Structure](#-sub-plan-structure--requirements) - Mandatory template for all orchestrators
+5. Review [Sub-Plan Tracker](orchestrators/README.md) - Progress dashboard for all 9 orchestrators
+6. Approve resource allocation for CORTEX 4.0
 
 ### For Technical Leads
 
 1. Review [9 Orchestrators](#-orchestrator-portfolio-9-unified-orchestrators)
 2. Study [Architecture Components](#-core-architecture-components) - State machine, DI, multi-tenant
-3. Plan team assignments for 7 phases (Phase 0-6)
-4. Review individual orchestrator sub-plans
-5. Allocate resources for 2,000+ test suite
+3. Review [Sub-Plan Template](orchestrators/00-sub-plan-template.md) - Mandatory structure for all sub-plans
+4. Plan team assignments for 7 phases (Phase 0-6)
+5. Review individual orchestrator sub-plans (see [Sub-Plan Tracker](orchestrators/README.md))
+6. Allocate resources for 2,400+ test suite
 
 ### For Developers
 
 1. Start with [Phase 0: Feature Discovery](#phase-0-feature-discovery-setup-week-0)
-2. Read individual orchestrator sub-plans
-3. Follow TDD workflow (RED→GREEN→REFACTOR)
-4. Run test suite before each commit (`pytest tests/`)
-5. Reference [Complete Audit](orchestrators/cortex-4.0-complete-orchestrator-audit.md) for context
+2. Read [Sub-Plan Template](orchestrators/00-sub-plan-template.md) - Understand migration structure
+3. Read individual orchestrator sub-plans (see [Sub-Plan Tracker](orchestrators/README.md))
+4. Follow TDD workflow (RED→GREEN→REFACTOR)
+5. Run test suite before each commit (`pytest tests/`)
+6. Reference [Folder Structure](#-folder-structure-for-new-orchestrators) for code organization
 
 ### For Architects
 
 1. Review [Multi-Tenant Architecture](#5-multi-tenant-architecture--new-cortex-40)
 2. Study [Quality Assurance Engine](#7-quality-assurance-engine--new)
 3. Review [Intelligence Engine](#8-intelligence-engine--new) - AI-powered operations
-4. Plan RBAC strategy for organization
-5. Design cross-project dependency graph
+4. Review [Intelligent Dashboard Engine](#9-intelligent-dashboard-engine--new) - AST-powered reverse engineering
+5. Plan RBAC strategy for organization
+6. Design cross-project dependency graph
+7. Review [Folder Structure](#-folder-structure-for-new-orchestrators) for architectural organization
 
 ---
 
@@ -458,10 +984,17 @@ Each orchestrator has a detailed sub-plan document with:
 **Branch:** `cortex3-orchestration`
 
 **Related Documents:**
-- `enterprise-doc-orchestrator-enhancement-plan.md` (Documentation strategy)
-- `planning-system-2.0-manifest.yaml` (Requirements manifest)
-- `cortex-brain/brain-protection-rules.yaml` (SKULL rules)
+- **Sub-Plan Documents:**
+  - [Sub-Plan Template](orchestrators/00-sub-plan-template.md) - Mandatory structure for all orchestrators
+  - [Sub-Plan Tracker](orchestrators/README.md) - Progress dashboard for all 9 orchestrators
+  - [Feature Discovery Baseline Scan Checklist](orchestrators/feature-discovery-baseline-scan-checklist.md) - Execution steps for discovery scan
+  - Individual sub-plans (see [Navigate to Sub-Plans](#-navigate-to-individual-sub-plans))
+- **Architecture Documents:**
+  - `enterprise-doc-orchestrator-enhancement-plan.md` (Documentation strategy)
+  - `intelligent-dashboard-enhancement-plan.md` (AST-powered dashboard design)
+  - `planning-system-2.0-manifest.yaml` (Requirements manifest)
+  - `cortex-brain/brain-protection-rules.yaml` (SKULL rules)
 
 ---
 
-**Next Step:** Review individual orchestrator plans, approve approach, begin Phase 1 foundation work.
+**Next Step:** Review [Sub-Plan Template](orchestrators/00-sub-plan-template.md), create Feature Discovery sub-plan, **RUN baseline scan** using [Feature Discovery Baseline Scan Checklist](orchestrators/feature-discovery-baseline-scan-checklist.md), update this master plan with findings, then create remaining sub-plans and begin Phase 1 foundation work.
