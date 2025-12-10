@@ -327,10 +327,22 @@ class CodeAnalyzer:
             'dotnet': '.NET'
         }
         
+        # Check external dependencies
         for dep in self.external_dependencies:
             for indicator, framework_name in framework_indicators.items():
                 if indicator in dep.lower():
                     return framework_name, None  # Version detection requires package file parsing
+        
+        # Fallback: Scan file contents for import patterns
+        for file_path in self.source_files:
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read(500)  # Read first 500 chars for imports
+                    for indicator, framework_name in framework_indicators.items():
+                        if f"import {indicator}" in content.lower() or f"from {indicator}" in content.lower():
+                            return framework_name, None
+            except Exception:
+                continue
         
         return None, None
     
