@@ -400,11 +400,14 @@ body {
 /* Hero Large Button Grid */
 .cta-buttons-large {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 220px));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     justify-content: center;
     margin-top: 2.5rem;
     animation: fadeInUp 0.8s ease-out 0.4s both;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .btn-hero {
@@ -420,6 +423,11 @@ body {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     overflow: hidden;
+}
+
+/* Full width button for The Awakening */
+.btn-hero-full-width {
+    grid-column: 1 / -1;
 }
 
 .btn-hero::before {
@@ -442,7 +450,7 @@ body {
 }
 
 .btn-hero-icon {
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin-bottom: 1rem;
     display: block;
     transition: transform 0.3s ease;
@@ -453,7 +461,7 @@ body {
 }
 
 .btn-hero-text {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-primary);
     display: block;
@@ -461,7 +469,7 @@ body {
 }
 
 .btn-hero-caption {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     color: var(--text-secondary);
     opacity: 0.8;
     display: block;
@@ -527,7 +535,7 @@ body {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .cta-buttons-large {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
     
@@ -537,11 +545,15 @@ body {
     }
     
     .btn-hero-icon {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
     
     .btn-hero-text {
-        font-size: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .btn-hero-caption {
+        font-size: 0.9rem;
     }
     
     .hero-acronym {
