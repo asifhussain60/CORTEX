@@ -364,6 +364,209 @@
     font-size: 0.95em;
 }
 
+/* ============================================
+   STORY-SPECIFIC VISUAL ENHANCEMENTS
+   Fun typography for "The Awakening" narrative
+   ============================================ */
+
+/* Dialogue - Cyan tinted for character speech */
+.story-dialogue {
+    color: rgba(0, 212, 255, 0.95);
+    font-size: 1.15rem;
+    font-style: italic;
+    padding-left: 1.5rem;
+    border-left: 3px solid rgba(0, 212, 255, 0.3);
+    margin: 1.25rem 0;
+    line-height: 1.7;
+}
+
+/* G's Voice - Ethereal purple glow for imaginary muse */
+.miss-g-voice {
+    color: #c864ff;
+    font-style: italic;
+    text-shadow: 0 0 10px rgba(200, 100, 255, 0.3);
+    font-size: 1.1rem;
+    padding-left: 2rem;
+    border-left: 3px solid rgba(200, 100, 255, 0.4);
+    margin: 1.5rem 0;
+    background: linear-gradient(90deg, rgba(200, 100, 255, 0.05), transparent);
+    padding: 0.75rem 1rem 0.75rem 2rem;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Technical Terms - Monospace with accent */
+.tech-term {
+    font-family: 'Source Code Pro', monospace;
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 1.05em;
+    letter-spacing: 0.5px;
+}
+
+/* Coffee Mug References - Warm brown tones */
+.coffee-ref {
+    color: #d4a574;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(212, 165, 116, 0.3);
+}
+
+/* Dramatic Moments - Larger, bolder emphasis */
+.dramatic {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    text-align: center;
+    margin: 2.5rem 0;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.1));
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+}
+
+/* Whiteboard Moments - Code-style blocks */
+.whiteboard-note {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(0, 212, 255, 0.3);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 1rem;
+    color: rgba(0, 212, 255, 0.9);
+    border-radius: 8px;
+    position: relative;
+}
+
+.whiteboard-note::before {
+    content: '📝';
+    position: absolute;
+    top: -12px;
+    left: 12px;
+    background: var(--bg-primary);
+    padding: 0 8px;
+    font-size: 1.2rem;
+}
+
+/* Timestamp - Subtle gray for time markers */
+.timestamp {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+/* Chapter Opening Lines - Special emphasis */
+.opening-line {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--accent-primary);
+    text-align: center;
+    margin: 2rem auto;
+    max-width: 600px;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* Mr. Codenstein's Internal Thoughts - Slightly different style */
+.internal-thought {
+    font-style: italic;
+    color: rgba(123, 97, 255, 0.85);
+    font-size: 1.05rem;
+    opacity: 0.9;
+}
+
+/* Git Commit Messages - Terminal style */
+.git-commit {
+    font-family: 'Source Code Pro', monospace;
+    background: rgba(0, 0, 0, 0.3);
+    color: #00ff88;
+    padding: 0.5rem 1rem;
+    border-left: 3px solid #00ff88;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+}
+
+/* Metric Numbers - Highlighted stats */
+.metric-number {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    font-family: 'Source Code Pro', monospace;
+}
+
+/* Coffee Mug Count - Fun counter style */
+.mug-evolution {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.2), rgba(212, 165, 116, 0.1));
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 2px solid rgba(212, 165, 116, 0.3);
+    font-weight: 600;
+    color: #d4a574;
+}
+
+/* Tier Labels - Architectural highlights */
+.tier-label {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
+    color: var(--accent-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    letter-spacing: 0.5px;
+}
+
+/* Special paragraph types */
+.story-text p.first-line {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--accent-secondary);
+}
+
+.story-text p.emphasis {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Fun variations for repeated phrases */
+.story-text .coffee-addiction {
+    color: #d4a574;
+    font-style: italic;
+}
+
+.story-text .time-check {
+    color: var(--text-muted);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.95rem;
+}
+
+.story-text .eureka-moment {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    display: inline-block;
+    animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% {
+        text-shadow: 0 0 5px rgba(0, 212, 255, 0.3);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+    }
+}
+
+/* END STORY-SPECIFIC ENHANCEMENTS */
+
 /* Story Callouts (Educational moments) */
 .story-callout {
     background: var(--glass-bg);
