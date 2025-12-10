@@ -735,7 +735,7 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
   - **Hero Section:**
     - Title: "The Awakening of CORTEX: A Tech Comedy in Eleven Chapters"
     - Subtitle: "By Asif 'Codenstein' Hussain"
-    - Coffee mug illustration (hero image)
+    - Comic illustration: Character sheet (hero image)
   - **Reading Progress Bar:**
     - Horizontal progress indicator (scroll-based)
     - Shows chapter markers (click to jump)
@@ -747,8 +747,9 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
     - Click chapter → smooth scroll to section
     - Mobile: Hidden by default, hamburger menu toggle
   - **Chapter Sections:**
-    - Each chapter as collapsible section with header image
-    - DALL-E narrative image as chapter header
+    - Each chapter with **TWO image types** (clearly distinguished):
+      1. **Comic illustration** (black & white cartoon) - Story/character moments at chapter top
+      2. **Technical DALL-E diagram** (presentation style) - Educational callout within text
     - Story text with readable typography (18px, line-height 1.8)
     - Technical callouts (glassmorphism boxes linking to architecture pages)
     - Example: "Working Memory breakthrough → [Learn More: Tier 1 Architecture]"
@@ -760,10 +761,9 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
     - Timeline below story text, sticky on scroll
   - **Character Reference Sidebar:**
     - Right sidebar (desktop only)
-    - Character portraits (AI-generated or text descriptions)
-    - **Mr. Codenstein:** Solo developer, basement laboratory, coffee mug collector
-    - **"G":** Imaginary girlfriend/muse (appears in visions for teachable moments)
-    - **Copilot:** AI assistant evolving from amnesia to personality
+    - **Mr. Codenstein:** Einstein-style crazy professor, basement laboratory, coffee mug collector
+    - **"Miss G":** Imaginary girlfriend/muse (pretty ethereal apparition, appears in visions for teachable moments)
+    - **Copilot:** Friendly robot assistant evolving from amnesia to personality
     - **Coffee Mugs (17 → 23):** Visual metaphor for Tier architecture
     - One-line character descriptions with educational context
     - Collapsible, hidden on mobile
@@ -798,69 +798,166 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
 - Social sharing functional
 - Mobile responsive (sidebars collapse/hide)
 
-#### Increment 3.3: DALL-E Image Integration & Optimization (1 day)
+#### Increment 3.3: Image Integration & Optimization (1 day)
+
+**⚠️ CRITICAL: Two Separate Image Systems**
+
+**System 1: Technical Architecture Diagrams** (EXISTING - DO NOT MIX)
+- **Location:** `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/`
+- **Subfolders:** `prompts/` + `narratives/`
+- **Purpose:** Professional diagrams for architecture/feature documentation
+- **Style:** Technical presentation format (polished, corporate)
+- **Usage:** GitHub Pages architecture pages, feature documentation
+- **Count:** 10 images (01-four-tier-architecture through 10-complete-system)
+
+**System 2: Comic Story Illustrations** (NEW - THIS INCREMENT)
+- **Location:** `docs/gh-pages/story/illustrations/`
+- **Subfolders:** `prompts/` + `images/`
+- **Purpose:** Visual comedy for story page, character/comedy moments
+- **Style:** Black & white cartoons (newspaper comic strip aesthetic)
+- **Usage:** Story page ONLY (`docs/gh-pages/story/index.html`)
+- **Count:** 12 images (character sheet + 11 chapter openers)
+- **Character Designs:**
+  - **Mr. Codenstein:** Einstein-style crazy professor (wild white hair, thick glasses, lab coat)
+  - **Miss G:** Pretty ethereal apparition (elegant, translucent, shimmer effect)
+  - **Copilot:** Friendly robot (rounded design, emoji-screen face, evolving personality)
+
 **Tasks:**
-- [ ] **Locate & Organize Generated Images:**
-  - Find all DALL-E narrative images in `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/narratives/`
-  - Verify 10 images exist (01-10 narratives)
-  - Create `docs/gh-pages/story/images/` directory
-  - Copy images to story assets folder
-- [ ] **Create Chapter Header Images:**
-  - Resize images for web (1200px width, maintain aspect ratio)
-  - Optimize for performance (WebP format, ~150KB per image)
-  - Add lazy loading attributes
-  - Create placeholder images for loading states
+- [x] **Create Comic Illustration System** (NEW):
+  - ✅ Created folder structure: `docs/gh-pages/story/illustrations/prompts/` + `images/`
+  - ✅ Generated 12 DALL-E prompts for comic illustrations:
+    1. `00-character-sheet.md` - Character reference (Mr. Codenstein, Miss G, Copilot)
+    2. `00-basement-laboratory.md` - Setting establishment (chaotic workspace)
+    3. `00-coffee-timeline.md` - Visual metaphor guide (17 mugs evolution)
+    4. `prologue-deadline.md` - Two-month deadline scene
+    5. `ch1-goldfish-theory.md` - Copilot amnesia metaphor
+    6. `ch2-skull-moment.md` - Finger frozen over Enter key (ICONIC)
+    7. `ch3-backup-chaos.md` - 47 desperate backup file names
+    8. `ch4-agent-chaos.md` - Ten robots arguing (coordination failure)
+    9. `ch5-graph-overload.md` - Complexity vs simplicity split-panel
+    10. `ch6-token-mountain.md` - Before/after token reduction comedy
+    11. `ch7-capture-moment.md` - Lightbulb eureka moment
+    12. `ch8-platform-chaos.md` - Cross-platform nightmare
+    13. `ch9-brute-force.md` - Sledgehammer optimization metaphor
+    14. `ch10-personality-emergence.md` - Copilot evolution three-panel
+  - ✅ Created README.md clearly distinguishing two image systems
+  - ✅ Documented character design specifications for consistency
+- [ ] **Generate Comic Illustrations:**
+  - Use DALL-E 3 with prompts in `docs/gh-pages/story/illustrations/prompts/`
+  - Save to `docs/gh-pages/story/illustrations/images/` as PNG
+  - Maintain character consistency (reference 00-character-sheet.png)
+- [ ] **Optimize Comic Illustrations:**
+  - Convert PNG to WebP format
+  - Target <100KB per image
+  - Dimensions: 1200x800px (standard), 1600x600px (timeline), 800x1200px (vertical)
+- [ ] **Integrate Technical DALL-E Diagrams** (EXISTING):
+  - Locate images in `cortex-brain/documents/analysis/dalle-prompts/cortex-brain/narratives/`
+  - Copy to `docs/gh-pages/story/technical-diagrams/` (separate from comic illustrations)
+  - Optimize for web (WebP, ~150KB per image)
+  - These go in TECHNICAL CALLOUTS within story text (not chapter openers)
 - [ ] **Write Image Captions:**
-  - Each image gets caption linking technical concept to story moment
-  - Example (Chapter 1 - Working Memory):
-    - Caption: "The Coffee Mug Timeline: 70 conversations of working memory, represented by 17 coffee mugs in various states of freshness—from steaming hot near the keyboard to mysteriously moldy in the far corner."
-  - Captions in glassmorphism boxes below images
-  - Include metrics from DALL-E narratives
+  - **Comic illustrations:** Character/comedy moment descriptions
+  - **Technical diagrams:** Link technical concept to story moment with metrics
+  - Example (Ch3 technical callout):
+    - Caption: "Working Memory Architecture: 70 conversations preserved in SQLite database, solving the amnesia crisis that started this whole journey."
+- [ ] **Implement Dual Image System in HTML:**
+  ```html
+  <div class="chapter" id="chapter-3">
+    <!-- COMIC ILLUSTRATION (top) -->
+    <img src="illustrations/images/ch3-backup-chaos.webp" 
+         alt="47 desperately-named backup files"
+         class="comic-illustration"
+         loading="lazy">
+    
+    <h2>Chapter 3: The SQLite Intervention</h2>
+    <div class="story-content">
+      <p>Story text...</p>
+      
+      <!-- TECHNICAL DIAGRAM (callout within text) -->
+      <div class="technical-callout">
+        <h3>🧠 Technical Concept: Working Memory</h3>
+        <img src="technical-diagrams/06-working-memory.webp"
+             alt="CORTEX Working Memory Architecture"
+             class="technical-diagram"
+             loading="lazy">
+        <p><strong>Teaches:</strong> Persistence over elegance...</p>
+      </div>
+    </div>
+  </div>
+  ```
+- [ ] **CSS Distinction:**
+  ```css
+  /* Comic illustrations - fun, casual, newspaper aesthetic */
+  .comic-illustration {
+    border: 3px solid black;
+    background: white;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+    border-radius: 4px;
+  }
+  
+  /* Technical diagrams - professional, glassmorphism */
+  .technical-diagram {
+    border: 1px solid var(--accent-primary);
+    background: rgba(0,212,255,0.05);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+  }
+  ```
 - [ ] **Optimize Loading Performance:**
-  - Implement lazy loading (load images as user scrolls)
-  - Use responsive images (srcset for different screen sizes)
-  - Preload first 2 chapter images (above fold)
-  - Add loading="lazy" attributes
+  - Implement lazy loading (both image types)
+  - Preload first 2 comic illustrations (above fold)
+  - Responsive images (srcset for different screen sizes)
 
 **Deliverables:**
-- 10 DALL-E images optimized for web (WebP, lazy loading)
+- 12 comic illustrations (black & white cartoons) for story humor/character moments
+- 10 technical diagrams (presentation style) for educational callouts
+- Both optimized for web (WebP, lazy loading)
 - Image captions linking technical concepts to story moments
 - Responsive image implementation (srcset)
 - Loading performance optimizations
+- README documenting distinction between two image systems
 
 **Acceptance Criteria:**
-- All 10 DALL-E images display correctly as chapter headers
-- Images optimized (WebP format, <150KB each)
+- **Clear Distinction:** Comic illustrations (story humor) vs technical diagrams (education) never confused
+- **Visual Hierarchy:** Comic illustrations at chapter top (fun), technical diagrams in callouts (learning)
+- Comic illustrations: Black & white, cartoon style, <100KB each, character-consistent
+- Technical diagrams: Professional presentation style, <150KB each, metrics visible
+- All images optimized (WebP format)
 - Lazy loading functional (images load on scroll)
-- Captions present and readable
-- Technical metrics from narratives included in captions
+- Captions present and readable (both image types serve different purposes)
 - Responsive images work across screen sizes
 - Page load time <2 seconds (first paint)
+- **Validation:** Beta readers can distinguish entertainment images from educational diagrams
 
 **Phase 3 Deliverables (Summary):**
-- Revised narrative with educational focus (Mr. Codenstein + imaginary "G" as teaching device)
+- Revised narrative with educational focus (Mr. Codenstein + imaginary "Miss G" as teaching device)
 - Complete story page with 11 chapters (including new Chapter 11)
 - Chapter navigation sidebar + reading progress bar
 - Coffee mug timeline visualization (D3.js)
-- 10 DALL-E images optimized and integrated with educational captions
+- **12 comic illustrations** (black & white cartoons) for story humor/character moments
+- **10 technical DALL-E diagrams** (presentation style) for educational callouts
+- Both image systems optimized and integrated with clear distinction
 - Character reference sidebar explaining narrative devices
 - Print stylesheet
 - Social sharing functionality
 
 **Phase 3 Acceptance Criteria (Summary):**
 - **Educational Objective Met:** Story effectively teaches CORTEX architecture/features through entertaining narrative
-- **Character Revision Complete:** All "Asif" → "Mr. Codenstein", all "Mrs. Codenstein" → "G" (imaginary muse)
+- **Character Revision Complete:** All "Asif" → "Mr. Codenstein", all "Mrs. Codenstein" → "Miss G" (imaginary muse)
+- **Character Designs Consistent:** Einstein-style professor, pretty ethereal apparition, friendly robot maintained across all comic illustrations
 - **Teachable Moments Clear:** Each chapter explains specific technical concept (Tiers, SKULL, agents, optimization, etc.)
+- **Image Systems Distinguished:** Comic illustrations (entertainment) clearly separated from technical diagrams (education) in both location and presentation
 - Story readable and engaging (humor maintains reader interest)
 - All 11 chapters present with continuity maintained
 - Navigation functional (sidebar, progress bar)
-- DALL-E images integrated as chapter headers with educational captions (technical concept → story moment)
+- Comic illustrations integrated as chapter openers (visual comedy)
+- Technical DALL-E diagrams in callouts within text (educational moments)
 - Coffee mug timeline interactive (visual metaphor for Tier evolution)
 - Technical callouts link to architecture pages (seamless learning path)
 - Mobile responsive
 - Print version clean
 - Performance optimized (lazy loading, <2s load)
-- **Validation:** Beta readers confirm story makes CORTEX easier to understand vs traditional docs
+- **Validation:** Beta readers confirm story makes CORTEX easier to understand vs traditional docs AND can distinguish entertainment images from educational diagrams
 
 ---
 
