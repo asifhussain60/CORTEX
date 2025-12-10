@@ -389,7 +389,7 @@
 /* Dialogue - Cyan tinted for character speech */
 .story-dialogue {
     color: rgba(0, 212, 255, 0.95);
-    font-size: 1.15rem;
+    font-size: 1.11rem !important;
     font-style: italic;
     padding-left: 1.5rem;
     border-left: 3px solid rgba(0, 212, 255, 0.3);
@@ -399,12 +399,12 @@
 
 /* G's Voice - Ethereal purple glow for imaginary muse */
 .miss-g-voice {
-    color: #c864ff;
+    color: #e6b3ff;
     font-style: italic;
-    text-shadow: 0 0 10px rgba(200, 100, 255, 0.3);
-    font-size: 1.1rem;
+    text-shadow: 0 0 10px rgba(230, 179, 255, 0.3);
+    font-size: 1.06rem !important;
     padding-left: 2rem;
-    border-left: 3px solid rgba(200, 100, 255, 0.4);
+    border-left: 3px solid rgba(230, 179, 255, 0.4);
     margin: 1.5rem 0;
     background: linear-gradient(90deg, rgba(200, 100, 255, 0.05), transparent);
     padding: 0.75rem 1rem 0.75rem 2rem;
@@ -432,7 +432,7 @@
 
 /* Dramatic Moments - Larger, bolder emphasis */
 .dramatic {
-    font-size: 1.35rem;
+    font-size: 1.3rem !important;
     font-weight: 600;
     color: var(--accent-primary);
     text-align: center;
@@ -476,7 +476,7 @@
 
 /* Chapter Opening Lines - Special emphasis */
 .opening-line {
-    font-size: 1.3rem;
+    font-size: 1.25rem !important;
     font-weight: 500;
     color: var(--accent-primary);
     text-align: center;
@@ -490,7 +490,7 @@
 .internal-thought {
     font-style: italic;
     color: rgba(123, 97, 255, 0.85);
-    font-size: 1.05rem;
+    font-size: 1.01rem !important;
     opacity: 0.9;
 }
 
@@ -507,7 +507,7 @@
 
 /* Metric Numbers - Highlighted stats */
 .metric-number {
-    font-size: 1.4rem;
+    font-size: 1.35rem !important;
     font-weight: 700;
     color: var(--accent-primary);
     text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
@@ -542,13 +542,13 @@
 
 /* Special paragraph types */
 .story-text p.first-line {
-    font-size: 1.2rem;
+    font-size: 1.15rem !important;
     font-weight: 500;
     color: var(--accent-secondary);
 }
 
 .story-text p.emphasis {
-    font-size: 1.15rem;
+    font-size: 1.11rem !important;
     font-weight: 500;
     color: var(--text-primary);
 }
@@ -566,7 +566,7 @@
 }
 
 .story-text .eureka-moment {
-    font-size: 1.25rem;
+    font-size: 1.21rem !important;
     font-weight: 600;
     color: var(--accent-primary);
     display: inline-block;
