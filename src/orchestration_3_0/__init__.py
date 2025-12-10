@@ -22,7 +22,7 @@ __author__ = "Asif Hussain"
 from .core.base_orchestrator import BaseOrchestrator
 from .core.state_machine import StateMachine
 from .core.dependency_container import DependencyContainer
-from .core.session_manager import SessionManager
+from .session.session_manager import SessionManager
 
 __all__ = [
     "BaseOrchestrator",

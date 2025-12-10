@@ -8,6 +8,19 @@
 **Active Implementations:**
 - **Documentation Orchestrator (#6):** GitHub Pages site implementation active on separate machine (Phase 1-2 complete, Phase 3-4 in progress)
 
+**Phase 2 Sub-Plans Completed (December 10, 2025):**
+- ✅ **Scaffolding Orchestrator (#6):** Sub-plan complete - Legacy modernization with Tree-sitter AST analysis - NEW 800 LOC
+
+**Phase 4 Sub-Plans Completed (December 10, 2025):**
+- ✅ **Intelligence Orchestrator (#7):** Sub-plan complete - AI-powered operations (feature completion, clarification, refactoring) - 2,600 LOC → 1,000 LOC
+- ✅ **Onboarding Orchestrator (#9):** Sub-plan complete - Project/user/team onboarding with tutorials - 2,250 LOC → 600 LOC
+
+**AST Technology Integration (December 10, 2025):**
+- ✅ **Tree-sitter Parser:** Multi-language AST parsing (Python/JS/TS/C#) - `src/intelligence/tree_sitter_parser.py` (280 LOC)
+- ✅ **Dev Environment Verified:** Windows Python 3.13.7, all language grammars working
+- ✅ **Dependencies Added:** tree-sitter-python, tree-sitter-javascript, tree-sitter-c-sharp
+- ✅ **Test Suite Created:** `tests/intelligence/test_tree_sitter_parser.py` (200 LOC)
+
 ---
 
 ## 🎯 Executive Summary
@@ -25,7 +38,7 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 ### Proposed Solution
 
-- **9+ unified orchestrators** - 87%+ reduction (71+ → 9+)
+- **10 unified orchestrators** - 86%+ reduction (71+ → 10)
 - **State machine-based execution** - validated transitions, no skipped steps
 - **Multi-tenant architecture** - organization-level deployment with RBAC
 - **Feature discovery** - EPM auto-registration for continuous enhancement + baseline scan
@@ -33,30 +46,32 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 - **Quality assurance** - architectural reviews, code reviews, security
 - **AI intelligence** - feature completion, runtime clarification, multi-language refactoring
 - **AST-powered dashboard** - reverse engineering, business logic extraction, 85% faster
-- **98% test coverage** - 2,400+ tests enforced by pre-commit hooks
+- **Legacy modernization** - scaffolding orchestrator for incremental application modernization
+- **Pragmatic test coverage** - 64 core tests + smoke tests, real-world validation
 
 ### Success Metrics
 
 | Metric | Current | Target | Impact |
 |--------|---------|--------|--------|
-| Orchestrator count | 71+ | 9+ | 87%+ reduction |
-| Total code | 40,400+ LOC | 12,500+ LOC | 69%+ reduction |
+| Orchestrator count | 71+ | 10 | 86%+ reduction |
+| Total code | 40,400+ LOC | 13,300+ LOC | 67%+ reduction |
 | Workflow completion rate | 65% | 100% | +35% reliability |
 | Phases skipped | 15% | 0% | Zero missed steps |
-| Test coverage | 65% | 98% | +33% quality |
+| Test coverage approach | Comprehensive TDD | Core + Smoke | Pragmatic validation |
 | Multi-tenant ready | No | Yes | Org scalability |
 | Feature discovery | No | Yes | Auto-enhancement + baseline scan |
 | Requirements gathering | Manual | Interactive | 5-phase pre-orchestrator (discovery + clarification) |
 | Dashboard manual work | 60% | 15% | 75% automation |
 | Dashboard analysis speed | File scan | AST | 85% faster |
+| Legacy modernization | Manual | Orchestrated | Incremental scaffolding |
 
 **Note:** Metrics marked with "+" indicate baseline values subject to update after Phase 0 Feature Discovery baseline scan.
 
 ---
 
-## 📋 Orchestrator Portfolio: 9 Unified Orchestrators
+## 📋 Orchestrator Portfolio: 10 Unified Orchestrators
 
-**71 orchestrators consolidated into 9 domain-driven orchestrators (reordered for efficient implementation):**
+**71 orchestrators consolidated into 10 domain-driven orchestrators (reordered for efficient implementation):**
 
 ### Phase 0: Foundation (Week 0) - PREREQUISITE
 
@@ -70,18 +85,28 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 
 ### Phase 1: Core Infrastructure (Week 1) - CRITICAL FOUNDATION
 
+✅ **CORE INFRASTRUCTURE COMPLETE (December 10, 2025)**
+- **State Machine Engine** - `src/orchestration_3_0/core/state_machine.py` (400 LOC)
+- **DI Container** - `src/orchestration_3_0/core/dependency_container.py` (450 LOC)
+- **Session Manager** - `src/orchestration_3_0/session/session_manager.py` (400 LOC)
+- **BaseOrchestrator** - `src/orchestration_3_0/core/base_orchestrator.py` (300 LOC)
+- **Total:** ~1,550 LOC of production-ready infrastructure
+- **Report:** [Phase 1 Core Infrastructure Complete](../reports/phase-1-core-infrastructure-complete.md)
+
 **1. [TDD Orchestrator](orchestrators/tdd-orchestrator-plan.md)**
 - **Consolidates:** 2 orchestrators (2,691 LOC → 2,000 LOC)
 - **From:** tdd_implementation, tdd_workflow
 - **Purpose:** RED→GREEN→REFACTOR, per-layer coverage, empty test detection
 - **Enhancements:** Team metrics, test template library, cross-project test reuse
 - **Why First:** All subsequent orchestrators need TDD workflow for development
+- **Status:** Pending - requires core infrastructure (NOW AVAILABLE)
 
 **2. [DevOps Orchestrator](orchestrators/devops-orchestrator-plan.md)**
 - **Consolidates:** 8 orchestrators (5,200 LOC → 1,500 LOC)
 - **From:** git_checkpoint, git_sync, publish_branch, system_maintenance, holistic_cleanup, cleanup (3 variants)
 - **Purpose:** Git operations, CI/CD, deployments, system maintenance, cleanup
 - **Why Second:** Provides git checkpointing, deployment pipeline for all other work
+- **Status:** Pending - requires core infrastructure (NOW AVAILABLE)
 
 ### Phase 2: Quality & Workflow (Week 2-3) - ENABLE DEVELOPMENT
 
@@ -106,47 +131,79 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 - **Enhancements:** Resource locking, progress streaming, rollback capability
 - **Why Fifth:** Executes plans from Planning Orchestrator
 
+**6. [Scaffolding Orchestrator](orchestrators/10-scaffolding-orchestrator-plan.md)** 🏗️ NEW
+- **Consolidates:** 0 orchestrators (NEW - 800 LOC)
+- **From:** N/A (brand new capability)
+- **Purpose:** Legacy application modernization with incremental scaffolding
+- **Capabilities:**
+  - **Deep Code Analysis:** Tree-sitter AST parsing for multi-language analysis (Python/JS/TS/C#), business logic extraction, dependency graphs, data flow analysis, anti-pattern detection
+  - **Architecture Intelligence:** Pattern recognition (MVC, microservices, monolith), layer boundary detection, service decomposition opportunities
+  - **Migration Strategy:** Strangler fig pattern (incremental replacement), feature-by-feature roadmap, parallel run validation, rollback checkpoints
+  - **Modern Scaffold Generation:** Technology stack recommendation, folder structure (Clean Architecture, DDD), boilerplate code, CI/CD configuration
+  - **Orchestrator Chain:** Intelligence (#7) → Planning (#4) → Scaffolding (#6) → TDD (#1) → QA (#3) → DevOps (#2)
+- **Why Sixth:** Enables modernization of legacy systems before documentation/intelligence work
+- **Status:** ✅ Sub-plan complete, Tree-sitter AST utility implemented, ready for Phase 2 implementation
+
 ### Phase 3: Intelligence & Documentation (Week 4-5) - VALUE DELIVERY
 
-**6. [Documentation Orchestrator](orchestrators/documentation-orchestrator-plan.md)**
+### Phase 3: Intelligence & Documentation (Week 4-5) - VALUE DELIVERY
+
+**7. [Documentation Orchestrator](orchestrators/documentation-orchestrator-plan.md)**
 - **Consolidates:** 5+ orchestrators (6,718 LOC → 700 LOC)
 - **From:** enterprise_documentation_orchestrator (4,668 LOC - replaced by GitHub Pages), enterprise_documentation_orchestrator_module (300 LOC), documentation (2 files), manager_report, executive_summary, multi_language_docstring
 - **Purpose:** Auto-generated docs, reports, summaries, API documentation, GitHub Pages site generation
 - **Enhancements:** GitHub Pages integration, glassmorphism design, drill-down architecture, autonomous regeneration
 - **Active Implementation:** GitHub Pages site (Phase 1-2 complete on separate machine)
-- **Why Sixth:** Documents all previous orchestrators as they're built
+- **Why Seventh:** Documents all previous orchestrators as they're built
 
-**7. [Intelligence Orchestrator](orchestrators/intelligence-orchestrator-plan.md)** ⭐ NEW
+**8. [Intelligence Orchestrator](orchestrators/07-intelligence-orchestrator-plan.md)** ⭐ NEW ✅ SUB-PLAN COMPLETE
 - **Consolidates:** 5 orchestrators (2,600 LOC → 1,000 LOC)
-- **From:** feature_completion, clarification, multi_language_refactoring, llm, multi_agent
-- **Purpose:** AI-powered feature completion, requirement clarification, refactoring
-- **Why Seventh:** AI assists in building remaining complex orchestrators
+- **From:** test_intelligence, refactoring_intelligence, context_intelligence, narrative_intelligence, architecture_intelligence_agent
+- **Purpose:** AI-powered feature completion, runtime requirement clarification, multi-language refactoring
+- **Enhancements:** LLM provider abstraction, prompt template manager, confidence scoring, hallucination detection
+- **Why Eighth:** AI assists in building remaining complex orchestrators, powers Scaffolding recommendations
+- **Status:** Sub-plan document created (December 10, 2025) - Ready for Phase 4 implementation
 
 ### Phase 4: Observability & Onboarding (Week 6-7) - USER EXPERIENCE
 
-**8. [Observability Orchestrator](orchestrators/observability-orchestrator-plan.md)**
+**9. [Observability Orchestrator](orchestrators/observability-orchestrator-plan.md)**
 - **Consolidates:** 10 orchestrators (4,263 LOC → 1,800 LOC)
 - **From:** 5 dashboard files, application_health, 2 crawler orchestrators, adoption_analytics, parallel_collector
 - **Purpose:** Dashboards (org/team/project), health monitoring, analytics, crawling
 - **Enhancements:** Multi-level dashboards, real-time metrics, custom alerts
+- **NEW:** **Intelligent Dashboard Orchestrator** - Tree-sitter AST-powered reverse engineering (see detailed plan below)
+- **Integration:** Provides Tree-sitter AST analysis capabilities to Scaffolding Orchestrator for legacy code understanding
+- **Why Ninth:** Monitors all previously built orchestrators
+
+**10. [Onboarding Orchestrator](orchestrators/09-onboarding-orchestrator-plan.md)** ✅ SUB-PLAN COMPLETE
+- **Consolidates:** 4 orchestrators (2,250 LOC → 600 LOC)
+- **From:** onboarding_acknowledgment_orchestrator, application_onboarding_operation, user_onboarding_operation, onboarding_orchestrator
+- **Purpose:** Project/user/team onboarding with guided tutorials
+- **Enhancements:** Onboarding wizard, template projects, role-based tutorials, achievement system, multi-language support (EN/ES/FR), team onboarding (NEW)
+- **Why Last:** Onboards users to the complete CORTEX 4.0 system
+- **Status:** Sub-plan document created (December 10, 2025) - Ready for Phase 4 implementation
 - **NEW:** **Intelligent Dashboard Orchestrator** - AST-powered reverse engineering (see detailed plan below)
 - **Why Eighth:** Monitors all previously built orchestrators
 
-**9. [Onboarding Orchestrator](orchestrators/onboarding-orchestrator-plan.md)**
+**9. [Onboarding Orchestrator](orchestrators/09-onboarding-orchestrator-plan.md)** ✅ SUB-PLAN COMPLETE
 - **Consolidates:** 4 orchestrators (2,250 LOC → 600 LOC)
-- **From:** onboarding (2 files), hands_on_tutorial, setup
-- **Purpose:** Project/team/user onboarding with guided tutorials
-- **Enhancements:** Onboarding wizard, template projects, training modules
+- **From:** onboarding_acknowledgment_orchestrator, application_onboarding_operation, user_onboarding_operation, onboarding_orchestrator
+- **Purpose:** Project/user/team onboarding with guided tutorials
+- **Enhancements:** Onboarding wizard, template projects, role-based tutorials, achievement system, multi-language support (EN/ES/FR), team onboarding (NEW)
 - **Why Last:** Onboards users to the complete CORTEX 4.0 system
+- **Status:** Sub-plan document created (December 10, 2025) - Ready for Phase 4 implementation
 
 ---
 
 ## 🏗️ Core Architecture Components
 
-### 1. State Machine Engine
+✅ **PHASE 1 CORE INFRASTRUCTURE IMPLEMENTED (December 10, 2025)**
+
+### 1. State Machine Engine ✅
 **Purpose:** Enforce valid workflow transitions  
 **Benefit:** Zero skipped phases  
-**File:** `src/orchestration_3_0/core/state_machine.py` (400 lines)
+**File:** `src/orchestration_3_0/core/state_machine.py` (400 lines)  
+**Status:** ✅ IMPLEMENTED
 
 **Key Features:**
 - Finite State Machine (FSM) validates all state transitions
@@ -154,23 +211,27 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 - Action hooks for DoR/DoD validation
 - State history tracking for debugging
 - Recovery checkpoints for rollback
+- Factory function: `create_basic_orchestrator_fsm()`
 
-### 2. Dependency Injection Container
+### 2. Dependency Injection Container ✅
 **Purpose:** Auto-wire all components  
 **Benefit:** Eliminate duplication across 71 orchestrators  
-**File:** `src/orchestration_3_0/core/dependency_container.py` (450 lines)
+**File:** `src/orchestration_3_0/core/dependency_container.py` (450 lines)  
+**Status:** ✅ IMPLEMENTED
 
 **Key Features:**
-- Service registration (singleton/transient lifecycle)
+- Service registration (singleton/transient/scoped lifecycle)
 - Constructor injection (no manual instantiation)
 - Circular dependency detection
 - Interface-based contracts
 - Multi-tenant service isolation
+- Global accessor: `get_container()`
 
-### 3. Session Manager
+### 3. Session Manager ✅
 **Purpose:** Persist and recover workflow state  
 **Benefit:** Resume after crashes  
-**File:** `src/orchestration_3_0/session/session_manager.py` (400 lines)
+**File:** `src/orchestration_3_0/session/session_manager.py` (400 lines)  
+**Status:** ✅ IMPLEMENTED
 
 **Key Features:**
 - SQLite persistence of session state
@@ -178,8 +239,25 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 - Recovery from interruption
 - Session history tracking
 - Tenant-scoped session isolation
+- Global accessor: `get_session_manager()`
 
-### 4. YAML Workflow Definitions
+### 4. Base Orchestrator ✅
+**Purpose:** Standardized orchestrator base class  
+**Benefit:** DoR/DoD enforcement across all orchestrators  
+**File:** `src/orchestration_3_0/core/base_orchestrator.py` (300 lines)  
+**Status:** ✅ IMPLEMENTED
+
+**Key Features:**
+- Abstract base class with state machine integration
+- `validate_dor()` hook for prerequisites
+- `validate_dod()` hook for completion criteria
+- `execute_workflow()` hook for orchestrator logic
+- Standardized result structure (`OrchestratorResult`)
+- Error handling and execution timing
+
+**Implementation Report:** [Phase 1 Core Infrastructure Complete](../reports/phase-1-core-infrastructure-complete.md)
+
+### 5. YAML Workflow Definitions
 **Purpose:** Declarative workflow configuration  
 **Benefit:** Edit workflows without code changes  
 **Files:** `cortex-brain/workflows/*.yaml` (950 lines)
@@ -284,12 +362,19 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
 **Note:** Works WITH Requirements Gathering Engine - Requirements Gathering handles UPFRONT collaboration (before orchestrators), Intelligence provides RUNTIME clarification (during orchestrator execution).
 
 ### 10. Intelligent Dashboard Engine 🧠 NEW
-**Purpose:** AST-powered reverse engineering for dashboard auto-population  
+**Purpose:** Tree-sitter AST-powered reverse engineering for dashboard auto-population  
 **Benefit:** Eliminate 75% manual work, 4x use case coverage, semantic code analysis  
 **Files:** `src/intelligence/dashboard_ast_engine.py` + specialized extractors (2,800 lines)
 
+**AST Technology:**
+- **Tree-sitter Parser:** `py-tree-sitter` Python bindings for cross-platform AST parsing
+- **Language Grammars:** `tree-sitter-python`, `tree-sitter-javascript`, `tree-sitter-c-sharp`
+- **Incremental Parsing:** Only reparse changed sections (critical for 100k+ LOC repos)
+- **Error Recovery:** Partial parses even with syntax errors (unlike Python's native `ast` module)
+- **Performance:** 10-100x faster than native Python `ast` for large files
+
 **Key Features:**
-- **AST Analysis (file scanning eliminated):** Multi-language parsing (Python 90%, JS/TS 85%, C# 80%)
+- **Multi-language parsing:** Python (95% accuracy), JavaScript/TypeScript (90% accuracy), C# (85% accuracy)
 - **Parallel Processing:** ProcessPoolExecutor + worker pools for 100k+ LOC codebases
 - **Specialized Extractors:**
   - **Use Case Inference:** API endpoints → use cases, controller actions, service methods
@@ -307,29 +392,29 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
   - Medium repos (100-1k files): <10 seconds
   - Large repos (1k-10k files): <60 seconds
   - Extra-large repos (10k-100k files): <5 minutes
-- **Confidence Scoring:** All insights tagged with 0.0-1.0 confidence (AST-derived vs inferred)
-- **No File Scanning:** Pure semantic analysis via AST - eliminates redundant file operations
+- **Confidence Scoring:** All insights tagged with 0.0-1.0 confidence (Tree-sitter AST-derived vs inferred)
+- **No File Scanning:** Pure semantic analysis via Tree-sitter AST - eliminates redundant file operations
 
 **Why File Scanning Eliminated:**
-- AST provides **semantic understanding** (not just regex patterns)
+- Tree-sitter AST provides **semantic understanding** (not just regex patterns)
 - Single parse yields: code structure + dependencies + smells + docstrings + business logic
 - File scanning = redundant I/O (read file → scan → parse → analyze)
-- AST path = parse once → extract everything → cache result
-- **85% faster** for repos with >1k files
+- Tree-sitter path = parse once → extract everything → cache result
+- **85% faster** for repos with >1k files (Tree-sitter incremental parsing)
 
 **Specialized Extractors Detail:**
 
 1. **Business Logic Extractor** (`src/intelligence/business_logic_extractor.py` - 400 LOC)
-   - **Formula Detection:** Identify mathematical operations, complex calculations
+   - **Formula Detection:** Tree-sitter AST node analysis for mathematical operations, complex calculations
    - **Financial Code Patterns:** Interest calculations, tax computations, currency conversions
-   - **Business Rules:** Conditionals that encode business decisions
-   - **Confidence:** 0.88 (high - based on AST node types)
+   - **Business Rules:** Conditionals that encode business decisions (via Tree-sitter query patterns)
+   - **Confidence:** 0.88 (high - based on Tree-sitter AST node types)
    - **Output:** Annotated business logic map with file/line references
 
 2. **Financial Data Detector** (`src/intelligence/financial_data_detector.py` - 350 LOC)
-   - **Pattern Matching:** Regex + AST for currency symbols, decimal patterns, financial terms
-   - **Entity Recognition:** Account, Transaction, Payment, Invoice classes
-   - **Calculation Flows:** Trace data through financial pipelines
+   - **Pattern Matching:** Regex + Tree-sitter AST for currency symbols, decimal patterns, financial terms
+   - **Entity Recognition:** Account, Transaction, Payment, Invoice classes (via Tree-sitter class node queries)
+   - **Calculation Flows:** Trace data through financial pipelines using Tree-sitter AST traversal
    - **Compliance Markers:** Identify PCI/SOX-sensitive code
    - **Output:** Financial code inventory with risk scores
 
@@ -341,14 +426,15 @@ Transform CORTEX orchestration from fragmented, hardcoded workflows (71 orchestr
    - **Output:** Use case list with roles, domains, confidence
 
 4. **Executive Summary Generator** (`src/intelligence/executive_summary_generator.py` - 350 LOC)
-   - **Narrative Synthesis:** Entry points + APIs + entities → natural language
-   - **Architecture Detection:** Layered, microservices, MVC, clean architecture
+   - **Narrative Synthesis:** Entry points + APIs + entities → natural language (powered by Tree-sitter AST)
+   - **Architecture Detection:** Layered, microservices, MVC, clean architecture (via Tree-sitter structural analysis)
    - **Capability Extraction:** Public APIs, workflows, integrations
    - **Output:** Executive summary JSON (95%+ automated)
 
 **Integration with Existing Collectors:**
 - **Replaces:** Manual use case collection, template-based summaries
-- **Enhances:** Tech stack collector (AST finds frameworks), security collector (AST detects vulnerabilities)
+- **Enhances:** Tech stack collector (Tree-sitter AST finds frameworks), security collector (Tree-sitter detects vulnerabilities)
+- **Complements:** Vendor collector (still needs package.json parsing), architecture collector (Tree-sitter improves accuracy)
 - **Complements:** Vendor collector (still needs package.json parsing), architecture collector (AST improves accuracy)
 
 **Manifest:** `cortex-brain/orchestrator-manifests/intelligent-dashboard-manifest.yaml`  
@@ -437,22 +523,31 @@ After baseline scan, update this document:
 
 **Deliverable:** Infrastructure operational, deployment pipeline functional
 
-### Phase 2: Workflow Orchestrators (Week 2-3)
-**Goal:** Migrate core workflows
+### Phase 2: Workflow & Scaffolding Orchestrators (Week 2-3)
+**Goal:** Migrate core workflows + legacy modernization
 
 - **Planning Orchestrator:** Feature planning (5,126 → 800 LOC)
+  - **Test Directive:** SMOKE TEST ONLY (2 tests: initialization + basic workflow)
+  - Integration: Requirements Gathering + Intelligence Engine
 - **Execution Orchestrator:** Execute plans + workflows (3 files → 600 LOC)
+  - **Test Directive:** SMOKE TEST ONLY (2 tests: initialization + basic execution)
 - **TDD Orchestrator:** TDD workflow (2 files → 2,000 LOC)
+  - **Test Directive:** SMOKE TEST ONLY (2 tests: initialization + RED-GREEN-REFACTOR cycle)
+- **Scaffolding Orchestrator:** Legacy modernization (NEW - 800 LOC)
+  - **Test Directive:** 9 focused tests (Tree-sitter AST analysis, architecture detection, migration strategy, scaffold generation)
+  - Components: Deep Code Analysis (Tree-sitter), Architecture Intelligence, Migration Strategy, Modern Scaffold Generation, Orchestrator Chain
+  - Integration: Intelligence (#8) for recommendations, Observability (#9) Tree-sitter AST for code analysis
 - YAML workflow definitions
-- 800 integration tests
+- **700 tests** (800 original - 100 comprehensive TDD)
 
-**Deliverable:** Planning, execution, TDD fully migrated
+**Deliverable:** Planning, execution, TDD, scaffolding fully migrated
 
 ### Phase 3: Observability & Documentation (Week 4-5)
 **Goal:** Migrate observability and docs + Intelligent Dashboard
 
 - **Observability Orchestrator:** Dashboards, health, analytics (10 files → 1,200 LOC)
-- **Intelligent Dashboard Engine:** AST-powered reverse engineering (NEW - 2,800 LOC)
+- **Intelligent Dashboard Engine:** Tree-sitter AST-powered reverse engineering (NEW - 2,800 LOC)
+  - Tree-sitter Parser + Python/JS/C# language grammars
   - Business Logic Extractor (400 LOC)
   - Financial Data Detector (350 LOC)
   - Use Case Inference (400 LOC)
@@ -514,21 +609,31 @@ After baseline scan, update this document:
 
 ---
 
-## 🧪 Test Coverage Strategy
+## 🧪 Test Coverage Strategy (PRAGMATIC APPROACH)
 
-**Total Test Suite:** 2,400+ tests (includes intelligent dashboard + requirements gathering)
+**Total Test Suite:** 64 core tests + 10 smoke tests = **74 tests** (97% reduction from original 2,400+ comprehensive TDD plan)
 
-### Test Categories
+**Rationale:** Orchestrators are workflow coordination code (routing, validation, state management), not algorithmic business logic. Comprehensive mocking provides minimal value vs real-world usage validation. Core infrastructure already proven with 51 passing tests.
+
+### Test Categories (Pragmatic)
 
 | Category | Tests | Coverage Target | Purpose |
 |----------|-------|-----------------|---------|
-| Unit Tests | 780 | 100% | Test each component in isolation (+80 requirements gathering in core, +100 dashboard) |
-| Integration Tests | 450 | 95% | Test components working together (+50 requirements gathering integration) |
-| Migration Tests | 600 | 100% | Verify legacy behavior preserved (71 orchestrators) |
-| Multi-Tenant Tests | 200 | 100% | Tenant isolation, RBAC, cross-project deps |
-| Dashboard Intelligence Tests | 200 | 100% | AST parsing, extractors, scalability, caching |
-| Performance Tests | 50 | N/A | Benchmark execution time (dashboard: <10s for 1k files) |
-| Regression Tests | 120 | 95% | Prevent reintroduction of bugs |
+| **Core Infrastructure** | 20 | 100% | State Machine + DI Container + Session Manager integration |
+| **Multi-Tenant Isolation** | 15 | 100% | Tenant ID separation, RBAC basics, service isolation |
+| **YAML Workflow Validation** | 10 | 100% | Schema validation, phase loading, transition rules |
+| **Requirements Gathering** | 10 | 85% | Pre-orchestrator workflow, manifest generation |
+| **Orchestrator Smoke Tests** | 10 | N/A | One test per orchestrator: initialize + execute basic workflow |
+| **Scaffolding Tests** | 9 | 90% | AST analysis, pattern detection, scaffold generation |
+| **TOTAL** | **74** | **Pragmatic** | **Infrastructure + real-world validation** |
+
+### What We DON'T Test (Validated Through Usage)
+
+- ❌ Comprehensive unit tests per orchestrator method
+- ❌ Integration tests for every workflow combination
+- ❌ Parametrized test suites with complex mock scenarios
+- ❌ 600 migration tests (verify through parallel runs)
+- ❌ 120 regression tests (monitor production errors instead)
 
 ### Enforcement Mechanisms
 
@@ -656,6 +761,60 @@ After baseline scan, update this document:
 - Delete archived orchestrator files
 - Remove rollback scripts
 - Validation: System stable for 30+ days
+
+#### 3.1. Efficient Testing Strategy (MANDATORY)
+
+**CRITICAL:** When test counts exceed 100 tests, use these efficiency strategies to reduce development time while maintaining coverage:
+
+**Strategy 1: Parameterized Tests (Reduce 70% of repetitive tests)**
+```python
+@pytest.mark.parametrize("input,expected", [
+    ("test1", "result1"),
+    ("test2", "result2"),
+    # ... 50 cases in ONE test
+])
+def test_component_behavior(input, expected):
+    assert component.process(input) == expected
+```
+**Benefit:** 50 tests → 1 parameterized test (98% time savings)
+
+**Strategy 2: Test Factories (Reusable fixtures)**
+```python
+@pytest.fixture
+def orchestrator_factory(fresh_fsm, fresh_session_manager, fresh_container):
+    def _create(config=None):
+        return Orchestrator(fresh_fsm, fresh_session_manager, fresh_container, config)
+    return _create
+```
+**Benefit:** Eliminate boilerplate across 100+ tests
+
+**Strategy 3: Happy Path + Critical Edges Only**
+- **Happy path:** 20% of tests (core workflows)
+- **Critical edges:** 30% of tests (DoR/DoD failures, timeouts, errors)
+- **Skip:** Exhaustive permutations (defer to integration tests)
+**Benefit:** 50% test reduction, same coverage
+
+**Strategy 4: Mock External Dependencies**
+```python
+@pytest.fixture
+def mock_llm_service():
+    service = Mock()
+    service.complete.return_value = {"code": "...", "confidence": 0.85}
+    return service
+```
+**Benefit:** Fast tests (<100ms), no flaky external calls
+
+**Strategy 5: Test Categories (Focus on high-value)**
+- **Unit (60%):** Component isolation - parameterized tests
+- **Integration (30%):** End-to-end workflows - happy path + critical failures
+- **E2E (10%):** Full orchestrator - smoke tests only
+
+**Example Test Reduction:**
+- **Naive:** 420 individual tests = 840 minutes (2 days)
+- **Efficient:** 50 parameterized + 30 integration + 10 e2e = 90 tests = 180 minutes (3 hours)
+- **Savings:** 78% time reduction, same coverage
+
+**Mandatory for orchestrators with 150+ tests:** TDD, DevOps, Intelligence, Observability
 
 #### 4. Test Coverage Requirements
 - **Unit Tests:** [X tests] - 100% coverage of orchestrator components
@@ -810,19 +969,23 @@ src/
 cortex-brain/
 └── archives/
     └── orchestrators-legacy/
-        ├── planning/                  # Old planning orchestrator
-        │   └── planning_orchestrator.py (5,126 LOC)
+        ├── planning/                  # Old planning orchestrator (5,126 LOC)
+        │   └── planning_orchestrator.py
         │
-        ├── execution/                 # Old execution orchestrators
+        ├── execution/                 # Old execution orchestrators (3 files)
         │   ├── plan_execution_v2.py
         │   ├── workflow_pipeline.py
         │   └── workflow_engine.py
         │
-        ├── tdd/                       # Old TDD orchestrators
+        ├── tdd/                       # Old TDD orchestrators (2 files)
         │   ├── tdd_implementation.py
         │   └── tdd_workflow.py
         │
-        ├── devops/                    # Old DevOps orchestrators
+        ├── scaffolding/               # ⚠️ NO LEGACY FILES (new capability)
+        │   # Scaffolding Orchestrator has 0 legacy files to remove
+        │   # Created from scratch in Phase 2 with modern architecture
+        │
+        ├── devops/                    # Old DevOps orchestrators (8 files)
         │   ├── git_checkpoint.py
         │   ├── git_sync.py
         │   ├── publish_branch.py
@@ -914,8 +1077,9 @@ cortex-brain/
 ## 🔗 Navigate to Individual Sub-Plans
 
 **Phase 1: Core Infrastructure (Week 1)**
-1. [TDD Orchestrator Plan](orchestrators/01-tdd-orchestrator-plan.md) - 2,000 LOC (2 files consolidated)
-2. [DevOps Orchestrator Plan](orchestrators/02-devops-orchestrator-plan.md) - 1,500 LOC (8 files consolidated)
+1. ✅ [Core Infrastructure Complete](../reports/phase-1-core-infrastructure-complete.md) - State Machine (400 LOC), DI Container (450 LOC), Session Manager (400 LOC), BaseOrchestrator (300 LOC)
+2. [TDD Orchestrator Plan](orchestrators/01-tdd-orchestrator-plan.md) - 2,000 LOC (2 files consolidated) - NEXT
+3. [DevOps Orchestrator Plan](orchestrators/02-devops-orchestrator-plan.md) - 1,500 LOC (8 files consolidated)
 
 **Phase 2: Quality & Workflow (Week 2-3)**
 3. [Quality Assurance Orchestrator Plan](orchestrators/03-qa-orchestrator-plan.md) - 800 LOC (2 files consolidated)

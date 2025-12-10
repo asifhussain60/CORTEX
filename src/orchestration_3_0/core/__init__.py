@@ -1,12 +1,53 @@
-"""
-Core orchestration infrastructure.
+"""Core infrastructure for CORTEX 4.0 orchestrators."""
 
-Contains shared components for all orchestrators:
-- State Machine: FSM-based workflow execution
-- Dependency Container: Auto-wiring and service injection
-- Session Manager: State persistence and recovery
-- Base Orchestrator: Abstract base class for all orchestrators
-"""
+from .state_machine import (
+    StateMachine,
+    OrchestratorStates,
+    StateTransition,
+    TransitionResult,
+    create_basic_orchestrator_fsm
+)
+
+from .dependency_container import (
+    DependencyContainer,
+    ServiceLifecycle,
+    ServiceNotFoundError,
+    CircularDependencyError,
+    get_container,
+    reset_container,
+    create_container
+)
+
+from .base_orchestrator import (
+    BaseOrchestrator,
+    OrchestratorResult,
+    ValidationResult,
+    WorkflowContext
+)
+
+__all__ = [
+    # State Machine
+    'StateMachine',
+    'OrchestratorStates',
+    'StateTransition',
+    'TransitionResult',
+    'create_basic_orchestrator_fsm',
+    
+    # Dependency Injection
+    'DependencyContainer',
+    'ServiceLifecycle',
+    'ServiceNotFoundError',
+    'CircularDependencyError',
+    'get_container',
+    'reset_container',
+    'create_container',
+    
+    # Base Orchestrator
+    'BaseOrchestrator',
+    'OrchestratorResult',
+    'ValidationResult',
+    'WorkflowContext'
+]
 
 __all__ = [
     "BaseOrchestrator",
