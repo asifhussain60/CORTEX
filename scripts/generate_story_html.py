@@ -42,16 +42,16 @@ CHAPTER_IMAGES = {
     "prologue": "prologue-deadline.webp",
     "chapter1": "ch1-goldfish-theory.webp",
     "chapter2": "ch2-skull-moment.webp",
-    "chapter3": "ch3-sqlite-rebellion.webp",
-    "chapter4": "ch4-agent-uprising.webp",
-    "chapter5": "ch5-knowledge-graph.webp",
-    "chapter6": "ch6-token-crisis.webp",
-    "chapter7": "ch7-hebbian-revelation.webp",
-    "chapter8": "ch8-template-evolution.webp",
-    "chapter9": "ch9-platform-challenge.webp",
-    "chapter10": "ch10-awakening.webp",
-    "chapter11": "ch11-revolution.webp",
-    "epilogue": "epilogue-six-months.webp"
+    "chapter3": "ch3-backup-chaos.webp",
+    "chapter4": "ch4-agent-chaos.webp",
+    "chapter5": "ch5-graph-overload.webp",
+    "chapter6": "ch6-token-mountain.webp",
+    "chapter7": "ch7-capture-moment.webp",
+    "chapter8": "ch8-platform-chaos.webp",
+    "chapter9": "ch9-brute-force.webp",
+    "chapter10": "ch10-personality-emergence.webp",
+    "chapter11": "ch11-the-revolution.webp",
+    "epilogue": "epilogue-six-months-later.webp"
 }
 
 # Architecture learning callouts for each chapter
