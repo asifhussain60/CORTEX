@@ -104,12 +104,26 @@ body {
 }
 
 .hero-logo {
-    width: 200px;
+    width: 300px;
     height: auto;
     margin: 0 auto 2rem;
     display: block;
     animation: fadeInScale 1s ease-out;
-    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+    filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6));
+}
+
+/* Logo responsive breakpoints */
+@media (max-width: 1024px) {
+    .hero-logo {
+        width: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-logo {
+        width: 200px;
+        filter: drop-shadow(0 0 25px rgba(0, 212, 255, 0.5));
+    }
 }
 
 @keyframes fadeInScale {
@@ -144,12 +158,26 @@ body {
 .hero h1 {
     font-size: 4rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-acronym {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.hero-acronym strong {
+    color: var(--accent-primary);
+    font-weight: 700;
 }
 
 .hero .tagline {
@@ -165,6 +193,158 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+/* Hero Large Button Grid */
+.cta-buttons-large {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 220px));
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.btn-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    min-height: 160px;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.btn-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-hero:hover::before {
+    opacity: 1;
+}
+
+.btn-hero-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.btn-hero:hover .btn-hero-icon {
+    transform: scale(1.15);
+}
+
+.btn-hero-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.btn-hero-caption {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+    display: block;
+    font-weight: 500;
+}
+
+/* Primary Button - CORTEX Bible */
+.btn-hero-primary {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+}
+
+.btn-hero-primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 212, 255, 0.4);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.25), rgba(123, 97, 255, 0.25));
+}
+
+/* Secondary Button - Explore Features */
+.btn-hero-secondary {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(102, 126, 234, 0.15));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(123, 97, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(123, 97, 255, 0.2);
+}
+
+.btn-hero-secondary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(123, 97, 255, 0.4);
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.25), rgba(102, 126, 234, 0.25));
+}
+
+/* Story Button - The Awakening */
+.btn-hero-story {
+    background: linear-gradient(135deg, rgba(255, 100, 200, 0.15), rgba(200, 100, 255, 0.15));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 100, 200, 0.3);
+    box-shadow: 0 8px 32px rgba(255, 100, 200, 0.2);
+}
+
+.btn-hero-story:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(255, 100, 200, 0.4);
+    background: linear-gradient(135deg, rgba(255, 100, 200, 0.25), rgba(200, 100, 255, 0.25));
+}
+
+/* Vision Button - 4.0 Vision */
+.btn-hero-vision {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 212, 255, 0.15));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 255, 136, 0.2);
+}
+
+.btn-hero-vision:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 255, 136, 0.4);
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.25), rgba(0, 212, 255, 0.25));
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cta-buttons-large {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+    }
+    
+    .btn-hero {
+        min-height: 140px;
+        padding: 1.5rem 1rem;
+    }
+    
+    .btn-hero-icon {
+        font-size: 2.5rem;
+    }
+    
+    .btn-hero-text {
+        font-size: 1rem;
+    }
+    
+    .hero-acronym {
+        font-size: 0.95rem;
+    }
 }
 
 @keyframes fadeInUp {
