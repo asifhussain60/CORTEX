@@ -12,20 +12,45 @@
 ```
 Black and white cartoon, split-panel comparison:
 
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
+
 LEFT PANEL - "WHAT I BUILT":
 - Whiteboard completely covered in nodes and edges
-- Seventeen different relationship types labeled
-- Arrows connecting everything to everything
-- Mr. Codenstein stepping back, overwhelmed
-- Labels: "epistemological", "ontological", "semantic", etc.
+- Seventeen different relationship types labeled with arrows
+- Nodes connecting everything to everything (complete spaghetti)
+- Mr. Codenstein stepping back, hands on head, overwhelmed
+  • Wild WHITE hair (Einstein spiky), thick round black glasses
+  • White lab coat with coffee stains, hunched posture, stubble
+  • Expression: Horror at own creation
+- Complex labels visible: "epistemological", "ontological", "semantic", "temporal", "causal", etc.
+- Visual chaos: impossible to follow any single path
 
 RIGHT PANEL - "WHAT I NEEDED":
-- Same whiteboard, clean
-- Three simple relationship types: "references", "influences", "conflicts-with"
-- Miss G's apparition pointing to simple version
+- Same whiteboard, completely clean and simple
+- Three clear relationship types with clean arrows:
+  * "references" (solid arrow)
+  * "influences" (dashed arrow)
+  * "conflicts-with" (zigzag arrow)
+- Only 6-7 nodes, easy to understand
+- Miss G's ethereal apparition pointing to simple version
+  • Shoulder-length flowing hair, 70% translucent with shimmer
+  • Business casual, arms crossed with one hand extended pointing
+  • Gentle ghostly effect, knowing smile
 - Mr. Codenstein facepalming at obvious solution
+  • Same features, now with hand covering face
+  • Body language: "Why didn't I think of that?"
 
-Visual contrast: Complexity vs simplicity, overengineering humor.
+VISUAL CONTRAST:
+- Left: Complexity overwhelming (dark, crowded, chaotic)
+- Right: Simplicity elegant (clean, sparse, obvious)
+- Horizontal divide line between panels emphasizing before/after
+
+DETAILS:
+- Left panel has "v1.0" written in corner
+- Right panel has "v2.0 - ACTUALLY USEFUL" 
+- Coffee mug on desk (stale, mug #12)
+
+Style: Visual contrast through density vs whitespace. Think XKCD's engineering comics meets Dilbert's overcomplexity jokes. MAINTAIN EXACT CHARACTER FEATURES from character sheet.
 ```
 
 ---

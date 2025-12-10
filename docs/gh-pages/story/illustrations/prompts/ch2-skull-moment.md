@@ -12,6 +12,8 @@
 ```
 Black and white cartoon illustration in newspaper comic strip style. Three-panel sequence showing critical intervention moment:
 
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
+
 PANEL 1 (TOP, HORIZONTAL):
 - Close-up of Mr. Codenstein's hand hovering over Enter key on keyboard
 - Finger positioned but NOT touching key yet
@@ -22,7 +24,10 @@ PANEL 1 (TOP, HORIZONTAL):
 
 PANEL 2 (MIDDLE, DRAMATIC MOMENT):
 - Miss G's ghostly hand appearing through air, palm out in STOP gesture
+  • 70% translucent hand with shimmer effect, light radiating lines
 - Mr. Codenstein's face frozen mid-keystroke (eyes wide with realization)
+  • Wild WHITE hair, thick round black glasses, stubble, gaunt cheeks
+  • Lab coat with coffee stains visible
 - Dramatic speed lines showing sudden halt
 - Speech bubble from Miss G: "*Finally. You were about to do it again.*"
 - Keyboard backlit dramatically for emphasis
@@ -33,20 +38,23 @@ PANEL 3 (BOTTOM, RESOLUTION):
 - Rough skull doodle beside title
 - Six numbered rules listed (intentionally illegible - just suggest text)
 - Mr. Codenstein staring at whiteboard with revelation expression
-- Miss G's apparition beside whiteboard, arms crossed, satisfied smile
+  • Full body: hunched posture, lab coat, pocket protector, disheveled
+- Miss G's apparition beside whiteboard
+  • Shoulder-length flowing hair, 70% translucent, business casual
+  • Arms crossed, satisfied smile, gentle ghostly effect
+- "Rule #1: Creator is biggest threat" visible on whiteboard
 
 VISUAL STORYTELLING:
 - Freeze-frame effect showing intervention timing
 - Before/after: destruction → protection
 - Miss G as guardian angel (but imaginary)
-- "Rule #1: Creator is biggest threat" visible on whiteboard
 
 DETAILS:
 - Git commit history showing 47 backups in background
 - Coffee mug #6 (getting stale) beside keyboard
 - Small panel showing what WOULD have happened (deleted files icon with X)
 
-Style: Dynamic action lines, dramatic pause effect, comic book freeze-frame aesthetic. Think Spider-Man comics - moment of intervention captured with visual drama.
+Style: Dynamic action lines, dramatic pause effect, comic book freeze-frame aesthetic. Think Spider-Man comics - moment of intervention captured with visual drama. MAINTAIN EXACT CHARACTER FEATURES from character sheet.
 ```
 
 ---

@@ -11,14 +11,46 @@
 
 ```
 Black and white cartoon showing platform compatibility nightmare:
-- Three computer monitors side by side: Windows, Mac, Linux logos
-- Each screen showing different error message (same feature, different failures)
-- Mr. Codenstein running between them frantically with arms full of USB cables
-- Sweat drops flying, hair more disheveled than usual
-- Miss G's apparition facepalming in background
-- Small whiteboard showing "Works on MY machine" crossed out
 
-Visual comedy: Physical impossibility of managing three platforms simultaneously.
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
+
+MAIN SCENE - THREE MONITORS:
+- Three computer monitors arranged side by side on desk
+- Left monitor: Windows logo with blue screen of death
+- Center monitor: Apple logo with spinning beach ball
+- Right monitor: Linux penguin with terminal error text
+- Each screen showing DIFFERENT error message for SAME feature
+- Error messages visible: "Path not found", "Permission denied", "Segmentation fault"
+
+MR. CODENSTEIN CHAOS:
+- Mr. Codenstein running between monitors frantically (motion blur effect)
+  • Wild WHITE hair even more disheveled, pointing in all directions
+  • Thick round black glasses falling off nose (barely hanging on)
+  • White lab coat flapping behind him from rapid movement
+  • Arms full of tangled USB cables, keyboard, mouse
+  • Multiple arms drawn (cartoon motion effect showing rapid movement)
+- Sweat drops flying from forehead
+- Expression: Panic mixed with exhaustion
+- Coffee mug knocked over on desk (spilled, adding to chaos)
+
+MISS G REACTION:
+- Miss G's ethereal apparition in background corner
+  • Shoulder-length flowing hair, 70% translucent with shimmer
+  • Business casual, gentle ghostly effect
+- Facepalming with one hand (ghostly hand covering face)
+- Other hand pointing to small whiteboard
+
+WHITEBOARD DETAIL:
+- Small whiteboard showing "Works on MY machine" crossed out in red
+- Below it: "Must work on ALL machines" underlined twice
+- Skull icon warning symbol
+
+VISUAL COMEDY:
+- Physical impossibility of being in three places at once
+- Tangled cables creating spaghetti mess
+- Each platform showing its signature failure mode
+
+Style: Motion lines emphasizing frantic energy, exaggerated impossible task. Think Looney Tunes physics meets developer reality. MAINTAIN EXACT CHARACTER FEATURES from character sheet.
 ```
 
 ---

@@ -11,14 +11,46 @@
 
 ```
 Black and white cartoon, classic eureka moment:
-- Mr. Codenstein with literal glowing lightbulb above head
-- Thought bubble showing journal/diary with conversation bubbles floating into it
-- Journal pages showing collaboration: "User asked...", "I suggested..."
-- Miss G's apparition in background with knowing smile
-- Small panel: Coffee mug #12 (moderately stale) = mid-project timing
-- Expression: Pure breakthrough joy
 
-Visual metaphor: Journal = conversation persistence, collaborative knowledge.
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
+
+CENTER CHARACTER:
+- Mr. Codenstein with literal glowing lightbulb above head (classic cartoon eureka)
+  • Wild WHITE hair (Einstein spiky), thick round black glasses
+  • White lab coat with coffee stains, hunched posture, stubble
+  • Expression: Pure breakthrough joy, wide eyes, open mouth smile
+  • Arms raised in victory/realization gesture
+  • Radiating lines around head showing enlightenment moment
+
+THOUGHT BUBBLE:
+- Large thought bubble emerging from Mr. Codenstein's head
+- Inside bubble: Open journal/diary with conversation entries
+- Conversation bubbles floating INTO the journal pages (visual metaphor for capture)
+- Journal pages showing visible text:
+  * "User asked about memory..."
+  * "I suggested four tiers..."
+  * "User taught me about..."
+- Small speech bubbles with user/AI icons showing dialogue being preserved
+
+MISS G IN BACKGROUND:
+- Miss G's ethereal apparition in corner/background
+  • Shoulder-length flowing hair, 70% translucent with shimmer
+  • Business casual, arms crossed, gentle ghostly effect
+  • Knowing smile (she knew he'd figure it out eventually)
+  • Slight nod of approval
+
+DETAILS:
+- Small panel in corner: Coffee mug #12 (moderately stale) on desk
+- Clock showing 2:47 AM (mid-project timing)
+- Whiteboard in background with "COLLABORATIVE KNOWLEDGE" written
+- Basement laboratory setting (computer monitors)
+
+VISUAL METAPHOR:
+- Journal = conversation persistence
+- Floating bubbles = collaborative dialogue being captured
+- Lightbulb = breakthrough insight moment
+
+Style: Classic cartoon eureka trope, clean line art emphasizing the breakthrough moment. Think Archimedes in bathtub meets Calvin and Hobbes epiphany scenes. MAINTAIN EXACT CHARACTER FEATURES from character sheet.
 ```
 
 ---

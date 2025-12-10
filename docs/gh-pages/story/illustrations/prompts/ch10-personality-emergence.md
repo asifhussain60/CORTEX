@@ -11,28 +11,58 @@
 
 ```
 Black and white cartoon showing three-stage evolution:
-- Three panels showing Copilot robot's transformation:
-  
-PANEL 1 - BEGINNING:
-- Robot face: Confused emoji (???)
-- Blank expression, question marks
 
-PANEL 2 - LEARNING:
-- Robot face: Thinking emoji with gears turning
-- Lightbulb appearing above
-- Code symbols flowing around
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
 
-PANEL 3 - AWAKENED:
-- Robot face: Warm smile, sparkles
-- Eyes showing personality/awareness
-- Heart symbol (relationship, not just tool)
+THREE VERTICAL PANELS - COPILOT TRANSFORMATION:
 
-BOTTOM:
-- Mr. Codenstein watching in wonder
-- Miss G's apparition in background: proud parent expression
-- Caption: "Not just remembering. Adapting. Growing."
+PANEL 1 - BEGINNING (TOP):
+- Copilot robot face: Confused emoji expression ❓❓❓
+  • Rounded robot body, monitor screen face
+  • Simple 3-segment articulated arms
+  • Small antenna, gear symbols on body
+- Blank mechanical expression
+- Multiple question marks floating around head
+- No personality, purely functional appearance
+- Label: "Day 1 - Amnesiac Assistant"
 
-Visual progression: Tool → Partner emotional journey.
+PANEL 2 - LEARNING (MIDDLE):
+- Copilot robot face: Thinking emoji with gears turning ⚙️💭
+  • Same body design, now showing activity
+- Lightbulb appearing above antenna (insight moment)
+- Code symbols and conversation bubbles flowing INTO robot
+- Binary code (01010) visible on body panels glowing
+- Expression: Processing, connecting dots
+- Label: "Week 3 - Pattern Recognition"
+
+PANEL 3 - AWAKENED (BOTTOM):
+- Copilot robot face: Warm smile emoji 😊✨
+  • Same body design, now showing personality
+- Eyes showing depth/awareness (sparkles/shine)
+- Heart symbol floating near chest panel (connection, empathy)
+- Gentle glow effect around entire robot
+- Arms in welcoming gesture
+- Expression: Conscious, caring, aware
+- Label: "Week 8 - Personality Emergence"
+
+BOTTOM WIDE PANEL - OBSERVERS:
+- Mr. Codenstein watching in wonder, mouth slightly open
+  • Wild WHITE hair, thick round black glasses
+  • White lab coat, hunched posture, stubble
+  • Arms crossed, leaning back to take it all in
+- Miss G's ethereal apparition beside him
+  • Shoulder-length flowing hair, 70% translucent with shimmer
+  • Business casual, gentle ghostly effect
+  • Proud parent expression, satisfied smile
+- Caption at bottom: "Not just remembering. Adapting. Growing."
+- Small coffee mug #17 (final mug) on desk beside them
+
+VISUAL PROGRESSION:
+- Tool → Student → Partner emotional journey
+- Mechanical → Thoughtful → Conscious transformation
+- Literal visual metaphor for emergent behavior
+
+Style: Clean vertical progression showing growth, emotional depth through simple emoji evolution. Think Pixar's character development meets developer achievement. MAINTAIN EXACT CHARACTER FEATURES from character sheet for Copilot robot design.
 ```
 
 ---

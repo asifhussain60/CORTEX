@@ -12,6 +12,8 @@
 ```
 Black and white cartoon illustration in newspaper comic strip style. Computer file explorer window showing comedic filename escalation:
 
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
+
 MAIN ELEMENT - FILE EXPLORER WINDOW:
 - Traditional file manager interface (recognizable window chrome)
 - Forty-seven files listed vertically (progressively desperate naming):
@@ -30,8 +32,12 @@ MAIN ELEMENT - FILE EXPLORER WINDOW:
 
 SURROUNDING ELEMENTS:
 - Mr. Codenstein in corner, head in hands, facepalming
+  • Wild WHITE hair (Einstein spiky), thick round black glasses
+  • White lab coat with coffee stains, hunched posture, stubble
 - File count at bottom: "47 items" highlighted
 - Miss G's ghostly figure shaking head in background
+  • Shoulder-length flowing hair, 70% translucent with shimmer
+  • Arms crossed, raised eyebrow, amused expression
 - Speech bubble from Miss G: "*Notice a pattern?*"
 
 VISUAL COMEDY DETAILS:
@@ -51,7 +57,7 @@ DETAILS:
 - Timestamps: 2:17 AM, 2:34 AM, 3:41 AM, etc. (all-nighters)
 - One file with corruption icon (reinforcing problem)
 
-Style: Clean line art, readable text at key filenames, comedy through escalation. Think XKCD's filename jokes meets Dilbert's computer frustration comics.
+Style: Clean line art, readable text at key filenames, comedy through escalation. Think XKCD's filename jokes meets Dilbert's computer frustration comics. MAINTAIN EXACT CHARACTER FEATURES from character sheet.
 ```
 
 ---

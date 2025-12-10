@@ -11,18 +11,42 @@
 
 ```
 Black and white cartoon, comic strip style. Ten small robot characters (agents) all arguing simultaneously:
-- Center: Mr. Codenstein covering ears, overwhelmed expression
-- Surrounding: Ten cartoon robots with speech bubbles overlapping chaotically:
+
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
+
+CENTER CHARACTER:
+- Mr. Codenstein covering ears with hands, overwhelmed expression
+  • Wild WHITE hair (Einstein spiky), thick round black glasses
+  • White lab coat with coffee stains, hunched posture, stubble
+  • Eyes squeezed shut, grimacing from noise
+
+SURROUNDING ROBOTS:
+- Ten small cartoon robots (similar to Copilot design)
+  • Rounded bodies, monitor screen faces showing angry emojis
+  • Simple 3-segment arms gesturing wildly
+  • Each 2-3 feet tall, different specialty icons on bodies
+- Speech bubbles overlapping chaotically:
   * "I can handle that!"
   * "No, I'm qualified!"
   * "Let ME do it!"
   * "I'm the expert!"
+  * "My turn!" "No, MINE!"
 - Arrows pointing everywhere showing communication chaos
-- Each robot with different specialty icon (database, file, API, etc.)
-- Miss G's apparition in corner, pointing to "HUMILITY PROTOCOL" sign
-- Visual metaphor: Coordination failure before humility
+- Each robot with different specialty icon: 🗄️ (database), 📁 (file), 🌐 (API), ⚙️ (system), etc.
 
-Style: Dense overlapping elements showing chaos, simple robot designs for readability.
+MISS G IN CORNER:
+- Miss G's ethereal apparition pointing to "HUMILITY PROTOCOL" sign
+  • Shoulder-length flowing hair, 70% translucent with shimmer
+  • Business casual, arms crossed (one arm extended pointing)
+  • Raised eyebrow, knowing expression, gentle ghostly effect
+- Large sign on wall: "HUMILITY PROTOCOL" with skull icon underneath
+
+VISUAL METAPHOR:
+- Coordination failure before humility
+- Chaos versus order dichotomy
+- Robot voices = visual noise (heavy overlapping speech bubbles)
+
+Style: Dense overlapping elements showing chaos, simple robot designs for readability. Think Calvin and Hobbes meets Wall-E - expressive robots in organized chaos. MAINTAIN EXACT CHARACTER FEATURES from character sheet.
 ```
 
 ---

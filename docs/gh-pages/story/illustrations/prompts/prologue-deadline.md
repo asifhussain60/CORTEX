@@ -12,20 +12,26 @@
 ```
 Black and white cartoon illustration in newspaper comic strip style. Two-panel horizontal layout showing deadline conversation:
 
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
+
 PANEL 1 (LEFT SIDE):
-- Mr. Codenstein (Einstein-style professor) staring at wall calendar
+- Mr. Codenstein staring at wall calendar
+  • Wild WHITE hair (Einstein spiky pattern), thick round black glasses (crooked)
+  • White lab coat with coffee stains, pocket protector with 5 pens
+  • Stubble, gaunt cheeks, hunched posture
 - Calendar shows dates with X's marked through many days
 - "TWO MONTHS" circled dramatically with thick marker
-- Mr. Codenstein's expression: Mix of determination and panic
+- Expression: Mix of determination and panic
 - Coffee mug in his hand (fresh, steaming)
 
 PANEL 2 (RIGHT SIDE):
 - Miss G's ethereal apparition floating beside him
-- Arms crossed in signature pose
-- One eyebrow raised (skeptical expression)
-- Shimmer effect around her edges
+  • Shoulder-length flowing wavy hair, elegant female figure
+  • 70% translucent with shimmer effect around edges
+  • Business casual blouse/slacks, arms crossed, eyebrow raised
+  • Pretty face with kind eyes, gentle ghostly effect
 - Speech bubble: "Then we're having a conversation about whether this is healthy."
-- Slight smile (knowing, amused)
+- Expression: Amused skepticism (slight knowing smile)
 
 VISUAL ELEMENTS:
 - Clock showing 2:17 AM visible in background
@@ -38,7 +44,7 @@ TONE:
 - Meta-humor: He's taking advice from someone who doesn't exist
 - Visual storytelling: Expressions convey entire relationship dynamic
 
-Style: Clean line art, high contrast, comic timing through panel composition. Think Calvin and Hobbes or Zits - expressive characters with minimal but effective detail.
+Style: Clean line art, high contrast, comic timing through panel composition. Think Calvin and Hobbes or Zits - expressive characters with minimal but effective detail. MAINTAIN EXACT CHARACTER FEATURES from character sheet.
 ```
 
 ---

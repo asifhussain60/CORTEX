@@ -12,12 +12,17 @@
 ```
 Black and white cartoon illustration in newspaper comic strip style. Split-panel layout showing visual metaphor:
 
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
+
 PANEL 1 - BEFORE METAPHOR (LEFT):
-- Mr. Codenstein (Einstein professor) hunched at computer
+- Mr. Codenstein hunched at computer
+  • Wild WHITE hair (Einstein spiky), thick round black glasses (crooked)
+  • White lab coat with coffee stains, pocket protector, hunched posture
+  • Stubble, gaunt cheeks
 - Chat window visible on screen showing Copilot conversation
-- Copilot robot face on screen: confused emoji expression (question marks)
+- Copilot robot face on screen: confused emoji expression ❓
+  • Rounded robot, monitor screen face, simple geometric body
 - Speech bubble from Mr. Codenstein: "But we just discussed this yesterday!"
-- Copilot robot looking blank/confused
 - Frustration lines radiating from Mr. Codenstein
 
 PANEL 2 - GOLDFISH METAPHOR (RIGHT):
@@ -30,7 +35,9 @@ PANEL 2 - GOLDFISH METAPHOR (RIGHT):
 
 CONNECTING ELEMENT:
 - Arrow between panels with text: "Visual Metaphor"
-- Miss G's ghostly face in small corner panel, amused expression
+- Miss G's ghostly face in small corner panel
+  • Shoulder-length flowing hair, 70% translucent with shimmer
+  • Amused expression with raised eyebrow
 - Small text: "Every conversation is the first conversation"
 
 DETAILS:
@@ -39,7 +46,7 @@ DETAILS:
 - Coffee mug #3 (slightly stale) beside keyboard
 - Whiteboard in background showing "MEMORY PROBLEM" underlined
 
-Style: Clean line art, thought-bubble-style metaphor visualization. Educational diagram style but with comic expressiveness. Think xkcd meets Pearls Before Swine - simple but conceptually rich.
+Style: Clean line art, thought-bubble-style metaphor visualization. Educational diagram style but with comic expressiveness. Think xkcd meets Pearls Before Swine - simple but conceptually rich. MAINTAIN EXACT CHARACTER FEATURES from character sheet.
 ```
 
 ---

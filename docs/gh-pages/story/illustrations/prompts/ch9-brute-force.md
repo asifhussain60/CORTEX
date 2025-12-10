@@ -11,15 +11,49 @@
 
 ```
 Black and white cartoon showing optimization metaphor:
-- Mr. Codenstein holding literal sledgehammer, about to smash laptop
-- "BRUTE FORCE SEARCH" label on sledgehammer
-- Miss G's apparition holding stopwatch, unimpressed expression
-- Split small panels at bottom:
-  * BEFORE: "Query time: 45 seconds" with Mr. Codenstein hammering
-  * AFTER: "Query time: 120ms" with elegant code flowing smoothly
-- Visual juxtaposition: Violence vs elegance
 
-Comic metaphor: Taking sledgehammer to performance problem vs surgical optimization.
+IMPORTANT: Use CANONICAL character descriptions from 00-character-sheet.md for consistency.
+
+MAIN SCENE:
+- Mr. Codenstein holding literal sledgehammer raised above head
+  • Wild WHITE hair (Einstein spiky), thick round black glasses
+  • White lab coat with coffee stains, hunched posture, stubble
+  • Expression: Determined aggression (attacking the problem)
+  • Muscles straining from weight of sledgehammer
+- Laptop on desk showing "SEARCHING..." with spinning wheel
+- "BRUTE FORCE SEARCH" label on sledgehammer handle (large text)
+- Sweat drops flying from Mr. Codenstein's forehead
+
+MISS G WITH STOPWATCH:
+- Miss G's ethereal apparition standing beside him
+  • Shoulder-length flowing hair, 70% translucent with shimmer
+  • Business casual, gentle ghostly effect
+  • Arms crossed, one hand holding stopwatch
+  • Unimpressed expression, raised eyebrow
+- Stopwatch showing "45 seconds" in large display
+- Thought bubble from Miss G: "Really? A sledgehammer?"
+
+SPLIT SMALL PANELS AT BOTTOM:
+
+PANEL 1 - BEFORE (LEFT):
+- Label: "BRUTE FORCE APPROACH"
+- Timer: "Query time: 45 seconds"
+- Mr. Codenstein hammering frantically at laptop
+- Smoke coming from overheated laptop
+
+PANEL 2 - AFTER (RIGHT):
+- Label: "INDEXED SEARCH + CACHING"
+- Timer: "Query time: 120ms"
+- Elegant code flowing smoothly across screen (flowing lines)
+- Mr. Codenstein relaxed, coffee mug in hand, satisfied smile
+- Miss G approving nod
+
+VISUAL METAPHOR:
+- Sledgehammer vs scalpel (violence vs surgical precision)
+- Physical comedy of attacking technical problem physically
+- Before/after showing transformation
+
+Style: Exaggerated physical comedy, clear visual contrast between brute force and elegance. Think Looney Tunes meets developer reality - absurd literal interpretation. MAINTAIN EXACT CHARACTER FEATURES from character sheet.
 ```
 
 ---
