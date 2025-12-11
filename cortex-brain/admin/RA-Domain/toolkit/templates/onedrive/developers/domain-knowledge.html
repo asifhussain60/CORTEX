@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developer Onboarding Guide | RA Domain Analysis</title>
+    <title>Domain Knowledge Guide | RA Domain Analysis</title>
     <link rel="stylesheet" href="../assets/onedrive-glass.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
         <div class="header-logo">
             <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
             <div>
-                <h1 class="header-title">Developer Onboarding Guide</h1>
+                <h1 class="header-title">Domain Knowledge Guide</h1>
                 <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
                     13 hours → 4 hours | Interactive 5-step checklist
                 </p>
@@ -26,10 +26,189 @@
         </div>
     </header>
 
-    <!-- Onboarding Metrics -->
+    <!-- Executive Narrative Section -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">
+            📖 Platform Overview - What You're Building
+        </h2>
+        
+        <div class="narrative-preview" style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
+            <p style="margin: 0 0 1rem 0;">
+                <strong style="color: var(--text-primary);">Welcome to the Reimbursement Accounts platform</strong>—a .NET enterprise system managing tax-advantaged healthcare spending accounts (FSA, HSA, HRA) for employers and their employees. You're joining a team maintaining 256 C# files across 12 projects, processing 50,000+ accounts annually with strict IRS, HIPAA, and PCI-DSS compliance requirements.
+            </p>
+            <p style="margin: 0;">
+                This guide explains what the platform does, who uses it, and the architectural patterns you'll work with daily. Understanding the business context will accelerate your domain knowledge acquisition from 13 hours to 4 hours.
+            </p>
+        </div>
+
+        <button id="narrative-toggle" class="narrative-toggle" style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer; width: 100%; margin-bottom: 1.5rem; transition: all 0.3s ease;">
+            📖 Read Full Platform Overview
+        </button>
+
+        <div id="narrative-full" class="narrative-full" style="display: none; font-size: 0.9375rem; line-height: 1.7; color: var(--text-secondary);">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin: 1.5rem 0 1rem 0; color: var(--accent-primary);">
+                🏥 What Is This Application?
+            </h3>
+
+            <div style="background: rgba(124, 58, 237, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--accent-primary); margin-bottom: 1.5rem;">
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    The Reimbursement Accounts platform is HealthEquity's enterprise system for managing tax-advantaged healthcare spending accounts on behalf of employers and their employees. Operating in the highly regulated healthcare benefits administration industry, it serves as the <strong>financial engine</strong> that processes medical expense reimbursements, tracks account balances, and ensures compliance with federal tax regulations.
+                </p>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    At its core, the platform solves a complex regulatory challenge: enabling employees to set aside pre-tax dollars for qualified medical expenses while ensuring strict adherence to IRS contribution limits, HIPAA privacy requirements, and PCI-DSS payment card security standards.
+                </p>
+                <p style="margin: 0; font-size: 0.875rem; line-height: 1.6;">
+                    The system manages <strong>four distinct account types</strong>—Flexible Spending Accounts (FSA), Health Savings Accounts (HSA), Health Reimbursement Arrangements (HRA), and Dependent Care FSA—each with unique regulatory rules and business logic.
+                </p>
+            </div>
+
+            <div style="background: rgba(0, 212, 255, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--info); margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: var(--info);">
+                    📊 Platform Scale
+                </h4>
+                <ul style="font-size: 0.875rem; line-height: 1.6; margin: 0; padding-left: 1.25rem;">
+                    <li><strong>256 C# code files</strong> across 12 interconnected projects</li>
+                    <li><strong>30 core domain entities</strong> (Account, Claim, Balance, Plan, Card, etc.)</li>
+                    <li><strong>11 business services</strong> (CarryoverDomainService, ClaimDomainService, etc.)</li>
+                    <li><strong>1,100+ operations</strong> (methods, queries, commands)</li>
+                    <li><strong>50,000+ accounts/year</strong> processed during year-end carryover</li>
+                    <li><strong>26,000 accounts in 15-20 minutes</strong> using V2 batch optimization (85% performance improvement)</li>
+                </ul>
+            </div>
+
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin: 2rem 0 1rem 0; color: var(--accent-primary);">
+                👥 Who Uses This Platform?
+            </h3>
+
+            <div style="background: rgba(34, 197, 94, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--success); margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: var(--success);">
+                    1️⃣ Employers (Plan Sponsors)
+                </h4>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    Employers act as plan sponsors, configuring reimbursement account offerings for their workforce. They define plan parameters such as contribution limits, carryover rules, and eligibility criteria.
+                </p>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>Key Activities:</strong>
+                </p>
+                <ul style="font-size: 0.875rem; line-height: 1.6; margin: 0; padding-left: 1.25rem;">
+                    <li>Generate compliance reports (IRS Form 5500)</li>
+                    <li>Monitor account utilization rates</li>
+                    <li>Track forfeited funds that return to the organization at year-end</li>
+                </ul>
+                <p style="margin: 0.75rem 0 0 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>Technical Note:</strong> The platform's multi-tenant architecture ensures complete data isolation between employers, protecting competitive business information and employee privacy.
+                </p>
+            </div>
+
+            <div style="background: rgba(124, 58, 237, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--accent-primary); margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: var(--accent-primary);">
+                    2️⃣ Members (Account Holders)
+                </h4>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    Members are employees who contribute pre-tax dollars to their reimbursement accounts and submit claims for qualified medical expenses. They interact with the platform primarily through member portals and mobile applications.
+                </p>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>Key Activities:</strong>
+                </p>
+                <ul style="font-size: 0.875rem; line-height: 1.6; margin: 0; padding-left: 1.25rem;">
+                    <li>Check account balances (real-time)</li>
+                    <li>Submit expense receipts for reimbursement</li>
+                    <li>Track reimbursement status</li>
+                    <li>Make informed healthcare purchasing decisions</li>
+                </ul>
+                <p style="margin: 0.75rem 0 0 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>Technical Challenge:</strong> The system must present real-time balance information accounting for pending claims, scheduled disbursements, and available funds—a critical feature for member decision-making.
+                </p>
+            </div>
+
+            <div style="background: rgba(0, 212, 255, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--info); margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: var(--info);">
+                    3️⃣ Administrators & Third-Party Administrators (TPAs)
+                </h4>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    Administrators and TPAs operate the system on behalf of employers, managing day-to-day operations and resolving complex scenarios.
+                </p>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>Key Activities:</strong>
+                </p>
+                <ul style="font-size: 0.875rem; line-height: 1.6; margin: 0; padding-left: 1.25rem;">
+                    <li>Review and approve claims</li>
+                    <li>Resolve disputes (balance discrepancies, claim denials)</li>
+                    <li>Manage account lifecycle events (terminations, plan year rollovers)</li>
+                    <li>Handle mid-year plan changes due to life events</li>
+                </ul>
+                <p style="margin: 0.75rem 0 0 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>Technical Requirement:</strong> Comprehensive audit trails to investigate discrepancies, demonstrate regulatory compliance during external audits, and provide customer service support.
+                </p>
+            </div>
+
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin: 2rem 0 1rem 0; color: var(--accent-primary);">
+                🏗️ Architectural Patterns You'll See
+            </h3>
+
+            <div style="background: rgba(124, 58, 237, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--accent-primary); margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: var(--accent-primary);">
+                    Domain-Driven Design (DDD)
+                </h4>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    The platform uses <strong>11 domain services</strong> (CarryoverDollarsDomainService, ClaimDomainService, BalanceDomainService, etc.) to encapsulate complex business rules. Each service represents a core business capability with well-defined inputs, outputs, and state transitions.
+                </p>
+                <p style="margin: 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>Example:</strong> <code>CarryoverDollarsDomainService</code> (717 LOC, 15 methods) orchestrates year-end balance rollovers, applying IRS carryover limits, grace periods, and forfeiture rules.
+                </p>
+            </div>
+
+            <div style="background: rgba(0, 212, 255, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--info); margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: var(--info);">
+                    Event-Driven Integration (NServiceBus)
+                </h4>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    When account balances change, the system publishes <code>BalanceChangedEvent</code> messages to a message queue. External systems (statement generation, reporting analytics, TPA synchronization) subscribe to these events asynchronously without blocking primary workflows.
+                </p>
+                <p style="margin: 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>Why This Matters:</strong> Downstream system failures (statement generation unavailable) do not block core platform workflows. Events queue for processing when systems recover, ensuring eventual consistency.
+                </p>
+            </div>
+
+            <div style="background: rgba(34, 197, 94, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--success); margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: var(--success);">
+                    Multi-Tenant Isolation
+                </h4>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    The <code>Employer</code> entity serves as the tenant root, ensuring complete data segregation between client organizations. <strong>All queries filter by employer identifier</strong>, preventing accidental data leakage across organizational boundaries.
+                </p>
+                <p style="margin: 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>Developer Responsibility:</strong> Every database query MUST include <code>WHERE employerId = @tenantId</code>. This is enforced by code review and integration tests. Violating multi-tenancy is a P0 security issue.
+                </p>
+            </div>
+
+            <div style="background: rgba(251, 146, 60, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--warning); margin-top: 1.5rem;">
+                <p style="margin: 0; font-size: 0.875rem; color: var(--warning); line-height: 1.6;">
+                    <strong>⚠️ Regulatory Context:</strong> Everything you build must comply with IRS Publication 969, HIPAA §164.312, PCI-DSS v4.0, and ERISA disclosure requirements. The compliance-overview dashboard details these regulations. When in doubt, consult the compliance team before merging code.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const toggleBtn = document.getElementById('narrative-toggle');
+                const fullNarrative = document.getElementById('narrative-full');
+                
+                if (toggleBtn && fullNarrative) {
+                    toggleBtn.addEventListener('click', function() {
+                        const isHidden = fullNarrative.style.display === 'none';
+                        fullNarrative.style.display = isHidden ? 'block' : 'none';
+                        toggleBtn.textContent = isHidden ? '📖 Hide Full Platform Overview' : '📖 Read Full Platform Overview';
+                    });
+                }
+            });
+        </script>
+    </section>
+
+    <!-- Domain Knowledge Metrics -->
     <section class="glass-card-flat mb-xl">
         <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
-            🚀 Developer Onboarding Metrics - Key Performance Indicators (KPIs)
+            🚀 Domain Knowledge Metrics - Key Performance Indicators (KPIs)
         </h2>
         <div class="kpi-grid">
         <div class="kpi info">
@@ -42,7 +221,7 @@
         </div>
 
         <div class="kpi warning">
-            <h3>Current Onboarding Time</h3>
+            <h3>Knowledge Acquisition Time</h3>
             <div class="value">13 hrs</div>
             <div class="target">Target: 4 hours</div>
             <div class="trend down">↓ 69% inefficiency</div>
@@ -377,7 +556,7 @@ public void CalculateEligibleAmount_WithValidInput_ReturnsCorrectAmount()
                     Q: Where's the README?
                 </h3>
                 <p style="font-size: 0.875rem; color: var(--text-primary);">
-                    <strong>A:</strong> Currently missing (30/100 doc score). Use this onboarding guide as the primary documentation resource.
+                    <strong>A:</strong> Currently missing (30/100 doc score). Use this domain knowledge guide as the primary documentation resource.
                 </p>
             </div>
         </div>

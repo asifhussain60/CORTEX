@@ -26,6 +26,168 @@
         </div>
     </header>
 
+    <!-- Executive Narrative Section -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">
+            📖 Executive Summary - P0 Compliance Gaps
+        </h2>
+        
+        <div class="narrative-preview" style="font-size: 0.9375rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
+            <p style="margin: 0 0 1rem 0;">
+                <strong style="color: #ef4444;">Nine Priority Zero (P0) compliance gaps</strong> require immediate validation across IRS tax code, HIPAA privacy, PCI-DSS payment security, and ERISA disclosure requirements. These gaps represent potential penalties ranging from $500,000 to $2,000,000 if systematic errors affected thousands of accounts.
+            </p>
+            <p style="margin: 0;">
+                <strong>Important:</strong> These gaps do not indicate confirmed violations—they flag areas where code-level enforcement could not be verified through AST analysis. Manual code review and compliance testing are required to confirm actual risk exposure.
+            </p>
+        </div>
+
+        <button id="narrative-toggle" class="narrative-toggle" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer; width: 100%; margin-bottom: 1.5rem; transition: all 0.3s ease;">
+            ⚠️ Read Detailed Gap Analysis
+        </button>
+
+        <div id="narrative-full" class="narrative-full" style="display: none; font-size: 0.9375rem; line-height: 1.7; color: var(--text-secondary);">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin: 1.5rem 0 1rem 0; color: #ef4444;">
+                🚨 Nine P0 Compliance Gaps Requiring Validation
+            </h3>
+
+            <div style="background: rgba(239, 68, 68, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid #ef4444; margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: #ef4444;">
+                    IRS Tax Code Gaps (5 Issues)
+                </h4>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>P0-001: FSA $3,200 Annual Contribution Limit</strong><br>
+                    No code verification that annual FSA contributions respect the IRS $3,200 maximum. The <code>ContributionLimitService</code> may lack validation logic, risking over-contributions that trigger tax penalties. <strong>Risk:</strong> $50-$2,000 per violation × affected accounts.
+                </p>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>P0-002: HSA $4,150/$8,300 Annual Contribution Limits</strong><br>
+                    No code verification of HSA annual limits ($4,150 individual, $8,300 family). If limits are only validated in external systems, the RA Domain could process over-limit contributions. <strong>Risk:</strong> $50-$2,000 per violation × affected accounts.
+                </p>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>P0-003: FSA $640 Carryover Cap Enforcement</strong><br>
+                    The <code>CarryoverDollarsDomainService</code> calculates <code>Min(accountBalance, $640)</code>, but no unit tests confirm this enforcement. If the carryover cap is bypassed, members could roll over $3,200 instead of $640, violating IRS Publication 969. <strong>Risk:</strong> Plan disqualification.
+                </p>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>P0-004: Dependent Care FSA Zero Carryover</strong><br>
+                    Dependent Care FSA accounts follow strict use-it-or-lose-it rules with zero carryover permitted. AST analysis could not confirm that <code>CarryoverDollarsDomainService</code> enforces <code>carryoverAmount = $0</code> for Dependent Care accounts. <strong>Risk:</strong> IRS penalties if carryover is incorrectly allowed.
+                </p>
+                <p style="margin: 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>P0-005: Cosmetic Surgery Expense Rejection</strong><br>
+                    IRS Publication 502 lists ineligible expenses (cosmetic surgery, teeth whitening, over-the-counter medications without prescription). The <code>ClaimDomainService</code> may lack automated rejection logic for these categories. <strong>Risk:</strong> Reimbursing ineligible expenses triggers tax penalties.
+                </p>
+            </div>
+
+            <div style="background: rgba(239, 68, 68, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid #ef4444; margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: #ef4444;">
+                    PCI-DSS Payment Card Security Gaps (2 Issues)
+                </h4>
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>P0-006: CVV/CVC Storage Prohibition</strong><br>
+                    PCI-DSS v4.0 strictly prohibits storing Card Verification Values (CVV/CVC). The <code>Card</code> and <code>CardTransaction</code> entities place the platform in PCI scope. AST analysis could not confirm that CVV fields are absent from database schemas and never persisted. <strong>Risk:</strong> $5,000-$25,000/month fines + potential card processing suspension.
+                </p>
+                <p style="margin: 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>P0-007: Primary Account Number (PAN) Encryption</strong><br>
+                    PCI-DSS requires AES-256 encryption for stored Primary Account Numbers (card numbers). The <code>Card</code> entity must encrypt PAN at rest and mask displayed values (XXXX-XXXX-XXXX-1234). No code evidence confirms encryption implementation. <strong>Risk:</strong> $5,000-$25,000/month fines.
+                </p>
+            </div>
+
+            <div style="background: rgba(239, 68, 68, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid #ef4444; margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: #ef4444;">
+                    HIPAA Audit Trail Gap (1 Issue)
+                </h4>
+                <p style="margin: 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>P0-008: Audit Trail Completeness (§164.312)</strong><br>
+                    HIPAA §164.312(b) requires logging all PHI access, create, modify, and delete operations. The <code>BalanceChangeAudit</code> entity tracks balance modifications, but AST analysis could not verify logging for claim reads, account detail views, or transaction history access. <strong>Risk:</strong> $100-$50,000 per violation × PHI records accessed without logging.
+                </p>
+            </div>
+
+            <div style="background: rgba(239, 68, 68, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid #ef4444; margin-bottom: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem 0; color: #ef4444;">
+                    ERISA Disclosure Gap (1 Issue)
+                </h4>
+                <p style="margin: 0; font-size: 0.875rem; line-height: 1.6;">
+                    <strong>P0-009: Form 5500 & SPD Generation</strong><br>
+                    ERISA mandates annual IRS Form 5500 filing and Summary Plan Description (SPD) distribution to participants. The <code>CarryoverDollarsDomainService</code> references Form 5500 generation, but implementation completeness could not be verified. <strong>Risk:</strong> Department of Labor penalties + plan disqualification.
+                </p>
+            </div>
+
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin: 2rem 0 1rem 0; color: #ef4444;">
+                💰 Risk Exposure Summary
+            </h3>
+
+            <div style="background: rgba(239, 68, 68, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid #ef4444; margin-bottom: 1.5rem;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+                    <thead>
+                        <tr style="background: rgba(0, 0, 0, 0.2); border-bottom: 1px solid var(--glass-border);">
+                            <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Regulation</th>
+                            <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Open Gaps</th>
+                            <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Penalty Range</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--glass-border);">
+                            <td style="padding: 0.75rem; color: var(--text-secondary);"><strong>IRS Tax Code</strong></td>
+                            <td style="padding: 0.75rem; color: var(--text-secondary);">5 issues</td>
+                            <td style="padding: 0.75rem; color: var(--text-secondary);">$50-$2,000 per violation × accounts</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--glass-border);">
+                            <td style="padding: 0.75rem; color: var(--text-secondary);"><strong>PCI-DSS v4.0</strong></td>
+                            <td style="padding: 0.75rem; color: var(--text-secondary);">2 issues</td>
+                            <td style="padding: 0.75rem; color: var(--text-secondary);">$5,000-$25,000/month + card suspension</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--glass-border);">
+                            <td style="padding: 0.75rem; color: var(--text-secondary);"><strong>HIPAA §164.312</strong></td>
+                            <td style="padding: 0.75rem; color: var(--text-secondary);">1 issue</td>
+                            <td style="padding: 0.75rem; color: var(--text-secondary);">$100-$50,000 per violation × PHI records</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; color: var(--text-secondary);"><strong>ERISA</strong></td>
+                            <td style="padding: 0.75rem; color: var(--text-secondary);">1 issue</td>
+                            <td style="padding: 0.75rem; color: var(--text-secondary);">DOL penalties + plan disqualification</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin: 1rem 0 0 0; font-size: 0.875rem; font-weight: 600; color: #ef4444;">
+                    Estimated Aggregate Risk: $500,000 - $2,000,000 pending validation
+                </p>
+            </div>
+
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin: 2rem 0 1rem 0; color: var(--accent-primary);">
+                ✅ Recommended Remediation Path
+            </h3>
+
+            <div style="background: rgba(34, 197, 94, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--success); margin-bottom: 1.5rem;">
+                <ol style="font-size: 0.875rem; line-height: 1.6; margin: 0; padding-left: 1.25rem;">
+                    <li style="margin-bottom: 0.75rem;"><strong>Code Review Sprint (Week 1):</strong> Manual inspection of <code>ContributionLimitService</code>, <code>CarryoverDollarsDomainService</code>, and <code>ClaimDomainService</code> to confirm IRS limit enforcement logic exists.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Unit Test Coverage (Week 2):</strong> Write tests validating IRS limits, carryover caps, and ineligible expense rejection. Target: 100% coverage for regulatory paths.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>PCI-DSS Audit (Week 3):</strong> Database schema review to confirm CVV fields are absent, PAN encryption is implemented, and display masking is enforced.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>HIPAA Audit Trail Validation (Week 4):</strong> Log analysis to verify all PHI access is captured in <code>BalanceChangeAudit</code> or equivalent audit tables.</li>
+                    <li><strong>Compliance Testing (Week 5):</strong> End-to-end tests simulating regulatory scenarios (over-limit contributions, CVV storage attempts, unlogged PHI access) to confirm remediation effectiveness.</li>
+                </ol>
+            </div>
+
+            <div style="background: rgba(251, 146, 60, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--warning); margin-top: 1.5rem;">
+                <p style="margin: 0; font-size: 0.875rem; color: var(--warning); line-height: 1.6;">
+                    <strong>⚠️ Next Steps:</strong> Schedule compliance review meeting with Legal, Finance, and Engineering to prioritize gap remediation. Assign owners to each P0 issue and establish weekly status reporting until all gaps are resolved or confirmed as false positives.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const toggleBtn = document.getElementById('narrative-toggle');
+                const fullNarrative = document.getElementById('narrative-full');
+                
+                if (toggleBtn && fullNarrative) {
+                    toggleBtn.addEventListener('click', function() {
+                        const isHidden = fullNarrative.style.display === 'none';
+                        fullNarrative.style.display = isHidden ? 'block' : 'none';
+                        toggleBtn.textContent = isHidden ? '⚠️ Hide Detailed Gap Analysis' : '⚠️ Read Detailed Gap Analysis';
+                    });
+                }
+            });
+        </script>
+    </section>
+
     <!-- Compliance Status KPIs -->
     <section class="glass-card-flat mb-xl">
         <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
