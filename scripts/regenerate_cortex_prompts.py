@@ -843,9 +843,11 @@ def main():
                 print(f"    - {regenerator.copilot_instructions}")
                 print(f"    - {regenerator.cortex_prompt}")
                 
-                backup_dir = results['phases']['backup']['backup_path']
-                print(f"\n  Backups saved to:")
-                print(f"    - {backup_dir}")
+                # Show backup path if available
+                if 'phases' in results and 'backup' in results['phases']:
+                    backup_dir = results['phases']['backup']['backup_path']
+                    print(f"\n  Backups saved to:")
+                    print(f"    - {backup_dir}")
         else:
             print("\n❌ FAILED")
             for error in results.get('errors', []):
