@@ -197,6 +197,7 @@ class DocumentationComponentRegistry:
             "publish": self.GeneratorType.PUBLISH,
             "rulebook": self.GeneratorType.ARCHITECTURE,  # NEW: Governance documentation
             "narratives": self.GeneratorType.ARCHITECTURE,  # NEW: Story documentation
+            "orchestration_docs": self.GeneratorType.ARCHITECTURE,  # NEW: Orchestration documentation
             "all": self.GeneratorType.ALL,
         }
         return mapping.get(component_id, self.GeneratorType.ALL)
@@ -291,6 +292,24 @@ def create_default_registry(workspace_root: Optional[Path] = None) -> Documentat
             dependencies=[],
             critical=False,
             natural_language=["generate story", "narrative chapters", "intern with amnesia", "cortex story"],
+        )
+    )
+
+    # Component #6: Orchestration Documentation
+    registry.register(
+        DocumentationComponent(
+            id="orchestration_docs",
+            name="Orchestration System Documentation",
+            module_path=admin_gen_path / "orchestration_docs_generator.py",
+            class_name="OrchestrationDocsGenerator",
+            dependencies=[],
+            critical=False,
+            natural_language=[
+                "generate orchestration docs",
+                "orchestrator documentation",
+                "document orchestrators",
+                "orchestration system docs"
+            ],
         )
     )
 

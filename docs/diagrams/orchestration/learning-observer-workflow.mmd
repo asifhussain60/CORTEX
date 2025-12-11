@@ -1,0 +1,24 @@
+flowchart TD
+    Start([learning_observer])
+
+    Init[Initialize LearningObserver]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[On Phase Completion]
+    M0 --> M1
+    M2[On Tdd Cycle Completion]
+    M1 --> M2
+    M3[On Debug Session Completion]
+    M2 --> M3
+    M9[Query Similar Bugs]
+    M8 --> M9
+    M10[Get High Risk Bugs]
+    M9 --> M10
+    M11[Get Feature Bug Report]
+    M10 --> M11
+    M12[Generate Rca Summary Report]
+    M11 --> M12
+
+    M12 --> End([Complete])

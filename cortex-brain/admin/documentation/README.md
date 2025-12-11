@@ -72,6 +72,24 @@ The registry manages 5 documentation components with dependency resolution:
   3. Validate build output (checks for `index.html`)
   4. (Optional) Deploy via `mkdocs gh-deploy`
 
+### 6. Orchestration Documentation ✨ NEW
+- **ID:** `orchestration_docs`
+- **Generator:** `OrchestrationDocsGenerator`
+- **Output:** `docs/orchestration/*.md` + `docs/diagrams/orchestration/*.mmd`
+- **Purpose:** Auto-generate comprehensive documentation for all CORTEX orchestrators
+- **Natural Language:** "generate orchestration docs", "orchestrator documentation", "document orchestrators"
+- **Dependencies:** None
+- **Features:**
+  - **Auto-Discovery:** Scans `src/orchestrators/` for all orchestrator files
+  - **AST Parsing:** Extracts classes, methods, docstrings, parameters
+  - **Mermaid Diagrams:** Generates workflow flowcharts for each orchestrator
+  - **Structured Docs:** Creates markdown pages with usage, API reference, workflow
+- **Output Structure:**
+  - `docs/orchestration/index.md` - Master catalog of all orchestrators
+  - `docs/orchestration/{orchestrator-name}.md` - Individual orchestrator docs
+  - `docs/diagrams/orchestration/{orchestrator-name}-workflow.mmd` - Mermaid workflows
+- **Documented:** 50+ orchestrators including Planning, TDD, Debug, Dashboard, Git operations
+
 ## Usage
 
 ### Programmatic (Python)

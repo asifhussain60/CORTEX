@@ -213,6 +213,32 @@ operations:
     - generate diagrams
     - create diagrams
     category: documentation
+  generate_orchestration_docs:
+    name: Generate Orchestration Documentation
+    description: Auto-generate comprehensive documentation for all CORTEX orchestrators with Mermaid workflows and API references
+    deployment_tier: developer
+    execution_method: internal
+    natural_language:
+    - generate orchestration docs
+    - orchestrator documentation
+    - document orchestrators
+    - orchestration system docs
+    - regenerate orchestrator docs
+    modules:
+    - admin.documentation.generators.orchestration_docs_generator
+    profiles:
+      standard:
+        description: Generate documentation for all orchestrators in src/orchestrators/
+        options:
+          force_regenerate: true
+          validate_output: true
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Discovers 50+ orchestrators, extracts metadata via AST, generates Mermaid diagrams and structured markdown
+    category: documentation
   dashboard_validation:
     name: Dashboard Validation
     description: Dashboard Data Collection Validator

@@ -1,0 +1,10 @@
+flowchart TD
+    Start([rollback_command_parser])
+
+    Init[Initialize RollbackCommandParser]
+    Start --> Init
+
+    M3[Parse Command]
+    M2 --> M3
+
+    M3 --> End([Complete])

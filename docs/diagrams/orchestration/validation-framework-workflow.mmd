@@ -1,0 +1,16 @@
+flowchart TD
+    Start([validation_framework])
+
+    Init[Initialize ValidationResult]
+    Start --> Init
+
+    M0[Add Error]
+    Init --> M0
+    M1[Add Warning]
+    M0 --> M1
+    M2[Merge]
+    M1 --> M2
+    M3[To Dict]
+    M2 --> M3
+
+    M3 --> End([Complete])

@@ -1,0 +1,26 @@
+flowchart TD
+    Start([dashboard_collector])
+
+    Init[Initialize DashboardDataCollector]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Collect Health Data]
+    M0 --> M1
+    M2[Collect Tech Stack]
+    M1 --> M2
+    M3[Collect Architecture]
+    M2 --> M3
+    M4[Collect Security]
+    M3 --> M4
+    M5[Collect Code Organization]
+    M4 --> M5
+    M6[Collect Vendors]
+    M5 --> M6
+    M7[Collect All]
+    M6 --> M7
+    M11[Save Results]
+    M10 --> M11
+
+    M18 --> End([Complete])

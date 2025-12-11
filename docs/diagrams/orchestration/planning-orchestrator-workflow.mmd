@@ -1,0 +1,88 @@
+flowchart TD
+    Start([planning_orchestrator])
+
+    Init[Initialize PlanningOrchestrator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M5[Validate Plan]
+    M4 --> M5
+    M11[Generate Markdown]
+    M10 --> M11
+    M12[Save Plan]
+    M11 --> M12
+    M13[Load Plan]
+    M12 --> M13
+    M14[Migrate Markdown Plan]
+    M13 --> M14
+    M16[Generate Markdown View]
+    M15 --> M16
+    M17[Generate Incremental Plan]
+    M16 --> M17
+    M24[Check For Duplicate Plans]
+    M23 --> M24
+    M29[Generate Duplicate Handling Prompt]
+    M28 --> M29
+    M30[Approve Plan]
+    M29 --> M30
+    M31[Execute Plan Autonomously]
+    M30 --> M31
+    M32[Complete Plan]
+    M31 --> M32
+    M42[Infer Scope From Dor]
+    M41 --> M42
+    M43[Process Clarification Response]
+    M42 --> M43
+    M44[Estimate Feature Scope]
+    M43 --> M44
+    M45[Estimate Timeframe]
+    M44 --> M45
+    M46[Estimate From Swagger]
+    M45 --> M46
+    M50[Resume Estimation With Approved Scope]
+    M49 --> M50
+    M51[Analyze Threats]
+    M50 --> M51
+    M52[Integrate Threats Into Plan]
+    M51 --> M52
+    M53[Restore Session]
+    M52 --> M53
+    M56[Activate Planning Mode]
+    M55 --> M56
+    M57[Deactivate Planning Mode]
+    M56 --> M57
+    M58[Is Planning Mode Active]
+    M57 --> M58
+    M59[Challenge Approach]
+    M58 --> M59
+    M60[Add Integration Consolidation Phase]
+    M59 --> M60
+    M61[Execute Plan With Consolidation]
+    M60 --> M61
+    M62[Inject Tdd Requirements]
+    M61 --> M62
+    M66[Render Phase Progress]
+    M65 --> M66
+    M67[Update Phase Status]
+    M66 --> M67
+    M68[Review Threats Interactive]
+    M67 --> M68
+    M69[Format Tdd Reminder Section]
+    M68 --> M69
+    M70[Document Phase To Learning Library]
+    M69 --> M70
+    M71[Run Architecture Review]
+    M70 --> M71
+    M72[Run Contextual Review]
+    M71 --> M72
+    M73[Refine Dor Interactive]
+    M72 --> M73
+    M76[Approve Acceptance Criteria]
+    M75 --> M76
+    M87[Subscribe]
+    M86 --> M87
+    M88[Unsubscribe]
+    M87 --> M88
+
+    M89 --> End([Complete])

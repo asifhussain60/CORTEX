@@ -1,0 +1,26 @@
+flowchart TD
+    Start([session_model])
+
+    Init[Initialize BaseSession]
+    Start --> Init
+
+    M0[  Post Init  ]
+    Init --> M0
+    M1[To Dict]
+    M0 --> M1
+    M2[To Json]
+    M1 --> M2
+    M3[From Dict]
+    M2 --> M3
+    M4[From Json]
+    M3 --> M4
+    M5[Complete]
+    M4 --> M5
+    M6[Cancel]
+    M5 --> M6
+    M7[Pause]
+    M6 --> M7
+    M8[Resume]
+    M7 --> M8
+
+    M8 --> End([Complete])

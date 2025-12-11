@@ -1,0 +1,12 @@
+flowchart TD
+    Start([git_sync_and_optimize])
+
+    Init[Initialize GitSyncAndOptimizeOrchestrator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Execute]
+    M0 --> M1
+
+    M16 --> End([Complete])

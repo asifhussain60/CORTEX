@@ -1,0 +1,16 @@
+flowchart TD
+    Start([dashboard_validation])
+
+    Init[Initialize CollectionValidator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Validate Collection]
+    M0 --> M1
+    M3[Format Validation Summary]
+    M2 --> M3
+    M4[Get Detailed Report]
+    M3 --> M4
+
+    M4 --> End([Complete])

@@ -1,0 +1,26 @@
+flowchart TD
+    Start([tdd_implementation_orchestrator])
+
+    Init[Initialize TDDImplementationOrchestrator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M2[Start Session]
+    M1 --> M2
+    M3[Get Session]
+    M2 --> M3
+    M6[Execute Red Phase]
+    M5 --> M6
+    M7[Execute Green Phase]
+    M6 --> M7
+    M8[Execute Refactor Phase]
+    M7 --> M8
+    M9[Complete Session]
+    M8 --> M9
+    M10[Rollback To Checkpoint]
+    M9 --> M10
+    M32[Get Learned Refactoring Patterns]
+    M31 --> M32
+
+    M32 --> End([Complete])

@@ -1,0 +1,18 @@
+flowchart TD
+    Start([git_checkpoint_orchestrator])
+
+    Init[Initialize GitCheckpointOrchestrator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Create Checkpoint]
+    M0 --> M1
+    M2[List Checkpoints]
+    M1 --> M2
+    M3[Rollback To Checkpoint]
+    M2 --> M3
+    M4[Create Auto Checkpoint]
+    M3 --> M4
+
+    M4 --> End([Complete])

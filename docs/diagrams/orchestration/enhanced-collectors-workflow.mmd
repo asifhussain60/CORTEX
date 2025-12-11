@@ -1,0 +1,12 @@
+flowchart TD
+    Start([enhanced_collectors])
+
+    Init[Initialize HealthDataCollector]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Collect]
+    M0 --> M1
+
+    M14 --> End([Complete])

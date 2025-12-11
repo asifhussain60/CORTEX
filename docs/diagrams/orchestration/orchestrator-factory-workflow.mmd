@@ -1,0 +1,22 @@
+flowchart TD
+    Start([orchestrator_factory])
+
+    Init[Initialize OrchestratorFactory]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Get Tdd Orchestrator]
+    M0 --> M1
+    M2[Get Git Checkpoint]
+    M1 --> M2
+    M3[Get Code Executor]
+    M2 --> M3
+    M4[Get Cleanup Orchestrator]
+    M3 --> M4
+    M5[Get Plan Execution Orchestrator]
+    M4 --> M5
+    M6[Get Planning Orchestrator]
+    M5 --> M6
+
+    M6 --> End([Complete])
