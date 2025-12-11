@@ -391,6 +391,8 @@ templates:
 
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
+      ⚙️ **Orchestrator:** Onboarding
+
 
       ---
 
@@ -421,6 +423,7 @@ templates:
 
       '
     name: User Onboarding
+    orchestrator_indicator: "⚙️ **Orchestrator:** Onboarding"
     triggers:
     - onboard
     - onboarding
@@ -881,6 +884,8 @@ templates:
 
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
+      ⚙️ **Orchestrator:** Hands-On Tutorial
+
 
       ---
 
@@ -911,6 +916,7 @@ templates:
 
       '
     name: Hands-On Tutorial
+    orchestrator_indicator: "⚙️ **Orchestrator:** Hands-On Tutorial"
     expected_orchestrator: HandsOnTutorialOrchestrator
     triggers:
     - tutorial
@@ -4350,6 +4356,8 @@ templates:
 
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
+      ⚙️ **Orchestrator:** System Alignment
+
 
       ---
 
@@ -4380,6 +4388,7 @@ templates:
 
       '
     name: Realignment
+    orchestrator_indicator: "⚙️ **Orchestrator:** System Alignment"
     expected_orchestrator: RealignmentOrchestrator
     triggers:
     - realign
@@ -8161,6 +8170,8 @@ templates:
 
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
+      ⚙️ **Orchestrator:** Code Review
+
 
       ---
 
@@ -8191,6 +8202,7 @@ templates:
 
       '
     name: Code Review
+    orchestrator_indicator: "⚙️ **Orchestrator:** Code Review"
     triggers:
     - review
     - code review
@@ -11389,6 +11401,7 @@ templates:
 
   cleanup:
     name: System Cleanup
+    orchestrator_indicator: "⚙️ **Orchestrator:** System Cleanup"
     triggers:
     - cleanup
     - clean up
@@ -11402,6 +11415,8 @@ templates:
     base_structure: '## 🧠 CORTEX {operation}
 
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+      ⚙️ **Orchestrator:** System Cleanup
 
 
       ---
@@ -12909,6 +12924,7 @@ templates:
 
   ado_agent:
     name: Azure DevOps Agent
+    orchestrator_indicator: "⚙️ **Orchestrator:** ADO Operations"
     triggers:
     - ado
     - azure devops
@@ -12921,6 +12937,8 @@ templates:
     base_structure: '## 🧠 CORTEX {operation}
 
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+      ⚙️ **Orchestrator:** ADO Operations
 
 
       ---
