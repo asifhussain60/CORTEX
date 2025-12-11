@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Execution Orchestrator - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Plan Execution Orchestrator</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Plan Execution Orchestrator</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Plan Execution Orchestrator for CORTEX</p><p>Executes feature implementation plans created by PlanningOrchestrator<br>and ADO Work Item Orchestrator. Autonomously implements phases with<br>automatic Integration & Consolidation phase at the end.</p><p>The Integration & Consolidation phase:<br>- Identifies and removes deprecated/obsolete code<br>- Eliminates duplicate implementations<br>- Organizes files into proper folder structures<br>- Updates references across the application<br>- Verifies new features are properly wired and functional<br>- Runs integration tests to validate production readiness</p><p>Author: GitHub Copilot (CORTEX 3.0)<br>Created: 2025-12-04
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([plan_execution_orchestrator])
+
+    Init[Initialize PlanExecutionOrchestrator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M2[Execute Plan]
+    M1 --> M2
+
+    M22 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: PlanExecutionOrchestrator</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Orchestrates autonomous execution of feature implementation plans.</p><p>Workflow:<br>1. Load plan (YAML or Markdown)<br>2. Execute each phase sequentially<br>3. Automatically add Integration & Consolidation phase<br>4. Execute cleanup and wiring operations<br>5. Validate production readiness</p><p>Features:<br>- Phase-by-phase execution with checkpoints<br>- Automatic rollback on failure<br>- Integration & Consolidation phase (always added automatically)<br>- Production readiness validation<br>- Progress tracking and reporting
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            __init__(self, cortex_root)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize plan execution orchestrator.</p><p>Args:<br>    cortex_root: Path to CORTEX root directory
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _init_execution_agents(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize agents and orchestrators used for execution.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            execute_plan(self, plan_path, auto_consolidate, dry_run, execution_mode, force_execution)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute a feature implementation plan.</p><p>Args:<br>    plan_path: Path to plan file (YAML or Markdown)<br>    auto_consolidate: Automatically add Integration & Consolidation phase<br>    dry_run: Preview execution without making changes<br>    execution_mode: "autonomous" (run all phases without stopping) or <br>                  "approval_gated" (stop after each phase for approval)<br>    force_execution: Skip DoR validation (DANGEROUS - use only with remediation plan)</p><p>Returns:<br>    Tuple of (success, execution_report)
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _execute_phase(self, phase, dry_run)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute a single phase of the plan.</p><p>Args:<br>    phase: Phase data from plan<br>    dry_run: Preview without making changes</p><p>Returns:<br>    Phase execution result
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _execute_task(self, task)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute a single task.</p><p>Uses TDD workflow if task specifies TDD mode, otherwise uses CodeExecutor.</p><p>Args:<br>    task: Task data from phase</p><p>Returns:<br>    Task execution result
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _execute_task_with_tdd(self, task, task_result)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute task using TDD workflow (RED→GREEN→REFACTOR).</p><p>Args:<br>    task: Task data<br>    task_result: Pre-initialized task result dict<br>    <br>Returns:<br>    Updated task result with TDD execution data
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _execute_integration_consolidation_phase(self, plan_data, dry_run)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute Integration & Consolidation phase automatically.</p><p>This phase:<br>1. Identifies deprecated/obsolete code<br>2. Removes duplicates<br>3. Organizes files into proper structures<br>4. Updates references across application<br>5. Verifies features are wired and functional<br>6. Runs integration tests</p><p>Args:<br>    plan_data: Original plan data for context<br>    dry_run: Preview without making changes</p><p>Returns:<br>    Consolidation execution result
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _validate_task_implementation_requirements(self, task)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Validate task specifies necessary implementation requirements.</p><p>Based on CORTEX-Clean-v2 review findings:<br>- Security requirements (auth, validation, sanitization)<br>- Error handling strategy<br>- Configuration externalization<br>- Transaction management (for data operations)<br>- Domain model richness (behavior vs data)</p><p>Args:<br>    task: Task data from plan<br>    <br>Returns:<br>    Dict with validation results and warnings
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _gather_affected_files(self, plan_data)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Gather list of files affected by plan implementation.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _find_deprecated_code(self, files)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Find deprecated code markers in affected files.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _remove_deprecated_code(self, items)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Remove deprecated code using CleanupOrchestrator.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _find_duplicate_code(self, files)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Find duplicate code patterns in affected files.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _eliminate_duplicates(self, duplicates)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Eliminate duplicate code.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _organize_files(self, files)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Organize files into proper folder structures.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _update_references(self, files)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Update import statements and references after file moves.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _verify_feature_wiring(self, plan_data)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Verify new features are properly wired and accessible.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _run_integration_tests(self, plan_data)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Run integration tests to validate production readiness.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _check_definition_of_ready(self, plan_data)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Check if Definition of Ready is satisfied.</p><p>Args:<br>    plan_data: Plan dictionary</p><p>Returns:<br>    Tuple of (satisfied, list of violations)
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _generate_remediation_plan(self, plan_data, dor_violations)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate remediation plan to address DoR violations.</p><p>Args:<br>    plan_data: Original plan data<br>    dor_violations: List of DoR violations</p><p>Returns:<br>    Remediation plan dictionary
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _load_plan(self, plan_path)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Load plan from file (YAML or Markdown).</p><p>Args:<br>    plan_path: Path to plan file</p><p>Returns:<br>    Tuple of (success, plan_data, errors)
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _run_post_execution_quality_gate(self, phase)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Run post-execution quality gate using Review Orchestrator.</p><p>Planning System 3.0 feature: Optional quality validation after phase execution.<br>Reviews code quality and provides score for decision-making.</p><p>Args:<br>    phase: Phase data (for configuration)<br>    <br>Returns:<br>    Quality gate result with score, validation status, checkpoint decision
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _parse_markdown_plan(self, plan_path)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Parse Markdown plan into structured data.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _save_execution_report(self, report)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Save execution report to disk.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/plan_execution_orchestrator.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

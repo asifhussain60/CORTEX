@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Orchestrator - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Documentation Orchestrator</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Documentation Orchestrator</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Documentation Orchestrator for CORTEX Learning Library<br>Generates and maintains documentation for multi-phase refactoring projects.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([documentation_orchestrator])
+
+    Init[Initialize DocumentationOrchestrator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Document Phase Completion]
+    M0 --> M1
+    M2[Generate Architecture Diagram]
+    M1 --> M2
+    M3[Create Adr]
+    M2 --> M3
+    M4[Create Refactoring Comparison]
+    M3 --> M4
+
+    M20 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: DocumentationOrchestrator</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Automates documentation generation for learning library.<br>Integrates with Planning Orchestrator for phase-based updates.
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            __init__(self, project_name, learning_lib_path)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize documentation orchestrator.</p><p>Args:<br>    project_name: Name of the project (e.g., 'badmonolith-refactoring')<br>    learning_lib_path: Path to learning library (default: cortex-brain/learning)
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            document_phase_completion(self, phase_number, phase_name, tasks_completed, metrics, duration_hours, lessons_learned)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate phase completion documentation.</p><p>Args:<br>    phase_number: Phase number (1-7)<br>    phase_name: Descriptive name<br>    tasks_completed: List of completed task IDs<br>    metrics: Dictionary of metrics (coverage, complexity, LOC, etc.)<br>    duration_hours: Actual duration<br>    lessons_learned: List of lessons learned<br>    <br>Returns:<br>    Path to generated document
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            generate_architecture_diagram(self, diagram_type, title, elements, output_filename)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate Mermaid architecture diagram.</p><p>Args:<br>    diagram_type: 'layers' | 'components' | 'dataflow' | 'state'<br>    title: Diagram title<br>    elements: List of diagram elements<br>    output_filename: Optional custom filename<br>    <br>Returns:<br>    Path to generated diagram file
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            create_adr(self, title, context, decision, consequences, alternatives, status)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Create Architecture Decision Record.</p><p>Args:<br>    title: ADR title<br>    context: Problem context<br>    decision: The decision made<br>    consequences: Impact of decision<br>    alternatives: Other options considered<br>    status: 'Accepted' | 'Proposed' | 'Deprecated'<br>    <br>Returns:<br>    Path to ADR document
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            create_refactoring_comparison(self, task_id, title, before_code, after_code, before_metrics, after_metrics, anti_pattern, solution_pattern)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Create before/after refactoring comparison.</p><p>Args:<br>    task_id: Task identifier<br>    title: Comparison title<br>    before_code: Code before refactoring<br>    after_code: Code after refactoring<br>    before_metrics: Metrics before<br>    after_metrics: Metrics after<br>    anti_pattern: Anti-pattern description<br>    solution_pattern: Solution pattern description<br>    <br>Returns:<br>    Path to comparison document
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_objectives(self, phase_number)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format phase objectives based on phase number.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_tasks(self, tasks)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format task list with checkmarks.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_metrics(self, metrics)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format metrics table.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_tdd_workflow(self, phase_number)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format TDD workflow section.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_lessons(self, lessons)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format lessons learned.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_related_docs(self, phase_number)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format related documentation links.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _get_next_phase(self, phase_number)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get next phase reference.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _generate_mermaid(self, diagram_type, elements)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate Mermaid diagram code.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _generate_layers_diagram(self, elements)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate Clean Architecture layers diagram.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _generate_diagram_description(self, diagram_type, elements)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate diagram description.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_alternatives(self, alternatives)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format alternatives list.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _get_related_adrs(self, current_num)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get related ADR links.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_code_metrics(self, metrics)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format code metrics.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _calculate_improvements(self, before, after)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Calculate improvement percentages.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_improvements(self, improvements)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format improvements list.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _generate_takeaways(self, anti_pattern, solution, improvements)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate key takeaways.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/documentation_orchestrator.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

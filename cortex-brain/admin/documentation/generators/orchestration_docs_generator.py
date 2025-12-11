@@ -4,8 +4,8 @@ Orchestration Documentation Generator
 Generates comprehensive documentation for CORTEX orchestrators including:
 - Automated discovery of all orchestrator files
 - AST-based metadata extraction (classes, methods, docstrings)
-- Mermaid workflow diagrams
-- Structured markdown documentation pages
+- Mermaid workflow diagrams embedded in HTML
+- Glassmorphism-styled HTML documentation pages
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -17,6 +17,7 @@ from typing import Any, Dict, List, Optional
 import ast
 import logging
 import re
+import markdown
 
 from .base_generator import (
     BaseDocumentationGenerator,
@@ -30,15 +31,15 @@ logger = logging.getLogger(__name__)
 
 class OrchestrationDocsGenerator(BaseDocumentationGenerator):
     """
-    Generate documentation for CORTEX orchestrators.
+    Generate glassmorphism HTML documentation for CORTEX orchestrators.
     
     Discovers all orchestrator files in src/orchestrators/, extracts metadata
     using AST parsing, generates Mermaid workflow diagrams, and creates
-    comprehensive markdown documentation.
+    beautiful glassmorphism-styled HTML documentation.
     
     Output Structure:
-        docs/orchestration/{orchestrator-name}.md - Main documentation
-        docs/diagrams/orchestration/{orchestrator-name}-workflow.mmd - Workflow diagram
+        docs/orchestration/{orchestrator-name}/index.html - Main documentation
+        docs/orchestration/index.html - Master catalog
     """
     
     def __init__(self, config: GenerationConfig, workspace_root: Optional[Path] = None):
@@ -46,11 +47,9 @@ class OrchestrationDocsGenerator(BaseDocumentationGenerator):
         self.docs_path = self.config.output_path
         self.orchestrators_path = self.workspace_root / "src" / "orchestrators"
         self.orchestration_docs_path = self.docs_path / "orchestration"
-        self.diagram_path = self.docs_path / "diagrams" / "orchestration"
         
-        # Ensure output directories exist
+        # Ensure output directory exists
         self.orchestration_docs_path.mkdir(parents=True, exist_ok=True)
-        self.diagram_path.mkdir(parents=True, exist_ok=True)
     
     def get_component_name(self) -> str:
         return "Orchestration Documentation"
@@ -82,35 +81,37 @@ class OrchestrationDocsGenerator(BaseDocumentationGenerator):
     
     def generate(self) -> GenerationResult:
         """
-        Generate orchestration documentation.
+        Generate orchestration documentation as glassmorphism HTML.
         
         Returns:
             GenerationResult with files generated
         """
-        logger.info("Generating orchestration documentation...")
+        logger.info("Generating glassmorphism HTML orchestration documentation...")
         
         data = self.collect_data()
         
         for orchestrator in data["orchestrators"]:
             try:
-                # Generate workflow diagram
-                diagram_content = self._generate_workflow_diagram(orchestrator)
-                diagram_file = self.diagram_path / f"{orchestrator['name'].lower().replace('_', '-')}-workflow.mmd"
-                diagram_file.write_text(diagram_content)
-                self.files_generated.append(diagram_file)
+                # Create subdirectory for orchestrator
+                orchestrator_slug = orchestrator['name'].lower().replace('_', '-')
+                orchestrator_dir = self.orchestration_docs_path / orchestrator_slug
+                orchestrator_dir.mkdir(parents=True, exist_ok=True)
                 
-                # Generate documentation page
-                doc_content = self._generate_documentation_page(orchestrator, diagram_file)
-                doc_file = self.orchestration_docs_path / f"{orchestrator['name'].lower().replace('_', '-')}.md"
-                doc_file.write_text(doc_content)
-                self.files_generated.append(doc_file)
+                # Generate workflow diagram content
+                diagram_content = self._generate_workflow_diagram(orchestrator)
+                
+                # Generate HTML documentation page
+                html_content = self._generate_html_page(orchestrator, diagram_content)
+                html_file = orchestrator_dir / "index.html"
+                html_file.write_text(html_content)
+                self.files_generated.append(html_file)
                 
             except Exception as e:
                 self.record_error(f"Failed to generate docs for {orchestrator['name']}: {e}")
         
         # Generate index page
-        index_content = self._generate_index_page(data)
-        index_file = self.orchestration_docs_path / "index.md"
+        index_content = self._generate_index_html(data)
+        index_file = self.orchestration_docs_path / "index.html"
         index_file.write_text(index_content)
         self.files_generated.append(index_file)
         
@@ -276,139 +277,314 @@ class OrchestrationDocsGenerator(BaseDocumentationGenerator):
         
         return "\n".join(lines)
     
-    def _generate_documentation_page(self, metadata: Dict[str, Any], diagram_file: Path) -> str:
+    def _generate_html_page(self, metadata: Dict[str, Any], diagram_content: str) -> str:
         """
-        Generate markdown documentation page for orchestrator.
+        Generate glassmorphism HTML documentation page for orchestrator.
         
         Args:
             metadata: Orchestrator metadata
-            diagram_file: Path to workflow diagram
+            diagram_content: Mermaid diagram content
             
         Returns:
-            Markdown content
+            HTML content
         """
-        lines = [
-            f"# {metadata['name'].replace('_', ' ').title()}",
-            "",
-            "**Author:** Asif Hussain | **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.",
-            "",
-            "---",
-            ""
-        ]
+        title = metadata['name'].replace('_', ' ').title()
+        orchestrator_slug = metadata['name'].lower().replace('_', '-')
         
-        # Module docstring
-        if metadata["module_docstring"]:
-            lines.append("## Overview")
-            lines.append("")
-            lines.append(metadata["module_docstring"])
-            lines.append("")
+        html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title} - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">{title}</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">{title}</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    {self._format_docstring(metadata.get("module_docstring", "No description available."))}
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+{diagram_content}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+'''
         
-        # Workflow diagram
-        diagram_rel_path = diagram_file.relative_to(self.docs_path)
-        lines.append("## Workflow")
-        lines.append("")
-        lines.append("```mermaid")
-        lines.append(diagram_file.read_text())
-        lines.append("```")
-        lines.append("")
-        
-        # Classes
+        # Add classes
         for class_info in metadata["classes"]:
-            lines.append(f"## Class: {class_info['name']}")
-            lines.append("")
-            
+            html += f'''
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: {class_info["name"]}</h3>
+'''
             if class_info["docstring"]:
-                lines.append(class_info["docstring"])
-                lines.append("")
+                html += f'''
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    {self._format_docstring(class_info["docstring"])}
+                </p>
+'''
             
             if class_info["bases"]:
-                lines.append(f"**Inherits from:** {', '.join(class_info['bases'])}")
-                lines.append("")
+                html += f'''
+                <p><strong>Inherits from:</strong> <code>{", ".join(class_info["bases"])}</code></p>
+'''
             
-            # Methods
+            # Add methods
             if class_info["methods"]:
-                lines.append("### Methods")
-                lines.append("")
-                
+                html += '''
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+'''
                 for method in class_info["methods"]:
                     if method["name"].startswith("__") and method["name"] != "__init__":
-                        continue  # Skip dunder methods except __init__
+                        continue
                     
                     async_marker = "async " if method["is_async"] else ""
                     params_str = ", ".join(method["params"])
-                    lines.append(f"#### `{async_marker}{method['name']}({params_str})`")
-                    lines.append("")
                     
+                    html += f'''
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            {async_marker}{method["name"]}({params_str})
+                        </h5>
+'''
                     if method["docstring"]:
-                        lines.append(method["docstring"])
-                        lines.append("")
-        
-        # Top-level functions
-        if metadata["functions"]:
-            lines.append("## Functions")
-            lines.append("")
+                        html += f'''
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            {self._format_docstring(method["docstring"])}
+                        </p>
+'''
+                    html += '''
+                    </div>
+'''
+                html += '''
+                </div>
+'''
             
+            html += '''
+            </div>
+'''
+        
+        # Add top-level functions
+        if metadata["functions"]:
+            html += '''
+            <div class="glass-card">
+                <h3>Functions</h3>
+                <div style="margin-left: 1rem;">
+'''
             for func in metadata["functions"]:
                 params_str = ", ".join(func["params"])
-                lines.append(f"### `{func['name']}({params_str})`")
-                lines.append("")
-                
+                html += f'''
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        {func["name"]}({params_str})
+                    </h4>
+'''
                 if func["docstring"]:
-                    lines.append(func["docstring"])
-                    lines.append("")
+                    html += f'''
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        {self._format_docstring(func["docstring"])}
+                    </p>
+'''
+                html += '''
+                </div>
+'''
+            html += '''
+                </div>
+            </div>
+'''
         
-        # File location
-        lines.append("---")
-        lines.append("")
-        lines.append(f"**Source:** `{metadata.get('file_path', 'Unknown')}`")
-        lines.append("")
-        
-        return "\n".join(lines)
+        # Footer
+        html += f'''
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>{metadata.get('file_path', 'Unknown')}</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({{ startOnLoad: true, theme: 'dark' }});
+    </script>
+</body>
+</html>
+'''
+        return html
     
-    def _generate_index_page(self, data: Dict[str, Any]) -> str:
+    def _format_docstring(self, text: str) -> str:
+        """Format docstring for HTML display."""
+        if not text:
+            return ""
+        
+        # Replace newlines with <br> for simple formatting
+        text = text.strip().replace("\n\n", "</p><p>").replace("\n", "<br>")
+        return text
+    
+    def _generate_index_html(self, data: Dict[str, Any]) -> str:
         """
-        Generate index page listing all orchestrators.
+        Generate glassmorphism HTML index page listing all orchestrators.
         
         Args:
             data: Collected orchestrator data
             
         Returns:
-            Markdown content
+            HTML content
         """
-        lines = [
-            "# CORTEX Orchestrators",
-            "",
-            "**Author:** Asif Hussain | **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.",
-            "",
-            "---",
-            "",
-            "## Overview",
-            "",
-            f"CORTEX orchestration system contains **{data['orchestrator_count']} orchestrators** that coordinate complex workflows.",
-            "",
-            "## Orchestrator Catalog",
-            ""
-        ]
+        html = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orchestrators - CORTEX 3.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Orchestrators</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <h1 class="section-title">CORTEX Orchestrators</h1>
+            <p class="text-center" style="max-width: 800px; margin: 0 auto 3rem; color: var(--text-secondary); font-size: 1.125rem;">
+                Intelligent workflow coordination for complex development operations. 
+                ''' + f'''{data["orchestrator_count"]} orchestrators power CORTEX's automation engine.
+            </p>
+        </div>
+    </section>
+
+    <!-- Overview Stats -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card">
+                <h2>System Overview</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">{data["orchestrator_count"]}</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">Total Orchestrators</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(123, 97, 255, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-secondary);">∞</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">Workflow Combinations</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(0, 255, 136, 0.1); border-radius: 8px;">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--success);">100%</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">Automation Coverage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Orchestrator Catalog -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Orchestrator Catalog</h2>
+            <div class="feature-grid">
+'''
         
+        # Add orchestrator cards
         for orchestrator in sorted(data["orchestrators"], key=lambda x: x["name"]):
-            doc_file = f"{orchestrator['name'].lower().replace('_', '-')}.md"
-            title = orchestrator["name"].replace("_", " ").title()
+            orchestrator_slug = orchestrator['name'].lower().replace('_', '-')
+            title = orchestrator['name'].replace('_', ' ').title()
             
-            lines.append(f"### [{title}]({doc_file})")
-            lines.append("")
-            
-            # Get first line of module docstring as summary
+            # Get summary from module docstring
+            summary = "Orchestrator workflow coordination"
             if orchestrator["module_docstring"]:
-                summary = orchestrator["module_docstring"].split("\n")[0]
-                lines.append(summary)
-                lines.append("")
+                summary = orchestrator["module_docstring"].split("\n")[0].strip()
+                if len(summary) > 150:
+                    summary = summary[:147] + "..."
+            
+            html += f'''
+                <a href="{orchestrator_slug}/" class="feature-card">
+                    <div class="icon">🔧</div>
+                    <h3>{title}</h3>
+                    <p>{summary}</p>
+                </a>
+'''
         
-        lines.append("---")
-        lines.append("")
-        lines.append(f"*Generated: {data['generated_at']}*")
-        lines.append("")
-        
-        return "\n".join(lines)
+        html += '''
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p style="font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Generated: ''' + data['generated_at'] + '''
+                </p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+'''
+        return html
     
     def _get_timestamp(self) -> str:
         """Get formatted timestamp"""

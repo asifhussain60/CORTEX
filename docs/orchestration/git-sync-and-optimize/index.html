@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Sync And Optimize - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Git Sync And Optimize</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Git Sync And Optimize</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Git Sync and Optimize Orchestrator</p><p>Comprehensive workflow for safely syncing with remote and optimizing CORTEX state.</p><p>Workflow:<br>1. Stash current work with descriptive message<br>2. Pull latest changes from origin<br>3. Intelligently merge stashed work (auto-resolve or prompt)<br>4. Run system alignment to validate integration<br>5. Run optimization to improve performance<br>6. Run cleanup to remove obsolete artifacts<br>7. Push merged changes to remote<br>8. Sync with origin to ensure consistency</p><p>Safety Features:<br>- Automatic stash backup with timestamps<br>- Conflict detection and resolution strategies<br>- Rollback capability on merge failures<br>- Validation checkpoints between phases<br>- Detailed logging and status reporting</p><p>Version: 3.2.1<br>Author: Asif Hussain<br>Copyright: © 2024-2025 Asif Hussain. All rights reserved.<br>License: Source-Available (Use Allowed, No Contributions)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([git_sync_and_optimize])
+
+    Init[Initialize GitSyncAndOptimizeOrchestrator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Execute]
+    M0 --> M1
+
+    M16 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: GitSyncAndOptimizeOrchestrator</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Orchestrates safe git sync with remote and system optimization.
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            __init__(self, repo_path)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize orchestrator.</p><p>Args:<br>    repo_path: Path to git repository (defaults to CORTEX root)
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            execute(self, auto_resolve_conflicts)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute the complete sync and optimize workflow.</p><p>Args:<br>    auto_resolve_conflicts: Automatically resolve simple conflicts<br>    <br>Returns:<br>    Dictionary with operation results
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase1_pre_status(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 1: Check pre-sync repository status.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase2_stash_work(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 2: Stash current work with descriptive message.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase3_pull_remote(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 3: Pull latest changes from remote.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase4_merge_stash(self, auto_resolve)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 4: Intelligently merge stashed work.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _auto_resolve_conflicts(self, conflicts)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Attempt to auto-resolve conflicts using intelligent strategies.</p><p>Args:<br>    conflicts: List of conflicted file paths<br>    <br>Returns:<br>    True if all conflicts resolved
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase5_align(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 5: Run system alignment.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase6_optimize(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 6: Run system optimization.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase7_cleanup(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 7: Run system cleanup.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase8_push(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 8: Push changes to remote.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase9_sync(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 9: Final sync with remote.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _phase10_post_status(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Phase 10: Final status check.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _print_success_summary(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Print final success summary.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _run_git_command(self, command)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Run git command and return result.</p><p>Args:<br>    command: Git command as list<br>    <br>Returns:<br>    Dictionary with returncode, stdout, stderr
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _rollback_stash(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Rollback by reapplying stash.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _build_error_result(self, message, rollback)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Build error result dictionary.</p><p>Args:<br>    message: Error message<br>    rollback: Whether to attempt rollback<br>    <br>Returns:<br>    Error result dictionary
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card">
+                <h3>Functions</h3>
+                <div style="margin-left: 1rem;">
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        main()
+                    </h4>
+
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        CLI entry point.
+                    </p>
+
+                </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/git_sync_and_optimize.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

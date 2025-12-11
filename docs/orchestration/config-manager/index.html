@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Manager - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Config Manager</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Config Manager</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Extended Orchestrator Configuration</p><p>Adds Phase 5 configuration management features to OrchestratorConfig.<br>Supports environment-specific configs, file-based loading, feature flags.</p><p>Version: 3.0.0<br>Author: Asif Hussain
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([config_manager])
+
+    Init[Initialize OrchestratorConfig]
+    Start --> Init
+
+    M0[  Post Init  ]
+    Init --> M0
+    M1[To Dict]
+    M0 --> M1
+    M2[To Yaml]
+    M1 --> M2
+    M3[To Json]
+    M2 --> M3
+    M4[Save To File]
+    M3 --> M4
+    M5[From Dict]
+    M4 --> M5
+    M6[From Yaml]
+    M5 --> M6
+    M7[From Json]
+    M6 --> M7
+    M8[From File]
+    M7 --> M8
+    M9[Load For Environment]
+    M8 --> M9
+    M10[Merge Overrides]
+    M9 --> M10
+
+    M10 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: OrchestratorConfig</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Extended orchestrator configuration with environment support.</p><p>Supports loading from YAML/JSON files, environment-specific overrides,<br>and centralized feature flag management.
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            to_dict(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Serialize to dictionary.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            to_yaml(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Serialize to YAML string.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            to_json(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Serialize to JSON string.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            save_to_file(self, file_path)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Save configuration to file.</p><p>Args:<br>    file_path: Path to save config (YAML or JSON based on extension)
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            from_dict(cls, data)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Deserialize from dictionary.</p><p>Args:<br>    data: Configuration dictionary<br>    <br>Returns:<br>    OrchestratorConfig instance
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            from_yaml(cls, yaml_str)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Deserialize from YAML string.</p><p>Args:<br>    yaml_str: YAML string<br>    <br>Returns:<br>    OrchestratorConfig instance
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            from_json(cls, json_str)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Deserialize from JSON string.</p><p>Args:<br>    json_str: JSON string<br>    <br>Returns:<br>    OrchestratorConfig instance
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            from_file(cls, file_path)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Load configuration from file.</p><p>Args:<br>    file_path: Path to config file (YAML or JSON)<br>    <br>Returns:<br>    OrchestratorConfig instance
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            load_for_environment(cls, cortex_root, environment)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Load environment-specific configuration.</p><p>Looks for config files in this order:<br>1. cortex-brain/config/orchestrator-config-{environment}.yaml<br>2. cortex-brain/config/orchestrator-config.yaml<br>3. Default configuration</p><p>Args:<br>    cortex_root: CORTEX root path<br>    environment: Environment name (development, staging, production)<br>    <br>Returns:<br>    OrchestratorConfig instance
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            merge_overrides(self, overrides)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Merge configuration overrides.</p><p>Args:<br>    overrides: Dictionary of configuration overrides
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card">
+                <h3>Functions</h3>
+                <div style="margin-left: 1rem;">
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        create_development_config(cortex_root)
+                    </h4>
+
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Create development configuration template.
+                    </p>
+
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        create_production_config(cortex_root)
+                    </h4>
+
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Create production configuration template.
+                    </p>
+
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        create_ci_cd_config(cortex_root)
+                    </h4>
+
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Create CI/CD configuration template.
+                    </p>
+
+                </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/config_manager.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

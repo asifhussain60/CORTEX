@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Report Orchestrator - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Manager Report Orchestrator</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Manager Report Orchestrator</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Manager Report Orchestrator</p><p>Generates comprehensive manager-level reports for CORTEX development metrics.<br>Provides velocity, coverage, productivity, and quality insights for team oversight.</p><p>Author: Asif Hussain<br>Copyright: © 2024-2025 Asif Hussain. All rights reserved.<br>License: Source-Available (Use Allowed, No Contributions)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([manager_report_orchestrator])
+
+    Init[Initialize ManagerReportOrchestrator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Generate Report]
+    M0 --> M1
+
+    M5 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: ManagerReportOrchestrator</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Orchestrates generation of manager-level performance reports.</p><p>Combines velocity metrics, test coverage, code quality, and productivity<br>insights into executive-friendly markdown reports.
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            __init__(self, cortex_root)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize manager report orchestrator.</p><p>Args:<br>    cortex_root: Root directory of CORTEX installation
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            generate_report(self, period, output_path)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate comprehensive manager report.</p><p>Args:<br>    period: Report period ("weekly", "monthly", "quarterly")<br>    output_path: Optional custom output path<br>    <br>Returns:<br>    Dict with success, report_path, metrics summary
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _get_days_for_period(self, period)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get number of days for report period.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _calculate_summary(self, velocity_data, git_metrics, coverage_trends, file_hotspots, insights)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Calculate summary statistics for report.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_report(self, period, days, summary, velocity_data, git_metrics, coverage_trends, file_hotspots, insights)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format report as markdown.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _format_duration(self, seconds)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Format duration in human-readable format.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card">
+                <h3>Functions</h3>
+                <div style="margin-left: 1rem;">
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        main()
+                    </h4>
+
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        CLI entry point for manager reports.
+                    </p>
+
+                </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/manager_report_orchestrator.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

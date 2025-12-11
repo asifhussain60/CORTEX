@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Launcher - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Dashboard Launcher</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Dashboard Launcher</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Dashboard Launcher Orchestrator</p><p>Purpose: Launch CORTEX dashboard with HTTP server and auto-open browser.<br>         Serves dashboard UI from cortex-brain/dashboards/ parent directory.</p><p>📖 COMPLETE DOCUMENTATION: cortex-brain/documents/implementation-guides/dashboard-operation-guide.md<br>   Read this guide for:<br>   - Launch commands and options<br>   - Data structure and file locations<br>   - Server configuration details<br>   - Troubleshooting common issues</p><p>Trigger: "load dashboard", "/CORTEX load dashboard", "launch dashboard", "open dashboard"</p><p>CRITICAL CONFIGURATION:<br>- Server MUST serve from cortex-brain/dashboards/ (parent directory)<br>- NOT from cortex-brain/dashboards/ui/ (breaks data file access)<br>- This allows both /ui/index.html and /data/mock/*.json to work</p><p>Features:<br>- Auto-detect cortex-brain/dashboards/ directory<br>- Launch HTTP server on available port (default: 8080, fallback: 8081-8089)<br>- Auto-open browser to dashboard with specified data source<br>- Background server process (non-blocking)<br>- Graceful shutdown on Ctrl+C<br>- CORS support for local development<br>- Comprehensive error handling</p><p>Usage:<br>    from src.orchestrators.dashboard_launcher import launch_dashboard<br>    <br>    # Launch with defaults<br>    result = launch_dashboard()<br>    <br>    # Launch with custom port<br>    result = launch_dashboard(port=9000)<br>    <br>    # Launch without auto-opening browser<br>    result = launch_dashboard(auto_open=False)<br>    <br>    # Launch with specific data source<br>    result = launch_dashboard(source="luum-fresh")</p><p>Data Sources:<br>    - "mock" - Demo data in cortex-brain/dashboards/data/mock/<br>    - "{repo-id}" - Repository data in cortex-brain/dashboards/data/repos/{repo-id}/</p><p>Author: Asif Hussain<br>Copyright: © 2024-2025 Asif Hussain. All rights reserved.<br>License: Source-Available (Use Allowed, No Contributions)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([dashboard_launcher])
+
+    Init[Initialize DashboardServer]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M4[Start]
+    M3 --> M4
+    M5[Stop]
+    M4 --> M5
+    M6[Is Running]
+    M5 --> M6
+
+    M6 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: CORSHTTPRequestHandler</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    HTTP request handler with CORS support for local development.
+                </p>
+
+                <p><strong>Inherits from:</strong> <code>http.server.SimpleHTTPRequestHandler</code></p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            __init__(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize handler with specific directory.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            end_headers(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Add CORS headers to all responses.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            do_OPTIONS(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Handle OPTIONS requests for CORS preflight.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            log_message(self, format)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Suppress default server logs (use Python logger instead).
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: DashboardServer</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    HTTP server wrapper for dashboard UI.
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            __init__(self, dashboard_dir, port)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize dashboard server.</p><p>Args:<br>    dashboard_dir: Path to dashboard UI directory<br>    port: Port to serve on (default: 8080)
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _kill_process_on_port(self, port)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Kill any process using the specified port.</p><p>Args:<br>    port: Port number to free up</p><p>Returns:<br>    True if port was freed, False otherwise
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _is_port_available(self, port)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Check if a port is available.</p><p>Args:<br>    port: Port number to check</p><p>Returns:<br>    True if port is available, False otherwise
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _resolve_data_source(self, path_or_source)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Resolve a file path or source name to a valid data source key.</p><p>Args:<br>    path_or_source: Repository path or data source key</p><p>Returns:<br>    Valid data source key (e.g., 'mock', 'v5-webservices-prevalidationws')
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            start(self, auto_open, source)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Start HTTP server and optionally open browser.</p><p>Args:<br>    auto_open: Auto-open browser to dashboard<br>    source: Data source to load (mock, noor-canvas, etc.) or repository path</p><p>Returns:<br>    Result dict with success, port, url, message
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            stop(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Stop the HTTP server.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            is_running(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Check if server is running.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card">
+                <h3>Functions</h3>
+                <div style="margin-left: 1rem;">
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        _detect_cortex_root()
+                    </h4>
+
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Auto-detect CORTEX root directory.</p><p>Returns:<br>    Path to CORTEX root or None if not found
+                    </p>
+
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        launch_dashboard(port, auto_open, source, cortex_root)
+                    </h4>
+
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Launch CORTEX dashboard with HTTP server.</p><p>Args:<br>    port: Port to serve on (default: 8080, auto-fallback to 8081-8089)<br>    auto_open: Auto-open browser to dashboard (default: True)<br>    source: Data source to load (default: "mock")<br>    cortex_root: Path to CORTEX root (auto-detect if None)</p><p>Returns:<br>    Dict with keys:<br>        - success: bool<br>        - port: int (actual port used)<br>        - url: str (dashboard URL)<br>        - message: str (status message)<br>        - directory: str (dashboard directory path)<br>        - server: DashboardServer instance (if successful)
+                    </p>
+
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        main()
+                    </h4>
+
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        CLI entry point for testing.
+                    </p>
+
+                </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/dashboard_launcher.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

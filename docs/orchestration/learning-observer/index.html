@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Observer - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Learning Observer</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Learning Observer</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    CORTEX Learning Observer</p><p>Event-driven pattern capture system for automated Knowledge Graph updates.<br>Subscribes to orchestrator lifecycle events to extract and store patterns.</p><p>Author: Asif Hussain<br>Copyright: © 2025 Asif Hussain. All rights reserved.</p><p>Design:<br>    - Observer pattern (decoupled from orchestrators)<br>    - <50ms overhead per event<br>    - Automatic Tier 2 storage<br>    - No blocking operations</p><p>Usage:<br>    from src.orchestrators.learning_observer import LearningObserver<br>    from src.tier2.knowledge_graph import KnowledgeGraph<br>    <br>    kg = KnowledgeGraph()<br>    observer = LearningObserver(kg)<br>    <br>    # Subscribe to orchestrator events<br>    planning_orchestrator.subscribe(observer)<br>    tdd_orchestrator.subscribe(observer)<br>    <br>    # Observer automatically captures patterns on phase completion
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([learning_observer])
+
+    Init[Initialize LearningObserver]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[On Phase Completion]
+    M0 --> M1
+    M2[On Tdd Cycle Completion]
+    M1 --> M2
+    M3[On Debug Session Completion]
+    M2 --> M3
+    M9[Query Similar Bugs]
+    M8 --> M9
+    M10[Get High Risk Bugs]
+    M9 --> M10
+    M11[Get Feature Bug Report]
+    M10 --> M11
+    M12[Generate Rca Summary Report]
+    M11 --> M12
+
+    M12 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: LearningObserver</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Observer that captures patterns from orchestrator lifecycle events.</p><p>Events:<br>    - phase_completion: Planning phase completed<br>    - tdd_cycle_completion: RED→GREEN→REFACTOR cycle completed<br>    - debug_session_completion: Bug resolution completed</p><p>Pattern Types:<br>    - planning_decision: DoR/DoD decisions, threat model outcomes<br>    - tdd_cycle: Test-to-code ratios, refactoring frequency<br>    - bug_resolution: RCA with symptom, root_cause, fix, prevention
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            __init__(self, knowledge_graph)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize observer with Knowledge Graph connection.</p><p>Args:<br>    knowledge_graph: KnowledgeGraph instance for pattern storage
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            on_phase_completion(self, event)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Handle planning phase completion event.</p><p>Event payload:<br>    - phase_id: str (e.g., "1.1", "2.3")<br>    - phase_name: str<br>    - duration_seconds: float<br>    - dor_compliant: bool<br>    - dod_compliant: bool<br>    - threat_model_applied: bool<br>    - acceptance_criteria_defined: bool<br>    - estimated_hours: int<br>    - actual_hours: int (if completed)</p><p>Patterns captured:<br>    - DoR/DoD compliance patterns<br>    - Estimation accuracy (estimated vs actual)<br>    - Threat modeling decisions
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            on_tdd_cycle_completion(self, event)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Handle TDD cycle completion event.</p><p>Event payload:<br>    - cycle_phase: str ("RED", "GREEN", "REFACTOR")<br>    - test_count: int<br>    - code_lines_changed: int<br>    - duration_seconds: float<br>    - tests_passed: bool<br>    - coverage_delta: float</p><p>Patterns captured:<br>    - RED→GREEN→REFACTOR timing<br>    - Test-to-code ratios<br>    - Refactoring frequency
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            on_debug_session_completion(self, event)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Handle debug session completion event.</p><p>Event payload:<br>    - session_id: str<br>    - symptom: str<br>    - root_cause: str<br>    - fix_applied: str<br>    - prevention: str<br>    - affected_features: List[str]<br>    - recurrence_risk: str ("low", "medium", "high")<br>    - target: str<br>    - duration_seconds: float</p><p>Patterns captured:<br>    - RCA (Root Cause Analysis)<br>    - Bug resolution patterns<br>    - Recurrence prevention strategies
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _extract_planning_content(self, event)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Extract planning pattern content from event.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _extract_tdd_content(self, event)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Extract TDD pattern content from event.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _extract_rca_content(self, event)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Extract RCA pattern content from event.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _calculate_confidence(self, event)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Calculate pattern confidence based on event data.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _calculate_estimation_accuracy(self, event)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Calculate estimation accuracy (1.0 = perfect, <1.0 = under, >1.0 = over).
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            query_similar_bugs(self, symptom, limit)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Find similar bug resolutions by symptom.</p><p>Args:<br>    symptom: Bug symptom description<br>    limit: Maximum results</p><p>Returns:<br>    List of similar RCA patterns with prevention strategies
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            get_high_risk_bugs(self, feature, limit)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get high-risk bugs, optionally filtered by feature.</p><p>Args:<br>    feature: Optional feature filter<br>    limit: Maximum results</p><p>Returns:<br>    List of high-risk RCA patterns
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            get_feature_bug_report(self, feature)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate bug impact report for a feature.</p><p>Args:<br>    feature: Feature name</p><p>Returns:<br>    Report with bug count, risk distribution, prevention strategies
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            generate_rca_summary_report(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate comprehensive RCA summary across all patterns.</p><p>Returns:<br>    Summary with total count, risk distribution, feature impact
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/learning_observer.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

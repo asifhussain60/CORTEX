@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Workflow Orchestrator - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Debug Workflow Orchestrator</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Debug Workflow Orchestrator</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    CORTEX Debug Workflow Orchestrator</p><p>Minimal debug workflow orchestrator focused on RCA (Root Cause Analysis) pattern capture.<br>Integrates with LearningObserver to automatically store bug resolutions in Tier 2.</p><p>Author: Asif Hussain<br>Copyright: © 2025 Asif Hussain. All rights reserved.</p><p>Design:<br>    - Observer pattern (subscribe/unsubscribe/notify)<br>    - Session-based debugging (start → investigate → complete)<br>    - Automatic RCA pattern emission on completion<br>    - <50ms overhead for event emission</p><p>Usage:<br>    from src.orchestrators.debug_workflow_orchestrator import DebugWorkflowOrchestrator<br>    from src.orchestrators.learning_observer import LearningObserver<br>    from src.tier2.knowledge_graph import KnowledgeGraph<br>    <br>    kg = KnowledgeGraph()<br>    observer = LearningObserver(kg)<br>    debug_orchestrator = DebugWorkflowOrchestrator()<br>    <br>    debug_orchestrator.subscribe(observer)<br>    <br>    # Start debug session<br>    session_id = debug_orchestrator.start_debug_session(<br>        symptom="Application crashes on login",<br>        target="authentication_module"<br>    )<br>    <br>    # Complete with RCA<br>    debug_orchestrator.complete_debug_session(<br>        session_id=session_id,<br>        root_cause="Null pointer exception in session validation",<br>        fix_applied="Added null check before session access",<br>        prevention="Add unit tests for null session scenarios",<br>        recurrence_risk="low",<br>        affected_features=["authentication", "sessions"]<br>    )<br>    <br>    # Observer automatically stores RCA pattern in Tier 2
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([debug_workflow_orchestrator])
+
+    Init[Initialize DebugWorkflowOrchestrator]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Subscribe]
+    M0 --> M1
+    M2[Unsubscribe]
+    M1 --> M2
+    M3[Start Debug Session]
+    M2 --> M3
+    M4[Complete Debug Session]
+    M3 --> M4
+    M5[Get Session]
+    M4 --> M5
+    M6[List Active Sessions]
+    M5 --> M6
+
+    M7 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: DebugWorkflowOrchestrator</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Orchestrator for debug workflows with RCA pattern capture.</p><p>Responsibilities:<br>    - Manage debug session lifecycle (start → investigate → complete)<br>    - Track active debug sessions<br>    - Emit debug_session_completion events to observers<br>    - Provide session metadata for RCA analysis</p><p>Events Emitted:<br>    - debug_session_completion: When debug session is completed with RCA</p><p>Event Payload:<br>    {<br>        "session_id": str,<br>        "symptom": str,<br>        "target": str,<br>        "root_cause": str,<br>        "fix_applied": str,<br>        "prevention": str,<br>        "recurrence_risk": "high|medium|low",<br>        "affected_features": List[str],<br>        "duration_seconds": float,<br>        "started_at": str (ISO format),<br>        "completed_at": str (ISO format)<br>    }
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            __init__(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize debug workflow orchestrator.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            subscribe(self, observer)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Subscribe an observer to debug events.</p><p>Args:<br>    observer: Observer instance with on_debug_session_completion() method
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            unsubscribe(self, observer)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Unsubscribe an observer from debug events.</p><p>Args:<br>    observer: Observer instance to remove
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            start_debug_session(self, symptom, target, metadata)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Start a new debug session.</p><p>Args:<br>    symptom: Observable issue description<br>    target: Component/module being debugged<br>    metadata: Optional additional session metadata</p><p>Returns:<br>    Session ID for tracking
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            complete_debug_session(self, session_id, root_cause, fix_applied, prevention, recurrence_risk, affected_features)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Complete a debug session and emit RCA pattern event.</p><p>Args:<br>    session_id: Session identifier from start_debug_session()<br>    root_cause: Identified root cause<br>    fix_applied: Fix that was implemented<br>    prevention: Strategy to prevent recurrence<br>    recurrence_risk: 'high', 'medium', or 'low'<br>    affected_features: List of affected features/components
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            get_session(self, session_id)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get session details by ID.</p><p>Args:<br>    session_id: Session identifier</p><p>Returns:<br>    Session dict or None if not found
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            list_active_sessions(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            List all active (in-progress) debug sessions.</p><p>Returns:<br>    List of active session dicts
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _notify_observers(self, event)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Notify all observers of debug_session_completion event.</p><p>Args:<br>    event: Event payload with RCA details
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/debug_workflow_orchestrator.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

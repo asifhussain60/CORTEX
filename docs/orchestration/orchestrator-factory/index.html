@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orchestrator Factory - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Orchestrator Factory</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Orchestrator Factory</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Orchestrator Factory - Dependency Injection & Configuration Management</p><p>Eliminates redundant initialization across orchestrators by providing:<br>- Centralized orchestrator instantiation<br>- Shared dependency injection<br>- Configuration-driven setup<br>- Testability via mock injection</p><p>Based on holistic analysis findings:<br>- 180+ lines of duplicated initialization code<br>- Tight coupling between orchestrators<br>- No dependency injection<br>- Manual import/initialization in each orchestrator</p><p>Author: Asif Hussain<br>Created: December 6, 2025<br>Version: 2.0.0 (Updated with Phase 2-5 integration)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([orchestrator_factory])
+
+    Init[Initialize OrchestratorFactory]
+    Start --> Init
+
+    M0[  Init  ]
+    Init --> M0
+    M1[Get Tdd Orchestrator]
+    M0 --> M1
+    M2[Get Git Checkpoint]
+    M1 --> M2
+    M3[Get Code Executor]
+    M2 --> M3
+    M4[Get Cleanup Orchestrator]
+    M3 --> M4
+    M5[Get Plan Execution Orchestrator]
+    M4 --> M5
+    M6[Get Planning Orchestrator]
+    M5 --> M6
+
+    M6 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: ITDDOrchestrator</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Interface for TDD orchestrators.
+                </p>
+
+                <p><strong>Inherits from:</strong> <code>Protocol</code></p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            start_session(self, feature_name, task_id)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Start TDD session.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            execute_red_phase(self, session_id)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute RED phase.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            execute_green_phase(self, session_id)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute GREEN phase.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            execute_refactor_phase(self, session_id)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute REFACTOR phase.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: IGitCheckpointOrchestrator</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Interface for Git checkpoint orchestrators.
+                </p>
+
+                <p><strong>Inherits from:</strong> <code>Protocol</code></p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            create_checkpoint(self, message, checkpoint_type)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Create git checkpoint.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            create_auto_checkpoint(self, operation, message)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Create automatic checkpoint.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            rollback_to_checkpoint(self, checkpoint_id)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Rollback to checkpoint.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: ICodeExecutor</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Interface for code execution agents.
+                </p>
+
+                <p><strong>Inherits from:</strong> <code>Protocol</code></p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            can_handle(self, request)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Check if can handle request.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            execute(self, request)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute code implementation.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: ICleanupOrchestrator</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Interface for cleanup orchestrators.
+                </p>
+
+                <p><strong>Inherits from:</strong> <code>Protocol</code></p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            execute_cleanup(self, scope, dry_run)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute cleanup operations.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: OrchestratorFactory</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Factory for creating orchestrators with dependency injection.</p><p>Eliminates:<br>- 180+ lines of redundant initialization code<br>- Tight coupling between orchestrators<br>- Manual dependency management<br>- Testing difficulties</p><p>Usage:<br>    config = OrchestratorConfig(cortex_root=Path("/path/to/cortex"))<br>    factory = OrchestratorFactory(config)<br>    <br>    # Get orchestrator with all dependencies injected<br>    plan_executor = factory.get_plan_execution_orchestrator()<br>    <br>    # For testing: inject mocks<br>    factory_with_mocks = OrchestratorFactory(config, tdd_orchestrator=MockTDD())
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            __init__(self, config, tdd_orchestrator, git_checkpoint, code_executor, cleanup_orchestrator)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize factory with configuration and optional mock dependencies.</p><p>Args:<br>    config: Orchestrator configuration<br>    tdd_orchestrator: Optional TDD orchestrator (for testing)<br>    git_checkpoint: Optional git checkpoint (for testing)<br>    code_executor: Optional code executor (for testing)<br>    cleanup_orchestrator: Optional cleanup orchestrator (for testing)
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            get_tdd_orchestrator(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get or create TDD implementation orchestrator.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            get_git_checkpoint(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get or create Git checkpoint orchestrator.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            get_code_executor(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get or create Code Executor agent.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            get_cleanup_orchestrator(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get or create Cleanup orchestrator.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            get_plan_execution_orchestrator(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get or create Plan Execution Orchestrator with injected dependencies.</p><p>Returns:<br>    Plan execution orchestrator with all dependencies injected
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            get_planning_orchestrator(self)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get or create Planning Orchestrator with injected dependencies.</p><p>Returns:<br>    Planning orchestrator with all dependencies injected
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card">
+                <h3>Functions</h3>
+                <div style="margin-left: 1rem;">
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                        create_orchestrator_factory(cortex_root)
+                    </h4>
+
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Convenience function to create factory with default configuration.</p><p>Args:<br>    cortex_root: Path to CORTEX root directory<br>    **config_overrides: Override default configuration values</p><p>Returns:<br>    Configured orchestrator factory</p><p>Example:<br>    factory = create_orchestrator_factory(<br>        cortex_root="/path/to/cortex",<br>        enable_vision_api=False,<br>        tdd_auto_debug=True<br>    )
+                    </p>
+
+                </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/orchestrator_factory.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

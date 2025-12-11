@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rollback Command Parser - CORTEX Orchestrators</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Rollback Command Parser</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+                    <div class="icon" style="font-size: 3rem;">🔧</div>
+                    <div>
+                        <h1 style="margin-bottom: 0.5rem;">Rollback Command Parser</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+                            CORTEX Orchestration System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Rollback Command Parser</p><p>Purpose: Parse natural language rollback commands into structured format<br>Author: Asif Hussain<br>Created: 2025-11-27</p><p>Command Formats Supported:<br>- "rollback to checkpoint-X"<br>- "rollback session session-Y to checkpoint-X"  <br>- "rollback checkpoint-X" (shorthand)</p><p>Integration Points:<br>- RollbackOrchestrator: Uses parsed checkpoint_id for validation<br>- User interaction: Translates natural language to structured commands
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Workflow Diagram</h2>
+            <div class="glass-card">
+                <div class="mermaid">
+flowchart TD
+    Start([rollback_command_parser])
+
+    Init[Initialize RollbackCommandParser]
+    Start --> Init
+
+    M3[Parse Command]
+    M2 --> M3
+
+    M3 --> End([Complete])
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes and Methods -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <h3>Class: RollbackCommandParser</h3>
+
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Parse natural language rollback commands into structured format.</p><p>Supports multiple command formats and validates checkpoint ID format.
+                </p>
+
+                <h4 style="margin-top: 1.5rem;">Methods</h4>
+                <div style="margin-left: 1rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _create_error_response(self, error_message)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Create standardized error response.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _create_success_response(self, checkpoint_id, session_id)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Create standardized success response.
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            _validate_checkpoint_id(self, checkpoint_id, command_format)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Validate checkpoint ID format.</p><p>Returns:<br>    Error response dict if invalid, None if valid
+                        </p>
+
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                            parse_command(self, command)
+                        </h5>
+
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Parse rollback command into structured format.</p><p>Args:<br>    command: Natural language rollback command<br>    <br>Returns:<br>    Dict with keys:<br>    - valid (bool): Whether command is valid<br>    - checkpoint_id (str|None): Extracted checkpoint ID<br>    - session_id (str|None): Extracted session ID (if specified)<br>    - error_message (str|None): Error description if invalid<br>    <br>Example:<br>    >>> parser = RollbackCommandParser()<br>    >>> parser.parse_command("rollback to checkpoint-abc123")<br>    {'valid': True, 'checkpoint_id': 'checkpoint-abc123', 'session_id': None}<br>    <br>    >>> parser.parse_command("rollback session session-1 to checkpoint-xyz")<br>    {'valid': True, 'checkpoint_id': 'checkpoint-xyz', 'session_id': 'session-1'}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Source File Info -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+                <p><strong>Source:</strong> <code>src/orchestrators/rollback_command_parser.py</code></p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>
