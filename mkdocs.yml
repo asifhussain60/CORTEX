@@ -9,12 +9,32 @@ repo_name: asifhussain60/CORTEX
 site_url: https://asifhussain60.github.io/CORTEX/
 use_directory_urls: true
 
-# Custom Tales Theme
+# Material Theme
 theme:
-  name: null
-  custom_dir: docs/themes/cortex-tales
-  
-# Theme does not use extra_css (CSS is in theme)
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
 
 # ============================================
 # NAVIGATION STRUCTURE - Section-Based
@@ -68,6 +88,16 @@ nav:
   - Workflows: operations/workflows.md
   - Entry Point Modules: operations/entry-point-modules.md
   - Health Monitoring: operations/health-monitoring.md
+- Orchestrators:
+  - Overview: orchestration/index.md
+  - TDD Implementation: orchestration/tdd-implementation-orchestrator.md
+  - Planning: orchestration/planning-orchestrator.md
+  - Debug Workflow: orchestration/debug-workflow-orchestrator.md
+  - Documentation: orchestration/documentation-orchestrator.md
+  - Dashboard Launcher: orchestration/dashboard-launcher.md
+  - Git Checkpoint: orchestration/git-checkpoint-orchestrator.md
+  - Learning Observer: orchestration/learning-observer.md
+  - All Orchestrators: orchestration/
 - User Guides:
   - Getting Started Guide: GETTING-STARTED.md
   - Navigation Guide: NAVIGATION-GUIDE.md
