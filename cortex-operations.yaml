@@ -79,6 +79,51 @@ operations:
     - resume planning session
     - continue the API refactoring
     - resume conversation conv-20251122-001
+  generate_narrative_from_ast:
+    name: Generate Narrative from AST
+    description: Transform AST JSON analysis data into business-focused textual narratives
+      for leadership and stakeholders
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - generate narrative from ast
+    - create executive narrative
+    - ast to narrative
+    - generate business narrative
+    - create narrative from code analysis
+    - synthesize ast narrative
+    category: analysis
+    modules:
+    - ast_narrative_orchestrator
+    profiles:
+      executive:
+        description: Generate executive-level narrative (non-technical, 1500-2000
+          words)
+        narrative_type: executive
+        target_audience: leadership
+        max_length: standard
+      technical:
+        description: Generate technical architecture narrative for developers
+        narrative_type: technical
+        target_audience: developers
+        max_length: detailed
+      compliance:
+        description: Generate regulatory compliance narrative for auditors
+        narrative_type: compliance
+        target_audience: auditors
+        max_length: standard
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Orchestrates data aggregation, template selection, synthesis, assembly,
+        and validation
+    examples:
+    - generate narrative from ast
+    - create executive narrative for RA-Domain
+    - generate business narrative from code analysis
+    - ast to narrative synthesis
   deploy_cortex_production:
     name: Deploy CORTEX Production Build
     description: Build clean production package and publish to downloadable repository
