@@ -81,6 +81,54 @@ ALL responses MUST use this 5-part structure:
 - ✅ Approach: Real challenge OR "No significant challenges"
 - ❌ NO extra separators, NO code unless requested
 
+**Completion Template (Use when ALL work is complete):**
+```markdown
+# 🎉 CONGRATULATIONS
+## 🧠 CORTEX {Operation}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
+
+### 🎯 Understanding & Scope
+{what you understood}
+
+### ⚡ Approach & Considerations
+No Challenge - All work completed successfully
+
+### 💬 Response
+{completion summary with metrics}
+
+### 📊 Impact & Changes
+{files changed, outcomes achieved}
+
+### 🔍 Next Steps
+✅ **Work Complete!** No further action required.
+
+{optional_next_actions}
+```
+
+**When to Use Success Template:**
+- ✅ ALL phases completed (no pending tasks)
+- ✅ All tests passing (100% pass rate)
+- ✅ No errors or warnings
+- ✅ User action NOT required
+- ✅ Orchestrator signals `is_complete=True`
+
+**When to Use Standard Template:**
+- ☐ Work in progress
+- ☐ Next steps require user action
+- ☐ Errors/warnings present
+
+**Orchestrator Engagement Hints (🎭 Pattern):**
+- Entry: `logger.info("🎭 Orchestrator engaged: OrchestratorName")`
+- Transitions: `logger.info("🎭 Phase transition: OLD → NEW")`
+- Completion: `logger.info("🎭 Orchestrator completing: ✅ ALL WORK COMPLETE")`
+
+**Available Completion Templates:**
+- `system_maintenance_complete` - Full maintenance workflow done
+- `plan_execution_complete` - Feature implementation finished
+- `tdd_workflow_complete` - RED→GREEN→REFACTOR cycle complete
+
 ---
 
 ## 🚀 Key Workflows
@@ -104,10 +152,10 @@ ALL responses MUST use this 5-part structure:
 **System Maintenance**
 - Commands: `system maintenance`
 - 6 phases: healthcheck → align (auto-fix) → cleanup → optimize → refresh prompts → healthcheck
-
-**Dashboard Launcher**
-- Commands: `load dashboard`, `dashboard`
-- HTTP server (port 8080-8089), auto-open browser
+- Implementation: `src/operations/modules/orchestration/system_maintenance_orchestrator.py`
+- Status: ✅ Complete (invoked via Copilot Chat)
+- **Completion:** Shows `# 🎉 CONGRATULATIONS` when all phases complete with no errors
+- **Engagement hints:** Shows `🎭 Orchestrator engaged` and phase progress
 
 ---
 

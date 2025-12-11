@@ -57,6 +57,11 @@ class GitCheckpointOrchestrator:
         Returns:
             Dict with success, checkpoint_id, commit_sha
         """
+        # Subtle hint: Orchestrator engagement
+        from logging import getLogger
+        logger = getLogger(__name__)
+        logger.info("🎭 Orchestrator engaged: GitCheckpointOrchestrator")
+        
         try:
             checkpoint_id = f"ckpt-{uuid.uuid4().hex[:8]}"
             timestamp = datetime.now(timezone.utc).isoformat()

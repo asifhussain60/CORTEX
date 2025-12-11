@@ -105,6 +105,8 @@ class PlanExecutionOrchestratorV2:
         Returns:
             Tuple of (success, execution_report)
         """
+        # Subtle hint: Orchestrator engagement
+        logger.info("🎭 Orchestrator engaged: PlanExecutionOrchestratorV2")
         logger.info(f"🚀 Starting plan execution (V2): {plan_path.name} (mode: {execution_mode})")
         
         # Create git checkpoint before starting
@@ -205,7 +207,11 @@ class PlanExecutionOrchestratorV2:
         # Mark as successful
         execution_report["success"] = True
         execution_report["completed_at"] = datetime.now().isoformat()
+        execution_report["is_complete"] = True  # Signal for template selection
         self._save_execution_report(execution_report)
+        
+        # Subtle hint: Completion status
+        logger.info("🎭 Orchestrator completing: ✅ ALL WORK COMPLETE")
         
         # Show final dashboard link for completed plan (autonomous mode)
         final_dashboard_link = (

@@ -67,6 +67,11 @@ class DocumentationOrchestrator:
         Returns:
             Path to generated document
         """
+        # Subtle hint: Orchestrator engagement
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info("🎭 Orchestrator engaged: DocumentationOrchestrator")
+        
         filename = f"phase-{phase_number}-{phase_name.lower().replace(' ', '-').replace('&', 'and')}.md"
         filepath = self.phases_dir / filename
         

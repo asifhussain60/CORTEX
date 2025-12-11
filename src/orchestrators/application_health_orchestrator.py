@@ -59,6 +59,11 @@ class ApplicationHealthOrchestrator:
                 - scan_level: Level used
                 - timestamp: Analysis timestamp
         """
+        # Subtle hint: Orchestrator engagement
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info("🎭 Orchestrator engaged: ApplicationHealthOrchestrator")
+        
         start_time = time.time()
         
         # Step 1: Discover files using CrawlerOrchestrator

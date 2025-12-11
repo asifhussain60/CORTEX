@@ -107,6 +107,8 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         total_phases = 7 if include_epm else 6  # 6 standard phases (+ optional EPM)
         current_phase = 0
         
+        # Subtle hint: Orchestrator engagement
+        logger.info("🎭 Orchestrator engaged: SystemMaintenanceOrchestrator")
         logger.info("🔧 Starting comprehensive system maintenance")
         
         try:
@@ -182,7 +184,12 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
             report_path = self._save_report(report)
             
             success = self.metrics['phases_completed'] == total_phases
+            is_complete = success and len(self.metrics['errors']) == 0
             
+            # Subtle hint: Completion status
+            logger.info(f"🎭 Orchestrator completing: {'✅ ALL WORK COMPLETE' if is_complete else '⏳ PHASES DONE WITH WARNINGS'}")
+            
+            # Standard response (template rendering handled by Copilot)
             return OperationResult(
                 success=success,
                 status=OperationStatus.SUCCESS if success else OperationStatus.WARNING,
@@ -192,7 +199,8 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
                     'phases_total': total_phases,
                     'metrics': self.metrics,
                     'report_path': str(report_path),
-                    'improvements': self.metrics['improvements']
+                    'improvements': self.metrics['improvements'],
+                    'is_complete': is_complete  # Signal for template selection
                 },
                 errors=[] if success else ["Some phases had warnings"],
                 warnings=self.metrics['warnings'],

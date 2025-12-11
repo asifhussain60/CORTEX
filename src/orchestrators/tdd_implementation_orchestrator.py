@@ -273,6 +273,9 @@ class TDDImplementationOrchestrator:
         Returns:
             Dict with session_id and initial state
         """
+        # Subtle hint: Orchestrator engagement
+        logger.info("🎭 Orchestrator engaged: TDDImplementationOrchestrator")
+        
         session_id = f"tdd-{uuid.uuid4().hex[:8]}"
         
         # SKULL PROTECTION: TDD_ENFORCEMENT
@@ -389,6 +392,7 @@ class TDDImplementationOrchestrator:
             }
         
         logger.info(f"🔴 Executing RED phase for session {session_id}")
+        logger.info("🎭 Phase transition: NOT_STARTED → RED")
         phase_start = datetime.now(timezone.utc)
         
         try:
@@ -489,6 +493,7 @@ class TDDImplementationOrchestrator:
             }
         
         logger.info(f"🟢 Executing GREEN phase for session {session_id}")
+        logger.info("🎭 Phase transition: RED → GREEN")
         phase_start = datetime.now(timezone.utc)
         
         try:
@@ -589,6 +594,7 @@ class TDDImplementationOrchestrator:
             }
         
         logger.info(f"🔵 Executing REFACTOR phase for session {session_id}")
+        logger.info("🎭 Phase transition: GREEN → REFACTOR")
         phase_start = datetime.now(timezone.utc)
         
         try:
@@ -770,6 +776,8 @@ class TDDImplementationOrchestrator:
         # Remove from active sessions
         del self.active_sessions[session_id]
         
+        # Subtle hint: Completion status
+        logger.info("🎭 Orchestrator completing: ✅ ALL WORK COMPLETE")
         logger.info(f"✅ Completed TDD session {session_id}")
         
         return {
@@ -779,7 +787,8 @@ class TDDImplementationOrchestrator:
             "metrics": state.metrics,
             "phase_history": state.phase_history,
             "duration_seconds": (state.completed_at - state.started_at).total_seconds(),
-            "message": f"TDD session complete for '{state.feature_name}'"
+            "message": f"TDD session complete for '{state.feature_name}'",
+            "is_complete": True  # Signal for template selection
         }
     
     def rollback_to_checkpoint(
