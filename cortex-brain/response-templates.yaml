@@ -96,6 +96,23 @@ shared:
       💡 **Session Restoration:** Open new chat → Reference this plan → Say "Continue"
 
       '
+  plan_approval_link:
+    format: '📋 **Review Plan:** [Open Plan Document](file:///{plan_file_path})
+
+
+      ✅ **To Approve:** Review the plan → Return to chat → Say "Approve" or "Proceed"
+
+      ❌ **To Modify:** Review the plan → Return to chat → Provide feedback
+
+      '
+  next_steps_with_approval:
+    format: '1. **📋 Review Plan** - [Open {plan_filename}](file:///{plan_file_path})
+
+      2. **✅ Approve** - Say "Approve" or "Proceed" to begin implementation
+
+      3. **✏️  Modify** - Provide feedback for plan adjustments
+
+      '
   maintenance_phase_progress:
     format: '## 🔧 System Maintenance Progress
 

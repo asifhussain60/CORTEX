@@ -24,6 +24,19 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, Any, List, Tuple
 
+# CORTEX 3.9.0: AST-Powered Copilot Instructions Enhancement
+try:
+    from src.operations.modules.setup.code_pattern_detector import detect_patterns, DomainPatterns
+    from src.operations.modules.setup.copilot_instructions_merger import (
+        merge_with_existing,
+        generate_new_instructions,
+        MergeResult
+    )
+    CODE_ANALYSIS_AVAILABLE = True
+except ImportError:
+    CODE_ANALYSIS_AVAILABLE = False
+    logger.warning("Code analysis modules not available - using basic templates")
+
 logger = logging.getLogger(__name__)
 
 
@@ -693,51 +706,187 @@ def generate_copilot_instructions(
     project_root: Path,
     project_name: str,
     detection: ProjectDetection,
-    force: bool = False
+    force: bool = False,
+    enable_code_analysis: bool = True
 ) -> Dict[str, Any]:
     """
     Generate .github/copilot-instructions.md for project.
     
-    Creates GitHub Copilot instructions file with project-specific context
-    and CORTEX integration guidelines.
+    **CORTEX 3.9.0 Enhancement:** Two-tier AST scanning strategy
+    - TIER 1 (Setup): Lightweight pattern detection (<3s)
+    - TIER 2 (Onboarding): Deep analysis via dashboard collectors (30-60s)
+    
+    Creates GitHub Copilot instructions file with project-specific context,
+    CORTEX integration guidelines, and detected domain patterns.
     
     Args:
         project_root: Project root directory
         project_name: Name of project
         detection: ProjectDetection with project details
         force: If True, overwrites existing instructions
+        enable_code_analysis: If True, run TIER 1 pattern detection
     
     Returns:
-        Dictionary with success status and file path
+        Dictionary with success status, file path, and merge details
     
     Example:
         >>> result = generate_copilot_instructions(
         ...     Path("/path/to/project"),
         ...     "my-project",
-        ...     detection
+        ...     detection,
+        ...     enable_code_analysis=True
         ... )
         >>> result["success"]
         True
+        >>> result["patterns_detected"]
+        4
     """
     project_root = Path(project_root)
     github_dir = project_root / ".github"
     instructions_path = github_dir / "copilot-instructions.md"
     
-    # Check if already exists
-    if instructions_path.exists() and not force:
-        logger.info("⚠️ Copilot instructions already exist")
-        return {
-            "success": False,
-            "file_path": str(instructions_path),
-            "learning_enabled": True,
-            "message": "File already exists (use force=True to overwrite)"
-        }
-    
     # Create .github directory if needed
     github_dir.mkdir(parents=True, exist_ok=True)
     
-    # Generate instructions content
-    content = f"""# GitHub Copilot Instructions for {project_name}
+    # Detect domain patterns if enabled (TIER 1 - lightweight)
+    patterns = None
+    analysis_time = 0.0
+    
+    if enable_code_analysis and CODE_ANALYSIS_AVAILABLE:
+        logger.info("🔍 Running TIER 1 pattern detection...")
+        import time
+        start = time.time()
+        
+        try:
+            patterns = detect_patterns(
+                project_root,
+                detection.language
+            )
+            analysis_time = time.time() - start
+            logger.info(f"✅ Pattern detection completed in {analysis_time:.2f}s")
+            logger.info(f"   Detected: {patterns.pattern_count()} patterns")
+        except Exception as e:
+            logger.warning(f"⚠️ Pattern detection failed: {e}")
+            patterns = None
+    
+    # Handle existing file (merge scenario)
+    if instructions_path.exists():
+        if not force:
+            logger.info("⚠️ Copilot instructions already exist")
+            return {
+                "success": False,
+                "file_path": str(instructions_path),
+                "learning_enabled": True,
+                "action": "skipped",
+                "message": "File already exists (use force=True to overwrite)"
+            }
+        
+        # Merge with existing (preserve user content)
+        if CODE_ANALYSIS_AVAILABLE:
+            logger.info("🔄 Merging CORTEX enhancements with existing file...")
+            try:
+                merge_result = merge_with_existing(
+                    instructions_path,
+                    project_name,
+                    detection.language,
+                    detection.framework,
+                    patterns
+                )
+                
+                # Write merged content
+                instructions_path.write_text(merge_result.content, encoding='utf-8')
+                logger.info(f"✅ Merged: {instructions_path}")
+                logger.info(f"   User sections preserved: {merge_result.user_sections_preserved}")
+                logger.info(f"   CORTEX sections updated: {merge_result.cortex_sections_updated}")
+                
+                return {
+                    "success": True,
+                    "file_path": str(instructions_path),
+                    "learning_enabled": True,
+                    "action": merge_result.action,
+                    "patterns_detected": patterns.pattern_count() if patterns else 0,
+                    "analysis_time": analysis_time,
+                    "user_sections_preserved": merge_result.user_sections_preserved,
+                    "cortex_sections_updated": merge_result.cortex_sections_updated,
+                    "warnings": merge_result.warnings,
+                    "message": f"Instructions {merge_result.action} with CORTEX enhancements"
+                }
+            except Exception as e:
+                logger.error(f"❌ Merge failed: {e}")
+                # Fall through to basic template
+    
+    # Generate new file (with detected patterns if available)
+    try:
+        if CODE_ANALYSIS_AVAILABLE and patterns:
+            # Use enhanced generator with patterns
+            content = generate_new_instructions(
+                project_name,
+                detection.language,
+                detection.framework,
+                detection.build_system,
+                detection.test_framework,
+                patterns
+            )
+            logger.info(f"✅ Generated enhanced instructions with {patterns.pattern_count()} patterns")
+        else:
+            # Fall back to basic template
+            content = _generate_basic_instructions(
+                project_name,
+                detection
+            )
+            logger.info("✅ Generated basic instructions (no pattern detection)")
+        
+        instructions_path.write_text(content, encoding='utf-8')
+        logger.info(f"✅ Created: {instructions_path}")
+        
+        return {
+            "success": True,
+            "file_path": str(instructions_path),
+            "learning_enabled": True,
+            "action": "created",
+            "patterns_detected": patterns.pattern_count() if patterns else 0,
+            "analysis_time": analysis_time,
+            "message": "Copilot instructions created successfully"
+        }
+        
+    except Exception as e:
+        error = f"Failed to create copilot instructions: {e}"
+        logger.error(f"❌ {error}")
+        return {
+            "success": False,
+            "file_path": str(instructions_path),
+            "learning_enabled": False,
+            "action": "failed",
+            "error": error
+        }
+
+
+def _generate_basic_instructions(
+    project_name: str,
+    detection: ProjectDetection
+) -> str:
+    """
+    Generate basic copilot instructions without pattern detection.
+    
+    Fallback for when code analysis is unavailable or disabled.
+    
+    Args:
+        project_name: Name of project
+        detection: ProjectDetection with project details
+    
+    Returns:
+        Markdown content for copilot-instructions.md
+    """
+    return f"""# GitHub Copilot Instructions for {project_name}
+
+**Auto-generated by CORTEX** | **Last Updated:** {datetime.now().strftime('%Y-%m-%d %H:%M')}  
+**Learning Progress:** Starting... (CORTEX will learn as you work)
+
+---
+
+## 🎯 Entry Point
+
+**Primary prompt:** `.github/prompts/CORTEX.prompt.md` - Load this for full CORTEX capabilities
 
 **Project:** {project_name}  
 **Language:** {detection.language}  
@@ -745,17 +894,27 @@ def generate_copilot_instructions(
 **Build System:** {detection.build_system}  
 **Test Framework:** {detection.test_framework}
 
+Users interact via natural language. No slash commands needed.
+
 ---
 
 ## 🧠 CORTEX Integration
 
-This project uses **CORTEX** - an AI assistant enhancement system that provides:
+This project uses **CORTEX** - an AI assistant enhancement system.
 
+**Available Capabilities:**
 - **Planning System 2.0:** Vision API, DoR/DoD enforcement, file-based planning
 - **TDD Mastery:** RED→GREEN→REFACTOR automation with auto-debug
 - **View Discovery:** Auto-extract UI element IDs for testing
 - **Progress Monitoring:** Real-time feedback for long operations
 - **Feedback System:** Structured issue reporting with privacy protection
+
+**Quick Commands:**
+- `plan [feature]` - Create feature plan with DoR/DoD
+- `start tdd` - Begin TDD workflow for current task
+- `discover views` - Extract UI element IDs for testing
+- `feedback` - Report issues or suggest improvements
+- `help` - Show all available commands
 
 ---
 
@@ -778,40 +937,9 @@ This project uses **CORTEX** - an AI assistant enhancement system that provides:
 
 ---
 
-## CORTEX Commands
-
-- `plan [feature]` - Create feature plan with DoR/DoD
-- `start tdd` - Begin TDD workflow for current task
-- `discover views` - Extract UI element IDs for testing
-- `feedback` - Report issues or suggest improvements
-- `help` - Show all available commands
-
----
-
-*Generated by CORTEX Master Setup v3.2.1*  
+*Generated by CORTEX Master Setup v3.9.0*  
 *Last updated: {datetime.now().strftime("%Y-%m-%d")}*
 """
-    
-    try:
-        instructions_path.write_text(content, encoding='utf-8')
-        logger.info(f"✅ Created: {instructions_path}")
-        
-        return {
-            "success": True,
-            "file_path": str(instructions_path),
-            "learning_enabled": True,
-            "message": "Copilot instructions created successfully"
-        }
-        
-    except Exception as e:
-        error = f"Failed to create copilot instructions: {e}"
-        logger.error(f"❌ {error}")
-        return {
-            "success": False,
-            "file_path": str(instructions_path),
-            "learning_enabled": False,
-            "error": error
-        }
 
 
 def create_completion_report(
