@@ -12,9 +12,9 @@
         <div class="header-logo">
             <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
             <div>
-                <h1 class="header-title">Complexity Heatmap</h1>
+                <h1 class="header-title">Complexity Analysis</h1>
                 <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                    Visualize code complexity hotspots | Large files | Refactoring priorities
+                    Code complexity metrics | Large file analysis | Method distribution
                 </p>
             </div>
         </div>
@@ -31,10 +31,10 @@
         <div class="kpi warning">
             <h3>Complexity Score</h3>
             <div class="value">65/100</div>
-            <div class="target">Target: 85/100</div>
-            <div class="trend down">↓ Need refactoring</div>
+            <div class="target">Current Complexity</div>
+            <div class="trend down">↓ 10 large files</div>
             <p style="font-size: 0.875rem; color: var(--text-secondary);">
-                10 large files (>500 LOC)
+                Files exceeding 500 LOC
             </p>
         </div>
 
@@ -42,7 +42,7 @@
             <h3>Largest File</h3>
             <div class="value">717</div>
             <div class="target">LOC (CarryoverDollars)</div>
-            <div class="trend down">↓ 3x target size</div>
+            <div class="trend down">↓ Largest in codebase</div>
             <p style="font-size: 0.875rem; color: var(--text-secondary);">
                 20 methods | Bus factor = 1
             </p>
@@ -52,19 +52,19 @@
             <h3>High-Method Classes</h3>
             <div class="value">3</div>
             <div class="target">Classes with >15 methods</div>
-            <div class="trend down">↓ Refactor candidates</div>
+            <div class="trend down">↓ High method count</div>
             <p style="font-size: 0.875rem; color: var(--text-secondary);">
-                Split into smaller classes
+                Multiple responsibilities
             </p>
         </div>
 
         <div class="kpi info">
-            <h3>Refactoring Budget</h3>
-            <div class="value">$45k</div>
-            <div class="target">CarryoverDollars only</div>
-            <div class="trend up">↑ Q1 2025 allocated</div>
+            <h3>Total LOC</h3>
+            <div class="value">~50k</div>
+            <div class="target">Across 220 files</div>
+            <div class="trend up">↑ Active codebase</div>
             <p style="font-size: 0.875rem; color: var(--text-secondary);">
-                Sprints 51-53
+                Average 227 LOC/file
             </p>
         </div>
     </section>
@@ -82,7 +82,7 @@
                     <th>LOC</th>
                     <th>Methods</th>
                     <th>Complexity</th>
-                    <th>Refactor Priority</th>
+                    <th>Risk Assessment</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,7 +92,7 @@
                     <td>717</td>
                     <td>20</td>
                     <td><span class="badge badge-critical">CRITICAL</span></td>
-                    <td>P0 - Split into 5 services</td>
+                    <td>Multiple responsibilities, bus factor 1</td>
                 </tr>
                 <tr class="warning">
                     <td><strong>2</strong></td>
@@ -100,7 +100,7 @@
                     <td>520</td>
                     <td>9</td>
                     <td><span class="badge badge-warning">HIGH</span></td>
-                    <td>P1 - Extract utilities</td>
+                    <td>Complex query logic</td>
                 </tr>
                 <tr class="warning">
                     <td><strong>3</strong></td>
@@ -108,7 +108,7 @@
                     <td>450</td>
                     <td>10</td>
                     <td><span class="badge badge-warning">HIGH</span></td>
-                    <td>P1 - Reduce method count</td>
+                    <td>Mixed calculation + persistence</td>
                 </tr>
                 <tr class="warning">
                     <td><strong>4</strong></td>
@@ -116,7 +116,7 @@
                     <td>410</td>
                     <td>8</td>
                     <td><span class="badge badge-warning">HIGH</span></td>
-                    <td>P2 - Extract queries</td>
+                    <td>Query-heavy service</td>
                 </tr>
                 <tr class="info">
                     <td><strong>5</strong></td>
@@ -124,7 +124,7 @@
                     <td>380</td>
                     <td>8</td>
                     <td><span class="badge badge-info">MEDIUM</span></td>
-                    <td>P2 - Monitor only</td>
+                    <td>Configuration management</td>
                 </tr>
                 <tr class="info">
                     <td><strong>6</strong></td>
@@ -132,7 +132,7 @@
                     <td>340</td>
                     <td>7</td>
                     <td><span class="badge badge-info">MEDIUM</span></td>
-                    <td>P3 - Low priority</td>
+                    <td>Manageable complexity</td>
                 </tr>
                 <tr class="info">
                     <td><strong>7</strong></td>
@@ -140,7 +140,7 @@
                     <td>290</td>
                     <td>6</td>
                     <td><span class="badge badge-info">MEDIUM</span></td>
-                    <td>P3 - Monitor only</td>
+                    <td>Shared utilities</td>
                 </tr>
                 <tr class="success">
                     <td><strong>8</strong></td>
@@ -148,7 +148,7 @@
                     <td>270</td>
                     <td>5</td>
                     <td><span class="badge badge-success">LOW</span></td>
-                    <td>OK - No action needed</td>
+                    <td>Well-structured</td>
                 </tr>
                 <tr class="success">
                     <td><strong>9</strong></td>
@@ -156,7 +156,7 @@
                     <td>180</td>
                     <td>4</td>
                     <td><span class="badge badge-success">LOW</span></td>
-                    <td>OK - Well-structured</td>
+                    <td>Simple feature flags</td>
                 </tr>
                 <tr class="success">
                     <td><strong>10</strong></td>
@@ -164,64 +164,61 @@
                     <td>130</td>
                     <td>0</td>
                     <td><span class="badge badge-success">LOW</span></td>
-                    <td>OK - Configuration file</td>
+                    <td>Configuration file</td>
                 </tr>
             </tbody>
         </table>
     </section>
 
-    <!-- Refactoring Roadmap -->
+    <!-- Complexity Distribution -->
     <section class="glass-card-flat mb-xl">
         <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
-            🛠️ Refactoring Roadmap (Q1 2025)
+            📊 Complexity Distribution Analysis
         </h2>
         <div style="display: grid; gap: 1rem;">
             <div class="glass-card">
                 <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">
-                    Phase 1: CarryoverDollarsDomainService (Sprints 51-52)
+                    CRITICAL: CarryoverDollarsDomainService
                 </h3>
                 <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
-                    <strong>Goal:</strong> Split 717 LOC into 5 sub-services
+                    <strong>Metrics:</strong> 717 LOC | 20 methods | Bus factor 1
                 </p>
                 <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
-                    <li>CarryoverCalculationService (150 LOC) - Core calculation logic</li>
-                    <li>CarryoverValidationService (120 LOC) - IRS rules validation</li>
-                    <li>CarryoverProcessingService (180 LOC) - Year-end processing</li>
-                    <li>CarryoverReportingService (100 LOC) - Form 5500 generation</li>
-                    <li>CarryoverOrchestratorService (167 LOC) - Coordinate sub-services</li>
+                    <li>Contains calculation, validation, processing, and reporting logic</li>
+                    <li>Single developer ownership creates knowledge silo</li>
+                    <li>Largest file in codebase by significant margin (3x median)</li>
+                    <li>Handles year-end carryover processing and Form 5500 generation</li>
                 </ul>
                 <p style="margin-top: 0.75rem; font-size: 0.875rem; color: var(--accent-primary);">
-                    💰 <strong>Budget:</strong> $45,000 | <strong>Effort:</strong> 120 hours
+                    💡 <strong>Observation:</strong> Multiple distinct responsibilities in single class
                 </p>
             </div>
 
             <div class="glass-card">
                 <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--warning);">
-                    Phase 2: PercentPlanLedger + ReimbursementBalance (Sprint 53)
+                    HIGH: PercentPlanLedger + ReimbursementBalance
                 </h3>
                 <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
-                    <strong>Goal:</strong> Extract utility classes, reduce method counts
+                    <strong>Metrics:</strong> 520 + 450 LOC | 9-10 methods each
                 </p>
                 <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
-                    <li>PercentPlanLedger: Extract ledger query utilities (50 LOC reduction)</li>
-                    <li>ReimbursementBalance: Split calculation + persistence (100 LOC reduction)</li>
+                    <li>PercentPlanLedger: Complex ledger query logic with utility methods</li>
+                    <li>ReimbursementBalance: Mixes calculation logic with data persistence</li>
+                    <li>Both files exceed recommended single-responsibility size</li>
                 </ul>
-                <p style="margin-top: 0.75rem; font-size: 0.875rem; color: var(--accent-primary);">
-                    💰 <strong>Budget:</strong> $16,000 | <strong>Effort:</strong> 42 hours
-                </p>
             </div>
 
             <div class="glass-card">
                 <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--info);">
-                    Phase 3: Monitor Remaining Files (Ongoing)
+                    MEDIUM-LOW: Remaining 7 Files
                 </h3>
                 <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
-                    <strong>Goal:</strong> Prevent complexity regression
+                    <strong>Range:</strong> 130-410 LOC | 4-8 methods
                 </p>
                 <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
-                    <li>Code review rule: No file >250 LOC without architecture approval</li>
-                    <li>CI/CD check: Fail build if complexity score <70/100</li>
-                    <li>Monthly complexity reports to tech lead</li>
+                    <li>MemberFlexSpanDomainService (410 LOC): Query-heavy service</li>
+                    <li>RolloverSettingsService (380 LOC): Configuration management</li>
+                    <li>5 additional files: Well-structured, manageable complexity</li>
                 </ul>
             </div>
         </div>

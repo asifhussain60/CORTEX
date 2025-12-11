@@ -12,9 +12,9 @@
         <div class="header-logo">
             <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
             <div>
-                <h1 class="header-title">Knowledge Ownership Map</h1>
+                <h1 class="header-title">Knowledge Distribution</h1>
                 <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                    Bus Factor Analysis | Knowledge Silos | Pair Programming Opportunities
+                    Bus factor analysis | Knowledge silos | Ownership gaps
                 </p>
             </div>
         </div>
@@ -31,7 +31,7 @@
         <div class="kpi critical">
             <h3>Critical Knowledge Silos</h3>
             <div class="value">3</div>
-            <div class="target">Target: 0</div>
+            <div class="target">Single points of failure</div>
             <div class="trend down">↓ Bus factor = 1</div>
             <p style="font-size: 0.875rem; color: var(--text-secondary);">
                 Carryover | Claims | Rollover
@@ -41,7 +41,7 @@
         <div class="kpi warning">
             <h3>Carryover Bus Factor</h3>
             <div class="value">1</div>
-            <div class="target">Target: 3+</div>
+            <div class="target">Single developer</div>
             <div class="trend down">↓ 717 LOC single-owner</div>
             <p style="font-size: 0.875rem; color: var(--text-secondary);">
                 Senior Dev B only
@@ -59,12 +59,12 @@
         </div>
 
         <div class="kpi info">
-            <h3>Pair Programming Target</h3>
-            <div class="value">8 hrs</div>
-            <div class="target">Per week (Q1 2025)</div>
-            <div class="trend up">↑ Knowledge transfer</div>
+            <h3>Knowledge Concentration</h3>
+            <div class="value">42%</div>
+            <div class="target">Of code in silos</div>
+            <div class="trend down">↓ High concentration</div>
             <p style="font-size: 0.875rem; color: var(--text-secondary);">
-                Focus: Carryover logic
+                3 critical areas
             </p>
         </div>
     </section>
@@ -82,7 +82,7 @@
                     <th>Primary Owner</th>
                     <th>Backup Developers</th>
                     <th>Risk Level</th>
-                    <th>Mitigation Plan</th>
+                    <th>Current Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,7 +92,7 @@
                     <td>Senior Dev B</td>
                     <td>None</td>
                     <td><span class="badge badge-critical">CRITICAL</span></td>
-                    <td>Pair programming Sprint 51-52</td>
+                    <td>No backup coverage</td>
                 </tr>
                 <tr class="critical">
                     <td><strong>Claims Processing</strong></td>
@@ -100,7 +100,7 @@
                     <td>Mid Dev D</td>
                     <td>None</td>
                     <td><span class="badge badge-critical">CRITICAL</span></td>
-                    <td>Knowledge transfer sessions</td>
+                    <td>No backup coverage</td>
                 </tr>
                 <tr class="critical">
                     <td><strong>Rollover Settings</strong></td>
@@ -108,7 +108,7 @@
                     <td>Senior Dev B</td>
                     <td>None</td>
                     <td><span class="badge badge-critical">CRITICAL</span></td>
-                    <td>Cross-train Mid Dev C</td>
+                    <td>No backup coverage</td>
                 </tr>
                 <tr class="warning">
                     <td><strong>Percent Plan Ledger</strong></td>
@@ -116,7 +116,7 @@
                     <td>Senior Dev A</td>
                     <td>Mid Dev C (partial)</td>
                     <td><span class="badge badge-warning">HIGH</span></td>
-                    <td>Documentation + code review</td>
+                    <td>Limited backup coverage</td>
                 </tr>
                 <tr class="success">
                     <td><strong>Reimbursement Balance</strong></td>
@@ -124,7 +124,7 @@
                     <td>Senior Dev A</td>
                     <td>Mid Dev C, Junior Dev E</td>
                     <td><span class="badge badge-success">LOW</span></td>
-                    <td>Maintain current coverage</td>
+                    <td>Good coverage</td>
                 </tr>
                 <tr class="success">
                     <td><strong>Member Domain Services</strong></td>
@@ -132,64 +132,75 @@
                     <td>Mid Dev C</td>
                     <td>Senior Dev A, Mid Dev D, Junior Dev E</td>
                     <td><span class="badge badge-success">LOW</span></td>
-                    <td>No action needed</td>
+                    <td>Excellent coverage</td>
                 </tr>
             </tbody>
         </table>
     </section>
 
-    <!-- Knowledge Transfer Plan -->
+    <!-- Knowledge Distribution Details -->
     <section class="glass-card-flat mb-xl">
         <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
-            📚 Knowledge Transfer Plan (Q1 2025)
+            📊 Knowledge Distribution Details
         </h2>
         <div style="display: grid; gap: 1rem;">
             <div class="glass-card">
                 <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">
-                    Priority 1: CarryoverDollars (Sprints 51-52)
+                    CRITICAL: CarryoverDollars
                 </h3>
                 <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
-                    <strong>Current:</strong> Bus factor = 1 (Senior Dev B only)  
-                    <strong>Target:</strong> Bus factor = 3 (+ Mid Dev C + Senior Dev A)
+                    <strong>Bus Factor:</strong> 1 (Senior Dev B only) | <strong>LOC:</strong> 717
                 </p>
                 <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
-                    <li><strong>Week 1:</strong> Senior Dev B → Mid Dev C pair programming (8 hrs)</li>
-                    <li><strong>Week 2:</strong> Mid Dev C solo implementation + review (8 hrs)</li>
-                    <li><strong>Week 3:</strong> Senior Dev A joins, 3-way knowledge sharing (4 hrs)</li>
-                    <li><strong>Week 4:</strong> Documentation sprint (all 3 developers, 6 hrs total)</li>
+                    <li>Single point of failure for year-end carryover processing</li>
+                    <li>Form 5500 generation knowledge concentrated in one developer</li>
+                    <li>IRS compliance rules and calculation logic not documented</li>
+                    <li>No backup developer familiar with carryover workflows</li>
                 </ul>
                 <p style="margin-top: 0.75rem; font-size: 0.875rem; color: var(--accent-primary);">
-                    ✅ <strong>Success Criteria:</strong> Mid Dev C can implement carryover feature solo by Sprint 53
+                    ⚠️ <strong>Risk:</strong> Year-end processing blocked if Senior Dev B unavailable
                 </p>
             </div>
 
             <div class="glass-card">
-                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--warning);">
-                    Priority 2: Claims Processing (Sprint 53)
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">
+                    CRITICAL: Claims Processing
                 </h3>
                 <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
-                    <strong>Current:</strong> Bus factor = 1 (Mid Dev D only)  
-                    <strong>Target:</strong> Bus factor = 2 (+ Junior Dev E)
+                    <strong>Bus Factor:</strong> 1 (Mid Dev D only)
                 </p>
                 <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
-                    <li><strong>Week 1:</strong> Mid Dev D creates architecture diagram (4 hrs)</li>
-                    <li><strong>Week 2:</strong> Junior Dev E shadows Mid Dev D on bug fix (6 hrs)</li>
-                    <li><strong>Week 3:</strong> Junior Dev E implements small feature with supervision (8 hrs)</li>
+                    <li>Claims workflow logic understood by single developer</li>
+                    <li>No architecture documentation for claims processing pipeline</li>
+                    <li>Integration points with external systems not shared knowledge</li>
                 </ul>
             </div>
 
             <div class="glass-card">
-                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--info);">
-                    Priority 3: Rollover Settings (Sprint 54)
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">
+                    CRITICAL: Rollover Settings
                 </h3>
                 <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
-                    <strong>Current:</strong> Bus factor = 1 (Senior Dev B)  
-                    <strong>Target:</strong> Bus factor = 2 (+ Mid Dev C)
+                    <strong>Bus Factor:</strong> 1 (Senior Dev B)
                 </p>
                 <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
-                    <li>Leverage CarryoverDollars knowledge transfer (Mid Dev C already trained)</li>
-                    <li>Code review focus: Rollover logic overlap with carryover</li>
-                    <li>Mid Dev C writes unit tests for rollover scenarios (4 hrs)</li>
+                    <li>Rollover logic similar to CarryoverDollars (same owner)</li>
+                    <li>Configuration rules and business logic concentrated</li>
+                    <li>Overlap with carryover processing creates compounded risk</li>
+                </ul>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--success);">
+                    HEALTHY: Member Domain Services
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                    <strong>Bus Factor:</strong> 4 | <strong>Primary:</strong> Mid Dev C
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li>Well-distributed knowledge across 4 developers</li>
+                    <li>Senior Dev A, Mid Dev D, and Junior Dev E all familiar</li>
+                    <li>Example of effective knowledge distribution</li>
                 </ul>
             </div>
         </div>

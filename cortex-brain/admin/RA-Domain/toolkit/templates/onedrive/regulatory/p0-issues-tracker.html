@@ -257,54 +257,54 @@
         </div>
     </section>
 
-    <!-- Mitigation Plan -->
+    <!-- Issue Risk Analysis -->
     <section class="glass-card-flat mb-xl">
         <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
-            🛡️ Mitigation Plan (Q1 2025)
+            📊 Issue Risk Analysis
         </h2>
         <table class="scorecard-table">
             <thead>
                 <tr>
-                    <th>Sprint</th>
-                    <th>Issues Addressed</th>
-                    <th>Deliverables</th>
-                    <th>Risk Reduced</th>
-                    <th>Status</th>
+                    <th>Category</th>
+                    <th>Issue Count</th>
+                    <th>Example Issues</th>
+                    <th>Total Risk</th>
+                    <th>Compliance Impact</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="warning">
-                    <td><strong>Sprint 51</strong></td>
-                    <td>P0-001, P0-005</td>
-                    <td>Audit trail + log sanitization</td>
-                    <td>$250,000</td>
-                    <td><span class="badge badge-warning">IN PROGRESS</span></td>
+                <tr class="critical">
+                    <td><strong>HIPAA Violations</strong></td>
+                    <td>3</td>
+                    <td>P0-001, P0-005, P0-006</td>
+                    <td>$350,000</td>
+                    <td><span class="badge badge-critical">CRITICAL</span></td>
                 </tr>
-                <tr class="info">
-                    <td><strong>Sprint 52</strong></td>
-                    <td>P0-002, P0-008</td>
-                    <td>IRS validation + PCI encryption</td>
+                <tr class="critical">
+                    <td><strong>IRS Non-Compliance</strong></td>
+                    <td>2</td>
+                    <td>P0-002, P0-003</td>
                     <td>$180,000</td>
-                    <td><span class="badge badge-info">PLANNED</span></td>
+                    <td><span class="badge badge-critical">CRITICAL</span></td>
                 </tr>
-                <tr class="info">
-                    <td><strong>Sprint 53</strong></td>
-                    <td>P0-003, P0-006</td>
-                    <td>Carryover limits + encryption at rest</td>
-                    <td>$140,000</td>
-                    <td><span class="badge badge-info">PLANNED</span></td>
+                <tr class="warning">
+                    <td><strong>PCI-DSS Gaps</strong></td>
+                    <td>2</td>
+                    <td>P0-008, P0-007</td>
+                    <td>$80,000</td>
+                    <td><span class="badge badge-warning">HIGH</span></td>
                 </tr>
-                <tr class="info">
-                    <td><strong>Sprint 54-56</strong></td>
-                    <td>P0-004, P0-007, P0-009</td>
-                    <td>Logging + audit trail + ERISA disclosure</td>
-                    <td>$100,000</td>
-                    <td><span class="badge badge-info">PLANNED</span></td>
+                <tr class="warning">
+                    <td><strong>ERISA Requirements</strong></td>
+                    <td>2</td>
+                    <td>P0-004, P0-009</td>
+                    <td>$60,000</td>
+                    <td><span class="badge badge-warning">HIGH</span></td>
                 </tr>
             </tbody>
         </table>
-        <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--success);">
-            ✅ <strong>Goal:</strong> Close all 9 P0 issues by end of Q1 2025 (Sprint 56) - $670k risk mitigation
+        <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--accent-primary);">
+            💡 <strong>Total Exposure:</strong> $670,000 across 9 open P0 compliance issues
         </p>
     </section>
 

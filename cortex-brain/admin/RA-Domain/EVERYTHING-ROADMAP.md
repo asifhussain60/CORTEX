@@ -293,7 +293,116 @@ For EACH background job:
 
 ---
 
-### Phase 11: Architecture (Batch 14 - 45 mins)
+### Phase 11: AST Deep Analysis Dashboard Pages (NEW - 120 mins)
+
+#### Performance Metrics Dashboard
+- [ ] V2 batch processing architecture visualization
+  - [ ] Batch size: 1,000 accounts/batch
+  - [ ] Concurrency: 10 parallel workers
+  - [ ] 85% performance improvement vs V1
+  - [ ] Pre-fetch optimization details (eliminate N+1 queries)
+- [ ] Feature flag rollout status
+  - [ ] `SplitJobPerformanceV2` global flag
+  - [ ] Per-employer override flags
+  - [ ] Rollout coverage percentage
+- [ ] Processing metrics
+  - [ ] Average batch processing time
+  - [ ] Throughput (accounts/minute)
+  - [ ] Error rate by batch
+- [ ] Data source: `carryover-service-methods.json` (lines 398-471)
+
+#### Regulatory Compliance Dashboard
+- [ ] IRS rules enforcement
+  - [ ] FSA carryover limit: $640 (2025)
+  - [ ] HSA carryover: 100% (unlimited)
+  - [ ] HRA carryover: Employer-defined
+  - [ ] Dependent Care: $0 (forfeiture only)
+- [ ] Audit trail coverage
+  - [ ] `BalanceChangeAudit` entity tracking
+  - [ ] `CarryoverTransferTracking` entity
+  - [ ] Transaction correlation IDs
+  - [ ] Event publishing for compliance
+- [ ] HIPAA compliance
+  - [ ] Protected Health Information (PHI) handling
+  - [ ] Audit requirements met
+- [ ] PCI-DSS scope
+  - [ ] `Card` entity (debit cards)
+  - [ ] `CardTransaction` entity
+  - [ ] Payment data protection
+- [ ] ERISA disclosure requirements
+  - [ ] Participant disclosure gaps
+  - [ ] Form 5500 generation (CarryoverDollars method)
+- [ ] Data sources: `carryover-service-methods.json`, `batch-3-1-entities.json`, `p0-issues-tracker.html`
+
+#### Integration Architecture Diagram
+- [ ] NServiceBus event flow
+  - [ ] `BalanceChangedEvent` publishing
+  - [ ] Event payload structure
+  - [ ] Publisher: CarryoverDollarsDomainService
+- [ ] Downstream subscribers
+  - [ ] Statements generation system
+  - [ ] Reporting/analytics system
+  - [ ] Third-party integrations
+- [ ] Message queue topology
+  - [ ] Event bus architecture
+  - [ ] Message routing rules
+  - [ ] Retry/dead-letter policies
+- [ ] Integration points
+  - [ ] HTTP APIs (if any)
+  - [ ] Batch job triggers
+  - [ ] Database integrations
+- [ ] Data source: `carryover-service-methods.json` (PublishBalanceChangedById method, lines 265-347)
+
+#### Technical Debt ROI Calculator
+- [ ] Debt item catalog (from `technical-debt-register.json`)
+  - [ ] TD-001: CarryoverDollars 717 LOC ($50k/year, 40 hrs)
+  - [ ] TD-002: Zero test coverage ($500k/year, 40 hrs)
+  - [ ] TD-003: Claims CQRS refactor ($40k/year, 35 hrs)
+  - [ ] TD-004: Missing docs ($20k/year, 16 hrs)
+- [ ] ROI calculations
+  - [ ] Total annual savings: $610,000
+  - [ ] Total effort: 131 hours (3.3 weeks)
+  - [ ] Average ROI: $4,656/hour
+  - [ ] Payback period per item
+- [ ] Priority matrix
+  - [ ] CRITICAL (TD-001, TD-002) - $550k savings
+  - [ ] HIGH (TD-003, TD-004) - $60k savings
+  - [ ] Sprint allocation recommendations
+- [ ] Interactive filters
+  - [ ] By severity (CRITICAL → LOW)
+  - [ ] By type (Complexity, Test Gap, Documentation)
+  - [ ] By ROI (highest → lowest)
+- [ ] Data source: `technical-debt-register.json`
+
+#### Domain Model Visualization
+- [ ] Entity relationship diagram
+  - [ ] 30 entities total (revised from 56)
+  - [ ] Core entities: Employer, Member, ReimbursementAccount, ReimbursementPlan
+  - [ ] Compliance entities: BalanceChangeAudit, CarryoverTransferTracking
+  - [ ] Transaction entities: Card, CardTransaction, ActualCoverage
+- [ ] Multi-tenant hierarchy
+  - [ ] Employer (tenant root)
+  - [ ] Member (belongs to Employer)
+  - [ ] ReimbursementAccount (belongs to Member)
+  - [ ] Plans, Claims, Transactions (belong to Account)
+- [ ] Business capability mapping
+  - [ ] Account Management: ReimbursementAccountBalanceService
+  - [ ] Claims Processing: ReimbursementAccountBalanceService
+  - [ ] Year-End Processing: CarryoverDollars, CarryoverShared, RolloverSettings
+  - [ ] Plan Management: PercentPlanLedgerDomainService
+- [ ] Compliance entity highlighting
+  - [ ] Audit trail entities (yellow)
+  - [ ] PCI-DSS scope entities (red)
+  - [ ] HIPAA protected entities (blue)
+- [ ] Navigation properties visualization
+  - [ ] One-to-Many relationships
+  - [ ] Many-to-Many relationships
+  - [ ] Aggregate roots (if DDD)
+- [ ] Data sources: `batch-3-1-entities.json`, `business-value-scan.json`, `complete-csharp-analysis.json`
+
+---
+
+### Phase 12: Architecture (Batch 14 - 45 mins)
 
 #### Pattern Detection
 - [ ] Architecture style (Clean, Hexagonal, Layered)
@@ -355,6 +464,40 @@ For EACH background job:
    - New orchestrators needed
    - Existing orchestrator improvements
    - Multi-language support strategy
+
+### OneDrive Dashboard Pages (AST Deep Analysis)
+
+9. **Performance Metrics Dashboard** (`toolkit/templates/onedrive/managers/performance-metrics.html`)
+   - V2 batch processing: 1,000 accounts/batch, 10 workers, 85% improvement
+   - Feature flag rollout: `SplitJobPerformanceV2` global + per-employer
+   - Processing metrics: throughput, error rates, batch timing
+   - Data source: `carryover-service-methods.json`
+
+10. **Regulatory Compliance Dashboard** (`toolkit/templates/onedrive/regulatory/compliance-overview.html`)
+    - IRS rules: FSA $640, HSA 100%, HRA custom, Dependent Care $0
+    - Audit trail: BalanceChangeAudit, CarryoverTransferTracking entities
+    - HIPAA/PCI-DSS/ERISA compliance status
+    - Data sources: `carryover-service-methods.json`, `batch-3-1-entities.json`, P0 tracker
+
+11. **Integration Architecture Diagram** (`toolkit/templates/onedrive/developers/integration-architecture.html`)
+    - NServiceBus event flow: BalanceChangedEvent publishing
+    - Downstream subscribers: statements, reporting, analytics
+    - Message queue topology and routing
+    - Data source: `carryover-service-methods.json` (PublishBalanceChangedById)
+
+12. **Technical Debt ROI Calculator** (`toolkit/templates/onedrive/managers/technical-debt-roi.html`)
+    - $610k total annual savings, 131 hours effort
+    - TD-002: $500k savings (zero test coverage) - 40 hrs
+    - TD-001: $50k savings (717 LOC complexity) - 40 hrs
+    - Interactive priority matrix by severity/type/ROI
+    - Data source: `technical-debt-register.json`
+
+13. **Domain Model Visualization** (`toolkit/templates/onedrive/developers/domain-model.html`)
+    - 30 entities with relationship diagram
+    - Multi-tenant hierarchy: Employer → Member → Account
+    - 4 business capabilities mapped to services
+    - Compliance entities highlighted (audit, PCI-DSS, HIPAA)
+    - Data sources: `batch-3-1-entities.json`, `business-value-scan.json`
 
 ---
 
