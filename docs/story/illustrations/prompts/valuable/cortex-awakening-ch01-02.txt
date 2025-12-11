@@ -24,13 +24,14 @@ VISUAL ELEMENTS:
 ---
 
 DALL-E 3 PROMPT:
-Digital illustration: Split screen showing the contrast: left side has Mr. Codenstein's detailed notes and git history from 2-hour conversation, right side shows blank Copilot chat with cheerful 'I'd be happy to help!' response that has zero memory of previous discussion.
+Black and white cartoon illustration in newspaper comic strip style. Split screen showing the contrast: left side has Mr. Codenstein's detailed notes and git history from 2-hour conversation, right side shows blank Copilot chat with cheerful 'I'd be happy to help!' response that has zero memory of previous discussion.
 
+CANONICAL CHARACTERS (maintain consistency across ALL images):
+- Mr. Codenstein: Wild unkempt WHITE hair sticking out in all directions (Einstein-inspired, consistent spiky pattern). Thick round black-framed glasses, slightly crooked on nose. White lab coat with visible coffee stains on front, pen marks on sleeves, frayed cuffs. Stubble (3-day growth), slightly gaunt cheeks from exhaustion. Hunched posture from too much screen time. Pocket protector with 5+ pens. Mid-40s appearance. ALWAYS has these features in every image.
 
-Mood: Frustration meets comedy, technology irony
+- Copilot (as chat avatar): Rounded, non-threatening geometric design (circles and rectangles). Monitor/screen face showing emoji-style expressions. Simple articulated arms with 3-segment design. Short stubby legs. Small antenna on top. Gear symbols and binary code decorative elements. Approximately 3 feet tall. Friendly appearance.
 
-
-Key visual elements:
+MAIN SCENE ELEMENTS:
 - Split monitor view: notes vs chat
 - Left: git commits with desperate messages, detailed architecture notes
 - Right: empty Copilot chat, cheerful but clueless
@@ -38,23 +39,24 @@ Key visual elements:
 - Eye twitch visible, cold coffee mug in hand
 - Visual disconnect between human memory vs AI amnesia
 
+MOOD: Frustration meets comedy, technology irony
 
-Style: Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+STYLE REQUIREMENTS:
+- Clean line art, high contrast black and white
+- Newspaper comic strip aesthetic (think Calvin and Hobbes or Dilbert)
+- Simple but expressive character design
+- NO color, NO shading - pure black line art on white background
+- Slightly exaggerated proportions for comedic effect
+- Cluttered but organized chaos visible: coffee mugs, cables, whiteboards with diagrams
 
 ---
 
 STYLE GUIDE:
-Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+Black and white cartoon illustration in newspaper comic strip style.
+Clean line art, high contrast black and white only.
+NO color, NO grayscale shading - pure black line art on white background.
+Calvin and Hobbes / Dilbert aesthetic.
+Simple but expressive character design with slightly exaggerated proportions for comedic effect.
 
 TECHNICAL NOTES:
 Resolution: 1024x1024 (DALL-E 3 standard)

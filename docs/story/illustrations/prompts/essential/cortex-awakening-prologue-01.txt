@@ -24,37 +24,35 @@ VISUAL ELEMENTS:
 ---
 
 DALL-E 3 PROMPT:
-Digital illustration: Mr. Codenstein's basement workspace: three monitors in semicircle, seventeen coffee mugs forming a timeline, whiteboards covered in frantic diagrams with 'TIER ARCHITECTURE' and neural network sticky notes, organized chaos everywhere.
+Black and white cartoon illustration in newspaper comic strip style. Bird's-eye view of chaotic basement laboratory workspace.
 
+CANONICAL CHARACTER (maintain consistency across ALL images):
+- Mr. Codenstein: Wild unkempt WHITE hair (Einstein spiky pattern), thick round black-framed glasses (slightly crooked), white lab coat with coffee stains, stubble (3-day growth), hunched posture from computer work, pocket protector with 5+ pens, mid-40s appearance
 
-Mood: Comedic chaos, creative obsession
+MAIN SCENE ELEMENTS:
+- Three computer monitors arranged in semicircle (glowing screens visible from above)
+- Mr. Codenstein hunched over keyboard in center (top of wild white hair visible)
+- Seventeen coffee mugs scattered across surfaces (various decay states: fresh with steam, stale with rings, old and crusty, some with mold and skull icons)
+- Large whiteboard on wall with frantic diagrams: "4-TIER ARCHITECTURE", flow charts with too many arrows, "SKULL RULES" with skull doodle, question marks "???" scattered
+- Sticky notes forming rough neural network pattern on opposite wall
+- Technical books stacked as monitor stand, cables tangled across floor
+- Half-eaten bagel on book stack, empty pizza boxes in corner
 
-
-Key visual elements:
-- Three monitors arranged in semicircle with code displays
-- Seventeen coffee mugs at various stages of decay
-- Whiteboards with 'TIER ARCHITECTURE' and sticky note neural network
-- Mr. Codenstein hunched over keyboard, chaotic hair
-- Basement lighting - warm monitor glow, technical equipment
-- Half-eaten bagel on stack of technical books
-
-
-Style: Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+STYLE REQUIREMENTS:
+- Clean line art, high contrast black and white
+- Newspaper comic strip aesthetic (think Calvin and Hobbes or Dilbert)
+- Simple but expressive character design
+- Comedic exaggeration in proportions and expressions
+- NO color, NO shading - pure black line art on white background
+- Single desk lamp creating dramatic black shadows
 
 ---
 
 STYLE GUIDE:
-Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+Black and white cartoon, newspaper comic strip style. Clean line art with high contrast. 
+Character consistency: Wild white Einstein hair, round glasses, lab coat with stains. 
+Simple expressive faces, comedic proportions. Calvin and Hobbes / Dilbert aesthetic.
+NO color, NO grayscale shading - pure black lines on white background.
 
 TECHNICAL NOTES:
 Resolution: 1024x1024 (DALL-E 3 standard)

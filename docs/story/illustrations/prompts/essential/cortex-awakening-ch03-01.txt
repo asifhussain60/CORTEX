@@ -24,13 +24,12 @@ VISUAL ELEMENTS:
 ---
 
 DALL-E 3 PROMPT:
-Digital illustration: Blue screen of death moment. Mr. Codenstein's face illuminated by error screen, three hours of work vanishing. Scattered around: forty-seven backup files with desperate filenames like 'working_memory_I_MEAN_IT_THIS_TIME.db'. Visual representation of volatility vs persistence.
+Black and white cartoon illustration in newspaper comic strip style. Blue screen of death moment. Mr. Codenstein's face illuminated by error screen, three hours of work vanishing. Scattered around: forty-seven backup files with desperate filenames like 'working_memory_I_MEAN_IT_THIS_TIME.db'. Visual representation of volatility vs persistence.
 
+CANONICAL CHARACTER (maintain consistency across ALL images):
+- Mr. Codenstein: Wild unkempt WHITE hair sticking out in all directions (Einstein-inspired, consistent spiky pattern). Thick round black-framed glasses, slightly crooked on nose. White lab coat with visible coffee stains on front, pen marks on sleeves, frayed cuffs. Stubble (3-day growth), slightly gaunt cheeks from exhaustion. Hunched posture from too much screen time. Pocket protector with 5+ pens. Mid-40s appearance. ALWAYS has these features in every image.
 
-Mood: Disaster, comedy through desperation, technical failure
-
-
-Key visual elements:
+MAIN SCENE ELEMENTS:
 - Blue screen of death on monitor, progress bar mocking
 - Mr. Codenstein's shocked/defeated expression
 - File explorer showing 47 backup files with frantic names
@@ -38,23 +37,24 @@ Key visual elements:
 - In-memory architecture diagram on whiteboard behind him
 - Coffee mug #18 knocked over from shock
 
+MOOD: Disaster, comedy through desperation, technical failure
 
-Style: Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+STYLE REQUIREMENTS:
+- Clean line art, high contrast black and white
+- Newspaper comic strip aesthetic (think Calvin and Hobbes or Dilbert)
+- Simple but expressive character design
+- NO color, NO shading - pure black line art on white background
+- Slightly exaggerated proportions for comedic effect
+- Cluttered but organized chaos visible: coffee mugs, cables, whiteboards with diagrams
 
 ---
 
 STYLE GUIDE:
-Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+Black and white cartoon illustration in newspaper comic strip style.
+Clean line art, high contrast black and white only.
+NO color, NO grayscale shading - pure black line art on white background.
+Calvin and Hobbes / Dilbert aesthetic.
+Simple but expressive character design with slightly exaggerated proportions for comedic effect.
 
 TECHNICAL NOTES:
 Resolution: 1024x1024 (DALL-E 3 standard)

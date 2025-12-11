@@ -24,37 +24,37 @@ VISUAL ELEMENTS:
 ---
 
 DALL-E 3 PROMPT:
-Digital illustration: Screen showing test coverage report: 81.4% coverage with per-layer breakdown. Mr. Codenstein pointing at metrics with satisfaction. Visual: color-coded coverage map (green=covered, red=gaps), testing pyramid showing unit/integration/e2e distribution.
+Black and white cartoon illustration in newspaper comic strip style. Screen showing test coverage report: 81.4% coverage with per-layer breakdown. Mr. Codenstein pointing at metrics with satisfaction. Visual: coverage map showing file coverage, testing pyramid showing unit/integration/e2e distribution.
 
+CANONICAL CHARACTER (maintain consistency across ALL images):
+- Mr. Codenstein: Wild unkempt WHITE hair sticking out in all directions (Einstein-inspired, consistent spiky pattern). Thick round black-framed glasses, slightly crooked on nose. White lab coat with visible coffee stains on front, pen marks on sleeves, frayed cuffs. Stubble (3-day growth), slightly gaunt cheeks from exhaustion. Hunched posture from too much screen time. Pocket protector with 5+ pens. Mid-40s appearance. ALWAYS has these features in every image.
 
-Mood: Achievement, validation, quality metrics
-
-
-Key visual elements:
+MAIN SCENE ELEMENTS:
 - Coverage report: 81.4% overall, per-layer breakdown visible
-- Color-coded file coverage map (green high, yellow medium, red gaps)
+- File coverage map showing different levels (use patterns/shading)
 - Testing pyramid diagram: unit > integration > e2e
 - Mr. Codenstein pointing at metrics, proud expression
 - Terminal showing pytest output: all tests passing
 - Brain protection rule: TDD_ENFORCEMENT highlighted
 
+MOOD: Achievement, validation, quality metrics
 
-Style: Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+STYLE REQUIREMENTS:
+- Clean line art, high contrast black and white
+- Newspaper comic strip aesthetic (think Calvin and Hobbes or Dilbert)
+- Simple but expressive character design
+- NO color, NO shading - pure black line art on white background
+- Slightly exaggerated proportions for comedic effect
+- Cluttered but organized chaos visible: coffee mugs, cables, whiteboards with diagrams
 
 ---
 
 STYLE GUIDE:
-Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+Black and white cartoon illustration in newspaper comic strip style.
+Clean line art, high contrast black and white only.
+NO color, NO grayscale shading - pure black line art on white background.
+Calvin and Hobbes / Dilbert aesthetic.
+Simple but expressive character design with slightly exaggerated proportions for comedic effect.
 
 TECHNICAL NOTES:
 Resolution: 1024x1024 (DALL-E 3 standard)

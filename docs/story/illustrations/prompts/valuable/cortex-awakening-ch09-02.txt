@@ -25,38 +25,38 @@ VISUAL ELEMENTS:
 ---
 
 DALL-E 3 PROMPT:
-Digital illustration: Screen showing System Maintenance output: alignment phase detecting and auto-fixing 12 issues (missing files, broken links, outdated metrics). Mr. Codenstein watching in amazement as CORTEX self-heals. Visual progress bars, green checkmarks appearing automatically.
+Black and white cartoon illustration in newspaper comic strip style. Screen showing System Maintenance output: alignment phase detecting and auto-fixing 12 issues (missing files, broken links, outdated metrics). Mr. Codenstein watching in amazement as CORTEX self-heals. Visual progress bars, checkmarks appearing automatically.
 
+CANONICAL CHARACTER (maintain consistency across ALL images):
+- Mr. Codenstein: Wild unkempt WHITE hair sticking out in all directions (Einstein-inspired, consistent spiky pattern). Thick round black-framed glasses, slightly crooked on nose. White lab coat with visible coffee stains on front, pen marks on sleeves, frayed cuffs. Stubble (3-day growth), slightly gaunt cheeks from exhaustion. Hunched posture from too much screen time. Pocket protector with 5+ pens. Mid-40s appearance. ALWAYS has these features in every image.
 
-Mood: Triumph, automation success, system maturity
-
-
-Key visual elements:
+MAIN SCENE ELEMENTS:
 - Terminal output: alignment phase running
 - Issues detected: 12 problems found
-- Auto-fixes applied: green checkmarks appearing sequentially
+- Auto-fixes applied: checkmarks appearing sequentially
 - Progress bars: file restoration, link repair, metric updates
 - Mr. Codenstein's amazed expression: 'it's maintaining itself'
 - Performance metrics: before/after comparison showing improvement
 - Self-healing architecture concept visualization
 
+MOOD: Triumph, automation success, system maturity
 
-Style: Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+STYLE REQUIREMENTS:
+- Clean line art, high contrast black and white
+- Newspaper comic strip aesthetic (think Calvin and Hobbes or Dilbert)
+- Simple but expressive character design
+- NO color, NO shading - pure black line art on white background
+- Slightly exaggerated proportions for comedic effect
+- Cluttered but organized chaos visible: coffee mugs, cables, whiteboards with diagrams
 
 ---
 
 STYLE GUIDE:
-Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+Black and white cartoon illustration in newspaper comic strip style.
+Clean line art, high contrast black and white only.
+NO color, NO grayscale shading - pure black line art on white background.
+Calvin and Hobbes / Dilbert aesthetic.
+Simple but expressive character design with slightly exaggerated proportions for comedic effect.
 
 TECHNICAL NOTES:
 Resolution: 1024x1024 (DALL-E 3 standard)

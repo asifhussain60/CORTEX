@@ -25,14 +25,15 @@ VISUAL ELEMENTS:
 ---
 
 DALL-E 3 PROMPT:
-Digital illustration: Miss G's apparition studying GitHub Pages site at 11:47 PM (not 2:17 AM, progress!). Screen shows glassmorphism design, feature cards, SKULL Rulebook showcase. Fifteen professional pages. G genuinely surprised by quality. Visual: documentation as product, not afterthought.
+Black and white cartoon illustration in newspaper comic strip style. Miss G's apparition studying GitHub Pages site at 11:47 PM (not 2:17 AM, progress!). Screen shows glassmorphism design, feature cards, SKULL Rulebook showcase. Fifteen professional pages. G genuinely surprised by quality. Visual: documentation as product, not afterthought.
 
+CANONICAL CHARACTERS (maintain consistency across ALL images):
+- Mr. Codenstein: Wild unkempt WHITE hair sticking out in all directions (Einstein-inspired, consistent spiky pattern). Thick round black-framed glasses, slightly crooked on nose. White lab coat with visible coffee stains on front, pen marks on sleeves, frayed cuffs. Stubble (3-day growth), slightly gaunt cheeks from exhaustion. Hunched posture from too much screen time. Pocket protector with 5+ pens. Mid-40s appearance. ALWAYS has these features in every image.
 
-Mood: Professional achievement, documentation as art, maturity
+- Miss G: Elegant, graceful female figure with gentle curves. Shoulder-length flowing hair, slightly wavy, moves as if in gentle breeze. Slightly translucent (70% opacity), subtle shimmer effect around edges. Business casual attire (blouse and pencil skirt). Kind eyes with knowing smile. ALWAYS has these features in every image.
 
-
-Key visual elements:
-- Screen showing GitHub Pages landing page (glassmorphism)
+MAIN SCENE ELEMENTS:
+- Screen showing GitHub Pages landing page (glass effect design)
 - Six feature cards with glass effects, gradient hero
 - Miss G's apparition: genuine surprise expression
 - Clock: 11:47 PM (earlier than usual, maturity)
@@ -40,23 +41,24 @@ Key visual elements:
 - SKULL Rulebook page open (prominent showcase)
 - Mr. Codenstein proud but humble expression
 
+MOOD: Professional achievement, documentation as art, maturity
 
-Style: Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+STYLE REQUIREMENTS:
+- Clean line art, high contrast black and white
+- Newspaper comic strip aesthetic (think Calvin and Hobbes or Dilbert)
+- Simple but expressive character design
+- NO color, NO shading - pure black line art on white background
+- Slightly exaggerated proportions for comedic effect
+- Cluttered but organized chaos visible: coffee mugs, cables, whiteboards with diagrams
 
 ---
 
 STYLE GUIDE:
-Digital illustration, tech comedy aesthetic. Warm lighting from multiple monitors 
-casting blue-purple glow. Slightly exaggerated proportions for comedic effect. 
-Rich color palette (deep blues, warm oranges from coffee, cool whites from screens).
-Cluttered but organized chaos - visible coffee mugs, cables, whiteboards with diagrams.
-Character style: expressive, slightly cartoon-like but grounded in reality.
-Environment: Basement laboratory feel, lots of technical equipment, lived-in space.
+Black and white cartoon illustration in newspaper comic strip style.
+Clean line art, high contrast black and white only.
+NO color, NO grayscale shading - pure black line art on white background.
+Calvin and Hobbes / Dilbert aesthetic.
+Simple but expressive character design with slightly exaggerated proportions for comedic effect.
 
 TECHNICAL NOTES:
 Resolution: 1024x1024 (DALL-E 3 standard)
