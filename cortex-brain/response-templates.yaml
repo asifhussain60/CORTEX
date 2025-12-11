@@ -1589,7 +1589,7 @@ templates:
       - 🧠 **Brain Architecture** - 4-tier memory system (Tier 0: Governance with 48 SKULL rules, Tier
       1: Working Memory, Tier 2: Knowledge Graph, Tier 3: Dev Context)
 
-      - 🎯 **Zero Ambiguity** - Planning System 2.0 with Definition of Ready (DoR) and Definition
+      - 🎯 **Zero Ambiguity** - Planning System with Definition of Ready (DoR) and Definition
       of Done (DoD) enforcement, auto-complexity detection, real-time visual progress tracking
 
       - 🔴🟢🔵 **TDD Mastery** - RED→GREEN→REFACTOR automation with per-layer coverage validation (Domain 90%, Application 85%, Infrastructure 70%), empty test detection, auto-debug via debugging orchestrator
@@ -1606,9 +1606,9 @@ templates:
       - **97.2% token reduction** (74,047 → 2,078 avg) through intelligent memory
       management saves $183K annually for typical team
 
-      - **Planning System 2.0** with auto-complexity detection, real-time visual progress tracking (5 phases with ETAs), DoR/DoD validation, Vision API integration
+      - **Planning System** with auto-complexity detection, real-time visual progress tracking (5 phases with ETAs), DoR/DoD validation, Vision API integration
 
-      - **ADO Operations** generates Azure DevOps work items with complete task breakdown, inherits Planning System 2.0 compliance
+      - **ADO Operations** generates Azure DevOps work items with complete task breakdown, inherits Planning System compliance
 
       - **Dashboard Intelligence** cuts engineer onboarding from 2 weeks to 2 hours (60-80% faster) via automated repository discovery
 
@@ -1631,7 +1631,7 @@ templates:
 
       ### 🚀 Quick Demos (5-10 min each)
 
-      1. **`demo planning`** - See Planning System 2.0 with auto-complexity detection, real-time visual progress (5 phases with ETAs), DoR/DoD enforcement, and Vision API
+      1. **`demo planning`** - See Planning System with auto-complexity detection, real-time visual progress (5 phases with ETAs), DoR/DoD enforcement, and Vision API
 
       2. **`demo ado`** - Watch ADO work item generation with complete task breakdown, estimates, and acceptance criteria
 
@@ -1654,9 +1654,9 @@ templates:
       9. **`show brain architecture`** - Understand 4-tier memory system and 48 SKULL
       protection rules (17 protection layers)
 
-      10. **`explain planning system 2.0`** - Auto-complexity detection, DoR/DoD validation, real-time visual progress, manifest-based orchestration
+      10. **`explain planning system`** - Auto-complexity detection, DoR/DoD validation, real-time visual progress, manifest-based orchestration
 
-      11. **`explain ado operations`** - Work item generation, completion summaries, manifest inheritance from Planning System 2.0
+      11. **`explain ado operations`** - Work item generation, completion summaries, manifest inheritance from Planning System
 
       12. **`explain upgrade system`** - Universal upgrade with brain preservation
       and path validation
@@ -1669,7 +1669,7 @@ templates:
 
       ### 📖 Documentation (Read at your pace)
 
-      15. **Planning System 2.0 Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/planning/)
+      15. **Planning System Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/planning/)
       (Coming Soon)
 
       16. **ADO Operations Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/ado/)
@@ -1701,7 +1701,7 @@ templates:
 
       24. **`developer path`** - Building features? → Learn: `demo tdd` → `demo discovery` → `git checkpoint`
 
-      25. **`product owner path`** - Planning features? → Learn: `demo planning` → `demo ado` → `explain planning system 2.0`
+      25. **`product owner path`** - Planning features? → Learn: `demo planning` → `demo ado` → `explain planning system`
 
 
       ---
@@ -2908,7 +2908,7 @@ templates:
       **Available Operations (choose by letter or describe what you need):**
 
 
-      A. **Planning System 2.0** - Vision API, DoR/DoD validation, file-based plans
+      A. **Planning System** - Vision API, DoR/DoD validation, file-based plans
 
 
       B. **TDD Mastery** - RED→GREEN→REFACTOR workflow with auto-debug
@@ -3022,9 +3022,9 @@ templates:
       
       ## How CORTEX Can Help
       
-      **Planning System 2.0** - Interactive feature planning with auto-complexity detection, real-time visual progress tracking (5 phases with ETAs), and Definition of Ready/Done validation. Vision API extracts requirements from screenshots (UI mockups, ADO items, errors). Manifest-based orchestration ensures consistency.
+      **Planning System** - Interactive feature planning with auto-complexity detection, real-time visual progress tracking (5 phases with ETAs), and Definition of Ready/Done validation. Vision API extracts requirements from screenshots (UI mockups, ADO items, errors). Manifest-based orchestration ensures consistency.
       
-      **ADO Integration** - Generates Azure DevOps work items with complete task breakdown, estimates, and acceptance criteria. Commands: `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`. Inherits Planning System 2.0 compliance with ADO-specific formatting.
+      **ADO Integration** - Generates Azure DevOps work items with complete task breakdown, estimates, and acceptance criteria. Commands: `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`. Inherits Planning System compliance with ADO-specific formatting.
       
       **TDD Mastery** - Enforces RED→GREEN→REFACTOR cycle with per-layer coverage validation (Domain 90%, Application 85%, Infrastructure 70%). Detects empty placeholder tests and enforces comprehensive testing. Auto-debug fixes test failures with root cause analysis. Test-first workflow has 94% success rate vs 67% without.
       
@@ -3037,7 +3037,7 @@ templates:
       ## Explore Further
       
       **Ask about specific capabilities:**
-      - "Show me Planning System 2.0 with progress tracking"
+      - "Show me Planning System with progress tracking"
       - "Demo ADO integration workflow"
       - "How does TDD Mastery auto-debug work?"
       - "Explain dashboard intelligence"
@@ -3070,7 +3070,7 @@ templates:
       **ROI Focus:** 
       - **97.2% token reduction** (74,047 → 2,078 avg tokens/operation) = Lower AI operational costs
       - **94% TDD success rate** vs 67% without structure = Reduced rework and debugging time
-      - **85% reduction in requirements ambiguity** (via Planning System 2.0 DoR validation) = Fewer mid-sprint surprises
+      - **85% reduction in requirements ambiguity** (via Planning System DoR validation) = Fewer mid-sprint surprises
       - **60-80% faster engineer onboarding** (2 hours vs 2 weeks) = Rapid productivity for new hires via dashboard discovery
       - **$183K annual savings** for typical team executing 100 operations daily
       
@@ -3089,11 +3089,11 @@ templates:
       
       **Deployment Model:** Standalone or embedded, universal upgrade system, zero vendor lock-in.
       
-      ## Planning System 2.0: Strategic Feature Delivery
+      ## Planning System: Strategic Feature Delivery
       
       **The Planning Problem:** Traditional planning lacks completeness validation, has no visibility into progress, and can't handle complex features that exceed AI response limits. Requirements often incomplete, acceptance criteria ambiguous.
       
-      **CORTEX Solution:** Planning System 2.0 with Definition of Ready (DoR) validation, auto-complexity detection, and real-time visual progress tracking.
+      **CORTEX Solution:** Planning System with Definition of Ready (DoR) validation, auto-complexity detection, and real-time visual progress tracking.
       
       **Planning Capabilities:**
       - **Auto-Complexity Detection:** HIGH complexity → incremental generation, MEDIUM → conditional, LOW → skeleton
@@ -3104,7 +3104,7 @@ templates:
       - **File-Based Plans:** Persist across chat sessions, enable "Continue plan" resumption
       - **TDD Auto-Integration:** Test requirements automatically included in all plans
       
-      **ADO Operations:** Commands like `plan ado story`, `plan ado feature` generate Azure DevOps work items with complete task breakdown. Inherits all Planning System 2.0 compliance with ADO-specific formatting.
+      **ADO Operations:** Commands like `plan ado story`, `plan ado feature` generate Azure DevOps work items with complete task breakdown. Inherits all Planning System compliance with ADO-specific formatting.
       
       **Planning Impact:** 85% reduction in requirements ambiguity, zero response length failures for complex features, complete traceability from concept to deployment.
       
@@ -3209,7 +3209,7 @@ templates:
       **High-Level Categories:**
       
       ### Planning & Requirements (8 features)
-      - Planning System 2.0 with DoR/DoD validation
+      - Planning System with DoR/DoD validation
       - Vision API (screenshot extraction)
       - ADO Integration & work item generation
       - Plan execution orchestrator (autonomous chained execution)
@@ -3284,7 +3284,7 @@ templates:
       **Want to learn more about specific capabilities?** Ask about:
       
       **Planning & Requirements:**
-      - "Tell me about Planning System 2.0" - DoR/DoD validation, Vision API, autonomous execution
+      - "Tell me about Planning System" - DoR/DoD validation, Vision API, autonomous execution
       - "How does ADO integration work?" - Work item generation, backlog sync, sprint planning
       - "Explain plan resumption" - Cross-session continuity, file-based plans
       
@@ -3417,7 +3417,7 @@ templates:
     content: |
       # 🧠 CORTEX
       
-      Transform feature delivery through AI-enhanced Planning System 2.0, automated quality validation, and persistent requirement tracking with real-time visual progress monitoring.
+      Transform feature delivery through AI-enhanced Planning System, automated quality validation, and persistent requirement tracking with real-time visual progress monitoring.
       
       ## What is CORTEX?
       
@@ -3427,7 +3427,7 @@ templates:
       
       **Product Challenge:** Requirements often lack detail, acceptance criteria are ambiguous, and technical implementation drifts from product vision. Traditional AI assistants help with code but can't validate completeness or maintain strategic context across sprints.
       
-      **Planning-First Solution:** CORTEX introduces Planning System 2.0 with Definition of Ready (DoR) validation that ensures specifications are complete before development starts. Combined with Definition of Done (DoD) tracking and real-time visual progress monitoring (5 phases with ETAs), it creates end-to-end visibility from backlog to deployment.
+      **Planning-First Solution:** CORTEX introduces Planning System with Definition of Ready (DoR) validation that ensures specifications are complete before development starts. Combined with Definition of Done (DoD) tracking and real-time visual progress monitoring (5 phases with ETAs), it creates end-to-end visibility from backlog to deployment.
       
       **Quality Built-In:** Governance rules (SKULL - 48 rules across 17 protection layers) automatically include test requirements, security considerations, and performance criteria in every plan. This prevents scope creep and ensures technical quality aligns with product expectations.
       
@@ -3445,7 +3445,7 @@ templates:
       - **Tier 2:** Historical patterns (similar features, reusable solutions)
       - **Tier 3:** Product metrics (velocity trends, quality indicators, delivery analytics)
       
-      ## Planning System 2.0: Complete Feature Delivery
+      ## Planning System: Complete Feature Delivery
       
       **Interactive Planning with Validation:**
       - **Definition of Ready (DoR):** 8 validation gates ensure user stories complete before sprint commitment (user story, acceptance criteria, dependencies, technical specs, test strategy, security review, performance criteria, resource availability)
@@ -3460,7 +3460,7 @@ templates:
       - Work item types: Story, Feature, Task with estimates and acceptance criteria
       - Bidirectional sync: CORTEX plans ↔ ADO backlog
       - Completion summaries: Generate code review summaries and completion reports
-      - Manifest compliance: Inherits all Planning System 2.0 standards + ADO formatting
+      - Manifest compliance: Inherits all Planning System standards + ADO formatting
       
       ## How CORTEX Can Help Product Teams
       
@@ -3479,7 +3479,7 @@ templates:
       ## Explore Further
       
       **Product workflow deep dives:**
-      - "Demo the Planning System 2.0 workflow with DoR/DoD"
+      - "Demo the Planning System workflow with DoR/DoD"
       - "Show me real-time progress tracking with ETAs"
       - "How does Vision API extract requirements from mockups?"
       - "Explain ADO integration and work item generation"
@@ -3501,7 +3501,7 @@ templates:
       
       ## What is CORTEX?
       
-      CORTEX is an architectural enhancement for GitHub Copilot that implements persistent memory, strategic planning, and automated quality enforcement. Built on a 4-tier brain architecture with 10 specialist agents, it transforms Copilot from a stateless assistant into a context-aware development partner with Planning System 2.0 and ADO Operations integration.
+      CORTEX is an architectural enhancement for GitHub Copilot that implements persistent memory, strategic planning, and automated quality enforcement. Built on a 4-tier brain architecture with 10 specialist agents, it transforms Copilot from a stateless assistant into a context-aware development partner with Planning System and ADO Operations integration.
       
       ## Why Was It Built?
       
@@ -3538,7 +3538,7 @@ templates:
       - Template-based response system (68 templates including 6 professional presentations)
       - Orchestrator manifest system (ensures consistency across planning workflows)
       
-      ## Planning System 2.0: Engineering Implementation
+      ## Planning System: Engineering Implementation
       
       **Auto-Complexity Detection:**
       - HIGH complexity → Incremental generator (prevents response length failures)
@@ -3575,7 +3575,7 @@ templates:
       - Universal schema: `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
       - 8 requirements, 7 integrations, 8 quality gates
       - Validator calculates compliance scores (0-100)
-      - ADO manifest inherits Planning System 2.0 + ADO-specific formatting
+      - ADO manifest inherits Planning System + ADO-specific formatting
       
       ## ADO Operations: Azure DevOps Integration
       
@@ -3591,11 +3591,11 @@ templates:
       - Acceptance criteria auto-generation
       - Bidirectional sync: CORTEX plans ↔ ADO backlog
       - Completion summaries for stakeholders
-      - Manifest compliance: Inherits all Planning System 2.0 requirements
+      - Manifest compliance: Inherits all Planning System requirements
       
       **Orchestrator Manifest:**
       - Location: `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
-      - Inherits: Planning System 2.0 manifest (DoR/DoD, TDD, acceptance gates)
+      - Inherits: Planning System manifest (DoR/DoD, TDD, acceptance gates)
       - Adds: ADO-specific formatting, work item types, state transitions
       
       ## How CORTEX Can Help Engineers
@@ -3610,7 +3610,7 @@ templates:
       
       **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 avg) through intelligent memory management. Semantic search retrieves relevant patterns without dumping entire codebase into context. Parallel batch reads (3-5 files), consolidated regex searches, large context windows (300-500 lines).
       
-      **Manifest-Based Orchestration** - Universal manifest schema ensures all orchestrators follow same standards. Planning System 2.0 manifest defines 8 requirements, 7 integrations, 8 quality gates. Validator calculates compliance scores (0-100). ADO manifest inherits + extends with ADO-specific formatting.
+      **Manifest-Based Orchestration** - Universal manifest schema ensures all orchestrators follow same standards. Planning System manifest defines 8 requirements, 7 integrations, 8 quality gates. Validator calculates compliance scores (0-100). ADO manifest inherits + extends with ADO-specific formatting.
       
       **Git Isolation** - CORTEX code never commits to user repositories (enforced by Tier 0 CORTEX_WORKSPACE_ISOLATION). Separate test directories (app tests in user repo, CORTEX tests in `tests/`). Clean separation of concerns.
       
@@ -3621,7 +3621,7 @@ templates:
       **Technical deep dives:**
       - "Show me the 4-tier database schema"
       - "Explain the agent framework architecture"
-      - "How does Planning System 2.0 auto-complexity detection work?"
+      - "How does Planning System auto-complexity detection work?"
       - "Demo ADO work item generation"
       - "Walk through the 48 SKULL governance rules"
       - "Explain the manifest-based orchestration system"
@@ -3651,7 +3651,7 @@ templates:
       
       ## Planning & Requirements
       
-      ### Planning System 2.0
+      ### Planning System
       **What it does:** Interactive feature planning with auto-complexity detection, real-time visual progress tracking (5 phases with ETAs), and Definition of Ready (DoR) / Definition of Done (DoD) validation.
       
       **Business value:** Reduces ambiguous requirements by 85%, cuts planning cycles from days to hours, prevents mid-sprint surprises, eliminates response length failures for complex features.
@@ -3671,7 +3671,7 @@ templates:
       **Evidence:** Planning with CORTEX shows 94% first-pass acceptance vs 67% without structured approach. Zero response length failures since incremental generator introduction.
       
       ### ADO Integration
-      **What it does:** Generates Azure DevOps work items with complete task breakdown, estimates, and acceptance criteria. Works like Planning System 2.0 with ADO-formatted output.
+      **What it does:** Generates Azure DevOps work items with complete task breakdown, estimates, and acceptance criteria. Works like Planning System with ADO-formatted output.
       
       **Business value:** Automates backlog creation, maintains sync between planning and tracking, standardizes work item structure, generates completion summaries for stakeholders.
       
@@ -3680,7 +3680,7 @@ templates:
       - **Commands:** `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`
       - **Bidirectional Sync:** CORTEX plans ↔ ADO backlog
       - **Completion Summaries:** Generate code review summaries and completion reports
-      - **Manifest Inheritance:** Inherits all Planning System 2.0 standards + ADO-specific formatting
+      - **Manifest Inheritance:** Inherits all Planning System standards + ADO-specific formatting
       
       **Integration:** Located in `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
       
@@ -3862,7 +3862,7 @@ templates:
       
       ## Explore Specific Capabilities
       
-      - "Demo Planning System 2.0 with progress tracking"
+      - "Demo Planning System with progress tracking"
       - "Show ADO integration workflow"
       - "Explain TDD Mastery auto-debug"
       - "Walk through Dashboard Intelligence"
@@ -11359,7 +11359,7 @@ templates:
       
       3. **Comprehensive Tutorial (60 min)** - Full CORTEX mastery
          - Everything in Standard +
-         - Planning System 2.0 with Vision API
+         - Planning System with Vision API
          - Dashboard analytics
          - Team telemetry integration
          - Production deployment
@@ -11367,7 +11367,7 @@ templates:
       **Learning Outcomes:**
       - ✅ Understand 4-tier brain architecture
       - ✅ Master TDD Mastery workflow
-      - ✅ Use Planning System 2.0 with DoR/DoD
+      - ✅ Use Planning System with DoR/DoD
       - ✅ Leverage dashboard for visual analytics
       - ✅ Deploy production-ready code
       
@@ -12247,7 +12247,7 @@ templates:
       4. Say "optimize system report" to see current performance
 
   planning:
-    name: Planning System 2.0
+    name: Planning System
     triggers:
     - plan
     - planning
@@ -12258,10 +12258,13 @@ templates:
     - planning system
     response_type: operational
     expected_orchestrator: planning_orchestrator
+    orchestrator_indicator: "⚙️ **Orchestrator:** Planning System"
     operation_name: Planning
     base_structure: '## 🧠 CORTEX {operation}
 
       **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+      ⚙️ **Orchestrator:** Planning System
 
 
       ---
@@ -12295,7 +12298,7 @@ templates:
     understanding_content: You want to create a comprehensive feature plan with DoR/DoD validation
     challenge_content: 'No Challenge - Structured planning with Vision API support'
     response_content: |
-      ## 📋 CORTEX Planning System 2.0
+      ## 📋 CORTEX Planning System
       
       **Zero-ambiguity planning** with Vision API, DoR validation, and file persistence
       
@@ -12750,7 +12753,7 @@ templates:
       - 4-tier brain architecture understood
       - Response template system reviewed
       - TDD Mastery workflow introduced
-      - Planning System 2.0 overview
+      - Planning System overview
       
       ✅ **First Operations**
       - Help command tested
@@ -13538,7 +13541,7 @@ templates:
       
       **Welcome Message:**
       ```
-      🧠 CORTEX v3.7.1 - AI-Enhanced Development Assistant
+      🧠 CORTEX v3.8.1 - AI-Enhanced Development Assistant
       
       📋 GOVERNANCE RULES:
       ✅ TDD Mastery: RED → GREEN → REFACTOR (mandatory)
@@ -14082,7 +14085,7 @@ templates:
       3. Say "security review" for comprehensive threat report
       4. Say "owasp compliance" to check OWASP Top 10 coverage
       
-      **Integration:** Auto-runs during Planning System 2.0 (DoR validation)
+      **Integration:** Auto-runs during Planning System (DoR validation)
 
   leadership_showcase:
     base_structure: '## 🧠 CORTEX Business Value Demonstration
@@ -14159,7 +14162,7 @@ templates:
       ### 🎨 **Product Owners & Business Leaders**
 
       **Strategic Planning Intelligence:**
-      - **Planning System 2.0** (2,599 lines, `src/orchestrators/planning_orchestrator.py`)
+      - **Planning System** (2,599 lines, `src/orchestrators/planning_orchestrator.py`)
         - Vision API: Extract requirements from screenshots (UI mockups, ADO items, error messages)
         - Definition of Ready (DoR): Zero-ambiguity validation before work starts
         - Definition of Done (DoD): Automated quality gates (testing, coverage, security)
