@@ -47,9 +47,9 @@ REQUIRED_FEATURES = {
         "description": "Vision API, DoR/DoD validation, file-based planning",
     },
     "Plan Execution": {
-        "module": "src.orchestrators.plan_execution_orchestrator",
+        "module": "src.orchestrators.plan_execution_orchestrator_v2",
         "functions": ["execute_plan", "_execute_integration_consolidation_phase"],
-        "description": "Autonomous plan execution with Integration & Consolidation phase",
+        "description": "Autonomous plan execution with Integration & Consolidation phase (V2 with dependency injection)",
     },
     "RCA (Root Cause Analysis)": {
         "module": "src.operations.modules.rca.rca_utility",

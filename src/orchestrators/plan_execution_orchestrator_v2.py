@@ -8,10 +8,10 @@ Improvements over V1:
 - Eliminated 80+ lines of redundant initialization
 - Backward compatible with existing plans
 
-Migration Path:
-- V1 remains available (plan_execution_orchestrator.py)
-- V2 used via factory (recommended)
-- Gradual migration of calling code
+Status:
+- V1 (plan_execution_orchestrator.py) REMOVED in v5.2.2
+- V2 is now the ONLY implementation
+- All code uses V2 via OrchestratorFactory
 
 Author: Asif Hussain
 Created: December 6, 2025
