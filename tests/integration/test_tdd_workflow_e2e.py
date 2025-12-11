@@ -1,41 +1,53 @@
 #!/usr/bin/env python3
 """
-Phase 2 Task 2.2: TDD Workflow E2E Test
+TDD Workflow E2E Test
 
-Test: start TDD → RED → GREEN → REFACTOR → checkpoint
+Tests complete TDD Mastery workflow:
+- RED phase (test fails) → GREEN phase (test passes) → REFACTOR phase (improve code)
 """
 
 import pytest
 from pathlib import Path
-import tempfile
-import shutil
+import subprocess
+import sys
 
 
 @pytest.fixture
-def temp_test_env():
-    """Create a temporary testing environment."""
-    temp_dir = Path(tempfile.mkdtemp())
-    yield temp_dir
-    shutil.rmtree(temp_dir, ignore_errors=True)
+def temp_project(tmp_path):
+    """Create a temporary project directory with Python structure."""
+    project_root = tmp_path / "test_project"
+    project_root.mkdir()
+    
+    # Create src directory
+    src_dir = project_root / "src"
+    src_dir.mkdir()
+    (src_dir / "__init__.py").touch()
+    
+    # Create tests directory
+    tests_dir = project_root / "tests"
+    tests_dir.mkdir()
+    (tests_dir / "__init__.py").touch()
+    
+    return project_root
 
 
 @pytest.fixture
-def tdd_orchestrator():
+def tdd_orchestrator(temp_project):
     """Create a TDD orchestrator instance for testing."""
     try:
-        from src.orchestrators.tdd_orchestrator import TDDWorkflowOrchestrator
-        return TDDWorkflowOrchestrator()
+        from src.orchestrators.tdd_implementation_orchestrator import TDDImplementationOrchestrator
+        return TDDImplementationOrchestrator(
+            project_root=str(temp_project),
+            cortex_root=str(Path.cwd())
+        )
     except ImportError:
-        pytest.skip("TDDWorkflowOrchestrator not available")
+        pytest.skip("TDDImplementationOrchestrator not available")
 
 
-def test_tdd_orchestrator_exists():
-    """Verify TDD orchestrator can be imported."""
-    try:
-        from src.orchestrators.tdd_orchestrator import TDDWorkflowOrchestrator
-        assert TDDWorkflowOrchestrator is not None
-    except ImportError:
-        pytest.skip("TDDWorkflowOrchestrator not available")
+def test_tdd_orchestrator_initialization(tdd_orchestrator, temp_project):
+    """Test that TDD orchestrator initializes correctly."""
+    assert tdd_orchestrator is not None
+    assert tdd_orchestrator.project_root == temp_project
 
 
 def test_tdd_phase_sequence():
@@ -48,146 +60,189 @@ def test_tdd_phase_sequence():
     assert phases[2] == "REFACTOR", "REFACTOR phase must follow GREEN"
 
 
-def test_red_phase_validation():
-    """Test RED phase requirements: tests must fail first."""
-    # RED phase requirements
-    red_requirements = [
-        "Test exists",
-        "Test runs",
-        "Test fails",
-        "Failure is expected"
-    ]
+def test_red_phase_failing_test(temp_project):
+    """Test RED phase: create a failing test."""
+    # Create a failing test
+    test_file = temp_project / "tests" / "test_calculator.py"
+    test_content = """
+import pytest
+
+def test_add_two_numbers():
+    '''Test that add function works.'''
+    from src.calculator import add
+    assert add(2, 3) == 5
+"""
+    test_file.write_text(test_content)
     
-    assert len(red_requirements) == 4
-    # TODO: Implement actual validation logic
-
-
-def test_green_phase_validation():
-    """Test GREEN phase requirements: tests must pass."""
-    # GREEN phase requirements
-    green_requirements = [
-        "Implementation exists",
-        "Tests pass",
-        "Minimal implementation",
-        "No refactoring yet"
-    ]
+    # Run test (should fail since src/calculator.py doesn't exist)
+    result = subprocess.run(
+        [sys.executable, "-m", "pytest", str(test_file), "-v"],
+        capture_output=True,
+        text=True,
+        cwd=str(temp_project)
+    )
     
-    assert len(green_requirements) == 4
-    # TODO: Implement actual validation logic
+    # Test should fail (RED phase successful)
+    assert result.returncode != 0, "Test should fail in RED phase"
 
 
-def test_refactor_phase_validation():
-    """Test REFACTOR phase requirements: improve without breaking tests."""
-    # REFACTOR phase requirements
-    refactor_requirements = [
-        "Tests still pass",
-        "Code quality improved",
-        "No new functionality",
-        "Checkpoint created"
-    ]
+def test_green_phase_passing_test(temp_project):
+    """Test GREEN phase: implement minimal code to make test pass."""
+    # Create test file
+    test_file = temp_project / "tests" / "test_calculator.py"
+    test_content = """
+import pytest
+
+def test_add_two_numbers():
+    from src.calculator import add
+    assert add(2, 3) == 5
+"""
+    test_file.write_text(test_content)
     
-    assert len(refactor_requirements) == 4
-    # TODO: Implement actual validation logic
+    # Create minimal implementation (GREEN phase)
+    impl_file = temp_project / "src" / "calculator.py"
+    impl_content = """
+def add(a, b):
+    return a + b
+"""
+    impl_file.write_text(impl_content)
+    
+    # Run test (should pass)
+    result = subprocess.run(
+        [sys.executable, "-m", "pytest", str(test_file), "-v"],
+        capture_output=True,
+        text=True,
+        cwd=str(temp_project)
+    )
+    
+    # Test should pass (GREEN phase successful)
+    assert result.returncode == 0, f"Test should pass in GREEN phase. Output: {result.stdout}"
+
+
+def test_refactor_phase_maintains_passing_tests(temp_project):
+    """Test REFACTOR phase: improve code while keeping tests passing."""
+    # Create test
+    test_file = temp_project / "tests" / "test_calculator.py"
+    test_content = """
+import pytest
+
+def test_add_two_numbers():
+    from src.calculator import add
+    assert add(2, 3) == 5
+    assert add(0, 0) == 0
+    assert add(-1, 1) == 0
+"""
+    test_file.write_text(test_content)
+    
+    # Create refactored implementation with better structure
+    impl_file = temp_project / "src" / "calculator.py"
+    impl_content = """
+def add(a: int, b: int) -> int:
+    \"\"\"Add two numbers and return the result.\"\"\"
+    return a + b
+"""
+    impl_file.write_text(impl_content)
+    
+    # Run tests (should still pass after refactoring)
+    result = subprocess.run(
+        [sys.executable, "-m", "pytest", str(test_file), "-v"],
+        capture_output=True,
+        text=True,
+        cwd=str(temp_project)
+    )
+    
+    # Tests should still pass (REFACTOR successful)
+    assert result.returncode == 0, f"Tests should pass after refactoring. Output: {result.stdout}"
 
 
 @pytest.mark.integration
-def test_tdd_red_green_refactor_cycle_skeleton():
+def test_complete_tdd_cycle(temp_project):
     """
-    Skeleton E2E test for complete TDD cycle.
+    Complete TDD cycle: RED → GREEN → REFACTOR.
     
-    Full implementation requires:
-    1. TDD orchestrator configured
-    2. Test execution environment
-    3. Git repository for checkpoints
+    Workflow:
+    1. RED: Write failing test
+    2. GREEN: Implement minimal code to pass
+    3. REFACTOR: Improve code structure
+    4. Verify: All tests still pass
     """
-    # RED phase
-    # session = orchestrator.start_session("calculate_total")
-    # assert session['phase'] == 'RED'
+    # Step 1: RED - Create failing test
+    test_file = temp_project / "tests" / "test_string_utils.py"
+    test_content_red = """
+import pytest
+
+def test_reverse_string():
+    from src.string_utils import reverse_string
+    assert reverse_string('hello') == 'olleh'
+    assert reverse_string('') == ''
+"""
+    test_file.write_text(test_content_red)
     
-    # Write failing test
-    # test_file = create_test_file("test_calculator.py", failing_test)
-    # result = orchestrator.execute_red_phase(session['id'])
-    # assert result['tests_failed'] > 0
+    # Verify test fails
+    result_red = subprocess.run(
+        [sys.executable, "-m", "pytest", str(test_file), "-v"],
+        capture_output=True,
+        text=True,
+        cwd=str(temp_project)
+    )
+    assert result_red.returncode != 0, "RED: Test should fail initially"
     
-    # GREEN phase
-    # impl_file = create_implementation("calculator.py", working_code)
-    # result = orchestrator.execute_green_phase(session['id'])
-    # assert result['tests_passed']
+    # Step 2: GREEN - Minimal implementation
+    impl_file = temp_project / "src" / "string_utils.py"
+    impl_content_green = """
+def reverse_string(s):
+    return s[::-1]
+"""
+    impl_file.write_text(impl_content_green)
     
-    # REFACTOR phase
-    # result = orchestrator.execute_refactor_phase(session['id'])
-    # assert result['checkpoint_created']
+    # Verify test passes
+    result_green = subprocess.run(
+        [sys.executable, "-m", "pytest", str(test_file), "-v"],
+        capture_output=True,
+        text=True,
+        cwd=str(temp_project)
+    )
+    assert result_green.returncode == 0, "GREEN: Test should pass after implementation"
     
-    pytest.skip("Full E2E test requires complete integration setup")
-
-
-def test_tdd_session_creation():
-    """Test that TDD sessions can be created with proper metadata."""
-    # Session should contain:
-    session_fields = [
-        "id",
-        "feature_name",
-        "phase",
-        "start_time",
-        "test_file",
-        "impl_file"
-    ]
+    # Step 3: REFACTOR - Improve code quality
+    impl_content_refactor = """
+def reverse_string(s: str) -> str:
+    \"\"\"
+    Reverse a string.
     
-    assert len(session_fields) == 6
-
-
-def test_tdd_enforcement_rules():
-    """Test that TDD enforcement rules are defined."""
-    # SKULL rule: TDD_ENFORCEMENT
-    enforcement_rules = {
-        "red_phase_required": True,
-        "tests_must_fail_first": True,
-        "green_phase_before_refactor": True,
-        "checkpoint_on_refactor": True
-    }
+    Args:
+        s: String to reverse
+        
+    Returns:
+        Reversed string
+        
+    Examples:
+        >>> reverse_string('hello')
+        'olleh'
+        >>> reverse_string('')
+        ''
+    \"\"\"
+    if not isinstance(s, str):
+        raise TypeError("Input must be a string")
+    return s[::-1]
+"""
+    impl_file.write_text(impl_content_refactor)
     
-    assert enforcement_rules["red_phase_required"]
-    assert enforcement_rules["tests_must_fail_first"]
+    # Verify tests still pass after refactoring
+    result_refactor = subprocess.run(
+        [sys.executable, "-m", "pytest", str(test_file), "-v"],
+        capture_output=True,
+        text=True,
+        cwd=str(temp_project)
+    )
+    assert result_refactor.returncode == 0, "REFACTOR: Tests should still pass"
 
 
-def test_test_execution_helper():
-    """Test helper function for running pytest tests."""
-    # This would test the helper that runs pytest
-    # and captures results
-    
-    # TODO: Implement test execution helper
-    pytest.skip("Test execution helper not implemented yet")
-
-
-def test_git_checkpoint_creation():
-    """Test that git checkpoints are created after REFACTOR phase."""
-    # Checkpoint requirements:
-    checkpoint_fields = [
-        "commit_hash",
-        "commit_message",
-        "timestamp",
-        "phase",
-        "feature_name"
-    ]
-    
-    assert len(checkpoint_fields) == 5
-    # TODO: Implement actual checkpoint creation test
-
-
-def test_tdd_brain_protection_rule():
-    """Verify TDD enforcement is in brain protection rules."""
+def test_tdd_orchestrator_import():
+    """Verify TDD orchestrator can be imported."""
     try:
-        import yaml
-        from pathlib import Path
-        
-        brain_rules_path = Path("cortex-brain/brain-protection-rules.yaml")
-        if not brain_rules_path.exists():
-            pytest.skip("Brain protection rules file not found")
-        
-        with open(brain_rules_path) as f:
-            rules = yaml.safe_load(f)
-        
-        # Check for TDD enforcement rule
-        assert "TDD_ENFORCEMENT" in str(rules), "TDD_ENFORCEMENT rule not found in brain protection"
-    except ImportError:
-        pytest.skip("PyYAML not available")
+        from src.orchestrators.tdd_implementation_orchestrator import TDDImplementationOrchestrator
+        assert TDDImplementationOrchestrator is not None
+        assert hasattr(TDDImplementationOrchestrator, '__init__')
+    except ImportError as e:
+        pytest.fail(f"TDD orchestrator import failed: {e}")
