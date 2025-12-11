@@ -2,11 +2,19 @@
 Tests for Oracle Database Schema Crawler
 
 Test Strategy:
-- Mock oracledb module to avoid requiring actual Oracle instance
+- Use real Oracle connection when ORACLE_HOST environment variable is set
+- Fall back to mock oracledb module for local development
 - Test metadata extraction logic (tables, columns, indexes, constraints)
 - Validate pattern conversion (Oracle schema -> CORTEX knowledge pattern)
 - Verify Tier 2 integration (scope='application', namespace handling)
 - Test error handling (connection failures, missing metadata)
+
+Environment Variables (for real Oracle testing):
+- ORACLE_HOST: Oracle server hostname (default: localhost)
+- ORACLE_PORT: Oracle server port (default: 1521)
+- ORACLE_SERVICE: Oracle service name (default: XEPDB1)
+- ORACLE_USER: Oracle username (default: system)
+- ORACLE_PASSWORD: Oracle password (required)
 
 Run: python -m pytest CORTEX/tests/tier2/test_oracle_crawler.py -v
 """
@@ -16,9 +24,17 @@ from unittest.mock import Mock, MagicMock, patch, call
 from pathlib import Path
 import json
 import sys
+import os
 
-# Mock oracledb module before importing oracle_crawler
-sys.modules['oracledb'] = MagicMock()
+# Check if real Oracle testing is available
+ORACLE_AVAILABLE = all([
+    os.getenv('ORACLE_HOST'),
+    os.getenv('ORACLE_PASSWORD')
+])
+
+# Mock oracledb module if not testing with real Oracle
+if not ORACLE_AVAILABLE:
+    sys.modules['oracledb'] = MagicMock()
 
 # Add CORTEX to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
