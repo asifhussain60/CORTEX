@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Ownership | RA Domain Analysis</title>
+    <link rel="stylesheet" href="../assets/onedrive-glass.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="header-logo">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
+            <div>
+                <h1 class="header-title">Knowledge Ownership Map</h1>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                    Bus Factor Analysis | Knowledge Silos | Pair Programming Opportunities
+                </p>
+            </div>
+        </div>
+        <div>
+            <p class="last-updated">Last Updated: December 11, 2025</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">
+                <a href="../index.html" style="color: var(--accent-primary);">← Back to Dashboard</a>
+            </p>
+        </div>
+    </header>
+
+    <!-- Bus Factor Overview -->
+    <section class="kpi-grid">
+        <div class="kpi critical">
+            <h3>Critical Knowledge Silos</h3>
+            <div class="value">3</div>
+            <div class="target">Target: 0</div>
+            <div class="trend down">↓ Bus factor = 1</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Carryover | Claims | Rollover
+            </p>
+        </div>
+
+        <div class="kpi warning">
+            <h3>Carryover Bus Factor</h3>
+            <div class="value">1</div>
+            <div class="target">Target: 3+</div>
+            <div class="trend down">↓ 717 LOC single-owner</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Senior Dev B only
+            </p>
+        </div>
+
+        <div class="kpi success">
+            <h3>Team Coverage (Avg)</h3>
+            <div class="value">2.4</div>
+            <div class="target">Developers per area</div>
+            <div class="trend up">↑ Good distribution</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Most areas covered
+            </p>
+        </div>
+
+        <div class="kpi info">
+            <h3>Pair Programming Target</h3>
+            <div class="value">8 hrs</div>
+            <div class="target">Per week (Q1 2025)</div>
+            <div class="trend up">↑ Knowledge transfer</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Focus: Carryover logic
+            </p>
+        </div>
+    </section>
+
+    <!-- Bus Factor Matrix -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🚨 Bus Factor Analysis
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Bus Factor</th>
+                    <th>Primary Owner</th>
+                    <th>Backup Developers</th>
+                    <th>Risk Level</th>
+                    <th>Mitigation Plan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="critical">
+                    <td><strong>CarryoverDollars (717 LOC)</strong></td>
+                    <td>1</td>
+                    <td>Senior Dev B</td>
+                    <td>None</td>
+                    <td><span class="badge badge-critical">CRITICAL</span></td>
+                    <td>Pair programming Sprint 51-52</td>
+                </tr>
+                <tr class="critical">
+                    <td><strong>Claims Processing</strong></td>
+                    <td>1</td>
+                    <td>Mid Dev D</td>
+                    <td>None</td>
+                    <td><span class="badge badge-critical">CRITICAL</span></td>
+                    <td>Knowledge transfer sessions</td>
+                </tr>
+                <tr class="critical">
+                    <td><strong>Rollover Settings</strong></td>
+                    <td>1</td>
+                    <td>Senior Dev B</td>
+                    <td>None</td>
+                    <td><span class="badge badge-critical">CRITICAL</span></td>
+                    <td>Cross-train Mid Dev C</td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>Percent Plan Ledger</strong></td>
+                    <td>2</td>
+                    <td>Senior Dev A</td>
+                    <td>Mid Dev C (partial)</td>
+                    <td><span class="badge badge-warning">HIGH</span></td>
+                    <td>Documentation + code review</td>
+                </tr>
+                <tr class="success">
+                    <td><strong>Reimbursement Balance</strong></td>
+                    <td>3</td>
+                    <td>Senior Dev A</td>
+                    <td>Mid Dev C, Junior Dev E</td>
+                    <td><span class="badge badge-success">LOW</span></td>
+                    <td>Maintain current coverage</td>
+                </tr>
+                <tr class="success">
+                    <td><strong>Member Domain Services</strong></td>
+                    <td>4</td>
+                    <td>Mid Dev C</td>
+                    <td>Senior Dev A, Mid Dev D, Junior Dev E</td>
+                    <td><span class="badge badge-success">LOW</span></td>
+                    <td>No action needed</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Knowledge Transfer Plan -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📚 Knowledge Transfer Plan (Q1 2025)
+        </h2>
+        <div style="display: grid; gap: 1rem;">
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">
+                    Priority 1: CarryoverDollars (Sprints 51-52)
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                    <strong>Current:</strong> Bus factor = 1 (Senior Dev B only)  
+                    <strong>Target:</strong> Bus factor = 3 (+ Mid Dev C + Senior Dev A)
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li><strong>Week 1:</strong> Senior Dev B → Mid Dev C pair programming (8 hrs)</li>
+                    <li><strong>Week 2:</strong> Mid Dev C solo implementation + review (8 hrs)</li>
+                    <li><strong>Week 3:</strong> Senior Dev A joins, 3-way knowledge sharing (4 hrs)</li>
+                    <li><strong>Week 4:</strong> Documentation sprint (all 3 developers, 6 hrs total)</li>
+                </ul>
+                <p style="margin-top: 0.75rem; font-size: 0.875rem; color: var(--accent-primary);">
+                    ✅ <strong>Success Criteria:</strong> Mid Dev C can implement carryover feature solo by Sprint 53
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--warning);">
+                    Priority 2: Claims Processing (Sprint 53)
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                    <strong>Current:</strong> Bus factor = 1 (Mid Dev D only)  
+                    <strong>Target:</strong> Bus factor = 2 (+ Junior Dev E)
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li><strong>Week 1:</strong> Mid Dev D creates architecture diagram (4 hrs)</li>
+                    <li><strong>Week 2:</strong> Junior Dev E shadows Mid Dev D on bug fix (6 hrs)</li>
+                    <li><strong>Week 3:</strong> Junior Dev E implements small feature with supervision (8 hrs)</li>
+                </ul>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--info);">
+                    Priority 3: Rollover Settings (Sprint 54)
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                    <strong>Current:</strong> Bus factor = 1 (Senior Dev B)  
+                    <strong>Target:</strong> Bus factor = 2 (+ Mid Dev C)
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li>Leverage CarryoverDollars knowledge transfer (Mid Dev C already trained)</li>
+                    <li>Code review focus: Rollover logic overlap with carryover</li>
+                    <li>Mid Dev C writes unit tests for rollover scenarios (4 hrs)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; margin-top: 3rem; padding: 2rem; border-top: 1px solid var(--glass-border);">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="height: 24px;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">
+                Powered by <strong style="color: var(--accent-primary);">CORTEX</strong> AI Framework
+            </p>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
+            <a href="../index.html" style="color: var(--accent-primary);">Dashboard</a> | 
+            <a href="onboarding-guide.html" style="color: var(--accent-primary);">Onboarding Guide</a>
+        </p>
+    </footer>
+</body>
+</html>

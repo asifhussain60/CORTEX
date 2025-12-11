@@ -1,0 +1,195 @@
+{
+  "batch_info": {
+    "name": "Batch 3.1 - First 10 Entities",
+    "total_files": 10,
+    "total_classes": 11,
+    "total_properties": 0,
+    "total_navigation_properties": 0
+  },
+  "entities": [
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\CashInOut.cs",
+      "filename": "CashInOut.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "CashInOut",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\CoverageIntent.cs",
+      "filename": "CoverageIntent.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "CoverageIntent",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\Dependent.cs",
+      "filename": "Dependent.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "Dependent",
+          "line": 23,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\DependentSpan.cs",
+      "filename": "DependentSpan.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "DependentSpan",
+          "line": 6,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\Employer.cs",
+      "filename": "Employer.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "Employer",
+          "line": 19,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\GlobalContributionMaxByYear.cs",
+      "filename": "GlobalContributionMaxByYear.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "GlobalContributionMaxByYear",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\GlobalContributionMaxByYearConfiguration.cs",
+      "filename": "GlobalContributionMaxByYearConfiguration.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "GlobalContributionMaxByYear",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        },
+        {
+          "name": "Configuration",
+          "line": 23,
+          "modifiers": [],
+          "inherits": [
+            "EntityTypeConfiguration<GlobalContributionMaxByYear>"
+          ],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\Lookup.cs",
+      "filename": "Lookup.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "Lookup",
+          "line": 19,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\Member.cs",
+      "filename": "Member.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "Member",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [
+            "ExcludeFromCodeCoverage"
+          ],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\MemberFlexSpan.cs",
+      "filename": "MemberFlexSpan.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "MemberFlexSpan",
+          "line": 7,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    }
+  ]
+}

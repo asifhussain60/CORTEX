@@ -1,0 +1,55 @@
+{
+  "risk_matrix": {
+    "CRITICAL": [
+      {
+        "component": "CarryoverDollarsDomainService",
+        "priority": "P0",
+        "roi_estimate": 500000,
+        "business_impact": "IRS compliance failure - $500k penalty risk"
+      }
+    ],
+    "HIGH": [
+      {
+        "component": "BalanceCalculationService",
+        "priority": "P0",
+        "roi_estimate": 200000,
+        "business_impact": "Incorrect balances \u2192 customer claims denied"
+      }
+    ],
+    "MEDIUM": [
+      {
+        "component": "ClaimsProcessingService",
+        "priority": "P1",
+        "roi_estimate": 100000,
+        "business_impact": "Claims processing errors \u2192 customer support burden"
+      },
+      {
+        "component": "CardTransactionService",
+        "priority": "P1",
+        "roi_estimate": 80000,
+        "business_impact": "Fraudulent transactions, merchant code errors"
+      }
+    ],
+    "LOW": [
+      {
+        "component": "PlanManagementService",
+        "priority": "P2",
+        "roi_estimate": 50000,
+        "business_impact": "Plan setup errors \u2192 delayed onboarding"
+      },
+      {
+        "component": "ReportingService",
+        "priority": "P2",
+        "roi_estimate": 20000,
+        "business_impact": "Report inaccuracies \u2192 operational delays"
+      }
+    ]
+  },
+  "summary": {
+    "critical_components": 1,
+    "high_risk_components": 1,
+    "medium_risk_components": 2,
+    "low_risk_components": 2,
+    "total_regulatory_exposure": 700000
+  }
+}

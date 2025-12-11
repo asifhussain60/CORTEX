@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Onboarding Guide | RA Domain Analysis</title>
+    <link rel="stylesheet" href="../assets/onedrive-glass.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="header-logo">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
+            <div>
+                <h1 class="header-title">Developer Onboarding Guide</h1>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                    13 hours → 4 hours | Interactive 5-step checklist
+                </p>
+            </div>
+        </div>
+        <div>
+            <p class="last-updated">Last Updated: December 11, 2025</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">
+                <a href="../index.html" style="color: var(--accent-primary);">← Back to Dashboard</a>
+            </p>
+        </div>
+    </header>
+
+    <!-- Onboarding Progress -->
+    <section class="kpi-grid">
+        <div class="kpi info">
+            <h3>Total C# Files</h3>
+            <div class="value">256</div>
+            <div class="target">12 projects</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                10 domain services
+            </p>
+        </div>
+
+        <div class="kpi warning">
+            <h3>Current Onboarding Time</h3>
+            <div class="value">13 hrs</div>
+            <div class="target">Target: 4 hours</div>
+            <div class="trend down">↓ 69% inefficiency</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                No README | 30% docs
+            </p>
+        </div>
+
+        <div class="kpi success">
+            <h3>Key Files to Read</h3>
+            <div class="value">20</div>
+            <div class="target">Priority: HIGH</div>
+            <div class="trend up">↑ Covers 80% domain</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Start with top 5
+            </p>
+        </div>
+
+        <div class="kpi success">
+            <h3>Learning Path Steps</h3>
+            <div class="value">5</div>
+            <div class="target">Est: 4 hours total</div>
+            <div class="trend up">↑ 70% faster</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Interactive checklist
+            </p>
+        </div>
+    </section>
+
+    <!-- 5-Step Learning Path -->
+    <section class="learning-path mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🚀 5-Step Learning Path (4 Hours)
+        </h2>
+
+        <!-- Step 1 -->
+        <div class="step">
+            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                <input type="checkbox" id="step1" style="margin-top: 0.25rem;">
+                <div style="flex: 1;">
+                    <label for="step1" style="cursor: pointer;">
+                        <h3>Step 1: Understand Core Business Functions (1 hour)</h3>
+                    </label>
+                    <p style="margin-bottom: 0.75rem;">
+                        Learn what the RA domain does: Year-End Processing, Account Management, Claims, Plan Management
+                    </p>
+                    <div style="background: rgba(255, 255, 255, 0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border);">
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                            <strong>Key Files:</strong>
+                        </p>
+                        <ul style="font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.75rem;">
+                            <li><code>CarryoverDollarsDomainService.cs</code> - Year-end carryover logic (717 LOC)</li>
+                            <li><code>ReimbursementAccountBalanceService.cs</code> - Account balances</li>
+                            <li><code>RolloverSettingsService.cs</code> - Rollover configuration</li>
+                            <li><code>PercentPlanLedgerDomainService.cs</code> - Percent plan ledger</li>
+                        </ul>
+                        <p style="font-size: 0.875rem; color: var(--accent-primary); margin: 0;">
+                            💡 <strong>Tip:</strong> Read CarryoverDollars first - it's the most complex service (20 methods)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step">
+            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                <input type="checkbox" id="step2" style="margin-top: 0.25rem;">
+                <div style="flex: 1;">
+                    <label for="step2" style="cursor: pointer;">
+                        <h3>Step 2: Review Integration Points (45 minutes)</h3>
+                    </label>
+                    <p style="margin-bottom: 0.75rem;">
+                        Understand how RA integrates with NServiceBus, Entity Framework, LaunchDarkly
+                    </p>
+                    <div style="background: rgba(255, 255, 255, 0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border);">
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                            <strong>Integration Catalog:</strong>
+                        </p>
+                        <ul style="font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.75rem;">
+                            <li><strong>NServiceBus:</strong> Messaging framework (15 handlers)</li>
+                            <li><strong>Entity Framework:</strong> ORM for database (10 queries)</li>
+                            <li><strong>LaunchDarkly:</strong> Feature flags (5 flags)</li>
+                            <li><strong>NuGet Packages:</strong> 45 total dependencies</li>
+                        </ul>
+                        <p style="font-size: 0.875rem; color: var(--warning); margin: 0;">
+                            ⚠️ <strong>Warning:</strong> NServiceBus requires separate setup (see DevOps wiki)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step">
+            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                <input type="checkbox" id="step3" style="margin-top: 0.25rem;">
+                <div style="flex: 1;">
+                    <label for="step3" style="cursor: pointer;">
+                        <h3>Step 3: Run Existing Tests (1 hour)</h3>
+                    </label>
+                    <p style="margin-bottom: 0.75rem;">
+                        Build solution, run 19 existing tests, understand test structure
+                    </p>
+                    <div style="background: rgba(255, 255, 255, 0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border);">
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                            <strong>Test Commands:</strong>
+                        </p>
+                        <pre style="background: var(--bg-primary); padding: 0.75rem; border-radius: 4px; font-size: 0.8125rem; overflow-x: auto; margin-bottom: 0.75rem;">
+# Open solution in Visual Studio
+Product.ReimbursementAccounts.sln
+
+# Run all tests
+dotnet test --logger "console;verbosity=detailed"
+
+# Run specific test project
+dotnet test Tests/Domain.Tests --no-build
+                        </pre>
+                        <p style="font-size: 0.875rem; color: var(--success); margin: 0;">
+                            ✅ <strong>Success Criteria:</strong> All 19 tests passing (8.6% coverage)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step">
+            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                <input type="checkbox" id="step4" style="margin-top: 0.25rem;">
+                <div style="flex: 1;">
+                    <label for="step4" style="cursor: pointer;">
+                        <h3>Step 4: Write Your First Test (45 minutes)</h3>
+                    </label>
+                    <p style="margin-bottom: 0.75rem;">
+                        Pick 1 untested method from CarryoverDollars, write unit test, submit PR
+                    </p>
+                    <div style="background: rgba(255, 255, 255, 0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border);">
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                            <strong>Suggested First Test:</strong>
+                        </p>
+                        <pre style="background: var(--bg-primary); padding: 0.75rem; border-radius: 4px; font-size: 0.8125rem; overflow-x: auto; margin-bottom: 0.75rem;">
+// Test: CarryoverDollars.CalculateEligibleAmount()
+[Test]
+public void CalculateEligibleAmount_WithValidInput_ReturnsCorrectAmount()
+{
+    // Arrange
+    var service = new CarryoverDollarsDomainService();
+    var accountBalance = 500.00m;
+    var carryoverLimit = 550.00m;
+
+    // Act
+    var result = service.CalculateEligibleAmount(accountBalance, carryoverLimit);
+
+    // Assert
+    Assert.AreEqual(500.00m, result);
+}
+                        </pre>
+                        <p style="font-size: 0.875rem; color: var(--accent-primary); margin: 0;">
+                            💡 <strong>Tip:</strong> Use existing tests as templates (see ReimbursementAccountBalanceService tests)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step">
+            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                <input type="checkbox" id="step5" style="margin-top: 0.25rem;">
+                <div style="flex: 1;">
+                    <label for="step5" style="cursor: pointer;">
+                        <h3>Step 5: Review Complexity Heatmap (30 minutes)</h3>
+                    </label>
+                    <p style="margin-bottom: 0.75rem;">
+                        Understand complexity hotspots, large files, refactoring priorities
+                    </p>
+                    <div style="background: rgba(255, 255, 255, 0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border);">
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                            <strong>Complexity Hotspots:</strong>
+                        </p>
+                        <ul style="font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.75rem;">
+                            <li><span class="badge badge-critical">CRITICAL</span> CarryoverDollarsDomainService (717 LOC, 20 methods)</li>
+                            <li><span class="badge badge-warning">HIGH</span> 10 files > 500 LOC (need refactoring)</li>
+                            <li><span class="badge badge-info">MEDIUM</span> 3 classes with >15 methods</li>
+                        </ul>
+                        <p style="font-size: 0.875rem; color: var(--accent-primary); margin: 0;">
+                            <a href="complexity-heatmap.html" style="color: var(--accent-primary);">
+                                → View Full Complexity Heatmap
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top 20 Key Files Reference -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📚 Top 20 Key Files Reference (Priority Order)
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>Priority</th>
+                    <th>File</th>
+                    <th>LOC</th>
+                    <th>Purpose</th>
+                    <th>Complexity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="critical">
+                    <td><span class="badge badge-critical">P0</span></td>
+                    <td><strong>CarryoverDollarsDomainService.cs</strong></td>
+                    <td>717</td>
+                    <td>Year-end carryover calculation (IRS compliance)</td>
+                    <td>CRITICAL (20 methods)</td>
+                </tr>
+                <tr class="warning">
+                    <td><span class="badge badge-warning">P1</span></td>
+                    <td><strong>ReimbursementAccountBalanceService.cs</strong></td>
+                    <td>450</td>
+                    <td>Account balance management</td>
+                    <td>HIGH (10 methods)</td>
+                </tr>
+                <tr class="warning">
+                    <td><span class="badge badge-warning">P1</span></td>
+                    <td><strong>RolloverSettingsService.cs</strong></td>
+                    <td>380</td>
+                    <td>Rollover configuration (IRS Publication 969)</td>
+                    <td>HIGH (8 methods)</td>
+                </tr>
+                <tr class="warning">
+                    <td><span class="badge badge-warning">P1</span></td>
+                    <td><strong>PercentPlanLedgerDomainService.cs</strong></td>
+                    <td>520</td>
+                    <td>Percent plan ledger (ERISA compliance)</td>
+                    <td>HIGH (9 methods)</td>
+                </tr>
+                <tr class="info">
+                    <td><span class="badge badge-info">P2</span></td>
+                    <td><strong>MemberDomainService.cs</strong></td>
+                    <td>340</td>
+                    <td>Member profile management</td>
+                    <td>MEDIUM (7 methods)</td>
+                </tr>
+                <tr class="info">
+                    <td><span class="badge badge-info">P2</span></td>
+                    <td><strong>CarryoverSharedService.cs</strong></td>
+                    <td>290</td>
+                    <td>Shared carryover utilities</td>
+                    <td>MEDIUM (6 methods)</td>
+                </tr>
+                <tr class="info">
+                    <td><span class="badge badge-info">P2</span></td>
+                    <td><strong>MemberFlexSpanDomainService.cs</strong></td>
+                    <td>410</td>
+                    <td>Flex spending account spans</td>
+                    <td>MEDIUM (8 methods)</td>
+                </tr>
+                <tr class="info">
+                    <td><span class="badge badge-info">P2</span></td>
+                    <td><strong>ScheduledItemService.cs</strong></td>
+                    <td>270</td>
+                    <td>Background job scheduling</td>
+                    <td>MEDIUM (5 methods)</td>
+                </tr>
+                <tr class="success">
+                    <td><span class="badge badge-success">P3</span></td>
+                    <td><strong>LDFeatureFlagService.cs</strong></td>
+                    <td>180</td>
+                    <td>LaunchDarkly feature flags</td>
+                    <td>LOW (4 methods)</td>
+                </tr>
+                <tr class="success">
+                    <td><span class="badge badge-success">P3</span></td>
+                    <td><strong>AutoMapperConfiguration.cs</strong></td>
+                    <td>130</td>
+                    <td>Object mapping configuration</td>
+                    <td>LOW (0 public methods)</td>
+                </tr>
+                <tr class="success">
+                    <td><span class="badge badge-success">P3</span></td>
+                    <td colspan="4" style="text-align: center; font-style: italic; color: var(--text-secondary);">
+                        ... +10 more files (see <a href="key-files-reference.html" style="color: var(--accent-primary);">Full Reference</a>)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- FAQ -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            ❓ Frequently Asked Questions
+        </h2>
+        <div style="display: grid; gap: 1rem;">
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--accent-primary);">
+                    Q: Why is test coverage so low (8.6%)?
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-primary);">
+                    <strong>A:</strong> Technical debt from rapid feature development. We're addressing this with a 
+                    <a href="../managers/test-coverage-roadmap.html" style="color: var(--accent-primary);">9-month roadmap</a> 
+                    targeting 90% coverage by Q3 2025.
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--accent-primary);">
+                    Q: What's the bus factor for CarryoverDollars?
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-primary);">
+                    <strong>A:</strong> Currently 1 (CRITICAL). Only 1 developer fully understands 717 LOC. Refactoring + knowledge transfer scheduled for Q1 2025.
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--accent-primary);">
+                    Q: How do I set up NServiceBus locally?
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-primary);">
+                    <strong>A:</strong> See DevOps wiki: <code>\\DevOps\NServiceBus-Setup.md</code>. Requires RabbitMQ + local SQL Server.
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--accent-primary);">
+                    Q: Where's the README?
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-primary);">
+                    <strong>A:</strong> Currently missing (30/100 doc score). Tech Lead creating README in Sprint 51. Use this onboarding guide as interim.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Next Steps -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🎯 Next Steps After Onboarding
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            <a href="complexity-heatmap.html" class="link-card">
+                <div class="icon">🔥</div>
+                <div>
+                    <h3>Complexity Heatmap</h3>
+                    <p>Visualize complexity hotspots, large files, refactoring priorities</p>
+                </div>
+            </a>
+
+            <a href="knowledge-ownership.html" class="link-card">
+                <div class="icon">👤</div>
+                <div>
+                    <h3>Knowledge Ownership</h3>
+                    <p>Bus factor analysis, knowledge silos, pair programming opportunities</p>
+                </div>
+            </a>
+
+            <a href="../managers/test-coverage-roadmap.html" class="link-card">
+                <div class="icon">🧪</div>
+                <div>
+                    <h3>Test Coverage Roadmap</h3>
+                    <p>P0 scenarios, sprint velocity tracker, ROI calculator</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; margin-top: 3rem; padding: 2rem; border-top: 1px solid var(--glass-border);">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="height: 24px;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">
+                Powered by <strong style="color: var(--accent-primary);">CORTEX</strong> AI Framework
+            </p>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
+            <a href="../index.html" style="color: var(--accent-primary);">Dashboard</a> | 
+            <a href="complexity-heatmap.html" style="color: var(--accent-primary);">Complexity Heatmap</a>
+        </p>
+    </footer>
+</body>
+</html>

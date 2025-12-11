@@ -1,0 +1,1047 @@
+{
+  "scanned_at": "2025-12-11T13:40:42.611447",
+  "repository": "Product.ReimbursementAccounts",
+  "business_functions": {
+    "core_capabilities": [
+      {
+        "capability": "Account Management",
+        "services": [
+          "ReimbursementAccountBalanceService"
+        ],
+        "count": 1
+      },
+      {
+        "capability": "Claims Processing",
+        "services": [
+          "ReimbursementAccountBalanceService"
+        ],
+        "count": 1
+      },
+      {
+        "capability": "Year-End Processing",
+        "services": [
+          "CarryoverDollarsDomainService",
+          "CarryoverSharedService",
+          "RolloverSettingsService"
+        ],
+        "count": 3
+      },
+      {
+        "capability": "Plan Management",
+        "services": [
+          "PercentPlanLedgerDomainService"
+        ],
+        "count": 1
+      }
+    ],
+    "by_namespace": {
+      "Hqy.Member.Domain.Services": [
+        "AutoMapperConfiguration",
+        "CarryoverDollarsDomainService",
+        "CarryoverSharedService",
+        "LDFeatureFlagService",
+        "MemberDomainService",
+        "MemberFlexSpanDomainService",
+        "PercentPlanLedgerDomainService",
+        "ReimbursementAccountBalanceService",
+        "RolloverSettingsService",
+        "ScheduledItemService"
+      ]
+    },
+    "by_project": {},
+    "service_catalog": [
+      {
+        "name": "AutoMapperConfiguration",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\AutoMapperConfiguration.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": null,
+        "public_methods": 0,
+        "lines_of_code": 130,
+        "business_keywords": [
+          "account",
+          "hsa",
+          "card",
+          "employer",
+          "balance",
+          "rollover",
+          "member",
+          "reimbursement",
+          "carryover"
+        ],
+        "is_domain_service": false
+      },
+      {
+        "name": "CarryoverDollarsDomainService",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\CarryoverDollarsDomainService.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": "ICarryoverDollarsDomainService",
+        "public_methods": 0,
+        "lines_of_code": 717,
+        "business_keywords": [
+          "fsa",
+          "account",
+          "hsa",
+          "eligible",
+          "card",
+          "transaction",
+          "employer",
+          "balance",
+          "plan year",
+          "rollover",
+          "member",
+          "irs",
+          "reimbursement",
+          "hra",
+          "carryover",
+          "claim"
+        ],
+        "is_domain_service": true
+      },
+      {
+        "name": "CarryoverSharedService",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\CarryoverSharedService.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": "ICarryoverSharedService",
+        "public_methods": 0,
+        "lines_of_code": 89,
+        "business_keywords": [
+          "account",
+          "eligible",
+          "member",
+          "irs",
+          "reimbursement",
+          "hra",
+          "carryover"
+        ],
+        "is_domain_service": false
+      },
+      {
+        "name": "LDFeatureFlagService",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\LDFeatureFlagService.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": "ILDFeatureFlagService",
+        "public_methods": 0,
+        "lines_of_code": 43,
+        "business_keywords": [
+          "card",
+          "employer",
+          "balance",
+          "member",
+          "carryover"
+        ],
+        "is_domain_service": false
+      },
+      {
+        "name": "MemberDomainService",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\MemberDomainService.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": "IMemberDomainService",
+        "public_methods": 2,
+        "lines_of_code": 818,
+        "business_keywords": [
+          "dependent care",
+          "fsa",
+          "account",
+          "hsa",
+          "eligible",
+          "limit",
+          "card",
+          "transaction",
+          "employer",
+          "balance",
+          "rollover",
+          "member",
+          "irs",
+          "reimbursement",
+          "hra",
+          "contribution",
+          "carryover",
+          "claim"
+        ],
+        "is_domain_service": true
+      },
+      {
+        "name": "MemberFlexSpanDomainService",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\MemberFlexSpanDomainService.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": "IMemberFlexSpanDomainService",
+        "public_methods": 3,
+        "lines_of_code": 1205,
+        "business_keywords": [
+          "account",
+          "hsa",
+          "eligible",
+          "limit",
+          "employer",
+          "member",
+          "irs",
+          "reimbursement",
+          "hra"
+        ],
+        "is_domain_service": true
+      },
+      {
+        "name": "PercentPlanLedgerDomainService",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\PercentPlanLedgerDomainService.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": "IPercentPlanLedgerDomainService",
+        "public_methods": 0,
+        "lines_of_code": 244,
+        "business_keywords": [
+          "account",
+          "employer",
+          "balance",
+          "member",
+          "reimbursement",
+          "claim"
+        ],
+        "is_domain_service": true
+      },
+      {
+        "name": "ReimbursementAccountBalanceService",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\ReimbursementAccountBalanceService.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": "IReimbursementAccountBalanceService",
+        "public_methods": 1,
+        "lines_of_code": 98,
+        "business_keywords": [
+          "account",
+          "card",
+          "employer",
+          "balance",
+          "member",
+          "reimbursement",
+          "carryover"
+        ],
+        "is_domain_service": false
+      },
+      {
+        "name": "RolloverSettingsService",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\RolloverSettingsService.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": "IRolloverSettingsService",
+        "public_methods": 2,
+        "lines_of_code": 124,
+        "business_keywords": [
+          "account",
+          "balance",
+          "rollover",
+          "member",
+          "irs",
+          "reimbursement",
+          "carryover"
+        ],
+        "is_domain_service": false
+      },
+      {
+        "name": "ScheduledItemService",
+        "file": "Libs\\Hqy.Member.Domain\\Services\\ScheduledItemService.cs",
+        "namespace": "Hqy.Member.Domain.Services",
+        "interface": "IScheduledItemService",
+        "public_methods": 0,
+        "lines_of_code": 142,
+        "business_keywords": [
+          "account",
+          "card",
+          "rollover",
+          "member",
+          "reimbursement",
+          "carryover",
+          "claim"
+        ],
+        "is_domain_service": false
+      }
+    ],
+    "domain_events": [
+      {
+        "handler": "CarryoverTransferTrackingEventHandler",
+        "event_type": "CarryoverTransferTrackingEvent",
+        "file": "Apps\\Hqy.CarryoverTransferTracking.Endpoint\\Handlers\\CarryoverTransferTrackingEventHandler.cs",
+        "integration_type": "NServiceBus"
+      }
+    ],
+    "background_jobs": []
+  },
+  "test_coverage": {
+    "summary": {
+      "production_files": 220,
+      "test_files": 19,
+      "test_to_code_ratio": 0.08636363636363636
+    },
+    "by_layer": {
+      "Domain": {
+        "production_files": 0,
+        "test_files": 0,
+        "test_ratio": 0
+      },
+      "Services": {
+        "production_files": 0,
+        "test_files": 0,
+        "test_ratio": 0
+      },
+      "Jobs": {
+        "production_files": 0,
+        "test_files": 0,
+        "test_ratio": 0
+      },
+      "Contracts": {
+        "production_files": 0,
+        "test_files": 0,
+        "test_ratio": 0
+      }
+    },
+    "untested_files": [
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\DependentBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\DependentSpanBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\EmployerBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\FlexSpanBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\MemberBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\ReimbursementAccountBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\ReimbursementPlanBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\RolloverSettingsBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\ScheduledItemBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Builders\\SubaccountBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Repositories\\ReimbursementFlexPlanRepository.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\TestHelpers\\CarryoverDataCreator.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\TestHelpers\\CoreHelper.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\TestHelpers\\CreatedData.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\TestHelpers\\DataCreator.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\TestHelpers\\FeatureEnablementHelper.cs",
+      "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\TestHelpers\\JamsHelper.cs",
+      "Tests\\Hqy.ReimbursementAccounts.Domain.IntegrationTests\\Builders\\EmployerBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.Domain.IntegrationTests\\Builders\\MemberBuilder.cs",
+      "Tests\\Hqy.ReimbursementAccounts.Domain.IntegrationTests\\Builders\\ReimbursementAccountBuilder.cs"
+    ],
+    "test_to_code_ratio": 0.0,
+    "coverage_estimate": 8.636363636363637,
+    "recommendations": [
+      {
+        "priority": "HIGH",
+        "message": "Coverage estimate 8.6% is below 90% target. Gap: 81.4%",
+        "action": "Increase test coverage, especially for domain services and background jobs"
+      }
+    ],
+    "untested_count": 220
+  },
+  "onboarding_metrics": {
+    "repository_overview": {
+      "total_csharp_files": 256,
+      "total_projects": 12,
+      "lines_of_code_estimate": 70318.08,
+      "primary_language": ".NET/C#",
+      "framework": "ASP.NET Framework 4.8",
+      "messaging": "NServiceBus",
+      "orm": "Entity Framework"
+    },
+    "key_files_to_read": [],
+    "learning_path": [
+      {
+        "order": 1,
+        "topic": "Repository Structure",
+        "description": "Understand project organization (Apps, Libs, Tests)",
+        "estimated_time": "1 hour"
+      },
+      {
+        "order": 2,
+        "topic": "Domain Model",
+        "description": "Study entities and relationships (FSA, HSA, HRA, Dependent Care)",
+        "estimated_time": "3 hours"
+      },
+      {
+        "order": 3,
+        "topic": "Business Logic",
+        "description": "Review domain services, especially CarryoverDollarsDomainService",
+        "estimated_time": "4 hours"
+      },
+      {
+        "order": 4,
+        "topic": "Testing Strategy",
+        "description": "Understand test structure and coverage approach",
+        "estimated_time": "2 hours"
+      },
+      {
+        "order": 5,
+        "topic": "Integration Points",
+        "description": "Learn NServiceBus messaging and background jobs",
+        "estimated_time": "3 hours"
+      }
+    ],
+    "terminology_guide": {
+      "FSA": "Flexible Spending Account",
+      "HSA": "Health Savings Account",
+      "HRA": "Health Reimbursement Arrangement",
+      "EOFY": "End of Fiscal Year",
+      "Carryover": "Unused funds transferred to next year",
+      "Forfeiture": "Unused funds returned to employer",
+      "Grace Period": "2.5-month extension to use prior year funds",
+      "NServiceBus": "Messaging framework for distributed systems",
+      "Domain Service": "Business logic orchestration layer"
+    },
+    "who_to_ask": [
+      {
+        "topic": "Carryover Logic",
+        "file": "Libs/Hqy.Member.Domain/Services/CarryoverDollarsDomainService.cs",
+        "note": "Primary owner should be identified from git history"
+      },
+      {
+        "topic": "Test Strategy",
+        "file": "Tests/",
+        "note": "QA lead or senior developer"
+      }
+    ]
+  },
+  "complexity_analysis": {
+    "large_files": [
+      {
+        "file": "Tests\\Hqy.Member.Domain.Tests\\Service.Tests\\MemberFlexSpanDomainServiceTests.cs",
+        "lines": 2325,
+        "risk": "HIGH"
+      },
+      {
+        "file": "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Tests\\Services\\FlexReimbursementAccountsDomainIntegrationTests.cs",
+        "lines": 1696,
+        "risk": "HIGH"
+      },
+      {
+        "file": "Tests\\Hqy.Member.Domain.Tests\\Service.Tests\\MemberDomainServiceTests.cs",
+        "lines": 1613,
+        "risk": "HIGH"
+      },
+      {
+        "file": "Tests\\Hqy.Member.Domain.Tests\\Service.Tests\\CarryoverDollarsDomainServiceTests.cs",
+        "lines": 1439,
+        "risk": "HIGH"
+      },
+      {
+        "file": "Libs\\Hqy.Member.Domain\\Services\\MemberFlexSpanDomainService.cs",
+        "lines": 1205,
+        "risk": "HIGH"
+      },
+      {
+        "file": "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Tests\\Services\\CarryoverDollarsDomainIntegrationTests.cs",
+        "lines": 934,
+        "risk": "MEDIUM"
+      },
+      {
+        "file": "Libs\\Hqy.Member.Domain\\Services\\MemberDomainService.cs",
+        "lines": 818,
+        "risk": "MEDIUM"
+      },
+      {
+        "file": "Libs\\Hqy.Member.Domain\\Repositories\\ReimbursementAccountRepository.cs",
+        "lines": 814,
+        "risk": "MEDIUM"
+      },
+      {
+        "file": "Tests\\Hqy.Employer.Domain.Tests\\Service.Tests\\EmployerDomainServiceTests.cs",
+        "lines": 730,
+        "risk": "MEDIUM"
+      },
+      {
+        "file": "Libs\\Hqy.Member.Domain\\Services\\CarryoverDollarsDomainService.cs",
+        "lines": 717,
+        "risk": "MEDIUM"
+      }
+    ],
+    "high_method_count_classes": [
+      {
+        "file": "Tests\\Hqy.Member.Domain.Tests\\Service.Tests\\MemberDomainServiceTests.cs",
+        "method_count": 73,
+        "risk": "HIGH"
+      },
+      {
+        "file": "Tests\\Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests\\Repositories\\ReimbursementFlexPlanRepository.cs",
+        "method_count": 26,
+        "risk": "MEDIUM"
+      },
+      {
+        "file": "Tests\\Hqy.Employer.Domain.Tests\\Service.Tests\\EmployerDomainServiceTests.cs",
+        "method_count": 21,
+        "risk": "MEDIUM"
+      }
+    ],
+    "deep_nesting": [],
+    "complexity_score": 65
+  },
+  "documentation_quality": {
+    "readme_exists": false,
+    "xml_doc_comments": 11,
+    "inline_comments": 707,
+    "documentation_score": 30,
+    "missing_docs": []
+  },
+  "integration_points": {
+    "messaging": [
+      {
+        "handler": "CarryoverTransferTrackingEventHandler",
+        "event_type": "CarryoverTransferTrackingEvent",
+        "file": "Apps\\Hqy.CarryoverTransferTracking.Endpoint\\Handlers\\CarryoverTransferTrackingEventHandler.cs",
+        "integration_type": "NServiceBus"
+      }
+    ],
+    "databases": [
+      {
+        "context": "ReimbursementAccountsContext",
+        "file": "Libs\\Hqy.Member.Domain\\Data\\ReimbursementAccountsContext.cs",
+        "type": "Entity Framework"
+      },
+      {
+        "context": "IReimbursementAccountsContext",
+        "file": "Libs\\Hqy.Member.Domain\\Interfaces\\IReimbursementAccountsContext.cs",
+        "type": "Entity Framework"
+      },
+      {
+        "context": "ReimbursementAccountsContext",
+        "file": "Libs\\Hqy.Employer.Domain\\Data\\ReimbursementAccountsContext.cs",
+        "type": "Entity Framework"
+      },
+      {
+        "context": "IReimbursementAccountsContext",
+        "file": "Libs\\Hqy.Employer.Domain\\Interfaces\\IReimbursementAccountsContext.cs",
+        "type": "Entity Framework"
+      }
+    ],
+    "external_apis": [],
+    "libraries": [
+      {
+        "name": "coverlet.collector",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.NET.Test.Sdk",
+        "type": "NuGet"
+      },
+      {
+        "name": "Moq",
+        "type": "NuGet"
+      },
+      {
+        "name": "NUnit",
+        "type": "NuGet"
+      },
+      {
+        "name": "NUnit3TestAdapter",
+        "type": "NuGet"
+      },
+      {
+        "name": "EnterpriseConfiguration.SDK",
+        "type": "NuGet"
+      },
+      {
+        "name": "EntityFramework",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Ioc",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Logging.TestHelpers",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Wcf.EnterpriseConfiguration",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Wcf.TestHelpers",
+        "type": "NuGet"
+      },
+      {
+        "name": "nunit",
+        "type": "NuGet"
+      },
+      {
+        "name": "HelpSystems.JAMS.JAMSBaseTypes",
+        "type": "NuGet"
+      },
+      {
+        "name": "HelpSystems.JAMS.JAMSShr",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Wcf.Contracts",
+        "type": "NuGet"
+      },
+      {
+        "name": "NServiceBus",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.ValueTuple",
+        "type": "NuGet"
+      },
+      {
+        "name": "AutoMapper",
+        "type": "NuGet"
+      },
+      {
+        "name": "ClassicModernization.DomainApiClient",
+        "type": "NuGet"
+      },
+      {
+        "name": "HQY.FeatureEnablement",
+        "type": "NuGet"
+      },
+      {
+        "name": "NServiceBus.UniformSession",
+        "type": "NuGet"
+      },
+      {
+        "name": "RAContexts.Contracts",
+        "type": "NuGet"
+      },
+      {
+        "name": "Z.EntityFramework.Extensions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Antlr3.Runtime",
+        "type": "NuGet"
+      },
+      {
+        "name": "BitFaster.Caching",
+        "type": "NuGet"
+      },
+      {
+        "name": "EnterpriseConfiguration.Contracts",
+        "type": "NuGet"
+      },
+      {
+        "name": "Foundation.Logging",
+        "type": "NuGet"
+      },
+      {
+        "name": "Foundation.Logging.Microsoft.Extensions.Logging.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Bootstrapper",
+        "type": "NuGet"
+      },
+      {
+        "name": "HQY.FeatureEnablement.Unity",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Ioc.Contracts",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Logging",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Logging.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Logging.Extensions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Logging.Microsoft",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.NServiceBus",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.NServiceBus.BearerToken",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.NServiceBus.EnterpriseConfiguration",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.NServiceBus.SelfHost",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Security.BearerTokens",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Security.Contracts",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Utilities",
+        "type": "NuGet"
+      },
+      {
+        "name": "Iesi.Collections",
+        "type": "NuGet"
+      },
+      {
+        "name": "JWT",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.AspNet.WebApi.Client",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.AspNetCore.Hosting.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.AspNetCore.Hosting.Server.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.AspNetCore.Http.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.AspNetCore.Http.Features",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Bcl.AsyncInterfaces",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.CSharp",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration.EnvironmentVariables",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.DependencyInjection",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.FileProviders.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Hosting.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Http",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Logging",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Logging.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Options",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Primitives",
+        "type": "NuGet"
+      },
+      {
+        "name": "Newtonsoft.Json",
+        "type": "NuGet"
+      },
+      {
+        "name": "NServiceBus.Extensions.Hosting",
+        "type": "NuGet"
+      },
+      {
+        "name": "RabbitMQ.Client",
+        "type": "NuGet"
+      },
+      {
+        "name": "Remotion.Linq",
+        "type": "NuGet"
+      },
+      {
+        "name": "Remotion.Linq.EagerFetching",
+        "type": "NuGet"
+      },
+      {
+        "name": "Serilog",
+        "type": "NuGet"
+      },
+      {
+        "name": "Serilog.Enrichers.Thread",
+        "type": "NuGet"
+      },
+      {
+        "name": "Serilog.Extensions.Logging",
+        "type": "NuGet"
+      },
+      {
+        "name": "Serilog.Sinks.Async",
+        "type": "NuGet"
+      },
+      {
+        "name": "Serilog.Sinks.Console",
+        "type": "NuGet"
+      },
+      {
+        "name": "Serilog.Sinks.File",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Buffers",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Collections.Immutable",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.ComponentModel.Annotations",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Configuration.ConfigurationManager",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Diagnostics.DiagnosticSource",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Formats.Asn1",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.IO.Pipelines",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Memory",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Numerics.Vectors",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Reflection.Emit",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Reflection.Emit.Lightweight",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Runtime.Caching",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Runtime.CompilerServices.Unsafe",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Security.AccessControl",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Security.Cryptography.Pkcs",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Security.Cryptography.Xml",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Security.Permissions",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Security.Principal.Windows",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.ServiceModel.Primitives",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Threading.Channels",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Threading.Tasks.Extensions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Unity.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "Unity.Container",
+        "type": "NuGet"
+      },
+      {
+        "name": "Unity.Interception",
+        "type": "NuGet"
+      },
+      {
+        "name": "Unity.Microsoft.DependencyInjection",
+        "type": "NuGet"
+      },
+      {
+        "name": "Unity.Microsoft.Logging",
+        "type": "NuGet"
+      },
+      {
+        "name": "Unity.RegistrationByConvention",
+        "type": "NuGet"
+      },
+      {
+        "name": "ClassicModernization.AppSettings.Extensions.Configuration",
+        "type": "NuGet"
+      },
+      {
+        "name": "ClassicModernization.EnterpriseConfiguration.Extensions.Configuration",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Bootstrapper.AppServer",
+        "type": "NuGet"
+      },
+      {
+        "name": "Microsoft.Extensions.Hosting",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.NServiceBus.Client",
+        "type": "NuGet"
+      },
+      {
+        "name": "EBTRequestLayer",
+        "type": "NuGet"
+      },
+      {
+        "name": "Foundation.WCF.Client",
+        "type": "NuGet"
+      },
+      {
+        "name": "HEData",
+        "type": "NuGet"
+      },
+      {
+        "name": "HETransactions.Contracts",
+        "type": "NuGet"
+      },
+      {
+        "name": "Hqy.Wcf.Client",
+        "type": "NuGet"
+      },
+      {
+        "name": "NHibernate",
+        "type": "NuGet"
+      },
+      {
+        "name": "ServiceJob.Contracts",
+        "type": "NuGet"
+      },
+      {
+        "name": "ServiceJob.Host",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.IO.Abstractions",
+        "type": "NuGet"
+      },
+      {
+        "name": "System.Text.Encodings.Web",
+        "type": "NuGet"
+      }
+    ]
+  },
+  "team_insights": {
+    "estimated_team_size": "Unknown (requires git history)",
+    "knowledge_areas": [
+      {
+        "area": "Hqy.Employer.Domain.Tests",
+        "type": "Test",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.Member.Domain.Tests",
+        "type": "Test",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.ReimbursementAccounts.Domain.IntegrationTests",
+        "type": "Test",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.ReimbursementAccounts.FlexPlan.IntegrationTests",
+        "type": "Test",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.ReimbursementAccounts.Contracts",
+        "type": "API Contracts",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.Employer.Domain",
+        "type": "Domain Logic",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.Member.Domain",
+        "type": "Domain Logic",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.CarryoverTransferTracking.Endpoint",
+        "type": "Application",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.ReimbursementAccounts.ApplicationServices",
+        "type": "Application",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.ReimbursementAccounts.CarryOver.Jobs",
+        "type": "Background Job",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.ReimbursementAccounts.FlexPlan.Jobs",
+        "type": "Background Job",
+        "complexity": "TBD"
+      },
+      {
+        "area": "Hqy.ReimbursementAccounts.PercentPlanLedger.Jobs",
+        "type": "Background Job",
+        "complexity": "TBD"
+      }
+    ],
+    "maintenance_burden": {
+      "total_files": 256,
+      "estimated_developer_months": 2.56,
+      "risk_areas": [
+        "Carryover Logic",
+        "Claims Processing",
+        "Background Jobs"
+      ]
+    },
+    "refactoring_candidates": []
+  }
+}

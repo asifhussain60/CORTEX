@@ -1,0 +1,9 @@
+C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\MemberFlexSpanDto.cs
+C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\MemberFlexStageChangeDto.cs
+C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\MemberRecentActivitiesDto.cs
+C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\MemberReimbursementAccountDetailsDto.cs
+C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\MemberReimbursementAccountsSummaryDto.cs
+C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\MemberSuspendedCard.cs
+C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\MemberUnsubstantiatedTransaction.cs
+C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\OverrideMemberFlexStageRequest.cs
+C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\PercentPlanLedgerJobResponse.cs

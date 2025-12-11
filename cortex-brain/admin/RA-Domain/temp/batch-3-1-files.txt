@@ -1,0 +1,10 @@
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Employer.Domain\Entities\Employer.cs
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Employer.Domain\Entities\Lookup.cs
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Employer.Domain\Entities\Member.cs
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Employer.Domain\Entities\ReimbursementAccount.cs
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Employer.Domain\Entities\ReimbursementPlan.cs
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Member.Domain\Entities\ActualCoverage.cs
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Member.Domain\Entities\BalanceChangeAudit.cs
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Member.Domain\Entities\Card.cs
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Member.Domain\Entities\CardTransaction.cs
+C:\PROJECTS\Product.ReimbursementAccounts\Libs\Hqy.Member.Domain\Entities\CarryoverTransferTracking.cs

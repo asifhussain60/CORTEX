@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capability Catalog | RA Domain Analysis</title>
+    <link rel="stylesheet" href="../assets/onedrive-glass.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="header-logo">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
+            <div>
+                <h1 class="header-title">Business Capability Catalog</h1>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                    4 Core Capabilities | 10 Domain Services | 45 Integrations
+                </p>
+            </div>
+        </div>
+        <div>
+            <p class="last-updated">Last Updated: December 11, 2025</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">
+                <a href="../index.html" style="color: var(--accent-primary);">← Back to Dashboard</a>
+            </p>
+        </div>
+    </header>
+
+    <!-- Capability Overview -->
+    <section class="kpi-grid">
+        <div class="kpi success">
+            <h3>Core Capabilities</h3>
+            <div class="value">4</div>
+            <div class="target">Coverage: 92%</div>
+            <div class="trend up">↑ Well-defined</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Year-End | Claims | Account | Plan
+            </p>
+        </div>
+
+        <div class="kpi info">
+            <h3>Domain Services</h3>
+            <div class="value">10</div>
+            <div class="target">Services catalogued</div>
+            <div class="trend up">↑ Organized</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Hqy.Member.Domain.Services
+            </p>
+        </div>
+
+        <div class="kpi warning">
+            <h3>External Integrations</h3>
+            <div class="value">45</div>
+            <div class="target">NuGet packages</div>
+            <div class="trend down">↓ Vendor risk</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                NServiceBus | EF | LaunchDarkly
+            </p>
+        </div>
+
+        <div class="kpi success">
+            <h3>Use Cases Documented</h3>
+            <div class="value">24</div>
+            <div class="target">Across all capabilities</div>
+            <div class="trend up">↑ Complete</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Product roadmap aligned
+            </p>
+        </div>
+    </section>
+
+    <!-- 4 Core Capabilities -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🏢 4 Core Business Capabilities
+        </h2>
+        
+        <!-- Year-End Processing -->
+        <div class="glass-card mb-lg">
+            <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--accent-primary);">
+                1️⃣ Year-End Processing
+            </h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Handles IRS-compliant year-end carryover calculations, rollover processing, and Form 5500 generation
+            </p>
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    <strong>Domain Services (3):</strong>
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li><strong>CarryoverDollarsDomainService</strong> - 717 LOC, 20 methods (IRS Form 5500 compliance)</li>
+                    <li><strong>CarryoverSharedService</strong> - 290 LOC, 6 methods (Shared utilities)</li>
+                    <li><strong>RolloverSettingsService</strong> - 380 LOC, 8 methods (IRS Publication 969)</li>
+                </ul>
+            </div>
+            <div style="background: rgba(0, 212, 255, 0.05); padding: 1rem; border-radius: 8px; border: 1px solid var(--info);">
+                <p style="font-size: 0.875rem; color: var(--info); margin: 0;">
+                    <strong>Key Regulations:</strong> IRS Code §125 | Form 5500 | Publication 969
+                </p>
+            </div>
+        </div>
+
+        <!-- Account Management -->
+        <div class="glass-card mb-lg">
+            <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--accent-primary);">
+                2️⃣ Account Management
+            </h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Manages reimbursement account balances, ledger tracking, and member account lifecycle
+            </p>
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    <strong>Domain Services (4):</strong>
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li><strong>ReimbursementAccountBalanceService</strong> - 450 LOC, 10 methods (Balance management)</li>
+                    <li><strong>MemberDomainService</strong> - 340 LOC, 7 methods (Member profiles)</li>
+                    <li><strong>MemberFlexSpanDomainService</strong> - 410 LOC, 8 methods (Flex spending spans)</li>
+                    <li><strong>PercentPlanLedgerDomainService</strong> - 520 LOC, 9 methods (ERISA compliance)</li>
+                </ul>
+            </div>
+            <div style="background: rgba(0, 212, 255, 0.05); padding: 1rem; border-radius: 8px; border: 1px solid var(--info);">
+                <p style="font-size: 0.875rem; color: var(--info); margin: 0;">
+                    <strong>Key Regulations:</strong> HIPAA Privacy Rule | ERISA §404
+                </p>
+            </div>
+        </div>
+
+        <!-- Claims Processing -->
+        <div class="glass-card mb-lg">
+            <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--accent-primary);">
+                3️⃣ Claims Processing
+            </h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Processes reimbursement claims via NServiceBus messaging, Entity Framework persistence
+            </p>
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    <strong>Integrations:</strong>
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li><strong>NServiceBus</strong> - 15 message handlers (Async processing)</li>
+                    <li><strong>Entity Framework</strong> - 10 database queries (ORM layer)</li>
+                    <li><strong>LaunchDarkly</strong> - 5 feature flags (A/B testing)</li>
+                </ul>
+            </div>
+            <div style="background: rgba(0, 212, 255, 0.05); padding: 1rem; border-radius: 8px; border: 1px solid var(--info);">
+                <p style="font-size: 0.875rem; color: var(--info); margin: 0;">
+                    <strong>Key Regulations:</strong> PCI-DSS 3.4 | HIPAA Security Rule
+                </p>
+            </div>
+        </div>
+
+        <!-- Plan Management -->
+        <div class="glass-card">
+            <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--accent-primary);">
+                4️⃣ Plan Management
+            </h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Multi-tenant plan configuration, scheduled jobs, feature flag management
+            </p>
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    <strong>Domain Services (3):</strong>
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li><strong>ScheduledItemService</strong> - 270 LOC, 5 methods (Background jobs)</li>
+                    <li><strong>LDFeatureFlagService</strong> - 180 LOC, 4 methods (Feature toggles)</li>
+                    <li><strong>AutoMapperConfiguration</strong> - 130 LOC (Object mapping)</li>
+                </ul>
+            </div>
+            <div style="background: rgba(0, 212, 255, 0.05); padding: 1rem; border-radius: 8px; border: 1px solid var(--info);">
+                <p style="font-size: 0.875rem; color: var(--info); margin: 0;">
+                    <strong>Dependencies:</strong> 45 NuGet packages | Multi-tenant architecture
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; margin-top: 3rem; padding: 2rem; border-top: 1px solid var(--glass-border);">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="height: 24px;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">
+                Powered by <strong style="color: var(--accent-primary);">CORTEX</strong> AI Framework
+            </p>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
+            <a href="../index.html" style="color: var(--accent-primary);">Dashboard</a>
+        </p>
+    </footer>
+</body>
+</html>

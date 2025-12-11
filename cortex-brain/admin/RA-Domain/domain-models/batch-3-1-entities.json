@@ -1,0 +1,181 @@
+{
+  "batch_info": {
+    "name": "Batch 3.1 - First 10 Entities",
+    "total_files": 10,
+    "total_classes": 10,
+    "total_properties": 0,
+    "total_navigation_properties": 0
+  },
+  "entities": [
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Employer.Domain\\Entities\\Employer.cs",
+      "filename": "Employer.cs",
+      "namespace": "Hqy.Employer.Domain.Entities",
+      "classes": [
+        {
+          "name": "Employer",
+          "line": 19,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Employer.Domain\\Entities\\Lookup.cs",
+      "filename": "Lookup.cs",
+      "namespace": "Hqy.Employer.Domain.Entities",
+      "classes": [
+        {
+          "name": "Lookup",
+          "line": 19,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Employer.Domain\\Entities\\Member.cs",
+      "filename": "Member.cs",
+      "namespace": "Hqy.Employer.Domain.Entities",
+      "classes": [
+        {
+          "name": "Member",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Employer.Domain\\Entities\\ReimbursementAccount.cs",
+      "filename": "ReimbursementAccount.cs",
+      "namespace": "Hqy.Employer.Domain.Entities",
+      "classes": [
+        {
+          "name": "ReimbursementAccount",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Employer.Domain\\Entities\\ReimbursementPlan.cs",
+      "filename": "ReimbursementPlan.cs",
+      "namespace": "Hqy.Employer.Domain.Entities",
+      "classes": [
+        {
+          "name": "ReimbursementPlan",
+          "line": 24,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\ActualCoverage.cs",
+      "filename": "ActualCoverage.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "ActualCoverage",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\BalanceChangeAudit.cs",
+      "filename": "BalanceChangeAudit.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "BalanceChangeAudit",
+          "line": 9,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": "<summary> Represents an audit record for balance changes in ReimbursementAccounts. </summary>"
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\Card.cs",
+      "filename": "Card.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "Card",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\CardTransaction.cs",
+      "filename": "CardTransaction.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "CardTransaction",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.ReimbursementAccounts\\Libs\\Hqy.Member.Domain\\Entities\\CarryoverTransferTracking.cs",
+      "filename": "CarryoverTransferTracking.cs",
+      "namespace": "Hqy.Member.Domain.Entities",
+      "classes": [
+        {
+          "name": "CarryoverTransferTracking",
+          "line": 9,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    }
+  ]
+}
