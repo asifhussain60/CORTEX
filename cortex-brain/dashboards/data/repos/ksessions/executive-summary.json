@@ -1,0 +1,11 @@
+{
+  "summary": "",
+  "key_metrics": [
+    {
+      "label": "Security Issues",
+      "value": 6,
+      "trend": "warning"
+    }
+  ],
+  "generated_at": "2025-12-11T06:58:12.215417"
+}

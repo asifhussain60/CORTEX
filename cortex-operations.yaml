@@ -142,6 +142,7 @@ operations:
     name: Debug Workflow Orchestrator
     description: CORTEX Debug Workflow Orchestrator
     deployment_tier: user_facing
+    execution_method: internal
     natural_language:
     - added null check before session access
     category: development
@@ -149,6 +150,7 @@ operations:
     name: Learning Observer
     description: CORTEX Learning Observer
     deployment_tier: user_facing
+    execution_method: internal
     natural_language:
     - operation name
     category: general
@@ -933,6 +935,7 @@ operations:
     name: Dashboard Validator V2
     description: Dashboard Validator V2 - Comprehensive Functionality Testing
     deployment_tier: dual_context
+    execution_method: internal
     natural_language:
     - generatedat
     - generated timestamp is valid iso format
@@ -2557,6 +2560,7 @@ operations:
     display_name: Phase8 Utility
     description: Internal utility module for phase8 operations
     deployment_tier: admin_only
+    execution_method: internal
     natural_language:
     - internal phase8 utility
     category: phase8
