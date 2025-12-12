@@ -32,6 +32,7 @@ from src.orchestrators.session_model import PlanningSession, SessionFactory, Ses
 from src.orchestrators.validation_framework import validate_plan, validate_task, ValidationResult
 from src.agents.estimation.scope_inference_engine import ScopeBoundary, ScopeEntities
 from src.orchestrators.test_intelligence import TestIntelligence, detect_test_requirements
+from src.orchestrators.tdd_intelligence import TDDIntelligence, get_tdd_intelligence, CodeType, TDDDecision
 from src.tier1.user_profile_manager import UserProfileManager
 from src.utils.manifest_validator import ManifestValidator, ValidationSeverity
 
@@ -120,6 +121,10 @@ class PlanningOrchestrator:
         self.test_intelligence = TestIntelligence()
         self.user_profile = UserProfileManager()
         logger.info("✅ Test intelligence initialized for smart test planning")
+        
+        # NEW: Initialize TDD intelligence module for smart TDD enforcement
+        self.tdd_intelligence = get_tdd_intelligence()
+        logger.info("✅ TDD intelligence initialized for intelligent TDD enforcement")
         
         # TDD Requirements (SKULL enforcement)
         self._tdd_dor_requirements = [
@@ -3676,6 +3681,11 @@ class PlanningOrchestrator:
         - Recommends frameworks based on user preferences
         - Provides headed/headless execution guidance
         
+        NEW (v3.8.5): TDD Intelligence Integration
+        - Analyzes code complexity for each phase/task
+        - Automatically exempts low-value code (entities, DTOs, POCOs)
+        - Enforces TDD only for high-value production code (controllers, services, repositories)
+        
         Args:
             plan_data: Plan dictionary with metadata, phases, DoR, DoD
             
@@ -3694,6 +3704,9 @@ class PlanningOrchestrator:
         
         # NEW: Detect test requirements from feature description
         test_strategy_injected = self._inject_test_strategy(plan_data, dor, dod)
+        
+        # NEW (v3.8.5): Analyze phases for intelligent TDD guidance
+        tdd_guidance_injected = self._inject_intelligent_tdd_guidance(plan_data, dor, dod)
         
         # REFACTOR: Pre-compute lowercased existing items for O(n) lookup instead of O(n²)
         existing_dor_lower = [item.lower()[:30] for item in dor]
@@ -3723,17 +3736,124 @@ class PlanningOrchestrator:
         plan_data["definition_of_ready"] = dor
         plan_data["definition_of_done"] = dod
         
-        if injected_dor_count > 0 or injected_dod_count > 0 or test_strategy_injected:
+        if injected_dor_count > 0 or injected_dod_count > 0 or test_strategy_injected or tdd_guidance_injected:
             logger.info(
                 f"🧬 Requirements injected: "
                 f"TDD +{injected_dor_count} DoR, +{injected_dod_count} DoD "
                 f"{'| Test strategy ✓' if test_strategy_injected else ''} "
+                f"{'| TDD intelligence ✓' if tdd_guidance_injected else ''} "
                 f"(Total: DoR={len(dor)}, DoD={len(dod)})"
             )
         else:
             logger.debug("✓ TDD and test requirements already present, no injection needed")
         
         return plan_data
+    
+    def _inject_intelligent_tdd_guidance(self, plan_data: Dict[str, Any], dor: List[str], dod: List[str]) -> bool:
+        """
+        Analyze phases and inject intelligent TDD guidance.
+        
+        Uses TDD Intelligence to:
+        1. Detect code types from phase descriptions
+        2. Calculate complexity scores
+        3. Recommend TDD enforcement or exemption
+        4. Add guidance to DoR/DoD
+        
+        Args:
+            plan_data: Plan dictionary with phases
+            dor: Definition of Ready (modified in place)
+            dod: Definition of Done (modified in place)
+        
+        Returns:
+            True if TDD guidance was injected
+        """
+        try:
+            phases = plan_data.get("phases", [])
+            if not phases:
+                logger.debug("No phases found in plan, skipping TDD intelligence")
+                return False
+            
+            # Analyze each phase for TDD requirements
+            tdd_mandatory_phases = []
+            tdd_optional_phases = []
+            
+            for phase in phases:
+                if not isinstance(phase, dict):
+                    continue
+                
+                phase_name = phase.get("name", "Unknown")
+                phase_desc = phase.get("description", "")
+                tasks = phase.get("tasks", [])
+                
+                # Skip analysis if no description
+                if not phase_desc:
+                    continue
+                
+                # Analyze phase description for code type
+                decision = self.tdd_intelligence.analyze_code_for_tdd(
+                    code_content="",  # No actual code yet, use description
+                    file_path="",
+                    intent=phase_desc
+                )
+                
+                if decision.tdd_required:
+                    tdd_mandatory_phases.append({
+                        "name": phase_name,
+                        "reason": decision.rationale,
+                        "complexity": decision.complexity_score,
+                        "code_type": decision.code_type.value
+                    })
+                else:
+                    tdd_optional_phases.append({
+                        "name": phase_name,
+                        "reason": decision.exemption_reason or decision.rationale,
+                        "complexity": decision.complexity_score,
+                        "code_type": decision.code_type.value
+                    })
+            
+            # Inject guidance into DoR/DoD if any phases analyzed
+            if tdd_mandatory_phases or tdd_optional_phases:
+                # Add intelligent TDD enforcement note to DoR
+                if tdd_mandatory_phases:
+                    mandatory_names = [p["name"] for p in tdd_mandatory_phases]
+                    dor.append(
+                        f"🧬 TDD MANDATORY for: {', '.join(mandatory_names)} "
+                        f"(complexity analysis: high-value production code)"
+                    )
+                
+                if tdd_optional_phases:
+                    optional_names = [p["name"] for p in tdd_optional_phases]
+                    dor.append(
+                        f"⏭️  TDD OPTIONAL for: {', '.join(optional_names)} "
+                        f"(complexity analysis: simple data structures)"
+                    )
+                
+                # Add validation guidance to DoD
+                dod.append(
+                    f"🧬 TDD enforcement validated: {len(tdd_mandatory_phases)} mandatory, "
+                    f"{len(tdd_optional_phases)} optional (intelligent enforcement)"
+                )
+                
+                # Log phase analysis summary
+                logger.info(f"🧬 TDD intelligence analyzed {len(phases)} phases:")
+                for phase_info in tdd_mandatory_phases:
+                    logger.info(
+                        f"  🔴 {phase_info['name']}: MANDATORY "
+                        f"({phase_info['code_type']}, complexity {phase_info['complexity']}/100)"
+                    )
+                for phase_info in tdd_optional_phases:
+                    logger.info(
+                        f"  ⏭️  {phase_info['name']}: OPTIONAL "
+                        f"({phase_info['code_type']}, complexity {phase_info['complexity']}/100)"
+                    )
+                
+                return True
+            
+            return False
+            
+        except Exception as e:
+            logger.error(f"Failed to inject TDD intelligence guidance: {e}")
+            return False
     
     def _inject_test_strategy(self, plan_data: Dict[str, Any], dor: List[str], dod: List[str]) -> bool:
         """

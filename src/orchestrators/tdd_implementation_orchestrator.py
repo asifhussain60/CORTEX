@@ -56,6 +56,7 @@ import json
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 from src.orchestrators.session_model import TDDSession, TDDPhase as NewTDDPhase, SessionStatus, SessionFactory
 from src.orchestrators.validation_framework import validate_tdd_transition, validate_code_quality, TDDTestValidator
+from src.orchestrators.tdd_intelligence import TDDIntelligence, get_tdd_intelligence, CodeType, TDDDecision
 from src.utils.progress_decorator import with_progress, yield_progress
 
 logger = logging.getLogger(__name__)
@@ -232,6 +233,9 @@ class TDDImplementationOrchestrator:
         # Integration points
         self.git_checkpoint = GitCheckpointOrchestrator(self.project_root)
         
+        # NEW: TDD Intelligence for smart enforcement
+        self.tdd_intelligence = get_tdd_intelligence()
+        
         # Lazy-load heavy dependencies
         self._code_analyzers = None
         self._brain_protector = None
@@ -239,6 +243,8 @@ class TDDImplementationOrchestrator:
         self._metrics_collector = None
         
         logger.info(f"✅ TDDImplementationOrchestrator initialized for {self.project_root}")
+        logger.info(f"✅ TDD Intelligence enabled (smart TDD enforcement)")
+
     
     def _detect_cortex_root(self) -> Path:
         """Auto-detect CORTEX root from current file location."""
@@ -338,6 +344,81 @@ class TDDImplementationOrchestrator:
             logger.debug(f"💾 Saved session state: {state.session_id}")
         except Exception as e:
             logger.error(f"❌ Failed to save session state: {e}")
+    
+    def analyze_code_for_tdd_requirement(
+        self,
+        code_content: str,
+        file_path: str,
+        intent: Optional[str] = None
+    ) -> TDDDecision:
+        """
+        Intelligently determine if TDD is required for given code.
+        
+        Uses TDD Intelligence module to analyze complexity and business value.
+        
+        Args:
+            code_content: Source code to analyze
+            file_path: Path to file being created
+            intent: User's stated intent (e.g., "Create user entity")
+        
+        Returns:
+            TDDDecision with enforcement decision and rationale
+        
+        Example:
+            # Analyze entity class
+            decision = orchestrator.analyze_code_for_tdd_requirement(
+                code_content="public class User { public int Id { get; set; } }",
+                file_path="src/Entities/User.cs",
+                intent="Create user entity"
+            )
+            
+            if decision.tdd_required:
+                # Follow RED→GREEN→REFACTOR
+                session = orchestrator.start_session(...)
+            else:
+                # TDD optional, proceed without tests
+                logger.info(f"TDD OPTIONAL: {decision.exemption_reason}")
+        """
+        logger.info(f"🔍 Analyzing code for TDD requirement: {file_path}")
+        
+        decision = self.tdd_intelligence.analyze_code_for_tdd(
+            code_content=code_content,
+            file_path=file_path,
+            intent=intent
+        )
+        
+        # Log decision
+        if decision.tdd_required:
+            logger.info(f"🔴 TDD MANDATORY: {decision.rationale}")
+            logger.info(f"   Code Type: {decision.code_type.value}")
+            logger.info(f"   Complexity: {decision.complexity_score}/100")
+            logger.info(f"   Methods: {decision.evidence.get('method_count', 0)}")
+        else:
+            logger.info(f"⏭️  TDD OPTIONAL: {decision.rationale}")
+            logger.info(f"   Exemption: {decision.exemption_reason}")
+            logger.info(f"   Properties: {decision.evidence.get('property_count', 0)}")
+        
+        return decision
+    
+    def get_tdd_guidance_for_code(
+        self,
+        code_content: str,
+        file_path: str,
+        intent: Optional[str] = None
+    ) -> str:
+        """
+        Get human-readable TDD guidance for code being created.
+        
+        Args:
+            code_content: Source code to analyze
+            file_path: Path to file
+            intent: User's stated intent
+        
+        Returns:
+            Formatted guidance string
+        """
+        decision = self.analyze_code_for_tdd_requirement(code_content, file_path, intent)
+        return self.tdd_intelligence.get_tdd_guidance(decision)
     
     def _validate_phase_transition(
         self,

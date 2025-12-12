@@ -124,24 +124,142 @@ protection_layers:
     evidence_template: '#file:documents/evidence-templates/planning/INCREMENTAL_PLAN_GENERATION.md'
     rationale: '#file:documents/rationales/INCREMENTAL_PLAN_GENERATION.md'
   - rule_id: TDD_ENFORCEMENT
-    name: Test-Driven Development Enforcement
+    name: Test-Driven Development Enforcement (High-Value Code Only)
     severity: blocked
-    description: Attempt to bypass Test-Driven Development requirement
+    description: "Intelligent TDD enforcement - applies to high-value production code (business logic, services, controllers, repositories with complex queries), excludes low-value code (simple DTOs, POCOs, configuration classes, entities with only properties)"
     detection:
-      keywords:
-      - skip test
-      - bypass tdd
-      - no tests
-      - disable tdd
-      - skip validation
+      combined_keywords:
+        high_value_code:
+        - controller
+        - service
+        - business logic
+        - validation
+        - repository method
+        - complex query
+        - transaction
+        - authorization
+        - authentication
+        - workflow
+        - orchestrator
+        - handler
+        - processor
+        low_value_exemptions:
+        - DTO
+        - POCO
+        - entity
+        - model
+        - configuration
+        - settings
+        - constants
+        - simple property
       scope:
       - intent
-      - description
+      - code_type
+      - complexity_analysis
+    complexity_threshold:
+      methods_with_logic: true  # Has methods beyond simple getters/setters
+      cyclomatic_complexity: "> 1"  # More than straight-line code
+      external_dependencies: true  # Calls other services/repositories
+      business_rules: true  # Contains validation/calculation logic
+    tdd_exemptions:
+      - type: simple_entity
+        description: "Entity classes with only auto-properties (no logic)"
+        examples:
+        - "public class User { public int Id { get; set; } public string Name { get; set; } }"
+      - type: dto
+        description: "Data Transfer Objects (pure data carriers)"
+        examples:
+        - "public class CreateUserRequest { public string Name { get; set; } }"
+      - type: configuration
+        description: "Configuration classes (appsettings mappings)"
+        examples:
+        - "public class DatabaseSettings { public string ConnectionString { get; set; } }"
+      - type: constants
+        description: "Constant/enum definitions"
+        examples:
+        - "public static class ErrorCodes { public const string NotFound = \"404\"; }"
+    tdd_required:
+      - type: repository
+        description: "Repository methods with complex queries/transactions"
+        examples:
+        - "Task<List<Invoice>> GetByDateRangeAsync(DateTime start, DateTime end)"
+        - "Task<bool> DeleteAsync(string id)"
+      - type: service
+        description: "Business logic layer (validation, calculations, workflows)"
+        examples:
+        - "Task<Result> ProcessPaymentAsync(Payment payment)"
+        - "bool ValidateInvoice(Invoice invoice)"
+      - type: controller
+        description: "REST API endpoints (HTTP request/response handling)"
+        examples:
+        - "Task<IActionResult> GetInvoice(string id)"
+        - "Task<IActionResult> CreateInvoice(CreateInvoiceRequest request)"
+      - type: middleware
+        description: "Request pipeline components"
+        examples:
+        - "Task InvokeAsync(HttpContext context)"
+      - type: authorization
+        description: "Security/permission checks"
+        examples:
+        - "Task<bool> CanAccessInvoice(User user, Invoice invoice)"
     alternatives:
-    - Write failing test first (RED phase)
+    - Write failing test first (RED phase) for high-value code
     - Create spike branch for exploration (throwaway)
-    - "Use TDD cycle: RED \u2192 GREEN \u2192 REFACTOR"
-    evidence_template: 'Intent: ''{intent}'''
+    - "Use TDD cycle: RED \u2192 GREEN \u2192 REFACTOR for production logic"
+    - Skip TDD for simple entities/DTOs (document why: 'Simple POCO, no logic to test')
+    intelligent_enforcement: |
+      CORTEX will intelligently detect code type and enforce TDD accordingly:
+      
+      HIGH-VALUE CODE (TDD MANDATORY):
+      ✅ Controllers with HTTP endpoints
+      ✅ Services with business logic
+      ✅ Repositories with complex queries
+      ✅ Middleware with request processing
+      ✅ Validation/authorization logic
+      ✅ Transaction management
+      ✅ Workflows/orchestrators
+      
+      LOW-VALUE CODE (TDD OPTIONAL):
+      ⏭️  Entity classes (only properties)
+      ⏭️  DTOs (pure data carriers)
+      ⏭️  Configuration classes (appsettings)
+      ⏭️  Constants/enums
+      ⏭️  Simple POCOs (no methods)
+      
+      DETECTION STRATEGY:
+      1. Analyze code intent (what is being created?)
+      2. Check for methods beyond getters/setters
+      3. Check for external dependencies (DB, services)
+      4. Check for business rules (if/switch logic)
+      5. If complexity > threshold → ENFORCE TDD
+      6. If simple data structure → SKIP TDD (document)
+      
+      EXAMPLE DECISIONS:
+      
+      Phase 2 Entities (FundingInvoice.cs):
+      - Type: Entity class
+      - Methods: None (only properties)
+      - Dependencies: None
+      - Business Logic: None
+      → DECISION: TDD OPTIONAL (simple POCO)
+      → REASON: No logic to test, just data structure
+      
+      Phase 3 Controller (FundingInvoicesController.GetById):
+      - Type: Controller endpoint
+      - Methods: Yes (GetById with repository call)
+      - Dependencies: Yes (IFundingInvoiceRepository)
+      - Business Logic: Yes (404 handling, model mapping)
+      → DECISION: TDD MANDATORY
+      → REASON: Production logic with HTTP contract
+      
+      This intelligent approach prevents "test bureaucracy" while ensuring
+      critical production code has proper TDD discipline.
+    evidence_template: |
+      Code Type: '{code_type}'
+      Complexity: '{complexity_analysis}'
+      TDD Required: '{tdd_decision}'
+      
+      {tdd_rationale}
   - rule_id: RED_PHASE_VALIDATION
     name: RED Phase Validation (Test Must Fail First)
     severity: blocked
