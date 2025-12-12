@@ -3920,48 +3920,84 @@ templates:
       - "cortex for engineers"
     response_type: "narrative"
     content: |
-      # 🧠 CORTEX
+      # 🧠 CORTEX: Engineering as Creative Problem-Solving
+      **Liberating Engineers from Syntax to Focus on Elegance**
       
-      A distributed memory architecture for AI-enhanced development with TDD automation, governance rules, and pattern learning.
+      ## The Vision: Engineers Should Add Value, Not Just Write Code
+      
+      **The Current Reality:** You spend 60-80% of your day on implementation mechanics—writing boilerplate, debugging syntax errors, authoring tests, searching for existing code, managing context. The work you **actually enjoy**—designing elegant architectures, solving complex problems, understanding user needs, optimizing performance—gets squeezed into the margins.
+      
+      **What If AI Could Handle All Of That?**
+      
+      Imagine your workflow like this:
+      - **You:** "We need authentication that balances security with user experience"
+      - **AI:** Generates OAuth2 implementation, comprehensive tests, security audit, performance benchmarks
+      - **You:** Focus on strategic decisions (token expiration strategy, refresh flow UX, rate limiting design)
+      
+      - **You:** "This architecture is getting coupled—how should we refactor?"
+      - **AI:** Holistic discovery surfaces all dependencies, suggests clean boundaries, generates refactoring plan
+      - **You:** Make architectural decisions, AI executes the transformation with full test coverage
+      
+      - **You:** "Show me how this codebase works"
+      - **AI:** Generates adaptive dashboard with API catalog, database schema, dependency graph, security posture
+      - **You:** Understand architecture in 2 hours instead of 2 weeks, identify opportunities for improvement
+      
+      **This is CORTEX.** AI handles "how to code," you focus on "how to add value."
       
       ## What is CORTEX?
       
-      CORTEX is an architectural enhancement for GitHub Copilot that implements persistent memory, strategic planning, and automated quality enforcement. Built on a 4-tier brain architecture with 10 specialist agents, it transforms Copilot from a stateless assistant into a context-aware development partner with Planning System and ADO Operations integration.
+      CORTEX is an architectural enhancement for GitHub Copilot that transforms it from a code completion tool into a strategic development partner. Built on a 4-tier brain architecture with persistent memory, automated quality enforcement, and intelligent workflow orchestration.
+      
+      **The Mental Model:** You design **what** creates value (architecture, behavior, user experience), CORTEX generates and validates **how** it's implemented (code, tests, documentation, quality checks). Your creativity unleashed, mechanics automated.
+      
+      **Core Architecture:**
+      - **4-Tier Brain** - Persistent memory modeled after human cognition (Governance → Working Memory → Knowledge Graph → Strategic Context)
+      - **10 Specialist Agents** - Dual-hemisphere processing (Tactical: Code Executor, Tester, Debugger, Refactorer; Strategic: Planner, Architect, Reviewer, Optimizer)
+      - **48 SKULL Governance Rules** - Automated quality enforcement (TDD, SOLID, security, architectural patterns)
+      - **Holistic Code Discovery** - Search-before-create pattern prevents duplicate implementations
+      - **Planning System** - Vision-driven workflow with DoR/DoD validation and real-time progress tracking
+      - **ADO Integration** - Seamless Azure DevOps workflow (work item generation, bidirectional sync)
       
       ## Why Was It Built?
       
-      **Technical Problem:** AI assistants lack persistence—every session starts from zero context. No memory of past decisions, no pattern learning, no strategic planning. This creates repetitive explanations, inconsistent code quality, and missed optimization opportunities.
+      **Technical Problem:** AI assistants lack persistence—every session starts from zero context. No memory of architectural decisions, no pattern learning, no strategic planning. You spend more time explaining context than solving problems.
       
-      **Architectural Solution:** CORTEX implements a distributed database architecture (Tier 0-3 SQLite DBs) that persists conversation history, code patterns, and project context. Think of it as adding a cerebral cortex to Copilot's reflexive code generation.
+      **Architectural Solution:** CORTEX implements a distributed database architecture (4 SQLite DBs with tier-specific schemas) that persists conversation history, code patterns, and project context. Think of it as adding a **cerebral cortex** to Copilot's reflexive code generation—strategic thinking on top of tactical execution.
       
-      **Governance Through Rules:** The SKULL system (Strategic Knowledge & Universal Learning Logic) enforces SOLID principles, TDD workflow, and architectural patterns through declarative YAML rules. 48 rules across 17 protection layers including SKULL-001 (Test Before Claim), SKULL-002 (Integration Verification), SKULL-007 (All Tests Must Pass). It's like having an embedded tech lead who challenges deviations with evidence-based recommendations (e.g., "Test-first has 94% success rate vs 67% without").
+      **Governance Through Rules:** The SKULL system (Strategic Knowledge & Universal Learning Logic) enforces SOLID principles, TDD workflow, and architectural patterns through declarative YAML rules. 48 rules across 17 protection layers. It's like having an embedded tech lead who challenges deviations with evidence-based recommendations (e.g., "Test-first has 94% success rate vs 67% without").
       
-      ## Tech Stack & Architecture
+      **The Freedom:** When AI enforces quality automatically, you're free to experiment, refactor boldly, and optimize creatively—knowing comprehensive tests will catch any regressions.
+      
+      ## Tech Stack & Architecture: Built for Real Complexity
       
       **Core Technologies:**
       - **SQLite** - 4 separate DBs (tier-specific schemas), FTS5 full-text search, <100ms query performance
-      - **Python 3.8+** - Type-annotated agents, pytest for 100% coverage, src-relative imports
-      - **YAML** - 5000+ lines of governance rules (48 rules, 17 protection layers), 68 response templates, orchestrator manifests
+      - **Python 3.8+** - Type-annotated agents, pytest for comprehensive coverage, clean architecture
+      - **YAML** - 5000+ lines of governance rules (48 rules, 17 protection layers), 62 response templates, orchestrator manifests
       
       **4-Tier Brain Architecture:**
       ```
-      Tier 0 (Governance): 48 immutable rules, SKULL instincts (SKULL-001 through SKULL-010), 17 protection layers
+      Tier 0 (Governance): 48 immutable rules, SKULL instincts, 17 protection layers
+        ↓ Enforces quality automatically
       Tier 1 (Working Memory): 70-conv FIFO, entity extraction, <100ms queries
+        ↓ Maintains active context
       Tier 2 (Knowledge Graph): Pattern storage, FTS5 semantic search, relationship mapping
+        ↓ Learns from your codebase
       Tier 3 (Dev Context): Git metrics, code hotspots, performance insights
+        ↓ Surfaces optimization opportunities
       ```
       
-      **Agent Framework:**
-      - **Tactical Hemisphere:** Code Executor, Tester, Debugger, Refactorer
-      - **Strategic Hemisphere:** Planner, Architect, Reviewer, Optimizer
-      - **Integration:** Intent Router, Context Synthesizer
+      **Agent Framework: Dual-Hemisphere Processing**
+      - **Tactical Hemisphere:** Code Executor, Tester, Debugger, Refactorer (Handle "how to implement")
+      - **Strategic Hemisphere:** Planner, Architect, Reviewer, Optimizer (Support "what creates value")
+      - **Integration:** Intent Router (understands your goals), Context Synthesizer (maintains big picture)
       
       **Key Design Patterns:**
-      - Dual-hemisphere processing (tactical + strategic)
-      - Agent inheritance from BaseAgent (auto-logging, tier integration)
-      - Decorator-based progress monitoring (@with_progress with real-time ETAs)
-      - Template-based response system (68 templates including 6 professional presentations)
-      - Orchestrator manifest system (ensures consistency across planning workflows)
+      - Dual-hemisphere processing (tactical execution + strategic thinking)
+      - Agent inheritance from BaseAgent (auto-logging, tier integration, progress tracking)
+      - Decorator-based monitoring (`@with_progress` for real-time ETAs)
+      - Template-based response system (62 templates for consistent, multi-lingual communication)
+      - Orchestrator manifest system (ensures workflow consistency across Planning System and ADO Operations)
       
       ## Planning System: Engineering Implementation
       
@@ -4041,6 +4077,35 @@ templates:
       
       **Universal Upgrade** - Standalone or embedded installation detection, brain preservation during upgrades, auto-backup with rollback capability. Zero data loss, zero manual migration.
       
+      ## The Impact: Creative Engineering Freedom
+      
+      **Before CORTEX:**
+      - 60-80% time on boilerplate, debugging, test authoring, context searching
+      - "How do I implement authentication?" → 2 days writing OAuth2 boilerplate
+      - "Where's similar code?" → Hours grepping through repos
+      - "What does this codebase do?" → 2 weeks reading code to understand architecture
+      - Manual test authoring → Coverage gaps discovered in production
+      
+      **After CORTEX:**
+      - 70-80% time on architecture, optimization, user experience, innovation
+      - "What authentication strategy delivers best UX?" → AI generates OAuth2 + tests + security audit
+      - "Should we consolidate these patterns?" → Holistic discovery surfaces all matches instantly
+      - "How does this codebase work?" → 2-hour dashboard review reveals everything
+      - AI enforces comprehensive coverage → Refactor fearlessly, optimize creatively
+      
+      **Your Work Transforms:**
+      - From syntax wrangler → Architectural designer
+      - From test author → Behavior specifier
+      - From code searcher → Pattern strategist
+      - From implementation executor → Value creator
+      
+      **The Freedom:** When AI handles mechanics automatically, you're free to:
+      - Design elegant architectures without boilerplate overhead
+      - Optimize performance knowing tests catch regressions
+      - Experiment with refactorings backed by automated validation
+      - Focus on user experience, not implementation details
+      - Solve complex problems with creative solutions
+      
       ## Explore Further
       
       **Technical deep dives:**
@@ -4050,7 +4115,13 @@ templates:
       - "Demo ADO work item generation"
       - "Walk through the 48 SKULL governance rules"
       - "Explain the manifest-based orchestration system"
-      - "Show me the @with_progress decorator implementation"
+      - "Show me holistic code discovery in action"
+      
+      **Start creating value:**
+      - `plan [feature]` - Design behavior, AI generates implementation plan
+      - `start tdd` - Specify tests, AI enforces RED→GREEN→REFACTOR
+      - `dashboard` - Understand codebase architecture in 2 hours
+      - `system maintenance` - 6-phase health + alignment + optimization
   
   business_value:
     name: "CORTEX Business Value & Capabilities"
