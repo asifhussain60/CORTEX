@@ -1,8 +1,34 @@
-# RA Funding Invoices Migration Plan (Enhanced v2.0)
+# RA Funding Invoices Migration Plan (Enhanced v2.2)
 **Migration Target:** Product.RA.Api (.NET 8)  
 **Author:** Asif Hussain  
 **Date:** December 12, 2025  
-**Version:** 2.0 (Enhanced with Mock Layer, UI Test Client, Contract Verification, HIPAA/SOC2)  
+**Version:** 2.2 (Added Documentation Phase, Executive/Engineer Guides, Consumer Integration)  
+
+---
+
+## 📁 Workspace Structure
+
+**Planning Documents (This Repository):**
+- **Location:** `C:\PROJECTS\CORTEX\cortex-brain\documents\planning\`
+- **Files:** Migration plan, progress tracker, coherence audit, version changes
+- **Repository:** CORTEX (AI-assisted planning and knowledge base)
+
+**Implementation Workspace:**
+- **Location:** `C:\PROJECTS\Platform.Classic\cortex\ra-modernized\`
+- **Repository:** Platform.Classic (production codebase)
+- **Git Status:** Added to `.gitignore` (local commits allowed, **NO remote pushes**)
+- **Structure:**
+  ```
+  cortex/ra-modernized/
+  ├── src/                   # Source code (.NET 8 projects)
+  ├── tests/                 # All test projects (unit, integration, contract)
+  └── docs/                  # Architecture diagrams, ADRs, runbooks
+  ```
+
+**Git Workflow:**
+- ✅ CORTEX repo: Planning docs committed and pushed (knowledge sharing)
+- ✅ Platform.Classic repo: Implementation gitignored (local development only)
+- ⚠️ **IMPORTANT:** Never push `cortex/ra-modernized` to Platform.Classic remote
 
 ---
 
@@ -14,7 +40,7 @@ This plan outlines the migration of two critical RA (Reimbursement Arrangement) 
 1. `Updater_CreateRAFundingInvoices.cs` - Scheduled service for bulk RA invoice creation
 2. `XGenerateFundingInvoice.cs` - Transaction-based individual invoice generation
 
-**Enhanced Features (v2.0):**
+**Enhanced Features (v2.2):**
 - ✅ **Mock Data Layer:** In-memory repositories for fast testing without database dependencies
 - ✅ **Repository Abstraction:** Seamless swapping between Mock → EF Core → Dapper implementations
 - ✅ **Schema Validation Phase:** Ensures mock data contracts match production database schema (prevents UI breaks)
@@ -22,7 +48,8 @@ This plan outlines the migration of two critical RA (Reimbursement Arrangement) 
 - ✅ **Contract Verification Framework:** Automated 100% WCF contract compatibility testing (MANDATORY phase)
 - ✅ **90% Test Coverage:** Comprehensive automated test suite (unit + integration + contract + schema)
 - ✅ **HIPAA/SOC2 Compliance:** Enhanced security with audit logging, field-level encryption, PHI protection
-- ✅ **13-Week Timeline:** Includes mandatory contract verification gate (Phase 4a) and schema validation (Phase 5a)
+- ✅ **Comprehensive Documentation Phase (NEW v2.2):** Executive briefs, engineer guides, API reference, runbooks, consumer integration kits
+- ✅ **14-Week Timeline:** Includes 3 mandatory gates (Phase 4a, 5a, 5b) ensuring quality and knowledge transfer
 
 ---
 
@@ -1264,7 +1291,26 @@ public class ContractCompatibilityTests
 
 #### **Tasks**
 1. **Project Setup**
+   - **Workspace:** `C:\PROJECTS\Platform.Classic\cortex\ra-modernized\`
    - Create `Product.RA.Api` solution (.NET 8 Web API)
+   - **Folder structure:**
+     ```
+     cortex/ra-modernized/
+     ├── src/
+     │   ├── Product.RA.Api/              # Main REST API project
+     │   ├── Product.RA.Domain/           # Domain models, interfaces
+     │   ├── Product.RA.Infrastructure/   # EF Core, repositories, external services
+     │   └── Product.RA.UITestClient/     # Blazor Server test client
+     ├── tests/
+     │   ├── Product.RA.Api.Tests/        # API integration tests
+     │   ├── Product.RA.Domain.Tests/     # Domain unit tests
+     │   ├── Product.RA.Infrastructure.Tests/  # Repository tests
+     │   └── Product.RA.ContractTests/    # WCF contract verification
+     └── docs/
+         ├── architecture/                 # C4 diagrams, ADRs
+         ├── api-reference/                # OpenAPI specs
+         └── runbooks/                     # Operations guides
+     ```
    - Configure project structure (Controllers, Services, Repositories, Models, Testing, UITestClient)
    - Set up dependency injection container with repository abstraction
    - Configure Serilog + Application Insights with HIPAA-compliant audit logging
@@ -2028,7 +2074,475 @@ If schema validation fails (< 100% match):
 
 ---
 
-### Phase 6: Deployment & Monitoring (Week 12-13)
+### Phase 5b: **Comprehensive Documentation & Knowledge Transfer** (Week 12) ⚠️ MANDATORY GATE
+
+#### **Purpose**
+Create production-ready documentation for all stakeholders (executives, engineers, operations, consumers) to ensure successful adoption, integration, and support of the new RA Funding Invoices API.
+
+#### **Definition of Ready (DoR)**
+- [ ] Phase 5a complete with 100% schema validation
+- [ ] All code finalized (no pending features)
+- [ ] OpenAPI spec generated from code
+- [ ] All ADRs (Architectural Decision Records) written during implementation
+- [ ] API endpoints tested and stable
+
+#### **Documentation Deliverables**
+
+##### **1. Executive Documentation (Business Stakeholders)**
+
+**1.1 Executive Brief (4-page deck)**
+- **Business Value Proposition**
+  - 20% infrastructure cost reduction vs. legacy WCF
+  - 99.9% SLA with modern cloud-native architecture
+  - Improved developer productivity (50% faster feature delivery)
+  - HIPAA/SOC2 compliance out-of-the-box
+- **ROI Analysis**
+  - Development cost: 14 weeks × team size
+  - Operational savings: -20% infrastructure, -30% maintenance
+  - Risk reduction: Zero-downtime deployment, instant rollback
+- **Migration Timeline & Milestones**
+  - Visual Gantt chart (Weeks 1-14)
+  - Key gates: Contract verification (Week 9), Schema validation (Week 11.5), Documentation (Week 12)
+- **Success Metrics Dashboard**
+  - Functional parity: 100%
+  - Test coverage: 90%+
+  - Performance: P95 < 500ms
+  - Availability: 99.9%+
+
+**1.2 Architecture Overview (C4 Model Diagrams)**
+- **Context Diagram** (Level 1)
+  - System boundaries: Product.RA.Api, consumers (web apps, mobile apps), external services (Paragon)
+  - Data flows: HTTPS/JSON, database connections, message queues
+- **Container Diagram** (Level 2)
+  - REST API (.NET 8), Database (SQL Server), Cache (Redis), Message Bus (Azure Service Bus)
+  - Security zones: DMZ, application tier, data tier
+- **Component Diagram** (Level 3)
+  - Controllers, Services, Repositories, Domain Models
+  - Cross-cutting concerns: Auth, Logging, Validation
+- **Deployment Diagram**
+  - Azure App Service, Azure SQL Database, Application Insights, Key Vault
+  - Load balancer, auto-scaling, multi-region DR
+
+**1.3 Security & Compliance Summary**
+- **HIPAA Compliance Matrix** (164.308-312 controls)
+  - Administrative safeguards: Access controls, audit logging
+  - Physical safeguards: Azure datacenter certifications
+  - Technical safeguards: Encryption at rest/transit, PHI de-identification
+- **SOC2 Type II Controls**
+  - Security: Multi-factor authentication, role-based access
+  - Availability: 99.9% SLA, multi-region failover
+  - Confidentiality: Field-level encryption, key rotation
+- **Audit Evidence Package**
+  - Automated audit logs (7-year retention)
+  - Security scanning reports (SAST/DAST)
+  - Penetration test results
+
+---
+
+##### **2. Engineer Documentation (Development Teams)**
+
+**2.1 API Reference Documentation (Auto-Generated)**
+- **OpenAPI 3.0 Specification** (Swashbuckle annotations)
+  ```csharp
+  [ApiController]
+  [Route("api/v1/funding-invoices")]
+  [Produces("application/json")]
+  [ApiVersion("1.0")]
+  public class FundingInvoiceController : ControllerBase
+  {
+      /// <summary>
+      /// Creates a new RA funding invoice for a subaccount
+      /// </summary>
+      /// <param name="request">Invoice creation request</param>
+      /// <returns>Created invoice with invoice number</returns>
+      /// <response code="201">Invoice created successfully</response>
+      /// <response code="400">Invalid request (validation errors)</response>
+      /// <response code="409">Duplicate invoice (already created today)</response>
+      [HttpPost]
+      [ProducesResponseType(typeof(FundingInvoiceResponse), StatusCodes.Status201Created)]
+      [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+      public async Task<IActionResult> CreateInvoice([FromBody] CreateInvoiceRequest request)
+      {
+          // Implementation
+      }
+  }
+  ```
+
+- **Swagger UI** (https://api.healthequity.com/ra/swagger)
+  - Interactive API testing
+  - Request/response samples
+  - Authentication configuration (OAuth2/JWT)
+
+- **ReDoc Documentation** (https://api.healthequity.com/ra/docs)
+  - Three-panel layout: navigation, content, code samples
+  - Markdown-enhanced descriptions
+  - Dark mode support
+
+**2.2 Integration Guide (Step-by-Step)**
+- **Prerequisites**
+  - Azure AD app registration (client credentials flow)
+  - API key provisioning (contact ops@healthequity.com)
+  - Network whitelist (IP ranges, VPN)
+  - TLS 1.3 client certificates
+
+- **Quick Start (5 minutes)**
+  ```csharp
+  // 1. Install NuGet package
+  dotnet add package HealthEquity.RA.Client
+  
+  // 2. Configure authentication
+  var client = new RAFundingInvoiceClient(new RAClientOptions
+  {
+      BaseUrl = "https://api.healthequity.com/ra",
+      ClientId = "your-client-id",
+      ClientSecret = "your-client-secret",
+      Scope = "ra.invoices.write"
+  });
+  
+  // 3. Create invoice
+  var request = new CreateInvoiceRequest
+  {
+      SubaccountId = "SUB123456",
+      Amount = 500.00m,
+      InvoiceDate = DateTime.Today,
+      Description = "Monthly RA funding"
+  };
+  
+  var response = await client.CreateInvoiceAsync(request);
+  Console.WriteLine($"Invoice created: {response.InvoiceNumber}");
+  ```
+
+- **Advanced Scenarios**
+  - Batch invoice creation (up to 100 invoices per request)
+  - Retry logic with exponential backoff (Polly policies)
+  - Circuit breaker configuration (failure threshold 50%, timeout 30s)
+  - Idempotency keys (prevent duplicate invoices)
+
+**2.3 Code Samples Repository**
+- **GitHub:** `HealthEquity/RA.Api.Samples`
+- **Languages:** C#, JavaScript/TypeScript, Python, Java
+- **Scenarios:**
+  - Single invoice creation
+  - Batch invoice processing
+  - Error handling and retries
+  - Webhook integration (invoice status updates)
+  - Pagination and filtering
+  - Performance optimization (caching, compression)
+
+**2.4 SDK Documentation (.NET Client Library)**
+```csharp
+// Strongly-typed client with IntelliSense
+public interface IRAFundingInvoiceClient
+{
+    Task<FundingInvoiceResponse> CreateInvoiceAsync(CreateInvoiceRequest request);
+    Task<BatchInvoiceResponse> CreateBatchAsync(CreateBatchRequest request);
+    Task<FundingInvoiceResponse> GetInvoiceAsync(string invoiceNumber);
+    Task<PagedResponse<FundingInvoiceResponse>> ListInvoicesAsync(InvoiceFilter filter);
+}
+
+// Extension methods for IServiceCollection
+services.AddRAFundingInvoiceClient(options => 
+{
+    options.BaseUrl = Configuration["RA:BaseUrl"];
+    options.ClientId = Configuration["RA:ClientId"];
+    options.ClientSecret = Configuration["RA:ClientSecret"];
+});
+```
+
+**2.5 Database Schema Documentation**
+- **Entity-Relationship Diagrams (ERD)**
+  - FundingInvoice, FundingBatch, Subaccount, CashInOut relationships
+  - Foreign keys, indexes, constraints
+  - Generated from EF Core model (DbContext.Database.GenerateCreateScript())
+
+- **Migration History**
+  - Initial schema (v1.0)
+  - Change scripts with rollback procedures
+  - Data migration notes (legacy WCF → REST API)
+
+**2.6 Architecture Decision Records (ADRs)**
+- **ADR-001:** Repository Pattern with Mock/EF Core/Dapper Abstraction
+- **ADR-002:** JWT Authentication over API Keys
+- **ADR-003:** Vertical Slice Architecture vs. Layered Architecture
+- **ADR-004:** Feature Flag Strategy (LaunchDarkly vs. Azure App Configuration)
+- **ADR-005:** OpenAPI Code Generation Strategy (NSwag vs. Swagger Codegen)
+- **ADR-006:** Error Handling Strategy (RFC 7807 Problem Details)
+- **ADR-007:** API Versioning Strategy (URL-based vs. Header-based)
+
+**2.7 Troubleshooting Guide**
+| Problem | Symptom | Solution |
+|---------|---------|----------|
+| 401 Unauthorized | Missing/invalid JWT token | Verify client credentials, check token expiration |
+| 409 Conflict | Duplicate invoice error | Invoice already created today for subaccount |
+| 500 Internal Server Error | Generic error message | Check Application Insights logs, correlation ID |
+| Timeout (30s+) | Request hangs | Check network connectivity, database connection pool |
+| Rate limit exceeded | 429 Too Many Requests | Implement exponential backoff, request quota increase |
+
+---
+
+##### **3. Operations Documentation (DevOps/SRE Teams)**
+
+**3.1 Runbook (Incident Response)**
+- **Service Health Dashboard**
+  - Application Insights: https://portal.azure.com/insights/ra-api
+  - Metrics: Request rate, error rate, P95/P99 latency, dependency health
+  - Alerts: Critical (PagerDuty), Warning (email), Info (Slack)
+
+- **Incident Playbooks**
+  - **P0 (Service Down):** Rollback to blue environment, notify stakeholders
+  - **P1 (Degraded Performance):** Scale out App Service, investigate slow queries
+  - **P2 (Elevated Error Rate):** Review logs, restart unhealthy instances
+  - **P3 (Monitoring Alert):** Investigate and resolve within 24 hours
+
+- **Common Tasks**
+  - Restart App Service: `az webapp restart --name ra-api-prod --resource-group rg-ra-prod`
+  - Check logs: `az webapp log tail --name ra-api-prod --resource-group rg-ra-prod`
+  - Scale out: `az webapp scale --name ra-api-prod --resource-group rg-ra-prod --instance-count 5`
+  - Deploy hotfix: `az webapp deployment source sync --name ra-api-prod --resource-group rg-ra-prod`
+
+**3.2 Deployment Procedures**
+- **Blue-Green Deployment**
+  ```bash
+  # 1. Deploy to green slot (staging)
+  az webapp deployment slot create --name ra-api-prod --resource-group rg-ra-prod --slot green
+  az webapp deployment source config-zip --name ra-api-prod --resource-group rg-ra-prod --slot green --src release.zip
+  
+  # 2. Smoke test green slot
+  curl https://ra-api-prod-green.azurewebsites.net/health/ready
+  
+  # 3. Swap slots (zero downtime)
+  az webapp deployment slot swap --name ra-api-prod --resource-group rg-ra-prod --slot green --target-slot production
+  
+  # 4. Monitor for 30 minutes, rollback if needed
+  az webapp deployment slot swap --name ra-api-prod --resource-group rg-ra-prod --slot production --target-slot green
+  ```
+
+- **Feature Flag Configuration**
+  ```json
+  {
+    "FeatureManagement": {
+      "EFCoreDataLayer": {
+        "EnabledFor": [
+          { "Name": "Percentage", "Parameters": { "Value": 50 } }
+        ]
+      }
+    }
+  }
+  ```
+
+**3.3 Monitoring & Alerting Configuration**
+- **Application Insights Queries**
+  ```kusto
+  // Top 10 slowest API endpoints
+  requests
+  | where timestamp > ago(1h)
+  | summarize avg(duration), p95=percentile(duration, 95) by name
+  | order by p95 desc
+  | take 10
+  
+  // Error rate by endpoint
+  requests
+  | where timestamp > ago(1h)
+  | summarize totalRequests=count(), failedRequests=countif(success == false) by name
+  | extend errorRate = failedRequests * 100.0 / totalRequests
+  | where errorRate > 1.0
+  ```
+
+- **Alert Rules**
+  - Error rate > 1% for 5 minutes → P1 incident
+  - P95 latency > 500ms for 10 minutes → P2 incident
+  - Availability < 99% for 15 minutes → P0 incident
+  - Database CPU > 80% for 5 minutes → P2 incident
+
+**3.4 Backup & Recovery Procedures**
+- **Database Backups**
+  - Automated daily backups (7-day retention)
+  - Weekly backups (90-day retention)
+  - Point-in-time restore (up to 7 days)
+  - Geo-redundant backups (disaster recovery)
+
+- **Recovery Time Objective (RTO):** 1 hour
+- **Recovery Point Objective (RPO):** 15 minutes
+
+---
+
+##### **4. Consumer Integration Kit (External Teams)**
+
+**4.1 Getting Started Guide**
+- **Onboarding Checklist**
+  - [ ] Request API access (submit form: https://healthequity.com/api/request)
+  - [ ] Receive client credentials (OAuth2 client ID/secret)
+  - [ ] Add IP ranges to whitelist
+  - [ ] Install SDK or configure HTTP client
+  - [ ] Test in sandbox environment (https://sandbox.api.healthequity.com/ra)
+  - [ ] Complete integration testing (100+ test scenarios)
+  - [ ] Request production access (submit go-live form)
+
+**4.2 Sandbox Environment**
+- **Base URL:** https://sandbox.api.healthequity.com/ra
+- **Test Data:** Pre-seeded with 100 subaccounts, 500 invoices
+- **Reset:** Daily at midnight UTC
+- **Rate Limits:** 1000 requests/hour (vs. 10,000 in production)
+
+**4.3 Postman Collection**
+- **Download:** https://healthequity.com/api/ra/postman
+- **Pre-configured requests:**
+  - Authentication (OAuth2 client credentials flow)
+  - Create invoice (single)
+  - Create batch invoices
+  - Get invoice by number
+  - List invoices with pagination
+  - Error scenarios (validation errors, duplicates)
+
+- **Environment variables:**
+  ```json
+  {
+    "base_url": "https://api.healthequity.com/ra",
+    "client_id": "{{YOUR_CLIENT_ID}}",
+    "client_secret": "{{YOUR_CLIENT_SECRET}}",
+    "subaccount_id": "SUB123456"
+  }
+  ```
+
+**4.4 Webhook Integration (Event-Driven)**
+```csharp
+// Subscribe to invoice events
+POST /api/v1/webhooks/subscriptions
+{
+  "eventTypes": ["invoice.created", "invoice.updated", "invoice.failed"],
+  "targetUrl": "https://your-app.com/webhooks/ra-invoices",
+  "secret": "your-webhook-secret"
+}
+
+// Webhook payload (sent via HTTP POST)
+{
+  "eventType": "invoice.created",
+  "eventId": "evt_123456",
+  "timestamp": "2025-12-12T10:00:00Z",
+  "data": {
+    "invoiceNumber": "INV-2025-001234",
+    "subaccountId": "SUB123456",
+    "amount": 500.00,
+    "status": "Pending"
+  },
+  "signature": "sha256=abc123..." // HMAC verification
+}
+```
+
+**4.5 Migration Guide (Legacy WCF → REST API)**
+- **Contract Mapping**
+  | Legacy WCF | New REST API | Notes |
+  |------------|--------------|-------|
+  | `XGenerateFundingInvoice.Execute()` | `POST /api/v1/funding-invoices` | Same input/output |
+  | `XGetFundingInvoice.Execute()` | `GET /api/v1/funding-invoices/{number}` | Response includes status |
+  | `Updater_CreateRAFundingInvoices.Run()` | `POST /api/v1/funding-invoices/batch` | Batch endpoint |
+
+- **Breaking Changes:** None (100% backward compatibility verified in Phase 4a)
+
+- **Deprecated Features:** WCF services will be sunset 12 months after REST API goes live
+
+**4.6 SLA & Support**
+- **Service Level Agreement**
+  - Availability: 99.9% (excluding planned maintenance)
+  - P95 latency: < 500ms
+  - P99 latency: < 1000ms
+  - Error rate: < 0.1%
+
+- **Support Channels**
+  - Documentation: https://docs.healthequity.com/ra-api
+  - Status page: https://status.healthequity.com
+  - Email: api-support@healthequity.com
+  - Slack: #ra-api-support (for HealthEquity teams)
+  - Emergency: (801) 355-8888 (24/7 on-call)
+
+---
+
+#### **Documentation Artifacts (Deliverables)**
+
+| Artifact | Format | Location | Audience |
+|----------|--------|----------|----------|
+| Executive Brief | PDF (4 pages) | SharePoint/Teams | C-suite, Product Leadership |
+| Architecture Diagrams (C4) | PNG/SVG + Draw.io source | Confluence | Architects, Engineering Leads |
+| API Reference | HTML (Swagger/ReDoc) | https://api.healthequity.com/ra/docs | All developers |
+| Integration Guide | Markdown | GitHub Wiki | Consumer teams |
+| Code Samples | .NET, JS, Python, Java | GitHub repo | Consumer teams |
+| SDK Documentation | XML comments + NuGet | NuGet.org | .NET developers |
+| ADRs | Markdown | `/docs/adr/` folder | Architects, Senior Engineers |
+| Runbook | Markdown + Azure Monitor dashboards | Confluence | DevOps/SRE teams |
+| Postman Collection | JSON | Postman workspace | Consumer teams, QA |
+| Webhook Integration Guide | Markdown | GitHub Wiki | Event-driven consumers |
+| Migration Guide | PDF | SharePoint | Legacy WCF consumers |
+
+---
+
+#### **Documentation Quality Gates**
+
+**Acceptance Criteria (100% Required):**
+- [ ] Executive brief reviewed and approved by Product VP
+- [ ] C4 diagrams validated by Enterprise Architect
+- [ ] OpenAPI spec validates with Swagger Editor (zero errors)
+- [ ] Integration guide tested by 2 external developers (setup < 5 minutes)
+- [ ] Code samples execute successfully in all languages
+- [ ] Runbook tested during chaos engineering exercise
+- [ ] Postman collection imported and all requests execute successfully
+- [ ] ADRs reviewed in architecture review board
+- [ ] Documentation website deployed and accessible (< 2s load time)
+- [ ] Search functionality working (find any term in < 1s)
+
+**Living Documentation Principles:**
+1. **Generated from code** (OpenAPI, ERD) → Always up-to-date
+2. **Version-controlled** (Git) → Auditable, traceable changes
+3. **Reviewed in PRs** (doc changes require approval) → Quality assured
+4. **Tested** (code samples must compile/run) → No broken examples
+5. **Monitored** (track page views, search terms) → Improve based on usage
+
+---
+
+#### **Timeline (Week 12)**
+
+**Week 12 - Day 1-2:** Executive Documentation
+- Create executive brief (4-page deck)
+- Generate C4 diagrams (Context, Container, Component, Deployment)
+- Compile security & compliance summary
+
+**Week 12 - Day 3:** Engineer Documentation
+- Finalize OpenAPI spec annotations
+- Generate Swagger UI + ReDoc
+- Write integration guide
+- Create code samples for all languages
+
+**Week 12 - Day 4:** Operations Documentation
+- Write runbook with incident playbooks
+- Document deployment procedures
+- Configure Application Insights dashboards and alerts
+- Test chaos engineering scenarios
+
+**Week 12 - Day 5:** Consumer Integration Kit
+- Publish getting started guide
+- Create Postman collection
+- Write webhook integration guide
+- Publish migration guide for legacy consumers
+- Deploy documentation website
+
+---
+
+#### **Definition of Done (DoD)**
+- [ ] All 12 documentation artifacts created and reviewed
+- [ ] Executive brief approved by Product VP
+- [ ] API reference deployed to https://api.healthequity.com/ra/docs
+- [ ] Integration guide tested by 2 external developers (< 5 min setup)
+- [ ] Code samples execute successfully in all 4 languages
+- [ ] Postman collection published and functional
+- [ ] Runbook tested in chaos engineering exercise
+- [ ] Documentation website live with search functionality
+- [ ] All stakeholders trained (1-hour session per group)
+- [ ] Zero critical documentation gaps (validated via stakeholder survey)
+
+**DEPLOYMENT GATE:** Phase 6 (Production Deployment) cannot start until all documentation is complete and approved.
+
+---
+
+### Phase 6: Deployment & Monitoring (Week 13-14)
 
 #### **Definition of Ready (DoR)**
 - [ ] Phase 5 complete with UAT sign-off
@@ -2497,9 +3011,10 @@ export default function () {
 | **Phase 4a Complete** | Week 9 | Phase 4 | **MANDATORY: 100% Contract Verification (WCF)** |
 | **Phase 5 Complete** | Week 11 | Phase 4a | Legacy Services Migrated + 90% Test Coverage |
 | **Phase 5a Complete** | Week 11.5 | Phase 5 | **Data Layer Transition + Schema Validation** |
-| **Production Deployment** | Week 13 | Phase 5a + UAT | Live in Production with EF Core |
+| **Phase 5b Complete** | Week 12 | Phase 5a | **Comprehensive Documentation & Knowledge Transfer** |
+| **Production Deployment** | Week 14 | Phase 5b + UAT | Live in Production with EF Core |
 
-**Total Duration:** 13 weeks (~3 months)
+**Total Duration:** 14 weeks (~3.5 months)
 
 **Key Milestones:**
 - Week 2: Mock layer functional, fast unit tests running
@@ -2509,24 +3024,27 @@ export default function () {
 - Week 9: **100% WCF contract compatibility achieved (MANDATORY GATE)**
 - Week 11: 90% automated test coverage, shadow testing complete
 - Week 11.5: **100% schema validation complete, mock data matches DB schema**
-- Week 13: Production deployment with EF Core data layer (0% → 100% rollout)
+- Week 12: **Comprehensive documentation complete (exec, engineer, ops, consumer guides)**
+- Week 14: Production deployment with EF Core data layer (0% → 100% rollout)
 
 **Critical Path:**
-Phase 1 → Phase 2 → Phase 3 → Phase 4 → **Phase 4a** (BLOCKER) → Phase 5 → **Phase 5a** (BLOCKER) → Phase 6
+Phase 1 → Phase 2 → Phase 3 → Phase 4 → **Phase 4a** (BLOCKER) → Phase 5 → **Phase 5a** (BLOCKER) → **Phase 5b** (BLOCKER) → Phase 6
 
 **Risk Buffer:** 
 - 1 week for contract compatibility issues (Phase 4a)
 - 0.5 week for schema validation fixes (Phase 5a)
+- 0 days for documentation (must complete in 1 week, no exceptions)
 
 **Deployment Gates:**
 1. **Phase 4a:** 100% WCF contract compatibility - MUST PASS
 2. **Phase 5a:** 100% schema validation - MUST PASS
+3. **Phase 5b:** 100% documentation complete - MUST PASS
 
 ---
 
 ## 10. Post-Migration Activities
 
-### 10.1 Decommissioning Legacy Services (Week 13-14)
+### 10.1 Decommissioning Legacy Services (Week 15)
 - [ ] Archive legacy code to source control (tag: `legacy-final`)
 - [ ] Remove legacy services from deployment pipelines
 - [ ] Update documentation to reference new APIs only
@@ -2538,7 +3056,7 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4 → **Phase 4a** (BLOCKER) → Phase
 - [ ] Optimize based on production data (quarterly review)
 - [ ] Update documentation (as needed)
 
-### 10.3 Knowledge Transfer (Week 15)
+### 10.3 Knowledge Transfer (Week 16)
 - [ ] Conduct training sessions for support team
 - [ ] Create video tutorials for API usage
 - [ ] Publish internal blog post (lessons learned)
