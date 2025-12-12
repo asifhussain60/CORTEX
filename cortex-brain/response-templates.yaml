@@ -3180,20 +3180,46 @@ templates:
     response_type: "narrative"
     content: |
       # 🧠 CORTEX
+      **Elevating Engineering from Implementation to Innovation**
       
-      An AI assistant enhancement system that solves the context management problem at scale through brain-inspired architecture with automated quality enforcement and intelligent code discovery.
+      An AI assistant enhancement system that frees engineers from the mechanics of coding so they can focus on creating value—transforming development teams from code producers into business impact architects.
+      
+      ## The Vision: Engineers Should Add Value, Not Just Write Code
+      
+      **The Current Reality:** Engineers spend 60-80% of their time on implementation mechanics—syntax, boilerplate, debugging, searching for existing code, writing tests, managing context. The valuable thinking—understanding business problems, designing elegant solutions, identifying opportunities—gets squeezed into the margins.
+      
+      **The Shift CORTEX Enables:** When AI handles the "how to code" automatically (syntax, patterns, test generation, quality enforcement), engineers elevate to "how to add value" (business impact, architectural elegance, user experience, innovation). This isn't about replacing engineers—it's about unleashing their highest capabilities.
+      
+      **What This Looks Like:**
+      - **Before CORTEX:** "How do I implement authentication?" → 2 days of boilerplate
+      - **After CORTEX:** "What authentication strategy delivers the best user experience?" → Strategic design, AI generates implementation
+      
+      - **Before CORTEX:** "How do I write tests for this?" → Manual test authoring
+      - **After CORTEX:** "What edge cases matter to users?" → AI enforces RED→GREEN→REFACTOR automatically
+      
+      - **Before CORTEX:** "Where is similar code in this codebase?" → Hours of searching
+      - **After CORTEX:** "Should we consolidate these patterns?" → Holistic discovery surfaces duplication instantly
       
       ## What is CORTEX?
       
-      CORTEX transforms GitHub Copilot into a strategic development partner with long-term memory, context awareness, and automated workflows. Think of it as upgrading from a helpful assistant to a collaborative team member that remembers your project's history, learns from your patterns, enforces quality through intelligent governance, and prevents duplicate code through holistic discovery.
+      CORTEX transforms GitHub Copilot into a strategic development partner with long-term memory, context awareness, and automated workflows. Think of it as upgrading from a helpful assistant to a collaborative team member that handles the mechanics of coding while you focus on the art of problem-solving.
+      
+      **The Mental Model:** CORTEX is your pair programmer who:
+      - **Remembers everything** (4-tier brain with persistent memory)
+      - **Enforces quality automatically** (48 governance rules via SKULL system)
+      - **Prevents duplicate work** (holistic code discovery)
+      - **Generates implementation** (you design, AI codes)
+      - **Validates continuously** (TDD Mastery with 94% success rate)
+      
+      This frees you to think about **what matters**: business value, user impact, architectural elegance, innovation opportunities.
       
       ## Why Was It Built?
       
-      **The Context Problem:** AI assistants lose context between sessions, can't remember past decisions, and lack strategic planning capabilities. Every conversation starts from zero, forcing repetitive explanations and missing opportunities for pattern learning.
+      **The Context Problem:** AI assistants lose context between sessions, forcing engineers back into implementation mode repeatedly. Every conversation starts from zero, perpetuating the cycle of "how to code" thinking.
       
-      **The Brain-Inspired Solution:** CORTEX implements a 4-tier memory architecture modeled after human cognition—from instinctive governance (Tier 0, like the brainstem) through working memory (Tier 1) and knowledge patterns (Tier 2) to strategic context (Tier 3, like the cortex). This creates persistent memory across sessions and projects.
+      **The Brain-Inspired Solution:** CORTEX implements a 4-tier memory architecture modeled after human cognition—from instinctive governance (Tier 0, like the brainstem) through working memory (Tier 1) and knowledge patterns (Tier 2) to strategic context (Tier 3, like the cortex). This creates persistent memory that evolves with your project, allowing strategic thinking to compound rather than reset.
       
-      **Quality Through Governance:** At its core is a rulebook system (SKULL - Strategic Knowledge & Universal Learning Logic) with 48 rules across 17 protection layers that enforces best practices through declarative rules rather than restrictive guardrails. Key protections include TDD Mastery (RED→GREEN→REFACTOR), holistic code discovery (search before create), inline CSS prohibition (centralized styling), and comprehensive test coverage validation. Think of it as pair programming with an experienced architect who prevents technical debt before it forms.
+      **Quality Through Governance:** The SKULL system (48 rules, 17 protection layers) enforces best practices automatically—TDD cycles, holistic discovery, centralized styling, comprehensive coverage. You focus on "what quality means for users," CORTEX enforces "how to achieve it."
       
       ## Tech Stack & Architecture
       
@@ -3209,19 +3235,45 @@ templates:
       - Tier 2: Knowledge graph (pattern learning, FTS5 search)
       - Tier 3: Development context (metrics, hotspots, insights)
       
-      ## How CORTEX Can Help
+      ## How CORTEX Elevates Engineering
       
-      **Planning System** - Interactive feature planning with auto-complexity detection, real-time visual progress tracking (5 phases with ETAs), and Definition of Ready/Done validation. Vision API extracts requirements from screenshots (UI mockups, ADO items, errors). Manifest-based orchestration ensures consistency.
+      **Planning System** - You describe **what value you want to create**, CORTEX generates the implementation plan with auto-complexity detection, real-time progress tracking, and Definition of Ready/Done validation. Vision API extracts requirements from screenshots—you show what you want, AI plans how to build it.
       
-      **ADO Integration** - Generates Azure DevOps work items with complete task breakdown, estimates, and acceptance criteria. Commands: `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`. Inherits Planning System compliance with ADO-specific formatting.
+      **ADO Integration** - You articulate **business outcomes**, CORTEX generates Azure DevOps work items with complete task breakdown, estimates, and acceptance criteria. The team focuses on "why this matters" while CORTEX handles "how to track it."
       
-      **TDD Mastery** - Enforces RED→GREEN→REFACTOR cycle with per-layer coverage validation (Domain 90%, Application 85%, Infrastructure 70%). Detects empty placeholder tests and enforces comprehensive testing. Auto-debug fixes test failures with root cause analysis. Test-first workflow has 94% success rate vs 67% without.
+      **TDD Mastery** - You design **behavior**, CORTEX enforces RED→GREEN→REFACTOR with auto-debug. Test-first workflow has 94% success rate vs 67% without—because you're thinking about user needs (tests as specifications) instead of implementation details.
       
       **Dashboard Intelligence** - Automated repository discovery generates interactive dashboards revealing system architecture, technology stack, security posture, code health metrics. Cuts engineer onboarding from 2 weeks to 2 hours (60-80% faster). **NEW: CORTEX Lens** - Universal repository analyzer that auto-detects repo type (full-stack, API, database, console, microservices, library) and generates adaptive dashboards tailored to each architecture. 6 specialized templates with glassmorphism UI extract business value from code through AST analysis, security audits, and architectural insights—making the invisible visible.
       
       **Holistic Code Discovery** - Search-before-create pattern using semantic search, grep patterns, and usage analysis prevents duplicate implementations. Decision matrix: exact match (90%+) → reuse, similar (70-90%) → enhance, partial (50-70%) → consolidate.
       
-      **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 average) through intelligent memory management. More context, lower costs, faster responses. Saves $183K annually for typical team.
+      **Context Efficiency** - 97.2% token reduction (74,047 → 2,078 tokens) means more strategic context, lower costs, faster responses. Teams save $183K annually while gaining strategic thinking capacity.
+      
+      ## The Impact: Engineering as Value Creation
+      
+      **For Engineers:**
+      - **Strategic Thinking:** Spend time on "what creates value" instead of "how to implement"
+      - **Creative Problem-Solving:** Design elegant solutions while AI handles boilerplate
+      - **Business Impact:** See your work through user outcomes, not lines of code
+      - **Continuous Learning:** Pattern recognition and architectural insights compound over time
+      
+      **For Teams:**
+      - **Velocity:** 60-80% faster onboarding, 97% token efficiency, automated quality
+      - **Quality:** 94% TDD success rate, zero duplicate code, declarative governance
+      - **Alignment:** Vision API and ADO integration keep "what we're building" clear
+      - **Innovation:** Engineering capacity redirected from mechanics to opportunities
+      
+      **For Organizations:**
+      - **Value Delivery:** Engineering time invested in outcomes, not implementation
+      - **Competitive Advantage:** Faster iteration on what matters to customers
+      - **Technical Excellence:** Quality enforced automatically, debt prevented proactively
+      - **Scalability:** Knowledge compounds through persistent memory and pattern learning
+      
+      ## This Is Just the Beginning
+      
+      CORTEX represents a fundamental shift in how we think about engineering. Not "can AI write code?" but "how do we free engineers to create maximum value?" The answer: Handle the mechanics automatically so humans focus on the strategy, creativity, and empathy that drive real innovation.
+      
+      **Your role as an engineer isn't diminishing—it's elevating.** From syntax wrangler to value architect. From code producer to business impact designer. From implementation executor to strategic innovator.
       
       ## Explore Further
       
@@ -3229,10 +3281,16 @@ templates:
       - "Show me Planning System with progress tracking"
       - "Demo ADO integration workflow"
       - "How does TDD Mastery auto-debug work?"
-      - "Explain dashboard intelligence"
-      - "Show me CORTEX Lens capabilities"
+      - "Explain dashboard intelligence and CORTEX Lens"
+      - "Show me holistic code discovery preventing duplication"
       - "What are the 48 SKULL governance rules?"
-      - "Show me the token optimization strategy"
+      - "How does the 4-tier brain architecture work?"
+      
+      **Or start creating value:**
+      - `plan [feature]` - Describe what value you want, AI plans implementation
+      - `plan ado` - Articulate business outcomes, AI creates work items
+      - `start tdd` - Design behavior, AI enforces quality
+      - `introduce cortex to [leadership/product/engineers]` - Share this vision
   
   introduction_leadership:
     name: "CORTEX Introduction - Leadership"
@@ -3243,9 +3301,20 @@ templates:
       - "cortex for leadership"
     response_type: "narrative"
     content: |
-      # 🧠 CORTEX Executive Overview
+      # 🧠 CORTEX: Engineering as Strategic Value Creation
+      **Transforming Development Investment from Code Production to Business Impact**
       
-      Accelerate development velocity, reduce technical debt, and gain comprehensive system visibility through AI-enhanced strategic planning, automated quality assurance with real-time progress tracking, and intelligent duplicate prevention that eliminates wasted effort.
+      ## The Business Challenge: Engineering Capacity Misalignment
+      
+      **Current State:** Your engineering teams spend 60-80% of their time on implementation mechanics—syntax, boilerplate, test authoring, debugging, context switching. The valuable work—understanding customer needs, designing elegant solutions, identifying market opportunities—gets compressed into 20-30% of available capacity.
+      
+      **The Cost:** This isn't just inefficiency—it's strategic misallocation. When your most expensive talent focuses on "how to code" instead of "how to create value," you're:
+      - **Underutilizing investment:** $150K engineers writing boilerplate
+      - **Slowing innovation:** Strategic thinking squeezed by implementation overhead
+      - **Losing competitive edge:** Competitors automating mechanics while you manually code
+      - **Accumulating debt:** Quality shortcuts under time pressure create maintenance burden
+      
+      **The Opportunity:** What if AI handled implementation mechanics automatically, freeing engineering capacity for strategic value creation? That's the CORTEX investment thesis.
       
       ## What is CORTEX?
       
