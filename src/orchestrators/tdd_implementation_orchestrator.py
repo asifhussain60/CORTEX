@@ -58,6 +58,7 @@ from src.orchestrators.session_model import TDDSession, TDDPhase as NewTDDPhase,
 from src.orchestrators.validation_framework import validate_tdd_transition, validate_code_quality, TDDTestValidator
 from src.orchestrators.tdd_intelligence import TDDIntelligence, get_tdd_intelligence, CodeType, TDDDecision
 from src.utils.progress_decorator import with_progress, yield_progress
+from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -256,6 +257,7 @@ class TDDImplementationOrchestrator:
         # Fallback to project root
         return self.project_root
     
+    @with_orchestration_metrics("TDDImplementationOrchestrator")
     def start_session(
         self,
         feature_name: str,

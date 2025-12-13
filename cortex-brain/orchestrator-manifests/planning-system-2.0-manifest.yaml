@@ -124,21 +124,56 @@ requirements:
     estimated_effort_hours: 6
     
   - requirement_id: "REQ-005"
-    name: "Visual Progress Rendering"
+    name: "Visual Progress Rendering (Enhanced)"
     description: |
-      Show phase completion percentages and progress bars in final responses.
-      Use markdown tables for status visualization.
+      Master Planner Visual Tracker with comprehensive metrics including:
+      - Start/end timestamps with timezone display (ISO 8601)
+      - Per-phase token usage tracking
+      - Total token consumption across all phases
+      - Phase duration in human-readable format (Xh Ym, Xm Ys, Xs)
+      - Files modified count per phase
+      - Sub-plan tracker update recording
+      Use markdown tables for status visualization with progress bars.
     priority: "high"
     status: "implemented"
     validation_method: "template_validation"
-    validation_criteria: "Progress bars rendered in work_planner_success template"
+    validation_criteria: "Enhanced progress tracker rendered in work_planner_success template"
     implementation_notes: |
-      - Update response-templates.yaml with progress sections
-      - Add phase progress tracking in PlanningSession
-      - Render summary table in final response
-      - Show: Phase | Status | Progress % | Duration
-    estimated_effort_hours: 4
-    current_implementation: "Template definitions exist but not rendered"
+      ENHANCEMENTS (2025-12-13):
+      - PlanningSession model extended with:
+        * phase_start_times (Dict[str, datetime])
+        * phase_end_times (Dict[str, datetime])
+        * tokens_used (Dict[str, int]) - per phase
+        * total_tokens_used (int)
+        * timezone (str) - auto-detected from system
+        * sub_plan_updates (List[Dict]) - tracks sub-plan tracker updates
+      - New methods added:
+        * record_phase_start(phase_name) - records phase start time
+        * record_phase_end(phase_name, tokens_used) - records completion with metrics
+        * record_sub_plan_update(sub_plan, phase, notes) - tracks sub-plan updates
+        * _format_duration(seconds) - human-readable duration (2h 15m, 3m 45s)
+        * _get_phase_duration(phase_name) - phase duration with ⏳ for in-progress
+      - render_progress_table() enhanced with:
+        * Plan name, start/end timestamps, timezone
+        * Total duration and tokens
+        * Per-phase duration, tokens, progress bars
+        * Sub-plan update counter
+      - update_phase_status() enhanced with:
+        * Auto-records phase start on first 'in_progress' status
+        * Auto-records phase end with tokens on 'completed' status
+        * Logs timing and token metrics
+        * Renders updated progress table after completion
+      - Sub-plan template updated with:
+        * Master tracker update template at top
+        * 🎯 CHECKPOINT after each phase with explicit instructions
+        * Master tracker must be updated before proceeding to next phase
+    estimated_effort_hours: 6
+    actual_effort_hours: 6
+    implementation_files:
+      - "src/orchestrators/session_model.py (PlanningSession enhanced)"
+      - "src/orchestrators/planning_orchestrator.py (update_phase_status enhanced)"
+      - "cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md (checkpoint gates)"
+    enhancement_date: "2025-12-13"
     
   - requirement_id: "REQ-006"
     name: "Learning Library Auto-Documentation"

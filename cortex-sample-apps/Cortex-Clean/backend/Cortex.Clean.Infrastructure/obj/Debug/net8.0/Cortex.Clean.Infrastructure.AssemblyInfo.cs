@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Cortex.Clean.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+827df0f2b01a7377eb570627fee97ebd2d26efa5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08bb692fef49953dc1f61ec398502321a1c52876")]
 [assembly: System.Reflection.AssemblyProductAttribute("Cortex.Clean.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Cortex.Clean.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -28,6 +28,7 @@ from src.cortex_agents.base_agent import AgentRequest, AgentResponse
 from src.cortex_agents.agent_types import IntentType
 from src.learning.event_collector import get_global_collector
 from src.learning.event_taxonomy import LearningEvent, EventType
+from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -108,6 +109,7 @@ class PlanExecutionOrchestrator:
             logger.warning(f"⚠️  GitCheckpointOrchestrator not available: {e}")
             self.git_checkpoint = None
     
+    @with_orchestration_metrics("PlanExecutionOrchestrator")
     def execute_plan(
         self, 
         plan_path: Path,

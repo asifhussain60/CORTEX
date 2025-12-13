@@ -20,7 +20,12 @@ from typing import Dict, List, Optional, Any, Tuple, Callable
 from pathlib import Path
 import logging
 import re
+import signal
 from src.utils.progress_decorator import with_progress, yield_progress
+from src.operations.utilities.progress_renderer import ProgressRenderer, format_elapsed_time
+from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
+from src.operations.utilities.task_injection_manager import TaskInjectionManager, TaskPriority
+from src.operations.utilities.orchestration_checkpoint_manager import OrchestrationCheckpointManager
 from src.response_templates.response_template_manager import ResponseTemplateManager
 from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
@@ -36,6 +41,8 @@ from src.orchestrators.tdd_intelligence import TDDIntelligence, get_tdd_intellig
 from src.tier1.user_profile_manager import UserProfileManager
 from src.utils.manifest_validator import ManifestValidator, ValidationSeverity
 
+logger = logging.getLogger(__name__)
+
 # Import Review Orchestrator for pre-planning architecture assessment (REQ-003)
 try:
     from src.operations.modules.architectural.review_orchestrator import ReviewOrchestrator
@@ -43,8 +50,6 @@ try:
 except ImportError:
     REVIEW_ORCHESTRATOR_AVAILABLE = False
     logger.warning("Review Orchestrator not available - architectural pre-assessment disabled")
-
-logger = logging.getLogger(__name__)
 
 
 class PlanningOrchestrator:
@@ -125,6 +130,14 @@ class PlanningOrchestrator:
         # NEW: Initialize TDD intelligence module for smart TDD enforcement
         self.tdd_intelligence = get_tdd_intelligence()
         logger.info("✅ TDD intelligence initialized for intelligent TDD enforcement")
+        
+        # NEW: Initialize Task Injection Manager for mid-execution task injection (Feature 12)
+        self.task_injection_manager = TaskInjectionManager()
+        logger.info("✅ Task Injection Manager initialized for context-aware task injection")
+        
+        # NEW: Initialize Orchestration Checkpoint Manager for workflow recovery (Feature 11)
+        self.checkpoint_manager = OrchestrationCheckpointManager()
+        logger.info("✅ Orchestration Checkpoint Manager initialized for workflow recovery")
         
         # TDD Requirements (SKULL enforcement)
         self._tdd_dor_requirements = [
@@ -791,6 +804,7 @@ class PlanningOrchestrator:
             return (False, error_msg)
     
     @with_progress(operation_name="Incremental Plan Generation", threshold_seconds=3.0)
+    @with_orchestration_metrics("PlanningOrchestrator")
     def generate_incremental_plan(
         self,
         feature_requirements: str,
@@ -1052,7 +1066,7 @@ class PlanningOrchestrator:
                 is_final_phase=False
             )
             if phase_2_doc_reminder:
-                logger.debug(phase_2_doc_reminder)  # Debug level since Phase 2 is routine
+                logger.info(phase_2_doc_reminder)
             
             if not phase_2_approved:
                 return (True, output_path, "Phase 2 complete, Phase 3 pending user approval")
@@ -1073,6 +1087,16 @@ class PlanningOrchestrator:
             logger.info("✅ Phase 3 written to file")
             
             # Progress: Phase 3 complete (4 of 5 steps)
+            yield_progress(4, 5, "Phase 3: Validation & Deployment complete")
+            
+            # Checkpoint 4: Phase 3 approval
+            phase_3_approved = self._handle_phase_checkpoint(
+                checkpoint_callback,
+                "phase-3",
+                "Phase 3: Validation & Deployment",
+                phase_3_sections
+            )
+            
             # Git checkpoint after Phase 3 completion
             try:
                 self.git_checkpoint.create_auto_checkpoint(
@@ -1092,16 +1116,6 @@ class PlanningOrchestrator:
                 threat_model_applied=False,
                 acceptance_criteria_defined=True
             )
-            
-            # Show learning library link after Phase 3 (Validation = significant)
-            try:
-                self.git_checkpoint.create_auto_checkpoint(
-                    operation="plan-phase-3",
-                    message=f"Planning Phase 3 complete: {feature_name}"
-                )
-                logger.info("✅ Git checkpoint created for Phase 3")
-            except Exception as e:
-                logger.warning(f"Git checkpoint failed for Phase 3: {e}")
             
             # Show learning library link after Phase 3 (Validation = significant)
             phase_3_doc_reminder = self._generate_documentation_reminder(
@@ -1722,6 +1736,7 @@ class PlanningOrchestrator:
             }
     
     @with_progress(operation_name="Autonomous Plan Execution")
+    @with_orchestration_metrics("PlanningOrchestrator")
     def execute_plan_autonomously(self, plan_filename: str) -> Dict[str, Any]:
         """
         Execute an approved plan autonomously from start to finish.
@@ -1740,6 +1755,10 @@ class PlanningOrchestrator:
             Dict with execution results, completed tasks, and documentation reminder
         """
         try:
+            # Initialize progress renderer for real-time visual feedback
+            progress_renderer = ProgressRenderer(bar_width=10)
+            start_time = datetime.now()
+            
             # Load approved plan - construct full path
             approved_path = self.cortex_root / "cortex-brain" / "documents" / "planning" / "approved" / plan_filename
             
@@ -1820,6 +1839,31 @@ class PlanningOrchestrator:
                 
                 # Execute each task in phase
                 for task_idx, task in enumerate(phase_tasks, 1):
+                    # Check for injected high-priority tasks BEFORE current task
+                    injected_task = self.task_injection_manager.get_next_task()
+                    if injected_task:
+                        injected_task_name = injected_task.get('task_name', 'Injected Task')
+                        injected_priority = injected_task.get('priority', TaskPriority.MEDIUM)
+                        
+                        logger.info(f"🚨 INJECTED TASK ({injected_priority.name}): {injected_task_name}")
+                        print(f"\n🚨 **INJECTED TASK** (Priority: {injected_priority.name})\n   Task: {injected_task_name}\n")
+                        
+                        # Execute injected task (log for now)
+                        execution_log.append({
+                            'phase': phase_idx,
+                            'phase_name': phase_name,
+                            'task_id': f'INJECTED-{injected_task.get("task_id")}',
+                            'task_name': injected_task_name,
+                            'priority': injected_priority.name,
+                            'status': 'completed',
+                            'injected': True,
+                            'timestamp': datetime.now().isoformat()
+                        })
+                        
+                        # Mark injected task as complete
+                        self.task_injection_manager.mark_complete(injected_task['task_id'])
+                        completed_tasks += 1
+                    
                     task_id = task.get('task_id', f'{phase_idx}.{task_idx}')
                     task_name = task.get('task', 'Unnamed task')
                     
@@ -1834,37 +1878,87 @@ class PlanningOrchestrator:
                     })
                     
                     completed_tasks += 1
+                    
+                    # Calculate elapsed time
+                    elapsed_seconds = (datetime.now() - start_time).total_seconds()
+                    elapsed_str = format_elapsed_time(elapsed_seconds)
+                    
+                    # Render task progress for real-time visibility (with injected tasks)
+                    injected_task_list = self.task_injection_manager.render_task_list_for_progress()
+                    task_progress_msg = progress_renderer.render_task_progress(
+                        current=completed_tasks,
+                        total=total_tasks,
+                        phase_name=phase_name,
+                        current_phase=phase_idx,
+                        total_phases=total_phases,
+                        task_name=task_name,
+                        elapsed_time=elapsed_str
+                    )
+                    
+                    # Append injected task visualization if tasks are pending
+                    if injected_task_list:
+                        task_progress_msg += f"\n{injected_task_list}"
+                    
+                    print(task_progress_msg)
+                    
+                    # Also update internal progress tracker
                     yield_progress(
                         completed_tasks,
                         total_tasks,
                         f"Task {task_id}: {task_name}"
                     )
                 
+                # Save orchestration checkpoint at phase boundary (Feature 11)
+                try:
+                    checkpoint_state = {
+                        'plan_id': plan_id,
+                        'phase': phase_idx,
+                        'phase_name': phase_name,
+                        'completed_tasks': completed_tasks,
+                        'total_tasks': total_tasks,
+                        'execution_log': execution_log,
+                        'timestamp': datetime.now().isoformat()
+                    }
+                    
+                    checkpoint_id = self.checkpoint_manager.save_checkpoint(
+                        orchestrator_name='planning_orchestrator',
+                        state=checkpoint_state,
+                        phase=phase_name
+                    )
+                    
+                    logger.debug(f"💾 Phase checkpoint saved: {checkpoint_id}")
+                    
+                    execution_log.append({
+                        'phase': phase_idx,
+                        'action': 'orchestration_checkpoint',
+                        'status': 'success',
+                        'checkpoint_id': checkpoint_id,
+                        'timestamp': datetime.now().isoformat()
+                    })
+                except Exception as e:
+                    logger.warning(f"Orchestration checkpoint failed at phase {phase_idx}: {e}")
+                    
+                    execution_log.append({
+                        'phase': phase_idx,
+                        'action': 'orchestration_checkpoint',
+                        'status': 'failed',
+                        'error': str(e),
+                        'timestamp': datetime.now().isoformat()
+                    })
+                
                 # Create git checkpoint at phase boundary
+                phase_start_time = datetime.now()
+                checkpoint_name = ""
+                checkpoint_success = False
+                
                 try:
                     checkpoint_result = self.git_checkpoint.create_auto_checkpoint(
                         operation="autonomous_execution",
                         message=f"Completed {phase_name} of plan {plan_id}"
                     )
                     
-                    # Render checkpoint status in chat
-                    if self.template_manager and checkpoint_result.get('success'):
-                        try:
-                            checkpoint_context = {
-                                'operation': 'autonomous_execution',
-                                'status': '✅ Success',
-                                'commit_message': f"Completed {phase_name} of plan {plan_id}",
-                                'files_changed': checkpoint_result.get('files_changed', 'N/A'),
-                                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                'error_details': ''
-                            }
-                            rendered_checkpoint = self.template_manager.render_template(
-                                template_id='checkpoint_status',
-                                context=checkpoint_context
-                            )
-                            print(f"\n{rendered_checkpoint}\n")
-                        except Exception as e:
-                            logger.debug(f"Checkpoint template rendering skipped: {e}")
+                    checkpoint_success = checkpoint_result.get('success', False)
+                    checkpoint_name = checkpoint_result.get('checkpoint_name', '')
                     
                     execution_log.append({
                         'phase': phase_idx,
@@ -1875,24 +1969,6 @@ class PlanningOrchestrator:
                 except Exception as e:
                     logger.warning(f"Git checkpoint failed at phase {phase_idx}: {e}")
                     
-                    # Render checkpoint failure
-                    if self.template_manager:
-                        try:
-                            checkpoint_context = {
-                                'operation': 'autonomous_execution',
-                                'status': '❌ Failed',
-                                'commit_message': f"Completed {phase_name} of plan {plan_id}",
-                                'files_changed': 'N/A',
-                                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                'error_details': f"**Error:** {str(e)}"
-                            }
-                            rendered_checkpoint = self.template_manager.render_template(
-                                template_id='checkpoint_status',
-                                context=checkpoint_context
-                            )
-                            print(f"\n{rendered_checkpoint}\n")
-                        except Exception as render_e:
-                            logger.debug(f"Checkpoint error template rendering skipped: {render_e}")
                     execution_log.append({
                         'phase': phase_idx,
                         'action': 'git_checkpoint',
@@ -1900,6 +1976,35 @@ class PlanningOrchestrator:
                         'error': str(e),
                         'timestamp': datetime.now().isoformat()
                     })
+                
+                # Render phase transition (if not last phase)
+                if phase_idx < total_phases:
+                    phase_duration = (datetime.now() - phase_start_time).total_seconds()
+                    phase_duration_str = format_elapsed_time(phase_duration)
+                    next_phase_name = phases[phase_idx].get('phase_name', f'Phase {phase_idx + 1}')
+                    
+                    transition_msg = progress_renderer.render_phase_transition(
+                        from_phase=phase_name,
+                        to_phase=next_phase_name,
+                        completed_tasks=len(phase_tasks),
+                        duration=phase_duration_str,
+                        checkpoint_created=checkpoint_success,
+                        checkpoint_name=checkpoint_name
+                    )
+                    print(transition_msg)
+            
+            # Render completion summary
+            total_duration = (datetime.now() - start_time).total_seconds()
+            total_duration_str = format_elapsed_time(total_duration)
+            checkpoints_created = sum(1 for log in execution_log if log.get('action') == 'git_checkpoint' and log.get('status') == 'success')
+            
+            completion_msg = progress_renderer.render_completion_summary(
+                total_phases=total_phases,
+                total_tasks=completed_tasks,
+                total_duration=total_duration_str,
+                checkpoints_created=checkpoints_created
+            )
+            print(completion_msg)
             
             # Complete the plan
             completion_result = self.complete_plan(plan_filename)
@@ -4048,25 +4153,46 @@ class PlanningOrchestrator:
         self,
         phase_name: str,
         status: str = 'in_progress',
-        progress: int = 0
+        progress: int = 0,
+        tokens_used: int = 0
     ) -> None:
         """
         Update phase status and progress for visual tracking (REQ-005).
+        
+        Enhanced with timing and token tracking for master planner visual tracker.
         
         Args:
             phase_name: Name of phase to update
             status: Status ('pending', 'in_progress', 'completed')
             progress: Progress percentage (0-100)
+            tokens_used: Number of tokens consumed (for completed phases)
         """
         if not hasattr(self, 'session') or not self.session:
             return
         
+        # Record phase start on first update
+        if status == 'in_progress' and phase_name not in self.session.phase_start_times:
+            self.session.record_phase_start(phase_name)
+            logger.info(f"⏱️  Phase '{phase_name}' started at {datetime.now().strftime('%H:%M:%S')} {self.session.timezone}")
+        
+        # Update phase in session
         for phase in self.session.phases:
             if phase['name'] == phase_name:
                 phase['status'] = status
                 phase['progress'] = progress
                 logger.info(f"📊 Phase '{phase_name}' → {status} ({progress}%)")
                 break
+        
+        # Record phase completion with metrics
+        if status == 'completed' and phase_name not in self.session.phase_end_times:
+            self.session.record_phase_end(phase_name, tokens_used=tokens_used)
+            duration = self.session._get_phase_duration(phase_name)
+            logger.info(f"✅ Phase '{phase_name}' completed in {duration} ({tokens_used:,} tokens)")
+            logger.info(f"📊 Total tokens used: {self.session.total_tokens_used:,}")
+            
+            # Render updated progress
+            progress_table = self.session.render_progress_table()
+            logger.info(f"\n{progress_table}")
     
     def review_threats_interactive(
         self,

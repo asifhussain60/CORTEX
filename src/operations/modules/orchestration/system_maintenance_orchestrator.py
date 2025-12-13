@@ -32,6 +32,7 @@ from src.operations.base_operation_module import (
 from src.operations.healthcheck_operation import HealthCheckOperation
 from src.operations.align import run_align
 from src.utils.progress_decorator import with_progress, yield_progress
+from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +91,7 @@ class SystemMaintenanceOrchestrator(BaseOperationModule):
         )
     
     @with_progress(operation_name="System Maintenance", threshold_seconds=3.0)
+    @with_orchestration_metrics("SystemMaintenanceOrchestrator")
     def execute(self, context: Dict[str, Any]) -> OperationResult:
         """
         Execute comprehensive system maintenance.

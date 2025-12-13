@@ -69,3 +69,6 @@ pytest-selenium>=4.0.0  # pytest integration for Selenium
 requests>=2.31.0  # HTTP client for endoflife.date API integration
 # Note: astroid and requirements-parser omitted (not strictly needed for simplified onboarding)
 
+# Orchestration Analytics Dashboard (CORTEX 3.8.1 - Feature 15)
+matplotlib>=3.5.0  # Chart generation for performance trends and success rate visualizations
+Flask>=2.3.0  # Web framework for live dashboard server (port 5000)
