@@ -1,0 +1,28 @@
+{
+  "plan_name": "CORTEX 3.0 → 4.0 Orchestration Master Plan",
+  "version": "2.0",
+  "status": "IN_PROGRESS",
+  "created": "2025-12-10",
+  "last_updated": "2025-12-13",
+  "orchestrators": 9,
+  "phases": 7,
+  "timeline_months": 12,
+  "orchestrator_list": [
+    "TDD Orchestrator",
+    "DevOps Orchestrator",
+    "QA Orchestrator",
+    "Planning Orchestrator",
+    "Execution Orchestrator",
+    "Documentation Orchestrator",
+    "Intelligence Orchestrator",
+    "Observability Orchestrator",
+    "Onboarding Orchestrator"
+  ],
+  "related_plans": [
+    "../../cortex-4.0/",
+    "../../orchestrators/",
+    "../completed/orchestrator-enhancement-v1/",
+    "../completed/orchestrator-enhancement-v2/"
+  ],
+  "sub_plan_tracker": "../../orchestrators/README.md"
+}
