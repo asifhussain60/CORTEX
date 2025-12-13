@@ -105,6 +105,7 @@ class DashboardRenderer:
         coverage_data = analysis_data.get('test_coverage', {})
         tech_stack_data = analysis_data.get('tech_stack', {})
         dependencies_data = analysis_data.get('dependencies', {})
+        narratives_data = analysis_data.get('narratives', {})
         
         # KPI calculations
         total_files = health_data.get('total_files', 0)
@@ -247,6 +248,17 @@ class DashboardRenderer:
             'frameworks': frameworks,
             'databases': databases,
             'build_tools': build_tools,
+            
+            # Business Intelligence Narratives (Phase 5)
+            'narratives': {
+                'use_cases': narratives_data.get('use_cases', []),
+                'problem_domain': narratives_data.get('problem_domain', {}),
+                'business_flows': narratives_data.get('business_flows', []),
+                'stakeholders': narratives_data.get('stakeholders', {}),
+                'competitive_position': narratives_data.get('competitive_position', {}),
+                'risks': narratives_data.get('risks', []),
+                'evolution': narratives_data.get('evolution', {})
+            },
             
             # Full data as JSON for charts
             'analysis_data_json': json.dumps(analysis_data, indent=2),

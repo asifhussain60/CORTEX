@@ -36,6 +36,7 @@
     <!-- Navigation Tabs -->
     <nav class="cortex-tabs">
         <button class="tab-button active" data-tab="overview">Overview</button>
+        <button class="tab-button" data-tab="executive">Executive Brief</button>
         <button class="tab-button" data-tab="architecture">Architecture</button>
         <button class="tab-button" data-tab="security">Security</button>
         <button class="tab-button" data-tab="quality">Code Quality</button>
@@ -106,6 +107,56 @@
                 <div class="glass-card">
                     <h2 class="card-title">Language Distribution</h2>
                     <canvas id="languageChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Executive Brief Tab (Business Intelligence Narratives) -->
+        <section id="executive" class="tab-content">
+            <div class="content-grid">
+                <!-- Problem Domain -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">🎯 What Problem Does This Solve?</h2>
+                    <div class="narrative-content">
+                        <div class="narrative-section">
+                            <h3 class="narrative-subtitle">Problem Domain</h3>
+                            <p class="narrative-text" id="problem-domain-summary"></p>
+                        </div>
+                        <div class="narrative-section">
+                            <h3 class="narrative-subtitle">Key Entities</h3>
+                            <div class="entity-badges" id="problem-domain-entities"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Use Cases -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">💼 Primary Use Cases</h2>
+                    <div class="use-cases-list" id="use-cases-container"></div>
+                </div>
+
+                <!-- Competitive Position -->
+                <div class="glass-card">
+                    <h2 class="card-title">🏆 Competitive Advantages</h2>
+                    <div class="competitive-list" id="competitive-advantages"></div>
+                </div>
+
+                <!-- Risks -->
+                <div class="glass-card">
+                    <h2 class="card-title">⚠️ Business Risks</h2>
+                    <div class="risks-list" id="business-risks"></div>
+                </div>
+
+                <!-- Stakeholders -->
+                <div class="glass-card">
+                    <h2 class="card-title">👥 Stakeholder Roles</h2>
+                    <div class="stakeholders-list" id="stakeholders-roles"></div>
+                </div>
+
+                <!-- Evolution -->
+                <div class="glass-card">
+                    <h2 class="card-title">📈 System Evolution</h2>
+                    <div class="evolution-summary" id="evolution-story"></div>
                 </div>
             </div>
         </section>

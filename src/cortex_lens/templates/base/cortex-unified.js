@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTabs();
     initializeTheme();
     initializeCharts();
+    initializeNarratives();
     console.log('🧠 CORTEX Dashboard initialized');
 });
 
@@ -377,3 +378,172 @@ window.addEventListener('afterprint', () => {
 window.toggleTheme = toggleTheme;
 window.exportToPDF = exportToPDF;
 window.exportToJSON = exportToJSON;
+
+// ========== Business Intelligence Narratives ==========
+function initializeNarratives() {
+    if (!analysisData.narratives) {
+        console.warn('No narratives data available');
+        return;
+    }
+
+    const narratives = analysisData.narratives;
+    
+    // Render Problem Domain
+    renderProblemDomain(narratives.problem_domain);
+    
+    // Render Use Cases
+    renderUseCases(narratives.use_cases);
+    
+    // Render Competitive Advantages
+    renderCompetitiveAdvantages(narratives.competitive_position);
+    
+    // Render Business Risks
+    renderBusinessRisks(narratives.risks);
+    
+    // Render Stakeholders
+    renderStakeholders(narratives.stakeholders);
+    
+    // Render Evolution
+    renderEvolution(narratives.evolution);
+    
+    console.log('📊 Business narratives rendered');
+}
+
+function renderProblemDomain(problemDomain) {
+    if (!problemDomain) return;
+    
+    const summaryEl = document.getElementById('problem-domain-summary');
+    const entitiesEl = document.getElementById('problem-domain-entities');
+    
+    if (summaryEl && problemDomain.summary) {
+        summaryEl.textContent = problemDomain.summary;
+    }
+    
+    if (entitiesEl && problemDomain.key_entities) {
+        entitiesEl.innerHTML = problemDomain.key_entities
+            .map(entity => `<span class="badge badge-primary">${escapeHtml(entity)}</span>`)
+            .join('');
+    }
+}
+
+function renderUseCases(useCases) {
+    const container = document.getElementById('use-cases-container');
+    if (!container || !useCases || useCases.length === 0) {
+        if (container) container.innerHTML = '<p class="no-data">No use cases identified</p>';
+        return;
+    }
+    
+    container.innerHTML = useCases.map(useCase => `
+        <div class="use-case-card glass-card">
+            <h3 class="use-case-title">${escapeHtml(useCase.name)}</h3>
+            <div class="use-case-meta">
+                <span class="use-case-actor">👤 ${escapeHtml(useCase.actor)}</span>
+                <span class="use-case-trigger">🔔 ${escapeHtml(useCase.trigger)}</span>
+            </div>
+            <div class="use-case-steps">
+                <h4>Steps:</h4>
+                <ol>
+                    ${useCase.steps.map(step => `<li>${escapeHtml(step)}</li>`).join('')}
+                </ol>
+            </div>
+            <div class="use-case-outcome">
+                <strong>Outcome:</strong> ${escapeHtml(useCase.outcome)}
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderCompetitiveAdvantages(competitive) {
+    const container = document.getElementById('competitive-advantages');
+    if (!container || !competitive || !competitive.advantages) {
+        if (container) container.innerHTML = '<p class="no-data">No competitive analysis available</p>';
+        return;
+    }
+    
+    container.innerHTML = competitive.advantages.map(adv => `
+        <div class="competitive-item">
+            <div class="competitive-icon">✨</div>
+            <div class="competitive-content">
+                <div class="competitive-technology">${escapeHtml(adv.technology)}</div>
+                <div class="competitive-benefit">${escapeHtml(adv.benefit)}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderBusinessRisks(risks) {
+    const container = document.getElementById('business-risks');
+    if (!container || !risks || risks.length === 0) {
+        if (container) container.innerHTML = '<p class="no-data">No business risks identified</p>';
+        return;
+    }
+    
+    container.innerHTML = risks.map(risk => `
+        <div class="risk-item risk-${risk.severity.toLowerCase()}">
+            <div class="risk-header">
+                <span class="risk-severity">${escapeHtml(risk.severity)}</span>
+                <span class="risk-category">${escapeHtml(risk.category)}</span>
+            </div>
+            <div class="risk-description">${escapeHtml(risk.description)}</div>
+            <div class="risk-impact">${escapeHtml(risk.business_impact)}</div>
+        </div>
+    `).join('');
+}
+
+function renderStakeholders(stakeholders) {
+    const container = document.getElementById('stakeholders-roles');
+    if (!container || !stakeholders || !stakeholders.roles) {
+        if (container) container.innerHTML = '<p class="no-data">No stakeholder analysis available</p>';
+        return;
+    }
+    
+    container.innerHTML = stakeholders.roles.map(role => `
+        <div class="stakeholder-item">
+            <div class="stakeholder-role">${escapeHtml(role.role)}</div>
+            <div class="stakeholder-needs">
+                ${role.needs.map(need => `<span class="need-badge">${escapeHtml(need)}</span>`).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderEvolution(evolution) {
+    const container = document.getElementById('evolution-story');
+    if (!container || !evolution) {
+        if (container) container.innerHTML = '<p class="no-data">No evolution data available</p>';
+        return;
+    }
+    
+    if (evolution.summary) {
+        container.innerHTML = `
+            <div class="evolution-content">
+                <p class="evolution-text">${escapeHtml(evolution.summary)}</p>
+                ${evolution.transformation_type ? `
+                    <div class="evolution-badge">
+                        <span class="badge badge-${getTransformationBadgeClass(evolution.transformation_type)}">
+                            ${escapeHtml(evolution.transformation_type)} Transformation
+                        </span>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    } else {
+        container.innerHTML = '<p class="narrative-text">First analysis - no historical comparison available</p>';
+    }
+}
+
+function getTransformationBadgeClass(type) {
+    const typeMap = {
+        'MAJOR': 'danger',
+        'SIGNIFICANT': 'warning',
+        'MODERATE': 'info',
+        'STEADY': 'success'
+    };
+    return typeMap[type] || 'secondary';
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}

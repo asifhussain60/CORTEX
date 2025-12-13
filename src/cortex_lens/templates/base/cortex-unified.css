@@ -591,3 +591,309 @@ tr:hover {
 canvas {
     max-height: 400px;
 }
+
+/* ========== Business Intelligence Narratives Styles ========== */
+
+/* Narrative Content */
+.narrative-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.narrative-section {
+    padding: 1rem;
+    background: var(--glass-bg);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+
+.narrative-subtitle {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+.narrative-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+.entity-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Use Cases */
+.use-cases-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.use-case-card {
+    padding: 1.5rem;
+}
+
+.use-case-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--accent-primary);
+}
+
+.use-case-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.use-case-actor,
+.use-case-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.use-case-steps h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.use-case-steps ol {
+    margin-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.use-case-steps li {
+    margin-bottom: 0.5rem;
+}
+
+.use-case-outcome {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+}
+
+/* Competitive Advantages */
+.competitive-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.competitive-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--glass-bg);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    transition: transform 0.2s ease;
+}
+
+.competitive-item:hover {
+    transform: translateX(5px);
+}
+
+.competitive-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.competitive-content {
+    flex: 1;
+}
+
+.competitive-technology {
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin-bottom: 0.25rem;
+}
+
+.competitive-benefit {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Business Risks */
+.risks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.risk-item {
+    padding: 1rem;
+    background: var(--glass-bg);
+    border-radius: 8px;
+    border-left: 4px solid;
+    transition: transform 0.2s ease;
+}
+
+.risk-item:hover {
+    transform: translateX(5px);
+}
+
+.risk-item.risk-critical {
+    border-left-color: var(--accent-danger);
+}
+
+.risk-item.risk-high {
+    border-left-color: var(--accent-warning);
+}
+
+.risk-item.risk-medium {
+    border-left-color: #ffc107;
+}
+
+.risk-item.risk-low {
+    border-left-color: var(--accent-success);
+}
+
+.risk-header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.risk-severity {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.risk-category {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.risk-description {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.risk-impact {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Stakeholders */
+.stakeholders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stakeholder-item {
+    padding: 1rem;
+    background: var(--glass-bg);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+
+.stakeholder-role {
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin-bottom: 0.75rem;
+}
+
+.stakeholder-needs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.need-badge {
+    padding: 0.25rem 0.75rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Evolution */
+.evolution-summary {
+    padding: 1.5rem;
+}
+
+.evolution-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.evolution-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+.evolution-badge {
+    display: flex;
+    justify-content: center;
+}
+
+/* Badge variants */
+.badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid;
+    display: inline-block;
+}
+
+.badge-primary {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.badge-success {
+    background: rgba(6, 255, 165, 0.1);
+    border-color: var(--accent-success);
+    color: var(--accent-success);
+}
+
+.badge-warning {
+    background: rgba(255, 182, 39, 0.1);
+    border-color: var(--accent-warning);
+    color: var(--accent-warning);
+}
+
+.badge-danger {
+    background: rgba(255, 107, 157, 0.1);
+    border-color: var(--accent-danger);
+    color: var(--accent-danger);
+}
+
+.badge-info {
+    background: rgba(123, 44, 191, 0.1);
+    border-color: var(--accent-secondary);
+    color: var(--accent-secondary);
+}
+
+.badge-secondary {
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    color: var(--text-secondary);
+}
+
+/* No data message */
+.no-data {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-style: italic;
+}

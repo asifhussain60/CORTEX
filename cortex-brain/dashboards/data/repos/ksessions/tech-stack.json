@@ -110,8 +110,8 @@
           "Respond 1.4.2"
         ],
         "all_versions": [
-          ".NET Framework 4.8",
-          ".NET 8.0"
+          ".NET 8.0",
+          ".NET Framework 4.8"
         ],
         "package_count": 33
       },
@@ -241,6 +241,6 @@
     "current_count": 8,
     "outdated_count": 0,
     "deprecated_count": 0,
-    "last_scan": "2025-12-11T06:52:58.045808"
+    "last_scan": "2025-12-13T07:20:10.044634"
   }
 }
