@@ -71,6 +71,16 @@ from .integration_testing_orchestrator import (
     TestEnvironment,
     TestResult
 )
+from .holistic_review_orchestrator import (
+    HolisticReviewOrchestrator,
+    ReviewResult,
+    QualityGate
+)
+from .knowledge_graph_auto_updater import (
+    KnowledgeGraphAutoUpdater,
+    UpdateResult,
+    PatternExtractor
+)
 
 __all__ = [
     "ProgressRenderer",
@@ -109,4 +119,10 @@ __all__ = [
     "IntegrationTestingOrchestrator",
     "TestEnvironment",
     "TestResult",
+    "HolisticReviewOrchestrator",
+    "ReviewResult",
+    "QualityGate",
+    "KnowledgeGraphAutoUpdater",
+    "UpdateResult",
+    "PatternExtractor",
 ]
