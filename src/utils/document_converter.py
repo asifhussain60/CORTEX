@@ -9,7 +9,7 @@ conversation imports, feedback attachments, and any document reading scenario.
 Converter Priority:
 1. pandoc (best quality, external tool)
 2. pdftotext + python-docx (fallback, mixed approach)
-3. PyPDF2 (pure Python, last resort)
+3. pypdf (pure Python, last resort)
 
 Features:
 - Hash-based caching (MD5 + mtime)
@@ -40,7 +40,7 @@ class ConversionResult:
     success: bool
     markdown_path: Optional[Path]
     original_path: Path
-    converter_used: str  # pandoc, python-docx, pypdf2, pdftotext
+    converter_used: str  # pandoc, python-docx, pypdf, pdftotext
     conversion_time: float
     error_message: Optional[str] = None
     cached: bool = False
@@ -62,13 +62,13 @@ class DocumentConverter:
         self.has_pandoc = self._check_pandoc()
         self.has_pdftotext = self._check_pdftotext()
         self.has_python_docx = self._check_python_docx()
-        self.has_pypdf2 = self._check_pypdf2()
+        self.has_pypdf = self._check_pypdf()
         
         logger.info(f"Document Converter initialized:")
         logger.info(f"  pandoc: {'✅' if self.has_pandoc else '❌'}")
         logger.info(f"  pdftotext: {'✅' if self.has_pdftotext else '❌'}")
         logger.info(f"  python-docx: {'✅' if self.has_python_docx else '❌'}")
-        logger.info(f"  PyPDF2: {'✅' if self.has_pypdf2 else '❌'}")
+        logger.info(f"  pypdf: {'✅' if self.has_pypdf else '❌'}")
     
     def convert_to_markdown(self, file_path: Path) -> ConversionResult:
         """
@@ -165,9 +165,9 @@ class DocumentConverter:
             if result.success:
                 return result
         
-        # Fallback to PyPDF2
-        if self.has_pypdf2:
-            result = self._convert_with_pypdf2(file_path)
+        # Fallback to pypdf
+        if self.has_pypdf:
+            result = self._convert_with_pypdf(file_path)
             if result.success:
                 return result
         
@@ -177,7 +177,7 @@ class DocumentConverter:
             original_path=file_path,
             converter_used="none",
             conversion_time=0.0,
-            error_message="No PDF converter available. Install pdftotext, pandoc, or PyPDF2."
+            error_message="No PDF converter available. Install pdftotext, pandoc, or pypdf."
         )
     
     def _convert_with_pandoc(self, file_path: Path) -> ConversionResult:
@@ -366,10 +366,10 @@ class DocumentConverter:
                 error_message=str(e)
             )
     
-    def _convert_with_pypdf2(self, file_path: Path) -> ConversionResult:
-        """Convert PDF using PyPDF2."""
+    def _convert_with_pypdf(self, file_path: Path) -> ConversionResult:
+        """Convert PDF using pypdf (modern replacement for PyPDF2)."""
         try:
-            from PyPDF2 import PdfReader
+            from pypdf import PdfReader
             
             reader = PdfReader(file_path)
             output_path = self._get_cached_path(file_path)
@@ -384,12 +384,12 @@ class DocumentConverter:
             markdown = '\n'.join(text_lines)
             output_path.write_text(markdown, encoding='utf-8')
             
-            logger.info(f"✅ Converted with PyPDF2: {output_path}")
+            logger.info(f"✅ Converted with pypdf: {output_path}")
             return ConversionResult(
                 success=True,
                 markdown_path=output_path,
                 original_path=file_path,
-                converter_used="pypdf2",
+                converter_used="pypdf",
                 conversion_time=0.0
             )
         
@@ -398,17 +398,17 @@ class DocumentConverter:
                 success=False,
                 markdown_path=None,
                 original_path=file_path,
-                converter_used="pypdf2",
+                converter_used="pypdf",
                 conversion_time=0.0,
-                error_message="PyPDF2 not installed"
+                error_message="pypdf not installed"
             )
         except Exception as e:
-            logger.error(f"PyPDF2 error: {e}")
+            logger.error(f"pypdf error: {e}")
             return ConversionResult(
                 success=False,
                 markdown_path=None,
                 original_path=file_path,
-                converter_used="pypdf2",
+                converter_used="pypdf",
                 conversion_time=0.0,
                 error_message=str(e)
             )
@@ -484,10 +484,10 @@ class DocumentConverter:
         except ImportError:
             return False
     
-    def _check_pypdf2(self) -> bool:
-        """Check if PyPDF2 is installed."""
+    def _check_pypdf(self) -> bool:
+        """Check if pypdf is installed."""
         try:
-            import PyPDF2
+            import pypdf
             return True
         except ImportError:
             return False
@@ -502,8 +502,8 @@ class DocumentConverter:
             missing.append("pdftotext (poppler-utils)")
         if not self.has_python_docx:
             missing.append("python-docx")
-        if not self.has_pypdf2:
-            missing.append("PyPDF2")
+        if not self.has_pypdf:
+            missing.append("pypdf")
         
         if not missing:
             return "✅ All converters installed!"
@@ -527,9 +527,9 @@ class DocumentConverter:
                 guide += "**python-docx** (fallback for Word):\n"
                 guide += "  • pip install python-docx\n\n"
             
-            elif tool == "PyPDF2":
-                guide += "**PyPDF2** (fallback for PDF):\n"
-                guide += "  • pip install PyPDF2\n\n"
+            elif tool == "pypdf":
+                guide += "**pypdf** (fallback for PDF):\n"
+                guide += "  • pip install pypdf\n\n"
         
         return guide
 

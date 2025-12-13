@@ -106,7 +106,7 @@ class PolicyAnalyzer:
     Analyze and parse policy documents into structured rules.
     
     Supports:
-    - PDF parsing (PyPDF2, pdfplumber)
+    - PDF parsing (pypdf, pdfplumber)
     - Markdown parsing (mistune)
     - DOCX parsing (python-docx)
     - TXT parsing (built-in)
@@ -214,11 +214,11 @@ class PolicyAnalyzer:
     def _parse_pdf(self, path: Path) -> str:
         """Parse PDF document"""
         try:
-            import PyPDF2
+            from pypdf import PdfReader
             
             content = []
             with open(path, 'rb') as f:
-                reader = PyPDF2.PdfReader(f)
+                reader = PdfReader(f)
                 for page in reader.pages:
                     text = page.extract_text()
                     if text:
@@ -241,7 +241,7 @@ class PolicyAnalyzer:
                 return '\n'.join(content)
             
             except ImportError:
-                raise ImportError("PDF parsing requires PyPDF2 or pdfplumber. Install with: pip install PyPDF2 pdfplumber")
+                raise ImportError("PDF parsing requires pypdf or pdfplumber. Install with: pip install pypdf pdfplumber")
     
     def _parse_markdown(self, path: Path) -> str:
         """Parse Markdown document"""

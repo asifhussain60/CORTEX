@@ -1,0 +1,593 @@
+/**
+ * CORTEX Unified Design System
+ * 
+ * Modern glassmorphism design with:
+ * - Dark/light theme support
+ * - Responsive layout
+ * - Smooth animations
+ * - Accessible color contrast
+ * 
+ * Author: Asif Hussain
+ * Version: 1.0.0
+ * Date: December 2025
+ */
+
+/* ========== CSS Variables ========== */
+:root[data-theme="dark"] {
+    /* Background */
+    --bg-primary: #0a0e27;
+    --bg-secondary: #131829;
+    --bg-tertiary: #1a1f3a;
+    
+    /* Glass effect */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    
+    /* Text */
+    --text-primary: #ffffff;
+    --text-secondary: #b8c5d6;
+    --text-muted: #6b7a90;
+    
+    /* Accent colors */
+    --accent-primary: #00d4ff;
+    --accent-secondary: #7b2cbf;
+    --accent-success: #06ffa5;
+    --accent-warning: #ffb627;
+    --accent-danger: #ff6b9d;
+    
+    /* Chart colors */
+    --chart-1: #00d4ff;
+    --chart-2: #7b2cbf;
+    --chart-3: #06ffa5;
+    --chart-4: #ffb627;
+    --chart-5: #ff6b9d;
+}
+
+:root[data-theme="light"] {
+    /* Background */
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #e9ecef;
+    
+    /* Glass effect */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    
+    /* Text */
+    --text-primary: #1a1f3a;
+    --text-secondary: #495057;
+    --text-muted: #6c757d;
+    
+    /* Accent colors */
+    --accent-primary: #0077ff;
+    --accent-secondary: #6c2ea0;
+    --accent-success: #00c97a;
+    --accent-warning: #ff9500;
+    --accent-danger: #ff3366;
+    
+    /* Chart colors */
+    --chart-1: #0077ff;
+    --chart-2: #6c2ea0;
+    --chart-3: #00c97a;
+    --chart-4: #ff9500;
+    --chart-5: #ff3366;
+}
+
+/* ========== Reset & Base Styles ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+    background: var(--glass-bg);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* ========== Header ========== */
+.cortex-header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+}
+
+.cortex-icon {
+    font-size: 2rem;
+}
+
+.header-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.theme-toggle {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    transform: scale(1.1);
+}
+
+.theme-icon {
+    font-size: 1.2rem;
+}
+
+.repo-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.repo-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.repo-type {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: var(--glass-bg);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    margin-top: 0.25rem;
+}
+
+/* ========== Navigation Tabs ========== */
+.cortex-tabs {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 0 2rem;
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    padding: 1rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    color: var(--text-primary);
+    background: var(--glass-bg);
+}
+
+.tab-button.active {
+    color: var(--accent-primary);
+    border-bottom-color: var(--accent-primary);
+}
+
+/* ========== Main Content ========== */
+.cortex-main {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Content Grid ========== */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* ========== Glass Cards ========== */
+.glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 12px 48px 0 rgba(0, 212, 255, 0.2);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+/* ========== KPI Cards ========== */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    grid-column: 1 / -1;
+    margin-bottom: 1rem;
+}
+
+.kpi-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-primary);
+}
+
+.kpi-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.kpi-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin-bottom: 0.25rem;
+}
+
+.kpi-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.kpi-trend {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.kpi-trend.positive {
+    background: rgba(6, 255, 165, 0.2);
+    color: var(--accent-success);
+}
+
+.kpi-trend.negative {
+    background: rgba(255, 107, 157, 0.2);
+    color: var(--accent-danger);
+}
+
+/* ========== Summary Rows ========== */
+.summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.summary-value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.health-score {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+.health-score.score-excellent {
+    background: rgba(6, 255, 165, 0.2);
+    color: var(--accent-success);
+}
+
+.health-score.score-good {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--accent-primary);
+}
+
+.health-score.score-fair {
+    background: rgba(255, 182, 39, 0.2);
+    color: var(--accent-warning);
+}
+
+.health-score.score-poor {
+    background: rgba(255, 107, 157, 0.2);
+    color: var(--accent-danger);
+}
+
+/* ========== Badges ========== */
+.badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0.25rem;
+}
+
+.badge-high {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--accent-primary);
+}
+
+.badge-medium {
+    background: rgba(255, 182, 39, 0.2);
+    color: var(--accent-warning);
+}
+
+.badge-low {
+    background: rgba(107, 122, 144, 0.2);
+    color: var(--text-muted);
+}
+
+.severity-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.severity-CRITICAL {
+    background: rgba(255, 107, 157, 0.3);
+    color: var(--accent-danger);
+}
+
+.severity-HIGH {
+    background: rgba(255, 182, 39, 0.3);
+    color: var(--accent-warning);
+}
+
+.severity-MEDIUM {
+    background: rgba(0, 212, 255, 0.3);
+    color: var(--accent-primary);
+}
+
+.severity-LOW {
+    background: rgba(107, 122, 144, 0.3);
+    color: var(--text-muted);
+}
+
+/* ========== Tables ========== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: var(--bg-tertiary);
+}
+
+th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--glass-border);
+}
+
+td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+tr:hover {
+    background: var(--glass-bg);
+}
+
+/* ========== Endpoint List ========== */
+.endpoint-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.endpoint-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--glass-bg);
+    border-radius: 8px;
+}
+
+.endpoint-method {
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    min-width: 60px;
+    text-align: center;
+}
+
+.method-GET { background: rgba(6, 255, 165, 0.2); color: var(--accent-success); }
+.method-POST { background: rgba(0, 212, 255, 0.2); color: var(--accent-primary); }
+.method-PUT { background: rgba(255, 182, 39, 0.2); color: var(--accent-warning); }
+.method-DELETE { background: rgba(255, 107, 157, 0.2); color: var(--accent-danger); }
+.method-PATCH { background: rgba(123, 44, 191, 0.2); color: var(--accent-secondary); }
+
+.endpoint-path {
+    font-family: monospace;
+    color: var(--text-primary);
+}
+
+/* ========== Metrics List ========== */
+.metrics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.metric-item:last-child {
+    border-bottom: none;
+}
+
+.metric-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.metric-value {
+    color: var(--accent-primary);
+    font-weight: 700;
+}
+
+/* ========== Footer ========== */
+.cortex-footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--glass-border);
+    padding: 2rem;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.footer-links a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cortex-tabs {
+        overflow-x: scroll;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+/* ========== Chart Containers ========== */
+canvas {
+    max-height: 400px;
+}
