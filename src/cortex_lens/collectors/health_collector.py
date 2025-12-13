@@ -59,6 +59,56 @@ class HealthCollector(BaseCollector):
         '.php': 'PHP'
     }
     
+    def _scan_files(
+        self,
+        repo_path: Path,
+        extensions: list[str] = None
+    ) -> list[Path]:
+        """
+        Recursively scan repository for files with specified extensions.
+        
+        Args:
+            repo_path: Repository root path
+            extensions: List of file extensions to include (e.g., ['.py', '.cs'])
+                       If None, includes all files
+        
+        Returns:
+            List of Path objects for matching files
+        """
+        files = []
+        
+        # Directories to exclude
+        exclude_dirs = {
+            '.git', '.svn', '.hg',  # VCS
+            '__pycache__', '.pytest_cache', '.mypy_cache',  # Python caches
+            'node_modules', 'bower_components',  # JavaScript
+            'bin', 'obj',  # .NET
+            'target',  # Java/Rust
+            'build', 'dist', '.egg-info',  # Build artifacts
+            'venv', 'env', '.env', '.venv',  # Virtual environments
+        }
+        
+        try:
+            for file_path in repo_path.rglob('*'):
+                # Skip if in excluded directory
+                if any(excluded in file_path.parts for excluded in exclude_dirs):
+                    continue
+                
+                # Skip if not a file
+                if not file_path.is_file():
+                    continue
+                
+                # Check extension filter
+                if extensions is not None:
+                    if file_path.suffix.lower() not in extensions:
+                        continue
+                
+                files.append(file_path)
+        except Exception as e:
+            logger.warning(f"Error scanning {repo_path}: {e}")
+        
+        return files
+    
     def collect(
         self,
         repo_path: Path,

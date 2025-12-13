@@ -153,8 +153,11 @@ class CortexLens:
         
         classification = self._classify_repository(repo_path)
         
-        logger.info(f"✅ Detected: {classification['primary_type']} "
-                   f"(confidence: {classification['confidence']:.1%})")
+        primary_type = classification['primary_type']
+        confidence = classification['confidence_scores'][primary_type]
+        
+        logger.info(f"✅ Detected: {primary_type} "
+                   f"(confidence: {confidence:.1%})")
         
         return classification
     
