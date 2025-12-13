@@ -1,10 +1,10 @@
 # Planning System 2.0 Orchestrator Manifest
 # Defines all requirements, integrations, and quality gates for planning workflow
 #
-# Version: 3.0.0
+# Version: 3.1.0
 # Author: CORTEX Development Team
-# Updated: 2025-12-08
-# Status: ACTIVE - ✅ 100% COMPLIANT (All 8 requirements implemented)
+# Updated: 2025-12-13
+# Status: ACTIVE - ✅ 88.9% COMPLIANT (8/9 requirements: 3 critical + 3 high + 3 medium)
 
 schema_version: "1.0"
 
@@ -14,13 +14,13 @@ schema_version: "1.0"
 
 metadata:
   orchestrator_name: "planning_system_2.0"
-  version: "3.0.0"
+  version: "3.1.0"
   description: "Interactive feature planning with DoR/DoD, threat modeling, and TDD integration"
   category: "planning"
   deployment_tier: "user"
   status: "active"
-  last_updated: "2025-12-08"
-  compliance_baseline: "100% (All 8 requirements: 3 critical + 3 high + 2 medium)"
+  last_updated: "2025-12-13"
+  compliance_baseline: "88.9% (8/9 requirements implemented: REQ-009 pending)"
   maintainer: "CORTEX Planning Team"
   related_orchestrators:
     - "ado_planning_orchestrator"
@@ -227,6 +227,69 @@ requirements:
       - Link to TDD Mastery guide
     estimated_effort_hours: 2
     current_implementation: "TDD injection works (inject_tdd_requirements) but silent"
+  
+  - requirement_id: "REQ-009"
+    name: "Modular Plan Structure"
+    description: |
+      Generate plans in dedicated folder structure with master plan + sub-plans
+      for better organization and parallel development support.
+      
+      Structure:
+      cortex-brain/documents/planning/PLAN-{DATE}-{NAME}/
+      ├── MASTER-PLAN.md              # Overview + TOC with links
+      ├── sub-plans/
+      │   ├── phase-1-{name}.md       # Individual phase plans
+      │   ├── phase-2-{name}.md
+      │   └── phase-N-{name}.md
+      ├── resources/
+      │   ├── diagrams/               # Architecture diagrams
+      │   └── references/             # External references
+      └── artifacts/
+          ├── feature-tracker.md      # Feature implementation tracker
+          ├── decision-log.md         # ADRs and decisions
+          └── execution-log.md        # Execution history
+    priority: "medium"
+    status: "pending"
+    validation_method: "integration_test"
+    validation_criteria: "Plan folder structure created with all components"
+    implementation_notes: |
+      - Add plan_structure_mode config: "single_file" (default) | "modular"
+      - Generate folder structure when modular mode enabled
+      - Create MASTER-PLAN.md with links to sub-plans
+      - Extract phases from single plan and create sub-plan files
+      - Generate feature tracker as separate artifact
+      - Maintain backward compatibility (default to single_file)
+      - Add folder navigation helpers in master plan
+    estimated_effort_hours: 8
+    benefits:
+      - "Better organization for large plans (500+ lines)"
+      - "Parallel development (multiple engineers on different phases)"
+      - "Easier plan maintenance and updates"
+      - "Clearer separation of concerns"
+      - "Reusable sub-plans across projects"
+    implementation_phases:
+      - phase: "Phase 1 - Folder Generator"
+        tasks:
+          - "Add create_plan_folder_structure() method"
+          - "Generate MASTER-PLAN.md with TOC"
+          - "Create sub-plans/ and artifacts/ directories"
+        duration: "3 hours"
+      - phase: "Phase 2 - Content Splitter"
+        tasks:
+          - "Extract phases from comprehensive plan"
+          - "Generate individual phase markdown files"
+          - "Create feature tracker artifact"
+        duration: "3 hours"
+      - phase: "Phase 3 - Integration"
+        tasks:
+          - "Add plan_structure_mode configuration"
+          - "Update response template with folder links"
+          - "Add migration utility for existing plans"
+        duration: "2 hours"
+    backward_compatibility: "Default to single_file mode, opt-in to modular"
+    migration_strategy: |
+      Existing plans remain as single files. Users can migrate via:
+      python -m scripts.migrate_plan_to_modular PLAN-{DATE}-{NAME}.md
 
 # ========================================
 # Integrations
