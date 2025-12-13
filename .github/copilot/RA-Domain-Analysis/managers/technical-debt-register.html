@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Debt Register</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 40px; max-width: 1000px; margin: 0 auto; background: #f7fafc; }
+        h1 { color: #2d3748; }
+        table { width: 100%; border-collapse: collapse; background: white; margin: 20px 0; }
+        th { background: #667eea; color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #e2e8f0; }
+        .critical { background: #fee; }
+        .high { background: #fef3c7; }
+        .back-link { display: inline-block; margin-top: 20px; color: #667eea; text-decoration: none; }
+        .summary { background: #fff3cd; padding: 15px; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+    <h1>⚠️ Technical Debt Register</h1>
+    
+    <div class="summary">
+        <p><strong>Total Items:</strong> 5</p>
+        <p><strong>Critical Items:</strong> 2</p>
+        <p><strong>Total Estimated Savings:</strong> $645,000/year</p>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Severity</th>
+                <th>Effort (hrs)</th>
+                <th>Savings/Year</th>
+                <th>Sprint</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="critical">
+                <td>TD-001</td>
+                <td>CarryoverDollarsDomainService too large (717 LOC)</td>
+                <td>CRITICAL</td>
+                <td>40</td>
+                <td>$50,000</td>
+                <td>Sprint 3</td>
+            </tr>
+            <tr class="critical">
+                <td>TD-002</td>
+                <td>Zero test coverage for carryover logic</td>
+                <td>CRITICAL</td>
+                <td>40</td>
+                <td>$500,000</td>
+                <td>Sprint 1</td>
+            </tr>
+            <tr class="high">
+                <td>TD-003</td>
+                <td>ClaimsProcessingService needs CQRS refactoring</td>
+                <td>HIGH</td>
+                <td>35</td>
+                <td>$40,000</td>
+                <td>Sprint 4</td>
+            </tr>
+            <tr class="high">
+                <td>TD-004</td>
+                <td>Missing README and architecture docs</td>
+                <td>HIGH</td>
+                <td>16</td>
+                <td>$20,000</td>
+                <td>Sprint 2</td>
+            </tr>
+            <tr class="high">
+                <td>TD-005</td>
+                <td>BalanceCalculationService split needed</td>
+                <td>HIGH</td>
+                <td>30</td>
+                <td>$35,000</td>
+                <td>Sprint 3-4</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <a href="../index.html" class="back-link">← Back to Dashboard</a>
+</body>
+</html>
