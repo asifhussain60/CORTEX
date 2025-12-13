@@ -216,26 +216,227 @@ See [SUPER-CORTEX-BRAIN-ANALYSIS.md](./SUPER-CORTEX-BRAIN-ANALYSIS.md) for compr
 
 ---
 
-### Feature 2: [PLACEHOLDER - Other CORTEX 4.0 Features]
+### Feature 2: Community Feedback Aggregation
 
-**Status:** 🔴 Not Yet Planned  
-**Priority:** TBD  
-**Timeline:** TBD
+**Status:** 🟡 Planning  
+**Priority:** P1 (High)  
+**Timeline:** 6 weeks (CORTEX 4.0 Phase 1)  
+**Risk:** 🟢 LOW
 
 **Description:**
-Additional CORTEX 4.0 features to be defined based on user priorities.
+Centralized community feedback system that aggregates anonymized metrics, patterns, and insights from CORTEX users worldwide to create a data-driven pattern library and performance benchmarks.
 
-**Potential Candidates:**
-- Enhanced Visual Studio support (from compatibility analysis)
-- Multi-language support expansion
-- Advanced debugging workflows
-- Team collaboration features
-- Cloud backup integration
+**Key Capabilities:**
+- Automatic feedback capture after TDD GREEN phase
+- Anonymized metrics aggregation across all users
+- Community dashboard with real-time analytics
+- Pattern library with community-curated successful patterns
+- Privacy-first design (opt-in, zero PII collection)
 
-**Next Steps:**
-- User to prioritize additional features
-- Conduct feasibility analysis per feature
-- Update roadmap with detailed plans
+**Implementation Details:**
+See `capabilities.yaml` entry: `community_feedback_aggregation`
+
+**Success Criteria:**
+- 100% anonymization (zero PII leaks)
+- Opt-in participation with >20% adoption rate
+- Community dashboard with real-time metrics
+- Pattern library with 50+ community-curated patterns
+- Trend detection with 90%+ accuracy
+
+---
+
+### Feature 3: PR Review Automation
+
+**Status:** 🟡 Planning  
+**Priority:** P1 (High)  
+**Timeline:** 6 weeks (CORTEX 4.0 Phase 1)  
+**Risk:** 🟡 MEDIUM
+
+**Description:**
+Automated pull request review integration with Azure DevOps, GitHub, GitLab, and BitBucket that provides line-by-line code analysis with SOLID principle validation, security scanning, and automated comment posting.
+
+**Platforms Supported:**
+- Azure DevOps (REST API)
+- GitHub (GitHub Actions + REST API)
+- GitLab (GitLab CI + REST API)
+- BitBucket (Pipelines integration)
+
+**Review Checks:**
+- SOLID principle violations
+- Security vulnerabilities (OWASP Top 10)
+- Test coverage regressions
+- Performance anti-patterns
+- Code style consistency
+- Duplicate code detection
+- Dependency analysis
+
+**Workflow:**
+1. PR opened → CORTEX triggered via webhook
+2. Analyze diff → Run all checks in parallel
+3. Post comments → Inline suggestions with severity
+4. Summary report → Overall health score (0-100)
+5. Auto-approve option → If score >95 and no blocking issues
+
+**Implementation Details:**
+See `capabilities.yaml` entry: `code_review` (CORTEX 4.0 enhancements)
+
+**Success Criteria:**
+- 95%+ accuracy on SOLID violation detection
+- Zero false positives on security scans
+- Sub-30s review time for <500 LOC PRs
+- Integration with all 4 major platforms
+- Team adoption >80% within 2 months
+
+---
+
+### Feature 4: Performance Testing Integration
+
+**Status:** 🟡 Planning  
+**Priority:** P2 (Medium)  
+**Timeline:** 4 weeks (CORTEX 4.0 Phase 2)  
+**Risk:** 🟢 LOW
+
+**Description:**
+Automated performance test generation and execution with integration to major load testing frameworks (Locust, k6, JMeter, Gatling) and APM platforms (New Relic, DataDog, AppInsights).
+
+**Frameworks Supported:**
+- Locust (Python-based load testing)
+- k6 (JavaScript-based performance testing)
+- Apache JMeter (Java-based load testing)
+- Gatling (Scala-based performance testing)
+
+**Features:**
+- Automatic performance test generation from API specs
+- Load profile creation (ramp-up, sustained, spike)
+- Response time assertions (p50, p95, p99)
+- Throughput validation (requests/second)
+- Concurrent user simulation (1-10k users)
+- Performance regression detection
+- Bottleneck identification with flame graphs
+
+**Metrics Collected:**
+- Response time percentiles (p50, p90, p95, p99)
+- Throughput (requests/second)
+- Error rate percentage
+- Resource utilization (CPU, memory, network I/O)
+- Database connection pool usage
+- Cache hit/miss ratios
+
+**Implementation Details:**
+See `capabilities.yaml` entry: `backend_testing` (CORTEX 4.0 enhancements)
+
+**Success Criteria:**
+- Auto-generate performance tests for 95% of REST APIs
+- Detect 90%+ of performance regressions (>20% degradation)
+- Sub-5min test execution for standard load profiles
+- Integration with 3+ major APM platforms
+
+---
+
+### Feature 5: Mobile App Testing (Appium/XCUITest)
+
+**Status:** 🟡 Planning  
+**Priority:** P2 (Medium)  
+**Timeline:** 8 weeks (CORTEX 4.0 Phase 3)  
+**Risk:** 🟡 MEDIUM
+
+**Description:**
+Cross-platform mobile app testing automation with Appium (iOS/Android), XCUITest (native iOS), Espresso (native Android), and device farm integration for comprehensive mobile test coverage.
+
+**Frameworks Supported:**
+- Appium (cross-platform iOS/Android automation)
+- XCUITest (native iOS testing)
+- Espresso (native Android testing)
+- Detox (React Native testing)
+
+**Platforms:**
+- iOS (iPhone, iPad - simulators + real devices)
+- Android (phones, tablets - emulators + real devices)
+
+**Features:**
+- Element discovery (accessibility IDs, XPath, coordinates)
+- Gesture simulation (tap, swipe, pinch, rotate)
+- Cross-platform selector strategy (shared test code)
+- Visual regression testing (screenshot comparison)
+- Network mocking and stubbing
+- Performance metrics (app launch time, memory usage)
+
+**Device Farm Integration:**
+- AWS Device Farm (cloud-based real devices)
+- BrowserStack App Automate (1000+ devices)
+- Sauce Labs (real device cloud)
+- Local device management (via Appium Desktop)
+
+**Selector Stability:**
+- Prefer accessibility IDs over XPath
+- Fallback strategy (ID → accessibility label → XPath)
+- Auto-heal selectors when elements change
+
+**Implementation Details:**
+See `capabilities.yaml` entry: `mobile_testing` (CORTEX 4.0 enhancements)
+
+**Success Criteria:**
+- Cross-platform test execution (iOS + Android from single codebase)
+- 95%+ selector stability (auto-heal on element changes)
+- Device farm integration with 3+ major providers
+- Visual regression detection with <5% false positive rate
+- Sub-10min test suite execution on device farm
+
+---
+
+### Feature 6: Figma UI Generation
+
+**Status:** 🟡 Planning  
+**Priority:** P3 (Low)  
+**Timeline:** 10 weeks (CORTEX 4.0 Phase 4)  
+**Risk:** 🔴 HIGH  
+**Condition:** Market demand validated
+
+**Description:**
+Automatic UI component generation from Figma designs with design token extraction, multi-framework support (React/Vue/Angular), and visual regression testing to ensure pixel-perfect implementation.
+
+**Figma Integration:**
+- Figma REST API authentication (OAuth 2.0)
+- Design file parsing (frames, components, variants)
+- Asset export (SVG, PNG for icons/images)
+- Plugin integration (direct Figma plugin for CORTEX)
+
+**Design Token Extraction:**
+- Color palette (CSS variables, Sass, Tailwind)
+- Typography system (font families, sizes, weights, line heights)
+- Spacing scale (margins, paddings, gaps)
+- Border radius, shadows, opacity values
+- Breakpoints for responsive design
+
+**Component Generation:**
+- React (TypeScript + styled-components/Emotion/Tailwind)
+- Vue 3 (Composition API + Sass/Tailwind)
+- Angular (TypeScript + Angular Material)
+- Svelte (Svelte + Tailwind)
+
+**Features:**
+- Component structure from Figma components
+- Props generation from Figma variants
+- Event handlers (onClick, onChange, etc.)
+- Accessibility attributes (ARIA labels, roles)
+- Responsive layout (CSS Grid, Flexbox)
+- Dark mode support (CSS variables)
+
+**Quality Assurance:**
+- Visual regression testing (Figma design vs generated component)
+- Accessibility compliance (WCAG 2.1 AA)
+- Component story generation (Storybook)
+- Responsive preview (mobile, tablet, desktop)
+
+**Implementation Details:**
+See `capabilities.yaml` entry: `ui_from_figma` (CORTEX 4.0 enhancements)
+
+**Success Criteria:**
+- 95%+ visual accuracy (Figma design vs generated component)
+- Support for 3+ major frameworks (React, Vue, Angular)
+- Automatic design token extraction with zero manual config
+- WCAG 2.1 AA compliance for generated components
+- Storybook story generation for all components
 
 ---
 
