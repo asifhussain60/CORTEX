@@ -11,10 +11,12 @@ Operations Utilities - Shared components for CORTEX orchestration workflows.
 - orchestration_analytics_dashboard: Visualization and reporting for metrics
 - resource_management_orchestrator: Resource monitoring and optimization
 - error_recovery_orchestrator: Retry policies and circuit breakers
+- performance_profiling_orchestrator: Execution profiling and bottleneck detection
 
 **Author:** Asif Hussain
 **Version:** 3.8.1
 """
+
 
 from .progress_renderer import ProgressRenderer
 from .vision_context_middleware import VisionContextMiddleware, with_vision_context_middleware
@@ -41,6 +43,12 @@ from .parallel_orchestration_coordinator import (
 from .orchestration_analytics_dashboard import OrchestrationAnalyticsDashboard
 from .resource_management_orchestrator import ResourceManagementOrchestrator
 from .error_recovery_orchestrator import ErrorRecoveryOrchestrator
+from .performance_profiling_orchestrator import (
+    PerformanceProfilingOrchestrator,
+    ProfileResult,
+    BottleneckReport,
+    RegressionReport
+)
 
 __all__ = [
     "ProgressRenderer",
@@ -61,4 +69,8 @@ __all__ = [
     "OrchestrationAnalyticsDashboard",
     "ResourceManagementOrchestrator",
     "ErrorRecoveryOrchestrator",
+    "PerformanceProfilingOrchestrator",
+    "ProfileResult",
+    "BottleneckReport",
+    "RegressionReport",
 ]
