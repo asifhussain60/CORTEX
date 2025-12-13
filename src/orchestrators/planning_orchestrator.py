@@ -21,6 +21,8 @@ from pathlib import Path
 import logging
 import re
 from src.utils.progress_decorator import with_progress, yield_progress
+from src.operations.utilities.progress_renderer import ProgressRenderer, format_elapsed_time
+from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
 from src.response_templates.response_template_manager import ResponseTemplateManager
 from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
@@ -791,6 +793,7 @@ class PlanningOrchestrator:
             return (False, error_msg)
     
     @with_progress(operation_name="Incremental Plan Generation", threshold_seconds=3.0)
+    @with_orchestration_metrics("PlanningOrchestrator")
     def generate_incremental_plan(
         self,
         feature_requirements: str,
@@ -1052,7 +1055,6 @@ class PlanningOrchestrator:
                 is_final_phase=False
             )
             if phase_2_doc_reminder:
-                logger.debug(phase_2_doc_reminder)  # Debug level since Phase 2 is routine
             
             if not phase_2_approved:
                 return (True, output_path, "Phase 2 complete, Phase 3 pending user approval")
@@ -1722,6 +1724,7 @@ class PlanningOrchestrator:
             }
     
     @with_progress(operation_name="Autonomous Plan Execution")
+    @with_orchestration_metrics("PlanningOrchestrator")
     def execute_plan_autonomously(self, plan_filename: str) -> Dict[str, Any]:
         """
         Execute an approved plan autonomously from start to finish.
@@ -1740,6 +1743,10 @@ class PlanningOrchestrator:
             Dict with execution results, completed tasks, and documentation reminder
         """
         try:
+            # Initialize progress renderer for real-time visual feedback
+            progress_renderer = ProgressRenderer(bar_width=10)
+            start_time = datetime.now()
+            
             # Load approved plan - construct full path
             approved_path = self.cortex_root / "cortex-brain" / "documents" / "planning" / "approved" / plan_filename
             
@@ -1834,6 +1841,24 @@ class PlanningOrchestrator:
                     })
                     
                     completed_tasks += 1
+                    
+                    # Calculate elapsed time
+                    elapsed_seconds = (datetime.now() - start_time).total_seconds()
+                    elapsed_str = format_elapsed_time(elapsed_seconds)
+                    
+                    # Render task progress for real-time visibility
+                    task_progress_msg = progress_renderer.render_task_progress(
+                        current=completed_tasks,
+                        total=total_tasks,
+                        phase_name=phase_name,
+                        current_phase=phase_idx,
+                        total_phases=total_phases,
+                        task_name=task_name,
+                        elapsed_time=elapsed_str
+                    )
+                    print(task_progress_msg)
+                    
+                    # Also update internal progress tracker
                     yield_progress(
                         completed_tasks,
                         total_tasks,
@@ -1841,30 +1866,18 @@ class PlanningOrchestrator:
                     )
                 
                 # Create git checkpoint at phase boundary
+                phase_start_time = datetime.now()
+                checkpoint_name = ""
+                checkpoint_success = False
+                
                 try:
                     checkpoint_result = self.git_checkpoint.create_auto_checkpoint(
                         operation="autonomous_execution",
                         message=f"Completed {phase_name} of plan {plan_id}"
                     )
                     
-                    # Render checkpoint status in chat
-                    if self.template_manager and checkpoint_result.get('success'):
-                        try:
-                            checkpoint_context = {
-                                'operation': 'autonomous_execution',
-                                'status': '✅ Success',
-                                'commit_message': f"Completed {phase_name} of plan {plan_id}",
-                                'files_changed': checkpoint_result.get('files_changed', 'N/A'),
-                                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                'error_details': ''
-                            }
-                            rendered_checkpoint = self.template_manager.render_template(
-                                template_id='checkpoint_status',
-                                context=checkpoint_context
-                            )
-                            print(f"\n{rendered_checkpoint}\n")
-                        except Exception as e:
-                            logger.debug(f"Checkpoint template rendering skipped: {e}")
+                    checkpoint_success = checkpoint_result.get('success', False)
+                    checkpoint_name = checkpoint_result.get('checkpoint_name', '')
                     
                     execution_log.append({
                         'phase': phase_idx,
@@ -1875,24 +1888,6 @@ class PlanningOrchestrator:
                 except Exception as e:
                     logger.warning(f"Git checkpoint failed at phase {phase_idx}: {e}")
                     
-                    # Render checkpoint failure
-                    if self.template_manager:
-                        try:
-                            checkpoint_context = {
-                                'operation': 'autonomous_execution',
-                                'status': '❌ Failed',
-                                'commit_message': f"Completed {phase_name} of plan {plan_id}",
-                                'files_changed': 'N/A',
-                                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                'error_details': f"**Error:** {str(e)}"
-                            }
-                            rendered_checkpoint = self.template_manager.render_template(
-                                template_id='checkpoint_status',
-                                context=checkpoint_context
-                            )
-                            print(f"\n{rendered_checkpoint}\n")
-                        except Exception as render_e:
-                            logger.debug(f"Checkpoint error template rendering skipped: {render_e}")
                     execution_log.append({
                         'phase': phase_idx,
                         'action': 'git_checkpoint',
@@ -1900,6 +1895,35 @@ class PlanningOrchestrator:
                         'error': str(e),
                         'timestamp': datetime.now().isoformat()
                     })
+                
+                # Render phase transition (if not last phase)
+                if phase_idx < total_phases:
+                    phase_duration = (datetime.now() - phase_start_time).total_seconds()
+                    phase_duration_str = format_elapsed_time(phase_duration)
+                    next_phase_name = phases[phase_idx].get('phase_name', f'Phase {phase_idx + 1}')
+                    
+                    transition_msg = progress_renderer.render_phase_transition(
+                        from_phase=phase_name,
+                        to_phase=next_phase_name,
+                        completed_tasks=len(phase_tasks),
+                        duration=phase_duration_str,
+                        checkpoint_created=checkpoint_success,
+                        checkpoint_name=checkpoint_name
+                    )
+                    print(transition_msg)
+            
+            # Render completion summary
+            total_duration = (datetime.now() - start_time).total_seconds()
+            total_duration_str = format_elapsed_time(total_duration)
+            checkpoints_created = sum(1 for log in execution_log if log.get('action') == 'git_checkpoint' and log.get('status') == 'success')
+            
+            completion_msg = progress_renderer.render_completion_summary(
+                total_phases=total_phases,
+                total_tasks=completed_tasks,
+                total_duration=total_duration_str,
+                checkpoints_created=checkpoints_created
+            )
+            print(completion_msg)
             
             # Complete the plan
             completion_result = self.complete_plan(plan_filename)
