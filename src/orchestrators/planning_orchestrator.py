@@ -25,6 +25,7 @@ from src.utils.progress_decorator import with_progress, yield_progress
 from src.operations.utilities.progress_renderer import ProgressRenderer, format_elapsed_time
 from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
 from src.operations.utilities.task_injection_manager import TaskInjectionManager, TaskPriority
+from src.operations.utilities.orchestration_checkpoint_manager import OrchestrationCheckpointManager
 from src.response_templates.response_template_manager import ResponseTemplateManager
 from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
@@ -133,6 +134,10 @@ class PlanningOrchestrator:
         # NEW: Initialize Task Injection Manager for mid-execution task injection (Feature 12)
         self.task_injection_manager = TaskInjectionManager()
         logger.info("✅ Task Injection Manager initialized for context-aware task injection")
+        
+        # NEW: Initialize Orchestration Checkpoint Manager for workflow recovery (Feature 11)
+        self.checkpoint_manager = OrchestrationCheckpointManager()
+        logger.info("✅ Orchestration Checkpoint Manager initialized for workflow recovery")
         
         # TDD Requirements (SKULL enforcement)
         self._tdd_dor_requirements = [
@@ -1901,6 +1906,44 @@ class PlanningOrchestrator:
                         total_tasks,
                         f"Task {task_id}: {task_name}"
                     )
+                
+                # Save orchestration checkpoint at phase boundary (Feature 11)
+                try:
+                    checkpoint_state = {
+                        'plan_id': plan_id,
+                        'phase': phase_idx,
+                        'phase_name': phase_name,
+                        'completed_tasks': completed_tasks,
+                        'total_tasks': total_tasks,
+                        'execution_log': execution_log,
+                        'timestamp': datetime.now().isoformat()
+                    }
+                    
+                    checkpoint_id = self.checkpoint_manager.save_checkpoint(
+                        orchestrator_name='planning_orchestrator',
+                        state=checkpoint_state,
+                        phase=phase_name
+                    )
+                    
+                    logger.debug(f"💾 Phase checkpoint saved: {checkpoint_id}")
+                    
+                    execution_log.append({
+                        'phase': phase_idx,
+                        'action': 'orchestration_checkpoint',
+                        'status': 'success',
+                        'checkpoint_id': checkpoint_id,
+                        'timestamp': datetime.now().isoformat()
+                    })
+                except Exception as e:
+                    logger.warning(f"Orchestration checkpoint failed at phase {phase_idx}: {e}")
+                    
+                    execution_log.append({
+                        'phase': phase_idx,
+                        'action': 'orchestration_checkpoint',
+                        'status': 'failed',
+                        'error': str(e),
+                        'timestamp': datetime.now().isoformat()
+                    })
                 
                 # Create git checkpoint at phase boundary
                 phase_start_time = datetime.now()

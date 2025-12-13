@@ -6,6 +6,7 @@ Operations Utilities - Shared components for CORTEX orchestration workflows.
 - vision_context_middleware: Automatic GPT-4V engagement for image analysis
 - orchestration_metrics_collector: Silent background metrics collection
 - task_injection_manager: Context-aware mid-execution task injection
+- orchestration_checkpoint_manager: Save/restore/rollback workflow state
 
 **Author:** Asif Hussain
 **Version:** 3.8.1
@@ -22,6 +23,11 @@ from .task_injection_manager import (
     TaskPriority,
     TaskStatus
 )
+from .orchestration_checkpoint_manager import (
+    OrchestrationCheckpointManager,
+    CheckpointNotFoundError,
+    CheckpointCorruptedError
+)
 
 __all__ = [
     "ProgressRenderer",
@@ -32,4 +38,7 @@ __all__ = [
     "TaskInjectionManager",
     "TaskPriority",
     "TaskStatus",
+    "OrchestrationCheckpointManager",
+    "CheckpointNotFoundError",
+    "CheckpointCorruptedError",
 ]
