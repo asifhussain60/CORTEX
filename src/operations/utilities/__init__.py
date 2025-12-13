@@ -8,6 +8,7 @@ Operations Utilities - Shared components for CORTEX orchestration workflows.
 - task_injection_manager: Context-aware mid-execution task injection
 - orchestration_checkpoint_manager: Save/restore/rollback workflow state
 - parallel_orchestration_coordinator: Concurrent phase execution with dependency resolution
+- orchestration_analytics_dashboard: Visualization and reporting for metrics
 
 **Author:** Asif Hussain
 **Version:** 3.8.1
@@ -35,6 +36,7 @@ from .parallel_orchestration_coordinator import (
     DependencyError,
     ResourceLockError
 )
+from .orchestration_analytics_dashboard import OrchestrationAnalyticsDashboard
 
 __all__ = [
     "ProgressRenderer",
@@ -52,4 +54,5 @@ __all__ = [
     "PhaseDefinition",
     "DependencyError",
     "ResourceLockError",
+    "OrchestrationAnalyticsDashboard",
 ]
