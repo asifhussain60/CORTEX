@@ -45,7 +45,7 @@ def dashboard_path():
     dashboard_file = output_dir / "index.html"
     
     if not dashboard_file.exists():
-        pytest.skip("Dashboard not generated yet - run test_dashboard.py first")
+        pytest.skip("Dashboard not generated yet - run tests\integration\test_dashboard.py first")
     
     return dashboard_file.as_uri()
 

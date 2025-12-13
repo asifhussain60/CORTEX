@@ -1,0 +1,63 @@
+{
+  "timestamp": "2025-12-13T11:55:47.819938",
+  "duration_seconds": 143.516273,
+  "dry_run": false,
+  "summary": {
+    "files_moved": 6,
+    "files_removed": 1,
+    "references_updated": 1,
+    "issues_fixed": 6,
+    "space_freed_mb": 0.01,
+    "errors": 0
+  },
+  "moved_files": [
+    {
+      "from": "test_dashboard.py",
+      "to": "tests\\integration\\test_dashboard.py"
+    },
+    {
+      "from": "debug_dashboard.py",
+      "to": "scripts\\utilities\\debug_dashboard.py"
+    },
+    {
+      "from": "launch_admin_dashboard.py",
+      "to": "scripts\\utilities\\launch_admin_dashboard.py"
+    },
+    {
+      "from": "preview_docs.py",
+      "to": "scripts\\utilities\\preview_docs.py"
+    },
+    {
+      "from": "MACHINE-ONBOARDING.md",
+      "to": "cortex-brain\\documents\\summaries\\MACHINE-ONBOARDING.md"
+    },
+    {
+      "from": "SETUP-GUIDE.md",
+      "to": "cortex-brain\\documents\\implementation-guides\\SETUP-GUIDE.md"
+    }
+  ],
+  "removed_files": [
+    "docs\\story\\story-template.html.backup"
+  ],
+  "updated_references": [
+    "tests\\test_dashboard_rendering.py"
+  ],
+  "validation": {
+    "passed": true,
+    "issues": []
+  },
+  "errors": [],
+  "duplicate_analysis": {
+    "duplicates_found": 151,
+    "safe_to_delete": 0,
+    "needs_review": 80,
+    "duplicates_deleted": 0,
+    "summary": {
+      "duplicate_files": 151,
+      "duplicate_functions": 825,
+      "duplicate_classes": 414,
+      "similar_module_pairs": 1953
+    },
+    "analysis_timestamp": ""
+  }
+}

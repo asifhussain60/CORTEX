@@ -460,16 +460,17 @@ operations:
     category: visualization
     status: planned
     notes: Deferred - Dashboard system requires redesign
-        modules:
-        - dashboard_launcher
-        options:
-          port: 9000
-          auto_open: true
-          source: mock
+    modules:
+      - dashboard_launcher
+    options:
+      port: 9000
+      auto_open: true
+      source: mock
+    profiles:
       no_browser:
         description: Launch dashboard without opening browser
         modules:
-        - dashboard_launcher
+          - dashboard_launcher
         options:
           port: 8080
           auto_open: false
