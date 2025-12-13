@@ -55,6 +55,12 @@ from .documentation_generation_orchestrator import (
     APIReference,
     UsageGuide
 )
+from .code_quality_orchestrator import (
+    CodeQualityOrchestrator,
+    CodeReviewReport,
+    ComplexityReport,
+    QualityScorecard
+)
 
 __all__ = [
     "ProgressRenderer",
@@ -83,4 +89,8 @@ __all__ = [
     "DocstringInfo",
     "APIReference",
     "UsageGuide",
+    "CodeQualityOrchestrator",
+    "CodeReviewReport",
+    "ComplexityReport",
+    "QualityScorecard",
 ]
