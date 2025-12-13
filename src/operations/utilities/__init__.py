@@ -49,6 +49,12 @@ from .performance_profiling_orchestrator import (
     BottleneckReport,
     RegressionReport
 )
+from .documentation_generation_orchestrator import (
+    DocumentationGenerationOrchestrator,
+    DocstringInfo,
+    APIReference,
+    UsageGuide
+)
 
 __all__ = [
     "ProgressRenderer",
@@ -73,4 +79,8 @@ __all__ = [
     "ProfileResult",
     "BottleneckReport",
     "RegressionReport",
+    "DocumentationGenerationOrchestrator",
+    "DocstringInfo",
+    "APIReference",
+    "UsageGuide",
 ]
