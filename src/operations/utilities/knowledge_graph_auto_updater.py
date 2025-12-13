@@ -10,9 +10,16 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 import yaml
 import logging
-import fcntl
 import time
 from datetime import datetime
+
+# Platform-specific imports
+try:
+    import fcntl
+    HAS_FCNTL = True
+except ImportError:
+    # fcntl not available on Windows
+    HAS_FCNTL = False
 
 logger = logging.getLogger(__name__)
 
@@ -125,6 +132,24 @@ class KnowledgeGraphAutoUpdater:
         Returns:
             True if lock acquired, False otherwise
         """
+        if not HAS_FCNTL:
+            # Windows: Use simple file existence check
+            try:
+                lock_path = self.graph_path.parent / f"{self.graph_path.name}.lock"
+                if lock_path.exists():
+                    # Check if lock is stale (>30 seconds old)
+                    if time.time() - lock_path.stat().st_mtime > 30:
+                        lock_path.unlink()  # Remove stale lock
+                    else:
+                        return False
+                lock_path.touch()
+                self._lock_file = lock_path
+                return True
+            except (OSError, IOError) as e:
+                logger.warning(f"Could not acquire lock: {e}")
+                return False
+        
+        # Unix: Use fcntl file locking
         try:
             lock_path = self.graph_path.parent / f"{self.graph_path.name}.lock"
             self._lock_file = open(lock_path, 'w')
@@ -145,6 +170,19 @@ class KnowledgeGraphAutoUpdater:
         Returns:
             True if lock released successfully
         """
+        if not HAS_FCNTL:
+            # Windows: Remove lock file
+            try:
+                if self._lock_file and isinstance(self._lock_file, Path):
+                    if self._lock_file.exists():
+                        self._lock_file.unlink()
+                    self._lock_file = None
+                return True
+            except Exception as e:
+                logger.error(f"Error releasing lock: {e}")
+                return False
+        
+        # Unix: Use fcntl unlock
         try:
             if self._lock_file:
                 fcntl.flock(self._lock_file.fileno(), fcntl.LOCK_UN)
