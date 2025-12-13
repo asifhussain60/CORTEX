@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\Cortex.Clean.Tests.csproj": {}
+    "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\Cortex.Clean.Tests.csproj": {}
   },
   "projects": {
-    "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj": {
+    "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj",
+        "projectUniqueName": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj",
         "projectName": "Cortex.Clean.API",
-        "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj",
-        "packagesPath": "C:\\Users\\asifh\\.nuget\\packages\\",
-        "outputPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\obj\\",
+        "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj",
+        "packagesPath": "C:\\Users\\ahussain\\.nuget\\packages\\",
+        "outputPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\asifh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\ahussain\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -32,11 +28,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj": {
-                "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj"
+              "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj": {
+                "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj"
               },
-              "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj": {
-                "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj"
+              "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj": {
+                "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj"
               }
             }
           }
@@ -52,7 +48,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -92,25 +88,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj": {
+    "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj",
+        "projectUniqueName": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj",
         "projectName": "Cortex.Clean.Application",
-        "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj",
-        "packagesPath": "C:\\Users\\asifh\\.nuget\\packages\\",
-        "outputPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\obj\\",
+        "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj",
+        "packagesPath": "C:\\Users\\ahussain\\.nuget\\packages\\",
+        "outputPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\asifh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\ahussain\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -124,8 +116,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj": {
-                "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj"
+              "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj": {
+                "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj"
               }
             }
           }
@@ -141,7 +133,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -184,25 +176,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj": {
+    "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj",
+        "projectUniqueName": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj",
         "projectName": "Cortex.Clean.Domain",
-        "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj",
-        "packagesPath": "C:\\Users\\asifh\\.nuget\\packages\\",
-        "outputPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\obj\\",
+        "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj",
+        "packagesPath": "C:\\Users\\ahussain\\.nuget\\packages\\",
+        "outputPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\asifh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\ahussain\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -229,7 +217,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -250,25 +238,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj": {
+    "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj",
+        "projectUniqueName": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj",
         "projectName": "Cortex.Clean.Infrastructure",
-        "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\asifh\\.nuget\\packages\\",
-        "outputPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\obj\\",
+        "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\ahussain\\.nuget\\packages\\",
+        "outputPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\asifh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\ahussain\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -282,11 +266,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj": {
-                "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj"
+              "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj": {
+                "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj"
               },
-              "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj": {
-                "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj"
+              "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj": {
+                "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj"
               }
             }
           }
@@ -302,7 +286,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -351,25 +335,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\Cortex.Clean.Tests.csproj": {
+    "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\Cortex.Clean.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\Cortex.Clean.Tests.csproj",
+        "projectUniqueName": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\Cortex.Clean.Tests.csproj",
         "projectName": "Cortex.Clean.Tests",
-        "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\Cortex.Clean.Tests.csproj",
-        "packagesPath": "C:\\Users\\asifh\\.nuget\\packages\\",
-        "outputPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\obj\\",
+        "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\Cortex.Clean.Tests.csproj",
+        "packagesPath": "C:\\Users\\ahussain\\.nuget\\packages\\",
+        "outputPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Tests\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\asifh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\ahussain\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -383,17 +363,17 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj": {
-                "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj"
+              "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj": {
+                "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.API\\Cortex.Clean.API.csproj"
               },
-              "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj": {
-                "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj"
+              "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj": {
+                "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Application\\Cortex.Clean.Application.csproj"
               },
-              "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj": {
-                "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj"
+              "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj": {
+                "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Domain\\Cortex.Clean.Domain.csproj"
               },
-              "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj": {
-                "projectPath": "D:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj"
+              "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj": {
+                "projectPath": "C:\\PROJECTS\\CORTEX\\cortex-sample-apps\\Cortex-Clean\\backend\\Cortex.Clean.Infrastructure\\Cortex.Clean.Infrastructure.csproj"
               }
             }
           }
@@ -409,7 +389,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -464,7 +444,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
