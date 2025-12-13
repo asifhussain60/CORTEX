@@ -61,6 +61,16 @@ from .code_quality_orchestrator import (
     ComplexityReport,
     QualityScorecard
 )
+from .deployment_orchestrator import (
+    DeploymentOrchestrator,
+    DeploymentResult,
+    EnvironmentConfig
+)
+from .integration_testing_orchestrator import (
+    IntegrationTestingOrchestrator,
+    TestEnvironment,
+    TestResult
+)
 
 __all__ = [
     "ProgressRenderer",
@@ -93,4 +103,10 @@ __all__ = [
     "CodeReviewReport",
     "ComplexityReport",
     "QualityScorecard",
+    "DeploymentOrchestrator",
+    "DeploymentResult",
+    "EnvironmentConfig",
+    "IntegrationTestingOrchestrator",
+    "TestEnvironment",
+    "TestResult",
 ]
