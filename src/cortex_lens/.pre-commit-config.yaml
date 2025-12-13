@@ -9,7 +9,7 @@ repos:
     rev: 24.10.0
     hooks:
       - id: black
-        language_version: python3.8
+        language_version: python3.13
         args: ['--line-length=100']
         files: ^src/cortex_lens/
 
@@ -39,7 +39,7 @@ repos:
     rev: v3.19.0
     hooks:
       - id: pyupgrade
-        args: ['--py38-plus']
+        args: ['--py313-plus']
         files: ^src/cortex_lens/
 
   # Check for Merge Conflicts
@@ -68,7 +68,7 @@ repos:
 
 # Global Configuration
 default_language_version:
-  python: python3.8
+  python: python3.13
 
 # Skip specific hooks (if needed)
 # SKIP=pytest git commit -m "Skip tests for this commit"
