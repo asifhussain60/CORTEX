@@ -7,6 +7,7 @@ Operations Utilities - Shared components for CORTEX orchestration workflows.
 - orchestration_metrics_collector: Silent background metrics collection
 - task_injection_manager: Context-aware mid-execution task injection
 - orchestration_checkpoint_manager: Save/restore/rollback workflow state
+- parallel_orchestration_coordinator: Concurrent phase execution with dependency resolution
 
 **Author:** Asif Hussain
 **Version:** 3.8.1
@@ -28,6 +29,12 @@ from .orchestration_checkpoint_manager import (
     CheckpointNotFoundError,
     CheckpointCorruptedError
 )
+from .parallel_orchestration_coordinator import (
+    ParallelOrchestrationCoordinator,
+    PhaseDefinition,
+    DependencyError,
+    ResourceLockError
+)
 
 __all__ = [
     "ProgressRenderer",
@@ -41,4 +48,8 @@ __all__ = [
     "OrchestrationCheckpointManager",
     "CheckpointNotFoundError",
     "CheckpointCorruptedError",
+    "ParallelOrchestrationCoordinator",
+    "PhaseDefinition",
+    "DependencyError",
+    "ResourceLockError",
 ]
