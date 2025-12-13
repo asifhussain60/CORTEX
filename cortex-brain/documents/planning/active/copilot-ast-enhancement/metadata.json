@@ -1,0 +1,30 @@
+{
+  "plan_name": "AST-Powered Copilot Instructions Enhancement",
+  "version": "1.0",
+  "status": "in_progress",
+  "created_date": "2024-12-12",
+  "completed_date": null,
+  "features": [
+    "Abstract Syntax Tree (AST) integration",
+    "Enhanced code understanding",
+    "Intelligent instruction generation",
+    "Context-aware suggestions",
+    "Code pattern recognition"
+  ],
+  "test_coverage": {
+    "ast_parsing": "85%",
+    "instruction_generation": "80%",
+    "integration": "75%"
+  },
+  "git_commits": [
+    "Tracked in copilot enhancement commits"
+  ],
+  "related_plans": [
+    "../../cortex-4.0/",
+    "../tech-stack-enhancements/"
+  ],
+  "documents": {
+    "MASTER-PLAN.md": "AST-powered copilot enhancement plan (17KB)"
+  },
+  "notes": "Leveraging AST for improved Copilot instruction generation. Enhances code understanding and context-aware assistance."
+}

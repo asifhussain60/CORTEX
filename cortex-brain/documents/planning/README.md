@@ -62,9 +62,113 @@ planning/
 
 **Files:**
 - `MASTER-PLAN.md` - Unified dashboard strategy
-- `metadata.json` - Notes 11 other dashboard plans for Phase 2 migration
+- `metadata.json` - Notes 11 other dashboard plans migrated in Phase 2
 
-**Related Plans:** `admin-dashboard-enhancement`, `cortex-4.0/`
+**Related Plans:** `admin-dashboard-enhancement`, `dashboard-consolidation`, `cortex-4.0/`
+
+---
+
+### 📂 [dashboard-consolidation](./active/dashboard-consolidation/) ✨ **NEW - Phase 2**
+**Status:** In Progress  
+**Focus:** Comprehensive dashboard modernization across all areas
+
+**Documents (14 files):**
+- `MASTER-PLAN.md` - Primary consolidation strategy (78KB)
+- `COMPREHENSIVE-ENHANCEMENT.md` - Full enhancement plan (74KB)
+- `COLLECTOR-ENHANCEMENT.md` - Collector improvements (44KB)
+- `TDD-REFACTOR-PLAN.md` - TDD-driven refactoring (22KB)
+- `INTELLIGENT-ENHANCEMENT.md` - AI/ML capabilities (27KB)
+- `CSS-REFACTORING-PLAN.md` - CSS modernization (28KB)
+- `RECONCILIATION-ENGINE.md` - Data reconciliation (45KB)
+- `V3-NARRATIVE-SUMMARY.md` - Dashboard V3 narrative (66KB)
+- `V3-OVERVIEW-TAB.md` - V3 overview redesign (29KB)
+- `ADVANCED-VIEWS-PROPOSAL.md` - Advanced views proposal (19KB)
+- `ADVANCED-VIEWS-SPECIFICATION.md` - Advanced views spec (27KB)
+- `ONBOARDING-SYSTEM-ENHANCEMENT.md` - Onboarding system (26KB)
+- `ONBOARDING-UNIFICATION.md` - Onboarding unification (16KB)
+- `ONBOARDING-ALIGNMENT.md` - Onboarding alignment (16KB)
+- `metadata.json` - Tracking & relationships
+
+**Related Plans:** `admin-dashboard-enhancement`, `dashboard-unified-plan`, `cortex-4.0/`
+
+---
+
+### 📂 [security-threat-modeling](./active/security-threat-modeling/) ✨ **NEW - Phase 2**
+**Status:** In Progress  
+**Focus:** Threat modeling framework and security integration
+
+**Documents:**
+- `MASTER-PLAN.md` - Threat modeling integration (31KB)
+- `AUDIT-REPORT.md` - Initial audit findings (13KB)
+- `metadata.json` - Tracking & relationships
+
+**Related Plans:** `integration-testing`, `cortex-4.0/`
+
+---
+
+### 📂 [integration-testing](./active/integration-testing/) ✨ **NEW - Phase 2**
+**Status:** In Progress  
+**Focus:** Comprehensive integration test suite across all layers
+
+**Files:**
+- `MASTER-PLAN.md` - Integration testing framework (30KB)
+- `metadata.json` - Tracking & relationships
+
+**Related Plans:** `orchestration-master-plan`, `security-threat-modeling`, `cortex-4.0/`
+
+---
+
+### 📂 [tech-stack-enhancements](./active/tech-stack-enhancements/) ✨ **NEW - Phase 2**
+**Status:** In Progress  
+**Focus:** Technology stack modernization and framework upgrades
+
+**Files:**
+- `MASTER-PLAN.md` - Tech stack enhancement strategy (34KB)
+- `metadata.json` - Tracking & relationships
+
+**Related Plans:** `copilot-ast-enhancement`, `cortex-4.0/`
+
+---
+
+### 📂 [copilot-ast-enhancement](./active/copilot-ast-enhancement/) ✨ **NEW - Phase 2**
+**Status:** In Progress  
+**Focus:** AST-powered Copilot instructions enhancement
+
+**Files:**
+- `MASTER-PLAN.md` - AST enhancement plan (17KB)
+- `metadata.json` - Tracking & relationships
+
+**Related Plans:** `tech-stack-enhancements`, `cortex-4.0/`
+
+---
+
+## 🔧 ADO Integration Plans ✨ **NEW - Phase 2**
+
+### 📂 [ra-migration](./ado/ra-migration/)
+**Status:** Complete  
+**Focus:** Research Administration funding & invoices migration
+
+**Documents (5 files):**
+- `RA-MIGRATION-PLAN-V2.md` - Initial V2 migration (51KB)
+- `RA-MIGRATION-PLAN-V2.2.md` - Updated V2.2 migration (15KB)
+- `FUNDING-INVOICES-MIGRATION-PLAN.md` - Funding/invoices (121KB)
+- `PROGRESS-TRACKER.md` - Migration progress tracking (28KB)
+- `COHERENCE-AUDIT.md` - Data coherence validation (21KB)
+- `metadata.json` - Tracking & relationships
+
+**Related Plans:** `ado-feature-reimbursement`, `admin-dashboard-enhancement`
+
+---
+
+### 📂 [ado-feature-reimbursement](./ado/ado-feature-reimbursement/)
+**Status:** Complete  
+**Focus:** ADO Feature - Reimbursement authentication
+
+**Files:**
+- `MASTER-PLAN.md` - Authentication implementation (12KB)
+- `metadata.json` - Tracking & relationships
+
+**Related Plans:** `ra-migration`, `admin-dashboard-enhancement`
 
 ---
 
@@ -188,10 +292,27 @@ python -c "from src.operations.modules.orchestration import system_maintenance_o
 **Commit:** `ec71c6a03` - December 13, 2024  
 **Changes:** 21 files changed, 1,527 insertions(+)
 
-### Phase 2: MEDIUM Priority ⏳ **PENDING**
-- ADO integration plans (ado-planning-manifest.yaml, etc.)
-- Application feature plans
-- 13 plans total, estimated 1 week
+---
+
+### Phase 2: MEDIUM Priority ✅ **COMPLETE**
+
+**ADO Integration Plans (2 folders, 6 files):**
+- ✅ ra-migration → `ado/ra-migration/` (5 files: V2 plan, V2.2 plan, funding invoices, progress tracker, coherence audit)
+- ✅ ado-feature-reimbursement → `ado/ado-feature-reimbursement/` (1 file: authentication master plan)
+
+**Dashboard Plans (1 folder, 14 files):**
+- ✅ dashboard-consolidation → `active/dashboard-consolidation/` (14 files: master plan, comprehensive enhancement, collectors, TDD refactor, intelligent enhancements, CSS refactoring, reconciliation engine, V3 narrative, V3 overview tab, advanced views proposal & spec, 3 onboarding plans)
+
+**Other MEDIUM Priority Plans (4 folders, 5 files):**
+- ✅ security-threat-modeling → `active/security-threat-modeling/` (2 files: master plan, audit report)
+- ✅ integration-testing → `active/integration-testing/` (1 file: master plan)
+- ✅ tech-stack-enhancements → `active/tech-stack-enhancements/` (1 file: master plan)
+- ✅ copilot-ast-enhancement → `active/copilot-ast-enhancement/` (1 file: master plan)
+
+**Commit:** TBD - December 13, 2024  
+**Changes:** TBD files changed, 7 folders created, 25+ files migrated
+
+---
 
 ### Phase 3: LOW Priority ⏳ **PENDING**
 - Completed phase reports
