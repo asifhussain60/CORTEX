@@ -35,28 +35,43 @@ class GitCheckpointOrchestrator:
         Args:
             project_root: Root directory of git repository
         """
-        self.project_root = Path(project_root)
+        # Store as string for backward compatibility with tests
+        self.project_root = str(project_root) if not isinstance(project_root, str) else project_root
+        self._project_path = Path(project_root)
         self.checkpoint_prefix = "CORTEX-TDD"
     
     def create_checkpoint(
         self,
-        session_id: str,
-        checkpoint_type: str,
-        message: str,
-        metadata: Optional[Dict[str, Any]] = None
+        session_id: str = None,
+        checkpoint_type: str = None,
+        message: str = "",
+        metadata: Optional[Dict[str, Any]] = None,
+        phase: str = None  # Backward compatibility with tests
     ) -> Dict[str, Any]:
         """
         Create a git checkpoint.
         
         Args:
-            session_id: TDD session identifier
+            session_id: TDD session identifier (optional, generated if not provided)
             checkpoint_type: Type of checkpoint (e.g., "phase-RED", "phase-GREEN")
             message: Checkpoint message
             metadata: Optional metadata dict (supports: task_id, feature_name, work_item_id)
+            phase: Alternative parameter name for checkpoint_type (backward compatibility)
             
         Returns:
             Dict with success, checkpoint_id, commit_sha
         """
+        # Handle backward compatibility: 'phase' parameter
+        if phase and not checkpoint_type:
+            checkpoint_type = f"phase-{phase}"
+        
+        # Generate session_id if not provided
+        if not session_id:
+            session_id = f"session-{uuid.uuid4().hex[:8]}"
+        
+        # Default checkpoint_type if not provided
+        if not checkpoint_type:
+            checkpoint_type = "checkpoint"
         # Subtle hint: Orchestrator engagement
         from logging import getLogger
         logger = getLogger(__name__)
@@ -91,7 +106,7 @@ class GitCheckpointOrchestrator:
             # Stage all changes
             subprocess.run(
                 ["git", "add", "-A"],
-                cwd=self.project_root,
+                cwd=self._project_path,
                 check=True,
                 capture_output=True
             )
@@ -99,7 +114,7 @@ class GitCheckpointOrchestrator:
             # Create commit
             result = subprocess.run(
                 ["git", "commit", "-m", commit_message],
-                cwd=self.project_root,
+                cwd=self._project_path,
                 check=True,
                 capture_output=True,
                 text=True
@@ -108,7 +123,7 @@ class GitCheckpointOrchestrator:
             # Get commit SHA
             sha_result = subprocess.run(
                 ["git", "rev-parse", "HEAD"],
-                cwd=self.project_root,
+                cwd=self._project_path,
                 check=True,
                 capture_output=True,
                 text=True
@@ -233,7 +248,7 @@ class GitCheckpointOrchestrator:
                     "--pretty=format:%H",
                     "-1"
                 ],
-                cwd=self.project_root,
+                cwd=self._project_path,
                 check=True,
                 capture_output=True,
                 text=True
@@ -249,7 +264,7 @@ class GitCheckpointOrchestrator:
             # Reset to checkpoint
             subprocess.run(
                 ["git", "reset", "--hard", commit_sha],
-                cwd=self.project_root,
+                cwd=self._project_path,
                 check=True,
                 capture_output=True
             )
@@ -265,6 +280,18 @@ class GitCheckpointOrchestrator:
                 "success": False,
                 "error": str(e)
             }
+    
+    def rollback(self, checkpoint_id: str) -> Dict[str, Any]:
+        """
+        Rollback to a specific checkpoint (alias for restore_checkpoint).
+        
+        Args:
+            checkpoint_id: Checkpoint ID to restore
+            
+        Returns:
+            Dict with success status
+        """
+        return self.restore_checkpoint(checkpoint_id)
     
     def create_auto_checkpoint(
         self,

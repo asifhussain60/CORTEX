@@ -1,0 +1,302 @@
+{
+  "Feature 5::Phase 5.1 (RED)": {
+    "feature_name": "Feature 5",
+    "phase_name": "Phase 5.1 (RED)",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.302799",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 5::Phase 5.1": {
+    "feature_name": "Feature 5",
+    "phase_name": "Phase 5.1",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.304480",
+    "end_time": "2025-12-12T16:45:55.304551",
+    "estimated_hours": 0.5,
+    "actual_hours": 1.9722222222222225e-08,
+    "failure_reason": null
+  },
+  "Feature 5::Phase 5.2": {
+    "feature_name": "Feature 5",
+    "phase_name": "Phase 5.2",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.304681",
+    "end_time": null,
+    "estimated_hours": 0.75,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 1::Phase 1.1": {
+    "feature_name": "Feature 1",
+    "phase_name": "Phase 1.1",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.491694",
+    "end_time": "2025-12-12T16:45:55.491914",
+    "estimated_hours": 0.5,
+    "actual_hours": 6.111111111111111e-08,
+    "failure_reason": null
+  },
+  "Feature 1::Phase 1.2": {
+    "feature_name": "Feature 1",
+    "phase_name": "Phase 1.2",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.367621",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 1::Phase 1.3": {
+    "feature_name": "Feature 1",
+    "phase_name": "Phase 1.3",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.342320",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "PlanningOrchestrator::DoR Validation": {
+    "feature_name": "PlanningOrchestrator",
+    "phase_name": "DoR Validation",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.373545",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "TDDOrchestrator::RED Phase": {
+    "feature_name": "TDDOrchestrator",
+    "phase_name": "RED Phase",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.376172",
+    "end_time": "2025-12-12T16:45:55.376274",
+    "estimated_hours": 0.5,
+    "actual_hours": 2.8333333333333332e-08,
+    "failure_reason": null
+  },
+  "TDDOrchestrator::GREEN Phase": {
+    "feature_name": "TDDOrchestrator",
+    "phase_name": "GREEN Phase",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.376374",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "TDDEnvironmentGate::Validation": {
+    "feature_name": "TDDEnvironmentGate",
+    "phase_name": "Validation",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.376792",
+    "end_time": "2025-12-12T16:45:55.376919",
+    "estimated_hours": 0.01,
+    "actual_hours": 3.527777777777778e-08,
+    "failure_reason": null
+  },
+  "Feature 0::Phase 0": {
+    "feature_name": "Feature 0",
+    "phase_name": "Phase 0",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.492543",
+    "end_time": "2025-12-12T16:45:55.492674",
+    "estimated_hours": 0.5,
+    "actual_hours": 3.6388888888888895e-08,
+    "failure_reason": null
+  },
+  "Feature 1::Phase 1": {
+    "feature_name": "Feature 1",
+    "phase_name": "Phase 1",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.492794",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 2::Phase 2": {
+    "feature_name": "Feature 2",
+    "phase_name": "Phase 2",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.492923",
+    "end_time": "2025-12-12T16:45:55.493049",
+    "estimated_hours": 0.5,
+    "actual_hours": 3.5e-08,
+    "failure_reason": null
+  },
+  "Feature 3::Phase 3": {
+    "feature_name": "Feature 3",
+    "phase_name": "Phase 3",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.493181",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 4::Phase 4": {
+    "feature_name": "Feature 4",
+    "phase_name": "Phase 4",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.493330",
+    "end_time": "2025-12-12T16:45:55.493487",
+    "estimated_hours": 0.5,
+    "actual_hours": 4.361111111111111e-08,
+    "failure_reason": null
+  },
+  "Feature 5::Phase 5": {
+    "feature_name": "Feature 5",
+    "phase_name": "Phase 5",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.493650",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 6::Phase 6": {
+    "feature_name": "Feature 6",
+    "phase_name": "Phase 6",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.493827",
+    "end_time": "2025-12-12T16:45:55.494035",
+    "estimated_hours": 0.5,
+    "actual_hours": 5.7777777777777775e-08,
+    "failure_reason": null
+  },
+  "Feature 7::Phase 7": {
+    "feature_name": "Feature 7",
+    "phase_name": "Phase 7",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.494207",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 8::Phase 8": {
+    "feature_name": "Feature 8",
+    "phase_name": "Phase 8",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.494364",
+    "end_time": "2025-12-12T16:45:55.494520",
+    "estimated_hours": 0.5,
+    "actual_hours": 4.333333333333333e-08,
+    "failure_reason": null
+  },
+  "Feature 9::Phase 9": {
+    "feature_name": "Feature 9",
+    "phase_name": "Phase 9",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.494671",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 10::Phase 10": {
+    "feature_name": "Feature 10",
+    "phase_name": "Phase 10",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.494829",
+    "end_time": "2025-12-12T16:45:55.495049",
+    "estimated_hours": 0.5,
+    "actual_hours": 6.111111111111111e-08,
+    "failure_reason": null
+  },
+  "Feature 11::Phase 11": {
+    "feature_name": "Feature 11",
+    "phase_name": "Phase 11",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.495238",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 12::Phase 12": {
+    "feature_name": "Feature 12",
+    "phase_name": "Phase 12",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.495425",
+    "end_time": "2025-12-12T16:45:55.495614",
+    "estimated_hours": 0.5,
+    "actual_hours": 5.250000000000001e-08,
+    "failure_reason": null
+  },
+  "Feature 13::Phase 13": {
+    "feature_name": "Feature 13",
+    "phase_name": "Phase 13",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.495781",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 14::Phase 14": {
+    "feature_name": "Feature 14",
+    "phase_name": "Phase 14",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.495953",
+    "end_time": "2025-12-12T16:45:55.496152",
+    "estimated_hours": 0.5,
+    "actual_hours": 5.527777777777778e-08,
+    "failure_reason": null
+  },
+  "Feature 15::Phase 15": {
+    "feature_name": "Feature 15",
+    "phase_name": "Phase 15",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.496354",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 16::Phase 16": {
+    "feature_name": "Feature 16",
+    "phase_name": "Phase 16",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.496542",
+    "end_time": "2025-12-12T16:45:55.496737",
+    "estimated_hours": 0.5,
+    "actual_hours": 5.416666666666667e-08,
+    "failure_reason": null
+  },
+  "Feature 17::Phase 17": {
+    "feature_name": "Feature 17",
+    "phase_name": "Phase 17",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.496945",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  },
+  "Feature 18::Phase 18": {
+    "feature_name": "Feature 18",
+    "phase_name": "Phase 18",
+    "status": "completed",
+    "start_time": "2025-12-12T16:45:55.497179",
+    "end_time": "2025-12-12T16:45:55.497412",
+    "estimated_hours": 0.5,
+    "actual_hours": 6.472222222222222e-08,
+    "failure_reason": null
+  },
+  "Feature 19::Phase 19": {
+    "feature_name": "Feature 19",
+    "phase_name": "Phase 19",
+    "status": "in_progress",
+    "start_time": "2025-12-12T16:45:55.497645",
+    "end_time": null,
+    "estimated_hours": 0.5,
+    "actual_hours": null,
+    "failure_reason": null
+  }
+}
