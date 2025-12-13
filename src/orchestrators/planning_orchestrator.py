@@ -20,9 +20,11 @@ from typing import Dict, List, Optional, Any, Tuple, Callable
 from pathlib import Path
 import logging
 import re
+import signal
 from src.utils.progress_decorator import with_progress, yield_progress
 from src.operations.utilities.progress_renderer import ProgressRenderer, format_elapsed_time
 from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
+from src.operations.utilities.task_injection_manager import TaskInjectionManager, TaskPriority
 from src.response_templates.response_template_manager import ResponseTemplateManager
 from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
@@ -38,6 +40,8 @@ from src.orchestrators.tdd_intelligence import TDDIntelligence, get_tdd_intellig
 from src.tier1.user_profile_manager import UserProfileManager
 from src.utils.manifest_validator import ManifestValidator, ValidationSeverity
 
+logger = logging.getLogger(__name__)
+
 # Import Review Orchestrator for pre-planning architecture assessment (REQ-003)
 try:
     from src.operations.modules.architectural.review_orchestrator import ReviewOrchestrator
@@ -45,8 +49,6 @@ try:
 except ImportError:
     REVIEW_ORCHESTRATOR_AVAILABLE = False
     logger.warning("Review Orchestrator not available - architectural pre-assessment disabled")
-
-logger = logging.getLogger(__name__)
 
 
 class PlanningOrchestrator:
@@ -127,6 +129,10 @@ class PlanningOrchestrator:
         # NEW: Initialize TDD intelligence module for smart TDD enforcement
         self.tdd_intelligence = get_tdd_intelligence()
         logger.info("✅ TDD intelligence initialized for intelligent TDD enforcement")
+        
+        # NEW: Initialize Task Injection Manager for mid-execution task injection (Feature 12)
+        self.task_injection_manager = TaskInjectionManager()
+        logger.info("✅ Task Injection Manager initialized for context-aware task injection")
         
         # TDD Requirements (SKULL enforcement)
         self._tdd_dor_requirements = [
@@ -1827,6 +1833,31 @@ class PlanningOrchestrator:
                 
                 # Execute each task in phase
                 for task_idx, task in enumerate(phase_tasks, 1):
+                    # Check for injected high-priority tasks BEFORE current task
+                    injected_task = self.task_injection_manager.get_next_task()
+                    if injected_task:
+                        injected_task_name = injected_task.get('task_name', 'Injected Task')
+                        injected_priority = injected_task.get('priority', TaskPriority.MEDIUM)
+                        
+                        logger.info(f"🚨 INJECTED TASK ({injected_priority.name}): {injected_task_name}")
+                        print(f"\n🚨 **INJECTED TASK** (Priority: {injected_priority.name})\n   Task: {injected_task_name}\n")
+                        
+                        # Execute injected task (log for now)
+                        execution_log.append({
+                            'phase': phase_idx,
+                            'phase_name': phase_name,
+                            'task_id': f'INJECTED-{injected_task.get("task_id")}',
+                            'task_name': injected_task_name,
+                            'priority': injected_priority.name,
+                            'status': 'completed',
+                            'injected': True,
+                            'timestamp': datetime.now().isoformat()
+                        })
+                        
+                        # Mark injected task as complete
+                        self.task_injection_manager.mark_complete(injected_task['task_id'])
+                        completed_tasks += 1
+                    
                     task_id = task.get('task_id', f'{phase_idx}.{task_idx}')
                     task_name = task.get('task', 'Unnamed task')
                     
@@ -1846,7 +1877,8 @@ class PlanningOrchestrator:
                     elapsed_seconds = (datetime.now() - start_time).total_seconds()
                     elapsed_str = format_elapsed_time(elapsed_seconds)
                     
-                    # Render task progress for real-time visibility
+                    # Render task progress for real-time visibility (with injected tasks)
+                    injected_task_list = self.task_injection_manager.render_task_list_for_progress()
                     task_progress_msg = progress_renderer.render_task_progress(
                         current=completed_tasks,
                         total=total_tasks,
@@ -1856,6 +1888,11 @@ class PlanningOrchestrator:
                         task_name=task_name,
                         elapsed_time=elapsed_str
                     )
+                    
+                    # Append injected task visualization if tasks are pending
+                    if injected_task_list:
+                        task_progress_msg += f"\n{injected_task_list}"
+                    
                     print(task_progress_msg)
                     
                     # Also update internal progress tracker
