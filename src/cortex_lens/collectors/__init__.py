@@ -23,8 +23,26 @@ Registry:
 
 from .base import BaseCollector
 from .registry import CollectorRegistry
+from .health_collector import HealthCollector
+from .architecture_collector import ArchitectureCollector
+from .api_endpoint_collector import APIEndpointCollector
+from .comment_collector import CommentCollector
+from .tech_stack_collector import TechStackCollector
+from .dependency_collector import DependencyCollector
+from .security_collector import SecurityCollector
+from .complexity_collector import ComplexityCollector
+from .test_coverage_collector import TestCoverageCollector
 
 __all__ = [
     'BaseCollector',
     'CollectorRegistry',
+    'HealthCollector',
+    'ArchitectureCollector',
+    'APIEndpointCollector',
+    'CommentCollector',
+    'TechStackCollector',
+    'DependencyCollector',
+    'SecurityCollector',
+    'ComplexityCollector',
+    'TestCoverageCollector',
 ]

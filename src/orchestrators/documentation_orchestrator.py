@@ -8,6 +8,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
 
 
 class DocumentationOrchestrator:
@@ -44,6 +45,7 @@ class DocumentationOrchestrator:
                          self.decisions_dir, self.refactorings_dir, self.assets_dir]:
             dir_path.mkdir(parents=True, exist_ok=True)
     
+    @with_orchestration_metrics("DocumentationOrchestrator")
     def document_phase_completion(
         self,
         phase_number: int,

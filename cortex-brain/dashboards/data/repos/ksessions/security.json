@@ -1,6 +1,6 @@
 {
   "overall_score": 0,
-  "last_scan": "2025-12-11T06:57:54.820453",
+  "last_scan": "2025-12-13T07:22:59.748792",
   "categories": [
     {
       "name": "code_security",
@@ -99,10 +99,10 @@
           {
             "type": "Connection String with Password",
             "severity": "critical",
-            "file": "Source Code\\Sessions.Spa\\bin\\KSESSIONS.dll.config",
-            "line": 12,
+            "file": "Source Code\\Sessions.Spa\\Web.Debug.config",
+            "line": 13,
             "description": "Connection String with Password found in plain text",
-            "masked_value": "Dat****************************************************************************************************************************************************************************",
+            "masked_value": "Dat**********************************************************************************************************************************",
             "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
           }
         ],
@@ -119,15 +119,6 @@
         "status": "fail",
         "findings_count": 2169,
         "findings": [
-          {
-            "type": "SQL Injection",
-            "severity": "high",
-            "file": "Source Code\\Sessions.Business\\XpathHelper.cs",
-            "line": 108,
-            "description": "Inline SQL with string concatenation detected",
-            "code_snippet": "string returnVal = doc.DocumentNode.SelectSingleNode(\"//\" + tag).InnerHtml;",
-            "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
-          },
           {
             "type": "SQL Injection",
             "severity": "high",
@@ -154,6 +145,15 @@
             "description": "SQL query using string interpolation - potential injection",
             "code_snippet": "//            .Replace(\"$$TEXT_QUESTION_ROWS$$\", nonSelectableRows);",
             "recommendation": "Replace string interpolation with parameterized queries"
+          },
+          {
+            "type": "SQL Injection",
+            "severity": "high",
+            "file": "Source Code\\Sessions.Business\\XpathHelper.cs",
+            "line": 108,
+            "description": "Inline SQL with string concatenation detected",
+            "code_snippet": "string returnVal = doc.DocumentNode.SelectSingleNode(\"//\" + tag).InnerHtml;",
+            "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
           },
           {
             "type": "SQL Injection",
@@ -282,10 +282,10 @@
           {
             "type": "Connection String with Password",
             "severity": "critical",
-            "file": "Source Code\\Sessions.Spa\\bin\\KSESSIONS.dll.config",
-            "line": 12,
+            "file": "Source Code\\Sessions.Spa\\Web.Debug.config",
+            "line": 13,
             "description": "Connection String with Password found in plain text",
-            "masked_value": "Dat****************************************************************************************************************************************************************************",
+            "masked_value": "Dat**********************************************************************************************************************************",
             "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
           }
         ],
@@ -354,7 +354,7 @@
     ],
     "overall_compliance": 64.0909090909091,
     "version": "2025",
-    "last_updated": "2025-12-11T06:57:54.331921"
+    "last_updated": "2025-12-13T07:22:59.370029"
   },
   "compliance": {
     "gdpr_ready": false,
@@ -381,15 +381,6 @@
       {
         "type": "SQL Injection",
         "severity": "high",
-        "file": "Source Code\\Sessions.Business\\XpathHelper.cs",
-        "line": 108,
-        "description": "Inline SQL with string concatenation detected",
-        "code_snippet": "string returnVal = doc.DocumentNode.SelectSingleNode(\"//\" + tag).InnerHtml;",
-        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
-      },
-      {
-        "type": "SQL Injection",
-        "severity": "high",
         "file": "Source Code\\Sessions.Business\\EmailService.cs",
         "line": 120,
         "description": "SQL query built with String.Format - injection risk",
@@ -413,6 +404,15 @@
         "description": "SQL query using string interpolation - potential injection",
         "code_snippet": "//            .Replace(\"$$TEXT_QUESTION_ROWS$$\", nonSelectableRows);",
         "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Source Code\\Sessions.Business\\XpathHelper.cs",
+        "line": 108,
+        "description": "Inline SQL with string concatenation detected",
+        "code_snippet": "string returnVal = doc.DocumentNode.SelectSingleNode(\"//\" + tag).InnerHtml;",
+        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
       },
       {
         "type": "SQL Injection",
@@ -480,60 +480,6 @@
       {
         "type": "SQL Injection",
         "severity": "high",
-        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminController.cs",
-        "line": 301,
-        "description": "SQL query built with String.Format - injection risk",
-        "code_snippet": "//_logService.Warn(string.Format(\"API [api/admin/summary/{1}/delete] -  Deleting resource file {0} f",
-        "recommendation": "Use parameterized queries instead of string formatting"
-      },
-      {
-        "type": "SQL Injection",
-        "severity": "high",
-        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminController.cs",
-        "line": 717,
-        "description": "SQL query using string interpolation - potential injection",
-        "code_snippet": "LogService.Info($\"[TEMP-DEBUG] AdminController received {tokens.Count} tokens from repository\");",
-        "recommendation": "Replace string interpolation with parameterized queries"
-      },
-      {
-        "type": "SQL Injection",
-        "severity": "high",
-        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\GroupController.cs",
-        "line": 325,
-        "description": "SQL query built with String.Format - injection risk",
-        "code_snippet": "//_logService.Warn(string.Format(\"[API api/session/{0}/remove/{1}] - About to call DeleteMediaFile m",
-        "recommendation": "Use parameterized queries instead of string formatting"
-      },
-      {
-        "type": "SQL Injection",
-        "severity": "high",
-        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\GroupController.cs",
-        "line": 344,
-        "description": "SQL query built with String.Format - injection risk",
-        "code_snippet": "//_logService.Warn(string.Format(\"[API api/session/{0}/media/{1}/delete] - About to call DeleteMedia",
-        "recommendation": "Use parameterized queries instead of string formatting"
-      },
-      {
-        "type": "SQL Injection",
-        "severity": "high",
-        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\GroupController.cs",
-        "line": 372,
-        "description": "Inline SQL with string concatenation detected",
-        "code_snippet": "string deleteFile = HttpContext.Current.Server.MapPath(\"~/Resources/MEDIA/\") + media + \".mp3\";",
-        "recommendation": "Use parameterized queries with SqlParameter/OracleParameter"
-      },
-      {
-        "type": "SQL Injection",
-        "severity": "high",
-        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\H2TranscriptTestController.cs",
-        "line": 247,
-        "description": "SQL query using string interpolation - potential injection",
-        "code_snippet": "LogService.Error($\"H2TranscriptTest: Failed to extract title from section {i}\");",
-        "recommendation": "Replace string interpolation with parameterized queries"
-      },
-      {
-        "type": "SQL Injection",
-        "severity": "high",
         "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
         "line": 354,
         "description": "SQL query using string interpolation - potential injection",
@@ -556,6 +502,60 @@
         "line": 1300,
         "description": "SQL query using string interpolation - potential injection",
         "code_snippet": "LogService.Info($\"Starting database restore from backup: {request.BackupFileName}\", this.GetType().N",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
+        "line": 1674,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "UpdateExportProgress(processId, \"Data Export\", $\"Exporting data from table: {tableName}\",",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
+        "line": 1761,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "scriptBuilder.AppendLine($\"IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[d",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
+        "line": 1807,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "var dataQuery = $\"SELECT * FROM [{tableName}]\";",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
+        "line": 1831,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "scriptBuilder.AppendLine($\"INSERT INTO [{tableName}] ({string.Join(\", \", columnNames)}) VALUES ({str",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
+        "line": 2499,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "LogService.Info($\"Successfully recorded sync history for syncId: {syncId}. Total entries: {updatedHi",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
+        "line": 2518,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "LogService.Info($\"Starting {syncType} synchronization from {source} to {destination}\", this.GetType(",
         "recommendation": "Replace string interpolation with parameterized queries"
       }
     ],
@@ -599,24 +599,6 @@
       {
         "type": "Connection String with Password",
         "severity": "critical",
-        "file": "Source Code\\Sessions.Spa\\bin\\KSESSIONS.dll.config",
-        "line": 12,
-        "description": "Connection String with Password found in plain text",
-        "masked_value": "Dat****************************************************************************************************************************************************************************",
-        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-      },
-      {
-        "type": "Connection String with Password",
-        "severity": "critical",
-        "file": "Source Code\\Sessions.Spa\\bin\\KSESSIONS.dll.config",
-        "line": 13,
-        "description": "Connection String with Password found in plain text",
-        "masked_value": "Dat***********************************************************************************************************************************************************************",
-        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-      },
-      {
-        "type": "Connection String with Password",
-        "severity": "critical",
         "file": "Source Code\\Sessions.Spa\\Web.Debug.config",
         "line": 13,
         "description": "Connection String with Password found in plain text",
@@ -630,6 +612,24 @@
         "line": 19,
         "description": "Connection String with Password found in plain text",
         "masked_value": "Dat*****************************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source Code\\Sessions.Spa\\bin\\KSESSIONS.dll.config",
+        "line": 12,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat****************************************************************************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source Code\\Sessions.Spa\\bin\\KSESSIONS.dll.config",
+        "line": 13,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat***********************************************************************************************************************************************************************",
         "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
       },
       {

@@ -1,0 +1,90 @@
+{
+  "template_name": "api_service",
+  "display_name": "API Service",
+  "description": "REST APIs, GraphQL services, and microservice endpoints",
+  "version": "1.0.0",
+  "tabs": [
+    {
+      "id": "overview",
+      "label": "Overview",
+      "icon": "📊",
+      "enabled": true,
+      "components": [
+        "kpi-cards",
+        "api-summary",
+        "health-overview",
+        "performance-metrics"
+      ]
+    },
+    {
+      "id": "endpoints",
+      "label": "API Endpoints",
+      "icon": "🔌",
+      "enabled": true,
+      "components": [
+        "endpoint-catalog",
+        "route-hierarchy",
+        "http-methods-distribution",
+        "authentication-patterns"
+      ]
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "icon": "🔒",
+      "enabled": true,
+      "components": [
+        "security-score",
+        "vulnerability-scan",
+        "auth-mechanisms",
+        "cors-configuration",
+        "rate-limiting"
+      ]
+    },
+    {
+      "id": "data-models",
+      "label": "Data Models",
+      "icon": "📋",
+      "enabled": true,
+      "components": [
+        "schema-registry",
+        "request-response-models",
+        "validation-rules",
+        "serialization-formats"
+      ]
+    },
+    {
+      "id": "dependencies",
+      "label": "Dependencies",
+      "icon": "📦",
+      "enabled": true,
+      "components": [
+        "dependency-tree",
+        "version-matrix",
+        "security-advisories",
+        "update-recommendations"
+      ]
+    },
+    {
+      "id": "testing",
+      "label": "Testing",
+      "icon": "🧪",
+      "enabled": true,
+      "components": [
+        "api-test-coverage",
+        "integration-tests",
+        "contract-testing",
+        "load-testing-results"
+      ]
+    }
+  ],
+  "features": {
+    "narrative_panel": true,
+    "reconciliation_widget": true,
+    "openapi_export": true,
+    "postman_collection": true,
+    "export_formats": ["json", "yaml", "csv", "openapi"],
+    "theme_support": true,
+    "responsive_design": true
+  }
+}

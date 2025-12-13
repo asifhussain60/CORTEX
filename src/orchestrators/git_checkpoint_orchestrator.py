@@ -16,6 +16,7 @@ from typing import Dict, Optional, Any
 import uuid
 from src.learning.event_collector import get_global_collector
 from src.learning.event_taxonomy import LearningEvent, EventType
+from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
 
 
 class GitCheckpointOrchestrator:
@@ -40,6 +41,7 @@ class GitCheckpointOrchestrator:
         self._project_path = Path(project_root)
         self.checkpoint_prefix = "CORTEX-TDD"
     
+    @with_orchestration_metrics("GitCheckpointOrchestrator")
     def create_checkpoint(
         self,
         session_id: str = None,

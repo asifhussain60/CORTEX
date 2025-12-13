@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Orchestration Analytics Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        h1 { color: #333; }
+        .header { background: #2196F3; color: white; padding: 20px; border-radius: 8px; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .stat-value { font-size: 32px; font-weight: bold; color: #2196F3; }
+        .stat-label { color: #666; margin-top: 5px; }
+        table { width: 100%; border-collapse: collapse; background: white; margin: 20px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #2196F3; color: white; }
+        .chart { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .footer { margin-top: 40px; color: #666; font-size: 12px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 Orchestration Analytics Dashboard</h1>
+        <p>Generated: 2025-12-13 08:25:14 | Data Range: Last 7 days</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Total Engagements</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">0ms</div>
+            <div class="stat-label">Average Duration</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">0.0%</div>
+            <div class="stat-label">Success Rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Active Orchestrators</div>
+        </div>
+    </div>
+    
+    <h2>Orchestrator Comparison</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Orchestrator</th>
+                <th>Engagements</th>
+                <th>Avg Duration (ms)</th>
+                <th>Success Rate</th>
+                <th>Errors</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <h2>Visualizations</h2>
+    <div class="chart">
+        <h3>Performance Trend</h3>
+        <img src="duration_trend_20251213_082514.png" alt="Duration Trend" style="max-width: 100%;">
+    </div>
+    <div class="chart">
+        <h3>Success Rate Distribution</h3>
+        <img src="success_rate_20251213_082514.png" alt="Success Rate" style="max-width: 100%;">
+    </div>
+    
+    <div class="footer">
+        <p>© 2024-2025 Asif Hussain | CORTEX Orchestrator Enhancement Plan v2.0 - Feature 15</p>
+    </div>
+</body>
+</html>

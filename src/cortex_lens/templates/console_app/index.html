@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ repository_name }} - Console Application Analysis</title>
+    <link rel="stylesheet" href="cortex-unified.css">
+    <style>
+        /* Admin Dashboard Enhanced Styling */
+        :root {
+            --spacing-xl: 32px;
+            --spacing-lg: 24px;
+            --spacing-md: 16px;
+            --icon-size-xl: 64px;
+            --icon-size-lg: 48px;
+            --font-size-xl: 48px;
+            --font-size-lg: 32px;
+            --font-size-md: 20px;
+            --font-size-base: 18px;
+            --font-size-sm: 16px;
+        }
+
+        /* Header Enhancement */
+        .header-title {
+            font-size: var(--font-size-lg) !important;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .cortex-icon {
+            font-size: var(--icon-size-lg) !important;
+            margin-right: 12px;
+        }
+
+        .header-subtitle {
+            font-size: var(--font-size-md) !important;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        /* Tab Enhancement */
+        .tab-button {
+            font-size: var(--font-size-base) !important;
+            padding: 16px 32px !important;
+            font-weight: 600;
+        }
+
+        /* Main Content Spacing */
+        .cortex-main {
+            padding: var(--spacing-xl);
+        }
+
+        .tab-content {
+            padding: var(--spacing-lg);
+        }
+
+        /* KPI Cards - Large & Impactful */
+        .kpi-card {
+            padding: var(--spacing-xl) !important;
+            border-radius: 16px;
+            min-height: 180px;
+        }
+
+        .kpi-icon {
+            font-size: var(--icon-size-xl) !important;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .kpi-label {
+            font-size: var(--font-size-sm) !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .kpi-value {
+            font-size: var(--font-size-xl) !important;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .kpi-trend {
+            font-size: var(--font-size-sm) !important;
+            font-weight: 600;
+        }
+
+        /* Section Headers */
+        .section-title {
+            font-size: var(--font-size-lg) !important;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-subtitle {
+            font-size: var(--font-size-md) !important;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Cards & Panels */
+        .card, .panel, .widget {
+            padding: var(--spacing-lg) !important;
+            margin-bottom: var(--spacing-lg);
+            border-radius: 12px;
+        }
+
+        /* Text Enhancement */
+        body {
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+        }
+
+        p, li {
+            font-size: var(--font-size-base);
+        }
+
+        /* Health Metrics - Keep Large Style */
+        .health-score {
+            font-size: 72px !important;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: var(--font-size-md) !important;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: var(--font-size-lg) !important;
+            font-weight: 700;
+        }
+
+        /* Grid Spacing */
+        .content-grid {
+            gap: var(--spacing-lg);
+        }
+
+        .kpi-grid {
+            gap: var(--spacing-lg);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        /* Button Enhancement */
+        button, .btn {
+            font-size: var(--font-size-base) !important;
+            padding: 12px 24px;
+            font-weight: 600;
+        }
+
+        /* Badge Enhancement */
+        .badge {
+            font-size: var(--font-size-sm) !important;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* Repository Badge */
+        .repo-name {
+            font-size: var(--font-size-md) !important;
+            font-weight: 700;
+        }
+
+        .repo-type {
+            font-size: var(--font-size-sm) !important;
+            font-weight: 600;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="cortex-unified.js" defer></script>
+    <script src="components/cortex-components.js" defer></script>
+    <script src="components/chart-builder.js" defer></script>
+    <script src="components/d3-force-graph.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="cortex-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="header-title">
+                    <span class="cortex-icon">🧠</span>
+                    CORTEX Lens
+                </h1>
+                <div class="header-subtitle">Console Application Analysis</div>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="repo-badge">
+                    <span class="repo-name">{{ repository_name }}</span>
+                    <span class="repo-type">Console App</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="cortex-tabs">
+        <button class="tab-button active" data-tab="overview">📊 Overview</button>
+        <button class="tab-button" data-tab="architecture">🏗️ Architecture</button>
+        <button class="tab-button" data-tab="code-quality">✨ Code Quality</button>
+        <button class="tab-button" data-tab="dependencies">📦 Dependencies</button>
+        <button class="tab-button" data-tab="testing">🧪 Testing</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="cortex-main">
+        <!-- Overview Tab -->
+        <section id="overview" class="tab-content active">
+            <div class="content-grid">
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📁</div>
+                        <div class="kpi-value">{{ total_files }}</div>
+                        <div class="kpi-label">Total Files</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📝</div>
+                        <div class="kpi-value">{{ total_lines | format_number }}</div>
+                        <div class="kpi-label">Lines of Code</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">⚙️</div>
+                        <div class="kpi-value">{{ command_count }}</div>
+                        <div class="kpi-label">Commands</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">✅</div>
+                        <div class="kpi-value">{{ test_coverage }}%</div>
+                        <div class="kpi-label">Test Coverage</div>
+                        <div class="kpi-trend {{ coverage_trend_class }}">{{ coverage_trend }}</div>
+                    </div>
+                </div>
+
+                <!-- Repository Summary -->
+                <div class="glass-card">
+                    <h2 class="card-title">Repository Summary</h2>
+                    <div class="summary-content">
+                        <div class="summary-row">
+                            <span class="summary-label">Primary Language:</span>
+                            <span class="summary-value">{{ primary_language }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Entry Point:</span>
+                            <span class="summary-value"><code>{{ entry_point }}</code></span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">CLI Framework:</span>
+                            <span class="summary-value">{{ cli_framework }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Health Score:</span>
+                            <span class="summary-value">
+                                <span class="health-score score-{{ health_score_class }}">
+                                    {{ health_score }}/100
+                                </span>
+                            </span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Analysis Date:</span>
+                            <span class="summary-value">{{ analysis_date }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Overview -->
+                <div class="glass-card">
+                    <h2 class="card-title">Health Metrics</h2>
+                    <canvas id="healthRadarChart" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Command Structure -->
+                <div class="glass-card">
+                    <h2 class="card-title">Command Structure</h2>
+                    <div class="command-list">
+                        {% for command in commands %}
+                        <div class="command-item">
+                            <span class="command-name">{{ command.name }}</span>
+                            <span class="command-description">{{ command.description }}</span>
+                            <span class="command-args">{{ command.arg_count }} args</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="glass-card">
+                    <h2 class="card-title">Recent Activity</h2>
+                    <div class="activity-timeline">
+                        {% for commit in recent_commits %}
+                        <div class="activity-item">
+                            <div class="activity-date">{{ commit.date }}</div>
+                            <div class="activity-message">{{ commit.message }}</div>
+                            <div class="activity-author">{{ commit.author }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Tab -->
+        <section id="architecture" class="tab-content">
+            <div class="content-grid">
+                <!-- Module Structure -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Module Structure</h2>
+                    <div id="moduleGraph" class="graph-container"></div>
+                </div>
+
+                <!-- Entry Points -->
+                <div class="glass-card">
+                    <h2 class="card-title">Entry Points</h2>
+                    <div class="entry-points-list">
+                        {% for entry in entry_points %}
+                        <div class="entry-point-item">
+                            <code>{{ entry.file }}</code>
+                            <span class="entry-type">{{ entry.type }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Dependency Graph -->
+                <div class="glass-card">
+                    <h2 class="card-title">Internal Dependencies</h2>
+                    <canvas id="dependencyChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Quality Tab -->
+        <section id="code-quality" class="tab-content">
+            <div class="content-grid">
+                <!-- Complexity Metrics -->
+                <div class="glass-card">
+                    <h2 class="card-title">Complexity Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-value">{{ avg_complexity }}</div>
+                            <div class="metric-label">Avg Complexity</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">{{ max_complexity }}</div>
+                            <div class="metric-label">Max Complexity</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">{{ complex_functions }}</div>
+                            <div class="metric-label">Complex Functions</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maintainability Index -->
+                <div class="glass-card">
+                    <h2 class="card-title">Maintainability Index</h2>
+                    <div class="maintainability-score">
+                        <div class="score-circle score-{{ maintainability_class }}">
+                            <span class="score-value">{{ maintainability_index }}</span>
+                        </div>
+                        <div class="score-interpretation">{{ maintainability_interpretation }}</div>
+                    </div>
+                </div>
+
+                <!-- Code Smells -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Code Smells</h2>
+                    <div class="code-smells-list">
+                        {% for smell in code_smells %}
+                        <div class="smell-item severity-{{ smell.severity }}">
+                            <span class="smell-type">{{ smell.type }}</span>
+                            <span class="smell-location">{{ smell.file }}:{{ smell.line }}</span>
+                            <span class="smell-message">{{ smell.message }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Documentation Coverage -->
+                <div class="glass-card">
+                    <h2 class="card-title">Documentation Coverage</h2>
+                    <canvas id="docCoverageChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dependencies Tab -->
+        <section id="dependencies" class="tab-content">
+            <div class="content-grid">
+                <!-- Dependency Tree -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Dependency Tree</h2>
+                    <div class="dependency-tree">
+                        {% for dep in dependencies %}
+                        <div class="dep-item">
+                            <span class="dep-name">{{ dep.name }}</span>
+                            <span class="dep-version">{{ dep.version }}</span>
+                            <span class="dep-status status-{{ dep.status }}">{{ dep.status }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Version Matrix -->
+                <div class="glass-card">
+                    <h2 class="card-title">Version Status</h2>
+                    <div class="version-stats">
+                        <div class="version-stat">
+                            <div class="stat-value up-to-date">{{ deps_up_to_date }}</div>
+                            <div class="stat-label">Up to Date</div>
+                        </div>
+                        <div class="version-stat">
+                            <div class="stat-value outdated">{{ deps_outdated }}</div>
+                            <div class="stat-label">Outdated</div>
+                        </div>
+                        <div class="version-stat">
+                            <div class="stat-value vulnerable">{{ deps_vulnerable }}</div>
+                            <div class="stat-label">Vulnerable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Advisories -->
+                <div class="glass-card">
+                    <h2 class="card-title">Security Advisories</h2>
+                    <div class="security-advisories">
+                        {% for advisory in security_advisories %}
+                        <div class="advisory-item severity-{{ advisory.severity }}">
+                            <div class="advisory-title">{{ advisory.title }}</div>
+                            <div class="advisory-package">{{ advisory.package }}</div>
+                            <div class="advisory-description">{{ advisory.description }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing Tab -->
+        <section id="testing" class="tab-content">
+            <div class="content-grid">
+                <!-- Test Coverage -->
+                <div class="glass-card">
+                    <h2 class="card-title">Test Coverage</h2>
+                    <canvas id="coverageChart" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Test Suite Health -->
+                <div class="glass-card">
+                    <h2 class="card-title">Test Suite Health</h2>
+                    <div class="test-stats">
+                        <div class="test-stat">
+                            <div class="stat-value passing">{{ tests_passing }}</div>
+                            <div class="stat-label">Passing</div>
+                        </div>
+                        <div class="test-stat">
+                            <div class="stat-value failing">{{ tests_failing }}</div>
+                            <div class="stat-label">Failing</div>
+                        </div>
+                        <div class="test-stat">
+                            <div class="stat-value skipped">{{ tests_skipped }}</div>
+                            <div class="stat-label">Skipped</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Execution Time -->
+                <div class="glass-card">
+                    <h2 class="card-title">Execution Time</h2>
+                    <canvas id="testTimeChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Test Reliability -->
+                <div class="glass-card">
+                    <h2 class="card-title">Test Reliability</h2>
+                    <div class="reliability-metrics">
+                        <div class="reliability-item">
+                            <span class="reliability-label">Flaky Tests:</span>
+                            <span class="reliability-value">{{ flaky_tests }}</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="reliability-label">Success Rate:</span>
+                            <span class="reliability-value">{{ success_rate }}%</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="reliability-label">Avg Duration:</span>
+                            <span class="reliability-value">{{ avg_test_duration }}s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Data Injection -->
+    <script>
+        // Analysis data injected by dashboard builder
+        const analysisData = {{ analysis_data_json }};
+        
+        // Initialize charts and visualizations
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeHealthRadar();
+            initializeDependencyChart();
+            initializeDocCoverageChart();
+            initializeCoverageChart();
+            initializeTestTimeChart();
+            initializeModuleGraph();
+        });
+
+        function initializeHealthRadar() {
+            const ctx = document.getElementById('healthRadarChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Code Quality', 'Test Coverage', 'Documentation', 'Security', 'Maintainability'],
+                    datasets: [{
+                        label: 'Health Metrics',
+                        data: [
+                            analysisData.health?.code_quality || 0,
+                            analysisData.health?.test_coverage || 0,
+                            analysisData.health?.documentation || 0,
+                            analysisData.health?.security || 0,
+                            analysisData.health?.maintainability || 0
+                        ],
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeDependencyChart() {
+            const ctx = document.getElementById('dependencyChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Direct', 'Transitive', 'Dev'],
+                    datasets: [{
+                        data: [
+                            analysisData.dependencies?.direct_count || 0,
+                            analysisData.dependencies?.transitive_count || 0,
+                            analysisData.dependencies?.dev_count || 0
+                        ],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(168, 85, 247, 0.8)'
+                        ]
+                    }]
+                }
+            });
+        }
+
+        function initializeDocCoverageChart() {
+            const ctx = document.getElementById('docCoverageChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Functions', 'Classes', 'Modules'],
+                    datasets: [{
+                        label: 'Documentation Coverage',
+                        data: [
+                            analysisData.documentation?.function_coverage || 0,
+                            analysisData.documentation?.class_coverage || 0,
+                            analysisData.documentation?.module_coverage || 0
+                        ],
+                        backgroundColor: 'rgba(99, 102, 241, 0.8)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeCoverageChart() {
+            const ctx = document.getElementById('coverageChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: analysisData.coverage?.history_dates || [],
+                    datasets: [{
+                        label: 'Coverage %',
+                        data: analysisData.coverage?.history_values || [],
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeTestTimeChart() {
+            const ctx = document.getElementById('testTimeChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: analysisData.tests?.suite_names || [],
+                    datasets: [{
+                        label: 'Execution Time (s)',
+                        data: analysisData.tests?.suite_times || [],
+                        backgroundColor: 'rgba(99, 102, 241, 0.8)'
+                    }]
+                }
+            });
+        }
+
+        function initializeModuleGraph() {
+            // D3.js force-directed graph implementation
+            // Will be implemented in shared components
+            console.log('Module graph initialized');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ repository_name }} - API Service Analysis</title>
+    <link rel="stylesheet" href="cortex-unified.css">
+    <style>
+        /* Admin Dashboard Enhanced Styling */
+        :root {
+            --spacing-xl: 32px;
+            --spacing-lg: 24px;
+            --spacing-md: 16px;
+            --icon-size-xl: 64px;
+            --icon-size-lg: 48px;
+            --font-size-xl: 48px;
+            --font-size-lg: 32px;
+            --font-size-md: 20px;
+            --font-size-base: 18px;
+            --font-size-sm: 16px;
+        }
+
+        .header-title {
+            font-size: var(--font-size-lg) !important;
+            font-weight: 700;
+        }
+
+        .cortex-icon {
+            font-size: var(--icon-size-lg) !important;
+            margin-right: 12px;
+        }
+
+        .header-subtitle {
+            font-size: var(--font-size-md) !important;
+        }
+
+        .tab-button {
+            font-size: var(--font-size-base) !important;
+            padding: 16px 32px !important;
+            font-weight: 600;
+        }
+
+        .cortex-main {
+            padding: var(--spacing-xl);
+        }
+
+        .kpi-card {
+            padding: var(--spacing-xl) !important;
+            min-height: 180px;
+        }
+
+        .kpi-icon {
+            font-size: var(--icon-size-xl) !important;
+            margin-bottom: 16px;
+        }
+
+        .kpi-label {
+            font-size: var(--font-size-sm) !important;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .kpi-value {
+            font-size: var(--font-size-xl) !important;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: var(--font-size-lg) !important;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        body {
+            font-size: var(--font-size-base);
+        }
+
+        .health-score {
+            font-size: 72px !important;
+            font-weight: 800;
+        }
+
+        .metric-value {
+            font-size: var(--font-size-lg) !important;
+            font-weight: 700;
+        }
+
+        .card, .panel {
+            padding: var(--spacing-lg) !important;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .kpi-grid {
+            gap: var(--spacing-lg);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .repo-name {
+            font-size: var(--font-size-md) !important;
+            font-weight: 700;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="cortex-unified.js" defer></script>
+    <script src="components/cortex-components.js" defer></script>
+    <script src="components/chart-builder.js" defer></script>
+    <script src="components/d3-force-graph.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="cortex-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="header-title">
+                    <span class="cortex-icon">🧠</span>
+                    CORTEX Lens
+                </h1>
+                <div class="header-subtitle">API Service Analysis</div>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="repo-badge">
+                    <span class="repo-name">{{ repository_name }}</span>
+                    <span class="repo-type">API Service</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="cortex-tabs">
+        <button class="tab-button active" data-tab="overview">📊 Overview</button>
+        <button class="tab-button" data-tab="endpoints">🔌 Endpoints</button>
+        <button class="tab-button" data-tab="security">🔒 Security</button>
+        <button class="tab-button" data-tab="data-models">📋 Data Models</button>
+        <button class="tab-button" data-tab="dependencies">📦 Dependencies</button>
+        <button class="tab-button" data-tab="testing">🧪 Testing</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="cortex-main">
+        <!-- Overview Tab -->
+        <section id="overview" class="tab-content active">
+            <div class="content-grid">
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">🔌</div>
+                        <div class="kpi-value">{{ endpoint_count }}</div>
+                        <div class="kpi-label">API Endpoints</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📝</div>
+                        <div class="kpi-value">{{ total_lines | format_number }}</div>
+                        <div class="kpi-label">Lines of Code</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">🔒</div>
+                        <div class="kpi-value">{{ security_score }}</div>
+                        <div class="kpi-label">Security Score</div>
+                        <div class="kpi-trend {{ security_trend_class }}">{{ security_trend }}</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">✅</div>
+                        <div class="kpi-value">{{ api_test_coverage }}%</div>
+                        <div class="kpi-label">API Test Coverage</div>
+                        <div class="kpi-trend {{ coverage_trend_class }}">{{ coverage_trend }}</div>
+                    </div>
+                </div>
+
+                <!-- API Summary -->
+                <div class="glass-card">
+                    <h2 class="card-title">API Summary</h2>
+                    <div class="summary-content">
+                        <div class="summary-row">
+                            <span class="summary-label">API Type:</span>
+                            <span class="summary-value">{{ api_type }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Framework:</span>
+                            <span class="summary-value">{{ framework }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Primary Language:</span>
+                            <span class="summary-value">{{ primary_language }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Authentication:</span>
+                            <span class="summary-value">{{ auth_mechanism }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Health Score:</span>
+                            <span class="summary-value">
+                                <span class="health-score score-{{ health_score_class }}">
+                                    {{ health_score }}/100
+                                </span>
+                            </span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Analysis Date:</span>
+                            <span class="summary-value">{{ analysis_date }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTTP Methods Distribution -->
+                <div class="glass-card">
+                    <h2 class="card-title">HTTP Methods Distribution</h2>
+                    <canvas id="httpMethodsChart" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Health Overview -->
+                <div class="glass-card">
+                    <h2 class="card-title">Health Metrics</h2>
+                    <canvas id="healthRadarChart" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Performance Metrics -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Performance Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-value">{{ avg_response_time }}ms</div>
+                            <div class="metric-label">Avg Response Time</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">{{ p95_response_time }}ms</div>
+                            <div class="metric-label">P95 Response Time</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">{{ error_rate }}%</div>
+                            <div class="metric-label">Error Rate</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">{{ requests_per_sec }}</div>
+                            <div class="metric-label">Requests/Sec</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Endpoints Tab -->
+        <section id="endpoints" class="tab-content">
+            <div class="content-grid">
+                <!-- Endpoint Catalog -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">API Endpoint Catalog</h2>
+                    <div class="endpoint-catalog">
+                        <div class="catalog-filters">
+                            <input type="text" id="endpointSearch" placeholder="Search endpoints..." class="search-input">
+                            <select id="methodFilter" class="filter-select">
+                                <option value="">All Methods</option>
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                                <option value="PATCH">PATCH</option>
+                            </select>
+                        </div>
+                        <div class="endpoint-list">
+                            {% for endpoint in endpoints %}
+                            <div class="endpoint-item" data-method="{{ endpoint.method }}">
+                                <span class="endpoint-method method-{{ endpoint.method | lower }}">{{ endpoint.method }}</span>
+                                <span class="endpoint-path">{{ endpoint.path }}</span>
+                                <span class="endpoint-description">{{ endpoint.description }}</span>
+                                <div class="endpoint-meta">
+                                    <span class="endpoint-auth">{{ endpoint.auth_required | yesno:"🔒,🔓" }}</span>
+                                    <span class="endpoint-params">{{ endpoint.param_count }} params</span>
+                                    <span class="endpoint-responses">{{ endpoint.response_codes | join:", " }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Route Hierarchy -->
+                <div class="glass-card">
+                    <h2 class="card-title">Route Hierarchy</h2>
+                    <div id="routeHierarchy" class="tree-view"></div>
+                </div>
+
+                <!-- Authentication Patterns -->
+                <div class="glass-card">
+                    <h2 class="card-title">Authentication Patterns</h2>
+                    <canvas id="authPatternsChart" width="400" height="250"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Tab -->
+        <section id="security" class="tab-content">
+            <div class="content-grid">
+                <!-- Security Score -->
+                <div class="glass-card">
+                    <h2 class="card-title">Security Score</h2>
+                    <div class="security-score-display">
+                        <div class="score-circle score-{{ security_class }}">
+                            <span class="score-value">{{ security_score }}</span>
+                        </div>
+                        <div class="score-interpretation">{{ security_interpretation }}</div>
+                    </div>
+                </div>
+
+                <!-- Vulnerability Scan -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Vulnerability Scan Results</h2>
+                    <div class="vulnerability-list">
+                        {% for vuln in vulnerabilities %}
+                        <div class="vulnerability-item severity-{{ vuln.severity }}">
+                            <div class="vuln-header">
+                                <span class="vuln-severity">{{ vuln.severity }}</span>
+                                <span class="vuln-title">{{ vuln.title }}</span>
+                                <span class="vuln-cve">{{ vuln.cve_id }}</span>
+                            </div>
+                            <div class="vuln-description">{{ vuln.description }}</div>
+                            <div class="vuln-location">{{ vuln.file }}:{{ vuln.line }}</div>
+                            <div class="vuln-remediation">
+                                <strong>Fix:</strong> {{ vuln.remediation }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Auth Mechanisms -->
+                <div class="glass-card">
+                    <h2 class="card-title">Authentication Mechanisms</h2>
+                    <div class="auth-mechanisms">
+                        {% for auth in auth_mechanisms %}
+                        <div class="auth-item">
+                            <span class="auth-type">{{ auth.type }}</span>
+                            <span class="auth-endpoints">{{ auth.endpoint_count }} endpoints</span>
+                            <span class="auth-status status-{{ auth.status }}">{{ auth.status }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- CORS Configuration -->
+                <div class="glass-card">
+                    <h2 class="card-title">CORS Configuration</h2>
+                    <div class="cors-config">
+                        <div class="config-item">
+                            <span class="config-label">Allowed Origins:</span>
+                            <span class="config-value">{{ cors_origins | join:", " }}</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">Allowed Methods:</span>
+                            <span class="config-value">{{ cors_methods | join:", " }}</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">Credentials:</span>
+                            <span class="config-value">{{ cors_credentials | yesno:"Enabled,Disabled" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rate Limiting -->
+                <div class="glass-card">
+                    <h2 class="card-title">Rate Limiting</h2>
+                    <div class="rate-limiting">
+                        <div class="rate-limit-status">
+                            <span class="status-indicator {{ rate_limit_enabled | yesno:'enabled,disabled' }}"></span>
+                            <span>{{ rate_limit_enabled | yesno:"Enabled,Disabled" }}</span>
+                        </div>
+                        {% if rate_limit_enabled %}
+                        <div class="rate-limit-config">
+                            <div>Limit: {{ rate_limit_requests }} requests / {{ rate_limit_window }}</div>
+                            <div>Strategy: {{ rate_limit_strategy }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Models Tab -->
+        <section id="data-models" class="tab-content">
+            <div class="content-grid">
+                <!-- Schema Registry -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Schema Registry</h2>
+                    <div class="schema-list">
+                        {% for schema in schemas %}
+                        <div class="schema-item">
+                            <div class="schema-header">
+                                <span class="schema-name">{{ schema.name }}</span>
+                                <span class="schema-type">{{ schema.type }}</span>
+                            </div>
+                            <div class="schema-fields">
+                                {% for field in schema.fields %}
+                                <div class="field-item">
+                                    <span class="field-name">{{ field.name }}</span>
+                                    <span class="field-type">{{ field.type }}</span>
+                                    <span class="field-required">{{ field.required | yesno:"required,optional" }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Request/Response Models -->
+                <div class="glass-card">
+                    <h2 class="card-title">Request/Response Models</h2>
+                    <canvas id="modelUsageChart" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Validation Rules -->
+                <div class="glass-card">
+                    <h2 class="card-title">Validation Rules</h2>
+                    <div class="validation-rules">
+                        <div class="validation-stat">
+                            <div class="stat-value">{{ validation_rules_count }}</div>
+                            <div class="stat-label">Total Rules</div>
+                        </div>
+                        <div class="validation-stat">
+                            <div class="stat-value">{{ validation_coverage }}%</div>
+                            <div class="stat-label">Coverage</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dependencies Tab -->
+        <section id="dependencies" class="tab-content">
+            <div class="content-grid">
+                <!-- Dependency Tree -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Dependency Tree</h2>
+                    <div class="dependency-tree">
+                        {% for dep in dependencies %}
+                        <div class="dep-item">
+                            <span class="dep-name">{{ dep.name }}</span>
+                            <span class="dep-version">{{ dep.version }}</span>
+                            <span class="dep-status status-{{ dep.status }}">{{ dep.status }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Version Matrix -->
+                <div class="glass-card">
+                    <h2 class="card-title">Version Status</h2>
+                    <div class="version-stats">
+                        <div class="version-stat">
+                            <div class="stat-value up-to-date">{{ deps_up_to_date }}</div>
+                            <div class="stat-label">Up to Date</div>
+                        </div>
+                        <div class="version-stat">
+                            <div class="stat-value outdated">{{ deps_outdated }}</div>
+                            <div class="stat-label">Outdated</div>
+                        </div>
+                        <div class="version-stat">
+                            <div class="stat-value vulnerable">{{ deps_vulnerable }}</div>
+                            <div class="stat-label">Vulnerable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Advisories -->
+                <div class="glass-card">
+                    <h2 class="card-title">Security Advisories</h2>
+                    <div class="security-advisories">
+                        {% for advisory in security_advisories %}
+                        <div class="advisory-item severity-{{ advisory.severity }}">
+                            <div class="advisory-title">{{ advisory.title }}</div>
+                            <div class="advisory-package">{{ advisory.package }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing Tab -->
+        <section id="testing" class="tab-content">
+            <div class="content-grid">
+                <!-- API Test Coverage -->
+                <div class="glass-card">
+                    <h2 class="card-title">API Test Coverage</h2>
+                    <canvas id="apiCoverageChart" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Integration Tests -->
+                <div class="glass-card">
+                    <h2 class="card-title">Integration Tests</h2>
+                    <div class="test-stats">
+                        <div class="test-stat">
+                            <div class="stat-value passing">{{ integration_tests_passing }}</div>
+                            <div class="stat-label">Passing</div>
+                        </div>
+                        <div class="test-stat">
+                            <div class="stat-value failing">{{ integration_tests_failing }}</div>
+                            <div class="stat-label">Failing</div>
+                        </div>
+                        <div class="test-stat">
+                            <div class="stat-value">{{ integration_test_coverage }}%</div>
+                            <div class="stat-label">Coverage</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contract Testing -->
+                <div class="glass-card">
+                    <h2 class="card-title">Contract Testing</h2>
+                    <div class="contract-tests">
+                        <div class="contract-stat">
+                            <span class="stat-label">Consumer Contracts:</span>
+                            <span class="stat-value">{{ consumer_contracts }}</span>
+                        </div>
+                        <div class="contract-stat">
+                            <span class="stat-label">Provider Contracts:</span>
+                            <span class="stat-value">{{ provider_contracts }}</span>
+                        </div>
+                        <div class="contract-stat">
+                            <span class="stat-label">Contract Compliance:</span>
+                            <span class="stat-value">{{ contract_compliance }}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load Testing Results -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Load Testing Results</h2>
+                    <canvas id="loadTestChart" width="800" height="300"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Data Injection -->
+    <script>
+        // Analysis data injected by dashboard builder
+        const analysisData = {{ analysis_data_json }};
+        
+        // Initialize charts and visualizations
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeHttpMethodsChart();
+            initializeHealthRadar();
+            initializeAuthPatternsChart();
+            initializeModelUsageChart();
+            initializeApiCoverageChart();
+            initializeLoadTestChart();
+            initializeRouteHierarchy();
+            setupEndpointFilters();
+        });
+
+        function initializeHttpMethodsChart() {
+            const ctx = document.getElementById('httpMethodsChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+                    datasets: [{
+                        data: [
+                            analysisData.endpoints?.get_count || 0,
+                            analysisData.endpoints?.post_count || 0,
+                            analysisData.endpoints?.put_count || 0,
+                            analysisData.endpoints?.delete_count || 0,
+                            analysisData.endpoints?.patch_count || 0
+                        ],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(251, 191, 36, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(168, 85, 247, 0.8)'
+                        ]
+                    }]
+                }
+            });
+        }
+
+        function initializeHealthRadar() {
+            const ctx = document.getElementById('healthRadarChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Security', 'Performance', 'Documentation', 'Testing', 'Reliability'],
+                    datasets: [{
+                        label: 'API Health',
+                        data: [
+                            analysisData.health?.security || 0,
+                            analysisData.health?.performance || 0,
+                            analysisData.health?.documentation || 0,
+                            analysisData.health?.testing || 0,
+                            analysisData.health?.reliability || 0
+                        ],
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeAuthPatternsChart() {
+            const ctx = document.getElementById('authPatternsChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: analysisData.auth?.pattern_names || [],
+                    datasets: [{
+                        label: 'Endpoints Using Pattern',
+                        data: analysisData.auth?.pattern_counts || [],
+                        backgroundColor: 'rgba(99, 102, 241, 0.8)'
+                    }]
+                }
+            });
+        }
+
+        function initializeModelUsageChart() {
+            const ctx = document.getElementById('modelUsageChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: analysisData.models?.names || [],
+                    datasets: [{
+                        data: analysisData.models?.usage_counts || [],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(168, 85, 247, 0.8)',
+                            'rgba(192, 132, 252, 0.8)'
+                        ]
+                    }]
+                }
+            });
+        }
+
+        function initializeApiCoverageChart() {
+            const ctx = document.getElementById('apiCoverageChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Unit Tests', 'Integration Tests', 'E2E Tests'],
+                    datasets: [{
+                        label: 'Coverage %',
+                        data: [
+                            analysisData.testing?.unit_coverage || 0,
+                            analysisData.testing?.integration_coverage || 0,
+                            analysisData.testing?.e2e_coverage || 0
+                        ],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(251, 191, 36, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeLoadTestChart() {
+            const ctx = document.getElementById('loadTestChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: analysisData.load_test?.time_labels || [],
+                    datasets: [{
+                        label: 'Response Time (ms)',
+                        data: analysisData.load_test?.response_times || [],
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Requests/sec',
+                        data: analysisData.load_test?.throughput || [],
+                        borderColor: 'rgba(34, 197, 94, 1)',
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            position: 'left'
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeRouteHierarchy() {
+            // D3.js tree visualization
+            console.log('Route hierarchy initialized');
+        }
+
+        function setupEndpointFilters() {
+            const searchInput = document.getElementById('endpointSearch');
+            const methodFilter = document.getElementById('methodFilter');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', filterEndpoints);
+            }
+            if (methodFilter) {
+                methodFilter.addEventListener('change', filterEndpoints);
+            }
+        }
+
+        function filterEndpoints() {
+            const searchTerm = document.getElementById('endpointSearch')?.value.toLowerCase() || '';
+            const methodFilter = document.getElementById('methodFilter')?.value || '';
+            
+            document.querySelectorAll('.endpoint-item').forEach(item => {
+                const path = item.querySelector('.endpoint-path')?.textContent.toLowerCase() || '';
+                const method = item.dataset.method || '';
+                
+                const matchesSearch = path.includes(searchTerm);
+                const matchesMethod = !methodFilter || method === methodFilter;
+                
+                item.style.display = (matchesSearch && matchesMethod) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

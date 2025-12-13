@@ -196,6 +196,7 @@ class PlanningSession(BaseSession):
     Planning-specific session state.
     
     Tracks interactive planning workflow, DoR/DoD, phases, and validation.
+    Enhanced with master planner visual tracker metrics.
     """
     plan_id: str = ""
     plan_title: str = ""
@@ -208,10 +209,29 @@ class PlanningSession(BaseSession):
     validation_warnings: List[str] = field(default_factory=list)
     approved: bool = False
     
+    # Master Planner Visual Tracker enhancements
+    phase_start_times: Dict[str, datetime] = field(default_factory=dict)
+    phase_end_times: Dict[str, datetime] = field(default_factory=dict)
+    tokens_used: Dict[str, int] = field(default_factory=dict)  # Per phase token consumption
+    total_tokens_used: int = 0
+    timezone: str = "UTC"  # ISO 8601 timezone (e.g., "America/New_York", "UTC")
+    sub_plan_updates: List[Dict[str, Any]] = field(default_factory=list)  # Track sub-plan tracker updates
+    
     def __post_init__(self):
         """Initialize planning session."""
         super().__post_init__()
         self.session_type = "planning"
+        # Auto-detect timezone from system
+        try:
+            from datetime import timezone as dt_timezone
+            import time
+            # Get local timezone offset
+            if time.daylight:
+                self.timezone = f"UTC{time.altzone // 3600:+03d}:00"
+            else:
+                self.timezone = f"UTC{time.timezone // 3600:+03d}:00"
+        except Exception:
+            self.timezone = "UTC"
     
     def add_phase(self, phase_name: str, tasks: List[Dict[str, Any]]) -> None:
         """Add phase to plan."""
@@ -310,35 +330,129 @@ class PlanningSession(BaseSession):
     
     def render_progress_table(self) -> str:
         """
-        Render visual progress table in Markdown (REQ-005).
+        Render enhanced visual progress table in Markdown (REQ-005).
+        
+        Includes timestamps, token usage, and phase metrics.
         
         Returns:
-            Markdown table with phase progress
+            Markdown table with comprehensive phase progress
         """
         progress = self.get_phase_progress()
         
         if progress['total_phases'] == 0:
             return "_No phases defined yet_"
         
+        # Calculate total duration
+        total_duration = "In Progress"
+        if self.completed_at:
+            duration_seconds = (self.completed_at - self.started_at).total_seconds()
+            total_duration = self._format_duration(duration_seconds)
+        
         lines = [
-            "### 📊 Phase Progress",
+            "### 📊 Master Planner Visual Tracker",
             "",
-            f"**Overall:** {progress['progress_percentage']:.1f}% complete ({progress['completed_phases']}/{progress['total_phases']} phases)",
-            "",
-            "| Phase | Name | Status | Progress | Tasks |",
-            "|-------|------|--------|----------|-------|"
+            f"**Plan:** {self.plan_title or self.plan_id}",
+            f"**Started:** {self.started_at.strftime('%Y-%m-%d %H:%M:%S')} {self.timezone}",
         ]
+        
+        if self.completed_at:
+            lines.append(f"**Completed:** {self.completed_at.strftime('%Y-%m-%d %H:%M:%S')} {self.timezone}")
+        
+        lines.extend([
+            f"**Duration:** {total_duration}",
+            f"**Tokens Used:** {self.total_tokens_used:,} tokens",
+            f"**Overall Progress:** {progress['progress_percentage']:.1f}% ({progress['completed_phases']}/{progress['total_phases']} phases)",
+            "",
+            "| Phase | Name | Status | Progress | Duration | Tokens | Tasks |",
+            "|-------|------|--------|----------|----------|--------|-------|"
+        ])
         
         for phase in progress['phases_summary']:
             task_ratio = f"{phase['tasks_completed']}/{phase['tasks_total']}"
             progress_bar = self._render_mini_progress_bar(phase['progress'])
             
+            # Get phase timing and tokens
+            phase_name = phase['name']
+            phase_duration = self._get_phase_duration(phase_name)
+            phase_tokens = self.tokens_used.get(phase_name, 0)
+            
             lines.append(
                 f"| {phase['icon']} Phase {phase['phase_number']} | {phase['name']} | "
-                f"{phase['status'].title()} | {progress_bar} {phase['progress']}% | {task_ratio} |"
+                f"{phase['status'].title()} | {progress_bar} {phase['progress']}% | "
+                f"{phase_duration} | {phase_tokens:,} | {task_ratio} |"
             )
         
+        # Add sub-plan update tracker
+        if self.sub_plan_updates:
+            lines.extend([
+                "",
+                "**Sub-Plan Tracker Updates:** ✅ " + f"{len(self.sub_plan_updates)} updates recorded",
+                ""
+            ])
+        
         return "\n".join(lines)
+    
+    def _format_duration(self, seconds: float) -> str:
+        """Format duration in human-readable format."""
+        if seconds < 60:
+            return f"{int(seconds)}s"
+        elif seconds < 3600:
+            minutes = int(seconds / 60)
+            secs = int(seconds % 60)
+            return f"{minutes}m {secs}s"
+        else:
+            hours = int(seconds / 3600)
+            minutes = int((seconds % 3600) / 60)
+            return f"{hours}h {minutes}m"
+    
+    def _get_phase_duration(self, phase_name: str) -> str:
+        """Get formatted duration for a specific phase."""
+        if phase_name not in self.phase_start_times:
+            return "-"
+        
+        start = self.phase_start_times[phase_name]
+        
+        if phase_name in self.phase_end_times:
+            end = self.phase_end_times[phase_name]
+            duration_seconds = (end - start).total_seconds()
+            return self._format_duration(duration_seconds)
+        else:
+            # Phase in progress
+            duration_seconds = (datetime.now() - start).total_seconds()
+            return f"{self._format_duration(duration_seconds)} ⏳"
+    
+    def record_phase_start(self, phase_name: str) -> None:
+        """Record phase start time."""
+        self.phase_start_times[phase_name] = datetime.now()
+    
+    def record_phase_end(self, phase_name: str, tokens_used: int = 0) -> None:
+        """
+        Record phase completion with metrics.
+        
+        Args:
+            phase_name: Name of completed phase
+            tokens_used: Number of tokens consumed in this phase
+        """
+        self.phase_end_times[phase_name] = datetime.now()
+        if tokens_used > 0:
+            self.tokens_used[phase_name] = tokens_used
+            self.total_tokens_used += tokens_used
+    
+    def record_sub_plan_update(self, sub_plan_name: str, phase_completed: str, notes: str = "") -> None:
+        """
+        Record that a sub-plan has updated the master tracker.
+        
+        Args:
+            sub_plan_name: Name of sub-plan that updated tracker
+            phase_completed: Phase that was completed
+            notes: Optional notes about the update
+        """
+        self.sub_plan_updates.append({
+            "sub_plan": sub_plan_name,
+            "phase": phase_completed,
+            "timestamp": datetime.now().isoformat(),
+            "notes": notes
+        })
     
     def _render_mini_progress_bar(self, percentage: float, width: int = 10) -> str:
         """Render a mini progress bar for tables."""
