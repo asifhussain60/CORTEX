@@ -183,6 +183,25 @@ workflow:
 
 ## 3️⃣ Migration Strategy (5 Phases with TDD)
 
+⚠️ **CRITICAL REQUIREMENT:** At the end of EVERY phase, you MUST update the **Master Planner Visual Tracker** in the master plan document before proceeding. Record completion status, metrics, and overall progress.
+
+**Master Tracker Update Template:**
+```markdown
+### 📊 Master Planner Visual Tracker - [Sub-Plan Name]
+
+**Started:** YYYY-MM-DD HH:MM:SS [Timezone]
+**Last Updated:** YYYY-MM-DD HH:MM:SS [Timezone]
+**Tokens Used:** [X,XXX] tokens
+
+| Phase | Status | Duration | Files Modified | Tests | Tokens |
+|-------|--------|----------|----------------|-------|--------|
+| Phase 1: RED | ✅ COMPLETE | 2h 15m | 8 files | 45 tests | 3,200 |
+| Phase 2: GREEN | 🔄 IN PROGRESS | 3h 45m ⏳ | 12 files | 45 pass | 5,300 |
+| Phase 3: REFACTOR | ⏸️ PENDING | - | - | - | - |
+
+**Overall Progress:** 40% complete (2/5 phases)
+```
+
 ### Phase 1: RED (Tests First) - Week X, Day 1-2
 
 **Objective:** Write comprehensive failing tests
@@ -206,6 +225,14 @@ workflow:
 
 **Deliverable:** Test suite in `tests/orchestration_3_0/orchestrators/[orchestrator-name]/`
 
+**🎯 CHECKPOINT:** Update Master Planner Visual Tracker with Phase 1 completion:
+- Record status: ✅ Phase 1 RED - COMPLETE
+- Add metrics: duration, tests created, tokens used
+- Update overall progress percentage
+- **Do NOT proceed to Phase 2 until master tracker is updated**
+
+---
+
 ### Phase 2: GREEN (Core Implementation) - Week X, Day 3-5
 
 **Objective:** Implement minimum viable orchestrator
@@ -222,6 +249,14 @@ workflow:
 **Expected Result:** All tests GREEN (passing)
 
 **Deliverable:** Working orchestrator in `src/orchestration_3_0/orchestrators/[orchestrator-name]/`
+
+**🎯 CHECKPOINT:** Update Master Planner Visual Tracker with Phase 2 completion:
+- Record status: ✅ Phase 2 GREEN - COMPLETE
+- Add metrics: duration, files created, tests passing, tokens used
+- Update overall progress percentage
+- **Do NOT proceed to Phase 3 until master tracker is updated**
+
+---
 
 ### Phase 3: REFACTOR (Parallel Operation) - Week X, Day 6-7
 
@@ -244,6 +279,14 @@ workflow:
 
 **Deliverable:** Equivalence report in `cortex-brain/documents/reports/[orchestrator-name]-equivalence-report.md`
 
+**🎯 CHECKPOINT:** Update Master Planner Visual Tracker with Phase 3 completion:
+- Record status: ✅ Phase 3 REFACTOR - COMPLETE
+- Add metrics: duration, equivalence %, performance delta, tokens used
+- Update overall progress percentage
+- **Do NOT proceed to Phase 4 until master tracker is updated**
+
+---
+
 ### Phase 4: CUTOVER (Switch to New) - Week X+1, Day 1-3
 
 **Objective:** Make new orchestrator production-default
@@ -265,6 +308,14 @@ workflow:
 
 **Deliverable:** Production monitoring dashboard
 
+**🎯 CHECKPOINT:** Update Master Planner Visual Tracker with Phase 4 completion:
+- Record status: ✅ Phase 4 CUTOVER - COMPLETE
+- Add metrics: duration, cutover time, production error rate, tokens used
+- Update overall progress percentage
+- **Do NOT proceed to Phase 5 until master tracker is updated**
+
+---
+
 ### Phase 5: CLEANUP (Remove Old) - Week X+5
 
 **Objective:** Permanently delete old orchestrator
@@ -280,6 +331,12 @@ workflow:
 **Expected Result:** Legacy code permanently removed
 
 **Deliverable:** Cleanup report in `cortex-brain/documents/reports/[orchestrator-name]-cleanup-report.md`
+
+**🎯 FINAL CHECKPOINT:** Update Master Planner Visual Tracker with Phase 5 completion:
+- Record status: ✅ Phase 5 CLEANUP - COMPLETE ✨
+- Add metrics: total duration, total tokens used, final file count
+- Mark overall progress: 100% COMPLETE 🎉
+- **ALL PHASES COMPLETE - Update master plan with final summary**
 
 ---
 

@@ -1066,6 +1066,7 @@ class PlanningOrchestrator:
                 is_final_phase=False
             )
             if phase_2_doc_reminder:
+                logger.info(phase_2_doc_reminder)
             
             if not phase_2_approved:
                 return (True, output_path, "Phase 2 complete, Phase 3 pending user approval")
@@ -1086,6 +1087,16 @@ class PlanningOrchestrator:
             logger.info("✅ Phase 3 written to file")
             
             # Progress: Phase 3 complete (4 of 5 steps)
+            yield_progress(4, 5, "Phase 3: Validation & Deployment complete")
+            
+            # Checkpoint 4: Phase 3 approval
+            phase_3_approved = self._handle_phase_checkpoint(
+                checkpoint_callback,
+                "phase-3",
+                "Phase 3: Validation & Deployment",
+                phase_3_sections
+            )
+            
             # Git checkpoint after Phase 3 completion
             try:
                 self.git_checkpoint.create_auto_checkpoint(
@@ -1105,16 +1116,6 @@ class PlanningOrchestrator:
                 threat_model_applied=False,
                 acceptance_criteria_defined=True
             )
-            
-            # Show learning library link after Phase 3 (Validation = significant)
-            try:
-                self.git_checkpoint.create_auto_checkpoint(
-                    operation="plan-phase-3",
-                    message=f"Planning Phase 3 complete: {feature_name}"
-                )
-                logger.info("✅ Git checkpoint created for Phase 3")
-            except Exception as e:
-                logger.warning(f"Git checkpoint failed for Phase 3: {e}")
             
             # Show learning library link after Phase 3 (Validation = significant)
             phase_3_doc_reminder = self._generate_documentation_reminder(
@@ -4152,25 +4153,46 @@ class PlanningOrchestrator:
         self,
         phase_name: str,
         status: str = 'in_progress',
-        progress: int = 0
+        progress: int = 0,
+        tokens_used: int = 0
     ) -> None:
         """
         Update phase status and progress for visual tracking (REQ-005).
+        
+        Enhanced with timing and token tracking for master planner visual tracker.
         
         Args:
             phase_name: Name of phase to update
             status: Status ('pending', 'in_progress', 'completed')
             progress: Progress percentage (0-100)
+            tokens_used: Number of tokens consumed (for completed phases)
         """
         if not hasattr(self, 'session') or not self.session:
             return
         
+        # Record phase start on first update
+        if status == 'in_progress' and phase_name not in self.session.phase_start_times:
+            self.session.record_phase_start(phase_name)
+            logger.info(f"⏱️  Phase '{phase_name}' started at {datetime.now().strftime('%H:%M:%S')} {self.session.timezone}")
+        
+        # Update phase in session
         for phase in self.session.phases:
             if phase['name'] == phase_name:
                 phase['status'] = status
                 phase['progress'] = progress
                 logger.info(f"📊 Phase '{phase_name}' → {status} ({progress}%)")
                 break
+        
+        # Record phase completion with metrics
+        if status == 'completed' and phase_name not in self.session.phase_end_times:
+            self.session.record_phase_end(phase_name, tokens_used=tokens_used)
+            duration = self.session._get_phase_duration(phase_name)
+            logger.info(f"✅ Phase '{phase_name}' completed in {duration} ({tokens_used:,} tokens)")
+            logger.info(f"📊 Total tokens used: {self.session.total_tokens_used:,}")
+            
+            # Render updated progress
+            progress_table = self.session.render_progress_table()
+            logger.info(f"\n{progress_table}")
     
     def review_threats_interactive(
         self,
