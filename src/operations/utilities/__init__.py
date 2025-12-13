@@ -10,6 +10,7 @@ Operations Utilities - Shared components for CORTEX orchestration workflows.
 - parallel_orchestration_coordinator: Concurrent phase execution with dependency resolution
 - orchestration_analytics_dashboard: Visualization and reporting for metrics
 - resource_management_orchestrator: Resource monitoring and optimization
+- error_recovery_orchestrator: Retry policies and circuit breakers
 
 **Author:** Asif Hussain
 **Version:** 3.8.1
@@ -39,6 +40,7 @@ from .parallel_orchestration_coordinator import (
 )
 from .orchestration_analytics_dashboard import OrchestrationAnalyticsDashboard
 from .resource_management_orchestrator import ResourceManagementOrchestrator
+from .error_recovery_orchestrator import ErrorRecoveryOrchestrator
 
 __all__ = [
     "ProgressRenderer",
@@ -58,4 +60,5 @@ __all__ = [
     "ResourceLockError",
     "OrchestrationAnalyticsDashboard",
     "ResourceManagementOrchestrator",
+    "ErrorRecoveryOrchestrator",
 ]
