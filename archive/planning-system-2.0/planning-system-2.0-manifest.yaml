@@ -1,0 +1,835 @@
+# Planning System 2.0 Orchestrator Manifest
+# Defines all requirements, integrations, and quality gates for planning workflow
+#
+# Version: 3.1.0
+# Author: CORTEX Development Team
+# Updated: 2025-12-13
+# Status: ACTIVE - ✅ 88.9% COMPLIANT (8/9 requirements: 3 critical + 3 high + 3 medium)
+
+schema_version: "1.0"
+
+# ========================================
+# Metadata
+# ========================================
+
+metadata:
+  orchestrator_name: "planning_system_2.0"
+  version: "3.1.0"
+  description: "Interactive feature planning with DoR/DoD, threat modeling, and TDD integration"
+  category: "planning"
+  deployment_tier: "user"
+  status: "active"
+  last_updated: "2025-12-13"
+  compliance_baseline: "88.9% (8/9 requirements implemented: REQ-009 pending)"
+  maintainer: "CORTEX Planning Team"
+  related_orchestrators:
+    - "ado_planning_orchestrator"
+    - "plan_execution_orchestrator_v2"
+    - "review_orchestrator"
+  documentation_path: ".github/prompts/modules/planning-orchestrator-guide.md"
+  changelog_path: "CHANGELOG.md"
+
+# ========================================
+# Requirements (From Gap Analysis)
+# ========================================
+
+requirements:
+  # ===== Critical Requirements (Phase 1) =====
+  
+  - requirement_id: "REQ-001"
+    name: "Acceptance Criteria Approval Gate"
+    description: |
+      Dedicated checkpoint after Phase 3 that blocks execution until user explicitly
+      approves acceptance criteria. Visual checklist must be shown in response.
+    priority: "critical"
+    status: "implemented"
+    validation_method: "method_exists"
+    validation_criteria: "PlanningOrchestrator.approve_acceptance_criteria()"
+    implementation_notes: |
+      - Add checkpoint after _append_threat_analysis_to_plan()
+      - Before autonomous execution starts
+      - Visual checklist in response template
+      - Block execution if not approved (unless autonomous mode)
+    estimated_effort_hours: 4
+    
+  - requirement_id: "REQ-002"
+    name: "Interactive DoR Workflow"
+    description: |
+      Iterative DoR refinement loop with question-based validation. User must
+      approve each DoR item individually. Visual progress shown.
+    priority: "critical"
+    status: "implemented"
+    validation_method: "method_exists"
+    validation_criteria: "PlanningOrchestrator.refine_dor_interactive()"
+    implementation_notes: |
+      - Add DoR questioning loop before skeleton generation
+      - Store DoR validation state in PlanningSession
+      - Visual checklist rendering in response template
+      - Iterate until user approves or requests skip
+    estimated_effort_hours: 6
+    current_implementation: "Basic DoR validation exists in _validate_definition_of_ready()"
+    
+  - requirement_id: "REQ-003"
+    name: "Contextual Review Orchestrator Integration"
+    description: |
+      Run context-aware architectural review before planning starts.
+      - Scope review to feature request (authentication, API, database, etc.)
+      - Classify findings: BLOCKER (prevents feature), CRITICAL (should fix), IMPROVEMENT (optional)
+      - Challenge user if blockers detected with auto-fix option
+      - Inject Phase 0: Remediation for blocking issues
+      - Add critical issues to Phase 1 tasks
+    priority: "critical"
+    status: "implemented"
+    validation_method: "integration_test"
+    validation_criteria: "run_contextual_review() called in plan initialization"
+    implementation_notes: |
+      ENHANCEMENT from original REQ-003 (2025-12-09):
+      - Replaced run_architecture_review() with run_contextual_review()
+      - Added _extract_scope_keywords() for feature-scoped analysis
+      - Added _classify_findings_by_relevance() for blocker detection
+      - Added _challenge_blockers() for user interaction
+      - Added _generate_remediation_phase() for auto-fix
+      - Phase 0 auto-injected when blockers detected
+      - User can choose: auto-fix (add remediation), skip (risky), or abort
+    implementation_file: "src/orchestrators/planning_orchestrator.py"
+    implementation_methods:
+      - run_contextual_review()
+      - _extract_scope_keywords()
+      - _extract_findings_from_sections()
+      - _classify_findings_by_relevance()
+      - _calculate_finding_relevance()
+      - _challenge_blockers()
+      - _format_blocker_challenge()
+      - _generate_remediation_phase()
+    estimated_effort_hours: 7
+    actual_effort_hours: 7
+    
+  # ===== Important Requirements (Phase 2) =====
+  
+  - requirement_id: "REQ-004"
+    name: "SWAG Estimation via Swagger"
+    description: |
+      Parse Swagger/OpenAPI files to estimate API complexity and effort.
+      Integrate with existing estimate_timeframe() method.
+    priority: "high"
+    status: "implemented"
+    validation_method: "method_exists"
+    validation_criteria: "PlanningOrchestrator.estimate_from_swagger()"
+    implementation_notes: |
+      - Create swagger_estimator.py utility
+      - Parse OpenAPI 3.0/Swagger 2.0 files
+      - Endpoint count → complexity mapping
+      - Integrate with estimate_timeframe()
+      - Store swagger metadata in plan
+    estimated_effort_hours: 6
+    
+  - requirement_id: "REQ-005"
+    name: "Visual Progress Rendering (Enhanced)"
+    description: |
+      Master Planner Visual Tracker with comprehensive metrics including:
+      - Start/end timestamps with timezone display (ISO 8601)
+      - Per-phase token usage tracking
+      - Total token consumption across all phases
+      - Phase duration in human-readable format (Xh Ym, Xm Ys, Xs)
+      - Files modified count per phase
+      - Sub-plan tracker update recording
+      Use markdown tables for status visualization with progress bars.
+    priority: "high"
+    status: "implemented"
+    validation_method: "template_validation"
+    validation_criteria: "Enhanced progress tracker rendered in work_planner_success template"
+    implementation_notes: |
+      ENHANCEMENTS (2025-12-13):
+      - PlanningSession model extended with:
+        * phase_start_times (Dict[str, datetime])
+        * phase_end_times (Dict[str, datetime])
+        * tokens_used (Dict[str, int]) - per phase
+        * total_tokens_used (int)
+        * timezone (str) - auto-detected from system
+        * sub_plan_updates (List[Dict]) - tracks sub-plan tracker updates
+      - New methods added:
+        * record_phase_start(phase_name) - records phase start time
+        * record_phase_end(phase_name, tokens_used) - records completion with metrics
+        * record_sub_plan_update(sub_plan, phase, notes) - tracks sub-plan updates
+        * _format_duration(seconds) - human-readable duration (2h 15m, 3m 45s)
+        * _get_phase_duration(phase_name) - phase duration with ⏳ for in-progress
+      - render_progress_table() enhanced with:
+        * Plan name, start/end timestamps, timezone
+        * Total duration and tokens
+        * Per-phase duration, tokens, progress bars
+        * Sub-plan update counter
+      - update_phase_status() enhanced with:
+        * Auto-records phase start on first 'in_progress' status
+        * Auto-records phase end with tokens on 'completed' status
+        * Logs timing and token metrics
+        * Renders updated progress table after completion
+      - Sub-plan template updated with:
+        * Master tracker update template at top
+        * 🎯 CHECKPOINT after each phase with explicit instructions
+        * Master tracker must be updated before proceeding to next phase
+    estimated_effort_hours: 6
+    actual_effort_hours: 6
+    implementation_files:
+      - "src/orchestrators/session_model.py (PlanningSession enhanced)"
+      - "src/orchestrators/planning_orchestrator.py (update_phase_status enhanced)"
+      - "cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md (checkpoint gates)"
+    enhancement_date: "2025-12-13"
+    
+  - requirement_id: "REQ-006"
+    name: "Learning Library Auto-Documentation"
+    description: |
+      Auto-create learning library entries after each phase documenting work
+      done for business users, engineers, and product owners.
+    priority: "high"
+    status: "implemented"
+    validation_method: "method_exists"
+    validation_criteria: "PlanningOrchestrator.document_phase_to_learning_library()"
+    implementation_notes: |
+      - Create learning_library_writer.py
+      - Template-based doc generation per phase
+      - Categorize: planning_strategies/milestones/ado_workflows
+      - Auto-commit learning docs after phase completion
+    estimated_effort_hours: 5
+    current_implementation: "Reminders exist (_generate_documentation_reminder) but no auto-creation"
+    
+  # ===== Enhancement Requirements (Phase 3) =====
+  
+  - requirement_id: "REQ-007"
+    name: "Interactive Threat Modeling"
+    description: |
+      Add user review option for threat analysis results. Allow threat dismissal
+      with justification and prioritization workflow.
+    priority: "medium"
+    status: "implemented"
+    validation_method: "method_exists"
+    validation_criteria: "PlanningOrchestrator.review_threats_interactive()"
+    implementation_notes: |
+      - Add threat review checkpoint after _run_threat_analysis()
+      - Show threat list with risk ratings
+      - Allow dismissal with justification
+      - Update plan with user decisions
+    estimated_effort_hours: 3
+    current_implementation: "Threat analysis runs automatically (_run_threat_analysis)"
+    
+  - requirement_id: "REQ-008"
+    name: "TDD Reminders Visibility"
+    description: |
+      Surface TDD requirements in Copilot Chat response showing what was
+      injected into plan with visual checklist.
+    priority: "medium"
+    status: "implemented"
+    validation_method: "template_validation"
+    validation_criteria: "TDD section visible in work_planner_success template"
+    implementation_notes: |
+      - Add TDD requirements section to response template
+      - Show injected DoR/DoD items
+      - Visual TDD workflow reminder
+      - Link to TDD Mastery guide
+    estimated_effort_hours: 2
+    current_implementation: "TDD injection works (inject_tdd_requirements) but silent"
+  
+  - requirement_id: "REQ-009"
+    name: "Modular Plan Structure"
+    description: |
+      Generate plans in dedicated folder structure with master plan + sub-plans
+      for better organization and parallel development support.
+      
+      Structure:
+      cortex-brain/documents/planning/PLAN-{DATE}-{NAME}/
+      ├── MASTER-PLAN.md              # Overview + TOC with links
+      ├── sub-plans/
+      │   ├── phase-1-{name}.md       # Individual phase plans
+      │   ├── phase-2-{name}.md
+      │   └── phase-N-{name}.md
+      ├── resources/
+      │   ├── diagrams/               # Architecture diagrams
+      │   └── references/             # External references
+      └── artifacts/
+          ├── feature-tracker.md      # Feature implementation tracker
+          ├── decision-log.md         # ADRs and decisions
+          └── execution-log.md        # Execution history
+    priority: "medium"
+    status: "pending"
+    validation_method: "integration_test"
+    validation_criteria: "Plan folder structure created with all components"
+    implementation_notes: |
+      - Add plan_structure_mode config: "single_file" (default) | "modular"
+      - Generate folder structure when modular mode enabled
+      - Create MASTER-PLAN.md with links to sub-plans
+      - Extract phases from single plan and create sub-plan files
+      - Generate feature tracker as separate artifact
+      - Maintain backward compatibility (default to single_file)
+      - Add folder navigation helpers in master plan
+    estimated_effort_hours: 8
+    benefits:
+      - "Better organization for large plans (500+ lines)"
+      - "Parallel development (multiple engineers on different phases)"
+      - "Easier plan maintenance and updates"
+      - "Clearer separation of concerns"
+      - "Reusable sub-plans across projects"
+    implementation_phases:
+      - phase: "Phase 1 - Folder Generator"
+        tasks:
+          - "Add create_plan_folder_structure() method"
+          - "Generate MASTER-PLAN.md with TOC"
+          - "Create sub-plans/ and artifacts/ directories"
+        duration: "3 hours"
+      - phase: "Phase 2 - Content Splitter"
+        tasks:
+          - "Extract phases from comprehensive plan"
+          - "Generate individual phase markdown files"
+          - "Create feature tracker artifact"
+        duration: "3 hours"
+      - phase: "Phase 3 - Integration"
+        tasks:
+          - "Add plan_structure_mode configuration"
+          - "Update response template with folder links"
+          - "Add migration utility for existing plans"
+        duration: "2 hours"
+    backward_compatibility: "Default to single_file mode, opt-in to modular"
+    migration_strategy: |
+      Existing plans remain as single files. Users can migrate via:
+      python -m scripts.migrate_plan_to_modular PLAN-{DATE}-{NAME}.md
+
+# ========================================
+# Integrations
+# ========================================
+
+integrations:
+  - integration_id: "INT-001"
+    target_component: "review_orchestrator"
+    integration_type: "required"
+    trigger_condition: "before_planning_starts"
+    expected_behavior: |
+      Run context-aware architectural review with feature scope filtering.
+      - Extract scope keywords from feature request (auth, api, database, etc.)
+      - Execute review with scope_filter context
+      - Classify findings by relevance (blocker/critical/improvement)
+      - Challenge user if blockers detected (auto-fix/skip/abort)
+      - Inject Phase 0: Remediation if auto-fix chosen
+      - Add critical issues to Phase 1 tasks
+    validation_method: "integration_test"
+    status: "implemented"
+    implementation_file: "src/orchestrators/planning_orchestrator.py"
+    implementation_method: "run_contextual_review() at line ~830 in generate_incremental_plan()"
+    enhancement_date: "2025-12-09"
+    enhancement_description: |
+      Enhanced from basic score-based review to context-aware blocker detection.
+      Now actively prevents planning when blocking issues exist.
+    
+  - integration_id: "INT-002"
+    target_component: "threat_modeler_agent"
+    integration_type: "conditional"
+    trigger_condition: "feature_matches_security_keywords"
+    expected_behavior: |
+      Run STRIDE-based threat analysis, identify threats with OWASP mapping,
+      append threat section to plan, add security DoD items.
+    validation_method: "method_exists"
+    status: "implemented"
+    implementation_file: "src/orchestrators/planning_orchestrator.py"
+    implementation_method: "_run_threat_analysis() and analyze_threats()"
+    
+  - integration_id: "INT-003"
+    target_component: "git_checkpoint_orchestrator"
+    integration_type: "required"
+    trigger_condition: "after_each_phase_completion"
+    expected_behavior: |
+      Create git checkpoint after Phase 1, 2, 3 completion with descriptive
+      commit message including plan name and phase number.
+    validation_method: "method_exists"
+    status: "implemented"
+    implementation_file: "src/orchestrators/planning_orchestrator.py"
+    implementation_method: "create_plan_incremental() lines 848-943"
+    
+  - integration_id: "INT-004"
+    target_component: "plan_execution_orchestrator_v2"
+    integration_type: "optional"
+    trigger_condition: "autonomous_execution_mode"
+    expected_behavior: |
+      Execute plan phases automatically when "execute all phases autonomously"
+      command detected. Must respect quality gates and approval workflow.
+    validation_method: "method_exists"
+    status: "implemented"
+    implementation_file: "src/orchestrators/planning_orchestrator.py"
+    implementation_method: "__init__() initializes self.plan_executor"
+    
+  - integration_id: "INT-005"
+    target_component: "test_intelligence"
+    integration_type: "required"
+    trigger_condition: "always_during_plan_generation"
+    expected_behavior: |
+      Detect test requirements from feature description, recommend frameworks
+      based on user preferences, inject test strategy into DoR/DoD.
+    validation_method: "method_exists"
+    status: "implemented"
+    implementation_file: "src/orchestrators/planning_orchestrator.py"
+    implementation_method: "_inject_test_strategy() called by inject_tdd_requirements()"
+    
+  - integration_id: "INT-006"
+    target_component: "document_organizer"
+    integration_type: "required"
+    trigger_condition: "after_plan_generation"
+    expected_behavior: |
+      Organize plan document into correct directory structure, update references,
+      ensure compliance with document organization rules.
+    validation_method: "method_exists"
+    status: "implemented"
+    implementation_file: "src/orchestrators/planning_orchestrator.py"
+    implementation_method: "create_plan_incremental() calls document_organizer.organize_document()"
+    
+  - integration_id: "INT-007"
+    target_component: "swagger_estimator"
+    integration_type: "optional"
+    trigger_condition: "swagger_file_detected_in_project"
+    expected_behavior: |
+      Parse Swagger/OpenAPI file, extract endpoint complexity, generate effort
+      estimate, integrate with estimate_timeframe() method.
+    validation_method: "method_exists"
+    status: "missing"
+    implementation_file: "src/utils/swagger_estimator.py (to be created)"
+    implementation_method: "estimate_from_swagger()"
+
+# ========================================
+# Quality Gates
+# ========================================
+
+quality_gates:
+  - gate_id: "GATE-001"
+    name: "Skeleton Approval"
+    gate_type: "approval"
+    trigger_point: "after_skeleton_generation"
+    blocking: true
+    validation_criteria: "User approves plan skeleton structure and sections"
+    bypass_conditions: ["autonomous_execution_mode"]
+    status: "implemented"
+    implementation_method: "create_plan_incremental() Step 1 checkpoint"
+    
+  - gate_id: "GATE-002"
+    name: "Phase 1 Approval"
+    gate_type: "approval"
+    trigger_point: "after_phase_1_completion"
+    blocking: true
+    validation_criteria: "User approves Requirements, Dependencies, Architecture sections"
+    bypass_conditions: ["autonomous_execution_mode"]
+    status: "implemented"
+    implementation_method: "create_plan_incremental() Checkpoint 2"
+    
+  - gate_id: "GATE-003"
+    name: "Phase 2 Approval"
+    gate_type: "approval"
+    trigger_point: "after_phase_2_completion"
+    blocking: true
+    validation_criteria: "User approves Implementation, Tests, Integration sections"
+    bypass_conditions: ["autonomous_execution_mode"]
+    status: "implemented"
+    implementation_method: "create_plan_incremental() Checkpoint 3"
+    
+  - gate_id: "GATE-004"
+    name: "Phase 3 Approval"
+    gate_type: "approval"
+    trigger_point: "after_phase_3_completion"
+    blocking: true
+    validation_criteria: "User approves Acceptance, Security, Deployment sections"
+    bypass_conditions: ["autonomous_execution_mode"]
+    status: "implemented"
+    implementation_method: "create_plan_incremental() Checkpoint 4"
+    
+  - gate_id: "GATE-005"
+    name: "Acceptance Criteria Approval"
+    gate_type: "approval"
+    trigger_point: "after_phase_3_before_execution"
+    blocking: true
+    validation_criteria: "User explicitly approves acceptance criteria and DoD items"
+    bypass_conditions: ["autonomous_execution_mode"]
+    status: "missing"
+    implementation_method: "NEW - approve_acceptance_criteria()"
+    priority: "critical"
+    
+  - gate_id: "GATE-006"
+    name: "DoR Completeness Validation"
+    gate_type: "validation"
+    trigger_point: "before_planning_starts"
+    blocking: true
+    validation_criteria: "All DoR items answered and validated by user"
+    bypass_conditions: []
+    status: "partial"
+    implementation_method: "ENHANCE - refine_dor_interactive()"
+    priority: "critical"
+    
+  - gate_id: "GATE-007"
+    name: "Threat Review Gate"
+    gate_type: "approval"
+    trigger_point: "after_threat_analysis"
+    blocking: false
+    validation_criteria: "User reviews critical/high threats and approves mitigations"
+    bypass_conditions: ["no_threats_found", "autonomous_execution_mode"]
+    status: "missing"
+    implementation_method: "NEW - review_threats_interactive()"
+    priority: "medium"
+    
+  - gate_id: "GATE-008"
+    name: "Architecture Review Gate"
+    gate_type: "validation"
+    trigger_point: "before_planning_starts"
+    blocking: false
+    validation_criteria: "Architectural review completed, score captured in metadata"
+    bypass_conditions: ["review_score_above_80"]
+    status: "missing"
+    implementation_method: "NEW - run_architecture_review()"
+    priority: "critical"
+
+# ========================================
+# Workflows
+# ========================================
+
+workflows:
+  - workflow_id: "WF-001"
+    name: "Interactive Planning Workflow"
+    description: "Complete planning workflow with all gates and approvals"
+    phases:
+      - phase_id: "PHASE-0"
+        name: "Pre-Planning"
+        sequence: 0
+        required: true
+        steps:
+          - step_id: "STEP-0.1"
+            name: "Run Architectural Review"
+            required: true
+            validation: "review_orchestrator.execute() called"
+            status: "missing"
+          - step_id: "STEP-0.2"
+            name: "Interactive DoR Refinement"
+            required: true
+            validation: "refine_dor_interactive() completes"
+            status: "missing"
+          - step_id: "STEP-0.3"
+            name: "Parse Swagger (if available)"
+            required: false
+            validation: "swagger_estimator.parse() called if file exists"
+            status: "missing"
+            
+      - phase_id: "PHASE-1"
+        name: "Skeleton Generation"
+        sequence: 1
+        required: true
+        steps:
+          - step_id: "STEP-1.1"
+            name: "Generate Plan Skeleton"
+            required: true
+            validation: "incremental_generator.generate_skeleton() called"
+            status: "implemented"
+          - step_id: "STEP-1.2"
+            name: "Skeleton Approval Gate"
+            required: true
+            validation: "checkpoint_callback invoked, user approves"
+            status: "implemented"
+            
+      - phase_id: "PHASE-2"
+        name: "Phase 1 - Foundation"
+        sequence: 2
+        required: true
+        steps:
+          - step_id: "STEP-2.1"
+            name: "Fill Requirements Section"
+            required: true
+            validation: "Section content appended to file"
+            status: "implemented"
+          - step_id: "STEP-2.2"
+            name: "Fill Dependencies Section"
+            required: true
+            validation: "Section content appended to file"
+            status: "implemented"
+          - step_id: "STEP-2.3"
+            name: "Fill Architecture Section"
+            required: true
+            validation: "Section content appended to file"
+            status: "implemented"
+          - step_id: "STEP-2.4"
+            name: "Phase 1 Approval Gate"
+            required: true
+            validation: "checkpoint_callback invoked"
+            status: "implemented"
+          - step_id: "STEP-2.5"
+            name: "Git Checkpoint Phase 1"
+            required: true
+            validation: "git_checkpoint.create_auto_checkpoint() called"
+            status: "implemented"
+          - step_id: "STEP-2.6"
+            name: "Document Phase 1 to Learning Library"
+            required: false
+            validation: "Learning library entry created"
+            status: "missing"
+            
+      - phase_id: "PHASE-3"
+        name: "Phase 2 - Development"
+        sequence: 3
+        required: true
+        steps:
+          - step_id: "STEP-3.1"
+            name: "Fill Implementation Section"
+            required: true
+            validation: "Section content appended"
+            status: "implemented"
+          - step_id: "STEP-3.2"
+            name: "Fill Tests Section"
+            required: true
+            validation: "Section content appended"
+            status: "implemented"
+          - step_id: "STEP-3.3"
+            name: "Fill Integration Section"
+            required: true
+            validation: "Section content appended"
+            status: "implemented"
+          - step_id: "STEP-3.4"
+            name: "Phase 2 Approval Gate"
+            required: true
+            validation: "checkpoint_callback invoked"
+            status: "implemented"
+          - step_id: "STEP-3.5"
+            name: "Git Checkpoint Phase 2"
+            required: true
+            validation: "git_checkpoint.create_auto_checkpoint() called"
+            status: "implemented"
+            
+      - phase_id: "PHASE-4"
+        name: "Phase 3 - Validation & Deployment"
+        sequence: 4
+        required: true
+        steps:
+          - step_id: "STEP-4.1"
+            name: "Fill Acceptance Section"
+            required: true
+            validation: "Section content appended"
+            status: "implemented"
+          - step_id: "STEP-4.2"
+            name: "Fill Security Section"
+            required: true
+            validation: "Section content appended"
+            status: "implemented"
+          - step_id: "STEP-4.3"
+            name: "Fill Deployment Section"
+            required: true
+            validation: "Section content appended"
+            status: "implemented"
+          - step_id: "STEP-4.4"
+            name: "Phase 3 Approval Gate"
+            required: true
+            validation: "checkpoint_callback invoked"
+            status: "implemented"
+          - step_id: "STEP-4.5"
+            name: "Git Checkpoint Phase 3"
+            required: true
+            validation: "git_checkpoint.create_auto_checkpoint() called"
+            status: "implemented"
+            
+      - phase_id: "PHASE-5"
+        name: "Security & Finalization"
+        sequence: 5
+        required: true
+        steps:
+          - step_id: "STEP-5.1"
+            name: "Run Threat Modeling Analysis"
+            required: false
+            validation: "_run_threat_analysis() called"
+            status: "implemented"
+          - step_id: "STEP-5.2"
+            name: "Append Threat Analysis to Plan"
+            required: false
+            validation: "_append_threat_analysis_to_plan() called"
+            status: "implemented"
+          - step_id: "STEP-5.3"
+            name: "Interactive Threat Review"
+            required: false
+            validation: "review_threats_interactive() called if threats found"
+            status: "missing"
+          - step_id: "STEP-5.4"
+            name: "Inject TDD Requirements"
+            required: true
+            validation: "inject_tdd_requirements() called"
+            status: "implemented"
+          - step_id: "STEP-5.5"
+            name: "Add Integration & Consolidation Phase"
+            required: true
+            validation: "add_integration_consolidation_phase() called"
+            status: "implemented"
+          - step_id: "STEP-5.5.1"
+            name: "Add REFACTOR Phase CSS Validation"
+            required: true
+            validation: "REFACTOR phase includes inline CSS migration check"
+            status: "implemented"
+            notes: |
+              REFACTOR phase MUST validate:
+              - No inline style="" attributes
+              - No <style> embedded tags
+              - No .style.property JS manipulation
+              - All styles centralized to CSS files
+              Enforced by INLINE_CSS_PROHIBITION rule
+          - step_id: "STEP-5.6"
+            name: "Acceptance Criteria Approval Gate"
+            required: true
+            validation: "approve_acceptance_criteria() called and user approves"
+            status: "missing"
+          - step_id: "STEP-5.7"
+            name: "Document Complete Plan to Learning Library"
+            required: false
+            validation: "Final learning library entry created"
+            status: "missing"
+            
+      - phase_id: "PHASE-6"
+        name: "Execution (Optional)"
+        sequence: 6
+        required: false
+        steps:
+          - step_id: "STEP-6.1"
+            name: "Execute Plan Autonomously"
+            required: false
+            validation: "plan_executor.execute() called if autonomous mode"
+            status: "implemented"
+
+# ========================================
+# Response Templates
+# ========================================
+
+response_templates:
+  - template_id: "TPL-001"
+    template_name: "work_planner_success"
+    required_sections:
+      - "understanding_content"
+      - "challenge_content"
+      - "response_content"
+      - "request_echo_content"
+      - "next_steps_content"
+      - "threat_modeling_section"
+      - "tdd_requirements_section"
+      - "progress_visualization"
+    progress_visualization: true
+    interactive_elements:
+      - "DoR checklist"
+      - "Phase approval buttons"
+      - "Acceptance criteria checklist"
+      - "Threat review interface"
+    status: "partial"
+    missing_elements:
+      - "progress_visualization"
+      - "tdd_requirements_section"
+      - "dor_checklist"
+      
+  - template_id: "TPL-002"
+    template_name: "autonomous_execution_progress"
+    required_sections:
+      - "progress_bar"
+      - "phase_status"
+      - "task_completion"
+      - "elapsed_time"
+      - "threat_analysis_status"
+    progress_visualization: true
+    interactive_elements: []
+    status: "implemented"
+
+# ========================================
+# Compliance Rules
+# ========================================
+
+compliance_rules:
+  - rule_id: "TDD_ENFORCEMENT"
+    source: "cortex-brain/brain-protection-rules.yaml"
+    enforcement_level: "mandatory"
+    validation_method: "inject_tdd_requirements() must be called"
+    applies_to: "all_plans"
+    
+  - rule_id: "DOCUMENT_ORGANIZATION"
+    source: "cortex-brain/brain-protection-rules.yaml"
+    enforcement_level: "mandatory"
+    validation_method: "document_organizer.organize_document() must be called"
+    applies_to: "all_plans"
+    
+  - rule_id: "GIT_CHECKPOINT_ENFORCEMENT"
+    source: "cortex-brain/brain-protection-rules.yaml"
+    enforcement_level: "recommended"
+    validation_method: "git_checkpoint after each phase"
+    applies_to: "all_phases"
+    
+  - rule_id: "PLANNING_MODE_ISOLATION"
+    source: "cortex-brain/brain-protection-rules.yaml"
+    enforcement_level: "recommended"
+    validation_method: "PlanningSession state management"
+    applies_to: "interactive_sessions"
+
+# ========================================
+# Metrics & Monitoring
+# ========================================
+
+metrics:
+  success_criteria:
+    - metric: "plan_completion_rate"
+      target: ">90%"
+      measurement: "Plans that reach execution phase / Total plans started"
+    - metric: "dor_approval_time"
+      target: "<10 minutes"
+      measurement: "Time from plan start to DoR approval"
+    - metric: "phase_approval_rate"
+      target: ">95%"
+      measurement: "Phases approved on first attempt / Total phases"
+    - metric: "threat_detection_accuracy"
+      target: ">80%"
+      measurement: "Relevant threats identified / Total security-related features"
+      
+  quality_indicators:
+    - indicator: "acceptance_criteria_clarity"
+      measurement: "User acceptance rate of generated acceptance criteria"
+    - indicator: "effort_estimation_accuracy"
+      measurement: "Actual vs estimated effort (within 20%)"
+    - indicator: "tdd_compliance"
+      measurement: "Plans with complete TDD requirements / Total plans"
+
+# ========================================
+# Extensibility & Future Enhancements
+# ========================================
+
+future_enhancements:
+  - enhancement_id: "ENH-001"
+    name: "AI-Powered DoR Generation"
+    description: "Use LLM to suggest DoR items based on feature description"
+    priority: "medium"
+    estimated_effort: "8 hours"
+    
+  - enhancement_id: "ENH-002"
+    name: "Multi-Language Plan Generation"
+    description: "Generate plans in multiple languages (Spanish, French, etc.)"
+    priority: "low"
+    estimated_effort: "12 hours"
+    
+  - enhancement_id: "ENH-003"
+    name: "Plan Template Library"
+    description: "Pre-built plan templates for common feature types"
+    priority: "high"
+    estimated_effort: "16 hours"
+    
+  - enhancement_id: "ENH-004"
+    name: "Collaborative Planning"
+    description: "Multi-user plan collaboration with real-time updates"
+    priority: "low"
+    estimated_effort: "40 hours"
+
+# ========================================
+# Validation Configuration
+# ========================================
+
+validation:
+  on_initialization:
+    enabled: true
+    strict_mode: true
+    fail_on_missing_requirements: false
+    log_level: "warning"
+    
+  on_execution:
+    enabled: true
+    validate_gates: true
+    validate_integrations: true
+    validate_workflow_sequence: true
+    
+  drift_detection:
+    enabled: true
+    check_frequency: "on_healthcheck"
+    report_missing_features: true
+    report_path: "cortex-brain/documents/reports/planning-drift-report.md"
