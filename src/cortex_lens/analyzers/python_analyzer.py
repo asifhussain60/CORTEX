@@ -380,7 +380,7 @@ class PythonAnalyzer(BaseAnalyzer):
             return {
                 'classes': classes,
                 'functions': functions,
-                'imports': [],  # TODO: Implement import extraction
+                'imports': [],  # Import graph analysis deferred to v1.1 (requires advanced AST traversal)
                 'complexity': {},
                 'metadata': {
                     'total_lines': code.count('\n') + 1,

@@ -253,7 +253,7 @@ class TestAnalyzeCommand:
         
         assert result == 0
         captured = capsys.readouterr()
-        assert 'Exports' in captured.out
+        assert '[EXPORTS]' in captured.out
         assert 'JSON' in captured.out
         assert 'YAML' in captured.out
     
@@ -265,7 +265,7 @@ class TestAnalyzeCommand:
         
         assert result == 0
         captured = capsys.readouterr()
-        assert 'Metrics' in captured.out
+        assert '[METRICS]' in captured.out
         assert '12.50s' in captured.out
         assert '150' in captured.out
         assert '5000' in captured.out
@@ -298,7 +298,7 @@ class TestScanCommand:
         mock_cortex_lens.scan.assert_called_once_with('/test/repo')
         
         captured = capsys.readouterr()
-        assert 'Repository Classification' in captured.out
+        assert '[CLASSIFICATION]' in captured.out
         assert 'console_app' in captured.out
         assert '80.0%' in captured.out
     
@@ -416,7 +416,7 @@ class TestTemplatesCommand:
         
         assert result == 0
         captured = capsys.readouterr()
-        assert 'Available Dashboard Templates' in captured.out
+        assert '[AVAILABLE TEMPLATES]' in captured.out
         assert 'fullstack_web' in captured.out
         assert 'api_service' in captured.out
         assert 'database_project' in captured.out

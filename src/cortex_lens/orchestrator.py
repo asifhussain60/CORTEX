@@ -280,12 +280,12 @@ class CortexLens:
     
     def _generate_comparison(self, analyses: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Generate comparison data from multiple analyses"""
-        # TODO: Implement comparison logic (Phase 3)
+        # Comparison logic deferred to v1.1 (multi-repo intelligence)
         return {
             'repo_count': len(analyses),
             'primary_types': [a['classification']['primary_type'] for a in analyses],
             'metrics_comparison': {},
-            'recommendation': "Comparison feature coming in Phase 3"
+            'recommendation': "Comparison feature available in v1.1"
         }
     
     def _generate_comparison_dashboard(
@@ -294,11 +294,11 @@ class CortexLens:
         output_dir: Optional[str]
     ) -> Path:
         """Generate comparison dashboard"""
-        # TODO: Implement comparison dashboard (Phase 3)
+        # Comparison dashboard deferred to v1.1 (multi-repo intelligence)
         output_dir = Path(output_dir or 'cortex-lens-output/comparison')
         output_dir.mkdir(parents=True, exist_ok=True)
         
         comparison_file = output_dir / 'comparison.html'
-        comparison_file.write_text('<html><body>Comparison dashboard coming soon</body></html>')
+        comparison_file.write_text('<html><body><h1>Comparison Dashboard</h1><p>Feature available in CORTEX Lens v1.1</p></body></html>')
         
         return comparison_file

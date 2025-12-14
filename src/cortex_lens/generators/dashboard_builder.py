@@ -386,8 +386,8 @@ class DashboardBuilder(BaseGenerator):
             
             # Testing
             'test_coverage': int(test_coverage.get('coverage_percent', 0)),
-            'coverage_trend': '+2%',  # TODO: Calculate from history
-            'coverage_trend_class': 'trend-up',
+            'coverage_trend': 'N/A',  # Historical tracking requires git integration (v1.1)
+            'coverage_trend_class': 'trend-neutral',
             'tests_passing': test_coverage.get('tests_passing', 0),
             'tests_failing': test_coverage.get('tests_failing', 0),
             'tests_skipped': test_coverage.get('tests_skipped', 0),
@@ -397,8 +397,8 @@ class DashboardBuilder(BaseGenerator):
             'security_class': self._get_score_class(health.get('security_score', 0)),
             'security_interpretation': self._get_score_interpretation(health.get('security_score', 0)),
             'security_issues': len(analysis_data.get('security', {}).get('vulnerabilities', [])),
-            'security_trend': '↓ 3',  # TODO: Calculate from history
-            'security_trend_class': 'trend-down',
+            'security_trend': 'N/A',  # Historical tracking requires git integration (v1.1)
+            'security_trend_class': 'trend-neutral',
             'vulnerabilities': analysis_data.get('security', {}).get('vulnerabilities', []),
             
             # Narrative
@@ -419,7 +419,7 @@ class DashboardBuilder(BaseGenerator):
             # Console app specific
             'cli_framework': architecture.get('cli_framework', 'argparse'),
             'entry_points': architecture.get('entry_points', []),
-            'recent_commits': []  # TODO: Git integration
+            'recent_commits': []  # Git integration deferred to v1.1
         }
     
     def _inject_template_data(

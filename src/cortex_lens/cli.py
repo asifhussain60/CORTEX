@@ -34,17 +34,18 @@ def cmd_analyze(args):
         export_formats=args.format
     )
     
-    print(f"\n✅ Analysis Complete!")
-    print(f"📊 Dashboard: {result['dashboard_path']}")
-    print(f"📦 Package: {result['package_path']}")
+    # Use ASCII-safe output for Windows compatibility
+    print(f"\n[OK] Analysis Complete!")
+    print(f"[DASHBOARD] {result['dashboard_path']}")
+    print(f"[PACKAGE] {result['package_path']}")
     
     if result.get('export_paths'):
-        print(f"\n📄 Exports:")
+        print(f"\n[EXPORTS]")
         for format_type, path in result['export_paths'].items():
             print(f"  - {format_type.upper()}: {path}")
     
     metrics = result.get('metrics', {})
-    print(f"\n📈 Metrics:")
+    print(f"\n[METRICS]")
     print(f"  - Duration: {metrics.get('duration_seconds', 0):.2f}s")
     print(f"  - Files: {metrics.get('total_files', 0)}")
     print(f"  - LOC: {metrics.get('total_loc', 0)}")
@@ -58,7 +59,7 @@ def cmd_scan(args):
     
     classification = lens.scan(args.repo_path)
     
-    print(f"\n🔍 Repository Classification")
+    print(f"\n[CLASSIFICATION]")
     print(f"Primary Type: {classification['primary_type']}")
     print(f"Confidence: {classification['confidence_scores'][classification['primary_type']]:.1%}")
     
@@ -69,7 +70,7 @@ def cmd_scan(args):
     
     print(f"\nDetected Patterns:")
     for pattern, detected in classification['detected_patterns'].items():
-        status = "✓" if detected else "✗"
+        status = "[+]" if detected else "[-]"
         print(f"  {status} {pattern}")
     
     print(f"\nDashboard Template: {classification['dashboard_template']}")
@@ -86,8 +87,8 @@ def cmd_compare(args):
         output_dir=args.output
     )
     
-    print(f"\n✅ Comparison Complete!")
-    print(f"📊 Comparison Dashboard: {result['comparison_path']}")
+    print(f"\n[OK] Comparison Complete!")
+    print(f"[DASHBOARD] {result['comparison_path']}")
     print(f"Repositories Compared: {len(args.repos)}")
     
     return 0
@@ -104,7 +105,7 @@ def cmd_templates(args):
         ("library_package", "Library/Package", "Exported APIs, documentation")
     ]
     
-    print("\n📋 Available Dashboard Templates\n")
+    print("\n[AVAILABLE TEMPLATES]\n")
     for template_id, name, description in templates:
         print(f"  {template_id:20s} - {name}")
         print(f"  {' ' * 20}   {description}")

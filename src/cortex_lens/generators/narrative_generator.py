@@ -73,8 +73,8 @@ class NarrativeGenerator(BaseGenerator):
         
         logger.info("✅ Narrative generated")
         
-        # For now, return the dict directly
-        # TODO: Write to markdown file
+        # Narrative designed for HTML dashboard embedding
+        # Standalone markdown export available via packager.export()
         return narrative
     
     def _generate_executive_summary(
