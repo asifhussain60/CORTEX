@@ -1,23 +1,31 @@
 """
-Planning Orchestrator v3.0 for CORTEX
+Planning Orchestrator v3.1 for CORTEX
 
-Streamlined planning system with intelligent tiered routing:
+Enhanced planning system with intelligent tiered routing and temporary plan support:
 - Tier 1 (INSTANT): Direct execution, no planning
 - Tier 2 (LIGHTWEIGHT): Inline validation, quick plans
 - Tier 3 (DOCUMENTED): Feature additions, single MD
 - Tier 4 (COMPLEX): Architecture changes, nested MD
 
+New Features (v3.1):
+- Temporary plan management for implicit requests
+- Plan folder lifecycle (approved → active → completed)
+- Master plan status updates (In Progress, Complete)
+- Knowledge extraction phase on completion
+- Removed ASCII progress bars from user-facing output (internal logging only)
+
 Integrates:
 - TieredRouter for operation classification
 - ComplexityAnalyzer for risk assessment
 - VersionManager for consistent versioning
+- TemporaryPlanManager for implicit planning workflow
 - Automatic refactor/vacuum cycles
 
 Phase 03 of CORTEX Evolution v3.9
 
 Author: Asif Hussain
 Copyright © 2025 Asif Hussain. All rights reserved.
-Version: 3.0.0
+Version: 3.1.0
 """
 
 import json
@@ -38,6 +46,9 @@ from src.operations.modules.routing.complexity_analyzer import (
     ComplexityAnalyzer, ComplexityScore, ComplexityTier
 )
 from src.operations.modules.version.version_manager import get_version_manager
+from src.operations.modules.orchestration.temporary_plan_manager import (
+    TemporaryPlanManager, TemporaryPlan
+)
 from src.utils.progress_decorator import with_progress, yield_progress
 from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
 
@@ -69,7 +80,7 @@ class PlanningContext:
 
 class PlanningOrchestrator(BaseOperationModule):
     """
-    Planning System 3.0 orchestrator.
+    Planning System 3.1 orchestrator.
     
     Workflow:
     1. Classify operation tier (TieredRouter)
@@ -82,18 +93,21 @@ class PlanningOrchestrator(BaseOperationModule):
     4. Execute refactor cycle (cleanup)
     5. Execute vacuum cycle (consolidation)
     6. Generate documentation
+    7. Knowledge extraction (on completion)
     
     Integrations:
     - TieredRouter: 4-tier classification
     - ComplexityAnalyzer: Risk scoring
     - VersionManager: Centralized versioning
+    - TemporaryPlanManager: Implicit planning workflow
     - RefactorCycleOrchestrator: Code cleanup
     - VacuumOrchestrator: Document consolidation
+    - KnowledgeGraphAutoUpdater: Knowledge extraction
     """
     
     def __init__(self, project_root: Path = None):
         """
-        Initialize Planning Orchestrator 3.0.
+        Initialize Planning Orchestrator 3.1.
         
         Args:
             project_root: Path to project root (defaults to CWD)
@@ -103,18 +117,29 @@ class PlanningOrchestrator(BaseOperationModule):
         
         # Initialize version manager and register
         self.version_manager = get_version_manager()
-        self.version_manager.register_orchestrator_version("planning_orchestrator", "3.0")
+        self.version_manager.register_orchestrator_version("planning_orchestrator", "3.1")
         self.version = self.version_manager.get_orchestrator_version("planning_orchestrator")
         
         # Initialize routing components
         self.tiered_router = TieredRouter()
         self.complexity_analyzer = ComplexityAnalyzer()
         
+        # Initialize temporary plan manager
+        self.temp_plan_manager = TemporaryPlanManager(self.project_root)
+        
+        # Track current plan for autonomous execution
+        self.current_plan_id: Optional[str] = None
+        self.current_phase: int = 0
+        
         # Metrics tracking
         self.metrics: Dict[str, Any] = {
             'operations_processed': 0,
             'tier_breakdown': {1: 0, 2: 0, 3: 0, 4: 0},
             'planning_created': 0,
+            'temporary_plans_created': 0,
+            'plans_approved': 0,
+            'plans_completed': 0,
+            'knowledge_extractions': 0,
             'refactor_cycles_run': 0,
             'vacuum_cycles_run': 0,
             'errors': [],
@@ -129,19 +154,19 @@ class PlanningOrchestrator(BaseOperationModule):
             logger.warning(f"Failed to initialize template manager: {e}")
             self.template_manager = None
         
-        logger.info(f"✅ PlanningOrchestrator v{self.version} initialized (Planning System 3.0)")
+        logger.info(f"✅ PlanningOrchestrator v{self.version} initialized (Planning System 3.1)")
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Get module metadata."""
         return OperationModuleMetadata(
-            module_id="planning_orchestrator_v3",
-            name="Planning Orchestrator 3.0",
-            description="Intelligent tiered planning with automatic refactor/vacuum cycles",
+            module_id="planning_orchestrator_v3_1",
+            name="Planning Orchestrator 3.1",
+            description="Intelligent tiered planning with temporary plan support, folder lifecycle, and knowledge extraction",
             phase=OperationPhase.PROCESSING,
             priority=100,
-            version="3.0.0",
+            version="3.1.0",
             author="Asif Hussain",
-            tags=["orchestration", "planning", "tiered-routing", "planning-system-3.0"]
+            tags=["orchestration", "planning", "tiered-routing", "planning-system-3.1", "temporary-plans", "knowledge-extraction"]
         )
     
     @with_progress(operation_name="Planning System 3.0", threshold_seconds=5.0)
@@ -209,7 +234,7 @@ class PlanningOrchestrator(BaseOperationModule):
             # Phase 6: Finalize
             yield_progress(6, 6, "Phase 6: Finalizing planning")
             
-            # Generate visual progress summary
+            # Generate visual progress summary (INTERNAL LOGGING ONLY)
             progress_summary = self._generate_progress_summary(planning_context)
             logger.info(f"\n{progress_summary}")
             
@@ -225,10 +250,13 @@ class PlanningOrchestrator(BaseOperationModule):
             
             logger.info(f"🎭 Orchestrator completing: {'✅ ALL WORK COMPLETE' if is_complete else '⏳ PHASES DONE WITH WARNINGS'}")
             
+            # User-facing message (NO ASCII progress bars)
+            user_message = f"Planning completed (Tier {planning_context.tier}): {operation}"
+            
             return OperationResult(
                 success=success,
                 status=OperationStatus.SUCCESS if success else OperationStatus.WARNING,
-                message=f"Planning completed (Tier {planning_context.tier}): {operation}\n\n{progress_summary}",
+                message=user_message,
                 data={
                     'tier': planning_context.tier,
                     'complexity_score': planning_context.complexity_score.total_score,
@@ -238,8 +266,8 @@ class PlanningOrchestrator(BaseOperationModule):
                     'documentation': docs_result,
                     'metrics': self.metrics,
                     'is_complete': is_complete,
-                    'elapsed_time': (datetime.now() - start_time).total_seconds(),
-                    'progress_summary': progress_summary
+                    'elapsed_time': (datetime.now() - start_time).total_seconds()
+                    # NOTE: progress_summary removed from data - it's for logging only
                 }
             )
             
@@ -549,54 +577,409 @@ class PlanningOrchestrator(BaseOperationModule):
     
     def _generate_progress_summary(self, planning_context: PlanningContext) -> str:
         """
-        Generate ASCII visual progress summary for user feedback.
+        Generate progress summary for INTERNAL LOGGING ONLY.
+        
+        NOTE: ASCII progress bars are for internal logging only.
+        User-facing output uses markdown tables without ASCII art.
         
         Args:
             planning_context: Current planning context
             
         Returns:
-            Formatted ASCII progress visualization
+            Formatted progress summary (for internal logging)
         """
         # Calculate progress
         total_phases = 6
         completed_phases = 6  # All phases complete when this is called
         progress_percent = int((completed_phases / total_phases) * 100)
         
-        # Generate progress bar
+        # Generate progress bar (INTERNAL LOGGING ONLY - not shown to user)
         bar_length = 20
         filled = int((progress_percent / 100) * bar_length)
         empty = bar_length - filled
         progress_bar = "█" * filled + "░" * empty
         
-        # Build summary
+        # Build summary (this goes to logger, not user response)
         summary = f"""
-```
-+==============================================================================+
-  Planning System 3.0 - Execution Complete
-+==============================================================================+
+[INTERNAL LOGGING - Planning System 3.1 Execution Complete]
 
-  Progress: [{progress_bar}] {progress_percent}%
+Progress: [{progress_bar}] {progress_percent}%
 
-  Operation: {planning_context.operation[:60]}{'...' if len(planning_context.operation) > 60 else ''}
-  Tier: {planning_context.tier} ({planning_context.routing_decision.execution_method.upper()})
-  Complexity Score: {planning_context.complexity_score.total_score}/100
-  Confidence: {planning_context.routing_decision.confidence*100:.0f}%
+Operation: {planning_context.operation[:60]}{'...' if len(planning_context.operation) > 60 else ''}
+Tier: {planning_context.tier} ({planning_context.routing_decision.execution_method.upper()})
+Complexity Score: {planning_context.complexity_score.total_score}/100
+Confidence: {planning_context.routing_decision.confidence*100:.0f}%
 
-  Phases Completed:
-    ✅ Classification & Analysis
-    ✅ Tier Routing & Execution
-    {'✅' if self.metrics['refactor_cycles_run'] > 0 else '⏭️ '} Refactor Cycle {'(Complete)' if self.metrics['refactor_cycles_run'] > 0 else '(Skipped)'}
-    {'✅' if self.metrics['vacuum_cycles_run'] > 0 else '⏭️ '} Vacuum Cycle {'(Complete)' if self.metrics['vacuum_cycles_run'] > 0 else '(Skipped)'}
-    ✅ Documentation Generation
-    ✅ Finalization
-
-+==============================================================================+
-```"""
+Phases Completed:
+  ✅ Classification & Analysis
+  ✅ Tier Routing & Execution
+  {'✅' if self.metrics['refactor_cycles_run'] > 0 else '⏭️ '} Refactor Cycle {'(Complete)' if self.metrics['refactor_cycles_run'] > 0 else '(Skipped)'}
+  {'✅' if self.metrics['vacuum_cycles_run'] > 0 else '⏭️ '} Vacuum Cycle {'(Complete)' if self.metrics['vacuum_cycles_run'] > 0 else '(Skipped)'}
+  ✅ Documentation Generation
+  ✅ Finalization
+"""
         return summary
 
 
-# Example usage:
+    # ========================================
+    # Temporary Plan Workflow (v3.1)
+    # ========================================
+    
+    def create_temporary_plan_for_task(
+        self,
+        user_request: str,
+        auto_approve: bool = False
+    ) -> Dict[str, Any]:
+        """
+        Create a temporary plan for an implicit task request.
+        
+        This is used when user provides tasks without explicitly saying "create a plan".
+        
+        Workflow:
+        1. Classify complexity and tier
+        2. Create temporary plan in active/
+        3. Return plan for user review
+        4. User provides feedback (update_temporary_plan) or approves
+        5. On approval: convert to full master/slave plan
+        6. Execute autonomously
+        
+        Args:
+            user_request: User's task request
+            auto_approve: Whether to auto-approve (skip user review)
+        
+        Returns:
+            Dictionary with temporary plan details
+        """
+        logger.info(f"🔄 Creating temporary plan for implicit request: {user_request}")
+        
+        # Step 1: Classify and analyze
+        planning_context = self._classify_and_analyze(user_request)
+        
+        # Step 2: Generate phases based on tier
+        phases = self._generate_phases_for_tier(planning_context)
+        
+        # Step 3: Create temporary plan
+        temp_plan = self.temp_plan_manager.create_temporary_plan(
+            user_request=user_request,
+            complexity_tier=planning_context.tier,
+            estimated_time=planning_context.routing_decision.estimated_time,
+            approach=f"Tier {planning_context.tier} approach: {planning_context.routing_decision.reasoning}",
+            phases=phases,
+            dependencies=self._extract_dependencies(user_request),
+            risks=self._extract_risks(planning_context)
+        )
+        
+        self.metrics['temporary_plans_created'] += 1
+        self.current_plan_id = temp_plan.plan_id
+        
+        # Step 4: Auto-approve if requested
+        if auto_approve:
+            temp_plan = self.temp_plan_manager.approve_temporary_plan(temp_plan.plan_id)
+            self.metrics['plans_approved'] += 1
+        
+        logger.info(f"✅ Temporary plan created: {temp_plan.plan_id}")
+        
+        return {
+            'success': True,
+            'plan_id': temp_plan.plan_id,
+            'plan': temp_plan.to_dict(),
+            'requires_approval': not auto_approve,
+            'message': f"Temporary plan created. {'Approved automatically.' if auto_approve else 'Please review and approve to proceed.'}"
+        }
+    
+    def approve_and_execute_plan(
+        self,
+        plan_id: str,
+        autonomous: bool = True
+    ) -> Dict[str, Any]:
+        """
+        Approve temporary plan, convert to full plan, and execute.
+        
+        Args:
+            plan_id: Plan identifier
+            autonomous: Whether to execute autonomously (default: True)
+        
+        Returns:
+            Execution results dictionary
+        """
+        logger.info(f"✅ Approving and executing plan: {plan_id}")
+        
+        # Step 1: Approve temporary plan (moves to approved/)
+        temp_plan = self.temp_plan_manager.approve_temporary_plan(plan_id)
+        self.metrics['plans_approved'] += 1
+        
+        # Step 2: Convert to full master/slave plan (moves to active/)
+        master_plan_path = self.temp_plan_manager.convert_to_full_plan(plan_id)
+        
+        # Step 3: Execute autonomously if requested
+        if autonomous:
+            return self.execute_plan_autonomously(plan_id)
+        else:
+            return {
+                'success': True,
+                'plan_id': plan_id,
+                'master_plan_path': str(master_plan_path),
+                'message': 'Plan approved and converted. Ready for manual execution.'
+            }
+    
+    def execute_plan_autonomously(self, plan_id: str) -> Dict[str, Any]:
+        """
+        Execute plan autonomously without asking for confirmation at each phase.
+        
+        Updates master plan status as phases progress:
+        - Not Started → In Progress (when phase begins)
+        - In Progress → Complete (when phase finishes)
+        
+        Args:
+            plan_id: Plan identifier
+        
+        Returns:
+            Execution results dictionary
+        """
+        logger.info(f"🚀 Executing plan autonomously: {plan_id}")
+        self.current_plan_id = plan_id
+        
+        # Load plan to get phase count
+        master_plan_path = self.temp_plan_manager.active_dir / plan_id / "master-plan.md"
+        if not master_plan_path.exists():
+            return {
+                'success': False,
+                'error': f"Master plan not found: {master_plan_path}"
+            }
+        
+        # Parse phases from master plan
+        phases = self._parse_phases_from_master_plan(master_plan_path)
+        total_phases = len(phases)
+        
+        logger.info(f"📊 Plan has {total_phases} phases")
+        
+        # Execute each phase
+        results = []
+        for phase_num in range(1, total_phases + 1):
+            logger.info(f"🎭 Phase transition: Phase {phase_num - 1 if phase_num > 1 else 0} → Phase {phase_num}")
+            
+            # Mark phase as In Progress
+            self.temp_plan_manager.mark_phase_in_progress(plan_id, phase_num)
+            self.current_phase = phase_num
+            
+            # Execute phase (stub - actual implementation would call sub-plan execution)
+            phase_result = self._execute_phase(plan_id, phase_num, phases[phase_num - 1])
+            results.append(phase_result)
+            
+            # Mark phase as Complete
+            self.temp_plan_manager.mark_phase_complete(plan_id, phase_num)
+        
+        # All phases complete - run knowledge extraction and move to completed/
+        logger.info(f"🎭 Orchestrator completing: ✅ ALL WORK COMPLETE")
+        
+        completed_path = self.temp_plan_manager.complete_plan(
+            plan_id,
+            extract_knowledge=True
+        )
+        
+        self.metrics['plans_completed'] += 1
+        self.metrics['knowledge_extractions'] += 1
+        
+        return {
+            'success': True,
+            'plan_id': plan_id,
+            'total_phases': total_phases,
+            'phase_results': results,
+            'completed_path': str(completed_path),
+            'is_complete': True,
+            'message': f"Plan execution complete. Knowledge extracted. Plan moved to completed/"
+        }
+    
+    def _generate_phases_for_tier(self, planning_context: PlanningContext) -> List[Dict[str, Any]]:
+        """Generate phases based on complexity tier."""
+        tier = planning_context.tier
+        
+        if tier == 1:
+            # Instant - single task
+            return [{
+                'name': 'Execute',
+                'description': 'Execute operation directly',
+                'tasks': ['Execute operation'],
+                'deliverables': ['Completed operation'],
+                'acceptance_criteria': ['Operation successful']
+            }]
+        
+        elif tier == 2:
+            # Lightweight - 2 phases
+            return [
+                {
+                    'name': 'Implementation',
+                    'description': 'Implement the change',
+                    'tasks': ['Make code changes', 'Validate syntax'],
+                    'deliverables': ['Modified files'],
+                    'acceptance_criteria': ['Code compiles', 'Lint passes']
+                },
+                {
+                    'name': 'Testing',
+                    'description': 'Test the implementation',
+                    'tasks': ['Run tests', 'Verify functionality'],
+                    'deliverables': ['Test results'],
+                    'acceptance_criteria': ['All tests pass']
+                }
+            ]
+        
+        elif tier == 3:
+            # Documented - 3 phases
+            return [
+                {
+                    'name': 'Foundation',
+                    'description': 'Set up foundation',
+                    'tasks': ['Define interfaces', 'Create models'],
+                    'deliverables': ['Base structure'],
+                    'acceptance_criteria': ['Structure in place']
+                },
+                {
+                    'name': 'Implementation',
+                    'description': 'Implement feature logic',
+                    'tasks': ['Implement business logic', 'Add tests'],
+                    'deliverables': ['Feature implemented'],
+                    'acceptance_criteria': ['Feature works', 'Tests pass']
+                },
+                {
+                    'name': 'Integration',
+                    'description': 'Integrate and validate',
+                    'tasks': ['Integration tests', 'Documentation'],
+                    'deliverables': ['Integrated feature'],
+                    'acceptance_criteria': ['Integration complete']
+                }
+            ]
+        
+        else:  # tier == 4
+            # Complex - 5 phases
+            return [
+                {
+                    'name': 'Architecture',
+                    'description': 'Design architecture',
+                    'tasks': ['Architecture design', 'Interface definitions'],
+                    'deliverables': ['Architecture doc'],
+                    'acceptance_criteria': ['Design approved']
+                },
+                {
+                    'name': 'Foundation',
+                    'description': 'Build foundation',
+                    'tasks': ['Core models', 'Base services'],
+                    'deliverables': ['Foundation code'],
+                    'acceptance_criteria': ['Foundation stable']
+                },
+                {
+                    'name': 'Implementation',
+                    'description': 'Implement features',
+                    'tasks': ['Feature implementation', 'Unit tests'],
+                    'deliverables': ['Feature code'],
+                    'acceptance_criteria': ['Features work']
+                },
+                {
+                    'name': 'Integration',
+                    'description': 'Integrate components',
+                    'tasks': ['Component integration', 'Integration tests'],
+                    'deliverables': ['Integrated system'],
+                    'acceptance_criteria': ['System integrated']
+                },
+                {
+                    'name': 'Deployment',
+                    'description': 'Deploy and validate',
+                    'tasks': ['Deployment', 'Monitoring setup'],
+                    'deliverables': ['Deployed system'],
+                    'acceptance_criteria': ['System live']
+                }
+            ]
+    
+    def _extract_dependencies(self, user_request: str) -> List[str]:
+        """Extract dependencies from user request (simple keyword matching)."""
+        dependencies = []
+        request_lower = user_request.lower()
+        
+        if 'api' in request_lower:
+            dependencies.append("API infrastructure")
+        if 'database' in request_lower or 'db' in request_lower:
+            dependencies.append("Database schema")
+        if 'auth' in request_lower:
+            dependencies.append("Authentication system")
+        if 'ui' in request_lower or 'frontend' in request_lower:
+            dependencies.append("UI components")
+        
+        return dependencies
+    
+    def _extract_risks(self, planning_context: PlanningContext) -> List[str]:
+        """Extract risks based on complexity."""
+        risks = []
+        
+        if planning_context.complexity_score.total_score > 70:
+            risks.append("High complexity may cause delays")
+        
+        if planning_context.tier >= 4:
+            risks.append("Complex architecture changes require careful coordination")
+        
+        if len(self._extract_dependencies(planning_context.operation)) > 2:
+            risks.append("Multiple dependencies may cause blocking issues")
+        
+        return risks
+    
+    def _parse_phases_from_master_plan(self, master_plan_path: Path) -> List[Dict[str, Any]]:
+        """Parse phases from master plan markdown."""
+        content = master_plan_path.read_text(encoding='utf-8')
+        
+        phases = []
+        import re
+        
+        # Find all phase headers: "### Phase N: Name - Status: ..."
+        phase_pattern = r'### Phase (\d+): (.+?) - Status:'
+        matches = re.finditer(phase_pattern, content)
+        
+        for match in matches:
+            phase_num = int(match.group(1))
+            phase_name = match.group(2).strip()
+            phases.append({
+                'number': phase_num,
+                'name': phase_name
+            })
+        
+        return phases
+    
+    def _execute_phase(
+        self,
+        plan_id: str,
+        phase_number: int,
+        phase_info: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Execute a single phase (stub for now).
+        
+        In production, this would:
+        1. Load sub-plan for phase
+        2. Execute tasks in sub-plan
+        3. Validate acceptance criteria
+        4. Generate phase report
+        
+        Args:
+            plan_id: Plan identifier
+            phase_number: Phase number
+            phase_info: Phase information dictionary
+        
+        Returns:
+            Phase execution results
+        """
+        logger.info(f"Executing Phase {phase_number}: {phase_info.get('name', 'Unknown')}")
+        
+        # Stub implementation
+        # TODO: Implement actual phase execution logic
+        
+        return {
+            'phase_number': phase_number,
+            'phase_name': phase_info.get('name', 'Unknown'),
+            'success': True,
+            'message': f"Phase {phase_number} executed (stub)"
+        }
+
+
+# Example usage (v3.1):
 # 
+# # Traditional explicit planning
 # orchestrator = PlanningOrchestrator()
 # result = orchestrator.execute({
 #     'operation': 'Add user authentication to API',
@@ -604,3 +987,23 @@ class PlanningOrchestrator(BaseOperationModule):
 #     'skip_vacuum': False
 # })
 # print(result.data['tier'])  # 3 or 4 (auth triggers HIGH complexity)
+#
+# # New implicit planning workflow
+# orchestrator = PlanningOrchestrator()
+# 
+# # User provides tasks without saying "create a plan"
+# temp_result = orchestrator.create_temporary_plan_for_task(
+#     user_request="Add logging to all API endpoints and create dashboard"
+# )
+# print(f"Temporary plan created: {temp_result['plan_id']}")
+#
+# # User provides feedback (optional)
+# # orchestrator.temp_plan_manager.update_temporary_plan(...)
+#
+# # User approves (or auto-approve)
+# exec_result = orchestrator.approve_and_execute_plan(
+#     plan_id=temp_result['plan_id'],
+#     autonomous=True  # Execute all phases without asking
+# )
+# print(f"Execution complete: {exec_result['is_complete']}")
+# print(f"Plan moved to: {exec_result['completed_path']}")
