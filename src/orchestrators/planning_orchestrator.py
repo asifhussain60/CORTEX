@@ -30,6 +30,7 @@ from src.response_templates.response_template_manager import ResponseTemplateMan
 from src.workflows.document_organizer import DocumentOrganizer
 from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
+from src.workflows.plan_folder_manager import PlanFolderManager
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 from src.agents.security.threat_modeler_agent import ThreatModelerAgent
 from src.cortex_agents.base_agent import AgentRequest
@@ -86,6 +87,10 @@ class PlanningOrchestrator:
         # NEW Sprint 2: Initialize document organizer
         brain_path = self.cortex_root / "cortex-brain"
         self.document_organizer = DocumentOrganizer(brain_path)
+        
+        # NEW Phase 1: Initialize PlanFolderManager for folder-based artifacts
+        self.folder_manager = PlanFolderManager(cortex_root=self.cortex_root)
+        logger.info(f"✅ PlanFolderManager initialized (folder_structure={'enabled' if self.folder_manager.is_folder_structure_enabled() else 'disabled'})")
         
         # NEW Sprint 3: Initialize incremental planning components
         self.incremental_generator = IncrementalPlanGenerator(
@@ -569,6 +574,7 @@ class PlanningOrchestrator:
         Save plan to YAML file (with validation).
         
         AUTO-INJECTS TDD requirements into DoR/DoD before saving.
+        NOW supports folder structure organization when enabled.
         
         Args:
             plan_data: Plan data dictionary
@@ -591,34 +597,112 @@ class PlanningOrchestrator:
             plan_id = plan_data.get("metadata", {}).get("plan_id", "UNKNOWN-PLAN")
             status = plan_data.get("metadata", {}).get("status", "proposed")
             
-            if status == "completed":
-                base_dir = self.completed_plans_dir
+            # NEW Phase 5: Use folder structure if enabled
+            if self.folder_manager.is_folder_structure_enabled():
+                try:
+                    # Create folder structure for plan
+                    plan_folder = self.folder_manager.create_plan_structure(
+                        plan_id=plan_id,
+                        status=status
+                    )
+                    
+                    if plan_folder:
+                        # Save plan YAML in organized folder
+                        output_path = plan_folder / f"{plan_id}.yaml"
+                        logger.info(f"📁 Folder structure created: {plan_folder}")
+                    else:
+                        # Folder structure disabled, fallback
+                        logger.info("Folder structure disabled, using flat structure")
+                        if status == "completed":
+                            base_dir = self.completed_plans_dir
+                        else:
+                            base_dir = self.active_plans_dir
+                        base_dir.mkdir(parents=True, exist_ok=True)
+                        output_path = base_dir / f"{plan_id}.yaml"
+                except Exception as e:
+                    # Fallback to flat structure if folder creation fails
+                    logger.warning(f"⚠️ Folder creation failed, using flat structure: {e}")
+                    if status == "completed":
+                        base_dir = self.completed_plans_dir
+                    else:
+                        base_dir = self.active_plans_dir
+                    base_dir.mkdir(parents=True, exist_ok=True)
+                    output_path = base_dir / f"{plan_id}.yaml"
             else:
-                base_dir = self.active_plans_dir
-            
-            base_dir.mkdir(parents=True, exist_ok=True)
-            output_path = base_dir / f"{plan_id}.yaml"
+                # Legacy flat structure (backward compatible)
+                if status == "completed":
+                    base_dir = self.completed_plans_dir
+                else:
+                    base_dir = self.active_plans_dir
+                
+                base_dir.mkdir(parents=True, exist_ok=True)
+                output_path = base_dir / f"{plan_id}.yaml"
         
         # Save YAML
         try:
             with open(output_path, 'w', encoding='utf-8') as f:
                 yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
             
-            # NEW Sprint 2: Auto-organize plan into correct category
-            try:
-                organized_path, organize_message = self.document_organizer.organize_document(output_path)
-                if organized_path:
-                    logger.info(f"📁 {organize_message}")
-                    output_path = organized_path
-                else:
-                    logger.warning(f"⚠️ Plan organization skipped: {organize_message}")
-            except Exception as org_error:
-                logger.warning(f"⚠️ Plan organization failed: {org_error}")
+            # NEW Sprint 2: Auto-organize plan into correct category (only for flat structure)
+            if not self.folder_manager.is_folder_structure_enabled():
+                try:
+                    organized_path, organize_message = self.document_organizer.organize_document(output_path)
+                    if organized_path:
+                        logger.info(f"📁 {organize_message}")
+                        output_path = organized_path
+                    else:
+                        logger.warning(f"⚠️ Plan organization skipped: {organize_message}")
+                except Exception as org_error:
+                    logger.warning(f"⚠️ Plan organization failed: {org_error}")
             
             logger.info(f"Plan saved to {output_path}")
             return (True, f"Plan saved to {output_path}")
         except Exception as e:
             error_msg = f"Failed to save plan: {e}"
+            logger.error(error_msg)
+            return (False, error_msg)
+    
+    def save_artifact(self, plan_id: str, artifact_type: str, content: str, filename: str, status: str = "active") -> Tuple[bool, str]:
+        """
+        Save plan artifact to organized folder structure (Phase 5 integration).
+        
+        Artifacts include: trackers, reports, sub-plans, tests, checkpoints
+        
+        Args:
+            plan_id: Plan identifier
+            artifact_type: Type of artifact (tracker, report, sub-plan, test, checkpoint)
+            content: Content to save
+            filename: Name of artifact file
+            status: Plan status (active, completed, archived)
+        
+        Returns:
+            Tuple of (success, message)
+        """
+        try:
+            # Get artifact path using folder manager
+            artifact_path = self.folder_manager.get_artifact_path(
+                plan_id=plan_id,
+                artifact_type=artifact_type,
+                filename=filename,
+                status=status
+            )
+            
+            if artifact_path:
+                # Ensure parent directory exists
+                artifact_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                # Write artifact
+                with open(artifact_path, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                
+                logger.info(f"Artifact saved: {artifact_path}")
+                return (True, f"Artifact saved to {artifact_path}")
+            else:
+                error_msg = f"Failed to determine artifact path for {plan_id}/{artifact_type}/{filename}"
+                logger.error(error_msg)
+                return (False, error_msg)
+        except Exception as e:
+            error_msg = f"Failed to save artifact: {e}"
             logger.error(error_msg)
             return (False, error_msg)
     
