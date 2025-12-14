@@ -1,5 +1,9 @@
 {
-  "version": "3.7.0",
+  "version": "3.9.0",
+  "planningSystem": {
+    "version": "3.0",
+    "comment": "Planning System 3.0 - Tiered routing, automatic refactor/vacuum cycles, centralized versioning"
+  },
   "application": {
     "name": "CORTEX",
     "framework": "Browser-Native (SQL.js + TypeScript) + PowerShell",

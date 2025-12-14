@@ -1786,6 +1786,18 @@ class PlanningOrchestrator:
             
             logger.info(f"Approved plan: {plan_filename} (active → approved)")
             
+            # FIX Issue #4: Move plan folder if folder structure enabled
+            if self.folder_manager.is_folder_structure_enabled():
+                plan_id = plan_filename.replace('.md', '')
+                try:
+                    self.folder_manager.move_plan(plan_id, 'active', 'approved')
+                    logger.info(f"✅ Moved plan folder: {plan_id} (active → approved)")
+                except FileNotFoundError:
+                    logger.debug(f"Plan folder not found (expected if not using folder structure): {plan_id}")
+                except Exception as e:
+                    logger.warning(f"Failed to move plan folder: {e}")
+            
+            # Create git checkpoint after successful approval
             try:
                 self.git_checkpoint.create_auto_checkpoint(
                     operation="approve",
@@ -1887,6 +1899,14 @@ class PlanningOrchestrator:
             for phase_idx, phase in enumerate(phases, 1):
                 phase_name = phase.get('phase_name', f'Phase {phase_idx}')
                 phase_tasks = phase.get('tasks', [])
+                
+                # Update phase status to "In Progress" (FIX: Issue #2)
+                self.update_phase_status(
+                    phase_name=phase_name,
+                    status='in_progress',
+                    progress=0
+                )
+                logger.info(f"🎭 Phase transition: START → {phase_name}")
                 
                 # Render phase progress in chat using template
                 if self.template_manager:
@@ -1992,6 +2012,15 @@ class PlanningOrchestrator:
                         f"Task {task_id}: {task_name}"
                     )
                 
+                # Update phase status to "Complete" (FIX: Issue #3)
+                self.update_phase_status(
+                    phase_name=phase_name,
+                    status='completed',
+                    progress=100,
+                    tokens_used=0  # TODO: Track actual token usage
+                )
+                logger.info(f"🎭 Phase transition: {phase_name} → COMPLETE")
+                
                 # Save orchestration checkpoint at phase boundary (Feature 11)
                 try:
                     checkpoint_state = {
@@ -2089,6 +2118,68 @@ class PlanningOrchestrator:
                 checkpoints_created=checkpoints_created
             )
             print(completion_msg)
+            
+            # FIX Issue #6: Knowledge Extraction Phase (CRITICAL)
+            logger.info("🎭 Phase transition: EXECUTION → KNOWLEDGE_EXTRACTION")
+            print("\n### 📚 Phase 7: Knowledge Extraction\n")
+            
+            try:
+                # 1. Build execution context for knowledge extraction
+                extraction_context = {
+                    'plan_id': plan_id,
+                    'total_phases': total_phases,
+                    'total_tasks': completed_tasks,
+                    'duration_seconds': (datetime.now() - start_time).total_seconds(),
+                    'execution_log': execution_log,
+                    'files_modified': [],  # TODO: Extract from git diff
+                    'tests_run': 0,  # TODO: Extract from test results
+                    'tests_passed': 0,
+                    'coverage': 0.0,
+                    'quality_gates': ['DoR_validated', 'DoD_validated', 'TDD_enforced']
+                }
+                
+                # 2. Update knowledge graph with patterns
+                from src.operations.utilities.knowledge_graph_auto_updater import KnowledgeGraphAutoUpdater
+                kg_updater = KnowledgeGraphAutoUpdater(self.cortex_root)
+                kg_result = kg_updater.safe_update(extraction_context)
+                
+                if kg_result.success:
+                    logger.info(f"✅ Knowledge graph updated: {kg_result.patterns_added} patterns added")
+                    print(f"   ✅ Knowledge Graph: {kg_result.patterns_added} patterns added, {kg_result.duplicates_skipped} duplicates skipped")
+                else:
+                    logger.warning(f"⚠️  Knowledge graph update failed: {kg_result.error_message}")
+                    print(f"   ⚠️  Knowledge graph update failed: {kg_result.error_message}")
+                
+                # 3. Store lesson in Tier 2 knowledge graph
+                from src.tier2.knowledge_graph import KnowledgeGraph
+                kg = KnowledgeGraph()
+                pattern_id = kg.store_pattern(
+                    title=f'Plan Execution: {plan_id}',
+                    pattern_type='workflow',
+                    confidence=0.9 if kg_result.success else 0.7,
+                    context={
+                        'plan_id': plan_id,
+                        'phases': total_phases,
+                        'tasks': completed_tasks,
+                        'duration_seconds': extraction_context['duration_seconds'],
+                        'success': True,
+                        'checkpoints': checkpoints_created,
+                        'patterns_extracted': kg_result.patterns_added if kg_result.success else 0
+                    },
+                    scope='cortex',
+                    namespaces=['planning', 'autonomous_execution']
+                )
+                
+                logger.info(f"✅ Stored workflow pattern: {pattern_id}")
+                print(f"   ✅ Learning Library: Documented as {pattern_id}")
+                
+                print("\n   ✅ Knowledge extraction complete\n")
+                
+            except Exception as e:
+                logger.error(f"❌ Knowledge extraction failed: {e}", exc_info=True)
+                print(f"   ⚠️  Knowledge extraction failed (non-blocking): {e}\n")
+            
+            logger.info("🎭 Phase transition: KNOWLEDGE_EXTRACTION → COMPLETION")
             
             # Complete the plan
             completion_result = self.complete_plan(plan_filename)
@@ -2264,6 +2355,17 @@ class PlanningOrchestrator:
             old_path.unlink()
             
             logger.info(f"Completed plan: {plan_filename} (approved → completed)")
+            
+            # FIX Issue #5: Move plan folder if folder structure enabled
+            if self.folder_manager.is_folder_structure_enabled():
+                plan_id = plan_filename.replace('.md', '')
+                try:
+                    self.folder_manager.move_plan(plan_id, 'approved', 'completed')
+                    logger.info(f"✅ Moved plan folder: {plan_id} (approved → completed)")
+                except FileNotFoundError:
+                    logger.debug(f"Plan folder not found (expected if not using folder structure): {plan_id}")
+                except Exception as e:
+                    logger.warning(f"Failed to move plan folder: {e}")
             
             # Create git checkpoint after successful completion
             try:

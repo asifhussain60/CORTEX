@@ -1,10 +1,10 @@
-version: '2.2'
+version: '2.4'
 type: governance
 name: Brain Protection Rules
 description: Automated architectural protection challenges
 rules:
-  total_count: 48
-  layers: 17
+  total_count: 56
+  layers: 24
   severity_levels:
   - blocked
   - warning
@@ -34,6 +34,14 @@ tier0_instincts:
 - HOLISTIC_CODE_DISCOVERY_ENFORCEMENT
 - TDD_TEST_FILE_VALIDATION
 - TDD_EMPTY_TEST_DETECTION
+- FILE_ORGANIZATION_ENFORCEMENT
+- TIERED_PLANNING_ENFORCEMENT
+- VACUUM_CYCLE_ENFORCEMENT
+- INCREMENTAL_PLAN_CREATION_ENFORCEMENT
+- PROGRESS_TRACKER_ENFORCEMENT
+- SENIOR_DEVELOPER_ESTIMATE_ENFORCEMENT
+- BIDIRECTIONAL_LINKING_ENFORCEMENT
+- AUTOMATIC_DOCUMENTATION_GENERATION
 - DEFINITION_OF_READY
 - DEFINITION_OF_DONE
 - SOLID_PRINCIPLES
@@ -3410,3 +3418,967 @@ validation:
   params:
     has_placeholders: true
     has_options: true
+
+# Layer 11: Planning System 3.0 Governance
+- layer_id: "planning_system_3_governance"
+  name: "Planning System 3.0 Governance"
+  description: "Governance rules for Planning System 3.0 - File organization, tiered planning, vacuum cycles, incremental creation"
+  priority: 11
+  
+  rules:
+    - rule_id: "FILE_ORGANIZATION_ENFORCEMENT"
+      name: "File Organization Enforcement"
+      severity: "blocked"
+      description: "All documents MUST be created in cortex-brain/documents/{category}/ with filename ≤20 characters. Root-level files in any folder are PROHIBITED."
+      
+      detection:
+        combined_keywords:
+          file_creation:
+            - "create file"
+            - "save to"
+            - "write file"
+            - "generate document"
+          wrong_location:
+            - "CORTEX/summary.md"
+            - "CORTEX/report.md"
+            - "cortex-brain/summary.md"
+            - "cortex-brain/analysis.md"
+          or_long_filename:
+            - "filename length > 20"
+        scope: ["intent", "target_path"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Determine document type (report, analysis, summary, investigation, planning, implementation-guide)"
+        - "STEP 2: Select category folder: cortex-brain/documents/{category}/"
+        - "STEP 3: Create meaningful filename ≤20 characters (excluding extension)"
+        - "STEP 4: Construct full path: cortex-brain/documents/{category}/{filename}.md"
+        - "EXAMPLE: Report → cortex-brain/documents/reports/test-results.md (17 chars)"
+        - "EXAMPLE: Analysis → cortex-brain/documents/analysis/arch-review.md (17 chars)"
+      
+      evidence_template: |
+        File organization violation detected!
+        
+        Target: '{target_path}'
+        Filename Length: {filename_length} chars
+        
+        ❌ WRONG: Root-level file creation
+        - Path: CORTEX/summary.md
+        - Reason: Root-level files pollute workspace
+        - Impact: Difficult navigation, cluttered filesystem
+        
+        ✅ CORRECT: Organized in category folder
+        - Path: cortex-brain/documents/reports/test-summary.md
+        - Category: reports/
+        - Filename: test-summary.md (12 chars ≤ 20 char limit)
+        
+        **Available Categories:**
+        - reports/ - Status reports, test results, validation reports
+        - analysis/ - Code analysis, architecture analysis
+        - summaries/ - Project summaries, progress summaries
+        - investigations/ - Bug investigations, root cause analysis
+        - planning/ - Feature plans, ADO items, phase plans
+        - implementation-guides/ - How-to guides, best practices
+        
+        **Filename Rules:**
+        - Maximum 20 characters (excluding .md extension)
+        - Use hyphens for word separation (kebab-case)
+        - Meaningful and descriptive
+        - Examples: test-results.md, arch-review.md, bug-123-fix.md
+      
+      rationale: |
+        FILE_ORGANIZATION_ENFORCEMENT: Clean, Navigable Workspace
+        
+        Problem Scenario:
+        - 50+ files in CORTEX root
+        - 30+ files in cortex-brain root
+        - Difficult to find specific documents
+        - No logical grouping
+        - Long filenames (40+ characters)
+        
+        Solution:
+        - Category-based organization
+        - Predictable file locations
+        - Short, meaningful filenames
+        - Easy navigation
+        
+        Benefits:
+        - Find documents by category
+        - Clean root directories
+        - Consistent naming conventions
+        - Scalable structure
+    
+    - rule_id: "TIERED_PLANNING_ENFORCEMENT"
+      name: "Tiered Planning Enforcement"
+      severity: "blocked"
+      description: "Operations MUST route through tiered planning system: Tier 1 (instant), Tier 2 (lightweight), Tier 3 (documented), Tier 4 (complex). Automatic routing via complexity analyzer."
+      
+      detection:
+        combined_keywords:
+          planning_bypass:
+            - "skip planning"
+            - "bypass tier check"
+            - "direct execution"
+          complex_operation:
+            - "architecture change"
+            - "multi-phase work"
+            - "system redesign"
+        scope: ["intent", "operation_complexity"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Invoke complexity_analyzer.py to assess operation"
+        - "STEP 2: Route to appropriate tier:"
+        - "  - Tier 1: CLI operations, <2s deterministic tasks (instant)"
+        - "  - Tier 2: Single file changes, inline validation (lightweight)"
+        - "  - Tier 3: Feature additions, single MD structure (documented)"
+        - "  - Tier 4: Architecture changes, nested MD structure (complex)"
+        - "STEP 3: Execute with tier-appropriate tracking"
+      
+      evidence_template: |
+        Tiered planning violation detected!
+        
+        Operation: '{operation}'
+        Complexity: {complexity_score}
+        
+        ❌ WRONG: Complex operation without tier routing
+        - Operation: Major architecture redesign
+        - Current Path: Direct execution
+        - Risk: No planning, no tracking, no validation
+        
+        ✅ CORRECT: Tier-routed execution
+        - Operation: Major architecture redesign
+        - Complexity Score: 85/100 (HIGH)
+        - Assigned Tier: Tier 4 (Complex)
+        - Plan Structure: Nested MD with 14 phases
+        - Tracking: Progress tracker, DoR/DoD gates
+        
+        **Tier Routing Logic:**
+        - Tier 1 (0-25): Instant execution, CLI wrappers
+        - Tier 2 (26-50): Lightweight planning, inline validation
+        - Tier 3 (51-75): Documented planning, single MD
+        - Tier 4 (76-100): Complex planning, nested MD structure
+        
+        **Complexity Factors:**
+        - Scope (files affected, LOC changed)
+        - Dependencies (internal/external)
+        - Risk (breaking changes, security impact)
+        - Uncertainty (unknowns, research required)
+      
+      rationale: |
+        TIERED_PLANNING_ENFORCEMENT: Right-Sized Planning
+        
+        Problem: One-size-fits-all planning
+        - Simple CLI command requires full planning doc
+        - Complex architecture change executed directly
+        - User friction vs insufficient tracking
+        
+        Solution: Intelligent tier routing
+        - Simple operations: Fast execution
+        - Complex operations: Comprehensive planning
+        - Automatic classification
+        - No manual tier selection needed
+        
+        Benefits:
+        - Sub-2s response for Tier 1 operations
+        - Appropriate tracking for complexity
+        - 95%+ routing accuracy
+        - User experience optimized
+    
+    - rule_id: "VACUUM_CYCLE_ENFORCEMENT"
+      name: "Vacuum Cycle Enforcement"
+      severity: "blocked"
+      description: "Vacuum cycle MUST run automatically as part of system maintenance. AST-powered duplicate detection, orphaned code removal, with dry-run validation required."
+      
+      detection:
+        combined_keywords:
+          maintenance_operation:
+            - "system maintenance"
+            - "cleanup"
+            - "refactor complete"
+          missing_vacuum:
+            - "vacuum_cycle: false"
+            - "skip cleanup"
+        scope: ["intent", "operation_config"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Invoke vacuum_orchestrator.py automatically"
+        - "STEP 2: Run AST similarity detection for duplicates"
+        - "STEP 3: Identify orphaned code (unreferenced functions/classes)"
+        - "STEP 4: Generate dry-run report for review"
+        - "STEP 5: Execute cleanup after approval"
+        - "STEP 6: Update cleanup metrics"
+      
+      evidence_template: |
+        Vacuum cycle enforcement required!
+        
+        Operation: '{operation}'
+        Phase: {phase}
+        
+        ❌ WRONG: Maintenance without vacuum cycle
+        - Operation: System maintenance complete
+        - Vacuum Cycle: Skipped
+        - Result: Duplicate code remains, orphaned files accumulate
+        
+        ✅ CORRECT: Automatic vacuum cycle
+        - Operation: System maintenance
+        - Phase 6: Vacuum cycle (automatic)
+        - AST Detection: 12 duplicates found
+        - Orphaned Code: 5 unused functions identified
+        - Dry-Run Report: Generated for review
+        - Cleanup: Executed after approval
+        
+        **Vacuum Cycle Components:**
+        - Duplicate detection (AST-based similarity analysis)
+        - Orphaned code identification (unreferenced symbols)
+        - Unused imports removal
+        - Empty directory cleanup
+        - Dry-run validation (safety check)
+        
+        **Benefits:**
+        - 80% reduction in manual cleanup
+        - Automatic code hygiene
+        - Safe with dry-run validation
+      
+      rationale: |
+        VACUUM_CYCLE_ENFORCEMENT: Automatic Code Hygiene
+        
+        Problem: Manual cleanup burden
+        - Duplicates accumulate over time
+        - Orphaned code forgotten
+        - Manual detection time-consuming
+        - Inconsistent cleanup practices
+        
+        Solution: Automatic vacuum cycles
+        - AST-powered duplicate detection
+        - Orphaned code identification
+        - Scheduled and on-demand execution
+        - Dry-run safety validation
+        
+        Benefits:
+        - 80% less manual cleanup
+        - Consistent code hygiene
+        - Safe with validation gates
+        - Integrated into maintenance workflow
+    
+    - rule_id: "INCREMENTAL_PLAN_CREATION_ENFORCEMENT"
+      name: "Incremental Plan Creation Enforcement"
+      severity: "blocked"
+      description: "Plans MUST be created incrementally: main → manifest → sub-plans (one at a time). Bulk file creation is PROHIBITED to avoid token usage issues."
+      
+      detection:
+        combined_keywords:
+          bulk_creation:
+            - "create all files"
+            - "generate 14 phases"
+            - "bulk create"
+          planning_operation:
+            - "plan creation"
+            - "phase generation"
+        scope: ["intent", "file_count"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Create main plan file first (cortex-3.9-master.md)"
+        - "STEP 2: Create manifest.yaml second"
+        - "STEP 3: Create sub-plans sequentially (phase-00-govern.md, then phase-01-router.md, etc.)"
+        - "STEP 4: Update main plan progress after each sub-plan creation"
+        - "NEVER: Create all 14 phase files in one operation"
+      
+      evidence_template: |
+        Incremental creation violation detected!
+        
+        Operation: '{operation}'
+        Files: {file_count}
+        
+        ❌ WRONG: Bulk file creation
+        - Operation: Create plan with 14 phases
+        - Method: Generate all 14 phase files at once
+        - Risk: Token usage exceeded, incomplete generation
+        
+        ✅ CORRECT: Incremental creation
+        - Step 1: Create main plan (cortex-3.9-master.md) ✅
+        - Step 2: Create manifest (manifest.yaml) ✅
+        - Step 3: Create phase-00-govern.md ⏳
+        - Step 4: Create phase-01-router.md (after phase-00)
+        - Step 5: Create phase-02-analyzer.md (after phase-01)
+        - ... (continue sequentially)
+        
+        **Protocol:**
+        - One file per operation
+        - Sequential creation only
+        - Update progress after each file
+        - User approval between steps
+        
+        **Benefits:**
+        - No token limit issues
+        - Quality control per file
+        - Easy to resume if interrupted
+        - Clear progress tracking
+      
+      rationale: |
+        INCREMENTAL_PLAN_CREATION_ENFORCEMENT: Quality Over Speed
+        
+        Problem: Bulk file generation
+        - 14+ files created at once
+        - Token limits exceeded
+        - Incomplete generation
+        - Poor quality control
+        
+        Solution: Incremental creation
+        - One file at a time
+        - Quality review per file
+        - Clear dependencies
+        - Resume capability
+        
+        Benefits:
+        - No token limit issues
+        - Higher quality outputs
+        - Easy to track progress
+        - Interruptible process
+    
+    - rule_id: "AUTOMATIC_DOCUMENTATION_GENERATION"
+      name: "Automatic Documentation Generation"
+      severity: "blocked"
+      description: "Planning System 3.0 MUST automatically insert a final documentation phase for all Tier 3/4 plans. Documentation includes: context, design architecture, implementation explanation (learning aid), test coverage, research/analysis work."
+      
+      detection:
+        combined_keywords:
+          plan_creation:
+            - "create plan"
+            - "tier 3"
+            - "tier 4"
+            - "complex plan"
+          missing_doc_phase:
+            - "no documentation phase"
+            - "missing final phase"
+        scope: ["intent", "plan_structure"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Detect plan tier (Tier 3 = single MD, Tier 4 = nested MD)"
+        - "STEP 2: After all implementation phases, auto-insert documentation phase"
+        - "STEP 3: Documentation phase MUST include:"
+        - "  a) Context & Requirements (what problem was solved)"
+        - "  b) Design Architecture (system design, component relationships)"
+        - "  c) Implementation Explanation (code walkthrough for learning)"
+        - "  d) Test Coverage (unit/integration test summary)"
+        - "  e) Research & Analysis (design decisions, trade-offs)"
+        - "STEP 4: Save documentation to cortex-brain/learning/{category}/{topic}/"
+        - "STEP 5: Enforce well-organized folder structure:"
+        - "  - cortex-brain/learning/orchestration/ (orchestrator designs)"
+        - "  - cortex-brain/learning/routing/ (router/analyzer patterns)"
+        - "  - cortex-brain/learning/intelligence/ (AI/ML components)"
+        - "  - cortex-brain/learning/analysis/ (AST/code analysis)"
+        - "  - cortex-brain/learning/testing/ (TDD patterns, test strategies)"
+      
+      evidence_template: |
+        Automatic documentation generation required!
+        
+        Plan: '{plan_name}'
+        Tier: {plan_tier}
+        Phases: {phase_count}
+        
+        ❌ WRONG: No documentation phase
+        - Implementation phases: 1-15 ✓
+        - Documentation phase: Missing ✗
+        - Result: Knowledge loss, no learning artifacts
+        
+        ✅ CORRECT: Auto-inserted documentation phase
+        - Implementation phases: 1-15 ✓
+        - Phase 16: Documentation Generation (auto-inserted)
+          * Context & Requirements
+          * Design Architecture
+          * Implementation Explanation (learning aid)
+          * Test Coverage Report
+          * Research & Analysis
+        - Output: cortex-brain/learning/orchestration/planning-system-3.0/
+        
+        **Documentation Structure:**
+        ```
+        cortex-brain/learning/{category}/{topic}/
+        ├── README.md                    # Overview & quickstart
+        ├── context.md                   # Problem statement, requirements
+        ├── architecture.md              # Design diagrams, components
+        ├── implementation-guide.md      # Code walkthrough (learning)
+        ├── test-strategy.md             # Test coverage, TDD approach
+        └── research-notes.md            # Design decisions, trade-offs
+        ```
+        
+        **Benefits:**
+        - Zero manual documentation overhead
+        - Knowledge captured automatically
+        - Learning library grows organically
+        - Future developers understand "why" not just "what"
+        - Onboarding accelerated with implementation guides
+      
+      rationale: |
+        AUTOMATIC_DOCUMENTATION_GENERATION: Knowledge Preservation
+        
+        Problem: Documentation neglect
+        - Implementation complete, docs forgotten
+        - Design decisions lost to time
+        - New developers struggle with "why?"
+        - Research/analysis not captured
+        - Learning opportunities missed
+        
+        Solution: Automatic final phase
+        - Planning System 3.0 auto-inserts documentation phase
+        - Tier 3/4 plans always include docs
+        - Enforced folder structure in learning library
+        - Learning aids (implementation guides)
+        - Test coverage documented
+        
+        Benefits:
+        - 100% documentation coverage for complex work
+        - Knowledge library grows automatically
+        - Implementation guides accelerate learning
+        - Design rationale preserved
+        - Onboarding time reduced by 50%
+    
+    - rule_id: "PROGRESS_TRACKER_ENFORCEMENT"
+      name: "Progress Tracker Enforcement"
+      severity: "blocked"
+      description: "Main plan files MUST include visual progress tracker with phase_start, phase_end, actual_time, elapsed_time metrics. Overall counters required."
+      
+      detection:
+        combined_keywords:
+          plan_creation:
+            - "create plan"
+            - "generate master plan"
+          missing_tracker:
+            - "progress_tracker: false"
+            - "no tracker"
+        scope: ["intent", "plan_content"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Add visual progress tracker at top of main plan"
+        - "STEP 2: Include phase status table with start/end times"
+        - "STEP 3: Track actual_time (development time only)"
+        - "STEP 4: Track elapsed_time (calendar time)"
+        - "STEP 5: Calculate overall_progress percentage"
+        - "STEP 6: Update tracker after each phase completion"
+      
+      evidence_template: |
+        Progress tracker enforcement required!
+        
+        File: '{file_path}'
+        Plan: {plan_name}
+        
+        ❌ WRONG: Plan without progress tracker
+        - File: cortex-3.9-master.md
+        - Tracker: Missing
+        - Metrics: Not tracked
+        - Progress: Unknown
+        
+        ✅ CORRECT: Plan with enhanced progress tracker
+        - File: cortex-3.9-master.md
+        - Tracker: Visual ASCII art + phase table
+        - Metrics: actual_time, elapsed_time, senior_dev_estimate
+        - Progress: 12% (2/17 phases)
+        - Updates: After each phase completion
+        
+        **Required Metrics:**
+        - phase_start: Timestamp when phase begins
+        - phase_end: Timestamp when phase completes
+        - actual_time: Development time (hours)
+        - elapsed_time: Calendar time (hours)
+        - overall_progress: Percentage complete
+        - senior_dev_estimate: Industry baseline (40h/week × multipliers)
+        
+        **Tracker Format:**
+        ```
+        ┌─────────────────────────────────────────┐
+        │ Overall Progress: [███░░░] 12% (2/17)   │
+        │ Total Actual Time: 3.5 hours            │
+        │ Total Elapsed Time: 8.0 hours           │
+        │ Senior Dev Estimate: 52-70 hours        │
+        └─────────────────────────────────────────┘
+        ```
+      
+      rationale: |
+        PROGRESS_TRACKER_ENFORCEMENT: Transparency & Accountability
+        
+        Problem: Invisible progress
+        - No visibility into work done
+        - Can't estimate time remaining
+        - Difficult to report status
+        - No historical metrics
+        
+        Solution: Enhanced progress tracking
+        - Visual progress indicators
+        - Time tracking (actual vs elapsed)
+        - Industry-standard estimates
+        - Phase-by-phase updates
+        
+        Benefits:
+        - Clear progress visibility
+        - Accurate time estimation
+        - Easy status reporting
+        - Historical data for learning
+    
+    - rule_id: "SENIOR_DEVELOPER_ESTIMATE_ENFORCEMENT"
+      name: "Senior Developer Estimate Enforcement"
+      severity: "blocked"
+      description: "Time estimates MUST use senior developer baseline: 40h/week × testing(1.30) × docs(1.15) × rework(1.10) = 1.55x multiplier. Complexity buffer +33%."
+      
+      detection:
+        combined_keywords:
+          time_estimation:
+            - "estimate duration"
+            - "time required"
+            - "development time"
+          missing_methodology:
+            - "no multiplier"
+            - "arbitrary estimate"
+        scope: ["intent", "estimation_method"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Calculate base development time (pure coding)"
+        - "STEP 2: Apply testing overhead: base × 1.30"
+        - "STEP 3: Apply documentation overhead: × 1.15"
+        - "STEP 4: Apply rework/refinement overhead: × 1.10"
+        - "STEP 5: Combined multiplier: 1.55x (minimum estimate)"
+        - "STEP 6: Add complexity buffer +33% (maximum estimate)"
+        - "STEP 7: Display as range: min-max hours (weeks @ 40h/week)"
+      
+      evidence_template: |
+        Senior developer estimate enforcement required!
+        
+        Task: '{task_name}'
+        Base Time: {base_time} hours
+        
+        ❌ WRONG: Arbitrary estimate
+        - Estimate: "About 20 hours"
+        - Methodology: None
+        - Accuracy: Unreliable
+        
+        ✅ CORRECT: Industry-standard estimate
+        - Base Development: 27 hours (pure coding)
+        - Testing Overhead: ×1.30 (unit + integration tests)
+        - Documentation: ×1.15 (inline docs, READMEs)
+        - Rework/Refinement: ×1.10 (code review, refactoring)
+        - Combined Multiplier: 1.55x
+        - Minimum Estimate: 27 × 1.55 = 42 hours
+        - Complexity Buffer: +33%
+        - Maximum Estimate: 42 × 1.33 = 56 hours
+        - Range: 42-56 hours (1.0-1.4 weeks @ 40h/week)
+        
+        **Multiplier Breakdown:**
+        - Testing (1.30): TDD, unit tests, integration tests
+        - Documentation (1.15): Docstrings, READMEs, API docs
+        - Rework (1.10): Code review iterations, refactoring
+        - Total: 1.30 × 1.15 × 1.10 = 1.55x
+        
+        **Complexity Buffer:**
+        - LOW: +10% (well-defined, low risk)
+        - MEDIUM: +20% (some unknowns, moderate risk)
+        - HIGH: +33% (unknowns, high risk, research needed)
+      
+      rationale: |
+        SENIOR_DEVELOPER_ESTIMATE_ENFORCEMENT: Realistic Expectations
+        
+        Problem: Optimistic estimates
+        - "Coding time only" estimates
+        - No testing time included
+        - No documentation time
+        - No rework/refinement
+        - Result: 2-3x estimate overrun
+        
+        Solution: Industry-standard methodology
+        - Base development time
+        - Testing overhead (30%)
+        - Documentation overhead (15%)
+        - Rework overhead (10%)
+        - Complexity buffer (10-33%)
+        
+        Benefits:
+        - Realistic time estimates
+        - Stakeholder trust
+        - Better planning
+        - Historical accuracy validation
+    
+    - rule_id: "BIDIRECTIONAL_LINKING_ENFORCEMENT"
+      name: "Bidirectional Linking Enforcement"
+      severity: "blocked"
+      description: "Sub-plans MUST include breadcrumb navigation linking back to main plan. Main plan MUST link to all sub-plans. No orphaned plans allowed."
+      
+      detection:
+        combined_keywords:
+          plan_creation:
+            - "create sub-plan"
+            - "generate phase file"
+          missing_links:
+            - "no breadcrumb"
+            - "no main plan link"
+        scope: ["intent", "plan_content"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Add breadcrumb navigation at top of sub-plan"
+        - "STEP 2: Link format: [← Main Plan](../cortex-3.9-master.md)"
+        - "STEP 3: Update main plan phase table with sub-plan link"
+        - "STEP 4: Verify bidirectional linking"
+      
+      evidence_template: |
+        Bidirectional linking violation detected!
+        
+        File: '{file_path}'
+        Plan: {plan_name}
+        
+        ❌ WRONG: Orphaned sub-plan
+        - File: phase-03-planning.md
+        - Main Plan Link: Missing
+        - Navigation: Impossible to find main plan
+        
+        ✅ CORRECT: Bidirectional linking
+        - File: phase-03-planning.md
+        - Top of file: [← Main Plan](../cortex-3.9-master.md)
+        - Main plan table: Links to phase-03-planning.md
+        - Navigation: Easy both directions
+        
+        **Required Links:**
+        
+        In Sub-Plan (phase-03-planning.md):
+        ```markdown
+        [← Main Plan](../cortex-3.9-master.md)
+        
+        # Phase 03: Planning Orchestrator 3.0
+        ```
+        
+        In Main Plan (cortex-3.9-master.md):
+        ```markdown
+        | 03 | Planning Orchestrator 3.0 | [phase-03-planning.md](phase-03-planning.md) |
+        ```
+        
+        **Benefits:**
+        - Easy navigation between plans
+        - No orphaned documents
+        - Clear parent-child relationships
+        - Bidirectional traceability
+      
+      rationale: |
+        BIDIRECTIONAL_LINKING_ENFORCEMENT: Navigation & Discoverability
+        
+        Problem: Orphaned plans
+        - Sub-plans exist but not discoverable
+        - No way to return to main plan
+        - Broken navigation
+        - Difficult to understand context
+        
+        Solution: Bidirectional linking
+        - Breadcrumb navigation in sub-plans
+        - Link table in main plan
+        - Clear parent-child relationships
+        - Easy navigation both directions
+        
+        Benefits:
+        - No orphaned plans
+        - Easy discoverability
+        - Clear relationships
+        - Intuitive navigation
+    
+    # =========================================================================
+    # INTELLIGENT TDD & CLEAN CODE RULES (Added 2025-12-14)
+    # Based on authoritative sources: Martin Fowler, Kent Beck, Google, Clean Architecture
+    # =========================================================================
+    
+    - rule_id: "INTELLIGENT_TDD_VALUE_SCORING"
+      name: "Intelligent TDD Value Scoring"
+      severity: "info"
+      description: "TDD value scoring utility determines when tests add value vs overhead. CRITICAL/HIGH code MUST have tests. LOW/TRIVIAL code (getters/setters/DTOs) SHOULD NOT be tested."
+      
+      detection:
+        combined_keywords:
+          test_generation:
+            - "generate tests"
+            - "write unit tests"
+            - "create test file"
+          code_patterns:
+            - "get|set method"
+            - "DTO|POCO"
+            - "simple property"
+            - "configuration class"
+        scope: ["intent", "code_content"]
+        logic: "AND"
+      
+      scoring_dimensions:
+        criticality: "0-30 points (security, financial, compliance)"
+        complexity: "0-20 points (cyclomatic complexity, branching)"
+        api_surface: "0-15 points (public methods, external interfaces)"
+        business_logic: "0-15 points (calculations, decision trees)"
+        mutation_potential: "0-10 points (non-trivial logic)"
+        regression_risk: "0-10 points (historical bugs, change frequency)"
+      
+      value_tiers:
+        CRITICAL: "90-100 points → MUST TEST (security/financial/compliance)"
+        HIGH: "70-89 points → SHOULD TEST (public APIs, business logic)"
+        MEDIUM: "40-69 points → CONSIDER TESTING (private methods with logic)"
+        LOW: "20-39 points → SKIP (simple getters/setters)"
+        TRIVIAL: "0-19 points → DO NOT TEST (constants, DTOs, config classes)"
+      
+      alternatives:
+        - "STEP 1: Run TestValueScorer on code file"
+        - "STEP 2: If score ≥ 70 → Generate comprehensive test suite"
+        - "STEP 3: If score 40-69 → Generate targeted tests for public API"
+        - "STEP 4: If score < 40 → Skip tests (document rationale)"
+        - "STEP 5: Log decision with authoritative source citation"
+      
+      authoritative_sources:
+        - source: "Kent Beck - stackoverflow.com/questions/153234"
+          quote: "You don't gain anything from testing simple getters or setters or other trivial implementations."
+          application: "Skip tests for TRIVIAL code (score < 20)"
+        
+        - source: "Martin Fowler - Test Pyramid (2012)"
+          quote: "Write lots of small and fast unit tests. Write some more coarse-grained tests and very few high-level tests."
+          application: "Focus testing effort on unit level for HIGH value code"
+        
+        - source: "Martin Fowler - Practical Test Pyramid"
+          quote: "Test the public interface. More importantly, don't test trivial code."
+          application: "API surface scoring (public methods = higher value)"
+        
+        - source: "Google Testing Blog - Test Sizes"
+          quote: "Small tests are fast, reliable, and isolate failures."
+          application: "CRITICAL code needs fast unit tests for security validation"
+        
+        - source: "Rule of Three (Martin Fowler/refactoring.guru)"
+          quote: "When you're doing something for the first time, just get it done. Second time, cringe. Third time, start refactoring."
+          application: "Don't test until pattern proven useful (avoid premature testing)"
+      
+      evidence_template: |
+        Test value scoring decision:
+        
+        File: {file_path}
+        Score: {total_score}/100 ({value_tier})
+        
+        Dimension Breakdown:
+        - Criticality: {criticality}/30
+        - Complexity: {complexity}/20
+        - API Surface: {api_surface}/15
+        - Business Logic: {business_logic}/15
+        - Mutation Potential: {mutation_potential}/10
+        - Regression Risk: {regression_risk}/10
+        
+        Decision: {recommendation}
+        
+        Rationale:
+        {rationale_list}
+        
+        Authoritative Source:
+        {cited_source}
+      
+      rationale: |
+        INTELLIGENT_TDD_VALUE_SCORING: Maximum Coverage, Zero Waste
+        
+        Problem: Wasted effort on trivial tests
+        - Tests for simple getters/setters provide no value
+        - DTOs/POCOs have no logic to test
+        - Configuration classes are just data carriers
+        - Test maintenance overhead for trivial code
+        
+        Solution: Value-based test scoring
+        - 6-dimensional scoring system
+        - Authoritative source citations
+        - Tier-based recommendations
+        - Skip low-value tests, focus on critical code
+        
+        Benefits:
+        - 100% coverage of CRITICAL code (security/financial)
+        - Zero wasted effort on trivial code
+        - Faster test suite (fewer useless tests)
+        - Team velocity increased
+        - Kent Beck-approved approach
+    
+    - rule_id: "TEST_PYRAMID_ADHERENCE"
+      name: "Test Pyramid Adherence"
+      severity: "warning"
+      description: "Follow Martin Fowler's Test Pyramid: Many unit tests, some integration tests, few E2E tests. Avoid test ice-cream cone (too many slow E2E tests)."
+      
+      detection:
+        combined_keywords:
+          pyramid_violation:
+            - "E2E test count > integration test count"
+            - "UI test heavy"
+            - "slow test suite"
+        scope: ["test_suite_analysis"]
+      
+      pyramid_ratios:
+        unit_tests: "70% (fast, isolated, many)"
+        integration_tests: "20% (moderate speed, focused integration points)"
+        e2e_tests: "10% (slow, full stack, critical user journeys only)"
+      
+      alternatives:
+        - "Rewrite E2E test as integration test if possible"
+        - "Rewrite integration test as unit test if possible"
+        - "Reserve E2E tests for critical user journeys only"
+        - "Use subcutaneous tests (just below UI) instead of full E2E"
+      
+      authoritative_sources:
+        - source: "Mike Cohn - Succeeding with Agile (2009)"
+          quote: "The Test Pyramid consists of three layers: Unit Tests (bottom), Service Tests (middle), User Interface Tests (top)."
+          application: "Foundation of modern testing strategy"
+        
+        - source: "Martin Fowler - Test Pyramid (2012)"
+          quote: "You should have many more low-level UnitTests than high level BroadStackTests running through a GUI."
+          application: "Ratio guidance for test distribution"
+        
+        - source: "Google Testing Blog - Just Say No to More End-to-End Tests (2015)"
+          quote: "End-to-end tests are brittle, expensive to write, and time consuming to run."
+          application: "Minimize E2E test count, push tests down pyramid"
+      
+      rationale: |
+        TEST_PYRAMID_ADHERENCE: Fast Feedback, High Confidence
+        
+        Problem: Test ice-cream cone
+        - Too many slow E2E tests
+        - Long CI/CD pipeline times
+        - Flaky tests (timing issues, browser quirks)
+        - Low developer confidence
+        
+        Solution: Follow pyramid shape
+        - Many fast unit tests (70%)
+        - Some integration tests (20%)
+        - Few E2E tests (10%)
+        - Push tests down the pyramid
+        
+        Benefits:
+        - Fast feedback loop (<2 min for unit tests)
+        - Reliable tests (fewer flakes)
+        - Easy debugging (isolated failures)
+        - High developer confidence
+    
+    - rule_id: "SOLID_PRINCIPLES_ENFORCEMENT"
+      name: "SOLID Principles Enforcement"
+      severity: "warning"
+      description: "Enforce SOLID principles from Clean Architecture: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion."
+      
+      detection:
+        combined_keywords:
+          srp_violation:
+            - "god class"
+            - "too many responsibilities"
+            - "class doing too much"
+          dip_violation:
+            - "new keyword in constructor"
+            - "concrete dependency"
+            - "tight coupling"
+        scope: ["code_structure"]
+      
+      principles:
+        - principle: "Single Responsibility Principle (SRP)"
+          description: "A class should have only one reason to change"
+          violation_example: "UserService handling authentication, validation, database access, email sending"
+          fix: "Split into: AuthService, UserValidator, UserRepository, EmailService"
+        
+        - principle: "Open/Closed Principle (OCP)"
+          description: "Open for extension, closed for modification"
+          violation_example: "Adding new payment type requires modifying PaymentProcessor class"
+          fix: "Use strategy pattern - PaymentProcessor accepts IPaymentStrategy implementations"
+        
+        - principle: "Liskov Substitution Principle (LSP)"
+          description: "Subtypes must be substitutable for their base types"
+          violation_example: "Square inheriting from Rectangle but breaking area calculation assumptions"
+          fix: "Proper inheritance hierarchy or prefer composition over inheritance"
+        
+        - principle: "Interface Segregation Principle (ISP)"
+          description: "Clients shouldn't depend on interfaces they don't use"
+          violation_example: "IRepository<T> with 20 methods but most clients only use 2"
+          fix: "Split into smaller interfaces: IReadRepository, IWriteRepository, IQueryRepository"
+        
+        - principle: "Dependency Inversion Principle (DIP)"
+          description: "Depend on abstractions, not concretions"
+          violation_example: "OrderService constructor: new SqlOrderRepository() (concrete)"
+          fix: "OrderService constructor: IOrderRepository (abstraction)"
+      
+      authoritative_sources:
+        - source: "Robert C. Martin - Clean Architecture (2017)"
+          quote: "The SOLID principles tell us how to arrange our functions and data structures into classes, and how those classes should be interconnected."
+          application: "Foundation for maintainable architecture"
+        
+        - source: "Martin Fowler - Refactoring"
+          quote: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
+          application: "SOLID principles improve human readability"
+      
+      rationale: |
+        SOLID_PRINCIPLES_ENFORCEMENT: Maintainable Architecture
+        
+        Problem: Spaghetti code
+        - God classes doing everything
+        - Tight coupling (hard to test, hard to change)
+        - Violation of separation of concerns
+        
+        Solution: Apply SOLID principles
+        - SRP: One responsibility per class
+        - OCP: Extend without modifying
+        - LSP: Proper inheritance
+        - ISP: Focused interfaces
+        - DIP: Depend on abstractions
+        
+        Benefits:
+        - Testable code (dependency injection)
+        - Maintainable (single responsibility)
+        - Extensible (open/closed)
+        - Understandable (focused classes)
+    
+    - rule_id: "REFACTORING_RULE_OF_THREE"
+      name: "Refactoring Rule of Three"
+      severity: "info"
+      description: "First time: just do it. Second time: cringe but duplicate. Third time: refactor and remove duplication."
+      
+      detection:
+        combined_keywords:
+          duplication:
+            - "duplicate code"
+            - "copy paste"
+            - "similar logic"
+        scope: ["code_duplication_analysis"]
+      
+      rule_stages:
+        - stage: 1
+          action: "Just get it done"
+          description: "First implementation, learn the problem"
+        
+        - stage: 2
+          action: "Cringe at duplication but proceed"
+          description: "Second implementation, pattern not yet clear"
+        
+        - stage: 3
+          action: "Refactor and remove duplication"
+          description: "Third implementation, pattern proven - extract common code"
+      
+      alternatives:
+        - "STEP 1: Identify third occurrence of similar code"
+        - "STEP 2: Extract common logic to shared function/class"
+        - "STEP 3: Replace all three occurrences with extracted abstraction"
+        - "STEP 4: Write tests for extracted code"
+      
+      authoritative_sources:
+        - source: "Martin Fowler / refactoring.guru"
+          quote: "When you're doing something for the first time, just get it done. When you're doing something similar for the second time, cringe at having to repeat but do the same thing anyway. When you're doing something for the third time, start refactoring."
+          application: "Avoid premature abstraction, wait for pattern to emerge"
+        
+        - source: "Sandi Metz - Ruby Conf 2014"
+          quote: "Duplication is far cheaper than the wrong abstraction."
+          application: "Don't refactor until pattern is proven (Rule of Three)"
+      
+      rationale: |
+        REFACTORING_RULE_OF_THREE: Avoid Premature Abstraction
+        
+        Problem: Wrong abstractions
+        - Refactoring too early creates wrong abstractions
+        - Changes require modifying abstraction + all callers
+        - Harder to understand than simple duplication
+        
+        Solution: Rule of Three
+        - First time: Learn the problem
+        - Second time: Confirm pattern similarity
+        - Third time: Pattern proven - refactor
+        
+        Benefits:
+        - Right abstractions (pattern-proven)
+        - Easier to understand
+        - Faster initial development
+        - Lower maintenance cost

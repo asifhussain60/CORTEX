@@ -2,6 +2,7 @@
 Learning Library Module
 
 Git-based learning capture with interactive refinement.
+Also includes Planning System 3.0 learning subsystem.
 
 Components:
 - git_history_scanner: Scan git commits for timeframe
@@ -9,6 +10,7 @@ Components:
 - lesson_capture: Interactive prompts for structured lesson input
 - duplication_detector: FTS5-based duplicate detection
 - yaml_writer: Safe YAML append with validation
+- planning_learner: Continuous improvement for routing accuracy
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -18,6 +20,7 @@ from .git_history_scanner import GitHistoryScanner, CommitMetadata, scan_commits
 from .commit_filter import CommitFilter, Candidate, filter_learning_candidates
 from .lesson_capture import LessonCapture, CapturedLesson, ValidationError
 from .duplication_detector import DuplicationDetector, DuplicateMatch, extract_keywords
+from .planning_learner import PlanningLearner, RoutingDecision
 from .yaml_writer import YAMLWriter, SchemaValidationError, generate_lesson_id
 
 __all__ = [

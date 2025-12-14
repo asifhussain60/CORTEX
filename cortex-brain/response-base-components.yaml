@@ -289,6 +289,143 @@ detail_levels:
     max_section_length: 1000  # characters
     use_variants: true  # Use 'verbose' variant of each section
 
+  # ============================================================================
+  # PLANNING SYSTEM 3.0 COMPONENTS (Phase 01.5)
+  # Added: 2025-12-14 | Purpose: Tiered routing, risk assessment, intelligence
+  # ============================================================================
+
+  # Risk assessment badges
+  risk_level_badge:
+    id: risk_level_badge
+    type: component
+    content: |
+      **Risk Level:** {{risk_emoji}} **{{risk_level}}** ({{threat_count}} threats identified)
+    risk_emojis:
+      CRITICAL: "🔴"
+      HIGH: "🟠"
+      MEDIUM: "🟡"
+      LOW: "🟢"
+
+  domain_classification_badge:
+    id: domain_classification_badge
+    type: component
+    content: |
+      **Domain:** {{domain_emoji}} **{{domain_type}}** | Analysis Depth: {{analysis_depth}}
+    domain_emojis:
+      SECURITY: "🛡️"
+      COMPLIANCE: "⚖️"
+      FINANCIAL: "💰"
+      BUSINESS_LOGIC: "🧮"
+      STANDARD: "📋"
+
+  # Risk and intelligence sections
+  section_risk_breakdown:
+    id: section_risk_breakdown
+    type: section
+    icon: "⚠️"
+    title: "Identified Risks"
+    content: "{{risk_breakdown_content}}"
+
+  section_mitigation_steps:
+    id: section_mitigation_steps
+    type: section
+    icon: "🛡️"
+    title: "Mitigation Steps"
+    content: "{{mitigation_steps_content}}"
+
+  section_recommendations:
+    id: section_recommendations
+    type: section
+    icon: "💡"
+    title: "Enhancement Recommendations"
+    content: "{{recommendations_content}}"
+
+  section_benefit_analysis:
+    id: section_benefit_analysis
+    type: section
+    icon: "📊"
+    title: "Impact Analysis"
+    content: "{{benefit_analysis_content}}"
+
+  section_analyzer_results:
+    id: section_analyzer_results
+    type: section
+    icon: "🔍"
+    title: "Analyzer Findings"
+    content: "{{analyzer_results_content}}"
+
+  section_compliance_checklist:
+    id: section_compliance_checklist
+    type: section
+    icon: "✅"
+    title: "Compliance Checklist"
+    content: "{{compliance_checklist_content}}"
+
+  section_approval_prompt:
+    id: section_approval_prompt
+    type: section
+    icon: "✋"
+    title: "Approval Required"
+    content: "{{approval_prompt_content}}"
+
+  # Market intelligence section (Phase 18 - conditional)
+  section_market_insights:
+    id: section_market_insights
+    type: section
+    icon: "🌐"
+    title: "Market Intelligence"
+    content: |
+      {{#if market_intelligence_enabled}}
+      {{#if market_insights}}
+      **Research Value Score:** {{research_value_score}}/100 ({{research_value_tier}})
+      
+      {{#each market_insights}}
+      <details>
+      <summary><strong>{{title}}</strong> ({{relevance_score}}/100) - Source: {{source_authority}}</summary>
+      
+      {{description}}
+      
+      **Recommendation:** {{recommendation}}
+      
+      **Authoritative Source:** [{{source_name}}]({{source_url}})
+      </details>
+      
+      {{/each}}
+      {{#if has_guardrails}}
+      
+      **Note:** Research skipped due to guardrails - {{guardrail_reason}}
+      {{/if}}
+      {{/if}}
+      {{/if}}
+    variants:
+      concise: |
+        {{#if market_insights}}
+        **Research:** {{market_insights.[0].title}} ({{research_value_score}}) - [{{market_insights.[0].source_name}}]({{market_insights.[0].source_url}})
+        {{/if}}
+      balanced: "{{content}}"
+      verbose: |
+        {{#if market_insights}}
+        **Domain Research Conducted:** {{domain_type}}
+        **Value Assessment:** {{research_value_score}}/100 ({{research_value_tier}})
+        
+        {{#each market_insights}}
+        ### {{title}}
+        **Relevance:** {{relevance_score}}/100 | **Authority:** {{source_authority}}
+        
+        {{description}}
+        
+        **CORTEX Recommendation:**
+        {{recommendation}}
+        
+        **Industry Standard:**
+        - **Source:** [{{source_name}}]({{source_url}})
+        - **Status:** {{source_authority}}
+        - **Last Updated:** {{source_date}}
+        
+        ---
+        {{/each}}
+        {{/if}}
+
 # ============================================================================
 # RENDERING RULES - How to compose final response
 # ============================================================================
@@ -308,6 +445,7 @@ rendering_rules:
     - section_tech_solution  # Only if has_tech_stack=true
     - section_learning_objectives  # Only if interaction_mode=educational
     - section_resources  # Only if interaction_mode=educational
+    - section_market_insights  # Only if research_value_score >= 70 (Phase 18)
 
   # Required sections (always include)
   required_sections:

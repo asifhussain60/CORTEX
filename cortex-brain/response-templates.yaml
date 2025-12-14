@@ -52,6 +52,15 @@ operation_aliases:
   ado: ado_agent
   cleanup: cleanup-operation
   git_checkpoint: git-checkpoint
+  
+  # Planning System 3.0 Tier Routing (Phase 01.5)
+  tier_1_operation: tier_1_instant
+  tier_2_operation: tier_2_lightweight
+  tier_3_operation: tier_3_documented
+  tier_4_operation: tier_4_complex
+  risk_assessment: risk_warning
+  enhancement_suggestion: enhancement_recommendation
+  domain_analysis: critical_domain_warning
 shared:
   standard_header: '## 🧠 CORTEX {title}
 
@@ -348,10 +357,345 @@ base_templates:
       📝 **Your Request:** {request_echo_content}
 
 
-      🔍 Next Steps: {next_steps_content}
+  risk_warning:
+    base_structure: '## ⚠️ CORTEX Risk Assessment
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ### 🎯 Understanding & Scope
+
+      {understanding_content}
+
+
+      ### 🚨 RISK ANALYSIS
+
+
+      **Risk Level:** {risk_level} ({risk_score}/100)
+
+
+      **Risk Category:** {risk_category}
+
+
+      #### 💥 Potential Impacts
+
+
+      {impact_analysis}
+
+
+      #### 🔍 Detected Issues
+
+
+      {detected_issues}
+
+
+      #### 🛡️ Affected Areas
+
+
+      {affected_areas}
+
+
+      ### ⚡ Approach & Considerations
+
+
+      {mitigation_strategy}
+
+
+      ### 💬 Recommended Actions
+
+
+      {recommended_actions}
+
+
+      ### 📊 Impact Summary
+
+
+      **Breaking Changes:** {breaking_changes_count}
+
+      **Data Loss Risk:** {data_loss_risk}
+
+      **Security Vulnerabilities:** {security_vulnerabilities_count}
+
+      **Compliance Violations:** {compliance_violations_count}
+
+
+      ### 🔍 Next Steps
+
+
+      {next_steps_with_safeguards}
+
+
+      ---
+
+
+      ⚠️  **CRITICAL:** Review all risks before proceeding. Say "abort" to cancel or "proceed with caution" to continue.
+
+      '
+  proactive_recommendation:
+    base_structure: '## 💡 CORTEX Proactive Insight
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ### 🎯 Context
+
+
+      {context_summary}
+
+
+      ### 💡 Enhancement Opportunities
+
+
+      {recommendations_list}
+
+
+      ### 📊 Potential Benefits
+
+
+      {benefits_analysis}
+
+
+      ### 🔍 Implementation Path
+
+
+      {implementation_suggestion}
+
+
+      ---
+
+
+      💬 Say "apply recommendation {number}" to implement, or "dismiss" to continue without changes.
+
+      '      🔍 Next Steps: {next_steps_content}
 
       '
 templates:
+  # ============================================================================
+  # PLANNING SYSTEM 3.0 TEMPLATES (Phase 01.5)
+  # Added: 2025-12-14 | Purpose: Tiered routing support
+  # ============================================================================
+  
+  tier_1_instant:
+    name: Tier 1 Instant Response
+    description: "<2s deterministic operations (CLI, status checks)"
+    triggers: ["help", "healthcheck", "align status", "version"]
+    components:
+      - header_compact
+      - section_response
+    format: minimal
+    performance_target: "2s max"
+    base_structure: |
+      ## 🧠 CORTEX {{title}}
+      **{{understanding_brief}}** | *No Challenge*
+      
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ### 💬 Response
+      {{response_content}}
+
+  tier_2_lightweight:
+    name: Tier 2 Lightweight Response
+    description: "<10s single-file changes, inline validation"
+    triggers: ["typo fix", "comment update", "inline validation"]
+    components:
+      - header_standard
+      - section_understanding
+      - section_response
+      - section_next_steps
+    format: standard_simplified
+    performance_target: "10s max"
+    base_structure: |
+      ## 🧠 CORTEX {{title}}
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ### 🎯 Understanding & Scope
+      {{understanding_scope_content}}
+      
+      ### 💬 Response
+      {{response_content}}
+      
+      ### 🔍 Next Steps
+      {{next_steps_content}}
+
+  tier_3_documented:
+    name: Tier 3 Documented Response
+    description: "Feature additions with single MD plan structure"
+    triggers: ["implement feature", "add functionality", "ADO story"]
+    components:
+      - header_standard
+      - section_understanding
+      - section_challenge
+      - section_response
+      - section_impact
+      - section_next_steps
+      - progress_bar
+    format: standard_5_part
+    performance_target: "Variable (plan-dependent)"
+    base_structure: |
+      ## 🧠 CORTEX {{title}}
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ### 🎯 Understanding & Scope
+      {{understanding_scope_content}}
+      
+      ### ⚡ Approach & Considerations
+      {{challenge_content}}
+      
+      ### 💬 Response
+      {{response_content}}
+      
+      **Plan:** [{{plan_name}}]({{plan_path}})
+      **Progress:** [{{progress_bar}}] {{percentage}}%
+      
+      ### 📊 Impact & Changes
+      {{impact_content}}
+      
+      ### 🔍 Next Steps
+      {{next_steps_content}}
+
+  tier_4_complex:
+    name: Tier 4 Complex Response
+    description: "Architecture changes with nested MD structure"
+    triggers: ["redesign", "refactor architecture", "ADO feature"]
+    components:
+      - header_standard
+      - section_understanding
+      - section_challenge
+      - section_response
+      - section_impact
+      - section_next_steps
+      - progress_bar
+      - plan_approval_link
+    format: standard_5_part_extended
+    performance_target: "Variable (orchestrator-dependent)"
+    base_structure: |
+      ## 🧠 CORTEX {{title}}
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ### 🎯 Understanding & Scope
+      {{understanding_scope_content}}
+      
+      **Manifest:** [{{manifest_name}}]({{manifest_path}})
+      
+      ### ⚡ Approach & Considerations
+      {{challenge_content}}
+      
+      ### 💬 Response
+      {{response_content}}
+      
+      **Master Plan:** [{{master_plan_name}}]({{master_plan_path}})
+      **Current Phase:** {{current_phase}} of {{total_phases}}
+      **Progress:** [{{progress_bar}}] {{percentage}}%
+      
+      **Sub-Plans:**
+      {{sub_plan_navigation}}
+      
+      ### 📊 Impact & Changes
+      {{impact_content}}
+      
+      ### 🔍 Next Steps
+      {{next_steps_content}}
+
+  risk_warning:
+    name: Risk Assessment Warning
+    description: "Pre-execution risk analysis results"
+    triggers: ["risk detected", "pre-execution analysis"]
+    components:
+      - header_standard
+      - risk_level_badge
+      - section_risk_breakdown
+      - section_mitigation_steps
+      - section_approval_prompt
+    format: alert_style
+    performance_target: "5s max"
+    base_structure: |
+      ## 🧠 CORTEX Risk Assessment
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      **Risk Level:** {{risk_emoji}} **{{risk_level}}** ({{threat_count}} threats identified)
+      
+      ### ⚠️ Identified Risks
+      {{risk_breakdown_content}}
+      
+      ### 🛡️ Mitigation Steps
+      {{mitigation_steps_content}}
+      
+      ### ✋ Approval Required
+      {{approval_prompt_content}}
+
+  enhancement_recommendation:
+    name: Enhancement Recommendation
+    description: "Proactive advisor suggestions after phase completion"
+    triggers: ["phase complete", "proactive analysis"]
+    components:
+      - header_compact
+      - section_recommendations
+      - section_benefit_analysis
+    format: suggestion_list
+    performance_target: "3s max"
+    base_structure: |
+      ## 🧠 CORTEX Enhancement Recommendations
+      **{{understanding_brief}}** | *Phase {{phase_number}} Complete*
+      
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ### 💡 Enhancement Recommendations
+      {{recommendations_content}}
+      
+      ### 📊 Impact Analysis
+      {{benefit_analysis_content}}
+
+  critical_domain_warning:
+    name: Critical Domain Warning
+    description: "Alert for security/compliance/financial code changes"
+    triggers: ["security code", "compliance code", "financial logic"]
+    components:
+      - header_standard
+      - domain_classification_badge
+      - section_analyzer_results
+      - section_compliance_checklist
+      - section_next_steps
+    format: domain_alert
+    performance_target: "5s max"
+    base_structure: |
+      ## 🧠 CORTEX Critical Domain Analysis
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      **Domain:** {{domain_emoji}} **{{domain_type}}** | Analysis Depth: {{analysis_depth}}
+      
+      ### 🔍 Analyzer Findings
+      {{analyzer_results_content}}
+      
+      ### ✅ Compliance Checklist
+      {{compliance_checklist_content}}
+      
+      ### 🔍 Next Steps
+      {{next_steps_content}}
+
+  # ============================================================================
+  # EXISTING TEMPLATES (v3.0)
+  # ============================================================================
+  
   autonomous_execution_progress:
     base_structure: '## 🧠 CORTEX Autonomous Plan Execution
 
@@ -11754,6 +12098,57 @@ routing:
   security_dod_triggers:
   - security dod
   - threat checklist
+  
+  # ============================================================================
+  # PLANNING SYSTEM 3.0 TIER ROUTING TRIGGERS (Phase 01.5)
+  # ============================================================================
+  tier_1_triggers:
+  - help
+  - healthcheck
+  - align status
+  - version
+  - status
+  - quick check
+  
+  tier_2_triggers:
+  - fix typo
+  - update comment
+  - inline validation
+  - quick fix
+  - small change
+  
+  tier_3_triggers:
+  - implement feature
+  - add functionality
+  - plan ado story
+  - create feature
+  - new feature
+  
+  tier_4_triggers:
+  - redesign
+  - refactor architecture
+  - plan ado feature
+  - major refactor
+  - system redesign
+  
+  risk_assessment_triggers:
+  - assess risk
+  - risk analysis
+  - pre-execution check
+  - analyze risks
+  
+  enhancement_triggers_proactive:
+  - suggest enhancements
+  - recommend improvements
+  - proactive analysis
+  - what could improve
+  
+  critical_domain_triggers:
+  - security code
+  - compliance code
+  - financial logic
+  - payment processing
+  - authentication code
   - security checklist
   - security validation
   - validate security
