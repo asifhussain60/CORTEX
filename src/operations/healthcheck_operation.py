@@ -62,7 +62,7 @@ class HealthCheckOperation(BaseOperationModule):
             description="System health and performance monitoring",
             phase=OperationPhase.PROCESSING,
             priority=50,
-            version="1.0.0",
+            version="3.0.0",
             author="Asif Hussain",
             tags=["user-facing", "diagnostics", "monitoring"],
         )

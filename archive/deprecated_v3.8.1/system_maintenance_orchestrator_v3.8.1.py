@@ -1,5 +1,10 @@
 """
-System Maintenance Orchestrator
+System Maintenance Orchestrator (DEPRECATED)
+
+WARNING: This orchestrator is replaced by maintenance_orchestrator_v3.py
+   Use: src/operations/modules/orchestration/maintenance_orchestrator_v3.py
+   Status: Kept for backward compatibility only
+   Migration: cortex-operations.yaml now uses maintenance_orchestrator_v3
 
 Runs comprehensive system maintenance in optimal sequence:
 1. Pre-maintenance healthcheck (baseline)
@@ -16,7 +21,7 @@ Windows Console Compatibility:
 
 Author: Asif Hussain
 Copyright © 2025 Asif Hussain. All rights reserved.
-Version: 3.8.1
+Version: 3.8.1 (DEPRECATED - Use maintenance_orchestrator_v3.py v3.0.0)
 """
 
 from pathlib import Path

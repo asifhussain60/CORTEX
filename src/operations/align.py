@@ -28,8 +28,8 @@ Subcommands:
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
-Version: 2.0
-Status: PRODUCTION (Enhanced)
+Version: 3.0
+Status: PRODUCTION (Enhanced - CORTEX v3.9 Compatible)
 """
 
 import sys

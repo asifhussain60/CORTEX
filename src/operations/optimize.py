@@ -13,6 +13,7 @@ Usage:
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+Version: 3.0
 License: Proprietary
 """
 

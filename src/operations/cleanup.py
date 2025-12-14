@@ -1,12 +1,13 @@
 """
-Workspace Cleanup Operation
-CORTEX 3.0 Phase 1.1 Week 3 - Monolithic MVP
+"""\nWorkspace Cleanup Operation
+CORTEX v3.9 Compatible
 
 Safely removes temporary files, old logs, and cache to free disk space.
 Includes safety checks to never delete source code or critical files.
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+Version: 3.0
 """
 
 import os

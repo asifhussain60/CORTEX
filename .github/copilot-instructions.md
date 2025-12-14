@@ -15,7 +15,7 @@
 
 **Purpose:** AI Assistant enhancement with long-term memory, context awareness, and strategic planning
 
-**Version:** 3.8.1 | **Updated:** December 08, 2025
+**Version:** 3.9.0 | **Updated:** December 14, 2025
 
 ---
 
@@ -151,8 +151,9 @@ No Challenge - All work completed successfully
 
 **System Maintenance**
 - Commands: `system maintenance`
-- 6 phases: healthcheck → align (auto-fix) → cleanup → optimize → refresh prompts → healthcheck
-- Implementation: `src/operations/modules/orchestration/system_maintenance_orchestrator.py`
+- 7 phases: healthcheck → align (auto-fix) → cleanup → optimize → vacuum → refresh prompts → healthcheck
+- Implementation: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+- Version: v3.0 (Planning System 3.0 integration with tiered routing)
 - Status: ✅ Complete (invoked via Copilot Chat)
 - **Completion:** Shows `# 🎉 CONGRATULATIONS` when all phases complete with no errors
 - **Engagement hints:** Shows `🎭 Orchestrator engaged` and phase progress

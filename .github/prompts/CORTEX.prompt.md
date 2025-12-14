@@ -17,7 +17,7 @@ DO NOT provide generic introduction - respond to user's ACTUAL request.
 
 # 🎯 CORTEX Universal Entry Point
 
-**Version:** 3.8.1 | **Status:** ✅ PRODUCTION  
+**Version:** 3.9.0 | **Status:** ✅ PRODUCTION  
 **Author:** Asif Hussain | **Copyright © 2025 Asif Hussain. All rights reserved.**
 
 ---
@@ -159,11 +159,13 @@ These hints confirm orchestrators are actively working without being intrusive.
 
 ### System Maintenance
 - **Commands:** `system maintenance`, `maintain system`
-- **Phases:** Pre-healthcheck → align (auto-fix) → cleanup → optimize → refresh prompts → post-healthcheck
-- **Implementation:** `src/operations/modules/orchestration/system_maintenance_orchestrator.py`
+- **Phases:** Pre-healthcheck → align (auto-fix) → cleanup → optimize → vacuum → refresh prompts → post-healthcheck (7 phases)
+- **Implementation:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+- **Version:** v3.0 (Planning System 3.0 integration)
 - **Status:** ✅ Orchestrator complete, invoked via Copilot Chat
 - **Execution Method:** `copilot_chat` (interactive workflow)
-- **Completion:** Shows `# 🎉 CONGRATULATIONS` when all 6 phases complete with zero errors
+- **Features:** Tiered routing, AST-powered cleanup, version management
+- **Completion:** Shows `# 🎉 CONGRATULATIONS` when all 7 phases complete with zero errors
 - **Engagement:** Displays `🎭` hints for orchestrator activity and phase progress
 
 ### Architectural Review
@@ -212,7 +214,7 @@ These hints confirm orchestrators are actively working without being intrusive.
 | `plan ado` | ADO work item (story/feature/task) | All |
 | `execute all phases autonomously` | Run plan end-to-end | All |
 | `start tdd` | Begin TDD workflow | All |
-| `system maintenance` | 6-phase maintenance (auto-fix) | Admin |
+| `system maintenance` | 7-phase maintenance v3.0 (tiered routing) | Admin |
 | `align` | System alignment | Admin/User |
 | `optimize` | CORTEX optimization | Admin/User |
 | `cleanup` | Workspace cleanup | Admin/User |

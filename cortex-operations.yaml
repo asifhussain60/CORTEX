@@ -14,8 +14,7 @@ operations:
     category: review
   system_maintenance:
     name: System Maintenance
-    description: Comprehensive system maintenance - runs healthcheck, align, optimize
-      in optimal sequence
+    description: Comprehensive system maintenance v3.0 - intelligent tiered routing with 7-phase cycle
     deployment_tier: admin
     execution_method: copilot_chat
     natural_language:
@@ -26,13 +25,12 @@ operations:
     - comprehensive maintenance
     category: system
     modules:
-    - system_maintenance_orchestrator
+    - maintenance_orchestrator_v3
     profiles:
       standard:
-        description: "Full maintenance workflow (healthcheck \u2192 align \u2192 optimize\
-          \ \u2192 healthcheck)"
+        description: "Full maintenance workflow v3.0 (healthcheck \u2192 align \u2192 cleanup \u2192 optimize \u2192 vacuum \u2192 refresh \u2192 healthcheck)"
         modules:
-        - system_maintenance_orchestrator
+        - maintenance_orchestrator_v3
     implementation_status:
       status: ready
       modules_implemented: 1
