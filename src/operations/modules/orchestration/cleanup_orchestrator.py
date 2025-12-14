@@ -106,6 +106,7 @@ class CleanupOrchestrator(BaseOperationModule):
                 - 'dry_run': bool - Preview changes without executing
                 - 'skip_duplicate_analysis': bool - Skip Phase 0 (faster)
                 - 'auto_delete_archived': bool - Auto-delete archived duplicates (Phase 3)
+                - 'aggressive_mode': bool - Use aggressive cleanup rules (archives legacy content)
             
         Returns:
             OperationResult with cleanup metrics and report
@@ -114,11 +115,23 @@ class CleanupOrchestrator(BaseOperationModule):
         dry_run = context.get('dry_run', False)
         skip_duplicate_analysis = context.get('skip_duplicate_analysis', False)
         auto_delete_archived = context.get('auto_delete_archived', False)
+        aggressive_mode = context.get('aggressive_mode', False)
         
         total_phases = 5 if not skip_duplicate_analysis and DUPLICATE_ANALYZER_AVAILABLE else 4
         current_phase = 0
         
-        logger.info(f"🧹 Starting comprehensive cleanup (dry_run={dry_run}, phases={total_phases})")
+        mode_str = "AGGRESSIVE" if aggressive_mode else "STANDARD"
+        logger.info(f"🧹 Starting {mode_str} cleanup (dry_run={dry_run}, phases={total_phases})")
+        
+        # Load aggressive cleanup rules if enabled
+        aggressive_rules = None
+        if aggressive_mode:
+            aggressive_rules = self._load_aggressive_rules()
+            if aggressive_rules:
+                logger.info("📋 Loaded aggressive cleanup rules")
+            else:
+                logger.warning("⚠️ Aggressive mode enabled but rules not found - using standard mode")
+                aggressive_mode = False
         
         try:
             # Phase 0: Duplicate Analysis (optional, can be skipped for speed)
@@ -149,7 +162,12 @@ class CleanupOrchestrator(BaseOperationModule):
             # Phase 3: Obsolete Cleanup (enhanced with duplicate analysis)
             current_phase += 1
             yield_progress(current_phase, total_phases, "Phase 3: Cleaning obsolete files")
-            self._cleanup_obsolete(dry_run, auto_delete_archived)
+            
+            # Apply aggressive archival if enabled
+            if aggressive_mode and aggressive_rules:
+                self._apply_aggressive_archival(aggressive_rules, dry_run)
+            else:
+                self._cleanup_obsolete(dry_run, auto_delete_archived)
             
             # Phase 4: Validation
             current_phase += 1
@@ -655,6 +673,265 @@ class CleanupOrchestrator(BaseOperationModule):
     
     def _save_report(self, report: Dict[str, Any], dry_run: bool) -> Path:
         """Save cleanup report."""
+        reports_dir = self.project_root / 'cortex-brain' / 'documents' / 'reports'
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        
+        prefix = "DRY-RUN-" if dry_run else ""
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"{prefix}cleanup-report-{timestamp}.json"
+        report_path = reports_dir / filename
+        
+        with open(report_path, 'w', encoding='utf-8') as f:
+            json.dump(report, f, indent=2, ensure_ascii=False)
+        
+        return report_path
+    
+    def _load_aggressive_rules(self) -> Dict[str, Any]:
+        """
+        Load aggressive cleanup rules from configuration.
+        
+        Returns:
+            Aggressive cleanup rules or None if not found
+        """
+        try:
+            import yaml
+            rules_path = self.project_root / 'cortex-brain' / 'aggressive-cleanup-rules.yaml'
+            
+            if not rules_path.exists():
+                logger.warning(f"Aggressive cleanup rules not found: {rules_path}")
+                return None
+            
+            with open(rules_path, 'r', encoding='utf-8') as f:
+                rules = yaml.safe_load(f)
+            
+            # Validate rules structure
+            if not rules or 'version' not in rules:
+                logger.error("Invalid aggressive cleanup rules structure")
+                return None
+            
+            # Safety checks
+            if rules.get('mode') != 'aggressive':
+                logger.error("Rules file is not in aggressive mode")
+                return None
+            
+            logger.info(f"✓ Loaded aggressive cleanup rules v{rules['version']}")
+            return rules
+            
+        except Exception as e:
+            logger.error(f"Failed to load aggressive cleanup rules: {e}")
+            return None
+    
+    def _check_protected_resources(self, path: Path, rules: Dict[str, Any]) -> bool:
+        """
+        Check if a path is protected by aggressive cleanup rules.
+        
+        Args:
+            path: Path to check
+            rules: Aggressive cleanup rules
+        
+        Returns:
+            True if protected, False otherwise
+        """
+        if not rules:
+            return False
+        
+        protected_dirs = rules.get('protected_directories', [])
+        protected_files = rules.get('protected_files', [])
+        
+        # Check if path matches protected directory
+        path_str = str(path.relative_to(self.project_root)) if path.is_relative_to(self.project_root) else str(path)
+        
+        for protected_dir in protected_dirs:
+            if protected_dir in path_str or path_str.startswith(protected_dir):
+                return True
+        
+        # Check if filename matches protected pattern
+        for pattern in protected_files:
+            if '*' in pattern:
+                # Wildcard pattern
+                import re
+                regex_pattern = pattern.replace('*', '.*')
+                if re.match(regex_pattern, path.name):
+                    return True
+            elif path.name == pattern:
+                return True
+        
+        return False
+    
+    def _apply_aggressive_archival(self, rules: Dict[str, Any], dry_run: bool) -> None:
+        """
+        Apply aggressive archival rules to repository.
+        
+        This method archives directories and files based on the aggressive
+        cleanup rules while respecting protected resources and safety checks.
+        
+        Args:
+            rules: Aggressive cleanup rules
+            dry_run: Preview mode flag
+        """
+        if not rules:
+            logger.warning("No aggressive rules provided")
+            return
+        
+        logger.info("🗂️ Applying aggressive archival rules")
+        
+        # Create timestamped archive folder
+        timestamp = datetime.now().strftime(rules['archive_settings']['timestamp_format'])
+        archive_root = self.project_root / rules['archive_settings']['root_folder'].format(timestamp=timestamp)
+        
+        if not dry_run:
+            archive_root.mkdir(parents=True, exist_ok=True)
+            logger.info(f"📦 Created archive: {archive_root.name}")
+        
+        archived_items = []
+        protected_items = []
+        
+        # Process archival categories
+        for category_name, category in rules.get('archival_categories', {}).items():
+            if not category.get('enabled', True):
+                logger.info(f"⏭️  Skipping disabled category: {category_name}")
+                continue
+            
+            logger.info(f"📂 Processing category: {category_name}")
+            
+            # Archive directories
+            for location, dirs in category.get('directories', {}).items():
+                base_path = self.project_root if location == 'root' else self.project_root / 'cortex-brain'
+                
+                for dir_name in dirs:
+                    source_path = base_path / dir_name
+                    
+                    if not source_path.exists():
+                        continue
+                    
+                    # Check if protected
+                    if self._check_protected_resources(source_path, rules):
+                        protected_items.append(str(source_path.relative_to(self.project_root)))
+                        logger.info(f"🛡️  Protected: {dir_name}")
+                        continue
+                    
+                    # Archive the directory
+                    if dry_run:
+                        logger.info(f"[DRY RUN] Would archive: {dir_name}")
+                    else:
+                        dest_path = archive_root / location / dir_name
+                        dest_path.parent.mkdir(parents=True, exist_ok=True)
+                        
+                        try:
+                            shutil.move(str(source_path), str(dest_path))
+                            archived_items.append({
+                                'type': 'directory',
+                                'source': str(source_path.relative_to(self.project_root)),
+                                'category': category_name,
+                                'reason': category.get('reason', 'No reason specified')
+                            })
+                            self.metrics['files_removed'] += 1
+                            logger.info(f"✓ Archived: {dir_name}")
+                        except Exception as e:
+                            logger.error(f"✗ Failed to archive {dir_name}: {e}")
+                            self.metrics['errors'].append(f"Archive failed: {dir_name} - {str(e)}")
+        
+        # Update metrics
+        self.metrics['archived_items'] = archived_items
+        self.metrics['protected_items'] = protected_items
+        
+        # Generate archive manifest
+        if not dry_run and archived_items:
+            self._generate_archive_manifest(archive_root, archived_items, protected_items, rules)
+        
+        logger.info(f"📊 Archived: {len(archived_items)} items, Protected: {len(protected_items)} items")
+    
+    def _generate_archive_manifest(self, archive_root: Path, archived_items: List[Dict], 
+                                   protected_items: List[str], rules: Dict[str, Any]) -> None:
+        """Generate archive manifest with recovery instructions."""
+        manifest_content = f"""# CORTEX Aggressive Cleanup Archive
+**Generated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
+**Archive Folder:** `{archive_root.name}`
+**Mode:** Aggressive Cleanup
+
+---
+
+## 📊 Summary Statistics
+
+| Metric | Value |
+|--------|-------|
+| **Items Archived** | {len(archived_items)} |
+| **Items Protected** | {len(protected_items)} |
+| **Archive Location** | `{archive_root}` |
+
+---
+
+## 📁 Archived Items
+
+"""
+        
+        # Group by category
+        by_category = {}
+        for item in archived_items:
+            category = item['category']
+            if category not in by_category:
+                by_category[category] = []
+            by_category[category].append(item)
+        
+        for category, items in by_category.items():
+            manifest_content += f"### {category.replace('_', ' ').title()} ({len(items)} items)\n\n"
+            for item in items:
+                manifest_content += f"- `{item['source']}`\n  - **Reason:** {item['reason']}\n"
+            manifest_content += "\n"
+        
+        manifest_content += f"""---
+
+## 🛡️ Protected Items
+
+The following items were protected and NOT archived:
+
+"""
+        
+        for item in protected_items:
+            manifest_content += f"- `{item}`\n"
+        
+        manifest_content += f"""
+
+---
+
+## 🔄 Recovery Instructions
+
+To restore archived content:
+
+```powershell
+# List archive contents
+Get-ChildItem "{archive_root}" -Recurse
+
+# Restore specific directory
+Copy-Item "{archive_root}\\cortex-brain\\<directory>" `
+          "{self.project_root}\\cortex-brain\\" -Recurse
+
+# Restore root directory
+Copy-Item "{archive_root}\\root\\<directory>" `
+          "{self.project_root}\\" -Recurse
+```
+
+---
+
+## 📝 Notes
+
+- Archive created with aggressive cleanup rules v{rules.get('version', 'unknown')}
+- All moves were executed after safety checks
+- Original structure preserved within archive
+- Archive can be deleted after verification period
+- Protected resources listed above were NOT modified
+
+---
+
+**Status:** ✅ Aggressive Cleanup Complete  
+**Next Steps:** Verify repository functionality, run tests, commit changes
+"""
+        
+        manifest_path = archive_root / 'ARCHIVE_REPORT.md'
+        with open(manifest_path, 'w', encoding='utf-8') as f:
+            f.write(manifest_content)
+        
+        logger.info(f"📄 Generated manifest: {manifest_path.name}")
         reports_dir = self.project_root / 'cortex-brain' / 'documents' / 'reports'
         reports_dir.mkdir(parents=True, exist_ok=True)
         
