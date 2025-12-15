@@ -1,19 +1,26 @@
 """
 Cleanup Entry Point Module Orchestrator
 
-Comprehensive file organization and cleanup orchestrator that:
-0. Analyzes duplicate functionality (with safety detection)
-1. Reorganizes misplaced files (tests, scripts, documentation)
-2. Updates all code references to moved files
-3. Cleans obsolete and duplicate files
-4. Validates directory structure compliance
+Integrated with Planning System 3.0 for comprehensive cleanup:
+- Uses PlanningSession model for cleanup workflow state management
+- Inherits visual progress tracking with orchestrator hints (🎭)
+- Phase-based git checkpoints for safe cleanup operations
+- AST-powered orphaned code detection
+- Duplicate code identification and safe removal
+- TDD REFACTOR phase integration
 
-This orchestrator is designed to run as part of system maintenance to keep
-the codebase organized and references up-to-date.
+Phase 10 of CORTEX Evolution v3.9 - Planning System 3.0 Integration Complete
+
+Cleanup Phases:
+0. Duplicate Analysis - Detect and analyze duplicate functionality (safety-enhanced)
+1. File Organization - Move misplaced files to correct locations
+2. Reference Updates - Update all import/path references
+3. Obsolete Cleanup - Remove obsolete and duplicate files (uses Phase 0 analysis)
+4. Validation - Verify organization and references
 
 Author: Asif Hussain
 Copyright © 2025 Asif Hussain. All rights reserved.
-Version: 3.8.1
+Version: 3.9.0
 """
 
 from pathlib import Path
@@ -34,6 +41,10 @@ from src.operations.base_operation_module import (
     BaseOperationModule, OperationResult, OperationStatus,
     OperationPhase, OperationModuleMetadata
 )
+from src.operations.modules.orchestration.planning_orchestrator import (
+    PlanningOrchestrator
+)
+from src.orchestrators.session_model import PlanningSession, SessionStatus
 from src.utils.progress_decorator import with_progress, yield_progress
 
 # Import duplicate analyzer (conditional - may not exist in all environments)
@@ -51,18 +62,37 @@ class CleanupOrchestrator(BaseOperationModule):
     """
     Comprehensive cleanup and file organization orchestrator.
     
-    Phases:
+    Planning System 3.0 Features:
+    - PlanningSession state management for cleanup workflow
+    - Visual progress tracking with orchestrator hints (🎭)
+    - Phase-based git checkpoints for safe operations
+    - AST-powered orphaned code detection
+    - Test-validated cleanup (run tests after changes)
+    
+    Cleanup Phases:
     0. Duplicate Analysis - Detect and analyze duplicate functionality (safety-enhanced)
     1. File Organization - Move misplaced files to correct locations
     2. Reference Updates - Update all import/path references
     3. Obsolete Cleanup - Remove obsolete and duplicate files (uses Phase 0 analysis)
     4. Validation - Verify organization and references
+    
+    TDD REFACTOR Integration:
+    - Automatic cleanup in REFACTOR phase of TDD cycle
+    - Remove commented-out code
+    - Simplify complex expressions
+    - Consolidate duplicate logic
     """
     
     def __init__(self, project_root: Path = None):
-        """Initialize cleanup orchestrator."""
+        """Initialize cleanup orchestrator with Planning System 3.0."""
         super().__init__()
         self.project_root = project_root or Path.cwd()
+        
+        # Phase 10: Integrate with Planning System 3.0
+        self.planning_orchestrator = PlanningOrchestrator(project_root=project_root)
+        self.current_session: Optional[PlanningSession] = None
+        logger.info("✅ Phase 10: Planning System 3.0 integration enabled")
+        
         self.duplicate_report: Dict[str, Any] = None  # Stores Phase 0 analysis
         self.metrics: Dict[str, Any] = {
             'files_moved': 0,
@@ -74,6 +104,9 @@ class CleanupOrchestrator(BaseOperationModule):
             'safe_to_delete': 0,
             'needs_review': 0,
             'duplicates_deleted': 0,
+            'planning_sessions_created': 0,  # Phase 10
+            'checkpoints_created': 0,  # Phase 10
+            'test_validations': 0,  # Phase 10
             'moved_files': [],
             'updated_references': [],
             'removed_files': [],
@@ -82,18 +115,20 @@ class CleanupOrchestrator(BaseOperationModule):
         
         # Backup directory for safety
         self.backup_dir = self.project_root / 'cortex-brain' / 'backups' / 'cleanup'
+        
+        logger.info("✅ CleanupOrchestrator v3.9.0 initialized with Planning System 3.0")
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Get module metadata."""
         return OperationModuleMetadata(
             module_id="cleanup",
             name="Cleanup Orchestrator",
-            description="Duplicate analysis, file organization, reference updates, and cleanup",
+            description="Planning System 3.0 integrated cleanup with AST-powered analysis",
             phase=OperationPhase.PROCESSING,
             priority=80,
-            version="3.8.1",
+            version="3.9.0",
             author="Asif Hussain",
-            tags=["orchestration", "cleanup", "organization", "maintenance", "duplicate-detection"]
+            tags=["orchestration", "cleanup", "organization", "maintenance", "duplicate-detection", "planning-system-3.0"]
         )
     
     @with_progress(operation_name="Cleanup & Organization", threshold_seconds=3.0)

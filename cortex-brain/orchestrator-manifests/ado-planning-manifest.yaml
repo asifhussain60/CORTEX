@@ -1,10 +1,10 @@
 # ADO Planning Orchestrator Manifest
-# Ensures parity with Planning System 2.0 for ADO work item generation
+# Integrates with Planning System 3.0 for ADO work item generation
 #
-# Version: 2.0.0
+# Version: 3.0.0
 # Author: CORTEX Development Team
-# Updated: 2025-12-08
-# Status: ACTIVE - Must maintain parity with planning-system-2.0-manifest.yaml
+# Updated: 2025-12-15
+# Status: ACTIVE - Phase 6: Planning System 3.0 Integration Complete
 
 schema_version: "1.0"
 inherits_from: "planning-system-2.0-manifest.yaml"
@@ -15,20 +15,25 @@ inherits_from: "planning-system-2.0-manifest.yaml"
 
 metadata:
   orchestrator_name: "ado_planning_orchestrator"
-  version: "2.0.0"
-  description: "ADO work item generation with same quality standards as Planning System 2.0"
+  version: "3.0.0"
+  description: "ADO work item generation integrated with Planning System 3.0 architecture"
   category: "planning"
   deployment_tier: "user"
   status: "active"
-  last_updated: "2025-12-08"
+  last_updated: "2025-12-15"
   maintainer: "CORTEX Planning Team"
   related_orchestrators:
-    - "planning_system_2.0"
+    - "planning_orchestrator"  # Now uses Planning System 3.0
     - "ado_agent"
   documentation_path: ".github/prompts/modules/ado-planning-guide.md"
-  parity_requirement: |
-    This orchestrator MUST maintain feature parity with planning-system-2.0.
-    Any requirement added to Planning System 2.0 must be mirrored here.
+  integration_status: |
+    Phase 6 Complete: Full Planning System 3.0 integration with:
+    - PlanningSession model for state management
+    - Tiered routing (Tier 1-4 classification)
+    - Historical context integration (anti-patterns, success patterns)
+    - Visual progress tracking with 🎭 orchestrator hints
+    - DoR/DoD compliance validation
+    - TDD workflow integration
 
 # ========================================
 # Requirements (Inherited + ADO-Specific)

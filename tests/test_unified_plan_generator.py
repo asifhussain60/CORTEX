@@ -94,10 +94,9 @@ class TestUnifiedPlanGenerator:
         
         # Assert
         assert "cortex-rearchitecture-v1" in prompt
-        assert "4/16" in prompt
         assert "25%" in prompt
-        assert "5" in prompt  # Phase number
-        assert "TDD Orchestrator Integration" in prompt
+        assert "Phase 5" in prompt
+        assert "Update Plan/Work/Wall/Tokens columns" in prompt
     
     def test_phase_status_transitions(self):
         """GREEN: Should update phase status in master plan content."""
@@ -363,6 +362,50 @@ class TestIntegrationScenarios:
         
         # Cleanup
         shutil.rmtree(temp_dir)
+    
+    def test_estimated_column_in_phase_table(self):
+        """GREEN: Should include estimated time column in phase table."""
+        # Arrange
+        generator = UnifiedPlanGenerator()
+        phases = [
+            {"id": 1, "name": "Phase 1", "status": "complete", "estimated": "4h", "actual": "3h 30m", "elapsed": "4h", "tokens_saved": 50000},
+            {"id": 2, "name": "Phase 2", "status": "in-progress", "estimated": "6h", "actual": "2h", "elapsed": "2.5h"},
+            {"id": 3, "name": "Phase 3", "status": "pending", "estimated": "8h", "actual": "-", "elapsed": "-"}
+        ]
+        
+        # Act
+        table = generator._generate_phases_table(phases, include_tokens=True, compressed=False)
+        
+        # Assert
+        assert "| Phase | Name | Status | Plan | Work | Wall |" in table
+        assert "| 1 | Phase 1 |" in table
+        assert "| 4h |" in table or "4h" in table  # Estimated time present
+        assert "| 3h 30m |" in table or "3h 30m" in table  # Actual time present
+        assert "50000" in table  # Tokens saved
+    
+    def test_continuation_prompt_includes_update_reminder(self):
+        """GREEN: Should include reminder to update metrics in continuation prompt."""
+        # Arrange
+        generator = UnifiedPlanGenerator()
+        
+        # Act
+        prompt = generator.generate_continuation_prompt(
+            plan_id="cortex-rearchitecture-v1",
+            completed_phases=6,
+            total_phases=17,
+            next_phase_number=7,
+            next_phase_name="Maintenance Integration",
+            progress_percentage=35,
+            manifest_path="cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml"
+        )
+        
+        # Assert
+        assert "cortex-rearchitecture-v1" in prompt
+        assert "35%" in prompt
+        assert "Phase 7" in prompt
+        assert "Update Plan/Work/Wall/Tokens columns" in prompt
+        assert "Overall Progress totals" in prompt
+        assert "planning-system-3.0-manifest.yaml" in prompt
     
     def test_full_lifecycle_temp_plan_manager(self):
         """Integration test: Complete lifecycle for TempPlanManager."""

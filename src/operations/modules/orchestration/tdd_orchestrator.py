@@ -759,3 +759,212 @@ class TDDOrchestrator(BaseOperationModule):
         """Convert tier to estimated time string."""
         times = {1: '<2s', 2: '2-30s', 3: '30s-5min', 4: '5min+'}
         return times.get(tier, 'unknown')
+    
+    # ===== PLANNING SYSTEM 3.0 INTEGRATION (Phase 5) =====
+    
+    def integrate_with_planning(self, planning_session_id: str) -> Dict[str, Any]:
+        """
+        Integrate TDD orchestrator with planning session.
+        
+        Creates TDD workflow tied to planning session for automatic
+        RED→GREEN→REFACTOR enforcement during plan execution.
+        
+        Args:
+            planning_session_id: ID of planning session to integrate with
+        
+        Returns:
+            Dict containing:
+            - tdd_session_id: Created TDD session ID
+            - enforcement_rules: Active TDD rules for this plan
+            - checkpoints: TDD checkpoint configuration
+        """
+        logger.info(f"🔗 Integrating TDD with planning session: {planning_session_id}")
+        
+        # Create TDD session tied to planning
+        tdd_session_id = f"tdd_{planning_session_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        
+        self.session_data[tdd_session_id] = {
+            'parent_session_id': planning_session_id,
+            'mode': 'planning_integrated',
+            'created_at': datetime.now().isoformat(),
+            'phases_completed': [],
+            'current_phase': None
+        }
+        
+        # Configure TDD enforcement rules
+        enforcement_rules = {
+            'red_phase_mandatory': True,
+            'empty_test_detection': True,
+            'coverage_threshold': 80.0,
+            'phase_based_validation': True,
+            'auto_rollback': True
+        }
+        
+        # Configure checkpoints (one per phase completion)
+        checkpoints = {
+            'frequency': 'per_phase',
+            'auto_validate': True,
+            'rollback_on_failure': True
+        }
+        
+        logger.info(f"✅ TDD session created: {tdd_session_id}")
+        
+        return {
+            'tdd_session_id': tdd_session_id,
+            'enforcement_rules': enforcement_rules,
+            'checkpoints': checkpoints
+        }
+    
+    def validate_red_phase_compliance(self, test_file: Path) -> ValidationResult:
+        """
+        Validate that tests in RED phase actually fail.
+        
+        Critical TDD enforcement: Tests must fail before implementation.
+        
+        Args:
+            test_file: Path to test file to validate
+        
+        Returns:
+            ValidationResult with RED phase compliance status
+        """
+        logger.info(f"🔍 Validating RED phase: {test_file}")
+        
+        if not test_file.exists():
+            return ValidationResult(
+                compliant=False,
+                violations=[f"Test file not found: {test_file}"],
+                recommendation="Create test file before validation"
+            )
+        
+        try:
+            # Run tests and capture results
+            result = subprocess.run(
+                ['pytest', str(test_file), '-v', '--tb=short'],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            
+            # Parse test results
+            stdout = result.stdout
+            violations = []
+            
+            # RED phase is valid only if tests fail (non-zero exit code)
+            if result.returncode == 0:
+                violations.append(f"All tests in {test_file.name} passed - RED phase violation")
+                violations.append("Tests must fail before implementation (TDD RED phase)")
+            
+            # Check for empty tests (tests that passed without assertions)
+            if 'PASSED' in stdout and 'assert' not in open(test_file).read():
+                violations.append("Tests may be empty - no assertions detected")
+            
+            compliant = len(violations) == 0
+            
+            if compliant:
+                recommendation = "RED phase valid - tests failed as expected. Proceed to GREEN phase."
+            else:
+                recommendation = "Fix tests to fail correctly before implementation. Add assertions or remove false positives."
+            
+            logger.info(f"{'✅' if compliant else '❌'} RED phase validation: {len(violations)} violations")
+            
+            return ValidationResult(
+                compliant=compliant,
+                violations=violations,
+                recommendation=recommendation
+            )
+        
+        except subprocess.TimeoutExpired:
+            return ValidationResult(
+                compliant=False,
+                violations=["Test execution timed out (>60s)"],
+                recommendation="Optimize test execution time"
+            )
+        except Exception as e:
+            logger.error(f"RED phase validation failed: {e}")
+            return ValidationResult(
+                compliant=False,
+                violations=[f"Validation error: {str(e)}"],
+                recommendation="Fix test execution errors before proceeding"
+            )
+    
+    def detect_empty_tests(self, test_file: Path) -> List[Dict[str, Any]]:
+        """
+        Detect empty or placeholder tests.
+        
+        Empty tests provide false confidence - they pass without testing anything.
+        
+        Args:
+            test_file: Path to test file to analyze
+        
+        Returns:
+            List of empty test dictionaries with name, reason, and line number
+        """
+        logger.debug(f"🔍 Detecting empty tests in: {test_file}")
+        
+        if not test_file.exists():
+            logger.warning(f"Test file not found: {test_file}")
+            return []
+        
+        try:
+            import ast
+            
+            with open(test_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+                tree = ast.parse(content, filename=str(test_file))
+            
+            empty_tests = []
+            
+            for node in ast.walk(tree):
+                if isinstance(node, ast.FunctionDef) and node.name.startswith('test_'):
+                    # Check if function body is just 'pass' or docstring only
+                    if len(node.body) == 1:
+                        if isinstance(node.body[0], ast.Pass):
+                            empty_tests.append({
+                                'name': node.name,
+                                'reason': 'Contains only pass statement',
+                                'line': node.lineno,
+                                'file': str(test_file)
+                            })
+                        elif isinstance(node.body[0], ast.Expr) and isinstance(node.body[0].value, (ast.Constant, ast.Str)):
+                            empty_tests.append({
+                                'name': node.name,
+                                'reason': 'Contains only docstring',
+                                'line': node.lineno,
+                                'file': str(test_file)
+                            })
+                    
+                    # Check for tests with no assertions
+                    has_assertion = False
+                    for child in ast.walk(node):
+                        if isinstance(child, ast.Assert):
+                            has_assertion = True
+                            break
+                        # Also check for pytest assertions (assert_* functions)
+                        if isinstance(child, ast.Call):
+                            if hasattr(child.func, 'attr') and child.func.attr.startswith('assert'):
+                                has_assertion = True
+                                break
+                    
+                    if not has_assertion and len(node.body) > 0:
+                        # Skip if it's just docstring/pass (already caught above)
+                        if not (len(node.body) == 1 and isinstance(node.body[0], (ast.Pass, ast.Expr))):
+                            empty_tests.append({
+                                'name': node.name,
+                                'reason': 'No assertions found - test may not validate anything',
+                                'line': node.lineno,
+                                'file': str(test_file)
+                            })
+            
+            if empty_tests:
+                logger.warning(f"⚠️  Found {len(empty_tests)} empty/weak tests in {test_file.name}")
+            else:
+                logger.info(f"✅ No empty tests detected in {test_file.name}")
+            
+            return empty_tests
+        
+        except SyntaxError as e:
+            logger.error(f"Syntax error in test file {test_file}: {e}")
+            return []
+        except Exception as e:
+            logger.error(f"Empty test detection failed for {test_file}: {e}")
+            return []

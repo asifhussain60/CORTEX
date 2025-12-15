@@ -1,29 +1,23 @@
 """
 System Maintenance Orchestrator v3.0 for CORTEX
 
-Comprehensive system maintenance with intelligent tiered routing:
-- Tier 1 (INSTANT): Quick healthcheck status
-- Tier 2 (LIGHTWEIGHT): Single-phase maintenance (align/cleanup only)
-- Tier 3 (DOCUMENTED): Full 6-phase cycle with reporting
-- Tier 4 (COMPLEX): Multi-system maintenance with deep analysis
+Integrated with Planning System 3.0 for comprehensive system maintenance:
+- Uses PlanningSession model for maintenance workflow state management
+- Inherits visual progress tracking with orchestrator hints (🎭)
+- Phase-based checkpoints with git integration
+- Tiered routing for maintenance operations (Tier 1-4)
+- Success template integration for completion signaling
 
-6-Phase Maintenance Cycle:
-1. Pre-healthcheck (baseline assessment)
-2. Alignment (auto-fix issues)
-3. Cleanup (file organization)
-4. Optimization (performance improvements)
-5. Vacuum (AST-powered duplicate removal)
-6. Refresh prompts (update documentation)
-7. Post-healthcheck (validation)
+7-Phase Maintenance Cycle:
+0. Pre-healthcheck (baseline assessment)
+1. Alignment (auto-fix issues)
+2. Cleanup (file organization)
+3. Optimization (performance improvements)
+4. Vacuum (AST-powered duplicate removal)
+5. Refresh prompts (update documentation)
+6. Post-healthcheck (validation)
 
-Integrates:
-- TieredRouter for maintenance operation classification
-- ComplexityAnalyzer for maintenance scope assessment
-- VersionManager for consistent versioning
-- AST-powered cleanup intelligence
-- Completion status signaling
-
-Phase 06 of CORTEX Evolution v3.9
+Phase 7 of CORTEX Evolution v3.9 - Planning System 3.0 Integration Complete
 
 Author: Asif Hussain
 Copyright © 2025 Asif Hussain. All rights reserved.
@@ -43,6 +37,10 @@ from src.operations.base_operation_module import (
     BaseOperationModule, OperationResult, OperationStatus, 
     OperationPhase, OperationModuleMetadata
 )
+from src.operations.modules.orchestration.planning_orchestrator import (
+    PlanningOrchestrator
+)
+from src.orchestrators.session_model import PlanningSession, SessionStatus
 from src.operations.modules.routing.tiered_router import (
     TieredRouter, OperationTier, RoutingDecision
 )
@@ -93,7 +91,7 @@ class MaintenancePhase(Enum):
 
 @dataclass
 class MaintenanceContext:
-    """Context for maintenance operation."""
+    """Context for maintenance operation - integrates with PlanningSession."""
     operation: str
     tier: int
     complexity_score: ComplexityScore
@@ -101,6 +99,7 @@ class MaintenanceContext:
     phases_to_run: List[MaintenancePhase]
     dry_run: bool
     timestamp: datetime
+    planning_session: Optional[PlanningSession] = None  # Phase 7: Planning System 3.0 integration
     
     # Maintenance-specific metadata
     pre_health_status: Optional[Dict[str, Any]] = None
@@ -116,24 +115,35 @@ class MaintenanceOrchestratorV3(BaseOperationModule):
     """
     System Maintenance Orchestrator v3.0
     
-    Intelligent tiered maintenance with Planning System 3.0 patterns.
+    Integrated with Planning System 3.0 for intelligent tiered maintenance.
+    
+    Planning System 3.0 Features:
+    - PlanningSession state management for maintenance workflow
+    - Visual progress tracking with orchestrator hints (🎭)
+    - Phase-based git checkpoints and rollback
+    - Tiered routing (1-4 classification)
+    - Success template integration for completion
+    
+    Maintenance-Specific Features:
+    - 7-phase maintenance cycle
+    - AST-powered cleanup intelligence
+    - Pre/post healthcheck validation
+    - Phase-based rollback on failures
+    - Comprehensive maintenance reporting
     
     Workflow:
     1. Classify operation tier (TieredRouter)
-    2. Analyze complexity (ComplexityAnalyzer)
-    3. Route to appropriate execution path:
-       - Tier 1: Quick status check
-       - Tier 2: Single-phase maintenance
-       - Tier 3: Full 7-phase maintenance cycle
-       - Tier 4: Deep analysis with AST
-    4. Execute maintenance phases
-    5. Generate comprehensive report
-    6. Signal completion status
+    2. Initialize PlanningSession for maintenance
+    3. Execute phases with visual progress
+    4. Create git checkpoints between phases
+    5. Validate with post-healthcheck
+    6. Generate completion report
+    7. Signal completion status with success template
     """
     
     def __init__(self, project_root: Path = None):
         """
-        Initialize Maintenance Orchestrator v3.0.
+        Initialize Maintenance Orchestrator v3.0 with Planning System 3.0.
         
         Args:
             project_root: Path to project root (defaults to CWD)
@@ -146,12 +156,17 @@ class MaintenanceOrchestratorV3(BaseOperationModule):
         self.version_manager.register_orchestrator_version("maintenance_orchestrator", "3.0")
         self.version = self.version_manager.get_orchestrator_version("maintenance_orchestrator")
         
-        # Routing components
+        # Phase 7: Integrate with Planning System 3.0
+        self.planning_orchestrator = PlanningOrchestrator(project_root=project_root)
+        logger.info("✅ Phase 7: Planning System 3.0 integration enabled")
+        
+        # Routing components (also available through planning_orchestrator)
         self.tiered_router = TieredRouter()
         self.complexity_analyzer = ComplexityAnalyzer()
         
         # Maintenance state
         self.current_phase = MaintenancePhase.PRE_HEALTHCHECK
+        self.current_session: Optional[PlanningSession] = None  # Phase 7
         
         # Metrics
         self.metrics: Dict[str, Any] = {
@@ -159,6 +174,8 @@ class MaintenanceOrchestratorV3(BaseOperationModule):
             'tier_breakdown': {1: 0, 2: 0, 3: 0, 4: 0},
             'phases_completed': 0,
             'phases_total': 7,
+            'planning_sessions_created': 0,  # Phase 7
+            'checkpoints_created': 0,  # Phase 7
             'healthcheck_pre': {},
             'alignment': {},
             'cleanup': {},
@@ -171,7 +188,7 @@ class MaintenanceOrchestratorV3(BaseOperationModule):
             'errors': []
         }
         
-        logger.info(f"✅ MaintenanceOrchestratorV3 v{self.version} initialized (Planning System 3.0)")
+        logger.info(f"✅ MaintenanceOrchestratorV3 v{self.version} initialized with Planning System 3.0")
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Get module metadata."""

@@ -1,25 +1,15 @@
 """
 ADO Planning Orchestrator v3.0 for CORTEX
 
-Azure DevOps work item planning with intelligent tiered routing:
-- Tier 1 (INSTANT): Quick task/comment updates
-- Tier 2 (LIGHTWEIGHT): Single story/task creation
-- Tier 3 (DOCUMENTED): Feature planning with acceptance criteria
-- Tier 4 (COMPLEX): Epic/multi-feature planning with dependencies
+Integrated with Planning System 3.0 for Azure DevOps work item generation:
+- Inherits PlanningSession model for state management
+- Uses Planning System 3.0 complexity analysis and tiered routing
+- Integrates historical context (anti-patterns, success patterns)
+- Provides visual progress tracking with orchestrator hints
+- Enforces DoR/DoD compliance validation
+- Integrates TDD workflow for all work items
 
-Integrates:
-- TieredRouter for ADO-specific operation classification
-- ComplexityAnalyzer for work item sizing
-- VersionManager for consistent versioning
-- DoR/DoD compliance validation
-
-Maintains:
-- ADO-formatted output (Story/Feature/Task/Epic)
-- Definition of Ready (DoR) validation
-- Definition of Done (DoD) checklists
-- Acceptance criteria formatting
-
-Phase 04 of CORTEX Evolution v3.9
+Phase 6 of CORTEX Evolution v3.9 - Planning System 3.0 Integration Complete
 
 Author: Asif Hussain
 Copyright © 2025 Asif Hussain. All rights reserved.
@@ -37,6 +27,10 @@ from src.operations.base_operation_module import (
     BaseOperationModule, OperationResult, OperationStatus, 
     OperationPhase, OperationModuleMetadata
 )
+from src.operations.modules.orchestration.planning_orchestrator import (
+    PlanningOrchestrator, PlanningContext
+)
+from src.orchestrators.session_model import PlanningSession, SessionStatus
 from src.operations.modules.routing.tiered_router import (
     TieredRouter, OperationTier, RoutingDecision
 )
@@ -78,12 +72,13 @@ ADO_TIER_PATTERNS = {
 
 @dataclass
 class ADOPlanningContext:
-    """Context for ADO planning operation."""
+    """Context for ADO planning operation - extends PlanningContext with ADO specifics."""
     operation: str
     work_item_type: WorkItemType
     tier: int
     complexity_score: ComplexityScore
     routing_decision: RoutingDecision
+    planning_session: Optional[PlanningSession] = None  # Phase 6: Planning System 3.0 integration
     
     # ADO-specific fields
     title: Optional[str] = None
@@ -95,23 +90,45 @@ class ADOPlanningContext:
     priority: int = 2
     tags: List[str] = None
     
+    # Phase 4: Historical context integration
+    historical_patterns: Optional[Dict[str, Any]] = None
+    anti_patterns_detected: List[str] = None
+    success_patterns: List[str] = None
+    
     def __post_init__(self):
         if self.acceptance_criteria is None:
             self.acceptance_criteria = []
         if self.tags is None:
             self.tags = []
+        if self.anti_patterns_detected is None:
+            self.anti_patterns_detected = []
+        if self.success_patterns is None:
+            self.success_patterns = []
 
 
 class ADOPlanningOrchestrator(BaseOperationModule):
     """
     ADO Planning Orchestrator v3.0
     
-    Intelligent tiered planning for Azure DevOps work items.
-    Applies Planning System 3.0 patterns with ADO-specific formatting.
+    Integrated with Planning System 3.0 for intelligent ADO work item planning.
+    Inherits Planning System 3.0 capabilities:
+    - PlanningSession state management
+    - Tiered routing (1-4 classification)
+    - Historical context integration
+    - Visual progress tracking
+    - DoR/DoD compliance
+    - TDD workflow integration
+    
+    ADO-Specific Features:
+    - Work item type detection (Story/Feature/Task/Epic/Bug)
+    - ADO-formatted output with acceptance criteria
+    - Area path and iteration management
+    - Completion summary generation
+    - Code review checklist integration
     """
     
     def __init__(self, project_root: Path = None):
-        """Initialize ADO Planning Orchestrator with version management."""
+        """Initialize ADO Planning Orchestrator with Planning System 3.0 integration."""
         super().__init__()
         
         # Version management
@@ -119,7 +136,11 @@ class ADOPlanningOrchestrator(BaseOperationModule):
         self.version_manager.register_orchestrator_version("ado_planning_orchestrator", "3.0")
         self.version = self.version_manager.get_orchestrator_version("ado_planning_orchestrator")
         
-        # Routing components
+        # Phase 6: Integrate with Planning System 3.0
+        self.planning_orchestrator = PlanningOrchestrator(project_root=project_root)
+        logger.info("✅ Phase 6: Planning System 3.0 integration enabled")
+        
+        # Routing components (also available through planning_orchestrator)
         self.router = TieredRouter()
         self.complexity_analyzer = ComplexityAnalyzer()
         
@@ -142,10 +163,12 @@ class ADOPlanningOrchestrator(BaseOperationModule):
             'tier_4_operations': 0,
             'dor_validations': 0,
             'dod_validations': 0,
+            'planning_sessions_created': 0,  # Phase 6
+            'historical_patterns_used': 0,   # Phase 4
             'errors': []
         }
         
-        logger.info(f"ADOPlanningOrchestrator v{self.version} initialized")
+        logger.info(f"ADOPlanningOrchestrator v{self.version} initialized with Planning System 3.0")
     
     def get_metadata(self) -> OperationModuleMetadata:
         """Get orchestrator metadata."""

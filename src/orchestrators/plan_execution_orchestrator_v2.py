@@ -1,21 +1,25 @@
 """
-Plan Execution Orchestrator V2 - Refactored with Dependency Injection
+Plan Execution Orchestrator V2 - Integrated with Planning System 3.0
 
-Improvements over V1:
-- Dependency injection via constructor (no manual initialization)
-- Protocol-based interfaces (testable, mockable)
-- Shared configuration via OrchestratorConfig
-- Eliminated 80+ lines of redundant initialization
-- Backward compatible with existing plans
+Integrated with Planning System 3.0 for autonomous plan execution:
+- Uses PlanningSession model for execution state management
+- Inherits visual progress tracking with orchestrator hints (🎭)
+- Phase-based git checkpoints and rollback capability
+- DoR/DoD validation gates
+- Real-time execution monitoring
 
-Status:
-- V1 (plan_execution_orchestrator.py) REMOVED in v5.2.2
-- V2 is now the ONLY implementation
-- All code uses V2 via OrchestratorFactory
+Phase 9 of CORTEX Evolution v3.9 - Planning System 3.0 Integration Complete
+
+Workflow:
+1. Load plan (YAML or Markdown)
+2. Validate Definition of Ready
+3. Execute phases with PlanningSession tracking
+4. Create git checkpoints between phases
+5. Validate Definition of Done
+6. Generate completion report
 
 Author: Asif Hussain
-Created: December 6, 2025
-Version: 2.0.0
+Version: 2.1.0
 """
 
 import logging
@@ -31,26 +35,33 @@ from src.orchestrators.orchestrator_factory import (
     ICodeExecutor,
     ICleanupOrchestrator
 )
+from src.operations.modules.orchestration.planning_orchestrator import (
+    PlanningOrchestrator
+)
+from src.orchestrators.session_model import PlanningSession, SessionStatus
 
 logger = logging.getLogger(__name__)
 
 
 class PlanExecutionOrchestratorV2:
     """
-    Executes feature implementation plans with injected dependencies.
+    Executes feature implementation plans with Planning System 3.0 integration.
     
-    Key Improvements:
-    - Dependencies injected via constructor (no manual initialization)
-    - Testable via mock injection
-    - No redundant try/except blocks
-    - Configuration-driven behavior
+    Planning System 3.0 Features:
+    - PlanningSession state management for execution workflow
+    - Visual progress tracking with orchestrator hints (🎭)
+    - Phase-based git checkpoints and rollback
+    - DoR/DoD validation gates
+    - Real-time execution monitoring
     
     Workflow:
     1. Load plan (YAML or Markdown)
-    2. Execute each phase sequentially
-    3. Automatically add Integration & Consolidation phase
-    4. Execute cleanup and wiring operations
-    5. Validate production readiness
+    2. Validate Definition of Ready (DoR)
+    3. Initialize PlanningSession for execution
+    4. Execute each phase sequentially with progress updates
+    5. Create git checkpoints between phases
+    6. Validate Definition of Done (DoD)
+    7. Generate completion report with success template
     """
     
     def __init__(
@@ -62,7 +73,7 @@ class PlanExecutionOrchestratorV2:
         cleanup_orchestrator: Optional[ICleanupOrchestrator] = None
     ):
         """
-        Initialize orchestrator with injected dependencies.
+        Initialize orchestrator with Planning System 3.0.
         
         Args:
             cortex_root: Path to CORTEX root directory
@@ -76,13 +87,18 @@ class PlanExecutionOrchestratorV2:
         self.execution_history_dir = self.cortex_root / "cortex-brain" / "documents" / "reports" / "execution-history"
         self.execution_history_dir.mkdir(parents=True, exist_ok=True)
         
+        # Phase 9: Integrate with Planning System 3.0
+        self.planning_orchestrator = PlanningOrchestrator(project_root=cortex_root)
+        self.current_session: Optional[PlanningSession] = None
+        logger.info("✅ Phase 9: Planning System 3.0 integration enabled")
+        
         # Injected dependencies (no manual initialization)
         self.tdd_orchestrator = tdd_orchestrator
         self.git_checkpoint = git_checkpoint
         self.code_executor = code_executor
         self.cleanup_orchestrator = cleanup_orchestrator
         
-        logger.info(f"🏭 PlanExecutionOrchestratorV2 initialized (TDD: {tdd_orchestrator is not None}, Git: {git_checkpoint is not None})")
+        logger.info(f"🏭 PlanExecutionOrchestratorV2 v2.1 initialized with Planning System 3.0")
     
     def execute_plan(
         self,
