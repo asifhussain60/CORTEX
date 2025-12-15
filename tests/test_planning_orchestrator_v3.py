@@ -29,7 +29,7 @@ class TestInitialization:
     
     def test_initialization(self, orchestrator):
         """Validate all real components initialized."""
-        assert orchestrator.version == "3.0"
+        assert orchestrator.version == "3.1"
         assert orchestrator.tiered_router is not None
         assert orchestrator.complexity_analyzer is not None
         assert orchestrator.version_manager is not None
@@ -37,15 +37,15 @@ class TestInitialization:
         
         # Verify real version registration
         registered_version = orchestrator.version_manager.get_orchestrator_version("planning_orchestrator")
-        assert registered_version == "3.0"
+        assert registered_version == "3.1"
     
     def test_metadata(self, orchestrator):
         """Verify orchestrator metadata."""
         metadata = orchestrator.get_metadata()
-        assert metadata.module_id == "planning_orchestrator_v3"
-        assert metadata.version == "3.0.0"
-        assert metadata.name == "Planning Orchestrator 3.0"
-        assert "planning-system-3.0" in metadata.tags
+        assert metadata.module_id == "planning_orchestrator_v3_1"
+        assert metadata.version == "3.1.0"
+        assert metadata.name == "Planning Orchestrator 3.1"
+        assert "planning-system-3.1" in metadata.tags
 
 
 class TestRealTierClassification:
@@ -149,12 +149,12 @@ class TestVersionIntegration:
     def test_version_registration(self, orchestrator):
         """Orchestrator registers with VersionManager."""
         version = orchestrator.version_manager.get_orchestrator_version("planning_orchestrator")
-        assert version == "3.0"
+        assert version == "3.1"
     
     def test_version_info(self, orchestrator):
         """Can retrieve version info dict."""
         version_info = orchestrator.get_version_info()
-        assert version_info['version'] == "3.0"
+        assert version_info['version'] == "3.1"
         assert version_info['orchestrator'] == "planning_orchestrator"
 
 
@@ -205,5 +205,7 @@ class TestCompletionStatus:
         orchestrator.metrics['errors'].append("Test error")
         result = orchestrator.execute({'operation': 'add feature W'})
         
-        assert result.success is True  # Execution succeeds
-        assert result.data['is_complete'] is False  # But has errors
+        # Orchestrator completes execution but tracks errors
+        assert result.success is True  # Execution completes
+        assert result.data['is_complete'] is False  # But has errors tracked
+        assert result.data['session']['status'] == 'failed'  # Session marked failed due to errors

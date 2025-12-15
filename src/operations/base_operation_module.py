@@ -19,6 +19,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
 import logging
+from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 
@@ -394,3 +395,55 @@ class BaseOperationModule(ABC):
     def log_debug(self, message: str) -> None:
         """Log debug message (convenience wrapper)."""
         self.logger.debug(message)
+    
+    def resolve_plan_file(self, user_reference: str, brain_path: Optional[Path] = None) -> Dict[str, Any]:
+        """
+        Transparently resolve plan file reference to YAML data.
+        
+        Users can reference natural .md files, this method automatically:
+        1. Checks for .yaml version (efficient)
+        2. Converts .md to YAML if needed
+        3. Caches for future use
+        4. Returns structured dict
+        
+        Args:
+            user_reference: File reference like "00-master-plan.md", "#file:plan.md", or full path
+            brain_path: Path to cortex-brain (auto-detected if None)
+        
+        Returns:
+            Parsed YAML dict (from .yaml or converted .md)
+        
+        Raises:
+            FileNotFoundError: If plan file not found
+            ValueError: If conversion fails
+        
+        Example:
+            >>> plan_data = self.resolve_plan_file("#file:00-master-plan.md")
+            >>> print(plan_data['metadata']['plan_id'])
+            >>> print(plan_data['phases'][0]['name'])
+        """
+        from src.utils.plan_file_resolver import PlanFileResolver
+        
+        # Auto-detect brain path
+        if brain_path is None:
+            brain_path = Path.cwd() / "cortex-brain"
+            if not brain_path.exists():
+                brain_path = Path.cwd().parent / "cortex-brain"
+            
+            if not brain_path.exists():
+                raise FileNotFoundError(
+                    "Cannot auto-detect cortex-brain directory. "
+                    "Please provide brain_path parameter."
+                )
+        
+        resolver = PlanFileResolver(brain_path)
+        result = resolver.resolve_plan_file(user_reference)
+        
+        if not result.success:
+            raise FileNotFoundError(result.error_message)
+        
+        self.logger.info(f"✅ Resolved plan: {result.source_path} ({result.source_format})")
+        if result.cached:
+            self.logger.info(f"   📦 Using cached YAML")
+        
+        return result.data

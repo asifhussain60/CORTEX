@@ -49,6 +49,9 @@ from src.operations.modules.version.version_manager import get_version_manager
 from src.operations.modules.orchestration.temporary_plan_manager import (
     TemporaryPlanManager, TemporaryPlan
 )
+from src.operations.modules.planning import (
+    UnifiedPlanGenerator, TokenReductionTracker, PhaseLifecycleManager
+)
 from src.orchestrators.session_model import PlanningSession, SessionStatus
 from src.utils.progress_decorator import with_progress, yield_progress
 from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
@@ -128,6 +131,11 @@ class PlanningOrchestrator(BaseOperationModule):
         
         # Initialize temporary plan manager
         self.temp_plan_manager = TemporaryPlanManager(self.project_root)
+        
+        # Initialize unified planning components (Phase 13)
+        self.unified_generator = UnifiedPlanGenerator()
+        self.token_tracker = TokenReductionTracker()
+        self.phase_manager = PhaseLifecycleManager(self.unified_generator)
         
         # Track current plan for autonomous execution
         self.current_plan_id: Optional[str] = None
@@ -302,7 +310,7 @@ class PlanningOrchestrator(BaseOperationModule):
             visual_tracker = ""
             if self.session:
                 self.session.completed_at = datetime.now()
-                self.session.status = SessionStatus.COMPLETED if is_complete else SessionStatus.WARNING
+                self.session.status = SessionStatus.COMPLETED if is_complete else SessionStatus.FAILED
                 visual_tracker = "\n\n" + self.session.render_progress_table() + "\n"
             
             # User-facing message with visual tracker
@@ -1659,14 +1667,9 @@ Phases Completed:
             
         except Exception as e:
             logger.warning(f"Could not update master plan tracker: {e}")
-    
-    # ========================================
-    # Master Plan Generation (Task 1.6)
-    # ========================================
-    
     def _generate_master_plan_content(self, plan_folder: Path, phases: List[Dict[str, Any]]) -> str:
         """
-        Generate master plan content with embedded visual tracker.
+        Generate master plan content using UnifiedPlanGenerator (Phase 13).
         
         Args:
             plan_folder: Path to plan folder
@@ -1675,83 +1678,48 @@ Phases Completed:
         Returns:
             Master plan markdown content
         """
-        import uuid
+        # Prepare metadata
+        plan_id = plan_folder.name
+        metadata = {
+            "date": datetime.now().strftime("%B %d, %Y"),
+            "complexity_tier": self._infer_complexity_tier(phases),
+            "summary": f"Implementation plan for {plan_id.replace('-', ' ').title()}",
+            "baseline_tokens": 0,  # Will be established separately
+            "current_tokens": 0,
+            "total_files": 0
+        }
         
-        # Create temporary session for tracker
-        temp_session = PlanningSession(
-            session_id=str(uuid.uuid4()),
-            session_type="planning",
-            status=SessionStatus.IN_PROGRESS,
-            started_at=datetime.now(),
-            plan_title=plan_folder.name
-        )
-        
-        # Add phases to session
-        for phase in phases:
-            # Convert tasks to dict format if they're strings
-            tasks = phase.get('tasks', [])
-            task_dicts = []
-            for task in tasks:
-                if isinstance(task, str):
-                    task_dicts.append({'name': task, 'completed': False})
-                else:
-                    task_dicts.append(task)
-            
-            temp_session.add_phase(phase['name'], task_dicts)
-        
-        # Render visual tracker
-        visual_tracker = temp_session.render_progress_table()
-        
-        # Generate master plan content
-        plan_title = plan_folder.name.replace('-', ' ').title()
-        
-        content = f"""# 🧠 CORTEX - {plan_title} Master Plan
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-## Executive Summary
-
-This master plan outlines the implementation strategy for {plan_title}.
-
-{visual_tracker}
-
----
-
-## Phase Breakdown
-
-"""
-        
-        # Add phase details
+        # Convert phases to unified format
+        unified_phases = []
         for idx, phase in enumerate(phases, 1):
-            content += f"""### Phase {idx}: {phase['name']}
-
-**Description:** {phase.get('description', 'No description')}
-
-**Tasks:**
-"""
-            for task in phase.get('tasks', []):
-                task_name = task if isinstance(task, str) else task.get('name', 'Unnamed task')
-                content += f"- [ ] {task_name}\n"
-            
-            content += "\n"
+            unified_phases.append({
+                "id": idx,
+                "name": phase.get("name", f"Phase {idx}"),
+                "status": "pending",
+                "actual": "-",
+                "elapsed": "-",
+                "tokens_saved": "-"
+            })
         
-        content += """---
-
-## Success Criteria
-
-- [ ] All phases completed
-- [ ] All tests passing
-- [ ] Documentation updated
-- [ ] Code reviewed and approved
-
----
-
-**Status:** In Progress  
-**Next Phase:** Phase 1
-"""
-        
-        return content
+        # Generate using UnifiedPlanGenerator
+        return self.unified_generator.generate_master_plan(
+            plan_id=plan_id,
+            phases=unified_phases,
+            metadata=metadata,
+            include_token_tracking=True,
+            include_visual_tracker=True,
+            include_continuation_prompt=True
+        )
+    
+    def _infer_complexity_tier(self, phases: List[Dict[str, Any]]) -> int:
+        """Infer complexity tier from phase count."""
+        phase_count = len(phases)
+        if phase_count <= 2:
+            return 2  # Lightweight
+        elif phase_count <= 5:
+            return 3  # Documented
+        else:
+            return 4  # Complex
     
     def _write_master_plan_file(self, plan_folder: Path, content: str) -> Path:
         """
@@ -1765,6 +1733,15 @@ This master plan outlines the implementation strategy for {plan_title}.
             Path to created master plan file
         """
         plan_folder.mkdir(parents=True, exist_ok=True)
+        
+        # Create standard plan structure folders
+        (plan_folder / "context").mkdir(exist_ok=True)
+        (plan_folder / "reports").mkdir(exist_ok=True)
+        (plan_folder / "artifacts" / "copilot-chats").mkdir(parents=True, exist_ok=True)
+        (plan_folder / "artifacts" / "user-preferences").mkdir(parents=True, exist_ok=True)
+        (plan_folder / "tracking").mkdir(exist_ok=True)
+        (plan_folder / "sub-plans").mkdir(exist_ok=True)
+        
         master_plan_path = plan_folder / "00-master-plan.md"
         
         with open(master_plan_path, 'w', encoding='utf-8') as f:

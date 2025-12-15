@@ -130,9 +130,13 @@ class TestMinimalMasterPlanGeneration:
         assert '[Implementation](sub-plans/phase-02-implementation.md)' in content
         assert '[Testing](sub-plans/phase-03-testing.md)' in content
         
-        # Verify visual tracker table
-        assert '| Phase | Name | Status |' in content
+        # Verify visual tracker table with time tracking
+        assert '| Phase | Name | Status | Actual | Elapsed |' in content
         assert '⏸️ PENDING' in content
+        
+        # Verify time tracking summary
+        assert 'Total Actual:' in content
+        assert 'Total Elapsed:' in content
     
     def test_minimal_master_plan_has_continuation_prompt(self, manager):
         """Test master plan has copy-paste ready continuation prompt."""

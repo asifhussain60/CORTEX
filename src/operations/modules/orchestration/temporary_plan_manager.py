@@ -12,9 +12,11 @@ Features:
 - Plan folder lifecycle management (approved → active → completed)
 - Knowledge extraction phase on completion
 
+Integrates UnifiedPlanGenerator (Phase 13) for consistent master plan generation.
+
 Author: Asif Hussain
 Copyright © 2025 Asif Hussain. All rights reserved.
-Version: 3.1.0
+Version: 3.2.0
 """
 
 import json
@@ -23,6 +25,10 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 from dataclasses import dataclass, field
+
+from src.operations.modules.planning import (
+    UnifiedPlanGenerator, TokenReductionTracker, PhaseLifecycleManager
+)
 
 logger = logging.getLogger(__name__)
 
@@ -114,7 +120,12 @@ class TemporaryPlanManager:
         self.approved_dir.mkdir(parents=True, exist_ok=True)
         self.completed_dir.mkdir(parents=True, exist_ok=True)
         
-        logger.info("✅ TemporaryPlanManager initialized")
+        # Initialize unified planning components (Phase 13)
+        self.unified_generator = UnifiedPlanGenerator()
+        self.token_tracker = TokenReductionTracker()
+        self.phase_manager = PhaseLifecycleManager(self.unified_generator)
+        
+        logger.info("✅ TemporaryPlanManager v3.2 initialized with UnifiedPlanGenerator")
     
     def create_temporary_plan(
         self,
@@ -261,17 +272,23 @@ class TemporaryPlanManager:
         
         temp_plan = self._load_temporary_plan(plan_id, folder=approved_folder)
         
+        # Create standard plan structure folders
+        (approved_folder / "context").mkdir(exist_ok=True)
+        (approved_folder / "reports").mkdir(exist_ok=True)
+        (approved_folder / "artifacts" / "copilot-chats").mkdir(parents=True, exist_ok=True)
+        (approved_folder / "artifacts" / "user-preferences").mkdir(parents=True, exist_ok=True)
+        (approved_folder / "tracking").mkdir(exist_ok=True)
+        (approved_folder / "sub-plans").mkdir(exist_ok=True)
+        
         # Generate master plan
         master_plan_path = approved_folder / "master-plan.md"
         master_plan_content = self._generate_master_plan(temp_plan)
         master_plan_path.write_text(master_plan_content, encoding='utf-8')
         
         # Generate sub-plans (slave plans) for each phase
-        subplans_dir = approved_folder / "sub-plans"
-        subplans_dir.mkdir(exist_ok=True)
-        
+        # Generate sub-plans (slave plans) for each phase
         for i, phase in enumerate(temp_plan.phases, 1):
-            subplan_path = subplans_dir / f"phase-{i:02d}-{phase.get('name', 'unnamed').lower().replace(' ', '-')}.md"
+            subplan_path = approved_folder / "sub-plans" / f"phase-{i:02d}-{phase.get('name', 'unnamed').lower().replace(' ', '-')}.md"
             subplan_content = self._generate_subplan(temp_plan, phase, i)
             subplan_path.write_text(subplan_content, encoding='utf-8')
         
@@ -288,7 +305,7 @@ class TemporaryPlanManager:
     
     def mark_phase_in_progress(self, plan_id: str, phase_number: int):
         """
-        Update master plan to mark phase as 'In Progress'.
+        Update master plan to mark phase as 'In Progress' using PhaseLifecycleManager.
         
         Args:
             plan_id: Plan identifier
@@ -299,64 +316,40 @@ class TemporaryPlanManager:
             logger.warning(f"Master plan not found: {master_plan_path}")
             return
         
-        content = master_plan_path.read_text(encoding='utf-8', errors='replace')
-        
-        # Update phase status to In Progress in visual tracker table
-        import re
-        phase_pattern = rf"(\| {phase_number} \| \[.*?\]\(.*?\) \| )⏸️ PENDING"
-        phase_replacement = rf"\1⏳ IN PROGRESS"
-        content = re.sub(phase_pattern, phase_replacement, content)
-        
-        master_plan_path.write_text(content, encoding='utf-8')
-        logger.info(f"✅ Marked Phase {phase_number} as In Progress in {plan_id}")
+        result = self.phase_manager.start_phase(master_plan_path, phase_number)
+        if result["success"]:
+            logger.info(f"✅ Marked Phase {phase_number} as In Progress in {plan_id}")
+        else:
+            logger.error(f"Failed to start phase: {result.get('error')}")
     
-    def mark_phase_complete(self, plan_id: str, phase_number: int):
+    def mark_phase_complete(self, plan_id: str, phase_number: int, duration_hours: float = 0, tokens_saved: int = 0):
         """
-        Update master plan to mark phase as 'Complete' and update continuation prompt.
+        Update master plan to mark phase as 'Complete' using PhaseLifecycleManager.
         
         Args:
             plan_id: Plan identifier
             phase_number: Phase number (1-based)
+            duration_hours: Actual time spent (hours)
+            tokens_saved: Tokens saved in this phase
         """
+        from datetime import timedelta
+        
         master_plan_path = self.active_dir / plan_id / "master-plan.md"
         if not master_plan_path.exists():
             logger.warning(f"Master plan not found: {master_plan_path}")
             return
         
-        content = master_plan_path.read_text(encoding='utf-8', errors='replace')
+        result = self.phase_manager.complete_phase(
+            master_plan_path=master_plan_path,
+            phase_number=phase_number,
+            duration=timedelta(hours=duration_hours),
+            tokens_saved=tokens_saved
+        )
         
-        # Update phase status to Complete
-        import re
-        
-        # Update status in progress tracker table
-        phase_pattern = rf"(\| {phase_number} \| \[.*?\]\(.*?\) \| )⏸️ PENDING|⏳ IN PROGRESS"
-        phase_replacement = rf"\1✅ COMPLETE"
-        content = re.sub(phase_pattern, phase_replacement, content)
-        
-        # Update progress bar
-        total_phases_match = re.search(r'(\d+)/(\d+) Phases Complete', content)
-        if total_phases_match:
-            completed = int(total_phases_match.group(1)) + 1
-            total = int(total_phases_match.group(2))
-            progress_pct = int((completed / total) * 100)
-            
-            # Update ASCII progress bar
-            bar_width = 20
-            filled = int((progress_pct / 100) * bar_width)
-            empty = bar_width - filled
-            new_progress_bar = '█' * filled + '░' * empty
-            
-            # Replace progress line
-            old_progress = re.search(r'\*\*Overall Progress:\*\* \[.*?\] \d+% \(\d+/\d+ Phases Complete\)', content)
-            if old_progress:
-                new_progress = f"**Overall Progress:** [{new_progress_bar}] {progress_pct}% ({completed}/{total} Phases Complete)"
-                content = content.replace(old_progress.group(0), new_progress)
-        
-        # Update continuation prompt
-        content = self._update_continuation_prompt(content, plan_id, phase_number)
-        
-        master_plan_path.write_text(content, encoding='utf-8')
-        logger.info(f"✅ Marked Phase {phase_number} as Complete in {plan_id} + updated continuation prompt")
+        if result["success"]:
+            logger.info(f"✅ Marked Phase {phase_number} as Complete in {plan_id} + updated continuation prompt")
+        else:
+            logger.error(f"Failed to complete phase: {result.get('error')}")
     
     def _update_continuation_prompt(self, content: str, plan_id: str, completed_phase: int) -> str:
         """
@@ -602,66 +595,38 @@ Continue work on plan `{plan_id}`. Current status: {completed_phases}/{total_pha
         return TemporaryPlan.from_dict(data)
     
     def _generate_master_plan(self, temp_plan: TemporaryPlan) -> str:
-        """Generate minimal master plan markdown from temporary plan."""
-        # Calculate progress
-        total_phases = len(temp_plan.phases)
-        completed_phases = 0
-        progress_pct = int((completed_phases / total_phases * 100)) if total_phases > 0 else 0
+        """Generate master plan using UnifiedPlanGenerator (Phase 13)."""
+        # Prepare metadata
+        metadata = {
+            "date": temp_plan.created_at.strftime("%B %d, %Y"),
+            "complexity_tier": temp_plan.complexity_tier,
+            "summary": temp_plan.approach,
+            "baseline_tokens": 0,  # Will be established separately
+            "current_tokens": 0,
+            "total_files": 0
+        }
         
-        # ASCII progress bar
-        bar_width = 20
-        filled = int((progress_pct / 100) * bar_width)
-        empty = bar_width - filled
-        progress_bar = '█' * filled + '░' * empty
+        # Convert phases to unified format
+        unified_phases = []
+        for idx, phase in enumerate(temp_plan.phases, 1):
+            unified_phases.append({
+                "id": idx,
+                "name": phase.get("name", f"Phase {idx}"),
+                "status": "pending",
+                "actual": phase.get("actual_time", "-"),
+                "elapsed": phase.get("elapsed_time", "-"),
+                "tokens_saved": phase.get("tokens", "-")
+            })
         
-        # Build minimal content
-        content = f"""🧠 CORTEX - {temp_plan.user_request}
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-**Plan ID:** {temp_plan.plan_id}  
-**Date:** {temp_plan.created_at.strftime("%B %d, %Y")}  
-**Complexity Tier:** {temp_plan.complexity_tier} ({self._tier_to_label(temp_plan.complexity_tier)})  
-
----
-
-## 🎯 Executive Summary
-
-{temp_plan.approach}
-
----
-
-## 📊 Visual Progress Tracker
-
-**Overall Progress:** [{progress_bar}] {progress_pct}% ({completed_phases}/{total_phases} Phases Complete)
-
-| Phase | Name | Status |
-|-------|------|--------|
-"""
-        # Add phase links
-        for i, phase in enumerate(temp_plan.phases, 1):
-            phase_name = phase.get('name', f'Phase {i}')
-            subplan_link = f"sub-plans/phase-{i:02d}-{phase_name.lower().replace(' ', '-')}.md"
-            content += f"| {i} | [{phase_name}]({subplan_link}) | ⏸️ PENDING |\n"
-        
-        # Continuation prompt
-        content += f"""
-
----
-
-## 🔄 Continuation Prompt
-
-**COPY-PASTE THIS TO RESUME WORK:**
-
-```markdown
-Continue work on plan `{temp_plan.plan_id}`. Current status: {completed_phases}/{total_phases} phases complete. Next: Execute Phase 1 ({temp_plan.phases[0].get('name', 'Phase 1') if temp_plan.phases else 'No phases defined'}). Master plan: `cortex-brain/documents/planning/features/active/{temp_plan.plan_id}/master-plan.md`. Follow TDD workflow (RED→GREEN→REFACTOR). Update continuation prompt after phase completion.
-```
-
----
-"""
-        
-        return content
+        # Generate using UnifiedPlanGenerator
+        return self.unified_generator.generate_master_plan(
+            plan_id=temp_plan.plan_id,
+            phases=unified_phases,
+            metadata=metadata,
+            include_token_tracking=True,
+            include_visual_tracker=True,
+            include_continuation_prompt=True
+        )
     
     def _tier_to_label(self, tier: int) -> str:
         """Convert complexity tier to label."""

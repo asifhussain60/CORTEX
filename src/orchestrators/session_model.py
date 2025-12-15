@@ -362,6 +362,8 @@ class PlanningSession(BaseSession):
             f"**Duration:** {total_duration}",
             f"**Tokens Used:** {self.total_tokens_used:,} tokens",
             f"**Overall Progress:** {progress['progress_percentage']:.1f}% ({progress['completed_phases']}/{progress['total_phases']} phases)",
+            f"**Overall Token Reduction:** 0% (0 tokens saved)",
+            f"*Baseline established: [measure and update with baseline metrics]*",
             "",
             "| Phase | Name | Status | Progress | Duration | Tokens | Tasks |",
             "|-------|------|--------|----------|----------|--------|-------|"
