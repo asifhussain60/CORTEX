@@ -38,6 +38,7 @@ from ...core.base_orchestrator import (
 )
 from ...core.state_machine import StateMachine, create_basic_orchestrator_fsm
 from ...session.session_manager import SessionManager
+from src.tier0.cortex_implants_integrator import get_implants_integrator
 
 logger = logging.getLogger(__name__)
 
@@ -363,6 +364,13 @@ class PlanningOrchestrator(BaseOrchestrator):
             approved=context.inputs.get('auto_approve', False)
         )
         
+        # Validate against cortex-implants (if present)
+        implants_violations = self._validate_against_implants(self.current_plan)
+        if implants_violations:
+            logger.warning(f"🧬 Cortex implants validation: {len(implants_violations)} issues found")
+            for violation in implants_violations:
+                logger.warning(f"   {violation}")
+        
         # Final progress
         self.report_progress(
             current_phase=5,
@@ -375,6 +383,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         
         return {
             'plan': self._plan_to_dict(self.current_plan),
+            'implants_violations': implants_violations,
             'success': True
         }
     
@@ -808,6 +817,62 @@ class PlanningOrchestrator(BaseOrchestrator):
             'created_at': plan.created_at.isoformat(),
             'approved': plan.approved
         }
+    
+    def _validate_against_implants(self, plan: FeaturePlan) -> List[str]:
+        """
+        Validate plan against cortex-implants (optional).
+        
+        Checks:
+        - Tech stack restrictions
+        - Architecture patterns
+        - Business rules compliance
+        
+        Args:
+            plan: Feature plan to validate
+            
+        Returns:
+            List of violations (empty if valid or no implants)
+        """
+        try:
+            integrator = get_implants_integrator()
+            
+            if not integrator.has_implants():
+                return []  # No implants, no violations
+            
+            logger.info(f"🧬 Validating plan against cortex-implants (Priority: {integrator.get_priority()})")
+            
+            violations = []
+            
+            # Validate tech stack (if dependencies mentioned in plan)
+            plan_dict = self._plan_to_dict(plan)
+            plan_str = str(plan_dict).lower()
+            
+            # Extract potential library names from plan
+            potential_deps = []
+            for phase in plan.phases:
+                for task in phase.tasks:
+                    if any(kw in task.lower() for kw in ['library', 'package', 'framework', 'npm', 'pip']):
+                        # Extract words that might be library names
+                        words = task.split()
+                        potential_deps.extend([w for w in words if len(w) > 2])
+            
+            if potential_deps:
+                tech_violations = integrator.validate_tech_stack(potential_deps)
+                violations.extend(tech_violations)
+            
+            # Validate architecture patterns
+            arch_violations = integrator.validate_architecture(plan_dict)
+            violations.extend(arch_violations)
+            
+            # Add context summary to logger
+            if violations:
+                logger.warning(integrator.get_context_summary())
+            
+            return violations
+            
+        except Exception as e:
+            logger.debug(f"Implants validation skipped: {e}")
+            return []
 
 
 # Factory function
