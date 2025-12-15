@@ -26,7 +26,7 @@
 
 ## 📊 CORTEX Lens Progress Tracker
 
-**Last Updated:** December 13, 2025 8:52 AM | **Current Phase:** Phase 6 Testing
+**Last Updated:** December 14, 2025 4:35 PM | **Current Phase:** Phase 6.5 Complete → Phase 7 Pending
 
 ### Phase Completion Status
 
@@ -38,64 +38,71 @@ Phase 3: Extended Collectors               [████████████
 Phase 4: Templates & Design System         [████████████████████] 100% ✅ COMPLETE
 Phase 5: Business Intelligence Narratives  [████████████████████] 100% ✅ COMPLETE
 Phase 6: Testing & Optimization            [██████████████░░░░░░]  71% 🔄 IN PROGRESS
-Phase 6.5: Dashboard Template Infrastructure [████████████████████] 100% ✅ COMPLETE
+Phase 6.5: Landing Page & Template Infra   [████████████████████] 100% ✅ COMPLETE
 Phase 7: Holistic Review & Validation      [░░░░░░░░░░░░░░░░░░░░]   0% ⏳ PENDING
 ```
 
 ### Module Implementation Status
 
+**⚠️ IMPORTANT: Actual implementation is in `src/dashboard/` not `src/cortex_lens/`**
+
 | Module | Status | LOC | Test Coverage | Notes |
 |--------|--------|-----|---------------|-------|
-| **Core** | | | | |
-| └─ classifier.py | ✅ Complete | 124 | 83% | Repository type detection |
-| └─ pipeline.py | ✅ Complete | 142 | 56% | Analysis orchestration |
-| └─ schema.py | ✅ Complete | 76 | 63% | Data validation |
-| └─ performance.py | ⏳ Pending | 53 | 0% | Multi-threading config |
-| **Analyzers** | | | | |
-| └─ python_analyzer.py | ✅ Complete | 169 | 49% | ast→parso→libcst cascade |
-| └─ csharp_analyzer.py | ✅ Complete | 152 | 61% | Regex + Roslyn |
-| └─ javascript_analyzer.py | ✅ Complete | 192 | 59% | Regex + Babel |
+| **Core (src/dashboard/)** | | | | |
+| └─ orchestrator.py | ✅ Complete | 434 | 100% | Main data orchestration (18 tests) |
+| **Analyzers (src/dashboard/analyzers/)** | | | | |
+| └─ python_analyzer.py | ✅ Complete | 418 | 49% | ast→parso→libcst cascade |
+| └─ csharp_analyzer.py | ✅ Complete | 152 | 61% | Regex-based parsing |
+| └─ typescript_analyzer.py | ✅ Complete | 192 | 59% | Regex patterns |
+| └─ coldfusion_analyzer.py | ✅ Complete | ~150 | ~50% | CFC/CFM support |
 | └─ sql_analyzer.py | ✅ Complete | 247 | 58% | sqlparse integration |
-| **Collectors (9/14)** | | | | |
-| └─ health_collector.py | ✅ Complete | 92 | 90% | File metrics, LOC |
-| └─ architecture_collector.py | ✅ Complete | 150 | 77% | Pattern detection |
-| └─ api_endpoint_collector.py | ✅ Complete | 192 | 35% | REST endpoint discovery |
-| └─ complexity_collector.py | ✅ Complete | 140 | 79% | Cyclomatic complexity |
-| └─ tech_stack_collector.py | ✅ Complete | 166 | 56% | Framework detection |
-| └─ dependency_collector.py | ✅ Complete | 183 | 87% | Package analysis |
-| └─ test_coverage_collector.py | ✅ Complete | 139 | 70% | Test file detection |
-| └─ security_collector.py | ✅ Complete | 107 | 52% | Vulnerability scanning |
-| └─ comment_collector.py | ✅ Complete | 145 | 71% | Docstring extraction |
-| **Narratives (7/7)** | | | | |
-| └─ use_case_discoverer.py | ✅ Complete | 150 | 0% | Use case extraction |
-| └─ problem_domain_narrator.py | ✅ Complete | 85 | 0% | Domain synthesis |
-| └─ business_flow_mapper.py | ✅ Complete | 27 | 0% | Workflow mapping |
-| └─ stakeholder_analyzer.py | ✅ Complete | 38 | 0% | Stakeholder analysis |
-| └─ competitive_position_narrator.py | ✅ Complete | 56 | 0% | Tech advantages |
-| └─ risk_narrator.py | ✅ Complete | 81 | 0% | Risk storytelling |
-| └─ evolution_narrator.py | ✅ Complete | 65 | 0% | Transformation stories |
-| └─ orchestrator.py | ✅ Complete | 93 | 0% | Narrative coordination |
-| **Generators (5/5)** | | | | |
-| └─ dashboard_builder.py | ✅ Complete | 466 | 100% | Template injection pipeline |
-| └─ dashboard_renderer.py | ✅ Complete | 88 | 100% | HTML generation |
-| └─ export_manager.py | ✅ Complete | 94 | 95% | JSON/YAML/CSV/Markdown/ZIP |
-| └─ narrative_generator.py | ✅ Complete | 68 | 85% | Narrative formatting |
-| └─ packager.py | ✅ Complete | 73 | 96% | ZIP packaging & multi-format |
-| **Templates (2/6 complete)** | | | | |
+| └─ language_analyzer_base.py | ✅ Complete | ~100 | ~70% | Base analyzer protocol |
+| └─ language_parser_factory.py | ✅ Complete | ~80 | ~75% | Analyzer registry |
+| **Collectors (src/dashboard/data/)** | | | | |
+| └─ base_collector.py | ✅ Complete | ~110 | N/A | Abstract base class |
+| └─ overview_collector.py | ✅ Complete | ~200 | ~80% | Repository metrics |
+| └─ architecture_collector.py | ✅ Complete | ~180 | ~75% | Pattern detection |
+| └─ tech_stack_collector.py | ✅ Complete | ~160 | 56% | Framework detection |
+| └─ security_collector.py | ✅ Complete | ~190 | 52% | Vulnerability scanning |
+| └─ security_collector_optimized.py | ✅ Complete | ~150 | ~50% | Optimized security scan |
+| └─ recommendation_collector.py | ✅ Complete | ~220 | ~60% | Actionable recommendations |
+| └─ use_case_collector.py | ✅ Complete | ~180 | ~55% | Use case extraction |
+| └─ solution_structure_collector.py | ✅ Complete | ~150 | ~65% | Solution hierarchy |
+| └─ tech_stack_risk_scorer.py | ✅ Complete | ~140 | ~60% | EOL + CVE risk scoring |
+| └─ business_capability_detector.py | ✅ Complete | ~200 | ~50% | Business narrative |
+| └─ team_metrics_collector.py | ✅ Complete | ~130 | ~55% | Team analytics |
+| └─ vendor_collector.py | ✅ Complete | ~120 | ~50% | Vendor detection |
+| └─ vendor_detector.py | ✅ Complete | ~100 | ~45% | Vendor patterns |
+| └─ parallel_collector.py | ✅ Complete | ~200 | ~70% | Parallel execution |
+| └─ mock_data_generator.py | ✅ Complete | ~300 | ~60% | Test data generation |
+| **Advanced Collectors (src/dashboard/collectors/)** | | | | |
+| └─ universal_collector_base.py | ✅ Complete | ~150 | N/A | Universal base with progress |
+| └─ architecture_collector_v2.py | ✅ Complete | 504 | 77% | Multi-language orchestrator |
+| **Intelligence (src/dashboard/intelligence/)** | | | | |
+| └─ ast_docstring_extractor.py | ✅ Complete | 415 | ~70% | AST-based doc extraction |
+| └─ semantic_analyzer.py | ✅ Complete | ~350 | ~60% | Semantic analysis |
+| └─ migration_roadmap_generator.py | ✅ Complete | ~280 | ~55% | Upgrade path generation |
+| └─ framework_health_heatmap.py | ✅ Complete | ~250 | ~60% | Health visualization |
+| └─ dependency_bloat_analyzer.py | ✅ Complete | ~300 | ~65% | Statistical bloat detection |
+| └─ e2e_test_prioritizer.py | ✅ Complete | ~320 | ~60% | Test scenario prioritization |
+| **Generators (src/dashboard/presentation/)** | | | | |
+| └─ dashboard_builder.py | ✅ Complete | ~550 | 100% | Template injection pipeline |
+| └─ dashboard_renderer.py | ✅ Complete | ~180 | 100% | HTML generation with narratives |
+| **Templates (src/cortex_lens/templates/)** | | | | |
 | └─ console_app/ | ✅ Complete | 520 | N/A | CLI tools dashboard (5 tabs) |
 | └─ api_service/ | ✅ Complete | 735 | N/A | API service dashboard (6 tabs) |
+| └─ base/ | ✅ Complete | ~1500 | N/A | Shared CSS/JS (dashboard.html, cortex-unified.css/js) |
 | └─ base/components/ | ✅ Complete | 630 | N/A | Shared component library (3 files) |
 | └─ fullstack_web/ | ⏳ Pending | 800 | N/A | Full-stack dashboard (7 tabs) |
 | └─ library_package/ | ⏳ Pending | 600 | N/A | Library dashboard (5 tabs) |
 | └─ database_project/ | ⏳ Pending | 500 | N/A | Database dashboard (5 tabs) |
 | └─ microservices/ | ⏳ Pending | 700 | N/A | Microservices dashboard (7 tabs) |
-| **Legacy Templates** | | | | |
-| └─ dashboard.html | ⚠️ Deprecated | 450 | N/A | Original 8-tab dashboard (replaced by templates) |
-| └─ cortex-unified.js | ✅ Complete | 1200 | N/A | Dashboard logic |
-| └─ cortex-unified.css | ✅ Complete | 800 | N/A | Glassmorphism styles |
-| **CLI** | | | | |
-| └─ cli.py | ✅ Complete | 239 | 100% | Command-line interface (40 tests) |
-| └─ orchestrator.py | ✅ Complete | 302 | 100% | Main entry point (18 tests) |
+| **Legacy Templates (src/dashboard/templates/)** | | | | |
+| └─ dashboard.html | ⚠️ Deprecated | 450 | N/A | Original 8-tab dashboard (use base/dashboard.html) |
+| └─ cortex-unified.js | ✅ Complete | 1200 | N/A | Dashboard logic (still used) |
+| └─ cortex-unified.css | ✅ Complete | 800 | N/A | Glassmorphism styles (still used) |
+| **Orchestrators (src/dashboard/orchestrators/)** | | | | |
+| └─ scalable_collector_orchestrator.py | ✅ Complete | ~300 | ~75% | Parallel collector execution |
 
 ### Test Coverage Progress
 
@@ -276,55 +283,58 @@ Organizations have diverse codebases requiring different analysis approaches:
 
 ## 🏗️ CORTEX Lens Architecture
 
-### Self-Contained Module Structure
+**⚠️ IMPLEMENTATION NOTE:** Current implementation is in `src/dashboard/` with plans to migrate to self-contained `src/cortex_lens/` structure.
+
+### Current Implementation Structure
 
 ```
-src/
-└── cortex_lens/                           # 🎯 ALL LENS CODE HERE (~10,000 LOC)
-    ├── __init__.py                        # Public API (CortexLens, registries)
-    ├── orchestrator.py                    # Main entry point (250 LOC)
-    ├── cli.py                             # CLI wrapper (100 LOC)
+src/dashboard/                             # 🎯 CURRENT IMPLEMENTATION (~8,000 LOC)
+    ├── orchestrator.py                    # Main data orchestration (434 LOC)
     │
-    ├── core/                              # Core framework (800 LOC)
-    │   ├── __init__.py
-    │   ├── classifier.py                  # Repo type detection (400 LOC)
-    │   ├── pipeline.py                    # Data collection orchestration (300 LOC)
-    │   └── schema.py                      # Universal JSON schema (100 LOC)
+    ├── analyzers/                         # AST & pattern analysis (1,500 LOC)
+    │   ├── language_analyzer_base.py      # Base protocol (~100 LOC)
+    │   ├── language_parser_factory.py     # Analyzer registry (~80 LOC)
+    │   ├── python_analyzer.py             # ast parsing (418 LOC)
+    │   ├── csharp_analyzer.py             # Regex-based (152 LOC)
+    │   ├── typescript_analyzer.py         # Regex patterns (192 LOC)
+    │   ├── coldfusion_analyzer.py         # CFC/CFM support (~150 LOC)
+    │   └── sql_analyzer.py                # SQL parsing (247 LOC)
     │
-    ├── analyzers/                         # AST & pattern analysis (1,200 LOC)
-    │   ├── __init__.py
-    │   ├── base.py                        # BaseAnalyzer protocol (100 LOC)
-    │   ├── python_analyzer.py             # Native ast (300 LOC)
-    │   ├── csharp_analyzer.py             # Regex-based (400 LOC)
-    │   ├── javascript_analyzer.py         # Regex patterns (250 LOC)
-    │   ├── sql_analyzer.py                # SQL parsing (150 LOC)
-    │   └── registry.py                    # Plugin registry (100 LOC)
+    ├── data/                              # Data collectors (3,500 LOC)
+    │   ├── base_collector.py              # Abstract base (~110 LOC)
+    │   ├── overview_collector.py          # Repository metrics (~200 LOC)
+    │   ├── architecture_collector.py      # Pattern detection (~180 LOC)
+    │   ├── tech_stack_collector.py        # Framework detection (~160 LOC)
+    │   ├── security_collector.py          # Vulnerabilities (~190 LOC)
+    │   ├── recommendation_collector.py    # Recommendations (~220 LOC)
+    │   ├── use_case_collector.py          # Use cases (~180 LOC)
+    │   ├── solution_structure_collector.py # Solution hierarchy (~150 LOC)
+    │   ├── tech_stack_risk_scorer.py      # EOL/CVE scoring (~140 LOC)
+    │   ├── business_capability_detector.py # Business narrative (~200 LOC)
+    │   ├── team_metrics_collector.py      # Team analytics (~130 LOC)
+    │   ├── vendor_collector.py            # Vendor detection (~120 LOC)
+    │   ├── vendor_detector.py             # Vendor patterns (~100 LOC)
+    │   ├── parallel_collector.py          # Parallel execution (~200 LOC)
+    │   └── mock_data_generator.py         # Test data (~300 LOC)
     │
-    ├── collectors/                        # Data collectors (2,400 LOC)
-    │   ├── __init__.py
-    │   ├── base.py                        # BaseCollector protocol (100 LOC)
-    │   ├── health_collector.py            # File count, LOC, languages (150 LOC)
-    │   ├── architecture_collector.py      # Layer detection (200 LOC)
-    │   ├── security_collector.py          # OWASP, vulnerabilities (250 LOC)
-    │   ├── tech_stack_collector.py        # Technology inventory (200 LOC)
-    │   ├── api_endpoint_collector.py      # REST API catalog (200 LOC)
-    │   ├── database_schema_collector.py   # Tables, views, procedures (200 LOC)
-    │   ├── frontend_routes_collector.py   # React/Vue/Angular routes (150 LOC)
-    │   ├── dependency_collector.py        # NuGet/NPM packages (150 LOC)
-    │   ├── complexity_collector.py        # Cyclomatic complexity (150 LOC)
-    │   ├── test_coverage_collector.py     # Coverage by layer (150 LOC)
-    │   ├── comment_collector.py           # Comment extraction (200 LOC)
-    │   ├── performance_collector.py       # Hot paths, slow queries (150 LOC)
-    │   ├── compliance_collector.py        # Regulatory keywords (150 LOC)
-    │   └── registry.py                    # Collector matrix (150 LOC)
+    ├── collectors/                        # Advanced collectors (650 LOC)
+    │   ├── universal_collector_base.py    # Base with progress (~150 LOC)
+    │   └── architecture_collector_v2.py   # Multi-language (504 LOC)
     │
-    ├── generators/                        # Dashboard generation (1,000 LOC)
-    │   ├── __init__.py
-    │   ├── base.py                        # BaseGenerator protocol (100 LOC)
-    │   ├── narrative_generator.py         # AST-to-Narrative (300 LOC)
-    │   ├── dashboard_builder.py           # Template engine (400 LOC)
-    │   ├── data_injector.py               # JSON injection (150 LOC)
-    │   └── packager.py                    # Distribution ZIP (150 LOC)
+    ├── intelligence/                      # Advanced analysis (2,000 LOC)
+    │   ├── ast_docstring_extractor.py     # Doc extraction (415 LOC)
+    │   ├── semantic_analyzer.py           # Semantic analysis (~350 LOC)
+    │   ├── migration_roadmap_generator.py # Upgrade paths (~280 LOC)
+    │   ├── framework_health_heatmap.py    # Health viz (~250 LOC)
+    │   ├── dependency_bloat_analyzer.py   # Bloat detection (~300 LOC)
+    │   └── e2e_test_prioritizer.py        # Test prioritization (~320 LOC)
+    │
+    ├── presentation/                      # Dashboard generation (730 LOC)
+    │   ├── dashboard_builder.py           # Template engine (~550 LOC)
+    │   └── dashboard_renderer.py          # HTML generation (~180 LOC)
+    │
+    └── orchestrators/                     # Parallel orchestration (300 LOC)
+        └── scalable_collector_orchestrator.py # Parallel execution (~300 LOC)
     │
     ├── templates/                         # Dashboard templates (3,000 LOC)
     │   ├── base/                          # Shared components
@@ -1898,10 +1908,10 @@ python -m cortex_lens generate --data /path/to/data --template api_service
   - [ ] **Deliverable:** Production-ready CORTEX Lens v1.0
   - [ ] **Update progress tracker** in cortex-lens-plan-v2.md
 
-### Phase 6.5: Dashboard Template Infrastructure (December 13, 2025) ✅ COMPLETE
-**Goal:** Build production-ready template system before Phase 7 end-to-end validation
+### Phase 6.5: Landing Page & Dashboard Template Infrastructure (December 13-14, 2025) ✅ COMPLETE
+**Goal:** Build production-ready template system with landing page before Phase 7 end-to-end validation
 
-**Context:** Phase 7 requires dashboard templates, but templates directory was empty. Created comprehensive template system with adaptive dashboards for 6 repository types.
+**Context:** Phase 7 requires dashboard templates, but templates directory was empty. Created comprehensive template system with adaptive dashboards for 6 repository types, plus complete landing page with Executive Summary and Overview tabs.
 
 - [x] **Console App Template** (~520 LOC) ✅
   * manifest.json: 5 tabs (Overview, Architecture, Code Quality, Dependencies, Testing)
@@ -1993,14 +2003,61 @@ python -m cortex_lens generate --data /path/to/data --template api_service
   * Applied to: console_app template (~160 LOC CSS), api_service template (~80 LOC CSS)
   * **Deliverable:** High-impact visual hierarchy matching admin dashboard standards
 
+- [x] **Landing Page Mock Data Implementation (December 14, 2025)** ✅
+  * **Executive Summary Tab** (~240 lines) - COMPLETE
+    - Value proposition cards (4 cards): Speed, Data-Driven Decisions, Risk Mitigation, Cost Optimization
+    - Business context: Problem domain + solution approach
+    - Collapsible use case tiles (3 tiles): Business & Product, Managers, Engineers
+    - Role-specific value propositions with detailed use cases
+    - **Deliverable:** Complete stakeholder-facing landing experience
+  
+  * **Overview Tab** (~120 lines) - COMPLETE
+    - Hero KPI: Overall health score (85/100) with color coding
+    - Repository statistics: Files, LOC, languages, architecture
+    - Health radar chart: 6 dimensions (code quality, testing, security, architecture, documentation, dependencies)
+    - Key metrics grid: 4 prominent cards with trend indicators
+    - **Deliverable:** At-a-glance repository health dashboard
+  
+  * **Navigation Consolidation** (10 → 6 tabs) - COMPLETE
+    - Executive Summary ✅ (stakeholder focus)
+    - Overview ✅ (metrics dashboard)
+    - Architecture & Technical 🔀 (merged 2 tabs with 3 subsections)
+    - Quality & Testing 🔀 (merged 2 tabs with 3 subsections)
+    - Security & Compliance ✅ (enhanced with 2 subsections)
+    - Dependencies & Workflows 🔀 (merged 2 tabs with 3 subsections)
+    - **Rationale:** 40% reduction in nav items, consolidated related content, reduced cognitive load
+  
+  * **Design System Integration** - COMPLETE
+    - 200px logo (left-aligned with 280px sidebar)
+    - 75px gradient title (cyan-to-blue: #00d4ff → #0066ff)
+    - Inline header layout (removed fixed positioning)
+    - Glassmorphism effects: backdrop-blur, rgba borders, subtle shadows
+    - Modern spacing: 30px header padding, 29px section gaps
+    - **Deliverable:** Professional modern design matching CORTEX brand
+  
+  * **Interactive Features** - COMPLETE
+    - Tab switching with scroll-to-top (mainContent.scrollTop = 0)
+    - Theme toggle (dark/light) with localStorage persistence
+    - Collapsible tiles with accordion behavior (auto-close others)
+    - Hover effects: Logo lift, theme button glow
+    - **Deliverable:** Smooth, responsive user interactions
+  
+  * **Test Coverage** - COMPLETE ✅
+    - Selenium test suite: 9 tests, 100% pass rate
+    - Tests: Page load, JS errors (filtered favicon), logo display (200px), all tabs present (6 tabs), tab switching, navigation order, default active tab, theme toggle, collapsible tiles
+    - **Deliverable:** Full regression protection for landing page
+
 **Impact:**
 - 🎨 **Templates Created:** 2/6 production-ready (console_app, api_service)
 - 🧩 **Component Library:** 630 LOC reusable UI code (prevents duplication)
 - 🚀 **Dashboard Builder:** Complete template injection pipeline (data → HTML/JSON)
-- ✅ **Test Status:** Selenium suite 21/22 passing (95% pass rate)
+- ✅ **Test Status:** Selenium suites 30/31 passing (97% pass rate - 21/22 dashboard + 9/9 landing page)
 - 🎨 **Design System:** Admin dashboard aesthetic with large fonts (18-72px), icons (48-64px), spacing (24-32px)
 - 📦 **Package:** Generated dashboard with all assets, ready for distribution
 - 🔧 **Bug Fixes:** Asset paths corrected (../base/ → ./), JSON serialization (set → list conversion)
+- 🎯 **Landing Page:** Executive Summary + Overview tabs complete with 6-tab consolidated navigation
+- 📊 **UX Improvement:** 40% navigation reduction (10 → 6 tabs), consolidated related content
+- 🎭 **Stakeholder Value:** Role-based use cases (Business, Managers, Engineers) in collapsible tiles
 
 **Remaining Work:**
 - [ ] **fullstack_web template** (~800 LOC, 7 tabs): Most comprehensive, frontend+backend+DB

@@ -1,0 +1,431 @@
+# Planning System 3.0 Orchestrator Manifest
+# Enhanced planning with tiered routing, pre-planning discovery, and visual progress tracking
+#
+# Version: 3.1.0
+# Author: CORTEX Development Team
+# Created: 2025-12-15
+# Status: ACTIVE - Latest planning system
+# Orchestrator: src/operations/modules/orchestration/planning_orchestrator.py
+
+schema_version: "1.0"
+
+# ========================================
+# Metadata
+# ========================================
+
+metadata:
+  orchestrator_name: "planning_orchestrator"
+  version: "3.1.0"
+  description: "Tiered planning system with intelligent routing and visual progress tracking"
+  category: "planning"
+  deployment_tier: "cortex"
+  status: "active"
+  last_updated: "2025-12-15"
+  maintainer: "CORTEX Planning Team"
+  related_orchestrators:
+    - "maintenance_orchestrator"
+    - "contextual_review_orchestrator"
+  documentation_path: ".github/prompts/modules/planning-system-guide.md"
+  source_file: "src/operations/modules/orchestration/planning_orchestrator.py"
+
+# ========================================
+# Core Components
+# ========================================
+
+components:
+  tiered_routing:
+    enabled: true
+    source: "src/operations/modules/routing/tiered_router.py"
+    description: "4-tier classification system for operation complexity"
+    tiers:
+      - id: 1
+        name: "INSTANT"
+        threshold: "< 2 seconds"
+        execution_method: "Direct function call"
+        planning_required: false
+      - id: 2
+        name: "LIGHTWEIGHT"
+        threshold: "< 10 seconds"
+        execution_method: "Inline validation plan"
+        planning_required: true
+        plan_type: "inline"
+      - id: 3
+        name: "DOCUMENTED"
+        threshold: "10-60 minutes"
+        execution_method: "Feature plan (single MD)"
+        planning_required: true
+        plan_type: "markdown"
+      - id: 4
+        name: "COMPLEX"
+        threshold: "> 1 hour"
+        execution_method: "Nested plan (master + sub-plans)"
+        planning_required: true
+        plan_type: "nested_markdown"
+
+  pre_planning_discovery:
+    enabled: true
+    source: "src/operations/modules/orchestration/planning_orchestrator.py::pre_planning_discovery()"
+    description: "Check for existing/recent plans before creating new ones"
+    implementation_task: "Task 1.1 (cortex-rearchitecture-v1)"
+    search_folders:
+      - folder: "active"
+        purpose: "Current work in progress"
+        time_range: "all"
+      - folder: "temp-plans"
+        purpose: "Unapproved/pending work"
+        time_range: "last_30_days"
+      - folder: "completed"
+        purpose: "Recently archived plans (context reuse)"
+        time_range: "last_180_days"
+    overhead: "30-60 seconds"
+    recommendation_types:
+      - "active_plan_exists" # Continue existing or create new version
+      - "temp_plan_exists" # Approve existing or create new
+      - "completed_plan_exists" # Reuse context from completed plan
+
+  visual_progress_tracker:
+    enabled: true
+    source: "src/orchestrators/session_model.py::PlanningSession"
+    description: "Real-time visual progress tracking in responses and plans"
+    implementation_tasks:
+      - "Task 1.3: PlanningSession integration"
+      - "Task 1.4: Phase tracking (record_phase_start/end)"
+      - "Task 1.5: Render visual tracker in responses"
+      - "Task 1.6: Embed tracker in master plans"
+    location: "User responses and master plans (00-master-plan.md)"
+    updates: "Real-time during execution"
+    metrics_tracked:
+      - "phase_timing" # Start/end timestamps per phase
+      - "token_consumption" # Tokens used per phase
+      - "duration_formatting" # Human-readable durations
+      - "progress_percentage" # Completion percentage
+      - "tasks_completed" # Task completion ratio
+    rendering:
+      method: "PlanningSession.render_progress_table()"
+      format: "Markdown table"
+      includes:
+        - "Phase number and name"
+        - "Status icons (✅ ⏳ 🔄)"
+        - "Progress percentage"
+        - "Duration per phase"
+        - "Token usage per phase"
+        - "Task completion ratio"
+
+  complexity_analyzer:
+    enabled: true
+    source: "src/operations/modules/routing/complexity_analyzer.py"
+    description: "4-dimensional complexity scoring"
+    dimensions:
+      - "code_impact" # Lines changed, files affected
+      - "risk_level" # Dependencies, breaking changes
+      - "domain_complexity" # Business logic, algorithms
+      - "integration_scope" # External systems, APIs
+
+  temporary_plan_manager:
+    enabled: true
+    source: "src/operations/modules/orchestration/temporary_plan_manager.py"
+    description: "Manage implicit planning workflow"
+    lifecycle:
+      - "create" # User tasks without "create plan"
+      - "feedback" # Optional user refinement
+      - "approve" # Move to active/
+      - "reject" # Delete from temp-plans/
+
+# ========================================
+# Testing Requirements
+# ========================================
+
+testing:
+  unit_tests:
+    location: "tests/orchestrators/"
+    coverage_target: 85
+    test_suites:
+      - name: "Pre-planning Discovery"
+        file: "test_pre_planning_discovery.py"
+        test_count: 9
+        status: "✅ ALL PASSING"
+        tests:
+          - "test_pre_planning_discovery_finds_active_plans"
+          - "test_pre_planning_discovery_finds_temp_plans"
+          - "test_pre_planning_discovery_finds_completed_plans"
+          - "test_pre_planning_discovery_no_existing_plans"
+          - "test_extract_feature_slug_basic"
+          - "test_search_plans_by_time_range"
+          - "test_find_master_plan_finds_correct_file"
+          - "test_extract_plan_summary"
+          - "test_discovery_performance_under_60_seconds"
+
+      - name: "Phase Tracking"
+        file: "test_phase_tracking.py"
+        status: "⏸️ PENDING"
+        tests:
+          - "test_planning_session_initialization"
+          - "test_phase_tracking_with_metrics"
+          - "test_token_estimation"
+
+      - name: "Visual Tracker Rendering"
+        file: "test_visual_tracker_rendering.py"
+        status: "⏸️ PENDING"
+        tests:
+          - "test_visual_tracker_in_response"
+          - "test_session_metrics_display"
+          - "test_master_plan_with_visual_tracker"
+
+  integration_tests:
+    location: "tests/integration/"
+    test_suites:
+      - name: "Visual Tracker Integration"
+        file: "test_visual_tracker_integration.py"
+        status: "⏸️ PENDING"
+        tests:
+          - "test_end_to_end_planning_with_discovery"
+          - "test_visual_tracker_visible_in_responses"
+          - "test_tracker_embedded_in_master_plans"
+          - "test_metrics_accurately_tracked"
+          - "test_discovery_finds_existing_plans"
+
+# ========================================
+# Requirements (Inherited from 2.0)
+# ========================================
+
+requirements:
+  - requirement_id: "REQ-001"
+    name: "Acceptance Criteria Approval Gate"
+    priority: "high"
+    status: "partial"
+    notes: "Implemented in tier routing, needs explicit approval step"
+
+  - requirement_id: "REQ-002"
+    name: "Interactive DoR Workflow"
+    priority: "high"
+    status: "pending"
+    notes: "Planned for Phase 3 (Plan Lifecycle Management)"
+
+  - requirement_id: "REQ-003"
+    name: "Contextual Review Orchestrator Integration"
+    priority: "high"
+    status: "implemented"
+    notes: "Integrated via orchestration chain"
+
+  - requirement_id: "REQ-004"
+    name: "SWAG Estimation via Swagger"
+    priority: "medium"
+    status: "pending"
+    notes: "Planned for future enhancement"
+
+  - requirement_id: "REQ-005"
+    name: "Visual Progress Rendering"
+    priority: "critical"
+    status: "implemented"
+    implementation_phase: "Phase 1 (cortex-rearchitecture-v1)"
+    tasks_completed:
+      - "Task 1.1: Pre-planning discovery (✅)"
+      - "Task 1.2: Helper methods (✅)"
+      - "Task 1.3: PlanningSession integration (✅)"
+      - "Task 1.4: Phase tracking (✅)"
+      - "Task 1.5: Render visual tracker (✅)"
+    tasks_pending:
+      - "Task 1.6: Embed in master plans (⏸️)"
+      - "Task 1.7: Update manifest (✅ THIS FILE)"
+      - "Task 1.8: Integration testing (⏸️)"
+
+  - requirement_id: "REQ-006"
+    name: "Learning Library Auto-Documentation"
+    priority: "medium"
+    status: "partial"
+    notes: "Knowledge extraction on plan completion"
+
+  - requirement_id: "REQ-007"
+    name: "Interactive Threat Modeling"
+    priority: "low"
+    status: "pending"
+    notes: "Planned for future enhancement"
+
+  - requirement_id: "REQ-008"
+    name: "TDD Reminders Visibility"
+    priority: "critical"
+    status: "implemented"
+    notes: "Enforced via SKULL rules"
+
+# ========================================
+# Workflow
+# ========================================
+
+workflow:
+  phases:
+    - id: 1
+      name: "Classification & Analysis"
+      description: "Classify operation tier and analyze complexity"
+      duration: "< 5 seconds"
+      components:
+        - "TieredRouter"
+        - "ComplexityAnalyzer"
+
+    - id: 2
+      name: "Pre-Planning Discovery"
+      description: "Check for existing/recent plans"
+      duration: "30-60 seconds"
+      components:
+        - "pre_planning_discovery()"
+      optional: true
+      skip_condition: "force_new_plan=true"
+
+    - id: 3
+      name: "Execution"
+      description: "Execute tier-specific planning workflow"
+      duration: "Variable (depends on tier)"
+      components:
+        - "_execute_instant()" # Tier 1
+        - "_execute_lightweight()" # Tier 2
+        - "_execute_documented()" # Tier 3
+        - "_execute_complex()" # Tier 4
+
+    - id: 4
+      name: "Refactor"
+      description: "Run refactor cycle for Tier 3+ operations"
+      duration: "Variable"
+      components:
+        - "_run_refactor_cycle()"
+      conditional: "tier >= 3 AND skip_refactor=false"
+
+    - id: 5
+      name: "Vacuum"
+      description: "Run vacuum cycle for Tier 3+ operations"
+      duration: "Variable"
+      components:
+        - "_run_vacuum_cycle()"
+      conditional: "tier >= 3 AND skip_vacuum=false"
+
+    - id: 6
+      name: "Documentation"
+      description: "Generate planning documentation"
+      duration: "< 10 seconds"
+      components:
+        - "_generate_documentation()"
+
+    - id: 7
+      name: "Finalization"
+      description: "Finalize planning and render visual tracker"
+      duration: "< 5 seconds"
+      components:
+        - "PlanningSession.render_progress_table()"
+
+# ========================================
+# Metrics & Monitoring
+# ========================================
+
+metrics:
+  tracked_metrics:
+    - "operations_processed" # Total operations
+    - "tier_breakdown" # Count per tier (1-4)
+    - "planning_created" # Plans generated
+    - "temporary_plans_created" # Implicit plans
+    - "plans_approved" # Temp → active
+    - "plans_completed" # Active → completed
+    - "knowledge_extractions" # Completed → knowledge graph
+    - "refactor_cycles_run" # Refactor invocations
+    - "vacuum_cycles_run" # Vacuum invocations
+    - "errors" # Error list
+    - "warnings" # Warning list
+
+  performance_targets:
+    tier_1_execution: "< 2 seconds"
+    tier_2_execution: "< 10 seconds"
+    tier_3_execution: "< 60 minutes"
+    tier_4_execution: "Variable (documented upfront)"
+    discovery_overhead: "< 60 seconds"
+
+# ========================================
+# Configuration
+# ========================================
+
+configuration:
+  plan_folder_structure:
+    root: "cortex-brain/documents/planning/"
+    subfolders:
+      - "active/" # Current work
+      - "temp-plans/" # Unapproved work
+      - "completed/" # Archived work
+      - "features/" # Legacy feature plans
+  
+  universal_subfolders:
+    required:
+      - "context/" # Context artifacts
+      - "reports/" # Progress reports
+      - "artifacts/" # Supporting files
+      - "tracking/" # Progress tracking JSON
+
+  plan_file_naming:
+    master_plan: "00-master-plan.md"
+    temp_plan: "11-temp-planning-session.md"
+    sub_plans: "01-*.md, 02-*.md, etc."
+    tracking: "tracking/progress-tracker.json"
+
+# ========================================
+# Phase 1 Implementation Status
+# (cortex-rearchitecture-v1)
+# ========================================
+
+phase_1_status:
+  name: "Visual Tracker Migration"
+  status: "in_progress"
+  progress: "63%"
+  tasks_completed: 5
+  tasks_total: 8
+  task_details:
+    - id: "1.1"
+      name: "Pre-planning discovery"
+      status: "✅ COMPLETE"
+      test_status: "9/9 passing"
+    - id: "1.2"
+      name: "Helper methods"
+      status: "✅ COMPLETE"
+      notes: "Implemented in 1.1"
+    - id: "1.3"
+      name: "PlanningSession integration"
+      status: "✅ COMPLETE"
+      notes: "Imported, session field added to __init__"
+    - id: "1.4"
+      name: "Phase tracking"
+      status: "✅ COMPLETE"
+      notes: "record_phase_start/end implemented"
+    - id: "1.5"
+      name: "Render visual tracker"
+      status: "✅ COMPLETE"
+      notes: "Added to user response via render_progress_table()"
+    - id: "1.6"
+      name: "Embed in master plans"
+      status: "⏸️ PENDING"
+      notes: "Awaiting actual plan file generation implementation"
+    - id: "1.7"
+      name: "Update manifest"
+      status: "✅ COMPLETE"
+      notes: "This file - planning-system-3.0-manifest.yaml"
+    - id: "1.8"
+      name: "Integration testing"
+      status: "⏸️ PENDING"
+      notes: "Requires test suite creation"
+
+# ========================================
+# Version History
+# ========================================
+
+version_history:
+  - version: "3.1.0"
+    date: "2025-12-15"
+    changes:
+      - "Pre-planning discovery system (Task 1.1)"
+      - "PlanningSession integration (Task 1.3)"
+      - "Phase tracking with metrics (Task 1.4)"
+      - "Visual tracker in responses (Task 1.5)"
+      - "Planning System 3.0 manifest created (Task 1.7)"
+    author: "CORTEX Planning Team"
+
+  - version: "3.0.0"
+    date: "2025-12-08"
+    changes:
+      - "Tiered routing system (4 tiers)"
+      - "Complexity analyzer integration"
+      - "Temporary plan management"
+      - "Master plan lifecycle (active → completed)"
+    author: "CORTEX Planning Team"

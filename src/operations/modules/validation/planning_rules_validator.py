@@ -198,6 +198,7 @@ class PlanningRulesValidator:
             
             # Run all validation checks
             issues.extend(self._check_dor_compliance(content, plan_file))
+            issues.extend(self._check_semantic_organization(plan_file))
             issues.extend(self._check_ambiguity_detection(content, plan_file))
             issues.extend(self._check_security_review(content, plan_file))
             issues.extend(self._check_tdd_tier_assignment(content, plan_file))
@@ -386,6 +387,105 @@ class PlanningRulesValidator:
             r'completion\s+criteria',
         ]
         return any(re.search(pattern, content, re.IGNORECASE) for pattern in patterns)
+    
+    def _check_semantic_organization(self, plan_file: Path) -> List[ValidationIssue]:
+        """
+        Check if planning file follows semantic organization rules.
+        
+        Validates:
+        1. Folder has semantic feature-based name (not generic like 'cortex-enhancements')
+        2. Master plans use 00- prefix
+        3. Sub-plans use sequential 01-, 02- prefixes
+        4. Short descriptive names (folder provides context)
+        
+        Args:
+            plan_file: Path to planning file
+            
+        Returns:
+            List of ValidationIssue
+        """
+        issues = []
+        
+        # Get folder name and file name
+        folder_name = plan_file.parent.name
+        file_name = plan_file.name
+        
+        # Rule 1: Check for generic folder names (PROHIBITED)
+        generic_folder_patterns = [
+            r'cortex-enhancements',
+            r'misc-plans',
+            r'new-features',
+            r'enhancements',
+            r'updates',
+            r'improvements',
+        ]
+        
+        if any(re.match(pattern, folder_name, re.IGNORECASE) for pattern in generic_folder_patterns):
+            issues.append(ValidationIssue(
+                severity='blocking',
+                category='planning_organization',
+                message=f"Generic folder name '{folder_name}' violates SEMANTIC_PLANNING_ORGANIZATION_ENFORCEMENT",
+                file_path=plan_file,
+                suggestion=f"Move to semantic folder like: {self._suggest_semantic_folder(file_name)}"
+            ))
+        
+        # Rule 2: Check if master plans have 00- prefix
+        is_master_plan = any(keyword in file_name.lower() for keyword in ['master', 'main', 'primary'])
+        if is_master_plan and not file_name.startswith('00-'):
+            issues.append(ValidationIssue(
+                severity='warning',
+                category='planning_organization',
+                message=f"Master plan '{file_name}' should use 00- prefix for visual hierarchy",
+                file_path=plan_file,
+                suggestion=f"Rename to: 00-{file_name.lower().replace('master-plan', 'master-plan').replace('main-plan', 'master-plan')}"
+            ))
+        
+        # Rule 3: Check if sub-plans have sequential prefixes
+        is_subplan = any(keyword in file_name.lower() for keyword in ['subplan', 'sub-plan', 'phase', 'execution', 'guide'])
+        if is_subplan and not re.match(r'^\d{2}-', file_name):
+            issues.append(ValidationIssue(
+                severity='warning',
+                category='planning_organization',
+                message=f"Sub-plan '{file_name}' should use sequential prefix (01-, 02-, etc.)",
+                file_path=plan_file,
+                suggestion="Use sequential numbering: 01-subplan-name.md, 02-subplan-name.md"
+            ))
+        
+        # Rule 4: Check for redundant prefixes in file names
+        redundant_prefixes = [
+            r'CORTEX-LENS-V3-',
+            r'CORTEX-LENS-',
+            r'PLANNING-SYSTEM-',
+            r'ADO-OPERATIONS-',
+        ]
+        
+        for pattern in redundant_prefixes:
+            if re.search(pattern, file_name, re.IGNORECASE):
+                # Extract feature from pattern
+                feature = pattern.lower().replace('-', ' ').strip().title()
+                issues.append(ValidationIssue(
+                    severity='info',
+                    category='planning_organization',
+                    message=f"Redundant prefix in file name: folder '{folder_name}' already provides context",
+                    file_path=plan_file,
+                    suggestion=f"Shorten file name by removing '{pattern}' prefix (folder name provides feature context)"
+                ))
+                break
+        
+        return issues
+    
+    def _suggest_semantic_folder(self, file_name: str) -> str:
+        """Suggest semantic folder name based on file name."""
+        if 'lens' in file_name.lower():
+            return "cortex-lens-v3/"
+        elif 'planning' in file_name.lower() and 'system' in file_name.lower():
+            return "planning-system-3.0/"
+        elif 'ado' in file_name.lower():
+            return "ado-operations/"
+        elif 'tdd' in file_name.lower():
+            return "tdd-orchestrator/"
+        else:
+            return "{feature-name-v{version}}/"
     
     def generate_recommendations(self, report: PlanningValidationReport) -> List[str]:
         """

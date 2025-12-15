@@ -301,19 +301,18 @@ class TemporaryPlanManager:
         
         content = master_plan_path.read_text(encoding='utf-8', errors='replace')
         
-        # Update phase status to In Progress
-        # Look for "Phase X: ... - Status: Not Started" and replace with "In Progress"
+        # Update phase status to In Progress in visual tracker table
         import re
-        pattern = rf"(Phase {phase_number}:.*?Status:\s*)Not Started"
-        replacement = rf"\1**In Progress** ⏳"
-        content = re.sub(pattern, replacement, content, flags=re.MULTILINE)
+        phase_pattern = rf"(\| {phase_number} \| \[.*?\]\(.*?\) \| )⏸️ PENDING"
+        phase_replacement = rf"\1⏳ IN PROGRESS"
+        content = re.sub(phase_pattern, phase_replacement, content)
         
         master_plan_path.write_text(content, encoding='utf-8')
         logger.info(f"✅ Marked Phase {phase_number} as In Progress in {plan_id}")
     
     def mark_phase_complete(self, plan_id: str, phase_number: int):
         """
-        Update master plan to mark phase as 'Complete'.
+        Update master plan to mark phase as 'Complete' and update continuation prompt.
         
         Args:
             plan_id: Plan identifier
@@ -327,14 +326,92 @@ class TemporaryPlanManager:
         content = master_plan_path.read_text(encoding='utf-8', errors='replace')
         
         # Update phase status to Complete
-        # Look for "Phase X: ... - Status: In Progress" and replace with "Complete"
         import re
-        pattern = rf"(Phase {phase_number}:.*?Status:\s*)\*\*In Progress\*\*[^\n]*"
-        replacement = rf"\1**Complete** ✅"
-        content = re.sub(pattern, replacement, content, flags=re.MULTILINE)
+        
+        # Update status in progress tracker table
+        phase_pattern = rf"(\| {phase_number} \| \[.*?\]\(.*?\) \| )⏸️ PENDING|⏳ IN PROGRESS"
+        phase_replacement = rf"\1✅ COMPLETE"
+        content = re.sub(phase_pattern, phase_replacement, content)
+        
+        # Update progress bar
+        total_phases_match = re.search(r'(\d+)/(\d+) Phases Complete', content)
+        if total_phases_match:
+            completed = int(total_phases_match.group(1)) + 1
+            total = int(total_phases_match.group(2))
+            progress_pct = int((completed / total) * 100)
+            
+            # Update ASCII progress bar
+            bar_width = 20
+            filled = int((progress_pct / 100) * bar_width)
+            empty = bar_width - filled
+            new_progress_bar = '█' * filled + '░' * empty
+            
+            # Replace progress line
+            old_progress = re.search(r'\*\*Overall Progress:\*\* \[.*?\] \d+% \(\d+/\d+ Phases Complete\)', content)
+            if old_progress:
+                new_progress = f"**Overall Progress:** [{new_progress_bar}] {progress_pct}% ({completed}/{total} Phases Complete)"
+                content = content.replace(old_progress.group(0), new_progress)
+        
+        # Update continuation prompt
+        content = self._update_continuation_prompt(content, plan_id, phase_number)
         
         master_plan_path.write_text(content, encoding='utf-8')
-        logger.info(f"✅ Marked Phase {phase_number} as Complete in {plan_id}")
+        logger.info(f"✅ Marked Phase {phase_number} as Complete in {plan_id} + updated continuation prompt")
+    
+    def _update_continuation_prompt(self, content: str, plan_id: str, completed_phase: int) -> str:
+        """
+        Update continuation prompt after phase completion.
+        
+        Args:
+            content: Current master plan content
+            plan_id: Plan identifier
+            completed_phase: Phase number just completed
+        
+        Returns:
+            Updated content with new continuation prompt
+        """
+        import re
+        
+        # Extract phase information
+        total_phases_match = re.search(r'(\d+)/(\d+) Phases Complete', content)
+        if not total_phases_match:
+            return content
+        
+        completed_phases = int(total_phases_match.group(1))
+        total_phases = int(total_phases_match.group(2))
+        
+        # Determine next phase
+        next_phase = completed_phases + 1
+        
+        if next_phase > total_phases:
+            # All phases complete
+            new_prompt = f"""## 🔄 Continuation Prompt
+
+**WORK COMPLETE** - All {total_phases} phases finished! Plan ready for completion review.
+
+```markdown
+Plan `{plan_id}` is complete ({total_phases}/{total_phases} phases). Run knowledge extraction and move to completed/. Review: `cortex-brain/documents/planning/features/active/{plan_id}/master-plan.md`
+```
+"""
+        else:
+            # Get next phase name from table
+            phase_table_match = re.search(rf'\| {next_phase} \| \[(.*?)\]\(', content)
+            next_phase_name = phase_table_match.group(1) if phase_table_match else f"Phase {next_phase}"
+            
+            new_prompt = f"""## 🔄 Continuation Prompt
+
+**COPY-PASTE THIS TO RESUME WORK:**
+
+```markdown
+Continue work on plan `{plan_id}`. Current status: {completed_phases}/{total_phases} phases complete. Phase {completed_phase} DONE. Next: Execute Phase {next_phase} ({next_phase_name}). Master plan: `cortex-brain/documents/planning/features/active/{plan_id}/master-plan.md`. Follow TDD workflow (RED→GREEN→REFACTOR). Update continuation prompt after phase completion.
+```
+"""
+        
+        # Replace old prompt
+        prompt_pattern = r'## 🔄 Continuation Prompt.*?(?=---|$)'
+        content = re.sub(prompt_pattern, new_prompt, content, flags=re.DOTALL)
+        
+        return content
     
     def complete_plan(self, plan_id: str, extract_knowledge: bool = True) -> Path:
         """
@@ -525,75 +602,76 @@ class TemporaryPlanManager:
         return TemporaryPlan.from_dict(data)
     
     def _generate_master_plan(self, temp_plan: TemporaryPlan) -> str:
-        """Generate master plan markdown from temporary plan."""
-        content = f"""# {temp_plan.user_request}
-
-**Plan ID:** {temp_plan.plan_id}  
-**Complexity Tier:** {temp_plan.complexity_tier}  
-**Estimated Time:** {temp_plan.estimated_time}  
-**Created:** {temp_plan.created_at.strftime("%Y-%m-%d %H:%M:%S")}  
-**Approved:** {temp_plan.approval_timestamp.strftime("%Y-%m-%d %H:%M:%S") if temp_plan.approval_timestamp else "N/A"}
+        """Generate minimal master plan markdown from temporary plan."""
+        # Calculate progress
+        total_phases = len(temp_plan.phases)
+        completed_phases = 0
+        progress_pct = int((completed_phases / total_phases * 100)) if total_phases > 0 else 0
+        
+        # ASCII progress bar
+        bar_width = 20
+        filled = int((progress_pct / 100) * bar_width)
+        empty = bar_width - filled
+        progress_bar = '█' * filled + '░' * empty
+        
+        # Build minimal content
+        content = f"""🧠 CORTEX - {temp_plan.user_request}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
 
-## Approach
+**Plan ID:** {temp_plan.plan_id}  
+**Date:** {temp_plan.created_at.strftime("%B %d, %Y")}  
+**Complexity Tier:** {temp_plan.complexity_tier} ({self._tier_to_label(temp_plan.complexity_tier)})  
+
+---
+
+## 🎯 Executive Summary
 
 {temp_plan.approach}
 
 ---
 
-## Phases
+## 📊 Visual Progress Tracker
 
+**Overall Progress:** [{progress_bar}] {progress_pct}% ({completed_phases}/{total_phases} Phases Complete)
+
+| Phase | Name | Status |
+|-------|------|--------|
 """
+        # Add phase links
         for i, phase in enumerate(temp_plan.phases, 1):
-            status = "Not Started"
-            content += f"""### Phase {i}: {phase.get('name', 'Unnamed Phase')} - Status: {status}
-
-**Description:** {phase.get('description', 'No description')}
-
-**Tasks:**
-"""
-            for task in phase.get('tasks', []):
-                content += f"- {task}\n"
-            
-            content += "\n"
+            phase_name = phase.get('name', f'Phase {i}')
+            subplan_link = f"sub-plans/phase-{i:02d}-{phase_name.lower().replace(' ', '-')}.md"
+            content += f"| {i} | [{phase_name}]({subplan_link}) | ⏸️ PENDING |\n"
         
-        content += """---
+        # Continuation prompt
+        content += f"""
 
-## Dependencies
-
-"""
-        if temp_plan.dependencies:
-            for dep in temp_plan.dependencies:
-                content += f"- {dep}\n"
-        else:
-            content += "None\n"
-        
-        content += """
 ---
 
-## Risks
+## 🔄 Continuation Prompt
 
-"""
-        if temp_plan.risks:
-            for risk in temp_plan.risks:
-                content += f"- {risk}\n"
-        else:
-            content += "None identified\n"
-        
-        content += """
+**COPY-PASTE THIS TO RESUME WORK:**
+
+```markdown
+Continue work on plan `{temp_plan.plan_id}`. Current status: {completed_phases}/{total_phases} phases complete. Next: Execute Phase 1 ({temp_plan.phases[0].get('name', 'Phase 1') if temp_plan.phases else 'No phases defined'}). Master plan: `cortex-brain/documents/planning/features/active/{temp_plan.plan_id}/master-plan.md`. Follow TDD workflow (RED→GREEN→REFACTOR). Update continuation prompt after phase completion.
+```
+
 ---
-
-## User Feedback History
-
 """
-        if temp_plan.user_feedback:
-            for feedback in temp_plan.user_feedback:
-                content += f"**{feedback['timestamp']}:** {feedback['feedback']}\n\n"
-        else:
-            content += "No feedback provided\n"
         
         return content
+    
+    def _tier_to_label(self, tier: int) -> str:
+        """Convert complexity tier to label."""
+        labels = {
+            1: "Simple - Instant",
+            2: "Medium - Lightweight",
+            3: "High - Documented",
+            4: "Complex - Incremental"
+        }
+        return labels.get(tier, "Unknown")
     
     def _generate_subplan(self, temp_plan: TemporaryPlan, phase: Dict[str, Any], phase_number: int) -> str:
         """Generate sub-plan markdown for a specific phase."""

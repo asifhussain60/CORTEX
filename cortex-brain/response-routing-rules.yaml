@@ -117,6 +117,22 @@ intent_detection:
   # PRIORITY 2 - Planning workflows
   # -------------------------------------------------------------------------
   priority_2_planning:
+    - intent: "autonomous_execution"
+      keywords:
+        - "execute autonomously"
+        - "run all phases autonomously"
+        - "execute all phases"
+        - "complete all autonomously"
+        - "run autonomously"
+        - "continue automatically"
+        - "proceed without stopping"
+        - "execute all without confirmation"
+        - "autonomous mode"
+      template: "autonomous_phase_execution"
+      orchestrator: "PlanningOrchestrator"
+      execution_mode: "autonomous"
+      note: "HIGH PRIORITY - Override interactive templates when autonomous keywords detected"
+    
     - intent: "planning_start"
       keywords:
         - "plan"

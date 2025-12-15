@@ -693,6 +693,95 @@ templates:
       {{next_steps_content}}
 
   # ============================================================================
+  # AUTONOMOUS EXECUTION TEMPLATE (Phase 1.5)
+  # Added: 2025-12-15 | Purpose: Continuous autonomous execution without prompts
+  # ============================================================================
+  
+  autonomous_phase_execution:
+    name: Autonomous Phase Execution
+    description: "Streamlined template for continuous autonomous execution without user intervention"
+    usage: "Multi-phase plan execution - no decision prompts, no option lists"
+    triggers: ["execute autonomously", "run all phases", "continue automatically"]
+    components:
+      - header_standard
+      - section_understanding
+      - section_execution_log
+      - section_results
+      - section_next_phase_transition
+    format: autonomous_continuous
+    performance_target: "Variable (phase-dependent)"
+    prohibited_phrases:
+      - "What would you like to do?"
+      - "Choose an option:"
+      - "Would you like me to..."
+      - "Please confirm:"
+      - "Select from:"
+    base_structure: |
+      ## 🧠 CORTEX {{phase_name}}
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ---
+      
+      ### 🎯 Phase Objectives
+      {{understanding_scope_content}}
+      
+      ### ⚡ Execution Log
+      {{execution_log_content}}
+      
+      ### 💬 Results
+      {{results_content}}
+      
+      **Progress:** [{{progress_bar}}] {{percentage}}%
+      **Phase {{current_phase}} of {{total_phases}}:** {{phase_status}}
+      **Tasks:** {{completed_tasks}}/{{total_tasks}} ✅
+      **Duration:** {{phase_duration}}
+      
+      ### 📊 Phase Outcomes
+      {{impact_content}}
+      
+      ### ⏭️ Next Phase
+      {{next_phase_transition}}
+    
+    phase_completion_summary:
+      name: Phase Completion Summary
+      description: "Incremental progress update shown after each phase completes during autonomous execution"
+      usage: "Display between phases to keep user informed without interrupting flow"
+      format: minimal_progress_update
+      base_structure: |
+        ---
+        
+        ## 🧠 CORTEX Phase {{phase_number}} Complete
+        **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+        
+        ---
+        
+        ### ✅ Phase Summary
+        
+        **Phase {{phase_number}}: {{phase_name}}**
+        
+        ✅ **Tasks Completed:** {{completed_tasks}}/{{total_tasks}}
+        ⏱️ **Duration:** {{phase_duration}}
+        📝 **Key Outcomes:**
+        {{outcomes_list}}
+        
+        ### 📊 Overall Progress
+        
+        **Plan:** {{plan_name}}
+        **Progress:** [{{progress_bar}}] {{percentage}}% ({{completed_phases}}/{{total_phases}} phases)
+        **Total Time:** {{total_duration}}
+        
+        **Master Plan Updated:** [View Progress]({{master_plan_path}})
+        
+        ### ⏭️ Continuing Execution
+        
+        **Next Phase:** {{next_phase_name}}
+        **Estimated Duration:** {{next_phase_estimate}}
+        
+        🎭 **Auto-progressing to Phase {{next_phase_number}}...**
+        
+        ---
+
+  # ============================================================================
   # EXISTING TEMPLATES (v3.0)
   # ============================================================================
   
