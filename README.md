@@ -62,6 +62,50 @@ Every new chat session, Copilot forgets everything from previous conversations. 
 
 ## 🚀 Quick Start
 
+### Installation
+
+CORTEX can be installed via pip for production use or in editable mode for development.
+
+**Production Installation:**
+```bash
+# From wheel distribution
+pip install dist/cortex_ai-3.2.0-py3-none-any.whl
+
+# Verify installation
+cortex "version"
+```
+
+**Development Installation:**
+```bash
+# Clone repository
+git clone https://github.com/asifhussain60/CORTEX.git
+cd CORTEX
+
+# Install in editable mode
+pip install -e .
+
+# Verify installation
+cortex "version"
+```
+
+**Complete installation guide:** [docs/deployment/production-install-guide.md](docs/deployment/production-install-guide.md)
+
+### CLI Commands
+
+CORTEX provides several CLI entry points:
+
+```bash
+# Main command
+cortex "version"                    # Check version
+cortex "help"                       # Show available operations
+cortex "system maintenance"         # Run maintenance workflow
+
+# Planning commands
+cortex-plan "implement auth system" # Create execution plan
+cortex-approve <plan-id>            # Approve plan for execution
+cortex-reject <plan-id>             # Reject and delete plan
+```
+
 ### Using CORTEX Entry Point
 
 **In GitHub Copilot Chat:**
