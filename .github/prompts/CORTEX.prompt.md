@@ -122,6 +122,7 @@ These hints confirm orchestrators are actively working without being intrusive.
 - `system_maintenance_complete` - 6-phase maintenance workflow
 - `plan_execution_complete` - Feature implementation with TDD
 - `tdd_workflow_complete` - RED→GREEN→REFACTOR cycle
+- `sanitization_complete` - Code sanitization with validation
 
 ---
 
@@ -131,6 +132,15 @@ These hints confirm orchestrators are actively working without being intrusive.
 - **Commands:** `introduce yourself`, `introduce cortex`
 - **Variants:** Add "to leadership", "to product", "to engineers"
 - **Features:** 5-section format, evidence-based claims
+
+### Code Sanitization
+- **Commands:** `sanitize [directory]`, `sanitize codebase`, `make generic`
+- **Features:** Remove company data, transform domain terminology, validate builds/tests
+- **Phases:** Analyze → Mapping → Transform → Validate → Report (5-phase workflow)
+- **Manifest:** `cortex-brain/orchestrator-manifests/code-sanitization-manifest.yaml`
+- **Guide:** `cortex-brain/CODE-SANITIZATION-QUICK-REF.md`
+- **Execution Method:** `copilot_chat` (interactive workflow)
+- **Output:** Sanitized codebase + audit report + mapping reference + backup
 
 ### Planning System 2.0
 - **Commands:** `plan [feature]`, `execute all phases autonomously`
@@ -213,6 +223,7 @@ These hints confirm orchestrators are actively working without being intrusive.
 | `plan [feature]` | Interactive planning (auto-TDD) | All |
 | `plan ado` | ADO work item (story/feature/task) | All |
 | `execute all phases autonomously` | Run plan end-to-end | All |
+| `sanitize [directory]` | Remove company data for sharing | All |
 | `start tdd` | Begin TDD workflow | All |
 | `system maintenance` | 7-phase maintenance v3.0 (tiered routing) | Admin |
 | `align` | System alignment | Admin/User |

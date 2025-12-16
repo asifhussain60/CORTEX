@@ -1,0 +1,10 @@
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\CashInOut.cs
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\CoverageIntent.cs
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\Dependent.cs
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\DependentSpan.cs
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\Organization.cs
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\GlobalContributionMaxByYear.cs
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\GlobalContributionMaxByYearConfiguration.cs
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\Lookup.cs
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\Customer.cs
+C:\PROJECTS\Product.PaymentAccounts\Libs\App.Customer.Domain\Entities\MemberFlexSpan.cs
