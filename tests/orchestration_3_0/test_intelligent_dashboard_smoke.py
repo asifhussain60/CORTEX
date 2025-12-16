@@ -174,7 +174,7 @@ class TestDashboardASTEngineIntegration:
         
         engine = DashboardASTEngine(repo_path=Path("d:/PROJECTS/CORTEX"))
         assert engine is not None
-        assert engine.parser is not None or engine.parser is None  # TreeSitterParser may not be available
+        # Native ast module is always available for Python files
     
     def test_component_initialization(self):
         """Test all intelligent components are initialized."""

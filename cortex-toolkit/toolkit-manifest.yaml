@@ -235,6 +235,52 @@ categories:
         requires_admin: false
         execution_method: cli
 
+  generators:
+    description: Code and specification generators
+    tools:
+      - name: extract-schemas
+        command: cortex-extract-schemas
+        script: core/generators/schema_extractor.py
+        wrapper: cli/wrappers/extract_schemas_wrapper.py
+        description: Extract OpenAPI schemas from C# entity classes
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: generate-ra-specs-v4
+        command: cortex-gen-ra-specs-v4
+        script: core/generators/openapi_generator_v4.py
+        wrapper: cli/wrappers/generate_ra_specs_v4_wrapper.py
+        description: Generate production-ready RA API specifications (v4)
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: generate-legacy-specs
+        command: cortex-gen-legacy-specs
+        script: ../src/operations/modules/generators/legacy_spec_generator.py
+        wrapper: cli/wrappers/generate_legacy_specs_wrapper.py
+        description: Generate business specs and OpenAPI from legacy C# code (v3 with narrative validation)
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: schema-registry
+        command: cortex-schema-registry
+        script: core/generators/schema_registry.py
+        description: Manage OpenAPI schema registry with deduplication
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: narrative-validator
+        command: cortex-validate-narrative
+        script: core/generators/narrative_validator.py
+        description: Validate and correct narrative quality in generated specs
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+
   utilities:
     description: General utility tools
     tools:

@@ -1,10 +1,10 @@
 """
 Dashboard AST Engine - Core orchestration for AST-powered dashboard intelligence
 
-Orchestrates Tree-sitter AST analysis for dashboard auto-population.
+Orchestrates native Python AST analysis for dashboard auto-population.
 
 Features:
-- Reuses TreeSitterParser from src/intelligence/tree_sitter_parser.py
+- Native Python ast module for Python files
 - Parallel processing with ProcessPoolExecutor
 - Incremental analysis via Git diff detection
 - 3-tier caching (AST → Result → SQLite)
@@ -27,6 +27,7 @@ from datetime import datetime
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import logging
 import hashlib
+import ast
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +58,7 @@ class DashboardASTEngine:
     Orchestrates AST-powered dashboard intelligence.
     
     Integration:
-    - TreeSitterParser: Reuses existing parser from src/intelligence/
+    - Native Python AST: Built-in ast module for Python files
     - Business Logic Extractor: Financial calculations, formulas
     - Use Case Inference: API endpoints → use cases
     - Executive Summary Generator: Narrative synthesis
@@ -82,22 +83,12 @@ class DashboardASTEngine:
         self.parallel_workers = parallel_workers
         
         # Components
-        self.parser = None
         self.cache: Dict[str, ASTCacheEntry] = {}
         
         self._initialize_components()
     
     def _initialize_components(self) -> None:
-        """Initialize AST parser and extractors."""
-        try:
-            # Reuse existing TreeSitterParser
-            from src.intelligence.tree_sitter_parser import TreeSitterParser
-            self.parser = TreeSitterParser()
-            logger.info("TreeSitterParser initialized successfully")
-        except ImportError as e:
-            logger.error(f"Failed to import TreeSitterParser: {e}")
-            self.parser = None
-        
+        """Initialize intelligent dashboard components."""
         # Initialize intelligent dashboard components
         try:
             from .business_logic_extractor import BusinessLogicExtractor
@@ -126,20 +117,16 @@ class DashboardASTEngine:
         Perform full repository AST analysis.
         
         Args:
-            file_patterns: File patterns to analyze (default: *.py, *.js, *.cs)
+            file_patterns: File patterns to analyze (default: *.py)
             
         Returns:
             DashboardInsights with all extracted data
         """
-        if not self.parser:
-            logger.warning("TreeSitterParser not available - returning empty insights")
-            return DashboardInsights()
-        
         start_time = datetime.now()
         
-        # Discover files to analyze
+        # Discover files to analyze (currently Python only with native ast)
         if not file_patterns:
-            file_patterns = ["**/*.py", "**/*.js", "**/*.ts", "**/*.cs"]
+            file_patterns = ["**/*.py"]
         
         files_to_analyze = self._discover_files(file_patterns)
         logger.info(f"Discovered {len(files_to_analyze)} files to analyze")
@@ -279,20 +266,16 @@ class DashboardASTEngine:
             logger.error(f"Error reading {file_path}: {e}")
             return insights
         
-        # Parse with Tree-sitter
-        if not self.parser:
-            return insights
-        
+        # Parse with native Python ast (only Python files supported)
         try:
             # Detect language from file extension
             lang = self._detect_language(file_path)
-            if not lang:
+            if lang != 'python':
+                # Skip non-Python files for now
                 return insights
             
-            # Parse AST using parse_string (correct method name)
-            from src.intelligence.tree_sitter_parser import SupportedLanguage
-            lang_enum = SupportedLanguage(lang)
-            tree = self.parser.parse_string(code.encode('utf-8'), lang_enum)
+            # Parse AST using native Python ast module
+            tree = ast.parse(code, filename=str(file_path))
             
             # Extract insights (placeholder - would use specialized extractors)
             insights["use_cases"] = self._extract_use_cases(tree, file_path)

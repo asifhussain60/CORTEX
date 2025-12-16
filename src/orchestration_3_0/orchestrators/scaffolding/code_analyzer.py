@@ -1,23 +1,24 @@
 """
 Code Analyzer Component
-Deep semantic understanding of legacy codebase using Tree-sitter AST parsing.
+Deep semantic understanding of legacy codebase using native Python AST parsing.
 
 Features:
-- Multi-language AST parsing (Python/JS/TS/C#)
+- Python AST parsing using built-in ast module
 - Dependency graph generation
 - Anti-pattern detection (God objects, circular deps, tight coupling)
 - Hotspot identification (high complexity, high churn)
 - Technology stack detection
+
+Note: Multi-language support (JS/TS/C#) available via parser_registry if needed.
 """
 
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Set, Tuple
 import logging
 import json
+import ast
 from collections import defaultdict
 from dataclasses import dataclass, asdict
-
-from src.intelligence.tree_sitter_parser import TreeSitterParser, SupportedLanguage, TREE_SITTER_AVAILABLE
 
 logger = logging.getLogger(__name__)
 
@@ -57,9 +58,10 @@ class CodeStructureReport:
 
 class CodeAnalyzer:
     """
-    Deep code analysis using Tree-sitter AST parsing.
+    Deep code analysis using native Python AST parsing.
     
-    Reuses TreeSitterParser from intelligence module for multi-language support.
+    Uses Python's built-in ast module for Python files.
+    For multi-language support, extend with parser_registry.
     Detects anti-patterns, generates dependency graphs, identifies hotspots.
     
     Example:
@@ -82,12 +84,8 @@ class CodeAnalyzer:
             repo_path: Path to repository root
             exclusions: List of glob patterns to exclude (e.g., ["vendor/*", "node_modules/*"])
         """
-        if not TREE_SITTER_AVAILABLE:
-            raise ImportError("Tree-sitter not available. Install with: pip install tree-sitter tree-sitter-python tree-sitter-javascript tree-sitter-c-sharp")
-        
         self.repo_path = Path(repo_path)
         self.exclusions = exclusions or ['vendor/*', 'node_modules/*', 'venv/*', '__pycache__/*', '*.pyc', 'dist/*', 'build/*']
-        self.parser = TreeSitterParser()
         
         # Analysis state
         self.source_files: List[Path] = []
@@ -133,7 +131,7 @@ class CodeAnalyzer:
         
         # Build final report
         report = CodeStructureReport(
-            language=self.language.value if self.language else "unknown",
+            language=self.language if self.language else "unknown",
             framework=framework,
             version=version,
             modules=self.module_count,
@@ -152,7 +150,9 @@ class CodeAnalyzer:
     
     def _discover_source_files(self):
         """Discover all source code files in repository."""
-        extensions = ['.py', '.js', '.jsx', '.ts', '.tsx', '.cs']
+        # Currently focuses on Python files (native ast support)
+        # For multi-language, extend with parser_registry
+        extensions = ['.py']
         
         for ext in extensions:
             for file_path in self.repo_path.rglob(f'*{ext}'):
@@ -169,97 +169,75 @@ class CodeAnalyzer:
         language_counts = defaultdict(int)
         
         for file_path in self.source_files:
-            lang = self.parser.detect_language(str(file_path))
-            if lang:
-                language_counts[lang] += 1
+            ext = file_path.suffix.lower()
+            if ext == '.py':
+                language_counts['python'] += 1
+            elif ext in ['.js', '.jsx']:
+                language_counts['javascript'] += 1
+            elif ext in ['.ts', '.tsx']:
+                language_counts['typescript'] += 1
+            elif ext == '.cs':
+                language_counts['csharp'] += 1
         
         if language_counts:
             self.language = max(language_counts, key=language_counts.get)
-            logger.info(f"Primary language detected: {self.language.value}")
+            logger.info(f"Primary language detected: {self.language}")
     
     def _parse_and_extract(self):
         """Parse all files and extract code structure metrics."""
         for file_path in self.source_files:
-            lang = self.parser.detect_language(str(file_path))
-            if not lang:
-                continue
+            ext = file_path.suffix.lower()
             
-            tree = self.parser.parse_file(str(file_path), lang)
-            if not tree:
-                logger.warning(f"Failed to parse {file_path}")
-                continue
+            if ext == '.py':
+                self._parse_python_file(file_path)
+            # Add more language support via parser_registry as needed
+    
+    def _parse_python_file(self, file_path: Path):
+        """Parse Python file using native ast module."""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                source_code = f.read()
             
+            tree = ast.parse(source_code, filename=str(file_path))
             self.module_count += 1
             
-            # Extract classes and functions using Tree-sitter queries
-            if lang == SupportedLanguage.PYTHON:
-                self._extract_python_structures(tree, file_path)
-            elif lang in [SupportedLanguage.JAVASCRIPT, SupportedLanguage.TYPESCRIPT]:
-                self._extract_javascript_structures(tree, file_path)
-            elif lang == SupportedLanguage.CSHARP:
-                self._extract_csharp_structures(tree, file_path)
+            # Extract classes, functions, and imports
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ClassDef):
+                    self.class_count += 1
+                elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    self.function_count += 1
+                elif isinstance(node, ast.Import):
+                    for alias in node.names:
+                        module = alias.name.split('.')[0]
+                        self._classify_dependency(module)
+                elif isinstance(node, ast.ImportFrom):
+                    if node.module:
+                        module = node.module.split('.')[0]
+                        self._classify_dependency(module)
+        
+        except Exception as e:
+            logger.warning(f"Failed to parse {file_path}: {e}")
+    
+    def _classify_dependency(self, module: str):
+        """Classify import as internal or external dependency."""
+        # Internal if starts with . or exists in repo
+        if module.startswith('.') or (self.repo_path / f"{module}.py").exists():
+            self.internal_dependencies.add(module)
+        else:
+            self.external_dependencies.add(module)
     
     def _extract_python_structures(self, tree, file_path: Path):
-        """Extract Python classes, functions, and imports."""
-        # Query for class definitions
-        class_query = "(class_definition name: (identifier) @class_name)"
-        class_captures = self.parser.query_nodes(tree, class_query, SupportedLanguage.PYTHON)
-        self.class_count += len(class_captures)
-        
-        # Query for function definitions
-        func_query = "(function_definition name: (identifier) @func_name)"
-        func_captures = self.parser.query_nodes(tree, func_query, SupportedLanguage.PYTHON)
-        self.function_count += len(func_captures)
-        
-        # Query for imports
-        import_query = "(import_statement) @import"
-        import_captures = self.parser.query_nodes(tree, import_query, SupportedLanguage.PYTHON)
-        
-        # Extract import module names (simplified - assumes "import X" or "from X import Y")
-        with open(file_path, 'rb') as f:
-            source_code = f.read()
-        
-        for node, _ in import_captures:
-            import_text = self.parser.get_node_text(node, source_code)
-            if import_text.startswith('from'):
-                module = import_text.split()[1].split('.')[0]
-            else:
-                module = import_text.split()[1].split('.')[0]
-            
-            # Classify as internal or external
-            if module.startswith('.') or (self.repo_path / f"{module}.py").exists():
-                self.internal_dependencies.add(module)
-            else:
-                self.external_dependencies.add(module)
+        """DEPRECATED: Legacy tree-sitter method - replaced by _parse_python_file."""
+        pass
     
     def _extract_javascript_structures(self, tree, file_path: Path):
-        """Extract JavaScript/TypeScript classes, functions, and imports."""
-        # Query for class declarations
-        class_query = "(class_declaration name: (identifier) @class_name)"
-        class_captures = self.parser.query_nodes(tree, class_query, SupportedLanguage.JAVASCRIPT)
-        self.class_count += len(class_captures)
-        
-        # Query for function declarations
-        func_query = "(function_declaration name: (identifier) @func_name)"
-        func_captures = self.parser.query_nodes(tree, func_query, SupportedLanguage.JAVASCRIPT)
-        self.function_count += len(func_captures)
-        
-        # Arrow functions
-        arrow_query = "(arrow_function) @arrow"
-        arrow_captures = self.parser.query_nodes(tree, arrow_query, SupportedLanguage.JAVASCRIPT)
-        self.function_count += len(arrow_captures)
+        """DEPRECATED: Legacy tree-sitter method - not currently used."""
+        pass
     
     def _extract_csharp_structures(self, tree, file_path: Path):
-        """Extract C# classes, methods, and using statements."""
-        # Query for class declarations
-        class_query = "(class_declaration name: (identifier) @class_name)"
-        class_captures = self.parser.query_nodes(tree, class_query, SupportedLanguage.CSHARP)
-        self.class_count += len(class_captures)
-        
-        # Query for method declarations
-        method_query = "(method_declaration name: (identifier) @method_name)"
-        method_captures = self.parser.query_nodes(tree, method_query, SupportedLanguage.CSHARP)
-        self.function_count += len(method_captures)
+        """DEPRECATED: Legacy tree-sitter method - not currently used."""
+        pass
     
     def _detect_anti_patterns(self):
         """Detect code anti-patterns using AST analysis."""
@@ -282,35 +260,36 @@ class CodeAnalyzer:
     def _identify_hotspots(self):
         """Identify high-risk code hotspots."""
         for file_path in self.source_files:
-            lang = self.parser.detect_language(str(file_path))
-            if not lang:
-                continue
+            ext = file_path.suffix.lower()
             
-            tree = self.parser.parse_file(str(file_path), lang)
-            if not tree:
-                continue
-            
-            # Estimate cyclomatic complexity (simplified: count control flow nodes)
-            complexity = self._estimate_complexity(tree, lang)
-            
-            if complexity > self.HIGH_COMPLEXITY_THRESHOLD:
-                self.hotspots.append(Hotspot(
-                    file=str(file_path.relative_to(self.repo_path)),
-                    complexity=complexity,
-                    churn=0,  # Placeholder - requires Git history analysis
-                    confidence=min(0.9, complexity / self.HIGH_COMPLEXITY_THRESHOLD)
-                ))
+            if ext == '.py':
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        source_code = f.read()
+                    
+                    tree = ast.parse(source_code, filename=str(file_path))
+                    complexity = self._estimate_complexity_ast(tree)
+                    
+                    if complexity > self.HIGH_COMPLEXITY_THRESHOLD:
+                        self.hotspots.append(Hotspot(
+                            file=str(file_path.relative_to(self.repo_path)),
+                            complexity=complexity,
+                            churn=0,  # Placeholder - requires Git history analysis
+                            confidence=min(0.9, complexity / self.HIGH_COMPLEXITY_THRESHOLD)
+                        ))
+                except Exception as e:
+                    logger.warning(f"Failed to analyze hotspot for {file_path}: {e}")
     
-    def _estimate_complexity(self, tree, language: SupportedLanguage) -> int:
+    def _estimate_complexity_ast(self, tree: ast.AST) -> int:
         """Estimate cyclomatic complexity by counting control flow nodes."""
-        control_flow_types = ['if_statement', 'while_statement', 'for_statement', 'try_statement', 
-                              'case_statement', 'switch_statement', 'conditional_expression']
-        
         complexity = 1  # Base complexity
-        nodes = self.parser.traverse_tree(tree.root_node)
         
-        for node_info in nodes:
-            if node_info['type'] in control_flow_types:
+        for node in ast.walk(tree):
+            # Count decision points
+            if isinstance(node, (ast.If, ast.While, ast.For, ast.ExceptHandler,
+                               ast.With, ast.Assert, ast.BoolOp)):
+                complexity += 1
+            elif isinstance(node, ast.comprehension):
                 complexity += 1
         
         return complexity

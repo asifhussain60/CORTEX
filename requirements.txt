@@ -54,8 +54,6 @@ python-docx>=1.1.0  # Word document parsing (document_converter, policy_analyzer
 pypdf>=6.4.1  # PDF text extraction - MODERN replacement for deprecated PyPDF2 (drop-in API)
 # Note: pandoc (external tool) provides best quality but requires separate installation
 # pdftotext (poppler-utils) is optional external tool for faster PDF extraction
-esprima>=4.0.1  # JavaScript AST parser
-tree-sitter-languages>=1.10.2  # Pre-built language grammars
 
 # Application Onboarding System (CORTEX 3.2 - Phase 1)
 networkx>=3.1  # Graph analysis for architecture visualization
