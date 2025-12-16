@@ -1,4 +1,46 @@
 operations:
+  refine:
+    name: Refinement
+    description: Holistic CORTEX system refinement with automated discovery and enhancement across code, tests, and documentation
+    deployment_tier: admin
+    execution_method: copilot_chat
+    cli_script: scripts/cli_wrappers/refine_wrapper.py
+    natural_language:
+    - refine
+    - refine the system
+    - improve cortex
+    - optimize cortex holistically
+    - system refine
+    - refinement
+    - improve cortex quality
+    - enhance system
+    category: system
+    modules:
+    - refinement_orchestrator_v1
+    profiles:
+      standard:
+        description: "Full 7-phase refinement (discovery → skull review → docs → quality → architecture → performance → validation)"
+        modules:
+        - refinement_orchestrator_v1
+      discovery_only:
+        description: "Run discovery phase only (analysis without changes)"
+        modules:
+        - refinement_orchestrator_v1
+      docs_only:
+        description: "Run documentation refinement only"
+        modules:
+        - refinement_orchestrator_v1
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: 7-phase orchestrator with AST analysis, SKULL test optimization, doc refinement, code quality, architecture review, performance optimization, and validation with rollback safety
+    examples:
+    - refine
+    - improve cortex
+    - optimize cortex holistically
+    - system refine
   upgrade:
     name: Upgrade
     description: Upgrade CORTEX to latest version with brain data backup and dependency updates

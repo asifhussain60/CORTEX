@@ -178,6 +178,16 @@ These hints confirm orchestrators are actively working without being intrusive.
 - **Completion:** Shows `# 🎉 CONGRATULATIONS` when all 7 phases complete with zero errors
 - **Engagement:** Displays `🎭` hints for orchestrator activity and phase progress
 
+### System Refinement
+- **Commands:** `refine`, `refine the system`, `improve cortex`, `optimize cortex holistically`
+- **Phases:** Discovery → SKULL Review → Documentation → Code Quality → Architecture → Performance → Validation (7 phases)
+- **Implementation:** `src/operations/modules/orchestration/refinement_orchestrator_v1.py`
+- **Status:** ✅ Orchestrator complete, invoked via Copilot Chat
+- **Execution Method:** `copilot_chat` (interactive workflow)
+- **Features:** AST-based analysis, SKULL test optimization, documentation refinement, rollback safety
+- **Completion:** Shows `# 🎉 CONGRATULATIONS` when all 7 phases complete with validation passed
+- **Engagement:** Displays `🎭` hints for orchestrator activity and phase progress
+
 ### Architectural Review
 - **Commands:** `review`, `review architecture`
 - **Features:** 6-phase analysis (0-100 scoring), git protection
@@ -186,9 +196,9 @@ These hints confirm orchestrators are actively working without being intrusive.
 
 ### System Operations
 - **Commands:** `align`, `optimize`, `healthcheck`, `cleanup`, `review`, `feedback`, `help`
-- **Admin-only:** `deploy`, `regenerate_prompts`
+- **Admin-only:** `deploy`, `regenerate_prompts`, `refine`
 - **Execution Method:** `cli_wrapper` for file operations, `copilot_chat` for interactive
-- **Implemented CLI Wrappers:** 7/7 (align, healthcheck, optimize, cleanup, review, deploy, regenerate_prompts)
+- **Implemented CLI Wrappers:** 8/8 (align, healthcheck, optimize, cleanup, review, deploy, regenerate_prompts, refine)
 
 ---
 
@@ -225,6 +235,7 @@ These hints confirm orchestrators are actively working without being intrusive.
 | `execute all phases autonomously` | Run plan end-to-end | All |
 | `sanitize [directory]` | Remove company data for sharing | All |
 | `start tdd` | Begin TDD workflow | All |
+| `refine` | Holistic system refinement (7-phase) | Admin |
 | `upgrade cortex` | Upgrade to latest version (7-phase) | All |
 | `system maintenance` | 7-phase maintenance v3.0 (tiered routing) | Admin |
 | `align` | System alignment | Admin/User |
