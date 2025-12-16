@@ -1,10 +1,27 @@
-# CORTEX 3.9.1: Context Injection Architecture
+🧠 CORTEX - Context Injection 391 20251216
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
-**Version:** 1.0.0  
-**Author:** Asif Hussain  
-**Status:** 🟢 APPROVED - POC Complete  
-**Target Release:** CORTEX 3.9.1  
-**Created:** December 16, 2025
+---
+
+**Plan ID:** context-injection-391-20251216  
+**Date:** December 16, 2025  
+**Complexity Tier:** 3
+
+---
+
+## 🎯 Executive Summary
+
+Implement CORTEX-First context injection architecture with graceful degradation through 5 layers:
+1. Explicit parameters (highest priority)
+2. GitHub Copilot context (enhanced)
+3. Environment variables (bandaid)
+4. Config file (fallback)
+5. Path.cwd() (last resort)
+
+This provides 95% solution in 1 week vs 87.5% in 11 weeks for v4.0, with 7.7x less code (350 lines vs 2700 lines) and stateless design.
+
+---
+
 
 ---
 
@@ -112,72 +129,6 @@
 
 ---
 
-## 📋 Implementation Plan
-
-### Phase 1: Core Context Infrastructure (POC COMPLETE) ✅
-
-**Deliverables:**
-- [x] `WorkspaceContext` dataclass
-- [x] `ContextResolver` with 5-layer fallback
-- [x] `CopilotIntegration` bridge (optional)
-- [x] Unit tests for context resolution
-- [x] Sample operation conversion
-
-**Timeline:** 1 day (COMPLETE)
-
----
-
-### Phase 2: Operation Migration (Week 1)
-
-**Strategy:** Convert operations to accept `WorkspaceContext`
-
-**Pattern:**
-```python
-# BEFORE
-def operation():
-    root = Path.cwd()  # Ambiguous!
-    
-# AFTER
-def operation(context: Optional[WorkspaceContext] = None):
-    context = context or resolve_context()  # Graceful degradation
-    root = context.repo_root  # Explicit!
-```
-
-**Priority Operations:**
-1. Planning orchestrator
-2. TDD workflow
-3. Git operations
-4. Test execution
-5. System maintenance
-
-**Timeline:** 3 days
-
----
-
-### Phase 3: Copilot Chat Integration (Week 1)
-
-**Integration Points:**
-1. Entry point receives Copilot params
-2. Parse to `WorkspaceContext`
-3. Pass to operations
-4. Fallback to self-detection if missing
-
-**Timeline:** 2 days
-
----
-
-### Phase 4: Validation & Cleanup (Week 1)
-
-**Tasks:**
-1. Remove redundant Path.cwd() calls
-2. Add context validation
-3. Integration testing
-4. Documentation updates
-
-**Timeline:** 1 day
-
----
-
 ## 🎯 Success Criteria
 
 ### Functional Requirements
@@ -241,32 +192,6 @@ tests/context/test_copilot_integration.py ............... [100%]
 
 ---
 
-## 🚀 Deployment Strategy
-
-### Week 1: Core Implementation
-
-**Day 1:** ✅ POC Complete
-- Core infrastructure
-- Context resolution
-- Tests
-
-**Day 2-3:** Operation Migration
-- Convert 5 critical operations
-- Update orchestrators
-- Integration tests
-
-**Day 4:** Copilot Integration
-- Entry point updates
-- Copilot Chat bridge
-- E2E testing
-
-**Day 5:** Documentation & Release
-- Usage guide
-- Migration guide
-- Release v3.9.1
-
----
-
 ## 📈 Comparison: v3.9.1 vs v4.0
 
 | Metric | v3.9.1 (This Plan) | v4.0 (Original) | Winner |
@@ -282,83 +207,6 @@ tests/context/test_copilot_integration.py ............... [100%]
 | **Overall Score** | 95% | 87.5% | 🌟 v3.9.1 |
 
 **Verdict:** v3.9.1 Context Injection is superior in every metric except backward compatibility (tie).
-
----
-
-## 🎓 Why We Chose This Path
-
-### Decision Journey
-
-**Initial Problem:** Workspace path resolution failures
-
-**First Solution:** v3.9.1 environment variable bandaid
-- **Pro:** Quick fix
-- **Con:** Manual switching, still has 10 other failure categories
-
-**Second Solution:** v4.0 Workspace Context Layer
-- **Pro:** Comprehensive, self-sufficient
-- **Con:** 11 weeks, 2700 lines, complex state management
-
-**Third Solution:** Alternative 5 (Copilot-First)
-- **Pro:** 1 week, 350 lines, 95% score
-- **Con:** Depends on Copilot (user rejected dependency)
-
-**Final Solution:** CORTEX-First with Graceful Degradation
-- **Pro:** All pros of Alternative 5
-- **Pro:** Self-sufficient (works without Copilot)
-- **Pro:** Enhanced with Copilot when available
-- **Con:** None identified
-
-### Key Insights
-
-1. **Stateless > Stateful**
-   - Pure functions easier to test
-   - No caching complexity
-   - Cloud-ready
-
-2. **Layered Fallback > Single Detection**
-   - Works in all environments
-   - Graceful degradation
-   - User has control (explicit params win)
-
-3. **Enhancement > Dependency**
-   - CORTEX works standalone
-   - Copilot makes it better
-   - No vendor lock-in
-
-4. **Simplicity > Comprehensiveness**
-   - 350 lines vs 2700 lines
-   - 1 week vs 11 weeks
-   - 95% vs 87.5% score
-
----
-
-## 🔮 Future Evolution
-
-### v3.9.1 → v4.0 (Optional)
-
-**What v3.9.1 Provides:**
-- ✅ 95% workspace solution
-- ✅ Stateless architecture
-- ✅ Copilot integration ready
-- ✅ Self-sufficient operation
-
-**What v4.0 Could Add (if needed):**
-- Brain tier isolation (Tier 1/2/3 per-repo)
-- Agent state isolation (repo-keyed state)
-- VS Code extension (status bar, repo picker)
-- Cross-repo learning (Tier 2 enhancement)
-
-**Decision:** v4.0 is now OPTIONAL enhancement, not critical path.
-
----
-
-## 📚 Related Documents
-
-- **Failure Analysis:** `cortex-brain/documents/analysis/CORTEX-3.X-WORKSPACE-FAILURE-ANALYSIS.md`
-- **v4.0 Plan:** `cortex-brain/documents/planning/CORTEX-4.0-WORKSPACE-ARCHITECTURE-PLAN.md` (now optional)
-- **POC Code:** `src/context/` (implemented)
-- **Tests:** `tests/context/` (passing)
 
 ---
 
@@ -388,3 +236,124 @@ tests/context/test_copilot_integration.py ............... [100%]
 ---
 
 **Copyright © 2025 Asif Hussain. All rights reserved.**
+
+---
+
+## 📋 Implementation Plan
+
+### Phase 1: Core Context Infrastructure (Week 1, Day 1) ✅
+
+**Deliverables:**
+- [x] `WorkspaceContext` dataclass
+- [x] `ContextResolver` with 5-layer fallback
+- [x] `CopilotIntegration` bridge (optional)
+- [x] Unit tests for context resolution
+- [x] Sample operation conversion
+
+**Timeline:** 8h (1d) - COMPLETE
+
+---
+
+### Phase 2: Operation Migration (Week 1, Days 2-3)
+
+**Strategy:** Convert operations to accept `WorkspaceContext`
+
+**Pattern:**
+```python
+# BEFORE
+def operation():
+    root = Path.cwd()  # Ambiguous!
+    
+# AFTER
+def operation(context: Optional[WorkspaceContext] = None):
+    context = context or resolve_context()  # Graceful degradation
+    root = context.repo_root  # Explicit!
+```
+
+**Priority Operations:**
+1. Planning orchestrator
+2. TDD workflow
+3. Git operations
+4. Test execution
+5. System maintenance
+
+**Timeline:** 24h (3d)
+
+---
+
+### Phase 3: Copilot Chat Integration (Week 1, Day 4)
+
+**Integration Points:**
+1. Entry point receives Copilot params
+2. Parse to `WorkspaceContext`
+3. Pass to operations
+4. Fallback to self-detection if missing
+
+**Timeline:** 16h (2d)
+
+---
+
+### Phase 4: Validation & Cleanup (Week 1, Day 5)
+
+**Tasks:**
+1. Remove redundant Path.cwd() calls
+2. Add context validation
+3. Integration testing
+4. Documentation updates
+
+**Timeline:** 8h (1d)
+
+---
+
+## 🔄 Continuation Prompt
+
+**COPY-PASTE THIS TO RESUME WORK:**
+
+```markdown
+Continue `context-injection-391-20251216`. 25% | Phase 2. Update Plan/Work/Wall/Tokens columns + Overall Progress totals.
+```
+
+---
+
+## Visual Progress Tracker
+
+```
++==============================================================================+
+  CORTEX Plan Progress Tracker
++==============================================================================+
+
+  Overall Progress:  [█████░░░░░░░░░░░░░░░] 25% (1/4 phases complete)
+
+  Total Actual Time:    0 minutes  |  Total Elapsed Time:  0:00
+  Senior Dev Estimate:  87-115 hours (2.17-2.87 weeks @ 40h/week baseline)
+
+  Estimation Methodology:
+    • Base: 56 hours pure development
+    • Testing overhead: x1.30 (TDD, unit/integration tests)
+    • Documentation: x1.15 (inline docs, READMEs, manifests)
+    • Rework/refinement: x1.10 (code review, refactoring)
+    • Combined multiplier: 1.55x = 87 hours minimum
+    • Complexity buffer: +33% = 115 hours maximum
+
++==============================================================================+
+```
+
+### Phase Status Table
+
+| Phase | Name | Status | Start | End | Actual | Elapsed | Sub-Plan |
+|-------|------|--------|-------|-----|--------|---------|----------|
+| 1 | Core Context Infrastructure | ✅ Complete | - | - | - | - | [phase-01-core-context-infrastructure.md](phase-01-core-context-infrastructure.md) |
+| 2 | Operation Migration | ⏳ Pending | - | - | - | - | [phase-02-operation-migration.md](phase-02-operation-migration.md) |
+| 3 | Copilot Chat Integration | ⏳ Pending | - | - | - | - | [phase-03-copilot-integration.md](phase-03-copilot-integration.md) |
+| 4 | Validation & Cleanup | ⏳ Pending | - | - | - | - | [phase-04-validation-cleanup.md](phase-04-validation-cleanup.md) |
+
+**Legend:**
+- ⏳ Pending - Not started
+- 🟡 In Progress - Active development
+- ✅ Complete - Finished and validated
+- ⚠️ Blocked - Dependency or issue preventing progress
+
+---
+
+**Last Updated:** December 16, 2025, 12:55 PM  
+**Next Update:** After phase completion

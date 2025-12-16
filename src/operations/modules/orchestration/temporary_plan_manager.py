@@ -615,8 +615,12 @@ Continue work on plan `{plan_id}`. Current status: {completed_phases}/{total_pha
                 "id": idx,
                 "name": phase.get("name", f"Phase {idx}"),
                 "status": "pending",
+                "start_time": phase.get("start_time", "-"),
+                "end_time": phase.get("end_time", "-"),
                 "actual": phase.get("actual_time", "-"),
                 "elapsed": phase.get("elapsed_time", "-"),
+                "estimated": phase.get("estimated", "-"),
+                "sub_plan": f"phase-{idx:02d}-{phase.get('name', f'phase-{idx}').lower().replace(' ', '-')}.md",
                 "tokens_saved": phase.get("tokens", "-")
             })
         

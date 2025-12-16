@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Application Dashboard</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .dashboard { max-width: 1400px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 20px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { padding: 10px 20px; background: white; border: none; cursor: pointer; border-radius: 5px; transition: all 0.3s; }
+        .tab.active { background: #667eea; color: white; }
+        .chart-container { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .chart-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #333; }
+        svg { display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>CORTEX Application Health Dashboard</h1>
+            <p>Real-time monitoring and insights for onboarded applications</p>
+        </div>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('health')">Health Trends</button>
+            <button class="tab" onclick="showTab('integration')">Integration Heatmap</button>
+            <button class="tab" onclick="showTab('coverage')">Coverage</button>
+            <button class="tab" onclick="showTab('quality')">Quality Radar</button>
+        </div>
+        <div id="content"></div>
+    </div>
+    <script>
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            loadChart(tab);
+        }
+        function loadChart(type) {
+            // Chart loading logic will be injected by dashboard_utility.py
+        }
+        // Initialize with health chart
+        loadChart('health');
+    </script>
+</body>
+</html>

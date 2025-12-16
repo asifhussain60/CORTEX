@@ -1,0 +1,46 @@
+<div class="chart-container">
+    <div class="chart-title">Quality Radar</div>
+    <svg id="quality-radar" width="600" height="500"></svg>
+</div>
+<script>
+// Quality radar chart
+const radarData = [/* Data injected by dashboard_utility.py */];
+const width = 600, height = 500;
+const radius = Math.min(width, height) / 2 - 80;
+const angleSlice = Math.PI * 2 / radarData.length;
+
+const svg = d3.select("#quality-radar")
+    .append("g")
+    .attr("transform", `translate(${width/2},${height/2})`);
+
+// Radial scale
+const rScale = d3.scaleLinear().range([0, radius]).domain([0, 100]);
+
+// Draw axes
+const axes = svg.selectAll(".axis")
+    .data(radarData)
+    .enter()
+    .append("g")
+    .attr("class", "axis");
+
+axes.append("line")
+    .attr("x1", 0)
+    .attr("y1", 0)
+    .attr("x2", (d, i) => rScale(100) * Math.cos(angleSlice * i - Math.PI / 2))
+    .attr("y2", (d, i) => rScale(100) * Math.sin(angleSlice * i - Math.PI / 2))
+    .attr("stroke", "#ddd");
+
+// Draw radar area
+const radarLine = d3.lineRadial()
+    .curve(d3.curveLinearClosed)
+    .radius(d => rScale(d.value))
+    .angle((d, i) => i * angleSlice);
+
+svg.append("path")
+    .datum(radarData)
+    .attr("d", radarLine)
+    .attr("fill", "#667eea")
+    .attr("fill-opacity", 0.3)
+    .attr("stroke", "#667eea")
+    .attr("stroke-width", 2);
+</script>

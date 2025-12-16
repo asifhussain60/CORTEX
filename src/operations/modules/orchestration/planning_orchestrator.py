@@ -2164,15 +2164,19 @@ Phases Completed:
             "total_files": 0
         }
         
-        # Convert phases to unified format
+        # Convert phases to unified format with detailed timing
         unified_phases = []
         for idx, phase in enumerate(phases, 1):
             unified_phases.append({
                 "id": idx,
                 "name": phase.get("name", f"Phase {idx}"),
                 "status": "pending",
+                "start_time": "-",
+                "end_time": "-",
                 "actual": "-",
                 "elapsed": "-",
+                "estimated": phase.get("estimated", "-"),
+                "sub_plan": f"phase-{idx:02d}-{phase.get('name', f'phase-{idx}').lower().replace(' ', '-')}.md",
                 "tokens_saved": "-"
             })
         
