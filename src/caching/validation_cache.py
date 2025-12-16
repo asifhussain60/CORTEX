@@ -54,7 +54,7 @@ def _serialize_for_json(obj: Any) -> Any:
         return obj
 
 # Default cache database location
-DEFAULT_CACHE_DB = Path(__file__).parent.parent.parent / "cortex-brain" / "cache" / "validation_cache.db"
+DEFAULT_CACHE_DB = get_brain_file("cache") / "validation_cache.db"
 
 
 @dataclass
@@ -98,6 +98,7 @@ class ValidationCache:
     
     Usage:
         from src.caching import get_cache
+from src.utils.resource_resolver import get_root_path
         
         cache = get_cache()
         

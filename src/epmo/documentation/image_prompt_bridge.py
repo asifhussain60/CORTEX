@@ -16,7 +16,7 @@ from typing import Dict, Any, List, Optional, Tuple
 import sys
 
 # Add EPM modules path for ImagePromptGenerator import
-sys.path.append(str(Path(__file__).parent.parent.parent / 'epm' / 'modules'))
+sys.path.append(str(get_root_path() / 'epm' / 'modules'))
 
 try:
     from image_prompt_generator import ImagePromptGenerator
@@ -26,6 +26,7 @@ except ImportError:
     logging.warning("ImagePromptGenerator not available - visual prompts will be limited")
 
 from .models import (
+from src.utils.resource_resolver import get_root_path
     EPMDocumentationModel, ImagePrompt, FileAnalysis, ArchitectureMetrics,
     DependencyRelation, HealthMetrics
 )

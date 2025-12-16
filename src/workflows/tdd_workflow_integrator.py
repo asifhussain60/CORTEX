@@ -14,6 +14,7 @@ from typing import Dict, List, Optional, Any
 import json
 
 from agents.view_discovery_agent import ViewDiscoveryAgent, discover_views_for_testing
+from src.utils.resource_resolver import get_root_path
 
 
 class TDDWorkflowIntegrator:
@@ -36,7 +37,7 @@ class TDDWorkflowIntegrator:
             brain_path: Path to CORTEX brain (for element mapping storage)
         """
         self.project_root = project_root
-        self.brain_path = brain_path or Path(__file__).parent.parent.parent / "cortex-brain"
+        self.brain_path = brain_path or get_brain_path()
         self.discovery_agent = ViewDiscoveryAgent(project_root=project_root)
         
     def run_discovery_phase(

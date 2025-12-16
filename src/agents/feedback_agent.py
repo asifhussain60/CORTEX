@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 import uuid
 import sys
+from src.utils.resource_resolver import get_root_path
 
 # Add src to path for FeedbackCollector import
 src_path = Path(__file__).parent.parent
@@ -28,7 +29,7 @@ class FeedbackAgent:
         """Initialize FeedbackAgent with path to CORTEX brain."""
         if brain_path is None:
             # Default to standard CORTEX brain location
-            brain_path = Path(__file__).parent.parent.parent / "cortex-brain"
+            brain_path = get_brain_path()
         
         self.brain_path = Path(brain_path)
         self.reports_path = self.brain_path / "documents" / "reports"

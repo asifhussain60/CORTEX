@@ -142,9 +142,10 @@ import sys
 from pathlib import Path
 
 # Add CORTEX to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+sys.path.insert(0, str(get_root_path()))
 
 from src.policy import PolicyAnalyzer, ComplianceValidator, PolicyLevel'''
+from src.utils.resource_resolver import get_root_path
     
     def _generate_fixtures(self, policy_doc: PolicyDocument, codebase_path: str) -> str:
         """Generate pytest fixtures"""

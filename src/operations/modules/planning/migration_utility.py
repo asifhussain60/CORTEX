@@ -22,6 +22,7 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional
+from src.utils.resource_resolver import get_root_path
 
 
 # Status mapping: detected status → directory name
@@ -298,7 +299,7 @@ if __name__ == "__main__":
     start_test = time.time()
     
     # Test with CORTEX planning directory
-    cortex_root = Path(__file__).parent.parent.parent.parent.parent
+    cortex_root = get_root_path().parent.parent
     planning_path = cortex_root / "cortex-brain" / "documents" / "planning"
     
     # Test 1: Find plans

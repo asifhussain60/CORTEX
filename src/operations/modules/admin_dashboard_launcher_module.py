@@ -24,6 +24,7 @@ SECURITY: This module is admin-only and blocked from production by:
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +101,7 @@ class AdminDashboardLauncherModule:
             source = default_repo['name']
             
             # Get current working directory
-            cortex_root = Path(__file__).parent.parent.parent.parent
+            cortex_root = get_root_path().parent
             
             # Build command for dashboard launcher
             python_cmd = f"python -m src.orchestrators.dashboard_launcher --port {port} --source {source}"
@@ -201,7 +202,7 @@ class AdminDashboardLauncherModule:
         """
         try:
             # Check for admin markers
-            cortex_root = Path(__file__).parent.parent.parent.parent
+            cortex_root = get_root_path().parent
             
             admin_markers = [
                 cortex_root / "cortex-brain" / "admin",
@@ -290,7 +291,7 @@ class AdminDashboardLauncherModule:
             Repository info or None
         """
         try:
-            cortex_root = Path(__file__).parent.parent.parent.parent
+            cortex_root = get_root_path().parent
             cache_file = cortex_root / "cortex-brain" / "cache" / "admin_dashboard_last_repo.json"
             
             if cache_file.exists():
@@ -310,7 +311,7 @@ class AdminDashboardLauncherModule:
             repo_info: Repository information
         """
         try:
-            cortex_root = Path(__file__).parent.parent.parent.parent
+            cortex_root = get_root_path().parent
             cache_dir = cortex_root / "cortex-brain" / "cache"
             cache_dir.mkdir(exist_ok=True)
             

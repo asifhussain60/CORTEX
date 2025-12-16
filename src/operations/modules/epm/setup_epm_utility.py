@@ -30,6 +30,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Optional, List, Any
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -517,7 +518,7 @@ def review_cortex_enhancements(cortex_root: Optional[Path] = None) -> Optional[C
         # Try to find CORTEX root
         candidates = [
             Path.home() / "PROJECTS" / "CORTEX",
-            Path(__file__).parent.parent.parent.parent
+            get_root_path().parent
         ]
         
         for candidate in candidates:

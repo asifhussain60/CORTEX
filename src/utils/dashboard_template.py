@@ -16,6 +16,7 @@ from pathlib import Path
 from jinja2 import Template
 from datetime import datetime
 import json
+from src.utils.resource_resolver import get_root_path
 
 
 class DashboardTemplate(ABC):
@@ -97,7 +98,7 @@ class DashboardTemplate(ABC):
         data = {k: (v if v is not None else {}) for k, v in data.items()}
         
         # Load base template
-        template_path = Path(__file__).parent.parent.parent / "templates" / "dashboard.html.j2"
+        template_path = get_root_path() / "templates" / "dashboard.html.j2"
         with open(template_path, 'r', encoding='utf-8') as f:
             template_content = f.read()
         

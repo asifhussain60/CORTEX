@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 # Add CORTEX root to Python path for imports
-CORTEX_ROOT = Path(__file__).parent.parent.parent.parent.parent
+CORTEX_ROOT = get_root_path().parent.parent
 if str(CORTEX_ROOT) not in sys.path:
     sys.path.insert(0, str(CORTEX_ROOT))
 
@@ -710,6 +710,7 @@ class DeployGateValidator:
         try:
             from src.operations.modules.planning.planning_utility import create_plan
             from src.operations.modules.vision_api_module import VisionAPIModule
+from src.utils.resource_resolver import get_root_path
             
             assert callable(create_plan), "create_plan not callable"
             assert VisionAPIModule is not None, "VisionAPIModule not available"
@@ -1055,7 +1056,7 @@ class DeployGateValidator:
 
 def main():
     """Main entry point."""
-    cortex_root = Path(__file__).parent.parent.parent.parent.parent
+    cortex_root = get_root_path().parent.parent
     validator = DeployGateValidator(cortex_root)
     
     success = validator.run_validation()

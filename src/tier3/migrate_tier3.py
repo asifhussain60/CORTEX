@@ -14,6 +14,7 @@ from datetime import datetime
 from typing import Dict
 import argparse
 import yaml
+from src.utils.resource_resolver import get_root_path
 
 
 class Tier3Migrator:
@@ -94,14 +95,14 @@ def main():
         '--source',
         type=Path,
         help='Source development-context.yaml file',
-        default=Path(__file__).parent.parent.parent.parent / 
+        default=get_root_path().parent / 
                 'cortex-brain' / 'development-context.yaml'
     )
     parser.add_argument(
         '--target',
         type=Path,
         help='Target JSON file',
-        default=Path(__file__).parent.parent.parent.parent / 
+        default=get_root_path().parent / 
                 'cortex-brain' / 'corpus-callosum' / 'tier3' / 'development-context.json'
     )
     

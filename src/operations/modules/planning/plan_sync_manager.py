@@ -15,6 +15,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 import threading
+from src.utils.resource_resolver import get_root_path
 
 
 class PlanningFileWatcher(FileSystemEventHandler):
@@ -107,14 +108,14 @@ class PlanSyncManager:
             planning_root: Root directory for planning files (default: cortex-brain/documents/planning)
         """
         if db_path is None:
-            project_root = Path(__file__).parent.parent.parent.parent.parent
+            project_root = get_root_path().parent.parent
             db_path = project_root / "cortex-brain" / "tier2" / "planning-tracker.db"
         
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
         if planning_root is None:
-            project_root = Path(__file__).parent.parent.parent.parent.parent
+            project_root = get_root_path().parent.parent
             self.planning_root = project_root / "cortex-brain" / "documents" / "planning"
         else:
             self.planning_root = Path(planning_root)

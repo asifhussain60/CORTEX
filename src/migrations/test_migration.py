@@ -295,10 +295,15 @@ def main():
         '--brain-dir',
         type=Path,
         help='Path to cortex-brain directory',
-        default=Path(__file__).parent.parent.parent.parent / 'cortex-brain'
+        default=None  # Will use get_brain_path() if None
     )
     
     args = parser.parse_args()
+
+    # Get brain directory using resource resolver if not specified
+    if args.brain_dir is None:
+        from src.utils.resource_resolver import get_brain_path
+        args.brain_dir = get_brain_path()
     
     # Run validation
     validator = MigrationValidator(args.brain_dir)
@@ -310,4 +315,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 

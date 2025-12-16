@@ -278,12 +278,13 @@ def create_pre_work_checkpoint(
 # CLI for testing
 if __name__ == "__main__":
     import time
+from src.utils.resource_resolver import get_root_path
     
     print("🧪 Testing Checkpoint Utility...")
     start_test = time.time()
     
     # Test with CORTEX project
-    cortex_root = str(Path(__file__).parent.parent.parent.parent.parent)
+    cortex_root = str(get_root_path().parent.parent)
     test_session = "test-checkpoint-001"
     
     # Test 1: Store metadata

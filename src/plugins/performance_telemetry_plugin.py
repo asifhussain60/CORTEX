@@ -1245,7 +1245,7 @@ class PerformanceTelemetryPlugin(BasePlugin):
     def _get_cortex_version(self) -> str:
         """Get CORTEX version"""
         # Try to read from version file or package
-        version_file = Path(__file__).parent.parent.parent / "VERSION"
+        version_file = get_root_path() / "VERSION"
         if version_file.exists():
             return version_file.read_text().strip()
         return "2.0.5"  # Default
@@ -1273,7 +1273,7 @@ class PerformanceTelemetryPlugin(BasePlugin):
     def _get_cortex_root(self) -> Path:
         """Get CORTEX repository root"""
         # Navigate up from plugin file
-        return Path(__file__).parent.parent.parent
+        return get_root_path()
     
     def _get_project_root(self) -> Path:
         """Get current project root (where CORTEX is working)"""
@@ -1293,6 +1293,7 @@ class PerformanceTelemetryPlugin(BasePlugin):
     def _save_config(self, config: Dict[str, Any], path: Path) -> None:
         """Save configuration file"""
         import json
+from src.utils.resource_resolver import get_root_path
         with open(path, 'w') as f:
             json.dump(config, f, indent=2)
 

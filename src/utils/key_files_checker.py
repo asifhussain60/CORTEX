@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Tuple
 import os
+from src.utils.resource_resolver import get_root_path
 
 
 class KeyFilesChecker:
@@ -40,7 +41,7 @@ class KeyFilesChecker:
         """
         if cortex_root is None:
             # Auto-detect: this file is in src/utils/
-            cortex_root = Path(__file__).parent.parent.parent
+            cortex_root = get_root_path()
         
         self.cortex_root = cortex_root
         self.inventory_file = (

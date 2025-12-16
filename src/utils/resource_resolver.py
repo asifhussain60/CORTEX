@@ -120,8 +120,8 @@ class ResourceResolver:
         
         # 4. Relative path fallback (development)
         # This file is at: CORTEX/src/utils/resource_resolver.py
-        # Project root is 2 levels up
-        self._root_path = Path(__file__).parent.parent.parent.resolve()
+        # Project root is 2 levels up from src/
+        self._root_path = Path(__file__).parent.parent.resolve()
         return self._root_path
     
     def get_brain_path(self) -> Path:

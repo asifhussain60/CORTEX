@@ -22,6 +22,7 @@ import logging
 import yaml
 
 from .git_history_scanner import CommitMetadata
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +72,7 @@ class CommitFilter:
         """
         if config_path is None:
             # Default to cortex-brain/config/learning-heuristics.yaml
-            project_root = Path(__file__).parent.parent.parent.parent.parent
+            project_root = get_root_path().parent.parent
             config_path = project_root / "cortex-brain" / "config" / "learning-heuristics.yaml"
         
         self.config = self._load_config(config_path)

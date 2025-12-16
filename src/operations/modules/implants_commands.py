@@ -49,7 +49,7 @@ class ImplantsCommands:
         
         # Templates directory
         self.templates_dir = (
-            Path(__file__).parent.parent.parent.parent / 
+            get_root_path().parent / 
             "cortex-brain" / "templates" / "cortex-implants-templates"
         )
     
@@ -134,6 +134,7 @@ class ImplantsCommands:
     ) -> None:
         """Customize governance.yaml with provided values."""
         import yaml
+from src.utils.resource_resolver import get_root_path
         
         with open(governance_file, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)

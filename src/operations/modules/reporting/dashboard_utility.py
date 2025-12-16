@@ -26,10 +26,11 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from src.utils.data_collector import DashboardDataCollector
 from src.utils.chart_config_builder import ChartConfigBuilder
+from src.utils.resource_resolver import get_root_path
 
 
 # Paths (relative to CORTEX root)
-CORTEX_ROOT = Path(__file__).parent.parent.parent.parent.parent
+CORTEX_ROOT = get_root_path().parent.parent
 BRAIN_PATH = CORTEX_ROOT / "cortex-brain"
 OUTPUT_DIR = BRAIN_PATH / "documents" / "analysis" / "dashboards"
 TEMPLATES_DIR = CORTEX_ROOT / "templates"

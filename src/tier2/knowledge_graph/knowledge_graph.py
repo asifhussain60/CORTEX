@@ -37,7 +37,7 @@ class KnowledgeGraph:
     def __init__(self, db_path: Optional[Path] = None):
         if db_path is None:
             # Default consistent with existing database modules
-            root = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "tier2"
+            root = get_root_path().parent / "cortex-brain" / "tier2"
             root.mkdir(parents=True, exist_ok=True)
             db_path = root / "knowledge_graph.db"
         self.connection_manager = ConnectionManager(db_path=db_path)
@@ -812,6 +812,7 @@ This analysis will persist across sessions and can be referenced in future conve
         """
         if isinstance(metadata, str):
             import json
+from src.utils.resource_resolver import get_root_path
             try:
                 return json.loads(metadata)
             except:

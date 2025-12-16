@@ -15,6 +15,7 @@ import yaml
 
 from .parsers import ParserRegistry, LanguageDetector, Language
 from .analyzers import (
+from src.utils.resource_resolver import get_root_path
     BaseAnalyzer, CodeSmell, PythonAnalyzer, 
     JavaScriptAnalyzer, TypeScriptAnalyzer, CSharpAnalyzer
 )
@@ -50,7 +51,7 @@ class MultiLanguageRefactoringOrchestrator:
         """Load refactoring rules from YAML"""
         if rules_path is None:
             # Default path
-            cortex_root = Path(__file__).parent.parent.parent.parent
+            cortex_root = get_root_path().parent
             rules_path = cortex_root / "cortex-brain" / "refactoring-rules.yaml"
         
         if Path(rules_path).exists():

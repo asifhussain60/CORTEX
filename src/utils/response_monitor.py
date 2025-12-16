@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import logging
 import sys
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -344,7 +345,7 @@ def create_monitor(brain_path: Optional[Path] = None) -> ResponseSizeMonitor:
         import json
         import socket
         
-        config_path = Path(__file__).parent.parent.parent / "cortex.config.json"
+        config_path = get_root_path() / "cortex.config.json"
         if config_path.exists():
             with open(config_path, 'r') as f:
                 config = json.load(f)

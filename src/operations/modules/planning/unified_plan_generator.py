@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 import re
+import subprocess
 
 from .token_reduction_tracker import TokenReductionTracker
 from .master_plan_template import MasterPlanTemplate, MasterPlanSection, SECTION_TEMPLATES
@@ -464,10 +465,13 @@ class UnifiedPlanGenerator:
         phase_number: int,
         new_status: str,
         actual_time: Optional[str] = None,
-        tokens_saved: Optional[int] = None
+        tokens_saved: Optional[int] = None,
+        master_plan_path: Optional[Path] = None,
+        auto_commit: bool = True,
+        commit_message_prefix: Optional[str] = None
     ) -> str:
         """
-        Update phase status in master plan content.
+        Update phase status in master plan content with optional git commit.
         
         Args:
             master_plan_content: Current master plan markdown
@@ -475,6 +479,9 @@ class UnifiedPlanGenerator:
             new_status: New status (e.g., "IN PROGRESS", "COMPLETE")
             actual_time: Actual time taken (e.g., "2h 15m")
             tokens_saved: Tokens saved in this phase
+            master_plan_path: Path to master plan file (required if auto_commit=True)
+            auto_commit: Automatically commit changes to git (default: True)
+            commit_message_prefix: Optional custom commit message prefix
         
         Returns:
             Updated master plan content
@@ -482,7 +489,10 @@ class UnifiedPlanGenerator:
         # Find phase line in table
         pattern = rf"\| {phase_number} \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \|"
         
+        phase_name = ""
+        
         def replace_phase(match):
+            nonlocal phase_name
             phase_name = match.group(1).strip()
             old_status = match.group(2).strip()
             old_actual = match.group(3).strip()
@@ -506,7 +516,89 @@ class UnifiedPlanGenerator:
             return f"| {phase_number} | {phase_name} | {new_status_display} | {actual_display} | {tokens_display} |"
         
         updated_content = re.sub(pattern, replace_phase, master_plan_content)
+        
+        # Auto-commit if requested and status is COMPLETE
+        if auto_commit and new_status == "COMPLETE" and master_plan_path:
+            try:
+                # Write updated content to file
+                with open(master_plan_path, 'w', encoding='utf-8') as f:
+                    f.write(updated_content)
+                
+                # Perform git commit
+                self._git_commit_phase_completion(
+                    phase_number=phase_number,
+                    phase_name=phase_name,
+                    master_plan_path=master_plan_path,
+                    commit_message_prefix=commit_message_prefix
+                )
+                
+                logger.info(f"✅ Auto-committed Phase {phase_number} completion to git")
+            except Exception as e:
+                logger.warning(f"⚠️ Failed to auto-commit Phase {phase_number}: {e}")
+                # Continue anyway - content is updated, just not committed
+        
         return updated_content
+    
+    def _git_commit_phase_completion(
+        self,
+        phase_number: int,
+        phase_name: str,
+        master_plan_path: Path,
+        commit_message_prefix: Optional[str] = None
+    ) -> bool:
+        """
+        Commit phase completion to git.
+        
+        Args:
+            phase_number: Phase number completed
+            phase_name: Phase name
+            master_plan_path: Path to master plan file
+            commit_message_prefix: Optional custom commit message prefix
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            # Get repository root (master plan path is relative to repo)
+            repo_root = master_plan_path.parent
+            while repo_root.parent != repo_root:
+                if (repo_root / ".git").exists():
+                    break
+                repo_root = repo_root.parent
+            
+            # Build commit message
+            if commit_message_prefix:
+                commit_msg = f"{commit_message_prefix}: Phase {phase_number} - {phase_name} complete"
+            else:
+                commit_msg = f"docs: Phase {phase_number} complete - {phase_name}\n\n- Updated master plan with phase completion\n- Status: ✅ COMPLETE"
+            
+            # Stage master plan file
+            subprocess.run(
+                ["git", "add", str(master_plan_path)],
+                cwd=repo_root,
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            
+            # Commit changes
+            result = subprocess.run(
+                ["git", "commit", "-m", commit_msg],
+                cwd=repo_root,
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            
+            logger.info(f"📝 Git commit successful: {commit_msg.split(chr(10))[0]}")
+            return True
+            
+        except subprocess.CalledProcessError as e:
+            logger.warning(f"⚠️ Git commit failed: {e.stderr}")
+            return False
+        except Exception as e:
+            logger.error(f"❌ Unexpected error during git commit: {e}")
+            return False
     
     # ===== Private Helper Methods =====
     

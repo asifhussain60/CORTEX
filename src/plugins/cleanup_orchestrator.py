@@ -32,6 +32,7 @@ import logging
 import hashlib
 import subprocess
 from collections import defaultdict
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -553,7 +554,7 @@ def print_cleanup_report(report: Dict[str, Any]) -> None:
 if __name__ == "__main__":
     import sys
     
-    workspace = Path(__file__).parent.parent.parent
+    workspace = get_root_path()
     
     # Always run in live mode
     mode = CleanupMode.LIVE

@@ -22,6 +22,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
 import logging
 import requests
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +89,7 @@ class FeedbackAggregator:
             github_token: GitHub personal access token for API access
         """
         if db_path is None:
-            cortex_root = Path(__file__).parent.parent.parent
+            cortex_root = get_root_path()
             db_path = cortex_root / "cortex-brain" / "feedback" / "feedback-aggregate.db"
         
         self.db_path = Path(db_path)

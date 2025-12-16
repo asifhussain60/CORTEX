@@ -77,7 +77,7 @@ class OperationFactory:
                 return config_file
         
         # Default to project root
-        return Path(__file__).parent.parent.parent / "cortex-operations.yaml"
+        return get_root_path() / "cortex-operations.yaml"
     
     def _load_config(self) -> None:
         """Load operations configuration from YAML."""
@@ -132,6 +132,7 @@ class OperationFactory:
                     
                     # Dynamic import - handle both direct modules and subdirectory orchestrators
                     import importlib
+from src.utils.resource_resolver import get_root_path
                     rel_path = module_file.relative_to(modules_dir)
                     # Convert path to module notation (e.g., cleanup/cleanup_orchestrator → cleanup.cleanup_orchestrator)
                     module_parts = list(rel_path.parts[:-1]) + [module_name]

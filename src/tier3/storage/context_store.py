@@ -6,6 +6,7 @@ Handles database initialization and schema management.
 import sqlite3
 from pathlib import Path
 from typing import Optional
+from src.utils.resource_resolver import get_root_path
 
 
 class ContextStore:
@@ -27,7 +28,7 @@ class ContextStore:
             db_path: Path to SQLite database (default: cortex-brain/tier3/context.db)
         """
         if db_path is None:
-            brain_dir = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "tier3"
+            brain_dir = get_root_path().parent / "cortex-brain" / "tier3"
             brain_dir.mkdir(parents=True, exist_ok=True)
             db_path = brain_dir / "context.db"
         

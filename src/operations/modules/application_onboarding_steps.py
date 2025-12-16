@@ -18,6 +18,7 @@ import logging
 from ...epm.onboarding_step import OnboardingStep, StepStatus, StepResult, StepDisplayFormat
 from ...epm.step_registry import StepRegistry
 from ..demo_discovery import generate_discovery_report
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ class CopyEntryPointsStep(OnboardingStep):
         """Copy CORTEX entry points to target project"""
         try:
             project_root = Path(context.get('project_root', Path.cwd()))
-            cortex_root = Path(__file__).parent.parent.parent.parent
+            cortex_root = get_root_path().parent
             
             # Files to copy
             entry_point_files = [

@@ -69,7 +69,7 @@ class DatabaseConnection:
         """
         if db_path is None:
             # Default location
-            brain_dir = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "tier2"
+            brain_dir = get_root_path().parent / "cortex-brain" / "tier2"
             brain_dir.mkdir(parents=True, exist_ok=True)
             db_path = brain_dir / "knowledge_graph.db"
         
@@ -118,6 +118,7 @@ class DatabaseConnection:
     # We intentionally separate connection concerns (this class) from
     # structural concerns (DatabaseSchema in database/schema.py)
     from .database.schema import DatabaseSchema  # local import to avoid cycles
+from src.utils.resource_resolver import get_root_path
     DatabaseSchema.initialize(self.db_path)
     
     def migrate(self, target_version: Optional[int] = None):

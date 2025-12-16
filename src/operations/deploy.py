@@ -20,11 +20,12 @@ if sys.platform == "win32":
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 # Add project root to path
-project_root = Path(__file__).parent.parent.parent
+project_root = get_root_path()
 sys.path.insert(0, str(project_root))
 sys.path.insert(0, str(project_root / "scripts"))
 
 from deploy_cortex import publish_to_branch, PUBLISH_BRANCH
+from src.utils.resource_resolver import get_root_path
 
 
 def run_deploy(

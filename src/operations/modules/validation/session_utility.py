@@ -30,13 +30,14 @@ try:
     from workflows.lint_integration import LintIntegration
     from workflows.production_readiness import ProductionReadinessChecklist
     from workflows.document_organizer import DocumentOrganizer
+from src.utils.resource_resolver import get_root_path
     QUALITY_ENFORCEMENT_AVAILABLE = True
 except ImportError:
     QUALITY_ENFORCEMENT_AVAILABLE = False
 
 
 # CORTEX root paths
-CORTEX_ROOT = Path(__file__).parent.parent.parent.parent.parent
+CORTEX_ROOT = get_root_path().parent.parent
 BRAIN_PATH = CORTEX_ROOT / "cortex-brain"
 SKULL_RULES_PATH = BRAIN_PATH / "brain-protection-rules.yaml"
 

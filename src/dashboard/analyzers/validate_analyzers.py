@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 # Add project root to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+sys.path.insert(0, str(get_root_path().parent))
 
 from src.dashboard.analyzers import (
     get_factory,
@@ -348,6 +348,7 @@ def main():
     except Exception as e:
         print(f"\n❌ VALIDATION FAILED: {e}")
         import traceback
+from src.utils.resource_resolver import get_root_path
         traceback.print_exc()
 
 

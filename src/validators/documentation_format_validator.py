@@ -264,7 +264,8 @@ class DocumentationFormatValidator:
         """Load validation schema from JSON file"""
         if schema_path is None:
             # Default schema path
-            schema_path = Path(__file__).parent.parent.parent / 'cortex-brain' / 'documents' / 'standards' / 'format-validation-schema.json'
+            from src.utils.resource_resolver import get_brain_file
+            schema_path = get_brain_file('documents') / 'standards' / 'format-validation-schema.json'
         
         if schema_path.exists():
             with open(schema_path, 'r', encoding='utf-8') as f:
@@ -715,3 +716,4 @@ class DocumentationFormatValidator:
                 f.write(report_content)
         
         return report_content
+

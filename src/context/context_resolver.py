@@ -17,6 +17,7 @@ import logging
 
 from .workspace_context import WorkspaceContext
 from .copilot_integration import CopilotIntegration
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -126,7 +127,7 @@ class ContextResolver:
         
         # Layer 5: Path.cwd() fallback (50% confidence, RISKY)
         cwd = Path.cwd()
-        cortex_from_module = Path(__file__).parent.parent.parent  # src/context -> CORTEX
+        cortex_from_module = get_root_path()  # src/context -> CORTEX
         
         metadata['source'] = 'cwd_fallback'
         metadata['confidence'] = 0.50
@@ -155,7 +156,7 @@ class ContextResolver:
             Dict with repo_root and cortex_root, or None if unavailable
         """
         try:
-            cortex_root = Path(__file__).parent.parent.parent
+            cortex_root = get_root_path()
             config_path = cortex_root / "cortex.config.json"
             
             if not config_path.exists():

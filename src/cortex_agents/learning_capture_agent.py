@@ -23,6 +23,7 @@ from datetime import datetime
 from dataclasses import dataclass, field
 import re
 import json
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -152,7 +153,7 @@ class LearningCaptureAgent:
         Args:
             project_root: Path to CORTEX project root
         """
-        self.project_root = project_root or Path(__file__).parent.parent.parent
+        self.project_root = project_root or get_root_path()
         self.brain_path = self.project_root / 'cortex-brain'
         self.lessons_file = self.brain_path / 'lessons-learned.yaml'
         self.knowledge_graph_file = self.brain_path / 'knowledge-graph.yaml'

@@ -25,10 +25,11 @@ from pathlib import Path
 import sys
 
 # Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+sys.path.insert(0, str(get_root_path().parent))
 
 from src.operations.modules.routing.complexity_analyzer import ComplexityAnalyzer, ComplexityScore, ComplexityTier
 from src.operations.modules.testing.test_value_scorer import TestValueScorer, TestValueScore, TestValue
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 

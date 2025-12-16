@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, asdict
 from datetime import datetime
+from src.utils.resource_resolver import get_root_path
 
 
 @dataclass
@@ -83,7 +84,7 @@ class ViewDiscoveryAgent:
         # Database connection for persistence
         if db_path is None:
             # Default to CORTEX brain Tier 2 database
-            cortex_root = Path(__file__).parent.parent.parent
+            cortex_root = get_root_path()
             db_path = cortex_root / "cortex-brain" / "tier2" / "knowledge_graph.db"
         
         self.db_path = db_path

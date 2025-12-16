@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional
 import argparse
+from src.utils.resource_resolver import get_root_path
 
 
 class Tier1Migrator:
@@ -319,14 +320,14 @@ def main():
         '--source',
         type=Path,
         help='Source conversation-history.jsonl file',
-        default=Path(__file__).parent.parent.parent.parent / 
+        default=get_root_path().parent / 
                 'cortex-brain' / 'conversation-history.jsonl'
     )
     parser.add_argument(
         '--target',
         type=Path,
         help='Target SQLite database file',
-        default=Path(__file__).parent.parent.parent.parent / 
+        default=get_root_path().parent / 
                 'cortex-brain' / 'left-hemisphere' / 'tier1' / 'conversations.db'
     )
     parser.add_argument(

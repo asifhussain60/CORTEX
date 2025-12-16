@@ -15,6 +15,7 @@ import json
 from datetime import datetime
 import subprocess
 import sys
+from src.utils.resource_resolver import get_root_path
 
 
 class ReportDashboardGenerator:
@@ -33,7 +34,7 @@ class ReportDashboardGenerator:
     def __init__(self):
         """Initialize dashboard generator."""
         self.version = "1.0.0"
-        self.template_path = Path(__file__).parent.parent.parent / "templates" / "report-dashboard-template.html"
+        self.template_path = get_root_path() / "templates" / "report-dashboard-template.html"
         
     def generate_dashboard(
         self,

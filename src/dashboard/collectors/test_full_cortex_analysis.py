@@ -10,7 +10,8 @@ def main():
     print("CORTEX Full Repository Analysis")
     print("=" * 80)
     
-    cortex_root = Path(__file__).parent.parent.parent.parent.resolve()
+    from src.utils.resource_resolver import get_root_path
+    cortex_root = get_root_path().resolve()
     
     collector = ArchitectureCollectorV2(
         root_path=cortex_root,
@@ -140,3 +141,4 @@ def main():
 
 if __name__ == '__main__':
     exit(main())
+

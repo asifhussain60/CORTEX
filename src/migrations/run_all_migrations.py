@@ -11,6 +11,7 @@ import subprocess
 from pathlib import Path
 from datetime import datetime
 import argparse
+from src.utils.resource_resolver import get_root_path
 
 
 def run_command(cmd: list, description: str) -> bool:
@@ -49,7 +50,7 @@ def main():
         '--brain-dir',
         type=Path,
         help='Path to cortex-brain directory',
-        default=Path(__file__).parent.parent.parent.parent / 'cortex-brain'
+        default=get_root_path().parent / 'cortex-brain'
     )
     parser.add_argument(
         '--skip-tier1',

@@ -49,6 +49,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any
 import threading
 import logging
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +86,7 @@ class OrchestrationCheckpointManager:
             self.checkpoint_root = Path(checkpoint_root)
         else:
             # Default to cortex-brain/checkpoints/
-            cortex_root = Path(__file__).parent.parent.parent.parent
+            cortex_root = get_root_path().parent
             self.checkpoint_root = cortex_root / "cortex-brain" / "checkpoints"
         
         self.checkpoint_root.mkdir(parents=True, exist_ok=True)

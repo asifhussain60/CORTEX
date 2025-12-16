@@ -19,6 +19,7 @@ from enum import Enum
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from operations.policy_scanner import PolicyScanner, PolicyDocument
+from src.utils.resource_resolver import get_root_path
 
 
 class ViolationSeverity(Enum):
@@ -394,7 +395,7 @@ class PolicyValidator:
         
         common_locations = [
             Path.home() / "PROJECTS" / "CORTEX",
-            Path(__file__).parent.parent.parent  # 3 levels up
+            get_root_path()  # 3 levels up
         ]
         
         for location in common_locations:

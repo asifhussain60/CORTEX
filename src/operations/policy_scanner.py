@@ -20,6 +20,7 @@ from enum import Enum
 # Optional: Document converter for Word/PDF support
 try:
     from src.utils.document_converter import DocumentConverter
+from src.utils.resource_resolver import get_root_path
     CONVERTER_AVAILABLE = True
 except ImportError:
     CONVERTER_AVAILABLE = False
@@ -338,7 +339,7 @@ architecture_patterns:
         
         common_locations = [
             Path.home() / "PROJECTS" / "CORTEX",
-            Path(__file__).parent.parent.parent  # 3 levels up from this file
+            get_root_path()  # 3 levels up from this file
         ]
         
         for location in common_locations:

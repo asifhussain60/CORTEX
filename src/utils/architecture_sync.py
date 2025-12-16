@@ -27,6 +27,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Tuple
 import yaml
+from src.utils.resource_resolver import get_root_path
 
 
 class ArchitectureSync:
@@ -41,7 +42,7 @@ class ArchitectureSync:
         """
         if cortex_root is None:
             # Auto-detect: this file is in src/utils/
-            cortex_root = Path(__file__).parent.parent.parent
+            cortex_root = get_root_path()
         
         self.cortex_root = cortex_root
         self.architecture_doc = cortex_root / "docs" / "ARCHITECTURE.md"

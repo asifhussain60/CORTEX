@@ -28,6 +28,7 @@ from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional, Set
 from dataclasses import dataclass
 from collections import defaultdict
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +81,7 @@ class EnhancementDiscoveryEngine:
         """
         if repo_path is None:
             # Auto-detect CORTEX root
-            repo_path = Path(__file__).parent.parent.parent
+            repo_path = get_root_path()
         
         self.repo_path = Path(repo_path)
         self.brain_path = self.repo_path / "cortex-brain"

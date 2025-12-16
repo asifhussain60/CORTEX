@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 import json
+from src.utils.resource_resolver import get_root_path
 
 
 class SQLiteOptimizer:
@@ -39,7 +40,7 @@ class SQLiteOptimizer:
         
         if brain_path is None:
             # Default to standard location
-            brain_path = Path(__file__).parent.parent.parent.parent.parent / "cortex-brain"
+            brain_path = get_root_path().parent.parent / "cortex-brain"
         
         self.brain_path = Path(brain_path)
         

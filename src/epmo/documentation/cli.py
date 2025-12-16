@@ -19,7 +19,7 @@ import json
 from datetime import datetime
 
 # Add project root to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+sys.path.insert(0, str(get_root_path().parent))
 
 from .parser import analyze_epmo_structure
 from .dependency_mapper import analyze_epmo_dependencies
@@ -32,6 +32,7 @@ from .markdown_generator import generate_markdown_documentation
 from .mermaid_generator import create_diagrams_for_model
 from .image_prompt_bridge import integrate_image_prompts_with_epmo
 from .template_engine import render_documentation
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 

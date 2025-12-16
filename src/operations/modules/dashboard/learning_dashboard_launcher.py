@@ -64,7 +64,7 @@ class LearningDashboardLauncher:
             dashboard_dir: Path to dashboard directory (default: cortex-brain/dashboards/learning/)
         """
         if dashboard_dir is None:
-            dashboard_dir = Path(__file__).parent.parent.parent.parent.parent / "cortex-brain" / "dashboards" / "learning"
+            dashboard_dir = get_root_path().parent.parent / "cortex-brain" / "dashboards" / "learning"
         
         self.dashboard_dir = Path(dashboard_dir)
         self.server: Optional[socketserver.TCPServer] = None
@@ -175,6 +175,7 @@ def launch_learning_dashboard(auto_open: bool = True) -> bool:
 if __name__ == "__main__":
     # Direct execution
     import sys
+from src.utils.resource_resolver import get_root_path
     
     auto_open = "--no-browser" not in sys.argv
     

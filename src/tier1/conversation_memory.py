@@ -12,6 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from contextlib import contextmanager
+from src.utils.resource_resolver import get_root_path
 
 
 class ConversationMemory:
@@ -30,7 +31,7 @@ class ConversationMemory:
             db_path: Path to SQLite database (default: cortex-brain/tier1/conversations.db)
         """
         if db_path is None:
-            project_root = Path(__file__).parent.parent.parent
+            project_root = get_root_path()
             db_path = project_root / "cortex-brain" / "tier1" / "conversations.db"
         
         self.db_path = Path(db_path)

@@ -10,8 +10,8 @@ def main():
     print("=" * 80)
     
     # Path: src/dashboard/collectors/test_collector_quick.py
-    # Need to go up 3 levels to CORTEX root
-    cortex_root = Path(__file__).parent.parent.parent.parent.resolve()
+    from src.utils.resource_resolver import get_root_path
+    cortex_root = get_root_path().resolve()
     test_path = cortex_root / 'src' / 'dashboard' / 'analyzers'
     
     if not test_path.exists():

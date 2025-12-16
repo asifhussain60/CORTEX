@@ -14,6 +14,7 @@ from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from datetime import datetime
+from src.utils.resource_resolver import get_root_path
 
 
 @dataclass
@@ -52,7 +53,7 @@ class Tier2PatternStore:
             db_path: Path to SQLite database. Defaults to cortex-brain/tier2/patterns.db
         """
         if db_path is None:
-            brain_root = Path(__file__).parent.parent.parent.parent / "cortex-brain"
+            brain_root = get_root_path().parent / "cortex-brain"
             tier2_dir = brain_root / "tier2"
             tier2_dir.mkdir(parents=True, exist_ok=True)
             db_path = str(tier2_dir / "patterns.db")

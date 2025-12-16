@@ -14,6 +14,7 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 import json
 import re
+from src.utils.resource_resolver import get_root_path
 
 
 class CodeReviewSuggester:
@@ -76,7 +77,7 @@ class CodeReviewSuggester:
         """
         if brain_path is None:
             # Default to project root
-            project_root = Path(__file__).parent.parent.parent.parent
+            project_root = get_root_path().parent
             self.brain_path = project_root / "cortex-brain" / "tier1"
         else:
             self.brain_path = brain_path

@@ -1023,7 +1023,7 @@ import logging
 from pathlib import Path
 
 # Add CORTEX to path
-CORTEX_ROOT = Path(__file__).parent.parent.parent
+CORTEX_ROOT = get_root_path()
 sys.path.insert(0, str(CORTEX_ROOT))
 
 from src.entry_point.cortex_entry import CortexEntry
@@ -1233,6 +1233,7 @@ export function run(): Promise<void> {
         # Sample test
         content = '''import * as assert from 'assert';
 import * as vscode from 'vscode';
+from src.utils.resource_resolver import get_root_path
 
 suite('Extension Test Suite', () => {
     vscode.window.showInformationMessage('Running tests...');

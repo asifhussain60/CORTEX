@@ -230,7 +230,7 @@ class ContextIntelligence:
             db_path: Path to SQLite database (default: cortex-brain/tier3/development_context.db)
         """
         if db_path is None:
-            brain_dir = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3"
+            brain_dir = get_brain_file("tier3")
             brain_dir.mkdir(parents=True, exist_ok=True)
             db_path = brain_dir / "development_context.db"
         
@@ -1761,6 +1761,7 @@ class ContextIntelligence:
             Dictionary with Copilot and CORTEX usage statistics
         """
         from src.tier3.metrics.copilot_metrics import CopilotMetricsCollector
+from src.utils.resource_resolver import get_root_path
         engineer_hash = CopilotMetricsCollector.anonymize_engineer_id(None, engineer_id)
         
         summary = {

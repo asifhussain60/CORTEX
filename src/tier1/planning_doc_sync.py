@@ -13,6 +13,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 import logging
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ class PlanningDocSyncEngine:
                          (default: cortex-brain/templates/planning)
         """
         if template_dir is None:
-            project_root = Path(__file__).parent.parent.parent
+            project_root = get_root_path()
             template_dir = project_root / "cortex-brain" / "templates" / "planning"
         
         self.template_dir = Path(template_dir)

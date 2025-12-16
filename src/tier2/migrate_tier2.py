@@ -209,6 +209,7 @@ class Tier2Migrator:
                 
                 # Store workflow steps and details
                 import json
+from src.utils.resource_resolver import get_root_path
                 for key, value in workflow_data.items():
                     if key not in ['pattern', 'description', 'success_rate']:
                         cursor.execute("""
@@ -362,14 +363,14 @@ def main():
         '--source',
         type=Path,
         help='Source knowledge-graph.yaml file',
-        default=Path(__file__).parent.parent.parent.parent / 
+        default=get_root_path().parent / 
                 'cortex-brain' / 'knowledge-graph.yaml'
     )
     parser.add_argument(
         '--target',
         type=Path,
         help='Target SQLite database file',
-        default=Path(__file__).parent.parent.parent.parent / 
+        default=get_root_path().parent / 
                 'cortex-brain' / 'right-hemisphere' / 'tier2' / 'patterns.db'
     )
     

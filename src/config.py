@@ -93,7 +93,8 @@ class CortexConfig:
             current = parent
         
         # Also check project root (one level up from CORTEX/)
-        project_root = Path(__file__).parent.parent.parent
+        from src.utils.resource_resolver import get_root_path
+        project_root = get_root_path()
         config_path = project_root / "cortex.config.json"
         if config_path.exists():
             return config_path
@@ -156,7 +157,8 @@ class CortexConfig:
         
         # 4. Relative path fallback
         # CORTEX/src/config.py -> go up to project root
-        return Path(__file__).parent.parent.parent
+        from src.utils.resource_resolver import get_root_path
+        return get_root_path()
     
     def _determine_brain_path(self) -> Path:
         """

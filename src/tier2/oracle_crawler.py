@@ -26,6 +26,7 @@ import sys
 # Add CORTEX to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from tier2.knowledge_graph import KnowledgeGraph
+from src.utils.resource_resolver import get_root_path
 
 
 @dataclass
@@ -556,7 +557,7 @@ if __name__ == "__main__":
         tables = crawler.extract_schema(include_system=False)
         print(f"✅ Found {len(tables)} tables")
         
-        brain_dir = Path(__file__).parent.parent.parent.parent / "cortex-brain"
+        brain_dir = get_root_path().parent / "cortex-brain"
         kg = KnowledgeGraph(brain_dir=brain_dir)
         
         # Store patterns

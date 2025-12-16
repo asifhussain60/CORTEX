@@ -31,8 +31,9 @@ class TestValidator(BaseHealthValidator):
         application's tests. Runs from CORTEX root with isolated environment.
         """
         try:
-            # Get CORTEX root directory (3 levels up from validators directory)
-            cortex_root = Path(__file__).parent.parent.parent.parent
+            # Get CORTEX root directory
+            from src.utils.resource_resolver import get_root_path
+            cortex_root = get_root_path()
             
             # Create isolated environment for CORTEX tests
             test_env = os.environ.copy()

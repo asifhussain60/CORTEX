@@ -21,9 +21,10 @@ from datetime import datetime
 import sqlite3
 import yaml
 import importlib.util
+from src.utils.resource_resolver import get_root_path
 
 # Add src to path for imports
-cortex_root = Path(__file__).parent.parent.parent
+cortex_root = get_root_path()
 sys.path.insert(0, str(cortex_root / "src"))
 
 
@@ -37,7 +38,7 @@ class PostDeploymentValidator:
         Args:
             cortex_root: Path to CORTEX root directory (default: auto-detect)
         """
-        self.cortex_root = cortex_root or Path(__file__).parent.parent.parent
+        self.cortex_root = cortex_root or get_root_path()
         self.brain_path = self.cortex_root / "cortex-brain"
         self.src_path = self.cortex_root / "src"
         

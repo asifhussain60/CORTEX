@@ -34,6 +34,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Optional, Tuple
 import time
+from src.utils.resource_resolver import get_root_path
 
 
 class RegenerationTracker:
@@ -48,7 +49,7 @@ class RegenerationTracker:
         """
         if cortex_root is None:
             # Auto-detect CORTEX root (go up from this file)
-            cortex_root = Path(__file__).parent.parent.parent.parent
+            cortex_root = get_root_path().parent
         
         self.cortex_root = Path(cortex_root)
         self.manifest_path = self.cortex_root / "cortex-brain" / "metadata" / "regeneration-manifest.yaml"

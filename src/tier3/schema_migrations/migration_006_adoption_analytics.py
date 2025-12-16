@@ -179,9 +179,10 @@ if __name__ == "__main__":
     import sqlite3
     import sys
     from pathlib import Path
+from src.utils.resource_resolver import get_root_path
     
     # Default to CORTEX Tier 3 database
-    default_db = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "tier3" / "development_context.db"
+    default_db = get_root_path().parent / "cortex-brain" / "tier3" / "development_context.db"
     db_path = sys.argv[1] if len(sys.argv) > 1 else default_db
     
     print(f"📊 Running migration on: {db_path}")

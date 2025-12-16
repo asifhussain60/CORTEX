@@ -55,7 +55,7 @@ class PhaseMetrics:
 
 # Database path (Tier 1 working memory)
 # Navigate from src/operations/modules/metrics/ up to CORTEX root
-CORTEX_ROOT = Path(__file__).parent.parent.parent.parent.parent
+CORTEX_ROOT = get_root_path().parent.parent
 DB_PATH = CORTEX_ROOT / "cortex-brain" / "tier1-working-memory.db"
 
 
@@ -482,6 +482,7 @@ def compare_metrics(
 if __name__ == "__main__":
     import sys
     import time
+from src.utils.resource_resolver import get_root_path
     
     print("🧪 Testing Metrics Utility...")
     start_test = time.time()

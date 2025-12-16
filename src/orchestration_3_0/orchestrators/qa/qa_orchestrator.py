@@ -35,7 +35,8 @@ from .architecture_reviewer import ArchitectureReviewer
 # Import batch path hardening
 import sys
 from pathlib import Path
-scripts_path = Path(__file__).parent.parent.parent.parent.parent / "scripts"
+from src.utils.resource_resolver import get_root_path
+scripts_path = get_root_path() / "scripts"
 if str(scripts_path) not in sys.path:
     sys.path.insert(0, str(scripts_path))
 

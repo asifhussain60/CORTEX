@@ -42,12 +42,13 @@ class ConfidenceResponseGenerator:
             template_renderer: Template renderer instance (creates new if None)
         """
         from pathlib import Path
+from src.utils.resource_resolver import get_root_path
         
         self.knowledge_graph = knowledge_graph or KnowledgeGraph()
         
         # Create template loader with default path if not provided
         if template_loader is None:
-            project_root = Path(__file__).parent.parent.parent
+            project_root = get_root_path()
             template_file = project_root / "cortex-brain" / "response-templates.yaml"
             self.template_loader = TemplateLoader(template_file)
         else:

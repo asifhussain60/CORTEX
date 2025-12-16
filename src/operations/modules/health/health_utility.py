@@ -279,12 +279,13 @@ def _get_display_name(language: str) -> str:
 if __name__ == "__main__":
     import sys
     import time
+from src.utils.resource_resolver import get_root_path
     
     print("🧪 Testing Health Utility...")
     start_test = time.time()
     
     # Get CORTEX root
-    cortex_root = Path(__file__).parent.parent.parent.parent.parent
+    cortex_root = get_root_path().parent.parent
     
     # Test application analysis
     result = analyze_application(str(cortex_root), scan_level='standard')

@@ -69,7 +69,7 @@ class TemplateSelector:
         Args:
             brain_path: Path to CORTEX brain directory
         """
-        self.brain_path = Path(brain_path) if brain_path else Path(__file__).parent.parent.parent.parent / "cortex-brain"
+        self.brain_path = Path(brain_path) if brain_path else get_root_path().parent / "cortex-brain"
         self.templates_path = self.brain_path / "response-templates"
         
         self.namespace_detector = None
@@ -393,6 +393,7 @@ if __name__ == "__main__":
     # Test the template selector
     import sys
     import json
+from src.utils.resource_resolver import get_root_path
     
     # Test questions
     test_questions = [

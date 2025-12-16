@@ -71,6 +71,7 @@ if str(cortex_brain_path) not in sys.path:
 try:
     from agents.view_discovery_agent import ViewDiscoveryAgent
     from agents.feedback_agent import FeedbackAgent
+from src.utils.resource_resolver import get_root_path
 except ImportError:
     # Fallback for different project structures
     ViewDiscoveryAgent = None
@@ -313,7 +314,7 @@ class TDDWorkflowOrchestrator:
             Path object for test output directory
         """
         source_path = Path(source_file).resolve()
-        cortex_root = Path(__file__).parent.parent.parent.resolve()  # CORTEX root
+        cortex_root = get_root_path().resolve()  # CORTEX root
         
         try:
             source_path.relative_to(cortex_root)
@@ -978,7 +979,7 @@ class TDDWorkflowOrchestrator:
         """
         # Check if this is a CORTEX internal test
         source_path = Path(source_file).resolve()
-        cortex_root = Path(__file__).parent.parent.parent.resolve()
+        cortex_root = get_root_path().resolve()
         
         try:
             source_path.relative_to(cortex_root)

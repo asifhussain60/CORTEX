@@ -760,9 +760,10 @@ Focus: Clear subject, detailed background, depth of field
 # CLI entry point for testing
 if __name__ == "__main__":
     from pathlib import Path
+from src.utils.resource_resolver import get_root_path
     
     # Paths
-    cortex_root = Path(__file__).parent.parent.parent.parent.parent
+    cortex_root = get_root_path().parent.parent
     master_file = cortex_root / "cortex-brain" / "documents" / "narratives" / "THE-AWAKENING-OF-CORTEX-MASTER.md"
     output_dir = cortex_root / "docs" / "story" / "illustrations" / "prompts"
     

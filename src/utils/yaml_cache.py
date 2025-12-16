@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional, Union
 from datetime import datetime
 import logging
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +86,7 @@ class YAMLCache:
         path = Path(file_path)
         if not path.is_absolute():
             # Resolve relative to project root
-            project_root = Path(__file__).parent.parent.parent
+            project_root = get_root_path()
             path = (project_root / path).resolve()
         
         path_str = str(path)
@@ -161,7 +162,7 @@ class YAMLCache:
             # Single file stats
             path = Path(file_path)
             if not path.is_absolute():
-                project_root = Path(__file__).parent.parent.parent
+                project_root = get_root_path()
                 path = (project_root / path).resolve()
             
             path_str = str(path)
@@ -238,7 +239,7 @@ class YAMLCache:
             # Clear specific file
             path = Path(file_path)
             if not path.is_absolute():
-                project_root = Path(__file__).parent.parent.parent
+                project_root = get_root_path()
                 path = (project_root / path).resolve()
             
             path_str = str(path)
@@ -265,7 +266,7 @@ class YAMLCache:
             # Reset specific file stats
             path = Path(file_path)
             if not path.is_absolute():
-                project_root = Path(__file__).parent.parent.parent
+                project_root = get_root_path()
                 path = (project_root / path).resolve()
             
             path_str = str(path)
@@ -289,7 +290,7 @@ class YAMLCache:
         """
         path = Path(file_path)
         if not path.is_absolute():
-            project_root = Path(__file__).parent.parent.parent
+            project_root = get_root_path()
             path = (project_root / path).resolve()
         
         return str(path) in self._cache
@@ -306,7 +307,7 @@ class YAMLCache:
         """
         path = Path(file_path)
         if not path.is_absolute():
-            project_root = Path(__file__).parent.parent.parent
+            project_root = get_root_path()
             path = (project_root / path).resolve()
         
         path_str = str(path)
