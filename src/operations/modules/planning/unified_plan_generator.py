@@ -5,7 +5,7 @@ Shared plan generation logic for all planning orchestrators.
 Eliminates duplication across PlanningOrchestrator, TempPlanManager, ADOPlanning.
 
 Author: Asif Hussain
-Version: 1.0.0
+Version: 2.0.0 - Added MasterPlanTemplate integration for canonical section ordering
 """
 
 import logging
@@ -15,6 +15,7 @@ from datetime import datetime
 import re
 
 from .token_reduction_tracker import TokenReductionTracker
+from .master_plan_template import MasterPlanTemplate, MasterPlanSection, SECTION_TEMPLATES
 
 logger = logging.getLogger(__name__)
 
@@ -175,7 +176,26 @@ class UnifiedPlanGenerator:
         manifest_path: Optional[str] = None
     ) -> str:
         """
-        Generate master plan with consistent structure.
+        Generate master plan with consistent structure following canonical section order.
+        
+        Uses MasterPlanTemplate to enforce the exact section order from cortex-3.9-master.md:
+        1. CORTEX Header (ASCII art)
+        2. Title & Metadata
+        3. Request Context
+        4. Visual Progress Tracker
+        5. Phase Status Table
+        6. Executive Summary
+        7. Architectural Changes (Tier 4 only)
+        8. Governance Framework (Tier 4 only)
+        9. Phase Overview (Tier 3+)
+        10. Dependency Graph (Tier 4 only)
+        11. Success Criteria (Tier 3+)
+        12. Deliverables (Tier 3+)
+        13. Risk Analysis (Tier 4 only)
+        14. Related Documentation (Tier 3+)
+        15. Execution Strategy (Tier 4 only)
+        16. Version History
+        17. Contact & Support (Tier 4 only)
         
         Args:
             plan_id: Plan identifier
@@ -195,47 +215,86 @@ class UnifiedPlanGenerator:
         # Store compression mode for use in helper methods
         self._compressed = compressed
         
-        # Header
-        sections.append(self._generate_header(plan_id, metadata, compressed))
+        # Get canonical section order based on complexity tier
+        complexity_tier = metadata.get("complexity_tier", 4)
+        section_order = MasterPlanTemplate.get_section_order(complexity_tier)
         
-        # Executive Summary
-        if "summary" in metadata:
-            sections.append(self._generate_executive_summary(metadata["summary"]))
+        # Build sections in canonical order
+        for section_type in section_order:
+            if section_type == MasterPlanSection.CORTEX_HEADER:
+                sections.append(MasterPlanTemplate.get_cortex_header())
+            
+            elif section_type == MasterPlanSection.TITLE_METADATA:
+                sections.append(self._generate_title_metadata(plan_id, metadata))
+            
+            elif section_type == MasterPlanSection.REQUEST_CONTEXT:
+                if "request_context" in metadata:
+                    sections.append(self._generate_request_context(metadata["request_context"]))
+            
+            elif section_type == MasterPlanSection.VISUAL_PROGRESS_TRACKER:
+                if include_visual_tracker:
+                    baseline_tokens = metadata.get("baseline_tokens", 0)
+                    current_tokens = metadata.get("current_tokens", baseline_tokens)
+                    sections.append(self.generate_progress_tracker(
+                        phases=phases,
+                        baseline_tokens=baseline_tokens,
+                        current_tokens=current_tokens,
+                        total_files=metadata.get("total_files", 0),
+                        compressed=compressed
+                    ))
+            
+            elif section_type == MasterPlanSection.PHASE_STATUS_TABLE:
+                sections.append(self._generate_phases_table(phases, include_token_tracking, compressed))
+            
+            elif section_type == MasterPlanSection.EXECUTIVE_SUMMARY:
+                if "summary" in metadata or "goals" in metadata:
+                    sections.append(self._generate_executive_summary_full(metadata))
+            
+            elif section_type == MasterPlanSection.ARCHITECTURAL_CHANGES:
+                if "architectural_changes" in metadata:
+                    sections.append(self._generate_architectural_changes(metadata["architectural_changes"]))
+            
+            elif section_type == MasterPlanSection.GOVERNANCE_FRAMEWORK:
+                if "governance_framework" in metadata:
+                    sections.append(self._generate_governance_framework(metadata["governance_framework"]))
+            
+            elif section_type == MasterPlanSection.PHASE_OVERVIEW:
+                if "phase_overview" in metadata:
+                    sections.append(self._generate_phase_overview(metadata["phase_overview"]))
+            
+            elif section_type == MasterPlanSection.DEPENDENCY_GRAPH:
+                if "dependency_graph" in metadata:
+                    sections.append(self._generate_dependency_graph(metadata["dependency_graph"]))
+            
+            elif section_type == MasterPlanSection.SUCCESS_CRITERIA:
+                if "success_criteria" in metadata:
+                    sections.append(self._generate_success_criteria(metadata["success_criteria"]))
+            
+            elif section_type == MasterPlanSection.DELIVERABLES:
+                if "deliverables" in metadata:
+                    sections.append(self._generate_deliverables(metadata["deliverables"]))
+            
+            elif section_type == MasterPlanSection.RISK_ANALYSIS:
+                if "risk_analysis" in metadata:
+                    sections.append(self._generate_risk_analysis(metadata["risk_analysis"]))
+            
+            elif section_type == MasterPlanSection.RELATED_DOCUMENTATION:
+                if "related_documentation" in metadata:
+                    sections.append(self._generate_related_documentation(metadata["related_documentation"]))
+            
+            elif section_type == MasterPlanSection.EXECUTION_STRATEGY:
+                if "execution_strategy" in metadata:
+                    sections.append(self._generate_execution_strategy(metadata["execution_strategy"]))
+            
+            elif section_type == MasterPlanSection.VERSION_HISTORY:
+                if "version_history" in metadata:
+                    sections.append(self._generate_version_history(metadata["version_history"]))
+            
+            elif section_type == MasterPlanSection.CONTACT_SUPPORT:
+                if "contact_support" in metadata:
+                    sections.append(self._generate_contact_support(metadata["contact_support"]))
         
-        # Continuation Prompt (skip if plan is 100% complete or empty)
-        completed_count = sum(1 for p in phases if p.get("status") == "complete")
-        total_phases = len(phases)
-        # Skip if: no phases (empty) OR all phases complete
-        is_plan_complete_or_empty = (total_phases == 0) or (completed_count == total_phases and total_phases > 0)
-        
-        if include_continuation_prompt and not is_plan_complete_or_empty:
-            sections.append(self._generate_continuation_prompt_section(
-                plan_id=plan_id,
-                completed_phases=completed_count,
-                total_phases=len(phases),
-                next_phase_number=self._find_next_phase(phases),
-                next_phase_name=self._find_next_phase_name(phases),
-                progress_percentage=self._calculate_progress(phases),
-                compressed=compressed,
-                manifest_path=manifest_path
-            ))
-        
-        # Visual Progress Tracker
-        if include_visual_tracker:
-            baseline_tokens = metadata.get("baseline_tokens", 0)
-            current_tokens = metadata.get("current_tokens", baseline_tokens)
-            sections.append(self.generate_progress_tracker(
-                phases=phases,
-                baseline_tokens=baseline_tokens,
-                current_tokens=current_tokens,
-                total_files=metadata.get("total_files", 0),
-                compressed=compressed
-            ))
-        
-        # Phases Table
-        sections.append(self._generate_phases_table(phases, include_token_tracking, compressed))
-        
-        # Footer
+        # Add footer (not part of canonical sections)
         sections.append(self._generate_footer(compressed))
         
         return "\n\n".join(sections)
@@ -246,7 +305,8 @@ class UnifiedPlanGenerator:
         baseline_tokens: int,
         current_tokens: int,
         total_files: int,
-        compressed: bool = False
+        compressed: bool = False,
+        include_detailed_tracker: bool = True
     ) -> str:
         """
         Generate visual progress tracker with token metrics.
@@ -257,6 +317,7 @@ class UnifiedPlanGenerator:
             current_tokens: Current token count
             total_files: Total file count
             compressed: Use compressed format
+            include_detailed_tracker: Include detailed ASCII box tracker (cortex-3.9 style)
         
         Returns:
             Progress tracker markdown
@@ -280,6 +341,41 @@ class UnifiedPlanGenerator:
 
 **Total:** [{bar}] {percentage:.0f}% ({completed}/{total})  
 **Time:** {self._sum_actual_time(phases)} | **Saved:** -{percentage_reduction}% ({self.token_tracker.format_tokens(tokens_saved, include_label=True)})"""
+        elif include_detailed_tracker:
+            # Detailed ASCII box tracker (cortex-3.9 style)
+            total_actual_minutes = self._calculate_total_actual_minutes(phases)
+            total_elapsed_time = self._format_elapsed_time(phases)
+            total_est_hours, total_est_days = self._calculate_total_estimated(phases)
+            
+            # Calculate senior dev estimate range
+            base_hours = total_est_hours
+            min_estimate = base_hours * 1.55  # Testing (1.30) × Docs (1.15) × Rework (1.10)
+            max_estimate = base_hours * 2.05  # 33% complexity buffer
+            min_weeks = min_estimate / 40
+            max_weeks = max_estimate / 40
+            
+            tracker = f"""## Visual Progress Tracker
+
+```
++==============================================================================+
+  CORTEX Plan Progress Tracker
++==============================================================================+
+
+  Overall Progress:  [{bar}] {percentage:.0f}% ({completed}/{total} phases complete)
+
+  Total Actual Time:    {total_actual_minutes} minutes  |  Total Elapsed Time:  {total_elapsed_time}
+  Senior Dev Estimate:  {min_estimate:.0f}-{max_estimate:.0f} hours ({min_weeks:.2f}-{max_weeks:.2f} weeks @ 40h/week baseline)
+
+  Estimation Methodology:
+    • Base: {base_hours:.0f} hours pure development
+    • Testing overhead: x1.30 (TDD, unit/integration tests)
+    • Documentation: x1.15 (inline docs, READMEs, manifests)
+    • Rework/refinement: x1.10 (code review, refactoring)
+    • Combined multiplier: 1.55x = {min_estimate:.0f} hours minimum
+    • Complexity buffer: +33% = {max_estimate:.0f} hours maximum
+
++==============================================================================+
+```"""
         else:
             # Calculate efficiency metrics
             total_est_hours, total_est_days = self._calculate_total_estimated(phases)
@@ -294,7 +390,7 @@ class UnifiedPlanGenerator:
             estimated_velocity = total / estimated_weeks if estimated_weeks > 0 else 0
             
             # Compact 3-column table format with business value summary
-            tracker = f"""## 📊 Visual Progress Tracker
+            tracker = f"""## 📊 Business Value Summary
 
 **Overall Progress:** [{bar}] {percentage:.0f}% ({completed}/{total} Phases Complete)  
 **Token Reduction:** {percentage_reduction}% ({self.token_tracker.format_tokens(tokens_saved, include_label=True)})  
@@ -311,7 +407,7 @@ class UnifiedPlanGenerator:
 
 ---
 
-## 💼 Business Value Summary
+## 💼 ROI Analysis
 
 | 👤 **Traditional Approach** | ⚡ **CORTEX-Powered Delivery** |
 |----------------------------|-------------------------------|
@@ -493,8 +589,23 @@ class UnifiedPlanGenerator:
 
 ---"""
     
-    def _generate_phases_table(self, phases: List[Dict], include_tokens: bool, compressed: bool = False) -> str:
-        """Generate phases table with optional compression."""
+    def _generate_phases_table(self, phases: List[Dict], include_tokens: bool, compressed: bool = False, detailed_timing: bool = True) -> str:
+        """Generate phases table with optional compression and detailed timing.
+        
+        Args:
+            phases: List of phase dictionaries
+            include_tokens: Whether to include token savings column
+            compressed: Use compressed format
+            detailed_timing: Include Start/End/Actual/Elapsed/Sub-Plan columns (cortex-3.9 style)
+        
+        Returns:
+            Markdown table string
+        """
+        if detailed_timing and not compressed:
+            # Detailed timing table (cortex-3.9 style)
+            return self._generate_detailed_phases_table(phases)
+        
+        # Standard table format
         headers = "| Phase | Name | Status | Plan | Work | Wall |"
         separator = "|-------|------|--------|------|------|------|"
         
@@ -550,6 +661,63 @@ class UnifiedPlanGenerator:
                 row += f" {tokens} |"
             
             rows.append(row)
+        
+        return "\n".join(rows)
+    
+    def _generate_detailed_phases_table(self, phases: List[Dict]) -> str:
+        """
+        Generate detailed phases table with Start/End/Actual/Elapsed/Sub-Plan columns.
+        
+        This is the cortex-3.9 style table format.
+        
+        Args:
+            phases: List of phase dictionaries
+            
+        Returns:
+            Markdown table string
+        """
+        headers = "| Phase | Name | Status | Start | End | Actual | Elapsed | Sub-Plan |"
+        separator = "|-------|------|--------|-------|-----|--------|---------|----------|"
+        
+        rows = [
+            "### Phase Status Table",
+            "",
+            headers,
+            separator
+        ]
+        
+        for phase in phases:
+            phase_num = phase.get("id", phase.get("phase_number", "?"))
+            name = phase.get("name", "Unknown")
+            status = phase.get("status", "pending")
+            start = phase.get("start_time", "-")
+            end = phase.get("end_time", "-")
+            actual = phase.get("actual", "-")
+            elapsed = phase.get("elapsed", "-")
+            sub_plan = phase.get("sub_plan", "")
+            
+            # Status emoji
+            status_emoji = {
+                "pending": "⏳ Pending",
+                "in-progress": "🟡 In Progress",
+                "complete": "✅ Complete",
+                "blocked": "⚠️ Blocked"
+            }
+            status_display = status_emoji.get(status.lower(), status)
+            
+            # Sub-plan link
+            sub_plan_display = f"[{sub_plan}]({sub_plan})" if sub_plan else "-"
+            
+            row = f"| {phase_num} | {name} | {status_display} | {start} | {end} | {actual} | {elapsed} | {sub_plan_display} |"
+            rows.append(row)
+        
+        # Add legend
+        rows.append("")
+        rows.append("**Legend:**")
+        rows.append("- ⏳ Pending - Not started")
+        rows.append("- 🟡 In Progress - Active development")
+        rows.append("- ✅ Complete - Finished and validated")
+        rows.append("- ⚠️ Blocked - Dependency or issue preventing progress")
         
         return "\n".join(rows)
     
@@ -645,6 +813,60 @@ class UnifiedPlanGenerator:
         
         return total_hours
     
+    def _calculate_total_actual_minutes(self, phases: List[Dict]) -> int:
+        """
+        Calculate total actual time in minutes from completed and in-progress phases.
+        
+        Returns:
+            Total minutes as integer
+        """
+        total_hours = 0.0
+        
+        for phase in phases:
+            status = phase.get("status", "").lower()
+            if status not in ["complete", "in-progress"]:
+                continue
+            
+            actual = phase.get("actual", "")
+            if not actual or actual == "-":
+                continue
+            
+            hours = self._parse_time_to_hours(actual)
+            total_hours += hours
+        
+        return int(total_hours * 60)
+    
+    def _format_elapsed_time(self, phases: List[Dict]) -> str:
+        """
+        Format total elapsed time in H:MM format from completed and in-progress phases.
+        
+        Args:
+            phases: List of phase dictionaries
+            
+        Returns:
+            Formatted elapsed time string (e.g., "4:45")
+        """
+        total_hours = 0.0
+        
+        for phase in phases:
+            status = phase.get("status", "").lower()
+            if status not in ["complete", "in-progress"]:
+                continue
+            
+            elapsed = phase.get("elapsed", "")
+            if not elapsed or elapsed == "-":
+                continue
+            
+            hours = self._parse_time_to_hours(elapsed)
+            total_hours += hours
+        
+        if total_hours == 0:
+            return "0:00"
+        
+        whole_hours = int(total_hours)
+        minutes = int((total_hours - whole_hours) * 60)
+        return f"{whole_hours}:{minutes:02d}"
+    
     def _calculate_total_elapsed(self, phases: List[Dict]) -> float:
         """Calculate total elapsed hours from completed phases."""
         total_hours = 0.0
@@ -672,6 +894,9 @@ class UnifiedPlanGenerator:
         - "2d" → 16.0
         - "1h 30m" → 1.5
         - "2h 15m" → 2.25
+        - "10 min" → 0.167
+        - "30m" → 0.5
+        - "0:45" → 0.75 (H:MM format)
         
         Args:
             time_str: Time string to parse
@@ -685,9 +910,25 @@ class UnifiedPlanGenerator:
         time_str = time_str.lower().strip()
         hours = 0.0
         
+        # Handle H:MM format (e.g., "0:45" or "1:30")
+        if ":" in time_str and not "h" in time_str and not "d" in time_str:
+            parts = time_str.split(":")
+            if len(parts) == 2:
+                try:
+                    h = float(parts[0])
+                    m = float(parts[1])
+                    return h + (m / 60)
+                except ValueError:
+                    pass
+        
         # Handle "16h (2d)" format - extract hours before parentheses
         if "(" in time_str:
             time_str = time_str.split("(")[0].strip()
+        
+        # Handle "10 min" or "30 min" format
+        if "min" in time_str and "h" not in time_str:
+            minutes = float(time_str.replace("min", "").strip())
+            return minutes / 60
         
         # Handle complex formats like "3d 4h"
         if "d" in time_str and "h" in time_str:
@@ -715,6 +956,10 @@ class UnifiedPlanGenerator:
         elif "h" in time_str:
             # Hours only: "4h" → 4.0
             hours = float(time_str.replace("h", "").strip())
+        elif "m" in time_str:
+            # Minutes only: "30m" → 0.5h
+            minutes = float(time_str.replace("m", "").strip())
+            hours = minutes / 60
         
         return hours
     
@@ -760,6 +1005,152 @@ class UnifiedPlanGenerator:
         
         return velocity
     
+    # ===== New Section Generators (Canonical Order) =====
+    
+    def _generate_title_metadata(self, plan_id: str, metadata: Dict) -> str:
+        """Generate title and metadata section (Section 2)."""
+        title = metadata.get("title", plan_id.replace('-', ' ').title())
+        tier = metadata.get("complexity_tier", "N/A")
+        tier_label = "Complex" if tier >= 4 else "Documented" if tier >= 3 else "Lightweight"
+        
+        return f"""# {title}
+
+**Plan Name:** {title}  
+**Type:** Tier {tier} {tier_label} Plan  
+**Status:** {metadata.get('status', '⏳ In Progress')}  
+**Created:** {metadata.get('created', datetime.now().strftime('%Y-%m-%d %I:%M %p'))}  
+**Last Updated:** {metadata.get('last_updated', datetime.now().strftime('%Y-%m-%d %I:%M %p'))}  
+**Completed:** {metadata.get('completed', 'TBD')}  
+**Version:** {metadata.get('version', '1.0.0')}
+
+---"""
+    
+    def _generate_request_context(self, context: str) -> str:
+        """Generate request context section (Section 3)."""
+        return f"""## Request Context
+
+{context}
+
+---"""
+    
+    def _generate_executive_summary_full(self, metadata: Dict) -> str:
+        """Generate full executive summary section (Section 6)."""
+        summary = metadata.get("summary", "")
+        goals = metadata.get("goals", [])
+        outcomes = metadata.get("outcomes", [])
+        autonomous = metadata.get("autonomous_execution", "")
+        
+        sections = [f"## 🎯 Executive Summary", "", summary]
+        
+        if goals:
+            sections.extend(["", "**Primary Goals:**"])
+            sections.extend([f"- {goal}" for goal in goals])
+        
+        if outcomes:
+            sections.extend(["", "**Key Outcomes:**"])
+            sections.extend([f"- {outcome}" for outcome in outcomes])
+        
+        if autonomous:
+            sections.extend(["", "**Autonomous Execution:**", autonomous])
+        
+        sections.append("\n---")
+        return "\n".join(sections)
+    
+    def _generate_architectural_changes(self, changes: str) -> str:
+        """Generate architectural changes section (Section 7)."""
+        return f"""## 🏗️ Architectural Changes
+
+{changes}
+
+---"""
+    
+    def _generate_governance_framework(self, framework: str) -> str:
+        """Generate governance framework section (Section 8)."""
+        return f"""## 🛡️ Governance Framework
+
+### New Brain Protection Rules (SKULL System)
+
+{framework}
+
+---"""
+    
+    def _generate_phase_overview(self, overview: str) -> str:
+        """Generate phase overview section (Section 9)."""
+        return f"""## 📋 Phase Overview
+
+{overview}
+
+---"""
+    
+    def _generate_dependency_graph(self, graph: str) -> str:
+        """Generate dependency graph section (Section 10)."""
+        return f"""## 🔗 Dependency Graph
+
+{graph}
+
+---"""
+    
+    def _generate_success_criteria(self, criteria: str) -> str:
+        """Generate success criteria section (Section 11)."""
+        return f"""## ✅ Success Criteria
+
+{criteria}
+
+---"""
+    
+    def _generate_deliverables(self, deliverables: str) -> str:
+        """Generate deliverables section (Section 12)."""
+        return f"""## 📁 Deliverables
+
+{deliverables}
+
+---"""
+    
+    def _generate_risk_analysis(self, risks: str) -> str:
+        """Generate risk analysis section (Section 13)."""
+        return f"""## 🚨 Risk Analysis
+
+{risks}
+
+---"""
+    
+    def _generate_related_documentation(self, docs: str) -> str:
+        """Generate related documentation section (Section 14)."""
+        return f"""## 📖 Related Documentation
+
+{docs}
+
+---"""
+    
+    def _generate_execution_strategy(self, strategy: str) -> str:
+        """Generate execution strategy section (Section 15)."""
+        return f"""## 🚀 Execution Strategy
+
+{strategy}
+
+---"""
+    
+    def _generate_version_history(self, history: List[Dict]) -> str:
+        """Generate version history section (Section 16)."""
+        rows = []
+        for v in history:
+            rows.append(f"| {v.get('version', 'N/A')} | {v.get('date', 'N/A')} | {v.get('author', 'N/A')} | {v.get('changes', 'N/A')} |")
+        
+        return f"""## 🔄 Version History
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+{chr(10).join(rows)}
+
+---"""
+    
+    def _generate_contact_support(self, contact: str) -> str:
+        """Generate contact & support section (Section 17)."""
+        return f"""## 📞 Contact & Support
+
+{contact}
+
+---"""
     def _format_work_hours(self, hours: float) -> str:
         """
         Format work hours consistently:
@@ -778,7 +1169,8 @@ class UnifiedPlanGenerator:
         if hours >= 36:
             # Show in days format
             days = hours / 8
-            return f"{hours:.1f}h ({days:.1f}d)"
+            hours_int = int(hours) if hours == int(hours) else hours
+            return f"{hours_int}h ({days:.1f}d)"
         else:
             # Show in H:MM format
             whole_hours = int(hours)
