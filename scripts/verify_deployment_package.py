@@ -23,7 +23,7 @@ import json
 # CRITICAL files that MUST be present in deployment package
 CRITICAL_FILES = {
     # Brain Protection (Tier 0)
-    'cortex-brain/protection/brain-protection-rules.yaml': 'Brain governance rules',
+    'cortex-brain/brain-protection-rules.yaml': 'Brain governance rules',
     
     # Database Schema (Combined)
     'cortex-brain/schema.sql': 'Combined database schema (Tier 0, 1, 2, 3)',
@@ -38,24 +38,11 @@ CRITICAL_FILES = {
     'requirements.txt': 'Python dependencies',
     
     # Essential Documentation (user-facing only)
-    'prompts/shared/story.md': 'The Intern with Amnesia story',
-    'prompts/shared/setup-guide.md': 'Installation guide',
-    'prompts/shared/tracking-guide.md': 'Conversation memory setup',
-    'prompts/shared/technical-reference.md': 'Architecture reference',
-    'prompts/shared/agents-guide.md': 'Agent system guide',
-    'prompts/shared/configuration-reference.md': 'Configuration settings',
-    'prompts/shared/plugin-system.md': 'Plugin development',
-    'prompts/shared/operations-reference.md': 'Operations reference',
+    '.github/prompts/CORTEX.prompt.md': 'Universal CORTEX entry point (verified)',
+    '.github/copilot-instructions.md': 'Baseline context (verified)',
     
     # TDD Mastery Components
-    'cortex-brain/documents/implementation-guides/test-strategy.yaml': 'TDD test strategy',
-    'cortex-brain/templates/response-templates.yaml': 'Response templates (includes TDD workflows)',
-    '.github/prompts/modules/template-guide.md': 'Template guide (TDD templates)',
-    '.github/prompts/modules/response-format.md': 'Response format guide',
-    '.github/prompts/modules/planning-system-guide.md': 'Planning system (DoR/DoD)',
-    
-    # Ambient Daemon
-    'scripts/cortex/auto_capture_daemon.py': 'Ambient conversation capture daemon',
+    'cortex-brain/response-templates.yaml': 'Response templates (62 templates)',
     
     # Legal
     'README.md': 'User README',

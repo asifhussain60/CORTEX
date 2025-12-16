@@ -196,9 +196,9 @@ These hints confirm orchestrators are actively working without being intrusive.
 
 **ALL operations in cortex-operations.yaml now have execution_method classification:**
 
-### cli_wrapper (System Operations - 7 operations)
+### cli_wrapper (System Operations - 8 operations)
 - **Purpose:** File I/O, git operations, system maintenance
-- **Operations:** align, healthcheck, optimize, review, cleanup, deploy, regenerate_prompts
+- **Operations:** align, healthcheck, optimize, review, cleanup, deploy, regenerate_prompts, upgrade
 - **Implementation:** CLI wrapper scripts in `scripts/cli_wrappers/`
 - **Routing:** `unified_entry_point_utility.py:route_operation()` → `invoke_cli_wrapper()`
 
@@ -225,6 +225,7 @@ These hints confirm orchestrators are actively working without being intrusive.
 | `execute all phases autonomously` | Run plan end-to-end | All |
 | `sanitize [directory]` | Remove company data for sharing | All |
 | `start tdd` | Begin TDD workflow | All |
+| `upgrade cortex` | Upgrade to latest version (7-phase) | All |
 | `system maintenance` | 7-phase maintenance v3.0 (tiered routing) | Admin |
 | `align` | System alignment | Admin/User |
 | `optimize` | CORTEX optimization | Admin/User |

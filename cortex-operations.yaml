@@ -1,4 +1,39 @@
 operations:
+  upgrade:
+    name: Upgrade
+    description: Upgrade CORTEX to latest version with brain data backup and dependency updates
+    deployment_tier: user
+    execution_method: cli_wrapper
+    cli_script: scripts/cli_wrappers/upgrade_wrapper.py
+    natural_language:
+    - upgrade cortex
+    - upgrade system
+    - check for updates
+    - update cortex
+    - pull latest changes
+    - upgrade to latest version
+    category: system
+    modules:
+    - upgrade_utility
+    profiles:
+      standard:
+        description: "Full upgrade workflow (backup → git pull → pip install → migrations → validation)"
+        modules:
+        - upgrade_utility
+      check_only:
+        description: "Check for updates without upgrading"
+        modules:
+        - upgrade_utility
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: 7-phase upgrade with brain backup, git pull, dependency updates, migrations, and validation
+    examples:
+    - upgrade cortex
+    - check for updates
+    - update to latest version
   review:
     name: Review
     description: Code Review CLI

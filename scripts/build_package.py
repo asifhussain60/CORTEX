@@ -116,7 +116,36 @@ class CortexPackageBuilder:
         """Ignore admin-only brain files."""
         ignore = self._ignore_common(dir, files)
         
-        # Add brain-specific exclusions
+        # Check directory name first - exclude entire directories
+        import os
+        dir_name = os.path.basename(dir)
+        dir_path_lower = dir.lower()
+        
+        # Exclude test directories entirely (anywhere in the tree)
+        if dir_name == 'tests' or '\\tests\\' in dir or '/tests/' in dir or '\\tests' in dir or '/tests' in dir:
+            return files  # Ignore entire tests directory
+        
+        # Exclude planning directories entirely (all planning is internal)
+        planning_dirs = ['planning', 'temp-plans', 'active', 'archived', 'completed']
+        if any(plan_dir in dir_path_lower for plan_dir in planning_dirs):
+            return files  # Ignore entire planning hierarchy
+        
+        # Exclude implementation guides (all internal)
+        if 'implementation-guides' in dir_path_lower:
+            return files
+        
+        # Internal categories to exclude entirely
+        internal_categories = [
+            'archived-scripts', 'conversation-captures', 'evidence-templates',
+            'investigations', 'learning', 'limitations', 'narratives',
+            'onboarded-apps', 'pilot-projects', 'rationales', 'reviews', 'scribe',
+            'discovery'  # NEW: discovery is internal dev context
+        ]
+        
+        if dir_name in internal_categories:
+            return files  # Ignore entire directory
+        
+        # File-level patterns for remaining files
         admin_patterns = [
             'IMPLEMENTATION', 'STATUS', 'PLAN', 'SESSION', 'PROGRESS',
             'HOLISTIC-REVIEW', 'LEARNING-SYSTEM', 'CLEANUP-ORCHESTRATOR',
@@ -124,11 +153,35 @@ class CortexPackageBuilder:
             'E2E-WORKFLOW', 'FILE-GENERATION', 'HARDCODED-DATA',
             'HONEST-STATUS', 'IMPLICIT-PART1', 'MAC-TRACK', 'MAC-UNIVERSAL',
             'MACOS-COMPATIBILITY', 'MODULE-INTEGRATION', 'cortex-2.0-design',
-            'phase-completions', 'archives'
+            'phase-completions', 'archives', '-summary.md', 'implementation-summary',
+            'implementation', 'progress', '-plan', 'holistic', 
+            'epm-', 'deploy-', 'feature-9', 'orchestrator-', 'path-cleanup',
+            'phase-', 'ra-migration', 'test-intelligence', 'user-profile',
+            'capability-driven', 'cleanup-validation', '3-tier-educational',
+            'ADO-', 'phased-implementation', 'roadmap', 'cortex-lens'
         ]
         
+        # Filter reports directory (keep only essential user-facing reports)
+        if 'reports' in dir:
+            keep_reports = [
+                'deployment-validation-dry-run-analysis'  # Keep this specific report
+            ]
+            
+            for f in files:
+                # Keep explicitly listed reports
+                if any(keep in f.lower() for keep in keep_reports):
+                    continue
+                # Exclude all other reports
+                ignore.append(f)
+        
+        # Filter analysis directory (exclude all analysis docs)
+        if 'analysis' in dir_path_lower:
+            return files  # Exclude entire analysis directory
+        
+        # Filter files by pattern
         for f in files:
-            if any(pattern in f for pattern in admin_patterns):
+            f_lower = f.lower()
+            if any(pattern.lower() in f_lower for pattern in admin_patterns):
                 ignore.append(f)
         
         return ignore
@@ -177,8 +230,10 @@ class CortexPackageBuilder:
         print("\n🚀 Copying bootstrap installers...")
         
         installers = [
-            ("publish/install-cortex-windows.ps1", "Windows bootstrap installer"),
-            ("publish/install-cortex-unix.sh", "Unix/macOS bootstrap installer"),
+            ("install-cortex-windows.ps1", "Windows bootstrap installer (legacy)"),
+            ("install-cortex-unix.sh", "Unix/macOS bootstrap installer (legacy)"),
+            ("install-cortex-windows-fast.ps1", "Windows fast installer (2-3 min)"),
+            ("install-cortex-unix-fast.sh", "Unix/macOS fast installer (2-3 min)"),
         ]
         
         for installer_path, description in installers:
@@ -229,11 +284,16 @@ class CortexPackageBuilder:
         if 'internal' in dir:
             return files
         
+        # Filter out modules directory (internal orchestrator guides)
+        if 'modules' in dir:
+            return files
+        
         # Also filter out specific admin files in user/shared
         admin_files = [
             'plan.md',
             'session-loader.md',
             'limitations-and-status.md',
+            'planning-orchestrator-guide.md',  # Internal orchestrator guide
         ]
         
         for f in files:
@@ -244,33 +304,54 @@ class CortexPackageBuilder:
     
     def copy_prompts(self):
         """Copy prompts directory."""
-        print("\n💬 Copying prompts...")
+        print("\\n💬 Copying prompts...")
         
-        source = self.cortex_root / "prompts"
-        target = self.package_dir / "prompts"
+        # Prompts are in .github/prompts/
+        source = self.cortex_root / ".github" / "prompts"
+        target = self.package_dir / ".github" / "prompts"
         
-        shutil.copytree(source, target, ignore=self._ignore_internal_prompts)
-        print(f"   ✓ Copied prompts/ (user-facing only)")
+        if source.exists():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(source, target, ignore=self._ignore_internal_prompts)
+            print(f"   ✓ Copied .github/prompts/ (CORTEX entry point)")
+        else:
+            print(f"   ⚠️  .github/prompts/ not found")
         
-        # Also copy .github/prompts/CORTEX.prompt.md
-        github_source = self.cortex_root / ".github" / "prompts" / "CORTEX.prompt.md"
-        if github_source.exists():
-            github_target = self.package_dir / ".github" / "prompts"
-            github_target.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(github_source, github_target / "CORTEX.prompt.md")
-            print(f"   ✓ Copied .github/prompts/CORTEX.prompt.md")
+        # Also copy .github/copilot-instructions.md
+        copilot_instructions = self.cortex_root / ".github" / "copilot-instructions.md"
+        if copilot_instructions.exists():
+            github_dir = self.package_dir / ".github"
+            github_dir.mkdir(exist_ok=True)
+            shutil.copy2(copilot_instructions, github_dir / "copilot-instructions.md")
+            print(f"   ✓ Copied .github/copilot-instructions.md")
         
+    def copy_templates(self):
+        """Copy D3.js dashboard templates."""
+        print("\n🎨 Copying dashboard templates...")
+        
+        templates_source = self.cortex_root / "templates"
+        if templates_source.exists():
+            templates_target = self.package_dir / "templates"
+            shutil.copytree(templates_source, templates_target)
+            print(f"   ✓ Copied templates/ (D3.js dashboards)")
+        else:
+            print(f"   ⚠️  templates/ not found - dashboard visualization disabled")
+    
     def copy_root_files(self):
         """Copy root configuration files."""
         print("\n📄 Copying root files...")
         
         root_files = [
             "requirements.txt",
+            "requirements-core.txt",  # NEW: Fast install tier 1
+            "requirements-optional.txt",  # NEW: Optional features tier 2
             "pytest.ini",
             "cortex.config.template.json",
             "cortex-operations.yaml",  # CRITICAL: Operations manifest
+            "deployment-manifest.yaml",  # NEW: Production deployment manifest
             "README.md",
             "LICENSE",
+            "CHANGELOG.md",
             "setup.py",
             ".gitignore",
         ]
@@ -344,6 +425,8 @@ class CortexPackageBuilder:
                 "install_cortex.py",
                 "install-cortex-windows.ps1",
                 "install-cortex-unix.sh",
+                "install-cortex-windows-fast.ps1",  # NEW: Fast installer
+                "install-cortex-unix-fast.sh",  # NEW: Fast installer
                 "INSTALL.md",
             ]
             
@@ -369,6 +452,7 @@ class CortexPackageBuilder:
             self.clean_publish_directory()
             self.copy_cortex_files()
             self.copy_prompts()
+            self.copy_templates()
             self.copy_root_files()
             self.copy_bootstrap_installers()
             self.skip_tests_for_user_package()

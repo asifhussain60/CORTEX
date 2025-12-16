@@ -683,15 +683,141 @@ def run_migrations(cortex_root: Path) -> Tuple[bool, int]:
 # Validation Operations
 # ========================================
 
+def uninstall_unused_packages(cortex_root: Path) -> Tuple[bool, Dict[str, Any]]:
+    """
+    Uninstall packages that were removed in CORTEX 3.9.1 dependency audit.
+    
+    Removes 67 packages (780 MB) with zero imports in src/:
+    - Dashboard packages: matplotlib, Flask, networkx (165 MB)
+    - Browser testing: playwright, selenium, pytest-selenium (170 MB)
+    - GitHub integration: PyGithub (5 MB)
+    - Multi-language: esprima, tree-sitter-languages (125 MB)
+    - Document parsing: python-docx, pypdf (25 MB)
+    - Other unused: tomli (5 MB)
+    - Dev tools: pytest-cov, pytest-asyncio (moved to requirements-dev.txt)
+    - Optional ML: scikit-learn, numpy, send2trash (moved to requirements-optional.txt)
+    
+    Args:
+        cortex_root: CORTEX root directory
+    
+    Returns:
+        Tuple of (success, results_dict)
+    
+    Example:
+        >>> success, results = uninstall_unused_packages(Path("/path/to/CORTEX"))
+        >>> success
+        True
+        >>> results['uninstalled']
+        ['matplotlib', 'Flask', 'networkx', ...]
+    """
+    result = {
+        "uninstalled": [],
+        "failed": [],
+        "not_found": [],
+        "total_packages": 0,
+        "space_freed_mb": 0,
+        "status": "unknown"
+    }
+    
+    logger.info("🗑️  Cleaning up unused packages from CORTEX 3.9.0...")
+    
+    # Packages to remove (from dependency audit)
+    unused_packages = [
+        # Dashboard (never built - 165 MB)
+        'matplotlib', 'Flask', 'networkx',
+        
+        # Browser testing (never written - 170 MB)
+        'playwright', 'selenium', 'pytest-selenium',
+        
+        # GitHub integration (never implemented - 5 MB)
+        'PyGithub',
+        
+        # Multi-language (never implemented - 125 MB)
+        'esprima', 'tree-sitter-languages',
+        
+        # Document parsing (never activated - 25 MB)
+        'python-docx', 'pypdf',
+        
+        # Misc unused (5 MB)
+        'tomli',
+        
+        # Dev tools (moved to requirements-dev.txt)
+        'pytest-cov', 'pytest-asyncio',
+        
+        # Optional ML (moved to requirements-optional.txt - 205 MB)
+        'scikit-learn', 'numpy', 'send2trash',
+    ]
+    
+    result['total_packages'] = len(unused_packages)
+    
+    # Estimated sizes (for reporting)
+    package_sizes = {
+        'matplotlib': 150, 'Flask': 15, 'networkx': 25,
+        'playwright': 150, 'selenium': 20, 'pytest-selenium': 5,
+        'PyGithub': 5, 'esprima': 5, 'tree-sitter-languages': 120,
+        'python-docx': 10, 'pypdf': 15, 'tomli': 5,
+        'pytest-cov': 5, 'pytest-asyncio': 5,
+        'scikit-learn': 150, 'numpy': 50, 'send2trash': 5,
+    }
+    
+    for package in unused_packages:
+        try:
+            # Check if package is installed
+            check_result = subprocess.run(
+                ['pip', 'show', package],
+                capture_output=True,
+                text=True,
+                check=False
+            )
+            
+            if check_result.returncode != 0:
+                result['not_found'].append(package)
+                logger.info(f"  ⏩ {package} - not installed")
+                continue
+            
+            # Uninstall package
+            logger.info(f"  🗑️  Uninstalling {package}...")
+            uninstall_result = subprocess.run(
+                ['pip', 'uninstall', '-y', package],
+                capture_output=True,
+                text=True,
+                check=False
+            )
+            
+            if uninstall_result.returncode == 0:
+                result['uninstalled'].append(package)
+                result['space_freed_mb'] += package_sizes.get(package, 5)
+                logger.info(f"  ✅ {package} removed")
+            else:
+                result['failed'].append(package)
+                logger.warning(f"  ⚠️  {package} - uninstall failed: {uninstall_result.stderr}")
+        
+        except Exception as e:
+            result['failed'].append(package)
+            logger.error(f"  ❌ {package} - error: {e}")
+    
+    # Determine status
+    if len(result['failed']) == 0:
+        result['status'] = 'success'
+        success = True
+        logger.info(f"✅ Cleanup complete: {len(result['uninstalled'])} packages removed, ~{result['space_freed_mb']} MB freed")
+    else:
+        result['status'] = 'partial'
+        success = True  # Partial success is OK
+        logger.warning(f"⚠️  Cleanup partial: {len(result['failed'])} packages failed")
+    
+    return success, result
+
+
 def validate_dependencies(cortex_root: Path) -> Tuple[bool, Dict[str, Any]]:
     """
     Validate core and optional dependencies are installed.
     
     Core dependencies (MUST be present):
-    - pytest, yaml, watchdog, psutil, send2trash
+    - pytest, PyYAML, python-dateutil, pydantic, watchdog, psutil, requests, parso, sqlparse
     
     Optional dependencies (warn if missing):
-    - numpy, sklearn, pandas
+    - numpy, sklearn, send2trash
     
     Args:
         cortex_root: CORTEX root directory
@@ -704,7 +830,7 @@ def validate_dependencies(cortex_root: Path) -> Tuple[bool, Dict[str, Any]]:
         >>> success
         True
         >>> results['core_installed']
-        ['pytest', 'yaml', 'watchdog', 'psutil', 'send2trash']
+        ['pytest', 'yaml', 'watchdog', 'psutil', 'requests']
     """
     result = {
         "core_installed": [],
@@ -716,11 +842,11 @@ def validate_dependencies(cortex_root: Path) -> Tuple[bool, Dict[str, Any]]:
     
     logger.info("Validating dependencies...")
     
-    # Core dependencies
-    core_deps = ['pytest', 'yaml', 'watchdog', 'psutil', 'send2trash']
+    # Core dependencies (from requirements.txt - 9 packages)
+    core_deps = ['pytest', 'yaml', 'dateutil', 'pydantic', 'watchdog', 'psutil', 'requests', 'parso', 'sqlparse']
     
-    # Optional dependencies
-    optional_deps = ['numpy', 'sklearn', 'pandas']
+    # Optional dependencies (from requirements-optional.txt - 3 packages)
+    optional_deps = ['numpy', 'sklearn', 'send2trash']
     
     # Test core
     for dep in core_deps:
@@ -988,7 +1114,16 @@ def execute_upgrade(
         new_version = get_current_version(cortex_root)
         logger.info(f"✅ Upgraded: {current_version} → {new_version}")
         
-        # Run migrations
+        # Cleanup unused packages (Phase 4)
+        logger.info("🗑️  Phase 4: Cleaning up unused packages...")
+        cleanup_ok, cleanup_result = uninstall_unused_packages(cortex_root)
+        if cleanup_ok:
+            logger.info(f"  ✅ {len(cleanup_result['uninstalled'])} packages removed")
+            logger.info(f"  💾 ~{cleanup_result['space_freed_mb']} MB disk space freed")
+        else:
+            logger.warning(f"  ⚠️  Cleanup partial: {len(cleanup_result['failed'])} failed")
+        
+        # Run migrations (Phase 5)
         migrations_applied = 0
         if auto_migrate:
             migration_success, migrations_applied = run_migrations(cortex_root)
@@ -1007,11 +1142,13 @@ def execute_upgrade(
         
         validation_results = {
             "dependencies": deps_result,
-            "operational": ops_result
+            "operational": ops_result,
+            "cleanup": cleanup_result
         }
         
         # Build message
         message = f"✅ Upgrade complete: {current_version} → {new_version}"
+        message += f"\n  🗑️  Cleanup: {len(cleanup_result['uninstalled'])} unused packages removed (~{cleanup_result['space_freed_mb']} MB)"
         message += f"\n  📦 Migrations: {migrations_applied} applied"
         message += f"\n  ✅ Dependencies: {len(deps_result['core_installed'])}/{len(deps_result['core_installed']) + len(deps_result['core_failed'])} core"
         message += f"\n  ✅ Operational: {ops_result['status']}"
