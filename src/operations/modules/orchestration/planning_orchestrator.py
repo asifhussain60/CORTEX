@@ -631,20 +631,16 @@ class PlanningOrchestrator(BaseOperationModule):
             logger.info(f"Tier override: {force_tier}")
             
             # Log tier routing for semantic folder organization
-            if force_tier >= 3:
-                logger.info(f"🎭 Tier {force_tier} operation routing to active/ folder")
-            else:
-                logger.info(f"🎭 Tier {force_tier} operation routing to temp-plans/ folder")
+            # ALL tiers start in temp-plans/ (moved to active/ upon approval)
+            logger.info(f"🎭 Tier {force_tier} operation routing to temp-plans/ folder")
         else:
             # Automatic classification
             routing_decision = self.tiered_router.route(operation)
             logger.info(f"Tier: {routing_decision.tier} (confidence: {routing_decision.confidence:.2f})")
             
             # Log tier routing for semantic folder organization
-            if routing_decision.tier >= 3:
-                logger.info(f"🎭 Tier {routing_decision.tier} operation routing to active/ folder")
-            else:
-                logger.info(f"🎭 Tier {routing_decision.tier} operation routing to temp-plans/ folder")
+            # ALL tiers start in temp-plans/ (moved to active/ upon approval)
+            logger.info(f"🎭 Tier {routing_decision.tier} operation routing to temp-plans/ folder")
         
         # Create context
         context = PlanningContext(
@@ -876,17 +872,18 @@ class PlanningOrchestrator(BaseOperationModule):
         operation_slug = self._extract_semantic_name(planning_context.operation)
         
         # Determine lifecycle stage based on tier
+        # ALL plans start in temp-plans/ (unapproved), moved to active/ upon approval
         if tier <= 2:
-            # Lightweight/instant: temporary plan
+            # Lightweight/instant: temporary plan (no versioning)
             plan_id = f"{operation_slug}-{datetime.now().strftime('%Y%m%d')}"
             plan_folder = self.project_root / "cortex-brain" / "documents" / "planning" / "temp-plans" / plan_id
-            filename = "11-temp-planning-session.md"
+            filename = "00-temp-plan.md"
         else:
-            # Documented/complex: active plan with versioning
+            # Documented/complex: temporary plan with versioning (will move to active/ on approval)
             version = self._detect_next_version(operation_slug)
             folder_name = f"{operation_slug}-v{version}"
-            plan_folder = self.project_root / "cortex-brain" / "documents" / "planning" / "active" / folder_name
-            filename = "00-master-plan.md" if tier == 4 else "11-temp-planning-session.md"
+            plan_folder = self.project_root / "cortex-brain" / "documents" / "planning" / "temp-plans" / folder_name
+            filename = "00-master-plan.md" if tier == 4 else "00-temp-plan.md"
         
         # Create folder structure
         plan_folder.mkdir(parents=True, exist_ok=True)

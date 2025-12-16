@@ -110,12 +110,14 @@ class TemporaryPlanManager:
             project_root: Path to project root (defaults to CWD)
         """
         self.project_root = project_root or Path.cwd()
-        self.plans_base = self.project_root / "cortex-brain" / "documents" / "planning" / "features"
+        self.plans_base = self.project_root / "cortex-brain" / "documents" / "planning"
+        self.temp_plans_dir = self.plans_base / "temp-plans"
         self.active_dir = self.plans_base / "active"
         self.approved_dir = self.plans_base / "approved"
         self.completed_dir = self.plans_base / "completed"
         
         # Ensure directories exist
+        self.temp_plans_dir.mkdir(parents=True, exist_ok=True)
         self.active_dir.mkdir(parents=True, exist_ok=True)
         self.approved_dir.mkdir(parents=True, exist_ok=True)
         self.completed_dir.mkdir(parents=True, exist_ok=True)

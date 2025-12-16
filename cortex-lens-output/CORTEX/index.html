@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX - Console Application Analysis</title>
+    <link rel="stylesheet" href="cortex-unified.css">
+    <style>
+        /* Admin Dashboard Enhanced Styling */
+        :root {
+            --spacing-xl: 32px;
+            --spacing-lg: 24px;
+            --spacing-md: 16px;
+            --icon-size-xl: 64px;
+            --icon-size-lg: 48px;
+            --font-size-xl: 48px;
+            --font-size-lg: 32px;
+            --font-size-md: 20px;
+            --font-size-base: 18px;
+            --font-size-sm: 16px;
+        }
+
+        /* Header Enhancement */
+        .header-title {
+            font-size: var(--font-size-lg) !important;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .cortex-icon {
+            font-size: var(--icon-size-lg) !important;
+            margin-right: 12px;
+        }
+
+        .header-subtitle {
+            font-size: var(--font-size-md) !important;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        /* Tab Enhancement */
+        .tab-button {
+            font-size: var(--font-size-base) !important;
+            padding: 16px 32px !important;
+            font-weight: 600;
+        }
+
+        /* Main Content Spacing */
+        .cortex-main {
+            padding: var(--spacing-xl);
+        }
+
+        .tab-content {
+            padding: var(--spacing-lg);
+        }
+
+        /* KPI Cards - Large & Impactful */
+        .kpi-card {
+            padding: var(--spacing-xl) !important;
+            border-radius: 16px;
+            min-height: 180px;
+        }
+
+        .kpi-icon {
+            font-size: var(--icon-size-xl) !important;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .kpi-label {
+            font-size: var(--font-size-sm) !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .kpi-value {
+            font-size: var(--font-size-xl) !important;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .kpi-trend {
+            font-size: var(--font-size-sm) !important;
+            font-weight: 600;
+        }
+
+        /* Section Headers */
+        .section-title {
+            font-size: var(--font-size-lg) !important;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-subtitle {
+            font-size: var(--font-size-md) !important;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Cards & Panels */
+        .card, .panel, .widget {
+            padding: var(--spacing-lg) !important;
+            margin-bottom: var(--spacing-lg);
+            border-radius: 12px;
+        }
+
+        /* Text Enhancement */
+        body {
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+        }
+
+        p, li {
+            font-size: var(--font-size-base);
+        }
+
+        /* Health Metrics - Keep Large Style */
+        .health-score {
+            font-size: 72px !important;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: var(--font-size-md) !important;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: var(--font-size-lg) !important;
+            font-weight: 700;
+        }
+
+        /* Grid Spacing */
+        .content-grid {
+            gap: var(--spacing-lg);
+        }
+
+        .kpi-grid {
+            gap: var(--spacing-lg);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        /* Button Enhancement */
+        button, .btn {
+            font-size: var(--font-size-base) !important;
+            padding: 12px 24px;
+            font-weight: 600;
+        }
+
+        /* Badge Enhancement */
+        .badge {
+            font-size: var(--font-size-sm) !important;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* Repository Badge */
+        .repo-name {
+            font-size: var(--font-size-md) !important;
+            font-weight: 700;
+        }
+
+        .repo-type {
+            font-size: var(--font-size-sm) !important;
+            font-weight: 600;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="cortex-unified.js" defer></script>
+    <script src="components/cortex-components.js" defer></script>
+    <script src="components/chart-builder.js" defer></script>
+    <script src="components/d3-force-graph.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="cortex-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="header-title">
+                    <span class="cortex-icon">🧠</span>
+                    CORTEX Lens
+                </h1>
+                <div class="header-subtitle">Console Application Analysis</div>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="repo-badge">
+                    <span class="repo-name">CORTEX</span>
+                    <span class="repo-type">Console App</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="cortex-tabs">
+        <button class="tab-button active" data-tab="overview">📊 Overview</button>
+        <button class="tab-button" data-tab="architecture">🏗️ Architecture</button>
+        <button class="tab-button" data-tab="code-quality">✨ Code Quality</button>
+        <button class="tab-button" data-tab="dependencies">📦 Dependencies</button>
+        <button class="tab-button" data-tab="testing">🧪 Testing</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="cortex-main">
+        <!-- Overview Tab -->
+        <section id="overview" class="tab-content active">
+            <div class="content-grid">
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📁</div>
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-label">Total Files</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📝</div>
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-label">Lines of Code</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">⚙️</div>
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-label">Commands</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">✅</div>
+                        <div class="kpi-value">0%</div>
+                        <div class="kpi-label">Test Coverage</div>
+                        <div class="kpi-trend trend-neutral">N/A</div>
+                    </div>
+                </div>
+
+                <!-- Repository Summary -->
+                <div class="glass-card">
+                    <h2 class="card-title">Repository Summary</h2>
+                    <div class="summary-content">
+                        <div class="summary-row">
+                            <span class="summary-label">Primary Language:</span>
+                            <span class="summary-value">Unknown</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Entry Point:</span>
+                            <span class="summary-value"><code>src\main.py</code></span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">CLI Framework:</span>
+                            <span class="summary-value">argparse</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Health Score:</span>
+                            <span class="summary-value">
+                                <span class="health-score score-poor">
+                                    0/100
+                                </span>
+                            </span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Analysis Date:</span>
+                            <span class="summary-value">2025-12-16 06:28</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Overview -->
+                <div class="glass-card">
+                    <h2 class="card-title">Health Metrics</h2>
+                    <canvas id="healthRadarChart" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Command Structure -->
+                <div class="glass-card">
+                    <h2 class="card-title">Command Structure</h2>
+                    <div class="command-list">
+                        {% for command in commands %}
+                        <div class="command-item">
+                            <span class="command-name">{{ command.name }}</span>
+                            <span class="command-description">{{ command.description }}</span>
+                            <span class="command-args">{{ command.arg_count }} args</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="glass-card">
+                    <h2 class="card-title">Recent Activity</h2>
+                    <div class="activity-timeline">
+                        {% for commit in recent_commits %}
+                        <div class="activity-item">
+                            <div class="activity-date">{{ commit.date }}</div>
+                            <div class="activity-message">{{ commit.message }}</div>
+                            <div class="activity-author">{{ commit.author }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Tab -->
+        <section id="architecture" class="tab-content">
+            <div class="content-grid">
+                <!-- Module Structure -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Module Structure</h2>
+                    <div id="moduleGraph" class="graph-container"></div>
+                </div>
+
+                <!-- Entry Points -->
+                <div class="glass-card">
+                    <h2 class="card-title">Entry Points</h2>
+                    <div class="entry-points-list">
+                        {% for entry in entry_points %}
+                        <div class="entry-point-item">
+                            <code>{{ entry.file }}</code>
+                            <span class="entry-type">{{ entry.type }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Dependency Graph -->
+                <div class="glass-card">
+                    <h2 class="card-title">Internal Dependencies</h2>
+                    <canvas id="dependencyChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Quality Tab -->
+        <section id="code-quality" class="tab-content">
+            <div class="content-grid">
+                <!-- Complexity Metrics -->
+                <div class="glass-card">
+                    <h2 class="card-title">Complexity Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-value">0</div>
+                            <div class="metric-label">Avg Complexity</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">0</div>
+                            <div class="metric-label">Max Complexity</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">0</div>
+                            <div class="metric-label">Complex Functions</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maintainability Index -->
+                <div class="glass-card">
+                    <h2 class="card-title">Maintainability Index</h2>
+                    <div class="maintainability-score">
+                        <div class="score-circle score-poor">
+                            <span class="score-value">0</span>
+                        </div>
+                        <div class="score-interpretation">Poor - Significant improvements required</div>
+                    </div>
+                </div>
+
+                <!-- Code Smells -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Code Smells</h2>
+                    <div class="code-smells-list">
+                        {% for smell in code_smells %}
+                        <div class="smell-item severity-{{ smell.severity }}">
+                            <span class="smell-type">{{ smell.type }}</span>
+                            <span class="smell-location">{{ smell.file }}:{{ smell.line }}</span>
+                            <span class="smell-message">{{ smell.message }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Documentation Coverage -->
+                <div class="glass-card">
+                    <h2 class="card-title">Documentation Coverage</h2>
+                    <canvas id="docCoverageChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dependencies Tab -->
+        <section id="dependencies" class="tab-content">
+            <div class="content-grid">
+                <!-- Dependency Tree -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Dependency Tree</h2>
+                    <div class="dependency-tree">
+                        {% for dep in dependencies %}
+                        <div class="dep-item">
+                            <span class="dep-name">{{ dep.name }}</span>
+                            <span class="dep-version">{{ dep.version }}</span>
+                            <span class="dep-status status-{{ dep.status }}">{{ dep.status }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Version Matrix -->
+                <div class="glass-card">
+                    <h2 class="card-title">Version Status</h2>
+                    <div class="version-stats">
+                        <div class="version-stat">
+                            <div class="stat-value up-to-date">0</div>
+                            <div class="stat-label">Up to Date</div>
+                        </div>
+                        <div class="version-stat">
+                            <div class="stat-value outdated">0</div>
+                            <div class="stat-label">Outdated</div>
+                        </div>
+                        <div class="version-stat">
+                            <div class="stat-value vulnerable">0</div>
+                            <div class="stat-label">Vulnerable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Advisories -->
+                <div class="glass-card">
+                    <h2 class="card-title">Security Advisories</h2>
+                    <div class="security-advisories">
+                        {% for advisory in security_advisories %}
+                        <div class="advisory-item severity-{{ advisory.severity }}">
+                            <div class="advisory-title">{{ advisory.title }}</div>
+                            <div class="advisory-package">{{ advisory.package }}</div>
+                            <div class="advisory-description">{{ advisory.description }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing Tab -->
+        <section id="testing" class="tab-content">
+            <div class="content-grid">
+                <!-- Test Coverage -->
+                <div class="glass-card">
+                    <h2 class="card-title">Test Coverage</h2>
+                    <canvas id="coverageChart" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Test Suite Health -->
+                <div class="glass-card">
+                    <h2 class="card-title">Test Suite Health</h2>
+                    <div class="test-stats">
+                        <div class="test-stat">
+                            <div class="stat-value passing">0</div>
+                            <div class="stat-label">Passing</div>
+                        </div>
+                        <div class="test-stat">
+                            <div class="stat-value failing">0</div>
+                            <div class="stat-label">Failing</div>
+                        </div>
+                        <div class="test-stat">
+                            <div class="stat-value skipped">0</div>
+                            <div class="stat-label">Skipped</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Execution Time -->
+                <div class="glass-card">
+                    <h2 class="card-title">Execution Time</h2>
+                    <canvas id="testTimeChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Test Reliability -->
+                <div class="glass-card">
+                    <h2 class="card-title">Test Reliability</h2>
+                    <div class="reliability-metrics">
+                        <div class="reliability-item">
+                            <span class="reliability-label">Flaky Tests:</span>
+                            <span class="reliability-value">{{ flaky_tests }}</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="reliability-label">Success Rate:</span>
+                            <span class="reliability-value">{{ success_rate }}%</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="reliability-label">Avg Duration:</span>
+                            <span class="reliability-value">{{ avg_test_duration }}s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Data Injection -->
+    <script>
+        // Analysis data injected by dashboard builder
+        const analysisData = {
+  "metadata": {
+    "repo_name": "CORTEX",
+    "repo_type": [
+      "fullstack_web"
+    ],
+    "scan_timestamp": "2025-12-16T06:23:27.927508",
+    "cortex_version": "1.0.0",
+    "classification": {
+      "primary_type": "fullstack_web",
+      "secondary_types": [
+        "database_project"
+      ],
+      "confidence_scores": {
+        "fullstack_web": 0.6499999999999999,
+        "api_service": 0.5,
+        "database_project": 0.5,
+        "console_app": 0.0,
+        "microservices": 0.3,
+        "library_package": 0.4
+      },
+      "dashboard_template": "fullstack-web-dashboard",
+      "detected_patterns": {
+        "has_frontend": true,
+        "has_backend": false,
+        "has_database": true,
+        "has_messaging": false,
+        "has_containerization": true,
+        "has_tests": true,
+        "has_ci_cd": true
+      },
+      "metadata": {
+        "total_files": 10052,
+        "languages": {
+          "SQL": 10,
+          "Python": 2595,
+          "TypeScript": 11,
+          "JavaScript": 92,
+          "C#": 217
+        },
+        "frameworks": [
+          "Angular",
+          "Node.js"
+        ]
+      }
+    }
+  },
+  "health": {},
+  "architecture": {
+    "layers": [
+      {
+        "name": "Presentation",
+        "detected_directories": [
+          "frontend",
+          "web",
+          "ui",
+          "components",
+          "controllers",
+          "api",
+          "handlers"
+        ],
+        "paths": [
+          "cortex-sample-apps\\BadMonolith\\frontend",
+          "cortex-sample-apps\\CleanSolidApp\\frontend",
+          "cortex-sample-apps\\Cortex-Clean\\frontend",
+          "cortex-sample-apps\\Cortex-SDD\\frontend",
+          "cortex-sample-apps\\Cortex-Clean\\frontend\\dist\\frontend"
+        ],
+        "file_count": 34889,
+        "loc": 5799206,
+        "confidence": 100
+      },
+      {
+        "name": "Business",
+        "detected_directories": [
+          "services",
+          "domain",
+          "core",
+          "application",
+          "use_cases",
+          "managers",
+          "handlers"
+        ],
+        "paths": [
+          "src\\plugins\\services",
+          "cortex-sample-apps\\_Real\\ra-modernized\\tests\\RA.FundingInvoices.Core.Tests\\services",
+          "cortex-sample-apps\\_Real\\ra-modernized\\tests\\RA.FundingInvoices.UnitTests\\services",
+          "cortex-sample-apps\\_Real\\ra-modernized\\src\\RA.FundingInvoices.Core\\services",
+          "cortex-sample-apps\\_Real\\ra-modernized\\src\\RA.FundingInvoices.Infrastructure\\services"
+        ],
+        "file_count": 2346,
+        "loc": 388177,
+        "confidence": 100
+      },
+      {
+        "name": "Data",
+        "detected_directories": [
+          "data",
+          "repositories",
+          "database",
+          "persistence",
+          "models",
+          "entities",
+          "db",
+          "storage",
+          "cache"
+        ],
+        "paths": [
+          "src\\dashboard\\data",
+          "docs\\assets\\data",
+          "cortex-sample-apps\\Cortex-Clean\\frontend\\node_modules\\caniuse-lite\\data",
+          "cortex-sample-apps\\Cortex-Clean\\frontend\\node_modules\\css-tree\\data",
+          "cortex-sample-apps\\Cortex-Clean\\frontend\\node_modules\\node-releases\\data"
+        ],
+        "file_count": 2235,
+        "loc": 72719,
+        "confidence": 100
+      },
+      {
+        "name": "Infrastructure",
+        "detected_directories": [
+          "infrastructure",
+          "config",
+          "utilities",
+          "utils",
+          "helpers",
+          "common",
+          "shared"
+        ],
+        "paths": [
+          "src\\infrastructure",
+          "tests\\dashboard\\infrastructure",
+          "tests\\unit\\infrastructure",
+          "src\\dashboard\\infrastructure",
+          "cortex-sample-apps\\Cortex-SDD\\js\\infrastructure"
+        ],
+        "file_count": 7359,
+        "loc": 411181,
+        "confidence": 100
+      },
+      {
+        "name": "Tests",
+        "detected_directories": [
+          "tests",
+          "test",
+          "spec",
+          "__tests__",
+          "testing"
+        ],
+        "paths": [
+          "tests",
+          "cortex-sample-apps\\Cortex-SDD\\tests",
+          "cortex-sample-apps\\_Real\\payment-processor-modernized\\tests",
+          "cortex-sample-apps\\_Real\\ra-modernized\\tests",
+          "cortex-sample-apps\\_Real\\ra-modernized\\tests\\RA.FundingInvoices.ContractTests\\tests"
+        ],
+        "file_count": 1827,
+        "loc": 333474,
+        "confidence": 100
+      }
+    ],
+    "detected_pattern": {
+      "name": "clean_architecture",
+      "description": "Clean Architecture (Onion/Hexagonal)",
+      "confidence": 100.0,
+      "matched_indicators": [
+        "domain",
+        "application",
+        "infrastructure",
+        "presentation"
+      ]
+    },
+    "entry_points": [
+      {
+        "file": "src\\main.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\_pytest\\main.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pip\\_internal\\main.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pip\\_internal\\cli\\main.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pip\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pygments\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pytest\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\sqlparse\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\psutil\\tests\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\certifi\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\dependency_groups\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\distro\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\platformdirs\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\pygments\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\rich\\__main__.py",
+        "language": "python",
+        "type": "application_start"
+      },
+      {
+        "file": "cortex-sample-apps\\_Real\\ra-modernized\\src\\RA.FundingInvoices.API\\Program.cs",
+        "language": "csharp",
+        "type": "application_start"
+      },
+      {
+        "file": "cortex-sample-apps\\_Real\\payment-processor-modernized\\src\\PaymentProcessor.TransactionInvoices.API\\Program.cs",
+        "language": "csharp",
+        "type": "application_start"
+      },
+      {
+        "file": "cortex-sample-apps\\CleanSolidApp\\backend\\API\\Program.cs",
+        "language": "csharp",
+        "type": "application_start"
+      },
+      {
+        "file": "cortex-sample-apps\\BadMonolith\\backend\\Program.cs",
+        "language": "csharp",
+        "type": "application_start"
+      },
+      {
+        "file": "cortex-sample-apps\\Cortex-Clean\\frontend\\node_modules\\accepts\\index.js",
+        "language": "javascript",
+        "type": "unknown"
+      }
+    ],
+    "dependencies": [
+      {
+        "from": "Presentation",
+        "to": "Business",
+        "type": "dependency",
+        "inferred": true
+      },
+      {
+        "from": "Presentation",
+        "to": "Infrastructure",
+        "type": "dependency",
+        "inferred": true
+      },
+      {
+        "from": "Business",
+        "to": "Data",
+        "type": "dependency",
+        "inferred": true
+      },
+      {
+        "from": "Business",
+        "to": "Infrastructure",
+        "type": "dependency",
+        "inferred": true
+      },
+      {
+        "from": "Data",
+        "to": "Infrastructure",
+        "type": "dependency",
+        "inferred": true
+      },
+      {
+        "from": "Tests",
+        "to": "Presentation",
+        "type": "dependency",
+        "inferred": true
+      },
+      {
+        "from": "Tests",
+        "to": "Business",
+        "type": "dependency",
+        "inferred": true
+      },
+      {
+        "from": "Tests",
+        "to": "Data",
+        "type": "dependency",
+        "inferred": true
+      }
+    ],
+    "metrics": {
+      "layer_count": 5,
+      "total_loc_in_layers": 7004757,
+      "total_files_in_layers": 48656,
+      "dependency_count": 8,
+      "coupling_score": 40.0,
+      "modularity_grade": "A - Highly Modular"
+    },
+    "directory_structure": [
+      {
+        "name": "archive",
+        "type": "directory",
+        "child_count": 5
+      },
+      {
+        "name": "CHANGELOG.md",
+        "type": "file",
+        "extension": ".md"
+      },
+      {
+        "name": "cortex-brain",
+        "type": "directory",
+        "child_count": 70
+      },
+      {
+        "name": "cortex-lens-output",
+        "type": "directory",
+        "child_count": 4
+      },
+      {
+        "name": "cortex-operations.yaml",
+        "type": "file",
+        "extension": ".yaml"
+      },
+      {
+        "name": "cortex-sample-apps",
+        "type": "directory",
+        "child_count": 6
+      },
+      {
+        "name": "CORTEX.code-workspace",
+        "type": "file",
+        "extension": ".code-workspace"
+      },
+      {
+        "name": "cortex.config.json",
+        "type": "file",
+        "extension": ".json"
+      },
+      {
+        "name": "cortex.config.template.json",
+        "type": "file",
+        "extension": ".json"
+      },
+      {
+        "name": "CORTEX.sln",
+        "type": "file",
+        "extension": ".sln"
+      },
+      {
+        "name": "docs",
+        "type": "directory",
+        "child_count": 19
+      },
+      {
+        "name": "launch_dashboard_server.ps1",
+        "type": "file",
+        "extension": ".ps1"
+      },
+      {
+        "name": "LICENSE",
+        "type": "file",
+        "extension": ""
+      },
+      {
+        "name": "logs",
+        "type": "directory",
+        "child_count": 1
+      },
+      {
+        "name": "metrics",
+        "type": "directory",
+        "child_count": 0
+      },
+      {
+        "name": "pytest.ini",
+        "type": "file",
+        "extension": ".ini"
+      },
+      {
+        "name": "pytest.smoke.ini",
+        "type": "file",
+        "extension": ".ini"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "extension": ".md"
+      },
+      {
+        "name": "requirements.txt",
+        "type": "file",
+        "extension": ".txt"
+      },
+      {
+        "name": "scripts",
+        "type": "directory",
+        "child_count": 194
+      },
+      {
+        "name": "src",
+        "type": "directory",
+        "child_count": 70
+      },
+      {
+        "name": "tests",
+        "type": "directory",
+        "child_count": 219
+      },
+      {
+        "name": "tier2",
+        "type": "directory",
+        "child_count": 0
+      }
+    ]
+  },
+  "dependencies": {},
+  "endpoints": {},
+  "tests": {},
+  "security": {},
+  "narrative": {
+    "executive_summary": "CORTEX is a Software Project comprising 0 files and 0 lines of code. The repository demonstrates a health score of 0.0/100, indicating moderate code organization and maintainability.",
+    "key_capabilities": [
+      "Core Application Functionality"
+    ],
+    "technical_highlights": [],
+    "recommendations": [
+      "Consider refactoring to improve code organization and maintainability"
+    ]
+  },
+  "classification": {
+    "primary_type": "fullstack_web",
+    "secondary_types": [
+      "database_project"
+    ],
+    "confidence_scores": {
+      "fullstack_web": 0.6499999999999999,
+      "api_service": 0.5,
+      "database_project": 0.5,
+      "console_app": 0.0,
+      "microservices": 0.3,
+      "library_package": 0.4
+    },
+    "dashboard_template": "fullstack-web-dashboard",
+    "detected_patterns": {
+      "has_frontend": true,
+      "has_backend": false,
+      "has_database": true,
+      "has_messaging": false,
+      "has_containerization": true,
+      "has_tests": true,
+      "has_ci_cd": true
+    },
+    "metadata": {
+      "total_files": 10052,
+      "languages": {
+        "SQL": 10,
+        "Python": 2595,
+        "TypeScript": 11,
+        "JavaScript": 92,
+        "C#": 217
+      },
+      "frameworks": [
+        "Angular",
+        "Node.js"
+      ]
+    }
+  }
+};
+        
+        // Initialize charts and visualizations
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeHealthRadar();
+            initializeDependencyChart();
+            initializeDocCoverageChart();
+            initializeCoverageChart();
+            initializeTestTimeChart();
+            initializeModuleGraph();
+        });
+
+        function initializeHealthRadar() {
+            const ctx = document.getElementById('healthRadarChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Code Quality', 'Test Coverage', 'Documentation', 'Security', 'Maintainability'],
+                    datasets: [{
+                        label: 'Health Metrics',
+                        data: [
+                            analysisData.health?.code_quality || 0,
+                            analysisData.health?.test_coverage || 0,
+                            analysisData.health?.documentation || 0,
+                            analysisData.health?.security || 0,
+                            analysisData.health?.maintainability || 0
+                        ],
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeDependencyChart() {
+            const ctx = document.getElementById('dependencyChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Direct', 'Transitive', 'Dev'],
+                    datasets: [{
+                        data: [
+                            analysisData.dependencies?.direct_count || 0,
+                            analysisData.dependencies?.transitive_count || 0,
+                            analysisData.dependencies?.dev_count || 0
+                        ],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(168, 85, 247, 0.8)'
+                        ]
+                    }]
+                }
+            });
+        }
+
+        function initializeDocCoverageChart() {
+            const ctx = document.getElementById('docCoverageChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Functions', 'Classes', 'Modules'],
+                    datasets: [{
+                        label: 'Documentation Coverage',
+                        data: [
+                            analysisData.documentation?.function_coverage || 0,
+                            analysisData.documentation?.class_coverage || 0,
+                            analysisData.documentation?.module_coverage || 0
+                        ],
+                        backgroundColor: 'rgba(99, 102, 241, 0.8)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeCoverageChart() {
+            const ctx = document.getElementById('coverageChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: analysisData.coverage?.history_dates || [],
+                    datasets: [{
+                        label: 'Coverage %',
+                        data: analysisData.coverage?.history_values || [],
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeTestTimeChart() {
+            const ctx = document.getElementById('testTimeChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: analysisData.tests?.suite_names || [],
+                    datasets: [{
+                        label: 'Execution Time (s)',
+                        data: analysisData.tests?.suite_times || [],
+                        backgroundColor: 'rgba(99, 102, 241, 0.8)'
+                    }]
+                }
+            });
+        }
+
+        function initializeModuleGraph() {
+            // D3.js force-directed graph implementation
+            // Will be implemented in shared components
+            console.log('Module graph initialized');
+        }
+    </script>
+</body>
+</html>
