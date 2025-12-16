@@ -227,7 +227,7 @@ src/orchestration_3_0/
 
 **Master Plan:** `cortex-brain/documents/planning/orchestration-master-plan.md`
 
-**Sub-Plan Template:** `cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md`
+**Sub-Plan Template:** `cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md`
 
 **Individual Sub-Plans:**
 - `cortex-brain/documents/planning/orchestrators/01-tdd-orchestrator-plan.md`
@@ -271,4 +271,4 @@ src/orchestration_3_0/
 
 ---
 
-**Next Step:** Review [Master Plan](../../cortex-brain/documents/planning/orchestration-master-plan.md), read [Sub-Plan Template](../../cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md), begin Phase 1 implementation.
+**Next Step:** Review [Master Plan](../../cortex-brain/documents/planning/orchestration-master-plan.md), read [Sub-Plan Template](../../cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md), begin Phase 1 implementation.

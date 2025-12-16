@@ -132,7 +132,7 @@ class OperationFactory:
                     
                     # Dynamic import - handle both direct modules and subdirectory orchestrators
                     import importlib
-from src.utils.resource_resolver import get_root_path
+                    from src.utils.resource_resolver import get_root_path
                     rel_path = module_file.relative_to(modules_dir)
                     # Convert path to module notation (e.g., cleanup/cleanup_orchestrator → cleanup.cleanup_orchestrator)
                     module_parts = list(rel_path.parts[:-1]) + [module_name]

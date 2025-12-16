@@ -42,7 +42,7 @@ class ConfidenceResponseGenerator:
             template_renderer: Template renderer instance (creates new if None)
         """
         from pathlib import Path
-from src.utils.resource_resolver import get_root_path
+        from src.utils.resource_resolver import get_root_path
         
         self.knowledge_graph = knowledge_graph or KnowledgeGraph()
         

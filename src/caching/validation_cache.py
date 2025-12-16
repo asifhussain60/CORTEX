@@ -26,6 +26,7 @@ import hashlib
 import json
 import sqlite3
 import logging
+from src.utils.resource_resolver import get_root_path
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +55,7 @@ def _serialize_for_json(obj: Any) -> Any:
         return obj
 
 # Default cache database location
-DEFAULT_CACHE_DB = get_brain_file("cache") / "validation_cache.db"
+DEFAULT_CACHE_DB = get_root_path() / "cortex-brain" / "cache" / "validation_cache.db"
 
 
 @dataclass

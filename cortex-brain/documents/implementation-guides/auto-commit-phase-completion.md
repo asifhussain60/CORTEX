@@ -389,7 +389,7 @@ subprocess.run(["git", "commit", "-m", "Batch phase update"])
 
 ## 📚 Related Documentation
 
-- **Master Plan Template:** `cortex-brain/templates/planning/master-plan-template.md`
+- **Master Plan Template:** `cortex-brain/templates/planning/MASTER-PLAN-TEMPLATE.md`
 - **Progress Synchronizer:** `src/operations/utilities/progress_synchronizer.py`
 - **Unified Plan Generator:** `src/operations/modules/planning/unified_plan_generator.py`
 

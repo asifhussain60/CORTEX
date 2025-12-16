@@ -232,7 +232,7 @@ class PlanningGate:
         }
         
         print(f"""
-## 🎭 Planning System Engaged
+## [PLANNING SYSTEM ENGAGED]
 
 **Complexity:** Tier {tier} ({tier_names.get(tier, 'UNKNOWN')})
 **Estimated Time:** {tier_times.get(tier, 'Unknown')}
@@ -241,11 +241,149 @@ class PlanningGate:
 **Status:** Creating temporary plan...
 
 ### Planning Phases:
-⏳ Phase 1: Definition of Ready validation
-⏳ Phase 2: Complexity analysis
-⏳ Phase 3: Phase decomposition
-⏳ Phase 4: Risk assessment
-⏳ Phase 5: Approval gate
+[ ] Phase 1: Definition of Ready validation
+[ ] Phase 2: Complexity analysis
+[ ] Phase 3: Phase decomposition
+[ ] Phase 4: Risk assessment
+[ ] Phase 5: Approval gate
 
 You'll see the plan shortly for review and approval.
 """)
+
+
+# ============================================================================
+# CLI Entry Points for Console Scripts (Phase 4)
+# ============================================================================
+
+def plan_command():
+    """
+    CLI entry point for `cortex-plan` command.
+    
+    Usage:
+        cortex-plan "implement user authentication"
+        cortex-plan "refactor database layer"
+    """
+    import sys
+    import argparse
+    
+    parser = argparse.ArgumentParser(
+        prog="cortex-plan",
+        description="Create a CORTEX plan for complex work"
+    )
+    parser.add_argument(
+        "request",
+        nargs="?",
+        help="Description of work to plan (e.g., 'add login feature')"
+    )
+    parser.add_argument(
+        "--cortex-root",
+        type=str,
+        help="Path to CORTEX root directory (defaults to current directory)"
+    )
+    
+    args = parser.parse_args()
+    
+    if not args.request:
+        print("Error: Please provide a request description")
+        print("\nUsage: cortex-plan 'implement user authentication'")
+        sys.exit(1)
+    
+    # Initialize planning gate
+    gate = PlanningGate(cortex_root=Path(args.cortex_root) if args.cortex_root else None)
+    
+    # Process request
+    result = gate.process_request(args.request)
+    
+    if result['requires_planning']:
+        print(f"\n[PLAN CREATED] {result['temp_plan_id']}")
+        print(f"Location: {result['plan_location']}")
+        print(f"\nNext steps:")
+        print(f"   1. Review the plan at the location above")
+        print(f"   2. Run: cortex-approve {result['temp_plan_id']}")
+        print(f"   3. Or run: cortex-reject {result['temp_plan_id']}")
+    else:
+        print(f"\n[SIMPLE REQUEST] Tier {result['complexity_tier']} - no planning needed")
+        print(f"   This work can be executed directly")
+
+
+def approve_command():
+    """
+    CLI entry point for `cortex-approve` command.
+    
+    Usage:
+        cortex-approve TEMP-PLAN-20251216_120000-user-auth
+    """
+    import sys
+    import argparse
+    
+    parser = argparse.ArgumentParser(
+        prog="cortex-approve",
+        description="Approve a temporary CORTEX plan and begin execution"
+    )
+    parser.add_argument(
+        "plan_id",
+        help="Temporary plan ID (e.g., TEMP-PLAN-20251216_120000-user-auth)"
+    )
+    parser.add_argument(
+        "--cortex-root",
+        type=str,
+        help="Path to CORTEX root directory (defaults to current directory)"
+    )
+    
+    args = parser.parse_args()
+    
+    cortex_root = Path(args.cortex_root) if args.cortex_root else Path.cwd()
+    temp_plans_dir = cortex_root / "cortex-brain" / "documents" / "planning" / "features" / "temp-plans"
+    plan_folder = temp_plans_dir / args.plan_id
+    
+    if not plan_folder.exists():
+        print(f"❌ Error: Plan not found: {args.plan_id}")
+        print(f"   Expected location: {plan_folder}")
+        sys.exit(1)
+    
+    # TODO: Move plan to active/ folder and trigger execution
+    print(f"[APPROVED] Plan approved: {args.plan_id}")
+    print(f"[STARTING] Execution starting...")
+    print(f"\nNote: Full execution workflow will be implemented in Phase 5")
+
+
+def reject_command():
+    """
+    CLI entry point for `cortex-reject` command.
+    
+    Usage:
+        cortex-reject TEMP-PLAN-20251216_120000-user-auth
+    """
+    import sys
+    import argparse
+    import shutil
+    
+    parser = argparse.ArgumentParser(
+        prog="cortex-reject",
+        description="Reject and delete a temporary CORTEX plan"
+    )
+    parser.add_argument(
+        "plan_id",
+        help="Temporary plan ID (e.g., TEMP-PLAN-20251216_120000-user-auth)"
+    )
+    parser.add_argument(
+        "--cortex-root",
+        type=str,
+        help="Path to CORTEX root directory (defaults to current directory)"
+    )
+    
+    args = parser.parse_args()
+    
+    cortex_root = Path(args.cortex_root) if args.cortex_root else Path.cwd()
+    temp_plans_dir = cortex_root / "cortex-brain" / "documents" / "planning" / "features" / "temp-plans"
+    plan_folder = temp_plans_dir / args.plan_id
+    
+    if not plan_folder.exists():
+        print(f"❌ Error: Plan not found: {args.plan_id}")
+        print(f"   Expected location: {plan_folder}")
+        sys.exit(1)
+    
+    # Delete plan folder
+    shutil.rmtree(plan_folder)
+    print(f"[REJECTED] Plan rejected and deleted: {args.plan_id}")
+    print(f"   Location removed: {plan_folder}")

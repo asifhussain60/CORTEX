@@ -1761,7 +1761,7 @@ class ContextIntelligence:
             Dictionary with Copilot and CORTEX usage statistics
         """
         from src.tier3.metrics.copilot_metrics import CopilotMetricsCollector
-from src.utils.resource_resolver import get_root_path
+        from src.utils.resource_resolver import get_root_path
         engineer_hash = CopilotMetricsCollector.anonymize_engineer_id(None, engineer_id)
         
         summary = {

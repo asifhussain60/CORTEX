@@ -100,7 +100,7 @@ orchestrator.update_phase_status("Phase 1: RED", status="completed", progress=10
 
 ### 3️⃣ Sub-Plan Template Checkpoint Gates
 
-**Location:** `cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md`
+**Location:** `cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md`
 
 **New Sections:**
 - **Master Tracker Update Template:** Added at top of Migration Strategy section
@@ -146,7 +146,7 @@ orchestrator.update_phase_status("Phase 1: RED", status="completed", progress=10
 # Check all modified files
 git diff HEAD~1 src/orchestrators/session_model.py
 git diff HEAD~1 src/orchestrators/planning_orchestrator.py
-git diff HEAD~1 cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md
+git diff HEAD~1 cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md
 git diff HEAD~1 cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml
 ```
 
@@ -242,7 +242,7 @@ plan feature: User Authentication
 **Enhanced Files:**
 - `src/orchestrators/session_model.py` - PlanningSession model
 - `src/orchestrators/planning_orchestrator.py` - Phase status updates
-- `cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md` - Checkpoint gates
+- `cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md` - Checkpoint gates
 - `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` - REQ-005 enhancement
 
 **Related Guides:**
@@ -299,7 +299,7 @@ regenerate_prompts
 **New Capabilities Tutorial:**
 1. **Timing Metrics:** See `cortex-brain/documents/reports/master-planner-visual-tracker-enhancement-2025-12-13.md`
 2. **Token Tracking:** Check `src/orchestrators/session_model.py` docstrings
-3. **Checkpoint Gates:** Review `cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md`
+3. **Checkpoint Gates:** Review `cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md`
 
 **API Examples:**
 ```python

@@ -812,7 +812,7 @@ This analysis will persist across sessions and can be referenced in future conve
         """
         if isinstance(metadata, str):
             import json
-from src.utils.resource_resolver import get_root_path
+            from src.utils.resource_resolver import get_root_path
             try:
                 return json.loads(metadata)
             except:

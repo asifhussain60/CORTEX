@@ -82,7 +82,7 @@ Each sub-plan MUST follow the mandatory template structure:
 **Sub-Plan Documents:**
 ```
 cortex-brain/documents/planning/orchestrators/
-├── 00-sub-plan-template.md                    ✅ CREATED
+├── SUB-PLAN-TEMPLATE.md                      ✅ CREATED
 ├── 00-feature-discovery-module-plan.md        ⏳ TO CREATE
 ├── (TDD Orchestrator - Phase 2 Complete)
 ├── 02-devops-orchestrator-plan.md             ⏳ TO CREATE
@@ -146,7 +146,7 @@ scripts/rollback/
 ### Week 0: Sub-Plan Creation (Current)
 **Goal:** Create all 9 sub-plan documents
 
-- [x] Create sub-plan template (00-sub-plan-template.md)
+- [x] Create sub-plan template (SUB-PLAN-TEMPLATE.md)
 - [ ] Create Feature Discovery sub-plan (prerequisite)
 - [ ] **RUN Feature Discovery baseline scan** after implementation
 - [ ] **UPDATE master plan** with any discovered orchestrators
@@ -222,7 +222,7 @@ scripts/rollback/
 ## 🚀 Next Steps
 
 ### Immediate (This Week)
-1. **Review Template:** Stakeholders review `00-sub-plan-template.md`
+1. **Review Template:** Stakeholders review `SUB-PLAN-TEMPLATE.md`
 2. **Create Sub-Plans:** Generate all 9 sub-plan documents
 3. **Approval:** Get sign-off from technical leads
 
@@ -246,7 +246,7 @@ scripts/rollback/
 
 **Related Documents:**
 - [Master Plan](../orchestration-master-plan.md)
-- [Sub-Plan Template](00-sub-plan-template.md)
+- [Sub-Plan Template](SUB-PLAN-TEMPLATE.md)
 - [Complete Audit](cortex-4.0-complete-orchestrator-audit.md)
 
 ---

@@ -96,7 +96,7 @@ At the end of **EVERY** phase:
 
 ## 🎯 Checkpoint Locations (Sub-Plan Template)
 
-The sub-plan template (`00-sub-plan-template.md`) includes explicit checkpoints:
+The sub-plan template (`SUB-PLAN-TEMPLATE.md`) includes explicit checkpoints:
 
 ```markdown
 **🎯 CHECKPOINT:** Update Master Planner Visual Tracker with Phase 1 completion:
@@ -224,7 +224,7 @@ session.record_sub_plan_update(
 
 - **Full Enhancement Report:** `cortex-brain/documents/reports/master-planner-visual-tracker-enhancement-2025-12-13.md`
 - **Planning System 2.0 Guide:** `.github/prompts/modules/planning-orchestrator-guide.md`
-- **Sub-Plan Template:** `cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md`
+- **Sub-Plan Template:** `cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md`
 - **Orchestrator Manifest:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
 
 ---

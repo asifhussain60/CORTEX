@@ -21,7 +21,7 @@ Created comprehensive sub-plan structure and requirements for migrating 71 legac
 ## 📋 What Was Created
 
 ### 1. Sub-Plan Template
-**File:** `cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md`
+**File:** `cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md`
 
 **Sections:**
 1. Existing State (Summarized) - Current files, workflow, triggers, issues
@@ -184,7 +184,7 @@ cortex-brain/
 ### Sub-Plan Documents
 ```
 cortex-brain/documents/planning/orchestrators/
-├── 00-sub-plan-template.md                    ✅ CREATED
+├── SUB-PLAN-TEMPLATE.md                      ✅ CREATED
 ├── README.md                                   ✅ CREATED
 ├── 00-feature-discovery-module-plan.md        ⏳ TO CREATE
 ├── (TDD Orchestrator - Phase 2 Complete, 1,764 LOC)
@@ -301,7 +301,7 @@ cortex-brain/archives/orchestrators-legacy/  ✅ CREATED (archived code)
 
 ## 📞 Key Deliverables
 
-1. **00-sub-plan-template.md** - Comprehensive template for all orchestrators
+1. **SUB-PLAN-TEMPLATE.md** - Comprehensive template for all orchestrators
 2. **README.md (orchestrators/)** - Progress tracker for all 9 orchestrators
 3. **orchestration-master-plan.md** - Updated with sub-plan structure (300+ lines added)
 4. **Folder structure** - 15 directories for new architecture
@@ -343,7 +343,7 @@ cortex-brain/archives/orchestrators-legacy/  ✅ CREATED (archived code)
 
 **Related Documents:**
 - [Master Plan](../orchestration-master-plan.md)
-- [Sub-Plan Template](orchestrators/00-sub-plan-template.md)
+- [Sub-Plan Template](orchestrators/SUB-PLAN-TEMPLATE.md)
 - [Sub-Plan Tracker](orchestrators/README.md)
 - [Architecture README](../../../src/orchestration_3_0/README.md)
 

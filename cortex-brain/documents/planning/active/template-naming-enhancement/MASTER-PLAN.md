@@ -76,8 +76,8 @@ Continue `template-naming-enhancement`. 0% | Phase 1. Update Plan/Work/Wall/Toke
 
 | Phase | Name | Status | Start | End | Actual | Elapsed | Sub-Plan |
 |-------|------|--------|-------|-----|--------|---------|----------|
-| 1 | File Renaming & Migration | ⏳ Pending | - | - | - | - | - |
-| 2 | Reference Updates (Code) | ⏳ Pending | - | - | - | - | - |
+| 1 | File Renaming & Migration | ✅ Complete | 2025-12-16 12:05 | 2025-12-16 12:10 | 5m | 5m | - |
+| 2 | Reference Updates (Code) | 🟡 In Progress | 2025-12-16 12:10 | - | - | - | - |
 | 3 | Reference Updates (Docs) | ⏳ Pending | - | - | - | - | - |
 | 4 | Validation & Git Commit | ⏳ Pending | - | - | - | - | - |
 
