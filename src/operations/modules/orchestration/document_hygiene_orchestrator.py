@@ -1,10 +1,15 @@
 """
-Document Hygiene Engine - Automatic Markdown maintenance and organization.
+Document Hygiene Engine v2.0 - Automatic Markdown maintenance and organization.
 
-Integrated into Planning System 3.0 for automatic documentation
-cleanup during Tier 3/4 operations.
+Integrated with Planning System 3.0 for standardized operation handling:
+- Inherits BaseOperationModule for consistent interface
+- Uses orchestration metrics for engagement tracking
+- Returns standardized OperationResult
+- Provides visual progress tracking with 🎭 hints
 
+Author: Asif Hussain
 Copyright © 2025 Asif Hussain. All rights reserved.
+Version: 2.0.0
 """
 
 from pathlib import Path
@@ -16,7 +21,13 @@ import logging
 import asyncio
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+from src.operations.base_operation_module import (
+    BaseOperationModule, OperationResult, OperationStatus,
+    OperationPhase, OperationModuleMetadata
+)
 from ..version.version_manager import get_version_manager
+from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
+from src.utils.progress_decorator import with_progress, yield_progress
 
 logger = logging.getLogger(__name__)
 
@@ -30,17 +41,26 @@ class HygieneResult:
     recommendations: List[str]
 
 
-class DocumentHygieneOrchestrator:
-    """Orchestrate automatic documentation maintenance."""
+class DocumentHygieneOrchestrator(BaseOperationModule):
+    """
+    Orchestrate automatic documentation maintenance.
+    
+    Planning System 3.0 Integration:
+    - Standardized BaseOperationModule inheritance
+    - Orchestration metrics for engagement tracking
+    - Visual progress hints with 🎭 pattern
+    - Consistent OperationResult format
+    """
     
     def __init__(self, project_root: Path = None):
-        """Initialize document hygiene orchestrator."""
+        """Initialize document hygiene orchestrator v2.0."""
+        super().__init__()
         self.project_root = project_root or Path.cwd()
         self.docs_brain = self.project_root / "cortex-brain" / "documents"
         
         # Version management
         self.version_manager = get_version_manager()
-        self.version_manager.register_orchestrator_version("document_hygiene_orchestrator", "1.0")
+        self.version_manager.register_orchestrator_version("document_hygiene_orchestrator", "2.0")
         self.version = self.version_manager.get_orchestrator_version("document_hygiene_orchestrator")
         
         self.phases = [
@@ -62,11 +82,24 @@ class DocumentHygieneOrchestrator:
         
         self.max_workers = 4
         
-    async def execute(
-        self,
-        target_dirs: List[Path] = None,
-        phases: List[str] = None
-    ) -> Dict[str, Any]:
+        logger.info(f"✅ DocumentHygieneOrchestrator v{self.version} initialized (Planning System 3.0)")
+    
+    def get_metadata(self) -> OperationModuleMetadata:
+        """Get module metadata."""
+        return OperationModuleMetadata(
+            module_id="document_hygiene_orchestrator",
+            name="Document Hygiene Orchestrator 2.0",
+            description="Automatic Markdown maintenance: consolidation, archiving, optimization",
+            phase=OperationPhase.PROCESSING,
+            priority=65,
+            version="2.0.0",
+            author="Asif Hussain",
+            tags=["orchestration", "documentation", "hygiene", "markdown", "planning-system-3.0"]
+        )
+    
+    @with_progress(operation_name="Document Hygiene", threshold_seconds=3.0)
+    @with_orchestration_metrics("DocumentHygieneOrchestrator")
+    def execute(self, context: Dict[str, Any]) -> OperationResult:
         """Execute document hygiene cycle."""
         logger.info(f"🎭 Orchestrator engaged: DocumentHygieneOrchestrator v{self.version}")
         
@@ -76,33 +109,81 @@ class DocumentHygieneOrchestrator:
         results = []
         
         try:
+            phase_idx = 1
             if "consolidation" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 1: Consolidating documents")
                 logger.info("🎭 Phase transition: START → consolidation")
-                consolidation_result = await self._run_consolidation_phase(target_dirs)
+                consolidation_result = asyncio.run(self._run_consolidation_phase(target_dirs))
                 results.append(consolidation_result)
                 self.metrics['phases_completed'].append('consolidation')
+                phase_idx += 1
                 
             if "archiving" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 2: Archiving old documents")
                 logger.info("🎭 Phase transition: consolidation → archiving")
-                archive_result = await self._run_archiving_phase(target_dirs)
+                archive_result = asyncio.run(self._run_archiving_phase(target_dirs))
                 results.append(archive_result)
                 self.metrics['phases_completed'].append('archiving')
+                phase_idx += 1
                 
             if "filename_optimization" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 3: Optimizing filenames")
                 logger.info("🎭 Phase transition: archiving → filename_optimization")
-                filename_result = await self._run_filename_optimization_phase(target_dirs)
+                filename_result = asyncio.run(self._run_filename_optimization_phase(target_dirs))
                 results.append(filename_result)
                 self.metrics['phases_completed'].append('filename_optimization')
+                phase_idx += 1
                 
             if "reference_updating" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 4: Updating references")
                 logger.info("🎭 Phase transition: filename_optimization → reference_updating")
-                reference_result = await self._run_reference_updating_phase()
+                reference_result = asyncio.run(self._run_reference_updating_phase())
                 results.append(reference_result)
                 self.metrics['phases_completed'].append('reference_updating')
+                phase_idx += 1
                 
             if "reorganization" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 5: Generating reorganization recommendations")
                 logger.info("🎭 Phase transition: reference_updating → reorganization")
-                reorg_result = await self._run_reorganization_phase(target_dirs)
+                reorganization_result = asyncio.run(self._run_reorganization_phase(target_dirs))
+                results.append(reorganization_result)
+                self.metrics['phases_completed'].append('reorganization')
+                phase_idx += 1
+                
+            yield_progress(len(phases) + 1, len(phases) + 1, "Phase 6: Finalizing hygiene")
+            logger.info("🎭 Phase transition: reorganization → finalization")
+            self._finalize_hygiene(results)
+            self.metrics['phases_completed'].append('finalization')
+            
+            success = True
+            is_complete = success and len(self.metrics['errors']) == 0
+            
+            logger.info(
+                f"🎭 Orchestrator completing: "
+                f"{'✅ ALL WORK COMPLETE' if is_complete else '⏳ PHASES DONE WITH WARNINGS'}"
+            )
+            
+            return OperationResult(
+                success=success,
+                status=OperationStatus.SUCCESS if success else OperationStatus.WARNING,
+                message=f"Document hygiene completed: {len(results)} phases, {self.metrics['actions_taken']} actions",
+                data={
+                    'results': [vars(r) for r in results],
+                    'metrics': self.metrics,
+                    'is_complete': is_complete
+                },
+                errors=self.metrics['errors'],
+                warnings=[],
+                duration_seconds=(datetime.now() - start_time).total_seconds(),
+                timestamp=datetime.now(),
+                formatted_header="📝 Document Hygiene",
+                formatted_footer=f"{self.metrics['actions_taken']} actions taken"
+            )
+            self.metrics['phases_completed'].append('reference_updating')
+            
+            if "reorganization" in phases:
+                logger.info("🎭 Phase transition: reference_updating → reorganization")
+                reorg_result = asyncio.run(self._run_reorganization_phase(target_dirs))
                 results.append(reorg_result)
                 self.metrics['phases_completed'].append('reorganization')
                 
@@ -128,12 +209,18 @@ class DocumentHygieneOrchestrator:
         except Exception as e:
             logger.error(f"Document hygiene failed: {e}", exc_info=True)
             self.metrics['errors'].append(str(e))
-            return {
-                'success': False,
-                'error': str(e),
-                'metrics': self.metrics,
-                'is_complete': False
-            }
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Document hygiene failed: {e}",
+                data={'metrics': self.metrics},
+                errors=[str(e)],
+                warnings=[],
+                duration_seconds=(datetime.now() - start_time).total_seconds(),
+                timestamp=datetime.now(),
+                formatted_header="📝 Document Hygiene",
+                formatted_footer="❌ Hygiene failed"
+            )
             
     async def _run_consolidation_phase(self, dirs: List[Path]) -> HygieneResult:
         """Phase 1: Consolidate similar MD files."""
@@ -264,7 +351,21 @@ def run_document_hygiene(
     project_root: Path = None,
     target_dirs: List[Path] = None,
     phases: List[str] = None
-) -> Dict[str, Any]:
-    """Synchronous wrapper for document hygiene."""
+) -> OperationResult:
+    """
+    Synchronous wrapper for document hygiene.
+    
+    Args:
+        project_root: Project root path
+        target_dirs: Directories to clean
+        phases: Phases to run
+        
+    Returns:
+        OperationResult with hygiene metrics
+    """
     orchestrator = DocumentHygieneOrchestrator(project_root)
-    return asyncio.run(orchestrator.execute(target_dirs, phases))
+    context = {
+        'target_dirs': target_dirs,
+        'phases': phases
+    }
+    return orchestrator.execute(context)

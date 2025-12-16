@@ -1,22 +1,34 @@
 """
-Refactor Cycle Engine - Automatic code cleanup and quality enforcement.
+Refactor Cycle Engine v2.0 - Automatic code cleanup and quality enforcement.
 
-Integrated into Planning System 3.0 for automatic code cleanup
-during Tier 3/4 operations.
+Integrated with Planning System 3.0 for standardized operation handling:
+- Inherits BaseOperationModule for consistent interface
+- Uses orchestration metrics for engagement tracking
+- Returns standardized OperationResult
+- Provides visual progress tracking with 🎭 hints
 
+Author: Asif Hussain
 Copyright © 2025 Asif Hussain. All rights reserved.
+Version: 2.0.0
 """
 
 from pathlib import Path
 from typing import Dict, Any, List
 from dataclasses import dataclass
+from datetime import datetime
 import re
 import logging
 import asyncio
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+from src.operations.base_operation_module import (
+    BaseOperationModule, OperationResult, OperationStatus,
+    OperationPhase, OperationModuleMetadata
+)
 from ..analysis.ast_engine import ASTEngine
 from ..version.version_manager import get_version_manager
+from src.operations.utilities.orchestration_metrics_collector import with_orchestration_metrics
+from src.utils.progress_decorator import with_progress, yield_progress
 
 logger = logging.getLogger(__name__)
 
@@ -30,17 +42,26 @@ class RefactorResult:
     issues_found: List[str]
 
 
-class RefactorCycleOrchestrator:
-    """Orchestrate automatic code cleanup and refactoring."""
+class RefactorCycleOrchestrator(BaseOperationModule):
+    """
+    Orchestrate automatic code cleanup and refactoring.
+    
+    Planning System 3.0 Integration:
+    - Standardized BaseOperationModule inheritance
+    - Orchestration metrics for engagement tracking
+    - Visual progress hints with 🎭 pattern
+    - Consistent OperationResult format
+    """
     
     def __init__(self, project_root: Path = None):
-        """Initialize refactor cycle orchestrator."""
+        """Initialize refactor cycle orchestrator v2.0."""
+        super().__init__()
         self.project_root = project_root or Path.cwd()
         self.ast_engine = ASTEngine(self.project_root)
         
         # Version management
         self.version_manager = get_version_manager()
-        self.version_manager.register_orchestrator_version("refactor_cycle_orchestrator", "1.0")
+        self.version_manager.register_orchestrator_version("refactor_cycle_orchestrator", "2.0")
         self.version = self.version_manager.get_orchestrator_version("refactor_cycle_orchestrator")
         
         self.phases = [
@@ -61,11 +82,24 @@ class RefactorCycleOrchestrator:
         
         self.max_workers = 4
         
-    async def execute(
-        self,
-        target_files: List[Path] = None,
-        phases: List[str] = None
-    ) -> Dict[str, Any]:
+        logger.info(f"✅ RefactorCycleOrchestrator v{self.version} initialized (Planning System 3.0)")
+    
+    def get_metadata(self) -> OperationModuleMetadata:
+        """Get module metadata."""
+        return OperationModuleMetadata(
+            module_id="refactor_cycle_orchestrator",
+            name="Refactor Cycle Orchestrator 2.0",
+            description="Automatic code cleanup: comments, debug removal, lint, format",
+            phase=OperationPhase.PROCESSING,
+            priority=70,
+            version="2.0.0",
+            author="Asif Hussain",
+            tags=["orchestration", "refactoring", "cleanup", "quality", "planning-system-3.0"]
+        )
+    
+    @with_progress(operation_name="Refactor Cycle", threshold_seconds=3.0)
+    @with_orchestration_metrics("RefactorCycleOrchestrator")
+    def execute(self, context: Dict[str, Any]) -> OperationResult:
         """Execute refactor cycle."""
         logger.info(f"🎭 Orchestrator engaged: RefactorCycleOrchestrator v{self.version}")
         
@@ -75,36 +109,48 @@ class RefactorCycleOrchestrator:
         results = []
         
         try:
+            phase_idx = 1
             if "comment_sync" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 1: Synchronizing comments")
                 logger.info("🎭 Phase transition: START → comment_sync")
-                comment_result = await self._run_comment_sync_phase(target_files)
+                comment_result = asyncio.run(self._run_comment_sync_phase(target_files))
                 results.append(comment_result)
                 self.metrics['phases_completed'].append('comment_sync')
+                phase_idx += 1
                 
             if "debug_removal" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 2: Removing debug code")
                 logger.info("🎭 Phase transition: comment_sync → debug_removal")
-                debug_result = await self._run_debug_removal_phase(target_files)
+                debug_result = asyncio.run(self._run_debug_removal_phase(target_files))
                 results.append(debug_result)
                 self.metrics['phases_completed'].append('debug_removal')
+                phase_idx += 1
                 
             if "dead_code" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 3: Detecting dead code")
                 logger.info("🎭 Phase transition: debug_removal → dead_code")
-                dead_code_result = await self._run_dead_code_phase(target_files)
+                dead_code_result = asyncio.run(self._run_dead_code_phase(target_files))
                 results.append(dead_code_result)
                 self.metrics['phases_completed'].append('dead_code')
+                phase_idx += 1
                 
             if "lint_enforcement" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 4: Enforcing lint rules")
                 logger.info("🎭 Phase transition: dead_code → lint_enforcement")
-                lint_result = await self._run_lint_phase(target_files)
+                lint_result = asyncio.run(self._run_lint_phase(target_files))
                 results.append(lint_result)
                 self.metrics['phases_completed'].append('lint_enforcement')
+                phase_idx += 1
                 
             if "format_enforcement" in phases:
+                yield_progress(phase_idx, len(phases) + 1, "Phase 5: Formatting code")
                 logger.info("🎭 Phase transition: lint_enforcement → format_enforcement")
-                format_result = await self._run_format_phase(target_files)
+                format_result = asyncio.run(self._run_format_phase(target_files))
                 results.append(format_result)
                 self.metrics['phases_completed'].append('format_enforcement')
+                phase_idx += 1
                 
+            yield_progress(len(phases) + 1, len(phases) + 1, "Phase 6: Finalizing refactor")
             logger.info("🎭 Phase transition: format_enforcement → finalization")
             self._finalize_refactor(results)
             self.metrics['phases_completed'].append('finalization')
@@ -117,22 +163,38 @@ class RefactorCycleOrchestrator:
                 f"{'✅ ALL WORK COMPLETE' if is_complete else '⏳ PHASES DONE WITH WARNINGS'}"
             )
             
-            return {
-                'success': success,
-                'results': results,
-                'metrics': self.metrics,
-                'is_complete': is_complete
-            }
+            return OperationResult(
+                success=success,
+                status=OperationStatus.SUCCESS if success else OperationStatus.WARNING,
+                message=f"Refactor cycle completed: {len(results)} phases, {self.metrics['changes_made']} changes",
+                data={
+                    'results': [vars(r) for r in results],
+                    'metrics': self.metrics,
+                    'is_complete': is_complete
+                },
+                errors=self.metrics['errors'],
+                warnings=[],
+                duration_seconds=(datetime.now() - start_time).total_seconds(),
+                timestamp=datetime.now(),
+                formatted_header="🔧 Refactor Cycle",
+                formatted_footer=f"{self.metrics['changes_made']} changes made"
+            )
             
         except Exception as e:
             logger.error(f"Refactor cycle failed: {e}", exc_info=True)
             self.metrics['errors'].append(str(e))
-            return {
-                'success': False,
-                'error': str(e),
-                'metrics': self.metrics,
-                'is_complete': False
-            }
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Refactor cycle failed: {e}",
+                data={'metrics': self.metrics},
+                errors=[str(e)],
+                warnings=[],
+                duration_seconds=(datetime.now() - start_time).total_seconds(),
+                timestamp=datetime.now(),
+                formatted_header="🔧 Refactor Cycle",
+                formatted_footer="❌ Refactor failed"
+            )
             
     async def _run_comment_sync_phase(self, files: List[Path]) -> RefactorResult:
         """Phase 1: Synchronize comments with code."""
@@ -261,7 +323,21 @@ def run_refactor_cycle(
     project_root: Path = None,
     target_files: List[Path] = None,
     phases: List[str] = None
-) -> Dict[str, Any]:
-    """Synchronous wrapper for refactor cycle."""
+) -> OperationResult:
+    """
+    Synchronous wrapper for refactor cycle.
+    
+    Args:
+        project_root: Project root path
+        target_files: Files to refactor
+        phases: Phases to run
+        
+    Returns:
+        OperationResult with refactor metrics
+    """
     orchestrator = RefactorCycleOrchestrator(project_root)
-    return asyncio.run(orchestrator.execute(target_files, phases))
+    context = {
+        'target_files': target_files,
+        'phases': phases
+    }
+    return orchestrator.execute(context)

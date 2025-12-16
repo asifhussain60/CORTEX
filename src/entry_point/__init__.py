@@ -7,6 +7,7 @@ Main Components:
 - CortexEntry: Main entry point coordinator
 - RequestParser: Natural language → AgentRequest
 - ResponseFormatter: AgentResponse → user-friendly output
+- PlanningGate: Automatic request triage and planning invocation
 
 Usage:
     from src.entry_point import CortexEntry
@@ -19,9 +20,11 @@ Usage:
 from .cortex_entry import CortexEntry
 from .request_parser import RequestParser
 from .response_formatter import ResponseFormatter
+from .planning_gate import PlanningGate
 
 __all__ = [
     "CortexEntry",
     "RequestParser",
     "ResponseFormatter",
+    "PlanningGate",
 ]

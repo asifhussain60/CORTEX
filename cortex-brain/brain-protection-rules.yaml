@@ -36,6 +36,8 @@ tier0_instincts:
 - TDD_EMPTY_TEST_DETECTION
 - FILE_ORGANIZATION_ENFORCEMENT
 - TIERED_PLANNING_ENFORCEMENT
+- MANDATORY_PLANNING_ENFORCEMENT
+- PLAN_ARTIFACT_LOCATION_ENFORCEMENT
 - VACUUM_CYCLE_ENFORCEMENT
 - INCREMENTAL_PLAN_CREATION_ENFORCEMENT
 - PROGRESS_TRACKER_ENFORCEMENT
@@ -213,8 +215,8 @@ protection_layers:
     alternatives:
     - Write failing test first (RED phase) for high-value code
     - Create spike branch for exploration (throwaway)
-    - "Use TDD cycle: RED \u2192 GREEN \u2192 REFACTOR for production logic"
-    - Skip TDD for simple entities/DTOs (document why: 'Simple POCO, no logic to test')
+    - "Use TDD cycle: RED -> GREEN -> REFACTOR for production logic"
+    - "Skip TDD for simple entities/DTOs (document why: Simple POCO, no logic to test)"
     intelligent_enforcement: |
       CORTEX will intelligently detect code type and enforce TDD accordingly:
       
@@ -3620,6 +3622,156 @@ validation:
         - Operation: System maintenance complete
         - Vacuum Cycle: Skipped
         - Result: Duplicate code remains, orphaned files accumulate
+    
+    - rule_id: "MANDATORY_PLANNING_ENFORCEMENT"
+      name: "Mandatory Planning Gate Enforcement"
+      severity: "blocked"
+      description: "ALL user requests MUST pass through PlanningGate for complexity classification. Tier 3+ work REQUIRES temporary plan creation and approval before execution. No direct execution of complex work."
+      
+      detection:
+        combined_keywords:
+          direct_execution:
+            - "execute without plan"
+            - "skip planning gate"
+            - "bypass triage"
+          tier_3_operation:
+            - "comprehensive"
+            - "holistic"
+            - "architecture"
+            - "multi-phase"
+        scope: ["intent", "operation_start"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Route ALL requests through PlanningGate.process_request()"
+        - "STEP 2: Classify complexity (Tier 1-4) automatically"
+        - "STEP 3: Tier 1-2: Execute immediately"
+        - "STEP 4: Tier 3+: Create temporary plan in temp-plans/ folder"
+        - "STEP 5: Show visual indicator: '🎭 Planning System Engaged'"
+        - "STEP 6: Await user approval before execution"
+      
+      evidence_template: |
+        Planning gate bypass detected!
+        
+        Operation: '{operation}'
+        Complexity: Tier {tier}
+        
+        ❌ WRONG: Direct execution of Tier 3+ work
+        - User Request: "Do comprehensive architecture review"
+        - Routing: Directly to execution agent
+        - Planning: SKIPPED
+        - Risk: No roadmap, no checkpoints, no approval
+        
+        ✅ CORRECT: PlanningGate enforcement
+        - User Request: "Do comprehensive architecture review"
+        - Routing: PlanningGate.process_request()
+        - Classification: Tier 3 (DOCUMENTED)
+        - Temporary Plan: TEMP-PLAN-20251216_143022-comprehensive-architecture
+        - Status: ⏳ Awaiting user approval
+        - Visual: "🎭 Planning System Engaged"
+        
+        **Enforcement Rules:**
+        - Tier 1 (<2s): No planning (instant execution)
+        - Tier 2 (<10s): No planning (lightweight validation)
+        - Tier 3 (10-60min): Temporary plan required
+        - Tier 4 (>1h): Temporary plan with master/sub-plan structure
+      
+      rationale: |
+        MANDATORY_PLANNING_ENFORCEMENT: No Complex Work Without Plan
+        
+        Problem: Complex operations executed directly
+        - "Do holistic review" → executes immediately
+        - No temporary plan creation
+        - No user approval gate
+        - No roadmap or checkpoints
+        
+        Solution: Universal planning gate
+        - ALL requests pass through PlanningGate
+        - Automatic complexity classification
+        - Tier 3+ creates temporary plan first
+        - User reviews and approves before execution
+        
+        Benefits:
+        - Zero complex work without plans
+        - User maintains control (approval gate)
+        - Clear roadmap before work starts
+        - Repository-level fix (all users benefit)
+    
+    - rule_id: "PLAN_ARTIFACT_LOCATION_ENFORCEMENT"
+      name: "Plan Artifact Location Enforcement"
+      severity: "blocked"
+      description: "Temporary plans MUST be created in cortex-brain/documents/planning/features/temp-plans/{TEMP-PLAN-ID}/ folder. No root-level plan files. Permanent plans move to features/ after approval."
+      
+      detection:
+        combined_keywords:
+          plan_creation:
+            - "create plan"
+            - "temporary plan"
+            - "planning artifact"
+          wrong_location:
+            - "CORTEX/"
+            - "root directory"
+            - "../plan.md"
+        scope: ["operation", "artifact_path"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Create temp plan folder: temp-plans/{TEMP-PLAN-ID}/"
+        - "STEP 2: Generate timestamp: YYYYMMDD_HHMMSS"
+        - "STEP 3: Sanitize request slug: 'comprehensive review' → 'comprehensive-review'"
+        - "STEP 4: Create folder: TEMP-PLAN-20251216_143022-comprehensive-review/"
+        - "STEP 5: Write README.md with plan details"
+        - "STEP 6: After approval: mv temp-plans/{ID}/ → features/{ID}/"
+      
+      evidence_template: |
+        Plan artifact location violation!
+        
+        Operation: '{operation}'
+        Artifact Path: {path}
+        
+        ❌ WRONG: Root-level plan artifacts
+        - Plan File: CORTEX/TEMP-PLAN-holistic-review.md
+        - Location: Repository root
+        - Risk: Root pollution, merge conflicts
+        
+        ✅ CORRECT: Organized plan artifacts
+        - Temporary: cortex-brain/documents/planning/features/temp-plans/TEMP-PLAN-20251216_143022-holistic-review/
+        - Structure:
+            ├── README.md (plan details)
+            ├── artifacts/ (supporting docs)
+            └── status.yaml (approval state)
+        - After Approval: → features/HOLISTIC-ARCHITECTURE-REVIEW/
+        
+        **Folder Structure:**
+        cortex-brain/documents/planning/
+        ├── features/           # Approved permanent plans
+        │   └── FEATURE-NAME/
+        └── temp-plans/         # Temporary plans awaiting approval
+            └── TEMP-PLAN-{timestamp}-{slug}/
+                ├── README.md
+                ├── artifacts/
+                └── status.yaml
+      
+      rationale: |
+        PLAN_ARTIFACT_LOCATION_ENFORCEMENT: Organized Planning Artifacts
+        
+        Problem: Plans scattered everywhere
+        - Root-level plan.md files
+        - No consistent structure
+        - Merge conflicts in root
+        - Hard to find historical plans
+        
+        Solution: Centralized planning folder
+        - All temporary plans in temp-plans/
+        - Timestamped folder per plan
+        - Move to features/ after approval
+        - Root directory stays clean
+        
+        Benefits:
+        - Zero root pollution
+        - Easy to find plans (chronological)
+        - Clear approval workflow (temp → permanent)
+        - Merge conflict prevention
         
         ✅ CORRECT: Automatic vacuum cycle
         - Operation: System maintenance
