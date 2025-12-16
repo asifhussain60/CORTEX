@@ -128,10 +128,17 @@ No Challenge - All work completed successfully
 - `system_maintenance_complete` - Full maintenance workflow done
 - `plan_execution_complete` - Feature implementation finished
 - `tdd_workflow_complete` - RED→GREEN→REFACTOR cycle complete
+- `sanitization_complete` - Code sanitization with validation complete
 
 ---
 
 ## 🚀 Key Workflows
+
+**Code Sanitization**
+- Commands: `sanitize [directory]`, `make generic`, `anonymize project`
+- 5-phase workflow: analyze → mapping → transform → validate → report
+- Removes company-specific data while preserving functionality
+- Guide: `cortex-brain/CODE-SANITIZATION-QUICK-REF.md`
 
 **Planning System 2.0**
 - Commands: `plan [feature]`, `execute all phases autonomously`

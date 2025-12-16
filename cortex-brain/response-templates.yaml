@@ -47,6 +47,7 @@ operation_aliases:
   optimize_tokens: optimize-token-efficiency
   review: code-review
   rollback: rollback-recovery
+  sanitize: sanitization_complete
   tdd: tdd-mastery
   planning: planning
   ado: ado_agent
@@ -872,6 +873,53 @@ templates:
       **View detailed report:** {report_path}
       
       **Recommended Frequency:** Run `system maintenance` weekly or after major changes
+  sanitization_complete:
+    name: Code Sanitization Complete
+    triggers:
+    - sanitization_complete
+    - sanitize complete
+    response_type: success
+    base_template: success_completion
+    operation_name: Code Sanitization
+    understanding_content: 'You sanitized {source_directory} to remove company-specific data'
+    challenge_content: 'No Challenge - All phases completed with validation successful'
+    response_content: |
+      ## 🔒 Sanitization Summary
+      
+      **Source:** `{source_directory}`
+      **Output:** `{output_directory}`
+      **Duration:** {duration}
+      
+      ### Transformation Metrics
+      
+      - **Files Scanned:** {files_scanned}
+      - **Files Transformed:** {files_transformed}
+      - **Files Renamed:** {files_renamed}
+      - **Domain Terms Replaced:** {domain_terms_count}
+      - **Total Transformations:** {total_transformations}
+      
+      ### Validation Results
+      
+      ✅ **Build:** {build_status}
+      ✅ **Tests:** {tests_passed}/{tests_total} passing ({test_pass_rate}%)
+      ✅ **No Broken References:** Validated
+      ✅ **Proprietary Data:** Removed
+      
+      ### Generated Artifacts
+      
+      📄 **Audit Report:** `{audit_report_path}`
+      📄 **Mapping Reference:** `{mapping_reference_path}`
+      📂 **Sanitized Code:** `{output_directory}`
+      💾 **Backup:** `{backup_location}`
+      
+      **Status:** Ready for safe sharing/upload
+    request_echo_content: 'Sanitize {source_directory} for safe sharing'
+    optional_next_actions: |
+      **Review sanitized code** in `{output_directory}`
+      
+      **View audit report** for complete transformation details
+      
+      **Backup retention:** {backup_retention_days} days
   plan_execution_complete:
     name: Plan Execution Complete
     triggers:

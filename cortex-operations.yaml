@@ -568,6 +568,44 @@ operations:
     - plan ado feature for payment processing
     - generate ado completion summary
     - ado code review for PR
+  sanitize:
+    name: Code Sanitization
+    description: Transform domain-specific codebases into generic, shareable versions while preserving functionality
+    deployment_tier: user
+    execution_method: copilot_chat
+    natural_language:
+    - sanitize
+    - sanitize codebase
+    - anonymize project
+    - make generic
+    - remove company data
+    - sanitize code
+    - clean proprietary data
+    category: developer_tools
+    modules:
+    - sanitization_orchestrator
+    profiles:
+      standard:
+        description: "5-phase sanitization workflow: analyze → mapping → transform → validate → report"
+        modules:
+        - sanitization_orchestrator
+      dry_run:
+        description: "Preview transformations without applying changes"
+        modules:
+        - sanitization_orchestrator
+        options:
+          dry_run: true
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Full orchestrator with AST analysis, build validation, and audit reporting
+    examples:
+    - sanitize C:\Projects\MyApp
+    - sanitize codebase dry-run
+    - make C:\Projects\HealthcareApp generic
+    manifest: cortex-brain/orchestrator-manifests/code-sanitization-manifest.yaml
   align:
     name: Align
     description: CORTEX Align v2.0 - Holistic system alignment with intelligent maintenance
