@@ -1,0 +1,120 @@
+name: Package Build & Test
+
+on:
+  push:
+    branches: [ main, CORTEX-3.0 ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test-package:
+    name: Test Package Installation
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+        exclude:
+          # Reduce matrix - test key combinations
+          - os: ubuntu-latest
+            python-version: '3.9'
+          - os: macos-latest
+            python-version: '3.9'
+          - os: macos-latest
+            python-version: '3.11'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+    
+    - name: Install package (editable)
+      run: |
+        pip install -e .
+    
+    - name: Verify CLI commands
+      run: |
+        cortex version
+        cortex-plan "test request"
+    
+    - name: Run integration tests
+      run: |
+        pytest tests/integration/test_production_install.py -v -k "not slow"
+  
+  build-distributions:
+    name: Build Distributions
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    
+    - name: Build distributions
+      run: |
+        python -m build
+    
+    - name: Check distributions
+      run: |
+        twine check dist/*
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: distributions
+        path: dist/
+        retention-days: 7
+  
+  test-wheel-install:
+    name: Test Wheel Installation
+    needs: build-distributions
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: distributions
+        path: dist/
+    
+    - name: Install from wheel
+      run: |
+        pip install dist/cortex_ai-*.whl
+    
+    - name: Test CLI commands
+      run: |
+        cortex version
+        cortex-plan "test authentication feature"
+    
+    - name: Verify package imports
+      run: |
+        python -c "from src.entry_point.cortex_entry import CortexEntry; print('OK')"
+        python -c "from src.entry_point.planning_gate import PlanningGate; print('OK')"
