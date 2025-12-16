@@ -38,13 +38,22 @@ playwright>=1.48.0  # Browser automation for dashboard generation tests
 # Enhanced Feedback System (CORTEX 3.0)
 PyGithub>=2.5.0  # GitHub Gist integration for feedback sharing (enhanced_feedback_module)
 
-# Multi-Language Refactoring System (CORTEX 3.2) - DEPRECATED
-# tree-sitter>=0.20.1  # Universal parser - REMOVED (binary compilation issues)
-# tree-sitter-python>=0.21.0  # REMOVED - replaced by parso + libcst
-# tree-sitter-javascript>=0.21.0  # REMOVED - replaced by regex + optional Babel
-# tree-sitter-c-sharp>=0.21.0  # REMOVED - replaced by regex + optional Roslyn
+# Multi-Language AST Parsing (CORTEX 3.10) - RESTORED ✅
+tree-sitter>=0.22.0  # Modern tree-sitter with pre-built binaries (NO compilation required)
+tree-sitter-python>=0.25.0  # Python AST parser
+tree-sitter-javascript>=0.25.0  # JavaScript/JSX parser
+tree-sitter-typescript>=0.23.2  # TypeScript/TSX parser
+tree-sitter-c-sharp>=0.23.1  # C# parser (14,459 files across projects)
+tree-sitter-sql>=0.3.11  # SQL parser (7,284 files across projects)
+tree-sitter-html>=0.23.2  # HTML parser
+tree-sitter-css>=0.25.0  # CSS/SCSS parser
+tree-sitter-json>=0.24.8  # JSON parser
+tree-sitter-yaml>=0.7.2  # YAML parser
+tree-sitter-markdown>=0.5.1  # Markdown parser
+tree-sitter-java>=0.23.5  # Java parser (future Android support)
+tree-sitter-kotlin>=1.1.0  # Kotlin parser (future Android support)
 
-# CORTEX Lens Multi-Language Analysis (Phase 2) 🆕
+# CORTEX Lens Multi-Language Analysis - Fallback Parsers 🆕
 parso>=0.8.5  # Error-recovery Python parser (587k users, powers Jedi autocomplete)
 sqlparse>=0.5.0  # SQL parsing with multi-dialect support (15+ years, production-grade)
 tomli>=2.0.0; python_version < "3.11"  # TOML parsing backport (3.11+ uses stdlib tomllib)
