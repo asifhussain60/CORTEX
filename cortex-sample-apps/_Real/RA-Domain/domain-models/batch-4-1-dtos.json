@@ -1,0 +1,174 @@
+{
+  "batch_info": {
+    "name": "Batch 3.1 - First 10 Entities",
+    "total_files": 9,
+    "total_classes": 10,
+    "total_properties": 0,
+    "total_navigation_properties": 0
+  },
+  "entities": [
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\ActualCoverageDto.cs",
+      "filename": "ActualCoverageDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "ActualCoverageDto",
+          "line": 5,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\BalanceChangeInfoDto.cs",
+      "filename": "BalanceChangeInfoDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "BalanceChangeInfoDto",
+          "line": 3,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\BalanceDetailsDto.cs",
+      "filename": "BalanceDetailsDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "BalanceDetailsDto",
+          "line": 5,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\CarryOverJobResponse.cs",
+      "filename": "CarryOverJobResponse.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "CarryOverJobResponse",
+          "line": 5,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        },
+        {
+          "name": "FailedReimbursementAccounts",
+          "line": 13,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\CarryoverTransferTrackingDto.cs",
+      "filename": "CarryoverTransferTrackingDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "CarryoverTransferTrackingDto",
+          "line": 9,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\CaryOverResponse.cs",
+      "filename": "CaryOverResponse.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "CarryOverResponse",
+          "line": 4,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\DependentDto.cs",
+      "filename": "DependentDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "DependentDto",
+          "line": 9,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\DependentSpanDto.cs",
+      "filename": "DependentSpanDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "DependentSpanDto",
+          "line": 9,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\EmployerDetailsDto.cs",
+      "filename": "EmployerDetailsDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "EmployerDetailsDto",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    }
+  ]
+}

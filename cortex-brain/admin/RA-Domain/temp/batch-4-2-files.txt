@@ -1,9 +1,0 @@
-C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\EmployerPortalReimbursementPlanDetailsDto.cs
-C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\EmployerPortalReimbursementPlanTypesDto.cs
-C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\FlexMemberDto.cs
-C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\FlexSpanJobResponse.cs
-C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\FlexSpanResponse.cs
-C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\FlexStageChangeReasonCodeDTO.cs
-C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\HsaMemberSummaryDto.cs
-C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\MemberDocumentationRequiredDto.cs
-C:\PROJECTS\Product.ReimbursementAccounts\SDKs\Hqy.ReimbursementAccounts.Contracts\DTOs\MemberDto.cs
