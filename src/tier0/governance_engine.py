@@ -54,6 +54,7 @@ class GovernanceEngine:
             governance_file: Path to governance.yaml. If None, uses default location.
         """
         if governance_file is None:
+            # governance.yaml is in same directory as this file
             governance_file = Path(__file__).parent / "governance.yaml"
         
         self.governance_file = governance_file

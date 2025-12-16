@@ -67,8 +67,8 @@ def load_brain_protection_rules(rules_path: Optional[Path] = None, force_reload:
     
     # Determine rules file path
     if rules_path is None:
-        project_root = Path(__file__).parent.parent.parent
-        rules_path = project_root / "cortex-brain" / "brain-protection-rules.yaml"
+        from src.utils.resource_resolver import get_brain_file
+        rules_path = get_brain_file("brain-protection-rules.yaml")
     else:
         rules_path = Path(rules_path)
     

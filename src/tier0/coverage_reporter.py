@@ -85,8 +85,10 @@ class CoverageReporter:
             source_root: Root directory for source code
             threshold: Minimum acceptable coverage percentage
         """
+        from src.utils.resource_resolver import get_root_path
+        
         if test_root is None or source_root is None:
-            project_root = Path(__file__).parent.parent.parent
+            project_root = get_root_path()
             test_root = test_root or project_root / "tests"
             source_root = source_root or project_root / "src"
         

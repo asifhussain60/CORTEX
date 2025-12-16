@@ -77,9 +77,10 @@ class TierValidator:
         Args:
             brain_root: Path to cortex-brain directory
         """
+        from src.utils.resource_resolver import get_brain_path
+        
         if brain_root is None:
-            project_root = Path(__file__).parent.parent.parent
-            brain_root = project_root / "cortex-brain"
+            brain_root = get_brain_path()
         
         self.brain_root = Path(brain_root)
         

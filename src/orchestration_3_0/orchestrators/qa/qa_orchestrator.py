@@ -32,6 +32,15 @@ from .security_scanner import SecurityScanner
 from .performance_analyzer import PerformanceAnalyzer
 from .architecture_reviewer import ArchitectureReviewer
 
+# Import batch path hardening
+import sys
+from pathlib import Path
+scripts_path = Path(__file__).parent.parent.parent.parent.parent / "scripts"
+if str(scripts_path) not in sys.path:
+    sys.path.insert(0, str(scripts_path))
+
+from batch_path_hardening import PathHardeningOrchestrator, BatchResult
+
 logger = logging.getLogger(__name__)
 
 
@@ -75,8 +84,9 @@ class QAOrchestrator(BaseOrchestrator):
         self.security_scanner = SecurityScanner()
         self.performance_analyzer = PerformanceAnalyzer()
         self.architecture_reviewer = ArchitectureReviewer()
+        self.path_hardening_orchestrator = PathHardeningOrchestrator()
         
-        logger.info("QAOrchestrator initialized with 4 components")
+        logger.info("QAOrchestrator initialized with 5 components (includes path hardening)")
     
     def validate_dor(self, context: WorkflowContext) -> ValidationResult:
         """
@@ -251,6 +261,56 @@ class QAOrchestrator(BaseOrchestrator):
         logger.info(f"QA complete: {total_issues} issues ({critical_issues} CRITICAL)")
         
         return results
+    
+    def execute_path_hardening(
+        self,
+        module: Optional[str] = None,
+        dry_run: bool = True
+    ) -> BatchResult:
+        """
+        Execute batch path hardening to fix hardcoded paths.
+        
+        This can be invoked as part of code refinement workflow or standalone.
+        
+        Args:
+            module: Specific module to process (e.g., 'tier1', 'operations')
+                   If None, processes all of src/
+            dry_run: If True, only previews changes without applying
+        
+        Returns:
+            BatchResult with operation summary
+        """
+        logger.info(f"🔧 Starting path hardening{' (dry run)' if dry_run else ''}...")
+        
+        result = self.path_hardening_orchestrator.execute(
+            module=module,
+            dry_run=dry_run
+        )
+        
+        # Log summary
+        logger.info(
+            f"Path hardening complete: {result.replacements_made} replacements "
+            f"in {result.files_processed} files"
+        )
+        
+        if result.errors:
+            logger.warning(f"{len(result.errors)} errors encountered")
+            for error in result.errors:
+                logger.error(f"  - {error}")
+        
+        return result
+    
+    def generate_path_hardening_report(self, result: BatchResult) -> str:
+        """
+        Generate detailed report for path hardening operation.
+        
+        Args:
+            result: BatchResult from path hardening
+        
+        Returns:
+            Formatted markdown report
+        """
+        return self.path_hardening_orchestrator.generate_report(result)
 
 
 def create_qa_orchestrator(

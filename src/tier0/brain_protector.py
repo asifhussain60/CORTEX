@@ -107,17 +107,17 @@ class BrainProtector:
             log_path: Path to protection events log (default: corpus-callosum/protection-events.jsonl)
             rules_path: Path to protection rules YAML (default: cortex-brain/brain-protection-rules.yaml)
         """
-        project_root = Path(__file__).parent.parent.parent
+        from src.utils.resource_resolver import get_brain_path
         
         if log_path is None:
-            log_dir = project_root / "cortex-brain" / "corpus-callosum"
+            log_dir = get_brain_path() / "corpus-callosum"
             log_dir.mkdir(parents=True, exist_ok=True)
             log_path = log_dir / "protection-events.jsonl"
         self.log_path = Path(log_path)
         
         # Load rules from YAML
         if rules_path is None:
-            rules_path = project_root / "cortex-brain" / "brain-protection-rules.yaml"
+            rules_path = get_brain_path() / "brain-protection-rules.yaml"
         
         self.rules_path = Path(rules_path)
         self.rules_config = self._load_rules()

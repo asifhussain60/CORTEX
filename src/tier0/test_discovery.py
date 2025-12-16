@@ -86,8 +86,10 @@ class TestDiscovery:
         Args:
             test_root: Root directory for tests (default: tests/)
         """
+        from src.utils.resource_resolver import get_root_path
+        
         if test_root is None:
-            project_root = Path(__file__).parent.parent.parent
+            project_root = get_root_path()
             test_root = project_root / "tests"
         
         self.test_root = Path(test_root)

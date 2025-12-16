@@ -40,7 +40,8 @@ class CopilotInstructionsGenerator:
         generator.save(repo_path, output)
     """
     
-    CORTEX_PROMPT_PATH = Path(__file__).parent.parent.parent / ".github" / "prompts" / "CORTEX.prompt.md"
+    from src.utils.resource_resolver import get_root_path
+CORTEX_PROMPT_PATH = get_root_path() / ".github" / "prompts" / "CORTEX.prompt.md"
     
     def __init__(self):
         """Initialize generator."""
