@@ -105,7 +105,11 @@ class TestStrictFolderOrganizationSKULL:
         """Test recursive scanning for root folder violations."""
         base = temp_workspace / "cortex-brain" / "documents"
         
-        # Create test structure with violations
+        # Create test structure with violations - ensure parent directories exist
+        (base / "planning").mkdir(exist_ok=True)
+        (base / "reports").mkdir(exist_ok=True)
+        (base / "analysis").mkdir(exist_ok=True)
+        
         (base / "planning" / "VIOLATION.md").write_text("Root file")
         (base / "reports" / "VIOLATION.md").write_text("Root file")
         (base / "analysis" / "VIOLATION.md").write_text("Root file")
@@ -116,9 +120,9 @@ class TestStrictFolderOrganizationSKULL:
         violations = self._scan_root_violations_recursive(base)
         
         assert len(violations) == 3, f"Expected 3 violations, found {len(violations)}"
-        assert any("planning/VIOLATION.md" in str(v) for v in violations)
-        assert any("reports/VIOLATION.md" in str(v) for v in violations)
-        assert any("analysis/VIOLATION.md" in str(v) for v in violations)
+        assert any("planning" in str(v) and "VIOLATION.md" in str(v) for v in violations)
+        assert any("reports" in str(v) and "VIOLATION.md" in str(v) for v in violations)
+        assert any("analysis" in str(v) and "VIOLATION.md" in str(v) for v in violations)
 
     # ============================================
     # TEST 2: Universal Subfolder Structure
@@ -379,10 +383,10 @@ Execute Phase 2 directly.
 ## Overview
 Plan content...
 """
-        master_plan.write_text(content)
+        master_plan.write_text(content, encoding='utf-8')
         
         # Verify continuation prompt presence
-        content = master_plan.read_text()
+        content = master_plan.read_text(encoding='utf-8')
         assert "🔄 **CONTINUATION PROMPT**" in content
         assert "**STATUS:**" in content
         assert "**NEXT ACTION:**" in content

@@ -3,7 +3,7 @@ type: governance
 name: Brain Protection Rules
 description: Automated architectural protection challenges
 rules:
-  total_count: 56
+  total_count: 61
   layers: 24
   severity_levels:
   - blocked
@@ -81,6 +81,11 @@ tier0_instincts:
 - DEBUG_MARKER_REMOVAL_ENFORCEMENT
 - ALIGNMENT_STATE_PROTECTION
 - INLINE_CSS_PROHIBITION
+- AUTONOMOUS_EXECUTION_PROTECTION
+- INTERACTIVE_MODE_ENFORCEMENT
+- TOKEN_OPTIMIZATION_ENFORCEMENT
+- GIT_CHECKPOINT_PHASE_PROTECTION
+- NO_EMOJIS_IN_SCRIPTS
 application_paths:
 - SPA/
 - KSESSIONS/
@@ -2039,6 +2044,388 @@ protection_layers:
       
       This rule ensures CORTEX generates maintainable, professional frontend code.
     rationale: "INLINE_CSS_PROHIBITION: Professional Frontend Architecture\n\n- Inline CSS creates maintenance nightmares (scattered styles)\n- Centralized CSS enables reusability (define once, use everywhere)\n- Browser caching improves performance (CSS files cached)\n- Theming/accessibility require centralized control (dark mode, responsive)\n- Planning System 2.0 REFACTOR phase validates migration\n\nImplementation: REFACTOR phase grep validation + CSS extraction workflow\n"
+  - rule_id: AUTONOMOUS_EXECUTION_PROTECTION
+    name: Autonomous Execution Protection
+    severity: blocked
+    minimum_coverage: 100
+    description: "Autonomous execution of multi-phase plans MUST include safety checks: git checkpoints per phase, validation before progression, rollback capability."
+    test_requirements:
+    - test_should_auto_progress_logic
+    - test_phase_validation_before_progression
+    - test_git_checkpoint_creation
+    - test_rollback_capability
+    detection:
+      combined_keywords:
+        autonomous_execution:
+        - execute all phases
+        - autonomous execution
+        - auto-progression
+        - continue to next phase
+        execution_context:
+        - planning system
+        - incremental planning
+        - phase execution
+      scope:
+      - intent
+      - planning_mode
+    alternatives:
+    - Add git checkpoint after each phase completion
+    - Validate phase success before auto-progression
+    - Implement rollback mechanism for failed phases
+    - Require explicit user confirmation for destructive operations
+    - Create phase completion summary before progression
+    evidence_template: |
+      Autonomous execution requires safety protections!
+      
+      Mode: Autonomous Execution
+      Phase: {current_phase}
+      
+      ❌ BLOCKED: Missing safety checks for autonomous execution
+      
+      REQUIRED SAFETY MECHANISMS:
+      
+      1. **Git Checkpoints Per Phase:**
+         - After each phase: git commit with descriptive message
+         - Tag format: "phase-{number}-{name}-complete"
+         - Enables rollback to any phase
+      
+      2. **Phase Validation:**
+         - Tests pass before progression
+         - No compilation errors
+         - Code quality metrics met
+      
+      3. **Rollback Capability:**
+         - Git reset to previous checkpoint
+         - Undo mechanism for each phase
+         - State restoration
+      
+      4. **Progress Visibility:**
+         - Phase completion summaries
+         - Clear status indicators
+         - Next phase preview
+      
+      ✅ CORRECT: Safe autonomous execution
+      ```python
+      def execute_phase_autonomously(phase):
+          # Execute phase
+          result = execute_phase(phase)
+          
+          # Validate success
+          if not validate_phase(result):
+              raise PhaseExecutionError()
+          
+          # Create git checkpoint
+          create_git_checkpoint(phase)
+          
+          # Generate summary
+          summary = generate_phase_summary(result)
+          
+          # Check if should continue
+          if should_auto_progress() and user_approves(summary):
+              execute_next_phase()
+      ```
+      
+      This protection prevents runaway autonomous execution and ensures safe multi-phase workflows.
+    rationale: |
+      AUTONOMOUS_EXECUTION_PROTECTION: Safe Multi-Phase Execution
+      
+      Problem: Runaway autonomous execution
+      - No checkpoints (can't rollback)
+      - No validation (errors cascade)
+      - No visibility (black box execution)
+      
+      Solution: Safety mechanisms
+      - Git checkpoints per phase
+      - Validation before progression
+      - Rollback capability
+      - Progress summaries
+      
+      Benefits:
+      - Safe autonomous execution
+      - Rollback to any phase
+      - Clear progress visibility
+      - Error containment
+  - rule_id: INTERACTIVE_MODE_ENFORCEMENT
+    name: Interactive Mode Enforcement
+    severity: blocked
+    minimum_coverage: 100
+    description: "Interactive mode MUST be default for complex operations. Autonomous execution requires explicit user opt-in with safety acknowledgment."
+    test_requirements:
+    - test_default_to_interactive_mode
+    - test_autonomous_requires_opt_in
+    - test_safety_acknowledgment_required
+    detection:
+      combined_keywords:
+        execution_mode:
+        - execute
+        - run plan
+        - start planning
+        complex_operation:
+        - multi-phase
+        - incremental plan
+        - feature implementation
+      scope:
+      - intent
+      - execution_mode
+    alternatives:
+    - Default to interactive mode (user approval per phase)
+    - Require explicit --autonomous flag for auto-execution
+    - Show phase preview before execution
+    - Confirm destructive operations
+    - Allow phase-by-phase execution with continue prompts
+    evidence_template: |
+      Interactive mode should be default for safety!
+      
+      Operation: {operation_name}
+      Complexity: {complexity_level}
+      
+      ⚠️  WARNING: Interactive mode recommended
+      
+      EXECUTION MODES:
+      
+      1. **Interactive Mode (Default):**
+         - User approval per phase
+         - Review before execution
+         - Pause/modify capability
+         - Full control
+      
+      2. **Autonomous Mode (Opt-In):**
+         - Executes all phases automatically
+         - Requires explicit flag
+         - Safety checks enforced
+         - Checkpoints mandatory
+      
+      ✅ CORRECT: Default to interactive
+      ```python
+      def execute_plan(plan, mode='interactive'):
+          if mode == 'autonomous':
+              warn_autonomous_execution()
+              require_safety_acknowledgment()
+          
+          for phase in plan.phases:
+              if mode == 'interactive':
+                  preview_phase(phase)
+                  if not user_approves():
+                      break
+              
+              execute_phase(phase)
+      ```
+      
+      This ensures users maintain control and understand what's happening.
+    rationale: |
+      INTERACTIVE_MODE_ENFORCEMENT: User Control & Safety
+      
+      Problem: Unexpected autonomous execution
+      - User loses control
+      - Surprises in behavior
+      - No review opportunity
+      
+      Solution: Interactive by default
+      - User approves each phase
+      - Review before execution
+      - Explicit opt-in for autonomous
+      
+      Benefits:
+      - User maintains control
+      - No surprises
+      - Learning opportunity
+      - Safer execution
+  - rule_id: TOKEN_OPTIMIZATION_ENFORCEMENT
+    name: Token Optimization Enforcement
+    severity: info
+    description: "Responses MUST optimize token usage: avoid redundant explanations, use concise formatting, reference existing docs instead of repeating."
+    detection:
+      combined_keywords:
+        redundancy:
+        - duplicate explanation
+        - repeated information
+        - verbose response
+        token_waste:
+        - unnecessary detail
+        - redundant sections
+      scope:
+      - response_content
+      - documentation
+    alternatives:
+    - Reference existing documentation instead of repeating
+    - Use concise bullet points vs paragraphs
+    - Eliminate redundant sections
+    - Link to detailed docs for deep-dives
+    - Use templates for consistent responses
+    evidence_template: |
+      Token optimization opportunity detected!
+      
+      Response: {response_name}
+      Token Count: {token_count}
+      
+      ℹ️  INFO: Response can be optimized
+      
+      OPTIMIZATION TECHNIQUES:
+      
+      1. **Reference Instead of Repeat:**
+         ❌ "Planning System 2.0 is a 7-phase workflow that includes..."
+         ✅ "See: planning-orchestrator-guide.md"
+      
+      2. **Concise Formatting:**
+         ❌ Paragraph: "The first step is to analyze the codebase..."
+         ✅ Bullet: "• Analyze codebase"
+      
+      3. **Eliminate Redundancy:**
+         ❌ Explaining same concept in multiple sections
+         ✅ Explain once, reference elsewhere
+      
+      4. **Template-Based Responses:**
+         ❌ Custom response each time
+         ✅ Load template from response-templates.yaml
+      
+      TOKEN SAVINGS EXAMPLE:
+      
+      Before (500 tokens):
+      ```
+      Planning System 2.0 is a comprehensive planning orchestrator 
+      that guides feature development through 7 phases: Discovery, 
+      Architecture, Planning, Implementation (RED/GREEN/REFACTOR), 
+      Validation, Documentation, and Review. Each phase has specific 
+      requirements and validation gates...
+      ```
+      
+      After (50 tokens):
+      ```
+      Executing Planning System 2.0 (7 phases)
+      Guide: cortex-brain/documents/implementation-guides/planning-orchestrator-guide.md
+      ```
+      
+      This ensures CORTEX responses are efficient and cost-effective.
+    rationale: |
+      TOKEN_OPTIMIZATION_ENFORCEMENT: Cost & Efficiency
+      
+      Problem: Token waste
+      - Redundant explanations
+      - Verbose responses
+      - Repeated information
+      
+      Solution: Optimize tokens
+      - Reference existing docs
+      - Concise formatting
+      - Template-based responses
+      - Eliminate redundancy
+      
+      Benefits:
+      - Lower costs
+      - Faster responses
+      - Better user experience
+      - Scalable system
+  - rule_id: GIT_CHECKPOINT_PHASE_PROTECTION
+    name: Git Checkpoint Phase Protection
+    severity: blocked
+    minimum_coverage: 100
+    description: "Each phase completion in Planning System 2.0 MUST create git checkpoint. No progression to next phase without checkpoint."
+    test_requirements:
+    - test_git_checkpoint_after_phase
+    - test_progression_blocked_without_checkpoint
+    - test_checkpoint_tag_format
+    - test_rollback_to_checkpoint
+    detection:
+      combined_keywords:
+        phase_completion:
+        - phase complete
+        - next phase
+        - progression
+        planning_context:
+        - planning system
+        - incremental planning
+        - phase execution
+      scope:
+      - intent
+      - phase_status
+    alternatives:
+    - Create git commit after each phase with descriptive message
+    - Tag format: "cortex-phase-{number}-{name}"
+    - Include phase summary in commit message
+    - Verify clean git state before phase execution
+    - Block phase progression if git checkpoint fails
+    evidence_template: |
+      Phase completion requires git checkpoint!
+      
+      Phase: {phase_name}
+      Status: Complete
+      
+      ❌ BLOCKED: Missing git checkpoint for phase completion
+      
+      GIT CHECKPOINT WORKFLOW:
+      
+      1. **Verify Clean State:**
+         ```bash
+         git status  # Must be clean before phase start
+         ```
+      
+      2. **Execute Phase:**
+         - Complete all phase tasks
+         - Pass validation
+         - Generate artifacts
+      
+      3. **Create Checkpoint:**
+         ```bash
+         git add .
+         git commit -m "cortex: Phase {number} - {name} complete
+         
+         Summary:
+         - {task_1_completed}
+         - {task_2_completed}
+         - {task_3_completed}
+         
+         Artifacts:
+         - {artifact_1}
+         - {artifact_2}
+         "
+         
+         git tag cortex-phase-{number}-{name}
+         ```
+      
+      4. **Progression Gate:**
+         - Checkpoint created? → Can progress
+         - Checkpoint failed? → BLOCKED
+      
+      ROLLBACK CAPABILITY:
+      
+      ```bash
+      # Rollback to previous phase
+      git reset --hard cortex-phase-{number}-{name}
+      
+      # View checkpoint history
+      git log --oneline --decorate --graph
+      
+      # Compare phases
+      git diff cortex-phase-2-architecture cortex-phase-3-planning
+      ```
+      
+      BENEFITS:
+      
+      - **Rollback Anytime:** git reset to any phase
+      - **Audit Trail:** Complete history of phase progression
+      - **Safe Exploration:** Try next phase, rollback if fails
+      - **Collaboration:** Share checkpoint tags with team
+      - **Recovery:** Undo mistakes easily
+      
+      This protection ensures every phase is saved and recoverable.
+    rationale: |
+      GIT_CHECKPOINT_PHASE_PROTECTION: Safe Phase Progression
+      
+      Problem: No rollback capability
+      - Phase fails, can't undo
+      - No history of phase work
+      - Lost work if error occurs
+      
+      Solution: Git checkpoints
+      - Commit after each phase
+      - Tag with phase identifier
+      - Include phase summary
+      
+      Benefits:
+      - Rollback to any phase
+      - Complete audit trail
+      - Safe experimentation
+      - Work recovery
   - rule_id: NO_EMOJIS_IN_SCRIPTS
     name: No Emojis in Generated Scripts
     severity: warning

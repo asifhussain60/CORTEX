@@ -116,6 +116,7 @@ class TestTempPlanManagerIntegration:
         result = manager.create_temporary_plan(
             user_request="Add user authentication",
             complexity_tier=3,
+            estimated_time="2-3 hours",
             approach="Use JWT tokens with refresh strategy",
             phases=[
                 {
@@ -131,16 +132,12 @@ class TestTempPlanManagerIntegration:
             ]
         )
         
-        # Verify result
-        assert result['success'] is True
-        assert 'plan_id' in result
-        assert 'temp_plan' in result
-        
-        temp_plan = result['temp_plan']
-        assert isinstance(temp_plan, TemporaryPlan)
-        assert temp_plan.user_request == "Add user authentication"
-        assert temp_plan.complexity_tier == 3
-        assert len(temp_plan.phases) == 2
+        # Verify result - now returns TemporaryPlan object directly
+        assert isinstance(result, TemporaryPlan)
+        assert result.user_request == "Add user authentication"
+        assert result.complexity_tier == 3
+        assert len(result.phases) == 2
+        assert result.estimated_time == "2-3 hours"
     
     def test_approve_plan_generates_master_plan_with_unified_components(self, temp_workspace):
         """Test plan approval uses UnifiedPlanGenerator."""
@@ -150,6 +147,7 @@ class TestTempPlanManagerIntegration:
         create_result = manager.create_temporary_plan(
             user_request="Refactor database layer",
             complexity_tier=2,
+            estimated_time="3-4 hours",
             approach="Extract repository pattern",
             phases=[
                 {
@@ -160,7 +158,7 @@ class TestTempPlanManagerIntegration:
             ]
         )
         
-        plan_id = create_result['plan_id']
+        plan_id = create_result.plan_id
         
         # Approve plan
         approve_result = manager.approve_plan(plan_id)
@@ -186,6 +184,7 @@ class TestTempPlanManagerIntegration:
         create_result = manager.create_temporary_plan(
             user_request="Optimize queries",
             complexity_tier=2,
+            estimated_time="4 hours",
             approach="Add indexes and query optimization",
             phases=[
                 {"name": "Add Indexes", "description": "Create DB indexes", "tasks": ["Analyze slow queries"]},
@@ -193,7 +192,7 @@ class TestTempPlanManagerIntegration:
             ]
         )
         
-        plan_id = create_result['plan_id']
+        plan_id = create_result.plan_id
         manager.approve_plan(plan_id)
         
         # Start and complete phase
@@ -228,6 +227,7 @@ class TestEndToEndPlanningWorkflow:
         create_result = manager.create_temporary_plan(
             user_request="Add caching layer",
             complexity_tier=3,
+            estimated_time="5-6 hours",
             approach="Redis-based caching with TTL",
             phases=[
                 {"name": "Setup Redis", "description": "Install and configure", "tasks": ["Install redis", "Config"]},
@@ -236,8 +236,8 @@ class TestEndToEndPlanningWorkflow:
             ]
         )
         
-        assert create_result['success'] is True
-        plan_id = create_result['plan_id']
+        assert isinstance(create_result, TemporaryPlan)
+        plan_id = create_result.plan_id
         
         # Step 2: Approve plan (generates master plan)
         approve_result = manager.approve_plan(plan_id)
@@ -282,13 +282,14 @@ class TestTokenTrackingIntegration:
         result = manager.create_temporary_plan(
             user_request="Refactor auth module",
             complexity_tier=2,
+            estimated_time="3 hours",
             approach="Extract to separate service",
             phases=[
                 {"name": "Extract Service", "description": "Create auth service", "tasks": ["Create service class"]}
             ]
         )
         
-        plan_id = result['plan_id']
+        plan_id = result.plan_id
         
         # Establish baseline (would normally be called by orchestrator)
         baseline = manager.token_tracker.establish_baseline(
@@ -309,6 +310,7 @@ class TestTokenTrackingIntegration:
         create_result = manager.create_temporary_plan(
             user_request="Remove unused code",
             complexity_tier=2,
+            estimated_time="2 hours",
             approach="Identify and remove dead code",
             phases=[
                 {"name": "Identify Dead Code", "description": "Run static analysis", "tasks": ["Run linter"]},
@@ -316,7 +318,7 @@ class TestTokenTrackingIntegration:
             ]
         )
         
-        plan_id = create_result['plan_id']
+        plan_id = create_result.plan_id
         manager.approve_plan(plan_id)
         
         # Establish baseline
