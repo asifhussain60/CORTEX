@@ -3,9 +3,10 @@ Phase Lifecycle Manager for CORTEX
 
 Unified phase lifecycle management across all orchestrators.
 Handles phase transitions: PENDING → IN PROGRESS → COMPLETE
+Auto-completes plans when final phase is done.
 
 Author: Asif Hussain
-Version: 1.0.0
+Version: 2.0.0 - Added automatic plan completion and folder movement
 """
 
 import logging
@@ -13,6 +14,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 from datetime import datetime, timedelta
 import re
+import shutil
 
 from .unified_plan_generator import UnifiedPlanGenerator
 
@@ -143,14 +145,25 @@ class PhaseLifecycleManager:
             
             logger.info(f"✅ Phase {phase_number} completed: {duration_str}, {tokens_saved} tokens saved")
             
-            return {
+            # Check if this was the final phase
+            is_final_phase = self._is_final_phase(updated_content, phase_number)
+            
+            result = {
                 "success": True,
                 "phase_number": phase_number,
                 "status": "COMPLETE",
                 "duration": duration_str,
                 "tokens_saved": tokens_saved,
-                "metrics": metrics or {}
+                "metrics": metrics or {},
+                "is_final_phase": is_final_phase
             }
+            
+            # Auto-complete plan if final phase
+            if is_final_phase:
+                completion_result = self._auto_complete_plan(master_plan_path)
+                result["plan_completed"] = completion_result
+            
+            return result
             
         except Exception as e:
             logger.error(f"Failed to complete phase {phase_number}: {e}")
@@ -248,3 +261,117 @@ class PhaseLifecycleManager:
         updated = re.sub(prompt_pattern, new_prompt, content)
         
         return updated
+    
+    def _is_final_phase(self, content: str, phase_number: int) -> bool:
+        """
+        Check if this is the final phase (no more PENDING phases).
+        
+        Args:
+            content: Master plan content
+            phase_number: Current phase number
+        
+        Returns:
+            True if this is the final phase, False otherwise
+        """
+        # Look for any PENDING phases
+        pending_pattern = r"\| \d+ \| [^|]+ \| .*?⏳ PENDING"
+        has_pending = re.search(pending_pattern, content) is not None
+        
+        return not has_pending
+    
+    def _auto_complete_plan(self, master_plan_path: Path) -> Dict[str, Any]:
+        """
+        Automatically complete the plan and move to completed folder.
+        
+        Steps:
+        1. Update plan status to COMPLETE in master plan
+        2. Update completion timestamp
+        3. Move plan folder from active/ to completed/
+        
+        Args:
+            master_plan_path: Path to master plan file
+        
+        Returns:
+            Result dictionary with success status and new path
+        """
+        try:
+            logger.info(f"🎉 Final phase complete - auto-completing plan: {master_plan_path.name}")
+            
+            # Read current content
+            with open(master_plan_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Update status to COMPLETE
+            content = re.sub(
+                r'\*\*Status:\*\* 🟡 In Progress',
+                '**Status:** ✅ Complete',
+                content
+            )
+            content = re.sub(
+                r'\*\*Status:\*\* ⏳ Pending',
+                '**Status:** ✅ Complete',
+                content
+            )
+            
+            # Update completed timestamp
+            completed_timestamp = datetime.now().strftime("%Y-%m-%d %I:%M %p")
+            content = re.sub(
+                r'\*\*Completed:\*\* TBD',
+                f'**Completed:** {completed_timestamp}',
+                content
+            )
+            
+            # Update continuation prompt to show completion
+            content = re.sub(
+                r'## 🔄 Continuation Prompt.*?---',
+                '## 🔄 Continuation Prompt\n\n✅ **PLAN COMPLETE** - All phases finished successfully.\n\n---',
+                content,
+                flags=re.DOTALL
+            )
+            
+            # Write back updated content
+            with open(master_plan_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+            
+            # Determine plan folder structure
+            plan_folder = master_plan_path.parent
+            
+            # Check if this is a folder-based plan (has parent folder with plan name)
+            if plan_folder.name.startswith(('PLAN-', 'TEMP-PLAN-', 'template-naming-enhancement')):
+                # Move entire folder from active/ to completed/
+                active_base = plan_folder.parent
+                completed_base = active_base.parent / "completed"
+                completed_base.mkdir(parents=True, exist_ok=True)
+                
+                new_location = completed_base / plan_folder.name
+                
+                # Move folder
+                shutil.move(str(plan_folder), str(new_location))
+                
+                logger.info(f"📁 Moved plan folder: {plan_folder} → {new_location}")
+                
+                return {
+                    "success": True,
+                    "moved": True,
+                    "old_path": str(master_plan_path),
+                    "new_path": str(new_location / master_plan_path.name),
+                    "folder_moved": True
+                }
+            else:
+                # Legacy flat structure - just update the file in place
+                logger.info(f"✅ Plan marked complete (flat structure, no folder move)")
+                
+                return {
+                    "success": True,
+                    "moved": False,
+                    "path": str(master_plan_path),
+                    "folder_moved": False
+                }
+            
+        except Exception as e:
+            logger.error(f"Failed to auto-complete plan: {e}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
+
