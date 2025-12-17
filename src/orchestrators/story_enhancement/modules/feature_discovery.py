@@ -74,7 +74,7 @@ class FeatureDiscoveryModule:
     def _validate_paths(self):
         """Validate required paths exist"""
         required_paths = [
-            self.cortex_root / "cortex-operations.yaml",
+            self.cortex_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml",
             self.cortex_root / "src" / "orchestrators",
             self.cortex_root / "cortex-brain" / "brain-protection-rules.yaml"
         ]

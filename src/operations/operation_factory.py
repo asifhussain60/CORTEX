@@ -66,18 +66,18 @@ class OperationFactory:
         """Find cortex-operations.yaml in project root."""
         # Try current directory
         current = Path.cwd()
-        config_file = current / "cortex-operations.yaml"
+        config_file = current / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         if config_file.exists():
             return config_file
         
         # Try parent directories
         for parent in current.parents:
-            config_file = parent / "cortex-operations.yaml"
+            config_file = parent / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
             if config_file.exists():
                 return config_file
         
         # Default to project root
-        return get_root_path() / "cortex-operations.yaml"
+        return get_root_path() / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
     
     def _load_config(self) -> None:
         """Load operations configuration from YAML."""

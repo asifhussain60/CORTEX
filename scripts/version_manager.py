@@ -224,7 +224,7 @@ class VersionManager:
         
         # Check 3: Package metadata files
         package_files = [
-            "cortex-operations.yaml",
+            "cortex-brain/manifests/operations/cortex-operations.yaml",
             "README.md"
         ]
         

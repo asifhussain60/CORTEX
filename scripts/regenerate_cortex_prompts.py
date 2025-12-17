@@ -295,7 +295,7 @@ class PromptRegenerator:
     
     def _scan_operations(self) -> List[str]:
         """Scan operations from YAML config."""
-        operations_yaml = self.cortex_root / "cortex-operations.yaml"
+        operations_yaml = self.cortex_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         operations = []
         
         if operations_yaml.exists():

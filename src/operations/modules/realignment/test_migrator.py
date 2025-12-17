@@ -117,11 +117,11 @@ class TestMigrator:
         """Auto-detect CORTEX project root."""
         current = Path.cwd()
         
-        if (current / "cortex-operations.yaml").exists():
+        if (current / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml").exists():
             return current
         
         for parent in current.parents:
-            if (parent / "cortex-operations.yaml").exists():
+            if (parent / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml").exists():
                 return parent
         
         raise FileNotFoundError("Cannot detect CORTEX project root")

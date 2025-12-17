@@ -258,7 +258,7 @@ class TestAutonomousExecutionRegistration:
         import yaml
         
         # Check cortex-operations.yaml (not operations-config.yaml)
-        config_path = Path(__file__).parent.parent.parent.parent / "cortex-operations.yaml"
+        config_path = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         
         if config_path.exists():
             with open(config_path, 'r') as f:
@@ -287,7 +287,7 @@ class TestAutonomousExecutionRegistration:
         import yaml
         
         # Check cortex-operations.yaml for autonomous triggers
-        config_path = Path(__file__).parent.parent.parent.parent / "cortex-operations.yaml"
+        config_path = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         
         if config_path.exists():
             with open(config_path, 'r') as f:

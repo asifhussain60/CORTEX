@@ -314,5 +314,5 @@ class TestConfigurationSmoke:
     
     def test_operations_config_exists(self):
         """cortex-operations.yaml exists."""
-        ops_path = Path("d:/PROJECTS/CORTEX/cortex-operations.yaml")
+        ops_path = Path("d:/PROJECTS/CORTEX/cortex-brain/manifests/operations/cortex-operations.yaml")
         assert ops_path.exists(), "cortex-operations.yaml not found"

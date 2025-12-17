@@ -56,7 +56,7 @@ def analyze_architecture() -> Dict:
             print("  ✅ Routing system configured")
     
     # Check operations config
-    ops_config = Path("cortex-operations.yaml")
+    ops_config = Path("cortex-brain/manifests/operations/cortex-operations.yaml")
     if ops_config.exists() and ops_config.stat().st_size > 1000:
         checks["operations_config_valid"] = True
         print("  ✅ Operations config valid")

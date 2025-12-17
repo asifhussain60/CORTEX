@@ -50,7 +50,7 @@ def register_utility_modules():
     """Register all utility modules to cortex-operations.yaml."""
     
     cortex_root = Path(__file__).resolve().parents[1]
-    operations_yaml_path = cortex_root / "cortex-operations.yaml"
+    operations_yaml_path = cortex_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
     
     print(f"Loading: {operations_yaml_path}")
     

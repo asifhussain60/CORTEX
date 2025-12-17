@@ -15,7 +15,7 @@ from typing import Dict, List
 @pytest.fixture
 def cortex_operations():
     """Load cortex-operations.yaml."""
-    ops_file = Path("cortex-operations.yaml")
+    ops_file = Path("cortex-brain/manifests/operations/cortex-operations.yaml")
     if not ops_file.exists():
         pytest.skip("cortex-operations.yaml not found")
     
@@ -35,7 +35,7 @@ def intent_router():
 
 def test_operations_file_exists():
     """Test that cortex-operations.yaml exists and is readable."""
-    ops_file = Path("cortex-operations.yaml")
+    ops_file = Path("cortex-brain/manifests/operations/cortex-operations.yaml")
     assert ops_file.exists(), "cortex-operations.yaml must exist"
     assert ops_file.stat().st_size > 0, "cortex-operations.yaml must not be empty"
 

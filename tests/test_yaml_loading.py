@@ -83,7 +83,7 @@ class TestYAMLLoading:
     
     def test_operations_config_loads(self, cortex_root: Path):
         """Test that cortex-operations.yaml loads successfully."""
-        ops_file = cortex_root / "cortex-operations.yaml"
+        ops_file = cortex_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         
         assert ops_file.exists(), f"Operations config file not found: {ops_file}"
         
@@ -95,7 +95,7 @@ class TestYAMLLoading:
     
     def test_operations_config_structure(self, cortex_root: Path):
         """Test operations config has required structure."""
-        ops_file = cortex_root / "cortex-operations.yaml"
+        ops_file = cortex_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         
         with open(ops_file, 'r', encoding='utf-8') as f:
             ops = yaml.safe_load(f)
@@ -109,7 +109,7 @@ class TestYAMLLoading:
     
     def test_operations_config_content(self, cortex_root: Path):
         """Test operations config has valid content."""
-        ops_file = cortex_root / "cortex-operations.yaml"
+        ops_file = cortex_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         
         with open(ops_file, 'r', encoding='utf-8') as f:
             ops = yaml.safe_load(f)
@@ -148,7 +148,7 @@ class TestYAMLLoading:
     
     def test_operations_config_profiles(self, cortex_root: Path):
         """Test operations have valid profile configurations."""
-        ops_file = cortex_root / "cortex-operations.yaml"
+        ops_file = cortex_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         
         with open(ops_file, 'r', encoding='utf-8') as f:
             ops = yaml.safe_load(f)
@@ -334,7 +334,7 @@ class TestYAMLLoading:
         
         yaml_files = [
             cortex_root / "cortex-brain" / "brain-protection-rules.yaml",
-            cortex_root / "cortex-operations.yaml",
+            cortex_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml",
             cortex_root / "cortex-brain" / "module-definitions.yaml",
             cortex_root / "cortex-brain" / "cortex-2.0-design" / "design-metadata.yaml",
         ]
@@ -366,7 +366,7 @@ class TestYAMLLoading:
     def test_all_yaml_files_consistent(self, cortex_root: Path):
         """Test that related YAML files have consistent data."""
         # Load all YAML files
-        with open(cortex_root / "cortex-operations.yaml", 'r', encoding='utf-8') as f:
+        with open(cortex_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml", 'r', encoding='utf-8') as f:
             operations = yaml.safe_load(f)
         
         with open(cortex_root / "cortex-brain" / "module-definitions.yaml", 'r', encoding='utf-8') as f:

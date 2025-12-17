@@ -360,10 +360,10 @@ def setup_environment(
     if project_root is None:
         project_root = Path.cwd()
         # Look for cortex-operations.yaml to confirm we're in CORTEX root
-        if not (project_root / 'cortex-operations.yaml').exists():
+        if not (project_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml").exists():
             # Try parent directories
             for parent in project_root.parents:
-                if (parent / 'cortex-operations.yaml').exists():
+                if (parent / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml").exists():
                     project_root = parent
                     break
     

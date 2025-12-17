@@ -22,7 +22,7 @@ from datetime import datetime
 def remove_slash_commands_from_yaml():
     """Remove slash_command fields from cortex-operations.yaml"""
     
-    yaml_path = Path("cortex-operations.yaml")
+    yaml_path = Path("cortex-brain/manifests/operations/cortex-operations.yaml")
     
     # Load YAML
     with open(yaml_path, 'r', encoding='utf-8') as f:

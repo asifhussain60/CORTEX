@@ -42,8 +42,8 @@ class TestYAMLConversion:
     
     @pytest.fixture
     def cortex_operations(self, root_path):
-        """Load cortex-operations.yaml (in root directory)"""
-        yaml_path = root_path / "cortex-operations.yaml"
+        """Load cortex-operations.yaml (from manifests directory)"""
+        yaml_path = root_path / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         with open(yaml_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
     
@@ -186,7 +186,7 @@ class TestYAMLConversion:
     
     def test_cortex_operations_load_performance(self, root_path):
         """Verify cortex-operations.yaml loads quickly (<300ms)."""
-        yaml_path = root_path / "cortex-operations.yaml"
+        yaml_path = root_path / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         
         start = time.perf_counter()
         with open(yaml_path, 'r', encoding='utf-8') as f:

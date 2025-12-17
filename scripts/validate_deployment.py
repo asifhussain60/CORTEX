@@ -873,7 +873,7 @@ class DeploymentValidator:
             
             # Configuration
             "cortex.config.template.json",
-            "cortex-operations.yaml",
+            "cortex-brain/manifests/operations/cortex-operations.yaml",
             "requirements.txt",
             
             # Legal & Documentation

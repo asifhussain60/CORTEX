@@ -645,7 +645,7 @@ See related guides in the navigation menu for additional help.
             registrar = FeatureAutoRegistrar(self.workspace_root)
             
             # Load existing operations
-            operations_yaml = self.workspace_root / "cortex-operations.yaml"
+            operations_yaml = self.workspace_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
             if operations_yaml.exists():
                 with open(operations_yaml, 'r') as f:
                     existing_ops = yaml.safe_load(f) or {}

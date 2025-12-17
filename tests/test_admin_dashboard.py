@@ -107,7 +107,7 @@ class TestAdminOperationsExclusion:
     
     def test_cortex_operations_has_admin_tier(self):
         """Test that admin_dashboard operation has deployment_tier: admin."""
-        operations_path = Path(__file__).parent.parent / "cortex-operations.yaml"
+        operations_path = Path(__file__).parent.parent / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         
         if not operations_path.exists():
             pytest.skip("cortex-operations.yaml not found")

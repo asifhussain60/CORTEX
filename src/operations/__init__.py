@@ -183,11 +183,11 @@ def _find_project_root() -> Path:
     """Find CORTEX project root by looking for cortex-operations.yaml."""
     current = Path.cwd()
     
-    if (current / "cortex-operations.yaml").exists():
+    if (current / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml").exists():
         return current
     
     for parent in current.parents:
-        if (parent / "cortex-operations.yaml").exists():
+        if (parent / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml").exists():
             return parent
     
     # Default to current directory

@@ -34,7 +34,7 @@ CRITICAL_FILES = {
     
     # Core Configuration
     'cortex.config.template.json': 'Configuration template',
-    'cortex-operations.yaml': 'Operations manifest',
+    'cortex-brain/manifests/operations/cortex-operations.yaml': 'Operations manifest',
     'requirements.txt': 'Python dependencies',
     
     # Essential Documentation (user-facing only)
