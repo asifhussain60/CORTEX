@@ -234,6 +234,14 @@ categories:
         platforms: [windows, linux, macos]
         requires_admin: false
         execution_method: cli
+        
+      - name: rename-planning-system-version
+        command: cortex-rename-planning-version
+        script: rename_planning_system_version.py
+        description: Rename Planning System version references across CORTEX
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
 
   generators:
     description: Code and specification generators

@@ -5,7 +5,7 @@ High-level orchestration for collecting, aggregating, and scheduling adoption me
 Coordinates CopilotMetricsCollector, CortexUsageTracker, and team aggregations.
 
 Author: Asif Hussain
-Version: 1.0.0
+Version: 3.0.0
 """
 
 import sqlite3

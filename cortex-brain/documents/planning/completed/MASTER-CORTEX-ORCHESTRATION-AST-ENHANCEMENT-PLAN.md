@@ -478,7 +478,7 @@ All phases below were delivered in v3.9, though some with different implementati
 - Full pre-flight validation orchestrator
 - Executable script generation (PowerShell, bash)
 - Environment health reports
-- Integration with Planning System 4.0
+- Integration with Planning System 3.0
 
 ---
 

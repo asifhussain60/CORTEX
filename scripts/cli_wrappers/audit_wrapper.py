@@ -1,5 +1,5 @@
 """
-CORTEX Planning System 4.0 - Audit Trail Viewer CLI
+CORTEX Planning System 3.0 - Audit Trail Viewer CLI
 
 Command-line utility for viewing and analyzing planning system audit logs.
 
@@ -283,7 +283,7 @@ class AuditViewer:
 def main():
     """CLI entry point."""
     parser = argparse.ArgumentParser(
-        description="CORTEX Planning System 4.0 - Audit Trail Viewer",
+        description="CORTEX Planning System 3.0 - Audit Trail Viewer",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:

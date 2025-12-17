@@ -6,7 +6,7 @@ Examines structure, patterns, SOLID principles, API design, security, scalabilit
 and maintainability.
 
 Author: Asif Hussain
-Version: 3.8.1
+Version: 3.0.0
 """
 
 import os

@@ -53,6 +53,7 @@ from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, asdict
 
 # Add project root to path
+from src.utils.resource_resolver import get_root_path
 PROJECT_ROOT = get_root_path()
 sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -544,7 +545,6 @@ class TokenOptimizer:
         # Use existing extraction script
         if self.extract_templates_script.exists():
             import subprocess
-from src.utils.resource_resolver import get_root_path
             subprocess.run([sys.executable, str(self.extract_templates_script)], check=True)
         else:
             safe_print("⚠️  Extraction script not found, skipping")

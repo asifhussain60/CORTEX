@@ -5445,76 +5445,79 @@ validation:
         - Faster initial development
         - Lower maintenance cost
 
-  # ============================================================================
-  # PLANNING SYSTEM 4.0 GOVERNANCE RULES
-  # ============================================================================
+# Layer 12: Planning System 3.0 Governance
+- layer_id: "planning_system_4_governance"
+  name: "Planning System 3.0 Governance"
+  description: "Governance rules for Planning System 3.0 - Temp plan approval, plan promotion integrity, task injection, context continuity"
+  priority: 12
+  
+  rules:
+    - rule_id: TEMP_PLAN_APPROVAL_ENFORCEMENT
+      name: "Temp Plan Approval Gate"
+      severity: blocked
+      description: "Prevents execution of unapproved or unready temporary plans"
+      detection:
+        keywords:
+          - "execute without approval"
+          - "skip approval"
+          - "bypass DoR"
+          - "implement before plan approved"
+        scope:
+          - intent
+          - implementation
+      validation:
+        - "Plan must be in active/ folder (not temp-plans/)"
+        - "Plan status must be 'approved'"
+        - "DoR score must be ≥90%"
+        - "User approval timestamp must exist"
+      alternatives:
+        - "Complete DoR validation (achieve ≥90% confidence)"
+        - "Request user approval explicitly"
+        - "Wait for plan promotion to active/"
+        - "Use iterative refinement to resolve ambiguities"
+      evidence_template: |
+        Plan Status: {status}
+        DoR Score: {dor_score}%
+        User Approval: {approval_status}
+        Location: {plan_folder}
+      rationale: |
+        TEMP_PLAN_APPROVAL_ENFORCEMENT: No Execution Without Approval
+        
+        Problem: Premature execution
+        - Implementation starts before requirements clear
+        - User expectations not validated
+        - High risk of rework
+        
+        Solution: Approval gate
+        - Temp plans remain in temp-plans/ until approved
+        - DoR validation ensures clarity (≥90% confidence)
+        - User must explicitly approve before promotion
+        - Only active/ plans can be executed
+        
+        Benefits:
+        - Mutual agreement achieved (CORTEX + user)
+        - Clear requirements before implementation
+        - Reduced rework and scope creep
+        - Complete audit trail
 
-  - rule_id: TEMP_PLAN_APPROVAL_ENFORCEMENT
-    name: "Temp Plan Approval Gate"
-    severity: blocked
-    description: "Prevents execution of unapproved or unready temporary plans"
-    detection:
-      keywords:
-        - "execute without approval"
-        - "skip approval"
-        - "bypass DoR"
-        - "implement before plan approved"
-      scope:
-        - intent
-        - implementation
-    validation:
-      - "Plan must be in active/ folder (not temp-plans/)"
-      - "Plan status must be 'approved'"
-      - "DoR score must be ≥90%"
-      - "User approval timestamp must exist"
-    alternatives:
-      - "Complete DoR validation (achieve ≥90% confidence)"
-      - "Request user approval explicitly"
-      - "Wait for plan promotion to active/"
-      - "Use iterative refinement to resolve ambiguities"
-    evidence_template: |
-      Plan Status: {status}
-      DoR Score: {dor_score}%
-      User Approval: {approval_status}
-      Location: {plan_folder}
-    rationale: |
-      TEMP_PLAN_APPROVAL_ENFORCEMENT: No Execution Without Approval
-      
-      Problem: Premature execution
-      - Implementation starts before requirements clear
-      - User expectations not validated
-      - High risk of rework
-      
-      Solution: Approval gate
-      - Temp plans remain in temp-plans/ until approved
-      - DoR validation ensures clarity (≥90% confidence)
-      - User must explicitly approve before promotion
-      - Only active/ plans can be executed
-      
-      Benefits:
-      - Mutual agreement achieved (CORTEX + user)
-      - Clear requirements before implementation
-      - Reduced rework and scope creep
-      - Complete audit trail
-
-  - rule_id: PLAN_PROMOTION_INTEGRITY
-    name: "Plan Promotion Integrity"
-    severity: blocked
-    description: "Ensures atomic transitions from temp-plans/ to active/"
-    detection:
-      keywords:
-        - "partial promotion"
-        - "incomplete transition"
-        - "missing context files"
-        - "orphaned plans"
-      scope:
-        - file_operations
-        - folder_structure
-    validation:
-      - "All plan files moved atomically"
-      - "Context graphs preserved (ast-analysis.json, lens-dependencies.json)"
-      - "Execution YAML files included"
-      - "Manifest updated before promotion completes"
+    - rule_id: PLAN_PROMOTION_INTEGRITY
+      name: "Plan Promotion Integrity"
+      severity: blocked
+      description: "Ensures atomic transitions from temp-plans/ to active/"
+      detection:
+        keywords:
+          - "partial promotion"
+          - "incomplete transition"
+          - "missing context files"
+          - "orphaned plans"
+        scope:
+          - file_operations
+          - folder_structure
+      validation:
+        - "All plan files moved atomically"
+        - "Context graphs preserved (ast-analysis.json, lens-dependencies.json)"
+        - "Execution YAML files included"
+        - "Manifest updated before promotion completes"
       - "Rollback possible if any step fails"
     alternatives:
       - "Use PlanLifecycleManager.promote_to_active()"

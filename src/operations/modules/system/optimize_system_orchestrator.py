@@ -30,7 +30,7 @@ Natural Language Triggers:
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Proprietary - See LICENSE file for terms
-Version: 1.0.0
+Version: 3.0.0
 Date: November 12, 2025
 """
 

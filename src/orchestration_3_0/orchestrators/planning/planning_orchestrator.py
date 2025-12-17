@@ -39,17 +39,22 @@ from ...core.base_orchestrator import (
 from ...core.state_machine import StateMachine, create_basic_orchestrator_fsm
 from ...session.session_manager import SessionManager
 from src.tier0.cortex_implants_integrator import get_implants_integrator
-from src.orchestration_3_0.orchestrators.planning.temporary_plan_manager import (
+from src.operations.modules.orchestration.temporary_plan_manager import (
     TemporaryPlanManager,
     InteractiveRefinementSession
 )
-from src.orchestration_3_0.orchestrators.planning.session_context_manager import (
+from src.operations.modules.orchestration.session_context_manager import (
     SessionContextManager,
     PlanningSession
 )
-from src.orchestration_3_0.orchestrators.planning.complexity_analyzer import ComplexityAnalyzer
-from src.orchestration_3_0.orchestrators.planning.plan_manifest_tracker import PlanManifestTracker
+from src.operations.modules.planning.complexity_analyzer import ComplexityAnalyzer
+from src.operations.modules.planning.plan_manifest_tracker import PlanManifestTracker
 from src.operations.modules.intelligence.narrative_generator import NarrativeGenerator
+from src.operations.modules.planning.unified_plan_generator import UnifiedPlanGenerator
+from src.planning.plan_lifecycle_manager import PlanLifecycleManager, PlanState
+from src.entry_point.planning_gate import PlanningGate
+from src.operations.modules.analysis.ast_engine import ASTEngine
+from src.cortex_lens.orchestrator import CortexLens
 
 logger = logging.getLogger(__name__)
 
@@ -169,29 +174,53 @@ class PlanningOrchestrator(BaseOrchestrator):
         
         self.current_plan: Optional[FeaturePlan] = None
         
-        # Initialize Planning System 4.0 components
+        # Initialize Planning System 3.0 components
         from pathlib import Path
         cortex_brain = Path("cortex-brain")
+        project_root = Path.cwd()
+        
+        # Initialize all Planning System 3.0 components
+        self.planning_gate = PlanningGate(cortex_root=project_root)
         
         self.temporary_plan_manager = TemporaryPlanManager(
-            temp_plans_folder=cortex_brain / "documents" / "planning" / "features" / "temp-plans"
+            project_root=project_root
         )
         
         self.session_context_manager = SessionContextManager(
-            sessions_file=cortex_brain / "active-sessions.json"
+            project_root=cortex_brain
         )
         
         self.complexity_analyzer = ComplexityAnalyzer()
         
         self.plan_manifest_tracker = PlanManifestTracker(
-            manifest_file=cortex_brain / "documents" / "planning" / "active-plans-manifest.yaml"
+            project_root=project_root
         )
+        
+        self.plan_lifecycle_manager = PlanLifecycleManager(
+            project_root=project_root
+        )
+        
+        self.unified_plan_generator = UnifiedPlanGenerator()
+        
+        # Initialize AST and Lens analyzers for codebase analysis
+        self.ast_engine = ASTEngine(project_root=project_root)
+        self.cortex_lens = CortexLens()
         
         # NarrativeGenerator requires AST engine and analyzers (initialize with None for now)
         # Will be injected when needed via container or lazy initialization
         self.narrative_generator: Optional[NarrativeGenerator] = None
         
-        logger.info("PlanningOrchestrator initialized with Planning System 4.0 components")
+        logger.info("🎭 PlanningOrchestrator initialized with Planning System 3.0 (10 components)")
+        logger.info("   ✅ PlanningGate - Request triage")
+        logger.info("   ✅ TemporaryPlanManager - Refinement sessions")
+        logger.info("   ✅ SessionContextManager - Context continuity")
+        logger.info("   ✅ ComplexityAnalyzer - Tier classification")
+        logger.info("   ✅ PlanManifestTracker - Manifest management")
+        logger.info("   ✅ PlanLifecycleManager - State machine")
+        logger.info("   ✅ UnifiedPlanGenerator - Template rendering")
+        logger.info("   ✅ ASTEngine - Code structure analysis")
+        logger.info("   ✅ CortexLens - Dependency mapping")
+        logger.info("   ✅ NarrativeGenerator - Documentation (lazy load)")
     
     def validate_dor(self, context: WorkflowContext) -> ValidationResult:
         """
@@ -903,7 +932,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         """
         Start iterative refinement session for temporary plan.
         
-        Planning System 4.0: Creates temporary plan, enters refinement loop.
+        Planning System 3.0: Creates temporary plan, enters refinement loop.
         
         Args:
             feature_name: Feature name
@@ -914,7 +943,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         Returns:
             InteractiveRefinementSession with initial plan
         """
-        logger.info(f"🎭 Planning System 4.0: Starting refinement session for {feature_name}")
+        logger.info(f"🎭 Planning System 3.0: Starting refinement session for {feature_name}")
         
         # Analyze complexity first
         complexity_analysis = self.complexity_analyzer.analyze(
@@ -962,7 +991,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         """
         Handle user feedback for active refinement session.
         
-        Planning System 4.0: Automatic context loading via SessionContextManager.
+        Planning System 3.0: Automatic context loading via SessionContextManager.
         No manual plan_id required if session is active.
         
         Args:
@@ -973,7 +1002,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         Returns:
             Updated InteractiveRefinementSession
         """
-        logger.info(f"🎭 Planning System 4.0: Processing user feedback")
+        logger.info(f"🎭 Planning System 3.0: Processing user feedback")
         
         # Automatic context loading (SKULL-013: CONTEXT_CONTINUITY_ENFORCEMENT)
         if not session_id and not plan_id:
@@ -1011,7 +1040,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         """
         Request user approval for refined temporary plan.
         
-        Planning System 4.0: Shows DoR metrics, awaits approval decision.
+        Planning System 3.0: Shows DoR metrics, awaits approval decision.
         
         Args:
             session_id: Refinement session ID
@@ -1019,7 +1048,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         Returns:
             Dict with approval request details
         """
-        logger.info(f"🎭 Planning System 4.0: Requesting approval for {session_id}")
+        logger.info(f"🎭 Planning System 3.0: Requesting approval for {session_id}")
         
         approval_request = self.temporary_plan_manager.request_approval(session_id)
         
@@ -1041,7 +1070,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         """
         Approve temporary plan and promote to active status.
         
-        Planning System 4.0: Atomic promotion (SKULL-012: PLAN_PROMOTION_INTEGRITY).
+        Planning System 3.0: Atomic promotion (SKULL-012: PLAN_PROMOTION_INTEGRITY).
         
         Args:
             session_id: Refinement session ID
@@ -1050,7 +1079,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         Returns:
             Dict with promotion result
         """
-        logger.info(f"🎭 Planning System 4.0: Approving and promoting {session_id}")
+        logger.info(f"🎭 Planning System 3.0: Approving and promoting {session_id}")
         
         if not user_approval:
             logger.info("❌ User rejected plan approval")
@@ -1083,6 +1112,237 @@ class PlanningOrchestrator(BaseOrchestrator):
         )
         
         return result
+    
+    def generate_worker_plans(
+        self,
+        plan_id: str,
+        phases: List[Dict[str, Any]],
+        metadata: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Generate worker plans (WP01, WP02, etc.) for multi-phase features.
+        
+        Planning System 3.0: Template-based worker plan generation with TaskInjector.
+        
+        Args:
+            plan_id: Plan identifier
+            phases: List of phase dictionaries
+            metadata: Plan metadata
+            
+        Returns:
+            Dict with generation results
+        """
+        logger.info(f"🎭 Planning System 3.0: Generating worker plans for {plan_id}")
+        logger.info(f"   Phases: {len(phases)}")
+        
+        from pathlib import Path
+        active_folder = Path("cortex-brain") / "documents" / "planning" / "active" / plan_id
+        
+        # Generate master plan
+        master_plan_content = self.unified_plan_generator.generate_master_plan(
+            plan_id=plan_id,
+            phases=phases,
+            metadata=metadata,
+            include_token_tracking=True,
+            include_visual_tracker=True,
+            include_continuation_prompt=True,
+            compressed=False
+        )
+        
+        master_plan_path = active_folder / "master-plan.md"
+        master_plan_path.write_text(master_plan_content, encoding='utf-8')
+        
+        logger.info(f"   ✅ Master plan: {master_plan_path}")
+        
+        # Generate worker plans for each phase
+        worker_plans = []
+        for idx, phase in enumerate(phases, start=1):
+            worker_plan_content = self.unified_plan_generator.generate_worker_plan(
+                plan_id=plan_id,
+                phase_number=idx,
+                phase_data=phase,
+                metadata=metadata
+            )
+            
+            phase_name_slug = phase['name'].replace(' ', '-')
+            worker_plan_path = active_folder / f"WP{idx:02d}-{phase_name_slug}.md"
+            worker_plan_path.write_text(worker_plan_content, encoding='utf-8')
+            
+            worker_plans.append({
+                'phase_number': idx,
+                'path': str(worker_plan_path),
+                'name': phase['name']
+            })
+            
+            logger.info(f"   ✅ Worker plan {idx:02d}: {worker_plan_path.name}")
+        
+        # Create execution/ subfolder with YAML execution files
+        execution_folder = active_folder / "execution"
+        execution_folder.mkdir(exist_ok=True)
+        
+        # Generate YAML execution files (simplified for now)
+        master_yaml_path = execution_folder / "master-execution.yaml"
+        master_yaml_path.write_text(
+            f"# Master Execution Plan\nplan_id: {plan_id}\nphases: {len(phases)}\n",
+            encoding='utf-8'
+        )
+        
+        logger.info(f"   ✅ Execution folder: {execution_folder}")
+        logger.info(f"🎉 Worker plan generation complete: 1 master + {len(worker_plans)} workers")
+        
+        return {
+            'success': True,
+            'plan_id': plan_id,
+            'master_plan': str(master_plan_path),
+            'worker_plans': worker_plans,
+            'execution_folder': str(execution_folder)
+        }
+    
+    def _generate_ast_lens_context(
+        self,
+        feature_name: str,
+        affected_files: List[str]
+    ) -> Dict[str, Any]:
+        """
+        Generate AST and Cortex Lens context graphs.
+        
+        Planning System 3.0: AST/Lens context accumulation.
+        
+        Args:
+            feature_name: Feature name
+            affected_files: List of affected file paths
+            
+        Returns:
+            Dict with AST and Lens analysis
+        """
+        logger.info(f"🎭 Planning System 3.0: Generating AST/Lens context for {feature_name}")
+        
+        from pathlib import Path
+        import json
+        
+        # Real AST analysis using ASTEngine
+        ast_context = {
+            'analyzed_files': affected_files,
+            'classes': [],
+            'functions': [],
+            'dependencies': [],
+            'imports': []
+        }
+        
+        if self.ast_engine.available and affected_files:
+            try:
+                logger.info(f"   Running AST analysis on {len(affected_files)} files...")
+                
+                # Analyze each affected file
+                for file_path in affected_files:
+                    file_path_obj = Path(file_path)
+                    if file_path_obj.exists() and file_path_obj.suffix == '.py':
+                        # Use AST engine for Python file analysis
+                        test_gaps = self.ast_engine.analyze_test_gaps(file_path_obj)
+                        
+                        # Extract structural information
+                        if test_gaps:
+                            ast_context['classes'].extend(test_gaps.get('untested_classes', []))
+                            ast_context['functions'].extend(test_gaps.get('untested_functions', []))
+                
+                logger.info(f"   ✅ AST analysis: {len(ast_context['classes'])} classes, {len(ast_context['functions'])} functions")
+            except Exception as e:
+                logger.warning(f"   AST analysis failed: {e}, using stub data")
+        else:
+            logger.info(f"   AST engine not available, using stub data")
+        
+        # Real Lens analysis using CortexLens
+        lens_context = {
+            'internal_dependencies': [],
+            'external_dependencies': [],
+            'integration_points': [],
+            'performance_bottlenecks': [],
+            'architecture_patterns': []
+        }
+        
+        try:
+            logger.info(f"   Running Cortex Lens analysis...")
+            
+            # Get project root for full analysis
+            project_root = Path.cwd()
+            
+            # Run Cortex Lens analysis (this is expensive, so we limit scope)
+            # In production, this would analyze the entire codebase
+            # For now, we focus on affected files
+            
+            lens_result = self.cortex_lens.analyze(
+                repo_path=str(project_root),
+                output_dir=None  # Don't generate full dashboard
+            )
+            
+            # Extract relevant context from Lens results
+            if lens_result and 'data' in lens_result:
+                lens_data = lens_result['data']
+                lens_context['internal_dependencies'] = lens_data.get('dependencies', {}).get('internal', [])
+                lens_context['external_dependencies'] = lens_data.get('dependencies', {}).get('external', [])
+                lens_context['architecture_patterns'] = lens_data.get('patterns', [])
+            
+            logger.info(f"   ✅ Lens analysis: {len(lens_context['internal_dependencies'])} internal deps")
+        except Exception as e:
+            logger.warning(f"   Cortex Lens analysis failed: {e}, using stub data")
+        
+        # Store context in JSON files (for external reference, not inline in plans)
+        context_dir = Path("cortex-brain") / "documents" / "planning" / "temp-plans" / feature_name / "context"
+        context_dir.mkdir(parents=True, exist_ok=True)
+        
+        ast_file = context_dir / "ast-analysis.json"
+        lens_file = context_dir / "lens-dependencies.json"
+        
+        with open(ast_file, 'w') as f:
+            json.dump(ast_context, f, indent=2)
+        
+        with open(lens_file, 'w') as f:
+            json.dump(lens_context, f, indent=2)
+        
+        logger.info(f"   ✅ Context stored: {ast_file}, {lens_file}")
+        
+        return {
+            'ast_context': ast_context,
+            'lens_context': lens_context,
+            'ast_file': str(ast_file),
+            'lens_file': str(lens_file)
+        }
+    
+    def _validate_against_implants(self, plan: FeaturePlan) -> List[str]:
+        """
+        Validate plan against cortex-implants (optional).
+        
+        Checks:
+        - Tech stack restrictions
+        - Architecture patterns
+        - Business rules compliance
+        
+        Args:
+            plan: Feature plan to validate
+            
+        Returns:
+            List of violations (empty if valid or no implants)
+        """
+        try:
+            integrator = get_implants_integrator()
+            
+            if not integrator.has_implants():
+                return []  # No implants, no violations
+            
+            logger.info(f"🧬 Validating plan against cortex-implants (Priority: {integrator.get_priority()})")
+            
+            violations = []
+            
+            # Validate tech stack (if dependencies mentioned in plan)
+            plan_dict = self._plan_to_dict(plan)
+            plan_str = str(plan_dict).lower()
+            
+            # Extract potential library names from plan
+            potential_deps = []
+            for phase in plan.phases:
+                for task in phase.deliverables:
+                    if any(kw in task.lower() for kw in ['library', 'package', 'framework', 'npm', 'pip']):
+                        # Extract words that might be library names
                         words = task.split()
                         potential_deps.extend([w for w in words if len(w) > 2])
             

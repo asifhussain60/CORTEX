@@ -274,12 +274,12 @@
    - Document iterative refinement workflow
    - Add approval commands
    
-2. ☐ Create `cortex-brain/PLANNING-SYSTEM-4.0-GUIDE.md`
+2. ☐ Create `cortex-brain/PLANNING-SYSTEM-3.0-GUIDE.md`
    - Complete workflow documentation
    - User guide for refinement iterations
    
 3. ☐ Update `cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml`
-   - Upgrade to planning-system-4.0-manifest.yaml
+   - Upgrade to planning-system-3.0-manifest.yaml
    - Document InteractiveRefinementSession
 
 ---

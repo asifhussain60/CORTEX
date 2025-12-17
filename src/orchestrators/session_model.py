@@ -3,7 +3,7 @@ Unified Session Model for CORTEX Orchestrators
 
 Provides type-safe, consistent state management across all orchestrators.
 
-Version: 1.0.0 (Extracted from archive)
+Version: 3.0.0 (Extracted from archive)
 Author: Asif Hussain
 """
 

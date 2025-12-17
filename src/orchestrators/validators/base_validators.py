@@ -9,7 +9,7 @@ Applies SOLID principles:
 - Dependency Inversion: Abstract base, concrete implementations
 
 Author: Asif Hussain
-Version: 1.0.0
+Version: 3.0.0
 Created: December 12, 2025
 """
 

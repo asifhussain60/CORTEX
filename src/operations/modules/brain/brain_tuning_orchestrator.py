@@ -16,7 +16,7 @@ Addresses identified issues:
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
-Version: 1.0.0
+Version: 3.0.0
 Date: December 8, 2025
 """
 

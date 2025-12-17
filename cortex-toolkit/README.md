@@ -174,6 +174,7 @@ Maintenance tools.
 | cleanup-temp | `cortex-cleanup-temp` | Clean up temporary files |
 | detect-duplicates | `cortex-duplicates` | Detect duplicate code |
 | master-cleanup | `cortex-master-cleanup` | Master cleanup operation |
+| rename-planning-system-version | `cortex-rename-planning-version` | Rename Planning System version references |
 
 ---
 

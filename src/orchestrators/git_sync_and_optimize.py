@@ -20,7 +20,7 @@ Safety Features:
 - Validation checkpoints between phases
 - Detailed logging and status reporting
 
-Version: 3.2.1
+Version: 3.0.0
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)

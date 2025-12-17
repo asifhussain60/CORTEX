@@ -1,4 +1,4 @@
-# 🎉 Planning System 4.0 Implementation - Completion Report
+# 🎉 Planning System 3.0 Implementation - Completion Report
 
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX  
 **Date:** December 17, 2025  
@@ -26,7 +26,7 @@
 6. `NO_IMPLEMENTATION_SHORTCUTS_ENFORCEMENT` - Prevents bypassing planning phase
 7. `AST_CONTEXT_INTEGRATION_ENFORCEMENT` - Requires AST context in plans
 
-**Impact:** Planning System 4.0 now has comprehensive governance enforcement through Tier 0 instincts.
+**Impact:** Planning System 3.0 now has comprehensive governance enforcement through Tier 0 instincts.
 
 ---
 
@@ -101,9 +101,9 @@ def generate_worker_plan(
 
 ---
 
-#### 5. Comprehensive Guide (PLANNING-SYSTEM-4.0-GUIDE.md)
+#### 5. Comprehensive Guide (PLANNING-SYSTEM-3.0-GUIDE.md)
 **Lines Added:** 600+ lines (new file)  
-**Location:** `cortex-brain/documents/planning/PLANNING-SYSTEM-4.0-GUIDE.md`
+**Location:** `cortex-brain/documents/planning/PLANNING-SYSTEM-3.0-GUIDE.md`
 
 **Sections:**
 1. **Overview** - Key features, DoR explanation, system diagram
@@ -166,7 +166,7 @@ def _validate_standard_tasks() -> Dict
 - ✅ Move context graphs to context/ subfolder
 - ✅ Validate standard task presence
 
-**Impact:** Old-format plans can be migrated to Planning System 4.0 canonical structure.
+**Impact:** Old-format plans can be migrated to Planning System 3.0 canonical structure.
 
 ---
 
@@ -188,7 +188,7 @@ def _validate_standard_tasks() -> Dict
 
 **New Files (4):**
 1. `src/operations/modules/planning/task_injector.py` (250 lines)
-2. `cortex-brain/documents/planning/PLANNING-SYSTEM-4.0-GUIDE.md` (600+ lines)
+2. `cortex-brain/documents/planning/PLANNING-SYSTEM-3.0-GUIDE.md` (600+ lines)
 3. `scripts/cli_wrappers/cleanup_plans_wrapper.py` (350 lines)
 4. `scripts/cli_wrappers/realign_plans_wrapper.py` (350 lines)
 
@@ -211,10 +211,10 @@ def _validate_standard_tasks() -> Dict
 
 2. **Documentation DoD** (4/5 checkboxes)
    - `.github/prompts/CORTEX.prompt.md` updated
-   - `PLANNING-SYSTEM-4.0-GUIDE.md` created
+   - `PLANNING-SYSTEM-3.0-GUIDE.md` created
    - Inline docstrings complete
    - Examples provided
-   - Pending: `planning-system-4.0-manifest.yaml`
+   - Pending: `planning-system-3.0-manifest.yaml`
 
 3. **Plan Lifecycle DoD** (6/7 checkboxes)
    - Cleanup policies implemented
@@ -327,7 +327,7 @@ def _validate_standard_tasks() -> Dict
    - Validate standard task presence
 
 3. **Documentation Finalization** (MEDIUM)
-   - Create `planning-system-4.0-manifest.yaml`
+   - Create `planning-system-3.0-manifest.yaml`
    - Update `.github/prompts/CORTEX.prompt.md` with new commands
    - Add troubleshooting examples to guide
 
@@ -382,7 +382,7 @@ def _validate_standard_tasks() -> Dict
 
 ### Qualitative Outcomes
 
-- ✅ Planning System 4.0 now has enforceable governance (SKULL)
+- ✅ Planning System 3.0 now has enforceable governance (SKULL)
 - ✅ Worker plans auto-include standard tasks (no manual injection)
 - ✅ DoR validation blocks premature execution (quality gate)
 - ✅ Lifecycle management automated (cleanup/realignment)

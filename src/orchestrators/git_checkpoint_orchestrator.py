@@ -2,7 +2,7 @@
 Git Checkpoint Orchestrator (Minimal stub for imports)
 
 Author: Asif Hussain
-Version: 1.0.0
+Version: 3.0.0
 """
 
 from pathlib import Path

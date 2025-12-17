@@ -15,7 +15,7 @@ Modules:
     8. Story Validation - Auto-fix narrative errors
     9. DALL-E Integration - Prompt generation + reference injection
 
-Version: 1.0
+Version: 3.0.0
 Author: Asif Hussain
 """
 

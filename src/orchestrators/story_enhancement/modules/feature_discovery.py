@@ -8,7 +8,7 @@ Categorization:
     MEDIUM: Section within chapter (800-1,200 words)
     MINOR: Mention in epilogue (100-300 words)
 
-Version: 1.0
+Version: 3.0.0
 Author: Asif Hussain
 """
 

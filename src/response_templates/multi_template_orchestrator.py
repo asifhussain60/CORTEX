@@ -4,7 +4,7 @@ This module enables intelligent selection and composition of multiple relevant t
 based on user context, with proper conflict resolution and priority handling.
 
 Author: Asif Hussain
-Version: 1.0
+Version: 3.0.0
 """
 
 import re

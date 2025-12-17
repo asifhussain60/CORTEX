@@ -11,7 +11,7 @@ Architecture:
     Phase 4: Image Injection (Module 9B)
     Phase 5: Pipeline Integration
 
-Version: 1.0
+Version: 3.0.0
 Author: Asif Hussain
 """
 

@@ -1,7 +1,7 @@
 """
 Plan Realignment CLI - Migrate Plans to Canonical Structure
 
-Realigns plans to conform to Planning System 4.0 canonical structure:
+Realigns plans to conform to Planning System 3.0 canonical structure:
 - WP## naming for worker plans
 - execution/ subfolder for YAML files
 - context/ subfolder for AST/Lens graphs
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 class PlanRealignmentEngine:
     """
-    Migrates old-format plans to Planning System 4.0 canonical structure.
+    Migrates old-format plans to Planning System 3.0 canonical structure.
     
     Migrations:
     - Rename sub-plans to WP##-Phase-Name.md format

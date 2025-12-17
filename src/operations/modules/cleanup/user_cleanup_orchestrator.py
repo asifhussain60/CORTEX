@@ -10,7 +10,7 @@ This module provides safe, conservative cleanup for user repositories with:
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Source-Available (Use Allowed, No Contributions)
-Version: 3.2.1
+Version: 3.0.0
 """
 
 import logging
