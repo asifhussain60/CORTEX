@@ -1,9 +1,10 @@
 # CORTEX 3.0 → 4.0 Migration Master Plan
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Author:** Asif Hussain  
 **Created:** December 17, 2025  
-**Status:** 🟡 AWAITING APPROVAL  
+**Approved:** December 17, 2025  
+**Status:** 🟢 APPROVED - Ready for Phase 0 Implementation  
 **Branch Strategy:** CORTEX-3.0 (source) → CORTEX-4.0 (target)
 
 ---
@@ -13,18 +14,20 @@
 Comprehensive migration plan to transform CORTEX from current 3.0 architecture to next-generation 4.0 system with:
 
 - **MCP Server Architecture** - Pluggable tool ecosystem replacing hardcoded wrappers
-- **Enhanced Brain** - Hybrid centralization (SQLite + shared templates)
+- **Enhanced Brain** - Multi-domain architecture with privacy controls (RA/FSA/HSA/Commuter)
 - **Bloat Reduction** - Permanent wiring via dependency injection, eliminate manifest bloat
 - **Clean Orchestrator Structure** - Co-located tests, TDD-first development
 - **Unified Operations** - Consolidate 28+ orchestrators into 13 total (11 core + 2 specialized)
 - **Agent Integration** - Streamline 18 agents into 12 active (7 independent + 4 brain integrations + 1 deprecated)
 - **CORTEX Lens v2.0** - MCP-integrated intelligence platform with streaming analysis, AI narratives, brain integration
 - **Technical Documentation System** - Auto-generated docs with 60+ interactive D3.js diagrams
+- **Multi-Domain Support** - Enterprise-grade domain isolation with selective knowledge sharing (NEW)
 
 **Timeline:** 18 weeks (4.5 months including Phase 0 cleanup + documentation)  
 **Risk Level:** 🟡 MEDIUM  
-**Test Coverage Target:** 85%+ all orchestrators  
+**Test Coverage Target:** 90%+ all orchestrators (UPGRADED)  
 **Documentation Target:** 200+ technical documents with 60+ interactive D3.js diagrams  
+**Breaking Changes:** ✅ APPROVED - CORTEX 4.0 fully replaces 3.0 (no backward compatibility)  
 
 **Architecture References:**
 - **Planning Orchestrator Redesign** - See analysis in `.github/copilot/copilot-chats/chat01.md`
@@ -36,7 +39,9 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 1. **Week 0:** Phase 0 cleanup + technical documentation structure setup
 2. **Weeks 1-3:** Phase 1 foundation (10 prerequisites MUST be complete)
 3. **Week 3 End:** Run validation script - MUST pass before Phase 3
-4. **Week 7:** Begin orchestrator migration (ExecutionOrchestrator first, TDD second with redesign)
+4. **Week 7 (Days 1-3):** Migrate ExecutionOrchestrator (foundation - all orchestrators depend on it)
+5. **Week 7 (Days 4-5):** Migrate Technical Documentation Orchestrator (self-documenting migration)
+6. **Week 8:** Migrate PlanningOrchestrator (high complexity, well-tested, 1,599 LOC → 4 modules)
 
 **Key Phases (Reorganized for Efficiency):**
 - **Phase 0 (Week 0):** Pre-Migration Cleanup - Eliminate bloat + Technical documentation structure  
@@ -756,6 +761,257 @@ src/mcp/
 - ✅ Perfect for single-machine dev workflows
 - ✅ Scales to 100GB+ databases
 - ❌ Enterprise (50+ devs) → PostgreSQL/SQL Server
+
+---
+
+### 2.1 Multi-Domain Architecture (Enterprise Extension)
+
+**Use Case:** Organizations with multiple business domains (e.g., RA, FSA, HSA, Commuter benefits) requiring isolated development with selective knowledge sharing.
+
+**Architecture: Domain-Namespaced Brain**
+
+```
+~/.cortex/shared/
+├── response-templates.yaml               # Single source of truth
+├── capabilities.yaml                     # Unified capability definitions
+├── tier2/
+│   └── knowledge_graph.db                # Cross-domain pattern sharing
+│       ├── patterns (with namespace)     # company.{domain}.{category}.{pattern}
+│       │   ├── company.ra.authentication.jwt-refresh-tokens
+│       │   ├── company.fsa.payment-processing.stripe-integration
+│       │   ├── company.hsa.compliance.hipaa-audit-logging
+│       │   └── company.commuter.enrollment.multi-step-wizard
+│       ├── cross_domain_insights         # "JWT used in 3/4 domains"
+│       └── sharing_audit_log             # Who shared what, when, why
+└── tier0/
+    └── skull_rules.yaml                  # Immutable governance
+
+{repo}/cortex-brain/
+├── domain.config.json                    # NEW: Domain identifier
+│   {
+│     "company": "your-company",
+│     "domain": "ra",                     # or "fsa", "hsa", "commuter"
+│     "subdomain": "web-api"              # optional
+│   }
+├── sharing-policy.yaml                   # NEW: What to share/isolate
+├── tier1/conversations.db                # Domain-isolated
+└── tier3/git_metrics.db                  # Domain-isolated
+```
+
+**Namespace Convention:**
+```
+Format: company.{domain}.{category}.{pattern}
+
+Examples:
+- company.ra.authentication.jwt-refresh-tokens
+- company.fsa.payment-processing.stripe-integration  
+- company.hsa.compliance.hipaa-audit-logging
+- company.commuter.enrollment.multi-step-wizard
+```
+
+**Privacy-First Sharing Policy (Default Private with Opt-In):**
+
+```yaml
+# cortex-brain/sharing-policy.yaml (per repository)
+domain: ra
+company: your-company
+
+# DEFAULT: All patterns private unless explicitly shared
+default_sharing: PRIVATE
+
+# Opt-in sharing by category
+sharing:
+  # Infrastructure patterns (safe to share)
+  testing:
+    share: true
+    reason: "Testing patterns beneficial across all domains"
+  
+  architecture:
+    share: true
+    reason: "Clean Architecture principles universal"
+  
+  cicd:
+    share: true
+    reason: "Build/deploy patterns reusable"
+  
+  # Business logic (private by default)
+  authentication:
+    share: false  # Could opt-in later if reviewed
+    reason: "Domain-specific auth requirements"
+  
+  payment-processing:
+    share: false
+    reason: "Contains PCI-sensitive patterns"
+  
+  compliance:
+    share: false
+    reason: "Regulatory requirements vary by domain"
+
+# Auto-reject sharing for these categories (hard block)
+never_share:
+  - pci-compliance          # Payment Card Industry
+  - pii-handling            # Personal Identifiable Information
+  - phi-patterns            # Protected Health Information (HIPAA)
+  - ssn-processing          # Social Security Numbers
+  - financial-calculations  # Domain-specific business logic
+  - api-credentials         # Even sanitized, patterns stay isolated
+  - customer-data-access    # Domain-specific authorization
+```
+
+**Enhanced Tier 2 Schema (Privacy-Aware):**
+
+```sql
+-- Multi-domain pattern storage with privacy controls
+CREATE TABLE patterns (
+    id INTEGER PRIMARY KEY,
+    namespace TEXT NOT NULL,              -- "company.ra.authentication"
+    pattern_type TEXT,
+    pattern_name TEXT,
+    code_examples JSON,
+    success_rate REAL,
+    usage_count INTEGER,
+    
+    -- Privacy controls (enterprise compliance)
+    is_shareable BOOLEAN DEFAULT FALSE,   -- Default PRIVATE
+    sharing_reason TEXT,                  -- Why shared (audit trail)
+    shared_by TEXT,                       -- Who approved sharing
+    shared_at TIMESTAMP,                  -- When approved
+    
+    -- Sensitivity classification
+    sensitivity_level TEXT CHECK(sensitivity_level IN ('PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED')) DEFAULT 'INTERNAL',
+    contains_pii BOOLEAN DEFAULT FALSE,   -- Personal Identifiable Information
+    contains_phi BOOLEAN DEFAULT FALSE,   -- Protected Health Information
+    contains_pci BOOLEAN DEFAULT FALSE,   -- Payment Card Industry data
+    
+    created_at TIMESTAMP,
+    last_used TIMESTAMP,
+    UNIQUE(namespace, pattern_name)
+);
+
+-- Indexes for multi-domain queries
+CREATE INDEX idx_namespace ON patterns(namespace);
+CREATE INDEX idx_domain ON patterns(substr(namespace, 1, instr(namespace, '.') + 2));
+CREATE INDEX idx_shareable ON patterns(is_shareable) WHERE is_shareable = TRUE;
+CREATE INDEX idx_sensitivity ON patterns(sensitivity_level);
+
+-- Hard block for sensitive patterns (compliance enforcement)
+CREATE TRIGGER prevent_sensitive_sharing
+BEFORE UPDATE OF is_shareable ON patterns
+WHEN NEW.is_shareable = TRUE AND (
+    NEW.contains_pii = TRUE OR 
+    NEW.contains_phi = TRUE OR 
+    NEW.contains_pci = TRUE OR
+    NEW.sensitivity_level = 'RESTRICTED'
+)
+BEGIN
+    SELECT RAISE(ABORT, 'Cannot share patterns containing PII/PHI/PCI data');
+END;
+
+-- Cross-domain insights (only from shareable patterns)
+CREATE TABLE cross_domain_insights (
+    id INTEGER PRIMARY KEY,
+    insight_type TEXT,                    -- "pattern_similarity", "recommendation"
+    domains TEXT,                         -- "ra,fsa,hsa"
+    pattern_id INTEGER,
+    confidence REAL,
+    created_at TIMESTAMP,
+    FOREIGN KEY(pattern_id) REFERENCES patterns(id)
+);
+
+-- Sharing audit log (compliance & accountability)
+CREATE TABLE sharing_audit_log (
+    id INTEGER PRIMARY KEY,
+    pattern_id INTEGER,
+    action TEXT,                          -- "SHARED", "UNSHARED", "ATTEMPTED"
+    actor TEXT,                           -- Who performed action
+    reason TEXT,
+    result TEXT,                          -- "SUCCESS", "BLOCKED", "FAILED"
+    timestamp TIMESTAMP,
+    FOREIGN KEY(pattern_id) REFERENCES patterns(id)
+);
+```
+
+**Usage Examples:**
+
+```python
+# Query RA patterns only (domain-isolated)
+ra_patterns = brain.get_patterns(namespace="company.ra.*")
+
+# Cross-domain recommendations (only from shared patterns)
+recommendations = brain.get_recommendations(
+    current_domain="commuter",
+    learn_from=["ra", "fsa", "hsa"],
+    pattern_type="authentication"
+)
+# Returns: "JWT with refresh tokens used in RA, FSA - recommend for Commuter"
+# Only includes patterns where is_shareable=TRUE
+
+# Share a vetted pattern (creates audit trail)
+brain.share_pattern(
+    namespace="company.ra.authentication.jwt-refresh-tokens",
+    reason="Generic JWT pattern, no RA-specific logic, reviewed by security team",
+    shared_by="tech-lead@company.com"
+)
+# Result: Pattern visible to FSA/HSA/Commuter + audit log entry
+
+# Attempt to share PCI pattern (blocked by trigger)
+brain.share_pattern(
+    namespace="company.fsa.payment.credit-card-processing",
+    reason="..."
+)
+# Result: ERROR - Cannot share patterns containing PII/PHI/PCI data
+# Audit log: action=ATTEMPTED, result=BLOCKED
+
+# Privacy enforcement when adding patterns
+brain.add_pattern(
+    namespace="company.hsa.compliance.hipaa-audit-logging",
+    pattern_type="compliance",
+    contains_phi=True,              # Marks as PHI
+    sensitivity_level="RESTRICTED"  # Highest sensitivity
+)
+# Result: Pattern stored, permanently blocked from sharing
+```
+
+**Benefits of Multi-Domain Architecture:**
+
+1. **Cross-Domain Learning (Selective)**
+   - "FSA uses Stripe integration pattern, recommend for RA payments"
+   - "3/4 domains use JWT with refresh tokens"
+   - "Commuter could benefit from RA's enrollment wizard pattern"
+
+2. **Privacy & Compliance**
+   - Default private prevents accidental data leakage
+   - PII/PHI/PCI patterns hard-blocked from sharing
+   - Audit trail for compliance (who shared what, when, why)
+   - Sensitivity classification enforced at database level
+
+3. **Domain Isolation**
+   - Tier 1 (conversations) stays per-repository
+   - Business logic private unless explicitly shared
+   - Regulatory requirements respected (HIPAA, PCI, SOC2)
+
+4. **Knowledge Reuse**
+   - Infrastructure patterns shared across domains
+   - Testing strategies reused (save 100+ hours/year)
+   - Architecture principles unified (Clean Architecture, DDD)
+
+5. **Single CORTEX Instance**
+   - One installation serves all domains
+   - Centralized maintenance and upgrades
+   - Unified brain with namespace isolation
+
+**Implementation Timeline:**
+
+**Phase 1 (Weeks 1-3):** Add domain.config.json to repository structure
+**Phase 2 (Weeks 4-6):** Implement multi-domain brain with privacy controls
+- Create sharing-policy.yaml schema
+- Implement namespace-aware queries
+- Add privacy enforcement triggers
+- Create sharing audit log
+- Build cross-domain insight engine
+
+**Phase 3 (Weeks 7-11):** Test with RA/FSA/HSA/Commuter repositories
+**Phase 5 (Weeks 15-17):** Validate privacy controls with security team
 
 ### 3. Bloat Reduction Strategy: Dependency Injection
 
@@ -2604,28 +2860,59 @@ cortex-toolkit docs export --format pdf --output cortex-4.0-technical-docs.pdf
 
 **⚠️ PREREQUISITE:** Phase 1 foundation validation MUST pass before starting Phase 3. See [Foundation Prerequisites](#-critical-foundation-prerequisites-for-orchestrator-migration) section.
 
-**🎯 FIRST ORCHESTRATOR MIGRATION: Technical Documentation Orchestrator (Week 7, Days 1-2)**
+**🎯 HYBRID MIGRATION SEQUENCE (Week 7)**
 
-The **Technical Documentation Orchestrator** will be migrated FIRST for strategic reasons:
+**FIRST: ExecutionOrchestrator (Days 1-3) - Foundation Dependency**
 
-1. **Self-Documentation** - Documents the migration process as it happens
-2. **Foundation Validation** - Proves BaseOrchestrator framework works end-to-end
-3. **Team Enablement** - Generates documentation for developers joining migration
-4. **Pattern Establishment** - Sets standards for remaining 12 orchestrators
-5. **Migration Visualization** - Creates Sankey diagrams showing 28→13 consolidation
+The **ExecutionOrchestrator** will be migrated FIRST because:
+
+1. **Foundation Dependency** - All other orchestrators depend on it for phase execution
+2. **Multi-Orchestrator Routing** - Routes operations to specialized orchestrators
+3. **Error Handling** - Provides centralized error recovery for all workflows
+4. **BaseOrchestrator Validation** - First real test of Phase 1 foundation
 
 **Migration Timeline:**
-- **Day 1:** Migrate orchestrator from Phase 1.5 implementation to CORTEX-4.0 branch (4 hours)
-- **Day 1-2:** Update imports, wire DI container, co-locate tests (2 hours)
-- **Day 2:** Generate first CORTEX 4.0 documentation with migration diagrams (3 hours)
-- **Total:** 1-2 days (fastest orchestrator migration)
+- **Day 1:** Migrate core orchestrator logic (6 hours)
+- **Day 2:** Wire DI container, co-locate tests (6 hours)
+- **Day 3:** Validate with comprehensive test suite, 85%+ coverage (6 hours)
+- **Total:** 3 days
 
-**Success Criteria:**
+---
+
+**SECOND: Technical Documentation Orchestrator (Days 4-5) - Strategic Benefits**
+
+The **Technical Documentation Orchestrator** will be migrated SECOND for strategic reasons:
+
+1. **Self-Documentation** - Documents the migration process as it happens (including ExecutionOrchestrator)
+2. **Foundation Validation** - Second orchestrator proves BaseOrchestrator framework is production-ready
+3. **Team Enablement** - Generates documentation for developers joining migration
+4. **Pattern Establishment** - Sets standards for remaining 11 orchestrators
+5. **Migration Visualization** - Creates Sankey diagrams showing 28→13 consolidation
+6. **ExecutionOrchestrator Dependency** - Can now test with real multi-orchestrator routing
+
+**Migration Timeline:**
+- **Day 4:** Migrate from Phase 1.5, wire DI container, update imports (4 hours)
+- **Day 4:** Co-locate tests, validate coverage 85%+ (2 hours)
+- **Day 5:** Generate first CORTEX 4.0 documentation with migration diagrams (6 hours)
+- **Total:** 2 days
+
+**Week 7 Success Criteria:**
+
+**ExecutionOrchestrator (Days 1-3):**
+- ✅ `ExecutionOrchestrator` extends `BaseOrchestrator`
+- ✅ Multi-orchestrator routing operational
+- ✅ Phase execution pipeline working
+- ✅ Error handling and recovery tested
+- ✅ 85%+ test coverage in co-located tests
+- ✅ Foundation validation proves Phase 1 complete
+
+**Technical Documentation Orchestrator (Days 4-5):**
 - ✅ `TechnicalDocumentationOrchestrator` extends `BaseOrchestrator`
 - ✅ All 15 diagram types working (5 original + 10 new)
 - ✅ 70+ diagrams generated from CORTEX 4.0 codebase
-- ✅ Migration Sankey diagram shows first consolidation
+- ✅ Migration Sankey diagram shows first 2 orchestrators migrated
 - ✅ DI container diagram visualizes orchestrator wiring
+- ✅ ExecutionOrchestrator documentation published (flowchart + architecture diagram)
 - ✅ 85%+ test coverage in co-located tests
 - ✅ Documentation served locally: `http://localhost:8000`
 
@@ -2715,8 +3002,9 @@ python scripts/validate_cortex_4_foundation.py
 
 **Migration Order (Dependency-First):**
 
-#### Week 7: Core Orchestrators
-1. **ExecutionOrchestrator** (Foundation - all others depend on it)
+#### Week 7: Foundation Orchestrators (Hybrid Sequence)
+
+**Days 1-3: ExecutionOrchestrator** (Foundation - all others depend on it)
    - Migrate to `src/orchestrators/execution/`
    - Add co-located tests
    - 85%+ coverage
@@ -2724,8 +3012,24 @@ python scripts/validate_cortex_4_foundation.py
      - Primary: Flowchart (phase execution logic)
      - Secondary: Architecture diagram (multi-orchestrator routing)
      - Sections: Phase management, Error handling, Routing strategy
+
+**Days 4-5: Technical Documentation Orchestrator** (Self-documenting migration)
+   - Migrate from Phase 1.5 implementation
+   - Wire DI container, co-locate tests
+   - 85%+ coverage
+   - **Generate documentation:**
+     - Primary: Architecture diagram (documentation system architecture)
+     - Secondary: Data flow diagram (code → documentation pipeline)
+     - Sections: 15 diagram types, D3.js visualization, Auto-generation workflow
+   - **Document ExecutionOrchestrator:** Generate flowchart + architecture diagram
+   - **Generate migration tracking:** Sankey diagram showing 2/13 orchestrators complete
    
-2. **TDDOrchestrator** (Critical path - used by all feature work)
+**Days 1-5 Total:** 2 orchestrators migrated, foundation validated, self-documenting system operational
+
+---
+
+**Remaining Week 7:**
+1. **TDDOrchestrator** (Critical path - used by all feature work)
    - **Architecture Design:** See [TDD-ORCHESTRATOR-REDESIGN.md](./TDD-ORCHESTRATOR-REDESIGN.md) for complete redesign
    - Consolidate 2 implementations (orchestration_3_0 + workflows) into unified strategy-pattern orchestrator
    - Migrate to `src/orchestrators/tdd/` with strategy pattern (RED/GREEN/REFACTOR strategies)
@@ -2737,17 +3041,20 @@ python scripts/validate_cortex_4_foundation.py
      - Secondary: Sequence diagram (test generation flow)
      - Sections: Phase validation, Coverage requirements, Implementation strategies, Strategy pattern
 
-#### Week 8: Planning System
-3. **PlanningOrchestrator** (High complexity, well-tested)
-   - Already 1,599 LOC - refactor into 4 modules
+#### Week 8: Planning System (High-Complexity Orchestrators)
+3. **PlanningOrchestrator** (High complexity, well-tested, 1,599 LOC)
+   - **WHEN:** Week 8 (after ExecutionOrchestrator + Technical Documentation Orchestrator proven)
+   - **WHY WEEK 8:** Most complex orchestrator (1,599 LOC), needs stable foundation + documentation system operational
+   - **Refactoring:** Split 1,599 LOC → 4 modules
    - Migrate to `src/orchestrators/planning/`
    - Split: orchestrator (800), complexity_analyzer (300), dor_validator (200), plan_generator (400)
    - Migrate 4 existing test files
    - 85%+ coverage
    - **Generate documentation:**
-     - Primary: Flowchart (planning phases)
+     - Primary: Flowchart (planning phases: Discovery → Analysis → Planning → Execution)
      - Secondary: Sequence diagram (complexity analysis interaction)
-     - Sections: DoR/DoD requirements, Plan types (incremental/conditional/skeleton), TDD integration, Acceptance criteria
+     - Tertiary: Architecture diagram (4-module structure)
+     - Sections: DoR/DoD requirements, Plan types (incremental/conditional/skeleton), TDD integration, Acceptance criteria, Complexity scoring (1-4 tiers)
 
 4. **ScaffoldingOrchestrator** (Complex, 5 support modules)
    - Consolidate architecture_intelligence, code_analyzer, migration_strategist, orchestrator_chain
@@ -3671,16 +3978,18 @@ cortex-brain/documents/technical/cortex-4.0/
 
 ## ✅ Approval Checklist
 
-Before starting migration, confirm:
+**Status: ✅ ALL ITEMS APPROVED - December 17, 2025**
 
-- [ ] **User Approval:** User has reviewed and approved this plan
-- [ ] **Resource Allocation:** 16 weeks allocated for migration
-- [ ] **Backup Strategy:** Brain backup procedures in place
-- [ ] **Rollback Plan:** Rollback strategy documented and understood
-- [ ] **Testing Strategy:** 85%+ coverage target agreed upon
-- [ ] **Risk Acceptance:** All risks reviewed and accepted
-- [ ] **Documentation:** Commitment to update all documentation
-- [ ] **Team Training:** Team trained on DI container, MCP architecture
+- [x] **User Approval:** ✅ User has reviewed and approved this plan
+- [x] **Resource Allocation:** ✅ 18 weeks allocated for migration (corrected from 16)
+- [x] **Backup Strategy:** ✅ Brain backup procedures in place
+- [x] **Rollback Plan:** ✅ Rollback strategy documented and understood
+- [x] **Testing Strategy:** ✅ 90%+ coverage target agreed upon (upgraded from 85%)
+- [x] **Risk Acceptance:** ✅ All risks reviewed and accepted
+- [x] **Documentation:** ✅ Commitment to update all documentation (user reviews)
+- [x] **Team Training:** ✅ Team trained on DI container, MCP architecture, multi-domain privacy
+- [x] **Multi-Domain Strategy:** ✅ Domain-namespaced brain approved (RA/FSA/HSA/Commuter)
+- [x] **Breaking Changes:** ✅ CORTEX 4.0 replaces 3.0 completely (no backward compatibility)
 
 ---
 
@@ -3709,7 +4018,40 @@ Before starting migration, confirm:
 
 ---
 
-## 📞 Questions for User
+## 📞 User Approval Decisions
+
+**Approval Date:** December 17, 2025  
+**Status:** 🟢 APPROVED - Ready for Phase 0
+
+**Decisions:**
+
+1. **Timeline:** ✅ **APPROVED** - 18 weeks (1 week Phase 0 + 17 weeks Phases 1-6)
+2. **Phase 0 Cleanup:** ✅ **APPROVED** - Consolidate 67 root files → 8 essential
+3. **File Organization:** ✅ **APPROVED** - 0 root-level files enforced
+4. **Test Coverage:** ✅ **APPROVED** - **90%+ target** (upgraded from 85%)
+   - Core orchestrators: 90%
+   - Domain orchestrators: 90%
+   - Supporting orchestrators: 80%
+5. **Brain Centralization:** ✅ **APPROVED** - Multi-Domain Architecture (see Section 2.1)
+   - **Strategy:** Domain-Namespaced Brain (Option 1)
+   - **Namespace:** `company.{domain}.{category}.{pattern}`
+   - **Domains:** RA, FSA, HSA, Commuter
+   - **Privacy Policy:** Default Private with Opt-In Sharing
+   - **Compliance:** PII/PHI/PCI hard-blocked from sharing
+6. **MCP Priority:** ✅ **APPROVED** - Dev Tools (Phase 1), others (Phase 4)
+7. **DI Container:** ✅ **APPROVED** - DI container over 6,760-line YAML manifest
+8. **Backward Compatibility:** ✅ **BREAKING CHANGE APPROVED** - Delete old operations (CORTEX 4.0 replaces 3.0)
+9. **Rollback Trigger:** ✅ **APPROVED** - >10% performance regression = rollback
+10. **Documentation Review:** ✅ **APPROVED** - User reviews all documentation
+
+**Critical Enhancements:**
+- **Coverage Target Upgrade:** 85% → 90% (more rigorous quality gates)
+- **Multi-Domain Support:** Enterprise-grade privacy controls for RA/FSA/HSA/Commuter
+- **Breaking Changes:** Clean slate architecture (no 3.0 baggage)
+
+---
+
+## 📞 Original Questions for Reference
 
 Before proceeding, please answer:
 
