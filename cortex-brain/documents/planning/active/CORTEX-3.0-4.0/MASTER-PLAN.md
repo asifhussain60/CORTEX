@@ -2604,6 +2604,35 @@ cortex-toolkit docs export --format pdf --output cortex-4.0-technical-docs.pdf
 
 **⚠️ PREREQUISITE:** Phase 1 foundation validation MUST pass before starting Phase 3. See [Foundation Prerequisites](#-critical-foundation-prerequisites-for-orchestrator-migration) section.
 
+**🎯 FIRST ORCHESTRATOR MIGRATION: Technical Documentation Orchestrator (Week 7, Days 1-2)**
+
+The **Technical Documentation Orchestrator** will be migrated FIRST for strategic reasons:
+
+1. **Self-Documentation** - Documents the migration process as it happens
+2. **Foundation Validation** - Proves BaseOrchestrator framework works end-to-end
+3. **Team Enablement** - Generates documentation for developers joining migration
+4. **Pattern Establishment** - Sets standards for remaining 12 orchestrators
+5. **Migration Visualization** - Creates Sankey diagrams showing 28→13 consolidation
+
+**Migration Timeline:**
+- **Day 1:** Migrate orchestrator from Phase 1.5 implementation to CORTEX-4.0 branch (4 hours)
+- **Day 1-2:** Update imports, wire DI container, co-locate tests (2 hours)
+- **Day 2:** Generate first CORTEX 4.0 documentation with migration diagrams (3 hours)
+- **Total:** 1-2 days (fastest orchestrator migration)
+
+**Success Criteria:**
+- ✅ `TechnicalDocumentationOrchestrator` extends `BaseOrchestrator`
+- ✅ All 15 diagram types working (5 original + 10 new)
+- ✅ 70+ diagrams generated from CORTEX 4.0 codebase
+- ✅ Migration Sankey diagram shows first consolidation
+- ✅ DI container diagram visualizes orchestrator wiring
+- ✅ 85%+ test coverage in co-located tests
+- ✅ Documentation served locally: `http://localhost:8000`
+
+**Detailed Integration Plan:** See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/TECHNICAL-DOCUMENTATION-ORCHESTRATOR-INTEGRATION.md`
+
+---
+
 **🚨 TEST LOCATION POLICY FOR PHASE 3:**
 
 During orchestrator migration, you will create TWO types of tests:

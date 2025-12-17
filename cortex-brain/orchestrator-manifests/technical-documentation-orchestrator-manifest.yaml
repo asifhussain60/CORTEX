@@ -1,0 +1,416 @@
+# Technical Documentation Orchestrator Manifest
+# Version: 1.0.0
+# Author: Asif Hussain
+# Copyright: © 2025 Asif Hussain. All rights reserved.
+
+orchestrator:
+  name: "TechnicalDocumentationOrchestrator"
+  version: "1.0.0"
+  category: "documentation"
+  execution_method: "copilot_chat"
+  description: "Generates comprehensive technical documentation with interactive D3.js diagrams"
+
+metadata:
+  complexity: "HIGH"
+  estimated_duration: "30-45 minutes"
+  requires_user_input: false
+  supports_incremental: true
+  idempotent: true
+
+phases:
+  - id: "discovery"
+    name: "Code Discovery & Analysis"
+    description: "Scan codebase, extract metadata, analyze architecture"
+    duration_estimate: "5-8 minutes"
+    dependencies: []
+    outputs:
+      - "component_registry.json"
+      - "architecture_analysis.json"
+      - "api_inventory.json"
+    
+  - id: "diagram_generation"
+    name: "D3.js Diagram Generation"
+    description: "Generate interactive diagrams (flowcharts, DFD, sequence, UML, architecture)"
+    duration_estimate: "10-15 minutes"
+    dependencies: ["discovery"]
+    outputs:
+      - "architecture/diagrams/*.html"
+      - "workflows/sequence-diagrams/*.html"
+      - "workflows/flowcharts/*.html"
+      - "data-flow/dfd-diagrams/*.html"
+    
+  - id: "api_documentation"
+    name: "API Documentation Generation"
+    description: "Generate comprehensive API docs for orchestrators, agents, brain tiers"
+    duration_estimate: "8-12 minutes"
+    dependencies: ["discovery"]
+    outputs:
+      - "api/orchestrators/*.md"
+      - "api/agents/*.md"
+      - "api/brain-tiers/*.md"
+    
+  - id: "workflow_documentation"
+    name: "Workflow Documentation"
+    description: "Document workflows with interactive diagrams"
+    duration_estimate: "5-8 minutes"
+    dependencies: ["diagram_generation", "api_documentation"]
+    outputs:
+      - "workflows/*.md"
+      - "workflows/sequence-diagrams/*.html"
+      - "workflows/flowcharts/*.html"
+    
+  - id: "integration_guides"
+    name: "Integration & Setup Guides"
+    description: "Generate setup, integration, deployment guides"
+    duration_estimate: "3-5 minutes"
+    dependencies: ["api_documentation"]
+    outputs:
+      - "setup-guides/*.md"
+      - "integration/*.md"
+      - "deployment/*.md"
+    
+  - id: "index_generation"
+    name: "Index & Navigation Generation"
+    description: "Generate index pages, navigation, search functionality"
+    duration_estimate: "2-3 minutes"
+    dependencies: ["api_documentation", "workflow_documentation", "integration_guides"]
+    outputs:
+      - "index.html"
+      - "navigation.html"
+      - "search-index.json"
+
+diagram_types:
+  - type: "architecture"
+    renderer: "d3.js"
+    templates:
+      - "component-diagram"
+      - "layer-diagram"
+      - "dependency-graph"
+      - "module-relationship"
+    interactive_features:
+      - "zoom"
+      - "pan"
+      - "node-expansion"
+      - "tooltip-details"
+      - "search-highlight"
+  
+  - type: "sequence"
+    renderer: "d3.js"
+    templates:
+      - "workflow-sequence"
+      - "api-flow"
+      - "orchestrator-lifecycle"
+    interactive_features:
+      - "timeline-scrubbing"
+      - "actor-filtering"
+      - "message-details"
+      - "timing-overlay"
+  
+  - type: "flowchart"
+    renderer: "d3.js"
+    templates:
+      - "decision-flow"
+      - "process-flow"
+      - "state-machine"
+    interactive_features:
+      - "path-highlighting"
+      - "branch-expansion"
+      - "condition-tooltips"
+  
+  - type: "dfd"
+    renderer: "d3.js"
+    templates:
+      - "context-diagram"
+      - "level-0-diagram"
+      - "level-1-diagram"
+      - "level-2-diagram"
+    interactive_features:
+      - "data-flow-animation"
+      - "store-details"
+      - "process-expansion"
+  
+  - type: "uml"
+    renderer: "d3.js"
+    templates:
+      - "class-diagram"
+      - "component-diagram"
+      - "deployment-diagram"
+    interactive_features:
+      - "class-details"
+      - "relationship-highlighting"
+      - "method-expansion"
+  
+  # NEW: CORTEX 4.0 Migration Diagrams
+  - type: "sankey"
+    renderer: "d3.js"
+    templates:
+      - "migration-flow"
+      - "orchestrator-consolidation"
+      - "loc-reduction"
+    interactive_features:
+      - "flow-thickness-scaling"
+      - "node-filtering"
+      - "risk-color-coding"
+      - "click-to-drill-down"
+    priority: "HIGH"
+    cortex_4_0_phase: "Phase 3"
+  
+  - type: "di-container"
+    renderer: "d3.js"
+    templates:
+      - "network-graph"
+      - "tree-hierarchy"
+      - "dependency-wiring"
+    interactive_features:
+      - "auto-registration-highlight"
+      - "circular-dependency-detection"
+      - "click-to-show-dependencies"
+      - "search-by-orchestrator"
+    priority: "HIGH"
+    cortex_4_0_phase: "Phase 4"
+  
+  - type: "swimlane"
+    renderer: "d3.js"
+    templates:
+      - "brain-tier-timeline"
+      - "parallel-operations"
+      - "tier-interaction"
+    interactive_features:
+      - "timeline-scrubbing"
+      - "lane-filtering"
+      - "timing-overlay"
+      - "corpus-callosum-highlight"
+    priority: "MEDIUM"
+    cortex_4_0_phase: "Phase 2"
+  
+  - type: "network-topology"
+    renderer: "d3.js"
+    templates:
+      - "mcp-gateway"
+      - "multi-layer-architecture"
+      - "protocol-routing"
+    interactive_features:
+      - "layer-expansion"
+      - "capability-tooltip"
+      - "fault-tolerance-visualization"
+      - "circuit-breaker-status"
+    priority: "MEDIUM"
+    cortex_4_0_phase: "Phase 4"
+  
+  - type: "decision-tree"
+    renderer: "d3.js"
+    templates:
+      - "response-template-tier-selection"
+      - "adaptive-routing"
+      - "token-optimization"
+    interactive_features:
+      - "branch-traversal"
+      - "example-queries"
+      - "token-savings-display"
+      - "click-to-render-template"
+    priority: "HIGH"
+    cortex_4_0_phase: "Phase 1"
+  
+  - type: "state-machine"
+    renderer: "d3.js"
+    templates:
+      - "orchestrator-lifecycle"
+      - "phase-transitions"
+      - "fsm-diagram"
+    interactive_features:
+      - "state-highlighting"
+      - "transition-animation"
+      - "error-path-visualization"
+      - "validation-gate-display"
+    priority: "HIGH"
+    cortex_4_0_phase: "Phase 1"
+  
+  - type: "treemap"
+    renderer: "d3.js"
+    templates:
+      - "test-coverage-heatmap"
+      - "orchestrator-coverage"
+      - "file-level-coverage"
+    interactive_features:
+      - "coverage-gradient"
+      - "drill-down-to-files"
+      - "threshold-highlighting"
+      - "click-to-view-uncovered"
+    priority: "MEDIUM"
+    cortex_4_0_phase: "Phase 5"
+  
+  - type: "animated-flow"
+    renderer: "d3.js"
+    templates:
+      - "cortex-lens-streaming-pipeline"
+      - "data-processing-flow"
+      - "performance-visualization"
+    interactive_features:
+      - "particle-animation"
+      - "play-pause-controls"
+      - "speed-adjustment"
+      - "metrics-overlay"
+    priority: "LOW"
+    cortex_4_0_phase: "Future"
+  
+  - type: "multi-path-flowchart"
+    renderer: "d3.js"
+    templates:
+      - "tdd-red-green-refactor"
+      - "phase-validation-gates"
+      - "skull-enforcement"
+    interactive_features:
+      - "path-color-coding"
+      - "validation-gate-highlight"
+      - "error-blocking-visualization"
+      - "click-to-show-rules"
+    priority: "HIGH"
+    cortex_4_0_phase: "Phase 3"
+  
+  - type: "clustered-graph"
+    renderer: "d3.js"
+    templates:
+      - "tier2-pattern-learning"
+      - "cross-repo-insights"
+      - "namespace-isolation"
+    interactive_features:
+      - "cluster-highlighting"
+      - "similarity-edge-thickness"
+      - "click-to-show-patterns"
+      - "namespace-filtering"
+    priority: "MEDIUM"
+    cortex_4_0_phase: "Phase 2"
+
+styling:
+  theme: "glassmorphism"
+  primary_color: "#7C3AED"
+  secondary_color: "#2563EB"
+  accent_color: "#10B981"
+  background: "rgba(255, 255, 255, 0.1)"
+  backdrop_filter: "blur(10px)"
+  border: "1px solid rgba(255, 255, 255, 0.18)"
+  shadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)"
+  logo: "#file:CORTEX-logo.png"
+
+documentation_sections:
+  - section: "architecture"
+    priority: 1
+    includes:
+      - "4-tier-brain-overview"
+      - "orchestrator-architecture"
+      - "agent-framework"
+      - "corpus-callosum-integration"
+      - "component-diagrams"
+      - "dependency-graphs"
+  
+  - section: "api"
+    priority: 2
+    includes:
+      - "orchestrator-apis"
+      - "agent-apis"
+      - "brain-tier-apis"
+      - "utility-functions"
+      - "type-definitions"
+  
+  - section: "workflows"
+    priority: 3
+    includes:
+      - "planning-system-workflow"
+      - "tdd-workflow"
+      - "maintenance-workflow"
+      - "refinement-workflow"
+      - "sanitization-workflow"
+  
+  - section: "integration"
+    priority: 4
+    includes:
+      - "copilot-integration"
+      - "vscode-extension-integration"
+      - "cli-integration"
+      - "api-integration"
+  
+  - section: "deployment"
+    priority: 5
+    includes:
+      - "local-setup"
+      - "docker-deployment"
+      - "cloud-deployment"
+      - "ci-cd-pipeline"
+  
+  - section: "troubleshooting"
+    priority: 6
+    includes:
+      - "common-issues"
+      - "debugging-guide"
+      - "log-analysis"
+      - "performance-tuning"
+
+validation:
+  required_outputs:
+    - "index.html"
+    - "architecture/overview.md"
+    - "api/index.md"
+    - "workflows/index.md"
+    - "migration/cortex-4-0-migration-guide.md"
+  
+  quality_checks:
+    - "all_diagrams_interactive"
+    - "all_links_valid"
+    - "api_coverage_100_percent"
+    - "code_examples_tested"
+    - "mobile_responsive"
+    - "accessibility_wcag_aa"
+commands:
+  generate_all: "generate technical documentation"
+  generate_diagrams_only: "generate technical diagrams"
+  generate_api_only: "generate api documentation"
+  generate_migration_docs: "generate cortex 4.0 migration documentation"
+  serve_local: "serve technical documentation"
+  export_pdf: "export technical documentation to pdf"
+  
+  # CORTEX 4.0 specific commands
+  generate_sankey: "generate migration sankey diagrams"
+  generate_di_container: "generate dependency injection diagrams"
+  generate_brain_timeline: "generate brain tier interaction diagrams"
+  validate_diagram_coverage: "validate all 70+ diagrams render"
+    - "brain_interface"
+    - "template_manager_v4"
+    - "di_container"
+    - "pytest_infrastructure"
+  
+  migration_priority: 1  # First orchestrator to migrate
+  migration_week: 7
+  migration_phase: "Phase 3"
+  
+  self_documentation: true  # Documents its own migration
+  
+  blockers:
+    - "Phase 1 must be 100% complete"
+    - "validate_cortex_4_foundation.py must pass"
+    - "All 10 Phase 1 prerequisites validated"
+  
+  success_criteria:
+    - "Generates 70+ interactive diagrams"
+    - "Documents all 13 CORTEX 4.0 orchestrators"
+    - "Migration path diagrams show 3.0→4.0 consolidation"
+    - "D3.js utilities support all 15 diagram types"
+    - "Documentation served locally with zero errors"
+
+commands:
+  generate_all: "generate technical documentation"
+  generate_diagrams_only: "generate technical diagrams"
+  generate_api_only: "generate api documentation"
+  serve_local: "serve technical documentation"
+  export_pdf: "export technical documentation to pdf"
+
+integration:
+  inherits_from:
+    - "planning-system-3.0-manifest.yaml"
+  compatible_with:
+    - "ado-planning-manifest.yaml"
+    - "code-sanitization-manifest.yaml"
+  uses_components:
+    - "DocumentationOrchestrator"
+    - "DiagramGenerator"
+    - "ApiDocGenerator"
+    - "TemplateEngine"
