@@ -5444,3 +5444,347 @@ validation:
         - Easier to understand
         - Faster initial development
         - Lower maintenance cost
+
+  # ============================================================================
+  # PLANNING SYSTEM 4.0 GOVERNANCE RULES
+  # ============================================================================
+
+  - rule_id: TEMP_PLAN_APPROVAL_ENFORCEMENT
+    name: "Temp Plan Approval Gate"
+    severity: blocked
+    description: "Prevents execution of unapproved or unready temporary plans"
+    detection:
+      keywords:
+        - "execute without approval"
+        - "skip approval"
+        - "bypass DoR"
+        - "implement before plan approved"
+      scope:
+        - intent
+        - implementation
+    validation:
+      - "Plan must be in active/ folder (not temp-plans/)"
+      - "Plan status must be 'approved'"
+      - "DoR score must be ≥90%"
+      - "User approval timestamp must exist"
+    alternatives:
+      - "Complete DoR validation (achieve ≥90% confidence)"
+      - "Request user approval explicitly"
+      - "Wait for plan promotion to active/"
+      - "Use iterative refinement to resolve ambiguities"
+    evidence_template: |
+      Plan Status: {status}
+      DoR Score: {dor_score}%
+      User Approval: {approval_status}
+      Location: {plan_folder}
+    rationale: |
+      TEMP_PLAN_APPROVAL_ENFORCEMENT: No Execution Without Approval
+      
+      Problem: Premature execution
+      - Implementation starts before requirements clear
+      - User expectations not validated
+      - High risk of rework
+      
+      Solution: Approval gate
+      - Temp plans remain in temp-plans/ until approved
+      - DoR validation ensures clarity (≥90% confidence)
+      - User must explicitly approve before promotion
+      - Only active/ plans can be executed
+      
+      Benefits:
+      - Mutual agreement achieved (CORTEX + user)
+      - Clear requirements before implementation
+      - Reduced rework and scope creep
+      - Complete audit trail
+
+  - rule_id: PLAN_PROMOTION_INTEGRITY
+    name: "Plan Promotion Integrity"
+    severity: blocked
+    description: "Ensures atomic transitions from temp-plans/ to active/"
+    detection:
+      keywords:
+        - "partial promotion"
+        - "incomplete transition"
+        - "missing context files"
+        - "orphaned plans"
+      scope:
+        - file_operations
+        - folder_structure
+    validation:
+      - "All plan files moved atomically"
+      - "Context graphs preserved (ast-analysis.json, lens-dependencies.json)"
+      - "Execution YAML files included"
+      - "Manifest updated before promotion completes"
+      - "Rollback possible if any step fails"
+    alternatives:
+      - "Use PlanLifecycleManager.promote_to_active()"
+      - "Verify all artifacts present before move"
+      - "Use transaction-like semantics (all or nothing)"
+    evidence_template: |
+      Source: {source_folder}
+      Target: {target_folder}
+      Files Moved: {file_count}
+      Context Preserved: {context_status}
+      Manifest Updated: {manifest_status}
+    rationale: |
+      PLAN_PROMOTION_INTEGRITY: Atomic Transitions
+      
+      Problem: Incomplete promotions
+      - Partial file moves leave orphaned artifacts
+      - Missing context graphs break execution
+      - Manifest out of sync with filesystem
+      
+      Solution: Atomic promotion
+      - All files moved together (or none)
+      - Context preserved during transition
+      - Manifest updated atomically
+      - Rollback on any failure
+      
+      Benefits:
+      - No orphaned plans
+      - Consistent state always
+      - Traceable transitions
+      - Recovery from failures
+
+  - rule_id: SUB_PLAN_TASK_INJECTION_ENFORCEMENT
+    name: "Standard Task Auto-Injection"
+    severity: warning
+    description: "Validates standard tasks present in all worker plans"
+    detection:
+      keywords:
+        - "worker plan without git checkpoint"
+        - "missing TDD validation"
+        - "no DoD validation"
+        - "skip standard tasks"
+      scope:
+        - worker_plans
+        - execution_yaml
+    validation:
+      - "Git checkpoint at phase start"
+      - "Git checkpoint at phase end"
+      - "AST/Lens analysis task present"
+      - "Documentation update task present"
+      - "TDD validation task present (RED→GREEN→REFACTOR)"
+      - "DoD validation checklist present"
+    alternatives:
+      - "Use UnifiedPlanGenerator with auto-injection enabled"
+      - "Apply SUB-PLAN-TEMPLATE.md with standard tasks"
+      - "Add missing tasks manually if template not used"
+    evidence_template: |
+      Worker Plan: {worker_plan_id}
+      Git Checkpoints: {git_checkpoint_status}
+      AST/Lens: {ast_lens_status}
+      Documentation: {docs_status}
+      TDD Validation: {tdd_status}
+      DoD Validation: {dod_status}
+    rationale: |
+      SUB_PLAN_TASK_INJECTION: Consistency Across Plans
+      
+      Problem: Inconsistent worker plans
+      - Some plans have git checkpoints, others don't
+      - TDD validation skipped in some phases
+      - Documentation updates forgotten
+      
+      Solution: Standard task injection
+      - Every worker plan gets identical boilerplate
+      - Git checkpoints ensure rollback capability
+      - TDD validation enforces test discipline
+      - Documentation keeps everything synchronized
+      
+      Benefits:
+      - Predictable plan structure
+      - No forgotten maintenance tasks
+      - Consistent quality across phases
+      - Easier automation
+
+  - rule_id: CONTEXT_CONTINUITY_ENFORCEMENT
+    name: "Automatic Context Continuity"
+    severity: info
+    description: "Standard behavior - users never reference temp plan files manually"
+    detection:
+      keywords:
+        - "update temp-plans/"
+        - "modify plan in temp-plans/"
+        - "reference session file"
+        - "load context from file"
+      scope:
+        - user_guidance
+        - response_templates
+    validation:
+      - "SessionContextManager tracks active sessions"
+      - "User requests auto-associated with active plan"
+      - "No manual file paths in user-facing responses"
+      - "CORTEX loads context automatically"
+    alternatives:
+      - "Use SessionContextManager.get_active_session()"
+      - "Auto-load context in PlanningOrchestrator"
+      - "Never ask user to specify temp plan path"
+    evidence_template: |
+      Active Session: {session_id}
+      Plan ID: {plan_id}
+      Auto-Loaded: {auto_load_status}
+      Manual Reference Detected: {manual_ref}
+    rationale: |
+      CONTEXT_CONTINUITY: Automatic Session Tracking
+      
+      Problem: Manual context management
+      - Users asked to reference temp plan files
+      - Error-prone (wrong paths, typos)
+      - Poor user experience
+      
+      Solution: Automatic tracking
+      - SessionContextManager maintains active sessions
+      - All user requests auto-associated with active plan
+      - CORTEX loads context automatically
+      - Zero manual file references
+      
+      Benefits:
+      - Seamless user experience
+      - No context mistakes
+      - Professional interaction model
+      - Standard behavior for all planning
+
+  - rule_id: PLAN_BASED_WORKFLOW_ENFORCEMENT
+    name: "Plan-Based Workflow Mandate"
+    severity: blocked
+    description: "ALL code changes require approved plan (no implementation shortcuts)"
+    detection:
+      keywords:
+        - "let me create that file"
+        - "I can write that function"
+        - "quick fix"
+        - "small change without plan"
+        - "implement now, plan later"
+      scope:
+        - code_generation
+        - file_operations
+        - next_steps
+    validation:
+      - "plan_id parameter present in all code operations"
+      - "Plan exists in active/ folder"
+      - "Plan status is 'approved' or 'in_progress'"
+      - "No code changes without plan_id"
+    alternatives:
+      - "Create temp plan first (even for small changes)"
+      - "Get user approval before implementation"
+      - "Follow: Review → DoR Check → Approve → Execute"
+    evidence_template: |
+      Operation: {operation_type}
+      Plan ID: {plan_id}
+      Plan Status: {plan_status}
+      Code Change Attempted: {code_change_desc}
+    rationale: |
+      PLAN_BASED_WORKFLOW: No Implementation Shortcuts
+      
+      Problem: Ad-hoc implementations
+      - "Quick fixes" bypass planning
+      - No documentation of changes
+      - Scope creep from small changes
+      
+      Solution: Mandatory planning
+      - ALL changes require approved plan
+      - Even small changes go through planning
+      - Implementation only after approval
+      - Complete audit trail
+      
+      Benefits:
+      - Documented decisions
+      - Predictable workflow
+      - No surprise changes
+      - Professional discipline
+
+  - rule_id: NO_IMPLEMENTATION_SHORTCUTS_ENFORCEMENT
+    name: "No Implementation Shortcuts in Next Steps"
+    severity: warning
+    description: "Next Steps must show planning workflow, not implementation shortcuts"
+    detection:
+      keywords:
+        - "I'll create the file"
+        - "I'll implement"
+        - "Let's write the code"
+        - "I can help you write"
+      scope:
+        - next_steps
+        - response_content
+    validation:
+      - "Next Steps shows: Review → DoR Check → Approve → Execute"
+      - "No direct implementation suggestions"
+      - "Plan approval required before execution mentioned"
+      - "Critical warning about planning phase present"
+    alternatives:
+      - "Show planning workflow in Next Steps"
+      - "Explain approval requirement"
+      - "Defer implementation to post-approval"
+    evidence_template: |
+      Next Steps Content: {next_steps_excerpt}
+      Contains Shortcut: {shortcut_detected}
+      Correct Workflow: {workflow_shown}
+    rationale: |
+      NO_IMPLEMENTATION_SHORTCUTS: Planning Phase Discipline
+      
+      Problem: Implementation suggestions during planning
+      - Users confused about when implementation starts
+      - Planning phase bypassed inadvertently
+      - Approval gates circumvented
+      
+      Solution: Clear Next Steps template
+      - Next Steps only shows planning actions
+      - Critical warning about planning phase
+      - Implementation deferred to post-approval
+      
+      Benefits:
+      - Clear separation of planning vs. execution
+      - User expectations managed
+      - Approval gates respected
+      - Professional workflow
+
+  - rule_id: AST_CONTEXT_INTEGRATION_ENFORCEMENT
+    name: "AST Context User Visibility"
+    severity: warning
+    description: "Plans must include narrative-enhanced AST/Lens context"
+    detection:
+      keywords:
+        - "plan without AST context"
+        - "missing codebase analysis"
+        - "no context graphs"
+        - "skip AST integration"
+      scope:
+        - master_plans
+        - worker_plans
+        - temp_plans
+    validation:
+      - "AST analysis section present in plan"
+      - "Files affected list with reasons"
+      - "Dependency impact narrative"
+      - "Integration points identified"
+      - "User validation checklist present"
+      - "Context graphs referenced (JSON files)"
+    alternatives:
+      - "Use ASTContextEnhancer for narrative generation"
+      - "Integrate NarrativeGenerator for human-friendly summaries"
+      - "Store full JSON in context/, show summary in plan MD"
+    evidence_template: |
+      Plan: {plan_id}
+      AST Section: {ast_section_present}
+      Files Count: {files_count}
+      Narrative Quality: {narrative_quality_score}
+      User Validation: {validation_checklist_present}
+    rationale: |
+      AST_CONTEXT_INTEGRATION: User Visibility & Validation
+      
+      Problem: Black-box analysis
+      - Users don't see what CORTEX analyzed
+      - Can't validate if CORTEX understood correctly
+      - Errors discovered too late
+      
+      Solution: Narrative-enhanced AST context
+      - Plain-language summary of analysis
+      - Files affected with reasons why
+      - Dependency impact explained
+      - User validation checklist
+      
+      Benefits:
+      - Early course correction
+      - Shared understanding
+      - User trust in analysis
+      - Professional transparency

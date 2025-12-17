@@ -5,7 +5,7 @@ Shared plan generation logic for all planning orchestrators.
 Eliminates duplication across PlanningOrchestrator, TempPlanManager, ADOPlanning.
 
 Author: Asif Hussain
-Version: 2.0.0 - Added MasterPlanTemplate integration for canonical section ordering
+Version: 2.1.0 - Added TaskInjector integration for standard task auto-injection
 """
 
 import logging
@@ -17,6 +17,7 @@ import subprocess
 
 from .token_reduction_tracker import TokenReductionTracker
 from .master_plan_template import MasterPlanTemplate, MasterPlanSection, SECTION_TEMPLATES
+from .task_injector import TaskInjector
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +87,8 @@ class UnifiedPlanGenerator:
     def __init__(self):
         """Initialize unified plan generator."""
         self.token_tracker = TokenReductionTracker()
-        logger.info("✅ UnifiedPlanGenerator initialized")
+        self.task_injector = TaskInjector()
+        logger.info("✅ UnifiedPlanGenerator initialized with TaskInjector")
     
     def standardize_hours(self, hours_value: str) -> str:
         """
@@ -1300,4 +1302,173 @@ class UnifiedPlanGenerator:
                 return f"{whole_hours}:{minutes:02d}h"
             else:
                 return f"{whole_hours}h"
+    
+    def generate_worker_plan(
+        self,
+        plan_id: str,
+        phase_number: int,
+        phase_name: str,
+        phase_data: Dict[str, Any],
+        inject_standard_tasks: bool = True
+    ) -> str:
+        """
+        Generate worker plan (WP##-Phase-Name.md) with optional task injection.
+        
+        Args:
+            plan_id: Plan identifier
+            phase_number: Phase number (1-indexed)
+            phase_name: Phase name
+            phase_data: Phase data dictionary with tasks, deliverables, DoD
+            inject_standard_tasks: Whether to inject standard tasks
+            
+        Returns:
+            Worker plan markdown content
+        """
+        logger.info(f"📝 Generating worker plan WP{phase_number:02d}-{phase_name}")
+        
+        # Get phase tasks
+        phase_tasks = phase_data.get("tasks", [])
+        
+        # Inject standard tasks if enabled
+        if inject_standard_tasks:
+            phase_tasks = self.task_injector.inject_standard_tasks(
+                phase_tasks=phase_tasks,
+                phase_number=phase_number,
+                phase_name=phase_name
+            )
+            logger.info(f"✅ Standard tasks injected into WP{phase_number:02d}")
+        
+        # Build worker plan content
+        sections = []
+        
+        # Header
+        sections.append(f"# 🎯 Worker Plan {phase_number:02d}: {phase_name}")
+        sections.append(f"**Plan ID:** {plan_id}")
+        sections.append(f"**Phase:** {phase_number}")
+        sections.append(f"**Status:** {phase_data.get('status', 'PENDING')}")
+        sections.append("")
+        sections.append("---")
+        sections.append("")
+        
+        # Phase Overview
+        sections.append("## 📋 Phase Overview")
+        sections.append("")
+        sections.append(phase_data.get("description", ""))
+        sections.append("")
+        sections.append("---")
+        sections.append("")
+        
+        # Tasks
+        sections.append("## ✅ Tasks")
+        sections.append("")
+        
+        # Group tasks by category
+        git_tasks = [t for t in phase_tasks if t.get("category") == "git"]
+        analysis_tasks = [t for t in phase_tasks if t.get("category") == "analysis"]
+        phase_specific_tasks = [t for t in phase_tasks if not t.get("standard_task", False)]
+        doc_tasks = [t for t in phase_tasks if t.get("category") == "documentation"]
+        tdd_tasks = [t for t in phase_tasks if t.get("category") == "tdd"]
+        dod_tasks = [t for t in phase_tasks if t.get("category") == "dod"]
+        
+        # Start checkpoint
+        if git_tasks:
+            start_checkpoint = [t for t in git_tasks if "start" in t.get("title", "").lower()]
+            if start_checkpoint:
+                sections.append("### 📌 Phase Start")
+                sections.append("")
+                for task in start_checkpoint:
+                    status = "✅" if task.get("status") == "complete" else "⏸️"
+                    sections.append(f"- [{' ' if task.get('status') != 'complete' else 'x'}] {status} **{task['title']}**")
+                    sections.append(f"  - {task['description']}")
+                    sections.append(f"  - Estimated: {task.get('estimated', '15m')}")
+                sections.append("")
+        
+        # Analysis
+        if analysis_tasks:
+            sections.append("### 🔍 Analysis & Context")
+            sections.append("")
+            for task in analysis_tasks:
+                status = "✅" if task.get("status") == "complete" else "⏸️"
+                sections.append(f"- [{' ' if task.get('status') != 'complete' else 'x'}] {status} **{task['title']}**")
+                sections.append(f"  - {task['description']}")
+                sections.append(f"  - Estimated: {task.get('estimated', '30m')}")
+            sections.append("")
+        
+        # Phase-specific tasks
+        if phase_specific_tasks:
+            sections.append("### 🛠️ Phase-Specific Work")
+            sections.append("")
+            for task in phase_specific_tasks:
+                status = "✅" if task.get("status") == "complete" else "⏸️"
+                sections.append(f"- [{' ' if task.get('status') != 'complete' else 'x'}] {status} **{task.get('title', 'Task')}**")
+                if "description" in task:
+                    sections.append(f"  - {task['description']}")
+                sections.append(f"  - Estimated: {task.get('estimated', '1h')}")
+            sections.append("")
+        
+        # Documentation
+        if doc_tasks:
+            sections.append("### 📝 Documentation")
+            sections.append("")
+            for task in doc_tasks:
+                status = "✅" if task.get("status") == "complete" else "⏸️"
+                sections.append(f"- [{' ' if task.get('status') != 'complete' else 'x'}] {status} **{task['title']}**")
+                sections.append(f"  - {task['description']}")
+                sections.append(f"  - Estimated: {task.get('estimated', '30m')}")
+            sections.append("")
+        
+        # TDD Validation
+        if tdd_tasks:
+            sections.append("### ✅ TDD Validation")
+            sections.append("")
+            for task in tdd_tasks:
+                status = "✅" if task.get("status") == "complete" else "⏸️"
+                sections.append(f"- [{' ' if task.get('status') != 'complete' else 'x'}] {status} **{task['title']}**")
+                sections.append(f"  - {task['description']}")
+                sections.append(f"  - Estimated: {task.get('estimated', '30m')}")
+            sections.append("")
+        
+        # End checkpoint and DoD
+        if git_tasks or dod_tasks:
+            sections.append("### 🎯 Phase Completion")
+            sections.append("")
+            
+            # End checkpoint
+            end_checkpoint = [t for t in git_tasks if "end" in t.get("title", "").lower() or "complete" in t.get("title", "").lower()]
+            for task in end_checkpoint:
+                status = "✅" if task.get("status") == "complete" else "⏸️"
+                sections.append(f"- [{' ' if task.get('status') != 'complete' else 'x'}] {status} **{task['title']}**")
+                sections.append(f"  - {task['description']}")
+                sections.append(f"  - Estimated: {task.get('estimated', '15m')}")
+            
+            # DoD validation
+            for task in dod_tasks:
+                status = "✅" if task.get("status") == "complete" else "⏸️"
+                sections.append(f"- [{' ' if task.get('status') != 'complete' else 'x'}] {status} **{task['title']}**")
+                sections.append(f"  - {task['description']}")
+                sections.append(f"  - Estimated: {task.get('estimated', '30m')}")
+            sections.append("")
+        
+        sections.append("---")
+        sections.append("")
+        
+        # Deliverables
+        sections.append("## 📦 Deliverables")
+        sections.append("")
+        deliverables = phase_data.get("deliverables", [])
+        for deliverable in deliverables:
+            sections.append(f"- {deliverable}")
+        sections.append("")
+        sections.append("---")
+        sections.append("")
+        
+        # DoD Checklist
+        sections.append("## ✅ Definition of Done (DoD)")
+        sections.append("")
+        dod_items = phase_data.get("dod", [])
+        for item in dod_items:
+            sections.append(f"- [ ] {item}")
+        sections.append("")
+        
+        return "\n".join(sections)
 

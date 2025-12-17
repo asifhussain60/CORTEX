@@ -4,7 +4,7 @@ Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
 License: Proprietary
 
-Version: 5.2.0 (Response Template Architecture)
+Version: 3.9.0 (Planning System 3.0 - Production Package)
 Status: Production Ready
 """
 
@@ -23,12 +23,12 @@ if requirements_path.exists():
         requirements = [
             line.strip()
             for line in f
-            if line.strip() and not line.startswith("#")
+            if line.strip() and not line.startswith("#") and "=" in line
         ]
 
 setup(
     name="cortex-ai",
-    version="5.2.0",
+    version="3.9.0",
     author="Asif Hussain",
     author_email="asif@cortexai.dev",
     description="AI enhancement system that gives GitHub Copilot long-term memory, context awareness, and strategic planning",
@@ -37,10 +37,17 @@ setup(
     url="https://github.com/asifhussain60/CORTEX",
     project_urls={
         "Bug Tracker": "https://github.com/asifhussain60/CORTEX/issues",
-        "Documentation": "https://github.com/asifhussain60/CORTEX/docs",
+        "Documentation": "https://github.com/asifhussain60/CORTEX",
         "Source Code": "https://github.com/asifhussain60/CORTEX",
     },
-    packages=find_packages(exclude=["tests", "tests.*", "docs", "examples", "scripts.temp"]),
+    packages=find_packages(
+        where=".",
+        include=["src*", "cortex_brain*"],
+        exclude=["tests", "tests.*", "docs", "examples", "scripts.temp", "archive"]
+    ),
+    package_dir={
+        "": ".",
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -63,21 +70,26 @@ setup(
     install_requires=requirements,
     extras_require={
         "dev": [
+            "pytest>=8.4.0",
+            "pytest-cov>=4.1.0",
             "black>=23.0.0",
             "flake8>=6.0.0",
             "mypy>=1.0.0",
-            "pytest>=7.4.0",
-            "pytest-cov>=4.1.0",
         ],
-        "docs": [
-            "mkdocs>=1.5.0",
-            "mkdocs-material>=9.4.0",
-            "mkdocs-mermaid2-plugin>=1.1.0",
+        "optional": [
+            "tree-sitter>=0.20.0",
+            "tree-sitter-python>=0.20.0",
+            "scikit-learn>=1.3.0",
+            "numpy>=1.24.0",
+            "send2trash>=1.8.0",
         ],
     },
     entry_points={
         "console_scripts": [
-            "cortex=src.cortex_cli:main",
+            "cortex=src.main:main",
+            "cortex-plan=src.entry_point.planning_gate:plan_command",
+            "cortex-approve=src.entry_point.planning_gate:approve_command",
+            "cortex-reject=src.entry_point.planning_gate:reject_command",
         ],
     },
     include_package_data=True,
@@ -90,6 +102,8 @@ setup(
             "*.md",
             "*.txt",
             "*.prompt.md",
+            "*.sql",
+            "*.db",
         ],
         "cortex_brain": [
             "**/*.yaml",
@@ -97,9 +111,16 @@ setup(
             "**/*.json",
             "**/*.jsonl",
             "**/*.md",
+            "**/*.txt",
+            "**/*.sql",
+            "**/*.db",
+        ],
+        "src": [
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.json",
+            "**/*.md",
         ],
     },
     zip_safe=False,
-    license="Proprietary",
-    keywords="ai copilot memory context planning assistant cognitive-framework github-copilot",
 )

@@ -284,6 +284,35 @@ class PlanLifecycleManager:
         
         return None
     
+    def can_proceed_to_execution(self, plan_id: str) -> tuple[bool, str]:
+        """
+        Check if plan can proceed to execution (BLOCKING DoR validation).
+        
+        Args:
+            plan_id: Plan identifier
+            
+        Returns:
+            Tuple of (can_proceed: bool, reason: str)
+        """
+        metadata = self._plan_metadata.get(plan_id, {})
+        
+        # Check DoR score
+        dor_score = metadata.get("dor_score", 0.0)
+        if dor_score < 90.0:
+            return (False, f"DoR score too low: {dor_score:.1f}% (need ≥90%)")
+        
+        # Check user approval
+        if not metadata.get("approved", False):
+            return (False, "Plan not approved by user")
+        
+        # Check plan is in ACTIVE or IN_PROGRESS state
+        current_state = self.get_current_state(plan_id)
+        if current_state not in (PlanState.ACTIVE, PlanState.IN_PROGRESS):
+            return (False, f"Plan not in executable state (current: {current_state.value})")
+        
+        # All checks passed
+        return (True, "DoR satisfied, plan approved, execution allowed")
+    
     def approve_plan(self, plan_id: str, approved_by: str):
         """
         Approve plan for transition to ACTIVE.
