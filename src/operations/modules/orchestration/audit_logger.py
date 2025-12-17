@@ -10,7 +10,7 @@ GitHub: github.com/asifhussain60/CORTEX
 
 import json
 import gzip
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 from dataclasses import dataclass, asdict
@@ -113,7 +113,7 @@ class AuditLogger:
             error_message: Error details if outcome is "failure" (optional)
         """
         event = AuditEvent(
-            timestamp=datetime.utcnow().isoformat() + "Z",
+            timestamp=datetime.now(timezone.utc).isoformat(),
             event_type=event_type,
             session_id=session_id,
             plan_id=plan_id,

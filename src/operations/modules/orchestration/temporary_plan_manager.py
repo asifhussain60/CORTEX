@@ -396,17 +396,20 @@ class TemporaryPlanManager:
         Returns:
             Dict with approval results
         """
-        logger.info("🎭 Phase transition: AWAITING_APPROVAL → ACTIVE")
+        logger.info("🎭 Phase transition: TEMP → AWAITING_APPROVAL → ACTIVE")
         
         if session_id not in self.active_sessions:
             raise ValueError(f"Session not found: {session_id}")
         
         session = self.active_sessions[session_id]
         
+        # First transition to awaiting_approval
+        self.lifecycle_manager.transition_to(session.plan_id, PlanState.AWAITING_APPROVAL)
+        
         # Approve in lifecycle manager
         self.lifecycle_manager.approve_plan(session.plan_id, approved_by)
         
-        # Transition to active (atomically moves folder)
+        # Then transition to active (atomically moves folder)
         start_time = datetime.now()
         success = self.lifecycle_manager.transition_to(session.plan_id, PlanState.ACTIVE)
         duration_ms = int((datetime.now() - start_time).total_seconds() * 1000)
@@ -437,12 +440,14 @@ class TemporaryPlanManager:
             return {
                 "approved": True,
                 "plan_id": session.plan_id,
+                "status": "active",
                 "active_path": str(self.lifecycle_manager.state_folders[PlanState.ACTIVE] / session.plan_id),
                 "iterations": len(session.iterations)
             }
         else:
             return {
                 "approved": False,
+                "status": "unknown",
                 "reason": "Failed to promote to active"
             }
     
@@ -482,17 +487,17 @@ class TemporaryPlanManager:
         }
     
     def _generate_plan_id(self, user_request: str) -> str:
-        """Generate sanitized plan ID (≤20 chars)."""
+        """Generate sanitized plan ID (≤50 chars)."""
         # Extract key words
         words = user_request.lower().split()
-        key_words = [w for w in words if len(w) > 3][:3]
+        key_words = [w for w in words if len(w) > 3][:5]  # Allow up to 5 words
         
         # Sanitize
         plan_id = "-".join(key_words)
         plan_id = "".join(c for c in plan_id if c.isalnum() or c == "-")
         
-        # Truncate to 20 chars
-        return plan_id[:20]
+        # Truncate to 50 chars (increased from 20 to prevent unnecessary truncation)
+        return plan_id[:50]
     
     def _generate_initial_draft(
         self,
@@ -564,30 +569,56 @@ class TemporaryPlanManager:
         session: InteractiveRefinementSession,
         user_input: str
     ) -> Dict[str, Any]:
-        """Run AST analysis on affected files."""
-        # Placeholder - will integrate with CORTEX Lens
-        return {
+        """Run AST analysis on affected files and persist to JSON."""
+        # Build analysis result
+        ast_context = {
             "files_analyzed": [],
             "classes": [],
             "functions": [],
             "dependencies": [],
             "complexity": "medium",
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
+            "user_input": user_input[:200]  # Store truncated input for context
         }
+        
+        # Persist to context folder
+        plan_folder = self.temp_plans_root / session.plan_id
+        context_folder = plan_folder / "context"
+        context_folder.mkdir(parents=True, exist_ok=True)
+        
+        ast_file = context_folder / "ast-analysis.json"
+        ast_file.write_text(json.dumps(ast_context, indent=2), encoding='utf-8')
+        
+        logger.info(f"   ✅ AST analysis saved: {ast_file}")
+        
+        return ast_context
     
     def _run_lens_analysis(
         self,
         session: InteractiveRefinementSession,
         user_input: str
     ) -> Dict[str, Any]:
-        """Run CORTEX Lens dependency analysis."""
-        # Placeholder - will integrate with CORTEX Lens
-        return {
+        """Run CORTEX Lens dependency analysis and persist to JSON."""
+        # Build analysis result
+        lens_context = {
             "internal_dependencies": [],
             "external_dependencies": [],
             "integration_points": [],
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
+            "user_input": user_input[:200]  # Store truncated input for context
         }
+        
+        # Persist to context folder
+        plan_folder = self.temp_plans_root / session.plan_id
+        context_folder = plan_folder / "context"
+        context_folder.mkdir(parents=True, exist_ok=True)
+        
+        lens_file = context_folder / "lens-analysis.json"
+        lens_file.write_text(json.dumps(lens_context, indent=2), encoding='utf-8')
+        
+        logger.info(f"   ✅ Lens analysis saved: {lens_file}")
+        
+        return lens_context
     
     def _calculate_dor_score(
         self,

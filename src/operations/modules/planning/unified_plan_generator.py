@@ -179,26 +179,16 @@ class UnifiedPlanGenerator:
         manifest_path: Optional[str] = None
     ) -> str:
         """
-        Generate master plan with consistent structure following canonical section order.
+        Generate master plan by rendering template with all required sections.
         
-        Uses MasterPlanTemplate to enforce the exact section order from cortex-3.9-master.md:
-        1. CORTEX Header (ASCII art)
-        2. Title & Metadata
-        3. Request Context
-        4. Visual Progress Tracker
-        5. Phase Status Table
-        6. Executive Summary
-        7. Architectural Changes (Tier 4 only)
-        8. Governance Framework (Tier 4 only)
-        9. Phase Overview (Tier 3+)
-        10. Dependency Graph (Tier 4 only)
-        11. Success Criteria (Tier 3+)
-        12. Deliverables (Tier 3+)
-        13. Risk Analysis (Tier 4 only)
-        14. Related Documentation (Tier 3+)
-        15. Execution Strategy (Tier 4 only)
-        16. Version History
-        17. Contact & Support (Tier 4 only)
+        Template sections (7 mandatory):
+        1. Executive Summary
+        2. Continuation Prompt
+        3. Visual Progress Tracker
+        4. Business Value Summary
+        5. Phase Breakdown & Execution Status
+        6. Request Context
+        7. Definition of Done (DoD)
         
         Args:
             plan_id: Plan identifier
@@ -211,14 +201,142 @@ class UnifiedPlanGenerator:
             manifest_path: Path to orchestrator manifest YAML (for continuation prompt context)
         
         Returns:
-            Master plan markdown content
+            Master plan markdown content with all 7 template sections
+        """
+        from pathlib import Path
+        import datetime
+        
+        # Load template (navigate from src/ up to project root, then to cortex-brain/)
+        # Current file: src/operations/modules/planning/unified_plan_generator.py
+        # Need: cortex-brain/templates/planning/MASTER-PLAN-TEMPLATE.md
+        template_path = Path(__file__).parent.parent.parent.parent.parent / "cortex-brain" / "templates" / "planning" / "MASTER-PLAN-TEMPLATE.md"
+        if not template_path.exists():
+            logger.warning(f"Template not found: {template_path}, using programmatic generation")
+            return self._generate_master_plan_programmatic(plan_id, phases, metadata, include_token_tracking, include_visual_tracker, include_continuation_prompt, compressed, manifest_path)
+        
+        template_content = template_path.read_text(encoding='utf-8')
+        
+        # Calculate metrics
+        completed_phases = sum(1 for p in phases if p.get("status") == "complete")
+        total_phases = len(phases)
+        progress_percentage = int((completed_phases / total_phases * 100) if total_phases > 0 else 0)
+        
+        # Calculate progress bar
+        bar_length = 20
+        filled = int(bar_length * completed_phases / total_phases) if total_phases > 0 else 0
+        progress_bar = "█" * filled + "░" * (bar_length - filled)
+        
+        # Calculate token metrics
+        baseline_tokens = metadata.get("baseline_tokens", 0)
+        current_tokens = metadata.get("current_tokens", baseline_tokens)
+        tokens_saved = baseline_tokens - current_tokens
+        token_reduction_percentage = self.token_tracker.calculate_percentage(baseline_tokens, current_tokens)
+        
+        # Calculate time metrics
+        total_est_hours, total_est_days = self._calculate_total_estimated(phases)
+        total_actual_hours = self._calculate_total_actual(phases)
+        total_elapsed_hours = self._calculate_total_elapsed(phases)
+        time_saved_hours = total_est_hours - total_actual_hours if total_actual_hours > 0 else 0
+        efficiency_percentage = self._calculate_efficiency(total_est_hours, total_actual_hours)
+        
+        # Generate continuation prompt
+        next_phase_num = completed_phases + 1 if completed_phases < total_phases else None
+        next_phase_name = phases[completed_phases]['name'] if completed_phases < total_phases else None
+        continuation_prompt = self.generate_continuation_prompt(
+            plan_id=plan_id,
+            completed_phases=completed_phases,
+            total_phases=total_phases,
+            next_phase_number=next_phase_num,
+            next_phase_name=next_phase_name,
+            progress_percentage=progress_percentage,
+            manifest_path=manifest_path
+        )
+        
+        # Generate phase breakdown table
+        phase_tables = self._generate_phases_table(phases, include_token_tracking, compressed)
+        
+        # Build placeholder replacements
+        replacements = {
+            "{PLAN_TITLE}": metadata.get("feature_name", plan_id),
+            "{PLAN_ID}": plan_id,
+            "{CREATION_DATE}": metadata.get("creation_date", datetime.datetime.now().strftime("%Y-%m-%d")),
+            "{STATUS}": "IN PROGRESS" if completed_phases < total_phases else "COMPLETE",
+            "{COMPLEXITY_TIER}": str(metadata.get("complexity_tier", 4)),
+            "{PHASES_COMPLETE}": str(completed_phases),
+            "{TOTAL_PHASES}": str(total_phases),
+            "{PROGRESS_PERCENTAGE}": str(progress_percentage),
+            "{PROGRESS_BAR}": progress_bar,
+            "{TOKEN_REDUCTION_PERCENTAGE}": f"{token_reduction_percentage:.1f}",
+            "{TOKEN_REDUCTION_AMOUNT}": self.token_tracker.format_tokens(tokens_saved),
+            "{BASELINE_TOKENS}": self.token_tracker.format_tokens(baseline_tokens),
+            "{BASELINE_FILES}": str(metadata.get("total_files", 0)),
+            "{ACTUAL_WORK_TIME}": f"{total_actual_hours:.1f}",
+            "{TIME_SAVED}": f"{time_saved_hours:.1f}",
+            "{DAYS_SAVED}": f"{time_saved_hours/8:.1f}",
+            "{ESTIMATED_HOURS}": f"{total_est_hours:.1f}",
+            "{ESTIMATED_DAYS}": f"{total_est_days:.1f}",
+            "{ESTIMATED_WEEKS}": f"{total_est_days/5:.1f}",
+            "{ESTIMATED_VELOCITY}": f"{total_phases/(total_est_days/5) if total_est_days > 0 else 0:.1f}",
+            "{ACTUAL_VELOCITY}": f"{self._calculate_velocity(phases):.1f}",
+            "{COST_SAVINGS}": f"{time_saved_hours * 75:,.0f}",
+            "{PRODUCTIVITY_MULTIPLIER}": f"{total_est_hours/total_actual_hours if total_actual_hours > 0 else 1:.2f}",
+            "{EFFICIENCY_PERCENTAGE}": f"{efficiency_percentage:.1f}",
+            "{ELAPSED_TIME}": f"{total_elapsed_hours:.1f}",
+            "{ELAPSED_DAYS}": f"{total_elapsed_hours/8:.1f}",
+            "{ACTUAL_DAYS}": f"{total_actual_hours/8:.1f}",
+            "{ACTUAL_WEEKS}": f"{total_elapsed_hours/40:.1f}",
+            "{TRADITIONAL_COST}": f"{total_est_hours * 75:,.0f}",
+            "{ACTUAL_COST}": f"{total_actual_hours * 75:,.0f}",
+            "{VELOCITY_MULTIPLIER}": f"{self._calculate_velocity(phases)/(total_phases/(total_est_days/5)) if total_est_days > 0 else 1:.1f}",
+            "{EXECUTIVE_SUMMARY}": metadata.get("summary", "Feature implementation plan generated by CORTEX Planning System 3.0."),
+            "{CONTINUATION_PROMPT}": continuation_prompt,
+            "{PHASE_TABLES}": phase_tables,
+            "{REQUEST_CONTEXT}": metadata.get("request_context", "User requested implementation of this feature."),
+            "{NARRATIVE_ENHANCED_SUMMARY}": metadata.get("codebase_summary", "AST analysis pending."),
+            "{PATTERN_LIST_WITH_EXPLANATIONS}": metadata.get("patterns", "- Analysis pending"),
+            "{AFFECTED_FILES_WITH_REASONS}": metadata.get("affected_files", "- Analysis pending"),
+            "{DEPENDENCY_NARRATIVE}": metadata.get("dependencies", "Analysis pending."),
+            "{INTEGRATION_POINTS_NARRATIVE}": metadata.get("integration_points", "Analysis pending."),
+            "{AST_ANALYSIS_TIMESTAMP}": metadata.get("ast_timestamp", "Pending"),
+            "{FILE_COUNT}": str(metadata.get("file_count", 0)),
+            "{MODULE_COUNT}": str(metadata.get("module_count", 0)),
+            "{DOD_CRITERIA}": metadata.get("dod_criteria", "- All tests passing (100% pass rate)\n- Code review completed\n- Documentation updated"),
+            "{APPROVAL_PROCESS}": metadata.get("approval_process", "Requires validation before promotion to active plan."),
+            "{RELATED_DOCS}": metadata.get("related_docs", "- Planning System 3.0 Manifest: `planning-system-3.0-manifest.yaml`"),
+            "{RISK_ANALYSIS}": metadata.get("risk_analysis", "Risk assessment pending."),
+            "{SUCCESS_CRITERIA}": metadata.get("success_criteria", "- Feature implemented per requirements\n- All acceptance criteria met"),
+            "{FINAL_STATUS}": "IN PROGRESS" if completed_phases < total_phases else "COMPLETE",
+            "{TOTAL_DURATION}": f"{total_elapsed_hours:.1f}h"
+        }
+        
+        # Replace all placeholders
+        rendered_content = template_content
+        for placeholder, value in replacements.items():
+            rendered_content = rendered_content.replace(placeholder, value)
+        
+        return rendered_content
+    
+    def _generate_master_plan_programmatic(
+        self,
+        plan_id: str,
+        phases: List[Dict],
+        metadata: Dict,
+        include_token_tracking: bool,
+        include_visual_tracker: bool,
+        include_continuation_prompt: bool,
+        compressed: bool,
+        manifest_path: Optional[str]
+    ) -> str:
+        """
+        Fallback programmatic master plan generation (legacy compatibility).
+        Used when template file is not available.
         """
         sections = []
         
-        # Store compression mode for use in helper methods
+        # Store compression mode
         self._compressed = compressed
         
-        # Get canonical section order based on complexity tier
+        # Get canonical section order
         complexity_tier = metadata.get("complexity_tier", 4)
         section_order = MasterPlanTemplate.get_section_order(complexity_tier)
         
@@ -226,14 +344,11 @@ class UnifiedPlanGenerator:
         for section_type in section_order:
             if section_type == MasterPlanSection.CORTEX_HEADER:
                 sections.append(MasterPlanTemplate.get_cortex_header())
-            
             elif section_type == MasterPlanSection.TITLE_METADATA:
                 sections.append(self._generate_title_metadata(plan_id, metadata))
-            
             elif section_type == MasterPlanSection.REQUEST_CONTEXT:
                 if "request_context" in metadata:
                     sections.append(self._generate_request_context(metadata["request_context"]))
-            
             elif section_type == MasterPlanSection.VISUAL_PROGRESS_TRACKER:
                 if include_visual_tracker:
                     baseline_tokens = metadata.get("baseline_tokens", 0)
@@ -245,61 +360,13 @@ class UnifiedPlanGenerator:
                         total_files=metadata.get("total_files", 0),
                         compressed=compressed
                     ))
-            
             elif section_type == MasterPlanSection.PHASE_STATUS_TABLE:
                 sections.append(self._generate_phases_table(phases, include_token_tracking, compressed))
-            
             elif section_type == MasterPlanSection.EXECUTIVE_SUMMARY:
                 if "summary" in metadata or "goals" in metadata:
                     sections.append(self._generate_executive_summary_full(metadata))
-            
-            elif section_type == MasterPlanSection.ARCHITECTURAL_CHANGES:
-                if "architectural_changes" in metadata:
-                    sections.append(self._generate_architectural_changes(metadata["architectural_changes"]))
-            
-            elif section_type == MasterPlanSection.GOVERNANCE_FRAMEWORK:
-                if "governance_framework" in metadata:
-                    sections.append(self._generate_governance_framework(metadata["governance_framework"]))
-            
-            elif section_type == MasterPlanSection.PHASE_OVERVIEW:
-                if "phase_overview" in metadata:
-                    sections.append(self._generate_phase_overview(metadata["phase_overview"]))
-            
-            elif section_type == MasterPlanSection.DEPENDENCY_GRAPH:
-                if "dependency_graph" in metadata:
-                    sections.append(self._generate_dependency_graph(metadata["dependency_graph"]))
-            
-            elif section_type == MasterPlanSection.SUCCESS_CRITERIA:
-                if "success_criteria" in metadata:
-                    sections.append(self._generate_success_criteria(metadata["success_criteria"]))
-            
-            elif section_type == MasterPlanSection.DELIVERABLES:
-                if "deliverables" in metadata:
-                    sections.append(self._generate_deliverables(metadata["deliverables"]))
-            
-            elif section_type == MasterPlanSection.RISK_ANALYSIS:
-                if "risk_analysis" in metadata:
-                    sections.append(self._generate_risk_analysis(metadata["risk_analysis"]))
-            
-            elif section_type == MasterPlanSection.RELATED_DOCUMENTATION:
-                if "related_documentation" in metadata:
-                    sections.append(self._generate_related_documentation(metadata["related_documentation"]))
-            
-            elif section_type == MasterPlanSection.EXECUTION_STRATEGY:
-                if "execution_strategy" in metadata:
-                    sections.append(self._generate_execution_strategy(metadata["execution_strategy"]))
-            
-            elif section_type == MasterPlanSection.VERSION_HISTORY:
-                if "version_history" in metadata:
-                    sections.append(self._generate_version_history(metadata["version_history"]))
-            
-            elif section_type == MasterPlanSection.CONTACT_SUPPORT:
-                if "contact_support" in metadata:
-                    sections.append(self._generate_contact_support(metadata["contact_support"]))
         
-        # Add footer (not part of canonical sections)
         sections.append(self._generate_footer(compressed))
-        
         return "\n\n".join(sections)
     
     def generate_progress_tracker(

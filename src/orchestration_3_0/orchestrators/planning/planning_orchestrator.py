@@ -187,7 +187,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         )
         
         self.session_context_manager = SessionContextManager(
-            project_root=cortex_brain
+            project_root=project_root
         )
         
         self.complexity_analyzer = ComplexityAnalyzer()
@@ -1134,6 +1134,23 @@ class PlanningOrchestrator(BaseOrchestrator):
         
         return result
     
+    def approve_plan(
+        self,
+        session_id: str,
+        approved_by: str = "system"
+    ) -> Dict[str, Any]:
+        """
+        Approve plan and promote to active (delegates to TemporaryPlanManager).
+        
+        Args:
+            session_id: Refinement session ID
+            approved_by: User who approved (default: "system")
+            
+        Returns:
+            Dict with approval results: {'approved': bool, 'plan_id': str, 'status': str}
+        """
+        return self.temporary_plan_manager.approve_plan(session_id, approved_by)
+    
     def generate_worker_plans(
         self,
         plan_id: str,
@@ -1157,7 +1174,9 @@ class PlanningOrchestrator(BaseOrchestrator):
         logger.info(f"   Phases: {len(phases)}")
         
         from pathlib import Path
-        active_folder = Path("cortex-brain") / "documents" / "planning" / "active" / plan_id
+        # FIX: Use project_root for absolute path resolution (not CWD-relative)
+        project_root = self.project_root if hasattr(self, 'project_root') else Path.cwd()
+        active_folder = project_root / "cortex-brain" / "documents" / "planning" / "active" / plan_id
         active_folder.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
         
         # Generate master plan
