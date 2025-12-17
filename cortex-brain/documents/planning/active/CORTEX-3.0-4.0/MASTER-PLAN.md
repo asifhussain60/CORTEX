@@ -18,6 +18,7 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **Clean Orchestrator Structure** - Co-located tests, TDD-first development
 - **Unified Operations** - Consolidate 28+ orchestrators into 13 total (11 core + 2 specialized)
 - **Agent Integration** - Streamline 18 agents into 12 active (7 independent + 4 brain integrations + 1 deprecated)
+- **CORTEX Lens v2.0** - MCP-integrated intelligence platform with streaming analysis, AI narratives, brain integration
 - **Technical Documentation System** - Auto-generated docs with 60+ interactive D3.js diagrams
 
 **Timeline:** 18 weeks (4.5 months including Phase 0 cleanup + documentation)  
@@ -28,6 +29,8 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 **Architecture References:**
 - **Planning Orchestrator Redesign** - See analysis in `.github/copilot/copilot-chats/chat01.md`
 - **TDD Mastery Orchestrator Redesign** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/TDD-ORCHESTRATOR-REDESIGN.md`
+- **CORTEX Lens v2.0 Architecture** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX-LENS-ARCHITECTURE-REDESIGN.md`
+  - **Phase A Technical Specs (Streaming Pipeline)** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX-LENS-PHASE-A-SPECS.md`
 
 **Critical Path to First Orchestrator Migration:**
 1. **Week 0:** Phase 0 cleanup + technical documentation structure setup
@@ -35,15 +38,20 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 3. **Week 3 End:** Run validation script - MUST pass before Phase 3
 4. **Week 7:** Begin orchestrator migration (ExecutionOrchestrator first, TDD second with redesign)
 
-**Key Phases:**
+**Key Phases (Reorganized for Efficiency):**
 - **Phase 0 (Week 0):** Pre-Migration Cleanup - Eliminate bloat + Technical documentation structure  
-- **Phase 1 (Weeks 1-3):** Foundation - Base orchestrator, brain, DI, templates, testing (CRITICAL)
+- **Phase 1 (Weeks 1-3):** Foundation - Base orchestrator, brain, DI, response templates v4.0, testing (CRITICAL)
 - **Phase 1.5 (Week 3):** Documentation & Visualization Framework - Auto-generation tool  
 - **Phase 2 (Weeks 4-6):** Brain Enhancement - Hybrid centralization
 - **Phase 3 (Weeks 7-11):** Orchestrator Consolidation - Migrate 13 orchestrators (11 core + 2 specialized) (requires Phase 1 complete)
 - **Phase 4 (Weeks 12-14):** Operations Simplification - DI container and manifest reduction
 - **Phase 5 (Weeks 15-17):** Testing & Validation - Comprehensive testing and quality gates
-- **Phase 6 (Week 18):** Documentation Finalization - Complete technical documentation generation  
+- **Phase 6 (Week 18):** Documentation Finalization - Complete technical documentation generation
+
+**Phase Reorganization Rationale:**
+1. **Response Templates v4.0 moved into Phase 1** - Foundation work, blocking dependency for orchestrators
+2. **MCP Gateway moved to Phase 4** - Non-blocking, can evolve alongside operations simplification
+3. **Brain Enhancement (Phase 2) independent** - Can proceed in parallel with orchestrator development  
 
 ---
 
@@ -54,12 +62,12 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 1. ✅ **Branch Setup** - CORTEX-4.0 branch with new directory structure
 2. ✅ **Base Orchestrator Framework** - BaseOrchestrator, PhaseManager, ErrorHandler (3 classes)
 3. ✅ **Brain Tiers** - All 4 tiers migrated with BrainInterface
-4. ✅ **Response Template System** - TemplateManager + templates migrated
+4. ✅ **Response Template System v4.0** - TemplateManager + 4-tier adaptive templates (500 lines max)
 5. ✅ **Configuration System** - cortex.config.json updated + ConfigManager
 6. ✅ **Testing Infrastructure** - pytest + fixtures + conftest.py (CORTEX INTERNAL TESTS ONLY)
 7. ✅ **Dependency Injection** - CortexContainer + @orchestrator decorator
 8. ✅ **Logging & Monitoring** - Standardized logger setup
-9. ✅ **MCP Gateway Stub** - Minimal stub (full implementation later)
+9. ✅ **MCP Gateway Stub** - Minimal stub (full implementation in Phase 4)
 10. ✅ **Validation Script** - Foundation validation passing
 
 **Validation Command:**
@@ -96,6 +104,355 @@ python scripts/validate_cortex_4_foundation.py
 | Start Phase 4 operations | 6+ orchestrators migrated | DI container operational |
 | Start Phase 5 testing | All 12 orchestrators migrated | Full test suite ready |
 | Start Phase 6 documentation | Phase 5 complete | Documentation tool tested |
+
+---
+
+## 🎨 Response Template System Redesign (v3.0 → v4.0)
+
+### Current State (v3.0) - Bloat Analysis
+
+**Files:**
+- `cortex-brain/core/response-templates.yaml` - **15,851 lines** (93% bloat)
+- `cortex-brain/response-templates/` - **46+ YAML files** scattered
+- Mandatory 5-part structure for ALL responses (even "yes/no")
+
+**Problems:**
+1. **Extreme complexity** - 15K lines unmaintainable
+2. **Cognitive overhead** - 5 sections for simple answers
+3. **Token waste** - ~200 tokens minimum per response
+4. **Scattered organization** - 46 files, unclear hierarchy
+5. **Over-engineering** - Fuzzy matching, caching, complex routing for static content
+
+### Target State (v4.0) - Adaptive Minimalism
+
+**Goal:** 97% reduction (15,851 → 500 lines) with context-appropriate scaling
+
+**Core Principle:** Responses scale from one-word answers to comprehensive narratives based on actual need, not arbitrary structure requirements.
+
+#### Header System (PROTECTED - Unchanged)
+
+```markdown
+## 🧠 CORTEX {Context-Appropriate Title}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+```
+
+**Rules:**
+- H2 level with 🧠 emoji
+- Author/GitHub on same line (compact)
+- No separator line after (saves tokens)
+
+#### Response Tier System (NEW)
+
+**TIER 1: INSTANT** (0-50 tokens)  
+Direct answers to factual/simple questions. Header + answer only.
+
+```markdown
+## 🧠 CORTEX Answer
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+{direct_answer}
+```
+
+**Use cases:** Command lookups, yes/no questions, status checks, quick confirmations
+
+---
+
+**TIER 2: FOCUSED** (50-200 tokens)  
+Single-concept explanations. Header + focused content + optional action.
+
+```markdown
+## 🧠 CORTEX {Topic}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+{focused_explanation}
+
+{optional_action_item}
+```
+
+**Use cases:** Concept explanations, configuration guidance, error explanations, simple troubleshooting
+
+---
+
+**TIER 3: STRUCTURED** (200-600 tokens)  
+Multi-faceted responses. Header + 2-3 dynamic sections based on need.
+
+```markdown
+## 🧠 CORTEX {Operation}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+### {Section1_Name}
+{content}
+
+### {Section2_Name}
+{content}
+
+### {Section3_Name - optional}
+{content}
+```
+
+**Dynamic sections (pick 2-3):**
+- 🎯 Context - What was understood/discovered
+- ⚡ Analysis - Key findings/decisions (only if non-trivial)
+- 💬 Details - Core information
+- 📊 Changes - What was modified
+- 🔍 Actions - Next steps (only if user action required)
+- ⚠️ Cautions - Risks/considerations (only if significant)
+
+**Use cases:** Feature implementations, analysis results, system operations, planning outputs
+
+---
+
+**TIER 4: COMPREHENSIVE** (600+ tokens)  
+Full narratives for complex operations. Header + 4-6 sections with rich detail.
+
+```markdown
+## 🧠 CORTEX {Complex Operation}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+### {Section1}
+{rich_content}
+
+### {Section2}
+{rich_content}
+
+### {Section3}
+{rich_content}
+
+### {Section4+}
+{additional_sections_as_needed}
+```
+
+**Dynamic section library (pick what's relevant):**
+- 🎯 Scope & Context
+- 🏗️ Architecture
+- ⚡ Strategy & Approach
+- 🔍 Analysis
+- 💬 Implementation
+- 📊 Results & Metrics
+- ⚠️ Risks & Mitigations
+- 🔧 Technical Details
+- 🎉 Achievements
+- 🚀 Next Steps
+
+**Use cases:** Introduction/onboarding, architectural reviews, system maintenance, multi-phase orchestrations, Planning System 2.0
+
+---
+
+#### Success Templates (SPECIAL)
+
+**Completion Template** - When ALL work is done:
+
+```markdown
+# 🎉 WORK COMPLETE
+
+## 🧠 CORTEX {Operation}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+{summary_of_completed_work}
+
+### 📊 Results
+{metrics_and_outcomes}
+
+✅ **No further action required.**
+```
+
+---
+
+#### Template Storage (SIMPLIFIED)
+
+**Single file:** `cortex-brain/response-templates-v4.yaml` (<500 lines)
+
+```yaml
+version: "4.0"
+schema: "adaptive-minimalism"
+
+# Tier routing rules
+routing:
+  tier1_triggers:
+    - question_words: [what, where, when, which, command]
+    - response_length: < 50 tokens
+    - no_multi_step: true
+  
+  tier2_triggers:
+    - single_concept: true
+    - response_length: 50-200 tokens
+  
+  tier3_triggers:
+    - multi_faceted: true
+    - response_length: 200-600 tokens
+    - sections_needed: 2-3
+  
+  tier4_triggers:
+    - complex_operation: true
+    - response_length: 600+ tokens
+
+# Reusable components (not full templates)
+components:
+  progress_bar: "{bar_visual}"
+  file_link: "[{filename}](file:///{path})"
+  collapsible: "<details><summary>{title}</summary>{content}</details>"
+  code_block: "```{lang}\n{code}\n```"
+  metric: "**{label}:** {value}"
+  
+# Section emoji mapping
+emojis:
+  context: "🎯"
+  analysis: "⚡"
+  details: "💬"
+  changes: "📊"
+  actions: "🔍"
+  cautions: "⚠️"
+  results: "📊"
+  architecture: "🏗️"
+  achievements: "🎉"
+  technical: "🔧"
+```
+
+**Total size target:** <500 lines (97% reduction from 15,851 lines)
+
+---
+
+#### Routing Logic (SIMPLIFIED)
+
+**Decision tree:**
+
+```python
+def select_tier(request, context):
+    # Instant: Factual lookup
+    if is_factual_query(request) and not requires_explanation(context):
+        return TIER1_INSTANT
+    
+    # Focused: Single concept
+    if is_single_concept(request) and estimated_tokens < 200:
+        return TIER2_FOCUSED
+    
+    # Structured: Multi-faceted
+    if requires_multiple_aspects(request) and estimated_tokens < 600:
+        return TIER3_STRUCTURED
+    
+    # Comprehensive: Complex operations
+    return TIER4_COMPREHENSIVE
+
+def select_sections(tier, context):
+    """Dynamically pick sections based on what's needed"""
+    sections = []
+    
+    if context.has_discovery:
+        sections.append("context")
+    if context.has_nontrivial_decisions:
+        sections.append("analysis")
+    if context.has_implementation:
+        sections.append("details")
+    if context.has_modifications:
+        sections.append("changes")
+    if context.requires_user_action:
+        sections.append("actions")
+    if context.has_risks:
+        sections.append("cautions")
+    
+    return sections[:tier.max_sections]
+```
+
+**No more:**
+- ❌ Fuzzy matching
+- ❌ Trigger index (46+ templates)
+- ❌ Template composition
+- ❌ Routing caching
+- ❌ Context weighting algorithms
+
+---
+
+#### Expected Benefits
+
+**Token Efficiency:**
+- Simple queries: 80-90% reduction (5-part → direct answer)
+- Medium queries: 50-60% reduction (remove unnecessary sections)
+- Complex queries: 20-30% reduction (dynamic sections only)
+- **Overall: ~60% token savings**
+
+**Maintainability:**
+- 97% code reduction (15,851 → ~500 lines)
+- Single file vs 46+ scattered files
+- Clear tier logic vs complex routing
+- Easy to modify section library
+
+**User Experience:**
+- Faster answers for simple queries
+- No cognitive overhead for straightforward questions
+- Rich detail when actually needed
+- Consistent branding maintained
+
+---
+
+#### Implementation Checklist (Phase 1, Week 2)
+
+**Core System:**
+- ☐ Create `cortex-brain/response-templates-v4.yaml` (500 lines max)
+- ☐ Implement tier selection logic (`src/core/response_tier_selector.py`)
+- ☐ Implement section selection logic (`src/core/section_selector.py`)
+- ☐ Update renderer to use tier system (`src/core/template_renderer_v4.py`)
+
+**Testing:**
+- ☐ Unit tests for tier selection (20 test cases)
+- ☐ Unit tests for section selection (15 test cases)
+- ☐ Integration tests for all 4 tiers
+- ☐ Token measurement tests (validate savings)
+
+**Documentation:**
+- ☐ Update `.github/prompts/CORTEX.prompt.md`
+- ☐ Create `docs/response-templates-v4.md`
+- ☐ Migration guide for custom templates
+- ☐ Examples for each tier
+
+**Deployment:**
+- ☐ A/B testing infrastructure (20% traffic initially)
+- ☐ Metrics dashboard (tokens, quality, usage by tier)
+- ☐ Rollback procedure
+- ☐ User feedback collection
+
+**Total implementation estimate:** 12-16 hours of focused work
+
+---
+
+#### Migration Strategy
+
+**Phase 1: Parallel Operation (Week 2, Days 4-5)**
+- Deploy v4.0 system alongside v3.0
+- Route 20% of traffic to v4.0
+- Monitor: response quality, token savings, user feedback
+
+**Phase 2: Gradual Rollout (Week 3, Days 1-2)**
+- Increase to 50% traffic on v4.0
+- Tune tier boundaries based on data
+- Fix edge cases
+
+**Phase 3: Full Deployment (Week 3, Day 3)**
+- 100% traffic to v4.0
+- Archive v3.0 templates
+- Update all documentation
+
+**Phase 4: Optimization (Week 3, Days 4-5)**
+- Refine section selection logic
+- Add specialized templates only if proven necessary
+- Document best practices
+
+---
+
+#### Anti-Patterns to Avoid
+
+**DON'T:**
+- ❌ Add "convenience" variations that duplicate tiers
+- ❌ Create specialized templates unless 10+ uses proven
+- ❌ Reintroduce complex routing logic
+- ❌ Add "just in case" sections
+- ❌ Allow tier inflation (respect token limits)
+
+**DO:**
+- ✅ Start with smallest tier that works
+- ✅ Only add sections that deliver value
+- ✅ Measure token usage continuously
+- ✅ Get user feedback on response quality
+- ✅ Enforce the 500-line budget
 
 ---
 
@@ -2521,7 +2878,7 @@ After:  500 lines (descriptions + examples only)
 4. Feature documentation (5 major features)
 5. API reference documentation
 6. Architecture overview documentation
-7. CORTEX Lens documentation
+7. CORTEX Lens v2.0 documentation (MCP-integrated intelligence platform)
 
 **Tasks:**
 
@@ -2551,7 +2908,13 @@ After:  500 lines (descriptions + examples only)
   - [ ] Documentation generator guide
   - [ ] Testing framework guide
   - [ ] Migration utilities guide
-- [ ] Generate CORTEX Lens documentation:
+- [ ] Generate CORTEX Lens v2.0 documentation:
+  - [ ] Architecture overview (v1.0 → v2.0 evolution)
+  - [ ] MCP integration guide
+  - [ ] Streaming pipeline documentation
+  - [ ] Brain integration patterns
+  - [ ] AI narrative generation guide
+  - [ ] Interactive dashboard user guide
   - [ ] Landing page generator
   - [ ] Comparison engine
   - [ ] Visualization engine
