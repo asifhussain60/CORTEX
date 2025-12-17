@@ -176,8 +176,18 @@ class TemporaryPlanManager:
         
         # Generate initial draft
         start_time = datetime.now()
+        
+        # Display progress
+        print(f"\n🔄 **Generating Initial Draft...**")
+        print(f"📁 Plan folder: `{plan_folder.name}`")
+        print(f"🧠 Analyzing codebase context...")
+        
         self._generate_initial_draft(session, plan_folder, context_folder)
         duration_ms = int((datetime.now() - start_time).total_seconds() * 1000)
+        
+        # Display completion
+        print(f"✅ Initial draft generated ({duration_ms}ms)")
+        print(f"📄 View plan: `{plan_folder / 'plan.md'}`\n")
         
         # Audit: Temp plan created
         audit_logger.log_event(

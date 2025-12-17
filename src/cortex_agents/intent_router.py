@@ -635,6 +635,25 @@ class IntentRouter(BaseAgent):
         message_lower = request.user_message.lower()
         metadata = {}
         
+        # UNIVERSAL PLANNING GATE: ALL requests go through planning first
+        # No keyword triggers needed - planning is mandatory for all work
+        # Exception: Meta-commands (help, status, feedback) skip planning
+        
+        meta_commands = ["help", "status", "healthcheck", "feedback", "resume", "continue"]
+        is_meta_command = any(cmd in message_lower for cmd in meta_commands)
+        
+        if not is_meta_command:
+            self.logger.info("🛡️ Universal Planning Gate: All requests require planning - creating temp plan")
+            metadata['detection_method'] = 'universal_planning_gate'
+            metadata['requires_temp_plan'] = True
+            
+            return IntentClassificationResult(
+                intent=IntentType.PLAN,
+                confidence=1.0,  # Absolute confidence - planning is mandatory
+                rule_context=self.INTENT_RULE_CONTEXT.get(IntentType.PLAN, {}),
+                metadata=metadata
+            )
+        
         # Check if there's an image attachment in context - this takes priority
         if request.context:
             has_image = (

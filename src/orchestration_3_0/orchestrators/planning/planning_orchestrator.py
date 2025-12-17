@@ -37,6 +37,7 @@ from ...core.base_orchestrator import (
     OrchestratorResult
 )
 from ...core.state_machine import StateMachine, create_basic_orchestrator_fsm
+from ...core.edge_case_validator import EdgeCaseValidator, ValidationReport
 from ...session.session_manager import SessionManager
 from src.tier0.cortex_implants_integrator import get_implants_integrator
 from src.operations.modules.orchestration.temporary_plan_manager import (
@@ -210,7 +211,23 @@ class PlanningOrchestrator(BaseOrchestrator):
         # Will be injected when needed via container or lazy initialization
         self.narrative_generator: Optional[NarrativeGenerator] = None
         
-        logger.info("🎭 PlanningOrchestrator initialized with Planning System 3.0 (10 components)")
+        # Initialize EdgeCaseValidator for comprehensive safety checks
+        sessions_dir = project_root / "cortex-brain"
+        self.edge_case_validator = EdgeCaseValidator(
+            sessions_dir=sessions_dir,
+            max_sessions=10,
+            min_disk_space_gb=1.0,
+            analysis_timeout=300,  # 5 minutes
+            session_expiry_hours=24,
+            max_iterations=50
+        )
+        
+        # Cleanup stale sessions on startup (#8)
+        cleaned_sessions = self.edge_case_validator.cleanup_stale_sessions()
+        if cleaned_sessions:
+            logger.info(f"🧹 Cleaned {len(cleaned_sessions)} stale sessions on startup")
+        
+        logger.info("🎭 PlanningOrchestrator initialized with Planning System 3.0 (11 components)")
         logger.info("   ✅ PlanningGate - Request triage")
         logger.info("   ✅ TemporaryPlanManager - Refinement sessions")
         logger.info("   ✅ SessionContextManager - Context continuity")
@@ -221,6 +238,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         logger.info("   ✅ ASTEngine - Code structure analysis")
         logger.info("   ✅ CortexLens - Dependency mapping")
         logger.info("   ✅ NarrativeGenerator - Documentation (lazy load)")
+        logger.info("   ✅ EdgeCaseValidator - Safety & edge case handling")
     
     def validate_dor(self, context: WorkflowContext) -> ValidationResult:
         """
@@ -231,6 +249,13 @@ class PlanningOrchestrator(BaseOrchestrator):
         - Feature description (min 50 chars)
         - At least 3 acceptance criteria
         - Target release or timeline specified
+        
+        Enhanced with edge case validation:
+        - Input sanitization (#6)
+        - Filesystem-safe names (#5)
+        - Concurrent session prevention (#1)
+        - Max sessions limit (#15)
+        - Disk space checks (#14)
         
         Args:
             context: Workflow context
@@ -247,6 +272,35 @@ class PlanningOrchestrator(BaseOrchestrator):
             errors.append("Feature name is required")
         elif len(feature_name) < 5:
             errors.append("Feature name too short (minimum 5 characters)")
+        
+        # Enhanced validation using EdgeCaseValidator
+        description = context.inputs.get('description', '').strip()
+        acceptance_criteria = context.inputs.get('acceptance_criteria', [])
+        
+        # Get active sessions for validation
+        active_sessions = list(self.session_context_manager.get_all_active_sessions().keys())
+        current_session_count = len(active_sessions)
+        
+        validation_report = self.edge_case_validator.validate_planning_request(
+            feature_name=feature_name,
+            feature_description=description,
+            acceptance_criteria=acceptance_criteria,
+            active_sessions=active_sessions,
+            current_session_count=current_session_count
+        )
+        
+        # Add validation report issues to errors/warnings
+        for issue in validation_report.critical_issues:
+            errors.append(f"[{issue.category.upper()}] {issue.message}")
+            if issue.mitigation:
+                errors.append(f"  → Mitigation: {issue.mitigation}")
+        
+        for issue in validation_report.warnings:
+            warnings.append(f"[{issue.category.upper()}] {issue.message}")
+            if issue.mitigation:
+                warnings.append(f"  → Mitigation: {issue.mitigation}")
+        
+        logger.info(f"🔍 Edge case validation: {validation_report.get_summary()}")
         
         # Check description
         description = context.inputs.get('description', '').strip()
@@ -945,6 +999,12 @@ class PlanningOrchestrator(BaseOrchestrator):
         """
         logger.info(f"🎭 Planning System 3.0: Starting refinement session for {feature_name}")
         
+        # Visual engagement indicator
+        print("\n" + "="*70)
+        print("🛡️ **Universal Planning Gate** | 🎭 **Creating Temp Plan**")
+        print("All work requires planning → refinement → approval → execution")
+        print("="*70 + "\n")
+        
         # Build user request from components
         user_request = f"{feature_name}: {description}"
         if acceptance_criteria:
@@ -986,6 +1046,12 @@ class PlanningOrchestrator(BaseOrchestrator):
             f"   Session: {planning_session.session_id}"
         )
         
+        # Display session info to user
+        print(f"\n📋 **Temp Plan Created:** `{session.plan_id}`")
+        print(f"🔄 **Session ID:** `{session.session_id}`")
+        print(f"📊 **Iteration:** 1/∞ (refinement mode)")
+        print(f"✨ **Status:** Awaiting your feedback\n")
+        
         return session
     
     def handle_user_feedback(
@@ -1000,6 +1066,11 @@ class PlanningOrchestrator(BaseOrchestrator):
         Planning System 3.0: Automatic context loading via SessionContextManager.
         No manual plan_id required if session is active.
         
+        Enhanced with edge case validation:
+        - Max iterations check (#10)
+        - Session expiry validation (#19)
+        - Session file locking (#2)
+        
         Args:
             feedback: User feedback text
             session_id: Session ID (optional if plan_id provided)
@@ -1010,15 +1081,46 @@ class PlanningOrchestrator(BaseOrchestrator):
         """
         logger.info(f"🎭 Planning System 3.0: Processing user feedback")
         
+        # Visual engagement indicator
+        print("\n🎭 **Processing Feedback** | 🔄 **Refining Plan**\n")
+        
         # Automatic context loading (SKULL-013: CONTEXT_CONTINUITY_ENFORCEMENT)
         if not session_id and not plan_id:
             # Load active session automatically
-            context = self.session_context_manager.load_context_for_request(feedback)
-            if context and 'active_session' in context:
-                active_session = context['active_session']
+            active_session = self.session_context_manager.load_context_for_request(feedback)
+            if active_session:
                 session_id = active_session.session_id
                 plan_id = active_session.plan_id
                 logger.info(f"✅ Context loaded automatically: {plan_id}")
+                
+                # Validate session hasn't expired (#19)
+                from datetime import datetime
+                session_created_at = datetime.fromisoformat(active_session.created_at)
+                expiry_issue = self.edge_case_validator.validate_session_expiry(session_created_at)
+                
+                if expiry_issue:
+                    if expiry_issue.severity.name == "WARNING":
+                        logger.warning(f"⚠️  {expiry_issue.message}")
+                        logger.info(f"   Closing expired session: {session_id}")
+                        self.session_context_manager.close_session(session_id)
+                        raise ValueError(
+                            f"Session expired. Please start a new planning session."
+                        )
+                    else:
+                        # Info-level expiry warning
+                        logger.info(f"📌 {expiry_issue.message}")
+                
+                # Validate iteration count (#10)
+                iteration_issue = self.edge_case_validator.validate_max_iterations(
+                    active_session.iteration_count
+                )
+                
+                if iteration_issue:
+                    logger.warning(f"⚠️  {iteration_issue.message}")
+                    if iteration_issue.severity.name == "CRITICAL":
+                        raise ValueError(
+                            f"Max iterations exceeded. Consider finalizing plan or starting fresh."
+                        )
             else:
                 raise ValueError(
                     "No active planning session found. Start refinement with start_refinement_session() first."
@@ -1030,12 +1132,31 @@ class PlanningOrchestrator(BaseOrchestrator):
             user_feedback=feedback
         )
         
+        # Update session iteration count
+        if plan_id:
+            active_session = self.session_context_manager.get_active_session_for_plan(plan_id)
+            if active_session:
+                new_iteration = active_session.iteration_count + 1
+                self.session_context_manager.update_session(
+                    session_id=active_session.session_id,
+                    iteration_count=new_iteration
+                )
+                logger.info(f"🔄 Iteration {new_iteration} complete")
+                print(f"📏 **Iteration:** {new_iteration}")
+        
         logger.info(
             f"✅ Feedback applied:\n"
             f"   Iteration: {updated_session.iterations}\n"
             f"   DoR Score: {updated_session.dor_score}% (prev: {updated_session.dor_score - 10}%)\n"
             f"   Ambiguity: {updated_session.ambiguity_score}% (prev: {updated_session.ambiguity_score + 5}%)"
         )
+        
+        # Display iteration progress to user
+        iteration_num = len(updated_session.iterations)
+        print(f"\n✅ **Feedback Applied**")
+        print(f"📊 **Iteration:** {iteration_num}/∞")
+        print(f"📈 **DoR Score:** {updated_session.current_dor_score:.1f}%")
+        print(f"🎯 **Status:** {'Ready for approval' if updated_session.current_dor_score >= 80 else 'Needs more refinement'}\n")
         
         return updated_session
     
@@ -1124,15 +1245,19 @@ class PlanningOrchestrator(BaseOrchestrator):
                 estimated_days=result.get('estimated_days', 0)
             )
         
-        logger.info(
-            f"✅ Plan approved and promoted:\n"
-            f"   Plan ID: {result['plan_id']}\n"
-            f"   Status: {result.get('status', 'unknown')}\n"
-            f"   Folder: {result.get('active_path', result.get('active_plan_path', 'unknown'))}\n"
-            f"   Manifest: Registered"
-        )
-        
-        return result
+            logger.info(
+                f"✅ Plan approved and promoted:\n"
+                f"   Plan ID: {result['plan_id']}\n"
+                f"   Status: {result.get('status', 'unknown')}\n"
+                f"   Folder: {result.get('active_path', result.get('active_plan_path', 'unknown'))}\n"
+                f"   Manifest: Registered"
+            )
+            
+            return result
+            
+        finally:
+            # Always release session lock (#2)
+            self.edge_case_validator.release_session_file_lock(session_id)
     
     def approve_plan(
         self,
@@ -1176,7 +1301,17 @@ class PlanningOrchestrator(BaseOrchestrator):
         from pathlib import Path
         # FIX: Use project_root for absolute path resolution (not CWD-relative)
         project_root = self.project_root if hasattr(self, 'project_root') else Path.cwd()
-        active_folder = project_root / "cortex-brain" / "documents" / "planning" / "active" / plan_id
+        
+        # FIX: Support custom folder structures (e.g., "cortex-4.0/orchestrator-migrations")
+        # If plan_id contains "/", it's a custom structure - use as-is
+        # Otherwise, use standard "active/{plan_id}" pattern
+        if "/" in plan_id or "\\" in plan_id:
+            # Custom folder structure (e.g., "cortex-4.0/orchestrator-migrations")
+            active_folder = project_root / "cortex-brain" / "documents" / "planning" / plan_id
+        else:
+            # Standard pattern (e.g., "PLAN-2024-12-17-feature")
+            active_folder = project_root / "cortex-brain" / "documents" / "planning" / "active" / plan_id
+        
         active_folder.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
         
         # Generate master plan
@@ -1247,7 +1382,11 @@ class PlanningOrchestrator(BaseOrchestrator):
         """
         Generate AST and Cortex Lens context graphs.
         
-        Planning System 3.0: AST/Lens context accumulation.
+        Planning System 3.0: AST/Lens context accumulation with timeout protection.
+        
+        Enhanced with edge case validation:
+        - Analysis timeout (#11, #12)
+        - Progress callbacks (#22)
         
         Args:
             feature_name: Feature name
@@ -1260,6 +1399,14 @@ class PlanningOrchestrator(BaseOrchestrator):
         
         from pathlib import Path
         import json
+        import time
+        
+        # Create progress callback for long operations (#22)
+        total_steps = 2  # AST + Lens analysis
+        progress_callback = self.edge_case_validator.create_progress_callback(
+            operation="AST/Lens Analysis",
+            total_steps=total_steps
+        )
         
         # Real AST analysis using ASTEngine
         ast_context = {
@@ -1270,12 +1417,26 @@ class PlanningOrchestrator(BaseOrchestrator):
             'imports': []
         }
         
+        ast_start_time = time.time()
+        
         if self.ast_engine.available and affected_files:
             try:
                 logger.info(f"   Running AST analysis on {len(affected_files)} files...")
+                progress_callback(1, "Starting AST analysis")
                 
-                # Analyze each affected file
+                # Analyze each affected file with timeout checks
                 for file_path in affected_files:
+                    # Check timeout before each file (#11)
+                    elapsed = time.time() - ast_start_time
+                    timeout_issue = self.edge_case_validator.validate_analysis_timeout(
+                        "AST", elapsed
+                    )
+                    
+                    if timeout_issue and timeout_issue.severity.name == "CRITICAL":
+                        logger.warning(f"⏰ {timeout_issue.message}")
+                        logger.info("   Using partial AST analysis results")
+                        break
+                    
                     file_path_obj = Path(file_path)
                     if file_path_obj.exists() and file_path_obj.suffix == '.py':
                         # Use AST engine for Python file analysis
@@ -1286,11 +1447,16 @@ class PlanningOrchestrator(BaseOrchestrator):
                             ast_context['classes'].extend(test_gaps.get('untested_classes', []))
                             ast_context['functions'].extend(test_gaps.get('untested_functions', []))
                 
-                logger.info(f"   ✅ AST analysis: {len(ast_context['classes'])} classes, {len(ast_context['functions'])} functions")
+                elapsed = time.time() - ast_start_time
+                logger.info(f"   ✅ AST analysis: {len(ast_context['classes'])} classes, {len(ast_context['functions'])} functions ({elapsed:.1f}s)")
+                progress_callback(1, f"AST complete ({elapsed:.1f}s)")
+                
             except Exception as e:
                 logger.warning(f"   AST analysis failed: {e}, using stub data")
+                progress_callback(1, "AST failed - using stub data")
         else:
             logger.info(f"   AST engine not available, using stub data")
+            progress_callback(1, "AST skipped - engine unavailable")
         
         # Real Lens analysis using CortexLens
         lens_context = {
@@ -1301,31 +1467,45 @@ class PlanningOrchestrator(BaseOrchestrator):
             'architecture_patterns': []
         }
         
+        lens_start_time = time.time()
+        
         try:
             logger.info(f"   Running Cortex Lens analysis...")
+            progress_callback(2, "Starting Lens analysis")
             
             # Get project root for full analysis
             project_root = Path.cwd()
             
-            # Run Cortex Lens analysis (this is expensive, so we limit scope)
-            # In production, this would analyze the entire codebase
-            # For now, we focus on affected files
-            
+            # Run Cortex Lens analysis with timeout protection (#12)
+            # This is expensive, so we limit scope and check timeout
             lens_result = self.cortex_lens.analyze(
                 repo_path=str(project_root),
                 output_dir=None  # Don't generate full dashboard
             )
             
-            # Extract relevant context from Lens results
-            if lens_result and 'data' in lens_result:
-                lens_data = lens_result['data']
-                lens_context['internal_dependencies'] = lens_data.get('dependencies', {}).get('internal', [])
-                lens_context['external_dependencies'] = lens_data.get('dependencies', {}).get('external', [])
-                lens_context['architecture_patterns'] = lens_data.get('patterns', [])
+            # Check if Lens analysis exceeded timeout
+            elapsed = time.time() - lens_start_time
+            timeout_issue = self.edge_case_validator.validate_analysis_timeout(
+                "Lens", elapsed
+            )
             
-            logger.info(f"   ✅ Lens analysis: {len(lens_context['internal_dependencies'])} internal deps")
+            if timeout_issue and timeout_issue.severity.name == "CRITICAL":
+                logger.warning(f"⏰ {timeout_issue.message}")
+                logger.info("   Using stub Lens data")
+            else:
+                # Extract relevant context from Lens results
+                if lens_result and 'data' in lens_result:
+                    lens_data = lens_result['data']
+                    lens_context['internal_dependencies'] = lens_data.get('dependencies', {}).get('internal', [])
+                    lens_context['external_dependencies'] = lens_data.get('dependencies', {}).get('external', [])
+                    lens_context['architecture_patterns'] = lens_data.get('patterns', [])
+            
+            logger.info(f"   ✅ Lens analysis: {len(lens_context['internal_dependencies'])} internal deps ({elapsed:.1f}s)")
+            progress_callback(2, f"Lens complete ({elapsed:.1f}s)")
+            
         except Exception as e:
             logger.warning(f"   Cortex Lens analysis failed: {e}, using stub data")
+            progress_callback(2, "Lens failed - using stub data")
         
         # Store context in JSON files (for external reference, not inline in plans)
         context_dir = Path("cortex-brain") / "documents" / "planning" / "temp-plans" / feature_name / "context"

@@ -1008,20 +1008,20 @@ operations:
     category: maintenance
   planning:
     name: Planning
-    description: Planning CLI Wrapper
+    description: Universal Planning Gate - ALL requests create temp plan first, execute after approval
     deployment_tier: user_facing
     execution_method: copilot_chat
     natural_language:
-    - create plan
-    - validate plan
-    - markdown generated
-    - plan loaded
-    - create new plan
+    - approve plan
+    - approve
+    - execute plan
     - execute all phases autonomously
     - auto chained
     - without user intervention
     - autonomous execution
     - execute plan autonomously
+    - promote plan
+    - finalize plan
     category: planning
   policy_scanner:
     name: Policy Scanner

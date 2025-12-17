@@ -997,6 +997,74 @@ def _run_self_tests() -> None:
 # CLI Wrapper Routing (Phase 3 & 4)
 # ========================================
 
+# ========================================
+# Planning Gate Check (CORTEX 4.0)
+# ========================================
+
+def check_planning_gate(user_request: str, operation_id: str) -> Dict[str, Any]:
+    """
+    Universal Planning Gate - ALL requests create temp plan first.
+    
+    DESIGN PRINCIPLE: Planning is mandatory, not optional.
+    Every request creates temp plan → refine → approve → execute.
+    No "plan" keyword needed.
+    
+    Args:
+        user_request: User's original request
+        operation_id: Operation being invoked
+        
+    Returns:
+        Dict with planning_required flag:
+        {
+            "planning_required": bool,
+            "reason": str,
+            "bypass_allowed": bool
+        }
+    """
+    if not user_request:
+        return {"planning_required": False, "reason": "No user request"}
+    
+    request_lower = user_request.lower()
+    
+    # Meta-commands that bypass planning (informational only)
+    meta_commands = [
+        "help", "status", "healthcheck", "feedback", "resume",
+        "continue", "audit", "review logs", "show metrics"
+    ]
+    
+    for cmd in meta_commands:
+        if cmd in request_lower:
+            logger.info(f"ℹ️ Meta-command detected: '{cmd}' - bypassing planning gate")
+            return {
+                "planning_required": False,
+                "reason": f"Meta-command: '{cmd}' (informational only)",
+                "bypass_allowed": True
+            }
+    
+    # Plan approval/execution commands (plan already exists)
+    approval_commands = ["approve", "execute", "promote plan", "finalize"]
+    for cmd in approval_commands:
+        if cmd in request_lower:
+            logger.info(f"✅ Plan approval/execution: '{cmd}' - bypassing gate")
+            return {
+                "planning_required": False,
+                "reason": f"Plan approval/execution: '{cmd}'",
+                "bypass_allowed": True
+            }
+    
+    # ALL OTHER REQUESTS: Require planning first
+    logger.info("🛡️ Universal Planning Gate: Creating temp plan (mandatory for all work)")
+    return {
+        "planning_required": True,
+        "reason": "Universal planning gate - all work requires temp plan approval",
+        "bypass_allowed": False
+    }
+
+
+# ========================================
+# CLI Wrapper Routing (Phase 3 & 4)
+# ========================================
+
 def route_operation(
     operation_id: str,
     cortex_root: Path,
