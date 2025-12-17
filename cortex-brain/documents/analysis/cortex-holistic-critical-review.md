@@ -108,7 +108,7 @@ class BrainProtector:
 
 **Evidence:**
 ```
-cortex-brain/orchestrator-manifests/
+cortex-brain/manifests/orchestrators/
 ├── planning-system-2.0-manifest.yaml (738 lines)
 ├── ado-planning-manifest.yaml
 ├── tdd_implementation_orchestrator-manifest.yaml

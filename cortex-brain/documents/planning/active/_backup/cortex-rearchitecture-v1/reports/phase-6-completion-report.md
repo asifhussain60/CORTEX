@@ -25,7 +25,7 @@ Integrate ADO Planning Orchestrator with Planning System 3.0 to enable seamless 
 - Updated metadata with Phase 6 completion details
 
 **Files Modified:**
-- `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
+- `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml`
 
 ### Task 6.2: ADO Orchestrator Planning Integration
 **Status:** ✅ COMPLETE

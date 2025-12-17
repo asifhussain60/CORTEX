@@ -65,7 +65,7 @@ The rule detects and blocks:
 - Updated rule count: 47 → 48
 - Positioned after `CODE_STYLE_CONSISTENCY` for logical grouping
 
-**2. cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml**
+**2. cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml**
 - Added Phase 5 Step 5.5.1: "Add REFACTOR Phase CSS Validation"
 - Integrated with REFACTOR phase mandatory checks
 - Status: Implemented
@@ -462,7 +462,7 @@ Connects with existing `SKULL_VISUAL_REGRESSION` rule for safe migrations.
 - **Rule Definition:** `cortex-brain/brain-protection-rules.yaml` (lines 1476-1899)
 - **Implementation Guide:** `cortex-brain/documents/implementation-guides/css-centralization-rule.md`
 - **Quick Reference:** `cortex-brain/INLINE-CSS-PROHIBITION-QUICK-REF.md`
-- **Planning System 2.0 Manifest:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **Planning System 2.0 Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 - **Visual Regression:** SKULL_VISUAL_REGRESSION rule
 - **Code Style:** CODE_STYLE_CONSISTENCY rule
 

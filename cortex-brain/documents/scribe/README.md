@@ -168,8 +168,8 @@ open cortex-brain/documents/scribe/implementation/modular-plan-structure.md
 ## 🔗 Related Documents
 
 ### External References
-- [Planning System 2.0 Manifest](../../orchestrator-manifests/planning-system-2.0-manifest.yaml) - REQ-009
-- [ADO Planning Manifest](../../orchestrator-manifests/ado-planning-manifest.yaml) - Inherits Planning System 2.0
+- [Planning System 2.0 Manifest](../../manifests/orchestrators/planning-system-2.0-manifest.yaml) - REQ-009
+- [ADO Planning Manifest](../../manifests/orchestrators/ado-planning-manifest.yaml) - Inherits Planning System 2.0
 - [CORTEX Capabilities](../../capabilities.yaml) - 45 features cataloged
 - [MkDocs Configuration](../../../mkdocs.yml) - Site configuration
 

@@ -124,7 +124,7 @@ orchestrator.update_phase_status("Phase 1: RED", status="completed", progress=10
 
 ### 4️⃣ Manifest Documentation
 
-**Location:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+**Location:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 
 **Enhanced Requirement:** REQ-005 (Visual Progress Rendering)
 
@@ -147,7 +147,7 @@ orchestrator.update_phase_status("Phase 1: RED", status="completed", progress=10
 git diff HEAD~1 src/orchestrators/session_model.py
 git diff HEAD~1 src/orchestrators/planning_orchestrator.py
 git diff HEAD~1 cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md
-git diff HEAD~1 cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml
+git diff HEAD~1 cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml
 ```
 
 ### Step 2: Run System Maintenance
@@ -243,7 +243,7 @@ plan feature: User Authentication
 - `src/orchestrators/session_model.py` - PlanningSession model
 - `src/orchestrators/planning_orchestrator.py` - Phase status updates
 - `cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md` - Checkpoint gates
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` - REQ-005 enhancement
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - REQ-005 enhancement
 
 **Related Guides:**
 - `.github/prompts/CORTEX.prompt.md` - Universal entry point

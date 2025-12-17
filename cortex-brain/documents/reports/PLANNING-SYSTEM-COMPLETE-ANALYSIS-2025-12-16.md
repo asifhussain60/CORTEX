@@ -335,7 +335,7 @@ User: "Do holistic review of architecture"
 
 1. **Full RCA:** `cortex-brain/documents/analysis/PLANNING-SYSTEM-RCA-2025-12-16.md`
 2. **Test Harness:** `tests/integration/test_planning_invocation_comprehensive.py`
-3. **Planning System 3.0 Manifest:** `cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml`
+3. **Planning System 3.0 Manifest:** `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml`
 4. **chat01.md:** Original conversation showing failure
 5. **Brain Protection Rules:** `cortex-brain/brain-protection-rules.yaml`
 

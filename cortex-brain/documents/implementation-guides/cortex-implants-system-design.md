@@ -617,7 +617,7 @@ cortex workspace analyze
 ## 📚 References
 
 - CORTEX Tier 0: `cortex-brain/brain-protection-rules.yaml`
-- Planning System: `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- Planning System: `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 - Truth Sources: `cortex-brain/TRUTH-SOURCES.yaml`
 
 ---

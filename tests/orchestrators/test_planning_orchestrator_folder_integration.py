@@ -50,7 +50,7 @@ class TestOrchestratorFolderIntegration:
             yaml.dump(schema, f)
         
         # Create planning manifest
-        manifest_path = brain / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+        manifest_path = brain / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
         manifest = {
             "manifest_version": "2.0.0",
@@ -222,7 +222,7 @@ class TestArtifactSaving:
             yaml.dump(schema, f)
         
         # Create planning manifest
-        manifest_path = brain / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+        manifest_path = brain / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
         manifest = {
             "manifest_version": "2.0.0",
@@ -371,7 +371,7 @@ class TestBackwardCompatibility:
             yaml.dump(schema, f)
         
         # Create planning manifest with folder structure DISABLED
-        manifest_path = brain / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+        manifest_path = brain / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
         manifest = {
             "manifest_version": "2.0.0",

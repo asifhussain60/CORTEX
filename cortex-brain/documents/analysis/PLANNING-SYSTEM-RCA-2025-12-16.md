@@ -92,7 +92,7 @@ tier0_instincts:
 
 #### Discovery 4: Planning System 3.0 Manifest
 ```yaml
-# cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml
+# cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml
 components:
   temporary_plan_manager:
     enabled: true
@@ -610,7 +610,7 @@ class TestSKULLPlanningEnforcement:
 **Action:** Enforce manifest-code alignment
 
 ```yaml
-# cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml
+# cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml
 validation:
   manifest_tests:
     - test: "temporary_plan_manager integrated to entry point"

@@ -278,7 +278,7 @@
    - Complete workflow documentation
    - User guide for refinement iterations
    
-3. ☐ Update `cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml`
+3. ☐ Update `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml`
    - Upgrade to planning-system-3.0-manifest.yaml
    - Document InteractiveRefinementSession
 

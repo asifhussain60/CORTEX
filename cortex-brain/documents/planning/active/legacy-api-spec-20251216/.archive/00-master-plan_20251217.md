@@ -719,7 +719,7 @@ output:
 - **Domain Standards:** `Platform.Classic/.github/instructions/ra-domain-standards.md` (to be created)
 - **DomainFramework:** [Internal documentation link]
 - **ClassicModernization:** [Internal documentation link]
-- **CORTEX Planning System 2.0:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **CORTEX Planning System 2.0:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 
 ---
 

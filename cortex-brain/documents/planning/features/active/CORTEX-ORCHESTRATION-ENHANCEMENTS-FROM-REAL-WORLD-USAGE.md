@@ -692,7 +692,7 @@ class BrainProtector:
 
 **Existing CORTEX Documentation:**
 - `.github/prompts/CORTEX.prompt.md` - Planning System 2.0 spec
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` - DoR/DoD
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - DoR/DoD
 - `cortex-brain/brain-protection-rules.yaml` - SKULL rules
 
 ---

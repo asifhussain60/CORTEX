@@ -20,7 +20,7 @@ The Orchestrator Manifest System is a **central source of truth** for all CORTEX
 ## 🏗️ Architecture
 
 ```
-cortex-brain/orchestrator-manifests/
+cortex-brain/manifests/orchestrators/
 ├── manifest-schema.yaml                    # Universal schema for all manifests
 ├── planning-system-2.0-manifest.yaml       # Planning System 2.0 requirements
 ├── ado-planning-manifest.yaml              # ADO planning (inherits from Planning 2.0)
@@ -115,8 +115,8 @@ class MyOrchestrator:
 
 ```bash
 # Copy template
-cp cortex-brain/orchestrator-manifests/manifest-schema.yaml \
-   cortex-brain/orchestrator-manifests/my-orchestrator-manifest.yaml
+cp cortex-brain/manifests/orchestrators/manifest-schema.yaml \
+   cortex-brain/manifests/orchestrators/my-orchestrator-manifest.yaml
 
 # Edit with your requirements
 # Follow schema structure defined in manifest-schema.yaml
@@ -266,8 +266,8 @@ graph TD
 
 1. **Create Manifest File**
    ```bash
-   cp cortex-brain/orchestrator-manifests/manifest-schema.yaml \
-      cortex-brain/orchestrator-manifests/my-orchestrator-manifest.yaml
+   cp cortex-brain/manifests/orchestrators/manifest-schema.yaml \
+      cortex-brain/manifests/orchestrators/my-orchestrator-manifest.yaml
    ```
 
 2. **Fill Required Sections**
@@ -337,7 +337,7 @@ print(f"Parity Gap: {abs(planning_report.compliance_score - ado_report.complianc
 ```
 ⚠️ Planning System 2.0 manifest not found - drift detection disabled
 ```
-**Solution:** Create manifest file in `cortex-brain/orchestrator-manifests/`
+**Solution:** Create manifest file in `cortex-brain/manifests/orchestrators/`
 
 ### Low Compliance Score
 ```

@@ -367,7 +367,7 @@ Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX
 
 ### Task 1.7: Update Planning System 2.0 Manifest
 
-**File:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 
 **Add visual tracker requirements:**
 ```yaml
@@ -434,7 +434,7 @@ pre_planning_discovery:
 
 - `src/orchestrators/session_model.py` (PlanningSession class)
 - `src/operations/modules/orchestration/planning_orchestrator.py` (target file)
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 - `tests/orchestrators/test_planning_orchestrator.py`
 
 ---

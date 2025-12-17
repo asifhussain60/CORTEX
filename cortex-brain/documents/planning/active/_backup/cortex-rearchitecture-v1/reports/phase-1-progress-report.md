@@ -184,7 +184,7 @@ return OperationResult(
 
 ### Task 1.7: Update Planning System 3.0 Manifest ✅
 **Status:** COMPLETE  
-**File Created:** `cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml`
+**File Created:** `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml`
 
 **Contents:**
 - Component documentation (tiered routing, discovery, visual tracker)
@@ -226,7 +226,7 @@ return OperationResult(
   - `src/operations/modules/orchestration/planning_orchestrator.py` (~200 lines added)
   - `tests/orchestrators/test_pre_planning_discovery.py` (created, ~240 lines)
 - **Files Created:** 2
-  - `cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml` (~500 lines)
+  - `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml` (~500 lines)
   - `cortex-brain/documents/planning/active/cortex-rearchitecture-v1/reports/phase-1-progress-report.md` (this file)
 
 ### Performance
@@ -272,7 +272,7 @@ return OperationResult(
 - [Master Plan](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/00-master-plan.md)
 - [Phase 1 Sub-Plan](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/01-visual-tracker-migration.md)
 - [Progress Tracker JSON](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/tracking/progress-tracker.json)
-- [Planning System 3.0 Manifest](d:/PROJECTS/CORTEX/cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml)
+- [Planning System 3.0 Manifest](d:/PROJECTS/CORTEX/cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml)
 - [Test Suite](d:/PROJECTS/CORTEX/tests/orchestrators/test_pre_planning_discovery.py)
 
 ---

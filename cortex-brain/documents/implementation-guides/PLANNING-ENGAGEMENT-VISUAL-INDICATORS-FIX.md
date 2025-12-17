@@ -667,7 +667,7 @@ grep "approve" src/cortex_agents/intent_router.py
 
 - `cortex-brain/documents/planning/CORTEX-4.0-ARCHITECTURE-DESIGN.md` - CORTEX 4.0 overall design
 - `.github/prompts/CORTEX.prompt.md` - Response format requirements
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` - Planning System 2.0 spec
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - Planning System 2.0 spec
 - `cortex-brain/CODE-SANITIZATION-QUICK-REF.md` - Similar orchestrator visual patterns
 - `cortex-brain/PLANNING-SYSTEM-3.0-GUIDE.md` - Planning System 3.0 comprehensive guide
 

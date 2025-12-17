@@ -250,7 +250,7 @@ This will:
 ## 📚 References
 
 **Manifests:**
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` - Planning requirements
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - Planning requirements
 - `cortex-brain/brain-protection-rules.yaml` - SKULL enforcement
 
 **Existing Code:**

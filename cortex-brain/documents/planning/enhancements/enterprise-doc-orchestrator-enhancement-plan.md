@@ -728,7 +728,7 @@ docs/ (GitHub Pages root)
     - Regeneration stats: "5 of 10 prompts regenerated (50% preserved)"
     - Performance: Time per stage, total regeneration time
   
-  - **Storage Location:** `cortex-brain/orchestrator-manifests/enterprise-docs-manifest.json`
+  - **Storage Location:** `cortex-brain/manifests/orchestrators/enterprise-docs-manifest.json`
   - **Version Control:** Track manifest in git (enables history analysis, rollback)
 
 **Deliverables:**
@@ -2301,7 +2301,7 @@ CORTEX is consolidating from 15+ orchestrators → 10 unified orchestrators as p
     - Generated file list with checksums
     - Git SHA, timestamp, operation count
     - Metrics: pages generated, images deleted, story updates
-  - **Location:** `cortex-brain/orchestrator-manifests/enterprise-docs-manifest.json`
+  - **Location:** `cortex-brain/manifests/orchestrators/enterprise-docs-manifest.json`
   - **Version Control:** Track manifest in git (enables history analysis)
 
 **Deliverables:**

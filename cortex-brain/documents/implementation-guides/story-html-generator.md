@@ -255,7 +255,7 @@ regenerate_story_docs:
   description: "Generate story/index.html from THE-AWAKENING-OF-CORTEX-MASTER.md"
   cli_script: "scripts/generate_story_html.py"
   admin_only: true
-  manifest: "cortex-brain/orchestrator-manifests/story-generator-manifest.yaml"
+  manifest: "cortex-brain/manifests/orchestrators/story-generator-manifest.yaml"
 ```
 
 ---

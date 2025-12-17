@@ -62,7 +62,7 @@ The following critical resources were **NEVER** archived:
 - ✅ `admin/` - Administrative operations
 - ✅ `config/` - Configuration files
 - ✅ `documents/` - Active documentation
-- ✅ `orchestrator-manifests/` - Planning System 2.0 manifests
+- ✅ `manifests/orchestrators/` - Planning System 2.0 manifests
 - ✅ `response-templates/` - Response template system
 
 ### Active Operations
@@ -103,7 +103,7 @@ Created `aggressive-cleanup-rules.yaml` with the following features:
 ### No Conflicts With Core Systems
 
 #### Planning System 2.0 ✅
-- `orchestrator-manifests/planning-system-2.0-manifest.yaml` - **PROTECTED**
+- `manifests/orchestrators/planning-system-2.0-manifest.yaml` - **PROTECTED**
 - `documents/planning/` - **PROTECTED**
 - `src/orchestrators/planning_orchestrator.py` - **PROTECTED**
 
@@ -175,7 +175,7 @@ cortex-brain/
 ├── admin/               # Admin operations
 ├── config/              # Configuration
 ├── documents/           # Active documentation
-├── orchestrator-manifests/  # Planning manifests
+├── manifests/orchestrators/  # Planning manifests
 ├── response-templates/  # Response system
 ├── checkpoints/         # Active checkpoints
 ├── dashboards/          # Live dashboards

@@ -576,7 +576,7 @@ Achieve feature parity with CORTEX Admin Dashboard while maintaining zero depend
 - Orchestrator: `src/orchestration_3_0/orchestrators/planning/planning_orchestrator.py`
 - State machine: INITIALIZED → VALIDATING_DOR → EXECUTING → VALIDATING_DOD → COMPLETED
 - Session persistence: SQLite-backed state recovery
-- Manifest: `cortex-brain/orchestrator-manifests/cortex-lens-v3-manifest.yaml` (to be created)
+- Manifest: `cortex-brain/manifests/orchestrators/cortex-lens-v3-manifest.yaml` (to be created)
 
 **TDD Orchestrator Integration:**
 - RED→GREEN→REFACTOR enforced at every phase
@@ -868,7 +868,7 @@ python -m src.cortex_lens generate --template cortex_lens_docs --input ./cortex-
 **Planning System v3.0:**
 - `src/orchestration_3_0/orchestrators/planning/planning_orchestrator.py`
 - `src/orchestration_3_0/README.md`
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` (to be replaced with v3.0 manifest)
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` (to be replaced with v3.0 manifest)
 
 **Design System:**
 - Glassmorphism patterns

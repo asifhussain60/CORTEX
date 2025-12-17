@@ -70,7 +70,7 @@ Implemented enterprise-grade code sanitization tool for transforming domain-spec
 
 ### 3. Configuration & Manifest ✅
 
-**File:** `cortex-brain/orchestrator-manifests/code-sanitization-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml`
 
 **Configuration:**
 - 5-phase workflow definition
@@ -144,7 +144,7 @@ Implemented enterprise-grade code sanitization tool for transforming domain-spec
 
 ### New Files Created (12)
 
-1. `cortex-brain/orchestrator-manifests/code-sanitization-manifest.yaml`
+1. `cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml`
 2. `src/operations/modules/orchestration/sanitization_orchestrator.py`
 3. `src/operations/utilities/sanitization/__init__.py`
 4. `src/operations/utilities/sanitization/code_analyzer.py`

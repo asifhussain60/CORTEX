@@ -772,7 +772,7 @@ See: `src/operations/modules/orchestration/planning_orchestrator.py`
 - **BaseOperationModule:** `src/operations/base_operation_module.py`
 - **Orchestration Metrics:** `src/operations/utilities/orchestration_metrics_collector.py`
 - **Progress Decorator:** `src/utils/progress_decorator.py`
-- **Planning System 3.0:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **Planning System 3.0:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 - **Version Management:** `src/operations/modules/version/version_manager.py`
 
 ---

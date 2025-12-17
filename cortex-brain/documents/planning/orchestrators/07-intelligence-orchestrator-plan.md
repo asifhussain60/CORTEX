@@ -164,7 +164,7 @@ src/orchestration_3_0/orchestrators/intelligence/
 
 **Prompt Template Manager (`prompt_template_manager.py` - 50 LOC)**
 - **Purpose:** Versioned, multi-language prompt templates
-- **Storage:** `cortex-brain/orchestrator-manifests/intelligence-prompts.yaml`
+- **Storage:** `cortex-brain/manifests/orchestrators/intelligence-prompts.yaml`
 - **Capabilities:**
   - Load prompt by name and version
   - Multi-language support (English, Spanish, French, etc.)

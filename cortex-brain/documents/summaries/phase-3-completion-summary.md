@@ -169,7 +169,7 @@ def format_tdd_reminder_section(self) -> str
    - Threat review integration in workflow (5 lines modified)
    - Total Phase 3 additions: ~133 lines
 
-2. **cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml**
+2. **cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml**
    - REQ-007 status: partial → implemented
    - REQ-008 status: partial → implemented
    - Version: 2.2.0 → 3.0.0

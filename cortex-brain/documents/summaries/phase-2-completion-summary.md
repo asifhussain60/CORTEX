@@ -194,7 +194,7 @@ def document_phase_to_learning_library(
    - _render_mini_progress_bar() helper (3 lines)
    - Total additions: ~87 lines
 
-4. **cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml**
+4. **cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml**
    - REQ-004 status: missing → implemented
    - REQ-005 status: partial → implemented
    - REQ-006 status: missing → implemented

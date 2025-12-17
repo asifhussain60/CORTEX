@@ -139,7 +139,7 @@ python scripts/cli_wrappers/sanitize_wrapper.py C:\Projects\MyApp --auto-approve
 
 ## Configuration
 
-### Manifest: `cortex-brain/orchestrator-manifests/code-sanitization-manifest.yaml`
+### Manifest: `cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml`
 
 #### Terminology Categories
 
@@ -444,7 +444,7 @@ sanitize MyApp/docs
 
 ## Related Documentation
 
-- **Manifest:** `cortex-brain/orchestrator-manifests/code-sanitization-manifest.yaml`
+- **Manifest:** `cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml`
 - **Orchestrator:** `src/operations/modules/orchestration/sanitization_orchestrator.py`
 - **CLI Wrapper:** `scripts/cli_wrappers/sanitize_wrapper.py`
 - **Operations:** `cortex-operations.yaml` (sanitize operation)

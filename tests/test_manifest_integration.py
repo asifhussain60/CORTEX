@@ -36,7 +36,7 @@ class TestManifestValidator:
     
     def test_load_manifest(self, validator):
         """Test loading Planning System 2.0 manifest"""
-        manifest_path = cortex_root / "cortex-brain" / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+        manifest_path = cortex_root / "cortex-brain" / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
         
         if not manifest_path.exists():
             pytest.skip("Planning System 2.0 manifest not found")
@@ -50,7 +50,7 @@ class TestManifestValidator:
     
     def test_manifest_caching(self, validator):
         """Test that manifests are cached"""
-        manifest_path = cortex_root / "cortex-brain" / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+        manifest_path = cortex_root / "cortex-brain" / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
         
         if not manifest_path.exists():
             pytest.skip("Planning System 2.0 manifest not found")
@@ -65,7 +65,7 @@ class TestManifestValidator:
     
     def test_validate_planning_orchestrator(self, validator):
         """Test validating Planning System 2.0 orchestrator"""
-        manifest_path = cortex_root / "cortex-brain" / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+        manifest_path = cortex_root / "cortex-brain" / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
         orchestrator_path = cortex_root / "src" / "orchestrators" / "planning_orchestrator.py"
         
         if not manifest_path.exists() or not orchestrator_path.exists():
@@ -89,7 +89,7 @@ class TestManifestValidator:
     
     def test_compliance_scoring(self, validator):
         """Test compliance score calculation"""
-        manifest_path = cortex_root / "cortex-brain" / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+        manifest_path = cortex_root / "cortex-brain" / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
         orchestrator_path = cortex_root / "src" / "orchestrators" / "planning_orchestrator.py"
         
         if not manifest_path.exists() or not orchestrator_path.exists():
@@ -151,8 +151,8 @@ class TestManifestValidator:
     
     def test_ado_manifest_inheritance(self, validator):
         """Test ADO manifest inherits from Planning 2.0"""
-        ado_path = cortex_root / "cortex-brain" / "orchestrator-manifests" / "ado-planning-manifest.yaml"
-        planning_path = cortex_root / "cortex-brain" / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+        ado_path = cortex_root / "cortex-brain" / "manifests/orchestrators" / "ado-planning-manifest.yaml"
+        planning_path = cortex_root / "cortex-brain" / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
         
         if not ado_path.exists() or not planning_path.exists():
             pytest.skip("Manifest files not found")
@@ -191,12 +191,12 @@ class TestManifestSchema:
     
     def test_schema_exists(self):
         """Test that manifest schema file exists"""
-        schema_path = cortex_root / "cortex-brain" / "orchestrator-manifests" / "manifest-schema.yaml"
+        schema_path = cortex_root / "cortex-brain" / "manifests/orchestrators" / "manifest-schema.yaml"
         assert schema_path.exists()
     
     def test_planning_manifest_structure(self):
         """Test Planning System 2.0 manifest has correct structure"""
-        manifest_path = cortex_root / "cortex-brain" / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+        manifest_path = cortex_root / "cortex-brain" / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
         
         if not manifest_path.exists():
             pytest.skip("Planning System 2.0 manifest not found")
@@ -234,7 +234,7 @@ def test_performance():
     import time
     
     validator = ManifestValidator(cortex_root=cortex_root)
-    manifest_path = cortex_root / "cortex-brain" / "orchestrator-manifests" / "planning-system-2.0-manifest.yaml"
+    manifest_path = cortex_root / "cortex-brain" / "manifests/orchestrators" / "planning-system-2.0-manifest.yaml"
     orchestrator_path = cortex_root / "src" / "orchestrators" / "planning_orchestrator.py"
     
     if not manifest_path.exists() or not orchestrator_path.exists():

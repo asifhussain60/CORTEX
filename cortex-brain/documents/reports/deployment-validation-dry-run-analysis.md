@@ -178,7 +178,7 @@ cortex-brain/
 ├── brain-protection-rules.yaml
 ├── response-templates.yaml
 ├── schema.sql (combined Tier 0-3)
-├── orchestrator-manifests/ (Planning, ADO, TDD, Sanitization)
+├── manifests/orchestrators/ (Planning, ADO, TDD, Sanitization)
 ├── documents/ (ALL categories including reports/)
 └── templates/ (MISSING - needs creation)
 ```

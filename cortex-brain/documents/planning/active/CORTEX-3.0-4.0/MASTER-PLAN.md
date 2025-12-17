@@ -500,7 +500,7 @@ src/orchestration_3_0/orchestrators/
     └── (LEGACY: scripts/cli_wrappers/sanitize_wrapper.py + cortex-toolkit/core/operations/sanitize.py)
     # 5-phase workflow: analyze → mapping → transform → validate → report
     # Removes company-specific data while preserving functionality
-    # Manifest: cortex-brain/orchestrator-manifests/code-sanitization-manifest.yaml
+    # Manifest: cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml
 ```
 
 **Legacy Orchestrators (Consolidation Required):**
@@ -1401,7 +1401,7 @@ cortex-brain/
 │   ├── temp-plans/ (scattered)
 │   ├── ado/ (separate)
 │   └── 12 loose planning files at documents/planning/
-├── orchestrator-manifests/ (20+ YAML files)
+├── manifests/orchestrators/ (20+ YAML files)
 └── 15+ *-QUICK-REF.md at root
 ```
 
@@ -1462,7 +1462,7 @@ cortex-brain/
 
 **Step 3: Consolidate Manifests (1 hour)**
 - [ ] Create `cortex-brain/manifests/orchestrators/`
-- [ ] Move `orchestrator-manifests/*` → `manifests/orchestrators/`
+- [ ] Move `manifests/orchestrators/*` → `manifests/orchestrators/`
 - [ ] Create `cortex-brain/manifests/operations/`
 - [ ] Move operation YAMLs:
   - [ ] `cleanup-rules.yaml`

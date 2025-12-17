@@ -27,7 +27,7 @@ Integrate ADO Planning Orchestrator with Planning System 3.0 to enable seamless 
 
 ### Task 6.1: ADO Orchestrator Manifest Enhancement
 
-**File:** `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml`
 
 **Update Manifest Structure:**
 ```yaml

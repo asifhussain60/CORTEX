@@ -568,9 +568,9 @@ Debug metrics visible in admin dashboard:
 
 ## 📚 Related Documentation
 
-- **Debug Orchestrator Manifest:** `cortex-brain/orchestrator-manifests/debug-orchestrator-manifest.yaml`
+- **Debug Orchestrator Manifest:** `cortex-brain/manifests/orchestrators/debug-orchestrator-manifest.yaml`
 - **TDD Mastery Phase 5:** `TDD-MASTERY-PHASE-5-PLAN.yaml`
-- **Planning System 2.0 Manifest:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **Planning System 2.0 Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 - **Brain Protection Rules:** `cortex-brain/brain-protection-rules.yaml` (TDD_ENFORCEMENT)
 
 ---

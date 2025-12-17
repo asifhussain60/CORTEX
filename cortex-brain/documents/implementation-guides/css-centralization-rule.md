@@ -570,7 +570,7 @@ body.no-scroll {
 
 ### REFACTOR Phase Validation
 
-**Location:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+**Location:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 
 **Add to REFACTOR phase checklist:**
 ```yaml
@@ -779,7 +779,7 @@ success_criteria:
 ## 🔗 Related Documentation
 
 - **Rule Definition:** `cortex-brain/brain-protection-rules.yaml` (INLINE_CSS_PROHIBITION)
-- **Planning System 2.0:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **Planning System 2.0:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 - **Visual Regression:** SKULL_VISUAL_REGRESSION rule
 - **Code Style:** CODE_STYLE_CONSISTENCY rule
 

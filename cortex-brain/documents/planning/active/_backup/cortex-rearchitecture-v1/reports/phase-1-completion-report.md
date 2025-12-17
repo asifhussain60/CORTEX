@@ -88,7 +88,7 @@ Phase 1 successfully migrated the visual progress tracker from the strategic pla
 - **Files Created:** 3
   - [tests/orchestrators/test_pre_planning_discovery.py](d:/PROJECTS/CORTEX/tests/orchestrators/test_pre_planning_discovery.py) (~240 lines, 9 tests)
   - [tests/integration/test_visual_tracker_integration.py](d:/PROJECTS/CORTEX/tests/integration/test_visual_tracker_integration.py) (~230 lines, 6 tests)
-  - [cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml](d:/PROJECTS/CORTEX/cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml) (~500 lines)
+  - [cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml](d:/PROJECTS/CORTEX/cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml) (~500 lines)
 
 - **Reports Generated:** 2
   - [cortex-brain/documents/planning/active/cortex-rearchitecture-v1/reports/phase-1-progress-report.md](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/reports/phase-1-progress-report.md)
@@ -165,7 +165,7 @@ Phase 1 successfully migrated the visual progress tracker from the strategic pla
 - [Phase 1 Sub-Plan](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/01-visual-tracker-migration.md)
 - [Phase 2 Sub-Plan](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/02-semantic-folder-organization.md)
 - [Progress Tracker JSON](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/tracking/progress-tracker.json)
-- [Planning System 3.0 Manifest](d:/PROJECTS/CORTEX/cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml)
+- [Planning System 3.0 Manifest](d:/PROJECTS/CORTEX/cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml)
 - [Unit Tests](d:/PROJECTS/CORTEX/tests/orchestrators/test_pre_planning_discovery.py)
 - [Integration Tests](d:/PROJECTS/CORTEX/tests/integration/test_visual_tracker_integration.py)
 

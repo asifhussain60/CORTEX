@@ -677,7 +677,7 @@ class KnowledgeGraphIntegration:
    - Store context in plan folder
 
 2. Context storage schema
-   - `cortex-brain/orchestrator-manifests/context-storage-schema.yaml`
+   - `cortex-brain/manifests/orchestrators/context-storage-schema.yaml`
    - Define YAML/JSON formats
 
 3. Tests
@@ -1010,7 +1010,7 @@ class KnowledgeGraphIntegration:
    - GIT_HISTORY_CONTEXT_REQUIRED (Lines 3363-3368)
    - Critical SKULL rule requiring git history integration
 
-3. **cortex-brain/orchestrator-manifests/manifest-schema.yaml**
+3. **cortex-brain/manifests/orchestrators/manifest-schema.yaml**
    - Manifest structure for orchestrator compliance
    - Context requirements definition
 

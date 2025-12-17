@@ -148,7 +148,7 @@ def mark_phase_complete(self, plan_id: str, phase_number: int):
 ## 🔍 Verification
 
 ### Internal Planning Still Uses YAML
-✅ **VERIFIED** - `cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml` confirms:
+✅ **VERIFIED** - `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml` confirms:
 - YAML files are source of truth for planning configuration
 - Master plans are **rendered views** of YAML data
 - Internal planning logic unaffected by master plan format changes
@@ -201,7 +201,7 @@ Token cost: Low (~500 tokens per master plan view)
 
 - `src/operations/modules/orchestration/temporary_plan_manager.py` (implementation)
 - `tests/orchestrators/test_minimal_master_plan.py` (tests)
-- `cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml` (manifest)
+- `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml` (manifest)
 - `cortex-brain/documents/planning/active/cortex-rearchitecture-v1/00-master-plan.md` (example)
 
 ---

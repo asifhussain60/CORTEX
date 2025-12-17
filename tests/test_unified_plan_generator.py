@@ -396,7 +396,7 @@ class TestIntegrationScenarios:
             next_phase_number=7,
             next_phase_name="Maintenance Integration",
             progress_percentage=35,
-            manifest_path="cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml"
+            manifest_path="cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml"
         )
         
         # Assert

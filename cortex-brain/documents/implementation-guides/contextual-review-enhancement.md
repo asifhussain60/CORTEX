@@ -274,11 +274,11 @@ No blockers - proceeding with planning.
 
 ### Manifest Updates (2 files)
 
-3. **cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml**
+3. **cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml**
    - REQ-003 enhanced with new methods
    - INT-001 updated with contextual behavior
 
-4. **cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml**
+4. **cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml**
    - REQ-003 inherited with ADO mappings
    - INT-001 enhanced with work item types
 

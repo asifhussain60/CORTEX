@@ -956,7 +956,7 @@ class PlanningOrchestrator:
 
 - Master Plan: `MASTER-CORTEX-ORCHESTRATION-AST-ENHANCEMENT-PLAN.md`
 - PrevalidationWS Chat01: Evidence of 2-week blocker
-- Planning System 2.0: `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- Planning System 2.0: `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 
 ---
 

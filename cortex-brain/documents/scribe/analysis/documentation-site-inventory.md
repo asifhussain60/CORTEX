@@ -461,7 +461,7 @@ cortex-brain/documents/
 
 - [CORTEX Scribe Enhancement Plan](../planning/PLAN-2025-12-13-CORTEX-SCRIBE-ENHANCEMENT.md)
 - [Modular Plan Structure Implementation](../implementation-guides/MODULAR-PLAN-STRUCTURE-IMPLEMENTATION.md)
-- [Planning System 2.0 Manifest](../../orchestrator-manifests/planning-system-2.0-manifest.yaml)
+- [Planning System 2.0 Manifest](../../manifests/orchestrators/planning-system-2.0-manifest.yaml)
 
 ---
 

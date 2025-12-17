@@ -12,7 +12,7 @@ User Input: "#file:00-master-plan.md"
 PlanFileResolver.resolve_plan_file()
     ↓
 Priority Resolution:
-    1. Check orchestrator-manifests/{name}.yaml  (native YAML)
+    1. Check manifests/orchestrators/{name}.yaml  (native YAML)
     2. Find documents/planning/**/{file}.md      (convert if needed)
     3. Convert MD → YAML + cache
     4. Return structured dict
@@ -163,7 +163,7 @@ if not result.success:
     # Output:
     # Plan file not found: nonexistent.md
     #   Searched in:
-    #     - cortex-brain/orchestrator-manifests/nonexistent.yaml
+    #     - cortex-brain/manifests/orchestrators/nonexistent.yaml
     #     - cortex-brain/documents/planning/**/nonexistent.md
 ```
 

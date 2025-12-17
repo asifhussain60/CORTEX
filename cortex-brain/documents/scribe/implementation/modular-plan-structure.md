@@ -389,7 +389,7 @@ python -m scripts.migrate_plan_to_modular \
 
 ## 🔗 Related Documents
 
-- [Planning System 2.0 Manifest](../../orchestrator-manifests/planning-system-2.0-manifest.yaml) - REQ-009
+- [Planning System 2.0 Manifest](../../manifests/orchestrators/planning-system-2.0-manifest.yaml) - REQ-009
 - [Planning Orchestrator Guide](../../../.github/prompts/modules/planning-orchestrator-guide.md)
 - [CORTEX Scribe Enhancement Plan](../planning/PLAN-2025-12-13-CORTEX-SCRIBE-ENHANCEMENT.md) - Example plan to migrate
 

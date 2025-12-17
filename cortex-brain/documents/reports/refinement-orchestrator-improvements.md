@@ -188,7 +188,7 @@ system maintenance
 ## 📚 References
 
 - **Orchestrator:** `src/operations/modules/orchestration/refinement_orchestrator_v1.py`
-- **Manifest:** `cortex-brain/orchestrator-manifests/refinement-orchestrator-manifest.yaml`
+- **Manifest:** `cortex-brain/manifests/orchestrators/refinement-orchestrator-manifest.yaml`
 - **Backlog:** `cortex-brain/documents/analysis/complexity-refactoring-backlog.md`
 - **Entry Point:** `.github/prompts/CORTEX.prompt.md` (line 150-157)
 

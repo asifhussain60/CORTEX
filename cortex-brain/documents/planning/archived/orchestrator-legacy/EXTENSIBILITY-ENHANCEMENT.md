@@ -472,7 +472,7 @@ Entry Point (50 LOC)
 
 ### Documentation
 - `cortex-brain/documents/reports/phase-2-orchestrators-completion.md` (Current extensibility ratings)
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` (DoR/DoD requirements)
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` (DoR/DoD requirements)
 - `src/orchestration_3_0/orchestrators/execution/orchestrator_registry.py` (Registry pattern example)
 
 ### Research

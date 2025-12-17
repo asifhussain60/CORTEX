@@ -216,7 +216,7 @@ Result: User gets accurate status with actionable feedback:
 ## 📚 Related Documents
 
 - **Analysis Report:** `cortex-brain/documents/reports/STUB-MOCK-ANALYSIS-2025-12-11.md` (500 lines)
-- **Planning System Manifest:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **Planning System Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 - **TDD Enforcement:** `cortex-brain/brain-protection-rules.yaml`
 - **E2E Test Suite:** `cortex-brain/documents/reports/v5.3.0-E2E-TEST-SUITE-COMPLETE.md`
 

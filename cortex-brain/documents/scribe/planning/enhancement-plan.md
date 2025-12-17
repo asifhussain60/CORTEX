@@ -71,7 +71,7 @@ This section tracks **all CORTEX capabilities and features** that need documenta
 | # | Feature | Version | Status | Docs Status | Priority | Source Location | Notes |
 |---|---------|---------|--------|-------------|----------|-----------------|-------|
 | 1 | **Planning System 2.0** | v3.0.0 | ✅ Production | ⏳ Pending | 🔥 High | `src/orchestrators/planning_orchestrator.py` | DoR/DoD, threat modeling, TDD integration, contextual review |
-| 2 | **ADO Planning Orchestrator** | v2.0.0 | ✅ Production | ⏳ Pending | 🔥 High | `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml` | Inherits Planning 2.0 + ADO work item generation |
+| 2 | **ADO Planning Orchestrator** | v2.0.0 | ✅ Production | ⏳ Pending | 🔥 High | `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml` | Inherits Planning 2.0 + ADO work item generation |
 | 3 | **TDD Mastery** | v3.2.0 | ✅ Production | 🔄 In Progress | 🔥 High | `src/orchestrators/tdd_implementation_orchestrator.py` | RED→GREEN→REFACTOR, debug integration, view discovery |
 | 4 | **Debug System** | v1.0.0 | ✅ Production | ⏳ Pending | 🔥 High | `src/orchestrators/debug_workflow_orchestrator.py` | Runtime instrumentation, multi-session, natural language intent |
 | 5 | **System Maintenance** | v3.8.1 | ✅ Production | 🔄 In Progress | 🔥 High | `src/operations/modules/orchestration/system_maintenance_orchestrator.py` | 6-phase workflow: healthcheck→align→cleanup→optimize→refresh→healthcheck |

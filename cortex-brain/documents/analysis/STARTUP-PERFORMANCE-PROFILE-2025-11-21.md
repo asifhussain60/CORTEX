@@ -40,4 +40,4 @@
 
 ---
 
-**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.
+**Copyright:** ï¿½ 2024-2025 Asif Hussain. All rights reserved.

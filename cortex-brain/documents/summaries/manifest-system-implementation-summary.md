@@ -15,7 +15,7 @@ Create a **centralized, extensible, and scalable** manifest system for all CORTE
 ## 📦 Deliverables
 
 ### 1. Universal Manifest Schema ✅
-**File:** `cortex-brain/orchestrator-manifests/manifest-schema.yaml`
+**File:** `cortex-brain/manifests/orchestrators/manifest-schema.yaml`
 
 **Features:**
 - Defines structure for all orchestrator manifests
@@ -34,7 +34,7 @@ Create a **centralized, extensible, and scalable** manifest system for all CORTE
 ---
 
 ### 2. Planning System 2.0 Manifest ✅
-**File:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 
 **Features:**
 - Complete requirement catalog (8 critical/high/medium requirements)
@@ -119,7 +119,7 @@ print(f"Compliance: {report.compliance_score:.1f}%")
 ---
 
 ### 5. ADO Planning Manifest ✅
-**File:** `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml`
 
 **Features:**
 - **Inherits from Planning System 2.0** (`inherits_from: "planning-system-2.0-manifest.yaml"`)
@@ -138,7 +138,7 @@ print(f"Compliance: {report.compliance_score:.1f}%")
 ---
 
 ### 6. System Documentation ✅
-**File:** `cortex-brain/orchestrator-manifests/README.md`
+**File:** `cortex-brain/manifests/orchestrators/README.md`
 
 **Sections:**
 - Overview and architecture
@@ -293,7 +293,7 @@ print(f"Compliance: {report.compliance_score:.1f}%")
 ## 📁 Files Created
 
 ```
-cortex-brain/orchestrator-manifests/
+cortex-brain/manifests/orchestrators/
 ├── README.md (350+ lines)
 ├── manifest-schema.yaml (220+ lines)
 ├── planning-system-2.0-manifest.yaml (600+ lines)

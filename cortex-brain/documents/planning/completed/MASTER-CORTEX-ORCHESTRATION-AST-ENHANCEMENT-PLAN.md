@@ -934,7 +934,7 @@ cortex-brain/learning/
 2. `.github/copilot/copilot-chats/chat01-05.md` - PrevalidationWS patterns (7 patterns)
 3. `.github/copilot/RA-Domain-Analysis/executive-narrative.md` - AST insights (246 lines)
 4. `CORTEX-ORCHESTRATION-ENHANCEMENTS-FROM-REAL-WORLD-USAGE.md` - Analysis document
-5. `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` - v2.0 manifest
+5. `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - v2.0 manifest
 6. `cortex-brain/brain-protection-rules.yaml` - SKULL rules
 7. `src/cortex_lens/` - AST capabilities (10 analyzers, 10 collectors)
 

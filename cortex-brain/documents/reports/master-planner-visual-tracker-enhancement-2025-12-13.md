@@ -187,7 +187,7 @@ Record completion status, metrics, and overall progress.
 
 ### 5. Orchestrator Manifest Documentation
 
-**File:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 
 **Updated REQ-005:**
 
@@ -354,7 +354,7 @@ session.record_sub_plan_update(
 ## 📚 Related Documents
 
 - **Planning System 2.0 Guide:** `.github/prompts/modules/planning-orchestrator-guide.md`
-- **Orchestrator Manifest:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **Orchestrator Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 - **Sub-Plan Template:** `cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md`
 - **Session Model:** `src/orchestrators/session_model.py`
 - **Planning Orchestrator:** `src/orchestrators/planning_orchestrator.py`
@@ -371,7 +371,7 @@ session.record_sub_plan_update(
 3. `cortex-brain/documents/planning/orchestrators/00-sub-plan-template.md` - Checkpoint gates added
 
 **Files Updated:** 1
-1. `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` - REQ-005 updated
+1. `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - REQ-005 updated
 
 **New Capabilities:**
 - ✅ Timestamp tracking with timezone (start + end)

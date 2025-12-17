@@ -45,7 +45,7 @@ class PlanFileResolver:
     Resolves plan file references to structured YAML data.
     
     Priority:
-    1. Check for .yaml version in orchestrator-manifests/
+    1. Check for .yaml version in manifests/orchestrators/
     2. Check for .md in documents/planning/
     3. Convert MD → YAML and cache
     4. Return structured dict
@@ -63,7 +63,7 @@ class PlanFileResolver:
         self.cache_dir = cache_dir or self.brain_path / "cache" / "plan-conversions"
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         
-        self.manifests_dir = self.brain_path / "orchestrator-manifests"
+        self.manifests_dir = self.brain_path / "manifests" / "orchestrators"
         self.planning_docs_dir = self.brain_path / "documents" / "planning"
         
         logger.info(f"PlanFileResolver initialized:")

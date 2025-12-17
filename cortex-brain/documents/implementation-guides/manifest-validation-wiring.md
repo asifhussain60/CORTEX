@@ -31,7 +31,7 @@ The Manifest Validation System ensures orchestrators remain compliant with their
 4. `_validation_report_cache` - Validation results
 
 **Key Methods:**
-- `load_manifest(name: str) -> Dict` - Load manifest from `cortex-brain/orchestrator-manifests/`
+- `load_manifest(name: str) -> Dict` - Load manifest from `cortex-brain/manifests/orchestrators/`
 - `validate_orchestrator(name: str, orchestrator_instance) -> ValidationReport` - Validate orchestrator
 - `ValidationReport.compliance_percentage` - Compliance score (0-100%)
 - `ValidationReport.status` - "Compliant"/"Drift Detected"/"Non-Compliant"
@@ -179,7 +179,7 @@ def _gate_20_orchestrator_compliance(self) -> Dict:
     }
     
     validator = ManifestValidator(self.project_root)
-    manifests_dir = self.project_root / "cortex-brain" / "orchestrator-manifests"
+    manifests_dir = self.project_root / "cortex-brain" / "manifests/orchestrators"
     
     if not manifests_dir.exists():
         gate["status"] = "warning"
@@ -326,7 +326,7 @@ if report.compliance_percentage < 80:
 
 ### Location
 
-`cortex-brain/orchestrator-manifests/`
+`cortex-brain/manifests/orchestrators/`
 
 ### Current Manifests
 
@@ -418,11 +418,11 @@ def auto_remediate(manifest_name: str, report: ValidationReport):
 
 ### Issue: Manifest not found
 
-**Cause:** Manifest file missing in `cortex-brain/orchestrator-manifests/`
+**Cause:** Manifest file missing in `cortex-brain/manifests/orchestrators/`
 
 **Fix:**
 ```bash
-ls cortex-brain/orchestrator-manifests/
+ls cortex-brain/manifests/orchestrators/
 # Ensure {orchestrator}-manifest.yaml exists
 ```
 

@@ -181,7 +181,7 @@ print(results["metrics"])
 
 ## Configuration
 
-Edit `cortex-brain/orchestrator-manifests/refinement-orchestrator-manifest.yaml`:
+Edit `cortex-brain/manifests/orchestrators/refinement-orchestrator-manifest.yaml`:
 
 ```yaml
 configuration:
@@ -404,7 +404,7 @@ pytest tests/  # Validate
 
 ## Related Documentation
 
-- **Manifest:** `cortex-brain/orchestrator-manifests/refinement-orchestrator-manifest.yaml`
+- **Manifest:** `cortex-brain/manifests/orchestrators/refinement-orchestrator-manifest.yaml`
 - **Implementation:** `src/operations/modules/orchestration/refinement_orchestrator_v1.py`
 - **CLI Wrapper:** `scripts/cli_wrappers/refine_wrapper.py`
 - **Tests:** `tests/test_refinement_orchestrator.py`

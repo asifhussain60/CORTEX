@@ -930,7 +930,7 @@ dashboard:
 
 ### Manifest Updates (NEW)
 
-**File:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 
 ```yaml
 # ADDITIONS to existing manifest
@@ -2729,7 +2729,7 @@ Start now with first task in 01-subplan-{phases[0]['name'].lower().replace(' ', 
 
 ### Phase 11: Manifest Updates (Week 4 - Day 22)
 
-- [ ] Open `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- [ ] Open `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 - [ ] Add `folder_organization` section (v3.0) with 8 subsections:
   - [ ] `structure`: planning_root, status_folders, universal_subfolders, required_files
   - [ ] `continuation_prompts`: enabled: true, location, section_marker, update_trigger, format

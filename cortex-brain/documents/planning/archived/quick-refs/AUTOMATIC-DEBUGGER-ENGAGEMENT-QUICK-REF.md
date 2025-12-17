@@ -132,7 +132,7 @@ ExecutionOrchestratorConfig(auto_debug_on_exception=True)
 | `src/orchestrators/debug_workflow_orchestrator.py` | Main debug orchestrator (245 lines) |
 | `src/workflows/tdd_workflow_orchestrator.py` | TDD auto-debug integration (1,232 lines) |
 | `src/orchestrators/test_intelligence.py` | Test requirement detection (534 lines) |
-| `cortex-brain/orchestrator-manifests/debug-orchestrator-manifest.yaml` | 12 requirements (DBG-001 to DBG-012) |
+| `cortex-brain/manifests/orchestrators/debug-orchestrator-manifest.yaml` | 12 requirements (DBG-001 to DBG-012) |
 
 ---
 
@@ -163,7 +163,7 @@ cleanup_report = marker_cleanup.cleanup_all_markers(project_root)
 ## 📚 Related Documents
 
 - **Comprehensive Guide:** `cortex-brain/documents/implementation-guides/automatic-debugger-engagement-guide.md`
-- **Debug Manifest:** `cortex-brain/orchestrator-manifests/debug-orchestrator-manifest.yaml`
+- **Debug Manifest:** `cortex-brain/manifests/orchestrators/debug-orchestrator-manifest.yaml`
 - **TDD Mastery:** `TDD-MASTERY-PHASE-5-PLAN.yaml`
 
 ---

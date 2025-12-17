@@ -5090,7 +5090,7 @@ Phase 4 (Plan Lifecycle Management & Cleanup)
    - MD vs YAML file structure explanation
    - Worker plan naming conventions
 
-3. **Update:** `cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml`
+3. **Update:** `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml`
    - Upgrade to planning-system-3.0-manifest.yaml
    - Document new components (ExecutionYAMLGenerator)
    - Document worker plan naming (WP##-Phase-Name)

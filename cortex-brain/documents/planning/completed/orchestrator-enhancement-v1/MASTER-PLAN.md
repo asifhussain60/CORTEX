@@ -14,7 +14,7 @@
 - ✅ TDD mandatory (RED→GREEN→REFACTOR)
 - ✅ DoR/DoD per feature
 - ✅ Auto-complexity detection: HIGH complexity detected
-- ✅ Manifest: `cortex-brain/orchestrator-manifests/orchestrator-enhancement-manifest.yaml` ✅ **CREATED**
+- ✅ Manifest: `cortex-brain/manifests/orchestrators/orchestrator-enhancement-manifest.yaml` ✅ **CREATED**
 - ✅ Progress Tracker: `cortex-brain/documents/planning/orchestrator-enhancement-progress.md` ✅ **UPDATED**
 
 ---
@@ -110,7 +110,7 @@ src/
 
 cortex-brain/
 ├── response-templates.yaml                       # ENHANCE - Feature 8
-└── orchestrator-manifests/
+└── manifests/orchestrators/
     └── orchestrator-enhancement-manifest.yaml    # NEW - DoR/DoD
 ```
 
@@ -1161,7 +1161,7 @@ code_review_suggestions:
 
 ### A. Manifest File Structure
 
-**File:** `cortex-brain/orchestrator-manifests/orchestrator-enhancement-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/orchestrator-enhancement-manifest.yaml`
 
 ```yaml
 manifest_version: "2.0"
@@ -1303,5 +1303,5 @@ sequenceDiagram
 
 **Key Files:**
 - **Plan:** `cortex-brain/documents/planning/orchestrator-enhancement-plan-v1.md` (this file)
-- **Manifest:** `cortex-brain/orchestrator-manifests/orchestrator-enhancement-manifest.yaml`
+- **Manifest:** `cortex-brain/manifests/orchestrators/orchestrator-enhancement-manifest.yaml`
 - **Progress Tracker:** `cortex-brain/documents/planning/orchestrator-enhancement-progress.md`

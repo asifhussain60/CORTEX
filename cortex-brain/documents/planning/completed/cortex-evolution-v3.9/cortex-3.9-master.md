@@ -618,9 +618,9 @@ Phase 16 (Integration & Validation)
 ## 📖 Related Documentation
 
 ### Planning System
-- [Planning System 2.0 Manifest](../../orchestrator-manifests/planning-system-2.0-manifest.yaml)
-- [ADO Planning Manifest](../../orchestrator-manifests/ado-planning-manifest.yaml)
-- [TDD Mastery Manifest](../../orchestrator-manifests/tdd-mastery-manifest.yaml)
+- [Planning System 2.0 Manifest](../../manifests/orchestrators/planning-system-2.0-manifest.yaml)
+- [ADO Planning Manifest](../../manifests/orchestrators/ado-planning-manifest.yaml)
+- [TDD Mastery Manifest](../../manifests/orchestrators/tdd-mastery-manifest.yaml)
 - [Proactive Intelligence Design](proactive-intelligence-design.md)
 
 ### CORTEX Lens

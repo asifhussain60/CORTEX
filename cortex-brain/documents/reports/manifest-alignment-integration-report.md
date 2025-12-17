@@ -61,7 +61,7 @@ Successfully integrated the Manifest Validation System into the Alignment Utilit
   * Validates Planning System 2.0 manifest by default
 
 **Validation Workflow:**
-1. Load manifest from `cortex-brain/orchestrator-manifests/`
+1. Load manifest from `cortex-brain/manifests/orchestrators/`
 2. Validate orchestrator implementation
 3. Return `ValidationResult` with compliance percentage
 4. Add to alignment report if admin context
@@ -183,7 +183,7 @@ def requirement_id(self) -> str:
 AlignUtility.run_alignment()
 └── if admin_context:
     └── validate_manifest_compliance()
-        ├── Load manifest from orchestrator-manifests/
+        ├── Load manifest from manifests/orchestrators/
         ├── Initialize ManifestValidator
         ├── Validate orchestrator (uses caching)
         ├── Calculate compliance percentage

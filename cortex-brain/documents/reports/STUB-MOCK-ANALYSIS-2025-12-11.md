@@ -466,7 +466,7 @@ jobs:
 
 **Related Documents:**
 - `cortex-brain/documents/reports/v5.3.0-E2E-TEST-SUITE-COMPLETE.md` - Test suite status
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` - Planning System spec
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - Planning System spec
 - `cortex-brain/brain-protection-rules.yaml` - SKULL rule enforcement
 - `tests/integration/test_tdd_workflow_e2e.py` - Example subprocess test execution
 

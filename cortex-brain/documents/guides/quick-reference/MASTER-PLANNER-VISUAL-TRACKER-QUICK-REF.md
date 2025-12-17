@@ -225,7 +225,7 @@ session.record_sub_plan_update(
 - **Full Enhancement Report:** `cortex-brain/documents/reports/master-planner-visual-tracker-enhancement-2025-12-13.md`
 - **Planning System 2.0 Guide:** `.github/prompts/modules/planning-orchestrator-guide.md`
 - **Sub-Plan Template:** `cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md`
-- **Orchestrator Manifest:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **Orchestrator Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
 
 ---
 

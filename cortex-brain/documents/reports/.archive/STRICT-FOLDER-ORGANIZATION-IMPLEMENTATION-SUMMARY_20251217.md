@@ -365,8 +365,8 @@ Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX
 
 ### Phase 5: Manifest & Documentation Updates
 **Files:**
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
-- `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml`
 - `.github/prompts/CORTEX.prompt.md`
 
 **Tasks:**

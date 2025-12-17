@@ -181,7 +181,7 @@ class TestTokenDisplayEnhancements:
             next_phase_number=2,
             next_phase_name='Semantic Folder Organization',
             progress_percentage=35,
-            manifest_path='cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml'
+            manifest_path='cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml'
         )
         
         # Should include manifest reference
@@ -207,7 +207,7 @@ class TestTokenDisplayEnhancements:
         # With manifest
         prompt_with_manifest = generator.generate_continuation_prompt(
             'test', 1, 5, 2, 'Phase', 20, 
-            manifest_path='cortex-brain/orchestrator-manifests/planning-system-3.0-manifest.yaml'
+            manifest_path='cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml'
         )
         tokens_with_manifest = len(enc.encode(prompt_with_manifest))
         

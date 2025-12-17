@@ -351,7 +351,7 @@ class OnboardingGenerator:
 **Deliverables:**
 - `src/orchestrators/intelligent_dashboard_orchestrator.py`
 - `src/intelligence/dashboard_ast_engine.py`
-- `cortex-brain/orchestrator-manifests/intelligent-dashboard-manifest.yaml`
+- `cortex-brain/manifests/orchestrators/intelligent-dashboard-manifest.yaml`
 
 ---
 
@@ -514,7 +514,7 @@ class OnboardingGenerator:
 
 ### Proposed Manifest
 
-**File:** `cortex-brain/orchestrator-manifests/intelligent-dashboard-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/intelligent-dashboard-manifest.yaml`
 
 ```yaml
 name: "Intelligent Dashboard Orchestrator"
@@ -661,7 +661,7 @@ dependencies:
 ## 🚀 Next Steps (Immediate Actions)
 
 ### 1. **Create Orchestrator Manifest** ✅
-**File:** `cortex-brain/orchestrator-manifests/intelligent-dashboard-manifest.yaml`  
+**File:** `cortex-brain/manifests/orchestrators/intelligent-dashboard-manifest.yaml`  
 **Action:** Use template above
 
 ### 2. **Create AST Engine** ⏭️
@@ -733,7 +733,7 @@ dependencies:
 - `cortex-brain/dashboards/ui/components/onboarding-tab.js`
 
 **Orchestrator Pattern:**
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` (inherit from)
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` (inherit from)
 - `src/orchestrators/planning_orchestrator.py` (reference implementation)
 
 ---

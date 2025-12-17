@@ -134,7 +134,7 @@ generate_incremental_plan() →
    - Added manifest validation in `__init__`
    - Total additions: ~400 lines
 
-2. **cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml**
+2. **cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml**
    - Updated REQ-001 status: missing → implemented
    - Updated REQ-002 status: partial → implemented
    - Updated REQ-003 status: missing → implemented

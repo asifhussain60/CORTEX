@@ -37,7 +37,7 @@ class TestManifestValidatorIntegration:
         root.mkdir()
         
         # Create manifest directory
-        manifest_dir = root / "cortex-brain" / "orchestrator-manifests"
+        manifest_dir = root / "cortex-brain" / "manifests" / "orchestrators"
         manifest_dir.mkdir(parents=True)
         
         # Create orchestrators directory
@@ -49,7 +49,7 @@ class TestManifestValidatorIntegration:
     @pytest.fixture
     def sample_manifest(self, cortex_root):
         """Create sample manifest file"""
-        manifest_dir = cortex_root / "cortex-brain" / "orchestrator-manifests"
+        manifest_dir = cortex_root / "cortex-brain" / "manifests" / "orchestrators"
         manifest_path = manifest_dir / "test-manifest.yaml"
         
         manifest_content = """
@@ -282,7 +282,7 @@ class TestClass:
         root = tmp_path / "CORTEX"
         root.mkdir()
         
-        manifest_dir = root / "cortex-brain" / "orchestrator-manifests"
+        manifest_dir = root / "cortex-brain" / "manifests" / "orchestrators"
         manifest_dir.mkdir(parents=True)
         
         validator = ManifestValidator(cortex_root=str(root))
@@ -314,7 +314,7 @@ class TestMultiOrchestratorValidation:
         root = tmp_path / "CORTEX"
         root.mkdir()
         
-        manifest_dir = root / "cortex-brain" / "orchestrator-manifests"
+        manifest_dir = root / "cortex-brain" / "manifests" / "orchestrators"
         manifest_dir.mkdir(parents=True)
         
         orch_dir = root / "src" / "orchestrators"

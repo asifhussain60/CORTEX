@@ -247,8 +247,8 @@
 - `cortex-brain/INLINE-CSS-PROHIBITION-QUICK-REF.md` (NEW)
 
 ### Manifests
-- `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml` (updated)
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml` (REQ-003 Enhanced)
+- `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml` (updated)
+- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` (REQ-003 Enhanced)
 
 ---
 
