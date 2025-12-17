@@ -65,6 +65,40 @@
 
 ---
 
+## 🧠 CORTEX Analysis & Discovery
+
+**AST Analysis Completed:** {AST_ANALYSIS_TIMESTAMP}  
+**Files Analyzed:** {FILE_COUNT} files across {MODULE_COUNT} modules  
+**Context Graphs:** `context/ast-analysis.json`, `context/lens-dependencies.json`
+
+### Codebase Understanding
+
+{NARRATIVE_ENHANCED_SUMMARY}
+
+**Key Architectural Patterns Identified:**
+{PATTERN_LIST_WITH_EXPLANATIONS}
+
+**Files Affected by This Change:**
+{AFFECTED_FILES_WITH_REASONS}
+
+**Dependency Impact Analysis:**
+{DEPENDENCY_NARRATIVE}
+
+**Integration Points Identified:**
+{INTEGRATION_POINTS_NARRATIVE}
+
+### ⚠️ User Validation Required
+
+**Please review the above analysis to confirm:**
+- [ ] CORTEX identified the correct files for modification
+- [ ] The architectural patterns match your understanding
+- [ ] The dependency impact is accurate
+- [ ] No critical files or systems were missed
+
+**If anything looks incorrect, please provide feedback before proceeding.**
+
+---
+
 ## Definition of Done (DoD)
 
 {DOD_CRITERIA}
@@ -98,3 +132,4 @@
 **Plan Status:** {FINAL_STATUS}  
 **Total Project Duration:** {TOTAL_DURATION}  
 **Actual Work Time:** {ACTUAL_WORK_TIME}h ({ESTIMATED_HOURS}h estimated = {EFFICIENCY_PERCENTAGE}% efficiency gain)
+

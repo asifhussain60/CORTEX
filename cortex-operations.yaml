@@ -89,6 +89,35 @@ operations:
     - create new code review
     - review title
     category: review
+  audit:
+    name: Audit Trail Viewer
+    description: View and analyze Planning System 4.0 audit logs with filtering, timeline visualization, and statistics
+    deployment_tier: dual_context
+    execution_method: cli_wrapper
+    cli_script: scripts/cli_wrappers/audit_wrapper.py
+    natural_language:
+    - audit
+    - view audit logs
+    - show audit trail
+    - audit plan
+    - audit session
+    - audit stats
+    - audit statistics
+    - export audit
+    - archive audit logs
+    category: planning
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: JSONL-based audit trail with CLI viewer, timeline visualization, statistics, CSV export, and monthly archival
+    examples:
+    - cortex audit --plan-id plan-abc123
+    - cortex audit --session-id session-xyz789 --timeline
+    - cortex audit --stats
+    - cortex audit --tail 20
+    - cortex audit --export csv --output report.csv
   system_maintenance:
     name: System Maintenance
     description: Comprehensive system maintenance v3.0 - intelligent tiered routing with 7-phase cycle

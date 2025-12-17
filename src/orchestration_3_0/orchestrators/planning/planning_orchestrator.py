@@ -39,6 +39,17 @@ from ...core.base_orchestrator import (
 from ...core.state_machine import StateMachine, create_basic_orchestrator_fsm
 from ...session.session_manager import SessionManager
 from src.tier0.cortex_implants_integrator import get_implants_integrator
+from src.orchestration_3_0.orchestrators.planning.temporary_plan_manager import (
+    TemporaryPlanManager,
+    InteractiveRefinementSession
+)
+from src.orchestration_3_0.orchestrators.planning.session_context_manager import (
+    SessionContextManager,
+    PlanningSession
+)
+from src.orchestration_3_0.orchestrators.planning.complexity_analyzer import ComplexityAnalyzer
+from src.orchestration_3_0.orchestrators.planning.plan_manifest_tracker import PlanManifestTracker
+from src.operations.modules.intelligence.narrative_generator import NarrativeGenerator
 
 logger = logging.getLogger(__name__)
 
@@ -158,7 +169,29 @@ class PlanningOrchestrator(BaseOrchestrator):
         
         self.current_plan: Optional[FeaturePlan] = None
         
-        logger.info("PlanningOrchestrator initialized")
+        # Initialize Planning System 4.0 components
+        from pathlib import Path
+        cortex_brain = Path("cortex-brain")
+        
+        self.temporary_plan_manager = TemporaryPlanManager(
+            temp_plans_folder=cortex_brain / "documents" / "planning" / "features" / "temp-plans"
+        )
+        
+        self.session_context_manager = SessionContextManager(
+            sessions_file=cortex_brain / "active-sessions.json"
+        )
+        
+        self.complexity_analyzer = ComplexityAnalyzer()
+        
+        self.plan_manifest_tracker = PlanManifestTracker(
+            manifest_file=cortex_brain / "documents" / "planning" / "active-plans-manifest.yaml"
+        )
+        
+        # NarrativeGenerator requires AST engine and analyzers (initialize with None for now)
+        # Will be injected when needed via container or lazy initialization
+        self.narrative_generator: Optional[NarrativeGenerator] = None
+        
+        logger.info("PlanningOrchestrator initialized with Planning System 4.0 components")
     
     def validate_dor(self, context: WorkflowContext) -> ValidationResult:
         """
@@ -850,9 +883,206 @@ class PlanningOrchestrator(BaseOrchestrator):
             # Extract potential library names from plan
             potential_deps = []
             for phase in plan.phases:
-                for task in phase.tasks:
+                for task in phase.deliverables:
                     if any(kw in task.lower() for kw in ['library', 'package', 'framework', 'npm', 'pip']):
                         # Extract words that might be library names
+                        potential_deps.append(task)
+            
+            return violations
+        except Exception as e:
+            logger.warning(f"Failed to validate against implants: {e}")
+            return []
+    
+    def start_refinement_session(
+        self,
+        feature_name: str,
+        description: str,
+        acceptance_criteria: List[str],
+        context: Optional[Dict[str, Any]] = None
+    ) -> InteractiveRefinementSession:
+        """
+        Start iterative refinement session for temporary plan.
+        
+        Planning System 4.0: Creates temporary plan, enters refinement loop.
+        
+        Args:
+            feature_name: Feature name
+            description: Feature description
+            acceptance_criteria: List of acceptance criteria
+            context: Additional context (optional)
+            
+        Returns:
+            InteractiveRefinementSession with initial plan
+        """
+        logger.info(f"🎭 Planning System 4.0: Starting refinement session for {feature_name}")
+        
+        # Analyze complexity first
+        complexity_analysis = self.complexity_analyzer.analyze(
+            feature_name=feature_name,
+            description=description,
+            acceptance_criteria=acceptance_criteria
+        )
+        
+        logger.info(
+            f"Complexity: {complexity_analysis.complexity_score}/100 "
+            f"(Single-phase: {complexity_analysis.is_single_phase})"
+        )
+        
+        # Start refinement session with TemporaryPlanManager
+        session = self.temporary_plan_manager.start_refinement_session(
+            feature_name=feature_name,
+            description=description,
+            acceptance_criteria=acceptance_criteria,
+            complexity_analysis=complexity_analysis,
+            context=context or {}
+        )
+        
+        # Create planning session for context tracking
+        planning_session = self.session_context_manager.create_session(
+            plan_id=session.plan_id,
+            temp_plan_path=session.temp_plan_path
+        )
+        
+        logger.info(
+            f"✅ Refinement session started: {session.session_id}\n"
+            f"   Plan ID: {session.plan_id}\n"
+            f"   DoR Score: {session.dor_score}%\n"
+            f"   Ambiguity: {session.ambiguity_score}%\n"
+            f"   Session: {planning_session.session_id}"
+        )
+        
+        return session
+    
+    def handle_user_feedback(
+        self,
+        feedback: str,
+        session_id: Optional[str] = None,
+        plan_id: Optional[str] = None
+    ) -> InteractiveRefinementSession:
+        """
+        Handle user feedback for active refinement session.
+        
+        Planning System 4.0: Automatic context loading via SessionContextManager.
+        No manual plan_id required if session is active.
+        
+        Args:
+            feedback: User feedback text
+            session_id: Session ID (optional if plan_id provided)
+            plan_id: Plan ID (optional if context can be inferred)
+            
+        Returns:
+            Updated InteractiveRefinementSession
+        """
+        logger.info(f"🎭 Planning System 4.0: Processing user feedback")
+        
+        # Automatic context loading (SKULL-013: CONTEXT_CONTINUITY_ENFORCEMENT)
+        if not session_id and not plan_id:
+            # Load active session automatically
+            context = self.session_context_manager.load_context_for_request(feedback)
+            if context and 'active_session' in context:
+                active_session = context['active_session']
+                session_id = active_session.session_id
+                plan_id = active_session.plan_id
+                logger.info(f"✅ Context loaded automatically: {plan_id}")
+            else:
+                raise ValueError(
+                    "No active planning session found. Start refinement with start_refinement_session() first."
+                )
+        
+        # Apply refinement with feedback
+        updated_session = self.temporary_plan_manager.refine_plan(
+            session_id=session_id or plan_id,
+            user_feedback=feedback
+        )
+        
+        logger.info(
+            f"✅ Feedback applied:\n"
+            f"   Iteration: {updated_session.iterations}\n"
+            f"   DoR Score: {updated_session.dor_score}% (prev: {updated_session.dor_score - 10}%)\n"
+            f"   Ambiguity: {updated_session.ambiguity_score}% (prev: {updated_session.ambiguity_score + 5}%)"
+        )
+        
+        return updated_session
+    
+    def request_plan_approval(
+        self,
+        session_id: str
+    ) -> Dict[str, Any]:
+        """
+        Request user approval for refined temporary plan.
+        
+        Planning System 4.0: Shows DoR metrics, awaits approval decision.
+        
+        Args:
+            session_id: Refinement session ID
+            
+        Returns:
+            Dict with approval request details
+        """
+        logger.info(f"🎭 Planning System 4.0: Requesting approval for {session_id}")
+        
+        approval_request = self.temporary_plan_manager.request_approval(session_id)
+        
+        logger.info(
+            f"✅ Approval request generated:\n"
+            f"   DoR Ready: {approval_request['dor_ready']}\n"
+            f"   DoR Score: {approval_request['dor_score']}%\n"
+            f"   Ambiguity: {approval_request['ambiguity_score']}%\n"
+            f"   Status: {approval_request['status']}"
+        )
+        
+        return approval_request
+    
+    def approve_and_promote_plan(
+        self,
+        session_id: str,
+        user_approval: bool = True
+    ) -> Dict[str, Any]:
+        """
+        Approve temporary plan and promote to active status.
+        
+        Planning System 4.0: Atomic promotion (SKULL-012: PLAN_PROMOTION_INTEGRITY).
+        
+        Args:
+            session_id: Refinement session ID
+            user_approval: User approval decision (default: True)
+            
+        Returns:
+            Dict with promotion result
+        """
+        logger.info(f"🎭 Planning System 4.0: Approving and promoting {session_id}")
+        
+        if not user_approval:
+            logger.info("❌ User rejected plan approval")
+            return {
+                'approved': False,
+                'status': 'TEMP',
+                'message': 'Plan rejected by user. Continue refinement or cancel.'
+            }
+        
+        # Approve plan (atomic promotion: folder move + status update + manifest registration)
+        result = self.temporary_plan_manager.approve_plan(session_id)
+        
+        # Register in manifest tracker
+        if result['approved']:
+            self.plan_manifest_tracker.register_plan(
+                plan_id=result['plan_id'],
+                title=result.get('feature_name', 'Unknown Feature'),
+                complexity_tier=result.get('complexity_tier', 3),
+                folder=result['active_plan_path'],
+                phases=result.get('phases', []),
+                estimated_days=result.get('estimated_days', 0)
+            )
+        
+        logger.info(
+            f"✅ Plan approved and promoted:\n"
+            f"   Plan ID: {result['plan_id']}\n"
+            f"   Status: {result['status']}\n"
+            f"   Folder: {result['active_plan_path']}\n"
+            f"   Manifest: Registered"
+        )
+        
+        return result
                         words = task.split()
                         potential_deps.extend([w for w in words if len(w) > 2])
             

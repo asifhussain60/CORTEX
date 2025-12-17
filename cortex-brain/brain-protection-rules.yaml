@@ -3108,6 +3108,529 @@ protection_layers:
 
       '
     rationale: '#file:documents/rationales/SKULL_CONSOLIDATION_INTEGRITY.md'
+  - rule_id: TEMP_PLAN_APPROVAL_ENFORCEMENT
+    name: Temporary Plan Approval Enforcement (SKULL-011)
+    severity: blocked
+    description: Temporary plans MUST be approved before execution. Unapproved plans cannot be executed.
+    detection:
+      combined_keywords:
+        execution_attempt:
+        - execute plan
+        - start implementation
+        - begin work
+        temp_plan_state:
+        - status: TEMP
+        - status: AWAITING_APPROVAL
+        not_approved:
+        - '!status: ACTIVE'
+      scope:
+      - intent
+      - plan_status
+      logic: AND
+    verification_required:
+    - type: plan_status_check
+      description: Verify plan has been approved
+      requirement: Plan status MUST be 'ACTIVE' before execution
+    - type: dor_validation
+      description: Verify DoR score meets threshold
+      requirement: DoR score MUST be ≥90%, ambiguity ≤10%
+    alternatives:
+    - Request approval with approve_plan() showing DoR metrics
+    - Refine plan with refine_plan() if DoR below threshold
+    - Wait for user approval before execution
+    evidence_template: |
+      Unapproved temporary plan execution blocked!
+      
+      Plan ID: {plan_id}
+      Status: {status}
+      DoR Score: {dor_score}%
+      Ambiguity: {ambiguity_score}%
+      
+      ❌ BLOCKED: Cannot execute plan without approval
+      
+      TEMPORARY PLAN WORKFLOW:
+      1. Create temporary plan (status: TEMP)
+      2. Refine with user feedback (status: AWAITING_APPROVAL)
+      3. Validate DoR ≥90% and ambiguity ≤10%
+      4. User approves → status: ACTIVE
+      5. ONLY THEN can execution begin
+      
+      Current State:
+      - Plan Status: {status} (not ACTIVE)
+      - DoR Score: {dor_score}% (need ≥90%)
+      - Ambiguity: {ambiguity_score}% (need ≤10%)
+      
+      Next Steps:
+      - If DoR low: Refine plan with more details
+      - If DoR ready: Request user approval
+      - After approval: Execute with confidence
+    rationale: |
+      TEMP_PLAN_APPROVAL_ENFORCEMENT: Quality Gate Before Execution
+      
+      Problem: Direct execution of incomplete plans
+      - Temporary plans executed before refinement
+      - Low DoR (60%) plans executed anyway
+      - High ambiguity (30%) not addressed
+      - No user approval gate
+      
+      Solution: Mandatory approval workflow
+      - TEMP → AWAITING_APPROVAL → ACTIVE transition
+      - DoR validation (≥90% threshold)
+      - Ambiguity validation (≤10% threshold)
+      - User approval required
+      
+      Benefits:
+      - Plans refined before execution
+      - User maintains control
+      - High-quality plans only
+      - Clear approval trail
+  - rule_id: PLAN_PROMOTION_INTEGRITY
+    name: Plan Promotion Integrity (SKULL-012)
+    severity: blocked
+    description: Plan promotion from temp → active MUST be atomic. Folder move, status update, and manifest registration in single transaction.
+    detection:
+      combined_keywords:
+        promotion_operation:
+        - promote plan
+        - approve plan
+        - temp to active
+        partial_operation:
+        - folder moved
+        - '!status updated'
+        - '!manifest updated'
+      scope:
+      - operation
+      - transaction_state
+      logic: AND
+    verification_required:
+    - type: atomic_transaction_check
+      description: Verify all promotion steps completed atomically
+      requirement: Folder move + status update + manifest registration in one operation
+    - type: rollback_capability
+      description: Verify rollback if any step fails
+      requirement: All or nothing - rollback on partial failure
+    alternatives:
+    - Use PlanLifecycleManager.approve_plan() for atomic promotion
+    - Verify folder moved AND status updated AND manifest registered
+    - Rollback all changes if any step fails
+    evidence_template: |
+      Plan promotion integrity violation!
+      
+      Plan ID: {plan_id}
+      Operation: {operation}
+      
+      ❌ BLOCKED: Partial promotion detected
+      
+      Promotion Checklist:
+      - [x] Folder moved: temp-plans/ → active-plans/
+      - [ ] Status updated: AWAITING_APPROVAL → ACTIVE
+      - [ ] Manifest registered: active-plans-manifest.yaml
+      
+      ATOMIC PROMOTION REQUIRED:
+      
+      Step 1: Move folder atomically
+      - Source: temp-plans/{plan_id}/
+      - Destination: active-plans/{plan_id}/
+      
+      Step 2: Update plan status
+      - Old: AWAITING_APPROVAL
+      - New: ACTIVE
+      
+      Step 3: Register in manifest
+      - File: active-plans-manifest.yaml
+      - Entry: plan_id, status, folder, complexity_tier
+      
+      ALL THREE STEPS MUST SUCCEED OR ALL ROLLBACK
+      
+      Current State: PARTIAL (step 1 complete, steps 2-3 pending)
+      Required: ATOMIC (all steps or none)
+    rationale: |
+      PLAN_PROMOTION_INTEGRITY: No Half-Approved Plans
+      
+      Problem: Partial promotions
+      - Folder moved but status not updated
+      - Status updated but manifest not registered
+      - Inconsistent plan state
+      
+      Solution: Atomic transactions
+      - All promotion steps in single operation
+      - Rollback if any step fails
+      - Consistent state guaranteed
+      
+      Benefits:
+      - No orphaned folders
+      - No status mismatches
+      - Clean promotion trail
+      - Recovery capability
+  - rule_id: CONTEXT_CONTINUITY_ENFORCEMENT
+    name: Context Continuity Enforcement (SKULL-013)
+    severity: blocked
+    description: Active planning sessions MUST be automatically loaded when user provides feedback. No manual file references required.
+    detection:
+      combined_keywords:
+        user_feedback:
+        - user feedback
+        - review comment
+        - plan iteration
+        manual_reference:
+        - which plan
+        - specify plan_id
+        - provide file path
+      scope:
+      - intent
+      - user_interaction
+      logic: AND
+    verification_required:
+    - type: session_context_check
+      description: Verify active session automatically loaded
+      requirement: SessionContextManager finds active session for user feedback
+    - type: implicit_loading
+      description: Verify no manual references required from user
+      requirement: System determines context from active sessions
+    alternatives:
+    - Use SessionContextManager.load_context_for_request()
+    - Automatically find active session for plan
+    - No manual plan_id required from user
+    evidence_template: |
+      Context continuity violation!
+      
+      User Feedback: "{feedback}"
+      System Response: "Which plan?"
+      
+      ❌ WRONG: Asking user for manual context
+      - User provides feedback
+      - System asks: "Which plan_id?"
+      - User must look up plan_id
+      - Manual reference required
+      
+      ✅ CORRECT: Automatic context loading
+      - User provides feedback
+      - SessionContextManager.load_context_for_request()
+      - Active session found automatically
+      - Feedback applied to correct plan
+      
+      AUTOMATIC CONTEXT LOADING:
+      
+      Step 1: User provides feedback
+      - "Add error handling to authentication phase"
+      
+      Step 2: System loads active session
+      - SessionContextManager.get_active_session_for_plan()
+      - Finds: TEMP-PLAN-authentication-20241216_143022
+      - Status: AWAITING_APPROVAL
+      
+      Step 3: Apply feedback automatically
+      - No plan_id required from user
+      - Refine active plan
+      - Update DoR score
+      
+      Benefits:
+      - Zero manual file references
+      - Seamless conversation flow
+      - User-friendly experience
+    rationale: |
+      CONTEXT_CONTINUITY_ENFORCEMENT: Seamless User Experience
+      
+      Problem: Manual context references
+      - "Which plan are you talking about?"
+      - User must provide plan_id manually
+      - Breaks conversation flow
+      - Poor user experience
+      
+      Solution: Automatic context loading
+      - SessionContextManager tracks active sessions
+      - User feedback automatically routed
+      - No manual references needed
+      - Natural conversation flow
+      
+      Benefits:
+      - Zero context lookup burden on user
+      - Seamless planning conversation
+      - Professional experience
+      - Reduced cognitive load
+  - rule_id: PLAN_BASED_WORKFLOW_ENFORCEMENT
+    name: Plan-Based Workflow Enforcement (SKULL-014)
+    severity: blocked
+    description: ALL code changes REQUIRE an approved plan. No direct implementation without planning workflow.
+    detection:
+      combined_keywords:
+        code_change_intent:
+        - implement feature
+        - write code
+        - create file
+        - modify code
+        no_active_plan:
+        - '!active_plan'
+        - plan_status: null
+      scope:
+      - intent
+      - execution_context
+      logic: AND
+    verification_required:
+    - type: active_plan_check
+      description: Verify active plan exists for code changes
+      requirement: Must have ACTIVE plan before implementing
+    - type: plan_scope_check
+      description: Verify code change within plan scope
+      requirement: Implementation matches plan phases
+    alternatives:
+    - Create temporary plan first
+    - Get user approval for plan
+    - THEN begin implementation
+    - Track progress against plan
+    evidence_template: |
+      Code change without active plan blocked!
+      
+      Intent: {intent}
+      Active Plan: {active_plan}
+      
+      ❌ BLOCKED: No approved plan for code changes
+      
+      REQUIRED WORKFLOW:
+      
+      Step 1: Create temporary plan
+      - Analyze requirements
+      - Define phases
+      - Calculate complexity
+      
+      Step 2: Refine plan
+      - Gather user feedback
+      - Improve DoR score
+      - Reduce ambiguity
+      
+      Step 3: Get approval
+      - DoR ≥90%
+      - Ambiguity ≤10%
+      - User approves
+      
+      Step 4: Execute plan
+      - Implement phase by phase
+      - Track progress
+      - Validate at gates
+      
+      Current State: No active plan (step 1 not started)
+      Required: Complete steps 1-3 before implementation
+    rationale: |
+      PLAN_BASED_WORKFLOW_ENFORCEMENT: No Cowboy Coding
+      
+      Problem: Direct implementation
+      - User: "Implement feature X"
+      - System: Starts coding immediately
+      - No planning, no roadmap, no tracking
+      - Ad-hoc development
+      
+      Solution: Plan-first mandate
+      - ALL code changes require approved plan
+      - Temporary plan for simple work
+      - Full plan for complex work
+      - No shortcuts allowed
+      
+      Benefits:
+      - Deliberate development
+      - Clear roadmap always
+      - Progress tracking built-in
+      - Quality gates enforced
+  - rule_id: NO_IMPLEMENTATION_SHORTCUTS_ENFORCEMENT
+    name: No Implementation Shortcuts in Next Steps (SKULL-015)
+    severity: blocked
+    description: Next Steps MUST show planning workflow (create plan → refine → approve → execute), NOT direct implementation instructions.
+    detection:
+      combined_keywords:
+        next_steps_section:
+        - '## Next Steps'
+        - '### Next Steps'
+        implementation_shortcut:
+        - 'Step 1: Implement'
+        - 'Step 1: Create file'
+        - 'Step 1: Write code'
+        not_planning:
+        - '!create temporary plan'
+        - '!refine plan'
+      scope:
+      - response_content
+      - next_steps
+      logic: AND
+    verification_required:
+    - type: next_steps_format_check
+      description: Verify Next Steps shows planning workflow
+      requirement: Must include plan creation, refinement, approval steps
+    - type: no_direct_implementation
+      description: Verify no direct implementation instructions
+      requirement: Implementation only after approval
+    alternatives:
+    - Show planning workflow in Next Steps
+    - 'Step 1: Create temporary plan with TemporaryPlanManager'
+    - 'Step 2: Refine plan based on user feedback'
+    - 'Step 3: Request approval when DoR ≥90%'
+    - 'Step 4: Execute approved plan'
+    evidence_template: |
+      Implementation shortcut detected in Next Steps!
+      
+      Next Steps Content: "{next_steps}"
+      
+      ❌ WRONG: Direct implementation shortcut
+      ## Next Steps
+      1. Implement TemporaryPlanManager
+      2. Create session_context_manager.py
+      3. Wire into PlanningOrchestrator
+      
+      ✅ CORRECT: Planning workflow shown
+      ## Next Steps
+      1. Create temporary plan for remaining components
+      2. Refine plan with user feedback (iterative)
+      3. Validate DoR ≥90% and ambiguity ≤10%
+      4. Request user approval
+      5. Execute approved plan phase by phase
+      
+      PLANNING WORKFLOW TEMPLATE:
+      
+      ## 🔍 Next Steps
+      1. **Create Temporary Plan**
+         - Invoke TemporaryPlanManager.start_refinement_session()
+         - Generate initial plan structure
+         - Save to temp-plans/{TEMP-PLAN-ID}/
+      
+      2. **Refine Plan (Iterative)**
+         - Gather user feedback
+         - Apply refinements with refine_plan()
+         - Improve DoR score (target: ≥90%)
+         - Reduce ambiguity (target: ≤10%)
+      
+      3. **Request Approval**
+         - Validate DoR ready (≥90%, ≤10% ambiguity)
+         - Show plan summary to user
+         - Await approval decision
+      
+      4. **Execute Approved Plan**
+         - Promote to active-plans/
+         - Implement phase by phase
+         - Track progress with manifest
+         - Validate at completion gates
+      
+      NEVER show implementation details in Next Steps!
+      Planning workflow visibility ensures user control.
+    rationale: |
+      NO_IMPLEMENTATION_SHORTCUTS_ENFORCEMENT: Transparency First
+      
+      Problem: Hidden implementation
+      - Next Steps says "Implement X"
+      - User doesn't see planning workflow
+      - Appears to skip approval gate
+      - Reduces user control
+      
+      Solution: Show planning workflow
+      - Next Steps explains planning process
+      - User understands approval gate
+      - Transparent workflow
+      - User maintains control
+      
+      Benefits:
+      - User sees planning workflow
+      - No surprise implementations
+      - Approval gate visible
+      - Trust through transparency
+  - rule_id: SUB_PLAN_TASK_INJECTION_ENFORCEMENT
+    name: Sub-Plan Task Injection Enforcement (SKULL-016)
+    severity: blocked
+    description: Worker plan tasks MUST be injected from master plan. No manual task definition in worker plans.
+    detection:
+      combined_keywords:
+        worker_plan_creation:
+        - create worker plan
+        - generate phase plan
+        - sub-plan generation
+        manual_tasks:
+        - manually define tasks
+        - hardcode tasks
+        not_injected:
+        - '!tasks_from_master'
+      scope:
+      - operation
+      - plan_generation
+      logic: AND
+    verification_required:
+    - type: task_injection_check
+      description: Verify tasks injected from master plan
+      requirement: Worker plan tasks MUST come from master plan phases
+    - type: consistency_validation
+      description: Verify master and worker plans stay in sync
+      requirement: Task changes propagate to relevant worker plans
+    alternatives:
+    - Use UnifiedPlanGenerator to inject tasks from master
+    - Worker plans inherit tasks from master plan phases
+    - Maintain single source of truth (master plan)
+    evidence_template: |
+      Manual task definition in worker plan blocked!
+      
+      Worker Plan: {worker_plan_id}
+      Master Plan: {master_plan_id}
+      
+      ❌ WRONG: Manually defining tasks
+      # Worker Plan: Phase 1 - Discovery
+      
+      ## Tasks
+      1. Analyze existing code
+      2. Document patterns
+      3. Create gap analysis
+      
+      ✅ CORRECT: Tasks injected from master
+      # Worker Plan: Phase 1 - Discovery
+      
+      ## Tasks (injected from master plan)
+      1. Analyze existing code
+      2. Document patterns
+      3. Create gap analysis
+      
+      TASK INJECTION WORKFLOW:
+      
+      Master Plan Definition:
+      ```yaml
+      phases:
+        - id: phase-1-discovery
+          name: Discovery
+          tasks:
+            - task_id: analyze-code
+              title: Analyze existing code
+            - task_id: document-patterns
+              title: Document patterns
+            - task_id: gap-analysis
+              title: Create gap analysis
+      ```
+      
+      Worker Plan Generation:
+      ```python
+      worker_plan = UnifiedPlanGenerator.generate_worker_plan(
+          master_plan=master_plan,
+          phase_id='phase-1-discovery'
+      )
+      # Tasks automatically injected from master
+      ```
+      
+      Benefits:
+      - Single source of truth (master plan)
+      - Consistency guaranteed
+      - Changes propagate automatically
+      - No manual sync required
+    rationale: |
+      SUB_PLAN_TASK_INJECTION_ENFORCEMENT: Single Source of Truth
+      
+      Problem: Manual task duplication
+      - Tasks defined in master plan
+      - Tasks manually redefined in worker plans
+      - Inconsistencies emerge
+      - Manual sync required
+      
+      Solution: Automatic task injection
+      - Master plan defines tasks once
+      - Worker plans inherit tasks
+      - Single source of truth
+      - Automatic consistency
+      
+      Benefits:
+      - Zero manual duplication
+      - Consistent task definitions
+      - Easy to update (change master only)
+      - Automatic propagation
 - layer_id: knowledge_quality
   name: Knowledge Quality
   description: Pattern validation and confidence thresholds

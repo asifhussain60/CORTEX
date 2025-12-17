@@ -381,3 +381,170 @@ class NarrativeGenerator:
             return f"🟡 MEDIUM RISK: Non-breaking change with wide impact ({affected_count} modules)"
         else:
             return f"🟢 LOW RISK: Localized change affecting {affected_count} modules"
+    
+    def format_for_master_plan(
+        self,
+        ast_context: Dict[str, Any],
+        lens_context: Dict[str, Any]
+    ) -> str:
+        """
+        Format AST/Lens analysis for master plan integration.
+        
+        Target: 200-400 words for master plan "Context" section.
+        Provides high-level architecture overview and key insights.
+        
+        Args:
+            ast_context: AST analysis results (architecture, dependencies, complexity)
+            lens_context: CORTEX Lens analysis results (patterns, smells, metrics)
+            
+        Returns:
+            Formatted narrative text (200-400 words)
+            
+        Example Output:
+            "The codebase analysis reveals a 4-tier architecture with 23 modules
+            across orchestration, routing, and intelligence layers. AST analysis
+            identified 12 key components with moderate coupling (avg 3.2 dependencies
+            per module). Complexity metrics show 3 high-complexity modules requiring
+            attention during implementation..."
+        """
+        logger.info("Formatting AST/Lens context for master plan")
+        
+        # Extract key metrics from AST context
+        architecture = ast_context.get('architecture', {})
+        complexity = ast_context.get('complexity', {})
+        dependencies = ast_context.get('dependencies', [])
+        
+        # Extract key insights from Lens context
+        patterns = lens_context.get('patterns', [])
+        smells = lens_context.get('smells', [])
+        metrics = lens_context.get('metrics', {})
+        
+        # Build narrative (target: 200-400 words)
+        narrative_parts = []
+        
+        # Architecture overview (80-100 words)
+        module_count = len(architecture.get('modules', []))
+        layers = architecture.get('layers', [])
+        narrative_parts.append(
+            f"The codebase analysis reveals a {len(layers)}-tier architecture with "
+            f"{module_count} modules across {', '.join(layers)} layers. AST analysis "
+            f"identified {len(dependencies)} dependencies with "
+            f"{'low' if len(dependencies) < 10 else 'moderate' if len(dependencies) < 30 else 'high'} "
+            f"coupling (avg {len(dependencies) / max(module_count, 1):.1f} dependencies per module)."
+        )
+        
+        # Complexity insights (60-80 words)
+        high_complexity = [m for m in complexity.get('modules', []) if m.get('score', 0) > 15]
+        narrative_parts.append(
+            f"Complexity metrics show {len(high_complexity)} high-complexity modules requiring "
+            f"attention during implementation. The average cyclomatic complexity is "
+            f"{complexity.get('average', 0):.1f}, indicating "
+            f"{'straightforward' if complexity.get('average', 0) < 10 else 'moderate' if complexity.get('average', 0) < 20 else 'complex'} "
+            f"implementation effort."
+        )
+        
+        # Code quality insights (60-80 words)
+        critical_smells = [s for s in smells if s.get('severity', '') == 'critical']
+        narrative_parts.append(
+            f"Code quality analysis detected {len(smells)} code smells "
+            f"({len(critical_smells)} critical) that should be addressed. "
+            f"Pattern analysis identified {len(patterns)} reusable patterns that can "
+            f"guide implementation. Test coverage is {metrics.get('coverage', 0)}%, "
+            f"{'requiring significant test additions' if metrics.get('coverage', 0) < 70 else 'adequate for refactoring'}."
+        )
+        
+        # Risk assessment (40-60 words)
+        risk_factors = []
+        if len(critical_smells) > 3:
+            risk_factors.append("high code smell count")
+        if len(high_complexity) > 5:
+            risk_factors.append("multiple complex modules")
+        if metrics.get('coverage', 0) < 70:
+            risk_factors.append("low test coverage")
+            
+        if risk_factors:
+            narrative_parts.append(
+                f"Risk assessment highlights: {', '.join(risk_factors)}. "
+                f"Recommend phased implementation with validation gates after each phase."
+            )
+        else:
+            narrative_parts.append(
+                f"Risk assessment indicates low-to-moderate risk. Implementation can proceed "
+                f"with standard validation gates."
+            )
+        
+        return " ".join(narrative_parts)
+    
+    def format_for_worker_plan(
+        self,
+        phase_context: Dict[str, Any],
+        ast_context: Dict[str, Any]
+    ) -> str:
+        """
+        Format phase-specific context for worker plan.
+        
+        Target: 100-200 words for worker plan "Phase Context" section.
+        Provides focused, actionable insights for specific phase implementation.
+        
+        Args:
+            phase_context: Phase-specific info (phase_id, focus_area, tasks)
+            ast_context: AST analysis relevant to this phase
+            
+        Returns:
+            Formatted narrative text (100-200 words)
+            
+        Example Output:
+            "Phase 2 focuses on router implementation with 4 modules requiring creation.
+            AST analysis shows existing router pattern in tier1/ that can be reused.
+            Key dependencies: base_router.py (2 imports), route_analyzer.py (3 imports).
+            Complexity: Moderate (avg 8.3 cyclomatic complexity). Recommend TDD approach
+            with test coverage target of 85%..."
+        """
+        logger.info(f"Formatting AST context for worker plan phase {phase_context.get('phase_id', 'unknown')}")
+        
+        # Extract phase-specific details
+        phase_id = phase_context.get('phase_id', 'unknown')
+        phase_name = phase_context.get('name', 'Unknown Phase')
+        focus_area = phase_context.get('focus_area', 'implementation')
+        tasks = phase_context.get('tasks', [])
+        
+        # Extract relevant AST insights
+        modules = ast_context.get('modules', [])
+        dependencies = ast_context.get('dependencies', [])
+        complexity = ast_context.get('complexity', {})
+        reusable_patterns = ast_context.get('patterns', [])
+        
+        # Build focused narrative (target: 100-200 words)
+        narrative_parts = []
+        
+        # Phase overview (40-60 words)
+        narrative_parts.append(
+            f"{phase_name} focuses on {focus_area} with {len(tasks)} tasks requiring "
+            f"{'creation' if 'create' in focus_area.lower() else 'modification'}. "
+            f"AST analysis shows {len(reusable_patterns)} existing patterns that can be reused. "
+            f"Target modules: {len(modules)} components."
+        )
+        
+        # Dependencies and complexity (40-60 words)
+        avg_complexity = complexity.get('average', 0)
+        narrative_parts.append(
+            f"Key dependencies: {len(dependencies)} imports across phase modules. "
+            f"Complexity: {'Low' if avg_complexity < 5 else 'Moderate' if avg_complexity < 15 else 'High'} "
+            f"(avg {avg_complexity:.1f} cyclomatic complexity). "
+            f"Recommend {'straightforward implementation' if avg_complexity < 5 else 'TDD approach with test coverage target of 85%' if avg_complexity < 15 else 'incremental implementation with comprehensive testing'}."
+        )
+        
+        # Implementation guidance (20-40 words)
+        if reusable_patterns:
+            pattern_names = [p.get('name', 'pattern') for p in reusable_patterns[:3]]
+            narrative_parts.append(
+                f"Reusable patterns identified: {', '.join(pattern_names)}. "
+                f"Leverage existing implementations to accelerate development."
+            )
+        else:
+            narrative_parts.append(
+                f"No existing patterns found - recommend creating reusable abstractions "
+                f"for future phases."
+            )
+        
+        return " ".join(narrative_parts)

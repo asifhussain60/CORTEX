@@ -20,8 +20,10 @@ from src.orchestration_3_0.core.state_machine import (
     StateMachine,
     TransitionResult
 )
+from src.operations.modules.orchestration.audit_logger import get_audit_logger
 
 logger = logging.getLogger(__name__)
+audit_logger = get_audit_logger()
 
 
 class PlanState(Enum):
@@ -222,12 +224,31 @@ class PlanLifecycleManager:
         self._record_transition(plan_id, from_state, to_state)
         
         # Move folder if needed
-        self._move_folder_for_state(plan_id, from_state, to_state)
+        source_folder = self._move_folder_for_state(plan_id, from_state, to_state)
         
         # Persist state
         self.persist_state(plan_id, to_state)
         
         logger.info(f"🎭 State transition: {plan_id} {from_state.value} → {to_state.value}")
+        
+        # Audit: Plan promoted (if transitioning to ACTIVE)
+        if to_state == PlanState.ACTIVE and from_state == PlanState.AWAITING_APPROVAL:
+            target_folder = self.state_folders[to_state] / plan_id
+            audit_logger.log_event(
+                event_type="plan_promoted",
+                session_id="lifecycle-ops",
+                plan_id=plan_id,
+                orchestrator="PlanLifecycleManager",
+                phase="promotion",
+                metadata={
+                    "source_folder": str(source_folder) if source_folder else "unknown",
+                    "target_folder": str(target_folder),
+                    "from_state": from_state.value,
+                    "to_state": to_state.value,
+                    "manifest_registered": True
+                }
+            )
+        
         return True
     
     def _move_folder_for_state(self, plan_id: str, from_state: PlanState, to_state: PlanState):
@@ -238,13 +259,16 @@ class PlanLifecycleManager:
             plan_id: Plan identifier
             from_state: Previous state
             to_state: New state
+            
+        Returns:
+            Source folder path if moved, None otherwise
         """
         from_folder_base = self.state_folders[from_state]
         to_folder_base = self.state_folders[to_state]
         
         # Skip if same folder
         if from_folder_base == to_folder_base:
-            return
+            return None
         
         from_folder = from_folder_base / plan_id
         to_folder = to_folder_base / plan_id
@@ -256,6 +280,9 @@ class PlanLifecycleManager:
             # Move folder
             from_folder.rename(to_folder)
             logger.info(f"📁 Moved plan folder: {from_folder} → {to_folder}")
+            return from_folder
+        
+        return None
     
     def approve_plan(self, plan_id: str, approved_by: str):
         """

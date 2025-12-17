@@ -536,11 +536,12 @@ templates:
       - header_standard
       - section_understanding
       - section_challenge
+      - section_recommendation
       - section_response
       - section_impact
       - section_next_steps
       - progress_bar
-    format: standard_5_part
+    format: standard_5_part_with_recommendation
     performance_target: "Variable (plan-dependent)"
     base_structure: |
       ## 🧠 CORTEX {{title}}
@@ -550,6 +551,9 @@ templates:
       
       ### 🎯 Understanding & Scope
       {{understanding_scope_content}}
+      
+      ### 🤔 CORTEX Recommendation
+      {{recommendation_content}}
       
       ### ⚡ Approach & Considerations
       {{challenge_content}}
@@ -574,12 +578,13 @@ templates:
       - header_standard
       - section_understanding
       - section_challenge
+      - section_recommendation
       - section_response
       - section_impact
       - section_next_steps
       - progress_bar
       - plan_approval_link
-    format: standard_5_part_extended
+    format: standard_5_part_extended_with_recommendation
     performance_target: "Variable (orchestrator-dependent)"
     base_structure: |
       ## 🧠 CORTEX {{title}}
@@ -591,6 +596,9 @@ templates:
       {{understanding_scope_content}}
       
       **Manifest:** [{{manifest_name}}]({{manifest_path}})
+      
+      ### 🤔 CORTEX Recommendation
+      {{recommendation_content}}
       
       ### ⚡ Approach & Considerations
       {{challenge_content}}
@@ -610,6 +618,88 @@ templates:
       
       ### 🔍 Next Steps
       {{next_steps_content}}
+  
+  cortex_recommendation:
+    name: CORTEX Recommendation Section
+    description: "Viability assessment with alternatives - challenges user request if architecturally problematic"
+    usage: "Auto-generated in all temp plans - balances accuracy vs efficiency"
+    triggers: ["temp plan generation", "planning refinement"]
+    components:
+      - viability_assessment
+      - architectural_alignment
+      - alternative_solutions
+      - decision_matrix
+    format: recommendation_with_alternatives
+    performance_target: "3s max"
+    base_structure: |
+      ## 🤔 CORTEX Recommendation
+      
+      **CRITICAL:** CORTEX challenges this request by balancing accuracy with efficiency against current architecture.
+      
+      ### Viability Assessment
+      
+      **Overall Viability:** {{viability_score}}/100 ({{viability_level}})
+      
+      **Accuracy vs Efficiency Analysis:**
+      - **Accuracy Impact:** {{accuracy_impact}} - {{accuracy_description}}
+      - **Efficiency Impact:** {{efficiency_impact}} - {{efficiency_description}}
+      - **Performance Tradeoff:** {{performance_tradeoff}}
+      
+      ### Architectural Alignment
+      
+      **Current Architecture Compatibility:**
+      {{architecture_compatibility}}
+      
+      **Design Pattern Match:**
+      {{design_pattern_analysis}}
+      
+      **Technical Debt Impact:**
+      {{tech_debt_assessment}}
+      
+      ### CORTEX Position
+      
+      {{recommendation_stance}}
+      
+      **Reasons:**
+      {{recommendation_reasons}}
+      
+      ### Alternative Solutions
+      
+      #### Alternative 1: {{alt_1_name}}
+      **Pros:** {{alt_1_pros}}
+      **Cons:** {{alt_1_cons}}
+      **Effort:** {{alt_1_effort}}
+      
+      #### Alternative 2: {{alt_2_name}}
+      **Pros:** {{alt_2_pros}}
+      **Cons:** {{alt_2_cons}}
+      **Effort:** {{alt_2_effort}}
+      
+      #### Alternative 3: {{alt_3_name}}
+      **Pros:** {{alt_3_pros}}
+      **Cons:** {{alt_3_cons}}
+      **Effort:** {{alt_3_effort}}
+      
+      ### Decision Framework
+      
+      | Approach | Accuracy | Efficiency | Alignment | Risk | Recommended |
+      |----------|----------|------------|-----------|------|-------------|
+      | **User Request** | {{user_accuracy}} | {{user_efficiency}} | {{user_alignment}} | {{user_risk}} | {{user_recommended}} |
+      | **Alternative 1** | {{alt1_accuracy}} | {{alt1_efficiency}} | {{alt1_alignment}} | {{alt1_risk}} | {{alt1_recommended}} |
+      | **Alternative 2** | {{alt2_accuracy}} | {{alt2_efficiency}} | {{alt2_alignment}} | {{alt2_risk}} | {{alt2_recommended}} |
+      | **Alternative 3** | {{alt3_accuracy}} | {{alt3_efficiency}} | {{alt3_alignment}} | {{alt3_risk}} | {{alt3_recommended}} |
+      
+      **CORTEX Recommended Approach:** {{cortex_recommendation}}
+    
+    viability_levels:
+      high: "≥90 - Architecturally sound, proceed with confidence"
+      medium: "70-89 - Some concerns, review alternatives"
+      low: "<70 - Significant issues, strongly consider alternatives"
+    
+    recommendation_stances:
+      support: "✅ SUPPORT - Request aligns well with architecture"
+      challenge: "⚠️ CHALLENGE - Request has architectural concerns"
+      strongly_recommend_alternative: "🚫 STRONGLY RECOMMEND ALTERNATIVE - Request creates significant technical debt"
 
   risk_warning:
     name: Risk Assessment Warning

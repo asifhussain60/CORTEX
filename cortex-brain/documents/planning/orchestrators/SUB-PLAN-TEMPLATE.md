@@ -18,6 +18,22 @@
 
 ## 1️⃣ Existing State (Summarized)
 
+### 🔎 Phase-Specific Context
+
+**Scope:** {PHASE_SCOPE_SUMMARY}
+
+**Files Modified in This Phase:**
+
+{PHASE_FILES_WITH_NARRATIVE}
+
+**Dependencies for This Phase:**
+
+{PHASE_DEPENDENCIES_NARRATIVE}
+
+**Architectural Considerations:**
+
+{PHASE_ARCH_CONSIDERATIONS}
+
 ### Current Files Being Consolidated
 
 | File | LOC | Purpose | Key Components |
