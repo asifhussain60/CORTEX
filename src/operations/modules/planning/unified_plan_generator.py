@@ -1362,13 +1362,13 @@ class UnifiedPlanGenerator:
         sections.append("## ✅ Tasks")
         sections.append("")
         
-        # Group tasks by category
-        git_tasks = [t for t in phase_tasks if t.get("category") == "git"]
-        analysis_tasks = [t for t in phase_tasks if t.get("category") == "analysis"]
-        phase_specific_tasks = [t for t in phase_tasks if not t.get("standard_task", False)]
-        doc_tasks = [t for t in phase_tasks if t.get("category") == "documentation"]
-        tdd_tasks = [t for t in phase_tasks if t.get("category") == "tdd"]
-        dod_tasks = [t for t in phase_tasks if t.get("category") == "dod"]
+        # Group tasks by category (handle tasks as dicts safely)
+        git_tasks = [t for t in phase_tasks if isinstance(t, dict) and t.get("category") == "git"]
+        analysis_tasks = [t for t in phase_tasks if isinstance(t, dict) and t.get("category") == "analysis"]
+        phase_specific_tasks = [t for t in phase_tasks if isinstance(t, dict) and not t.get("standard_task", False)]
+        doc_tasks = [t for t in phase_tasks if isinstance(t, dict) and t.get("category") == "documentation"]
+        tdd_tasks = [t for t in phase_tasks if isinstance(t, dict) and t.get("category") == "tdd"]
+        dod_tasks = [t for t in phase_tasks if isinstance(t, dict) and t.get("category") == "dod"]
         
         # Start checkpoint
         if git_tasks:

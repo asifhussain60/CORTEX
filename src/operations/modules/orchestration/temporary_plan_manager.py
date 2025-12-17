@@ -325,6 +325,10 @@ class TemporaryPlanManager:
         
         session = self.active_sessions[session_id]
         
+        # Always transition to awaiting approval regardless of DoR score
+        self.lifecycle_manager.transition_to(session.plan_id, PlanState.AWAITING_APPROVAL)
+        session.status = "awaiting_approval"
+        
         # Check DoR
         if session.current_dor_score < 90:
             logger.warning(f"⚠️ DoR score too low: {session.current_dor_score:.1f}% (need ≥90%)")
@@ -348,10 +352,6 @@ class TemporaryPlanManager:
                 approved=False,
                 reason=f"DoR not satisfied (score: {session.current_dor_score:.1f}%, need ≥90%)"
             )
-        
-        # Transition to awaiting approval
-        self.lifecycle_manager.transition_to(session.plan_id, PlanState.AWAITING_APPROVAL)
-        session.status = "awaiting_approval"
         
         # Request approval from lifecycle manager
         dor_checklist = self._generate_dor_checklist(session)
