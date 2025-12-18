@@ -1,16 +1,56 @@
 {
-  "version": "3.9.0",
-  "planningSystem": {
-    "version": "3.0",
-    "comment": "Planning System 3.0 - Tiered routing, automatic refactor/vacuum cycles, centralized versioning"
+  "version": "4.0",
+  "environment": "development",
+  "paths": {
+    "orchestrators": "src/orchestrators",
+    "brain": "src/brain",
+    "templates": "src/templates",
+    "mcp_gateway": "src/mcp",
+    "logs": "logs",
+    "cache": ".cortex/cache"
   },
-  "application": {
-    "name": "CORTEX",
-    "framework": "Browser-Native (SQL.js + TypeScript) + PowerShell",
-    "language": "TypeScript/Python/PowerShell",
-    "rootPath": "",
-    "buildCommand": "npm run build",
-    "runCommand": "npm run dev"
+  "brain": {
+    "tier1_db": "{repo}/cortex-brain/tier1/conversations.db",
+    "tier2_db": "~/.cortex/shared/tier2/knowledge-graph.db",
+    "tier3_db": "{repo}/cortex-brain/tier3/metrics.db",
+    "tier0_rules": "~/.cortex/shared/skull_rules.yaml",
+    "max_conversations": 70,
+    "pattern_confidence_threshold": 0.5,
+    "enable_cross_repo_learning": true
+  },
+  "ide": {
+    "auto_detect": true,
+    "detected_ide": "unknown",
+    "vscode_config_path": ".vscode/cortex.config.json",
+    "visual_studio_config_path": ".vs/cortex/config.json"
+  },
+  "logging": {
+    "level": "INFO",
+    "console_output": true,
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "max_file_size_mb": 10,
+    "backup_count": 5
+  },
+  "features": {
+    "mcp_gateway_enabled": false,
+    "response_templates_v4": false,
+    "dependency_injection": false,
+    "documentation_engine": false
+  },
+  "legacy_v3": {
+    "comment": "Legacy v3.9.0 configuration - kept for backward compatibility during migration",
+    "planningSystem": {
+      "version": "3.0",
+      "comment": "Planning System 3.0 - Tiered routing, automatic refactor/vacuum cycles, centralized versioning"
+    },
+    "application": {
+      "name": "CORTEX",
+      "framework": "Browser-Native (SQL.js + TypeScript) + PowerShell",
+      "language": "TypeScript/Python/PowerShell",
+      "rootPath": "",
+      "buildCommand": "npm run build",
+      "runCommand": "npm run dev"
+    }
   },
   "machines": {
     "": {
