@@ -1,7 +1,15 @@
 """
-Pytest Configuration and Shared Fixtures
+Pytest Configuration and Shared Fixtures for CORTEX 4.0
 
 Provides common test fixtures for all CORTEX tests.
+
+Features:
+- Temporary directory management
+- Configuration fixtures (ConfigManager, CortexConfig)
+- IDE detection mocks
+- Orchestrator fixtures
+- Brain tier mocks
+- Response template fixtures
 
 Copyright © 2024-2025 Asif Hussain. All rights reserved.
 """
@@ -11,13 +19,20 @@ import pytest
 import sqlite3
 import tempfile
 import os
+import json
 from pathlib import Path
 from datetime import datetime
-from typing import Generator
+from typing import Generator, Dict, Any
+from unittest.mock import Mock, patch
 
 # Import agent framework
 from src.cortex_agents.base_agent import AgentRequest, AgentResponse, BaseAgent
 from src.cortex_agents.agent_types import IntentType, Priority
+
+# Import CORTEX 4.0 components
+from src.core.config_manager import ConfigManager, CortexConfig
+from src.core.ide_detector import IDEDetector, IDEType
+from src.orchestrators.base.base_orchestrator import BaseOrchestrator, OrchestratorStatus, OrchestratorResult
 
 # ============================================================================
 # DEPENDENCY DETECTION
@@ -343,6 +358,183 @@ def sample_files(temp_workspace: Path):
 
 
 # ============================================================================
+# CORTEX 4.0 FIXTURES (Added 2025-12-18)
+# ============================================================================
+
+@pytest.fixture
+def cortex_workspace(tmp_path) -> Path:
+    """Create a temporary CORTEX workspace with brain structure"""
+    workspace = tmp_path / "cortex-workspace"
+    workspace.mkdir()
+    
+    # Create brain structure
+    brain = workspace / "cortex-brain"
+    brain.mkdir()
+    
+    # Create brain tiers
+    for tier in ["tier0", "tier1", "tier2", "tier3"]:
+        (brain / tier).mkdir()
+    
+    # Create config directory
+    config_dir = brain / "config"
+    config_dir.mkdir()
+    
+    # Create documents directory structure
+    docs = brain / "documents"
+    for category in ["reports", "analysis", "summaries", "investigations", "planning", "implementation-guides"]:
+        (docs / category).mkdir(parents=True)
+    
+    return workspace
+
+
+@pytest.fixture
+def shared_config(cortex_workspace: Path) -> Dict[str, Any]:
+    """Create a shared configuration file in workspace"""
+    config_dir = cortex_workspace / "cortex-brain" / "config"
+    shared_config = {
+        "brain": {
+            "max_conversations": 70,
+            "tdd_enforcement": True,
+            "timeout": 30
+        },
+        "orchestrator": {
+            "auto_cleanup": True,
+            "phase_validation": "strict"
+        }
+    }
+    
+    config_file = config_dir / "shared.config.json"
+    config_file.write_text(json.dumps(shared_config, indent=2))
+    
+    return shared_config
+
+
+@pytest.fixture
+def vscode_config(cortex_workspace: Path) -> Dict[str, Any]:
+    """Create VSCode-specific configuration file in workspace"""
+    config_dir = cortex_workspace / "cortex-brain" / "config"
+    vscode_config = {
+        "brain": {
+            "max_conversations": 100,
+            "fifo_enabled": True
+        },
+        "ide": {
+            "integration_mode": "copilot_chat"
+        }
+    }
+    
+    config_file = config_dir / "vscode.config.json"
+    config_file.write_text(json.dumps(vscode_config, indent=2))
+    
+    return vscode_config
+
+
+@pytest.fixture
+def config_manager(cortex_workspace: Path, shared_config: Dict[str, Any]) -> ConfigManager:
+    """Create a ConfigManager instance with test workspace"""
+    return ConfigManager(workspace_root=cortex_workspace)
+
+
+@pytest.fixture
+def cortex_config(config_manager: ConfigManager) -> CortexConfig:
+    """Load CortexConfig from ConfigManager"""
+    with patch("psutil.Process", side_effect=Exception("No IDE")):
+        return config_manager.load()
+
+
+@pytest.fixture
+def mock_ide_detector_vscode():
+    """Mock IDEDetector to return VSCode"""
+    with patch.object(IDEDetector, "detect", return_value=IDEType.VSCODE):
+        yield IDEType.VSCODE
+
+
+@pytest.fixture
+def mock_ide_detector_visualstudio():
+    """Mock IDEDetector to return Visual Studio"""
+    with patch.object(IDEDetector, "detect", return_value=IDEType.VISUAL_STUDIO):
+        yield IDEType.VISUAL_STUDIO
+
+
+@pytest.fixture
+def mock_ide_detector_unknown():
+    """Mock IDEDetector to return Unknown"""
+    with patch.object(IDEDetector, "detect", return_value=IDEType.UNKNOWN):
+        yield IDEType.UNKNOWN
+
+
+@pytest.fixture
+def mock_orchestrator(cortex_workspace: Path):
+    """Create a mock orchestrator for testing"""
+    class MockOrchestrator(BaseOrchestrator):
+        def __init__(self, workspace_root: Path):
+            config = {
+                "name": "MockOrchestrator",
+                "version": "4.0.0",
+                "workspace_root": str(workspace_root)
+            }
+            super().__init__(config=config)
+            self.workspace_root = workspace_root
+        
+        def execute(self, **kwargs) -> OrchestratorResult:
+            """Mock execution - always succeeds"""
+            return OrchestratorResult(
+                status=OrchestratorStatus.COMPLETED,
+                success=True,
+                message="Mock execution successful"
+            )
+    
+    return MockOrchestrator(workspace_root=cortex_workspace)
+
+
+@pytest.fixture
+def reset_ide_detector_cache(request):
+    """Reset IDEDetector cache before and after each test"""
+    IDEDetector.reset_cache()
+    yield
+    IDEDetector.reset_cache()
+
+
+@pytest.fixture
+def temp_config_dir(tmp_path) -> Path:
+    """Create a temporary directory for config files"""
+    config_dir = tmp_path / "cortex-brain" / "config"
+    config_dir.mkdir(parents=True)
+    return config_dir
+
+
+@pytest.fixture
+def response_templates_yaml(tmp_path) -> Path:
+    """Create a mock response templates YAML file"""
+    templates_dir = tmp_path / "cortex-brain" / "response-templates"
+    templates_dir.mkdir(parents=True)
+    
+    templates_file = templates_dir / "response-templates.yaml"
+    templates_content = """
+templates:
+  test_success:
+    title: "Test Success"
+    sections:
+      understanding: "Test completed successfully"
+      approach: "No significant challenges"
+      response: "All tests passed"
+      impact: "System validated"
+      next_steps: "Continue development"
+  
+  test_failure:
+    title: "Test Failure"
+    sections:
+      understanding: "Test failed"
+      approach: "Debugging required"
+      response: "Test failure detected"
+      impact: "Fix needed"
+      next_steps: "Debug and fix"
+"""
+    templates_file.write_text(templates_content)
+    return templates_file
+
+
+# ============================================================================
 # PERFORMANCE MONITORING (Added 2025-11-11)
 # ============================================================================
 
@@ -358,3 +550,4 @@ def monitor_test_performance(request):
         print(f'\n⚠️  SLOW UNIT TEST: {request.node.name} took {duration:.3f}s')
     elif 'integration' in markers and duration > 1.0:
         print(f'\n⚠️  SLOW INTEGRATION: {request.node.name} took {duration:.3f}s')
+
