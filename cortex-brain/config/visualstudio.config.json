@@ -1,0 +1,20 @@
+{
+  "custom": {
+    "editor": {
+      "integration_mode": "extension",
+      "solution_aware": true,
+      "msbuild_integration": true,
+      "nuget_integration": true
+    },
+    "ui": {
+      "progress_location": "status_bar",
+      "output_pane": "CORTEX",
+      "tool_window": true
+    },
+    "features": {
+      "intellisense_integration": true,
+      "code_map": true,
+      "architecture_explorer": true
+    }
+  }
+}
