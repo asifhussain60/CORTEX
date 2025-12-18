@@ -37,10 +37,11 @@
 │ Week 7 Days 1-3: ExecutionOrchestrator (COMPLETE)       [█████]  100% ✅ DONE│
 │ Week 7 Days 4-5: DocumentationOrchestrator (COMPLETE)   [█████]  100% ✅ DONE│
 │ Week 7 Days 6-7: TDDOrchestrator                        [░░░░░]  0%         │
-│ Week 8: Planning + Scaffolding                          [░░░░░]  0%         │
-│ Week 9: ADO + Documentation                             [░░░░░]  0%         │
-│ Week 10: Maintenance + QA + DevOps                      [░░░░░]  0%         │
-│ Week 11: Observability + Intelligence + Onboarding      [░░░░░]  0%         │
+│ Week 8-9: Planning + Scaffolding                        [░░░░░]  0%         │
+│ Week 10: ADO + Sanitization                             [░░░░░]  0%         │
+│ Week 11: Maintenance + QA + DevOps                      [░░░░░]  0%         │
+│ Week 12: Observability + Intelligence + Onboarding      [░░░░░]  0%         │
+│ Week 13: Security Learning Agent                        [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ PHASE 4: Operations Simplification + Universal Adapters   [░░░░░░░░░░░░]   0% │
 │ Week 12-13: @orchestrator decorator & DI auto-discovery [░░░░░]  0%         │
@@ -71,11 +72,15 @@
 └─ ☐ CORTEX 4.0 GA Release (Week 20)
 
 📈 METRICS
-├─ Orchestrators Migrated: 2/13 (15%)
-├─ Test Coverage: 72.5% average (67.15% phase_manager, 69.86% documentation_orchestrator, 71.90% code_analyzer, 87.27% type_extractor)
+├─ Orchestrators Migrated: 2/14 (14%)  # ExecutionOrchestrator, DocumentationOrchestrator
+├─ Test Coverage (Current): 72.5% average → Target: 90%+
+│  ├─ phase_manager: 67.15% ⚠️ (need +23% for 90% target)
+│  ├─ documentation_orchestrator: 69.86% ⚠️ (need +20%)
+│  ├─ code_analyzer: 71.90% ⚠️ (need +18%)
+│  └─ type_extractor: 87.27% ✅ (need +3%)
 ├─ Tests Passing: 123/123 (100%) - 74 foundation + 49 documentation
 ├─ Documentation: 10/200+ docs generated (ExecutionOrchestrator auto-documented: 6 modules, 10 classes, 9 files)
-└─ Lines Reduced: 0 (Target: -40% bloat)
+└─ Lines Reduced: 0 (Target: -40% bloat, ~2,700 lines from 6,760)
 ```
 
 **🔄 AUTO-UPDATE INSTRUCTIONS FOR ORCHESTRATORS:**
@@ -163,7 +168,7 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **Semantic Retrieval** - Embedding-based search for domain-specific guidelines + security patterns (NEW)
 - **Bloat Reduction** - Permanent wiring via dependency injection, eliminate manifest bloat
 - **Clean Orchestrator Structure** - Co-located tests, TDD-first development
-- **Unified Operations** - Consolidate 28+ orchestrators into 13 total (11 core + 2 specialized)
+- **Unified Operations** - Consolidate 28+ orchestrators into 14 total (11 core + 2 specialized + 1 security)
 - **Agent Integration** - Streamline 18 agents into 13 active (7 independent + 5 brain integrations + 1 security + 1 deprecated)
 - **CORTEX Lens v2.0** - MCP-integrated intelligence platform with streaming analysis, AI narratives, brain integration
 - **Technical Documentation System** - Auto-generated docs with 60+ interactive D3.js diagrams
@@ -189,19 +194,20 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **🆕 Progress Tracking Standard** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/PROGRESS-TRACKING-STANDARD.md` (CORTEX 4.0 core pattern)
 
 **Critical Path to First Orchestrator Migration:**
-1. **Week 0:** Phase 0 cleanup + technical documentation structure setup
-2. **Weeks 1-3:** Phase 1 foundation (10 prerequisites MUST be complete)
-3. **Week 3 End:** Run validation script - MUST pass before Phase 3
-4. **Week 7 (Days 1-3):** Migrate ExecutionOrchestrator (foundation - all orchestrators depend on it)
-5. **Week 7 (Days 4-5):** Migrate Technical Documentation Orchestrator (self-documenting migration)
-6. **Week 8:** Migrate PlanningOrchestrator (high complexity, well-tested, 1,599 LOC → 4 modules)
+1. **Week 0:** Phase 0 cleanup + technical documentation structure setup ✅
+2. **Weeks 1-3:** Phase 1 foundation (10 prerequisites MUST be complete) ✅
+3. **Week 3 End:** Run validation script - MUST pass before Phase 3 ✅
+4. **Week 7 (Days 1-3):** Migrate ExecutionOrchestrator (foundation - all orchestrators depend on it) ✅
+5. **Week 7 (Days 4-5):** Migrate Technical Documentation Orchestrator (self-documenting migration) ✅
+6. **Week 8:** Migrate TDDOrchestrator (next priority, RED→GREEN→REFACTOR enforcement)
+7. **Week 9:** Migrate PlanningOrchestrator (high complexity, well-tested, 1,599 LOC → 4 modules)
 
-**Key Phases (Reorganized for Efficiency):**
+**Key Phases (Reorganized for Parallel Execution):**
 - **Phase 0 (Week 0):** Pre-Migration Cleanup - Eliminate bloat + Technical documentation structure  
 - **Phase 1 (Weeks 1-3):** Foundation - Base orchestrator, brain, DI, response templates v4.0, testing (CRITICAL)
 - **Phase 1.5 (Week 3):** Documentation & Visualization Framework - Auto-generation tool  
-- **Phase 2 (Weeks 4-8):** Brain Enhancement - Hybrid centralization + RAG guideline stores + Security Learning Agent (EXTENDED)
-- **Phase 3 (Weeks 9-13):** Orchestrator Consolidation - Migrate 13 orchestrators (11 core + 2 specialized) (requires Phase 1 complete)
+- **Phase 2 (Weeks 4-8):** Brain Enhancement - Hybrid centralization + RAG guideline stores + Security Learning Agent (RUNS PARALLEL WITH PHASE 3)
+- **Phase 3 (Weeks 7-13):** Orchestrator Consolidation - Migrate 14 orchestrators (11 core + 2 specialized + 1 security) (requires Phase 1 complete, Phase 2 optional)
 - **Phase 4 (Weeks 14-16):** Operations Simplification - DI container and manifest reduction
 - **Phase 5 (Weeks 17-19):** Testing & Validation - Comprehensive testing and quality gates
 - **Phase 6 (Week 20):** Documentation Finalization - Complete technical documentation generation
@@ -210,11 +216,52 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 1. **Response Templates v4.0 moved into Phase 1** - Foundation work, blocking dependency for orchestrators
 2. **MCP Gateway moved to Phase 4** - Non-blocking, can evolve alongside operations simplification
 3. **Brain Enhancement (Phase 2) EXTENDED** - Now includes RAG guideline stores (Weeks 4-8 vs original 4-6)
-4. **Phase 3-6 shifted +2 weeks** - Accommodate RAG integration time (total timeline: 18 → 20 weeks)  
+4. **Phase 2-3 PARALLEL EXECUTION** - Brain enhancements don't block orchestrator migration (Phase 1 Brain interface sufficient)
+5. **Phase 3 started Week 7** - Overlaps with Phase 2 (Weeks 4-8) by design
+6. **Total timeline: 20 weeks** - Parallel execution reduces sequential dependency  
 
 ---
 
-## 🚨 CRITICAL: Foundation Prerequisites Summary
+## � Phase Dependency Matrix
+
+**Understanding Parallel Execution:**
+
+| Phase | Starts After | Hard Dependencies | Can Run Parallel With | Blocks |
+|-------|-------------|-------------------|----------------------|--------|
+| **Phase 0** | - | None | - | Phase 1 |
+| **Phase 1** | Phase 0 | None | - | All phases |
+| **Phase 1.5** | Phase 1 | Phase 1 items 1-8 | Phase 2 | Documentation tooling |
+| **Phase 2** | Phase 1 | Brain interface (Phase 1) | **Phase 3** ⚡ | Phase 4 (optional) |
+| **Phase 3** | Phase 1 | 10 foundation prerequisites | **Phase 2** ⚡ | Phase 4, 5 |
+| **Phase 4** | Phase 3 (80%+) | 6+ orchestrators migrated | - | Phase 5 |
+| **Phase 5** | Phase 4 | All 13 orchestrators | - | Phase 6 |
+| **Phase 6** | Phase 5 | Testing complete | - | GA release |
+
+**Why Phase 2-3 Can Run in Parallel:**
+
+✅ **Phase 1 Brain Interface is Sufficient:**
+- BaseOrchestrator uses BrainInterface (abstract base class)
+- Phase 2 enhancements (RAG, Security Agent) are additive, not breaking
+- Orchestrators don't need RAG/Security to function (optional features)
+
+✅ **Independent Work Streams:**
+- **Phase 2:** Brain schema changes, RAG infrastructure, Security Learning Agent
+- **Phase 3:** Orchestrator migration using existing Phase 1 foundation
+- **No cross-dependencies:** Orchestrators don't block brain work, brain work doesn't block orchestrators
+
+✅ **Resource Efficiency:**
+- Different skill sets (brain architecture vs orchestrator implementation)
+- Different codebases (cortex-brain/ vs src/orchestration_4_0/)
+- Parallel execution saves 4 weeks vs sequential
+
+**Current Status (Week 7 Day 5):**
+- ✅ Phase 1: Complete (10/10 prerequisites)
+- 🔄 Phase 2: 0% (starting Week 4, runs through Week 8)
+- 🔄 Phase 3: 25% (started Week 7, 2/13 orchestrators migrated)
+
+---
+
+## �🚨 CRITICAL: Foundation Prerequisites Summary
 
 **Before ANY orchestrator can be migrated, these 10 components MUST be complete on CORTEX-4.0 branch:**
 
@@ -260,9 +307,55 @@ python scripts/validate_cortex_4_foundation.py
 | Start Phase 1 foundation | Phase 0 complete | Directory structure exists |
 | Start Phase 2 brain work | Phase 1 items 1-8 | Brain interface tests pass |
 | **Start Phase 3 orchestrator migration** | **ALL 10 Phase 1 prerequisites** | **`validate_cortex_4_foundation.py` = 100% PASS** |
-| Start Phase 4 operations | 6+ orchestrators migrated | DI container operational |
-| Start Phase 5 testing | All 12 orchestrators migrated | Full test suite ready |
+| Start Phase 4 operations | Phase 3 > 80% (10+ orchestrators) | DI container operational |
+| Start Phase 5 testing | All 13 orchestrators migrated | Full test suite ready |
 | Start Phase 6 documentation | Phase 5 complete | Documentation tool tested |
+
+---
+
+## ✅ Phase Transition Validation Gates
+
+**Phase 1 → Phase 2/3 (PARALLEL):** ✅ PASSED (Week 3)
+- ✅ Validation script: 10/10 checks passing
+- ✅ Tests: 123/123 passing (100%)
+- ✅ Documentation: BaseOrchestrator auto-documented
+- ✅ Git: All Phase 1 work committed to CORTEX-4.0 branch
+- ✅ Coverage: 72.5% baseline established
+
+**Phase 2 → Phase 4:** ☐ PENDING (Week 8 End)
+- ☐ Brain centralization: operational with domain namespacing
+- ☐ RAG similarity search: <100ms p95 latency
+- ☐ Security Learning Agent: integration tests passing
+- ☐ guidelines.db: schema validated, 10+ sample guidelines loaded
+- ☐ Performance: No regression vs Phase 1 baseline
+
+**Phase 3 → Phase 4:** ☐ PENDING (Week 13 End)
+- ☐ Orchestrators migrated: 11+ of 14 (80%+ threshold)
+- ☐ All migrated orchestrators: 85%+ test coverage
+- ☐ Integration tests: All orchestrators pass end-to-end tests
+- ☐ No regressions: All operations from 3.0 still work
+- ☐ Git: All orchestrator migrations committed with progress updates
+
+**Phase 4 → Phase 5:** ☐ PENDING (Week 16 End)
+- ☐ All 14 orchestrators migrated
+- ☐ DI container: Auto-discovery operational
+- ☐ MCP Gateway: Dev Tools + ADO servers live
+- ☐ Manifest bloat: 6,760 → <1,000 lines (85% reduction)
+- ☐ Operations simplified: decorator-based registration working
+
+**Phase 5 → Phase 6:** ☐ PENDING (Week 19 End)
+- ☐ Test coverage: 90%+ all orchestrators
+- ☐ Performance: <10% regression vs 3.0 baseline
+- ☐ Backward compatibility: 100% verified
+- ☐ Load testing: 100 concurrent operations stable
+- ☐ Quality gates: All gates passing
+
+**Phase 6 → GA Release:** ☐ PENDING (Week 20 End)
+- ☐ Documentation: 200+ docs generated
+- ☐ D3.js diagrams: 60+ interactive visualizations
+- ☐ User acceptance: 3 sample repos validated
+- ☐ Migration guide: Complete and tested
+- ☐ Rollback plan: Tested and documented
 
 ---
 
@@ -650,12 +743,21 @@ src/orchestration_3_0/orchestrators/
 │   └── observability_orchestrator.py     # System health monitoring
 ├── onboarding/
 │   └── onboarding_orchestrator.py        # Developer onboarding automation
-└── sanitization/
-    └── (LEGACY: scripts/cli_wrappers/sanitize_wrapper.py + cortex-toolkit/core/operations/sanitize.py)
-    # 5-phase workflow: analyze → mapping → transform → validate → report
-    # Removes company-specific data while preserving functionality
-    # Manifest: cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml
+├── sanitization/
+│   └── (LEGACY: scripts/cli_wrappers/sanitize_wrapper.py + cortex-toolkit/core/operations/sanitize.py)
+│       # 5-phase workflow: analyze → mapping → transform → validate → report
+│       # Removes company-specific data while preserving functionality
+│       # Manifest: cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml
+└── security/
+    └── security_learning_orchestrator.py  # OWASP/CWE/Compliance enforcement (14th orchestrator, NEW)
 ```
+
+**Security Learning Agent Classification:**
+- **Status:** 14th orchestrator (not integrated into QAOrchestrator)
+- **Rationale:** Security requires dedicated focus with specialized knowledge base
+- **Integration:** Phase 2 Week 7 (OWASP/CWE data loading)
+- **Dependencies:** RAG infrastructure (guidelines.db for security patterns)
+- **Capabilities:** Threat modeling, vulnerability detection, compliance automation
 
 **Legacy Orchestrators (Consolidation Required):**
 
@@ -843,14 +945,35 @@ CORTEX 4.0 Core
   Git/Docker  Boards   Jira/Teams   SAST/Vault
 ```
 
+**MCP Gateway Evolution Timeline:**
+
+| Phase | Week | Status | Capabilities |
+|-------|------|--------|--------------|
+| **Stub** | Week 3 | ✅ Complete | Routing only, no real tools |
+| **Minimal** | Week 14 | ☐ Planned | Dev Tools Server (git, docker, pytest) |
+| **Standard** | Week 15 | ☐ Planned | + ADO Server (boards, work items) |
+| **Full** | Week 16 | ☐ Planned | + Enterprise + Security servers |
+
+**Phase 1 Stub (Current):**
+- ✅ MCP protocol parser (JSON-RPC 2.0)
+- ✅ Tool routing infrastructure
+- ✅ Error handling framework
+- ❌ No actual tool implementations (returns mock data)
+- **Purpose:** Validate architecture, enable Phase 3 orchestrators to use MCP interface
+
+**Phase 4 Evolution:**
+- **Week 14:** Dev Tools Server (replace git/docker/pytest wrappers)
+- **Week 15:** ADO Server (boards, work items, PR integration)
+- **Week 16:** Enterprise Server (Jira, Teams) + Security Server (SAST, secrets)
+
 **Implementation:**
 ```
 src/mcp/
 ├── gateway/
-│   ├── mcp_gateway.py                # Main router
-│   ├── auth_manager.py               # Tool-level authorization
-│   ├── circuit_breaker.py            # Fault tolerance
-│   └── load_balancer.py              # Multi-server distribution
+│   ├── mcp_gateway.py                # Main router (✅ stub, full in Phase 4)
+│   ├── auth_manager.py               # Tool-level authorization (☐ Phase 4)
+│   ├── circuit_breaker.py            # Fault tolerance (☐ Phase 4)
+│   └── load_balancer.py              # Multi-server distribution (☐ Phase 4)
 ├── servers/
 │   ├── dev_tools_server.py           # Git, Docker, pytest, etc.
 │   ├── ado_server.py                 # Azure DevOps
@@ -875,14 +998,22 @@ src/mcp/
 
 ### 1.5. Cross-IDE Compatibility (VSCode + Visual Studio)
 
+**Phase Ownership:** Phase 4 (Week 14-16) - IDE detection already implemented in Phase 1
+
 **Principle:** CORTEX 4.0 operates seamlessly in both VSCode and Visual Studio, with intelligent file separation based on IDE context detection.
 
 **Design Philosophy:**
 - **Unified Core** - CORTEX brain, orchestrators, and agents work identically in both IDEs
 - **IDE-Specific Configurations** - Separate settings/extensions for each IDE without conflicts
-- **Context Detection** - Auto-detect active IDE and adapt behavior
+- **Context Detection** - Auto-detect active IDE and adapt behavior (✅ implemented in Phase 1)
 - **Shared Brain** - Single brain instance regardless of IDE (no duplication)
 - **No Lock-In** - Developers can switch IDEs mid-project without migration
+
+**Implementation Status:**
+- ✅ **Phase 1:** IDE detection (`src/core/config/ide_detector.py`)
+- ☐ **Phase 4:** File separation validation (`.vscode/` vs `.vs/`)
+- ☐ **Phase 4:** Cross-IDE testing (VSCode + Visual Studio validation)
+- ☐ **Phase 5:** Integration tests (switch IDE mid-project scenarios)
 
 **Architecture: Intelligent File Separation**
 
@@ -3180,16 +3311,51 @@ class PhaseExecution:
 
 ---
 
-### Phase 1: Foundation (Weeks 1-3) - MCP Gateway + DI Container + Documentation Engine
+### Phase 2: Brain Enhancement + RAG + Security (Weeks 4-8) - RUNS PARALLEL WITH PHASE 3
+
+**Goal:** Enhance brain with multi-domain support, RAG guideline stores, and security intelligence
+
+**Timeline Breakdown:**
+
+| Week | Focus | Deliverables | Status |
+|------|-------|--------------|--------|
+| **Week 4** | Brain Schema Updates | Domain namespacing, privacy controls | ☐ 0% |
+| **Week 5** | Hybrid Centralization | Shared Tier 2, isolated Tier 1/3 | ☐ 0% |
+| **Week 6** | RAG Infrastructure | guidelines.db schema, embedding pipeline | ☐ 0% |
+| **Week 7** | Security Learning Agent | OWASP/CWE integration, pattern detection | ☐ 0% |
+| **Week 8** | RAG Validation | Semantic search, performance tuning | ☐ 0% |
+
+**Deliverables:**
+1. ☐ Brain schema with domain namespacing (`company.{domain}.{category}.{pattern}`)
+2. ☐ Privacy controls (default private, opt-in sharing, PII/PHI/PCI blocking)
+3. ☐ guidelines.db with semantic search (<100ms p95)
+4. ☐ Security Learning Agent (14th orchestrator or QA integration)
+5. ☐ RAG embedding pipeline (sentence-transformers, 384-dim vectors)
+6. ☐ Domain isolation validation (RA/FSA/HSA/Commuter namespaces)
+7. ☐ Performance benchmarks (no regression vs Phase 1)
+
+**Parallel Execution Rationale:**
+- Phase 2 work is independent of Phase 3 orchestrator migration
+- Phase 1 Brain interface sufficient for orchestrators
+- RAG and Security Agent are optional enhancements (not blocking)
+
+---
+
+### Phase 1: Foundation (Weeks 1-3) - ✅ COMPLETE
 
 **Goal:** Establish core infrastructure without breaking existing functionality
 
 **Deliverables:**
-1. MCP Gateway implementation
-2. Dependency Injection container
-3. Dev Tools MCP Server (Git, Docker, pytest)
-4. Backward compatibility layer (old wrappers → MCP)
-5. **CRITICAL:** Minimum foundation for Phase 3 orchestrator migration
+1. ✅ MCP Gateway stub (routing only, full implementation Phase 4)
+2. ✅ Dependency Injection container
+3. ✅ Response Templates v4.0 (adaptive minimalism)
+4. ✅ Configuration system with IDE detection
+5. ✅ Testing infrastructure (pytest + fixtures)
+6. ✅ Logging system with rotating handlers
+7. ✅ Brain interface (BrainInterface abstract base)
+8. ✅ BaseOrchestrator framework
+9. ✅ PhaseManager for orchestration
+10. ✅ Validation script (10/10 checks passing)
 
 ---
 
@@ -5348,7 +5514,7 @@ See "Git Commit Policy" section above for commit message format.
 
 | Metric | Current (3.0) | Target (4.0) | Measurement |
 |--------|---------------|--------------|-------------|
-| **Orchestrator Count** | 28+ scattered | 12 consolidated | 57% reduction |
+| **Orchestrator Count** | 28+ scattered | 14 consolidated | 50% reduction |
 | **Manifest Size** | 6,760 lines YAML | 500 lines YAML | 93% reduction |
 | **Test Coverage** | ~60% | 85%+ | pytest --cov |
 | **Tests Co-located** | 0% | 100% | All orchestrators have tests/ |
@@ -5404,8 +5570,8 @@ See "Git Commit Policy" section above for commit message format.
 
 **Phase-Specific Rollback:**
 - **Phase 1:** MCP compatibility layer allows old code to work
-- **Phase 2:** Brain migration is opt-in, no forced changes
-- **Phase 3:** Orchestrators migrate one-by-one, old ones still work
+- **Phase 2:** Brain enhancements are additive, no breaking changes to Phase 1 interface
+- **Phase 3:** Orchestrators migrate one-by-one, old 3.0 orchestrators still work via compatibility layer
 - **Phase 4:** Operations YAML reduction doesn't affect functionality
 - **Phase 5:** Testing phase, no production impact
 
