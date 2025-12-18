@@ -29,9 +29,9 @@
 │ PHASE 1.5: Documentation & Visualization                  [░░░░░░░░░░░░]   0% │
 │ Week 3: Auto-generation Tool & D3.js Framework           [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 2: Brain Enhancement + RAG                          [░░░░░░░░░░░░]   0% │
-│ Week 4-5: Hybrid Centralization                          [░░░░░]  0%         │
-│ Week 6-8: RAG Guideline Content Stores                   [░░░░░]  0%         │
+│ PHASE 2: Brain Enhancement + RAG + Security               [░░░░░░░░░░░░]   0% │
+│ Week 4-5: Hybrid Centralization + Security Schema       [░░░░░]  0%         │
+│ Week 6-8: RAG + Security Knowledge Stores (Parallel)    [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ PHASE 3: Orchestrator Consolidation                       [███░░░░░░░░░]  25% │
 │ Week 7 Days 1-3: ExecutionOrchestrator (COMPLETE)       [█████]  100% ✅ DONE│
@@ -42,9 +42,11 @@
 │ Week 10: Maintenance + QA + DevOps                      [░░░░░]  0%         │
 │ Week 11: Observability + Intelligence + Onboarding      [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 4: Operations Simplification                        [░░░░░░░░░░░░]   0% │
-│ Week 14-15: MCP Gateway & DI Container                   [░░░░░]  0%         │
-│ Week 16: Manifest Reduction                              [░░░░░]  0%         │
+│ PHASE 4: Operations Simplification + Universal Adapters   [░░░░░░░░░░░░]   0% │
+│ Week 12-13: @orchestrator decorator & DI auto-discovery [░░░░░]  0%         │
+│ Week 14: Adapter interfaces + AdapterRegistry           [░░░░░]  0%         │
+│ Week 15: Core adapters (test frameworks, logging)       [░░░░░]  0%         │
+│ Week 16: Additional adapters + orchestrator integration [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ PHASE 5: Testing & Validation                             [░░░░░░░░░░░░]   0% │
 │ Week 17-18: Comprehensive Testing                        [░░░░░]  0%         │
@@ -60,8 +62,11 @@
 ├─ ✅ First Orchestrator Migrated (Week 7 Days 1-3) - ExecutionOrchestrator ✅ COMPLETE
 ├─ ✅ Self-Documentation Active (Week 7 Day 5) - DocumentationOrchestrator ✅ COMPLETE
 ├─ ☐ TDD Orchestrator Complete (Week 7 Day 7)
-├─ ☐ Planning System Migrated (Week 8 End)
+├─ ☐ Security Patterns Schema Complete (Week 4) - NEW: Security Learning Agent
+├─ ☐ OWASP/CWE Data Loaded (Week 8) - NEW: Security knowledge base operational
+├─ ☐ Planning System Migrated + Security Gates (Week 8 End)
 ├─ ☐ RAG Integration Live (Week 8)
+├─ ☐ QA Security Audit Phase (Week 10) - NEW: Compliance automation
 ├─ ☐ 90%+ Test Coverage (Week 19)
 └─ ☐ CORTEX 4.0 GA Release (Week 20)
 
@@ -154,15 +159,16 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **MCP Server Architecture** - Pluggable tool ecosystem replacing hardcoded wrappers
 - **Enhanced Brain** - Multi-domain architecture with privacy controls (RA/FSA/HSA/Commuter) + RAG-inspired guideline content stores
 - **Domain Guideline Stores** - User-created knowledge bases with semantic search (NEW - RAG-inspired)
-- **Semantic Retrieval** - Embedding-based search for domain-specific guidelines (NEW)
+- **Security Learning Agent** - OWASP/CWE/Compliance enforcement with tech stack awareness (NEW - APPROVED Dec 18, 2025)
+- **Semantic Retrieval** - Embedding-based search for domain-specific guidelines + security patterns (NEW)
 - **Bloat Reduction** - Permanent wiring via dependency injection, eliminate manifest bloat
 - **Clean Orchestrator Structure** - Co-located tests, TDD-first development
 - **Unified Operations** - Consolidate 28+ orchestrators into 13 total (11 core + 2 specialized)
-- **Agent Integration** - Streamline 18 agents into 12 active (7 independent + 4 brain integrations + 1 deprecated)
+- **Agent Integration** - Streamline 18 agents into 13 active (7 independent + 5 brain integrations + 1 security + 1 deprecated)
 - **CORTEX Lens v2.0** - MCP-integrated intelligence platform with streaming analysis, AI narratives, brain integration
 - **Technical Documentation System** - Auto-generated docs with 60+ interactive D3.js diagrams
 - **Multi-Domain Support** - Enterprise-grade domain isolation with selective knowledge sharing (NEW)
-- **RAG-Inspired Content Stores** - User-uploaded guideline documents with semantic search (NEW)
+- **RAG-Inspired Content Stores** - User-uploaded guideline documents + security patterns with semantic search (NEW)
 - **Cross-IDE Support** - Seamless operation in VSCode + Visual Studio with intelligent file separation (NEW)
 
 **Timeline:** 20 weeks (5 months including Phase 0 cleanup + RAG integration)  
@@ -173,6 +179,7 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 
 **Architecture References:**
 - **Planning Orchestrator Redesign** - See analysis in `.github/copilot/copilot-chats/chat01.md`
+- **Security Learning Agent Integration** - See `SECURITY-LEARNING-INTEGRATION-SPEC.md` (APPROVED Dec 18, 2025)
 - **TDD Mastery Orchestrator Redesign** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/TDD-ORCHESTRATOR-REDESIGN.md`
 - **CORTEX Lens v2.0 Architecture** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX-LENS-ARCHITECTURE-REDESIGN.md`
   - **Phase A Technical Specs (Streaming Pipeline)** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX-LENS-PHASE-A-SPECS.md`
@@ -193,7 +200,7 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **Phase 0 (Week 0):** Pre-Migration Cleanup - Eliminate bloat + Technical documentation structure  
 - **Phase 1 (Weeks 1-3):** Foundation - Base orchestrator, brain, DI, response templates v4.0, testing (CRITICAL)
 - **Phase 1.5 (Week 3):** Documentation & Visualization Framework - Auto-generation tool  
-- **Phase 2 (Weeks 4-8):** Brain Enhancement - Hybrid centralization + RAG-inspired guideline content stores (EXTENDED)
+- **Phase 2 (Weeks 4-8):** Brain Enhancement - Hybrid centralization + RAG guideline stores + Security Learning Agent (EXTENDED)
 - **Phase 3 (Weeks 9-13):** Orchestrator Consolidation - Migrate 13 orchestrators (11 core + 2 specialized) (requires Phase 1 complete)
 - **Phase 4 (Weeks 14-16):** Operations Simplification - DI container and manifest reduction
 - **Phase 5 (Weeks 17-19):** Testing & Validation - Comprehensive testing and quality gates
@@ -4210,17 +4217,20 @@ python scripts/validate_cortex_4_foundation.py
 - [ ] Tag release: `git tag v4.0.0-phase3-complete`
 - [ ] Verify no uncommitted changes: `git status`
 
-### Phase 4: Operations Simplification (Weeks 12-14) - Manifest Reduction
+### Phase 4: Operations Simplification (Weeks 12-16) - Manifest Reduction + Universal Adapters
 
-**Goal:** Replace cortex-operations.yaml with DI container auto-discovery
+**Goal:** Replace cortex-operations.yaml with DI container auto-discovery + Universal Adapter System for tech-stack agnosticism
 
 **Deliverables:**
 1. `@orchestrator` decorator for auto-registration
 2. Metadata-only YAML (500 lines vs 6,760)
 3. Dynamic operation routing via DI container
 4. Backward compatibility for natural language commands
+5. **Universal Adapter System** - ITestFrameworkAdapter, ILoggingAdapter, IFeatureFlagAdapter, IBuildToolAdapter interfaces with 30+ implementations
+6. AdapterRegistry with dynamic loading and user extensibility
+7. Configuration-driven tech stack selection via `cortex.config.json`
 
-**Tasks:**
+**Tasks (Weeks 12-13: Operations Simplification):**
 - [ ] Implement `@orchestrator` decorator
 - [ ] Auto-discovery system for decorated classes
 - [ ] Reduce `cortex-operations.yaml` to metadata only
@@ -4229,22 +4239,97 @@ python scripts/validate_cortex_4_foundation.py
 - [ ] Write 30 tests for auto-discovery, routing
 - [ ] Migration guide for custom operations
 
+**Tasks (Week 14: Universal Adapter Interfaces + MCP Gateway Enhancement):**
+- [ ] Design and implement ITestFrameworkAdapter interface (protocol class with execute_tests, parse_results, get_coverage methods)
+- [ ] Design and implement ILoggingAdapter interface (protocol class with parse_logs, extract_errors, sanitize_pii methods)
+- [ ] Design and implement IFeatureFlagAdapter interface (protocol class with initialize, get_flag, get_variant, track_event methods)
+- [ ] Design and implement IBuildToolAdapter interface (protocol class with build, test, publish methods)
+- [ ] Create AdapterRegistry class with dynamic loading (auto-discovery from src/adapters/ directory)
+- [ ] Implement adapter validation (ensure all required methods present at registration)
+- [ ] Add adapter metadata system (name, version, supported_languages, configuration_schema)
+- [ ] Enhance MCP Gateway to support adapter routing
+- [ ] Write 20 tests for adapter interfaces and registry
+
+**Tasks (Week 15: Core Adapter Implementations):**
+- [ ] **Test Framework Adapters (8 implementations):**
+  - [ ] xUnit adapter (C#): dotnet test execution + trx file parsing
+  - [ ] pytest adapter (Python): pytest execution + json report parsing
+  - [ ] JUnit adapter (Java): maven test + surefire report parsing
+  - [ ] Jest adapter (JavaScript): jest execution + json report parsing
+  - [ ] GoTest adapter (Go): go test execution + json output parsing
+  - [ ] RSpec adapter (Ruby): rspec execution + json formatter parsing
+  - [ ] Mocha adapter (JavaScript): mocha execution + json reporter parsing
+  - [ ] NUnit adapter (C#): nunit3-console execution + xml report parsing
+- [ ] **Logging Framework Adapters (8 implementations):**
+  - [ ] NLog adapter (C#): JSON format log parsing
+  - [ ] Serilog adapter (C#): JSON format log parsing with structured properties
+  - [ ] log4j adapter (Java): XML/JSON format log parsing
+  - [ ] log4net adapter (C#): XML format log parsing
+  - [ ] Winston adapter (JavaScript/TypeScript): JSON format log parsing
+  - [ ] zap adapter (Go): JSON format log parsing with structured logging
+  - [ ] logrus adapter (Go): JSON format log parsing
+  - [ ] Structured JSON adapter (universal): Generic JSON log parser for any framework
+- [ ] Write 40 tests for test framework adapters (5 tests per adapter)
+- [ ] Write 40 tests for logging adapters (5 tests per adapter)
+
+**Tasks (Week 16: Additional Adapters + Orchestrator Integration):**
+- [ ] **Feature Flag Adapters (6 implementations):**
+  - [ ] LaunchDarkly adapter: SDK integration for .NET, Python, Java, Node.js
+  - [ ] Unleash adapter: REST API integration for all languages
+  - [ ] ConfigCat adapter: REST API integration for all languages
+  - [ ] Split.io adapter: SDK integration for supported languages
+  - [ ] Flagsmith adapter: REST API integration for all languages
+  - [ ] EnvVar adapter: Environment variable fallback (universal)
+- [ ] **Build Tool Adapters (8 implementations):**
+  - [ ] dotnet adapter (C#): dotnet build, test, publish commands
+  - [ ] maven adapter (Java): mvn clean, compile, test, package commands
+  - [ ] gradle adapter (Java): gradle build, test, jar commands
+  - [ ] npm adapter (JavaScript): npm install, build, test, publish commands
+  - [ ] yarn adapter (JavaScript): yarn install, build, test, publish commands
+  - [ ] cargo adapter (Rust): cargo build, test, publish commands
+  - [ ] go adapter (Go): go build, test, install commands
+  - [ ] pip adapter (Python): pip install, build (setup.py), pytest integration
+- [ ] Integrate adapters with TDDOrchestrator (test execution via ITestFrameworkAdapter)
+- [ ] Integrate adapters with ObservabilityOrchestrator (metrics collection via ITestFrameworkAdapter)
+- [ ] Integrate adapters with IntelligenceOrchestrator (log parsing via ILoggingAdapter, defect correlation)
+- [ ] Integrate adapters with PlanningOrchestrator (feature flag awareness via IFeatureFlagAdapter)
+- [ ] Update `cortex.config.template.json` with tech_stack section (language, test_framework, build_tool, logging_framework, feature_flag_provider)
+- [ ] Add configuration validation on startup (verify selected adapters exist and are valid)
+- [ ] Write 30 tests for feature flag adapters (5 tests per adapter)
+- [ ] Write 40 tests for build tool adapters (5 tests per adapter)
+- [ ] Write 20 integration tests for orchestrator-adapter interactions
+- [ ] Create ADAPTER-DEVELOPMENT-GUIDE.md (how users create custom adapters)
+
 **Reduction:**
 ```
 Before: 6,760 lines (operations + modules + wiring + profiles)
 After:  500 lines (descriptions + examples only)
         Wiring → DI Container (code)
+        
+Universal Adapter System:
+New Code: ~10,000 LOC across 40+ files
+  - 4 adapter interfaces (200 LOC each = 800 LOC)
+  - 30 adapter implementations (200 LOC each = 6,000 LOC)
+  - AdapterRegistry (500 LOC)
+  - Orchestrator integrations (1,500 LOC)
+  - Tests (1,200 LOC)
 ```
 
 **🔄 Phase 4 Cleanup Cycle:**
 - [ ] Run `pytest tests/di/` - Validate DI container tests pass
 - [ ] Run `pytest tests/operations/` - Verify operations routing works
+- [ ] Run `pytest tests/adapters/` - Validate all 30+ adapters pass unit tests (180+ tests)
+- [ ] Run `pytest tests/adapters/integration/` - Verify orchestrator-adapter integration tests pass (20+ tests)
 - [ ] Run `system maintenance` - Clean up old operation YAML files
 - [ ] Test backward compatibility - All 27 operations from 3.0 work via DI
-- [ ] Run `align` - Verify @orchestrator decorator registrations correct
-- [ ] Run `healthcheck` - Ensure DI auto-discovery is stable
+- [ ] Test universal adapter system - Execute tests with xUnit, pytest, JUnit, Jest in sample projects
+- [ ] Test tech stack switching - Change `cortex.config.json` tech_stack and verify CORTEX adapts (zero code changes)
+- [ ] Run `align` - Verify @orchestrator decorator registrations + adapter registrations correct
+- [ ] Run `healthcheck` - Ensure DI auto-discovery and AdapterRegistry are stable
 - [ ] Verify manifest reduction: 6,760 → 500 lines (93% reduction)
-- [ ] Commit checkpoint: "Phase 4 complete: Operations simplified with DI"
+- [ ] Verify adapter development guide created: `cortex-brain/documents/implementation-guides/ADAPTER-DEVELOPMENT-GUIDE.md`
+- [ ] Verify config template updated: `cortex.config.template.json` has tech_stack section with examples
+- [ ] Commit checkpoint: "Phase 4 complete: Operations simplified with DI + Universal Adapter System"
 - [ ] Tag release: `git tag v4.0.0-phase4-complete`
 - [ ] Verify no uncommitted changes: `git status`
 
