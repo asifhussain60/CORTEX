@@ -42,6 +42,10 @@ class TierSelector:
             # Success responses are always TIER 4 (COMPREHENSIVE)
             return ResponseTier.COMPREHENSIVE
         
+        # Edge case: Empty request defaults to TIER 4
+        if not context.request or context.request.strip() == "":
+            return ResponseTier.COMPREHENSIVE
+        
         # TIER 1: Instant responses for factual queries
         if self._is_tier1_instant(context):
             return ResponseTier.INSTANT
@@ -54,13 +58,17 @@ class TierSelector:
         if self._is_tier3_structured(context):
             return ResponseTier.STRUCTURED
         
-        # TIER 4: Comprehensive responses (default)
+        # TIER 4: Comprehensive responses (default for unknown/complex)
         return ResponseTier.COMPREHENSIVE
     
     def _is_tier1_instant(self, context: TemplateContext) -> bool:
         """Check if request qualifies for TIER 1 (INSTANT)"""
         tier1_config = self.routing.get("tier1_instant", {})
         triggers = tier1_config.get("triggers", {})
+        
+        # Zero tokens defaults to higher tier (not instant)
+        if context.estimated_tokens == 0:
+            return False
         
         # Check for question words
         question_words = triggers.get("question_words", [])
@@ -75,9 +83,9 @@ class TierSelector:
         token_limit = self._parse_token_limit(token_limit_str)
         within_token_limit = context.estimated_tokens > 0 and context.estimated_tokens < token_limit
         
-        # Must have question word OR be marked factual, AND be within token limit
-        if (has_question_word or is_factual) and (within_token_limit or context.estimated_tokens == 0):
-            return not context.requires_explanation
+        # Must have question word OR be marked factual, AND be within token limit, AND no explanation needed
+        if (has_question_word or is_factual) and within_token_limit and not context.requires_explanation:
+            return True
         
         return False
     
@@ -85,6 +93,10 @@ class TierSelector:
         """Check if request qualifies for TIER 2 (FOCUSED)"""
         tier2_config = self.routing.get("tier2_focused", {})
         triggers = tier2_config.get("triggers", {})
+        
+        # Zero tokens defaults to higher tier (not focused)
+        if context.estimated_tokens == 0:
+            return False
         
         # Check for single concept
         is_single_concept = context.is_single_concept or triggers.get("single_concept", False)
@@ -100,7 +112,7 @@ class TierSelector:
         sections_range = triggers.get("sections_needed", [1, 2])
         needs_few_sections = not context.has_architecture and not context.has_technical_depth
         
-        return is_single_concept and (within_range or context.estimated_tokens == 0) and needs_few_sections
+        return is_single_concept and within_range and needs_few_sections
     
     def _is_tier3_structured(self, context: TemplateContext) -> bool:
         """Check if request qualifies for TIER 3 (STRUCTURED)"""
@@ -117,11 +129,19 @@ class TierSelector:
         else:
             within_range = 200 <= context.estimated_tokens < 600
         
-        # Check sections needed
-        sections_range = triggers.get("sections_needed", [2, 4])
-        has_moderate_sections = context.has_modifications or context.requires_explanation
+        # Check for technical depth or architecture
+        has_depth = (context.has_modifications or context.requires_explanation or 
+                    context.has_technical_depth or context.has_architecture)
         
-        return is_multi_faceted and (within_range or context.estimated_tokens == 0) and has_moderate_sections
+        # TIER 3 if: multi-faceted AND within token range (or unknown tokens with depth)
+        if is_multi_faceted and within_range:
+            return True
+        
+        # Also TIER 3 if has depth and reasonable token estimate
+        if context.estimated_tokens == 0 and is_multi_faceted and has_depth:
+            return True
+            
+        return False
     
     def _parse_token_limit(self, limit_str: str) -> int:
         """Parse token limit string like '< 50' or '[50, 200]'"""
