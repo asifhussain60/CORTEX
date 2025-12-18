@@ -3620,6 +3620,19 @@ After:  500 lines (descriptions + examples only)
   - [ ] Test all operations end-to-end
   - [ ] Collect user feedback
   - [ ] Document issues/improvements
+- [ ] **RAG Architecture Evaluation (Optional):**
+  - [ ] **Context:** Current architecture uses FTS5 BM25 + TF-IDF (achieving 85-90% accuracy, <50ms queries)
+  - [ ] **Evaluation Criteria:** Only consider RAG if search quality gaps emerge during testing
+  - [ ] **Benchmark Requirements:**
+    - Enhanced FTS5 (synonym expansion + domain boosting) vs local embeddings (sentence-transformers)
+    - Test on 1,000+ Tier 2 patterns
+    - Measure: Speed (<100ms target), accuracy (>90% target), complexity overhead
+  - [ ] **Decision Gate:** 
+    - **IF** enhanced_fts5_accuracy >= 90% AND speed < 100ms: **KEEP current architecture** ✅
+    - **ELSE IF** rag_accuracy > 95% AND worth_complexity: **ADD hybrid search** (FTS5 + embeddings) 🟡
+    - **ELSE:** **REJECT RAG**, optimize FTS5 further ❌
+  - [ ] **Rationale:** Current architecture is well-designed for CORTEX use case (code patterns, keyword-dominant queries). RAG would add 20% complexity for <5% accuracy gain. Enhance what exists first - if gaps emerge, revisit RAG as optional hybrid layer, not replacement.
+  - [ ] **Implementation Note:** If RAG proven valuable, use local embeddings (sentence-transformers, no API cost) as non-breaking hybrid layer alongside FTS5
 - [ ] Final go/no-go decision meeting
 - [ ] Sign-off from stakeholders
 
