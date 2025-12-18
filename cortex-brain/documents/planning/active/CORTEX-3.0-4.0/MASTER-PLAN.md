@@ -1,11 +1,13 @@
 # CORTEX 3.0 → 4.0 Migration Master Plan
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Author:** Asif Hussain  
 **Created:** December 17, 2025  
+**Updated:** December 18, 2025  
 **Approved:** December 17, 2025  
 **Status:** 🟢 APPROVED - Ready for Phase 0 Implementation  
-**Branch Strategy:** CORTEX-3.0 (source) → CORTEX-4.0 (target)
+**Branch Strategy:** CORTEX-3.0 (source) → CORTEX-4.0 (target)  
+**IDE Compatibility:** ✅ VSCode + Visual Studio (Intelligent Separation)
 
 ---
 
@@ -22,6 +24,7 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **CORTEX Lens v2.0** - MCP-integrated intelligence platform with streaming analysis, AI narratives, brain integration
 - **Technical Documentation System** - Auto-generated docs with 60+ interactive D3.js diagrams
 - **Multi-Domain Support** - Enterprise-grade domain isolation with selective knowledge sharing (NEW)
+- **Cross-IDE Support** - Seamless operation in VSCode + Visual Studio with intelligent file separation (NEW)
 
 **Timeline:** 18 weeks (4.5 months including Phase 0 cleanup + documentation)  
 **Risk Level:** 🟡 MEDIUM  
@@ -34,6 +37,7 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **TDD Mastery Orchestrator Redesign** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/TDD-ORCHESTRATOR-REDESIGN.md`
 - **CORTEX Lens v2.0 Architecture** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX-LENS-ARCHITECTURE-REDESIGN.md`
   - **Phase A Technical Specs (Streaming Pipeline)** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX-LENS-PHASE-A-SPECS.md`
+- **IDE Compatibility Architecture** - See Section 1.5 (VSCode + Visual Studio intelligent separation)
 
 **Critical Path to First Orchestrator Migration:**
 1. **Week 0:** Phase 0 cleanup + technical documentation structure setup
@@ -68,7 +72,7 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 2. ✅ **Base Orchestrator Framework** - BaseOrchestrator, PhaseManager, ErrorHandler (3 classes)
 3. ✅ **Brain Tiers** - All 4 tiers migrated with BrainInterface
 4. ✅ **Response Template System v4.0** - TemplateManager + 4-tier adaptive templates (500 lines max)
-5. ✅ **Configuration System** - cortex.config.json updated + ConfigManager
+5. ✅ **Configuration System** - cortex.config.json updated + ConfigManager + IDE detection
 6. ✅ **Testing Infrastructure** - pytest + fixtures + conftest.py (CORTEX INTERNAL TESTS ONLY)
 7. ✅ **Dependency Injection** - CortexContainer + @orchestrator decorator
 8. ✅ **Logging & Monitoring** - Standardized logger setup
@@ -718,6 +722,261 @@ src/mcp/
 - ✅ Centralized governance (audit all tool calls)
 - ✅ Consistent error handling
 - ✅ Easy to test (mock MCP servers)
+
+### 1.5. Cross-IDE Compatibility (VSCode + Visual Studio)
+
+**Principle:** CORTEX 4.0 operates seamlessly in both VSCode and Visual Studio, with intelligent file separation based on IDE context detection.
+
+**Design Philosophy:**
+- **Unified Core** - CORTEX brain, orchestrators, and agents work identically in both IDEs
+- **IDE-Specific Configurations** - Separate settings/extensions for each IDE without conflicts
+- **Context Detection** - Auto-detect active IDE and adapt behavior
+- **Shared Brain** - Single brain instance regardless of IDE (no duplication)
+- **No Lock-In** - Developers can switch IDEs mid-project without migration
+
+**Architecture: Intelligent File Separation**
+
+```
+user-project/                             # User's repository
+├── .vscode/                              # VSCode-specific (Git: IGNORE)
+│   ├── settings.json                     # VSCode editor settings
+│   ├── tasks.json                        # VSCode tasks
+│   ├── launch.json                       # VSCode debug configs
+│   ├── extensions.json                   # VSCode extension recommendations
+│   └── cortex.code-snippets              # VSCode snippets (CORTEX-aware)
+│
+├── .vs/                                  # Visual Studio-specific (Git: IGNORE)
+│   ├── config/                           # VS solution config
+│   ├── slnx.sqlite                       # VS workspace database
+│   └── cortex/                           # CORTEX integration for VS
+│       ├── settings.json                 # VS-specific CORTEX settings
+│       └── tasks.json                    # VS-specific task definitions
+│
+├── cortex-brain/                         # CORTEX brain (Git: COMMIT)
+│   ├── ide-context.json                  # IDE detection state
+│   ├── tier1/conversations.db            # Shared conversation history
+│   ├── tier3/git_metrics.db              # Shared git metrics
+│   └── config/
+│       ├── vscode.config.json            # VSCode-specific CORTEX config
+│       ├── visualstudio.config.json      # Visual Studio-specific config
+│       └── shared.config.json            # IDE-agnostic config (default)
+│
+└── .cortexignore                         # IDE-specific exclusions
+```
+
+**IDE Context Detection:**
+
+```python
+# src/core/ide_detector.py
+from enum import Enum
+from pathlib import Path
+import os
+
+class IDEType(Enum):
+    VSCODE = "vscode"
+    VISUAL_STUDIO = "visualstudio"
+    RIDER = "rider"
+    UNKNOWN = "unknown"
+
+class IDEDetector:
+    """Detect active IDE and load appropriate configuration."""
+    
+    @staticmethod
+    def detect_current_ide() -> IDEType:
+        """Auto-detect IDE from environment variables and process context."""
+        # Check environment variables
+        if os.getenv("VSCODE_PID") or os.getenv("TERM_PROGRAM") == "vscode":
+            return IDEType.VSCODE
+        
+        if os.getenv("VisualStudioVersion") or os.getenv("VSAPPIDNAME"):
+            return IDEType.VISUAL_STUDIO
+        
+        if os.getenv("RIDER_VERSION"):
+            return IDEType.RIDER
+        
+        # Check workspace markers
+        cwd = Path.cwd()
+        if (cwd / ".vscode").exists():
+            return IDEType.VSCODE
+        
+        if (cwd / ".vs").exists() or any(cwd.glob("*.sln")):
+            return IDEType.VISUAL_STUDIO
+        
+        return IDEType.UNKNOWN
+    
+    @staticmethod
+    def get_config_path(base_path: Path, ide: IDEType) -> Path:
+        """Get IDE-specific configuration path."""
+        config_map = {
+            IDEType.VSCODE: base_path / "config" / "vscode.config.json",
+            IDEType.VISUAL_STUDIO: base_path / "config" / "visualstudio.config.json",
+            IDEType.RIDER: base_path / "config" / "rider.config.json",
+            IDEType.UNKNOWN: base_path / "config" / "shared.config.json"
+        }
+        return config_map.get(ide, config_map[IDEType.UNKNOWN])
+    
+    @staticmethod
+    def get_settings_template(ide: IDEType) -> dict:
+        """Get IDE-specific settings template."""
+        if ide == IDEType.VSCODE:
+            return {
+                "cortex.pythonPath": "${workspaceFolder}/.venv/bin/python",
+                "cortex.autoSave": True,
+                "cortex.brainPath": "${workspaceFolder}/cortex-brain",
+                "cortex.enableCopilotIntegration": True,
+                "cortex.debugMode": False
+            }
+        elif ide == IDEType.VISUAL_STUDIO:
+            return {
+                "CortexPythonPath": "$(SolutionDir).venv\\Scripts\\python.exe",
+                "CortexAutoSave": True,
+                "CortexBrainPath": "$(SolutionDir)cortex-brain",
+                "CortexDebugMode": False
+            }
+        return {}
+```
+
+**Configuration Inheritance:**
+
+```python
+# src/core/config_manager.py
+class ConfigManager:
+    """Manage IDE-specific and shared configuration."""
+    
+    def __init__(self, workspace_root: Path):
+        self.workspace_root = workspace_root
+        self.ide = IDEDetector.detect_current_ide()
+        self.brain_path = workspace_root / "cortex-brain"
+        
+        # Load configurations in priority order:
+        # 1. IDE-specific config (highest priority)
+        # 2. Shared config (fallback)
+        # 3. Default config (hardcoded defaults)
+        self.config = self._load_config()
+    
+    def _load_config(self) -> dict:
+        """Load configuration with IDE-specific overrides."""
+        # Start with defaults
+        config = self._get_defaults()
+        
+        # Load shared config
+        shared_path = self.brain_path / "config" / "shared.config.json"
+        if shared_path.exists():
+            config.update(json.loads(shared_path.read_text()))
+        
+        # Load IDE-specific config (overrides shared)
+        ide_path = IDEDetector.get_config_path(self.brain_path, self.ide)
+        if ide_path.exists():
+            config.update(json.loads(ide_path.read_text()))
+        
+        # Resolve IDE-specific paths
+        config = self._resolve_paths(config)
+        
+        return config
+    
+    def _resolve_paths(self, config: dict) -> dict:
+        """Resolve IDE-specific path variables."""
+        if self.ide == IDEType.VSCODE:
+            # Resolve ${workspaceFolder} variables
+            for key, value in config.items():
+                if isinstance(value, str):
+                    config[key] = value.replace("${workspaceFolder}", str(self.workspace_root))
+        
+        elif self.ide == IDEType.VISUAL_STUDIO:
+            # Resolve $(SolutionDir) variables
+            for key, value in config.items():
+                if isinstance(value, str):
+                    config[key] = value.replace("$(SolutionDir)", str(self.workspace_root) + "\\")
+        
+        return config
+```
+
+**Benefits:**
+
+1. **Zero Conflicts**
+   - VSCode settings in `.vscode/`, VS settings in `.vs/`
+   - No IDE-specific files in shared brain
+   - Git ignore IDE-specific folders, commit brain
+
+2. **Seamless Switching**
+   - Open project in VSCode → Auto-loads `.vscode/` settings
+   - Open same project in Visual Studio → Auto-loads `.vs/` settings
+   - Brain state preserved across IDE switches
+
+3. **Team Flexibility**
+   - Developer A uses VSCode
+   - Developer B uses Visual Studio
+   - Both work on same repository without conflicts
+   - Brain captures knowledge from both
+
+4. **IDE-Specific Features**
+   - VSCode: GitHub Copilot Chat integration
+   - Visual Studio: IntelliCode + CodeLens integration
+   - Rider: ReSharper integration (future)
+   - Shared: CORTEX orchestrators, brain, agents
+
+**Git Configuration:**
+
+```gitignore
+# .gitignore (user repository)
+
+# VSCode (IDE-specific, do NOT commit)
+.vscode/
+!.vscode/extensions.json    # Allow extension recommendations
+
+# Visual Studio (IDE-specific, do NOT commit)
+.vs/
+*.suo
+*.user
+*.sln.docstates
+
+# CORTEX Brain (shared, MUST commit)
+!cortex-brain/
+cortex-brain/tier1/*.db      # Ignore conversation database (sensitive)
+cortex-brain/tier3/*.db      # Ignore git metrics (auto-generated)
+```
+
+**Use Cases:**
+
+**Use Case 1: Pure Python Project (VSCode)**
+- Developer uses VSCode
+- CORTEX loads `vscode.config.json`
+- Python orchestrators work natively
+- No Visual Studio files present
+
+**Use Case 2: C# Solution (Visual Studio)**
+- Developer uses Visual Studio 2022
+- CORTEX loads `visualstudio.config.json`
+- Detects `.sln` file, enables C# orchestrators
+- No VSCode files present
+
+**Use Case 3: Full-Stack (VSCode + Visual Studio)**
+- Frontend dev uses VSCode (React/TypeScript)
+- Backend dev uses Visual Studio (C# API)
+- Both have CORTEX installed
+- Brain syncs knowledge across both IDEs
+- No conflicts, no duplication
+
+**Use Case 4: Mid-Project IDE Switch**
+- Developer starts in VSCode
+- Switches to Visual Studio (better C# debugging)
+- CORTEX auto-detects IDE change
+- Loads Visual Studio config
+- All conversation history preserved
+
+**Implementation Checklist:**
+
+- ☐ Implement `IDEDetector` class (Phase 1, Week 1)
+- ☐ Implement `ConfigManager` with inheritance (Phase 1, Week 1)
+- ☐ Create IDE-specific config templates (Phase 1, Week 2)
+- ☐ Update `.gitignore` templates for user repos (Phase 1, Week 2)
+- ☐ Add IDE context to Brain Tier 3 (Phase 2, Week 4)
+- ☐ Test VSCode + Visual Studio simultaneously (Phase 5, Week 15)
+- ☐ Document IDE-switching workflow (Phase 6, Week 18)
+
+**Performance Impact:** <0.01s (one-time detection at startup)
+
+---
 
 ### 2. Enhanced Brain Architecture (Hybrid Centralization)
 
@@ -1381,6 +1640,35 @@ src/orchestrators/scaffolding/
 - **3.0 Agents:** 18 total
 - **4.0 Agents:** 7 independent agents + 4 brain integrations + 6 orchestrator phases + 1 deprecated = 12 active
 - **Consolidation:** 33% reduction, clearer boundaries
+
+---
+
+## 📅 Phase Timeline Summary
+
+| Phase | Duration | Weeks | Key Deliverables | Dependencies | Risk |
+|-------|----------|-------|------------------|--------------|------|
+| **Phase 0** | 5 days | Week 0 | Root bloat cleanup, technical doc structure | None | 🟢 LOW |
+| **Phase 1** | 15 days | Weeks 1-3 | Foundation: Base orchestrator, Brain, DI, Response Templates v4.0, Testing, IDE detection | Phase 0 | 🟡 MEDIUM |
+| **Phase 1.5** | 5 days | Week 3 | Documentation generator tool, D3.js templates | Phase 1 | 🟢 LOW |
+| **Phase 2** | 15 days | Weeks 4-6 | Brain hybrid centralization, multi-domain support, privacy controls | Phase 1 items 1-8 | 🟡 MEDIUM |
+| **Phase 3** | 25 days | Weeks 7-11 | Migrate 13 orchestrators (11 core + 2 specialized), co-located tests | **Phase 1 COMPLETE** | 🔴 HIGH |
+| **Phase 4** | 15 days | Weeks 12-14 | Operations simplification, DI auto-discovery, manifest reduction | 6+ orchestrators migrated | 🟡 MEDIUM |
+| **Phase 5** | 15 days | Weeks 15-17 | Testing, validation, performance benchmarks, go/no-go | All 13 orchestrators migrated | 🟡 MEDIUM |
+| **Phase 6** | 5 days | Week 18 | Documentation finalization, publish, sign-off | Phase 5 complete | 🟢 LOW |
+| **TOTAL** | **95 days** | **18 weeks** | **CORTEX 4.0 Production Ready** | - | 🟡 MEDIUM |
+
+**Critical Path:** Phase 0 → Phase 1 (BLOCKING) → Phase 3 (orchestrators) → Phase 5 (validation) → Phase 6 (docs)
+
+**Parallel Work Opportunities:**
+- Phase 2 (Brain) can proceed alongside Phase 1 completion (Week 3)
+- Phase 4 (Operations) can begin when 6+ orchestrators complete (Week 10)
+- Documentation (Phase 1.5) overlaps with Phase 1 finalization
+
+**Validation Gates:**
+- ✅ **Week 3 End:** Foundation validation script 100% PASS (BLOCKING for Phase 3)
+- ✅ **Week 11 End:** All 13 orchestrators migrated, 90%+ coverage
+- ✅ **Week 17 End:** Performance <10% regression, backward compatibility verified
+- ✅ **Week 18 End:** Documentation complete, final sign-off
 
 ---
 
@@ -2731,6 +3019,16 @@ class PhaseExecution:
   - [ ] Class/function reference
   - [ ] Parameters and return types
   - [ ] Examples
+- [ ] Create `ide_setup_template.md.j2`
+  - [ ] IDE-specific configuration files
+  - [ ] Extension/plugin recommendations
+  - [ ] Task and launch configurations
+  - [ ] Troubleshooting common issues
+- [ ] Create `configuration_reference_template.md.j2`
+  - [ ] Configuration file structure
+  - [ ] All available settings with defaults
+  - [ ] Environment-specific overrides
+  - [ ] IDE-specific path resolution
 
 #### Code Annotations for Auto-Generation
 - [ ] Define documentation decorators:
@@ -2801,6 +3099,45 @@ class PlanningOrchestrator:
 | Observability | Architecture (monitoring) | Data flow (metrics collection) | Health metrics, Alerting |
 | Intelligence | Architecture (learning system) | Data flow (pattern extraction) | Pattern learning, Recommendations |
 | Onboarding | Flowchart (onboarding steps) | Sequence (user interaction) | Setup guides, Interactive demos |
+
+**IDE Documentation Requirements (Special):**
+
+| Document Type | Source | Output Location | Auto-Generated From |
+|---------------|--------|-----------------|---------------------|
+| VSCode Setup Guide | `src/core/ide_detector.py` + MASTER-PLAN Section 1.5 | `docs/setup/vscode-setup.md` | Code annotations + use cases |
+| Visual Studio Setup Guide | `src/core/ide_detector.py` + MASTER-PLAN Section 1.5 | `docs/setup/visualstudio-setup.md` | Code annotations + use cases |
+| IDE Switching Workflow | MASTER-PLAN Section 1.5 Use Case 4 | `docs/setup/ide-switching.md` | Use case extraction |
+| IDE Detection System | `src/core/ide_detector.py` class docs | `docs/architecture/ide-detection-system.md` | Docstrings + class diagram |
+| IDE Compatibility Architecture | MASTER-PLAN Section 1.5 | `docs/architecture/ide-compatibility.md` | Section extraction |
+| VSCode Config Reference | `.vscode/` templates + `cortex-brain/config/vscode.config.json` | `docs/configuration/vscode-config-reference.md` | Configuration schema |
+| Visual Studio Config Reference | `.vs/` templates + `cortex-brain/config/visualstudio.config.json` | `docs/configuration/visualstudio-config-reference.md` | Configuration schema |
+| CORTEX Brain Config | `cortex-brain/config/shared.config.json` + `ConfigManager` | `docs/configuration/cortex-brain-config.md` | Configuration schema + code |
+| IDE Detection Troubleshooting | Common error patterns + resolutions | `docs/troubleshooting/ide-detection.md` | Error log analysis |
+
+**IDE Documentation Auto-Generation Strategy:**
+
+1. **Extract from Code:**
+   - Parse `IDEDetector` class → architecture documentation
+   - Parse `ConfigManager` class → configuration documentation
+   - Extract method signatures, parameters, return types
+   - Generate class diagrams (D3.js hierarchy)
+
+2. **Extract from MASTER-PLAN:**
+   - Section 1.5 "Cross-IDE Compatibility" → architecture overview
+   - Use Cases 1-4 → setup workflow documentation
+   - Implementation Checklist → feature status
+
+3. **Extract from Configuration Files:**
+   - Parse `.vscode/settings.json` schema → VSCode config reference
+   - Parse `cortex-brain/config/vscode.config.json` → CORTEX VSCode settings
+   - Parse `cortex-brain/config/visualstudio.config.json` → CORTEX VS settings
+   - Generate configuration tables with defaults, types, descriptions
+
+4. **Generate Templates:**
+   - Create `.vscode/` setup examples (settings, tasks, launch)
+   - Create `.vs/` setup examples (solution config, CORTEX integration)
+   - Generate step-by-step setup guides
+   - Include troubleshooting decision trees
 
 **Tests:**
 - [ ] `test_doc_generator.py` (15 tests)
@@ -3176,69 +3513,294 @@ After:  500 lines (descriptions + examples only)
         Wiring → DI Container (code)
 ```
 
-### Phase 5: Testing & Validation (Weeks 15-16) - Quality Gates
+### Phase 5: Testing & Validation (Weeks 15-17) - Quality Gates
 
-**Goal:** Ensure 85%+ coverage, all orchestrators tested
+**Goal:** Comprehensive testing and validation of all CORTEX 4.0 components
+
+**Duration:** 3 weeks (15 work days)
 
 **Deliverables:**
-1. Comprehensive test suite (500+ tests)
-2. Integration tests (orchestrator interactions)
-3. Performance benchmarks
-4. Migration validation report
+1. 90%+ test coverage across all orchestrators
+2. Performance benchmarks report (3.0 vs 4.0)
+3. Integration test suite (10 critical workflows)
+4. Load testing results (100 concurrent operations)
+5. Backward compatibility validation report
+6. Migration validation report with go/no-go decision
 
 **Tasks:**
+
+#### Week 15: Unit & Coverage Testing
 - [ ] Run full test suite: `pytest tests/`
-- [ ] Measure coverage: `pytest --cov=src tests/`
-- [ ] Fix coverage gaps (target 85%+)
-- [ ] Integration tests (10 critical paths)
-- [ ] Performance benchmarks (ensure <10% regression)
-- [ ] Test backward compatibility (old operations still work)
-- [ ] Load testing (100 concurrent operations)
-- [ ] Document test strategy
+- [ ] Measure coverage: `pytest --cov=src --cov-report=html tests/`
+- [ ] Generate coverage report: `cortex-toolkit coverage analyze`
+- [ ] Identify coverage gaps (target 90%+)
+- [ ] Write tests for uncovered code paths
+- [ ] Fix failing tests
+- [ ] Validate test organization (co-located with modules)
+
+#### Week 16: Integration & Performance Testing
+- [ ] Integration tests (10 critical paths):
+  1. Planning → Execution → TDD → Deployment
+  2. ADO Story → Implementation → Testing → Review
+  3. Cleanup → Optimization → Healthcheck
+  4. Onboarding → Demo → First Feature
+  5. Error → Recovery → Retry
+  6. MCP Tool Invocation → Retry → Circuit Breaker
+  7. Cross-repo pattern learning → Recommendation
+  8. Tier 2 namespace isolation → Privacy enforcement
+  9. DI auto-discovery → Orchestrator routing
+  10. Backward compatibility (old operations)
+- [ ] Performance benchmarks:
+  - [ ] Baseline measurements (3.0) - operation time, memory, brain queries
+  - [ ] Target measurements (4.0) - same operations
+  - [ ] Regression analysis (must be <10% slower)
+  - [ ] Memory profiling
+- [ ] Load testing:
+  - [ ] 100 concurrent operations
+  - [ ] Sustained load (1 hour continuous operation)
+  - [ ] Stress test (until failure, identify limits)
+
+#### Week 17: Validation & Sign-Off
+- [ ] Test backward compatibility:
+  - [ ] All 27 operations from 3.0
+  - [ ] Natural language commands
+  - [ ] Response template compatibility
+  - [ ] Brain data migration
+  - [ ] Old wrappers via compatibility layer
+- [ ] Create validation report:
+  - [ ] Orchestrators migrated: 13/13 ✅
+  - [ ] Test coverage: 90%+ ✅
+  - [ ] Performance: <10% regression ✅
+  - [ ] Backward compatibility: verified ✅
+  - [ ] Bloat reduction: 6,760 → 500 lines (93%) ✅
+- [ ] User acceptance testing:
+  - [ ] Run on 3 sample repositories (Python, C#, Full-Stack)
+  - [ ] Test all operations end-to-end
+  - [ ] Collect user feedback
+  - [ ] Document issues/improvements
+- [ ] Final go/no-go decision meeting
+- [ ] Sign-off from stakeholders
 
 **Quality Gates:**
-- ✅ 85%+ code coverage
+- ✅ 90%+ code coverage (upgraded from 85%)
 - ✅ 0 critical bugs
 - ✅ All smoke tests passing
 - ✅ <10% performance regression
 - ✅ Backward compatibility verified
+- ✅ User acceptance criteria met
 
 ### Phase 6: Documentation Finalization (Week 18) - Complete Technical Documentation
 
 **Goal:** Generate complete technical documentation for all CORTEX 4.0 components
 
+**Duration:** 1 week (5 work days)
+
 **Deliverables:**
-1. Interactive documentation website (HTML + D3.js)
-2. PDF export of complete technical documentation
-3. Per-orchestrator documentation with diagrams (12 orchestrators)
-4. Feature documentation (5 major features)
-5. API reference documentation
+1. Interactive documentation website (HTML + D3.js) - 200+ pages
+2. PDF export of complete technical documentation (~500 pages)
+3. Per-orchestrator documentation with diagrams (13 orchestrators)
+4. Feature documentation (7 major features)
+5. API reference documentation (6 API surfaces)
 6. Architecture overview documentation
 7. CORTEX Lens v2.0 documentation (MCP-integrated intelligence platform)
+8. Migration guide (3.0 → 4.0)
+9. Development contribution guide
 
 **Tasks:**
 
-#### Generate All Documentation
+#### Day 1: Generate Core Documentation
 - [ ] Run documentation generator for all orchestrators:
   ```bash
-  cortex-toolkit docs generate --all
+  cortex-toolkit docs generate --all --format html,pdf,markdown
   ```
 - [ ] Verify all D3.js diagrams render correctly:
-  - [ ] 12 orchestrator flowcharts
-  - [ ] 12 sequence diagrams (where applicable)
-  - [ ] 8 architecture diagrams
-  - [ ] 5 data flow diagrams
-- [ ] Generate feature documentation:
+  - [ ] 13 orchestrator flowcharts
+  - [ ] 13 sequence diagrams (orchestrator interactions)
+  - [ ] 8 architecture diagrams (system, brain, MCP, DI, IDE)
+  - [ ] 5 data flow diagrams (brain tiers, MCP routing)
+- [ ] Generate orchestrator documentation:
   - [ ] Planning System 3.0
   - [ ] TDD Mastery
-  - [ ] Code Sanitization
+  - [ ] Execution Orchestrator
   - [ ] ADO Integration
-  - [ ] System Maintenance
-- [ ] Generate API reference documentation:
+  - [ ] Documentation Orchestrator
+  - [ ] QA Orchestrator
+  - [ ] DevOps Orchestrator
+  - [ ] Intelligence Orchestrator
+  - [ ] Observability Orchestrator
+  - [ ] Onboarding Orchestrator
+  - [ ] Sanitization Orchestrator
+  - [ ] Maintenance Orchestrator
+  - [ ] Error Recovery Orchestrator
+
+#### Day 2: Generate Feature Documentation
+- [ ] Feature documentation:
+  - [ ] Planning System 3.0 - DoR/DoD, complexity detection, TDD integration
+  - [ ] TDD Mastery - phase enforcement, coverage tracking
+  - [ ] Code Sanitization - 5-phase workflow
+  - [ ] ADO Integration - story/feature/task creation
+  - [ ] System Maintenance v3.0 - 7-phase workflow
+  - [ ] Multi-Domain Architecture - namespace isolation, privacy
+  - [ ] Cross-IDE Compatibility - VSCode + Visual Studio
+- [ ] IDE Setup Documentation:
+  - [ ] VSCode setup guide (configuration, extensions, tasks, launch configs)
+  - [ ] Visual Studio setup guide (solution config, CORTEX integration)
+  - [ ] IDE switching workflow (mid-project IDE changes)
+  - [ ] IDE detection troubleshooting (common issues, resolutions)
+  - [ ] Multi-IDE team scenarios (frontend/backend split)
+
+#### Day 3: Generate API Documentation
+- [ ] API reference documentation:
   - [ ] MCP Protocol API
   - [ ] Orchestrator API
   - [ ] Brain Tier API
   - [ ] Agent API
+  - [ ] DI Container API
+  - [ ] Template Manager API v4.0
+  - [ ] IDEDetector API - detection methods, IDE type enum, configuration resolution
+  - [ ] ConfigManager API - IDE-specific inheritance, path resolution
+
+#### Day 4: Generate Supporting Documentation
+- [ ] Architecture overview:
+  - [ ] System architecture (CORTEX 4.0 high-level)
+  - [ ] IDE compatibility architecture (Section 1.5 from MASTER-PLAN)
+  - [ ] IDE detection system (IDEDetector class documentation)
+- [ ] Configuration references:
+  - [ ] VSCode configuration reference (`.vscode/` + `vscode.config.json`)
+  - [ ] Visual Studio configuration reference (`.vs/` + `visualstudio.config.json`)
+  - [ ] CORTEX Brain configuration (all `cortex-brain/config/*.json` files)
+  - [ ] Configuration inheritance and override rules
+- [ ] Migration guide (3.0 → 4.0)
+- [ ] Development contribution guide
+- [ ] Coding/testing/documentation standards
+- [ ] Release process
+
+#### Day 5: Review, Publish & Finalize
+- [ ] Review all generated documentation
+- [ ] Generate final artifacts (HTML, PDF, Markdown)
+- [ ] Publish documentation
+- [ ] Final documentation review meeting
+- [ ] Sign-off on documentation completeness
+
+**Documentation Statistics Target:**
+- **Pages:** 210+ Markdown documents (includes 9 IDE-specific docs)
+- **Interactive Diagrams:** 62+ D3.js visualizations (includes IDE detection class diagram + config inheritance diagram)
+- **Code Examples:** 320+ examples (includes IDE config examples)
+- **Size:** ~520KB Markdown + ~2.1MB HTML + ~11MB PDF
+
+**IDE Documentation Breakdown:**
+- Setup Guides: 4 documents (VSCode, Visual Studio, Switching, Troubleshooting)
+- Configuration References: 3 documents (VSCode, Visual Studio, CORTEX Brain)
+- Architecture: 2 documents (IDE Compatibility, IDE Detection System)
+
+**Quality Gates:**
+- ✅ All orchestrators documented (13/13)
+- ✅ All features documented (7/7)
+- ✅ All API surfaces documented (8/8) - includes IDEDetector + ConfigManager
+- ✅ All IDE setup guides documented (4/4)
+- ✅ All IDE config references documented (3/3)
+- ✅ 62+ interactive diagrams generated
+- ✅ Migration guide complete
+- ✅ 0 broken links
+- ✅ All code examples validated
+
+**Tasks:**
+
+#### Day 1: Generate Core Documentation
+- [ ] Run documentation generator for all orchestrators:
+  ```bash
+  cortex-toolkit docs generate --all --format html,pdf,markdown
+  ```
+- [ ] Verify all D3.js diagrams render correctly:
+  - [ ] 13 orchestrator flowcharts (Planning, TDD, Execution, ADO, Documentation, QA, DevOps, Intelligence, Observability, Onboarding, Sanitization, Maintenance, Error Recovery)
+  - [ ] 13 sequence diagrams (orchestrator interactions)
+  - [ ] 8 architecture diagrams (system, brain, MCP, DI)
+  - [ ] 5 data flow diagrams (brain tiers, MCP routing)
+- [ ] Generate orchestrator documentation:
+  - [ ] Planning System 3.0 - architecture, workflows, configuration, examples
+  - [ ] TDD Mastery - RED→GREEN→REFACTOR, phase validation
+  - [ ] Execution Orchestrator - phase management, multi-orchestrator routing
+  - [ ] ADO Integration - work item generation, completion summaries
+  - [ ] Documentation Orchestrator - auto-generation, D3.js rendering
+  - [ ] QA Orchestrator - code quality, review automation
+  - [ ] DevOps Orchestrator - CI/CD automation
+  - [ ] Intelligence Orchestrator - pattern learning, recommendations
+  - [ ] Observability Orchestrator - system health, metrics
+  - [ ] Onboarding Orchestrator - developer onboarding
+  - [ ] Sanitization Orchestrator - code sanitization workflows
+  - [ ] Maintenance Orchestrator - system maintenance (7 phases)
+  - [ ] Error Recovery Orchestrator - error handling, retry logic
+
+#### Day 2: Generate Feature Documentation
+- [ ] Feature documentation:
+  - [ ] Planning System 3.0 - DoR/DoD, complexity detection, TDD integration
+  - [ ] TDD Mastery - phase enforcement, coverage tracking, empty test detection
+  - [ ] Code Sanitization - 5-phase workflow, mapping, validation
+  - [ ] ADO Integration - story/feature/task creation, formatting
+  - [ ] System Maintenance v3.0 - 7-phase workflow, tiered routing
+  - [ ] Multi-Domain Architecture - namespace isolation, privacy controls
+  - [ ] Cross-IDE Compatibility - VSCode + Visual Studio intelligent separation
+
+#### Day 3: Generate API Documentation
+- [ ] API reference documentation:
+  - [ ] MCP Protocol API - JSON-RPC 2.0, tool invocation, auth
+  - [ ] Orchestrator API - BaseOrchestrator, PhaseManager, lifecycle hooks
+  - [ ] Brain Tier API - Tier 0-3 interfaces, queries, ingestion
+  - [ ] Agent API - intent routing, orchestrator management
+  - [ ] DI Container API - CortexContainer, decorators, auto-discovery
+  - [ ] Template Manager API - v4.0 tier system, adaptive rendering
+
+#### Day 4: Generate Supporting Documentation
+- [ ] Architecture overview:
+  - [ ] System architecture (CORTEX 4.0 high-level)
+  - [ ] Brain architecture (hybrid centralization)
+  - [ ] MCP architecture (gateway, servers, protocol)
+  - [ ] DI architecture (container, decorators, auto-wiring)
+  - [ ] IDE compatibility architecture (VSCode + Visual Studio)
+- [ ] Migration guide (3.0 → 4.0):
+  - [ ] Breaking changes summary
+  - [ ] Migration steps (phase-by-phase)
+  - [ ] Backward compatibility layer
+  - [ ] Rollback procedures
+  - [ ] FAQ and troubleshooting
+- [ ] Development guides:
+  - [ ] Contributing to CORTEX 4.0
+  - [ ] Coding standards (Python, TypeScript)
+  - [ ] Testing standards (TDD, co-located tests)
+  - [ ] Documentation standards (auto-generation)
+  - [ ] Release process
+
+#### Day 5: Review, Publish & Finalize
+- [ ] Review all generated documentation:
+  - [ ] Check for broken links
+  - [ ] Verify code examples compile/run
+  - [ ] Validate diagram rendering
+  - [ ] Proofread for clarity
+- [ ] Generate final artifacts:
+  - [ ] HTML documentation (deploy to GitHub Pages)
+  - [ ] PDF export (500+ pages with TOC, index)
+  - [ ] Markdown export (for GitHub wiki)
+- [ ] Publish documentation:
+  - [ ] Deploy to `docs.cortex.ai` (or GitHub Pages)
+  - [ ] Update README.md with documentation links
+  - [ ] Create documentation release (v4.0-docs)
+- [ ] Final documentation review meeting
+- [ ] Sign-off on documentation completeness
+
+**Documentation Statistics Target:**
+- **Pages:** 200+ Markdown documents
+- **Interactive Diagrams:** 60+ D3.js visualizations
+- **Code Examples:** 300+ examples
+- **Size:** ~500KB Markdown + ~2MB HTML (with D3.js) + ~10MB PDF
+
+**Quality Gates:**
+- ✅ All orchestrators documented (13/13)
+- ✅ All features documented (7/7)
+- ✅ All API surfaces documented (6/6)
+- ✅ 60+ interactive diagrams generated
+- ✅ Migration guide complete
+- ✅ 0 broken links
+- ✅ All code examples validated
 - [ ] Generate toolkit documentation:
   - [ ] CLI commands reference
   - [ ] Documentation generator guide
@@ -3818,25 +4380,28 @@ cortex-brain/documents/technical/cortex-4.0/
 - [ ] `test_operation_aliases.py` (8 tests)
 - [ ] Integration: `test_operations_e2e.py` (5 tests)
 
-### Phase 5: Testing & Validation (Weeks 15-16)
+### Phase 5: Testing & Validation (Weeks 15-17)
 
-#### Test Suite Execution
+#### Week 15: Unit & Coverage Testing
 - [ ] Run full test suite: `pytest tests/`
-- [ ] Measure coverage: `pytest --cov=src tests/`
-- [ ] Generate HTML coverage report
-- [ ] Identify coverage gaps
-- [ ] Write tests for uncovered code
+- [ ] Measure coverage: `pytest --cov=src --cov-report=html tests/`
+- [ ] Generate coverage report: `cortex-toolkit coverage analyze`
+- [ ] Identify coverage gaps (target 90%+)
+- [ ] Write tests for uncovered code paths
+- [ ] Fix failing tests
+- [ ] Validate test organization (co-located with modules)
 
-#### Coverage Targets
-- [ ] Core orchestrators: 90%+ coverage
-- [ ] Domain orchestrators: 85%+ coverage
-- [ ] Supporting orchestrators: 75%+ coverage
+#### Coverage Targets (Upgraded)
+- [ ] Core orchestrators: 90%+ coverage (upgraded from 85%)
+- [ ] Domain orchestrators: 90%+ coverage (upgraded from 85%)
+- [ ] Supporting orchestrators: 80%+ coverage (upgraded from 75%)
 - [ ] MCP Gateway: 90%+ coverage
 - [ ] DI Container: 95%+ coverage
 - [ ] Brain tiers: 80%+ coverage
+- [ ] IDE detection: 85%+ coverage
 
-#### Integration Tests
-- [ ] Test critical user workflows:
+#### Week 16: Integration & Performance Testing
+- [ ] Integration tests - 10 critical workflows:
   1. [ ] Planning → Execution → TDD → Deployment
   2. [ ] ADO Story → Implementation → Testing → Review
   3. [ ] Cleanup → Optimization → Healthcheck
@@ -3848,41 +4413,43 @@ cortex-brain/documents/technical/cortex-4.0/
   9. [ ] DI auto-discovery → Orchestrator routing
   10. [ ] Backward compatibility (old operations)
 
-#### Performance Benchmarks
-- [ ] Baseline measurements (3.0)
-  - [ ] Operation execution time
-  - [ ] Memory usage
-  - [ ] Brain query performance
-  - [ ] Test suite duration
-- [ ] Target measurements (4.0)
-  - [ ] Same operations (should be <10% slower)
-  - [ ] Memory usage (should be similar or better)
-  - [ ] Brain query performance (should be same or faster)
+- [ ] Performance benchmarks:
+  - [ ] Baseline measurements (3.0) - operation time, memory, brain queries, test suite
+  - [ ] Target measurements (4.0) - same operations
+  - [ ] Regression analysis (must be <10% slower)
+  - [ ] Memory profiling (must be similar or better)
+  - [ ] Brain query performance (must be same or faster)
   - [ ] Test suite duration (more tests, but optimized)
-- [ ] Load testing
+
+- [ ] Load testing:
   - [ ] 100 concurrent operations
-  - [ ] Sustained load (1 hour)
-  - [ ] Stress test (until failure)
+  - [ ] Sustained load (1 hour continuous operation)
+  - [ ] Stress test (until failure, identify limits)
 
-#### Backward Compatibility
-- [ ] Test all 27 operations from 3.0
-- [ ] Verify natural language commands work
-- [ ] Check response template compatibility
-- [ ] Validate brain data migration
-- [ ] Test old wrappers via compatibility layer
+#### Week 17: Validation & Sign-Off
+- [ ] Backward compatibility testing:
+  - [ ] All 27 operations from 3.0
+  - [ ] Natural language commands
+  - [ ] Response template compatibility
+  - [ ] Brain data migration (Tier 1, 2, 3)
+  - [ ] Old wrappers via compatibility layer
 
-#### Migration Validation
-- [ ] Create validation report
-  - [ ] All orchestrators migrated (12/12)
-  - [ ] Test coverage (85%+)
-  - [ ] Performance benchmarks (pass/fail)
-  - [ ] Backward compatibility (verified)
-  - [ ] Bloat reduction (6,760 → 500 lines)
-- [ ] User acceptance testing
-  - [ ] Run on 3 sample repositories
-  - [ ] Test all operations
-  - [ ] Collect feedback
-- [ ] Final go/no-go decision
+- [ ] Create validation report:
+  - [ ] Orchestrators migrated: 13/13 ✅
+  - [ ] Test coverage: 90%+ ✅
+  - [ ] Performance: <10% regression ✅
+  - [ ] Backward compatibility: verified ✅
+  - [ ] Bloat reduction: 6,760 → 500 lines (93%) ✅
+  - [ ] IDE compatibility: VSCode + Visual Studio verified ✅
+
+- [ ] User acceptance testing:
+  - [ ] Run on 3 sample repositories (Python, C#, Full-Stack)
+  - [ ] Test all operations end-to-end
+  - [ ] Collect user feedback
+  - [ ] Document issues/improvements
+
+- [ ] Final go/no-go decision meeting
+- [ ] Sign-off from stakeholders
 
 ---
 
@@ -4043,11 +4610,13 @@ cortex-brain/documents/technical/cortex-4.0/
 8. **Backward Compatibility:** ✅ **BREAKING CHANGE APPROVED** - Delete old operations (CORTEX 4.0 replaces 3.0)
 9. **Rollback Trigger:** ✅ **APPROVED** - >10% performance regression = rollback
 10. **Documentation Review:** ✅ **APPROVED** - User reviews all documentation
+11. **IDE Compatibility:** ✅ **APPROVED** - Full VSCode + Visual Studio support with intelligent separation
 
 **Critical Enhancements:**
 - **Coverage Target Upgrade:** 85% → 90% (more rigorous quality gates)
 - **Multi-Domain Support:** Enterprise-grade privacy controls for RA/FSA/HSA/Commuter
 - **Breaking Changes:** Clean slate architecture (no 3.0 baggage)
+- **IDE Compatibility:** VSCode + Visual Studio seamless operation (no lock-in)
 
 ---
 
@@ -4109,4 +4678,5 @@ Before proceeding, please answer:
 **Author:** Asif Hussain  
 **Contact:** github.com/asifhussain60/CORTEX  
 **Date:** December 17, 2025  
-**Version:** 1.0  
+**Updated:** December 18, 2025  
+**Version:** 1.2  
