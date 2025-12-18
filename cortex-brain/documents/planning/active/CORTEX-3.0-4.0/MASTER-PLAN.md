@@ -1,13 +1,98 @@
 # CORTEX 3.0 → 4.0 Migration Master Plan
 
-**Version:** 1.2  
+**Version:** 1.3 (RAG-Enhanced)  
 **Author:** Asif Hussain  
 **Created:** December 17, 2025  
-**Updated:** December 18, 2025  
+**Updated:** December 18, 2025 (RAG Content Stores Added)  
 **Approved:** December 17, 2025  
 **Status:** 🟢 APPROVED - Ready for Phase 0 Implementation  
 **Branch Strategy:** CORTEX-3.0 (source) → CORTEX-4.0 (target)  
-**IDE Compatibility:** ✅ VSCode + Visual Studio (Intelligent Separation)
+**IDE Compatibility:** ✅ VSCode + Visual Studio (Intelligent Separation)  
+**RAG Integration:** ✅ Domain-Specific Guideline Content Stores (Phase 2 Enhancement)
+
+---
+
+## 📊 MIGRATION PROGRESS TRACKER
+
+**Last Updated:** December 18, 2025 | **Current Phase:** Phase 1 (Foundation) | **Week:** 1 | **Overall:** 12% Complete
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 0: Pre-Migration Cleanup                            [████████████] 100% │
+│ Week 0 (5 days)                                           ✅ COMPLETE        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 1: Foundation                                       [███████░░░░░]  60% │
+│ Week 1: Base Orchestrator & Brain                        [███░░]  60%  ⏳ ACTIVE│
+│ Week 2: Infrastructure (Templates, Config, Testing)      [░░░░░]  0%         │
+│ Week 3: DI Container, Logging, Validation               [░░░░░]  0%         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 1.5: Documentation & Visualization                  [░░░░░░░░░░░░]   0% │
+│ Week 3: Auto-generation Tool & D3.js Framework           [░░░░░]  0%         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 2: Brain Enhancement + RAG                          [░░░░░░░░░░░░]   0% │
+│ Week 4-5: Hybrid Centralization                          [░░░░░]  0%         │
+│ Week 6-8: RAG Guideline Content Stores                   [░░░░░]  0%         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 3: Orchestrator Consolidation                       [░░░░░░░░░░░░]   0% │
+│ Week 9-10: Core Orchestrators (Execution, Planning)      [░░░░░]  0%         │
+│ Week 11-12: Development Orchestrators (TDD, QA)          [░░░░░]  0%         │
+│ Week 13: Specialized Orchestrators (Sanitization, Lens)  [░░░░░]  0%         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 4: Operations Simplification                        [░░░░░░░░░░░░]   0% │
+│ Week 14-15: MCP Gateway & DI Container                   [░░░░░]  0%         │
+│ Week 16: Manifest Reduction                              [░░░░░]  0%         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 5: Testing & Validation                             [░░░░░░░░░░░░]   0% │
+│ Week 17-18: Comprehensive Testing                        [░░░░░]  0%         │
+│ Week 19: Quality Gates                                   [░░░░░]  0%         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 6: Documentation Finalization                       [░░░░░░░░░░░░]   0% │
+│ Week 20: Complete Technical Docs Generation             [░░░░░]  0%         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🎯 MILESTONES
+├─ ✅ Phase 0 Complete (Week 0)
+├─ ⏳ Foundation Validation (Week 3) - 10/10 prerequisites passing
+├─ ☐ First Orchestrator Migrated (Week 9)
+├─ ☐ RAG Integration Live (Week 8)
+├─ ☐ 90%+ Test Coverage (Week 19)
+└─ ☐ CORTEX 4.0 GA Release (Week 20)
+
+📈 METRICS
+├─ Orchestrators Migrated: 0/13 (0%)
+├─ Test Coverage: 10/10 foundation prerequisites passing
+├─ Documentation: 0/200+ docs generated
+└─ Lines Reduced: 0 (Target: -40% bloat)
+```
+
+**🔄 AUTO-UPDATE INSTRUCTIONS FOR ORCHESTRATORS:**
+
+All Phase 1-6 orchestrators MUST update this tracker after completing work:
+
+```python
+# In orchestrator completion handler:
+from src.core.progress_tracker import update_master_plan_progress
+
+update_master_plan_progress(
+    phase="1",  # Current phase number
+    week="1",   # Current week number
+    completion_percentage=60,  # Week completion %
+    milestone_completed=None,  # Or milestone name if achieved
+    metrics={
+        "orchestrators_migrated": 0,
+        "test_coverage": "10/10 foundation",
+        "docs_generated": 0,
+        "lines_reduced": 0
+    }
+)
+```
+
+**Manual Update (Development):**
+- Edit progress bars: `[████░░░░]` (█ = complete, ░ = pending)
+- Update percentages: Match visual bars
+- Update status: ✅ COMPLETE | ⏳ ACTIVE | ☐ PENDING
+- Update "Last Updated" timestamp
+- Update "Current Phase" and "Week" fields
 
 ---
 
@@ -16,7 +101,9 @@
 Comprehensive migration plan to transform CORTEX from current 3.0 architecture to next-generation 4.0 system with:
 
 - **MCP Server Architecture** - Pluggable tool ecosystem replacing hardcoded wrappers
-- **Enhanced Brain** - Multi-domain architecture with privacy controls (RA/FSA/HSA/Commuter)
+- **Enhanced Brain** - Multi-domain architecture with privacy controls (RA/FSA/HSA/Commuter) + RAG-inspired guideline content stores
+- **Domain Guideline Stores** - User-created knowledge bases with semantic search (NEW - RAG-inspired)
+- **Semantic Retrieval** - Embedding-based search for domain-specific guidelines (NEW)
 - **Bloat Reduction** - Permanent wiring via dependency injection, eliminate manifest bloat
 - **Clean Orchestrator Structure** - Co-located tests, TDD-first development
 - **Unified Operations** - Consolidate 28+ orchestrators into 13 total (11 core + 2 specialized)
@@ -24,9 +111,10 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **CORTEX Lens v2.0** - MCP-integrated intelligence platform with streaming analysis, AI narratives, brain integration
 - **Technical Documentation System** - Auto-generated docs with 60+ interactive D3.js diagrams
 - **Multi-Domain Support** - Enterprise-grade domain isolation with selective knowledge sharing (NEW)
+- **RAG-Inspired Content Stores** - User-uploaded guideline documents with semantic search (NEW)
 - **Cross-IDE Support** - Seamless operation in VSCode + Visual Studio with intelligent file separation (NEW)
 
-**Timeline:** 18 weeks (4.5 months including Phase 0 cleanup + documentation)  
+**Timeline:** 20 weeks (5 months including Phase 0 cleanup + RAG integration)  
 **Risk Level:** 🟡 MEDIUM  
 **Test Coverage Target:** 90%+ all orchestrators (UPGRADED)  
 **Documentation Target:** 200+ technical documents with 60+ interactive D3.js diagrams  
@@ -38,6 +126,9 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **CORTEX Lens v2.0 Architecture** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX-LENS-ARCHITECTURE-REDESIGN.md`
   - **Phase A Technical Specs (Streaming Pipeline)** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX-LENS-PHASE-A-SPECS.md`
 - **IDE Compatibility Architecture** - See Section 1.5 (VSCode + Visual Studio intelligent separation)
+- **RAG Impact Analysis** - See `cortex-brain/documents/analysis/CORTEX-4.0-RAG-IMPACT-ANALYSIS.md`
+- **RAG Implementation Guide** - See `cortex-brain/documents/implementation-guides/RAG-CONCEPTS-FOR-CORTEX.md`
+- **🆕 Progress Tracking Standard** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/PROGRESS-TRACKING-STANDARD.md` (CORTEX 4.0 core pattern)
 
 **Critical Path to First Orchestrator Migration:**
 1. **Week 0:** Phase 0 cleanup + technical documentation structure setup
@@ -51,16 +142,17 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **Phase 0 (Week 0):** Pre-Migration Cleanup - Eliminate bloat + Technical documentation structure  
 - **Phase 1 (Weeks 1-3):** Foundation - Base orchestrator, brain, DI, response templates v4.0, testing (CRITICAL)
 - **Phase 1.5 (Week 3):** Documentation & Visualization Framework - Auto-generation tool  
-- **Phase 2 (Weeks 4-6):** Brain Enhancement - Hybrid centralization
-- **Phase 3 (Weeks 7-11):** Orchestrator Consolidation - Migrate 13 orchestrators (11 core + 2 specialized) (requires Phase 1 complete)
-- **Phase 4 (Weeks 12-14):** Operations Simplification - DI container and manifest reduction
-- **Phase 5 (Weeks 15-17):** Testing & Validation - Comprehensive testing and quality gates
-- **Phase 6 (Week 18):** Documentation Finalization - Complete technical documentation generation
+- **Phase 2 (Weeks 4-8):** Brain Enhancement - Hybrid centralization + RAG-inspired guideline content stores (EXTENDED)
+- **Phase 3 (Weeks 9-13):** Orchestrator Consolidation - Migrate 13 orchestrators (11 core + 2 specialized) (requires Phase 1 complete)
+- **Phase 4 (Weeks 14-16):** Operations Simplification - DI container and manifest reduction
+- **Phase 5 (Weeks 17-19):** Testing & Validation - Comprehensive testing and quality gates
+- **Phase 6 (Week 20):** Documentation Finalization - Complete technical documentation generation
 
 **Phase Reorganization Rationale:**
 1. **Response Templates v4.0 moved into Phase 1** - Foundation work, blocking dependency for orchestrators
 2. **MCP Gateway moved to Phase 4** - Non-blocking, can evolve alongside operations simplification
-3. **Brain Enhancement (Phase 2) independent** - Can proceed in parallel with orchestrator development  
+3. **Brain Enhancement (Phase 2) EXTENDED** - Now includes RAG guideline stores (Weeks 4-8 vs original 4-6)
+4. **Phase 3-6 shifted +2 weeks** - Accommodate RAG integration time (total timeline: 18 → 20 weeks)  
 
 ---
 
@@ -1261,16 +1353,509 @@ brain.add_pattern(
 
 **Implementation Timeline:**
 
-**Phase 1 (Weeks 1-3):** Add domain.config.json to repository structure
-**Phase 2 (Weeks 4-6):** Implement multi-domain brain with privacy controls
-- Create sharing-policy.yaml schema
-- Implement namespace-aware queries
-- Add privacy enforcement triggers
-- Create sharing audit log
-- Build cross-domain insight engine
+**Phase 1 (Weeks 1-3):** Add domain.config.json to repository structure  
+**Phase 2 (Weeks 4-8):** Implement multi-domain brain with privacy controls + RAG guideline stores (EXTENDED)
+- **Weeks 4-5:** Multi-domain brain foundation
+  - Create sharing-policy.yaml schema
+  - Implement namespace-aware queries
+  - Add privacy enforcement triggers
+  - Create sharing audit log
+  - Build cross-domain insight engine
+- **Week 6:** RAG guideline content stores (NEW)
+  - Create guidelines.db schema (guideline_documents, guideline_chunks tables)
+  - Implement GuidelineSimilarityEngine (chunking + embeddings)
+  - CLI command `cortex guideline add` (user uploads docs)
+  - Install dependencies: sentence-transformers, langchain
+- **Week 7:** RAG integration with brain
+  - Semantic search integration with intent router
+  - Response augmentation with guideline chunks
+  - Citation links to source documents (file://)
+- **Week 8:** RAG testing & validation
+  - Unit tests (chunking, embedding, similarity search)
+  - Integration tests (end-to-end guideline query workflow)
+  - Pilot testing with HSA/FSA sample guidelines
+  - Security review (PII scanning for uploaded docs)
 
-**Phase 3 (Weeks 7-11):** Test with RA/FSA/HSA/Commuter repositories
-**Phase 5 (Weeks 15-17):** Validate privacy controls with security team
+**Phase 3 (Weeks 9-13):** Test with RA/FSA/HSA/Commuter repositories  
+**Phase 5 (Weeks 17-19):** Validate privacy controls with security team + RAG rollout to 15 domains
+
+---
+
+### 2.2 RAG-Inspired Guideline Content Stores (NEW - Phase 2 Enhancement)
+
+**Use Case:** Self-service domain-specific knowledge bases for 15+ teams (HSA, FSA, COBRA, Commuter, etc.)
+
+**Problem Statement:**
+Users ask domain-specific questions like:
+- "What's our HSA coding standard for PHI redaction?"
+- "What's the FSA team's Stripe integration pattern?"
+- "What's the COBRA enrollment workflow compliance requirement?"
+
+CORTEX has learned patterns (Tier 2) but NO domain-specific GUIDELINES to reference.
+
+**Solution:** User-created guideline stores with semantic search (RAG-inspired architecture)
+
+---
+
+#### Architecture: Guideline Store (Lightweight RAG)
+
+**New Tier 2 Component:**
+
+```
+cortex-brain/tier2/
+├── knowledge_graph.db              # Existing - learned patterns
+├── guidelines.db                   # NEW - user-uploaded guidelines
+│   ├── guideline_documents         # Full markdown/text docs
+│   ├── guideline_chunks            # Semantic chunks (200-500 chars)
+│   ├── guideline_embeddings        # 384-dim vectors (sentence-transformers)
+│   └── guideline_metadata          # Domain, sensitivity, author, version
+└── similarity_engine.py            # NEW - Semantic search engine
+```
+
+**Database Schema (guidelines.db):**
+
+```sql
+-- User-uploaded guideline documents
+CREATE TABLE guideline_documents (
+    id INTEGER PRIMARY KEY,
+    namespace TEXT NOT NULL,              -- company.hsa.compliance
+    title TEXT NOT NULL,
+    content TEXT,                         -- Full markdown content
+    file_path TEXT,                       -- Original file location
+    
+    -- Metadata
+    author TEXT,
+    version TEXT,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    
+    -- Privacy controls (reuse existing multi-domain architecture)
+    sensitivity_level TEXT DEFAULT 'INTERNAL',
+    contains_pii BOOLEAN DEFAULT FALSE,
+    contains_phi BOOLEAN DEFAULT FALSE,
+    contains_pci BOOLEAN DEFAULT FALSE,
+    is_shareable BOOLEAN DEFAULT FALSE,
+    
+    UNIQUE(namespace, title)
+);
+
+-- Semantic chunks for retrieval (RAG core)
+CREATE TABLE guideline_chunks (
+    id INTEGER PRIMARY KEY,
+    document_id INTEGER,
+    chunk_index INTEGER,
+    content TEXT,                         -- 200-500 characters (with overlap)
+    embedding BLOB,                       -- 384-dim vector (all-MiniLM-L6-v2)
+    
+    -- Metadata for context
+    section_title TEXT,
+    category TEXT,
+    
+    FOREIGN KEY(document_id) REFERENCES guideline_documents(id) ON DELETE CASCADE
+);
+
+-- Full-text search index (hybrid: keyword + semantic)
+CREATE VIRTUAL TABLE guideline_search USING fts5(
+    document_id,
+    content,
+    content=guideline_chunks,
+    content_rowid=id
+);
+
+-- Indexes for performance
+CREATE INDEX idx_chunks_document ON guideline_chunks(document_id);
+CREATE INDEX idx_chunks_embedding ON guideline_chunks(document_id, chunk_index);
+CREATE INDEX idx_guideline_namespace ON guideline_documents(namespace);
+```
+
+**Why Separate guidelines.db?**
+- ✅ Clear separation: user-created guidelines vs learned patterns
+- ✅ Different lifecycles (guidelines change quarterly, patterns evolve daily)
+- ✅ Easier backup/restore (domain-specific content)
+- ✅ Different chunking strategies (semantic vs conversational)
+
+---
+
+#### Semantic Search Engine (Minimal RAG Implementation)
+
+```python
+# src/cortex_brain/tier2/similarity_engine.py
+from sentence_transformers import SentenceTransformer
+import numpy as np
+import sqlite3
+
+class GuidelineSimilarityEngine:
+    """
+    Lightweight RAG implementation for domain guideline retrieval.
+    
+    Uses sentence-transformers (all-MiniLM-L6-v2):
+    - 22M parameters, 90MB model, runs locally (CPU)
+    - 384-dimensional embeddings
+    - Proven for semantic similarity tasks
+    """
+    
+    def __init__(self, db_path: str):
+        self.db = sqlite3.connect(db_path)
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+    
+    def ingest_guideline(self, namespace: str, title: str, content: str, 
+                        metadata: dict) -> int:
+        """
+        User uploads a guideline document.
+        
+        RAG Pipeline Steps:
+        1. Save full document to guideline_documents
+        2. Chunk into 200-500 char segments with 50-char overlap
+        3. Generate 384-dim embeddings for each chunk
+        4. Store chunks with embeddings
+        
+        Returns: document_id
+        """
+        # Save document
+        doc_id = self._save_document(namespace, title, content, metadata)
+        
+        # Chunk content (RAG best practice: overlap for context)
+        chunks = self._chunk_content(content, chunk_size=400, overlap=50)
+        
+        # Generate embeddings (semantic vectors)
+        embeddings = self.model.encode(chunks)
+        
+        # Store chunks with embeddings
+        for idx, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+            self._save_chunk(doc_id, idx, chunk, embedding)
+        
+        return doc_id
+    
+    def search_guidelines(self, query: str, namespace: str = None, 
+                         top_k: int = 3) -> list:
+        """
+        Semantic search for relevant guideline chunks.
+        
+        Args:
+            query: User's question ("What's the HSA PHI redaction standard?")
+            namespace: Filter by domain (e.g., "company.hsa.*")
+            top_k: Return top 3 most relevant chunks
+        
+        Returns:
+            [
+                {
+                    "chunk": "HSA PHI Redaction: Always use AES-256...",
+                    "similarity": 0.89,
+                    "document_title": "HSA Compliance Guidelines v2.1",
+                    "namespace": "company.hsa.compliance",
+                    "file_path": "file:///docs/hsa-phi-redaction.md"
+                }
+            ]
+        """
+        # Generate query embedding
+        query_embedding = self.model.encode([query])[0]
+        
+        # Retrieve chunks (filtered by namespace if provided)
+        chunks = self._get_chunks(namespace)
+        
+        # Calculate cosine similarity (numpy dot product)
+        results = []
+        for chunk in chunks:
+            chunk_embedding = np.frombuffer(chunk['embedding'], dtype=np.float32)
+            similarity = np.dot(query_embedding, chunk_embedding)
+            
+            # Only include results above threshold (0.7 = highly relevant)
+            if similarity >= 0.7:
+                results.append({
+                    "chunk": chunk['content'],
+                    "similarity": float(similarity),
+                    "document_title": chunk['document_title'],
+                    "namespace": chunk['namespace'],
+                    "section": chunk['section_title'],
+                    "file_path": f"file:///{chunk['file_path']}"
+                })
+        
+        # Sort by similarity, return top_k
+        results.sort(key=lambda x: x['similarity'], reverse=True)
+        return results[:top_k]
+    
+    def _chunk_content(self, content: str, chunk_size: int, overlap: int) -> list:
+        """
+        Chunk content with overlap (RAG best practice).
+        
+        Strategy: Split at sentence boundaries when possible.
+        Uses: LangChain RecursiveCharacterTextSplitter
+        """
+        from langchain.text_splitter import RecursiveCharacterTextSplitter
+        
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size,
+            chunk_overlap=overlap,
+            separators=["\n\n", "\n", ". ", " ", ""]
+        )
+        
+        return splitter.split_text(content)
+```
+
+**Why sentence-transformers all-MiniLM-L6-v2?**
+- ✅ **Small** - 90MB, runs locally on CPU (no GPU required)
+- ✅ **Fast** - 22M parameters (vs GPT-3.5's 175B)
+- ✅ **Proven** - Top 10 on Hugging Face embedding leaderboard
+- ✅ **384 dimensions** - Good balance of precision and performance
+- ✅ **Zero API costs** - Local embeddings (vs OpenAI embeddings $0.02/1M tokens)
+- ⚠️ **Trade-off** - Not state-of-the-art (but 80% use cases covered)
+
+**Alternative (if performance issues):**
+- Use OpenAI embeddings API (text-embedding-3-small) for higher accuracy
+- Add FAISS vector index if >50,000 chunks (currently: SQLite + numpy sufficient for 10,000 chunks)
+
+---
+
+#### User Workflow: Adding Guidelines
+
+**CLI Command:**
+
+```bash
+# Add a guideline document
+cortex guideline add \
+  --domain hsa \
+  --category compliance \
+  --file docs/hsa-phi-redaction-standard.md \
+  --title "HSA PHI Redaction Standard v2.1" \
+  --sensitivity CONFIDENTIAL \
+  --contains-phi
+
+# Output:
+# ✅ Guideline ingested: company.hsa.compliance.hsa-phi-redaction-standard-v2-1
+# 📄 Document: 15 pages, 47 chunks generated (chunk_size=400, overlap=50)
+# 🔍 Embeddings: 47 vectors created (384-dim, all-MiniLM-L6-v2)
+# 🔒 Sensitivity: CONFIDENTIAL (not shareable across domains)
+# ⏱️ Processing time: 8.3 seconds
+```
+
+**GitHub Copilot Chat Integration:**
+
+```
+User: "What's our HSA coding standard for PHI redaction?"
+
+CORTEX RAG Pipeline:
+1. Detect domain context (HSA repository or explicit "HSA" mention)
+2. Generate query embedding (384-dim vector)
+3. Search guidelines.db with semantic similarity
+4. Retrieve top 3 relevant chunks (similarity > 0.7)
+5. Augment LLM prompt with guideline content
+6. LLM generates response citing guidelines
+7. Add file:// citation links
+
+Response:
+## 🧠 CORTEX HSA PHI Redaction Standard
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+According to **HSA Compliance Guidelines v2.1** (similarity: 0.89):
+
+> Always use AES-256 encryption for PHI at rest. Use bcrypt (cost=12) 
+> for password hashing. Redact SSN/DOB in logs via regex pattern.
+
+See: [HSA Compliance Guidelines](file:///docs/hsa-phi-redaction-standard.md)
+```
+
+---
+
+#### Integration with Existing Multi-Domain Architecture
+
+**NO CONFLICTS - Perfect Alignment:**
+
+| Existing Feature | RAG Enhancement | Integration |
+|------------------|-----------------|-------------|
+| **Domain namespaces** (company.hsa.*) | Guideline documents use same namespaces | ✅ Seamless (reuse existing logic) |
+| **Sharing policies** (YAML) | Apply to guidelines identically | ✅ Zero new config (reuse sharing-policy.yaml) |
+| **Privacy controls** (PII/PHI/PCI triggers) | Guidelines inherit same protections | ✅ Database triggers reused |
+| **Cross-domain insights** (Tier 2) | Guidelines can be recommended across domains | ✅ Auto-works (namespace-aware) |
+| **Audit logs** (sharing_audit_log table) | Track guideline access/sharing | ✅ Extends naturally (same schema) |
+
+**Example: HSA Team Adds Guidelines**
+
+```yaml
+# cortex-brain/sharing-policy.yaml (HSA repo)
+domain: hsa
+company: your-company
+
+sharing:
+  compliance:
+    share: false  # HIPAA-sensitive, keep private
+    reason: "PHI patterns must stay in HSA domain"
+  
+  architecture:
+    share: true   # Clean Architecture docs safe to share
+    reason: "Architecture principles apply to all domains"
+
+# Guidelines inherit sharing policy automatically
+guidelines:
+  hsa-phi-redaction-standard:
+    share: false  # Inherits from compliance category
+    sensitivity: CONFIDENTIAL
+    contains_phi: true
+  
+  hsa-clean-architecture-guide:
+    share: true   # Inherits from architecture category
+    sensitivity: INTERNAL
+    contains_phi: false
+```
+
+**Result:**
+- HSA compliance guidelines stay isolated (HIPAA enforcement via database triggers)
+- HSA architecture guidelines visible to FSA/COBRA/Commuter teams
+- CORTEX automatically enforces via existing privacy infrastructure (zero new code)
+
+---
+
+#### Performance Characteristics
+
+**Storage:**
+- 50-page guideline doc → ~200 chunks → ~200KB in DB
+- 15 teams × 10 docs average = 150 docs → ~30MB total
+- **Conclusion:** Negligible storage impact (<1% of typical brain size)
+
+**Query Speed (Sub-200ms):**
+- Embed query: ~50ms (sentence-transformers)
+- Search 3,000 chunks: ~100ms (numpy dot product)
+- Return top 3: ~150ms total
+- **Conclusion:** Excellent UX (perception of "instant")
+
+**Ingestion Speed:**
+- 50-page doc → ~200 chunks → ~10 seconds to ingest
+- **Conclusion:** One-time cost, acceptable for user-initiated uploads
+
+**Memory:**
+- sentence-transformers model: 90MB loaded once at startup
+- Embeddings in memory: 3,000 chunks × 1.5KB = 4.5MB
+- **Conclusion:** Minimal memory footprint (~100MB total)
+
+---
+
+#### Testing Strategy
+
+**Unit Tests (20 test cases):**
+```python
+def test_guideline_ingestion():
+    """Should chunk and embed a 10-page doc into ~40 chunks."""
+    
+def test_semantic_search_relevance():
+    """Query 'PHI redaction' should return compliance chunks with similarity > 0.7."""
+    
+def test_namespace_isolation():
+    """HSA query should NOT return FSA guidelines (unless shared)."""
+    
+def test_privacy_enforcement():
+    """Cannot share guidelines marked contains_phi=True (database trigger blocks)."""
+    
+def test_chunking_with_overlap():
+    """Chunks should have 50-char overlap to preserve context."""
+    
+def test_embedding_quality():
+    """Similar queries should return similar embeddings (cosine similarity > 0.8)."""
+```
+
+**Integration Tests (10 scenarios):**
+```python
+def test_end_to_end_guideline_query():
+    """
+    1. Upload HSA compliance doc
+    2. User asks "What's our PHI standard?"
+    3. CORTEX returns augmented response with citation
+    """
+
+def test_cross_domain_guideline_recommendation():
+    """
+    1. HSA shares architecture guideline
+    2. FSA repo should see recommendation
+    3. COBRA repo should NOT see compliance guideline (private)
+    """
+    
+def test_rag_pipeline_latency():
+    """Full RAG query (retrieval → augmentation → generation) < 2 seconds."""
+```
+
+---
+
+#### Benefits
+
+**For Users (Domain Teams):**
+1. **Self-Service Guidelines** - Teams upload their own docs (no admin bottleneck)
+2. **Semantic Q&A** - "What's our Stripe pattern?" returns actual FSA guidelines (not generic answers)
+3. **Domain Isolation** - HSA guidelines don't leak to FSA (privacy enforced automatically)
+4. **Always Up-to-Date** - Teams control their own content (no stale docs)
+5. **Citation Links** - CORTEX provides file:// links to source documents (transparency)
+
+**For CORTEX Maintainers:**
+1. **Zero Manual Curation** - No need to manually add every pattern to brain
+2. **Scales to 100+ Domains** - Self-service scales infinitely (no bottleneck)
+3. **Reuses 80% of Existing Architecture** - Multi-domain + privacy already done
+4. **No New Infrastructure** - SQLite, local embeddings (no cloud dependencies)
+
+**For Organization:**
+1. **Knowledge Democratization** - Tribal knowledge → Searchable guidelines
+2. **Compliance Ready** - PII/PHI/PCI protections built-in (database triggers)
+3. **Cross-Domain Learning** - Teams see what other domains solved (opt-in sharing)
+4. **Developer Velocity** - Instant answers vs 2-hour doc searches (10x faster)
+
+---
+
+#### Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|------------|--------|------------|
+| **Embedding model accuracy insufficient** | Low | Medium | A/B test with OpenAI embeddings if needed |
+| **Storage grows too large** | Low | Low | Archive old versions, 90-day retention policy |
+| **Teams upload non-sanitized docs (PII)** | Medium | High | Auto-scan with PII detection + manual review flag |
+| **Chunk strategy doesn't work** | Low | Medium | Configurable chunk size per domain (400 → 300 or 500) |
+| **Cross-domain leakage** | Low | Critical | Reuse existing privacy triggers (tested in multi-domain) |
+| **Performance degrades with 10K+ chunks** | Low | Medium | Add FAISS vector index if needed (future enhancement) |
+
+**OVERALL RISK:** 🟢 **LOW** - Well-understood technology (RAG is proven in production)
+
+---
+
+#### Implementation Checklist (Phase 2, Weeks 6-8)
+
+**Week 6 (Infrastructure):**
+- ☐ Create `guidelines.db` schema (guideline_documents, guideline_chunks tables)
+- ☐ Implement `GuidelineSimilarityEngine` class (chunking + embedding + search)
+- ☐ CLI command `cortex guideline add` (user uploads docs)
+- ☐ Install dependencies: `pip install sentence-transformers langchain`
+- ☐ Unit tests: chunking, embedding, similarity search (20 test cases)
+
+**Week 7 (Integration):**
+- ☐ Update intent router to detect guideline queries
+- ☐ Augment LLM prompts with guideline chunks (top 3 results)
+- ☐ Add file:// citation links to responses
+- ☐ Update BrainInterface with `search_guidelines()` method
+- ☐ Integration tests: end-to-end query workflow (10 scenarios)
+
+**Week 8 (Testing & Validation):**
+- ☐ Pilot testing with HSA/FSA sample guidelines (5-10 docs each)
+- ☐ Security review: PII scanning for uploaded docs (auto-detection)
+- ☐ Performance validation: <200ms query latency
+- ☐ Documentation: user guide for guideline uploads
+- ☐ Rollout plan: Alpha (Week 8) → Beta (Week 12) → GA (Week 17)
+
+**Total Effort:** ~94 hours (12 days)
+
+---
+
+#### Rollout Plan
+
+**Stage 1 (Alpha - Week 8):**
+- Deploy to CORTEX repo only
+- Test with CORTEX's own documentation as guidelines
+- Validate chunking strategy + embedding quality
+
+**Stage 2 (Beta - Week 12):**
+- Deploy to HSA and FSA teams (2 pilot domains)
+- Each team uploads 3-5 guideline documents
+- Gather feedback on search relevance
+
+**Stage 3 (GA - Week 17):**
+- Full rollout to all 15 domains
+- Training sessions for guideline authors
+- Monitoring dashboard for search quality metrics (precision, recall)
+
+---
 
 ### 3. Bloat Reduction Strategy: Dependency Injection
 

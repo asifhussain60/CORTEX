@@ -284,8 +284,15 @@ src/
 ├── tier0/, tier1/, tier2/, tier3/  # Brain tiers
 ├── cortex_agents/                   # 2 specialist agents
 ├── orchestrators/                   # 8 workflows
+├── core/progress_tracker.py         # Progress tracking (CORTEX 4.0 standard)
 └── response_templates/              # Template rendering
 ```
+
+**🆕 CORTEX 4.0 Standard: Progress Tracking**
+- All master plans include visual status trackers
+- Orchestrators auto-update progress on completion
+- Milestones tracked with automated checkbox updates
+- Guide: `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/PROGRESS-TRACKING-STANDARD.md`
 
 **Brain Protection (SKULL):** `cortex-brain/brain-protection-rules.yaml`
 - **TDD_ENFORCEMENT:** RED→GREEN→REFACTOR mandatory

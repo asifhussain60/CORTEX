@@ -371,16 +371,18 @@ class FoundationValidator:
         total = len(self.results)
         
         for result in self.results:
-            print(result)
+            # Use ASCII-safe output for Windows console
+            status = "[PASS]" if result.passed else "[FAIL]"
+            print(f"{status} {result.name}: {result.message}")
         
         print()
         print("=" * 80)
         print(f"SUMMARY: {passed}/{total} prerequisites validated")
         
         if passed == total:
-            print("✅ PHASE 1 FOUNDATION COMPLETE!")
+            print("[PASS] PHASE 1 FOUNDATION COMPLETE!")
         else:
-            print(f"❌ {total - passed} prerequisites failed")
+            print(f"[FAIL] {total - passed} prerequisites failed")
         
         print("=" * 80)
 
