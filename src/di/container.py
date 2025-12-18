@@ -28,7 +28,8 @@ class CortexContainer(containers.DeclarativeContainer):
     - Logging (Logger instances)
     - Templates (TemplateManager)
     - MCP Gateway (MCPGateway)
-    - Future: Brain interface, Orchestrators
+    - Orchestrators (Phase 3+)
+    - Future: Brain interface
     """
     
     # Configuration (singleton)
@@ -51,9 +52,16 @@ class CortexContainer(containers.DeclarativeContainer):
         get_mcp_gateway
     )
     
-    # Future providers (Phase 2-4):
+    # Phase 3: Orchestrators
+    # ExecutionOrchestrator (foundation for all orchestrators)
+    execution_orchestrator = providers.Factory(
+        "src.orchestration_4_0.orchestrators.execution.ExecutionOrchestrator",
+        logger=logger_factory.provider("orchestration.execution"),
+        config=config
+    )
+    
+    # Future providers (Phase 3-4):
     # brain_interface = providers.Singleton(BrainInterface)
-    # base_orchestrator = providers.Factory(BaseOrchestrator, ...)
     # planning_orchestrator = providers.Factory(PlanningOrchestrator, ...)
     # tdd_orchestrator = providers.Factory(TDDOrchestrator, ...)
 
