@@ -1828,6 +1828,13 @@ cortex-brain/
 
 **Total Time:** 11 hours (1.4 days)
 
+**🔄 Phase 0 Cleanup Cycle:**
+- [ ] Run `system maintenance` - Verify all Phase 0 changes are clean
+- [ ] Run `align` - Check for any file organization issues
+- [ ] Run `healthcheck` - Ensure system is healthy before Phase 1
+- [ ] Commit checkpoint: "Phase 0 complete: Pre-migration cleanup"
+- [ ] Verify no uncommitted changes: `git status`
+
 ---
 
 ### Migration Phase Prerequisites Matrix
@@ -3191,6 +3198,17 @@ cortex-toolkit docs export --format pdf --output cortex-4.0-technical-docs.pdf
 
 **Migration Approach:** **Opt-in** - Users manually run migration script per repo
 
+**🔄 Phase 2 Cleanup Cycle:**
+- [ ] Run `pytest tests/brain/` - Validate all brain tier tests pass
+- [ ] Run `system maintenance` - Clean up any temporary brain migration files
+- [ ] Run `align` - Verify brain interface integration is correct
+- [ ] Test cross-repo pattern sharing with 3 sample repos
+- [ ] Verify privacy controls working (patterns stay private by default)
+- [ ] Run `healthcheck` - Ensure brain enhancement is stable
+- [ ] Commit checkpoint: "Phase 2 complete: Brain hybrid centralization"
+- [ ] Tag release: `git tag v4.0.0-phase2-complete`
+- [ ] Verify no uncommitted changes: `git status`
+
 ### Phase 3: Orchestrator Consolidation (Weeks 7-11) - Clean Structure + TDD + Documentation
 
 **Goal:** Migrate orchestrators to clean structure with co-located tests + auto-generated technical documentation
@@ -3487,6 +3505,18 @@ python scripts/validate_cortex_4_foundation.py
 
 **Result:** 28 orchestrators → 12 consolidated orchestrators (57% reduction)
 
+**🔄 Phase 3 Cleanup Cycle:**
+- [ ] Run `pytest tests/orchestrators/ --cov=src/orchestrators` - Validate 90%+ coverage
+- [ ] Run `system maintenance` - Clean up migration artifacts and temporary files
+- [ ] Run `align` - Verify all orchestrator imports and DI wiring correct
+- [ ] Generate technical documentation for all 12 orchestrators
+- [ ] Verify all 60+ D3.js diagrams generated successfully
+- [ ] Run `healthcheck` - Ensure all orchestrators operational
+- [ ] Test all 12 orchestrators end-to-end with sample workflows
+- [ ] Commit checkpoint: "Phase 3 complete: All orchestrators migrated"
+- [ ] Tag release: `git tag v4.0.0-phase3-complete`
+- [ ] Verify no uncommitted changes: `git status`
+
 ### Phase 4: Operations Simplification (Weeks 12-14) - Manifest Reduction
 
 **Goal:** Replace cortex-operations.yaml with DI container auto-discovery
@@ -3512,6 +3542,18 @@ Before: 6,760 lines (operations + modules + wiring + profiles)
 After:  500 lines (descriptions + examples only)
         Wiring → DI Container (code)
 ```
+
+**🔄 Phase 4 Cleanup Cycle:**
+- [ ] Run `pytest tests/di/` - Validate DI container tests pass
+- [ ] Run `pytest tests/operations/` - Verify operations routing works
+- [ ] Run `system maintenance` - Clean up old operation YAML files
+- [ ] Test backward compatibility - All 27 operations from 3.0 work via DI
+- [ ] Run `align` - Verify @orchestrator decorator registrations correct
+- [ ] Run `healthcheck` - Ensure DI auto-discovery is stable
+- [ ] Verify manifest reduction: 6,760 → 500 lines (93% reduction)
+- [ ] Commit checkpoint: "Phase 4 complete: Operations simplified with DI"
+- [ ] Tag release: `git tag v4.0.0-phase4-complete`
+- [ ] Verify no uncommitted changes: `git status`
 
 ### Phase 5: Testing & Validation (Weeks 15-17) - Quality Gates
 
@@ -3589,6 +3631,18 @@ After:  500 lines (descriptions + examples only)
 - ✅ Backward compatibility verified
 - ✅ User acceptance criteria met
 
+**🔄 Phase 5 Cleanup Cycle:**
+- [ ] Run `pytest tests/ --cov=src --cov-report=html` - Generate final coverage report
+- [ ] Run `system maintenance` - Full system cleanup before documentation
+- [ ] Run `align` - Final alignment check across all components
+- [ ] Run `healthcheck` - Comprehensive health validation
+- [ ] Run performance benchmarks - Verify <10% regression
+- [ ] Archive test artifacts and reports
+- [ ] Verify all quality gates: 90%+ coverage, 0 critical bugs, performance OK
+- [ ] Commit checkpoint: "Phase 5 complete: Testing and validation passed"
+- [ ] Tag release: `git tag v4.0.0-phase5-complete`
+- [ ] Verify no uncommitted changes: `git status`
+
 ### Phase 6: Documentation Finalization (Week 18) - Complete Technical Documentation
 
 **Goal:** Generate complete technical documentation for all CORTEX 4.0 components
@@ -3598,6 +3652,28 @@ After:  500 lines (descriptions + examples only)
 **Deliverables:**
 1. Interactive documentation website (HTML + D3.js) - 200+ pages
 2. PDF export of complete technical documentation (~500 pages)
+3. Migration completion report with metrics and lessons learned
+4. CORTEX 4.0 release notes and changelog
+
+**🔄 Phase 6 Cleanup Cycle (FINAL):**
+- [ ] Run `system maintenance` - Final system cleanup
+- [ ] Run `align` - Final alignment verification
+- [ ] Run `healthcheck` - Final health check
+- [ ] Verify all documentation generated (200+ pages, 60+ diagrams)
+- [ ] Test documentation website locally: `http://localhost:8000`
+- [ ] Generate PDF export (~500 pages)
+- [ ] Create migration completion report with metrics:
+  - Orchestrators: 28 → 13 (46% reduction)
+  - Manifest: 6,760 → 500 lines (93% reduction)
+  - Test coverage: 90%+
+  - Performance: <10% regression
+  - Documentation: 200+ pages, 60+ diagrams
+- [ ] Update CHANGELOG.md with CORTEX 4.0 release notes
+- [ ] Commit checkpoint: "Phase 6 complete: CORTEX 4.0 documentation finalized"
+- [ ] Tag final release: `git tag v4.0.0-release`
+- [ ] Merge CORTEX-4.0 branch → main
+- [ ] Verify no uncommitted changes: `git status`
+- [ ] 🎉 CORTEX 4.0 MIGRATION COMPLETE!
 3. Per-orchestrator documentation with diagrams (13 orchestrators)
 4. Feature documentation (7 major features)
 5. API reference documentation (6 API surfaces)
@@ -3879,6 +3955,16 @@ After:  500 lines (descriptions + examples only)
 - ✅ All code examples validated
 
 **Total Time:** 40 hours (1 week)
+
+**🔄 Phase 1 Cleanup Cycle:**
+- [ ] Run `pytest tests/` - Validate all foundation tests pass
+- [ ] Run `system maintenance` - Clean up any temporary files from foundation work
+- [ ] Run `align` - Verify all imports and dependencies correct
+- [ ] Run `healthcheck` - Ensure foundation is production-ready
+- [ ] Run `python scripts/validate_cortex_4_foundation.py` - MUST pass 100%
+- [ ] Commit checkpoint: "Phase 1 complete: CORTEX 4.0 foundation ready"
+- [ ] Tag release: `git tag v4.0.0-phase1-complete`
+- [ ] Verify no uncommitted changes: `git status`
 
 ---
 
