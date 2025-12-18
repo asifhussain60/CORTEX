@@ -985,8 +985,11 @@ class TestIntegration:
 - ☐ Update `src/orchestrators/base/base_orchestrator.py` to use ConfigManager
 - ☐ Add IDE context to Brain Tier 3 (metadata only)
 - ☐ Create `.gitignore` templates for user repos
+- ☐ **Git Commit:** Commit all IDE detection work with descriptive message
 - ☐ Update MASTER-PLAN.md checklist (mark Phase 1, Week 1 IDE work complete)
+- ☐ **Git Commit:** Commit MASTER-PLAN.md progress update
 - ☐ Test in both VSCode and Visual Studio (if available)
+- ☐ **Git Push:** Push both commits to CORTEX-4.0 branch
 
 ---
 
