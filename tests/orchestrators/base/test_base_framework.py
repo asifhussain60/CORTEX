@@ -72,8 +72,8 @@ class TestBaseOrchestrator:
         assert orch.name == "TestOrch"
         assert orch.version == "1.0.0"
         assert orch.status == OrchestratorStatus.NOT_STARTED
-        assert orch.brain is None  # Placeholder in Phase 1
-        assert orch.template_manager is None  # Placeholder in Phase 1
+        assert orch.brain is not None  # Brain interface integrated ✅
+        assert orch.template_manager is None  # Placeholder - will be implemented in Phase 1 item #4
     
     def test_execute_success(self):
         """Test successful orchestrator execution."""
