@@ -126,9 +126,17 @@ class BaseOrchestrator(ABC):
         log_level = config.get("log_level", "INFO")
         self.logger.setLevel(getattr(logging, log_level))
         
-        # Initialize brain interface (lazy-loaded in Phase 1)
-        # Will be replaced with: self.brain = BrainInterface(config.get("brain_config", {}))
-        self.brain = None  # Placeholder for Phase 1
+        # Initialize brain interface
+        workspace_root = Path(config.get("workspace_root", Path.cwd()))
+        brain_config = config.get("brain_config", {})
+        
+        try:
+            from src.brain import BrainInterface
+            self.brain = BrainInterface(workspace_root, brain_config)
+            self.logger.debug("Brain interface initialized")
+        except Exception as e:
+            self.logger.warning(f"Failed to initialize brain interface: {e}")
+            self.brain = None
         
         # Initialize template manager (lazy-loaded in Phase 1)
         # Will be replaced with: self.template_manager = TemplateManager(config.get("template_config", {}))
