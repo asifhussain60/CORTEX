@@ -632,6 +632,11 @@ configuration:
 # ========================================
 # Phase 1 Implementation Status
 # (cortex-rearchitecture-v1)
+# 
+# ⚠️ UPDATE REQUIREMENT: When completing tasks, update BOTH:
+#   1. This section (phase_1_status below)
+#   2. MASTER-PLAN.md progress tracker (lines 22-110)
+#   3. Commit BOTH files together (see MASTER-PLAN.md Git Commit Policy)
 # ========================================
 
 phase_1_status:
@@ -640,6 +645,15 @@ phase_1_status:
   progress: "63%"
   tasks_completed: 5
   tasks_total: 8
+  last_updated: "2025-12-19"
+  update_instructions: |
+    After completing ANY task:
+    1. Update task status in this file (⏸️ → ✅)
+    2. Update MASTER-PLAN.md progress tracker
+    3. git add cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml
+    4. git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
+    5. git commit -m "📊 Update Progress: [Task completed]"
+    6. git push origin CORTEX-4.0
   task_details:
     - id: "1.1"
       name: "Pre-planning discovery"
