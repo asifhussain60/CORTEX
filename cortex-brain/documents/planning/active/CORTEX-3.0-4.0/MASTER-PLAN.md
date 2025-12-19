@@ -21,6 +21,9 @@
 │ PHASE 0: Pre-Migration Cleanup                            [████████████] 100% │
 │ Week 0 (5 days)                                           ✅ COMPLETE        │
 ├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 0.5: Autonomous Execution Framework                  [░░░░░░░░░░░░]   0% │
+│ Week 1 Days 1-3 (3 days)                                 [░░░░░]  0%         │
+├─────────────────────────────────────────────────────────────────────────────┤
 │ PHASE 1: Foundation                                       [████████████] 100% │
 │ Week 1: Base Orchestrator & Brain                        [█████]  100% ✅ DONE│
 │ Week 2: Infrastructure (Templates, Config, Testing)      [█████]  100% ✅ DONE│
@@ -37,7 +40,8 @@
 │ Week 7 Days 1-3: ExecutionOrchestrator (COMPLETE)       [█████]  100% ✅ DONE│
 │ Week 7 Days 4-5: DocumentationOrchestrator (COMPLETE)   [█████]  100% ✅ DONE│
 │ Week 7 Days 6-7: TDDOrchestrator v4.0 (COMPLETE)        [█████]  100% ✅ DONE│
-│ Week 8-9: Planning + Scaffolding                        [░░░░░]  0%         │
+│ Week 8 Days 1-5: Planning System Migration (Day 0)      [░░░░░]  0%         │
+│ Week 9 Days 1-5: Planning System Integration (Day 0)    [░░░░░]  0%         │
 │ Week 10: ADO + Sanitization                             [░░░░░]  0%         │
 │ Week 11: Maintenance + QA + DevOps                      [░░░░░]  0%         │
 │ Week 12: Observability + Intelligence + Onboarding      [░░░░░]  0%         │
@@ -59,6 +63,7 @@
 
 🎯 MILESTONES
 ├─ ✅ Phase 0 Complete (Week 0)
+├─ ☐ Autonomous Execution Framework Complete (Week 1 Days 1-3) - E2E execution enabled
 ├─ ✅ Foundation Validation (Week 3) - 10/10 prerequisites passing ✅ COMPLETE
 ├─ ✅ First Orchestrator Migrated (Week 7 Days 1-3) - ExecutionOrchestrator ✅ COMPLETE
 ├─ ✅ Self-Documentation Active (Week 7 Day 5) - DocumentationOrchestrator ✅ COMPLETE
@@ -66,7 +71,8 @@
 ├─ ✅ TDD Orchestrator v4.0 Complete (Week 7 Day 7) - 26/26 tests, 11+ languages, AI-driven ✅ COMPLETE
 ├─ ☐ Security Patterns Schema Complete (Week 4) - NEW: Security Learning Agent
 ├─ ☐ OWASP/CWE Data Loaded (Week 8) - NEW: Security knowledge base operational
-├─ ☐ Planning System Migrated + Security Gates (Week 8 End)
+├─ ☐ Planning System Core Components Migrated (Week 8 End) - Routing, Discovery, Tracking
+├─ ☐ Planning System 4.0 Complete (Week 9 End) - 50+ tests, 85% coverage, 8 docs
 ├─ ☐ RAG Integration Live (Week 8)
 ├─ ☐ QA Security Audit Phase (Week 10) - NEW: Compliance automation
 ├─ ☐ 90%+ Test Coverage (Week 18 - UPDATED from Week 19)
@@ -202,15 +208,17 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 
 **Critical Path to First Orchestrator Migration:**
 1. **Week 0:** Phase 0 cleanup + technical documentation structure setup ✅
-2. **Weeks 1-3:** Phase 1 foundation (10 prerequisites MUST be complete) ✅
-3. **Week 3 End:** Run validation script - MUST pass before Phase 3 ✅
-4. **Week 7 (Days 1-3):** Migrate ExecutionOrchestrator (foundation - all orchestrators depend on it) ✅
-5. **Week 7 (Days 4-5):** Migrate Technical Documentation Orchestrator (self-documenting migration) ✅
-6. **Week 8:** Migrate TDDOrchestrator (next priority, RED→GREEN→REFACTOR enforcement)
-7. **Week 9:** Migrate PlanningOrchestrator (high complexity, well-tested, 1,599 LOC → 4 modules)
+2. **Week 1 Days 1-3:** Phase 0.5 autonomous execution framework (NEW - enables E2E execution)
+3. **Weeks 1-3:** Phase 1 foundation (10 prerequisites MUST be complete) 
+4. **Week 3 End:** Run validation script - MUST pass before Phase 3
+5. **Week 7 (Days 1-3):** Migrate ExecutionOrchestrator (foundation - all orchestrators depend on it) ✅
+6. **Week 7 (Days 4-5):** Migrate Technical Documentation Orchestrator (self-documenting migration) ✅
+7. **Week 8:** Migrate TDDOrchestrator (next priority, RED→GREEN→REFACTOR enforcement)
+8. **Week 9:** Migrate PlanningOrchestrator (high complexity, well-tested, 1,599 LOC → 4 modules)
 
 **Key Phases (Reorganized for Parallel Execution):**
 - **Phase 0 (Week 0):** Pre-Migration Cleanup - Eliminate bloat + Technical documentation structure  
+- **Phase 0.5 (Week 1 Days 1-3):** Autonomous Execution Framework - E2E autonomous execution with self-healing
 - **Phase 1 (Weeks 1-3):** Foundation - Base orchestrator, brain, DI, response templates v4.0, testing (CRITICAL)
 - **Phase 1.5 (Week 3):** Documentation & Visualization Framework - Auto-generation tool  
 - **Phase 2 (Weeks 4-8):** Brain Enhancement - Hybrid centralization + RAG guideline stores + Security Learning Agent (RUNS PARALLEL WITH PHASE 3)
@@ -236,8 +244,9 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 
 | Phase | Starts After | Hard Dependencies | Can Run Parallel With | Blocks |
 |-------|-------------|-------------------|----------------------|--------|
-| **Phase 0** | - | None | - | Phase 1 |
-| **Phase 1** | Phase 0 | None | - | All phases |
+| **Phase 0** | - | None | - | Phase 0.5 |
+| **Phase 0.5** | Phase 0 | Phase 0 cleanup | - | Phase 1 |
+| **Phase 1** | Phase 0.5 | Autonomous framework | - | All phases |
 | **Phase 1.5** | Phase 1 | Phase 1 items 1-8 | Phase 2 | Documentation tooling |
 | **Phase 2** | Phase 1 | Brain interface (Phase 1) | **Phase 3** ⚡ | Phase 4 (optional) |
 | **Phase 3** | Phase 1 | 10 foundation prerequisites | **Phase 2** ⚡ | Phase 4, 5 |
@@ -2676,6 +2685,279 @@ cortex-brain/
 
 ---
 
+### Phase 0.5: Autonomous Execution Framework (Week 1, Days 1-3) - E2E Autonomous Execution
+
+**Goal:** Enable end-to-end autonomous execution with self-healing and auto-validation gates
+
+**Status:** ⏳ PENDING - Requires Phase 0 complete
+
+**Duration:** 3 days (24 hours)
+
+**Implementation Priority:** HIGH - Enables autonomous multi-phase execution
+
+**Overview:**
+
+Phase 0.5 adds the foundational capability for CORTEX 4.0 to execute plans end-to-end autonomously without manual intervention. This transforms CORTEX from a manual orchestration tool to a fully autonomous execution engine with self-healing capabilities.
+
+**Key Capabilities:**
+
+1. **Autonomous Phase Transitions** - Auto-advance to next phase on validation pass
+2. **Auto-Validation Gates** - Run validation scripts automatically after each phase
+3. **Self-Healing** - 3-retry error recovery with exponential backoff
+4. **Git Automation** - Auto-commit work on phase completion
+5. **Progress Monitoring** - Real-time decision-making progress tracker
+
+**Architecture:**
+
+```
+Autonomous Execution Flow:
+┌─────────────────────────────────────────────────────────────┐
+│ User: "cortex execute plan --mode=autonomous"               │
+└───────────────────────┬─────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────────────┐
+│ AutonomousExecutionEngine                                   │
+├─────────────────────────────────────────────────────────────┤
+│ 1. Load master plan + validate prerequisites                │
+│ 2. FOR EACH PHASE:                                          │
+│    ├─ Create checkpoint                                     │
+│    ├─ Execute phase orchestrator                            │
+│    ├─ Run validation gate                                   │
+│    ├─ IF PASS:                                              │
+│    │  ├─ Commit work (auto-git)                             │
+│    │  ├─ Update master plan progress                        │
+│    │  └─ Transition to next phase                           │
+│    └─ IF FAIL:                                              │
+│       ├─ Attempt self-heal (max 3 retries)                  │
+│       ├─ Rollback to checkpoint                             │
+│       └─ Escalate to user after exhaustion                  │
+│ 3. Report completion + metrics                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Components:**
+
+```python
+src/orchestrators/
+└── autonomous_execution_engine.py         # NEW: Core autonomous orchestrator
+    ├── class AutonomousExecutionEngine(BaseOrchestrator)
+    ├── def execute_plan_autonomous()      # Main entry point
+    ├── def execute_phase()                # Single phase execution
+    ├── def run_validation_gate()          # Auto-validation
+    ├── def self_heal()                    # Error recovery
+    ├── def create_checkpoint()            # Git checkpoints
+    ├── def rollback_to_checkpoint()       # Rollback on failure
+    └── def escalate_to_user()             # Manual intervention
+
+src/core/
+└── validation_gate_runner.py              # NEW: Auto-validation runner
+    ├── class ValidationGateRunner
+    ├── def run_phase_validation()         # Phase-specific validation
+    ├── def parse_validation_results()     # Parse script output
+    └── def determine_pass_fail()          # Pass/fail logic
+
+src/core/
+└── git_automation.py                      # NEW: Git operations
+    ├── class GitAutomation
+    ├── def auto_commit()                  # Auto-commit with template
+    ├── def auto_push()                    # Auto-push on milestone
+    └── def create_checkpoint()            # Named checkpoints
+
+src/core/
+└── self_healing_engine.py                 # NEW: Error recovery
+    ├── class SelfHealingEngine
+    ├── def attempt_recovery()             # Main recovery logic
+    ├── def retry_with_backoff()           # Exponential backoff
+    ├── def try_alternative_approach()     # Alternative strategies
+    └── def determine_recovery_strategy()  # Strategy selection
+```
+
+**Tasks (Week 1, Days 1-3):**
+
+**Day 1: Core Framework (8 hours)**
+- [ ] Create `autonomous_execution_engine.py` with BaseOrchestrator
+- [ ] Implement `execute_plan_autonomous()` - main entry point
+- [ ] Implement `execute_phase()` - single phase execution
+- [ ] Add phase lifecycle hooks (on_phase_start, on_phase_complete, on_validation_fail)
+- [ ] Write 10 unit tests for autonomous engine
+- [ ] Update Planning System 3.0 manifest with autonomous config
+
+**Day 2: Validation & Git Automation (8 hours)**
+- [ ] Create `validation_gate_runner.py` with auto-validation logic
+- [ ] Implement phase-specific validation script runner
+- [ ] Create `git_automation.py` with auto-commit/push
+- [ ] Implement checkpoint creation/rollback
+- [ ] Write 8 tests for validation runner
+- [ ] Write 8 tests for git automation
+
+**Day 3: Self-Healing & Integration (8 hours)**
+- [ ] Create `self_healing_engine.py` with recovery strategies
+- [ ] Implement retry_with_backoff (exponential, max 3 attempts)
+- [ ] Implement alternative_approach strategy
+- [ ] Implement rollback_and_retry strategy
+- [ ] Write 12 tests for self-healing engine
+- [ ] Integration test: Execute Phase 1 autonomously
+- [ ] Documentation: Autonomous execution guide
+
+**Execution Modes:**
+
+**Supervised Mode (Default):**
+```bash
+cortex execute plan --mode=supervised
+# User approves each phase transition
+# Auto-validation: ✅ YES
+# Auto-commit: ❌ NO
+# Auto-transition: ❌ NO
+# Self-healing: ❌ NO
+```
+
+**Autonomous Mode (E2E):**
+```bash
+cortex execute plan --mode=autonomous
+# Full E2E execution
+# Auto-validation: ✅ YES
+# Auto-commit: ✅ YES
+# Auto-transition: ✅ YES
+# Self-healing: ✅ YES (3 retries)
+# Escalation: Only after exhaustion
+```
+
+**Partial Execution:**
+```bash
+cortex execute plan --mode=autonomous --from=phase_2 --to=phase_4
+# Execute specific phase range autonomously
+```
+
+**Self-Healing Strategies:**
+
+| Strategy | Applicable To | Max Attempts | Backoff |
+|----------|--------------|--------------|---------|
+| `retry_with_backoff` | Transient errors, network issues | 3 | Exponential (1s, 2s, 4s) |
+| `alternative_approach` | Test failures, validation errors | 2 | None |
+| `rollback_and_retry` | Breaking changes, integration failures | 1 | None |
+
+**Validation Gates:**
+
+Each phase has automatic validation:
+
+```python
+validation_gates = {
+    "phase_0": "scripts/validate_phase_0_cleanup.py",
+    "phase_0.5": "scripts/validate_autonomous_framework.py",
+    "phase_1": "scripts/validate_cortex_4_foundation.py",
+    "phase_2": "scripts/validate_brain_enhancement.py",
+    "phase_3": "scripts/validate_orchestrator_migration.py",
+    "phase_4": "scripts/validate_operations_simplification.py",
+    "phase_5": "scripts/validate_testing_coverage.py",
+    "phase_6": "scripts/validate_documentation.py",
+}
+```
+
+**Git Automation:**
+
+Auto-commit template:
+```
+✅ {phase_name} Complete: {summary}
+
+Deliverables:
+{deliverable_list}
+
+Validation: {validation_status}
+Tests Passing: {test_count}/{total_tests}
+Coverage: {coverage_percentage}%
+
+Phase Duration: {duration}
+Token Usage: {tokens_consumed}
+```
+
+**Progress Monitoring with Decision Logic:**
+
+```python
+class ProgressMonitor:
+    def can_transition_to_next_phase(self) -> bool:
+        """Decision logic for autonomous phase transitions."""
+        return (
+            self.phase_completion == 100 and
+            self.validation_passed == True and
+            self.test_pass_rate == 100 and
+            self.error_count == 0
+        )
+```
+
+**Testing Requirements:**
+
+```
+tests/orchestrators/autonomous/
+├── test_autonomous_execution_engine.py      # 10 tests
+├── test_validation_gate_runner.py           # 8 tests
+├── test_git_automation.py                   # 8 tests
+├── test_self_healing_engine.py              # 12 tests
+└── test_autonomous_integration.py           # 5 tests (E2E)
+
+Total: 43 tests
+Target Coverage: 90%+
+```
+
+**Deliverables:**
+
+- ✅ `autonomous_execution_engine.py` (300 LOC)
+- ✅ `validation_gate_runner.py` (150 LOC)
+- ✅ `git_automation.py` (120 LOC)
+- ✅ `self_healing_engine.py` (180 LOC)
+- ✅ 43 tests (90%+ coverage)
+- ✅ Autonomous execution guide
+- ✅ Planning System 3.0 manifest updated
+- ✅ Master Plan progress tracker integration
+
+**Total LOC:** ~750 lines (implementation) + 400 lines (tests) = 1,150 lines
+
+**Success Criteria:**
+
+1. ✅ Execute Phase 1 autonomously end-to-end
+2. ✅ Auto-validation gates run and pass
+3. ✅ Git auto-commit on phase completion
+4. ✅ Self-healing recovers from 1 simulated failure
+5. ✅ Progress tracker updates automatically
+6. ✅ 43/43 tests passing (100%)
+7. ✅ 90%+ test coverage
+
+**Risks & Mitigation:**
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| Auto-commit breaks branch | HIGH | Checkpoint system + rollback capability |
+| Self-healing loops infinitely | MEDIUM | Hard limit: 3 retries per strategy |
+| Validation scripts fail silently | HIGH | Explicit pass/fail parsing + error logs |
+| Git conflicts in autonomous mode | MEDIUM | Pull before commit + conflict detection |
+
+**Integration Points:**
+
+- **Planning System 3.0:** Manifest updated with autonomous config
+- **Master Plan:** Progress tracker auto-updates
+- **All Orchestrators:** Can be executed autonomously via engine
+- **Validation Scripts:** Auto-triggered by validation gate runner
+
+**Commands Added:**
+
+```bash
+# New commands
+cortex execute plan --mode=autonomous           # Full E2E
+cortex execute plan --mode=supervised           # User approvals (default)
+cortex execute plan --mode=autonomous --from=phase_2 --to=phase_4  # Partial
+
+# Status monitoring
+cortex status autonomous                        # Show current autonomous execution
+cortex logs autonomous                          # View autonomous execution logs
+```
+
+**Ready for Phase 1:** ✅ After 3 days
+- Autonomous execution framework operational
+- E2E execution proven with Phase 1
+- Self-healing tested and validated
+- Git automation working reliably
+
+---
+
 ### Migration Phase Prerequisites Matrix
 
 **This table shows what MUST be complete before starting each phase:**
@@ -2683,7 +2965,8 @@ cortex-brain/
 | Phase | Prerequisites | Validation | Can Start When... | Status |
 |-------|--------------|------------|-------------------|--------|
 | **Phase 0** (Week 0) | None - starting point | Manual review of file organization | Immediately | ✅ **COMPLETE** |
-| **Phase 1** (Weeks 1-3) | Phase 0 complete | Directory structure exists | Phase 0 deliverables verified | 🟢 **READY TO START** |
+| **Phase 0.5** (Week 1 Days 1-3) | Phase 0 complete | 43/43 autonomous tests pass | Phase 0 deliverables verified | 🟡 **READY TO START** |
+| **Phase 1** (Weeks 1-3) | Phase 0.5 complete | Directory structure + autonomous framework | Autonomous execution validated | ⏳ Blocked by Phase 0.5 |
 | **Phase 1.5** (Week 3) | Phase 1 foundation items 1-8 complete | `pytest tests/` passes | Foundation validation script passes | ⏳ Blocked by Phase 1 |
 | **Phase 2** (Weeks 4-6) | Phase 1 complete | Brain interface tests pass | Full Phase 1 validation | ⏳ Blocked by Phase 1 |
 | **Phase 3** (Weeks 7-11) | **CRITICAL:** All 10 Phase 1 prerequisites | `validate_cortex_4_foundation.py` passes ✅ | Foundation validation = 100% pass | ⏳ Blocked by Phase 1 |

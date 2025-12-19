@@ -1,5 +1,5 @@
-schema_version: '4.0'
-last_updated: '2025-12-18'
+schema_version: '4.0.1'
+last_updated: '2025-12-19'
 architecture: adaptive_minimalism
 description: |
   Response Template System v4.0 - 97% reduction (15,851 → 486 lines)
@@ -116,7 +116,7 @@ sections:
     title: "Response"
     when_to_use:
       - always: true  # Core content section
-    content_guidelines: "Main response content - code only if requested"
+    content_guidelines: "Main response content - concise pseudo-code by default, full code ONLY if explicitly requested"
   
   changes:
     emoji: "📊"
@@ -208,7 +208,7 @@ sections:
     when_to_use:
       - code_written: true
       - changes_made: true
-    content_guidelines: "What was implemented, how it works"
+    content_guidelines: "Describe what was implemented using concise pseudo-code or high-level approach - full code snippets ONLY if user explicitly requests"
   
   achievements:
     emoji: "🎉"
@@ -237,7 +237,9 @@ components:
   
   formatting:
     file_link: "[`{filename}`]({path})"
+    pseudo_code: "**Pseudo-code:** {description}"
     code_block: "```{language}\n{code}\n```"
+    code_reference: "**Implementation:** {high_level_approach}"
     collapsible: "<details><summary>{title}</summary>\n\n{content}\n\n</details>"
     metric: "**{label}:** {value}"
     progress_bar: "[{filled}{'>' if not complete else ''}{empty}] {percentage}%"
@@ -333,7 +335,7 @@ standard_structure:
     - name: "Response"
       emoji: "💬"
       required: true
-      content: "Your response - NO code unless requested"
+      content: "Your response - concise pseudo-code by default, full code ONLY if explicitly requested"
     
     - name: "Impact & Changes"
       emoji: "📊"
@@ -349,7 +351,8 @@ standard_structure:
     - "✅ H2 with 🧠, H3 with emojis"
     - "✅ Author line + one separator (---)"
     - "✅ Approach: Real challenge OR 'No significant challenges'"
-    - "❌ NO extra separators, NO code unless requested"
+    - "✅ Use concise pseudo-code by default (NOT full code snippets)"
+    - "❌ NO extra separators, NO full code unless explicitly requested"
 
 # ============================================================================
 # TIER SELECTION ALGORITHM
@@ -413,6 +416,59 @@ section_selection:
         add: "achievements"
 
 # ============================================================================
+# CODE DISPLAY POLICY
+# ============================================================================
+
+code_display_policy:
+  description: "Rules for when to show full code vs pseudo-code"
+  
+  default_behavior:
+    rule: "ALWAYS use concise pseudo-code unless explicitly requested"
+    rationale: "Keep responses concise and conversational"
+  
+  pseudo_code_format:
+    description: "High-level logic without implementation details"
+    examples:
+      - "**Approach:** Validate input → query database → transform results → cache → return"
+      - "**Logic:** Check permissions → if authorized → execute operation → log result"
+      - "**Flow:** Parse request → authenticate user → call service layer → format response"
+    when_to_use:
+      - "Explaining implementation approach"
+      - "Describing logic flow"
+      - "Answering 'how does X work' questions"
+      - "Default for all responses"
+  
+  full_code_triggers:
+    description: "Only show full code snippets when user explicitly requests"
+    explicit_requests:
+      - "show me the code"
+      - "give me the implementation"
+      - "what's the code for"
+      - "write the code"
+      - "can you code this"
+      - "provide code snippet"
+      - "example code"
+    implicit_triggers:
+      - "debugging specific syntax error"
+      - "user pastes code asking for fix"
+      - "code review requested"
+  
+  collapsible_code:
+    description: "For longer code, use collapsible sections"
+    format: |
+      <details><summary>📄 Implementation Code</summary>
+      
+      ```{language}
+      {code}
+      ```
+      
+      </details>
+    when_to_use:
+      - "Code snippet > 20 lines"
+      - "Multiple code examples"
+      - "Full file contents"
+
+# ============================================================================
 # ANTI-BLOAT MEASURES
 # ============================================================================
 
@@ -420,15 +476,20 @@ anti_bloat:
   rules:
     - "Never create unnecessary sections"
     - "Approach section: real challenge OR 'No significant challenges'"
-    - "No code unless requested"
+    - "Use concise pseudo-code by default - full code ONLY if explicitly requested"
     - "One separator (---) only after author line"
     - "Sections must add value, not just fill space"
+  
+  pseudo_code_examples:
+    - "**Approach:** Use decorator pattern → validate input → call original function → log result"
+    - "**Logic:** Check cache → if miss, query DB → transform data → store in cache → return"
+    - "**Flow:** User request → authentication → authorization → business logic → response"
   
   red_flags:
     - "Empty or placeholder sections"
     - "Restating the request"
     - "Unnecessary explanations"
-    - "Code when not asked"
+    - "Full code snippets when not explicitly requested"
     - "Multiple separators"
 
 # ============================================================================
@@ -467,7 +528,16 @@ examples:
       No significant challenges - straightforward implementation following existing patterns.
       
       ### 💬 Response
-      {implementation_details}
+      **Implementation approach:**
+      1. Create `FeatureX` class with validation decorator
+      2. Add input validation → business logic → error handling
+      3. Integrate with existing service layer
+      4. Add logging and metrics tracking
+      
+      **Key logic:**
+      - Input validation: Check required fields → validate data types → sanitize
+      - Processing: Transform input → call dependency services → aggregate results
+      - Error handling: Try-catch wrapper → log errors → return user-friendly messages
       
       ### 📊 Impact & Changes
       - Created `src/features/feature_x.py` (150 LOC)
@@ -504,6 +574,36 @@ examples:
       
       ### 🔍 Next Steps
       {follow_up_actions}
+  
+  full_code_example:
+    request: "show me the code for feature X"
+    response: |
+      ## 🧠 CORTEX Feature X Code
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      
+      ### 💬 Implementation
+      Here's the complete implementation:
+      
+      ```python
+      class FeatureX:
+          def __init__(self, config):
+              self.config = config
+          
+          def process(self, data):
+              # Validation
+              if not self._validate(data):
+                  raise ValueError("Invalid data")
+              
+              # Processing
+              result = self._transform(data)
+              return result
+      ```
+      
+      ### 🔍 Usage
+      ```python
+      feature = FeatureX(config)
+      result = feature.process(input_data)
+      ```
 
 # ============================================================================
 # MIGRATION NOTES
@@ -531,11 +631,21 @@ migration:
 # ============================================================================
 
 metadata:
-  version: "4.0.0"
+  version: "4.0.1"
   author: "Asif Hussain"
   copyright: "© 2025 Asif Hussain. All rights reserved."
   github: "github.com/asifhussain60/CORTEX"
   created: "2025-12-18"
-  lines_of_code: 486
+  updated: "2025-12-19"
+  lines_of_code: 642
   reduction_from_v3: "97%"
   estimated_token_savings: "~12,000 tokens per response cycle"
+  changelog:
+    - version: "4.0.1"
+      date: "2025-12-19"
+      changes:
+        - "Added code display policy (pseudo-code by default)"
+        - "Updated all sections to prefer concise pseudo-code"
+        - "Added explicit code trigger keywords"
+        - "Added pseudo-code format examples"
+        - "Enhanced anti-bloat measures with pseudo-code guidelines"

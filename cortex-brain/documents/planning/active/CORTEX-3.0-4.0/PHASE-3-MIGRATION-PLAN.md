@@ -37,11 +37,17 @@
 │ ☐ Day 6-7: TDDOrchestrator                          [░░░░░]  0%       │
 ├─────────────────────────────────────────────────────────────────────────┤
 │ Week 8: Planning System (High-Complexity)            [░░░░░░░░░░░]  0% │
+│   Days 1-2: Tiered Routing + Complexity Analysis    [░░░░░]  0%         │
+│   Days 3-4: Pre-Planning Discovery                  [░░░░░]  0%         │
+│   Day 5: Visual Progress Tracker                    [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────┤
 │ ☐ PlanningOrchestrator (1,599 LOC → 4 modules)      [░░░░░]  0%       │
 │ ☐ ScaffoldingOrchestrator (5 support modules)       [░░░░░]  0%       │
 ├─────────────────────────────────────────────────────────────────────────┤
 │ Week 9: Domain-Specific Orchestrators                [░░░░░░░░░░░]  0% │
+│   Days 1-2: Planning System Core Logic              [░░░░░]  0%         │
+│   Day 3: Temporary Plan Manager Integration         [░░░░░]  0%         │
+│   Days 4-5: Integration + Testing + Documentation   [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────┤
 │ ☐ ADOOrchestrator (3 → 1 consolidation)             [░░░░░]  0%       │
 │ ☐ DocumentationOrchestrator (2 → 1 consolidation)   [░░░░░]  0%       │
@@ -63,8 +69,9 @@
 ├─ ☐ First Orchestrator Migrated (Week 7 Day 3)
 ├─ ☐ Self-Documentation Active (Week 7 Day 5)
 ├─ ☐ TDD Orchestrator Complete (Week 7 Day 7)
-├─ ☐ Planning System Migrated (Week 8 End)
-├─ ☐ 50% Orchestrators Done (Week 9 End)
+├─ ☐ Planning System Migrated (Week 8 End) - Core components operational
+├─ ☐ Planning System Complete (Week 9 End) - 50+ tests, 85% coverage
+├─ ☐ 50% Orchestrators Done (Week 10 End) - 7/14 orchestrators
 └─ ☐ Phase 3 Complete (Week 11 End)
 
 📈 METRICS
@@ -175,6 +182,246 @@
 **Tasks:** (TODO Day 4)
 
 ---
+
+### Day 6-7: TDDOrchestrator Migration
+
+**Status:** ✅ COMPLETE (December 19, 2025)
+
+**Completed Work:**
+- ✅ TDD Orchestrator v4.0 designed and implemented
+- ✅ Unified architecture with strategy pattern
+- ✅ 11+ language support (adaptive tech discovery)
+- ✅ AI-driven test generation
+- ✅ Clean code enforcement (SOLID/DRY/KISS/YAGNI)
+- ✅ 26/26 tests passing (100% pass rate)
+- ✅ 81.5% coverage (target: 90%)
+- ✅ Complete documentation (manifest, guide, reference)
+
+**See:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/TDD-ORCHESTRATOR-REDESIGN.md`
+
+---
+
+## 🗓️ Week 8: Planning System Migration (Days 1-5)
+
+**Orchestrator:** Planning System 3.0 → 4.0  
+**Complexity:** HIGH (1,599 LOC, 9 components)  
+**Coverage Target:** 85%+ (50+ tests)  
+**Estimated Effort:** 21 hours over 5 days  
+
+**Sub-Plan:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/sub-plans/PLANNING-SYSTEM-MIGRATION-WEEK-8-9.md`
+
+### Day 1: Tiered Routing Migration (4 hours)
+
+**Objective:** Migrate TieredRouter + ComplexityAnalyzer to v4.0 structure
+
+**Tasks:**
+- [ ] Copy `TieredRouter` from `src/operations/modules/routing/` → `src/orchestrators/planning_system/routing/`
+- [ ] Copy `ComplexityAnalyzer` from `src/operations/modules/routing/` → `src/orchestrators/planning_system/routing/`
+- [ ] Update imports in both modules
+- [ ] Create `src/orchestrators/planning_system/routing/__init__.py`
+- [ ] Create `test_tiered_routing.py` (8 tests: Tier 1-4 classification, caching, LLM fallback, edge cases)
+- [ ] Run tests: `pytest src/orchestrators/planning_system/tests/test_tiered_routing.py -v --cov`
+- [ ] Validate: 90%+ coverage on routing module
+
+**Deliverable:** Tiered routing operational in v4.0 structure with 8 passing tests
+
+### Day 2: Routing Tests & Validation (4 hours)
+
+**Objective:** Complete testing for routing module
+
+**Tasks:**
+- [ ] Create `test_complexity_analyzer.py` (8 tests: 4D scoring, thresholds, edge cases)
+- [ ] Test code impact dimension (LOC, files, modules)
+- [ ] Test risk level dimension (breaking changes, dependencies)
+- [ ] Test domain complexity dimension (business logic, algorithms)
+- [ ] Test integration scope dimension (external systems, APIs)
+- [ ] Test tier classification edge cases (boundary scores)
+- [ ] Test LLM fallback behavior (no cache, network error)
+- [ ] Run coverage: `pytest src/orchestrators/planning_system/tests/ -v --cov=src/orchestrators/planning_system/routing/`
+- [ ] Validate: 90%+ coverage
+
+**Deliverable:** Routing module fully tested (16 tests passing, 90% coverage)
+
+### Day 3: Pre-Planning Discovery Migration (6 hours)
+
+**Objective:** Extract pre-planning discovery logic from archived orchestrator
+
+**Tasks:**
+- [ ] Review archived `PlanningOrchestrator.pre_planning_discovery()` in `archive/orchestrators/legacy/`
+- [ ] Create `src/orchestrators/planning_system/discovery/` directory
+- [ ] Create `pre_planning_discovery.py` - Extract discovery logic
+- [ ] Create `plan_matcher.py` - Semantic plan matching (feature slug extraction, similarity scoring)
+- [ ] Update imports and dependencies
+- [ ] Create `src/orchestrators/planning_system/discovery/__init__.py`
+- [ ] Create `test_pre_planning_discovery.py` (9 tests: active/temp/completed search, time ranges, slug extraction)
+- [ ] Run tests: `pytest src/orchestrators/planning_system/tests/test_pre_planning_discovery.py -v`
+
+**Deliverable:** Pre-planning discovery operational (9 tests passing)
+
+### Day 4: Discovery Tests & Validation (4 hours)
+
+**Objective:** Complete testing for discovery module
+
+**Tasks:**
+- [ ] Test active plan search (exact match, partial match)
+- [ ] Test temporary plan search (30-day time range)
+- [ ] Test completed plan search (180-day time range)
+- [ ] Test feature slug extraction (multiple formats)
+- [ ] Test semantic plan matching (confidence scoring)
+- [ ] Test edge cases (no plans, multiple matches, old plans)
+- [ ] Run coverage: `pytest src/orchestrators/planning_system/tests/ -v --cov=src/orchestrators/planning_system/discovery/`
+- [ ] Validate: 85%+ coverage
+
+**Deliverable:** Discovery module fully tested (9 tests passing, 85% coverage)
+
+### Day 5: Visual Progress Tracker (4 hours)
+
+**Objective:** Migrate visual progress tracking to v4.0
+
+**Tasks:**
+- [ ] Copy `PlanningSession` from `src/orchestrators/session_model.py` → `src/orchestrators/planning_system/tracking/progress_tracker.py`
+- [ ] Create `metrics_collector.py` for phase metrics (timing, tokens, duration)
+- [ ] Update imports
+- [ ] Create `src/orchestrators/planning_system/tracking/__init__.py`
+- [ ] Create `test_progress_tracking.py` (5 tests: phase tracking, metrics, rendering, visual table)
+- [ ] Run tests: `pytest src/orchestrators/planning_system/tests/test_progress_tracking.py -v --cov`
+- [ ] Validate: 85%+ coverage
+
+**Deliverable:** Progress tracking operational (5 tests passing, 85% coverage)
+
+**Week 8 End Status:**
+- ✅ Routing module complete (16 tests, 90% coverage)
+- ✅ Discovery module complete (9 tests, 85% coverage)
+- ✅ Tracking module complete (5 tests, 85% coverage)
+- ✅ 30/50 tests passing (60% complete)
+
+---
+
+## 🗓️ Week 9: Planning System Integration (Days 1-5)
+
+**Objective:** Complete main orchestrator, integrate all modules, achieve 85%+ coverage
+
+### Day 1: Core Planning Orchestrator (Part 1) (6 hours)
+
+**Objective:** Create main orchestrator structure
+
+**Tasks:**
+- [ ] Create `src/orchestrators/planning_system/planning_orchestrator.py`
+- [ ] Extend `BaseOrchestrator` from Phase 1
+- [ ] Implement `__init__()` with DI container wiring
+- [ ] Implement `execute()` method (request routing)
+- [ ] Integrate `TieredRouter` for request classification
+- [ ] Integrate `ComplexityAnalyzer` for scoring
+- [ ] Wire in logging and error handling
+- [ ] Create initial unit tests (5 tests: init, execute, routing integration)
+
+**Deliverable:** Basic orchestrator structure operational (5 tests passing)
+
+### Day 2: Core Planning Orchestrator (Part 2) (6 hours)
+
+**Objective:** Integrate discovery and tracking
+
+**Tasks:**
+- [ ] Integrate `PrePlanningDiscovery` module
+- [ ] Implement discovery workflow (search → recommend → user decision)
+- [ ] Integrate `ProgressTracker` module
+- [ ] Implement phase management (planning → execution)
+- [ ] Add comprehensive error handling
+- [ ] Add logging for all phases
+- [ ] Create integration tests (10 tests: discovery + routing, tracking + execution)
+- [ ] Run tests: `pytest src/orchestrators/planning_system/tests/test_planning_orchestrator.py -v`
+
+**Deliverable:** Core orchestrator functionality complete (15 tests passing)
+
+### Day 3: Temporary Plan Manager Integration (4 hours)
+
+**Objective:** Complete lifecycle management
+
+**Tasks:**
+- [ ] Copy `TemporaryPlanManager` from `src/operations/modules/orchestration/` → `src/orchestrators/planning_system/management/`
+- [ ] Create `plan_lifecycle.py` for lifecycle management (active → completed → archived)
+- [ ] Update imports
+- [ ] Create `src/orchestrators/planning_system/management/__init__.py`
+- [ ] Wire into main orchestrator
+- [ ] Create `test_temporary_plan_lifecycle.py` (5 tests: create, approve, reject, archive)
+- [ ] Run tests: `pytest src/orchestrators/planning_system/tests/test_temporary_plan_lifecycle.py -v`
+
+**Deliverable:** Temporary plan workflow operational (5 tests passing)
+
+### Day 4: Integration & Wiring (6 hours)
+
+**Objective:** Complete full system integration
+
+**Tasks:**
+- [ ] Wire orchestrator into DI container (`src/core/di_container.py`)
+- [ ] Update `src/orchestrators/planning_system/__init__.py` exports
+- [ ] Create end-to-end integration tests (10 tests: Tier 1-4 workflows)
+- [ ] Test complete workflows:
+  - Tier 1: Instant execution (<2 sec)
+  - Tier 2: Lightweight with inline validation (<10 sec)
+  - Tier 3: Documented with pre-planning discovery + single MD
+  - Tier 4: Complex with nested plans
+- [ ] Run full test suite: `pytest src/orchestrators/planning_system/tests/ -v --cov`
+- [ ] Validate: 85%+ overall coverage
+- [ ] Fix any failing tests
+
+**Deliverable:** Full integration complete (50+ tests passing, 85%+ coverage)
+
+### Day 5: Testing, Documentation & Validation (6 hours)
+
+**Objective:** Finalize and document
+
+**Tasks:**
+- [ ] Run full test suite: `pytest src/orchestrators/planning_system/tests/ -v --cov`
+- [ ] Validate 85%+ coverage achieved
+- [ ] Fix any coverage gaps
+- [ ] Generate documentation (8 docs):
+  - Architecture diagram (Mermaid - already created)
+  - Workflow flowchart (Mermaid - tiered routing)
+  - Sequence diagram (Mermaid - discovery → routing → execution)
+  - API reference (from docstrings)
+  - Configuration guide (manifest + DI wiring)
+  - Migration guide (v3.0 → v4.0)
+  - Usage examples (Tier 1-4 scenarios)
+  - Testing guide (run tests, write new tests)
+- [ ] Create `README.md` for planning_system module
+- [ ] Update master plan progress tracker in `MASTER-PLAN.md`
+- [ ] Git commit checkpoint
+
+**Git Commit:**
+```bash
+git add src/orchestrators/planning_system/
+git commit -m "✅ Week 9 Complete: Planning System 4.0
+
+- All 9 components migrated
+- 50+ tests passing (85% coverage)
+- 8 documentation artifacts generated
+- Tiered routing operational (4 tiers)
+- Pre-planning discovery operational
+- Visual progress tracking integrated"
+
+git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
+git commit -m "📊 Update MASTER-PLAN.md: Week 8-9 Planning System complete"
+
+git push origin CORTEX-4.0
+```
+
+**Deliverable:** Planning System 4.0 complete and documented
+
+**Week 9 End Status:**
+- ✅ 4/14 orchestrators complete (29%) - Execution, Documentation, TDD, Planning
+- ✅ Planning System: 50+ tests, 85% coverage, 8 docs
+- ✅ Ready for Week 10: ADO + Sanitization orchestrators
+
+---
+
+## 🗓️ Week 10-13: Remaining Orchestrators (To Be Detailed)
+
+### Week 10: ADO + Code Sanitization
+
+**Orchestrators:**
+1. **ADO Operations Orchestrator** (3 days)
+2. **Code Sanitization Orchestrator** (2 days)
 
 ### Day 6-7: TDDOrchestrator Migration
 

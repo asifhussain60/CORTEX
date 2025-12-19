@@ -101,7 +101,8 @@ Examples: Architecture analysis, system maintenance, planning
 - ✅ Header ALWAYS included (H2 with 🧠 + author)
 - ✅ Body adapts to question complexity (no mandatory sections)
 - ✅ Use bolded labels (**Context:**, **Changes:**) for brevity
-- ❌ NO separators after header, NO code unless requested
+- ✅ Use concise pseudo-code by default (NOT full code snippets)
+- ❌ NO separators after header, NO full code unless explicitly requested
 
 **Completion Template (Use when ALL work is complete):**
 ```markdown

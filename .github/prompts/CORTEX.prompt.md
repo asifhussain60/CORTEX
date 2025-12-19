@@ -59,7 +59,8 @@ DO NOT provide generic introduction - respond to user's ACTUAL request.
 - ✅ Header ALWAYS included (H2 with 🧠 + author line)
 - ✅ Body adapts to complexity (no mandatory 5-section structure)
 - ✅ Use bolded labels (**Context:**, **Changes:**) over H3 headers for brevity
-- ❌ NO separator after header, NO code unless requested
+- ✅ Use concise pseudo-code by default (NOT full code snippets)
+- ❌ NO separator after header, NO full code unless explicitly requested
 
 **Format Exception:** Introduction/business value templates use narrative format.
 
