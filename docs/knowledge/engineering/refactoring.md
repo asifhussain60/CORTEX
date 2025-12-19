@@ -1,0 +1,3 @@
+# Refactoring Guidelines
+
+*(Documentation pending)*
