@@ -4,7 +4,7 @@
 **Author:** Asif Hussain  
 **Created:** December 19, 2025  
 **Status:** 🟢 ACTIVE - Phase 0.5 Implementation  
-**Manifest:** `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml`
+**Manifest:** `cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml`
 
 ---
 
@@ -510,7 +510,7 @@ Phase 0.5 considered complete when:
 ## 📚 References
 
 - **Master Plan:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md`
-- **Manifest:** `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml`
+- **Manifest:** `cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml`
 - **Implementation:** `src/orchestrators/autonomous_execution_engine.py` (Phase 0.5)
 
 ---

@@ -592,7 +592,7 @@ The following governance rules protect Planning System 3.0:
 ## 🤝 Support
 
 **Documentation:** `cortex-brain/documents/planning/`  
-**Manifest:** `planning-system-3.0-manifest.yaml`  
+**Manifest:** `planning-system-4.0-manifest.yaml`  
 **GitHub:** github.com/asifhussain60/CORTEX  
 **Author:** Asif Hussain
 

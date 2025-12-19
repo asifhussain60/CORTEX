@@ -405,7 +405,7 @@ commands:
 
 integration:
   inherits_from:
-    - "planning-system-3.0-manifest.yaml"
+    - "planning-system-4.0-manifest.yaml"
   compatible_with:
     - "ado-planning-manifest.yaml"
     - "code-sanitization-manifest.yaml"

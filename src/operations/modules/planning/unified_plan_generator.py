@@ -302,7 +302,7 @@ class UnifiedPlanGenerator:
             "{MODULE_COUNT}": str(metadata.get("module_count", 0)),
             "{DOD_CRITERIA}": metadata.get("dod_criteria", "- All tests passing (100% pass rate)\n- Code review completed\n- Documentation updated"),
             "{APPROVAL_PROCESS}": metadata.get("approval_process", "Requires validation before promotion to active plan."),
-            "{RELATED_DOCS}": metadata.get("related_docs", "- Planning System 3.0 Manifest: `planning-system-3.0-manifest.yaml`"),
+            "{RELATED_DOCS}": metadata.get("related_docs", "- Planning System 4.0 Manifest: `planning-system-4.0-manifest.yaml`"),
             "{RISK_ANALYSIS}": metadata.get("risk_analysis", "Risk assessment pending."),
             "{SUCCESS_CRITERIA}": metadata.get("success_criteria", "- Feature implemented per requirements\n- All acceptance criteria met"),
             "{FINAL_STATUS}": "IN PROGRESS" if completed_phases < total_phases else "COMPLETE",
@@ -513,7 +513,7 @@ class UnifiedPlanGenerator:
             next_phase_number: Next phase number (or None if complete)
             next_phase_name: Next phase name
             progress_percentage: Overall progress percentage
-            manifest_path: Path to orchestrator manifest (e.g., planning-system-3.0-manifest.yaml)
+            manifest_path: Path to orchestrator manifest (e.g., planning-system-4.0-manifest.yaml)
         
         Returns:
             Ultra-compact continuation prompt (<30 tokens target)

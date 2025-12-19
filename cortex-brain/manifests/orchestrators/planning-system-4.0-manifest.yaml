@@ -1,0 +1,719 @@
+# Planning System 4.0 Orchestrator Manifest
+# Enhanced planning with tiered routing, pre-planning discovery, visual progress tracking,
+# and Phase 2.5 agentic enhancements (multi-agent collaboration, evaluation, learning)
+#
+# ⚠️ SYNC REQUIREMENT: When this file is updated, MASTER-PLAN.md MUST also be updated
+# Linked Document: cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
+# Update Policy: Changes to planning features, phases, or capabilities require synchronization
+#
+# Version: 4.0.0
+# Author: CORTEX Development Team
+# Created: 2025-12-15
+# Updated: 2025-12-19 (Phase 2.5 Agentic Enhancements)
+# Status: ACTIVE - Latest planning system
+# Orchestrator: src/operations/modules/orchestration/planning_orchestrator.py
+
+schema_version: "1.0"
+
+# ========================================
+# Metadata
+# ========================================
+
+metadata:
+  orchestrator_name: "planning_orchestrator"
+  version: "4.0.0"
+  description: "Tiered planning system with intelligent routing, visual progress tracking, and Phase 2.5 agentic enhancements (multi-agent, evaluation, learning)"
+  category: "planning"
+  deployment_tier: "cortex"
+  status: "active"
+  last_updated: "2025-12-19"
+  maintainer: "CORTEX Planning Team"
+  sync_requirements:
+    linked_document: "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md"
+    update_policy: "Bidirectional sync required - changes to either file must be reflected in the other"
+    last_synced: "2025-12-19"
+  related_orchestrators:
+    - "maintenance_orchestrator"
+    - "contextual_review_orchestrator"
+    - "tdd_orchestrator_v4"
+  child_orchestrators:
+    - name: "tdd_orchestrator_v4"
+      manifest: "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml"
+      relationship: "All planning system plans include TDD phases"
+  documentation_path: ".github/prompts/modules/planning-system-guide.md"
+  source_file: "src/operations/modules/orchestration/planning_orchestrator.py"
+
+# ========================================
+# Core Components
+# ========================================
+
+components:
+  tiered_routing:
+    enabled: true
+    source: "src/operations/modules/routing/tiered_router.py"
+    description: "4-tier classification system for operation complexity"
+    tiers:
+      - id: 1
+        name: "INSTANT"
+        threshold: "< 2 seconds"
+        execution_method: "Direct function call"
+        planning_required: false
+      - id: 2
+        name: "LIGHTWEIGHT"
+        threshold: "< 10 seconds"
+        execution_method: "Inline validation plan"
+        planning_required: true
+        plan_type: "inline"
+      - id: 3
+        name: "DOCUMENTED"
+        threshold: "10-60 minutes"
+        execution_method: "Feature plan (single MD)"
+        planning_required: true
+        plan_type: "markdown"
+      - id: 4
+        name: "COMPLEX"
+        threshold: "> 1 hour"
+        execution_method: "Nested plan (master + sub-plans)"
+        planning_required: true
+        plan_type: "nested_markdown"
+
+  pre_planning_discovery:
+    enabled: true
+    source: "src/operations/modules/orchestration/planning_orchestrator.py::pre_planning_discovery()"
+    description: "Check for existing/recent plans before creating new ones"
+    implementation_task: "Task 1.1 (cortex-rearchitecture-v1)"
+    search_folders:
+      - folder: "active"
+        purpose: "Current work in progress"
+        time_range: "all"
+      - folder: "temp-plans"
+        purpose: "Unapproved/pending work"
+        time_range: "last_30_days"
+      - folder: "completed"
+        purpose: "Recently archived plans (context reuse)"
+        time_range: "last_180_days"
+    overhead: "30-60 seconds"
+    recommendation_types:
+      - "active_plan_exists" # Continue existing or create new version
+      - "temp_plan_exists" # Approve existing or create new
+      - "completed_plan_exists" # Reuse context from completed plan
+
+  visual_progress_tracker:
+    enabled: true
+    source: "src/orchestrators/session_model.py::PlanningSession"
+    description: "Real-time visual progress tracking in responses and plans"
+    implementation_tasks:
+      - "Task 1.3: PlanningSession integration"
+      - "Task 1.4: Phase tracking (record_phase_start/end)"
+      - "Task 1.5: Render visual tracker in responses"
+      - "Task 1.6: Embed tracker in master plans"
+    location: "User responses and master plans (00-master-plan.md)"
+    updates: "Real-time during execution"
+    metrics_tracked:
+      - "phase_timing" # Start/end timestamps per phase
+      - "token_consumption" # Tokens used per phase
+      - "duration_formatting" # Human-readable durations
+      - "progress_percentage" # Completion percentage
+      - "tasks_completed" # Task completion ratio
+    rendering:
+      method: "PlanningSession.render_progress_table()"
+      format: "Markdown table"
+      includes:
+        - "Phase number and name"
+        - "Status icons (✅ ⏳ 🔄)"
+        - "Progress percentage"
+        - "Duration per phase"
+        - "Token usage per phase"
+        - "Task completion ratio"
+
+  complexity_analyzer:
+    enabled: true
+    source: "src/operations/modules/routing/complexity_analyzer.py"
+    description: "4-dimensional complexity scoring"
+    dimensions:
+      - "code_impact" # Lines changed, files affected
+      - "risk_level" # Dependencies, breaking changes
+      - "domain_complexity" # Business logic, algorithms
+      - "integration_scope" # External systems, APIs
+
+  temporary_plan_manager:
+    enabled: true
+    source: "src/operations/modules/orchestration/temporary_plan_manager.py"
+    description: "Manage implicit planning workflow"
+    lifecycle:
+      - "create" # User tasks without "create plan"
+      - "feedback" # Optional user refinement
+      - "approve" # Move to active/
+      - "reject" # Delete from temp-plans/
+
+  autonomous_execution:
+    enabled: true
+    version: "1.0.0"
+    description: "E2E autonomous execution with self-healing and auto-validation"
+    implementation_phase: "Phase 0.5 (Week 1)"
+    source: "src/orchestrators/autonomous_execution_engine.py"
+    modes:
+      supervised:
+        description: "User approves each phase transition (default)"
+        auto_validate: true
+        auto_commit: false
+        auto_transition: false
+        self_healing: false
+        user_approval_required: true
+      autonomous:
+        description: "Full E2E execution with self-healing"
+        auto_validate: true
+        auto_commit: true
+        auto_transition: true
+        self_healing: true
+        escalation_threshold: 3  # Escalate after 3 failures
+        user_approval_required: false
+
+  # ========================================
+  # Phase 2.5: Agentic Enhancements (NEW)
+  # ========================================
+
+  multi_agent_collaboration:
+    enabled: true
+    version: "1.0.0"
+    description: "Multi-agent patterns for complex operations (sequential, group, nested)"
+    implementation_phase: "Phase 2.5 (Week 4-5)"
+    source: "src/orchestrators/agent_collaboration_orchestrator.py"
+    status: "planned"
+    patterns:
+      sequential_chat:
+        description: "Pipeline processing (writer → SEO → publisher)"
+        use_cases:
+          - "Code review workflow (security → quality → performance → style)"
+          - "Content creation pipeline"
+          - "Multi-stage validation"
+      group_chat:
+        description: "Parallel execution with manager coordination"
+        use_cases:
+          - "Planning System parallel analysis (complexity + risk + domain + integration)"
+          - "Simultaneous document generation"
+          - "Multi-perspective code analysis"
+      nested_chat:
+        description: "Hierarchical team structure"
+        use_cases:
+          - "System maintenance (healthcheck team + optimization team + docs team)"
+          - "Complex feature development with sub-teams"
+          - "Cross-domain coordination"
+
+  context_validator:
+    enabled: true
+    version: "1.0.0"
+    description: "Validate context sufficiency before agent execution"
+    implementation_phase: "Phase 2.5 (Week 5)"
+    source: "src/core/context_validator.py"
+    status: "planned"
+    capabilities:
+      - "Validate required context availability"
+      - "Assess context quality"
+      - "Identify missing items"
+      - "Attempt automatic context retrieval"
+      - "Prevent hallucinations via early validation"
+
+  agent_evaluation_framework:
+    enabled: true
+    version: "1.0.0"
+    description: "Evaluate agent reasoning, not just output (LLM-as-judge)"
+    implementation_phase: "Phase 2.5 (Week 7-8)"
+    source: "src/observability/agent_evaluator.py"
+    status: "planned"
+    metrics:
+      - "decision_quality" # Analyze decision-making process
+      - "token_efficiency" # Tokens per quality unit
+      - "tool_usage_appropriateness" # Validate tool selection
+      - "context_relevance" # Measure context usage effectiveness
+      - "reasoning_coherence" # LLM-judge evaluation of reasoning chain
+    integration_points:
+      - "Planning System: Evaluate plan quality reasoning"
+      - "TDD Orchestrator: Evaluate test generation reasoning"
+      - "Documentation: Evaluate completeness reasoning"
+
+  agent_learning_engine:
+    enabled: true
+    version: "1.0.0"
+    description: "Learn from operation outcomes to improve future performance"
+    implementation_phase: "Phase 2.5 (Week 9-10)"
+    source: "src/brain/agent_learning_engine.py"
+    status: "planned"
+    capabilities:
+      - "Track operation outcomes (success/failure)"
+      - "Measure strategy success rates"
+      - "Learn user preferences"
+      - "Suggest optimal approaches based on history"
+      - "Adapt to individual working styles"
+
+  enhanced_guardrails:
+    enabled: true
+    version: "1.0.0"
+    description: "Multi-layer security and compliance enforcement"
+    implementation_phase: "Phase 2.5 (Week 4-5)"
+    source: "src/core/guardrail_orchestrator.py"
+    status: "planned"
+    layers:
+      - "relevance_classifier" # Keep agent on-task
+      - "prompt_injection_detection" # Detect jailbreak attempts
+      - "pii_filtering" # Protect sensitive data
+      - "compliance_checking" # OWASP/CWE enforcement
+      - "tool_risk_assessment" # Dynamic risk per tool/context
+
+  adaptive_execution_modes:
+    enabled: true
+    version: "1.0.0"
+    description: "Dynamic execution mode switching based on context"
+    implementation_phase: "Phase 2.5 (Week 2)"
+    source: "src/orchestrators/execution_mode_manager.py"
+    status: "planned"
+    modes:
+      human_in_loop:
+        description: "Pause after each step (teaching/debugging)"
+        use_cases: ["First-time users", "Learning CORTEX", "High-risk debugging"]
+      supervised:
+        description: "Auto-validate, manual approval (default)"
+        use_cases: ["Experienced users", "Standard operations", "Quality assurance"]
+      autonomous:
+        description: "Full E2E with self-healing"
+        use_cases: ["Routine operations", "Trusted users", "Automated pipelines"]
+    selection_logic:
+      - "First 10 operations → human_in_loop"
+      - "High-risk operations → supervised"
+      - "Routine + high trust score → autonomous"
+      - "Repeated failures → escalate to more restrictive mode"
+
+  mcp_community_integration:
+    enabled: true
+    version: "1.0.0"
+    description: "Leverage community MCP servers and expose CORTEX as MCP"
+    implementation_phase: "Phase 2.5 (Week 6)"
+    source: "src/mcp/community_integration.py"
+    status: "planned"
+    community_servers:
+      - "github_mcp" # GitHub integration via community server
+      - "postgres_mcp" # Database access
+      - "web_search_mcp" # Google Search for RAG
+      - "slack_mcp" # Notifications
+    cortex_native_servers:
+      - "cortex_brain_server" # Expose brain as MCP tool
+      - "cortex_analysis_server" # Code analysis as MCP
+      - "cortex_planning_server" # Planning operations as MCP
+
+  cicd_orchestrator:
+    enabled: true
+    version: "1.0.0"
+    description: "AI-driven CI/CD pipeline intelligence"
+    implementation_phase: "Phase 2.5 (Week 14-15)"
+    source: "src/orchestrators/cicd_orchestrator.py"
+    status: "planned"
+    agents:
+      - "code_review_agent" # Automated PR reviews
+      - "self_healing_agent" # Auto-fix test failures
+      - "test_generation_agent" # Generate missing tests
+      - "release_report_agent" # Automated release notes
+    
+    phase_lifecycle:
+      on_phase_start:
+        - "validate_prerequisites"
+        - "create_checkpoint"
+        - "update_progress_tracker"
+      on_phase_complete:
+        - "run_validation_gate"
+        - "if_pass: commit_work"
+        - "if_pass: update_master_plan"
+        - "if_pass: create_checkpoint"
+        - "if_pass: transition_to_next_phase"
+      on_validation_fail:
+        - "attempt_self_heal (max 3 retries)"
+        - "rollback_to_checkpoint"
+        - "log_failure_reason"
+        - "escalate_to_user"
+      on_critical_error:
+        - "emergency_rollback"
+        - "save_error_state"
+        - "notify_user_immediately"
+    
+    self_healing_strategies:
+      - name: "retry_with_backoff"
+        max_attempts: 3
+        backoff: "exponential"
+        applicable_to: ["transient_errors", "network_issues"]
+      - name: "alternative_approach"
+        max_attempts: 2
+        applicable_to: ["test_failures", "validation_errors"]
+      - name: "rollback_and_retry"
+        max_attempts: 1
+        applicable_to: ["breaking_changes", "integration_failures"]
+    
+    git_automation:
+      enabled: true
+      commit_on_phase_complete: true
+      push_on_milestone: true
+      commit_message_template: "✅ {phase_name} Complete: {summary}\n\n{deliverables}"
+      branch_protection: true  # Require validation before push
+    
+    progress_monitoring:
+      real_time_updates: true
+      decision_making: true  # Progress tracker can make phase transition decisions
+      metrics_tracked:
+        - "phase_completion_percentage"
+        - "validation_gate_status"
+        - "test_pass_rate"
+        - "error_count"
+        - "token_consumption"
+      thresholds:
+        phase_complete: 100  # % completion required
+        validation_pass: 100  # % tests passing required
+        error_tolerance: 0  # Max errors before escalation
+    
+    commands:
+      execute_autonomous:
+        syntax: "cortex execute plan --mode=autonomous [--from=PHASE] [--to=PHASE]"
+        description: "Execute plan end-to-end with autonomous mode"
+        examples:
+          - "cortex execute plan --mode=autonomous"
+          - "cortex execute plan --mode=autonomous --from=phase_1 --to=phase_3"
+      execute_supervised:
+        syntax: "cortex execute plan --mode=supervised"
+        description: "Execute plan with user approval at each phase (default)"
+
+# ========================================
+# Testing Requirements
+# ========================================
+
+testing:
+  unit_tests:
+    location: "tests/orchestrators/"
+    coverage_target: 85
+    test_suites:
+      - name: "Pre-planning Discovery"
+        file: "test_pre_planning_discovery.py"
+        test_count: 9
+        status: "✅ ALL PASSING"
+        tests:
+          - "test_pre_planning_discovery_finds_active_plans"
+          - "test_pre_planning_discovery_finds_temp_plans"
+          - "test_pre_planning_discovery_finds_completed_plans"
+          - "test_pre_planning_discovery_no_existing_plans"
+          - "test_extract_feature_slug_basic"
+          - "test_search_plans_by_time_range"
+          - "test_find_master_plan_finds_correct_file"
+          - "test_extract_plan_summary"
+          - "test_discovery_performance_under_60_seconds"
+
+      - name: "Phase Tracking"
+        file: "test_phase_tracking.py"
+        status: "⏸️ PENDING"
+        tests:
+          - "test_planning_session_initialization"
+          - "test_phase_tracking_with_metrics"
+          - "test_token_estimation"
+
+      - name: "Visual Tracker Rendering"
+        file: "test_visual_tracker_rendering.py"
+        status: "⏸️ PENDING"
+        tests:
+          - "test_visual_tracker_in_response"
+          - "test_session_metrics_display"
+          - "test_master_plan_with_visual_tracker"
+
+  integration_tests:
+    location: "tests/integration/"
+    test_suites:
+      - name: "Visual Tracker Integration"
+        file: "test_visual_tracker_integration.py"
+        status: "⏸️ PENDING"
+        tests:
+          - "test_end_to_end_planning_with_discovery"
+          - "test_visual_tracker_visible_in_responses"
+          - "test_tracker_embedded_in_master_plans"
+          - "test_metrics_accurately_tracked"
+          - "test_discovery_finds_existing_plans"
+
+# ========================================
+# Requirements (Inherited from 2.0)
+# ========================================
+
+requirements:
+  - requirement_id: "REQ-001"
+    name: "Acceptance Criteria Approval Gate"
+    priority: "high"
+    status: "partial"
+    notes: "Implemented in tier routing, needs explicit approval step"
+
+  - requirement_id: "REQ-002"
+    name: "Interactive DoR Workflow"
+    priority: "high"
+    status: "pending"
+    notes: "Planned for Phase 3 (Plan Lifecycle Management)"
+
+  - requirement_id: "REQ-003"
+    name: "Contextual Review Orchestrator Integration"
+    priority: "high"
+    status: "implemented"
+    notes: "Integrated via orchestration chain"
+
+  - requirement_id: "REQ-004"
+    name: "SWAG Estimation via Swagger"
+    priority: "medium"
+    status: "pending"
+    notes: "Planned for future enhancement"
+
+  - requirement_id: "REQ-005"
+    name: "Visual Progress Rendering"
+    priority: "critical"
+    status: "implemented"
+    implementation_phase: "Phase 1 (cortex-rearchitecture-v1)"
+    tasks_completed:
+      - "Task 1.1: Pre-planning discovery (✅)"
+      - "Task 1.2: Helper methods (✅)"
+      - "Task 1.3: PlanningSession integration (✅)"
+      - "Task 1.4: Phase tracking (✅)"
+      - "Task 1.5: Render visual tracker (✅)"
+    tasks_pending:
+      - "Task 1.6: Embed in master plans (⏸️)"
+      - "Task 1.7: Update manifest (✅ THIS FILE)"
+      - "Task 1.8: Integration testing (⏸️)"
+
+  - requirement_id: "REQ-006"
+    name: "Learning Library Auto-Documentation"
+    priority: "medium"
+    status: "partial"
+    notes: "Knowledge extraction on plan completion"
+
+  - requirement_id: "REQ-007"
+    name: "Interactive Threat Modeling"
+    priority: "low"
+    status: "pending"
+    notes: "Planned for future enhancement"
+
+  - requirement_id: "REQ-008"
+    name: "TDD Reminders Visibility"
+    priority: "critical"
+    status: "implemented"
+    notes: "Enforced via SKULL rules"
+
+# ========================================
+# Workflow
+# ========================================
+
+workflow:
+  phases:
+    - id: 1
+      name: "Classification & Analysis"
+      description: "Classify operation tier and analyze complexity"
+      duration: "< 5 seconds"
+      components:
+        - "TieredRouter"
+        - "ComplexityAnalyzer"
+
+    - id: 2
+      name: "Pre-Planning Discovery"
+      description: "Check for existing/recent plans"
+      duration: "30-60 seconds"
+      components:
+        - "pre_planning_discovery()"
+      optional: true
+      skip_condition: "force_new_plan=true"
+
+    - id: 3
+      name: "Execution"
+      description: "Execute tier-specific planning workflow"
+      duration: "Variable (depends on tier)"
+      components:
+        - "_execute_instant()" # Tier 1
+        - "_execute_lightweight()" # Tier 2
+        - "_execute_documented()" # Tier 3
+        - "_execute_complex()" # Tier 4
+
+    - id: 3.5
+      name: "TDD Integration"
+      description: "Automated RED→GREEN→REFACTOR cycle for all plans (Tier 2+)"
+      duration: "Variable (depends on implementation complexity)"
+      orchestrator: "tdd_orchestrator_v4"
+      integration_method: "Automatic inclusion in all plans"
+      components:
+        - "TDDOrchestratorV4"
+        - "RedPhaseStrategy" # Generate failing tests
+        - "GreenPhaseStrategy" # Minimal implementation
+        - "RefactorPhaseStrategy" # AI-driven refactoring
+      triggers:
+        - "tier >= 2" # LIGHTWEIGHT and above
+        - "skip_tdd=false" # Not explicitly disabled
+      quality_gates:
+        - "min_test_coverage: 80%"
+        - "min_quality_score: 7.0/10.0"
+        - "all_tests_passing: true"
+      rollback_on_failure: true
+      notes: "TDD v4.0 provides adaptive learning (11+ languages), AI code generation, and clean code enforcement"
+
+    - id: 4
+      name: "Refactor"
+      description: "Run refactor cycle for Tier 3+ operations"
+      duration: "Variable"
+      components:
+        - "_run_refactor_cycle()"
+      conditional: "tier >= 3 AND skip_refactor=false"
+
+    - id: 5
+      name: "Vacuum"
+      description: "Run vacuum cycle for Tier 3+ operations"
+      duration: "Variable"
+      components:
+        - "_run_vacuum_cycle()"
+      conditional: "tier >= 3 AND skip_vacuum=false"
+
+    - id: 6
+      name: "Documentation"
+      description: "Generate planning documentation"
+      duration: "< 10 seconds"
+      components:
+        - "_generate_documentation()"
+
+    - id: 7
+      name: "Finalization"
+      description: "Finalize planning and render visual tracker"
+      duration: "< 5 seconds"
+      components:
+        - "PlanningSession.render_progress_table()"
+
+# ========================================
+# Metrics & Monitoring
+# ========================================
+
+metrics:
+  tracked_metrics:
+    - "operations_processed" # Total operations
+    - "tier_breakdown" # Count per tier (1-4)
+    - "planning_created" # Plans generated
+    - "temporary_plans_created" # Implicit plans
+    - "plans_approved" # Temp → active
+    - "plans_completed" # Active → completed
+    - "knowledge_extractions" # Completed → knowledge graph
+    - "refactor_cycles_run" # Refactor invocations
+    - "vacuum_cycles_run" # Vacuum invocations
+    - "errors" # Error list
+    - "warnings" # Warning list
+
+  performance_targets:
+    tier_1_execution: "< 2 seconds"
+    tier_2_execution: "< 10 seconds"
+    tier_3_execution: "< 60 minutes"
+    tier_4_execution: "Variable (documented upfront)"
+    discovery_overhead: "< 60 seconds"
+
+# ========================================
+# Configuration
+# ========================================
+
+configuration:
+  plan_folder_structure:
+    root: "cortex-brain/documents/planning/"
+    subfolders:
+      - "active/" # Current work
+      - "temp-plans/" # Unapproved work
+      - "completed/" # Archived work
+      - "features/" # Legacy feature plans
+  
+  universal_subfolders:
+    required:
+      - "context/" # Context artifacts
+      - "reports/" # Progress reports
+      - "artifacts/" # Supporting files
+      - "tracking/" # Progress tracking JSON
+
+  plan_file_naming:
+    master_plan: "00-master-plan.md"
+    temp_plan: "11-temp-planning-session.md"
+    sub_plans: "01-*.md, 02-*.md, etc."
+    tracking: "tracking/progress-tracker.json"
+
+# ========================================
+# Phase 1 Implementation Status
+# (cortex-rearchitecture-v1)
+# ========================================
+
+phase_1_status:
+  name: "Visual Tracker Migration"
+  status: "in_progress"
+  progress: "63%"
+  tasks_completed: 5
+  tasks_total: 8
+  task_details:
+    - id: "1.1"
+      name: "Pre-planning discovery"
+      status: "✅ COMPLETE"
+      test_status: "9/9 passing"
+    - id: "1.2"
+      name: "Helper methods"
+      status: "✅ COMPLETE"
+      notes: "Implemented in 1.1"
+    - id: "1.3"
+      name: "PlanningSession integration"
+      status: "✅ COMPLETE"
+      notes: "Imported, session field added to __init__"
+    - id: "1.4"
+      name: "Phase tracking"
+      status: "✅ COMPLETE"
+      notes: "record_phase_start/end implemented"
+    - id: "1.5"
+      name: "Render visual tracker"
+      status: "✅ COMPLETE"
+      notes: "Added to user response via render_progress_table()"
+    - id: "1.6"
+      name: "Embed in master plans"
+      status: "⏸️ PENDING"
+      notes: "Awaiting actual plan file generation implementation"
+    - id: "1.7"
+      name: "Update manifest"
+      status: "✅ COMPLETE"
+      notes: "This file - planning-system-4.0-manifest.yaml (updated Dec 19, 2025)"
+    - id: "1.8"
+      name: "Integration testing"
+      status: "⏸️ PENDING"
+      notes: "Requires test suite creation"
+
+# ========================================
+# Version History
+# ========================================
+
+version_history:
+  - version: "4.0.0"
+    date: "2025-12-19"
+    changes:
+      - "Renamed from planning-system-3.0-manifest.yaml to planning-system-4.0-manifest.yaml"
+      - "Added Phase 2.5 agentic enhancements (8 packages)"
+      - "Multi-agent collaboration framework (sequential, group, nested)"
+      - "Context validator for hallucination prevention"
+      - "Agent evaluation framework with LLM-as-judge"
+      - "Agent learning engine for outcome-based improvement"
+      - "Enhanced guardrails (relevance, PII, prompt injection, compliance)"
+      - "Adaptive execution modes (human-in-loop, supervised, autonomous)"
+      - "MCP community integration + CORTEX-native servers"
+      - "CI/CD orchestrator with self-healing agents"
+      - "Added sync requirements linking to MASTER-PLAN.md"
+      - "Documented bidirectional update policy"
+    author: "CORTEX Planning Team"
+    references:
+      - "cortex-brain/documents/analysis/AGENTIC-AI-CORTEX-INTEGRATION-ANALYSIS.md"
+      - "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md"
+
+  - version: "3.1.0"
+    date: "2025-12-15"
+    changes:
+      - "Pre-planning discovery system (Task 1.1)"
+      - "PlanningSession integration (Task 1.3)"
+      - "Phase tracking with metrics (Task 1.4)"
+      - "Visual tracker in responses (Task 1.5)"
+      - "Planning System 3.0 manifest created (Task 1.7)"
+    author: "CORTEX Planning Team"
+
+  - version: "3.0.0"
+    date: "2025-12-08"
+    changes:
+      - "Tiered routing system (4 tiers)"
+      - "Complexity analyzer integration"
+      - "Temporary plan management"
+      - "Master plan lifecycle (active → completed)"
+    author: "CORTEX Planning Team"

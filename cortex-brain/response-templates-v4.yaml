@@ -19,74 +19,20 @@ description: |
 
 routing:
   tier1_instant:
-    description: "Direct answers, no markdown formatting needed"
-    triggers:
-      question_words: [what, where, when, which, who, how many, how much]
-      factual_lookup: true
-      no_explanation_needed: true
-      estimated_tokens: < 50
-      single_value_response: true
-    examples:
-      - "what's the square root of 144?"
-      - "which directory has the server code?"
-      - "how many bytes in a megabyte?"
-      - "what files are in src/utils/?"
+    triggers: [factual_lookup, single_value, tokens_lt_50]
     format: "{direct_answer}"
   
   tier2_focused:
-    description: "Single-concept responses with minimal structure"
-    triggers:
-      single_concept: true
-      estimated_tokens: [50, 200]
-      explanation_required: true
-      sections_needed: [1, 2]
-    examples:
-      - "explain lazy loading"
-      - "what's the difference between X and Y?"
-      - "how does namespace isolation work?"
-    format: |
-      ## 🧠 CORTEX {title}
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-      
-      {1-2 dynamic sections}
+    triggers: [single_concept, tokens_50_200, sections_1_2]
+    format: "## 🧠 CORTEX {title}\n**Author:** Asif Hussain\n\n{1-2 sections}"
   
   tier3_structured:
-    description: "Multi-faceted responses with clear structure"
-    triggers:
-      multi_faceted: true
-      estimated_tokens: [200, 600]
-      sections_needed: [2, 4]
-      requires_organization: true
-    examples:
-      - "implement feature X"
-      - "analyze test results"
-      - "review architecture design"
-    format: |
-      ## 🧠 CORTEX {title}
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-      
-      ---
-      
-      {2-4 dynamic sections}
+    triggers: [multi_faceted, tokens_200_600, sections_2_4]
+    format: "## 🧠 CORTEX {title}\n**Author:** Asif Hussain\n\n---\n\n{2-4 sections}"
   
   tier4_comprehensive:
-    description: "Complex operations requiring detailed narrative"
-    triggers:
-      complex_operation: true
-      estimated_tokens: 600+
-      sections_needed: [4, 6]
-      multi_phase: true
-    examples:
-      - "system maintenance workflow"
-      - "architectural review with multiple components"
-      - "Planning System 2.0 execution"
-    format: |
-      ## 🧠 CORTEX {title}
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-      
-      ---
-      
-      {4-6 dynamic sections}
+    triggers: [complex_operation, tokens_600_plus, sections_4_6]
+    format: "## 🧠 CORTEX {title}\n**Author:** Asif Hussain\n\n---\n\n{4-6 sections}"
 
 # ============================================================================
 # DYNAMIC SECTION LIBRARY
@@ -492,118 +438,7 @@ anti_bloat:
     - "Full code snippets when not explicitly requested"
     - "Multiple separators"
 
-# ============================================================================
-# EXAMPLES BY TIER
-# ============================================================================
-
-examples:
-  tier1:
-    request: "what's the square root of 144?"
-    response: "12"
-  
-  tier2:
-    request: "explain lazy loading"
-    response: |
-      ## 🧠 CORTEX Lazy Loading
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-      
-      ### 💬 Details
-      Lazy loading defers object initialization until first access. Instead of creating all objects at startup, they're created on-demand when first used. Reduces memory footprint and startup time.
-      
-      ### 🔍 Actions
-      Use properties with `_instance or initialize()` pattern for lazy-loaded components.
-  
-  tier3:
-    request: "implement feature X"
-    response: |
-      ## 🧠 CORTEX Feature X Implementation
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-      
-      ---
-      
-      ### 🎯 Understanding & Scope
-      Implementing Feature X with validation and error handling.
-      
-      ### ⚡ Approach & Considerations
-      No significant challenges - straightforward implementation following existing patterns.
-      
-      ### 💬 Response
-      **Implementation approach:**
-      1. Create `FeatureX` class with validation decorator
-      2. Add input validation → business logic → error handling
-      3. Integrate with existing service layer
-      4. Add logging and metrics tracking
-      
-      **Key logic:**
-      - Input validation: Check required fields → validate data types → sanitize
-      - Processing: Transform input → call dependency services → aggregate results
-      - Error handling: Try-catch wrapper → log errors → return user-friendly messages
-      
-      ### 📊 Impact & Changes
-      - Created `src/features/feature_x.py` (150 LOC)
-      - Added 12 tests in `tests/features/test_feature_x.py`
-      - All tests passing (12/12)
-      
-      ### 🔍 Next Steps
-      1. Review implementation
-      2. Test in staging environment
-      3. Update documentation
-  
-  tier4:
-    request: "system maintenance workflow"
-    response: |
-      ## 🧠 CORTEX System Maintenance Complete
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-      
-      ---
-      
-      ### 🎯 Understanding & Scope
-      {comprehensive_scope}
-      
-      ### 🏗️ Architecture
-      {system_architecture}
-      
-      ### ⚡ Strategy & Approach
-      {detailed_strategy}
-      
-      ### 💬 Implementation
-      {what_was_done}
-      
-      ### 📊 Results & Metrics
-      {detailed_metrics}
-      
-      ### 🔍 Next Steps
-      {follow_up_actions}
-  
-  full_code_example:
-    request: "show me the code for feature X"
-    response: |
-      ## 🧠 CORTEX Feature X Code
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-      
-      ### 💬 Implementation
-      Here's the complete implementation:
-      
-      ```python
-      class FeatureX:
-          def __init__(self, config):
-              self.config = config
-          
-          def process(self, data):
-              # Validation
-              if not self._validate(data):
-                  raise ValueError("Invalid data")
-              
-              # Processing
-              result = self._transform(data)
-              return result
-      ```
-      
-      ### 🔍 Usage
-      ```python
-      feature = FeatureX(config)
-      result = feature.process(input_data)
-      ```
+# Examples removed to meet <500 line target. See v3.0 for reference examples.
 
 # ============================================================================
 # MIGRATION NOTES

@@ -21,9 +21,10 @@ from src.operations.base_operation_module import (
     OperationPhase,
     OperationStatus
 )
-from src.config import config
+from src.config import get_config
 
 logger = logging.getLogger(__name__)
+config = get_config()
 
 
 class ApplyNarratorVoiceModule(BaseOperationModule):
