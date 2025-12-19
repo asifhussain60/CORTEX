@@ -37,25 +37,23 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ PHASE 0: Pre-Migration Cleanup                            [████████████] 100% │
+│ PHASE 1: Pre-Migration Cleanup                            [████████████] 100% │
 │ Week 0 (5 days)                                           ✅ COMPLETE        │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 0.5: Autonomous Execution Framework                  [████████████] 100% │
+│ PHASE 2: Autonomous Execution Framework                   [████████████] 100% │
 │ Week 1 Days 1-3 (3 days)                                 [█████]  100% ✅ DONE│
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 1: Foundation                                       [████████████] 100% │
+│ PHASE 3: Foundation                                       [████████████] 100% │
 │ Week 1: Base Orchestrator & Brain                        [█████]  100% ✅ DONE│
 │ Week 2: Infrastructure (Templates, Config, Testing)      [█████]  100% ✅ DONE│
 │ Week 3: DI Container, Logging, Validation               [█████]  100% ✅ DONE│
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 1.5: Documentation & Visualization                  [░░░░░░░░░░░░]   0% │
+│ PHASE 4: Documentation & Visualization                    [░░░░░░░░░░░░]   0% │
 │ Week 3: Auto-generation Tool & D3.js Framework           [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 2: Brain Enhancement + RAG + Security               [░░░░░░░░░░░░]   0% │
+│ PHASE 5: Brain + Agentic AI (PARALLEL)                   [░░░░░░░░░░░░]   0% │
 │ Week 4-5: Hybrid Centralization + Security Schema       [░░░░░]  0%         │
-│ Week 6-8: RAG + Security Knowledge Stores (Parallel)    [░░░░░]  0%         │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 2.5: Agentic Enhancements (PARALLEL)                [░░░░░░░░░░░░]   0% │
+│ Week 6-8: RAG + Security Knowledge Stores               [░░░░░]  0%         │
 │ Week 2: Adaptive Execution Modes                         [░░░░░]  0%         │
 │ Week 4-5: Multi-Agent Framework + Guardrails            [░░░░░]  0%         │
 │ Week 5: Context Validator                                [░░░░░]  0%         │
@@ -64,50 +62,49 @@
 │ Week 9-10: Agent Learning Engine                         [░░░░░]  0%         │
 │ Week 14-15: CI/CD Orchestrator                           [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 3: Orchestrator Consolidation                       [████░░░░░░░░]  33% │
+│ PHASE 6: Orchestrator Consolidation                       [████░░░░░░░░]  33% │
 │ Week 7 Days 1-3: ExecutionOrchestrator (COMPLETE)       [█████]  100% ✅ DONE│
 │ Week 7 Days 4-5: DocumentationOrchestrator (COMPLETE)   [█████]  100% ✅ DONE│
 │ Week 7 Days 6-7: TDDOrchestrator v4.0 (COMPLETE)        [█████]  100% ✅ DONE│
 │ Week 8 Days 1-5: Planning System Migration (Day 0)      [░░░░░]  0%         │
 │ Week 9 Days 1-5: Planning System Integration (Day 0)    [░░░░░]  0%         │
 │ Week 10: ADO + Sanitization                             [░░░░░]  0%         │
-│ Week 11: Post-Phase 2.5 TDD v4.0 Enhancement            [░░░░░]  0%         │
-│ Week 12: Post-Phase 2.5 DocumentationOrchestrator       [░░░░░]  0%         │
-│ Week 13: Post-Phase 2.5 ExecutionOrchestrator           [░░░░░]  0%         │
+│ Week 11: Post-Phase 5 TDD v4.0 Enhancement              [░░░░░]  0%         │
+│ Week 12: Post-Phase 5 DocumentationOrchestrator         [░░░░░]  0%         │
+│ Week 13: Post-Phase 5 ExecutionOrchestrator             [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 4: Operations Simplification + Universal Adapters   [░░░░░░░░░░░░]   0% │
-│ Week 12-13: @orchestrator decorator & DI auto-discovery [░░░░░]  0%         │
-│ Week 14: Adapter interfaces + AdapterRegistry           [░░░░░]  0%         │
-│ Week 15: Core adapters (test frameworks, logging)       [░░░░░]  0%         │
-│ Week 16: Additional adapters + orchestrator integration [░░░░░]  0%         │
+│ PHASE 7: Operations Simplification + Universal Adapters   [░░░░░░░░░░░░]   0% │
+│ Week 15-17: @orchestrator decorator & DI auto-discovery [░░░░░]  0%         │
+│ Week 15: Adapter interfaces + AdapterRegistry           [░░░░░]  0%         │
+│ Week 16: Core adapters (test frameworks, logging)       [░░░░░]  0%         │
+│ Week 17: Additional adapters + orchestrator integration [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 5: Testing & Validation                             [░░░░░░░░░░░░]   0% │
-│ Week 17-18: Comprehensive Testing                        [░░░░░]  0%         │
-│ Week 19: Quality Gates                                   [░░░░░]  0%         │
+│ PHASE 8: Testing & Validation                             [░░░░░░░░░░░░]   0% │
+│ Week 18-20: Comprehensive Testing & Quality Gates       [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ PHASE 6: Documentation Finalization                       [░░░░░░░░░░░░]   0% │
-│ Week 20: Complete Technical Docs Generation             [░░░░░]  0%         │
+│ PHASE 9: Documentation Finalization                       [░░░░░░░░░░░░]   0% │
+│ Week 21: Complete Technical Docs Generation             [░░░░░]  0%         │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 🎯 MILESTONES
-├─ ✅ Phase 0 Complete (Week 0)
-├─ ✅ Autonomous Execution Framework Complete (Week 1 Days 1-3) - E2E execution enabled ✅ COMPLETE
-├─ ✅ Foundation Validation (Week 3) - 10/10 prerequisites passing ✅ COMPLETE
+├─ ✅ Phase 1 Complete (Week 0) - Pre-migration cleanup
+├─ ✅ Phase 2 Complete (Week 1 Days 1-3) - Autonomous execution framework ✅ COMPLETE
+├─ ✅ Phase 3 Complete (Week 3) - Foundation with 10/10 prerequisites ✅ COMPLETE
 ├─ ✅ First Orchestrator Migrated (Week 7 Days 1-3) - ExecutionOrchestrator ✅ COMPLETE
 ├─ ✅ Self-Documentation Active (Week 7 Day 5) - DocumentationOrchestrator ✅ COMPLETE
 ├─ ✅ MASTER-PLAN Gap Resolution (Week 7 Day 5) - 7 critical gaps resolved ✅ COMPLETE
 ├─ ✅ TDD Orchestrator v4.0 Complete (Week 7 Day 7) - 26/26 tests, 11+ languages, AI-driven ✅ COMPLETE
 ├─ ✅ Agentic AI Benefits Analysis (Week 7 Day 7) - $367K 5-year ROI quantified, 15 metrics ✅ COMPLETE
-├─ ✅ Completed Orchestrators Alignment Review (Week 7 Day 7) - 30% current, 95% post-Phase 2.5 target ✅ COMPLETE
-├─ ☐ Phase 2.5 Package 5 Complete (Week 2) - Adaptive execution modes operational
-├─ ☐ Phase 2.5 Packages 1+6 Complete (Week 5) - Multi-agent + guardrails operational
-├─ ☐ Phase 2.5 Package 2 Complete (Week 6) - MCP community integration (5+ servers)
-├─ ☐ Phase 2.5 Package 3 Complete (Week 8) - Agent evaluation with LLM-as-judge
-├─ ☐ Phase 2.5 Package 7 Complete (Week 10) - Agent learning engine operational
-├─ ☐ Phase 2.5 Package 8 Complete (Week 15) - CI/CD orchestrator with self-healing
-├─ ☐ Post-Phase 2.5: TDD v4.0 Enhancement Complete (Week 11) - 57% → 95% alignment
-├─ ☐ Post-Phase 2.5: DocumentationOrchestrator Enhancement Complete (Week 12) - 47% → 95% alignment
-├─ ☐ Post-Phase 2.5: ExecutionOrchestrator Enhancement Complete (Week 13) - 23% → 95% alignment
+├─ ✅ Completed Orchestrators Alignment Review (Week 7 Day 7) - 30% current, 95% post-Phase 5 target ✅ COMPLETE
+├─ ☐ Phase 5 Package 5 Complete (Week 2) - Adaptive execution modes operational
+├─ ☐ Phase 5 Packages 1+6 Complete (Week 5) - Multi-agent + guardrails operational
+├─ ☐ Phase 5 Package 2 Complete (Week 6) - MCP community integration (5+ servers)
+├─ ☐ Phase 5 Package 3 Complete (Week 8) - Agent evaluation with LLM-as-judge
+├─ ☐ Phase 5 Package 7 Complete (Week 10) - Agent learning engine operational
+├─ ☐ Phase 5 Package 8 Complete (Week 15) - CI/CD orchestrator with self-healing
+├─ ☐ Post-Phase 5: TDD v4.0 Enhancement Complete (Week 11) - 57% → 95% alignment
+├─ ☐ Post-Phase 5: DocumentationOrchestrator Enhancement Complete (Week 12) - 47% → 95% alignment
+├─ ☐ Post-Phase 5: ExecutionOrchestrator Enhancement Complete (Week 13) - 23% → 95% alignment
 ├─ ☐ Agentic Pattern Documentation Complete (Week 14) - Reference implementations for 8 patterns
 ├─ ☐ Security Patterns Schema Complete (Week 4) - NEW: Security Learning Agent
 ├─ ☐ OWASP/CWE Data Loaded (Week 8) - NEW: Security knowledge base operational
@@ -121,9 +118,9 @@
 └─ ☐ CORTEX 4.0 GA Release (Week 19 - UPDATED from Week 20)
 
 📈 METRICS
-├─ Orchestrators Migrated: 3/15 (20%)  # ExecutionOrchestrator, DocumentationOrchestrator, TDDOrchestrator v4.0 (Phase 2.5 adds CICDOrchestrator = 15th)
+├─ Orchestrators Migrated: 3/15 (20%)  # ExecutionOrchestrator, DocumentationOrchestrator, TDDOrchestrator v4.0 (Phase 5 adds CICDOrchestrator = 15th)
 ├─ Test Coverage (Current): 75.2% average → Target: 90%+
-├─ Phase 2.5 Packages: 0/8 (0%)  # Multi-agent, MCP, Evaluation, Context, Execution, Guardrails, Learning, CI/CD
+├─ Phase 5 Packages: 0/8 (0%)  # Multi-agent, MCP, Evaluation, Context, Execution, Guardrails, Learning, CI/CD
 │  ├─ phase_manager: 67.15% ⚠️ (need +23% for 90% target)
 │  ├─ documentation_orchestrator: 69.86% ⚠️ (need +20%)
 │  ├─ code_analyzer: 71.90% ⚠️ (need +18%)
@@ -290,37 +287,35 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **🆕 Completed Orchestrators Agentic Alignment Review** - See `cortex-brain/documents/analysis/COMPLETED-ORCHESTRATORS-AGENTIC-ALIGNMENT-REVIEW.md` (30% current alignment, 95% post-Phase 2.5 target, COMPLETED Dec 19, 2025)
 
 **Critical Path to First Orchestrator Migration:**
-1. **Week 0:** Phase 0 cleanup + technical documentation structure setup ✅
-2. **Week 1 Days 1-3:** Phase 0.5 autonomous execution framework (NEW - enables E2E execution)
-3. **Weeks 1-3:** Phase 1 foundation (10 prerequisites MUST be complete) 
-4. **Week 3 End:** Run validation script - MUST pass before Phase 3
+1. **Week 0:** Phase 1 cleanup + technical documentation structure setup ✅
+2. **Week 1 Days 1-3:** Phase 2 autonomous execution framework (NEW - enables E2E execution) ✅
+3. **Weeks 1-3:** Phase 3 foundation (10 prerequisites MUST be complete) ✅
+4. **Week 3 End:** Run validation script - MUST pass before Phase 6
 5. **Week 7 (Days 1-3):** Migrate ExecutionOrchestrator (foundation - all orchestrators depend on it) ✅
 6. **Week 7 (Days 4-5):** Migrate Technical Documentation Orchestrator (self-documenting migration) ✅
-7. **Week 8:** Migrate TDDOrchestrator (next priority, RED→GREEN→REFACTOR enforcement)
-8. **Week 9:** Migrate PlanningOrchestrator (high complexity, well-tested, 1,599 LOC → 4 modules)
+7. **Week 7 (Days 6-7):** Migrate TDDOrchestrator v4.0 (RED→GREEN→REFACTOR enforcement) ✅
+8. **Week 8:** Migrate PlanningOrchestrator (high complexity, well-tested, 1,599 LOC → 4 modules)
 
-**Key Phases (Reorganized for Parallel Execution):**
-- **Phase 0 (Week 0):** Pre-Migration Cleanup - Eliminate bloat + Technical documentation structure  
-- **Phase 0.5 (Week 1 Days 1-3):** Autonomous Execution Framework - E2E autonomous execution with self-healing
-- **Phase 1 (Weeks 1-3):** Foundation - Base orchestrator, brain, DI, response templates v4.0, testing (CRITICAL)
-- **Phase 1.5 (Week 3):** Documentation & Visualization Framework - Auto-generation tool  
-- **Phase 2 (Weeks 4-8):** Brain Enhancement - Hybrid centralization + RAG guideline stores + Security Learning Agent (RUNS PARALLEL WITH PHASE 2.5 & 3)
-- **Phase 2.5 (Weeks 2, 4-10, 14-15):** Agentic Enhancements - Multi-agent patterns, MCP ecosystem, evaluation, learning (RUNS PARALLEL WITH PHASE 2 & 3)
-- **Phase 3 (Weeks 7-13):** Orchestrator Consolidation - Migrate 15 orchestrators (11 core + 2 specialized + 1 security + 1 CI/CD) (requires Phase 1 complete, Phase 2/2.5 optional)
-- **Phase 4 (Weeks 14-16):** Operations Simplification - DI container and manifest reduction
-- **Phase 5 (Weeks 17-18):** Testing & Validation - Comprehensive testing and quality gates (**reduced from 17-19**)
-- **Phase 6 (Week 19):** Documentation Finalization - Complete technical documentation generation (**reduced from Week 20**)
+**Key Phases (Sequential with Parallel Execution):**
+- **Phase 1 (Week 0):** Pre-Migration Cleanup - Eliminate bloat + Technical documentation structure  
+- **Phase 2 (Week 1 Days 1-3):** Autonomous Execution Framework - E2E autonomous execution with self-healing
+- **Phase 3 (Weeks 1-3):** Foundation - Base orchestrator, brain, DI, response templates v4.0, testing (CRITICAL)
+- **Phase 4 (Week 3):** Documentation & Visualization Framework - Auto-generation tool  
+- **Phase 5 (Weeks 2, 4-10, 14-15):** Brain + Agentic AI (PARALLEL) - Hybrid centralization + RAG stores + Security Agent + 8 agentic packages
+- **Phase 6 (Weeks 7-14):** Orchestrator Consolidation - Migrate 15 orchestrators + post-Phase 5 enhancements (requires Phase 3 complete)
+- **Phase 7 (Weeks 15-17):** Operations Simplification - DI container, manifest reduction, universal adapters
+- **Phase 8 (Weeks 18-20):** Testing & Validation - Comprehensive testing and quality gates
+- **Phase 9 (Week 21):** Documentation Finalization - Complete technical documentation generation
 
 **Phase Reorganization Rationale:**
-1. **Response Templates v4.0 moved into Phase 1** - Foundation work, blocking dependency for orchestrators
-2. **MCP Gateway moved to Phase 4** - Non-blocking, can evolve alongside operations simplification
-3. **Brain Enhancement (Phase 2) EXTENDED** - Now includes RAG guideline stores (Weeks 4-8 vs original 4-6)
-4. **Phase 2.5 INTEGRATED (NEW)** - Agentic enhancements run parallel with Phase 2 & 3 (8 packages, 1 developer, Weeks 2, 4-10, 14-15)
-5. **Phase 2-3 PARALLEL EXECUTION** - Brain enhancements don't block orchestrator migration (Phase 1 Brain interface sufficient)
-6. **Phase 2.5 starts Week 2** - Adaptive execution modes integrate with Phase 0.5, remaining packages Weeks 4-10, 14-15
-5. **Phase 3 started Week 7** - Overlaps with Phase 2 (Weeks 4-8) by design
-6. **Total timeline: 19 weeks** - Parallel execution + simplifications reduce timeline by 1 week
-7. **Simplifications (Dec 19, 2025):** CORTEX Lens v2.0 deferred (saves 60h), Feature Discovery simplified (saves 14h), diagrams capped at 20  
+1. **Sequential numbering 1-9** - Eliminates confusing Phase 0.5, 1.5, 2.5 fractional numbering
+2. **Phase 5 combines Brain + Agentic AI** - Both run completely in parallel, same developer resources
+3. **Response Templates v4.0 moved into Phase 3** - Foundation work, blocking dependency for orchestrators
+4. **Phase 5-6 PARALLEL EXECUTION** - Brain enhancements don't block orchestrator migration (Phase 3 interface sufficient)
+5. **Phase 5 starts Week 2** - Adaptive execution modes integrate with Phase 2, remaining packages Weeks 4-10, 14-15
+6. **Phase 6 started Week 7** - Overlaps with Phase 5 (Weeks 4-10) by design
+7. **Total timeline: 21 weeks** - Parallel execution maintains 125-day timeline
+8. **Simplifications (Dec 19, 2025):** CORTEX Lens v2.0 deferred (saves 60h), Feature Discovery simplified (saves 14h), diagrams capped at 20  
 
 ---
 
@@ -2836,27 +2831,27 @@ src/orchestrators/scaffolding/
 
 | Phase | Duration | Weeks | Key Deliverables | Dependencies | Risk |
 |-------|----------|-------|------------------|--------------|------|
-| **Phase 0** | 5 days | Week 0 | Root bloat cleanup, technical doc structure | None | 🟢 LOW |
-| **Phase 1** | 15 days | Weeks 1-3 | Foundation: Base orchestrator, Brain, DI, Response Templates v4.0, Testing, IDE detection | Phase 0 | 🟡 MEDIUM |
-| **Phase 1.5** | 5 days | Week 3 | Documentation generator tool, D3.js templates | Phase 1 | 🟢 LOW |
-| **Phase 2** | 15 days | Weeks 4-6 | Brain hybrid centralization, multi-domain support, privacy controls | Phase 1 items 1-8 | 🟡 MEDIUM |
-| **Phase 2.5** | 15 days | Weeks 7-9 | Agentic AI framework (multi-agent, MCP, evaluation, guardrails, learning, CI/CD) | Phase 2 | 🟡 MEDIUM |
-| **Phase 3** | 40 days | Weeks 7-14 | **Weeks 7-10:** Migrate 13 orchestrators (11 core + 2 specialized), co-located tests. **Weeks 11-13:** Post-Phase 2.5 enhancements (TDD, Documentation, Execution orchestrators). **Week 14:** Agentic pattern docs | **Phase 1 COMPLETE** | 🔴 HIGH |
-| **Phase 4** | 15 days | Weeks 15-17 | Operations simplification, DI auto-discovery, manifest reduction | 6+ orchestrators migrated | 🟡 MEDIUM |
-| **Phase 5** | 15 days | Weeks 18-20 | Testing, validation, performance benchmarks, go/no-go | All 13 orchestrators migrated | 🟡 MEDIUM |
-| **Phase 6** | 5 days | Week 21 | Documentation finalization, publish, sign-off | Phase 5 complete | 🟢 LOW |
+| **Phase 1** | 5 days | Week 0 | Root bloat cleanup, technical doc structure | None | 🟢 LOW |
+| **Phase 2** | 3 days | Week 1 Days 1-3 | Autonomous execution framework, E2E execution, self-healing | Phase 1 | 🟢 LOW |
+| **Phase 3** | 15 days | Weeks 1-3 | Foundation: Base orchestrator, Brain, DI, Response Templates v4.0, Testing, IDE detection | Phase 1 | 🟡 MEDIUM |
+| **Phase 4** | 5 days | Week 3 | Documentation generator tool, D3.js templates | Phase 3 | 🟢 LOW |
+| **Phase 5** | 45 days | Weeks 2, 4-10, 14-15 | **Brain:** Hybrid centralization, RAG stores, Security Agent (Weeks 4-8). **Agentic AI:** Multi-agent, MCP, evaluation, guardrails, learning, CI/CD (8 packages, parallel) | Phase 3 items 1-8 | 🟡 MEDIUM |
+| **Phase 6** | 40 days | Weeks 7-14 | **Weeks 7-10:** Migrate 13 orchestrators (11 core + 2 specialized), co-located tests. **Weeks 11-13:** Post-Phase 5 enhancements (TDD, Documentation, Execution). **Week 14:** Agentic pattern docs | **Phase 3 COMPLETE** | 🔴 HIGH |
+| **Phase 7** | 15 days | Weeks 15-17 | Operations simplification, DI auto-discovery, manifest reduction, universal adapters | 6+ orchestrators migrated | 🟡 MEDIUM |
+| **Phase 8** | 15 days | Weeks 18-20 | Testing, validation, performance benchmarks, go/no-go | All 13 orchestrators migrated | 🟡 MEDIUM |
+| **Phase 9** | 5 days | Week 21 | Documentation finalization, publish, sign-off | Phase 8 complete | 🟢 LOW |
 | **TOTAL** | **125 days** | **21 weeks** | **CORTEX 4.0 Production Ready** | - | 🟡 MEDIUM |
 
-**Critical Path:** Phase 0 → Phase 1 (BLOCKING) → Phase 3 (orchestrators) → Phase 5 (validation) → Phase 6 (docs)
+**Critical Path:** Phase 1 → Phase 3 (BLOCKING) → Phase 6 (orchestrators) → Phase 8 (validation) → Phase 9 (docs)
 
 **Parallel Work Opportunities:**
-- Phase 2 (Brain) can proceed alongside Phase 1 completion (Week 3)
-- Phase 4 (Operations) can begin when 6+ orchestrators complete (Week 10)
-- Documentation (Phase 1.5) overlaps with Phase 1 finalization
+- Phase 5 (Brain + Agentic AI) runs completely in parallel with Phase 3 & 6 (Weeks 2-15)
+- Phase 7 (Operations) can begin when 6+ orchestrators complete (Week 10)
+- Phase 4 (Documentation Framework) overlaps with Phase 3 finalization (Week 3)
 
 **Validation Gates:**
-- ✅ **Week 3 End:** Foundation validation script 100% PASS (BLOCKING for Phase 3)
-- ✅ **Week 11 End:** All 13 orchestrators migrated, 90%+ coverage
+- ✅ **Week 3 End:** Foundation validation script 100% PASS (BLOCKING for Phase 6)
+- ✅ **Week 13 End:** All 13 orchestrators migrated + enhanced, 90%+ coverage
 - ✅ **Week 17 End:** Performance <10% regression, backward compatibility verified
 - ✅ **Week 21 End:** Documentation complete, final sign-off
 
@@ -2864,7 +2859,7 @@ src/orchestrators/scaffolding/
 
 ## 🔄 Migration Order & Strategy
 
-### Phase 0: Pre-Migration Cleanup (Week 0) - Organize Bloat
+### Phase 1: Pre-Migration Cleanup (Week 0) - Organize Bloat
 
 **Status:** ✅ **COMPLETE** (Verified December 18, 2025)
 
@@ -3084,7 +3079,7 @@ cortex-brain/
 
 ---
 
-### Phase 0.5: Autonomous Execution Framework (Week 1, Days 1-3) - E2E Autonomous Execution
+### Phase 2: Autonomous Execution Framework (Week 1, Days 1-3) - E2E Autonomous Execution
 
 **Goal:** Enable end-to-end autonomous execution with self-healing and auto-validation gates
 
@@ -4140,7 +4135,7 @@ Each package must meet:
 
 ---
 
-### Phase 1: Foundation (Weeks 1-3) - ✅ COMPLETE
+### Phase 3: Foundation (Weeks 1-3) - ✅ COMPLETE
 
 **Goal:** Establish core infrastructure without breaking existing functionality
 
@@ -4610,7 +4605,7 @@ Each package must meet:
 
 **Migration Approach:** **Non-breaking** - Old code continues working via compatibility layer
 
-### Phase 1.5: Documentation & Visualization Framework (Week 3) - Technical Documentation Tool
+### Phase 4: Documentation & Visualization Framework (Week 3) - Technical Documentation Tool
 
 **Goal:** Create automated documentation generation system with D3.js visualizations
 
@@ -4840,7 +4835,9 @@ cortex-toolkit docs export --format pdf --output cortex-4.0-technical-docs.pdf
 
 ---
 
-### Phase 2: Brain Enhancement (Weeks 4-6) - Hybrid Centralization
+### Phase 5: Brain + Agentic AI (Weeks 2, 4-10, 14-15) - PARALLEL EXECUTION
+
+**Part 1: Brain Enhancement (Weeks 4-8)**
 
 **Goal:** Implement shared templates + Tier 2 centralization
 
