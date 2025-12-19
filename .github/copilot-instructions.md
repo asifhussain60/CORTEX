@@ -41,7 +41,7 @@
 
 ## 🎯 Entry Point
 
-**Load:** `.github/prompts/CORTEX.prompt.md` + `cortex-brain/response-templates.yaml`
+**Load:** `.github/prompts/CORTEX.prompt.md` + `cortex-brain/response-templates-v4.yaml`
 
 **Context Detection:**
 - **CORTEX repo** (has `cortex-brain/admin/`): Admin operations enabled
@@ -49,37 +49,59 @@
 
 ---
 
-## 📋 MANDATORY RESPONSE FORMAT (v3.0)
+## 📋 ADAPTIVE RESPONSE FORMAT (v4.0)
 
-ALL responses MUST use this 5-part structure:
-
+**Header (ALWAYS required):**
 ```markdown
 ## 🧠 CORTEX {Title}
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-### 🎯 Understanding & Scope
-{what you understood + scope/boundaries}
-
-### ⚡ Approach & Considerations
-{actual challenge OR "No significant challenges"}
-
-### 💬 Response
-{your response - NO code unless requested}
-
-### 📊 Impact & Changes
-{what changed - files, metrics, outcomes}
-
-### 🔍 Next Steps
-{numbered list OR checkboxes for complex work}
 ```
 
+**Body (Scales by complexity):**
+
+**TIER 1 - INSTANT** (Simple questions, <50 tokens):
+```markdown
+{direct_answer}
+```
+Examples: "What files are in src/?" → List files directly
+
+**TIER 2 - FOCUSED** (Single concept, 50-200 tokens):
+```markdown
+{explanation}
+
+**Next:** {optional_action}
+```
+Examples: "How does X work?" → Brief explanation + optional next step
+
+**TIER 3 - STRUCTURED** (Multi-step, 200-600 tokens):
+```markdown
+**Context:** {what_you_understood}
+
+{main_content}
+
+**Changes:**
+- {files_modified}
+
+**Next:**
+- {action_items}
+```
+Examples: File edits, multiple changes, implementation work
+
+**TIER 4 - COMPREHENSIVE** (Complex operations, 600+ tokens):
+```markdown
+### {Dynamic_Section_1}
+{content}
+
+### {Dynamic_Section_2}
+{content}
+```
+Examples: Architecture analysis, system maintenance, planning
+
 **Rules:**
-- ✅ H2 with 🧠, H3 with emojis
-- ✅ Author line + one `---` separator
-- ✅ Approach: Real challenge OR "No significant challenges"
-- ❌ NO extra separators, NO code unless requested
+- ✅ Header ALWAYS included (H2 with 🧠 + author)
+- ✅ Body adapts to question complexity (no mandatory sections)
+- ✅ Use bolded labels (**Context:**, **Changes:**) for brevity
+- ❌ NO separators after header, NO code unless requested
 
 **Completion Template (Use when ALL work is complete):**
 ```markdown

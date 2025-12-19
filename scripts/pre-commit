@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+"""
+Git Pre-Commit Hook: Migration Activation & Legacy Cleanup
+
+Enforces CORTEX 4.0 migration standards:
+1. All completed migrations must be activated
+2. All old 3.0 code must be deleted
+3. No legacy 3.0 files can be committed
+4. Documents folder bloat is tracked
+
+Installation:
+    python scripts/install_git_hooks.py
+    
+Or manual:
+    cp scripts/pre-commit .git/hooks/pre-commit
+    chmod +x .git/hooks/pre-commit
+"""
+
+import subprocess
+import sys
+from pathlib import Path
+
+
+def run_command(cmd: list, capture=True) -> tuple:
+    """Run shell command and return output"""
+    result = subprocess.run(
+        cmd, 
+        capture_output=capture, 
+        text=True,
+        cwd=Path(__file__).parent.parent
+    )
+    return result.returncode, result.stdout, result.stderr
+
+
+def check_migration_activation() -> tuple[bool, list]:
+    """Check if all migrations are properly activated"""
+    print("🔍 Checking migration activation status...")
+    
+    returncode, stdout, stderr = run_command([
+        sys.executable, 
+        "scripts/validate_migration_activation.py", 
+        "--all"
+    ])
+    
+    # Exit code 0 = all passing, 1 = failures, 2 = error
+    if returncode == 0:
+        print("✅ All migrations properly activated")
+        return True, []
+    elif returncode == 1:
+        failures = []
+        for line in stdout.split('\n'):
+            if '❌' in line and 'FAILURE' in line:
+                failures.append(line.strip())
+        return False, failures
+    else:
+        print(f"❌ Migration validation error: {stderr}")
+        return False, [stderr]
+
+
+def check_legacy_3_0_files() -> tuple[bool, list]:
+    """Check for legacy 3.0 files being committed"""
+    print("🔍 Checking for legacy 3.0 files...")
+    
+    # Get staged files
+    returncode, stdout, stderr = run_command([
+        "git", "diff", "--cached", "--name-only"
+    ])
+    
+    if returncode != 0:
+        print(f"❌ Git error: {stderr}")
+        return False, [stderr]
+    
+    staged_files = stdout.strip().split('\n')
+    
+    # Check for legacy patterns
+    legacy_patterns = [
+        'src/cortex_3_0/',
+        'src/orchestrators/execution/',
+        'src/orchestrators/documentation/',
+        'cortex-brain/core/response-templates.yaml',
+        'cortex-brain/documents/scribe/',
+    ]
+    
+    violations = []
+    for file in staged_files:
+        for pattern in legacy_patterns:
+            if pattern in file:
+                violations.append(f"Legacy 3.0 file staged: {file}")
+    
+    if violations:
+        print(f"❌ Found {len(violations)} legacy files in staging")
+        return False, violations
+    
+    print("✅ No legacy 3.0 files staged")
+    return True, []
+
+
+def check_documents_bloat() -> tuple[bool, list]:
+    """Warn if documents folder is growing"""
+    print("🔍 Checking documents folder size...")
+    
+    # Count files in documents
+    docs_path = Path(__file__).parent.parent / "cortex-brain/documents"
+    if not docs_path.exists():
+        return True, []
+    
+    file_count = sum(1 for _ in docs_path.rglob('*') if _.is_file())
+    
+    # Warn if > 500 files (target after cleanup)
+    if file_count > 500:
+        warning = f"⚠️  Documents folder has {file_count} files (target: <500)"
+        print(warning)
+        return True, [warning]  # Warning, not blocking
+    
+    print(f"✅ Documents folder size OK ({file_count} files)")
+    return True, []
+
+
+def main():
+    """Pre-commit hook main"""
+    print("\n" + "="*80)
+    print("🎯 CORTEX 4.0 Pre-Commit Validation")
+    print("="*80 + "\n")
+    
+    all_passed = True
+    all_issues = []
+    
+    # Check 1: Migration activation
+    passed, issues = check_migration_activation()
+    if not passed:
+        all_passed = False
+        all_issues.extend(issues)
+    
+    # Check 2: Legacy 3.0 files
+    passed, issues = check_legacy_3_0_files()
+    if not passed:
+        all_passed = False
+        all_issues.extend(issues)
+    
+    # Check 3: Documents bloat (warning only)
+    passed, warnings = check_documents_bloat()
+    if warnings:
+        all_issues.extend(warnings)
+    
+    # Summary
+    print("\n" + "="*80)
+    if all_passed:
+        print("✅ Pre-commit validation PASSED")
+        print("="*80 + "\n")
+        return 0
+    else:
+        print("❌ Pre-commit validation FAILED")
+        print("="*80 + "\n")
+        
+        print("Issues found:")
+        for issue in all_issues:
+            print(f"  {issue}")
+        
+        print("\nTo fix:")
+        print("  1. Run: python scripts/validate_migration_activation.py --all")
+        print("  2. Run: python scripts/cleanup_legacy_3_0.py --scan")
+        print("  3. Fix issues and recommit")
+        print("\nTo bypass (NOT RECOMMENDED):")
+        print("  git commit --no-verify")
+        print()
+        
+        return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())

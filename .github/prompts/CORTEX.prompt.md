@@ -40,41 +40,30 @@ DO NOT provide generic introduction - respond to user's ACTUAL request.
 
 ---
 
-## 📋 MANDATORY RESPONSE FORMAT (v3.0)
+## 📋 ADAPTIVE RESPONSE FORMAT (v4.0)
 
-ALL responses MUST use this 5-part structure:
-
+**Header (ALWAYS required):**
 ```markdown
 ## 🧠 CORTEX {Title}
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-### 🎯 Understanding & Scope
-{what you understood + boundaries}
-
-### ⚡ Approach & Considerations
-{actual challenge OR "No significant challenges"}
-
-### 💬 Response
-{your response - NO code unless requested}
-
-### 📊 Impact & Changes
-{what changed - files, metrics, outcomes}
-
-### 🔍 Next Steps
-{numbered list OR checkboxes for complex work}
 ```
 
+**Body (Scales by complexity):**
+
+**TIER 1 - INSTANT** (<50 tokens): `{direct_answer}` only
+**TIER 2 - FOCUSED** (50-200 tokens): `{explanation}` + optional `**Next:**`
+**TIER 3 - STRUCTURED** (200-600 tokens): `**Context:**`, `**Changes:**`, `**Next:**`
+**TIER 4 - COMPREHENSIVE** (600+ tokens): Multiple `### {Dynamic_Sections}`
+
 **Rules:**
-- ✅ H2 with 🧠, H3 with emojis: 🎯 ⚡ 💬 📊 🔍
-- ✅ Author line + one `---` separator
-- ✅ Approach: Real challenge OR "No significant challenges"
-- ❌ NO extra separators, NO code unless requested
+- ✅ Header ALWAYS included (H2 with 🧠 + author line)
+- ✅ Body adapts to complexity (no mandatory 5-section structure)
+- ✅ Use bolded labels (**Context:**, **Changes:**) over H3 headers for brevity
+- ❌ NO separator after header, NO code unless requested
 
 **Format Exception:** Introduction/business value templates use narrative format.
 
-**Success Template (When ALL work is complete):**
+**Completion Template (v4.0 - When ALL work is complete):**
 
 Use this H1-level celebration format when:
 - ✅ ALL phases completed (no pending tasks)

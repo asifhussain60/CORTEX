@@ -13,9 +13,9 @@ from pathlib import Path
 from typing import List, Dict, Optional, Any
 import yaml
 
+from src.utils.resource_resolver import get_root_path
 from .parsers import ParserRegistry, LanguageDetector, Language
 from .analyzers import (
-from src.utils.resource_resolver import get_root_path
     BaseAnalyzer, CodeSmell, PythonAnalyzer, 
     JavaScriptAnalyzer, TypeScriptAnalyzer, CSharpAnalyzer
 )

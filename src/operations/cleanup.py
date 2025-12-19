@@ -1,5 +1,5 @@
 """
-"""\nWorkspace Cleanup Operation
+Workspace Cleanup Operation
 CORTEX v3.9 Compatible
 
 Safely removes temporary files, old logs, and cache to free disk space.

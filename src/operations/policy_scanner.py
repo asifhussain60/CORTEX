@@ -17,10 +17,11 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
 
+from src.utils.resource_resolver import get_root_path
+
 # Optional: Document converter for Word/PDF support
 try:
     from src.utils.document_converter import DocumentConverter
-from src.utils.resource_resolver import get_root_path
     CONVERTER_AVAILABLE = True
 except ImportError:
     CONVERTER_AVAILABLE = False

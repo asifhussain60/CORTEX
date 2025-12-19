@@ -21,6 +21,8 @@ import time
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+from src.utils.resource_resolver import get_root_path
+
 # Add CORTEX root to Python path for imports
 CORTEX_ROOT = get_root_path().parent.parent
 if str(CORTEX_ROOT) not in sys.path:

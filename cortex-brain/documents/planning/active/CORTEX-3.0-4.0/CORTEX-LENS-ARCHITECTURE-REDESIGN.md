@@ -3,11 +3,26 @@
 **Version:** 2.0  
 **Author:** Asif Hussain  
 **Created:** December 17, 2025  
-**Status:** 📋 ARCHITECTURAL VISION
+**Updated:** December 19, 2025 (Deferred to CORTEX 5.0)  
+**Status:** 🔴 DEFERRED TO CORTEX 5.0 - v1.0 Sufficient for 4.0 GA
 
 ---
 
 ## 🎯 Executive Summary
+
+**⚠️ ARCHITECTURAL DECISION (December 19, 2025): DEFERRED TO CORTEX 5.0**
+
+This v2.0 redesign has been deferred to CORTEX 5.0 based on architectural review findings:
+- **v1.0 is sufficient** for CORTEX 4.0 GA release (works well, no user complaints)
+- **Overlaps with IntelligenceOrchestrator** (duplicate functionality)
+- **Saves 60+ hours** of implementation time (3-4 days)
+- **v1.0 enhancements preferred** over full v2.0 rebuild for 4.0 timeline
+
+CORTEX Lens v1.0 will remain as the static dashboard generator for 4.0, with incremental enhancements as needed.
+
+---
+
+## 📋 Original v2.0 Vision (Archived for 5.0)
 
 Redesign CORTEX Lens from a **standalone static dashboard generator** (v1.0) into a **dynamic MCP-integrated intelligence platform** (v2.0) that provides real-time repository analysis, AI-powered insights, and seamless integration with CORTEX 4.0 orchestrators.
 

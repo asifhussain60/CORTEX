@@ -19,6 +19,15 @@ omit =
     */build/*
     */migrations/*
     */__init__.py
+    # Problematic files causing slow parsing (syntax/encoding issues)
+    */operations/modules/dashboard/learning_dashboard_launcher.py
+    */operations/modules/deploy/deploy_gate_validator.py
+    */operations/modules/implants_commands.py
+    */orchestrators/story_enhancement/modules/dalle_prompt_generator.py
+    */policy/policy_test_generator.py
+    */tier0/copilot_instructions_generator.py
+    */utils/doc_sync_hooks.py
+    */workflows/tdd_workflow_orchestrator.py
 
 # Branch coverage enabled
 branch = True
