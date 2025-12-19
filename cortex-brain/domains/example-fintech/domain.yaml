@@ -1,0 +1,402 @@
+# Example Domain Configuration
+# Company: Example Financial Corp
+# Industry: Financial Services
+# Version: 1.0
+# Created: December 19, 2025
+
+metadata:
+  domain_name: "Example Financial Corp"
+  domain_id: "example-fintech"
+  industry: "Financial Services"
+  
+  compliance_frameworks:
+    - name: "PCI-DSS"
+      version: "4.0"
+      scope: "Payment card processing"
+      mandatory: true
+    
+    - name: "SOC2 Type II"
+      version: "2017"
+      scope: "Security, Availability, Confidentiality"
+      mandatory: true
+    
+    - name: "GDPR"
+      version: "2018"
+      scope: "EU customer data"
+      mandatory: true
+  
+  contacts:
+    primary: "tech-lead@example-fintech.com"
+    security: "security@example-fintech.com"
+  
+  created: "2025-12-19"
+  updated: "2025-12-19"
+  version: "1.0"
+
+# TECH STACK
+tech_stack:
+  languages:
+    primary:
+      name: "Python"
+      version: "3.11+"
+      justification: "Type safety, async support, rich ecosystem"
+    
+    secondary:
+      - name: "TypeScript"
+        version: "5.0+"
+        usage: "Frontend React applications"
+      
+      - name: "C#"
+        version: "12.0+"
+        usage: "Legacy payment processing services"
+  
+  frameworks:
+    backend:
+      primary: "FastAPI"
+      version: ">=0.104.0"
+      justification: "Async-native, automatic OpenAPI docs, Pydantic integration"
+    
+    orm: "SQLAlchemy"
+    migrations: "Alembic"
+    
+    frontend:
+      primary: "React"
+      version: "18.x"
+      state_management: "Redux Toolkit"
+    
+    testing:
+      unit: "pytest"
+      integration: "pytest + testcontainers"
+      e2e: "Playwright"
+  
+  databases:
+    primary:
+      type: "PostgreSQL"
+      version: "15+"
+      justification: "ACID compliance, JSON support, mature"
+    
+    caching:
+      type: "Redis"
+      version: "7.0+"
+      usage: "Session storage, rate limiting"
+    
+    event_store:
+      type: "Kafka"
+      version: "3.5+"
+      usage: "Event sourcing, audit logs"
+  
+  infrastructure:
+    cloud_provider: "AWS"
+    container_orchestration: "Kubernetes"
+    ci_cd: "GitHub Actions"
+    monitoring: "Datadog"
+    logging: "ELK Stack"
+
+# ARCHITECTURE
+architecture:
+  pattern: "Clean Architecture"
+  description: "Hexagonal architecture with clear layer boundaries"
+  
+  layers:
+    - name: "Domain"
+      path_pattern: "*.Domain/"
+      purpose: "Entities, Value Objects, Aggregates, Domain Events"
+      dependencies: []
+      rules:
+        - "No framework dependencies"
+        - "No infrastructure dependencies"
+        - "Pure business logic only"
+    
+    - name: "UseCase"
+      path_pattern: "*.UseCase/"
+      purpose: "Application services, interfaces, DTOs"
+      dependencies: ["Domain"]
+      rules:
+        - "Define interfaces for infrastructure"
+        - "Orchestrate domain logic"
+        - "No direct infrastructure calls"
+    
+    - name: "Infrastructure"
+      path_pattern: "*.Data/,*.Client/"
+      purpose: "Repositories, external API clients, database access"
+      dependencies: ["Domain", "UseCase"]
+      rules:
+        - "Implement UseCase interfaces"
+        - "Handle persistence concerns"
+        - "Manage external integrations"
+    
+    - name: "Presentation"
+      path_pattern: "*.Api/,*.UI/"
+      purpose: "REST controllers, GraphQL resolvers, React components"
+      dependencies: ["Domain", "UseCase"]
+      rules:
+        - "HTTP concerns only"
+        - "DTO transformation"
+        - "Request/response handling"
+  
+  project_structure:
+    backend: "ExampleFintech.{Layer}"
+    frontend: "fintech-web/"
+    
+    example: |
+      ExampleFintech/
+      ├── ExampleFintech.Domain/
+      │   ├── Entities/
+      │   │   ├── Payment.cs
+      │   │   └── Account.cs
+      │   ├── ValueObjects/
+      │   └── Events/
+      ├── ExampleFintech.UseCase/
+      │   ├── Services/
+      │   │   └── PaymentService.cs
+      │   └── Interfaces/
+      │       └── IPaymentRepository.cs
+      ├── ExampleFintech.Data/
+      │   ├── Repositories/
+      │   │   └── PaymentRepository.cs
+      │   └── Migrations/
+      ├── ExampleFintech.Client/
+      │   └── StripeClient.cs
+      └── ExampleFintech.Api/
+          └── Controllers/
+              └── PaymentController.cs
+
+# CODING STANDARDS (Augments universal clean-code.yaml)
+coding_standards:
+  naming_conventions:
+    class_suffix:
+      service: "Service"        # PaymentService
+      repository: "Repository"  # PaymentRepository
+      dto: "DTO"               # PaymentRequestDTO
+      entity: null             # Payment (no suffix)
+      value_object: null       # Money, Email (no suffix)
+      client: "Client"         # StripeClient
+    
+    method_prefixes:
+      query: "Get", "Find", "List", "Query"
+      command: "Create", "Update", "Delete", "Process"
+      validation: "Validate", "Is", "Can", "Has"
+  
+  async_requirements:
+    - rule: "All API endpoints MUST be async"
+      severity: "CRITICAL"
+      example: |
+        # Good
+        async def get_payment(payment_id: str) -> Payment:
+            return await payment_repo.get(payment_id)
+        
+        # Bad
+        def get_payment(payment_id: str) -> Payment:
+            return payment_repo.get(payment_id)  # Blocking!
+    
+    - rule: "All database operations MUST be async"
+      severity: "CRITICAL"
+    
+    - rule: "All external API calls MUST be async"
+      severity: "CRITICAL"
+  
+  error_handling:
+    - rule: "Use custom exception hierarchy"
+      example: |
+        class DomainException(Exception):
+            """Base for all domain exceptions"""
+        
+        class PaymentException(DomainException):
+            """Payment-specific errors"""
+        
+        class InsufficientFundsError(PaymentException):
+            """Concrete domain error"""
+    
+    - rule: "Never expose internal errors to API"
+      severity: "CRITICAL"
+      example: |
+        # Good
+        try:
+            payment = await process_payment(request)
+        except PaymentException as e:
+            return {"error": "payment_failed", "message": str(e)}
+        except Exception:
+            logger.exception("Unexpected error")
+            return {"error": "internal_error", "message": "Please contact support"}
+  
+  logging_requirements:
+    - rule: "Log PII fields as hashed"
+      severity: "CRITICAL"
+      example: |
+        # Good
+        logger.info(f"Payment processed for user {hash(user_email)}")
+        
+        # Bad
+        logger.info(f"Payment processed for user {user_email}")  # PII leak!
+    
+    - rule: "Use structured logging (JSON)"
+      severity: "HIGH"
+      example: |
+        logger.info(
+            "payment_processed",
+            extra={
+                "payment_id": payment.id,
+                "amount": payment.amount,
+                "currency": payment.currency,
+                "user_id_hash": hash(user.id)
+            }
+        )
+  
+  testing_requirements:
+    coverage_threshold: 85
+    tdd_mandatory: true
+    
+    test_organization:
+      unit: "tests/unit/"
+      integration: "tests/integration/"
+      e2e: "tests/e2e/"
+    
+    test_naming: "test_{method_name}_{scenario}_{expected_result}"
+    example: |
+      def test_process_payment_insufficient_funds_raises_error():
+          pass
+
+# APPROVED DEPENDENCIES
+approved_dependencies:
+  python:
+    - name: "fastapi"
+      version: ">=0.104.0"
+      purpose: "REST API framework"
+      mandatory: true
+    
+    - name: "pydantic"
+      version: ">=2.5.0"
+      purpose: "Data validation and serialization"
+      mandatory: true
+    
+    - name: "sqlalchemy"
+      version: ">=2.0.0"
+      purpose: "ORM"
+      mandatory: true
+    
+    - name: "polars"
+      version: ">=0.19.0"
+      purpose: "Data processing (NOT pandas)"
+      justification: "5x faster than pandas, better memory usage"
+    
+    - name: "httpx"
+      version: ">=0.25.0"
+      purpose: "Async HTTP client"
+      justification: "Replaces requests, native async support"
+    
+    - name: "stripe"
+      version: ">=7.0.0"
+      purpose: "Payment gateway integration"
+    
+    - name: "pydantic-settings"
+      version: ">=2.0.0"
+      purpose: "Configuration management"
+
+# FORBIDDEN DEPENDENCIES
+forbidden_dependencies:
+  - name: "pandas"
+    reason: "Use polars instead (5x faster, better memory)"
+    alternative: "polars"
+    severity: "HIGH"
+  
+  - name: "requests"
+    reason: "Use httpx instead (async support)"
+    alternative: "httpx"
+    severity: "MEDIUM"
+  
+  - name: "flask"
+    reason: "Use FastAPI (company standard)"
+    alternative: "fastapi"
+    severity: "CRITICAL"
+
+# ARCHITECTURE CONSTRAINTS (Stricter than universal)
+architecture_constraints:
+  max_method_lines: 15          # Universal: 20
+  max_class_lines: 150          # Universal: 200
+  max_service_dependencies: 3
+  max_parameter_count: 2        # Universal: 3
+  
+  cyclomatic_complexity:
+    warning: 3                  # Universal: 5
+    error: 5                    # Universal: 10
+
+# SECURITY REQUIREMENTS
+security:
+  authentication:
+    method: "OAuth 2.0 + JWT"
+    token_expiry: "15 minutes"
+    refresh_token_expiry: "7 days"
+  
+  authorization:
+    model: "RBAC (Role-Based Access Control)"
+    roles:
+      - "admin"
+      - "operator"
+      - "viewer"
+      - "customer"
+  
+  pii_handling:
+    - rule: "Encrypt PII at rest"
+      fields: ["email", "phone", "ssn", "account_number"]
+    
+    - rule: "Mask PII in logs"
+      example: "user@example.com → u***@e***.com"
+    
+    - rule: "Never log payment card numbers"
+      severity: "CRITICAL"
+  
+  vulnerability_scanning:
+    tools: ["Snyk", "Dependabot"]
+    frequency: "Daily"
+    auto_fix: true
+
+# COMPLIANCE RULES
+compliance:
+  pci_dss:
+    - rule: "SAQ D Merchant compliance"
+      description: "Store cardholder data securely"
+    
+    - rule: "Quarterly vulnerability scans"
+      mandatory: true
+    
+    - rule: "Annual penetration testing"
+      mandatory: true
+  
+  gdpr:
+    - rule: "Right to erasure"
+      implementation: "User.delete() must cascade to all related data"
+    
+    - rule: "Data portability"
+      implementation: "User.export() returns JSON with all user data"
+    
+    - rule: "Consent management"
+      implementation: "UserConsent table tracks all consents"
+  
+  audit_logging:
+    - rule: "Log all state changes"
+      retention: "7 years"
+    
+    - rule: "Immutable audit logs"
+      implementation: "Event sourcing with Kafka"
+
+# CORTEX INTEGRATION
+cortex_integration:
+  code_generation:
+    default_layer: "UseCase"  # Start with services
+    require_tests: true
+    require_docstrings: true
+  
+  code_review:
+    enforce_domain_rules: true
+    validate_compliance: true
+    check_forbidden_deps: true
+  
+  refactoring:
+    respect_layer_boundaries: true
+    preserve_compliance_comments: true
+
+# EXAMPLE PATTERNS
+examples:
+  payment_service: "examples/payment-service.py"
+  repository_pattern: "examples/repository-pattern.py"
+  domain_event: "examples/domain-event.py"

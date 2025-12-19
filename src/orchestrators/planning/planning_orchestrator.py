@@ -57,6 +57,22 @@ from src.orchestrators.base.base_orchestrator import (
     ValidationResult as BaseValidationResult
 )
 
+# Week 8 Day 3: Import execution engine modules
+from src.orchestrators.planning.plan_executor import (
+    PlanExecutor,
+    ExecutionMode,
+    ExecutionResult
+)
+from src.orchestrators.planning.phase_manager_integration import PhaseManagerIntegration
+from src.orchestrators.planning.git_checkpoint_integration import (
+    GitCheckpointManager,
+    CheckpointType
+)
+from src.orchestrators.planning.session_manager import (
+    SessionManager,
+    SessionStatus
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -233,14 +249,34 @@ class PlanningOrchestrator(BaseOrchestrator):
         # Initialize schema
         self.schema = self._load_schema()
         
-        # Week 8 Day 3: Will initialize these modules
+        # Week 8 Day 3: Initialize execution engine modules
         self.plan_validator = None      # Will be: from .plan_validator import PlanValidator
         self.plan_generator = None      # Will be: from .plan_generator import PlanGenerator
         self.markdown_renderer = None   # Will be: from .markdown_renderer import MarkdownRenderer
-        self.plan_executor = None       # Will be: from .plan_executor import PlanExecutor (Day 3)
-        self.phase_manager = None       # Will be: from .phase_manager_integration import PhaseManagerIntegration (Day 3)
-        self.git_checkpoint = None      # Will be: from .git_checkpoint_integration import GitCheckpointIntegration (Day 3)
-        self.session_manager = None     # Will be: from .session_manager import SessionManager (Day 3)
+        
+        # Execution engine (Week 8 Day 3)
+        self.plan_executor = PlanExecutor(
+            workspace_root=config.get("workspace_root", Path.cwd()),
+            execution_mode=ExecutionMode[config.get("execution_mode", "SUPERVISED").upper()],
+            logger_instance=self.logger
+        ) if config.get("enable_autonomous_execution", True) else None
+        
+        self.phase_manager = PhaseManagerIntegration(
+            orchestrator=self,
+            workspace_root=config.get("workspace_root", Path.cwd()),
+            logger_instance=self.logger
+        )
+        
+        self.git_checkpoint = GitCheckpointManager(
+            workspace_root=config.get("workspace_root", Path.cwd()),
+            checkpoint_prefix="cortex-plan-checkpoint",
+            logger_instance=self.logger
+        ) if self.git_checkpoints_enabled else None
+        
+        self.session_manager = SessionManager(
+            workspace_root=config.get("workspace_root", Path.cwd()),
+            logger_instance=self.logger
+        ) if self.session_restoration_enabled else None
         
         # Planning state
         self.current_phase = None
@@ -439,15 +475,60 @@ class PlanningOrchestrator(BaseOrchestrator):
                     validation_result=None
                 )
             
-            # Phase 5: EXECUTION (Day 3 - optional)
+            # Phase 5: EXECUTION (Week 8 Day 3 - autonomous execution)
             execution_summary = None
             if kwargs.get("auto_execute", False):
                 self.current_phase = PlanningPhase.EXECUTION
                 self.logger.info("🎭 Phase transition: RENDERING → EXECUTION")
                 
-                # Day 3: Will implement autonomous execution
-                self.logger.warning("⚠️  Autonomous execution not yet implemented (Week 8 Day 3)")
-                execution_summary = {"status": "deferred", "reason": "Not implemented in Day 1-2"}
+                # Week 8 Day 3: Integrate PlanExecutor
+                if self.plan_executor:
+                    # Create session if session management enabled
+                    if self.session_manager:
+                        session = self.session_manager.create_session(
+                            plan_name=feature_name or "provided_plan",
+                            plan_path=rendering_result.plan_path,
+                            execution_config={
+                                "execution_mode": self.plan_executor.execution_mode.value,
+                                "auto_checkpoint": self.git_checkpoints_enabled
+                            }
+                        )
+                        self.current_session = session
+                        self.logger.info(f"✅ Execution session created: {session.session_id}")
+                    
+                    # Execute plan autonomously
+                    execution_result: ExecutionResult = self.plan_executor.execute_plan(
+                        plan_data=plan_data,
+                        plan_path=rendering_result.plan_path,
+                        auto_checkpoint=self.git_checkpoints_enabled,
+                        resume_from_phase=None
+                    )
+                    
+                    # Update session if successful
+                    if self.session_manager and self.current_session:
+                        self.session_manager.complete_session(
+                            session_id=self.current_session.session_id,
+                            success=execution_result.success
+                        )
+                    
+                    execution_summary = {
+                        "status": "completed" if execution_result.success else "failed",
+                        "message": execution_result.message,
+                        "phases_executed": len(execution_result.phase_results),
+                        "execution_time_seconds": execution_result.total_execution_time_seconds,
+                        "checkpoint_created": execution_result.checkpoint_created,
+                        "rollback_available": execution_result.rollback_available
+                    }
+                    
+                    if not execution_result.success:
+                        self.logger.error(f"❌ Plan execution failed: {execution_result.message}")
+                        return self._create_error_result(
+                            f"Plan execution failed: {execution_result.message}",
+                            validation_result=None
+                        )
+                else:
+                    self.logger.warning("⚠️  PlanExecutor not initialized - skipping autonomous execution")
+                    execution_summary = {"status": "skipped", "reason": "PlanExecutor not enabled"}
             
             # Create successful result
             self.end_time = datetime.now()
