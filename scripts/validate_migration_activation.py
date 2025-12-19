@@ -49,19 +49,19 @@ class MigrationValidator:
     def validate_migration(self, migration_name: str) -> bool:
         """Validate a single migration"""
         if migration_name not in self.checklist['migrations']:
-            print(f"❌ Migration not found in checklist: {migration_name}")
+            print(f"[X] Migration not found in checklist: {migration_name}")
             return False
         
         migration = self.checklist['migrations'][migration_name]
         status = migration.get('status', 'UNKNOWN')
         
         print(f"\n{'='*80}")
-        print(f"🔍 Validating: {migration_name}")
+        print(f"[>] Validating: {migration_name}")
         print(f"{'='*80}")
         print(f"Status: {status}")
         
         if status == 'PENDING':
-            print("⏳ Migration pending - skipping validation")
+            print("[~] Migration pending - skipping validation")
             return True
         
         # Run all validation checks
@@ -75,35 +75,35 @@ class MigrationValidator:
         passed = all(checks)
         
         if passed:
-            print(f"✅ All checks passed for {migration_name}")
+            print(f"[OK] All checks passed for {migration_name}")
         else:
-            print(f"❌ Validation failed for {migration_name}")
+            print(f"[X] Validation failed for {migration_name}")
         
         return passed
     
     def _check_new_code_activated(self, name: str, migration: Dict) -> bool:
         """Check if new 4.0 code is activated"""
-        print(f"\n📋 Check 1: New Code Activated")
+        print(f"\n[1] Check 1: New Code Activated")
         
         new_path = migration.get('new_path')
         if not new_path:
-            print("⚠️  No new_path specified - skipping")
+            print("[!] No new_path specified - skipping")
             return True
         
         # Check file exists
         full_path = self.repo_root / new_path
         if not full_path.exists():
-            self.failures.append(f"❌ {name}: New code does not exist: {new_path}")
-            print(f"❌ File not found: {new_path}")
+            self.failures.append(f"[X] {name}: New code does not exist: {new_path}")
+            print(f"[X] File not found: {new_path}")
             return False
         
-        print(f"✅ New code exists: {new_path}")
+        print(f"[OK] New code exists: {new_path}")
         
         # Check if activated (referenced in instructions)
         activated_in = migration.get('activated_in', [])
         if not activated_in:
-            self.failures.append(f"❌ {name}: Not activated (no references in instructions)")
-            print(f"❌ Not activated - no references found")
+            self.failures.append(f"[X] {name}: Not activated (no references in instructions)")
+            print(f"[X] Not activated - no references found")
             return False
         
         # Verify references exist
@@ -124,23 +124,23 @@ class MigrationValidator:
             
             content = ref_path.read_text(encoding='utf-8')
             if filename in content or classname in content:
-                print(f"✅ Referenced in: {ref_file}")
+                print(f"[OK] Referenced in: {ref_file}")
                 found_references = True
         
         if not found_references:
-            self.failures.append(f"❌ {name}: New code exists but not referenced in instructions")
-            print(f"❌ Not found in: {', '.join(activation_files)}")
+            self.failures.append(f"[X] {name}: New code exists but not referenced in instructions")
+            print(f"[X] Not found in: {', '.join(activation_files)}")
             return False
         
         return True
     
     def _check_old_code_deleted(self, name: str, migration: Dict) -> bool:
         """Check if old 3.0 code is deleted"""
-        print(f"\n🗑️  Check 2: Old Code Deleted")
+        print(f"\n[2] Check 2: Old Code Deleted")
         
         old_path = migration.get('old_path')
         if not old_path:
-            print("✅ No old code to delete (new component)")
+            print("[OK] No old code to delete (new component)")
             return True
         
         deleted_info = migration.get('deleted', [])
@@ -150,8 +150,8 @@ class MigrationValidator:
             if isinstance(deleted_info, list) and len(deleted_info) > 0:
                 if deleted_info[0].get('status') == 'PENDING':
                     paths = deleted_info[0].get('paths', [])
-                    self.warnings.append(f"⚠️  {name}: Old code deletion pending: {', '.join(paths)}")
-                    print(f"⚠️  Deletion pending: {', '.join(paths)}")
+                    self.warnings.append(f"[!] {name}: Old code deletion pending: {', '.join(paths)}")
+                    print(f"[!] Deletion pending: {', '.join(paths)}")
                     return False
         
         # Check if old path still exists
@@ -159,29 +159,29 @@ class MigrationValidator:
         if full_path.exists():
             # Allow if it's in archive/
             if 'archive' in str(full_path) or '.backup' in str(full_path):
-                print(f"✅ Old code archived: {old_path}")
+                print(f"[OK] Old code archived: {old_path}")
                 return True
             
-            self.failures.append(f"❌ {name}: Old code still exists: {old_path}")
-            print(f"❌ Old code NOT deleted: {old_path}")
+            self.failures.append(f"[X] {name}: Old code still exists: {old_path}")
+            print(f"[X] Old code NOT deleted: {old_path}")
             return False
         
-        print(f"✅ Old code deleted: {old_path}")
+        print(f"[OK] Old code deleted: {old_path}")
         return True
     
     def _check_tests_updated(self, name: str, migration: Dict) -> bool:
         """Check if tests reference new paths"""
-        print(f"\n🧪 Check 3: Tests Updated")
+        print(f"\n[3] Check 3: Tests Updated")
         
         old_path = migration.get('old_path')
         if not old_path:
-            print("✅ No old tests to update (new component)")
+            print("[OK] No old tests to update (new component)")
             return True
         
         # Search for old path references in tests
         tests_dir = self.repo_root / 'tests'
         if not tests_dir.exists():
-            print("⚠️  No tests directory found")
+            print("[!] No tests directory found")
             return True
         
         # Extract old module path pattern
@@ -194,24 +194,24 @@ class MigrationValidator:
                 matches.append(str(test_file.relative_to(self.repo_root)))
         
         if matches:
-            self.warnings.append(f"⚠️  {name}: {len(matches)} test files still reference old path")
-            print(f"⚠️  Found {len(matches)} files with old path references:")
+            self.warnings.append(f"[!] {name}: {len(matches)} test files still reference old path")
+            print(f"[!] Found {len(matches)} files with old path references:")
             for match in matches[:5]:  # Show first 5
                 print(f"   - {match}")
             if len(matches) > 5:
                 print(f"   ... and {len(matches) - 5} more")
             return False
         
-        print(f"✅ No test files reference old path")
+        print(f"[OK] No test files reference old path")
         return True
     
     def _check_docs_updated(self, name: str, migration: Dict) -> bool:
-        """Check if documentation is updated"""
-        print(f"\n📚 Check 4: Documentation Updated")
+        """Check if documentation references new paths"""
+        print(f"\n[4] Check 4: Documentation Updated")
         
         old_path = migration.get('old_path')
         if not old_path:
-            print("✅ No old docs to update (new component)")
+            print("[OK] No old docs to update (new component)")
             return True
         
         # Search for old path references in docs
@@ -236,7 +236,7 @@ class MigrationValidator:
         if matches:
             # Allow some historical references
             if len(matches) <= 5:
-                print(f"✅ Minor doc references found ({len(matches)}): acceptable")
+                print(f"[OK] Minor doc references found ({len(matches)}): acceptable")
                 return True
             
             self.warnings.append(f"⚠️  {name}: {len(matches)} doc files still reference old path")
@@ -246,7 +246,7 @@ class MigrationValidator:
             if len(matches) > 5:
                 print(f"   ... and {len(matches) - 5} more")
         else:
-            print(f"✅ No documentation references old path")
+            print(f"[OK] No documentation references old path")
         
         return True
     
@@ -257,7 +257,7 @@ class MigrationValidator:
                      if data.get('status') == 'COMPLETE']
         
         print(f"\n{'='*80}")
-        print(f"🔍 Validating {len(completed)} completed migrations")
+        print(f"[>] Validating {len(completed)} completed migrations")
         print(f"{'='*80}")
         
         results = []
@@ -266,19 +266,19 @@ class MigrationValidator:
         
         # Print summary
         print(f"\n{'='*80}")
-        print(f"📊 VALIDATION SUMMARY")
+        print(f"[#] VALIDATION SUMMARY")
         print(f"{'='*80}")
         print(f"Total migrations validated: {len(results)}")
         print(f"Passed: {sum(results)}")
         print(f"Failed: {len(results) - sum(results)}")
         
         if self.failures:
-            print(f"\n❌ FAILURES ({len(self.failures)}):")
+            print(f"\n[X] FAILURES ({len(self.failures)}):")
             for failure in self.failures:
                 print(f"  {failure}")
         
         if self.warnings:
-            print(f"\n⚠️  WARNINGS ({len(self.warnings)}):")
+            print(f"\n[!] WARNINGS ({len(self.warnings)}):")
             for warning in self.warnings:
                 print(f"  {warning}")
         
@@ -306,7 +306,7 @@ class MigrationValidator:
                      m.get('deleted') and 
                      not any(d.get('status') == 'PENDING' for d in m.get('deleted', [])))
         
-        report.append("## 📊 Progress Summary\n")
+        report.append("## [#] Progress Summary\n")
         report.append(f"- **Total Migrations:** {total}")
         report.append(f"- **Completed:** {complete}/{total} ({complete/total*100:.0f}%)")
         activated_pct = (activated/complete*100) if complete > 0 else 0
@@ -316,26 +316,26 @@ class MigrationValidator:
         
         # Failures
         if self.failures:
-            report.append("\n## ❌ Activation Failures\n")
+            report.append("\n## [X] Activation Failures\n")
             for failure in self.failures:
                 report.append(f"- {failure}")
         
         # Warnings
         if self.warnings:
-            report.append("\n## ⚠️  Cleanup Pending\n")
+            report.append("\n## [!] Cleanup Pending\n")
             for warning in self.warnings:
                 report.append(f"- {warning}")
         
         # Details table
-        report.append("\n## 📋 Migration Details\n")
+        report.append("\n## [>] Migration Details\n")
         report.append("| Migration | Status | Activated | Deleted | Notes |")
         report.append("|-----------|--------|-----------|---------|-------|")
         
         for name, data in migrations.items():
             status = data.get('status', 'UNKNOWN')
-            activated = '✅' if data.get('activated_in') else '❌'
+            activated = '[OK]' if data.get('activated_in') else '[X]'
             deleted_status = data.get('deleted', [])
-            deleted = '✅' if deleted_status and not any(d.get('status') == 'PENDING' for d in deleted_status) else '⏳'
+            deleted = '[OK]' if deleted_status and not any(d.get('status') == 'PENDING' for d in deleted_status) else '[~]'
             notes = data.get('notes', '-')
             
             if status == 'PENDING':
@@ -349,7 +349,7 @@ class MigrationValidator:
         # Write to file
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(report_text, encoding='utf-8')
-        print(f"\n📄 Report saved: {output_path}")
+        print(f"\n[>] Report saved: {output_path}")
         
         return report_text
     
@@ -400,7 +400,7 @@ def main():
         return 0 if success else 1
         
     except Exception as e:
-        print(f"❌ Error: {e}", file=sys.stderr)
+        print(f"[X] Error: {e}", file=sys.stderr)
         return 2
 
 

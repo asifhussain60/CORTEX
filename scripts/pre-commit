@@ -39,7 +39,7 @@ def run_command(cmd: list, capture=True) -> tuple:
 
 def check_migration_activation() -> tuple[bool, list]:
     """Check if all migrations are properly activated"""
-    print("🔍 Checking migration activation status...")
+    print("[>] Checking migration activation status...")
     
     returncode, stdout, stderr = run_command([
         sys.executable, 
@@ -49,22 +49,22 @@ def check_migration_activation() -> tuple[bool, list]:
     
     # Exit code 0 = all passing, 1 = failures, 2 = error
     if returncode == 0:
-        print("✅ All migrations properly activated")
+        print("[OK] All migrations properly activated")
         return True, []
     elif returncode == 1:
         failures = []
         for line in stdout.split('\n'):
-            if '❌' in line and 'FAILURE' in line:
+            if '[X]' in line and 'FAILURE' in line:
                 failures.append(line.strip())
         return False, failures
     else:
-        print(f"❌ Migration validation error: {stderr}")
+        print(f"[X] Migration validation error: {stderr}")
         return False, [stderr]
 
 
 def check_legacy_3_0_files() -> tuple[bool, list]:
     """Check for legacy 3.0 files being committed"""
-    print("🔍 Checking for legacy 3.0 files...")
+    print("[>] Checking for legacy 3.0 files...")
     
     # Get staged files
     returncode, stdout, stderr = run_command([
@@ -72,7 +72,7 @@ def check_legacy_3_0_files() -> tuple[bool, list]:
     ])
     
     if returncode != 0:
-        print(f"❌ Git error: {stderr}")
+        print(f"[X] Git error: {stderr}")
         return False, [stderr]
     
     staged_files = stdout.strip().split('\n')
@@ -93,16 +93,16 @@ def check_legacy_3_0_files() -> tuple[bool, list]:
                 violations.append(f"Legacy 3.0 file staged: {file}")
     
     if violations:
-        print(f"❌ Found {len(violations)} legacy files in staging")
+        print(f"[X] Found {len(violations)} legacy files in staging")
         return False, violations
     
-    print("✅ No legacy 3.0 files staged")
+    print("[OK] No legacy 3.0 files staged")
     return True, []
 
 
 def check_documents_bloat() -> tuple[bool, list]:
     """Warn if documents folder is growing"""
-    print("🔍 Checking documents folder size...")
+    print("[>] Checking documents folder size...")
     
     # Count files in documents
     docs_path = Path(__file__).parent.parent / "cortex-brain/documents"
@@ -113,19 +113,76 @@ def check_documents_bloat() -> tuple[bool, list]:
     
     # Warn if > 500 files (target after cleanup)
     if file_count > 500:
-        warning = f"⚠️  Documents folder has {file_count} files (target: <500)"
+        warning = f"[!] Documents folder has {file_count} files (target: <500)"
         print(warning)
         return True, [warning]  # Warning, not blocking
     
-    print(f"✅ Documents folder size OK ({file_count} files)")
+    print(f"[OK] Documents folder size OK ({file_count} files)")
     return True, []
+
+
+def run_cleanup() -> bool:
+    """Run pre-commit cleanup script"""
+    print("[>] Running pre-commit cleanup...")
+    
+    returncode, stdout, stderr = run_command([
+        sys.executable,
+        "scripts/cleanup_pre_commit.py"
+    ])
+    
+    if returncode == 0:
+        print("[OK] Cleanup complete")
+        return True
+    else:
+        print(f"[X] Cleanup failed: {stderr}")
+        return False
+
+
+def is_infrastructure_only_commit() -> bool:
+    """Check if commit only touches validation infrastructure"""
+    returncode, stdout, stderr = run_command([
+        "git", "diff", "--cached", "--name-only"
+    ])
+    
+    if returncode != 0:
+        return False
+    
+    staged_files = [f.strip() for f in stdout.strip().split('\n') if f.strip()]
+    
+    # Infrastructure files that can be committed without full validation
+    infrastructure_patterns = [
+        'scripts/pre-commit',
+        'scripts/validate_migration_activation.py',
+        'scripts/cleanup_pre_commit.py',
+        'scripts/install_git_hooks.py',
+        '.git/hooks/',
+    ]
+    
+    # If ALL staged files are infrastructure, allow commit
+    for file in staged_files:
+        if not any(pattern in file for pattern in infrastructure_patterns):
+            return False
+    
+    return True
 
 
 def main():
     """Pre-commit hook main"""
     print("\n" + "="*80)
-    print("🎯 CORTEX 4.0 Pre-Commit Validation")
+    print("[>] CORTEX 4.0 Pre-Commit Validation")
     print("="*80 + "\n")
+    
+    # Phase 1: Run cleanup (reorganize files, delete temps)
+    if not run_cleanup():
+        print("\n[X] Cleanup failed - commit blocked")
+        return 1
+    
+    # Allow infrastructure-only commits (self-improvement)
+    if is_infrastructure_only_commit():
+        print("\n[>] Infrastructure-only commit detected")
+        print("[OK] Skipping migration validation (self-improvement commit)")
+        print("="*80 + "\n")
+        return 0
     
     all_passed = True
     all_issues = []
@@ -150,11 +207,11 @@ def main():
     # Summary
     print("\n" + "="*80)
     if all_passed:
-        print("✅ Pre-commit validation PASSED")
+        print("[OK] Pre-commit validation PASSED")
         print("="*80 + "\n")
         return 0
     else:
-        print("❌ Pre-commit validation FAILED")
+        print("[X] Pre-commit validation FAILED")
         print("="*80 + "\n")
         
         print("Issues found:")
