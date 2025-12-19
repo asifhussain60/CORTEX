@@ -68,7 +68,7 @@
 │ Week 7 Days 6-7: TDDOrchestrator v4.0 (COMPLETE)        [█████]  100% ✅ DONE│
 │ Week 8 Days 1-5: Planning System Migration (Day 0)      [░░░░░]  0%         │
 │ Week 9 Days 1-5: Planning System Integration (Day 0)    [░░░░░]  0%         │
-│ Week 10: ADO + Sanitization                             [░░░░░]  0%         │
+│ Week 10: ADO + Sanitization + Test Migration Analysis   [░░░░░]  0%         │
 │ Week 11: Post-Phase 5 TDD v4.0 Enhancement              [░░░░░]  0%         │
 │ Week 12: Post-Phase 5 DocumentationOrchestrator         [░░░░░]  0%         │
 │ Week 13: Post-Phase 5 ExecutionOrchestrator             [░░░░░]  0%         │
@@ -106,6 +106,7 @@
 ├─ ☐ Post-Phase 5: DocumentationOrchestrator Enhancement Complete (Week 12) - 47% → 95% alignment
 ├─ ☐ Post-Phase 5: ExecutionOrchestrator Enhancement Complete (Week 13) - 23% → 95% alignment
 ├─ ☐ Agentic Pattern Documentation Complete (Week 14) - Reference implementations for 8 patterns
+├─ ☐ Test Migration Analysis Orchestrator Complete (Week 10 Days 6-8) - Framework-agnostic test value assessment
 ├─ ☐ Security Patterns Schema Complete (Week 4) - NEW: Security Learning Agent
 ├─ ☐ OWASP/CWE Data Loaded (Week 8) - NEW: Security knowledge base operational
 ├─ ☐ Planning System Core Components Migrated (Week 8 End) - Routing, Discovery, Tracking
@@ -118,7 +119,7 @@
 └─ ☐ CORTEX 4.0 GA Release (Week 19 - UPDATED from Week 20)
 
 📈 METRICS
-├─ Orchestrators Migrated: 3/15 (20%)  # ExecutionOrchestrator, DocumentationOrchestrator, TDDOrchestrator v4.0 (Phase 5 adds CICDOrchestrator = 15th)
+├─ Orchestrators Migrated: 3/16 (19%)  # ExecutionOrchestrator, DocumentationOrchestrator, TDDOrchestrator v4.0 (Phase 5 adds CICDOrchestrator = 15th, TestMigrationAnalysisOrchestrator = 16th)
 ├─ Test Coverage (Current): 75.2% average → Target: 90%+
 ├─ Phase 5 Packages: 0/8 (0%)  # Multi-agent, MCP, Evaluation, Context, Execution, Guardrails, Learning, CI/CD
 │  ├─ phase_manager: 67.15% ⚠️ (need +23% for 90% target)
@@ -224,7 +225,8 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **Agentic AI Enhancements** - Multi-agent collaboration, evaluation framework, learning engine (NEW - APPROVED Dec 19, 2025)
 - **Bloat Reduction** - Permanent wiring via dependency injection, eliminate manifest bloat
 - **Clean Orchestrator Structure** - Co-located tests, TDD-first development
-- **Unified Operations** - Consolidate 28+ orchestrators into 15 total (11 core + 2 specialized + 1 security + 1 CI/CD)
+- **Unified Operations** - Consolidate 28+ orchestrators into 16 total (12 core + 2 specialized + 1 security + 1 CI/CD)
+- **Test Migration Intelligence** - Framework-agnostic test value assessment for migration prioritization (NEW - APPROVED Dec 19, 2025)
 - **Agent Integration** - Streamline 18 agents into 13 active (7 independent + 5 brain integrations + 1 security + 1 deprecated)
 - **Technical Documentation System** - Auto-generated docs with 20 high-value D3.js diagrams (**reduced from 60+**)
 - **Multi-Domain Support** - Enterprise-grade domain isolation with selective knowledge sharing (NEW)
@@ -5216,21 +5218,50 @@ git push origin CORTEX-4.0
      - Secondary: Sequence diagram (deployment process)
      - Sections: Pipeline configuration, Environment management, Integration testing
 
+10. **TestMigrationAnalysisOrchestrator** (Framework-agnostic test migration intelligence)
+   - **NEW - APPROVED Dec 19, 2025:** Technology-agnostic test value assessment orchestrator
+   - Supports any test framework migration (Selenium→Playwright, Jest→Vitest, JUnit→pytest, etc.)
+   - Migrate to `src/orchestrators/test_migration/`
+   - **5-Phase Analysis:**
+     1. Discovery & Classification (AST-based, multi-language)
+     2. Value Assessment (business criticality, coverage uniqueness, stability, execution cost)
+     3. Migration Complexity (framework mapping, effort estimation, risk scoring)
+     4. ROI Calculation (value × complexity⁻¹, maintenance savings, recommendation: PORT/REWRITE/RETIRE/DEFER)
+     5. Roadmap Generation (phased migration, ADO work items, Markdown/JSON/CSV export)
+   - **Integration Points:**
+     - TDD Orchestrator v4.0 (C#/TypeScript/Python/Java/JavaScript support)
+     - Planning System 4.0 (complexity analysis + roadmap generation)
+     - Existing Migration Roadmap Generator (enhanced for test-specific metrics)
+     - Phase 5 Package 3 (Agent Evaluation Framework for recommendation validation)
+   - **Tech Stack Support:** C#, TypeScript, Python, Java, JavaScript, Go, Ruby, PHP, Kotlin, Swift, Rust (via TDD v4.0 language detection)
+   - **Output Deliverables:**
+     - Analysis report with ROI projections
+     - 5-phase migration roadmap (Quick Wins → Strategic Migrations → Retirement)
+     - ADO work items (auto-generated epic/features/stories)
+     - Framework-specific migration guides
+   - 75%+ coverage
+   - **Generate documentation:**
+     - Primary: Flowchart (5-phase analysis pipeline)
+     - Secondary: Sequence diagram (value assessment workflow)
+     - Tertiary: Architecture diagram (integration with TDD v4.0, Planning System, Phase 5)
+     - Sections: Value scoring algorithm, Complexity matrix, ROI calculation, Recommendation logic, Multi-framework support
+
 **🔒 MANDATORY: Commit Before Week 11**
 ```bash
 git add .
-git commit -m "✅ Week 10 Complete: Operations Orchestrators
+git commit -m "✅ Week 10 Complete: Operations + Test Migration Orchestrators
 
 - MaintenanceOrchestrator: 7-phase maintenance with 80%+ coverage
 - QAOrchestrator: Quality automation with 75%+ coverage
 - DevOpsOrchestrator: CI/CD automation with 75%+ coverage
+- TestMigrationAnalysisOrchestrator: Framework-agnostic test migration with 75%+ coverage
 - Tests: All passing
-- Documentation: 3 flowcharts + 3 sequence diagrams
-- Orchestrators migrated: 10/15 (67%)"
+- Documentation: 4 flowcharts + 4 sequence diagrams + 1 architecture diagram
+- Orchestrators migrated: 11/16 (69%)"
 
 # Update progress tracker
 git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
-git commit -m "📊 Update Progress: Week 10 complete (10/15 orchestrators, 67%)"
+git commit -m "📊 Update Progress: Week 10 complete (11/16 orchestrators, 69%)"
 
 git push origin CORTEX-4.0
 ```
@@ -5528,13 +5559,13 @@ git commit -m "✅ Week 14 Complete: Phase 3 Orchestrator Consolidation COMPLETE
 - OnboardingOrchestrator: Developer experience with 75%+ coverage
 - Tests: All passing, 85%+ average coverage across 13 orchestrators
 - Documentation: Complete technical docs + 8 agentic pattern guides
-- Orchestrators migrated: 13/15 (87%) - Security Agent in Phase 2, CI/CD in Phase 2.5
+- Orchestrators migrated: 14/16 (88%) - Security Agent in Phase 2, CI/CD in Phase 2.5
 - Post-Phase 2.5 Enhancements: 3 orchestrators enhanced to 95% agentic alignment
-- **PHASE 3 COMPLETE**"
+- **PHASE 6 COMPLETE**"
 
 # Update progress tracker
 git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
-git commit -m "📊 Update Progress: Phase 3 COMPLETE (13/15 orchestrators, 95% agentic alignment)"
+git commit -m "📊 Update Progress: Phase 6 COMPLETE (14/16 orchestrators, 95% agentic alignment)"
 
 # Phase 3 validation (MANDATORY before Phase 4)
 python scripts/validate_phase_3_orchestrators.py
@@ -5555,18 +5586,18 @@ git push origin CORTEX-4.0
 | DevOpsOrchestrator | devops_orchestrator, deployment_orchestrator, integration_testing_orchestrator | 3 → 1 |
 | OnboardingOrchestrator | onboarding_orchestrator, demo_orchestrator | 2 → 1 |
 
-**Result:** 28 orchestrators → 12 consolidated orchestrators (57% reduction)
+**Result:** 28 orchestrators → 13 consolidated orchestrators (54% reduction)
 
-**🔄 Phase 3 Cleanup Cycle:**
+**🔄 Phase 6 Cleanup Cycle:**
 - [ ] Run `pytest tests/orchestrators/ --cov=src/orchestrators` - Validate 90%+ coverage
 - [ ] Run `system maintenance` - Clean up migration artifacts and temporary files
 - [ ] Run `align` - Verify all orchestrator imports and DI wiring correct
-- [ ] Generate technical documentation for all 12 orchestrators
+- [ ] Generate technical documentation for all 13 orchestrators
 - [ ] Verify all 60+ D3.js diagrams generated successfully
 - [ ] Run `healthcheck` - Ensure all orchestrators operational
-- [ ] Test all 12 orchestrators end-to-end with sample workflows
-- [ ] Commit checkpoint: "Phase 3 complete: All orchestrators migrated"
-- [ ] Tag release: `git tag v4.0.0-phase3-complete`
+- [ ] Test all 13 orchestrators end-to-end with sample workflows
+- [ ] Commit checkpoint: "Phase 6 complete: All orchestrators migrated"
+- [ ] Tag release: `git tag v4.0.0-phase6-complete`
 - [ ] Verify no uncommitted changes: `git status`
 
 ### Phase 7: Operations Simplification (Weeks 15-17) - Manifest Reduction + Universal Adapters
