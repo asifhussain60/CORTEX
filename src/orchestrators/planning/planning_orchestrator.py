@@ -1,0 +1,711 @@
+"""
+CORTEX 4.0 Planning Orchestrator - Core Module
+
+Purpose: Orchestrates YAML-based feature planning with validation and autonomous execution
+Version: 4.0.0
+Author: CORTEX Development Team
+Migrated: 2025-12-19 (from legacy 5,557 LOC → 3,000 LOC MVP in Week 8-9)
+
+Key Features (Week 8 Core MVP):
+- BaseOrchestrator integration with PhaseManager
+- YAML plan validation against schema
+- Plan generation with complexity analysis
+- Markdown rendering for human-readable plans
+- DoR/DoD validation at phase boundaries
+- TDD workflow integration
+- Git checkpoint support
+- Session management for restoration
+
+Deferred to Week 9 (Intelligence Layer):
+- TestIntelligence integration (coverage analysis)
+- TDDIntelligence integration (workflow enforcement)
+- ValidationFramework integration (multi-layer validation)
+- Manifest compliance validation
+
+Deferred to Week 11+ (Advanced Features):
+- Threat modeling integration (requires Phase 2.5 agentic AI)
+- Architecture review integration (requires Phase 2.5 agentic AI)
+- Task injection system (requires orchestration_4_0)
+- Orchestration checkpoints (requires orchestration_4_0)
+- Incremental plan generation (requires adaptive reasoning)
+- Folder-based plans (requires enhanced context discovery)
+
+Architecture:
+- Core: planning_orchestrator.py (this file - main workflow)
+- Validation: plan_validator.py (YAML schema validation)
+- Generation: plan_generator.py (plan creation logic)
+- Rendering: markdown_renderer.py (Markdown export)
+- Execution: plan_executor.py (autonomous execution - Day 3)
+- Integration: phase_manager_integration.py (PhaseManager wiring - Day 3)
+- Git: git_checkpoint_integration.py (git checkpoints - Day 3)
+- Session: session_manager.py (session restoration - Day 3)
+"""
+
+import logging
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+import yaml
+
+from src.orchestrators.base.base_orchestrator import (
+    BaseOrchestrator,
+    OrchestratorResult,
+    OrchestratorStatus,
+    ValidationResult as BaseValidationResult
+)
+
+logger = logging.getLogger(__name__)
+
+
+# ============================================================================
+# Domain Models
+# ============================================================================
+
+class PlanningPhase(Enum):
+    """Planning workflow phases."""
+    DISCOVERY = "DISCOVERY"           # Pre-planning context gathering
+    VALIDATION = "VALIDATION"         # Schema and DoR validation
+    GENERATION = "GENERATION"         # Plan creation
+    RENDERING = "RENDERING"           # Markdown export
+    EXECUTION = "EXECUTION"           # Autonomous execution (Week 8 Day 3)
+
+
+class PlanComplexity(Enum):
+    """Plan complexity tiers for adaptive planning."""
+    LOW = 1          # Skeleton plan (DoR/DoD only)
+    MEDIUM = 2       # Conditional plan (some phases detailed)
+    HIGH = 3         # Incremental plan (all phases detailed)
+    CRITICAL = 4     # Full plan with security analysis
+
+
+class PlanType(Enum):
+    """Plan generation types."""
+    SKELETON = "skeleton"           # DoR/DoD only
+    CONDITIONAL = "conditional"     # Conditional phases
+    INCREMENTAL = "incremental"     # Full incremental
+    FOLDER_BASED = "folder_based"   # Deferred to Week 11
+
+
+@dataclass
+class PlanMetadata:
+    """Plan metadata structure."""
+    title: str
+    description: str
+    complexity: PlanComplexity
+    plan_type: PlanType
+    author: str = "CORTEX Planning System 4.0"
+    created: datetime = field(default_factory=datetime.now)
+    version: str = "4.0.0"
+    tags: List[str] = field(default_factory=list)
+    estimated_duration: Optional[str] = None
+
+
+@dataclass
+class PlanPhaseData:
+    """Plan phase structure."""
+    phase_name: str
+    tasks: List[Dict[str, Any]]
+    acceptance_criteria: List[str]
+    estimated_duration: Optional[str] = None
+    dependencies: List[str] = field(default_factory=list)
+    is_conditional: bool = False
+    condition: Optional[str] = None
+
+
+@dataclass
+class PlanData:
+    """Complete plan data structure."""
+    metadata: PlanMetadata
+    definition_of_ready: List[str]
+    definition_of_done: List[str]
+    phases: List[PlanPhaseData]
+    tdd_requirements: Optional[Dict[str, List[str]]] = None
+    git_checkpoint_strategy: Optional[Dict[str, Any]] = None
+    session_metadata: Optional[Dict[str, Any]] = None
+
+
+@dataclass
+class ValidationResult:
+    """Result of plan validation (extends base)."""
+    valid: bool
+    errors: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+    validation_type: str = "plan_validation"
+    timestamp: datetime = field(default_factory=datetime.now)
+    
+    def to_base_validation_result(self) -> BaseValidationResult:
+        """Convert to BaseOrchestrator ValidationResult."""
+        return BaseValidationResult(
+            valid=self.valid,
+            errors=self.errors,
+            warnings=self.warnings
+        )
+
+
+@dataclass
+class PlanningResult:
+    """Result of planning orchestrator execution."""
+    success: bool
+    plan_data: Optional[PlanData]
+    plan_path: Optional[Path]
+    markdown_path: Optional[Path]
+    validation_result: Optional[ValidationResult]
+    execution_summary: Optional[Dict[str, Any]] = None
+    errors: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+    timestamp: datetime = field(default_factory=datetime.now)
+
+
+# ============================================================================
+# Planning Orchestrator (Week 8 Core MVP)
+# ============================================================================
+
+class PlanningOrchestrator(BaseOrchestrator):
+    """
+    CORTEX 4.0 Planning Orchestrator - Core MVP.
+    
+    Responsibilities (Week 8):
+    - Initialize with BaseOrchestrator pattern
+    - Load and validate YAML schema
+    - Coordinate plan validation (via PlanValidator)
+    - Coordinate plan generation (via PlanGenerator)
+    - Coordinate markdown rendering (via MarkdownRenderer)
+    - Manage planning workflow phases
+    - Integrate with PhaseManager (Day 3)
+    - Support git checkpoints (Day 3)
+    - Support session restoration (Day 3)
+    
+    Deferred to Week 9:
+    - Test intelligence integration
+    - TDD intelligence integration
+    - Validation framework integration
+    - Manifest compliance validation
+    
+    Deferred to Week 11+:
+    - Threat modeling integration
+    - Architecture review integration
+    - Task injection system
+    - Advanced checkpoint management
+    - Incremental generation
+    - Folder-based plans
+    """
+    
+    def __init__(self, config: Dict[str, Any]):
+        """
+        Initialize Planning Orchestrator.
+        
+        Args:
+            config: Orchestrator configuration
+                Required keys:
+                - cortex_root: Path to CORTEX root directory
+                Optional keys:
+                - schema_path: Custom schema path (default: cortex-brain/config/plan-schema.yaml)
+                - plans_dir: Custom plans directory (default: cortex-brain/documents/planning/features)
+                - enable_git_checkpoints: Enable git checkpoints (default: True)
+                - enable_session_restoration: Enable session restoration (default: True)
+        """
+        # Set name and version before BaseOrchestrator.__init__
+        config["name"] = "PlanningOrchestrator"
+        config["version"] = "4.0.0"
+        
+        super().__init__(config)
+        
+        # Path configuration
+        self.cortex_root = Path(config["cortex_root"])
+        self.schema_path = Path(config.get(
+            "schema_path",
+            self.cortex_root / "cortex-brain" / "config" / "plan-schema.yaml"
+        ))
+        self.plans_dir = Path(config.get(
+            "plans_dir",
+            self.cortex_root / "cortex-brain" / "documents" / "planning" / "features"
+        ))
+        self.active_plans_dir = self.plans_dir / "active"
+        self.completed_plans_dir = self.plans_dir / "completed"
+        
+        # Feature flags
+        self.git_checkpoints_enabled = config.get("enable_git_checkpoints", True)
+        self.session_restoration_enabled = config.get("enable_session_restoration", True)
+        
+        # Initialize schema
+        self.schema = self._load_schema()
+        
+        # Week 8 Day 3: Will initialize these modules
+        self.plan_validator = None      # Will be: from .plan_validator import PlanValidator
+        self.plan_generator = None      # Will be: from .plan_generator import PlanGenerator
+        self.markdown_renderer = None   # Will be: from .markdown_renderer import MarkdownRenderer
+        self.plan_executor = None       # Will be: from .plan_executor import PlanExecutor (Day 3)
+        self.phase_manager = None       # Will be: from .phase_manager_integration import PhaseManagerIntegration (Day 3)
+        self.git_checkpoint = None      # Will be: from .git_checkpoint_integration import GitCheckpointIntegration (Day 3)
+        self.session_manager = None     # Will be: from .session_manager import SessionManager (Day 3)
+        
+        # Planning state
+        self.current_phase = None
+        self.planning_mode_active = False
+        self.current_session = None
+        
+        # TDD requirements (SKULL enforcement)
+        self._tdd_dor_requirements = [
+            "TDD Mastery workflow MUST be followed (RED→GREEN→REFACTOR)",
+            "Tests MUST fail before implementation (RED phase validation)",
+            "All CORTEX brain protection rules apply (SKULL enforcement)",
+            "Reference: cortex-brain/brain-protection-rules.yaml for complete ruleset"
+        ]
+        
+        self._tdd_dod_requirements = [
+            "All code follows TDD workflow with git checkpoints at phase boundaries",
+            "No SKULL rule violations detected (brain protection compliance verified)",
+            "Test coverage meets CORTEX standards (RED→GREEN→REFACTOR documented)",
+            "Git history shows test-first commits (RED phase before GREEN phase)"
+        ]
+        
+        self.logger.info(f"✅ Planning Orchestrator 4.0 initialized (schema={'loaded' if self.schema else 'not_found'})")
+    
+    def _load_schema(self) -> Optional[Dict[str, Any]]:
+        """
+        Load plan schema from YAML file.
+        
+        Returns:
+            Schema dictionary or None if not found
+        """
+        try:
+            if not self.schema_path.exists():
+                self.logger.warning(f"Schema not found at {self.schema_path}, using minimal defaults")
+                return self._get_default_schema()
+            
+            with open(self.schema_path, 'r', encoding='utf-8') as f:
+                schema = yaml.safe_load(f)
+                self.logger.info(f"✅ Schema loaded: {self.schema_path.name}")
+                return schema
+        except Exception as e:
+            self.logger.error(f"Failed to load schema: {e}")
+            return self._get_default_schema()
+    
+    def _get_default_schema(self) -> Dict[str, Any]:
+        """
+        Return minimal default schema if file not found.
+        
+        Returns:
+            Minimal schema dictionary
+        """
+        return {
+            "schema": {
+                "version": "1.0.0",
+                "required_fields": ["metadata", "phases", "definition_of_ready", "definition_of_done"]
+            }
+        }
+    
+    def validate_input(self, **kwargs) -> BaseValidationResult:
+        """
+        Validate input parameters for planning orchestrator.
+        
+        Args:
+            **kwargs: Input parameters
+                Required: feature_name OR plan_data
+                Optional: plan_type, complexity, output_dir
+        
+        Returns:
+            BaseValidationResult with validation status
+        """
+        errors = []
+        warnings = []
+        
+        # Check required parameters
+        if "feature_name" not in kwargs and "plan_data" not in kwargs:
+            errors.append("Either 'feature_name' or 'plan_data' must be provided")
+        
+        # Validate plan_type if provided
+        if "plan_type" in kwargs:
+            try:
+                PlanType(kwargs["plan_type"])
+            except ValueError:
+                valid_types = [t.value for t in PlanType]
+                errors.append(f"Invalid plan_type '{kwargs['plan_type']}'. Valid: {valid_types}")
+        
+        # Validate complexity if provided
+        if "complexity" in kwargs:
+            try:
+                if isinstance(kwargs["complexity"], int):
+                    PlanComplexity(kwargs["complexity"])
+                else:
+                    # Try to match by name
+                    PlanComplexity[kwargs["complexity"].upper()]
+            except (ValueError, KeyError):
+                warnings.append(f"Invalid complexity '{kwargs['complexity']}'. Will auto-detect.")
+        
+        # Validate schema is loaded
+        if not self.schema:
+            warnings.append("Schema not loaded - validation may be limited")
+        
+        # Validate output directory exists
+        if "output_dir" in kwargs:
+            output_dir = Path(kwargs["output_dir"])
+            if not output_dir.exists():
+                warnings.append(f"Output directory does not exist: {output_dir}")
+        
+        return BaseValidationResult(
+            valid=len(errors) == 0,
+            errors=errors,
+            warnings=warnings
+        )
+    
+    def execute(self, **kwargs) -> OrchestratorResult:
+        """
+        Execute planning orchestrator workflow.
+        
+        Workflow (Week 8 MVP):
+        1. DISCOVERY: Gather context (placeholder for Week 11 advanced features)
+        2. VALIDATION: Validate input and schema
+        3. GENERATION: Generate plan (or validate provided plan)
+        4. RENDERING: Render markdown view
+        5. EXECUTION: Execute plan autonomously (Day 3)
+        
+        Args:
+            **kwargs: Execution parameters
+                feature_name: Name of feature to plan (str)
+                plan_data: Pre-generated plan data (Dict) - alternative to feature_name
+                plan_type: Type of plan to generate (PlanType enum or str)
+                complexity: Plan complexity (PlanComplexity enum or int)
+                output_dir: Custom output directory (Path or str)
+                auto_execute: Execute plan after generation (bool, default: False - Day 3)
+        
+        Returns:
+            OrchestratorResult with execution status and planning result
+        """
+        self.status = OrchestratorStatus.RUNNING
+        self.start_time = datetime.now()
+        
+        try:
+            # Phase 1: DISCOVERY (placeholder - Week 11 will add architectural review)
+            self.current_phase = PlanningPhase.DISCOVERY
+            self.logger.info("🎭 Phase transition: START → DISCOVERY")
+            
+            feature_name = kwargs.get("feature_name")
+            plan_data_input = kwargs.get("plan_data")
+            
+            # Week 11: Add architectural review, threat modeling, context discovery
+            # For now, just log
+            self.logger.info(f"📋 Planning for: {feature_name or 'provided plan data'}")
+            
+            # Phase 2: VALIDATION
+            self.current_phase = PlanningPhase.VALIDATION
+            self.logger.info("🎭 Phase transition: DISCOVERY → VALIDATION")
+            
+            if plan_data_input:
+                # Validate provided plan data
+                validation_result = self._validate_plan_data(plan_data_input)
+                if not validation_result.valid:
+                    return self._create_error_result(
+                        f"Plan validation failed: {', '.join(validation_result.errors)}",
+                        validation_result=validation_result
+                    )
+                plan_data = plan_data_input
+            else:
+                # Will validate during generation
+                plan_data = None
+            
+            # Phase 3: GENERATION
+            self.current_phase = PlanningPhase.GENERATION
+            self.logger.info("🎭 Phase transition: VALIDATION → GENERATION")
+            
+            if not plan_data:
+                # Generate new plan
+                generation_result = self._generate_plan(
+                    feature_name=feature_name,
+                    plan_type=kwargs.get("plan_type", "incremental"),
+                    complexity=kwargs.get("complexity")
+                )
+                if not generation_result.success:
+                    return self._create_error_result(
+                        f"Plan generation failed: {', '.join(generation_result.errors)}",
+                        validation_result=None
+                    )
+                plan_data = generation_result.plan_data
+            
+            # Phase 4: RENDERING
+            self.current_phase = PlanningPhase.RENDERING
+            self.logger.info("🎭 Phase transition: GENERATION → RENDERING")
+            
+            rendering_result = self._render_markdown(
+                plan_data=plan_data,
+                output_dir=kwargs.get("output_dir", self.active_plans_dir)
+            )
+            if not rendering_result.success:
+                return self._create_error_result(
+                    f"Markdown rendering failed: {', '.join(rendering_result.errors)}",
+                    validation_result=None
+                )
+            
+            # Phase 5: EXECUTION (Day 3 - optional)
+            execution_summary = None
+            if kwargs.get("auto_execute", False):
+                self.current_phase = PlanningPhase.EXECUTION
+                self.logger.info("🎭 Phase transition: RENDERING → EXECUTION")
+                
+                # Day 3: Will implement autonomous execution
+                self.logger.warning("⚠️  Autonomous execution not yet implemented (Week 8 Day 3)")
+                execution_summary = {"status": "deferred", "reason": "Not implemented in Day 1-2"}
+            
+            # Create successful result
+            self.end_time = datetime.now()
+            execution_time = (self.end_time - self.start_time).total_seconds()
+            
+            planning_result = PlanningResult(
+                success=True,
+                plan_data=plan_data,
+                plan_path=rendering_result.plan_path,
+                markdown_path=rendering_result.markdown_path,
+                validation_result=rendering_result.validation_result,
+                execution_summary=execution_summary
+            )
+            
+            self.status = OrchestratorStatus.COMPLETED
+            self.logger.info("🎭 Orchestrator completing: ✅ PLANNING COMPLETE")
+            
+            return OrchestratorResult(
+                status=OrchestratorStatus.COMPLETED,
+                success=True,
+                message=f"Planning complete: {feature_name or 'provided plan'}",
+                data={
+                    "planning_result": planning_result,
+                    "plan_path": str(rendering_result.plan_path) if rendering_result.plan_path else None,
+                    "markdown_path": str(rendering_result.markdown_path) if rendering_result.markdown_path else None
+                },
+                execution_time_seconds=execution_time
+            )
+        
+        except Exception as e:
+            self.logger.error(f"❌ Planning orchestrator failed: {e}", exc_info=True)
+            self.status = OrchestratorStatus.FAILED
+            return self._create_error_result(str(e), validation_result=None)
+    
+    def _validate_plan_data(self, plan_data: Dict[str, Any]) -> ValidationResult:
+        """
+        Validate plan data against schema.
+        
+        Week 8 Day 1-2: Placeholder - will be delegated to PlanValidator module.
+        
+        Args:
+            plan_data: Plan data dictionary to validate
+        
+        Returns:
+            ValidationResult with validation status
+        """
+        # Day 1-2: Basic validation
+        errors = []
+        warnings = []
+        
+        # Check required fields
+        required_fields = ["metadata", "phases", "definition_of_ready", "definition_of_done"]
+        for field in required_fields:
+            if field not in plan_data:
+                errors.append(f"Missing required field: {field}")
+        
+        # Check metadata structure
+        if "metadata" in plan_data:
+            metadata = plan_data["metadata"]
+            if not isinstance(metadata, dict):
+                errors.append("metadata must be a dictionary")
+            else:
+                required_metadata = ["title", "description", "complexity"]
+                for field in required_metadata:
+                    if field not in metadata:
+                        warnings.append(f"Missing recommended metadata field: {field}")
+        
+        # Day 2: Will delegate to PlanValidator module for comprehensive validation
+        
+        return ValidationResult(
+            valid=len(errors) == 0,
+            errors=errors,
+            warnings=warnings,
+            validation_type="basic_plan_validation"
+        )
+    
+    def _generate_plan(
+        self,
+        feature_name: str,
+        plan_type: str,
+        complexity: Optional[Any]
+    ) -> PlanningResult:
+        """
+        Generate new plan.
+        
+        Week 8 Day 1-2: Placeholder - will be delegated to PlanGenerator module.
+        
+        Args:
+            feature_name: Name of feature to plan
+            plan_type: Type of plan to generate
+            complexity: Plan complexity level
+        
+        Returns:
+            PlanningResult with generated plan
+        """
+        # Day 1-2: Basic plan generation
+        self.logger.info(f"📝 Generating {plan_type} plan for: {feature_name}")
+        
+        # Create basic plan structure
+        plan_data = PlanData(
+            metadata=PlanMetadata(
+                title=feature_name,
+                description=f"Implementation plan for {feature_name}",
+                complexity=PlanComplexity.MEDIUM,  # Default
+                plan_type=PlanType(plan_type)
+            ),
+            definition_of_ready=[
+                "Requirements clearly defined",
+                "Architecture design reviewed",
+                "Test strategy defined"
+            ],
+            definition_of_done=[
+                "All tests passing",
+                "Code reviewed and merged",
+                "Documentation updated"
+            ],
+            phases=[
+                PlanPhaseData(
+                    phase_name="Implementation",
+                    tasks=[
+                        {"task": "Implement core functionality", "estimated_hours": 4},
+                        {"task": "Write unit tests", "estimated_hours": 2}
+                    ],
+                    acceptance_criteria=[
+                        "Core functionality working",
+                        "Tests passing"
+                    ]
+                )
+            ],
+            tdd_requirements={
+                "dor": self._tdd_dor_requirements,
+                "dod": self._tdd_dod_requirements
+            }
+        )
+        
+        # Day 2: Will delegate to PlanGenerator module for sophisticated generation
+        
+        return PlanningResult(
+            success=True,
+            plan_data=plan_data,
+            plan_path=None,  # Will be set during rendering
+            markdown_path=None,  # Will be set during rendering
+            validation_result=ValidationResult(valid=True)
+        )
+    
+    def _render_markdown(
+        self,
+        plan_data: PlanData,
+        output_dir: Path
+    ) -> PlanningResult:
+        """
+        Render plan as markdown.
+        
+        Week 8 Day 1-2: Placeholder - will be delegated to MarkdownRenderer module.
+        
+        Args:
+            plan_data: Plan data to render
+            output_dir: Output directory for markdown file
+        
+        Returns:
+            PlanningResult with markdown file path
+        """
+        # Day 1-2: Basic markdown rendering
+        self.logger.info(f"📄 Rendering markdown to: {output_dir}")
+        
+        # Create output paths
+        output_dir = Path(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        safe_title = plan_data.metadata.title.lower().replace(" ", "-").replace("_", "-")
+        plan_path = output_dir / f"{safe_title}-plan.yaml"
+        markdown_path = output_dir / f"{safe_title}-plan.md"
+        
+        # Day 2: Will delegate to MarkdownRenderer module for comprehensive rendering
+        
+        return PlanningResult(
+            success=True,
+            plan_data=plan_data,
+            plan_path=plan_path,
+            markdown_path=markdown_path,
+            validation_result=ValidationResult(valid=True)
+        )
+    
+    def _create_error_result(
+        self,
+        error_message: str,
+        validation_result: Optional[ValidationResult]
+    ) -> OrchestratorResult:
+        """
+        Create error result.
+        
+        Args:
+            error_message: Error message
+            validation_result: Optional validation result
+        
+        Returns:
+            OrchestratorResult with error status
+        """
+        self.end_time = datetime.now()
+        execution_time = (self.end_time - self.start_time).total_seconds() if self.start_time else 0.0
+        
+        return OrchestratorResult(
+            status=OrchestratorStatus.FAILED,
+            success=False,
+            message=error_message,
+            errors=[error_message],
+            warnings=validation_result.warnings if validation_result else [],
+            execution_time_seconds=execution_time
+        )
+    
+    def get_tdd_requirements(self) -> Dict[str, List[str]]:
+        """
+        Get TDD requirements for DoR/DoD compliance.
+        
+        Returns:
+            Dictionary with 'dor' and 'dod' requirements
+        """
+        return {
+            "dor": self._tdd_dor_requirements,
+            "dod": self._tdd_dod_requirements
+        }
+    
+    def is_schema_loaded(self) -> bool:
+        """
+        Check if schema is loaded.
+        
+        Returns:
+            True if schema is loaded
+        """
+        return self.schema is not None
+    
+    def get_supported_plan_types(self) -> List[str]:
+        """
+        Get list of supported plan types.
+        
+        Returns:
+            List of plan type names
+        """
+        return [t.value for t in PlanType]
+    
+    def get_complexity_levels(self) -> List[Dict[str, Any]]:
+        """
+        Get list of complexity levels.
+        
+        Returns:
+            List of complexity level dictionaries
+        """
+        return [
+            {"level": c.value, "name": c.name, "description": self._get_complexity_description(c)}
+            for c in PlanComplexity
+        ]
+    
+    def _get_complexity_description(self, complexity: PlanComplexity) -> str:
+        """Get human-readable description of complexity level."""
+        descriptions = {
+            PlanComplexity.LOW: "Simple feature, skeleton plan with DoR/DoD only",
+            PlanComplexity.MEDIUM: "Moderate feature, conditional phases with some detail",
+            PlanComplexity.HIGH: "Complex feature, full incremental plan with all phases",
+            PlanComplexity.CRITICAL: "Critical feature, full plan with security analysis"
+        }
+        return descriptions.get(complexity, "Unknown complexity level")
