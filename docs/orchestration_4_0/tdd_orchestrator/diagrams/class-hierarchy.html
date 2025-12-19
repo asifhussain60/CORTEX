@@ -63,18 +63,118 @@
     <script>
         const nodes = [
   {
-    "id": "execution_orchestrator.ExecutionOrchestrator",
-    "name": "ExecutionOrchestrator",
-    "module": "execution_orchestrator",
-    "method_count": 11,
+    "id": "tdd_orchestrator_v4.TDDPhase",
+    "name": "TDDPhase",
+    "module": "tdd_orchestrator_v4",
+    "method_count": 0,
     "is_abstract": false,
-    "docstring": "Orchestrates execution of multi-phase workflows.\n\nFeatures:\n- Dynamic phase registration from execution plans\n- Sub-orchestrator integration (TDD, Planning, etc.)\n- Validation gates between phases\n- Rollback support for failed phases\n- Progress tracking with visual feedback\n\nUsage:\n    orchestrator = ExecutionOrchestrator(\n        logger=logger,\n        config={\"max_retries\": 3}\n    )\n    \n    result = orchestrator.execute(context={\n        \"plan\": execution_plan,\n        \"workspace\": \"/path/to/workspace\"\n    })"
+    "docstring": "TDD workflow phases."
+  },
+  {
+    "id": "tdd_orchestrator_v4.ValidationResult",
+    "name": "ValidationResult",
+    "module": "tdd_orchestrator_v4",
+    "method_count": 0,
+    "is_abstract": false,
+    "docstring": "Result from DoR/DoD validation."
+  },
+  {
+    "id": "tdd_orchestrator_v4.PhaseResult",
+    "name": "PhaseResult",
+    "module": "tdd_orchestrator_v4",
+    "method_count": 0,
+    "is_abstract": false,
+    "docstring": "Result from phase execution."
+  },
+  {
+    "id": "tdd_orchestrator_v4.TechnologyProfile",
+    "name": "TechnologyProfile",
+    "module": "tdd_orchestrator_v4",
+    "method_count": 0,
+    "is_abstract": false,
+    "docstring": "Adaptive technology profile for learning."
+  },
+  {
+    "id": "tdd_orchestrator_v4.TDDPhaseStrategy",
+    "name": "TDDPhaseStrategy",
+    "module": "tdd_orchestrator_v4",
+    "method_count": 4,
+    "is_abstract": true,
+    "docstring": "Base strategy for TDD phase execution.\n\nEach phase (RED, GREEN, REFACTOR) implements this interface with:\n- DoR validation (Definition of Ready)\n- Phase execution\n- DoD validation (Definition of Done)\n- Rollback capability"
+  },
+  {
+    "id": "tdd_orchestrator_v4.TechnologyDiscoveryEngine",
+    "name": "TechnologyDiscoveryEngine",
+    "module": "tdd_orchestrator_v4",
+    "method_count": 8,
+    "is_abstract": false,
+    "docstring": "Discovers and adapts to new technologies, frameworks, and patterns.\n\nPurpose: Keep TDD orchestrator current with latest releases\nFeatures:\n- Framework version detection\n- New pattern discovery\n- Best practice learning\n- Breaking change adaptation"
+  },
+  {
+    "id": "tdd_orchestrator_v4.CleanCodeEnforcer",
+    "name": "CleanCodeEnforcer",
+    "module": "tdd_orchestrator_v4",
+    "method_count": 9,
+    "is_abstract": false,
+    "docstring": "Enforces clean code best practices during TDD workflow.\n\nPrinciples:\n- SOLID principles\n- DRY (Don't Repeat Yourself)\n- KISS (Keep It Simple, Stupid)\n- YAGNI (You Aren't Gonna Need It)\n- Single Responsibility"
+  },
+  {
+    "id": "tdd_orchestrator_v4.TDDOrchestratorV4",
+    "name": "TDDOrchestratorV4",
+    "module": "tdd_orchestrator_v4",
+    "method_count": 7,
+    "is_abstract": false,
+    "docstring": "Unified TDD Orchestrator with adaptive learning and clean architecture.\n\nFeatures:\n- Strategy pattern for phase execution\n- Technology discovery and adaptation\n- Clean code enforcement\n- AI-driven code generation\n- Automatic learning from patterns\n- DoR/DoD validation with rollback"
+  },
+  {
+    "id": "red_phase_strategy.REDPhaseStrategy",
+    "name": "REDPhaseStrategy",
+    "module": "red_phase_strategy",
+    "method_count": 14,
+    "is_abstract": false,
+    "docstring": "RED Phase: Generate comprehensive tests that MUST fail.\n\nWorkflow:\n1. Validate DoR (feature defined, no existing tests)\n2. Analyze feature requirements\n3. Extract edge cases (null, empty, boundaries, errors)\n4. Query Tier 2 for domain patterns\n5. Generate test suite (unit + parametrized + property-based)\n6. Run tests (MUST fail - RED validation)\n7. Create git checkpoint\n8. Update documentation\n9. Feed patterns to brain"
+  },
+  {
+    "id": "refactor_phase_strategy.REFACTORPhaseStrategy",
+    "name": "REFACTORPhaseStrategy",
+    "module": "refactor_phase_strategy",
+    "method_count": 19,
+    "is_abstract": false,
+    "docstring": "REFACTOR Phase: AI-driven code improvement while keeping tests green.\n\nWorkflow:\n1. Validate DoR (tests passing, implementation exists)\n2. Detect code smells (god methods, duplicates, complexity)\n3. Generate refactoring suggestions (AI-driven)\n4. Apply refactorings incrementally\n5. Run tests after each refactoring (keep GREEN)\n6. Validate clean code compliance\n7. Create git checkpoint\n8. Update documentation\n9. Feed patterns to brain"
+  },
+  {
+    "id": "green_phase_strategy.GREENPhaseStrategy",
+    "name": "GREENPhaseStrategy",
+    "module": "green_phase_strategy",
+    "method_count": 16,
+    "is_abstract": false,
+    "docstring": "GREEN Phase: Minimal implementation to make tests pass.\n\nWorkflow:\n1. Validate DoR (tests exist and failing)\n2. Analyze failing tests\n3. Generate minimal implementation (AI-driven)\n4. Run tests continuously (RED \u2192 GREEN)\n5. Detect over-engineering\n6. Validate clean code compliance\n7. Create git checkpoint\n8. Update documentation\n9. Feed patterns to brain"
   }
 ];
         const links = [
   {
-    "source": "BaseOrchestrator",
-    "target": "execution_orchestrator.ExecutionOrchestrator",
+    "source": "Enum",
+    "target": "tdd_orchestrator_v4.TDDPhase",
+    "type": "inherits"
+  },
+  {
+    "source": "ABC",
+    "target": "tdd_orchestrator_v4.TDDPhaseStrategy",
+    "type": "inherits"
+  },
+  {
+    "source": "tdd_orchestrator_v4.TDDPhaseStrategy",
+    "target": "red_phase_strategy.REDPhaseStrategy",
+    "type": "inherits"
+  },
+  {
+    "source": "tdd_orchestrator_v4.TDDPhaseStrategy",
+    "target": "refactor_phase_strategy.REFACTORPhaseStrategy",
+    "type": "inherits"
+  },
+  {
+    "source": "tdd_orchestrator_v4.TDDPhaseStrategy",
+    "target": "green_phase_strategy.GREENPhaseStrategy",
     "type": "inherits"
   }
 ];

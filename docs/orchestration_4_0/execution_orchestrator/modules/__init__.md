@@ -1,11 +1,8 @@
 # __init__
 
-Base orchestrator framework for CORTEX 4.0.
+Execution Orchestrator Module
 
-Provides:
-- BaseOrchestrator: Template method pattern for all orchestrators
-- PhaseManager: Phase transition and validation
-- ErrorHandler: Standardized error recovery
+Provides phase execution capabilities for CORTEX 4.0.
 
 
 ## Table of Contents
@@ -16,5 +13,5 @@ Provides:
 
 - **Classes:** 0
 - **Functions:** 0
-- **Dependencies:** base_orchestrator, error_handler, phase_manager
+- **Dependencies:** execution_orchestrator
 

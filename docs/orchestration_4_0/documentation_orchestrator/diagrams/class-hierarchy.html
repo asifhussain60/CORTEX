@@ -63,18 +63,98 @@
     <script>
         const nodes = [
   {
-    "id": "execution_orchestrator.ExecutionOrchestrator",
-    "name": "ExecutionOrchestrator",
-    "module": "execution_orchestrator",
-    "method_count": 11,
+    "id": "documentation_orchestrator.DocumentationConfig",
+    "name": "DocumentationConfig",
+    "module": "documentation_orchestrator",
+    "method_count": 0,
     "is_abstract": false,
-    "docstring": "Orchestrates execution of multi-phase workflows.\n\nFeatures:\n- Dynamic phase registration from execution plans\n- Sub-orchestrator integration (TDD, Planning, etc.)\n- Validation gates between phases\n- Rollback support for failed phases\n- Progress tracking with visual feedback\n\nUsage:\n    orchestrator = ExecutionOrchestrator(\n        logger=logger,\n        config={\"max_retries\": 3}\n    )\n    \n    result = orchestrator.execute(context={\n        \"plan\": execution_plan,\n        \"workspace\": \"/path/to/workspace\"\n    })"
+    "docstring": "Configuration for documentation generation"
+  },
+  {
+    "id": "documentation_orchestrator.DocumentationResult",
+    "name": "DocumentationResult",
+    "module": "documentation_orchestrator",
+    "method_count": 0,
+    "is_abstract": false,
+    "docstring": "Results from documentation generation"
+  },
+  {
+    "id": "documentation_orchestrator.DocumentationOrchestrator",
+    "name": "DocumentationOrchestrator",
+    "module": "documentation_orchestrator",
+    "method_count": 19,
+    "is_abstract": false,
+    "docstring": "Orchestrates comprehensive technical documentation generation\n\nFeatures:\n- AST-based code analysis\n- Type hint extraction\n- API documentation generation\n- Interactive D3.js diagrams\n- Phase flow visualization\n- Class hierarchy diagrams\n\nExample:\n    orchestrator = DocumentationOrchestrator(logger, config)\n    \n    context = {\n        'config': DocumentationConfig(\n            source_paths=[Path(\"src/orchestration_4_0\")],\n            output_dir=Path(\"docs/orchestration\")\n        )\n    }\n    \n    result = orchestrator.execute(context)\n    print(f\"Documented {result['modules_analyzed']} modules\")"
+  },
+  {
+    "id": "api_doc_generator.APIDocGenerator",
+    "name": "APIDocGenerator",
+    "module": "api_doc_generator",
+    "method_count": 10,
+    "is_abstract": false,
+    "docstring": "Generates comprehensive API documentation in Markdown format\n\nCreates documentation with:\n- Table of contents\n- Module overview\n- Class documentation\n- Method signatures with type hints\n- Parameter descriptions\n- Return value documentation\n- Usage examples"
+  },
+  {
+    "id": "diagram_generator.DiagramGenerator",
+    "name": "DiagramGenerator",
+    "module": "diagram_generator",
+    "method_count": 7,
+    "is_abstract": false,
+    "docstring": "Generates D3.js-based interactive diagrams for documentation\n\nOutput is HTML with embedded D3.js visualization code.\nDiagrams are fully interactive with zoom, pan, and hover tooltips."
+  },
+  {
+    "id": "type_extractor.TypeExtractor",
+    "name": "TypeExtractor",
+    "module": "type_extractor",
+    "method_count": 9,
+    "is_abstract": false,
+    "docstring": "Extracts and formats type information from Python code\n\nHandles:\n- Basic types (int, str, bool, etc.)\n- Generic types (List[int], Dict[str, Any], etc.)\n- Optional types (Optional[str], Union[str, None])\n- Custom class types\n- Type aliases"
+  },
+  {
+    "id": "code_analyzer.MethodInfo",
+    "name": "MethodInfo",
+    "module": "code_analyzer",
+    "method_count": 0,
+    "is_abstract": false,
+    "docstring": "Information about a class method"
+  },
+  {
+    "id": "code_analyzer.ClassInfo",
+    "name": "ClassInfo",
+    "module": "code_analyzer",
+    "method_count": 0,
+    "is_abstract": false,
+    "docstring": "Information about a class"
+  },
+  {
+    "id": "code_analyzer.FunctionInfo",
+    "name": "FunctionInfo",
+    "module": "code_analyzer",
+    "method_count": 0,
+    "is_abstract": false,
+    "docstring": "Information about a standalone function"
+  },
+  {
+    "id": "code_analyzer.ModuleInfo",
+    "name": "ModuleInfo",
+    "module": "code_analyzer",
+    "method_count": 0,
+    "is_abstract": false,
+    "docstring": "Information about a Python module"
+  },
+  {
+    "id": "code_analyzer.CodeAnalyzer",
+    "name": "CodeAnalyzer",
+    "module": "code_analyzer",
+    "method_count": 9,
+    "is_abstract": false,
+    "docstring": "Analyzes Python code using AST to extract structural information\n\nExample:\n    analyzer = CodeAnalyzer()\n    module_info = analyzer.analyze_file(Path(\"my_module.py\"))\n    \n    # Access extracted information\n    for cls in module_info.classes:\n        print(f\"Class: {cls.name}\")\n        for method in cls.methods:\n            print(f\"  Method: {method.name} - {method.signature}\")"
   }
 ];
         const links = [
   {
     "source": "BaseOrchestrator",
-    "target": "execution_orchestrator.ExecutionOrchestrator",
+    "target": "documentation_orchestrator.DocumentationOrchestrator",
     "type": "inherits"
   }
 ];
