@@ -1,11 +1,11 @@
 # CORTEX 3.0 → 4.0 Migration Master Plan
 
-**Version:** 1.3 (RAG-Enhanced)  
+**Version:** 1.4 (Agentic-Enhanced)  
 **Author:** Asif Hussain  
 **Created:** December 17, 2025  
-**Updated:** December 19, 2025 (TDD Orchestrator v4.0 Complete)  
-**Approved:** December 17, 2025  
-**Status:** 🟢 APPROVED - Ready for Phase 0 Implementation  
+**Updated:** December 19, 2025 (Phase 2.5 Agentic Enhancements Integrated)  
+**Approved:** December 19, 2025  
+**Status:** 🟢 APPROVED - Phase 2.5 Integration Complete  
 **Branch Strategy:** CORTEX-3.0 (source) → CORTEX-4.0 (target)  
 **IDE Compatibility:** ✅ VSCode + Visual Studio (Intelligent Separation)  
 **RAG Integration:** ✅ Domain-Specific Guideline Content Stores (Phase 2 Enhancement)
@@ -35,6 +35,15 @@
 │ PHASE 2: Brain Enhancement + RAG + Security               [░░░░░░░░░░░░]   0% │
 │ Week 4-5: Hybrid Centralization + Security Schema       [░░░░░]  0%         │
 │ Week 6-8: RAG + Security Knowledge Stores (Parallel)    [░░░░░]  0%         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 2.5: Agentic Enhancements (PARALLEL)                [░░░░░░░░░░░░]   0% │
+│ Week 2: Adaptive Execution Modes                         [░░░░░]  0%         │
+│ Week 4-5: Multi-Agent Framework + Guardrails            [░░░░░]  0%         │
+│ Week 5: Context Validator                                [░░░░░]  0%         │
+│ Week 6: MCP Community Integration                        [░░░░░]  0%         │
+│ Week 7-8: Agent Evaluation Framework                     [░░░░░]  0%         │
+│ Week 9-10: Agent Learning Engine                         [░░░░░]  0%         │
+│ Week 14-15: CI/CD Orchestrator                           [░░░░░]  0%         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ PHASE 3: Orchestrator Consolidation                       [████░░░░░░░░]  33% │
 │ Week 7 Days 1-3: ExecutionOrchestrator (COMPLETE)       [█████]  100% ✅ DONE│
@@ -69,6 +78,12 @@
 ├─ ✅ Self-Documentation Active (Week 7 Day 5) - DocumentationOrchestrator ✅ COMPLETE
 ├─ ✅ MASTER-PLAN Gap Resolution (Week 7 Day 5) - 7 critical gaps resolved ✅ COMPLETE
 ├─ ✅ TDD Orchestrator v4.0 Complete (Week 7 Day 7) - 26/26 tests, 11+ languages, AI-driven ✅ COMPLETE
+├─ ☐ Phase 2.5 Package 5 Complete (Week 2) - Adaptive execution modes operational
+├─ ☐ Phase 2.5 Packages 1+6 Complete (Week 5) - Multi-agent + guardrails operational
+├─ ☐ Phase 2.5 Package 2 Complete (Week 6) - MCP community integration (5+ servers)
+├─ ☐ Phase 2.5 Package 3 Complete (Week 8) - Agent evaluation with LLM-as-judge
+├─ ☐ Phase 2.5 Package 7 Complete (Week 10) - Agent learning engine operational
+├─ ☐ Phase 2.5 Package 8 Complete (Week 15) - CI/CD orchestrator with self-healing
 ├─ ☐ Security Patterns Schema Complete (Week 4) - NEW: Security Learning Agent
 ├─ ☐ OWASP/CWE Data Loaded (Week 8) - NEW: Security knowledge base operational
 ├─ ☐ Planning System Core Components Migrated (Week 8 End) - Routing, Discovery, Tracking
@@ -79,14 +94,15 @@
 └─ ☐ CORTEX 4.0 GA Release (Week 19 - UPDATED from Week 20)
 
 📈 METRICS
-├─ Orchestrators Migrated: 3/14 (21%)  # ExecutionOrchestrator, DocumentationOrchestrator, TDDOrchestrator v4.0
+├─ Orchestrators Migrated: 3/15 (20%)  # ExecutionOrchestrator, DocumentationOrchestrator, TDDOrchestrator v4.0 (Phase 2.5 adds CICDOrchestrator = 15th)
 ├─ Test Coverage (Current): 75.2% average → Target: 90%+
+├─ Phase 2.5 Packages: 0/8 (0%)  # Multi-agent, MCP, Evaluation, Context, Execution, Guardrails, Learning, CI/CD
 │  ├─ phase_manager: 67.15% ⚠️ (need +23% for 90% target)
 │  ├─ documentation_orchestrator: 69.86% ⚠️ (need +20%)
 │  ├─ code_analyzer: 71.90% ⚠️ (need +18%)
 │  ├─ type_extractor: 87.27% ✅ (need +3%)
 │  └─ tdd_orchestrator_v4: 81.5% ✅ (need +9% for 90% target)
-├─ Tests Passing: 149/149 (100%) - 74 foundation + 49 documentation + 26 TDD v4.0
+├─ Tests Passing: 149/297 (50%) - 74 foundation + 49 documentation + 26 TDD v4.0 + 0/148 Phase 2.5 (target)
 ├─ Documentation: 13/200+ docs generated (TDD v4.0: manifest, guide, reference; ExecutionOrchestrator: 6 modules, 10 classes, 9 files)
 ├─ Lines Reduced: 0 (Target: -40% bloat, ~2,700 lines from 6,760)
 └─ Plan Quality: 9.5/10 (up from 8.5/10 after gap resolution)
@@ -175,14 +191,17 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **Domain Guideline Stores** - User-created knowledge bases with semantic search (NEW - RAG-inspired)
 - **Security Learning Agent** - OWASP/CWE/Compliance enforcement with tech stack awareness (NEW - APPROVED Dec 18, 2025)
 - **Semantic Retrieval** - Embedding-based search for domain-specific guidelines + security patterns (NEW)
+- **Agentic AI Enhancements** - Multi-agent collaboration, evaluation framework, learning engine (NEW - APPROVED Dec 19, 2025)
 - **Bloat Reduction** - Permanent wiring via dependency injection, eliminate manifest bloat
 - **Clean Orchestrator Structure** - Co-located tests, TDD-first development
-- **Unified Operations** - Consolidate 28+ orchestrators into 14 total (11 core + 2 specialized + 1 security)
+- **Unified Operations** - Consolidate 28+ orchestrators into 15 total (11 core + 2 specialized + 1 security + 1 CI/CD)
 - **Agent Integration** - Streamline 18 agents into 13 active (7 independent + 5 brain integrations + 1 security + 1 deprecated)
 - **Technical Documentation System** - Auto-generated docs with 20 high-value D3.js diagrams (**reduced from 60+**)
 - **Multi-Domain Support** - Enterprise-grade domain isolation with selective knowledge sharing (NEW)
 - **RAG-Inspired Content Stores** - User-uploaded guideline documents + security patterns with semantic search (NEW)
 - **Cross-IDE Support** - Seamless operation in VSCode + Visual Studio with intelligent file separation (NEW)
+- **Agent Observability** - LLM-as-judge evaluation, reasoning tracing, learning feedback loops (NEW - Phase 2.5)
+- **Community MCP Integration** - GitHub, PostgreSQL, Web Search, CORTEX-native servers (NEW - Phase 2.5)
 
 **Timeline:** 19 weeks (4.75 months after simplifications - saved 1 week)  
 **Risk Level:** 🟡 MEDIUM  
@@ -205,6 +224,8 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **RAG Impact Analysis** - See `cortex-brain/documents/analysis/CORTEX-4.0-RAG-IMPACT-ANALYSIS.md`
 - **RAG Implementation Guide** - See `cortex-brain/documents/implementation-guides/RAG-CONCEPTS-FOR-CORTEX.md`
 - **🆕 Progress Tracking Standard** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/PROGRESS-TRACKING-STANDARD.md` (CORTEX 4.0 core pattern)
+- **🆕 Agentic AI Integration Analysis** - See `cortex-brain/documents/analysis/AGENTIC-AI-CORTEX-INTEGRATION-ANALYSIS.md` (Phase 2.5 foundation, APPROVED Dec 19, 2025)
+- **🆕 Agentic Enhancements Implementation Plan** - See `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/AGENTIC-ENHANCEMENTS-IMPLEMENTATION-PLAN.md` (8 packages, APPROVED Dec 19, 2025)
 
 **Critical Path to First Orchestrator Migration:**
 1. **Week 0:** Phase 0 cleanup + technical documentation structure setup ✅
@@ -221,8 +242,9 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - **Phase 0.5 (Week 1 Days 1-3):** Autonomous Execution Framework - E2E autonomous execution with self-healing
 - **Phase 1 (Weeks 1-3):** Foundation - Base orchestrator, brain, DI, response templates v4.0, testing (CRITICAL)
 - **Phase 1.5 (Week 3):** Documentation & Visualization Framework - Auto-generation tool  
-- **Phase 2 (Weeks 4-8):** Brain Enhancement - Hybrid centralization + RAG guideline stores + Security Learning Agent (RUNS PARALLEL WITH PHASE 3)
-- **Phase 3 (Weeks 7-13):** Orchestrator Consolidation - Migrate 14 orchestrators (11 core + 2 specialized + 1 security) (requires Phase 1 complete, Phase 2 optional)
+- **Phase 2 (Weeks 4-8):** Brain Enhancement - Hybrid centralization + RAG guideline stores + Security Learning Agent (RUNS PARALLEL WITH PHASE 2.5 & 3)
+- **Phase 2.5 (Weeks 2, 4-10, 14-15):** Agentic Enhancements - Multi-agent patterns, MCP ecosystem, evaluation, learning (RUNS PARALLEL WITH PHASE 2 & 3)
+- **Phase 3 (Weeks 7-13):** Orchestrator Consolidation - Migrate 15 orchestrators (11 core + 2 specialized + 1 security + 1 CI/CD) (requires Phase 1 complete, Phase 2/2.5 optional)
 - **Phase 4 (Weeks 14-16):** Operations Simplification - DI container and manifest reduction
 - **Phase 5 (Weeks 17-18):** Testing & Validation - Comprehensive testing and quality gates (**reduced from 17-19**)
 - **Phase 6 (Week 19):** Documentation Finalization - Complete technical documentation generation (**reduced from Week 20**)
@@ -231,7 +253,9 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 1. **Response Templates v4.0 moved into Phase 1** - Foundation work, blocking dependency for orchestrators
 2. **MCP Gateway moved to Phase 4** - Non-blocking, can evolve alongside operations simplification
 3. **Brain Enhancement (Phase 2) EXTENDED** - Now includes RAG guideline stores (Weeks 4-8 vs original 4-6)
-4. **Phase 2-3 PARALLEL EXECUTION** - Brain enhancements don't block orchestrator migration (Phase 1 Brain interface sufficient)
+4. **Phase 2.5 INTEGRATED (NEW)** - Agentic enhancements run parallel with Phase 2 & 3 (8 packages, 1 developer, Weeks 2, 4-10, 14-15)
+5. **Phase 2-3 PARALLEL EXECUTION** - Brain enhancements don't block orchestrator migration (Phase 1 Brain interface sufficient)
+6. **Phase 2.5 starts Week 2** - Adaptive execution modes integrate with Phase 0.5, remaining packages Weeks 4-10, 14-15
 5. **Phase 3 started Week 7** - Overlaps with Phase 2 (Weeks 4-8) by design
 6. **Total timeline: 19 weeks** - Parallel execution + simplifications reduce timeline by 1 week
 7. **Simplifications (Dec 19, 2025):** CORTEX Lens v2.0 deferred (saves 60h), Feature Discovery simplified (saves 14h), diagrams capped at 20  
@@ -247,11 +271,12 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 | **Phase 0** | - | None | - | Phase 0.5 |
 | **Phase 0.5** | Phase 0 | Phase 0 cleanup | - | Phase 1 |
 | **Phase 1** | Phase 0.5 | Autonomous framework | - | All phases |
-| **Phase 1.5** | Phase 1 | Phase 1 items 1-8 | Phase 2 | Documentation tooling |
-| **Phase 2** | Phase 1 | Brain interface (Phase 1) | **Phase 3** ⚡ | Phase 4 (optional) |
-| **Phase 3** | Phase 1 | 10 foundation prerequisites | **Phase 2** ⚡ | Phase 4, 5 |
-| **Phase 4** | Phase 3 (80%+) | 6+ orchestrators migrated | - | Phase 5 |
-| **Phase 5** | Phase 4 | All 13 orchestrators | - | Phase 6 |
+| **Phase 1.5** | Phase 1 | Phase 1 items 1-8 | Phase 2, 2.5 | Documentation tooling |
+| **Phase 2** | Phase 1 | Brain interface (Phase 1) | **Phase 2.5, 3** ⚡ | Phase 4 (optional) |
+| **Phase 2.5** | Phase 1 (Week 2 start) | Brain interface, Phase 0.5 (for Pkg 5) | **Phase 2, 3** ⚡ | CI/CD orchestrator (Phase 3) |
+| **Phase 3** | Phase 1 | 10 foundation prerequisites | **Phase 2, 2.5** ⚡ | Phase 4, 5 |
+| **Phase 4** | Phase 3 (80%+) | 10+ orchestrators migrated | Phase 2.5 (Pkg 8) | Phase 5 |
+| **Phase 5** | Phase 4 | All 15 orchestrators | - | Phase 6 |
 | **Phase 6** | Phase 5 | Testing complete | - | GA release |
 
 **Why Phase 2-3 Can Run in Parallel:**
@@ -271,10 +296,29 @@ Comprehensive migration plan to transform CORTEX from current 3.0 architecture t
 - Different codebases (cortex-brain/ vs src/orchestration_4_0/)
 - Parallel execution saves 4 weeks vs sequential
 
-**Current Status (Week 7 Day 5):**
+**Current Status (Week 7 Day 7):**
 - ✅ Phase 1: Complete (10/10 prerequisites)
 - 🔄 Phase 2: 0% (starting Week 4, runs through Week 8)
-- 🔄 Phase 3: 25% (started Week 7, 2/13 orchestrators migrated)
+- 🔄 Phase 2.5: 0% (starting Week 2, runs through Week 15 with gaps)
+- 🔄 Phase 3: 33% (started Week 7, 3/15 orchestrators migrated)
+
+**Why Phase 2-2.5-3 Can Run in Parallel:**
+
+✅ **Phase 1 Foundation Enables All:**
+- Phase 2.5 builds on Brain interface, MCP Gateway stub, DI container (Phase 1)
+- Phase 2 enhances brain without breaking existing interface
+- Phase 3 orchestrators use Phase 1 foundation, don't need Phase 2/2.5 features
+
+✅ **Independent Work Streams:**
+- **Phase 2:** Brain schema, RAG infrastructure, Security Agent (brain architect)
+- **Phase 2.5:** Agent frameworks, MCP integration, evaluation (agentic specialist)
+- **Phase 3:** Orchestrator migration (orchestrator developer)
+- **No blocking dependencies:** Each phase progresses independently
+
+✅ **Resource Efficiency:**
+- 3 parallel developers: brain + agentic + orchestrators
+- Different codebases: cortex-brain/ + src/orchestration_4_0/frameworks/ + src/orchestration_4_0/orchestrators/
+- Parallel execution: Zero timeline impact (all work fits within existing 19 weeks)
 
 ---
 
@@ -346,17 +390,28 @@ python scripts/validate_cortex_4_foundation.py
 - ☐ guidelines.db: schema validated, 10+ sample guidelines loaded
 - ☐ Performance: No regression vs Phase 1 baseline
 
+**Phase 2.5 → Phase 4:** ☐ PENDING (Week 10 End, Package 8 at Week 15)
+- ☐ Packages 1-7: All completed and merged (148 tests passing)
+- ☐ Multi-agent framework: operational with 3 patterns
+- ☐ MCP community: 5+ servers integrated
+- ☐ Agent evaluation: LLM-as-judge operational
+- ☐ Context validator: 50% hallucination reduction achieved
+- ☐ Guardrails: 100% prompt injection detection
+- ☐ Learning engine: Strategy suggestions based on history
+- ☐ Performance: <10% overhead vs Phase 3 baseline
+
 **Phase 3 → Phase 4:** ☐ PENDING (Week 13 End)
-- ☐ Orchestrators migrated: 11+ of 14 (80%+ threshold)
+- ☐ Orchestrators migrated: 12+ of 15 (80%+ threshold)  # Includes CI/CD from Phase 2.5
 - ☐ All migrated orchestrators: 85%+ test coverage
 - ☐ Integration tests: All orchestrators pass end-to-end tests
 - ☐ No regressions: All operations from 3.0 still work
 - ☐ Git: All orchestrator migrations committed with progress updates
 
 **Phase 4 → Phase 5:** ☐ PENDING (Week 16 End)
-- ☐ All 14 orchestrators migrated
+- ☐ All 15 orchestrators migrated  # 14 core + 1 CI/CD
+- ☐ Phase 2.5 Package 8: CI/CD Orchestrator complete (Week 14-15)
 - ☐ DI container: Auto-discovery operational
-- ☐ MCP Gateway: Dev Tools + ADO servers live
+- ☐ MCP Gateway: Dev Tools + ADO + Community servers live
 - ☐ Manifest bloat: 6,760 → <1,000 lines (85% reduction)
 - ☐ Operations simplified: decorator-based registration working
 
@@ -3629,6 +3684,115 @@ class PhaseExecution:
 - Phase 2 work is independent of Phase 3 orchestrator migration
 - Phase 1 Brain interface sufficient for orchestrators
 - RAG and Security Agent are optional enhancements (not blocking)
+
+---
+
+### Phase 2.5: Agentic Enhancements (Weeks 2, 4-10, 14-15) - RUNS PARALLEL WITH PHASE 2 & 3
+
+**Goal:** Integrate modern agentic AI patterns from industry best practices (Agentic-AI.md analysis)
+
+**Status:** ✅ APPROVED December 19, 2025 - Option A (Full Integration)
+
+**Timeline Breakdown:**
+
+| Week | Package | Deliverables | Tests | Status |
+|------|---------|--------------|-------|--------|
+| **Week 2** | Package 5: Adaptive Execution Modes | ExecutionModeManager (3 modes) | 8 | ☐ 0% |
+| **Week 4-5** | Package 1: Multi-Agent Framework | AgentCollaborationOrchestrator | 15 | ☐ 0% |
+| **Week 4-5** | Package 6: Enhanced Guardrails (parallel) | GuardrailOrchestrator (5 layers) | 25 | ☐ 0% |
+| **Week 5** | Package 4: Context Validator | ContextValidator + OutputSchemas | 12 | ☐ 0% |
+| **Week 6** | Package 2: MCP Community Integration | 5 community + 3 native MCP servers | 30 | ☐ 0% |
+| **Week 7-8** | Package 3: Agent Evaluation Framework | AgentEvaluator + LLM-as-judge | 20 | ☐ 0% |
+| **Week 9-10** | Package 7: Agent Learning Engine | AgentLearningEngine | 18 | ☐ 0% |
+| **Week 14-15** | Package 8: CI/CD Orchestrator | CICDOrchestrator (15th orchestrator) | 20 | ☐ 0% |
+
+**8 Enhancement Packages (Total: 148 tests, 85%+ coverage target):**
+
+1. **Multi-Agent Collaboration Framework** (Week 4-5, 2 weeks)
+   - Sequential chat: Agent1 → Agent2 → Agent3 pipeline
+   - Group chat: Parallel agents with manager coordination
+   - Nested chat: Hierarchical team structure
+   - Use cases: Planning (parallel analysis), Code Review (sequential gates), Maintenance (team structure)
+
+2. **MCP Community Integration** (Week 6, 1 week)
+   - Community servers: GitHub, PostgreSQL, Web Search, Slack
+   - CORTEX-native servers: Brain Server, Analysis Server, Planning Server
+   - Replaces custom wrappers with standardized MCP protocol
+   - Integration: RAG (web search), Planning (GitHub context), Brain Tier 2 (expose as MCP)
+
+3. **Agent Evaluation Framework** (Week 7-8, 2 weeks)
+   - LLM-as-judge reasoning validation (score 1-10)
+   - Token efficiency analysis
+   - Tool usage appropriateness
+   - Context relevance measurement
+   - Integration: All orchestrators post-execution, progress tracking
+
+4. **Context Validator & Structured Output** (Week 5, 1 week)
+   - Pre-execution context sufficiency validation
+   - Structured output schemas (Pydantic models)
+   - 50% hallucination reduction target
+   - <30ms validation overhead
+
+5. **Adaptive Execution Modes** (Week 2, 1 week)
+   - Human-in-loop: Pause after each step (learning/debugging)
+   - Supervised: Auto-validate, manual approval (default)
+   - Autonomous: Full E2E with self-healing (experienced users)
+   - Smart mode selection: Based on user experience + operation risk
+
+6. **Enhanced Guardrails** (Week 4-5, 1.5 weeks)
+   - Relevance classifier: Keep agent on-task
+   - Prompt injection detection: Security
+   - PII filter: Privacy compliance
+   - Compliance checker: OWASP/CWE integration
+   - Tool risk assessor: Dynamic risk scoring
+   - Integration: Security Learning Agent bidirectional learning
+
+7. **Agent Learning Engine** (Week 9-10, 2 weeks)
+   - Operation outcome tracking (success rates, duration, quality)
+   - Strategy success rates (historical data)
+   - User preference learning (detail level, execution mode, risk tolerance)
+   - 20% improvement target in strategy selection (30 days)
+
+8. **CI/CD Orchestrator** (Week 14-15, 2 weeks) - 15th ORCHESTRATOR
+   - Code review agent: Automated PR reviews
+   - Self-healing agent: Auto-fix test failures (max 3 tries)
+   - Test generation agent: Auto-generate missing tests
+   - Release report agent: Auto-generate release docs
+   - Integration: GitHub Actions, Azure Pipelines, TDD Orchestrator v4.0
+
+**Validation Gates:**
+
+Each package must meet:
+- ✅ 85%+ test coverage, 100% passing
+- ✅ Integration with existing orchestrators
+- ✅ Manifest + guide + reference docs
+- ✅ <10% performance overhead
+- ✅ Approved by 2+ reviewers
+- ✅ Working example in sample app
+
+**Phase 2.5 Completion Gate (Week 10 End):**
+- ✅ All 8 packages completed and merged
+- ✅ 148+ integration tests passing
+- ✅ No regression vs Phase 3 baseline
+- ✅ All manifests + guides complete
+- ✅ 3+ sample scenarios validated
+
+**Resource Allocation:**
+- 1 dedicated developer (agentic specialist)
+- Does NOT block Phase 2 (brain) or Phase 3 (orchestrators)
+- Zero timeline impact (parallel execution)
+
+**Architecture References:**
+- **Analysis:** `cortex-brain/documents/analysis/AGENTIC-AI-CORTEX-INTEGRATION-ANALYSIS.md`
+- **Implementation Plan:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/AGENTIC-ENHANCEMENTS-IMPLEMENTATION-PLAN.md`
+- **Source:** Agentic AI for Developers course (Pluralsight), industry patterns
+
+**Expected Impact:**
+- ✅ 40% productivity boost (multi-agent patterns)
+- ✅ 50% hallucination reduction (context validation)
+- ✅ 100% prompt injection detection (guardrails)
+- ✅ 90% user preference accuracy (learning engine)
+- ✅ Industry-aligned architecture (future-proof)
 
 ---
 
