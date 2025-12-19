@@ -148,11 +148,16 @@ These hints confirm orchestrators are actively working without being intrusive.
 - **Compliance:** Inherits all Planning System 2.0 requirements + ADO-specific formatting
 - **Execution Method:** `copilot_chat` (interactive workflow)
 
-### TDD Mastery
-- **Commands:** `start tdd`, `run tests`, `trace`, `debug`
-- **Features:** RED→GREEN→REFACTOR, per-layer coverage, empty test detection, debugging orchestrator integration
+### TDD Mastery (v4.0)
+- **Commands:** `start tdd`, `run tests`, `tdd [feature]`
+- **Version:** 4.0.0 - Unified orchestrator with adaptive learning
+- **Features:** RED→GREEN→REFACTOR, adaptive tech discovery (11+ languages), AI-driven generation, clean code enforcement (SOLID/DRY/KISS/YAGNI), per-phase rollback
+- **Manifest:** `cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml`
 - **Guide:** `cortex-brain/brain-protection-rules.yaml` (TDD_ENFORCEMENT)
 - **Execution Method:** `copilot_chat` (interactive workflow)
+- **Architecture:** Strategy pattern with pluggable phases
+- **Learning:** Technology discovery, pattern storage (Tier 2), best practice retrieval
+- **Quality:** 0-10 scoring, violation detection, actionable recommendations
 - **Completion:** Shows `# 🎉 CONGRATULATIONS` when full TDD cycle complete with all tests passing
 - **Engagement:** Displays `🎭 Phase transition` hints for RED→GREEN→REFACTOR progression
 

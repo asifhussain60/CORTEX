@@ -25,6 +25,11 @@ metadata:
   related_orchestrators:
     - "maintenance_orchestrator"
     - "contextual_review_orchestrator"
+    - "tdd_orchestrator_v4"
+  child_orchestrators:
+    - name: "tdd_orchestrator_v4"
+      manifest: "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml"
+      relationship: "All planning system plans include TDD phases"
   documentation_path: ".github/prompts/modules/planning-system-guide.md"
   source_file: "src/operations/modules/orchestration/planning_orchestrator.py"
 
@@ -279,6 +284,27 @@ workflow:
         - "_execute_lightweight()" # Tier 2
         - "_execute_documented()" # Tier 3
         - "_execute_complex()" # Tier 4
+
+    - id: 3.5
+      name: "TDD Integration"
+      description: "Automated RED→GREEN→REFACTOR cycle for all plans (Tier 2+)"
+      duration: "Variable (depends on implementation complexity)"
+      orchestrator: "tdd_orchestrator_v4"
+      integration_method: "Automatic inclusion in all plans"
+      components:
+        - "TDDOrchestratorV4"
+        - "RedPhaseStrategy" # Generate failing tests
+        - "GreenPhaseStrategy" # Minimal implementation
+        - "RefactorPhaseStrategy" # AI-driven refactoring
+      triggers:
+        - "tier >= 2" # LIGHTWEIGHT and above
+        - "skip_tdd=false" # Not explicitly disabled
+      quality_gates:
+        - "min_test_coverage: 80%"
+        - "min_quality_score: 7.0/10.0"
+        - "all_tests_passing: true"
+      rollback_on_failure: true
+      notes: "TDD v4.0 provides adaptive learning (11+ languages), AI code generation, and clean code enforcement"
 
     - id: 4
       name: "Refactor"
