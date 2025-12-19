@@ -297,31 +297,61 @@ class PreCommitCleanup:
         return True, self._build_summary()
     
     def _auto_commit_cleanup(self, change_count: int):
-        """Auto-commit cleanup changes"""
+        """Auto-commit cleanup changes (additions + deletions)"""
         try:
-            # Stage ALL changes (deletions + reorganizations)
-            subprocess.run(
+            print("\n[>] Auto-committing cleanup changes...")
+            
+            # Stage ALL changes: additions, modifications, AND deletions
+            # -A flag captures everything including deletions
+            result = subprocess.run(
                 ['git', 'add', '-A'],
                 cwd=self.repo_root,
                 check=True,
-                capture_output=True
+                capture_output=True,
+                text=True
             )
             
-            # Commit with descriptive message
-            commit_msg = f"chore: Auto-cleanup by pre-commit hook ({change_count} changes)\n\n"
-            commit_msg += f"- Deleted {len(self.deleted_files)} temp files/folders\n"
-            commit_msg += f"- Reorganized {len(self.moved_files)} files to correct locations"
+            # Verify we have staged changes
+            status = subprocess.run(
+                ['git', 'diff', '--cached', '--name-only'],
+                cwd=self.repo_root,
+                capture_output=True,
+                text=True
+            )
             
-            subprocess.run(
+            staged_files = status.stdout.strip().split('\n') if status.stdout.strip() else []
+            
+            if not staged_files:
+                print("[!] No changes to commit (already clean)")
+                return
+            
+            # Build detailed commit message
+            commit_msg = f"chore: Auto-cleanup by pre-commit hook ({len(staged_files)} files)\n\n"
+            commit_msg += f"Deletions: {len([f for f in self.deleted_files])}\n"
+            commit_msg += f"Reorganizations: {len([f for f in self.moved_files])}\n\n"
+            commit_msg += "Changes:\n"
+            for f in staged_files[:10]:  # Show first 10 files
+                commit_msg += f"  - {f}\n"
+            if len(staged_files) > 10:
+                commit_msg += f"  ... and {len(staged_files) - 10} more files\n"
+            
+            # Commit with --no-verify to avoid recursion
+            result = subprocess.run(
                 ['git', 'commit', '--no-verify', '-m', commit_msg],
                 cwd=self.repo_root,
                 check=True,
-                capture_output=True
+                capture_output=True,
+                text=True
             )
             
-            print("[OK] Cleanup changes auto-committed")
+            print(f"[OK] Cleanup auto-committed: {len(staged_files)} files")
+            print("[>] Your original commit will now proceed\n")
+            
         except subprocess.CalledProcessError as e:
-            print(f"[!] Auto-commit skipped: {e}")
+            print(f"[X] Auto-commit failed: {e}")
+            if e.stderr:
+                print(f"    Error: {e.stderr}")
+            # Don't exit - let user's commit proceed
     
     def _build_summary(self) -> dict:
         """Build summary of cleanup operations"""
