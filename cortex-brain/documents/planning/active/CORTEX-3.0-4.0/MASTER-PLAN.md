@@ -5109,22 +5109,133 @@ git commit -m "📊 Update MASTER-PLAN.md: Week 7 complete (3/15 orchestrators, 
 git push origin CORTEX-4.0
 ```
 
-#### Week 8: Planning System (High-Complexity Orchestrators)
-3. **PlanningOrchestrator** (High complexity, well-tested, 1,599 LOC)
-   - **WHEN:** Week 8 (after ExecutionOrchestrator + Technical Documentation Orchestrator proven)
-   - **WHY WEEK 8:** Most complex orchestrator (1,599 LOC), needs stable foundation + documentation system operational
-   - **Refactoring:** Split 1,599 LOC → 4 modules
+#### Week 8: Planning System Core Migration (MVP)
+3. **PlanningOrchestrator Core** (**REVISED SCOPE:** 5,557 LOC actual → 3,000 LOC MVP migration)
+   - **WHEN:** Week 8 (after ExecutionOrchestrator + Documentation Orchestrator proven)
+   - **WHY REVISED:** Discovery analysis revealed 5,557 LOC (3.5× larger than initial 1,599 LOC estimate)
+   - **SCOPE CHANGE:** Split into 3 phases (Week 8 Core MVP, Week 9 Intelligence, Week 11 Advanced)
+   - **Analysis Document:** `cortex-brain/documents/analysis/PLANNING-SYSTEM-MIGRATION-DISCOVERY.md`
+   
+   **Week 8 Deliverables (Core MVP - 3,000 LOC):**
    - Migrate to `src/orchestrators/planning/`
-   - Split: orchestrator (800), complexity_analyzer (300), dor_validator (200), plan_generator (400)
-   - Migrate 4 existing test files
-   - 85%+ coverage
-   - **Generate documentation:**
+   - **Day 1-2:** Core modules (1,800 LOC)
+     - `planning_orchestrator.py` (800 LOC) - Main orchestrator
+     - `plan_validator.py` (300 LOC) - YAML schema validation
+     - `plan_generator.py` (400 LOC) - Plan creation
+     - `markdown_renderer.py` (300 LOC) - Markdown export
+   - **Day 3:** Execution engine (1,200 LOC)
+     - `plan_executor.py` (500 LOC) - Autonomous execution
+     - `phase_manager_integration.py` (300 LOC) - PhaseManager wiring
+     - `git_checkpoint_integration.py` (200 LOC) - Git checkpoints
+     - `session_manager.py` (200 LOC) - Session restoration
+   - **Day 4:** Integration & validation
+     - Wire all modules together
+     - Validate against `planning-system-4.0-manifest.yaml`
+     - Run full test suite (35+ tests consolidated from 36 existing)
+   - **Day 5:** Documentation & commit
+     - Generate comprehensive documentation via DocumentationOrchestrator
+     - Commit + push to remote
+   
+   **Test Migration:**
+   - Consolidate 36 existing test files → 35 core tests
+   - Archive 10 obsolete tests
+   - Target: 85%+ coverage
+   
+   **Deferred to Week 9:**
+   - TestIntelligence integration (400 LOC)
+   - TDDIntelligence integration (300 LOC)
+   - ValidationFramework integration (400 LOC)
+   - Manifest compliance validation (300 LOC)
+   - Total: 1,400 LOC (25% of total)
+   
+   **Deferred to Week 11 (Post-Phase 5):**
+   - Threat modeling integration
+   - Contextual architecture review
+   - Task injection system
+   - Orchestration checkpoints
+   - Incremental plan generation
+   - Folder-based plans
+   - Total: 1,157 LOC (21% of total - requires agentic AI from Phase 2.5)
+   
+   **Generate documentation:**
      - Primary: Flowchart (planning phases: Discovery → Analysis → Planning → Execution)
-     - Secondary: Sequence diagram (complexity analysis interaction)
-     - Tertiary: Architecture diagram (4-module structure)
-     - Sections: DoR/DoD requirements, Plan types (incremental/conditional/skeleton), TDD integration, Acceptance criteria, Complexity scoring (1-4 tiers)
+     - Secondary: Sequence diagram (core orchestrator interactions)
+     - Tertiary: Architecture diagram (4-module + 4-adapter structure)
+     - Reference: Migration discovery analysis document
+     - Edge cases: 10 documented risks with mitigations
+     - Sections: DoR/DoD requirements, Plan types, TDD integration, Session management, Git checkpoints
 
-4. **ScaffoldingOrchestrator** (Complex, 5 support modules)
+**🔒 MANDATORY: Commit Before Week 9**
+```bash
+git add .
+git commit -m "✅ Week 8 Complete: Planning System Core MVP Migration
+
+- PlanningOrchestrator Core: 3,000 LOC migrated (54% of total 5,557 LOC)
+- Modules: orchestrator, validator, generator, renderer, executor, phase_mgr, git, session
+- Tests: 35+ passing (85%+ coverage)
+- Documentation: Analysis doc + flowchart + sequence + architecture diagrams
+- Deferred: Intelligence integrations (Week 9) + Advanced features (Week 11)
+- Orchestrators migrated: 4/15 (27%)"
+
+# Update MASTER-PLAN progress tracker  
+git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
+git commit -m "📊 Update MASTER-PLAN.md: Week 8 complete (4/15 orchestrators, 27%)"
+
+# Update planning-system-4.0-manifest.yaml status
+git add cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml
+git commit -m "📊 Update planning-system-4.0-manifest.yaml: Core migration complete"
+
+git push origin CORTEX-4.0
+```
+
+#### Week 9: Planning System Intelligence Integrations
+**Context:** Week 8 delivered Core MVP (3,000 LOC). Week 9 adds Intelligence Layer (1,400 LOC).
+
+4. **Planning System Intelligence Layer** (1,400 LOC from legacy planning_orchestrator.py)
+   - **WHEN:** Week 9 (after Core MVP proven in Week 8)
+   - **WHY SEPARATE WEEK:** Intelligence adapters require TestIntelligence, TDDIntelligence, ValidationFramework integration
+   - **Scope:** Adapters for 4 intelligence systems deferred from Week 8
+   
+   **Week 9 Deliverables (Intelligence Layer - 1,400 LOC):**
+   - Migrate to `src/orchestrators/planning/intelligence/`
+   - **Day 1-2:** Test & TDD Intelligence (700 LOC)
+     - `test_intelligence_adapter.py` (400 LOC) - Test coverage analysis
+     - `tdd_intelligence_adapter.py` (300 LOC) - TDD workflow enforcement
+   - **Day 3:** Validation & Manifest (700 LOC)
+     - `validation_framework_adapter.py` (400 LOC) - Multi-layer validation
+     - `manifest_compliance_validator.py` (300 LOC) - YAML schema validation
+   - **Day 4:** Integration & validation
+     - Wire intelligence adapters to Core MVP from Week 8
+     - Validate full Planning System against `planning-system-4.0-manifest.yaml`
+     - Run extended test suite (50+ tests including intelligence)
+   - **Day 5:** Documentation & commit
+     - Generate intelligence layer documentation via DocumentationOrchestrator
+     - Update architecture diagrams to show intelligence integration
+     - Commit + push to remote
+   
+   **Test Migration:**
+   - Add 15 new intelligence adapter tests
+   - Total: 50 tests (35 core + 15 intelligence)
+   - Target: 85%+ coverage maintained
+   
+   **Week 11 Deferred Features (Still Pending):**
+   - Threat modeling integration (requires Phase 2.5 agentic AI)
+   - Contextual architecture review (requires Phase 2.5 agentic AI)
+   - Task injection system (requires orchestration_4_0 completion)
+   - Orchestration checkpoints (requires orchestration_4_0 completion)
+   - Incremental plan generation (requires advanced complexity analysis)
+   - Folder-based plans (requires enhanced context discovery)
+   - Total: 1,157 LOC (21% of total - deferred to post-Phase 5)
+   
+   **Generate documentation:**
+     - Primary: Flowchart (intelligence adapter interaction flow)
+     - Secondary: Sequence diagram (test intelligence → TDD intelligence → validation)
+     - Tertiary: Architecture diagram (4-module Core + 4-adapter Intelligence structure)
+     - Sections: Intelligence adapters, Test coverage analysis, TDD enforcement, Validation layers, Manifest compliance
+
+5. **ScaffoldingOrchestrator** (Complex, 5 support modules - MOVED FROM WEEK 8)
+   - **WHEN:** Week 9 Day 3-5 (after intelligence adapters integrated)
+   - **WHY MOVED:** Free up Week 8 for Planning System MVP focus
    - Consolidate architecture_intelligence, code_analyzer, migration_strategist, orchestrator_chain
    - Migrate to `src/orchestrators/scaffolding/`
    - 80%+ coverage
@@ -5133,30 +5244,31 @@ git push origin CORTEX-4.0
      - Secondary: Architecture diagram (pattern recognition engine)
      - Sections: Architecture patterns (Clean/DDD/Microservices), Migration strategies, Code analysis
 
-**🔒 MANDATORY: Commit Before Week 9**
+**🔒 MANDATORY: Commit Before Week 10**
 ```bash
 git add .
-git commit -m "✅ Week 8 Complete: Planning System + Scaffolding Orchestrators
+git commit -m "✅ Week 9 Complete: Planning System Intelligence + Scaffolding
 
-- PlanningOrchestrator: 1,599 LOC → 4 modules, 85%+ coverage
+- Planning System Intelligence Layer: 1,400 LOC migrated (4 adapters)
 - ScaffoldingOrchestrator: 5 support modules consolidated, 80%+ coverage
-- Tests: All passing
-- Documentation: 3 flowcharts + 2 architecture diagrams + 1 sequence diagram
-- Orchestrators migrated: 5/15 (33%)"
+- Tests: 50+ planning tests + scaffolding tests passing (85%+ coverage)
+- Documentation: Intelligence flowchart + sequence diagram + architecture updates
+- Orchestrators migrated: 5/15 (33%)
+- Planning System: 79% complete (4,400/5,557 LOC migrated)"
 
 # Update MASTER-PLAN progress tracker  
 git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
-git commit -m "📊 Update MASTER-PLAN.md: Week 8 complete (5/15 orchestrators, 33%)"
+git commit -m "📊 Update MASTER-PLAN.md: Week 9 complete (5/15 orchestrators, 33%)"
 
 # Update planning-system-4.0-manifest.yaml status
 git add cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml
-git commit -m "📊 Update planning-system-4.0-manifest.yaml: Migration complete"
+git commit -m "📊 Update planning-system-4.0-manifest.yaml: Intelligence layer complete"
 
 git push origin CORTEX-4.0
 ```
 
-#### Week 9: Domain-Specific Orchestrators
-5. **ADOOrchestrator** (Consolidate all ADO operations)
+#### Week 10: Domain-Specific Orchestrators
+6. **ADOOrchestrator** (Consolidate all ADO operations)
    - Combine: ado_agent, ado work item operations, ado_planning
    - Migrate to `src/orchestrators/ado/`
    - 80%+ coverage
@@ -5165,7 +5277,7 @@ git push origin CORTEX-4.0
      - Secondary: Sequence diagram (ADO API interactions)
      - Sections: Work item types (Story/Feature/Task), Completion summaries, Code review integration
 
-6. **DocumentationOrchestrator** (Consolidate 2 implementations)
+7. **DocumentationOrchestrator** (Consolidate 2 implementations)
    - Merge: documentation_orchestrator + documentation_generation_orchestrator
    - Migrate to `src/orchestrators/documentation/`
    - 75%+ coverage
@@ -5174,26 +5286,7 @@ git push origin CORTEX-4.0
      - Secondary: Data flow diagram (code → documentation transformation)
      - Sections: Auto-generation strategies, Template system, D3.js integration
 
-**🔒 MANDATORY: Commit Before Week 10**
-```bash
-git add .
-git commit -m "✅ Week 9 Complete: Domain-Specific Orchestrators
-
-- ADOOrchestrator: ADO integration with 80%+ coverage
-- DocumentationOrchestrator: 2 implementations consolidated, 75%+ coverage
-- Tests: All passing
-- Documentation: 2 flowcharts + 1 sequence diagram + 1 data flow
-- Orchestrators migrated: 7/15 (47%)"
-
-# Update BOTH progress trackers
-git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
-git commit -m "📊 Update Progress: Week 9 complete (7/15 orchestrators, 47%)"
-
-git push origin CORTEX-4.0
-```
-
-#### Week 10: Operations Orchestrators
-7. **MaintenanceOrchestrator** (Consolidate cleanup + optimization)
+8. **MaintenanceOrchestrator** (Consolidate cleanup + optimization - MOVED FROM WEEK 10)
    - Merge: cleanup_orchestrator, holistic_cleanup, user_cleanup, optimize_cortex, optimize_system
    - Migrate to `src/orchestrators/maintenance/`
    - Split: orchestrator, cleanup_engine, optimization_engine
@@ -5203,7 +5296,27 @@ git push origin CORTEX-4.0
      - Secondary: Data flow diagram (health metrics collection)
      - Sections: Phase sequence, Optimization strategies, Cleanup rules, Health monitoring
 
-8. **QAOrchestrator** (Quality automation)
+**🔒 MANDATORY: Commit Before Week 11**
+```bash
+git add .
+git commit -m "✅ Week 10 Complete: Domain-Specific + Maintenance Orchestrators
+
+- ADOOrchestrator: ADO integration with 80%+ coverage
+- DocumentationOrchestrator: 2 implementations consolidated, 75%+ coverage
+- MaintenanceOrchestrator: 5 cleanup modules consolidated, 80%+ coverage
+- Tests: All passing
+- Documentation: 3 flowcharts + 1 sequence diagram + 2 data flows
+- Orchestrators migrated: 8/15 (53%)"
+
+# Update BOTH progress trackers
+git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
+git commit -m "📊 Update Progress: Week 10 complete (8/15 orchestrators, 53%)"
+
+git push origin CORTEX-4.0
+```
+
+#### Week 11: Operations Orchestrators
+9. **QAOrchestrator** (Quality automation)
    - Already in orchestration_3_0, migrate to new structure
    - Add code_quality_orchestrator, holistic_review_orchestrator
    - 75%+ coverage
@@ -5212,7 +5325,7 @@ git push origin CORTEX-4.0
      - Secondary: Sequence diagram (analysis workflow)
      - Sections: Code quality metrics, Review automation, Remediation strategies
 
-9. **DevOpsOrchestrator** (CI/CD automation)
+10. **DevOpsOrchestrator** (CI/CD automation)
    - Add deployment_orchestrator, integration_testing_orchestrator
    - 75%+ coverage
    - **Generate documentation:**
@@ -5220,7 +5333,7 @@ git push origin CORTEX-4.0
      - Secondary: Sequence diagram (deployment process)
      - Sections: Pipeline configuration, Environment management, Integration testing
 
-10. **TestMigrationAnalysisOrchestrator** (Framework-agnostic test migration intelligence)
+11. **TestMigrationAnalysisOrchestrator** (Framework-agnostic test migration intelligence)
    - **NEW - APPROVED Dec 19, 2025:** Technology-agnostic test value assessment orchestrator
    - Supports any test framework migration (Selenium→Playwright, Jest→Vitest, JUnit→pytest, etc.)
    - Migrate to `src/orchestrators/test_migration/`
@@ -5235,6 +5348,7 @@ git push origin CORTEX-4.0
      - Planning System 4.0 (complexity analysis + roadmap generation)
      - Existing Migration Roadmap Generator (enhanced for test-specific metrics)
      - Phase 5 Package 3 (Agent Evaluation Framework for recommendation validation)
+
    - **Tech Stack Support:** C#, TypeScript, Python, Java, JavaScript, Go, Ruby, PHP, Kotlin, Swift, Rust (via TDD v4.0 language detection)
    - **Output Deliverables:**
      - Analysis report with ROI projections
@@ -5329,6 +5443,86 @@ git commit -m "✅ Week 11 Complete: TDD v4.0 Agentic Enhancements
 
 git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
 git commit -m "📊 Update Progress: Week 11 complete - TDD v4.0 enhanced to 95%"
+
+git push origin CORTEX-4.0
+```
+
+#### Week 11 (Post-Phase 5): Planning System Advanced Features (Deferred)
+
+**Context:** 1,157 LOC of advanced features from legacy planning_orchestrator.py deferred to post-Phase 5
+**Rationale:** These features require Phase 2.5 Agentic AI enhancements (multi-agent collaboration, context validation) and orchestration_4_0 completion
+
+**Deferred Features (1,157 LOC - 21% of 5,557 LOC total):**
+
+12. **Planning System Advanced Features** (Post-Phase 5 integration)
+   - **WHEN:** Week 11+ (after Phase 2.5 agentic AI delivered + orchestration_4_0 complete)
+   - **WHY DEFERRED:** Requires multi-agent collaboration, agentic evaluation, enhanced context validation
+   - **Scope:** 6 advanced capabilities deferred from Weeks 8-9
+   
+   **Advanced Feature Modules (1,157 LOC):**
+   - Migrate to `src/orchestrators/planning/advanced/`
+   - **Threat Modeling Integration (250 LOC)**
+     - `threat_modeler_adapter.py` - Security threat analysis integration
+     - Requires: Phase 2.5 threat modeling agent
+   - **Contextual Architecture Review (200 LOC)**
+     - `architecture_review_adapter.py` - Pre-planning architecture analysis
+     - Requires: Phase 2.5 architecture intelligence agent
+   - **Task Injection System (220 LOC)**
+     - `task_injection_manager.py` - Dynamic task insertion during execution
+     - Requires: orchestration_4_0 dynamic orchestration
+   - **Orchestration Checkpoints (187 LOC)**
+     - `checkpoint_manager.py` - Save/restore orchestration state
+     - Requires: orchestration_4_0 checkpoint framework
+   - **Incremental Plan Generation (150 LOC)**
+     - `incremental_generator.py` - Adaptive plan generation based on progress
+     - Requires: Phase 2.5 adaptive reasoning
+   - **Folder-Based Plans (150 LOC)**
+     - `folder_plan_generator.py` - Generate plans from folder structure
+     - Requires: Phase 2.5 enhanced context discovery
+   
+   **Test Migration:**
+   - Add 20 advanced feature tests
+   - Total: 70 tests (50 core+intelligence + 20 advanced)
+   - Target: 85%+ coverage maintained
+   
+   **Integration Requirements:**
+   - Phase 2.5 Package 1: Multi-Agent Collaboration (threat modeler, architecture agent coordination)
+   - Phase 2.5 Package 2: Context Validation (pre-planning discovery validation)
+   - Phase 2.5 Package 3: Agent Evaluation (plan quality assessment)
+   - orchestration_4_0: Dynamic orchestration + checkpoint framework
+   
+   **Generate documentation:**
+     - Primary: Flowchart (advanced feature integration flow)
+     - Secondary: Sequence diagram (threat modeling → architecture review → planning)
+     - Tertiary: Architecture diagram (complete Planning System with advanced features)
+     - Sections: Threat modeling integration, Architecture review, Task injection, Checkpoints, Incremental generation, Folder-based plans
+
+**Planning System Migration Summary:**
+- Week 8: Core MVP (3,000 LOC - 54% of total)
+- Week 9: Intelligence Layer (1,400 LOC - 25% of total)
+- Week 11+: Advanced Features (1,157 LOC - 21% of total)
+- Total: 5,557 LOC migrated across 3 phases
+- Final Test Count: 70 tests (35 core + 15 intelligence + 20 advanced)
+- Final Coverage: 85%+ maintained
+
+**🔒 MANDATORY: Commit When Advanced Features Complete**
+```bash
+git add .
+git commit -m "✅ Planning System 100% Complete: Advanced Features Integrated
+
+- Advanced Features: 1,157 LOC migrated (6 modules)
+- Threat modeling, architecture review, task injection, checkpoints, incremental, folder-based
+- Tests: 70 total (35 core + 15 intelligence + 20 advanced), 85%+ coverage
+- Documentation: Advanced feature flowchart + sequence diagram + full architecture
+- Planning System: 100% complete (5,557/5,557 LOC migrated)"
+
+# Update MASTER-PLAN progress tracker  
+git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
+git commit -m "📊 Update MASTER-PLAN.md: Planning System 100% complete (5,557 LOC)"
+
+# Update planning-system-4.0-manifest.yaml status
+git add cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml
+git commit -m "📊 Update planning-system-4.0-manifest.yaml: Advanced features complete"
 
 git push origin CORTEX-4.0
 ```
