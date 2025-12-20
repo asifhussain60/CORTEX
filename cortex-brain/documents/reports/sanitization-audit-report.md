@@ -1,29 +1,29 @@
 # Code Sanitization Audit Report
 
-**Generated:** 2025-12-16 10:54:20 UTC  
+**Generated:** 2025-12-20 21:14:18 UTC  
 **Operation:** Code Sanitization  
-**Status:** UNKNOWN
+**Status:** SUCCESS
 
 ---
 
 ## Executive Summary
 
-**Source Directory:** `cortex-sample-apps/ra-api-specs`  
-**Output Directory:** `cortex-sample-apps/test-sanitize-output`  
-**Duration:** 0.4 seconds
+**Source Directory:** `N/A`  
+**Output Directory:** `N/A`  
+**Duration:** N/A
 
 ### Transformation Metrics
 
-- **Files Scanned:** 23
-- **Files Transformed:** 21
+- **Files Scanned:** 1
+- **Files Transformed:** 0
 - **Files Renamed:** 0
-- **Total Transformations:** 469
-- **Domain Terms Replaced:** 37
+- **Total Transformations:** 0
+- **Domain Terms Replaced:** 0
 
 ### Validation Results
 
-- **Build System:** unknown
-- **Build Success:** ✅ PASS
+- **Build System:** python
+- **Build Success:** ❌ FAIL
 - **Tests Passed:** 0
 - **Tests Failed:** 0
 - **Overall Validation:** ✅ SUCCESS
@@ -34,30 +34,21 @@
 
 ### File Inventory
 
-**Total Files:** 23
+**Total Files:** 1
 
 **By Language:**
-- documentation: 9 files
-- configuration: 6 files
-- unknown: 8 files
 
 ### Domain Terminology
 
-**Identified Terms:** 5
+**Identified Terms:** 0
 
 **Top Terms by Frequency:**
-- `funding`: 46 occurrences (domain_specific category)
-- `reimbursement`: 12 occurrences (domain_specific category)
-- `subaccount`: 8 occurrences (domain_specific category)
-- `participant`: 3 occurrences (domain_specific category)
-- `member`: 2 occurrences (domain_specific category)
 
 ### Sensitive Data Detection
 
-**Total Findings:** 20
+**Total Findings:** 0
 
 **By Type:**
-- url: 20
 
 ---
 
@@ -65,29 +56,12 @@
 
 ### Mapping Generation
 
-**Total Mappings:** 37  
+**Total Mappings:** 0  
 **Conflicts Detected:** 0  
 **Conflicts Resolved:** 0
 
 ### Sample Mappings
 
-- `Updater_CreateRAFundingInvoices` → `Updater_CreatePaymentTransactionInvoices`
-- `updater-createrafundinginvoices` → `updater-createpaymenttransactioninvoices`
-- `Protected Health Information` → `Personal Identifiable Information`
-- `CreateRAFundingInvoices` → `CreatePaymentTransactionInvoices`
-- `createrafundinginvoices` → `createpaymenttransactioninvoices`
-- `XGenerateFundingInvoice` → `XGenerateTransactionInvoice`
-- `xgeneratefundinginvoice` → `xgeneratetransactioninvoice`
-- `XUpdateFundingBatch` → `XUpdateTransactionBatch`
-- `xupdatefundingbatch` → `xupdatetransactionbatch`
-- `FundingInvoices` → `TransactionInvoices`
-- `FundingInvoice` → `TransactionInvoice`
-- `FundingBatch` → `TransactionBatch`
-- `HEInteraction` → `PaymentInteraction`
-- `HETransactions` → `PaymentTransactions`
-- `Reimbursement` → `Payment`
-
-*...and 22 more mappings (see mapping reference file)*
 
 ---
 
@@ -95,15 +69,15 @@
 
 ### Transformation Statistics
 
-- **Files Transformed:** 21
+- **Files Transformed:** 0
 - **Files Copied (unchanged):** 0
 - **Files Renamed:** 0
-- **Total Changes Applied:** 469
+- **Total Changes Applied:** 0
 
 ### Backup Information
 
-**Backup Location:** `cortex-sample-apps/ra-api-specs_backup_20251216_055420`  
-**Backup Created:** 2025-12-16 10:54:20 UTC
+**Backup Location:** `N/A`  
+**Backup Created:** 2025-12-20 21:14:18 UTC
 
 ---
 
@@ -111,18 +85,18 @@
 
 ### Build Validation
 
-- **Build System:** unknown
-- **Build Command:** N/A
-- **Build Result:** ✅ SUCCESS
+- **Build System:** python
+- **Build Command:** pip install -e .
+- **Build Result:** ❌ FAILED
 - **Exit Code:** N/A
 
 ### Test Validation
 
-- **Test Command:** N/A
+- **Test Command:** pytest
 - **Tests Passed:** 0
 - **Tests Failed:** 0
 - **Tests Skipped:** 0
-- **Test Result:** ✅ SUCCESS
+- **Test Result:** ❌ FAILED
 
 ---
 
@@ -144,8 +118,8 @@
 
 ### Quality Gates
 
-- ✅ PASS Build Success
-- ✅ PASS Test Pass Rate >= Original
+- ❌ FAIL Build Success
+- ❌ FAIL Test Pass Rate >= Original
 - ✅ PASS No Broken References
 - ✅ PASS Documentation Updated
 
@@ -155,10 +129,10 @@
 
 ### Generated Files
 
-1. **Sanitized Codebase:** `cortex-sample-apps/test-sanitize-output`
-2. **Audit Report:** `cortex-brain\documents\reports\sanitization-audit-report.md`
+1. **Sanitized Codebase:** `N/A`
+2. **Audit Report:** `cortex-brain/documents/reports/sanitization-audit-report.md`
 3. **Mapping Reference:** `sanitization-mapping-reference.json`
-4. **Backup:** `cortex-sample-apps/ra-api-specs_backup_20251216_055420`
+4. **Backup:** `N/A`
 
 ### Retention
 
@@ -170,9 +144,9 @@
 
 ## Conclusion
 
-**Final Status:** UNKNOWN
+**Final Status:** SUCCESS
 
-❌ **Sanitization encountered issues.** Review validation results and consider rollback.
+✅ **Sanitization completed successfully.** The sanitized codebase is ready for sharing.
 
 ---
 

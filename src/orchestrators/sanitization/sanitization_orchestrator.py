@@ -287,7 +287,11 @@ class SanitizationOrchestrator(BaseOrchestrator):
                 files_analyzed,
                 mappings_created,
                 files_transformed,
-                validation_passed
+                validation_passed,
+                analysis=analysis,
+                mappings=mapping,
+                transform=transform if not self.dry_run else {},
+                validate=validation if not self.dry_run else {}
             )
             report_path = report.get('report_path', Path('/tmp/sanitization-report.md'))
             
@@ -326,12 +330,16 @@ class SanitizationOrchestrator(BaseOrchestrator):
             domain_terms = self.analyzer.extract_domain_terminology()
             terms = list(domain_terms.keys()) if isinstance(domain_terms, dict) else []
             
+            # Extract namespaces
+            namespaces = self.analyzer.extract_namespaces()
+            
             return {
                 'success': True,
                 'files': files,
                 'terms': terms,
                 'file_inventory': file_inventory,
-                'domain_terms': domain_terms
+                'domain_terms': domain_terms,
+                'namespaces': namespaces
             }
         except Exception as e:
             self.logger.error(f"Analysis phase failed: {e}", exc_info=True)
@@ -340,24 +348,30 @@ class SanitizationOrchestrator(BaseOrchestrator):
     def _execute_mapping_phase(self, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """Execute MAPPING phase: Domain→generic mapping generation"""
         try:
-            terms = analysis.get('terms', [])
-            if not terms:
-                # No terms to map
+            domain_terms = analysis.get('domain_terms', {})
+            namespaces = analysis.get('namespaces', {})
+            
+            if not domain_terms and not namespaces:
+                # No terms or namespaces to map
                 return {
                     'success': True,
                     'mappings': {}
                 }
             
-            # Generate mappings (MappingEngine should handle this)
-            if hasattr(self.mapper, 'generate_mappings'):
-                mappings = self.mapper.generate_mappings(terms)
-            else:
-                # Fallback: simple generic mapping
-                mappings = {term: f"Generic{i}" for i, term in enumerate(terms)}
+            # Generate mappings using MappingEngine
+            mappings = self.mapper.generate_mappings(domain_terms, namespaces)
+            
+            # Detect conflicts
+            conflicts = self.mapper.detect_conflicts(mappings)
+            if conflicts:
+                self.logger.warning(f"Detected {len(conflicts)} naming conflicts")
+                for conflict in conflicts:
+                    self.logger.warning(f"  Conflict: {conflict['original_terms']} → {conflict['generic_term']}")
             
             return {
                 'success': True,
-                'mappings': mappings if isinstance(mappings, dict) else {}
+                'mappings': mappings if isinstance(mappings, dict) else {},
+                'conflicts': conflicts
             }
         except Exception as e:
             self.logger.error(f"Mapping phase failed: {e}", exc_info=True)
@@ -366,37 +380,74 @@ class SanitizationOrchestrator(BaseOrchestrator):
     def _execute_transform_phase(self, mapping: Dict[str, Any]) -> Dict[str, Any]:
         """Execute TRANSFORM phase: AST transformation, file renaming"""
         try:
-            # Stub implementation for GREEN phase
-            if self.transformer and hasattr(self.transformer, 'transform'):
-                result = self.transformer.transform(
-                    str(self.target),
-                    mapping.get('mappings', {})
-                )
-                files_transformed = result.get('files_transformed', 0)
-            else:
-                files_transformed = 0
+            mappings = mapping.get('mappings', {})
+            if not mappings:
+                # No mappings to apply
+                return {
+                    'success': True,
+                    'files_transformed': 0
+                }
+            
+            # Create output directory for sanitized code
+            output_dir = self.target.parent / f"{self.target.name}_sanitized"
+            
+            # Transform codebase
+            result = self.transformer.transform_codebase(
+                str(self.target),
+                str(output_dir),
+                mappings
+            )
+            
+            files_transformed = result.get('files_transformed', 0)
+            self.logger.info(f"Transformed {files_transformed} files")
             
             return {
                 'success': True,
-                'files_transformed': files_transformed
+                'files_transformed': files_transformed,
+                'output_directory': str(output_dir),
+                'transformation_log': result
             }
         except Exception as e:
+            self.logger.error(f"Transform phase failed: {e}", exc_info=True)
             return {'success': False, 'errors': [str(e)]}
     
     def _execute_validate_phase(self) -> Dict[str, Any]:
         """Execute VALIDATE phase: Build validation, test execution"""
         try:
-            # Stub implementation for GREEN phase
-            if self.validator and hasattr(self.validator, 'validate'):
-                result = self.validator.validate(str(self.target))
-            else:
-                result = True
+            # Detect build system
+            build_system = self.validator.detect_build_system(str(self.target))
+            self.logger.info(f"Detected build system: {build_system}")
+            
+            if build_system == 'none':
+                self.logger.warning("No build system detected, skipping validation")
+                return {
+                    'success': True,
+                    'passed': True,
+                    'build_system': 'none'
+                }
+            
+            # Execute build
+            build_result = self.validator.execute_build(str(self.target), build_system)
+            if not build_result.get('success', False):
+                self.logger.error("Build failed")
+                return {
+                    'success': False,
+                    'passed': False,
+                    'errors': ['Build failed']
+                }
+            
+            # Run tests
+            test_result = self.validator.run_tests(str(self.target), build_system)
+            passed = test_result.get('success', False)
             
             return {
-                'success': result,
-                'passed': result
+                'success': True,
+                'passed': passed,
+                'build_system': build_system,
+                'test_result': test_result
             }
         except Exception as e:
+            self.logger.error(f"Validate phase failed: {e}", exc_info=True)
             return {'success': False, 'errors': [str(e)]}
     
     def _execute_report_phase(
@@ -404,23 +455,30 @@ class SanitizationOrchestrator(BaseOrchestrator):
         files_analyzed: int,
         mappings_created: int,
         files_transformed: int,
-        validation_passed: bool
+        validation_passed: bool,
+        analysis: Dict[str, Any] = None,
+        mappings: Dict[str, Any] = None,
+        transform: Dict[str, Any] = None,
+        validate: Dict[str, Any] = None
     ) -> Dict[str, Any]:
         """Execute REPORT phase: Audit report generation"""
         try:
-            # Stub implementation for GREEN phase
-            if self.reporter and hasattr(self.reporter, 'generate'):
-                report_path = self.reporter.generate(
-                    str(self.target),
-                    {
-                        'files_analyzed': files_analyzed,
-                        'mappings_created': mappings_created,
-                        'files_transformed': files_transformed,
-                        'validation_passed': validation_passed
-                    }
-                )
+            # Build comprehensive results dict for report
+            results = {
+                'status': 'success' if validation_passed else 'failed',
+                'phases': {
+                    'analyze': analysis or {},
+                    'mapping': mappings or {},
+                    'transform': transform or {},
+                    'validate': validate or {}
+                }
+            }
+            
+            # Generate audit report
+            if self.reporter and hasattr(self.reporter, 'generate_audit_report'):
+                report_path = self.reporter.generate_audit_report(results)
             else:
-                report_path = Path('/tmp/sanitization-report.md')
+                report_path = str(Path('/tmp/sanitization-report.md'))
             
             return {
                 'success': True,

@@ -227,10 +227,18 @@ class TestOrchestratorFoundation:
         )
         
         # Force validation to fail
-        orchestrator.analyzer.analyze = Mock(return_value={'files': ['test.py']})
+        orchestrator.analyzer.scan_file_structure = Mock(return_value={
+            'files': [{'path': 'test.py'}], 'total_files': 1
+        })
+        orchestrator.analyzer.extract_domain_terminology = Mock(return_value={
+            'Test': {'count': 1, 'category': 'business_entity'}
+        })
+        orchestrator.analyzer.extract_namespaces = Mock(return_value={'python': []})
         orchestrator.mapper.generate_mappings = Mock(return_value={'Test': 'Generic'})
-        orchestrator.transformer.transform = Mock(return_value={'files_transformed': 1})
-        orchestrator.validator.validate = Mock(return_value=False)
+        orchestrator.mapper.detect_conflicts = Mock(return_value=[])
+        orchestrator.transformer.transform_codebase = Mock(return_value={'files_transformed': 1})
+        orchestrator.validator.detect_build_system = Mock(return_value='python')
+        orchestrator.validator.execute_build = Mock(return_value={'success': False})
         
         result = orchestrator.execute()
         

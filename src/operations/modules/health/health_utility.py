@@ -279,7 +279,7 @@ def _get_display_name(language: str) -> str:
 if __name__ == "__main__":
     import sys
     import time
-from src.utils.resource_resolver import get_root_path
+    from src.utils.resource_resolver import get_root_path
     
     print("🧪 Testing Health Utility...")
     start_test = time.time()
