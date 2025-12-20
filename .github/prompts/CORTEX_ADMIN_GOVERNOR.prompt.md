@@ -69,6 +69,27 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - `copilot_chat`: Interactive workflows, no CLI script needed
   - `internal`: Infrastructure only, reject direct invocation
 
+### 2.5 User Operation Completeness Verification (NEW - Detects Ready-But-Inactive)
+- **For production-ready infrastructure with passing tests:**
+  - Check if user-facing operation exists in `cortex-operations.yaml`
+  - Verify natural language triggers configured
+  - Validate routing logic active (IntentRouter, orchestrator entry points)
+  - Test end-to-end invocation path (user command → execution)
+- **Detection patterns:**
+  - Complete orchestrators with tests passing
+  - Module has `execution_method: internal` but should be user-accessible
+  - Orchestrator initialized (e.g., IntentRouter.vision_orchestrator) but not routed
+  - Documentation exists but no operation entry
+- **Auto-generate activation checklist:**
+  - Configuration changes needed
+  - Operations registry updates
+  - Routing logic additions
+  - Effort estimate
+- **Report ready-but-inaccessible features:**
+  - List in `cortex-brain/documents/reports/infrastructure-discovery-*.md`
+  - Prioritize by user value
+  - Add to current phase if quick (<1 day)
+
 ### 3. Tests: Execute and Repair (SKULL Enforcement)
 - **Run test suites:**
   - CORTEX internal: `pytest tests/`
