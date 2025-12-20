@@ -59,8 +59,8 @@ xml.etree.ElementTree
 | **numpy** | 50 MB | 1 min | "Required by scikit-learn" | ❌ Only imported if sklearn works |
 | **networkx** | 25 MB | 30 sec | "Architecture visualization" | ❌ No graph code in src/ |
 | **playwright** | 150 MB | 10 min | "Browser automation tests" | ❌ No playwright code in src/ |
-| **selenium** | 20 MB | 1 min | "Dashboard testing" | ❌ No selenium code in src/ |
-| **pytest-selenium** | 5 MB | 10 sec | "pytest integration" | ❌ No selenium tests |
+| **selenium** | 20 MB | 1 min | "Dashboard testing" | ❌ No selenium code in src/ | ✅ REMOVED Dec 20, 2025 |
+| **pytest-selenium** | 5 MB | 10 sec | "pytest integration" | ❌ No selenium tests | ✅ REMOVED Dec 20, 2025 |
 | **PyGithub** | 5 MB | 10 sec | "GitHub Gist feedback" | ❌ No github imports in src/ |
 | **esprima** | 5 MB | 10 sec | "JavaScript AST parser" | ❌ No JS parsing in src/ |
 | **tree-sitter-languages** | 120 MB | 5 min | "Multi-language grammars" | ❌ No tree-sitter in src/ |
@@ -98,7 +98,7 @@ Get-ChildItem -Path "d:\PROJECTS\CORTEX\src" -Recurse -Filter "*.py" |
 ### Key Finding:
 **NO IMPORTS FOUND FOR:**
 - matplotlib, Flask, networkx (dashboard packages)
-- playwright, selenium (testing packages)
+- playwright, selenium (testing packages) | ✅ REMOVED: Selenium tests archived Dec 20, 2025, Playwright is CORTEX 4.0 standard
 - PyGithub (feedback package)
 - tree-sitter-languages, esprima (multi-language packages)
 - python-docx, pypdf (document packages)
@@ -167,8 +167,8 @@ matplotlib>=3.5.0          # Dashboard never built
 Flask>=2.3.0               # Server never created
 networkx>=3.1              # Graph analysis not implemented
 playwright>=1.48.0         # Tests never written
-selenium>=4.15.0           # Tests never written
-pytest-selenium>=4.0.0     # Tests never written
+selenium>=4.15.0          # ✅ REMOVED Dec 20, 2025 - Tests archived
+pytest-selenium>=4.0.0    # ✅ REMOVED Dec 20, 2025 - Playwright is CORTEX 4.0 standard
 PyGithub>=2.5.0            # API integration not implemented
 esprima>=4.0.1             # JS parsing not implemented
 tree-sitter-languages>=1.10.2  # Multi-language not implemented

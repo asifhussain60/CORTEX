@@ -74,6 +74,7 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - CORTEX internal: `pytest tests/`
   - Coverage target: 90%+ for orchestrators
   - Fast suite: `pytest tests/misc/test_cli_wrappers.py` (<30s)
+  - E2E/Browser tests: Playwright (preferred framework for CORTEX 4.0)
 - **SKULL Rules Enforcement:**
   - **TDD_ENFORCEMENT:** RED→GREEN→REFACTOR mandatory
   - **RED_PHASE_VALIDATION:** Tests must fail before implementation

@@ -1,7 +1,7 @@
 {
   "app_name": "ksessions",
   "app_type": "onboarded",
-  "onboarding_timestamp": "2025-12-13T07:23:07.797883",
-  "scan_duration_seconds": 221.06,
+  "onboarding_timestamp": "2025-12-20T09:27:48.893815",
+  "scan_duration_seconds": 384.13,
   "data_source": "onboarding_orchestrator"
 }

@@ -90,7 +90,7 @@ definition_of_ready:
         - "All D3.js visualizations rendering with real data"
         - "26 components functional and tested"
         - "Performance targets met (<5min for 100K LOC)"
-        - "Selenium test suite: 60+ tests, 95%+ pass rate"
+        - "Playwright test suite: 60+ tests, 95%+ pass rate"
         - "WCAG 2.1 AAA compliance achieved"
         - "Zero dependencies on admin dashboard"
         - "Zero console errors in browser"
@@ -122,11 +122,12 @@ definition_of_ready:
       status: "verified"
       capability: "HTML/CSS/JS injection supported"
     
-    - prerequisite: "Selenium test framework exists"
+    - prerequisite: "Playwright test framework exists"
       status: "verified"
       location: "tests/cortex_lens/"
       current_tests: 12
       target_tests: 60
+      note: "CORTEX 4.0 standard: Playwright for E2E/browser testing"
   
   stakeholder_approvals:
     - stakeholder: "Technical Lead"
@@ -314,7 +315,7 @@ phases:
     dor_validated: false
     dod_validated: false
     deliverables:
-      - "Expanded Selenium test suite (60+ tests)"
+      - "Expanded Playwright test suite (60+ tests)"
       - "Performance benchmark report"
       - "Accessibility audit report"
       - "v3.0 release validation report"
@@ -343,11 +344,11 @@ definition_of_done:
     
     - criterion: "Sidebar navigation working"
       status: "pending"
-      validation_method: "selenium_navigation_tests"
+      validation_method: "playwright_navigation_tests"
     
     - criterion: "All D3.js visualizations rendering"
       status: "pending"
-      validation_method: "selenium_visualization_tests"
+      validation_method: "playwright_visualization_tests"
     
     - criterion: "26 components functional and tested"
       status: "pending"
@@ -362,9 +363,10 @@ definition_of_done:
         - "Tab switch: <500ms"
         - "Visualization render: <1s"
     
-    - criterion: "Selenium test suite: 60+ tests, 95%+ pass rate"
+    - criterion: "Playwright test suite: 60+ tests, 95%+ pass rate"
       status: "pending"
       validation_method: "test_execution"
+      note: "CORTEX 4.0 standard: Playwright for all E2E testing"
     
     - criterion: "WCAG 2.1 AAA compliance"
       status: "pending"

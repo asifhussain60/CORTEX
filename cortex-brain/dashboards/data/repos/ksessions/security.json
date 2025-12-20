@@ -1,6 +1,6 @@
 {
   "overall_score": 0,
-  "last_scan": "2025-12-13T07:22:59.748792",
+  "last_scan": "2025-12-20T09:27:35.407068",
   "categories": [
     {
       "name": "code_security",
@@ -81,28 +81,28 @@
           {
             "type": "Connection String with Password",
             "severity": "critical",
-            "file": "Source Code\\Sessions.Tests\\App.config",
-            "line": 5,
+            "file": "Source Code\\Sessions.Spa\\Web.Debug.config",
+            "line": 13,
             "description": "Connection String with Password found in plain text",
-            "masked_value": "Ser*******************************************************************************************",
-            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-          },
-          {
-            "type": "Connection String with Password",
-            "severity": "critical",
-            "file": "Source Code\\Sessions.Tests\\App.config",
-            "line": 6,
-            "description": "Connection String with Password found in plain text",
-            "masked_value": "Ser**************************************************************************************",
+            "masked_value": "Dat**********************************************************************************************************************************",
             "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
           },
           {
             "type": "Connection String with Password",
             "severity": "critical",
             "file": "Source Code\\Sessions.Spa\\Web.Debug.config",
-            "line": 13,
+            "line": 19,
             "description": "Connection String with Password found in plain text",
-            "masked_value": "Dat**********************************************************************************************************************************",
+            "masked_value": "Dat*****************************************************************************************************************************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Connection String with Password",
+            "severity": "critical",
+            "file": "Source Code\\Sessions.Tests\\App.config",
+            "line": 5,
+            "description": "Connection String with Password found in plain text",
+            "masked_value": "Ser*******************************************************************************************",
             "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
           }
         ],
@@ -264,28 +264,28 @@
           {
             "type": "Connection String with Password",
             "severity": "critical",
-            "file": "Source Code\\Sessions.Tests\\App.config",
-            "line": 5,
+            "file": "Source Code\\Sessions.Spa\\Web.Debug.config",
+            "line": 13,
             "description": "Connection String with Password found in plain text",
-            "masked_value": "Ser*******************************************************************************************",
-            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-          },
-          {
-            "type": "Connection String with Password",
-            "severity": "critical",
-            "file": "Source Code\\Sessions.Tests\\App.config",
-            "line": 6,
-            "description": "Connection String with Password found in plain text",
-            "masked_value": "Ser**************************************************************************************",
+            "masked_value": "Dat**********************************************************************************************************************************",
             "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
           },
           {
             "type": "Connection String with Password",
             "severity": "critical",
             "file": "Source Code\\Sessions.Spa\\Web.Debug.config",
-            "line": 13,
+            "line": 19,
             "description": "Connection String with Password found in plain text",
-            "masked_value": "Dat**********************************************************************************************************************************",
+            "masked_value": "Dat*****************************************************************************************************************************",
+            "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+          },
+          {
+            "type": "Connection String with Password",
+            "severity": "critical",
+            "file": "Source Code\\Sessions.Tests\\App.config",
+            "line": 5,
+            "description": "Connection String with Password found in plain text",
+            "masked_value": "Ser*******************************************************************************************",
             "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
           }
         ],
@@ -354,7 +354,7 @@
     ],
     "overall_compliance": 64.0909090909091,
     "version": "2025",
-    "last_updated": "2025-12-13T07:22:59.370029"
+    "last_updated": "2025-12-20T09:27:35.023910"
   },
   "compliance": {
     "gdpr_ready": false,
@@ -480,6 +480,24 @@
       {
         "type": "SQL Injection",
         "severity": "high",
+        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminController.cs",
+        "line": 301,
+        "description": "SQL query built with String.Format - injection risk",
+        "code_snippet": "//_logService.Warn(string.Format(\"API [api/admin/summary/{1}/delete] -  Deleting resource file {0} f",
+        "recommendation": "Use parameterized queries instead of string formatting"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
+        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminController.cs",
+        "line": 717,
+        "description": "SQL query using string interpolation - potential injection",
+        "code_snippet": "LogService.Info($\"[TEMP-DEBUG] AdminController received {tokens.Count} tokens from repository\");",
+        "recommendation": "Replace string interpolation with parameterized queries"
+      },
+      {
+        "type": "SQL Injection",
+        "severity": "high",
         "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
         "line": 354,
         "description": "SQL query using string interpolation - potential injection",
@@ -539,24 +557,6 @@
         "description": "SQL query using string interpolation - potential injection",
         "code_snippet": "scriptBuilder.AppendLine($\"INSERT INTO [{tableName}] ({string.Join(\", \", columnNames)}) VALUES ({str",
         "recommendation": "Replace string interpolation with parameterized queries"
-      },
-      {
-        "type": "SQL Injection",
-        "severity": "high",
-        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
-        "line": 2499,
-        "description": "SQL query using string interpolation - potential injection",
-        "code_snippet": "LogService.Info($\"Successfully recorded sync history for syncId: {syncId}. Total entries: {updatedHi",
-        "recommendation": "Replace string interpolation with parameterized queries"
-      },
-      {
-        "type": "SQL Injection",
-        "severity": "high",
-        "file": "Source Code\\Sessions.Spa\\Controllers\\Api\\AdminUtilityController.cs",
-        "line": 2518,
-        "description": "SQL query using string interpolation - potential injection",
-        "code_snippet": "LogService.Info($\"Starting {syncType} synchronization from {source} to {destination}\", this.GetType(",
-        "recommendation": "Replace string interpolation with parameterized queries"
       }
     ],
     "hardcoded_secrets": [
@@ -581,24 +581,6 @@
       {
         "type": "Connection String with Password",
         "severity": "critical",
-        "file": "Source Code\\Sessions.Tests\\App.config",
-        "line": 5,
-        "description": "Connection String with Password found in plain text",
-        "masked_value": "Ser*******************************************************************************************",
-        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-      },
-      {
-        "type": "Connection String with Password",
-        "severity": "critical",
-        "file": "Source Code\\Sessions.Tests\\App.config",
-        "line": 6,
-        "description": "Connection String with Password found in plain text",
-        "masked_value": "Ser**************************************************************************************",
-        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-      },
-      {
-        "type": "Connection String with Password",
-        "severity": "critical",
         "file": "Source Code\\Sessions.Spa\\Web.Debug.config",
         "line": 13,
         "description": "Connection String with Password found in plain text",
@@ -617,6 +599,42 @@
       {
         "type": "Connection String with Password",
         "severity": "critical",
+        "file": "Source Code\\Sessions.Tests\\App.config",
+        "line": 5,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Ser*******************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source Code\\Sessions.Tests\\App.config",
+        "line": 6,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Ser**************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source Code\\Sessions.Spa\\Web.Release.config",
+        "line": 13,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat******************************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
+        "file": "Source Code\\Sessions.Spa\\Web.Release.config",
+        "line": 17,
+        "description": "Connection String with Password found in plain text",
+        "masked_value": "Dat*************************************************************************************************************************",
+        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
+      },
+      {
+        "type": "Connection String with Password",
+        "severity": "critical",
         "file": "Source Code\\Sessions.Spa\\bin\\KSESSIONS.dll.config",
         "line": 12,
         "description": "Connection String with Password found in plain text",
@@ -630,24 +648,6 @@
         "line": 13,
         "description": "Connection String with Password found in plain text",
         "masked_value": "Dat***********************************************************************************************************************************************************************",
-        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-      },
-      {
-        "type": "Connection String with Password",
-        "severity": "critical",
-        "file": "Source Code\\Sessions.Spa\\obj\\Release\\TransformWebConfig\\assist\\Web.config",
-        "line": 13,
-        "description": "Connection String with Password found in plain text",
-        "masked_value": "Dat******************************************************************************************************************************",
-        "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
-      },
-      {
-        "type": "Connection String with Password",
-        "severity": "critical",
-        "file": "Source Code\\Sessions.Spa\\obj\\Release\\TransformWebConfig\\assist\\Web.config",
-        "line": 17,
-        "description": "Connection String with Password found in plain text",
-        "masked_value": "Dat*************************************************************************************************************************",
         "recommendation": "Move to environment variables or secure vault (Azure Key Vault, AWS Secrets Manager)"
       }
     ],

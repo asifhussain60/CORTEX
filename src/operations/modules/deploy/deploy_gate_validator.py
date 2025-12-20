@@ -712,7 +712,7 @@ class DeployGateValidator:
         try:
             from src.operations.modules.planning.planning_utility import create_plan
             from src.operations.modules.vision_api_module import VisionAPIModule
-from src.utils.resource_resolver import get_root_path
+            from src.utils.resource_resolver import get_root_path
             
             assert callable(create_plan), "create_plan not callable"
             assert VisionAPIModule is not None, "VisionAPIModule not available"

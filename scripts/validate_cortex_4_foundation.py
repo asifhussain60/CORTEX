@@ -128,7 +128,7 @@ class FoundationValidator:
                 return
             
             # Try importing
-            from src.logging import setup_logger
+            from src.cortex_logging import setup_logger
             
             # Verify functionality
             logger = setup_logger("test_validation")

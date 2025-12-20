@@ -14,7 +14,7 @@ from dependency_injector import containers, providers
 from typing import Optional
 
 from src.config import ConfigManager
-from src.logging import setup_logger
+from src.cortex_logging import setup_logger
 from src.templates import TemplateManager
 from src.mcp import get_mcp_gateway
 

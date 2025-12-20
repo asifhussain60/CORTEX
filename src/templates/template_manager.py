@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 
 from src.config import get_config_manager
-from src.logging import setup_logger
+from src.cortex_logging import setup_logger
 from src.templates.types import ResponseTier, TemplateContext
 from src.templates.tier_selector import TierSelector
 from src.templates.section_selector import SectionSelector
