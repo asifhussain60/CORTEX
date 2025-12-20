@@ -19,11 +19,15 @@ Target Coverage: 85%+
 import pytest
 import json
 import time
+import platform
 from datetime import datetime, timedelta
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock, mock_open
 import tempfile
 import os
+
+# Windows compatibility check
+WINDOWS = platform.system() == "Windows"
 
 from src.orchestrators.planning.session_manager import (
     SessionManager,
@@ -408,6 +412,9 @@ def test_lock_session_success(session_manager, workspace_root):
 
 def test_lock_session_already_locked(session_manager, workspace_root, mock_logger):
     """Test locking already locked session."""
+    if WINDOWS:
+        pytest.skip("fcntl not available on Windows - locking uses file-based mechanism")
+    
     session = session_manager.create_session("Test", workspace_root / "test.md")
     
     # First lock succeeds
@@ -415,6 +422,7 @@ def test_lock_session_already_locked(session_manager, workspace_root, mock_logge
     assert result1 is True
     
     # Second lock fails (simulate from different process)
+    import fcntl
     with patch('fcntl.flock', side_effect=IOError("Resource locked")):
         result2 = session_manager.lock_session(f"{session.session_id}-2")
         assert result2 is False
@@ -453,10 +461,14 @@ def test_unlock_session_already_unlocked(session_manager, workspace_root):
 
 def test_lock_unlock_exception_handling(session_manager, workspace_root, mock_logger):
     """Test lock/unlock exception handling."""
+    if WINDOWS:
+        pytest.skip("fcntl not available on Windows - locking uses file-based mechanism")
+    
     session = session_manager.create_session("Test", workspace_root / "test.md")
     
     # Test lock exception - we need to patch at the right place
     # The lock_session method calls open() and fcntl.flock()
+    import fcntl
     with patch('fcntl.flock', side_effect=Exception("Lock error")):
         result = session_manager.lock_session(session.session_id)
         assert result is False

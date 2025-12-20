@@ -28,7 +28,7 @@ Integration Points:
 """
 
 import logging
-import fcntl
+import platform
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
@@ -36,6 +36,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import json
 import os
+
+# Windows compatibility: fcntl only available on Unix
+WINDOWS = platform.system() == "Windows"
+if not WINDOWS:
+    import fcntl
 
 logger = logging.getLogger(__name__)
 
@@ -332,7 +337,17 @@ class SessionManager:
             # Create lock file if doesn't exist
             lock_file.touch(exist_ok=True)
             
-            # Acquire exclusive lock (non-blocking)
+            # Windows: Simple file-based locking (fcntl unavailable)
+            if WINDOWS:
+                if lock_file.exists() and lock_file.stat().st_size > 0:
+                    self.logger.warning(f"⚠️  Session already locked: {session_id}")
+                    return False
+                lock_file.write_text(str(os.getpid()))
+                self._locks[session_id] = lock_file
+                self.logger.debug(f"🔒 Session locked (Windows): {session_id}")
+                return True
+            
+            # Unix: Use fcntl for proper file locking
             lock_fd = open(lock_file, 'w')
             fcntl.flock(lock_fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
             
@@ -365,14 +380,22 @@ class SessionManager:
             return True  # Already unlocked
         
         try:
-            lock_fd = self._locks[session_id]
-            fcntl.flock(lock_fd.fileno(), fcntl.LOCK_UN)
-            lock_fd.close()
+            lock_ref = self._locks[session_id]
             
-            # Remove lock file
-            lock_file = self.session_dir / f"{session_id}.lock"
-            if lock_file.exists():
-                lock_file.unlink()
+            # Windows: Simple file cleanup
+            if WINDOWS:
+                lock_file = self.session_dir / f"{session_id}.lock"
+                if lock_file.exists():
+                    lock_file.unlink()
+            else:
+                # Unix: Release fcntl lock
+                fcntl.flock(lock_ref.fileno(), fcntl.LOCK_UN)
+                lock_ref.close()
+                
+                # Remove lock file
+                lock_file = self.session_dir / f"{session_id}.lock"
+                if lock_file.exists():
+                    lock_file.unlink()
             
             del self._locks[session_id]
             
