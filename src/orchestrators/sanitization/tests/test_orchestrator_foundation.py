@@ -200,7 +200,7 @@ class TestOrchestratorFoundation:
         )
         
         # Force analyzer to raise an error
-        orchestrator.analyzer.analyze = Mock(side_effect=Exception("Test error"))
+        orchestrator.analyzer.scan_file_structure = Mock(side_effect=Exception("Test error"))
         
         result = orchestrator.execute()
         

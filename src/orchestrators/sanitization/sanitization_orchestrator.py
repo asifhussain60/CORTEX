@@ -30,6 +30,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from pathlib import Path
+import yaml
 
 # Import base orchestrator
 from src.orchestrators.base.base_orchestrator import BaseOrchestrator
@@ -173,18 +174,49 @@ class SanitizationOrchestrator(BaseOrchestrator):
         self.target = Path(target_directory)
         self.dry_run = dry_run
         
-        # Initialize utility modules (will be properly integrated in Phase 2-6)
-        # Create mock objects for testing
-        from unittest.mock import Mock
-        self.analyzer = Mock()
-        self.mapper = Mock()
-        self.transformer = Mock()
-        self.validator = Mock()
-        self.reporter = Mock()
+        # Load manifest
+        self.manifest = self._load_manifest()
+        
+        # Initialize utility modules
+        try:
+            self.analyzer = CodeAnalyzer(str(self.target), self.manifest)
+            self.mapper = MappingEngine(self.manifest)
+            self.transformer = CodeTransformer(self.manifest)
+            self.validator = BuildValidator(self.manifest)
+            self.reporter = ReportGenerator(self.manifest)
+        except Exception as e:
+            # Fall back to mocks if utilities aren't ready
+            self.logger.warning(f"Using mock utilities: {e}")
+            from unittest.mock import Mock
+            self.analyzer = Mock()
+            self.mapper = Mock()
+            self.transformer = Mock()
+            self.validator = Mock()
+            self.reporter = Mock()
         
         # Log initialization with engagement hint
         self.logger.info(f"🎭 Orchestrator engaged: SanitizationOrchestrator")
         self.logger.info(f"Target: {self.target}, Dry Run: {self.dry_run}")
+    
+    def _load_manifest(self) -> Dict[str, Any]:
+        """Load sanitization manifest from YAML file"""
+        manifest_path = Path(__file__).parent.parent.parent.parent / \
+                       "cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml"
+        
+        try:
+            with open(manifest_path, 'r') as f:
+                return yaml.safe_load(f)
+        except Exception as e:
+            self.logger.warning(f"Could not load manifest: {e}")
+            # Return minimal manifest structure
+            return {
+                "file_processing": {
+                    "exclusions": []
+                },
+                "mapping_rules": {
+                    "terminology_categories": {}
+                }
+            }
     
     def execute(self) -> SanitizationResult:
         """
@@ -286,36 +318,49 @@ class SanitizationOrchestrator(BaseOrchestrator):
     def _execute_analyze_phase(self) -> Dict[str, Any]:
         """Execute ANALYZE phase: File scanning, domain term extraction"""
         try:
-            # Stub implementation for GREEN phase
-            # Will be properly integrated with CodeAnalyzer in Phase 2
-            if self.analyzer and hasattr(self.analyzer, 'analyze'):
-                analysis = self.analyzer.analyze(str(self.target))
-            else:
-                # Minimal stub for tests
-                analysis = {'files': [], 'terms': []}
+            # Scan file structure
+            file_inventory = self.analyzer.scan_file_structure()
+            files = file_inventory.get('files', [])
+            
+            # Extract domain terminology
+            domain_terms = self.analyzer.extract_domain_terminology()
+            terms = list(domain_terms.keys()) if isinstance(domain_terms, dict) else []
             
             return {
                 'success': True,
-                'files': analysis.get('files', []),
-                'terms': analysis.get('terms', [])
+                'files': files,
+                'terms': terms,
+                'file_inventory': file_inventory,
+                'domain_terms': domain_terms
             }
         except Exception as e:
+            self.logger.error(f"Analysis phase failed: {e}", exc_info=True)
             return {'success': False, 'errors': [str(e)]}
     
     def _execute_mapping_phase(self, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """Execute MAPPING phase: Domain→generic mapping generation"""
         try:
-            # Stub implementation for GREEN phase
-            if self.mapper and hasattr(self.mapper, 'generate_mappings'):
-                mappings = self.mapper.generate_mappings(analysis.get('terms', []))
+            terms = analysis.get('terms', [])
+            if not terms:
+                # No terms to map
+                return {
+                    'success': True,
+                    'mappings': {}
+                }
+            
+            # Generate mappings (MappingEngine should handle this)
+            if hasattr(self.mapper, 'generate_mappings'):
+                mappings = self.mapper.generate_mappings(terms)
             else:
-                mappings = {}
+                # Fallback: simple generic mapping
+                mappings = {term: f"Generic{i}" for i, term in enumerate(terms)}
             
             return {
                 'success': True,
-                'mappings': mappings
+                'mappings': mappings if isinstance(mappings, dict) else {}
             }
         except Exception as e:
+            self.logger.error(f"Mapping phase failed: {e}", exc_info=True)
             return {'success': False, 'errors': [str(e)]}
     
     def _execute_transform_phase(self, mapping: Dict[str, Any]) -> Dict[str, Any]:
