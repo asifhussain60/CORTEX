@@ -24,6 +24,14 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+import uuid
+
+# Import adaptive execution components
+from src.operations.modules.orchestration.adaptive_execution import (
+    ExecutionMode,
+    AdaptiveExecutionConfig,
+    SafetyGuardrail
+)
 
 
 class OrchestratorStatus(Enum):
@@ -114,7 +122,8 @@ class BaseOrchestrator(ABC):
         Args:
             config: Orchestrator configuration dictionary
                    Must contain at least: name, version
-                   Optional: logger_name, log_level, brain_config, template_config
+                   Optional: logger_name, log_level, brain_config, template_config,
+                            execution_mode, adaptive_config
         """
         self.config = config
         self.name = config.get("name", self.__class__.__name__)
@@ -142,6 +151,19 @@ class BaseOrchestrator(ABC):
         # Will be replaced with: self.template_manager = TemplateManager(config.get("template_config", {}))
         self.template_manager = None  # Placeholder for Phase 1
         
+        # Adaptive execution configuration
+        self.execution_mode = config.get("execution_mode", ExecutionMode.SUPERVISED)
+        adaptive_config_dict = config.get("adaptive_config", {})
+        adaptive_config = AdaptiveExecutionConfig(**adaptive_config_dict) if adaptive_config_dict else AdaptiveExecutionConfig()
+        self.safety_guardrail = SafetyGuardrail(adaptive_config)
+        
+        # Auto-rollback enabled for AUTONOMOUS mode
+        self.auto_rollback_enabled = (self.execution_mode == ExecutionMode.AUTONOMOUS)
+        
+        # Checkpoint management
+        self._checkpoints: List[Dict[str, Any]] = []
+        self.current_phase = None
+        
         # Execution state
         self.status = OrchestratorStatus.NOT_STARTED
         self.start_time: Optional[datetime] = None
@@ -150,6 +172,8 @@ class BaseOrchestrator(ABC):
         self.warnings: List[str] = []
         
         self.logger.info(f"Initialized {self.name} v{self.version}")
+        self.logger.debug(f"Execution mode: {self.execution_mode.value if isinstance(self.execution_mode, ExecutionMode) else self.execution_mode}")
+        self.logger.debug(f"Auto-rollback: {'enabled' if self.auto_rollback_enabled else 'disabled'}")
     
     @abstractmethod
     def execute(self) -> OrchestratorResult:
@@ -230,6 +254,75 @@ class BaseOrchestrator(ABC):
             should_retry=False
         )
     
+    def create_checkpoint(self, phase: str, state: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Create a checkpoint of current execution state.
+        
+        Args:
+            phase: Current phase name
+            state: Current state to save
+        
+        Returns:
+            Checkpoint dictionary with id, phase, state, and timestamp
+        """
+        checkpoint = {
+            "checkpoint_id": str(uuid.uuid4()),
+            "phase": phase,
+            "state": state.copy(),
+            "timestamp": datetime.now().isoformat()
+        }
+        self._checkpoints.append(checkpoint)
+        self.logger.debug(f"Checkpoint created for phase '{phase}': {checkpoint['checkpoint_id']}")
+        return checkpoint
+    
+    def restore_checkpoint(self, checkpoint_id: str) -> bool:
+        """
+        Restore orchestrator state from a checkpoint.
+        
+        Args:
+            checkpoint_id: ID of checkpoint to restore
+        
+        Returns:
+            True if checkpoint restored successfully, False otherwise
+        """
+        for checkpoint in self._checkpoints:
+            if checkpoint["checkpoint_id"] == checkpoint_id:
+                self.current_phase = checkpoint["phase"]
+                self.logger.info(f"Restored checkpoint {checkpoint_id} for phase '{checkpoint['phase']}'")
+                return True
+        
+        self.logger.warning(f"Checkpoint {checkpoint_id} not found")
+        return False
+    
+    def list_checkpoints(self) -> List[Dict[str, Any]]:
+        """
+        Get list of all saved checkpoints.
+        
+        Returns:
+            List of checkpoint dictionaries
+        """
+        return self._checkpoints.copy()
+    
+    def validate_action(self, action: Dict[str, Any]) -> ValidationResult:
+        """
+        Validate an action using safety guardrails.
+        
+        Args:
+            action: Action dictionary to validate
+        
+        Returns:
+            ValidationResult with validation outcome
+        """
+        validation = self.safety_guardrail.validate_action(action)
+        
+        if not validation.get("allowed", True):
+            return ValidationResult(
+                valid=False,
+                errors=[f"Unsafe action: {validation.get('reason', 'Unknown reason')}"]
+            )
+        
+        return ValidationResult(valid=True)
+    
     def run(self) -> OrchestratorResult:
         """
         Execute orchestrator with full lifecycle (validation, execution, error handling).
@@ -239,6 +332,7 @@ class BaseOrchestrator(ABC):
         - Timing
         - Error handling
         - Logging
+        - Auto-rollback (if enabled)
         
         Returns:
             OrchestratorResult with execution details
@@ -270,11 +364,25 @@ class BaseOrchestrator(ABC):
             self.status = OrchestratorStatus.FAILED
             self.end_time = datetime.now()
             
+            # Auto-rollback if enabled
+            rolled_back = False
+            checkpoint_restored = None
+            if self.auto_rollback_enabled and len(self._checkpoints) > 0:
+                last_checkpoint = self._checkpoints[-1]
+                if self.restore_checkpoint(last_checkpoint["checkpoint_id"]):
+                    rolled_back = True
+                    checkpoint_restored = last_checkpoint["checkpoint_id"]
+                    self.logger.info(f"Auto-rollback triggered: Restored checkpoint {checkpoint_restored}")
+            
             return OrchestratorResult(
                 status=OrchestratorStatus.FAILED,
                 success=False,
                 message=f"Orchestrator failed: {error_result.error_message}",
                 errors=[error_result.error_message],
+                data={
+                    "rolled_back": rolled_back,
+                    "checkpoint_restored": checkpoint_restored
+                },
                 execution_time_seconds=(self.end_time - self.start_time).total_seconds()
             )
     

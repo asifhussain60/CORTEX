@@ -36,12 +36,18 @@ class AdaptiveExecutionConfig:
     default_mode: ExecutionMode = ExecutionMode.SUPERVISED
     enable_auto_rollback: bool = True
     validation_gates: bool = True
-    safety_critical_keywords: List[str] = field(default_factory=lambda: [
+    safety_keywords: List[str] = field(default_factory=lambda: [
         "delete", "drop", "truncate", "production", "destroy"
     ])
+    safety_critical_keywords: List[str] = field(default_factory=list)  # Legacy support, will use safety_keywords
     high_risk_keywords: List[str] = field(default_factory=lambda: [
         "database", "migration", "deploy", "publish"
     ])
+    
+    def __post_init__(self):
+        """Merge safety_critical_keywords into safety_keywords for backwards compatibility."""
+        if self.safety_critical_keywords:
+            self.safety_keywords = list(set(self.safety_keywords + self.safety_critical_keywords))
 
 
 class ExecutionStrategy(ABC):
@@ -435,8 +441,9 @@ class SafetyGuardrail:
         Returns:
             Validation result with allowed flag
         """
-        action_text = str(action.get("action", "")).lower()
-        path = str(action.get("path", "")).lower()
+        # Support both "action" and "type" keys
+        action_text = str(action.get("action") or action.get("type", "")).lower()
+        path = str(action.get("path") or action.get("target", "")).lower()
         combined = f"{action_text} {path}"
         
         # Check for dangerous patterns
@@ -447,6 +454,18 @@ class SafetyGuardrail:
                     "reason": f"Dangerous action detected: {pattern}",
                     "action": action_text
                 }
+        
+        # Check for safety-critical keywords (simple keyword matching)
+        for keyword in self.config.safety_keywords:
+            if keyword.lower() in action_text or keyword.lower() in path:
+                # Extra strict for production-related actions
+                if "production" in path or "prod" in path or keyword in ["delete", "drop", "truncate"]:
+                    return {
+                        "allowed": False,
+                        "reason": f"Unsafe action: '{keyword}' detected in action or target",
+                        "action": action_text,
+                        "path": path
+                    }
         
         # Check for safety-critical keywords in critical paths
         if path == "/" or path.startswith("/system"):
