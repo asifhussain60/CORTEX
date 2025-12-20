@@ -189,6 +189,29 @@ class ADOOrchestrator(BaseOrchestrator):
     MEDIUM_COMPLEXITY_MIN_LENGTH = 30
     MEDIUM_COMPLEXITY_MAX_LENGTH = 100
     
+    # DoR (Definition of Ready) Constants
+    DOR_PROMPT_ACCEPTANCE_CRITERIA = (
+        "What are the acceptance criteria for this work? "
+        "(Use Given/When/Then format for clarity. Example: "
+        "'Given a user is logged in, When they click submit, Then the form is validated')"
+    )
+    
+    DOR_PROMPT_ASSUMPTIONS = (
+        "What assumptions are we making? "
+        "(e.g., infrastructure availability, data access, third-party services, user permissions)"
+    )
+    
+    DOR_PROMPT_CONSTRAINTS = (
+        "What constraints apply to this work? "
+        "(e.g., timeline deadlines, technology limitations, compliance requirements, budget)"
+    )
+    
+    # DoR Completeness Weights (must sum to 100)
+    DOR_WEIGHT_ACCEPTANCE_CRITERIA = 50  # Required - core requirements
+    DOR_WEIGHT_ASSUMPTIONS = 25           # Optional - risk identification
+    DOR_WEIGHT_CONSTRAINTS = 25           # Optional - boundary definition
+    DOR_COMPLETENESS_THRESHOLD = 75       # Minimum score for complete DoR
+    
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
         Initialize ADO Orchestrator
@@ -360,10 +383,64 @@ class ADOOrchestrator(BaseOrchestrator):
             # ===== PHASE 2: VALIDATION =====
             self._transition_phase(ADOPhase.DISCOVERY, ADOPhase.VALIDATION, logs)
             
-            # - Interactive DoR workflow
-            # - ADO authentication check
-            # - Threat modeling (conditional on complexity)
-            logs.append("✅ Validation phase placeholder")
+            logs.append(f"📋 Starting DoR (Definition of Ready) workflow")
+            
+            # DoR data structure:
+            # {
+            #     "prompts": Dict[str, str],           # DoR prompts for user guidance
+            #     "acceptance_criteria": List[str],    # AC from user (Given/When/Then format encouraged)
+            #     "assumptions": List[str],            # Assumptions taken for granted
+            #     "constraints": List[str],            # Limitations/boundaries
+            #     "is_complete": bool,                 # DoR completeness flag
+            #     "completeness_percentage": int       # 0-100 score
+            # }
+            dor_data: Dict[str, Any] = {}
+            
+            # Generate DoR prompts
+            dor_prompts = self._generate_dor_prompts(feature_name)
+            dor_data["prompts"] = dor_prompts
+            logs.append(f"📝 Generated DoR prompts (AC, assumptions, constraints)")
+            
+            # Collect acceptance criteria
+            acceptance_criteria = kwargs.get("acceptance_criteria", [])
+            dor_data["acceptance_criteria"] = acceptance_criteria
+            if acceptance_criteria:
+                logs.append(f"✅ Collected {len(acceptance_criteria)} acceptance criteria")
+            else:
+                warning_msg = "⚠️  No acceptance criteria provided"
+                warnings.append(warning_msg)
+                logs.append(warning_msg)
+            
+            # Collect assumptions
+            assumptions = kwargs.get("assumptions", [])
+            dor_data["assumptions"] = assumptions
+            if assumptions:
+                logs.append(f"✅ Collected {len(assumptions)} assumptions")
+                if len(assumptions) > 5:
+                    warnings.append(f"⚠️  High number of assumptions ({len(assumptions)}) - may indicate uncertainty")
+            else:
+                logs.append("ℹ️  No assumptions provided (optional)")
+            
+            # Collect constraints
+            constraints = kwargs.get("constraints", [])
+            dor_data["constraints"] = constraints
+            if constraints:
+                logs.append(f"✅ Collected {len(constraints)} constraints")
+            else:
+                logs.append("ℹ️  No constraints provided (optional)")
+            
+            # Validate DoR completeness
+            completeness = self._calculate_dor_completeness(acceptance_criteria, assumptions, constraints)
+            dor_data["is_complete"] = completeness["is_complete"]
+            dor_data["completeness_percentage"] = completeness["percentage"]
+            
+            if dor_data["is_complete"]:
+                logs.append(f"✅ DoR is complete ({completeness['percentage']}%)")
+            else:
+                warning_msg = f"⚠️  DoR incomplete ({completeness['percentage']}%) - consider adding more details"
+                warnings.append(warning_msg)
+                logs.append(warning_msg)
+            
             
             # ===== PHASE 3: GENERATION =====
             self._transition_phase(ADOPhase.VALIDATION, ADOPhase.GENERATION, logs)
@@ -413,7 +490,10 @@ class ADOOrchestrator(BaseOrchestrator):
                 message=f"ADO planning workflow completed for '{feature_name}' (test mode)",
                 logs=logs,
                 warnings=warnings,
-                data={"discovery": discovery_data}
+                data={
+                    "discovery": discovery_data,
+                    "dor": dor_data
+                }
             )
             
         except Exception as e:
@@ -533,3 +613,92 @@ class ADOOrchestrator(BaseOrchestrator):
             "ADO duplicate detection integration pending (Task 6). "
             "Will use ADO REST API for work item search."
         )
+
+    def _generate_dor_prompts(self, feature_name: str) -> Dict[str, str]:
+        """
+        Generate DoR (Definition of Ready) prompts for user guidance
+        
+        Creates structured prompts to collect acceptance criteria, assumptions,
+        and constraints before work item generation. Uses class-level constants
+        for prompt text to ensure consistency and maintainability.
+        
+        Args:
+            feature_name: Feature name to contextualize prompts (currently unused)
+            
+        Returns:
+            Dict[str, str]: Dictionary with prompt keys:
+                - acceptance_criteria: Prompt for AC (encourages Given/When/Then format)
+                - assumptions: Prompt for things taken for granted
+                - constraints: Prompt for limitations/boundaries
+                
+        Implementation Notes:
+            - Prompts defined in class constants (DOR_PROMPT_*)
+            - AC prompt encourages Given/When/Then format for testability
+            - Assumptions prompt provides examples (infrastructure, data, etc.)
+            - Constraints prompt covers timeline, technology, and compliance
+            - Future enhancement: Contextualize prompts based on feature_name/complexity
+        """
+        return {
+            "acceptance_criteria": self.DOR_PROMPT_ACCEPTANCE_CRITERIA,
+            "assumptions": self.DOR_PROMPT_ASSUMPTIONS,
+            "constraints": self.DOR_PROMPT_CONSTRAINTS
+        }
+
+    def _calculate_dor_completeness(
+        self, 
+        acceptance_criteria: List[str], 
+        assumptions: List[str], 
+        constraints: List[str]
+    ) -> Dict[str, Any]:
+        """
+        Calculate DoR (Definition of Ready) completeness percentage
+        
+        Validates that sufficient requirements have been collected before
+        proceeding to work item generation. Uses weighted scoring system
+        defined in class constants for maintainability.
+        
+        Args:
+            acceptance_criteria: List of acceptance criteria (required)
+            assumptions: List of assumptions (optional)
+            constraints: List of constraints (optional)
+            
+        Returns:
+            Dict[str, Any]: Completeness result with keys:
+                - is_complete: bool - True if score >= DOR_COMPLETENESS_THRESHOLD
+                - percentage: int - Completeness score (0-100)
+                
+        Scoring System (from class constants):
+            - Acceptance Criteria: DOR_WEIGHT_ACCEPTANCE_CRITERIA (50%)
+            - Assumptions: DOR_WEIGHT_ASSUMPTIONS (25%)
+            - Constraints: DOR_WEIGHT_CONSTRAINTS (25%)
+            
+        Completeness Threshold:
+            - Score >= DOR_COMPLETENESS_THRESHOLD: DoR complete, workflow proceeds
+            - Score < threshold: Warning generated, workflow continues in test mode
+            
+        Implementation Notes:
+            - Weights defined in class constants for easy tuning
+            - AC is required (highest weight) - minimum viable DoR
+            - Assumptions/constraints optional but recommended
+            - Threshold ensures at least AC + 1 optional field
+            - Future enhancement: Adjust weights dynamically based on complexity/risk
+        """
+        score = 0
+        
+        # Acceptance criteria required (weight from constant)
+        if acceptance_criteria and len(acceptance_criteria) > 0:
+            score += self.DOR_WEIGHT_ACCEPTANCE_CRITERIA
+        
+        # Assumptions optional (weight from constant)
+        if assumptions and len(assumptions) > 0:
+            score += self.DOR_WEIGHT_ASSUMPTIONS
+        
+        # Constraints optional (weight from constant)
+        if constraints and len(constraints) > 0:
+            score += self.DOR_WEIGHT_CONSTRAINTS
+        
+        return {
+            "is_complete": score >= self.DOR_COMPLETENESS_THRESHOLD,
+            "percentage": score
+        }
+
