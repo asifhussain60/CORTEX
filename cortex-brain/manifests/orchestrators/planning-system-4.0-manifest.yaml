@@ -1,16 +1,21 @@
 # Planning System 4.0 Orchestrator Manifest
 # Enhanced planning with tiered routing, pre-planning discovery, visual progress tracking,
-# and Phase 2.5 agentic enhancements (multi-agent collaboration, evaluation, learning)
+# Phase 2.5 agentic enhancements (multi-agent collaboration, evaluation, learning),
+# and token-optimized hierarchical plan structure
 #
-# ⚠️ SYNC REQUIREMENT: When this file is updated, MASTER-PLAN.md MUST also be updated
-# Linked Document: cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
+# ⚠️ SYNC REQUIREMENT: When this file is updated, plan structure files MUST also be updated
+# Linked Documents:
+#   - Status: cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md
+#   - Master Hub: cortex-brain/documents/planning/active/CORTEX-3.0-4.0/00-MASTER-PLAN.md
+#   - Phases: cortex-brain/documents/planning/active/CORTEX-3.0-4.0/phases/
+#   - Metadata: cortex-brain/documents/planning/active/CORTEX-3.0-4.0/metadata/plan-metadata.yaml
 # Update Policy: Changes to planning features, phases, or capabilities require synchronization
 #
-# Version: 4.0.0
+# Version: 4.0.1 (Token-Optimized Structure)
 # Author: CORTEX Development Team
 # Created: 2025-12-15
-# Updated: 2025-12-19 (Phase 2.5 Agentic Enhancements)
-# Status: ACTIVE - Latest planning system
+# Updated: 2025-12-20 (Token-Optimized Hierarchical Structure)
+# Status: ACTIVE - Latest planning system with 95% token reduction
 # Orchestrator: src/operations/modules/orchestration/planning_orchestrator.py
 
 schema_version: "1.0"
@@ -21,17 +26,29 @@ schema_version: "1.0"
 
 metadata:
   orchestrator_name: "planning_orchestrator"
-  version: "4.0.0"
-  description: "Tiered planning system with intelligent routing, visual progress tracking, and Phase 2.5 agentic enhancements (multi-agent, evaluation, learning)"
+  version: "4.0.1"
+  description: "Tiered planning system with intelligent routing, visual progress tracking, Phase 2.5 agentic enhancements, and token-optimized hierarchical structure (95% reduction)"
   category: "planning"
   deployment_tier: "cortex"
   status: "active"
-  last_updated: "2025-12-19"
+  last_updated: "2025-12-20"
   maintainer: "CORTEX Planning Team"
   sync_requirements:
-    linked_document: "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md"
-    update_policy: "Bidirectional sync required - changes to either file must be reflected in the other"
-    last_synced: "2025-12-19"
+    linked_documents:
+      status: "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md"
+      master_hub: "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/00-MASTER-PLAN.md"
+      phases: "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/phases/"
+      metadata: "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/metadata/plan-metadata.yaml"
+      smart_loader: "src/utils/smart_plan_loader.py"
+    update_policy: "Bidirectional sync required - changes to planning features must be reflected in all structure files"
+    last_synced: "2025-12-20"
+  token_optimization:
+    enabled: true
+    status_only_tokens: 400
+    master_hub_tokens: 1200
+    phase_specific_tokens: 2500
+    reduction_percent: 95
+    pattern_version: "1.0"
   related_orchestrators:
     - "maintenance_orchestrator"
     - "contextual_review_orchestrator"
@@ -635,8 +652,8 @@ configuration:
 # 
 # ⚠️ UPDATE REQUIREMENT: When completing tasks, update BOTH:
 #   1. This section (phase_1_status below)
-#   2. MASTER-PLAN.md progress tracker (lines 22-110)
-#   3. Commit BOTH files together (see MASTER-PLAN.md Git Commit Policy)
+#   2. CORTEX4-STATUS.md progress tracker (visual status tracker)
+#   3. Commit BOTH files together (see 00-MASTER-PLAN.md Git Commit Policy)
 # ========================================
 
 phase_1_status:
@@ -649,9 +666,9 @@ phase_1_status:
   update_instructions: |
     After completing ANY task:
     1. Update task status in this file (⏸️ → ✅)
-    2. Update MASTER-PLAN.md progress tracker
+    2. Update CORTEX4-STATUS.md progress tracker
     3. git add cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml
-    4. git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md
+    4. git add cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md
     5. git commit -m "📊 Update Progress: [Task completed]"
     6. git push origin CORTEX-4.0
   task_details:
@@ -711,7 +728,8 @@ version_history:
     author: "CORTEX Planning Team"
     references:
       - "cortex-brain/documents/analysis/AGENTIC-AI-CORTEX-INTEGRATION-ANALYSIS.md"
-      - "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/MASTER-PLAN.md"
+      - "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/00-MASTER-PLAN.md"
+      - "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md"
 
   - version: "3.1.0"
     date: "2025-12-15"

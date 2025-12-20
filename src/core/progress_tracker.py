@@ -1,6 +1,6 @@
 """
 CORTEX 4.0 Migration Progress Tracker
-Updates MASTER-PLAN.md status visualization after phase completion.
+Updates CORTEX4-STATUS.md status visualization after phase completion.
 
 Features:
 - Progress bar visualization updates
@@ -9,7 +9,7 @@ Features:
 - AUTO-DOCUMENTATION: Triggers DocumentationOrchestrator on completions
 
 Author: Asif Hussain
-Version: 2.0 (Added auto-documentation hooks)
+Version: 3.0 (Token-optimized structure - CORTEX4-STATUS.md)
 """
 
 import re
@@ -20,9 +20,9 @@ import logging
 
 
 class ProgressTracker:
-    """Update MASTER-PLAN.md progress visualization."""
+    """Update CORTEX4-STATUS.md progress visualization."""
     
-    MASTER_PLAN_PATH = Path(__file__).parent.parent.parent / "cortex-brain" / "documents" / "planning" / "active" / "CORTEX-3.0-4.0" / "MASTER-PLAN.md"
+    MASTER_PLAN_PATH = Path(__file__).parent.parent.parent / "cortex-brain" / "documents" / "planning" / "active" / "CORTEX-3.0-4.0" / "CORTEX4-STATUS.md"
     
     PHASE_NAMES = {
         "0": "Pre-Migration Cleanup",
@@ -65,7 +65,7 @@ class ProgressTracker:
         orchestrator_name: Optional[str] = None
     ) -> bool:
         """
-        Update MASTER-PLAN.md progress tracker.
+        Update CORTEX4-STATUS.md progress tracker.
         
         Args:
             phase: Phase number (0, 1, 1.5, 2, 3, 4, 5, 6)
@@ -81,7 +81,7 @@ class ProgressTracker:
             True if update successful
         """
         if not cls.MASTER_PLAN_PATH.exists():
-            print(f"❌ MASTER-PLAN.md not found at {cls.MASTER_PLAN_PATH}")
+            print(f"❌ CORTEX4-STATUS.md not found at {cls.MASTER_PLAN_PATH}")
             return False
         
         content = cls.MASTER_PLAN_PATH.read_text(encoding="utf-8")
@@ -147,7 +147,7 @@ class ProgressTracker:
         
         # Write updated content
         cls.MASTER_PLAN_PATH.write_text(content, encoding="utf-8")
-        print(f"✅ Updated MASTER-PLAN.md progress: Phase {phase} = {completion_percentage}%")
+        print(f"✅ Updated CORTEX4-STATUS.md progress: Phase {phase} = {completion_percentage}%")
         
         # AUTO-DOCUMENTATION: Trigger if completion detected
         if auto_document and orchestrator_name:

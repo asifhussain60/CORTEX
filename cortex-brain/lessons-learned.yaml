@@ -1,0 +1,43 @@
+version: '1.0'
+last_updated: '2025-12-20T06:13:02.802595'
+total_lessons: 3
+lessons:
+- id: orchestration-general-001
+  title: Operation 'Environment Setup' had 1 failed modules
+  category: orchestration
+  subcategory: general
+  severity: high
+  date: '2025-12-20'
+  problem: Operation 'Environment Setup' had 1 failed modules
+  symptoms:
+  - 'project_validation: Project validation failed: Required directories missing'
+  confidence: 0.8
+  tags:
+  - operation-failure
+  - environment-setup
+- id: orchestration-general-002
+  title: Operation 'CORTEX Documentation' had 1 failed modules
+  category: orchestration
+  subcategory: general
+  severity: high
+  date: '2025-12-20'
+  problem: Operation 'CORTEX Documentation' had 1 failed modules
+  symptoms:
+  - Issue detected during operation
+  confidence: 0.8
+  tags:
+  - operation-failure
+  - cortex-documentation
+- id: orchestration-general-003
+  title: Operation 'CORTEX Maintenance' had 1 failed modules
+  category: orchestration
+  subcategory: general
+  severity: high
+  date: '2025-12-20'
+  problem: Operation 'CORTEX Maintenance' had 1 failed modules
+  symptoms:
+  - Issue detected during operation
+  confidence: 0.8
+  tags:
+  - operation-failure
+  - cortex-maintenance

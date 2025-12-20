@@ -92,7 +92,7 @@ migrations:
     new_path: src/orchestration_4_0/orchestrators/execution/execution_orchestrator.py
     old_path: src/orchestrators/execution/execution_orchestrator.py
     activated_in:
-      - MASTER-PLAN.md (milestone marker)
+      - CORTEX4-STATUS.md (milestone marker)
     deleted:
       - status: COMPLETE
         paths:
@@ -106,7 +106,7 @@ migrations:
     new_path: src/orchestration_4_0/orchestrators/documentation/documentation_orchestrator.py
     old_path: src/orchestrators/documentation/
     activated_in:
-      - MASTER-PLAN.md (milestone marker)
+      - CORTEX4-STATUS.md (milestone marker)
     deleted:
       - status: COMPLETE
         paths:

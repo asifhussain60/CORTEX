@@ -1,0 +1,164 @@
+# CORTEX 3.0 → 4.0 Migration Plan Metadata
+# Purpose: Machine-readable metadata for smart plan loading and token optimization
+# Version: 1.0
+# Created: 2025-12-20
+# Updated: 2025-12-20
+
+plan_info:
+  name: "CORTEX-3.0-4.0-Migration"
+  version: "1.5"
+  author: "Asif Hussain"
+  created: "2025-12-17"
+  updated: "2025-12-20"
+  status: "APPROVED"
+  branch_strategy: "CORTEX-3.0 → CORTEX-4.0"
+  
+  # Token optimization metrics
+  original_size_lines: 7283
+  original_size_tokens: ~20000
+  optimized_size_tokens: ~400  # Status only
+  token_reduction_percent: 95
+
+structure:
+  hub_files:
+    status: "CORTEX4-STATUS.md"            # Tier 1: Visual tracker (~150 lines, ~400 tokens)
+    master: "00-MASTER-PLAN.md"            # Tier 2: Overview (~300 lines, ~800 tokens)
+  
+  phase_directory: "phases/"               # Tier 3: Phase details
+  worker_directory: "workers/"             # Tier 4: Granular sub-tasks
+  metadata_directory: "metadata/"          # YAML metadata files
+  archive_directory: "archive/"            # Completed work
+  
+  phases:
+    - id: "01"
+      name: "Pre-Migration Cleanup"
+      status: "COMPLETE"
+      file: "phases/phase-01-pre-migration-cleanup.md"
+      estimated_tokens: 1500
+      weeks: ["Week 0"]
+      
+    - id: "02"
+      name: "Autonomous Execution Framework"
+      status: "COMPLETE"
+      file: "phases/phase-02-autonomous-execution.md"
+      estimated_tokens: 2000
+      weeks: ["Week 1 Days 1-3"]
+      
+    - id: "03"
+      name: "Foundation"
+      status: "COMPLETE"
+      file: "phases/phase-03-foundation.md"
+      estimated_tokens: 3500
+      weeks: ["Week 1", "Week 2", "Week 3"]
+      
+    - id: "04"
+      name: "Documentation & Visualization"
+      status: "COMPLETE"
+      file: "phases/phase-04-documentation-visualization.md"
+      estimated_tokens: 1800
+      weeks: ["Week 7 Days 4-5"]
+      
+    - id: "04.5"
+      name: "Documentation Generation"
+      status: "COMPLETE"
+      file: "phases/phase-04.5-documentation-generation.md"
+      estimated_tokens: 1200
+      weeks: ["Week 8 Day 4"]
+      
+    - id: "05"
+      name: "Brain + Agentic AI"
+      status: "IN_PROGRESS"
+      file: "phases/phase-05-brain-agentic-ai.md"
+      estimated_tokens: 4500
+      weeks: ["Week 2", "Week 4-10", "Week 14-15"]
+      parallel: true
+      
+    - id: "06"
+      name: "Orchestrator Consolidation"
+      status: "IN_PROGRESS"
+      file: "phases/phase-06-orchestrator-consolidation.md"
+      estimated_tokens: 5000
+      weeks: ["Week 7-14"]
+      current_week: "Week 9"
+      
+    - id: "07"
+      name: "Operations Simplification"
+      status: "NOT_STARTED"
+      file: "phases/phase-07-operations-simplification.md"
+      estimated_tokens: 2500
+      weeks: ["Week 15-17"]
+      
+    - id: "08"
+      name: "Testing & Validation"
+      status: "NOT_STARTED"
+      file: "phases/phase-08-testing-validation.md"
+      estimated_tokens: 2200
+      weeks: ["Week 18-20"]
+      
+    - id: "09"
+      name: "Documentation Finalization"
+      status: "NOT_STARTED"
+      file: "phases/phase-09-documentation-finalization.md"
+      estimated_tokens: 1500
+      weeks: ["Week 21"]
+      
+    - id: "10"
+      name: "Knowledge Library Expansion"
+      status: "IN_PROGRESS"
+      file: "phases/phase-10-knowledge-library.md"
+      estimated_tokens: 4000
+      weeks: ["Week 22-37"]
+      parallel: true
+      current_week: "Week 22"
+
+progress:
+  overall_percent: 80
+  current_phase: "Phase 6"
+  current_week: "Week 9 Day 1"
+  phases_complete: 4.5
+  total_phases: 10
+  orchestrators_migrated: 4
+  total_orchestrators: 16
+  
+  recent_milestone: "Planning System Core MVP Complete - 5,363 LOC, 138/138 tests, Windows compatible"
+  recent_date: "2025-12-20"
+
+# Smart loading queries (for orchestrator intelligence)
+query_routing:
+  status_only:
+    keywords: ["status", "summary", "progress", "overall"]
+    load: ["CORTEX4-STATUS.md"]
+    estimated_tokens: 400
+    
+  architecture:
+    keywords: ["architecture", "dependencies", "structure", "design"]
+    load: ["CORTEX4-STATUS.md", "00-MASTER-PLAN.md"]
+    estimated_tokens: 1200
+    
+  phase_specific:
+    pattern: "phase [0-9]+"
+    load: ["CORTEX4-STATUS.md", "phases/phase-{id}-*.md"]
+    estimated_tokens: ~2500
+    
+  week_specific:
+    pattern: "week [0-9]+"
+    load: ["CORTEX4-STATUS.md", "workers/phase-*/week-*.md"]
+    estimated_tokens: ~1000
+    
+  default:
+    load: ["CORTEX4-STATUS.md", "00-MASTER-PLAN.md"]
+    estimated_tokens: 1200
+
+# Integration points
+integration:
+  manifest_file: "cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml"
+  sync_required: true
+  smart_loader: "src/utils/smart_plan_loader.py"
+  plan_folder_manager: "src/workflows/plan_folder_manager.py"
+  plan_executor: "src/orchestrators/planning/plan_executor.py"
+
+# Template for future complex plans
+template:
+  standard: true
+  reusable: true
+  applies_to: ["planning-system", "ado-planning", "migration-plans", "architecture-plans"]

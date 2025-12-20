@@ -1,4 +1,52 @@
 operations:
+  system_integrity:
+    name: System Integrity
+    description: Comprehensive system validation and auto-fix - validates master plan
+      alignment, runs tests, checks docs, organizes files, repairs links, removes
+      legacy artifacts
+    deployment_tier: admin
+    execution_method: cli_wrapper
+    cli_script: scripts/cli_wrappers/system_integrity_wrapper.py
+    natural_language:
+    - system integrity
+    - validate system
+    - check integrity
+    - integrity check
+    - validate cortex
+    - system validation
+    - integrity scan
+    - check system health
+    category: system
+    modules:
+    - system_integrity_orchestrator
+    profiles:
+      full:
+        description: "Full 8-phase integrity check (analyze \u2192 tests \u2192 docs\
+          \ \u2192 organize \u2192 repair links \u2192 cleanup \u2192 manifests \u2192\
+          \ report)"
+        modules:
+        - system_integrity_orchestrator
+      check_only:
+        description: Report issues without auto-fix
+        modules:
+        - system_integrity_orchestrator
+      quick:
+        description: Skip tests and legacy cleanup
+        modules:
+        - system_integrity_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: 8-phase orchestrator with master plan alignment, test validation, documentation
+        completeness, file organization, broken link repair, legacy cleanup, manifest
+        validation, and comprehensive reporting with auto-fix
+    examples:
+    - system integrity
+    - validate system
+    - check integrity
+    - cortex validate
   refine:
     name: Refinement
     description: Holistic CORTEX system refinement with automated discovery and enhancement
