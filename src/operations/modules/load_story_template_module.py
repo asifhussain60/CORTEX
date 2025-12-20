@@ -1,7 +1,7 @@
 """
 Load Story Template Module - Story Refresh Operation
 
-This module loads the CORTEX story template from prompts/shared/story.md
+This module loads the CORTEX story template from .github/prompts/story.md
 as the first step in the story refresh operation.
 
 Author: Asif Hussain
@@ -30,7 +30,7 @@ class LoadStoryTemplateModule(BaseOperationModule):
     how the universal operations architecture works for non-setup commands.
     
     What it does:
-        1. Validates story file exists at prompts/shared/story.md
+        1. Validates story file exists at .github/prompts/story.md
         2. Loads story content
         3. Validates basic Markdown structure
         4. Stores story content in context for downstream modules
@@ -51,7 +51,7 @@ class LoadStoryTemplateModule(BaseOperationModule):
         return OperationModuleMetadata(
             module_id="load_story_template",
             name="Load Story Template",
-            description="Load CORTEX story from prompts/shared/story.md",
+            description="Load CORTEX story from .github/prompts/story.md",
             phase=OperationPhase.PREPARATION,
             priority=10,
             dependencies=[],
@@ -80,7 +80,7 @@ class LoadStoryTemplateModule(BaseOperationModule):
         if not project_root.exists():
             issues.append(f"Project root does not exist: {project_root}")
         
-        story_path = project_root / "prompts" / "shared" / "story.md"
+        story_path = project_root / ".github" / "prompts" / "story.md"
         if not story_path.exists():
             issues.append(f"Story file not found: {story_path}")
         
@@ -100,7 +100,7 @@ class LoadStoryTemplateModule(BaseOperationModule):
         """
         try:
             project_root = Path(context['project_root'])
-            story_path = project_root / "prompts" / "shared" / "story.md"
+            story_path = project_root / ".github" / "prompts" / "story.md"
             
             logger.info(f"Loading story template from: {story_path}")
             

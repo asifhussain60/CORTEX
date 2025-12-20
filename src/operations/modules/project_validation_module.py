@@ -42,7 +42,6 @@ class ProjectValidationModule(BaseOperationModule):
         "cortex-brain",
         "src",
         "tests",
-        "prompts",
         ".github"
     ]
     

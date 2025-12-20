@@ -256,7 +256,7 @@
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Entry Point:</span>
-                            <span class="summary-value"><code>src\main.py</code></span>
+                            <span class="summary-value"><code>.venv/lib/python3.9/site-packages/dotenv/main.py</code></span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">CLI Framework:</span>
@@ -272,7 +272,7 @@
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Analysis Date:</span>
-                            <span class="summary-value">2025-12-20 11:29</span>
+                            <span class="summary-value">2025-12-20 14:55</span>
                         </div>
                     </div>
                 </div>
@@ -515,7 +515,7 @@
     "repo_type": [
       "fullstack_web"
     ],
-    "scan_timestamp": "2025-12-20T11:25:30.146186",
+    "scan_timestamp": "2025-12-20T14:55:23.257343",
     "cortex_version": "1.0.0",
     "classification": {
       "primary_type": "fullstack_web",
@@ -541,17 +541,17 @@
         "has_ci_cd": true
       },
       "metadata": {
-        "total_files": 10719,
+        "total_files": 12490,
         "languages": {
-          "Python": 2753,
-          "JavaScript": 96,
+          "Python": 2762,
+          "JavaScript": 141,
+          "SQL": 10,
           "TypeScript": 11,
-          "C#": 217,
-          "SQL": 10
+          "C#": 217
         },
         "frameworks": [
-          "Angular",
-          "Node.js"
+          "Node.js",
+          "Angular"
         ]
       }
     }
@@ -563,22 +563,20 @@
         "name": "Presentation",
         "detected_directories": [
           "frontend",
-          "web",
           "ui",
           "components",
           "controllers",
-          "api",
-          "handlers"
+          "api"
         ],
         "paths": [
-          "cortex-sample-apps\\BadMonolith\\frontend",
-          "cortex-sample-apps\\CleanSolidApp\\frontend",
-          "cortex-sample-apps\\Cortex-Clean\\frontend",
-          "cortex-sample-apps\\Cortex-SDD\\frontend",
-          "cortex-sample-apps\\Cortex-Clean\\frontend\\dist\\frontend"
+          "cortex-sample-apps/CleanSolidApp/frontend",
+          "cortex-sample-apps/Cortex-SDD/frontend",
+          "cortex-sample-apps/BadMonolith/frontend",
+          "cortex-sample-apps/Cortex-Clean/frontend",
+          "cortex-sample-apps/Cortex-Clean/frontend/.angular/cache/21.0.2/frontend"
         ],
-        "file_count": 34890,
-        "loc": 5799412,
+        "file_count": 91,
+        "loc": 37221,
         "confidence": 100
       },
       {
@@ -589,18 +587,17 @@
           "core",
           "application",
           "use_cases",
-          "managers",
-          "handlers"
+          "managers"
         ],
         "paths": [
-          "src\\plugins\\services",
-          "cortex-sample-apps\\_Real\\ra-modernized\\tests\\RA.FundingInvoices.Core.Tests\\services",
-          "cortex-sample-apps\\_Real\\ra-modernized\\tests\\RA.FundingInvoices.UnitTests\\services",
-          "cortex-sample-apps\\_Real\\ra-modernized\\src\\RA.FundingInvoices.Core\\services",
-          "cortex-sample-apps\\_Real\\ra-modernized\\src\\RA.FundingInvoices.Infrastructure\\services"
+          "cortex-sample-apps/CleanSolidApp/frontend/src/app/services",
+          "cortex-sample-apps/CleanSolidApp/backend/Application/services",
+          "cortex-sample-apps/_Real/ra-modernized/tests/RA.FundingInvoices.Core.Tests/services",
+          "cortex-sample-apps/_Real/ra-modernized/tests/RA.FundingInvoices.UnitTests/services",
+          "cortex-sample-apps/_Real/ra-modernized/src/RA.FundingInvoices.Infrastructure/services"
         ],
-        "file_count": 2377,
-        "loc": 395295,
+        "file_count": 190,
+        "loc": 31625,
         "confidence": 100
       },
       {
@@ -617,14 +614,14 @@
           "cache"
         ],
         "paths": [
-          "src\\dashboard\\data",
-          "docs\\assets\\data",
-          "cortex-sample-apps\\Cortex-Clean\\frontend\\node_modules\\caniuse-lite\\data",
-          "cortex-sample-apps\\Cortex-Clean\\frontend\\node_modules\\css-tree\\data",
-          "cortex-sample-apps\\Cortex-Clean\\frontend\\node_modules\\node-releases\\data"
+          "docs/assets/data",
+          "cortex-sample-apps/CleanSolidApp/backend/Infrastructure/data",
+          "cortex-brain/dashboards/data",
+          "cortex-brain/dashboards/ui/data",
+          "cortex-brain/documents/analysis/dashboard/data"
         ],
-        "file_count": 2255,
-        "loc": 75868,
+        "file_count": 174,
+        "loc": 29440,
         "confidence": 100
       },
       {
@@ -632,43 +629,40 @@
         "detected_directories": [
           "infrastructure",
           "config",
+          "configuration",
           "utilities",
           "utils",
-          "helpers",
           "common",
           "shared"
         ],
         "paths": [
-          "src\\infrastructure",
-          "tests\\infrastructure",
-          "tests\\dashboard\\infrastructure",
-          "tests\\unit\\infrastructure",
-          "src\\dashboard\\infrastructure"
+          "tests/unit/infrastructure",
+          "cortex-sample-apps/CleanSolidApp/backend/infrastructure",
+          "cortex-sample-apps/Cortex-SDD/js/infrastructure",
+          "cortex-brain/documents/planning/features/active/infrastructure",
+          "src/infrastructure"
         ],
-        "file_count": 7440,
-        "loc": 433592,
+        "file_count": 430,
+        "loc": 172983,
         "confidence": 100
       },
       {
         "name": "Tests",
         "detected_directories": [
           "tests",
-          "test",
-          "spec",
           "specs",
-          "__tests__",
           "testing"
         ],
         "paths": [
           "tests",
-          "archive\\tests",
-          "cortex-toolkit\\tests",
-          "cortex-sample-apps\\Cortex-SDD\\tests",
-          "cortex-sample-apps\\_Real\\payment-processor-modernized\\tests"
+          "cortex-lens-output/mock-landing/tests",
+          "archive/tests",
+          "archive/cortex-brain/backups/phase2-deletion/20251207_192324/cortex-brain/archives/flask-removal-2025-12-04/tests",
+          "cortex-sample-apps/_Real/ra-modernized/tests"
         ],
-        "file_count": 1912,
-        "loc": 353596,
-        "confidence": 100
+        "file_count": 1205,
+        "loc": 390210,
+        "confidence": 75
       }
     ],
     "detected_pattern": {
@@ -684,103 +678,103 @@
     },
     "entry_points": [
       {
-        "file": "src\\main.py",
+        "file": ".venv/lib/python3.9/site-packages/dotenv/main.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": "build\\lib\\src\\main.py",
+        "file": ".venv/lib/python3.9/site-packages/pip/_internal/main.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\_pytest\\main.py",
+        "file": ".venv/lib/python3.9/site-packages/pip/_internal/cli/main.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pip\\_internal\\main.py",
+        "file": ".venv/lib/python3.9/site-packages/pydantic/main.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pip\\_internal\\cli\\main.py",
+        "file": ".venv/lib/python3.9/site-packages/pydantic/v1/main.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\coverage\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/_pytest/main.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pip\\__main__.py",
+        "file": "src/main.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pygments\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/trio/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pytest\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/dotenv/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\sqlparse\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/sqlparse/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\psutil\\tests\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/pygments/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\certifi\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/pytest/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\dependency_groups\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/mkdocs_get_deps/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\distro\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/markdown/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\platformdirs\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/numpy/f2py/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\pygments\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/charset_normalizer/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\rich\\__main__.py",
+        "file": ".venv/lib/python3.9/site-packages/charset_normalizer/cli/__main__.py",
         "language": "python",
         "type": "application_start"
       },
       {
-        "file": "cortex-sample-apps\\_Real\\ra-modernized\\src\\RA.FundingInvoices.API\\Program.cs",
-        "language": "csharp",
+        "file": ".venv/lib/python3.9/site-packages/pip/__main__.py",
+        "language": "python",
         "type": "application_start"
       },
       {
-        "file": "cortex-sample-apps\\_Real\\payment-processor-modernized\\src\\PaymentProcessor.TransactionInvoices.API\\Program.cs",
-        "language": "csharp",
+        "file": ".venv/lib/python3.9/site-packages/pip/_vendor/dependency_groups/__main__.py",
+        "language": "python",
         "type": "application_start"
       },
       {
-        "file": "cortex-sample-apps\\CleanSolidApp\\backend\\API\\Program.cs",
-        "language": "csharp",
+        "file": ".venv/lib/python3.9/site-packages/pip/_vendor/pygments/__main__.py",
+        "language": "python",
         "type": "application_start"
       }
     ],
@@ -836,32 +830,42 @@
     ],
     "metrics": {
       "layer_count": 5,
-      "total_loc_in_layers": 7057763,
-      "total_files_in_layers": 48874,
+      "total_loc_in_layers": 661479,
+      "total_files_in_layers": 2090,
       "dependency_count": 8,
       "coupling_score": 40.0,
       "modularity_grade": "A - Highly Modular"
     },
     "directory_structure": [
       {
-        "name": "archive",
-        "type": "directory",
-        "child_count": 9
-      },
-      {
-        "name": "build",
-        "type": "directory",
-        "child_count": 2
-      },
-      {
         "name": "CHANGELOG.md",
         "type": "file",
         "extension": ".md"
       },
       {
+        "name": "LICENSE",
+        "type": "file",
+        "extension": ""
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "extension": ".md"
+      },
+      {
+        "name": "archive",
+        "type": "directory",
+        "child_count": 9
+      },
+      {
         "name": "cortex-brain",
         "type": "directory",
         "child_count": 32
+      },
+      {
+        "name": "cortex-brain.db",
+        "type": "file",
+        "extension": ".db"
       },
       {
         "name": "cortex-cleanup.ps1",
@@ -886,7 +890,7 @@
       {
         "name": "cortex-toolkit",
         "type": "directory",
-        "child_count": 17
+        "child_count": 16
       },
       {
         "name": "cortex.config.json",
@@ -931,32 +935,22 @@
       {
         "name": "htmlcov",
         "type": "directory",
-        "child_count": 848
-      },
-      {
-        "name": "LICENSE",
-        "type": "file",
-        "extension": ""
+        "child_count": 903
       },
       {
         "name": "logs",
         "type": "directory",
-        "child_count": 2
+        "child_count": 3
       },
       {
-        "name": "metrics",
-        "type": "directory",
-        "child_count": 0
+        "name": "mkdocs.yml",
+        "type": "file",
+        "extension": ".yml"
       },
       {
         "name": "pytest.ini",
         "type": "file",
         "extension": ".ini"
-      },
-      {
-        "name": "README.md",
-        "type": "file",
-        "extension": ".md"
       },
       {
         "name": "requirements.txt",
@@ -966,12 +960,17 @@
       {
         "name": "scripts",
         "type": "directory",
-        "child_count": 210
+        "child_count": 209
+      },
+      {
+        "name": "site",
+        "type": "directory",
+        "child_count": 15
       },
       {
         "name": "src",
         "type": "directory",
-        "child_count": 74
+        "child_count": 73
       },
       {
         "name": "templates",
@@ -981,12 +980,7 @@
       {
         "name": "tests",
         "type": "directory",
-        "child_count": 65
-      },
-      {
-        "name": "tier2",
-        "type": "directory",
-        "child_count": 0
+        "child_count": 47
       }
     ]
   },
@@ -1028,17 +1022,17 @@
       "has_ci_cd": true
     },
     "metadata": {
-      "total_files": 10719,
+      "total_files": 12490,
       "languages": {
-        "Python": 2753,
-        "JavaScript": 96,
+        "Python": 2762,
+        "JavaScript": 141,
+        "SQL": 10,
         "TypeScript": 11,
-        "C#": 217,
-        "SQL": 10
+        "C#": 217
       },
       "frameworks": [
-        "Angular",
-        "Node.js"
+        "Node.js",
+        "Angular"
       ]
     }
   }
