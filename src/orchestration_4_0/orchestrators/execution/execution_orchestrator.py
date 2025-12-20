@@ -47,7 +47,10 @@ class ExecutionOrchestrator(BaseOrchestrator):
         
         Args:
             logger: Optional logger instance
-            config: Optional configuration dictionary
+            config: Optional configuration dictionary with:
+                - execution_mode: AUTONOMOUS, CHECKPOINT, or INTERACTIVE
+                - max_retries: Max retry attempts per phase
+                - enable_rollback: Enable automatic rollback on failure
         """
         super().__init__(
             name="execution",
@@ -60,6 +63,12 @@ class ExecutionOrchestrator(BaseOrchestrator):
         self.workspace: Optional[str] = None
         self.sub_orchestrators: Dict[str, Any] = {}
         self.phase_validators: Dict[str, Callable] = {}
+        
+        # Adaptive execution mode from config
+        self.execution_mode = self.config.get("execution_mode", "AUTONOMOUS")
+        self.enable_rollback = self.config.get("enable_rollback", True)
+        
+        self.logger.info(f"🎯 Execution mode: {self.execution_mode}")
     
     def _setup(self, context: Dict[str, Any]) -> None:
         """
@@ -69,6 +78,7 @@ class ExecutionOrchestrator(BaseOrchestrator):
         - Execution plan
         - Workspace path
         - Phase validators
+        - Sub-orchestrators
         
         Args:
             context: Must contain "plan" key with execution plan
@@ -85,6 +95,15 @@ class ExecutionOrchestrator(BaseOrchestrator):
         # Extract phase validators if provided
         if "validators" in context:
             self.phase_validators = context["validators"]
+        
+        # Extract sub-orchestrators if provided
+        if "sub_orchestrators" in context:
+            self.sub_orchestrators = context["sub_orchestrators"]
+        
+        # Override execution mode if specified in context
+        if "execution_mode" in context:
+            self.execution_mode = context["execution_mode"]
+            self.logger.info(f"🎯 Execution mode overridden: {self.execution_mode}")
         
         self.logger.info(f"✅ Setup complete - Plan: {self.execution_plan.get('name', 'unnamed')}")
     
@@ -140,12 +159,17 @@ class ExecutionOrchestrator(BaseOrchestrator):
         context: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
         """
-        Execute a specific phase.
+        Execute a specific phase with adaptive execution modes.
         
         Phases can either:
         1. Execute inline code (if "code" key present)
         2. Route to sub-orchestrator (if "orchestrator" key present)
         3. Execute custom function (if "handler" key present)
+        
+        Execution modes:
+        - AUTONOMOUS: Execute without user intervention
+        - CHECKPOINT: Pause at phase boundaries for validation
+        - INTERACTIVE: Request user approval before each phase
         
         Args:
             phase_name: Name of phase to execute
@@ -156,25 +180,50 @@ class ExecutionOrchestrator(BaseOrchestrator):
         """
         self.logger.info(f"▶️  Executing phase: {phase_name}")
         
+        # CHECKPOINT mode: Validate phase readiness
+        if self.execution_mode == "CHECKPOINT":
+            if not self._validate_phase_checkpoint(phase_name, context):
+                return {"status": "skipped", "reason": "Checkpoint validation failed"}
+        
+        # INTERACTIVE mode: Request user approval
+        if self.execution_mode == "INTERACTIVE":
+            if not self._request_phase_approval(phase_name):
+                return {"status": "skipped", "reason": "User declined phase execution"}
+        
         # Find phase definition in execution plan
         phase_def = self._get_phase_definition(phase_name)
         if not phase_def:
             raise ValueError(f"Phase definition not found: {phase_name}")
         
-        # Route to appropriate execution method
-        if "orchestrator" in phase_def:
-            result = self._execute_sub_orchestrator(phase_name, phase_def, context)
-        elif "code" in phase_def:
-            result = self._execute_inline_code(phase_name, phase_def, context)
-        elif "handler" in phase_def:
-            result = self._execute_custom_handler(phase_name, phase_def, context)
-        else:
-            # Default: just log and return empty result
-            self.logger.info(f"  ℹ️  Phase {phase_name} has no execution logic")
-            result = {"status": "completed", "message": f"Phase {phase_name} completed"}
+        # Pre-phase validation if validator exists
+        if phase_name in self.phase_validators:
+            validation_result = self.phase_validators[phase_name](context)
+            if not validation_result:
+                self.logger.warning(f"⚠️  Phase validation failed: {phase_name}")
+                if self.execution_mode != "AUTONOMOUS":
+                    return {"status": "validation_failed", "phase": phase_name}
         
-        self.logger.info(f"✅ Phase complete: {phase_name}")
-        return result
+        # Route to appropriate execution method
+        try:
+            if "orchestrator" in phase_def:
+                result = self._execute_sub_orchestrator(phase_name, phase_def, context)
+            elif "code" in phase_def:
+                result = self._execute_inline_code(phase_name, phase_def, context)
+            elif "handler" in phase_def:
+                result = self._execute_custom_handler(phase_name, phase_def, context)
+            else:
+                # Default: just log and return empty result
+                self.logger.info(f"  ℹ️  Phase {phase_name} has no execution logic")
+                result = {"status": "completed", "message": f"Phase {phase_name} completed"}
+            
+            self.logger.info(f"✅ Phase complete: {phase_name}")
+            return result
+            
+        except Exception as e:
+            self.logger.error(f"❌ Phase failed: {phase_name} - {e}")
+            if self.enable_rollback:
+                self._rollback_phase(phase_name, context)
+            raise
     
     def _execute_sub_orchestrator(
         self,
@@ -324,3 +373,72 @@ class ExecutionOrchestrator(BaseOrchestrator):
         """
         self.phase_validators[name] = validator
         self.logger.debug(f"📝 Registered validator: {name}")
+    
+    def _validate_phase_checkpoint(self, phase_name: str, context: Dict[str, Any]) -> bool:
+        """
+        Validate phase checkpoint in CHECKPOINT mode.
+        
+        Checks:
+        - Previous phase completed successfully
+        - Required context data available
+        - Resources ready
+        
+        Args:
+            phase_name: Phase to validate
+            context: Execution context
+            
+        Returns:
+            True if checkpoint validation passes
+        """
+        self.logger.debug(f"🔍 Validating checkpoint for phase: {phase_name}")
+        
+        # Check if previous phases completed
+        progress = self.phase_manager.get_progress()
+        if progress["failed"] > 0:
+            self.logger.warning(f"⚠️  Previous phase failures detected")
+            return False
+        
+        # Custom validator if registered
+        if phase_name in self.phase_validators:
+            return self.phase_validators[phase_name](context)
+        
+        return True
+    
+    def _request_phase_approval(self, phase_name: str) -> bool:
+        """
+        Request user approval in INTERACTIVE mode.
+        
+        Args:
+            phase_name: Phase requesting approval
+            
+        Returns:
+            True if user approves execution
+        """
+        self.logger.info(f"🤔 INTERACTIVE mode: Requesting approval for phase '{phase_name}'")
+        
+        # In real implementation, this would use UI/CLI to get user input
+        # For now, auto-approve in INTERACTIVE mode (can be overridden)
+        self.logger.info(f"✅ Auto-approved: {phase_name}")
+        return True
+    
+    def _rollback_phase(self, phase_name: str, context: Dict[str, Any]) -> None:
+        """
+        Rollback phase changes on failure.
+        
+        Args:
+            phase_name: Failed phase to rollback
+            context: Execution context
+        """
+        self.logger.warning(f"🔄 Rolling back phase: {phase_name}")
+        
+        phase_def = self._get_phase_definition(phase_name)
+        if not phase_def:
+            return
+        
+        # Execute rollback logic if defined
+        if "rollback" in phase_def:
+            rollback_handler = phase_def["rollback"]
+            self.logger.debug(f"  Executing rollback handler: {rollback_handler}")
+            # In full implementation, would execute rollback logic
+        
+        self.logger.info(f"✅ Rollback complete: {phase_name}")

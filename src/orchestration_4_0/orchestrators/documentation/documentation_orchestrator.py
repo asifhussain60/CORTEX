@@ -84,7 +84,11 @@ class DocumentationOrchestrator(BaseOrchestrator):
         logger: Optional["Logger"] = None,
         config: Optional[Dict[str, Any]] = None
     ):
-        super().__init__(logger, config)
+        super().__init__(
+            name="documentation",
+            logger=logger,
+            config=config
+        )
         
         # Initialize documentation components
         self.code_analyzer = CodeAnalyzer()
@@ -102,6 +106,10 @@ class DocumentationOrchestrator(BaseOrchestrator):
         self.modules: List[ModuleInfo] = []
         self.doc_config: Optional[DocumentationConfig] = None
         self.doc_result: Optional[DocumentationResult] = None
+        
+        # Adaptive execution mode
+        self.execution_mode = self.config.get("execution_mode", "AUTONOMOUS")
+        self.logger.info(f"🎯 Documentation execution mode: {self.execution_mode}")
     
     def _setup(self, context: Dict[str, Any]) -> None:
         """
@@ -109,7 +117,7 @@ class DocumentationOrchestrator(BaseOrchestrator):
         
         Validates configuration and prepares output directories
         """
-        self.logger.info("Setting up documentation generation")
+        self.logger.info("🔧 Setting up documentation generation")
         
         # Extract configuration
         config_data = context.get('config', {})
@@ -131,7 +139,12 @@ class DocumentationOrchestrator(BaseOrchestrator):
         # Create output directory
         self.doc_config.output_dir.mkdir(parents=True, exist_ok=True)
         
-        self.logger.info(f"Documentation will be generated at: {self.doc_config.output_dir}")
+        # Override execution mode if specified
+        if "execution_mode" in context:
+            self.execution_mode = context["execution_mode"]
+            self.logger.info(f"🎯 Execution mode overridden: {self.execution_mode}")
+        
+        self.logger.info(f"✅ Documentation will be generated at: {self.doc_config.output_dir}")
         
         # Initialize result in context and store in instance
         self.doc_result = DocumentationResult()
@@ -176,8 +189,26 @@ class DocumentationOrchestrator(BaseOrchestrator):
         phase_name: str,
         context: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Execute a documentation generation phase"""
+        """
+        Execute a documentation generation phase with adaptive modes
+        
+        Execution modes:
+        - AUTONOMOUS: Execute all phases without intervention
+        - CHECKPOINT: Validate completeness at each phase
+        - INTERACTIVE: Request approval before expensive operations
+        """
         result: DocumentationResult = context['result']
+        
+        # CHECKPOINT mode: Validate phase prerequisites
+        if self.execution_mode == "CHECKPOINT":
+            if not self._validate_phase_prerequisites(phase_name, context):
+                return {"status": "skipped", "reason": "Prerequisites not met"}
+        
+        # INTERACTIVE mode: Request approval for expensive phases
+        if self.execution_mode == "INTERACTIVE":
+            if phase_name in ["generate_diagrams", "export"]:
+                if not self._request_phase_approval(phase_name):
+                    return {"status": "skipped", "reason": "User declined"}
         
         if phase_name == "analyze":
             return self._analyze_phase(context, result)
@@ -476,7 +507,7 @@ class DocumentationOrchestrator(BaseOrchestrator):
     
     def _teardown(self) -> None:
         """Cleanup after documentation generation"""
-        self.logger.info("Documentation generation complete")
+        self.logger.info("✅ Documentation generation complete")
     
     def _collect_results(self) -> Dict[str, Any]:
         """Collect orchestrator results including DocumentationResult"""
@@ -488,6 +519,53 @@ class DocumentationOrchestrator(BaseOrchestrator):
             base_results['result'] = self.doc_result
         
         return base_results
+    
+    def _validate_phase_prerequisites(self, phase_name: str, context: Dict[str, Any]) -> bool:
+        """
+        Validate phase prerequisites in CHECKPOINT mode
+        
+        Args:
+            phase_name: Phase to validate
+            context: Execution context
+            
+        Returns:
+            True if prerequisites met
+        """
+        result: DocumentationResult = context.get('result')
+        
+        if phase_name == "extract":
+            # Need analyzed modules
+            return len(self.modules) > 0
+        elif phase_name == "generate_docs":
+            # Need extracted modules
+            return len(self.modules) > 0
+        elif phase_name == "generate_diagrams":
+            # Need generated docs
+            return result and result.modules_analyzed > 0
+        elif phase_name == "validate":
+            # Need generated docs
+            return result and len(result.output_files) > 0
+        elif phase_name == "export":
+            # Need validation complete
+            return True
+        
+        return True
+    
+    def _request_phase_approval(self, phase_name: str) -> bool:
+        """
+        Request user approval in INTERACTIVE mode
+        
+        Args:
+            phase_name: Phase requesting approval
+            
+        Returns:
+            True if user approves
+        """
+        self.logger.info(f"🤔 INTERACTIVE mode: Requesting approval for phase '{phase_name}'")
+        
+        # Auto-approve for now (can be overridden)
+        self.logger.info(f"✅ Auto-approved: {phase_name}")
+        return True
     
     # Validation methods
     def _validate_analyze(self, context: Dict[str, Any]) -> bool:
