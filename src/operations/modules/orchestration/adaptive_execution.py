@@ -49,10 +49,16 @@ class ExecutionStrategy(ABC):
     Abstract base class for execution strategies.
     
     Implements Strategy Pattern for different execution modes.
+    Provides common functionality for validation, checkpointing, and rollback.
     """
     
     def __init__(self, config: Optional[AdaptiveExecutionConfig] = None):
-        """Initialize strategy with optional config."""
+        """
+        Initialize strategy with optional config.
+        
+        Args:
+            config: Configuration for execution behavior
+        """
         self.config = config or AdaptiveExecutionConfig()
         self.checkpoints: List[Dict[str, Any]] = []
     
@@ -77,7 +83,7 @@ class ExecutionStrategy(ABC):
             context: Execution context
             
         Returns:
-            Validation result
+            Validation result with valid flag, errors, warnings
         """
         return {
             "valid": True,
@@ -85,6 +91,40 @@ class ExecutionStrategy(ABC):
             "warnings": [],
             "timestamp": datetime.now().isoformat()
         }
+    
+    def _create_validation_failed_result(self, validation: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Create standardized validation failure result.
+        
+        Args:
+            validation: Validation result from validate()
+            
+        Returns:
+            Standardized error response
+        """
+        return {
+            "status": "validation_failed",
+            "errors": validation["errors"],
+            "requires_confirmation": False
+        }
+    
+    def _create_checkpoint(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Create checkpoint for rollback.
+        
+        Args:
+            context: Current execution context
+            
+        Returns:
+            Checkpoint data
+        """
+        checkpoint = {
+            "phase": context.get("phase"),
+            "state": context.copy(),
+            "timestamp": datetime.now().isoformat()
+        }
+        self.checkpoints.append(checkpoint)
+        return checkpoint
     
     def rollback(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -94,7 +134,7 @@ class ExecutionStrategy(ABC):
             context: Current context
             
         Returns:
-            Rollback result
+            Rollback result with success flag and checkpoint data
         """
         if not self.checkpoints:
             return {
@@ -115,19 +155,30 @@ class SupervisedStrategy(ExecutionStrategy):
     Supervised execution strategy.
     
     Requires user confirmation before each phase execution.
-    Provides maximum control and visibility.
+    Provides maximum control and visibility. Best for high-risk operations
+    or when learning new workflows.
+    
+    Characteristics:
+    - User approval required for every phase
+    - Full visibility into each step
+    - Maximum safety and control
+    - Slowest execution (interactive)
     """
     
     def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute with user confirmation requirement."""
+        """
+        Execute with user confirmation requirement.
+        
+        Args:
+            context: Execution context with phase and action info
+            
+        Returns:
+            Result requiring user confirmation
+        """
         # Validate first
         validation = self.validate(context)
         if not validation["valid"]:
-            return {
-                "status": "validation_failed",
-                "errors": validation["errors"],
-                "requires_confirmation": False
-            }
+            return self._create_validation_failed_result(validation)
         
         # SUPERVISED mode always requires confirmation
         return {
@@ -144,28 +195,35 @@ class AutonomousStrategy(ExecutionStrategy):
     Autonomous execution strategy.
     
     Executes without user confirmation, with automatic rollback on failure.
-    Suitable for low-risk, well-tested operations.
+    Suitable for low-risk, well-tested operations. Fastest execution mode
+    with built-in safety through automatic rollback.
+    
+    Characteristics:
+    - No user interaction required
+    - Automatic checkpoint creation
+    - Auto-rollback on failures
+    - Fastest execution (fully automated)
+    - Best for repetitive, low-risk tasks
     """
     
     def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute autonomously without confirmation."""
+        """
+        Execute autonomously without confirmation.
+        
+        Args:
+            context: Execution context with phase and action info
+            
+        Returns:
+            Result with execution status and rollback capability
+        """
         # Validate first
         validation = self.validate(context)
         if not validation["valid"]:
-            return {
-                "status": "validation_failed",
-                "errors": validation["errors"],
-                "requires_confirmation": False
-            }
+            return self._create_validation_failed_result(validation)
         
         # Create checkpoint before execution
         if self.config.enable_auto_rollback:
-            checkpoint = {
-                "phase": context.get("phase"),
-                "state": context.copy(),
-                "timestamp": datetime.now().isoformat()
-            }
-            self.checkpoints.append(checkpoint)
+            self._create_checkpoint(context)
         
         # AUTONOMOUS mode does NOT require confirmation
         return {
@@ -186,14 +244,27 @@ class HybridStrategy(ExecutionStrategy):
     - Risk level of the operation
     - Complexity of the task
     - Safety-critical indicators
+    
+    Provides best balance between speed and safety by automating
+    low-risk operations while requiring confirmation for high-risk actions.
+    
+    Characteristics:
+    - Intelligent risk assessment
+    - Conditional confirmation (high-risk only)
+    - Automatic checkpoints for auto-execution
+    - Balanced speed vs safety
+    - Best for mixed workflows
     """
     
     def _assess_risk(self, context: Dict[str, Any]) -> str:
         """
         Assess risk level of operation.
         
+        Checks for safety-critical and high-risk keywords in the
+        task description and action text.
+        
         Args:
-            context: Execution context
+            context: Execution context with task/action descriptions
             
         Returns:
             Risk level: 'high', 'medium', or 'low'
@@ -218,15 +289,22 @@ class HybridStrategy(ExecutionStrategy):
         return "low"
     
     def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute with conditional confirmation."""
+        """
+        Execute with conditional confirmation based on risk.
+        
+        High-risk operations require user confirmation.
+        Medium and low-risk operations execute automatically with checkpoints.
+        
+        Args:
+            context: Execution context with phase and action info
+            
+        Returns:
+            Result with conditional confirmation requirement
+        """
         # Validate first
         validation = self.validate(context)
         if not validation["valid"]:
-            return {
-                "status": "validation_failed",
-                "errors": validation["errors"],
-                "requires_confirmation": False
-            }
+            return self._create_validation_failed_result(validation)
         
         # Assess risk
         risk_level = self._assess_risk(context)
@@ -236,12 +314,7 @@ class HybridStrategy(ExecutionStrategy):
         
         # Create checkpoint for non-high-risk operations
         if not requires_confirmation and self.config.enable_auto_rollback:
-            checkpoint = {
-                "phase": context.get("phase"),
-                "state": context.copy(),
-                "timestamp": datetime.now().isoformat()
-            }
-            self.checkpoints.append(checkpoint)
+            self._create_checkpoint(context)
         
         status = "pending_confirmation" if requires_confirmation else "executing"
         
