@@ -99,6 +99,41 @@ Comprehensive migration to transform CORTEX 3.0 → 4.0 with:
 
 ### ⏸️ Pending Phases
 
+8. **[Phase 7: Operations Simplification](./phases/phase-07-operations-simplification.md)** (Weeks 15-17) - 0% COMPLETE
+   - @orchestrator decorator, DI auto-discovery
+   - Universal adapters (test frameworks, logging, etc.)
+   - Duration: 15 days
+   - **Dependencies:** 6+ orchestrators complete
+
+9. **[Phase 8: Testing & Validation](./phases/phase-08-testing-validation.md)** (Weeks 18-20) - 0% COMPLETE
+   - Comprehensive test coverage (90%+ all orchestrators)
+   - Quality gates, backward compatibility
+   - Duration: 15 days
+
+10. **[Phase 9: Documentation Finalization](./phases/phase-09-documentation-finalization.md)** (Week 21) - 0% COMPLETE
+    - Technical docs generation complete
+    - Final review and sign-off
+    - Duration: 5 days
+
+11. **[Phase 11: Multi-Repo Architecture](./phases/phase-11-multi-repo-architecture.md)** (Post-Core, 1 week) - 0% COMPLETE
+    - One CORTEX installation → N user repos
+    - Workspace-aware orchestrators + Brain segmentation
+    - Remove GIT_ISOLATION, add upgrade mechanism
+    - Duration: 8 days (5 packages)
+    - **Dependencies:** Phase 3 Complete (BaseOrchestrator, Brain, IDE detection)
+    - **Status:** 70% infrastructure exists (workspace detection, repo boundaries, Copilot integration)
+    - **Gap:** Orchestrators hardcoded to CORTEX directory, Brain not workspace-segmented
+
+12. **[Phase 12: Native IDE Extensions](./phases/phase-12-native-ide-extensions.md)** (Optional Enhancement, 2 weeks) - 0% COMPLETE
+    - VSCode extension: Native workspace API integration
+    - Visual Studio extension: Native DTE2 API integration
+    - 0ms workspace detection (vs 200ms fallback)
+    - Enhanced Copilot integration
+    - Duration: 10 days (2 extensions)
+    - **Dependencies:** Phase 11 Complete (multi-repo architecture)
+    - **Status:** Optional optimization - Phase 11 works without extensions
+    - **Benefits:** Improved performance, richer IDE context, better UX
+
 8. **[Phase 7: Operations Simplification](./phases/phase-07-operations-simplification.md)** (Weeks 15-17)
    - Manifest reduction, universal adapters, DI auto-discovery
    - Duration: 15 days
@@ -230,6 +265,11 @@ src/orchestrators/
 **Phase 10 (Knowledge Library)** runs completely parallel with Phases 5-8:
 - **Weeks 22-37:** Knowledge documents, RAG integration, learning agents
 - **Independent work:** No blocking dependencies
+
+**LLM Integration Strategy:**
+- **Week 9 Days 1-2:** Core LLM upgrades (SmartPlanLoader, ComplexityAnalyzer)
+- **Documentation:** [LLM-MIGRATION-OPPORTUNITIES.md](./LLM-MIGRATION-OPPORTUNITIES.md)
+- **ROI:** 30-50% improvements in classification accuracy
 
 **Timeline Efficiency:**
 - Sequential-only timeline: ~31 weeks

@@ -1,8 +1,8 @@
 # 📊 CORTEX 3.0 → 4.0 Migration Status Tracker
 
-**Version:** 1.5 | **Author:** Asif Hussain | **Last Updated:** December 20, 2025
+**Version:** 1.6 | **Author:** Asif Hussain | **Last Updated:** December 20, 2025
 
-**Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 80% | **Current Phase:** Phase 6 (Orchestrator Consolidation) | **Week:** Week 9 Day 1
+**Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 75% | **Current Phase:** Phase 6 (Orchestrator Consolidation) | **Week:** Week 9 Day 2
 
 ---
 
@@ -94,6 +94,23 @@
 │ Week 26-29: Specialization Domains (12 docs)            [░░░░░]  0%         │
 │ Week 30-33: RAG Integration (4 weeks)                   [░░░░░]  0%         │
 │ Week 34-37: Learning Agents Enhancement (4 weeks)       [░░░░░]  0%         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 11: Multi-Repo Architecture (POST-CORE)             [░░░░░░░░░░░░]   0% │
+│ Package 1: Workspace Registry & Detection (2 days)      [░░░░░]  0%         │
+│ Package 2: Brain Tier 3 Segmentation (2 days)           [░░░░░]  0%         │
+│ Package 3: Remove GIT_ISOLATION_ENFORCEMENT (1 day)     [░░░░░]  0%         │
+│ Package 4: Orchestrator Workspace Integration (2 days)  [░░░░░]  0%         │
+│ Package 5: Upgrade Mechanism (1 day)                    [░░░░░]  0%         │
+│   Vision: One CORTEX install → N user repos              STATUS: 📋 PLANNED │
+│   Current: 70% infrastructure exists (workspace detect)  DURATION: 1 week   │
+│   Gap: Orchestrators hardcoded, brain not segmented      RISK: 🟢 LOW       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PHASE 12: Native IDE Extensions (OPTIONAL)                [░░░░░░░░░░░░]   0% │
+│ Package 1: VSCode Extension (1 week)                     [░░░░░]  0%         │
+│ Package 2: Visual Studio Extension (1 week)             [░░░░░]  0%         │
+│   Vision: <1ms workspace detection (vs 200ms Phase 11)   STATUS: 📋 OPTIONAL│
+│   Dependencies: Phase 11 complete                        DURATION: 2 weeks  │
+│   Decision: Implement only if user demand exists         RISK: 🟡 MEDIUM    │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -131,6 +148,8 @@
 - ☐ **Knowledge Library Foundation Complete** (Week 25) - 12 critical best practice documents
 - ☐ **RAG Integration Live** (Week 33) - AI learning from best practices
 - ☐ **Learning Agents Enhanced** (Week 37) - Code review, security scan, architecture advisor agents
+- ☐ **Phase 11: Multi-Repo Architecture Complete** (Post-Core) - One CORTEX → N repos, workspace-aware operations
+- ☐ **Phase 12: Native IDE Extensions Complete** (Optional, 2 weeks) - <1ms workspace detection, rich IDE integration
 - ☐ **CORTEX 4.0 GA Release** (Week 37)
 
 ---
@@ -139,7 +158,7 @@
 
 | Metric | Value |
 |--------|-------|
-| **Phases Complete** | 4.5/10 (45%) |
+| **Phases Complete** | 4.5/12 (38%) |
 | **Orchestrators Migrated** | 4/16 (25%) |
 | **Test Coverage** | 84.6% (Planning System MVP) |
 | **Lines of Code** | 5,363 (Planning System MVP) |
