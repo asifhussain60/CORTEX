@@ -248,7 +248,8 @@ class SanitizationOrchestrator(BaseOrchestrator):
                 return self._failure_result(
                     SanitizationPhase.MAPPING,
                     start_time,
-                    mapping.get('errors', ['Mapping failed'])
+                    mapping.get('errors', ['Mapping failed']),
+                    files_analyzed=files_analyzed
                 )
             
             mappings_created = len(mapping.get('mappings', {}))
@@ -261,7 +262,9 @@ class SanitizationOrchestrator(BaseOrchestrator):
                     return self._failure_result(
                         SanitizationPhase.TRANSFORM,
                         start_time,
-                        transform.get('errors', ['Transform failed'])
+                        transform.get('errors', ['Transform failed']),
+                        files_analyzed=files_analyzed,
+                        mappings_created=mappings_created
                     )
                 files_transformed = transform.get('files_transformed', 0)
                 
@@ -273,7 +276,10 @@ class SanitizationOrchestrator(BaseOrchestrator):
                         SanitizationPhase.VALIDATE,
                         start_time,
                         validation.get('errors', ['Validation failed']),
-                        validation_passed=False
+                        validation_passed=False,
+                        files_analyzed=files_analyzed,
+                        mappings_created=mappings_created,
+                        files_transformed=files_transformed
                     )
                 validation_passed = validation.get('passed', False)
             else:
@@ -492,16 +498,19 @@ class SanitizationOrchestrator(BaseOrchestrator):
         phase: SanitizationPhase,
         start_time: datetime,
         errors: List[str],
-        validation_passed: bool = True
+        validation_passed: bool = True,
+        files_analyzed: int = 0,
+        mappings_created: int = 0,
+        files_transformed: int = 0
     ) -> SanitizationResult:
-        """Create failure result"""
+        """Create failure result preserving metrics collected before failure"""
         duration = (datetime.now() - start_time).total_seconds()
         return SanitizationResult(
             success=False,
             phase=phase,
-            files_analyzed=0,
-            mappings_created=0,
-            files_transformed=0,
+            files_analyzed=files_analyzed,
+            mappings_created=mappings_created,
+            files_transformed=files_transformed,
             validation_passed=validation_passed,
             report_path=Path('/tmp/sanitization-report.md'),
             duration_seconds=duration,

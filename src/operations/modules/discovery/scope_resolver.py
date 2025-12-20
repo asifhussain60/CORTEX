@@ -10,7 +10,7 @@ Version: 1.0.0
 
 import logging
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 
 from .models import DiscoveryScope, DiscoveryDepth
 
@@ -56,7 +56,6 @@ class ScopeResolver:
         Raises:
             ValueError: If scope cannot be resolved
         """
-        # TODO: Implement scope resolution logic
         # This is a skeleton - implementation in GREEN phase
         
         if isinstance(scope_input, dict):
@@ -66,7 +65,7 @@ class ScopeResolver:
         else:
             raise ValueError(f"Unsupported scope input type: {type(scope_input)}")
     
-    def _resolve_from_path(self, path: str | Path, depth: str) -> DiscoveryScope:
+    def _resolve_from_path(self, path: Union[str, Path], depth: str) -> DiscoveryScope:
         """Resolve scope from path string."""
         # Handle special keyword "project"
         if isinstance(path, str) and path.lower() == "project":

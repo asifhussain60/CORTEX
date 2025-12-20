@@ -1,6 +1,6 @@
 # CORTEX System Integrity Report
 
-**Generated:** 2025-12-20 11:27:45
+**Generated:** 2025-12-20 17:18:16
 **Orchestrator:** SystemIntegrityOrchestrator v1.0.0
 **Execution Time:** 0.00 seconds
 
@@ -39,18 +39,18 @@
 
 ## 📋 Detailed Issues
 
-### 1. [MEDIUM] Test suite timed out (>5 minutes)
+### 1. [MEDIUM] Error running tests: [Errno 2] No such file or directory: 'pytest'
 
 - **Category:** tests
 - **Status:** ⏸️ REMAINING
-- **Location:** `D:\PROJECTS\CORTEX\tests`
+- **Location:** `/Users/asifhussain/PROJECTS/CORTEX/tests`
 - **Auto-Fix:** Not available (manual intervention required)
 
 ### 2. [HIGH] cortex-operations.yaml not found
 
 - **Category:** manifests
 - **Status:** ⏸️ REMAINING
-- **Location:** `D:\PROJECTS\CORTEX\cortex-brain\cortex-operations.yaml`
+- **Location:** `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/cortex-operations.yaml`
 - **Auto-Fix:** Not available (manual intervention required)
 
 ---

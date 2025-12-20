@@ -12,7 +12,7 @@ import logging
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Union
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ class PlanFolderManager:
     Feature Flag: cortex.config.json::planning.use_folder_structure (default: true)
     """
     
-    def __init__(self, cortex_root: Path | str):
+    def __init__(self, cortex_root: Union[Path, str]):
         """
         Initialize PlanFolderManager.
         

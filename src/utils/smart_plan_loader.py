@@ -18,10 +18,11 @@ Usage:
     context = loader.load_plan_context("Tell me about Phase 6")       # Tier 3: ~2,500 tokens
 """
 
+import json
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Tuple, Any, Union
 import yaml
 
 logger = logging.getLogger(__name__)
@@ -40,7 +41,7 @@ class SmartPlanLoader:
     Version 2.0: LLM-based intent classification with regex fallback
     """
     
-    def __init__(self, cortex_root: Path | str, llm_client: Optional[Any] = None):
+    def __init__(self, cortex_root: Union[Path, str], llm_client: Optional[Any] = None):
         """
         Initialize smart plan loader.
         
