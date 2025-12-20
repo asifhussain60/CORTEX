@@ -78,6 +78,7 @@ class ADOResult:
         errors: List of error messages encountered
         warnings: List of warning messages
         logs: List of detailed execution logs
+        data: Additional phase-specific data (discovery context, validation results, etc.)
         
     Example:
         >>> result = ADOResult(
@@ -86,7 +87,8 @@ class ADOResult:
         ...     phase=ADOPhase.COMPLETION,
         ...     message="Created 5 work items",
         ...     items_created=5,
-        ...     items_planned=5
+        ...     items_planned=5,
+        ...     data={"discovery": {"complexity": "MEDIUM"}}
         ... )
     """
     status: str
@@ -99,11 +101,19 @@ class ADOResult:
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
     logs: List[str] = field(default_factory=list)
+    data: Dict[str, Any] = field(default_factory=dict)
 
 
 class ADOOrchestrator(BaseOrchestrator):
     """
     ADO Orchestrator - Azure DevOps Work Item Management
+    
+    Complexity Classification Constants:
+        HIGH_COMPLEXITY_KEYWORDS: Indicators of high complexity features
+        MEDIUM_COMPLEXITY_KEYWORDS: Indicators of medium complexity features
+        HIGH_COMPLEXITY_LENGTH_THRESHOLD: Character count for auto-HIGH classification
+        MEDIUM_COMPLEXITY_MIN_LENGTH: Minimum chars for MEDIUM classification
+        MEDIUM_COMPLEXITY_MAX_LENGTH: Maximum chars for MEDIUM classification
     
     Orchestrates the complete lifecycle of ADO work item generation from feature
     description to created work items, with Planning System 2.0 feature parity.
@@ -162,6 +172,22 @@ class ADOOrchestrator(BaseOrchestrator):
         ...     for link in result.work_item_links:
         ...         print(f"  - {link}")
     """
+    
+    # Complexity Classification Constants
+    HIGH_COMPLEXITY_KEYWORDS = [
+        "distributed", "blockchain", "real-time", "integration",
+        "security", "payment", "encryption", "scalability",
+        "microservice", "kubernetes", "multi-tenant"
+    ]
+    
+    MEDIUM_COMPLEXITY_KEYWORDS = [
+        "feature", "system", "api", "database", "authentication",
+        "authorization", "workflow", "service", "module"
+    ]
+    
+    HIGH_COMPLEXITY_LENGTH_THRESHOLD = 100
+    MEDIUM_COMPLEXITY_MIN_LENGTH = 30
+    MEDIUM_COMPLEXITY_MAX_LENGTH = 100
     
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
@@ -283,15 +309,53 @@ class ADOOrchestrator(BaseOrchestrator):
         
         start_time: datetime = datetime.now()
         logs: List[str] = []
+        warnings: List[str] = []
+        
+        # Discovery phase data structure:
+        # {
+        #     "complexity": str,              # HIGH/MEDIUM/LOW
+        #     "review_context": Optional[Dict],  # From review orchestrator (None if unavailable)
+        #     "duplicates": List[Dict]        # Existing ADO work items (empty if unavailable)
+        # }
+        discovery_data: Dict[str, Any] = {}
         
         try:
             # ===== PHASE 1: DISCOVERY =====
             self._transition_phase(self.current_phase, ADOPhase.DISCOVERY, logs)
             
-            # - Run review orchestrator for context
-            # - Check for duplicate ADO items
-            # - Classify complexity (HIGH/MEDIUM/LOW)
             logs.append(f"📋 Planning for: {feature_name}")
+            
+            # Complexity Classification
+            complexity = self._classify_complexity(feature_name)
+            discovery_data["complexity"] = complexity
+            logs.append(f"🎯 Complexity classified as: {complexity}")
+            
+            # Review Orchestrator Integration (graceful degradation)
+            try:
+                review_context = self._run_review_orchestrator(feature_name)
+                discovery_data["review_context"] = review_context
+                logs.append(f"✅ Review orchestrator completed")
+            except Exception as e:
+                warning_msg = f"⚠️  Review orchestrator unavailable: {e}"
+                warnings.append(warning_msg)
+                logs.append(warning_msg)
+                discovery_data["review_context"] = None
+            
+            # Duplicate Detection (graceful degradation)
+            try:
+                duplicates = self._detect_duplicates(feature_name)
+                discovery_data["duplicates"] = duplicates
+                if duplicates:
+                    dup_msg = f"⚠️  Found {len(duplicates)} potential duplicate work items"
+                    warnings.append(dup_msg)
+                    logs.append(dup_msg)
+                else:
+                    logs.append("✅ No duplicate work items found")
+            except Exception as e:
+                warning_msg = f"⚠️  Duplicate detection unavailable: {e}"
+                warnings.append(warning_msg)
+                logs.append(warning_msg)
+                discovery_data["duplicates"] = []
             
             # ===== PHASE 2: VALIDATION =====
             self._transition_phase(ADOPhase.DISCOVERY, ADOPhase.VALIDATION, logs)
@@ -347,7 +411,9 @@ class ADOOrchestrator(BaseOrchestrator):
                 success=True,
                 phase=self.current_phase,
                 message=f"ADO planning workflow completed for '{feature_name}' (test mode)",
-                logs=logs
+                logs=logs,
+                warnings=warnings,
+                data={"discovery": discovery_data}
             )
             
         except Exception as e:
@@ -361,3 +427,109 @@ class ADOOrchestrator(BaseOrchestrator):
                 errors=[str(e)],
                 logs=logs
             )
+    
+    def _classify_complexity(self, feature_name: str) -> str:
+        """
+        Classify feature complexity based on name analysis
+        
+        Analyzes feature description to determine complexity level (HIGH/MEDIUM/LOW).
+        Higher complexity triggers additional validation phases (e.g., threat modeling).
+        
+        Args:
+            feature_name: Feature description to analyze
+            
+        Returns:
+            str: Complexity level - "HIGH", "MEDIUM", or "LOW"
+            
+        Classification Rules:
+            HIGH: Contains HIGH_COMPLEXITY_KEYWORDS or exceeds HIGH_COMPLEXITY_LENGTH_THRESHOLD
+            MEDIUM: Contains MEDIUM_COMPLEXITY_KEYWORDS or within MEDIUM length range
+            LOW: Simple descriptions, bug fixes, minor changes (default)
+            
+        Note:
+            Uses class-level constants for keyword matching:
+            - HIGH_COMPLEXITY_KEYWORDS: distributed, blockchain, security, etc.
+            - MEDIUM_COMPLEXITY_KEYWORDS: feature, system, api, etc.
+            - Thresholds configurable via class constants
+        """
+        feature_lower = feature_name.lower()
+        feature_length = len(feature_name)
+        
+        # Check HIGH complexity
+        if (feature_length > self.HIGH_COMPLEXITY_LENGTH_THRESHOLD or 
+            any(keyword in feature_lower for keyword in self.HIGH_COMPLEXITY_KEYWORDS)):
+            return "HIGH"
+        
+        # Check MEDIUM complexity
+        if ((self.MEDIUM_COMPLEXITY_MIN_LENGTH <= feature_length <= self.MEDIUM_COMPLEXITY_MAX_LENGTH) or
+            any(keyword in feature_lower for keyword in self.MEDIUM_COMPLEXITY_KEYWORDS)):
+            return "MEDIUM"
+        
+        # Default to LOW
+        return "LOW"
+    
+    def _run_review_orchestrator(self, feature_name: str) -> Optional[Dict[str, Any]]:
+        """
+        Run review orchestrator to gather contextual information
+        
+        Invokes the review orchestrator to analyze the feature and gather
+        relevant context from codebase, documentation, and existing work.
+        
+        Args:
+            feature_name: Feature to analyze
+            
+        Returns:
+            Optional[Dict[str, Any]]: Review context data with keys:
+                - context: str - Contextual analysis
+                - related_code: List[str] - Relevant file paths
+                - complexity_hints: str - Suggested complexity level
+            
+        Raises:
+            Exception: When review orchestrator not yet integrated (graceful degradation)
+            
+        Implementation Notes:
+            TODO (Week 10 Day 2): Integrate with HolisticReviewOrchestrator
+            - Import from src.operations.utilities.holistic_review_orchestrator
+            - Pass feature_name and workspace_root
+            - Parse and structure return data
+            - Handle orchestrator failures gracefully
+        """
+        # Placeholder - will be implemented with actual review orchestrator
+        raise Exception(
+            "Review orchestrator integration pending (Task 3). "
+            "Will use HolisticReviewOrchestrator for context gathering."
+        )
+    
+    def _detect_duplicates(self, feature_name: str) -> List[Dict[str, Any]]:
+        """
+        Detect duplicate ADO work items
+        
+        Searches existing ADO work items to identify potential duplicates
+        for the given feature to prevent duplicate effort.
+        
+        Args:
+            feature_name: Feature name to search for
+            
+        Returns:
+            List[Dict[str, Any]]: List of potential duplicate work items with keys:
+                - id: int - ADO work item ID
+                - title: str - Work item title
+                - state: str - Current state (Active, Resolved, Closed, etc.)
+                - url: str - ADO web URL for work item
+            
+        Raises:
+            Exception: When ADO API integration not yet implemented (graceful degradation)
+            
+        Implementation Notes:
+            TODO (Week 10 Day 3 PM): Integrate with ADO API
+            - Create ADOUtility class for API operations
+            - Implement search_work_items() with fuzzy matching
+            - Query ADO REST API with feature name
+            - Parse response and extract work item details
+            - Return empty list if no duplicates found
+        """
+        # Placeholder - will be implemented with actual ADO utility
+        raise Exception(
+            "ADO duplicate detection integration pending (Task 6). "
+            "Will use ADO REST API for work item search."
+        )
