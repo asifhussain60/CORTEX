@@ -1,3 +1,0 @@
-# DALL-E Prompt: Brain Protection
-
-Create a security shield diagram protecting brain tiers...
