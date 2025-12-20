@@ -21,7 +21,7 @@ Usage:
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 import yaml
 
 logger = logging.getLogger(__name__)
@@ -36,18 +36,26 @@ class SmartPlanLoader:
     - Architecture queries: Load status + master hub (~1,200 tokens)
     - Phase queries: Load status + specific phase file (~2,500 tokens)
     - Week queries: Load status + specific worker file (~1,000 tokens)
+    
+    Version 2.0: LLM-based intent classification with regex fallback
     """
     
-    def __init__(self, cortex_root: Path | str):
+    def __init__(self, cortex_root: Path | str, llm_client: Optional[Any] = None):
         """
         Initialize smart plan loader.
         
         Args:
             cortex_root: Path to CORTEX root directory
+            llm_client: Optional LLM client for semantic intent classification
         """
         self.cortex_root = Path(cortex_root)
         self.plan_base = self.cortex_root / "cortex-brain" / "documents" / "planning" / "active" / "CORTEX-3.0-4.0"
         self.metadata_path = self.plan_base / "metadata" / "plan-metadata.yaml"
+        self.llm_client = llm_client
+        
+        logger.info(
+            f"SmartPlanLoader initialized with LLM: {'enabled' if llm_client else 'disabled (regex fallback)'}"
+        )
         
         # Load metadata for intelligent routing
         self.metadata = self._load_metadata()
@@ -102,8 +110,116 @@ class SmartPlanLoader:
         """
         Classify query intent for optimal loading strategy.
         
+        Uses LLM for semantic understanding with regex fallback.
+        
+        Args:
+            query: User's natural language query
+            
         Returns:
-            Dict with keys: type, estimated_tokens, phase_id (optional), week_number (optional)
+            Dict with keys: type, estimated_tokens, phase_id (optional), week_number (optional), confidence (optional)
+        """
+        # Try LLM classification first if available
+        if self.llm_client:
+            try:
+                llm_result = self._classify_intent_llm(query)
+                if llm_result and llm_result.get('confidence', 0) >= 0.8:
+                    logger.info(f"LLM classification: {llm_result['type']} (confidence: {llm_result['confidence']})")
+                    return llm_result
+                else:
+                    logger.info(f"LLM confidence too low ({llm_result.get('confidence', 0)}), falling back to regex")
+            except Exception as e:
+                logger.warning(f"LLM classification failed: {e}, falling back to regex")
+        
+        # Fallback to regex-based classification
+        return self._classify_intent_regex(query)
+    
+    def _classify_intent_llm(self, query: str) -> Optional[Dict]:
+        """
+        LLM-based semantic intent classification.
+        
+        Args:
+            query: User's natural language query
+            
+        Returns:
+            Dict with intent classification or None if LLM unavailable
+        """
+        if not self.llm_client:
+            return None
+        
+        prompt = f"""Classify the following planning query into one of these intent types:
+
+Query: "{query}"
+
+Intent Types:
+1. status_only - Progress/summary queries (e.g., "what's the status?", "how's it going?", "current progress")
+2. architecture - Design/structure questions (e.g., "what's the architecture?", "explain design decisions")
+3. phase_specific - Questions about a specific phase (e.g., "tell me about Phase 6", "Phase 4 details")
+4. week_specific - Questions about a specific week (e.g., "what's happening Week 9?")
+5. default - General questions or unclear intent
+
+Response must be valid JSON with this structure:
+{{
+    "type": "status_only|architecture|phase_specific|week_specific|default",
+    "confidence": 0.95,
+    "reasoning": "Brief explanation",
+    "phase_id": "6" (only if phase_specific),
+    "week_number": "9" (only if week_specific),
+    "estimated_tokens": 400
+}}
+
+Token estimates:
+- status_only: 400 tokens
+- architecture: 1200 tokens  
+- phase_specific: 2500 tokens
+- week_specific: 1000 tokens
+- default: 1200 tokens"""
+
+        try:
+            # Call LLM client (interface to be implemented)
+            response = self.llm_client.classify(prompt)
+            
+            # Parse JSON response
+            if isinstance(response, str):
+                result = json.loads(response)
+            else:
+                result = response
+            
+            # Validate required fields
+            if 'type' not in result or 'confidence' not in result:
+                logger.warning("LLM response missing required fields")
+                return None
+            
+            # Extract phase/week if present
+            intent_data = {
+                'type': result['type'],
+                'confidence': result['confidence'],
+                'estimated_tokens': result.get('estimated_tokens', 1200)
+            }
+            
+            if 'phase_id' in result:
+                intent_data['phase_id'] = str(result['phase_id'])
+            
+            if 'week_number' in result:
+                intent_data['week_number'] = str(result['week_number'])
+            
+            return intent_data
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse LLM JSON response: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"LLM classification error: {e}")
+            return None
+    
+    def _classify_intent_regex(self, query: str) -> Dict:
+        """
+        Regex-based fallback intent classification.
+        
+        Args:
+            query: User's natural language query
+            
+        Returns:
+            Dict with intent classification
         """
         query_lower = query.lower()
         
@@ -112,7 +228,8 @@ class SmartPlanLoader:
         if any(keyword in query_lower for keyword in status_keywords):
             return {
                 'type': 'status_only',
-                'estimated_tokens': 400
+                'estimated_tokens': 400,
+                'confidence': 0.85
             }
         
         # Architecture/design queries
@@ -120,7 +237,8 @@ class SmartPlanLoader:
         if any(keyword in query_lower for keyword in arch_keywords):
             return {
                 'type': 'architecture',
-                'estimated_tokens': 1200
+                'estimated_tokens': 1200,
+                'confidence': 0.85
             }
         
         # Phase-specific queries
@@ -130,7 +248,8 @@ class SmartPlanLoader:
             return {
                 'type': 'phase_specific',
                 'phase_id': phase_id,
-                'estimated_tokens': 2500
+                'estimated_tokens': 2500,
+                'confidence': 0.90
             }
         
         # Week-specific queries
@@ -143,13 +262,15 @@ class SmartPlanLoader:
                 'type': 'week_specific',
                 'phase_id': phase_id,
                 'week_number': week_number,
-                'estimated_tokens': 1000
+                'estimated_tokens': 1000,
+                'confidence': 0.90
             }
         
         # Default: Load status + master hub
         return {
             'type': 'default',
-            'estimated_tokens': 1200
+            'estimated_tokens': 1200,
+            'confidence': 0.75
         }
     
     def _load_status_only(self) -> str:
