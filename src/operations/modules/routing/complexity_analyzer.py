@@ -17,6 +17,7 @@ Version: 1.0.0
 """
 
 import re
+import json
 import logging
 from enum import Enum
 from dataclasses import dataclass
@@ -123,16 +124,23 @@ class ComplexityAnalyzer:
         r'bump\s+version'
     ]
     
-    def __init__(self):
-        """Initialize complexity analyzer"""
+    def __init__(self, llm_client=None):
+        """
+        Initialize complexity analyzer.
+        
+        Args:
+            llm_client: Optional LLM client for semantic analysis (v2.0)
+        """
         self.dimension_weights = {
             'scope_magnitude': 25,
             'dependencies': 25,
             'risk_level': 30,
             'uncertainty': 20
         }
+        self.llm_client = llm_client
         
-        logger.info("ComplexityAnalyzer initialized with 4-dimensional scoring")
+        mode = "LLM-enhanced" if llm_client else "regex-based"
+        logger.info(f"ComplexityAnalyzer initialized with 4-dimensional scoring ({mode})")
     
     def analyze(
         self,
@@ -157,12 +165,12 @@ class ComplexityAnalyzer:
         """
         logger.info(f"Analyzing complexity for request: {user_request[:100]}...")
         
-        # Check for trivial patterns first
-        if self._is_trivial(user_request):
-            return self._create_trivial_score(user_request)
-        
-        # Check for auto-route triggers
+        # Check for auto-route triggers FIRST (LLM can override trivial patterns)
         triggers = self._detect_triggers(user_request)
+        
+        # Only check trivial if no triggers detected
+        if not triggers and self._is_trivial(user_request):
+            return self._create_trivial_score(user_request)
         
         # Score 4 dimensions
         scope_score = self._score_scope_magnitude(user_request, codebase_context)
@@ -220,7 +228,87 @@ class ComplexityAnalyzer:
         return False
     
     def _detect_triggers(self, user_request: str) -> List[str]:
-        """Detect auto-route triggers forcing HIGH complexity"""
+        """
+        Detect auto-route triggers forcing HIGH complexity.
+        
+        Uses LLM for semantic understanding with regex fallback.
+        """
+        # Try LLM-based detection first if available
+        if self.llm_client:
+            try:
+                llm_triggers = self._detect_triggers_llm(user_request)
+                if llm_triggers is not None and llm_triggers.get('confidence', 0) >= 0.8:
+                    logger.info(f"LLM trigger detection: {llm_triggers['triggers']} (confidence: {llm_triggers['confidence']})")
+                    # Return raw triggers from LLM (just category names)
+                    return llm_triggers['triggers']
+                else:
+                    logger.info(f"LLM confidence too low ({llm_triggers.get('confidence', 0)}), falling back to regex")
+            except Exception as e:
+                logger.warning(f"LLM trigger detection failed: {e}, falling back to regex")
+        
+        # Fallback to regex-based detection
+        return self._detect_triggers_regex(user_request)
+    
+    def _detect_triggers_llm(self, user_request: str) -> Optional[Dict]:
+        """
+        LLM-based semantic trigger detection (v2.0).
+        
+        Args:
+            user_request: User's feature request
+            
+        Returns:
+            Dict with keys: triggers (list), confidence (float), reasoning (str)
+            None if LLM unavailable
+        """
+        if not self.llm_client:
+            return None
+        
+        prompt = f"""Analyze feature request for critical complexity triggers:
+
+Request: "{user_request}"
+
+Check for these critical patterns:
+1. Security: authentication, authorization, encryption, access control, credentials, OAuth, SSO, JWT
+2. Data operations: database migrations, schema changes, data loss risk, backfill, reseed
+3. API breaking changes: API versioning, deprecation, backwards incompatibility, contract changes
+4. Critical domains: payment processing, financial transactions, healthcare/medical, compliance (GDPR/HIPAA/PCI), accessibility
+
+Return JSON with this structure:
+{{
+    "triggers": ["security", "data_operations", "api_breaking", "critical_domains"],
+    "confidence": 0.95,
+    "reasoning": "Brief explanation of what patterns were detected"
+}}
+
+Only include triggers that are clearly present. Confidence should be 0.8+ for reliable detection."""
+
+        try:
+            # Call LLM client (interface to be implemented)
+            response = self.llm_client.analyze(prompt)
+            
+            # Parse JSON response
+            if isinstance(response, str):
+                result = json.loads(response)
+            else:
+                result = response
+            
+            # Validate required fields
+            if 'triggers' not in result or 'confidence' not in result:
+                logger.warning("LLM response missing required fields")
+                return None
+            
+            return {
+                'triggers': result['triggers'],
+                'confidence': result['confidence'],
+                'reasoning': result.get('reasoning', 'No reasoning provided')
+            }
+            
+        except Exception as e:
+            logger.error(f"LLM trigger detection error: {e}")
+            return None
+    
+    def _detect_triggers_regex(self, user_request: str) -> List[str]:
+        """Regex-based trigger detection (legacy fallback)."""
         triggers = []
         request_lower = user_request.lower()
         
@@ -229,7 +317,7 @@ class ComplexityAnalyzer:
                 if re.search(pattern, request_lower):
                     trigger_name = f"{category}: {pattern}"
                     triggers.append(trigger_name)
-                    logger.info(f"Auto-route trigger detected: {trigger_name}")
+                    logger.info(f"Auto-route trigger detected (regex): {trigger_name}")
         
         return triggers
     
