@@ -12,7 +12,25 @@
 
 **For Overview:** Read [00-MASTER-PLAN.md](./00-MASTER-PLAN.md) (~800 tokens)
 
+**For Execution:** See [AUTONOMOUS-EXECUTION-GUIDE.md](./references/AUTONOMOUS-EXECUTION-GUIDE.md) - How to execute phases autonomously
+
 **For Details:** Navigate to specific folders below
+
+---
+
+## ⚡ Execution Modes
+
+This migration supports **2 execution modes**:
+
+1. **Supervised (Default):** Execute tasks one-by-one with manual approval
+2. **Autonomous (Advanced):** Execute all phases/tasks end-to-end automatically
+
+**Quick Commands:**
+- `execute task [N]` - Run single task (supervised)
+- `execute all phases autonomously` - Full E2E execution
+- `execute tasks 2-10 autonomously` - Continue from task 2
+
+See [Autonomous Execution Guide](./references/AUTONOMOUS-EXECUTION-GUIDE.md) for full details.
 
 ---
 

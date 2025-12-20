@@ -1,8 +1,32 @@
 # CORTEX 3.0 → 4.0 Migration Plan Metadata
 # Purpose: Machine-readable metadata for smart plan loading and token optimization
-# Version: 1.0
+# Version: 1.1
 # Created: 2025-12-20
 # Updated: 2025-12-20
+
+execution_modes:
+  # Autonomous execution support (matches Planning System 2.0 pattern)
+  # See: cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml (line 166+)
+  supervised:
+    description: "User approves each task/phase transition (manual control)"
+    auto_validate: true
+    auto_commit: false
+    auto_transition: false
+    self_healing: false
+    user_approval_required: true
+  
+  autonomous:
+    description: "Full E2E phase execution with self-healing and auto-checkpoints"
+    auto_validate: true
+    auto_commit: true
+    auto_transition: true
+    self_healing: true
+    escalation_threshold: 3  # Escalate to user after 3 consecutive failures
+    user_approval_required: false
+    commands:
+      - "execute all phases autonomously"
+      - "execute phase [N] autonomously"
+      - "continue autonomous execution"
 
 plan_info:
   name: "CORTEX-3.0-4.0-Migration"
@@ -12,6 +36,7 @@ plan_info:
   updated: "2025-12-20"
   status: "APPROVED"
   branch_strategy: "CORTEX-3.0 → CORTEX-4.0"
+  default_execution_mode: "supervised"  # Can be overridden per phase/worker
   
   # Token optimization metrics
   original_size_lines: 7283

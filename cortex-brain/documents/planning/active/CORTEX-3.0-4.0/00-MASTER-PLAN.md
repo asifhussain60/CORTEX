@@ -1,8 +1,27 @@
 # CORTEX 3.0 → 4.0 Migration Master Plan
 
-**Version:** 1.5 | **Author:** Asif Hussain | **Created:** December 17, 2025 | **Updated:** December 20, 2025
+**Version:** 1.6 | **Author:** Asif Hussain | **Created:** December 17, 2025 | **Updated:** December 20, 2025
 
 **Status:** 🟢 APPROVED | **Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 80%
+
+---
+
+## 🚀 Execution Modes
+
+### Mode 1: Supervised (Phase-by-Phase)
+- Execute each phase/task with manual approval
+- Review outcomes before proceeding
+- **Command:** `execute phase [N]` or `execute task [N]`
+
+### Mode 2: Autonomous (Full Plan Execution)
+- Execute all phases end-to-end autonomously
+- Auto-validation and auto-checkpoints
+- Self-healing with failure escalation (3 retries)
+- **Commands:** 
+  - `execute all phases autonomously`
+  - `execute plan autonomously from phase 6`
+
+**Pattern Reference:** Planning System 2.0 (planning-system-4.0-manifest.yaml line 166+)
 
 ---
 
