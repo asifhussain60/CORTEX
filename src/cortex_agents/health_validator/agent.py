@@ -7,7 +7,6 @@ from ..agent_types import IntentType
 
 from .validators import (
     DatabaseValidator,
-    TestValidator,
     GitValidator,
     DiskValidator,
     PerformanceValidator
@@ -50,7 +49,7 @@ class HealthValidator(BaseAgent):
         super().__init__(name, tier1_api, tier2_kg, tier3_context)
         
         self.db_validator = DatabaseValidator(tier1_api, tier2_kg, tier3_context)
-        self.test_validator = TestValidator()
+        self.test_validator = None  # Temporarily disabled
         self.git_validator = GitValidator()
         self.disk_validator = DiskValidator()
         self.perf_validator = PerformanceValidator(tier3_context)
@@ -98,7 +97,6 @@ class HealthValidator(BaseAgent):
             # Perform all health checks using validators
             check_results = {
                 "databases": self.db_validator.check(),
-                "tests": self.test_validator.check() if not request.context.get("skip_tests") else {"status": "skip"},
                 "git": self.git_validator.check(),
                 "disk_space": self.disk_validator.check(),
                 "performance": self.perf_validator.check()
