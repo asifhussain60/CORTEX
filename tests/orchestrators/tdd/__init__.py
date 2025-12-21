@@ -1,21 +1,6 @@
 """
-Unit Tests for TDD Orchestrator v4.0
+Test suite for TDD Orchestrator v4.0
 
-Test suite for unified TDD orchestrator with adaptive learning.
-
-Version: 4.0.0
+Tests the unified TDD workflow with RED→GREEN→REFACTOR phases,
+adaptive learning, and clean code enforcement.
 """
-
-# Task 6.10 Enhancement Tests
-# from .test_tdd_orchestrator_v4 import *
-# from .test_red_phase_strategy import *
-
-__all__ = [
-    # 'TestTDDOrchestratorV4',
-    # 'TestTechnologyDiscoveryEngine',
-    # 'TestCleanCodeEnforcer',
-    # 'TestDomainModels',
-    # 'TestREDPhaseDoR',
-    # 'TestREDPhaseExecution',
-    # 'TestREDPhaseDoD'
-]

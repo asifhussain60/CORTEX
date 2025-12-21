@@ -25,6 +25,7 @@ from .extractors.code_analyzer import CodeAnalyzer, ModuleInfo, ClassInfo
 from .extractors.type_extractor import TypeExtractor
 from .generators.api_doc_generator import APIDocGenerator
 from .generators.diagram_generator import DiagramGenerator
+from .parallel_analyzer import ParallelDocumentationAnalyzer
 
 
 @dataclass
@@ -35,6 +36,7 @@ class DocumentationConfig:
     include_private: bool = False
     generate_diagrams: bool = True
     generate_quick_ref: bool = True
+    use_parallel_analysis: bool = True  # NEW: Enable parallel analysis
     diagram_types: List[str] = field(default_factory=lambda: [
         "class_hierarchy",
         "phase_flow"
@@ -95,6 +97,7 @@ class DocumentationOrchestrator(BaseOrchestrator):
         self.type_extractor = TypeExtractor()
         self.api_doc_generator = APIDocGenerator()
         self.diagram_generator = DiagramGenerator()
+        self.parallel_analyzer = ParallelDocumentationAnalyzer(logger)  # NEW
         
         # Inject loggers
         self.code_analyzer.logger = self.logger
@@ -233,6 +236,11 @@ class DocumentationOrchestrator(BaseOrchestrator):
         """Analyze Python files and extract metadata"""
         self.logger.info("Phase: ANALYZE - Scanning Python files")
         
+        # Use parallel analysis if enabled
+        if self.doc_config.use_parallel_analysis:
+            return self._analyze_phase_parallel(context, result)
+        
+        # Fall back to sequential analysis
         self.modules.clear()
         
         for source_path in self.doc_config.source_paths:
@@ -264,6 +272,91 @@ class DocumentationOrchestrator(BaseOrchestrator):
                         result.warnings.append(error_msg)
         
         self.logger.info(f"Analyzed {result.modules_analyzed} modules")
+        
+        return {'modules': self.modules, 'result': result}
+    
+    def _analyze_phase_parallel(
+        self,
+        context: Dict[str, Any],
+        result: DocumentationResult
+    ) -> Dict[str, Any]:
+        """
+        Analyze Python files using parallel multi-agent analysis
+        
+        Uses ParallelDocumentationAnalyzer to analyze API, architecture,
+        and user guide documentation concurrently.
+        """
+        import asyncio
+        
+        self.logger.info("Phase: ANALYZE - Using parallel multi-agent analysis")
+        
+        # Run parallel analysis
+        try:
+            # Create event loop if not in async context
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+            
+            parallel_results = loop.run_until_complete(
+                self.parallel_analyzer.analyze_parallel(self.doc_config.source_paths)
+            )
+            
+            # Extract results
+            api_result = parallel_results['api']
+            arch_result = parallel_results['architecture']
+            guide_result = parallel_results['user_guide']
+            validation = parallel_results['validation']
+            
+            # Update documentation result
+            result.modules_analyzed = api_result.modules_analyzed
+            result.errors.extend(api_result.errors)
+            result.errors.extend(arch_result.errors)
+            result.errors.extend(guide_result.errors)
+            result.warnings.extend(api_result.warnings)
+            result.warnings.extend(arch_result.warnings)
+            result.warnings.extend(guide_result.warnings)
+            
+            # Log validation issues
+            if validation.broken_references > 0:
+                self.logger.warning(
+                    f"Cross-reference validation found {validation.broken_references} "
+                    f"broken references out of {validation.references_checked} checked"
+                )
+                for issue in validation.issues:
+                    result.warnings.append(
+                        f"Cross-reference issue: {issue.description} ({issue.location})"
+                    )
+            
+            # Still populate self.modules for subsequent phases using sequential analysis
+            # (Parallel analyzer provides metadata, but full AST analysis still needed)
+            self.modules.clear()
+            for source_path in self.doc_config.source_paths:
+                if source_path.is_dir():
+                    for py_file in source_path.rglob("*.py"):
+                        if '__pycache__' in str(py_file) or py_file.name.startswith('test_'):
+                            continue
+                        try:
+                            module_info = self.code_analyzer.analyze_file(py_file)
+                            self.modules.append(module_info)
+                        except Exception as e:
+                            error_msg = f"Failed to analyze {py_file}: {e}"
+                            self.logger.warning(error_msg)
+                            result.warnings.append(error_msg)
+            
+            self.logger.info(
+                f"✅ Parallel analysis complete: {result.modules_analyzed} modules, "
+                f"{validation.valid_references} valid refs, {validation.broken_references} broken refs"
+            )
+            
+        except Exception as e:
+            error_msg = f"Parallel analysis failed: {e}"
+            self.logger.error(error_msg)
+            result.errors.append(error_msg)
+            
+            # Fall back to sequential analysis
+            self.logger.info("Falling back to sequential analysis")
+            return self._analyze_phase(context, result)
         
         return {'modules': self.modules, 'result': result}
     
