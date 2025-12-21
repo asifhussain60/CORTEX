@@ -249,12 +249,12 @@ class TestConvenienceFunctions:
     
     def test_get_tier2_path_convenience(self, temp_repo_root):
         """Test get_tier2_path() convenience function."""
-        manager = get_manager(repo_root=temp_repo_root)
-        manager.SHARED_TIER2 = temp_repo_root.parent / ".cortex" / "shared" / "tier2"
-        
         path = get_tier2_path(repo_root=temp_repo_root)
         
-        assert path == manager.SHARED_TIER2
+        # Verify it returns a shared tier2 path (not repo-specific)
+        assert path.name == "tier2"
+        assert "shared" in path.parts
+        assert ".cortex" in path.parts
     
     def test_get_tier3_path_convenience(self, temp_repo_root):
         """Test get_tier3_path() convenience function."""

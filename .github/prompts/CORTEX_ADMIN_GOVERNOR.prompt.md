@@ -119,12 +119,13 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - `cli_wrapper`: Must have `cli_script` field pointing to valid wrapper (e.g., `scripts/cli_wrappers/align_wrapper.py`)
   - `copilot_chat`: Interactive workflows, no CLI script needed
   - `internal`: Infrastructure only, reject direct invocation
-- **CLI Wrapper Completeness (15 wrappers validated):**
+- **CLI Wrapper Completeness (16 wrappers validated):**
   - system_integrity_wrapper.py, refine_wrapper.py, upgrade_wrapper.py
   - review_wrapper.py, audit_wrapper.py, deploy_wrapper.py
   - regenerate_prompts_wrapper.py, align_wrapper.py, cleanup_wrapper.py
   - healthcheck_wrapper.py, optimize_wrapper.py, sanitize_wrapper.py
   - realign_plans_wrapper.py, cleanup_plans_wrapper.py, generate_ra_specs.py
+  - base_wrapper.py (base class - not registered)
 
 ### 2.5 User Operation Completeness Verification (NEW - Detects Ready-But-Inactive)
 - **For production-ready infrastructure with passing tests:**
@@ -206,11 +207,11 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - Update imports, paths, configs, docs
 
 ### 6. CORTEX 3.0 → 4.0 Migration Enforcement
-- **Phase tracking awareness (from CORTEX4-STATUS.md v2.0):**
-  - Overall Progress: 82%
-  - Current: Phase 6 (Orchestrator Consolidation) - In progress (Task 6.10-6.12 remaining)
+- **Phase tracking awareness (from CORTEX4-STATUS.md v2.1):**
+  - Overall Progress: 83%
+  - Current: Phase 5 + 6 (PARALLEL) - Phase 6 at 40% (9/12 tasks complete)
   - Structure: Phase/Task format (12 phases, ~70 tasks)
-  - Parallel phases: Phase 5 (Brain + Agentic AI 12%), Phase 10 (Knowledge Library 4%)
+  - Parallel phases: Phase 5 (Brain + Agentic AI 5/12), Phase 6 (40%), Phase 10 (Knowledge Library 1/10)
   - Authority source: `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md`
   - Planning format: Logic-based (Phase → Task), NOT calendar-based (Week → Day)
 - **Legacy purge:**

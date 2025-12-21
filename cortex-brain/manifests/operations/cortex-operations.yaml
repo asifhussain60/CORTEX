@@ -1046,6 +1046,52 @@ operations:
     - deploy
     - validate
     category: maintenance
+  realign_plans:
+    name: Plan Realignment
+    description: Migrate plans to Planning System 3.0 canonical structure (WP## naming, execution/context subfolders)
+    deployment_tier: admin
+    execution_method: cli_wrapper
+    cli_script: scripts/cli_wrappers/realign_plans_wrapper.py
+    natural_language:
+    - realign plans
+    - migrate plans to canonical structure
+    - reorganize plans
+    - update plan structure
+    category: planning
+    modules:
+    - plan_realignment_engine
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Realigns plans to WP## naming, moves YAML to execution/, graphs to context/
+    examples:
+    - realign plans
+    - migrate plans to canonical structure
+  cleanup_plans:
+    name: Plan Cleanup
+    description: Automated plan lifecycle management - delete temp plans, archive completed/failed plans
+    deployment_tier: admin
+    execution_method: cli_wrapper
+    cli_script: scripts/cli_wrappers/cleanup_plans_wrapper.py
+    natural_language:
+    - cleanup plans
+    - clean up old plans
+    - archive completed plans
+    - manage plan lifecycle
+    category: planning
+    modules:
+    - plan_cleanup_manager
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Cleans temp plans (7 days), archives completed (30 days) and failed (14 days) plans
+    examples:
+    - cleanup plans
+    - archive old plans
   optimize_tokens:
     name: Optimize Tokens
     description: CORTEX Token Optimization CLI

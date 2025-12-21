@@ -187,6 +187,7 @@ class SystemIntegrityOrchestrator(BaseOrchestrator):
                 'issues_found': self.report.issues_found,
                 'issues_fixed': self.report.issues_fixed,
                 'issues_remaining': self.report.issues_remaining,
+                'tests_run': self.report.tests_run,
                 'tests_passed': self.report.tests_passed,
                 'tests_failed': self.report.tests_failed,
                 'execution_time': self.report.execution_time_seconds
@@ -701,7 +702,7 @@ Phase {phase['number']} ({phase['name']}) has been completed and validated by Sy
         self.logger.info("Phase 7: Validating manifests")
         
         # Check cortex-operations.yaml
-        operations_yaml = self.workspace_root / "cortex-brain" / "cortex-operations.yaml"
+        operations_yaml = self.workspace_root / "cortex-operations.yaml"
         
         if operations_yaml.exists():
             self._validate_operations_manifest(operations_yaml, context)
@@ -724,7 +725,9 @@ Phase {phase['number']} ({phase['name']}) has been completed and validated by Sy
             # Check for system_integrity operation
             operations = manifest.get('cortex_operations', {})
             
-            if 'system_integrity' not in operations:
+            operations_root = manifest.get('operations', {})
+            
+            if 'system_integrity' not in operations_root:
                 if context.get('fix_mode', True):
                     self._add_system_integrity_to_manifest(manifest_path, manifest, context)
                 else:
@@ -749,10 +752,10 @@ Phase {phase['number']} ({phase['name']}) has been completed and validated by Sy
             import yaml
             
             # Add operation
-            if 'cortex_operations' not in manifest:
-                manifest['cortex_operations'] = {}
+            if 'operations' not in manifest:
+                manifest['operations'] = {}
             
-            manifest['cortex_operations']['system_integrity'] = {
+            manifest['operations']['system_integrity'] = {
                 'triggers': ['system integrity', 'validate system', 'check integrity', 'integrity check'],
                 'description': 'Comprehensive system validation and auto-fix',
                 'orchestrator': 'SystemIntegrityOrchestrator',
