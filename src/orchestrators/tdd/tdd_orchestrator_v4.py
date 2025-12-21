@@ -31,6 +31,21 @@ from src.orchestrators.tdd.test_quality_evaluator import TestQualityEvaluator
 from src.orchestrators.tdd.code_safety_guardrail import CodeSafetyGuardrail
 from src.orchestration_4_0.execution.execution_mode_manager import ExecutionModeManager
 
+# Phase 5 Component Imports (Day 1: Multi-Agent Collaboration)
+from src.orchestration_4_0.frameworks.multi_agent_orchestrator import (
+    MultiAgentOrchestrator,
+    CollaborationPattern
+)
+from src.orchestration_4_0.learning.agent_learning_engine import (
+    AgentLearningEngine,
+    StrategyType,
+    ExecutionPattern
+)
+from src.orchestration_4_0.frameworks.context_validator import (
+    ContextValidator,
+    ContextQuality
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -558,7 +573,11 @@ class TDDOrchestratorV4:
         knowledge_graph,
         mcp_gateway,
         config: Optional[Dict[str, Any]] = None,
-        llm_client: Optional[Any] = None
+        llm_client: Optional[Any] = None,
+        # Phase 5 Components (optional DI)
+        multi_agent_orchestrator: Optional[MultiAgentOrchestrator] = None,
+        learning_engine: Optional[AgentLearningEngine] = None,
+        context_validator: Optional[ContextValidator] = None
     ):
         self.brain = brain_connector
         self.kg = knowledge_graph
@@ -568,6 +587,13 @@ class TDDOrchestratorV4:
         # Initialize adaptive learning
         self.tech_discovery = TechnologyDiscoveryEngine(brain_connector, knowledge_graph)
         self.clean_code = CleanCodeEnforcer()
+        
+        # Phase 5 Components: Multi-Agent Collaboration (Day 1)
+        self.multi_agent_orchestrator = multi_agent_orchestrator or MultiAgentOrchestrator()
+        self.learning_engine = learning_engine or AgentLearningEngine(knowledge_graph)
+        self.context_validator = context_validator or ContextValidator(knowledge_graph)
+        
+        logger.info("🎭 Phase 5 components initialized: MultiAgent, Learning, ContextValidator")
         
         # Task 6.10 Package 1: Parallel test execution (50% faster)
         self.parallel_runner = ParallelTestRunner(
@@ -601,7 +627,12 @@ class TDDOrchestratorV4:
             'parallel_speedup': 0.0,  # Track parallel performance
             'test_quality_avg': 0.0,  # Track average test quality
             'safety_violations': 0,   # Track safety issues caught
-            'execution_mode_switches': 0  # Track mode adaptations
+            'execution_mode_switches': 0,  # Track mode adaptations
+            # Phase 5 Metrics
+            'context_validations': 0,
+            'multi_agent_executions': 0,
+            'learning_patterns_stored': 0,
+            'auto_retrievals': 0
         }
         
         logger.info("🎭 Orchestrator engaged: TDDOrchestratorV4 (Enhanced with Phase 5 AI)")
@@ -635,14 +666,70 @@ class TDDOrchestratorV4:
         logger.info(f"🎭 Starting TDD cycle: {feature_name}")
         self.metrics['total_cycles'] += 1
         
+        # Phase 5: Context Validation (Day 1)
+        logger.info("🔍 Phase 5: Validating execution context...")
+        self.metrics['context_validations'] += 1
+        
+        execution_plan = {
+            'operation_type': 'tdd_cycle',
+            'required_context': [
+                'feature_name', 'acceptance_criteria', 'project_path'
+            ],
+            'optional_context': [
+                'tech_profile', 'execution_mode', 'test_framework',
+                'coverage_threshold', 'quality_gates'
+            ]
+        }
+        
+        initial_context = {
+            'feature_name': feature_name,
+            'acceptance_criteria': acceptance_criteria,
+            'project_path': str(project_path),
+            **(context or {})
+        }
+        
+        validation = await self.context_validator.validate_context_sufficiency(
+            context=initial_context,
+            execution_plan=execution_plan
+        )
+        
+        logger.info(f"✅ Context validation complete: {validation.quality.value}")
+        logger.info(f"   Quality score: {validation.get_quality_score():.1f}/100")
+        
+        if validation.retrieved_items:
+            self.metrics['auto_retrievals'] += len(validation.retrieved_items)
+            logger.info(f"   Auto-retrieved: {list(validation.retrieved_items.keys())}")
+        
+        if validation.missing_optional:
+            logger.info(f"   Missing optional: {validation.missing_optional}")
+        
+        if not validation.is_valid():
+            logger.error(f"❌ Context validation failed: missing {validation.missing_required}")
+            return {
+                'success': False,
+                'error': 'Insufficient context',
+                'validation': validation
+            }
+        
         # Package 5: Determine execution mode
         if execution_mode:
             chosen_mode = execution_mode
         else:
-            chosen_mode = await self.execution_mode_manager.select_mode(
-                task_complexity='medium',
-                user_preferences={'default_mode': 'autonomous'}
+            # Use execution mode manager with adaptive selection
+            from src.orchestration_4_0.execution.execution_mode_manager import Operation, User
+            operation = Operation(
+                name='tdd_cycle',
+                category='test',
+                estimated_duration=300
             )
+            user = User(
+                user_id="tdd_user",
+                completed_operations=self.metrics.get('total_cycles', 0),
+                successful_operations=self.metrics.get('successful_cycles', 0),
+                days_since_first_use=7,  # Default
+                first_used_at=datetime.now()
+            )
+            chosen_mode = self.execution_mode_manager.selector.select_mode(operation, user).value
             self.metrics['execution_mode_switches'] += 1
         
         logger.info(f"🎮 Execution mode: {chosen_mode}")
@@ -671,10 +758,20 @@ class TDDOrchestratorV4:
         try:
             # Phase 1: RED - Generate failing tests
             logger.info("🎭 Phase transition: START → RED")
+            
+            # Phase 5: Get learning recommendations for RED phase
+            red_recommendation = await self._get_learning_recommendations(
+                'test_generation',
+                exec_context
+            )
+            
             results['RED'] = await self._execute_phase(
                 TDDPhase.RED,
                 exec_context
             )
+            
+            # Phase 5: Record learning from RED phase
+            await self._record_phase_learning(TDDPhase.RED, exec_context, results['RED'])
             
             # Package 3: Evaluate test quality after RED phase
             if 'test_code' in results['RED'].outputs:
@@ -694,10 +791,20 @@ class TDDOrchestratorV4:
             # Phase 2: GREEN - Minimal implementation
             logger.info("🎭 Phase transition: RED → GREEN")
             exec_context.update(results['RED'].outputs)
+            
+            # Phase 5: Get learning recommendations for GREEN phase
+            green_recommendation = await self._get_learning_recommendations(
+                'implementation',
+                exec_context
+            )
+            
             results['GREEN'] = await self._execute_phase(
                 TDDPhase.GREEN,
                 exec_context
             )
+            
+            # Phase 5: Record learning from GREEN phase
+            await self._record_phase_learning(TDDPhase.GREEN, exec_context, results['GREEN'])
             
             # Package 6: Check code safety after GREEN phase
             if 'implementation_code' in results['GREEN'].outputs:
@@ -716,10 +823,20 @@ class TDDOrchestratorV4:
             # Phase 3: REFACTOR - Clean up code
             logger.info("🎭 Phase transition: GREEN → REFACTOR")
             exec_context.update(results['GREEN'].outputs)
+            
+            # Phase 5: Get learning recommendations for REFACTOR phase
+            refactor_recommendation = await self._get_learning_recommendations(
+                'refactoring',
+                exec_context
+            )
+            
             results['REFACTOR'] = await self._execute_phase(
                 TDDPhase.REFACTOR,
                 exec_context
             )
+            
+            # Phase 5: Record learning from REFACTOR phase
+            await self._record_phase_learning(TDDPhase.REFACTOR, exec_context, results['REFACTOR'])
             
             logger.info("🎭 Phase transition: REFACTOR → COMPLETE")
             
@@ -745,6 +862,199 @@ class TDDOrchestratorV4:
                 'completed_phases': list(results.keys()),
                 'partial_results': results
             }
+    
+    # ============================================================================
+    # Phase 5: Multi-Agent Collaboration & Learning (Day 1)
+    # ============================================================================
+    
+    async def _get_learning_recommendations(
+        self,
+        operation_type: str,
+        context: Dict[str, Any]
+    ) -> Optional[Any]:
+        """
+        Get strategy recommendations from learning engine.
+        
+        Args:
+            operation_type: Type of operation (e.g., 'test_generation', 'implementation')
+            context: Execution context
+            
+        Returns:
+            Recommendation or None if insufficient patterns
+        """
+        try:
+            recommendations = self.learning_engine.get_recommendations(
+                operation_type=operation_type,
+                context=context,
+                top_k=1
+            )
+            
+            if recommendations:
+                recommendation = recommendations[0]
+                logger.info(f"🧠 Learning recommendation: {recommendation.strategy.value}")
+                logger.info(f"   Confidence: {recommendation.confidence:.2f}")
+                logger.info(f"   Expected outcome: {recommendation.expected_outcome:.1f}/10")
+                return recommendation
+            
+            return None
+        except Exception as e:
+            logger.warning(f"⚠️  Failed to get recommendation: {e}")
+            return None
+    
+    async def _record_phase_learning(
+        self,
+        phase: TDDPhase,
+        context: Dict[str, Any],
+        result: PhaseResult
+    ) -> None:
+        """
+        Record phase execution for learning.
+        
+        Args:
+            phase: TDD phase executed
+            context: Execution context
+            result: Phase result
+        """
+        try:
+            from src.orchestration_4_0.frameworks.agent_evaluator import EvaluationCategory
+            
+            # Create mock evaluation from result metrics  
+            # Note: EvaluationResult expects different fields than we initially thought
+            class MockEvaluation:
+                def __init__(self, score):
+                    self.score = score
+            
+            eval_result = MockEvaluation(score=result.metrics.get('quality_score', 7.0))
+            
+            # Map phase to operation type
+            operation_map = {
+                TDDPhase.RED: 'test_generation',
+                TDDPhase.GREEN: 'implementation',
+                TDDPhase.REFACTOR: 'refactoring'
+            }
+            
+            # Learn from execution
+            self.learning_engine.learn_from_execution(
+                operation_type=operation_map.get(phase, 'unknown'),
+                strategy=StrategyType.SEQUENTIAL,  # Default for now
+                context={
+                    'feature_name': context.get('feature_name'),
+                    'complexity': context.get('complexity', 'medium'),
+                    'tech_stack': str(context.get('tech_profile', {}))
+                },
+                evaluation=eval_result,
+                execution_time_seconds=result.metrics.get('execution_time', 0),
+                tokens_used=result.metrics.get('tokens_used')
+            )
+            
+            self.metrics['learning_patterns_stored'] += 1
+            logger.info(f"🧠 Recorded learning pattern for {phase.value} phase")
+            
+        except Exception as e:
+            logger.warning(f"⚠️  Failed to record learning: {e}")
+    
+    async def _create_phase_agents(
+        self,
+        phase: TDDPhase,
+        context: Dict[str, Any]
+    ) -> List[Any]:
+        """
+        Create agents for multi-agent phase execution.
+        
+        Args:
+            phase: TDD phase to create agents for
+            context: Execution context
+            
+        Returns:
+            List of agents for the phase
+        """
+        from src.orchestration_4_0.base.agent_interface import Agent, AgentContext
+        
+        # Create simple wrapper agents for TDD phases
+        class TDDPhaseAgent(Agent):
+            def __init__(self, name: str, phase_strategy, phase_context):
+                super().__init__(name)
+                self.strategy = phase_strategy
+                self.phase_context = phase_context
+            
+            async def execute(self, agent_context: AgentContext) -> AgentContext:
+                """Execute phase strategy and update agent context"""
+                try:
+                    result = await self.strategy.execute(self.phase_context)
+                    agent_context.add_to_history(self.name)
+                    agent_context.data.update(result.outputs)
+                    agent_context.metadata['success'] = result.success
+                    agent_context.metadata['metrics'] = result.metrics
+                    return agent_context
+                except Exception as e:
+                    agent_context.add_error(str(e))
+                    return agent_context
+        
+        strategy = self.strategies.get(phase.value)
+        if not strategy:
+            return []
+        
+        # For now, create single agent per phase
+        # Future: Could create multiple agents for different strategies
+        agent = TDDPhaseAgent(f"{phase.value}_Agent", strategy, context)
+        return [agent]
+    
+    async def _execute_phase_with_multi_agent(
+        self,
+        phase: TDDPhase,
+        context: Dict[str, Any]
+    ) -> PhaseResult:
+        """
+        Execute phase using multi-agent orchestration.
+        
+        Args:
+            phase: TDD phase to execute
+            context: Execution context
+            
+        Returns:
+            Phase result
+        """
+        logger.info(f"🤖 Multi-agent execution: {phase.value} phase")
+        self.metrics['multi_agent_executions'] += 1
+        
+        # Create agents for phase
+        agents = await self._create_phase_agents(phase, context)
+        
+        if not agents:
+            # Fall back to standard execution
+            logger.warning(f"⚠️  No agents created, falling back to standard execution")
+            return await self._execute_phase(phase, context)
+        
+        # Execute using sequential pattern (simplest for now)
+        from src.orchestration_4_0.base.agent_interface import AgentContext
+        
+        initial_context = AgentContext(
+            data=context.copy(),
+            metadata={'phase': phase.value}
+        )
+        
+        final_context = await self.multi_agent_orchestrator.execute_sequential(
+            agents=agents,
+            initial_context=initial_context
+        )
+        
+        # Convert agent context back to PhaseResult
+        result = PhaseResult(
+            phase_name=phase.value,
+            success=final_context.metadata.get('success', False),
+            outputs=final_context.data,
+            metrics=final_context.metadata.get('metrics', {})
+        )
+        
+        if final_context.has_errors():
+            result.errors = final_context.errors
+            logger.warning(f"⚠️  Phase had errors: {result.errors}")
+        
+        return result
+    
+    # ============================================================================
+    # End Phase 5 Integration
+    # ============================================================================
     
     async def _execute_phase(
         self,

@@ -5,12 +5,6 @@ Phase 3: Real brain implementation.
 Phase 7.2: Pattern learning activation.
 """
 
-from .knowledge_graph.types import (
-    Pattern,
-    PatternType,
-    RelationshipType
-)
-
 # Phase 3: Real brain implementation (production SQLite backend)
 from .knowledge_graph import KnowledgeGraph
 
@@ -22,9 +16,6 @@ from . import semantic_search
 
 __all__ = [
     'KnowledgeGraph',
-    'Pattern',
-    'PatternType',
-    'RelationshipType',
     'relationship_mapper',
     'tdd_cycle_logger',
     'relevance_scorer',
