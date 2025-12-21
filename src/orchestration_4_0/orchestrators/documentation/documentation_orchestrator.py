@@ -28,6 +28,7 @@ from .generators.diagram_generator import DiagramGenerator
 from .parallel_analyzer import ParallelDocumentationAnalyzer
 from .preference_tracker import DocumentationPreferenceTracker, DocumentationPreferences
 from .style_adaptation import StyleAdaptationEngine, FeedbackLoopIntegrator
+from .execution_mode_integration import ExecutionModeIntegration, FormattingConfig
 
 
 @dataclass
@@ -114,6 +115,9 @@ class DocumentationOrchestrator(BaseOrchestrator):
         self.style_engine = StyleAdaptationEngine(logger)
         self.feedback_integrator = FeedbackLoopIntegrator(self.preference_tracker, logger)
         
+        # NEW: Initialize execution mode integration
+        self.mode_integration = ExecutionModeIntegration(logger, config)
+        
         # Inject loggers
         self.code_analyzer.logger = self.logger
         self.type_extractor.logger = self.logger
@@ -127,6 +131,9 @@ class DocumentationOrchestrator(BaseOrchestrator):
         
         # NEW: Store user preferences for adaptive generation
         self.user_preferences: Optional[DocumentationPreferences] = None
+        
+        # NEW: Store formatting configuration from mode integration
+        self.formatting_config: Optional[FormattingConfig] = None
         
         # Adaptive execution mode
         self.execution_mode = self.config.get("execution_mode", "AUTONOMOUS")
@@ -164,6 +171,24 @@ class DocumentationOrchestrator(BaseOrchestrator):
         if "execution_mode" in context:
             self.execution_mode = context["execution_mode"]
             self.logger.info(f"🎯 Execution mode overridden: {self.execution_mode}")
+        
+        # NEW: Select execution mode and get formatting config
+        selected_mode = self.mode_integration.select_mode_for_operation(
+            operation_name="generate_documentation",
+            estimated_duration=300,  # 5 minutes typical
+            override_mode=context.get("execution_mode")
+        )
+        self.execution_mode = selected_mode.value
+        
+        # Get context-aware formatting configuration
+        self.formatting_config = self.mode_integration.get_formatting_config(selected_mode)
+        context['execution_mode'] = selected_mode
+        context['formatting_config'] = self.formatting_config
+        
+        self.logger.info(
+            f"🎭 Mode selected: {selected_mode.value}, "
+            f"formatting: {self.formatting_config.detail_level.value}"
+        )
         
         # NEW: Load user preferences if adaptive style is enabled
         if self.doc_config.enable_adaptive_style and self.doc_config.user_id:
@@ -578,6 +603,11 @@ class DocumentationOrchestrator(BaseOrchestrator):
         """Generate D3.js interactive diagrams"""
         self.logger.info("Phase: GENERATE_DIAGRAMS - Creating visualizations")
         
+        # NEW: Check if diagrams should be included based on mode
+        if self.formatting_config and not self.formatting_config.include_diagrams:
+            self.logger.info("⏭️  Skipping diagram generation (mode: AUTONOMOUS)")
+            return context
+        
         diagrams_dir = self.doc_config.output_dir / "diagrams"
         diagrams_dir.mkdir(parents=True, exist_ok=True)
         
@@ -699,6 +729,13 @@ class DocumentationOrchestrator(BaseOrchestrator):
         result.output_files.append(summary_path)
         
         self.logger.info(f"Documentation summary: {summary_path}")
+        
+        # NEW: Update user statistics after successful completion
+        if hasattr(self, 'mode_integration') and self.mode_integration:
+            self.mode_integration.update_user_stats(
+                operation_name="generate_documentation",
+                success=len(result.errors) == 0
+            )
         
         return context
     

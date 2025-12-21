@@ -110,8 +110,19 @@ class TestTDDOrchestratorFoundation:
     def orchestrator(self):
         """Create orchestrator with mocked dependencies."""
         brain = Mock()
+        brain.get_patterns = Mock(return_value=[])
+        brain.learn_pattern = Mock(return_value=True)
+        
         kg = Mock()
+        kg.search = Mock(return_value=[])
+        kg.search_patterns = Mock(return_value=[])  # AgentLearningEngine uses this
+        kg.add_node = Mock(return_value=True)
+        kg.add_relationship = Mock(return_value=True)
+        kg.save_pattern = Mock(return_value=True)
+        
         mcp = Mock()
+        mcp.call = Mock(return_value={"status": "success"})
+        
         config = {'workspace_root': 'd:\\PROJECTS\\CORTEX'}
         return TDDOrchestratorV4(brain, kg, mcp, config)
     
@@ -134,8 +145,19 @@ class TestTDDOrchestratorFoundation:
     def test_orchestrator_engagement_logged(self, caplog):
         """Test orchestrator logs engagement hints (🎭 pattern)."""
         brain = Mock()
+        brain.get_patterns = Mock(return_value=[])
+        brain.learn_pattern = Mock(return_value=True)
+        
         kg = Mock()
+        kg.search = Mock(return_value=[])
+        kg.search_patterns = Mock(return_value=[])
+        kg.add_node = Mock(return_value=True)
+        kg.add_relationship = Mock(return_value=True)
+        kg.save_pattern = Mock(return_value=True)
+        
         mcp = Mock()
+        mcp.call = Mock(return_value={"status": "success"})
+        
         config = {'workspace_root': 'd:\\PROJECTS\\CORTEX'}
         TDDOrchestratorV4(brain, kg, mcp, config)
         

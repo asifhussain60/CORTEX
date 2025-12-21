@@ -22,9 +22,13 @@ def brain_connector():
 def knowledge_graph():
     """Create mock knowledge graph."""
     kg = Mock()
+    # Return empty list for strategy weights query
     kg.search = Mock(return_value=[])
+    kg.search_patterns = Mock(return_value=[])  # AgentLearningEngine uses this
     kg.add_node = Mock(return_value=True)
     kg.add_relationship = Mock(return_value=True)
+    kg.get_pattern_data = Mock(return_value=None)
+    kg.save_pattern = Mock(return_value=True)
     return kg
 
 

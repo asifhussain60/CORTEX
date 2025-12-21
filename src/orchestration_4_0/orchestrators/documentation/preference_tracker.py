@@ -306,9 +306,7 @@ class DocumentationPreferenceTracker:
             elif preference_type == 'include_toc':
                 prefs.include_toc = new_value.lower() == 'true'
             else:
-                if self.logger:
-                    self.logger.warning(f"Unknown preference type: {preference_type}")
-                return
+                raise ValueError(f"Unknown preference type: {preference_type}")
             
             prefs.updated_at = time.time()
             
@@ -432,3 +430,50 @@ class DocumentationPreferenceTracker:
             key=lambda u: u.timestamp,
             reverse=True
         )[:limit]
+    
+    def save_preferences(self) -> None:
+        """Public method to save preferences to storage"""
+        self._save_preferences()
+    
+    def get_preference_summary(
+        self,
+        user_id: str,
+        project_id: Optional[str] = None
+    ) -> str:
+        """
+        Get human-readable summary of user preferences
+        
+        Args:
+            user_id: User identifier
+            project_id: Optional project identifier
+            
+        Returns:
+            String summary of preferences
+        """
+        prefs = self.get_preferences(user_id, project_id)
+        
+        summary_parts = [
+            f"Documentation Preferences for {user_id}",
+            f"Style: {prefs.style.value}",
+            f"Tone: {prefs.tone.value}",
+            f"Depth: {prefs.depth.value}",
+            f"Example Density: {prefs.example_density.value}",
+            f"Format: {prefs.preferred_format}",
+            f"Diagrams: {'Yes' if prefs.include_diagrams else 'No'}",
+            f"Table of Contents: {'Yes' if prefs.include_toc else 'No'}"
+        ]
+        
+        if project_id:
+            summary_parts.insert(1, f"Project: {project_id}")
+        
+        return "\n".join(summary_parts)
+    
+    @property
+    def preferences(self) -> Dict[str, DocumentationPreferences]:
+        """Public read-only access to preferences cache"""
+        return self._preferences_cache
+    
+    @property
+    def update_history(self) -> Dict[str, List[PreferenceUpdate]]:
+        """Public read-only access to update history"""
+        return self._update_history

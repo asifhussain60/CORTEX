@@ -1,0 +1,91 @@
+{
+  "preferences": {
+    "test_user": {
+      "user_id": "test_user",
+      "project_id": null,
+      "style": "balanced",
+      "tone": "neutral",
+      "depth": "detailed",
+      "example_density": "balanced",
+      "preferred_format": "markdown",
+      "include_diagrams": true,
+      "include_toc": true,
+      "created_at": 1766353495.6116421,
+      "updated_at": 1766354611.976125
+    }
+  },
+  "update_history": {
+    "test_user": [
+      {
+        "preference_type": "depth",
+        "old_value": "moderate",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766353495.611854
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766353495.612897
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766353502.388646
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766353502.390302
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766353509.1441689
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766353509.145866
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766354387.8201768
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766354387.821845
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766354611.97452
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766354611.976126
+      }
+    ]
+  }
+}
