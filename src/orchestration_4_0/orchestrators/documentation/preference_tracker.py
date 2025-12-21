@@ -9,6 +9,11 @@ Tracks user preferences for documentation generation including:
 - Example density: many vs few examples
 
 Stores preferences in Tier 2 knowledge graph for persistence and learning.
+
+Integration with AgentLearningEngine:
+- Tracks which documentation strategies work best for different module types
+- Learns patterns from generation success/failure
+- Recommends optimal documentation approaches based on context
 """
 
 from dataclasses import dataclass, field, asdict
@@ -20,6 +25,7 @@ import time
 
 if TYPE_CHECKING:
     from logging import Logger
+    from ...learning.agent_learning_engine import AgentLearningEngine
 
 
 class DocumentationStyle(Enum):
@@ -118,9 +124,13 @@ class DocumentationPreferenceTracker:
     - Learning from user feedback and edits
     - Preference history and evolution tracking
     - Integration with Tier 2 knowledge graph
+    - AgentLearningEngine integration for strategy recommendations
     
     Example:
-        tracker = DocumentationPreferenceTracker(logger)
+        from src.orchestration_4_0.learning.agent_learning_engine import AgentLearningEngine
+        
+        learning_engine = AgentLearningEngine()
+        tracker = DocumentationPreferenceTracker(logger, learning_engine=learning_engine)
         
         # Get or create preferences for user
         prefs = tracker.get_preferences(user_id="dev123")
@@ -140,12 +150,21 @@ class DocumentationPreferenceTracker:
             original_doc="...",
             edited_doc="..."
         )
+        
+        # Record successful documentation generation for learning
+        tracker.record_generation_success(
+            user_id="dev123",
+            module_type="api_reference",
+            context={'complexity': 'high', 'file_count': 10},
+            quality_score=8.5
+        )
     """
     
     def __init__(
         self,
         logger: Optional["Logger"] = None,
-        storage_path: Optional[Path] = None
+        storage_path: Optional[Path] = None,
+        learning_engine: Optional["AgentLearningEngine"] = None
     ):
         """
         Initialize preference tracker
@@ -153,9 +172,11 @@ class DocumentationPreferenceTracker:
         Args:
             logger: Logger instance for output
             storage_path: Path to store preferences (defaults to tier2/)
+            learning_engine: Optional AgentLearningEngine for pattern learning
         """
         self.logger = logger
         self.storage_path = storage_path or Path("cortex-brain/tier2/documentation_preferences.json")
+        self.learning_engine = learning_engine
         
         # In-memory cache of preferences
         self._preferences_cache: Dict[str, DocumentationPreferences] = {}
@@ -165,6 +186,9 @@ class DocumentationPreferenceTracker:
         
         # Load existing preferences
         self._load_preferences()
+        
+        if self.learning_engine and self.logger:
+            self.logger.info("🧠 AgentLearningEngine integration enabled for documentation preferences")
     
     def _load_preferences(self) -> None:
         """Load preferences from storage"""
@@ -467,6 +491,176 @@ class DocumentationPreferenceTracker:
             summary_parts.insert(1, f"Project: {project_id}")
         
         return "\n".join(summary_parts)
+    
+    def record_generation_success(
+        self,
+        user_id: str,
+        module_type: str,
+        context: Dict[str, Any],
+        quality_score: float,
+        execution_time_seconds: float = 0.0,
+        project_id: Optional[str] = None
+    ) -> None:
+        """
+        Record successful documentation generation for agent learning.
+        
+        Integrates with AgentLearningEngine to track which documentation
+        strategies work best for different module types and contexts.
+        
+        Args:
+            user_id: User identifier
+            module_type: Type of module documented (api_reference, guide, etc.)
+            context: Generation context (complexity, file_count, etc.)
+            quality_score: Quality score (1.0-10.0)
+            execution_time_seconds: Time taken to generate docs
+            project_id: Optional project identifier
+        """
+        if not self.learning_engine:
+            if self.logger:
+                self.logger.debug("AgentLearningEngine not available - skipping pattern recording")
+            return
+        
+        # Get current user preferences
+        prefs = self.get_preferences(user_id, project_id)
+        
+        # Build strategy context combining preferences and generation context
+        strategy_context = {
+            'style': prefs.style.value,
+            'tone': prefs.tone.value,
+            'depth': prefs.depth.value,
+            'example_density': prefs.example_density.value,
+            'module_type': module_type,
+            **context
+        }
+        
+        # Create mock evaluation result (in real usage, would come from evaluator)
+        from ...frameworks.agent_evaluator import EvaluationResult, EvaluationCategory
+        from ...learning.agent_learning_engine import StrategyType
+        
+        evaluation = EvaluationResult(
+            agent_name="documentation_generator",
+            category=EvaluationCategory.CORRECTNESS,
+            score=quality_score,
+            reasoning=f"Generated documentation with {prefs.style.value} style",
+            metrics={'quality_score': quality_score}
+        )
+        
+        # Determine strategy based on preferences
+        if prefs.depth == DocumentationDepth.DETAILED:
+            strategy = StrategyType.INCREMENTAL
+        elif prefs.depth == DocumentationDepth.CONCISE:
+            strategy = StrategyType.SKELETON
+        else:
+            strategy = StrategyType.ADAPTIVE
+        
+        # Record pattern in learning engine
+        try:
+            self.learning_engine.learn_from_execution(
+                operation_type="documentation",
+                strategy=strategy,
+                context=strategy_context,
+                evaluation=evaluation,
+                execution_time_seconds=execution_time_seconds,
+                tokens_used=None
+            )
+            
+            if self.logger:
+                self.logger.info(
+                    f"📚 Recorded documentation pattern: {module_type} "
+                    f"(score: {quality_score:.1f}/10, strategy: {strategy.value})"
+                )
+        
+        except Exception as e:
+            if self.logger:
+                self.logger.warning(f"Failed to record pattern in learning engine: {e}")
+    
+    def get_recommended_preferences(
+        self,
+        user_id: str,
+        module_type: str,
+        context: Dict[str, Any],
+        project_id: Optional[str] = None
+    ) -> Optional[DocumentationPreferences]:
+        """
+        Get recommended preferences based on learning engine insights.
+        
+        Uses AgentLearningEngine to find similar past successful documentation
+        generations and recommend optimal preferences.
+        
+        Args:
+            user_id: User identifier
+            module_type: Type of module to document
+            context: Generation context (complexity, file_count, etc.)
+            project_id: Optional project identifier
+            
+        Returns:
+            Recommended DocumentationPreferences or None if no recommendations
+        """
+        if not self.learning_engine:
+            if self.logger:
+                self.logger.debug("AgentLearningEngine not available - using default preferences")
+            return None
+        
+        # Build search context
+        search_context = {
+            'module_type': module_type,
+            **context
+        }
+        
+        try:
+            # Get recommendations from learning engine
+            recommendations = self.learning_engine.get_recommendations(
+                operation_type="documentation",
+                context=search_context,
+                top_k=1
+            )
+            
+            if not recommendations:
+                if self.logger:
+                    self.logger.info("No learned patterns found - using user's current preferences")
+                return None
+            
+            top_recommendation = recommendations[0]
+            
+            # Extract preferences from learned patterns
+            # This would be enhanced to parse actual learned preference patterns
+            current_prefs = self.get_preferences(user_id, project_id)
+            
+            # For now, adjust based on strategy recommendation
+            recommended_prefs = DocumentationPreferences(
+                user_id=user_id,
+                project_id=project_id,
+                style=current_prefs.style,
+                tone=current_prefs.tone,
+                depth=current_prefs.depth,
+                example_density=current_prefs.example_density,
+                preferred_format=current_prefs.preferred_format,
+                include_diagrams=current_prefs.include_diagrams,
+                include_toc=current_prefs.include_toc
+            )
+            
+            # Adjust depth based on recommended strategy
+            from ...learning.agent_learning_engine import StrategyType
+            if top_recommendation.strategy == StrategyType.INCREMENTAL:
+                recommended_prefs.depth = DocumentationDepth.DETAILED
+            elif top_recommendation.strategy == StrategyType.SKELETON:
+                recommended_prefs.depth = DocumentationDepth.CONCISE
+            else:
+                recommended_prefs.depth = DocumentationDepth.MODERATE
+            
+            if self.logger:
+                self.logger.info(
+                    f"💡 Recommended depth: {recommended_prefs.depth.value} "
+                    f"(confidence: {top_recommendation.confidence:.1%}, "
+                    f"reasoning: {top_recommendation.reasoning[:50]}...)"
+                )
+            
+            return recommended_prefs
+        
+        except Exception as e:
+            if self.logger:
+                self.logger.warning(f"Failed to get recommendations from learning engine: {e}")
+            return None
     
     @property
     def preferences(self) -> Dict[str, DocumentationPreferences]:

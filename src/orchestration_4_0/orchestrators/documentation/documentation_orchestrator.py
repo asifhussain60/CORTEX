@@ -29,6 +29,11 @@ from .parallel_analyzer import ParallelDocumentationAnalyzer
 from .preference_tracker import DocumentationPreferenceTracker, DocumentationPreferences
 from .style_adaptation import StyleAdaptationEngine, FeedbackLoopIntegrator
 from .execution_mode_integration import ExecutionModeIntegration, FormattingConfig
+from .enhanced_guardrails import (
+    EnhancedDocumentationGuardrail,
+    SensitivityLevel,
+    RedactionStrategy
+)
 
 
 @dataclass
@@ -44,6 +49,12 @@ class DocumentationConfig:
     user_id: Optional[str] = None  # NEW: User identifier for preference tracking
     project_id: Optional[str] = None  # NEW: Project identifier for preference scoping
     learn_from_feedback: bool = True  # NEW: Learn from user edits
+    # Package 3: Enhanced Guardrails configuration
+    enable_guardrails: bool = True  # NEW: Enable PII/PHI/PCI filtering
+    sensitivity_level: str = "CONFIDENTIAL"  # NEW: Sensitivity level (PUBLIC, INTERNAL, CONFIDENTIAL, RESTRICTED)
+    redaction_strategy: str = "MASK"  # NEW: Redaction strategy (MASK, HASH, REMOVE, PLACEHOLDER)
+    enable_audit_trail: bool = True  # NEW: Track all redactions for compliance
+    company_patterns: List[Dict[str, str]] = field(default_factory=list)  # NEW: Company-specific patterns to sanitize
     diagram_types: List[str] = field(default_factory=lambda: [
         "class_hierarchy",
         "phase_flow"
@@ -110,13 +121,24 @@ class DocumentationOrchestrator(BaseOrchestrator):
         self.diagram_generator = DiagramGenerator()
         self.parallel_analyzer = ParallelDocumentationAnalyzer(logger)
         
-        # NEW: Initialize preference tracking and style adaptation
-        self.preference_tracker = DocumentationPreferenceTracker(logger)
+        # NEW: Initialize AgentLearningEngine for pattern learning
+        from ...learning.agent_learning_engine import AgentLearningEngine
+        self.learning_engine = AgentLearningEngine()
+        
+        # NEW: Initialize preference tracking and style adaptation (with learning engine)
+        self.preference_tracker = DocumentationPreferenceTracker(logger, learning_engine=self.learning_engine)
         self.style_engine = StyleAdaptationEngine(logger)
         self.feedback_integrator = FeedbackLoopIntegrator(self.preference_tracker, logger)
         
         # NEW: Initialize execution mode integration
         self.mode_integration = ExecutionModeIntegration(logger, config)
+        
+        # Package 3: Initialize Enhanced Guardrails for PII/PHI/PCI filtering
+        self.guardrail = EnhancedDocumentationGuardrail(
+            logger=logger,
+            default_strategy=RedactionStrategy.MASK,
+            enable_audit_trail=True
+        )
         
         # Inject loggers
         self.code_analyzer.logger = self.logger
@@ -213,6 +235,16 @@ class DocumentationOrchestrator(BaseOrchestrator):
             self.user_preferences = None
             if self.doc_config.enable_adaptive_style:
                 self.logger.info("⚠️  Adaptive style enabled but no user_id provided")
+        
+        # Package 3: Configure guardrails with company-specific patterns
+        if self.doc_config.enable_guardrails and self.doc_config.company_patterns:
+            self.logger.info(f"🛡️  Configuring {len(self.doc_config.company_patterns)} company-specific patterns")
+            for pattern_config in self.doc_config.company_patterns:
+                pattern_name = pattern_config.get('name', 'CUSTOM_PATTERN')
+                pattern_regex = pattern_config.get('pattern', '')
+                if pattern_regex:
+                    self.guardrail.add_company_pattern(pattern_name, pattern_regex)
+                    self.logger.debug(f"  - Added pattern: {pattern_name}")
         
         self.logger.info(f"✅ Documentation will be generated at: {self.doc_config.output_dir}")
         
@@ -523,6 +555,54 @@ class DocumentationOrchestrator(BaseOrchestrator):
                 error_msg = f"Failed to generate quick reference: {e}"
                 self.logger.error(error_msg)
                 result.errors.append(error_msg)
+        
+        # Package 3: Apply guardrails to filter sensitive data from generated docs
+        if self.doc_config.enable_guardrails:
+            self.logger.info("🛡️  Applying guardrails to filter sensitive data")
+            total_redactions = 0
+            
+            for doc_file in result.output_files:
+                try:
+                    # Read generated documentation
+                    if doc_file.suffix == '.md':
+                        original_content = doc_file.read_text(encoding='utf-8')
+                        
+                        # Apply guardrails
+                        sensitivity = SensitivityLevel[self.doc_config.sensitivity_level]
+                        strategy = RedactionStrategy[self.doc_config.redaction_strategy]
+                        
+                        redaction_result = self.guardrail.redact_sensitive_data(
+                            text=original_content,
+                            sensitivity=sensitivity,
+                            strategy=strategy
+                        )
+                        
+                        # Write filtered content if any redactions were made
+                        if redaction_result.redaction_count > 0:
+                            doc_file.write_text(redaction_result.redacted_text, encoding='utf-8')
+                            total_redactions += redaction_result.redaction_count
+                            
+                            self.logger.info(
+                                f"🛡️  Filtered {redaction_result.redaction_count} sensitive items from {doc_file.name} "
+                                f"({', '.join(redaction_result.data_types_found)})"
+                            )
+                            
+                            # Log audit trail if enabled
+                            if self.doc_config.enable_audit_trail and redaction_result.audit_trail:
+                                for audit_entry in redaction_result.audit_trail[:5]:  # Show first 5
+                                    self.logger.debug(f"  - {audit_entry}")
+                                if len(redaction_result.audit_trail) > 5:
+                                    self.logger.debug(f"  ... and {len(redaction_result.audit_trail) - 5} more")
+                        
+                except Exception as e:
+                    error_msg = f"Failed to apply guardrails to {doc_file.name}: {e}"
+                    self.logger.warning(error_msg)
+                    result.warnings.append(error_msg)
+            
+            if total_redactions > 0:
+                self.logger.info(f"✅ Guardrails complete: {total_redactions} total redactions applied")
+            else:
+                self.logger.info("✅ Guardrails complete: No sensitive data detected")
         
         return context
     
@@ -991,3 +1071,63 @@ class DocumentationOrchestrator(BaseOrchestrator):
             return 0.0
         
         return self.feedback_integrator.get_preference_confidence(target_user_id)
+    
+    # Package 3: Enhanced Guardrails methods
+    
+    def get_guardrail_statistics(self) -> Dict[str, int]:
+        """
+        Get guardrail usage statistics
+        
+        Returns:
+            Dictionary with guardrail statistics:
+            - total_scans: Number of scans performed
+            - total_redactions: Total redactions applied
+            - company_patterns: Number of company patterns configured
+            - whitelist_entries: Number of whitelisted items
+            
+        Example:
+            stats = orchestrator.get_guardrail_statistics()
+            print(f"Applied {stats['total_redactions']} redactions across {stats['total_scans']} scans")
+        """
+        return self.guardrail.get_statistics()
+    
+    def add_guardrail_whitelist(self, text: str) -> None:
+        """
+        Add text to guardrail whitelist (won't be redacted)
+        
+        Useful for false positives like common variable names or test data.
+        
+        Args:
+            text: Text to whitelist (case-insensitive)
+            
+        Example:
+            # Prevent redacting test email addresses
+            orchestrator.add_guardrail_whitelist("test@example.com")
+            orchestrator.add_guardrail_whitelist("user@test.local")
+        """
+        self.guardrail.add_to_whitelist(text)
+        self.logger.info(f"🛡️  Added to guardrail whitelist: {text}")
+    
+    def configure_company_guardrail_pattern(self, pattern_name: str, pattern_regex: str) -> None:
+        """
+        Add a company-specific pattern to guardrails
+        
+        Args:
+            pattern_name: Name for the pattern (e.g., "COMPANY_DOMAIN")
+            pattern_regex: Regex pattern to match
+            
+        Example:
+            # Redact company domains
+            orchestrator.configure_company_guardrail_pattern(
+                "ACME_DOMAIN",
+                r"\\b[\\w.-]+@acme\\.com\\b"
+            )
+            
+            # Redact internal IPs
+            orchestrator.configure_company_guardrail_pattern(
+                "INTERNAL_IP",
+                r"\\b10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"
+            )
+        """
+        self.guardrail.add_company_pattern(pattern_name, pattern_regex)
+        self.logger.info(f"🛡️  Added company guardrail pattern: {pattern_name}")
