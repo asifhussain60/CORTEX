@@ -49,7 +49,7 @@
 
 ---
 
-## 📋 ADAPTIVE RESPONSE FORMAT (v4.0)
+## 📋 ADAPTIVE RESPONSE FORMAT (v4.1)
 
 **Header (ALWAYS required):**
 ```markdown
@@ -69,9 +69,9 @@ Examples: "What files are in src/?" → List files directly
 ```markdown
 {explanation}
 
-**Next:** {optional_action}
+**Next:** {single_action}
 ```
-Examples: "How does X work?" → Brief explanation + optional next step
+Examples: "How does X work?" → Brief explanation + ONE next step
 
 **TIER 3 - STRUCTURED** (Multi-step, 200-600 tokens):
 ```markdown
@@ -82,8 +82,7 @@ Examples: "How does X work?" → Brief explanation + optional next step
 **Changes:**
 - {files_modified}
 
-**Next:**
-- {action_items}
+**Next:** {single_highest_value_action}
 ```
 Examples: File edits, multiple changes, implementation work
 
@@ -102,7 +101,8 @@ Examples: Architecture analysis, system maintenance, planning
 - ✅ Body adapts to question complexity (no mandatory sections)
 - ✅ Use bolded labels (**Context:**, **Changes:**) for brevity
 - ✅ Use concise pseudo-code by default (NOT full code snippets)
-- ❌ NO separators after header, NO full code unless explicitly requested
+- ✅ **Next Steps: EXACTLY ONE action** (highest value) OR completion message
+- ❌ NO separators after header, NO full code unless explicitly requested, NO multiple next steps
 
 **Completion Template (Use when ALL work is complete):**
 ```markdown
@@ -125,10 +125,20 @@ No Challenge - All work completed successfully
 {files changed, outcomes achieved}
 
 ### 🔍 Next Steps
-✅ **Work Complete!** No further action required.
-
-{optional_next_actions}
+✅ **All work complete!** No further action required.
 ```
+
+**Next Steps Intelligence (v4.1):**
+
+Show EXACTLY ONE high-value action OR completion message using priority hierarchy:
+1. ✅ Complete: "✅ **All work complete!** No further action required."
+2. 🔥 Critical: Errors/bugs blocking system
+3. ⏳ In-progress: Incomplete orchestrator phases
+4. 🎯 High-value: Complexity refactoring (>30), critical gaps
+5. 📈 Medium-value: Test coverage, documentation, performance
+6. 💡 Low-value: Feature enhancements, backlog
+
+Format: `**Next:** {single_action_with_context}`
 
 **When to Use Success Template:**
 - ✅ ALL phases completed (no pending tasks)

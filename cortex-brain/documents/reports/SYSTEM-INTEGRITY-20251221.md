@@ -1,6 +1,6 @@
 # CORTEX System Integrity Report
 
-**Generated:** 2025-12-21 09:32:03
+**Generated:** 2025-12-21 12:51:30
 **Orchestrator:** SystemIntegrityOrchestrator v1.0.0
 **Execution Time:** 0.00 seconds
 
@@ -37,11 +37,11 @@
 
 ## 📋 Detailed Issues
 
-### 1. [MEDIUM] Test suite timed out (>5 minutes)
+### 1. [MEDIUM] Error running tests: [Errno 2] No such file or directory: 'pytest'
 
 - **Category:** tests
 - **Status:** ⏸️ REMAINING
-- **Location:** `D:\PROJECTS\CORTEX\tests`
+- **Location:** `/Users/asifhussain/PROJECTS/CORTEX/tests`
 - **Auto-Fix:** Not available (manual intervention required)
 
 ---
