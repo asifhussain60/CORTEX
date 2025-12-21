@@ -33,15 +33,16 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
    - Update test metrics with actual pass rates
    - Correct phase progress indicators
 
-4. **Completed Orchestrators (from CORTEX4-STATUS.md Week 10 Day 3):**
-   - ✅ ExecutionOrchestrator (Week 7 Days 1-3)
-   - ✅ DocumentationOrchestrator (Week 7 Days 4-5)
-   - ✅ TDDOrchestrator v4.0 (Week 7 Days 6-7) - 26 tests, 90%+ coverage
-   - ✅ Planning System Core MVP (Week 8 Days 1-5) - 138 tests, 84.6% coverage
-   - ✅ SmartPlanLoader v2.0 (Week 9 Day 1) - 15 tests, 40.36% coverage
-   - ✅ ComplexityAnalyzer v2.0 (Week 9 Day 2) - 15 tests, 82.86% coverage
-   - ✅ Vision API Activation (Week 9 Days 4-5) - 8/12 tests passing (66.7%)
-   - ✅ ADO Orchestrator (Week 10 Days 1-2) - 80 tests, 91.44% coverage
+4. **Completed Orchestrators (from CORTEX4-STATUS.md v2.0):**
+   - ✅ ExecutionOrchestrator (Task 6.1) - Phase 6
+   - ✅ DocumentationOrchestrator (Task 6.2) - Phase 6
+   - ✅ TDDOrchestrator v4.0 (Task 6.3) - Phase 6, 26 tests, 90%+ coverage
+   - ✅ Planning System Core MVP (Task 6.4) - Phase 6, 138 tests, 84.6% coverage
+   - ✅ SmartPlanLoader v2.0 (Task 6.5) - Phase 6, 15 tests, 40.36% coverage
+   - ✅ ComplexityAnalyzer v2.0 (Task 6.6) - Phase 6, 15 tests, 82.86% coverage
+   - ✅ Vision API Activation (Task 6.7-6.8) - Phase 6, 8/12 tests passing (66.7%)
+   - ✅ ADO Orchestrator (Task 6.9) - Phase 6, 80 tests, 91.44% coverage
+   - ✅ Adaptive Execution Modes (Task 5.5) - Phase 5, 14 tests, 95% complete
 
 5. **NOT YET IMPLEMENTED (do not reference as if they exist):**
    - ⏳ Admin Governor Orchestrator (this prompt describes it, but no code exists)
@@ -60,9 +61,10 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
 ## 🎯 Authoritative Sources (Truth Hierarchy)
 
 **Primary Truth Sources:**
-1. **Token-Optimized Status:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md` (~400 tokens)
-   - Current phase, week, overall progress
-   - Quick visual status bars
+1. **Token-Optimized Status:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md` v2.0 (~400 tokens)
+   - Current phase, task progress, overall completion
+   - Phase/Task structure (logic-based, NOT calendar-based)
+   - Quick visual status bars with task-level granularity
 2. **Master Hub:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/00-MASTER-PLAN.md` (~1200 tokens)
    - Executive summary, phase overview, navigation
 3. **Phase-Specific:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/phases/phase-*.md` (~2500 tokens each)
@@ -83,11 +85,12 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
 ## 📋 Core Responsibilities (Fix-First, Never Report-Only)
 
 ### 1. Plan ↔ Implementation Sanity Enforcement
-- **Parse token-optimized structure:**
-  - Quick status: `CORTEX4-STATUS.md` (400 tokens)
-  - Phase details: `phases/phase-*.md` (2500 tokens each)
+- **Parse token-optimized structure (v2.0 - Phase/Task format):**
+  - Quick status: `CORTEX4-STATUS.md` v2.0 (12 phases, ~70 tasks, 400 tokens)
+  - Phase details: `phases/phase-*.md` (task breakdown, 2500 tokens each)
   - Metadata: `metadata/plan-metadata.yaml`
-- **Extract deliverables:** completion states, wiring, tests, documentation
+  - Structure: Logic-based (Phase → Task), NOT calendar-based (Week → Day)
+- **Extract deliverables:** Phase completion, task states, wiring, tests, documentation
 - **Compare plan vs repo:**
   - Missing implementations (plan says done, code missing)
   - Extra/unplanned artifacts (code exists, not in plan)
@@ -165,11 +168,12 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - Validate co-located test structure (orchestrators + tests together)
 
 ### 4. Plan & Manifest Conflict Resolution
-- **Detect plan conflicts in token-optimized structure:**
-  - Duplicated responsibilities across phases
-  - Contradictory completion states (CORTEX4-STATUS vs phase files)
-  - Circular dependencies between phases
+- **Detect plan conflicts in token-optimized structure (v2.0 Phase/Task format):**
+  - Duplicated responsibilities across phases or tasks
+  - Contradictory completion states (CORTEX4-STATUS v2.0 vs phase files)
+  - Circular dependencies between phases or tasks
   - Progress percentage mismatches
+  - Calendar references (Week/Day) in Phase/Task plan (NOT allowed in v2.0)
 - **Validate orchestrator manifests:**
   - Schema compliance: `cortex-brain/manifests/orchestrators/manifest-schema.yaml`
   - Required fields: metadata, components, execution_method, documentation_path
@@ -202,12 +206,13 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - Update imports, paths, configs, docs
 
 ### 6. CORTEX 3.0 → 4.0 Migration Enforcement
-- **Phase tracking awareness (from CORTEX4-STATUS.md):**
+- **Phase tracking awareness (from CORTEX4-STATUS.md v2.0):**
   - Overall Progress: 82%
-  - Current: Phase 6 (Orchestrator Consolidation) - In progress
-  - Week: Week 10 Day 3
-  - Parallel phases: Phase 5 (Brain + Agentic AI 0%), Phase 10 (Knowledge Library 4%)
+  - Current: Phase 6 (Orchestrator Consolidation) - In progress (Task 6.10-6.12 remaining)
+  - Structure: Phase/Task format (12 phases, ~70 tasks)
+  - Parallel phases: Phase 5 (Brain + Agentic AI 12%), Phase 10 (Knowledge Library 4%)
   - Authority source: `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md`
+  - Planning format: Logic-based (Phase → Task), NOT calendar-based (Week → Day)
 - **Legacy purge:**
   - Detect CORTEX 3.0 artifacts not in 4.0 master plan
   - Delete legacy orchestrators, tools, modules, reports, scripts
