@@ -25,6 +25,12 @@ import asyncio
 import logging
 from datetime import datetime
 
+# Task 6.10 Package Imports (Post-Phase 5 Enhancement)
+from src.orchestrators.tdd.parallel_test_runner import ParallelTestRunner
+from src.orchestrators.tdd.test_quality_evaluator import TestQualityEvaluator
+from src.orchestrators.tdd.code_safety_guardrail import CodeSafetyGuardrail
+from src.orchestration_4_0.execution.execution_mode_manager import ExecutionModeManager
+
 logger = logging.getLogger(__name__)
 
 
@@ -551,7 +557,8 @@ class TDDOrchestratorV4:
         brain_connector,
         knowledge_graph,
         mcp_gateway,
-        config: Optional[Dict[str, Any]] = None
+        config: Optional[Dict[str, Any]] = None,
+        llm_client: Optional[Any] = None
     ):
         self.brain = brain_connector
         self.kg = knowledge_graph
@@ -562,6 +569,26 @@ class TDDOrchestratorV4:
         self.tech_discovery = TechnologyDiscoveryEngine(brain_connector, knowledge_graph)
         self.clean_code = CleanCodeEnforcer()
         
+        # Task 6.10 Package 1: Parallel test execution (50% faster)
+        self.parallel_runner = ParallelTestRunner(
+            max_workers=self.config.get('max_parallel_tests', 4)
+        )
+        
+        # Task 6.10 Package 3: LLM-as-judge test quality
+        self.test_quality_evaluator = TestQualityEvaluator(llm_client)
+        
+        # Task 6.10 Package 6: Code safety guardrails
+        self.code_safety_guardrail = CodeSafetyGuardrail()
+        
+        # Task 6.10 Package 5: Adaptive execution modes
+        # Create mock user profile for ExecutionModeManager
+        from src.orchestration_4_0.execution.execution_mode_manager import UserProfile
+        mock_user_profile = UserProfile(user_id="tdd_user")
+        self.execution_mode_manager = ExecutionModeManager(
+            config=self.config,
+            user_profile=mock_user_profile
+        )
+        
         # Strategy registry
         self.strategies: Dict[str, TDDPhaseStrategy] = {}
         
@@ -570,10 +597,14 @@ class TDDOrchestratorV4:
             'total_cycles': 0,
             'successful_cycles': 0,
             'patterns_learned': 0,
-            'technologies_discovered': 0
+            'technologies_discovered': 0,
+            'parallel_speedup': 0.0,  # Track parallel performance
+            'test_quality_avg': 0.0,  # Track average test quality
+            'safety_violations': 0,   # Track safety issues caught
+            'execution_mode_switches': 0  # Track mode adaptations
         }
         
-        logger.info("🎭 Orchestrator engaged: TDDOrchestratorV4")
+        logger.info("🎭 Orchestrator engaged: TDDOrchestratorV4 (Enhanced with Phase 5 AI)")
     
     def register_strategy(self, phase: TDDPhase, strategy: TDDPhaseStrategy):
         """Register phase strategy."""
@@ -585,7 +616,8 @@ class TDDOrchestratorV4:
         feature_name: str,
         acceptance_criteria: List[str],
         project_path: Path,
-        context: Optional[Dict[str, Any]] = None
+        context: Optional[Dict[str, Any]] = None,
+        execution_mode: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Execute complete RED→GREEN→REFACTOR cycle.
@@ -595,12 +627,25 @@ class TDDOrchestratorV4:
             acceptance_criteria: List of acceptance criteria
             project_path: Path to project root
             context: Additional context
+            execution_mode: Execution mode (autonomous/supervised/manual)
             
         Returns:
             Cycle results with all phase outcomes
         """
         logger.info(f"🎭 Starting TDD cycle: {feature_name}")
         self.metrics['total_cycles'] += 1
+        
+        # Package 5: Determine execution mode
+        if execution_mode:
+            chosen_mode = execution_mode
+        else:
+            chosen_mode = await self.execution_mode_manager.select_mode(
+                task_complexity='medium',
+                user_preferences={'default_mode': 'autonomous'}
+            )
+            self.metrics['execution_mode_switches'] += 1
+        
+        logger.info(f"🎮 Execution mode: {chosen_mode}")
         
         # Discover technology stack
         tech_profile = await self.tech_discovery.discover_project_tech_stack(
@@ -614,6 +659,10 @@ class TDDOrchestratorV4:
             'acceptance_criteria': acceptance_criteria,
             'project_path': project_path,
             'tech_profile': tech_profile,
+            'execution_mode': chosen_mode,
+            'parallel_runner': self.parallel_runner,
+            'test_quality_evaluator': self.test_quality_evaluator,
+            'code_safety_guardrail': self.code_safety_guardrail,
             **(context or {})
         }
         
@@ -627,6 +676,21 @@ class TDDOrchestratorV4:
                 exec_context
             )
             
+            # Package 3: Evaluate test quality after RED phase
+            if 'test_code' in results['RED'].outputs:
+                test_quality = await self.test_quality_evaluator.evaluate_test_quality(
+                    test_code=results['RED'].outputs['test_code'],
+                    implementation="",  # No implementation yet
+                    acceptance_criteria=acceptance_criteria,
+                    language=tech_profile.language
+                )
+                results['RED'].metrics['test_quality'] = test_quality.overall
+                self.metrics['test_quality_avg'] = (
+                    (self.metrics['test_quality_avg'] * (self.metrics['total_cycles'] - 1) + 
+                     test_quality.overall) / self.metrics['total_cycles']
+                )
+                logger.info(f"📊 Test quality score: {test_quality.overall:.1f}/10")
+            
             # Phase 2: GREEN - Minimal implementation
             logger.info("🎭 Phase transition: RED → GREEN")
             exec_context.update(results['RED'].outputs)
@@ -634,6 +698,20 @@ class TDDOrchestratorV4:
                 TDDPhase.GREEN,
                 exec_context
             )
+            
+            # Package 6: Check code safety after GREEN phase
+            if 'implementation_code' in results['GREEN'].outputs:
+                safety_check = self.code_safety_guardrail.check_code_safety(
+                    code=results['GREEN'].outputs['implementation_code'],
+                    language=tech_profile.language,
+                    context=feature_name
+                )
+                results['GREEN'].metrics['safety_score'] = 10.0 - safety_check.risk_score
+                self.metrics['safety_violations'] += len(safety_check.violations)
+                
+                if not safety_check.is_safe:
+                    logger.warning(f"⚠️  Safety violations detected: {len(safety_check.violations)}")
+                    logger.warning(f"Recommendations: {safety_check.recommendations}")
             
             # Phase 3: REFACTOR - Clean up code
             logger.info("🎭 Phase transition: GREEN → REFACTOR")

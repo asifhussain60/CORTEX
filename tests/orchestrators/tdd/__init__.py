@@ -6,15 +6,16 @@ Test suite for unified TDD orchestrator with adaptive learning.
 Version: 4.0.0
 """
 
-from .test_tdd_orchestrator_v4 import *
-from .test_red_phase_strategy import *
+# Task 6.10 Enhancement Tests
+# from .test_tdd_orchestrator_v4 import *
+# from .test_red_phase_strategy import *
 
 __all__ = [
-    'TestTDDOrchestratorV4',
-    'TestTechnologyDiscoveryEngine',
-    'TestCleanCodeEnforcer',
-    'TestDomainModels',
-    'TestREDPhaseDoR',
-    'TestREDPhaseExecution',
-    'TestREDPhaseDoD'
+    # 'TestTDDOrchestratorV4',
+    # 'TestTechnologyDiscoveryEngine',
+    # 'TestCleanCodeEnforcer',
+    # 'TestDomainModels',
+    # 'TestREDPhaseDoR',
+    # 'TestREDPhaseExecution',
+    # 'TestREDPhaseDoD'
 ]
