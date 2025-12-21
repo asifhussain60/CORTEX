@@ -149,57 +149,63 @@ class ParallelTestRunner:
             
             logger.info(f"  🧪 Running: {suite.name}")
             
-            # Execute with timeout
-            async with asyncio.timeout(self.timeout_seconds):
-                proc = await asyncio.create_subprocess_exec(
-                    *cmd,
-                    stdout=asyncio.subprocess.PIPE,
-                    stderr=asyncio.subprocess.PIPE,
-                    cwd=suite.parent
-                )
-                
-                stdout, stderr = await proc.communicate()
-                
-                # Parse output
-                execution_time = (datetime.now() - start_time).total_seconds()
-                output = stdout.decode('utf-8', errors='replace')
-                error_output = stderr.decode('utf-8', errors='replace')
-                
-                # Parse test counts (framework-specific)
-                passed, failed, skipped = self._parse_test_counts(
-                    output,
-                    test_framework
-                )
-                
-                success = proc.returncode == 0 and failed == 0
-                
-                result = TestResult(
-                    suite_path=suite,
-                    success=success,
-                    tests_passed=passed,
-                    tests_failed=failed,
-                    tests_skipped=skipped,
-                    execution_time=execution_time,
-                    output=output,
-                    error=error_output if error_output else None
-                )
-                
-                if success:
-                    logger.info(f"  ✅ {suite.name}: {passed} passed ({execution_time:.1f}s)")
-                else:
-                    logger.warning(f"  ❌ {suite.name}: {failed} failed ({execution_time:.1f}s)")
-                
-                return result
-                
-        except asyncio.TimeoutError:
-            execution_time = self.timeout_seconds
-            logger.error(f"  ⏱️ {suite.name} timed out after {self.timeout_seconds}s")
-            return TestResult(
-                suite_path=suite,
-                success=False,
-                execution_time=execution_time,
-                error=f"Test suite timed out after {self.timeout_seconds}s"
+            # Execute with timeout (Python 3.9 compatible using wait_for)
+            proc = await asyncio.create_subprocess_exec(
+                *cmd,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                cwd=suite.parent
             )
+            
+            try:
+                stdout, stderr = await asyncio.wait_for(
+                    proc.communicate(),
+                    timeout=self.timeout_seconds
+                )
+            except asyncio.TimeoutError:
+                # Kill process if timeout
+                proc.kill()
+                await proc.wait()
+                execution_time = self.timeout_seconds
+                logger.error(f"  ⏱️ {suite.name} timed out after {self.timeout_seconds}s")
+                return TestResult(
+                    suite_path=suite,
+                    success=False,
+                    execution_time=execution_time,
+                    error=f"Test suite timed out after {self.timeout_seconds}s"
+                )
+            
+            # Parse output
+            execution_time = (datetime.now() - start_time).total_seconds()
+            output = stdout.decode('utf-8', errors='replace')
+            error_output = stderr.decode('utf-8', errors='replace')
+            
+            # Parse test counts (framework-specific)
+            passed, failed, skipped = self._parse_test_counts(
+                output,
+                test_framework
+            )
+            
+            success = proc.returncode == 0 and failed == 0
+            
+            result = TestResult(
+                suite_path=suite,
+                success=success,
+                tests_passed=passed,
+                tests_failed=failed,
+                tests_skipped=skipped,
+                execution_time=execution_time,
+                output=output,
+                error=error_output if error_output else None
+            )
+            
+            if success:
+                logger.info(f"  ✅ {suite.name}: {passed} passed ({execution_time:.1f}s)")
+            else:
+                logger.warning(f"  ❌ {suite.name}: {failed} failed ({execution_time:.1f}s)")
+            
+            return result
+                
         except Exception as e:
             execution_time = (datetime.now() - start_time).total_seconds()
             logger.error(f"  ❌ {suite.name} failed: {str(e)}")

@@ -32,7 +32,10 @@ def mock_brain():
 def mock_kg():
     """Mock knowledge graph"""
     kg = Mock()
+    # Mock query_patterns to return empty list (for AgentLearningEngine initialization)
     kg.query_patterns = AsyncMock(return_value=[])
+    # Mock search_patterns to return empty list (for strategy weights retrieval)
+    kg.search_patterns = Mock(return_value=[])
     return kg
 
 
@@ -45,7 +48,13 @@ def mock_mcp():
 @pytest.fixture
 def orchestrator(mock_brain, mock_kg, mock_mcp):
     """Create TDD orchestrator with mocked dependencies"""
-    config = {'max_parallel_tests': 2}
+    config = {
+        'max_parallel_tests': 2,
+        'auto_approval_threshold': 0.8,
+        'fallback_timeout_seconds': 10
+    }
+    
+    # Create orchestrator with proper config dict
     orch = TDDOrchestratorV4(
         brain_connector=mock_brain,
         knowledge_graph=mock_kg,
