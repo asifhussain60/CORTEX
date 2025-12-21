@@ -19,9 +19,9 @@ import time
 from typing import List, Dict
 from datetime import datetime
 
-# Import will fail until implementation exists (expected for RED phase)
+# Import the implemented MultiAgentOrchestrator
 try:
-    from src.orchestration_4_0.frameworks.multi_agent import AgentCollaborationOrchestrator
+    from src.orchestration_4_0.frameworks.multi_agent_orchestrator import MultiAgentOrchestrator as AgentCollaborationOrchestrator
 except ImportError:
     AgentCollaborationOrchestrator = None
 
