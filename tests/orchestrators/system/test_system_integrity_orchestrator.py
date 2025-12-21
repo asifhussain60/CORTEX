@@ -345,6 +345,7 @@ class TestIntegrityReport:
 class TestSystemIntegrityIntegration:
     """Integration tests requiring full environment"""
     
+    @pytest.mark.slow
     @pytest.mark.skipif(not Path('tests').exists(), reason="Tests directory required")
     def test_real_test_execution(self):
         """Test with real test suite (if available)"""

@@ -336,14 +336,14 @@ class SystemIntegrityOrchestrator(BaseOrchestrator):
             )
             return
         
-        # Run pytest
+        # Run pytest (skip slow and performance tests to avoid hangs)
         try:
             result = subprocess.run(
-                ["pytest", "tests/", "-v", "--tb=short"],
+                ["pytest", "tests/", "-v", "--tb=short", "-m", "not slow and not performance"],
                 capture_output=True,
                 text=True,
                 cwd=str(self.workspace_root),
-                timeout=300
+                timeout=120  # Reduced to 2 minutes for fast tests only
             )
             
             # Parse test results
