@@ -2,19 +2,25 @@
 Execution Mode Manager - Adaptive execution mode selection
 
 Author: Asif Hussain
-Version: 1.0
+Version: 1.1
 Created: December 21, 2025
+Updated: December 21, 2025
 
 Features:
 - Smart mode selection based on user experience + operation risk
 - Automatic escalation after failures
 - User profile tracking
 - Integration with Phase 2 autonomous execution
+- Comprehensive logging and error handling
+- Performance optimization with caching
 """
 
-from typing import Dict, Any, Optional
-from dataclasses import dataclass
+import logging
+import time
+from typing import Dict, Any, Optional, Callable
+from dataclasses import dataclass, field
 from datetime import datetime
+from threading import Lock
 
 from .execution_mode import ExecutionMode
 
