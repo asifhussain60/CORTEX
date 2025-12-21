@@ -40,6 +40,16 @@ class MultiAgentOrchestrator:
         self.pattern = CollaborationPattern.SEQUENTIAL
         self.agents: List[Agent] = []
         self.timeout_seconds = 300
+        self._metrics = {
+            "total_executions": 0,
+            "pattern_usage": {
+                "sequential": 0,
+                "group": 0,
+                "nested": 0
+            },
+            "success_count": 0,
+            "failure_count": 0
+        }
     
     async def execute_sequential(
         self,
@@ -58,22 +68,17 @@ class MultiAgentOrchestrator:
         """
         logger.info(f"🎭 Sequential chat: {len(agents)} agents")
         
+        self._metrics["total_executions"] += 1
+        self._metrics["pattern_usage"]["sequential"] += 1
+        
         context = initial_context
         
         for agent in agents:
-            try:
-                logger.info(f"  → {agent.get_name()}")
-                context.add_to_history(agent.get_name())
-                context = await agent.execute(context)
-                
-                if context.has_errors():
-                    logger.warning(f"  ⚠️ {agent.get_name()} reported errors: {context.errors}")
-                    
-            except Exception as e:
-                error_msg = f"Agent {agent.get_name()} failed: {str(e)}"
-                logger.error(f"  ❌ {error_msg}")
-                context.add_error(error_msg)
-                # Continue to next agent rather than failing entirely
+            logger.info(f"  → {agent.get_name()}")
+            context = await agent.execute(context)
+            
+            if context.has_errors():
+                logger.warning(f"  ⚠️ {agent.get_name()} reported errors: {context.errors}")
         
         logger.info(f"✅ Sequential chat complete: {len(context.history)} agents executed")
         return context
@@ -97,6 +102,9 @@ class MultiAgentOrchestrator:
         """
         logger.info(f"🎭 Group chat: {len(agents)} parallel agents + manager")
         
+        self._metrics["total_executions"] += 1
+        self._metrics["pattern_usage"]["group"] += 1
+        
         # Execute all agents in parallel
         tasks = []
         for agent in agents:
@@ -105,7 +113,6 @@ class MultiAgentOrchestrator:
                 data=initial_context.data.copy(),
                 metadata=initial_context.metadata.copy()
             )
-            agent_context.add_to_history(agent.get_name())
             tasks.append(agent.execute(agent_context))
         
         try:
@@ -126,7 +133,6 @@ class MultiAgentOrchestrator:
             # Manager synthesizes results
             logger.info(f"  → Manager: {manager.get_name()}")
             final_context = await manager.synthesize(valid_results)
-            final_context.add_to_history(manager.get_name())
             
             logger.info(f"✅ Group chat complete: {len(agents)} agents → manager")
             return final_context
@@ -155,6 +161,9 @@ class MultiAgentOrchestrator:
             Coordinated context from coordinator
         """
         logger.info(f"🎭 Nested chat: {len(teams)} teams + coordinator")
+        
+        self._metrics["total_executions"] += 1
+        self._metrics["pattern_usage"]["nested"] += 1
         
         # Execute each team sequentially (teams contain sequential agents)
         team_tasks = []
@@ -186,7 +195,6 @@ class MultiAgentOrchestrator:
             # Coordinator integrates team results
             logger.info(f"  → Coordinator: {coordinator.get_name()}")
             final_context = await coordinator.coordinate(team_results)
-            final_context.add_to_history(coordinator.get_name())
             
             logger.info(f"✅ Nested chat complete: {len(teams)} teams → coordinator")
             return final_context
@@ -196,3 +204,43 @@ class MultiAgentOrchestrator:
             error_context = AgentContext()
             error_context.add_error(f"Nested chat failed: {str(e)}")
             return error_context
+    
+    # Aliases for test compatibility
+    async def sequential_chat(
+        self,
+        agents: List[Agent],
+        initial_context: AgentContext
+    ) -> AgentContext:
+        """Alias for execute_sequential (test compatibility)"""
+        return await self.execute_sequential(agents, initial_context)
+    
+    async def group_chat(
+        self,
+        agents: List[Agent],
+        manager: ManagerAgent,
+        initial_context: AgentContext
+    ) -> AgentContext:
+        """Alias for execute_group (test compatibility)"""
+        return await self.execute_group(agents, manager, initial_context)
+    
+    async def nested_chat(
+        self,
+        teams: Dict[str, List[Agent]],
+        coordinator: CoordinatorAgent,
+        initial_context: AgentContext
+    ) -> AgentContext:
+        """Alias for execute_nested (test compatibility)"""
+        return await self.execute_nested(teams, coordinator, initial_context)
+    
+    def get_metrics(self) -> Dict[str, Any]:
+        """
+        Get orchestrator metrics.
+        
+        Returns:
+            Dict containing execution metrics:
+            - total_executions: Total number of pattern executions
+            - pattern_usage: Count per pattern (sequential/group/nested)
+            - success_count: Successful executions
+            - failure_count: Failed executions
+        """
+        return self._metrics.copy()

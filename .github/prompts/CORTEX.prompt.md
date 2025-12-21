@@ -94,10 +94,30 @@ No Challenge - All work completed successfully
 {files modified, metrics achieved, system improvements}
 
 ### 🔍 Next Steps
-✅ **Work Complete!** No further action required.
-
-{optional_next_actions if any}
+✅ **All work complete!** No further action required.
 ```
+
+**Next Steps Intelligence (v4.1):**
+
+ALWAYS show EXACTLY ONE high-value action OR completion message:
+
+**Priority Hierarchy:**
+1. ✅ **Complete:** "✅ **All work complete!** No further action required."
+2. 🔥 **Critical:** Errors/bugs blocking system (immediate fix required)
+3. ⏳ **In-progress:** Incomplete orchestrator phases (finish current work)
+4. 🎯 **High-value:** Complexity refactoring (>30), critical path gaps
+5. 📈 **Medium-value:** Test coverage, documentation, performance
+6. 💡 **Low-value:** Feature enhancements, backlog items
+
+**Format:** `**Next:** {single_action_with_context}`
+
+**Examples:**
+- `**Next:** Refactor align_system_v2 (complexity 56) - core system function used in every operation`
+- `**Next:** Fix 15 failing tests in test_orchestrator.py (blocking deployment)`
+- `**Next:** Complete Phase 3: Validation (ensures system integrity)`
+- `✅ **All work complete!** No further action required.`
+
+**Never:** Show multiple bullets, numbered lists, or "optional next actions"
 
 **Orchestrator Engagement Hints (🎭 Pattern):**
 

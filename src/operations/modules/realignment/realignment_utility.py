@@ -488,6 +488,534 @@ def _move_secret_to_env(file_path: Path, old_value: str, env_var: str) -> bool:
 # CORTEX ALIGN v2.0 - Intelligent Maintenance System
 # ============================================================================
 
+def _check_feature_registration(
+    cortex_root: Path,
+    auto_fix: bool,
+    dry_run: bool,
+    results: Dict[str, Any]
+) -> None:
+    """Check 1: Feature Registration Validation"""
+    from src.operations.modules.realignment.feature_registration_validator import (
+        FeatureRegistrationValidator
+    )
+    from src.operations.modules.realignment.feature_auto_registrar import (
+        FeatureAutoRegistrar
+    )
+    
+    logger.info("📋 Check 1: Feature Registration Validation")
+    validator = FeatureRegistrationValidator(cortex_root)
+    registration_result = validator.validate()
+    
+    ops_dir = cortex_root / "src" / "operations"
+    user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
+    unregistered_user_facing = [
+        op for op in registration_result.unregistered_operations 
+        if op in user_facing_ops
+    ]
+    
+    results["checks"]["feature_registration"] = {
+        "passed": registration_result.passed,
+        "registered_operations": len(registration_result.registered_operations),
+        "unregistered_operations": len(registration_result.unregistered_operations),
+        "unregistered_user_facing": len(unregistered_user_facing),
+        "registration_percentage": registration_result.registration_percentage
+    }
+    
+    if not registration_result.passed:
+        logger.error(
+            f"❌ {registration_result.unregistered_count} operations unregistered"
+        )
+        results["errors"].append({
+            "category": "feature_registration",
+            "severity": "CRITICAL",
+            "message": f"{registration_result.unregistered_count} operations unregistered",
+            "details": {
+                "user_facing_operations": unregistered_user_facing,
+                "utility_modules": registration_result.unregistered_modules
+            }
+        })
+        results["success"] = False
+        
+        if auto_fix and not dry_run:
+            _auto_fix_feature_registration(
+                cortex_root, registration_result.unregistered_operations, results
+            )
+    else:
+        logger.info("✅ All features properly registered")
+
+
+def _auto_fix_feature_registration(
+    cortex_root: Path,
+    unregistered_operations: List[str],
+    results: Dict[str, Any]
+) -> None:
+    """Auto-register unregistered features"""
+    from src.operations.modules.realignment.feature_auto_registrar import (
+        FeatureAutoRegistrar
+    )
+    
+    logger.info("🔧 Auto-registering features...")
+    registrar = FeatureAutoRegistrar(cortex_root)
+    for op_name in unregistered_operations:
+        try:
+            reg_result = registrar.register_feature(op_name, dry_run=False)
+            if reg_result.success:
+                logger.info(f"   ✅ Registered: {op_name}")
+                results["fixes_applied"].append(f"Registered operation: {op_name}")
+            else:
+                logger.warning(f"   ⚠️  Could not register {op_name}")
+                results["warnings"].append({
+                    "category": "feature_registration",
+                    "severity": "MEDIUM",
+                    "message": f"Could not register {op_name}",
+                    "details": reg_result.error_message
+                })
+        except Exception as e:
+            logger.error(f"   ❌ Failed to register {op_name}: {e}")
+            results["errors"].append(f"Registration failed: {op_name} - {e}")
+
+
+def _check_intent_router(
+    cortex_root: Path,
+    auto_fix: bool,
+    dry_run: bool,
+    results: Dict[str, Any]
+) -> None:
+    """Check 2: Intent Router Coverage"""
+    logger.info("📋 Check 2: Intent Router Coverage")
+    intent_router_coverage = _check_intent_router_coverage(cortex_root)
+    results["checks"]["intent_router"] = intent_router_coverage
+    
+    if intent_router_coverage["missing_count"] > 0:
+        ops_dir = cortex_root / "src" / "operations"
+        user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
+        missing_ops = intent_router_coverage["missing_operations"]
+        missing_user_facing = [op for op in missing_ops if op in user_facing_ops]
+        
+        logger.error(
+            f"❌ {intent_router_coverage['missing_count']} operations missing from router"
+        )
+        results["errors"].append({
+            "category": "intent_router",
+            "severity": "CRITICAL",
+            "message": f"{intent_router_coverage['missing_count']} operations missing",
+            "details": {
+                "user_facing": missing_user_facing,
+                "internal": [op for op in missing_ops if op not in user_facing_ops]
+            }
+        })
+        results["success"] = False
+        
+        if auto_fix and not dry_run:
+            _auto_fix_intent_router(cortex_root, missing_ops, results)
+    else:
+        logger.info("✅ All operations have intent router triggers")
+
+
+def _auto_fix_intent_router(
+    cortex_root: Path,
+    missing_operations: List[str],
+    results: Dict[str, Any]
+) -> None:
+    """Auto-fix intent router coverage"""
+    logger.info("🔧 Auto-adding operations to intent router...")
+    try:
+        from src.operations.modules.realignment.intent_router_auto_fixer import (
+            IntentRouterAutoFixer
+        )
+        fixer = IntentRouterAutoFixer(cortex_root)
+        fix_results = fixer.fix_missing_operations(missing_operations, dry_run=False)
+        for fix_result in fix_results:
+            if fix_result.success and not fix_result.error_message:
+                results["fixes_applied"].append(
+                    f"Added {fix_result.operation_name} to intent router"
+                )
+    except Exception as e:
+        logger.error(f"   ❌ Auto-fix failed: {e}")
+        results["errors"].append(f"Intent router auto-fix failed: {e}")
+
+
+def _check_response_templates(
+    cortex_root: Path,
+    auto_fix: bool,
+    dry_run: bool,
+    results: Dict[str, Any]
+) -> None:
+    """Check 3: Response Template Coverage"""
+    logger.info("📋 Check 3: Response Template Coverage")
+    template_coverage = _check_response_template_coverage(cortex_root)
+    results["checks"]["response_templates"] = template_coverage
+    
+    if template_coverage["missing_count"] > 0:
+        ops_dir = cortex_root / "src" / "operations"
+        user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
+        missing_user_facing = [
+            op for op in template_coverage["missing_templates"] 
+            if op in user_facing_ops
+        ]
+        
+        if len(missing_user_facing) > 0:
+            severity = (
+                "CRITICAL" if len(missing_user_facing) > 20 
+                else "HIGH" if len(missing_user_facing) > 10 
+                else "MEDIUM"
+            )
+            logger.error(f"❌ {len(missing_user_facing)} operations missing templates")
+            results["warnings"].append({
+                "category": "response_templates",
+                "severity": severity,
+                "message": f"{len(missing_user_facing)} operations lack templates",
+                "details": {
+                    "user_facing_missing": missing_user_facing,
+                    "utility_missing": [
+                        op for op in template_coverage["missing_templates"] 
+                        if op not in user_facing_ops
+                    ],
+                    "total_missing": template_coverage["missing_count"]
+                }
+            })
+            if len(missing_user_facing) > 20:
+                results["success"] = False
+            
+            if auto_fix and not dry_run:
+                _auto_fix_response_templates(
+                    cortex_root, template_coverage["missing_templates"], results
+                )
+        else:
+            logger.info("✅ All user-facing operations have response templates")
+    else:
+        logger.info("✅ All operations have response templates")
+
+
+def _auto_fix_response_templates(
+    cortex_root: Path,
+    missing_templates: List[str],
+    results: Dict[str, Any]
+) -> None:
+    """Auto-generate missing response templates"""
+    logger.info("🔧 Auto-generating response templates...")
+    try:
+        from src.operations.modules.realignment.response_template_auto_generator import (
+            ResponseTemplateAutoGenerator
+        )
+        generator = ResponseTemplateAutoGenerator(cortex_root)
+        gen_results = generator.generate_missing_templates(missing_templates, dry_run=False)
+        for gen_result in gen_results:
+            if gen_result.success and not gen_result.error_message:
+                results["fixes_applied"].append(
+                    f"Generated template for {gen_result.operation_name}"
+                )
+    except Exception as e:
+        logger.error(f"   ❌ Template generation failed: {e}")
+        results["errors"].append(f"Template generation failed: {e}")
+
+
+def _check_template_struct(
+    cortex_root: Path,
+    auto_fix: bool,
+    dry_run: bool,
+    results: Dict[str, Any]
+) -> None:
+    """Check 4: Response Template Structure"""
+    logger.info("📋 Check 4: Response Template Structure")
+    template_structure = _check_template_structure(cortex_root)
+    results["checks"]["template_structure"] = template_structure
+    
+    if template_structure["root_level_templates"] > 0:
+        logger.error(f"❌ {template_structure['root_level_templates']} templates at ROOT")
+        results["warnings"].append({
+            "category": "template_structure",
+            "severity": "HIGH",
+            "message": f"{template_structure['root_level_templates']} templates incorrectly placed",
+            "details": template_structure["root_level_template_names"]
+        })
+        
+        if auto_fix and not dry_run:
+            _auto_fix_template_structure(cortex_root, results)
+    else:
+        logger.info("✅ All templates in correct location")
+
+
+def _auto_fix_template_structure(
+    cortex_root: Path,
+    results: Dict[str, Any]
+) -> None:
+    """Auto-fix template structure"""
+    logger.info("🔧 Auto-fixing template structure...")
+    try:
+        fix_result = _fix_template_structure(cortex_root)
+        if fix_result["success"]:
+            results["fixes_applied"].append(
+                f"Moved {fix_result['moved']} templates into templates: section"
+            )
+            logger.info(f"   ✅ Moved {fix_result['moved']} templates")
+        else:
+            results["errors"].append(
+                f"Template structure fix failed: {fix_result.get('error', 'Unknown')}"
+            )
+    except Exception as e:
+        logger.error(f"   ❌ Template structure fix failed: {e}")
+        results["errors"].append(f"Template structure fix failed: {e}")
+
+
+def _align_foundation(
+    cortex_root: Path,
+    auto_fix: bool,
+    dry_run: bool,
+    results: Dict[str, Any]
+) -> None:
+    """
+    Foundation Phase: Checks 1-4
+    - Feature registration validation
+    - Intent router coverage
+    - Response template coverage
+    - Response template structure
+    """
+    _check_feature_registration(cortex_root, auto_fix, dry_run, results)
+    _check_intent_router(cortex_root, auto_fix, dry_run, results)
+    _check_response_templates(cortex_root, auto_fix, dry_run, results)
+    _check_template_struct(cortex_root, auto_fix, dry_run, results)
+
+
+def _align_development(
+    cortex_root: Path,
+    auto_fix: bool,
+    dry_run: bool,
+    results: Dict[str, Any]
+) -> None:
+    """
+    Development Phase: Checks 5-7
+    - CORTEX.prompt.md optimization
+    - Obsolete code detection
+    - Specialist router wiring
+    """
+    from src.operations.modules.realignment.obsolete_code_detector import (
+        ObsoleteCodeDetector
+    )
+    
+    # CHECK 5: CORTEX.prompt.md Optimization
+    logger.info("📋 Check 5: CORTEX.prompt.md Optimization")
+    prompt_check = _check_prompt_optimization(cortex_root)
+    results["checks"]["prompt_optimization"] = prompt_check
+    
+    if not prompt_check["optimized"]:
+        logger.warning(f"⚠️  CORTEX.prompt.md bloat: {prompt_check['line_count']} lines")
+        results["warnings"].append({
+            "category": "prompt_bloat",
+            "severity": "MEDIUM",
+            "message": f"CORTEX.prompt.md is {prompt_check['line_count']} lines",
+            "details": prompt_check
+        })
+    else:
+        logger.info(f"✅ CORTEX.prompt.md optimized: {prompt_check['line_count']} lines")
+    
+    # CHECK 6: Obsolete Code Detection
+    logger.info("📋 Check 6: Obsolete Code Detection")
+    detector = ObsoleteCodeDetector(cortex_root)
+    obsolete_result = detector.detect_all()
+    
+    results["checks"]["obsolete_code"] = {
+        "deprecated_files": len(obsolete_result.get("deprecated", [])),
+        "test_files": len(obsolete_result.get("test_files", [])),
+        "temp_files": len(obsolete_result.get("temp_files", []))
+    }
+    
+    total_obsolete = sum(results["checks"]["obsolete_code"].values())
+    if total_obsolete > 0:
+        logger.warning(f"⚠️  {total_obsolete} obsolete files detected")
+        results["warnings"].append({
+            "category": "obsolete_code",
+            "severity": "LOW",
+            "message": f"{total_obsolete} obsolete files found",
+            "details": obsolete_result
+        })
+        
+        if auto_fix and not dry_run:
+            logger.info("🔧 Auto-cleaning obsolete code...")
+            try:
+                from src.operations.modules.realignment.obsolete_code_auto_cleaner import (
+                    ObsoleteCodeAutoCleaner
+                )
+                cleaner = ObsoleteCodeAutoCleaner(cortex_root)
+                obsolete_files = []
+                obsolete_files.extend(obsolete_result.get("deprecated", []))
+                obsolete_files.extend(obsolete_result.get("test_files", []))
+                obsolete_files.extend(obsolete_result.get("temp_files", []))
+                
+                cleanup_result = cleaner.cleanup_files(obsolete_files, dry_run=False)
+                if cleanup_result.success:
+                    results["fixes_applied"].append(
+                        f"Cleaned up {len(cleanup_result.files_removed)} obsolete files "
+                        f"({cleanup_result.space_freed_mb} MB freed)"
+                    )
+                    logger.info(f"   💾 Backup: {cleanup_result.backup_dir}")
+                else:
+                    for error in cleanup_result.errors:
+                        results["errors"].append(f"Cleanup error: {error}")
+            except Exception as e:
+                logger.error(f"   ❌ Obsolete code cleanup failed: {e}")
+                results["errors"].append(f"Obsolete code cleanup failed: {e}")
+    else:
+        logger.info("✅ No obsolete code detected")
+    
+    # CHECK 7: Specialist Router Wiring
+    logger.info("📋 Check 7: Specialist Router Wiring")
+    wiring_check = _check_specialist_router_wiring(cortex_root)
+    results["checks"]["specialist_router_wiring"] = wiring_check
+    
+    if not wiring_check["passed"]:
+        logger.error(f"❌ {wiring_check['unwired_count']} specialist router(s) NOT wired")
+        for issue in wiring_check["issues"]:
+            results["errors"].append({
+                "category": "router_wiring",
+                "severity": issue["severity"].upper(),
+                "message": f"{issue['router']} not wired",
+                "details": {"router": issue["router"], "fix": issue["fix"]}
+            })
+        results["success"] = False
+        
+        if auto_fix and not dry_run:
+            logger.info("🔧 Auto-wiring specialist routers...")
+            try:
+                from src.operations.modules.realignment.specialist_router_wiring_checker import (
+                    SpecialistRouterWiringChecker
+                )
+                wiring_checker = SpecialistRouterWiringChecker(cortex_root)
+                fix_result = wiring_checker.fix_wiring(dry_run=False)
+                
+                if fix_result["success"]:
+                    results["fixes_applied"].extend(fix_result["fixes_applied"])
+                    logger.info(f"   ✅ Applied {len(fix_result['fixes_applied'])} fix(es)")
+                
+                if fix_result["fixes_skipped"]:
+                    results["warnings"].extend([{
+                        "category": "router_wiring_manual",
+                        "severity": "HIGH",
+                        "message": skip
+                    } for skip in fix_result["fixes_skipped"]])
+                
+                if fix_result["errors"]:
+                    results["errors"].extend([{
+                        "category": "router_wiring_error",
+                        "severity": "CRITICAL",
+                        "message": error
+                    } for error in fix_result["errors"]])
+            except Exception as e:
+                logger.error(f"   ❌ Router wiring fix failed: {e}")
+                results["errors"].append(f"Router wiring fix failed: {e}")
+    else:
+        logger.info(
+            f"✅ All {wiring_check['total_specialist_routers']} specialist router(s) wired"
+        )
+
+
+def _align_validation(
+    cortex_root: Path,
+    results: Dict[str, Any]
+) -> None:
+    """
+    Validation Phase: Checks 8-10
+    - Module import health
+    - Git checkpoint orchestrator wiring
+    - Component discovery & wiring
+    """
+    # CHECK 8: Module Import Health
+    logger.info("📋 Check 8: Module Import Health")
+    import_health = _check_module_imports(cortex_root)
+    results["checks"]["module_imports"] = import_health
+    
+    if import_health["broken_imports"] > 0:
+        logger.error(f"❌ {import_health['broken_imports']} broken imports detected")
+        results["errors"].append({
+            "category": "broken_imports",
+            "severity": "CRITICAL",
+            "message": f"{import_health['broken_imports']} modules have broken imports",
+            "details": import_health["broken_modules"]
+        })
+        results["success"] = False
+    else:
+        logger.info("✅ All module imports healthy")
+    
+    # CHECK 9: Git Checkpoint Orchestrator Wiring
+    logger.info("📋 Check 9: Git Checkpoint Orchestrator Wiring")
+    wiring_result = _check_git_checkpoint_wiring(cortex_root)
+    results["checks"]["git_checkpoint_wiring"] = wiring_result
+    
+    if not wiring_result["passed"]:
+        logger.error("❌ Git checkpoint wiring validation FAILED")
+        for issue in wiring_result["issues"]:
+            logger.error(f"   - {issue}")
+        results["errors"].append({
+            "category": "git_checkpoint_wiring",
+            "severity": "CRITICAL",
+            "message": "Git checkpoint orchestrator wiring failed SKULL rule validation",
+            "details": wiring_result["issues"]
+        })
+        results["success"] = False
+    else:
+        logger.info("✅ Git checkpoint orchestrator properly wired")
+    
+    # CHECK 10: Component Discovery & Wiring
+    logger.info("📋 Check 10: Component Discovery & Wiring")
+    component_check = _check_component_discovery(cortex_root)
+    results["checks"]["component_discovery"] = component_check
+    
+    if not component_check["passed"]:
+        logger.error(f"❌ {component_check['unwired_count']} component(s) NOT wired")
+        for issue in component_check["issues"]:
+            logger.error(f"   - {issue['component']}: {issue['impact']}")
+        results["errors"].append({
+            "category": "component_wiring",
+            "severity": "HIGH",
+            "message": f"{component_check['unwired_count']} components not wired",
+            "details": component_check["issues"]
+        })
+        results["success"] = False
+    else:
+        logger.info("✅ All architectural components properly wired")
+
+
+def _align_deployment(
+    cortex_root: Path,
+    results: Dict[str, Any]
+) -> None:
+    """
+    Deployment Phase: Check 11
+    - Autonomous execution wiring
+    """
+    # CHECK 11: Autonomous Execution Wiring
+    logger.info("📋 Check 11: Autonomous Execution Wiring")
+    try:
+        from src.operations.modules.realignment.autonomous_execution_wiring_checker import (
+            check_autonomous_execution_wiring
+        )
+        auto_exec_result = check_autonomous_execution_wiring(cortex_root)
+        results["checks"]["autonomous_execution_wiring"] = auto_exec_result
+        
+        if auto_exec_result["all_passed"]:
+            logger.info("✅ Autonomous execution fully wired")
+        else:
+            warning_count = len(auto_exec_result.get("warnings", []))
+            logger.warning(
+                f"⚠️  Autonomous execution wiring incomplete: {warning_count} issue(s)"
+            )
+            for warning in auto_exec_result.get("warnings", []):
+                results["warnings"].append({
+                    "category": "autonomous_execution_wiring",
+                    "severity": "MEDIUM",
+                    "message": warning,
+                    "details": {}
+                })
+    except Exception as e:
+        logger.error(f"❌ Autonomous execution wiring check failed: {e}")
+        results["errors"].append({
+            "category": "autonomous_execution_wiring",
+            "severity": "HIGH",
+            "message": f"Autonomous execution wiring check failed: {str(e)}",
+            "details": {}
+        })
+
+
 def align_system_v2(
     project_root: Path,
     cortex_root: Path,
@@ -531,458 +1059,25 @@ def align_system_v2(
     }
     
     try:
-        # Import alignment modules
-        from src.operations.modules.realignment.feature_registration_validator import (
-            FeatureRegistrationValidator
-        )
-        from src.operations.modules.realignment.feature_auto_registrar import (
-            FeatureAutoRegistrar
-        )
-        from src.operations.modules.realignment.obsolete_code_detector import (
-            ObsoleteCodeDetector
-        )
+        # ====================================================================
+        # PHASE 1: Foundation (Checks 1-4)
+        # ====================================================================
+        _align_foundation(cortex_root, auto_fix, dry_run, results)
         
         # ====================================================================
-        # CHECK 1: Feature Registration Validation
+        # PHASE 2: Development (Checks 5-7)
         # ====================================================================
-        logger.info("📋 Check 1: Feature Registration Validation")
-        validator = FeatureRegistrationValidator(cortex_root)
-        registration_result = validator.validate()
-        
-        # Identify user-facing operations
-        ops_dir = cortex_root / "src" / "operations"
-        user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
-        
-        # Check how many unregistered are user-facing
-        unregistered_user_facing = [op for op in registration_result.unregistered_operations if op in user_facing_ops]
-        
-        results["checks"]["feature_registration"] = {
-            "passed": registration_result.passed,
-            "registered_operations": len(registration_result.registered_operations),
-            "unregistered_operations": len(registration_result.unregistered_operations),
-            "unregistered_user_facing": len(unregistered_user_facing),
-            "registration_percentage": registration_result.registration_percentage
-        }
-        
-        if not registration_result.passed:
-            # ALL unregistered operations are CRITICAL - no exceptions
-            logger.error(f"❌ {registration_result.unregistered_count} operations unregistered (CRITICAL)")
-            
-            results["errors"].append({
-                "category": "feature_registration",
-                "severity": "CRITICAL",
-                "message": f"{registration_result.unregistered_count} operations unregistered - {len(unregistered_user_facing)} user-facing, {len(registration_result.unregistered_modules)} utility modules",
-                "details": {
-                    "user_facing_operations": unregistered_user_facing,
-                    "utility_modules": registration_result.unregistered_modules
-                }
-            })
-            
-            results["success"] = False
-            
-            # Auto-fix if enabled
-            if auto_fix and not dry_run:
-                logger.info("🔧 Auto-registering features...")
-                registrar = FeatureAutoRegistrar(cortex_root)
-                for op_name in registration_result.unregistered_operations:
-                    try:
-                        # Register operation to cortex-operations.yaml
-                        reg_result = registrar.register_feature(op_name, dry_run=False)
-                        
-                        if reg_result.success:
-                            logger.info(f"   ✅ Registered: {op_name}")
-                            results["fixes_applied"].append(f"Registered operation: {op_name}")
-                        else:
-                            logger.warning(f"   ⚠️  Could not register {op_name}: {reg_result.error_message}")
-                            results["warnings"].append({
-                                "category": "feature_registration",
-                                "severity": "MEDIUM",
-                                "message": f"Could not register {op_name}",
-                                "details": reg_result.error_message
-                            })
-                    except Exception as e:
-                        logger.error(f"   ❌ Failed to register {op_name}: {e}")
-                        results["errors"].append(f"Registration failed: {op_name} - {e}")
-        else:
-            logger.info("✅ All features properly registered")
+        _align_development(cortex_root, auto_fix, dry_run, results)
         
         # ====================================================================
-        # CHECK 2: Intent Router Coverage
+        # PHASE 3: Validation (Checks 8-10)
         # ====================================================================
-        logger.info("📋 Check 2: Intent Router Coverage")
-        intent_router_coverage = _check_intent_router_coverage(cortex_root)
-        results["checks"]["intent_router"] = intent_router_coverage
-        
-        if intent_router_coverage["missing_count"] > 0:
-            # ALL missing operations are CRITICAL - no exceptions
-            coverage_pct = intent_router_coverage["coverage_percentage"]
-            missing_ops = intent_router_coverage["missing_operations"]
-            
-            # Count user-facing operations (those in src/operations/*.py)
-            ops_dir = cortex_root / "src" / "operations"
-            user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
-            missing_user_facing = [op for op in missing_ops if op in user_facing_ops]
-            
-            logger.error(f"❌ {intent_router_coverage['missing_count']} operations missing from intent router (CRITICAL)")
-            logger.info(f"   User-facing: {len(missing_user_facing)}, Internal: {len(missing_ops) - len(missing_user_facing)}")
-            
-            results["errors"].append({
-                "category": "intent_router",
-                "severity": "CRITICAL",
-                "message": f"{intent_router_coverage['missing_count']} operations missing from intent router ({coverage_pct:.1f}% coverage) - {len(missing_user_facing)} user-facing, {len(missing_ops) - len(missing_user_facing)} internal",
-                "details": {
-                    "user_facing": missing_user_facing,
-                    "internal": [op for op in missing_ops if op not in user_facing_ops]
-                }
-            })
-            
-            results["success"] = False
-            
-            # Auto-fix if enabled
-            if auto_fix and not dry_run:
-                logger.info("🔧 Auto-adding operations to intent router...")
-                try:
-                    from src.operations.modules.realignment.intent_router_auto_fixer import (
-                        IntentRouterAutoFixer
-                    )
-                    fixer = IntentRouterAutoFixer(cortex_root)
-                    fix_results = fixer.fix_missing_operations(
-                        intent_router_coverage["missing_operations"],
-                        dry_run=False
-                    )
-                    
-                    for fix_result in fix_results:
-                        if fix_result.success and not fix_result.error_message:
-                            results["fixes_applied"].append(
-                                f"Added {fix_result.operation_name} to intent router"
-                            )
-                except Exception as e:
-                    logger.error(f"   ❌ Auto-fix failed: {e}")
-                    results["errors"].append(f"Intent router auto-fix failed: {e}")
-        else:
-            logger.info("✅ All operations have intent router triggers")
+        _align_validation(cortex_root, results)
         
         # ====================================================================
-        # CHECK 3: Response Template Coverage
+        # PHASE 4: Deployment (Check 11)
         # ====================================================================
-        logger.info("📋 Check 3: Response Template Coverage")
-        template_coverage = _check_response_template_coverage(cortex_root)
-        results["checks"]["response_templates"] = template_coverage
-        
-        if template_coverage["missing_count"] > 0:
-            # Identify user-facing operations (have entry point files)
-            ops_dir = cortex_root / "src" / "operations"
-            user_facing_ops = {f.stem for f in ops_dir.glob("*.py") if f.stem not in ["__init__"]}
-            
-            # Check how many missing templates are for user-facing operations
-            missing_user_facing = [op for op in template_coverage["missing_templates"] if op in user_facing_ops]
-            
-            # Only report/error if user-facing operations are missing templates
-            if len(missing_user_facing) > 0:
-                severity = "CRITICAL" if len(missing_user_facing) > 20 else "HIGH" if len(missing_user_facing) > 10 else "MEDIUM"
-                
-                logger.error(f"❌ {len(missing_user_facing)} USER-FACING operations missing response templates (CRITICAL)")
-                logger.warning(f"⚠️  {template_coverage['missing_count'] - len(missing_user_facing)} utility operations missing templates")
-                
-                results["warnings"].append({
-                    "category": "response_templates",
-                    "severity": severity,
-                    "message": f"{len(missing_user_facing)} USER-FACING operations lack templates (CRITICAL)",
-                    "details": {
-                        "user_facing_missing": missing_user_facing,
-                        "utility_missing": [op for op in template_coverage["missing_templates"] if op not in user_facing_ops],
-                        "total_missing": template_coverage["missing_count"]
-                    }
-                })
-                
-                # Mark as failed if too many user-facing operations missing
-                if len(missing_user_facing) > 20:
-                    results["success"] = False
-            else:
-                # Only utility operations missing - just informational warning
-                logger.info(f"✅ All user-facing operations have response templates")
-                logger.warning(f"⚠️  {template_coverage['missing_count']} utility operations missing templates (uses fallback)")
-            
-            # Auto-fix if enabled
-            if auto_fix and not dry_run and len(missing_user_facing) > 0:
-                logger.info("🔧 Auto-generating response templates...")
-                try:
-                    from src.operations.modules.realignment.response_template_auto_generator import (
-                        ResponseTemplateAutoGenerator
-                    )
-                    generator = ResponseTemplateAutoGenerator(cortex_root)
-                    gen_results = generator.generate_missing_templates(
-                        template_coverage["missing_templates"],
-                        dry_run=False
-                    )
-                    
-                    for gen_result in gen_results:
-                        if gen_result.success and not gen_result.error_message:
-                            results["fixes_applied"].append(
-                                f"Generated template for {gen_result.operation_name}"
-                            )
-                except Exception as e:
-                    logger.error(f"   ❌ Template generation failed: {e}")
-                    results["errors"].append(f"Template generation failed: {e}")
-        else:
-            logger.info("✅ All operations have response templates")
-        
-        # ====================================================================
-        # CHECK 4: Response Template Structure
-        # ====================================================================
-        logger.info("📋 Check 4: Response Template Structure")
-        template_structure = _check_template_structure(cortex_root)
-        results["checks"]["template_structure"] = template_structure
-        
-        if template_structure["root_level_templates"] > 0:
-            logger.error(f"❌ {template_structure['root_level_templates']} templates at ROOT level (should be in templates: section)")
-            results["warnings"].append({
-                "category": "template_structure",
-                "severity": "HIGH",
-                "message": f"{template_structure['root_level_templates']} templates incorrectly placed at root level",
-                "details": template_structure["root_level_template_names"]
-            })
-            
-            # Auto-fix if enabled
-            if auto_fix and not dry_run:
-                logger.info("🔧 Auto-fixing template structure...")
-                try:
-                    fix_result = _fix_template_structure(cortex_root)
-                    
-                    if fix_result["success"]:
-                        results["fixes_applied"].append(
-                            f"Moved {fix_result['moved']} templates into templates: section"
-                        )
-                        logger.info(f"   ✅ Moved {fix_result['moved']} templates")
-                    else:
-                        results["errors"].append(f"Template structure fix failed: {fix_result.get('error', 'Unknown error')}")
-                except Exception as e:
-                    logger.error(f"   ❌ Template structure fix failed: {e}")
-                    results["errors"].append(f"Template structure fix failed: {e}")
-        else:
-            logger.info("✅ All templates in correct location (templates: section)")
-        
-        # ====================================================================
-        # CHECK 5: CORTEX.prompt.md Optimization
-        # ====================================================================
-        logger.info("📋 Check 5: CORTEX.prompt.md Optimization")
-        prompt_check = _check_prompt_optimization(cortex_root)
-        results["checks"]["prompt_optimization"] = prompt_check
-        
-        if not prompt_check["optimized"]:
-            logger.warning(f"⚠️  CORTEX.prompt.md bloat detected: {prompt_check['line_count']} lines")
-            results["warnings"].append({
-                "category": "prompt_bloat",
-                "severity": "MEDIUM",
-                "message": f"CORTEX.prompt.md is {prompt_check['line_count']} lines (target: <300)",
-                "details": prompt_check
-            })
-        else:
-            logger.info(f"✅ CORTEX.prompt.md optimized: {prompt_check['line_count']} lines")
-        
-        # ====================================================================
-        # CHECK 6: Obsolete Code Detection
-        # ====================================================================
-        logger.info("📋 Check 6: Obsolete Code Detection")
-        detector = ObsoleteCodeDetector(cortex_root)
-        obsolete_result = detector.detect_all()
-        
-        results["checks"]["obsolete_code"] = {
-            "deprecated_files": len(obsolete_result.get("deprecated", [])),
-            "test_files": len(obsolete_result.get("test_files", [])),
-            "temp_files": len(obsolete_result.get("temp_files", []))
-        }
-        
-        total_obsolete = sum(results["checks"]["obsolete_code"].values())
-        if total_obsolete > 0:
-            logger.warning(f"⚠️  {total_obsolete} obsolete files detected")
-            results["warnings"].append({
-                "category": "obsolete_code",
-                "severity": "LOW",
-                "message": f"{total_obsolete} obsolete files found",
-                "details": obsolete_result
-            })
-            
-            # Auto-fix if enabled
-            if auto_fix and not dry_run:
-                logger.info("🔧 Auto-cleaning obsolete code...")
-                try:
-                    from src.operations.modules.realignment.obsolete_code_auto_cleaner import (
-                        ObsoleteCodeAutoCleaner
-                    )
-                    cleaner = ObsoleteCodeAutoCleaner(cortex_root)
-                    
-                    # Collect all obsolete files
-                    obsolete_files = []
-                    obsolete_files.extend(obsolete_result.get("deprecated", []))
-                    obsolete_files.extend(obsolete_result.get("test_files", []))
-                    obsolete_files.extend(obsolete_result.get("temp_files", []))
-                    
-                    cleanup_result = cleaner.cleanup_files(obsolete_files, dry_run=False)
-                    
-                    if cleanup_result.success:
-                        results["fixes_applied"].append(
-                            f"Cleaned up {len(cleanup_result.files_removed)} obsolete files "
-                            f"({cleanup_result.space_freed_mb} MB freed)"
-                        )
-                        logger.info(f"   💾 Backup: {cleanup_result.backup_dir}")
-                    else:
-                        for error in cleanup_result.errors:
-                            results["errors"].append(f"Cleanup error: {error}")
-                except Exception as e:
-                    logger.error(f"   ❌ Obsolete code cleanup failed: {e}")
-                    results["errors"].append(f"Obsolete code cleanup failed: {e}")
-        else:
-            logger.info("✅ No obsolete code detected")
-        
-        # ====================================================================
-        # CHECK 7: Specialist Router Wiring (NEW - Critical for TDD Mastery)
-        # ====================================================================
-        logger.info("📋 Check 7: Specialist Router Wiring")
-        wiring_check = _check_specialist_router_wiring(cortex_root)
-        results["checks"]["specialist_router_wiring"] = wiring_check
-        
-        if not wiring_check["passed"]:
-            logger.error(f"❌ {wiring_check['unwired_count']} specialist router(s) NOT wired")
-            for issue in wiring_check["issues"]:
-                results["errors"].append({
-                    "category": "router_wiring",
-                    "severity": issue["severity"].upper(),
-                    "message": f"{issue['router']} not wired - {issue['impact']}",
-                    "details": {
-                        "router": issue["router"],
-                        "fix": issue["fix"]
-                    }
-                })
-            results["success"] = False
-            
-            # Auto-fix if enabled
-            if auto_fix and not dry_run:
-                logger.info("🔧 Auto-wiring specialist routers...")
-                try:
-                    from src.operations.modules.realignment.specialist_router_wiring_checker import (
-                        SpecialistRouterWiringChecker
-                    )
-                    wiring_checker = SpecialistRouterWiringChecker(cortex_root)
-                    fix_result = wiring_checker.fix_wiring(dry_run=False)
-                    
-                    if fix_result["success"]:
-                        results["fixes_applied"].extend(fix_result["fixes_applied"])
-                        logger.info(f"   ✅ Applied {len(fix_result['fixes_applied'])} wiring fix(es)")
-                    
-                    if fix_result["fixes_skipped"]:
-                        results["warnings"].extend([{
-                            "category": "router_wiring_manual",
-                            "severity": "HIGH",
-                            "message": skip
-                        } for skip in fix_result["fixes_skipped"]])
-                    
-                    if fix_result["errors"]:
-                        results["errors"].extend([{
-                            "category": "router_wiring_error",
-                            "severity": "CRITICAL",
-                            "message": error
-                        } for error in fix_result["errors"]])
-                except Exception as e:
-                    logger.error(f"   ❌ Router wiring fix failed: {e}")
-                    results["errors"].append(f"Router wiring fix failed: {e}")
-        else:
-            logger.info(f"✅ All {wiring_check['total_specialist_routers']} specialist router(s) properly wired")
-        
-        # ====================================================================
-        # CHECK 8: Module Import Health
-        # ====================================================================
-        logger.info("📋 Check 8: Module Import Health")
-        import_health = _check_module_imports(cortex_root)
-        results["checks"]["module_imports"] = import_health
-        
-        if import_health["broken_imports"] > 0:
-            logger.error(f"❌ {import_health['broken_imports']} broken imports detected")
-            results["errors"].append({
-                "category": "broken_imports",
-                "severity": "CRITICAL",
-                "message": f"{import_health['broken_imports']} modules have broken imports",
-                "details": import_health["broken_modules"]
-            })
-            results["success"] = False
-        else:
-            logger.info("✅ All module imports healthy")
-        
-        # ====================================================================
-        # CHECK 9: Git Checkpoint Orchestrator Wiring (SKULL Rule Enforcement)
-        # ====================================================================
-        logger.info("📋 Check 9: Git Checkpoint Orchestrator Wiring")
-        wiring_result = _check_git_checkpoint_wiring(cortex_root)
-        results["checks"]["git_checkpoint_wiring"] = wiring_result
-        
-        if not wiring_result["passed"]:
-            logger.error(f"❌ Git checkpoint wiring validation FAILED")
-            for issue in wiring_result["issues"]:
-                logger.error(f"   - {issue}")
-            results["errors"].append({
-                "category": "git_checkpoint_wiring",
-                "severity": "CRITICAL",
-                "message": "Git checkpoint orchestrator wiring failed SKULL rule validation",
-                "details": wiring_result["issues"]
-            })
-            results["success"] = False
-        else:
-            logger.info("✅ Git checkpoint orchestrator properly wired")
-        
-        # ====================================================================
-        # CHECK 10: Component Discovery & Wiring
-        # ====================================================================
-        logger.info("📋 Check 10: Component Discovery & Wiring")
-        component_check = _check_component_discovery(cortex_root)
-        results["checks"]["component_discovery"] = component_check
-        
-        if not component_check["passed"]:
-            logger.error(f"❌ {component_check['unwired_count']} component(s) NOT wired")
-            for issue in component_check["issues"]:
-                logger.error(f"   - {issue['component']}: {issue['impact']}")
-            results["errors"].append({
-                "category": "component_wiring",
-                "severity": "HIGH",
-                "message": f"{component_check['unwired_count']} architectural component(s) not wired to workflows",
-                "details": component_check["issues"]
-            })
-            results["success"] = False
-        else:
-            logger.info("✅ All architectural components properly wired")
-        
-        # ====================================================================
-        # CHECK 11: Autonomous Execution Wiring
-        # ====================================================================
-        logger.info("📋 Check 11: Autonomous Execution Wiring")
-        try:
-            from src.operations.modules.realignment.autonomous_execution_wiring_checker import (
-                check_autonomous_execution_wiring
-            )
-            auto_exec_result = check_autonomous_execution_wiring(cortex_root)
-            results["checks"]["autonomous_execution_wiring"] = auto_exec_result
-            
-            if auto_exec_result["all_passed"]:
-                logger.info("✅ Autonomous execution fully wired")
-            else:
-                warning_count = len(auto_exec_result.get("warnings", []))
-                logger.warning(f"⚠️  Autonomous execution wiring incomplete: {warning_count} issue(s)")
-                
-                # Add warnings to results
-                for warning in auto_exec_result.get("warnings", []):
-                    results["warnings"].append({
-                        "category": "autonomous_execution_wiring",
-                        "severity": "MEDIUM",
-                        "message": warning,
-                        "details": {}
-                    })
-        except Exception as e:
-            logger.error(f"❌ Autonomous execution wiring check failed: {e}")
-            results["errors"].append({
-                "category": "autonomous_execution_wiring",
-                "severity": "HIGH",
-                "message": f"Autonomous execution wiring check failed: {str(e)}",
-                "details": {}
-            })
+        _align_deployment(cortex_root, results)
         
         # ====================================================================
         # Generate Comprehensive Report
