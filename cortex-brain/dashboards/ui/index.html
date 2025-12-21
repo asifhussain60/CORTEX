@@ -81,43 +81,43 @@
 
             <!-- Navigation Tabs -->
             <nav class="nav-tabs">
-                <a class="nav-tab active" data-tab="executive" onclick="switchTab('executive')">
+                <a class="nav-tab active" data-tab="executive">
                     <span class="nav-tab-icon">📊</span>
                     <span class="nav-tab-text">Executive Summary</span>
                 </a>
-                <a class="nav-tab" data-tab="overview" onclick="switchTab('overview')">
+                <a class="nav-tab" data-tab="overview">
                     <span class="nav-tab-icon">🏠</span>
                     <span class="nav-tab-text">System Overview</span>
                 </a>
-                <a class="nav-tab" data-tab="tech-stack" onclick="switchTab('tech-stack')">
+                <a class="nav-tab" data-tab="tech-stack">
                     <span class="nav-tab-icon">⚙️</span>
                     <span class="nav-tab-text">Tech Stack</span>
                 </a>
-                <a class="nav-tab" data-tab="security" onclick="switchTab('security')">
+                <a class="nav-tab" data-tab="security">
                     <span class="nav-tab-icon">🔒</span>
                     <span class="nav-tab-text">Security</span>
                 </a>
-                <a class="nav-tab" data-tab="use-cases" onclick="switchTab('use-cases')">
+                <a class="nav-tab" data-tab="use-cases">
                     <span class="nav-tab-icon">🎯</span>
                     <span class="nav-tab-text">Use Cases</span>
                 </a>
-                <a class="nav-tab" data-tab="recommendations" onclick="switchTab('recommendations')">
+                <a class="nav-tab" data-tab="recommendations">
                     <span class="nav-tab-icon">💡</span>
                     <span class="nav-tab-text">Recommendations</span>
                 </a>
-                <a class="nav-tab" data-tab="architecture" onclick="switchTab('architecture')">
+                <a class="nav-tab" data-tab="architecture">
                     <span class="nav-tab-icon">🏗️</span>
                     <span class="nav-tab-text">Architecture</span>
                 </a>
-                <a class="nav-tab" data-tab="code-org" onclick="switchTab('code-org')">
+                <a class="nav-tab" data-tab="code-org">
                     <span class="nav-tab-icon">📁</span>
                     <span class="nav-tab-text">Code Organization</span>
                 </a>
-                <a class="nav-tab" data-tab="vendors" onclick="switchTab('vendors')">
+                <a class="nav-tab" data-tab="vendors">
                     <span class="nav-tab-icon">🔌</span>
                     <span class="nav-tab-text">Dependencies</span>
                 </a>
-                <a class="nav-tab" data-tab="onboarding" onclick="switchTab('onboarding')">
+                <a class="nav-tab" data-tab="onboarding">
                     <span class="nav-tab-icon">🎓</span>
                     <span class="nav-tab-text">Onboarding</span>
                 </a>
@@ -215,54 +215,6 @@
 
     <!-- Global Functions -->
     <script>
-        /**
-         * Switch between dashboard tabs
-         * @param {string} tabName - The tab to switch to
-         */
-        function switchTab(tabName) {
-            // Note: This function is now deprecated - tab switching handled by setupTabNavigation() in app.js
-            // Kept for backwards compatibility but not called by nav tabs
-            
-            // Update active nav tab
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            const activeNav = document.querySelector(`.nav-tab[data-tab="${tabName}"]`);
-            if (activeNav) {
-                activeNav.classList.add('active');
-            }
-
-            // Update active content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            const activeContent = document.getElementById(`tab-${tabName}`);
-            if (activeContent) {
-                activeContent.classList.add('active');
-            }
-
-            // Update title
-            const titles = {
-                'executive': 'Executive Summary',
-                'overview': 'System Overview',
-                'tech-stack': 'Tech Stack',
-                'security': 'Security',
-                'use-cases': 'Use Cases',
-                'recommendations': 'Recommendations',
-                'architecture': 'Architecture',
-                'code-org': 'Code Organization',
-                'vendors': 'Dependencies',
-                'onboarding': 'Onboarding'
-            };
-            const titleElement = document.getElementById('contentTitle');
-            if (titleElement && titles[tabName]) {
-                titleElement.textContent = titles[tabName];
-            }
-
-            // Trigger tab change event for app.js
-            window.dispatchEvent(new CustomEvent('tabChange', { detail: { tab: tabName } }));
-        }
-
         /**
          * Handle data source change
          * @param {string} source - The data source to switch to
