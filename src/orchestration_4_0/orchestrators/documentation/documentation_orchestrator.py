@@ -26,6 +26,8 @@ from .extractors.type_extractor import TypeExtractor
 from .generators.api_doc_generator import APIDocGenerator
 from .generators.diagram_generator import DiagramGenerator
 from .parallel_analyzer import ParallelDocumentationAnalyzer
+from .preference_tracker import DocumentationPreferenceTracker, DocumentationPreferences
+from .style_adaptation import StyleAdaptationEngine, FeedbackLoopIntegrator
 
 
 @dataclass
@@ -36,7 +38,11 @@ class DocumentationConfig:
     include_private: bool = False
     generate_diagrams: bool = True
     generate_quick_ref: bool = True
-    use_parallel_analysis: bool = True  # NEW: Enable parallel analysis
+    use_parallel_analysis: bool = True  # Enable parallel analysis
+    enable_adaptive_style: bool = True  # NEW: Enable preference-based style adaptation
+    user_id: Optional[str] = None  # NEW: User identifier for preference tracking
+    project_id: Optional[str] = None  # NEW: Project identifier for preference scoping
+    learn_from_feedback: bool = True  # NEW: Learn from user edits
     diagram_types: List[str] = field(default_factory=lambda: [
         "class_hierarchy",
         "phase_flow"
@@ -66,6 +72,8 @@ class DocumentationOrchestrator(BaseOrchestrator):
     - Interactive D3.js diagrams
     - Phase flow visualization
     - Class hierarchy diagrams
+    - Adaptive style based on user preferences (NEW)
+    - Learning from user feedback (NEW)
     
     Example:
         orchestrator = DocumentationOrchestrator(logger, config)
@@ -73,7 +81,9 @@ class DocumentationOrchestrator(BaseOrchestrator):
         context = {
             'config': DocumentationConfig(
                 source_paths=[Path("src/orchestration_4_0")],
-                output_dir=Path("docs/orchestration")
+                output_dir=Path("docs/orchestration"),
+                user_id="dev123",  # Enable preference tracking
+                enable_adaptive_style=True  # Enable style adaptation
             )
         }
         
@@ -97,7 +107,12 @@ class DocumentationOrchestrator(BaseOrchestrator):
         self.type_extractor = TypeExtractor()
         self.api_doc_generator = APIDocGenerator()
         self.diagram_generator = DiagramGenerator()
-        self.parallel_analyzer = ParallelDocumentationAnalyzer(logger)  # NEW
+        self.parallel_analyzer = ParallelDocumentationAnalyzer(logger)
+        
+        # NEW: Initialize preference tracking and style adaptation
+        self.preference_tracker = DocumentationPreferenceTracker(logger)
+        self.style_engine = StyleAdaptationEngine(logger)
+        self.feedback_integrator = FeedbackLoopIntegrator(self.preference_tracker, logger)
         
         # Inject loggers
         self.code_analyzer.logger = self.logger
@@ -109,6 +124,9 @@ class DocumentationOrchestrator(BaseOrchestrator):
         self.modules: List[ModuleInfo] = []
         self.doc_config: Optional[DocumentationConfig] = None
         self.doc_result: Optional[DocumentationResult] = None
+        
+        # NEW: Store user preferences for adaptive generation
+        self.user_preferences: Optional[DocumentationPreferences] = None
         
         # Adaptive execution mode
         self.execution_mode = self.config.get("execution_mode", "AUTONOMOUS")
@@ -147,6 +165,30 @@ class DocumentationOrchestrator(BaseOrchestrator):
             self.execution_mode = context["execution_mode"]
             self.logger.info(f"🎯 Execution mode overridden: {self.execution_mode}")
         
+        # NEW: Load user preferences if adaptive style is enabled
+        if self.doc_config.enable_adaptive_style and self.doc_config.user_id:
+            self.user_preferences = self.preference_tracker.get_preferences(
+                user_id=self.doc_config.user_id,
+                project_id=self.doc_config.project_id
+            )
+            self.logger.info(
+                f"🎨 Loaded preferences for user '{self.doc_config.user_id}': "
+                f"style={self.user_preferences.style.value}, "
+                f"tone={self.user_preferences.tone.value}, "
+                f"depth={self.user_preferences.depth.value}"
+            )
+            
+            # Get confidence score
+            confidence = self.feedback_integrator.get_preference_confidence(
+                self.doc_config.user_id
+            )
+            if confidence > 0:
+                self.logger.info(f"📊 Preference confidence: {confidence:.1%}")
+        else:
+            self.user_preferences = None
+            if self.doc_config.enable_adaptive_style:
+                self.logger.info("⚠️  Adaptive style enabled but no user_id provided")
+        
         self.logger.info(f"✅ Documentation will be generated at: {self.doc_config.output_dir}")
         
         # Initialize result in context and store in instance
@@ -170,6 +212,13 @@ class DocumentationOrchestrator(BaseOrchestrator):
             "generate_docs",
             description="Generate API documentation"
         )
+        
+        # NEW: Add style adaptation phase if enabled
+        if self.doc_config and self.doc_config.enable_adaptive_style and self.user_preferences:
+            self.phase_manager.register_phase(
+                "adapt_style",
+                description="Adapt documentation style to user preferences"
+            )
         
         if self.doc_config and self.doc_config.generate_diagrams:
             self.phase_manager.register_phase(
@@ -219,6 +268,8 @@ class DocumentationOrchestrator(BaseOrchestrator):
             return self._extract_phase(context, result)
         elif phase_name == "generate_docs":
             return self._generate_docs_phase(context, result)
+        elif phase_name == "adapt_style":  # NEW
+            return self._adapt_style_phase(context, result)
         elif phase_name == "generate_diagrams":
             return self._generate_diagrams_phase(context, result)
         elif phase_name == "validate":
@@ -447,6 +498,75 @@ class DocumentationOrchestrator(BaseOrchestrator):
                 error_msg = f"Failed to generate quick reference: {e}"
                 self.logger.error(error_msg)
                 result.errors.append(error_msg)
+        
+        return context
+    
+    def _adapt_style_phase(
+        self,
+        context: Dict[str, Any],
+        result: DocumentationResult
+    ) -> Dict[str, Any]:
+        """
+        Adapt generated documentation to user preferences
+        
+        NEW: Applies learned preferences to transform documentation style,
+        tone, and depth to match user expectations.
+        """
+        self.logger.info("Phase: ADAPT_STYLE - Applying user preferences")
+        
+        if not self.user_preferences:
+            self.logger.warning("No user preferences available, skipping style adaptation")
+            return context
+        
+        if not result.output_files:
+            self.logger.warning("No documentation files to adapt")
+            return context
+        
+        adapted_count = 0
+        skip_count = 0
+        
+        # Adapt each generated markdown documentation file
+        for doc_path in result.output_files:
+            if doc_path.suffix == '.md' and doc_path.name != 'summary.md':
+                try:
+                    # Read original documentation
+                    original_content = doc_path.read_text(encoding='utf-8')
+                    
+                    # Apply style adaptation
+                    adapted_content = self.style_engine.adapt_documentation(
+                        original_doc=original_content,
+                        preferences=self.user_preferences
+                    )
+                    
+                    # Write adapted content back
+                    doc_path.write_text(adapted_content, encoding='utf-8')
+                    adapted_count += 1
+                    
+                    self.logger.info(f"✨ Adapted: {doc_path.name}")
+                    
+                except Exception as e:
+                    # Log as warning instead of error to avoid failing the phase
+                    warning_msg = f"Could not adapt {doc_path.name}: {e}"
+                    self.logger.warning(warning_msg)
+                    result.warnings.append(warning_msg)
+                    skip_count += 1
+        
+        # Log adaptation summary
+        if adapted_count > 0:
+            self.logger.info(
+                f"✅ Adapted {adapted_count} files - "
+                f"Style: {self.user_preferences.style.value}, "
+                f"Tone: {self.user_preferences.tone.value}, "
+                f"Depth: {self.user_preferences.depth.value}"
+            )
+            
+            # Get and log confidence score
+            confidence = self.feedback_integrator.get_preference_confidence(
+                self.doc_config.user_id
+            )
+            self.logger.info(f"📊 Adaptation confidence: {confidence:.1%}")
+        elif skip_count > 0:
+            self.logger.info(f"⚠️  Skipped {skip_count} files due to adaptation issues")
         
         return context
     
@@ -690,3 +810,147 @@ class DocumentationOrchestrator(BaseOrchestrator):
         """Validate export phase"""
         summary_path = self.doc_config.output_dir / "summary.md"
         return summary_path.exists()
+    
+    # NEW: Preference learning and feedback methods
+    
+    def learn_from_user_edit(
+        self,
+        original_doc: str,
+        edited_doc: str,
+        user_id: Optional[str] = None
+    ) -> None:
+        """
+        Learn from user's edits to generated documentation
+        
+        Analyzes the differences between generated and edited documentation
+        to infer user preferences and improve future generations.
+        
+        Args:
+            original_doc: Original generated documentation
+            edited_doc: User-edited version
+            user_id: User identifier (uses config user_id if not provided)
+            
+        Example:
+            # After user edits generated docs
+            orchestrator.learn_from_user_edit(
+                original_doc=original_content,
+                edited_doc=user_edited_content
+            )
+        """
+        target_user_id = user_id or (self.doc_config.user_id if self.doc_config else None)
+        
+        if not target_user_id:
+            self.logger.warning("Cannot learn from edit: No user_id specified")
+            return
+        
+        if not self.doc_config or not self.doc_config.learn_from_feedback:
+            self.logger.info("Learning from feedback is disabled")
+            return
+        
+        self.logger.info(f"🧠 Learning from user edit for '{target_user_id}'")
+        
+        try:
+            # Use feedback integrator to process edit
+            self.feedback_integrator.process_user_edit(
+                user_id=target_user_id,
+                original_doc=original_doc,
+                edited_doc=edited_doc
+            )
+            
+            self.logger.info("✅ Successfully learned from user edit")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to learn from edit: {e}")
+    
+    def get_user_preferences(self, user_id: Optional[str] = None) -> Optional[DocumentationPreferences]:
+        """
+        Get current preferences for a user
+        
+        Args:
+            user_id: User identifier (uses config user_id if not provided)
+            
+        Returns:
+            DocumentationPreferences if available, None otherwise
+        """
+        target_user_id = user_id or (self.doc_config.user_id if self.doc_config else None)
+        
+        if not target_user_id:
+            return None
+        
+        return self.preference_tracker.get_preferences(
+            user_id=target_user_id,
+            project_id=self.doc_config.project_id if self.doc_config else None
+        )
+    
+    def update_user_preference(
+        self,
+        preference_type: str,
+        new_value: str,
+        reason: str = "user_feedback",
+        user_id: Optional[str] = None
+    ) -> None:
+        """
+        Manually update a specific user preference
+        
+        Args:
+            preference_type: Type of preference (style, tone, depth, example_density)
+            new_value: New value for the preference
+            reason: Reason for update
+            user_id: User identifier (uses config user_id if not provided)
+            
+        Example:
+            orchestrator.update_user_preference(
+                preference_type="style",
+                new_value="technical",
+                reason="user_explicit_request"
+            )
+        """
+        target_user_id = user_id or (self.doc_config.user_id if self.doc_config else None)
+        
+        if not target_user_id:
+            self.logger.warning("Cannot update preference: No user_id specified")
+            return
+        
+        self.logger.info(
+            f"📝 Updating preference for '{target_user_id}': "
+            f"{preference_type}={new_value} (reason: {reason})"
+        )
+        
+        try:
+            self.preference_tracker.update_preference(
+                user_id=target_user_id,
+                preference_type=preference_type,
+                new_value=new_value,
+                reason=reason,
+                project_id=self.doc_config.project_id if self.doc_config else None
+            )
+            
+            # Reload preferences
+            self.user_preferences = self.preference_tracker.get_preferences(
+                user_id=target_user_id,
+                project_id=self.doc_config.project_id if self.doc_config else None
+            )
+            
+            self.logger.info("✅ Preference updated successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to update preference: {e}")
+    
+    def get_preference_confidence(self, user_id: Optional[str] = None) -> float:
+        """
+        Get confidence score for user's preferences
+        
+        Higher confidence means more historical data and consistent preferences.
+        
+        Args:
+            user_id: User identifier (uses config user_id if not provided)
+            
+        Returns:
+            Confidence score (0.0 to 1.0)
+        """
+        target_user_id = user_id or (self.doc_config.user_id if self.doc_config else None)
+        
+        if not target_user_id:
+            return 0.0
+        
+        return self.feedback_integrator.get_preference_confidence(target_user_id)
