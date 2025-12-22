@@ -268,9 +268,36 @@ class MarkdownRenderer:
         md.append("")
         return "\n".join(md)
     
+    def _render_overall_progress(self, phases: List[Dict[str, Any]]) -> str:
+        """Render overall progress bar from phases."""
+        if not phases:
+            return ""
+        
+        # Calculate overall progress
+        total_phases = len(phases)
+        completed_phases = sum(1 for phase in phases if phase.get("status", "").lower() in ["complete", "completed", "done"])
+        progress_percent = int((completed_phases / total_phases) * 100) if total_phases > 0 else 0
+        
+        # Create progress bar (width 20 for overall)
+        filled = int((progress_percent / 100) * 20)
+        empty = 20 - filled
+        progress_bar = f"[{'█' * filled}{'░' * empty}]"
+        
+        md = []
+        md.append(f"**Overall Progress:** {progress_bar} {progress_percent}% ({completed_phases}/{total_phases} phases complete)\n")
+        md.append("")
+        return "\n".join(md)
+    
     def _render_phases(self, phases: List[Dict[str, Any]]) -> str:
         """Render implementation phases."""
-        md = ["## Implementation Phases\n"]
+        md = ["## 📈 Phase Progress Overview\n"]
+        
+        # Add overall progress bar as first item
+        overall_progress = self._render_overall_progress(phases)
+        if overall_progress:
+            md.append(overall_progress)
+        
+        md.append("## Implementation Phases\n")
         
         for phase in phases:
             # Phase header

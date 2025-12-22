@@ -228,17 +228,39 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - `cortex-brain/documents/investigations/` - Bug investigations
   - `cortex-brain/documents/planning/` - Feature plans, ADO items
   - `cortex-brain/documents/implementation-guides/` - How-to guides
+  - **`docs/architecture/` - Architecture documentation with diagrams**
 - **Verify documentation:**
   - Every completed plan item has docs in correct category
   - Orchestrator manifests exist for all orchestrators
   - Implementation guides current and accurate
+  - **Architecture diagrams exist for all completed orchestrators (MANDATORY)**
+    - **Tier 1 (<500 LOC, <20 tests):** 1 architecture diagram minimum
+    - **Tier 2 (500-2000 LOC, 20-50 tests):** Architecture + Sequence + Integration diagrams (3 minimum)
+    - **Tier 3 (>2000 LOC, >50 tests):** High-level architecture + 2+ workflow diagrams + component interaction (4+ diagrams)
+    - **All diagrams:** Mermaid format in markdown files (`docs/architecture/*.md`)
+    - **Diagram types:** architecture (graph TB/TD), sequence (sequenceDiagram), flowchart (flowchart TD)
+- **Diagram Quality Requirements:**
+  - Clear component boundaries and responsibilities
+  - Integration points explicitly shown with arrows
+  - Data flow directions indicated
+  - Key decision points highlighted with diamond shapes
+  - Async/parallel operations clearly marked
+  - External dependencies identified
+  - Minimum 3 diagrams per Tier 2+ orchestrator
+  - All diagrams must render correctly in GitHub markdown preview
 - **Auto-documentation triggers:**
   - Invoke `DocumentationOrchestrator` when `ProgressTracker.update_progress()` called with `auto_document=True`
+  - **Generate architecture diagrams when marking orchestrator complete (MANDATORY gate)**
   - Generate API docs: `python scripts/documentation/generate_api_docs.py`
   - Update D3.js visualizations for architecture changes
 - **Fix broken links:**
   - Recursively update all file references after moves
   - Update imports, paths, configs, docs
+- **Enforcement Actions:**
+  - Block completion of orchestrator tasks without architecture diagrams
+  - Generate gap reports: `cortex-brain/documents/reports/documentation-gap-analysis-*.md`
+  - Auto-create diagram scaffolding for new orchestrators
+  - Validate diagram count matches tier requirements
 
 ### 6. CORTEX 3.0 → 4.0 Migration Enforcement
 - **Phase tracking awareness (from CORTEX4-STATUS.md v2.1):**
