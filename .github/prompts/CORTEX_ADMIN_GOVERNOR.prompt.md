@@ -304,10 +304,27 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - Authority source: `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md`
   - Planning format: Logic-based (Phase → Task), NOT calendar-based (Week → Day)
   - Total tasks: ~70 across all phases (exact count in plan-metadata.yaml)
-- **Legacy purge:**
-  - Detect CORTEX 3.0 artifacts not in 4.0 master plan
-  - Delete legacy orchestrators, tools, modules, reports, scripts
-  - Remove references from imports, configs, docs
+- **Legacy purge with port-first strategy:**
+  - **BEFORE deleting 3.0 code, check for port-readiness:**
+    - Search for existing 3.0 implementations in target area
+    - Review if functionality can be migrated to 4.0 architecture
+    - Port and enhance if tests passing and architecture-compatible
+    - Delete original 3.0 code ONLY after successful port
+  - **Port-Ready Indicators:**
+    - Tests passing in 3.0 implementation
+    - Clear responsibility boundaries
+    - Compatible with 4.0 (4-tier brain, orchestrators, agents)
+    - No hard dependencies on deprecated infrastructure
+  - **Post-Port Cleanup:**
+    - Remove 3.0 files from `src/` and `tests/`
+    - Update imports, configs, `cortex-operations.yaml`
+    - Archive to `cortex-brain/archive/cortex-3.0/` with timestamp
+    - Create migration report documenting what was ported
+  - **Direct deletion (no port):**
+    - Duplicate functionality already in 4.0
+    - Experimental/incomplete 3.0 features
+    - Tests failing or missing in 3.0 code
+    - Functionality deprecated in 4.0 architecture
   - Validate against Phase 1 cleanup deliverables (100% complete)
 - **Multi-repo architecture (Phases 11-12):**
   - Cross-IDE workspace detection: `src/core/workspace_detector.py`
@@ -317,6 +334,7 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
 - **Archive properly:**
   - Move deprecated items to `archive/` with timestamp
   - Create `ARCHIVE_REPORT.md` with migration details
+  - Include porting decisions (what was ported vs deleted)
   - Follow Phase 1 archive structure (approved pattern)
 
 ### 7. Repo Structure Enforcement

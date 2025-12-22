@@ -290,7 +290,7 @@ cortex-brain/
 ├── tier1/  # Working memory (70-conv FIFO, <100ms)
 ├── tier2/  # Knowledge graph (pattern learning)
 ├── tier3/  # Dev context (metrics, hotspots)
-└── response-templates.yaml  # 62 templates
+└── response-templates-v4.yaml  # 62 templates
 ```
 
 **Code Structure:**
@@ -319,7 +319,7 @@ src/
 - **GIT_ISOLATION_ENFORCEMENT:** CORTEX code never in user repos
 - **TEST_LOCATION_SEPARATION:** App tests in user repo, CORTEX in `tests/`
 
-**Response Templates:** Auto-select by intent from `cortex-brain/response-templates.yaml`
+**Response Templates:** Auto-select by intent from `cortex-brain/response-templates-v4.yaml`
 
 ---
 
@@ -366,9 +366,38 @@ python -m src.main
 
 **Core Documentation:**
 - `cortex-brain/brain-protection-rules.yaml` - Complete SKULL rules
-- `cortex-brain/response-templates.yaml` - All response templates
+- `cortex-brain/response-templates-v4.yaml` - All response templates
 - `src/tier0/README.md` - Governance rules
 - `src/cortex_agents/README.md` - Agent framework
+
+---
+
+## 🔄 CORTEX 3.0 → 4.0 Migration Protocol
+
+**BEFORE implementing new functionality:**
+1. **Search for existing 3.0 implementations:** Use `semantic_search` and `grep_search` to find related functionality
+2. **Review for port-readiness:** Check if CORTEX 3.0 code can be migrated to 4.0 architecture
+3. **Port before building new:** If ready, migrate and enhance existing code to 4.0 standards
+4. **Delete 3.0 artifacts:** After successful port, delete original 3.0 code to prevent:
+   - Import confusion (duplicate implementations)
+   - Maintenance overhead (two codebases)
+   - Integration conflicts (competing orchestrators)
+   - Documentation drift (outdated references)
+
+**Port-Ready Indicators:**
+- Tests passing in 3.0 implementation
+- Clear responsibility boundaries
+- Compatible with 4.0 architecture (4-tier brain, orchestrators, agents)
+- No hard dependencies on deprecated 3.0 infrastructure
+
+**Post-Port Cleanup:**
+- Remove 3.0 files from `src/` and `tests/`
+- Update imports across codebase
+- Archive to `cortex-brain/archive/cortex-3.0/` with timestamp
+- Update `cortex-operations.yaml` registry
+- Regenerate documentation
+
+**Guide:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/00-MASTER-PLAN.md` (Phase 1: Legacy purge)
 
 ---
 

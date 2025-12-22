@@ -220,7 +220,7 @@ cortex-brain/
 ├── tier1/  # Working memory (70-conv FIFO)
 ├── tier2/  # Knowledge graph
 ├── tier3/  # Dev context
-└── response-templates.yaml
+└── response-templates-v4.yaml
 ```
 
 **Code:**
@@ -233,12 +233,10 @@ src/
 ```
 
 **Brain Protection (SKULL):**
-- TDD_ENFORCEMENT: RED→GREEN→REFACTOR mandatory
-- RED_PHASE_VALIDATION: Tests must fail first
-- HOLISTIC_CODE_DISCOVERY_ENFORCEMENT: Search before create (prevent duplication)
+- TDD_ENFORCEMENT: RED→GREEN→REFACTOR mandatory, tests fail first
+- HOLISTIC_CODE_DISCOVERY_ENFORCEMENT: Search before create (no duplication)
 - REFACTOR_CODE_CLEANUP_ENFORCEMENT: Remove orphaned/duplicate code
-- GIT_ISOLATION_ENFORCEMENT: CORTEX code never in user repos
-- TEST_LOCATION_SEPARATION: App tests in user repo, CORTEX in `tests/`
+- GIT_ISOLATION_ENFORCEMENT: CORTEX code never in user repos, tests in `tests/`
 
 ---
 
@@ -267,7 +265,7 @@ python -m src.main
 |------|---------|
 | `.github/prompts/CORTEX.prompt.md` | Complete instructions |
 | `cortex-brain/brain-protection-rules.yaml` | SKULL rules |
-| `cortex-brain/response-templates.yaml` | 62 templates |
+| `cortex-brain/response-templates-v4.yaml` | 62 templates |
 | `cortex.config.json` | Machine settings |
 
 ---
@@ -282,6 +280,22 @@ python -m src.main
 
 ---
 
+## 🔄 CORTEX 3.0 → 4.0 Migration
+
+**BEFORE implementing new functionality:**
+1. Search for existing 3.0 implementations (semantic_search/grep_search)
+2. Review port-readiness (tests passing, architecture-compatible)
+3. Port and enhance if ready (migrate to 4.0 standards)
+4. Delete 3.0 artifacts (prevent import confusion, conflicts)
+
+**Port-Ready Indicators:**
+- Tests passing, clear boundaries, 4.0-compatible architecture
+
+**Post-Port:**
+- Remove 3.0 files, update imports/registry, archive with timestamp
+
+---
+
 **Quick Start:** Say "help" to see available operations.
 
-**Anti-Bloat:** This file MUST stay under 350 lines.
+**Anti-Bloat:** This file MUST stay under 300 lines.
