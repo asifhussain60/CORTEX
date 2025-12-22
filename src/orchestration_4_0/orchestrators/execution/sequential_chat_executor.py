@@ -76,7 +76,7 @@ class SequentialChatExecutor:
                     return {
                         'success': False,
                         'error': error_msg,
-                        'completed_steps': i - 1,
+                        'completed_steps': orchestrator_names[:i-1],
                         'failed_at': orch_name,
                         'sequential_results': result.get('sequential_results', [])
                     }
@@ -107,7 +107,7 @@ class SequentialChatExecutor:
                         return {
                             'success': False,
                             'error': error_msg,
-                            'completed_steps': i - 1,
+                            'completed_steps': orchestrator_names[:i-1],
                             'failed_at': orch_name,
                             'sequential_results': result.get('sequential_results', [])
                         }
@@ -130,7 +130,7 @@ class SequentialChatExecutor:
                     return {
                         'success': False,
                         'error': error_msg,
-                        'completed_steps': i - 1,
+                        'completed_steps': orchestrator_names[:i-1],
                         'failed_at': orch_name,
                         'sequential_results': result.get('sequential_results', [])
                     }
@@ -147,7 +147,7 @@ class SequentialChatExecutor:
         
         return {
             'success': True,
-            'completed_steps': len(orchestrator_names),
+            'completed_steps': orchestrator_names[:len(orchestrator_names)],
             'sequential_results': result.get('sequential_results', []),
             'final_context': result
         }
