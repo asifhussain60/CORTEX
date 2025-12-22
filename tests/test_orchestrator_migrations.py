@@ -33,21 +33,21 @@ class TestExecutionOrchestratorMigration:
         orchestrator = ExecutionOrchestrator(
             logger=logger,
             config={
-                "execution_mode": "AUTONOMOUS",
+                "execution_mode": "autonomous",
                 "max_retries": 3,
                 "enable_rollback": True
             }
         )
         
         assert orchestrator.name == "execution"
-        assert orchestrator.execution_mode == "AUTONOMOUS"
+        assert orchestrator.execution_mode.value == "autonomous"
         assert orchestrator.enable_rollback is True
         assert orchestrator.phase_manager is not None
         assert orchestrator.error_handler is not None
     
     def test_all_execution_modes(self):
         """Test orchestrator accepts all execution modes"""
-        modes = ["AUTONOMOUS", "CHECKPOINT", "INTERACTIVE"]
+        modes = ["autonomous", "supervised", "manual"]
         
         for mode in modes:
             orchestrator = ExecutionOrchestrator(

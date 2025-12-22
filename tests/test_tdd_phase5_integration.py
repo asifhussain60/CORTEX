@@ -55,6 +55,7 @@ def mock_kg():
     kg.add_entity = Mock()
     kg.add_relationship = Mock()
     kg.query = Mock(return_value=[])
+    kg.store_pattern = AsyncMock()  # Must be async
     return kg
 
 

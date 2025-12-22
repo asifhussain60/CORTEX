@@ -283,11 +283,11 @@ class ManifestInheritanceResolver:
             if not Path(parent_path).is_absolute():
                 current_dir = Path(current_path).parent
                 # Resolve parent relative to current file's directory
-                resolved_parent = (self.manifest_base_dir / current_dir / parent_path)
+                resolved_parent = (self.manifest_base_dir / current_dir / parent_path).resolve()
                 
-                # Make it relative to base_dir
+                # Make it relative to base_dir (normalized)
                 try:
-                    parent_path = str(resolved_parent.relative_to(self.manifest_base_dir))
+                    parent_path = str(resolved_parent.relative_to(self.manifest_base_dir.resolve()))
                 except ValueError:
                     # Already absolute or outside base_dir
                     pass

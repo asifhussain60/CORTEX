@@ -14,7 +14,7 @@ from src.utils.manifest_inheritance_resolver import ManifestInheritanceResolver
 @pytest.fixture
 def resolver():
     """Create resolver with test manifests directory"""
-    base_dir = Path(__file__).parent.parent.parent / "cortex-brain" / "manifests"
+    base_dir = Path(__file__).parent.parent / "cortex-brain" / "manifests"
     return ManifestInheritanceResolver(base_dir)
 
 

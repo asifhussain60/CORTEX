@@ -76,8 +76,6 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
 
 5. **NOT YET IMPLEMENTED (do not reference as if they exist):**
    - ⏳ Admin Governor Orchestrator (this prompt describes it, but no code exists)
-   - ⏳ System Maintenance Orchestrator v3.0 (referenced but file missing: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`)
-   - ⏳ Refinement Orchestrator v1.0 (referenced but file missing: `src/operations/modules/orchestration/refinement_orchestrator_v1.py`)
    - ⏳ QA Orchestrator (referenced in Phase 6.5 architecture docs but implementation status unknown)
 
 6. **Report Drift:**
@@ -404,8 +402,6 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - `src/orchestrators/system/system_integrity_orchestrator.py` (status unknown - verify)
   - `src/orchestrators/story_enhancement/story_enhancement_orchestrator.py` (status unknown - verify)
 - **Missing Referenced Files (flag as NOT IMPLEMENTED):**
-  - `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` (REFERENCED in CORTEX.prompt.md but MISSING)
-  - `src/operations/modules/orchestration/refinement_orchestrator_v1.py` (REFERENCED in CORTEX.prompt.md but MISSING)
   - `src/operations/modules/orchestration/admin_governor_orchestrator.py` (this prompt describes it but NO CODE)
 - **Auto-correct governance behavior:**
   - Only validate/enforce orchestrators that actually exist
@@ -414,7 +410,6 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - Report implementation gaps to user
 
 **This ensures governance operates on actual codebase state, not aspirational documentation.**
-
 ### 12. Phase Completion Validation (NEW - Detects False Completion)
 - **Status Tracker vs Implementation Reality:**
   - For each phase marked "✅ COMPLETE" in CORTEX4-STATUS.md:
