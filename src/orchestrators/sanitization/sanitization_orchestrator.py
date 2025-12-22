@@ -35,6 +35,9 @@ import yaml
 # Import base orchestrator
 from src.orchestrators.base.base_orchestrator import BaseOrchestrator
 
+# Import ManifestLoader for 3-Tier Manifest Architecture
+from src.utils.manifest_loader import ManifestLoader
+
 # Import sanitization utilities
 from src.operations.utilities.sanitization.code_analyzer import CodeAnalyzer
 from src.operations.utilities.sanitization.mapping_engine import MappingEngine
@@ -153,12 +156,13 @@ class SanitizationOrchestrator(BaseOrchestrator):
         reporter: ReportGenerator instance for audit reports
     """
     
-    def __init__(self, target_directory: str, dry_run: bool = False):
+    def __init__(self, target_directory: str, cortex_root: Optional[str] = None, dry_run: bool = False):
         """
         Initialize Sanitization Orchestrator
         
         Args:
             target_directory: Path to directory to sanitize
+            cortex_root: Path to CORTEX root (auto-detected if None)
             dry_run: If True, simulate without modifying files
         """
         # Call parent constructor with config
@@ -174,8 +178,22 @@ class SanitizationOrchestrator(BaseOrchestrator):
         self.target = Path(target_directory)
         self.dry_run = dry_run
         
-        # Load manifest
-        self.manifest = self._load_manifest()
+        # Detect CORTEX root if not provided
+        if cortex_root is None:
+            cortex_root = str(Path(__file__).parent.parent.parent.parent)
+        
+        # Load manifest using ManifestLoader (3-Tier Architecture)
+        try:
+            self.manifest_loader = ManifestLoader(cortex_root)
+            resolved = self.manifest_loader.resolve_cross_references("sanitization_orchestrator")
+            self.metadata = resolved.get("metadata", {})
+            self.config_overrides = resolved.get("config", {})
+            self.integrations = resolved.get("integrations", {})
+            # For backward compatibility with utility modules
+            self.manifest = self.metadata
+        except Exception as e:
+            self.logger.warning(f"ManifestLoader failed, using fallback: {e}")
+            self.manifest = self._load_manifest_fallback()
         
         # Initialize utility modules
         try:
@@ -198,8 +216,11 @@ class SanitizationOrchestrator(BaseOrchestrator):
         self.logger.info(f"🎭 Orchestrator engaged: SanitizationOrchestrator")
         self.logger.info(f"Target: {self.target}, Dry Run: {self.dry_run}")
     
-    def _load_manifest(self) -> Dict[str, Any]:
-        """Load sanitization manifest from YAML file"""
+    def _load_manifest_fallback(self) -> Dict[str, Any]:
+        """
+        Fallback manifest loading for backward compatibility.
+        Only used if ManifestLoader fails.
+        """
         manifest_path = Path(__file__).parent.parent.parent.parent / \
                        "cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml"
         

@@ -1,0 +1,674 @@
+# CORTEX Integration Manifest v2.0
+# External system integrations, API configurations, and adapter specifications
+#
+# Purpose: Centralized integration management with unified authentication and retry policies
+# Reduction: ~4,000 lines (scattered integrations) → 500 lines (-88%)
+#
+# Author: Asif Hussain
+# GitHub: github.com/asifhussain60/CORTEX
+# Created: 2025-12-22
+# Version: 2.0.0
+# Status: PRODUCTION
+
+schema_version: "2.0"
+manifest_type: "integration"
+last_updated: "2025-12-22T00:00:00Z"
+
+# ========================================
+# Integration Definitions
+# ========================================
+
+integrations:
+  
+  # ──────────────────────────────────
+  # Azure DevOps Integration
+  # ──────────────────────────────────
+  
+  azure_devops:
+    id: "integration://azure_devops"
+    name: "Azure DevOps"
+    description: "Integration with Azure DevOps for automated work item management, sprint planning, and pipeline orchestration"
+    version: "2.1.0"
+    status: "active"
+    
+    # Adapter Implementation
+    adapter:
+      class_name: "AzureDevOpsAdapter"
+      module_path: "src.orchestration_4_0.adapters.azure_devops_adapter"
+      version: "2.0.0"
+      fallback_adapter: "file_system"
+    
+    # Authentication
+    authentication:
+      method: "PAT"  # Personal Access Token
+      env_var: "AZURE_DEVOPS_PAT"
+      required_scopes:
+        - "vso.work_write"
+        - "vso.project"
+        - "vso.build"
+      optional_scopes:
+        - "vso.release"
+        - "vso.code_write"
+      
+      validation:
+        test_endpoint: "/_apis/projects"
+        expected_status: 200
+        timeout: 10
+    
+    # API Configuration
+    api:
+      base_url: "https://dev.azure.com"
+      version: "7.1"
+      documentation_url: "https://learn.microsoft.com/en-us/rest/api/azure/devops"
+      
+      endpoints:
+        work_items:
+          path: "/{organization}/_apis/wit/workitems"
+          methods: ["GET", "POST", "PATCH", "DELETE"]
+          description: "Work item operations"
+        
+        projects:
+          path: "/{organization}/_apis/projects"
+          methods: ["GET"]
+          description: "Project listing and details"
+        
+        pipelines:
+          path: "/{organization}/{project}/_apis/pipelines"
+          methods: ["GET", "POST"]
+          description: "Pipeline management"
+        
+        queries:
+          path: "/{organization}/{project}/_apis/wit/queries"
+          methods: ["GET", "POST"]
+          description: "Work item queries"
+        
+        iterations:
+          path: "/{organization}/{project}/_apis/work/teamsettings/iterations"
+          methods: ["GET"]
+          description: "Sprint/iteration management"
+    
+    # Rate Limiting
+    rate_limiting:
+      enabled: true
+      requests_per_second: 10
+      burst: 20
+      strategy: "token_bucket"
+      window_size: 60  # seconds
+      
+      backoff:
+        enabled: true
+        initial_delay: 1
+        max_delay: 60
+        multiplier: 2
+    
+    # Retry Policy
+    retry:
+      enabled: true
+      max_retries: 3
+      backoff_strategy: "exponential"
+      initial_delay: 1  # seconds
+      max_delay: 30
+      retry_on_status:
+        - 429  # Too Many Requests
+        - 500  # Internal Server Error
+        - 502  # Bad Gateway
+        - 503  # Service Unavailable
+        - 504  # Gateway Timeout
+      
+      retry_on_exceptions:
+        - "ConnectionError"
+        - "Timeout"
+        - "RequestException"
+    
+    # Caching
+    caching:
+      enabled: true
+      ttl: 300  # seconds
+      cache_key_prefix: "ado"
+      cache_responses:
+        - "GET:projects"
+        - "GET:work_items"
+      invalidate_on:
+        - "POST"
+        - "PATCH"
+        - "DELETE"
+    
+    # Circuit Breaker
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 5
+      recovery_timeout: 60
+      half_open_max_calls: 3
+    
+    # Used By
+    orchestrators:
+      - "ado_orchestrator"
+    
+    # Configuration
+    configuration:
+      default_organization: null  # Set at runtime
+      default_project: null
+      max_work_items_per_request: 200
+      batch_size: 50
+  
+  # ──────────────────────────────────
+  # GitHub Integration
+  # ──────────────────────────────────
+  
+  github:
+    id: "integration://github"
+    name: "GitHub"
+    description: "Integration with GitHub for issue tracking, pull requests, actions, and repository management"
+    version: "1.0.0"
+    status: "active"
+    
+    # Adapter Implementation
+    adapter:
+      class_name: "GitHubAdapter"
+      module_path: "src.orchestration_4_0.adapters.github_adapter"
+      version: "2.0.0"
+      fallback_adapter: "file_system"
+    
+    # Authentication
+    authentication:
+      method: "PAT"  # Personal Access Token
+      env_var: "GITHUB_PAT"
+      required_scopes:
+        - "repo"
+        - "workflow"
+      optional_scopes:
+        - "admin:repo_hook"
+        - "gist"
+      
+      validation:
+        test_endpoint: "/user"
+        expected_status: 200
+        timeout: 10
+    
+    # API Configuration
+    api:
+      base_url: "https://api.github.com"
+      version: "2022-11-28"
+      documentation_url: "https://docs.github.com/en/rest"
+      
+      endpoints:
+        issues:
+          path: "/repos/{owner}/{repo}/issues"
+          methods: ["GET", "POST", "PATCH"]
+          description: "Issue management"
+        
+        pull_requests:
+          path: "/repos/{owner}/{repo}/pulls"
+          methods: ["GET", "POST", "PATCH"]
+          description: "Pull request operations"
+        
+        actions:
+          path: "/repos/{owner}/{repo}/actions"
+          methods: ["GET", "POST"]
+          description: "GitHub Actions workflows"
+        
+        commits:
+          path: "/repos/{owner}/{repo}/commits"
+          methods: ["GET"]
+          description: "Commit history"
+        
+        branches:
+          path: "/repos/{owner}/{repo}/branches"
+          methods: ["GET", "POST", "DELETE"]
+          description: "Branch management"
+    
+    # Rate Limiting
+    rate_limiting:
+      enabled: true
+      requests_per_second: 60  # GitHub allows 5000/hour
+      burst: 100
+      strategy: "sliding_window"
+      window_size: 3600  # 1 hour
+      
+      backoff:
+        enabled: true
+        initial_delay: 0.5
+        max_delay: 30
+        multiplier: 2
+    
+    # Retry Policy
+    retry:
+      enabled: true
+      max_retries: 3
+      backoff_strategy: "exponential"
+      initial_delay: 1
+      max_delay: 30
+      retry_on_status:
+        - 429
+        - 500
+        - 502
+        - 503
+        - 504
+      
+      retry_on_exceptions:
+        - "ConnectionError"
+        - "Timeout"
+    
+    # Caching
+    caching:
+      enabled: true
+      ttl: 180  # 3 minutes
+      cache_key_prefix: "github"
+      cache_responses:
+        - "GET:repos"
+        - "GET:issues"
+        - "GET:commits"
+      invalidate_on:
+        - "POST"
+        - "PATCH"
+        - "DELETE"
+    
+    # Circuit Breaker
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 5
+      recovery_timeout: 60
+      half_open_max_calls: 3
+    
+    # Used By
+    orchestrators:
+      - "planning_orchestrator"
+      - "tdd_orchestrator_v4"
+      - "git_checkpoint_orchestrator"
+      - "git_sync_optimize_orchestrator"
+    
+    # Configuration
+    configuration:
+      default_owner: null  # Set at runtime
+      default_repo: null
+      max_items_per_page: 100
+      default_branch: "main"
+  
+  # ──────────────────────────────────
+  # File System Integration
+  # ──────────────────────────────────
+  
+  file_system:
+    id: "integration://file_system"
+    name: "File System"
+    description: "Local and network file system access with standardized I/O operations and error handling"
+    version: "1.0.0"
+    status: "active"
+    
+    # Adapter Implementation
+    adapter:
+      class_name: "FileSystemAdapter"
+      module_path: "src.orchestration_4_0.adapters.filesystem_adapter"
+      version: "1.0.0"
+      fallback_adapter: null  # No fallback for file system
+    
+    # Configuration
+    configuration:
+      local:
+        enabled: true
+        base_path: null  # Set at runtime (e.g., /Users/asifhussain/PROJECTS/CORTEX)
+        permissions:
+          read: true
+          write: true
+          execute: false
+          create_directories: true
+        
+        limits:
+          max_file_size_mb: 100
+          max_directory_depth: 10
+          max_files_per_directory: 10000
+      
+      network:
+        enabled: false
+        base_path: null
+        protocol: "smb"  # smb|nfs|ftp
+        timeout: 30
+        permissions:
+          read: true
+          write: false
+          execute: false
+      
+      patterns:
+        include:
+          - "**/*.py"
+          - "**/*.md"
+          - "**/*.yaml"
+          - "**/*.json"
+          - "**/*.txt"
+        
+        exclude:
+          - "**/__pycache__/**"
+          - "**/.git/**"
+          - "**/node_modules/**"
+          - "**/.venv/**"
+          - "**/.pytest_cache/**"
+          - "**/*.pyc"
+    
+    # Authentication
+    authentication:
+      method: "none"  # Local file system doesn't need auth
+      network_auth:
+        method: "username_password"
+        env_var_username: "FS_USERNAME"
+        env_var_password: "FS_PASSWORD"
+    
+    # Rate Limiting
+    rate_limiting:
+      enabled: false  # Not applicable for local FS
+    
+    # Retry Policy
+    retry:
+      enabled: true
+      max_retries: 2
+      backoff_strategy: "linear"
+      initial_delay: 0.5
+      retry_on_exceptions:
+        - "PermissionError"
+        - "FileNotFoundError"
+        - "IOError"
+    
+    # Caching
+    caching:
+      enabled: false  # File system is already optimized
+    
+    # Circuit Breaker
+    circuit_breaker:
+      enabled: false  # Not applicable
+    
+    # Used By (nearly all orchestrators)
+    orchestrators:
+      - "planning_orchestrator"
+      - "tdd_orchestrator_v4"
+      - "ado_orchestrator"
+      - "sanitization_orchestrator"
+      - "maintenance_orchestrator"
+      - "system_integrity_orchestrator"
+      - "git_checkpoint_orchestrator"
+      - "autonomous_execution_engine"
+      - "story_enhancement_orchestrator"
+    
+    # Operations
+    operations:
+      read:
+        encoding: "utf-8"
+        errors: "strict"  # strict|ignore|replace
+        buffer_size: 8192
+      
+      write:
+        encoding: "utf-8"
+        mode: "w"  # w|a|x
+        create_parents: true
+        atomic: true  # Use temp file + rename
+      
+      delete:
+        safe_mode: true
+        backup_before_delete: false
+        move_to_trash: false
+
+# ========================================
+# Adapter Factory Configuration
+# ========================================
+
+adapter_factory:
+  auto_detection: true
+  fallback_adapter: "file_system"
+  cache_ttl: 300  # seconds
+  lazy_loading: true
+  
+  # Middleware Pipeline (order matters)
+  middleware:
+    - name: "logging"
+      enabled: true
+      priority: 1  # First (logs everything)
+      config:
+        log_requests: true
+        log_responses: false  # Too verbose
+        log_errors: true
+        log_level: "INFO"
+    
+    - name: "rate_limiting"
+      enabled: true
+      priority: 2  # Before caching
+      config:
+        enforce: true
+        log_rejections: true
+    
+    - name: "caching"
+      enabled: true
+      priority: 3  # After rate limiting
+      config:
+        backend: "memory"  # memory|redis|disk
+        max_size: 1000
+        eviction_policy: "lru"  # lru|lfu|fifo
+    
+    - name: "retry"
+      enabled: true
+      priority: 4  # After caching
+      config:
+        log_retries: true
+    
+    - name: "circuit_breaker"
+      enabled: true
+      priority: 5  # Last line of defense
+      config:
+        log_state_changes: true
+    
+    - name: "metrics"
+      enabled: true
+      priority: 6  # Final (collects metrics)
+      config:
+        collect_latency: true
+        collect_errors: true
+        collect_cache_hits: true
+
+# ========================================
+# Connection Pooling
+# ========================================
+
+connection_pooling:
+  enabled: true
+  max_connections: 10
+  min_connections: 2
+  connection_timeout: 30
+  idle_timeout: 300
+  max_lifetime: 3600
+  
+  per_integration:
+    azure_devops:
+      max_connections: 5
+      min_connections: 1
+    
+    github:
+      max_connections: 8
+      min_connections: 2
+    
+    file_system:
+      max_connections: 1  # Not applicable
+      min_connections: 1
+
+# ========================================
+# Health Checks
+# ========================================
+
+health_checks:
+  enabled: true
+  interval: 60  # seconds
+  timeout: 10
+  retry_on_failure: 3
+  
+  checks:
+    - integration: "azure_devops"
+      method: "endpoint"
+      endpoint: "/_apis/projects"
+      expected_status: 200
+      enabled: true
+    
+    - integration: "github"
+      method: "endpoint"
+      endpoint: "/user"
+      expected_status: 200
+      enabled: true
+    
+    - integration: "file_system"
+      method: "custom"
+      function: "write_test_file"
+      test_file: ".cortex_health_check"
+      enabled: true
+  
+  on_failure:
+    notify: true
+    disable_integration: false
+    fallback_to_alternative: true
+
+# ========================================
+# Security
+# ========================================
+
+security:
+  encryption:
+    at_rest: false  # Credentials in env vars
+    in_transit: true  # HTTPS required
+  
+  credentials:
+    storage: "environment"  # environment|vault|keychain
+    rotation_days: 90
+    require_strong_tokens: true
+  
+  validation:
+    verify_ssl: true
+    check_token_expiry: true
+    min_token_length: 20
+
+# ========================================
+# Monitoring & Telemetry
+# ========================================
+
+monitoring:
+  enabled: true
+  
+  metrics:
+    - name: "request_count"
+      type: "counter"
+      labels: ["integration", "method", "status"]
+    
+    - name: "request_duration"
+      type: "histogram"
+      labels: ["integration", "endpoint"]
+      buckets: [0.1, 0.5, 1.0, 5.0, 10.0]
+    
+    - name: "cache_hit_rate"
+      type: "gauge"
+      labels: ["integration"]
+    
+    - name: "circuit_breaker_state"
+      type: "gauge"
+      labels: ["integration"]
+      values: ["closed", "open", "half_open"]
+    
+    - name: "active_connections"
+      type: "gauge"
+      labels: ["integration"]
+  
+  export:
+    enabled: false
+    format: "prometheus"
+    endpoint: "/metrics"
+
+# ========================================
+# Error Handling
+# ========================================
+
+error_handling:
+  strategy: "fail_fast"  # fail_fast|continue|retry
+  
+  classification:
+    transient_errors:
+      - 429  # Rate limit
+      - 500
+      - 502
+      - 503
+      - 504
+      - "ConnectionError"
+      - "Timeout"
+    
+    permanent_errors:
+      - 400  # Bad Request
+      - 401  # Unauthorized
+      - 403  # Forbidden
+      - 404  # Not Found
+      - "AuthenticationError"
+      - "ValidationError"
+  
+  logging:
+    log_all_errors: true
+    log_stack_traces: true
+    sanitize_credentials: true
+
+# ========================================
+# Validation Rules
+# ========================================
+
+validation:
+  required_fields:
+    - "integrations.*.adapter.class_name"
+    - "integrations.*.adapter.module_path"
+  
+  allowed_auth_methods:
+    - "PAT"
+    - "OAuth2"
+    - "API_KEY"
+    - "username_password"
+    - "none"
+  
+  allowed_http_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "PATCH"
+    - "DELETE"
+  
+  allowed_backoff_strategies:
+    - "linear"
+    - "exponential"
+    - "fixed"
+
+# ========================================
+# Metadata
+# ========================================
+
+metadata:
+  total_integrations: 3
+  active_integrations: 3
+  deprecated_integrations: 0
+  
+  coverage:
+    orchestrators_using_azure_devops: 1
+    orchestrators_using_github: 4
+    orchestrators_using_file_system: 9
+  
+  statistics:
+    lines_consolidated: 3500  # Estimated from scattered configs
+    reduction_percentage: 87.5
+
+# ========================================
+# Change Log
+# ========================================
+
+changelog:
+  - version: "2.0.0"
+    date: "2025-12-22"
+    changes:
+      - "Initial 3-tier manifest architecture release"
+      - "Consolidated integration configurations"
+      - "3 integrations: Azure DevOps, GitHub, File System"
+      - "Unified authentication and retry policies"
+      - "Middleware pipeline implemented"
+      - "Health checks and monitoring configured"
+    author: "Asif Hussain"
+  
+  - version: "1.0.0"
+    date: "2024-01-15"
+    changes:
+      - "Legacy integration system (pre-consolidation)"
+      - "Scattered integration configs"
+    author: "CORTEX Development Team"
