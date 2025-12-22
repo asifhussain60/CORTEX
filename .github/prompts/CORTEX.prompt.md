@@ -186,7 +186,7 @@ These hints confirm orchestrators are actively working without being intrusive.
 - **Commands:** `system maintenance`, `maintain system`
 - **Phases:** Pre-healthcheck → align (auto-fix) → cleanup → optimize → vacuum → refresh prompts → post-healthcheck (7 phases)
 - **Implementation:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
-- **Version:** v3.0 (Planning System 3.0 integration)
+- **Version:** v4.0 (Planning System 4.0 integration)
 - **Status:** ✅ Orchestrator complete, invoked via Copilot Chat
 - **Execution Method:** `copilot_chat` (interactive workflow)
 - **Features:** Tiered routing, AST-powered cleanup, version management
@@ -252,7 +252,7 @@ These hints confirm orchestrators are actively working without being intrusive.
 | `start tdd` | Begin TDD workflow | All |
 | `refine` | Holistic system refinement (7-phase) | Admin |
 | `upgrade cortex` | Upgrade to latest version (7-phase) | All |
-| `system maintenance` | 7-phase maintenance v3.0 (tiered routing) | Admin |
+| `system maintenance` | 7-phase maintenance v4.0 (tiered routing) | Admin |
 | `align` | System alignment | Admin/User |
 | `optimize` | CORTEX optimization | Admin/User |
 | `cleanup` | Workspace cleanup | Admin/User |

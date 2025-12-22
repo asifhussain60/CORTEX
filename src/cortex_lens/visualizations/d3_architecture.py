@@ -1,5 +1,5 @@
 """
-CORTEX Lens v3.0 - D3.js Architecture Diagram Visualization
+CORTEX Lens v4.0 - D3.js Architecture Diagram Visualization
 
 Interactive architecture diagram showing CORTEX component relationships.
 

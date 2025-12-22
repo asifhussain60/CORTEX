@@ -1,5 +1,5 @@
 """
-CORTEX Lens v3.0 - D3.js Force Graph Visualization Template
+CORTEX Lens v4.0 - D3.js Force Graph Visualization Template
 
 Replaces Mermaid.js dependency graph with interactive D3.js force-directed graph.
 
