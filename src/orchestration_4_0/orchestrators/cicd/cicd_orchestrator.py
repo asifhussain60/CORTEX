@@ -1,10 +1,10 @@
 """
 CI/CD Self-Healing Orchestrator
 
-Intelligent CI/CD automation with self-healing capabilities.
+Intelligent CI/CD automation with self-healing capabilities and Brain integration.
 
 Author: Asif Hussain
-Version: 1.0
+Version: 1.1
 """
 
 import logging
@@ -24,20 +24,28 @@ from .schemas import (
 )
 from .failure_analyzer import FailureAnalyzer
 from .auto_fix_engine import AutoFixEngine
+from .brain_integrator import BrainIntegrator
 
 
 class CICDSelfHealingOrchestrator(BaseOrchestrator):
     """
-    Orchestrates CI/CD pipelines with self-healing capabilities.
+    Orchestrates CI/CD pipelines with self-healing capabilities and Brain integration.
     
-    Monitors builds, analyzes failures, applies automatic fixes,
+    Monitors builds, analyzes failures, applies automatic fixes, learns from outcomes,
     and escalates complex issues when needed.
+    
+    Features:
+    - Pattern learning from failures and fixes (Brain Tier 2)
+    - Historical pattern retrieval for similar failures
+    - Strategy optimization based on success rates
+    - Cross-repo failure pattern learning
     """
     
     def __init__(
         self,
         name: str = "cicd_self_healing",
         devops_orchestrator: Optional[DevOpsOrchestrator] = None,
+        brain_integrator: Optional[BrainIntegrator] = None,
         max_fix_attempts: int = 3,
         escalation_threshold: float = 0.5,
         logger: Optional[logging.Logger] = None
@@ -48,12 +56,14 @@ class CICDSelfHealingOrchestrator(BaseOrchestrator):
         Args:
             name: Orchestrator name
             devops_orchestrator: DevOps orchestrator for pipeline operations
+            brain_integrator: Brain integrator for pattern learning
             max_fix_attempts: Maximum auto-fix attempts per failure
             escalation_threshold: Confidence threshold for escalation (0.0-1.0)
             logger: Optional logger instance
         """
         super().__init__(name, logger)
         self.devops_orchestrator = devops_orchestrator
+        self.brain_integrator = brain_integrator
         self.max_fix_attempts = max_fix_attempts
         self.escalation_threshold = escalation_threshold
         
@@ -228,7 +238,7 @@ class CICDSelfHealingOrchestrator(BaseOrchestrator):
         }
     
     async def _analyze_failures(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze pipeline failures"""
+        """Analyze pipeline failures with Brain integration"""
         pipeline_id = context.get("pipeline_id")
         
         # Get build logs (simulated)
@@ -238,8 +248,30 @@ class CICDSelfHealingOrchestrator(BaseOrchestrator):
             "Configuration error: Missing DATABASE_URL environment variable"
         ])
         
-        # Analyze
+        # Analyze failure
         failure = await self.failure_analyzer.analyze(logs, context)
+        
+        # Get historical patterns if Brain available
+        if self.brain_integrator:
+            similar_failures = self.brain_integrator.get_similar_failures(failure)
+            recommended_strategies = self.brain_integrator.get_recommended_strategies(
+                failure.category
+            )
+            
+            self.logger.info(
+                f"🧠 Found {len(similar_failures)} similar failures, "
+                f"{len(recommended_strategies)} recommended strategies"
+            )
+            
+            # Enhance suggested fixes with Brain recommendations
+            if recommended_strategies:
+                brain_strategies = [
+                    FixStrategy(s["strategy"]) 
+                    for s in recommended_strategies 
+                    if s["success_rate"] > 0.5
+                ]
+                # Prepend high-confidence Brain strategies
+                failure.suggested_fixes = brain_strategies + failure.suggested_fixes
         
         return {
             "failure_analysis": failure,
@@ -247,14 +279,25 @@ class CICDSelfHealingOrchestrator(BaseOrchestrator):
         }
     
     async def _apply_healing(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Apply automatic fixes"""
+        """Apply automatic fixes with Brain learning"""
         failure: FailureAnalysis = context.get("failure")
         fix_attempts = []
+        start_time = datetime.now()
         
         # Try each suggested fix strategy
         for strategy in failure.suggested_fixes[:self.max_fix_attempts]:
             attempt = await self.auto_fix_engine.apply_fix(failure, strategy, context)
             fix_attempts.append(attempt)
+            
+            # Learn from fix attempt if Brain available
+            if self.brain_integrator:
+                execution_time = (datetime.now() - start_time).total_seconds()
+                self.brain_integrator.store_fix_strategy(
+                    strategy,
+                    failure.category,
+                    attempt.success and attempt.verification_passed,
+                    execution_time
+                )
             
             if attempt.success and attempt.verification_passed:
                 self.logger.info(f"✅ Healing successful with strategy: {strategy}")
@@ -319,7 +362,7 @@ class CICDSelfHealingOrchestrator(BaseOrchestrator):
         successful = sum(1 for h in self.healing_history if h.healed)
         escalated = sum(1 for h in self.healing_history if h.human_escalation_triggered)
         
-        return {
+        stats = {
             "total_attempts": total,
             "successful": successful,
             "escalated": escalated,
@@ -327,3 +370,59 @@ class CICDSelfHealingOrchestrator(BaseOrchestrator):
             "escalation_rate": escalated / total if total > 0 else 0.0,
             "avg_time_seconds": sum(h.total_healing_time_seconds for h in self.healing_history) / total
         }
+        
+        # Add Brain statistics if available
+        if self.brain_integrator:
+            brain_stats = self.brain_integrator.get_failure_statistics()
+            stats["brain"] = brain_stats
+        
+        return stats
+    
+    async def heal_failure(
+        self,
+        pipeline_id: str,
+        logs: List[str],
+        platform: str = "unknown"
+    ) -> HealingResult:
+        """
+        High-level method to heal a pipeline failure.
+        
+        Args:
+            pipeline_id: Pipeline run ID
+            logs: Build/test logs
+            platform: CI/CD platform (azure_devops, github_actions, etc.)
+            
+        Returns:
+            HealingResult with outcome
+        """
+        start_time = datetime.now()
+        
+        context = {
+            "pipeline_id": pipeline_id,
+            "logs": logs,
+            "platform": platform
+        }
+        
+        # Execute healing workflow
+        result = await self.execute(context)
+        
+        # Create healing result
+        failure = result.get("failure_analysis")
+        fix_attempts = result.get("fix_attempts", [])
+        
+        healing_result = HealingResult(
+            initial_failure=failure,
+            fix_applied=fix_attempts[0].strategy if fix_attempts else None,
+            success=result.get("healing_applied", False),
+            attempts=len(fix_attempts),
+            execution_time=(datetime.now() - start_time).total_seconds()
+        )
+        
+        # Learn from result if Brain available
+        if self.brain_integrator:
+            self.brain_integrator.learn_from_healing_result(healing_result)
+        
+        # Store in history
+        self.healing_history.append(healing_result)
+        
+        return healing_result

@@ -1,11 +1,11 @@
 """
 CI/CD Self-Healing Orchestrator Package
 
-Provides intelligent CI/CD automation with self-healing capabilities.
-Analyzes build failures and attempts automatic fixes.
+Provides intelligent CI/CD automation with self-healing capabilities and Brain integration.
+Analyzes build failures, attempts automatic fixes, and learns from outcomes.
 
 Author: Asif Hussain
-Version: 1.0
+Version: 1.1
 """
 
 from .cicd_orchestrator import CICDSelfHealingOrchestrator
@@ -19,6 +19,7 @@ from .schemas import (
 )
 from .failure_analyzer import FailureAnalyzer
 from .auto_fix_engine import AutoFixEngine
+from .brain_integrator import BrainIntegrator
 
 __all__ = [
     "CICDSelfHealingOrchestrator",
@@ -29,6 +30,7 @@ __all__ = [
     "HealingResult",
     "EscalationRequest",
     "FailureAnalyzer",
-    "AutoFixEngine"
+    "AutoFixEngine",
+    "BrainIntegrator"
 ]
 

@@ -179,12 +179,18 @@ class KnowledgeGraph:
         self.logger.debug(f"Stored pattern: {pattern_id} ({title})")
         return pattern_id
     
-    def search_patterns(self, query: str, limit: int = 10) -> List[Pattern]:
+    def search_patterns(
+        self,
+        query: str,
+        pattern_type: Optional[str] = None,
+        limit: int = 10
+    ) -> List[Pattern]:
         """
         Search patterns using FTS5.
         
         Args:
             query: Search query
+            pattern_type: Optional filter by pattern type
             limit: Maximum results
             
         Returns:
@@ -193,17 +199,36 @@ class KnowledgeGraph:
         with self._get_connection() as conn:
             cursor = conn.cursor()
             
-            # FTS5 full-text search with namespace filter
-            cursor.execute("""
-                SELECT p.*
-                FROM patterns p
-                JOIN patterns_fts fts ON p.rowid = fts.rowid
-                WHERE patterns_fts MATCH ?
-                AND p.namespace = ?
-                AND p.confidence >= ?
-                ORDER BY p.usage_count DESC, p.confidence DESC
-                LIMIT ?
-            """, (query, self.namespace, self.confidence_threshold, limit))
+            if query:
+                # FTS5 full-text search with namespace filter
+                sql = """
+                    SELECT p.*
+                    FROM patterns p
+                    JOIN patterns_fts fts ON p.rowid = fts.rowid
+                    WHERE patterns_fts MATCH ?
+                    AND p.namespace = ?
+                    AND p.confidence >= ?
+                """
+                params = [query, self.namespace, self.confidence_threshold]
+            else:
+                # No query - just filter by namespace
+                sql = """
+                    SELECT p.*
+                    FROM patterns p
+                    WHERE p.namespace = ?
+                    AND p.confidence >= ?
+                """
+                params = [self.namespace, self.confidence_threshold]
+            
+            # Add pattern_type filter if provided
+            if pattern_type:
+                sql += " AND p.pattern_type = ?"
+                params.append(pattern_type)
+            
+            sql += " ORDER BY p.usage_count DESC, p.confidence DESC LIMIT ?"
+            params.append(limit)
+            
+            cursor.execute(sql, params)
             
             patterns = []
             for row in cursor.fetchall():
@@ -249,6 +274,23 @@ class KnowledgeGraph:
                 SET usage_count = usage_count + 1, last_used = ?
                 WHERE pattern_id = ?
             """, (datetime.now().isoformat(), pattern_id))
+            conn.commit()
+    
+    def update_pattern_confidence(self, pattern_id: str, confidence: float):
+        """
+        Update pattern confidence score.
+        
+        Args:
+            pattern_id: Pattern ID
+            confidence: New confidence score (0.0-1.0)
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE patterns
+                SET confidence = ?
+                WHERE pattern_id = ?
+            """, (confidence, pattern_id))
             conn.commit()
     
     def close(self):
