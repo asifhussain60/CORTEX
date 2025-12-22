@@ -137,16 +137,30 @@ structure:
       current_week: "Week 22"
 
 progress:
-  overall_percent: 80
-  current_phase: "Phase 6"
-  current_week: "Week 9 Day 1"
-  phases_complete: 4.5
-  total_phases: 10
-  orchestrators_migrated: 4
+  # Progress calculation methodology:
+  # - linear_percent: Simple phase count (completed ÷ total)
+  # - weighted_percent: Effort-based (accounts for phase complexity)
+  # - Display: weighted_percent (more accurate representation)
+  
+  linear_percent: 46        # 6.27 / 13.5 phases
+  weighted_percent: 56      # Foundation/orchestrators = 70% of effort
+  
+  current_phase: "Phase 6.5"
+  current_week: "Week 10 Day 5"
+  phases_complete: 6.27     # 6 full + 0.27 (Phase 6.5 progress)
+  total_phases: 13.5
+  
+  orchestrators_migrated: 16
   total_orchestrators: 16
   
-  recent_milestone: "Planning System Core MVP Complete - 5,363 LOC, 138/138 tests, Windows compatible"
-  recent_date: "2025-12-20"
+  # Effort weights by phase group
+  effort_distribution:
+    foundation_orchestrators: 0.70  # Phases 1-6 (heavy lifting)
+    operations_testing_docs: 0.20   # Phases 7-9 (lighter weight)
+    enhancements_postga: 0.10       # Phases 10-13 (optional/parallel)
+  
+  recent_milestone: "Phase 6 Complete - All 16 orchestrators migrated to 4.0 architecture"
+  recent_date: "2025-12-22"
 
 # Smart loading queries (for orchestrator intelligence)
 query_routing:

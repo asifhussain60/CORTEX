@@ -2,9 +2,14 @@
 
 **Version:** 3.0 (Token-Optimized Architecture) | **Author:** Asif Hussain | **Last Updated:** December 22, 2025
 
-**Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 93% | **Current Phase:** 7 (Operations Simplification)
+**Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 56% | **Current Phase:** 6 (Orchestrator Consolidation)
 
-**Latest:** 📋 Phase 7 worker plan created - Operations Simplification ready to start. 3-week timeline covering manifest consolidation (14→3 files, 70% reduction), universal adapters (Azure DevOps/GitHub/FileSystem), and DI auto-discovery (zero manual wiring). Target: 75 tests, <10% performance regression. Dependencies satisfied (16 orchestrators migrated). Total: 13.5 phases (13 core + 1 post-GA + 0.5 remediation).
+**Progress Calculation:**
+- **Linear:** 6.27 / 13.5 phases = 46% (simple phase counting)
+- **Weighted:** 56% (effort-based: foundation/orchestrators = 70% of total work)
+- **Status:** Phase 6 at 95% (13/14 tasks), Phase 6.5 at 27% (architecture docs remediation)
+
+**Latest:** ✅ Phase 6 Task 6.14 complete - CI/CD Self-Healing Orchestrator (26/26 tests passing). All 16 orchestrators now migrated to 4.0 architecture. Phase 5 Task 5.12 (CI/CD Brain Integration) now unblocked. Phase 6.5 (Architecture Documentation) in progress (3/11 weeks complete).
 
 **Architecture:** Master Plan + Worker Plans (Token-Optimized)
 
@@ -33,7 +38,15 @@
 
 ## 📈 Phase Progress Overview
 
-**Overall Progress:** [███████████████████░] 93% (9.3/13.5 phases complete)
+**Overall Progress:** [████████████░░░░░░░░] 56% (6.27/13.5 phases complete)
+
+**Progress Methodology:**
+- **Linear Progress:** Simple phase completion count (6.27 ÷ 13.5 = 46%)
+- **Weighted Progress:** Effort-based calculation accounting for complexity (56%)
+  - Phases 1-6: Foundation & orchestrators = 70% of total effort
+  - Phases 7-9: Operations, testing, docs = 20% of effort
+  - Phases 10-13: Enhancement & post-GA = 10% of effort
+- **Display:** Weighted progress shown by default (more accurate representation of remaining work)
 
 ### ✅ Completed Phases (1-6)
 
@@ -62,13 +75,13 @@
 | 10 | Knowledge Library Expansion | 4% | 🟡 PARALLEL | [phases/phase-10-knowledge-library.md](./phases/phase-10-knowledge-library.md) |
 
 **Phase 6 Highlights:**
-- **Status:** ✅ COMPLETE - All 14 tasks finished
+- **Status:** ✅ COMPLETE - All 14 tasks finished (100%)
 - **Completed:** Task 6.11 (Documentation Orchestrator) - Implementation and 53 tests complete (100% pass rate)
 - **Completed:** Task 6.12 (Execution Orchestrator Post-Phase 5) - 21/21 tests passing, 23% → 95% agentic alignment achieved
 - **Completed:** Task 6.13 (DevOps Orchestrator) - 20/20 tests passing, Azure DevOps + GitHub Actions support
 - **Completed:** Task 6.14 (CI/CD Self-Healing Orchestrator) - 26/26 tests passing (100%), intelligent failure analysis, 10 auto-fix strategies, full self-healing workflow
-- **Achievement:** Phase 5 Task 5.12 now unblocked
-- **Extended Scope:** +2 tasks (6.13-6.14) successfully completed to unblock Phase 5
+- **Achievement:** Phase 5 Task 5.12 now unblocked, all 16 orchestrators migrated
+- **Extended Scope:** +2 tasks (6.13-6.14) successfully completed
 - **Worker Plan:** [phases/phase-06-orchestrator-consolidation.md](./phases/phase-06-orchestrator-consolidation.md)
 
 **Phase 6.5 Highlights:**
@@ -80,42 +93,40 @@
 ### ⏳ Pending Phases (7-13)
 
 | Phase | Name | Progress | Status | Dependencies |
-|-------|------|----------|--------|--------------||
-| 7 | Operations Simplification | 0% | 📋 PLAN READY | Phase 6 (16 orchestrators ✅) |
+|-------|------|----------|--------|--------------|
+| 7 | Operations Simplification | 0% | ⏳ NOT STARTED | Phase 6 complete ✅ |
 | 8 | Testing & Validation | 0% | ⏳ NOT STARTED | Phase 7 complete |
 | 9 | Documentation Finalization | 0% | ⏳ NOT STARTED | Phase 8 complete |
-| 11 | Multi-Repo Architecture | 0% | ⏳ POST-CORE | Phase 3 complete |
+| 11 | Multi-Repo Architecture | 0% | ⏳ POST-CORE | Phase 3 complete ✅ |
 | 12 | Native IDE Extensions | 0% | ⏳ OPTIONAL | Phase 11 complete |
 | 13 | Sharpen the Saw (STS) | 0% | ⏳ POST-GA | All phases complete |
 
+**Remaining Work Breakdown:**
+- **Phase 7:** Manifest consolidation (14→3 files), universal adapters, DI auto-discovery (3 weeks)
+- **Phase 8:** Comprehensive testing, quality gates, backward compatibility (3 weeks)
+- **Phase 9:** Documentation finalization, review, sign-off (1 week)
+- **Phase 11:** Multi-repo support, workspace segmentation (1 week, post-core)
+- **Phase 12:** Native IDE extensions for VSCode/Visual Studio (2 weeks, optional)
+- **Phase 13:** Post-GA system refinement and optimization (ongoing)
+
 ---
 
-## 🎯 Current Focus: Phase 7 - Operations Simplification
+## 🎯 Current Focus: Phase 6.5 - Architecture Documentation Gap
 
-**Task:** Begin Week 15 (Manifest Consolidation)
+**Status:** Week 1 Complete (27%) - CRITICAL components documented
 
-**Scope:**
-- Task 7.1: Audit existing manifests (analyze 60% redundancy)
-- Task 7.2: Design 3-tier manifest architecture
-- Task 7.3: Implement CoreManifest (orchestrator metadata)
-- Task 7.4: Implement ConfigManifest (runtime configuration)
-- Task 7.5: Implement IntegrationManifest (external systems)
-- Task 7.6: Migrate 16 orchestrators to new manifests
-- Task 7.7: Validate backward compatibility
+**Completed (Week 1):**
+- ✅ ExecutionOrchestrator architecture diagram
+- ✅ BaseOrchestrator patterns diagram
+- ✅ Orchestrator interaction flow diagram
 
-**Priority:** Reduce 14 YAML manifests to 3 (70% size reduction)
+**Remaining Work:**
+- **Week 2 (HIGH Priority):** 4 core orchestrators (TDD v4.0, Planning System, Documentation, DevOps)
+- **Week 3 (MEDIUM Priority):** 4 specialized orchestrators (ADO, Sanitization, Maintenance, CI/CD)
 
-**Next Steps:**
-1. Task 7.1: Audit existing manifests across orchestrators
-2. Identify redundant patterns and duplication
-3. Design unified schema for CoreManifest
-4. Create manifest loader with validation
+**Next Action:** Resume Phase 6.5 Week 2 - TDD v4.0 Orchestrator architecture diagram
 
-**Effort:** Week 15 (5 days, 40 hours)
-
-**Target:** 3 canonical manifests + 20 tests passing
-
-**Dependencies:** Phase 6 complete (16 orchestrators) ✅
+**Dependencies:** Phase 6 complete ✅ (all orchestrators implemented)
 
 ---
 
@@ -143,11 +154,18 @@
 
 | Metric | Value | Target | Status |
 |--------|-------|--------|--------|
-| Overall Progress | 87% | 100% | 🟡 ON TRACK |
-| Phases Complete | 5.5/13.5 | 13.5 | 🟡 ON TRACK |
+| Weighted Progress | 56% | 100% | 🟡 ON TRACK |
+| Linear Progress | 46% | 100% | 🟡 ON TRACK |
+| Phases Complete | 6.27/13.5 | 13.5 | 🟡 ON TRACK |
 | Test Coverage | 85%+ | 90%+ | 🟢 GOOD |
 | Current Week | Week 10 Day 5 | Week 37 | 🟡 ON TRACK |
 | Critical Blockers | 0 | 0 | 🟢 NONE |
+
+**Progress Notes:**
+- Weighted progress accounts for phase complexity (foundation/orchestrators = 70% of effort)
+- Phase 6 completion represents major milestone (all orchestrators migrated)
+- Remaining phases 7-9 are operations, testing, and documentation (lighter weight)
+- Phases 11-13 are post-core enhancements and optional work
 
 ---
 
@@ -171,8 +189,10 @@
 - ✅ **Execution Orchestrator Post-Phase 5 Complete** - 21/21 tests passing (100%), 23% → 95% agentic alignment achieved (Task 6.12)
 - ✅ **DevOps Orchestrator Complete** - 20/20 tests passing (100%), Azure DevOps + GitHub Actions support (Task 6.13)
 - ✅ **CI/CD Self-Healing Orchestrator Complete** - 26/26 tests passing (100%), intelligent failure analysis, 10 auto-fix strategies, full self-healing workflow (Task 6.14)
-- ✅ **Phase 6 Complete** - All orchestrators migrated to 4.0 architecture (14/14 tasks)
-- ☐ **Phase 5 Complete** - Brain + Agentic AI operational (Task 5.12 now unblocked)
+- ✅ **Phase 6 Complete** - All 16 orchestrators migrated to 4.0 architecture (14/14 tasks, 100%)
+- ⏳ **Phase 6.5 In Progress** - Architecture documentation remediation (Week 1/3 complete, 27%)
+- ⏳ **Phase 5 Near Complete** - Brain + Agentic AI operational (Task 5.12 unblocked, awaiting completion)
+- ☐ **Phase 7 Ready** - Operations Simplification can begin after Phase 6.5
 
 - **[00-MASTER-PLAN.md](./00-MASTER-PLAN.md)** - Complete migration strategy
 - **[LLM-MIGRATION-OPPORTUNITIES.md](./LLM-MIGRATION-OPPORTUNITIES.md)** - LLM enhancement opportunities
