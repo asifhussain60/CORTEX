@@ -3,7 +3,7 @@
     "test_user": {
       "user_id": "test_user",
       "project_id": null,
-      "style": "balanced",
+      "style": "technical",
       "tone": "neutral",
       "depth": "detailed",
       "example_density": "balanced",
@@ -11,7 +11,46 @@
       "include_diagrams": true,
       "include_toc": true,
       "created_at": 1766353495.6116421,
-      "updated_at": 1766356979.871737
+      "updated_at": 1766402134.7881088
+    },
+    "test_user:test_project": {
+      "user_id": "test_user",
+      "project_id": "test_project",
+      "style": "balanced",
+      "tone": "neutral",
+      "depth": "moderate",
+      "example_density": "balanced",
+      "preferred_format": "markdown",
+      "include_diagrams": true,
+      "include_toc": true,
+      "created_at": 1766401890.0178192,
+      "updated_at": 1766401890.0178194
+    },
+    "user1:proj1": {
+      "user_id": "user1",
+      "project_id": "proj1",
+      "style": "balanced",
+      "tone": "neutral",
+      "depth": "moderate",
+      "example_density": "balanced",
+      "preferred_format": "markdown",
+      "include_diagrams": true,
+      "include_toc": true,
+      "created_at": 1766401890.0267365,
+      "updated_at": 1766401890.0267367
+    },
+    "user1:proj2": {
+      "user_id": "user1",
+      "project_id": "proj2",
+      "style": "balanced",
+      "tone": "neutral",
+      "depth": "moderate",
+      "example_density": "balanced",
+      "preferred_format": "markdown",
+      "include_diagrams": true,
+      "include_toc": true,
+      "created_at": 1766401890.0288355,
+      "updated_at": 1766401890.028836
     }
   },
   "update_history": {
@@ -169,6 +208,41 @@
         "new_value": "detailed",
         "reason": "auto_learning",
         "timestamp": 1766356979.8717382
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766398714.0251212
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766398714.0312912
+      },
+      {
+        "preference_type": "style",
+        "old_value": "balanced",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766401957.2485116
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766402089.6279714
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766402134.7881112
       }
     ]
   }

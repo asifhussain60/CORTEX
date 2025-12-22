@@ -934,7 +934,8 @@ class DocumentationOrchestrator(BaseOrchestrator):
         self,
         original_doc: str,
         edited_doc: str,
-        user_id: Optional[str] = None
+        user_id: Optional[str] = None,
+        force_learn: bool = False
     ) -> None:
         """
         Learn from user's edits to generated documentation
@@ -945,24 +946,34 @@ class DocumentationOrchestrator(BaseOrchestrator):
         Args:
             original_doc: Original generated documentation
             edited_doc: User-edited version
-            user_id: User identifier (uses config user_id if not provided)
+            user_id: User identifier (REQUIRED if called before execute())
+            force_learn: Force learning even if learn_from_feedback=False
             
         Example:
             # After user edits generated docs
             orchestrator.learn_from_user_edit(
                 original_doc=original_content,
-                edited_doc=user_edited_content
+                edited_doc=user_edited_content,
+                user_id="user123"  # Required if doc_config not yet set
             )
         """
-        target_user_id = user_id or (self.doc_config.user_id if self.doc_config else None)
+        # Determine target user_id
+        target_user_id = user_id
+        if not target_user_id and self.doc_config:
+            target_user_id = self.doc_config.user_id
         
         if not target_user_id:
-            self.logger.warning("Cannot learn from edit: No user_id specified")
+            self.logger.warning(
+                "Cannot learn from edit: No user_id specified. "
+                "Pass user_id parameter when calling before execute()."
+            )
             return
         
-        if not self.doc_config or not self.doc_config.learn_from_feedback:
-            self.logger.info("Learning from feedback is disabled")
-            return
+        # Check if learning is enabled (skip if force_learn=True or user_id explicitly passed)
+        if not force_learn and not user_id:
+            if not self.doc_config or not self.doc_config.learn_from_feedback:
+                self.logger.info("Learning from feedback is disabled")
+                return
         
         self.logger.info(f"🧠 Learning from user edit for '{target_user_id}'")
         
@@ -1013,19 +1024,27 @@ class DocumentationOrchestrator(BaseOrchestrator):
             preference_type: Type of preference (style, tone, depth, example_density)
             new_value: New value for the preference
             reason: Reason for update
-            user_id: User identifier (uses config user_id if not provided)
+            user_id: User identifier (REQUIRED if called before execute())
             
         Example:
             orchestrator.update_user_preference(
                 preference_type="style",
                 new_value="technical",
-                reason="user_explicit_request"
+                reason="user_explicit_request",
+                user_id="user123"  # Required if doc_config not yet set
             )
         """
-        target_user_id = user_id or (self.doc_config.user_id if self.doc_config else None)
+        # Determine target user_id
+        # Priority: 1) explicit user_id param, 2) config user_id, 3) error
+        target_user_id = user_id
+        if not target_user_id and self.doc_config:
+            target_user_id = self.doc_config.user_id
         
         if not target_user_id:
-            self.logger.warning("Cannot update preference: No user_id specified")
+            self.logger.warning(
+                "Cannot update preference: No user_id specified. "
+                "Pass user_id parameter when calling before execute()."
+            )
             return
         
         self.logger.info(

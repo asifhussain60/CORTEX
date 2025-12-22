@@ -174,7 +174,8 @@ class TestAdaptiveDocumentationGeneration:
         orchestrator.update_user_preference(
             preference_type="style",
             new_value="technical",
-            reason="test_setup"
+            reason="test_setup",
+            user_id="test_user_technical"
         )
         
         context = {"config": config}
@@ -218,7 +219,8 @@ class TestAdaptiveDocumentationGeneration:
         orchestrator.update_user_preference(
             preference_type="style",
             new_value="accessible",
-            reason="test_setup"
+            reason="test_setup",
+            user_id="test_user_accessible"
         )
         
         context = {"config": config}
@@ -301,14 +303,14 @@ class TestPreferenceLearning:
         ]
         
         for original, edited in edits:
-            orchestrator.learn_from_user_edit(original, edited)
+            orchestrator.learn_from_user_edit(original, edited, user_id="test_multi_learner")
         
         # Should have learned preference for detailed documentation
-        prefs = orchestrator.get_user_preferences()
+        prefs = orchestrator.get_user_preferences(user_id="test_multi_learner")
         assert prefs.depth == DocumentationDepth.DETAILED
         
         # Confidence should be higher with multiple edits
-        confidence = orchestrator.get_preference_confidence()
+        confidence = orchestrator.get_preference_confidence(user_id="test_multi_learner")
         assert confidence > 0.3  # Should increase with more data
 
 
@@ -340,8 +342,8 @@ class TestProgressiveImprovement:
         assert result_v1.get("is_complete")
         
         # User provides feedback (wants concise, casual style)
-        orchestrator_v1.update_user_preference("depth", "concise", "user_feedback")
-        orchestrator_v1.update_user_preference("tone", "casual", "user_feedback")
+        orchestrator_v1.update_user_preference("depth", "concise", "user_feedback", user_id=user_id)
+        orchestrator_v1.update_user_preference("tone", "casual", "user_feedback", user_id=user_id)
         
         # Iteration 2: Regenerate with learned preferences
         config_v2 = DocumentationConfig(
@@ -356,6 +358,7 @@ class TestProgressiveImprovement:
         
         orchestrator_v2 = DocumentationOrchestrator(logger=mock_logger)
         orchestrator_v2.preference_tracker.storage_path = temp_storage
+        orchestrator_v2.preference_tracker._load_preferences()  # Reload from new path
         
         result_v2 = orchestrator_v2.execute({"config": config_v2})
         assert result_v2.get("is_complete")
