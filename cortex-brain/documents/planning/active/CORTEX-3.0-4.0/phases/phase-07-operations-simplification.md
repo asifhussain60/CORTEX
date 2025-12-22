@@ -91,9 +91,9 @@
 - `src/orchestration_4_0/adapters/adapter_factory.py`
 - 30 tests for adapters (CRUD, error handling, middleware)
 
-### Week 17: Auto-Discovery & Validation (Days 11-15)
+### Week 17: Auto-Discovery, LLM Intent Detection & Validation (Days 11-15)
 
-**Milestone:** Dependency injection with zero manual wiring
+**Milestone:** Dependency injection with zero manual wiring + LLM-powered intent routing
 
 **Tasks:**
 1. Design DI container with auto-discovery
@@ -101,19 +101,97 @@
 3. Implement dependency resolution (constructor injection)
 4. Add lifecycle management (singleton, transient, scoped)
 5. Migrate 16 orchestrators to DI container
-6. Create configuration validator
-7. E2E validation of all orchestrators
-8. Performance benchmarking
-9. Documentation and migration guide
+6. **Integrate LLM Intent Detection** (NEW - upgrade from keyword-based to semantic routing)
+7. Wire LLMIntentRouter into IntentRouter with hybrid approach (fast path → LLM → fallback)
+8. Add Tier 2 caching for intent classifications (reduce LLM calls by 80%)
+9. Implement confidence-based fallback to regex (threshold: 0.8)
+10. Test end-to-end with 50+ real user requests (measure accuracy improvement)
+11. Create configuration validator
+12. E2E validation of all orchestrators
+13. Performance benchmarking
+14. Documentation and migration guide
 
 **Deliverables:**
 - `src/orchestration_4_0/di/container.py` (DI container)
 - `src/orchestration_4_0/di/decorators.py` (@service, @inject)
 - `src/orchestration_4_0/di/lifecycle.py` (scope management)
+- **`src/cortex_agents/intent_router.py` (LLM integration)** - Wire LLMIntentRouter with hybrid classification
+- **`tests/cortex_agents/test_llm_intent_router.py`** - 20+ tests for LLM classification accuracy
 - Migration complete for 16 orchestrators
 - 25 tests for DI container
-- Performance report (<10% regression)
+- Performance report (<10% regression, LLM latency <500ms p95)
 - Complete documentation
+
+**LLM Intent Detection Implementation:**
+
+```python
+# src/cortex_agents/intent_router.py (enhanced)
+
+from .llm_intent_router import LLMIntentRouter, LLMIntentConfig
+
+class IntentRouter(BaseAgent):
+    def __init__(self, name: str, tier1_api=None, tier2_kg=None, tier3_context=None, config=None):
+        super().__init__(name, tier1_api, tier2_kg, tier3_context)
+        self.config = config or {}
+        
+        # Initialize LLM Intent Router (NEW)
+        llm_config = LLMIntentConfig(
+            enabled=self.config.get('llm_intent_enabled', False),
+            provider=self.config.get('llm_provider', 'openai'),
+            model=self.config.get('llm_model', 'gpt-3.5-turbo'),
+            fast_path_threshold=0.8,
+            tier2_similarity_threshold=0.85
+        )
+        self.llm_router = LLMIntentRouter(
+            config=llm_config,
+            tier2_kg=tier2_kg,
+            fallback_classifier=self
+        )
+        
+        self.logger.info(f"Intent Router initialized with LLM: {llm_config.enabled}")
+    
+    def _classify_intent_with_rules(self, request: AgentRequest) -> IntentClassificationResult:
+        """Enhanced classification with LLM support"""
+        
+        # Phase 1: Fast keyword pre-screening (< 10ms)
+        fast_result = self._fast_keyword_classification(request)
+        if fast_result.confidence >= 0.8:
+            self.logger.debug(f"Fast path: {fast_result.intent} (confidence: {fast_result.confidence})")
+            return fast_result
+        
+        # Phase 2: LLM classification (100-500ms)
+        if self.llm_router.config.enabled:
+            try:
+                llm_result = self.llm_router.classify_intent(
+                    request,
+                    conversation_history=self._get_recent_history(request)
+                )
+                if llm_result.confidence >= 0.8:
+                    self.logger.info(
+                        f"LLM classification: {llm_result.intent} "
+                        f"(confidence: {llm_result.confidence}, method: {llm_result.method})"
+                    )
+                    return llm_result.to_standard_result()
+                else:
+                    self.logger.info(f"LLM confidence too low ({llm_result.confidence}), using fallback")
+            except Exception as e:
+                self.logger.warning(f"LLM classification failed: {e}, falling back to regex")
+        
+        # Phase 3: Fallback to regex (< 10ms)
+        return self._classify_intent_regex(request)
+```
+
+**Performance Targets:**
+- Fast path hit rate: 40% (exact matches)
+- Tier 2 cache hit rate: 40% (similar past requests)
+- LLM calls: 20% of requests
+- Accuracy: 70% → 95%+ (25% improvement)
+- Latency p50: <50ms (fast path), p95: <500ms (LLM), p99: <1s
+
+**Test Coverage:**
+- Unit tests: 20+ for LLM router, 15+ for hybrid routing
+- Integration tests: 10+ with mock LLM, 5+ with real LLM (CI optional)
+- E2E tests: 50 real user requests with accuracy validation
 
 ---
 
