@@ -1,0 +1,66 @@
+# Example Planning Orchestrator Manifest
+# Demonstrates inheritance from planning-base-manifest.yaml
+#
+# Purpose: Test manifest inheritance with planning orchestrator
+# Inheritance: base-orchestrator → planning-base → this manifest
+#
+# Version: 1.0.0
+# Created: 2025-12-22
+
+inherits_from: "../shared/planning-base-manifest.yaml"
+
+# ========================================
+# Override/Extend Metadata
+# ========================================
+
+metadata:
+  orchestrator_name: "example_planning_orchestrator"
+  version: "1.0.0"
+  description: "Example planning orchestrator demonstrating inheritance patterns"
+  last_updated: "2025-12-22"
+  
+  # Add custom fields
+  created_by: "Asif Hussain"
+  example_purpose: "Demonstrate 63% redundancy reduction through inheritance"
+
+# ========================================
+# Custom Requirements
+# (Phases, DoR, DoD inherited from planning-base)
+# ========================================
+
+requirements:
+  - requirement_id: "REQ-EXAMPLE-001"
+    name: "Custom Planning Requirement"
+    description: "This is specific to example orchestrator only"
+    priority: "high"
+    status: "implemented"
+    validation_method: "method_exists"
+    validation_criteria: "ExampleOrchestrator.custom_method()"
+
+# ========================================
+# Custom Phases
+# (Overrides any phases from planning-base)
+# ========================================
+
+phases:
+  - id: "phase_1"
+    name: "Example Phase 1"
+    description: "Custom phase for example orchestrator"
+    blocking: true
+    timeout_minutes: 5
+    
+  - id: "phase_2"
+    name: "Example Phase 2"
+    description: "Another custom phase"
+    blocking: false
+    timeout_minutes: 10
+
+# ========================================
+# Custom Configuration
+# ========================================
+
+custom_config:
+  example_setting: "This demonstrates extensibility"
+  example_list:
+    - "item1"
+    - "item2"
