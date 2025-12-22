@@ -98,6 +98,10 @@
     "requireGitValidation": true,
     "testQualityThreshold": 70
   },
+  "planning": {
+    "yaml_modularization_threshold_bytes": 20480,
+    "comment": "Phase 10: Automatic YAML modularization - splits plans >20KB into modular structure for 80%+ faster loads and 85%+ token reduction"
+  },
   "system_alignment": {
     "skip_duplicate_detection": true,
     "comment": "Duplicate detection skipped by default to prevent O(n²) performance issue (330k+ file ops with 575 docs). Enable only for deep validation: set to false"

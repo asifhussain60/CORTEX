@@ -30,6 +30,10 @@
     "requireGitValidation": true,
     "testQualityThreshold": 70
   },
+  "planning": {
+    "yaml_modularization_threshold_bytes": 20480,
+    "comment": "Phase 10: Automatic YAML modularization - splits plans >20KB into modular structure for 80%+ faster loads and 85%+ token reduction"
+  },
   "token_optimization": {
     "enabled": true,
     "soft_limit": 40000,

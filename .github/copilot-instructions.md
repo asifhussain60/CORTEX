@@ -178,6 +178,7 @@ Format: `**Next:** {single_action_with_context}`
 - AUTO-COMPLEXITY: HIGH→incremental, MEDIUM→conditional, LOW→skeleton
 - TDD auto-included in all plans
 - Manifest: `planning-system-2.0-manifest.yaml` (DoR/DoD/TDD compliance)
+- Phase 10 Integration: Automatic YAML modularization (>20KB plans split into index + modules)
 
 **ADO Operations**
 - Commands: `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`

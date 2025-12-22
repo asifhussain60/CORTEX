@@ -73,6 +73,9 @@ from src.orchestrators.planning.session_manager import (
     SessionStatus
 )
 
+# Phase 10: YAML Modularization
+from src.orchestrators.planning.markdown_renderer import MarkdownRenderer
+
 logger = logging.getLogger(__name__)
 
 
@@ -252,7 +255,16 @@ class PlanningOrchestrator(BaseOrchestrator):
         # Week 8 Day 3: Initialize execution engine modules
         self.plan_validator = None      # Will be: from .plan_validator import PlanValidator
         self.plan_generator = None      # Will be: from .plan_generator import PlanGenerator
-        self.markdown_renderer = None   # Will be: from .markdown_renderer import MarkdownRenderer
+        
+        # Phase 10: Initialize MarkdownRenderer with modularization support
+        modularization_threshold = config.get("planning", {}).get(
+            "yaml_modularization_threshold_bytes", 
+            20480  # Default: 20KB
+        )
+        self.markdown_renderer = MarkdownRenderer(
+            output_dir=self.active_plans_dir,
+            modularization_threshold=modularization_threshold
+        )
         
         # Execution engine (Week 8 Day 3)
         self.plan_executor = PlanExecutor(
@@ -680,35 +692,76 @@ class PlanningOrchestrator(BaseOrchestrator):
         output_dir: Path
     ) -> PlanningResult:
         """
-        Render plan as markdown.
-        
-        Week 8 Day 1-2: Placeholder - will be delegated to MarkdownRenderer module.
+        Render plan as markdown with Phase 10 YAML modularization.
         
         Args:
             plan_data: Plan data to render
             output_dir: Output directory for markdown file
         
         Returns:
-            PlanningResult with markdown file path
+            PlanningResult with markdown file path and optional modular YAML structure
         """
-        # Day 1-2: Basic markdown rendering
         self.logger.info(f"📄 Rendering markdown to: {output_dir}")
         
         # Create output paths
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
         
+        # Generate filename from plan title
         safe_title = plan_data.metadata.title.lower().replace(" ", "-").replace("_", "-")
-        plan_path = output_dir / f"{safe_title}-plan.yaml"
-        markdown_path = output_dir / f"{safe_title}-plan.md"
         
-        # Day 2: Will delegate to MarkdownRenderer module for comprehensive rendering
+        # Phase 10: Use MarkdownRenderer with automatic YAML modularization
+        # Convert PlanData to dict for renderer
+        plan_dict = {
+            "metadata": {
+                "title": plan_data.metadata.title,
+                "description": plan_data.metadata.description,
+                "complexity": plan_data.metadata.complexity.value if hasattr(plan_data.metadata.complexity, 'value') else plan_data.metadata.complexity,
+                "plan_type": plan_data.metadata.plan_type.value if hasattr(plan_data.metadata.plan_type, 'value') else plan_data.metadata.plan_type,
+                "author": plan_data.metadata.author,
+                "created": plan_data.metadata.created.isoformat() if hasattr(plan_data.metadata.created, 'isoformat') else str(plan_data.metadata.created),
+                "version": plan_data.metadata.version,
+            },
+            "definition_of_ready": plan_data.definition_of_ready,
+            "definition_of_done": plan_data.definition_of_done,
+            "phases": [
+                {
+                    "phase_name": phase.phase_name,
+                    "tasks": [{"task_name": t} for t in phase.tasks] if phase.tasks else [],
+                    "acceptance_criteria": phase.acceptance_criteria,
+                    "dependencies": phase.dependencies,
+                }
+                for phase in plan_data.phases
+            ],
+        }
+        
+        if plan_data.tdd_requirements:
+            plan_dict["tdd_requirements"] = plan_data.tdd_requirements
+        
+        # Render with automatic modularization
+        rendering_result = self.markdown_renderer.render(
+            plan_data=plan_dict,
+            output_filename=safe_title,
+            save_yaml=True
+        )
+        
+        if not rendering_result.success:
+            self.logger.error(f"❌ Markdown rendering failed: {rendering_result.errors}")
+            return PlanningResult(
+                success=False,
+                plan_data=plan_data,
+                errors=rendering_result.errors
+            )
+        
+        self.logger.info(f"✅ Plan rendered: {rendering_result.markdown_path}")
+        if rendering_result.yaml_path:
+            self.logger.info(f"✅ YAML saved: {rendering_result.yaml_path}")
         
         return PlanningResult(
             success=True,
             plan_data=plan_data,
-            plan_path=plan_path,
-            markdown_path=markdown_path,
+            plan_path=rendering_result.yaml_path,
+            markdown_path=rendering_result.markdown_path,
             validation_result=ValidationResult(valid=True)
         )
     

@@ -31,6 +31,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import yaml
 
+# Phase 10: Systematic YAML Modularization
+from src.utils.file_structure_optimizer import FileStructureOptimizer
+
 logger = logging.getLogger(__name__)
 
 
@@ -70,17 +73,24 @@ class MarkdownRenderer:
     Week 9: Template integration for customizable rendering
     """
     
-    def __init__(self, output_dir: Optional[Path] = None):
+    def __init__(self, output_dir: Optional[Path] = None, modularization_threshold: int = 20480):
         """
         Initialize markdown renderer.
         
         Args:
             output_dir: Optional output directory (default: current directory)
+            modularization_threshold: Size threshold for YAML modularization (default: 20KB)
         """
         self.output_dir = Path(output_dir) if output_dir else Path.cwd()
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
-        logger.info(f"✅ Markdown Renderer initialized (output_dir={self.output_dir})")
+        # Phase 10: Initialize YAML modularization optimizer
+        self.file_optimizer = FileStructureOptimizer(
+            threshold_bytes=modularization_threshold,
+            module_key='phases'
+        )
+        
+        logger.info(f"✅ Markdown Renderer initialized (output_dir={self.output_dir}, modularization_threshold={modularization_threshold}B)")
     
     def render(
         self,
@@ -120,9 +130,31 @@ class MarkdownRenderer:
             yaml_path = None
             if save_yaml:
                 yaml_path = self.output_dir / f"{output_filename}.yaml"
-                with open(yaml_path, 'w', encoding='utf-8') as f:
-                    yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
-                logger.info(f"✅ YAML saved: {yaml_path.name}")
+                
+                # Phase 10: Check if we should modularize the YAML
+                # First, estimate the size by dumping to string
+                yaml_str = yaml.dump(plan_data, default_flow_style=False, sort_keys=False, allow_unicode=True)
+                estimated_size = len(yaml_str.encode('utf-8'))
+                
+                if estimated_size > self.file_optimizer.threshold:
+                    logger.info(f"📦 Plan size ({estimated_size}B) exceeds threshold ({self.file_optimizer.threshold}B), modularizing...")
+                    
+                    # Create modular structure
+                    plan_dir = self.output_dir / output_filename
+                    plan_dir.mkdir(parents=True, exist_ok=True)
+                    
+                    # Split into modules
+                    yaml_path = self.file_optimizer.split_into_modules(
+                        yaml_data=plan_data,
+                        output_dir=plan_dir
+                    )
+                    
+                    logger.info(f"✅ Modular YAML saved: {yaml_path.name} + phases/ directory")
+                else:
+                    # Save monolithic YAML (existing behavior)
+                    with open(yaml_path, 'w', encoding='utf-8') as f:
+                        f.write(yaml_str)
+                    logger.info(f"✅ YAML saved: {yaml_path.name}")
             
             return RenderingResult(
                 success=True,
