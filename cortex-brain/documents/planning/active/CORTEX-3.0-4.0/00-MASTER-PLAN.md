@@ -168,6 +168,15 @@ Comprehensive migration to transform CORTEX 3.0 → 4.0 with:
     - Duration: 5 days
     - **Dependencies:** Phase 8 complete
 
+14. **[Phase 14: Version Consolidation & Housekeeping](./phases/phase-14-version-consolidation.md)** (Weeks 37-38) - 0% COMPLETE ⚠️ **PRE-GA CRITICAL**
+    - Version consolidation: All v2/v3 → v4.0 naming
+    - Architecture completeness: 100% diagram coverage (22 diagrams)
+    - Dashboard validation: All tabs load, zero errors
+    - Documentation audit: Zero broken links, version consistency
+    - Duration: 10 days
+    - **Dependencies:** Phase 6.5 complete (architecture docs), Phase 9 complete (documentation finalized)
+    - **Status:** BLOCKS GA release - must complete before public launch
+
 ---
 
 ## 🎯 Critical Path & Dependencies
