@@ -1,0 +1,627 @@
+# TDD Best Practices (Machine-Readable Guideline)
+# Source: Kent Beck's "Test-Driven Development: By Example" (2002) + Uncle Bob's TDD Rules
+# Version: 1.0
+# Created: December 22, 2025
+# Schema: TDDBestPracticesSchema
+# Purpose: Authoritative TDD methodology for CORTEX test-first development
+
+metadata:
+  title: "Test-Driven Development (TDD) Best Practices"
+  authors:
+    - "Kent Beck"
+    - "Robert C. Martin (Uncle Bob)"
+  sources:
+    - "Test-Driven Development: By Example (2002)"
+    - "Clean Code: A Handbook of Agile Software Craftsmanship (2008)"
+  version: "1.0"
+  created: "2025-12-22"
+  updated: "2025-12-22"
+  schema: "TDDBestPracticesSchema"
+  tags:
+    - tdd
+    - test-driven-development
+    - testing
+    - agile
+    - software-craftsmanship
+  
+  generated_docs:
+    - path: "docs/guidelines/testing/tdd-best-practices.md"
+      format: "markdown"
+      generator: "DocumentationOrchestrator"
+      template: "knowledge_guideline"
+
+# OVERVIEW
+overview:
+  concept: "Test-Driven Development (TDD)"
+  definition: >
+    TDD is a software development methodology where tests are written BEFORE implementation code.
+    The cycle follows: write a failing test (RED), write minimal code to pass (GREEN), then
+    improve the design (REFACTOR). This rhythm creates high-quality, well-tested code by design.
+  
+  core_principles:
+    - principle: "Test First"
+      description: "Write test before production code"
+      rationale: "Clarifies requirements and design before implementation"
+    
+    - principle: "Baby Steps"
+      description: "Make smallest possible increments"
+      rationale: "Reduces complexity and makes debugging easier"
+    
+    - principle: "Refactor Relentlessly"
+      description: "Continuously improve design with test safety net"
+      rationale: "Maintains clean, maintainable code over time"
+  
+  benefits:
+    design:
+      - "Forces modular, loosely-coupled design"
+      - "Creates testable code by default"
+      - "Encourages interface-based design"
+      - "Prevents over-engineering (YAGNI - You Aren't Gonna Need It)"
+    
+    quality:
+      - "High test coverage (90%+) by construction"
+      - "Fewer bugs reach production"
+      - "Regression safety for refactoring"
+      - "Living documentation through tests"
+    
+    productivity:
+      - "Faster debugging (tests pinpoint failures)"
+      - "Confidence to refactor aggressively"
+      - "Reduced debugging time"
+      - "Less time fixing production bugs"
+    
+    psychology:
+      - "Clear definition of 'done' (tests pass)"
+      - "Continuous positive feedback"
+      - "Reduced fear of breaking things"
+      - "Flow state from quick cycles"
+
+# THE THREE LAWS OF TDD (Uncle Bob)
+three_laws:
+  law_1:
+    statement: "You may not write production code until you have written a failing unit test"
+    explanation: >
+      Start by writing a test that describes what you want the code to do. The test must fail
+      because the production code doesn't exist yet. This ensures the test is actually testing
+      something and not passing by accident.
+    
+    violation_example:
+      code: |
+        # WRONG: Writing implementation first
+        def calculate_total(items):
+            return sum(item.price for item in items)
+        
+        # Then writing test
+        def test_calculate_total():
+            items = [Item(price=10), Item(price=20)]
+            assert calculate_total(items) == 30
+      
+      problem: "No evidence test would fail without implementation"
+    
+    correct_example:
+      code: |
+        # CORRECT: Write test first
+        def test_calculate_total():
+            items = [Item(price=10), Item(price=20)]
+            assert calculate_total(items) == 30  # FAILS - function doesn't exist
+        
+        # Run test → RED (failure)
+        # Then write minimal implementation
+        def calculate_total(items):
+            return sum(item.price for item in items)
+        
+        # Run test → GREEN (pass)
+      
+      benefit: "Confirmed test fails without implementation"
+  
+  law_2:
+    statement: "You may not write more of a unit test than is sufficient to fail"
+    explanation: >
+      Write just enough test code to fail (often just compilation failure). Don't write multiple
+      assertions or complex test logic. Keep tests small and focused on ONE thing.
+    
+    violation_example:
+      code: |
+        # WRONG: Too much test at once
+        def test_shopping_cart():
+            cart = ShoppingCart()
+            cart.add_item(Item("Laptop", 1000))
+            cart.add_item(Item("Mouse", 25))
+            assert cart.item_count() == 2
+            assert cart.total() == 1025
+            assert cart.has_discount() == False
+            cart.apply_discount(0.1)
+            assert cart.total() == 922.5
+      
+      problem: "Testing multiple behaviors; hard to diagnose failures"
+    
+    correct_example:
+      code: |
+        # CORRECT: One test per behavior
+        def test_add_item_increments_count():
+            cart = ShoppingCart()
+            cart.add_item(Item("Laptop", 1000))
+            assert cart.item_count() == 1  # ONE assertion
+        
+        def test_calculate_total_sums_item_prices():
+            cart = ShoppingCart()
+            cart.add_item(Item("Laptop", 1000))
+            cart.add_item(Item("Mouse", 25))
+            assert cart.total() == 1025  # ONE assertion
+      
+      benefit: "Each test has single responsibility; failures are precise"
+  
+  law_3:
+    statement: "You may not write more production code than is sufficient to pass the failing test"
+    explanation: >
+      Write the simplest code that makes the test pass. Don't add features not covered by tests.
+      Resist the urge to write 'clever' or 'future-proof' code. Add complexity only when tests
+      demand it (YAGNI principle).
+    
+    violation_example:
+      code: |
+        # WRONG: Over-engineered for current test
+        def test_add_positive_numbers():
+            assert add(2, 3) == 5
+        
+        # Overly complex implementation
+        def add(a, b):
+            if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+                return a + b
+            elif isinstance(a, str) and isinstance(b, str):
+                return int(a) + int(b)
+            else:
+                raise TypeError("Unsupported types")
+      
+      problem: "Added string handling not required by test"
+    
+    correct_example:
+      code: |
+        # CORRECT: Minimal implementation
+        def test_add_positive_numbers():
+            assert add(2, 3) == 5
+        
+        def add(a, b):
+            return a + b  # Simplest code that passes
+      
+      benefit: "No speculative code; every line justified by test"
+
+# RED-GREEN-REFACTOR CYCLE
+red_green_refactor:
+  cycle_name: "The TDD Mantra"
+  description: "The fundamental rhythm of TDD practiced in 30-second to 2-minute cycles"
+  
+  phases:
+    # PHASE 1: RED
+    red_phase:
+      name: "RED - Write a Failing Test"
+      duration: "30 seconds - 1 minute"
+      goal: "Create a failing test that defines desired behavior"
+      
+      steps:
+        - step: "1. Think about the next small behavior"
+          example: "User can add item to shopping cart"
+        
+        - step: "2. Write a test that expresses that behavior"
+          code: |
+            def test_add_item_to_cart():
+                cart = ShoppingCart()
+                cart.add_item(Item("Laptop", 1000))
+                assert cart.item_count() == 1
+        
+        - step: "3. Run the test and watch it FAIL"
+          expected_failure: "NameError: name 'ShoppingCart' is not defined"
+        
+        - step: "4. Verify failure reason is expected"
+          rationale: "Ensures test isn't passing by accident"
+      
+      best_practices:
+        - "Write the test as if the API already exists (design from client perspective)"
+        - "Use descriptive test names (test_methodName_scenario_expectedBehavior)"
+        - "Keep tests small and focused (1-2 assertions max)"
+        - "Verify the test fails for the RIGHT reason"
+      
+      red_flags:
+        - "Test passes on first run (means it's not testing new behavior)"
+        - "Test fails for wrong reason (e.g., syntax error vs missing implementation)"
+        - "Test is too large (testing multiple behaviors)"
+    
+    # PHASE 2: GREEN
+    green_phase:
+      name: "GREEN - Write Minimal Code to Pass"
+      duration: "1-3 minutes"
+      goal: "Make the test pass with simplest possible implementation"
+      
+      steps:
+        - step: "1. Write just enough code to pass the test"
+          code: |
+            class ShoppingCart:
+                def __init__(self):
+                    self._items = []
+                
+                def add_item(self, item):
+                    self._items.append(item)
+                
+                def item_count(self):
+                    return len(self._items)
+        
+        - step: "2. Run ALL tests (not just the new one)"
+          rationale: "Ensure new code doesn't break existing functionality"
+        
+        - step: "3. Watch all tests PASS (green bar)"
+          satisfaction: "Dopamine hit from positive feedback!"
+      
+      strategies:
+        - strategy: "Fake It ('Til You Make It)"
+          description: "Return hard-coded value first, generalize later"
+          example: |
+            # First test
+            def test_add_returns_five():
+                assert add(2, 3) == 5
+            
+            # Fake it
+            def add(a, b):
+                return 5  # Hard-coded!
+            
+            # Second test forces generalization
+            def test_add_returns_seven():
+                assert add(3, 4) == 7
+            
+            # Now generalize
+            def add(a, b):
+                return a + b
+          
+          benefit: "Builds confidence quickly; forces incremental design"
+        
+        - strategy: "Obvious Implementation"
+          description: "Write the real implementation if it's trivial"
+          example: |
+            def test_multiply():
+                assert multiply(3, 4) == 12
+            
+            # Obvious implementation
+            def multiply(a, b):
+                return a * b
+          
+          when_to_use: "When implementation is simple and obvious"
+        
+        - strategy: "Triangulation"
+          description: "Write multiple tests to force generalization"
+          example: |
+            # Test 1
+            def test_add_two_and_three():
+                assert add(2, 3) == 5
+            
+            # Test 2 (triangulate)
+            def test_add_five_and_seven():
+                assert add(5, 7) == 12
+            
+            # Forces general solution
+            def add(a, b):
+                return a + b
+          
+          when_to_use: "When unsure how to generalize from one test"
+      
+      best_practices:
+        - "Prefer simple over clever"
+        - "Avoid premature optimization"
+        - "Don't add features not tested"
+        - "Run tests frequently (every 30-60 seconds)"
+      
+      red_flags:
+        - "Adding code not required by current test"
+        - "Implementing features 'for the future'"
+        - "Spending > 5 minutes without running tests"
+    
+    # PHASE 3: REFACTOR
+    refactor_phase:
+      name: "REFACTOR - Improve Design Without Changing Behavior"
+      duration: "1-5 minutes"
+      goal: "Clean up code while maintaining green tests"
+      
+      steps:
+        - step: "1. Look for code smells"
+          examples:
+            - "Duplication"
+            - "Long methods"
+            - "Magic numbers"
+            - "Poor naming"
+        
+        - step: "2. Apply refactoring technique"
+          examples:
+            - "Extract method"
+            - "Rename variable"
+            - "Extract constant"
+            - "Introduce parameter object"
+        
+        - step: "3. Run tests after each micro-refactor"
+          rationale: "Ensure behavior unchanged; catch mistakes immediately"
+        
+        - step: "4. Repeat until satisfied with design"
+          stopping_condition: "Code is clean and tests are green"
+      
+      when_to_refactor:
+        - "Every cycle (even if just renaming a variable)"
+        - "When you notice duplication (DRY principle)"
+        - "When code is hard to understand"
+        - "When adding new feature exposes design issues"
+      
+      common_refactorings:
+        - refactoring: "Extract Method"
+          before: |
+            def process_order(order):
+                total = sum(item.price * item.quantity for item in order.items)
+                tax = total * 0.08
+                shipping = 10 if total < 50 else 0
+                return total + tax + shipping
+          
+          after: |
+            def process_order(order):
+                subtotal = calculate_subtotal(order)
+                tax = calculate_tax(subtotal)
+                shipping = calculate_shipping(subtotal)
+                return subtotal + tax + shipping
+            
+            def calculate_subtotal(order):
+                return sum(item.price * item.quantity for item in order.items)
+            
+            def calculate_tax(amount):
+                return amount * 0.08
+            
+            def calculate_shipping(amount):
+                return 10 if amount < 50 else 0
+          
+          benefit: "Improved readability; each method has single responsibility"
+        
+        - refactoring: "Remove Duplication"
+          before: |
+            def validate_email(email):
+                if "@" not in email or "." not in email:
+                    raise ValueError("Invalid email")
+            
+            def validate_username(username):
+                if len(username) < 3:
+                    raise ValueError("Username too short")
+            
+            def validate_password(password):
+                if len(password) < 8:
+                    raise ValueError("Password too short")
+          
+          after: |
+            def validate_min_length(value, min_length, field_name):
+                if len(value) < min_length:
+                    raise ValueError(f"{field_name} too short")
+            
+            def validate_email(email):
+                if "@" not in email or "." not in email:
+                    raise ValueError("Invalid email")
+            
+            def validate_username(username):
+                validate_min_length(username, 3, "Username")
+            
+            def validate_password(password):
+                validate_min_length(password, 8, "Password")
+          
+          benefit: "DRY principle; single source of truth for length validation"
+      
+      best_practices:
+        - "Refactor in tiny steps"
+        - "Run tests after each change"
+        - "Commit after each successful refactor"
+        - "Keep tests and production code clean"
+      
+      red_flags:
+        - "Refactoring for > 10 minutes without running tests"
+        - "Changing test expectations during refactoring (tests should not change)"
+        - "Adding new functionality during refactor phase"
+
+# TDD BEST PRACTICES
+best_practices:
+  test_design:
+    - practice: "Write Tests from User Perspective"
+      description: "Tests should read like specifications"
+      example: |
+        # Good: Behavior-focused
+        def test_user_receives_confirmation_email_after_registration():
+            user = register_user("alice@example.com", "password123")
+            assert email_sent_to("alice@example.com")
+            assert email_contains_subject("Welcome to Our Service")
+        
+        # Bad: Implementation-focused
+        def test_user_repository_insert():
+            repo = UserRepository()
+            repo.insert({"email": "alice@example.com"})
+            assert repo.count() == 1
+    
+    - practice: "Use Descriptive Test Names"
+      format: "test_<methodName>_<scenario>_<expectedBehavior>()"
+      examples:
+        - "test_divide_byZero_raisesZeroDivisionError()"
+        - "test_authenticate_withInvalidPassword_returnsFalse()"
+        - "test_calculateDiscount_forPremiumMember_applies20Percent()"
+    
+    - practice: "One Logical Assertion Per Test"
+      rationale: "Makes failures easier to diagnose"
+      exception: "Multiple asserts on same object are OK"
+      example: |
+        # Good: Multiple asserts on same result
+        def test_parse_user_data():
+            user = parse("alice,30,engineer")
+            assert user.name == "alice"
+            assert user.age == 30
+            assert user.occupation == "engineer"
+        
+        # Bad: Asserting unrelated things
+        def test_user_operations():
+            user1 = create_user("alice")
+            assert user1.id is not None  # Different concern
+            user2 = find_user("alice")
+            assert user2.name == "alice"  # Different concern
+    
+    - practice: "Follow AAA Pattern"
+      pattern: "Arrange, Act, Assert"
+      example: |
+        def test_withdraw_reduces_balance():
+            # Arrange
+            account = BankAccount(initial_balance=100)
+            
+            # Act
+            account.withdraw(30)
+            
+            # Assert
+            assert account.balance == 70
+    
+    - practice: "Keep Tests Independent"
+      description: "Each test should set up its own data"
+      rationale: "Tests should pass in any order"
+      anti_pattern: |
+        # BAD: Test order dependency
+        def test_step1_create_user():
+            global user
+            user = User("alice")
+        
+        def test_step2_update_user():
+            user.name = "bob"  # Depends on test_step1!
+      
+      solution: |
+        # GOOD: Each test is independent
+        def test_create_user():
+            user = User("alice")
+            assert user.name == "alice"
+        
+        def test_update_user():
+            user = User("alice")  # Setup own data
+            user.name = "bob"
+            assert user.name == "bob"
+  
+  workflow:
+    - practice: "Take Baby Steps"
+      description: "Make smallest possible increments"
+      guideline: "Each RED-GREEN-REFACTOR cycle should be < 5 minutes"
+      benefit: "Easier to debug; always close to working state"
+    
+    - practice: "Run Tests Frequently"
+      frequency: "Every 30-60 seconds"
+      tooling: "Use test watchers (pytest-watch, Jest watch mode)"
+    
+    - practice: "Commit on Green"
+      workflow: "Git commit after each successful GREEN or REFACTOR"
+      rationale: "Creates fine-grained history; easy to revert"
+    
+    - practice: "Never Skip RED Phase"
+      warning: "ALWAYS verify test fails before implementing"
+      danger: "Tests that never fail might be testing nothing"
+    
+    - practice: "Don't Debug by Adding Prints"
+      alternative: "Write a new test that exposes the bug"
+      benefit: "Bug becomes permanent regression test"
+
+# COMMON MISTAKES
+common_mistakes:
+  - mistake: "Writing All Tests First"
+    description: "Writing many tests before any implementation"
+    problem: "Violates TDD rhythm; leads to analysis paralysis"
+    solution: "Write ONE test, implement, refactor, repeat"
+  
+  - mistake: "Testing Implementation Details"
+    description: "Tests couple to internal structure"
+    example: |
+      # Bad: Tests private method
+      def test_calculate_tax_internal():
+          calculator = TaxCalculator()
+          assert calculator._apply_rate(100, 0.08) == 8
+    
+    problem: "Refactoring breaks tests even when behavior unchanged"
+    solution: "Test public API only; treat implementation as black box"
+  
+  - mistake: "Overmocking"
+    description: "Mocking everything, even simple dependencies"
+    example: |
+      # Overmocked
+      def test_process_order(mocker):
+          mock_math = mocker.patch('builtins.sum')
+          mock_math.return_value = 100
+          # ...
+    
+    problem: "Tests don't verify real behavior"
+    solution: "Mock only external dependencies (database, API, time)"
+  
+  - mistake: "Testing Getters/Setters"
+    description: "Writing tests for trivial property access"
+    example: |
+      # Pointless test
+      def test_user_name_property():
+          user = User(name="Alice")
+          assert user.name == "Alice"
+    
+    problem: "No value; tests framework/language features"
+    solution: "Test behavior, not data access"
+  
+  - mistake: "Large Test Fixtures"
+    description: "Complex setup code shared across tests"
+    problem: "Hard to understand what test is actually testing"
+    solution: "Use test helpers, but keep setup explicit in each test"
+
+# TDD IN PRACTICE
+practical_tips:
+  starting_a_feature:
+    - "Write a high-level acceptance test (failing)"
+    - "Break down into smaller behaviors"
+    - "TDD each small behavior with unit tests"
+    - "Watch acceptance test turn green"
+  
+  debugging_a_bug:
+    - "Write a failing test that reproduces the bug"
+    - "Fix the bug (make test pass)"
+    - "Keep the test as regression protection"
+  
+  refactoring_legacy_code:
+    - "Write characterization tests (describe current behavior)"
+    - "Refactor with test safety net"
+    - "Gradually improve design"
+  
+  dealing_with_legacy_code:
+    - "Use 'sprout method' for new features (pure functions)"
+    - "Cover new code with TDD"
+    - "Gradually expand test coverage to surrounding code"
+
+# METRICS
+metrics:
+  cycle_time:
+    target: "< 5 minutes per RED-GREEN-REFACTOR cycle"
+    warning: "> 10 minutes suggests steps too large"
+  
+  test_run_time:
+    target: "< 2 seconds for unit tests"
+    maximum: "< 10 seconds acceptable"
+  
+  code_coverage:
+    tdd_typical: "90-100% for new code"
+    note: "High coverage is byproduct, not goal"
+  
+  defect_rate:
+    expectation: "Significantly lower bugs in production"
+    research: "Microsoft/IBM studies show 40-90% reduction"
+
+# REFERENCES
+references:
+  - title: "Test-Driven Development: By Example"
+    author: "Kent Beck"
+    publisher: "Addison-Wesley Professional"
+    year: 2002
+    isbn: "978-0321146533"
+  
+  - title: "The Three Laws of TDD"
+    author: "Robert C. Martin (Uncle Bob)"
+    url: "http://butunclebob.com/ArticleS.UncleBob.TheThreeRulesOfTdd"
+  
+  - title: "Growing Object-Oriented Software, Guided by Tests"
+    authors: ["Steve Freeman", "Nat Pryce"]
+    publisher: "Addison-Wesley Professional"
+    year: 2009
+  
+  - title: "Clean Code: A Handbook of Agile Software Craftsmanship"
+    author: "Robert C. Martin"
+    publisher: "Prentice Hall"
+    year: 2008
+    chapter: "Chapter 9: Unit Tests"
