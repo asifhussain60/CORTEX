@@ -91,7 +91,7 @@
 | Phase | Name | Progress | Status | Dependencies |
 |-------|------|----------|--------|--------------|
 | 7 | Operations Simplification | 0% | ⏳ NOT STARTED | Phase 6 complete ✅ |
-| 8 | Testing & Validation | 0% | ⏳ NOT STARTED | Phase 7 complete |
+| 8 | Testing & Validation | 0% | 🎯 READY | Phase 7 complete, [plan created](./phases/phase-08-testing-validation.md) ✅ |
 | 9 | Documentation Finalization | 0% | ⏳ NOT STARTED | Phase 8 complete |
 | 11 | Multi-Repo Architecture | 0% | ⏳ POST-CORE | Phase 3 complete ✅ |
 | 12 | Native IDE Extensions | 0% | ⏳ OPTIONAL | Phase 11 complete |
