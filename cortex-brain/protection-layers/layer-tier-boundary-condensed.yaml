@@ -1,0 +1,29 @@
+# CORTEX Protection Layer: Tier Boundary
+
+# Condensed for token optimization - full docs in protection-layers-docs/
+
+  rules:
+    - rule_id: "TIER0_APPLICATION_DATA"
+      name: "No Application Data in Tier 0"
+      severity: "blocked"
+      description: "Application-specific path in Tier 0 (immutable governance)"
+
+      detection:
+          - "tier0/**"
+          - "governance/**"
+
+        - "Store in Tier 2 with scope='application'"
+        - "Keep generic principles in Tier 0"
+        - "Create application-specific tier"
+
+    - rule_id: "TIER2_CONVERSATION_DATA"
+      name: "No Conversation Data in Tier 2"
+      severity: "warning"
+      description: "Conversation data should be in Tier 1, not Tier 2"
+
+      detection:
+          - "tier2/**"
+
+        - "Move to Tier 1 (conversation-history.jsonl)"
+        - "Store aggregated patterns in Tier 2"
+        - "Keep raw data in Tier 1, patterns in Tier 2"

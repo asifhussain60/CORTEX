@@ -1,0 +1,202 @@
+# CORTEX Protection Layer: Namespace Protection
+# Extracted from brain-protection-rules.yaml for token optimization
+# Version: 2.1
+# Part of: CORTEX 3.0 Track B (Token Optimization)
+
+version: "2.1"
+type: "protection_layer"
+layer_id: "namespace_protection"
+parent_file: "brain-protection-rules.yaml"
+
+# Layer definition (normalized indentation)
+- layer_id: "namespace_protection"
+  name: "Knowledge Namespace Boundaries"
+  description: "Enforce separation between CORTEX framework and workspace knowledge"
+  priority: 6
+
+  rules:
+    - rule_id: "NAMESPACE-001"
+      name: "Protected CORTEX Namespace"
+      severity: "blocked"
+      description: "Prevent user code from writing to cortex.* namespace"
+
+      detection:
+        combined_keywords:
+          namespace_write:
+            - "learn_pattern"
+            - "store_pattern"
+            - "add pattern"
+          cortex_namespace:
+            - "cortex.*"
+            - "namespace='cortex."
+            - 'namespace="cortex.'
+          not_framework:
+            - "is_cortex_internal=False"
+            - "user code"
+        scope: ["code", "intent"]
+        logic: "AND"
+
+      alternatives:
+        - "Use workspace.* namespace for application patterns"
+        - "workspace.myapp.* for your project-specific knowledge"
+        - "Only CORTEX framework code can write to cortex.* namespace"
+
+      evidence_template: |
+        NAMESPACE PROTECTION VIOLATION
+
+        Attempted write to protected cortex.* namespace from user code!
+
+        Code: '{code_snippet}'
+
+        CORTEX namespaces are PROTECTED:
+        - cortex.* → Framework knowledge only (read-only for users)
+        - workspace.* → Application knowledge (user read/write)
+
+        Use: learn_pattern(..., namespace="workspace.myapp.*", is_cortex_internal=False)
+
+      rationale: |
+        NAMESPACE-001: Protected CORTEX Namespace
+
+        Critical architectural boundary preventing knowledge contamination.
+
+        Why This Matters:
+        1. Framework Integrity: CORTEX patterns must remain pure
+        2. Multi-Project Support: Each workspace isolated
+        3. Knowledge Quality: No user app patterns in framework brain
+        4. Upgradability: CORTEX can update without breaking user data
+
+        Protected Namespaces:
+        - cortex.tier_architecture (4-tier brain system)
+        - cortex.agent_patterns (10 specialist agents)
+        - cortex.operations (universal operations)
+        - cortex.plugins (plugin system)
+
+        Allowed Namespaces:
+        - workspace.<project>.* (your application patterns)
+        - workspace.myapp.security (JWT, OAuth patterns)
+        - workspace.myapp.architecture (file structure, tech stack)
+
+        This rule is BLOCKING severity - violations stop execution immediately.
+
+    - rule_id: "NAMESPACE-002"
+      name: "Workspace Isolation"
+      severity: "warning"
+      description: "Isolate workspace patterns by owner/project"
+
+      detection:
+        combined_keywords:
+          cross_workspace:
+            - "workspace.projectA"
+            - "workspace.projectB"
+          shared_pattern:
+            - "pattern applies to both"
+            - "copy to other project"
+        scope: ["intent", "description"]
+        logic: "AND"
+
+      alternatives:
+        - "Store pattern in each workspace separately"
+        - "Use cortex.* for truly generic framework patterns"
+        - "Create explicit cross-workspace link if needed"
+
+      evidence_template: |
+        CROSS-WORKSPACE CONTAMINATION RISK
+
+        Pattern appears to span multiple workspaces: '{description}'
+
+        Best Practices:
+        - workspace.projectA.* → Project A only
+        - workspace.projectB.* → Project B only
+        - cortex.* → Framework generic knowledge
+
+        If truly shared, use explicit relationship links, not duplicate storage.
+
+      rationale: |
+        NAMESPACE-002: Workspace Isolation
+
+        Each workspace (project) should have isolated knowledge.
+
+        Benefits:
+        1. Clean Separation: No cross-project contamination
+        2. Parallel Development: Multiple projects on same machine
+        3. Easier Cleanup: Delete workspace.projectA.* removes all traces
+        4. Privacy: Project A can't see Project B patterns
+
+        Example Structure:
+        - workspace.ksessions.* → KSESSIONS project patterns
+        - workspace.noor.* → NOOR Canvas project patterns
+        - workspace.cortex.* → CORTEX development patterns (meta!)
+
+        This rule is WARNING severity - allowed but discouraged.
+
+    - rule_id: "NAMESPACE-003"
+      name: "No Namespace Mixing"
+      severity: "blocked"
+      description: "Prevent patterns from spanning multiple namespaces"
+
+      detection:
+        combined_keywords:
+          multi_namespace:
+            - "namespaces=['cortex."
+            - "namespaces=['workspace.a', 'workspace.b']"
+          pattern_storage:
+            - "store_pattern"
+            - "learn_pattern"
+        scope: ["code"]
+        logic: "AND"
+
+      alternatives:
+        - "Store pattern in single primary namespace"
+        - "Use relationship links for cross-namespace references"
+        - "Duplicate pattern if truly applicable to both (rare)"
+
+      evidence_template: |
+        NAMESPACE MIXING VIOLATION
+
+        Pattern assigned to multiple namespaces: '{namespaces}'
+
+        A pattern MUST belong to exactly ONE namespace.
+
+        If pattern applies to multiple contexts, use explicit links:
+        - Primary: workspace.myapp.auth_pattern
+        - Link: cortex.security_patterns → workspace.myapp.auth_pattern
+
+        This maintains clear ownership and prevents ambiguity.
+
+      rationale: |
+        NAMESPACE-003: No Namespace Mixing
+
+        Single Ownership Principle: Each pattern has ONE home.
+
+        Why Single Namespace:
+        1. Clear Ownership: No ambiguity about who maintains pattern
+        2. Clean Deletion: Removing workspace.* removes all patterns
+        3. No Orphans: Pattern lifecycle tied to single namespace
+        4. Simpler Queries: No multi-namespace resolution logic
+
+        Cross-Namespace References:
+        Use relationship links instead of multi-namespace patterns:
+
+        ❌ BAD:
+        learn_pattern(
+            ...,
+            namespaces=["cortex.security", "workspace.myapp.security"]
+        )
+
+        ✅ GOOD:
+        # Store in primary namespace
+        pattern_id = learn_pattern(
+            ...,
+            namespaces=["workspace.myapp.security"]
+        )
+
+        # Link to generic pattern
+        create_relationship(
+            from_pattern="cortex.security_best_practices",
+            to_pattern=pattern_id,
+            relationship_type="implements"
+        )
+
+        This rule is BLOCKING severity - multi-namespace patterns rejected.
+
+# Layer 9: Database Architecture Enforcement

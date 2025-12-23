@@ -1,0 +1,413 @@
+# Intent Confirmation Templates (Rule #26: Intent-First, Code-Second)
+#
+# Purpose: Templates for confirming understanding before implementation
+# Each template provides a structured way to summarize understanding and ask for confirmation
+#
+# Usage: Generate confirmation message BEFORE any code execution
+# Format: Summarize understanding → Ask for confirmation → Wait for response
+
+---
+
+# PLAN Intent - Creating new features or multi-phase work
+
+plan_feature:
+  intent_type: "PLAN"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to implement: {feature_name}
+    
+    My understanding:
+    - Feature type: {feature_type}
+    - Estimated phases: {phase_count}
+    - Similar patterns found: {similar_patterns}
+    - Estimated effort: {effort_estimate}
+    - Files likely affected: {affected_files}
+    - Tests required: {test_count}
+    
+    Proceed with detailed planning? (yes/clarify)
+  
+  required_fields:
+    - feature_name
+    - phase_count
+    - effort_estimate
+  
+  optional_fields:
+    - feature_type
+    - similar_patterns
+    - affected_files
+    - test_count
+
+plan_architecture:
+  intent_type: "PLAN"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to design: {architecture_component}
+    
+    My understanding:
+    - Component type: {component_type}
+    - Integration points: {integration_points}
+    - Dependencies: {dependencies}
+    - Design pattern: {design_pattern}
+    
+    Proceed with architectural design? (yes/clarify)
+  
+  required_fields:
+    - architecture_component
+    - component_type
+  
+  optional_fields:
+    - integration_points
+    - dependencies
+    - design_pattern
+
+# EXECUTE Intent - Implementing code changes
+
+execute_code:
+  intent_type: "EXECUTE"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to: {user_request}
+    
+    This will:
+    - Modify files: {modified_files}
+    - Create new files: {new_files}
+    - Delete files: {deleted_files}
+    - Tests required: {test_count}
+    - TDD approach: {tdd_steps}
+    
+    Proceed with implementation? (yes/clarify)
+  
+  required_fields:
+    - user_request
+    - tdd_steps
+  
+  optional_fields:
+    - modified_files
+    - new_files
+    - deleted_files
+    - test_count
+
+execute_refactor:
+  intent_type: "EXECUTE"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to refactor: {target_code}
+    
+    Refactoring plan:
+    - Pattern: {refactor_pattern}
+    - Files affected: {affected_files}
+    - Tests to update: {test_updates}
+    - Risk level: {risk_level}
+    - Safety: All tests must pass before and after
+    
+    Proceed with refactoring? (yes/clarify)
+  
+  required_fields:
+    - target_code
+    - refactor_pattern
+    - risk_level
+  
+  optional_fields:
+    - affected_files
+    - test_updates
+
+# TEST Intent - Creating or running tests
+
+test_create:
+  intent_type: "TEST"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to test: {test_target}
+    
+    Test plan:
+    - Test type: {test_type}
+    - Coverage goal: {coverage_goal}
+    - Test file: {test_file}
+    - Test cases: {test_case_count}
+    
+    Proceed with test creation? (yes/clarify)
+  
+  required_fields:
+    - test_target
+    - test_type
+  
+  optional_fields:
+    - coverage_goal
+    - test_file
+    - test_case_count
+
+test_run:
+  intent_type: "TEST"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to run tests: {test_scope}
+    
+    Test execution plan:
+    - Test suite: {test_suite}
+    - Expected result: {expected_result}
+    - Action on failure: {failure_action}
+    
+    Proceed with test execution? (yes/clarify)
+  
+  required_fields:
+    - test_scope
+  
+  optional_fields:
+    - test_suite
+    - expected_result
+    - failure_action
+
+# FIX Intent - Debugging and error correction
+
+fix_bug:
+  intent_type: "FIX"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to fix: {bug_description}
+    
+    Debugging plan:
+    - Root cause hypothesis: {hypothesis}
+    - Files to investigate: {investigation_files}
+    - Fix approach: {fix_approach}
+    - Tests to validate: {validation_tests}
+    
+    Proceed with bug fix? (yes/clarify)
+  
+  required_fields:
+    - bug_description
+    - fix_approach
+  
+  optional_fields:
+    - hypothesis
+    - investigation_files
+    - validation_tests
+
+fix_error:
+  intent_type: "FIX"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    Error detected: {error_message}
+    
+    Correction plan:
+    - Error type: {error_type}
+    - Affected file: {affected_file}
+    - Proposed fix: {proposed_fix}
+    
+    Proceed with correction? (yes/clarify)
+  
+  required_fields:
+    - error_message
+    - proposed_fix
+  
+  optional_fields:
+    - error_type
+    - affected_file
+
+# QUERY Intent - Searching knowledge or asking questions
+
+query_knowledge:
+  intent_type: "QUERY"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You're asking: {query_text}
+    
+    Search plan:
+    - Tier 1 search: {tier1_search}
+    - Tier 2 search: {tier2_search}
+    - Tier 3 search: {tier3_search}
+    - Expected result: {expected_result}
+    
+    Proceed with knowledge query? (yes/clarify)
+  
+  required_fields:
+    - query_text
+  
+  optional_fields:
+    - tier1_search
+    - tier2_search
+    - tier3_search
+    - expected_result
+
+query_codebase:
+  intent_type: "QUERY"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to find: {search_target}
+    
+    Search strategy:
+    - Search scope: {search_scope}
+    - Search method: {search_method}
+    - Expected matches: {expected_matches}
+    
+    Proceed with codebase search? (yes/clarify)
+  
+  required_fields:
+    - search_target
+  
+  optional_fields:
+    - search_scope
+    - search_method
+    - expected_matches
+
+# VALIDATE Intent - Checking system health
+
+validate_health:
+  intent_type: "VALIDATE"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to validate: {validation_target}
+    
+    Validation plan:
+    - Health checks: {health_checks}
+    - Pass criteria: {pass_criteria}
+    - Action on failure: {failure_action}
+    
+    Proceed with health validation? (yes/clarify)
+  
+  required_fields:
+    - validation_target
+  
+  optional_fields:
+    - health_checks
+    - pass_criteria
+    - failure_action
+
+validate_compliance:
+  intent_type: "VALIDATE"
+  template: |
+    🤔 INTENT CONFIRMATION
+    
+    You want to check compliance with: {compliance_rule}
+    
+    Compliance check:
+    - Rule: {rule_id}
+    - Scope: {check_scope}
+    - Expected result: {expected_result}
+    - Remediation: {remediation_plan}
+    
+    Proceed with compliance validation? (yes/clarify)
+  
+  required_fields:
+    - compliance_rule
+  
+  optional_fields:
+    - rule_id
+    - check_scope
+    - expected_result
+    - remediation_plan
+
+# GENERAL - Fallback for unclear intents
+
+clarify_intent:
+  intent_type: "UNCLEAR"
+  template: |
+    🤔 INTENT CLARIFICATION NEEDED
+    
+    Your request: {user_request}
+    
+    I'm not certain about:
+    - Intent type: {ambiguous_aspects}
+    - Scope: {scope_questions}
+    
+    Possible interpretations:
+    {interpretations}
+    
+    Please clarify: Which interpretation is correct?
+  
+  required_fields:
+    - user_request
+    - ambiguous_aspects
+  
+  optional_fields:
+    - scope_questions
+    - interpretations
+
+# CORTEX MODIFICATION - Special handling for brain changes
+
+modify_cortex:
+  intent_type: "CORTEX_CHANGE"
+  template: |
+    🤔 INTENT CONFIRMATION (CORTEX MODIFICATION)
+    
+    ⚠️ You want to modify CORTEX itself: {modification_description}
+    
+    Impact analysis:
+    - Component affected: {affected_component}
+    - Hemisphere: {hemisphere}
+    - Tier: {tier}
+    - Risk level: {risk_level}
+    - Rule violations: {rule_violations}
+    - Suggested alternative: {safe_alternative}
+    
+    This requires Brain Protector approval (Rule #22).
+    
+    Proceed with CORTEX modification? (yes/safe-alternative/cancel)
+  
+  required_fields:
+    - modification_description
+    - affected_component
+    - risk_level
+  
+  optional_fields:
+    - hemisphere
+    - tier
+    - rule_violations
+    - safe_alternative
+
+# CONTEXT RESTORATION - Resuming after interruption
+
+resume_session:
+  intent_type: "RESUME"
+  template: |
+    🤔 INTENT CONFIRMATION (SESSION RESUME)
+    
+    Resuming session: {session_id}
+    
+    Last context:
+    - Previous task: {previous_task}
+    - Status: {task_status}
+    - Next step: {next_step}
+    - Files in progress: {active_files}
+    
+    Continue from: {continuation_point}
+    
+    Resume work? (yes/clarify/start-fresh)
+  
+  required_fields:
+    - session_id
+    - previous_task
+    - task_status
+  
+  optional_fields:
+    - next_step
+    - active_files
+    - continuation_point
+
+# RESPONSE TEMPLATES - Handling user feedback
+
+user_confirmed:
+  response_type: "CONFIRMATION"
+  message: "✅ Confirmed. Proceeding with {action}..."
+
+user_clarified:
+  response_type: "CLARIFICATION"
+  message: "📝 Updated understanding based on clarification. New plan: {updated_plan}"
+
+user_cancelled:
+  response_type: "CANCELLATION"
+  message: "❌ Cancelled. No changes made. Ready for new request."
+
+user_requested_alternative:
+  response_type: "ALTERNATIVE"
+  message: "🔄 Switching to alternative approach: {alternative_approach}"

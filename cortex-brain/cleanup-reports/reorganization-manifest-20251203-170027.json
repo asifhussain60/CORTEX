@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-12-03T17:00:27.976122",
+  "summary": {
+    "total_moved": 7,
+    "total_references_updated": 0,
+    "failed_moves": 0
+  },
+  "moves": [
+    {
+      "old_path": "run_optimize.py",
+      "new_path": "scripts/misc/run_optimize.py",
+      "reason": "Reorganization rule applied",
+      "timestamp": "2025-12-03T17:00:27.975557",
+      "references_updated": []
+    },
+    {
+      "old_path": "test_gate8_swagger.py",
+      "new_path": "scripts/misc/test_gate8_swagger.py",
+      "reason": "Reorganization rule applied",
+      "timestamp": "2025-12-03T17:00:27.975647",
+      "references_updated": []
+    },
+    {
+      "old_path": "validate_yaml.py",
+      "new_path": "scripts/misc/validate_yaml.py",
+      "reason": "Reorganization rule applied",
+      "timestamp": "2025-12-03T17:00:27.975730",
+      "references_updated": []
+    },
+    {
+      "old_path": "run_enhanced_cleanup_live.py",
+      "new_path": "scripts/misc/run_enhanced_cleanup_live.py",
+      "reason": "Reorganization rule applied",
+      "timestamp": "2025-12-03T17:00:27.975813",
+      "references_updated": []
+    },
+    {
+      "old_path": "test_enhanced_cleanup.py",
+      "new_path": "scripts/misc/test_enhanced_cleanup.py",
+      "reason": "Reorganization rule applied",
+      "timestamp": "2025-12-03T17:00:27.975894",
+      "references_updated": []
+    },
+    {
+      "old_path": "run_deploy_gates.py",
+      "new_path": "scripts/misc/run_deploy_gates.py",
+      "reason": "Reorganization rule applied",
+      "timestamp": "2025-12-03T17:00:27.975972",
+      "references_updated": []
+    },
+    {
+      "old_path": "MAC-CONTINUATION-GUIDE.md",
+      "new_path": "scripts/misc/MAC-CONTINUATION-GUIDE.md",
+      "reason": "Reorganization rule applied",
+      "timestamp": "2025-12-03T17:00:27.976051",
+      "references_updated": []
+    }
+  ]
+}

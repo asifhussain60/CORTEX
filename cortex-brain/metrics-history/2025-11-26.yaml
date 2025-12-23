@@ -1,0 +1,31 @@
+date: '2025-11-26'
+timestamp: '2025-11-26T00:18:06.753352'
+tier0:
+  rules_file_size_kb: 0
+  total_rules: 0
+  critical_paths: 0
+  tier0_instincts: 0
+tier1:
+  conversations_jsonl: 0
+  conversations_db: 0
+  jsonl_size_kb: 0
+  db_size_kb: 0
+  last_activity: null
+  utilization_percent: 0
+tier2:
+  file_size_kb: 0
+  patterns_count: 0
+  avg_confidence: 0
+  last_learning: null
+  patterns_by_impact: {}
+tier3:
+  architecture_file_kb: 0
+  module_definitions_kb: 0
+  session_summaries: 0
+health:
+  overall_status: Needs Attention
+  tier0_health: Missing
+  tier1_health: Inactive
+  tier2_health: Empty
+  tier3_health: Inactive
+  health_score: 0.0

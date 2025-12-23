@@ -1,0 +1,47 @@
+# {{ name or 'Project' }}
+
+{{ description or 'A software project description.' }}
+
+{% if version %}**Version:** {{ version }}{% endif %}
+{% if language %}**Language:** {{ language }}{% endif %}
+{% if framework %}**Framework:** {{ framework }}{% endif %}
+
+## Quick Start
+
+```bash
+# Installation and setup instructions
+# (customize based on your project)
+```
+
+{% if features %}
+## Features
+
+{% for feature in features %}
+- {{ feature }}
+{% endfor %}
+{% endif %}
+
+{% if components %}
+## Key Components
+
+{% for component in components %}
+### {{ component.name }}
+{{ component.description or '' }}
+{% if component.location %}**Location:** `{{ component.location }}`{% endif %}
+
+{% endfor %}
+{% endif %}
+
+## Documentation
+
+{% if generated_docs %}
+{% for doc_name, doc_path in generated_docs.items() %}
+{% if doc_name != 'readme' %}
+- [{{ doc_name.replace('_', ' ').title() }}]({{ doc_path | basename }})
+{% endif %}
+{% endfor %}
+{% endif %}
+
+---
+
+Generated on: {{ _template.rendered_at | format_datetime }}
