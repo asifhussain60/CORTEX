@@ -40,6 +40,14 @@ class KnowledgeGraph:
             root = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "tier2"
             root.mkdir(parents=True, exist_ok=True)
             db_path = root / "knowledge_graph.db"
+        
+        # Convert to Path if string provided
+        if isinstance(db_path, str):
+            db_path = Path(db_path)
+        
+        # Store db_path for backward compatibility (tests expect this attribute)
+        self.db_path = db_path
+        
         self.connection_manager = ConnectionManager(db_path=db_path)
 
         # Component instances
@@ -51,7 +59,50 @@ class KnowledgeGraph:
 
     # ---------------------- Pattern CRUD ----------------------
     def store_pattern(self, **kwargs) -> Dict[str, Any]:
-        return self.pattern_store.store_pattern(**kwargs)
+        """
+        Store a pattern with backward-compatible API.
+        
+        Supports both LEGACY API (5-param) and MODERN API (7-param):
+        
+        LEGACY API:
+            title, pattern_type, confidence, context (dict), scope, namespaces
+        
+        MODERN API:
+            pattern_id, title, content (str), pattern_type, confidence, metadata, namespaces
+        
+        Auto-detects which API is used based on parameters.
+        """
+        import uuid
+        import json
+        
+        # LEGACY API detection: has 'context' parameter
+        if 'context' in kwargs:
+            # Transform context (dict) → content (JSON string) + metadata
+            context = kwargs.pop('context')
+            if context:
+                kwargs['content'] = json.dumps(context) if isinstance(context, dict) else str(context)
+                kwargs['metadata'] = context if isinstance(context, dict) else None
+        
+        # Auto-generate pattern_id if not provided
+        if 'pattern_id' not in kwargs:
+            title = kwargs.get('title', 'pattern')
+            # Generate pattern_id from title (legacy format: pattern_<slug>_<short_uuid>)
+            slug = title.lower().replace(' ', '_').replace('-', '_')
+            slug = ''.join(c for c in slug if c.isalnum() or c == '_')
+            short_uuid = str(uuid.uuid4())[:8]
+            kwargs['pattern_id'] = f"pattern_{slug}_{short_uuid}"
+        
+        # Ensure content exists (required by PatternStore)
+        if 'content' not in kwargs:
+            kwargs['content'] = kwargs.get('title', '')
+        
+        # Return result - extract pattern_id for backward compatibility
+        result = self.pattern_store.store_pattern(**kwargs)
+        
+        # Legacy API expects pattern_id string, modern API expects dict
+        if isinstance(result, dict):
+            return result.get('pattern_id', result)
+        return result
     
     def learn_pattern(self, pattern: Dict[str, Any], namespace: str, is_cortex_internal: bool = False) -> Dict[str, Any]:
         """
