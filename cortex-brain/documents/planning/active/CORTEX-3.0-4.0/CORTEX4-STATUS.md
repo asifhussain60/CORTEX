@@ -112,6 +112,7 @@
 | 11 | Multi-Repo Architecture | 0% | ⏳ POST-CORE | Phase 3 complete ✅ |
 | 12 | Native IDE Extensions | 0% | ⏳ OPTIONAL | Phase 11 complete |
 | 13 | Sharpen the Saw (STS) | 0% | ⏳ POST-GA | Phase 14 complete |
+| 15 | VS Code Extension | 0% | ⏳ POST-GA | Phases 14, 7B, 8, 9 complete |
 
 **Remaining Work Breakdown:**
 - **Phase 14 (IN PROGRESS - 67% COMPLETE - PRE-GA CRITICAL):** Version consolidation (v2/v3→v4.0 cleanup ✅), architecture diagram completion (16/16 complete ✅), dashboard validation (2 days ⏳), naming consistency complete ✅
@@ -124,6 +125,7 @@
 - **Phase 11:** Multi-repo support, workspace segmentation (1 week, post-core)
 - **Phase 12:** Native IDE extensions for VSCode/Visual Studio (2 weeks, optional)
 - **Phase 13:** Post-GA system refinement and optimization (ongoing, requires Phase 14 complete)
+- **Phase 15:** VS Code Extension development (8-10 weeks, post-GA enhancement) - NEW
 
 ---
 ## 🎯 Current Focus: Phase 14 (Version Consolidation & Housekeeping) - APPROVED & READY
@@ -409,6 +411,7 @@
   - ⏳ **Task 14.3 Next** - Complete 6 missing architecture diagrams
 - ☐ **Phase 7B Ready** - Architectural Implementation (Tasks 7.6-7.9, estimated 2-3 weeks, will proceed after Phase 14)
 - ☐ **Phase 8 Ready** - Testing & Validation can begin (Phase 7A enables early testing)
+- ☐ **Phase 15 Planned** - VS Code Extension (8-10 weeks, post-GA, see [phases/phase-15-vscode-extension.md](./phases/phase-15-vscode-extension.md))
 
 - **[00-MASTER-PLAN.md](./00-MASTER-PLAN.md)** - Complete migration strategy
 - **[LLM-MIGRATION-OPPORTUNITIES.md](./LLM-MIGRATION-OPPORTUNITIES.md)** - LLM enhancement opportunities
