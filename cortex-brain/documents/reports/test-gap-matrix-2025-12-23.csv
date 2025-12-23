@@ -1,0 +1,56 @@
+File,Module,Coverage,Statements,Missing_Lines,Type,Priority,Estimated_Hours,Target_Coverage,Notes
+src/cortex_agents/intent_router.py,cortex_agents,0.0,394,394,agent,P0,3,95,Core routing intelligence
+src/cortex_agents/investigation_router.py,cortex_agents,0.0,332,332,agent,P0,3,95,Investigation workflows
+src/cortex_agents/llm_intent_router.py,cortex_agents,0.0,216,216,agent,P0,2,95,LLM-based routing
+src/cortex_agents/strategic/interactive_planner.py,cortex_agents,0.0,297,297,agent,P0,3,95,Interactive planning
+src/cortex_agents/strategic/architecture_intelligence_agent.py,cortex_agents,0.0,134,134,agent,P0,2,95,Architecture intelligence
+src/cortex_agents/error_corrector.py,cortex_agents,0.0,293,293,agent,P0,3,95,Error correction workflows
+src/cortex_agents/rca_agent.py,cortex_agents,0.0,149,149,agent,P0,2,95,Root cause analysis
+src/core/context_management/unified_context_manager.py,core,0.0,198,198,core,P0,3,90,Context orchestration
+src/core/context_management/context_quality_monitor.py,core,0.0,217,217,core,P0,3,90,Context quality tracking
+src/core/context_management/context_injector.py,core,0.0,158,158,core,P0,2,90,Context injection
+src/core/context_management/migrate_cross_tier_linking.py,core,0.0,189,189,core,P0,2,90,Cross-tier linking
+src/core/context_management/token_budget_manager.py,core,0.0,107,107,core,P0,2,90,Token management
+src/cortex_agents/profile_agent.py,cortex_agents,0.0,166,166,agent,P1,2,92,Profile management
+src/cortex_agents/health_validator/enhanced_validator.py,cortex_agents,0.0,163,163,agent,P1,2,92,Health validation
+src/cortex_agents/screenshot_analyzer.py,cortex_agents,0.0,139,139,agent,P1,2,92,Screenshot analysis
+src/cortex_agents/commit_handler.py,cortex_agents,0.0,115,115,agent,P1,2,92,Commit handling
+src/cortex_agents/ado_agent.py,cortex_agents,0.0,108,108,agent,P1,2,92,ADO integration
+src/cortex_agents/compliance_dashboard_agent.py,cortex_agents,0.0,106,106,agent,P1,2,92,Compliance dashboard
+src/cortex_agents/change_governor.py,cortex_agents,0.0,102,102,agent,P1,2,92,Change governance
+src/cortex_agents/learning_librarian_agent.py,cortex_agents,0.0,101,101,agent,P1,2,92,Learning library
+src/core/knowledge_graph/sync_engine.py,core,0.0,173,173,core,P1,3,90,Knowledge sync
+src/core/response_tier_selector.py,core,0.0,134,134,core,P1,2,90,Response tier logic
+src/core/plugin_processor.py,core,0.0,120,120,core,P1,2,90,Plugin processing
+src/core/progress_tracker.py,core,0.0,120,120,core,P1,2,90,Progress tracking
+src/core/document_validator.py,core,0.0,118,118,core,P1,2,90,Document validation
+src/orchestrators/planning/plan_executor.py,orchestrators,83.33,158,24,orchestrator,P1,3,97,Planning execution - expand
+src/orchestrators/tdd/tdd_orchestrator_v4.py,orchestrators,88.62,386,30,orchestrator,P1,4,98,TDD v4.0 - expand
+src/orchestrators/sanitization/sanitization_orchestrator.py,orchestrators,86.59,157,22,orchestrator,P1,3,95,Sanitization - expand
+src/orchestrators/system/system_integrity_orchestrator.py,orchestrators,71.19,411,106,orchestrator,P1,5,95,System integrity - expand
+src/orchestrators/ado/ado_orchestrator.py,orchestrators,91.44,537,39,orchestrator,P1,4,95,ADO - expand
+src/tier0/hybrid_brain_manager.py,tier0,89.52,106,9,brain,P1,2,95,Brain manager - expand
+src/tier0/brain_template_loader.py,tier0,94.44,92,5,brain,P1,1,98,Template loader - minor
+src/tier1/conversations/conversation_manager.py,tier1,87.88,116,11,brain,P1,2,95,Conversation mgmt - expand
+src/tier1/sessions/session_manager.py,tier1,80.34,105,19,brain,P1,2,95,Session mgmt - expand
+src/tier2/knowledge_graph.py,tier2,60.87,205,68,brain,P1,4,95,Knowledge graph - expand
+src/tier3/context_intelligence.py,tier3,19.14,2821,2281,brain,P1,12,90,Context intelligence - critical
+src/utils/manifest_loader.py,utils,68.36,285,91,utility,P1,3,95,Manifest loading
+src/utils/manifest_inheritance_resolver.py,utils,72.31,135,34,utility,P1,2,95,Manifest inheritance
+src/utils/file_structure_optimizer.py,utils,95.00,98,3,utility,P2,1,98,File optimizer - minor
+src/operations/modules/orchestration/adaptive_execution.py,operations,68.37,134,32,orchestrator,P2,3,92,Adaptive execution
+src/operations/modules/routing/complexity_analyzer.py,operations,82.86,194,24,utility,P2,2,95,Complexity analysis
+src/orchestration_4_0/base/base_orchestrator.py,orchestration_4_0,93.97,92,5,framework,P2,1,98,Base orchestrator - minor
+src/orchestration_4_0/orchestrators/execution/execution_safety_guardrail.py,orchestration_4_0,91.74,85,5,framework,P2,1,95,Safety guardrail - minor
+src/orchestration_4_0/orchestrators/cicd/brain_integrator.py,orchestration_4_0,91.74,95,4,framework,P2,1,95,Brain integrator - minor
+src/orchestration_4_0/orchestrators/documentation/documentation_orchestrator.py,orchestration_4_0,63.14,491,167,orchestrator,P2,8,90,Documentation - expand
+src/di/auto_discovery.py,di,67.74,109,31,framework,P2,2,95,DI auto-discovery - expand
+src/di/service_container.py,di,84.70,137,16,framework,P2,1,95,DI container - minor
+src/workflows/*,workflows,0.0,4917,4917,workflow,P3,20,80,Legacy - evaluate for deletion
+src/cortex_lens/*,cortex_lens,0.0,4207,4207,tooling,P3,15,70,Legacy - evaluate for deletion
+src/crawlers/*,crawlers,0.0,3090,3090,crawler,P3,12,70,Legacy - evaluate for deletion
+src/intelligence/*,intelligence,0.0,3527,3527,intelligence,P3,15,80,Legacy - evaluate for deletion
+src/setup/*,setup,0.0,2754,2754,setup,P4,0,0,Deprecated - delete
+src/brain_transfer/*,brain_transfer,0.0,546,546,migration,P4,0,0,Deprecated - delete
+src/collectors/*,collectors,0.0,2000,2000,collector,P4,0,0,Legacy - evaluate
+src/conversation_capture/*,conversation_capture,0.0,662,662,capture,P4,0,0,Legacy - evaluate
