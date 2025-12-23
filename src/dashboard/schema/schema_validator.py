@@ -27,7 +27,7 @@ class ValidationResult:
             self.warnings = []
 
 
-class SchemaValidatorV2:
+class SchemaValidator:
     """Validator for universal schema v2.0"""
     
     def __init__(self):

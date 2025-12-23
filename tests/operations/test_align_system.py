@@ -1,7 +1,7 @@
 """
-Test suite for align_system_v2 refactoring (RED phase).
+Test suite for align_system refactoring (RED phase).
 
-This test file covers the current behavior of align_system_v2 before refactoring.
+This test file covers the current behavior of align_system before refactoring.
 Target: Reduce complexity from 56 to <15 per extracted function.
 
 Author: Asif Hussain
@@ -11,10 +11,10 @@ GitHub: github.com/asifhussain60/CORTEX
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
-from src.operations.modules.realignment.realignment_utility import align_system_v2
+from src.operations.modules.realignment.realignment_utility import align_system
 
 
-@pytest.mark.skip(reason="align_system_v2 refactoring deferred to Phase 7B (Operations Simplification)")
+@pytest.mark.skip(reason="align_system refactoring deferred to Phase 7B (Operations Simplification)")
 class TestAlignSystemV2CurrentBehavior:
     """Test current behavior before refactoring."""
     
@@ -35,7 +35,7 @@ class TestAlignSystemV2CurrentBehavior:
     
     def test_function_exists_and_callable(self):
         """RED: Verify function exists and is callable."""
-        assert callable(align_system_v2)
+        assert callable(align_system)
     
     def test_returns_dict_with_expected_keys(self, mock_paths):
         """RED: Verify function returns dict with required keys."""
@@ -50,7 +50,7 @@ class TestAlignSystemV2CurrentBehavior:
                                         with patch('src.operations.modules.realignment.realignment_utility._check_git_checkpoint_wiring'):
                                             with patch('src.operations.modules.realignment.realignment_utility._check_component_discovery'):
                                                 with patch('src.operations.modules.realignment.realignment_utility._check_autonomous_execution_wiring'):
-                                                    result = align_system_v2(
+                                                    result = align_system(
                                                         mock_paths["project_root"],
                                                         mock_paths["cortex_root"],
                                                         dry_run=True
@@ -106,7 +106,7 @@ class TestAlignSystemV2CurrentBehavior:
                                                 with patch('src.operations.modules.realignment.realignment_utility._check_autonomous_execution_wiring') as mock_auto:
                                                     mock_auto.return_value = {"passed": True}
                                                     
-                                                    result = align_system_v2(
+                                                    result = align_system(
                                                         mock_paths["project_root"],
                                                         mock_paths["cortex_root"],
                                                         auto_fix=True,
@@ -144,7 +144,7 @@ class TestAlignSystemV2CurrentBehavior:
                                         with patch('src.operations.modules.realignment.realignment_utility._check_git_checkpoint_wiring', return_value={"passed": True}):
                                             with patch('src.operations.modules.realignment.realignment_utility._check_component_discovery', return_value={"passed": True}):
                                                 with patch('src.operations.modules.realignment.realignment_utility._check_autonomous_execution_wiring', return_value={"passed": True}):
-                                                    result = align_system_v2(
+                                                    result = align_system(
                                                         mock_paths["project_root"],
                                                         mock_paths["cortex_root"],
                                                         dry_run=True
@@ -188,14 +188,14 @@ class TestComplexityMetrics:
         with open(file_path, encoding='utf-8') as f:
             code = f.read()
         
-        # Find align_system_v2 complexity
+        # Find align_system complexity
         complexities = radon_complexity.cc_visit(code)
         align_v2_complexity = next(
-            (c.complexity for c in complexities if c.name == "align_system_v2"),
+            (c.complexity for c in complexities if c.name == "align_system"),
             None
         )
         
-        assert align_v2_complexity is not None, "align_system_v2 not found"
+        assert align_v2_complexity is not None, "align_system not found"
         # Complexity reduced from 56 to 7 after refactoring
         assert align_v2_complexity == 7, f"Expected complexity 7, got {align_v2_complexity}"
 

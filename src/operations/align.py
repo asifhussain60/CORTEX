@@ -36,7 +36,7 @@ import sys
 from pathlib import Path
 from typing import Dict, Any
 
-from src.operations.modules.realignment.realignment_utility import align_system_v2
+from src.operations.modules.realignment.realignment_utility import align_system
 from src.operations.modules.admin.governance_tokens import validate_token_budgets
 
 
@@ -93,7 +93,7 @@ def run_align(
         return run_align_utility(force_full=force_full, quick_mode=quick_mode)
     else:
         # Use full align v2.0 system (realignment with auto-fix)
-        result = align_system_v2(
+        result = align_system(
             project_root=project_root,
             cortex_root=cortex_root,
             auto_fix=auto_fix,

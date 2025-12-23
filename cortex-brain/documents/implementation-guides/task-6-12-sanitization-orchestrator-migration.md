@@ -256,8 +256,10 @@ SanitizationOrchestratorV2(BaseOrchestrator)
 
 ## 📝 Usage Example
 
+**Note:** This example references the archived v2_migrated implementation. Current production code uses `sanitization_orchestrator.py`.
+
 ```python
-from src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated import (
+from src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated_archived import (
     SanitizationOrchestratorV2
 )
 

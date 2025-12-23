@@ -3,13 +3,13 @@ Dashboard collectors package.
 """
 
 from .universal_collector_base import UniversalCollectorBase
-from .architecture_collector_v2 import (
-    ArchitectureCollectorV2,
+from .architecture_collector import (
+    ArchitectureCollector,
     ArchitectureData
 )
 
 __all__ = [
     'UniversalCollectorBase',
-    'ArchitectureCollectorV2',
+    'ArchitectureCollector',
     'ArchitectureData'
 ]

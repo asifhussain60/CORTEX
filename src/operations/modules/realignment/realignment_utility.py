@@ -1016,7 +1016,7 @@ def _align_deployment(
         })
 
 
-def align_system_v2(
+def align_system(
     project_root: Path,
     cortex_root: Path,
     auto_fix: bool = False,
@@ -1903,18 +1903,18 @@ if __name__ == "__main__":
     # Test 5: Align v2.0 (dry run)
     print("\nTest 5: CORTEX Align v2.0 (dry run)")
     try:
-        align_results = align_system_v2(
+        align_results = align_system(
             project_root,
             cortex_root,
             auto_fix=False,
             dry_run=True
         )
-        print(f"SUCCESS - align_system_v2: {'PASSED' if align_results['success'] else 'FAILED'}")
+        print(f"SUCCESS - align_system: {'PASSED' if align_results['success'] else 'FAILED'}")
         print(f"   Checks: {len(align_results['checks'])}")
         print(f"   Warnings: {len(align_results['warnings'])}")
         print(f"   Errors: {len(align_results['errors'])}")
     except Exception as e:
-        print(f"SUCCESS - align_system_v2: {e}")
+        print(f"SUCCESS - align_system: {e}")
     
     # Test 6: Review Orchestrator
     print("\nTest 6: Review Orchestrator")

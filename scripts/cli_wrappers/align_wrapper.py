@@ -35,7 +35,7 @@ CORTEX_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(CORTEX_ROOT))
 
 from scripts.cli_wrappers.base_wrapper import BaseCLIWrapper, main_template
-from src.operations.modules.realignment.realignment_utility import align_system_v2
+from src.operations.modules.realignment.realignment_utility import align_system
 from src.operations.base_operation_module import OperationResult, OperationStatus
 
 
@@ -46,7 +46,7 @@ class AlignWrapper(BaseCLIWrapper):
         """
         Get alignment orchestrator.
         
-        Note: align_system_v2 is a function, not a class.
+        Note: align_system is a function, not a class.
         We'll wrap it in a simple executor.
         """
         class AlignExecutor:
@@ -59,7 +59,7 @@ class AlignWrapper(BaseCLIWrapper):
                 project_root = context.get('project_root', Path.cwd())
                 cortex_root = context.get('cortex_root', CORTEX_ROOT)
                 
-                result = align_system_v2(
+                result = align_system(
                     project_root=project_root,
                     cortex_root=cortex_root,
                     auto_fix=self.auto_fix,

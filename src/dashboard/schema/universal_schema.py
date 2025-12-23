@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 SCHEMA_VERSION = "2.0.0"
 
 
-class UniversalSchemaV2:
+class UniversalSchema:
     """Universal dashboard schema v2.0 definition"""
     
     @staticmethod
@@ -34,18 +34,18 @@ class UniversalSchemaV2:
         """
         return {
             "schema_version": SCHEMA_VERSION,
-            "metadata": UniversalSchemaV2._get_metadata_schema(),
-            "architecture": UniversalSchemaV2._get_architecture_schema(),
-            "frontend": UniversalSchemaV2._get_frontend_schema(),
-            "backend": UniversalSchemaV2._get_backend_schema(),
-            "database": UniversalSchemaV2._get_database_schema(),
-            "infrastructure": UniversalSchemaV2._get_infrastructure_schema(),
-            "code_metrics": UniversalSchemaV2._get_code_metrics_schema(),
-            "security": UniversalSchemaV2._get_security_schema(),
-            "testing": UniversalSchemaV2._get_testing_schema(),
-            "business_domain": UniversalSchemaV2._get_business_domain_schema(),
-            "documentation": UniversalSchemaV2._get_documentation_schema(),
-            "health": UniversalSchemaV2._get_health_schema()
+            "metadata": UniversalSchema._get_metadata_schema(),
+            "architecture": UniversalSchema._get_architecture_schema(),
+            "frontend": UniversalSchema._get_frontend_schema(),
+            "backend": UniversalSchema._get_backend_schema(),
+            "database": UniversalSchema._get_database_schema(),
+            "infrastructure": UniversalSchema._get_infrastructure_schema(),
+            "code_metrics": UniversalSchema._get_code_metrics_schema(),
+            "security": UniversalSchema._get_security_schema(),
+            "testing": UniversalSchema._get_testing_schema(),
+            "business_domain": UniversalSchema._get_business_domain_schema(),
+            "documentation": UniversalSchema._get_documentation_schema(),
+            "health": UniversalSchema._get_health_schema()
         }
     
     @staticmethod

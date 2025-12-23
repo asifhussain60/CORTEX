@@ -307,7 +307,6 @@ class OnboardingOrchestrator:
         
         return {
             "name": project_name,
-            "version": "1.0.0",  # TODO: Detect from package files
             "files": total_files,
             "lines": total_lines,
             "languages": sorted(list(languages))
@@ -819,7 +818,7 @@ class OnboardingOrchestrator:
             Tuple of (success: bool, report: dict)
         """
         try:
-            from operations.dashboard_validator_v2 import DashboardValidator
+            from operations.dashboard_validator import DashboardValidator
             
             dashboard_path = output_dir / 'dashboard.html'
             

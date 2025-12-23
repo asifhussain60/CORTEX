@@ -1,5 +1,5 @@
 """
-ArchitectureCollectorV2 - Universal architecture collection orchestrator.
+ArchitectureCollector - Universal architecture collection orchestrator.
 
 This collector orchestrates all language-specific analyzers to extract complete
 architecture information from any codebase (C#, TypeScript, ColdFusion, SQL, Python, etc.).
@@ -74,7 +74,7 @@ class ArchitectureData:
     warnings: List[str] = field(default_factory=list)
 
 
-class ArchitectureCollectorV2(UniversalCollectorBase):
+class ArchitectureCollector(UniversalCollectorBase):
     """
     Universal architecture collector that orchestrates language-specific analyzers.
     
@@ -130,7 +130,7 @@ class ArchitectureCollectorV2(UniversalCollectorBase):
         from datetime import datetime
         
         print(f"\n{'='*80}")
-        print(f"🏗️  CORTEX ArchitectureCollectorV2 - Universal Analysis")
+        print(f"🏗️  CORTEX ArchitectureCollector - Universal Analysis")
         print(f"{'='*80}")
         print(f"Project: {self.project_name}")
         print(f"Path: {self.root_path}")
