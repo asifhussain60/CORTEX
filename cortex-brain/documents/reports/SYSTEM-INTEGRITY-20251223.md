@@ -1,6 +1,6 @@
 # CORTEX System Integrity Report
 
-**Generated:** 2025-12-23 05:22:00
+**Generated:** 2025-12-23 08:31:24
 **Orchestrator:** SystemIntegrityOrchestrator v1.0.0
 **Execution Time:** 0.00 seconds
 
@@ -13,9 +13,9 @@
 | **Issues Found** | 1 |
 | **Issues Fixed** | 0 |
 | **Issues Remaining** | 1 |
-| **Tests Run** | 0 |
-| **Tests Passed** | 0 |
-| **Tests Failed** | 0 |
+| **Tests Run** | 12 |
+| **Tests Passed** | 10 |
+| **Tests Failed** | 2 |
 | **Docs Generated** | 0 |
 | **Files Relocated** | 0 |
 | **Files Deleted** | 0 |
@@ -31,17 +31,17 @@
 
 ## ⚠️ Issues by Severity
 
-- **MEDIUM:** 1
+- **HIGH:** 1
 
 ---
 
 ## 📋 Detailed Issues
 
-### 1. [MEDIUM] Error running tests: [Errno 2] No such file or directory: 'pytest'
+### 1. [HIGH] 2 tests failing
 
 - **Category:** tests
 - **Status:** ⏸️ REMAINING
-- **Location:** `/Users/asifhussain/PROJECTS/CORTEX/tests`
+- **Location:** `D:\PROJECTS\CORTEX\tests`
 - **Auto-Fix:** Not available (manual intervention required)
 
 ---
@@ -49,6 +49,7 @@
 ## 🔍 Next Steps
 
 - Review and address 1 remaining issues
+- Fix 2 failing tests
 
 ---
 

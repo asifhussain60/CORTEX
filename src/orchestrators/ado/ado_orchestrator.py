@@ -1260,7 +1260,7 @@ class ADOOrchestrator(BaseOrchestrator):
                 "priority_changes": List[str]
             }
         """
-        print("\n🔧 Collect Modification Feedback:\n")
+        print("\n[TOOL] Collect Modification Feedback:\n")
         
         feedback_text = input("Describe changes needed: ").strip()
         modification_type = input("Modification type (scope/priority/other): ").strip()

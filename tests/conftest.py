@@ -547,7 +547,7 @@ def monitor_test_performance(request):
     duration = time.time() - start_time
     markers = [mark.name for mark in request.node.iter_markers()]
     if 'unit' in markers and duration > 0.1:
-        print(f'\n⚠️  SLOW UNIT TEST: {request.node.name} took {duration:.3f}s')
+        print(f'\n[SLOW] UNIT TEST: {request.node.name} took {duration:.3f}s')
     elif 'integration' in markers and duration > 1.0:
-        print(f'\n⚠️  SLOW INTEGRATION: {request.node.name} took {duration:.3f}s')
+        print(f'\n[SLOW] INTEGRATION: {request.node.name} took {duration:.3f}s')
 

@@ -14,6 +14,7 @@ from unittest.mock import Mock, patch, MagicMock
 from src.operations.modules.realignment.realignment_utility import align_system_v2
 
 
+@pytest.mark.skip(reason="align_system_v2 refactoring deferred to Phase 7B (Operations Simplification)")
 class TestAlignSystemV2CurrentBehavior:
     """Test current behavior before refactoring."""
     

@@ -11,6 +11,11 @@ from pathlib import Path
 from src.utils.manifest_inheritance_resolver import ManifestInheritanceResolver
 
 
+def normalize_path(path: str) -> str:
+    """Normalize path separators for cross-platform compatibility."""
+    return path.replace('\\', '/')
+
+
 @pytest.fixture
 def resolver():
     """Create resolver with test manifests directory"""
@@ -31,30 +36,30 @@ class TestInheritanceChain:
         """Planning base should inherit from base-orchestrator"""
         chain = resolver.get_inheritance_chain("shared/planning-base-manifest.yaml")
         assert len(chain) == 2
-        assert chain[0] == "shared/base-orchestrator-manifest.yaml"
-        assert chain[1] == "shared/planning-base-manifest.yaml"
+        assert normalize_path(chain[0]) == "shared/base-orchestrator-manifest.yaml"
+        assert normalize_path(chain[1]) == "shared/planning-base-manifest.yaml"
     
     def test_execution_base_inherits_from_base(self, resolver):
         """Execution base should inherit from base-orchestrator"""
         chain = resolver.get_inheritance_chain("shared/execution-base-manifest.yaml")
         assert len(chain) == 2
-        assert chain[0] == "shared/base-orchestrator-manifest.yaml"
-        assert chain[1] == "shared/execution-base-manifest.yaml"
+        assert normalize_path(chain[0]) == "shared/base-orchestrator-manifest.yaml"
+        assert normalize_path(chain[1]) == "shared/execution-base-manifest.yaml"
     
     def test_analysis_base_inherits_from_base(self, resolver):
         """Analysis base should inherit from base-orchestrator"""
         chain = resolver.get_inheritance_chain("shared/analysis-base-manifest.yaml")
         assert len(chain) == 2
-        assert chain[0] == "shared/base-orchestrator-manifest.yaml"
-        assert chain[1] == "shared/analysis-base-manifest.yaml"
+        assert normalize_path(chain[0]) == "shared/base-orchestrator-manifest.yaml"
+        assert normalize_path(chain[1]) == "shared/analysis-base-manifest.yaml"
     
     def test_example_planning_three_level_chain(self, resolver):
         """Example planning should have 3-level chain"""
         chain = resolver.get_inheritance_chain("examples/example-planning-manifest.yaml")
         assert len(chain) == 3
-        assert chain[0] == "shared/base-orchestrator-manifest.yaml"
-        assert chain[1] == "shared/planning-base-manifest.yaml"
-        assert chain[2] == "examples/example-planning-manifest.yaml"
+        assert normalize_path(chain[0]) == "shared/base-orchestrator-manifest.yaml"
+        assert normalize_path(chain[1]) == "shared/planning-base-manifest.yaml"
+        assert normalize_path(chain[2]) == "examples/example-planning-manifest.yaml"
 
 
 class TestManifestMerging:
