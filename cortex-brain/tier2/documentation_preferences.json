@@ -11,7 +11,7 @@
       "include_diagrams": true,
       "include_toc": true,
       "created_at": 1766353495.6116421,
-      "updated_at": 1766527850.9129632
+      "updated_at": 1766528699.8804631
     },
     "test_user:test_project": {
       "user_id": "test_user",
@@ -1314,6 +1314,27 @@
         "new_value": "detailed",
         "reason": "auto_learning",
         "timestamp": 1766527850.912965
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766528697.44947
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766528699.8771799
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766528699.8804638
       }
     ]
   }
