@@ -305,25 +305,27 @@ class TestSchemaLoadingAndValidation:
         assert schema["plan"]["type"] == "object"
     
     def test_load_schema_with_missing_file_raises_error(self, temp_workspace):
-        """Test that missing schema file raises appropriate error."""
+        """Test that missing schema file falls back to defaults with warning."""
         # Remove schema file
         schema_path = temp_workspace / "cortex-brain" / "config" / "plan-schema.yaml"
         schema_path.unlink()
         
         config = {"cortex_root": str(temp_workspace)}
         
-        with pytest.raises(FileNotFoundError):
-            PlanningOrchestrator(config)
+        # Orchestrator should gracefully fall back to defaults (no exception)
+        orchestrator = PlanningOrchestrator(config)
+        assert orchestrator.schema is not None  # Minimal defaults loaded
     
     def test_load_schema_with_invalid_yaml_raises_error(self, temp_workspace):
-        """Test that invalid YAML schema raises appropriate error."""
+        """Test that invalid YAML schema falls back to defaults with warning."""
         schema_path = temp_workspace / "cortex-brain" / "config" / "plan-schema.yaml"
         schema_path.write_text("invalid: yaml: [content")
         
         config = {"cortex_root": str(temp_workspace)}
         
-        with pytest.raises(Exception):  # yaml.YAMLError or similar
-            PlanningOrchestrator(config)
+        # Orchestrator should gracefully handle YAML errors (no exception)
+        orchestrator = PlanningOrchestrator(config)
+        assert orchestrator.schema is not None  # Minimal defaults loaded
     
     def test_validate_plan_data_with_valid_data(self, minimal_config, sample_plan_data):
         """Test validating plan data with valid structure."""

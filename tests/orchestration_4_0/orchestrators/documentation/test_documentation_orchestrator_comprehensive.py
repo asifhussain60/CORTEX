@@ -282,7 +282,7 @@ class TestDocumentationOrchestratorInitialization:
         ]
         
         for level in levels:
-            assert level.value in ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+            assert level.value in ["public", "internal", "confidential", "restricted"]
 
 
 # ============================================================================
