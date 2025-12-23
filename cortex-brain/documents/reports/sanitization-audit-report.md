@@ -1,6 +1,6 @@
 # Code Sanitization Audit Report
 
-**Generated:** 2025-12-23 15:32:33 UTC  
+**Generated:** 2025-12-23 19:17:53 UTC  
 **Operation:** Code Sanitization  
 **Status:** SUCCESS
 
@@ -77,7 +77,7 @@
 ### Backup Information
 
 **Backup Location:** `N/A`  
-**Backup Created:** 2025-12-23 15:32:33 UTC
+**Backup Created:** 2025-12-23 19:17:53 UTC
 
 ---
 
@@ -130,7 +130,7 @@
 ### Generated Files
 
 1. **Sanitized Codebase:** `N/A`
-2. **Audit Report:** `cortex-brain/documents/reports/sanitization-audit-report.md`
+2. **Audit Report:** `cortex-brain\documents\reports\sanitization-audit-report.md`
 3. **Mapping Reference:** `sanitization-mapping-reference.json`
 4. **Backup:** `N/A`
 
