@@ -1,52 +1,58 @@
-# Phase 7: Manifest Consolidation Analysis
+# Phase 7.1 - Manifest Consolidation Analysis
 
-**Author:** Asif Hussain | **Date:** December 22, 2025  
-**Phase:** 7.1 - Manifest Consolidation Analysis  
-**Status:** 🔬 IN PROGRESS
-
----
-
-## 📊 Executive Summary
-
-**Current State:**
-- **37 YAML manifest files** totaling **21,594 lines**
-- **6 full orchestrator manifests** with complete schema (schema_version, metadata, architecture)
-- **11 manifests with metadata sections** (partial orchestrator specs)
-- **20+ rule/config manifests** (cleanup-rules, refactoring-rules, token-optimization-rules)
-
-**Redundancy Analysis:**
-- **60-70% redundancy** in metadata sections (orchestrator_name, version, status, maintainer)
-- **Duplicate validation rules** across multiple manifests
-- **Scattered configuration** (8+ config files vs 1 unified source)
-- **Fragmented inheritance** (ADO manifest inherits from planning-system-2.0, TDD inherits from planning-system-4.0)
-
-**Target State:**
-- **3 unified manifests:**
-  - `core-manifest.yaml` - Orchestrator registry (metadata, versions, relationships)
-  - `config-manifest.yaml` - Runtime configuration (rules, thresholds, behaviors)
-  - `integration-manifest.yaml` - External systems (Azure DevOps, GitHub, file systems)
-- **~2,500 lines total** (88% reduction from 21,594 lines)
-- **Zero redundancy** through inheritance and cross-referencing
+**Operation:** CORTEX 4.0 Manifest Consolidation  
+**Author:** Asif Hussain  
+**Date:** December 23, 2025  
+**Version:** 1.0.0  
+**Status:** ✅ Analysis Complete - Ready for Phase 7.2 (Design)
 
 ---
 
-## 🔍 Current Manifest Inventory
+## Executive Summary
 
-### Full Orchestrator Manifests (6 files, ~3,500 lines)
+**Current State:** 40 YAML manifest files totaling 23,144 lines across 5 subdirectories  
+**Problem:** Significant configuration redundancy, duplicate keys, and limited inheritance usage  
+**Opportunity:** 3-tier consolidation strategy can reduce files by 60-70% and lines by 50-60%  
+**Target State:** ~15-20 manifests with ~10,000-12,000 lines through strategic consolidation
 
-| File | Lines | Purpose | Redundancy |
-|------|-------|---------|------------|
-| `tdd-orchestrator-v4-manifest.yaml` | 401 | TDD workflow, adaptive learning | ✅ Metadata, schema |
-| `planning-system-4.0-manifest.yaml` | 752 | Planning system with tiered routing | ✅ Metadata, schema |
-| `ado-planning-manifest.yaml` | 506 | ADO work item generation | ✅ Metadata, inherits planning-system-2.0 |
-| `code-sanitization-manifest.yaml` | ~400 | Code sanitization workflow | ✅ Metadata, schema |
-| `refinement-orchestrator-manifest.yaml` | ~350 | System refinement 7-phase | ✅ Metadata, schema |
-| `technical-documentation-orchestrator-manifest.yaml` | ~450 | Documentation generation | ✅ Metadata, schema |
+**Key Findings:**
+- ✅ Core consolidation framework EXISTS (core-manifest.yaml, config-manifest.yaml, integration-manifest.yaml)
+- ✅ Base inheritance templates EXIST (4 shared base manifests)
+- ⚠️ Only 3 of 18 orchestrators use inheritance (83% redundancy)
+- ⚠️ 27 files contain duplicate "validation" blocks
+- ⚠️ 24 files contain duplicate "metadata" blocks
+- ⚠️ 10 files contain duplicate "rollback" configurations
 
-**Key Observation:** All 6 manifests repeat:
-- `schema_version: "1.0"`
-- `metadata.orchestrator_name`, `metadata.version`, `metadata.status`, `metadata.maintainer`
-- `metadata.deployment_tier`, `metadata.category`
+---
+
+## 1. Current Manifest Inventory
+
+### 1.1 File Distribution
+
+| Directory | Files | Total Lines | Avg Lines/File | Purpose |
+|-----------|-------|-------------|----------------|---------|
+| **operations/** | 12 | 11,568 | 964 | Large operational configs (cortex-operations.yaml = 6,842 lines) |
+| **orchestrators/** | 18 | 7,631 | 424 | Orchestrator-specific manifests |
+| **manifests/** (root) | 4 | 2,470 | 618 | Top-level core/config/integration + migration checklist |
+| **shared/** | 4 | 1,362 | 340 | Base inheritance templates |
+| **examples/** | 2 | 113 | 56 | Example manifests |
+| **schemas/** | 3 JSON files | N/A | N/A | JSON schemas for validation |
+| **TOTAL** | **40 YAML** | **23,144** | **579** | |
+
+### 1.2 Top 10 Largest Manifests
+
+| Rank | File | Lines | Category | Consolidation Priority |
+|------|------|-------|----------|----------------------|
+| 1 | `operations/cortex-operations.yaml` | 6,842 | Operational | HIGH - Extract to registry |
+| 2 | `operations/lessons-learned.yaml` | 1,159 | Operational | LOW - Domain knowledge |
+| 3 | `orchestrators/cleanup-rules.yaml` | 952 | Rules | HIGH - Merge with config-manifest |
+| 4 | `operations/module-definitions.yaml` | 920 | Operational | MEDIUM - Validate alignment |
+| 5 | `orchestrators/intelligent-dashboard-manifest.yaml` | 869 | Orchestrator | LOW - Complex feature |
+| 6 | `operations/multilingual-templates.yaml` | 863 | Operational | LOW - i18n content |
+| 7 | `config-manifest.yaml` | 811 | Core Config | ✅ ALREADY CONSOLIDATED |
+| 8 | `orchestrators/planning-system-4.0-manifest.yaml` | 697 | Orchestrator | MEDIUM - Large but valid |
+| 9 | `core-manifest.yaml` | 671 | Core Registry | ✅ ALREADY CONSOLIDATED |
+| 10 | `operations/self-review-checklist.yaml` | 668 | Operational | LOW - Quality gates |
 
 ### Partial Orchestrator Manifests (5 files, ~1,200 lines)
 
