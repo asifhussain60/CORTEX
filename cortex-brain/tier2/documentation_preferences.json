@@ -11,7 +11,7 @@
       "include_diagrams": true,
       "include_toc": true,
       "created_at": 1766353495.6116421,
-      "updated_at": 1766522400.9910588
+      "updated_at": 1766527850.9129632
     },
     "test_user:test_project": {
       "user_id": "test_user",
@@ -1272,6 +1272,48 @@
         "new_value": "detailed",
         "reason": "auto_learning",
         "timestamp": 1766522400.99106
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766526455.122838
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766526457.554996
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766526457.5583072
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766527847.896944
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766527850.907169
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766527850.912965
       }
     ]
   }
