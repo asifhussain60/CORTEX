@@ -80,8 +80,13 @@ class EnhancedIntentResult:
         return IntentClassificationResult(
             intent=self.intent,
             confidence=self.confidence,
-            method=self.method.value,
-            reasoning=self.reasoning
+            rule_context={},  # LLM router doesn't have rule context
+            metadata={
+                'method': self.method.value,
+                'reasoning': self.reasoning,
+                'key_indicators': self.key_indicators,
+                'latency_ms': self.latency_ms
+            }
         )
 
 
@@ -250,15 +255,15 @@ class LLMIntentRouter:
         
         # Exact command matches (confidence 0.95)
         exact_commands = {
-            'help': IntentType.HELP,
+            'help': IntentType.UNKNOWN,  # No HELP intent in agent_types
             'align': IntentType.ALIGN,
             'healthcheck': IntentType.HEALTH_CHECK,
             'health check': IntentType.HEALTH_CHECK,
-            'system maintenance': IntentType.SYSTEM_MAINTENANCE,
+            'system maintenance': IntentType.HEALTH_CHECK,  # No SYSTEM_MAINTENANCE - use HEALTH_CHECK
             'plan ado story': IntentType.ADO_STORY,
             'plan ado feature': IntentType.ADO_FEATURE,
-            'optimize': IntentType.OPTIMIZE,
-            'cleanup': IntentType.CLEANUP,
+            'optimize': IntentType.REFACTOR,  # No OPTIMIZE - use REFACTOR
+            'cleanup': IntentType.REFACTOR,  # No CLEANUP - use REFACTOR
             'review': IntentType.CODE_REVIEW,
         }
         
@@ -275,8 +280,8 @@ class LLMIntentRouter:
         # High-confidence pattern matches (confidence 0.85-0.9)
         high_conf_patterns = [
             (r'^plan\s+[\w\s]+feature', IntentType.PLAN, 0.85, 'plan feature'),
-            (r'execute.*autonomously', IntentType.AUTONOMOUS_EXECUTION, 0.9, 'autonomous'),
-            (r'execute\s+all\s+phases', IntentType.AUTONOMOUS_EXECUTION, 0.9, 'all phases'),
+            (r'execute.*autonomously', IntentType.PLAN, 0.9, 'autonomous'),  # No AUTONOMOUS_EXECUTION - use PLAN
+            (r'execute\s+all\s+phases', IntentType.PLAN, 0.9, 'all phases'),  # No AUTONOMOUS_EXECUTION - use PLAN
             (r'start\s+tdd', IntentType.TDD, 0.9, 'start tdd'),
             (r'run\s+test', IntentType.RUN_TESTS, 0.85, 'run test'),
             (r'generate\s+ado\s+summary', IntentType.ADO_SUMMARY, 0.9, 'ado summary'),
@@ -607,7 +612,7 @@ Respond in JSON format:
         
         basic_keywords = {
             'plan': (IntentType.PLAN, 0.7),
-            'help': (IntentType.HELP, 0.8),
+            'help': (IntentType.UNKNOWN, 0.5),  # No HELP intent
             'fix': (IntentType.FIX, 0.7),
             'test': (IntentType.TEST, 0.7),
             'align': (IntentType.ALIGN, 0.8),

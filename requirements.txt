@@ -26,6 +26,10 @@ requests>=2.31.0           # Used by: technology_risk_scorer, endoflife.date API
 parso>=0.8.5               # Used by: code_discovery_engine, AST analysis (Python fallback)
 sqlparse>=0.5.0            # Used by: SQL parsing utilities (3 locations, SQL fallback)
 
+# AI Integration (Optional - for advanced intent routing)
+openai>=1.0.0              # Used by: LLMIntentRouter, AI-powered intent classification
+anthropic>=0.18.0          # Used by: LLMIntentRouter, Claude-based intent classification
+
 # ============================================================================
 # REMOVED PACKAGES (67 packages, 780 MB) - See Audit Report
 # These packages had ZERO imports in src/ and were removed in CORTEX 3.9.1

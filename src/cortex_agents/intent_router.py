@@ -227,7 +227,6 @@ class IntentRouter(BaseAgent):
             IntentType.DEBUG: {
                 'rules_to_consider': ['ROOT_CAUSE_ANALYSIS'],
                 'enable_investigation_mode': True,
-                'skip_summary_generation': False,  # Debug sessions need summaries
                 'requires_documentation': True
             },
             IntentType.PLAN: {
@@ -1043,8 +1042,7 @@ class IntentRouter(BaseAgent):
                     "intent_type": "INVESTIGATE",
                     "investigation_phase": investigation_result.get('phase', 'unknown'),
                     "findings_count": investigation_result.get('total_findings', 0)
-                },
-                context=request.context
+                }
             )
             
         except Exception as e:
