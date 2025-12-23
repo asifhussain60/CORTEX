@@ -452,6 +452,9 @@ class TestAdapterCapabilities:
     
     def test_filesystem_validate_config_failure(self):
         """Test filesystem adapter config validation fails for bad path"""
-        adapter = FileSystemAdapter({"base_path": "/nonexistent/path"})
+        import platform
+        # Use a path that definitely doesn't exist
+        bad_path = "Z:\\__NONEXISTENT_PATH_12345__" if platform.system() == "Windows" else "/tmp/__NONEXISTENT_PATH_12345__"
+        adapter = FileSystemAdapter({"base_path": bad_path})
         with pytest.raises(AdapterError, match="does not exist"):
             adapter.validate_config()
