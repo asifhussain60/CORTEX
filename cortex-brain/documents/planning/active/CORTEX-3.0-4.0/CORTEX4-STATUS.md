@@ -5,16 +5,16 @@
 **Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 71% | **Current Phase:** 7 (Operations Simplification)
 
 **Progress Calculation:**
-- **Linear:** 8.6 / 13.5 phases = 64% (simple phase counting: 1-6.5, 10 complete, 7.1 complete)
-- **Weighted:** 71% (effort-based calculation with Phase 7.1 complete)
+- **Linear:** 8.7 / 13.5 phases = 64% (simple phase counting: 1-6.5, 10 complete, 7.1-7.2 complete)
+- **Weighted:** 72% (effort-based calculation with Phase 7.1-7.2 complete)
   - Phases 1-6.5: Foundation, orchestrators, architecture docs = 71% of total effort ✅
   - Phase 10: Knowledge library = 4% of total effort ✅
-  - **Phase 7.1: Manifest consolidation analysis = 1% of total effort ✅**
-  - Phases 7.2-9: Operations, testing, docs = 18% of effort ⏳
+  - **Phase 7.1-7.2: Manifest analysis + schema design = 2% of total effort ✅**
+  - Phases 7.3-9: Operations implementation, testing, docs = 17% of effort ⏳
   - Phases 11-13: Enhancement & post-GA = 6% of effort ⏳
-- **Status:** Phases 1-6.5 complete ✅, Phase 10 complete ✅, **Phase 7 Task 7.1 complete ✅**, Task 7.2 in progress
+- **Status:** Phases 1-6.5 complete ✅, Phase 10 complete ✅, **Phase 7 Tasks 7.1-7.2 complete ✅**, Task 7.3 ready
 
-**Latest:** ✅ Phase 7 Task 7.1 complete - Manifest consolidation analysis (37 files, 21,594 lines analyzed, 88% reduction target designed: 21,594→2,500 lines via 3-tier architecture). Task 7.2 (schema design) in progress.
+**Latest:** ✅ Phase 7 Task 7.2 complete - 3-tier manifest schema designed (CoreManifest 800 lines, ConfigManifest 1,200 lines, IntegrationManifest 500 lines, inheritance model, JSON schemas, migration path). Task 7.3 (CoreManifest implementation) ready.
 
 **Architecture:** Master Plan + Worker Plans (Token-Optimized)
 
@@ -43,14 +43,15 @@
 
 ## 📈 Phase Progress Overview
 
-**Overall Progress:** [██████████████░░░░░] 70% (8.5/13.5 phases complete)
+**Overall Progress:** [██████████████░░░░░] 72% (8.7/13.5 phases complete)
 
 **Progress Methodology:**
-- **Linear Progress:** Simple phase completion count (8.5 ÷ 13.5 = 63%)
-- **Weighted Progress:** Effort-based calculation accounting for complexity (70%)
+- **Linear Progress:** Simple phase completion count (8.7 ÷ 13.5 = 64%)
+- **Weighted Progress:** Effort-based calculation accounting for complexity (72%)
   - Phases 1-6.5: Foundation, orchestrators, architecture docs = 71% of total effort ✅
   - Phase 10: Knowledge library = 4% of total effort ✅
-  - Phases 7-9: Operations, testing, docs = 19% of effort ⏳
+  - Phase 7.1-7.2: Manifest analysis + schema design = 2% of total effort ✅
+  - Phases 7.3-9: Operations implementation, testing, docs = 17% of effort ⏳
   - Phases 11-13: Enhancement & post-GA = 6% of effort ⏳
 - **Display:** Weighted progress shown by default (more accurate representation of remaining work)
 
@@ -90,7 +91,7 @@
 
 | Phase | Name | Progress | Status | Dependencies |
 |-------|------|----------|--------|--------------|
-| 7 | Operations Simplification | 0% | ⏳ NOT STARTED | Phase 6 complete ✅ |
+| 7 | Operations Simplification | 13% | 🎯 IN PROGRESS | Phase 6 complete ✅ (Tasks 7.1-7.2 done) |
 | 8 | Testing & Validation | 0% | 🎯 READY | Phase 7 complete, [plan created](./phases/phase-08-testing-validation.md) ✅ |
 | 9 | Documentation Finalization | 0% | ⏳ NOT STARTED | Phase 8 complete |
 | 11 | Multi-Repo Architecture | 0% | ⏳ POST-CORE | Phase 3 complete ✅ |
@@ -108,10 +109,9 @@
 - **Phase 14:** Version consolidation (v2/v3→v4.0), naming consistency, dashboard validation (2 weeks, PRE-GA CRITICAL)
 
 ---
-
 ## 🎯 Current Focus: Phase 7 - Operations Simplification
 
-**Status:** Ready to begin (all dependencies complete)
+**Status:** 🎯 IN PROGRESS (Tasks 7.1-7.2 complete, 13%)
 
 **Goal:** Simplify CORTEX operations through manifest consolidation, universal adapters, and dependency injection auto-discovery
 
@@ -119,13 +119,20 @@
 
 **Duration:** 3 weeks (Week 11-13)
 
-**Key Tasks:**
-1. Manifest consolidation (14 files → 3 unified manifests)
-2. Universal operation adapters
-3. DI container auto-discovery
-4. Operation registry refactoring
-5. CLI simplification
+**Completed Tasks:**
+1. ✅ Task 7.1: Manifest consolidation analysis (40 files, 23,144 lines, 88% reduction target)
+2. ✅ Task 7.2: 3-tier schema design (CoreManifest, ConfigManifest, IntegrationManifest)
 
+**Remaining Tasks:**
+3. Task 7.3: Implement CoreManifest (800 lines, 16 orchestrators)
+4. Task 7.4: Implement ConfigManifest (1,200 lines, 8 rule consolidations)
+5. Task 7.5: Implement IntegrationManifest (500 lines, 5 adapters)
+6. Task 7.6: Universal operation adapters
+7. Task 7.7: DI container auto-discovery
+8. Task 7.8: Operation registry refactoring
+9. Task 7.9: CLI simplification
+
+**Next Action:** Task 7.3 - Implement CoreManifest with 16 orchestrator registrations
 **Next Action:** Review Phase 7 planning document and begin Task 7.1
 
 ---
@@ -174,23 +181,24 @@
 
 **2. TEST_LOCATION_SEPARATION Violation** ✅ **RESOLVED**
 - **Status:** Complete (December 21, 2025)
-- **Fix:** Moved CORTEX internal tests to `tests/` directory
-- **Impact:** SKULL compliance restored
-
----
-
-## 📊 Overall Metrics
-
 | Metric | Value | Target | Status |
 |--------|-------|--------|--------|
-| Weighted Progress | 70% | 100% | 🟢 ON TRACK |
-| Linear Progress | 63% | 100% | 🟢 ON TRACK |
-| Phases Complete | 8.5/13.5 | 13.5 | 🟢 ON TRACK |
+| Weighted Progress | 72% | 100% | 🟢 ON TRACK |
+| Linear Progress | 64% | 100% | 🟢 ON TRACK |
+| Phases Complete | 8.7/13.5 | 13.5 | 🟢 ON TRACK |
 | Test Coverage | 85%+ | 90%+ | 🟢 GOOD |
-| Current Week | Week 10 Day 5 | Week 37 | 🟢 ON TRACK |
+| Current Week | Week 10 Day 6 | Week 37 | 🟢 ON TRACK |
 | Critical Blockers | 0 | 0 | 🟢 NONE |
-
+|--------|-------|--------|--------|
+| Weighted Progress | 70% | 100% | 🟢 ON TRACK |
 **Progress Notes:**
+- Weighted progress accounts for phase complexity (foundation/orchestrators = 71% of effort)
+- Phase 6.5 completion represents architecture documentation milestone (10 diagrams, ~10K lines)
+- All orchestrator migrations complete (Phase 6) + all architecture docs complete (Phase 6.5)
+- Phase 10 completion adds comprehensive knowledge library (32 YAML files, ~32K lines)
+- Phase 7.1-7.2 complete: Manifest consolidation strategy designed (88% reduction target)
+- Remaining phases 7.3-9 are operations implementation, testing, documentation (17% of effort)
+- Phases 11-13 are post-core enhancements and optional work (6% of effort)
 - Weighted progress accounts for phase complexity (foundation/orchestrators = 71% of effort)
 - Phase 6.5 completion represents architecture documentation milestone (10 diagrams, ~10K lines)
 - All orchestrator migrations complete (Phase 6) + all architecture docs complete (Phase 6.5)

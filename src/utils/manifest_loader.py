@@ -23,6 +23,13 @@ from copy import deepcopy
 from datetime import datetime
 import logging
 
+try:
+    import jsonschema
+    JSONSCHEMA_AVAILABLE = True
+except ImportError:
+    JSONSCHEMA_AVAILABLE = False
+    logging.warning("jsonschema not available - schema validation disabled")
+
 logger = logging.getLogger(__name__)
 
 
@@ -51,20 +58,28 @@ class ManifestLoader:
         orch = loader.get_orchestrator("planning_orchestrator")
     """
     
-    def __init__(self, cortex_root: str):
+    def __init__(self, cortex_root: str, validate_schema: bool = True):
         """
         Initialize ManifestLoader.
         
         Args:
             cortex_root: Path to CORTEX root directory
+            validate_schema: Whether to validate manifests against JSON schemas
         """
         self.cortex_root = Path(cortex_root)
         self.manifest_dir = self.cortex_root / "cortex-brain" / "manifests"
+        self.schema_dir = self.manifest_dir / "schemas"
+        self.validate_schema = validate_schema and JSONSCHEMA_AVAILABLE
         
         # Lazy-loaded manifests
         self._core_manifest: Optional[Dict[str, Any]] = None
         self._config_manifest: Optional[Dict[str, Any]] = None
         self._integration_manifest: Optional[Dict[str, Any]] = None
+        
+        # Lazy-loaded schemas
+        self._core_schema: Optional[Dict[str, Any]] = None
+        self._config_schema: Optional[Dict[str, Any]] = None
+        self._integration_schema: Optional[Dict[str, Any]] = None
         
         # Cross-reference cache
         self._resolved_cache: Dict[str, Dict[str, Any]] = {}
@@ -79,9 +94,13 @@ class ManifestLoader:
     
     @property
     def core_manifest(self) -> Dict[str, Any]:
-        """Lazy load CoreManifest."""
+        """Lazy load CoreManifest with optional schema validation."""
         if self._core_manifest is None:
             self._core_manifest = self._load_manifest("core-manifest.yaml")
+            
+            if self.validate_schema:
+                self._validate_manifest(self._core_manifest, "core")
+            
             logger.info("📋 Loaded CoreManifest")
         return self._core_manifest
     
@@ -131,6 +150,100 @@ class ManifestLoader:
             if not manifest:
                 raise ValueError(f"Empty manifest: {manifest_path}")
             
+            return manifest
+            
+        except yaml.YAMLError as e:
+            logger.error(f"Invalid YAML in {manifest_path}: {e}")
+            raise
+        except Exception as e:
+            logger.error(f"Failed to load {manifest_path}: {e}")
+            raise
+    
+    def _load_schema(self, schema_filename: str) -> Optional[Dict[str, Any]]:
+        """
+        Load JSON schema from file.
+        
+        Args:
+            schema_filename: Schema filename (e.g., "core-manifest-schema.json")
+            
+        Returns:
+            Parsed JSON schema or None if not found
+        """
+        if not self.schema_dir.exists():
+            logger.warning(f"Schema directory not found: {self.schema_dir}")
+            return None
+        
+        schema_path = self.schema_dir / schema_filename
+        
+        if not schema_path.exists():
+            logger.warning(f"Schema not found: {schema_path}")
+            return None
+        
+        try:
+            with open(schema_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            logger.error(f"Failed to load schema {schema_path}: {e}")
+            return None
+    
+    def _validate_manifest(self, manifest: Dict[str, Any], manifest_type: str) -> bool:
+        """
+        Validate manifest against JSON schema.
+        
+        Args:
+            manifest: Manifest dictionary to validate
+            manifest_type: Type of manifest ('core', 'config', 'integration')
+            
+        Returns:
+            True if valid, False otherwise
+            
+        Raises:
+            jsonschema.ValidationError: If validation fails and strict mode
+        """
+        if not JSONSCHEMA_AVAILABLE:
+            logger.debug("jsonschema not available - skipping validation")
+            return True
+        
+        # Load schema
+        schema_map = {
+            "core": ("_core_schema", "core-manifest-schema.json"),
+            "config": ("_config_schema", "config-manifest-schema.json"),
+            "integration": ("_integration_schema", "integration-manifest-schema.json")
+        }
+        
+        if manifest_type not in schema_map:
+            logger.warning(f"Unknown manifest type: {manifest_type}")
+            return False
+        
+        schema_attr, schema_file = schema_map[manifest_type]
+        
+        # Lazy load schema
+        if not hasattr(self, schema_attr) or getattr(self, schema_attr) is None:
+            schema = self._load_schema(schema_file)
+            setattr(self, schema_attr, schema)
+        else:
+            schema = getattr(self, schema_attr)
+        
+        if not schema:
+            logger.warning(f"Schema not found for {manifest_type} - skipping validation")
+            return False
+        
+        # Validate
+        try:
+            jsonschema.validate(instance=manifest, schema=schema)
+            logger.info(f"✅ {manifest_type.capitalize()} manifest validation passed")
+            return True
+        except jsonschema.ValidationError as e:
+            logger.error(f"❌ {manifest_type.capitalize()} manifest validation failed: {e.message}")
+            logger.debug(f"   Path: {' -> '.join(map(str, e.path))}")
+            return False
+        except Exception as e:
+            logger.error(f"Schema validation error: {e}")
+            return False
+    
+    # ──────────────────────────────────────────────────────────────
+    # Orchestrator Operations
+    # ──────────────────────────────────────────────────────────────
             return manifest
             
         except yaml.YAMLError as e:

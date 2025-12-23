@@ -447,6 +447,187 @@ orchestrators:
     created_date: "2024-07-15"
     last_updated: "2025-11-30"
   
+  code_review_orchestrator:
+    version: "1.0.0"
+    status: "active"
+    category: "quality"
+    description: "Automated code review orchestrator analyzing code quality, security vulnerabilities, best practices adherence, and generating comprehensive review reports with actionable recommendations"
+    
+    source_file: "src/orchestrators/code_review/code_review_orchestrator.py"
+    entry_point: "CodeReviewOrchestrator"
+    documentation_path: "docs/orchestration/code-review-guide.md"
+    
+    inherits_from: null
+    parent_orchestrator: null
+    child_orchestrators: []
+    related_orchestrators:
+      - "system_integrity_orchestrator"
+      - "refactoring_orchestrator"
+    
+    config_overrides:
+      namespace: "config://code_review"
+      sections:
+        - "quality.code_review"
+        - "security.scanning"
+    
+    integrations:
+      - "integration://file_system"
+    
+    enabled: true
+    auto_start: false
+    
+    quality_gates:
+      min_test_coverage: 85
+      max_complexity: 30
+    
+    created_date: "2024-06-20"
+    last_updated: "2025-12-10"
+  
+  documentation_orchestrator:
+    version: "2.0.0"
+    status: "active"
+    category: "documentation"
+    description: "Documentation generation orchestrator creating comprehensive API docs, user guides, architecture diagrams, and maintaining documentation consistency across the codebase with automated updates"
+    
+    source_file: "src/orchestrators/documentation/documentation_orchestrator.py"
+    entry_point: "DocumentationOrchestrator"
+    documentation_path: "docs/orchestration/documentation-orchestrator-guide.md"
+    changelog_path: "docs/orchestration/documentation-changelog.md"
+    
+    inherits_from: null
+    parent_orchestrator: null
+    child_orchestrators: []
+    related_orchestrators:
+      - "planning_orchestrator"
+    
+    config_overrides:
+      namespace: "config://documentation"
+      sections:
+        - "documentation.generation"
+        - "documentation.formats"
+    
+    integrations:
+      - "integration://file_system"
+    
+    enabled: true
+    auto_start: false
+    
+    quality_gates:
+      min_test_coverage: 80
+      max_complexity: 25
+    
+    created_date: "2024-04-10"
+    last_updated: "2025-12-18"
+  
+  refactoring_orchestrator:
+    version: "1.0.0"
+    status: "active"
+    category: "refactoring"
+    description: "Code refactoring orchestrator identifying technical debt, complexity hotspots, duplicate code, and orchestrating systematic refactoring with safety checks and rollback capability"
+    
+    source_file: "src/orchestrators/refactoring/refactoring_orchestrator.py"
+    entry_point: "RefactoringOrchestrator"
+    documentation_path: "docs/orchestration/refactoring-guide.md"
+    
+    inherits_from: null
+    parent_orchestrator: null
+    child_orchestrators: []
+    related_orchestrators:
+      - "code_review_orchestrator"
+      - "tdd_orchestrator_v4"
+    
+    config_overrides:
+      namespace: "config://refactoring"
+      sections:
+        - "refactoring.rules"
+        - "refactoring.complexity"
+    
+    integrations:
+      - "integration://file_system"
+    
+    enabled: true
+    auto_start: false
+    
+    quality_gates:
+      min_test_coverage: 90
+      max_complexity: 20
+    
+    created_date: "2024-08-25"
+    last_updated: "2025-12-05"
+  
+  cicd_orchestrator:
+    version: "1.0.0"
+    status: "active"
+    category: "deployment"
+    description: "CI/CD pipeline orchestrator managing continuous integration, automated testing, build pipelines, deployment workflows, and release automation with multi-environment support"
+    
+    source_file: "src/orchestrators/cicd/cicd_orchestrator.py"
+    entry_point: "CICDOrchestrator"
+    documentation_path: "docs/orchestration/cicd-guide.md"
+    
+    inherits_from: null
+    parent_orchestrator: null
+    child_orchestrators: []
+    related_orchestrators:
+      - "devops_orchestrator"
+      - "tdd_orchestrator_v4"
+    
+    config_overrides:
+      namespace: "config://cicd"
+      sections:
+        - "cicd.pipelines"
+        - "cicd.deployment"
+    
+    integrations:
+      - "integration://github"
+      - "integration://file_system"
+    
+    enabled: true
+    auto_start: false
+    
+    quality_gates:
+      min_test_coverage: 85
+      max_complexity: 30
+    
+    created_date: "2024-09-15"
+    last_updated: "2025-12-12"
+  
+  devops_orchestrator:
+    version: "1.0.0"
+    status: "active"
+    category: "deployment"
+    description: "DevOps infrastructure orchestrator managing container orchestration, infrastructure as code, monitoring setup, log aggregation, and cloud resource provisioning with cost optimization"
+    
+    source_file: "src/orchestrators/devops/devops_orchestrator.py"
+    entry_point: "DevOpsOrchestrator"
+    documentation_path: "docs/orchestration/devops-guide.md"
+    
+    inherits_from: null
+    parent_orchestrator: null
+    child_orchestrators: []
+    related_orchestrators:
+      - "cicd_orchestrator"
+      - "maintenance_orchestrator"
+    
+    config_overrides:
+      namespace: "config://devops"
+      sections:
+        - "devops.infrastructure"
+        - "devops.monitoring"
+    
+    integrations:
+      - "integration://file_system"
+    
+    enabled: true
+    auto_start: false
+    
+    quality_gates:
+      min_test_coverage: 80
+      max_complexity: 35
+    
+    created_date: "2024-10-01"
+    last_updated: "2025-12-08"
+  
   # ──────────────────────────────────
   # MAINTENANCE ORCHESTRATORS
   # ──────────────────────────────────
@@ -546,6 +727,43 @@ categories:
       - "Automated cleanup"
       - "Performance optimization"
       - "System health monitoring"
+  
+  quality:
+    description: "Code quality analysis, review automation, and best practices enforcement orchestrators"
+    orchestrators:
+      - "code_review_orchestrator"
+    characteristics:
+      - "Automated code review"
+      - "Security scanning"
+      - "Best practices enforcement"
+  
+  documentation:
+    description: "Documentation generation, maintenance, and consistency orchestrators"
+    orchestrators:
+      - "documentation_orchestrator"
+    characteristics:
+      - "API documentation"
+      - "User guide generation"
+      - "Architecture diagrams"
+  
+  refactoring:
+    description: "Code refactoring, technical debt management, and complexity reduction orchestrators"
+    orchestrators:
+      - "refactoring_orchestrator"
+    characteristics:
+      - "Technical debt identification"
+      - "Complexity reduction"
+      - "Safe refactoring workflows"
+  
+  deployment:
+    description: "CI/CD, infrastructure management, and deployment automation orchestrators"
+    orchestrators:
+      - "cicd_orchestrator"
+      - "devops_orchestrator"
+    characteristics:
+      - "Pipeline automation"
+      - "Infrastructure as code"
+      - "Multi-environment support"
 
 # ========================================
 # Deprecation & Migration
@@ -645,10 +863,10 @@ validation:
 # ========================================
 
 metadata:
-  total_orchestrators: 11
-  active_orchestrators: 10
+  total_orchestrators: 16
+  active_orchestrators: 15
   deprecated_orchestrators: 0
-  categories_count: 5
+  categories_count: 6
   
   coverage:
     planning: 3
@@ -656,6 +874,10 @@ metadata:
     execution: 4
     analysis: 2
     maintenance: 1
+    deployment: 2
+    documentation: 1
+    refactoring: 1
+    quality: 1
   
   statistics:
     avg_test_coverage: 85.5
