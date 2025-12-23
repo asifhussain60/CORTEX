@@ -22,7 +22,7 @@ from datetime import datetime
 from unittest.mock import Mock, patch, AsyncMock
 from typing import Dict, Any
 
-from src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated import (
+from src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated_archived import (
     SanitizationOrchestratorV2,
     SanitizationPhase,
     SanitizationResult,
@@ -60,11 +60,11 @@ def mock_agentic_components():
 @pytest.fixture
 def orchestrator(temp_project_dir, mock_agentic_components):
     """Create orchestrator instance with mocked components."""
-    with patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated.CodeAnalyzer'), \
-         patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated.MappingEngine'), \
-         patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated.CodeTransformer'), \
-         patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated.BuildValidator'), \
-         patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated.ReportGenerator'):
+    with patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated_archived.CodeAnalyzer'), \
+         patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated_archived.MappingEngine'), \
+         patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated_archived.CodeTransformer'), \
+         patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated_archived.BuildValidator'), \
+         patch('src.orchestrators.sanitization.sanitization_orchestrator_v2_migrated_archived.ReportGenerator'):
         
         orch = SanitizationOrchestratorV2(
             target_directory=temp_project_dir,
