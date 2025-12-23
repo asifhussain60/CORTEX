@@ -251,7 +251,14 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
         
         if refactorings_applied > 0 and smells_eliminated == 0:
             warnings.append(
-                "Refactorings applied but no smells eliminated"
+                "No code smells eliminated despite applying refactorings"
+            )
+        
+        # Check for new smells introduced
+        new_smells = context.get('new_smells_introduced', 0)
+        if new_smells > 0:
+            warnings.append(
+                f"{new_smells} new code smell(s) introduced during refactoring"
             )
         
         # Check final quality score
@@ -264,6 +271,12 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
         # Check git checkpoint
         if not context.get('git_commit_sha'):
             errors.append("Git checkpoint not created")
+        
+        # Check documentation updated (error if work done but docs not updated)
+        # Work is indicated by: refactorings applied OR smells eliminated
+        work_done = refactorings_applied > 0 or smells_eliminated > 0
+        if work_done and not context.get('documentation_updated', False):
+            errors.append("Documentation not updated after refactoring")
         
         logger.info(f"REFACTOR DoD validation: {'✅ PASS' if not errors else '❌ FAIL'}")
         
@@ -327,12 +340,26 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
                 'message': violation.get('message', ''),
                 'fix_confidence': 0.7
             }
+            
+            # Add metadata based on violation type
+            if smell['type'] == 'function_length':
+                smell['lines'] = violation.get('lines', 0)
+            elif smell['type'] == 'complexity':
+                smell['score'] = violation.get('score', 0)
+            elif smell['type'] == 'duplication':
+                smell['blocks'] = violation.get('blocks', 0)
+            elif smell['type'] == 'naming':
+                smell['names'] = violation.get('names', [])
+            elif smell['type'] == 'god_object':
+                smell['methods'] = violation.get('methods', 0)
+            elif smell['type'] == 'god_method':
+                smell['lines'] = violation.get('lines', 0)
+            
             smells.append(smell)
         
-        # Add additional smell detection logic here
-        # - Check for magic numbers
-        # - Check for long parameter lists
-        # - Check for feature envy
+        # Sort by severity for prioritization
+        severity_order = {'critical': 0, 'high': 1, 'medium': 2, 'low': 3}
+        smells.sort(key=lambda s: severity_order.get(s['severity'], 4))
         
         return smells
     
@@ -358,10 +385,13 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
             if refactoring:
                 refactorings.append(refactoring)
         
-        # Sort by confidence and impact
+        # Sort by impact (high impact first)
+        impact_order = {'high': 0, 'medium': 1, 'low': 2}
         refactorings.sort(
-            key=lambda r: r['confidence'] * r['expected_improvement'],
-            reverse=True
+            key=lambda r: (
+                impact_order.get(r.get('impact', 'medium'), 3),
+                -r['confidence'] * r['expected_improvement']
+            )
         )
         
         return refactorings
@@ -374,41 +404,101 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
         """Convert code smell to refactoring suggestion."""
         smell_type = smell['type']
         
+        # Extended refactoring map supporting all smell types
         refactoring_map = {
             'long_function': {
                 'type': 'extract_method',
                 'description': 'Break long function into smaller methods',
                 'confidence': 0.8,
-                'expected_improvement': 1.5
+                'expected_improvement': 1.5,
+                'impact': 'high'
+            },
+            'function_length': {
+                'type': 'extract_method',
+                'description': 'Break long function into smaller methods',
+                'confidence': 0.8,
+                'expected_improvement': 1.5,
+                'impact': 'high'
             },
             'high_complexity': {
                 'type': 'simplify_logic',
                 'description': 'Simplify complex conditional logic',
                 'confidence': 0.7,
-                'expected_improvement': 1.2
+                'expected_improvement': 1.2,
+                'impact': 'medium'
+            },
+            'complexity': {
+                'type': 'simplify_complexity',
+                'description': 'Reduce cyclomatic complexity',
+                'confidence': 0.7,
+                'expected_improvement': 1.2,
+                'impact': 'medium'
             },
             'duplicate_code': {
                 'type': 'extract_function',
                 'description': 'Extract duplicate code into reusable function',
                 'confidence': 0.9,
-                'expected_improvement': 1.0
+                'expected_improvement': 1.0,
+                'impact': 'medium'
+            },
+            'duplication': {
+                'type': 'eliminate_duplication',
+                'description': 'Extract duplicate code into reusable function',
+                'confidence': 0.9,
+                'expected_improvement': 1.0,
+                'impact': 'medium'
             },
             'poor_naming': {
                 'type': 'rename',
                 'description': 'Improve variable/function naming',
                 'confidence': 0.95,
-                'expected_improvement': 0.5
+                'expected_improvement': 0.5,
+                'impact': 'low'
+            },
+            'naming': {
+                'type': 'improve_naming',
+                'description': 'Use descriptive names for clarity',
+                'confidence': 0.95,
+                'expected_improvement': 0.5,
+                'impact': 'low'
+            },
+            'god_object': {
+                'type': 'split_class',
+                'description': 'Split god class into smaller focused classes',
+                'confidence': 0.75,
+                'expected_improvement': 2.0,
+                'impact': 'high'
+            },
+            'god_method': {
+                'type': 'extract_method',
+                'description': 'Extract god method into smaller methods',
+                'confidence': 0.8,
+                'expected_improvement': 1.8,
+                'impact': 'high'
             }
         }
         
         refactoring_template = refactoring_map.get(smell_type)
         if not refactoring_template:
-            return None
+            # Unknown smell type, create generic refactoring
+            return {
+                'type': 'refactor',
+                'description': f'Address {smell_type} code smell',
+                'confidence': 0.5,
+                'expected_improvement': 0.5,
+                'impact': smell.get('severity', 'medium'),
+                'smell': smell,
+                'location': smell['location']
+            }
+        
+        # Propagate impact from smell if available
+        impact = smell.get('impact', refactoring_template.get('impact', 'medium'))
         
         return {
             **refactoring_template,
+            'impact': impact,
             'smell': smell,
-            'location': smell['location']
+            'location': smell.get('location', 'unknown')
         }
     
     async def _apply_refactorings_incrementally(
@@ -434,8 +524,11 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
                 f"{refactoring['type']}"
             )
             
-            # Save current state
-            original_content = Path(impl_file).read_text()
+            # Save current state (only if file exists)
+            impl_path = Path(impl_file)
+            original_content = None
+            if impl_path.exists():
+                original_content = impl_path.read_text()
             
             try:
                 # Apply refactoring
@@ -446,17 +539,19 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
                 
                 if test_result['failed'] > 0:
                     # Tests failed, rollback this refactoring
-                    logger.warning(f"  ❌ Tests failed, rolling back")
-                    Path(impl_file).write_text(original_content)
+                    logger.warning(f"  ❌ Tests failed ({test_result['failed']} failures), rolling back")
+                    if original_content is not None and impl_path.exists():
+                        impl_path.write_text(original_content)
                 else:
                     # Success, keep the refactoring
                     applied.append(refactoring)
-                    logger.info(f"  ✅ Refactoring applied successfully")
+                    logger.info(f"  ✅ Refactoring applied successfully ({test_result['passed']} tests passing)")
                 
             except Exception as e:
                 # Error during refactoring, rollback
                 logger.warning(f"  ❌ Refactoring failed: {e}, rolling back")
-                Path(impl_file).write_text(original_content)
+                if original_content is not None and impl_path.exists():
+                    impl_path.write_text(original_content)
         
         logger.info(f"  Applied {len(applied)}/{len(refactorings)} refactorings")
         return applied
@@ -503,13 +598,33 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
     
     async def _run_tests(self, test_file: str) -> Dict[str, Any]:
         """Run tests to validate refactoring didn't break anything."""
-        # Simulate test execution
-        return {
-            'passed': 8,
-            'failed': 0,
-            'total': 8,
-            'duration_ms': 180
-        }
+        try:
+            # Call MCP gateway to run tests
+            result = await self.mcp.call('run_tests', {'test_file': test_file})
+            
+            # Normalize result format
+            passed = result.get('tests_passing', result.get('passed', 0))
+            failed = result.get('tests_failing', result.get('failed', 0))
+            
+            # If passed is 0 and failed is 0, treat as failure (no tests or all skipped)
+            if passed == 0 and failed == 0:
+                failed = 1  # Mark as failure
+            
+            return {
+                'passed': passed,
+                'failed': failed,
+                'total': passed + failed,
+                'duration_ms': result.get('duration_ms', 0)
+            }
+        except Exception as e:
+            logger.warning(f"  ⚠️  Test execution failed: {e}")
+            # Return failure result on error
+            return {
+                'passed': 0,
+                'failed': 1,
+                'total': 1,
+                'duration_ms': 0
+            }
     
     async def _create_no_refactoring_result(
         self,
@@ -518,10 +633,12 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
         baseline: Dict[str, Any]
     ) -> PhaseResult:
         """Create result when no refactoring needed."""
+        logger.info("  ✨ Code quality is excellent - no refactoring needed")
+        
         # Still create checkpoint for consistency
         git_commit = await self._create_checkpoint(
             phase='REFACTOR',
-            message=f"REFACTOR: No changes needed for {feature_name}",
+            message=f"REFACTOR: No changes needed for {feature_name} (quality: {baseline['quality_score']:.1f}/10)",
             files=[]
         )
         
@@ -573,9 +690,11 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
     ) -> int:
         """Feed refactoring patterns to Tier 2."""
         if not refactorings:
+            logger.info("  📊 No patterns to feed (no refactorings applied)")
             return 0
         
         try:
+            # Create rich pattern entry with metrics
             pattern_entry = {
                 'feature': feature_name,
                 'refactorings_applied': len(refactorings),
@@ -583,16 +702,30 @@ class REFACTORPhaseStrategy(TDDPhaseStrategy):
                 'quality_improvement': final_quality['quality_score'] - baseline['quality_score'],
                 'baseline_score': baseline['quality_score'],
                 'final_score': final_quality['quality_score'],
+                'smells_fixed': len(baseline.get('violations', [])) - len(final_quality.get('violations', [])),
+                'confidence_avg': sum(r['confidence'] for r in refactorings) / len(refactorings),
+                'impact_distribution': {
+                    'high': sum(1 for r in refactorings if r.get('impact') == 'high'),
+                    'medium': sum(1 for r in refactorings if r.get('impact') == 'medium'),
+                    'low': sum(1 for r in refactorings if r.get('impact') == 'low')
+                },
                 'timestamp': datetime.now().isoformat()
             }
             
+            # Store in knowledge graph
+            pattern_id = f"refactor_{feature_name}_{datetime.now().timestamp()}"
             await self.kg.store_pattern(
-                pattern_id=f"refactor_{feature_name}_{datetime.now().timestamp()}",
+                pattern_id=pattern_id,
                 pattern=pattern_entry
+            )
+            
+            logger.info(
+                f"  🧠 Pattern fed to brain: {len(refactorings)} refactorings, "
+                f"quality Δ={pattern_entry['quality_improvement']:+.1f}"
             )
             
             return 1
             
         except Exception as e:
-            logger.warning(f"  Failed to feed patterns: {e}")
+            logger.warning(f"  ⚠️  Failed to feed patterns to brain: {e}")
             return 0
