@@ -129,10 +129,13 @@ Comprehensive migration to transform CORTEX 3.0 → 4.0 with:
    - Quality gates, backward compatibility
    - Duration: 15 days
 
-10. **[Phase 9: Documentation Finalization](./phases/phase-09-documentation-finalization.md)** (Week 21) - 0% COMPLETE
-    - Technical docs generation complete
-    - Final review and sign-off
-    - Duration: 5 days
+10. **[Phase 9: Documentation Finalization](./phases/phase-09-documentation-finalization.md)** (Weeks 22-25) - 0% COMPLETE
+    - **Week 22:** Generate 8 missing orchestrator architecture files (40h)
+    - **Weeks 23-24:** Implement 20 D3.js interactive visualizations (120h)
+    - **Week 22 (parallel):** Auto-generation triggers + 30 Mermaid diagrams (36h)
+    - **Week 25:** VSCode integration + coverage reporting (32h)
+    - **Total:** 228 hours effort, 24 calendar days (4.8 weeks)
+    - Duration: 20 days (4 weeks)
 
 11. **[Phase 11: Multi-Repo Architecture](./phases/phase-11-multi-repo-architecture.md)** (Post-Core, 1 week) - 0% COMPLETE
     - One CORTEX installation → N user repos
