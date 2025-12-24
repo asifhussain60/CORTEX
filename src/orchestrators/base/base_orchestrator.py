@@ -3,6 +3,7 @@ Base Orchestrator Class for CORTEX 4.0
 
 All orchestrators inherit from BaseOrchestrator which provides:
 - Standardized initialization with config, logger, brain, templates
+- Workspace detection and context (Phase 11)
 - Abstract execute() method for orchestrator logic
 - Input validation framework
 - Error handling integration
@@ -15,6 +16,7 @@ Design Principles:
 3. Brain tiers are accessed through unified interface
 4. Templates are managed centrally
 5. Errors are handled consistently
+6. Workspace-aware file operations (Phase 11)
 """
 
 import logging
@@ -32,6 +34,9 @@ from src.operations.modules.orchestration.adaptive_execution import (
     AdaptiveExecutionConfig,
     SafetyGuardrail
 )
+
+# Phase 11: Workspace detection
+from src.core.workspace_detector import detect_active_workspace, WorkspaceInfo
 
 
 class OrchestratorStatus(Enum):
@@ -104,10 +109,19 @@ class BaseOrchestrator(ABC):
         3. execute() - Main orchestrator logic (abstract - implement in subclass)
         4. handle_error() - Handle any errors (optional override)
     
+    Workspace Awareness (Phase 11):
+        - self.workspace_info: Current active workspace information
+        - self.target_directory: Where to write files (active workspace path)
+        - self.workspace_id: Current workspace UUID
+        - self.workspace_name: Human-readable workspace name
+    
     Usage:
         class MyOrchestrator(BaseOrchestrator):
             def execute(self) -> OrchestratorResult:
-                # Your orchestrator logic here
+                # Files will be written to self.target_directory
+                output_file = self.target_directory / "output.txt"
+                output_file.write_text("Hello from workspace!")
+                
                 return OrchestratorResult(
                     status=OrchestratorStatus.COMPLETED,
                     success=True,
@@ -123,7 +137,7 @@ class BaseOrchestrator(ABC):
             config: Orchestrator configuration dictionary
                    Must contain at least: name, version
                    Optional: logger_name, log_level, brain_config, template_config,
-                            execution_mode, adaptive_config
+                            execution_mode, adaptive_config, workspace_id (override)
         """
         self.config = config
         self.name = config.get("name", self.__class__.__name__)
@@ -134,6 +148,24 @@ class BaseOrchestrator(ABC):
         self.logger = logging.getLogger(logger_name)
         log_level = config.get("log_level", "INFO")
         self.logger.setLevel(getattr(logging, log_level))
+        
+        # Phase 11: Detect active workspace
+        try:
+            self.workspace_info = detect_active_workspace()
+            self.target_directory = self.workspace_info.path
+            self.workspace_id = self.workspace_info.workspace_id
+            self.workspace_name = self.workspace_info.name
+            self.logger.info(
+                f"[workspace:{self.workspace_name}] Orchestrator initialized - "
+                f"target directory: {self.target_directory}"
+            )
+        except Exception as e:
+            self.logger.warning(f"Workspace detection failed: {e}")
+            # Fallback to workspace_root from config
+            self.target_directory = Path(config.get("workspace_root", Path.cwd()))
+            self.workspace_info = None
+            self.workspace_id = "unknown"
+            self.workspace_name = "unknown"
         
         # Initialize brain interface
         workspace_root = Path(config.get("workspace_root", Path.cwd()))
@@ -171,7 +203,7 @@ class BaseOrchestrator(ABC):
         self.errors: List[str] = []
         self.warnings: List[str] = []
         
-        self.logger.info(f"Initialized {self.name} v{self.version}")
+        self.logger.info(f"[workspace:{self.workspace_name}] Initialized {self.name} v{self.version}")
         self.logger.debug(f"Execution mode: {self.execution_mode.value if isinstance(self.execution_mode, ExecutionMode) else self.execution_mode}")
         self.logger.debug(f"Auto-rollback: {'enabled' if self.auto_rollback_enabled else 'disabled'}")
     
@@ -337,7 +369,7 @@ class BaseOrchestrator(ABC):
         Returns:
             OrchestratorResult with execution details
         """
-        self.logger.info(f"🎭 Orchestrator engaged: {self.name}")
+        self.logger.info(f"🎭 Orchestrator engaged: {self.name} [workspace:{self.workspace_name}]")
         self.status = OrchestratorStatus.RUNNING
         self.start_time = datetime.now()
         
