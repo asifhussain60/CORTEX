@@ -400,13 +400,9 @@ class DocumentationOrchestrator(BaseOrchestrator):
         
         # Run parallel analysis
         try:
-            # Create event loop if not in async context
-            loop = asyncio.get_event_loop()
-            if loop.is_closed():
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-            
-            parallel_results = loop.run_until_complete(
+            # Use asyncio.run() which handles event loop creation/cleanup automatically
+            # This is the recommended way in Python 3.7+ and avoids "no current event loop" errors
+            parallel_results = asyncio.run(
                 self.parallel_analyzer.analyze_parallel(self.doc_config.source_paths)
             )
             
