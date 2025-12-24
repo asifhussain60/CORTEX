@@ -1033,3 +1033,70 @@ PLANNING_ORGANIZATION Issues (2):
 2025-12-24 07:59:13 [    INFO] ================================================================================
 2025-12-24 07:59:13 [    INFO] 
 Scanning: D:\PROJECTS\CORTEX\src
+2025-12-24 07:59:16 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\plugins\performance_telemetry_plugin.py, skipping AST analysis
+2025-12-24 07:59:16 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\policy\policy_test_generator.py, skipping AST analysis
+2025-12-24 07:59:16 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\tier0\copilot_instructions_generator.py, skipping AST analysis
+2025-12-24 07:59:17 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\utils\doc_sync_hooks.py, skipping AST analysis
+2025-12-24 07:59:18 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\workflows\tdd_workflow_orchestrator.py, skipping AST analysis
+2025-12-24 07:59:18 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\tier3\schema_migrations\migration_006_adoption_analytics.py, skipping AST analysis
+2025-12-24 07:59:19 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\orchestrators\story_enhancement\modules\dalle_prompt_generator.py, skipping AST analysis
+2025-12-24 07:59:19 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\implants_commands.py, skipping AST analysis
+2025-12-24 07:59:20 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\checkpoints\checkpoint_utility.py, skipping AST analysis
+2025-12-24 07:59:20 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\dashboard\learning_dashboard_launcher.py, skipping AST analysis
+2025-12-24 07:59:21 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\metrics\metrics_utility.py, skipping AST analysis
+2025-12-24 07:59:21 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\questions\template_selector.py, skipping AST analysis
+2025-12-24 07:59:22 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\validation\session_utility.py, skipping AST analysis
+2025-12-24 07:59:22 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\epmo\documentation\image_prompt_bridge.py, skipping AST analysis
+2025-12-24 07:59:23 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\dashboard\analyzers\validate_analyzers.py, skipping AST analysis
+2025-12-24 07:59:24 [    INFO] 
+Scanning: D:\PROJECTS\CORTEX\tests
+2025-12-24 07:59:25 [    INFO] 
+Scanning: D:\PROJECTS\CORTEX\.github
+2025-12-24 07:59:25 [    INFO] 
+Scanning: D:\PROJECTS\CORTEX\cortex-brain\documents
+2025-12-24 07:59:25 [    INFO] \n\U0001f527 Attempting automatic path fixes...\n2025-12-24 07:59:25 [    INFO] \u2139\ufe0f  No paths were automatically fixed\n2025-12-24 07:59:25 [    INFO] 
+================================================================================
+2025-12-24 07:59:25 [    INFO] SCAN COMPLETE
+2025-12-24 07:59:25 [    INFO] ================================================================================
+2025-12-24 07:59:25 [    INFO] Files scanned: 1596
+2025-12-24 07:59:25 [    INFO] Violations found: 3466
+2025-12-24 07:59:25 [    INFO]   CRITICAL: 305
+2025-12-24 07:59:25 [    INFO]   HIGH: 2186
+2025-12-24 07:59:25 [    INFO]   MEDIUM: 975
+2025-12-24 07:59:25 [    INFO]   LOW: 0
+2025-12-24 07:59:25 [    INFO] Clean files: 696
+2025-12-24 07:59:25 [   ERROR] Path cleanup error: 'OptimizationMetrics' object has no attribute 'optimizations_attempted'
+Traceback (most recent call last):
+  File "D:\PROJECTS\CORTEX\src\operations\modules\optimization\optimize_cortex_orchestrator.py", line 1338, in _cleanup_hardcoded_paths
+    metrics.optimizations_attempted += 1
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'OptimizationMetrics' object has no attribute 'optimizations_attempted'. Did you mean: 'optimizations_applied'?
+2025-12-24 07:59:25 [ WARNING] \u26a0\ufe0f Path cleanup encountered issues: 'OptimizationMetrics' object has no attribute 'optimizations_attempted'\n2025-12-24 07:59:25 [    INFO] 
+[Phase 2.5] Running system alignment check...
+2025-12-24 07:59:25 [    INFO] 
+[Phase 2.7] Checking brain health...
+2025-12-24 07:59:25 [ WARNING] \u26a0\ufe0f Brain health issues detected:\n2025-12-24 07:59:25 [ WARNING]   - Tier 0: Brain protection rules missing
+2025-12-24 07:59:25 [ WARNING]   - Tier 3: Git metrics collection inactive
+2025-12-24 07:59:25 [    INFO] \U0001f4a1 Run 'optimize cortex system' with brain_tuning enabled for full remediation\n2025-12-24 07:59:25 [    INFO] 
+[Phase 3] Analyzing CORTEX architecture...
+2025-12-24 07:59:25 [    INFO] Analyzing CORTEX architecture...
+2025-12-24 07:59:25 [    INFO] Running AGGRESSIVE hardcoded data scan...
+2025-12-24 07:59:25 [   ERROR] Error during hardcoded data scan: BaseOperationModule.__init__() got an unexpected keyword argument 'project_root'
+2025-12-24 07:59:25 [    INFO] Running CORTEX admin optimizer for code quality metrics...
+2025-12-24 07:59:26 [ WARNING] CORTEX optimizer failed (exit code 1), using fallback analysis
+2025-12-24 07:59:26 [    INFO] Issues identified: 3
+2025-12-24 07:59:26 [    INFO] 
+[Phase 4] Generating optimization plan...
+2025-12-24 07:59:26 [    INFO] Generating optimization plan...
+2025-12-24 07:59:26 [    INFO] Generated 2 optimization actions
+2025-12-24 07:59:26 [    INFO]   Critical: 1
+2025-12-24 07:59:26 [    INFO]   High: 0
+2025-12-24 07:59:26 [    INFO]   Medium: 1
+2025-12-24 07:59:26 [    INFO]   Low: 0
+2025-12-24 07:59:26 [    INFO] 
+[Phase 5] Executing optimizations...
+2025-12-24 07:59:26 [    INFO] Executing optimizations...
+2025-12-24 07:59:26 [    INFO] [CRITICAL] Create/restore brain_protection
+warning: in the working copy of 'test_output.txt', CRLF will be replaced by LF the next time Git touches it
+2025-12-24 07:59:26 [    INFO] Committed: 94b2e2ce - [OPTIMIZATION/CRITICAL] Create/restore brain_protection
+2025-12-24 07:59:26 [    INFO] [MEDIUM] Implement operations
