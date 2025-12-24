@@ -11,10 +11,14 @@ from .test_intelligence_adapter import TestIntelligenceAdapter
 from .tdd_intelligence_adapter import TDDIntelligenceAdapter
 from .validation_framework_adapter import ValidationFrameworkAdapter
 from .manifest_compliance_validator import ManifestComplianceValidator
+from .intelligence_orchestrator import IntelligenceOrchestrator, IntelligenceMode, IntelligenceReport
 
 __all__ = [
     'TestIntelligenceAdapter',
     'TDDIntelligenceAdapter',
     'ValidationFrameworkAdapter',
     'ManifestComplianceValidator',
+    'IntelligenceOrchestrator',
+    'IntelligenceMode',
+    'IntelligenceReport',
 ]
