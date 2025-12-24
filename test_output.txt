@@ -244,3 +244,4 @@ AttributeError: 'OptimizationMetrics' object has no attribute 'optimizations_att
 2025-12-24 07:56:52 [   ERROR] Error during hardcoded data scan: BaseOperationModule.__init__() got an unexpected keyword argument 'project_root'
 2025-12-24 07:56:52 [ WARNING] CORTEX optimizer failed (exit code 1), using fallback analysis
 warning: in the working copy of 'test_output.txt', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test_output.txt', CRLF will be replaced by LF the next time Git touches it
