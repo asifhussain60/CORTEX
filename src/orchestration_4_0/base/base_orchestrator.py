@@ -135,7 +135,7 @@ class BaseOrchestrator(ABC):
             # Always run teardown
             try:
                 self.logger.debug("Running teardown...")
-                self._teardown()
+                self._teardown(context or {})
             except Exception as e:
                 self.logger.error(f"⚠️  Teardown failed: {e}")
             
@@ -271,6 +271,45 @@ class BaseOrchestrator(ABC):
             "errors": self.error_handler.get_error_summary()
         }
     
+    # Public wrapper methods for testing and external access
+    
+    def setup(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Public wrapper for setup.
+        
+        Args:
+            context: Optional execution context
+            
+        Returns:
+            Setup result
+        """
+        return self._setup(context or {})
+    
+    def teardown(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Public wrapper for teardown.
+        
+        Args:
+            context: Optional teardown context
+            
+        Returns:
+            Teardown result
+        """
+        return self._teardown(context or {})
+    
+    def execute_phase(self, phase_name: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Public wrapper for phase execution.
+        
+        Args:
+            phase_name: Name of phase to execute
+            context: Optional execution context
+            
+        Returns:
+            Phase execution result
+        """
+        return self._execute_phase(phase_name, context or {})
+    
     # Abstract methods that subclasses must implement
     
     @abstractmethod
@@ -309,10 +348,16 @@ class BaseOrchestrator(ABC):
         pass
     
     @abstractmethod
-    def _teardown(self) -> None:
+    def _teardown(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Cleanup orchestrator-specific resources.
         
         Called after all phases complete (even if errors occurred).
+        
+        Args:
+            context: Teardown context
+            
+        Returns:
+            Teardown result
         """
         pass

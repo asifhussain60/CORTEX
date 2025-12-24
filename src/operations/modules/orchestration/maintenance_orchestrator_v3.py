@@ -110,17 +110,21 @@ class MaintenanceOrchestrator(BaseOrchestrator):
     def _register_phases(self) -> None:
         """Register 7 maintenance phases."""
         phases = [
-            "pre_healthcheck",
-            "align",
-            "cleanup",
-            "optimize",
-            "vacuum",
-            "refresh_prompts",
-            "post_healthcheck"
+            ("pre_healthcheck", "Scan system health and establish baseline"),
+            ("align", "Auto-fix misalignments with realignment utility"),
+            ("cleanup", "Organize files and update references"),
+            ("optimize", "Optimize token usage and cache"),
+            ("vacuum", "SQLite and AST cleanup"),
+            ("refresh_prompts", "Regenerate prompts"),
+            ("post_healthcheck", "Calculate health delta")
         ]
         
-        for phase in phases:
-            self.phase_manager.register_phase(phase)
+        for phase_name, description in phases:
+            self.phase_manager.register_phase(
+                name=phase_name,
+                description=description,
+                required=True
+            )
         
         self.logger.info(f"Registered {len(phases)} maintenance phases")
     
@@ -149,7 +153,12 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         }
         
         if phase_name not in phase_methods:
-            raise ValueError(f"Unknown phase: {phase_name}")
+            self.logger.error(f"Unknown phase: {phase_name}")
+            return {
+                'success': False,
+                'phase': phase_name,
+                'error': f'Unknown phase: {phase_name}'
+            }
         
         try:
             result = phase_methods[phase_name](context)
@@ -178,8 +187,17 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         # Calculate health delta if both healthchecks completed
         health_delta = None
         if self.baseline_health and self.final_health:
-            baseline_score = self.baseline_health.get('overall_score', 0)
-            final_score = self.final_health.get('overall_score', 0)
+            # Handle both dict and float formats for backward compatibility
+            if isinstance(self.baseline_health, dict):
+                baseline_score = self.baseline_health.get('overall_score', 0)
+            else:
+                baseline_score = float(self.baseline_health)
+            
+            if isinstance(self.final_health, dict):
+                final_score = self.final_health.get('overall_score', 0)
+            else:
+                final_score = float(self.final_health)
+            
             health_delta = final_score - baseline_score
             
             self.logger.info(f"Health delta: {health_delta:+.2f}% ({baseline_score:.1f}% → {final_score:.1f}%)")
@@ -219,12 +237,13 @@ class MaintenanceOrchestrator(BaseOrchestrator):
             'brain_tier2': self._check_tier2_health(),
             'brain_tier3': self._check_tier3_health(),
             'orchestrators': self._check_orchestrators_health(),
+            'agents': self._check_agents_health(),
             'protection': self._check_protection_health(),
             'system': self._check_system_health()
         }
         
-        # Calculate overall health score
-        health_scores = [c['score'] for c in components.values()]
+        # Calculate overall health score (all values are floats now)
+        health_scores = list(components.values())
         overall_score = sum(health_scores) / len(health_scores)
         
         self.baseline_health = {
@@ -241,7 +260,7 @@ class MaintenanceOrchestrator(BaseOrchestrator):
             'components': components
         }
     
-    def _check_tier0_health(self) -> Dict[str, Any]:
+    def _check_tier0_health(self) -> float:
         """Check Tier 0 (Governance) health."""
         tier0_path = self.cortex_root / 'cortex-brain'
         
@@ -251,14 +270,9 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         }
         
         score = (sum(checks.values()) / len(checks)) * 100
-        
-        return {
-            'score': score,
-            'checks': checks,
-            'status': 'healthy' if score >= 80 else 'degraded'
-        }
+        return score
     
-    def _check_tier1_health(self) -> Dict[str, Any]:
+    def _check_tier1_health(self) -> float:
         """Check Tier 1 (Working Memory) health."""
         tier1_path = self.cortex_root / 'cortex-brain' / 'tier1'
         
@@ -267,42 +281,27 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         context_count = len(context_files)
         
         score = 100 if context_count <= 70 else max(0, 100 - (context_count - 70))
-        
-        return {
-            'score': score,
-            'context_count': context_count,
-            'status': 'healthy' if score >= 80 else 'degraded'
-        }
+        return score
     
-    def _check_tier2_health(self) -> Dict[str, Any]:
+    def _check_tier2_health(self) -> float:
         """Check Tier 2 (Knowledge Graph) health."""
         tier2_path = self.cortex_root / 'cortex-brain' / 'tier2'
         
         # Check knowledge graph existence
         kg_exists = tier2_path.exists()
         score = 100 if kg_exists else 50
-        
-        return {
-            'score': score,
-            'kg_exists': kg_exists,
-            'status': 'healthy' if score >= 80 else 'degraded'
-        }
+        return score
     
-    def _check_tier3_health(self) -> Dict[str, Any]:
+    def _check_tier3_health(self) -> float:
         """Check Tier 3 (Development Context) health."""
         tier3_path = self.cortex_root / 'cortex-brain' / 'tier3'
         
         # Check development context existence
         dev_context_exists = tier3_path.exists()
         score = 100 if dev_context_exists else 50
-        
-        return {
-            'score': score,
-            'dev_context_exists': dev_context_exists,
-            'status': 'healthy' if score >= 80 else 'degraded'
-        }
+        return score
     
-    def _check_orchestrators_health(self) -> Dict[str, Any]:
+    def _check_orchestrators_health(self) -> float:
         """Check orchestrators health."""
         orchestrators_path = self.cortex_root / 'src' / 'orchestrators'
         
@@ -313,12 +312,41 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         orch_count = len(list(orchestrators_path.glob('*/'))) if orch_exists else 0
         
         score = 100 if orch_count >= 8 else (orch_count / 8) * 100
+        return score
+    
+    def _check_agents_health(self) -> float:
+        """Check agents health."""
+        agents_path = self.cortex_root / 'src' / 'cortex_agents'
         
-        return {
-            'score': score,
-            'orchestrator_count': orch_count,
-            'status': 'healthy' if score >= 80 else 'degraded'
+        # Check agents directory exists
+        agents_exist = agents_path.exists()
+        score = 100 if agents_exist else 50
+        return score
+    
+    def _check_protection_health(self) -> float:
+        """Check protection layer health."""
+        brain_path = self.cortex_root / 'cortex-brain'
+        tests_path = self.cortex_root / 'tests'
+        
+        checks = {
+            'skull_rules': (brain_path / 'brain-protection-rules.yaml').exists(),
+            'test_separation': tests_path.exists()
         }
+        
+        score = (sum(checks.values()) / len(checks)) * 100
+        return score
+    
+    def _check_system_health(self) -> float:
+        """Check system health."""
+        checks = {
+            'src_directory': (self.cortex_root / 'src').exists(),
+            'tests_directory': (self.cortex_root / 'tests').exists(),
+            'config_file': (self.cortex_root / 'cortex.config.json').exists(),
+            'requirements': (self.cortex_root / 'requirements.txt').exists()
+        }
+        
+        score = (sum(checks.values()) / len(checks)) * 100
+        return score
     
     def _check_protection_health(self) -> Dict[str, Any]:
         """Check protection layers health."""
