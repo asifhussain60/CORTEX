@@ -73,6 +73,14 @@ from src.orchestrators.planning.session_manager import (
     SessionStatus
 )
 
+# Week 9: Intelligence Layer Adapters
+from src.orchestrators.planning.intelligence import (
+    TestIntelligenceAdapter,
+    TDDIntelligenceAdapter,
+    ValidationFrameworkAdapter,
+    ManifestComplianceValidator
+)
+
 # Phase 10: YAML Modularization
 from src.orchestrators.planning.markdown_renderer import MarkdownRenderer
 
@@ -289,6 +297,23 @@ class PlanningOrchestrator(BaseOrchestrator):
             workspace_root=config.get("workspace_root", Path.cwd()),
             logger_instance=self.logger
         ) if self.session_restoration_enabled else None
+        
+        # Week 9: Initialize Intelligence Layer Adapters
+        self.test_intelligence = TestIntelligenceAdapter(
+            project_root=config.get("workspace_root", Path.cwd())
+        ) if config.get("enable_test_intelligence", True) else None
+        
+        self.tdd_intelligence = TDDIntelligenceAdapter(
+            strict_mode=config.get("tdd_strict_mode", True)
+        ) if config.get("enable_tdd_intelligence", True) else None
+        
+        self.validation_framework = ValidationFrameworkAdapter(
+            strict_mode=config.get("validation_strict_mode", True)
+        ) if config.get("enable_validation_framework", True) else None
+        
+        self.manifest_validator = ManifestComplianceValidator(
+            manifest_path=config.get("manifest_path")
+        ) if config.get("enable_manifest_validation", True) else None
         
         # Planning state
         self.current_phase = None
