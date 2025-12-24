@@ -1,0 +1,42 @@
+/* Metrics Tab Styles */
+
+.metrics-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl, 32px);
+}
+
+.metrics-overview,
+.test-coverage,
+.module-size {
+    background-color: var(--white, #ffffff);
+    padding: var(--spacing-lg, 24px);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.metrics-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg, 24px);
+    margin-top: var(--spacing-md, 16px);
+}
+
+.metrics-card {
+    padding: var(--spacing-md, 16px);
+    background-color: var(--light-gray, #f8f9fa);
+    border-radius: 6px;
+}
+
+.metrics-card h3 {
+    font-size: 16px;
+    color: var(--dark-gray, #343a40);
+    margin-bottom: var(--spacing-md, 16px);
+    text-align: center;
+}
+
+.coverage-visualization,
+.size-distribution {
+    margin-top: var(--spacing-md, 16px);
+    min-height: 300px;
+}

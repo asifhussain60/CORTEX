@@ -399,6 +399,75 @@ operations:
     - regenerate prompts incremental
     - regenerate prompts force
     category: system
+  generate_ra_specs:
+    name: Generate RA Specifications
+    description: Legacy API specification generator for PM/BA documentation from C# code
+    deployment_tier: admin
+    execution_method: cli_wrapper
+    cli_script: scripts/cli_wrappers/generate_ra_specs.py
+    natural_language:
+    - generate ra specs
+    - generate specifications
+    - generate api specs
+    - create ra documentation
+    - document ra apis
+    category: documentation
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Generates PM/BA specifications from legacy C# code with business rules, validations, and database operations
+    examples:
+    - generate ra specs
+    - create ra documentation
+    - document legacy apis
+  realign_plans:
+    name: Realign Plans
+    description: Migrate plans to Planning System 3.0 canonical structure (WP## naming, execution/ subfolder, context/ subfolder)
+    deployment_tier: admin
+    execution_method: cli_wrapper
+    cli_script: scripts/cli_wrappers/realign_plans_wrapper.py
+    natural_language:
+    - realign plans
+    - migrate plans
+    - realign plan structure
+    - fix plan structure
+    - migrate to canonical structure
+    category: planning
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Migrates old-format plans to Planning System 3.0 canonical structure with WP## naming and standard task injection
+    examples:
+    - realign plans
+    - migrate plan CORTEX-3.0-4.0
+    - fix plan structure
+  cleanup_plans:
+    name: Cleanup Plans
+    description: Automated plan lifecycle management - delete temp plans, archive completed/failed plans, detect orphaned plans
+    deployment_tier: admin
+    execution_method: cli_wrapper
+    cli_script: scripts/cli_wrappers/cleanup_plans_wrapper.py
+    natural_language:
+    - cleanup plans
+    - clean up plans
+    - cleanup old plans
+    - archive completed plans
+    - delete temp plans
+    category: planning
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Automated cleanup with configurable retention policies - temp plans (7 days), completed (30 days), failed (14 days)
+    examples:
+    - cleanup plans
+    - cleanup old plans
+    - archive completed plans
   threat_modeler_agent:
     name: Threat Modeler Agent
     description: Threat Modeler Agent

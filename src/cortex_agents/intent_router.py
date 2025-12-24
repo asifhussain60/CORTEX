@@ -972,6 +972,12 @@ class IntentRouter(BaseAgent):
         try:
             self.tier2.add_pattern(
                 pattern_type="routing",
+                data={
+                    'message': request.user_message[:100],
+                    'intent': self._get_intent_value(routing_decision['intent']),
+                    'primary_agent': routing_decision['primary_agent'].name,
+                    'confidence': routing_decision['confidence']
+                },
                 title=f"Route: {self._get_intent_value(routing_decision['intent'])}",
                 content=f"Message: {request.user_message[:100]}, "
                         f"Agent: {routing_decision['primary_agent'].name}"

@@ -1,0 +1,285 @@
+tier3_context_intelligence_api:
+  name: "Tier 3 Context Intelligence API"  
+  version: "2.0"
+  purpose: "Development context analytics through git analysis and session tracking"
+  
+  overview:
+    storage:
+      primary: "cortex-brain/tier3/context-intelligence.db (SQLite)"
+      exports: "git-analysis.jsonl"
+    performance_target: "<200ms per analysis"
+    actual_performance: "156ms average"
+    
+  core_classes:
+    ContextIntelligence:
+      location: "src/tier3/context_intelligence.py"
+      purpose: "Git analysis, file stability, and session analytics"
+      
+      git_analysis_methods:
+        analyze_git_activity:
+          parameters:
+            lookback_days: "integer (default: 30)"
+            include_authors: "boolean (default: True)" 
+            include_hotspots: "boolean (default: True)"
+          returns: "comprehensive analysis dict"
+          example: |
+            analysis = ci.analyze_git_activity(
+                lookback_days=30,
+                include_authors=True,
+                include_hotspots=True
+            )
+            # Returns: commit_velocity, file_hotspots, authors, health_score
+            
+        get_file_stability:
+          parameters:
+            file_path: "string"
+          returns: "stability classification"
+          values: ["stable", "unstable", "volatile"]
+          criteria:
+            stable: "<10% churn rate"
+            unstable: "10-30% churn rate (needs attention)"
+            volatile: ">30% churn rate (high risk)"
+          example: |
+            stability = ci.get_file_stability("HostControlPanel.razor")
+            
+        get_file_stability_details:
+          parameters:
+            file_path: "string"
+          returns: "detailed stability analysis"
+          example: |
+            details = ci.get_file_stability_details("HostControlPanel.razor")
+            # Returns: classification, churn_rate, change_count, 
+            #          last_changed, average_change_size, recommendations
+
+  session_analytics_methods:
+    get_development_insights:
+      parameters: "none"
+      returns: "productivity and workflow insights"
+      example: |
+        insights = ci.get_development_insights()
+        # Returns: productivity_patterns, workflow_effectiveness, 
+        #          intent_distribution
+        
+    track_code_health:
+      parameters:
+        test_coverage: "float"
+        build_success_rate: "float"
+        error_count: "integer"
+        warning_count: "integer"
+        timestamp: "datetime string (optional)"
+      example: |
+        ci.track_code_health(
+            test_coverage=0.76,
+            build_success_rate=0.97,
+            error_count=0,
+            warning_count=2
+        )
+        
+    get_health_trends:
+      parameters:
+        days: "integer (default: 30)"
+      returns: "health trend analysis"
+      example: |
+        trends = ci.get_health_trends(days=30)
+        # Returns: test_coverage_trend, build_success_trend, overall_health
+
+  proactive_warning_system:
+    get_file_warnings:
+      parameters:
+        file_path: "string"
+      returns: "list of warnings and recommendations"
+      warning_types:
+        - "hotspot_alert"
+        - "complexity_alert"
+        - "stability_alert"
+        - "test_coverage_alert"
+      example: |
+        warnings = ci.get_file_warnings("HostControlPanel.razor")
+        
+    get_optimal_session_timing:
+      parameters: "none"
+      returns: "timing recommendations based on historical data"
+      example: |
+        timing = ci.get_optimal_session_timing()
+        # Returns: current_time, current_success_rate, 
+        #          optimal_times, recommendation
+
+  performance_analytics:
+    commit_velocity:
+      calculation: "commits per week with trend analysis"
+      trending: ["increasing", "stable", "decreasing"]
+      
+    file_hotspots:
+      definition: "files with high modification frequency"
+      calculation: "percentage of commits touching file"
+      thresholds:
+        normal: "<10%"
+        attention: "10-30%"
+        critical: ">30%"
+        
+    code_health_score:
+      factors:
+        - "test coverage percentage"
+        - "build success rate"
+        - "error/warning counts"
+        - "file stability distribution"
+      scale: "0.0 to 1.0 (0-100%)"
+      
+    productivity_patterns:
+      best_session_times: "time ranges with highest success rates"
+      optimal_session_duration: "minutes for peak productivity"
+      workflow_effectiveness: "TDD vs non-TDD success comparison"
+
+  database_schema:
+    git_commits_table:
+      fields:
+        commit_hash: "TEXT PRIMARY KEY"
+        author: "TEXT"
+        timestamp: "DATETIME"
+        message: "TEXT"
+        files_changed: "INTEGER"
+        lines_added: "INTEGER"
+        lines_deleted: "INTEGER"
+        analyzed_at: "DATETIME DEFAULT CURRENT_TIMESTAMP"
+        
+    file_metrics_table:
+      fields:
+        file_path: "TEXT PRIMARY KEY"
+        change_count: "INTEGER DEFAULT 0"
+        churn_rate: "REAL"
+        stability: "TEXT (stable|unstable|volatile)"
+        last_changed: "DATETIME"
+        avg_change_size: "INTEGER"
+        total_lines: "INTEGER"
+        last_analyzed: "DATETIME DEFAULT CURRENT_TIMESTAMP"
+        
+    session_analytics_table:
+      fields:
+        session_id: "TEXT PRIMARY KEY"
+        start_time: "DATETIME"
+        end_time: "DATETIME"
+        duration_minutes: "INTEGER"
+        intent: "TEXT"
+        success: "BOOLEAN"
+        productivity_score: "REAL"
+        files_modified: "TEXT (JSON array)"
+        tests_passed: "INTEGER"
+        tests_failed: "INTEGER"
+        
+    code_health_table:
+      fields:
+        recorded_at: "DATETIME PRIMARY KEY"
+        test_coverage: "REAL"
+        build_success_rate: "REAL"
+        error_count: "INTEGER"
+        warning_count: "INTEGER"
+        overall_health_score: "REAL"
+
+  analysis_algorithms:
+    file_stability_classification:
+      stable_threshold: 0.10  # <10% churn rate
+      volatile_threshold: 0.30  # >30% churn rate
+      calculation: "modifications / total_commits_in_period"
+      
+    commit_velocity_trending:
+      window_size: "7 days for short-term, 30 days for long-term"
+      trend_detection: "linear regression on commit counts"
+      significance_threshold: "15% change required"
+      
+    productivity_scoring:
+      factors:
+        success_rate: 0.4  # 40% weight
+        completion_time: 0.3  # 30% weight
+        error_rate: 0.2  # 20% weight
+        test_coverage: 0.1  # 10% weight
+      scale: "0.0 to 1.0"
+      
+    health_score_calculation:
+      test_coverage_weight: 0.35
+      build_success_weight: 0.25
+      error_count_weight: 0.20
+      stability_weight: 0.20
+
+  performance_optimizations:
+    git_analysis_caching:
+      commit_data: "cache for 1 hour"
+      file_metrics: "cache for 30 minutes"
+      health_trends: "cache for 15 minutes"
+      
+    incremental_processing:
+      new_commits_only: "process commits since last analysis"
+      delta_updates: "update metrics incrementally"
+      batch_operations: "group database writes"
+      
+    indexing_strategy:
+      - "CREATE INDEX idx_commits_timestamp ON git_commits(timestamp DESC)"
+      - "CREATE INDEX idx_commits_author ON git_commits(author)"
+      - "CREATE INDEX idx_file_metrics_stability ON file_metrics(stability)"
+      - "CREATE INDEX idx_health_recorded_at ON code_health(recorded_at DESC)"
+
+  configuration:
+    git_analysis:
+      max_commits: 1000
+      exclude_branches: ["temp/*", "experimental/*"]
+      author_mapping: "normalize author names"
+      
+    file_stability:
+      lookback_window_days: 30
+      minimum_commits: 5  # ignore files with <5 commits
+      exclude_patterns: ["*.log", "*.tmp", "node_modules/*"]
+      
+    session_tracking:
+      idle_threshold_minutes: 15
+      session_timeout_hours: 8
+      min_session_duration_minutes: 5
+
+  warning_system:
+    file_hotspot_warnings:
+      threshold: "10+ modifications in lookback period"
+      message: "High churn detected. Consider refactoring."
+      recommendations:
+        - "Add extra testing before changes"
+        - "Consider smaller, incremental modifications"
+        - "Review recent changes for instability causes"
+        
+    timing_recommendations:
+      data_source: "historical session success rates by time"
+      update_frequency: "weekly analysis"
+      recommendation_trigger: "20% difference from optimal"
+
+  example_usage:
+    initialization: |
+      from src.tier3.context_intelligence import ContextIntelligence
+      ci = ContextIntelligence()
+      
+    git_analysis_workflow: |
+      # Analyze recent git activity
+      analysis = ci.analyze_git_activity(lookback_days=30)
+      
+      # Check file stability
+      stability = ci.get_file_stability("AuthService.cs")
+      if stability == "volatile":
+          warnings = ci.get_file_warnings("AuthService.cs")
+          
+      # Track code health
+      ci.track_code_health(
+          test_coverage=0.78,
+          build_success_rate=0.96,
+          error_count=0,
+          warning_count=1
+      )
+      
+    proactive_intelligence: |
+      # Get optimal timing recommendations
+      timing = ci.get_optimal_session_timing()
+      if timing["current_success_rate"] < timing["optimal_success_rate"]:
+          print(f"Consider working during {timing['optimal_times']}")
+          
+      # Get development insights
+      insights = ci.get_development_insights()
+      tdd_success = insights["workflow_effectiveness"]["test_first_success_rate"]
+      
+      # Monitor health trends
+      trends = ci.get_health_trends(days=30)
+      if trends["overall_health"] == "declining":
+          print("Code health declining - recommend maintenance sprint")

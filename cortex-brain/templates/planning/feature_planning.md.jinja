@@ -1,0 +1,129 @@
+# {{ conversation.goal }}
+
+**Conversation ID:** {{ conversation_id }}  
+**Started:** {{ conversation.start_time | format_datetime }}  
+{% if conversation.end_time -%}
+**Completed:** {{ conversation.end_time | format_datetime }}  
+{% endif -%}
+**Status:** {% if conversation.status == 'active' %}🟢 Active{% elif conversation.status == 'completed' %}✅ Completed{% else %}⚪ {{ conversation.status | title }}{% endif %}  
+**Progress:** {{ progress.completed }}/{{ progress.total }} questions answered ({{ progress.percentage }}%)
+
+---
+
+## 📋 Definition of Ready (DoR)
+
+{% if session and session.questions -%}
+{% for question in session.questions -%}
+{% set answered = question.question_id in (session.answers | map(attribute='question_id') | list) -%}
+- [{% if answered %}x{% else %} {% endif %}] {{ question.question_text }}
+  {% if answered -%}
+  {% set answer = session.answers | selectattr('question_id', 'equalto', question.question_id) | first -%}
+  {% if not answer.skipped -%}
+  **Answer:** {{ answer.value }}
+  {% else -%}
+  *Skipped*
+  {% endif -%}
+  {% endif -%}
+{% endfor %}
+{% else -%}
+*No planning questions defined for this conversation*
+{% endif %}
+
+---
+
+## 🎯 Conversation Summary
+
+**Messages:** {{ conversation.message_count }}  
+**Outcome:** {% if conversation.outcome %}{{ conversation.outcome }}{% else %}*In progress*{% endif %}
+
+### Recent Activity (Last 5 Messages)
+
+{% if conversation.messages -%}
+{% for message in conversation.messages[-5:] -%}
+**{{ message.role | title }}** ({{ message.timestamp | format_datetime('%H:%M') }}):  
+{{ message.content | truncate_content(200) }}
+
+{% endfor -%}
+{% else -%}
+*No messages yet*
+{% endif %}
+
+---
+
+## 🔗 Entities Discussed
+
+{% if entities -%}
+{% for entity_type, values in entities.items() -%}
+**{{ entity_type | title }}:**
+{% for value in values -%}
+- {{ value }}
+{% endfor -%}
+
+{% endfor -%}
+{% else -%}
+*No entities extracted yet*
+{% endif %}
+
+---
+
+## 📂 Files Modified
+
+{% if conversation.files -%}
+{% for file in conversation.files -%}
+- **{{ file.operation | upper }}:** `{{ file.file_path }}` ({{ file.timestamp | format_datetime('%Y-%m-%d %H:%M') }})
+{% endfor -%}
+{% else -%}
+*No files modified yet*
+{% endif %}
+
+---
+
+## 📝 Implementation Plan
+
+{% if session and session.final_plan -%}
+{{ session.final_plan }}
+{% else -%}
+*Planning in progress. Plan will appear here once Definition of Ready is complete.*
+
+### Next Steps
+
+{% if conversation.status == 'active' -%}
+1. Complete remaining DoR questions
+2. Review and approve plan
+3. Begin implementation
+{% elif conversation.status == 'completed' -%}
+✅ **Conversation Complete**
+
+Review conversation outcome above for final results.
+{% else -%}
+1. Continue conversation to define plan
+2. Answer DoR questions as they appear
+3. Track progress in this document
+{% endif -%}
+{% endif %}
+
+---
+
+## 🔄 Resume This Conversation
+
+To resume this conversation in a new chat:
+
+```
+resume conversation {{ conversation_id }}
+```
+
+Or use natural language:
+```
+resume {{ conversation.goal[:30] }}
+```
+
+---
+
+*Auto-generated from Tier 1 Working Memory*  
+*Last synced: {{ sync_time | format_datetime }}*  
+*Source: `cortex-brain/tier1/conversations.db`*
+
+---
+
+**CORTEX Planning Document Sync Engine v1.0**  
+© 2024-2025 Asif Hussain. All rights reserved.

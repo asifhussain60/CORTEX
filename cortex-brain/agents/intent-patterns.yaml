@@ -1,0 +1,181 @@
+# Intent Router Pattern Definitions
+# Version: 5.0
+# Purpose: Intent classification patterns for routing user requests
+# Usage: Loaded by Intent Router Agent
+
+intent_patterns:
+  
+  PLAN:
+    description: "User wants to start new feature work"
+    route_to: "work-planner.md"
+    patterns:
+      - "I want to [add|create|build|implement]"
+      - "Add a [feature]"
+      - "Create a [component]"
+      - "Build a [service]"
+      - "Implement [functionality]"
+      - "Let's [add|create|build]"
+    examples:
+      - "I want to add a FAB button pulse animation"
+      - "Create a PDF export feature"
+      - "Build a dark mode toggle"
+      - "Implement session sharing"
+  
+  EXECUTE:
+    description: "User wants to continue active work"
+    route_to: "code-executor.md"
+    patterns:
+      - "continue"
+      - "next"
+      - "next task"
+      - "keep going"
+      - "proceed"
+      - "execute"
+    examples:
+      - "continue"
+      - "next task"
+      - "keep going"
+      - "proceed with the plan"
+  
+  RESUME:
+    description: "User wants to see progress or pickup after break"
+    route_to: "session-resumer.md"
+    patterns:
+      - "resume"
+      - "where was I"
+      - "where am I"
+      - "show progress"
+      - "left off"
+      - "status"
+      - "current status"
+      - "what's next"
+    examples:
+      - "Show me where I left off"
+      - "What's the current status?"
+      - "Resume work"
+      - "Where was I?"
+  
+  CORRECT:
+    description: "User needs to fix Copilot's mistake/misunderstanding"
+    route_to: "correction-handler.md"
+    patterns:
+      - "wrong [file|approach|assumption]"
+      - "not [that|what I meant]"
+      - "actually"
+      - "correction"
+      - "you're [working on|using|modifying] the wrong"
+    examples:
+      - "Wrong file - use AuthService.ts not UserService.ts"
+      - "Not what I meant - add to dashboard not sidebar"
+  
+  TEST:
+    description: "User wants to run tests or validate work"
+    route_to: "test-generator.md"
+    patterns:
+      - "test"
+      - "run tests"
+      - "validate"
+      - "check if"
+      - "does it work"
+      - "verify"
+    examples:
+      - "Run tests for the new feature"
+      - "Validate the implementation"
+      - "Check if it works"
+  
+  VALIDATE:
+    description: "User wants to check code quality/standards"
+    route_to: "validator.md"
+    patterns:
+      - "lint"
+      - "check code"
+      - "code quality"
+      - "review"
+      - "standards"
+      - "best practices"
+    examples:
+      - "Check code quality"
+      - "Review for best practices"
+      - "Run linter"
+  
+  COMMIT:
+    description: "User wants to commit changes"
+    route_to: "commit-handler.md"
+    patterns:
+      - "commit"
+      - "save changes"
+      - "git commit"
+      - "check in"
+    examples:
+      - "Commit the changes"
+      - "Save progress to git"
+  
+  QUERY:
+    description: "User has a question about code/system"
+    route_to: "brain-query.md"
+    patterns:
+      - "how"
+      - "what"
+      - "why"
+      - "when"
+      - "where"
+      - "explain"
+      - "show me"
+      - "tell me"
+    examples:
+      - "How does authentication work?"
+      - "What is the structure of UserService?"
+      - "Explain the routing logic"
+  
+  HELP:
+    description: "User needs guidance or documentation"
+    route_to: "help-system.md"
+    patterns:
+      - "help"
+      - "docs"
+      - "documentation"
+      - "guide"
+      - "tutorial"
+      - "how do I"
+    examples:
+      - "help"
+      - "Show me the docs"
+      - "How do I start a new feature?"
+  
+  FEEDBACK:
+    description: "User wants to provide feedback or report issues"
+    route_to: "feedback-agent.py"
+    patterns:
+      - "feedback"
+      - "report issue"
+      - "report bug"
+      - "cortex issue"
+      - "cortex bug"
+      - "cortex improvement"
+      - "report problem"
+    examples:
+      - "feedback: The TDD workflow is missing view discovery"
+      - "report issue with test generation"
+      - "cortex bug: feedback command doesn't exist"
+      - "I want to report an improvement"
+
+routing_rules:
+  multi_intent_handling:
+    - "If multiple intents detected, prioritize PLAN > EXECUTE > TEST > VALIDATE"
+    - "If conflicting intents (PLAN + EXECUTE), ask user to clarify"
+    - "HELP intent always takes precedence if explicit"
+  
+  ambiguity_resolution:
+    - "If confidence < 70%, ask clarifying question"
+    - "If no pattern match, treat as QUERY"
+    - "If user says 'I don't know', route to HELP"
+  
+  context_passing:
+    - "Pass Tier 1 working memory to specialist"
+    - "Include conversation history (last 3 turns)"
+    - "Pass any referenced files or components"
+
+confidence_thresholds:
+  high: ">= 90% - route immediately"
+  medium: "70-89% - route with caveat"
+  low: "< 70% - ask clarifying question"

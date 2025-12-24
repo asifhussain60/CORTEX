@@ -1,0 +1,232 @@
+# Commit Handler Configuration and Patterns
+# Version: 1.0
+# Purpose: Git commit categorization, validation, and message generation
+
+version: "1.0"
+
+# File Categorization Patterns
+categories:
+  kds_enhancements:
+    pattern: "^KDS/(prompts|governance|docs|scripts)/"
+    commit_type: "feat(kds)"
+    branch_required: "features/kds"
+    priority: 1
+    
+  kds_brain:
+    pattern: "^KDS/kds-brain/"
+    commit_type: "feat(kds-brain)"
+    branch_required: "features/kds"
+    priority: 1
+    
+  application_features:
+    pattern: "^(SPA|Tools|Migrations)/"
+    commit_type: "feat"
+    branch_required: "features/* or development"
+    priority: 2
+    
+  tests:
+    pattern: "^(Tests|PlayWright)/"
+    commit_type: "test"
+    branch_required: "any"
+    priority: 3
+    
+  context_files:
+    pattern: "^(Docs|.copilot)/"
+    commit_type: "docs"
+    branch_required: "any"
+    priority: 4
+    
+  config_files:
+    pattern: '\.(json|config|md)$ (root level)'
+    commit_type: "chore"
+    branch_required: "any"
+    priority: 5
+    
+  build_artifacts:
+    pattern: "^(bin|obj|node_modules|\.skip)$"
+    commit_type: "SKIP"
+    action: "add to .gitignore"
+    priority: 99
+
+# Commit Strategies
+strategies:
+  single_category:
+    condition: "All changes in ONE category"
+    action: "Create single commit"
+    example: "feat(kds): Add intelligent commit handler"
+    
+  multiple_related:
+    condition: "Changes span related categories (e.g., KDS + KDS-BRAIN)"
+    action: "Create single commit with multi-scope"
+    example: "feat(kds): Add Tier 3 throttling optimization"
+    
+  separate_concerns:
+    condition: "Changes span unrelated categories"
+    action: "Create separate commits in logical order"
+    priority_order:
+      - "KDS enhancements (features/kds branch)"
+      - "Application features (feature branch)"
+      - "Tests (feature branch)"
+      - "Documentation (any branch)"
+      - "Configuration (any branch)"
+
+# Conventional Commit Types
+commit_types:
+  feat:
+    description: "New feature"
+    version_bump: "minor"
+  fix:
+    description: "Bug fix"
+    version_bump: "patch"
+  docs:
+    description: "Documentation only"
+    version_bump: "none"
+  refactor:
+    description: "Code change that neither fixes nor adds"
+    version_bump: "none"
+  test:
+    description: "Adding or correcting tests"
+    version_bump: "none"
+  chore:
+    description: "Build process, dependencies, tooling"
+    version_bump: "none"
+  perf:
+    description: "Performance improvement"
+    version_bump: "patch"
+
+# KDS-Specific Scopes
+scopes:
+  kds: "KDS system enhancements"
+  kds-brain: "BRAIN learning system"
+  kds-governance: "Rules and policies"
+
+# Message Format Configuration
+message_format:
+  max_subject_length: 50
+  max_body_width: 72
+  include_file_list: true
+  include_statistics: true
+  template: |
+    <type>(<scope>): <subject>
+    
+    <body>
+    
+    <footer>
+
+# Git Tag Criteria
+tag_criteria:
+  kds_version_bump:
+    condition: "Major KDS enhancement (new agent, architecture change)"
+    tag_format: "kds-v{major}.{minor}.{patch}"
+    example: "kds-v5.2.0"
+    
+  kds_milestone:
+    condition: "Significant KDS milestone (BRAIN complete, SOLID refactor)"
+    tag_format: "kds-{milestone-name}"
+    example: "kds-brain-complete"
+    
+  application_release:
+    condition: "Production deployment ready"
+    tag_format: "v{major}.{minor}.{patch}"
+    example: "v1.2.0"
+    
+  feature_complete:
+    condition: "Feature fully implemented, tested, validated"
+    tag_format: "{feature-name}-complete"
+    example: "fab-button-animation-complete"
+
+# Build Artifact Detection
+build_artifacts:
+  patterns:
+    - "bin/"
+    - "obj/"
+    - "node_modules/"
+    - ".vs/"
+    - "*.user"
+    - "*.suo"
+    - "*.cache"
+    - "*.skip"
+    - "test-results/"
+    - "playwright-report/"
+  
+  actions:
+    - warn_on_detection: true
+    - suggest_gitignore: true
+    - auto_exclude: true
+
+# Commit Size Limits
+size_limits:
+  warn_file_count: 20
+  error_file_count: 50
+  suggest_breakdown: true
+
+# Validation Rules
+validation:
+  branch_compliance:
+    enforce: true
+    rules:
+      - type: "kds_changes"
+        required_branch: "features/kds"
+        error_message: "KDS changes detected but not on features/kds branch"
+        
+      - type: "non_kds_on_kds_branch"
+        forbidden: true
+        error_message: "Non-KDS changes on features/kds branch"
+  
+  commit_verification:
+    baseline_tracking: true
+    exclude_artifacts: true
+    fail_on_uncommitted: true
+    warn_on_new_files: true
+    
+  cross_reference:
+    detect_issues: true
+    link_sessions: true
+    find_related_commits: true
+
+# Error Handling Patterns
+error_patterns:
+  wrong_branch:
+    error: "KDS changes on wrong branch"
+    resolution:
+      - "Stash changes: git stash"
+      - "Switch branch: git checkout features/kds"
+      - "Apply stash: git stash pop"
+      - "Commit: (re-run commit handler)"
+      
+  conflicting_categories:
+    error: "Both KDS and application changes"
+    resolution:
+      - "Commit KDS changes first (features/kds)"
+      - "Merge to development"
+      - "Switch to feature branch"
+      - "Commit application changes"
+      
+  dirty_working_directory:
+    error: "Merge conflicts or unresolved changes"
+    resolution:
+      - "Resolve conflicts"
+      - "Stage resolved files"
+      - "Re-run commit handler"
+
+# Integration Points
+integration:
+  intent_router:
+    patterns:
+      - "commit changes"
+      - "commit my work"
+      - "git commit"
+      - "save changes to git"
+      - "create commits"
+    confidence: 0.95
+    
+  brain_logging:
+    enabled: true
+    events:
+      - "commit_created"
+      - "tag_created"
+      - "commit_failed"
+    
+  health_validator:
+    trigger_after_validation: true
+    auto_commit_on_pass: false

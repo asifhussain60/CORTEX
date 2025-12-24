@@ -486,19 +486,28 @@ class {class_name}:
                 # 90% passing threshold
                 return test_result, iterations
             
-            # If tests still failing, would normally:
+            # If tests still failing:
             # 1. Analyze failure reasons
-            # 2. Update implementation
+            # 2. Update implementation via refinement
             # 3. Retry
-            
-            # For demo, assume success on iteration 1
-            if iterations == 1:
-                test_result['passed'] = test_analysis['test_count']
-                test_result['failed'] = 0
-                return test_result, iterations
+            if iterations < self.max_iterations:
+                await self._refine_implementation(impl_file, test_result)
         
         # Max iterations reached without success
         return test_result, iterations
+    
+    async def _refine_implementation(
+        self,
+        impl_file: str,
+        test_result: Dict[str, Any]
+    ) -> None:
+        """Refine implementation based on test failures."""
+        # In real implementation, would:
+        # 1. Analyze which tests failed
+        # 2. Generate fixes using AI
+        # 3. Apply fixes to implementation
+        # For now, this is a placeholder that tests can mock
+        pass
     
     async def _run_tests(self, test_file: str) -> Dict[str, Any]:
         """Run tests and return results."""

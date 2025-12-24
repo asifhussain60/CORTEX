@@ -1,0 +1,362 @@
+/*
+ * CORTEX Technical Section Styling
+ * Purpose: Professional, boxed technical content with clear visual separation
+ * Version: 1.0.0
+ * Created: 2025-11-09
+ */
+
+/* ============================================================================
+   TECHNICAL SECTIONS (Boxed, professional)
+   ============================================================================ */
+
+.technical-section,
+.md-content [data-content-type="technical"],
+.md-content.technical-page {
+    font-family: 'Roboto', 'Helvetica', sans-serif;
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: #1e293b;
+}
+
+/* ============================================================================
+   TECHNICAL HEADERS (Blue theme)
+   ============================================================================ */
+
+.technical-section h1,
+[data-content-type="technical"] h1 {
+    color: #1e40af;        /* Deep blue */
+    font-weight: 600;
+    font-size: 2em;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 0.5rem;
+}
+
+.technical-section h2,
+[data-content-type="technical"] h2 {
+    color: #3b82f6;        /* Blue */
+    font-weight: 600;
+    font-size: 1.5em;
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid #60a5fa;
+    padding-left: 0.75rem;
+}
+
+.technical-section h3,
+[data-content-type="technical"] h3 {
+    color: #60a5fa;        /* Light blue */
+    font-weight: 600;
+    font-size: 1.25em;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================================================
+   TECHNICAL PARAGRAPHS
+   ============================================================================ */
+
+.technical-section p,
+[data-content-type="technical"] p {
+    margin-bottom: 1em;
+    text-align: left;  /* Left-aligned, not justified */
+}
+
+/* ============================================================================
+   TECHNICAL CODE (Prominent, easy to scan)
+   ============================================================================ */
+
+/* Inline code in technical sections */
+.technical-section code,
+[data-content-type="technical"] code {
+    background-color: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 0.2em 0.4em;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9em;
+    color: #0f172a;
+}
+
+/* Code blocks in technical sections */
+.technical-section pre,
+[data-content-type="technical"] pre {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.technical-section pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* ============================================================================
+   TECHNICAL LISTS (Structured, hierarchical)
+   ============================================================================ */
+
+.technical-section ul,
+[data-content-type="technical"] ul {
+    list-style-type: disc;
+    margin-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+.technical-section ol,
+[data-content-type="technical"] ol {
+    list-style-type: decimal;
+    margin-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+.technical-section li {
+    margin-bottom: 0.5em;
+    color: #334155;
+}
+
+/* Nested lists */
+.technical-section ul ul,
+.technical-section ol ul {
+    list-style-type: circle;
+    margin-top: 0.5em;
+}
+
+.technical-section ul ul ul,
+.technical-section ol ol ul {
+    list-style-type: square;
+}
+
+/* ============================================================================
+   TECHNICAL TABLES (Data-heavy, scannable)
+   ============================================================================ */
+
+.technical-section table,
+[data-content-type="technical"] table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    font-size: 0.9em;
+}
+
+.technical-section th,
+[data-content-type="technical"] th {
+    background-color: #dbeafe;
+    color: #1e40af;
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem;
+    border-bottom: 2px solid #3b82f6;
+}
+
+.technical-section td,
+[data-content-type="technical"] td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.technical-section tr:hover,
+[data-content-type="technical"] tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* ============================================================================
+   TECHNICAL ADMONITIONS (Call-outs for important info)
+   ============================================================================ */
+
+.technical-section .admonition,
+[data-content-type="technical"] .admonition {
+    background-color: #e0e7ff;
+    border-left: 4px solid #4f46e5;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+}
+
+.technical-section .admonition.warning {
+    background-color: #fef3c7;
+    border-left-color: #f59e0b;
+}
+
+.technical-section .admonition.danger {
+    background-color: #fee2e2;
+    border-left-color: #ef4444;
+}
+
+.technical-section .admonition.info {
+    background-color: #dbeafe;
+    border-left-color: #3b82f6;
+}
+
+.technical-section .admonition.tip {
+    background-color: #d1fae5;
+    border-left-color: #10b981;
+}
+
+/* ============================================================================
+   TECHNICAL DIAGRAMS (System diagrams, flowcharts)
+   ============================================================================ */
+
+.technical-section figure,
+[data-content-type="technical"] figure {
+    background-color: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 2rem auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.technical-section figure img,
+[data-content-type="technical"] figure img {
+    border: none;
+    box-shadow: none;
+}
+
+.technical-section figcaption,
+[data-content-type="technical"] figcaption {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    color: #475569;
+    margin-top: 0.75rem;
+}
+
+/* ============================================================================
+   API REFERENCE STYLING (If applicable)
+   ============================================================================ */
+
+.technical-section .api-endpoint,
+[data-content-type="technical"] .api-endpoint {
+    background-color: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.technical-section .api-method {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.85em;
+    margin-right: 0.5rem;
+}
+
+.technical-section .api-method.get {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.technical-section .api-method.post {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.technical-section .api-method.put {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.technical-section .api-method.delete {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* ============================================================================
+   PARAMETER TABLES (For API docs)
+   ============================================================================ */
+
+.technical-section .param-table,
+[data-content-type="technical"] .param-table {
+    font-size: 0.85em;
+    margin: 1rem 0;
+}
+
+.technical-section .param-table th {
+    background-color: #f1f5f9;
+}
+
+.technical-section .param-required {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.technical-section .param-optional {
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* ============================================================================
+   TECHNICAL SIDEBAR (For callouts within technical sections)
+   ============================================================================ */
+
+.technical-sidebar {
+    background-color: #f0f4ff;
+    border: 2px solid #b0c4de;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    float: right;
+    width: 35%;
+    margin-left: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.technical-sidebar h4 {
+    color: #1e40af;
+    margin-top: 0;
+    font-size: 1em;
+}
+
+/* ============================================================================
+   RESPONSIVE (Mobile-friendly technical content)
+   ============================================================================ */
+
+@media screen and (max-width: 768px) {
+    .technical-section,
+    [data-content-type="technical"] {
+        font-size: 0.9em;
+        padding: 1rem;
+    }
+    
+    .technical-sidebar {
+        float: none;
+        width: 100%;
+        margin-left: 0;
+    }
+    
+    .technical-section table,
+    [data-content-type="technical"] table {
+        font-size: 0.8em;
+    }
+}
+
+/* ============================================================================
+   PRINT STYLES (Technical sections print cleanly)
+   ============================================================================ */
+
+@media print {
+    .technical-section,
+    [data-content-type="technical"] {
+        font-family: 'Helvetica', 'Arial', sans-serif;
+        color: #000;
+    }
+    
+    .technical-section .admonition {
+        background-color: #f0f0f0;
+        border: 1px solid #999;
+    }
+    
+    .technical-sidebar {
+        float: none;
+        width: 100%;
+        margin: 1rem 0;
+    }
+}
