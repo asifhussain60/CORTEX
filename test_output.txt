@@ -1,0 +1,220 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\asifh\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\PROJECTS\CORTEX
+configfile: pytest.ini
+plugins: anyio-4.12.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 94 items
+
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_init_with_valid_cortex_root 
+-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_init_with_custom_logger 
+-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_init_with_config 
+-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_setup_validates_cortex_root 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Setting up maintenance orchestrator...
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_register_phases_creates_7_phases 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Registered 7 maintenance phases
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_execute_phase_with_unknown_phase 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Phase transition: \u2192 UNKNOWN_PHASE\n2025-12-24 07:56:33 [   ERROR] Unknown phase: UNKNOWN_PHASE
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_teardown_calculates_health_delta 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Tearing down maintenance orchestrator...
+2025-12-24 07:56:33 [    INFO] Health delta: +10.00% (75.0% \u2192 85.0%)\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_teardown_without_healthchecks 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Tearing down maintenance orchestrator...
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_phase_execution_logs_transition 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Running pre-healthcheck...
+FAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPhaseInitialization::test_initialization_creates_phase_manager 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_pre_healthcheck_success 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Running pre-healthcheck...
+FAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_pre_healthcheck_sets_baseline_health 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Running pre-healthcheck...
+FAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_pre_healthcheck_scans_7_components 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Running pre-healthcheck...
+FAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_check_tier0_health_all_files_present 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nFAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_check_tier0_health_missing_files 
+-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_check_tier1_health_within_limit 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_check_tier1_health_over_limit 
+-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nFAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_check_tier2_health 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_check_tier3_health 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_check_orchestrators_health 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_check_agents_health 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nPASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestPreHealthcheckPhase::test_check_system_health 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nFAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhase::test_align_phase_success_when_utility_missing 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Running align phase...
+2025-12-24 07:56:33 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+FAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhase::test_align_phase_checks_for_import 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Running align phase...
+2025-12-24 07:56:33 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhase::test_align_phase_returns_metrics 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:33 [    INFO] Running align phase...
+2025-12-24 07:56:33 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhase::test_align_phase_logs_execution 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:33 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:33 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running align phase...
+2025-12-24 07:56:34 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhase::test_align_phase_with_utility_available 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nFAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhaseExtended::test_align_phase_exception_handling 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running align phase...
+2025-12-24 07:56:34 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhaseExtended::test_align_phase_with_auto_fix_enabled 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running align phase...
+2025-12-24 07:56:34 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhaseExtended::test_align_phase_returns_correct_structure 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running align phase...
+2025-12-24 07:56:34 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhaseExtended::test_align_phase_handles_empty_context 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running align phase...
+2025-12-24 07:56:34 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestAlignPhaseExtended::test_align_phase_idempotent 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running align phase...
+2025-12-24 07:56:34 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+2025-12-24 07:56:34 [    INFO] Running align phase...
+2025-12-24 07:56:34 [ WARNING] Align utility not available: cannot import name 'run_align' from 'src.operations.modules.realignment.realignment_utility' (D:\PROJECTS\CORTEX\src\operations\modules\realignment\realignment_utility.py)
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_success_when_utility_missing 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+FAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_returns_metrics 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_logs_execution 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_with_utility_available 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\nFAILED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_respects_dry_run 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_exception_handling 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_idempotent 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_correct_structure 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_with_empty_context 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestCleanupPhase::test_cleanup_phase_updates_references 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running cleanup phase...
+2025-12-24 07:56:34 [ WARNING] Cleanup orchestrator not available: No module named 'src.operations.modules.orchestration.cleanup_orchestrator'
+PASSED
+tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestOptimizePhase::test_optimize_phase_success_when_utility_missing 
+------------------------------- live log setup --------------------------------
+2025-12-24 07:56:34 [    INFO] \U0001f3ad Orchestrator initialized: maintenance_v3\n2025-12-24 07:56:34 [    INFO] \U0001f3ad Maintenance Orchestrator v3.0 initialized\n-------------------------------- live log call --------------------------------
+2025-12-24 07:56:34 [    INFO] Running optimize phase...
+2025-12-24 07:56:34 [ WARNING] DoR checklist not found: D:\PROJECTS\CORTEX\cortex-brain\templates\planning\dor-checklist.yaml
+2025-12-24 07:56:34 [ WARNING] TDD framework not found: D:\PROJECTS\CORTEX\cortex-brain\components\development-executor\tdd-framework.yaml
+2025-12-24 07:56:34 [ WARNING] Clean code gates not found: D:\PROJECTS\CORTEX\cortex-brain\components\development-executor\clean-code-gates.yaml
+2025-12-24 07:56:34 [ WARNING] Security gates not found: D:\PROJECTS\CORTEX\cortex-brain\components\development-executor\security-gates.yaml
+2025-12-24 07:56:34 [ WARNING] Planning validation found issues - recommendations provided
