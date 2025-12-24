@@ -17,16 +17,28 @@ CREATE TABLE IF NOT EXISTS conversations (
 
 -- Tier 2: Knowledge Graph - Patterns
 CREATE TABLE IF NOT EXISTS patterns (
-    pattern_id TEXT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pattern_id TEXT UNIQUE NOT NULL,
+    title TEXT NOT NULL,
     name TEXT NOT NULL,
-    pattern_type TEXT NOT NULL,
+    content TEXT NOT NULL,
     context TEXT NOT NULL,
-    confidence REAL NOT NULL CHECK (confidence >= 0.0 AND confidence <= 1.0),
+    pattern_type TEXT NOT NULL,
+    confidence REAL NOT NULL DEFAULT 1.0 CHECK (confidence >= 0.0 AND confidence <= 1.0),
     namespace TEXT NOT NULL,
+    namespaces TEXT DEFAULT '["CORTEX-core"]',
+    scope TEXT DEFAULT 'cortex' CHECK (scope IN ('cortex', 'application')),
     examples TEXT,  -- JSON array
     related_patterns TEXT,  -- JSON array
+    source TEXT,
+    metadata TEXT,
+    is_pinned INTEGER DEFAULT 0,
+    access_count INTEGER DEFAULT 0,
+    usage_count INTEGER DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_accessed TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_used TIMESTAMP
 );
 
 -- Tier 1-3: Context Items

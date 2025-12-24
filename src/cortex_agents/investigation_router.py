@@ -15,6 +15,14 @@ if TYPE_CHECKING:
 from src.cortex_agents.health_validator.agent import HealthValidator
 from src.tier2.knowledge_graph import KnowledgeGraph
 
+# Try to import EnhancedHealthValidator, fall back gracefully if not available
+try:
+    from src.cortex_agents.health_validator.enhanced_validator import EnhancedHealthValidator
+    ENHANCED_VALIDATOR_AVAILABLE = True
+except ImportError:
+    EnhancedHealthValidator = None
+    ENHANCED_VALIDATOR_AVAILABLE = False
+
 
 class InvestigationPhase(Enum):
     """Investigation phases with token budgets"""
@@ -89,21 +97,24 @@ class InvestigationRouter:
         self.knowledge_graph = knowledge_graph
         
         # Initialize Enhanced Health Validator for investigation-specific analysis
-        try:
-            from src.cortex_agents.health_validator.enhanced_validator import EnhancedHealthValidator
-            # Use enhanced validator if available, fall back to base validator
-            if isinstance(health_validator, EnhancedHealthValidator):
-                self.enhanced_validator = health_validator
-            else:
-                # Wrap existing validator with enhanced capabilities
-                self.enhanced_validator = EnhancedHealthValidator(
-                    name="enhanced_health_validator",
-                    tier1_api=getattr(health_validator, 'tier1_api', None),
-                    tier2_kg=getattr(health_validator, 'tier2_kg', None),
-                    tier3_context=getattr(health_validator, 'tier3_context', None)
-                )
-        except ImportError:
-            self.enhanced_validator = health_validator  # Fallback to base validator
+        self.enhanced_validator = health_validator  # Default fallback
+        
+        if ENHANCED_VALIDATOR_AVAILABLE and EnhancedHealthValidator is not None:
+            try:
+                # Use enhanced validator if available, fall back to base validator
+                if isinstance(health_validator, EnhancedHealthValidator):
+                    self.enhanced_validator = health_validator
+                else:
+                    # Wrap existing validator with enhanced capabilities
+                    self.enhanced_validator = EnhancedHealthValidator(
+                        name="enhanced_health_validator",
+                        tier1_api=getattr(health_validator, 'tier1_api', None),
+                        tier2_kg=getattr(health_validator, 'tier2_kg', None),
+                        tier3_context=getattr(health_validator, 'tier3_context', None)
+                    )
+            except Exception:
+                # If EnhancedHealthValidator instantiation fails, keep the fallback
+                pass
         
         # Investigation patterns for entity detection
         self.investigation_patterns = {
@@ -125,6 +136,14 @@ class InvestigationRouter:
         Returns:
             Investigation results with phase completion status
         """
+        # Validate query
+        if not query or not isinstance(query, str):
+            return {
+                "success": False,
+                "error": "Invalid query: must be a non-empty string",
+                "phase": "validation"
+            }
+        
         self.logger.info(f"Starting investigation: {query}")
         
         # Phase 1: Discovery - Initial scope and entity detection
@@ -463,6 +482,11 @@ class InvestigationRouter:
     async def _analyze_relationship(self, relationship: Dict[str, Any], context: InvestigationContext) -> Optional[Dict[str, Any]]:
         """Analyze a specific relationship and return findings"""
         try:
+            # Check confidence threshold first
+            rel_confidence = relationship.get('confidence', 0.0)
+            if rel_confidence < context.confidence_threshold:
+                return {'skipped': True, 'reason': 'low_confidence', 'confidence': rel_confidence}
+            
             # Estimate token cost
             relationship_size = len(str(relationship))
             token_cost = relationship_size // 4  # Rough estimate

@@ -36,13 +36,8 @@ class ConnectionManager:
         self._connection = None
         # Create database file immediately and initialize schema
         self.get_connection()
-        # Ensure schema exists (idempotent)
-        try:
-            DatabaseSchema.initialize(db_path=self.db_path)
-        except Exception:
-            # Allow caller tests to handle initialization explicitly if needed
-            # but don't fail construction due to idempotent init
-            pass
+        # Ensure schema exists (idempotent) - always initialize for new databases
+        DatabaseSchema.initialize(db_path=self.db_path)
     
     def get_connection(self) -> sqlite3.Connection:
         """

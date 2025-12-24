@@ -214,7 +214,7 @@ class KnowledgeGraph:
         This method retrieves patterns stored by the Intent Router for routing decisions.
         
         Args:
-            pattern_type: Optional filter by pattern type (e.g., 'routing', 'intent')
+            pattern_type: Optional filter by pattern_type (e.g., 'routing', 'intent')
             limit: Maximum number of patterns to return (default: 100)
         
         Returns:
@@ -222,23 +222,24 @@ class KnowledgeGraph:
         """
         # Use the delegated pattern_store to query patterns
         try:
-            # Query patterns from the pattern store
-            if pattern_type:
-                results = self.pattern_store.get_patterns(
-                    filters={'pattern_type': pattern_type},
-                    limit=limit
-                )
-            else:
-                results = self.pattern_store.get_patterns(limit=limit)
+            # Query patterns from the pattern store using list_patterns
+            results = self.pattern_store.list_patterns(
+                pattern_type=pattern_type,
+                limit=limit
+            )
             
             return results if results else []
         except Exception:
             # Fallback to empty list if query fails
             return []
     
-    def add_pattern(self, pattern: Dict[str, Any]) -> Dict[str, Any]:
+    def add_pattern(self, pattern: Dict[str, Any] = None, pattern_type: str = None, data: Dict[str, Any] = None, **kwargs) -> Dict[str, Any]:
         """
         Add a pattern (alias for store_pattern for backward compatibility).
+        
+        Supports two calling styles:
+        1. add_pattern(pattern={...})  # Dictionary with all fields
+        2. add_pattern(pattern_type="...", data={...})  # Legacy style from tests
         
         Args:
             pattern: Pattern dictionary containing fields like:
@@ -248,21 +249,33 @@ class KnowledgeGraph:
                 - pattern_type: Type of pattern (workflow, intent, validation, etc.)
                 - confidence: Confidence score (0.0-1.0)
                 - etc.
+            pattern_type: (Legacy) Pattern type as keyword argument
+            data: (Legacy) Pattern data as keyword argument
+            **kwargs: Additional pattern fields
             
         Returns:
             Result dictionary with pattern_id and status
         """
+        # Handle legacy calling style: add_pattern(pattern_type="...", data={...})
+        if pattern is None and pattern_type is not None:
+            pattern = {'pattern_type': pattern_type}
+            if data is not None:
+                pattern.update(data)
+            pattern.update(kwargs)
+        elif pattern is None:
+            pattern = kwargs
+        
         # Extract fields from pattern dict with defaults
         import uuid
         
         return self.store_pattern(
             pattern_id=pattern.get('pattern_id', str(uuid.uuid4())),
-            title=pattern.get('title', 'Untitled Pattern'),
-            content=pattern.get('content', ''),
+            title=pattern.get('title', pattern.get('message', 'Untitled Pattern')),
+            content=pattern.get('content', str(pattern.get('data', ''))),
             pattern_type=pattern.get('pattern_type', 'workflow'),
             confidence=pattern.get('confidence', 1.0),
             source=pattern.get('source'),
-            metadata=pattern.get('metadata'),
+            metadata=pattern.get('metadata', pattern if isinstance(pattern, dict) else None),
             is_pinned=pattern.get('is_pinned', False),
             scope=pattern.get('scope', 'application'),
             namespaces=pattern.get('namespaces', []),
