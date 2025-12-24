@@ -742,7 +742,7 @@ if __name__ == "__main__":
             ]
         )
         
-        monitor = OptimizationHealthMonitor("/Users/asifhussain/PROJECTS/CORTEX")
+        monitor = OptimizationHealthMonitor(Path(CORTEX_ROOT) / "")
         report = await monitor.generate_health_report(test_data)
         
         print(f"Health Report for {report.feature_name}:")

@@ -637,7 +637,7 @@ if __name__ == "__main__":
             complexity_score=25
         )
         
-        generator = VisualAssetGenerator("/Users/asifhussain/PROJECTS/CORTEX")
+        generator = VisualAssetGenerator(Path(CORTEX_ROOT) / "")
         assets = await generator.generate_visual_assets(test_data)
         
         print(f"Visual Asset Generation Results for {assets.feature_name}:")

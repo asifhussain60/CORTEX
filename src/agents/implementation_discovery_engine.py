@@ -684,7 +684,7 @@ if __name__ == "__main__":
     import asyncio
     
     async def test_discovery():
-        engine = ImplementationDiscoveryEngine("/Users/asifhussain/PROJECTS/CORTEX")
+        engine = ImplementationDiscoveryEngine(Path(CORTEX_ROOT) / "")
         data = await engine.discover_implementation("test_feature")
         
         print(f"Discovery Results for {data.feature_name}:")

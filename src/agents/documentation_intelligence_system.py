@@ -664,7 +664,7 @@ if __name__ == "__main__":
             ]
         )
         
-        system = DocumentationIntelligenceSystem("/Users/asifhussain/PROJECTS/CORTEX")
+        system = DocumentationIntelligenceSystem(Path(CORTEX_ROOT) / "")
         updates = await system.generate_documentation_updates(test_data)
         
         print(f"Documentation Intelligence Results for {updates.feature_name}:")

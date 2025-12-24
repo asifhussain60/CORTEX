@@ -123,7 +123,7 @@ class TestTDDOrchestratorFoundation:
         mcp = Mock()
         mcp.call = Mock(return_value={"status": "success"})
         
-        config = {'workspace_root': 'd:\\PROJECTS\\CORTEX'}
+        config = {'workspace_root': Path(CORTEX_ROOT) / "".replace("/", os.sep)}
         return TDDOrchestratorV4(brain, kg, mcp, config)
     
     def test_orchestrator_initialization(self, orchestrator):
@@ -158,7 +158,7 @@ class TestTDDOrchestratorFoundation:
         mcp = Mock()
         mcp.call = Mock(return_value={"status": "success"})
         
-        config = {'workspace_root': 'd:\\PROJECTS\\CORTEX'}
+        config = {'workspace_root': Path(CORTEX_ROOT) / "".replace("/", os.sep)}
         TDDOrchestratorV4(brain, kg, mcp, config)
         
         # Verify engagement hint pattern in initialization

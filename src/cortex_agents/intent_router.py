@@ -1023,7 +1023,7 @@ class IntentRouter(BaseAgent):
             # Extract context from request
             context = {
                 'current_file': request.metadata.get('current_file'),
-                'workspace_root': request.metadata.get('workspace_root', '/Users/asifhussain/PROJECTS/CORTEX'),
+                'workspace_root': request.metadata.get('workspace_root', Path(CORTEX_ROOT) / ""),
                 'conversation_id': request.conversation_id
             }
             

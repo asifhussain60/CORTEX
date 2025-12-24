@@ -403,7 +403,7 @@ if __name__ == '__main__':
     # Test with CORTEX source code
     import sys
     
-    workspace = sys.argv[1] if len(sys.argv) > 1 else '/Users/asifhussain/PROJECTS/CORTEX'
+    workspace = sys.argv[1] if len(sys.argv) > 1 else Path(CORTEX_ROOT) / ""
     output = sys.argv[2] if len(sys.argv) > 2 else 'uml_diagram.svg'
     
     print(f"Analyzing Python project: {workspace}")

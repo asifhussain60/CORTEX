@@ -24,7 +24,7 @@ class MultilingualTemplateLoader:
         template = loader.get_template("help", language="es", verbosity="concise")
     """
     
-    DEFAULT_TEMPLATE_PATH = "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/multilingual-templates.yaml"
+    DEFAULT_TEMPLATE_PATH = Path(CORTEX_ROOT) / "cortex-brain/multilingual-templates.yaml"
     
     def __init__(self, template_path: Optional[str] = None):
         """
