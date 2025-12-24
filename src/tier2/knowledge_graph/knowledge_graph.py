@@ -203,6 +203,39 @@ class KnowledgeGraph:
     def search_patterns_with_namespace_priority(self, query: str, **kwargs) -> List[Dict[str, Any]]:
         return self.pattern_search.search_with_namespace_priority(query=query, **kwargs)
     
+    def get_routing_patterns(
+        self,
+        pattern_type: Optional[str] = None,
+        limit: int = 100
+    ) -> List[Dict[str, Any]]:
+        """
+        Get all routing patterns from the knowledge graph.
+        
+        This method retrieves patterns stored by the Intent Router for routing decisions.
+        
+        Args:
+            pattern_type: Optional filter by pattern type (e.g., 'routing', 'intent')
+            limit: Maximum number of patterns to return (default: 100)
+        
+        Returns:
+            List of pattern dictionaries with routing metadata
+        """
+        # Use the delegated pattern_store to query patterns
+        try:
+            # Query patterns from the pattern store
+            if pattern_type:
+                results = self.pattern_store.get_patterns(
+                    filters={'pattern_type': pattern_type},
+                    limit=limit
+                )
+            else:
+                results = self.pattern_store.get_patterns(limit=limit)
+            
+            return results if results else []
+        except Exception:
+            # Fallback to empty list if query fails
+            return []
+    
     def add_pattern(self, pattern: Dict[str, Any]) -> Dict[str, Any]:
         """
         Add a pattern (alias for store_pattern for backward compatibility).

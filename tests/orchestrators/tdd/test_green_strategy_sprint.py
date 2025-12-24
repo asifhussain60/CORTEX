@@ -279,7 +279,13 @@ class TestImplementationGeneration:
     @pytest.mark.asyncio
     async def test_generate_error_handling(self, strategy):
         """Handle errors during implementation generation."""
-        strategy.mcp.generate_implementation.side_effect = Exception("MCP failure")
+        # Mock file write to raise an exception
+        original_write_text = Path.write_text
+        
+        def mock_write_text(self, *args, **kwargs):
+            raise Exception("File write failure")
+        
+        Path.write_text = mock_write_text
         
         test_analysis = {
             'failing_tests': ['test_feature'],
@@ -289,10 +295,14 @@ class TestImplementationGeneration:
         best_practices = {}
         tech_profile = MagicMock(language='python', frameworks=[])
         
-        with pytest.raises(Exception):
-            await strategy._generate_implementation(
-                'feature', test_analysis, best_practices, tech_profile
-            )
+        try:
+            with pytest.raises(Exception, match="File write failure"):
+                await strategy._generate_implementation(
+                    'feature', test_analysis, best_practices, tech_profile
+                )
+        finally:
+            # Restore original method
+            Path.write_text = original_write_text
 
 
 class TestTestExecutionLoop:

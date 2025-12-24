@@ -250,6 +250,72 @@ class KnowledgeGraph:
             
             return pattern_results
     
+    def get_routing_patterns(
+        self,
+        pattern_type: Optional[str] = None,
+        limit: int = 100
+    ) -> List[Dict[str, Any]]:
+        """
+        Get all routing patterns from the knowledge graph.
+        
+        This method retrieves patterns stored by the Intent Router for routing decisions.
+        It's a convenience wrapper around the patterns table query.
+        
+        Args:
+            pattern_type: Optional filter by pattern type (e.g., 'routing', 'intent')
+            limit: Maximum number of patterns to return (default: 100)
+        
+        Returns:
+            List of pattern dictionaries with fields like:
+            - pattern_id: Unique identifier
+            - pattern_type: Type of pattern
+            - user_message or message_hash: Original input
+            - intent or classified_intent: Classified intent
+            - confidence: Confidence score
+            - context: Additional context data
+        """
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            # Build query
+            if pattern_type:
+                query = """
+                    SELECT pattern_id, pattern_type, confidence, context, created_at
+                    FROM patterns
+                    WHERE pattern_type = ?
+                    ORDER BY created_at DESC
+                    LIMIT ?
+                """
+                cursor.execute(query, (pattern_type, limit))
+            else:
+                query = """
+                    SELECT pattern_id, pattern_type, confidence, context, created_at
+                    FROM patterns
+                    ORDER BY created_at DESC
+                    LIMIT ?
+                """
+                cursor.execute(query, (limit,))
+            
+            results = cursor.fetchall()
+            
+            # Convert to list of dicts and parse JSON context
+            patterns = []
+            for row in results:
+                pattern = dict(row)
+                # Parse context JSON if present
+                if pattern.get('context'):
+                    try:
+                        import json
+                        context_data = json.loads(pattern['context'])
+                        # Merge context data into pattern dict
+                        pattern.update(context_data)
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+                patterns.append(pattern)
+            
+            return patterns
+    
     def track_relationship(
         self,
         file_a: str,
