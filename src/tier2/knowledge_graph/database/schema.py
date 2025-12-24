@@ -36,6 +36,10 @@ class DatabaseSchema:
         DatabaseSchema._create_decay_log_table(cursor)
         DatabaseSchema._create_fts_table(cursor)
         
+        # Legacy tables for backward compatibility
+        DatabaseSchema._create_legacy_relationships_table(cursor)
+        DatabaseSchema._create_legacy_workflows_table(cursor)
+        
         DatabaseSchema._create_fts_triggers(cursor)
         
         DatabaseSchema._create_indexes(cursor)
@@ -45,7 +49,7 @@ class DatabaseSchema:
     
     @staticmethod
     def _create_patterns_table(cursor: sqlite3.Cursor) -> None:
-        """Create patterns table (core storage)."""
+        """Create patterns table (core storage with backward compatibility)."""
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS patterns (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,14 +60,15 @@ class DatabaseSchema:
                 confidence REAL DEFAULT 1.0,
                 created_at TIMESTAMP NOT NULL,
                 last_accessed TIMESTAMP NOT NULL,
+                last_used TIMESTAMP,
                 access_count INTEGER DEFAULT 0,
+                usage_count INTEGER DEFAULT 0,
                 source TEXT,
                 metadata TEXT,
                 is_pinned INTEGER DEFAULT 0,
                 scope TEXT DEFAULT 'cortex',
                 namespaces TEXT DEFAULT '["CORTEX-core"]',
                 CHECK (confidence >= 0.0 AND confidence <= 1.0),
-                CHECK (pattern_type IN ('workflow', 'principle', 'anti_pattern', 'solution', 'context')),
                 CHECK (scope IN ('cortex', 'application'))
             )
         """)
@@ -84,6 +89,37 @@ class DatabaseSchema:
                 CHECK (strength >= 0.0 AND strength <= 1.0),
                 CHECK (relationship_type IN ('extends', 'relates_to', 'related_to', 'contradicts', 'supersedes')),
                 UNIQUE (from_pattern, to_pattern, relationship_type)
+            )
+        """)
+    
+    @staticmethod
+    def _create_legacy_relationships_table(cursor: sqlite3.Cursor) -> None:
+        """Create legacy relationships table for file co-modification tracking."""
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS relationships (
+                relationship_id TEXT PRIMARY KEY,
+                file_a TEXT,
+                file_b TEXT,
+                relationship_type TEXT,
+                strength REAL,
+                co_modification_count INTEGER DEFAULT 0,
+                context TEXT,
+                last_observed DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+    
+    @staticmethod
+    def _create_legacy_workflows_table(cursor: sqlite3.Cursor) -> None:
+        """Create legacy workflows table for workflow templates."""
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS workflows (
+                workflow_id TEXT PRIMARY KEY,
+                name TEXT UNIQUE NOT NULL,
+                phases_json TEXT,
+                success_rate REAL,
+                avg_duration_hours REAL,
+                usage_count INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
     
@@ -120,6 +156,17 @@ class DatabaseSchema:
         """Create FTS5 virtual table for semantic search."""
         cursor.execute("""
             CREATE VIRTUAL TABLE IF NOT EXISTS pattern_fts USING fts5(
+                pattern_id UNINDEXED,
+                title,
+                content,
+                content='patterns',
+                content_rowid='id'
+            )
+        """)
+        
+        # Create legacy alias for backward compatibility
+        cursor.execute("""
+            CREATE VIRTUAL TABLE IF NOT EXISTS patterns_fts USING fts5(
                 pattern_id UNINDEXED,
                 title,
                 content,
@@ -165,3 +212,8 @@ class DatabaseSchema:
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_tag ON pattern_tags(tag)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_relationship_from ON pattern_relationships(from_pattern)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_relationship_to ON pattern_relationships(to_pattern)")
+        
+        # Legacy indexes
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_patterns_confidence ON patterns(confidence DESC)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_patterns_last_used ON patterns(last_used DESC)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_relationships_files ON relationships(file_a, file_b)")

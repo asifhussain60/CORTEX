@@ -161,7 +161,40 @@ class KnowledgeGraph:
 
     # ---------------------- Search ----------------------
     def search_patterns(self, query: str, **kwargs) -> List[Dict[str, Any]]:
-        return self.pattern_search.search(query=query, **kwargs)
+        """
+        Search patterns with backward compatibility for legacy parameters.
+        
+        Legacy parameters handled:
+        - pattern_type: Filter by type (delegated to post-filter)
+        - include_confidence_metadata: Add usage/success rate metadata
+        """
+        # Extract legacy parameters
+        pattern_type = kwargs.pop('pattern_type', None)
+        include_confidence_metadata = kwargs.pop('include_confidence_metadata', False)
+        
+        # Call modern search API
+        results = self.pattern_search.search(query=query, **kwargs)
+        
+        # Map access_count to usage_count for backward compatibility
+        for result in results:
+            if "access_count" in result and "usage_count" not in result:
+                result["usage_count"] = result["access_count"]
+            # Also add last_used if not present (use last_accessed)
+            if "last_accessed" in result and "last_used" not in result:
+                result["last_used"] = result["last_accessed"]
+        
+        # Post-filter by pattern_type if specified
+        if pattern_type:
+            results = [r for r in results if r.get('pattern_type') == pattern_type]
+        
+        # Add confidence metadata if requested
+        if include_confidence_metadata:
+            pattern_count = len(results)
+            for result in results:
+                result["pattern_count"] = pattern_count
+                result["success_rate"] = self._calculate_success_rate(result["pattern_id"])
+        
+        return results
     
     def search(self, query: str, **kwargs) -> List[Dict[str, Any]]:
         """Alias for search_patterns for backward compatibility."""
@@ -210,7 +243,17 @@ class KnowledgeGraph:
         return self.pattern_search.get_application_patterns(namespace=namespace, **kwargs)
 
     # ---------------------- Decay ----------------------
-    def apply_decay(self) -> Dict[str, Any]:
+    def apply_decay(self, decay_rate: float = 0.05, min_confidence: float = 0.3) -> Dict[str, Any]:
+        """
+        Apply pattern decay with optional parameters (backward compatibility).
+        
+        Args:
+            decay_rate: Confidence decrease per period (default: 0.05)
+            min_confidence: Don't decay below this (default: 0.3)
+        
+        Returns:
+            Decay results dictionary
+        """
         return self.pattern_decay.apply_decay()
 
     def get_decay_candidates(self) -> List[Dict[str, Any]]:
@@ -224,6 +267,27 @@ class KnowledgeGraph:
 
     def get_decay_log(self, **kwargs) -> List[Dict[str, Any]]:
         return self.pattern_decay.get_decay_log(**kwargs)
+    
+    def boost_pattern(self, pattern_id: str, boost_amount: float = 0.05):
+        """
+        Increase pattern confidence after successful use (legacy API compatibility).
+        
+        Args:
+            pattern_id: Pattern to boost
+            boost_amount: Confidence increase (default: 0.05)
+        """
+        from datetime import datetime
+        
+        with self.connection_manager.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE patterns 
+                SET confidence = MIN(confidence + ?, 1.0),
+                    last_used = ?,
+                    usage_count = usage_count + 1
+                WHERE pattern_id = ?
+            """, (boost_amount, datetime.now(), pattern_id))
+            conn.commit()
 
     # ---------------------- Relationships ----------------------
     def create_relationship(self, **kwargs) -> Dict[str, Any]:
@@ -234,6 +298,92 @@ class KnowledgeGraph:
 
     def traverse_graph(self, start_pattern: str, **kwargs) -> Dict[str, Any]:
         return self.relationships.traverse_graph(start_pattern=start_pattern, **kwargs)
+    
+    def track_relationship(
+        self,
+        file_a: str,
+        file_b: str,
+        relationship_type: str = "co_modification",
+        strength: float = 0.5,
+        context: str = None
+    ):
+        """
+        Track file co-modification relationship (legacy API compatibility).
+        
+        Args:
+            file_a: First file path
+            file_b: Second file path
+            relationship_type: Type (co_modification, dependency)
+            strength: Relationship strength (0.0-1.0)
+            context: Additional context
+        """
+        from datetime import datetime
+        
+        relationship_id = f"{file_a}_{file_b}_{relationship_type}"
+        
+        # Check if relationship exists
+        with self.connection_manager.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT co_modification_count FROM relationships 
+                WHERE relationship_id = ?
+            """, (relationship_id,))
+            existing = cursor.fetchone()
+            
+            if existing:
+                # Update count and strength
+                new_count = existing["co_modification_count"] + 1
+                cursor.execute("""
+                    UPDATE relationships 
+                    SET co_modification_count = ?,
+                        strength = ?,
+                        last_observed = ?
+                    WHERE relationship_id = ?
+                """, (new_count, strength, datetime.now(), relationship_id))
+            else:
+                # Insert new relationship
+                cursor.execute("""
+                    INSERT INTO relationships 
+                    (relationship_id, file_a, file_b, relationship_type, strength, context, co_modification_count)
+                    VALUES (?, ?, ?, ?, ?, ?, 1)
+                """, (relationship_id, file_a, file_b, relationship_type, strength, context))
+            
+            conn.commit()
+    
+    def get_file_relationships(
+        self,
+        file_path: str,
+        min_strength: float = 0.5
+    ) -> List[Dict[str, Any]]:
+        """
+        Get all relationships for a file (legacy API compatibility).
+        
+        Args:
+            file_path: File to query
+            min_strength: Minimum relationship strength
+        
+        Returns:
+            List of related files
+        """
+        with self.connection_manager.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM relationships 
+                WHERE (file_a = ? OR file_b = ?)
+                AND strength >= ?
+                ORDER BY strength DESC
+            """, (file_path, file_path, min_strength))
+            
+            return [
+                {
+                    "related_file": row["file_b"] if row["file_a"] == file_path else row["file_a"],
+                    "relationship_type": row["relationship_type"],
+                    "strength": row["strength"],
+                    "co_modification_count": row["co_modification_count"],
+                    "context": row["context"]
+                }
+                for row in cursor.fetchall()
+            ]
 
     # ---------------------- Tags ----------------------
     def add_tag(self, pattern_id: str, tag: str) -> bool:
@@ -405,6 +555,165 @@ File: CORTEX/cortex-brain/knowledge-graph.yaml
 Items Saved: {items_count} components
 
 This analysis will persist across sessions and can be referenced in future conversations."""
+
+    # ---------------------- Workflow Templates ----------------------
+    def store_workflow_template(
+        self,
+        name: str,
+        phases: List[Dict[str, Any]],
+        success_rate: float = 0.0,
+        avg_duration_hours: float = 0.0
+    ) -> str:
+        """
+        Store workflow template (legacy API compatibility).
+        
+        Args:
+            name: Workflow name
+            phases: List of phase definitions
+            success_rate: Historical success rate
+            avg_duration_hours: Average completion time
+        
+        Returns:
+            workflow_id: Unique identifier
+        """
+        import json
+        
+        workflow_id = self._generate_workflow_id(name)
+        phases_json = json.dumps(phases)
+        
+        with self.connection_manager.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO workflows 
+                (workflow_id, name, phases_json, success_rate, avg_duration_hours)
+                VALUES (?, ?, ?, ?, ?)
+            """, (workflow_id, name, phases_json, success_rate, avg_duration_hours))
+            conn.commit()
+        
+        return workflow_id
+    
+    def get_workflow_template(self, name: str) -> Optional[Dict[str, Any]]:
+        """Retrieve workflow template by name (legacy API compatibility)."""
+        import json
+        
+        with self.connection_manager.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM workflows WHERE name = ?
+            """, (name,))
+            row = cursor.fetchone()
+            
+            if row:
+                return {
+                    "workflow_id": row["workflow_id"],
+                    "name": row["name"],
+                    "phases": json.loads(row["phases_json"]),
+                    "success_rate": row["success_rate"],
+                    "avg_duration_hours": row["avg_duration_hours"],
+                    "usage_count": row["usage_count"]
+                }
+            return None
+    
+    # ---------------------- TDD Cycle Patterns ----------------------
+    def store_tdd_cycle_pattern(
+        self,
+        feature: str,
+        test_strategy: str,
+        implementation_approach: str,
+        refactoring_type: str,
+        confidence: float = 0.7
+    ) -> str:
+        """
+        Store a completed TDD cycle as a pattern (legacy API compatibility).
+        
+        Args:
+            feature: Feature name that was implemented
+            test_strategy: Testing strategy used
+            implementation_approach: Implementation approach
+            refactoring_type: Type of refactoring performed
+            confidence: Initial confidence score (default: 0.7)
+        
+        Returns:
+            pattern_id: Unique identifier for the stored pattern
+        """
+        import json
+        
+        context = {
+            'test_strategy': test_strategy,
+            'implementation_approach': implementation_approach,
+            'refactoring_type': refactoring_type,
+            'source': 'tdd_cycle'
+        }
+        
+        return self.store_pattern(
+            title=feature,
+            content=json.dumps(context),
+            pattern_type='tdd_cycle',
+            confidence=confidence,
+            source='tdd_cycle',
+            metadata=context,
+            scope='application',
+            namespaces=['tdd', 'development']
+        )
+    
+    # ---------------------- Helper Methods ----------------------
+    def _generate_pattern_id(self, title: str) -> str:
+        """Generate unique pattern ID (legacy API compatibility)."""
+        from datetime import datetime
+        
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        clean_title = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_'))
+        clean_title = clean_title.replace(' ', '_').lower()[:30]
+        return f"pattern_{clean_title}_{timestamp}"
+    
+    def _generate_workflow_id(self, name: str) -> str:
+        """Generate unique workflow ID (legacy API compatibility)."""
+        clean_name = "".join(c for c in name if c.isalnum() or c in (' ', '-', '_'))
+        clean_name = clean_name.replace(' ', '_').lower()
+        return f"workflow_{clean_name}"
+    
+    def _calculate_success_rate(self, pattern_id: str) -> float:
+        """
+        Calculate success rate for a pattern (legacy API compatibility).
+        
+        Args:
+            pattern_id: Pattern to calculate success rate for
+            
+        Returns:
+            Success rate (0.0-1.0)
+        """
+        with self.connection_manager.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT confidence, usage_count FROM patterns 
+                WHERE pattern_id = ?
+            """, (pattern_id,))
+            row = cursor.fetchone()
+            
+            if row:
+                # Use confidence as success rate proxy
+                # Adjust based on usage: more usage = more reliable
+                base_rate = row["confidence"]
+                usage_count = row["usage_count"]
+                
+                # Boost success rate slightly for well-used patterns
+                if usage_count > 10:
+                    return min(base_rate + 0.05, 1.0)
+                elif usage_count > 5:
+                    return min(base_rate + 0.02, 1.0)
+                else:
+                    return base_rate
+            
+            return 0.5  # Default if pattern not found
+    
+    def _get_connection(self):
+        """
+        Get database connection context manager (legacy API compatibility).
+        
+        Returns:
+            Context manager for database connection
+        """
+        return self.connection_manager.get_connection()
 
     # ---------------------- Maintenance ----------------------
     def health_check(self) -> Dict[str, Any]:

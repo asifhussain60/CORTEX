@@ -75,7 +75,12 @@ class PatternSearch:
         Performance: <50ms for simple queries
         """
         conn = self.db.get_connection()
-        cursor = conn.cursor()
+        cursor_pragma = conn.cursor()
+        
+        # Check if usage_count column exists (for backward compatibility)
+        cursor_pragma.execute("PRAGMA table_info(patterns)")
+        columns = [row[1] for row in cursor_pragma.fetchall()]
+        has_usage_count = 'usage_count' in columns
         
         # Build WHERE clause for filters
         where_clauses = ["p.confidence >= ?"]
@@ -95,11 +100,15 @@ class PatternSearch:
         
         where_sql = " AND ".join(where_clauses)
         
+        # Build column list based on available columns
+        usage_count_col = "p.usage_count" if has_usage_count else "p.access_count"
+        
         # FTS5 search with BM25 ranking
         query_sql = f"""
             SELECT p.pattern_id, p.title, p.content, p.pattern_type, p.confidence,
                    p.created_at, p.last_accessed, p.access_count, p.source, p.metadata,
                    p.is_pinned, p.scope, p.namespaces,
+                   {usage_count_col} as usage_count,
                    bm25(pattern_fts) as rank
             FROM patterns p
             JOIN pattern_fts ON p.id = pattern_fts.rowid
@@ -109,6 +118,7 @@ class PatternSearch:
         """
         
         params_full = [query] + params + [limit]
+        cursor = conn.cursor()
         cursor.execute(query_sql, params_full)
         
         rows = cursor.fetchall()
@@ -133,7 +143,8 @@ class PatternSearch:
                 "is_pinned": bool(row[10]),
                 "scope": row[11] if row[11] else "cortex",
                 "namespaces": namespaces_data,
-                "score": row[13]  # BM25 score (lower = better)
+                "usage_count": row[13],  # NEW: usage_count from DB
+                "score": row[14]  # BM25 score (lower = better)
             })
         
         return results
