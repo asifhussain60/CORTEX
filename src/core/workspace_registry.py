@@ -229,6 +229,31 @@ class WorkspaceRegistry:
             return True
         return False
     
+    def auto_discover_workspace(self, workspace_path: Path) -> Optional[WorkspaceInfo]:
+        """
+        Discover and register a single workspace.
+        
+        Args:
+            workspace_path: Path to workspace to discover and register
+            
+        Returns:
+            WorkspaceInfo if successful, None otherwise
+        """
+        try:
+            detector = WorkspaceDetector(self.cortex_root)
+            workspace_info = detector.detect_workspace(workspace_path)
+            
+            if workspace_info:
+                # Register the workspace
+                self.register_workspace(workspace_info)
+                return workspace_info
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Failed to discover workspace at {workspace_path}: {e}")
+            return None
+    
     def auto_discover_workspaces(self, search_paths: List[Path]) -> int:
         """
         Auto-discover workspaces in given paths.
