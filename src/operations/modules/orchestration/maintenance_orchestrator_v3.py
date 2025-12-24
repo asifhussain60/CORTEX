@@ -242,7 +242,7 @@ class MaintenanceOrchestrator(BaseOrchestrator):
             'system': self._check_system_health()
         }
         
-        # Calculate overall health score (all values are floats now)
+        # Calculate overall health score (all components return floats)
         health_scores = list(components.values())
         overall_score = sum(health_scores) / len(health_scores)
         
@@ -261,6 +261,10 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         }
     
     def _check_tier0_health(self) -> float:
+        """Check Tier 0 (Governance) health - returns score only."""
+        return self._check_tier0_health_detailed()['score']
+    
+    def _check_tier0_health(self) -> float:
         """Check Tier 0 (Governance) health."""
         tier0_path = self.cortex_root / 'cortex-brain'
         
@@ -273,7 +277,11 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         return score
     
     def _check_tier1_health(self) -> float:
-        """Check Tier 1 (Working Memory) health."""
+        """Check Tier 1 (Working Memory) health - returns score only."""
+        return self._check_tier1_health_detailed()['score']
+    
+    def _check_tier1_health_detailed(self) -> Dict[str, Any]:
+        """Check Tier 1 (Working Memory) health - returns detailed dict."""
         tier1_path = self.cortex_root / 'cortex-brain' / 'tier1'
         
         # Check conversation context limit (70 entries)
@@ -281,16 +289,30 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         context_count = len(context_files)
         
         score = 100 if context_count <= 70 else max(0, 100 - (context_count - 70))
-        return score
+        
+        return {
+            'score': score,
+            'context_count': context_count,
+            'status': 'healthy' if score >= 80 else 'degraded'
+        }
     
     def _check_tier2_health(self) -> float:
-        """Check Tier 2 (Knowledge Graph) health."""
+        """Check Tier 2 (Knowledge Graph) health - returns score only."""
+        return self._check_tier2_health_detailed()['score']
+    
+    def _check_tier2_health_detailed(self) -> Dict[str, Any]:
+        """Check Tier 2 (Knowledge Graph) health - returns detailed dict."""
         tier2_path = self.cortex_root / 'cortex-brain' / 'tier2'
         
         # Check knowledge graph existence
         kg_exists = tier2_path.exists()
         score = 100 if kg_exists else 50
-        return score
+        
+        return {
+            'score': score,
+            'kg_exists': kg_exists,
+            'status': 'healthy' if score >= 80 else 'degraded'
+        }
     
     def _check_tier3_health(self) -> float:
         """Check Tier 3 (Development Context) health."""
@@ -635,12 +657,13 @@ class MaintenanceOrchestrator(BaseOrchestrator):
             'brain_tier2': self._check_tier2_health(),
             'brain_tier3': self._check_tier3_health(),
             'orchestrators': self._check_orchestrators_health(),
+            'agents': self._check_agents_health(),
             'protection': self._check_protection_health(),
             'system': self._check_system_health()
         }
         
-        # Calculate overall health score
-        health_scores = [c['score'] for c in components.values()]
+        # Calculate overall health score (components are floats)
+        health_scores = list(components.values())
         overall_score = sum(health_scores) / len(health_scores)
         
         self.final_health = {

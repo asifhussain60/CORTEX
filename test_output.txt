@@ -1100,3 +1100,14 @@ AttributeError: 'OptimizationMetrics' object has no attribute 'optimizations_att
 warning: in the working copy of 'test_output.txt', CRLF will be replaced by LF the next time Git touches it
 2025-12-24 07:59:26 [    INFO] Committed: 94b2e2ce - [OPTIMIZATION/CRITICAL] Create/restore brain_protection
 2025-12-24 07:59:26 [    INFO] [MEDIUM] Implement operations
+warning: in the working copy of 'test_output.txt', CRLF will be replaced by LF the next time Git touches it
+2025-12-24 07:59:27 [    INFO] Committed: 1c3d966d - [OPTIMIZATION/MEDIUM] Implement operations
+2025-12-24 07:59:27 [    INFO] Applied: 2
+2025-12-24 07:59:27 [    INFO] Skipped: 0
+2025-12-24 07:59:27 [    INFO] Failed: 0
+2025-12-24 07:59:27 [    INFO] 
+[Phase 6] Collecting metrics...
+2025-12-24 07:59:27 [    INFO] 
+[Phase 6.5] Deduplicating documentation...
+2025-12-24 07:59:27 [    INFO] Scanning documentation for duplicates...
+2025-12-24 07:59:27 [    INFO] Scanning 2251 markdown files...
