@@ -218,3 +218,29 @@ tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py::TestOptimiz
 2025-12-24 07:56:34 [ WARNING] Clean code gates not found: D:\PROJECTS\CORTEX\cortex-brain\components\development-executor\clean-code-gates.yaml
 2025-12-24 07:56:34 [ WARNING] Security gates not found: D:\PROJECTS\CORTEX\cortex-brain\components\development-executor\security-gates.yaml
 2025-12-24 07:56:34 [ WARNING] Planning validation found issues - recommendations provided
+2025-12-24 07:56:40 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\plugins\performance_telemetry_plugin.py, skipping AST analysis
+2025-12-24 07:56:40 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\policy\policy_test_generator.py, skipping AST analysis
+2025-12-24 07:56:41 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\tier0\copilot_instructions_generator.py, skipping AST analysis
+2025-12-24 07:56:41 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\utils\doc_sync_hooks.py, skipping AST analysis
+2025-12-24 07:56:42 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\workflows\tdd_workflow_orchestrator.py, skipping AST analysis
+2025-12-24 07:56:42 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\tier3\schema_migrations\migration_006_adoption_analytics.py, skipping AST analysis
+2025-12-24 07:56:43 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\orchestrators\story_enhancement\modules\dalle_prompt_generator.py, skipping AST analysis
+2025-12-24 07:56:44 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\implants_commands.py, skipping AST analysis
+2025-12-24 07:56:45 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\checkpoints\checkpoint_utility.py, skipping AST analysis
+2025-12-24 07:56:45 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\dashboard\learning_dashboard_launcher.py, skipping AST analysis
+2025-12-24 07:56:46 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\metrics\metrics_utility.py, skipping AST analysis
+2025-12-24 07:56:46 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\questions\template_selector.py, skipping AST analysis
+2025-12-24 07:56:47 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\operations\modules\validation\session_utility.py, skipping AST analysis
+2025-12-24 07:56:47 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\epmo\documentation\image_prompt_bridge.py, skipping AST analysis
+2025-12-24 07:56:48 [ WARNING] Syntax error in D:\PROJECTS\CORTEX\src\dashboard\analyzers\validate_analyzers.py, skipping AST analysis
+2025-12-24 07:56:51 [   ERROR] Path cleanup error: 'OptimizationMetrics' object has no attribute 'optimizations_attempted'
+Traceback (most recent call last):
+  File "D:\PROJECTS\CORTEX\src\operations\modules\optimization\optimize_cortex_orchestrator.py", line 1338, in _cleanup_hardcoded_paths
+    metrics.optimizations_attempted += 1
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'OptimizationMetrics' object has no attribute 'optimizations_attempted'. Did you mean: 'optimizations_applied'?
+2025-12-24 07:56:51 [ WARNING] \u26a0\ufe0f Path cleanup encountered issues: 'OptimizationMetrics' object has no attribute 'optimizations_attempted'\n2025-12-24 07:56:52 [ WARNING] \u26a0\ufe0f Brain health issues detected:\n2025-12-24 07:56:52 [ WARNING]   - Tier 0: Brain protection rules missing
+2025-12-24 07:56:52 [ WARNING]   - Tier 3: Git metrics collection inactive
+2025-12-24 07:56:52 [   ERROR] Error during hardcoded data scan: BaseOperationModule.__init__() got an unexpected keyword argument 'project_root'
+2025-12-24 07:56:52 [ WARNING] CORTEX optimizer failed (exit code 1), using fallback analysis
+warning: in the working copy of 'test_output.txt', CRLF will be replaced by LF the next time Git touches it
