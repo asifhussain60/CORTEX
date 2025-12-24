@@ -46,7 +46,8 @@ tier0_instincts:
 - SKULL_TRANSFORMATION_VERIFICATION
 - SKULL_PRIVACY_PROTECTION
 - SKULL_FACULTY_INTEGRITY
-- GIT_ISOLATION_ENFORCEMENT
+- WORKSPACE_AWARE_OPERATIONS
+- GIT_ISOLATION_ENFORCEMENT_DEPRECATED
 - DISTRIBUTED_DATABASE_ARCHITECTURE
 - CORTEX_PROMPT_FILE_PROTECTION
 - GIT_CHECKPOINT_ENFORCEMENT
@@ -1516,14 +1517,30 @@ protection_layers:
     - Use .gitkeep for empty directories
     evidence: Temporary files pollute repository
 - layer_id: git_isolation
-  name: Git Isolation Enforcement
-  description: CORTEX code MUST NEVER be committed to user application repositories
+  name: Workspace-Aware Operations & Git Isolation
+  description: File operations target active workspace with CORTEX core protection (Phase 11)
   priority: 8
   rules:
-  - rule_id: GIT_ISOLATION_ENFORCEMENT
-    name: CORTEX Code Isolation from User Repos
+  - rule_id: WORKSPACE_AWARE_OPERATIONS
+    name: Workspace-Aware File Operations (Phase 11)
     severity: blocked
-    description: 'CRITICAL: CORTEX source code, brain files, or internal components being committed to user application repository'
+    description: 'NEW (Phase 11): File operations must target active workspace or CORTEX non-core paths. Prevents cross-workspace contamination and CORTEX core modification.'
+    detection:
+      path_patterns:
+      - writing to inactive workspace
+      - modifying CORTEX core (src/tier0-3/)
+      - cross-workspace file operations
+    alternatives:
+    - Operations automatically routed to active workspace
+    - Use WorkspaceOperationValidator for validation
+    - CORTEX can write to active user workspace
+    - CORTEX core paths (tier0-3/) are read-only
+    evidence_template: "🎯 Workspace Operation Validation\n\nOperation: {operation}\nTarget: {target_path}\nActive Workspace: {workspace_name}\n\nRules:\n✅ CORTEX can WRITE to active user workspace\n✅ CORTEX can READ from any workspace\n❌ Cannot write to INACTIVE workspaces\n❌ Cannot modify CORTEX core (tier0-3/)\n\nValidator: src/tier0/workspace_operation_validator.py\n"
+    rationale: 'Phase 11 Multi-Repo Architecture enables one CORTEX installation to serve multiple user repositories. Workspace-aware validation ensures operations target the correct workspace while protecting CORTEX core integrity.'
+  - rule_id: GIT_ISOLATION_ENFORCEMENT
+    name: CORTEX Code Isolation (DEPRECATED - See WORKSPACE_AWARE_OPERATIONS)
+    severity: info
+    description: 'DEPRECATED: Replaced by WORKSPACE_AWARE_OPERATIONS in Phase 11. Old rule blocked all CORTEX writes to user repos. New rule allows writes to ACTIVE workspace.'
     detection:
       path_patterns:
       - '**/src/tier0/**'
@@ -1543,8 +1560,8 @@ protection_layers:
     - Install CORTEX via pip/npm (when distributed)
     - Use git submodule if local development required
     - Ensure .gitignore excludes CORTEX directories
-    evidence_template: "\U0001F6A8 CRITICAL VIOLATION: Git Isolation Breach\n\nCORTEX code detected in user application repository!\nFile: '{path}'\n\nCORTEX MUST remain isolated from user application code:\n- User App Repo: Application-specific code only\n- CORTEX Repo: Framework code (separate repository)\n- Knowledge Sharing: Via exported YAML (team-knowledge/)\n\nBrain knowledge (cortex-brain/) is LOCAL ONLY - never committed anywhere.\n"
-    rationale: '#file:documents/rationales/GIT_ISOLATION_ENFORCEMENT.md'
+    evidence_template: "\U0001F6A8 DEPRECATED RULE - See WORKSPACE_AWARE_OPERATIONS\n\nThis rule is deprecated as of Phase 11 (Multi-Repo Architecture).\n\nOLD BEHAVIOR: CORTEX code never written to user repos\nNEW BEHAVIOR: CORTEX writes to ACTIVE user workspace (orchestrators create files)\n\nMigration: Use WorkspaceOperationValidator for workspace-aware validation.\n"
+    rationale: '#file:documents/rationales/GIT_ISOLATION_ENFORCEMENT.md (archived)'
   - rule_id: GIT_HOOKS_INSTALLATION
     name: Git Hooks Must Be Installed During Setup
     severity: blocked
