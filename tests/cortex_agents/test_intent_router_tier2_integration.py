@@ -96,10 +96,11 @@ class TestTier2PatternStorage:
         patterns = real_tier2.get_routing_patterns()
         assert len(patterns) > 0
         
-        # Verify pattern contains expected fields
+        # Verify pattern contains expected fields (in metadata)
         pattern = patterns[0]
-        assert 'user_message' in pattern or 'message_hash' in pattern
-        assert 'intent' in pattern or 'classified_intent' in pattern
+        metadata = pattern.get('metadata', {})
+        assert 'message' in metadata or 'user_message' in pattern or 'message_hash' in pattern
+        assert 'intent' in metadata or 'classified_intent' in metadata or 'intent' in pattern
     
     def test_pattern_confidence_tracking(self, intent_router_with_real_tier2, real_tier2):
         """Test that pattern confidence is tracked over time."""
@@ -364,8 +365,8 @@ class TestTier2ErrorHandling:
         """Test graceful degradation when Tier 2 is unavailable."""
         router = intent_router_with_real_tier2
         
-        # Simulate Tier 2 failure
-        router.tier2_kg = None
+        # Simulate Tier 2 failure (router.tier2, not tier2_kg)
+        router.tier2 = None
         
         request = AgentRequest(
             intent="unknown",
@@ -384,8 +385,8 @@ class TestTier2ErrorHandling:
         
         router = intent_router_with_real_tier2
         
-        # Make Tier 2 search raise exception
-        router.tier2_kg.search = Mock(side_effect=Exception("Database error"))
+        # Make Tier 2 search raise exception (router.tier2, not tier2_kg)
+        router.tier2.search = Mock(side_effect=Exception("Database error"))
         
         request = AgentRequest(
             intent="unknown",
