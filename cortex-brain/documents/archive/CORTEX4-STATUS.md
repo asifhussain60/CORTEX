@@ -1,8 +1,8 @@
 # 📊 CORTEX 3.0 → 4.0 Migration Status Tracker
 
-**Version:** 4.0 (Phases 6, 8, 9, 11 Complete) | **Author:** Asif Hussain | **Last Updated:** December 25, 2025 21:00 PST
+**Version:** 4.0 (Phases 6, 8, 9, 11 Complete) | **Author:** Asif Hussain | **Last Updated:** December 25, 2025 22:00 PST
 
-**Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 97% | **Current Phase:** Phase 9 (Documentation Finalization) - 100% COMPLETE ✅
+**Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 97% | **Current Phase:** Phase 13 (Post-GA Refinement) - IN PROGRESS 🔄
 
 **Progress Calculation:**
 - **Linear:** 14 / 14.5 phases = 97% (1-6.5, 7A, 7B partial, 8 COMPLETE, 9 COMPLETE, 10, 11, 14 complete)
@@ -19,7 +19,7 @@
   - Phases 12-13: Enhancement & post-GA = 2% of effort ⏳
 - **Status:** Phases 1-6.5 complete ✅, Phase 10 complete ✅, Phase 7A complete ✅, **Phase 7B PARTIALLY COMPLETE (50%): Tasks 7.6-7.7 done ✅**, **Phase 11 COMPLETE ✅**, Phase 14 complete ✅, **Phase 8: 100% COMPLETE ✅**, **Phase 9: 100% COMPLETE ✅**
 
-**Latest:** 🎉 **PHASE 9 COMPLETE** - Documentation finalization finished! **Results:** All 5 tasks complete (9.1-9.5), 7 GA-critical docs validated, 22/22 quality gates passed, 3 validation tools created (770 LOC), 4 validation reports generated. **Time:** 13h actual vs 30h estimated (57% efficiency). **Progress:** Overall 96% → 97% complete. **Next:** Phase 12 (Native IDE Extensions) or Phase 13 (Post-GA refinement) - CORTEX 4.0 GA READY! ✅
+**Latest:** 🚀 **PHASE 13 STARTED** - Post-GA Refinement in progress! **Focus:** Fix 58 failing tests (git checkpoint integration), complete Phase 7B tasks (dynamic registry), generate 9 deferred docs. **Status:** Task 13.1 ready (critical test fixes). **Plan:** 13-day roadmap created (70h estimated). **Priority:** CRITICAL fixes (4h) → HIGH value features (20h) → MEDIUM enhancements (46h). **Goal:** 98.0% → 99.8% test pass rate, full system stability.
 
 **Architecture:** Master Plan + Worker Plans (Token-Optimized)
 
@@ -202,11 +202,63 @@
 - ✅ **CHANGELOG Updated:** v4.0 GA release notes with Phase 9 completion
 - ✅ **Status Updated:** Overall progress 96% → 97% (Phase 9 complete)
 
-**Next Phase:** Phase 12 (Native IDE Extensions) or Phase 13 (Post-GA Refinement)
+**Next Phase:** Phase 13 (Post-GA Refinement) - IN PROGRESS 🔄
 
 ---
 
-## 📋 Phase 9 Task Breakdown
+## 📋 Phase 13: Post-GA Refinement (IN PROGRESS)
+
+**Status:** Task 13.1 ready - Critical test fixes and git checkpoint integration
+
+**Overall Plan:**
+- **Plan Document:** [phase-13-post-ga-refinement-plan.md](../planning/phase-13-post-ga-refinement-plan.md)
+- **Duration:** 13 days (~2 weeks, flexible)
+- **Estimated Effort:** 70 hours total
+- **Priority:** CRITICAL (4h) → HIGH (20h) → MEDIUM (46h)
+
+**Current Focus: Task 13.1 - Critical Test Fixes**
+- Fix `_generate_plan()` signature mismatch (1 test)
+- Fix git checkpoint integration (5 tests: auto-creation, metadata, rollback, history)
+- **Goal:** 2,809 → 2,815 tests passing (98.0% → 98.2%)
+- **Duration:** 4 hours (Day 1)
+
+**Phase 13 Tasks:**
+| Task | Description | Priority | Effort | Status |
+|------|-------------|----------|--------|--------|
+| 13.1 | Critical Test Fixes (signature + git checkpoint) | CRITICAL | 4h | ⏳ READY |
+| 13.2 | Session Restoration (6 tests) | HIGH | 8h | ⏳ Pending |
+| 13.3 | Dynamic Registry System (Phase 7B Task 7.8) | HIGH | 12h | ⏳ Pending |
+| 13.4 | YAML Modularization (6 tests) | MEDIUM | 10h | ⏳ Pending |
+| 13.5 | Registry Consolidation (Phase 7B Task 7.9) | MEDIUM | 10h | ⏳ Pending |
+| 13.6 | MEDIUM-Priority Documentation (9 items) | MEDIUM | 22h | ⏳ Pending |
+| 13.7 | Test Suite Optimization | LOW | 4h | ⏳ Pending |
+
+**Test Suite Health:**
+- **Current:** 2,809/2,867 passing (98.0%)
+- **Target:** 2,861/2,867 passing (99.8%)
+- **Failing:** 58 tests (all in `test_planning_orchestrator_extended.py`)
+  - 6 Manifest compliance (LOW priority - defer)
+  - 6 YAML modularization (Task 13.4)
+  - 6 Session restoration (Task 13.2)
+  - 5 Git checkpoint integration (Task 13.1) ⚡ CRITICAL
+  - 1 Method signature (Task 13.1) ⚡ CRITICAL
+
+**Success Metrics:**
+- ✅ Git checkpoint safety net operational
+- ✅ Test pass rate ≥ 99.0% (required)
+- ✅ Test pass rate ≥ 99.5% (recommended)
+- ✅ Test pass rate = 99.8% (target)
+- ✅ Dynamic registry reduces maintenance
+- ✅ Session restoration improves UX
+
+**Flexible Approach:**
+- CRITICAL + HIGH tasks = 24h (~3 days) for core stability
+- MEDIUM/LOW tasks can be deferred based on priorities
+- Incremental progress acceptable
+
+---
+
+## 📋 Phase 9 Task Breakdown (COMPLETE)
 
 ### ✅ Task 9.1: Documentation Audit & Gap Analysis - COMPLETE
 **Completion Date:** December 25, 2025 16:45 PST  
