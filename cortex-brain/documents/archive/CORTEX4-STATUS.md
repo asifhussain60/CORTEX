@@ -2,10 +2,10 @@
 
 **Version:** 4.0 (Phases 6, 8, 9, 11 Complete) | **Author:** Asif Hussain | **Last Updated:** December 25, 2025 22:00 PST
 
-**Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 97% | **Current Phase:** Phase 13 (Post-GA Refinement) - IN PROGRESS 🔄
+**Branch:** CORTEX-3.0 → CORTEX-4.0 | **Overall Progress:** 97% | **Current Phase:** Phase 13A (Post-GA Refinement) - IN PROGRESS 🔄 | Phase 13B (STS Validation) - PLANNING 📋
 
 **Progress Calculation:**
-- **Linear:** 14 / 14.5 phases = 97% (1-6.5, 7A, 7B partial, 8 COMPLETE, 9 COMPLETE, 10, 11, 14 complete)
+- **Linear:** 14 / 15 phases = 93% (1-6.5, 7A, 7B partial, 8 COMPLETE, 9 COMPLETE, 10, 11, 14 complete, 13A in progress, 13B planned)
 - **Weighted:** 97% (effort-based calculation with Phases 6, 8, 9, 11 complete)
   - Phases 1-6.5: Foundation, orchestrators, architecture docs = 71% of total effort ✅
   - Phase 10: Knowledge library = 4% of total effort ✅
@@ -16,10 +16,10 @@
   - **Phase 8 (ALL TASKS 8.1-8.5 COMPLETE): Testing & Validation = 10% of effort × 100% complete = 10% ✅**
   - **Phase 9 (ALL TASKS 9.1-9.5 COMPLETE): Documentation = 3% of effort × 100% complete = 3% ✅**
   - Phases 7B (Tasks 7.8-7.9): Registry = 0.5% of effort ⏳
-  - Phases 12-13: Enhancement & post-GA = 2% of effort ⏳
-- **Status:** Phases 1-6.5 complete ✅, Phase 10 complete ✅, Phase 7A complete ✅, **Phase 7B PARTIALLY COMPLETE (50%): Tasks 7.6-7.7 done ✅**, **Phase 11 COMPLETE ✅**, Phase 14 complete ✅, **Phase 8: 100% COMPLETE ✅**, **Phase 9: 100% COMPLETE ✅**
+  - Phases 12-13A-13B: Enhancement & post-GA = 2% of effort ⏳
+- **Status:** Phases 1-6.5 complete ✅, Phase 10 complete ✅, Phase 7A complete ✅, **Phase 7B PARTIALLY COMPLETE (50%): Tasks 7.6-7.7 done ✅**, **Phase 11 COMPLETE ✅**, Phase 14 complete ✅, **Phase 8: 100% COMPLETE ✅**, **Phase 9: 100% COMPLETE ✅**, **Phase 13A: 30% IN PROGRESS 🔄**, **Phase 13B: 0% PLANNING 📋**
 
-**Latest:** 🚀 **PHASE 13 STARTED** - Post-GA Refinement in progress! **Focus:** Fix 58 failing tests (git checkpoint integration), complete Phase 7B tasks (dynamic registry), generate 9 deferred docs. **Status:** Task 13.1 ready (critical test fixes). **Plan:** 13-day roadmap created (70h estimated). **Priority:** CRITICAL fixes (4h) → HIGH value features (20h) → MEDIUM enhancements (46h). **Goal:** 98.0% → 99.8% test pass rate, full system stability.
+**Latest:** 🚀 **PHASE 13A IN PROGRESS** | **PHASE 13B PLANNED** - Post-GA refinement (58 failing tests, dynamic registry) + STS validation framework (8 capabilities, 61 deliberate flaws). **Focus:** Complete 13A technical debt → Begin 13B comprehensive validation. **Status:** 13A Tasks 13.1-13.4 complete ✅ (git checkpoints, session restore, ADO, YAML). **Plan:** 13A: 13-day roadmap (70h estimated) → 13B: 4-6 week validation (120-150h). **Priority:** CRITICAL fixes (4h) → HIGH value features (20h) → MEDIUM enhancements (46h) → STS capability validation. **Goal:** 98.9% → 99.5%+ test pass rate, then F→A grade transformation validation.
 
 **Architecture:** Master Plan + Worker Plans (Token-Optimized)
 
@@ -155,12 +155,18 @@
 | Phase | Name | Progress | Status | Dependencies |
 |-------|------|----------|--------|--------------|
 | 12 | Native IDE Extensions | 0% | ⏳ OPTIONAL | Phase 11 complete ✅ |
-| 13 | Sharpen the Saw (STS) | 0% | ⏳ POST-GA | Phase 14 complete ✅ (unblocked) |
+| 13A | Post-GA Refinement | 30% | ⏳ IN PROGRESS | Phase 14 complete ✅ |
+| 13B | Sharpen the Saw (STS) | 0% | ⏳ POST-GA | Phase 13A complete |
 | 15 | VS Code Extension | 0% | ⏳ POST-GA | Phases 14, 7B, 8, 9 complete ✅ |
 
 **Remaining Work Breakdown:**
 - **Phase 12:** Native IDE extensions for VSCode/Visual Studio (2 weeks, optional, Phase 11 complete ✅)
-- **Phase 13:** Post-GA system refinement and optimization (ongoing, unblocked by Phase 14 completion)
+- **Phase 13A:** Post-GA system refinement and optimization (ongoing, 58 failing tests, dynamic registry, documentation)
+- **Phase 13B:** Sharpen the Saw (STS) - Comprehensive CORTEX 4.0 capability validation (4-6 weeks, 120-150 hours)
+  - **Plan:** [Phase 13 STS Plan](../planning/active/CORTEX-3.0-4.0/phase-13-sharpen-the-saw-plan.md)
+  - **Purpose:** Create deliberately flawed application, validate all 8 CORTEX capabilities
+  - **Scope:** Code Sanitization, Planning 2.0, TDD v4.0, Maintenance, Refinement, Review, ADO, Discovery
+  - **Deliverables:** STS app, 9 validation reports, capability certification matrix, transformation dashboard
 - **Phase 15:** VS Code Extension development (8-10 weeks, post-GA enhancement)
 
 **🎉 CORTEX 4.0 GA READY:** All critical phases (1-11, 14) complete with 97% overall progress!
@@ -202,13 +208,13 @@
 - ✅ **CHANGELOG Updated:** v4.0 GA release notes with Phase 9 completion
 - ✅ **Status Updated:** Overall progress 96% → 97% (Phase 9 complete)
 
-**Next Phase:** Phase 13 (Post-GA Refinement) - IN PROGRESS 🔄
+**Next Phase:** Phase 13A (Post-GA Refinement) - IN PROGRESS 🔄 | Phase 13B (STS Validation) - PLANNING 📋
 
 ---
 
-## 📋 Phase 13: Post-GA Refinement (IN PROGRESS)
+## 📋 Phase 13A: Post-GA Refinement (IN PROGRESS)
 
-**Status:** Tasks 13.1-13.2 complete ✅ - Git checkpoints + Session restoration operational
+**Status:** Tasks 13.1-13.4 complete ✅ - Git checkpoints + Session restoration + ADO Planning + YAML modularization operational
 
 **Overall Plan:**
 - **Plan Document:** [phase-13-post-ga-refinement-plan.md](../planning/phase-13-post-ga-refinement-plan.md)
@@ -216,13 +222,83 @@
 - **Estimated Effort:** 70 hours total
 - **Priority:** CRITICAL (4h) → HIGH (20h) → MEDIUM (46h)
 
-**Current Focus: Task 13.3 - Dynamic Registry System**
+---
+
+## 📋 Phase 13B: Sharpen The Saw (STS) - CORTEX 4.0 Validation
+
+**Status:** 📋 PLANNING - Comprehensive capability validation framework
+
+**Plan Document:** [phase-13-sharpen-the-saw-plan.md](../planning/active/CORTEX-3.0-4.0/phase-13-sharpen-the-saw-plan.md)
+
+**Purpose:** Validate ALL CORTEX 4.0 capabilities against a deliberately flawed application, inspired by Stephen Covey's 7th Habit "Sharpen The Saw" principle.
+
+**Four Dimensions (Covey Framework):**
+1. **Physical → Code Health:** Refactoring, cleanup, performance, test coverage
+2. **Mental → Architectural Integrity:** SOLID, patterns, dependencies, security
+3. **Social/Emotional → Developer Experience:** Documentation, error messages, onboarding
+4. **Spiritual → Purpose Alignment:** Business value, traceability, ROI
+
+**Validation Scope (8 Capabilities):**
+| Capability | Target Flaws | Success Criteria |
+|------------|--------------|------------------|
+| Code Sanitization | 5 hardcoded secrets | 5/5 removed, tests pass |
+| Planning System 2.0 | God class, security | HIGH detected, 4 phases, DoR/DoD |
+| TDD Mastery v4.0 | 0% coverage, complexity 87 | RED→GREEN→REFACTOR, 90%+ coverage |
+| System Maintenance | Dead code, memory leaks | 7 phases, 0 critical issues |
+| System Refinement | 35 SOLID/quality violations | All resolved, 60%+ coverage |
+| Architectural Review | Tight coupling, no patterns | 25→90 score, 20+ recommendations |
+| ADO Operations | All flaws | Valid ADO format, complete hierarchy |
+| Holistic Discovery | Duplicates, dead code | 100% accuracy, 0 false positives |
+
+**STS Application (Deliberately Flawed):**
+- **Location:** `cortex-sample-apps/sts-validation-app/`
+- **Structure:** E-commerce app with 4 layers (API, Business, Data, Utils)
+- **Flaws:** 61 documented issues across 6 categories
+  - Security: 12 vulnerabilities (SQL injection, hardcoded secrets)
+  - SOLID: 15 principle violations (God classes, tight coupling)
+  - Code Quality: 20 issues (complexity 87, duplication, dead code)
+  - Performance: 8 bottlenecks (N+1 queries, memory leaks)
+  - Testing: 10 gaps (0% coverage, no edge cases)
+  - Documentation: 8 issues (outdated, contradictory)
+
+**Transformation Metrics:**
+- **Overall Score:** 25/100 (F) → 90+/100 (A)
+- **Security:** 12 vulnerabilities → 0
+- **Test Coverage:** 15% → 90%+
+- **Code Quality:** Complexity 68 avg → <15
+- **Performance:** Baseline + 50%+ improvement
+
+**Roadmap:**
+- **Week 1-2:** Create STS application (40h)
+- **Week 3-4:** Validate capabilities 1-4 (40h)
+- **Week 5-6:** Validate capabilities 5-8 (40h)
+- **Week 7:** Final measurement & reporting (20h)
+
+**Deliverables:**
+1. STS Validation Application (4 layers, 61 flaws)
+2. 9 Validation Reports (baseline + 8 capabilities)
+3. Capability Certification Matrix (8×8 pass/fail)
+4. Transformation Dashboard (before/after metrics)
+5. Lessons Learned Document
+
+**Dependencies:** Phase 13A complete (technical debt resolved)
+
+**Status:** 📋 AWAITING APPROVAL - Plan ready for review
+
+---
+
+## 📋 Phase 13A Task Breakdown (IN PROGRESS)
+- **Duration:** 13 days (~2 weeks, flexible)
+- **Estimated Effort:** 70 hours total
+- **Priority:** CRITICAL (4h) → HIGH (20h) → MEDIUM (46h)
+
+**Current Focus: Task 13.5 - Dynamic Registry System**
 - Implement dynamic orchestrator/agent registration
 - Replace hardcoded imports with registry discovery
-- **Goal:** 2,819 → 2,825+ tests passing (98.3% → 98.5%+)
-- **Duration:** 12 hours (Days 3-4)
+- **Goal:** 2,833 → 2,840+ tests passing (98.8% → 99.0%+)
+- **Duration:** 12 hours (Days 5-6)
 
-**Phase 13 Tasks:**
+**Phase 13A Tasks:**
 | Task | Description | Priority | Effort | Status |
 |------|-------------|----------|--------|--------|
 | 13.1 | Critical Test Fixes (signature + git checkpoint) | CRITICAL | 4h | ✅ COMPLETE (2.5h actual) |
@@ -234,8 +310,16 @@
 | 13.7 | MEDIUM-Priority Documentation (9 items) | MEDIUM | 22h | ⏳ Pending |
 | 13.8 | Test Suite Optimization | LOW | 4h | ⏳ Pending |
 
+**Phase 13B STS Tasks:**
+| Week | Tasks | Effort | Status |
+|------|-------|--------|--------|
+| 1-2 | Create STS application (4 layers, 61 flaws) | 40h | ⏳ Pending 13A |
+| 3-4 | Validate capabilities 1-4 (Sanitization, Planning, TDD, Maintenance) | 40h | ⏳ Pending 13A |
+| 5-6 | Validate capabilities 5-8 (Refinement, Review, ADO, Discovery) | 40h | ⏳ Pending 13A |
+| 7 | Final measurement & reporting (9 reports, dashboard, certification) | 20h | ⏳ Pending 13A |
+
 **Test Suite Health:**
-- **Baseline (Phase 13 start):** 2,809/2,867 passing (98.0%)
+- **Baseline (Phase 13A start):** 2,809/2,867 passing (98.0%)
 - **After Task 13.1:** 2,813/2,867 passing (98.1%, +4 tests)
 - **After Task 13.2:** 2,819/2,867 passing (98.3%, +6 tests)
 - **After Task 13.3:** 2,827/2,867 passing (98.6%, +8 tests)
