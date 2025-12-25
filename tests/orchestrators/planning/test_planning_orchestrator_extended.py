@@ -517,11 +517,11 @@ class TestManifestComplianceValidation:
         orchestrator = PlanningOrchestrator(minimal_orchestrator_config)
         
         # Large plan should trigger modularization
-        large_plan_data = orchestrator._generate_plan({
-            "feature_name": "Large Feature",
-            "complexity": PlanComplexity.HIGH,
-            "num_phases": 20
-        })
+        large_plan_data = orchestrator._generate_plan(
+            feature_name="Large Feature",
+            plan_type="incremental",
+            complexity=PlanComplexity.HIGH
+        )
         
         # Check if plan exceeds threshold
         plan_size = orchestrator._estimate_plan_size(large_plan_data)
