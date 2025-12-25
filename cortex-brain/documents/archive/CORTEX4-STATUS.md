@@ -208,7 +208,7 @@
 
 ## 📋 Phase 13: Post-GA Refinement (IN PROGRESS)
 
-**Status:** Task 13.1 ready - Critical test fixes and git checkpoint integration
+**Status:** Tasks 13.1-13.2 complete ✅ - Git checkpoints + Session restoration operational
 
 **Overall Plan:**
 - **Plan Document:** [phase-13-post-ga-refinement-plan.md](../planning/phase-13-post-ga-refinement-plan.md)
@@ -216,32 +216,36 @@
 - **Estimated Effort:** 70 hours total
 - **Priority:** CRITICAL (4h) → HIGH (20h) → MEDIUM (46h)
 
-**Current Focus: Task 13.1 - Critical Test Fixes**
-- Fix `_generate_plan()` signature mismatch (1 test)
-- Fix git checkpoint integration (5 tests: auto-creation, metadata, rollback, history)
-- **Goal:** 2,809 → 2,815 tests passing (98.0% → 98.2%)
-- **Duration:** 4 hours (Day 1)
+**Current Focus: Task 13.3 - Dynamic Registry System**
+- Implement dynamic orchestrator/agent registration
+- Replace hardcoded imports with registry discovery
+- **Goal:** 2,819 → 2,825+ tests passing (98.3% → 98.5%+)
+- **Duration:** 12 hours (Days 3-4)
 
 **Phase 13 Tasks:**
 | Task | Description | Priority | Effort | Status |
 |------|-------------|----------|--------|--------|
-| 13.1 | Critical Test Fixes (signature + git checkpoint) | CRITICAL | 4h | ⏳ READY |
-| 13.2 | Session Restoration (6 tests) | HIGH | 8h | ⏳ Pending |
-| 13.3 | Dynamic Registry System (Phase 7B Task 7.8) | HIGH | 12h | ⏳ Pending |
+| 13.1 | Critical Test Fixes (signature + git checkpoint) | CRITICAL | 4h | ✅ COMPLETE (2.5h actual) |
+| 13.2 | Session Restoration (6 tests) | HIGH | 4h | ✅ COMPLETE (1.5h actual) |
+| 13.3 | Dynamic Registry System (Phase 7B Task 7.8) | HIGH | 12h | ⏳ READY |
 | 13.4 | YAML Modularization (6 tests) | MEDIUM | 10h | ⏳ Pending |
 | 13.5 | Registry Consolidation (Phase 7B Task 7.9) | MEDIUM | 10h | ⏳ Pending |
 | 13.6 | MEDIUM-Priority Documentation (9 items) | MEDIUM | 22h | ⏳ Pending |
 | 13.7 | Test Suite Optimization | LOW | 4h | ⏳ Pending |
 
 **Test Suite Health:**
-- **Current:** 2,809/2,867 passing (98.0%)
+- **Baseline (Phase 13 start):** 2,809/2,867 passing (98.0%)
+- **After Task 13.1:** 2,813/2,867 passing (98.1%, +4 tests)
+- **After Task 13.2:** 2,819/2,867 passing (98.3%, +6 tests)
+- **Current:** 2,819/2,867 passing (98.3%)
 - **Target:** 2,861/2,867 passing (99.8%)
-- **Failing:** 58 tests (all in `test_planning_orchestrator_extended.py`)
-  - 6 Manifest compliance (LOW priority - defer)
+- **Failing:** 48 tests (all in `test_planning_orchestrator_extended.py`)
+  - 13 TDD workflow integration
+  - 10 Manifest compliance (LOW priority - defer)
   - 6 YAML modularization (Task 13.4)
-  - 6 Session restoration (Task 13.2)
-  - 5 Git checkpoint integration (Task 13.1) ⚡ CRITICAL
-  - 1 Method signature (Task 13.1) ⚡ CRITICAL
+  - 12 Dynamic complexity routing (Task 13.3)
+  - 6 DoR/DoD validation
+  - 1 Git checkpoint cleanup
 
 **Success Metrics:**
 - ✅ Git checkpoint safety net operational
