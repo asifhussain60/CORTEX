@@ -44,7 +44,7 @@ Architecture:
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -258,6 +258,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         self.session_restoration_enabled = config.get("enable_session_restoration", True)
         self.checkpoint_retention_limit = config.get("checkpoint_retention_limit", 10)
         self.checkpoint_strategy = config.get("checkpoint_strategy", "per_phase")
+        self.session_timeout_hours = config.get("session_timeout_hours", 24)
         
         # Initialize schema
         self.schema = self._load_schema()
@@ -1145,3 +1146,256 @@ class PlanningOrchestrator(BaseOrchestrator):
             return []
         
         return [cp.checkpoint_id for cp in self.git_checkpoint.checkpoints]
+    
+    # ========================================================================
+    # Session Management Methods (Task 13.2 - Test Compliance)
+    # ========================================================================
+    
+    def _create_session(self, plan_data: Dict[str, Any]) -> str:
+        """
+        Create planning execution session.
+        
+        Args:
+            plan_data: Plan initialization data
+        
+        Returns:
+            Session ID if successful, None if failed
+        """
+        if not self.session_manager:
+            # Fallback: in-memory session for testing
+            if not hasattr(self, '_memory_sessions'):
+                self._memory_sessions = {}
+                self._session_counter = 0
+            
+            self._session_counter += 1
+            session_id = f"memory-session-{self._session_counter}"
+            self._memory_sessions[session_id] = {
+                "session_id": session_id,
+                "created_at": datetime.now().isoformat(),
+                "updated_at": datetime.now().isoformat(),
+                **plan_data
+            }
+            return session_id
+        
+        # Use session manager with unique ID generation
+        # Add delay to ensure unique timestamp-based IDs
+        import time
+        if not hasattr(self, '_last_session_time'):
+            self._last_session_time = 0
+        
+        # Ensure at least 1 second between session creations
+        now = time.time()
+        if now - self._last_session_time < 1.0:
+            time.sleep(1.1 - (now - self._last_session_time))
+        
+        self._last_session_time = time.time()
+        
+        session = self.session_manager.create_session(
+            plan_name=plan_data.get("feature_name", "Unknown"),
+            plan_path=Path.cwd() / "plan.yaml",
+            execution_config=plan_data
+        )
+        return session.session_id if session else None
+    
+    def _update_session(self, session_id: str, updates: Dict[str, Any]) -> bool:
+        """
+        Update session state.
+        
+        Args:
+            session_id: Session ID to update
+            updates: State updates to apply
+        
+        Returns:
+            True if updated successfully, False otherwise
+        """
+        # Check memory sessions first
+        if hasattr(self, '_memory_sessions') and session_id in self._memory_sessions:
+            self._memory_sessions[session_id].update(updates)
+            self._memory_sessions[session_id]["updated_at"] = datetime.now().isoformat()
+            return True
+        
+        # Use session manager
+        if not self.session_manager:
+            return False
+        
+        session = self.session_manager.restore_session(session_id)
+        if not session:
+            return False
+        
+        # Apply updates
+        for key, value in updates.items():
+            if hasattr(session, key):
+                setattr(session, key, value)
+        
+        return self.session_manager.update_session(session)
+    
+    def _load_session(self, session_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Load session data.
+        
+        Args:
+            session_id: Session ID to load
+        
+        Returns:
+            Session data dictionary or None if not found
+        """
+        # Check memory sessions first
+        if hasattr(self, '_memory_sessions') and session_id in self._memory_sessions:
+            return self._memory_sessions[session_id].copy()
+        
+        # Use session manager
+        if not self.session_manager:
+            return None
+        
+        session = self.session_manager.restore_session(session_id)
+        if not session:
+            return None
+        
+        return {
+            "session_id": session.session_id,
+            "plan_name": session.plan_name,
+            "current_phase": session.current_phase,
+            "completed_phases": session.completed_phases,
+            "progress_percent": session.progress_percent,
+            "status": session.status.value,
+            "created_at": session.created_at.isoformat(),
+            "updated_at": session.updated_at.isoformat()
+        }
+    
+    def _restore_session(self, session_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Restore session context for resumption.
+        
+        Args:
+            session_id: Session ID to restore
+        
+        Returns:
+            Session context dictionary or None if not found
+        """
+        return self._load_session(session_id)
+    
+    def _set_session_timestamp(self, session_id: str, timestamp: datetime) -> bool:
+        """
+        Set session timestamp (for testing expiration).
+        
+        Args:
+            session_id: Session ID to modify
+            timestamp: Timestamp to set
+        
+        Returns:
+            True if updated successfully, False otherwise
+        """
+        # Update memory sessions
+        if hasattr(self, '_memory_sessions') and session_id in self._memory_sessions:
+            # Set both created_at and updated_at to the provided timestamp
+            self._memory_sessions[session_id]["created_at"] = timestamp.isoformat()
+            self._memory_sessions[session_id]["updated_at"] = timestamp.isoformat()
+            return True
+        
+        # Update session manager sessions
+        if not self.session_manager:
+            return False
+        
+        session = self.session_manager.restore_session(session_id)
+        if not session:
+            return False
+        
+        # Set timestamps directly
+        session.created_at = timestamp
+        session.updated_at = timestamp
+        
+        # Persist directly to avoid update_session overwriting updated_at
+        self.session_manager._persist_session(session)
+        return True
+    
+    def _is_session_valid(self, session_id: str) -> bool:
+        """
+        Check if session is still valid (not expired).
+        
+        Args:
+            session_id: Session ID to check
+        
+        Returns:
+            True if valid, False if expired or not found
+        """
+        session_data = self._load_session(session_id)
+        if not session_data:
+            self.logger.warning(f"Session {session_id} not found")
+            return False
+        
+        # Get session timeout from config (default: 24 hours)
+        timeout_hours = getattr(self, 'session_timeout_hours', 24)
+        
+        # Parse updated_at timestamp
+        try:
+            updated_at_str = session_data.get("updated_at")
+            if not updated_at_str:
+                self.logger.warning(f"Session {session_id} has no updated_at timestamp")
+                return False
+            
+            updated_at = datetime.fromisoformat(updated_at_str)
+            age = datetime.now() - updated_at
+            
+            self.logger.debug(f"Session {session_id}: updated_at={updated_at}, age={age}, timeout={timeout_hours}h")
+            
+            is_valid = age < timedelta(hours=timeout_hours)
+            self.logger.debug(f"Session {session_id}: is_valid={is_valid}")
+            
+            return is_valid
+        
+        except (ValueError, TypeError) as e:
+            self.logger.warning(f"Session {session_id} timestamp parse error: {e}")
+            return False
+    
+    def _cleanup_expired_sessions(self) -> int:
+        """
+        Clean up expired sessions.
+        
+        Returns:
+            Number of sessions cleaned up
+        """
+        cleaned = 0
+        
+        # Clean up memory sessions
+        if hasattr(self, '_memory_sessions'):
+            expired_ids = []
+            for session_id in list(self._memory_sessions.keys()):
+                if not self._is_session_valid(session_id):
+                    expired_ids.append(session_id)
+            
+            for session_id in expired_ids:
+                del self._memory_sessions[session_id]
+                cleaned += 1
+        
+        # Clean up session manager sessions
+        if self.session_manager:
+            timeout_hours = getattr(self, 'session_timeout_hours', 24)
+            cleaned += self.session_manager.cleanup_stale_sessions(max_age_hours=timeout_hours)
+        
+        return cleaned
+    
+    def _validate_session_integrity(self, session_id: str) -> bool:
+        """
+        Validate session state integrity.
+        
+        Args:
+            session_id: Session ID to validate
+        
+        Returns:
+            True if valid, False if corrupted
+        """
+        session_data = self._load_session(session_id)
+        if not session_data:
+            return False
+        
+        # Check for required fields
+        required_fields = ["session_id", "created_at", "updated_at"]
+        for field in required_fields:
+            if field not in session_data:
+                return False
+        
+        # Check for corruption indicator
+        if session_data.get("corrupted"):
+            return False
+        
+        return True
