@@ -14,6 +14,14 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
 
 ## 📋 Version History
 
+**v2.2.2 (December 25, 2025)** - Anti-Restoration Rule for Stubs/Mocks
+- ✅ **NEW RULE:** DO NOT restore deliberately deleted stubs/mocks (Section 3)
+- ✅ **CRITICAL PROTECTION:** Prevents AI from re-adding temporary scaffolding after user cleanup
+- ✅ **DETECTION CRITERIA:** Git history analysis, file size changes, commit messages, manual edits
+- ✅ **DEFAULT BEHAVIOR:** Assume deletion is deliberate, ask user before restoring
+- ✅ **EXCEPTION:** Restore only if tests fail AND no git deletion history exists
+- ✅ **RATIONALE:** Stubs are temporary scaffolding removed after real implementation
+
 **v2.2.1 (December 25, 2025)** - Holistic Review & Deduplication
 - ✅ **DUPLICATE REMOVAL:** Removed duplicate Validate/Repair/Post-Cleanup/Failure sections in Section 8
 - ✅ **CONSOLIDATION:** Unified test count validation - Section 12 delegates to Section 20 for detailed commands
@@ -229,6 +237,17 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - **Validate test markers:** Ensure slow/performance tests properly marked in pytest.ini
   - **Coverage optimization:** Remove `--cov` from pytest.ini addopts (55s overhead), use explicit `--cov=src` when needed
   - **Test collection speed:** Target <1s collection time for fast feedback
+- **⚠️ CRITICAL: DO NOT RESTORE DELIBERATELY DELETED STUBS/MOCKS:**
+  - **If git history shows recent deletion of stub/mock methods**: Assume deliberate cleanup
+  - **If file was manually edited to remove stubs**: DO NOT re-add them
+  - **Indicators of deliberate deletion:**
+    - Git commit message mentions "cleanup", "remove stubs", "delete mocks"
+    - File size decreased significantly (>100 LOC) in recent commit
+    - Stubs were added in one commit, then removed in next commit
+    - User manually edited file between AI sessions
+  - **When in doubt:** ASK user before restoring any deleted code
+  - **Exception:** Restore ONLY if tests explicitly fail due to missing method AND no git history of deletion
+  - **Rationale:** Stubs may be temporary scaffolding removed after real implementation added
 - **SKULL Rules Enforcement:**
   - **TDD_ENFORCEMENT:** RED→GREEN→REFACTOR mandatory
   - **RED_PHASE_VALIDATION:** Tests must fail before implementation
