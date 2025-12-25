@@ -240,12 +240,12 @@
 - **After Task 13.2:** 2,819/2,867 passing (98.3%, +6 tests)
 - **After Task 13.3:** 2,827/2,867 passing (98.6%, +8 tests)
 - **After Task 13.4:** 2,833/2,867 passing (98.8%, +6 tests)
-- **Current:** 2,833/2,867 passing (98.8%)
-- **Target:** 2,861/2,867 passing (99.8%)
-- **Failing:** 34 tests
+- **Current:** 2,944/2,977 passing (98.9%, +111 tests)
+- **Target:** 2,961/2,977 passing (99.5%+)
+- **Failing:** 33 tests
   - 13 TDD workflow integration (Task 13.5)
   - 10 Manifest compliance (LOW priority - defer)
-  - 12 Dynamic complexity routing (Task 13.5)
+  - 9 Planning DoR/DoD validation (Task 13.5)
   - 1 Git checkpoint cleanup (Task 13.5)
 
 **Success Metrics:**
