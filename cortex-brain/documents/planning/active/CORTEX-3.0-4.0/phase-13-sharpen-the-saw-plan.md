@@ -1,19 +1,50 @@
 # Phase 13: Sharpen The Saw (STS) - CORTEX 4.0 Capability Validation
 
-**Version:** 1.0  
-**Status:** 📋 PLANNING  
+**Version:** 2.0 (Hybrid Approach)  
+**Status:** ✅ APPROVED - Ready for Implementation  
 **Author:** Asif Hussain  
 **Created:** December 25, 2025  
-**Estimated Duration:** 4-6 weeks  
-**Estimated Effort:** 120-150 hours
+**Updated:** December 25, 2025 (v2.0 Hybrid Model)  
+**Estimated Duration:** 2-3 weeks  
+**Estimated Effort:** 40-60 hours (one-time) + 2-3 hours per validation run
 
 ---
 
 ## 🎯 Executive Summary
 
-Phase 13 implements a comprehensive validation system that tests ALL CORTEX 4.0 capabilities against a deliberately flawed multi-layer application. Inspired by Stephen Covey's "Sharpen The Saw" principle (7th Habit of Highly Effective People), this phase ensures CORTEX maintains its edge through systematic self-testing across four dimensions: Code Health, Architectural Integrity, Developer Experience, and Purpose Alignment.
+**Phase 13B implements a lightweight, repeatable regression suite that validates CORTEX 4.0's critical capabilities** against a deliberately flawed application. Unlike comprehensive end-to-end testing (redundant with existing 2,977 unit tests), this **Hybrid STS approach fills 4 critical gaps** not covered by unit/integration tests: deployment pipeline, end-to-end workflows, upgrade path, and multi-IDE support.
 
-**Core Concept:** Create a realistic but intentionally broken application, then use CORTEX 4.0's full arsenal to transform it from F-grade to A-grade, validating every capability in the process.
+**Core Innovation:** Transform traditional comprehensive testing (250 hours) into an **automated regression framework (60 hours one-time + 2-3 hours per run)** that can be executed anytime new functionality is added—true "Sharpen The Saw" capability.
+
+**Value Proposition:**
+- ✅ **Fills Critical Gaps:** 0% → 100% coverage for deployment, E2E, upgrade, multi-IDE
+- ✅ **Zero Redundancy:** Leverages existing 98.9% unit test pass rate (no overlap)
+- ✅ **Fully Automated:** CI/CD integration, runs in 2-3 hours
+- ✅ **Repeatable:** Execute validation after each major feature addition
+- ✅ **Production Confidence:** Validates scenarios unit tests CANNOT test
+
+**Strategic Rationale:** Existing test suite provides excellent component-level validation but lacks production deployment scenarios and end-to-end workflow integration. STS complements (not duplicates) existing coverage.
+
+---
+
+## 📊 Analysis: Why Hybrid STS vs Full Validation
+
+### Existing Test Suite Status (2,977 tests, 220 files, 60,656 LOC)
+
+**Strengths:**
+- ✅ 98.9% pass rate (2,944/2,977)
+- ✅ 91% core workflow coverage (Planning, TDD, Maintenance, Refinement)
+- ✅ 90% agent coverage (164 tests - Investigation Router, Strategic Planning)
+- ✅ 80% brain coverage (89 tests - Tier 1/2/3 validation)
+
+**Critical Gaps (0% coverage):**
+- ❌ Deployment Pipeline: Build → Install → Publish → First-run validation
+- ❌ End-to-End Workflows: Multi-orchestrator chains, knowledge transfer
+- ❌ Upgrade Path: 3.0 → 4.0 migration with rollback validation
+- ❌ Production Scenarios: Real-world scale, concurrent operations, failure recovery
+- ⚠️ Multi-IDE Support: Only 20% coverage (1 workspace switch test)
+
+**STS Value Add:** Focus exclusively on gaps (40-60 hours) vs redundant comprehensive validation (250 hours, 70% overlap with existing tests)
 
 ---
 
@@ -769,187 +800,761 @@ Each CORTEX capability will be tested against specific STS app flaws:
 
 ## 📊 Success Criteria
 
-### Overall Transformation Metrics
+### Hybrid STS Validation Goals
 
-**Before (Baseline):**
-- Overall Score: 25/100 (F grade)
-- Security: 12 critical vulnerabilities
-- SOLID Compliance: 15 violations
-- Code Quality: 20 issues, avg complexity 68
-- Test Coverage: 15%
-- Documentation: 8 major gaps
-- Performance: 8 bottlenecks (100x slower)
+**Objective:** Fill 4 critical gaps with 100% coverage (no redundancy with existing 2,977 unit tests)
 
-**After (Target):**
-- Overall Score: 90+/100 (A grade)
-- Security: 0 vulnerabilities
-- SOLID Compliance: 0 violations
-- Code Quality: 0 critical issues, avg complexity <15
-- Test Coverage: 90%+
-- Documentation: Complete, accurate
-- Performance: Baseline + 50%+ improvement
+**Before (Current State):**
+- Deployment Pipeline: 0% coverage
+- End-to-End Workflows: 0% coverage
+- Upgrade Path: 0% coverage
+- Multi-IDE Support: 20% coverage (1 test)
+- Production Scenarios: 0% coverage
+- Performance Baseline: 0% coverage
 
-### Per-Capability Validation (16 capabilities for PRODUCTION READINESS)
+**After (Target State):**
+- Deployment Pipeline: 100% coverage (build, install, publish, first-run)
+- End-to-End Workflows: 100% coverage (multi-orchestrator chains)
+- Upgrade Path: 100% coverage (3.0→4.0 with rollback)
+- Multi-IDE Support: 100% coverage (VSCode, VS, GitHub Copilot)
+- Production Scenarios: 100% coverage (scale, failures, recovery)
+- Performance Baseline: 100% coverage (latency, memory, CPU)
 
-**Group A: Core Workflows (8 capabilities)**
-| Capability | Validation Criteria | Status |
-|------------|---------------------|--------|
-| Code Sanitization | 5/5 secrets removed, tests pass | ⏳ |
-| Planning System 2.0 | HIGH complexity detected, 4 phases, DoR/DoD | ⏳ |
-| TDD Mastery v4.0 | RED→GREEN→REFACTOR, 90%+ coverage | ⏳ |
-| System Maintenance | 7 phases complete, 0 critical issues | ⏳ |
-| System Refinement | 35+ violations resolved, 60%+ coverage | ⏳ |
-| Architectural Review | 25 → 90+ score, 20+ recommendations | ⏳ |
-| ADO Operations | Valid ADO format, complete hierarchy | ⏳ |
-| Holistic Discovery | 100% accuracy, 0 false positives | ⏳ |
-
-**Group B: Deployment & Infrastructure (3 capabilities)**
-| Capability | Validation Criteria | Status |
-|------------|---------------------|--------|
-| Deployment Pipeline | Build + install + publish success 100% | ⏳ |
-| Multi-Workspace | 3 IDEs, 100% isolation, <100ms switch | ⏳ |
-| Upgrade 3.0→4.0 | 100% success, zero data loss, rollback works | ⏳ |
-
-**Group C: Brain System (3 capabilities)**
-| Capability | Validation Criteria | Status |
-|------------|---------------------|--------|
-| Tier 1 Working Memory | FIFO 100%, <100ms latency, 95%+ accuracy | ⏳ |
-| Tier 2 Knowledge Graph | Pattern learning, 30%+ optimization | ⏳ |
-| Tier 3 Dev Context | Metrics 100%, hotspot >90% precision | ⏳ |
-
-**Group D: Agentic AI (2 capabilities)**
-| Capability | Validation Criteria | Status |
-|------------|---------------------|--------|
-| Investigation Router | >95% triage accuracy, 100% evidence | ⏳ |
-| Strategic Planning | 100% classification, 30%+ learning | ⏳ |
-
-**Group E: Supporting Operations (1 meta-capability)**
-| Capability | Validation Criteria | Status |
-|------------|---------------------|--------|
-| System Operations (5) | Align, Optimize, Health, Cleanup, Feedback all pass | ⏳ |
+### Critical Capability Validation (8 capabilities)
 
 **PRODUCTION READINESS GATE:**
-- ✅ 16/16 capabilities validated (100% coverage)
-- ✅ Deployment pipeline tested end-to-end
-- ✅ Multi-workspace isolation verified
-- ✅ Performance/scale testing passed
-- ✅ Brain persistence validated
-- ✅ Upgrade path confirmed (3.0→4.0)
+| Capability | Validation Criteria | Target | Status |
+|------------|---------------------|--------|--------|
+| **Deployment Pipeline** | Build + install + publish + first-run all succeed | 100% | ⏳ |
+| **Multi-Workspace** | 3 IDEs detect, 100% isolation, <100ms switch | 100% | ⏳ |
+| **Upgrade 3.0→4.0** | 100% data preservation, rollback works | 100% | ⏳ |
+| **End-to-End Workflows** | Multi-orchestrator chains complete | 100% | ⏳ |
+| **Brain Persistence** | Failure recovery, integrity maintained | 100% | ⏳ |
+| **Agent Collaboration** | Handoffs <50ms, context preserved | 100% | ⏳ |
+| **Performance Baseline** | 10k files <10min, queries <50ms | 100% | ⏳ |
+| **Regression Detection** | Compare baseline, CI/CD integrated | 100% | ⏳ |
 
-**Confidence Level:**
-- 8/16 validated = 50% confidence (NOT production ready)
-- 12/16 validated = 75% confidence (Beta ready)
-- 16/16 validated = 100% confidence (✅ PRODUCTION READY)
+**Confidence Formula:**
+- ✅ **8/8 capabilities validated = 100% PRODUCTION READY**
+- ⚠️ 6-7/8 capabilities validated = 85-95% (Beta ready, known gaps)
+- ❌ <6/8 capabilities validated = <75% (Not production ready)
+
+**Distinction from Unit Tests:**
+- Unit tests validate: Component isolation, logic correctness, happy paths
+- STS validates: System integration, deployment, production scenarios, failure recovery
+- **Zero overlap:** STS complements (not duplicates) existing 98.9% test pass rate
+
+---
 | Architectural Review | 25 → 90+ score, 20+ recommendations | ⏳ |
 | ADO Operations | Valid ADO format, complete hierarchy | ⏳ |
 | Holistic Discovery | 100% accuracy, 0 false positives | ⏳ |
 
 ---
 
-## 🗓️ Implementation Roadmap (ENHANCED for Production Readiness)
+## 🗓️ Implementation Roadmap (HYBRID STS APPROACH)
 
-**Total Duration:** 8-10 weeks (200-250 hours)
-**Original Plan:** 4-6 weeks (120-150 hours) - INSUFFICIENT
-**Addition:** +4 weeks (+80-100 hours) for deployment, brain, agents, operations
+**Total Duration:** 2-3 weeks (40-60 hours one-time + 2-3 hours per run)
+**Focus:** Critical gaps only (deployment, E2E, upgrade, multi-IDE) - 8 capabilities
+**Skip:** Capabilities already validated by unit tests (Planning, TDD, Maintenance, etc.) - 8 capabilities
+**Value:** Zero redundancy with existing 2,977 tests (98.9% pass rate)
 
-### Week 1-2: STS Application Creation (UNCHANGED)
-**Effort:** 40 hours
+### Week 1: Infrastructure & Automation (20 hours)
+
+#### Day 1-2: STS Template Application (8 hours)
+**Objective:** Create reusable, version-controlled flawed application
 
 **Tasks:**
-1. **Day 1-3:** Core application structure
+1. **Core Application Structure** (4h)
    - Create Flask app with 4 layers (API, Business, Data, Utils)
-   - Implement 12 endpoints with intentional flaws
-   - Add 5 business logic modules with anti-patterns
-   - **Deliverable:** Working but flawed application
+   - Implement 8 key endpoints (not 12 - streamlined)
+   - Add 3 business logic modules (not 5 - focused)
+   - Inject 40 critical flaws (not 61 - targeted)
 
-2. **Day 4-5:** Inject deliberate flaws
-   - Security: Hardcode secrets, add SQL injection
-   - SOLID: Create God classes, tight coupling
-   - Quality: Add complexity, duplication, dead code
-   - **Deliverable:** 61 documented flaws across 6 categories
+2. **Flaw Documentation** (2h)
+   - Create `STS-MANIFEST.json` with categorized flaws
+   - Map flaws to 8 critical capabilities
+   - Define baseline metrics (complexity, security, coverage)
 
-3. **Day 6-8:** Baseline documentation
-   - Create README with minimal instructions
-   - Add outdated architecture docs
-   - Write placeholder tests (assert True)
-   - **Deliverable:** Poor documentation baseline
+3. **Version Control Setup** (2h)
+   - Store in `cortex-sample-apps/sts-template/`
+   - Create README with instantiation instructions
+   - Tag as v1.0 baseline
 
-4. **Day 9-10:** Baseline measurement
-   - Run security scans (12 vulnerabilities)
-   - Measure complexity (avg 68, max 87)
-   - Check test coverage (15%)
-   - Calculate performance baseline
-   - **Deliverable:** Baseline metrics report
+**Deliverable:** Reusable STS template (download → instantiate → validate in 30 minutes)
+
+#### Day 3-4: Automation Framework (8 hours)
+**Objective:** Build "run-anytime" validation system
+
+**Tasks:**
+1. **Core Validation Script** (4h)
+   ```python
+   # scripts/run_sts_validation.py
+   
+   def validate_capability(capability_name: str, sts_app_path: str):
+       """Execute single capability test, return pass/fail + metrics"""
+       pass
+   
+   def validate_all(capabilities: List[str] = None):
+       """Execute all or specified capabilities"""
+       pass
+   
+   def compare_to_baseline(results: dict, baseline_path: str):
+       """Detect regressions vs baseline"""
+       pass
+   ```
+
+2. **Reporting System** (2h)
+   - Generate JSON results: `cortex-brain/sts-results/{timestamp}.json`
+   - Generate markdown report: `{timestamp}-report.md`
+   - Generate HTML dashboard: `cortex-lens-output/sts-dashboard.html`
+
+3. **CLI Interface** (2h)
+   ```bash
+   # Run all critical capabilities
+   python scripts/run_sts_validation.py --capabilities all
+   
+   # Run specific capabilities
+   python scripts/run_sts_validation.py --capabilities deployment,multi-workspace
+   
+   # Compare to baseline
+   python scripts/run_sts_validation.py --compare-baseline
+   ```
+
+**Deliverable:** Fully automated validation framework (2-3 hour execution)
+
+#### Day 5: Baseline Establishment (4 hours)
+**Objective:** Create reference measurements for regression detection
+
+**Tasks:**
+1. **Execute Initial Validation** (2h)
+   - Run all 8 critical capabilities on STS template
+   - Record before/after metrics for each capability
+   - Capture performance baselines
+
+2. **Store Reference Data** (1h)
+   - Save as `cortex-brain/sts-baseline.json`
+   - Include: scores, timing, resource usage
+   - Version control baseline
+
+3. **Documentation** (1h)
+   - Create `cortex-brain/documents/guides/STS-USAGE.md`
+   - Document how to run validations
+   - Explain repeatability pattern
+
+**Deliverable:** Baseline metrics + usage documentation
 
 ---
 
-### Week 3-4: Group A Capabilities (Core Workflows) - PART 1
-**Effort:** 40 hours
+### Week 2-3: Critical Capability Validation (40 hours)
 
-**Tasks:**
-1. **Day 11-12:** Code Sanitization + Planning 2.0
-   - Run sanitization workflow (5 secrets)
-   - Create authentication plan (HIGH complexity)
-   - Validate both capabilities
-   - **Deliverable:** 2 validation reports
+**Focus:** 8 capabilities × 5 hours each = 40 hours
+**Strategy:** Test what unit tests CANNOT validate
 
-2. **Day 13-15:** TDD Mastery v4.0
-   - Full RED→GREEN→REFACTOR cycle
-   - Payment processing refactoring
-   - Coverage 0% → 90%+
-   - **Deliverable:** TDD validation report
+#### Capability 1: Deployment Pipeline (5 hours)
+**Gap Filled:** 0% → 100% deployment coverage
 
-3. **Day 16-17:** System Maintenance v4.0
-   - Run 7-phase maintenance
-   - Track auto-fix rate (60%+)
-   - Measure dead code removal (300+ lines)
-   - **Deliverable:** Maintenance validation report
+**Test Scenarios:**
+1. **Build Package** (1h)
+   - Execute: `python setup.py sdist bdist_wheel`
+   - Validate: Package created, dependencies resolved
+   - Metrics: Build time, package size
 
-4. **Day 18:** Buffer/Documentation
-   - Catch-up on any delays
-   - Document findings so far
+2. **Install in Clean Environment** (2h)
+   - Create fresh venv
+   - Execute: `pip install dist/cortex-4.0.0.tar.gz`
+   - Validate: All modules importable, config auto-generated
+   - Test: Run simple operation (`cortex --version`)
 
----
+3. **Publish to Test PyPI** (1h)
+   - Execute: `twine upload --repository testpypi dist/*`
+   - Validate: Package available, downloadable
+   - Test: Install from TestPyPI, verify functionality
 
-### Week 5-6: Group A Capabilities (Core Workflows) - PART 2
-**Effort:** 40 hours
+4. **First-Run Configuration** (1h)
+   - Fresh install, no config
+   - Execute: First CORTEX command
+   - Validate: Auto-generates cortex.config.json, brain DB initialized
+   - Test: Configuration persists across restarts
 
-**Tasks:**
-1. **Day 19-21:** System Refinement v1.0
-   - Run 7-phase refinement
-   - Validate violation detection (35+)
-   - Track test coverage improvement (15% → 60%+)
-   - Measure quality score improvement (30 → 75)
-   - **Deliverable:** Refinement validation report
-
-2. **Day 22-23:** Architectural Review
-   - Run 6-phase review
-   - Validate scoring (25/100 baseline)
-   - Check violation detection (35+)
-   - Review recommendations (20+)
-   - **Deliverable:** Architecture review validation report
-
-3. **Day 24-25:** ADO Operations
-   - Create ADO story for security fixes
-   - Create ADO feature for test coverage
-   - Generate completion summary
-   - Validate ADO format compliance
-   - **Deliverable:** ADO operations validation report
-
-4. **Day 26:** Holistic Code Discovery
-   - Search for duplicates (3 found)
-   - Find dead code (6 items)
-   - Detect unused imports (20+)
-   - Measure accuracy (100%)
-   - **Deliverable:** Discovery validation report
+**Success Criteria:**
+- ✅ Build succeeds in <2 minutes
+- ✅ Install works in clean environment
+- ✅ Package size <5MB
+- ✅ First-run auto-configuration works
+- ✅ All dependencies resolve correctly
 
 ---
 
-### Week 7-8: Group B+C Capabilities (Deployment, Brain) - NEW
-**Effort:** 50 hours
+#### Capability 2: Multi-Workspace Isolation (5 hours)
+**Gap Filled:** 20% → 100% multi-IDE coverage
 
-**Tasks:**
-1. **Day 27-28:** Deployment Pipeline (Capability 9)
+**Test Scenarios:**
+1. **VSCode Workspace Detection** (1h)
+   - Create VSCode workspace with .vscode/settings.json
+   - Execute CORTEX operation
+   - Validate: Correct workspace detected, Tier 3 context isolated
+
+2. **Visual Studio Workspace Detection** (1h)
+   - Create VS workspace with .vs/ directory
+   - Execute same CORTEX operation
+   - Validate: Different Tier 3 context, no cross-contamination
+
+3. **GitHub Copilot Chat Context** (1h)
+   - Simulate GitHub Copilot Chat environment
+   - Execute CORTEX operation
+   - Validate: Workspace detection works without .vscode/
+
+4. **Rapid Context Switching** (1h)
+   - Switch between 3 workspaces in rapid succession
+   - Execute operations in each
+   - Validate: Context isolation maintained, <100ms switch time
+
+5. **Stress Test** (1h)
+   - Open 5 workspaces simultaneously
+   - Execute concurrent operations
+   - Validate: No context leakage, memory usage linear
+
+**Success Criteria:**
+- ✅ 3 IDEs correctly detected
+- ✅ Context isolation 100% (zero cross-contamination)
+- ✅ Switch latency <100ms
+- ✅ Concurrent operations stable
+- ✅ Memory usage scales linearly (not exponentially)
+
+---
+
+#### Capability 3: Upgrade Path 3.0→4.0 (5 hours)
+**Gap Filled:** 0% → 100% migration coverage
+
+**Test Scenarios:**
+1. **Fresh 3.0 Installation** (1h)
+   - Install CORTEX 3.0 in test environment
+   - Generate brain data (conversations, knowledge graph)
+   - Create configuration files
+   - Record baseline state
+
+2. **Upgrade Execution** (2h)
+   - Execute: `pip install --upgrade cortex==4.0.0`
+   - Validate: Upgrade orchestrator auto-triggers
+   - Test: Migration scripts execute correctly
+   - Monitor: No errors during migration
+
+3. **Data Preservation Validation** (1h)
+   - Verify: All brain data intact (Tier 1, 2, 3)
+   - Verify: Configuration migrated (3.0 keys → 4.0 keys)
+   - Verify: Conversation history preserved
+   - Verify: Knowledge graph edges maintained
+
+4. **Rollback Testing** (1h)
+   - Simulate upgrade failure mid-migration
+   - Execute: Rollback procedure
+   - Validate: System restored to 3.0 state
+   - Verify: Zero data loss on rollback
+
+**Success Criteria:**
+- ✅ Upgrade completes in <5 minutes
+- ✅ 100% data preservation (brain, config, conversations)
+- ✅ Configuration keys migrated correctly
+- ✅ Rollback works (restore to exact 3.0 state)
+- ✅ Zero data loss on failure
+
+---
+
+#### Capability 4: End-to-End Workflows (5 hours)
+**Gap Filled:** 0% → 100% multi-orchestrator chain coverage
+
+**Test Scenarios:**
+1. **Planning → TDD → Refinement Chain** (2h)
+   - Execute: `plan feature: Add user authentication`
+   - Validate: Planning generates 4-phase plan with TDD
+   - Execute: TDD workflow (RED→GREEN→REFACTOR)
+   - Execute: Refinement pass (SKULL review)
+   - Validate: Complete transformation (F → A grade)
+
+2. **Error → Investigation → Planning Chain** (2h)
+   - Inject: Intentional error in STS app
+   - Execute: CORTEX encounters error
+   - Validate: Investigation Router triages correctly
+   - Validate: Strategic Planning generates fix plan
+   - Execute: Plan implementation
+   - Validate: Error resolved
+
+3. **Brain Knowledge Transfer** (1h)
+   - Execute: Operation A (learn pattern in Tier 2)
+   - Execute: Operation B (should leverage learned pattern)
+   - Validate: Tier 2 knowledge accessed correctly
+   - Validate: Operation B 30%+ faster (pattern reuse)
+   - Verify: Knowledge graph updated
+
+**Success Criteria:**
+- ✅ Multi-orchestrator chains complete successfully
+- ✅ Brain knowledge transfers between operations
+- ✅ Pattern learning yields 30%+ performance improvement
+- ✅ No failures in orchestrator handoffs
+- ✅ Complete user journey validated
+
+---
+
+#### Capability 5: Brain Persistence Under Failure (5 hours)
+**Gap Filled:** 80% → 100% failure scenario coverage
+
+**Test Scenarios:**
+1. **Tier 1 FIFO Under Memory Pressure** (1h)
+   - Fill Tier 1 to capacity (70 conversations)
+   - Add 10 more conversations
+   - Validate: Oldest 10 evicted (FIFO maintained)
+   - Kill process mid-eviction
+   - Restart: Verify integrity (no corruption)
+
+2. **Tier 2 Write Interruption** (2h)
+   - Execute: Operation that learns pattern
+   - Kill process mid-write to knowledge graph
+   - Restart: Verify graph integrity
+   - Validate: Partial write rolled back (not corrupted)
+   - Retry: Pattern learning succeeds
+
+3. **Tier 3 Context Corruption** (1h)
+   - Simulate: Workspace deleted mid-operation
+   - Validate: Tier 3 handles gracefully (no crash)
+   - Restart: Verify context rebuilt correctly
+
+4. **Database Recovery** (1h)
+   - Corrupt brain database file intentionally
+   - Execute: CORTEX operation
+   - Validate: Auto-recovery triggered
+   - Verify: Backup restored successfully
+
+**Success Criteria:**
+- ✅ FIFO integrity maintained under failures
+- ✅ Knowledge graph write atomicity (no partial corruption)
+- ✅ Tier 3 context rebuilds after deletion
+- ✅ Database auto-recovery works
+- ✅ Zero data loss on crash/recovery
+
+---
+
+#### Capability 6: Agent Collaboration (5 hours)
+**Gap Filled:** 90% → 100% handoff validation
+
+**Test Scenarios:**
+1. **Investigation → Strategic Planning Handoff** (2h)
+   - Execute: Complex problem (architectural debt)
+   - Validate: Investigation Router triages to Strategic Planning
+   - Validate: Evidence preserved during handoff
+   - Validate: Strategic Planning uses Investigation context
+   - Measure: Handoff latency <50ms
+
+2. **Strategic Planning → TDD Orchestrator** (2h)
+   - Execute: Strategic Planning generates implementation plan
+   - Validate: Auto-triggers TDD workflow
+   - Validate: Plan context passed to TDD
+   - Validate: TDD follows plan phases
+
+3. **Multi-Agent Error Handling** (1h)
+   - Inject: Error during agent handoff
+   - Validate: Graceful degradation (no crash)
+   - Validate: Error reported to user
+   - Validate: Recovery possible (retry succeeds)
+
+**Success Criteria:**
+- ✅ Agent handoffs <50ms latency
+- ✅ Context preserved 100% during handoffs
+- ✅ Evidence chain maintained
+- ✅ Error handling graceful
+- ✅ Multi-agent workflows complete
+
+---
+
+#### Capability 7: Performance Baseline (5 hours)
+**Gap Filled:** 0% → 100% scale testing
+
+**Test Scenarios:**
+1. **Large Codebase Performance** (2h)
+   - Test: STS app with 10,000 files
+   - Execute: Code Sanitization operation
+   - Measure: Time to completion, memory usage
+   - Baseline: <10 minutes, <2GB RAM
+
+2. **Concurrent Operations** (2h)
+   - Execute: 5 operations simultaneously (different workspaces)
+   - Measure: CPU usage, memory per operation
+   - Validate: Linear scaling (not exponential)
+   - Baseline: <80% CPU, <500MB per operation
+
+3. **Brain Query Performance** (1h)
+   - Fill Tier 2 with 1,000 patterns
+   - Execute: 100 queries
+   - Measure: Average query latency
+   - Baseline: <50ms per query
+
+**Success Criteria:**
+- ✅ Large codebase (10k files) completes in <10 minutes
+- ✅ Memory usage <2GB for large operations
+- ✅ Concurrent operations scale linearly
+- ✅ Brain queries <50ms average
+- ✅ No memory leaks over 1-hour runtime
+
+---
+
+#### Capability 8: Regression Detection (5 hours)
+**Gap Filled:** 0% → 100% automated regression checks
+
+**Test Scenarios:**
+1. **Compare to Baseline** (2h)
+   - Execute: All 7 capabilities (above)
+   - Compare: Results vs baseline (Week 1 Day 5)
+   - Detect: Any regressions (slower, less accurate, failures)
+   - Report: Differences with severity (critical, warning, info)
+
+2. **CI/CD Integration** (2h)
+   - Create: `.github/workflows/sts-validation.yml`
+   - Configure: Run on main branch pushes
+   - Configure: Run weekly (Sunday nights)
+   - Test: Trigger manually, verify execution
+
+3. **Certification Report Generation** (1h)
+   - Execute: `python scripts/generate_certification.py`
+   - Output: `cortex-brain/sts-results/certification-YYYY-MM-DD.md`
+   - Validate: Report shows 8/8 pass (100% confidence)
+   - Format: Production-ready certification template
+
+**Success Criteria:**
+- ✅ Baseline comparison automated
+- ✅ CI/CD integration functional
+- ✅ Regression detection <5% false positives
+- ✅ Certification report generation automated
+- ✅ Weekly validation runs successfully
+
+---
+
+## 🔄 Repeatability Framework
+
+### "Sharpen-Anytime" Capability
+
+**Trigger Scenarios:**
+1. **Post-Feature Addition:**
+   - New orchestrator added → Run relevant capabilities (2-3 hours)
+   - New brain tier added → Run brain capabilities (1 hour)
+   - New agent added → Run agent capabilities (1 hour)
+
+2. **Pre-Release Validation:**
+   - Release candidate → Run all 8 capabilities (2-3 hours)
+   - Generate certification report
+   - Gate: 8/8 pass required for release
+
+3. **Regression Prevention:**
+   - Weekly automated run (CI/CD)
+   - Compare to baseline
+   - Alert on any failures
+
+4. **On-Demand Validation:**
+   ```bash
+   # After code changes
+   python scripts/run_sts_validation.py --capabilities all
+   
+   # Check specific concern
+   python scripts/run_sts_validation.py --capabilities deployment
+   
+   # Compare to baseline
+   python scripts/compare_to_baseline.py
+   ```
+
+## 🎯 Deliverables
+
+### Core Artifacts (Week 1)
+
+1. **STS Template Application** (`cortex-sample-apps/sts-template/`)
+   - Reusable Flask application with 40 documented flaws
+   - `STS-MANIFEST.json` - Flaw categorization and mapping
+   - `README.md` - Instantiation instructions (<30 minutes)
+   - Version controlled, tagged as v1.0
+
+2. **Automation Framework** (`scripts/`)
+   - `run_sts_validation.py` - Execute capability tests
+   - `compare_to_baseline.py` - Detect regressions
+   - `generate_certification.py` - Create reports
+   - CLI interface with flexible options
+
+3. **Baseline Measurements** (`cortex-brain/sts-baseline.json`)
+   - Reference metrics for 8 capabilities
+   - Performance baselines (timing, memory, CPU)
+   - Scoring thresholds (pass/fail criteria)
+
+4. **Documentation** (`cortex-brain/documents/guides/`)
+   - `STS-USAGE.md` - How to run validations
+   - `STS-REPEATABILITY.md` - When/how to re-validate
+   - `STS-CERTIFICATION.md` - Interpretation guide
+
+### Validation Reports (Week 2-3)
+
+**Per-Capability Reports** (8 total):
+1. `deployment-pipeline-validation-{date}.md`
+2. `multi-workspace-validation-{date}.md`
+3. `upgrade-path-validation-{date}.md`
+4. `end-to-end-workflows-validation-{date}.md`
+5. `brain-persistence-validation-{date}.md`
+6. `agent-collaboration-validation-{date}.md`
+7. `performance-baseline-validation-{date}.md`
+8. `regression-detection-validation-{date}.md`
+
+**Each report contains:**
+- Test scenarios executed
+- Pass/fail results
+- Performance metrics
+- Issues discovered
+- Recommendations
+
+### Certification Artifacts
+
+1. **Certification Report** (`cortex-brain/sts-results/certification-YYYY-MM-DD.md`)
+   - Overall status (8/8 capabilities)
+   - Confidence level (100% = production ready)
+   - Known limitations
+   - Recommended actions
+
+2. **Dashboard** (`cortex-lens-output/sts-dashboard.html`)
+   - Visual capability status
+   - Trend charts (baseline comparison)
+   - Interactive drill-down
+
+3. **CI/CD Integration** (`.github/workflows/sts-validation.yml`)
+   - Automated weekly validation
+   - On-demand trigger capability
+   - Slack/email notifications
+
+---
+
+## ⚠️ Risk Mitigation
+
+### Technical Risks
+
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| **STS template too simplistic** | Medium | Medium | Use real-world anti-patterns from production codebases |
+| **Automation flaky** | Low | High | Extensive error handling, retry logic, timeout management |
+| **Baseline drift** | Medium | Low | Version control baselines, timestamp all measurements |
+| **CI/CD integration fails** | Low | Medium | Test locally first, use GitHub Actions best practices |
+| **False positives** | Medium | Medium | Tune thresholds iteratively, manual review first 3 runs |
+
+### Resource Risks
+
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| **Time overrun** | Low | Low | Focus on 8 capabilities only (not 16), skip unit-tested areas |
+| **Maintenance burden** | Low | Medium | Design for minimal maintenance (template rarely changes) |
+| **Setup complexity** | Medium | Low | Comprehensive documentation, step-by-step guides |
+
+### Strategic Risks
+
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| **Redundancy with unit tests** | Mitigated | High | Explicit gap analysis shows 0% overlap with existing tests |
+| **Low adoption** | Low | High | Automate in CI/CD (passive usage), make execution trivial (1 command) |
+| **Outdated template** | Medium | Medium | Annual review cycle, update with major CORTEX changes |
+
+---
+
+## 📈 Success Metrics & KPIs
+
+### Validation Execution Metrics
+
+**Efficiency:**
+- ✅ Initial setup: <60 hours (Week 1)
+- ✅ Validation run: <3 hours (automated)
+- ✅ CI/CD integration: <30 minutes to configure
+
+**Coverage:**
+- ✅ 8/8 critical capabilities validated (100%)
+- ✅ 4 major gaps filled (0% → 100%)
+- ✅ Zero overlap with existing 2,977 unit tests
+
+**Reliability:**
+- ✅ False positive rate: <5%
+- ✅ Automation success rate: >95%
+- ✅ Repeatability: 100% (same inputs = same outputs)
+
+### Quality Metrics
+
+**Deployment:**
+- ✅ Build success rate: 100%
+- ✅ Install success rate: 100%
+- ✅ First-run configuration: 100% success
+
+**Performance:**
+- ✅ Large codebase (10k files): <10 minutes
+- ✅ Brain queries: <50ms average
+- ✅ Workspace switching: <100ms
+
+**Upgrade:**
+- ✅ Data preservation: 100%
+- ✅ Rollback success: 100%
+- ✅ Migration errors: 0
+
+### Business Metrics
+
+**Confidence:**
+- ✅ 8/8 capabilities = 100% production confidence
+- ✅ Stakeholder demonstration capability
+- ✅ Customer trust building
+
+**Efficiency:**
+- ✅ 76% time savings vs full STS (250h → 60h)
+- ✅ Repeatable in 2-3 hours (not 10 weeks)
+- ✅ ROI positive after 2nd validation run
+
+---
+
+## 🔗 Dependencies & Prerequisites
+
+### Technical Prerequisites
+
+**Required Software:**
+- Python 3.8+ (CORTEX 4.0 requirement)
+- Git (version control)
+- GitHub account (CI/CD integration)
+- Docker (optional, for clean environment testing)
+
+**Required CORTEX Capabilities:**
+- All 8 critical capabilities must be implemented:
+  - Deployment pipeline orchestrator
+  - Multi-workspace detection system
+  - Upgrade orchestrator (3.0→4.0)
+  - Brain Tier 1/2/3 operational
+  - Investigation Router + Strategic Planning agents
+  - Performance monitoring hooks
+
+**Required Test Infrastructure:**
+- Existing 2,977 unit tests passing (98.9%+ rate)
+- pytest framework configured
+- CI/CD pipeline operational (GitHub Actions)
+
+### Phase Dependencies
+
+**Must Complete Before STS:**
+- Phase 1-12: Core CORTEX 4.0 implementation ✅ DONE
+- Phase 13A: Technical debt cleanup (60% complete, can overlap)
+- Phase 14: Documentation ✅ DONE
+
+**Parallel Work Possible:**
+- Phase 13A (Tasks 13.5-13.8) can continue during STS Week 1
+- Documentation updates can occur during validation
+
+**Blocking Items:**
+- None (all critical dependencies complete)
+
+---
+
+## 🚀 Next Steps
+
+### Immediate Actions (Week 1, Day 1)
+
+1. **Create STS Template Repository Structure** (1 hour)
+   ```bash
+   mkdir -p cortex-sample-apps/sts-template/{src/{api,business,data,utils},tests,docs,scripts}
+   touch cortex-sample-apps/sts-template/{README.md,requirements.txt,STS-MANIFEST.json}
+   ```
+
+2. **Initialize Flask Application** (2 hours)
+   - Create minimal Flask app with 4 layers
+   - Add 8 key endpoints (users, products, orders, auth)
+   - Inject 10 initial flaws (security, complexity)
+
+3. **Document Baseline Flaws** (1 hour)
+   - Create `STS-MANIFEST.json` with flaw catalog
+   - Map flaws to capabilities
+   - Define measurement criteria
+
+**Estimated Time to First Validation:** 3 weeks (60 hours)
+
+### Phase 13B Completion Gate
+
+**Definition of Done:**
+- ✅ STS template created and version-controlled
+- ✅ Automation framework operational (3 Python scripts)
+- ✅ 8 critical capabilities validated (all pass)
+- ✅ Baseline established (`sts-baseline.json`)
+- ✅ CI/CD integration active (weekly runs)
+- ✅ Certification report generated
+- ✅ Documentation complete (usage, repeatability, certification guides)
+- ✅ First successful automated validation run (2-3 hours)
+
+**Success Criteria:**
+- 8/8 capabilities = 100% → ✅ **CORTEX 4.0 PRODUCTION READY**
+- Automation reliable: >95% success rate, <5% false positives
+- Repeatability proven: Run 3x with consistent results
+- Time efficiency: <3 hours per validation run
+
+---
+
+## 📚 References & Related Work
+
+### Internal Documentation
+
+- **Analysis:** `cortex-brain/documents/analysis/phase-13b-sts-value-analysis.md`
+- **Planning System 2.0:** `cortex-brain/manifests/planning-system-2.0-manifest.yaml`
+- **Brain Protection Rules:** `cortex-brain/brain-protection-rules.yaml`
+- **TDD Workflow:** `cortex-brain/agents/tdd-agent-rules.yaml`
+
+### External Resources
+
+- **Covey's 7 Habits:** "The 7 Habits of Highly Effective People" (Sharpen The Saw principle)
+- **Test Pyramid:** Martin Fowler - https://martinfowler.com/bliki/TestPyramid.html
+- **Deployment Testing:** Google SRE Book - Chapter 17
+- **Chaos Engineering:** Netflix - Chaos Monkey principles
+
+### Related CORTEX Phases
+
+- **Phase 8:** Orchestrator testing (completed, 91.1% pass rate)
+- **Phase 11:** TDD Mastery v4.0 (completed)
+- **Phase 13A:** Technical debt cleanup (60% complete, ongoing)
+- **Phase 14:** Documentation (completed)
+
+---
+
+## 📝 Changelog
+
+### v2.0 (December 25, 2025) - Hybrid STS Approach ✅ APPROVED
+
+**Major Changes:**
+- Reduced duration: 8-10 weeks → 2-3 weeks (67% reduction)
+- Reduced effort: 200-250 hours → 40-60 hours (76% reduction)
+- Focused scope: 16 capabilities → 8 critical capabilities
+- Eliminated redundancy: Skip capabilities covered by unit tests (Planning, TDD, etc.)
+- Added repeatability: Fully automated, 2-3 hour execution
+- Added CI/CD integration: Weekly regression checks
+- Added cost-benefit analysis: Justification vs existing test suite
+
+**Rationale:**
+- Existing test suite (2,977 tests, 98.9% pass) provides excellent unit/integration coverage
+- STS now fills critical gaps only (deployment, E2E, upgrade, multi-IDE)
+- Zero overlap with existing tests (no redundant validation)
+- Transform from one-time validation to repeatable regression framework
+
+**Approval:**
+- Status: ✅ APPROVED by user (December 25, 2025)
+- Decision: Proceed with Hybrid STS implementation
+- Next: Begin Week 1 Day 1 (STS template creation)
+
+### v1.0 (December 25, 2025) - Original Comprehensive Plan
+
+**Initial Design:**
+- 8-10 weeks, 200-250 hours
+- 16 capabilities (comprehensive validation)
+- F→A grade transformation concept
+- Covey's "Sharpen The Saw" principle applied
+
+**Gap Identified:**
+- 70% overlap with existing unit tests (redundant)
+- Not repeatable (10 weeks per run = impractical)
+- Questioned value vs existing 98.9% test pass rate
+
+**Outcome:**
+- Enhanced to v2.0 (Hybrid approach)
+- Approved after cost-benefit analysis
+
+---
+
+**END OF PHASE 13B PLAN**
    - Build package from clean state
    - Install in fresh environment (3 scenarios)
    - Publish to local test repository
