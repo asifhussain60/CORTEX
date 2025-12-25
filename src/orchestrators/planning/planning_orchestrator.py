@@ -45,7 +45,7 @@ import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from enum import Enum
+from enum import Enum, IntEnum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 import yaml
@@ -100,7 +100,7 @@ class PlanningPhase(Enum):
     EXECUTION = "EXECUTION"           # Autonomous execution (Week 8 Day 3)
 
 
-class PlanComplexity(Enum):
+class PlanComplexity(IntEnum):
     """Plan complexity tiers for adaptive planning."""
     LOW = 1          # Skeleton plan (DoR/DoD only)
     MEDIUM = 2       # Conditional plan (some phases detailed)
@@ -1399,3 +1399,404 @@ class PlanningOrchestrator(BaseOrchestrator):
             return False
         
         return True
+    
+    # ========================================================================
+    # Complexity Routing Methods (Task 13.3 - Adaptive Complexity)
+    # ========================================================================
+    
+    def _determine_plan_type(self, complexity: PlanComplexity) -> PlanType:
+        """
+        Determine plan type based on complexity level.
+        
+        Args:
+            complexity: Plan complexity level
+        
+        Returns:
+            Appropriate plan type for complexity
+        """
+        complexity_to_plan_type = {
+            PlanComplexity.LOW: PlanType.SKELETON,
+            PlanComplexity.MEDIUM: PlanType.CONDITIONAL,
+            PlanComplexity.HIGH: PlanType.INCREMENTAL,
+            PlanComplexity.CRITICAL: PlanType.INCREMENTAL  # CRITICAL gets incremental + security
+        }
+        
+        plan_type = complexity_to_plan_type.get(complexity, PlanType.INCREMENTAL)
+        self.logger.info(f"📊 Complexity routing: {complexity.name} → {plan_type.value}")
+        
+        return plan_type
+    
+    def _analyze_complexity(self, context: Dict[str, Any]) -> PlanComplexity:
+        """
+        Analyze feature complexity from context.
+        
+        Args:
+            context: Feature context (description, estimated_lines, dependencies, etc.)
+        
+        Returns:
+            Calculated complexity level
+        """
+        # Extract factors
+        description = context.get("feature_description", "")
+        estimated_lines = context.get("estimated_lines", 0)
+        dependencies = context.get("dependencies", [])
+        
+        # Calculate complexity score
+        score = 0
+        
+        # Lines of code factor (0-3 points)
+        if estimated_lines < 100:
+            score += 0
+        elif estimated_lines < 300:
+            score += 1
+        elif estimated_lines < 500:
+            score += 2
+        else:
+            score += 3
+        
+        # Dependencies factor (0-3 points)
+        dep_count = len(dependencies)
+        if dep_count < 2:
+            score += 0
+        elif dep_count <= 4:
+            score += 1
+        elif dep_count <= 6:
+            score += 2
+        else:
+            score += 3
+        
+        # Description complexity (0-2 points)
+        complexity_keywords = ["complex", "integration", "security", "critical", "migration"]
+        if any(keyword in description.lower() for keyword in complexity_keywords):
+            score += 2
+        elif "simple" in description.lower() or "basic" in description.lower():
+            score += 0
+        else:
+            score += 1
+        
+        # Map score to complexity (0-8 total possible)
+        if score <= 2:
+            complexity = PlanComplexity.LOW
+        elif score <= 3:
+            complexity = PlanComplexity.MEDIUM
+        elif score <= 6:
+            complexity = PlanComplexity.HIGH
+        else:
+            complexity = PlanComplexity.CRITICAL
+        
+        self.logger.info(f"📊 Complexity analysis: score={score}, lines={estimated_lines}, deps={dep_count} → {complexity.name}")
+        return complexity
+    
+    def _generate_skeleton_plan(self, context: Dict[str, Any]) -> PlanData:
+        """
+        Generate skeleton plan (DoR/DoD only, minimal phases).
+        
+        Args:
+            context: Feature context
+        
+        Returns:
+            Skeleton plan data
+        """
+        feature_name = context.get("feature_name", "Unknown Feature")
+        
+        # Metadata
+        metadata = PlanMetadata(
+            title=f"Skeleton Plan: {feature_name}",
+            description=f"Minimal plan for {feature_name}",
+            complexity=PlanComplexity.LOW,
+            plan_type=PlanType.SKELETON,
+            estimated_duration="1-2 days"
+        )
+        
+        # DoR/DoD
+        definition_of_ready = [
+            "Feature requirements documented",
+            "Dependencies identified",
+            "Development environment ready"
+        ]
+        
+        definition_of_done = [
+            "Implementation complete",
+            "Tests passing",
+            "Documentation updated"
+        ]
+        
+        # Minimal phases (setup, implement, verify)
+        phases = [
+            PlanPhaseData(
+                phase_name="Setup",
+                tasks=[{"description": "Prepare development environment"}],
+                acceptance_criteria=["Environment configured"]
+            ),
+            PlanPhaseData(
+                phase_name="Implementation",
+                tasks=[{"description": "Implement feature"}],
+                acceptance_criteria=["Code complete"]
+            ),
+            PlanPhaseData(
+                phase_name="Verification",
+                tasks=[{"description": "Verify implementation"}],
+                acceptance_criteria=["Tests passing"]
+            )
+        ]
+        
+        return PlanData(
+            metadata=metadata,
+            definition_of_ready=definition_of_ready,
+            definition_of_done=definition_of_done,
+            phases=phases
+        )
+    
+    def _generate_conditional_plan(self, context: Dict[str, Any]) -> PlanData:
+        """
+        Generate conditional plan (some phases detailed, others conditional).
+        
+        Args:
+            context: Feature context
+        
+        Returns:
+            Conditional plan data
+        """
+        feature_name = context.get("feature_name", "Unknown Feature")
+        
+        # Metadata
+        metadata = PlanMetadata(
+            title=f"Conditional Plan: {feature_name}",
+            description=f"Adaptive plan for {feature_name}",
+            complexity=PlanComplexity.MEDIUM,
+            plan_type=PlanType.CONDITIONAL,
+            estimated_duration="3-5 days"
+        )
+        
+        # DoR/DoD
+        definition_of_ready = [
+            "Feature requirements documented",
+            "Architecture design reviewed",
+            "Dependencies identified",
+            "Test strategy defined"
+        ]
+        
+        definition_of_done = [
+            "Implementation complete",
+            "Unit tests passing (>80% coverage)",
+            "Integration tests passing",
+            "Documentation complete",
+            "Code reviewed"
+        ]
+        
+        # Conditional phases (some always execute, others conditional)
+        phases = [
+            PlanPhaseData(
+                phase_name="Design",
+                tasks=[
+                    {"description": "Design architecture", "is_conditional": False},
+                    {"description": "Plan database schema", "is_conditional": True}
+                ],
+                acceptance_criteria=["Design approved"]
+            ),
+            PlanPhaseData(
+                phase_name="Implementation",
+                tasks=[
+                    {"description": "Implement core logic", "is_conditional": False},
+                    {"description": "Add performance optimizations", "is_conditional": True}
+                ],
+                acceptance_criteria=["Core functionality complete"]
+            ),
+            PlanPhaseData(
+                phase_name="Testing",
+                tasks=[
+                    {"description": "Write unit tests", "is_conditional": False},
+                    {"description": "Add integration tests", "is_conditional": True}
+                ],
+                acceptance_criteria=["Tests passing"]
+            ),
+            PlanPhaseData(
+                phase_name="Documentation",
+                tasks=[{"description": "Document API", "is_conditional": True}],
+                acceptance_criteria=["Documentation updated"]
+            )
+        ]
+        
+        # Mark phases with conditional tasks as conditional
+        for phase in phases:
+            if any(task.get("is_conditional") for task in phase.tasks):
+                phase.is_conditional = True
+        
+        return PlanData(
+            metadata=metadata,
+            definition_of_ready=definition_of_ready,
+            definition_of_done=definition_of_done,
+            phases=phases
+        )
+    
+    def _generate_incremental_plan(self, context: Dict[str, Any]) -> PlanData:
+        """
+        Generate incremental plan (all phases detailed, comprehensive).
+        
+        Args:
+            context: Feature context
+        
+        Returns:
+            Incremental plan data
+        """
+        feature_name = context.get("feature_name", "Unknown Feature")
+        
+        # Metadata
+        metadata = PlanMetadata(
+            title=f"Incremental Plan: {feature_name}",
+            description=f"Comprehensive plan for {feature_name}",
+            complexity=PlanComplexity.HIGH,
+            plan_type=PlanType.INCREMENTAL,
+            estimated_duration="1-2 weeks"
+        )
+        
+        # Comprehensive DoR/DoD
+        definition_of_ready = [
+            "Feature requirements fully documented",
+            "Architecture design complete",
+            "All dependencies identified and available",
+            "Test strategy approved",
+            "Security review completed",
+            "Performance benchmarks defined"
+        ]
+        
+        definition_of_done = [
+            "All phases complete",
+            "Unit tests passing (>90% coverage)",
+            "Integration tests passing",
+            "Performance tests passing",
+            "Security scan passing",
+            "Documentation complete",
+            "Code reviewed and approved",
+            "Deployment ready"
+        ]
+        
+        # Comprehensive phases
+        phases = [
+            PlanPhaseData(
+                phase_name="Requirements Analysis",
+                tasks=[
+                    {"description": "Analyze requirements"},
+                    {"description": "Identify edge cases"},
+                    {"description": "Define acceptance criteria"}
+                ],
+                acceptance_criteria=["Requirements documented", "Stakeholders aligned"],
+                estimated_duration="1 day"
+            ),
+            PlanPhaseData(
+                phase_name="Architecture Design",
+                tasks=[
+                    {"description": "Design system architecture"},
+                    {"description": "Plan database schema"},
+                    {"description": "Design API interfaces"},
+                    {"description": "Identify integration points"}
+                ],
+                acceptance_criteria=["Architecture approved", "Design reviewed"],
+                estimated_duration="2 days"
+            ),
+            PlanPhaseData(
+                phase_name="Implementation",
+                tasks=[
+                    {"description": "Set up project structure"},
+                    {"description": "Implement core logic"},
+                    {"description": "Add error handling"},
+                    {"description": "Implement API endpoints"},
+                    {"description": "Add logging and monitoring"}
+                ],
+                acceptance_criteria=["All features implemented", "Code quality checks passing"],
+                estimated_duration="3-5 days"
+            ),
+            PlanPhaseData(
+                phase_name="Testing",
+                tasks=[
+                    {"description": "Write unit tests"},
+                    {"description": "Write integration tests"},
+                    {"description": "Perform manual testing"},
+                    {"description": "Run performance tests"},
+                    {"description": "Security testing"}
+                ],
+                acceptance_criteria=["All tests passing", "Coverage >90%"],
+                estimated_duration="2-3 days"
+            ),
+            PlanPhaseData(
+                phase_name="Documentation",
+                tasks=[
+                    {"description": "Write API documentation"},
+                    {"description": "Update user guides"},
+                    {"description": "Create deployment guide"},
+                    {"description": "Document troubleshooting"}
+                ],
+                acceptance_criteria=["Documentation complete", "Reviewed by team"],
+                estimated_duration="1 day"
+            ),
+            PlanPhaseData(
+                phase_name="Review & Deployment",
+                tasks=[
+                    {"description": "Code review"},
+                    {"description": "Final QA"},
+                    {"description": "Deploy to staging"},
+                    {"description": "Production deployment"}
+                ],
+                acceptance_criteria=["All reviews passed", "Deployment successful"],
+                estimated_duration="1-2 days"
+            )
+        ]
+        
+        return PlanData(
+            metadata=metadata,
+            definition_of_ready=definition_of_ready,
+            definition_of_done=definition_of_done,
+            phases=phases
+        )
+    
+    def _check_complexity_escalation(
+        self,
+        initial_complexity: PlanComplexity,
+        context: Dict[str, Any]
+    ) -> PlanComplexity:
+        """
+        Check if complexity should escalate during execution.
+        
+        Args:
+            initial_complexity: Original complexity level
+            context: New context with potential escalation triggers
+        
+        Returns:
+            Updated complexity level (may be escalated)
+        """
+        # Check for escalation triggers
+        unexpected_deps = context.get("unexpected_dependencies", [])
+        errors_encountered = context.get("errors", [])
+        scope_changes = context.get("scope_changes", [])
+        
+        # Calculate escalation score
+        escalation_score = 0
+        
+        if len(unexpected_deps) > 2:
+            escalation_score += 1
+        
+        if len(errors_encountered) > 5:
+            escalation_score += 1
+        
+        if len(scope_changes) > 0:
+            escalation_score += 1
+        
+        # Escalate if score warrants it
+        escalated_complexity = initial_complexity
+        
+        if escalation_score >= 2:
+            if initial_complexity == PlanComplexity.LOW:
+                escalated_complexity = PlanComplexity.MEDIUM
+            elif initial_complexity == PlanComplexity.MEDIUM:
+                escalated_complexity = PlanComplexity.HIGH
+            elif initial_complexity == PlanComplexity.HIGH:
+                escalated_complexity = PlanComplexity.CRITICAL
+        
+        if escalated_complexity != initial_complexity:
+            self.logger.warning(
+                f"⚠️  Complexity escalation: {initial_complexity.name} → {escalated_complexity.name} "
+                f"(score={escalation_score})"
+            )
+        
+        return escalated_complexity
+
