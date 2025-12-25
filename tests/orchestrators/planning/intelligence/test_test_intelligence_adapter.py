@@ -72,7 +72,11 @@ def test_feature():
     
     def test_analyze_test_file(self, tmp_path):
         """Test analyzing single test file."""
-        test_file = tmp_path / "test_sample.py"
+        # Create tests directory structure
+        tests_dir = tmp_path / "tests"
+        tests_dir.mkdir()
+        
+        test_file = tests_dir / "test_sample.py"
         test_file.write_text("""
 def test_one():
     assert True
@@ -95,7 +99,7 @@ def test_three():
         assert result.path == test_file
 
 
-class TestCoverageAnalysis:
+class TestCoverageAnalysisFeature:
     """Test coverage calculation."""
     
     def test_analyze_project_coverage(self, tmp_path):

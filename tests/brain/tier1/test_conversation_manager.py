@@ -234,9 +234,9 @@ class TestConversationCRUD:
         original = manager.get_conversation(conv_id)
         original_updated_at = original['updated_at']
         
-        # Small delay to ensure timestamp difference
+        # Delay to ensure timestamp difference (SQLite datetime has second precision)
         import time
-        time.sleep(0.1)
+        time.sleep(1.1)
         
         manager.update_conversation(conv_id, outcome="success")
         

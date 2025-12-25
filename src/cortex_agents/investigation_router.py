@@ -3,6 +3,8 @@
 # Architecture: Phased investigation with user checkpoints and relationship confidence scoring
 
 import logging
+import os
+from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional, TYPE_CHECKING
 from dataclasses import dataclass
 from enum import Enum
@@ -22,6 +24,9 @@ try:
 except ImportError:
     EnhancedHealthValidator = None
     ENHANCED_VALIDATOR_AVAILABLE = False
+
+# Get CORTEX root directory
+CORTEX_ROOT = Path(__file__).parent.parent.parent
 
 
 class InvestigationPhase(Enum):

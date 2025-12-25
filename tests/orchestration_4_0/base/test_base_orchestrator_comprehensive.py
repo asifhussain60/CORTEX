@@ -58,9 +58,10 @@ class TestableOrchestrator(BaseOrchestrator):
         self.executed_phases.append(phase_name)
         return {"phase": phase_name, "completed": True}
     
-    def _teardown(self) -> None:
+    def _teardown(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """Test implementation of teardown."""
         self.teardown_called = True
+        return {"teardown": "completed"}
 
 
 class FailingOrchestrator(BaseOrchestrator):
@@ -83,9 +84,10 @@ class FailingOrchestrator(BaseOrchestrator):
             raise RuntimeError(f"Phase {phase_name} failed")
         return {"phase": phase_name, "completed": True}
     
-    def _teardown(self) -> None:
+    def _teardown(self, context: Dict[str, Any]) -> Dict[str, Any]:
         if self.fail_on_phase == "teardown":
             raise RuntimeError("Teardown failed")
+        return {"teardown": "completed"}
 
 
 class CriticalFailingOrchestrator(BaseOrchestrator):
@@ -114,8 +116,8 @@ class CriticalFailingOrchestrator(BaseOrchestrator):
             raise RuntimeError(f"CRITICAL: Phase {phase_name} failed")
         return {"phase": phase_name, "completed": True}
     
-    def _teardown(self) -> None:
-        pass
+    def _teardown(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        return {"teardown": "completed"}
 
 
 # ============================================================================
@@ -347,9 +349,9 @@ class TestTemplateMethodPattern:
             order.append("register")
             original_register()
         
-        def tracked_teardown():
+        def tracked_teardown(context):
             order.append("teardown")
-            original_teardown()
+            return original_teardown(context)
         
         testable_orchestrator._setup = tracked_setup
         testable_orchestrator._register_phases = tracked_register

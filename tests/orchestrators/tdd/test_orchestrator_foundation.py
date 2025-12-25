@@ -8,7 +8,9 @@ Tests:
 - Metrics tracking
 """
 
+import os
 import pytest
+from pathlib import Path
 from unittest.mock import Mock
 from datetime import datetime
 from src.orchestrators.tdd.tdd_orchestrator_v4 import (
@@ -18,6 +20,9 @@ from src.orchestrators.tdd.tdd_orchestrator_v4 import (
     TechnologyProfile,
     TDDOrchestratorV4
 )
+
+# Get CORTEX root directory
+CORTEX_ROOT = Path(__file__).parent.parent.parent.parent
 
 
 class TestTDDPhaseEnum:

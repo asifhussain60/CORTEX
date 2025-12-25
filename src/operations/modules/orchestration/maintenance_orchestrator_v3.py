@@ -246,23 +246,18 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         health_scores = list(components.values())
         overall_score = sum(health_scores) / len(health_scores)
         
-        self.baseline_health = {
-            'overall_score': overall_score,
-            'components': components,
-            'timestamp': datetime.now().isoformat()
-        }
+        # Store baseline health as simple float for attribute access
+        self.baseline_health = overall_score
         
         self.logger.info(f"Baseline health: {overall_score:.1f}%")
         
         return {
             'success': True,
+            'baseline_health': overall_score,
             'overall_score': overall_score,
-            'components': components
+            'components': components,
+            'health_components': components
         }
-    
-    def _check_tier0_health(self) -> float:
-        """Check Tier 0 (Governance) health - returns score only."""
-        return self._check_tier0_health_detailed()['score']
     
     def _check_tier0_health(self) -> float:
         """Check Tier 0 (Governance) health."""
@@ -284,8 +279,10 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         """Check Tier 1 (Working Memory) health - returns detailed dict."""
         tier1_path = self.cortex_root / 'cortex-brain' / 'tier1'
         
-        # Check conversation context limit (70 entries)
-        context_files = list(tier1_path.glob('*.json')) if tier1_path.exists() else []
+        # Check conversation context limit (70 entries) - support both json and yaml
+        context_files = []
+        if tier1_path.exists():
+            context_files = list(tier1_path.glob('*.json')) + list(tier1_path.glob('*.yaml'))
         context_count = len(context_files)
         
         score = 100 if context_count <= 70 else max(0, 100 - (context_count - 70))
@@ -370,46 +367,6 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         score = (sum(checks.values()) / len(checks)) * 100
         return score
     
-    def _check_protection_health(self) -> Dict[str, Any]:
-        """Check protection layers health."""
-        # Check SKULL rules file
-        skull_path = self.cortex_root / 'cortex-brain' / 'brain-protection-rules.yaml'
-        skull_exists = skull_path.exists()
-        
-        # Check test separation (tests/ directory exists)
-        tests_path = self.cortex_root / 'tests'
-        tests_exist = tests_path.exists()
-        
-        checks = {
-            'skull_rules': skull_exists,
-            'test_separation': tests_exist
-        }
-        
-        score = (sum(checks.values()) / len(checks)) * 100
-        
-        return {
-            'score': score,
-            'checks': checks,
-            'status': 'healthy' if score >= 80 else 'degraded'
-        }
-    
-    def _check_system_health(self) -> Dict[str, Any]:
-        """Check system health."""
-        checks = {
-            'src_directory': (self.cortex_root / 'src').exists(),
-            'tests_directory': (self.cortex_root / 'tests').exists(),
-            'config_file': (self.cortex_root / 'cortex.config.json').exists(),
-            'requirements': (self.cortex_root / 'requirements.txt').exists()
-        }
-        
-        score = (sum(checks.values()) / len(checks)) * 100
-        
-        return {
-            'score': score,
-            'checks': checks,
-            'status': 'healthy' if score >= 80 else 'degraded'
-        }
-    
     # ========================================================================
     # Phase 2: Align
     # ========================================================================
@@ -430,22 +387,26 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         
         try:
             # Import alignment utility (may not exist yet)
-            from src.operations.modules.realignment.realignment_utility import run_align
+            from src.operations.modules.realignment.realignment_utility import realign
             
             # Execute alignment with auto-fix enabled
-            result = run_align(auto_fix=True, create_checkpoint=True)
+            result = realign(
+                project_root=self.cortex_root,
+                cortex_root=self.cortex_root,
+                interactive=False
+            )
             
-            fixes_applied = len(result.get('fixes', []))
-            issues_detected = len(result.get('issues', []))
+            fixes_applied = len(result.actions_applied)
+            issues_detected = len(result.errors)
             
             self.logger.info(f"Alignment complete: {fixes_applied} fixes applied, {issues_detected} issues detected")
             
             return {
-                'success': result.get('success', False),
+                'success': result.success,
                 'fixes_applied': fixes_applied,
                 'issues_detected': issues_detected,
-                'rollback_checkpoint': result.get('checkpoint_path'),
-                'validation_passed': result.get('validation_passed', False)
+                'rollback_checkpoint': str(result.report_path) if result.report_path else None,
+                'validation_passed': result.after_compliance > result.before_compliance
             }
         except ImportError as e:
             self.logger.warning(f"Align utility not available: {e}")
@@ -454,7 +415,7 @@ class MaintenanceOrchestrator(BaseOrchestrator):
                 'fixes_applied': 0,
                 'issues_detected': 0,
                 'skipped': True,
-                'reason': 'Alignment utility not found'
+                'reason': 'Align utility not available'
             }
         except Exception as e:
             self.logger.error(f"Align phase failed: {e}", exc_info=True)
@@ -499,7 +460,7 @@ class MaintenanceOrchestrator(BaseOrchestrator):
                 'success': True,
                 'files_moved': 0,
                 'skipped': True,
-                'reason': 'Cleanup orchestrator not found'
+                'reason': 'Cleanup utility not available'
             }
         except Exception as e:
             self.logger.error(f"Cleanup phase failed: {e}", exc_info=True)
@@ -534,7 +495,8 @@ class MaintenanceOrchestrator(BaseOrchestrator):
             return {
                 'success': result.success,
                 'tokens_saved': result.data.get('tokens_saved', 0),
-                'cache_cleared': result.data.get('cache_cleared', False)
+                'cache_cleared': result.data.get('cache_cleared', False),
+                'skipped': False
             }
         except ImportError as e:
             self.logger.warning(f"Optimize orchestrator not available: {e}")
@@ -542,7 +504,7 @@ class MaintenanceOrchestrator(BaseOrchestrator):
                 'success': True,
                 'tokens_saved': 0,
                 'skipped': True,
-                'reason': 'Optimize orchestrator not found'
+                'reason': 'Optimize utility not available'
             }
         except Exception as e:
             self.logger.error(f"Optimize phase failed: {e}", exc_info=True)
@@ -585,7 +547,7 @@ class MaintenanceOrchestrator(BaseOrchestrator):
                 'success': True,
                 'space_saved_bytes': 0,
                 'skipped': True,
-                'reason': 'Vacuum orchestrator not found'
+                'reason': 'Vacuum utility not available'
             }
         except Exception as e:
             self.logger.error(f"Vacuum phase failed: {e}", exc_info=True)
@@ -626,7 +588,7 @@ class MaintenanceOrchestrator(BaseOrchestrator):
                 'success': True,
                 'prompts_regenerated': 0,
                 'skipped': True,
-                'reason': 'Regenerate prompts utility not found'
+                'reason': 'Refresh prompts utility not available'
             }
         except Exception as e:
             self.logger.error(f"Refresh prompts phase failed: {e}", exc_info=True)
@@ -666,15 +628,13 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         health_scores = list(components.values())
         overall_score = sum(health_scores) / len(health_scores)
         
-        self.final_health = {
-            'overall_score': overall_score,
-            'components': components,
-            'timestamp': datetime.now().isoformat()
-        }
+        # Store final health as simple float for attribute access
+        self.final_health = overall_score
         
         # Calculate health delta
+        health_delta = 0.0
         if self.baseline_health:
-            baseline_score = self.baseline_health['overall_score']
+            baseline_score = self.baseline_health
             health_delta = overall_score - baseline_score
             
             self.logger.info(f"Final health: {overall_score:.1f}% (Δ {health_delta:+.2f}%)")
@@ -683,8 +643,11 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         
         return {
             'success': True,
+            'final_health': overall_score,
             'overall_score': overall_score,
-            'components': components
+            'health_delta': health_delta,
+            'components': components,
+            'health_components': components
         }
 
 

@@ -11,7 +11,7 @@
       "include_diagrams": true,
       "include_toc": true,
       "created_at": 1766353495.6116421,
-      "updated_at": 1766614568.689636
+      "updated_at": 1766622599.987564
     },
     "test_user:test_project": {
       "user_id": "test_user",
@@ -2826,6 +2826,167 @@
         "new_value": "detailed",
         "reason": "auto_learning",
         "timestamp": 1766614568.689636
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766619943.204525
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766620020.046049
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766620452.3338969
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766620454.481075
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766620454.490732
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766621103.26672
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766621105.324432
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766621105.330067
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766621366.8390589
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766621368.895158
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766621368.900626
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766621736.453082
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766621738.510588
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766621738.516068
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766622096.039304
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766622098.0986729
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766622098.104119
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766622407.0340202
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766622409.084654
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766622409.0901902
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766622597.9149172
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766622599.982212
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766622599.987565
       }
     ]
   }

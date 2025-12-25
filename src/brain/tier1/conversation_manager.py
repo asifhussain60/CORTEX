@@ -227,8 +227,7 @@ class ConversationManager:
                 updates.append("status = ?")
                 params.append(status)
                 if status == 'complete':
-                    updates.append("completed_at = ?")
-                    params.append(datetime.now().isoformat())
+                    updates.append("completed_at = datetime('now')")
             
             if outcome is not None:
                 updates.append("outcome = ?")
@@ -248,9 +247,8 @@ class ConversationManager:
                 updates.append("associated_commits = ?")
                 params.append(json.dumps(associated_commits))
             
-            # Always update updated_at
-            updates.append("updated_at = ?")
-            params.append(datetime.now().isoformat())
+            # Always update updated_at with SQLite datetime to match schema format
+            updates.append("updated_at = datetime('now')")
             
             if not updates:
                 return True  # Nothing to update

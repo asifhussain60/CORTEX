@@ -304,7 +304,8 @@ class PlanningOrchestrator(BaseOrchestrator):
         ) if config.get("enable_test_intelligence", True) else None
         
         self.tdd_intelligence = TDDIntelligenceAdapter(
-            strict_mode=config.get("tdd_strict_mode", True)
+            project_root=config.get("workspace_root", Path.cwd()),
+            enforce_strict=config.get("tdd_strict_mode", True)
         ) if config.get("enable_tdd_intelligence", True) else None
         
         self.validation_framework = ValidationFrameworkAdapter(
