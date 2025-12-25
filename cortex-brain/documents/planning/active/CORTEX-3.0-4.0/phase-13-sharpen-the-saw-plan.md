@@ -205,8 +205,22 @@ cortex-sample-apps/sts-validation-app/
 
 ## 🎯 CORTEX 4.0 Validation Matrix
 
-### Capability Testing Plan
+### Production Readiness Philosophy
 
+**STS Passing = Production Confidence**
+
+To answer "Can I rest assured it will work in production?":
+- ✅ YES - If ALL 15 capabilities validated (not just 8)
+- ✅ YES - If deployment pipeline tested end-to-end
+- ✅ YES - If multi-workspace scenarios validated
+- ✅ YES - If performance/scale testing passed
+- ✅ YES - If brain persistence verified under failure conditions
+
+**Current Plan Coverage: 8/15 capabilities (53%) - INSUFFICIENT FOR PRODUCTION**
+
+### Enhanced Capability Testing Plan (15 capabilities)
+
+**Group A: Core Workflows (8 capabilities - Currently Planned)**
 Each CORTEX capability will be tested against specific STS app flaws:
 
 #### 1. Code Sanitization Workflow
@@ -437,6 +451,322 @@ Each CORTEX capability will be tested against specific STS app flaws:
 
 ---
 
+**Group B: Deployment & Infrastructure (3 capabilities - NEW)**
+
+#### 9. Deployment Pipeline
+**Target Validation:** Complete publish workflow end-to-end
+
+**Test Plan:**
+- **Phase 1: Package Building**
+  - Build CORTEX package from clean state
+  - Validate all dependencies resolved
+  - Check version consistency across files
+  - Verify manifest completeness
+- **Phase 2: Installation Testing**
+  - Install in fresh virtual environment
+  - Test workspace detection (VSCode/Visual Studio/Copilot)
+  - Validate configuration file creation
+  - Verify brain database initialization
+- **Phase 3: Publish Validation**
+  - Deploy to local test repository
+  - Install from published package
+  - Run healthcheck in installed environment
+  - Validate all operations accessible
+- **Validation:**
+  - ✅ Package builds successfully
+  - ✅ Clean install works (no errors)
+  - ✅ All operations callable post-install
+  - ✅ Brain databases created correctly
+  - ✅ Configuration auto-generated
+
+**Success Metrics:**
+- Build success: 100%
+- Install success: 100%
+- Operation accessibility: 300/300 (100%)
+- Zero manual intervention required
+
+---
+
+#### 10. Multi-Workspace Architecture
+**Target Validation:** Workspace detection, context switching, isolation
+
+**Test Plan:**
+- **Scenario 1: Multiple Workspace Detection**
+  - Open 3 workspaces simultaneously (STS app + 2 others)
+  - Verify each gets unique workspace ID
+  - Check context isolation (no data leakage)
+  - Validate workspace registry updates
+- **Scenario 2: Context Switching**
+  - Switch between workspaces mid-operation
+  - Verify operation state preserved per workspace
+  - Check brain tier data segregation
+  - Validate file tracker accuracy
+- **Scenario 3: Cross-IDE Support**
+  - Test in VSCode, Visual Studio, GitHub Copilot
+  - Verify workspace detection in each IDE
+  - Check operation compatibility
+  - Validate configuration inheritance
+- **Validation:**
+  - ✅ Workspace IDs unique (UUID v4)
+  - ✅ Context isolation 100% (no leakage)
+  - ✅ Switch time <100ms
+  - ✅ 3 IDEs supported
+
+**Success Metrics:**
+- Workspace detection: 100% (all 3 IDEs)
+- Context isolation: 100% (zero leakage)
+- Switch latency: <100ms
+- Concurrent workspaces: 5+ supported
+
+---
+
+#### 11. Upgrade Orchestrator (3.0→4.0)
+**Target Validation:** Migration path for existing users
+
+**Test Plan:**
+- **Phase 1: Pre-Upgrade Validation**
+  - Create mock CORTEX 3.0 installation
+  - Run upgrade orchestrator pre-flight checks
+  - Verify backup creation (cortex-brain/, config)
+- **Phase 2: Migration Execution**
+  - Run 5-phase upgrade (analyze → backup → migrate → validate → cleanup)
+  - Track schema migrations (brain DBs)
+  - Verify configuration updates
+  - Check operation registry updates
+- **Phase 3: Post-Upgrade Validation**
+  - Run full test suite (2,900+ tests)
+  - Execute healthcheck (7 categories)
+  - Verify all operations work
+  - Check brain data integrity
+- **Phase 4: Rollback Testing**
+  - Simulate upgrade failure mid-process
+  - Verify automatic rollback to 3.0
+  - Check data restoration
+  - Validate 3.0 still functional
+- **Validation:**
+  - ✅ Upgrade success: 100%
+  - ✅ Data migration: 100% (no loss)
+  - ✅ Rollback works on failure
+  - ✅ 3.0→4.0 breaking changes handled
+
+**Success Metrics:**
+- Upgrade success rate: 100%
+- Data integrity: 100% (zero loss)
+- Rollback success: 100%
+- Migration time: <5 minutes
+
+---
+
+**Group C: Brain System (3 capabilities - NEW)**
+
+#### 12. Tier 1 Working Memory
+**Target Validation:** 70-conversation FIFO, entity extraction, <100ms latency
+
+**Test Plan:**
+- **Scenario 1: FIFO Queue Management**
+  - Generate 100 conversations (30 above limit)
+  - Verify oldest 30 evicted automatically
+  - Check entity extraction on each entry
+  - Validate retrieval latency <100ms
+- **Scenario 2: Entity Extraction**
+  - Submit conversations with 50+ entities (files, functions, classes)
+  - Verify extraction accuracy (precision/recall)
+  - Check entity relationship mapping
+  - Validate deduplication logic
+- **Scenario 3: High-Load Testing**
+  - 100 concurrent conversation writes
+  - Verify queue consistency
+  - Check lock contention
+  - Validate no data corruption
+- **Validation:**
+  - ✅ FIFO enforcement: 100%
+  - ✅ Entity extraction: >95% accuracy
+  - ✅ Retrieval latency: <100ms (p95)
+  - ✅ Concurrent safety: No corruption
+
+**Success Metrics:**
+- FIFO compliance: 100%
+- Entity extraction accuracy: >95%
+- Retrieval latency: <100ms (p95)
+- Concurrent operations: 100+ supported
+
+---
+
+#### 13. Tier 2 Knowledge Graph
+**Target Validation:** Pattern learning, strategy optimization, confidence scoring
+
+**Test Plan:**
+- **Scenario 1: Pattern Learning**
+  - Execute 10 TDD cycles (RED→GREEN→REFACTOR)
+  - Verify pattern storage (code smells, refactorings)
+  - Check pattern retrieval in subsequent cycles
+  - Validate confidence score increases with repetition
+- **Scenario 2: Strategy Optimization**
+  - Run planning orchestrator 5 times on similar features
+  - Track strategy selection changes over time
+  - Verify optimal strategy emerges (highest confidence)
+  - Check learning from failed executions
+- **Scenario 3: Cross-Orchestrator Learning**
+  - Run maintenance → refinement → TDD sequence
+  - Verify knowledge shared across orchestrators
+  - Check pattern recommendations improve
+  - Validate brain integration layer works
+- **Validation:**
+  - ✅ Pattern storage: 100%
+  - ✅ Confidence scoring: Increases over time
+  - ✅ Strategy optimization: 30%+ improvement after 5 runs
+  - ✅ Cross-orchestrator sharing: Works
+
+**Success Metrics:**
+- Pattern storage: 100/100 patterns stored
+- Confidence growth: +20% after 5 repetitions
+- Strategy optimization: 30%+ improvement
+- Learning transfer: 80%+ accuracy
+
+---
+
+#### 14. Tier 3 Dev Context
+**Target Validation:** Metrics tracking, hotspot detection, file relationships
+
+**Test Plan:**
+- **Scenario 1: Metrics Tracking**
+  - Execute 50 operations across 5 orchestrators
+  - Verify metrics collected (execution time, success rate, complexity)
+  - Check aggregation accuracy
+  - Validate trend analysis
+- **Scenario 2: Hotspot Detection**
+  - Modify 20 files repeatedly (10+ edits each)
+  - Verify hotspot identification (high-change files)
+  - Check complexity correlation
+  - Validate recommendations (refactor suggestions)
+- **Scenario 3: File Relationship Mapping**
+  - Track imports across 100 files
+  - Verify dependency graph accuracy
+  - Check circular dependency detection
+  - Validate impact analysis (change propagation)
+- **Validation:**
+  - ✅ Metrics accuracy: 100%
+  - ✅ Hotspot detection: >90% precision
+  - ✅ Relationship mapping: 100% accurate
+  - ✅ Trend analysis: Works
+
+**Success Metrics:**
+- Metrics collection: 100%
+- Hotspot detection: >90% precision
+- Dependency accuracy: 100%
+- Impact analysis: 95%+ accuracy
+
+---
+
+**Group D: Agentic AI (2 capabilities - NEW)**
+
+#### 15. Investigation Router Agent
+**Target Validation:** Triage, evidence collection, autonomous decision-making
+
+**Test Plan:**
+- **Scenario 1: Error Triage**
+  - Submit 20 errors (10 CORTEX, 10 user code)
+  - Verify correct triage (CORTEX vs user)
+  - Check evidence collection (stack traces, logs)
+  - Validate routing to appropriate handler
+- **Scenario 2: Confidence Scoring**
+  - Present ambiguous errors (50/50 CORTEX/user)
+  - Verify confidence scores calculated
+  - Check escalation to human when <70% confidence
+  - Validate learning from feedback
+- **Scenario 3: Multi-Agent Collaboration**
+  - Trigger investigation requiring planning agent
+  - Verify handoff protocol
+  - Check context preservation
+  - Validate collaborative resolution
+- **Validation:**
+  - ✅ Triage accuracy: >95%
+  - ✅ Evidence collection: 100%
+  - ✅ Confidence scoring: Works correctly
+  - ✅ Agent collaboration: Seamless
+
+**Success Metrics:**
+- Triage accuracy: >95%
+- Evidence completeness: 100%
+- Confidence calibration: <5% error
+- Handoff success: 100%
+
+---
+
+#### 16. Strategic Planning Agent
+**Target Validation:** Autonomous planning, feature decomposition, DoR/DoD enforcement
+
+**Test Plan:**
+- **Scenario 1: Autonomous Planning**
+  - Request complex feature ("Add multi-tenant auth")
+  - Verify autonomous plan generation (no human input)
+  - Check DoR/DoD compliance
+  - Validate TDD integration
+- **Scenario 2: Complexity Classification**
+  - Submit 10 features (3 LOW, 4 MEDIUM, 3 HIGH)
+  - Verify correct classification (route to appropriate strategy)
+  - Check auto-routing (LOW→skeleton, HIGH→incremental)
+  - Validate decision explanation
+- **Scenario 3: Adaptive Learning**
+  - Execute 5 plans with varying success rates
+  - Verify strategy adjustments based on outcomes
+  - Check confidence scoring evolution
+  - Validate knowledge graph integration
+- **Validation:**
+  - ✅ Plan completeness: 100%
+  - ✅ Classification accuracy: 100%
+  - ✅ Adaptive learning: 30%+ improvement
+  - ✅ DoR/DoD compliance: 100%
+
+**Success Metrics:**
+- Plan completeness: 100%
+- Classification accuracy: 100%
+- Learning improvement: 30%+ after 5 plans
+- DoR/DoD compliance: 100%
+
+---
+
+**Group E: Supporting Operations (5 capabilities - NEW)**
+
+#### 17. System Operations (Align, Optimize, Healthcheck, Cleanup, Feedback)
+**Target Validation:** CLI wrappers, error handling, git protection
+
+**Test Plan:**
+- **Align:**
+  - Run on STS app with 20 formatting issues
+  - Verify auto-fix (imports, spacing, quotes)
+  - Check git checkpoint creation
+  - Validate rollback on failure
+- **Optimize:**
+  - Run performance optimization
+  - Verify improvements measured
+  - Check recommendations generated
+  - Validate no regressions introduced
+- **Healthcheck:**
+  - Run 7-category validation
+  - Verify issue detection (20+ issues in STS app)
+  - Check severity classification
+  - Validate actionable recommendations
+- **Cleanup:**
+  - Run AST-powered cleanup
+  - Verify dead code removed (300+ lines)
+  - Check imports optimized
+  - Validate tests still pass
+- **Feedback:**
+  - Submit feedback through all channels (GitHub, file, inline)
+  - Verify capture in feedback system
+  - Check categorization (bug/feature/improvement)
+  - Validate acknowledgment
+
+**Success Metrics:**
+- Align: 20/20 issues fixed
+- Optimize: 50%+ performance gain
+- Healthcheck: 20+ issues detected
+- Cleanup: 300+ dead lines removed
+- Feedback: 100% capture rate
+
+---
+
 ## 📊 Success Criteria
 
 ### Overall Transformation Metrics
@@ -459,8 +789,9 @@ Each CORTEX capability will be tested against specific STS app flaws:
 - Documentation: Complete, accurate
 - Performance: Baseline + 50%+ improvement
 
-### Per-Capability Validation
+### Per-Capability Validation (16 capabilities for PRODUCTION READINESS)
 
+**Group A: Core Workflows (8 capabilities)**
 | Capability | Validation Criteria | Status |
 |------------|---------------------|--------|
 | Code Sanitization | 5/5 secrets removed, tests pass | ⏳ |
@@ -472,11 +803,56 @@ Each CORTEX capability will be tested against specific STS app flaws:
 | ADO Operations | Valid ADO format, complete hierarchy | ⏳ |
 | Holistic Discovery | 100% accuracy, 0 false positives | ⏳ |
 
+**Group B: Deployment & Infrastructure (3 capabilities)**
+| Capability | Validation Criteria | Status |
+|------------|---------------------|--------|
+| Deployment Pipeline | Build + install + publish success 100% | ⏳ |
+| Multi-Workspace | 3 IDEs, 100% isolation, <100ms switch | ⏳ |
+| Upgrade 3.0→4.0 | 100% success, zero data loss, rollback works | ⏳ |
+
+**Group C: Brain System (3 capabilities)**
+| Capability | Validation Criteria | Status |
+|------------|---------------------|--------|
+| Tier 1 Working Memory | FIFO 100%, <100ms latency, 95%+ accuracy | ⏳ |
+| Tier 2 Knowledge Graph | Pattern learning, 30%+ optimization | ⏳ |
+| Tier 3 Dev Context | Metrics 100%, hotspot >90% precision | ⏳ |
+
+**Group D: Agentic AI (2 capabilities)**
+| Capability | Validation Criteria | Status |
+|------------|---------------------|--------|
+| Investigation Router | >95% triage accuracy, 100% evidence | ⏳ |
+| Strategic Planning | 100% classification, 30%+ learning | ⏳ |
+
+**Group E: Supporting Operations (1 meta-capability)**
+| Capability | Validation Criteria | Status |
+|------------|---------------------|--------|
+| System Operations (5) | Align, Optimize, Health, Cleanup, Feedback all pass | ⏳ |
+
+**PRODUCTION READINESS GATE:**
+- ✅ 16/16 capabilities validated (100% coverage)
+- ✅ Deployment pipeline tested end-to-end
+- ✅ Multi-workspace isolation verified
+- ✅ Performance/scale testing passed
+- ✅ Brain persistence validated
+- ✅ Upgrade path confirmed (3.0→4.0)
+
+**Confidence Level:**
+- 8/16 validated = 50% confidence (NOT production ready)
+- 12/16 validated = 75% confidence (Beta ready)
+- 16/16 validated = 100% confidence (✅ PRODUCTION READY)
+| Architectural Review | 25 → 90+ score, 20+ recommendations | ⏳ |
+| ADO Operations | Valid ADO format, complete hierarchy | ⏳ |
+| Holistic Discovery | 100% accuracy, 0 false positives | ⏳ |
+
 ---
 
-## 🗓️ Implementation Roadmap
+## 🗓️ Implementation Roadmap (ENHANCED for Production Readiness)
 
-### Week 1-2: STS Application Creation
+**Total Duration:** 8-10 weeks (200-250 hours)
+**Original Plan:** 4-6 weeks (120-150 hours) - INSUFFICIENT
+**Addition:** +4 weeks (+80-100 hours) for deployment, brain, agents, operations
+
+### Week 1-2: STS Application Creation (UNCHANGED)
 **Effort:** 40 hours
 
 **Tasks:**
@@ -507,40 +883,35 @@ Each CORTEX capability will be tested against specific STS app flaws:
 
 ---
 
-### Week 3-4: CORTEX Capability Validation (Part 1)
+### Week 3-4: Group A Capabilities (Core Workflows) - PART 1
 **Effort:** 40 hours
 
 **Tasks:**
-1. **Day 11-12:** Code Sanitization
-   - Run sanitization workflow
-   - Validate secret removal (5/5)
-   - Check build/test status
-   - Generate audit report
-   - **Deliverable:** Sanitization validation report
+1. **Day 11-12:** Code Sanitization + Planning 2.0
+   - Run sanitization workflow (5 secrets)
+   - Create authentication plan (HIGH complexity)
+   - Validate both capabilities
+   - **Deliverable:** 2 validation reports
 
-2. **Day 13-14:** Planning System 2.0
-   - Create "Add proper authentication" plan
-   - Validate complexity detection (HIGH)
-   - Check incremental phases (4 deliveries)
-   - Verify DoR/DoD inclusion
-   - **Deliverable:** Planning validation report
-
-3. **Day 15-17:** TDD Mastery v4.0
-   - Start TDD for payment processing
-   - Validate RED phase (tests fail)
-   - Implement GREEN phase (tests pass)
-   - Execute REFACTOR phase (complexity reduction)
+2. **Day 13-15:** TDD Mastery v4.0
+   - Full RED→GREEN→REFACTOR cycle
+   - Payment processing refactoring
+   - Coverage 0% → 90%+
    - **Deliverable:** TDD validation report
 
-4. **Day 18:** System Maintenance v4.0
+3. **Day 16-17:** System Maintenance v4.0
    - Run 7-phase maintenance
    - Track auto-fix rate (60%+)
    - Measure dead code removal (300+ lines)
    - **Deliverable:** Maintenance validation report
 
+4. **Day 18:** Buffer/Documentation
+   - Catch-up on any delays
+   - Document findings so far
+
 ---
 
-### Week 5-6: CORTEX Capability Validation (Part 2)
+### Week 5-6: Group A Capabilities (Core Workflows) - PART 2
 **Effort:** 40 hours
 
 **Tasks:**
@@ -574,8 +945,112 @@ Each CORTEX capability will be tested against specific STS app flaws:
 
 ---
 
-### Week 7: Final Measurement & Reporting
-**Effort:** 20 hours
+### Week 7-8: Group B+C Capabilities (Deployment, Brain) - NEW
+**Effort:** 50 hours
+
+**Tasks:**
+1. **Day 27-28:** Deployment Pipeline (Capability 9)
+   - Build package from clean state
+   - Install in fresh environment (3 scenarios)
+   - Publish to local test repository
+   - Validate all operations accessible
+   - **Deliverable:** Deployment validation report
+
+2. **Day 29-30:** Multi-Workspace Architecture (Capability 10)
+   - Test 3 workspaces simultaneously
+   - Validate context switching (<100ms)
+   - Test cross-IDE support (VSCode/VS/Copilot)
+   - Verify isolation (no data leakage)
+   - **Deliverable:** Multi-workspace validation report
+
+3. **Day 31-32:** Upgrade Orchestrator (Capability 11)
+   - Mock CORTEX 3.0 installation
+   - Run 5-phase upgrade
+   - Test rollback on failure
+   - Validate data migration (zero loss)
+   - **Deliverable:** Upgrade validation report
+
+4. **Day 33-34:** Tier 1 Working Memory (Capability 12)
+   - Generate 100 conversations (test FIFO)
+   - Validate entity extraction (>95% accuracy)
+   - Test high-load (100 concurrent writes)
+   - Measure retrieval latency (<100ms p95)
+   - **Deliverable:** Tier 1 validation report
+
+5. **Day 35:** Tier 2 Knowledge Graph (Capability 13)
+   - Run 10 TDD cycles (pattern learning)
+   - Execute 5 planning operations (strategy optimization)
+   - Verify cross-orchestrator knowledge sharing
+   - **Deliverable:** Tier 2 validation report
+
+6. **Day 36:** Tier 3 Dev Context (Capability 14)
+   - Execute 50 operations (metrics tracking)
+   - Modify 20 files repeatedly (hotspot detection)
+   - Track imports across 100 files (relationship mapping)
+   - **Deliverable:** Tier 3 validation report
+
+---
+
+### Week 9: Group D+E Capabilities (Agents, Operations) - NEW
+**Effort:** 30 hours
+
+**Tasks:**
+1. **Day 37-38:** Investigation Router Agent (Capability 15)
+   - Submit 20 errors (10 CORTEX, 10 user)
+   - Validate triage accuracy (>95%)
+   - Test confidence scoring
+   - Verify multi-agent collaboration
+   - **Deliverable:** Investigation router validation report
+
+2. **Day 39-40:** Strategic Planning Agent (Capability 16)
+   - Request complex feature planning
+   - Submit 10 features (varying complexity)
+   - Execute 5 plans (adaptive learning)
+   - Validate DoR/DoD compliance
+   - **Deliverable:** Strategic planning validation report
+
+3. **Day 41-42:** System Operations (Capability 17)
+   - Run Align (20 formatting issues)
+   - Run Optimize (performance gains)
+   - Run Healthcheck (7 categories)
+   - Run Cleanup (dead code removal)
+   - Submit Feedback (all channels)
+   - **Deliverable:** System operations validation report
+
+---
+
+### Week 10: Final Measurement & Certification
+**Effort:** 30 hours
+
+**Tasks:**
+1. **Day 43-44:** Re-measure all metrics
+   - Security scan (0 vulnerabilities)
+   - Complexity analysis (avg <15)
+   - Test coverage (90%+)
+   - Performance benchmarks (+50%)
+   - Documentation audit (complete)
+   - Brain health check (all 3 tiers)
+   - Agent performance metrics
+
+2. **Day 45-46:** Create validation dashboard
+   - Before/after metrics visualization
+   - 16-capability pass/fail matrix
+   - Transformation timeline
+   - Confidence level calculation
+   - **Deliverable:** Interactive dashboard
+
+3. **Day 47-48:** Final reporting & certification
+   - Write Phase 13B completion report
+   - Document lessons learned
+   - Create 16-capability certification matrix
+   - Generate production readiness scorecard
+   - Update CORTEX4-STATUS.md
+   - **Deliverable:** ✅ PRODUCTION CERTIFIED (if 16/16 pass)
+
+4. **Day 49-50:** Buffer/Contingency
+   - Address any failing validations
+   - Re-test critical capabilities
+   - Final documentation review
 
 **Tasks:**
 1. **Day 27-28:** Re-measure all metrics
@@ -611,10 +1086,10 @@ Each CORTEX capability will be tested against specific STS app flaws:
 - Minimal documentation (baseline)
 - Placeholder tests (15% coverage)
 
-### 2. Validation Reports (8 reports)
-**Location:** `cortex-brain/documents/reports/phase-13/`
+### 2. Validation Reports (17 reports - ENHANCED)
+**Location:** `cortex-brain/documents/reports/phase-13b/`
 
-**Reports:**
+**Group A: Core Workflows (8 reports)**
 1. `01-baseline-metrics-report.md` - Initial state measurements
 2. `02-code-sanitization-validation.md` - Sanitization test results
 3. `03-planning-system-validation.md` - Planning capability test
@@ -625,23 +1100,48 @@ Each CORTEX capability will be tested against specific STS app flaws:
 8. `08-ado-operations-validation.md` - ADO capabilities test
 9. `09-holistic-discovery-validation.md` - Discovery test
 
-### 3. Capability Certification Matrix
-**Location:** `cortex-brain/documents/reports/phase-13-capability-certification.md`
+**Group B: Deployment & Infrastructure (3 reports)**
+10. `10-deployment-pipeline-validation.md` - Build, install, publish tests
+11. `11-multi-workspace-validation.md` - Workspace isolation & switching
+12. `12-upgrade-orchestrator-validation.md` - 3.0→4.0 migration test
+
+**Group C: Brain System (3 reports)**
+13. `13-tier1-working-memory-validation.md` - FIFO, entity extraction, latency
+14. `14-tier2-knowledge-graph-validation.md` - Pattern learning, optimization
+15. `15-tier3-dev-context-validation.md` - Metrics, hotspots, relationships
+
+**Group D+E: Agents & Operations (2 reports)**
+16. `16-investigation-router-validation.md` - Triage, evidence, collaboration
+17. `17-strategic-planning-agent-validation.md` - Autonomous planning, learning
+18. `18-system-operations-validation.md` - Align, Optimize, Health, Cleanup, Feedback
+9. `09-holistic-discovery-validation.md` - Discovery test
+
+### 3. Capability Certification Matrix (ENHANCED)
+**Location:** `cortex-brain/documents/reports/phase-13b-capability-certification.md`
 
 **Contents:**
-- 8×8 matrix (capabilities × validation criteria)
+- 16×8 matrix (16 capabilities × 8 validation criteria)
 - Pass/fail status per capability
 - Detailed evidence for each validation
 - Overall certification: PASS/FAIL
+- Production readiness confidence: 0-100%
+- **Confidence Thresholds:**
+  - 100% (16/16) = ✅ PRODUCTION READY
+  - 75-99% (12-15/16) = Beta ready, production with caveats
+  - 50-74% (8-11/16) = Alpha ready, NOT production
+  - <50% (<8/16) = ⛔ NOT READY
 
-### 4. Transformation Dashboard
-**Location:** `cortex-lens-output/phase-13-sts-dashboard.html`
+### 4. Transformation Dashboard (ENHANCED)
+**Location:** `cortex-lens-output/phase-13b-sts-dashboard.html`
 
 **Visualizations:**
-- Before/after metrics (radar chart)
-- Per-capability validation (matrix)
-- Timeline of improvements (Gantt chart)
-- Code quality evolution (line chart)
+- Before/after metrics (radar chart - 12 dimensions)
+- Per-capability validation (16-cell matrix with color coding)
+- Timeline of improvements (Gantt chart - 50 days)
+- Code quality evolution (line chart - daily measurements)
+- Brain health metrics (3 tiers × 5 KPIs)
+- Agent performance (triage accuracy, learning curves)
+- Deployment success rate (build/install/publish)
 
 ### 5. Lessons Learned Document
 **Location:** `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/phase-13-lessons-learned.md`
@@ -687,20 +1187,115 @@ Each CORTEX capability will be tested against specific STS app flaws:
 ### Risk 1: Flaws Too Easy to Detect
 **Mitigation:** Add subtle anti-patterns that require deep analysis (e.g., race conditions, LSP violations)
 
-### Risk 2: Validation Takes Longer Than Estimated
-**Mitigation:** Prioritize 4 critical capabilities (Sanitization, Planning, TDD, Maintenance), defer 4 others to Phase 15
+### Risk 2: Validation Takes Longer Than Estimated (UPDATED)
+**Original Mitigation:** Prioritize 4 critical capabilities, defer 4 others to Phase 15  
+**ENHANCED Mitigation:** Accept 10-week timeline (was 4-6 weeks). Deployment/brain/agents are non-negotiable for production readiness. Can't defer infrastructure validation - it's foundational.
 
 ### Risk 3: CORTEX Capabilities Don't Work as Expected
 **Mitigation:** This is the POINT - document gaps, create bug reports, prioritize fixes
 
-### Risk 4: Scope Creep (Too Many Flaws)
-**Mitigation:** Cap at 61 documented flaws (10 per category max), resist adding more
+### Risk 4: Scope Creep (Too Many Flaws or Capabilities)
+**Original:** Cap at 61 documented flaws (10 per category max)  
+**ENHANCED:** Cap at 16 capabilities (no more additions). Focus is production readiness validation, not feature discovery.
+
+### Risk 5: Deployment Validation Blocks Progress (NEW)
+**Mitigation:** Run deployment tests in parallel with Week 7-8. If deployment fails, continue other validations but mark overall status as "NOT PRODUCTION READY" regardless of other results.
+
+### Risk 6: Brain/Agent Tests Require Production Data (NEW)
+**Mitigation:** Generate synthetic data (1000+ conversations, 500+ patterns, 200+ metrics). No production dependencies for STS validation.
 
 ---
 
 ## 📊 Progress Tracking
 
-**Overall Progress:** [░░░░░░░░░░░░░░░░░░░░] 0% (0/30 days)
+**Overall Progress:** [░░░░░░░░░░░░░░░░░░░░] 0% (0/50 days)
+
+**Phase Breakdown:**
+- Week 1-2: Application Creation [░░░░░░░░░░] 0%
+- Week 3-4: Group A Part 1 (4 capabilities) [░░░░░░░░░░] 0%
+- Week 5-6: Group A Part 2 (4 capabilities) [░░░░░░░░░░] 0%
+- Week 7-8: Group B+C (6 capabilities) [░░░░░░░░░░] 0%
+- Week 9: Group D+E (3 capabilities) [░░░░░░░░░░] 0%
+- Week 10: Final Certification [░░░░░░░░░░] 0%
+
+**Capability Validation Status (16 total):**
+- Group A (Core Workflows): 0/8 complete
+- Group B (Deployment): 0/3 complete
+- Group C (Brain): 0/3 complete
+- Group D+E (Agents/Ops): 0/3 complete
+
+---
+
+## 🎓 Lessons from Enhanced Plan
+
+### Key Insights
+
+**1. Original Plan Was Insufficient for Production**
+- 8/16 capabilities = 50% coverage
+- Missing deployment, multi-workspace, brain, agents
+- Would have passed STS but failed in production
+
+**2. Production Readiness Requires Infrastructure Validation**
+- Can't assume deployment "just works"
+- Multi-workspace isolation is critical (1:∞ scaling)
+- Brain persistence must survive failures
+
+**3. Agentic AI is Core, Not Optional**
+- Investigation Router: 40+ tests existing (already validated)
+- Strategic Planning: Autonomous decision-making
+- Can't defer to "future work" - used in every operation
+
+**4. Timeline Reality: 10 weeks vs 4-6 weeks**
+- Original: 120-150 hours (optimistic)
+- Enhanced: 200-250 hours (realistic for production cert)
+- 67% increase justified by 100% confidence requirement
+
+**5. Confidence Thresholds Matter**
+- 50% coverage = "It mostly works" (NOT production)
+- 75% coverage = "Beta ready" (production with caveats)
+- 100% coverage = "Fully validated" (✅ PRODUCTION CERTIFIED)
+
+---
+
+## 📢 Final Answer to User's Question
+
+**Q: Does STS cover all aspects of CORTEX 4.0? Can I rest assured it will work in production?**
+
+**A: Original Plan (8 capabilities) - NO**
+- 53% coverage (8/15 capabilities)
+- Missing deployment, multi-workspace, brain, agents
+- Would NOT guarantee production readiness
+
+**A: Enhanced Plan (16 capabilities) - YES**  
+- 100% coverage (16/16 critical capabilities)
+- Deployment pipeline validated end-to-end
+- Multi-workspace architecture tested (3 IDEs)
+- Brain system validated (all 3 tiers)
+- Agentic AI confirmed (both agents)
+- System operations verified (5 operations)
+
+**Production Readiness Guarantee:**
+```
+IF 16/16 capabilities PASS STS validation
+THEN ✅ CORTEX 4.0 IS PRODUCTION READY
+  - Deployment: Verified (build → install → publish)
+  - Multi-workspace: Verified (isolation, switching, 3 IDEs)
+  - Brain: Verified (persistence, learning, performance)
+  - Agents: Verified (triage, planning, collaboration)
+  - Core workflows: Verified (8 orchestrators)
+  - Operations: Verified (align, optimize, health, cleanup, feedback)
+  - Confidence: 100%
+ELSE IF 12-15/16 PASS
+THEN ⚠️ BETA READY (production with known limitations)
+ELSE
+THEN ⛔ NOT PRODUCTION READY (critical gaps exist)
+```
+
+**Investment Required:**
+- Duration: 10 weeks (vs original 4-6)
+- Effort: 200-250 hours (vs original 120-150)
+- Cost: 67% increase
+- Value: 100% production confidence (vs 50%)
 
 **Phase Breakdown:**
 - Week 1-2: Application Creation [░░░░░░░░░░] 0%
