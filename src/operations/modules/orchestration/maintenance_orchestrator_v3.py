@@ -406,7 +406,8 @@ class MaintenanceOrchestrator(BaseOrchestrator):
                 'fixes_applied': fixes_applied,
                 'issues_detected': issues_detected,
                 'rollback_checkpoint': str(result.report_path) if result.report_path else None,
-                'validation_passed': result.after_compliance > result.before_compliance
+                'validation_passed': result.after_compliance > result.before_compliance,
+                'skipped': False
             }
         except ImportError as e:
             self.logger.warning(f"Align utility not available: {e}")
@@ -452,7 +453,8 @@ class MaintenanceOrchestrator(BaseOrchestrator):
                 'files_moved': result.data.get('files_moved', 0),
                 'references_updated': result.data.get('references_updated', 0),
                 'duplicates_found': result.data.get('duplicates_detected', 0),
-                'backup_path': result.data.get('backup_path')
+                'backup_path': result.data.get('backup_path'),
+                'skipped': False
             }
         except ImportError as e:
             self.logger.warning(f"Cleanup orchestrator not available: {e}")
@@ -539,7 +541,8 @@ class MaintenanceOrchestrator(BaseOrchestrator):
             return {
                 'success': result.success,
                 'space_saved_bytes': result.data.get('space_saved', 0),
-                'databases_vacuumed': result.data.get('databases_vacuumed', 0)
+                'databases_vacuumed': result.data.get('databases_vacuumed', 0),
+                'skipped': False
             }
         except ImportError as e:
             self.logger.warning(f"Vacuum orchestrator not available: {e}")
@@ -580,7 +583,8 @@ class MaintenanceOrchestrator(BaseOrchestrator):
             
             return {
                 'success': result.get('success', False),
-                'prompts_regenerated': result.get('prompts_regenerated', 0)
+                'prompts_regenerated': result.get('prompts_regenerated', 0),
+                'skipped': False
             }
         except ImportError as e:
             self.logger.warning(f"Regenerate prompts utility not available: {e}")

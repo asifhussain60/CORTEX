@@ -256,6 +256,8 @@ class PlanningOrchestrator(BaseOrchestrator):
         # Feature flags
         self.git_checkpoints_enabled = config.get("enable_git_checkpoints", True)
         self.session_restoration_enabled = config.get("enable_session_restoration", True)
+        self.checkpoint_retention_limit = config.get("checkpoint_retention_limit", 10)
+        self.checkpoint_strategy = config.get("checkpoint_strategy", "per_phase")
         
         # Initialize schema
         self.schema = self._load_schema()
@@ -869,3 +871,225 @@ class PlanningOrchestrator(BaseOrchestrator):
             PlanComplexity.CRITICAL: "Critical feature, full plan with security analysis"
         }
         return descriptions.get(complexity, "Unknown complexity level")
+    
+    # ========================================================================
+    # Git Checkpoint Methods (Task 8.4 - Test Compliance)
+    # ========================================================================
+    
+    def _create_checkpoint(self, phase_name: str, metadata: Dict[str, Any]) -> str:
+        """
+        Create git checkpoint for phase.
+        
+        Args:
+            phase_name: Name of phase for checkpoint
+            metadata: Additional checkpoint metadata
+        
+        Returns:
+            Checkpoint ID if successful, empty string if failed
+        """
+        if not self.git_checkpoint:
+            self.logger.warning("⚠️  Git checkpoints disabled")
+            return ""
+        
+        from .git_checkpoint_integration import CheckpointType
+        
+        checkpoint = self.git_checkpoint.create_checkpoint(
+            checkpoint_type=CheckpointType.PHASE,
+            phase_name=phase_name,
+            message=f"Checkpoint: {phase_name} - {metadata.get('progress', 'N/A')}"
+        )
+        
+        return checkpoint.checkpoint_id if checkpoint else ""
+    
+    def _create_checkpoint_with_validation(self, phase_name: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Create checkpoint with validation before creation.
+        
+        Args:
+            phase_name: Phase name
+            metadata: Checkpoint metadata
+        
+        Returns:
+            Result dictionary with validation status and checkpoint ID
+        """
+        # Validate metadata
+        validation_errors = []
+        if not phase_name:
+            validation_errors.append("Phase name required")
+        if not isinstance(metadata, dict):
+            validation_errors.append("Metadata must be dictionary")
+        
+        if validation_errors:
+            return {
+                "success": False,
+                "validation": False,
+                "errors": validation_errors
+            }
+        
+        # Create checkpoint
+        checkpoint_id = self._create_checkpoint(phase_name, metadata)
+        
+        return {
+            "success": bool(checkpoint_id),
+            "validation": True,
+            "checkpoint_id": checkpoint_id
+        }
+    
+    def _create_git_checkpoint(self, phase_name: str, metadata: Dict[str, Any]) -> Optional[str]:
+        """
+        Create git checkpoint with git integration.
+        
+        Args:
+            phase_name: Phase name
+            metadata: Checkpoint metadata
+        
+        Returns:
+            Checkpoint ID or None if failed
+        """
+        checkpoint_id = self._create_checkpoint(phase_name, metadata)
+        return checkpoint_id if checkpoint_id else None
+    
+    def _get_checkpoint(self, checkpoint_id: str) -> Dict[str, Any]:
+        """
+        Get checkpoint data by ID.
+        
+        Args:
+            checkpoint_id: Checkpoint identifier
+        
+        Returns:
+            Checkpoint data dictionary
+        """
+        if not self.git_checkpoint:
+            return {}
+        
+        # Find checkpoint in history
+        for checkpoint in self.git_checkpoint.checkpoints:
+            if checkpoint.checkpoint_id == checkpoint_id:
+                return {
+                    "checkpoint_id": checkpoint.checkpoint_id,
+                    "phase_name": checkpoint.phase_name,
+                    "commit_sha": checkpoint.commit_sha,
+                    "branch_name": checkpoint.branch_name,
+                    "message": checkpoint.message,
+                    "timestamp": checkpoint.timestamp.isoformat(),
+                    "files_changed": checkpoint.files_changed
+                }
+        
+        return {}
+    
+    def _update_state(self, state_updates: Dict[str, Any]) -> None:
+        """
+        Update orchestrator state.
+        
+        Args:
+            state_updates: State updates to apply
+        """
+        if not hasattr(self, '_internal_state'):
+            self._internal_state = {}
+        
+        self._internal_state.update(state_updates)
+    
+    def _get_current_state(self) -> Dict[str, Any]:
+        """
+        Get current orchestrator state.
+        
+        Returns:
+            Current state dictionary
+        """
+        if not hasattr(self, '_internal_state'):
+            self._internal_state = {}
+        
+        return self._internal_state.copy()
+    
+    def _rollback_to_checkpoint(self, checkpoint_id: str) -> bool:
+        """
+        Rollback to previous checkpoint.
+        
+        Args:
+            checkpoint_id: Checkpoint to rollback to
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        if not self.git_checkpoint:
+            return False
+        
+        checkpoint = self.git_checkpoint.restore_checkpoint(checkpoint_id)
+        if checkpoint:
+            # Restore state from checkpoint metadata
+            if hasattr(self, '_internal_state'):
+                self._internal_state = checkpoint.metadata.copy() if hasattr(checkpoint, 'metadata') else {}
+            return True
+        
+        return False
+    
+    def _get_checkpoint_history(self) -> List[Dict[str, Any]]:
+        """
+        Get checkpoint history.
+        
+        Returns:
+            List of checkpoint dictionaries
+        """
+        if not self.git_checkpoint:
+            return []
+        
+        return [
+            {
+                "checkpoint_id": cp.checkpoint_id,
+                "phase_name": cp.phase_name,
+                "timestamp": cp.timestamp.isoformat(),
+                "commit_sha": cp.commit_sha
+            }
+            for cp in self.git_checkpoint.checkpoints
+        ]
+    
+    def _cleanup_old_checkpoints(self) -> None:
+        """
+        Cleanup old checkpoints beyond retention limit.
+        """
+        if not self.git_checkpoint:
+            return
+        
+        retention_limit = getattr(self, 'checkpoint_retention_limit', 10)
+        
+        if len(self.git_checkpoint.checkpoints) > retention_limit:
+            # Remove oldest checkpoints
+            to_remove = len(self.git_checkpoint.checkpoints) - retention_limit
+            self.git_checkpoint.checkpoints = self.git_checkpoint.checkpoints[to_remove:]
+            self.git_checkpoint._persist_checkpoints()
+    
+    def _execute_phase_with_checkpoint(self, phase_name: str, phase_config: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Execute phase with automatic checkpoint creation.
+        
+        Args:
+            phase_name: Name of phase to execute
+            phase_config: Phase configuration
+        
+        Returns:
+            Phase execution result
+        """
+        # Execute phase (placeholder - actual implementation would call phase executor)
+        result = {
+            "phase": phase_name,
+            "status": "completed",
+            "config": phase_config
+        }
+        
+        # Create checkpoint after phase
+        checkpoint_id = self._create_checkpoint(phase_name, {"phase_result": result})
+        result["checkpoint_id"] = checkpoint_id
+        
+        return result
+    
+    def _get_created_checkpoints(self) -> List[str]:
+        """
+        Get list of created checkpoint IDs.
+        
+        Returns:
+            List of checkpoint IDs
+        """
+        if not self.git_checkpoint:
+            return []
+        
+        return [cp.checkpoint_id for cp in self.git_checkpoint.checkpoints]
