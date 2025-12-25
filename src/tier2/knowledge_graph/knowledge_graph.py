@@ -22,6 +22,7 @@ NOTE:
 
 from pathlib import Path
 from typing import Optional, List, Dict, Any
+import logging
 
 from .database.connection import ConnectionManager
 from .patterns.pattern_store import PatternStore
@@ -29,12 +30,15 @@ from .patterns.pattern_search import PatternSearch
 from .patterns.pattern_decay import PatternDecay
 from .relationships.relationship_manager import RelationshipManager
 from .tags.tag_manager import TagManager
+from .loaders.yaml_loader import YAMLKnowledgeLoader
+
+logger = logging.getLogger(__name__)
 
 
 class KnowledgeGraph:
-    """High-level orchestration for Knowledge Graph operations."""
+    """High-level orchestration for Knowledge Graph operations with lazy YAML loading."""
 
-    def __init__(self, db_path: Optional[Path] = None):
+    def __init__(self, db_path: Optional[Path] = None, auto_load_knowledge: bool = True):
         if db_path is None:
             # Default consistent with existing database modules
             root = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "tier2"
@@ -56,6 +60,11 @@ class KnowledgeGraph:
         self.pattern_decay = PatternDecay(self.connection_manager)
         self.relationships = RelationshipManager(self.connection_manager)
         self.tags = TagManager(self.connection_manager)
+        
+        # YAML knowledge loader
+        self.yaml_loader = YAMLKnowledgeLoader(self.connection_manager)
+        self._knowledge_loaded = False
+        self._auto_load_knowledge = auto_load_knowledge
 
     # ---------------------- Pattern CRUD ----------------------
     def store_pattern(self, **kwargs) -> Dict[str, Any]:
@@ -167,7 +176,12 @@ class KnowledgeGraph:
         Legacy parameters handled:
         - pattern_type: Filter by type (delegated to post-filter)
         - include_confidence_metadata: Add usage/success rate metadata
+        
+        Lazy loads YAML knowledge files on first query if enabled.
         """
+        # Lazy load knowledge files on first query
+        self._ensure_knowledge_loaded()
+        
         # Extract legacy parameters
         pattern_type = kwargs.pop('pattern_type', None)
         include_confidence_metadata = kwargs.pop('include_confidence_metadata', False)
@@ -767,6 +781,74 @@ This analysis will persist across sessions and can be referenced in future conve
 
     def migrate(self, target_version: Optional[int] = None):
         return self.connection_manager.migrate(target_version)
+    
+    # ---------------------- YAML Knowledge Loading ----------------------
+    def _ensure_knowledge_loaded(self):
+        """Lazy load YAML knowledge files on first query."""
+        if self._knowledge_loaded or not self._auto_load_knowledge:
+            return
+        
+        try:
+            logger.info("🔄 Loading YAML knowledge files into Tier 2...")
+            stats = self.yaml_loader.load_all_knowledge_files()
+            
+            if stats:
+                total_patterns = sum(stats.values())
+                logger.info(f"✅ Loaded {total_patterns} patterns from {len(stats)} categories")
+                for category, count in stats.items():
+                    logger.debug(f"   {category}: {count} patterns")
+            else:
+                logger.debug("No new knowledge files to load")
+            
+            self._knowledge_loaded = True
+        except Exception as e:
+            logger.warning(f"Failed to load knowledge files: {e}")
+            # Don't fail queries if knowledge loading fails
+            self._knowledge_loaded = True  # Mark as attempted
+    
+    def load_knowledge_category(self, category: str, force_reload: bool = False) -> int:
+        """
+        Explicitly load knowledge files from a specific category.
+        
+        Args:
+            category: Category name (e.g., 'engineering', 'testing', 'security')
+            force_reload: If True, reload even if already loaded
+        
+        Returns:
+            Number of patterns loaded
+        """
+        return self.yaml_loader.load_category(category, force_reload)
+    
+    def load_knowledge_file(self, file_path: Path) -> int:
+        """
+        Explicitly load a specific YAML knowledge file.
+        
+        Args:
+            file_path: Path to YAML file
+        
+        Returns:
+            Number of patterns loaded
+        """
+        return self.yaml_loader.load_file(file_path)
+    
+    def get_knowledge_load_stats(self) -> Dict[str, Any]:
+        """
+        Get statistics about loaded knowledge files.
+        
+        Returns:
+            Dictionary with load statistics
+        """
+        return self.yaml_loader.get_load_stats()
+    
+    def reload_all_knowledge(self) -> Dict[str, int]:
+        """
+        Force reload all YAML knowledge files.
+        
+        Returns:
+            Dictionary with load statistics per category
+        """
+        self._knowledge_loaded = False
+        return self.yaml_loader.load_all_knowledge_files(force_reload=True)
 
     def close(self):
         self.connection_manager.close()

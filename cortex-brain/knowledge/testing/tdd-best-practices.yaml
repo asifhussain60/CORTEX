@@ -625,3 +625,14 @@ references:
     publisher: "Prentice Hall"
     year: 2008
     chapter: "Chapter 9: Unit Tests"
+
+# RELATED TOPICS
+related_knowledge:
+  - file: "testing/testing-pyramid.yaml"
+    relevance: "Test strategy and distribution across layers"
+  
+  - file: "testing/test-doubles.yaml"
+    relevance: "Mocking strategies for isolated unit tests"
+  
+  - file: "testing/selenium-to-playwright-migration.yaml"
+    relevance: "Modern E2E testing with Playwright (faster, more reliable than Selenium)"

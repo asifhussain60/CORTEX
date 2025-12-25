@@ -791,3 +791,14 @@ references:
     publisher: "Addison-Wesley Professional"
     year: 2009
     note: "Deep dive into mockist TDD style"
+
+# RELATED TOPICS
+related_knowledge:
+  - file: "testing/tdd-best-practices.yaml"
+    relevance: "Test doubles enable isolated unit tests in TDD RED-GREEN-REFACTOR cycle"
+  
+  - file: "testing/testing-pyramid.yaml"
+    relevance: "Test doubles most critical at pyramid base (unit tests) for isolation"
+  
+  - file: "testing/selenium-to-playwright-migration.yaml"
+    relevance: "Playwright's network interception is superior test double for E2E (mock APIs)"
