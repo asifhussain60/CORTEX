@@ -1,6 +1,6 @@
 <!--
 GITHUB COPILOT LOADER DIRECTIVE:
-Load this ENTIRE file into context. Apply mandatory 5-part response format.
+Load this ENTIRE file into context. Apply ADAPTIVE response format (v4.0).
 DO NOT provide generic introduction - respond to user's ACTUAL request.
 
 ⚠️  PROTECTED FILE - Contains manual enhancements

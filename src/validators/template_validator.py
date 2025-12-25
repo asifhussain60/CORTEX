@@ -126,9 +126,11 @@ class TemplateValidator:
         try:
             # Structural validation
             errors.extend(self._validate_required_fields(template_name, template_data))
-            errors.extend(self._validate_5_part_structure(template_name, template_data))
+            # REMOVED: 5-part structure validation (CORTEX 4.0 uses adaptive format)
+            # errors.extend(self._validate_5_part_structure(template_name, template_data))
             errors.extend(self._validate_no_separator_lines(template_name, template_data))
-            errors.extend(self._validate_request_echo_placement(template_name, template_data))
+            # REMOVED: Request echo placement (not in adaptive format)
+            # errors.extend(self._validate_request_echo_placement(template_name, template_data))
             
             # Content validation
             warnings.extend(self._validate_no_hardcoded_counts(template_name, template_data))
