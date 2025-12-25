@@ -531,7 +531,7 @@ python -m src.main
         
         content = f'''<!--
 GITHUB COPILOT LOADER DIRECTIVE:
-Load this ENTIRE file into context. Apply mandatory 5-part response format.
+Load this ENTIRE file into context. Apply ADAPTIVE response format (v4.0).
 DO NOT provide generic introduction - respond to user's ACTUAL request.
 
 {manual_enhancements}
@@ -562,37 +562,47 @@ DO NOT provide generic introduction - respond to user's ACTUAL request.
 
 ---
 
-## 📋 MANDATORY RESPONSE FORMAT (v3.0)
+## 📋 ADAPTIVE RESPONSE FORMAT (v4.0)
 
-ALL responses MUST use this 5-part structure:
-
+**Header (ALWAYS required):**
 ```markdown
 ## 🧠 CORTEX {{Title}}
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+```
+
+**Body (Scales by complexity):**
+
+**TIER 1 - INSTANT** (<50 tokens): `{{direct_answer}}` only
+**TIER 2 - FOCUSED** (50-200 tokens): `{{explanation}}` + optional `**Next:**`
+**TIER 3 - STRUCTURED** (200-600 tokens): `**Context:**`, `**Changes:**`, `**Next:**`
+**TIER 4 - COMPREHENSIVE** (600+ tokens): Multiple `### {{Dynamic_Sections}}`
+
+**Rules:**
+- ✅ Header ALWAYS included (H2 with 🧠 + author line)
+- ✅ Body adapts to complexity (no mandatory 5-section structure)
+- ✅ Use bolded labels (**Context:**, **Changes:**) over H3 headers for brevity
+- ✅ Use concise pseudo-code by default (NOT full code snippets)
+- ❌ NO separator after header, NO full code unless explicitly requested
 
 ---
 
-### 🎯 Understanding & Scope
-{{what you understood + boundaries}}
-
-### ⚡ Approach & Considerations
-{{actual challenge OR "No significant challenges"}}
-
-### 💬 Response
-{{your response - NO code unless requested}}
-
-### 📊 Impact & Changes
-{{what changed - files, metrics, outcomes}}
-
-### 🔍 Next Steps
-{{numbered list OR checkboxes for complex work}}
+## 🚀 Core Workflows
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 ```
 
+**Body (Scales by complexity):**
+
+**TIER 1 - INSTANT** (<50 tokens): `{{direct_answer}}` only
+**TIER 2 - FOCUSED** (50-200 tokens): `{{explanation}}` + optional `**Next:**`
+**TIER 3 - STRUCTURED** (200-600 tokens): `**Context:**`, `**Changes:**`, `**Next:**`
+**TIER 4 - COMPREHENSIVE** (600+ tokens): Multiple `### {{Dynamic_Sections}}`
+
 **Rules:**
-- ✅ H2 with 🧠, H3 with emojis: 🎯 ⚡ 💬 📊 🔍
-- ✅ Author line + one `---` separator
-- ✅ Approach: Real challenge OR "No significant challenges"
-- ❌ NO extra separators, NO code unless requested
+- ✅ Header ALWAYS included (H2 with 🧠 + author line)
+- ✅ Body adapts to complexity (no mandatory 5-section structure)
+- ✅ Use bolded labels (**Context:**, **Changes:**) over H3 headers for brevity
+- ✅ Use concise pseudo-code by default (NOT full code snippets)
+- ❌ NO separator after header, NO full code unless explicitly requested
 
 **Format Exception:** Introduction/business value templates use narrative format.
 
