@@ -368,36 +368,39 @@ class TestTDDWorkflowIntegration:
         """TDD requirements automatically included in generated plans."""
         orchestrator = PlanningOrchestrator(minimal_orchestrator_config)
         
-        plan_data = orchestrator._generate_plan({
-            "feature_name": "Test Feature",
-            "complexity": PlanComplexity.MEDIUM
-        })
+        result = orchestrator._generate_plan(
+            feature_name="Test Feature",
+            plan_type="incremental",
+            complexity=PlanComplexity.MEDIUM
+        )
         
-        assert plan_data.tdd_requirements is not None
+        assert result.plan_data.tdd_requirements is not None
     
     def test_red_green_refactor_phases_in_plan(self, minimal_orchestrator_config):
         """RED-GREEN-REFACTOR phases included in TDD plans."""
         orchestrator = PlanningOrchestrator(minimal_orchestrator_config)
         
-        plan_data = orchestrator._generate_plan({
-            "feature_name": "Test Feature",
-            "tdd_workflow": True
-        })
+        result = orchestrator._generate_plan(
+            feature_name="Test Feature",
+            plan_type="incremental",
+            complexity=PlanComplexity.MEDIUM
+        )
         
-        phase_names = [p.phase_name for p in plan_data.phases]
+        phase_names = [p.phase_name for p in result.plan_data.phases]
         assert any("RED" in p or "Test" in p for p in phase_names)
     
     def test_tdd_mandatory_for_high_complexity(self, minimal_orchestrator_config):
         """TDD workflow mandatory for HIGH/CRITICAL complexity."""
         orchestrator = PlanningOrchestrator(minimal_orchestrator_config)
         
-        plan_data = orchestrator._generate_plan({
-            "feature_name": "Complex Feature",
-            "complexity": PlanComplexity.HIGH
-        })
+        result = orchestrator._generate_plan(
+            feature_name="Complex Feature",
+            plan_type="incremental",
+            complexity=PlanComplexity.HIGH
+        )
         
-        assert plan_data.tdd_requirements is not None
-        assert len(plan_data.tdd_requirements.get("unit_tests", [])) > 0
+        assert result.plan_data.tdd_requirements is not None
+        assert len(result.plan_data.tdd_requirements.get("unit_tests", [])) > 0
     
     def test_test_first_enforcement_in_dor(self, minimal_orchestrator_config):
         """DoR enforces test-first for TDD phases."""
@@ -456,14 +459,14 @@ class TestTDDWorkflowIntegration:
         """TDD workflow can be skipped for LOW complexity (with warning)."""
         orchestrator = PlanningOrchestrator(minimal_orchestrator_config)
         
-        plan_data = orchestrator._generate_plan({
-            "feature_name": "Simple Feature",
-            "complexity": PlanComplexity.LOW,
-            "skip_tdd": True
-        })
+        result = orchestrator._generate_plan(
+            feature_name="Simple Feature",
+            plan_type="skeleton",
+            complexity=PlanComplexity.LOW
+        )
         
         # Should either have minimal TDD or warnings
-        assert plan_data.tdd_requirements is None or len(plan_data.tdd_requirements.get("unit_tests", [])) == 0
+        assert result.plan_data.tdd_requirements is None or len(result.plan_data.tdd_requirements.get("unit_tests", [])) == 0
 
 
 # ============================================================================
@@ -483,9 +486,13 @@ class TestManifestComplianceValidation:
         """Generated plans validate against manifest schema."""
         orchestrator = PlanningOrchestrator(minimal_orchestrator_config)
         
-        plan_data = orchestrator._generate_plan({"feature_name": "Test"})
+        result = orchestrator._generate_plan(
+            feature_name="Test",
+            plan_type="incremental",
+            complexity=PlanComplexity.MEDIUM
+        )
         
-        validation_result = orchestrator._validate_against_manifest(plan_data)
+        validation_result = orchestrator._validate_against_manifest(result.plan_data)
         
         assert validation_result.valid or len(validation_result.errors) > 0
     
