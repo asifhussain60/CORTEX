@@ -13,7 +13,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Add the src directory to the path so we can import CORTEX modules
-sys.path.append('/Users/asifhussain/PROJECTS/CORTEX/src')
+sys.path.append(Path(CORTEX_ROOT) / "src")
 
 def process_conversations_to_knowledge_graph():
     """Process conversations and import them into the knowledge graph."""

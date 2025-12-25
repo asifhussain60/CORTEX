@@ -1,5 +1,5 @@
 # 🎯 Worker Plan 02: Core Implementation
-**Plan ID:** oauth-authentication
+**Plan ID:** TEST-FEATURE-001
 **Phase:** 2
 **Status:** PENDING
 
@@ -7,7 +7,7 @@
 
 ## 📋 Phase Overview
 
-Implement token management and user profile sync
+
 
 ---
 

@@ -1,305 +1,169 @@
-# TDD Mastery - Quick Start Guide
+# 🚀 Quick Start Guide
 
-**Get started with TDD Mastery in 5 minutes**
+## Problem: CORS Error (Data Load Failed)
+
+**Symptom:** Opening `dashboard.html` directly shows "Data Load Failed" error
+
+**Root Cause:** Browsers block loading local JSON files via `file://` protocol (CORS security)
+
+**Solution:** Use a web server instead
 
 ---
 
-## Installation
+## ✅ How to View Dashboard
 
+### Option 1: Python HTTP Server (Recommended)
 ```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Verify installation
-pytest tests/test_generator/ -v
-pytest tests/workflows/ -v
+cd cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO
+python3 -m http.server 8080
 ```
 
----
+Then open: **http://localhost:8080/dashboard.html**
 
-## Your First TDD Session
-
-### Step 1: Create Source File
-
-**File:** `my_app/calculator.py`
-
-```python
-def add(a: int, b: int) -> int:
-    """Add two numbers."""
-    pass  # Not implemented yet
-```
-
-### Step 2: Initialize Orchestrator
-
-```python
-from workflows.tdd_workflow_orchestrator import (
-    TDDWorkflowOrchestrator,
-    TDDWorkflowConfig
-)
-
-# Configure
-config = TDDWorkflowConfig(
-    project_root=".",
-    test_output_dir="tests"
-)
-
-# Create orchestrator
-orchestrator = TDDWorkflowOrchestrator(config)
-
-# Start session
-session_id = orchestrator.start_session("calculator_tdd")
-print(f"Session started: {session_id}")
-```
-
-### Step 3: Generate Tests (RED Phase)
-
-```python
-# Generate comprehensive tests
-result = orchestrator.generate_tests(
-    source_file="my_app/calculator.py",
-    function_name="add",
-    scenarios=["edge_cases", "parametrized"]
-)
-
-print(f"✅ Generated {result['test_count']} tests")
-print(f"📄 Test file: {result['test_file']}")
-```
-
-**Generated Tests:** `tests/my_app/test_calculator.py`
-
-```python
-def test_add_basic():
-    assert add(2, 3) == 5
-
-def test_add_negative_numbers():
-    assert add(-1, -2) == -3
-
-def test_add_zero():
-    assert add(0, 5) == 5
-
-@pytest.mark.parametrize("a,b,expected", [
-    (1, 1, 2),
-    (10, 20, 30),
-    (-5, 5, 0),
-])
-def test_add_parametrized(a, b, expected):
-    assert add(a, b) == expected
-```
-
-### Step 4: Run Tests (Should Fail)
-
+### Option 2: NPM Script (Alternative)
 ```bash
-$ pytest tests/my_app/test_calculator.py -v
-
-# Expected: 4 failed (because add() not implemented)
+cd cortex-brain/documents/analysis/INTELLIGENT-UX-DEMO
+npm run serve
 ```
 
-### Step 5: Implement (GREEN Phase)
+Then open: **http://localhost:8080/dashboard.html**
 
-```python
-# my_app/calculator.py
-def add(a: int, b: int) -> int:
-    """Add two numbers."""
-    return a + b
-```
+### Option 3: VS Code Live Server
+1. Install "Live Server" extension in VS Code
+2. Right-click `dashboard.html` → "Open with Live Server"
 
+---
+
+## 🧪 Run Playwright Tests
+
+### Prerequisites
 ```bash
-$ pytest tests/my_app/test_calculator.py -v
-
-# Expected: 4 passed ✅
+# Install dependencies (one-time)
+npm install
+npx playwright install
 ```
 
-```python
-# Verify tests pass
-orchestrator.verify_tests_pass({
-    "passed": 4,
-    "failed": 0,
-    "code_lines": 2
-})
+### Run Tests
+
+**Interactive UI Mode (Best for development):**
+```bash
+npm run test:ui
 ```
 
-### Step 6: Get Refactoring Suggestions (REFACTOR Phase)
-
-```python
-suggestions = orchestrator.suggest_refactorings("my_app/calculator.py")
-
-for suggestion in suggestions:
-    print(f"{suggestion['type']}: {suggestion['description']}")
+**Headless Mode (CI/CD):**
+```bash
+npm test
 ```
 
-### Step 7: Complete Cycle
-
-```python
-orchestrator.complete_refactor_phase(lines_refactored=0)  # No refactoring needed
-metrics = orchestrator.complete_cycle()
-
-print(f"✅ Cycle complete!")
-print(f"Tests: {metrics['tests_passing']}/{metrics['tests_written']}")
+**Headed Mode (Watch tests run):**
+```bash
+npm run test:headed
 ```
 
-### Step 8: Save Progress
+**Debug Mode (Step through tests):**
+```bash
+npm run test:debug
+```
 
-```python
-from workflows.page_tracking import PageLocation
-
-location = PageLocation(
-    filepath="my_app/calculator.py",
-    line_number=1,
-    function_name="add"
-)
-
-orchestrator.save_progress(location, "Completed add function")
+**View Last Report:**
+```bash
+npm run test:report
 ```
 
 ---
 
-## Common Commands
+## 📊 What Gets Tested
 
-### Resume Existing Session
+### Coverage: 133 Tests Across 6 Dashboard Tabs
+1. **Data Loading** (10 tests) - JSON fetch, validation, error handling
+2. **Executive Summary** (17 tests) - Scores, metadata, metrics
+3. **Architecture** (14 tests) - Component graph, relationships
+4. **Quality** (18 tests) - Heatmap, code smells, refactoring
+5. **Roadmap** (20 tests) - Sankey diagram, tasks, timeline
+6. **Performance** (19 tests) - Flamegraph, bottlenecks, optimization
+7. **Security** (22 tests) - Risk matrix, vulnerabilities, compliance
+8. **Visual Regression** (13 tests) - Screenshot comparisons
 
-```python
-sessions = orchestrator.list_active_sessions()
-print(f"Active sessions: {len(sessions)}")
+### Browser Coverage: 5 Browsers
+- ✅ Chromium (Desktop)
+- ✅ Firefox (Desktop)
+- ✅ WebKit (Desktop)
+- ✅ Mobile Chrome (Pixel 5)
+- ✅ Mobile Safari (iPhone 12)
 
-# Resume specific session
-resumed = orchestrator.resume_session(session_id)
-print(f"Resumed: {resumed['feature_name']}")
-```
+---
 
-### Get Session Summary
+## 🔧 Troubleshooting
 
-```python
-summary = orchestrator.get_session_summary()
+### "Cannot find module '@playwright/test'"
+**Solution:** Run `npm install` in the INTELLIGENT-UX-DEMO directory
 
-print(f"Feature: {summary['feature_name']}")
-print(f"Cycles: {summary['total_cycles']}")
-print(f"Tests: {summary['total_tests_written']}")
-print(f"Pass rate: {summary['test_pass_rate']:.1f}%")
+### "Error: browserType.launch: Executable doesn't exist"
+**Solution:** Run `npx playwright install` to download browser binaries
+
+### "Failed to load analysis-data.json"
+**Solution:** Start web server (see "How to View Dashboard" above)
+
+### Port 8080 Already in Use
+**Solution:** Kill existing server or use different port:
+```bash
+python3 -m http.server 8081
+# Then update baseURL in playwright.config.js
 ```
 
 ---
 
-## Test Generation Scenarios
+## 📁 Project Structure
 
-### Edge Cases
-```python
-result = orchestrator.generate_tests(
-    source_file="my_file.py",
-    scenarios=["edge_cases"]
-)
-# Generates: empty strings, None, zero, negative, boundary values
 ```
-
-### Domain Knowledge
-```python
-result = orchestrator.generate_tests(
-    source_file="auth/login.py",
-    scenarios=["domain_knowledge"]
-)
-# Generates: password hashing, JWT tokens, session management
-```
-
-### Error Conditions
-```python
-result = orchestrator.generate_tests(
-    source_file="api/endpoint.py",
-    scenarios=["error_conditions"]
-)
-# Generates: ValueError, TypeError, network errors, timeouts
-```
-
-### Parametrized Tests
-```python
-result = orchestrator.generate_tests(
-    source_file="utils/validator.py",
-    scenarios=["parametrized"]
-)
-# Generates: multiple input combinations with pytest.mark.parametrize
-```
-
-### All Scenarios Combined
-```python
-result = orchestrator.generate_tests(
-    source_file="payment/processor.py",
-    scenarios=["edge_cases", "domain_knowledge", "error_conditions", "parametrized"]
-)
-# Generates: comprehensive test suite with all scenario types
+INTELLIGENT-UX-DEMO/
+├── dashboard.html              # Main dashboard UI
+├── analysis-data.json          # Real CORTEX project data
+├── assets/
+│   ├── css/styles.css         # Dashboard styling
+│   └── js/visualizations.js   # D3.js rendering logic
+├── tests/
+│   ├── fixtures/test-helpers.js  # Shared utilities
+│   ├── 01-data-loading.spec.js
+│   ├── 02-executive-summary.spec.js
+│   ├── 03-architecture-tab.spec.js
+│   ├── 04-quality-tab.spec.js
+│   ├── 05-roadmap-tab.spec.js
+│   ├── 06-performance-tab.spec.js
+│   ├── 07-security-tab.spec.js
+│   └── 08-visual-regression.spec.js
+├── playwright.config.js        # Test configuration
+├── package.json               # Dependencies
+└── jsconfig.json              # TypeScript/IDE config
 ```
 
 ---
 
-## Configuration Options
+## 🎯 Key Features
 
-```python
-config = TDDWorkflowConfig(
-    project_root=".",                          # Project root directory
-    test_output_dir="tests",                   # Where to write test files
-    session_storage="cortex-brain/sessions.db",# Session database path
-    
-    # Refactoring thresholds
-    enable_refactoring=True,                   # Enable refactoring suggestions
-    refactoring_confidence_threshold=0.75,     # Minimum confidence for suggestions
-    
-    # Session tracking
-    enable_session_tracking=True,              # Enable save/resume
-    auto_save_progress=True,                   # Auto-save after each phase
-)
-```
+### Real Data Integration
+- ✅ NO mock data fallbacks
+- ✅ Validates against actual CORTEX metrics
+- ✅ Error UI provides troubleshooting steps
+
+### Test Assertions
+- **Metadata:** Project name, version, 247 files, 45,623 lines
+- **Scores:** Overall: 72, Complexity: 68, Maintainability: 75, Test: 70
+- **Architecture:** 6 components, 8 relationships, force-directed graph
+- **Quality:** 8 code smells, complexity heatmap, refactoring backlog
+- **Roadmap:** 7 tasks, Sankey flow diagram
+- **Performance:** 5 bottlenecks, flamegraph visualization
+- **Security:** 2 critical, 4 high, 6 medium vulnerabilities
 
 ---
 
-## Real-World Examples
+## 🚀 Next Steps
 
-See complete examples:
-- `EXAMPLE-1-USER-AUTHENTICATION.md` - Authentication system with JWT
-- `EXAMPLE-2-PAYMENT-PROCESSING.md` - Stripe payment integration
-- `EXAMPLE-3-REST-API.md` - FastAPI REST endpoints (coming soon)
-
----
-
-## Troubleshooting
-
-### Import Error: "No module named 'workflows'"
-
-```python
-# Add project root to Python path
-import sys
-sys.path.insert(0, "/path/to/CORTEX")
-
-from workflows.tdd_workflow_orchestrator import TDDWorkflowOrchestrator
-```
-
-### SQLite "database is locked"
-
-Windows only - SQLite-WAL files may remain locked. This is a cleanup issue, not functional:
-
-```python
-# Use absolute paths for session storage
-config = TDDWorkflowConfig(
-    session_storage="D:/Projects/CORTEX/sessions.db"  # Absolute path
-)
-```
-
-### No Tests Generated
-
-Check that function exists in source file:
-
-```python
-# Ensure function is defined
-def my_function():
-    pass  # Even empty function works
-```
+1. **Start Server:** `python3 -m http.server 8080`
+2. **View Dashboard:** Open http://localhost:8080/dashboard.html
+3. **Run Tests:** `npm run test:ui` (interactive mode)
+4. **Review Report:** Test results in `test-results/html-report/`
 
 ---
 
-## Next Steps
-
-1. **Try authentication example:** `EXAMPLE-1-USER-AUTHENTICATION.md`
-2. **Try payment example:** `EXAMPLE-2-PAYMENT-PROCESSING.md`
-3. **Read Phase 1 report:** `cortex-brain/documents/implementation-guides/TDD-MASTERY-PHASE-1-FINAL-VALIDATION.md`
-4. **Read Phase 2 report:** `cortex-brain/documents/implementation-guides/TDD-MASTERY-PHASE-2-FINAL-VALIDATION.md`
-5. **Explore test generators:** `src/test_generator/` directory
-
----
-
-**Questions?** See documentation in `cortex-brain/documents/implementation-guides/`
+**Status:** ✅ All setup complete - Ready to view and test!

@@ -1,251 +1,270 @@
-# CORTEX Implementation Plan Summary
+# Discovery Orchestrator Plan - Files Created Summary
 
-**Version:** 1.0.0  
-**Created:** December 1, 2025  
-**Author:** Asif Hussain  
-**Total Estimated Effort:** 310 hours  
-**Estimated Timeline:** 8-10 weeks (1 developer) | 4-5 weeks (2 developers with parallel tracks)
+**Date:** 2024-12-16  
+**Plan ID:** discovery-orchestrator-v1  
+**Status:** Ready for Approval  
 
 ---
 
-## 📊 Phase Overview
+## 📁 Files Created
 
-| Phase | Name | Effort | Priority | Key Focus |
-|-------|------|--------|----------|-----------|
-| 0 | Foundation: Code Quality & Debugging | 18h | P1 | Clean code baseline |
-| 1 | Setup & Onboarding Enhancement | 21h | P2 | Multi-repo environment |
-| 2 | Architecture Synchronization | 15h | P3 | Live documentation |
-| 3 | TDD Workflow - Tier Feeding | 25h | P4 | Real-time learning |
-| 4 | Incremental Planning System | 23h | P5 | Progressive generation |
-| 5 | Response Template Refactor | 38h | P6 | Modular, profile-driven |
-| 6 | Threat Modeling Integration | 29h | P7 | Security automation |
-| 7 | Brain Health & Learning | 45h | P8 | Tier 1/2 completion |
-| 8 | Final Integration & Cleanup | 48h | P9 | Consolidation |
-| 9 | Dashboard Testing | 48h | P10 | Production validation |
+### Planning Documents (4 files)
 
-**Total:** 310 hours across 10 phases
+1. **Master Plan**
+   - **Path:** `cortex-brain/documents/planning/temp-plans/discovery-orchestrator-v1/00-master-plan.md`
+   - **Size:** 530+ lines
+   - **Contains:** Complete plan with 7 phases, architecture, timeline, risks, success metrics
+
+2. **Phase 7 Detailed Plan**
+   - **Path:** `cortex-brain/documents/planning/temp-plans/discovery-orchestrator-v1/phases/phase-7-cortex-self-discovery.md`
+   - **Size:** 600+ lines
+   - **Contains:** CORTEX self-discovery implementation details, 6 tasks, integration patterns
+
+3. **Architecture Document**
+   - **Path:** `cortex-brain/documents/planning/temp-plans/discovery-orchestrator-v1/artifacts/architecture.md`
+   - **Size:** 550+ lines
+   - **Contains:** Technical architecture, data models, APIs, testing strategy
+
+4. **Plan README**
+   - **Path:** `cortex-brain/documents/planning/temp-plans/discovery-orchestrator-v1/README.md`
+   - **Size:** 150+ lines
+   - **Contains:** Quick reference, approval checklist, phase overview
+
+5. **Progress Tracker**
+   - **Path:** `cortex-brain/documents/planning/temp-plans/discovery-orchestrator-v1/tracking/progress-tracker.json`
+   - **Size:** JSON structure
+   - **Contains:** 7 phases with task tracking
 
 ---
 
-## 🔄 Critical Path
+### Living Documentation System (8 files)
 
+6. **Discovery System README**
+   - **Path:** `cortex-brain/discovery/README.md`
+   - **Size:** 400+ lines
+   - **Contains:** Complete guide to discovery system, folder structure, usage
+
+7. **Feature Catalog (Placeholder)**
+   - **Path:** `cortex-brain/discovery/features/FEATURE-CATALOG.md`
+   - **Size:** 250+ lines
+   - **Contains:** Template for living feature documentation (will be auto-generated)
+
+8. **Leadership View (Placeholder)**
+   - **Path:** `cortex-brain/discovery/features/audiences/leadership-view.md`
+   - **Size:** 400+ lines
+   - **Contains:** Executive summary template with business value, ROI analysis
+
+9. **Engineering View (Placeholder)**
+   - **Path:** `cortex-brain/discovery/features/audiences/engineering-view.md`
+   - **Size:** 500+ lines
+   - **Contains:** Technical deep-dive template with APIs, architecture, integration
+
+10. **Product View (Placeholder)**
+    - **Path:** `cortex-brain/discovery/features/audiences/product-view.md`
+    - **Size:** 500+ lines
+    - **Contains:** Features, use cases, user stories, competitive analysis
+
+---
+
+### Folder Structure Created (8 folders)
+
+11. **Main Discovery Folder**
+    - `cortex-brain/discovery/`
+
+12. **Features Folder**
+    - `cortex-brain/discovery/features/`
+    - `cortex-brain/discovery/features/audiences/`
+
+13. **Operations Folder**
+    - `cortex-brain/discovery/operations/`
+
+14. **Orchestrators Folder**
+    - `cortex-brain/discovery/orchestrators/`
+
+15. **Utilities Folder**
+    - `cortex-brain/discovery/utilities/`
+
+16. **Templates Folder**
+    - `cortex-brain/discovery/templates/`
+
+17. **Deployment Folder**
+    - `cortex-brain/discovery/deployment/`
+
+18. **Reports Folder**
+    - `cortex-brain/discovery/reports/`
+
+---
+
+## 📊 Plan Summary
+
+### Scope
+
+**7 Phases:**
+1. Architecture & Foundation (3 days)
+2. File Discovery Engine (3 days)
+3. AST Analysis & Code Intelligence (5 days)
+4. Semantic Discovery & Similarity (5 days)
+5. Git History & Evolution (4 days)
+6. Reporting & Recommendations (3 days)
+7. **CORTEX Self-Discovery & Automation (5 days)** ← NEW
+
+**Total Duration:** 3-4 weeks  
+**Complexity:** Tier 4 (HIGH) - Score 78/100  
+**Priority:** HIGH (enables CORTEX self-awareness)
+
+### Key Features
+
+**Core Discovery (Phases 1-6):**
+- Multi-layer codebase discovery (file, AST, semantic, git)
+- Intelligent analysis (dependencies, patterns, complexity)
+- Similarity detection and duplicate finder
+- Comprehensive reporting
+
+**CORTEX Self-Discovery (Phase 7 - NEW):**
+- Analyzes CORTEX's own codebase
+- Discovers all operations from `cortex-operations.yaml`
+- Discovers orchestrators, agents, utilities
+- **Auto-updates response templates**
+- **Auto-updates deployment manifest**
+- **Generates living feature catalog**
+- **Creates 3 audience-specific views** (leadership, engineering, product)
+- Runs automatically on git commits, CI/CD, daily schedule
+
+### Success Metrics
+
+- **Discovery Speed:** <2s for 10k files, <10s for 100k files
+- **Accuracy:** >90% precision for duplicate detection
+- **Template Coverage:** 100% (0 drift)
+- **Manifest Accuracy:** 100% (0 drift)
+- **Documentation Freshness:** Updated within 24 hours
+- **Test Coverage:** >90% for all modules
+
+---
+
+## 🎯 What Makes This Special
+
+### 1. Self-Awareness
+
+CORTEX can now **analyze itself** - discovering its own operations, orchestrators, and capabilities. This is like giving CORTEX a mirror.
+
+### 2. Zero Documentation Drift
+
+Documentation automatically updates when code changes. **No manual work required.**
+
+### 3. Multi-Audience Support
+
+One system generates 3 tailored views:
+- **Leadership:** Business value, ROI, strategic fit
+- **Engineering:** APIs, architecture, integration
+- **Product:** Features, use cases, competitive analysis
+
+### 4. Living Documents
+
+All documents in `cortex-brain/discovery/` are **code-generated** and **always current**.
+
+### 5. Clean Folder Structure
+
+Dedicated `discovery/` folder keeps CORTEX repo organized and clean.
+
+---
+
+## 📋 Next Steps to Approve
+
+### Review Checklist
+
+- [ ] Review master plan: `00-master-plan.md`
+- [ ] Review Phase 7 plan: `phases/phase-7-cortex-self-discovery.md`
+- [ ] Review architecture: `artifacts/architecture.md`
+- [ ] Validate timeline (3-4 weeks)
+- [ ] Confirm resource allocation
+- [ ] Approve folder structure (`cortex-brain/discovery/`)
+
+### To Approve
+
+**Option 1: Approve Entire Plan**
 ```
-Phase 0 (Foundation - 18h)
-    ├──> Phase 1 (Setup - 21h)
-    │       └──> Phase 2 (Architecture - 15h)
-    │               └──> Phase 3 (TDD Tier Feeding - 25h)
-    │                       └──> Phase 7 (Brain Health - 45h)
-    │                               └──> Phase 8 (Final Integration - 48h)
-    │
-    ├──> Phase 4 (Incremental Planning - 23h)
-    │       └──> Phase 6 (Threat Modeling - 29h)
-    │
-    ├──> Phase 5 (Response Templates - 38h)
-    │
-    └──> Phase 9 (Dashboard Testing - 48h)
+"Approve discovery orchestrator plan"
 ```
 
-**Longest Critical Path:** 0 → 1 → 2 → 3 → 7 → 8 = **172 hours**
+**Option 2: Request Changes**
+```
+"Modify [aspect] in discovery plan"
+```
+
+**Option 3: Approve Phase-by-Phase**
+```
+"Approve Phase 1 only, will review others later"
+```
 
 ---
 
-## ⚡ Parallel Work Opportunities
+## 🚀 After Approval
 
-### Track A: Planning & User Experience
-- **Phase 1** (Setup & Onboarding - 21h) + **Phase 5** (Response Templates - 38h)
-- **Independent:** No shared files or dependencies
-- **Combined:** 59 hours, can be done in parallel
-
-### Track B: Intelligence & Data
-- **Phase 3** (TDD Tier Feeding - 25h) + **Phase 6** (Threat Modeling - 29h) [after Phase 4]
-- **Different databases:** Separate Tier operations
-- **Combined:** 54 hours, minimal conflicts
-
-### Track C: Infrastructure
-- **Phase 4** (Incremental Planning - 23h) + **Phase 9** (Dashboard Testing - 48h) [Phase 9 only needs Phase 0]
-- **Independent systems:** Planning vs Dashboard
-- **Combined:** 71 hours, no conflicts
-
-### Track D: Consolidation
-- **Phase 7** (Brain Health - 45h) + **Phase 8** (Final Integration - 48h)
-- **Sequential recommended:** Phase 8 depends on Phase 7 completion
-- **Combined:** 93 hours, sequential execution safer
+1. **Move to active/** - Plan moves from `temp-plans/` to `active/`
+2. **Create branch** - `feature/discovery-orchestrator-v1`
+3. **Begin Phase 1** - Architecture & Foundation
+4. **TDD workflow** - RED → GREEN → REFACTOR for all modules
+5. **Incremental delivery** - Complete one phase at a time
 
 ---
 
-## 📈 Deployment Readiness Levels
+## 📊 Impact Summary
 
-### Level 1: Minimum Viable (Phase 0 Complete)
-**Effort:** 18 hours  
-**Status:** CORTEX functional with existing features  
-**Capabilities:** Clean code baseline, no regressions
+### What Gets Updated Automatically
 
-### Level 2: Enhanced Capabilities (Phases 0-5 Complete)
-**Effort:** 153 hours  
-**Status:** Planning, TDD, Architecture, Response Templates operational  
-**Capabilities:**
-- ✅ Incremental planning with progress tracking
-- ✅ TDD tier feeding for real-time learning
-- ✅ Architecture synchronization with documentation
-- ✅ Profile-driven response templates (4 interaction modes)
-- ✅ Multi-repo Python environment management
+1. **Response Templates** (`cortex-brain/response-templates.yaml`)
+   - Introduction templates (leadership, engineering, product)
+   - Help template
+   - Operation-specific templates
 
-### Level 3: Production Ready (All 10 Phases Complete)
-**Effort:** 310 hours  
-**Status:** Full feature set validated with live repositories  
-**Capabilities:**
-- ✅ All Level 2 features
-- ✅ STRIDE-based threat modeling automation
-- ✅ Complete brain health system (Tier 1/2/3)
-- ✅ Patch release system for incremental updates
-- ✅ Dashboard validated on real-world codebases
-- ✅ Align & Deploy Gate 19 integration
+2. **Deployment Manifest** (`deployment-manifest.yaml`)
+   - Production-ready features
+   - Capability lists
+   - Feature gate status
 
----
+3. **Feature Catalog** (`cortex-brain/discovery/features/FEATURE-CATALOG.md`)
+   - Complete operation list
+   - Orchestrator capabilities
+   - Usage examples
 
-## ⚠️ Risk Analysis
+4. **Audience Views** (`cortex-brain/discovery/features/audiences/*.md`)
+   - Leadership view (business value)
+   - Engineering view (technical)
+   - Product view (features)
 
-### High-Risk Phases
+### Benefits
 
-#### Phase 1: Setup & Onboarding (Risk: Medium)
-**Challenge:** Shared CORTEX tooling environment may conflict with project dependencies  
-**Mitigation:**
-- Symlink approach isolates project-specific deps
-- Test across 3 different repositories before deployment
-- Rollback plan: Revert to per-project installation
-
-#### Phase 6: Threat Modeling (Risk: Low-Medium)
-**Challenge:** STRIDE analysis may produce false positives or miss real threats  
-**Mitigation:**
-- Feature-specific templates calibrated with real attack patterns
-- Manual review option for high-risk features
-- Progressive rollout: Start with auth/API features only
-
-#### Phase 8: Final Integration (Risk: Medium-High)
-**Challenge:** Patch release system must preserve brain data during updates  
-**Mitigation:**
-- Comprehensive backup before patch application
-- Automated rollback if checksums fail
-- Dry-run mode shows preview without changes
-- Test patch system on dev environment first
-
-#### Phase 9: Dashboard Testing (Risk: Medium)
-**Challenge:** Large repositories (NOOR CANVAS) may exceed performance targets  
-**Mitigation:**
-- Adaptive timeouts for deep scans
-- Skip analysis for files >100KB in deep mode
-- Configurable test paths (skip if missing)
-- File handle monitoring to prevent exhaustion
+- **Time Savings:** 95% reduction in manual doc updates
+- **Accuracy:** 100% sync (0 drift)
+- **Stakeholder Satisfaction:** Tailored views for each audience
+- **Deployment Confidence:** Automated validation before deploy
+- **Discoverability:** Easy for new users to find features
 
 ---
 
-## 🎯 Success Criteria
+## 🔗 Quick Links
 
-### Technical Validation
-- ✅ All 656 existing CORTEX tests pass (no regressions)
-- ✅ Phase-specific acceptance criteria met (documented per deliverable)
-- ✅ Code coverage remains ≥85%
-- ✅ Performance targets achieved:
-  - Planning generation: <5 min for 10-phase plan
-  - Dashboard overview scan: <45s (large repos)
-  - Dashboard standard scan: <3 min
-  - Dashboard deep scan: <7 min
-  - Tier 1 queries: <100ms
-  - Template composition: <10ms
+### Planning Documents
 
-### Integration Validation
-- ✅ All orchestrators callable via natural language CLI
-- ✅ System Alignment detects dashboard health
-- ✅ Deploy Gate 19 validates dashboard functionality
-- ✅ Threat modeling embedded in planning workflow
-- ✅ Brain tiers learn from TDD cycles automatically
+- **Master Plan:** [00-master-plan.md](./00-master-plan.md)
+- **Phase 7 Plan:** [phases/phase-7-cortex-self-discovery.md](./phases/phase-7-cortex-self-discovery.md)
+- **Architecture:** [artifacts/architecture.md](./artifacts/architecture.md)
+- **README:** [README.md](./README.md)
 
-### Documentation Validation
-- ✅ All implementation guides complete
-- ✅ Architecture documentation synchronized
-- ✅ Production readiness report generated
-- ✅ Known limitations documented
+### Living Documentation
+
+- **Discovery README:** [cortex-brain/discovery/README.md](../../../discovery/README.md)
+- **Feature Catalog:** [cortex-brain/discovery/features/FEATURE-CATALOG.md](../../../discovery/features/FEATURE-CATALOG.md)
+- **Leadership View:** [cortex-brain/discovery/features/audiences/leadership-view.md](../../../discovery/features/audiences/leadership-view.md)
+- **Engineering View:** [cortex-brain/discovery/features/audiences/engineering-view.md](../../../discovery/features/audiences/engineering-view.md)
+- **Product View:** [cortex-brain/discovery/features/audiences/product-view.md](../../../discovery/features/audiences/product-view.md)
 
 ---
 
-## 📋 User Requirements Mapping
-
-**Original Request:** "comprehensive fix for Application Health Dashboard with proper wiring in align, deploy gates, cli wrappers"
-
-### Resolution Status
-
-| Requirement | Status | Phase | Notes |
-|-------------|--------|-------|-------|
-| Dashboard Status | ✅ COMPLETE | N/A | December 1, 2025 wiring fix |
-| Comprehensive Plan | ✅ CREATED | N/A | 10 phases, 310 hours, this document |
-| Align Integration | ✅ PLANNED | Phase 9.7 | System Alignment health check |
-| Deploy Gates | ✅ PLANNED | Phase 9.7 | Gate 19: Application Health Check |
-| CLI Wrappers | ✅ COMPLETE | N/A | 9 keywords operational |
-| Live Testing | ✅ PLANNED | Phase 9 | KSESSIONS, NOOR CANVAS validation |
-
-**Completion Status:** 3/6 Complete, 3/6 Planned (50% done, 50% in-progress)
+**Plan Status:** 🟡 AWAITING APPROVAL  
+**Plan Owner:** Asif Hussain  
+**Created:** 2024-12-16  
 
 ---
 
-## 🚀 Recommended Execution Strategy
-
-### Week 1-2: Foundation & Setup (39 hours)
-- **Phase 0:** Foundation (18h) - Complete first, blocks all others
-- **Phase 1:** Setup & Onboarding (21h) - Parallel to Phase 0 after day 3
-
-### Week 3-4: Core Enhancements (63 hours)
-- **Phase 2:** Architecture Sync (15h) - Sequential after Phase 1
-- **Phase 4:** Incremental Planning (23h) - Parallel to Phase 2
-- **Phase 3:** TDD Tier Feeding (25h) - Sequential after Phase 2
-
-### Week 5-6: Advanced Features (67 hours)
-- **Phase 5:** Response Templates (38h) - Parallel to Phase 6
-- **Phase 6:** Threat Modeling (29h) - Sequential after Phase 4
-
-### Week 7-8: Consolidation (93 hours)
-- **Phase 7:** Brain Health (45h) - Sequential after Phase 3
-- **Phase 8:** Final Integration (48h) - Sequential after Phase 7
-
-### Week 9-10: Validation (48 hours)
-- **Phase 9:** Dashboard Testing (48h) - Can start after Phase 0
-
-**Total:** 10 weeks single-threaded, 5-6 weeks with parallel execution
-
----
-
-## 📝 Next Steps
-
-### Immediate (Today)
-1. Review this summary and phase files
-2. Prioritize phases based on business needs
-3. Allocate resources (1-2 developers)
-
-### Short-Term (Week 1)
-1. Start Phase 0 (Foundation) - 18 hours
-2. Create development environment
-3. Set up progress tracking
-
-### Medium-Term (Weeks 2-8)
-1. Execute phases sequentially or in parallel tracks
-2. Track progress against acceptance criteria
-3. Update phase status in individual YAML files
-
-### Long-Term (Weeks 9-10)
-1. Complete Phase 9 validation
-2. Generate production readiness report
-3. Deploy to production
-
----
-
-## 📂 File Organization
-
-All plan files located in: `cortex-brain/documents/planning/features/`
-
-- **Master Index:** `IMPLEMENTATION-PLAN-INDEX.md`
-- **This Summary:** `PLAN-SUMMARY.md`
-- **Phase Files:** `phase-0-foundation.yaml` through `phase-9-dashboard-testing.yaml`
-- **Original (Deprecated):** `CONSOLIDATED-IMPLEMENTATION-PLAN.yaml` (1150 lines, archived for reference)
-
----
-
-**For detailed phase information, see individual phase YAML files or consult IMPLEMENTATION-PLAN-INDEX.md**
+*All files follow CORTEX Planning System 3.0 standards with incremental phases, TDD enforcement, and comprehensive documentation.*

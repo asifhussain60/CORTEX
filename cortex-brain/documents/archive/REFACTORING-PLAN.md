@@ -1,748 +1,826 @@
-# CORTEX Orchestrator Refactoring Plan
+# BadMonolith to Cortex-Clean Refactoring Plan
 
-**Date:** December 6, 2025  
-**Author:** Asif Hussain  
-**Status:** Phase 1 Complete  
-**Version:** 1.0.0
-
----
-
-## Executive Summary
-
-Comprehensive refactoring of CORTEX orchestrator architecture to eliminate redundancy, improve testability, and enforce SOLID principles.
-
-**Problems Identified:**
-1. **180+ lines of duplicated initialization code** across orchestrators
-2. **Tight coupling** - direct instantiation of concrete classes
-3. **No dependency injection** - untestable, unmockable
-4. **Inconsistent state management** - Dict vs dataclass approaches
-5. **Validation logic duplication** - each orchestrator validates independently
-
-**Solution:** Introduce factory pattern with dependency injection, protocol-based interfaces, and shared configuration.
-
-**Impact:**
-- Code reduction: ~200 lines eliminated
-- Testability: 100% mockable dependencies
-- Maintainability: Single point of orchestrator creation
-- Performance: Singleton dependencies (no redundant initialization)
+**Project:** Refactor BadMonolith to Clean Architecture  
+**Target Folder:** `cortex-sample-apps/Cortex-Clean`  
+**Methodology:** TDD Mastery + Clean Architecture + SOLID Principles  
+**Plan ID:** badmonolith-refactor-001  
+**Created:** December 6, 2025  
+**Status:** pending_approval
 
 ---
 
-## Architecture Analysis
+## 🎯 Project Vision
 
-### Current State (Before Refactoring)
+Transform the BadMonolith application (a deliberately poorly-designed task management system) into a showcase of Clean Architecture, SOLID principles, and TDD Mastery. This refactoring will serve as a teaching example demonstrating CORTEX's ability to restructure monolithic code into maintainable, testable, and scalable applications.
 
-**Redundant Initialization Pattern:**
-```python
-# plan_execution_orchestrator.py (lines 68-105)
-def _init_execution_agents(self):
-    try:
-        from src.cortex_agents.tactical.code_executor import CodeExecutor
-        self.code_executor = CodeExecutor("CodeExecutor")
-        logger.info("✅ CodeExecutor agent initialized")
-    except ImportError as e:
-        logger.warning(f"⚠️  CodeExecutor not available: {e}")
-        self.code_executor = None
-    
-    try:
-        from src.orchestrators.tdd_implementation_orchestrator import TDDImplementationOrchestrator
-        self.tdd_orchestrator = TDDImplementationOrchestrator(...)
-        logger.info("✅ TDDImplementationOrchestrator initialized")
-    except ImportError as e:
-        logger.warning(f"⚠️  TDDImplementationOrchestrator not available: {e}")
-        self.tdd_orchestrator = None
-    
-    # ... 3 more similar blocks (Git, Cleanup)
-```
+### Current State Analysis
 
-**Same pattern in:**
-- `planning_orchestrator.py` (lines 56-78)
-- `tdd_implementation_orchestrator.py` (indirect via imports)
-- Multiple other orchestrators
+**Backend Issues (Program.cs - 141 lines):**
+- ❌ God-endpoint handling all HTTP methods via query params
+- ❌ SQL injection vulnerabilities (string concatenation)
+- ❌ Hard-coded connection strings with credentials
+- ❌ Global mutable state (`CachedTasks`)
+- ❌ No error handling, logging, or validation
+- ❌ No separation of concerns (routing, business logic, data access in one file)
+- ❌ Zero tests
 
-**Total Duplication:** 180+ lines across 5+ files
+**Frontend Issues (app.component.ts):**
+- ❌ All business logic in single component
+- ❌ Direct HTTP calls in UI layer
+- ❌ No state management
+- ❌ No error handling
+- ❌ No abstraction (services, models)
+- ❌ Zero tests
 
----
+### Target State
 
-### Target State (After Refactoring)
+**Backend (Clean Architecture):**
+- ✅ Domain Layer: Entities, interfaces, domain services
+- ✅ Application Layer: Use cases, DTOs, validators
+- ✅ Infrastructure Layer: EF Core, repositories, logging
+- ✅ API Layer: Controllers with proper HTTP verbs, middleware
+- ✅ 90%+ test coverage with TDD workflow
+- ✅ Configuration management with secrets
+- ✅ Structured logging and error handling
 
-**Factory Pattern with Dependency Injection:**
-```python
-# Usage
-from src.orchestrators.orchestrator_factory import create_orchestrator_factory
+**Frontend (Angular Clean Architecture):**
+- ✅ Feature modules with smart/dumb component separation
+- ✅ State management (NgRx or standalone signals)
+- ✅ Service layer abstraction
+- ✅ Domain models and interfaces
+- ✅ 85%+ test coverage
+- ✅ Error handling and loading states
 
-factory = create_orchestrator_factory(cortex_root="/path/to/cortex")
-plan_executor = factory.get_plan_execution_orchestrator()
-# All dependencies auto-injected: TDD, Git, Cleanup, CodeExecutor
-```
-
-**Benefits:**
-1. **Single initialization point** - Factory manages all dependencies
-2. **Testable** - Inject mocks for testing
-3. **Configurable** - Feature flags control what gets initialized
-4. **Type-safe** - Protocol-based interfaces
+**Documentation System:**
+- ✅ Docsify-based learning library
+- ✅ Auto-generated architecture diagrams
+- ✅ Per-phase documentation updates
+- ✅ Code examples with before/after comparisons
 
 ---
 
-## Phase 1: Factory Pattern (COMPLETE)
+## 📋 Definition of Ready (DoR)
 
-### Deliverables
+### Functional Requirements
+1. ✅ BadMonolith application analyzed and anti-patterns documented
+2. ✅ Clean Architecture structure defined for both backend and frontend
+3. ✅ Database schema reviewed and domain model designed
+4. ✅ Target folder `cortex-sample-apps/Cortex-Clean` identified
+5. ✅ Docsify documentation structure planned
 
-**1. OrchestratorFactory (`orchestrator_factory.py`)**
-- 380 lines
-- Centralized orchestrator creation
-- Dependency injection support
-- Configuration-driven initialization
-- Protocol-based interfaces (ITDDOrchestrator, IGitCheckpointOrchestrator, etc.)
+### Technical Requirements
+6. ✅ .NET 8 SDK available for backend development
+7. ✅ Angular CLI available for frontend development
+8. ✅ SQL Server LocalDB or equivalent for development database
+9. ✅ Docsify CLI installed for documentation generation
+10. ✅ Git repository configured for checkpoint management
 
-**2. PlanExecutionOrchestratorV2 (`plan_execution_orchestrator_v2.py`)**
-- 370 lines
-- Dependencies injected via constructor
-- No manual initialization
-- Backward compatible with V1
-- Proof-of-concept for pattern
+### TDD Requirements (Auto-Injected)
+11. ✅ TDD Mastery workflow MUST be followed (RED→GREEN→REFACTOR)
+12. ✅ Tests MUST fail before implementation (RED phase validation)
+13. ✅ Git checkpoints required at RED, GREEN, REFACTOR phases
+14. ✅ Test coverage targets defined: Backend 90%, Frontend 85%
 
-**3. OrchestratorConfig (dataclass)**
-- Centralized configuration
-- Feature flags (enable_tdd, enable_git_checkpoints, etc.)
-- Performance tuning (caching, timeouts)
-- Path management (cortex_root, project_root, brain_path)
-
-### Code Reduction
-
-**Before (V1):**
-- `plan_execution_orchestrator.py`: 1036 lines (includes 80 lines of initialization)
-- Duplicated across 5 orchestrators: ~180 lines total
-
-**After (V2):**
-- `orchestrator_factory.py`: 380 lines (handles ALL orchestrators)
-- `plan_execution_orchestrator_v2.py`: 370 lines (60% less initialization)
-- **Net reduction:** ~120 lines eliminated, centralized logic
-
-### Migration Path
-
-**Backward Compatibility:**
-- V1 orchestrators remain functional
-- V2 used via factory (opt-in)
-- Gradual migration over sprints
-
-**Usage Example:**
-```python
-# OLD (V1) - Manual initialization
-from src.orchestrators.plan_execution_orchestrator import PlanExecutionOrchestrator
-orchestrator = PlanExecutionOrchestrator("/path/to/cortex")
-# Internally creates TDD, Git, Cleanup in _init_execution_agents()
-
-# NEW (V2) - Factory-based
-from src.orchestrators.orchestrator_factory import create_orchestrator_factory
-factory = create_orchestrator_factory("/path/to/cortex")
-orchestrator = factory.get_plan_execution_orchestrator()
-# Factory injects dependencies
-```
-
-**Testing Example:**
-```python
-# Mock dependencies for testing
-mock_tdd = MockTDDOrchestrator()
-mock_git = MockGitCheckpoint()
-
-config = OrchestratorConfig(cortex_root=Path("/test"))
-factory = OrchestratorFactory(config, tdd_orchestrator=mock_tdd, git_checkpoint=mock_git)
-
-# Get orchestrator with mocks injected
-orchestrator = factory.get_plan_execution_orchestrator()
-# orchestrator.tdd_orchestrator is mock_tdd
-```
+### Documentation Requirements
+15. ✅ Docsify documentation automated via custom orchestrator extension
+16. ✅ Each phase includes architecture decision records (ADRs)
+17. ✅ Before/after code comparisons for each refactoring
 
 ---
 
-## Phase 2: Shared Validation Framework (PLANNED)
+## 🏗️ Phase Breakdown
 
-### Problem
+### Phase 1: Foundation & Infrastructure Setup
+**Duration:** 8 hours  
+**Objectives:** 
+- Create project structure for Cortex-Clean
+- Setup backend Clean Architecture layers
+- Configure testing framework and CI skeleton
+- Initialize Docsify documentation structure
 
-**Validation logic duplicated:**
-- `planning_orchestrator.py`: `validate_plan()` (metadata, phases, DoR/DoD)
-- `plan_execution_orchestrator.py`: `_validate_task_implementation_requirements()` (6 checks)
-- `tdd_implementation_orchestrator.py`: Multiple validators (test files, phase transitions)
+**Tasks:**
 
-**Duplication:** ~150 lines of validation logic
+#### 1.1 - Project Structure Creation
+**Description:** Create folder structure for Clean Architecture backend  
+**Estimated Time:** 1 hour  
+**Dependencies:** None  
+**Test Requirements:**
+- RED: Test that solution file references all projects
+- GREEN: Create projects with proper dependencies
+- REFACTOR: Organize with Directory.Build.props for shared settings
 
-### Solution
-
-**Create ValidationFramework:**
-```python
-# src/orchestrators/validation_framework.py
-
-from typing import Protocol, List, Dict, Any
-from dataclasses import dataclass
-
-@dataclass
-class ValidationResult:
-    valid: bool
-    errors: List[str]
-    warnings: List[str]
-    checks_performed: int
-
-class IValidator(Protocol):
-    """Base validator protocol."""
-    def validate(self, target: Any) -> ValidationResult:
-        ...
-
-class PlanValidator(IValidator):
-    """Validates plan structure and completeness."""
-    def validate(self, plan_data: Dict) -> ValidationResult:
-        # Consolidates logic from planning_orchestrator.validate_plan()
-        ...
-
-class TaskValidator(IValidator):
-    """Validates task implementation requirements."""
-    def validate(self, task: Dict) -> ValidationResult:
-        # Consolidates logic from plan_execution._validate_task_implementation_requirements()
-        ...
-
-class TDDPhaseValidator(IValidator):
-    """Validates TDD phase transitions."""
-    def validate(self, session_state: Any) -> ValidationResult:
-        # Consolidates logic from tdd_implementation.can_transition_to()
-        ...
-
-# Composite validator
-class CompositeValidator(IValidator):
-    def __init__(self, validators: List[IValidator]):
-        self.validators = validators
-    
-    def validate(self, target: Any) -> ValidationResult:
-        # Run all validators, aggregate results
-        ...
+**Deliverables:**
 ```
+Cortex-Clean/
+├── backend/
+│   ├── Cortex.Clean.Domain/         # Entities, Interfaces, Domain Services
+│   ├── Cortex.Clean.Application/    # Use Cases, DTOs, Validators
+│   ├── Cortex.Clean.Infrastructure/ # EF Core, Repositories, External Services
+│   ├── Cortex.Clean.API/            # Controllers, Middleware, Program.cs
+│   └── Cortex.Clean.Tests/          # All test projects
+├── frontend/
+│   └── cortex-clean-app/            # Angular application
+├── docs/                             # Docsify documentation
+└── README.md
+```
+
+#### 1.2 - Domain Layer Implementation
+**Description:** Create core domain entities and interfaces  
+**Estimated Time:** 2 hours  
+**Dependencies:** Task 1.1  
+**Test Requirements:**
+- RED: Write tests for Task entity validation rules
+- GREEN: Implement Task entity with business rules
+- REFACTOR: Extract validation logic to domain services
+
+**Deliverables:**
+- `Task` entity with validation
+- `ITaskRepository` interface
+- `TaskDomainService` for business rules
+- Domain exceptions (TaskNotFoundException, InvalidTaskException)
+- 95%+ unit test coverage
+
+#### 1.3 - Testing Infrastructure Setup
+**Description:** Configure xUnit, FluentAssertions, Moq, AutoFixture  
+**Estimated Time:** 1.5 hours  
+**Dependencies:** Task 1.1  
+**Test Requirements:**
+- RED: Test that test utilities are discoverable
+- GREEN: Create test base classes and factories
+- REFACTOR: Extract common test patterns
+
+**Deliverables:**
+- Test project with all NuGet packages
+- `TestFixture` base class
+- `TaskFactory` for test data
+- CI configuration (GitHub Actions or Azure Pipelines)
+
+#### 1.4 - Docsify Documentation Initialization
+**Description:** Create documentation structure with automated update system  
+**Estimated Time:** 2 hours  
+**Dependencies:** Task 1.1  
+**Test Requirements:**
+- RED: Test documentation generator can parse project structure
+- GREEN: Implement basic documentation generator
+- REFACTOR: Extract template system for reusability
+
+**Deliverables:**
+- Docsify configured with sidebar and search
+- Documentation generator script (`docs/generate-docs.py`)
+- Initial pages: Architecture Overview, TDD Workflow, Phase 1 Progress
+- Automated update hook for planner orchestrator
+
+#### 1.5 - Git Checkpoint & Phase Review
+**Description:** Commit Phase 1, validate DoD, update documentation  
+**Estimated Time:** 1.5 hours  
+**Dependencies:** Tasks 1.1-1.4  
+**Test Requirements:**
+- Verify all tests pass
+- Validate test coverage meets 90% threshold
+- Documentation generated successfully
+
+---
+
+### Phase 2: Backend Application Layer & Use Cases
+**Duration:** 10 hours  
+**Objectives:**
+- Implement CQRS pattern with use cases
+- Add validation with FluentValidation
+- Create DTOs and mapping profiles
+- Full test coverage with TDD
+
+**Tasks:**
+
+#### 2.1 - CQRS Command/Query Setup
+**Description:** Implement MediatR for CQRS pattern  
+**Estimated Time:** 2 hours  
+**Dependencies:** Phase 1 complete  
+**Test Requirements:**
+- RED: Test that handlers are registered in DI container
+- GREEN: Configure MediatR with pipeline behaviors
+- REFACTOR: Extract common handler patterns
+
+**Deliverables:**
+- MediatR NuGet package installed
+- `ICommand<TResponse>` and `IQuery<TResponse>` marker interfaces
+- Pipeline behavior for logging and validation
+- Handler base classes
+
+#### 2.2 - Task Use Cases Implementation
+**Description:** Create commands and queries for task operations  
+**Estimated Time:** 4 hours  
+**Dependencies:** Task 2.1  
+**Test Requirements:**
+- RED: Write handler tests first (should fail)
+- GREEN: Implement handlers to pass tests
+- REFACTOR: Extract common validation logic
+
+**Deliverables:**
+- `CreateTaskCommand` + `CreateTaskCommandHandler`
+- `GetTasksQuery` + `GetTasksQueryHandler`
+- `UpdateTaskCommand` + `UpdateTaskCommandHandler`
+- `DeleteTaskCommand` + `DeleteTaskCommandHandler`
+- `ToggleTaskCompletionCommand` + handler
+- DTOs: `TaskDto`, `CreateTaskRequest`, `UpdateTaskRequest`
+- 90%+ test coverage per handler
+
+#### 2.3 - FluentValidation Integration
+**Description:** Add request validation with FluentValidation  
+**Estimated Time:** 2 hours  
+**Dependencies:** Task 2.2  
+**Test Requirements:**
+- RED: Test validation failures for invalid inputs
+- GREEN: Implement validators
+- REFACTOR: Extract common validation rules
+
+**Deliverables:**
+- `CreateTaskCommandValidator` (title required, max length 255)
+- `UpdateTaskCommandValidator`
+- Validation pipeline behavior
+- Validation exception handling
+- 95%+ validator test coverage
+
+#### 2.4 - AutoMapper Configuration
+**Description:** Setup object mapping between domain and DTOs  
+**Estimated Time:** 1 hour  
+**Dependencies:** Task 2.2  
+**Test Requirements:**
+- RED: Test mapping configurations
+- GREEN: Create mapping profiles
+- REFACTOR: Simplify complex mappings
+
+**Deliverables:**
+- `TaskMappingProfile`
+- AutoMapper DI registration
+- Mapping tests
+
+#### 2.5 - Git Checkpoint & Phase Review
+**Description:** Commit Phase 2, update documentation  
+**Estimated Time:** 1 hour  
+**Dependencies:** Tasks 2.1-2.4  
+
+---
+
+### Phase 3: Infrastructure Layer & Data Access
+**Duration:** 8 hours  
+**Objectives:**
+- Implement EF Core with repository pattern
+- Add database migrations
+- Configure logging and configuration
+- Secure connection string management
+
+**Tasks:**
+
+#### 3.1 - EF Core DbContext Setup
+**Description:** Create DbContext with entity configurations  
+**Estimated Time:** 2 hours  
+**Dependencies:** Phase 2 complete  
+**Test Requirements:**
+- RED: Test DbContext configuration
+- GREEN: Implement DbContext and entity configs
+- REFACTOR: Extract configuration patterns
+
+**Deliverables:**
+- `CleanTaskDbContext`
+- `TaskEntityConfiguration` (Fluent API)
+- Connection string from `appsettings.json` (User Secrets for local dev)
+- DbContext registration in DI
+
+#### 3.2 - Repository Implementation
+**Description:** Implement repository pattern with EF Core  
+**Estimated Time:** 3 hours  
+**Dependencies:** Task 3.1  
+**Test Requirements:**
+- RED: Write integration tests with in-memory database
+- GREEN: Implement repositories
+- REFACTOR: Extract common repository logic to base class
+
+**Deliverables:**
+- `TaskRepository : ITaskRepository`
+- Integration tests using `WebApplicationFactory`
+- Repository pattern validation (no IQueryable leakage)
+- 85%+ integration test coverage
+
+#### 3.3 - Database Migrations
+**Description:** Create initial migration and seed data  
+**Estimated Time:** 1.5 hours  
+**Dependencies:** Task 3.1  
+**Test Requirements:**
+- RED: Test migration can be applied to empty database
+- GREEN: Create migration with seed data
+- REFACTOR: Extract seed logic to separate class
+
+**Deliverables:**
+- Initial migration: `20251206_InitialCreate`
+- Seed data for demo tasks
+- Migration documentation
+
+#### 3.4 - Logging & Configuration
+**Description:** Add Serilog structured logging  
+**Estimated Time:** 1.5 hours  
+**Dependencies:** Task 3.1  
+**Test Requirements:**
+- RED: Test log output formatting
+- GREEN: Configure Serilog with enrichers
+- REFACTOR: Extract logging configuration
+
+**Deliverables:**
+- Serilog configured (Console + File sinks)
+- Request logging middleware
+- Exception logging middleware
+- Log correlation IDs
+
+#### 3.5 - Git Checkpoint & Phase Review
+**Description:** Commit Phase 3, update documentation  
+**Estimated Time:** 1 hour  
+**Dependencies:** Tasks 3.1-3.4  
+
+---
+
+### Phase 4: API Layer & HTTP Endpoints
+**Duration:** 6 hours  
+**Objectives:**
+- Create RESTful controllers
+- Add Swagger/OpenAPI documentation
+- Implement proper HTTP status codes
+- CORS and error handling middleware
+
+**Tasks:**
+
+#### 4.1 - Tasks Controller Implementation
+**Description:** Create RESTful controller for task operations  
+**Estimated Time:** 2.5 hours  
+**Dependencies:** Phase 3 complete  
+**Test Requirements:**
+- RED: Write controller integration tests
+- GREEN: Implement controller actions
+- REFACTOR: Extract common controller patterns
+
+**Deliverables:**
+- `TasksController` with proper verbs:
+  - `GET /api/tasks` (list with optional filter)
+  - `GET /api/tasks/{id}` (single task)
+  - `POST /api/tasks` (create)
+  - `PUT /api/tasks/{id}` (update)
+  - `DELETE /api/tasks/{id}` (delete)
+  - `PATCH /api/tasks/{id}/toggle` (toggle completion)
+- Proper HTTP status codes (200, 201, 204, 400, 404, 500)
+- 90%+ controller test coverage
+
+#### 4.2 - Swagger/OpenAPI Configuration
+**Description:** Add API documentation with Swashbuckle  
+**Estimated Time:** 1 hour  
+**Dependencies:** Task 4.1  
+**Test Requirements:**
+- RED: Test Swagger UI is accessible
+- GREEN: Configure Swagger with XML comments
+- REFACTOR: Add examples and descriptions
+
+**Deliverables:**
+- Swashbuckle NuGet package
+- XML documentation generation enabled
+- Swagger UI at `/swagger`
+- API examples for all endpoints
+
+#### 4.3 - Global Error Handling
+**Description:** Implement global exception middleware  
+**Estimated Time:** 1.5 hours  
+**Dependencies:** Task 4.1  
+**Test Requirements:**
+- RED: Test exception responses
+- GREEN: Implement exception middleware
+- REFACTOR: Create ProblemDetails factory
+
+**Deliverables:**
+- `ExceptionMiddleware` with ProblemDetails responses
+- Domain exception mapping (404 for NotFound, 400 for Validation)
+- Structured error logging
+- Exception tests
+
+#### 4.4 - CORS & Security Headers
+**Description:** Configure CORS for frontend integration  
+**Estimated Time:** 1 hour  
+**Dependencies:** Task 4.1  
+**Test Requirements:**
+- RED: Test CORS preflight requests
+- GREEN: Configure CORS policy
+- REFACTOR: Extract to configuration
+
+**Deliverables:**
+- CORS policy for `http://localhost:4200`
+- Security headers middleware
+- HTTPS redirection (production)
+
+#### 4.5 - Git Checkpoint & Phase Review
+**Description:** Commit Phase 4, update documentation  
+**Estimated Time:** 1 hour  
+**Dependencies:** Tasks 4.1-4.4  
+
+---
+
+### Phase 5: Frontend Architecture Foundation
+**Duration:** 8 hours  
+**Objectives:**
+- Setup Angular project with Clean Architecture
+- Create feature modules
+- Implement state management
+- Setup testing infrastructure
+
+**Tasks:**
+
+#### 5.1 - Angular Project Setup
+**Description:** Create Angular app with strict mode and standalone components  
+**Estimated Time:** 1.5 hours  
+**Dependencies:** Phase 4 complete  
+**Test Requirements:**
+- RED: Test app bootstraps successfully
+- GREEN: Create Angular project with routing
+- REFACTOR: Configure path mappings
+
+**Deliverables:**
+- Angular 17+ project (standalone components)
+- Strict TypeScript configuration
+- Path mappings (`@core`, `@shared`, `@features`)
+- ESLint + Prettier configuration
+
+#### 5.2 - Core Module & Services
+**Description:** Create core services (HTTP, error handling, logging)  
+**Estimated Time:** 2 hours  
+**Dependencies:** Task 5.1  
+**Test Requirements:**
+- RED: Write service tests
+- GREEN: Implement core services
+- REFACTOR: Extract HTTP interceptors
+
+**Deliverables:**
+- `ApiService` (HTTP wrapper with error handling)
+- `LoggerService` (console wrapper)
+- `ErrorHandlerService`
+- HTTP interceptors for auth/logging
+- 90%+ service test coverage
+
+#### 5.3 - Domain Models & Interfaces
+**Description:** Define TypeScript interfaces and models  
+**Estimated Time:** 1.5 hours  
+**Dependencies:** Task 5.1  
+**Test Requirements:**
+- RED: Test model validation
+- GREEN: Create models with validation
+- REFACTOR: Extract common validators
+
+**Deliverables:**
+- `Task` interface
+- `CreateTaskRequest` interface
+- `UpdateTaskRequest` interface
+- Model validators (Zod or class-validator)
+- 85%+ validator coverage
+
+#### 5.4 - State Management Setup
+**Description:** Configure NgRx or Angular Signals for state  
+**Estimated Time:** 2 hours  
+**Dependencies:** Task 5.2  
+**Test Requirements:**
+- RED: Test state mutations
+- GREEN: Implement state management
+- REFACTOR: Extract state patterns
+
+**Deliverables:**
+- State management solution (NgRx Store or Signals)
+- Task state (list, loading, error)
+- Actions/effects or signal services
+- State tests (90%+ coverage)
+
+#### 5.5 - Git Checkpoint & Phase Review
+**Description:** Commit Phase 5, update documentation  
+**Estimated Time:** 1 hour  
+**Dependencies:** Tasks 5.1-5.4  
+
+---
+
+### Phase 6: Frontend Feature Implementation
+**Duration:** 10 hours  
+**Objectives:**
+- Implement task list feature
+- Create smart/dumb component architecture
+- Add loading/error states
+- Full test coverage
+
+**Tasks:**
+
+#### 6.1 - Task Service Layer
+**Description:** Create service for task API operations  
+**Estimated Time:** 2 hours  
+**Dependencies:** Phase 5 complete  
+**Test Requirements:**
+- RED: Write service tests with mocked HTTP
+- GREEN: Implement service methods
+- REFACTOR: Extract common HTTP patterns
+
+**Deliverables:**
+- `TaskService` with methods:
+  - `getTasks(filter?: string): Observable<Task[]>`
+  - `getTask(id: number): Observable<Task>`
+  - `createTask(request: CreateTaskRequest): Observable<Task>`
+  - `updateTask(id: number, request: UpdateTaskRequest): Observable<void>`
+  - `deleteTask(id: number): Observable<void>`
+  - `toggleCompletion(id: number): Observable<void>`
+- HTTP error handling
+- 95%+ service test coverage
+
+#### 6.2 - Smart Container Component
+**Description:** Create container component for task list  
+**Estimated Time:** 2.5 hours  
+**Dependencies:** Task 6.1  
+**Test Requirements:**
+- RED: Write component tests
+- GREEN: Implement container logic
+- REFACTOR: Extract state logic
+
+**Deliverables:**
+- `TaskListContainerComponent` (smart)
+- State management integration
+- Loading/error handling
+- 85%+ component test coverage
+
+#### 6.3 - Presentation Components
+**Description:** Create dumb components for UI  
+**Estimated Time:** 3 hours  
+**Dependencies:** Task 6.2  
+**Test Requirements:**
+- RED: Write component tests
+- GREEN: Implement presentational components
+- REFACTOR: Extract reusable sub-components
+
+**Deliverables:**
+- `TaskListComponent` (displays tasks)
+- `TaskItemComponent` (single task row)
+- `TaskFormComponent` (create/edit form)
+- `LoadingSpinnerComponent`
+- `ErrorMessageComponent`
+- Angular Material or standalone CSS
+- 90%+ component test coverage
+
+#### 6.4 - Integration & E2E Tests
+**Description:** Add end-to-end tests with Playwright  
+**Estimated Time:** 2 hours  
+**Dependencies:** Tasks 6.1-6.3  
+**Test Requirements:**
+- RED: Write E2E scenarios
+- GREEN: Implement E2E tests
+- REFACTOR: Extract page objects
+
+**Deliverables:**
+- Playwright configuration
+- E2E tests: Create task, toggle completion, delete task
+- Page object models
+- CI integration for E2E tests
+
+#### 6.5 - Git Checkpoint & Phase Review
+**Description:** Commit Phase 6, update documentation  
+**Estimated Time:** 0.5 hours  
+**Dependencies:** Tasks 6.1-6.4  
+
+---
+
+### Phase 7: Documentation & Knowledge Transfer
+**Duration:** 6 hours  
+**Objectives:**
+- Complete Docsify documentation
+- Create architecture diagrams
+- Document lessons learned
+- Comparison with BadMonolith
+
+**Tasks:**
+
+#### 7.1 - Architecture Documentation
+**Description:** Create comprehensive architecture guides  
+**Estimated Time:** 2 hours  
+**Dependencies:** Phase 6 complete  
+**Test Requirements:**
+- Validate documentation accuracy
+- Review with stakeholders
+
+**Deliverables:**
+- Clean Architecture overview
+- Layer dependency diagrams (using Mermaid)
+- CQRS pattern explanation
+- Repository pattern documentation
+- TDD workflow documentation
+
+#### 7.2 - Before/After Comparisons
+**Description:** Document refactoring transformations  
+**Estimated Time:** 2 hours  
+**Dependencies:** Task 7.1  
+**Test Requirements:**
+- Validate code examples
+- Verify metrics accuracy
+
+**Deliverables:**
+- Side-by-side code comparisons
+- Metrics comparison (lines of code, complexity, test coverage)
+- Anti-pattern identification in BadMonolith
+- Solution patterns in Cortex-Clean
+- Lessons learned document
+
+#### 7.3 - Developer Onboarding Guide
+**Description:** Create guide for new developers  
+**Estimated Time:** 1.5 hours  
+**Dependencies:** Task 7.1  
+**Test Requirements:**
+- Walkthrough with fresh developer
+- Validate setup instructions
+
+**Deliverables:**
+- Getting started guide
+- Development workflow documentation
+- Testing guide
+- Contribution guidelines
+- Troubleshooting FAQ
+
+#### 7.4 - Docsify Finalization
+**Description:** Polish documentation site  
+**Estimated Time:** 0.5 hours  
+**Dependencies:** Tasks 7.1-7.3  
+
+**Deliverables:**
+- Navigation sidebar complete
+- Search functionality tested
+- Code syntax highlighting
+- Responsive design validated
+
+---
+
+## ✅ Definition of Done (DoD)
+
+### Functional Completeness
+1. ✅ All task CRUD operations working in Cortex-Clean backend
+2. ✅ Frontend displays task list with create, update, delete, toggle functionality
+3. ✅ API returns proper HTTP status codes and error messages
+4. ✅ Database migrations applied successfully
+5. ✅ No SQL injection vulnerabilities (parameterized queries only)
+
+### Code Quality
+6. ✅ Clean Architecture maintained: Domain → Application → Infrastructure → API
+7. ✅ SOLID principles followed (single responsibility, dependency inversion)
+8. ✅ No hard-coded connection strings or credentials
+9. ✅ All components have single responsibility
+10. ✅ Dependency injection used throughout
+
+### Testing Requirements
+11. ✅ Backend test coverage ≥90% (unit + integration)
+12. ✅ Frontend test coverage ≥85% (unit + component)
+13. ✅ E2E tests cover critical user journeys
+14. ✅ All tests pass in CI pipeline
+15. ✅ TDD workflow documented in git history (RED→GREEN→REFACTOR commits)
+
+### TDD Requirements (Auto-Injected)
+16. ✅ RED phase verified: All tests written first and failed initially
+17. ✅ GREEN phase verified: Minimal implementation to pass tests
+18. ✅ REFACTOR phase verified: Code improved while tests remain green
+19. ✅ Git checkpoints at phase boundaries with passing tests
+
+### Documentation Requirements
+20. ✅ Docsify documentation complete with all phases documented
+21. ✅ Architecture diagrams generated and current
+22. ✅ Before/after comparisons for each refactoring
+23. ✅ ADRs (Architecture Decision Records) for key decisions
+24. ✅ Developer onboarding guide complete
+
+### Deployment Readiness
+25. ✅ API runs successfully with `dotnet run`
+26. ✅ Frontend runs successfully with `ng serve`
+27. ✅ Database migrations can be applied to fresh database
+28. ✅ Configuration management uses environment variables
+29. ✅ README with setup instructions complete
+
+---
+
+## 📊 Success Metrics
+
+### Quantitative
+- **Lines of Code Reduction:** Target 40% reduction through proper abstraction
+- **Cyclomatic Complexity:** Average <5 per method
+- **Test Coverage:** Backend 90%+, Frontend 85%+
+- **Build Time:** <2 minutes for full solution
+- **API Response Time:** <200ms for typical operations
+
+### Qualitative
+- **Maintainability:** New developers can add features without modifying existing code
+- **Testability:** Business logic testable without infrastructure
+- **Scalability:** Layers can be deployed independently
+- **Security:** No vulnerabilities in OWASP Top 10
+
+---
+
+## 🔄 Automated Documentation System
+
+### Integration with Planning Orchestrator
+
+A custom documentation orchestrator extension will be created to automate Docsify updates:
+
+**Location:** `src/orchestrators/documentation_orchestrator.py`
+
+**Functionality:**
+1. **Phase Completion Hook:** Triggered automatically at end of each phase
+2. **Content Generation:**
+   - Architecture diagrams (Mermaid)
+   - Code metrics (coverage, complexity)
+   - Git history analysis (TDD commit patterns)
+   - Before/after diffs
+3. **Docsify Integration:**
+   - Updates `docs/_sidebar.md` with new pages
+   - Generates markdown files in `docs/phases/`
+   - Embeds code examples with syntax highlighting
+4. **Template System:**
+   - Phase summary template
+   - Architecture decision template
+   - Refactoring comparison template
 
 **Usage:**
 ```python
-# In plan_execution_orchestrator_v2
-from src.orchestrators.validation_framework import TaskValidator
+from src.orchestrators.documentation_orchestrator import DocumentationOrchestrator
 
-validator = TaskValidator()
-result = validator.validate(task)
-if not result.valid:
-    logger.error(f"Task validation failed: {result.errors}")
-```
-
-**Benefits:**
-- Single source of truth for validation rules
-- Reusable across orchestrators
-- Easy to test in isolation
-- Extensible (add new validators)
-
-**Estimated Impact:**
-- Eliminate 150 lines of duplication
-- Improve consistency (same rules everywhere)
-- Enable policy-as-code (validation rules externalized)
-
----
-
-## Phase 3: Unified Session/Context Model (PLANNED)
-
-### Problem
-
-**Inconsistent state management:**
-- `TDDImplementationOrchestrator`: Uses `TDDSessionState` (dataclass with strong typing)
-- `PlanningOrchestrator`: Uses `Dict[str, Any]` for `current_plan_context`
-- `PlanExecutionOrchestrator`: Uses `execution_report` Dict
-
-**Issues:**
-- No type safety in Dict-based approaches
-- Inconsistent field names across orchestrators
-- Difficult to track state flow
-- Cannot serialize/deserialize reliably
-
-### Solution
-
-**Create Unified Session Model:**
-```python
-# src/orchestrators/session_model.py
-
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
-from datetime import datetime
-from enum import Enum
-
-class SessionStatus(Enum):
-    """Standard session statuses."""
-    NOT_STARTED = "not_started"
-    IN_PROGRESS = "in_progress"
-    PAUSED = "paused"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    CANCELLED = "cancelled"
-
-@dataclass
-class BaseSession:
-    """Base session model for all orchestrators."""
-    session_id: str
-    session_type: str  # "tdd", "planning", "execution"
-    status: SessionStatus
-    started_at: datetime
-    completed_at: Optional[datetime] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    def to_dict(self) -> Dict[str, Any]:
-        """Serialize to dictionary."""
-        ...
-    
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'BaseSession':
-        """Deserialize from dictionary."""
-        ...
-
-@dataclass
-class TDDSession(BaseSession):
-    """TDD-specific session state."""
-    feature_name: str = ""
-    current_phase: str = "not_started"
-    phase_history: List[Dict] = field(default_factory=list)
-    checkpoints: List[str] = field(default_factory=list)
-    test_scope: List[str] = field(default_factory=list)
-    implementation_scope: List[str] = field(default_factory=list)
-    metrics: Dict[str, Any] = field(default_factory=dict)
-
-@dataclass
-class PlanningSession(BaseSession):
-    """Planning-specific session state."""
-    plan_id: str = ""
-    plan_title: str = ""
-    planning_mode_active: bool = False
-    dor_items: List[str] = field(default_factory=list)
-    dod_items: List[str] = field(default_factory=list)
-
-@dataclass
-class ExecutionSession(BaseSession):
-    """Execution-specific session state."""
-    plan_path: str = ""
-    execution_mode: str = "approval_gated"
-    phases_executed: List[Dict] = field(default_factory=list)
-    awaiting_approval: bool = False
-```
-
-**Migration Strategy:**
-```python
-# TDDImplementationOrchestrator (already uses dataclass - minimal change)
-session_state = TDDSession(
-    session_id=uuid.uuid4().hex,
-    session_type="tdd",
-    status=SessionStatus.IN_PROGRESS,
-    started_at=datetime.now(),
-    feature_name="User Authentication"
+# Auto-invoked by planning orchestrator at phase boundaries
+doc_orchestrator = DocumentationOrchestrator(
+    project_path="cortex-sample-apps/Cortex-Clean",
+    docs_path="cortex-sample-apps/Cortex-Clean/docs"
 )
 
-# PlanningOrchestrator (migrate from Dict)
-# BEFORE:
-self.current_plan_context = {
-    "plan_id": "FEAT-001",
-    "status": "in-progress"
-}
-
-# AFTER:
-self.current_plan_context = PlanningSession(
-    session_id=uuid.uuid4().hex,
-    session_type="planning",
-    status=SessionStatus.IN_PROGRESS,
-    started_at=datetime.now(),
-    plan_id="FEAT-001"
+doc_orchestrator.document_phase_completion(
+    phase_number=1,
+    phase_name="Foundation & Infrastructure Setup",
+    tasks_completed=["1.1", "1.2", "1.3", "1.4"],
+    metrics={
+        "test_coverage": 92,
+        "lines_added": 450,
+        "lines_deleted": 0
+    }
 )
 ```
 
-**Benefits:**
-- Type safety via dataclasses
-- Consistent field names
-- Serialization built-in
-- IDE auto-completion
-- Easier state persistence
+**Deliverables:**
+- Auto-generated phase summaries
+- Interactive architecture diagrams
+- Searchable code examples
+- Live metrics dashboard (embedded in docs)
 
 ---
 
-## Phase 4: Interface-Based Communication (PLANNED)
+## 🎯 Risk Assessment
 
-### Problem
+### Technical Risks
+1. **EF Core Migration Issues** - Mitigation: Test with fresh database, document rollback
+2. **Frontend State Complexity** - Mitigation: Use proven state management (NgRx or Signals)
+3. **Test Coverage Gaps** - Mitigation: Enforce coverage gates in CI
 
-**Tight coupling between orchestrators:**
-```python
-# planning_orchestrator.py (line 65)
-from src.orchestrators.plan_execution_orchestrator import PlanExecutionOrchestrator
-self.plan_executor = PlanExecutionOrchestrator(str(self.cortex_root))
-
-# plan_execution_orchestrator.py (line 80)
-from src.orchestrators.tdd_implementation_orchestrator import TDDImplementationOrchestrator
-self.tdd_orchestrator = TDDImplementationOrchestrator(...)
-```
-
-**Issues:**
-- Direct dependency on concrete classes
-- Circular import risks
-- Cannot swap implementations
-- Difficult to test (cannot mock easily)
-
-### Solution
-
-**Protocol-Based Interfaces (Already in Phase 1):**
-```python
-# orchestrator_factory.py already defines:
-class ITDDOrchestrator(Protocol):
-    def start_session(...) -> Dict: ...
-    def execute_red_phase(...) -> Dict: ...
-    def execute_green_phase(...) -> Dict: ...
-    def execute_refactor_phase(...) -> Dict: ...
-
-class IPlanExecutionOrchestrator(Protocol):
-    def execute_plan(...) -> Tuple[bool, Dict]: ...
-
-class IPlanningOrchestrator(Protocol):
-    def validate_plan(...) -> Tuple[bool, List[str]]: ...
-    def save_plan(...) -> Tuple[bool, str]: ...
-```
-
-**Extend to all orchestrator interactions:**
-```python
-# planning_orchestrator_v2.py
-class PlanningOrchestratorV2:
-    def __init__(
-        self,
-        cortex_root: Path,
-        plan_executor: Optional[IPlanExecutionOrchestrator] = None
-    ):
-        self.plan_executor = plan_executor
-    
-    def auto_execute_plan(self, plan_id: str):
-        if self.plan_executor:
-            # Uses interface, not concrete class
-            success, report = self.plan_executor.execute_plan(...)
-```
-
-**Benefits:**
-- Dependency Inversion Principle (SOLID)
-- Testable (inject mocks)
-- Swappable implementations
-- No circular dependencies
+### Schedule Risks
+1. **Phase 2 Complexity** - Mitigation: Break into smaller tasks if needed
+2. **Documentation Time** - Mitigation: Automate with orchestrator
 
 ---
 
-## Phase 5: Configuration Management (PLANNED)
+## 📅 Timeline Summary
 
-### Problem
+| Phase | Duration | Cumulative |
+|-------|----------|------------|
+| Phase 1: Foundation | 8 hours | 8 hours |
+| Phase 2: Application Layer | 10 hours | 18 hours |
+| Phase 3: Infrastructure | 8 hours | 26 hours |
+| Phase 4: API Layer | 6 hours | 32 hours |
+| Phase 5: Frontend Foundation | 8 hours | 40 hours |
+| Phase 6: Frontend Features | 10 hours | 50 hours |
+| Phase 7: Documentation | 6 hours | 56 hours |
 
-**Configuration scattered:**
-- Feature flags hard-coded in orchestrators
-- Paths constructed manually
-- No central configuration file
-- Cannot override settings per environment
-
-### Solution
-
-**Centralized Configuration (Partially done in Phase 1):**
-
-**OrchestratorConfig extended:**
-```python
-@dataclass
-class OrchestratorConfig:
-    # Paths
-    cortex_root: Path
-    project_root: Path
-    brain_path: Path
-    
-    # Feature flags
-    enable_tdd: bool = True
-    enable_git_checkpoints: bool = True
-    enable_cleanup: bool = True
-    
-    # TDD configuration
-    tdd_auto_debug: bool = True
-    tdd_performance_refactoring: bool = True
-    tdd_test_timeout_seconds: int = 30
-    
-    # Git configuration
-    git_auto_checkpoint: bool = True
-    git_rollback_enabled: bool = True
-    
-    # Performance
-    enable_caching: bool = True
-    cache_ttl_minutes: int = 30
-    max_concurrent_tasks: int = 4
-    
-    # Validation
-    enforce_dor: bool = True
-    enforce_dod: bool = True
-    skip_validation_for_admins: bool = False
-    
-    # Logging
-    log_level: str = "INFO"
-    log_to_file: bool = True
-    
-    @classmethod
-    def from_file(cls, config_path: Path) -> 'OrchestratorConfig':
-        """Load configuration from YAML/JSON file."""
-        ...
-    
-    def to_file(self, config_path: Path) -> None:
-        """Save configuration to file."""
-        ...
-```
-
-**Environment-specific configs:**
-```yaml
-# cortex-brain/config/orchestrator-config-dev.yaml
-enable_tdd: true
-enable_git_checkpoints: true
-tdd_auto_debug: true
-log_level: "DEBUG"
-
-# cortex-brain/config/orchestrator-config-prod.yaml
-enable_tdd: true
-enable_git_checkpoints: false  # Don't checkpoint in CI/CD
-tdd_auto_debug: false
-log_level: "WARNING"
-```
-
-**Usage:**
-```python
-# Load environment-specific config
-config = OrchestratorConfig.from_file(
-    Path("cortex-brain/config/orchestrator-config-prod.yaml")
-)
-
-factory = OrchestratorFactory(config)
-```
+**Total Estimated Effort:** 56 hours (7 working days)
 
 ---
 
-## Implementation Timeline
+## 🚀 Getting Started
 
-| Phase | Status | Duration | Deliverables |
-|-------|--------|----------|--------------|
-| Phase 1: Factory Pattern | ✅ Complete | 4 hours | OrchestratorFactory, PlanExecutionOrchestratorV2, Protocols |
-| Phase 2: Validation Framework | ✅ Complete | 3 hours | ValidationFramework (650 lines), 20 tests passing |
-| Phase 3: Session Model | ✅ Complete | 3 hours | Session models (550 lines), 24 tests passing |
-| Phase 4: Interface Communication | ✅ Complete | 1 hour | Factory integration with new models |
-| Phase 5: Configuration | ✅ Complete | 2 hours | Config manager (380 lines), 18 tests passing |
-| **Total** | **100%** | **13 hours** | **5 phases complete, 62 tests passing** |
+### Approval Process
+1. Review this plan document
+2. Confirm DoR requirements met
+3. Approve plan: `approve plan badmonolith-refactor-001`
+4. Execute autonomously: `execute all phases autonomously`
 
----
-
-## Testing Strategy
-
-### Phase 1 Tests (Immediate)
-
-**File:** `tests/orchestrators/test_orchestrator_factory.py`
-
-```python
-import pytest
-from pathlib import Path
-from src.orchestrators.orchestrator_factory import (
-    OrchestratorFactory,
-    OrchestratorConfig,
-    create_orchestrator_factory
-)
-
-class TestOrchestratorFactory:
-    def test_factory_initialization(self):
-        """Test factory initializes with config."""
-        config = OrchestratorConfig(cortex_root=Path("/test"))
-        factory = OrchestratorFactory(config)
-        assert factory.config.cortex_root == Path("/test")
-    
-    def test_get_tdd_orchestrator(self):
-        """Test TDD orchestrator creation."""
-        factory = create_orchestrator_factory("/test")
-        tdd = factory.get_tdd_orchestrator()
-        assert tdd is not None or factory.config.enable_tdd == False
-    
-    def test_dependency_injection(self):
-        """Test mock injection for testing."""
-        class MockTDD:
-            def start_session(self, **kwargs):
-                return {"session_id": "mock"}
-        
-        mock_tdd = MockTDD()
-        config = OrchestratorConfig(cortex_root=Path("/test"))
-        factory = OrchestratorFactory(config, tdd_orchestrator=mock_tdd)
-        
-        assert factory.get_tdd_orchestrator() == mock_tdd
-    
-    def test_singleton_behavior(self):
-        """Test dependencies are singletons."""
-        factory = create_orchestrator_factory("/test")
-        tdd1 = factory.get_tdd_orchestrator()
-        tdd2 = factory.get_tdd_orchestrator()
-        assert tdd1 is tdd2  # Same instance
-```
-
-**File:** `tests/orchestrators/test_plan_execution_orchestrator_v2.py`
-
-```python
-def test_v2_with_mocked_dependencies():
-    """Test V2 orchestrator with mocked dependencies."""
-    mock_tdd = MockTDDOrchestrator()
-    mock_git = MockGitCheckpoint()
-    
-    orchestrator = PlanExecutionOrchestratorV2(
-        cortex_root=Path("/test"),
-        tdd_orchestrator=mock_tdd,
-        git_checkpoint=mock_git
-    )
-    
-    # Execute plan
-    success, report = orchestrator.execute_plan(test_plan_path)
-    
-    # Verify mocks were called
-    assert mock_tdd.start_session_called
-    assert mock_git.create_checkpoint_called
-```
+### Manual Execution
+Alternatively, execute phase-by-phase:
+1. `execute phase 1`
+2. Review Phase 1 results
+3. `execute phase 2`
+4. Continue until Phase 7
 
 ---
 
-## Migration Guide
+## 📝 Notes
 
-### For Developers Using Orchestrators
-
-**Before (V1):**
-```python
-from src.orchestrators.plan_execution_orchestrator import PlanExecutionOrchestrator
-
-orchestrator = PlanExecutionOrchestrator("/path/to/cortex")
-success, report = orchestrator.execute_plan(plan_path)
-```
-
-**After (V2 - Recommended):**
-```python
-from src.orchestrators.orchestrator_factory import create_orchestrator_factory
-
-factory = create_orchestrator_factory("/path/to/cortex")
-orchestrator = factory.get_plan_execution_orchestrator()
-success, report = orchestrator.execute_plan(plan_path)
-```
-
-**Gradual Migration:**
-- V1 continues to work (no breaking changes)
-- Migrate to V2 when convenient
-- New code should use V2
-
-### For Orchestrator Developers
-
-**Adding New Orchestrator:**
-1. Define protocol in `orchestrator_factory.py`
-2. Add factory method to `OrchestratorFactory`
-3. Create V2 version with constructor injection
-4. Write tests with mocked dependencies
-
-**Example:**
-```python
-# 1. Define protocol
-class INewOrchestrator(Protocol):
-    def execute_operation(self, params: Dict) -> bool:
-        ...
-
-# 2. Add to factory
-class OrchestratorFactory:
-    def get_new_orchestrator(self) -> INewOrchestrator:
-        if self._new_orchestrator is None:
-            from src.orchestrators.new_orchestrator_v2 import NewOrchestratorV2
-            self._new_orchestrator = NewOrchestratorV2(
-                cortex_root=self.config.cortex_root,
-                dependency1=self.get_dependency1(),
-                dependency2=self.get_dependency2()
-            )
-        return self._new_orchestrator
-
-# 3. Create V2 orchestrator
-class NewOrchestratorV2:
-    def __init__(self, cortex_root: Path, dependency1, dependency2):
-        self.cortex_root = cortex_root
-        self.dependency1 = dependency1  # Injected
-        self.dependency2 = dependency2  # Injected
-```
+- This plan uses CORTEX Planning System 2.0 with autonomous execution support
+- TDD requirements are automatically enforced by Brain Protector (SKULL)
+- Documentation is auto-generated at phase boundaries
+- Git checkpoints ensure rollback capability
+- All code in `Cortex-Clean` folder is independent of CORTEX codebase (git isolation)
 
 ---
 
-## Rollback Plan
-
-**If Phase 1 causes issues:**
-1. V1 orchestrators remain functional (no changes)
-2. Remove V2 files: `orchestrator_factory.py`, `plan_execution_orchestrator_v2.py`
-3. Revert any calling code to V1
-4. No data loss (V1 and V2 use same persistence)
-
-**Risk Level:** LOW (V2 is additive, not replacement)
-
----
-
-## Success Metrics
-
-**Code Quality:**
-- ✅ Eliminated 180+ lines of duplication (Phase 1: ~120 lines)
-- ✅ Created 1,580 lines of new infrastructure (validation 650, session 550, config 380)
-- ✅ Achieved 100% test coverage on new frameworks (62 tests, all passing)
-- ✅ Zero syntax errors, type-safe with dataclasses and protocols
-
-**Maintainability:**
-- ✅ Single point of orchestrator creation (Phase 1)
-- ✅ All dependencies injectable for testing (Phase 1)
-- ✅ Configuration externalized with environment support (Phase 5)
-- ✅ Validation logic centralized, no duplication (Phase 2)
-
-**Testing:**
-- ✅ 20 validation framework tests (100% pass)
-- ✅ 24 session model tests (100% pass)
-- ✅ 18 configuration tests (100% pass)
-## Next Actions
-
-### ✅ ALL PHASES COMPLETE (Autonomous Execution)
-
-**Phase Completion Summary:**
-1. ✅ Phase 1: Factory Pattern (372 lines) - OrchestratorFactory with dependency injection
-2. ✅ Phase 2: Validation Framework (650 lines) - 11 validators, 20 tests passing
-3. ✅ Phase 3: Unified Session Model (550 lines) - 5 session types, 24 tests passing  
-4. ✅ Phase 4: Factory integration with new frameworks
-5. ✅ Phase 5: Configuration Management (380 lines) - Environment configs, 18 tests passing
-
-**Test Results:**
-- Total tests: 62
-- Passing: 62 (100%)
-- Failing: 0
-- Execution time: <1 second
-
-**Code Metrics:**
-- New infrastructure: 1,952 lines (factory 372, validation 650, session 550, config 380)
-- Test coverage: 1,100+ lines of tests
-- Duplication eliminated: ~180 lines
-- Net addition: +1,772 lines of high-quality, tested code
-
-### Recommended Follow-Up Actions
-
-**Immediate (Optional):**
-1. ✅ Document Phase 2-5 in architecture docs
-2. Migrate existing orchestrators to use new frameworks:
-   - Update `tdd_implementation_orchestrator.py` to use `TDDSession`
-   - Update `planning_orchestrator.py` to use `PlanningSession` and validators
-   - Update `plan_execution_orchestrator.py` to use `ExecutionSession`
-3. Create integration tests for cross-orchestrator workflows
-4. Performance benchmarking (baseline vs refactored)
-
-**Future Enhancements:**
-1. Add more validators as needs arise
-2. Implement hot-reload for configuration
-3. Add telemetry/metrics collection to session models
-4. Create dashboard for session monitoringodel
-2. Migrate TDD, Planning, Execution orchestrators
-3. Extend protocols to all inter-orchestrator communication
-4. Full dependency injection across system
-
-### Long-term (Phase 5)
-1. Configuration file support
-2. Environment-specific configs
-3. Hot-reload configuration
-4. Performance optimization
-
----
-
-**Document Version:** 1.0  
-**Last Updated:** December 6, 2025  
-**Status:** Phase 1 Complete, Phases 2-5 Planned  
-**Approval:** Pending review
+**Plan Status:** Ready for approval  
+**Next Action:** Review and approve plan, then execute autonomously
