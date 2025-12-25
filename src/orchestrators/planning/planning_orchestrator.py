@@ -86,6 +86,14 @@ from src.orchestrators.planning.markdown_renderer import MarkdownRenderer
 
 logger = logging.getLogger(__name__)
 
+# Enhancement 1: JSON Schema validation for manifests
+try:
+    import jsonschema
+    JSONSCHEMA_AVAILABLE = True
+except ImportError:
+    JSONSCHEMA_AVAILABLE = False
+    logger.warning("jsonschema not available - advanced manifest validation disabled")
+
 
 # ============================================================================
 # Domain Models
@@ -941,15 +949,22 @@ class PlanningOrchestrator(BaseOrchestrator):
     # Git Checkpoint Methods (Task 8.4 - Test Compliance, Enhanced Task 13.4)
     # ========================================================================
     
-    def _create_checkpoint(self, phase_name: str, metadata: Dict[str, Any]) -> str:
+    def _create_checkpoint(
+        self,
+        phase_name: str,
+        metadata: Dict[str, Any],
+        tags: Optional[List[str]] = None
+    ) -> str:
         """
         Create git checkpoint for phase.
         
         ENHANCED (Task 13.4): Now tracks checkpoint history for management.
+        ENHANCED (Phase 13 Optional Enhancement 2): Added tags support for better organization.
         
         Args:
             phase_name: Name of phase for checkpoint
             metadata: Additional checkpoint metadata
+            tags: Optional list of tags for checkpoint organization (e.g., ["stable", "pre-migration"])
         
         Returns:
             Checkpoint ID if successful, empty string if failed
@@ -958,30 +973,37 @@ class PlanningOrchestrator(BaseOrchestrator):
         if not hasattr(self, "_checkpoint_history"):
             self._checkpoint_history = []
         
+        # Normalize tags
+        tags = tags or []
+        
         # Try git checkpoints first if available
         if self.git_checkpoint and self.git_checkpoint._is_git_repo():
             from .git_checkpoint_integration import CheckpointType
             
+            # Include tags in commit message if provided
+            tag_suffix = f" [tags: {', '.join(tags)}]" if tags else ""
             checkpoint = self.git_checkpoint.create_checkpoint(
                 checkpoint_type=CheckpointType.PHASE,
                 phase_name=phase_name,
-                message=f"Checkpoint: {phase_name} - {metadata.get('progress', 'N/A')}"
+                message=f"Checkpoint: {phase_name} - {metadata.get('progress', 'N/A')}{tag_suffix}"
             )
             
             if checkpoint:
                 # Store metadata in checkpoint for retrieval
                 checkpoint.metadata = {"phase_name": phase_name, **metadata}
                 
-                # ENHANCED: Add to checkpoint history
+                # ENHANCED: Add to checkpoint history with tags
                 checkpoint_data = {
                     "checkpoint_id": checkpoint.checkpoint_id,
                     "phase_name": phase_name,
                     "timestamp": checkpoint.timestamp.isoformat(),
                     "metadata": metadata,
-                    "type": "git"
+                    "type": "git",
+                    "tags": tags
                 }
                 self._checkpoint_history.append(checkpoint_data)
-                logger.info(f"✅ Git checkpoint created: {checkpoint.checkpoint_id} (phase: {phase_name})")
+                tag_log = f" (tags: {', '.join(tags)})" if tags else ""
+                logger.info(f"✅ Git checkpoint created: {checkpoint.checkpoint_id} (phase: {phase_name}){tag_log}")
                 
                 return checkpoint.checkpoint_id
         
@@ -993,20 +1015,23 @@ class PlanningOrchestrator(BaseOrchestrator):
             "phase_name": phase_name,
             "timestamp": datetime.now().isoformat(),
             "type": "memory",
+            "tags": tags,
             **metadata
         }
         self._memory_checkpoints.append(checkpoint_data)
         
-        # ENHANCED: Add to checkpoint history
+        # ENHANCED: Add to checkpoint history with tags
         history_entry = {
             "checkpoint_id": checkpoint_id,
             "phase_name": phase_name,
             "timestamp": checkpoint_data["timestamp"],
             "metadata": metadata,
-            "type": "memory"
+            "type": "memory",
+            "tags": tags
         }
         self._checkpoint_history.append(history_entry)
-        logger.info(f"✅ Memory checkpoint created: {checkpoint_id} (phase: {phase_name})")
+        tag_log = f" (tags: {', '.join(tags)})" if tags else ""
+        logger.info(f"✅ Memory checkpoint created: {checkpoint_id} (phase: {phase_name}){tag_log}")
         
         return checkpoint_id
     
@@ -1185,14 +1210,20 @@ class PlanningOrchestrator(BaseOrchestrator):
         logger.error(f"Rollback failed for checkpoint: {checkpoint_id}")
         return False
     
-    def _list_checkpoints(self, phase_filter: Optional[str] = None) -> List[Dict[str, Any]]:
+    def _list_checkpoints(
+        self,
+        phase_filter: Optional[str] = None,
+        tags_filter: Optional[List[str]] = None
+    ) -> List[Dict[str, Any]]:
         """
-        List all checkpoints with optional phase filtering.
+        List all checkpoints with optional phase and tags filtering.
         
         NEW (Task 13.4): Provides filtered checkpoint listing.
+        ENHANCED (Phase 13 Optional Enhancement 2): Added tags filtering support.
         
         Args:
             phase_filter: Optional phase name to filter by
+            tags_filter: Optional list of tags to filter by (matches ANY tag in list)
         
         Returns:
             List of checkpoint dictionaries with metadata
@@ -1209,6 +1240,13 @@ class PlanningOrchestrator(BaseOrchestrator):
                 if cp.get("phase_name", "").lower() == phase_filter.lower()
             ]
         
+        # Apply tags filter if provided (match ANY tag)
+        if tags_filter:
+            checkpoints = [
+                cp for cp in checkpoints
+                if any(tag in cp.get("tags", []) for tag in tags_filter)
+            ]
+        
         # Sort by timestamp (newest first)
         checkpoints = sorted(
             checkpoints,
@@ -1216,7 +1254,14 @@ class PlanningOrchestrator(BaseOrchestrator):
             reverse=True
         )
         
-        logger.debug(f"Listed {len(checkpoints)} checkpoints" + (f" (phase: {phase_filter})" if phase_filter else ""))
+        filter_desc = []
+        if phase_filter:
+            filter_desc.append(f"phase: {phase_filter}")
+        if tags_filter:
+            filter_desc.append(f"tags: {', '.join(tags_filter)}")
+        filter_str = f" ({'; '.join(filter_desc)})" if filter_desc else ""
+        
+        logger.debug(f"Listed {len(checkpoints)} checkpoints{filter_str}")
         return checkpoints
     
     def _get_checkpoint_history(self) -> List[Dict[str, Any]]:
@@ -2225,10 +2270,17 @@ class PlanningOrchestrator(BaseOrchestrator):
         """
         Validate manifest structure and required fields.
         
+        ENHANCED (Phase 13 Optional Enhancement 1):
+        - Added JSON Schema validation for comprehensive validation
+        - Supports both basic validation (always on) and advanced JSON Schema validation
+        - Falls back to basic validation if jsonschema not available
+        
         Checks for:
         - Required top-level keys (orchestrator_name, version, phases)
         - Proper phases structure
         - Quality gates structure (if present)
+        - Type validation for all fields (JSON Schema)
+        - Enum constraints for phase status values
         
         Args:
             manifest: Manifest dict to validate
@@ -2238,6 +2290,20 @@ class PlanningOrchestrator(BaseOrchestrator):
         """
         errors = []
         
+        # ENHANCED: Try JSON Schema validation first if available
+        if JSONSCHEMA_AVAILABLE:
+            schema = self._get_manifest_json_schema()
+            try:
+                jsonschema.validate(instance=manifest, schema=schema)
+                logger.info("✅ Manifest JSON Schema validation passed")
+            except jsonschema.ValidationError as e:
+                errors.append(f"Schema validation error: {e.message} at {'.'.join(str(p) for p in e.path)}")
+                logger.warning(f"⚠️ JSON Schema validation failed: {e.message}")
+            except jsonschema.SchemaError as e:
+                errors.append(f"Invalid schema definition: {e.message}")
+                logger.error(f"❌ Schema definition error: {e.message}")
+        
+        # Basic validation (always runs as fallback)
         # Required top-level keys
         required_keys = ["orchestrator_name", "version", "phases"]
         for key in required_keys:
@@ -2271,6 +2337,80 @@ class PlanningOrchestrator(BaseOrchestrator):
             logger.warning(f"⚠️ Manifest validation failed: {len(errors)} error(s)")
         
         return is_valid, errors
+    
+    def _get_manifest_json_schema(self) -> Dict[str, Any]:
+        """
+        Get JSON Schema definition for manifest validation.
+        
+        ENHANCED (Phase 13 Optional Enhancement 1):
+        Comprehensive schema defining all manifest structure, types, and constraints.
+        
+        Returns:
+            JSON Schema dict
+        """
+        return {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": ["orchestrator_name", "version", "phases"],
+            "properties": {
+                "orchestrator_name": {"type": "string", "minLength": 1},
+                "version": {"type": "string", "pattern": r"^\d+\.\d+(\.\d+)?$"},
+                "inherits_from": {"type": "string"},
+                "phases": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "required": ["name"],
+                        "properties": {
+                            "name": {"type": "string", "minLength": 1},
+                            "description": {"type": "string"},
+                            "status": {
+                                "type": "string",
+                                "enum": ["not_started", "in_progress", "complete", "blocked", "skipped"]
+                            },
+                            "tasks": {
+                                "type": "array",
+                                "items": {"type": "string"}
+                            },
+                            "dependencies": {
+                                "type": "array",
+                                "items": {"type": "string"}
+                            }
+                        }
+                    }
+                },
+                "quality_gates": {
+                    "type": "object",
+                    "properties": {
+                        "definition_of_ready": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {"type": "boolean"},
+                                "criteria": {"type": "array", "items": {"type": "string"}}
+                            }
+                        },
+                        "definition_of_done": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {"type": "boolean"},
+                                "criteria": {"type": "array", "items": {"type": "string"}}
+                            }
+                        }
+                    }
+                },
+                "tdd_workflow": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {"type": "boolean"},
+                        "test_framework": {"type": "string"},
+                        "coverage_threshold": {"type": "number", "minimum": 0, "maximum": 100}
+                    }
+                },
+                "metadata": {"type": "object"}
+            },
+            "additionalProperties": True
+        }
     
     def _cache_resolved_manifest(self, manifest_path: str, resolved: Dict[str, Any]) -> None:
         """
