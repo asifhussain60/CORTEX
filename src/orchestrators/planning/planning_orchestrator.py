@@ -938,12 +938,14 @@ class PlanningOrchestrator(BaseOrchestrator):
         return descriptions.get(complexity, "Unknown complexity level")
     
     # ========================================================================
-    # Git Checkpoint Methods (Task 8.4 - Test Compliance)
+    # Git Checkpoint Methods (Task 8.4 - Test Compliance, Enhanced Task 13.4)
     # ========================================================================
     
     def _create_checkpoint(self, phase_name: str, metadata: Dict[str, Any]) -> str:
         """
         Create git checkpoint for phase.
+        
+        ENHANCED (Task 13.4): Now tracks checkpoint history for management.
         
         Args:
             phase_name: Name of phase for checkpoint
@@ -952,6 +954,10 @@ class PlanningOrchestrator(BaseOrchestrator):
         Returns:
             Checkpoint ID if successful, empty string if failed
         """
+        # Initialize checkpoint history if needed
+        if not hasattr(self, "_checkpoint_history"):
+            self._checkpoint_history = []
+        
         # Try git checkpoints first if available
         if self.git_checkpoint and self.git_checkpoint._is_git_repo():
             from .git_checkpoint_integration import CheckpointType
@@ -965,6 +971,18 @@ class PlanningOrchestrator(BaseOrchestrator):
             if checkpoint:
                 # Store metadata in checkpoint for retrieval
                 checkpoint.metadata = {"phase_name": phase_name, **metadata}
+                
+                # ENHANCED: Add to checkpoint history
+                checkpoint_data = {
+                    "checkpoint_id": checkpoint.checkpoint_id,
+                    "phase_name": phase_name,
+                    "timestamp": checkpoint.timestamp.isoformat(),
+                    "metadata": metadata,
+                    "type": "git"
+                }
+                self._checkpoint_history.append(checkpoint_data)
+                logger.info(f"✅ Git checkpoint created: {checkpoint.checkpoint_id} (phase: {phase_name})")
+                
                 return checkpoint.checkpoint_id
         
         # Fall back to in-memory checkpoints (for testing or non-git environments)
@@ -974,9 +992,22 @@ class PlanningOrchestrator(BaseOrchestrator):
             "checkpoint_id": checkpoint_id,
             "phase_name": phase_name,
             "timestamp": datetime.now().isoformat(),
+            "type": "memory",
             **metadata
         }
         self._memory_checkpoints.append(checkpoint_data)
+        
+        # ENHANCED: Add to checkpoint history
+        history_entry = {
+            "checkpoint_id": checkpoint_id,
+            "phase_name": phase_name,
+            "timestamp": checkpoint_data["timestamp"],
+            "metadata": metadata,
+            "type": "memory"
+        }
+        self._checkpoint_history.append(history_entry)
+        logger.info(f"✅ Memory checkpoint created: {checkpoint_id} (phase: {phase_name})")
+        
         return checkpoint_id
     
     def _create_checkpoint_with_validation(self, phase_name: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
@@ -1092,38 +1123,101 @@ class PlanningOrchestrator(BaseOrchestrator):
     
     def _rollback_to_checkpoint(self, checkpoint_id: str) -> bool:
         """
-        Rollback to previous checkpoint.
+        Rollback to specific checkpoint by ID.
+        
+        ENHANCED (Task 13.4): Now uses checkpoint history for validation.
         
         Args:
-            checkpoint_id: Checkpoint to rollback to
+            checkpoint_id: Checkpoint ID to rollback to
         
         Returns:
             True if successful, False otherwise
         """
-        # Find checkpoint to get metadata
-        checkpoint_data = self._get_checkpoint(checkpoint_id)
-        if not checkpoint_data:
+        # Find checkpoint in history
+        if not hasattr(self, "_checkpoint_history"):
+            logger.error("No checkpoint history found")
             return False
         
-        # For memory checkpoints, restore state directly
-        if hasattr(self, '_memory_checkpoints') and checkpoint_id.startswith("memory-"):
-            if hasattr(self, '_internal_state') and 'state' in checkpoint_data:
-                self._internal_state['state'] = checkpoint_data['state']
-            return True
+        checkpoint = next(
+            (cp for cp in self._checkpoint_history if cp["checkpoint_id"] == checkpoint_id),
+            None
+        )
         
-        # For git checkpoints, use git restore
-        if not self.git_checkpoint:
+        if not checkpoint:
+            logger.error(f"Checkpoint not found in history: {checkpoint_id}")
             return False
         
-        # Restore git state
-        success = self.git_checkpoint.restore_checkpoint(checkpoint_id)
-        if success:
-            # Restore orchestrator state from checkpoint metadata
-            if hasattr(self, '_internal_state') and 'state' in checkpoint_data:
-                self._internal_state['state'] = checkpoint_data['state']
-            return True
+        # Handle git checkpoints
+        if checkpoint["type"] == "git":
+            if self.git_checkpoint and self.git_checkpoint._is_git_repo():
+                try:
+                    # Restore git state
+                    success = self.git_checkpoint.restore_checkpoint(checkpoint_id)
+                    if success:
+                        logger.info(f"✅ Rolled back to git checkpoint: {checkpoint_id} (phase: {checkpoint['phase_name']})")
+                        
+                        # Restore orchestrator state from checkpoint metadata
+                        if hasattr(self, '_internal_state') and 'state' in checkpoint.get('metadata', {}):
+                            self._internal_state['state'] = checkpoint['metadata']['state']
+                        
+                        return True
+                except Exception as e:
+                    logger.error(f"Git rollback failed: {e}")
+                    return False
         
+        # Handle memory checkpoints
+        elif checkpoint["type"] == "memory":
+            # Find checkpoint in memory list
+            memory_checkpoint = next(
+                (cp for cp in self._memory_checkpoints if cp["checkpoint_id"] == checkpoint_id),
+                None
+            )
+            
+            if memory_checkpoint:
+                # Restore state from checkpoint metadata
+                if hasattr(self, '_internal_state') and 'state' in memory_checkpoint:
+                    self._internal_state['state'] = memory_checkpoint['state']
+                
+                logger.info(f"✅ Rolled back to memory checkpoint: {checkpoint_id} (phase: {checkpoint['phase_name']})")
+                logger.warning("⚠️ Memory rollback is limited - only metadata restored")
+                return True
+        
+        logger.error(f"Rollback failed for checkpoint: {checkpoint_id}")
         return False
+    
+    def _list_checkpoints(self, phase_filter: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        List all checkpoints with optional phase filtering.
+        
+        NEW (Task 13.4): Provides filtered checkpoint listing.
+        
+        Args:
+            phase_filter: Optional phase name to filter by
+        
+        Returns:
+            List of checkpoint dictionaries with metadata
+        """
+        if not hasattr(self, "_checkpoint_history"):
+            self._checkpoint_history = []
+        
+        checkpoints = self._checkpoint_history.copy()
+        
+        # Apply phase filter if provided
+        if phase_filter:
+            checkpoints = [
+                cp for cp in checkpoints
+                if cp.get("phase_name", "").lower() == phase_filter.lower()
+            ]
+        
+        # Sort by timestamp (newest first)
+        checkpoints = sorted(
+            checkpoints,
+            key=lambda cp: cp.get("timestamp", ""),
+            reverse=True
+        )
+        
+        logger.debug(f"Listed {len(checkpoints)} checkpoints" + (f" (phase: {phase_filter})" if phase_filter else ""))
+        return checkpoints
     
     def _get_checkpoint_history(self) -> List[Dict[str, Any]]:
         """
@@ -1150,20 +1244,86 @@ class PlanningOrchestrator(BaseOrchestrator):
             for cp in self.git_checkpoint.checkpoints
         ]
     
-    def _cleanup_old_checkpoints(self) -> None:
+    def _cleanup_old_checkpoints(self, retention_days: int = 7) -> int:
         """
-        Cleanup old checkpoints beyond retention limit.
+        Cleanup checkpoints older than retention period.
+        
+        ENHANCED (Task 13.4): Now supports retention-based cleanup with phase preservation.
+        
+        Args:
+            retention_days: Number of days to retain checkpoints (default: 7)
+        
+        Returns:
+            Number of checkpoints removed
+            
+        Cleanup Strategy:
+        1. Keep all checkpoints from last N days
+        2. Keep one checkpoint per phase (most recent)
+        3. Remove all others
         """
-        if not self.git_checkpoint:
-            return
+        if not hasattr(self, "_checkpoint_history"):
+            return 0
         
-        retention_limit = getattr(self, 'checkpoint_retention_limit', 10)
+        from datetime import timedelta
         
-        if len(self.git_checkpoint.checkpoints) > retention_limit:
-            # Remove oldest checkpoints
-            to_remove = len(self.git_checkpoint.checkpoints) - retention_limit
-            self.git_checkpoint.checkpoints = self.git_checkpoint.checkpoints[to_remove:]
-            self.git_checkpoint._persist_checkpoints()
+        cutoff_date = datetime.now() - timedelta(days=retention_days)
+        removed_count = 0
+        
+        # Group checkpoints by phase
+        checkpoints_by_phase = {}
+        for cp in self._checkpoint_history:
+            phase_name = cp.get("phase_name", "unknown")
+            if phase_name not in checkpoints_by_phase:
+                checkpoints_by_phase[phase_name] = []
+            checkpoints_by_phase[phase_name].append(cp)
+        
+        # Keep most recent checkpoint per phase
+        checkpoints_to_keep = set()
+        for phase_name, checkpoints in checkpoints_by_phase.items():
+            if checkpoints:
+                # Sort by timestamp, keep newest
+                newest = max(checkpoints, key=lambda cp: cp.get("timestamp", ""))
+                checkpoints_to_keep.add(newest["checkpoint_id"])
+        
+        # Remove old checkpoints
+        checkpoints_to_remove = []
+        for cp in self._checkpoint_history:
+            # Parse timestamp
+            try:
+                cp_timestamp = datetime.fromisoformat(cp.get("timestamp", ""))
+            except:
+                cp_timestamp = datetime.now()  # Keep if timestamp invalid
+            
+            # Remove if:
+            # 1. Older than retention period
+            # 2. Not the most recent for its phase
+            if cp_timestamp < cutoff_date and cp["checkpoint_id"] not in checkpoints_to_keep:
+                checkpoints_to_remove.append(cp)
+        
+        # Execute removal
+        for cp in checkpoints_to_remove:
+            # Remove from history
+            self._checkpoint_history.remove(cp)
+            
+            # Remove from memory checkpoints if applicable
+            if cp["type"] == "memory":
+                self._memory_checkpoints = [
+                    mcp for mcp in self._memory_checkpoints
+                    if mcp["checkpoint_id"] != cp["checkpoint_id"]
+                ]
+            
+            # Git checkpoints: Could delete git refs, but safer to keep
+            # (git gc will clean up unreferenced commits)
+            
+            removed_count += 1
+            logger.debug(f"Removed checkpoint: {cp['checkpoint_id']} (phase: {cp.get('phase_name')})")
+        
+        if removed_count > 0:
+            logger.info(f"✅ Cleaned up {removed_count} old checkpoints (retention: {retention_days} days)")
+        else:
+            logger.debug(f"No checkpoints to clean up (retention: {retention_days} days)")
+        
+        return removed_count
     
     def _execute_phase_with_checkpoint(self, phase_name: str, phase_config: Dict[str, Any]) -> Dict[str, Any]:
         """
