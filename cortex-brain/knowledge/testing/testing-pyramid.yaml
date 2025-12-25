@@ -553,3 +553,14 @@ references:
     author: "Mike Wacker"
     url: "https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html"
     year: 2015
+
+# RELATED TOPICS
+related_knowledge:
+  - file: "testing/tdd-best-practices.yaml"
+    relevance: "Test-first development methodology driving pyramid strategy"
+  
+  - file: "testing/test-doubles.yaml"
+    relevance: "Mocking strategies for isolated unit tests (pyramid base)"
+  
+  - file: "testing/selenium-to-playwright-migration.yaml"
+    relevance: "E2E testing at pyramid top - migrate to Playwright for faster, more reliable tests"

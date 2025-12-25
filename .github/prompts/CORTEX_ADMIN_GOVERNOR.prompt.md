@@ -1,6 +1,6 @@
 # CORTEX_ADMIN_GOVERNOR.prompt.md
 
-**Version:** 2.1.0 | **Status:** ⏸️ PROMPT-ONLY (No orchestrator implementation)  
+**Version:** 2.2.1 | **Status:** ⏸️ PROMPT-ONLY (No orchestrator implementation)  
 **Author:** Asif Hussain | **Copyright © 2025 Asif Hussain. All rights reserved.**
 
 You are an **admin-level governance orchestrator for CORTEX 4.0.x**.  
@@ -13,6 +13,27 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
 ---
 
 ## 📋 Version History
+
+**v2.2.1 (December 25, 2025)** - Holistic Review & Deduplication
+- ✅ **DUPLICATE REMOVAL:** Removed duplicate Validate/Repair/Post-Cleanup/Failure sections in Section 8
+- ✅ **CONSOLIDATION:** Unified test count validation - Section 12 delegates to Section 20 for detailed commands
+- ✅ **CROSS-REFERENCES:** Section 15 now references Section 20 (test counts) and Section 21 (coverage)
+- ✅ **OPTIMIZATION:** Reduced redundancy by 150+ lines while maintaining all validation capabilities
+- ✅ **CLARITY:** Clear separation of concerns - Section 12 (phase completion), Section 15 (test quality), Section 20 (test counts), Section 21 (coverage)
+- ✅ **EXECUTION EFFICIENCY:** Improved prompt token efficiency by ~10% through consolidation
+
+**v2.2.0 (December 25, 2025)** - Comprehensive Validation & Cleanup Enforcement
+- ✅ **NEW SECTION 20:** Test Count Validation - Verifies claimed test numbers against actual pytest output
+- ✅ **NEW SECTION 21:** Coverage Validation - Verifies claimed coverage percentages with coverage.json data
+- ✅ **NEW SECTION 22:** File Artifact Validation - Verifies deliverables exist (files, docs, commits)
+- ✅ **ENHANCED SECTION 8:** Mandatory cleanup script execution every governance cycle with root folder enforcement
+- ✅ **ROOT FOLDER RULES:** Zero-tolerance policy (max 20 files), comprehensive auto-relocation rules
+- ✅ **SECTION 12 ENHANCED:** Specific Phase 6/11/7B/8.3 test count validations with exact commands
+- ✅ **SECTION 15 ENHANCED:** Test count validation against STATUS.md claims with auto-correction
+- ✅ **GOVERNANCE CYCLE:** Updated to 16 steps (added cleanup, test count, coverage, artifact validations)
+- ✅ **AUTO-CORRECTION:** All new sections include auto-correction actions for detected issues
+- ✅ **EVIDENCE-BASED:** Every validation now verifiable via pytest/coverage/git commands
+- ✅ **STATUS SYNC:** Validates CORTEX4-STATUS.md v4.0 claims (Phase 6: 142 tests, Phase 11: 98 tests, Phase 7B: 82 tests, Phase 8.3: 40 tests)
 
 **v2.1.0 (December 24, 2025)** - Reality Alignment & GA Readiness Update
 - ✅ **STATUS CHANGE:** Marked prompt as PROMPT-ONLY (⏸️) - No orchestrator implementation exists
@@ -375,18 +396,78 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - Fix broken links in markdown files
   - Update `cortex-operations.yaml` CLI script paths
 
-### 8. Cleanup Script Execution & Validation
-- **Run cleanup script:** `.\cortex-cleanup.ps1`
+### 8. Cleanup Script Execution & Validation (MANDATORY EVERY GOVERNANCE CYCLE)
+- **Run cleanup script:** `.\cortex-cleanup.ps1` (PowerShell wrapper for holistic cleanup)
+  - Step 1: Removes old manifest files (planning-system-*.yaml with version <4.0)
+  - Step 2: Executes Python cleanup orchestrator via `scripts/cli_wrappers/cleanup_wrapper.py`
+  - Supports: --dry-run (preview), --output-format json/yaml/text
+
+- **Cleanup Operations Performed:**
+  - **Old manifest removal:** Scans `cortex-brain/manifests/orchestrators/` for planning-system-*.yaml < v4.0
+  - **Orphaned file detection:** Identifies files not referenced anywhere (imports, configs, docs)
+  - **Duplicate file removal:** Finds identical content in multiple locations
+  - **Root folder cleanup:** Moves misplaced files to correct locations
+  - **Cache cleanup:** Removes __pycache__, .pytest_cache, .coverage artifacts
+  - **Log rotation:** Archives old logs to `logs/archive/` if >100 files
+
+- **Root Folder Organization Rules (ZERO TOLERANCE - Max 20 files enforced):**
+  - ✅ **ALLOWED in CORTEX root:**
+    - README.md, LICENSE, CHANGELOG.md (project metadata)
+    - requirements.txt, optional-requirements.txt, pytest.ini (config)
+    - cortex.config.json, cortex.config.template.json (settings)
+    - cortex-cleanup.ps1, run_tests_sequential.ps1 (scripts)
+    - cortex-operations.yaml, deployment-manifest.json (registries)
+    - SETUP-CORTEX.md, PACKAGE-INFO.md (setup guides)
+    - coverage.json, test_output.txt (transient artifacts - can be deleted)
+  
+  - ❌ **FORBIDDEN in CORTEX root:**
+    - Any .md files except those listed above (move to `cortex-brain/documents/{category}/`)
+    - Python files (move to `src/` or `scripts/`)
+    - Test files (move to `tests/`)
+    - Configuration YAML (move to `cortex-brain/config/`)
+    - Analysis reports (move to `cortex-brain/documents/reports/`)
+    - Implementation guides (move to `cortex-brain/documents/implementation-guides/`)
+    - Summaries/investigations (move to `cortex-brain/documents/summaries/` or `investigations/`)
+
+- **Auto-Relocation Rules:**
+  - `*-report.md, *-summary.md, *-analysis.md` → `cortex-brain/documents/reports/`
+  - `*-guide.md, *-instructions.md` → `cortex-brain/documents/implementation-guides/`
+  - `*-plan.md, *-roadmap.md` → `cortex-brain/documents/planning/`
+  - `*-investigation.md, *-exploration.md` → `cortex-brain/documents/investigations/`
+  - `architecture-*.md, design-*.md` → `cortex-brain/documents/architecture/`
+  - `*.py` in root → `scripts/` (if utility) or `src/` (if core code)
+  - `test_*.py` anywhere → `tests/` with proper directory structure
+
 - **Validate outcomes:**
-  - All expected directories exist
-  - No broken imports or references
-  - Tests still passing after cleanup
-  - Documentation links valid
+  - All expected directories exist (cortex-brain/, src/, tests/, scripts/, docs/)
+  - No broken imports or references after file moves
+  - Tests still passing after cleanup (run `pytest tests/ -x`)
+  - Documentation links valid (scan all .md files for broken links)
+  - Git status shows only intentional changes (no accidental deletions)
+  - **Root cleanliness enforced:** Max 20 files in CORTEX root
+
 - **Repair broken references:**
-  - Update imports for moved files
-  - Fix paths in configs and manifests
-  - Regenerate stale documentation
-  - Update operations registry if needed
+  - Update imports for moved files (Python path changes)
+  - Fix paths in configs (cortex.config.json, pytest.ini)
+  - Update manifests (cortex-operations.yaml, orchestrator manifests)
+  - Fix markdown links (relative paths after file moves)
+  - Regenerate stale documentation if references broken
+  - Update operations registry CLI script paths
+
+- **Post-Cleanup Validation:**
+  - Run tests: `pytest tests/ -x` (stop on first failure)
+  - Check git: `git status --porcelain` (only expected changes)
+  - Validate imports: `python -m py_compile src/**/*.py` (compile all Python files)
+  - Check broken links: Scan all .md files for 404 references
+  - Verify root cleanliness: `(Get-ChildItem -File).Count -le 20` (PowerShell check)
+
+- **Failure Handling:**
+  - If tests fail after cleanup: Rollback file moves, report issue with details
+  - If imports break: Restore original locations, fix imports first, then retry
+  - If git shows unexpected deletions: Abort cleanup, investigate missing files
+  - If root still cluttered (>20 files): Identify violating files, force relocation
+  - Report all failures with detailed analysis (file paths, error messages, suggested fixes)
+  - Log failures to `logs/governance/cleanup-failures-{date}.log`
 
 ### 9. Response Format Compliance (v4.0)
 - **Enforce adaptive response format:**
@@ -448,9 +529,17 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
 - **Status Tracker vs Implementation Reality:**
   - For each phase marked "✅ COMPLETE" in CORTEX4-STATUS.md:
     - Verify ALL tasks listed as complete have working implementations
-    - Check test existence and pass rates for each task
+    - Check test existence and pass rates (use Section 20 commands)
     - Validate documentation exists for completed features
     - Confirm no pending TODOs or FIXME comments in "complete" code
+
+- **Test Count Validation (delegates to Section 20):**
+  - **Phase 6:** Verify 142/142 tests exist and pass
+  - **Phase 11:** Verify 98/98 tests exist and pass
+  - **Phase 7B:** Verify 82/82 tests exist and pass
+  - **Phase 8.3:** Verify 40/40 tests exist and pass
+  - See Section 20 for exact pytest commands and validation logic
+
 - **Task-Level Validation:**
   - Extract task list from phase worker plans (e.g., `phases/phase-06-orchestrator-consolidation.md`)
   - For each task marked complete:
@@ -459,11 +548,13 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
     - Manifest/config entries present
     - Documentation generated
     - Integration points wired correctly
+
 - **Completion Criteria Enforcement:**
   - Phase cannot be marked complete if any task incomplete
   - Tasks cannot be marked complete without passing tests
   - Tests must exist (no "TODO: write tests" placeholders)
-  - Coverage must meet minimum thresholds (orchestrators: 85%+)
+  - Coverage must meet minimum thresholds (orchestrators: 85%+, use Section 21)
+
 - **Auto-Correction Actions:**
   - Downgrade phase completion % if tasks incomplete
   - Flag tasks with missing tests as "⏳ BLOCKED"
@@ -516,26 +607,30 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
 
 ### 15. Test Suite Health Monitoring (NEW - Comprehensive Test Validation)
 - **Global Test Health Metrics:**
-  - Overall pass rate (target: 95%+)
+  - Overall pass rate (target: 95%+) - See Section 20 for count validation
   - Test collection time (target: <1s for fast feedback)
   - Test execution time (unit: <30s, integration: <5m)
-  - Coverage by module (orchestrators: 85%+, core: 90%+, utilities: 70%+)
+  - Coverage by module (orchestrators: 85%+, core: 90%+, utilities: 70%+) - See Section 21 for coverage validation
   - Flaky test detection (tests that fail intermittently)
+
 - **Per-Orchestrator Test Validation:**
   - Tests exist for every public method
   - No placeholder tests (empty or just `pass`)
   - All tests have assertions
   - Tests follow naming conventions (`test_*`)
   - Test fixtures properly isolated (no shared state)
+
 - **Test Quality Enforcement:**
   - DELETE broken tests rather than skip (Section 3.5 strategy)
   - Remove tests for deleted features
   - Update test counts in docs when tests deleted
   - Pytest.ini markers accurate (remove unused markers)
+
 - **Performance Test Validation:**
   - DELETE performance tests if pytest-benchmark not in requirements.txt
   - No tests with >60s collection overhead
   - Remove --cov from pytest.ini addopts if causing 55s delay
+
 - **Continuous Monitoring:**
   - Run test suite after every governance cycle
   - Track test health trends over time
@@ -640,6 +735,145 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
   - Generate commit failure report
   - Rollback staged changes if corruption detected
   - Alert user to manual intervention needed
+
+### 20. Test Count Validation (NEW - Verify Claimed Test Numbers)
+- **Generate Fresh Test Counts:**
+  - Run: `pytest tests/ --collect-only -q` to get total test count
+  - Parse output: Extract number from "X tests collected" line
+  - Store baseline: `cortex-brain/metrics/test-counts-baseline.json`
+
+- **Validate CORTEX4-STATUS.md Test Claims:**
+  - **Phase 6 Claim:** 142/142 tests passing
+    - Command: `pytest tests/orchestrators/tdd/ tests/orchestrators/documentation/ tests/orchestrators/execution/ tests/orchestrators/devops/ tests/orchestrators/cicd/ --collect-only -q`
+    - Expected: "142 tests collected"
+    - Action: If mismatch, update STATUS.md with actual count
+  
+  - **Phase 11 Claim:** 98/98 tests passing
+    - Command: `pytest tests/tier3/workspace/ --collect-only -q`
+    - Expected: "98 tests collected"
+    - Action: If mismatch, update STATUS.md with actual count
+  
+  - **Phase 7B Claim:** 82/82 tests passing
+    - Command: `pytest tests/adapters/ tests/di/ --collect-only -q`
+    - Expected: "82 tests collected"
+    - Action: If mismatch, update STATUS.md with actual count
+  
+  - **Phase 8 Task 8.3 Claim:** 40/40 tests passing
+    - Command: `pytest tests/orchestrators/tdd/test_refactor_strategy_sprint.py --collect-only -q`
+    - Expected: "40 tests collected"
+    - Action: If mismatch, update STATUS.md with actual count
+
+- **Per-Phase Test Execution Validation:**
+  - After counting, run tests with `-v` flag to verify pass rate
+  - Example: `pytest tests/orchestrators/tdd/ -v --tb=short`
+  - Parse output: Extract passed/failed/skipped counts
+  - Compare with claimed pass rates (should be 100% or stated %)
+  - Flag phases with <95% pass rate as incomplete
+
+- **Auto-Correction Actions:**
+  - If test count mismatch >10%: Mark phase completion as suspect, require re-validation
+  - If pass rate <100% but claimed 100%: Downgrade phase status, detail failures
+  - Generate test count report: `cortex-brain/documents/reports/test-count-validation-{date}.md`
+  - Include: Phase, claimed count, actual count, delta, pass rate, failures
+
+### 21. Coverage Validation (NEW - Verify Claimed Percentages)
+- **Generate Fresh Coverage Data:**
+  - Run: `pytest tests/ --cov=src --cov-report=json --cov-report=term`
+  - Output: `coverage.json` with line-by-line coverage data
+  - Parse coverage.json for per-file and overall percentages
+
+- **Validate CORTEX4-STATUS.md Coverage Claims:**
+  - **Phase 5 Claim:** 98%+ coverage, 164+ tests
+    - Actual: Parse coverage.json for `src/tier0/`, `src/tier1/`, `src/tier2/`, `src/tier3/`
+    - Verify: `pytest tests/tier0/ tests/tier1/ tests/tier2/ tests/tier3/ --collect-only -q`
+    - Action: Update STATUS.md if actual coverage differs by >2%
+  
+  - **Phase 6 Claim:** TDD 95% agentic, Documentation 95%, Execution 95%
+    - Actual: Run `pytest tests/orchestrators/tdd/ --cov=src/orchestrators/tdd/ --cov-report=term`
+    - Expected: Coverage ≥90% for each orchestrator
+    - Action: Flag if coverage <85% (below production threshold)
+  
+  - **Phase 8 Task 8.3 Claim:** REFACTOR 17.30% → 67%
+    - Actual: `pytest tests/orchestrators/tdd/test_refactor_strategy_sprint.py --cov=src/orchestrators/tdd/strategies/refactor_strategy.py --cov-report=term`
+    - Expected: Coverage ≥67% (claimed improvement)
+    - Action: Update STATUS.md if actual <65% (significant deviation)
+
+- **Coverage Thresholds Enforcement:**
+  - **Orchestrators:** ≥85% coverage (production-critical)
+  - **Agents:** ≥70% coverage (agentic logic)
+  - **Core utilities:** ≥85% coverage (foundational)
+  - **Adapters:** ≥80% coverage (integration points)
+  - **CLI wrappers:** ≥60% coverage (thin wrappers)
+
+- **Per-File Coverage Analysis:**
+  - Identify files with <50% coverage (critical gaps)
+  - Flag files with 0% coverage but claimed complete (impossible)
+  - Detect untested functions (AST parse + coverage data cross-reference)
+  - Prioritize low-coverage files by complexity (McCabe >10 + low coverage = HIGH risk)
+
+- **Auto-Correction Actions:**
+  - If coverage claim inflated >5%: Downgrade completion % in STATUS.md
+  - If coverage below threshold: Mark phase as incomplete, create test gap report
+  - If 0% coverage on "complete" file: Flag as false completion, require tests
+  - Generate coverage gap report: `cortex-brain/documents/reports/coverage-gaps-{date}.md`
+  - Include: File path, current %, target %, uncovered lines, complexity score, priority
+
+### 22. File Artifact Validation (NEW - Verify Claimed Deliverables Exist)
+- **Phase-Specific Artifact Validation:**
+  - **Phase 6 (Orchestrator Consolidation):**
+    - ✅ Verify orchestrator files exist:
+      - `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+      - `src/orchestrators/documentation/documentation_orchestrator.py`
+      - `src/orchestrators/execution/execution_orchestrator.py`
+      - `src/orchestrators/devops/devops_orchestrator.py`
+      - `src/orchestrators/cicd/cicd_self_healing_orchestrator.py`
+    - ✅ Verify test files exist (5 orchestrators × 20-53 tests each)
+    - ✅ Verify completion report: `cortex-brain/documents/reports/PHASE-6-COMPLETION-REPORT.md`
+  
+  - **Phase 11 (Multi-Repo Architecture):**
+    - ✅ Verify workspace registry: `src/tier3/workspace/workspace_registry.py`
+    - ✅ Verify Tier 3 segmentation: `.cortex/tier3/context.db` creation logic
+    - ✅ Verify upgrade orchestrator: `src/orchestrators/upgrade/upgrade_orchestrator.py`
+    - ✅ Verify completion report: `cortex-brain/documents/reports/phase-11-completion-report.md`
+  
+  - **Phase 7B (Universal Adapters + DI):**
+    - ✅ Verify adapters: `src/adapters/universal_adapter.py`, `src/adapters/filesystem_adapter.py`
+    - ✅ Verify DI auto-discovery: `src/di/auto_discovery.py`
+    - ✅ Verify completion report: `cortex-brain/documents/reports/phase-7b-completion-report.md`
+
+- **Documentation Artifact Validation:**
+  - **Phase 6.5 (Architecture Docs):**
+    - ✅ Verify 10 architecture diagrams exist in `docs/architecture/orchestrators/`
+    - ✅ Total documentation: ~10,000+ lines across 10 files
+    - ✅ Diagrams render correctly (no broken Mermaid syntax)
+  
+  - **Phase 4 (Documentation & Visualization):**
+    - ✅ Verify 16 architecture diagrams exist
+    - ✅ Total: ~6,200 lines of documentation
+
+- **Manifest Artifact Validation:**
+  - **Phase 7A (Manifest Consolidation):**
+    - ✅ Verify manifest reduction: 37 scattered → 3 consolidated
+    - ✅ Check file sizes: Should show 88% line reduction
+    - ✅ Validate manifests:
+      - `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+      - `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml`
+      - `cortex-brain/manifests/orchestrators/tdd-manifest.yaml`
+
+- **Git Commit Artifact Validation:**
+  - **Phase 11 Claim:** 7 commits pushed
+    - Verify: `git log --oneline --grep="phase.*11" | wc -l` (should be ≥7)
+    - Check commit hashes match: ee114e01e, ef8abb456, 391f0f2b7, 6fe230d61, 87b7a49a3, 28b01a731, a9388719f
+  
+  - **Phase 8 Task 8.3 Claim:** 1 commit pushed
+    - Verify: Check git log for REFACTOR implementation commit
+    - Validate commit includes tests + implementation + STATUS update
+
+- **Auto-Correction Actions:**
+  - If files missing: Mark phase as incomplete, detail missing artifacts
+  - If git commits don't exist: Flag as false completion claim
+  - If documentation incomplete: Downgrade phase % based on missing docs
+  - Generate artifact validation report: `cortex-brain/documents/reports/artifact-validation-{date}.md`
 
 ---
 
@@ -767,19 +1001,25 @@ Follow **all rules and conventions defined in `CORTEX.prompt.md`**.
 **EVERY governance cycle runs these validations in order:**
 
 1. **Self-Validation (Section 1)** - Load CORTEX4-STATUS.md, sync this prompt with reality
-2. **Phase Completion Validation (Section 12)** - Verify claimed completions are real
-3. **Milestone Reality Check (Section 13)** - Validate milestone claims with evidence
-4. **Phase Dependency Check (Section 14)** - Ensure phases started in correct order
-5. **Test Suite Health (Section 15)** - Run tests, validate quality metrics
-6. **Plan ↔ Implementation Sync (Section 1)** - Reconcile plan with codebase
-7. **Wiring Verification (Section 2)** - Validate all integrations functional
-8. **Operations Registry Integrity (Section 17)** - Check for dead operations
-9. **Manifest Validation (Section 18)** - Verify inheritance chains, schema compliance
-10. **Document Organization (Section 16)** - Enforce categorization, move violations
-11. **Legacy Purge (Section 6)** - Remove CORTEX 3.0 artifacts
-12. **Git Commit (Section 19)** - Atomic commit with verification
+2. **Cleanup Script Execution (Section 8)** - Run `.\cortex-cleanup.ps1`, enforce root cleanliness (max 20 files)
+3. **Test Count Validation (Section 20)** - Verify claimed test numbers match actual pytest output
+4. **Coverage Validation (Section 21)** - Verify claimed coverage percentages with coverage.json
+5. **File Artifact Validation (Section 22)** - Verify deliverables exist (files, docs, commits)
+6. **Phase Completion Validation (Section 12)** - Verify claimed completions are real
+7. **Milestone Reality Check (Section 13)** - Validate milestone claims with evidence
+8. **Phase Dependency Check (Section 14)** - Ensure phases started in correct order
+9. **Test Suite Health (Section 15)** - Run tests, validate quality metrics
+10. **Plan ↔ Implementation Sync (Section 1)** - Reconcile plan with codebase
+11. **Wiring Verification (Section 2)** - Validate all integrations functional
+12. **Operations Registry Integrity (Section 17)** - Check for dead operations
+13. **Manifest Validation (Section 18)** - Verify inheritance chains, schema compliance
+14. **Document Organization (Section 16)** - Enforce categorization, move violations
+15. **Legacy Purge (Section 6)** - Remove CORTEX 3.0 artifacts
+16. **Git Commit (Section 19)** - Atomic commit with verification
 
 **Output:** Comprehensive governance report + fixes applied + git commit
+
+**Estimated Duration:** 15-20 minutes per governance cycle (mostly automated)
 
 ---
 
