@@ -157,21 +157,6 @@
     "track_file_changes": true,
     "track_commits": true
   },
-  "vision_api": {
-    "enabled": true,
-    "auto_detect_images": true,
-    "auto_analyze_on_detect": true,
-    "auto_inject_context": true,
-    "max_images_per_request": 5,
-    "supported_formats": ["png", "jpg", "jpeg", "webp", "gif", "bmp"],
-    "max_tokens_per_image": 500,
-    "warn_threshold_tokens": 400,
-    "max_image_size_bytes": 2000000,
-    "downscale_threshold": 1920,
-    "jpeg_quality": 85,
-    "cache_analysis_results": true,
-    "cache_ttl_hours": 24
-  },
   "story_refresh": {
     "enabled": true,
     "target_read_time_min": 25,
@@ -207,6 +192,36 @@
       "quality": "hd",
       "output_dir": "cortex-brain/documents/images/features-dec-2025"
     }
+  },
+  "llm_intent_routing": {
+    "comment": "LLM-based intent classification with caching and fallback (CORTEX 4.0)",
+    "enabled": false,
+    "provider": "openai",
+    "model": "gpt-3.5-turbo",
+    "max_tokens": 500,
+    "temperature": 0.3,
+    "cache_enabled": true,
+    "fallback_to_regex": true,
+    "fast_path_threshold": 0.8,
+    "tier2_similarity_threshold": 0.85,
+    "max_latency_ms": 500,
+    "api_key_env": "OPENAI_API_KEY",
+    "anthropic": {
+      "model": "claude-3-haiku",
+      "api_key_env": "ANTHROPIC_API_KEY"
+    }
+  },
+  "vision_api": {
+    "comment": "Vision API for screenshot and image analysis",
+    "enabled": false,
+    "provider": "openai",
+    "model": "gpt-4-vision-preview",
+    "auto_detect_images": true,
+    "auto_analyze_on_detect": true,
+    "auto_engage_on_image": true,
+    "max_engagement_time_ms": 500,
+    "api_key_env": "OPENAI_API_KEY",
+    "config_file": "cortex-brain/config/vision_api_config.yaml"
   },
   "plugins": {
     "cleanup_plugin": {
