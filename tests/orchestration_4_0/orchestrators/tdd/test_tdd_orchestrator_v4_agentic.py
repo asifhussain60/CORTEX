@@ -17,7 +17,7 @@ from typing import Dict, Any, List
 from datetime import datetime
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
-from src.orchestrators.tdd.tdd_orchestrator_migrated import (
+from src.orchestrators.tdd.tdd_orchestrator_v4_migrated import (
     TDDOrchestrator,
     TDDPhase,
     TechnologyProfile,

@@ -20,7 +20,7 @@ from src.orchestration_4_0.orchestrators.documentation.documentation_orchestrato
     DocumentationOrchestrator,
     DocumentationConfig
 )
-from src.orchestrators.tdd.tdd_orchestrator_migrated import TDDOrchestrator, TDDPhase
+from src.orchestrators.tdd.tdd_orchestrator_v4_migrated import TDDOrchestrator, TDDPhase
 
 logger = logging.getLogger(__name__)
 
