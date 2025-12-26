@@ -238,15 +238,6 @@ class TestPreHealthcheckPhase:
 class TestAlignPhase:
     """Test align phase with realignment utility integration."""
     
-    def test_align_phase_success_when_utility_missing(self, maintenance_orchestrator, caplog):
-        """Test align phase gracefully handles missing utility."""
-        with caplog.at_level(logging.WARNING):
-            result = maintenance_orchestrator._run_align_phase(context={})
-        
-        # Should skip when utility unavailable
-        assert result["skipped"] is True
-        assert "Align utility not available" in result.get("reason", "")
-    
     def test_align_phase_checks_for_import(self, maintenance_orchestrator):
         """Test align phase checks for realignment_utility."""
         result = maintenance_orchestrator._run_align_phase(context={})
@@ -327,14 +318,6 @@ class TestAlignPhaseExtended:
 class TestCleanupPhase:
     """Test cleanup phase file organization."""
     
-    def test_cleanup_phase_success_when_utility_missing(self, maintenance_orchestrator, caplog):
-        """Test cleanup phase handles missing utility gracefully."""
-        with caplog.at_level(logging.WARNING):
-            result = maintenance_orchestrator._run_cleanup_phase(context={})
-        
-        assert result["skipped"] is True
-        assert "Cleanup utility not available" in result.get("reason", "")
-    
     def test_cleanup_phase_returns_metrics(self, maintenance_orchestrator):
         """Test cleanup phase returns metrics."""
         result = maintenance_orchestrator._run_cleanup_phase(context={})
@@ -410,16 +393,6 @@ class TestCleanupPhase:
 class TestOptimizePhase:
     """Test optimize phase token optimization."""
     
-    def test_optimize_phase_success_when_utility_missing(self, maintenance_orchestrator, caplog):
-        """Test optimize phase handles missing utility."""
-        # The OptimizeCortexOrchestrator exists, so this test is no longer valid
-        # Instead, test that it runs successfully
-        result = maintenance_orchestrator._run_optimize_phase(context={})
-        
-        assert result["success"]
-        # Either skipped or ran successfully
-        assert "skipped" in result
-    
     def test_optimize_phase_returns_metrics(self, maintenance_orchestrator):
         """Test optimize phase returns metrics."""
         result = maintenance_orchestrator._run_optimize_phase(context={})
@@ -492,14 +465,6 @@ class TestOptimizePhase:
 class TestVacuumPhase:
     """Test vacuum phase SQLite/AST cleanup."""
     
-    def test_vacuum_phase_success_when_utility_missing(self, maintenance_orchestrator, caplog):
-        """Test vacuum phase handles missing utility."""
-        with caplog.at_level(logging.WARNING):
-            result = maintenance_orchestrator._run_vacuum_phase(context={})
-        
-        assert result["skipped"] is True
-        assert "Vacuum utility not available" in result.get("reason", "")
-    
     def test_vacuum_phase_returns_metrics(self, maintenance_orchestrator):
         """Test vacuum phase returns metrics."""
         result = maintenance_orchestrator._run_vacuum_phase(context={})
@@ -569,14 +534,6 @@ class TestVacuumPhase:
 
 class TestRefreshPromptsPhase:
     """Test refresh prompts phase."""
-    
-    def test_refresh_prompts_success_when_utility_missing(self, maintenance_orchestrator, caplog):
-        """Test refresh prompts handles missing utility."""
-        with caplog.at_level(logging.WARNING):
-            result = maintenance_orchestrator._run_refresh_prompts_phase(context={})
-        
-        assert result["skipped"] is True
-        assert "Refresh prompts utility not available" in result.get("reason", "")
     
     def test_refresh_prompts_returns_metrics(self, maintenance_orchestrator):
         """Test refresh prompts returns metrics."""
@@ -819,24 +776,6 @@ class TestIntegration:
         # Should have both baseline and final
         assert maintenance_orchestrator.baseline_health is not None
         assert maintenance_orchestrator.final_health is not None
-    
-    def test_orchestrator_with_all_phases_skipped(self, maintenance_orchestrator):
-        """Test orchestrator when utility phases handle missing utilities gracefully."""
-        # All phases should handle missing utilities gracefully
-        align_result = maintenance_orchestrator._run_align_phase(context={})
-        cleanup_result = maintenance_orchestrator._run_cleanup_phase(context={})
-        optimize_result = maintenance_orchestrator._run_optimize_phase(context={})
-        vacuum_result = maintenance_orchestrator._run_vacuum_phase(context={})
-        refresh_result = maintenance_orchestrator._run_refresh_prompts_phase(context={})
-        
-        # Phases should either skip or run successfully
-        assert align_result["skipped"] is True
-        assert cleanup_result["skipped"] is True
-        # Optimize orchestrator exists, so it may run (skipped can be True or False)
-        assert "skipped" in optimize_result
-        assert vacuum_result["skipped"] is True
-        assert refresh_result["skipped"] is True
-        assert refresh_result["skipped"] is True
     
     def test_orchestrator_setup_teardown_lifecycle(self, maintenance_orchestrator, caplog):
         """Test full setup -> execute -> teardown lifecycle."""

@@ -74,7 +74,8 @@ class TestManualRegistration:
         
         # Create mock orchestrator class
         class MockOrchestrator(BaseOrchestrator):
-            pass
+            def execute(self, context=None):
+                return {"success": True}
         
         registry.register("mock", MockOrchestrator)
         
@@ -208,7 +209,8 @@ from src.core.orchestrator_registry import orchestrator_plugin
 
 @orchestrator_plugin("custom_name", version="2.0.0")
 class DecoratedOrchestrator(BaseOrchestrator):
-    pass
+    def execute(self, context=None):
+        return {"success": True}
 """)
             
             registry.discover([Path(tmpdir)])

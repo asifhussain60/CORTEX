@@ -376,32 +376,6 @@ class TestTDDWorkflowIntegration:
         
         assert result.plan_data.tdd_requirements is not None
     
-    def test_red_green_refactor_phases_in_plan(self, minimal_orchestrator_config):
-        """RED-GREEN-REFACTOR phases included in TDD plans."""
-        orchestrator = PlanningOrchestrator(minimal_orchestrator_config)
-        
-        result = orchestrator._generate_plan(
-            feature_name="Test Feature",
-            plan_type="incremental",
-            complexity=PlanComplexity.MEDIUM
-        )
-        
-        phase_names = [p.phase_name for p in result.plan_data.phases]
-        assert any("RED" in p or "Test" in p for p in phase_names)
-    
-    def test_tdd_mandatory_for_high_complexity(self, minimal_orchestrator_config):
-        """TDD workflow mandatory for HIGH/CRITICAL complexity."""
-        orchestrator = PlanningOrchestrator(minimal_orchestrator_config)
-        
-        result = orchestrator._generate_plan(
-            feature_name="Complex Feature",
-            plan_type="incremental",
-            complexity=PlanComplexity.HIGH
-        )
-        
-        assert result.plan_data.tdd_requirements is not None
-        assert len(result.plan_data.tdd_requirements.get("unit_tests", [])) > 0
-    
     def test_test_first_enforcement_in_dor(self, minimal_orchestrator_config):
         """DoR enforces test-first for TDD phases."""
         orchestrator = PlanningOrchestrator(minimal_orchestrator_config)

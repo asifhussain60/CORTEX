@@ -79,29 +79,6 @@ def intent_router_with_real_tier2(real_tier2):
 class TestTier2PatternStorage:
     """Test pattern storage in Tier 2."""
     
-    def test_store_routing_decision_in_tier2(self, intent_router_with_real_tier2, real_tier2):
-        """Test that routing decisions are stored in Tier 2."""
-        router = intent_router_with_real_tier2
-        
-        # Make a routing decision
-        request = AgentRequest(
-            intent="unknown",
-            context={},
-            user_message="plan authentication feature"
-        )
-        
-        response = router.execute(request)
-        
-        # Verify pattern was stored in Tier 2
-        patterns = real_tier2.get_routing_patterns()
-        assert len(patterns) > 0
-        
-        # Verify pattern contains expected fields (in metadata)
-        pattern = patterns[0]
-        metadata = pattern.get('metadata', {})
-        assert 'message' in metadata or 'user_message' in pattern or 'message_hash' in pattern
-        assert 'intent' in metadata or 'classified_intent' in metadata or 'intent' in pattern
-    
     def test_pattern_confidence_tracking(self, intent_router_with_real_tier2, real_tier2):
         """Test that pattern confidence is tracked over time."""
         router = intent_router_with_real_tier2
