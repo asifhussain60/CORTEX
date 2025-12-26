@@ -1,13 +1,13 @@
 # ADO Planning Orchestrator Manifest
-# Integrates with Planning System 3.0 for ADO work item generation
+# Integrates with Planning System for ADO work item generation
 #
 # Version: 3.0.0
 # Author: CORTEX Development Team
 # Updated: 2025-12-15
-# Status: ACTIVE - Phase 6: Planning System 3.0 Integration Complete
+# Status: ACTIVE - Phase 6: Planning System Integration Complete
 
 schema_version: "1.0"
-inherits_from: "planning-system-2.0-manifest.yaml"
+inherits_from: "planning-system-manifest.yaml"
 
 # ========================================
 # Metadata
@@ -16,18 +16,18 @@ inherits_from: "planning-system-2.0-manifest.yaml"
 metadata:
   orchestrator_name: "ado_planning_orchestrator"
   version: "3.0.0"
-  description: "ADO work item generation integrated with Planning System 3.0 architecture"
+  description: "ADO work item generation integrated with Planning System architecture"
   category: "planning"
   deployment_tier: "user"
   status: "active"
   last_updated: "2025-12-15"
   maintainer: "CORTEX Planning Team"
   related_orchestrators:
-    - "planning_orchestrator"  # Now uses Planning System 3.0
+    - "planning_orchestrator"  # Now uses Planning System
     - "ado_agent"
   documentation_path: ".github/prompts/modules/ado-planning-guide.md"
   integration_status: |
-    Phase 6 Complete: Full Planning System 3.0 integration with:
+    Phase 6 Complete: Full Planning System integration with:
     - PlanningSession model for state management
     - Tiered routing (Tier 1-4 classification)
     - Historical context integration (anti-patterns, success patterns)
@@ -40,11 +40,11 @@ metadata:
 # ========================================
 
 requirements:
-  # ===== Inherited from Planning System 2.0 =====
+  # ===== Inherited from Planning System =====
   
   - requirement_id: "REQ-001"
     name: "Acceptance Criteria Approval Gate"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     priority: "critical"
     status: "missing"
     validation_method: "method_exists"
@@ -53,7 +53,7 @@ requirements:
     
   - requirement_id: "REQ-002"
     name: "Interactive DoR Workflow"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     priority: "critical"
     status: "missing"
     validation_method: "method_exists"
@@ -61,7 +61,7 @@ requirements:
     
   - requirement_id: "REQ-003"
     name: "Contextual Review Orchestrator Integration"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     priority: "critical"
     status: "implemented"
     validation_method: "integration_test"
@@ -75,7 +75,7 @@ requirements:
     
   - requirement_id: "REQ-004"
     name: "SWAG Estimation via Swagger"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     priority: "high"
     status: "missing"
     validation_method: "method_exists"
@@ -84,28 +84,28 @@ requirements:
     
   - requirement_id: "REQ-005"
     name: "Visual Progress Rendering"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     priority: "high"
     status: "missing"
     ado_specific_note: "Show ADO work item creation progress"
     
   - requirement_id: "REQ-006"
     name: "Learning Library Auto-Documentation"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     priority: "high"
     status: "missing"
     ado_specific_note: "Document ADO planning strategies"
     
   - requirement_id: "REQ-007"
     name: "Interactive Threat Modeling"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     priority: "medium"
     status: "missing"
     ado_specific_note: "Threats added as ADO work items (type: Risk)"
     
   - requirement_id: "REQ-008"
     name: "TDD Reminders Visibility"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     priority: "medium"
     status: "missing"
     ado_specific_note: "TDD requirements in ADO acceptance criteria"
@@ -182,7 +182,7 @@ integrations:
   
   - integration_id: "INT-001"
     target_component: "review_orchestrator"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     integration_type: "required"
     trigger_condition: "before_ado_planning_starts"
     ado_specific: |
@@ -194,12 +194,12 @@ integrations:
     status: "implemented"
     enhancement_date: "2025-12-09"
     implementation_notes: |
-      Inherits all contextual review capabilities from Planning System 2.0.
+      Inherits all contextual review capabilities from Planning System.
       ADO-specific mapping ensures findings become actionable work items.
     
   - integration_id: "INT-002"
     target_component: "threat_modeler_agent"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     integration_type: "conditional"
     trigger_condition: "feature_matches_security_keywords"
     ado_specific: "Each threat becomes ADO work item (type: Risk)"
@@ -207,7 +207,7 @@ integrations:
     
   - integration_id: "INT-003"
     target_component: "git_checkpoint_orchestrator"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     integration_type: "required"
     trigger_condition: "after_ado_items_created"
     ado_specific: "Checkpoint after successful ADO API calls"
@@ -232,10 +232,10 @@ integrations:
     status: "partial"
     
   - integration_id: "INT-ADO-003"
-    target_component: "planning_system_2.0"
+    target_component: "planning_system"
     integration_type: "required"
     trigger_condition: "always"
-    expected_behavior: "Share DoR/DoD, phases, TDD requirements with Planning System 2.0"
+    expected_behavior: "Share DoR/DoD, phases, TDD requirements with Planning System"
     validation_method: "integration_test"
     status: "partial"
     notes: "Parity requirement - must use same planning logic"
@@ -249,14 +249,14 @@ quality_gates:
   
   - gate_id: "GATE-001"
     name: "Skeleton Approval"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     gate_type: "approval"
     blocking: true
     status: "missing"
     
   - gate_id: "GATE-005"
     name: "Acceptance Criteria Approval"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     gate_type: "approval"
     trigger_point: "before_ado_item_creation"
     blocking: true
@@ -265,7 +265,7 @@ quality_gates:
     
   - gate_id: "GATE-006"
     name: "DoR Completeness Validation"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     gate_type: "validation"
     blocking: true
     status: "missing"
@@ -425,18 +425,18 @@ response_templates:
 
 compliance_rules:
   - rule_id: "PARITY_WITH_PLANNING_2.0"
-    source: "planning-system-2.0-manifest.yaml"
+    source: "planning-system-manifest.yaml"
     enforcement_level: "mandatory"
     validation_method: "feature_comparison"
-    description: "Must implement all Planning System 2.0 features for ADO context"
+    description: "Must implement all Planning System features for ADO context"
     
   - rule_id: "TDD_ENFORCEMENT"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     enforcement_level: "mandatory"
     validation_method: "TDD requirements in ADO acceptance criteria"
     
   - rule_id: "DOCUMENT_ORGANIZATION"
-    inherited_from: "planning-system-2.0"
+    inherited_from: "planning-system"
     enforcement_level: "mandatory"
     validation_method: "ADO planning docs organized correctly"
 
@@ -445,7 +445,7 @@ compliance_rules:
 # ========================================
 
 parity_checklist:
-  description: "Features that MUST match Planning System 2.0"
+  description: "Features that MUST match Planning System"
   items:
     - feature: "Interactive DoR Workflow"
       planning_status: "missing"

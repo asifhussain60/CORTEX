@@ -153,7 +153,7 @@ Successfully completed P2 (MEDIUM) and P3 (LOW) priority stub/mock remediation i
 **Tracked Stubs (8 total):**
 
 #### GitHub Pages (5 stubs)
-1. `docs/generated/planning-system.html` - Planning System 2.0 documentation
+1. `docs/generated/planning-system.html` - Planning System documentation
 2. `docs/generated/dashboard-system.html` - Dashboard system documentation
 3. `docs/generated/ado-operations.html` - ADO operations documentation
 4. `docs/generated/architecture/index.html` - Architecture overview
@@ -178,7 +178,7 @@ grep -l "Under Construction\|Coming Soon" docs/
 - Structure templates provided
 - Writing guidelines included
 - Prioritization matrix:
-  * **High:** Planning System 2.0 (core workflow)
+  * **High:** Planning System (core workflow)
   * **Medium:** Dashboard, ADO Operations (operational features)
   * **Low:** Architecture, Future Vision (reference material)
 

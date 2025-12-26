@@ -278,7 +278,7 @@ pytest tests/orchestrators/test_cross_machine_context_orchestrator.py -v
 
 ## 🔍 Next Steps
 
-1. **Integrate with Planning System 2.0** - Use context for cross-platform plan execution
+1. **Integrate with Planning System** - Use context for cross-platform plan execution
 2. **Environment Diagnostics** - Feature 1 will leverage runtime detection
 3. **TDD Environment Gates** - Feature 6 will use environment validation
 4. **Dashboard Integration** - Show current machine context in admin dashboard

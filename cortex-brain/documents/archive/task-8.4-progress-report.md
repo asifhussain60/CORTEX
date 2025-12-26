@@ -181,7 +181,7 @@ test_low_complexity_routes_to_skeleton PASSED [100%]
 ---
 
 ### Phase 4: Maintenance v3 Extensions (40 tests)
-**File:** `tests/orchestrators/maintenance/test_maintenance_orchestrator_v3_extended.py`
+**File:** `tests/orchestrators/maintenance/test_maintenance_orchestrator_extended.py`
 
 **Current:** 102 tests exist  
 **Add:** 40 tests for advanced scenarios
@@ -287,7 +287,7 @@ test_low_complexity_routes_to_skeleton PASSED [100%]
 1. ✅ **60 GREEN tests created** - All pass immediately
 2. ✅ **Helper method framework** - Stub-based testing infrastructure
 3. ✅ **Comprehensive coverage** - 7 distinct test groups
-4. ✅ **Manifest integration** - Planning System 2.0/3.0 validation
+4. ✅ **Manifest integration** - Planning System/3.0 validation
 5. ✅ **Phase 10 support** - YAML modularization testing
 6. ✅ **TDD enforcement** - RED-GREEN-REFACTOR validation
 7. ✅ **Session management** - State restoration testing
@@ -321,7 +321,7 @@ test_low_complexity_routes_to_skeleton PASSED [100%]
 ### Current:
 1. Helper methods are stubs (require actual implementation in orchestrator)
 2. Some tests mock complex interactions (may need refinement)
-3. Integration with actual Planning System 2.0 pending
+3. Integration with actual Planning System pending
 4. Manifest file location assumptions (may differ in deployment)
 
 ### Future Considerations:

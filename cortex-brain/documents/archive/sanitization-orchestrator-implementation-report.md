@@ -191,7 +191,7 @@ The Sanitization Orchestrator successfully implements a **5-phase workflow** for
 | **GIT_ISOLATION_ENFORCEMENT** | ✅ Pass | All code in `src/orchestrators/sanitization/` |
 | **TEST_LOCATION_SEPARATION** | ✅ Pass | Tests in `src/orchestrators/sanitization/tests/` |
 
-### Planning System 2.0 Integration
+### Planning System Integration
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
@@ -460,7 +460,7 @@ Results:
 - [Implementation Guide](../implementation-guides/code-sanitization-orchestrator.md)
 - [Code Sanitization Quick Reference](../../CODE-SANITIZATION-QUICK-REF.md)
 - [Manifest](../../manifests/orchestrators/code-sanitization-manifest.yaml)
-- [Planning System 2.0 Manifest](../../manifests/planning-system-2.0-manifest.yaml)
+- [Planning System Manifest](../../manifests/planning-system-manifest.yaml)
 
 ---
 

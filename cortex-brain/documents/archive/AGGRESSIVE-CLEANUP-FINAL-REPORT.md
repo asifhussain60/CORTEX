@@ -62,7 +62,7 @@ The following critical resources were **NEVER** archived:
 - ✅ `admin/` - Administrative operations
 - ✅ `config/` - Configuration files
 - ✅ `documents/` - Active documentation
-- ✅ `manifests/orchestrators/` - Planning System 2.0 manifests
+- ✅ `manifests/orchestrators/` - Planning System manifests
 - ✅ `response-templates/` - Response template system
 
 ### Active Operations
@@ -102,8 +102,8 @@ Created `aggressive-cleanup-rules.yaml` with the following features:
 
 ### No Conflicts With Core Systems
 
-#### Planning System 2.0 ✅
-- `manifests/orchestrators/planning-system-2.0-manifest.yaml` - **PROTECTED**
+#### Planning System ✅
+- `manifests/orchestrators/planning-system-manifest.yaml` - **PROTECTED**
 - `documents/planning/` - **PROTECTED**
 - `src/orchestrators/planning_orchestrator.py` - **PROTECTED**
 
@@ -218,7 +218,7 @@ git checkout HEAD~1 -- .
 
 ## ✅ Verification Checklist
 
-- [x] Planning System 2.0 intact
+- [x] Planning System intact
 - [x] TDD workflow functional
 - [x] System maintenance operational
 - [x] Response templates active

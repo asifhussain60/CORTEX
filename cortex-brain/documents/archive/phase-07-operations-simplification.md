@@ -220,10 +220,10 @@ orchestrators:
       - plan_generation
       - validation
     
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     version: "4.0"
     module: "src.orchestration_4_0.orchestrators.tdd"
-    class: "TDDOrchestratorV4"
+    class: "TDDOrchestrator"
     category: "core"
     dependencies:
       - "qa_orchestrator"
@@ -253,7 +253,7 @@ orchestrators:
       medium: 30
       high: 50
   
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     test_frameworks:
       - pytest
       - unittest

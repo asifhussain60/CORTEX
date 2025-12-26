@@ -9,7 +9,7 @@
 
 This guide documents the autonomous execution pattern for CORTEX 3.0→4.0 migration, enabling full phase/task execution without manual intervention while maintaining quality gates and self-healing capabilities.
 
-**Pattern Source:** Planning System 2.0 (planning-system-4.0-manifest.yaml line 166+)
+**Pattern Source:** Planning System (planning-system-4.0-manifest.yaml line 166+)
 
 ---
 
@@ -376,7 +376,7 @@ autonomous_execution:
 
 ## 📚 References
 
-**Planning System 2.0 Manifest:**
+**Planning System Manifest:**
 - Path: `cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml`
 - Lines: 166-195 (autonomous execution configuration)
 
@@ -412,4 +412,4 @@ autonomous_execution:
 
 **Last Updated:** December 20, 2025  
 **Maintained By:** CORTEX Planning Team  
-**Questions:** Reference Planning System 2.0 manifest or ask in Copilot Chat
+**Questions:** Reference Planning System manifest or ask in Copilot Chat

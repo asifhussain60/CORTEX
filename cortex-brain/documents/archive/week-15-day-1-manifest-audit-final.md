@@ -220,7 +220,7 @@ prerequisites:
 **Example: ADO Planning**
 ```yaml
 # ado-planning-manifest.yaml
-inherits_from: "planning-system-2.0-manifest.yaml"
+inherits_from: "planning-system-manifest.yaml"
 
 # BUT DUPLICATES 8 requirements marked "inherited_from"
 # Should reference parent instead of copying

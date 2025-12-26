@@ -409,7 +409,7 @@ implementation_timeline:
     deliverables:
       - "GitCheckpointOrchestrator"
       - "MetricsTracker"
-      - "PublishBranchOrchestrator v2.0"
+      - "PublishBranchOrchestrator"
     validation:
       - "Unit tests pass"
       - "Publish to main works"

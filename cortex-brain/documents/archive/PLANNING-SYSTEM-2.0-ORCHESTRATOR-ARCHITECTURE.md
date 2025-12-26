@@ -1,4 +1,4 @@
-# Planning System 2.0 Orchestrator Architecture
+# Planning System Orchestrator Architecture
 
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX  
 **Created:** December 22, 2025  
@@ -18,7 +18,7 @@
 - ✅ DoR/DoD validation with TDD intelligence integration
 - ✅ Smart plan loader with inheritance and YAML schema validation
 - ✅ Markdown rendering with progress tracking
-- ✅ Planning System 2.0 manifest compliance (manifest-driven operations)
+- ✅ Planning System manifest compliance (manifest-driven operations)
 
 **Metrics:**
 - **LOC:** 3,000+ (4 core modules)
@@ -39,7 +39,7 @@
 
 ```mermaid
 graph TB
-    subgraph "Planning System 2.0 Core"
+    subgraph "Planning System Core"
         ORCH[PlanningOrchestrator<br/>Main Coordinator]
         
         subgraph "Strategy Pattern (Plan Generation)"
@@ -617,7 +617,7 @@ class SmartPlanLoader:
 **Inheritance Example:**
 ```yaml
 # File: ado-planning-manifest.yaml
-inherits_from: "planning-system-2.0-manifest.yaml"
+inherits_from: "planning-system-manifest.yaml"
 
 metadata:
   title: "ADO Planning"
@@ -625,7 +625,7 @@ metadata:
 
 phases:
   - phase_name: "DISCOVERY"
-    inherited_from: "planning-system-2.0"  # Reuse parent phase
+    inherited_from: "planning-system"  # Reuse parent phase
   
   - phase_name: "GENERATION"
     tasks:  # Override with ADO-specific tasks
@@ -778,9 +778,9 @@ sequenceDiagram
 
 ---
 
-## 📊 Planning System 2.0 vs Legacy Comparison
+## 📊 Planning System vs Legacy Comparison
 
-| Feature | Legacy | Planning System 2.0 | Improvement |
+| Feature | Legacy | Planning System | Improvement |
 |---------|--------|---------------------|-------------|
 | **Complexity Analysis** | Manual | Automatic 4-tier | ✅ 100% automated |
 | **Plan Types** | 1 (fixed) | 3 (adaptive) | ✅ 3× flexibility |
@@ -839,9 +839,9 @@ sequenceDiagram
 
 ---
 
-## 🎯 Planning System 2.0 Manifest Compliance
+## 🎯 Planning System Manifest Compliance
 
-**Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+**Manifest:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 
 **Key Requirements:**
 - ✅ 6-phase workflow (DISCOVERY → PLANNING → GENERATION → VALIDATION → STORAGE → RENDERING)
@@ -1009,7 +1009,7 @@ tests/orchestrators/planning/
     "auto_tdd_injection": true,   # Inject TDD requirements automatically
     "plan_output_dir": "cortex-brain/documents/planning/active",
     "plan_archive_dir": "cortex-brain/documents/planning/archived",
-    "schema_path": "cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml"
+    "schema_path": "cortex-brain/manifests/orchestrators/planning-system-manifest.yaml"
   }
 }
 ```
@@ -1078,7 +1078,7 @@ tests/orchestrators/planning/
 **Implementation:**
 - `src/orchestrators/planning/README.md` - Setup and usage guide
 - `tests/orchestrators/planning/README.md` - Test execution guide
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - Schema definition
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` - Schema definition
 
 **Reports:**
 - `cortex-brain/documents/reports/planning-system-core-mvp-completion.md` - Task 6.4 completion
@@ -1086,7 +1086,7 @@ tests/orchestrators/planning/
 - `cortex-brain/documents/reports/complexity-analyzer-v2-completion.md` - Task 6.6 completion
 
 **Architecture:**
-- `docs/architecture/planning-system-2.0-overview.md` - System overview
+- `docs/architecture/planning-system-overview.md` - System overview
 - `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/worker-plans/orchestrators/02-planning-orchestrator-migration.md` - Migration plan
 
 **Related Orchestrators:**

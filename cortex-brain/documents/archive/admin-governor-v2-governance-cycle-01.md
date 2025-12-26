@@ -76,7 +76,7 @@
 
 ✅ **Phase 1-4.5 Complete** - Verified as 100% complete  
 ✅ **First Orchestrator Migrated** - ExecutionOrchestrator (Task 6.1) exists  
-✅ **TDD Orchestrator v4.0 Complete** - Claimed 26/26 tests  
+✅ **TDD Orchestrator Complete** - Claimed 26/26 tests  
 ✅ **Planning System Core MVP Complete** - Claimed 138/138 tests  
 ✅ **ADO Orchestrator Complete** - Claimed 80 tests @ 91.44% coverage  
 ✅ **Phase 6 Complete** - All 14 tasks finished (verified in CORTEX4-STATUS.md)
@@ -150,7 +150,7 @@ Phase 13 (Sharpen the Saw) → Depends on: All phases ⏳ NOT STARTED (correct)
 Claimed in CORTEX4-STATUS.md:
 - ✅ ExecutionOrchestrator → `src/orchestrators/autonomous_execution_engine.py` EXISTS
 - ✅ DocumentationOrchestrator → (infrastructure, not single file)
-- ✅ TDDOrchestrator v4.0 → `src/orchestrators/tdd/` EXISTS
+- ✅ TDDOrchestrator → `src/orchestrators/tdd/` EXISTS
 - ✅ Planning System → `src/orchestrators/planning/planning_orchestrator.py` EXISTS
 - ✅ ADO Orchestrator → `src/orchestrators/ado/ado_orchestrator.py` EXISTS
 
@@ -160,7 +160,7 @@ Claimed in CORTEX4-STATUS.md:
 - `src/orchestrators/sanitization/` (directory exists, status unknown)
 
 **Missing Referenced Files (Ghost Orchestrators):**
-- ⚠️ `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` (REFERENCED in CORTEX.prompt.md but MISSING)
+- ⚠️ `src/operations/modules/orchestration/maintenance_orchestrator.py` (REFERENCED in CORTEX.prompt.md but MISSING)
 - ⚠️ `src/operations/modules/orchestration/refinement_orchestrator_v1.py` (REFERENCED in CORTEX.prompt.md but MISSING)
 
 **Verdict:** Plan generally aligned with implementation. Minor ghost orchestrators detected (legacy references).
@@ -209,7 +209,7 @@ Claimed in CORTEX4-STATUS.md:
 **Quick Check:**
 - `cortex-brain/manifests/orchestrators/` directory exists
 - Multiple manifest files present
-- ADO manifest inheritance (ADO → Planning System 2.0) documented in CORTEX.prompt.md
+- ADO manifest inheritance (ADO → Planning System) documented in CORTEX.prompt.md
 
 **Verdict:** Deferred to future governance cycle
 
@@ -238,7 +238,7 @@ Claimed in CORTEX4-STATUS.md:
 - Archive structure exists: `cortex-brain/archive/`
 
 **Ghost Orchestrators (Legacy References):**
-- ⚠️ CORTEX.prompt.md references `maintenance_orchestrator_v3.py` (file missing)
+- ⚠️ CORTEX.prompt.md references `maintenance_orchestrator.py` (file missing)
 - ⚠️ CORTEX.prompt.md references `refinement_orchestrator_v1.py` (file missing)
 
 **Recommendation:**

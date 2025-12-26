@@ -9,7 +9,7 @@ Tests for Task 13.4:
 
 Total: 13 tests
 
-Author: CORTEX Planning System 2.0
+Author: CORTEX Planning System
 Version: 4.0.0
 """
 

@@ -851,7 +851,7 @@ CORTEX:
 
 **Orchestrator Header Format:** All entry points show: Version, Profile, Mode (LIVE), Timestamp, Author, Copyright, License, Repository
 
-# ⭐ Planning System 2.0
+# ⭐ Planning System
 
 **Complete Guide:** #file:modules/planning-orchestrator-guide.md
 

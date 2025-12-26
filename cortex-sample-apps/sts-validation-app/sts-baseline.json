@@ -114,7 +114,7 @@
         "docs/CAPABILITY-1-SANITIZATION-EXPECTATIONS.md"
       ]
     },
-    "planning_system_2.0": {
+    "planning_system": {
       "status": "NOT_STARTED",
       "complexity_level": "HIGH",
       "expected_phases": 4
@@ -169,7 +169,7 @@
       "security_improvement": "+20 points"
     },
     {
-      "checkpoint": "capability_2_planning_system_2.0",
+      "checkpoint": "capability_2_planning_system",
       "status": "PENDING"
     },
     {

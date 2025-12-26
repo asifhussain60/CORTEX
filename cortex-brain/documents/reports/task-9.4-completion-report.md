@@ -42,7 +42,7 @@ Successfully completed comprehensive validation of all CORTEX 4.0 GA-critical do
 - ✅ **Skipped:** 29 (section anchors, GitHub URLs, localhost references)
 
 **Documents Checked:**
-1. ✅ planning-system-2.0-user-guide.md - 0 links
+1. ✅ planning-system-user-guide.md - 0 links
 2. ✅ system-maintenance-v3-user-guide.md - 0 links
 3. ✅ ado-operations-user-guide.md - 0 links
 4. ✅ CORTEX-3.0-TO-4.0-MIGRATION-GUIDE.md - 9 links (all valid)
@@ -72,7 +72,7 @@ Successfully completed comprehensive validation of all CORTEX 4.0 GA-critical do
 - ✅ **Syntax Pass Rate:** 100%
 
 **Document Breakdown:**
-1. ✅ planning-system-2.0-user-guide.md - 3 examples (all valid)
+1. ✅ planning-system-user-guide.md - 3 examples (all valid)
 2. ⏭️  system-maintenance-v3-user-guide.md - 0 Python examples
 3. ✅ ado-operations-user-guide.md - 1 example (valid)
 4. ✅ CORTEX-3.0-TO-4.0-MIGRATION-GUIDE.md - 28 examples (all valid)

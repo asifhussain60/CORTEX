@@ -549,7 +549,7 @@ Focus: Clear subject, detailed background, depth of field
             sequence=2
         ))
         
-        # CHAPTER 11: The 3.0 Revolution (Planning System 2.0 & Future)
+        # CHAPTER 11: The 3.0 Revolution (Planning System & Future)
         beats.append(NarrativeBeat(
             chapter="ch11",
             title="The Beautiful Documentation",
@@ -571,11 +571,11 @@ Focus: Clear subject, detailed background, depth of field
         
         beats.append(NarrativeBeat(
             chapter="ch11",
-            title="Planning System 2.0 Vision",
+            title="Planning System Vision",
             narrative_anchor="'Phase 2 is about making CORTEX real.'",
-            scene_description="Whiteboard showing Planning System 2.0 architecture: incremental planning with DoR/DoD gates, TDD integration, ADO compatibility. Mr. Codenstein explaining next evolution to Miss G. Visual: roadmap from basement project to production system.",
+            scene_description="Whiteboard showing Planning System architecture: incremental planning with DoR/DoD gates, TDD integration, ADO compatibility. Mr. Codenstein explaining next evolution to Miss G. Visual: roadmap from basement project to production system.",
             visual_elements=[
-                "Whiteboard: Planning System 2.0 flowchart",
+                "Whiteboard: Planning System flowchart",
                 "DoR/DoD gates as checkpoints in workflow",
                 "TDD integration (RED-GREEN-REFACTOR) embedded in planning",
                 "ADO Operations branch showing enterprise integration",

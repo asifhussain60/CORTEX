@@ -136,7 +136,7 @@ Transform CORTEX from a template-based AI assistant into an **intelligent autono
 |--------|----------------|------------------|--------|
 | **Intent Routing Accuracy** | 70% → 95% | **Tiered routing** (4 tiers vs single LLM) | Complexity analyzer + domain classifier |
 | **Pre-Flight Coverage** | 0% → 100% | **Deferred to 4.0** | Needs environment abstraction layer |
-| **Autonomous Phases** | 1 → 11 | **19 phases** in cortex-3.9-master.md | Planning System 3.0 |
+| **Autonomous Phases** | 1 → 11 | **19 phases** in cortex-3.9-master.md | Planning System |
 | **Test Rework Rate** | 50% → 5% | **TDD Orchestrator 3.0** with strategic deferral | Built into TDD workflow |
 | **Documentation Lag** | Post-project → Real-time | **Learning library** structure (Phase 18) | Auto-generation during execution |
 | **User Experience** | "Felt anticipatory" | **Proactive advisor** (Phase 17) | Risk assessment + continuous recommendations |
@@ -478,7 +478,7 @@ All phases below were delivered in v3.9, though some with different implementati
 - Full pre-flight validation orchestrator
 - Executable script generation (PowerShell, bash)
 - Environment health reports
-- Integration with Planning System 3.0
+- Integration with Planning System
 
 ---
 
@@ -658,7 +658,7 @@ All phases below were delivered in v3.9, though some with different implementati
 **v3.9 Implementation:**
 - **Phase 13:** Refactor Cycle Engine
 - **Features:** Auto-cleanup, comment sync, debug removal, lint enforcement
-- **Integration:** Automatic phase in Planning System 3.0
+- **Integration:** Automatic phase in Planning System
 
 **Deliverables (Actual):**
 - `src/operations/modules/orchestration/refactor_cycle_orchestrator.py` ✅
@@ -670,7 +670,7 @@ All phases below were delivered in v3.9, though some with different implementati
 - [x] Intelligent detection (mandatory for code, optional for simple tasks)
 - [x] Max 3 iterations (no infinite loops)
 - [x] Auto-fix mode (not just report)
-- [x] Integrates with Planning System 3.0
+- [x] Integrates with Planning System
 - [x] Reviews orchestration logs and self-heals
 
 **Sub-Plan:** `cortex-brain/documents/planning/completed/cortex-evolution-v3.9/phase-13-refactor.md`
@@ -934,7 +934,7 @@ cortex-brain/learning/
 2. `.github/copilot/copilot-chats/chat01-05.md` - PrevalidationWS patterns (7 patterns)
 3. `.github/copilot/RA-Domain-Analysis/executive-narrative.md` - AST insights (246 lines)
 4. `CORTEX-ORCHESTRATION-ENHANCEMENTS-FROM-REAL-WORLD-USAGE.md` - Analysis document
-5. `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - v2.0 manifest
+5. `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` - v2.0 manifest
 6. `cortex-brain/brain-protection-rules.yaml` - SKULL rules
 7. `src/cortex_lens/` - AST capabilities (10 analyzers, 10 collectors)
 

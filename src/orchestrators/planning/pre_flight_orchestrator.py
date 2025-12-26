@@ -11,7 +11,7 @@ Evidence:
 - BLOCKS execution on CRITICAL failures, WARNS on optional issues
 
 Integration:
-- Called by Planning System 2.0 BEFORE Phase 1
+- Called by Planning System BEFORE Phase 1
 - Generates HealthReport with PASS/FAIL/WARN status
 - Auto-remediates common issues (install commands, config fixes)
 
@@ -432,7 +432,7 @@ class PreFlightOrchestrator:
     6. Gate enforcement (BLOCK if CRITICAL failures)
     
     Integration:
-    - Called by Planning System 2.0 before Phase 1
+    - Called by Planning System before Phase 1
     - Returns PreFlightHealthReport
     - Blocks execution if status == "BLOCK"
     

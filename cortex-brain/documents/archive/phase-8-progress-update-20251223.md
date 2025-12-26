@@ -83,7 +83,7 @@
 
 ### HIGH PRIORITY
 1. **Maintenance Orchestrator v3 Missing**
-   - File: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+   - File: `src/operations/modules/orchestration/maintenance_orchestrator.py`
    - Status: Documented but not implemented
    - Impact: Blocks 80 tests, referenced in production code
    - Estimated effort: 4-6 hours implementation + 3 hours testing
@@ -146,7 +146,7 @@
 4. **Maintenance Orchestrator Implementation** (4-6 hours)
    - Implement from architecture docs
    - 7-phase workflow orchestration
-   - Planning System 3.0 integration
+   - Planning System integration
    - 80 tests for phase transitions
 
 5. **Base Orchestrator Polish** (1 hour)

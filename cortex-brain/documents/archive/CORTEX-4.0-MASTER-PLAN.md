@@ -334,7 +334,7 @@ cortex-4.0/
 │       └── defaults.yaml        # Default settings
 │
 ├── 🎭 cortex_orchestrators/     # Orchestrator implementations
-│   ├── planning/                # Planning System 2.0
+│   ├── planning/                # Planning System
 │   │   ├── planning_orchestrator.py
 │   │   ├── complexity_analyzer.py
 │   │   ├── dor_validator.py
@@ -583,7 +583,7 @@ cortex-4.0/
 
 1. **Consolidation** (Day 1-2)
    - Merge scattered planning modules
-   - Map Planning System 2.0 components
+   - Map Planning System components
    - Document DoR/DoD compliance
 
 2. **Port to 4.0 Architecture** (Day 2-4)
@@ -636,7 +636,7 @@ cortex-4.0/
 - [ ] TDD auto-integration functional
 - [ ] DoR/DoD compliance validated
 - [ ] Interactive refinement sessions working
-- [ ] Planning System 2.0 manifest preserved
+- [ ] Planning System manifest preserved
 
 **Deliverables:**
 - Planning orchestrator (800 LOC)
@@ -670,7 +670,7 @@ cortex-4.0/
        └── fixtures/
    ```
 
-2. **Inherit Planning System 2.0** (Day 2)
+2. **Inherit Planning System** (Day 2)
    - Extend Planning orchestrator
    - Apply ADO-specific formatting
    - Preserve DoR/DoD compliance
@@ -678,7 +678,7 @@ cortex-4.0/
 3. **Write Tests** (Day 3-4)
    - Unit tests (100% coverage)
    - ADO format validation tests
-   - Planning System 2.0 compliance tests
+   - Planning System compliance tests
 
 4. **Implement MCP Tools** (Day 4-5)
    - `cortex_ado_story` - Generate user story
@@ -689,7 +689,7 @@ cortex-4.0/
 **Success Criteria:**
 - [ ] 100% test coverage
 - [ ] All ADO formats validated (Story, Feature, Task)
-- [ ] Planning System 2.0 compliance inherited
+- [ ] Planning System compliance inherited
 - [ ] Completion summaries working
 - [ ] Code review planning functional
 
@@ -719,7 +719,7 @@ cortex-4.0/
    ├── optimize_module.py           # System optimization
    ├── vacuum_module.py             # Brain vacuum
    ├── refresh_prompts_module.py    # Prompt refresh
-   ├── tiered_router.py             # Planning System 3.0
+   ├── tiered_router.py             # Planning System
    └── tests/
        ├── test_maintenance_orchestrator.py
        ├── test_healthcheck.py
@@ -942,7 +942,7 @@ cortex-4.0/
 |-------------------|------------------|-----------|
 | align, healthcheck, optimize, cleanup, vacuum | **MaintenanceOrchestrator** (7 phases) | All system health operations |
 | planning, incremental_planning, skeleton_planning | **PlanningOrchestrator** (unified) | Single entry point, auto-routing |
-| ado_story, ado_feature, ado_task | **ADOOrchestrator** (extends Planning) | Inherits Planning System 2.0 |
+| ado_story, ado_feature, ado_task | **ADOOrchestrator** (extends Planning) | Inherits Planning System |
 | sanitize_analyze, sanitize_transform, sanitize_validate | **SanitizationOrchestrator** (5 phases) | Single workflow |
 | refine_discovery, refine_quality, refine_validate | **RefinementOrchestrator** (7 phases) | Single workflow |
 

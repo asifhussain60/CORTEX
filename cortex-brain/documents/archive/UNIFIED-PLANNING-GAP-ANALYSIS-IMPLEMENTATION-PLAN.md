@@ -100,7 +100,7 @@ All core components exist but are NOT wired together in PlanningOrchestrator:
    - **MISSING:** PlanningOrchestrator doesn't update manifest
    - **MISSING:** No active-plans-manifest.yaml entry creation
 
-**ROOT CAUSE:** Planning System 3.0 components are modular libraries but PlanningOrchestrator is still using legacy 3.0 architecture. Components were built but never integrated into the orchestrator workflow.
+**ROOT CAUSE:** Planning System components are modular libraries but PlanningOrchestrator is still using legacy 3.0 architecture. Components were built but never integrated into the orchestrator workflow.
 
 **SOLUTION:** Wire all 8 components into PlanningOrchestrator.execute() workflow.
 
@@ -420,7 +420,7 @@ This implementation is considered complete when ALL criteria are met:
 **Approval Required:** Yes - All checkboxes must be ✅ before production release
 
 **🎉 IMPLEMENTATION COMPLETE - All DoD Criteria Met:**
-1. ✅ SKULL governance rules (7 Planning System 3.0 rules added to brain-protection-rules.yaml)
+1. ✅ SKULL governance rules (7 Planning System rules added to brain-protection-rules.yaml)
 2. ✅ Blocking DoR validation (can_proceed_to_execution method in PlanLifecycleManager)
 3. ✅ Standard task auto-injection (TaskInjector module + integration)
 4. ✅ Worker plan generation (generate_worker_plan method with WP## naming)

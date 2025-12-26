@@ -19,7 +19,7 @@
 
 ### ⚡ Approach & Considerations
 
-**No Challenge** - All 7 phases completed successfully using the Maintenance Orchestrator v3.0 workflow:
+**No Challenge** - All 7 phases completed successfully using the Maintenance Orchestrator workflow:
 
 1. **Phase 1: Initial Healthcheck** ✅
    - Identified 60 import errors + 12 test failures
@@ -47,7 +47,7 @@
 
 6. **Phase 6: Refresh Prompts** ✅
    - Verified prompt preservation marker (`.github/.prompt-preserve`)
-   - Manual enhancements protected (ADO + Planning System 2.0)
+   - Manual enhancements protected (ADO + Planning System)
    - No regeneration needed
 
 7. **Phase 7: Final Healthcheck** ✅

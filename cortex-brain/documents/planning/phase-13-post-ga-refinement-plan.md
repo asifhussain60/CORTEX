@@ -37,7 +37,7 @@
 
 1. **Manifest Compliance Tests (6 failures)**
    - Missing methods: `_get_manifest_requirements`, `_validate_against_manifest`, `_get_manifest_inheritance`, `_check_manifest_compatibility`
-   - Issue: Tests written for Planning System 2.0 features not yet implemented
+   - Issue: Tests written for Planning System features not yet implemented
    - Impact: LOW (feature tests, not blocking core functionality)
 
 2. **YAML Modularization Tests (6 failures)**
@@ -399,9 +399,9 @@ class YAMLModularizer:
 
 **Status:** LOW priority - defer to future release
 
-**Reason:** Manifest compliance is Planning System 2.0 enhancement, not critical for current operations
+**Reason:** Manifest compliance is Planning System enhancement, not critical for current operations
 
-**When to Revisit:** When implementing Planning System 3.0 or when manifest-driven workflows become priority
+**When to Revisit:** When implementing Planning System or when manifest-driven workflows become priority
 
 ---
 

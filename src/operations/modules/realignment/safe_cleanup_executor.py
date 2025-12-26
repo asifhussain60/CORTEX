@@ -1,5 +1,5 @@
 """
-Safe Cleanup Executor for CORTEX Align Orchestrator v2.0
+Safe Cleanup Executor for CORTEX Align Orchestrator
 
 This module safely removes obsolete files with comprehensive safety checks:
 - Git working directory validation

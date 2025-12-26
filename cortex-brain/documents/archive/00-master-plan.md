@@ -17,7 +17,7 @@ The **Discovery Orchestrator** is a powerful new CORTEX orchestrator that provid
 1. **Multi-Layer Discovery** - File system, AST analysis, semantic search, git history
 2. **Intelligent Analysis** - Pattern detection, dependency mapping, complexity assessment
 3. **Knowledge Extraction** - Automatic documentation, insight generation, recommendation engine
-4. **Integration Ready** - Works with Planning System 3.0, TDD Orchestrator, and all CORTEX agents
+4. **Integration Ready** - Works with Planning System, TDD Orchestrator, and all CORTEX agents
 5. **Interactive & Autonomous** - Supports both guided exploration and automated discovery workflows
 
 ### Why This Matters
@@ -83,7 +83,7 @@ DiscoveryOrchestrator (BaseOperationModule)
 
 ### Integration Points
 
-- **Planning System 3.0** - Pre-planning discovery phase
+- **Planning System** - Pre-planning discovery phase
 - **TDD Orchestrator** - Test coverage discovery
 - **Maintenance Orchestrator** - Health checks, cleanup targets
 - **Sanitization Orchestrator** - Discover sanitization candidates
@@ -274,7 +274,7 @@ DiscoveryOrchestrator (BaseOperationModule)
 
 ## 🔗 Integration Strategy
 
-### With Planning System 3.0
+### With Planning System
 
 ```python
 # Pre-planning discovery
@@ -592,8 +592,8 @@ tests/
 - `.github/prompts/CORTEX.prompt.md` - Entry point and standards
 - `cortex-brain/brain-protection-rules.yaml` - SKULL rules (HOLISTIC_CODE_DISCOVERY_ENFORCEMENT)
 - `src/operations/base_operation_module.py` - Base class for orchestrators
-- `src/operations/modules/orchestration/planning_orchestrator.py` - Planning System 3.0
-- `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` - Example orchestrator
+- `src/operations/modules/orchestration/planning_orchestrator.py` - Planning System
+- `src/operations/modules/orchestration/maintenance_orchestrator.py` - Example orchestrator
 
 ### External Resources
 
@@ -610,4 +610,4 @@ tests/
 
 ---
 
-*This plan follows CORTEX Planning System 3.0 standards with incremental phases, TDD enforcement, and comprehensive documentation.*
+*This plan follows CORTEX Planning System standards with incremental phases, TDD enforcement, and comprehensive documentation.*

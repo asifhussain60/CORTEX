@@ -20,7 +20,7 @@
 
 ### 1. PlanLifecycleManager (`src/planning/plan_lifecycle_manager.py` - 561 LOC)
 
-**Commit:** `394566f6` - Phase 2 Complete: Orchestrator Integrations & Planning System 3.0
+**Commit:** `394566f6` - Phase 2 Complete: Orchestrator Integrations & Planning System
 
 **Features Implemented:**
 - ✅ State machine: TEMP → AWAITING_APPROVAL → ACTIVE → IN_PROGRESS → COMPLETED
@@ -99,7 +99,7 @@
 
 ### 5. UnifiedPlanGenerator Enhancement (`src/operations/modules/planning/unified_plan_generator.py` - 1304 LOC)
 
-**Commit:** `394566f6` - Phase 2 Complete: Orchestrator Integrations & Planning System 3.0
+**Commit:** `394566f6` - Phase 2 Complete: Orchestrator Integrations & Planning System
 
 **Features Implemented:**
 - ✅ `generate_master_plan()` with MasterPlanTemplate integration

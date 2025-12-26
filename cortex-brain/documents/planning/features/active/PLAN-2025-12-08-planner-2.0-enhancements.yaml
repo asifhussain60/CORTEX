@@ -16,7 +16,7 @@ metadata:
     - threat-modeling
     - user-experience
   dependencies:
-    - Planning System 2.0 (existing)
+    - Planning System (existing)
     - ThreatModelerAgent (existing)
     - Progress decorator system (existing)
     - Response template system (existing)

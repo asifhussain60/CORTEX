@@ -2,7 +2,7 @@
 Planning Learner - Continuous improvement for routing accuracy.
 
 Tracks routing decisions, collects feedback, and adapts complexity
-scoring to improve Planning System 3.0 tier classification.
+scoring to improve Planning System tier classification.
 
 Copyright © 2025 Asif Hussain. All rights reserved.
 """

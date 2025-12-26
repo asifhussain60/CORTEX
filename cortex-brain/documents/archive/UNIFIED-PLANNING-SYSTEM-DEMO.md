@@ -1,6 +1,6 @@
 # Unified Planning System Workflow Demonstration
 
-**Purpose:** Interactive demonstration of Planning System 3.0 lifecycle  
+**Purpose:** Interactive demonstration of Planning System lifecycle  
 **Version:** 3.0.0  
 **Author:** Asif Hussain  
 **Date:** December 17, 2025

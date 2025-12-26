@@ -20,7 +20,7 @@
 - 2 new Quick Reference guides (HOLISTIC-DISCOVERY, INLINE-CSS-PROHIBITION)
 - 2 new brain protection rules (Tier 0 instincts)
 - 3 new implementation guides (holistic navigation, CSS centralization, contextual review)
-- Enhanced Planning System 2.0 with contextual review
+- Enhanced Planning System with contextual review
 - System maintenance command integration
 - Multiple cleanup and reorganization improvements
 
@@ -49,7 +49,7 @@
 - **Quick Ref:** `cortex-brain/INLINE-CSS-PROHIBITION-QUICK-REF.md`
 - **Status:** ✅ Fully wired
 - **Integration Points:**
-  - Planning System 2.0 REFACTOR phase
+  - Planning System REFACTOR phase
   - Brain Protector validation
   - Tier 0 enforcement
 
@@ -60,7 +60,7 @@
 
 ---
 
-### 2. Planning System 2.0 Enhancements
+### 2. Planning System Enhancements
 
 #### Contextual Architectural Review (REQ-003 Enhanced)
 - **File:** `src/orchestrators/planning_orchestrator.py`
@@ -248,7 +248,7 @@
 
 ### Manifests
 - `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml` (updated)
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` (REQ-003 Enhanced)
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` (REQ-003 Enhanced)
 
 ---
 

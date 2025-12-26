@@ -1,15 +1,14 @@
 """
-CORTEX 4.0 System Maintenance Orchestrator v3.0
+CORTEX 4.0 System Maintenance Orchestrator
 
 Purpose: Automated 7-phase system maintenance orchestrator
-Version: 3.0.0
 Author: CORTEX Development Team
 Created: 2025-12-24
 
 Features:
 - 7-phase workflow (healthcheck → align → cleanup → optimize → vacuum → refresh → healthcheck)
 - BaseOrchestrator integration with PhaseManager
-- Tiered routing integration (Planning System 3.0 alignment)
+- Tiered routing integration (Planning System alignment)
 - Automatic phase 5 vacuum cycle (SQLite optimization + AST cleanup)
 - Version synchronization (cortex.config.json consistency)
 - Enhanced healthcheck (component-level status reporting)
@@ -41,7 +40,7 @@ from src.orchestration_4_0.base.base_orchestrator import BaseOrchestrator
 
 class MaintenanceOrchestrator(BaseOrchestrator):
     """
-    System Maintenance Orchestrator v3.0
+    System Maintenance Orchestrator
     
     Executes 7-phase maintenance workflow with automatic health validation
     and delta reporting.
@@ -62,7 +61,7 @@ class MaintenanceOrchestrator(BaseOrchestrator):
             config: Optional configuration
         """
         super().__init__(
-            name="maintenance_v3",
+            name="maintenance",
             logger=logger,
             config=config or {}
         )
@@ -71,7 +70,7 @@ class MaintenanceOrchestrator(BaseOrchestrator):
         self.baseline_health: Optional[Dict[str, Any]] = None
         self.final_health: Optional[Dict[str, Any]] = None
         
-        self.logger.info("🎭 Maintenance Orchestrator v3.0 initialized")
+        self.logger.info("🎭 Maintenance Orchestrator initialized")
     
     def _setup(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """

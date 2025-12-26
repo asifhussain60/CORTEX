@@ -9,7 +9,7 @@
 
 ## 📋 Overview
 
-Threat modeling is automatically integrated into CORTEX Planning System 2.0, providing zero-effort security analysis for every security-sensitive feature. The ThreatModelerAgent analyzes features using the STRIDE framework and OWASP Top 10 2021 mapping, generating comprehensive threat reports with actionable mitigation strategies.
+Threat modeling is automatically integrated into CORTEX Planning System, providing zero-effort security analysis for every security-sensitive feature. The ThreatModelerAgent analyzes features using the STRIDE framework and OWASP Top 10 2021 mapping, generating comprehensive threat reports with actionable mitigation strategies.
 
 ---
 

@@ -9,7 +9,7 @@
 
 ## 🎯 Objective
 
-Integrate the new Planning System 2.0 autonomous execution feature into CORTEX's quality assurance infrastructure by:
+Integrate the new Planning System autonomous execution feature into CORTEX's quality assurance infrastructure by:
 1. Creating comprehensive integration tests for the autonomous execution workflow
 2. Creating an alignment wiring checker to validate autonomous execution integration
 3. Wiring the checker into the realignment utility as Check 11
@@ -241,7 +241,7 @@ Integrate the new Planning System 2.0 autonomous execution feature into CORTEX's
    - Add performance benchmarks for autonomous execution
 
 6. **Documentation Updates**
-   - Add autonomous execution section to Planning System 2.0 guide
+   - Add autonomous execution section to Planning System guide
    - Document Check 11 in alignment system documentation
    - Update user-facing docs with autonomous execution examples
 
@@ -293,7 +293,7 @@ Integrate the new Planning System 2.0 autonomous execution feature into CORTEX's
 ## 📄 References
 
 **Related Files:**
-- `.github/prompts/modules/planning-orchestrator-guide.md` - Planning System 2.0 documentation
+- `.github/prompts/modules/planning-orchestrator-guide.md` - Planning System documentation
 - `src/orchestrators/planning_orchestrator.py` - Main orchestrator with execute_plan_autonomously method
 - `cortex-brain/documents/reports/system-alignment-v2-20251206_153955.md` - Latest alignment report
 
@@ -303,7 +303,7 @@ Integrate the new Planning System 2.0 autonomous execution feature into CORTEX's
 - `1fe5a603` - First alignment fix
 
 **Documentation:**
-- Planning System 2.0 Guide: `.github/prompts/modules/planning-orchestrator-guide.md`
+- Planning System Guide: `.github/prompts/modules/planning-orchestrator-guide.md`
 - TDD Mastery Guide: `.github/prompts/modules/tdd-mastery-guide.md`
 - Multi-Machine Setup: `cortex-brain/documents/implementation-guides/multi-machine-alignment.md`
 

@@ -36,7 +36,7 @@ class TestWorkItemHierarchy:
     Requirements:
     - REQ-ADO-002: Work item type mapping
     - REQ-ADO-004: Parent-child linking
-    - Planning System 2.0 parity: Feature decomposition
+    - Planning System parity: Feature decomposition
     """
     
     def test_generate_hierarchy_from_high_complexity(self):

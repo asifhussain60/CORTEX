@@ -309,7 +309,7 @@ def test_business_value_evidence():
     """Verify each capability has evidence/impact statement"""
     content = load_template("business_value")
     capabilities = [
-        "Planning System 2.0",
+        "Planning System",
         "TDD Mastery",
         "Convention-Based Validation",
         "Universal Upgrade System"

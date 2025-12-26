@@ -351,7 +351,7 @@ python scripts/cli_wrappers/healthcheck_wrapper.py
 **After Installation:**
 1. ✅ Read: [README.md](README.md) - Complete feature overview
 2. ✅ Try: `help` - See all available operations
-3. ✅ Learn: `plan authentication feature` - Test Planning System 2.0
+3. ✅ Learn: `plan authentication feature` - Test Planning System
 4. ✅ Explore: `load dashboard` - Launch Admin Dashboard
 5. ✅ Master: `start tdd` - Begin TDD workflow
 

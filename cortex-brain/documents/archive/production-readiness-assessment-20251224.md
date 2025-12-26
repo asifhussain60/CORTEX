@@ -256,7 +256,7 @@ Neither issue blocks production deployment. Both can be addressed post-GA in v4.
 **Business Value Delivered:**
 
 - ✅ **Multi-language TDD support:** 11+ languages (Python, JavaScript, TypeScript, Java, C#, Go, Rust, Ruby, PHP, Kotlin, Swift)
-- ✅ **ADO integration:** Full parity with Planning System 2.0 (80 tests, 91.44% coverage)
+- ✅ **ADO integration:** Full parity with Planning System (80 tests, 91.44% coverage)
 - ✅ **4-tier brain architecture:** Long-term memory, context awareness, learning capabilities
 - ✅ **Multi-agent collaboration:** Framework operational (15/15 tests passing)
 - ✅ **Adaptive execution modes:** Autonomous/supervised/manual (14/14 tests passing)
@@ -266,7 +266,7 @@ Neither issue blocks production deployment. Both can be addressed post-GA in v4.
 
 **User-Facing Features Ready:**
 
-- `plan [feature]` - Planning System 2.0 (138 tests, 84.6% coverage)
+- `plan [feature]` - Planning System (138 tests, 84.6% coverage)
 - `plan ado` - ADO Operations (80 tests, 91.44% coverage)
 - `start tdd` - TDD v4.0 (26 tests, 90%+ coverage)
 - `sanitize [dir]` - Code sanitization (5-phase workflow)

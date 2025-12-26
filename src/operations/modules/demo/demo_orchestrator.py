@@ -136,13 +136,13 @@ class DemoOrchestrator:
         }
     
     def _demo_planning(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """Demonstrate Planning System 2.0"""
+        """Demonstrate Planning System"""
         return {
             'template_id': 'introduction_discovery',
             'context': {
                 'demo_type': 'planning',
                 'demo_content': """
-## 🚀 Planning System 2.0 Demo
+## 🚀 Planning System Demo
 
 **Key Features:**
 - **Vision API** - Extract requirements from screenshots (UI mockups, errors, ADO items)

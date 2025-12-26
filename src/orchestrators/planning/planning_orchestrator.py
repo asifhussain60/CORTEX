@@ -1425,7 +1425,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         Returns:
             Tuple of (is_ready: bool, violations: List[str])
             
-        DoR Criteria (from Planning System 2.0 manifest):
+        DoR Criteria (from Planning System manifest):
         1. Requirements clarity (objectives, acceptance criteria defined)
         2. Dependencies identified (external services, data sources)
         3. Acceptance criteria measurable (testable outcomes)
@@ -1598,7 +1598,7 @@ class PlanningOrchestrator(BaseOrchestrator):
             report.append(f"{i}. {violation}")
         
         report.append("\nREMEDIATION:")
-        report.append("- Review Planning System 2.0 User Guide section 'DoR Requirements'")
+        report.append("- Review Planning System User Guide section 'DoR Requirements'")
         report.append("- Update plan metadata with missing criteria")
         report.append("- Re-run validation after updates")
         
@@ -1619,7 +1619,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         Returns:
             Tuple of (is_done: bool, violations: List[str])
             
-        DoD Criteria (from Planning System 2.0 manifest):
+        DoD Criteria (from Planning System manifest):
         1. Code complete (all phases executed successfully)
         2. Tests passing (≥95% pass rate, TDD complete)
         3. Documentation complete (README, API docs, guides)
@@ -2128,7 +2128,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         Load manifest with inheritance resolution.
         
         Supports inheritance chains like:
-        ADO Manifest → Planning System 2.0 → Base Orchestrator
+        ADO Manifest → Planning System → Base Orchestrator
         
         Merge rules:
         - Child overrides parent for same keys

@@ -180,7 +180,7 @@ CORTEX Central Platform (Kubernetes)
 - Brain protection (SKULL rules)
 
 **Core Workflows:**
-- Planning System 2.0 (DoR/DoD compliance, incremental planning)
+- Planning System (DoR/DoD compliance, incremental planning)
 - TDD Mastery (RED→GREEN→REFACTOR)
 - Architecture Intelligence
 - Git Checkpoint System

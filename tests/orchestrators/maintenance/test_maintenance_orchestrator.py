@@ -10,7 +10,7 @@ import pytest
 import logging
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
-from src.operations.modules.orchestration.maintenance_orchestrator_v3 import (
+from src.operations.modules.orchestration.maintenance_orchestrator import (
     MaintenanceOrchestrator,
     execute_maintenance
 )

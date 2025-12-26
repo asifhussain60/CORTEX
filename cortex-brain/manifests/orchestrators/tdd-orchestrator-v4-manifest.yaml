@@ -1,4 +1,4 @@
-# TDD Orchestrator v4.0 Manifest
+# TDD Orchestrator Manifest
 # Unified, clean, adaptive TDD workflow with technology discovery
 #
 # Version: 4.0.0
@@ -14,7 +14,7 @@ schema_version: "1.0"
 # ========================================
 
 metadata:
-  orchestrator_name: "tdd_orchestrator_v4"
+  orchestrator_name: "tdd_orchestrator"
   version: "4.0.0"
   description: "Unified TDD orchestrator with adaptive learning, clean architecture, and AI-driven refactoring"
   category: "tdd"
@@ -29,7 +29,7 @@ metadata:
     - "maintenance_orchestrator"
     - "code_sanitization_orchestrator"
   documentation_path: ".github/prompts/modules/tdd-orchestrator-guide.md"
-  source_file: "src/orchestrators/tdd/tdd_orchestrator_v4.py"
+  source_file: "src/orchestrators/tdd/tdd_orchestrator.py"
 
 # ========================================
 # Architecture
@@ -40,8 +40,8 @@ architecture:
   description: "Strategy pattern for phase execution with dependency injection"
   
   core_components:
-    - name: "TDDOrchestratorV4"
-      path: "src/orchestrators/tdd/tdd_orchestrator_v4.py"
+    - name: "TDDOrchestrator"
+      path: "src/orchestrators/tdd/tdd_orchestrator.py"
       purpose: "Main orchestrator coordinating RED→GREEN→REFACTOR workflow"
       dependencies:
         - "brain_connector"
@@ -51,7 +51,7 @@ architecture:
         - "clean_code_enforcer"
     
     - name: "TechnologyDiscoveryEngine"
-      path: "src/orchestrators/tdd/tdd_orchestrator_v4.py"
+      path: "src/orchestrators/tdd/tdd_orchestrator.py"
       purpose: "Discover and adapt to new technologies and frameworks"
       features:
         - "Language and framework detection"
@@ -61,7 +61,7 @@ architecture:
         - "Best practice retrieval"
     
     - name: "CleanCodeEnforcer"
-      path: "src/orchestrators/tdd/tdd_orchestrator_v4.py"
+      path: "src/orchestrators/tdd/tdd_orchestrator.py"
       purpose: "Enforce clean code principles (SOLID, DRY, KISS, YAGNI)"
       features:
         - "Function length validation"
@@ -233,7 +233,7 @@ integrations:
   
   planning_system:
     parent: "planning_orchestrator"
-    integration: "TDD included in all Planning System 3.0 plans"
+    integration: "TDD included in all Planning System plans"
     relationship: "Child orchestrator for implementation phases"
 
 # ========================================
@@ -337,14 +337,14 @@ improvements_over_v3:
 
 usage:
   invocation:
-    method: "Direct call or via Planning System 3.0"
+    method: "Direct call or via Planning System"
     examples:
       - "orchestrator.execute_tdd_cycle(feature_name, acceptance_criteria, project_path)"
       - "plan 'Implement user authentication' (auto-includes TDD)"
   
   typical_workflow:
     - "User requests feature implementation"
-    - "Planning System 3.0 creates plan with TDD phases"
+    - "Planning System creates plan with TDD phases"
     - "TDD Orchestrator discovers tech stack"
     - "RED: Generate failing tests"
     - "GREEN: Implement minimally"
@@ -364,7 +364,7 @@ testing:
     location: "tests/orchestrators/tdd/"
     coverage_target: 90
     files:
-      - "test_tdd_orchestrator_v4.py"
+      - "test_tdd_orchestrator.py"
       - "test_red_phase_strategy.py"
       - "test_green_phase_strategy.py"
       - "test_refactor_phase_strategy.py"

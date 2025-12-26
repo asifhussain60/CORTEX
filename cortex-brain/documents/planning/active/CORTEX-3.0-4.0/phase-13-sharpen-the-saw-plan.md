@@ -279,7 +279,7 @@ Each CORTEX capability will be tested against specific STS app flaws:
 
 ---
 
-#### 2. Planning System 2.0
+#### 2. Planning System
 **Target Flaws:** SEC-02 (auth), SOL-01 (God class)
 
 **Test Plan:**
@@ -1491,7 +1491,7 @@ Each CORTEX capability will be tested against specific STS app flaws:
 ### Internal Documentation
 
 - **Analysis:** `cortex-brain/documents/analysis/phase-13b-sts-value-analysis.md`
-- **Planning System 2.0:** `cortex-brain/manifests/planning-system-2.0-manifest.yaml`
+- **Planning System:** `cortex-brain/manifests/planning-system-manifest.yaml`
 - **Brain Protection Rules:** `cortex-brain/brain-protection-rules.yaml`
 - **TDD Workflow:** `cortex-brain/agents/tdd-agent-rules.yaml`
 

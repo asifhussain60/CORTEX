@@ -20,7 +20,7 @@ from src.orchestration_4_0.orchestrators.documentation.documentation_orchestrato
     DocumentationOrchestrator,
     DocumentationConfig
 )
-from src.orchestrators.tdd.tdd_orchestrator_v4_migrated import TDDOrchestratorV4, TDDPhase
+from src.orchestrators.tdd.tdd_orchestrator_migrated import TDDOrchestrator, TDDPhase
 
 logger = logging.getLogger(__name__)
 
@@ -171,7 +171,7 @@ class TestTDDOrchestratorMigration:
         kg = MagicMock()
         mcp = MagicMock()
         
-        orchestrator = TDDOrchestratorV4(
+        orchestrator = TDDOrchestrator(
             brain_connector=brain,
             knowledge_graph=kg,
             mcp_gateway=mcp,
@@ -196,7 +196,7 @@ class TestTDDOrchestratorMigration:
         kg = MagicMock()
         mcp = MagicMock()
         
-        orchestrator = TDDOrchestratorV4(
+        orchestrator = TDDOrchestrator(
             brain_connector=brain,
             knowledge_graph=kg,
             mcp_gateway=mcp,
@@ -221,7 +221,7 @@ class TestTDDOrchestratorMigration:
         kg = MagicMock()
         mcp = MagicMock()
         
-        orchestrator = TDDOrchestratorV4(
+        orchestrator = TDDOrchestrator(
             brain_connector=brain,
             knowledge_graph=kg,
             mcp_gateway=mcp,
@@ -253,7 +253,7 @@ class TestTDDOrchestratorMigration:
         kg = MagicMock()
         mcp = MagicMock()
         
-        orchestrator = TDDOrchestratorV4(
+        orchestrator = TDDOrchestrator(
             brain_connector=brain,
             knowledge_graph=kg,
             mcp_gateway=mcp,
@@ -284,7 +284,7 @@ class TestOrchestratorsIntegration:
         
         exec_orch = ExecutionOrchestrator(logger=logger)
         doc_orch = DocumentationOrchestrator(logger=logger)
-        tdd_orch = TDDOrchestratorV4(brain, kg, mcp, logger=logger)
+        tdd_orch = TDDOrchestrator(brain, kg, mcp, logger=logger)
         
         assert isinstance(exec_orch, BaseOrchestrator)
         assert isinstance(doc_orch, BaseOrchestrator)
@@ -299,7 +299,7 @@ class TestOrchestratorsIntegration:
         orchestrators = [
             ExecutionOrchestrator(logger=logger),
             DocumentationOrchestrator(logger=logger),
-            TDDOrchestratorV4(brain, kg, mcp, logger=logger)
+            TDDOrchestrator(brain, kg, mcp, logger=logger)
         ]
         
         for orch in orchestrators:

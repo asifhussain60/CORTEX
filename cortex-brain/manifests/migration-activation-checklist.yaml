@@ -118,7 +118,7 @@ migrations:
   # Phase 3 - PENDING (13 orchestrators remaining)
   tdd_orchestrator:
     status: PENDING
-    new_path: src/orchestration_4_0/orchestrators/tdd_orchestrator_v4.py
+    new_path: src/orchestration_4_0/orchestrators/tdd_orchestrator.py
     old_path: src/tdd/*.py
     activated_in: []
     deleted: []

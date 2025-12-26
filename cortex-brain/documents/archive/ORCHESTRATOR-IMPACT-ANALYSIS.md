@@ -63,9 +63,9 @@ def get_plan_context_for_prompt(self, query: str) -> str:
 
 ---
 
-### 3. TDD Orchestrator v4.0 (Week 7 Complete)
+### 3. TDD Orchestrator (Week 7 Complete)
 
-**Location:** `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+**Location:** `src/orchestrators/tdd/tdd_orchestrator.py`
 
 **Current Implementation:**
 - RED→GREEN→REFACTOR workflow
@@ -218,7 +218,7 @@ linked_documents:
 |--------|--------|----------|----------|--------|
 | PlanningOrchestrator | None | Low | Week 9+ | Optional enhancement |
 | DocumentationOrchestrator | None | N/A | N/A | No change |
-| TDDOrchestrator v4.0 | None | N/A | N/A | No change |
+| TDDOrchestrator | None | N/A | N/A | No change |
 | ExecutionOrchestrator | None | N/A | N/A | No change |
 | PlanFolderManager | Minor | Medium | Week 9-10 | 2 hours (backward compat) |
 | PlanExecutor | None | N/A | N/A | No change |

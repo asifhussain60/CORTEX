@@ -1,7 +1,7 @@
 # Code Complexity Refactoring Backlog
 
 **Generated:** December 16, 2025  
-**Source:** Refinement Orchestrator v1.0  
+**Source:** Refinement Orchestrator  
 **Total Functions Identified:** 169 high-complexity functions (complexity > 15)
 
 ---
@@ -29,7 +29,7 @@ These functions have the highest cyclomatic complexity and should be prioritized
 
 4. **`generate_master_plan`** - Complexity: 34
    - **File:** `src/operations/modules/planning/unified_plan_generator.py:167`
-   - **Impact:** Planning System 2.0 core
+   - **Impact:** Planning System core
    - **Suggestion:** Extract phase generators
 
 5. **`_parse_markdown_plan`** - Complexity: 33

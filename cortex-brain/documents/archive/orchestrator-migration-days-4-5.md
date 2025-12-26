@@ -68,7 +68,7 @@ Successfully migrated 3 orchestrators to use BaseOrchestrator with adaptive exec
 
 ### 3. TDDOrchestrator ✅
 
-**Location:** `src/orchestrators/tdd/tdd_orchestrator_v4_migrated.py`
+**Location:** `src/orchestrators/tdd/tdd_orchestrator_migrated.py`
 
 **Changes Made:**
 - **Full BaseOrchestrator integration** (was standalone)
@@ -90,7 +90,7 @@ Successfully migrated 3 orchestrators to use BaseOrchestrator with adaptive exec
 - ✅ Adaptive execution modes
 - ✅ Async execution support
 
-**Note:** Original v4.0 remains at `tdd_orchestrator_v4.py` for reference. New version is `tdd_orchestrator_v4_migrated.py`.
+**Note:** Original v4.0 remains at `tdd_orchestrator.py` for reference. New version is `tdd_orchestrator_migrated.py`.
 
 ---
 
@@ -140,7 +140,7 @@ orchestrator = DocumentationOrchestrator(
 )
 
 # Example: TDDOrchestrator
-orchestrator = TDDOrchestratorV4(
+orchestrator = TDDOrchestrator(
     brain_connector=brain,
     knowledge_graph=kg,
     mcp_gateway=mcp,

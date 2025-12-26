@@ -457,7 +457,7 @@
 **Features:**
 - ✅ All 29 migrated features operational
 - ✅ TDD Mastery complete (state machine + checkpoints)
-- ✅ Planning System 2.0 (DoR/DoD + Vision API)
+- ✅ Planning System (DoR/DoD + Vision API)
 - ✅ Git operations (commit/checkpoint/rollback)
 - ✅ Analysis tools (RCA/code review/lint)
 - ✅ Application health monitoring

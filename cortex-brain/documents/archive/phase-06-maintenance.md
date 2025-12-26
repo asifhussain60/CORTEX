@@ -199,7 +199,7 @@ def _check_version_consistency(self) -> Dict[str, Any]:
 
 ### Code Deliverables
 ### Code Deliverables
-- ✅ `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` (884 lines, v3.0)
+- ✅ `src/operations/modules/orchestration/maintenance_orchestrator.py` (884 lines, v3.0)
 - ✅ Tiered routing integration (4 tiers)
 - ✅ 7-phase maintenance cycle (pre-healthcheck → alignment → cleanup → optimization → vacuum → refresh → post-healthcheck)
 - ✅ MaintenanceContext dataclass with phase tracking
@@ -207,7 +207,7 @@ def _check_version_consistency(self) -> Dict[str, Any]:
 - ✅ Completion status signaling
 
 ### Test Deliverables
-- ✅ `tests/test_maintenance_orchestrator_v3.py` (586 lines, 36/36 passing)
+- ✅ `tests/test_maintenance_orchestrator.py` (586 lines, 36/36 passing)
   - Initialization tests (5 tests)
   - Metadata tests (2 tests)
   - Phase determination tests (5 tests)
@@ -295,17 +295,17 @@ def _check_version_consistency(self) -> Dict[str, Any]:
 **Test Results:** 36/36 passing (100% pass rate)
 
 **Deliverables:**
-- ✅ `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` - 767 lines, v3.0
-- ✅ `tests/test_maintenance_orchestrator_v3.py` - 564 lines, 36 tests (100% passing)
+- ✅ `src/operations/modules/orchestration/maintenance_orchestrator.py` - 767 lines, v3.0
+- ✅ `tests/test_maintenance_orchestrator.py` - 564 lines, 36 tests (100% passing)
 - ✅ Tiered routing integration (Tier 1-4 execution paths)
 - ✅ Version manager integration (v3.0 from cortex.config.json)
 - ✅ 7-phase maintenance cycle (healthcheck → align → cleanup → optimize → vacuum → refresh → healthcheck)
 - ✅ Completion status signaling (`is_complete` flag)
 - ✅ Orchestrator engagement hints (`🎭` pattern)
-- ✅ Archive: `archive/deprecated_v3.8.1/system_maintenance_orchestrator_v3.8.1.py`
+- ✅ Archive: `archive/deprecated_v3.8.1/system_maintenance_orchestrator.8.1.py`
 
 **Integration Status:**
-- ✅ `cortex-operations.yaml` updated to use `maintenance_orchestrator_v3`
+- ✅ `cortex-operations.yaml` updated to use `maintenance_orchestrator`
 - ✅ Documentation updated (CORTEX.prompt.md, copilot-instructions.md)
 - ✅ All admin operations version-synchronized to v3.0
 - ✅ Zero breaking changes (backward compatibility maintained)

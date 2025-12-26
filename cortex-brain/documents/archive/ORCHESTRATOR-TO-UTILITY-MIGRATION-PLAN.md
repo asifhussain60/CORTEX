@@ -372,7 +372,7 @@ Features: CLI argument parsing, calls publish_to_branch()
 **Status:** 🔥 HIGH PRIORITY - Core TDD Mastery feature planning
 
 **TDD Mastery Integration:**
-- **Purpose:** Interactive feature planning with DoR/DoD enforcement (Planning System 2.0)
+- **Purpose:** Interactive feature planning with DoR/DoD enforcement (Planning System)
 - **User Commands:** `plan [feature]`, `plan ado`, `approve plan`, `resume plan [name]`
 - **Workflow:** Vision API → file-based planning → DoR/DoD validation → zero-ambiguity requirements
 - **Guide:** .github/prompts/modules/planning-orchestrator-guide.md (1133 lines)
@@ -384,7 +384,7 @@ Features: CLI argument parsing, calls publish_to_branch()
 - **Performance Bottleneck:** Vision API (5-10s for screenshot analysis)
 
 **Investigation Steps:**
-1. ✅ Verify Planning System 2.0 guide exists (.github/prompts/modules/planning-orchestrator-guide.md)
+1. ✅ Verify Planning System guide exists (.github/prompts/modules/planning-orchestrator-guide.md)
 2. Profile planning workflow: With Vision API vs without
 3. Identify bottlenecks: Vision API (slow), file operations, DoR/DoD validation, ADO API calls
 4. Check for code duplication (112KB is unusually large)

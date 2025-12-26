@@ -1,5 +1,5 @@
 """
-Parallel Test Runner for TDD Orchestrator v4.0
+Parallel Test Runner for TDD Orchestrator
 
 Package 1: Multi-Agent Collaboration Integration
 Executes test suites in parallel with async support.

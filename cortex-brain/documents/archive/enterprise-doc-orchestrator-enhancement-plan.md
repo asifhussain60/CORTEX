@@ -171,7 +171,7 @@ Old MkDocs-based orchestrator files moved to `cortex-brain/archives/deprecated-o
 
 **Increment 2.1: Feature Documentation (8 Pages)** - ✅ COMPLETE
 - ✅ TDD Mastery (enhanced - 352 lines) - RED-GREEN-REFACTOR workflow
-- ✅ Planning System 2.0 (enhanced - 380 lines) - DoR/DoD, auto-complexity
+- ✅ Planning System (enhanced - 380 lines) - DoR/DoD, auto-complexity
 - ✅ Dashboard System (enhanced - 430 lines) - Glassmorphism UI, real-time metrics
 - ✅ ADO Operations (enhanced - 450 lines) - User stories, features, epics
 - ✅ System Maintenance (NEW - 352 lines) - 6-phase healthcheck workflow
@@ -426,7 +426,7 @@ docs/ (GitHub Pages root)
 │   │                               #   - Code examples (expand on click)
 │   │                               #   - API reference links (drill to tier3/api-reference)
 │   │
-│   ├── planning-system.html        # TIER 3: Planning System 2.0
+│   ├── planning-system.html        # TIER 3: Planning System
 │   ├── dashboard-system.html       # TIER 3: Dashboard System
 │   └── ... (one page per feature)
 │
@@ -1120,7 +1120,7 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
   - **Opening:** "The documentation was beautiful." (G's vision appears, reviews GitHub Pages)
   - **Setting:** Two months after initial deadline
   - **Content:** G (in vision) discovers 16 delivered pages, glassmorphism design, Zero Mock Data Policy
-  - **Technical Reveals:** Planning System 2.0, ADO Operations, Enhanced Package Management - **Teaches:** Phase 2 achievements
+  - **Technical Reveals:** Planning System, ADO Operations, Enhanced Package Management - **Teaches:** Phase 2 achievements
   - **Character Moments:** Mr. Codenstein explains achievements to imaginary G, self-reflection on growth
   - **Coffee Mug Update:** Now 23 mugs (6 new from Phase 2 work)
   - **Closing:** Setup for Phase 4 (CORTEX 4.0 vision), G: "Show me the future."
@@ -1409,7 +1409,7 @@ The primary goal is to **teach CORTEX features, architecture, and evolution thro
    - Orchestrators vs Agents distinction
 
 3. **✨ Features & Usage (5 questions)**
-   - Planning System 2.0 usage & complexity detection
+   - Planning System usage & complexity detection
    - TDD Mastery RED-GREEN-REFACTOR workflow
    - Dashboard features & metrics
    - ADO integration guide

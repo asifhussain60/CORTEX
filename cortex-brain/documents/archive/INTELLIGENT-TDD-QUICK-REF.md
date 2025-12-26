@@ -178,7 +178,7 @@ public class FundingInvoiceService : IFundingInvoiceService
 
 ## 🛠️ Developer Workflow
 
-### Automatic Enforcement (Planning System 2.0)
+### Automatic Enforcement (Planning System)
 
 ```bash
 # User runs planning command

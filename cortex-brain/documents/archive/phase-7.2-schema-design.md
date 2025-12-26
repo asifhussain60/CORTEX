@@ -117,7 +117,7 @@ orchestrators:
     inherits_from: null                # Top-level orchestrator
     parent_orchestrator: null
     child_orchestrators:
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
       - "ado_orchestrator"
       - "sanitization_orchestrator"
     related_orchestrators:
@@ -151,14 +151,14 @@ orchestrators:
     migration_status: "migrated"       # not_started|in_progress|migrated
     migration_date: "2025-12-23"
   
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     version: "4.0.0"
     status: "active"
     category: "tdd"
     description: "Unified TDD orchestrator with adaptive learning and clean code enforcement"
     
-    source_file: "src/orchestrators/tdd/tdd_orchestrator_v4.py"
-    entry_point: "TDDOrchestratorV4"
+    source_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+    entry_point: "TDDOrchestrator"
     
     documentation_path: ".github/prompts/modules/tdd-orchestrator-guide.md"
     changelog_path: "docs/orchestration/tdd-orchestrator-changelog.md"
@@ -440,8 +440,8 @@ orchestrators:
     category: "maintenance"
     description: "7-phase system maintenance (healthcheck → align → cleanup → optimize → vacuum → refresh → healthcheck)"
     
-    source_file: "src/operations/modules/orchestration/maintenance_orchestrator_v3.py"
-    entry_point: "MaintenanceOrchestratorV3"
+    source_file: "src/operations/modules/orchestration/maintenance_orchestrator.py"
+    entry_point: "MaintenanceOrchestrator"
     
     documentation_path: "docs/orchestration_4_0/maintenance-orchestrator.md"
     
@@ -1094,7 +1094,7 @@ publish:
 
 orchestrator_overrides:
   # TDD Orchestrator overrides
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     refactoring:
       enabled: true
       enforcement_level: "strict"
@@ -1514,7 +1514,7 @@ orchestrators:
 **Examples:**
 ```yaml
 orchestrators:
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     config_overrides:
       namespace: "config://tdd"
       sections:
@@ -1546,7 +1546,7 @@ def resolve_integration_reference(uri: str) -> Dict:
 ```
 BaseOrchestrator (defaults)
   ├─ PlanningOrchestrator
-  │    ├─ TDDOrchestratorV4 (inherits planning config)
+  │    ├─ TDDOrchestrator (inherits planning config)
   │    ├─ ADOOrchestrator (inherits planning config)
   │    └─ SanitizationOrchestrator
   ├─ ExecutionOrchestrator

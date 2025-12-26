@@ -26,7 +26,7 @@ system maintenance
 
 **What happens:**
 1. **Pre-Healthcheck** - Scans 32+ components, establishes baseline
-2. **Align** - Auto-fixes misalignments using Planning System 3.0 tiered routing
+2. **Align** - Auto-fixes misalignments using Planning System tiered routing
 3. **Cleanup** - Organizes files, updates references, removes duplicates
 4. **Optimize** - Compresses tokens, clears caches, optimizes performance
 5. **Vacuum** - Compacts SQLite databases, AST cleanup
@@ -100,7 +100,7 @@ system maintenance
 
 **Purpose:** Automatically fix common issues, escalate complex problems
 
-**Intelligence:** Uses **Planning System 3.0 tiered routing** to classify fixes:
+**Intelligence:** Uses **Planning System tiered routing** to classify fixes:
 
 | Tier | Complexity | Execution | Example Issues |
 |------|------------|-----------|----------------|
@@ -624,7 +624,7 @@ crontab -e
 ## 📚 Related Documentation
 
 - **Architecture:** `cortex-brain/documents/archive/system-maintenance-architecture-completion.md`
-- **Planning System 3.0:** `cortex-brain/documents/implementation-guides/planning-system-2.0-user-guide.md`
+- **Planning System:** `cortex-brain/documents/implementation-guides/planning-system-user-guide.md`
 - **Tiered Routing:** `cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml`
 - **CLI Wrappers:** `cortex-brain/documents/reports/CLI-WRAPPER-PHASE-3-4-COMPLETION.md`
 

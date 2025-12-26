@@ -1,5 +1,5 @@
 """
-Feature Registration Validator for CORTEX Align Orchestrator v2.0
+Feature Registration Validator for CORTEX Align Orchestrator
 
 This module validates that all operations and modules are properly registered
 in cortex-operations.yaml. Part of the Intelligent Maintenance System.

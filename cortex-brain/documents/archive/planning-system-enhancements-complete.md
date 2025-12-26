@@ -155,7 +155,7 @@ metadata:
 ### 3. `.github/copilot-instructions.md`
 
 **Changes:**
-- Updated Planning System 2.0 section with TDD auto-inclusion note
+- Updated Planning System section with TDD auto-inclusion note
 - Added autonomous execution trigger examples
 - Documented "execute all phases autonomously" command
 

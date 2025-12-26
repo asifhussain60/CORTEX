@@ -367,7 +367,7 @@ phases:
         estimated_hours: 4
         priority: high
         acceptance_criteria:
-          - "Manifest follows planning-system-2.0 structure"
+          - "Manifest follows planning-system structure"
           - "DoR/DoD requirements defined"
           - "Integration points documented"
         
@@ -436,7 +436,7 @@ phases:
         description: "Create response templates for debug workflow (Planning/TDD parity)"
         estimated_hours: 6
         priority: high
-        rationale: "Professional, consistent responses matching Planning System 2.0 quality"
+        rationale: "Professional, consistent responses matching Planning System quality"
         components:
           - "bug_report_received.yaml - Initial intake confirmation"
           - "debug_session_progress.yaml - Real-time updates"

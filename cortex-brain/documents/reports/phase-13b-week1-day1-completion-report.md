@@ -193,7 +193,7 @@ Successfully created STS (Sharpen The Saw) validation application - a deliberate
 **Expected actions:** Replace secrets with env vars, generate mapping reference  
 **Success criteria:** 5/5 secrets sanitized, tests pass, mapping generated
 
-### 2. Planning System 2.0
+### 2. Planning System
 **Flaws to detect:** SOL-04 (OCP), SEC-03 (SQL injection)  
 **Expected complexity:** HIGH  
 **Expected routing:** Incremental (security + refactoring)  
@@ -413,7 +413,7 @@ cortex-sample-apps/sts-validation-app/
    - Test: Can CORTEX remove 5/5 hardcoded secrets?
    - Validate: Mapping generated, tests pass
 
-5. **Capability 2: Planning System 2.0**
+5. **Capability 2: Planning System**
    - Test: Can CORTEX detect HIGH complexity, create incremental plan?
    - Validate: 4 phases, TDD included, DoR/DoD compliance
 

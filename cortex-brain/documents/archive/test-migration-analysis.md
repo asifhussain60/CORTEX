@@ -69,7 +69,7 @@ Analysis of test organization across CORTEX 4.0 orchestrators reveals a **dual-p
 | Story Enhancement | `src/orchestrators/story_enhancement/` | NO TESTS | 🟠 HIGH |
 | System Integrity | `src/orchestrators/system/` | 1 central test only | 🟠 HIGH |
 
-**Note:** TDD Orchestrator v4.0 marked as "COMPLETE" in CORTEX4-STATUS.md with "26 tests" - **tests location unknown or not discovered**. Requires investigation.
+**Note:** TDD Orchestrator marked as "COMPLETE" in CORTEX4-STATUS.md with "26 tests" - **tests location unknown or not discovered**. Requires investigation.
 
 ---
 
@@ -120,7 +120,7 @@ src/orchestrators/sanitization/tests/
 
 ### Priority 1: HIGH RISK - Create Missing Tests
 
-**1. TDD Orchestrator v4.0**
+**1. TDD Orchestrator**
 - **Current:** Marked complete with "26 tests" but no tests discovered
 - **Action:** Locate existing tests OR create co-located test suite
 - **Estimate:** 3-5 days (if creating from scratch)

@@ -38,7 +38,7 @@
    - No single source of truth
 
 3. **Fragmented Inheritance**
-   - ADO manifest inherits from `planning-system-2.0-manifest.yaml`
+   - ADO manifest inherits from `planning-system-manifest.yaml`
    - TDD manifest inherits from `planning-system-4.0-manifest.yaml`
    - Inconsistent parent-child relationships
 

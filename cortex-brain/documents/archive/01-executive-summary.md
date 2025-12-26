@@ -30,7 +30,7 @@ CORTEX 3.x is a production-ready AI assistant enhancement system with:
 - Brain protection (SKULL rules)
 
 **Key Capabilities:**
-- ✅ Planning System 2.0 with DoR/DoD compliance
+- ✅ Planning System with DoR/DoD compliance
 - ✅ TDD Mastery (RED→GREEN→REFACTOR automation)
 - ✅ Architecture Intelligence & Reviews
 - ✅ Git Checkpoint System

@@ -570,7 +570,7 @@ def test_documentation_quality():
 - **Operations YAML:** `cortex-operations.yaml`
 - **Response Templates:** `cortex-brain/response-templates.yaml`
 - **Deployment Manifest:** `deployment-manifest.yaml`
-- **Maintenance Orchestrator:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+- **Maintenance Orchestrator:** `src/operations/modules/orchestration/maintenance_orchestrator.py`
 
 ---
 

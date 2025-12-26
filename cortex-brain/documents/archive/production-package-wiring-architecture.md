@@ -166,7 +166,7 @@ package_data={
    - Required by: `UnifiedPlanGenerator`
    - Not included: `cortex-brain/documents/` not in `package_data`
 
-2. ❌ **Planning Manifests** - `planning-system-2.0-manifest.yaml`, `ado-planning-manifest.yaml`
+2. ❌ **Planning Manifests** - `planning-system-manifest.yaml`, `ado-planning-manifest.yaml`
    - Required by: Planning orchestrators for DoR/DoD validation
    - Not included: Root-level YAML files not packaged
 
@@ -205,7 +205,7 @@ from ...session.session_manager import SessionManager  # Fragile
 
 **🔴 DEFINITELY BROKEN (Direct file references):**
 ```python
-manifest_path = Path(__file__).parent.parent / "planning-system-2.0-manifest.yaml"
+manifest_path = Path(__file__).parent.parent / "planning-system-manifest.yaml"
 # ❌ Breaks when installed
 ```
 

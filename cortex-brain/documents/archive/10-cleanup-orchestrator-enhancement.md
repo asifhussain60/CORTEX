@@ -9,7 +9,7 @@
 
 ## 🎯 Objectives
 
-Enhance Cleanup Orchestrator with Planning System 3.0 integration and AST-powered analysis for intelligent code cleanup during plan execution.
+Enhance Cleanup Orchestrator with Planning System integration and AST-powered analysis for intelligent code cleanup during plan execution.
 
 **Key Deliverables:**
 1. Cleanup orchestrator integrated with planning sessions

@@ -8,7 +8,7 @@
 
 ## 🎯 Executive Summary
 
-The `cortex-rearchitecture-v1` plan has reached a significant architectural milestone with **8 core phases complete (47%)**. The foundational infrastructure for Planning System 3.0 is now operational, including:
+The `cortex-rearchitecture-v1` plan has reached a significant architectural milestone with **8 core phases complete (47%)**. The foundational infrastructure for Planning System is now operational, including:
 
 ✅ **Governance & Planning Foundation** (Phases 0-2)  
 ✅ **Autonomous Execution & Visual Tracking** (Phases 1, 1.5, 1.5.7)  
@@ -44,7 +44,7 @@ The `cortex-rearchitecture-v1` plan has reached a significant architectural mile
 
 ### What's Operational Now
 
-**1. Planning System 3.0 Core**
+**1. Planning System Core**
 - ✅ Tiered routing (4 complexity levels)
 - ✅ Pre-planning discovery (avoid duplicates)
 - ✅ Visual progress tracking (real-time)
@@ -213,7 +213,7 @@ The `cortex-rearchitecture-v1` plan has reached a significant architectural mile
 - ✅ Maintains momentum without burnout
 
 **Benefits:**
-- Planning System 3.0 fully operational
+- Planning System fully operational
 - Knowledge extraction working
 - File bloat prevention active
 - Clean brain tier organization

@@ -13,12 +13,12 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock
 from datetime import datetime
-from src.orchestrators.tdd.tdd_orchestrator_v4 import (
+from src.orchestrators.tdd.tdd_orchestrator import (
     TDDPhase,
     ValidationResult,
     PhaseResult,
     TechnologyProfile,
-    TDDOrchestratorV4
+    TDDOrchestrator
 )
 
 # Get CORTEX root directory
@@ -129,7 +129,7 @@ class TestTDDOrchestratorFoundation:
         mcp.call = Mock(return_value={"status": "success"})
         
         config = {'workspace_root': Path(CORTEX_ROOT) / "".replace("/", os.sep)}
-        return TDDOrchestratorV4(brain, kg, mcp, config)
+        return TDDOrchestrator(brain, kg, mcp, config)
     
     def test_orchestrator_initialization(self, orchestrator):
         """Test TDD orchestrator initializes correctly."""
@@ -164,7 +164,7 @@ class TestTDDOrchestratorFoundation:
         mcp.call = Mock(return_value={"status": "success"})
         
         config = {'workspace_root': Path(CORTEX_ROOT) / "".replace("/", os.sep)}
-        TDDOrchestratorV4(brain, kg, mcp, config)
+        TDDOrchestrator(brain, kg, mcp, config)
         
         # Verify engagement hint pattern in initialization
         assert any('🎭' in record.message for record in caplog.records)

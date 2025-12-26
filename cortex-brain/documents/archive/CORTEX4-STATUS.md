@@ -115,7 +115,7 @@
 - **Total Documentation:** ~10,000+ lines across 10 architecture files
 - **Breakdown:**
   - Week 1 (CRITICAL): ExecutionOrchestrator, BaseOrchestrator, Interaction Flow (3/3)
-  - Week 2 (HIGH): TDD v4.0, Planning System 2.0, Documentation, DevOps (4/4)
+  - Week 2 (HIGH): TDD v4.0, Planning System, Documentation, DevOps (4/4)
   - Week 3 (MEDIUM): ADO, Sanitization, System Maintenance, CI/CD Self-Healing (4/4)
 - **Impact:** 91% documentation gap remediated, complete architecture reference for all 4.0 orchestrators
 
@@ -242,7 +242,7 @@
 | Capability | Target Flaws | Success Criteria |
 |------------|--------------|------------------|
 | Code Sanitization | 5 hardcoded secrets | 5/5 removed, tests pass |
-| Planning System 2.0 | God class, security | HIGH detected, 4 phases, DoR/DoD |
+| Planning System | God class, security | HIGH detected, 4 phases, DoR/DoD |
 | TDD Mastery v4.0 | 0% coverage, complexity 87 | RED→GREEN→REFACTOR, 90%+ coverage |
 | System Maintenance | Dead code, memory leaks | 7 phases, 0 critical issues |
 | System Refinement | 35 SOLID/quality violations | All resolved, 60%+ coverage |
@@ -362,12 +362,12 @@
 
 **Gap Analysis:**
 - ❌ **7 HIGH-Priority Gaps (GA Blockers):**
-  1. Planning System 2.0 User Guide (4h)
+  1. Planning System User Guide (4h)
   2. System Maintenance v3 User Guide (3h)
   3. ADO Operations User Guide (3h)
   4. Migration Guide 3.0 → 4.0 (6h)
   5. Release Notes 4.0 (4h)
-  6. Base Orchestrator v4.0 Developer Guide (4h)
+  6. Base Orchestrator Developer Guide (4h)
   7. Execution Orchestrator User Guide (3h)
   - **Total:** 27 hours (~3.5 days)
 
@@ -396,11 +396,11 @@
 **Achievement Summary:**
 3/3 HIGH-priority orchestrator user guides delivered:
 
-1. ✅ **Planning System 2.0 User Guide** (850+ lines, 2.5h)
+1. ✅ **Planning System User Guide** (850+ lines, 2.5h)
    - Coverage: 4-tier complexity classification, DoR/DoD enforcement, TDD integration
    - Features: Execution modes (supervised/autonomous/human-only), plan inheritance, progress tracking
    - Examples: 4 complexity tiers with real-world scenarios (simple→critical)
-   - Content reuse: 70% from planning-system-2.0-architecture-completion.md
+   - Content reuse: 70% from planning-system-architecture-completion.md
    - Advanced: Plan comparison, templates, analytics, customization
 
 2. ✅ **System Maintenance v3 User Guide** (700+ lines, 2h)
@@ -414,7 +414,7 @@
    - Coverage: 5 work item types (Story/Feature/Task/Bug/Epic), DoR/DoD quality gates
    - Lifecycle: Create→Active→Block→Complete→Cancel with file-based workflow
    - DoR/DoD: 10 criteria each (prevents premature start/completion)
-   - Planning System 2.0 integration: 8 inherited requirements
+   - Planning System integration: 8 inherited requirements
    - Examples: 3 full scenarios with generated work items, validation failures with remediation
    - Content reuse: 70% from ado-operations-architecture-completion.md
 
@@ -429,7 +429,7 @@
 **Time Efficiency:** 7h actual vs 10h estimated (30% efficiency gain via architecture doc reuse)
 
 **Deliverables:**
-- `cortex-brain/documents/implementation-guides/planning-system-2.0-user-guide.md`
+- `cortex-brain/documents/implementation-guides/planning-system-user-guide.md`
 - `cortex-brain/documents/implementation-guides/system-maintenance-v3-user-guide.md`
 - `cortex-brain/documents/implementation-guides/ado-operations-user-guide.md`
 
@@ -467,12 +467,12 @@
    - Advanced: Execution modes, safety guardrails, brain integration, workspace awareness
    - Testing: Unit/integration patterns with examples
    - Best practices: 8 guidelines (fail-fast, idempotency, context preservation)
-   - Content reuse: 75% from BaseOrchestrator v4.0 architecture completion doc
+   - Content reuse: 75% from BaseOrchestrator architecture completion doc
 
 4. ✅ **Execution Orchestrator Guide** (903 lines, 30 min)
    - Coverage: Plan execution patterns, 3 execution modes (supervised/autonomous/human-only)
    - Features: Progress tracking, phase validation, error recovery, resource management
-   - Integration: Planning System 2.0, TDD, workspace context
+   - Integration: Planning System, TDD, workspace context
    - Examples: 4 complete execution scenarios with code
    - Troubleshooting: 6 common execution issues with remediation
    - Content reuse: 75% from ExecutionOrchestrator architecture completion doc
@@ -1097,7 +1097,7 @@ This generates baseline coverage data required for ALL Phase 8 work.
 **Test Coverage Status:**
 - **ADO Orchestrator:** 80 tests, 91.44% coverage ✅
 - **Planning Orchestrator:** 138 tests, 84.6% coverage ✅
-- **TDD Orchestrator v4.0:** 26 tests, 90%+ coverage ✅
+- **TDD Orchestrator:** 26 tests, 90%+ coverage ✅
 - **DevOps Orchestrator:** 20 tests, 100% pass ✅
 - **CI/CD Self-Healing:** 46 tests, 100% pass ✅
 - **Phase 11 Multi-Repo:** 98 tests, 100% pass ✅
@@ -1177,7 +1177,7 @@ This generates baseline coverage data required for ALL Phase 8 work.
 - ✅ **Phase 4.5 Complete** - Documentation Generation (471 modules, Git Pages ready)
 - ✅ **First Orchestrator Migrated** - ExecutionOrchestrator (Task 6.1)
 - ✅ **Self-Documentation Active** - DocumentationOrchestrator (Task 6.2)
-- ✅ **TDD Orchestrator v4.0 Complete** - 26/26 tests, 11+ languages (Task 6.3)
+- ✅ **TDD Orchestrator Complete** - 26/26 tests, 11+ languages (Task 6.3)
 - ✅ **Planning System Core MVP Complete** - 5,363 LOC, 138/138 tests (Task 6.4)
 - ✅ **SmartPlanLoader v2.0 LLM Integration** - 30% query improvement (Task 6.5)
 - ✅ **ComplexityAnalyzer v2.0 LLM Integration** - 50% accuracy improvement (Task 6.6)

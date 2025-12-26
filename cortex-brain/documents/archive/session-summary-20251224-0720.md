@@ -54,7 +54,7 @@
 **Finding:**
 - Architecture documented in 2 comprehensive specification files
 - Referenced by 3+ files (router_agent.py, realignment_utility.py, cortex-operations.yaml)
-- File path expected: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+- File path expected: `src/operations/modules/orchestration/maintenance_orchestrator.py`
 - **Result:** `file_search` returned NO FILES FOUND
 
 **Impact:**
@@ -174,8 +174,8 @@
 **Session Length:** 3-4 hours (6-hour task with interruptions/testing)
 
 **Expected Deliverables:**
-- `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` (500-800 LOC)
-- `tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py` (80+ tests)
+- `src/operations/modules/orchestration/maintenance_orchestrator.py` (500-800 LOC)
+- `tests/orchestrators/maintenance/test_maintenance_orchestrator.py` (80+ tests)
 - Integration validation report
 - Phase 8 progress update (70% → 85%)
 

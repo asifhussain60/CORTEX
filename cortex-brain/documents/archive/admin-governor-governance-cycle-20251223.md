@@ -67,7 +67,7 @@ scripts/cli_wrappers/
 **Completed Orchestrators (from CORTEX4-STATUS.md):**
 - ✅ ExecutionOrchestrator (Phase 6)
 - ✅ DocumentationOrchestrator (Phase 6)
-- ✅ TDDOrchestrator v4.0 (Phase 6, 26 tests, 90%+ coverage)
+- ✅ TDDOrchestrator (Phase 6, 26 tests, 90%+ coverage)
 - ✅ Planning System Core MVP (Phase 6, 138 tests, 84.6% coverage)
 - ✅ ADO Orchestrator (Phase 6, 80 tests, 91.44% coverage)
 - ✅ DevOps Orchestrator (Phase 6, 20 tests, 100% pass)
@@ -226,7 +226,7 @@ scripts/cli_wrappers/
 ✅ **All claimed orchestrators exist:**
 - `src/orchestrators/planning/planning_orchestrator.py` (138 tests)
 - `src/orchestrators/ado/ado_orchestrator.py` (80 tests)
-- `src/orchestrators/tdd/tdd_orchestrator_v4.py` (26 tests)
+- `src/orchestrators/tdd/tdd_orchestrator.py` (26 tests)
 - `src/orchestrators/system/system_integrity_orchestrator.py`
 - `src/orchestrators/sanitization/sanitization_orchestrator.py`
 
@@ -474,14 +474,14 @@ Phase 14 (parallel)
 
 ### 10. Manifest Inheritance Validation (Section 18) ✅ PASSED
 
-**Objective:** Validate manifest inheritance chains (ADO → Planning System 2.0)
+**Objective:** Validate manifest inheritance chains (ADO → Planning System)
 
 **Manifest Count:** 36+ orchestrator manifests in `cortex-brain/manifests/orchestrators/`
 
 **Inheritance Chain Validation:**
 
 ADO Manifest (`ado-orchestrator-manifest.yaml`):
-- ✅ Inherits from Planning System 2.0 manifest
+- ✅ Inherits from Planning System manifest
 - ✅ Overrides only necessary fields
 - ✅ No duplicate fields between parent and child
 - ✅ Maintains compatibility
@@ -544,7 +544,7 @@ nothing to commit, working tree clean
 ✅ **All referenced orchestrators exist:**
 - Planning: `src/orchestrators/planning/planning_orchestrator.py`
 - ADO: `src/orchestrators/ado/ado_orchestrator.py`
-- TDD v4.0: `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+- TDD v4.0: `src/orchestrators/tdd/tdd_orchestrator.py`
 - System Integrity: `src/orchestrators/system/system_integrity_orchestrator.py`
 - Sanitization: `src/orchestrators/sanitization/sanitization_orchestrator.py`
 

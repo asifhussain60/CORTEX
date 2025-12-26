@@ -99,7 +99,7 @@ This unified plan consolidates two major architectural initiatives into a single
 3. **Proactive Intelligence** - Continuous enhancement recommendations and risk-first development
 
 **Primary Goals:**
-- Transform Planning System 2.0 → 3.0 with intelligent tiered routing
+- Transform Planning System → 3.0 with intelligent tiered routing
 - Integrate CORTEX Lens AST capabilities non-invasively
 - Establish governance framework preventing root-level file creation
 - Implement automatic refactor & vacuum cycles for every plan execution
@@ -120,7 +120,7 @@ This unified plan consolidates two major architectural initiatives into a single
 
 **Autonomous Execution:**
 - User commands "continue", "go", or "proceed" trigger autonomous completion of proposed Next Steps
-- Planning System 3.0 executes remaining phases without further prompting
+- Planning System executes remaining phases without further prompting
 - Progress tracked in real-time with phase-by-phase updates
 
 ---
@@ -134,7 +134,7 @@ This unified plan consolidates two major architectural initiatives into a single
 - Regex routing with ~70% accuracy
 - Single execution mode (manual planning for all operations)
 
-**Target State (v3.9.0 - Planning System 3.0):**
+**Target State (v3.9.0 - Planning System):**
 - Intelligent LLM-based routing with 95%+ accuracy
 - 4-tier execution model:
   - **Tier 1 (Instant):** CLI operations, <2s deterministic tasks
@@ -507,7 +507,7 @@ Phase 16 (Integration & Validation)
 ### Planning Artifacts
 - ✅ cortex-3.9-master.md (this file - with standardized CORTEX header)
 - ✅ manifest.yaml (DoR/DoD, phase metadata)
-- ✅ response-template-enhancement-proposal.md (UX enhancements for Planning System 3.0)
+- ✅ response-template-enhancement-proposal.md (UX enhancements for Planning System)
 - ✅ proactive-intelligence-design.md (Proactive advisor + risk assessment system)
 - ⏳ phase-19.1-header-standardization.md (CORTEX branding header system)
 - ⏳ 19 phase sub-plans (phase-00-govern.md through phase-18-documentation.md)
@@ -520,8 +520,8 @@ Phase 16 (Integration & Validation)
 - ✅ src/operations/modules/orchestration/ado_planning_orchestrator.py (834 lines - v3.0)
 - ✅ src/operations/modules/orchestration/tdd_orchestrator.py (762 lines - v3.0)
 - ✅ tests/test_tdd_orchestrator_v3.py (686 lines, 44/44 passing)
-- ✅ src/operations/modules/orchestration/maintenance_orchestrator_v3.py (884 lines - v3.0)
-- ✅ tests/test_maintenance_orchestrator_v3.py (686 lines, 36/36 passing)
+- ✅ src/operations/modules/orchestration/maintenance_orchestrator.py (884 lines - v3.0)
+- ✅ tests/test_maintenance_orchestrator.py (686 lines, 36/36 passing)
 - ⏳ src/operations/modules/learning/planning_learner.py
 - ⏳ src/operations/modules/analysis/ast_engine.py
 - ⏳ src/operations/modules/orchestration/vacuum_orchestrator.py
@@ -541,7 +541,7 @@ Phase 16 (Integration & Validation)
 ### Documentation Deliverables
 - ✅ cortex-brain/brain-protection-rules.yaml (v2.4 - added AUTOMATIC_DOCUMENTATION_GENERATION rule)
 - ⏳ cortex.config.json (version field documentation)
-- ⏳ README updates for Planning System 3.0
+- ⏳ README updates for Planning System
 - ⏳ API documentation for AST engine wrapper
 - ⏳ Integration guide for CORTEX Lens
 - ⏳ Refactor cycle usage guide (NEW)
@@ -618,7 +618,7 @@ Phase 16 (Integration & Validation)
 ## 📖 Related Documentation
 
 ### Planning System
-- [Planning System 2.0 Manifest](../../manifests/orchestrators/planning-system-2.0-manifest.yaml)
+- [Planning System Manifest](../../manifests/orchestrators/planning-system-manifest.yaml)
 - [ADO Planning Manifest](../../manifests/orchestrators/ado-planning-manifest.yaml)
 - [TDD Mastery Manifest](../../manifests/orchestrators/tdd-mastery-manifest.yaml)
 - [Proactive Intelligence Design](proactive-intelligence-design.md)
@@ -683,10 +683,10 @@ return OperationResult(
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 3.9.0 | 2024-12-14 | Asif Hussain | Initial creation - unified plan consolidation |
-| 3.9.1 | 2024-12-14 | Asif Hussain | Planning System 3.0 - Added refactor cycle, document hygiene, version manager |
+| 3.9.1 | 2024-12-14 | Asif Hussain | Planning System - Added refactor cycle, document hygiene, version manager |
 | 3.9.2 | 2024-12-14 | Asif Hussain | Added Path B execution strategy - autonomous implementation approach |
 | 3.9.3 | 2024-12-14 | Asif Hussain | Phase 03 complete - Planning Orchestrator 3.0 with 17/17 tests passing (100%), zero mocks |
-| 3.9.4 | 2024-12-14 | Asif Hussain | Planning System 3.0 ACTIVATED - All 19 phase sub-plans generated, master plan aligned |
+| 3.9.4 | 2024-12-14 | Asif Hussain | Planning System ACTIVATED - All 19 phase sub-plans generated, master plan aligned |
 | 3.9.5 | 2024-12-14 | Asif Hussain | Format optimization - Minutes/h:mm time format, elegant box design, executive summary |
 
 ---

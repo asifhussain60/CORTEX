@@ -23,13 +23,13 @@
   - `execute all phases autonomously`
   - `execute tasks 2-10 autonomously` (continue from Task 2)
 
-**Pattern Reference:** Planning System 2.0 autonomous execution (planning-system-4.0-manifest.yaml line 166+)
+**Pattern Reference:** Planning System autonomous execution (planning-system-4.0-manifest.yaml line 166+)
 
 ---
 
 ## 🎯 Mission
 
-Migrate ADO work item management from utility pattern to full Planning System 2.0-compliant orchestrator with parity enforcement, DoR/DoD validation, and interactive workflows.
+Migrate ADO work item management from utility pattern to full Planning System-compliant orchestrator with parity enforcement, DoR/DoD validation, and interactive workflows.
 
 ---
 
@@ -53,7 +53,7 @@ Migrate ADO work item management from utility pattern to full Planning System 2.
 - ✅ Complete requirements specification (8 inherited + 7 ADO-specific)
 - ✅ Workflow phases defined (4 phases, 13 steps)
 - ✅ Quality gates documented (3 inherited + 3 ADO-specific)
-- ✅ Parity checklist with Planning System 2.0
+- ✅ Parity checklist with Planning System
 
 **ADO Parser (src/planning/ado_parser.py):**
 - ✅ Plan-to-ADO mapping logic
@@ -67,7 +67,7 @@ Migrate ADO work item management from utility pattern to full Planning System 2.
 - ❌ No `🎭` engagement hints
 - ❌ No phase transitions (DISCOVERY → VALIDATION → GENERATION → EXECUTION)
 
-**Planning System 2.0 Parity:**
+**Planning System Parity:**
 - ❌ Interactive DoR workflow (REQ-002)
 - ❌ Acceptance criteria approval gate (REQ-001, GATE-005)
 - ❌ Contextual review integration (REQ-003 partial)
@@ -183,7 +183,7 @@ src/orchestrators/ado/
 - ✅ All 25 tests passing (100% pass rate)
 - ✅ 85%+ coverage on ado_orchestrator.py
 - ✅ All phases implemented with transitions
-- ✅ Parity with Planning System 2.0 validated
+- ✅ Parity with Planning System validated
 - ✅ Git checkpoints at each task completion
 - ✅ Final completion report generated
 
@@ -547,7 +547,7 @@ def test_end_to_end_ado_planning():
     assert result.items_created > 0
 
 def test_parity_with_planning_system():
-    """Must have feature parity with Planning System 2.0."""
+    """Must have feature parity with Planning System."""
     from src.orchestrators.planning.planning_orchestrator import PlanningOrchestrator
     
     planning_features = dir(PlanningOrchestrator)
@@ -612,7 +612,7 @@ def test_parity_with_planning_system():
 - ✅ ADO API integration working (batch creation)
 - ✅ Git checkpoint after creation
 - ✅ Visual progress rendering
-- ✅ Parity with Planning System 2.0 validated
+- ✅ Parity with Planning System validated
 
 ### Nice-to-Have (80% Completion Acceptable)
 
@@ -634,7 +634,7 @@ def test_parity_with_planning_system():
 ### Risk 1: ADO API Rate Limiting
 **Mitigation:** Implement batch API calls, add retry logic with exponential backoff
 
-### Risk 2: Planning System 2.0 Parity Drift
+### Risk 2: Planning System Parity Drift
 **Mitigation:** Automated parity validation tests, manifest-driven validation
 
 ### Risk 3: Interactive Workflow Complexity
@@ -669,7 +669,7 @@ pytest tests/orchestrators/ado/ -v --cov=src/orchestrators/ado --cov-report=html
 # Run parity validation
 python scripts/validate_ado_parity.py
 
-# Expected: 8/8 features matching Planning System 2.0
+# Expected: 8/8 features matching Planning System
 ```
 
 ---
@@ -681,7 +681,7 @@ python scripts/validate_ado_parity.py
 - ✅ BaseOrchestrator (`src/orchestrators/base/base_orchestrator.py`)
 - ✅ ADO Utility (`src/operations/modules/ado/ado_utility.py`)
 - ✅ ADO Agent (`src/cortex_agents/ado_agent.py`)
-- ✅ Planning System 2.0 (`src/orchestrators/planning/`)
+- ✅ Planning System (`src/orchestrators/planning/`)
 - ✅ Review Orchestrator (`src/orchestrators/review/`)
 
 ### Optional (Graceful Degradation)

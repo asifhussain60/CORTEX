@@ -23,7 +23,7 @@ trigger:
 
 # Inheritance
 inheritance:
-  parent: "planning-system-2.0-manifest.yaml"
+  parent: "planning-system-manifest.yaml"
   reason: "Shares holistic discovery, TDD compliance, DoR/DoD validation"
   inherited_features:
     - "complexity_detection"

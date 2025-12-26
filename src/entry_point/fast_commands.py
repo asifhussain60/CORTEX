@@ -213,7 +213,7 @@ For detailed health check, use: `cortex diagnose`
 - 🧠 4-Tier Brain Architecture
 - 🤖 10 Specialist Agents
 - 🔬 TDD Mastery with Auto-Debug
-- 📋 Planning System 2.0 with Vision API
+- 📋 Planning System with Vision API
 - 🔄 Git Checkpoint & History
 - 📊 Progress Monitoring
 

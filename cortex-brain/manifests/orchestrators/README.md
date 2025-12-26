@@ -22,7 +22,7 @@ The Orchestrator Manifest System is a **central source of truth** for all CORTEX
 ```
 cortex-brain/manifests/orchestrators/
 ├── manifest-schema.yaml                    # Universal schema for all manifests
-├── planning-system-2.0-manifest.yaml       # Planning System 2.0 requirements
+├── planning-system-manifest.yaml       # Planning System requirements
 ├── ado-planning-manifest.yaml              # ADO planning (inherits from Planning 2.0)
 └── [future]-manifest.yaml                  # Extensible to all orchestrators
 ```
@@ -126,7 +126,7 @@ cp cortex-brain/manifests/orchestrators/manifest-schema.yaml \
 
 ```yaml
 schema_version: "1.0"
-inherits_from: "planning-system-2.0-manifest.yaml"
+inherits_from: "planning-system-manifest.yaml"
 
 metadata:
   orchestrator_name: "my_related_orchestrator"
@@ -153,7 +153,7 @@ for name, report in reports.items():
 **2. Generate Drift Reports**
 
 ```python
-report = validator.validate_orchestrator("planning_system_2.0")
+report = validator.validate_orchestrator("planning_system")
 
 # Generate markdown report
 markdown = validator.generate_drift_report(
@@ -247,7 +247,7 @@ graph TD
 
 ## 🚨 Critical Requirements
 
-### Planning System 2.0
+### Planning System
 - ✅ Threat Modeling (implemented)
 - ✅ TDD Requirements Injection (implemented)
 - ❌ Acceptance Criteria Approval Gate (missing - **Priority 1**)
@@ -255,7 +255,7 @@ graph TD
 - ❌ Review Orchestrator Integration (missing - **Priority 1**)
 
 ### ADO Planning
-- ❌ Must maintain parity with Planning System 2.0
+- ❌ Must maintain parity with Planning System
 - ❌ All Planning 2.0 requirements apply
 - ✅ ADO API Authentication (implemented)
 - ⚠️ Story Point Conversion (partial)
@@ -300,7 +300,7 @@ graph TD
 ### Example 1: Check Requirement Status
 
 ```python
-manifest = validator.load_manifest("planning-system-2.0")
+manifest = validator.load_manifest("planning-system")
 
 for req in manifest['requirements']:
     if req['status'] == 'missing' and req['priority'] == 'critical':
@@ -310,7 +310,7 @@ for req in manifest['requirements']:
 ### Example 2: Find All Missing Features
 
 ```python
-report = validator.validate_orchestrator("planning_system_2.0")
+report = validator.validate_orchestrator("planning_system")
 
 for issue in report.issues:
     if issue.category == "requirement":
@@ -321,7 +321,7 @@ for issue in report.issues:
 ### Example 3: Compare Two Orchestrators
 
 ```python
-planning_report = validator.validate_orchestrator("planning-system-2.0")
+planning_report = validator.validate_orchestrator("planning-system")
 ado_report = validator.validate_orchestrator("ado-planning")
 
 print(f"Planning 2.0: {planning_report.compliance_score:.1f}%")
@@ -335,13 +335,13 @@ print(f"Parity Gap: {abs(planning_report.compliance_score - ado_report.complianc
 
 ### Manifest Not Found
 ```
-⚠️ Planning System 2.0 manifest not found - drift detection disabled
+⚠️ Planning System manifest not found - drift detection disabled
 ```
 **Solution:** Create manifest file in `cortex-brain/manifests/orchestrators/`
 
 ### Low Compliance Score
 ```
-⚠️ Planning System 2.0 compliance: 65.0%
+⚠️ Planning System compliance: 65.0%
 ```
 **Solution:** Check report for critical issues, prioritize fixes
 
@@ -356,7 +356,7 @@ print(f"Parity Gap: {abs(planning_report.compliance_score - ado_report.complianc
 ## 📖 Related Documentation
 
 - `manifest-schema.yaml` - Universal manifest schema
-- `planning-system-2.0-manifest.yaml` - Planning System 2.0 requirements
+- `planning-system-manifest.yaml` - Planning System requirements
 - `ado-planning-manifest.yaml` - ADO planning requirements
 - `src/utils/manifest_validator.py` - Validation implementation
 

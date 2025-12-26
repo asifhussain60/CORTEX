@@ -828,7 +828,7 @@ templates:
 
       ### 🚀 Quick Demos (5-10 min each)
 
-      1. **`demo planning`** - See Planning System 2.0 with DoR/DoD enforcement and
+      1. **`demo planning`** - See Planning System with DoR/DoD enforcement and
       Vision API
 
       2. **`demo tdd`** - Watch RED→GREEN→REFACTOR cycle with auto-debug and performance
@@ -1369,7 +1369,7 @@ templates:
       **Available Operations (choose by letter or describe what you need):**
 
 
-      A. **Planning System 2.0** - Vision API, DoR/DoD validation, file-based plans
+      A. **Planning System** - Vision API, DoR/DoD validation, file-based plans
 
 
       B. **TDD Mastery** - RED→GREEN→REFACTOR workflow with auto-debug

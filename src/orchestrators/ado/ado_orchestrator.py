@@ -1,13 +1,13 @@
 """
 ADO Orchestrator - Azure DevOps Work Item Management
 
-Full Planning System 2.0-compliant orchestrator for ADO work item generation.
+Full Planning System-compliant orchestrator for ADO work item generation.
 Implements 6-phase workflow with interactive DoR, approval gates, and batch creation.
 
 Architecture:
     - Inherits from BaseOrchestrator for standardized lifecycle
     - 6-phase workflow: DISCOVERY → VALIDATION → GENERATION → APPROVAL → EXECUTION → COMPLETION
-    - Planning System 2.0 parity: Interactive DoR, approval gates, visual progress
+    - Planning System parity: Interactive DoR, approval gates, visual progress
     - ADO-specific: Authentication, work item type mapping, bulk creation
 
 Usage:
@@ -117,7 +117,7 @@ class ADOOrchestrator(BaseOrchestrator):
         MEDIUM_COMPLEXITY_MAX_LENGTH: Maximum chars for MEDIUM classification
     
     Orchestrates the complete lifecycle of ADO work item generation from feature
-    description to created work items, with Planning System 2.0 feature parity.
+    description to created work items, with Planning System feature parity.
     
     Inherits from BaseOrchestrator to leverage standard orchestration patterns:
     - Configuration injection
@@ -134,7 +134,7 @@ class ADOOrchestrator(BaseOrchestrator):
         5. EXECUTION: ADO API batch creation, linking, checkpointing
         6. COMPLETION: Link generation, visual progress, success reporting
     
-    Planning System 2.0 Parity:
+    Planning System Parity:
         - ✅ Interactive DoR workflow (REQ-002)
         - ✅ Approval gate with preview (REQ-001)
         - ✅ Contextual review integration (REQ-003)

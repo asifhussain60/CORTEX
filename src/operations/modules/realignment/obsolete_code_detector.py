@@ -1,5 +1,5 @@
 """
-Obsolete Code Detector for CORTEX Align Orchestrator v2.0
+Obsolete Code Detector for CORTEX Align Orchestrator
 
 This module detects obsolete code across the repository including:
 - Orchestrators that have been migrated to utilities

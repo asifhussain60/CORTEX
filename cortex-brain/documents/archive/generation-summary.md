@@ -275,7 +275,7 @@ python C:\PROJECTS\CORTEX\src\operations\modules\generators\legacy_spec_generato
    - Symbol resolution
    - Control flow graph generation
 
-5. **Planning System 3.0 Integration** - Orchestrate multi-API generation
+5. **Planning System Integration** - Orchestrate multi-API generation
    - Batch processing of API sets
    - Dependency ordering
    - Progress tracking

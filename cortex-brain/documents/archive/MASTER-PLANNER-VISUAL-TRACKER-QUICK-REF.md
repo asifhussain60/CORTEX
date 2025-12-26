@@ -1,6 +1,6 @@
 # Master Planner Visual Tracker - Quick Reference
 
-**Version:** Planning System 2.0.1  
+**Version:** Planning System.1  
 **Date:** December 13, 2025  
 **Status:** ✅ ACTIVE
 
@@ -119,7 +119,7 @@ These appear after:
 
 ### For Master Plans (Automatic)
 
-When you run Planning System 2.0:
+When you run Planning System:
 
 ```python
 # Just use normal planning workflow
@@ -223,16 +223,16 @@ session.record_sub_plan_update(
 ## 📚 Related Documentation
 
 - **Full Enhancement Report:** `cortex-brain/documents/reports/master-planner-visual-tracker-enhancement-2025-12-13.md`
-- **Planning System 2.0 Guide:** `.github/prompts/modules/planning-orchestrator-guide.md`
+- **Planning System Guide:** `.github/prompts/modules/planning-orchestrator-guide.md`
 - **Sub-Plan Template:** `cortex-brain/documents/planning/orchestrators/SUB-PLAN-TEMPLATE.md`
-- **Orchestrator Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- **Orchestrator Manifest:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 
 ---
 
 ## ✅ Quick Checklist
 
 **For Orchestrator Usage (Automatic):**
-- ✅ Use Planning System 2.0 normally
+- ✅ Use Planning System normally
 - ✅ Tracker auto-populates with metrics
 - ✅ No manual updates needed
 

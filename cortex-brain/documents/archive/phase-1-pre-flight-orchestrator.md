@@ -115,7 +115,7 @@ Create pre-flight validation orchestrator that detects environment requirements 
 ### Component Overview
 
 ```
-Planning System 2.0
+Planning System
     ↓
 Pre-Flight Orchestrator (NEW)
     ├─ Requirement Detector
@@ -798,7 +798,7 @@ class GateEnforcer:
 **Owner:** Tech Lead
 
 **Tasks:**
-- [ ] Integrate pre-flight into Planning System 2.0
+- [ ] Integrate pre-flight into Planning System
 - [ ] Add Phase 0 (pre-flight) before Phase 1
 - [ ] Update manifest with pre-flight requirements
 - [ ] Test end-to-end workflow
@@ -956,7 +956,7 @@ class PlanningOrchestrator:
 
 - Master Plan: `MASTER-CORTEX-ORCHESTRATION-AST-ENHANCEMENT-PLAN.md`
 - PrevalidationWS Chat01: Evidence of 2-week blocker
-- Planning System 2.0: `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- Planning System: `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 
 ---
 

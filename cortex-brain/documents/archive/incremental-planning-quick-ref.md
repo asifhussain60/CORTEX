@@ -8,7 +8,7 @@
 
 ## 🎯 What Changed
 
-Planning System 2.0 now **automatically prevents response length failures** by routing complex features to incremental generation.
+Planning System now **automatically prevents response length failures** by routing complex features to incremental generation.
 
 ## 🔄 How It Works
 
@@ -52,7 +52,7 @@ Complete plan created successfully
    - Added `_append_phase_to_plan()` - Phase appending
 
 3. **Documentation**
-   - `.github/prompts/CORTEX.prompt.md` - Updated Planning System 2.0
+   - `.github/prompts/CORTEX.prompt.md` - Updated Planning System
    - `.github/copilot-instructions.md` - Updated Key Features
    - `CHANGELOG.md` - Version 3.8.5 entry
 
@@ -72,7 +72,7 @@ print(f'Auth: {complexity}, incremental={use_inc}')
 ## 📚 Full Documentation
 
 - **Implementation Guide:** `cortex-brain/documents/implementation-guides/incremental-planning-integration.md`
-- **Planning System 2.0:** `.github/prompts/modules/planning-orchestrator-guide.md`
+- **Planning System:** `.github/prompts/modules/planning-orchestrator-guide.md`
 
 ## 🚀 Usage
 

@@ -44,7 +44,7 @@
 **Status:** ✅ **90% COMPLETE** (9/10 orchestrators)
 
 **Completed Architecture Docs:**
-1. ✅ Planning System 2.0 (`PLANNING-SYSTEM-2.0-ORCHESTRATOR-ARCHITECTURE.md`)
+1. ✅ Planning System (`PLANNING-SYSTEM-2.0-ORCHESTRATOR-ARCHITECTURE.md`)
 2. ✅ TDD Mastery v4.0 (`TDD-V4-ORCHESTRATOR-ARCHITECTURE.md`)
 3. ✅ Documentation Orchestrator (`DOCUMENTATION-ORCHESTRATOR-ARCHITECTURE.md`)
 4. ✅ DevOps Orchestrator (`DEVOPS-ORCHESTRATOR-ARCHITECTURE.md`)
@@ -160,7 +160,7 @@
 **Gap:** Feature documentation scattered across multiple locations
 
 **Recommendation:** Create consolidated guides in `docs/features/`:
-- Planning System 2.0 Complete Workflow Guide
+- Planning System Complete Workflow Guide
 - TDD Mastery v4.0 Complete Workflow Guide
 - Code Sanitization 5-Phase Workflow Guide
 - ADO Integration Workflow Guide

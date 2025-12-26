@@ -66,7 +66,7 @@ GitHub Pages deployment (.github/workflows/deploy-docs.yml)
   - *Why Major:* Fundamental workflow change, brain protection integration, philosophical shift
   - *Narrative Focus:* Mr. Codenstein learning failure validates success
   
-- ⭐ **Planning System 2.0** (Chapter 8) - Incremental planning, DoR/DoD gates, autonomous execution
+- ⭐ **Planning System** (Chapter 8) - Incremental planning, DoR/DoD gates, autonomous execution
   - *Why Major:* Orchestrator coordination, multi-phase workflows, strategic intelligence
   - *Narrative Focus:* From chaos to structure, agent coordination breakthrough
 
@@ -90,7 +90,7 @@ GitHub Pages deployment (.github/workflows/deploy-docs.yml)
 - **Chapter 4 (Agent Uprising):** Add ADO Operations section (800 words) - professional workflow agent
 - **Chapter 6 (Token Crisis):** Add Dashboard Launcher section (1,000 words) - visual optimization proof
 - **Chapter 7 (NEW):** TDD Mastery - "The RED Phase Revelation" (3,000 words) - full chapter
-- **Chapter 8 (NEW):** Planning System 2.0 - "The Orchestrator Awakening" (3,200 words) - full chapter
+- **Chapter 8 (NEW):** Planning System - "The Orchestrator Awakening" (3,200 words) - full chapter
 - **Chapter 9 (NEW):** System Maintenance - "The Self-Healing Miracle" (2,800 words) - full chapter
 - **Epilogue:** Minor feature mentions (execution methods, response templates, future roadmap)
 
@@ -377,7 +377,7 @@ class FeatureDiscoveryModule:
     
     def generate_integration_points(self) -> List[IntegrationPoint]:
         """Identify narrative beats where features fit naturally"""
-        # Example: Planning System 2.0 fits in Chapter 4 during agent coordination
+        # Example: Planning System fits in Chapter 4 during agent coordination
         # Story beat: "And who coordinates the coordinators?"
         # Integration: Planning Agent coordinates multi-agent workflows
 ```
@@ -387,7 +387,7 @@ class FeatureDiscoveryModule:
 {
   "features": [
     {
-      "name": "Planning System 2.0",
+      "name": "Planning System",
       "type": "orchestrator",
       "theme": "strategic_coordination",
       "target_chapter": "Chapter 4",
@@ -1927,7 +1927,7 @@ ls -1 docs/story/illustrations/prompts/
 
 **Deliverables:**
 - [ ] TDD Mastery chapter (Chapter 7) - 3,000 words (MAJOR)
-- [ ] Planning System 2.0 chapter (Chapter 8) - 3,200 words (MAJOR)
+- [ ] Planning System chapter (Chapter 8) - 3,200 words (MAJOR)
 - [ ] System Maintenance chapter (Chapter 9) - 2,800 words (MAJOR)
 - [ ] ADO Operations section (Chapter 4) - 800 words (MEDIUM)
 - [ ] Dashboard Launcher section (Chapter 6) - 1,000 words (MEDIUM)
@@ -2414,7 +2414,7 @@ python scripts/story_enhancement_orchestrator.py \
 | Feature | Weight | Target | Words | Rationale |
 |---------|--------|--------|-------|-----------|
 | TDD Mastery | ⭐ MAJOR | Ch 7 | 3,000 | Workflow paradigm shift |
-| Planning System 2.0 | ⭐ MAJOR | Ch 8 | 3,200 | Orchestrator coordination |
+| Planning System | ⭐ MAJOR | Ch 8 | 3,200 | Orchestrator coordination |
 | System Maintenance | ⭐ MAJOR | Ch 9 | 2,800 | Self-healing architecture |
 | ADO Operations | 📊 MEDIUM | Ch 4 | 800 | Professional workflow |
 | Dashboard Launcher | 📊 MEDIUM | Ch 6 | 1,000 | Visual validation |

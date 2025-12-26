@@ -96,7 +96,7 @@ Generate complete technical documentation for all CORTEX 4.0 components and prep
 **Tasks:**
 
 1. **Generate Orchestrator Documentation**
-   - [ ] Planning System 2.0 - DoR/DoD, complexity detection, TDD integration
+   - [ ] Planning System - DoR/DoD, complexity detection, TDD integration
    - [ ] TDD Mastery v4.0 - RED→GREEN→REFACTOR, phase enforcement, adaptive learning
    - [ ] Execution Orchestrator - autonomous execution, phase management, multi-orchestrator routing
    - [ ] ADO Integration - story/feature/task creation, completion summaries
@@ -107,11 +107,11 @@ Generate complete technical documentation for all CORTEX 4.0 components and prep
    - [ ] Observability Orchestrator - monitoring, metrics
    - [ ] Onboarding Orchestrator - user guidance
    - [ ] Sanitization Orchestrator - 5-phase code sanitization workflow
-   - [ ] Maintenance Orchestrator v3.0 - 7-phase maintenance workflow
+   - [ ] Maintenance Orchestrator - 7-phase maintenance workflow
    - [ ] Error Recovery Orchestrator - failure recovery patterns
 
 2. **Generate Feature Documentation**
-   - [ ] Planning System 2.0 - Complete workflow guide
+   - [ ] Planning System - Complete workflow guide
    - [ ] TDD Mastery - Phase enforcement and coverage tracking
    - [ ] Code Sanitization - 5-phase workflow detailed guide
    - [ ] ADO Integration - Work item creation workflow

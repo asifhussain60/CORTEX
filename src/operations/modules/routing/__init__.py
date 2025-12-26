@@ -1,4 +1,4 @@
-"""Routing module for CORTEX Planning System 3.0
+"""Routing module for CORTEX Planning System
 
 This module provides tiered routing for operation classification.
 

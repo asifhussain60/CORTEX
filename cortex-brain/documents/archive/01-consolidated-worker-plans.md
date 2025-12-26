@@ -29,11 +29,11 @@
 
 ## 🎯 Goal
 
-Enhance TDD Orchestrator v4.0 from 57% to 95% agentic alignment by integrating Phase 5 agentic packages.
+Enhance TDD Orchestrator from 57% to 95% agentic alignment by integrating Phase 5 agentic packages.
 
 ## 📊 Current State
 
-**File:** `src/orchestrators/tdd/tdd_orchestrator_v4.py` (869 LOC)  
+**File:** `src/orchestrators/tdd/tdd_orchestrator.py` (869 LOC)  
 **Test Coverage:** 90%+ (26/26 tests passing)  
 **Agentic Alignment:** 57%
 
@@ -168,7 +168,7 @@ def _merge_test_suites(self, agent_results: List[AgentContext]) -> TestSuite:
 
 5. **Write tests** (2 hours)
 ```python
-# tests/orchestrators/tdd/test_tdd_orchestrator_v4_agentic.py
+# tests/orchestrators/tdd/test_tdd_orchestrator_agentic.py
 
 async def test_generate_tests_parallel_multiple_files(tdd_orchestrator):
     """Test parallel test generation across 3 files"""

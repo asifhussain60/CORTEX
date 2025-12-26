@@ -29,7 +29,7 @@
 
 **Rule ID:** `INLINE_CSS_PROHIBITION`  
 **Severity:** BLOCKED (cannot be bypassed)  
-**Phase Integration:** Planning System 2.0 REFACTOR phase
+**Phase Integration:** Planning System REFACTOR phase
 
 **Mandate:** All inline CSS must be migrated to centralized CSS files during REFACTOR phase.
 
@@ -65,7 +65,7 @@ The rule detects and blocks:
 - Updated rule count: 47 → 48
 - Positioned after `CODE_STYLE_CONSISTENCY` for logical grouping
 
-**2. cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml**
+**2. cortex-brain/manifests/orchestrators/planning-system-manifest.yaml**
 - Added Phase 5 Step 5.5.1: "Add REFACTOR Phase CSS Validation"
 - Integrated with REFACTOR phase mandatory checks
 - Status: Implemented
@@ -94,7 +94,7 @@ The rule detects and blocks:
 - 3 CSS organization patterns (Component-Scoped, Feature-Based, Atomic/Utility)
 - CSS variables for theming
 - Migration workflow (6 steps)
-- Planning System 2.0 integration code
+- Planning System integration code
 - Exception handling
 - Success metrics
 
@@ -137,7 +137,7 @@ def validate_no_inline_css(project_path: str) -> bool:
 ### REFACTOR Phase Integration
 
 ```yaml
-# Planning System 2.0 REFACTOR Phase Checklist
+# Planning System REFACTOR Phase Checklist
 refactor_validations:
   - orphaned_code_removal       # REFACTOR_CODE_CLEANUP_ENFORCEMENT
   - duplicate_detection         # HOLISTIC_CODE_DISCOVERY_ENFORCEMENT
@@ -346,7 +346,7 @@ theming_capability:
 ✅ Detection patterns documented  
 ✅ Migration strategy provided
 
-### Planning System 2.0 Integration
+### Planning System Integration
 
 ✅ Added Phase 5 Step 5.5.1 to manifest  
 ✅ REFACTOR phase validation requirement  
@@ -368,7 +368,7 @@ theming_capability:
 
 ### 1. REFACTOR Phase Integration
 
-First SKULL rule explicitly integrated with Planning System 2.0 REFACTOR phase workflow.
+First SKULL rule explicitly integrated with Planning System REFACTOR phase workflow.
 
 ### 2. Multi-Pattern Detection
 
@@ -403,7 +403,7 @@ Connects with existing `SKULL_VISUAL_REGRESSION` rule for safe migrations.
 
 - [x] Rule implementation complete
 - [x] Documentation complete
-- [x] Planning System 2.0 integration complete
+- [x] Planning System integration complete
 - [ ] Commit changes to git
 - [ ] Test rule enforcement in next UI development cycle
 
@@ -431,7 +431,7 @@ Connects with existing `SKULL_VISUAL_REGRESSION` rule for safe migrations.
 
 ### "Planning 2.0 system refactor phase should check for this"
 
-**Answer:** ✅ Integrated as Phase 5 Step 5.5.1 in Planning System 2.0 manifest. REFACTOR phase now validates CSS centralization before allowing completion.
+**Answer:** ✅ Integrated as Phase 5 Step 5.5.1 in Planning System manifest. REFACTOR phase now validates CSS centralization before allowing completion.
 
 ### "All inline css should be centralized to css files"
 
@@ -447,7 +447,7 @@ Connects with existing `SKULL_VISUAL_REGRESSION` rule for safe migrations.
 ## 🏆 Success Criteria
 
 ✅ **Tier 0 Rule:** Registered and enforced (INLINE_CSS_PROHIBITION)  
-✅ **Planning System 2.0:** REFACTOR phase integration complete  
+✅ **Planning System:** REFACTOR phase integration complete  
 ✅ **Documentation:** Implementation guide + quick reference  
 ✅ **CSS Patterns:** 3 organization patterns documented  
 ✅ **Theming:** CSS variables infrastructure  
@@ -462,7 +462,7 @@ Connects with existing `SKULL_VISUAL_REGRESSION` rule for safe migrations.
 - **Rule Definition:** `cortex-brain/brain-protection-rules.yaml` (lines 1476-1899)
 - **Implementation Guide:** `cortex-brain/documents/implementation-guides/css-centralization-rule.md`
 - **Quick Reference:** `cortex-brain/INLINE-CSS-PROHIBITION-QUICK-REF.md`
-- **Planning System 2.0 Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- **Planning System Manifest:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 - **Visual Regression:** SKULL_VISUAL_REGRESSION rule
 - **Code Style:** CODE_STYLE_CONSISTENCY rule
 

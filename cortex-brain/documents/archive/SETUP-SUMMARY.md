@@ -133,4 +133,4 @@
 
 **Next Action:** Approve plan and begin Phase 1 implementation
 
-*This summary is part of CORTEX Planning System 2.0*
+*This summary is part of CORTEX Planning System*

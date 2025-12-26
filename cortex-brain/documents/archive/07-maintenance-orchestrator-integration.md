@@ -9,7 +9,7 @@
 
 ## 🎯 Objectives
 
-Integrate Maintenance Orchestrator v3.0 with Planning System 3.0 to enable maintenance operations to leverage planning infrastructure for multi-phase execution and progress tracking.
+Integrate Maintenance Orchestrator with Planning System to enable maintenance operations to leverage planning infrastructure for multi-phase execution and progress tracking.
 
 **Key Deliverables:**
 1. Maintenance orchestrator uses planning session model
@@ -27,21 +27,21 @@ Integrate Maintenance Orchestrator v3.0 with Planning System 3.0 to enable maint
 
 ### Task 7.1: Maintenance Orchestrator Planning Integration
 
-**File:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+**File:** `src/operations/modules/orchestration/maintenance_orchestrator.py`
 
 **Integrate Planning Session Model:**
 ```python
 """
-Maintenance Orchestrator v3.0
+Maintenance Orchestrator
 
-Integrates with Planning System 3.0 for maintenance workflow orchestration.
+Integrates with Planning System for maintenance workflow orchestration.
 """
 from typing import Dict, Any
 import logging
 from src.operations.modules.orchestration.session_model import PlanningSession
 from src.operations.modules.orchestration.planning_orchestrator import PlanningOrchestrator
 
-class MaintenanceOrchestratorV3:
+class MaintenanceOrchestrator:
     """
     Maintenance Orchestrator - 7-phase maintenance workflow with planning integration.
     
@@ -70,7 +70,7 @@ class MaintenanceOrchestratorV3:
         Returns:
             Maintenance execution results with planning metrics
         """
-        self.logger.info("🎭 Orchestrator engaged: MaintenanceOrchestratorV3")
+        self.logger.info("🎭 Orchestrator engaged: MaintenanceOrchestrator")
         
         # Initialize planning session for maintenance
         session = self.planning_orchestrator.initialize_planning_session(
@@ -268,7 +268,7 @@ def generate_maintenance_report(self, results: Dict[str, Any]) -> str:
     """
     Generate maintenance completion report with visual progress.
     
-    Uses Planning System 3.0 visual tracker for progress display.
+    Uses Planning System visual tracker for progress display.
     """
     from src.operations.modules.orchestration.planning.visual_tracker import VisualProgressTracker
     
@@ -328,13 +328,13 @@ System ready for production use.
 
 ### Task 7.3: Tiered Routing Integration
 
-**Integrate with Planning System 3.0 Tiered Routing:**
+**Integrate with Planning System Tiered Routing:**
 ```python
 def route_maintenance_operation(self, operation: str, tier: int = None) -> Dict[str, Any]:
     """
     Route maintenance operation through tiered routing system.
     
-    Leverages Planning System 3.0 tiered routing for complexity-based execution.
+    Leverages Planning System tiered routing for complexity-based execution.
     
     Args:
         operation: Maintenance operation to route
@@ -438,14 +438,14 @@ metadata:
 
 ```python
 import pytest
-from src.operations.modules.orchestration.maintenance_orchestrator_v3 import MaintenanceOrchestratorV3
+from src.operations.modules.orchestration.maintenance_orchestrator import MaintenanceOrchestrator
 
 class TestMaintenancePlanningIntegration:
-    """Test maintenance orchestrator integration with Planning System 3.0."""
+    """Test maintenance orchestrator integration with Planning System."""
     
     def test_maintenance_creates_planning_session(self):
         """Test that maintenance creates planning session."""
-        orchestrator = MaintenanceOrchestratorV3()
+        orchestrator = MaintenanceOrchestrator()
         
         results = orchestrator.execute_maintenance(scope='quick')
         
@@ -454,7 +454,7 @@ class TestMaintenancePlanningIntegration:
     
     def test_7_phase_workflow_execution(self):
         """Test all 7 phases execute with planning tracking."""
-        orchestrator = MaintenanceOrchestratorV3()
+        orchestrator = MaintenanceOrchestrator()
         
         results = orchestrator.execute_maintenance(scope='full')
         
@@ -464,7 +464,7 @@ class TestMaintenancePlanningIntegration:
     
     def test_checkpoint_creation_for_critical_phases(self):
         """Test checkpoints created for critical phases."""
-        orchestrator = MaintenanceOrchestratorV3()
+        orchestrator = MaintenanceOrchestrator()
         
         results = orchestrator.execute_maintenance(scope='full')
         
@@ -474,7 +474,7 @@ class TestMaintenancePlanningIntegration:
     
     def test_success_template_when_complete(self):
         """Test success template used when all phases complete."""
-        orchestrator = MaintenanceOrchestratorV3()
+        orchestrator = MaintenanceOrchestrator()
         
         results = orchestrator.execute_maintenance(scope='full')
         
@@ -526,7 +526,7 @@ class TestMaintenancePlanningIntegration:
 
 **Requires:**
 - Phase 6: ADO Orchestrator Integration (complete)
-- Planning System 3.0 operational
+- Planning System operational
 - Git checkpoint utility available
 
 **Enables:**

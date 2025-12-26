@@ -311,7 +311,7 @@ That's not incremental improvement—that's transformational efficiency.
 
 **Example:**
 ```
-**Planning System 2.0: Built for Product Success**
+**Planning System: Built for Product Success**
 
 Tired of mid-sprint surprises? Me too.
 

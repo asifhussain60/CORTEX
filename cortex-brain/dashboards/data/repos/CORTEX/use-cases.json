@@ -77,7 +77,7 @@
     },
     {
       "id": "uc006",
-      "title": "Planning System 2.0 with DoR/DoD",
+      "title": "Planning System with DoR/DoD",
       "description": "Create incremental/conditional/skeleton plans with Definition of Ready and Done compliance",
       "target_role": "Manager",
       "domain": "Reporting",
@@ -85,7 +85,7 @@
       "confidence": 0.91,
       "business_value": "high",
       "evidence": {
-        "files": [".github/prompts/planning-system-2.0-manifest.yaml"],
+        "files": [".github/prompts/planning-system-manifest.yaml"],
         "patterns": ["plan", "dor", "dod", "incremental", "conditional"],
         "entities": ["plan", "task", "milestone"]
       }

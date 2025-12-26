@@ -256,7 +256,7 @@ requirements:
   - requirement_id: "DBG-013"
     name: "Debug Response Templates"
     description: |
-      Professional template-based responses matching Planning System 2.0 quality.
+      Professional template-based responses matching Planning System quality.
       5 templates for debug workflow stages.
     priority: "high"
     status: "planned"
@@ -296,7 +296,7 @@ requirements:
     name: "Debug Session Quality Gates (DoR/DoD)"
     description: |
       Definition of Ready and Definition of Done for debug sessions.
-      Matches Planning System 2.0 quality gate pattern.
+      Matches Planning System quality gate pattern.
     priority: "high"
     status: "planned"
     validation_method: "method_exists"
@@ -654,7 +654,7 @@ changelog:
       - "Added DBG-016: Autonomous Debug Workflow"
       - "Updated to 16 requirements (6 critical, 8 high, 2 medium)"
       - "Phase 5 duration: 4.5 weeks → 6 weeks (28h additional)"
-      - "100% feature parity with Planning System 2.0 and TDD Mastery"
+      - "100% feature parity with Planning System and TDD Mastery"
   
   - version: "1.1.0"
     date: "2025-12-09"

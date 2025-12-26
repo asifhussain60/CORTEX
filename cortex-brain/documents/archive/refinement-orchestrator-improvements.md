@@ -1,4 +1,4 @@
-# Refinement Orchestrator v1.0 - Improvements Summary
+# Refinement Orchestrator - Improvements Summary
 
 **Date:** December 16, 2025  
 **Version:** v1.0 Post-Launch Fixes  

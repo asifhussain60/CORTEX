@@ -40,7 +40,7 @@ Create automatic refactor cycle engine for code cleanup integrated into all Tier
 """
 Refactor Cycle Engine - Automatic code cleanup and quality enforcement.
 
-Integrated into Planning System 3.0 for automatic code cleanup
+Integrated into Planning System for automatic code cleanup
 during Tier 3/4 operations.
 """
 

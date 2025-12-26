@@ -495,7 +495,7 @@ master_story_path = self.workspace_root / "cortex-brain" / "orchestrator" / "sou
 **Recent Milestones:**
 - Phase 0 Complete: 100% test pass rate (834/897 passing)
 - CORTEX 2.0: 97.2% input token reduction
-- Planning System 2.0: Vision API integration (planned)
+- Planning System: Vision API integration (planned)
 
 **Implementation Status:**
 - Core Architecture: ✅ Complete

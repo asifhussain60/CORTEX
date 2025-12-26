@@ -32,7 +32,7 @@ operation_aliases:
   ado: ado_agent               # ✅ Matches specialized/ado-integration/ado-integration.yaml
 ```
 
-**Impact:** User commands now correctly route to specialized Planning System 2.0 and ADO templates instead of falling back to generic responses.
+**Impact:** User commands now correctly route to specialized Planning System and ADO templates instead of falling back to generic responses.
 
 ---
 
@@ -153,9 +153,9 @@ Add more natural language variants:
 ## 🚨 Risks Mitigated
 
 ### Risk 1: Broken Template Routing (MEDIUM → RESOLVED)
-**Before:** User says "plan feature" → alias resolves to non-existent `planning-workflow` → falls back to generic template → loses Planning System 2.0 content
+**Before:** User says "plan feature" → alias resolves to non-existent `planning-workflow` → falls back to generic template → loses Planning System content
 
-**After:** User says "plan feature" → alias correctly resolves to `planning` → loads Planning System 2.0 template with full feature set
+**After:** User says "plan feature" → alias correctly resolves to `planning` → loads Planning System template with full feature set
 
 ---
 

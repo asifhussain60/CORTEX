@@ -17,7 +17,7 @@
 📄 DOCUMENT BREAKDOWN
 ================================================================================
 
-✅ PASS - planning-system-2.0-user-guide.md
+✅ PASS - planning-system-user-guide.md
    Examples: 3 | Valid: 3 | Invalid: 0
 
 ⏭️  SKIP - system-maintenance-v3-user-guide.md (no Python examples)

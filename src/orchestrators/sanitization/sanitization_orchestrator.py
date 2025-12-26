@@ -1,13 +1,13 @@
 """
 Sanitization Orchestrator - Code Sanitization Workflow
 
-Full Planning System 2.0-compliant orchestrator for code sanitization.
+Full Planning System-compliant orchestrator for code sanitization.
 Implements 5-phase workflow with interactive mapping approval and validation gates.
 
 Architecture:
     - Inherits from BaseOrchestrator for standardized lifecycle
     - 5-phase workflow: ANALYZE → MAPPING → TRANSFORM → VALIDATE → REPORT
-    - Planning System 2.0 parity: Interactive approval, dry-run mode, visual progress
+    - Planning System parity: Interactive approval, dry-run mode, visual progress
     - Sanitization-specific: Domain term extraction, AST transformation, rollback
 
 Usage:
@@ -116,7 +116,7 @@ class SanitizationOrchestrator(BaseOrchestrator):
     Sanitization Orchestrator - Code Sanitization Workflow
     
     Orchestrates the complete lifecycle of code sanitization from analysis
-    to validated transformation, with Planning System 2.0 feature parity.
+    to validated transformation, with Planning System feature parity.
     
     Inherits from BaseOrchestrator to leverage standard orchestration patterns:
     - Configuration injection
@@ -132,7 +132,7 @@ class SanitizationOrchestrator(BaseOrchestrator):
         4. VALIDATE: Build validation, test execution, rollback on failure
         5. REPORT: Audit report generation, metrics collection, artifact creation
     
-    Planning System 2.0 Parity:
+    Planning System Parity:
         - ✅ Interactive approval workflow (MAPPING phase)
         - ✅ Dry-run mode support
         - ✅ Visual progress indicators (🎭 engagement hints)

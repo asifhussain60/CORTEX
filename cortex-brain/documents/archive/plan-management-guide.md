@@ -532,7 +532,7 @@ sqlite3 cortex-brain/documents/planning/planning-registry.db
 
 - **Shared Environment Setup:** `shared-environment-setup.md`
 - **User Profiling Guide:** `user-profiling-guide.md`
-- **Planning System 2.0:** `.github/prompts/modules/planning-system-guide.md`
+- **Planning System:** `.github/prompts/modules/planning-system-guide.md`
 - **DoR/DoD Checklists:** `cortex-brain/planning-checklists.yaml`
 
 ---

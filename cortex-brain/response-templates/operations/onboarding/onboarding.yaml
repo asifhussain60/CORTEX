@@ -19,7 +19,7 @@ templates:
         \ Setup**\n- CORTEX installed\n- Brain tiers initialized\n- Configuration\
         \ validated\n\n✅ **Core Concepts**\n- 4-tier brain architecture understood\n\
         - Response template system reviewed\n- TDD Mastery workflow introduced\n-\
-        \ Planning System 2.0 overview\n\n✅ **First Operations**\n- Help command tested\n\
+        \ Planning System overview\n\n✅ **First Operations**\n- Help command tested\n\
         - System alignment run\n- Feature discovery verified\n\n**Profile Creation:**\n\
         ```yaml\nuser_profile:\n  name: [Your Name]\n  role: [Developer/Tester/Manager/Product\
         \ Owner]\n  team: [Team Name]\n  preferences:\n    response_style: standard\n\

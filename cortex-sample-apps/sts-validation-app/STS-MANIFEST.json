@@ -106,7 +106,7 @@
         "branches": 8
       },
       "detection_heuristic": "if/elif count > 5",
-      "capability_tested": "planning_system_2.0"
+      "capability_tested": "planning_system"
     },
     {
       "id": "SOL-09",
@@ -240,7 +240,7 @@
       ],
       "success_criteria": "5/5 secrets sanitized, tests pass, mapping generated"
     },
-    "planning_system_2.0": {
+    "planning_system": {
       "flaws_to_detect": ["SOL-04", "SEC-03"],
       "expected_complexity": "HIGH",
       "expected_routing": "incremental",

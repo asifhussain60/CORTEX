@@ -338,7 +338,7 @@ Or disable knowledge extraction via config:
 ## 📚 Related Documentation
 
 - **Investigation:** `cortex-brain/documents/investigations/planning-orchestrator-autonomous-failures.md`
-- **Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- **Manifest:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 - **PlanFolderManager:** `src/workflows/plan_folder_manager.py`
 - **Knowledge Graph:** `src/tier2/knowledge_graph.py`
 - **KG Auto-Updater:** `src/operations/utilities/knowledge_graph_auto_updater.py`

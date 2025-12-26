@@ -1,5 +1,5 @@
 """
-Feature Auto-Registrar for CORTEX Align Orchestrator v2.0
+Feature Auto-Registrar for CORTEX Align Orchestrator
 
 This module automatically discovers and registers new features in cortex-operations.yaml.
 Extracts metadata from Python files and generates properly formatted YAML entries.

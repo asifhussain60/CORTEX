@@ -9,13 +9,13 @@
 ## 📊 Current Coverage Baseline
 
 ### 1. TDD Orchestrator v4 ✅ EXISTS
-**File:** `src/orchestrators/tdd/tdd_orchestrator_v4.py`  
+**File:** `src/orchestrators/tdd/tdd_orchestrator.py`  
 **LOC:** 1,179  
 **Current Coverage:** 49.57% (599/1290 statements)  
 **Tests:** 70 passing
 
 **Coverage by Component:**
-- `tdd_orchestrator_v4.py`: **67.89%** (115/386 missing)
+- `tdd_orchestrator.py`: **67.89%** (115/386 missing)
 - `red_phase_strategy.py`: **84.97%** (15/137 missing)
 - `green_phase_strategy.py`: **26.88%** (106/152 missing) ⚠️ LOW
 - `refactor_phase_strategy.py`: **17.30%** (115/147 missing) ⚠️ CRITICAL
@@ -86,7 +86,7 @@
 ---
 
 ### 4. Maintenance Orchestrator v3 ❌ MISSING
-**File:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`  
+**File:** `src/operations/modules/orchestration/maintenance_orchestrator.py`  
 **Status:** **DOES NOT EXIST** (architecture documented only)  
 **LOC:** Unknown (estimated ~500-800 based on architecture docs)  
 **Current Coverage:** 0% (file missing)
@@ -171,7 +171,7 @@ src/operations/modules/orchestration/
    - Phase 7: Post-healthcheck validation (5 tests)
 
 3. **Integration Testing (30 tests)**
-   - Planning System 3.0 integration (10 tests)
+   - Planning System integration (10 tests)
    - Router agent invocation (5 tests)
    - Tiered routing (5 tests)
    - Success template completion (5 tests)

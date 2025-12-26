@@ -30,10 +30,10 @@
 
 ### Q2: Integration with Planning System
 
-**Question:** Should SWAGGER integrate with existing Planning System 2.0 or operate independently?
+**Question:** Should SWAGGER integrate with existing Planning System or operate independently?
 
 **Options:**
-- [] **Integrate with Planning System 2.0** - Reuse DoR/DoD, security review, phase breakdown
+- [] **Integrate with Planning System** - Reuse DoR/DoD, security review, phase breakdown
 - [ ] **Operate independently** - Separate lightweight workflow for quick estimates
 - [x] **Hybrid approach** - Quick mode (independent) + Detailed mode (integrated)
 

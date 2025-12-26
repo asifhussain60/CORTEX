@@ -13,7 +13,7 @@ Responsibilities:
 - Phase transition enforcement (must pass DoR/DoD)
 - TDD workflow pattern learning
 - TDD strategy recommendations
-- Integration with TDD Orchestrator v4.0
+- Integration with TDD Orchestrator
 
 Integration Points:
 - Planning System: Injects TDD workflow into plans

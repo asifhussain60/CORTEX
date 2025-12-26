@@ -4,7 +4,7 @@ CORTEX 4.0 TDD Orchestrator Module
 Unified TDD orchestrator with adaptive learning, clean architecture, and AI-driven capabilities.
 
 Main Components:
-- TDDOrchestratorV4: Main orchestrator coordinating RED→GREEN→REFACTOR
+- TDDOrchestrator: Main orchestrator coordinating RED→GREEN→REFACTOR
 - TechnologyDiscoveryEngine: Auto-discover tech stacks and learn patterns
 - CleanCodeEnforcer: Enforce SOLID, DRY, KISS, YAGNI principles
 - Phase Strategies: RED, GREEN, REFACTOR
@@ -12,8 +12,8 @@ Main Components:
 Version: 4.0.0
 """
 
-from .tdd_orchestrator_v4 import (
-    TDDOrchestratorV4,
+from .tdd_orchestrator import (
+    TDDOrchestrator,
     TechnologyDiscoveryEngine,
     CleanCodeEnforcer,
     TDDPhase,
@@ -23,7 +23,7 @@ from .tdd_orchestrator_v4 import (
 )
 
 __all__ = [
-    'TDDOrchestratorV4',
+    'TDDOrchestrator',
     'TechnologyDiscoveryEngine',
     'CleanCodeEnforcer',
     'TDDPhase',

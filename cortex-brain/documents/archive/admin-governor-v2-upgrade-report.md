@@ -26,7 +26,7 @@ Admin Governor prompt upgraded from v1.0 to v2.0 with **9 new validation section
 | 15 | Test Suite Health Monitoring | Comprehensive test validation (quality, coverage, performance) |
 | 16 | Document Categorization Enforcement | Anti-root-clutter, auto-routes documents to correct categories |
 | 17 | Operations Registry Integrity | Prevents dead operations, validates wiring |
-| 18 | Manifest Inheritance Validation | ADO → Planning System 2.0 inheritance chain verification |
+| 18 | Manifest Inheritance Validation | ADO → Planning System inheritance chain verification |
 | 19 | Git Commit Verification | Prevents dirty commits, enforces atomic commit requirements |
 | N/A | Governance Cycle Workflow | 12-step validation process runs every governance cycle |
 
@@ -255,7 +255,7 @@ Action: Fix path OR mark operation as 'internal' if no wrapper needed
 2. Parse cortex-operations.yaml
 3. Operation: system_maintenance, cli_script: scripts/cli_wrappers/maintenance_wrapper.py
 4. Validation: File NOT FOUND
-5. Check if orchestrator exists: src/operations/modules/orchestration/maintenance_orchestrator_v3.py - MISSING
+5. Check if orchestrator exists: src/operations/modules/orchestration/maintenance_orchestrator.py - MISSING
 6. Action: Mark operation as 'internal' (not user-facing) OR remove from registry
 7. Update operations registry
 

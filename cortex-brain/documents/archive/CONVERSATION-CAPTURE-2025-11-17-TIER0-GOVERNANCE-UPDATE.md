@@ -247,7 +247,7 @@ Pull from origin and merge. Commit all changes and push to origin. Make sure all
 
 **Git Commits:**
 1. "governance: add NO_EMOJIS_IN_SCRIPTS and NO_ROOT_SUMMARY_DOCUMENTS rules"
-2. "feat: complete ADO Planning System 2.0 and Vision API integration"
+2. "feat: complete ADO Planning System and Vision API integration"
 
 ---
 

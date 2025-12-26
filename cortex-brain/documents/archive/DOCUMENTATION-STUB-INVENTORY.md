@@ -26,7 +26,7 @@ This document lists all documentation pages containing stub markers or placehold
 
 | Page | Path | Status | Effort | Notes |
 |------|------|--------|--------|-------|
-| Planning System | `features/planning-system.html` | STUB | 1-2h | Need Planning System 2.0 details, phases, examples |
+| Planning System | `features/planning-system.html` | STUB | 1-2h | Need Planning System details, phases, examples |
 | Dashboard System | `features/dashboard-system.html` | STUB | 1h | Need dashboard features, collectors, metrics |
 | ADO Operations | `features/ado-operations.html` | STUB | 1h | Need ADO integration details, story/task creation |
 | Architecture | `architecture/index.html` | STUB | 1-2h | Need 4-tier brain architecture, orchestrators |
@@ -67,7 +67,7 @@ Features related to operations & workflows:
 ```markdown
 ### Operations & Workflows
 
-- **Planning System 2.0:** Interactive feature planning with TDD integration, DoR/DoD compliance, and 6-phase execution
+- **Planning System:** Interactive feature planning with TDD integration, DoR/DoD compliance, and 6-phase execution
 - **TDD Mastery:** RED→GREEN→REFACTOR workflow with per-layer coverage validation and debugging orchestrator
 - **ADO Operations:** Azure DevOps integration for story/feature/task creation and completion summaries
 - **System Maintenance:** 6-phase health monitoring with auto-fix alignment and prompt refresh

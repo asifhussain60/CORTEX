@@ -3,7 +3,7 @@
 **Rule:** INLINE_CSS_PROHIBITION  
 **Tier:** 0 (Cannot be bypassed)  
 **Severity:** BLOCKED  
-**Phase:** REFACTOR (Planning System 2.0)
+**Phase:** REFACTOR (Planning System)
 
 ---
 
@@ -137,7 +137,7 @@ element.style.setProperty('--user-color', user.themeColor);
 
 ## 🔍 REFACTOR Phase Validation
 
-Planning System 2.0 automatically checks:
+Planning System automatically checks:
 ```python
 def validate_refactor_phase():
     return (

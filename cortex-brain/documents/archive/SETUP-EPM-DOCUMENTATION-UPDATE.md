@@ -68,7 +68,7 @@ Added Setup Entry Point Module (EPM) documentation to CORTEX.prompt.md universal
 
 **Section Placement:**
 - **Before:** Conversation Capture & Context
-- **After:** Planning System 2.0
+- **After:** Planning System
 - **Rationale:** Logically grouped with other user-facing features (Planning, TDD, Tutorial)
 
 ### Cross-References

@@ -39,7 +39,7 @@ Migrated 3 orchestrators to use BaseOrchestrator with adaptive execution modes:
 2. `src/orchestration_4_0/orchestrators/documentation/documentation_orchestrator.py` (+80 LOC)
 
 **Files Created:**
-1. `src/orchestrators/tdd/tdd_orchestrator_v4_migrated.py` (520 LOC)
+1. `src/orchestrators/tdd/tdd_orchestrator_migrated.py` (520 LOC)
 2. `tests/test_orchestrator_migrations.py` (350 LOC)
 3. `cortex-brain/documents/reports/orchestrator-migration-days-4-5.md` (documentation)
 
@@ -70,7 +70,7 @@ orchestrator.execute(context, mode="INTERACTIVE")
 - Error handling with retry logic
 
 **Backward Compatibility:**
-- ✅ Original TDD v4.0 preserved at `tdd_orchestrator_v4.py`
+- ✅ Original TDD v4.0 preserved at `tdd_orchestrator.py`
 - ✅ All existing orchestrators remain functional
 - ✅ No breaking changes to public APIs
 

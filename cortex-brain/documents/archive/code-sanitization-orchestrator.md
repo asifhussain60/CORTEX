@@ -410,7 +410,7 @@ Reports contain critical provenance information:
 
 ## Integration with CORTEX
 
-### Planning System 2.0
+### Planning System
 
 Can be invoked via:
 ```bash
@@ -516,7 +516,7 @@ except Exception as e:
 ## Related Documentation
 
 - [Code Sanitization Quick Reference](../CODE-SANITIZATION-QUICK-REF.md)
-- [Planning System 2.0 Manifest](../../manifests/planning-system-2.0-manifest.yaml)
+- [Planning System Manifest](../../manifests/planning-system-manifest.yaml)
 - [ADO Operations Guide](./ado-operations-guide.md)
 
 ---

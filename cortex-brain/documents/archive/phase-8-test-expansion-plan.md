@@ -38,7 +38,7 @@ Given the 85% coverage gap (10% → 95%), we'll use **high-leverage testing** ra
 
 ### Autonomous Execution Strategy
 
-Rather than manually writing 200+ tests, we'll use **TDD Orchestrator v4.0** to auto-generate tests for priority modules.
+Rather than manually writing 200+ tests, we'll use **TDD Orchestrator** to auto-generate tests for priority modules.
 
 #### Step 1: TDD Orchestrator Self-Improvement (2h)
 **Current:** 88.62% coverage (30 missing lines)  
@@ -48,14 +48,14 @@ Rather than manually writing 200+ tests, we'll use **TDD Orchestrator v4.0** to 
 
 ```bash
 # Generate tests for TDD Orchestrator's missing coverage
-pytest --cov=src/orchestrators/tdd/tdd_orchestrator_v4.py --cov-report=term-missing
+pytest --cov=src/orchestrators/tdd/tdd_orchestrator.py --cov-report=term-missing
 # Identify missing lines (982-991, 995, 1025-1026, etc.)
 # Use TDD Orchestrator to generate tests for these lines
 ```
 
 **Expected Output:** 20 new tests, 2 hours
 
-#### Step 2: Planning System 2.0 Enhancement (4h)
+#### Step 2: Planning System Enhancement (4h)
 **Modules:**
 - plan_executor.py (83.33% → 97%)
 - session_manager.py (84.55% → 97%)
@@ -105,7 +105,7 @@ pytest --cov=src/orchestrators/tdd/tdd_orchestrator_v4.py --cov-report=term-miss
 
 ```bash
 # Use TDD Orchestrator to generate missing tests
-pytest --cov=src/orchestrators/tdd/tdd_orchestrator_v4.py --cov-report=term-missing
+pytest --cov=src/orchestrators/tdd/tdd_orchestrator.py --cov-report=term-missing
 
 # Extract missing lines
 # Lines: 982-991, 995, 1025-1026, 1050-1051, 1068, 1113-1147
@@ -202,10 +202,10 @@ Before completing Task 8.2:
 1. ✅ Remove placeholder tests (DONE - 4 files deleted)
 2. ✅ Confirm clean baseline (DONE - 10.05%, 1,678 passing)
 3. 🔄 Begin TDD Orchestrator self-testing
-4. 🔄 Generate 20 tests for missing coverage in TDD Orchestrator v4.0
+4. 🔄 Generate 20 tests for missing coverage in TDD Orchestrator
 
 **This Week (Days 3-6):**
-- Generate Planning System 2.0 tests (40 tests)
+- Generate Planning System tests (40 tests)
 - Create Brain Tier tests manually (60 tests)
 - Batch-generate orchestrator tests (50 tests)
 - Complete DI + utilities tests (30 tests)

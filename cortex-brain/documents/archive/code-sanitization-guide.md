@@ -398,7 +398,7 @@ onboard MyApp
 sanitize MyApp --auto-approve
 ```
 
-### With Planning System 2.0
+### With Planning System
 
 ```
 # Plan a feature, sanitize the implementation

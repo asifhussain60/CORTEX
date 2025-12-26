@@ -110,12 +110,12 @@ defaults:
 
 # Orchestrator registry
 orchestrators:
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     version: "4.0.0"
     status: "active"
     category: "tdd"
     description: "Unified TDD orchestrator with adaptive learning"
-    source_file: "src/orchestrators/tdd/tdd_orchestrator_v4.py"
+    source_file: "src/orchestrators/tdd/tdd_orchestrator.py"
     documentation_path: ".github/prompts/modules/tdd-orchestrator-guide.md"
     manifest_file: "tdd-orchestrator-v4-manifest.yaml"  # DEPRECATED - will be removed
     parent_orchestrator: "planning_orchestrator"
@@ -131,7 +131,7 @@ orchestrators:
     source_file: "src/operations/modules/orchestration/planning_orchestrator.py"
     documentation_path: ".github/prompts/modules/planning-system-guide.md"
     child_orchestrators:
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
       - "ado_planning_orchestrator"
     
   # ... 14 more orchestrators
@@ -193,7 +193,7 @@ categories:
 
 # Orchestrator-specific overrides
 orchestrator_configs:
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     refactoring:
       enabled: true
       enforcement_level: "strict"  # Override global

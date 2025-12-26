@@ -12,7 +12,7 @@
 **Document Created:** `DOCUMENTATION-ORCHESTRATOR-ARCHITECTURE.md`
 
 **Metrics:**
-- **Lines Written:** 1,400+ (vs 700 for TDD v4.0, 1,200 for Planning System 2.0)
+- **Lines Written:** 1,400+ (vs 700 for TDD v4.0, 1,200 for Planning System)
 - **Mermaid Diagrams:** 2 (high-level architecture + workflow sequence)
 - **Component Breakdowns:** 7 (orchestrator + Phase 5 enhancements)
 - **Code Examples:** 25+ (AST parsing, parallel processing, preference learning)
@@ -29,7 +29,7 @@
 
 **Week 2 Status:**
 - ✅ Day 1: TDD v4.0 Orchestrator (700+ lines)
-- ✅ Day 2: Planning System 2.0 Orchestrator (1,200+ lines)
+- ✅ Day 2: Planning System Orchestrator (1,200+ lines)
 - ✅ Day 3: DocumentationOrchestrator (1,400+ lines)
 - ⏳ Day 4: DevOpsOrchestrator (FINAL HIGH priority task)
 
@@ -303,7 +303,7 @@ def select_mode_for_operation(estimated_duration: int) -> ExecutionMode:
 | Orchestrator | LOC | Diagrams | Components | Code Examples | Phase 5 Focus |
 |--------------|-----|----------|------------|---------------|---------------|
 | **TDD v4.0** | 700 | 2 | 6 | 15 | Strategy pattern |
-| **Planning System 2.0** | 1,200 | 2 | 6 | 20 | Adaptive complexity |
+| **Planning System** | 1,200 | 2 | 6 | 20 | Adaptive complexity |
 | **DocumentationOrchestrator** | 1,400 | 2 | 7 | 25 | Multi-agent + learning |
 
 **Unique Aspects:**

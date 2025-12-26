@@ -630,7 +630,7 @@ Analytics & Insights Platform
 | View Discovery | ✅ Production | Multi-framework support (React, Vue, Angular) | P2 | 4 |
 | Feedback Agent | ✅ Production | Centralized feedback aggregation | P2 | 4 |
 | **Orchestrators** |
-| Planning System 2.0 | ✅ Production | Multi-team planning, dependency management | P0 | 1 |
+| Planning System | ✅ Production | Multi-team planning, dependency management | P0 | 1 |
 | ADO Operations | ✅ Production | Full CI/CD integration, pipeline tasks | P0 | 4 |
 | TDD Mastery | ✅ Production | Enterprise TDD with team collaboration | P0 | 1 |
 | Git Checkpoint | ✅ Production | Multi-repo checkpoint coordination | P1 | 2 |

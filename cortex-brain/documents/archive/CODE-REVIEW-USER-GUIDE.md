@@ -15,7 +15,7 @@ The CORTEX Code Review feature provides intelligent, automated analysis of Azure
 - 🎯 **3 Depth Tiers:** Quick (30s), Standard (2min), Deep (5min)
 - 📊 **Token Budget:** 5-10K tokens per review (83% reduction from naive approaches)
 - ⚡ **Dependency-Driven:** Crawls import graph for relevant context
-- 🛡️ **Two-Tier Response:** Findings report first, then optional auto-fix with Planning System 2.0
+- 🛡️ **Two-Tier Response:** Findings report first, then optional auto-fix with Planning System
 
 ---
 
@@ -34,7 +34,7 @@ CORTEX will:
 2. Build dependency graph for changed files
 3. Execute analyzers based on depth tier
 4. Generate comprehensive report with fix templates
-5. Offer Planning System 2.0 integration for auto-fix
+5. Offer Planning System integration for auto-fix
 
 ### Trigger Examples
 
@@ -215,7 +215,7 @@ After reviewing findings, developer chooses:
 I'll handle the SQL injection fix myself
 ```
 
-**Option B:** Use Planning System 2.0 for orchestrated fix
+**Option B:** Use Planning System for orchestrated fix
 ```
 Create a plan to fix the SQL injection issue
 ```
@@ -371,7 +371,7 @@ Shows this guide and common commands.
 
 ## 📚 Related Documentation
 
-- **Planning System 2.0:** `.github/prompts/modules/planning-system-guide.md`
+- **Planning System:** `.github/prompts/modules/planning-system-guide.md`
 - **TDD Mastery:** `.github/prompts/modules/tdd-mastery-guide.md`
 - **Response Format:** `.github/prompts/modules/response-format.md`
 - **Brain Protection:** `cortex-brain/brain-protection-rules.yaml`

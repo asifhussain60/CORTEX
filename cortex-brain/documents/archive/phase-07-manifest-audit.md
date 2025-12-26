@@ -235,10 +235,10 @@ orchestrators:
       - token_optimization
       - hierarchical_plans
   
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     version: "4.0"
     module: "src.orchestration_4_0.orchestrators.tdd"
-    class: "TDDOrchestratorV4"
+    class: "TDDOrchestrator"
     category: "core"
     status: "active"
     dependencies:
@@ -317,7 +317,7 @@ orchestrators:
       medium: 30
       high: 50
   
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     max_retries: 5  # More retries for flaky tests
     test_frameworks:
       - pytest

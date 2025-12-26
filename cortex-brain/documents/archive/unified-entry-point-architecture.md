@@ -239,7 +239,7 @@ graph TD
     
     Extract --> TIER[Tier: 3<br/>Documented]
     Extract --> METHOD[Execution Method:<br/>copilot_chat]
-    Extract --> MODULES[Modules:<br/>maintenance_orchestrator_v3]
+    Extract --> MODULES[Modules:<br/>maintenance_orchestrator]
     
     TIER --> Route[Route to Tier 3 Handler]
     METHOD --> Route

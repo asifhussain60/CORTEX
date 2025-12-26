@@ -165,7 +165,7 @@
 #### 2.3 Orchestrator Enhancements (20 tests) - PRIORITY 1
 **Enhance existing tests to reach 85%+**
 
-- `maintenance_orchestrator_v3.py` (8 tests)
+- `maintenance_orchestrator.py` (8 tests)
   - Test phase transitions
   - Test rollback mechanisms
   - Test health check integration

@@ -50,7 +50,7 @@ The Diagram Regeneration Orchestrator manages the complete lifecycle of CORTEX s
 
 **Workflows Visualized:**
 - `docs/workflows/tdd-cycle.png` - RED→GREEN→REFACTOR flow
-- `docs/workflows/planning-workflow.png` - Planning System 2.0 flow
+- `docs/workflows/planning-workflow.png` - Planning System flow
 - `docs/workflows/upgrade-process.png` - Upgrade orchestrator steps
 - `docs/workflows/git-checkpoint.png` - Checkpoint creation and rollback
 

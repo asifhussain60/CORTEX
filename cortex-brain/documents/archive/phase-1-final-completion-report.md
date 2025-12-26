@@ -115,7 +115,7 @@ This strategic selection delivers immediate production value while deferring com
 - **Time:** 6:30h work | 7h wall
 - **Deliverables:**
   - Unified planning manifest structure
-  - Planning System 3.0 foundation
+  - Planning System foundation
   - Cross-orchestrator planning alignment
 - **Impact:** Consolidated fragmented planning approaches
 

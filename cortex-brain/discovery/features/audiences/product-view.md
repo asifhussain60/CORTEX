@@ -304,7 +304,7 @@ CORTEX transforms how teams build software by providing AI-powered assistance ac
 **Will be auto-generated from planning system:**
 
 ### Current (Q4 2024)
-- ✅ Planning System 2.0
+- ✅ Planning System
 - ✅ TDD Mastery
 - ✅ ADO Operations
 - ✅ Code Sanitization

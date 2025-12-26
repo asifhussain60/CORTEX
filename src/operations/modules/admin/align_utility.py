@@ -1324,7 +1324,7 @@ class AlignUtility:
         
         Checks:
         - Manifest files exist
-        - Planning System 2.0 manifest compliance
+        - Planning System manifest compliance
         - ADO planning manifest inheritance
         
         Returns:
@@ -1347,20 +1347,20 @@ class AlignUtility:
                     severity="WARNING"
                 )
             
-            # Load Planning System 2.0 manifest
-            planning_manifest_path = manifest_dir / "planning-system-2.0-manifest.yaml"
+            # Load Planning System manifest
+            planning_manifest_path = manifest_dir / "planning-system-manifest.yaml"
             if not planning_manifest_path.exists():
                 return ValidationResult(
                     check_name="Manifest Compliance",
                     passed=False,
-                    message="Planning System 2.0 manifest not found",
+                    message="Planning System manifest not found",
                     details=f"Expected at: {planning_manifest_path}",
                     severity="WARNING"
                 )
             
             planning_manifest = validator.load_manifest(str(planning_manifest_path))
             
-            # Validate Planning System 2.0 orchestrator
+            # Validate Planning System orchestrator
             planning_orchestrator_path = self.root_path / "src" / "orchestrators" / "planning_orchestrator.py"
             
             if not planning_orchestrator_path.exists():
@@ -1379,7 +1379,7 @@ class AlignUtility:
             
             # Determine result based on compliance
             if report.compliance_percentage >= 80:
-                message = f"Planning System 2.0: {report.compliance_percentage:.0f}% compliant ({report.implemented_count}/{report.total_requirements})"
+                message = f"Planning System: {report.compliance_percentage:.0f}% compliant ({report.implemented_count}/{report.total_requirements})"
                 details = f"Status: {report.status}"
                 
                 if report.compliance_percentage >= 95:
@@ -1396,7 +1396,7 @@ class AlignUtility:
                 )
             else:
                 missing_critical = [i for i in report.issues if i.severity == "CRITICAL"]
-                message = f"Planning System 2.0: {report.compliance_percentage:.0f}% compliant (below 80% threshold)"
+                message = f"Planning System: {report.compliance_percentage:.0f}% compliant (below 80% threshold)"
                 details = f"{len(missing_critical)} critical requirements missing"
                 
                 return ValidationResult(

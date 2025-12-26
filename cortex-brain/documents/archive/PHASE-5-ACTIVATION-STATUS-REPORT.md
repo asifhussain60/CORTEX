@@ -45,7 +45,7 @@ Adoption rate: 100.0%
 templates:
   planning:
     inherits_from: core/base-templates/5-part-standard.yaml  # ✅ Directive present
-    name: Planning System 2.0
+    name: Planning System
     sections:
       understanding_content: "..."
       challenge_content: "..."

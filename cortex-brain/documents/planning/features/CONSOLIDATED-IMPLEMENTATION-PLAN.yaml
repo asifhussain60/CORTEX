@@ -127,7 +127,7 @@ summary:
   total_estimated_effort_hours: 316.5
   phase_breakdown:
     phase_0: Foundation (48 hours) - Database, brain protection, entry points
-    phase_1: Planning System 2.0 (36 hours) - Vision API, DoR/DoD, file-based workflow
+    phase_1: Planning System (36 hours) - Vision API, DoR/DoD, file-based workflow
     phase_2: TDD Workflow Enhancements (28 hours) - View discovery, auto-debug, performance
       refactoring
     phase_3: Architecture Intelligence (24 hours) - Trend analysis, debt forecasting,

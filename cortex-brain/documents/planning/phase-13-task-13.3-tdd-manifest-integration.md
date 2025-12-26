@@ -11,11 +11,11 @@
 
 ## 📊 Executive Summary
 
-Integrate TDD Orchestrator v4.0 with Planning Orchestrator and implement manifest inheritance system for configuration reuse. This adds 11 methods across TDD workflow coordination and YAML inheritance resolution.
+Integrate TDD Orchestrator with Planning Orchestrator and implement manifest inheritance system for configuration reuse. This adds 11 methods across TDD workflow coordination and YAML inheritance resolution.
 
 **Impact:**
 - Automatic TDD integration in all plans (RED→GREEN→REFACTOR enforcement)
-- Manifest inheritance reduces duplication (ADO inherits from Planning System 2.0)
+- Manifest inheritance reduces duplication (ADO inherits from Planning System)
 - Test plan generation tied to acceptance criteria
 - Phase-specific TDD validation gates
 
@@ -26,7 +26,7 @@ Integrate TDD Orchestrator v4.0 with Planning Orchestrator and implement manifes
 ### Primary Goals
 
 1. **TDD Workflow Integration (6 methods)**
-   - Coordinate with TDD Orchestrator v4.0 for test-first development
+   - Coordinate with TDD Orchestrator for test-first development
    - Generate test plans from acceptance criteria
    - Execute RED→GREEN→REFACTOR phases with validation
    - Track TDD completion in plan results
@@ -224,7 +224,7 @@ def _execute_red_phase(self, plan: Dict[str, Any]) -> Dict[str, Any]:
     """
     Execute RED phase - write failing tests.
     
-    Coordinates with TDD Orchestrator v4.0 to:
+    Coordinates with TDD Orchestrator to:
     1. Generate test files from test plan
     2. Run tests (should all fail)
     3. Validate RED phase completion
@@ -269,7 +269,7 @@ def _execute_green_phase(self, plan: Dict[str, Any]) -> Dict[str, Any]:
     """
     Execute GREEN phase - implement code to pass tests.
     
-    Coordinates with TDD Orchestrator v4.0 to:
+    Coordinates with TDD Orchestrator to:
     1. Monitor test execution during implementation
     2. Track pass rate progression
     3. Validate GREEN phase completion (all tests pass)
@@ -315,7 +315,7 @@ def _execute_refactor_phase(self, plan: Dict[str, Any]) -> Dict[str, Any]:
     """
     Execute REFACTOR phase - clean code while maintaining tests.
     
-    Coordinates with TDD Orchestrator v4.0 to:
+    Coordinates with TDD Orchestrator to:
     1. Analyze code complexity
     2. Suggest refactoring opportunities
     3. Re-run tests after refactoring
@@ -420,7 +420,7 @@ def _load_manifest_with_inheritance(self, manifest_path: str) -> Dict[str, Any]:
         Fully resolved manifest with all inherited configs merged
         
     Inheritance Chain Example:
-    ADO Manifest → Planning System 2.0 → Base Orchestrator
+    ADO Manifest → Planning System → Base Orchestrator
     
     Merge Rules:
     - Child overrides parent for same keys
@@ -557,7 +557,7 @@ def _validate_manifest_schema(self, manifest: Dict[str, Any]) -> Tuple[bool, Lis
     Required Fields:
     - orchestrator_name
     - version
-    - quality_gates (if inherited from Planning System 2.0)
+    - quality_gates (if inherited from Planning System)
     - phases
     """
     errors = []
@@ -773,16 +773,16 @@ class TestManifestInheritance:
 ## 📚 Related Documentation
 
 **Manifests:**
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- `cortex-brain/orchestrator-manifests/planning-system-manifest.yaml`
 - `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
 - Example inheritance: ADO → Planning 2.0 → Base
 
 **TDD Orchestrator:**
-- `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+- `src/orchestrators/tdd/tdd_orchestrator.py`
 - `cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml`
 
 **User Guides:**
-- Planning System 2.0 User Guide (TDD integration section)
+- Planning System User Guide (TDD integration section)
 - TDD Mastery Guide (RED→GREEN→REFACTOR workflow)
 
 ---

@@ -23,7 +23,7 @@ CORTEX 4.0 implements three production-grade multi-agent collaboration patterns 
 
 **Implementation:** `src/orchestration_4_0/frameworks/multi_agent_orchestrator.py`  
 **Tests:** 15/15 passing (100% coverage)  
-**Integration:** TDD Orchestrator v4.0, Planning System 2.0 (ready)
+**Integration:** TDD Orchestrator, Planning System (ready)
 
 ---
 
@@ -854,16 +854,16 @@ class CoordinatorAgent(Agent):
 
 ## 🚀 Integration Examples
 
-### Integration 1: TDD Orchestrator v4.0
+### Integration 1: TDD Orchestrator
 
 ```python
-# src/orchestrators/tdd/tdd_orchestrator_v4.py
+# src/orchestrators/tdd/tdd_orchestrator.py
 
 from src.orchestration_4_0.frameworks.multi_agent_orchestrator import (
     MultiAgentOrchestrator
 )
 
-class TDDOrchestratorV4:
+class TDDOrchestrator:
     def __init__(self, ...):
         self.multi_agent_orchestrator = MultiAgentOrchestrator()
     
@@ -896,7 +896,7 @@ class TDDOrchestratorV4:
 
 **Status**: ✅ Integrated (TDD v4.0)
 
-### Integration 2: Planning System 2.0 (Ready)
+### Integration 2: Planning System (Ready)
 
 ```python
 # src/orchestrators/planning/planning_orchestrator_v2.py
@@ -931,9 +931,9 @@ class PlanningOrchestratorV2:
 ### Integration 3: System Maintenance (Ready)
 
 ```python
-# src/orchestrators/maintenance/maintenance_orchestrator_v3.py
+# src/orchestrators/maintenance/maintenance_orchestrator.py
 
-class MaintenanceOrchestratorV3:
+class MaintenanceOrchestrator:
     async def run_maintenance(self) -> MaintenanceReport:
         """Hierarchical teams with nested chat"""
         
@@ -1113,8 +1113,8 @@ async def execute(self, context: AgentContext) -> AgentContext:
 - `cortex-brain/documents/planning/active/CORTEX-3.0-4.0/task-6-10-tdd-enhancement-spec.md` - TDD integration
 
 **Integration Guides:**
-- TDD Orchestrator v4.0: Phase 5 integration complete
-- Planning System 2.0: Ready for integration
+- TDD Orchestrator: Phase 5 integration complete
+- Planning System: Ready for integration
 - System Maintenance v3.0: Ready for integration
 
 ---

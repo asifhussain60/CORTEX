@@ -218,7 +218,7 @@ after:
    - Re-run validation: expect 4/6 passing
 
 2. **Migrate Next Orchestrator (TDD)**
-   - Build: TDDOrchestratorV4
+   - Build: TDDOrchestrator
    - Activate: Reference in instructions
    - Delete: Remove src/tdd/ (old 3.0 code)
    - Validate: Run script before commit

@@ -462,7 +462,7 @@ icacls .\output /grant Users:F
 
 ## 📚 Related Documentation
 
-- [Planning System 2.0 Enhancement Plan](../planning/orchestrator-enhancement-plan-v1.md)
+- [Planning System Enhancement Plan](../planning/orchestrator-enhancement-plan-v1.md)
 - [Copilot Chat Analysis](../analysis/copilot-chat-analysis-2025-12-12.md)
 - [Brain Protection Rules](../../brain-protection-rules.yaml)
 - [TDD Mastery Orchestrator](../../operations/tdd-mastery/)

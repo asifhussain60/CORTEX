@@ -4,7 +4,7 @@
 
 ## 🚀 Key Features & Workflows
 
-### Planning System 2.0
+### Planning System
 **Guide:** `.github/prompts/modules/planning-orchestrator-guide.md`
 
 - **Vision API:** Auto-extract requirements from screenshots (UI mockups, errors, ADO items)
@@ -351,7 +351,7 @@ def long_operation(items):
 |------|---------|
 | `.github/prompts/CORTEX.prompt.md` | Universal entry point, response format, command reference |
 | `.github/prompts/modules/response-format.md` | Mandatory 5-part response structure, formatting rules |
-| `.github/prompts/modules/planning-system-guide.md` | Planning System 2.0, Vision API, DoR/DoD |
+| `.github/prompts/modules/planning-system-guide.md` | Planning System, Vision API, DoR/DoD |
 | `.github/prompts/modules/tdd-mastery-guide.md` | TDD workflow, auto-debug, refactoring |
 | `.github/prompts/modules/hands-on-tutorial-guide.md` | Interactive tutorial program (15-30 min) |
 | `.github/prompts/modules/upgrade-guide.md` | Universal upgrade system, brain preservation |

@@ -4,7 +4,7 @@
 **Created:** December 22, 2025  
 **Phase:** 6.5 Week 3 Day 3 (MEDIUM Priority - 3/4 tasks)  
 **Version:** 3.0  
-**Status:** ⚠️ DOCUMENTED (Implementation file missing: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`)
+**Status:** ⚠️ DOCUMENTED (Implementation file missing: `src/operations/modules/orchestration/maintenance_orchestrator.py`)
 
 ---
 
@@ -14,7 +14,7 @@
 
 **Key Innovations:**
 - ✅ 7-phase workflow (healthcheck → align → cleanup → optimize → vacuum → refresh → healthcheck)
-- ✅ Tiered routing integration (Planning System 3.0 alignment)
+- ✅ Tiered routing integration (Planning System alignment)
 - ✅ Automatic phase 5 vacuum cycle (SQLite optimization + AST cleanup)
 - ✅ Version synchronization (cortex.config.json consistency)
 - ✅ Enhanced healthcheck (component-level status reporting)
@@ -42,7 +42,7 @@
 
 ```mermaid
 graph TB
-    subgraph "System Maintenance Orchestrator v3.0"
+    subgraph "System Maintenance Orchestrator"
         ORCHESTRATOR[MaintenanceOrchestrator<br/>7-Phase Controller]
         
         subgraph "Phase 1: Pre-Healthcheck"
@@ -53,7 +53,7 @@ graph TB
         
         subgraph "Phase 2: Align"
             ALIGN[RealignmentUtility<br/>Auto-Fix Engine]
-            TIER_ROUTING[Tiered Routing<br/>Planning System 3.0]
+            TIER_ROUTING[Tiered Routing<br/>Planning System]
             AUTO_FIX[Auto-Fix Strategies<br/>10+ Fix Types]
         end
         
@@ -208,7 +208,7 @@ def _run_pre_healthcheck(self) -> Dict[str, Any]:
 
 ### Phase 2: Align (Auto-Fix)
 
-**Purpose:** Execute system alignment with automatic fixes using Planning System 3.0 tiered routing
+**Purpose:** Execute system alignment with automatic fixes using Planning System tiered routing
 
 **Process:**
 1. **Tiered Routing** - Determine complexity and route to appropriate fix strategy
@@ -817,12 +817,12 @@ system_maintenance:
     - comprehensive maintenance
   category: maintenance
   modules:
-    - maintenance_orchestrator_v3
+    - maintenance_orchestrator
   profiles:
     standard:
       description: "Full 7-phase workflow"
       modules:
-        - maintenance_orchestrator_v3
+        - maintenance_orchestrator
   implementation_status:
     status: ready
     modules_implemented: 1
@@ -1040,7 +1040,7 @@ def execute(self, context: Dict[str, Any]) -> OperationResult:
 
 ## 🔗 Integration Points
 
-### Planning System 3.0 Integration
+### Planning System Integration
 
 **Tiered Routing in Align Phase:**
 ```python
@@ -1049,7 +1049,7 @@ def execute(self, context: Dict[str, Any]) -> OperationResult:
 from src.operations.modules.orchestration.planning_orchestrator import PlanningOrchestrator
 
 def _run_align_phase(self) -> Dict[str, Any]:
-    """Execute ALIGN phase with Planning System 3.0 tiered routing."""
+    """Execute ALIGN phase with Planning System tiered routing."""
     
     # Initialize planning session for alignment
     planning = PlanningOrchestrator()
@@ -1071,7 +1071,7 @@ def _run_align_phase(self) -> Dict[str, Any]:
 **Benefits:**
 - Complexity-aware fix selection (simple fixes first, complex orchestrator-level fixes last)
 - Rollback checkpoints for critical phases
-- Progress tracking with Planning System 3.0 patterns
+- Progress tracking with Planning System patterns
 
 ---
 
@@ -1149,7 +1149,7 @@ def _run_post_healthcheck(self) -> Dict[str, Any]:
 | Requirement | Status | Evidence |
 |-------------|--------|----------|
 | 7-phase workflow | ✅ COMPLETE | healthcheck → align → cleanup → optimize → vacuum → refresh → healthcheck |
-| Tiered routing integration | ✅ COMPLETE | Planning System 3.0 alignment in Phase 2 |
+| Tiered routing integration | ✅ COMPLETE | Planning System alignment in Phase 2 |
 | Version synchronization | ✅ COMPLETE | cortex.config.json integration |
 | Enhanced healthcheck | ✅ COMPLETE | 32+ components scanned |
 | Completion detection | ✅ COMPLETE | Success template trigger logic |
@@ -1321,8 +1321,8 @@ Report: cortex-brain/documents/reports/system-maintenance-20251222-104500.json
 
 **Current State:** 
 - ✅ **Documented:** Complete architecture specification (phase-06-maintenance.md)
-- ✅ **Tested:** 36/36 tests passing (test_maintenance_orchestrator_v3.py)
-- ❌ **Implementation:** File missing (`src/operations/modules/orchestration/maintenance_orchestrator_v3.py`)
+- ✅ **Tested:** 36/36 tests passing (test_maintenance_orchestrator.py)
+- ❌ **Implementation:** File missing (`src/operations/modules/orchestration/maintenance_orchestrator.py`)
 
 **Evidence:**
 - Architecture documented in `cortex-brain/documents/planning/completed/cortex-evolution-v3.9/phase-06-maintenance.md`
@@ -1347,7 +1347,7 @@ Report: cortex-brain/documents/reports/system-maintenance-20251222-104500.json
 - ✅ 3 Mermaid diagrams (high-level architecture, component relationships, data flow)
 - ✅ 12+ code examples across all 7 phases
 - ✅ 36 test strategy (documented in v3.9 completion as 100% passing)
-- ✅ Integration points (Router Agent, Planning System 3.0, Version Manager, CLI, YAML)
+- ✅ Integration points (Router Agent, Planning System, Version Manager, CLI, YAML)
 - ✅ Performance characteristics (scalability analysis, optimization strategies)
 - ✅ 2 usage examples (standard maintenance, maintenance with failures)
 

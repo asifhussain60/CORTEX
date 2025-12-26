@@ -1,5 +1,5 @@
 """
-Sanitization Orchestrator v2.0 - Agentic Enhancement
+Sanitization Orchestrator - Agentic Enhancement
 
 Purpose: Code sanitization workflow with multi-agent parallel processing and adaptive learning
 Version: 2.0.0 (Phase 6 Task 6.12: Agentic Enhancement)
@@ -166,7 +166,7 @@ class AnalysisTask:
 
 class SanitizationOrchestratorV2(BaseOrchestrator):
     """
-    Sanitization Orchestrator v2.0 - Agentic Enhancement
+    Sanitization Orchestrator - Agentic Enhancement
     
     Orchestrates the complete lifecycle of code sanitization from analysis
     to validated transformation, with Phase 5 agentic enhancement.
@@ -224,7 +224,7 @@ class SanitizationOrchestratorV2(BaseOrchestrator):
     
     def __init__(self, target_directory: str, cortex_root: Optional[str] = None, dry_run: bool = False):
         """
-        Initialize Sanitization Orchestrator v2.0
+        Initialize Sanitization Orchestrator
         
         Args:
             target_directory: Path to directory to sanitize

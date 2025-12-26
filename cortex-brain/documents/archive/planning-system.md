@@ -1,4 +1,4 @@
-# CORTEX Planning System 2.0
+# CORTEX Planning System
 
 **Purpose:** File-based feature planning with persistent state  
 **Version:** 2.0 (EPM Orchestrator)  
@@ -8,7 +8,7 @@
 
 ## Overview
 
-Planning System 2.0 creates **persistent planning files** stored in `cortex-brain/planning/` (NOT chat-only). Plans survive conversation resets and can be resumed anytime.
+Planning System creates **persistent planning files** stored in `cortex-brain/planning/` (NOT chat-only). Plans survive conversation resets and can be resumed anytime.
 
 ---
 
@@ -171,4 +171,4 @@ cortex import --planning --input planning-backup.zip
 ---
 
 **Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
-**Last Updated:** 2025-11-17 | Planning System 2.0
+**Last Updated:** 2025-11-17 | Planning System

@@ -125,7 +125,7 @@ Create comprehensive architecture documentation for Code Sanitization Orchestrat
 - **Commands:** `sanitize [directory]`, `sanitize codebase`, `make generic`, `anonymize project`
 - **Routing:** `cortex-operations.yaml` → `cli_wrapper` → `sanitize_wrapper.py`
 
-### Planning System 2.0 Comparison
+### Planning System Comparison
 - **Parity Score:** 7/8 features aligned (87.5%)
 - **Shared Features:** Interactive approval, dry-run, rollback, visual progress, validation gates, audit trail, phased execution
 
@@ -282,7 +282,7 @@ Create comprehensive architecture documentation for Code Sanitization Orchestrat
 - ✅ **Visual Architecture** - 3 professional Mermaid diagrams
 - ✅ **Code Examples** - 15+ real implementations from codebase
 - ✅ **Test Strategy** - 77 tests with 90%+ coverage target
-- ✅ **Integration Points** - CLI, Copilot Chat, Planning System 2.0
+- ✅ **Integration Points** - CLI, Copilot Chat, Planning System
 
 ### Quality Metrics
 - ✅ **Criteria Met:** 8/8 (100%)

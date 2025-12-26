@@ -416,7 +416,7 @@ class CICDOrchestrator(BaseOrchestrator):
 **Tests:** 20+ tests covering CI/CD scenarios  
 **Integration Points:**
 - GitHub Actions / Azure Pipelines
-- TDD Orchestrator v4.0 (test generation)
+- TDD Orchestrator (test generation)
 - Git automation (Phase 0.5)
 
 **Success Metrics:**

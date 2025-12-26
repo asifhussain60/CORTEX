@@ -3,7 +3,7 @@ CORTEX 4.0 Orchestrators
 
 11 core orchestrators + 2 specialized:
 - ExecutionOrchestrator: Phase execution engine
-- PlanningOrchestrator: Feature planning (Planning System 2.0)
+- PlanningOrchestrator: Feature planning (Planning System)
 - TDDOrchestrator: RED→GREEN→REFACTOR workflow
 - ScaffoldingOrchestrator: Project structure generation
 - DocumentationOrchestrator: Auto-doc generation

@@ -400,7 +400,7 @@ print(scope_v2)
 
 **File:** `src/orchestrators/planning_orchestrator.py` (+254 lines)
 
-**Purpose:** Integrate SWAGGER into Planning System 2.0 workflow.
+**Purpose:** Integrate SWAGGER into Planning System workflow.
 
 **New Methods:**
 

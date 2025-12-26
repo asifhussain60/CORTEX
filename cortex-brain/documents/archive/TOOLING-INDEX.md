@@ -333,7 +333,7 @@ Platform.Classic/
 
 ## 📊 Integration with CORTEX
 
-**Planning System 2.0:**
+**Planning System:**
 - Architecture agents integrated via `copilot_chat` execution method
 - Validation tools called during REFACTOR phase
 - Guidelines referenced in agent context

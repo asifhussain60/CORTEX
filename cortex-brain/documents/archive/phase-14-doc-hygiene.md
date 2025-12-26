@@ -15,7 +15,7 @@
 
 ## 🎯 Phase Objective
 
-Create document hygiene engine for automatic Markdown consolidation, archive management, filename optimization, and bidirectional reference updating integrated into Planning System 3.0.
+Create document hygiene engine for automatic Markdown consolidation, archive management, filename optimization, and bidirectional reference updating integrated into Planning System.
 
 **Success Criteria:**
 - ✅ MD file consolidation with similarity detection
@@ -40,7 +40,7 @@ Create document hygiene engine for automatic Markdown consolidation, archive man
 """
 Document Hygiene Engine - Automatic Markdown maintenance and organization.
 
-Integrated into Planning System 3.0 for automatic documentation
+Integrated into Planning System for automatic documentation
 cleanup during Tier 3/4 operations.
 """
 

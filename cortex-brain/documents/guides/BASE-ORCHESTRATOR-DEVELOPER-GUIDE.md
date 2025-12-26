@@ -893,7 +893,7 @@ class MyOrchestrator(BaseOrchestrator):
 ### Examples
 - **Planning Orchestrator:** `src/orchestrators/planning/planning_orchestrator.py`
 - **Execution Orchestrator:** `src/orchestration_4_0/orchestrators/execution/execution_orchestrator.py`
-- **Maintenance Orchestrator:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+- **Maintenance Orchestrator:** `src/operations/modules/orchestration/maintenance_orchestrator.py`
 
 ### Related Guides
 - **Migration Guide:** `cortex-brain/documents/guides/CORTEX-3.0-TO-4.0-MIGRATION-GUIDE.md`

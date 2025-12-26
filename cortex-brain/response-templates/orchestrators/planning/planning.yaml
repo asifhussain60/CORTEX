@@ -2,7 +2,7 @@ category: orchestrators/planning
 templates:
   planning:
     inherits_from: core/base-templates/5-part-standard.yaml
-    name: Planning System 2.0
+    name: Planning System
     triggers:
     - plan
     - planning
@@ -18,7 +18,7 @@ templates:
       understanding_scope_content: You want to create a comprehensive feature plan with
         DoR/DoD validation
       approach_considerations_content: No significant challenges - Structured planning with Vision API support
-      response_content: "## \U0001F4CB CORTEX Planning System 2.0\n\n**Zero-ambiguity\
+      response_content: "## \U0001F4CB CORTEX Planning System\n\n**Zero-ambiguity\
         \ planning** with Vision API, DoR validation, and file persistence\n\n**Key\
         \ Features:**\n\n**1. Vision API Integration**\n- Upload screenshots (UI mockups,\
         \ ADO items, error messages)\n- Auto-extract requirements from images\n- OCR\

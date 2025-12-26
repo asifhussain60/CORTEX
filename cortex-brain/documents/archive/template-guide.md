@@ -138,7 +138,7 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
    You want to create a new ADO work item with planning template
 
 ⚠️ **Challenge:** ✓ **Accept**
-   This uses the ADO Planning System 2.0 with database storage and template-based workflow.
+   This uses the ADO Planning System with database storage and template-based workflow.
 
 💬 **Response:**
    Created ADO work item with complete planning template. File opened in VS Code for review and customization.

@@ -444,9 +444,9 @@ jobs:
    - Test deployment pipeline
    - Enable custom domain
 
-### Alternative Approach: Use Planning System 2.0
+### Alternative Approach: Use Planning System
 
-Instead of manual implementation, use CORTEX's own Planning System 2.0:
+Instead of manual implementation, use CORTEX's own Planning System:
 
 ```bash
 plan enterprise documentation enhancement Phase 1 - Core Infrastructure
@@ -502,11 +502,11 @@ src/orchestrators/
 1. **Phase 1 is NOT implemented** - Plan document contains design only
 2. **Modular generator system exists** - Basic functionality in place
 3. **Major gaps in Phase 1** - All 3 components missing
-4. **Planning System 2.0 recommended** - Use CORTEX to build CORTEX
+4. **Planning System recommended** - Use CORTEX to build CORTEX
 5. **Estimated effort: 88 hours** - Phase 1 complete implementation
 
 ---
 
 **Investigation Complete**  
 **Report Generated:** December 10, 2025  
-**Next Step:** Create Planning System 2.0 implementation plan
+**Next Step:** Create Planning System implementation plan

@@ -196,7 +196,7 @@
    - Implement from architecture docs
    - 7-phase workflow
    - 80 tests for phase transitions
-   - Planning System 3.0 integration
+   - Planning System integration
 
 5. **Base Orchestrator Polish** (1 hour)
    - 40 edge case tests

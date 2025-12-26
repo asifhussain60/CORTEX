@@ -139,14 +139,14 @@ Message: ⚠️ Health check: WARNING (4 warnings)
 4. ✅ **User Profile System:** 3-question onboarding (experience → mode → tech stack)
 5. ✅ **Brain Architecture:** 3-tier system (Tier 0-3) understood
 6. ✅ **TDD Mastery:** RED→GREEN→REFACTOR workflow available
-7. ✅ **Planning System 2.0:** File-based workflow with DoR/DoD enforcement
+7. ✅ **Planning System:** File-based workflow with DoR/DoD enforcement
 8. ✅ **Admin Operations:** Context detection for CORTEX repo vs user repos
 
 **Available Modules (All Loaded):**
 - ✅ response-format.md - Mandatory 5-part response structure
 - ✅ template-guide.md - 62 response templates with trigger mappings
 - ✅ tdd-mastery-guide.md - Complete TDD workflow documentation
-- ✅ planning-orchestrator-guide.md - Planning System 2.0 with Vision API
+- ✅ planning-orchestrator-guide.md - Planning System with Vision API
 - ✅ hands-on-tutorial-guide.md - Interactive tutorial program
 - ✅ system-alignment-guide.md - Convention-based feature discovery
 - ✅ architecture-intelligence-guide.md - Strategic architecture review

@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-**Goal:** Reduce scope interrogation by 70% while maintaining DoR accuracy through intelligent inference from existing Planning System 2.0 data.
+**Goal:** Reduce scope interrogation by 70% while maintaining DoR accuracy through intelligent inference from existing Planning System data.
 
 **Strategy:** Leverage DoR Questions 3 & 6 (functional scope + technical dependencies) to automatically infer feature boundaries, eliminating redundant questioning.
 
@@ -284,7 +284,7 @@ class TeamCapacity:
 
 ## Workflow Integration
 
-### Planning System 2.0 Integration Point
+### Planning System Integration Point
 
 **Location:** `PlanningOrchestrator.generate_plan()`  
 **Trigger:** After DoR validation, before implementation planning

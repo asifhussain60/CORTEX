@@ -104,7 +104,7 @@ pytest tests/smoke/ -v
 ### Orchestrators Validated (9/9)
 - ✅ PlanningOrchestrator
 - ✅ TemporaryPlanManager
-- ✅ MaintenanceOrchestratorV3
+- ✅ MaintenanceOrchestrator
 - ✅ TDDOrchestrator
 - ✅ ADOPlanningOrchestrator
 - ✅ RefactorCycleOrchestrator

@@ -17,7 +17,7 @@ Implement Definition of Ready (DoR) and Definition of Done (DoD) validation fram
 - Quality gates prevent incomplete/untestable plans from starting
 - Completion gates ensure deliverables meet acceptance criteria
 - Automated reporting provides actionable feedback for remediation
-- Enforces Planning System 2.0 manifest compliance requirements
+- Enforces Planning System manifest compliance requirements
 
 ---
 
@@ -73,7 +73,7 @@ def _validate_definition_of_ready(self, plan: Dict[str, Any]) -> Tuple[bool, Lis
     Returns:
         Tuple of (is_ready: bool, violations: List[str])
         
-    DoR Criteria (from Planning System 2.0 manifest):
+    DoR Criteria (from Planning System manifest):
     1. Requirements clarity (objectives, acceptance criteria defined)
     2. Dependencies identified (external services, data sources)
     3. Acceptance criteria measurable (testable outcomes)
@@ -315,7 +315,7 @@ def _generate_dor_report(self, plan: Dict[str, Any], violations: List[str]) -> s
         report.append(f"{i}. {violation}")
     
     report.append("\nREMEDIATION:")
-    report.append("- Review Planning System 2.0 User Guide section 'DoR Requirements'")
+    report.append("- Review Planning System User Guide section 'DoR Requirements'")
     report.append("- Update plan metadata with missing criteria")
     report.append("- Re-run validation after updates")
     
@@ -349,7 +349,7 @@ def _validate_definition_of_done(
     Returns:
         Tuple of (is_done: bool, violations: List[str])
         
-    DoD Criteria (from Planning System 2.0 manifest):
+    DoD Criteria (from Planning System manifest):
     1. Code complete (all phases executed successfully)
     2. Tests passing (≥95% pass rate, TDD complete)
     3. Documentation complete (README, API docs, guides)
@@ -721,7 +721,7 @@ class TestDoRDoDIntegration:
 - **Checkpoint:** DoD enforcement working
 
 **Documentation (30m):**
-- Update Planning System 2.0 User Guide with DoR/DoD sections
+- Update Planning System User Guide with DoR/DoD sections
 - Add troubleshooting guide for common violations
 - Create quick reference card
 
@@ -729,12 +729,12 @@ class TestDoRDoDIntegration:
 
 ## 📚 Related Documentation
 
-**Planning System 2.0 Manifest:**
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+**Planning System Manifest:**
+- `cortex-brain/orchestrator-manifests/planning-system-manifest.yaml`
 - Section: `quality_gates` → `definition_of_ready` and `definition_of_done`
 
 **User Guide:**
-- `cortex-brain/documents/implementation-guides/planning-system-2.0-user-guide.md`
+- `cortex-brain/documents/implementation-guides/planning-system-user-guide.md`
 - Section: "Quality Gates & Compliance"
 
 **Architecture:**

@@ -96,7 +96,7 @@ print(f"Phases completed: {result.phases_completed}")
 print(f"Duration: {result.total_duration_ms}ms")
 ```
 
-### With Planning System 2.0
+### With Planning System
 
 ```python
 from src.orchestrators.planning import PlanningOrchestrator
@@ -461,12 +461,12 @@ result = await orchestrator.execute_nested_chat(
 ### Register Sub-Orchestrators
 
 ```python
-from src.orchestrators.tdd import TDDOrchestratorV4
+from src.orchestrators.tdd import TDDOrchestrator
 from src.orchestrators.planning import PlanningOrchestrator
 from src.orchestrators.documentation import DocumentationOrchestrator
 
 # Create sub-orchestrators
-tdd_orchestrator = TDDOrchestratorV4(config={})
+tdd_orchestrator = TDDOrchestrator(config={})
 planning_orchestrator = PlanningOrchestrator(config={})
 doc_orchestrator = DocumentationOrchestrator(config={})
 
@@ -804,10 +804,10 @@ for phase in execution_plan["phases"]:
 ### Examples
 - **Execution Orchestrator Source:** `src/orchestration_4_0/orchestrators/execution/execution_orchestrator.py`
 - **Planning Integration:** `src/orchestrators/planning/planning_orchestrator.py`
-- **TDD Integration:** `src/orchestrators/tdd/tdd_orchestrator_v4_migrated.py`
+- **TDD Integration:** `src/orchestrators/tdd/tdd_orchestrator_migrated.py`
 
 ### Related Systems
-- **Planning System 2.0:** `planning-system-2.0-manifest.yaml`
+- **Planning System:** `planning-system-manifest.yaml`
 - **TDD Mastery v4.0:** `src/orchestrators/tdd/`
 - **Adaptive Execution:** `src/operations/modules/orchestration/adaptive_execution.py`
 

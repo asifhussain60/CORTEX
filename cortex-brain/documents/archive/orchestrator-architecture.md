@@ -1,7 +1,7 @@
 # Orchestrator Architecture Implementation Guide
 
 **Author:** Asif Hussain  
-**Version:** 2.0 (Planning System 3.0)  
+**Version:** 2.0 (Planning System)  
 **Last Updated:** December 16, 2025
 
 ---
@@ -39,7 +39,7 @@ This guide explains the CORTEX orchestrator architecture, helping developers und
 - Emit engagement hints (🎭 pattern)
 
 **Examples:**
-- `MaintenanceOrchestratorV3` - System maintenance workflow
+- `MaintenanceOrchestrator` - System maintenance workflow
 - `PlanningOrchestrator` - Feature planning with TDD
 - `ADOPlanningOrchestrator` - Azure DevOps work item generation
 - `TDDOrchestrator` - Test-Driven Development workflow
@@ -70,9 +70,9 @@ This guide explains the CORTEX orchestrator architecture, helping developers und
 
 ```python
 """
-MyFeature Orchestrator v3.0 for CORTEX
+MyFeature Orchestrator for CORTEX
 
-Integrated with Planning System 3.0:
+Integrated with Planning System:
 - Uses PlanningSession for state management
 - Inherits visual progress tracking
 - Phase-based git checkpoints
@@ -105,7 +105,7 @@ from src.operations.utilities.orchestration_metrics_collector import (
 
 class MyFeatureOrchestrator(BaseOperationModule):
     """
-    User-facing orchestrator with full Planning System 3.0 integration.
+    User-facing orchestrator with full Planning System integration.
     """
     
     def __init__(self, project_root: Path = None):
@@ -118,7 +118,7 @@ class MyFeatureOrchestrator(BaseOperationModule):
         self.version_manager.register_orchestrator_version("my_feature", "3.0")
         self.version = self.version_manager.get_orchestrator_version("my_feature")
         
-        # Planning System 3.0 integration
+        # Planning System integration
         self.planning_orchestrator = PlanningOrchestrator(project_root=project_root)
         self.tiered_router = TieredRouter()
         self.complexity_analyzer = ComplexityAnalyzer()
@@ -219,9 +219,9 @@ class MyFeatureOrchestrator(BaseOperationModule):
 
 ```python
 """
-Helper Tool Orchestrator v2.0 - Specialized internal utility
+Helper Tool Orchestrator - Specialized internal utility
 
-Integrated with Planning System 3.0 for standardized operation handling:
+Integrated with Planning System for standardized operation handling:
 - Inherits BaseOperationModule for consistent interface
 - Uses orchestration metrics for engagement tracking
 - Returns standardized OperationResult
@@ -346,7 +346,7 @@ class HelperToolOrchestrator(BaseOperationModule):
 ✅ Users directly invoke the operation  
 ✅ Operation appears in `cortex-operations.yaml`  
 ✅ Multi-phase workflow with user feedback needed  
-✅ Requires Planning System 3.0 state management  
+✅ Requires Planning System state management  
 ✅ Needs tiered routing (Tier 1-4 classification)  
 ✅ Operation creates planning documents  
 ✅ Git checkpoints between phases required
@@ -520,7 +520,7 @@ return OperationResult(
 
 ## Integration Features
 
-### Planning System 3.0 Integration (User-Facing Only)
+### Planning System Integration (User-Facing Only)
 
 **PlanningSession State Management:**
 
@@ -654,7 +654,7 @@ def test_metadata():
 
 ```python
 def test_orchestrator_with_planning_system():
-    """Test integration with Planning System 3.0."""
+    """Test integration with Planning System."""
     orchestrator = MyOrchestrator()
     # Test PlanningSession creation
     # Test tiered routing
@@ -705,12 +705,12 @@ def test_orchestrator_metrics_collection():
 **Naming Conventions:**
 - Orchestrator classes: `*Orchestrator` (e.g., `MaintenanceOrchestrator`)
 - File names: `*_orchestrator.py` (e.g., `maintenance_orchestrator.py`)
-- Module IDs: `*_orchestrator` (e.g., `maintenance_orchestrator_v3`)
+- Module IDs: `*_orchestrator` (e.g., `maintenance_orchestrator`)
 
 **Version Numbering:**
 - v1.0: Initial implementation
 - v2.0: BaseOperationModule standardization
-- v3.0: Full Planning System 3.0 integration
+- v3.0: Full Planning System integration
 
 **Error Handling:**
 ```python
@@ -759,7 +759,7 @@ See: `src/operations/modules/orchestration/vacuum_orchestrator.py`
 
 ### Example 2: Complex User-Facing Orchestrator
 
-See: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+See: `src/operations/modules/orchestration/maintenance_orchestrator.py`
 
 ### Example 3: Planning-Integrated Orchestrator
 
@@ -772,7 +772,7 @@ See: `src/operations/modules/orchestration/planning_orchestrator.py`
 - **BaseOperationModule:** `src/operations/base_operation_module.py`
 - **Orchestration Metrics:** `src/operations/utilities/orchestration_metrics_collector.py`
 - **Progress Decorator:** `src/utils/progress_decorator.py`
-- **Planning System 3.0:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- **Planning System:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 - **Version Management:** `src/operations/modules/version/version_manager.py`
 
 ---

@@ -79,7 +79,7 @@ orchestrators:
     inherits_from: null
     parent_orchestrator: null
     child_orchestrators:
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
       - "ado_orchestrator"
       - "sanitization_orchestrator"
     related_orchestrators:
@@ -186,14 +186,14 @@ orchestrators:
   # TDD ORCHESTRATORS
   # ──────────────────────────────────
   
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     version: "4.0.0"
     status: "active"
     category: "tdd"
     description: "Unified TDD orchestrator with adaptive learning, RED→GREEN→REFACTOR enforcement, parallel test execution, and complexity-based test generation supporting multiple testing frameworks"
     
-    source_file: "src/orchestrators/tdd/tdd_orchestrator_v4.py"
-    entry_point: "TDDOrchestratorV4"
+    source_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+    entry_point: "TDDOrchestrator"
     documentation_path: ".github/prompts/modules/tdd-orchestrator-guide.md"
     
     inherits_from: "planning_orchestrator"
@@ -316,7 +316,7 @@ orchestrators:
     child_orchestrators: []
     related_orchestrators:
       - "planning_orchestrator"
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
       - "autonomous_execution_engine"
     
     config_overrides:
@@ -534,7 +534,7 @@ orchestrators:
     child_orchestrators: []
     related_orchestrators:
       - "code_review_orchestrator"
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
     
     config_overrides:
       namespace: "config://refactoring"
@@ -570,7 +570,7 @@ orchestrators:
     child_orchestrators: []
     related_orchestrators:
       - "devops_orchestrator"
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
     
     config_overrides:
       namespace: "config://cicd"
@@ -638,8 +638,8 @@ orchestrators:
     category: "maintenance"
     description: "System maintenance orchestrator with 7-phase workflow (healthcheck, align, cleanup, optimize, vacuum, refresh prompts, final healthcheck) ensuring CORTEX system health and performance"
     
-    source_file: "src/operations/modules/orchestration/maintenance_orchestrator_v3.py"
-    entry_point: "MaintenanceOrchestratorV3"
+    source_file: "src/operations/modules/orchestration/maintenance_orchestrator.py"
+    entry_point: "MaintenanceOrchestrator"
     documentation_path: ".github/prompts/modules/maintenance-guide.md"
     
     inherits_from: null
@@ -690,7 +690,7 @@ categories:
   tdd:
     description: "Test-driven development workflow orchestrators enforcing RED→GREEN→REFACTOR cycle with adaptive learning"
     orchestrators:
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
     characteristics:
       - "Test-first development"
       - "Complexity-based test generation"
@@ -780,7 +780,7 @@ deprecated:
     
     tdd_orchestrator_v3:
       deprecated_date: "2024-11-01"
-      replacement: "tdd_orchestrator_v4"
+      replacement: "tdd_orchestrator"
       removal_date: "2025-02-01"
       migration_guide: "docs/migration/tdd-v3-to-v4.md"
       reason: "Replaced by unified v4 with adaptive learning"
@@ -793,7 +793,7 @@ deprecated:
       reason: "Upgraded to 5-phase workflow with validation"
   
   manifests:
-    planning-system-2.0-manifest.yaml:
+    planning-system-manifest.yaml:
       deprecated_date: "2025-12-22"
       replacement: "core-manifest.yaml"
       removal_date: "2026-01-31"

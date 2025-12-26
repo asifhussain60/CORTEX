@@ -9,7 +9,7 @@
 
 ## Overview
 
-Enhanced Planning System 2.0 to integrate context-aware architectural review that analyzes existing code in the context of the user's feature request. CORTEX now identifies blocking issues, challenges users, and automatically incorporates fixes into the plan.
+Enhanced Planning System to integrate context-aware architectural review that analyzes existing code in the context of the user's feature request. CORTEX now identifies blocking issues, challenges users, and automatically incorporates fixes into the plan.
 
 ---
 
@@ -129,7 +129,7 @@ def execute(self, context: Dict[str, Any]):
 
 ## Manifest Updates
 
-### planning-system-2.0-manifest.yaml
+### planning-system-manifest.yaml
 
 **REQ-003 Enhanced:**
 
@@ -167,7 +167,7 @@ def execute(self, context: Dict[str, Any]):
 
 ```yaml
 - requirement_id: "REQ-003"
-  inherited_from: "planning-system-2.0"
+  inherited_from: "planning-system"
   status: "implemented"
   ado_specific_note: |
     - Blocking issues → ADO Impediments
@@ -274,7 +274,7 @@ No blockers - proceeding with planning.
 
 ### Manifest Updates (2 files)
 
-3. **cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml**
+3. **cortex-brain/manifests/orchestrators/planning-system-manifest.yaml**
    - REQ-003 enhanced with new methods
    - INT-001 updated with contextual behavior
 

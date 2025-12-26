@@ -72,10 +72,10 @@ Nested Chat (Teams → Coordinator)
 
 ## 🚀 Integration Status
 
-### TDD Orchestrator v4.0
+### TDD Orchestrator
 - **Status:** ✅ Integrated
 - **Pattern:** Sequential Chat (RED → GREEN → REFACTOR)
-- **File:** `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+- **File:** `src/orchestrators/tdd/tdd_orchestrator.py`
 - **Lines:** 35-36, 578, 592, 1036
 
 ```python
@@ -87,7 +87,7 @@ self.multi_agent_orchestrator = MultiAgentOrchestrator()
 result = await self.multi_agent_orchestrator.execute_sequential(agents, context)
 ```
 
-### Planning System 2.0
+### Planning System
 - **Status:** 🟡 Ready for integration
 - **Pattern:** Group Chat (parallel complexity analysis)
 - **Expected Performance:** 50% faster than sequential
@@ -371,8 +371,8 @@ class AgentContext:
 - ✅ Partial failure handling: Resilient execution
 
 ### Integration Metrics
-- ✅ TDD Orchestrator v4.0 integrated
-- 🟡 Planning System 2.0 ready
+- ✅ TDD Orchestrator integrated
+- 🟡 Planning System ready
 - 🟡 System Maintenance ready
 
 ---
@@ -386,7 +386,7 @@ class AgentContext:
 - 🔄 Monitoring production usage in TDD workflows
 
 ### Phase 2: Expand Integration (Q1 2026)
-- [ ] Integrate with Planning System 2.0
+- [ ] Integrate with Planning System
 - [ ] Integrate with System Maintenance
 - [ ] Add metrics dashboard
 - [ ] Production performance monitoring

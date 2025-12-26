@@ -133,7 +133,7 @@ Each prompt includes EXACT text phrase from story:
 - Chapter 5: Tier 2 - Knowledge Graph overload
 - Chapter 6: Tier 3 - Development Context
 - Chapter 7: TDD Mastery integration (NEW MAJOR FEATURE)
-- Chapter 8: Planning System 2.0 (NEW MAJOR FEATURE)
+- Chapter 8: Planning System (NEW MAJOR FEATURE)
 - Chapter 9: System Maintenance orchestrator (NEW MAJOR FEATURE)
 - Chapter 10: The Awakening - CORTEX achieves consciousness
 - Epilogue: Six months later, where are they now?

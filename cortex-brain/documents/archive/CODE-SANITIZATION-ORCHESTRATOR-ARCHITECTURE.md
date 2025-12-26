@@ -1042,9 +1042,9 @@ python scripts/cli_wrappers/sanitize_wrapper.py /path/to/project --dry-run
 
 ---
 
-### Planning System 2.0 Comparison
+### Planning System Comparison
 
-| Feature | Planning System 2.0 | Code Sanitization | Notes |
+| Feature | Planning System | Code Sanitization | Notes |
 |---------|---------------------|-------------------|-------|
 | **Interactive Approval** | ✅ Yes (plan review) | ✅ Yes (mapping approval) | Both require user sign-off |
 | **Dry-Run Mode** | ✅ Yes | ✅ Yes | Simulation without changes |
@@ -1325,7 +1325,7 @@ User approval required. Review mappings? [Y/n]
 - ✅ 3 Mermaid diagrams (high-level architecture, component relationships, data flow)
 - ✅ 15+ code examples across all 5 phases
 - ✅ 77 test strategy (51+ target exceeded by 51%)
-- ✅ Integration points (CLI, Copilot Chat, Planning System 2.0 comparison)
+- ✅ Integration points (CLI, Copilot Chat, Planning System comparison)
 - ✅ Performance characteristics (scalability analysis, optimization strategies)
 - ✅ 3 usage examples (Python, .NET, large codebase with conflicts)
 

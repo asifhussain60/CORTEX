@@ -37,7 +37,7 @@
 | 5 | `src/orchestrators/plan_execution_orchestrator.py:838` | `_run_integration_tests()` returns success without running tests - "Placeholder - real implementation would run pytest" | **Integration tests not running** - production readiness not validated | **CRITICAL** | Implement subprocess-based pytest execution (see `tests/integration/test_tdd_workflow_e2e.py` for pattern) |
 
 **Impact Assessment:**
-- **Affected Feature:** Planning System 2.0 execution phase
+- **Affected Feature:** Planning System execution phase
 - **Production Risk:** Plans execute successfully but critical quality gates (duplicate detection, file organization, import updates, feature wiring, integration testing) are bypassed
 - **User Impact:** Generated code may have duplicates, broken imports, unregistered routes, missing configuration
 - **Timeline:** These placeholders have existed since v2.0 (plan_execution_orchestrator.py created ~Nov 2025)
@@ -158,7 +158,7 @@ def _run_integration_tests(self, plan_data: Dict[str, Any]) -> Dict[str, Any]:
     return {"success": True, "passed": 0, "failed": 0}
 ```
 
-**Impact on Planning System 2.0:**
+**Impact on Planning System:**
 - ✅ Phase 1: SPECIFICATION (implemented)
 - ✅ Phase 2: DESIGN (implemented)
 - ✅ Phase 3: IMPLEMENTATION (implemented)
@@ -466,7 +466,7 @@ jobs:
 
 **Related Documents:**
 - `cortex-brain/documents/reports/v5.3.0-E2E-TEST-SUITE-COMPLETE.md` - Test suite status
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - Planning System spec
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` - Planning System spec
 - `cortex-brain/brain-protection-rules.yaml` - SKULL rule enforcement
 - `tests/integration/test_tdd_workflow_e2e.py` - Example subprocess test execution
 

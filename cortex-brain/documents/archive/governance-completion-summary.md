@@ -317,7 +317,7 @@ Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX
 **Files:**
 - `src/operations/modules/orchestration/tdd_orchestrator.py`
 - `src/operations/modules/orchestration/ado_planning_orchestrator.py`
-- `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+- `src/operations/modules/orchestration/maintenance_orchestrator.py`
 - `src/operations/modules/orchestration/cleanup_orchestrator.py`
 
 **Tasks:**
@@ -365,13 +365,13 @@ Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX
 
 ### Phase 5: Manifest & Documentation Updates
 **Files:**
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 - `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml`
 - `.github/prompts/CORTEX.prompt.md`
 
 **Tasks:**
-1. ✅ Update Planning System 2.0 manifest with folder organization rules
-2. ✅ Update ADO manifest (inherits Planning System 2.0)
+1. ✅ Update Planning System manifest with folder organization rules
+2. ✅ Update ADO manifest (inherits Planning System)
 3. ✅ Update CORTEX.prompt.md with new folder patterns
 4. ✅ Create quick reference guide for developers
 

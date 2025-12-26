@@ -90,7 +90,7 @@ Repository root *.md (excluding README): 0 files
 
 ### ✅ Core Features Implemented
 
-**Planning System 2.0:**
+**Planning System:**
 - ✅ File-based workflow documented
 - ✅ DoR/DoD enforcement documented
 - ✅ Incremental planning documented (v3.2.0)

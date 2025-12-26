@@ -35,7 +35,7 @@ All architecture documents located and validated:
 
 **Core Orchestrators (7):**
 1. ✅ TDD v4.0 - 762 lines
-2. ✅ Planning System 2.0 - 1,102 lines
+2. ✅ Planning System - 1,102 lines
 3. ✅ Documentation Orchestrator - 1,329 lines
 4. ✅ DevOps Orchestrator - 1,324 lines
 5. ✅ ADO Operations - 1,468 lines

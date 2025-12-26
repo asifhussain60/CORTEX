@@ -14,7 +14,7 @@
 **Completed Work (From CORTEX4-STATUS.md v2.1):**
 - ✅ ExecutionOrchestrator (Task 6.1) - Phase 6
 - ✅ DocumentationOrchestrator (Task 6.2) - Phase 6
-- ✅ TDDOrchestrator v4.0 (Task 6.3) - Phase 6, 26 tests, 90%+ coverage
+- ✅ TDDOrchestrator (Task 6.3) - Phase 6, 26 tests, 90%+ coverage
 - ✅ Planning System Core MVP (Task 6.4) - Phase 6, 138 tests, 84.6% coverage
 - ✅ SmartPlanLoader v2.0 (Task 6.5) - Phase 6
 - ✅ ComplexityAnalyzer v2.0 (Task 6.6) - Phase 6
@@ -48,7 +48,7 @@
 
 ### ⚠️ Partially Documented (Text Only, No Diagrams)
 
-#### 2. TDDOrchestrator v4.0 (Task 6.3)
+#### 2. TDDOrchestrator (Task 6.3)
 - **Location:** `cortex-brain/documents/reports/tdd-orchestrator-enhancement-complete.md`
 - **Content:** 480 lines - Enhancement report with anti-pattern detection
 - **Missing:** 
@@ -114,7 +114,7 @@
 - **Content:** User guides exist
 - **Missing:**
   - ❌ 6-phase architecture diagram (DISCOVERY→COMPLETION)
-  - ❌ Planning System 2.0 inheritance diagram
+  - ❌ Planning System inheritance diagram
   - ❌ Manifest-driven workflow sequence
 - **Quality:** ⭐⭐ USER GUIDES exist, missing ARCHITECTURE
 - **Status:** ⚠️ NEEDS ARCHITECTURE DIAGRAMS (91.44% coverage, 80 tests deserves full docs)
@@ -277,7 +277,7 @@
    - Est: 3 hours
 
 **Week 2 (High):**
-4. TDDOrchestrator v4.0 (enhance existing report with diagrams)
+4. TDDOrchestrator (enhance existing report with diagrams)
    - 3 diagrams required (Tier 2)
    - Est: 2 hours
 5. ADO Orchestrator (enhance existing guides with architecture)
@@ -323,7 +323,7 @@
 |-----------|-----|-------|----------|-----------|----------|--------|
 | ExecutionOrchestrator | Unknown | Unknown | Unknown | ❌ | ❌ | CRITICAL |
 | DocumentationOrchestrator | Unknown | Unknown | Unknown | ⚠️ | ❌ | CRITICAL |
-| TDDOrchestrator v4.0 | 386 | 26 | 90%+ | ✅ | ❌ | HIGH |
+| TDDOrchestrator | 386 | 26 | 90%+ | ✅ | ❌ | HIGH |
 | Planning System Core | 5,363 | 138 | 84.6% | ⚠️ | ❌ | **CRITICAL** |
 | SmartPlanLoader v2.0 | Unknown | 15 | 40.36% | ❌ | ❌ | MEDIUM |
 | ComplexityAnalyzer v2.0 | Unknown | 15 | 82.86% | ❌ | ❌ | MEDIUM |

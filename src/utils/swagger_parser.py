@@ -2,7 +2,7 @@
 Swagger/OpenAPI Parser for Complexity Estimation
 
 Parses Swagger 2.0 and OpenAPI 3.0 files to extract API complexity metrics
-for integration with Planning System 2.0 estimation.
+for integration with Planning System estimation.
 
 Author: CORTEX Development Team
 Version: 1.0.0

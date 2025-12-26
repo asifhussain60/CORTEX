@@ -174,7 +174,7 @@ defaults:
 
 example_manifest_snippet: |
   metadata:
-    orchestrator_name: "planning_system_2.0"
+    orchestrator_name: "planning_system"
     version: "2.0.0"
     category: "planning"
     status: "active"

@@ -1,4 +1,4 @@
-# TDD Orchestrator v4.0 - Quick Reference
+# TDD Orchestrator - Quick Reference
 
 **YAML Manifest:** `cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml`
 
@@ -15,7 +15,7 @@ All Phase 3 work completed autonomously:
 
 ### ✅ Deliverables Created
 
-1. **Core Orchestrator** (`src/orchestrators/tdd/tdd_orchestrator_v4.py`)
+1. **Core Orchestrator** (`src/orchestrators/tdd/tdd_orchestrator.py`)
    - Strategy pattern architecture
    - Technology discovery engine
    - Clean code enforcer
@@ -104,13 +104,13 @@ All Phase 3 work completed autonomously:
 ### 🚀 Usage
 
 ```python
-from src.orchestrators.tdd.tdd_orchestrator_v4 import TDDOrchestratorV4
+from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
 from src.orchestrators.tdd.strategies.red_phase_strategy import REDPhaseStrategy
 from src.orchestrators.tdd.strategies.green_phase_strategy import GREENPhaseStrategy
 from src.orchestrators.tdd.strategies.refactor_phase_strategy import REFACTORPhaseStrategy
 
 # Initialize orchestrator
-orchestrator = TDDOrchestratorV4(
+orchestrator = TDDOrchestrator(
     brain_connector=brain,
     knowledge_graph=kg,
     mcp_gateway=mcp
@@ -138,11 +138,11 @@ print(f"Success rate: {metrics['success_rate']:.1%}")
 print(f"Patterns learned: {metrics['patterns_learned']}")
 ```
 
-### 🔄 Integration with Planning System 3.0
+### 🔄 Integration with Planning System
 
-TDD Orchestrator v4.0 is a **child orchestrator** of Planning System 3.0:
+TDD Orchestrator is a **child orchestrator** of Planning System:
 
-- **Automatic inclusion:** All Planning System 3.0 plans include TDD phases
+- **Automatic inclusion:** All Planning System plans include TDD phases
 - **Manifest inheritance:** Inherits DoR/DoD framework from planning-system-3.0-manifest.yaml
 - **Completion signals:** Uses `🎭 Orchestrator completing: ✅ ALL WORK COMPLETE` pattern
 

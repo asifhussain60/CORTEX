@@ -141,10 +141,10 @@ class TDDPhaseStrategy(ABC):
 
 
 # ============================================================================
-# TDD Orchestrator v4.1 - BaseOrchestrator Integration
+# TDD Orchestrator - BaseOrchestrator Integration
 # ============================================================================
 
-class TDDOrchestratorV4(BaseOrchestrator):
+class TDDOrchestrator(BaseOrchestrator):
     """
     Unified TDD Orchestrator with BaseOrchestrator integration.
     

@@ -1,5 +1,5 @@
 """
-Analysis module for CORTEX Planning System 3.0.
+Analysis module for CORTEX Planning System.
 
 Provides AST-powered code analysis capabilities including
 semantic duplicate detection, architecture debt analysis,

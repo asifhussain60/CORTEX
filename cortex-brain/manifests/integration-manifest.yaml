@@ -273,7 +273,7 @@ integrations:
     # Used By
     orchestrators:
       - "planning_orchestrator"
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
       - "git_checkpoint_orchestrator"
       - "git_sync_optimize_orchestrator"
     
@@ -378,7 +378,7 @@ integrations:
     # Used By (nearly all orchestrators)
     orchestrators:
       - "planning_orchestrator"
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
       - "ado_orchestrator"
       - "sanitization_orchestrator"
       - "maintenance_orchestrator"

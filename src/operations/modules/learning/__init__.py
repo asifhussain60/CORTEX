@@ -2,7 +2,7 @@
 Learning Library Module
 
 Git-based learning capture with interactive refinement.
-Also includes Planning System 3.0 learning subsystem.
+Also includes Planning System learning subsystem.
 
 Components:
 - git_history_scanner: Scan git commits for timeframe

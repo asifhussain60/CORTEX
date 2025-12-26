@@ -154,7 +154,7 @@ dotnet add package Microsoft.CodeAnalysis.CSharp
 ### No Breaking Changes ✅
 - ✅ All core CORTEX operations use native `ast` already (20+ files)
 - ✅ TDD Mastery Orchestrator: Uses `ast` module
-- ✅ Planning System 2.0: Uses `ast` module
+- ✅ Planning System: Uses `ast` module
 - ✅ Validation/Conflict Detection: Uses `ast` module
 
 ---

@@ -1,4 +1,4 @@
-"""Tiered Router for CORTEX Planning System 3.0
+"""Tiered Router for CORTEX Planning System
 
 This module implements LLM-based operation classification into 4 tiers:
 - Tier 1: Instant (<2s) - CLI operations, status checks

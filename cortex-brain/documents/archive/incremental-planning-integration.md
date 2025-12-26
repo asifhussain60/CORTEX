@@ -8,7 +8,7 @@
 
 ## Overview
 
-The Planning System 2.0 now automatically delegates to incremental plan generation for complex features, preventing response length failures and creating plans phase-by-phase.
+The Planning System now automatically delegates to incremental plan generation for complex features, preventing response length failures and creating plans phase-by-phase.
 
 ## Problem Solved
 
@@ -233,7 +233,7 @@ No migration needed - existing plans continue to work.
 ---
 
 **Related Documentation:**
-- `.github/prompts/modules/planning-orchestrator-guide.md` - Planning System 2.0 overview
+- `.github/prompts/modules/planning-orchestrator-guide.md` - Planning System overview
 - `src/workflows/incremental_plan_generator.py` - Incremental generator implementation
 - `cortex-brain/brain-protection-rules.yaml` - TDD_ENFORCEMENT rules for plans
 

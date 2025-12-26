@@ -1,5 +1,5 @@
 """
-Code Safety Guardrail for TDD Orchestrator v4.0
+Code Safety Guardrail for TDD Orchestrator
 
 Package 6: Security and safety checks for generated code
 Integrates with Phase 5 agent guardrails to prevent vulnerabilities.

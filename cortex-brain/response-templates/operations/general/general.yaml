@@ -1277,7 +1277,7 @@ templates:
         \n**Annual Value Projection:** $84,480 saved per developer (validated against\
         \ Copilot Pro+ baseline)\n\n---\n\n## \U0001F465 Value by Stakeholder Role\n\
         \n### \U0001F3A8 **Product Owners & Business Leaders**\n\n**Strategic Planning\
-        \ Intelligence:**\n- **Planning System 2.0** (2,599 lines, `src/orchestrators/planning_orchestrator.py`)\n\
+        \ Intelligence:**\n- **Planning System** (2,599 lines, `src/orchestrators/planning_orchestrator.py`)\n\
         \  - Vision API: Extract requirements from screenshots (UI mockups, ADO items,\
         \ error messages)\n  - Definition of Ready (DoR): Zero-ambiguity validation\
         \ before work starts\n  - Definition of Done (DoD): Automated quality gates\

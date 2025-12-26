@@ -4,7 +4,7 @@
 **Created:** December 22, 2025  
 **Phase:** 6.5 Week 2 (HIGH Priority)  
 **Version:** 4.0.0  
-**Implementation:** `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+**Implementation:** `src/orchestrators/tdd/tdd_orchestrator.py`
 
 ---
 
@@ -32,7 +32,7 @@
 ```mermaid
 graph TB
     subgraph "TDD v4.0 Orchestrator Core"
-        ORCH[TDDOrchestratorV4<br/>Main Orchestrator]
+        ORCH[TDDOrchestrator<br/>Main Orchestrator]
         
         subgraph "Strategy Pattern (Phase Execution)"
             RED[RED Phase Strategy<br/>Test Generation]
@@ -104,7 +104,7 @@ graph TB
 
 ## 📦 Component Breakdown
 
-### 1. TDDOrchestratorV4 (Main Orchestrator)
+### 1. TDDOrchestrator (Main Orchestrator)
 
 **Purpose:** Central coordination of TDD workflow execution
 
@@ -410,7 +410,7 @@ async def _suggest_mitigations(risks: List[RiskPattern]) -> List[str]
 ```mermaid
 sequenceDiagram
     participant User
-    participant Orchestrator as TDDOrchestratorV4
+    participant Orchestrator as TDDOrchestrator
     participant Tech as Technology Discovery
     participant Red as RED Phase
     participant Green as GREEN Phase
@@ -620,9 +620,9 @@ logger.info("🎭 Orchestrator completing: ✅ ALL WORK COMPLETE")
 
 ### Example 1: Basic TDD Cycle
 ```python
-from src.orchestrators.tdd.tdd_orchestrator_v4 import TDDOrchestratorV4
+from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
 
-orchestrator = TDDOrchestratorV4(brain, kg, mcp)
+orchestrator = TDDOrchestrator(brain, kg, mcp)
 
 result = await orchestrator.execute_tdd_cycle(
     feature="User authentication",
@@ -746,7 +746,7 @@ print(f"Recommendations: {result.recommendations}")
 3. **E2E Tests:** Full TDD cycle
 4. **Language Tests:** 11+ language validation
 
-**Test Location:** `tests/orchestrators/tdd/test_tdd_orchestrator_v4.py`
+**Test Location:** `tests/orchestrators/tdd/test_tdd_orchestrator.py`
 
 ---
 

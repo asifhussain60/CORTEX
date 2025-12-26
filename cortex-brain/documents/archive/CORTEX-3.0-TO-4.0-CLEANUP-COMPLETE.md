@@ -175,7 +175,7 @@ python scripts/cleanup_legacy_3_0.py --scan --report
 
 ### Medium Term (Phase 3 - Weeks 7-13)
 5. **TDD Orchestrator Migration** (Week 7 Day 6-7)
-   - Develop: src/orchestration_4_0/orchestrators/tdd_orchestrator_v4.py
+   - Develop: src/orchestration_4_0/orchestrators/tdd_orchestrator.py
    - Activate: Add to copilot-instructions.md
    - Delete: src/tdd/ (old 3.0 code)
    - Validate: Must pass before commit

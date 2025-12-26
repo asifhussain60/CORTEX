@@ -617,7 +617,7 @@ pandas>=2.1.4    # Data aggregation (optional, for advanced analytics)
 
 ## 📚 Related Documentation
 
-- **Planning System 2.0:** `.github/prompts/modules/planning-orchestrator-guide.md`
+- **Planning System:** `.github/prompts/modules/planning-orchestrator-guide.md`
 - **Tier 3 Architecture:** `src/tier3/README.md`
 - **Brain Protection Rules:** `cortex-brain/brain-protection-rules.yaml`
 - **Dashboard Launcher:** `cortex-brain/documents/implementation-guides/dashboard-launcher-quick-ref.md`
@@ -639,5 +639,5 @@ pandas>=2.1.4    # Data aggregation (optional, for advanced analytics)
 ---
 
 **Plan Status:** ⏳ AWAITING APPROVAL  
-**Created By:** CORTEX Planning System 2.0  
+**Created By:** CORTEX Planning System  
 **Review Required:** YES - Please review DoR, acceptance criteria, and risks before approval

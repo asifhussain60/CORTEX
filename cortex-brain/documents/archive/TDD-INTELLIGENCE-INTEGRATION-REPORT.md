@@ -512,7 +512,7 @@ CORTEX:
 ### Short-Term (Phase 3)
 1. ☐ Test intelligent enforcement with Phase 3 controller creation
 2. ☐ Validate TDD decisions appear in logs with evidence
-3. ☐ Verify Planning System 2.0 includes intelligent TDD guidance in DoR/DoD
+3. ☐ Verify Planning System includes intelligent TDD guidance in DoR/DoD
 4. ☐ Create Phase 3 controllers (should enforce TDD automatically)
 5. ☐ Document TDD enforcement metrics (mandatory vs. optional code %)
 
@@ -561,7 +561,7 @@ CORTEX:
 ### CORTEX Files Referenced
 - `.github/prompts/CORTEX.prompt.md` (TDD_ENFORCEMENT documentation)
 - `cortex-brain/response-templates.yaml` (template: tdd_workflow_complete)
-- `planning-system-2.0-manifest.yaml` (DoR/DoD compliance)
+- `planning-system-manifest.yaml` (DoR/DoD compliance)
 
 ### External Documentation
 - SOLID Principles: Single Responsibility guides code type detection

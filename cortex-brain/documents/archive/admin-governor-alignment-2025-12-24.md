@@ -77,7 +77,7 @@ Successfully aligned `CORTEX_ADMIN_GOVERNOR.prompt.md` with CORTEX 4.0 GA realit
 ```markdown
 4. **Completed Orchestrators (from CORTEX4-STATUS.md v3.0):**
    - ✅ ExecutionOrchestrator (Task 6.1) - Phase 6
-   - ✅ TDDOrchestrator v4.0 (Task 6.3) - Phase 6, 26 tests, 90%+ coverage
+   - ✅ TDDOrchestrator (Task 6.3) - Phase 6, 26 tests, 90%+ coverage
    [... generic task references ...]
 
 5. **NOT YET IMPLEMENTED:**
@@ -87,9 +87,9 @@ Successfully aligned `CORTEX_ADMIN_GOVERNOR.prompt.md` with CORTEX 4.0 GA realit
 **To:**
 ```markdown
 4. **Completed Orchestrators (from CORTEX4-STATUS.md v5.2):**
-   - ✅ Planning System 2.0 (planning_orchestrator_v2.py) - 138 tests, 84.6% coverage
+   - ✅ Planning System (planning_orchestrator_v2.py) - 138 tests, 84.6% coverage
    - ✅ ADO Operations (ado_operations_orchestrator_v1.py) - 80 tests, 91.44% coverage
-   - ✅ TDD Mastery v4.0 (tdd_orchestrator_v4.py) - 26 tests, 90%+ coverage
+   - ✅ TDD Mastery v4.0 (tdd_orchestrator.py) - 26 tests, 90%+ coverage
    [... 19 total orchestrators with file paths and metrics ...]
 
 5. **NOT YET IMPLEMENTED:**

@@ -528,7 +528,7 @@ trigger:
     - "rebuild dashboard intelligence"
 
 inheritance:
-  parent: "planning-system-2.0-manifest.yaml"
+  parent: "planning-system-manifest.yaml"
   reason: "Shares holistic discovery, TDD compliance, DoR/DoD validation"
 
 phases:
@@ -733,7 +733,7 @@ dependencies:
 - `cortex-brain/dashboards/ui/components/onboarding-tab.js`
 
 **Orchestrator Pattern:**
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` (inherit from)
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` (inherit from)
 - `src/orchestrators/planning_orchestrator.py` (reference implementation)
 
 ---

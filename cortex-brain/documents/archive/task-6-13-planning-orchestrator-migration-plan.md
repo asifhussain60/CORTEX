@@ -1,6 +1,6 @@
 # Task 6.13: Planning Orchestrator Migration - Implementation Plan
 
-## 🧠 CORTEX Phase 6 Task 6.13 - Planning Orchestrator v2.0
+## 🧠 CORTEX Phase 6 Task 6.13 - Planning Orchestrator
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
@@ -8,7 +8,7 @@
 ## 📊 Migration Analysis
 
 ### Orchestrator Selected
-**Planning Orchestrator v2.0** - YAML-based feature planning with validation and autonomous execution
+**Planning Orchestrator** - YAML-based feature planning with validation and autonomous execution
 
 ### Selection Rationale
 - ✅ **Moderate Size**: 792 LOC (manageable scope)

@@ -15,7 +15,7 @@ from pathlib import Path
 from datetime import datetime
 
 from src.orchestrators.tdd.strategies.refactor_phase_strategy import REFACTORPhaseStrategy
-from src.orchestrators.tdd.tdd_orchestrator_v4 import ValidationResult, PhaseResult
+from src.orchestrators.tdd.tdd_orchestrator import ValidationResult, PhaseResult
 
 
 @pytest.fixture

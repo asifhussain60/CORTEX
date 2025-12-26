@@ -2,7 +2,7 @@
 Extended Tests for PlanningOrchestrator (Task 8.4 - GREEN Strategy)
 
 Objective: Add 60 new tests focusing on GREEN strategy compliance
-Target: Planning System 2.0/3.0 integration, complexity routing, manifest compliance
+Target: Planning System/3.0 integration, complexity routing, manifest compliance
 Priority: P0 (CRITICAL)
 Author: CORTEX Test Expansion Phase 8 Task 8.4
 Created: December 25, 2025
@@ -474,7 +474,7 @@ class TestTDDWorkflowIntegration:
 # ============================================================================
 
 class TestManifestComplianceValidation:
-    """Test manifest compliance validation against planning-system-2.0-manifest.yaml."""
+    """Test manifest compliance validation against planning-system-manifest.yaml."""
     
     def test_manifest_loaded_on_init(self, minimal_orchestrator_config):
         """Planning manifest loaded during orchestrator initialization."""
@@ -525,10 +525,10 @@ class TestManifestComplianceValidation:
         assert "manifest" in caplog.text.lower() or "violation" in caplog.text.lower()
     
     def test_manifest_inheritance_structure_respected(self, minimal_orchestrator_config):
-        """Manifest inheritance structure (Planning System 2.0 → ADO) respected."""
+        """Manifest inheritance structure (Planning System → ADO) respected."""
         orchestrator = PlanningOrchestrator(minimal_orchestrator_config)
         
-        # Check if ADO manifest inherits from Planning System 2.0
+        # Check if ADO manifest inherits from Planning System
         manifest_inheritance = orchestrator._get_manifest_inheritance()
         
         assert manifest_inheritance is not None

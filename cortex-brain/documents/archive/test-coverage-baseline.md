@@ -60,10 +60,10 @@ These are production orchestrators with **NO test coverage**:
 **Total Gap:** ~2,800 lines of critical orchestrator code with 0% coverage
 
 **Immediate Action Required:**
-1. TDD Orchestrator v4.0 - Create test suite (target: 98% coverage)
-2. Planning System 2.0 - Create test suite (target: 97% coverage)
+1. TDD Orchestrator - Create test suite (target: 98% coverage)
+2. Planning System - Create test suite (target: 97% coverage)
 3. Sanitization Orchestrator - Create test suite (target: 95% coverage)
-4. Maintenance Orchestrator v3.0 - Create test suite (target: 95% coverage)
+4. Maintenance Orchestrator - Create test suite (target: 95% coverage)
 5. System Integrity Orchestrator - Create test suite (target: 88% coverage)
 
 ---
@@ -146,10 +146,10 @@ These are production orchestrators with **NO test coverage**:
 
 | Module | Target Coverage | Estimated Tests | Hours |
 |--------|-----------------|-----------------|-------|
-| TDD Orchestrator v4.0 | 98% | 30 tests | 4h |
-| Planning System 2.0 | 97% | 35 tests | 5h |
+| TDD Orchestrator | 98% | 30 tests | 4h |
+| Planning System | 97% | 35 tests | 5h |
 | Sanitization Orchestrator | 95% | 25 tests | 3h |
-| Maintenance Orchestrator v3.0 | 95% | 25 tests | 3h |
+| Maintenance Orchestrator | 95% | 25 tests | 3h |
 | Brain Tier 1 (Working Memory) | 95% | 40 tests | 5h |
 
 **Priority 1 (P1) - Complete By End of Week:**
@@ -208,8 +208,8 @@ These are production orchestrators with **NO test coverage**:
    - Configure pytest.ini with coverage thresholds
    - Create test fixture library
 3. 🎯 **Begin P0 orchestrator tests:**
-   - TDD Orchestrator v4.0 (30 tests)
-   - Planning System 2.0 (35 tests)
+   - TDD Orchestrator (30 tests)
+   - Planning System (35 tests)
    - Brain Tier 1 (40 tests)
 
 ### Short-Term (Week 14 - Days 3-5)
@@ -258,12 +258,12 @@ These are production orchestrators with **NO test coverage**:
 
 **Immediate Actions (Task 8.2 - Unit Test Expansion):**
 
-1. **Start TDD Orchestrator v4.0 tests:**
-   - Create `tests/orchestrators/tdd/test_tdd_orchestrator_v4.py`
+1. **Start TDD Orchestrator tests:**
+   - Create `tests/orchestrators/tdd/test_tdd_orchestrator.py`
    - Target: 30 tests, 98% coverage, 4 hours
    - Focus: RED→GREEN→REFACTOR workflow, phase transitions, rollback
 
-2. **Start Planning System 2.0 tests:**
+2. **Start Planning System tests:**
    - Create `tests/orchestrators/planning/test_planning_orchestrator_v2.py`
    - Target: 35 tests, 97% coverage, 5 hours
    - Focus: Plan generation, validation, DoR/DoD compliance
@@ -282,12 +282,12 @@ These are production orchestrators with **NO test coverage**:
 
 - [Phase 8 Master Plan](../planning/active/CORTEX-3.0-4.0/phases/phase-08-testing-validation.md)
 - [Task 8.2: Unit Test Expansion](../planning/active/CORTEX-3.0-4.0/phases/phase-08-testing-validation.md#task-82-unit-test-expansion-24-hours)
-- [TDD Orchestrator v4.0 Architecture](../../docs/orchestration/tdd-orchestrator-v4-architecture.md)
+- [TDD Orchestrator Architecture](../../docs/orchestration/tdd-orchestrator-v4-architecture.md)
 - [Testing Strategy Guide](../../docs/testing/testing-strategy.md)
 
 ---
 
 **Last Updated:** December 22, 2025  
 **Report Status:** ✅ COMPLETE  
-**Next Task:** Task 8.2 - Unit Test Expansion (begin TDD Orchestrator v4.0 tests)
+**Next Task:** Task 8.2 - Unit Test Expansion (begin TDD Orchestrator tests)
 

@@ -1,4 +1,4 @@
-# CORTEX Planning System 2.0 - Feature Plan
+# CORTEX Planning System - Feature Plan
 # Plan ID: template-enhancement-20251207
 # Status: APPROVED
 # Created: 2025-12-07
@@ -109,7 +109,7 @@ definition_of_ready:
       business_value:
         organization: "capability_based"
         categories:
-          - "Planning & Requirements (Planning System 2.0, Vision API, ADO)"
+          - "Planning & Requirements (Planning System, Vision API, ADO)"
           - "Development Automation (TDD Mastery, auto-debug, refactoring)"
           - "Quality Assurance (Convention validation, test isolation)"
           - "Operations & Maintenance (Upgrade system, dashboard, feedback)"

@@ -10,10 +10,10 @@
 
 ## 🎯 Executive Summary
 
-**Purpose:** Azure DevOps work item orchestration integrated with Planning System 2.0 for automated story/feature/task generation with DoR/DoD enforcement
+**Purpose:** Azure DevOps work item orchestration integrated with Planning System for automated story/feature/task generation with DoR/DoD enforcement
 
 **Key Innovations:**
-- ✅ Planning System 2.0 inheritance (DoR/DoD/TDD enforcement)
+- ✅ Planning System inheritance (DoR/DoD/TDD enforcement)
 - ✅ ADO-formatted markdown (direct Azure DevOps copy-paste)
 - ✅ Hierarchical work item types (Story/Feature/Task/Epic/Bug)
 - ✅ File-based workflow (active/completed/blocked/cancelled)
@@ -46,7 +46,7 @@ graph TB
         AGENT[ADOAgent<br/>Routing Layer]
         UTILITY[ADOUtility<br/>Core Operations]
         
-        subgraph "Planning System 2.0 Integration"
+        subgraph "Planning System Integration"
             PLANNING[PlanningOrchestrator<br/>Inherited Base]
             DOR[DoR Validation<br/>Definition of Ready]
             DOD[DoD Validation<br/>Definition of Done]
@@ -863,21 +863,21 @@ def list_work_items(
 
 ---
 
-### 4. Planning System 2.0 Integration
+### 4. Planning System Integration
 
-**Purpose:** Inherit Planning System 2.0 compliance requirements (DoR/DoD/TDD)
+**Purpose:** Inherit Planning System compliance requirements (DoR/DoD/TDD)
 
 **Manifest:** `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml`
 
 **Inheritance Structure:**
 ```yaml
 schema_version: "1.0"
-inherits_from: "planning-system-2.0-manifest.yaml"
+inherits_from: "planning-system-manifest.yaml"
 
 metadata:
   orchestrator_name: "ado_planning_orchestrator"
   version: "3.0.0"
-  description: "ADO work item generation integrated with Planning System 3.0 architecture"
+  description: "ADO work item generation integrated with Planning System architecture"
 ```
 
 **Inherited Requirements (8 total):**
@@ -1179,9 +1179,9 @@ sequenceDiagram
 
 ## 🎯 Integration Points
 
-### 1. Planning System 2.0
+### 1. Planning System
 
-**Inheritance:** ADO operations extend Planning System 2.0 base capabilities
+**Inheritance:** ADO operations extend Planning System base capabilities
 
 **Inherited Features:**
 - DoR/DoD validation framework

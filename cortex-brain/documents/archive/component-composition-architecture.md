@@ -49,7 +49,7 @@ components:
 ```yaml
 templates:
   planning:
-    name: "Planning System 2.0"
+    name: "Planning System"
     base_structure: |
       ## 🧠 CORTEX {operation}
       **Author:** Asif Hussain

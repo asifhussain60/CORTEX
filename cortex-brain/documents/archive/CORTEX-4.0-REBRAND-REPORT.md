@@ -61,7 +61,7 @@ Completed comprehensive rebrand of CORTEX 3.0 to 4.0 across all user-facing docu
 
 **BEFORE:**
 ```markdown
-- **Version:** v3.0 (Planning System 3.0 integration)
+- **Version:** v3.0 (Planning System integration)
 | `system maintenance` | 7-phase maintenance v3.0 (tiered routing) | Admin |
 ```
 

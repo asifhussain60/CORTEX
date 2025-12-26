@@ -509,7 +509,7 @@ TOTAL:                      88 tests (100%)
 3. **Add more languages** - Ruby, Swift, Kotlin (if requested)
 
 ### Medium-term (1 month)
-1. **Planning System 2.0 integration** - Connect Tier 2 auto-fix workflow
+1. **Planning System integration** - Connect Tier 2 auto-fix workflow
 2. **Custom analyzer rules** - Allow team-specific pattern definitions
 3. **Historical trending** - Track risk scores over time per PR
 

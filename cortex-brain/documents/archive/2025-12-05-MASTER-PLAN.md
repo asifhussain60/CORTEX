@@ -267,7 +267,7 @@
 └── prompts/
     └── CORTEX.prompt.md (1207 lines)
         ├── Template system
-        ├── Planning System 2.0
+        ├── Planning System
         ├── TDD Mastery
         ├── Response format (DUPLICATE)
         ├── Document organization (DUPLICATE)
@@ -306,7 +306,7 @@
 │   ├── First interaction protocol (30 lines)
 │   ├── Quick reference table (40 lines) ← NEW
 │   ├── Key features (6 core, 80 lines)
-│   │   ├── Planning System 2.0
+│   │   ├── Planning System
 │   │   ├── TDD Mastery
 │   │   ├── Dashboard Launcher ← NEW
 │   │   ├── Hands-On Tutorial

@@ -117,7 +117,7 @@ Successfully completed final release preparation activities for CORTEX 4.0 GA. *
 
 **Documentation Delivered:**
 - ✅ **3 User Guides** (2,400+ lines):
-  - Planning System 2.0 User Guide (850 lines)
+  - Planning System User Guide (850 lines)
   - System Maintenance v3 User Guide (700 lines)
   - ADO Operations User Guide (850 lines)
 

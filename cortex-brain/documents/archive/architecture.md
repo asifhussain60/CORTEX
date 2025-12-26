@@ -252,7 +252,7 @@ src/operations/modules/
 
 ## 🔌 Integration Points
 
-### With Planning System 3.0
+### With Planning System
 
 ```python
 class PlanningOrchestrator:
@@ -523,7 +523,7 @@ def test_large_codebase_performance():
 ## 📚 References
 
 - **BaseOperationModule:** `src/operations/base_operation_module.py`
-- **Planning System 3.0:** `src/operations/modules/orchestration/planning_orchestrator.py`
+- **Planning System:** `src/operations/modules/orchestration/planning_orchestrator.py`
 - **SKULL Rules:** `cortex-brain/brain-protection-rules.yaml`
 - **Tree-sitter:** https://tree-sitter.github.io/
 - **FTS5 Documentation:** https://www.sqlite.org/fts5.html

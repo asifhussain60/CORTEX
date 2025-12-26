@@ -36,7 +36,7 @@ Successfully validated all 3 manifest files against their corresponding JSON sch
 
 #### Core Manifest Schema Issues
 1. ❌ Schema rejected `metadata` and `changelog` properties
-2. ❌ Orchestrator ID pattern `^[a-z_]+$` rejected `tdd_orchestrator_v4` (contains `v4`)
+2. ❌ Orchestrator ID pattern `^[a-z_]+$` rejected `tdd_orchestrator` (contains `v4`)
 3. ❌ Child/related orchestrator patterns rejected numeric suffixes
 4. ❌ Category orchestrator patterns rejected numeric suffixes
 
@@ -193,7 +193,7 @@ CORTEX 3-Tier Manifest Validation
 
 #### Config References (CoreManifest → ConfigManifest)
 - ✅ `planning_orchestrator` → config://planning → categories.refactoring.planning
-- ✅ `tdd_orchestrator_v4` → config://tdd → categories.refactoring.tdd
+- ✅ `tdd_orchestrator` → config://tdd → categories.refactoring.tdd
 - ✅ `ado_orchestrator` → config://ado → categories.ado.base
 - ✅ `sanitization_orchestrator` → config://sanitization → categories.sanitization.base
 - ✅ `maintenance_orchestrator` → config://maintenance → categories.cleanup.aggressive
@@ -266,7 +266,7 @@ CORTEX 3-Tier Manifest Validation
 **After:** `^[a-z_0-9]+$` (lowercase letters + underscore + digits)
 
 **Impact:** Supports versioned orchestrator IDs like:
-- `tdd_orchestrator_v4` ✅ (previously rejected)
+- `tdd_orchestrator` ✅ (previously rejected)
 - `planning_orchestrator_v2` ✅ (future-proof)
 - `execution_engine_v3` ✅ (future-proof)
 

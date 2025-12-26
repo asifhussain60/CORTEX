@@ -1,5 +1,5 @@
 """
-TDD Orchestrator v4.0 Edge Case Tests
+TDD Orchestrator Edge Case Tests
 
 Purpose: Target uncovered lines to reach 98% coverage
 Focus: Error handling, empty projects, pattern learning failures, rollback edge cases
@@ -14,8 +14,8 @@ from pathlib import Path
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 from datetime import datetime, timedelta
 
-from src.orchestrators.tdd.tdd_orchestrator_v4 import (
-    TDDOrchestratorV4,
+from src.orchestrators.tdd.tdd_orchestrator import (
+    TDDOrchestrator,
     TechnologyDiscoveryEngine,
     CleanCodeEnforcer,
     TechnologyProfile,
@@ -224,7 +224,7 @@ class TestAdvancedValidation:
         })
         mock_learning_engine.record_pattern = AsyncMock()
         
-        orch = TDDOrchestratorV4(
+        orch = TDDOrchestrator(
             brain_connector=brain,
             knowledge_graph=kg,
             mcp_gateway=mcp,
@@ -297,7 +297,7 @@ class TestAsyncCoordination:
         })
         mock_learning_engine.record_pattern = AsyncMock()
         
-        orch = TDDOrchestratorV4(
+        orch = TDDOrchestrator(
             brain_connector=brain,
             knowledge_graph=kg,
             mcp_gateway=mcp,

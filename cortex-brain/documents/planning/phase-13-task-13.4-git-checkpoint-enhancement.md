@@ -564,7 +564,7 @@ class TestCheckpointIntegration:
 - `GitCheckpointManager` class (git integration)
 
 **User Guides:**
-- Planning System 2.0 User Guide (add "Checkpoint Management" section)
+- Planning System User Guide (add "Checkpoint Management" section)
 - Rollback Procedures Guide (new document)
 
 **Testing:**

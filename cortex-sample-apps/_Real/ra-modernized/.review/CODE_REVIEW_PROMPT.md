@@ -22,7 +22,7 @@ This code review **MUST** be conducted **completely independently** of CORTEX AI
 ❌ Using CORTEX response formats (5-part structure)  
 ❌ Accessing CORTEX brain tiers or knowledge graph  
 ❌ Using CORTEX-specific terminology or patterns  
-❌ Following CORTEX workflows (Planning System 2.0, TDD Mastery, etc.)  
+❌ Following CORTEX workflows (Planning System, TDD Mastery, etc.)  
 ❌ Applying CORTEX brain protection rules  
 ❌ Using CORTEX document organization conventions  
 ❌ Referencing any files in `C:\PROJECTS\CORTEX\` directory  

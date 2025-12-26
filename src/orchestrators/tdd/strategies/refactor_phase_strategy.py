@@ -19,7 +19,7 @@ from pathlib import Path
 import logging
 from datetime import datetime
 
-from ..tdd_orchestrator_v4 import TDDPhaseStrategy, ValidationResult, PhaseResult
+from ..tdd_orchestrator import TDDPhaseStrategy, ValidationResult, PhaseResult
 
 logger = logging.getLogger(__name__)
 

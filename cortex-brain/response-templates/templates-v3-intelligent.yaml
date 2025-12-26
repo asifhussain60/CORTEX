@@ -865,7 +865,7 @@ templates:
         display: true
         format: "## ✓ Template Ready"
         style: "accept_only"
-        content: "ADO Planning System 2.0 with database storage active."
+        content: "ADO Planning System with database storage active."
         max_length: 70
       
       response:

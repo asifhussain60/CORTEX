@@ -18,7 +18,7 @@
 📄 DOCUMENT BREAKDOWN
 ================================================================================
 
-✅ PASS - planning-system-2.0-user-guide.md
+✅ PASS - planning-system-user-guide.md
    Links: 0 | Valid: 0 | Broken: 0 | Skipped: 0
 
 ✅ PASS - system-maintenance-v3-user-guide.md

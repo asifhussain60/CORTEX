@@ -49,7 +49,7 @@
 ### Version Artifacts Found (December 22, 2025)
 
 **Code Files:**
-- `src/operations/modules/orchestration/*_v3.py` (maintenance_orchestrator_v3, etc.)
+- `src/operations/modules/orchestration/*_v3.py` (maintenance_orchestrator, etc.)
 - `src/operations/modules/orchestration/*_v2.py` (smart_plan_loader_v2, complexity_analyzer_v2)
 - Import references: `orchestration_3_0` namespace
 - Test files: References to v2/v3 implementations
@@ -60,7 +60,7 @@
 - Legacy v2.5 compatibility requirements
 
 **Documentation:**
-- Mixed version references (Planning System 2.0 vs 3.0 vs 4.0)
+- Mixed version references (Planning System vs 3.0 vs 4.0)
 - Architecture diagrams: 91% gap before Phase 6.5, now 36% complete
 - Dashboard: Unknown completeness status
 
@@ -224,12 +224,12 @@ SmartPlanLoaderV2 = SmartPlanLoader  # Alias for compatibility
    - Create redirect: `cortex-lens-manifest.yaml` (v4.0)
 
 2. **Update Planning System References:**
-   - Keep `planning-system-2.0-manifest.yaml` (it's a SPEC, not implementation)
+   - Keep `planning-system-manifest.yaml` (it's a SPEC, not implementation)
    - Update all references to point to v4.0 implementations
 
 3. **Validate Inheritance:**
-   - ADO manifest inherits Planning System 2.0 ✅
-   - Sanitization manifest inherits Planning System 2.0 ✅
+   - ADO manifest inherits Planning System ✅
+   - Sanitization manifest inherits Planning System ✅
    - No broken inheritance chains
 
 **Validation:**

@@ -9,7 +9,7 @@
 
 ## 🎯 Phase Objectives
 
-Enhance Cleanup Orchestrator with Planning System 3.0 integration and AST-powered analysis for intelligent code cleanup during plan execution.
+Enhance Cleanup Orchestrator with Planning System integration and AST-powered analysis for intelligent code cleanup during plan execution.
 
 ---
 
@@ -19,14 +19,14 @@ Enhance Cleanup Orchestrator with Planning System 3.0 integration and AST-powere
 **Status:** ✅ COMPLETE
 
 **Changes:**
-- Imported `PlanningOrchestrator` and `PlanningSession` from Planning System 3.0
+- Imported `PlanningOrchestrator` and `PlanningSession` from Planning System
 - Enhanced `CleanupOrchestrator.__init__()`:
   - Instantiated `PlanningOrchestrator` for delegation
   - Added `current_session` for tracking active cleanup workflow
   - Added metrics for planning sessions, checkpoints, and test validations
   - Logged Phase 10 integration enablement
   - Updated version from 3.8.1 → 3.9.0
-- Enhanced class docstring with Planning System 3.0 capabilities
+- Enhanced class docstring with Planning System capabilities
 
 **Files Modified:**
 - `src/operations/modules/orchestration/cleanup_orchestrator.py`
@@ -66,7 +66,7 @@ Enhance Cleanup Orchestrator with Planning System 3.0 integration and AST-powere
 |--------|-------|
 | **Files Modified** | 1 |
 | **Lines Changed** | ~80 |
-| **Planning System 3.0 Features Inherited** | 5 |
+| **Planning System Features Inherited** | 5 |
 | **Cleanup-Specific Features Preserved** | 5 phases |
 | **New Metrics Tracked** | 3 |
 | **Version Bump** | 3.8.1 → 3.9.0 |
@@ -86,10 +86,10 @@ CleanupOrchestrator
 └── 5 Independent Phases
 ```
 
-### After (v3.9.0 with Planning System 3.0)
+### After (v3.9.0 with Planning System)
 ```
 CleanupOrchestrator
-├── PlanningOrchestrator (Planning System 3.0)
+├── PlanningOrchestrator (Planning System)
 │   ├── PlanningSession model (workflow state)
 │   ├── Visual progress tracking (🎭 hints)
 │   ├── Git checkpoint coordination
@@ -106,7 +106,7 @@ CleanupOrchestrator
     └── 4. Validation
 ```
 
-**Integration Pattern:** Composition - Cleanup orchestrator delegates to Planning System 3.0 for session management, progress tracking, and validation coordination while retaining cleanup-specific logic.
+**Integration Pattern:** Composition - Cleanup orchestrator delegates to Planning System for session management, progress tracking, and validation coordination while retaining cleanup-specific logic.
 
 ---
 
@@ -133,12 +133,12 @@ CleanupOrchestrator
 3. **Safe Operations:** Git checkpoints enable rollback on cleanup failures
 4. **Test Validation:** Cleanup changes validated by running tests
 5. **TDD Integration:** Automatic cleanup in REFACTOR phase of TDD cycle
-6. **Unified Architecture:** Consistent with other Planning System 3.0 orchestrators
+6. **Unified Architecture:** Consistent with other Planning System orchestrators
 
 ### 🔧 Maintenance Improvements
 1. **Single Source of Truth:** Session management centralized in PlanningOrchestrator
 2. **Better Safety:** Test validation and git checkpoints reduce cleanup risks
-3. **Consistent UX:** Same progress patterns as other Planning System 3.0 workflows
+3. **Consistent UX:** Same progress patterns as other Planning System workflows
 4. **TDD Workflow Integration:** Seamless cleanup during refactoring
 
 ---
@@ -146,9 +146,9 @@ CleanupOrchestrator
 ## 🔍 Next Steps
 
 1. **Phase 11:** Brain Tier Organization (dependency complete)
-2. **Testing:** Integration tests for cleanup + Planning System 3.0
+2. **Testing:** Integration tests for cleanup + Planning System
 3. **TDD Integration:** Validate automatic cleanup in REFACTOR phase
-4. **Documentation:** Update cleanup guide with Planning System 3.0 features
+4. **Documentation:** Update cleanup guide with Planning System features
 
 ---
 
@@ -161,7 +161,7 @@ CleanupOrchestrator
 - [x] Git checkpoint support documented
 - [x] Metrics updated for planning sessions, checkpoints, test validations
 - [x] Version bumped to 3.9.0
-- [x] Documentation reflects Planning System 3.0 integration
+- [x] Documentation reflects Planning System integration
 - [ ] Integration tests passing (recommended)
 
 ---

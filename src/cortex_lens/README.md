@@ -342,7 +342,7 @@ Copyright © 2025 Asif Hussain. All rights reserved.
 
 - **CORTEX Core** - Long-term memory system for AI assistants
 - **CORTEX Agents** - Specialized AI agents for code analysis
-- **Planning System 2.0** - Feature planning with DoR/DoD compliance
+- **Planning System** - Feature planning with DoR/DoD compliance
 
 ---
 

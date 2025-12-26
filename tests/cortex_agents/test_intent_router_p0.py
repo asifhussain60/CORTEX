@@ -77,7 +77,7 @@ def mock_operations_yaml():
         'operations': {
             'plan': {
                 'natural_language': ['plan', 'create plan', 'planning'],
-                'description': 'Planning System 2.0'
+                'description': 'Planning System'
             },
             'healthcheck': {
                 'natural_language': ['health', 'status', 'healthcheck'],

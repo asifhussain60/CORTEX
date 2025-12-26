@@ -532,7 +532,7 @@ def review_cortex_enhancements(cortex_root: Optional[Path] = None) -> Optional[C
     # Mock implementation (actual would use EnhancementCatalog)
     # This represents typical CORTEX capabilities
     features = [
-        {"name": "Planning System 2.0", "category": "planning", "status": "active"},
+        {"name": "Planning System", "category": "planning", "status": "active"},
         {"name": "TDD Mastery", "category": "development", "status": "active"},
         {"name": "View Discovery", "category": "testing", "status": "active"},
         {"name": "Feedback System", "category": "support", "status": "active"},
@@ -685,7 +685,7 @@ Users interact via natural language. No slash commands needed.
 
 ## 📚 CORTEX Capabilities
 
-- **Planning System 2.0** - Feature planning with DoR/DoD enforcement
+- **Planning System** - Feature planning with DoR/DoD enforcement
 - **TDD Mastery** - RED→GREEN→REFACTOR workflow automation
 - **View Discovery** - Auto-extract element IDs for testing
 - **Feedback System** - Structured bug/feature reporting

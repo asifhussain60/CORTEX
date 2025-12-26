@@ -847,7 +847,7 @@ Automated narrative generation + health monitoring + tech intelligence system th
   },
   "capabilities": [
     {
-      "name": "Interactive Planning System 2.0",
+      "name": "Interactive Planning System",
       "description": "Create detailed feature plans with DoR/DoD validation, risk analysis, and TDD requirements auto-included",
       "confidence": 0.95
     },

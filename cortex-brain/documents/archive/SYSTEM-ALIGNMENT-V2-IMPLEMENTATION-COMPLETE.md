@@ -327,7 +327,7 @@ python3 -m src.operations.modules.realignment.safe_cleanup_executor --restore-ba
 
 ## 🏆 Achievement Unlocked
 
-**CORTEX Align Orchestrator v2.0: Intelligent Maintenance System**
+**CORTEX Align Orchestrator: Intelligent Maintenance System**
 
 From passive validation tool to active maintenance system:
 - **Discovers** new features automatically

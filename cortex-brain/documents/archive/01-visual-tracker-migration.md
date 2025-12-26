@@ -14,7 +14,7 @@ Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX
 
 ## 🎯 Objectives
 
-Migrate visual progress tracker from Planning System 2.0 (legacy) to Planning Orchestrator v3.1. Add pre-planning discovery to check for existing plans before creating new ones.
+Migrate visual progress tracker from Planning System (legacy) to Planning Orchestrator. Add pre-planning discovery to check for existing plans before creating new ones.
 
 **Key Deliverables:**
 1. Pre-planning discovery method
@@ -365,9 +365,9 @@ Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX
 
 ---
 
-### Task 1.7: Update Planning System 2.0 Manifest
+### Task 1.7: Update Planning System Manifest
 
-**File:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 
 **Add visual tracker requirements:**
 ```yaml
@@ -418,7 +418,7 @@ pre_planning_discovery:
 - [ ] Visual tracker visible in Copilot responses
 - [ ] Visual tracker embedded in master plans
 - [ ] Session metrics accurate (tokens, duration)
-- [ ] Planning System 2.0 manifest updated
+- [ ] Planning System manifest updated
 
 ---
 
@@ -434,7 +434,7 @@ pre_planning_discovery:
 
 - `src/orchestrators/session_model.py` (PlanningSession class)
 - `src/operations/modules/orchestration/planning_orchestrator.py` (target file)
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 - `tests/orchestrators/test_planning_orchestrator.py`
 
 ---

@@ -231,7 +231,7 @@ Track these metrics after activation:
 1. **Week 9 Day 4:** Fix `test_validator.py` import issue
 2. **Week 9 Day 5:** Run full test suite, document metrics
 3. **Week 10:** Integrate Vision API into Planning System for UI feature extraction
-4. **Week 11:** Add Vision API support to TDD Orchestrator v4.0 for UI test generation
+4. **Week 11:** Add Vision API support to TDD Orchestrator for UI test generation
 
 ---
 

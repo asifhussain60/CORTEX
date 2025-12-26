@@ -1,4 +1,4 @@
-# Planning System 2.0 Manifest Implementation Summary
+# Planning System Manifest Implementation Summary
 
 **Date:** 2025-12-08  
 **Version:** 1.0  
@@ -8,7 +8,7 @@
 
 ## 🎯 Objective
 
-Create a **centralized, extensible, and scalable** manifest system for all CORTEX orchestrators to prevent drift and ensure consistency across Planning System 2.0, ADO Planning, and future orchestrators.
+Create a **centralized, extensible, and scalable** manifest system for all CORTEX orchestrators to prevent drift and ensure consistency across Planning System, ADO Planning, and future orchestrators.
 
 ---
 
@@ -33,8 +33,8 @@ Create a **centralized, extensible, and scalable** manifest system for all CORTE
 
 ---
 
-### 2. Planning System 2.0 Manifest ✅
-**File:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+### 2. Planning System Manifest ✅
+**File:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 
 **Features:**
 - Complete requirement catalog (8 critical/high/medium requirements)
@@ -80,7 +80,7 @@ Create a **centralized, extensible, and scalable** manifest system for all CORTE
 **Usage:**
 ```python
 validator = ManifestValidator(cortex_root)
-report = validator.validate_orchestrator("planning_system_2.0")
+report = validator.validate_orchestrator("planning_system")
 print(f"Compliance: {report.compliance_score:.1f}%")
 ```
 
@@ -108,8 +108,8 @@ print(f"Compliance: {report.compliance_score:.1f}%")
 
 **Behavior:**
 ```
-🔍 Validating Planning System 2.0 compliance with manifest...
-⚠️  Planning System 2.0 compliance: 65.0%
+🔍 Validating Planning System compliance with manifest...
+⚠️  Planning System compliance: 65.0%
 ⚠️  3 critical manifest requirements missing:
   - REQ-001: Acceptance Criteria Approval Gate
   - REQ-002: Interactive DoR Workflow
@@ -122,7 +122,7 @@ print(f"Compliance: {report.compliance_score:.1f}%")
 **File:** `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml`
 
 **Features:**
-- **Inherits from Planning System 2.0** (`inherits_from: "planning-system-2.0-manifest.yaml"`)
+- **Inherits from Planning System** (`inherits_from: "planning-system-manifest.yaml"`)
 - All 8 Planning 2.0 requirements mirrored
 - 7 ADO-specific requirements (authentication, work item mapping, story points, etc.)
 - Parity checklist comparing Planning 2.0 vs ADO
@@ -225,7 +225,7 @@ print(f"Compliance: {report.compliance_score:.1f}%")
 - Healthcheck detects drift automatically
 
 ### 2. Ensures Consistency
-- Planning System 2.0 and ADO Planning share same requirements via inheritance
+- Planning System and ADO Planning share same requirements via inheritance
 - New orchestrators can inherit from existing manifests
 - Parity enforced programmatically
 
@@ -248,7 +248,7 @@ print(f"Compliance: {report.compliance_score:.1f}%")
 
 ## 📈 Current Compliance
 
-### Planning System 2.0
+### Planning System
 **Estimated Score:** ~65% (8 requirements: 2 implemented, 3 partial, 3 missing)
 
 **Critical Issues:**
@@ -296,7 +296,7 @@ print(f"Compliance: {report.compliance_score:.1f}%")
 cortex-brain/manifests/orchestrators/
 ├── README.md (350+ lines)
 ├── manifest-schema.yaml (220+ lines)
-├── planning-system-2.0-manifest.yaml (600+ lines)
+├── planning-system-manifest.yaml (600+ lines)
 └── ado-planning-manifest.yaml (450+ lines)
 
 src/utils/

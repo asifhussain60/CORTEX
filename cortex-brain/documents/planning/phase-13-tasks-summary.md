@@ -200,7 +200,7 @@ Each task includes:
    - Implementation plan
 
 2. **User Guide Updates**
-   - Planning System 2.0 User Guide (DoR/DoD, TDD sections)
+   - Planning System User Guide (DoR/DoD, TDD sections)
    - Manifest inheritance guide
    - Rollback procedures guide
 
@@ -255,7 +255,7 @@ Phase 13 Tasks 13.2-13.4 are successful when:
 - CORTEX4-STATUS.md (Phase 13 progress tracking)
 
 **Implementation Guides:**
-- Planning System 2.0 User Guide
+- Planning System User Guide
 - TDD Mastery Guide
 - Orchestrator Development Guide
 

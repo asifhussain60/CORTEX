@@ -9,7 +9,7 @@
 
 ## 🎯 Overview
 
-**ADO Operations** is CORTEX's Azure DevOps integration that creates professional work items (Stories, Features, Tasks, Bugs, Epics) with automatic DoR/DoD enforcement, Planning System 2.0 integration, and ADO-formatted markdown ready for copy-paste.
+**ADO Operations** is CORTEX's Azure DevOps integration that creates professional work items (Stories, Features, Tasks, Bugs, Epics) with automatic DoR/DoD enforcement, Planning System integration, and ADO-formatted markdown ready for copy-paste.
 
 **Key Innovation:** File-based workflow with automatic quality gates - work items can't start until ready (DoR) and can't complete until done (DoD), ensuring consistent quality across your ADO backlog.
 
@@ -25,7 +25,7 @@ plan ado story add user authentication
 ```
 
 **What happens:**
-1. **Planning System 2.0 Analysis** - Complexity classification (authentication → Tier 3 HIGH)
+1. **Planning System Analysis** - Complexity classification (authentication → Tier 3 HIGH)
 2. **DoR Validation** - Checks 10 readiness criteria
 3. **Work Item Generation** - Creates ADO-formatted markdown
 4. **File Storage** - Saves to `cortex-brain/documents/ado/active/`
@@ -247,7 +247,7 @@ Integrate Stripe payment processing to enable credit card payments, subscription
 - Documentation complete
 ```
 
-**Features auto-generate child stories** based on Planning System 2.0 complexity analysis.
+**Features auto-generate child stories** based on Planning System complexity analysis.
 
 ---
 
@@ -737,9 +737,9 @@ ado complete implement-2fa-story
 
 ---
 
-## 🔗 Planning System 2.0 Integration
+## 🔗 Planning System Integration
 
-ADO Operations inherits **8 requirements** from Planning System 2.0:
+ADO Operations inherits **8 requirements** from Planning System:
 
 ### 1. Acceptance Criteria Approval Gate
 
@@ -938,7 +938,7 @@ ls cortex-brain/documents/ado/cancelled/
 
 ## 📚 Related Documentation
 
-- **Planning System 2.0:** `cortex-brain/documents/implementation-guides/planning-system-2.0-user-guide.md`
+- **Planning System:** `cortex-brain/documents/implementation-guides/planning-system-user-guide.md`
 - **Architecture:** `cortex-brain/documents/archive/ado-operations-architecture-completion.md`
 - **TDD Integration:** `cortex-brain/documents/implementation-guides/tdd-orchestrator-v4-user-guide.md`
 - **Command Reference:** `.github/prompts/CORTEX.prompt.md`

@@ -47,7 +47,7 @@
    - Coverage: 84.6%
    - Status: ✅ COMPLETE (Task 6.4)
 
-3. **TDD Orchestrator v4.0** - `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+3. **TDD Orchestrator** - `src/orchestrators/tdd/tdd_orchestrator.py`
    - Tests: 26/26 passing (from plan context)
    - Coverage: 90%+
    - Status: ✅ COMPLETE (Task 6.3)
@@ -62,12 +62,12 @@
    - Status: ⚠️ IMPLEMENTED BUT UNTESTED
 
 **❌ GHOST ORCHESTRATORS (referenced but missing):**
-1. **Maintenance Orchestrator v3.0**
-   - Expected: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+1. **Maintenance Orchestrator**
+   - Expected: `src/operations/modules/orchestration/maintenance_orchestrator.py`
    - Status: ❌ FILE NOT FOUND
    - Referenced in: CORTEX.prompt.md (System Maintenance section)
 
-2. **Refinement Orchestrator v1.0**
+2. **Refinement Orchestrator**
    - Expected: `src/operations/modules/orchestration/refinement_orchestrator_v1.py`
    - Status: ❌ FILE NOT FOUND
    - Referenced in: cortex-operations.yaml (refine operation)
@@ -200,7 +200,7 @@ cortex-brain/documents/
 **✅ ORCHESTRATOR MANIFESTS:**
 - Location: `cortex-brain/manifests/orchestrators/`
 - Status: Schema-compliant (36+ manifests)
-- Recent additions: ADO manifest (inherits Planning System 2.0)
+- Recent additions: ADO manifest (inherits Planning System)
 
 ---
 
@@ -286,7 +286,7 @@ cortex-brain/documents/
    - Runtime: 1-2 hours
 
 3. **Remove Ghost Orchestrator References**
-   - Update CORTEX.prompt.md to remove maintenance_orchestrator_v3 reference
+   - Update CORTEX.prompt.md to remove maintenance_orchestrator reference
    - Update cortex-operations.yaml to remove refinement_orchestrator_v1 reference
    - Runtime: 30 minutes
 

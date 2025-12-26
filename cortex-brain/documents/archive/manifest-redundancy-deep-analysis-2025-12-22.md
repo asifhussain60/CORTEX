@@ -201,10 +201,10 @@ prerequisites:
 
 ### 4.1 Copy-Paste Inheritance
 
-**ADO Planning inherits from Planning System 2.0:**
+**ADO Planning inherits from Planning System:**
 ```yaml
 # ado-planning-manifest.yaml
-inherits_from: "planning-system-2.0-manifest.yaml"
+inherits_from: "planning-system-manifest.yaml"
 
 # BUT still duplicates 8 requirements marked "inherited_from"
 # Redundancy: Could use reference instead of copy

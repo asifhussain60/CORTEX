@@ -112,14 +112,14 @@ CREATE TABLE file_loads (
 
 ## Integration Points
 
-### TDD Orchestrator v4.0
+### TDD Orchestrator
 ```python
 tech_engine = TechnologyDiscoveryEngine(brain, kg)
 patterns = kg.search_patterns("pytest fixture best practices")
 # Auto-loads testing/ knowledge on first query
 ```
 
-### Planning System 2.0
+### Planning System
 ```python
 planner = PlanningOrchestrator(kg)
 suggestions = kg.suggest_patterns_for_feature("authentication")

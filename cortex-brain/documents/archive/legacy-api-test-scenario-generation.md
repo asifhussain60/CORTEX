@@ -434,9 +434,9 @@ public async Task Execute_WithValidConfiguration_ShouldCompleteSuccessfully()
 
 ## Integration with Existing Workflows
 
-### Planning System 2.0
+### Planning System
 
-Test scenarios integrate seamlessly with Planning System 2.0:
+Test scenarios integrate seamlessly with Planning System:
 
 1. **Phase 1 (Requirements):** Use test scenarios as acceptance criteria
 2. **Phase 2 (Design):** Map test scenarios to architecture layers
@@ -549,7 +549,7 @@ Submit issues/enhancements to: github.com/asifhussain60/CORTEX
 
 - [CORTEX Lens Usage Guide](cortex-lens-usage-guide.md)
 - [OpenAPI Generation Guide](openapi-generation-guide.md)
-- [Planning System 2.0 Manifest](../../planning-system-2.0-manifest.yaml)
+- [Planning System Manifest](../../planning-system-manifest.yaml)
 - [TDD Best Practices](../INTELLIGENT-TDD-QUICK-REF.md)
 
 ---

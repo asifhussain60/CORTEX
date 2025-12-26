@@ -306,7 +306,7 @@ class ContextValidator:
 
 **Phase 6 Enhancement (Tasks 6.10-6.12):**
 ```python
-# TDD Orchestrator v4.0 with Agent Learning
+# TDD Orchestrator with Agent Learning
 class TDDOrchestrator:
     def select_test_strategy(self, context):
         # Get recommendations
@@ -576,7 +576,7 @@ class StrategyType(Enum):
 
 ### Phase 6 Integration (Tasks 6.10-6.12)
 
-1. **TDD Orchestrator v4.0** (Task 6.10)
+1. **TDD Orchestrator** (Task 6.10)
    - Integrate agent learning for test strategy selection
    - Track test quality scores over time
    - Adapt RED→GREEN→REFACTOR approach based on language patterns

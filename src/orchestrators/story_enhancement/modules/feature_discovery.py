@@ -132,7 +132,7 @@ class FeatureDiscoveryModule:
                 ]
             ),
             Feature(
-                name="Planning System 2.0",
+                name="Planning System",
                 weight=FeatureWeight.MAJOR,
                 description="Incremental planning, DoR/DoD gates, autonomous execution",
                 target_location="Chapter 8",
@@ -184,7 +184,7 @@ class FeatureDiscoveryModule:
                     "Feature/task hierarchy",
                     "Completion summaries",
                     "Code review integration",
-                    "Planning System 2.0 inheritance"
+                    "Planning System inheritance"
                 ]
             ),
             Feature(

@@ -29,7 +29,7 @@ Successfully wired **22 features** across orchestrators and agents, improving wi
 3. ✅ `publish_branch_orchestrator` - Production deployment (19 gates)
 4. ✅ `optimize_cortex_orchestrator` - Performance optimization
 5. ✅ `design_sync_orchestrator` - Design doc synchronization
-6. ✅ `planning_orchestrator` - Planning System 2.0 with Vision API
+6. ✅ `planning_orchestrator` - Planning System with Vision API
 
 **Phase 1 - Additional:**
 7. ✅ `demo_orchestrator` - Demo content generation

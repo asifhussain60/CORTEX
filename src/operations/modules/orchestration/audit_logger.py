@@ -1,5 +1,5 @@
 """
-CORTEX Planning System 3.0 - Audit Trail Logger
+CORTEX Planning System - Audit Trail Logger
 
 Provides comprehensive audit logging for all planning orchestrator operations.
 Stores events in JSONL format for easy querying and analysis.
@@ -40,7 +40,7 @@ class AuditEvent:
 
 class AuditLogger:
     """
-    Singleton audit logger for Planning System 3.0.
+    Singleton audit logger for Planning System.
     
     Captures all significant planning operations and stores them in JSONL format
     for complete visibility, troubleshooting, and compliance.

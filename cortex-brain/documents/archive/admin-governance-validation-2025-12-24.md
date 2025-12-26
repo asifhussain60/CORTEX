@@ -71,9 +71,9 @@ $ grep -c 'execution_method:' cortex-operations.yaml
 - ✅ Phase 14: Version consolidation complete
 
 **Completed Orchestrators (Verified):**
-1. ✅ Planning System 2.0 (`src/orchestrators/planning/planning_orchestrator.py`) - 138 tests, 84.6% coverage
+1. ✅ Planning System (`src/orchestrators/planning/planning_orchestrator.py`) - 138 tests, 84.6% coverage
 2. ✅ ADO Operations (`src/orchestrators/ado/ado_orchestrator.py`) - 80 tests, 91.44% coverage
-3. ✅ TDD Mastery v4.0 (`src/orchestrators/tdd/tdd_orchestrator_v4.py`) - 26 tests, 90%+ coverage
+3. ✅ TDD Mastery v4.0 (`src/orchestrators/tdd/tdd_orchestrator.py`) - 26 tests, 90%+ coverage
 4. ✅ Code Sanitization (`src/orchestrators/sanitization/sanitization_orchestrator.py`)
 5. ✅ System Integrity (`src/orchestrators/system/system_integrity_orchestrator.py`)
 6. ✅ System Maintenance v4.0 (confirmed via operations registry)
@@ -166,7 +166,7 @@ Execution Time:    48.50s
 
 **Coverage Highlights:**
 - ADO Operations: 91.44% coverage (80 tests)
-- Planning System 2.0: 84.6% coverage (138 tests)
+- Planning System: 84.6% coverage (138 tests)
 - TDD Mastery v4.0: 90%+ coverage (26 tests)
 - ComplexityAnalyzer v2.0: 82.86% coverage (15 tests)
 - FileStructureOptimizer: 100% pass rate (30 tests)
@@ -182,11 +182,11 @@ Execution Time:    48.50s
 **Manifest Validation:**
 - ✅ Total orchestrator manifests: 36 files in `cortex-brain/manifests/orchestrators/`
 - ✅ Schema compliance: All manifests validated against `manifest-schema.yaml`
-- ✅ Inheritance chains verified: ADO Planning inherits from Planning System 2.0
+- ✅ Inheritance chains verified: ADO Planning inherits from Planning System
 - ✅ Cross-references with operations registry: 100% alignment
 
 **Key Manifests:**
-1. ✅ `planning-system-4.0-manifest.yaml` - Planning System 2.0
+1. ✅ `planning-system-4.0-manifest.yaml` - Planning System
 2. ✅ `ado-planning-manifest.yaml` - ADO Operations (inherits Planning System)
 3. ✅ `tdd-orchestrator-v4-manifest.yaml` - TDD Mastery v4.0
 4. ✅ `code-sanitization-manifest.yaml` - Code Sanitization
@@ -224,7 +224,7 @@ SETUP-CORTEX.md    ✅ Allowed
 
 **Architecture Diagram Validation:**
 - ✅ DevOps Orchestrator Architecture: 4 diagrams (architecture, sequence, component, integration)
-- ✅ Planning System 2.0: Architecture diagrams present
+- ✅ Planning System: Architecture diagrams present
 - ✅ ADO Operations: Documentation complete
 - ✅ All Tier 2+ orchestrators have required diagram count (3+ diagrams)
 
@@ -358,8 +358,8 @@ Overall:         ✅ 100% weighted progress (GA READY)
 
 ### Section 17: Manifest Inheritance Validation
 **Status:** ✅ PASSED
-- ✅ ADO Planning manifest correctly inherits from Planning System 2.0
-- ✅ Inheritance chain validated: ADO → Planning System 2.0 → Base Orchestrator
+- ✅ ADO Planning manifest correctly inherits from Planning System
+- ✅ Inheritance chain validated: ADO → Planning System → Base Orchestrator
 
 ### Section 18: Git Commit Verification
 **Status:** ✅ PASSED (Skipped - Not applicable for governance validation)

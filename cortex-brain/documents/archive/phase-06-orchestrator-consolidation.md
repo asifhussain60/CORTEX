@@ -66,7 +66,7 @@
 
 ---
 
-### ✅ Task 6.3: TDDOrchestrator v4.0 Migration (COMPLETE)
+### ✅ Task 6.3: TDDOrchestrator Migration (COMPLETE)
 
 **Status:** ✅ DONE  
 **Duration:** 1 week  
@@ -80,8 +80,8 @@
 - 26/26 tests passing
 
 **Files:**
-- `src/orchestration_4_0/orchestrators/tdd/tdd_orchestrator_v4.py` (850 LOC)
-- `tests/orchestration_4_0/orchestrators/tdd/test_tdd_orchestrator_v4.py` (26 tests)
+- `src/orchestration_4_0/orchestrators/tdd/tdd_orchestrator.py` (850 LOC)
+- `tests/orchestration_4_0/orchestrators/tdd/test_tdd_orchestrator.py` (26 tests)
 
 ---
 
@@ -180,7 +180,7 @@
 **Deliverables:**
 - All 6 phases (DISCOVERY→COMPLETION)
 - 80/80 tests passing
-- Planning System 2.0 parity: 87.5%
+- Planning System parity: 87.5%
 - ADO-specific features: 100%
 
 **Files:**
@@ -237,7 +237,7 @@
 
 **Deliverables:**
 ```python
-class TDDOrchestratorV4Enhanced(TDDOrchestratorV4):
+class TDDOrchestratorEnhanced(TDDOrchestrator):
     def __init__(self):
         super().__init__()
         self.multi_agent = MultiAgentOrchestrator()

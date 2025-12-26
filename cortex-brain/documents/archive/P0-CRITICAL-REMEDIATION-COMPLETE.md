@@ -10,7 +10,7 @@
 
 ## 🎯 Objective
 
-Implement 5 CRITICAL placeholders in `plan_execution_orchestrator.py` that were faking success without executing quality gates, affecting Planning System 2.0's REFACTOR, TESTING, and VALIDATION phases.
+Implement 5 CRITICAL placeholders in `plan_execution_orchestrator.py` that were faking success without executing quality gates, affecting Planning System's REFACTOR, TESTING, and VALIDATION phases.
 
 ---
 
@@ -147,7 +147,7 @@ tests/unit/test_entry_point.py::test_cortex_entry_tier_integration PASSED
 
 ---
 
-## 🎯 Impact on Planning System 2.0
+## 🎯 Impact on Planning System
 
 ### Before (Fake Success)
 ```
@@ -216,7 +216,7 @@ Result: User gets accurate status with actionable feedback:
 ## 📚 Related Documents
 
 - **Analysis Report:** `cortex-brain/documents/reports/STUB-MOCK-ANALYSIS-2025-12-11.md` (500 lines)
-- **Planning System Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- **Planning System Manifest:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 - **TDD Enforcement:** `cortex-brain/brain-protection-rules.yaml`
 - **E2E Test Suite:** `cortex-brain/documents/reports/v5.3.0-E2E-TEST-SUITE-COMPLETE.md`
 
@@ -238,7 +238,7 @@ Result: User gets accurate status with actionable feedback:
 
 ## 🎉 Outcome
 
-**Planning System 2.0 quality gates now functional.** Users will receive accurate feedback during plan execution instead of fake success messages. Critical production gaps (duplicate detection, file organization, import updates, feature wiring, integration testing) are now properly validated.
+**Planning System quality gates now functional.** Users will receive accurate feedback during plan execution instead of fake success messages. Critical production gaps (duplicate detection, file organization, import updates, feature wiring, integration testing) are now properly validated.
 
 **Risk Reduction:** HIGH → LOW  
 **User Impact:** Production failures prevented by real quality validation  

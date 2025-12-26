@@ -93,7 +93,7 @@
 - Resolution: Test assertions need updating to check key existence, not value
 
 **Files Modified:**
-- `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` (+4 lines)
+- `src/operations/modules/orchestration/maintenance_orchestrator.py` (+4 lines)
 
 **Files Created (Stubs):**
 - `src/operations/modules/vacuum/vacuum_orchestrator.py` (19 lines)
@@ -260,7 +260,7 @@ _get_created_checkpoints() -> List[str]
 
 2. **Create git commit**
    - Message: "✅ Task 8.4 Complete: Orchestrator testing fixes (+13 methods, +3 stubs, 91.1% pass rate)"
-   - Files: planning_orchestrator.py, maintenance_orchestrator_v3.py, 3 stub modules
+   - Files: planning_orchestrator.py, maintenance_orchestrator.py, 3 stub modules
 
 ### Short-term (Medium Priority)
 

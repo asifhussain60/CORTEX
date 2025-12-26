@@ -99,7 +99,7 @@ python -m src.main pre-flight --generate-script --output ./scripts/
 
 ### Integration with Planning System
 
-Pre-Flight Orchestrator is automatically invoked by Planning System 2.0 **before Phase 1**:
+Pre-Flight Orchestrator is automatically invoked by Planning System **before Phase 1**:
 
 ```
 User Request → Intent Router → Planning Orchestrator
@@ -455,7 +455,7 @@ echo $?
 
 ### Workflow Integration
 
-Pre-Flight Orchestrator is invoked **BEFORE** Planning System 2.0 Phase 1:
+Pre-Flight Orchestrator is invoked **BEFORE** Planning System Phase 1:
 
 ```
 User: "Implement JWT authentication"
@@ -786,7 +786,7 @@ The **Pre-Flight Orchestrator** prevents environment-related project delays by:
 ✅ **Generating executable remediation scripts** (PowerShell/bash)  
 ✅ **Preventing 100% of environment blockers** (PrevalidationWS: saved 2-week delay)
 
-**Integration:** Automatically invoked by Planning System 2.0 before Phase 1.
+**Integration:** Automatically invoked by Planning System before Phase 1.
 
 **Test Coverage:** 40/40 tests passed (100%) - Pattern detection, requirement generation, validation logic, gate enforcement, script generation, error handling.
 

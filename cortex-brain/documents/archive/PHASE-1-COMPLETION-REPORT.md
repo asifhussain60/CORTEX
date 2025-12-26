@@ -5,7 +5,7 @@
 ---
 
 ### 🎯 Understanding & Scope
-Phase 1 successfully migrated the visual progress tracker from the strategic planning agent into Planning Orchestrator v3.1, delivering real-time progress visibility in user responses and generated master plans across all 8 planned tasks.
+Phase 1 successfully migrated the visual progress tracker from the strategic planning agent into Planning Orchestrator, delivering real-time progress visibility in user responses and generated master plans across all 8 planned tasks.
 
 ### ⚡ Approach & Considerations
 **Challenge - Task 1.1 (TDD RED→GREEN→REFACTOR):** Initial test failures due to query slug extraction not matching folder names. Solution: Adjusted `_extract_feature_slug()` to create simpler slugs and refined test queries for better substring matching.
@@ -59,7 +59,7 @@ Phase 1 successfully migrated the visual progress tracker from the strategic pla
    - Updated Tier 3 and Tier 4 execution methods
    - Generates proper folder structure with 00-master-plan.md
 
-7. **Task 1.7:** Planning System 3.0 Manifest
+7. **Task 1.7:** Planning System Manifest
    - Created `planning-system-3.0-manifest.yaml`
    - Documents all components, workflows, requirements
    - Phase 1 implementation status tracking
@@ -110,7 +110,7 @@ Phase 1 successfully migrated the visual progress tracker from the strategic pla
 1. **Pre-Planning Discovery System** - Prevents duplicate plan creation
 2. **Visual Progress Tracker** - Real-time visibility in responses
 3. **Master Plan Generation** - Embedded tracker in generated plans
-4. **Planning System 3.0 Manifest** - Official orchestrator documentation
+4. **Planning System Manifest** - Official orchestrator documentation
 5. **Comprehensive Test Suite** - 15 tests ensuring reliability
 
 ### 🔍 Next Steps
@@ -165,7 +165,7 @@ Phase 1 successfully migrated the visual progress tracker from the strategic pla
 - [Phase 1 Sub-Plan](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/01-visual-tracker-migration.md)
 - [Phase 2 Sub-Plan](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/02-semantic-folder-organization.md)
 - [Progress Tracker JSON](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/tracking/progress-tracker.json)
-- [Planning System 3.0 Manifest](d:/PROJECTS/CORTEX/cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml)
+- [Planning System Manifest](d:/PROJECTS/CORTEX/cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml)
 - [Unit Tests](d:/PROJECTS/CORTEX/tests/orchestrators/test_pre_planning_discovery.py)
 - [Integration Tests](d:/PROJECTS/CORTEX/tests/integration/test_visual_tracker_integration.py)
 

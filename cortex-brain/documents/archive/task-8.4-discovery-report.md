@@ -35,7 +35,7 @@ Create 230 new tests for orchestrator-level testing:
 - 📊 **Status:** Needs fixes, not new tests
 
 **Maintenance Orchestrator v3:**
-- ✅ **94 tests exist** in `test_maintenance_orchestrator_v3.py`
+- ✅ **94 tests exist** in `test_maintenance_orchestrator.py`
 - ✅ **93.6% pass rate** (88/94 passing, 6 failing)
 - ❌ **Failure patterns:**
   - ModuleNotFoundError: `src.operations.modules.prompt_generation` missing
@@ -113,7 +113,7 @@ Implement missing methods in `PlanningOrchestrator`:
 
 **Implementation Locations:**
 - Create `src/operations/modules/prompt_generation/__init__.py` (stub)
-- Update `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` (add 'skipped' key)
+- Update `src/operations/modules/orchestration/maintenance_orchestrator.py` (add 'skipped' key)
 
 ---
 
@@ -179,8 +179,8 @@ Implement missing methods in `PlanningOrchestrator`:
 
 **Priority 2: Maintenance v3 Module Fixes (MEDIUM)**
 - Create `src/operations/modules/prompt_generation/__init__.py`
-- Add 'skipped' key to phase results in maintenance_orchestrator_v3.py
-- Run tests: `pytest tests/orchestrators/maintenance/test_maintenance_orchestrator_v3.py -v`
+- Add 'skipped' key to phase results in maintenance_orchestrator.py
+- Run tests: `pytest tests/orchestrators/maintenance/test_maintenance_orchestrator.py -v`
 - Target: 94/94 passing (100%)
 
 **Priority 3: Validation & Documentation (LOW)**

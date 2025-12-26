@@ -42,7 +42,7 @@ CORTEX 4.0 represents a **complete architectural transformation** from version 3
 
 | Orchestrator | Purpose | Key Features |
 |-------------|---------|--------------|
-| **Planning System 2.0** | Feature planning with DoR/DoD | Auto-complexity detection, TDD integration, YAML modularization |
+| **Planning System** | Feature planning with DoR/DoD | Auto-complexity detection, TDD integration, YAML modularization |
 | **TDD Mastery v4.0** | Test-driven development | RED→GREEN→REFACTOR enforcement, 11+ languages, adaptive learning |
 | **Execution Orchestrator** | Multi-phase plan execution | Autonomous modes, self-healing (3 retries), rollback support |
 | **Documentation Orchestrator** | Auto-generated docs | D3.js diagrams, API docs, architecture visualization |
@@ -145,7 +145,7 @@ cortex-tdd.yaml             # 600 lines
 operations:
   planning:
     id: "PLANNING_SYSTEM_2_0"
-    name: "Planning System 2.0"
+    name: "Planning System"
     execution_method: "copilot_chat"
     complexity: "high"
     features:
@@ -173,7 +173,7 @@ operations:
 
 ---
 
-### 4. 🎯 Planning System 2.0
+### 4. 🎯 Planning System
 
 **Auto-Complexity Detection**
 
@@ -202,7 +202,7 @@ result = orchestrator.execute(
 - ✅ **Git Checkpoint Rollback**: 13 checkpoint methods for phase-level recovery
 - ✅ **Autonomous Execution**: Optional end-to-end execution with PlanExecutor
 
-**Manifest:** `planning-system-2.0-manifest.yaml`
+**Manifest:** `planning-system-manifest.yaml`
 
 **Benefits:**
 - ✅ Prevents response length failures
@@ -217,9 +217,9 @@ result = orchestrator.execute(
 **Adaptive Learning & Enforcement**
 
 ```python
-from src.orchestrators.tdd import TDDOrchestratorV4
+from src.orchestrators.tdd import TDDOrchestrator
 
-orchestrator = TDDOrchestratorV4(config={
+orchestrator = TDDOrchestrator(config={
     "enforce_red_phase": True,  # Tests MUST fail first
     "quality_scoring": True      # 0-10 scoring per phase
 })
@@ -374,7 +374,7 @@ User: "system maintenance"
 ```
 
 **Engagement Hints:**
-- `🎭 Orchestrator engaged: MaintenanceOrchestratorV3`
+- `🎭 Orchestrator engaged: MaintenanceOrchestrator`
 - `🎭 Phase transition: HEALTHCHECK → ALIGN`
 - `🎭 Orchestrator completing: ✅ ALL WORK COMPLETE`
 
@@ -407,13 +407,13 @@ result = generate_ado_plan(
 )
 
 # Output: ADO-compatible work items
-# - Inherits Planning System 2.0 (DoR/DoD/TDD)
+# - Inherits Planning System (DoR/DoD/TDD)
 # - ADO-specific formatting
 # - Work item hierarchy (Epic → Feature → Story → Task)
 ```
 
 **Manifest:** `ado-planning-manifest.yaml`
-- Inherits: `planning-system-2.0-manifest.yaml`
+- Inherits: `planning-system-manifest.yaml`
 - Adds: ADO formatting rules
 
 **Use Cases:**
@@ -424,7 +424,7 @@ result = generate_ado_plan(
 
 **Benefits:**
 - ✅ Native ADO format
-- ✅ Planning System 2.0 quality
+- ✅ Planning System quality
 - ✅ Orchestrator-level integration
 - ✅ Automated work item creation
 
@@ -663,7 +663,7 @@ git tag v4.0.0
 - ✅ Phase 11 Completion Report (550+ lines)
 - ✅ Task 8.4 Orchestrator Testing Report
 - ✅ CORTEX 4.0 Status Tracker
-- ✅ Planning System 2.0 Manifest
+- ✅ Planning System Manifest
 - ✅ ADO Operations Manifest
 
 ---

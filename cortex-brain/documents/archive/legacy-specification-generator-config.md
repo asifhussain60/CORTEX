@@ -218,4 +218,4 @@ plan ado ra-api Segment4/HETransactions/XAddFundingInvoice.cs
 ---
 
 **Status:** ✅ Ready for Use  
-**Integration:** Planning System 2.0, ADO Operations
+**Integration:** Planning System, ADO Operations

@@ -15,7 +15,7 @@ Analysis of chat01.md conversation reveals **critical gaps in planning system in
 3. ❌ Temporary plan not created despite multi-step work
 4. ❌ SKULL enforcement bypassed (work without plan)
 
-**Root Cause:** Planning System 3.0 has **no entry point enforcement** - relies on explicit "plan" keyword or manual orchestrator invocation, missing implicit planning scenarios.
+**Root Cause:** Planning System has **no entry point enforcement** - relies on explicit "plan" keyword or manual orchestrator invocation, missing implicit planning scenarios.
 
 ---
 
@@ -90,7 +90,7 @@ tier0_instincts:
 
 **Gap:** SKULL rule exists but has no enforcement logic
 
-#### Discovery 4: Planning System 3.0 Manifest
+#### Discovery 4: Planning System Manifest
 ```yaml
 # cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml
 components:
@@ -212,7 +212,7 @@ Searched knowledge graph and conversation history:
 
 1. **Issue #Unknown (Implicit):** Planning system added but never integrated to entry point
 2. **Phase 13:** UnifiedPlanGenerator created but parallel systems still exist
-3. **Planning System 3.0:** Manifest created but orchestrator not updated to match
+3. **Planning System:** Manifest created but orchestrator not updated to match
 
 **Pattern:** Features built but not integrated into request workflow.
 
@@ -413,7 +413,7 @@ You'll see the plan shortly for review and approval.
 4. **Archive:** Remaining duplicates
 
 **Migration:**
-- Move Planning System 3.0 enhancements to main orchestrator
+- Move Planning System enhancements to main orchestrator
 - Update manifest to reference single source
 - Add deprecation warnings to old files
 
@@ -725,7 +725,7 @@ def track_planning_invocation():
 4. **No entry point tests** - Planning invocation never validated
 
 ### What Went Right
-1. **Manifest documented intent** - Planning System 3.0 manifest clearly defined expected behavior
+1. **Manifest documented intent** - Planning System manifest clearly defined expected behavior
 2. **Implementation exists** - TemporaryPlanManager code is solid, just needs wiring
 3. **User feedback clear** - chat01.md provided excellent evidence of failure
 
@@ -746,7 +746,7 @@ def track_planning_invocation():
 - brain-protection-rules.yaml - SKULL enforcement
 
 ### Related Issues
-- Planning System 3.0 implementation (partial)
+- Planning System implementation (partial)
 - UnifiedPlanGenerator integration (partial)
 - Folder-based artifact organization (incomplete)
 

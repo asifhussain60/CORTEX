@@ -9,7 +9,7 @@ Features:
     - 4-dimensional scoring: scope (25), dependencies (25), risk (30), uncertainty (20)
     - Complexity tiers: CRITICAL (90-100), HIGH (70-89), MEDIUM (40-69), LOW (20-39), TRIVIAL (0-19)
     - Auto-routing logic: Security/auth/migrations/APIs→incremental planning
-    - Integration with TieredRouter for Planning System 3.0
+    - Integration with TieredRouter for Planning System
 
 Author: Asif Hussain
 Date: December 2024

@@ -506,7 +506,7 @@ result = await multi_agent.sequential_chat(agents, context)
 
 #### Integration 3: System Maintenance (Nested Chat)
 
-**File:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+**File:** `src/operations/modules/orchestration/maintenance_orchestrator.py`
 
 **Before:**
 ```python

@@ -42,7 +42,7 @@ Total: 8 features
 
 MAJOR Features (3):
   - TDD Mastery → Chapter 7 (3,000 words)
-  - Planning System 2.0 → Chapter 8 (3,200 words)
+  - Planning System → Chapter 8 (3,200 words)
   - System Maintenance → Chapter 9 (2,800 words)
 
 MEDIUM Features (2):

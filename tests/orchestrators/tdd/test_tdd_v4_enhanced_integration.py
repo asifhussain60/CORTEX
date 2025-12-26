@@ -1,5 +1,5 @@
 """
-Integration Tests for TDD Orchestrator v4.0 Enhanced (Task 6.10)
+Integration Tests for TDD Orchestrator Enhanced (Task 6.10)
 
 Tests end-to-end RED→GREEN→REFACTOR workflow with all 4 packages integrated.
 
@@ -13,8 +13,8 @@ from pathlib import Path
 from unittest.mock import Mock, AsyncMock, patch
 from datetime import datetime
 
-from src.orchestrators.tdd.tdd_orchestrator_v4 import (
-    TDDOrchestratorV4,
+from src.orchestrators.tdd.tdd_orchestrator import (
+    TDDOrchestrator,
     TDDPhase,
     PhaseResult,
     ValidationResult,
@@ -55,7 +55,7 @@ def orchestrator(mock_brain, mock_kg, mock_mcp):
     }
     
     # Create orchestrator with proper config dict
-    orch = TDDOrchestratorV4(
+    orch = TDDOrchestrator(
         brain_connector=mock_brain,
         knowledge_graph=mock_kg,
         mcp_gateway=mock_mcp,

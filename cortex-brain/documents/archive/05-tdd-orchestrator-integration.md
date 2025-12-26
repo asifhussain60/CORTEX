@@ -9,7 +9,7 @@
 
 ## 🎯 Objectives
 
-Integrate TDD Orchestrator with Planning System 3.0 to ensure RED→GREEN→REFACTOR cycle enforcement and automatic test generation during plan execution.
+Integrate TDD Orchestrator with Planning System to ensure RED→GREEN→REFACTOR cycle enforcement and automatic test generation during plan execution.
 
 **Key Deliverables:**
 1. TDD orchestrator integration with planning phases
@@ -499,7 +499,7 @@ def test_real():
 
 **Requires:**
 - Phase 4: Historical Context Integration (complete)
-- TDD Orchestrator v2.0 operational
+- TDD Orchestrator operational
 - pytest-cov installed
 
 **Enables:**

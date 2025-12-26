@@ -377,7 +377,7 @@ If knowledge extraction causes issues:
 
 ## 📚 References
 
-- **Manifest:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- **Manifest:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
   - REQ-006: Learning library integration (STEP-2.6, STEP-5.7)
   - REQ-009: Modular plan structure (folder management)
 - **PlanFolderManager:** `src/workflows/plan_folder_manager.py`

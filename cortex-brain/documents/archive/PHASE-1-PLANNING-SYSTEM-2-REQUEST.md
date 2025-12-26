@@ -1,4 +1,4 @@
-# Planning System 2.0 Request - Enterprise Documentation Enhancement Phase 1
+# Planning System Request - Enterprise Documentation Enhancement Phase 1
 
 **Date:** December 10, 2025  
 **Requester:** Asif Hussain  
@@ -214,7 +214,7 @@ tests/documentation/generators/
 
 ## 🚀 Autonomous Execution Plan
 
-Once Planning System 2.0 creates the incremental plan, enable autonomous execution:
+Once Planning System creates the incremental plan, enable autonomous execution:
 
 ```
 execute all phases autonomously
@@ -250,7 +250,7 @@ This will:
 ## 📚 References
 
 **Manifests:**
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - Planning requirements
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` - Planning requirements
 - `cortex-brain/brain-protection-rules.yaml` - SKULL enforcement
 
 **Existing Code:**
@@ -258,14 +258,14 @@ This will:
 - `cortex-brain/admin/documentation/generators/mkdocs_generator.py`
 
 **Documentation:**
-- `.github/prompts/CORTEX.prompt.md` - Planning System 2.0 documentation
+- `.github/prompts/CORTEX.prompt.md` - Planning System documentation
 - `cortex-brain/documents/reports/phase-1-implementation-investigation-2025-12-10.md`
 
 ---
 
-## ✅ Ready for Planning System 2.0
+## ✅ Ready for Planning System
 
-This request is ready for Planning System 2.0 processing:
+This request is ready for Planning System processing:
 - ✅ HIGH complexity → Incremental delivery
 - ✅ Clear acceptance criteria
 - ✅ TDD requirements defined

@@ -42,7 +42,7 @@
 
 | Orchestrator | File | Execution | Notes |
 |--------------|------|-----------|-------|
-| planning_orchestrator | `src/orchestrators/planning_orchestrator.py` | ✅ Chat | Planning System 2.0 |
+| planning_orchestrator | `src/orchestrators/planning_orchestrator.py` | ✅ Chat | Planning System |
 | plan_ado | ADO integration in planning | ✅ Chat | Work item creation |
 | plan_execution_orchestrator_v2 | `src/orchestrators/plan_execution_orchestrator_v2.py` | ✅ Chat | Autonomous execution |
 | tdd_implementation_orchestrator | `src/orchestrators/tdd_implementation_orchestrator.py` | ✅ Chat | TDD workflow |

@@ -13,12 +13,12 @@
 **Goal:** Enhance 3 completed CORTEX 4.0 orchestrators (TDD v4.0, Documentation, Execution) from **30% average agentic alignment to 95%** by integrating Phase 5 agentic AI patterns.
 
 **Current State:**
-- TDDOrchestrator v4.0: 57% alignment (791 LOC)
+- TDDOrchestrator: 57% alignment (791 LOC)
 - DocumentationOrchestrator: 47% alignment (522 LOC)
 - ExecutionOrchestrator: 23% alignment (327 LOC)
 
 **Target State:**
-- TDDOrchestrator v4.0 Enhanced: 95% alignment (1,100+ LOC)
+- TDDOrchestrator Enhanced: 95% alignment (1,100+ LOC)
 - DocumentationOrchestrator Enhanced: 95% alignment (750+ LOC)
 - ExecutionOrchestrator Enhanced: 95% alignment (650+ LOC)
 
@@ -349,7 +349,7 @@ Post-Enhancement Validation & Documentation
 ### Code Artifacts
 
 1. **Enhanced Orchestrators** (3 files, +861 LOC)
-   - `src/orchestrators/tdd/tdd_orchestrator_v4.py` (enhanced)
+   - `src/orchestrators/tdd/tdd_orchestrator.py` (enhanced)
    - `src/orchestration_4_0/orchestrators/documentation/documentation_orchestrator.py` (enhanced)
    - `src/orchestration_4_0/orchestrators/execution/execution_orchestrator.py` (enhanced)
 
@@ -435,7 +435,7 @@ Post-Enhancement Validation & Documentation
 - `task-6.12-execution-orch-post-phase5-enhancement.md`
 
 **Source Code:**
-- `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+- `src/orchestrators/tdd/tdd_orchestrator.py`
 - `src/orchestration_4_0/orchestrators/documentation/documentation_orchestrator.py`
 - `src/orchestration_4_0/orchestrators/execution/execution_orchestrator.py`
 - `src/orchestration_4_0/execution/execution_mode_manager.py`

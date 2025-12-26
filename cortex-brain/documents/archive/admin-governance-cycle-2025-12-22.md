@@ -62,7 +62,7 @@
 
 **Orchestrator Validation:**
 - ✅ ExecutionOrchestrator: `src/orchestrators/base/base_orchestrator.py`
-- ✅ TDD v4.0: `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+- ✅ TDD v4.0: `src/orchestrators/tdd/tdd_orchestrator.py`
 - ✅ ADO Orchestrator: `src/orchestrators/ado/ado_orchestrator.py`
 - ✅ Planning System: `src/orchestrators/planning/planning_orchestrator.py`
 - ✅ Sanitization: `src/orchestrators/sanitization/sanitization_orchestrator.py`
@@ -71,7 +71,7 @@
 - ✅ Git Checkpoint: `src/orchestrators/git_checkpoint_orchestrator.py`
 
 **Missing Referenced Orchestrators (prompt cleanup needed):**
-- ⚠️ `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` - REFERENCED but MISSING
+- ⚠️ `src/operations/modules/orchestration/maintenance_orchestrator.py` - REFERENCED but MISSING
 - ⚠️ `src/operations/modules/orchestration/refinement_orchestrator_v1.py` - REFERENCED but MISSING
 - ⚠️ Admin Governor Orchestrator - This prompt describes it but no code exists
 
@@ -116,7 +116,7 @@
 - Status: ✅ PRODUCTION READY
 
 **TDD v4.0 (Task 6.3):**
-- Implementation: ✅ `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+- Implementation: ✅ `src/orchestrators/tdd/tdd_orchestrator.py`
 - Tests: ✅ 26 tests
 - Coverage: ✅ 90%+
 - Status: ✅ PRODUCTION READY
@@ -290,7 +290,7 @@ align:
 - Files exist but tests can't find them
 
 **Inheritance Chain Validation:**
-- ADO → Planning System 2.0: Architecture documented ✅
+- ADO → Planning System: Architecture documented ✅
 - Tests failing due to path issues, not inheritance logic ❌
 
 **Recommendation:** Fix manifest path resolution in Phase 7 (part of Operations Simplification)
@@ -366,7 +366,7 @@ align:
 - **Impact:** 🟢 LOW - Documentation accuracy
 - **Root Cause:** Prompt references orchestrators that don't exist
 - **Missing Files:**
-  - `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+  - `src/operations/modules/orchestration/maintenance_orchestrator.py`
   - `src/operations/modules/orchestration/refinement_orchestrator_v1.py`
 - **Resolution:** Update CORTEX_ADMIN_GOVERNOR.prompt.md to remove stale references
 - **Timeline:** Next prompt update cycle

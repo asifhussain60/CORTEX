@@ -89,7 +89,7 @@ This is by design, not a deficiency.
 
 ---
 
-### 3. Planning System 2.0 ✅
+### 3. Planning System ✅
 
 **Status:** FULLY PRESENT
 
@@ -278,7 +278,7 @@ Most differences are in:
 |-----------|--------|----------|
 | TDD Mastery | ✅ Complete | `src/workflows/tdd_*`, `src/operations/tdd.py` |
 | ADO Planning | ✅ Complete | `src/operations/ado.py`, `src/cortex_agents/ado_agent.py` |
-| Planning System 2.0 | ✅ Complete | `src/orchestrators/planning_orchestrator.py` |
+| Planning System | ✅ Complete | `src/orchestrators/planning_orchestrator.py` |
 | RCA | ✅ Complete | `src/cortex_agents/rca_agent.py` |
 | Swagger/Estimation | ✅ Complete | `src/operations/modules/estimation/` |
 | Deployment (19 gates) | ✅ Complete | `src/deployment/`, `scripts/deploy_cortex.py` |

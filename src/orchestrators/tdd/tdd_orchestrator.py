@@ -551,10 +551,10 @@ class CleanCodeEnforcer:
 
 
 # ============================================================================
-# TDD Orchestrator v4.0
+# TDD Orchestrator
 # ============================================================================
 
-class TDDOrchestratorV4:
+class TDDOrchestrator:
     """
     Unified TDD Orchestrator with adaptive learning and clean architecture.
     
@@ -635,7 +635,7 @@ class TDDOrchestratorV4:
             'auto_retrievals': 0
         }
         
-        logger.info("🎭 Orchestrator engaged: TDDOrchestratorV4 (Enhanced with Phase 5 AI)")
+        logger.info("🎭 Orchestrator engaged: TDDOrchestrator (Enhanced with Phase 5 AI)")
     
     def register_strategy(self, phase: TDDPhase, strategy: TDDPhaseStrategy):
         """Register phase strategy."""

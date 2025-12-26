@@ -227,7 +227,7 @@ if isinstance(templates['templates'], dict):
 - Check 11: ✅ Autonomous execution fully wired
 
 **3. pull-sync-complete-20251206.md**
-- Pull synchronization report (15 files, Planning System 2.0)
+- Pull synchronization report (15 files, Planning System)
 
 ---
 

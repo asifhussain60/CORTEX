@@ -58,7 +58,7 @@ Successfully integrated the Manifest Validation System into the Alignment Utilit
 - Existing integration verified
   * `validate_manifest_compliance()` method already exists (lines 1321-1400)
   * Called in `run_alignment()` on line 1551 (admin context only)
-  * Validates Planning System 2.0 manifest by default
+  * Validates Planning System manifest by default
 
 **Validation Workflow:**
 1. Load manifest from `cortex-brain/manifests/orchestrators/`
@@ -196,7 +196,7 @@ AlignUtility.run_alignment()
 1. **Direct Validation**
    ```python
    validator = ManifestValidator(cortex_root)
-   report = validator.validate_orchestrator("planning_system_2.0")
+   report = validator.validate_orchestrator("planning_system")
    ```
 
 2. **Alignment Integration**

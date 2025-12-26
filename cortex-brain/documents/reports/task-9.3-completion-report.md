@@ -71,7 +71,7 @@ Successfully generated all critical documentation required to unblock CORTEX 4.0
 1. Orchestrator Consolidation (28 → 13, 46% reduction)
 2. 4-Tier Brain Architecture (Tier 0-3 with examples)
 3. Manifest Consolidation (6,760 → 500 lines, 93% reduction)
-4. Planning System 2.0 (auto-complexity, DoR/DoD, TDD integration)
+4. Planning System (auto-complexity, DoR/DoD, TDD integration)
 5. TDD Mastery v4.0 (RED→GREEN→REFACTOR, 98.3% pass rate)
 6. Autonomous Execution Framework (3 modes, self-healing)
 7. Code Sanitization Orchestrator (5-phase workflow)
@@ -117,7 +117,7 @@ Successfully generated all critical documentation required to unblock CORTEX 4.0
 
 **Coverage:**
 - ✅ Overview (Phase 5 enhancements, 23% → 95% agentic alignment)
-- ✅ Quick start (basic usage, Planning System 2.0 integration)
+- ✅ Quick start (basic usage, Planning System integration)
 - ✅ Execution modes (AUTONOMOUS, SUPERVISED, MANUAL)
 - ✅ Plan execution (context, results, progress tracking)
 - ✅ Phase management (dynamic registration, dependencies, validators)

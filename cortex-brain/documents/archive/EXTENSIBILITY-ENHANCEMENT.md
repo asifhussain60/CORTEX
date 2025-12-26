@@ -472,7 +472,7 @@ Entry Point (50 LOC)
 
 ### Documentation
 - `cortex-brain/documents/reports/phase-2-orchestrators-completion.md` (Current extensibility ratings)
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` (DoR/DoD requirements)
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` (DoR/DoD requirements)
 - `src/orchestration_3_0/orchestrators/execution/orchestrator_registry.py` (Registry pattern example)
 
 ### Research
@@ -484,7 +484,7 @@ Entry Point (50 LOC)
 
 ## 🚀 Execution Mode
 
-**Method:** Planning System 2.0 Autonomous Execution  
+**Method:** Planning System Autonomous Execution  
 **Approach:** Incremental phasing with DoD gates  
 **Interaction:** Interactive (user approval at phase boundaries)
 

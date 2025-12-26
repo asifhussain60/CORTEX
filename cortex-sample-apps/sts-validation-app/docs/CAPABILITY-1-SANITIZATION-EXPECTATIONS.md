@@ -404,7 +404,7 @@ cat .mapping.json | python3 -m json.tool
 3. **Run test suite** (pytest to confirm functionality)
 4. **Create validation report** (document detection rate, transformation accuracy, scoring)
 5. **Update sts-baseline.json** (record new security score)
-6. **Move to Capability 2** (Planning System 2.0 validation)
+6. **Move to Capability 2** (Planning System validation)
 
 ---
 

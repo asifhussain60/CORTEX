@@ -9,7 +9,7 @@
 
 ## 📊 Executive Summary
 
-Phase 1 focuses on migrating the visual progress tracker from the strategic planning agent into the Planning Orchestrator v3.1. This provides real-time progress visibility in user responses and generated plans.
+Phase 1 focuses on migrating the visual progress tracker from the strategic planning agent into the Planning Orchestrator. This provides real-time progress visibility in user responses and generated plans.
 
 **Key Achievement:** Successfully implemented pre-planning discovery system and integrated PlanningSession tracking into the orchestrator execution workflow.
 
@@ -182,7 +182,7 @@ return OperationResult(
 
 ---
 
-### Task 1.7: Update Planning System 3.0 Manifest ✅
+### Task 1.7: Update Planning System Manifest ✅
 **Status:** COMPLETE  
 **File Created:** `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml`
 
@@ -195,7 +195,7 @@ return OperationResult(
 - Phase 1 implementation status (63% complete)
 - Version history (3.1.0 changelog)
 
-**Outcome:** Official manifest documents all Phase 1 work and establishes baseline for Planning System 3.0.
+**Outcome:** Official manifest documents all Phase 1 work and establishes baseline for Planning System.
 
 ---
 
@@ -272,7 +272,7 @@ return OperationResult(
 - [Master Plan](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/00-master-plan.md)
 - [Phase 1 Sub-Plan](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/01-visual-tracker-migration.md)
 - [Progress Tracker JSON](d:/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-rearchitecture-v1/tracking/progress-tracker.json)
-- [Planning System 3.0 Manifest](d:/PROJECTS/CORTEX/cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml)
+- [Planning System Manifest](d:/PROJECTS/CORTEX/cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml)
 - [Test Suite](d:/PROJECTS/CORTEX/tests/orchestrators/test_pre_planning_discovery.py)
 
 ---

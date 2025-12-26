@@ -42,7 +42,7 @@
    - Size: ~700 lines
    - Features: 11+ languages, strategy pattern, adaptive learning
 
-5. **Planning System 2.0 Orchestrator**
+5. **Planning System Orchestrator**
    - File: `planning-system-2-0-architecture.md`
    - Size: ~1,200 lines
    - Features: Adaptive complexity, DoR/DoD enforcement, TDD integration
@@ -61,7 +61,7 @@
 8. **ADO Operations Orchestrator**
    - File: `ado-operations-architecture.md`
    - Size: ~1,300 lines
-   - Features: Planning System 2.0 integration, 5 work item types
+   - Features: Planning System integration, 5 work item types
 
 9. **Code Sanitization Orchestrator**
    - File: `code-sanitization-architecture.md`

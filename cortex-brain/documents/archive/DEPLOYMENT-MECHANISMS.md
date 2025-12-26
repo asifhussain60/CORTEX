@@ -689,7 +689,7 @@ CORTEX:
      • 89 documents preserved
   
   🆕 New features available:
-     • ADO Planning System 2.0
+     • ADO Planning System
      • Enhanced response templates
      • Brain import/export
   

@@ -1,6 +1,6 @@
 # Code Sanitization Validation Report
 **Generated:** December 16, 2025 05:51:23  
-**Tool:** CORTEX Code Sanitization Orchestrator v1.0.0  
+**Tool:** CORTEX Code Sanitization Orchestrator.0  
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---

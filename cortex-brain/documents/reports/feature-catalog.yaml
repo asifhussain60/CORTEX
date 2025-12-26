@@ -22,7 +22,7 @@ features:
   - Per-layer coverage tracking
   - Empty test detection
   - Debugging orchestrator
-- name: Planning System 2.0
+- name: Planning System
   weight: MAJOR
   description: Incremental planning, DoR/DoD gates, autonomous execution
   target_location: Chapter 8
@@ -64,7 +64,7 @@ features:
   - Feature/task hierarchy
   - Completion summaries
   - Code review integration
-  - Planning System 2.0 inheritance
+  - Planning System inheritance
 - name: Dashboard Launcher
   weight: MEDIUM
   description: HTTP server with visualization and metrics tracking

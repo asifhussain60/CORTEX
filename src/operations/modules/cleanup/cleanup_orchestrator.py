@@ -142,7 +142,7 @@ class CleanupOrchestrator(BaseOperationModule):
         """Module metadata."""
         return OperationModuleMetadata(
             module_id="cleanup_orchestrator_v3",
-            name="Cleanup Orchestrator v3.0 (Enhanced)",
+            name="Cleanup Orchestrator (Enhanced)",
             description="Comprehensive workspace cleanup with advanced scanning, intelligent deletion, and automatic reference updates",
             version="3.0.0",
             author="Asif Hussain",

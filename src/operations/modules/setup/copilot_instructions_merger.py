@@ -77,7 +77,7 @@ def is_cortex_managed_section(header: str, content: str) -> bool:
         True if CORTEX-managed, False if user-owned
     
     Example:
-        >>> is_cortex_managed_section("## 🧠 CORTEX Integration", "Planning System 2.0...")
+        >>> is_cortex_managed_section("## 🧠 CORTEX Integration", "Planning System...")
         True
         >>> is_cortex_managed_section("## Custom Notes", "My notes...")
         False
@@ -88,7 +88,7 @@ def is_cortex_managed_section(header: str, content: str) -> bool:
     
     # Check for CORTEX-specific content markers
     cortex_markers = [
-        "Planning System 2.0",
+        "Planning System",
         "TDD Mastery",
         "CORTEX Integration",
         "Entry Point",
@@ -250,7 +250,7 @@ Users interact via natural language. No slash commands needed."""
     cortex_section = """This project uses **CORTEX** - an AI assistant enhancement system.
 
 **Available Capabilities:**
-- **Planning System 2.0:** Vision API, DoR/DoD enforcement, file-based planning
+- **Planning System:** Vision API, DoR/DoD enforcement, file-based planning
 - **TDD Mastery:** RED→GREEN→REFACTOR automation with auto-debug
 - **View Discovery:** Auto-extract UI element IDs for testing
 - **Progress Monitoring:** Real-time feedback for long operations
@@ -490,7 +490,7 @@ Users interact via natural language. No slash commands needed."""
     sections["## 🧠 CORTEX Integration"] = """This project uses **CORTEX** - an AI assistant enhancement system.
 
 **Available Capabilities:**
-- **Planning System 2.0:** Vision API, DoR/DoD enforcement, file-based planning
+- **Planning System:** Vision API, DoR/DoD enforcement, file-based planning
 - **TDD Mastery:** RED→GREEN→REFACTOR automation with auto-debug
 - **View Discovery:** Auto-extract UI element IDs for testing
 - **Progress Monitoring:** Real-time feedback for long operations

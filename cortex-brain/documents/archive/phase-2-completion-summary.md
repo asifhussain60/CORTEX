@@ -1,4 +1,4 @@
-# Phase 2 Completion Summary: Planning System 2.0 High-Priority Requirements
+# Phase 2 Completion Summary: Planning System High-Priority Requirements
 
 **Date:** December 8, 2025  
 **Version:** 2.2.0  
@@ -194,7 +194,7 @@ def document_phase_to_learning_library(
    - _render_mini_progress_bar() helper (3 lines)
    - Total additions: ~87 lines
 
-4. **cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml**
+4. **cortex-brain/manifests/orchestrators/planning-system-manifest.yaml**
    - REQ-004 status: missing → implemented
    - REQ-005 status: partial → implemented
    - REQ-006 status: missing → implemented
@@ -315,4 +315,4 @@ All Phase 2 implementations follow Tier 0 instincts:
 **Next Milestone:** Phase 3 (optional polish, 2 medium-priority items)  
 **Production Readiness:** ✅ YES (95% exceeds production threshold)
 
-**Recommendation:** Planning System 2.0 is production-ready at 95% compliance. Phase 3 can be scheduled as polish work or deferred indefinitely.
+**Recommendation:** Planning System is production-ready at 95% compliance. Phase 3 can be scheduled as polish work or deferred indefinitely.

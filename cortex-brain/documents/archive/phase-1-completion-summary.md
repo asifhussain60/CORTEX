@@ -1,4 +1,4 @@
-# Phase 1 Completion Summary: Planning System 2.0 Critical Requirements
+# Phase 1 Completion Summary: Planning System Critical Requirements
 
 **Date:** December 8, 2025  
 **Version:** 2.1.0  
@@ -9,7 +9,7 @@
 
 ## 🎯 Phase 1 Objectives
 
-Implement 3 critical requirements to bring Planning System 2.0 into compliance:
+Implement 3 critical requirements to bring Planning System into compliance:
 
 1. **REQ-001:** Acceptance Criteria Approval Gate
 2. **REQ-002:** Interactive DoR Workflow  
@@ -134,7 +134,7 @@ generate_incremental_plan() →
    - Added manifest validation in `__init__`
    - Total additions: ~400 lines
 
-2. **cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml**
+2. **cortex-brain/manifests/orchestrators/planning-system-manifest.yaml**
    - Updated REQ-001 status: missing → implemented
    - Updated REQ-002 status: partial → implemented
    - Updated REQ-003 status: missing → implemented

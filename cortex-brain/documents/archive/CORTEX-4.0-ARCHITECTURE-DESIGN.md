@@ -425,7 +425,7 @@ jobs:
   - [ ] All 3.0 features preserved
 
 **Priority 2: Planning Orchestrator** (Week 4)
-- **Why Second?** Just developed (Planning System 2.0), fresh in memory
+- **Why Second?** Just developed (Planning System), fresh in memory
 - **Current Location:** `src/orchestrators/planning/` (multiple files)
 - **Dependencies:** TDD orchestrator, complexity analyzer, DoR/DoD validator
 - **Migration Steps:**
@@ -447,14 +447,14 @@ jobs:
 - **Dependencies:** Planning orchestrator
 - **Migration Steps:**
   1. Port to `cortex_orchestrators/planning/ado_orchestrator.py`
-  2. Inherit Planning System 2.0 manifest
+  2. Inherit Planning System manifest
   3. Add ADO-specific formatting
   4. Write tests (story/feature/task generation)
   5. Implement MCP tools: `cortex_plan_ado`, `cortex_ado_summary`
 - **Success Criteria:**
   - [ ] 100% test coverage
   - [ ] All ADO formats validated (Story, Feature, Task)
-  - [ ] Planning System 2.0 compliance inherited
+  - [ ] Planning System compliance inherited
 
 **Priority 4: Maintenance Orchestrator** (Week 6)
 - **Why Fourth?** Critical for system health
@@ -466,7 +466,7 @@ jobs:
   3. Extract phase modules (alignment, cleanup, optimize, etc.)
   4. Write comprehensive tests (all 7 phases)
   5. Implement MCP tools: `cortex_maintain`, `cortex_healthcheck`, `cortex_align`, `cortex_cleanup`, `cortex_optimize`
-  6. Integrate tiered routing (Planning System 3.0)
+  6. Integrate tiered routing (Planning System)
 - **Success Criteria:**
   - [ ] 100% test coverage
   - [ ] All 7 phases tested independently

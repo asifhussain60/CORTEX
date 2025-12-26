@@ -107,7 +107,7 @@
 
 | Manifest | Inherits From | Status |
 |----------|---------------|--------|
-| `ado-planning-manifest.yaml` | planning-system-2.0-manifest.yaml | ✅ Uses inheritance |
+| `ado-planning-manifest.yaml` | planning-system-manifest.yaml | ✅ Uses inheritance |
 | `technical-documentation-orchestrator-manifest.yaml` | (partial) | ⚠️ Partial |
 | `manifest-schema.yaml` | (self-reference) | ⚠️ Schema |
 | **15 other orchestrators** | **NONE** | ❌ **83% NOT using inheritance** |
@@ -397,7 +397,7 @@ cleanup_rules = config_manifest["categories"]["cleanup"]["standard"]
 ```yaml
 # tdd-orchestrator-v4-manifest.yaml (377 lines)
 metadata:
-  orchestrator_name: "tdd_orchestrator_v4"
+  orchestrator_name: "tdd_orchestrator"
   version: "4.0.0"
   description: "..."
   category: "tdd"
@@ -420,7 +420,7 @@ logging:
 inherits_from: "shared/planning-base-manifest.yaml"
 
 metadata:
-  orchestrator_name: "tdd_orchestrator_v4"
+  orchestrator_name: "tdd_orchestrator"
   version: "4.0.0"
   description: "..."
   # category, deployment_tier, status, maintainer inherited

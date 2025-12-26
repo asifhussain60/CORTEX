@@ -8,7 +8,7 @@ Tests for Task 13.3:
 
 Total: 15 tests
 
-Author: CORTEX Planning System 2.0
+Author: CORTEX Planning System
 Version: 4.0.0
 """
 

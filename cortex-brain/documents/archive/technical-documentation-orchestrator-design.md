@@ -67,7 +67,7 @@ docs/technical/
 │
 ├── workflows/                          # Workflow Documentation
 │   ├── index.md                        # Workflow overview
-│   ├── planning-workflow.md            # Planning System 2.0/3.0
+│   ├── planning-workflow.md            # Planning System/3.0
 │   ├── tdd-workflow.md                 # TDD RED→GREEN→REFACTOR
 │   ├── maintenance-workflow.md         # 7-phase maintenance
 │   ├── refinement-workflow.md          # 7-phase refinement

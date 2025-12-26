@@ -52,9 +52,9 @@ metadata:
   related_orchestrators:
     - "maintenance_orchestrator"
     - "contextual_review_orchestrator"
-    - "tdd_orchestrator_v4"
+    - "tdd_orchestrator"
   child_orchestrators:
-    - name: "tdd_orchestrator_v4"
+    - name: "tdd_orchestrator"
       manifest: "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml"
       relationship: "All planning system plans include TDD phases"
   documentation_path: ".github/prompts/modules/planning-system-guide.md"
@@ -548,10 +548,10 @@ workflow:
       name: "TDD Integration"
       description: "Automated RED→GREEN→REFACTOR cycle for all plans (Tier 2+)"
       duration: "Variable (depends on implementation complexity)"
-      orchestrator: "tdd_orchestrator_v4"
+      orchestrator: "tdd_orchestrator"
       integration_method: "Automatic inclusion in all plans"
       components:
-        - "TDDOrchestratorV4"
+        - "TDDOrchestrator"
         - "RedPhaseStrategy" # Generate failing tests
         - "GreenPhaseStrategy" # Minimal implementation
         - "RefactorPhaseStrategy" # AI-driven refactoring
@@ -738,7 +738,7 @@ version_history:
       - "PlanningSession integration (Task 1.3)"
       - "Phase tracking with metrics (Task 1.4)"
       - "Visual tracker in responses (Task 1.5)"
-      - "Planning System 3.0 manifest created (Task 1.7)"
+      - "Planning System manifest created (Task 1.7)"
     author: "CORTEX Planning Team"
 
   - version: "3.0.0"

@@ -55,10 +55,10 @@
 
 **Must complete before GA release:**
 
-1. ❌ **Planning System 2.0 User Guide**
+1. ❌ **Planning System User Guide**
    - **Why:** Core feature, 40%+ user workflows depend on it
    - **Content:** DoR/DoD compliance, complexity detection, auto-TDD, incremental planning
-   - **Effort:** 4 hours (architecture exists: planning-system-2.0-architecture-completion.md)
+   - **Effort:** 4 hours (architecture exists: planning-system-architecture-completion.md)
 
 2. ❌ **System Maintenance v3 User Guide**
    - **Why:** Admin workflow, system health critical
@@ -80,7 +80,7 @@
    - **Content:** Feature summary, breaking changes, performance gains, acknowledgments
    - **Effort:** 4 hours (CHANGELOG exists, needs restructuring)
 
-6. ❌ **Base Orchestrator v4.0 Developer Guide**
+6. ❌ **Base Orchestrator Developer Guide**
    - **Why:** Foundation for custom orchestrators, extensibility critical
    - **Content:** Lifecycle, workspace integration, error handling, checkpoints
    - **Effort:** 4 hours (architecture exists in orchestrator-architecture.md)
@@ -126,7 +126,7 @@
 
 | Orchestrator | Architecture Doc | Status | User Guide Status |
 |--------------|------------------|--------|-------------------|
-| Planning System 2.0 | planning-system-2.0-architecture-completion.md | ✅ | ❌ MISSING |
+| Planning System | planning-system-architecture-completion.md | ✅ | ❌ MISSING |
 | System Maintenance v3 | system-maintenance-architecture-completion.md | ✅ | ❌ MISSING |
 | ADO Operations | ado-operations-architecture-completion.md | ✅ | ❌ MISSING |
 | DevOps Orchestrator | devops-orchestrator-architecture-completion.md | ✅ | ✅ HAS GUIDE |
@@ -180,7 +180,7 @@
 **Focus:** Core orchestrator guides users need immediately
 
 **Tasks:**
-1. **Planning System 2.0 User Guide** (4h)
+1. **Planning System User Guide** (4h)
    - Convert architecture doc to user-friendly format
    - Add usage examples: `plan [feature]`, `execute all phases autonomously`
    - Document DoR/DoD compliance requirements
@@ -220,7 +220,7 @@
    - Add performance metrics (85% time efficiency across Phase 8)
    - Add acknowledgments section
 
-3. **Base Orchestrator v4.0 Developer Guide** (4h)
+3. **Base Orchestrator Developer Guide** (4h)
    - Convert architecture doc to developer-focused guide
    - Document orchestrator lifecycle
    - Add code examples: custom orchestrator creation
@@ -340,15 +340,15 @@
 **Command:**
 ```bash
 cd /Users/asifhussain/PROJECTS/CORTEX
-# Start with Planning System 2.0 guide (highest user demand)
+# Start with Planning System guide (highest user demand)
 ```
 
 **Inputs:**
-- `cortex-brain/documents/archive/planning-system-2.0-architecture-completion.md`
-- `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- `cortex-brain/documents/archive/planning-system-architecture-completion.md`
+- `cortex-brain/orchestrator-manifests/planning-system-manifest.yaml`
 - `.github/prompts/CORTEX.prompt.md` (command reference)
 
-**Output:** `cortex-brain/documents/implementation-guides/planning-system-2.0-user-guide.md`
+**Output:** `cortex-brain/documents/implementation-guides/planning-system-user-guide.md`
 
 **Estimated Time:** 4 hours (70% content reuse from architecture doc)
 
@@ -370,7 +370,7 @@ Located in `cortex-brain/` (should be in `cortex-brain/documents/implementation-
 ### B. Architecture Documentation in Archive
 
 20+ architecture documents exist in `cortex-brain/documents/archive/`:
-- Planning System 2.0, TDD v4, System Maintenance v3, ADO Operations
+- Planning System, TDD v4, System Maintenance v3, ADO Operations
 - DevOps, Documentation, CI/CD Self-Healing, Upgrade, Refinement
 - Base Orchestrator, Execution, multi-repo, workspace isolation
 

@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-Reviewed all CORTEX orchestrators to verify integration with Planning System 3.0 enhancements and ensure proper wiring into the execution framework.
+Reviewed all CORTEX orchestrators to verify integration with Planning System enhancements and ensure proper wiring into the execution framework.
 
 **Overall Status:** ✅ **PRODUCTION READY** with 3 minor recommendations
 
@@ -15,11 +15,11 @@ Reviewed all CORTEX orchestrators to verify integration with Planning System 3.0
 
 ## Orchestrator Inventory
 
-### ✅ Fully Integrated (Planning System 3.0)
+### ✅ Fully Integrated (Planning System)
 
 | Orchestrator | Version | Base Class | Metrics | Session | 🎭 Hints | Wired |
 |-------------|---------|------------|---------|---------|----------|-------|
-| **MaintenanceOrchestratorV3** | 3.0.0 | ✅ BaseOperationModule | ✅ Yes | ✅ PlanningSession | ✅ Yes | ✅ copilot_chat |
+| **MaintenanceOrchestrator** | 3.0.0 | ✅ BaseOperationModule | ✅ Yes | ✅ PlanningSession | ✅ Yes | ✅ copilot_chat |
 | **PlanningOrchestrator** | 3.1.0 | ✅ BaseOperationModule | ✅ Yes | ✅ PlanningSession | ✅ Yes | ✅ copilot_chat |
 | **ADOPlanningOrchestrator** | 3.0.0 | ✅ BaseOperationModule | ✅ Yes | ✅ PlanningSession | ✅ Yes | ✅ copilot_chat |
 | **TDDOrchestrator** | 3.0.0 | ✅ BaseOperationModule | ✅ Yes | 🔶 Integration method | ✅ Yes | ✅ copilot_chat |
@@ -57,8 +57,8 @@ Reviewed all CORTEX orchestrators to verify integration with Planning System 3.0
 
 **Evidence:**
 ```python
-# MaintenanceOrchestratorV3
-@with_orchestration_metrics("MaintenanceOrchestratorV3")
+# MaintenanceOrchestrator
+@with_orchestration_metrics("MaintenanceOrchestrator")
 def execute(self, context: Dict[str, Any]) -> OperationResult:
 
 # PlanningOrchestrator
@@ -87,7 +87,7 @@ def execute(self, context: Dict[str, Any]) -> OperationResult:
 **Evidence:**
 ```python
 # Engagement Entry
-logger.info(f"🎭 Orchestrator engaged: MaintenanceOrchestratorV3 v{self.version}")
+logger.info(f"🎭 Orchestrator engaged: MaintenanceOrchestrator v{self.version}")
 
 # Phase Transitions
 logger.info("🎭 Phase transition: PRE_HEALTHCHECK → ALIGNMENT")
@@ -98,7 +98,7 @@ logger.info(f"🎭 Orchestrator completing: {'✅ ALL WORK COMPLETE' if is_compl
 ```
 
 **Orchestrators with 🎭 Hints:**
-- ✅ MaintenanceOrchestratorV3 (7 phases)
+- ✅ MaintenanceOrchestrator (7 phases)
 - ✅ VacuumOrchestrator (5 phases)
 - ✅ RefactorCycleOrchestrator (6 phases)
 - ✅ DocumentHygieneOrchestrator (6 phases)
@@ -111,13 +111,13 @@ logger.info(f"🎭 Orchestrator completing: {'✅ ALL WORK COMPLETE' if is_compl
 
 ### 4. PlanningSession Integration ✅
 
-**Finding:** Planning System 3.0 orchestrators properly integrate `PlanningSession` for state management.
+**Finding:** Planning System orchestrators properly integrate `PlanningSession` for state management.
 
 **Integration Patterns:**
 
 **Full PlanningSession Usage:**
 ```python
-# MaintenanceOrchestratorV3
+# MaintenanceOrchestrator
 self.current_session: Optional[PlanningSession] = None
 planning_session: Optional[PlanningSession] = None  # In MaintenanceContext
 
@@ -150,7 +150,7 @@ def integrate_with_planning(self, planning_session_id: str) -> Dict[str, Any]:
 
 **Implementation Examples:**
 ```python
-# MaintenanceOrchestratorV3
+# MaintenanceOrchestrator
 self.tiered_router = TieredRouter()
 self.complexity_analyzer = ComplexityAnalyzer()
 routing_decision = self.tiered_router.route(operation)
@@ -177,13 +177,13 @@ MAINTENANCE_TIER_PATTERNS = {
 
 | Operation | Orchestrator | execution_method | deployment_tier | Wired |
 |-----------|-------------|------------------|-----------------|-------|
-| system_maintenance | maintenance_orchestrator_v3 | copilot_chat | admin | ✅ |
+| system_maintenance | maintenance_orchestrator | copilot_chat | admin | ✅ |
 | planning | planning_orchestrator | copilot_chat | user | ✅ |
 | ado_planning | ado_planning_orchestrator | copilot_chat | user | ✅ |
 | tdd | (internal - legacy) | internal | user | ⚠️ See note |
 | cleanup | cleanup_orchestrator | cli_wrapper | admin_only | ✅ |
 
-**Note on TDD:** The `tdd` operation in cortex-operations.yaml (line 868) is marked as `internal` and appears to be a legacy CLI entry. The actual TDD orchestrator (`TDDOrchestrator` v3.0.0) is wired through Planning System 3.0 integration and the `start tdd` command pattern.
+**Note on TDD:** The `tdd` operation in cortex-operations.yaml (line 868) is marked as `internal` and appears to be a legacy CLI entry. The actual TDD orchestrator (`TDDOrchestrator` v3.0.0) is wired through Planning System integration and the `start tdd` command pattern.
 
 **Missing from cortex-operations.yaml (by design):**
 - VacuumOrchestrator (internal helper, called by maintenance)
@@ -208,7 +208,7 @@ class VacuumOrchestrator:  # Not BaseOperationModule
 ```
 
 **Usage:**
-- Called by MaintenanceOrchestratorV3 during vacuum phase
+- Called by MaintenanceOrchestrator during vacuum phase
 - Called by PlanningOrchestrator during cleanup cycles
 - Not exposed to users directly
 
@@ -222,7 +222,7 @@ class VacuumOrchestrator:  # Not BaseOperationModule
 
 **Implementation Pattern:**
 ```python
-# MaintenanceOrchestratorV3 - Determines is_complete flag
+# MaintenanceOrchestrator - Determines is_complete flag
 all_phases_complete = (
     maintenance_context.tier == 3 and 
     len(maintenance_context.phases_completed) == len(maintenance_context.phases_to_run)
@@ -270,13 +270,13 @@ condition:
 
 ### 2. Clarify TDD Wiring (Priority: MEDIUM) 🔶
 
-**Issue:** TDD operation in cortex-operations.yaml (line 868) marked as `internal`, but TDDOrchestrator v3.0.0 is fully Planning System 3.0 integrated.
+**Issue:** TDD operation in cortex-operations.yaml (line 868) marked as `internal`, but TDDOrchestrator.0 is fully Planning System integrated.
 
 **Impact:** Potential confusion in routing logic.
 
 **Recommendation:**
 - Update cortex-operations.yaml TDD entry to `copilot_chat` execution method
-- OR remove legacy entry and document that TDD is accessed via Planning System 3.0
+- OR remove legacy entry and document that TDD is accessed via Planning System
 - Clarify in CORTEX.prompt.md how users invoke TDD workflows
 
 **Effort:** 1 hour
@@ -321,7 +321,7 @@ condition:
    - Validate test execution
 
 4. ✅ **ADO Planning:** Run `plan ado story` in Copilot Chat
-   - Verify Planning System 3.0 integration
+   - Verify Planning System integration
    - Confirm DoR/DoD compliance checks
    - Validate work item output format
 
@@ -345,7 +345,7 @@ condition:
 
 **Overall Assessment:** ✅ **PRODUCTION READY**
 
-All core orchestrators are properly integrated with Planning System 3.0 enhancements:
+All core orchestrators are properly integrated with Planning System enhancements:
 - ✅ BaseOperationModule inheritance (user-facing orchestrators)
 - ✅ Orchestration metrics collection (`@with_orchestration_metrics`)
 - ✅ Visual progress tracking (🎭 hints)

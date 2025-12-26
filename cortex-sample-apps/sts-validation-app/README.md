@@ -164,7 +164,7 @@ src/
 **Test:** Can CORTEX remove all 5 hardcoded secrets?
 **Expected:** 5/5 secrets sanitized, tests still pass
 
-### 2. Planning System 2.0
+### 2. Planning System
 **Test:** Can CORTEX detect HIGH complexity and create incremental plan?
 **Expected:** Complexity detected, 4-phase plan, DoR/DoD compliance
 
@@ -250,7 +250,7 @@ pytest tests/
 
 ### Week 3-4: Capabilities 1-4
 - ⏳ Code Sanitization validation
-- ⏳ Planning System 2.0 validation
+- ⏳ Planning System validation
 - ⏳ TDD Mastery validation
 - ⏳ System Maintenance validation
 

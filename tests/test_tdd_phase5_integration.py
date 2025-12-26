@@ -16,8 +16,8 @@ from pathlib import Path
 from unittest.mock import Mock, AsyncMock, MagicMock, patch
 from datetime import datetime
 
-from src.orchestrators.tdd.tdd_orchestrator_v4 import (
-    TDDOrchestratorV4,
+from src.orchestrators.tdd.tdd_orchestrator import (
+    TDDOrchestrator,
     TDDPhase,
     PhaseResult,
     ValidationResult
@@ -122,7 +122,7 @@ def mock_context_validator():
 def tdd_orchestrator(mock_brain, mock_kg, mock_mcp, mock_llm,
                      mock_multi_agent, mock_learning_engine, mock_context_validator):
     """Create TDD orchestrator with Phase 5 components"""
-    orchestrator = TDDOrchestratorV4(
+    orchestrator = TDDOrchestrator(
         brain_connector=mock_brain,
         knowledge_graph=mock_kg,
         mcp_gateway=mock_mcp,

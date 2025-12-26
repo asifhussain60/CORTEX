@@ -29,7 +29,7 @@
 - 🏗️ **Orchestrator Consolidation:** 28 → 13 orchestrators (46% reduction)
 - 🧠 **4-Tier Brain Architecture:** Sub-100ms memory access, pattern learning
 - 📝 **Manifest Consolidation:** 6,760 → 500 lines (93% reduction)
-- 🎯 **Planning System 2.0:** Auto-complexity detection, DoR/DoD compliance
+- 🎯 **Planning System:** Auto-complexity detection, DoR/DoD compliance
 - 🔄 **TDD Mastery v4.0:** RED→GREEN→REFACTOR enforcement
 - 🚀 **40% Productivity Gain:** From consolidated workflows
 - ✅ **98.3% Test Reliability:** From TDD-first approach
@@ -67,7 +67,7 @@ from src.orchestrators.maintenance_v2 import MaintenanceOrchestrator
 from src.orchestrators.base import BaseOrchestrator
 from src.orchestrators.planning import PlanningOrchestrator
 from src.orchestration_4_0.orchestrators.execution import ExecutionOrchestrator
-from src.operations.modules.orchestration import MaintenanceOrchestratorV3
+from src.operations.modules.orchestration import MaintenanceOrchestrator
 ```
 
 **Impact:** All orchestrators now inherit from `BaseOrchestrator` with standardized lifecycle.
@@ -121,7 +121,7 @@ working_memory.store_conversation(conversation_id, data)
 operations:
   planning:
     id: "PLANNING_SYSTEM_2_0"
-    name: "Planning System 2.0"
+    name: "Planning System"
     execution_method: "copilot_chat"
     complexity: "high"
     features:
@@ -472,13 +472,13 @@ result = generate_ado_plan(
 )
 
 # Output: Manifest with ADO-compatible formatting
-# - Inherits Planning System 2.0 (DoR/DoD/TDD)
+# - Inherits Planning System (DoR/DoD/TDD)
 # - Adds ADO-specific output format
 # - Work item hierarchy (Epic → Feature → Story → Task)
 ```
 
 **Manifest:** `ado-planning-manifest.yaml`
-- Inherits: `planning-system-2.0-manifest.yaml`
+- Inherits: `planning-system-manifest.yaml`
 - Adds: ADO formatting rules
 
 ---
@@ -525,7 +525,7 @@ User: "system maintenance"
 ```
 
 **Engagement Hints:**
-- `🎭 Orchestrator engaged: MaintenanceOrchestratorV3`
+- `🎭 Orchestrator engaged: MaintenanceOrchestrator`
 - `🎭 Phase transition: HEALTHCHECK → ALIGN`
 - `🎭 Orchestrator completing: ✅ ALL WORK COMPLETE`
 
@@ -806,7 +806,7 @@ Use this checklist to track migration progress:
   - [ ] Manifest consolidated to `cortex-operations.yaml`
 
 - [ ] **Feature Migrations**
-  - [ ] Planning System 2.0 integrated
+  - [ ] Planning System integrated
   - [ ] TDD workflow enforced (RED→GREEN→REFACTOR)
   - [ ] Execution modes configured
   - [ ] ADO operations enabled (if applicable)

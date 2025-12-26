@@ -1,4 +1,4 @@
-# Planning System 2.0 Orchestrator Architecture Completion Report
+# Planning System Orchestrator Architecture Completion Report
 
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX  
 **Date:** December 22, 2025  
@@ -9,7 +9,7 @@
 
 ## 🎯 Executive Summary
 
-**Objective:** Document Planning System 2.0 Orchestrator architecture with comprehensive diagrams and implementation details
+**Objective:** Document Planning System Orchestrator architecture with comprehensive diagrams and implementation details
 
 **Outcome:** ✅ 1,200+ line architecture document complete with 2 Mermaid diagrams, 6 component breakdowns, and complete workflow documentation
 
@@ -127,11 +127,11 @@ complexity_score = (
 **Example Inheritance:**
 ```yaml
 # File: ado-planning-manifest.yaml
-inherits_from: "planning-system-2.0-manifest.yaml"
+inherits_from: "planning-system-manifest.yaml"
 
 phases:
   - phase_name: "DISCOVERY"
-    inherited_from: "planning-system-2.0"  # Reuse parent
+    inherited_from: "planning-system"  # Reuse parent
   
   - phase_name: "GENERATION"
     tasks:  # Override with ADO-specific tasks
@@ -198,9 +198,9 @@ phases:
 
 ---
 
-## 🎯 Planning System 2.0 vs Legacy
+## 🎯 Planning System vs Legacy
 
-| Feature | Legacy | Planning System 2.0 | Improvement |
+| Feature | Legacy | Planning System | Improvement |
 |---------|--------|---------------------|-------------|
 | **Complexity Analysis** | Manual | Automatic 4-tier | ✅ 100% automated |
 | **Plan Types** | 1 (fixed) | 3 (adaptive) | ✅ 3× flexibility |
@@ -266,9 +266,9 @@ phases:
 7. **Smart Plan Loader v2.0** - Inheritance + discovery
 8. **Markdown Renderer** - Progress visualization
 9. **Complete Planning Workflow** - Sequence diagram
-10. **Planning System 2.0 vs Legacy** - Comparison table
+10. **Planning System vs Legacy** - Comparison table
 11. **Testing Strategy** - 138 tests breakdown
-12. **Planning System 2.0 Manifest Compliance** - Requirements checklist
+12. **Planning System Manifest Compliance** - Requirements checklist
 
 ---
 
@@ -331,7 +331,7 @@ phases:
 **Implementation:**
 - `src/orchestrators/planning/README.md` - Setup guide
 - `tests/orchestrators/planning/README.md` - Test execution
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - Schema definition
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` - Schema definition
 
 **Reports:**
 - `cortex-brain/documents/reports/planning-system-core-mvp-completion.md` - Task 6.4

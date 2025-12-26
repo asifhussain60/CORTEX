@@ -1809,12 +1809,12 @@ protection_layers:
       .no-scroll { overflow: hidden; }
       ```
       
-      REFACTOR PHASE INTEGRATION (Planning System 2.0):
+      REFACTOR PHASE INTEGRATION (Planning System):
       
       This rule MUST be validated during REFACTOR phase:
       
       ```yaml
-      # Planning System 2.0 REFACTOR Phase Checklist
+      # Planning System REFACTOR Phase Checklist
       refactor_validations:
         - orphaned_code_removal     # REFACTOR_CODE_CLEANUP_ENFORCEMENT
         - duplicate_detection       # HOLISTIC_CODE_DISCOVERY_ENFORCEMENT
@@ -1935,7 +1935,7 @@ protection_layers:
       
       ENFORCEMENT IN PLANNING SYSTEM 2.0:
       
-      The REFACTOR phase in Planning System 2.0 MUST include CSS centralization check:
+      The REFACTOR phase in Planning System MUST include CSS centralization check:
       
       ```python
       # src/orchestrators/planning_system_2.py
@@ -2043,7 +2043,7 @@ protection_layers:
       Result: Centralized, reusable, themeable, maintainable
       
       This rule ensures CORTEX generates maintainable, professional frontend code.
-    rationale: "INLINE_CSS_PROHIBITION: Professional Frontend Architecture\n\n- Inline CSS creates maintenance nightmares (scattered styles)\n- Centralized CSS enables reusability (define once, use everywhere)\n- Browser caching improves performance (CSS files cached)\n- Theming/accessibility require centralized control (dark mode, responsive)\n- Planning System 2.0 REFACTOR phase validates migration\n\nImplementation: REFACTOR phase grep validation + CSS extraction workflow\n"
+    rationale: "INLINE_CSS_PROHIBITION: Professional Frontend Architecture\n\n- Inline CSS creates maintenance nightmares (scattered styles)\n- Centralized CSS enables reusability (define once, use everywhere)\n- Browser caching improves performance (CSS files cached)\n- Theming/accessibility require centralized control (dark mode, responsive)\n- Planning System REFACTOR phase validates migration\n\nImplementation: REFACTOR phase grep validation + CSS extraction workflow\n"
   - rule_id: AUTONOMOUS_EXECUTION_PROTECTION
     name: Autonomous Execution Protection
     severity: blocked
@@ -2263,7 +2263,7 @@ protection_layers:
       OPTIMIZATION TECHNIQUES:
       
       1. **Reference Instead of Repeat:**
-         ❌ "Planning System 2.0 is a 7-phase workflow that includes..."
+         ❌ "Planning System is a 7-phase workflow that includes..."
          ✅ "See: planning-orchestrator-guide.md"
       
       2. **Concise Formatting:**
@@ -2282,7 +2282,7 @@ protection_layers:
       
       Before (500 tokens):
       ```
-      Planning System 2.0 is a comprehensive planning orchestrator 
+      Planning System is a comprehensive planning orchestrator 
       that guides feature development through 7 phases: Discovery, 
       Architecture, Planning, Implementation (RED/GREEN/REFACTOR), 
       Validation, Documentation, and Review. Each phase has specific 
@@ -2291,7 +2291,7 @@ protection_layers:
       
       After (50 tokens):
       ```
-      Executing Planning System 2.0 (7 phases)
+      Executing Planning System (7 phases)
       Guide: cortex-brain/documents/implementation-guides/planning-orchestrator-guide.md
       ```
       
@@ -2319,7 +2319,7 @@ protection_layers:
     name: Git Checkpoint Phase Protection
     severity: blocked
     minimum_coverage: 100
-    description: "Each phase completion in Planning System 2.0 MUST create git checkpoint. No progression to next phase without checkpoint."
+    description: "Each phase completion in Planning System MUST create git checkpoint. No progression to next phase without checkpoint."
     test_requirements:
     - test_git_checkpoint_after_phase
     - test_progression_blocked_without_checkpoint
@@ -4331,10 +4331,10 @@ validation:
     has_placeholders: true
     has_options: true
 
-# Layer 11: Planning System 3.0 Governance
+# Layer 11: Planning System Governance
 - layer_id: "planning_system_3_governance"
-  name: "Planning System 3.0 Governance"
-  description: "Governance rules for Planning System 3.0 - File organization, tiered planning, vacuum cycles, incremental creation"
+  name: "Planning System Governance"
+  description: "Governance rules for Planning System - File organization, tiered planning, vacuum cycles, incremental creation"
   priority: 11
   
   rules:
@@ -4803,7 +4803,7 @@ validation:
     - rule_id: "AUTOMATIC_DOCUMENTATION_GENERATION"
       name: "Automatic Documentation Generation"
       severity: "blocked"
-      description: "Planning System 3.0 MUST automatically insert a final documentation phase for all Tier 3/4 plans. Documentation includes: context, design architecture, implementation explanation (learning aid), test coverage, research/analysis work."
+      description: "Planning System MUST automatically insert a final documentation phase for all Tier 3/4 plans. Documentation includes: context, design architecture, implementation explanation (learning aid), test coverage, research/analysis work."
       
       detection:
         combined_keywords:
@@ -4886,7 +4886,7 @@ validation:
         - Learning opportunities missed
         
         Solution: Automatic final phase
-        - Planning System 3.0 auto-inserts documentation phase
+        - Planning System auto-inserts documentation phase
         - Tier 3/4 plans always include docs
         - Enforced folder structure in learning library
         - Learning aids (implementation guides)
@@ -5445,10 +5445,10 @@ validation:
         - Faster initial development
         - Lower maintenance cost
 
-# Layer 12: Planning System 3.0 Governance
+# Layer 12: Planning System Governance
 - layer_id: "planning_system_4_governance"
-  name: "Planning System 3.0 Governance"
-  description: "Governance rules for Planning System 3.0 - Temp plan approval, plan promotion integrity, task injection, context continuity"
+  name: "Planning System Governance"
+  description: "Governance rules for Planning System - Temp plan approval, plan promotion integrity, task injection, context continuity"
   priority: 12
   
   rules:

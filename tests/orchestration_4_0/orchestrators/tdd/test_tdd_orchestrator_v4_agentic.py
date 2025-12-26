@@ -1,5 +1,5 @@
 """
-Test Suite for TDD Orchestrator v4.2 Agentic Enhancements
+Test Suite for TDD Orchestrator Agentic Enhancements
 
 Phase 6 Task 6.10: Test agentic AI integration
 - Multi-agent parallel test generation
@@ -17,8 +17,8 @@ from typing import Dict, Any, List
 from datetime import datetime
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
-from src.orchestrators.tdd.tdd_orchestrator_v4_migrated import (
-    TDDOrchestratorV4,
+from src.orchestrators.tdd.tdd_orchestrator_migrated import (
+    TDDOrchestrator,
     TDDPhase,
     TechnologyProfile,
     ValidationResult,
@@ -63,7 +63,7 @@ def tech_profile():
 @pytest.fixture
 def tdd_orchestrator(mock_dependencies):
     """Create TDD orchestrator with agentic enhancements enabled."""
-    return TDDOrchestratorV4(
+    return TDDOrchestrator(
         brain_connector=mock_dependencies['brain_connector'],
         knowledge_graph=mock_dependencies['knowledge_graph'],
         mcp_gateway=mock_dependencies['mcp_gateway'],
@@ -79,7 +79,7 @@ def tdd_orchestrator(mock_dependencies):
 @pytest.fixture
 def tdd_orchestrator_no_agentic(mock_dependencies):
     """Create TDD orchestrator with agentic features disabled."""
-    return TDDOrchestratorV4(
+    return TDDOrchestrator(
         brain_connector=mock_dependencies['brain_connector'],
         knowledge_graph=mock_dependencies['knowledge_graph'],
         mcp_gateway=mock_dependencies['mcp_gateway'],
@@ -696,7 +696,7 @@ def test_orchestrator_metrics_tracking():
         'mcp_gateway': Mock()
     }
     
-    orchestrator = TDDOrchestratorV4(**mock_deps)
+    orchestrator = TDDOrchestrator(**mock_deps)
     
     assert 'multi_agent_executions' in orchestrator.metrics
     assert 'learning_recommendations' in orchestrator.metrics

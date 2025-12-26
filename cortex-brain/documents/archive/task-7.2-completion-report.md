@@ -141,7 +141,7 @@ categories:
         max_function_complexity: 30  # Override
 
 orchestrator_overrides:
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     refactoring:
       enforcement_level: "strict"
 ```
@@ -236,14 +236,14 @@ child:
 
 ```python
 # ManifestInheritanceResolver detects circular inheritance
-# Example: planning_orchestrator → tdd_orchestrator_v4 → planning_orchestrator
+# Example: planning_orchestrator → tdd_orchestrator → planning_orchestrator
 
 resolver = ManifestInheritanceResolver(base_dir)
 try:
     resolved = resolver.resolve("planning_orchestrator")
 except ValueError as e:
     print(f"Circular dependency: {e}")
-    # Output: "Circular inheritance detected: planning_orchestrator → tdd_orchestrator_v4 → planning_orchestrator"
+    # Output: "Circular inheritance detected: planning_orchestrator → tdd_orchestrator → planning_orchestrator"
 ```
 
 ---

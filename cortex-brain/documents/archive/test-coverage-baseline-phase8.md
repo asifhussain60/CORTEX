@@ -70,8 +70,8 @@
 
 | Orchestrator | Coverage | Target | Gap | Priority |
 |--------------|----------|--------|-----|----------|
-| `tdd_orchestrator_v4.py` | 88.62% | 98% | 9.38% | 🟡 MEDIUM |
-| `tdd_orchestrator_v4_migrated.py` | 69.26% | 98% | 28.74% | 🔴 HIGH |
+| `tdd_orchestrator.py` | 88.62% | 98% | 9.38% | 🟡 MEDIUM |
+| `tdd_orchestrator_migrated.py` | 69.26% | 98% | 28.74% | 🔴 HIGH |
 | `sanitization_orchestrator.py` | 86.59% | 95% | 8.41% | 🟡 MEDIUM |
 | `sanitization_orchestrator_v2_migrated.py` | 77.03% | 95% | 17.97% | 🔴 HIGH |
 | `planning_orchestrator.py` | 30.62% | 97% | **66.38%** | 🔴 **CRITICAL** |

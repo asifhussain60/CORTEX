@@ -88,7 +88,7 @@ ready_but_inactive:
     approval_gate: yes (with preview and modification loop)
     accessibility_gap: |
       Users invoke "plan ado story" but get routed to legacy orchestrator.
-      ADOOrchestrator with full Planning System 2.0 parity never invoked.
+      ADOOrchestrator with full Planning System parity never invoked.
       Missing: ADOAgent.execute() should instantiate ADOOrchestrator
     remediation_steps:
       - Update src/cortex_agents/ado_agent.py line 50-60
@@ -153,8 +153,8 @@ ready_but_inactive:
       - Register in cortex-operations.yaml with copilot_chat execution method
       - Test: "sanitize C:\Projects\MyApp" → SanitizationOrchestrator.execute()
   
-  - orchestrator: TDDOrchestratorV4 (migrated)
-    location: src/orchestrators/tdd/tdd_orchestrator_v4_migrated.py
+  - orchestrator: TDDOrchestrator (migrated)
+    location: src/orchestrators/tdd/tdd_orchestrator_migrated.py
     implementation: complete
     lines_of_code: 475
     tests: yes
@@ -175,9 +175,9 @@ ready_but_inactive:
       - "run tests"
       - "generate test skeleton"
     activation_blocker: |
-      tdd.py wrapper imports tdd_utility, NOT TDDOrchestratorV4.
+      tdd.py wrapper imports tdd_utility, NOT TDDOrchestrator.
       Migrated orchestrator (BaseOrchestrator integration) not invoked.
-      Legacy tdd_orchestrator_v4.py (536 LOC) still exists alongside migrated version.
+      Legacy tdd_orchestrator.py (536 LOC) still exists alongside migrated version.
     base_orchestrator_integration: yes
     inherits_from: BaseOrchestrator
     migration_status: complete (v4.1.0)
@@ -190,13 +190,13 @@ ready_but_inactive:
       tdd_utility.py bypasses orchestrator phases.
       Users get utility functions, not full TDD orchestration.
     dual_implementation_issue: yes
-    legacy_location: src/orchestrators/tdd/tdd_orchestrator_v4.py (536 LOC)
+    legacy_location: src/orchestrators/tdd/tdd_orchestrator.py (536 LOC)
     remediation_steps:
-      - Update src/operations/tdd.py to import TDDOrchestratorV4 (migrated)
+      - Update src/operations/tdd.py to import TDDOrchestrator (migrated)
       - Replace utility calls with orchestrator.execute()
-      - Deprecate legacy tdd_orchestrator_v4.py
+      - Deprecate legacy tdd_orchestrator.py
       - Update natural language routing to use migrated orchestrator
-      - Test: "start tdd" → TDDOrchestratorV4 phases
+      - Test: "start tdd" → TDDOrchestrator phases
   
   - orchestrator: StoryEnhancementOrchestrator
     location: src/orchestrators/story_enhancement/story_enhancement_orchestrator.py
@@ -344,7 +344,7 @@ summary:
     - "PlanningOrchestrator: 793 LOC, tested, but CLI bypasses orchestrator phases"
     - "ADOOrchestrator: 1945 LOC, 8 tests, but agent routes to wrong orchestrator"
     - "SanitizationOrchestrator: 519 LOC, 10 tests, ZERO integration (most ready-but-inactive)"
-    - "TDDOrchestratorV4: Migrated to BaseOrchestrator but legacy version still in use"
+    - "TDDOrchestrator: Migrated to BaseOrchestrator but legacy version still in use"
     - "GitCheckpointOrchestrator: Stub only, but used by multiple orchestrators"
     - "GitSyncAndOptimizeOrchestrator: 801 LOC complete, no user access"
   
@@ -353,7 +353,7 @@ summary:
       - PlanningOrchestrator
       - ADOOrchestrator
       - SanitizationOrchestrator
-      - TDDOrchestratorV4 (migrated)
+      - TDDOrchestrator (migrated)
       - AutonomousExecutionEngine
     not_using_base_orchestrator:
       - StoryEnhancementOrchestrator (internal tool)
@@ -392,7 +392,7 @@ summary:
         value: "High (core planning feature)"
     
     medium_priority:
-      - orchestrator: TDDOrchestratorV4
+      - orchestrator: TDDOrchestrator
         reason: "Migrated but legacy still in use"
         effort: "2-3 hours (deprecate legacy, update routing)"
         value: "Medium (TDD workflow already accessible via utility)"
@@ -423,7 +423,7 @@ recommendations:
   strategic_actions:
     - "Audit all cortex-operations.yaml registrations for orchestrator vs utility routing"
     - "Create standard pattern: orchestrator wrapper → agent → natural language registration"
-    - "Deprecate dual implementations (TDDOrchestratorV4 legacy vs migrated)"
+    - "Deprecate dual implementations (TDDOrchestrator legacy vs migrated)"
     - "Document BaseOrchestrator adoption guidelines for future orchestrators"
   
   architectural_improvements:

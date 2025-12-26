@@ -173,7 +173,7 @@ Showcases CORTEX capabilities through hands-on walkthrough.
 **What's Demonstrated:**
 - ✅ Natural language interface (no slash commands)
 - ✅ Story transformation with narrator AI
-- ✅ Planning System 2.0 (DoR/DoD validation)
+- ✅ Planning System (DoR/DoD validation)
 - ✅ Token optimization (massive cost savings)
 - ✅ Code review capabilities
 - ✅ Conversation memory system (Tier 1)

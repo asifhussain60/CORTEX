@@ -38,7 +38,7 @@ Integrate TDD Orchestrator with tiered system for intelligent RED→GREEN→REFA
 - ✅ Enhanced RED phase validation (tests must fail before implementation)
 - ✅ AST-powered test gap detection
 - ✅ Version synchronization from cortex.config.json
-- ✅ Integration with Planning System 3.0 patterns
+- ✅ Integration with Planning System patterns
 - ✅ 100% test coverage with all tests passing
 
 ---
@@ -148,7 +148,7 @@ def __init__(self, project_root: Path = None):
 
 **Logger Hints:**
 ```python
-logger.info("🎭 Orchestrator engaged: TDDOrchestrator v3.0")
+logger.info("🎭 Orchestrator engaged: TDDOrchestrator")
 logger.info("🎭 Phase transition: RED → GREEN")
 logger.info("🎭 Phase transition: GREEN → REFACTOR")
 logger.info("🎭 Orchestrator completing: ✅ ALL WORK COMPLETE")
@@ -198,7 +198,7 @@ is_complete = (
 **Upon Completion:**
 1. Phase 06: Maintenance Orchestrator 3.0
 2. Phase 08: AST Engine Wrapper (full integration)
-3. Phase 16: Integration testing with Planning System 3.0
+3. Phase 16: Integration testing with Planning System
 
 **Integration Points:**
 - TieredRouter for TDD operation classification

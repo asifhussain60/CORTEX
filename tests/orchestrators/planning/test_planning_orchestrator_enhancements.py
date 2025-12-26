@@ -7,7 +7,7 @@ Tests for Phase 13 Optional Enhancements:
 
 Total: 10 tests
 
-Author: CORTEX Planning System 2.0
+Author: CORTEX Planning System
 Version: 4.0.0
 """
 

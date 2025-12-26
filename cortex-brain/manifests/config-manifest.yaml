@@ -605,7 +605,7 @@ orchestrator_overrides:
       execution:
         timeout: 600
   
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     refactoring:
       enabled: true
       enforcement_level: "strict"  # Block on violations

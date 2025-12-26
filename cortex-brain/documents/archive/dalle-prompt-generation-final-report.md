@@ -35,7 +35,7 @@ All image filenames now known BEFORE Phase 2 content generation begins. Zero bac
 | Chapter 8 | 1 | Windows vs Mac path chaos |
 | Chapter 9 | 2 | Maintenance orchestrator, alignment auto-fix |
 | Chapter 10 | 2 | Personality emergence, first real demo |
-| Chapter 11 | 2 | Beautiful documentation, Planning System 2.0 vision |
+| Chapter 11 | 2 | Beautiful documentation, Planning System vision |
 | Epilogue | 1 | Where are they now |
 | **TOTAL** | **24** | **Complete narrative coverage** |
 
@@ -57,8 +57,8 @@ All image filenames now known BEFORE Phase 2 content generation begins. Zero bac
 - Technical diagram + Key moment
 - Educates on test-first development
 
-✅ **Planning System 2.0** (Chapter 11)
-- 1 prompt: Planning System 2.0 vision whiteboard
+✅ **Planning System** (Chapter 11)
+- 1 prompt: Planning System vision whiteboard
 - Technical diagram showing DoR/DoD gates, TDD integration, ADO compatibility
 - Roadmap visual
 

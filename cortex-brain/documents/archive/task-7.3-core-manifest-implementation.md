@@ -48,7 +48,7 @@
 3. **ado_orchestrator** v2.1.0 - Azure DevOps integration for work item generation
 
 ### TDD Orchestrators (1)
-4. **tdd_orchestrator_v4** v4.0.0 - Unified TDD with RED→GREEN→REFACTOR enforcement
+4. **tdd_orchestrator** v4.0.0 - Unified TDD with RED→GREEN→REFACTOR enforcement
 
 ### Execution Orchestrators (4)
 5. **sanitization_orchestrator** v2.0.1 - 5-phase code sanitization workflow
@@ -168,7 +168,7 @@ print(resolved["integrations"])
 planning_orchestrators = loader.list_orchestrators(category="planning")
 
 # Get orchestrator config with defaults
-config = loader.get_orchestrator_config("tdd_orchestrator_v4")
+config = loader.get_orchestrator_config("tdd_orchestrator")
 
 # Check manifest stats
 stats = loader.get_manifest_stats()

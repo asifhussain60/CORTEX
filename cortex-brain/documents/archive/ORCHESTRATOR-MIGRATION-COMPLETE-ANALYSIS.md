@@ -172,7 +172,7 @@ This document originally tracked orchestrator analysis for migration planning. T
 
 #### Phase 6: planning_orchestrator.py 🔥 CRITICAL - USER
 - **Size:** 112KB (largest orchestrator - potential code duplication)
-- **Purpose:** USER - Interactive feature planning with DoR/DoD validation (Planning System 2.0)
+- **Purpose:** USER - Interactive feature planning with DoR/DoD validation (Planning System)
 - **User Commands:** `plan [feature]`, `plan ado`, `approve plan`, `resume plan [name]`
 - **Guide:** .github/prompts/modules/planning-orchestrator-guide.md (1133 lines)
 - **TDD Integration:** Zero-ambiguity requirements before TDD cycle, Vision API screenshot analysis
@@ -349,7 +349,7 @@ This document originally tracked orchestrator analysis for migration planning. T
 **Priority:** 🔥 CRITICAL (USER - feature planning before TDD cycle)
 
 **Investigation Steps:**
-1. ✅ Verify Planning System 2.0 guide exists (1133 lines in .github/prompts/modules/)
+1. ✅ Verify Planning System guide exists (1133 lines in .github/prompts/modules/)
 2. Profile planning workflow: With Vision API vs without
 3. Identify bottlenecks: Vision API (5-10s), file operations, DoR/DoD validation, ADO calls
 4. **CRITICAL:** Check for code duplication (112KB is red flag - largest orchestrator)
@@ -718,7 +718,7 @@ CORTEX lacks a dedicated **API Enhancement Orchestrator** despite having special
 
 ---
 
-## 🎯 Phase 10: Intelligent Maintenance System (Align Orchestrator v2.0)
+## 🎯 Phase 10: Intelligent Maintenance System (Align Orchestrator)
 
 **Date:** December 3, 2025  
 **Status:** 📋 PLANNING COMPLETE - Ready for Implementation  

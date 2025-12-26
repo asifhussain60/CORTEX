@@ -98,7 +98,7 @@ pytest tests/tier3/test_context_intelligence.py -v
 1. **response-format.md** (~120 lines): Mandatory 5-part response structure, challenge rules, Next Steps formatting (simple/complex/parallel), critical formatting rules, validation checklist
 2. **template-system.md** (~150 lines): Template trigger detection logic, planning detection (PRIORITY triggers), contextual intelligence table (work type → response focus), integration examples
 3. **document-organization.md** (~90 lines): Mandatory folder structure rules, category table (7 categories), examples (correct vs incorrect paths), enforcement rules
-4. **planning-system.md** (~150 lines): Planning System 2.0, file-based workflow, .gitignore configuration, backup & sync strategy, unified planning core (DRY principle)
+4. **planning-system.md** (~150 lines): Planning System, file-based workflow, .gitignore configuration, backup & sync strategy, unified planning core (DRY principle)
 5. All modules reference existing documentation via #file: directives
 
 ### Entry Point Structure

@@ -75,7 +75,7 @@ generate_ra_specs:
 ```yaml
 realign_plans:
   name: Realign Plans
-  description: Migrate plans to Planning System 3.0 canonical structure
+  description: Migrate plans to Planning System canonical structure
   deployment_tier: admin
   execution_method: cli_wrapper
   cli_script: scripts/cli_wrappers/realign_plans_wrapper.py
@@ -274,7 +274,7 @@ TIER 2 KNOWLEDGE GRAPH:
 OPERATIONS REGISTRY:
 - Register 3 missing CLI wrappers:
   - generate_ra_specs (RA API spec generation)
-  - realign_plans (Planning System 3.0 migration)
+  - realign_plans (Planning System migration)
   - cleanup_plans (Automated plan lifecycle)
 - CLI operations: 13/16 → 16/16 (100% registered)
 - Total operations: 302 → 305

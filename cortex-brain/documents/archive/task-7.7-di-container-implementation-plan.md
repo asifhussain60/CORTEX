@@ -56,8 +56,8 @@ class BaseOrchestrator(ABC):
 **CRITICAL Priority (Package 1):**
 1. `ExecutionOrchestrator` - Core execution engine
 2. `BaseOrchestrator` (both versions) - Foundation class
-3. `TDDOrchestratorV4` - Test-driven development
-4. `PlanningOrchestrator` - Planning System 2.0
+3. `TDDOrchestrator` - Test-driven development
+4. `PlanningOrchestrator` - Planning System
 
 **HIGH Priority (Package 2):**
 5. `DocumentationOrchestrator` - Self-documentation

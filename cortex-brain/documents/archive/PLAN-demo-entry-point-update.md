@@ -93,7 +93,7 @@ Update the demo entry point module documentation to reflect CORTEX's enhanced ca
 
 ---
 
-### 4. **Planning System 2.0 (Planned)**
+### 4. **Planning System (Planned)**
 - **Vision API Integration** - Auto-extract from screenshots
 - **File-Based Workflow** - Persistent `.md` files (git-trackable)
 - **Unified Core** - ADO/Feature/Vision planning share 80% code

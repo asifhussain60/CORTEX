@@ -82,7 +82,7 @@ Orchestrates all TDD validation checks and returns consolidated results:
 - ✅ PageTracker for progress checkpointing
 - ✅ `save_progress()` method implemented
 - ✅ `resume_session()` method implemented
-- ✅ Planning System 2.0 incremental phases (skeleton → Phase 1 → Phase 2 → Phase 3)
+- ✅ Planning System incremental phases (skeleton → Phase 1 → Phase 2 → Phase 3)
 
 **Severity Levels:**
 - CRITICAL: Missing git checkpoint system
@@ -125,7 +125,7 @@ Orchestrates all TDD validation checks and returns consolidated results:
 
 **Expected Issues (to be validated on next run):**
 - Potential warning if `save_progress()` or `resume_session()` methods not implemented
-- Potential warning if Planning System 2.0 missing incremental phase structure
+- Potential warning if Planning System missing incremental phase structure
 
 ---
 

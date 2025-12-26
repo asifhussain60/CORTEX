@@ -1,4 +1,4 @@
-# 🎯 CORTEX Planning System 3.0 - Complete Guide
+# 🎯 CORTEX Planning System - Complete Guide
 
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX  
 **Version:** 4.0.0  
@@ -21,7 +21,7 @@
 
 ## 🎯 Overview
 
-CORTEX Planning System 3.0 is a comprehensive planning orchestration system that enforces:
+CORTEX Planning System is a comprehensive planning orchestration system that enforces:
 
 - **Iterative Refinement:** Back-and-forth dialogue until Definition of Ready (DoR) satisfied
 - **Mutual Agreement:** Both CORTEX and user must agree before execution begins
@@ -128,7 +128,7 @@ Before approving a plan, verify:
 ### Architecture Components
 
 ```
-Planning System 3.0
+Planning System
 ├── PlanningGate (request triage)
 ├── TemporaryPlanManager (refinement loop)
 ├── SessionContextManager (automatic context)
@@ -520,7 +520,7 @@ cortex audit --export csv --output report.csv
 
 ## 🛡️ SKULL Enforcement
 
-The following governance rules protect Planning System 3.0:
+The following governance rules protect Planning System:
 
 ### TEMP_PLAN_APPROVAL_ENFORCEMENT
 - **Severity:** BLOCKED

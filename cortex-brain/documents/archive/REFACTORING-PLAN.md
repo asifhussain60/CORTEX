@@ -814,7 +814,7 @@ Alternatively, execute phase-by-phase:
 
 ## 📝 Notes
 
-- This plan uses CORTEX Planning System 2.0 with autonomous execution support
+- This plan uses CORTEX Planning System with autonomous execution support
 - TDD requirements are automatically enforced by Brain Protector (SKULL)
 - Documentation is auto-generated at phase boundaries
 - Git checkpoints ensure rollback capability

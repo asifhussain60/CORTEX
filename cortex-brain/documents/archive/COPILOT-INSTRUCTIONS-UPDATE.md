@@ -48,7 +48,7 @@ Updated `.github/copilot-instructions.md` to align with authoritative `CORTEX.pr
 **Why Critical:** Helps AI agents understand core CORTEX capabilities quickly
 
 **Added:**
-- Planning System 2.0 (Vision API, file-based, DoR/DoD)
+- Planning System (Vision API, file-based, DoR/DoD)
 - TDD Mastery (RED→GREEN→REFACTOR automation)
 - Hands-On Tutorial (interactive learning program)
 - View Discovery (auto-extract element IDs)

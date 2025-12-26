@@ -169,7 +169,7 @@
 ### Immediate (Next Session)
 1. **Start Task 6.10 Implementation (Supervised)**
    - Use multi-agent framework completed in this session
-   - Integrate with TDDOrchestrator v4.0
+   - Integrate with TDDOrchestrator
    - Implement LLM-as-judge test quality evaluation
    - Estimated: 1 week supervised work
 

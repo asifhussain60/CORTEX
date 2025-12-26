@@ -27,7 +27,7 @@
 
 | Component | Current | Target | Gap | Priority | File |
 |-----------|---------|--------|-----|----------|------|
-| **TDD Orchestrator v4** | 88.62% | 95% | +6.38% | P0-1 | `src/orchestrators/tdd/tdd_orchestrator_v4.py` |
+| **TDD Orchestrator v4** | 88.62% | 95% | +6.38% | P0-1 | `src/orchestrators/tdd/tdd_orchestrator.py` |
 | **ADO Orchestrator** | 91.44% | 95% | +3.56% | P0-2 | `src/orchestrators/ado/ado_orchestrator.py` |
 | **Sanitization Orchestrator v2** | 76.47% | 95% | +18.53% | P0-3 | `src/orchestrators/sanitization/sanitization_orchestrator_v2_migrated.py` |
 | **Planning Orchestrator** | 30.62% | 95% | **+64.38%** | P0-4 | `src/orchestrators/planning/planning_orchestrator.py` |
@@ -206,7 +206,7 @@
 ## 🚨 High-Risk Gaps (Require Immediate Attention)
 
 ### 1. Planning Orchestrator (30.62%)
-**Risk:** Core workflow orchestration - affects ALL Planning System 2.0 features
+**Risk:** Core workflow orchestration - affects ALL Planning System features
 **Impact:** HIGH - blocks feature implementation tracking
 **Untested:** Phase transitions, checkpoints, error recovery
 

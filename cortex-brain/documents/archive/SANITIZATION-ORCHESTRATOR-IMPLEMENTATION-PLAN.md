@@ -21,7 +21,7 @@
 - ✅ 25+ tests passing (RED→GREEN→REFACTOR)
 - ✅ 5-phase workflow operational
 - ✅ CLI integration validated
-- ✅ Planning System 2.0 compliance (DoR/DoD)
+- ✅ Planning System compliance (DoR/DoD)
 - ✅ Completion report generated
 
 ---
@@ -228,7 +228,7 @@ def test_dry_run_workflow()
 - [ ] Completion report generated (follow ADO template)
 
 ### Compliance
-- [ ] Planning System 2.0 DoR/DoD validated
+- [ ] Planning System DoR/DoD validated
 - [ ] SKULL rules enforced (TDD, code discovery, git isolation)
 - [ ] Brain protection validated
 - [ ] Status file updated

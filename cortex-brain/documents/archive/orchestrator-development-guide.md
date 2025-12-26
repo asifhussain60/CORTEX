@@ -739,7 +739,7 @@ print(result)
 ## Example: Full Orchestrator Implementation
 
 See reference implementations:
-- **Planning System 2.0:** `src/orchestrators/planning_orchestrator.py` (2852 lines, full-featured)
+- **Planning System:** `src/orchestrators/planning_orchestrator.py` (2852 lines, full-featured)
 - **TDD Mastery:** `src/orchestrators/tdd_implementation_orchestrator.py` (197 lines, state machine)
 - **Cleanup:** `src/operations/modules/orchestration/cleanup_orchestrator.py` (50 lines, simple)
 

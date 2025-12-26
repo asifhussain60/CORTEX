@@ -260,7 +260,7 @@ pytest tests/test_tdd_orchestrator.py -v --tb=short
 ### Planned Extensions
 
 1. **Planning Orchestrator Validation**
-   - Extend Gate 17 to validate Planning System 2.0
+   - Extend Gate 17 to validate Planning System
    - Ensure Vision API and DoR/DoD workflows operational
 
 2. **Code Review Orchestrator**

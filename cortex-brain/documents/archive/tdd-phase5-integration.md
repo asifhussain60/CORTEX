@@ -9,7 +9,7 @@
 
 ## 📋 Overview
 
-This guide documents the successful integration of Phase 5 components (MultiAgentOrchestrator, AgentLearningEngine, ContextValidator) into TDD Orchestrator v4.0. The integration enables multi-agent collaboration, learning from execution patterns, and intelligent context validation.
+This guide documents the successful integration of Phase 5 components (MultiAgentOrchestrator, AgentLearningEngine, ContextValidator) into TDD Orchestrator. The integration enables multi-agent collaboration, learning from execution patterns, and intelligent context validation.
 
 ---
 
@@ -32,7 +32,7 @@ This guide documents the successful integration of Phase 5 components (MultiAgen
 ### Component Integration Points
 
 ```
-TDDOrchestratorV4
+TDDOrchestrator
 ├── Phase 5 Components
 │   ├── multi_agent_orchestrator: MultiAgentOrchestrator
 │   ├── learning_engine: AgentLearningEngine
@@ -283,11 +283,11 @@ print(f"Auto-Retrievals: {metrics['auto_retrievals']}")
 ### Example 1: Basic TDD Cycle with Phase 5
 
 ```python
-from src.orchestrators.tdd.tdd_orchestrator_v4 import TDDOrchestratorV4
+from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
 from pathlib import Path
 
 # Initialize orchestrator (Phase 5 components auto-initialized)
-orchestrator = TDDOrchestratorV4(
+orchestrator = TDDOrchestrator(
     brain_connector=brain,
     knowledge_graph=kg,
     mcp_gateway=mcp,
@@ -323,7 +323,7 @@ custom_learning = AgentLearningEngine(knowledge_graph=kg)
 custom_validator = ContextValidator(knowledge_graph=kg)
 
 # Inject into orchestrator
-orchestrator = TDDOrchestratorV4(
+orchestrator = TDDOrchestrator(
     brain_connector=brain,
     knowledge_graph=kg,
     mcp_gateway=mcp,
@@ -376,7 +376,7 @@ config = {
     'confidence_threshold': 0.5
 }
 
-orchestrator = TDDOrchestratorV4(
+orchestrator = TDDOrchestrator(
     brain_connector=brain,
     knowledge_graph=kg,
     mcp_gateway=mcp,
@@ -470,7 +470,7 @@ assert phase.value in orchestrator.strategies
   - `src/orchestration_4_0/frameworks/context_validator.py`
 
 - **TDD Orchestrator:**
-  - `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+  - `src/orchestrators/tdd/tdd_orchestrator.py`
   - `tests/test_tdd_phase5_integration.py`
 
 - **Architecture:**
@@ -507,7 +507,7 @@ assert phase.value in orchestrator.strategies
 
 - Check CORTEX main documentation: `.github/prompts/CORTEX.prompt.md`
 - Review test examples: `tests/test_tdd_phase5_integration.py`
-- Examine implementation: `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+- Examine implementation: `src/orchestrators/tdd/tdd_orchestrator.py`
 
 ---
 

@@ -543,7 +543,7 @@ class PhaseExecutor:
         self.logger.info("⚙️  Implementation phase: Executing plan phases")
         
         # Week 8 Day 3: Placeholder
-        # Will integrate with TDDOrchestrator v4.0 from Week 7
+        # Will integrate with TDDOrchestrator from Week 7
         implementation_data = {
             "phases_executed": 0,  # Placeholder
             "tdd_workflow": "pending",

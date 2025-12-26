@@ -21,7 +21,7 @@ Analysis of user conversation (chat01.md) revealed **CRITICAL planning system fa
 
 ### Root Cause
 
-**Planning System 3.0 has no automatic invocation** - depends on explicit "plan" keyword or manual orchestrator call, missing implicit scenarios like "holistic review", "comprehensive analysis", etc.
+**Planning System has no automatic invocation** - depends on explicit "plan" keyword or manual orchestrator call, missing implicit scenarios like "holistic review", "comprehensive analysis", etc.
 
 ---
 
@@ -335,7 +335,7 @@ User: "Do holistic review of architecture"
 
 1. **Full RCA:** `cortex-brain/documents/analysis/PLANNING-SYSTEM-RCA-2025-12-16.md`
 2. **Test Harness:** `tests/integration/test_planning_invocation_comprehensive.py`
-3. **Planning System 3.0 Manifest:** `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml`
+3. **Planning System Manifest:** `cortex-brain/manifests/orchestrators/planning-system-3.0-manifest.yaml`
 4. **chat01.md:** Original conversation showing failure
 5. **Brain Protection Rules:** `cortex-brain/brain-protection-rules.yaml`
 

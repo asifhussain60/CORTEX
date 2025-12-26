@@ -85,7 +85,7 @@
 ## 🔗 Integration Points Documented
 
 1. **Router Agent** - CLI entry point (`_execute_system_maintenance()`)
-2. **Planning System 3.0** - Tiered routing in Align phase
+2. **Planning System** - Tiered routing in Align phase
 3. **Version Manager** - cortex.config.json synchronization
 4. **Copilot Chat** - `system maintenance` natural language command
 5. **YAML Manifest** - `cortex-operations.yaml` operation registration
@@ -111,10 +111,10 @@
 
 **Evidence:**
 - ✅ Architecture documented (phase-06-maintenance.md, 886 LOC)
-- ✅ Tests documented (test_maintenance_orchestrator_v3.py, 686 LOC, 36/36 passing)
+- ✅ Tests documented (test_maintenance_orchestrator.py, 686 LOC, 36/36 passing)
 - ✅ Router agent integration exists (line 96-150)
 - ✅ Operation registered (cortex-operations.yaml)
-- ❌ **Implementation file missing:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
+- ❌ **Implementation file missing:** `src/operations/modules/orchestration/maintenance_orchestrator.py`
 
 **Documentation Approach:**
 - Created architecture from planning specifications (phase-06-maintenance.md)
@@ -131,7 +131,7 @@
 
 ## 🎓 Unique Features Documented
 
-1. **Tiered Routing Integration** - Planning System 3.0 alignment in Align phase
+1. **Tiered Routing Integration** - Planning System alignment in Align phase
 2. **Conditional Execution** - Skip non-critical phases on failures
 3. **Dual Healthcheck** - Pre and post with delta calculation
 4. **Version Synchronization** - Automatic version consistency via cortex.config.json

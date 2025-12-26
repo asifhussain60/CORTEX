@@ -1773,7 +1773,7 @@ CREATE TABLE cortex_company.user_engagement (
 
 | Feature | Target Usage Rate | Measurement | Success Metric |
 |---------|-------------------|-------------|----------------|
-| Planning System 2.0 | 60% of features | Plans created/total features | 10+ plans/week |
+| Planning System | 60% of features | Plans created/total features | 10+ plans/week |
 | TDD Workflows | 40% of commits | TDD sessions/commits | 30+ TDD sessions/week |
 | ADO Integration | 80% of work items | Work items created via CORTEX | 100+ items/month |
 | Code Review Assistant | 70% of PRs | PRs with CORTEX review | 50+ reviews/week |

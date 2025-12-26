@@ -1023,7 +1023,7 @@ progress_sync.complete_phase(
 
 - Master Plan: `MASTER-CORTEX-ORCHESTRATION-AST-ENHANCEMENT-PLAN.md`
 - PrevalidationWS Evidence: Chat02 (manual updates)
-- Planning System 2.0: Progress tracker format
+- Planning System: Progress tracker format
 
 ---
 

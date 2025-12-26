@@ -507,7 +507,7 @@ deployment:
 #### Core Features (100% Deployed)
 - ✅ TDD Mastery (RED→GREEN→REFACTOR workflow)
 - ✅ ADO Integration (story/feature/task creation)
-- ✅ Planning System 2.0 (DoR/DoD validation)
+- ✅ Planning System (DoR/DoD validation)
 - ✅ Plan Execution V2 (autonomous execution)
 - ✅ RCA (Root Cause Analysis with 5 Whys)
 - ✅ SWAGGER Estimation (DoR-driven with 80% threshold)
@@ -534,7 +534,7 @@ deployment:
 
 #### Orchestrator Manifests (100% Deployed)
 - ✅ `code-sanitization-manifest.yaml`
-- ✅ `planning-system-2.0-manifest.yaml`
+- ✅ `planning-system-manifest.yaml`
 - ✅ `ado-planning-manifest.yaml`
 - ✅ `tdd-mastery-manifest.yaml`
 

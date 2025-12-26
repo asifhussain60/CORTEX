@@ -174,7 +174,7 @@ Admin Governor executed 10 governance responsibilities, identifying and fixing s
   - `refinement-orchestrator-manifest.yaml`
   - `manifest-schema.yaml`
 - ⏳ Schema validation deferred to System Integrity
-- ⏳ Inheritance chain validation (ADO→Planning System 2.0) deferred
+- ⏳ Inheritance chain validation (ADO→Planning System) deferred
 
 **Action:** Summary validation passed; deep validation recommended
 
@@ -218,7 +218,7 @@ Admin Governor executed 10 governance responsibilities, identifying and fixing s
   - `cortex-brain/documents/reports/DAYS-4-5-COMPLETION.md`
   - `cortex-brain/documents/reports/admin-governor-enhancement-2025-12-20.md`
   - `cortex-brain/documents/reports/orchestrator-migration-days-4-5.md`
-  - `src/orchestrators/tdd/tdd_orchestrator_v4_migrated.py`
+  - `src/orchestrators/tdd/tdd_orchestrator_migrated.py`
   - `tests/test_orchestrator_migrations.py`
   - (this report)
 

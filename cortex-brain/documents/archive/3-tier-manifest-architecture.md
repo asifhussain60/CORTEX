@@ -168,7 +168,7 @@ orchestrators:
     inherits_from: null  # Top-level orchestrator
     parent_orchestrator: null
     child_orchestrators:
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
       - "ado_planning_orchestrator"
       - "sanitization_orchestrator"
     related_orchestrators:
@@ -208,14 +208,14 @@ orchestrators:
       - "2.0.0"
   
   # Example: TDD Orchestrator
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     version: "4.0.0"
     status: "active"
     category: "tdd"
     description: "Unified TDD orchestrator with adaptive learning and RED→GREEN→REFACTOR enforcement"
     
-    source_file: "src/orchestrators/tdd/tdd_orchestrator_v4.py"
-    entry_point: "TDDOrchestratorV4"
+    source_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+    entry_point: "TDDOrchestrator"
     documentation_path: ".github/prompts/modules/tdd-orchestrator-guide.md"
     
     # Inheritance
@@ -289,7 +289,7 @@ categories:
   tdd:
     description: "Test-driven development workflow orchestrators"
     orchestrators:
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
   
   execution:
     description: "Orchestrators that execute predefined workflows"
@@ -327,7 +327,7 @@ deprecated:
       migration_guide: "docs/migration/planning-v2-to-v4.md"
   
   manifests:
-    planning-system-2.0-manifest.yaml:
+    planning-system-manifest.yaml:
       deprecated_date: "2025-12-22"
       replacement: "core-manifest.yaml"
       removal_date: "2026-01-15"
@@ -546,7 +546,7 @@ core = loader.load_core_manifest()
 # Get orchestrator metadata
 planning = core.get_orchestrator("planning_orchestrator")
 print(planning["version"])  # "4.0.1"
-print(planning["child_orchestrators"])  # ["tdd_orchestrator_v4", ...]
+print(planning["child_orchestrators"])  # ["tdd_orchestrator", ...]
 
 # Get all orchestrators in category
 tdd_orchestrators = core.get_orchestrators_by_category("tdd")
@@ -841,7 +841,7 @@ orchestrator_overrides:
       generation:
         include_diagrams: true
   
-  tdd_orchestrator_v4:
+  tdd_orchestrator:
     refactoring:
       enabled: true
       enforcement_level: "strict"  # Block on violations
@@ -989,7 +989,7 @@ print(planning_refactoring["complexity"]["max_function_complexity"])  # 30
 
 # Get TDD testing config
 tdd_testing = config.get_config(
-    orchestrator_id="tdd_orchestrator_v4",
+    orchestrator_id="tdd_orchestrator",
     category="testing"
 )
 print(tdd_testing["coverage"]["min_coverage"])  # 95
@@ -1195,7 +1195,7 @@ integrations:
     
     orchestrators:
       - "planning_orchestrator"
-      - "tdd_orchestrator_v4"
+      - "tdd_orchestrator"
       - "sanitization_orchestrator"
       - "maintenance_orchestrator"
 
@@ -1508,7 +1508,7 @@ child:
 # ManifestInheritanceResolver detects circular inheritance
 
 # Example circular dependency:
-# planning_orchestrator -> tdd_orchestrator_v4 -> planning_orchestrator
+# planning_orchestrator -> tdd_orchestrator -> planning_orchestrator
 
 resolver = ManifestInheritanceResolver(base_dir)
 
@@ -1516,7 +1516,7 @@ try:
     resolved = resolver.resolve("planning_orchestrator")
 except ValueError as e:
     print(f"Circular dependency: {e}")
-    # Output: "Circular inheritance detected: planning_orchestrator → tdd_orchestrator_v4 → planning_orchestrator"
+    # Output: "Circular inheritance detected: planning_orchestrator → tdd_orchestrator → planning_orchestrator"
 ```
 
 ### Multi-Level Inheritance Example
@@ -1785,7 +1785,7 @@ class TestCoreManifest:
     def test_inheritance_resolution(self):
         loader = ManifestLoader(cortex_root)
         core = loader.load_core_manifest()
-        tdd = core.get_orchestrator("tdd_orchestrator_v4")
+        tdd = core.get_orchestrator("tdd_orchestrator")
         # Should inherit from planning_orchestrator
         assert tdd["inherits_from"] == "planning_orchestrator"
 
@@ -1804,7 +1804,7 @@ class TestConfigManifest:
         assert planning_config["complexity"]["max_function_complexity"] == 30
         
         # TDD orchestrator uses stricter default
-        tdd_config = config.get_config("tdd_orchestrator_v4", "refactoring")
+        tdd_config = config.get_config("tdd_orchestrator", "refactoring")
         assert tdd_config["complexity"]["max_function_complexity"] == 10
 
 class TestIntegrationManifest:
@@ -1864,7 +1864,7 @@ class TestOrchestratorWithNewManifests:
     
     def test_tdd_orchestrator_inherits_from_planning(self):
         loader = ManifestLoader(cortex_root)
-        orch = TDDOrchestratorV4(cortex_root, manifest_loader=loader)
+        orch = TDDOrchestrator(cortex_root, manifest_loader=loader)
         
         # Should inherit config from planning
         assert orch.parent_orchestrator == "planning_orchestrator"

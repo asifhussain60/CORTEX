@@ -151,14 +151,14 @@ owasp_top_10:
 
 ## Integration Points
 
-### TDD Orchestrator v4.0
+### TDD Orchestrator
 ```python
 # Auto-loads testing knowledge on first pattern query
 tech_engine = TechnologyDiscoveryEngine(brain, kg)
 patterns = kg.search_patterns("pytest fixture best practices")
 ```
 
-### Planning System 2.0
+### Planning System
 ```python
 # Auto-loads design patterns for architectural suggestions
 planner = PlanningOrchestrator(kg)

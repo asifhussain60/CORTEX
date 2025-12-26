@@ -124,7 +124,7 @@ class ManifestValidator:
     
     Usage:
         validator = ManifestValidator(cortex_root)
-        report = validator.validate_orchestrator("planning_system_2.0")
+        report = validator.validate_orchestrator("planning_system")
         
         if not report.get_critical_issues():
             logger.info("✅ Orchestrator compliant with manifest")

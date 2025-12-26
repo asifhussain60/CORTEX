@@ -462,7 +462,7 @@ CORTEX:
   ✅ Update available: v5.1.0 → v5.2.0
   
   📦 Changes in v5.2.0:
-     • New feature: ADO Planning System 2.0
+     • New feature: ADO Planning System
      • Enhancement: Response templates expanded
      • Bug fix: Schema migration validation
   

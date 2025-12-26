@@ -20,7 +20,7 @@
 - ⚠️ **Orchestration Complexity:** Over-engineered with unclear ownership
 - 🔴 **Critical Gap:** Entry point doesn't actually execute claimed workflows
 - 🔴 **Testing Coverage:** Missing integration tests for critical workflows
-- 🔴 **Real-World Failure Risk:** Planning System 2.0 and TDD workflows not wired end-to-end
+- 🔴 **Real-World Failure Risk:** Planning System and TDD workflows not wired end-to-end
 
 ---
 
@@ -109,7 +109,7 @@ class BrainProtector:
 **Evidence:**
 ```
 cortex-brain/manifests/orchestrators/
-├── planning-system-2.0-manifest.yaml (738 lines)
+├── planning-system-manifest.yaml (738 lines)
 ├── ado-planning-manifest.yaml
 ├── tdd_implementation_orchestrator-manifest.yaml
 ├── plan_execution_orchestrator_v2-manifest.yaml
@@ -121,9 +121,9 @@ cortex-brain/manifests/orchestrators/
 
 **Manifest Quality Example:**
 ```yaml
-# planning-system-2.0-manifest.yaml
+# planning-system-manifest.yaml
 metadata:
-  orchestrator_name: "planning_system_2.0"
+  orchestrator_name: "planning_system"
   version: "3.0.0"
   compliance_baseline: "100% (All 8 requirements: 3 critical + 3 high + 2 medium)"
   status: "active"
@@ -175,7 +175,7 @@ templates:
 
 ### 2.1 ENTRY POINT DISCONNECT 🔴 CRITICAL
 
-**Claim:** "User types `/CORTEX plan feature` and Planning System 2.0 executes"
+**Claim:** "User types `/CORTEX plan feature` and Planning System executes"
 
 **Reality:** 🔴 **NO ENTRY POINT WIRING**
 
@@ -231,9 +231,9 @@ grep -r "if __name__ == '__main__'" src/entry_point/
 
 ---
 
-### 2.2 Planning System 2.0 Not Executable 🔴 CRITICAL
+### 2.2 Planning System Not Executable 🔴 CRITICAL
 
-**Claim:** "Planning System 2.0 with DoR/DoD, threat modeling, TDD integration"
+**Claim:** "Planning System with DoR/DoD, threat modeling, TDD integration"
 
 **Reality:** ⚠️ **ORCHESTRATOR EXISTS BUT NOT WIRED TO ENTRY POINT**
 
@@ -431,7 +431,7 @@ tests/integration/test_brain_persistence.py
 
 **What's Not Tested:**
 1. User command → Orchestrator → Database → File system → Git
-2. Planning System 2.0 complete workflow
+2. Planning System complete workflow
 3. TDD RED→GREEN→REFACTOR with actual git checkpoints
 4. Brain Tier 1 FIFO queue enforcement
 5. Manifest drift detection in production
@@ -838,8 +838,8 @@ def test_code_writing_capability():
 - **Evidence:** No entry point dispatcher in src/
 - **Severity:** 🔴 CRITICAL
 
-### Misalignment #2: Planning System 2.0
-- **Claim:** "Planning System 2.0 with interactive DoR/DoD workflow"
+### Misalignment #2: Planning System
+- **Claim:** "Planning System with interactive DoR/DoD workflow"
 - **Reality:** Orchestrator exists but never invoked by user commands
 - **Evidence:** No CLI wrapper, no entry point wiring
 - **Severity:** 🔴 CRITICAL

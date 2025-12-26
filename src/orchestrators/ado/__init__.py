@@ -1,7 +1,7 @@
 """
 ADO Orchestrator Package
 
-Azure DevOps work item management orchestrator with Planning System 2.0 parity.
+Azure DevOps work item management orchestrator with Planning System parity.
 
 Components:
 - ADOOrchestrator: Main orchestrator (5-phase workflow)

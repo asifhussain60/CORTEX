@@ -197,7 +197,7 @@ All orchestrators automatically have access:
 plan_data = self.resolve_plan_file(user_input)
 ```
 
-### 2. Planning Orchestrator v3.1
+### 2. Planning Orchestrator
 ```python
 class PlanningOrchestrator(BaseOperationModule):
     def continue_plan(self, plan_reference: str):
@@ -229,7 +229,7 @@ class TDDOrchestrator(BaseOperationModule):
 
 ### 4. Maintenance Orchestrator
 ```python
-class MaintenanceOrchestratorV3(BaseOperationModule):
+class MaintenanceOrchestrator(BaseOperationModule):
     def validate_all_plans(self):
         # Find all master plans
         plans_dir = Path("cortex-brain/documents/planning/active")

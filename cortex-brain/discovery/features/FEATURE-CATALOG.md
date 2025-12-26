@@ -56,7 +56,7 @@ Choose the view that matches your role:
 - Validate builds and tests
 - 5-phase workflow with audit reports
 
-### 3. Planning System 2.0
+### 3. Planning System
 **Status:** ✅ Production Ready
 
 - Auto-complexity detection

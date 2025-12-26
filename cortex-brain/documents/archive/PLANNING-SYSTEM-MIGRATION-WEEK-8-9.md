@@ -1,4 +1,4 @@
-# Planning System 3.0 → 4.0 Migration Plan
+# Planning System → 4.0 Migration Plan
 
 **Version:** 1.0  
 **Author:** Asif Hussain  
@@ -45,7 +45,7 @@
 
 ## 🎯 Executive Summary
 
-**Objective:** Migrate Planning System 3.0 orchestrator to CORTEX 4.0 architecture with enhanced modularity, tiered routing intelligence, and visual progress tracking.
+**Objective:** Migrate Planning System orchestrator to CORTEX 4.0 architecture with enhanced modularity, tiered routing intelligence, and visual progress tracking.
 
 **Current State (v3.0):**
 - **Location:** Archived (`archive/orchestrators/legacy/planning_orchestrator.py`)
@@ -82,7 +82,7 @@
 **Components:**
 
 ```
-Planning System 3.0 (ARCHIVED)
+Planning System (ARCHIVED)
 ├── TieredRouter (src/operations/modules/routing/tiered_router.py) ✅ EXISTS
 │   └── 4-tier classification with LLM/cache
 ├── ComplexityAnalyzer (src/operations/modules/routing/complexity_analyzer.py) ✅ EXISTS

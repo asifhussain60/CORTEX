@@ -295,7 +295,7 @@ results["metrics"] = {
 After reviewing findings, CORTEX asks:
 ```
 Would you like me to:
-• A) Generate fix plan for ALL issues (Planning System 2.0)
+• A) Generate fix plan for ALL issues (Planning System)
 • B) Generate fix plan for CRITICAL issues only
 • C) Exit (you'll fix manually)
 ```
@@ -348,7 +348,7 @@ Low confidence (<70%): Investigate carefully
    - Confidence: 78%
 4. CORTEX: "Would you like auto-fix? A/B/C"
 5. User: "B" (critical only)
-6. CORTEX: Creates plan with Planning System 2.0
+6. CORTEX: Creates plan with Planning System
 7. User: "approve plan"
 8. CORTEX: Executes fixes with TDD workflow
 ```
@@ -579,16 +579,16 @@ Phase 1 (Report Generation)
 
 ## 🚀 Next Steps
 
-### Immediate (Planning System 2.0 Integration)
+### Immediate (Planning System Integration)
 
-**Task:** Connect auto-fix workflow to Planning System 2.0  
+**Task:** Connect auto-fix workflow to Planning System  
 **Time Estimate:** 1 hour  
 **File:** `src/orchestrators/code_review_orchestrator.py`
 
 **Implementation:**
 1. Add `offer_auto_fix()` method to orchestrator
 2. Present A/B/C options to user
-3. If user approves, trigger Planning System 2.0:
+3. If user approves, trigger Planning System:
    - Create plan with DoR/DoD validation
    - Convert IssueFinding objects to actionable tasks
    - Execute with TDD workflow
@@ -672,7 +672,7 @@ Phase 1 (Report Generation)
 
 **Time Invested:** ~6 hours (on track with 10-12 hour Phase 1-5 estimate)
 
-**Next Milestone:** Planning System 2.0 Integration (1 hour estimated)
+**Next Milestone:** Planning System Integration (1 hour estimated)
 
 **Blocker Count:** 0
 
@@ -683,7 +683,7 @@ Phase 1 (Report Generation)
 **Report Generated:** November 26, 2025  
 **Author:** CORTEX v3.2.0  
 **Validation Status:** All acceptance criteria met  
-**Recommendation:** Proceed to Planning System 2.0 integration or Phase 4/5
+**Recommendation:** Proceed to Planning System integration or Phase 4/5
 
 ---
 

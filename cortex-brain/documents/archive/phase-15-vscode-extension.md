@@ -56,8 +56,8 @@
 **Tasks:**
 - 15.2.1: Python environment detection (leverage Python extension API)
 - 15.2.2: Bundle Python orchestrators in extension package
-- 15.2.3: Planning System 2.0 integration (via Python subprocess)
-- 15.2.4: TDD Orchestrator v4.0 integration
+- 15.2.3: Planning System integration (via Python subprocess)
+- 15.2.4: TDD Orchestrator integration
 - 15.2.5: Code Sanitization Orchestrator integration
 - 15.2.6: System Maintenance/Refinement integration
 - 15.2.7: ADO Operations integration

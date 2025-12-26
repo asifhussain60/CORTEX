@@ -18,7 +18,7 @@
 - **Code Examples:** 15 (data models, operations, usage patterns)
 - **Test Coverage:** Expected 90%+
 
-**Key Achievement:** Comprehensive architecture document for utility-based ADO orchestration integrated with Planning System 2.0, featuring DoR/DoD enforcement, manifest inheritance (8 inherited + 7 ADO-specific requirements), and complete work item lifecycle management.
+**Key Achievement:** Comprehensive architecture document for utility-based ADO orchestration integrated with Planning System, featuring DoR/DoD enforcement, manifest inheritance (8 inherited + 7 ADO-specific requirements), and complete work item lifecycle management.
 
 ---
 
@@ -30,7 +30,7 @@
 1. ✅ **ADOAgent (Routing Layer)** - Intent handling, orchestrator routing, 317 LOC
 2. ✅ **ADOUtility (Core Operations)** - 7 operations, 1,086 LOC, 45% reduction from legacy
 3. ✅ **Work Item Operations** - create/load/update/complete/validate (DoR/DoD)
-4. ✅ **Planning System 2.0 Integration** - 8 inherited requirements, manifest structure
+4. ✅ **Planning System Integration** - 8 inherited requirements, manifest structure
 5. ✅ **File-Based Workflow** - Status directories (active/completed/blocked/cancelled)
 
 **Technical Depth (8/8 areas):**
@@ -38,7 +38,7 @@
 - ✅ Complete workflow sequence diagram (user → agent → utility → validation)
 - ✅ Data models (WorkItemType, WorkItemStatus, WorkItemMetadata, WorkItemResult)
 - ✅ 7 core operations (create, load, update, summary, DoR/DoD validation, list)
-- ✅ Planning System 2.0 inheritance (DoR/DoD/TDD enforcement)
+- ✅ Planning System inheritance (DoR/DoD/TDD enforcement)
 - ✅ ADO-formatted markdown generation (copy-paste ready)
 - ✅ File-based workflow (status transitions)
 - ✅ Legacy comparison (34% LOC reduction, improved maintainability)
@@ -48,7 +48,7 @@
 - ✅ Testing strategy (15 core + 8 file + 5 integration + 3 learning = 31 tests)
 - ✅ Performance metrics (work item creation <1s, DoR validation <100ms, DoD <150ms)
 - ✅ Usage examples (3 scenarios: create story, complete with DoD, list items)
-- ✅ Integration points (Planning System 2.0, Learning System, Azure DevOps API)
+- ✅ Integration points (Planning System, Learning System, Azure DevOps API)
 - ✅ Future enhancements (Phase 7-9: API integration, ML estimation, advanced analytics)
 
 ---
@@ -73,9 +73,9 @@
 
 ---
 
-### 2. Planning System 2.0 Integration
+### 2. Planning System Integration
 
-**Manifest Inheritance:** `ado-planning-manifest.yaml` inherits `planning-system-2.0-manifest.yaml`
+**Manifest Inheritance:** `ado-planning-manifest.yaml` inherits `planning-system-manifest.yaml`
 
 **8 Inherited Requirements:**
 1. REQ-001: Acceptance Criteria Approval Gate
@@ -213,7 +213,7 @@ cortex-brain/documents/ado/
 ### What Worked Well ✅
 
 1. **Utility Pattern:** 45% LOC reduction vs legacy orchestrator (1,642 → 1,086) with no feature loss
-2. **Manifest Inheritance:** Clear separation of Planning System 2.0 requirements vs ADO-specific features
+2. **Manifest Inheritance:** Clear separation of Planning System requirements vs ADO-specific features
 3. **DoR/DoD Templates:** Reusable validation criteria by work item type (Story/Feature/Task/Epic/Bug)
 4. **File-Based Workflow:** Simple, transparent, version-controllable status management
 5. **ADO-Formatted Output:** Direct copy-paste to Azure DevOps (no formatting required)

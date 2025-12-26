@@ -108,13 +108,13 @@ class EnhancementCatalog:
         catalog = EnhancementCatalog()
         
         # Add new feature
-        catalog.add_feature("Planning System 2.0", FeatureType.WORKFLOW, 
+        catalog.add_feature("Planning System", FeatureType.WORKFLOW, 
                           "Vision API + incremental planning", source="git")
         
         new_features = catalog.get_features_since(days=7)
         
         # Update acceptance status
-        catalog.update_acceptance("Planning System 2.0", AcceptanceStatus.ACCEPTED)
+        catalog.update_acceptance("Planning System", AcceptanceStatus.ACCEPTED)
         
         last_review = catalog.get_last_review_timestamp()
     """

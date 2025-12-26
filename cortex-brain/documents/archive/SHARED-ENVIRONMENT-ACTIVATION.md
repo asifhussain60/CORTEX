@@ -23,7 +23,7 @@ related_plans: []
 **Created:** 2025-12-03  
 **Updated:** 2025-12-03 (Added code language enforcement: Task 3.6 + unified pre-commit hook in Task 8.7)  
 **Author:** Asif Hussain  
-**Planning System:** CORTEX Planning System 2.0  
+**Planning System:** CORTEX Planning System  
 **Current Filename:** `shared-environment-default-activation.md` (41 chars)  
 **Target Filename:** `PLAN-001-shared-env-setup.md` (27 chars, -34%)  
 **Location:** `cortex-brain/documents/planning/` → Will move to `features/active/` in Phase 6

@@ -136,16 +136,16 @@
 
 ### Core Orchestrators (20+)
 
-**Planning System 2.0**
+**Planning System**
 - **Features:** DoR/DoD compliance, incremental planning, auto-TDD
 - **Complexity Detection:** AUTO-ROUTE (HIGH→incremental, LOW→skeleton)
-- **Manifest:** `planning-system-2.0-manifest.yaml`
+- **Manifest:** `planning-system-manifest.yaml`
 - **Execution:** Interactive copilot_chat workflow
 
 **ADO Operations**
 - **Integration:** Azure DevOps REST API
 - **Capabilities:** Story/Feature/Task creation, completion summaries, code reviews
-- **Manifest:** `ado-planning-manifest.yaml` (inherits Planning System 2.0)
+- **Manifest:** `ado-planning-manifest.yaml` (inherits Planning System)
 
 **TDD Mastery**
 - **Workflow:** Complete RED→GREEN→REFACTOR automation
@@ -521,7 +521,7 @@
 - `cortex-brain/module-definitions.yaml` - 82 modules (935 lines)
 
 **Planning Documents:**
-- Planning System 2.0 manifest
+- Planning System manifest
 - ADO planning manifest
 - TDD Mastery integration plan
 - System maintenance orchestrator guide

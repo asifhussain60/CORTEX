@@ -112,7 +112,7 @@ Task 8.5 involved comprehensive quality validation across all CORTEX 4.0 modules
 4. ✅ Converting 3.0 response templates to 4.0 format
 
 **Breaking Changes (intentional):**
-- Planning System 2.0 manifest format (new DoR/DoD compliance layer)
+- Planning System manifest format (new DoR/DoD compliance layer)
 - Intelligence orchestrator API (new advisory/validation modes)
 - Multi-agent framework (AutoGen 0.4 → sequential/parallel patterns)
 

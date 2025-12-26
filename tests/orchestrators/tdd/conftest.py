@@ -1,5 +1,5 @@
 """
-Pytest Configuration for TDD Orchestrator v4.0 Tests
+Pytest Configuration for TDD Orchestrator Tests
 
 Provides shared fixtures for TDD orchestrator tests.
 """

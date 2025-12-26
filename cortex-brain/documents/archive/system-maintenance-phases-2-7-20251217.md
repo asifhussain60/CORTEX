@@ -127,7 +127,7 @@
 
 ### Issue 1: brain-protection-rules.yaml Indentation
 **Severity:** WARNING  
-**Location:** Lines 5448-5794 (Planning System 3.0 rules)  
+**Location:** Lines 5448-5794 (Planning System rules)  
 **Impact:** SKULL protection rules fail YAML validation  
 **Root Cause:** Indentation inconsistency in newly added rules
 
@@ -148,7 +148,7 @@
           - item2  # Consistent indentation
 ```
 
-**Recommendation:** Manual review and fix of Planning System 3.0 layer (lines 5448-5794)
+**Recommendation:** Manual review and fix of Planning System layer (lines 5448-5794)
 
 ---
 
@@ -290,7 +290,7 @@ python -m src.operations.healthcheck
 2. **Cleanup Manifests:**
    - `cortex-brain/cleanup-manifests/deletion-manifest-backup_cleanup-20251217-091452.json`
    - `cortex-brain/cleanup-manifests/reorganization-manifest-20251217-091500.json`
-3. **Planning System 3.0:**
+3. **Planning System:**
    - `PLANNING-SYSTEM-3.0-GUIDE.md`
    - `PLANNING-SYSTEM-3.0-PHASE-1-COMPLETION-REPORT.md`
 4. **Git Commits:**

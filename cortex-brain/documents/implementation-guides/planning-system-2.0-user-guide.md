@@ -1,4 +1,4 @@
-# Planning System 2.0 User Guide
+# Planning System User Guide
 
 **Version:** 2.0  
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX  
@@ -9,7 +9,7 @@
 
 ## 🎯 Overview
 
-**Planning System 2.0** is CORTEX's intelligent feature planning orchestrator that automatically analyzes complexity, generates adaptive plans, enforces quality gates (DoR/DoD), and integrates TDD throughout the development lifecycle.
+**Planning System** is CORTEX's intelligent feature planning orchestrator that automatically analyzes complexity, generates adaptive plans, enforces quality gates (DoR/DoD), and integrates TDD throughout the development lifecycle.
 
 **Key Innovation:** Automatic complexity classification eliminates manual planning decisions - you describe the feature, CORTEX determines the right plan structure.
 
@@ -53,7 +53,7 @@ execute all phases autonomously
 
 ## 📊 Complexity Tiers (Automatic Classification)
 
-Planning System 2.0 uses a **4-tier complexity analyzer** that scores features based on keywords:
+Planning System uses a **4-tier complexity analyzer** that scores features based on keywords:
 
 ### Tier 1: LOW (0-1 points) - Skeleton Plan
 
@@ -237,7 +237,7 @@ dod_status = {
 
 ## 🧪 TDD Integration (Automatic)
 
-Planning System 2.0 **automatically injects TDD requirements** based on phase content:
+Planning System **automatically injects TDD requirements** based on phase content:
 
 ### Phase Analysis
 
@@ -430,7 +430,7 @@ plan refactor legacy authentication
 
 ## 🗂️ Plan Inheritance (Manifest-Driven)
 
-Planning System 2.0 supports **plan inheritance** for reusable patterns:
+Planning System supports **plan inheritance** for reusable patterns:
 
 ### Parent Plan
 
@@ -852,7 +852,7 @@ definition_of_done:
 
 ## 📚 Related Documentation
 
-- **Architecture:** `cortex-brain/documents/archive/planning-system-2.0-architecture-completion.md`
+- **Architecture:** `cortex-brain/documents/archive/planning-system-architecture-completion.md`
 - **Manifest:** `cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml`
 - **TDD Integration:** `cortex-brain/documents/implementation-guides/tdd-orchestrator-v4-user-guide.md`
 - **Execution Orchestrator:** `cortex-brain/documents/implementation-guides/execution-orchestrator-user-guide.md`
@@ -930,4 +930,4 @@ definition_of_done:
 
 **Document Version:** 1.0.0  
 **Status:** ✅ PRODUCTION  
-**Next Update:** Planning System 3.0 (Intelligence Layer - Vision API, Threat Modeling)
+**Next Update:** Planning System (Intelligence Layer - Vision API, Threat Modeling)

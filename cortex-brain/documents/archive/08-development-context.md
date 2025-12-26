@@ -36,7 +36,7 @@ THERMAL HEATMAP OVERLAY (Color-coded activity zones):
 - ORANGE ACTIVE ZONES (Temperature: 60-79°C, Regular Activity):
   * `src/orchestrators/planning_orchestrator.py` - Orange
     - 89 commits | Weekly changes
-    - Planning System 2.0 active development
+    - Planning System active development
   * `src/tier1/working_memory.py` - Orange-yellow
     - 67 commits | Tier 1 optimizations
   * `cortex-brain/response-templates.yaml` - Orange

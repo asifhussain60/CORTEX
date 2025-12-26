@@ -31,7 +31,7 @@
 
 ## 🎯 Phase Objective
 
-Apply Planning System 3.0 tiered planning patterns to ADO Orchestrator while maintaining DoR/DoD compliance and ADO-specific formatting.
+Apply Planning System tiered planning patterns to ADO Orchestrator while maintaining DoR/DoD compliance and ADO-specific formatting.
 
 **Success Criteria:**
 - ✅ Tiered execution paths integrated (Tier 1-4)
@@ -119,7 +119,7 @@ def __init__(self, project_root: Path = None):
 
 **Logger Hints:**
 ```python
-logger.info("🎭 Orchestrator engaged: ADOPlanningOrchestrator v3.0")
+logger.info("🎭 Orchestrator engaged: ADOPlanningOrchestrator")
 logger.info(f"🎭 Phase transition: Classification → ADO Formatting")
 logger.info("🎭 Orchestrator completing: ✅ ALL WORK COMPLETE")
 ```

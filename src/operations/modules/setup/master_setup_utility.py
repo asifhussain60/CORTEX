@@ -903,7 +903,7 @@ Users interact via natural language. No slash commands needed.
 This project uses **CORTEX** - an AI assistant enhancement system.
 
 **Available Capabilities:**
-- **Planning System 2.0:** Vision API, DoR/DoD enforcement, file-based planning
+- **Planning System:** Vision API, DoR/DoD enforcement, file-based planning
 - **TDD Mastery:** RED→GREEN→REFACTOR automation with auto-debug
 - **View Discovery:** Auto-extract UI element IDs for testing
 - **Progress Monitoring:** Real-time feedback for long operations
@@ -1050,7 +1050,7 @@ def create_completion_report(
 
 ## CORTEX Capabilities
 
-- **Planning System 2.0** - Vision API, DoR/DoD enforcement
+- **Planning System** - Vision API, DoR/DoD enforcement
 - **TDD Mastery** - RED→GREEN→REFACTOR automation
 - **View Discovery** - Auto-extract UI element IDs
 - **Feedback System** - Structured issue reporting

@@ -83,7 +83,7 @@ Enhanced the leadership introduction template in `cortex-brain/response-template
 
 **New Content:**
 - **Explore Deeper** section with categorized follow-up questions:
-  - **Planning & Requirements:** Planning System 2.0, ADO integration, plan resumption
+  - **Planning & Requirements:** Planning System, ADO integration, plan resumption
   - **Dashboard Intelligence:** Capabilities, system discovery, onboarding benefits
   - **Quality & Governance:** TDD Mastery, SKULL rules, enforcement mechanism
   - **Cost Optimization:** Token reduction analysis, efficiency strategies, ROI calculation
@@ -205,7 +205,7 @@ introduction_leadership:
 6. Provide interactive deep-dive prompts
 
 **Follow-Up Commands (Progressive Disclosure):**
-- `Tell me about Planning System 2.0`
+- `Tell me about Planning System`
 - `Show me dashboard capabilities`
 - `Explain TDD Mastery`
 - `Show token reduction analysis`

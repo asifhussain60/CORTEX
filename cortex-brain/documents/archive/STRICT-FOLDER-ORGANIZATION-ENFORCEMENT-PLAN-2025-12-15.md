@@ -43,7 +43,7 @@ Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX
 6. 🆕 **Continuation Prompt System** - Session handoff mechanism in master plans
 7. 🆕 **All Orchestrators Integration** - TDD, ADO, Execution, Maintenance, Cleanup
 8. 🆕 **Brain Tier Organization** - Folder structure for Tier 1, 2, 3 captures
-9. 🆕 **Manifest Updates** - Planning System 2.0 manifest compliance
+9. 🆕 **Manifest Updates** - Planning System manifest compliance
 10. 🆕 **Dashboard Metrics** - Folder organization health tracking
 
 **SKULL Enforcement:** 
@@ -134,7 +134,7 @@ cortex-brain/documents/ (Filing Cabinet)
 
 ### Architectural Issues from Holistic Review
 
-**Planning Orchestrator v3.1 Problems:**
+**Planning Orchestrator Problems:**
 
 1. **Missing Visual Tracker (Feature Regression)**
    - **Problem:** `_generate_progress_summary()` only logs internally, users never see it
@@ -703,7 +703,7 @@ Based on holistic review of `src/operations/modules/orchestration/`:
    - Generate ADO work items in `artifacts/`
    - Store ADO summaries in `reports/`
 
-4. **MaintenanceOrchestratorV3** (`maintenance_orchestrator_v3.py`) - TERTIARY
+4. **MaintenanceOrchestrator** (`maintenance_orchestrator.py`) - TERTIARY
    - Create maintenance plans in `planning/system-maintenance-v{N}/`
    - Store healthcheck results in `reports/healthcheck-{timestamp}.md`
    - Track maintenance metrics in `tracking/maintenance-metrics.json`
@@ -930,7 +930,7 @@ dashboard:
 
 ### Manifest Updates (NEW)
 
-**File:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+**File:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 
 ```yaml
 # ADDITIONS to existing manifest
@@ -1032,7 +1032,7 @@ folder_organization:
         integration_level: "full"
         folder_support: "required"
       
-      - name: "MaintenanceOrchestratorV3"
+      - name: "MaintenanceOrchestrator"
         integration_level: "minimal"
         folder_support: "recommended"
     
@@ -2729,7 +2729,7 @@ Start now with first task in 01-subplan-{phases[0]['name'].lower().replace(' ', 
 
 ### Phase 11: Manifest Updates (Week 4 - Day 22)
 
-- [ ] Open `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- [ ] Open `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 - [ ] Add `folder_organization` section (v3.0) with 8 subsections:
   - [ ] `structure`: planning_root, status_folders, universal_subfolders, required_files
   - [ ] `continuation_prompts`: enabled: true, location, section_marker, update_trigger, format
@@ -3053,7 +3053,7 @@ Before creating new project folder:
 **2. Orchestration System Integration (8 Orchestrators)**
    - PRIMARY: PlanningOrchestrator (line 512-518 fix + continuation prompts)
    - SECONDARY: TDDOrchestrator (test reports in plan folders), ADOPlanningOrchestrator (ADO work items in artifacts/)
-   - TERTIARY/MINOR: MaintenanceOrchestratorV3, CleanupOrchestrator (rename to StrictFolderRealignmentOrchestrator), DocumentHygieneOrchestrator, RefactorCycleOrchestrator, VacuumOrchestrator
+   - TERTIARY/MINOR: MaintenanceOrchestrator, CleanupOrchestrator (rename to StrictFolderRealignmentOrchestrator), DocumentHygieneOrchestrator, RefactorCycleOrchestrator, VacuumOrchestrator
    - BaseOrchestrator base class with universal methods (create_plan_folder, update_continuation_prompt, generate_execution_report, update_progress_tracker)
    - Consistent folder organization across ALL orchestrators
 
@@ -3064,7 +3064,7 @@ Before creating new project folder:
    - Real-time health monitoring with alerts (root violations >0)
 
 **4. Manifest Updates (NEW)**
-   - planning-system-2.0-manifest.yaml comprehensive additions
+   - planning-system-manifest.yaml comprehensive additions
    - folder_organization v3.0 specification with 8 subsections:
      - structure, continuation_prompts, pre_planning_discovery, visual_tracker, lifecycle_workflow, orchestrator_integration, skull_enforcement, realignment
    - Standardized configuration across all orchestrators

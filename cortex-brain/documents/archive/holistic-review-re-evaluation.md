@@ -48,7 +48,7 @@ def process(self, user_message: str, ...) -> str:
 
 ---
 
-### ❌ Critical Misunderstanding #2: "Planning System 2.0 Not Executable"
+### ❌ Critical Misunderstanding #2: "Planning System Not Executable"
 
 **Review's Claim:**
 > "Orchestrator exists but never invoked by user commands"  

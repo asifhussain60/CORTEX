@@ -45,7 +45,7 @@ Successfully added letter labels to ALL user choice options across CORTEX respon
 - **Location:** Line 732-806
 - **Changes:** Operations list already had letter labels A-G (no change needed)
 - **Options:**
-  - **A)** Planning System 2.0
+  - **A)** Planning System
   - **B)** TDD Mastery
   - **C)** Hands-On Tutorial
   - **D)** View Discovery
@@ -58,7 +58,7 @@ Successfully added letter labels to ALL user choice options across CORTEX respon
 - **Location:** Line 145-315
 - **Changes:** Added letter labels A-R across 4 sections
 - **Quick Demos (A-E):**
-  - **A)** `demo planning` - Planning System 2.0
+  - **A)** `demo planning` - Planning System
   - **B)** `demo tdd` - TDD workflow
   - **C)** `demo view discovery` - Element extraction
   - **D)** `demo feedback` - Issue reporting
@@ -159,7 +159,7 @@ Line 282: **O)** **Full Documentation**
 Line 288: **P)** **`beginner path`**
 Line 291: **Q)** **`advanced path`**
 Line 294: **R)** **`developer path`**
-Line 770: **A)** Planning System 2.0
+Line 770: **A)** Planning System
 Line 773: **B)** TDD Mastery
 Line 776: **C)** Hands-On Tutorial
 Line 1029: **A) User Story**

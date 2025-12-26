@@ -49,7 +49,7 @@
 **GREEN Phase (14.3):**
 - Implemented `PlanMigrationUtility` class (350+ lines)
 - Key features:
-  - Format detection (unified/Planning System 2.0/legacy)
+  - Format detection (unified/Planning System/legacy)
   - Phase extraction with regex pattern matching
   - UnifiedPlanGenerator integration
   - Token counting with tiktoken

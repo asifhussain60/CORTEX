@@ -139,7 +139,7 @@
 - ✅ "94% test-first success rate in team environments"
 - ❌ "Enterprise TDD enforcement platform"
 
-**Planning System 2.0:**
+**Planning System:**
 - ✅ "Team planning with DoR/DoD compliance"
 - ❌ "Enterprise portfolio management system"
 

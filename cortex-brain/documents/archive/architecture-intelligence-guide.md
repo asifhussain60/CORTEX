@@ -470,7 +470,7 @@ Q1 Goal: Improve from 78% to 85%
 ## 🔗 See Also
 
 **Other Strategic Agents:**
-- Planning System 2.0: `.github/prompts/modules/planning-orchestrator-guide.md`
+- Planning System: `.github/prompts/modules/planning-orchestrator-guide.md`
 - TDD Mastery: `.github/prompts/modules/tdd-mastery-guide.md`
 
 **Tactical Validation:**

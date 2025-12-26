@@ -19,7 +19,7 @@ This analysis identifies gaps in the CORTEX v3.9 master plan and proposes priori
 ### 1. Response Template System Integration (CRITICAL - RESOLVED)
 
 **Gap Description:**
-- Planning System 3.0 introduces tiered routing (Tier 1-4 operations)
+- Planning System introduces tiered routing (Tier 1-4 operations)
 - Proactive intelligence needs risk warnings and enhancement recommendations
 - Domain-aware analysis needs critical domain alerts
 - **Existing 62 templates did not support these new features**
@@ -188,7 +188,7 @@ User can say any of:
 - "execute all phases autonomously"
 
 ### Phase-by-Phase Progress
-Planning System 3.0 will:
+Planning System will:
 1. Execute Phase 00 (Governance) - 2 hours
 2. Execute Phase 01 (Router) - 4 hours
 3. Execute Phase 01.5 (Templates) - 3 hours ← NEW

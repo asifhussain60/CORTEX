@@ -166,7 +166,7 @@ class ResponseTemplateManager:
 **Test 1: Template Loading**
 ```
 ✅ hands_on_tutorial: 1.75ms - Hands-On Interactive Tutorial
-✅ planning: 1.96ms - Planning System 2.0
+✅ planning: 1.96ms - Planning System
 ✅ git_checkpoint: 1.73ms - Git Checkpoint
 ✅ feedback_agent: 1.84ms - Feedback Collection
 

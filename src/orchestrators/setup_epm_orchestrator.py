@@ -358,7 +358,7 @@ Users interact via natural language. No slash commands needed.
 
 ## 📚 CORTEX Capabilities
 
-- **Planning System 2.0** - Feature planning with DoR/DoD enforcement
+- **Planning System** - Feature planning with DoR/DoD enforcement
 - **TDD Mastery** - RED→GREEN→REFACTOR workflow automation
 - **View Discovery** - Auto-extract element IDs for testing
 - **Feedback System** - Structured bug/feature reporting

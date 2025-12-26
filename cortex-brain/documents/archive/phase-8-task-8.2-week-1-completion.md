@@ -165,9 +165,9 @@ Successfully completed Week 1 Sprint of Phase 8 Task 8.2 (Unit Test Expansion) t
 ### Week 2 Sprint: Orchestration Layer (Recommended Priority)
 **Target Files (from test gap matrix):**
 1. `src/orchestration_4_0/base/orchestrator_4_0.py` (20 statements, 0% coverage, priority: 90)
-2. `src/orchestrators/maintenance_orchestrator_v3.py` (50 statements, 0% coverage, priority: 90)
+2. `src/orchestrators/maintenance_orchestrator.py` (50 statements, 0% coverage, priority: 90)
 3. `src/orchestrators/planning_system_2_0.py` (40 statements, 0% coverage, priority: 85)
-4. `src/orchestrators/tdd_orchestrator_v4.py` (35 statements, 0% coverage, priority: 85)
+4. `src/orchestrators/tdd_orchestrator.py` (35 statements, 0% coverage, priority: 85)
 
 **Estimated Effort:** 120 minutes (based on Week 1 velocity)
 **Expected Tests:** ~300 tests

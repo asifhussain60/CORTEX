@@ -1,7 +1,7 @@
 """
-TDD Orchestrator v4.0 Coverage Tests - Achieve 98% Coverage
+TDD Orchestrator Coverage Tests - Achieve 98% Coverage
 
-Purpose: Test untested paths in tdd_orchestrator_v4.py
+Purpose: Test untested paths in tdd_orchestrator.py
 Current Coverage: 42.89% (386 statements, 188 missing)
 Target Coverage: 98% (380/386 lines)
 
@@ -33,8 +33,8 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Import subject under test
-from src.orchestrators.tdd.tdd_orchestrator_v4 import (
-    TDDOrchestratorV4,
+from src.orchestrators.tdd.tdd_orchestrator import (
+    TDDOrchestrator,
     TechnologyDiscoveryEngine,
     CleanCodeEnforcer,
     TechnologyProfile,
@@ -430,7 +430,7 @@ class TestValidationAndRollback:
     
     @pytest.fixture
     async def orchestrator(self):
-        """Create TDDOrchestratorV4 instance with mocked dependencies."""
+        """Create TDDOrchestrator instance with mocked dependencies."""
         brain = Mock()
         kg = Mock()
         kg.store_pattern = AsyncMock()
@@ -447,7 +447,7 @@ class TestValidationAndRollback:
         })
         mock_learning_engine.record_pattern = AsyncMock()
         
-        orch = TDDOrchestratorV4(
+        orch = TDDOrchestrator(
             brain_connector=brain,
             knowledge_graph=kg,
             mcp_gateway=mcp,
@@ -630,7 +630,7 @@ class TestIntegrationAndAsync:
         })
         mock_learning_engine.record_pattern = AsyncMock()
         
-        orch = TDDOrchestratorV4(
+        orch = TDDOrchestrator(
             brain_connector=brain,
             knowledge_graph=kg,
             mcp_gateway=mcp,

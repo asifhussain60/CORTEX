@@ -4,7 +4,7 @@
 # Only keeps active development artifacts, archives everything else
 #
 # SAFETY: Does NOT conflict with:
-# - Planning System 2.0 (orchestrator-manifests/, documents/planning/)
+# - Planning System (orchestrator-manifests/, documents/planning/)
 # - TDD Workflow (tests/, tier0-3/)
 # - System Maintenance (admin/, config/)
 # - Core orchestrators (src/orchestrators/)

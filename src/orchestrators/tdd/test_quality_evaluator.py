@@ -1,5 +1,5 @@
 """
-Test Quality Evaluator for TDD Orchestrator v4.0
+Test Quality Evaluator for TDD Orchestrator
 
 Package 3: LLM-as-judge test quality evaluation
 Evaluates test generation reasoning using agent evaluation framework.

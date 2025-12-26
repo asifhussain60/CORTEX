@@ -29,7 +29,7 @@
 
 **Week 2 Status:**
 - ✅ Day 1: TDD v4.0 Orchestrator (700+ lines)
-- ✅ Day 2: Planning System 2.0 Orchestrator (1,200+ lines)
+- ✅ Day 2: Planning System Orchestrator (1,200+ lines)
 - ✅ Day 3: DocumentationOrchestrator (1,400+ lines)
 - ✅ Day 4: DevOpsOrchestrator (1,300+ lines) - **WEEK 2 COMPLETE**
 
@@ -288,7 +288,7 @@ result = await cicd.monitor_and_heal("pipeline-456")
 | Orchestrator | LOC | Diagrams | Components | Code Examples | Key Innovation |
 |--------------|-----|----------|------------|---------------|----------------|
 | **TDD v4.0** | 700 | 2 | 6 | 15 | Multi-language strategy |
-| **Planning System 2.0** | 1,200 | 2 | 6 | 20 | Adaptive complexity |
+| **Planning System** | 1,200 | 2 | 6 | 20 | Adaptive complexity |
 | **DocumentationOrchestrator** | 1,400 | 2 | 7 | 25 | Multi-agent + learning |
 | **DevOpsOrchestrator** | 1,300 | 2 | 6 | 20 | Multi-platform abstraction |
 
@@ -306,7 +306,7 @@ result = await cicd.monitor_and_heal("pipeline-456")
 
 **Week 2 Deliverables:**
 1. ✅ TDD v4.0 Orchestrator (Day 1) - 700 lines
-2. ✅ Planning System 2.0 Orchestrator (Day 2) - 1,200 lines
+2. ✅ Planning System Orchestrator (Day 2) - 1,200 lines
 3. ✅ DocumentationOrchestrator (Day 3) - 1,400 lines
 4. ✅ DevOpsOrchestrator (Day 4) - 1,300 lines
 
@@ -335,7 +335,7 @@ result = await cicd.monitor_and_heal("pipeline-456")
 
 - ✅ Week 2 (HIGH): 4/4 orchestrators (100%)
   - TDD v4.0 Orchestrator
-  - Planning System 2.0 Orchestrator
+  - Planning System Orchestrator
   - DocumentationOrchestrator
   - DevOpsOrchestrator
 
@@ -359,9 +359,9 @@ result = await cicd.monitor_and_heal("pipeline-456")
 **Continue Phase 6.5 Week 3 Day 1:** ADO Operations Orchestrator architecture diagram
 - **Priority:** MEDIUM (first of 4 MEDIUM priority tasks)
 - **Estimated Effort:** 1,000-1,200 lines
-- **Key Features:** Azure DevOps story/feature/task generation, Planning System 2.0 integration, ADO-formatted output
+- **Key Features:** Azure DevOps story/feature/task generation, Planning System integration, ADO-formatted output
 - **Implementation:** `src/operations/ado_operations.py` (600+ LOC)
-- **Manifest:** `ado-planning-manifest.yaml` (inherits Planning System 2.0 + ADO formatting)
+- **Manifest:** `ado-planning-manifest.yaml` (inherits Planning System + ADO formatting)
 
 ### Week 3 Remaining (Days 2-4)
 1. Code Sanitization Orchestrator (Day 2)
@@ -426,7 +426,7 @@ result = await cicd.monitor_and_heal("pipeline-456")
 ╠════════════════════════════════════════════════╣
 ║  4 Orchestrators Documented:                   ║
 ║  ✅ TDD v4.0 Orchestrator                     ║
-║  ✅ Planning System 2.0 Orchestrator          ║
+║  ✅ Planning System Orchestrator          ║
 ║  ✅ DocumentationOrchestrator                 ║
 ║  ✅ DevOpsOrchestrator                        ║
 ║                                                ║

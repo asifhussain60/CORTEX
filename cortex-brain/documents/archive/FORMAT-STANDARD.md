@@ -36,7 +36,7 @@ Content paragraph...
 - Format: `# 🧠 CORTEX {Title}`
 - No emoji for non-presentation templates
 - Examples:
-  - `# 🧠 CORTEX Planning System 2.0`
+  - `# 🧠 CORTEX Planning System`
   - `# 🧠 CORTEX Business Value & Capabilities`
   - `## 🧠 CORTEX {operation}` (operational templates start with H2)
 
@@ -53,7 +53,7 @@ Content paragraph...
 - Feature categories
 - Step-by-step breakdowns
 - Examples:
-  - `### Planning System 2.0`
+  - `### Planning System`
   - `### Requirements Clarity`
   - `### RED Phase`
 

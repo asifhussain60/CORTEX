@@ -62,6 +62,6 @@ templates:
         4. Say "owasp compliance" to check OWASP Top 10 coverage
 
 
-        **Integration:** Auto-runs during Planning System 2.0 (DoR validation)
+        **Integration:** Auto-runs during Planning System (DoR validation)
 
         '

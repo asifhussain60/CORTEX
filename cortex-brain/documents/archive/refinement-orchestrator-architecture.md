@@ -601,7 +601,7 @@ def update_confidence(self, outcome: RefactoringOutcome):
 - `cortex-brain/documents/planning/archived/TDD-MASTERY-INTEGRATION-PLAN.md`
 
 **Related Orchestrators:**
-- TDD Orchestrator v4.0 (triggers refinement in REFACTOR phase)
+- TDD Orchestrator (triggers refinement in REFACTOR phase)
 - Documentation Orchestrator (documents refactoring patterns)
 - System Maintenance Orchestrator (periodic code quality scans)
 

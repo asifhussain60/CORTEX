@@ -55,7 +55,7 @@ class PreFlightOrchestrator:
 ```
 
 **Enhancement for CORTEX:**
-- Add `PreFlightOrchestrator` to Planning System 2.0
+- Add `PreFlightOrchestrator` to Planning System
 - Run BEFORE Phase 1 of any plan
 - Detect: SDKs, tools, disk space, permissions, internet
 - Generate executable validation script (PowerShell/bash)
@@ -96,7 +96,7 @@ class PlanningOrchestrator:
 ```
 
 **Enhancement for CORTEX:**
-- Add `ProgressSynchronizer` utility to Planning System 2.0
+- Add `ProgressSynchronizer` utility to Planning System
 - Auto-update master plan after each phase
 - Update visual progress bars (ASCII art)
 - Prevent phase duplication (skip if already ✅)
@@ -198,7 +198,7 @@ class AutonomousPlanExecutor:
 ```
 
 **Enhancement for CORTEX:**
-- Add `AutonomousPlanExecutor` to Planning System 2.0
+- Add `AutonomousPlanExecutor` to Planning System
 - Detect: "continue autonomously", "proceed to next phase"
 - Gate checks: Pre-flight, tests passing, no blockers
 - Auto-advance: Phase N → N+1 until complete or blocked
@@ -305,7 +305,7 @@ class CompletionReporter:
 ```
 
 **Enhancement for CORTEX:**
-- Add `CompletionReporter` to Planning System 2.0
+- Add `CompletionReporter` to Planning System
 - Auto-generate PROJECT-COMPLETION-SUMMARY.md
 - Include: Metrics tables, deliverables, business value, handoff
 - Trigger: When master plan reaches 100%
@@ -350,7 +350,7 @@ class HolisticDiscovery:
 
 ## 🚀 Proposed Enhancements to CORTEX Orchestration
 
-### Enhancement 1: Add PreFlightOrchestrator to Planning System 2.0
+### Enhancement 1: Add PreFlightOrchestrator to Planning System
 
 **File:** `src/orchestrators/planning/pre_flight_orchestrator.py` (new)
 
@@ -632,7 +632,7 @@ class BrainProtector:
 ### Phase 1: Core Orchestration (Week 1)
 - ☐ Implement PreFlightOrchestrator
 - ☐ Implement ProgressSynchronizer
-- ☐ Integrate with Planning System 2.0
+- ☐ Integrate with Planning System
 - ☐ Test: plan → pre-flight → progress update
 
 ### Phase 2: Strategic Intelligence (Week 2)
@@ -642,7 +642,7 @@ class BrainProtector:
 
 ### Phase 3: Autonomous Execution (Week 3)
 - ☐ Implement AutonomousPlanExecutor
-- ☐ Integrate with Planning System 2.0
+- ☐ Integrate with Planning System
 - ☐ Test: Execute 5-phase plan autonomously
 
 ### Phase 4: Living Documentation (Week 4)
@@ -691,8 +691,8 @@ class BrainProtector:
 - `PrevalidationWS/plan/phase-4a-contract-verification.md` - Strategic test deferral
 
 **Existing CORTEX Documentation:**
-- `.github/prompts/CORTEX.prompt.md` - Planning System 2.0 spec
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - DoR/DoD
+- `.github/prompts/CORTEX.prompt.md` - Planning System spec
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` - DoR/DoD
 - `cortex-brain/brain-protection-rules.yaml` - SKULL rules
 
 ---

@@ -1,4 +1,4 @@
-# TDD Orchestrator v4.0 - User Guide
+# TDD Orchestrator - User Guide
 
 **Version:** 4.0.0  
 **Author:** CORTEX Development Team  
@@ -8,7 +8,7 @@
 
 ## 🎯 Overview
 
-TDD Orchestrator v4.0 is a unified, adaptive system for Test-Driven Development that automatically discovers your technology stack, generates comprehensive tests, implements minimal code, and refactors for quality—all while learning from patterns and enforcing clean code principles.
+TDD Orchestrator is a unified, adaptive system for Test-Driven Development that automatically discovers your technology stack, generates comprehensive tests, implements minimal code, and refactors for quality—all while learning from patterns and enforcing clean code principles.
 
 ### Key Features
 
@@ -99,7 +99,7 @@ start tdd User Authentication with criteria:
 
 **Example Output:**
 ```
-🎭 Orchestrator engaged: TDDOrchestratorV4
+🎭 Orchestrator engaged: TDDOrchestrator
 ▶️  RED: Generating tests for 'User Authentication'
   1. Analyzing feature requirements...
   2. Extracting edge cases...
@@ -355,7 +355,7 @@ View overall performance:
 
 ```bash
 # In Python console
-from src.orchestrators.tdd import TDDOrchestratorV4
+from src.orchestrators.tdd import TDDOrchestrator
 metrics = orchestrator.get_orchestrator_metrics()
 print(f"Success Rate: {metrics['success_rate']:.1%}")
 print(f"Patterns Learned: {metrics['patterns_learned']}")
@@ -383,7 +383,7 @@ These patterns are stored in Tier 2 and retrieved for future cycles.
 
 ## 🔗 Integration
 
-### With Planning System 3.0
+### With Planning System
 
 TDD is automatically included in all planning system plans:
 
@@ -400,7 +400,7 @@ Run TDD orchestrator in your CI pipeline:
 # .github/workflows/tdd.yml
 - name: Run TDD Cycle
   run: |
-    python -m src.orchestrators.tdd.tdd_orchestrator_v4 \
+    python -m src.orchestrators.tdd.tdd_orchestrator \
       --feature "New Feature" \
       --project-path "."
 ```
@@ -428,9 +428,9 @@ orchestrator.register_strategy('PERFORMANCE', PERFORMANCEPhaseStrategy())
 
 ```python
 from pathlib import Path
-from src.orchestrators.tdd import TDDOrchestratorV4
+from src.orchestrators.tdd import TDDOrchestrator
 
-orchestrator = TDDOrchestratorV4(brain, kg, mcp)
+orchestrator = TDDOrchestrator(brain, kg, mcp)
 
 result = await orchestrator.execute_tdd_cycle(
     feature_name="User Authentication",
@@ -450,7 +450,7 @@ print(f"Quality: {result['metrics']['quality_score']}")
 
 ## 🎯 Examples
 
-See `examples/tdd_orchestrator_v4_example.py` for complete examples:
+See `examples/tdd_orchestrator_example.py` for complete examples:
 
 1. Basic TDD cycle
 2. Multi-feature workflow with learning
@@ -461,7 +461,7 @@ See `examples/tdd_orchestrator_v4_example.py` for complete examples:
 ## 📖 Reference
 
 - **Manifest:** `cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml`
-- **Implementation:** `src/orchestrators/tdd/tdd_orchestrator_v4.py`
+- **Implementation:** `src/orchestrators/tdd/tdd_orchestrator.py`
 - **Strategies:** `src/orchestrators/tdd/strategies/`
 - **Tests:** `tests/orchestrators/tdd/`
 - **Brain Rules:** `cortex-brain/brain-protection-rules.yaml` (TDD_ENFORCEMENT)

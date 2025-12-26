@@ -57,7 +57,7 @@
 |--------|----------|-------|------------|---------------|
 | `orchestrators/` | 59.03% | 31 | 5,839 | 2,392 |
 
-**Analysis:** Legacy orchestrators (v3.0 and earlier) need test expansion. Planning System 2.0, TDD v4.0, Sanitization, and ADO have partial coverage.
+**Analysis:** Legacy orchestrators (v3.0 and earlier) need test expansion. Planning System, TDD v4.0, Sanitization, and ADO have partial coverage.
 
 ---
 
@@ -253,8 +253,8 @@
 #### P1 - High Priority (Complete in Week 15)
 
 5. **Orchestrators Expansion**
-   - Planning System 2.0 (increase 88% → 97%)
-   - TDD Orchestrator v4.0 (increase 88% → 98%)
+   - Planning System (increase 88% → 97%)
+   - TDD Orchestrator (increase 88% → 98%)
    - Sanitization (increase 86% → 95%)
    - Maintenance v3.0 (expand integration tests)
    - **Estimated Effort:** 16 hours

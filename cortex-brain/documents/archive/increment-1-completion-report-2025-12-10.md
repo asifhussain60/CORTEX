@@ -247,6 +247,6 @@ generator.update_mkdocs_navigation()
 
 ---
 
-**Approved By:** Planning System 2.0 DoD Gate  
+**Approved By:** Planning System DoD Gate  
 **Timestamp:** December 10, 2025  
 **Increment Duration:** 2 hours (per plan)

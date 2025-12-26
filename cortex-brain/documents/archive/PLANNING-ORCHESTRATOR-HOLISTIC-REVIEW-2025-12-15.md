@@ -171,7 +171,7 @@ cortex-brain/documents/planning/active/
 
 ## 🔧 Implementation Plan
 
-### Phase 1: Add Visual Tracker to Planning Orchestrator v3.1
+### Phase 1: Add Visual Tracker to Planning Orchestrator
 
 **File:** `src/operations/modules/orchestration/planning_orchestrator.py`
 

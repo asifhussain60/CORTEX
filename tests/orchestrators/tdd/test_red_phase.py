@@ -1,5 +1,5 @@
 """
-Tests for TDD Orchestrator v4.0 - RED Phase Strategy
+Tests for TDD Orchestrator - RED Phase Strategy
 
 Purpose: Verify RED phase test generation and DoR/DoD validation
 Version: 1.0.0
@@ -12,8 +12,8 @@ from unittest.mock import Mock, AsyncMock, patch
 from pathlib import Path
 from datetime import datetime
 
-from src.orchestrators.tdd.tdd_orchestrator_v4 import (
-    TDDOrchestratorV4,
+from src.orchestrators.tdd.tdd_orchestrator import (
+    TDDOrchestrator,
     TDDPhase,
     ValidationResult,
     PhaseResult,
@@ -25,7 +25,7 @@ from src.orchestrators.tdd.tdd_orchestrator_v4 import (
 def orchestrator(brain_connector, knowledge_graph, mcp_gateway, config):
     """Create orchestrator instance with required dependencies."""
     brain, kg, mcp, cfg = brain_connector, knowledge_graph, mcp_gateway, config
-    return TDDOrchestratorV4(brain, kg, mcp, cfg)
+    return TDDOrchestrator(brain, kg, mcp, cfg)
 
 
 @pytest.fixture

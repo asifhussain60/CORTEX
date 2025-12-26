@@ -47,7 +47,7 @@ core2 = loader.core_manifest  # ← Uses cached version
 
 ```python
 # Get orchestrator metadata
-orch = loader.get_orchestrator("tdd_orchestrator_v4")
+orch = loader.get_orchestrator("tdd_orchestrator")
 
 # List orchestrators
 all_orchestrators = loader.list_orchestrators()

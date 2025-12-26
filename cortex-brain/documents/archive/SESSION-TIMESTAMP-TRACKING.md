@@ -401,7 +401,7 @@ Business Value:
 
 ### Integration Points
 
-**Planning System 2.0:**
+**Planning System:**
 ```python
 # DoR/DoD enforcement with timestamp tracking
 session.record_event("milestone", "DoR validated - all requirements clear")

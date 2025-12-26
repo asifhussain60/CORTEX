@@ -167,7 +167,7 @@ adoption_rate = (400 / 500) × 100 = 80%
 
 | Feature | Target Usage Rate | Measurement | Business Impact |
 |---------|-------------------|-------------|-----------------|
-| **Planning System 2.0** | 70% of features | Plans created/total features | Velocity gain |
+| **Planning System** | 70% of features | Plans created/total features | Velocity gain |
 | **TDD Mastery** | 60% of code changes | TDD sessions/commits | Quality improvement |
 | **ADO Operations** | 80% of stories | ADO operations/stories | Process efficiency |
 | **Code Review Assistant** | 90% of PRs | PRs reviewed with CORTEX/total PRs | Review speed |

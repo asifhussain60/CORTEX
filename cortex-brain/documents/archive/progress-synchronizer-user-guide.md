@@ -331,7 +331,7 @@ def generate_progress_section(plan_name: str) -> str:
 
 ### Orchestrator Integration
 
-Example integration with Planning System 2.0:
+Example integration with Planning System:
 
 ```python
 from src.operations.utilities.progress_synchronizer import (

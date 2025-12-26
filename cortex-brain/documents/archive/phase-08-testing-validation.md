@@ -63,8 +63,8 @@ Testing & Validation is the final technical gate before documentation finalizati
 
 **Activities:**
 1. **Orchestrators (16 hours):**
-   - TDD Orchestrator v4.0 (target: 98%)
-   - Planning System 2.0 (target: 97%)
+   - TDD Orchestrator (target: 98%)
+   - Planning System (target: 97%)
    - Sanitization (target: 95%)
    - Maintenance v3.0 (target: 95%)
    - ADO Operations (target: 92%)
@@ -101,7 +101,7 @@ Testing & Validation is the final technical gate before documentation finalizati
 
 **Activities:**
 1. **End-to-End Workflows (8 hours):**
-   - Planning System 2.0: plan → approve → execute → complete
+   - Planning System: plan → approve → execute → complete
    - TDD Workflow: RED → GREEN → REFACTOR
    - System Maintenance: 7-phase workflow completion
    - Sanitization: analyze → mapping → transform → validate → report
@@ -138,7 +138,7 @@ Testing & Validation is the final technical gate before documentation finalizati
 
 **Activities:**
 1. **Orchestrator Performance (6 hours):**
-   - Planning System 2.0: plan generation time (<5s for 10-phase plan)
+   - Planning System: plan generation time (<5s for 10-phase plan)
    - TDD Orchestrator: test execution time (<30s for 100 tests)
    - Sanitization: code transformation throughput (>1000 LOC/s)
    - Maintenance: 7-phase completion time (<10 minutes)
@@ -283,7 +283,7 @@ Testing & Validation is the final technical gate before documentation finalizati
 
 **Activities:**
 1. **Orchestrator Load Testing (6 hours):**
-   - Planning System 2.0: 100 concurrent plan generations
+   - Planning System: 100 concurrent plan generations
    - TDD Orchestrator: 1000 test executions (parallel)
    - Sanitization: 10MB codebase processing
    - Maintenance: 10 concurrent system maintenance runs

@@ -233,4 +233,4 @@ VALIDATION:
 ---
 
 **Status:** ✅ Ready for Use  
-**Integration:** Planning System 2.0, ADO Operations
+**Integration:** Planning System, ADO Operations

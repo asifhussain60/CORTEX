@@ -38,7 +38,7 @@ Implement learning subsystem with `planning_learner.py` to continuously improve 
 Planning Learner - Continuous improvement for routing accuracy.
 
 Tracks routing decisions, collects feedback, and adapts complexity
-scoring to improve Planning System 3.0 tier classification.
+scoring to improve Planning System tier classification.
 """
 
 from pathlib import Path

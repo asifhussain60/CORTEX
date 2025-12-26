@@ -133,7 +133,7 @@
 
 **Current State:**
 - ✅ SKULL rules (Brain Protector enforces TDD, git isolation, etc.)
-- ✅ Planning System 2.0 (DoR/DoD compliance)
+- ✅ Planning System (DoR/DoD compliance)
 - ⚠️ No goal alignment checks (are features used?)
 - ⚠️ No code quality trend tracking
 - ❌ No productivity impact measurement
@@ -164,7 +164,7 @@
 
 **Example Dummy Plans:**
 ```yaml
-# Test Planning System 2.0
+# Test Planning System
 dummy_plan_1:
   purpose: "Validate IncrementalPlanGenerator"
   phases:

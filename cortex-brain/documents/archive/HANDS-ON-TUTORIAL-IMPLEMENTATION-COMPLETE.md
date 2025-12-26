@@ -287,7 +287,7 @@ align report
 
 **Expected Increase in Feature Usage:**
 - TDD Mastery: +80% (guided workflow demonstration)
-- Planning System 2.0: +60% (DoR/DoD practice)
+- Planning System: +60% (DoR/DoD practice)
 - View Discovery: +70% (hands-on exercise)
 - Feedback System: +50% (completion exercise)
 

@@ -180,7 +180,7 @@ NOT STARTED (5%):
 
 2. **Start SWAGGER Entry Point Module** (From CORTEX-3.3-QUESTIONNAIRE.md)
    - Define crawling strategy and complexity factors
-   - Integrate with Planning System 2.0
+   - Integrate with Planning System
    - Bootstrap with default estimation models
 
 3. **Extend User Profile Schema** (Team capacity fields)
@@ -368,7 +368,7 @@ def test_plan_approval_creates_git_checkpoint()
 
 **Approach A Architecture (Scope-First Strategy):**
 
-**Overview:** Leverage existing Planning System 2.0 DoR (Questions 3 & 6) to infer scope automatically, reducing redundant interrogation while maintaining accuracy.
+**Overview:** Leverage existing Planning System DoR (Questions 3 & 6) to infer scope automatically, reducing redundant interrogation while maintaining accuracy.
 
 **Components:**
 
@@ -494,7 +494,7 @@ confidence = calculate_confidence(
 **Time:** 2 days
 
 **Tasks:**
-- Wire SWAGGER into Planning System 2.0
+- Wire SWAGGER into Planning System
 - Add estimation to DoR validation phase
 - Display estimation in planning templates
 - Store estimation history in Tier 3 for learning
@@ -1141,7 +1141,7 @@ INCREMENT N+1 Start
 - [x] Estimation completes in <30 seconds (achieved: <0.7s, 43x faster than target)
 - [x] Accuracy within ±30% of actual (validated through 60-70% question reduction)
 - [x] Confidence scoring with threshold-based clarification (0.70 threshold)
-- [x] Integrated with Planning System 2.0 (+254 lines in PlanningOrchestrator)
+- [x] Integrated with Planning System (+254 lines in PlanningOrchestrator)
 - [x] Tier 3 storage for learning operational (scope_history table)
 - [x] 90%+ test coverage achieved (91% - 56/56 tests passing)
 - [x] Documentation complete (swagger-entry-point-guide.md created - comprehensive 45-section guide)
@@ -1186,7 +1186,7 @@ Core SWAGGER functionality (scope inference, validation, clarification) achieves
 ### Existing Documents
 - #file:git-enhancements-feature-plan.md - Git enhancements detailed design (70% complete)
 - #file:CORTEX-3.3-QUESTIONNAIRE.md - User questionnaire responses
-- #file:../../.github/prompts/modules/planning-orchestrator-guide.md - Planning System 2.0
+- #file:../../.github/prompts/modules/planning-orchestrator-guide.md - Planning System
 - #file:../../.github/prompts/modules/user-profile-guide.md - User Profile System
 
 ### Documents to Create

@@ -99,7 +99,7 @@ Implement dynamic orchestrator/agent registration to replace hardcoded imports w
    ```python
    @orchestrator_plugin("planning", version="4.0.0")
    class PlanningOrchestrator(BaseOrchestrator):
-       """Planning System 2.0 orchestrator."""
+       """Planning System orchestrator."""
        pass
    ```
 

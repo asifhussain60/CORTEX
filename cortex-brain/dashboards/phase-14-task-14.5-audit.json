@@ -1589,7 +1589,7 @@
         },
         {
           "line_num": 934,
-          "content": "# src/orchestrators/maintenance/maintenance_orchestrator_v3.py",
+          "content": "# src/orchestrators/maintenance/maintenance_orchestrator.py",
           "version": "_v3"
         },
         {
@@ -1896,7 +1896,7 @@
       "lines": [
         {
           "line_num": 1,
-          "content": "# Enhanced Cleanup Orchestrator v3.0 - Implementation Summary",
+          "content": "# Enhanced Cleanup Orchestrator - Implementation Summary",
           "version": "v3.x"
         },
         {
@@ -1931,7 +1931,7 @@
         },
         {
           "line_num": 355,
-          "content": "The Enhanced Cleanup Orchestrator v3.0 provides:",
+          "content": "The Enhanced Cleanup Orchestrator provides:",
           "version": "v3.x"
         },
         {
@@ -2218,7 +2218,7 @@
         },
         {
           "line_num": 73,
-          "content": "MyFeature Orchestrator v3.0 for CORTEX",
+          "content": "MyFeature Orchestrator for CORTEX",
           "version": "v3.x"
         },
         {
@@ -2228,7 +2228,7 @@
         },
         {
           "line_num": 222,
-          "content": "Helper Tool Orchestrator v2.0 - Specialized internal utility",
+          "content": "Helper Tool Orchestrator - Specialized internal utility",
           "version": "v2.x"
         },
         {
@@ -2243,7 +2243,7 @@
         },
         {
           "line_num": 713,
-          "content": "- v3.0: Full Planning System 3.0 integration",
+          "content": "- v3.0: Full Planning System integration",
           "version": "v3.x"
         },
         {
@@ -2258,7 +2258,7 @@
         },
         {
           "line_num": 762,
-          "content": "See: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`",
+          "content": "See: `src/operations/modules/orchestration/maintenance_orchestrator.py`",
           "version": "_v3"
         }
       ]
@@ -2419,7 +2419,7 @@
       "lines": [
         {
           "line_num": 200,
-          "content": "### 2. Planning Orchestrator v3.1",
+          "content": "### 2. Planning Orchestrator",
           "version": "v3.x"
         }
       ]
@@ -2517,7 +2517,7 @@
       "lines": [
         {
           "line_num": 1,
-          "content": "# Planning Orchestrator v3.1 Enhancement Summary",
+          "content": "# Planning Orchestrator Enhancement Summary",
           "version": "v3.x"
         },
         {
@@ -2532,12 +2532,12 @@
         },
         {
           "line_num": 250,
-          "content": "logger.info(\"\ud83c\udfad Orchestrator engaged: PlanningOrchestrator v3.1\")",
+          "content": "logger.info(\"\ud83c\udfad Orchestrator engaged: PlanningOrchestrator\")",
           "version": "v3.x"
         },
         {
           "line_num": 336,
-          "content": "All issues have been fixed and the requested feature (temporary plan workflow) has been implemented. The Planning Orchestrator v3.1 is now production-ready with comprehensive test coverage.",
+          "content": "All issues have been fixed and the requested feature (temporary plan workflow) has been implemented. The Planning Orchestrator is now production-ready with comprehensive test coverage.",
           "version": "v3.x"
         }
       ]
@@ -2874,7 +2874,7 @@
       "lines": [
         {
           "line_num": 11,
-          "content": "**Sanitization Orchestrator v2.0** - Code sanitization workflow with 5-phase architecture",
+          "content": "**Sanitization Orchestrator** - Code sanitization workflow with 5-phase architecture",
           "version": "v2.x"
         },
         {
@@ -2899,7 +2899,7 @@
         },
         {
           "line_num": 244,
-          "content": "1. \u2705 **Sanitization Orchestrator v2.0**: Complete (this task)",
+          "content": "1. \u2705 **Sanitization Orchestrator**: Complete (this task)",
           "version": "v2.x"
         },
         {
@@ -2920,12 +2920,12 @@
       "lines": [
         {
           "line_num": 3,
-          "content": "## \ud83e\udde0 CORTEX Phase 6 Task 6.13 - Planning Orchestrator v2.0",
+          "content": "## \ud83e\udde0 CORTEX Phase 6 Task 6.13 - Planning Orchestrator",
           "version": "v2.x"
         },
         {
           "line_num": 11,
-          "content": "**Planning Orchestrator v2.0** - YAML-based feature planning with validation and autonomous execution",
+          "content": "**Planning Orchestrator** - YAML-based feature planning with validation and autonomous execution",
           "version": "v2.x"
         },
         {
@@ -3592,12 +3592,12 @@
       "lines": [
         {
           "line_num": 74,
-          "content": "- \u26a0\ufe0f `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` - REFERENCED but MISSING",
+          "content": "- \u26a0\ufe0f `src/operations/modules/orchestration/maintenance_orchestrator.py` - REFERENCED but MISSING",
           "version": "_v3"
         },
         {
           "line_num": 369,
-          "content": "- `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`",
+          "content": "- `src/operations/modules/orchestration/maintenance_orchestrator.py`",
           "version": "_v3"
         },
         {
@@ -3644,12 +3644,12 @@
       "lines": [
         {
           "line_num": 65,
-          "content": "1. **Maintenance Orchestrator v3.0**",
+          "content": "1. **Maintenance Orchestrator**",
           "version": "v3.x"
         },
         {
           "line_num": 66,
-          "content": "- Expected: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`",
+          "content": "- Expected: `src/operations/modules/orchestration/maintenance_orchestrator.py`",
           "version": "_v3"
         },
         {
@@ -3706,7 +3706,7 @@
         },
         {
           "line_num": 163,
-          "content": "- \u26a0\ufe0f `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` (REFERENCED in CORTEX.prompt.md but MISSING)",
+          "content": "- \u26a0\ufe0f `src/operations/modules/orchestration/maintenance_orchestrator.py` (REFERENCED in CORTEX.prompt.md but MISSING)",
           "version": "_v3"
         },
         {
@@ -3716,7 +3716,7 @@
         },
         {
           "line_num": 241,
-          "content": "- \u26a0\ufe0f CORTEX.prompt.md references `maintenance_orchestrator_v3.py` (file missing)",
+          "content": "- \u26a0\ufe0f CORTEX.prompt.md references `maintenance_orchestrator.py` (file missing)",
           "version": "_v3"
         },
         {
@@ -3772,7 +3772,7 @@
         },
         {
           "line_num": 258,
-          "content": "5. Check if orchestrator exists: src/operations/modules/orchestration/maintenance_orchestrator_v3.py - MISSING",
+          "content": "5. Check if orchestrator exists: src/operations/modules/orchestration/maintenance_orchestrator.py - MISSING",
           "version": "_v3"
         },
         {
@@ -3911,12 +3911,12 @@
       "lines": [
         {
           "line_num": 12,
-          "content": "The Align Orchestrator v2.0 has been comprehensively reviewed, debugged, and validated for production release. A critical YAML insertion bug was identified and fixed, resulting in operation registration improving from 2.9% to 54.3% (100% operation coverage). All 6 validation checks are operational, and the system is now lean, unbloated, and fully functional.",
+          "content": "The Align Orchestrator has been comprehensively reviewed, debugged, and validated for production release. A critical YAML insertion bug was identified and fixed, resulting in operation registration improving from 2.9% to 54.3% (100% operation coverage). All 6 validation checks are operational, and the system is now lean, unbloated, and fully functional.",
           "version": "v2.x"
         },
         {
           "line_num": 285,
-          "content": "The CORTEX Align Orchestrator v2.0 is **PRODUCTION READY** after successfully:",
+          "content": "The CORTEX Align Orchestrator is **PRODUCTION READY** after successfully:",
           "version": "v2.x"
         }
       ]
@@ -4875,7 +4875,7 @@
         },
         {
           "line_num": 64,
-          "content": "- **Version:** v3.0 (Planning System 3.0 integration)",
+          "content": "- **Version:** v3.0 (Planning System integration)",
           "version": "v3.x"
         },
         {
@@ -6743,7 +6743,7 @@
       "lines": [
         {
           "line_num": 1,
-          "content": "# Enhanced Cleanup Orchestrator v3.0 - Live Execution Report",
+          "content": "# Enhanced Cleanup Orchestrator - Live Execution Report",
           "version": "v3.x"
         },
         {
@@ -6753,7 +6753,7 @@
         },
         {
           "line_num": 12,
-          "content": "Successfully executed Enhanced Cleanup Orchestrator v3.0 in **LIVE MODE** on the CORTEX repository. All operations completed without errors, repository is now cleaner and better organized.",
+          "content": "Successfully executed Enhanced Cleanup Orchestrator in **LIVE MODE** on the CORTEX repository. All operations completed without errors, repository is now cleaner and better organized.",
           "version": "v3.x"
         },
         {
@@ -6778,7 +6778,7 @@
         },
         {
           "line_num": 284,
-          "content": "The Enhanced Cleanup Orchestrator v3.0 has been **successfully deployed and validated** in live mode. All cleanup operations executed flawlessly, the repository is now better organized, and no essential functionality was impacted.",
+          "content": "The Enhanced Cleanup Orchestrator has been **successfully deployed and validated** in live mode. All cleanup operations executed flawlessly, the repository is now better organized, and no essential functionality was impacted.",
           "version": "v3.x"
         },
         {
@@ -7658,7 +7658,7 @@
       "lines": [
         {
           "line_num": 1,
-          "content": "# Mock Test Elimination Report - Planning Orchestrator v3.0",
+          "content": "# Mock Test Elimination Report - Planning Orchestrator",
           "version": "v3.x"
         },
         {
@@ -7668,7 +7668,7 @@
         },
         {
           "line_num": 11,
-          "content": "**FINDING:** Original Planning Orchestrator v3.0 tests used extensive mocking, defeating the purpose of integration testing.",
+          "content": "**FINDING:** Original Planning Orchestrator tests used extensive mocking, defeating the purpose of integration testing.",
           "version": "v3.x"
         },
         {
@@ -7693,7 +7693,7 @@
         },
         {
           "line_num": 213,
-          "content": "**Mock-free integration testing is now the CORTEX standard.** Planning Orchestrator v3.0 tests demonstrate that real component validation is faster, more reliable, and more accurate than mocked tests. All future orchestrator tests must follow this pattern.",
+          "content": "**Mock-free integration testing is now the CORTEX standard.** Planning Orchestrator tests demonstrate that real component validation is faster, more reliable, and more accurate than mocked tests. All future orchestrator tests must follow this pattern.",
           "version": "v3.x"
         }
       ]
@@ -7821,12 +7821,12 @@
       "lines": [
         {
           "line_num": 186,
-          "content": "**Note on TDD:** The `tdd` operation in cortex-operations.yaml (line 868) is marked as `internal` and appears to be a legacy CLI entry. The actual TDD orchestrator (`TDDOrchestrator` v3.0.0) is wired through Planning System 3.0 integration and the `start tdd` command pattern.",
+          "content": "**Note on TDD:** The `tdd` operation in cortex-operations.yaml (line 868) is marked as `internal` and appears to be a legacy CLI entry. The actual TDD orchestrator (`TDDOrchestrator` v3.0.0) is wired through Planning System integration and the `start tdd` command pattern.",
           "version": "v3.x"
         },
         {
           "line_num": 273,
-          "content": "**Issue:** TDD operation in cortex-operations.yaml (line 868) marked as `internal`, but TDDOrchestrator v3.0.0 is fully Planning System 3.0 integrated.",
+          "content": "**Issue:** TDD operation in cortex-operations.yaml (line 868) marked as `internal`, but TDDOrchestrator.0 is fully Planning System integrated.",
           "version": "v3.x"
         }
       ]
@@ -8681,7 +8681,7 @@
         },
         {
           "line_num": 174,
-          "content": "### Phase 1: Add Visual Tracker to Planning Orchestrator v3.1",
+          "content": "### Phase 1: Add Visual Tracker to Planning Orchestrator",
           "version": "v3.x"
         }
       ]
@@ -8713,7 +8713,7 @@
       ]
     },
     {
-      "file": "cortex-brain\\documents\\reports\\planning-system-2.0-architecture-completion.md",
+      "file": "cortex-brain\\documents\\reports\\planning-system-architecture-completion.md",
       "refs_count": 5,
       "lines": [
         {
@@ -9260,12 +9260,12 @@
       "lines": [
         {
           "line_num": 41,
-          "content": "| **Sprint 1** | \u2705 COMPLETE | 12.5h | CodeCleanupValidator, LintIntegration, ProductionReadinessChecklist, SessionCompletionOrchestrator v2.0 |",
+          "content": "| **Sprint 1** | \u2705 COMPLETE | 12.5h | CodeCleanupValidator, LintIntegration, ProductionReadinessChecklist, SessionCompletionOrchestrator |",
           "version": "v2.x"
         },
         {
           "line_num": 74,
-          "content": "4. **SessionCompletionOrchestrator v2.0**",
+          "content": "4. **SessionCompletionOrchestrator**",
           "version": "v2.x"
         },
         {
@@ -9275,7 +9275,7 @@
         },
         {
           "line_num": 394,
-          "content": "3. \u23f3 No integration tests for SessionCompletionOrchestrator v2.0",
+          "content": "3. \u23f3 No integration tests for SessionCompletionOrchestrator",
           "version": "v2.x"
         }
       ]
@@ -9286,12 +9286,12 @@
       "lines": [
         {
           "line_num": 17,
-          "content": "4. **SessionCompletionOrchestrator v2.0** - Integrated quality enforcement pipeline",
+          "content": "4. **SessionCompletionOrchestrator** - Integrated quality enforcement pipeline",
           "version": "v2.x"
         },
         {
           "line_num": 157,
-          "content": "### 4. SessionCompletionOrchestrator v2.0 Integration (2.0h actual vs 3h estimated)",
+          "content": "### 4. SessionCompletionOrchestrator Integration (2.0h actual vs 3h estimated)",
           "version": "v2.x"
         }
       ]
@@ -9302,17 +9302,17 @@
       "lines": [
         {
           "line_num": 150,
-          "content": "| SessionCompletionOrchestrator v2.0 | 0 | N/A | N/A | Deferred to future sprint |",
+          "content": "| SessionCompletionOrchestrator | 0 | N/A | N/A | Deferred to future sprint |",
           "version": "v2.x"
         },
         {
           "line_num": 290,
-          "content": "### 2. SessionCompletionOrchestrator v2.0 Integration Tests",
+          "content": "### 2. SessionCompletionOrchestrator Integration Tests",
           "version": "v2.x"
         },
         {
           "line_num": 442,
-          "content": "2. SessionCompletionOrchestrator v2.0 integration tests (3h)",
+          "content": "2. SessionCompletionOrchestrator integration tests (3h)",
           "version": "v2.x"
         }
       ]
@@ -9547,7 +9547,7 @@
         },
         {
           "line_num": 137,
-          "content": "**Planning Orchestrator v3.1 Problems:**",
+          "content": "**Planning Orchestrator Problems:**",
           "version": "v3.x"
         },
         {
@@ -9557,7 +9557,7 @@
         },
         {
           "line_num": 706,
-          "content": "4. **MaintenanceOrchestratorV3** (`maintenance_orchestrator_v3.py`) - TERTIARY",
+          "content": "4. **MaintenanceOrchestrator** (`maintenance_orchestrator.py`) - TERTIARY",
           "version": "_v3"
         },
         {
@@ -12155,7 +12155,7 @@
         },
         {
           "line_num": 330,
-          "content": "**CORTEX Align Orchestrator v2.0: Intelligent Maintenance System**",
+          "content": "**CORTEX Align Orchestrator: Intelligent Maintenance System**",
           "version": "v2.x"
         }
       ]
@@ -12208,7 +12208,7 @@
       "lines": [
         {
           "line_num": 22,
-          "content": "**No Challenge** - All 7 phases completed successfully using the Maintenance Orchestrator v3.0 workflow:",
+          "content": "**No Challenge** - All 7 phases completed successfully using the Maintenance Orchestrator workflow:",
           "version": "v3.x"
         }
       ]
@@ -12432,47 +12432,47 @@
         },
         {
           "line_num": 73,
-          "content": "**Session Completion Orchestrator v2.0:**",
+          "content": "**Session Completion Orchestrator:**",
           "version": "v2.x"
         },
         {
           "line_num": 144,
-          "content": "- \u2705 Add format validator to SessionCompletionOrchestrator v2.0 validation pipeline",
+          "content": "- \u2705 Add format validator to SessionCompletionOrchestrator validation pipeline",
           "version": "v2.x"
         },
         {
           "line_num": 170,
-          "content": "- Integration tests with SessionCompletionOrchestrator v2.0",
+          "content": "- Integration tests with SessionCompletionOrchestrator",
           "version": "v2.x"
         },
         {
           "line_num": 211,
-          "content": "- \u2705 Integrate with SessionCompletionOrchestrator v2.0 patterns",
+          "content": "- \u2705 Integrate with SessionCompletionOrchestrator patterns",
           "version": "v2.x"
         },
         {
           "line_num": 456,
-          "content": "- SessionCompletionOrchestrator v2.0 integration",
+          "content": "- SessionCompletionOrchestrator integration",
           "version": "v2.x"
         },
         {
           "line_num": 596,
-          "content": "1. Implement `documentation_format_validator.py` (integrate with SessionCompletionOrchestrator v2.0)",
+          "content": "1. Implement `documentation_format_validator.py` (integrate with SessionCompletionOrchestrator)",
           "version": "v2.x"
         },
         {
           "line_num": 613,
-          "content": "- [x] Identified SessionCompletionOrchestrator v2.0 integration points",
+          "content": "- [x] Identified SessionCompletionOrchestrator integration points",
           "version": "v2.x"
         },
         {
           "line_num": 651,
-          "content": "- Production-ready validation pipeline (SessionCompletionOrchestrator v2.0)",
+          "content": "- Production-ready validation pipeline (SessionCompletionOrchestrator)",
           "version": "v2.x"
         },
         {
           "line_num": 670,
-          "content": "1. **TDD Mastery provides production-ready patterns:** SessionCompletionOrchestrator v2.0 validation pipeline can be reused for format validation",
+          "content": "1. **TDD Mastery provides production-ready patterns:** SessionCompletionOrchestrator validation pipeline can be reused for format validation",
           "version": "v2.x"
         }
       ]
@@ -12777,12 +12777,12 @@
       "lines": [
         {
           "line_num": 65,
-          "content": "4. Maintenance Orchestrator v3.0 - Create test suite (target: 95% coverage)",
+          "content": "4. Maintenance Orchestrator - Create test suite (target: 95% coverage)",
           "version": "v3.x"
         },
         {
           "line_num": 151,
-          "content": "| Maintenance Orchestrator v3.0 | 95% | 25 tests | 3h |",
+          "content": "| Maintenance Orchestrator | 95% | 25 tests | 3h |",
           "version": "v3.x"
         },
         {
@@ -14236,7 +14236,7 @@
         },
         {
           "line_num": 320,
-          "content": "- `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`",
+          "content": "- `src/operations/modules/orchestration/maintenance_orchestrator.py`",
           "version": "_v3"
         }
       ]
@@ -15585,7 +15585,7 @@
         },
         {
           "line_num": 937,
-          "content": "5. `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` - v2.0 manifest",
+          "content": "5. `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` - v2.0 manifest",
           "version": "v2.x"
         },
         {
@@ -16127,7 +16127,7 @@
         },
         {
           "line_num": 137,
-          "content": "**Target State (v3.9.0 - Planning System 3.0):**",
+          "content": "**Target State (v3.9.0 - Planning System):**",
           "version": "v3.x"
         },
         {
@@ -16157,12 +16157,12 @@
         },
         {
           "line_num": 523,
-          "content": "- \u2705 src/operations/modules/orchestration/maintenance_orchestrator_v3.py (884 lines - v3.0)",
+          "content": "- \u2705 src/operations/modules/orchestration/maintenance_orchestrator.py (884 lines - v3.0)",
           "version": "v3.x"
         },
         {
           "line_num": 524,
-          "content": "- \u2705 tests/test_maintenance_orchestrator_v3.py (686 lines, 36/36 passing)",
+          "content": "- \u2705 tests/test_maintenance_orchestrator.py (686 lines, 36/36 passing)",
           "version": "_v3"
         },
         {
@@ -16220,7 +16220,7 @@
         },
         {
           "line_num": 35,
-          "content": "**PlanningOrchestrator v3.0 (src/operations/modules/orchestration/planning_orchestrator.py):**",
+          "content": "**PlanningOrchestrator (src/operations/modules/orchestration/planning_orchestrator.py):**",
           "version": "v3.x"
         },
         {
@@ -16230,7 +16230,7 @@
         },
         {
           "line_num": 91,
-          "content": "logger.info(\"\ud83c\udfad Orchestrator engaged: PlanningOrchestrator v3.0\")",
+          "content": "logger.info(\"\ud83c\udfad Orchestrator engaged: PlanningOrchestrator\")",
           "version": "v3.x"
         },
         {
@@ -16246,7 +16246,7 @@
       "lines": [
         {
           "line_num": 122,
-          "content": "logger.info(\"\ud83c\udfad Orchestrator engaged: ADOPlanningOrchestrator v3.0\")",
+          "content": "logger.info(\"\ud83c\udfad Orchestrator engaged: ADOPlanningOrchestrator\")",
           "version": "v3.x"
         },
         {
@@ -16267,7 +16267,7 @@
       "lines": [
         {
           "line_num": 151,
-          "content": "logger.info(\"\ud83c\udfad Orchestrator engaged: TDDOrchestrator v3.0\")",
+          "content": "logger.info(\"\ud83c\udfad Orchestrator engaged: TDDOrchestrator\")",
           "version": "v3.x"
         },
         {
@@ -16293,7 +16293,7 @@
         },
         {
           "line_num": 202,
-          "content": "- \u2705 `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` (884 lines, v3.0)",
+          "content": "- \u2705 `src/operations/modules/orchestration/maintenance_orchestrator.py` (884 lines, v3.0)",
           "version": "v3.x"
         },
         {
@@ -16303,17 +16303,17 @@
         },
         {
           "line_num": 210,
-          "content": "- \u2705 `tests/test_maintenance_orchestrator_v3.py` (586 lines, 36/36 passing)",
+          "content": "- \u2705 `tests/test_maintenance_orchestrator.py` (586 lines, 36/36 passing)",
           "version": "_v3"
         },
         {
           "line_num": 298,
-          "content": "- \u2705 `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` - 767 lines, v3.0",
+          "content": "- \u2705 `src/operations/modules/orchestration/maintenance_orchestrator.py` - 767 lines, v3.0",
           "version": "v3.x"
         },
         {
           "line_num": 299,
-          "content": "- \u2705 `tests/test_maintenance_orchestrator_v3.py` - 564 lines, 36 tests (100% passing)",
+          "content": "- \u2705 `tests/test_maintenance_orchestrator.py` - 564 lines, 36 tests (100% passing)",
           "version": "_v3"
         },
         {
@@ -16323,7 +16323,7 @@
         },
         {
           "line_num": 305,
-          "content": "- \u2705 Archive: `archive/deprecated_v3.8.1/system_maintenance_orchestrator_v3.8.1.py`",
+          "content": "- \u2705 Archive: `archive/deprecated_v3.8.1/system_maintenance_orchestrator.8.1.py`",
           "version": "v3.x"
         },
         {
@@ -16355,12 +16355,12 @@
         },
         {
           "line_num": 92,
-          "content": "- \u2705 Successfully integrated with PlanningOrchestrator v3.0",
+          "content": "- \u2705 Successfully integrated with PlanningOrchestrator",
           "version": "v3.x"
         },
         {
           "line_num": 145,
-          "content": "- Integration points: 1 (PlanningOrchestrator v3.0)",
+          "content": "- Integration points: 1 (PlanningOrchestrator)",
           "version": "v3.x"
         }
       ]
@@ -17843,7 +17843,7 @@
       "lines": [
         {
           "line_num": 509,
-          "content": "**File:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`",
+          "content": "**File:** `src/operations/modules/orchestration/maintenance_orchestrator.py`",
           "version": "_v3"
         },
         {
@@ -17870,7 +17870,7 @@
       "lines": [
         {
           "line_num": 596,
-          "content": "- `src/operations/modules/orchestration/maintenance_orchestrator_v3.py` - Example orchestrator",
+          "content": "- `src/operations/modules/orchestration/maintenance_orchestrator.py` - Example orchestrator",
           "version": "_v3"
         }
       ]
@@ -17934,7 +17934,7 @@
       "lines": [
         {
           "line_num": 573,
-          "content": "- **Maintenance Orchestrator:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`",
+          "content": "- **Maintenance Orchestrator:** `src/operations/modules/orchestration/maintenance_orchestrator.py`",
           "version": "_v3"
         }
       ]
@@ -18132,12 +18132,12 @@
       "lines": [
         {
           "line_num": 114,
-          "content": "- \u2705 Tests documented (test_maintenance_orchestrator_v3.py, 686 LOC, 36/36 passing)",
+          "content": "- \u2705 Tests documented (test_maintenance_orchestrator.py, 686 LOC, 36/36 passing)",
           "version": "_v3"
         },
         {
           "line_num": 117,
-          "content": "- \u274c **Implementation file missing:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`",
+          "content": "- \u274c **Implementation file missing:** `src/operations/modules/orchestration/maintenance_orchestrator.py`",
           "version": "_v3"
         },
         {
@@ -18153,7 +18153,7 @@
       "lines": [
         {
           "line_num": 7,
-          "content": "**Status:** \u26a0\ufe0f DOCUMENTED (Implementation file missing: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`)",
+          "content": "**Status:** \u26a0\ufe0f DOCUMENTED (Implementation file missing: `src/operations/modules/orchestration/maintenance_orchestrator.py`)",
           "version": "_v3"
         },
         {
@@ -18163,7 +18163,7 @@
         },
         {
           "line_num": 45,
-          "content": "subgraph \"System Maintenance Orchestrator v3.0\"",
+          "content": "subgraph \"System Maintenance Orchestrator\"",
           "version": "v3.x"
         },
         {
@@ -18173,12 +18173,12 @@
         },
         {
           "line_num": 1324,
-          "content": "- \u2705 **Tested:** 36/36 tests passing (test_maintenance_orchestrator_v3.py)",
+          "content": "- \u2705 **Tested:** 36/36 tests passing (test_maintenance_orchestrator.py)",
           "version": "_v3"
         },
         {
           "line_num": 1325,
-          "content": "- \u274c **Implementation:** File missing (`src/operations/modules/orchestration/maintenance_orchestrator_v3.py`)",
+          "content": "- \u274c **Implementation:** File missing (`src/operations/modules/orchestration/maintenance_orchestrator.py`)",
           "version": "_v3"
         },
         {
@@ -18752,7 +18752,7 @@
       "lines": [
         {
           "line_num": 52,
-          "content": "- `src/operations/modules/orchestration/*_v3.py` (maintenance_orchestrator_v3, etc.)",
+          "content": "- `src/operations/modules/orchestration/*_v3.py` (maintenance_orchestrator, etc.)",
           "version": "_v3"
         },
         {
@@ -18838,7 +18838,7 @@
         },
         {
           "line_num": 443,
-          "content": "source_file: \"src/operations/modules/orchestration/maintenance_orchestrator_v3.py\"",
+          "content": "source_file: \"src/operations/modules/orchestration/maintenance_orchestrator.py\"",
           "version": "_v3"
         },
         {
@@ -19342,7 +19342,7 @@
       "lines": [
         {
           "line_num": 7,
-          "content": "**Status:** \u26a0\ufe0f DOCUMENTED (Implementation file missing: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`)",
+          "content": "**Status:** \u26a0\ufe0f DOCUMENTED (Implementation file missing: `src/operations/modules/orchestration/maintenance_orchestrator.py`)",
           "version": "_v3"
         },
         {
@@ -19352,7 +19352,7 @@
         },
         {
           "line_num": 45,
-          "content": "subgraph \"System Maintenance Orchestrator v3.0\"",
+          "content": "subgraph \"System Maintenance Orchestrator\"",
           "version": "v3.x"
         },
         {
@@ -19362,12 +19362,12 @@
         },
         {
           "line_num": 1324,
-          "content": "- \u2705 **Tested:** 36/36 tests passing (test_maintenance_orchestrator_v3.py)",
+          "content": "- \u2705 **Tested:** 36/36 tests passing (test_maintenance_orchestrator.py)",
           "version": "_v3"
         },
         {
           "line_num": 1325,
-          "content": "- \u274c **Implementation:** File missing (`src/operations/modules/orchestration/maintenance_orchestrator_v3.py`)",
+          "content": "- \u274c **Implementation:** File missing (`src/operations/modules/orchestration/maintenance_orchestrator.py`)",
           "version": "_v3"
         },
         {
@@ -19487,7 +19487,7 @@
         },
         {
           "line_num": 173,
-          "content": "### SessionCompletionOrchestrator v2.0",
+          "content": "### SessionCompletionOrchestrator",
           "version": "v2.x"
         },
         {
@@ -20220,7 +20220,7 @@
       "lines": [
         {
           "line_num": 412,
-          "content": "- \"PublishBranchOrchestrator v2.0\"",
+          "content": "- \"PublishBranchOrchestrator\"",
           "version": "v2.x"
         },
         {
@@ -20258,7 +20258,7 @@
       "lines": [
         {
           "line_num": 2,
-          "content": "# \ud83e\udde0 CORTEX Evolution v3.9 - Planning System 3.0 Manifest",
+          "content": "# \ud83e\udde0 CORTEX Evolution v3.9 - Planning System Manifest",
           "version": "v3.x"
         },
         {
@@ -20268,7 +20268,7 @@
         },
         {
           "line_num": 8,
-          "content": "title: \"CORTEX Evolution v3.9 - Planning System 3.0\"",
+          "content": "title: \"CORTEX Evolution v3.9 - Planning System\"",
           "version": "v3.x"
         },
         {
@@ -21324,7 +21324,7 @@
       "lines": [
         {
           "line_num": 3,
-          "content": "Feature Auto-Registrar for CORTEX Align Orchestrator v2.0",
+          "content": "Feature Auto-Registrar for CORTEX Align Orchestrator",
           "version": "v2.x"
         }
       ]
@@ -21335,7 +21335,7 @@
       "lines": [
         {
           "line_num": 3,
-          "content": "Feature Registration Validator for CORTEX Align Orchestrator v2.0",
+          "content": "Feature Registration Validator for CORTEX Align Orchestrator",
           "version": "v2.x"
         }
       ]
@@ -21562,12 +21562,12 @@
         },
         {
           "line_num": 2191,
-          "content": "Feature Auto-Registrar for CORTEX Align Orchestrator v2.0",
+          "content": "Feature Auto-Registrar for CORTEX Align Orchestrator",
           "version": "v2.x"
         },
         {
           "line_num": 2198,
-          "content": "Feature Registration Validator for CORTEX Align Orchestrator v2.0",
+          "content": "Feature Registration Validator for CORTEX Align Orchestrator",
           "version": "v2.x"
         },
         {
@@ -21582,7 +21582,7 @@
         },
         {
           "line_num": 2226,
-          "content": "Obsolete Code Detector for CORTEX Align Orchestrator v2.0",
+          "content": "Obsolete Code Detector for CORTEX Align Orchestrator",
           "version": "v2.x"
         },
         {
@@ -21592,7 +21592,7 @@
         },
         {
           "line_num": 2247,
-          "content": "Safe Cleanup Executor for CORTEX Align Orchestrator v2.0",
+          "content": "Safe Cleanup Executor for CORTEX Align Orchestrator",
           "version": "v2.x"
         },
         {
@@ -21814,7 +21814,7 @@
       "lines": [
         {
           "line_num": 3,
-          "content": "Obsolete Code Detector for CORTEX Align Orchestrator v2.0",
+          "content": "Obsolete Code Detector for CORTEX Align Orchestrator",
           "version": "v2.x"
         }
       ]
@@ -21978,7 +21978,7 @@
       "lines": [
         {
           "line_num": 3,
-          "content": "Safe Cleanup Executor for CORTEX Align Orchestrator v2.0",
+          "content": "Safe Cleanup Executor for CORTEX Align Orchestrator",
           "version": "v2.x"
         }
       ]
@@ -22255,7 +22255,7 @@
       "lines": [
         {
           "line_num": 188,
-          "content": "- **Implementation:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`",
+          "content": "- **Implementation:** `src/operations/modules/orchestration/maintenance_orchestrator.py`",
           "version": "_v3"
         },
         {

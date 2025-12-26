@@ -20,7 +20,7 @@
 **Impact:**
 - Users cannot access 6 complete, tested workflows
 - 100+ hours of development work sitting dormant
-- Planning System 2.0 features bypassed by legacy routing
+- Planning System features bypassed by legacy routing
 - Code duplication (dual TDD implementations, bypass utilities)
 
 ---
@@ -77,7 +77,7 @@ AFTER:  "sanitize project" → Full 5-phase workflow executes
 - ✅ Tests: 80/80 passing (100% pass rate, 23.18s)
 - ✅ Coverage: 91.44% (exceeds target)
 - ✅ Phases: 6 phases (DISCOVERY→SUMMARY→STORIES→FEATURES→REFINEMENT→COMPLETION)
-- ✅ Planning System 2.0 parity: 87.5%
+- ✅ Planning System parity: 87.5%
 - ⚠️ Agent exists: BUT routes to WRONG orchestrator
 - ❌ Phase execution: BYPASSED by UnifiedEntryPointOrchestrator
 
@@ -93,7 +93,7 @@ orchestrator = ADOOrchestrator(...)  # ✅ CORRECT
 - ADOAgent imports exist
 - Natural language routing works
 - BUT: Delegates to legacy unified orchestrator instead of ADO orchestrator
-- Result: Planning System 2.0 features (DoR/DoD, phase checkpoints, learning) BYPASSED
+- Result: Planning System features (DoR/DoD, phase checkpoints, learning) BYPASSED
 
 **Activation Fix:**
 ```python
@@ -172,11 +172,11 @@ priority: MEDIUM (requires wrapper refactoring)
 
 ---
 
-### 4. TDDOrchestratorV4 🔀 DUAL IMPLEMENTATION
+### 4. TDDOrchestrator 🔀 DUAL IMPLEMENTATION
 
 **Location:**
-- Migrated: `src/orchestrators/tdd/tdd_orchestrator_v4_migrated.py` (475 LOC)
-- Legacy: `src/orchestrators/tdd/tdd_orchestrator_v4.py` (536 LOC)
+- Migrated: `src/orchestrators/tdd/tdd_orchestrator_migrated.py` (475 LOC)
+- Legacy: `src/orchestrators/tdd/tdd_orchestrator.py` (536 LOC)
 
 **Status:**
 - ✅ Migrated version: BaseOrchestrator integration complete
@@ -195,8 +195,8 @@ priority: MEDIUM (requires wrapper refactoring)
 **Activation Checklist:**
 ```yaml
 tasks:
-  - Deprecate: src/orchestrators/tdd/tdd_orchestrator_v4.py (mark obsolete)
-  - Update: src/operations/tdd.py to use tdd_orchestrator_v4_migrated
+  - Deprecate: src/orchestrators/tdd/tdd_orchestrator.py (mark obsolete)
+  - Update: src/operations/tdd.py to use tdd_orchestrator_migrated
   - Update: Agent routing to use migrated orchestrator
   - Test: Full TDD cycle with migrated orchestrator
   - Remove: Legacy file after validation
@@ -323,7 +323,7 @@ priority: HIGH (unblocks dependent orchestrators)
    - Enables proper rollback capabilities
    - High dependency impact
 
-2. **TDDOrchestratorV4 Migration** (2-3 hours)
+2. **TDDOrchestrator Migration** (2-3 hours)
    - Deprecate legacy implementation
    - Enable BaseOrchestrator features
    - Reduce maintenance burden
@@ -393,7 +393,7 @@ User: "sanitize my project"
 Response: "Command not found"
 
 User: "plan ado feature"
-Response: ✅ Works, BUT bypasses Planning System 2.0 features
+Response: ✅ Works, BUT bypasses Planning System features
           (No DoR/DoD validation, no checkpoints, no learning)
 
 User: "use new TDD orchestrator"
@@ -416,7 +416,7 @@ Response: ✅ Full 5-phase workflow
           - REPORT: Summary with metrics
 
 User: "plan ado feature"
-Response: ✅ Full Planning System 2.0 workflow
+Response: ✅ Full Planning System workflow
           - DoR validation before each phase
           - Checkpoint creation
           - DoD validation after each phase
@@ -467,7 +467,7 @@ Response: ✅ Full 8-phase workflow
 
 2. **Agent Routing Misconfigurations**
    - Agents exist but route to legacy orchestrators
-   - Planning System 2.0 features bypassed
+   - Planning System features bypassed
    - Requires agent → orchestrator routing audit
 
 3. **Dual Implementation Anti-Pattern**
@@ -528,7 +528,7 @@ Response: ✅ Full 8-phase workflow
 | SanitizationOrchestrator | 519 | 70/70 ✅ | Ready | HIGH ⭐ |
 | ADOOrchestrator | 1,945 | 80/80 ✅ | Misrouted | HIGH ⭐ |
 | PlanningOrchestrator | 793 | ? | Bypassed | MEDIUM |
-| TDDOrchestratorV4 (migrated) | 475 | 68/68 ✅ | Dual impl | MEDIUM |
+| TDDOrchestrator (migrated) | 475 | 68/68 ✅ | Dual impl | MEDIUM |
 | GitSyncAndOptimizeOrchestrator | 801 | 0/0 ❌ | Dormant | LOW |
 | GitCheckpointOrchestrator | 32 | 0/0 ❌ | Stub | HIGH ⭐ |
 | **TOTAL** | **4,565** | **218/218** | **6 inactive** | **3 HIGH** |
@@ -540,7 +540,7 @@ Ready Orchestrators:
 ├── src/orchestrators/sanitization/sanitization_orchestrator.py (519 LOC)
 ├── src/orchestrators/ado/ado_orchestrator.py (1,945 LOC)
 ├── src/orchestrators/planning/planning_orchestrator.py (793 LOC)
-├── src/orchestrators/tdd/tdd_orchestrator_v4_migrated.py (475 LOC)
+├── src/orchestrators/tdd/tdd_orchestrator_migrated.py (475 LOC)
 ├── src/orchestrators/git_sync_and_optimize.py (801 LOC)
 └── src/orchestrators/git_checkpoint_orchestrator.py (32 LOC - stub)
 
@@ -561,7 +561,7 @@ Bypassed CLI Wrappers:
 
 - CORTEX4-STATUS.md (Week 11 planning)
 - Test Migration Analysis (Week 10 Day 3)
-- Planning System 2.0 Manifest
+- Planning System Manifest
 - ADO Planning Manifest
 - Sanitization Quick Reference
 

@@ -1,5 +1,5 @@
 """
-Tests for Sanitization Orchestrator v2.0 - Agentic Enhancement
+Tests for Sanitization Orchestrator - Agentic Enhancement
 
 Purpose: Comprehensive test coverage for agentic features
 Version: 2.0.0

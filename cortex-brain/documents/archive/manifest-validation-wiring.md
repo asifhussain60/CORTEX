@@ -60,7 +60,7 @@ except ImportError:
 
 **2. Validation Method (Lines 1320-1400)**
 - Method: `validate_manifest_compliance()`
-- Validates: Planning System 2.0 manifest
+- Validates: Planning System manifest
 - Threshold: 80% compliance required
 - Reports: Compliance percentage, missing requirements
 - Severity: WARNING if below 80%
@@ -73,13 +73,13 @@ if self.context_type == "admin" and not self.quick_mode:
 
 **Usage:**
 - Runs automatically during `align` command (admin context)
-- Validates Planning System 2.0 orchestrator
+- Validates Planning System orchestrator
 - Results included in alignment report
 - Cached for performance (repeat calls use cache)
 
 ---
 
-### ✅ WIRED: Planning System 2.0
+### ✅ WIRED: Planning System
 
 **File:** `src/orchestrators/planning_orchestrator.py`
 
@@ -89,7 +89,7 @@ if self.context_type == "admin" and not self.quick_mode:
 ```python
 # Initialize manifest validator to prevent drift
 self.manifest_validator = ManifestValidator(cortex_root)
-self.manifest = self.manifest_validator.load_manifest("planning-system-2.0")
+self.manifest = self.manifest_validator.load_manifest("planning-system")
 
 # Validate compliance on initialization
 self._validate_manifest_compliance()
@@ -104,9 +104,9 @@ self._validate_manifest_compliance()
 
 **3. Compliance Logging**
 ```python
-✅ Planning System 2.0 compliance: 92.3%  # ≥80%
-⚠️  Planning System 2.0 compliance: 67.8%  # 60-79%
-❌ Planning System 2.0 compliance: 45.2%  # <60%
+✅ Planning System compliance: 92.3%  # ≥80%
+⚠️  Planning System compliance: 67.8%  # 60-79%
+❌ Planning System compliance: 45.2%  # <60%
 ```
 
 **Usage:**
@@ -134,7 +134,7 @@ def _validate_upgrade_success(self):
     
     # Validate key orchestrators
     orchestrators = [
-        ("planning-system-2.0", "src/orchestrators/planning_orchestrator.py"),
+        ("planning-system", "src/orchestrators/planning_orchestrator.py"),
         # Add other critical orchestrators
     ]
     
@@ -254,7 +254,7 @@ def _gate_20_orchestrator_compliance(self) -> Dict:
 python -m src.operations.align
 
 # Output includes:
-# ✅ Manifest Compliance: Planning System 2.0: 92% compliant (12/13)
+# ✅ Manifest Compliance: Planning System: 92% compliant (12/13)
 #    Status: Compliant - EXCELLENT
 ```
 
@@ -266,8 +266,8 @@ orchestrator = PlanningOrchestrator(cortex_root=".")
 
 # Automatic validation on initialization
 # Logs:
-# 🔍 Validating Planning System 2.0 compliance with manifest...
-# ✅ Planning System 2.0 compliance: 92.3%
+# 🔍 Validating Planning System compliance with manifest...
+# ✅ Planning System compliance: 92.3%
 ```
 
 ### Pattern 3: Manual Validation (Development)
@@ -276,7 +276,7 @@ orchestrator = PlanningOrchestrator(cortex_root=".")
 from src.utils.manifest_validator import ManifestValidator
 
 validator = ManifestValidator(cortex_root=".")
-report = validator.validate_orchestrator("planning-system-2.0")
+report = validator.validate_orchestrator("planning-system")
 
 print(f"Compliance: {report.compliance_percentage:.1f}%")
 print(f"Status: {report.status}")
@@ -294,7 +294,7 @@ for issue in report.get_critical_issues():
 python -c "
 from src.utils.manifest_validator import ManifestValidator
 validator = ManifestValidator('.')
-report = validator.validate_orchestrator('planning-system-2.0')
+report = validator.validate_orchestrator('planning-system')
 if report.compliance_percentage < 80:
     print(f'❌ Manifest compliance: {report.compliance_percentage:.1f}% (threshold: 80%)')
     exit(1)
@@ -330,8 +330,8 @@ if report.compliance_percentage < 80:
 
 ### Current Manifests
 
-1. **planning-system-2.0-manifest.yaml**
-   - Planning System 2.0 requirements
+1. **planning-system-manifest.yaml**
+   - Planning System requirements
    - 13 total requirements
    - Categories: Core Operations, Complexity Detection, Incremental Planning, TDD Integration, etc.
 
@@ -368,7 +368,7 @@ requirements:
 **Usage:**
 ```python
 validator = ManifestValidator(cortex_root)
-manifests = ["planning-system-2.0", "upgrade", "deployment"]
+manifests = ["planning-system", "upgrade", "deployment"]
 
 for manifest_name in manifests:
     report = validator.validate_orchestrator(manifest_name)
@@ -432,7 +432,7 @@ ls cortex-brain/manifests/orchestrators/
 
 **Debug:**
 ```python
-report = validator.validate_orchestrator("planning-system-2.0")
+report = validator.validate_orchestrator("planning-system")
 for issue in report.issues:
     print(f"{issue.severity}: {issue.item_name} ({issue.validation_type})")
 ```

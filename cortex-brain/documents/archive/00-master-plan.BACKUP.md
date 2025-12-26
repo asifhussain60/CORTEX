@@ -82,7 +82,7 @@ Achieve feature parity with CORTEX Admin Dashboard while maintaining zero depend
 5. Test strategy (expand Selenium suite to 60+ tests)
 
 **DoD:**
-- [ ] Manifest validated by Planning Orchestrator v3.0
+- [ ] Manifest validated by Planning Orchestrator
 - [ ] All DoR items approved
 - [ ] Zero blocking architectural issues
 - [ ] Design extraction plan peer-reviewed
@@ -868,7 +868,7 @@ python -m src.cortex_lens generate --template cortex_lens_docs --input ./cortex-
 **Planning System v3.0:**
 - `src/orchestration_3_0/orchestrators/planning/planning_orchestrator.py`
 - `src/orchestration_3_0/README.md`
-- `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml` (to be replaced with v3.0 manifest)
+- `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml` (to be replaced with v3.0 manifest)
 
 **Design System:**
 - Glassmorphism patterns

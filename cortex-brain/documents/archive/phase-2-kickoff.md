@@ -101,7 +101,7 @@ Phase 8 (File Bloat Prevention System) was created during Phase 1 and is ready f
 - **Quality Improvement:** TDD + AST analysis = fewer bugs, easier maintenance
 
 ### Technical Achievements
-1. **Unified Architecture:** All orchestrators use Planning System 3.0
+1. **Unified Architecture:** All orchestrators use Planning System
 2. **TDD Mastery:** RED→GREEN→REFACTOR enforced across all workflows
 3. **Historical Learning:** Pattern-based recommendations prevent repeated mistakes
 4. **Clean Codebase:** AST-powered cleanup + bloat prevention
@@ -170,7 +170,7 @@ cortex-brain/documents/planning/active/cortex-rearchitecture-v1/
 
 ### Phase 2 Complete When:
 - [x] All 10 phases executed successfully
-- [x] All orchestrators integrated with Planning System 3.0
+- [x] All orchestrators integrated with Planning System
 - [x] TDD enforced across all workflows
 - [x] File bloat reduced by ≥50%
 - [x] Brain tiers consolidated (no duplicates)

@@ -25,7 +25,7 @@
 
 ### Overview
 
-A Tier 0 governance rule that BLOCKS inline CSS and mandates centralization to CSS files. Integrated with Planning System 2.0 REFACTOR phase for automatic validation.
+A Tier 0 governance rule that BLOCKS inline CSS and mandates centralization to CSS files. Integrated with Planning System REFACTOR phase for automatic validation.
 
 ### Rule Structure
 
@@ -566,11 +566,11 @@ body.no-scroll {
 
 ---
 
-## 🔧 Planning System 2.0 Integration
+## 🔧 Planning System Integration
 
 ### REFACTOR Phase Validation
 
-**Location:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+**Location:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 
 **Add to REFACTOR phase checklist:**
 ```yaml
@@ -779,7 +779,7 @@ success_criteria:
 ## 🔗 Related Documentation
 
 - **Rule Definition:** `cortex-brain/brain-protection-rules.yaml` (INLINE_CSS_PROHIBITION)
-- **Planning System 2.0:** `cortex-brain/manifests/orchestrators/planning-system-2.0-manifest.yaml`
+- **Planning System:** `cortex-brain/manifests/orchestrators/planning-system-manifest.yaml`
 - **Visual Regression:** SKULL_VISUAL_REGRESSION rule
 - **Code Style:** CODE_STYLE_CONSISTENCY rule
 

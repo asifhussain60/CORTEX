@@ -49,7 +49,7 @@ Unify all planning orchestrators (`PlanningOrchestrator`, `TempPlanManagerOrches
 
 ### Orchestrators Inventory
 
-**1. PlanningOrchestrator (Planning System 2.0)**
+**1. PlanningOrchestrator (Planning System)**
 - **File:** `src/operations/modules/orchestration/planning_orchestrator.py`
 - **Features:** 
   - ✅ Visual progress tracker (SessionModel integration)
@@ -80,7 +80,7 @@ Unify all planning orchestrators (`PlanningOrchestrator`, `TempPlanManagerOrches
   - ❌ NO master plans (creates work item docs)
   - ❌ NO visual progress tracker
   - ❌ NO token tracking
-  - ❌ Different architecture from Planning System 2.0
+  - ❌ Different architecture from Planning System
 
 **4. SessionModel (Progress Tracking)**
 - **File:** `src/orchestrators/session_model.py`
@@ -473,7 +473,7 @@ class PhaseLifecycleManager:
 **File:** `tests/integration/test_unified_planning_architecture.py`
 
 **Actions:**
-- [ ] Create end-to-end test: Planning System 2.0 → Master Plan with tokens
+- [ ] Create end-to-end test: Planning System → Master Plan with tokens
 - [ ] Create end-to-end test: TempPlanManager → Master Plan with tokens
 - [ ] Create end-to-end test: Phase lifecycle transitions
 - [ ] Create end-to-end test: Token reduction tracking across phases

@@ -267,4 +267,4 @@ Dedicated `discovery/` folder keeps CORTEX repo organized and clean.
 
 ---
 
-*All files follow CORTEX Planning System 3.0 standards with incremental phases, TDD enforcement, and comprehensive documentation.*
+*All files follow CORTEX Planning System standards with incremental phases, TDD enforcement, and comprehensive documentation.*

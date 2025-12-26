@@ -570,7 +570,7 @@ Chapter 1: The Basement (Where it all began)
 Chapter 2: The First Orchestrator (ExecutionOrchestrator)
 Chapter 3: The Brain Awakens (Tier 0-3 architecture)
 Chapter 4: The Agents Arrive (Strategic + Tactical agents)
-Chapter 5: The Planning System (Planning System 2.0)
+Chapter 5: The Planning System (Planning System)
 Chapter 6: The TDD Revolution (RED→GREEN→REFACTOR)
 Chapter 7: The Awakening (Feature discovery recursion) ← META-HUMOR
 Chapter 8: The Intelligence (IntelligenceOrchestrator pattern learning)
