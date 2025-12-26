@@ -51,8 +51,14 @@ anthropic>=0.18.0          # Used by: LLMIntentRouter, Claude-based intent class
 # See: cortex-brain/documents/analysis/dependency-audit-report.md
 # ============================================================================
 
+# Vision API Dependencies (Phase 13B Vision API Testing)
+opencv-python>=4.8.0       # Computer vision library (UI mockup analysis)
+scikit-learn>=1.3.0        # K-means clustering (color palette extraction)
+Pillow>=10.0.0             # Image manipulation (mockup preprocessing)
+numpy>=1.24.0              # Numerical operations (array processing)
+
 # Installation Instructions:
 # pip install -r requirements.txt
-# Total install time: < 45 seconds
-# Total download size: ~20 MB
+# Total install time: < 60 seconds
+# Total download size: ~80 MB (includes Vision API libraries)
 # Utilization: 100% (all packages actively used)
