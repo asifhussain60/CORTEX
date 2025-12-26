@@ -1291,9 +1291,10 @@ class PlanningOrchestrator(BaseOrchestrator):
     
     def _cleanup_old_checkpoints(self, retention_days: int = 7) -> int:
         """
-        Cleanup checkpoints older than retention period.
+        Cleanup checkpoints older than retention period or exceeding count limit.
         
-        ENHANCED (Task 13.4): Now supports retention-based cleanup with phase preservation.
+        ENHANCED (Task 13.4): Now supports both retention-based and count-based cleanup.
+        FIXED (Phase 13C Task 13C.4 Part 4): Respect checkpoint_retention_limit config.
         
         Args:
             retention_days: Number of days to retain checkpoints (default: 7)
@@ -1302,17 +1303,55 @@ class PlanningOrchestrator(BaseOrchestrator):
             Number of checkpoints removed
             
         Cleanup Strategy:
-        1. Keep all checkpoints from last N days
-        2. Keep one checkpoint per phase (most recent)
-        3. Remove all others
+        1. If checkpoint count exceeds checkpoint_retention_limit, remove oldest
+        2. Keep all checkpoints from last N days
+        3. Keep one checkpoint per phase (most recent)
+        4. Remove all others
         """
         if not hasattr(self, "_checkpoint_history"):
             return 0
         
         from datetime import timedelta
         
-        cutoff_date = datetime.now() - timedelta(days=retention_days)
         removed_count = 0
+        
+        # Strategy 1: Count-based cleanup (respect checkpoint_retention_limit)
+        if hasattr(self, 'checkpoint_retention_limit') and self.checkpoint_retention_limit:
+            max_checkpoints = self.checkpoint_retention_limit
+            current_count = len(self._checkpoint_history)
+            
+            if current_count > max_checkpoints:
+                # Sort by timestamp (oldest first)
+                sorted_checkpoints = sorted(
+                    self._checkpoint_history,
+                    key=lambda cp: cp.get("timestamp", ""),
+                    reverse=False
+                )
+                
+                # Remove oldest checkpoints to reach limit
+                num_to_remove = current_count - max_checkpoints
+                checkpoints_to_remove = sorted_checkpoints[:num_to_remove]
+                
+                for cp in checkpoints_to_remove:
+                    self._checkpoint_history.remove(cp)
+                    
+                    # Remove from memory checkpoints if applicable
+                    if cp.get("type") == "memory":
+                        self._memory_checkpoints = [
+                            mcp for mcp in self._memory_checkpoints
+                            if mcp.get("checkpoint_id") != cp.get("checkpoint_id")
+                        ]
+                    
+                    removed_count += 1
+                    logger.debug(f"Removed checkpoint (count-based): {cp.get('checkpoint_id')} (phase: {cp.get('phase_name')})")
+                
+                if removed_count > 0:
+                    logger.info(f"✅ Cleaned up {removed_count} checkpoints (count limit: {max_checkpoints})")
+                
+                return removed_count
+        
+        # Strategy 2: Time-based cleanup (original implementation)
+        cutoff_date = datetime.now() - timedelta(days=retention_days)
         
         # Group checkpoints by phase
         checkpoints_by_phase = {}
