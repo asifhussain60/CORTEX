@@ -1,0 +1,142 @@
+---
+title: Multi-Workspace Capability - STS Validation
+description: Context isolation across multiple IDEs
+category: STS Capability
+priority: HIGH
+version: 4.0.0
+validation_date: 2025-12-26
+---
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'primaryColor': '#7B68EE',
+      'primaryTextColor': '#fff',
+      'primaryBorderColor': '#5A4FCF'
+    }
+  }
+}%%
+
+graph TB
+    Start([🧪 STS Validator<br/>Start Multi-Workspace Test]) --> DetectIDEs
+    
+    subgraph Detection[" 🔍 IDE DETECTION "]
+        DetectIDEs[Scan for Active IDEs] --> VSCode{VS Code<br/>Running?}
+        VSCode -->|Yes| CountVSCode[Count: +1]
+        VSCode -->|No| Cursor
+        
+        CountVSCode --> Cursor{Cursor<br/>Running?}
+        Cursor -->|Yes| CountCursor[Count: +1]
+        Cursor -->|No| Windsurf
+        
+        CountCursor --> Windsurf{Windsurf<br/>Running?}
+        Windsurf -->|Yes| CountWindsurf[Count: +1]
+        Windsurf -->|No| TotalCount
+        
+        CountWindsurf --> TotalCount[📊 Total IDEs: N]
+    end
+    
+    TotalCount --> CheckMin{IDEs ≥ 2?}
+    CheckMin -->|No| SimulateIDEs[🔧 Simulate Multi-IDE<br/>Create mock contexts]
+    CheckMin -->|Yes| CreateContexts
+    
+    SimulateIDEs --> CreateContexts
+    
+    subgraph ContextCreation[" 🏗️ CONTEXT CREATION "]
+        CreateContexts[Create Workspace Contexts]
+        
+        CreateContexts --> WS1[📁 Workspace 1<br/>cortex-sample-app-1<br/>Context ID: ctx-001]
+        CreateContexts --> WS2[📁 Workspace 2<br/>cortex-sample-app-2<br/>Context ID: ctx-002]
+        CreateContexts --> WS3[📁 Workspace 3<br/>cortex-sample-app-3<br/>Context ID: ctx-003]
+        
+        WS1 --> InitCortex1[Initialize CORTEX<br/>Brain: cortex-brain-1.db]
+        WS2 --> InitCortex2[Initialize CORTEX<br/>Brain: cortex-brain-2.db]
+        WS3 --> InitCortex3[Initialize CORTEX<br/>Brain: cortex-brain-3.db]
+    end
+    
+    InitCortex1 --> IsolationTest
+    InitCortex2 --> IsolationTest
+    InitCortex3 --> IsolationTest
+    
+    subgraph IsolationTest[" 🔒 ISOLATION VALIDATION "]
+        TestIsolation[Test Context Isolation]
+        
+        TestIsolation --> Op1[Operation in WS1<br/>'plan feature-A']
+        Op1 --> CheckDB1{Conversation<br/>in DB1?}
+        CheckDB1 -->|Yes| CheckDB2{NOT in<br/>DB2/DB3?}
+        CheckDB2 -->|Yes| Isolated1[✅ WS1 Isolated]
+        CheckDB2 -->|No| LeakDetected[❌ Context Leak Detected]
+        
+        TestIsolation --> Op2[Operation in WS2<br/>'tdd feature-B']
+        Op2 --> CheckDB2_2{Conversation<br/>in DB2?}
+        CheckDB2_2 -->|Yes| CheckDB1_2{NOT in<br/>DB1/DB3?}
+        CheckDB1_2 -->|Yes| Isolated2[✅ WS2 Isolated]
+        CheckDB1_2 -->|No| LeakDetected
+        
+        TestIsolation --> Op3[Operation in WS3<br/>'sanitize code']
+        Op3 --> CheckDB3{Conversation<br/>in DB3?}
+        CheckDB3 -->|Yes| CheckDB1_3{NOT in<br/>DB1/DB2?}
+        CheckDB1_3 -->|Yes| Isolated3[✅ WS3 Isolated]
+        CheckDB1_3 -->|No| LeakDetected
+    end
+    
+    LeakDetected --> FailResult[❌ FAIL Result<br/>Context isolation broken]
+    
+    Isolated1 --> SwitchTest
+    Isolated2 --> SwitchTest
+    Isolated3 --> SwitchTest
+    
+    subgraph SwitchTest[" 🔄 CONTEXT SWITCHING "]
+        Switch[Test Context Switch Performance]
+        
+        Switch --> Switch1[Switch: WS1 → WS2]
+        Switch1 --> Measure1[⏱️ Measure Latency]
+        Measure1 --> Latency1{Latency<br/>< 100ms?}
+        Latency1 -->|No| SlowSwitch[❌ Slow Switch Detected]
+        Latency1 -->|Yes| Fast1[✅ Fast Switch]
+        
+        Switch --> Switch2[Switch: WS2 → WS3]
+        Switch2 --> Measure2[⏱️ Measure Latency]
+        Measure2 --> Latency2{Latency<br/>< 100ms?}
+        Latency2 -->|No| SlowSwitch
+        Latency2 -->|Yes| Fast2[✅ Fast Switch]
+        
+        Switch --> Switch3[Switch: WS3 → WS1]
+        Switch3 --> Measure3[⏱️ Measure Latency]
+        Measure3 --> Latency3{Latency<br/>< 100ms?}
+        Latency3 -->|No| SlowSwitch
+        Latency3 -->|Yes| Fast3[✅ Fast Switch]
+    end
+    
+    SlowSwitch --> FailResult
+    
+    Fast1 --> MetricsCollection
+    Fast2 --> MetricsCollection
+    Fast3 --> MetricsCollection
+    
+    subgraph MetricsCollection[" 📊 METRICS COLLECTION "]
+        Collect[Collect Metrics:<br/>• IDEs detected: 3<br/>• Context isolation: 100%<br/>• Avg switch latency: 45ms<br/>• Max switch latency: 65ms<br/>• No context leaks: ✓]
+        
+        Validate[Validate Thresholds:<br/>• IDEs ≥ 2 ✓<br/>• Isolation = 100% ✓<br/>• Latency < 100ms ✓<br/>• No leaks ✓]
+    end
+    
+    Collect --> Validate
+    Validate --> PassResult[✅ PASS Result<br/>All Criteria Met]
+    
+    PassResult --> UpdateBaseline[📝 Update sts-baseline.json<br/>capability: multi_workspace<br/>status: PASS]
+    
+    FailResult --> UpdateBaseline
+    
+    UpdateBaseline --> End([🎯 Multi-Workspace Capability<br/>Validation Complete])
+    
+    %% Styling
+    classDef successStyle fill:#50C878,stroke:#3A9B5C,stroke-width:2px,color:#fff
+    classDef errorStyle fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#fff
+    classDef contextStyle fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    classDef phaseStyle fill:#7B68EE,stroke:#5A4FCF,stroke-width:3px,color:#fff
+    
+    class PassResult,Isolated1,Isolated2,Isolated3,Fast1,Fast2,Fast3 successStyle
+    class FailResult,LeakDetected,SlowSwitch errorStyle
+    class WS1,WS2,WS3,InitCortex1,InitCortex2,InitCortex3 contextStyle
+    class Detection,ContextCreation,IsolationTest,SwitchTest,MetricsCollection phaseStyle

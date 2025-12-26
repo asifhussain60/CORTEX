@@ -1,0 +1,99 @@
+---
+title: Deployment Capability - STS Validation
+description: Build, package, and install validation
+category: STS Capability
+priority: HIGH
+version: 4.0.0
+validation_date: 2025-12-26
+---
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'primaryColor': '#4A90E2',
+      'primaryTextColor': '#fff',
+      'primaryBorderColor': '#2E5C8A'
+    }
+  }
+}%%
+
+flowchart TD
+    Start([🧪 STS Validator<br/>Start Deployment Test]) --> CheckApp{App Path<br/>Exists?}
+    
+    CheckApp -->|No| CreateApp[📦 Create Sample App<br/>cortex-sample-apps/sts-validation-app]
+    CheckApp -->|Yes| ValidateStructure
+    
+    CreateApp --> ValidateStructure[🔍 Validate Structure<br/>src/, tests/, requirements.txt]
+    
+    ValidateStructure --> BuildPhase[⚙️ BUILD PHASE]
+    
+    subgraph BuildPhase[" 🏗️ BUILD PHASE "]
+        Build[python setup.py build] --> BuildSuccess{Build<br/>Success?}
+        BuildSuccess -->|No| BuildFail[❌ Build Failed<br/>Record Error]
+        BuildSuccess -->|Yes| MeasureBuildTime[📊 Measure Build Time<br/>Target: <5s]
+    end
+    
+    BuildFail --> FailResult[❌ FAIL Result]
+    MeasureBuildTime --> PackagePhase
+    
+    subgraph PackagePhase[" 📦 PACKAGE PHASE "]
+        Package[python setup.py sdist bdist_wheel] --> PackageSuccess{Package<br/>Success?}
+        PackageSuccess -->|No| PackageFail[❌ Package Failed<br/>Record Error]
+        PackageSuccess -->|Yes| MeasureSize[📊 Measure Package Size<br/>Target: <10MB]
+    end
+    
+    PackageFail --> FailResult
+    MeasureSize --> ValidatePackage
+    
+    ValidatePackage[🔍 Validate Package Contents<br/>• Metadata<br/>• Dependencies<br/>• Entry points] --> InstallPhase
+    
+    subgraph InstallPhase[" 💿 INSTALL PHASE "]
+        CreateVenv[Create virtual environment<br/>python -m venv test_env] --> ActivateVenv[Activate environment]
+        ActivateVenv --> InstallPkg[pip install dist/*.whl]
+        InstallPkg --> InstallSuccess{Install<br/>Success?}
+        InstallSuccess -->|No| InstallFail[❌ Install Failed<br/>Record Error]
+        InstallSuccess -->|Yes| VerifyImports[🔍 Verify Imports<br/>import cortex_app]
+    end
+    
+    InstallFail --> FailResult
+    VerifyImports --> ImportSuccess{Imports<br/>Valid?}
+    
+    ImportSuccess -->|No| ImportFail[❌ Import Failed<br/>Record Error]
+    ImportSuccess -->|Yes| RunTests
+    
+    ImportFail --> FailResult
+    
+    subgraph TestPhase[" 🧪 TEST PHASE "]
+        RunTests[pytest tests/ -v] --> TestResults{Tests<br/>Pass?}
+        TestResults -->|No| TestFail[❌ Tests Failed<br/>Record Error]
+        TestResults -->|Yes| RecordCoverage[📊 Record Test Coverage]
+    end
+    
+    TestFail --> FailResult
+    RecordCoverage --> MetricsPhase
+    
+    subgraph MetricsPhase[" 📊 METRICS COLLECTION "]
+        CollectMetrics[Collect Metrics:<br/>• Build time: 1.2s<br/>• Package size: 4.5MB<br/>• Install success: true<br/>• Test coverage: 85%]
+        ValidateThresholds[Validate Against Thresholds:<br/>• Build < 5s ✓<br/>• Size < 10MB ✓<br/>• Install success ✓<br/>• Coverage > 80% ✓]
+    end
+    
+    CollectMetrics --> ValidateThresholds
+    ValidateThresholds --> PassResult
+    
+    PassResult[✅ PASS Result<br/>All Criteria Met] --> UpdateBaseline[📝 Update sts-baseline.json<br/>capability: deployment<br/>status: PASS]
+    
+    FailResult --> UpdateBaseline
+    
+    UpdateBaseline --> End([🎯 Deployment Capability<br/>Validation Complete])
+    
+    %% Styling
+    classDef successStyle fill:#50C878,stroke:#3A9B5C,stroke-width:2px,color:#fff
+    classDef errorStyle fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#fff
+    classDef processStyle fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    classDef phaseStyle fill:#7B68EE,stroke:#5A4FCF,stroke-width:3px,color:#fff
+    
+    class PassResult,MeasureBuildTime,MeasureSize,RecordCoverage successStyle
+    class BuildFail,PackageFail,InstallFail,ImportFail,TestFail,FailResult errorStyle
+    class Build,Package,InstallPkg,RunTests,CollectMetrics processStyle
+    class BuildPhase,PackagePhase,InstallPhase,TestPhase,MetricsPhase phaseStyle
