@@ -20,10 +20,9 @@ When the system finally came back up, VS Code opened automatically, recovering h
 
 The conversation history with Copilot? Gone. Vanished. Evaporated into the digital ether like his will to live.
 
-"No," he said to the empty basement. "No no no no no."
+<img src="../illustrations/images/essentials/cortex-awakening-ch03-01.jpeg" alt="The Blue Screen of Death" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
 
-![The blue screen of death](images/system-crash.png)
-*Three hours of context, lost to the void*
+"No," he said to the empty basement. "No no no no no."
 
 He'd been so clever. So *very* clever. Building an in-memory data structure for conversation tracking, optimized for O(1) lookups, with a beautiful cache-coherent design that would make computer science professors weep with joy.
 
@@ -52,9 +51,6 @@ Attempt #1: Store everything. Every message, every token, every keystroke. The d
 Attempt #2: Store nothing. Just conversation IDs and timestamps. The database was lightning fast and completely useless. Copilot couldn't remember what they'd discussed because he'd optimized away the actual content.
 
 Attempt #3: Store everything as JSON. One column. One beautiful, horrible column of JSON blobs. It worked until he needed to query by entity type, at which point he discovered he'd invented the world's slowest document database.
-
-![Whiteboard schema iterations](images/sqlite-battles.png)
-*Seven days, fourteen schemas, one increasingly desperate engineer*
 
 His whiteboard had evolved into a timeline of database design regret. Schema v1 through v14, each one crossed out with increasingly aggressive marker strokes.
 

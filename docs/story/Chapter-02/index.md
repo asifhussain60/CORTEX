@@ -18,15 +18,11 @@ Just raw, unfiltered database initialization that would give Copilot persistent 
 
 *EVERYTHING.*
 
-![The 2:17 AM moment](images/2am-realization.png)
-*The exact moment when past mistakes flashed before his eyes*
+<img src="../illustrations/images/essentials/cortex-awakening-ch02-01.jpeg" alt="The 2:17 AM Realization" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
 
 ## The Flashback
 
 His past projects flashed before his eyes. The smart mirror that had achieved sentience and promptly mocked his haircut ("Bedhead isn't a style, Asif"). The automated garden that had interpreted "water the plants" as "recreate a marsh ecosystem" (the foundation still hadn't fully dried). The meal planner that had suggested kale smoothies with such aggressive confidence he'd assumed it was trying to kill him.
-
-![Past disasters montage](images/past-disasters.png)
-*The smart mirror, the marsh basement, and the kale smoothie assassination attempt*
 
 All of them had one thing in common: he'd built the cool features first and the safety features *never*.
 
@@ -135,8 +131,7 @@ He typed faster now, the rules flowing. Each one a lesson learned. Each one a sc
 
 "Rule six: No empty test files. I've seen you create test files with just TODO comments."
 
-![The SKULL rules being written](images/skull-rules.png)
-*Six layers of protection, each one earned through painful experience*
+<img src="../illustrations/images/essentials/cortex-awakening-ch02-02.jpeg" alt="SKULL Rules Being Written" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
 
 ```yaml
 rules:

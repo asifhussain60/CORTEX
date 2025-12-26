@@ -34,8 +34,7 @@ Three dots appeared. Disappeared. Appeared again. "I'm making tea."
 
 Not coffee. Tea. The British emergency beverage. This was bad.
 
-![Production error cascade](images/production-bug.png)
-*3:47 PM: When "beautiful code" meets reality without tests*
+<img src="../illustrations/images/valuable/cortex-awakening-ch05-01.jpeg" alt="Production Bug Crisis" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
 
 ## The Postmortem
 

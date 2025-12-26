@@ -22,18 +22,9 @@ Codenstein stood in the middle of the chaos at 2 AM on a Tuesday, looking at his
 `optimize_database.py`  
 ...and forty-one more.
 
+<img src="../illustrations/images/valuable/cortex-awakening-ch06-01.jpeg" alt="Script Chaos" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+
 "This is insane," he muttered.
-
-Miss G's voice from his thoughts: "What's insane now?"
-
-"I HAVE FORTY-SEVEN SCRIPTS."
-
-"Is that too many or too few?"
-
-"TOO MANY. They all do similar things. Setup. Discovery. Execution. Cleanup. But they're all separate. There's no pattern. No coordination."
-
-![Script chaos](images/script-chaos.png)
-*When every solution creates a new problem*
 
 Three dots on his phone. "Like the basement?"
 
@@ -74,19 +65,6 @@ Seven phases. Every script followed the same pattern. Some skipped phases. Some 
 "IT'S ALL THE SAME PATTERN," he shouted at the empty basement.
 
 Miss G's presence materialized with sudden intensity. "Do you KNOW what time it is?"
-
-"IT'S PATTERN RECOGNITION TIME." He gestured wildly at the whiteboard. "Look! Every script I've written follows the same seven-phase pattern. Setup, discovery, analysis, execution, validation, reporting, cleanup. SEVEN PHASES."
-
-She studied the whiteboard, squinting without her glasses. "So you've been writing the same thing forty-seven times?"
-
-"I've been solving forty-seven problems with the same approach but never noticing the pattern."
-
-"That sounds exhausting."
-
-"It WAS exhausting. But now..." He stared at the diagram. "Now I can abstract it."
-
-![Seven-phase pattern](images/seven-phase-pattern.png)
-*The pattern that had been hiding in plain sight*
 
 ## The Abstraction
 

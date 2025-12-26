@@ -28,9 +28,6 @@ One CORTEX. Five projects. Complete context for each. Shared wisdom across all.
 
 "It's actually working," he whispered.
 
-![Multi-repo dashboard](images/multi-repo-active.png)
-*Five repositories, one brain*
-
 ## The Scale
 
 He tested it. Switched between projects rapidly.
@@ -463,10 +460,9 @@ He laughed. Actually laughed. "CORTEX teaching me how to sell CORTEX."
 
 "Recursive improvement. Seems appropriate."
 
-![Final system status](images/system-complete.png)
-*CORTEX 4.0 - Complete and operational*
-
 ## The Epilogue
+
+<img src="../illustrations/images/essentials/cortex-awakening-epilogue-01.jpeg" alt="Where Are They Now" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
 
 December 23rd. One day after deadline.
 
