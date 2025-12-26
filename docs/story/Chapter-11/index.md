@@ -32,12 +32,9 @@ He checked GitHub across three different repositories. Found something similar b
 
 Forty minutes wasted hunting for a solution he KNEW he'd implemented.
 
+<img src="../illustrations/images/valuable/cortex-awakening-ch11-01.jpeg" alt="Cross-Project Knowledge Search" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+
 "THIS IS THE AMNESIA PROBLEM AGAIN," he shouted at the empty basement.
-
-But different. Not forgetting conversations. Forgetting solutions ACROSS projects.
-
-![Searching multiple projects](images/cross-project-search.png)
-*The moment he realized knowledge was trapped in silos*
 
 ## The Problem
 
@@ -111,7 +108,9 @@ tier3_knowledge_library:
 
 Cross-project wisdom. Anonymized. Searchable. Always available.
 
-"Is this like your personal development journal?" Mrs. G asked.
+<img src="../illustrations/images/valuable/cortex-awakening-ch11-02.jpeg" alt="Tier 3 Knowledge Library" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+
+"Is this like your personal development journal?" Miss G asked.
 
 "I don't KEEP a development journal."
 

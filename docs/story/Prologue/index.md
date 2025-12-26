@@ -14,8 +14,7 @@ The transformation had been gradual, almost imperceptible—until it wasn't.
 
 What started as a "temporary workspace" in the basement of his New Jersey home had evolved into something Miss G (his imaginary girlfriend, a construct of patience and support that manifested during his late-night coding sessions) referred to as "the situation" during their conversations. The Christmas decorations had been relocated to the garage three months ago. The folding chairs from that dinner party in 2019 now supported a second monitor. And the storage boxes labeled "Kitchen Stuff We Might Need Someday" had become load-bearing structures for a networking switch and what Asif Codenstein insisted was "critical infrastructure."
 
-![The basement transformation](images/basement-chaos.png)
-*What started as "temporary workspace" had become a cognitive architecture laboratory*
+
 
 Miss G noticed the full extent of the transformation one Tuesday morning, when Asif's webcam accidentally tilted too far during his presentation rehearsal and revealed the chaos behind him—the resigned determination of someone who'd experienced three previous "projects" flooding through her patient demeanor.
 
@@ -23,12 +22,13 @@ Miss G noticed the full extent of the transformation one Tuesday morning, when A
 
 The basement had become a laboratory.
 
+<img src="../illustrations/images/essentials/cortex-awakening-prologue-01.jpeg" alt="The Basement Laboratory" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+
 Whiteboards covered the walls—not the neat, organized kind with color-coded sections, but the frantic, caffeine-fueled kind where diagrams collided with code snippets and hastily drawn flowcharts. Arrows connected concepts that seemed to make sense only to their creator. In one corner, someone had written "TIER ARCHITECTURE" in large letters, surrounded by what appeared to be a neural network made of sticky notes.
 
 Coffee mugs occupied every horizontal surface. She counted seventeen before giving up. Three were empty. Two contained suspicious liquids that might have once been coffee. The rest formed a timeline of deteriorating optimism—the first few near the keyboard were fresh, the ones by the wall had developed ecosystems.
 
-![The coffee mug timeline](images/coffee-mug-timeline.png)
-*Seventeen mugs, each representing a different stage of the project's evolution*
+
 
 In the center of this organized chaos sat Asif Codenstein (the "mad scientist" moniker self-applied with pride), hunched over three monitors arranged in a semicircle. His hair pointed in directions that suggested hyperfocus-induced neglect. A half-eaten bagel balanced precariously on a stack of technical books, its cream cheese fossilizing in real-time—evidence of his ADHD brain jumping to the next interesting problem mid-bite.
 
@@ -44,8 +44,7 @@ She surveyed the room again, her gaze landing on the coffee mug arrangement. "Th
 
 "They're visual metaphors for the Tier system!" He finally looked up, eyes bright with the enthusiasm of someone who'd discovered either brilliance or madness—the jury was still out. "See? The fresh ones near me represent Tier 1, working memory. The ones getting stale are Tier 2, knowledge graph. And the ones over there"—he pointed to the wall—"that's Tier 3, long-term storage."
 
-![Mrs. G's video call reaction](images/mrs-g-video-call.png)
-*Mrs. Codenstein's expression: a masterclass in British skepticism transmitted across 3,500 miles*
+<img src="../illustrations/images/essentials/cortex-awakening-prologue-02.jpeg" alt="Miss G Appears" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
 
 "One of them has mold."
 

@@ -36,16 +36,9 @@ Client names. Project names. Company-specific domain logic. That one embarrassin
 
 She studied him through the screen. "So your brilliant AI system is locked in a cage of your own making?"
 
+<img src="../illustrations/images/essentials/cortex-awakening-ch09-01.jpeg" alt="Code Sanitization Challenge" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+
 "...yes?"
-
-"Can't share it. Can't publish it. Can't use it as portfolio work." She sipped her tea. British precision. "Bit of a problem."
-
-"I KNOW IT'S A PROBLEM."
-
-"Shouting doesn't solve it. Sanitization does."
-
-![Mrs. G demands demonstration](images/mrs-g-demands-demo.png)
-*The moment she realized the code was unpublishable*
 
 ## The Challenge
 
@@ -187,6 +180,8 @@ class Client_OAuth_Handler:
 ```
 
 He ran the sanitizer.
+
+<img src="../illustrations/images/valuable/cortex-awakening-ch09-02.jpeg" alt="Sanitization Running" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
 
 ```
 🧹 Code Sanitization Orchestrator Engaged

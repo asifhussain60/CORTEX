@@ -32,10 +32,9 @@ Codenstein's eye twitched. It was the same eye twitch that signaled his ADHD bra
 
 "I'd be happy to help with authentication!" Copilot responded cheerfully. "Could you share your current implementation?"
 
-The cursor blinked. The coffee grew colder. Somewhere in his consciousness, Miss G was probably observing with patient concern, knowing he'd been at this for hours without rest.
+<img src="../illustrations/images/valuable/cortex-awakening-ch01-02.jpeg" alt="Copilot Amnesia" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
 
-![Late night coding despair](images/late-night-coding.png)
-*11 PM: The moment you realize you're explaining the same thing for the third time*
+The cursor blinked. The coffee grew colder. Somewhere in his consciousness, Miss G was probably observing with patient concern, knowing he'd been at this for hours without rest.
 
 ## The Git Commits of Madness
 
@@ -50,8 +49,7 @@ Seven commits from today, all with messages that read like a descent into madnes
 - `no really this is the auth fix` (6:18 PM)
 - `why does git hate me` (6:19 PM)
 
-![Git commit history](images/git-commit-madness.png)
-*A timeline of deteriorating mental stability, preserved forever in version control*
+<img src="../illustrations/images/essentials/cortex-awakening-ch01-03.jpeg" alt="Git Commit Madness" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
 
 Each commit represented a conversation with Copilot. Each conversation had been brilliant, insightful, exactly what he'd needed. And each conversation had evaporated the moment it ended, leaving him to reconstruct context from git messages that sounded like they'd been written by someone having a breakdown.
 
@@ -64,6 +62,8 @@ Turns out? Pretty hard when the thing you're trying to give memory to can't reme
 ## The Archaeological Dig
 
 He pushed back from his desk, the chair wheels squeaking in protest. The basement laboratory felt different at midnight—less "cognitive architecture breakthrough" and more "scene from a cautionary tale about obsessive engineers."
+
+<img src="../illustrations/images/essentials/cortex-awakening-ch01-01.jpeg" alt="Coffee Mug Timeline" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
 
 Coffee mug seventeen sat on top of a stack of papers titled "Conversation Context Persistence Strategies." Mug sixteen had formed a ring stain on a diagram labeled "Entity Relationship Tracking." The others were scattered like archaeological layers, each marking a different failed approach to the same problem.
 

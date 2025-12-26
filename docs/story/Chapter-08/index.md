@@ -24,8 +24,7 @@ Codenstein's brain stuttered. "ADO integration?"
 
 "All our work items are in Azure DevOps. Stories, features, tasks, sprints. Your system would need to generate work items in our format. With our hierarchy. Following our compliance requirements."
 
-![Corporate meeting tension](images/corporate-meeting.png)
-*Split screen: Nervous developer vs stern enterprise client*
+<img src="../illustrations/images/essentials/cortex-awakening-ch08-01.jpeg" alt="Corporate Meeting Tension" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
 
 Internal panic. External calm. "Can you... send me your format requirements?"
 

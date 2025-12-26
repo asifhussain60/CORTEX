@@ -20,9 +20,6 @@ He pulled up Tier 1 logs. There it was: Four separate conversations about error 
 
 Memory without learning is just expensive note-taking.
 
-![Four identical solutions](images/repeated-solutions.png)
-*Four conversations, four identical responses—memory without pattern recognition*
-
 Miss G's voice from his thoughts: "Are you arguing with the AI again?"
 
 "IT'S NOT LEARNING!"

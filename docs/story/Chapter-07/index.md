@@ -44,8 +44,7 @@ And then he had to manually assess complexity. Was this HIGH complexity (needs i
 
 "There must be a better way," he muttered.
 
-![Manual planning fatigue](images/manual-planning-fatigue.png)
-*Surrounded by planning documents, all following the same structure*
+<img src="../illustrations/images/essentials/cortex-awakening-ch07-01.jpeg" alt="Manual Planning Fatigue" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
 
 Miss G's voice from his consciousness: "What must have a better way?"
 
@@ -136,8 +135,6 @@ All automatically. All consistently.
 
 "I'm going to automate planning," he said.
 
-Silence from his inner thoughts. Miss G had learned to rest through his 3 AM epiphanies.
-
 ## The Implementation
 
 The PlanningOrchestrator took three days to implement properly.
@@ -174,8 +171,7 @@ She studied the manifest structure on his screen. "This looks thorough."
 
 "Copilot will ENFORCE systematic planning. Can't skip DoR. Can't skip DoD. Can't skip TDD. The manifest makes it mandatory."
 
-![Complexity matrix](images/complexity-matrix.png)
-*4-tier complexity classification with automatic routing*
+<img src="../illustrations/images/valuable/cortex-awakening-ch07-02.jpeg" alt="Planning System Manifest" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
 
 ## The First Auto-Plan
 

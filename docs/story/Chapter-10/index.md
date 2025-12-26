@@ -22,10 +22,9 @@ His codebase looked similar. Drift. Accumulation. Things that made sense two mon
 
 Then he had a thought. A dangerous thought.
 
-What if the system could clean ITSELF?
+<img src="../illustrations/images/essentials/cortex-awakening-ch10-01.jpeg" alt="Self-Healing System Vision" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
 
-![Basement and code chaos parallel](images/chaos-parallel.png)
-*Two types of disorder: physical and digital*
+What if the system could clean ITSELF?
 
 ## The Realization
 
