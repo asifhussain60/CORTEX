@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Maintenance Orchestrator | CORTEX Technical Documentation</title>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            --maintenance-primary: #FF9800;
+            --maintenance-secondary: #F57C00;
+            --maintenance-dark: #E65100;
+            --phase-1: #2196F3;
+            --phase-2: #4CAF50;
+            --phase-3: #9C27B0;
+            --phase-4: #FF9800;
+            --phase-5: #F44336;
+            --phase-6: #00BCD4;
+            --phase-7: #8BC34A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #DC2626;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--maintenance-primary);
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--maintenance-primary);
+            margin: 0;
+        }
+        
+        header .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+        
+        .metadata {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+        
+        .metadata span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section {
+            margin: 4rem 0;
+        }
+        
+        .section h2 {
+            font-size: 2rem;
+            color: var(--maintenance-primary);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--maintenance-primary);
+            padding-left: 1rem;
+        }
+        
+        .section p {
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+        
+        .diagram-container {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .diagram-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--maintenance-secondary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .mermaid {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            min-height: 400px;
+        }
+        
+        #tiered-routing-viz,
+        #health-delta-viz {
+            width: 100%;
+            min-height: 500px;
+            background: #0f172a;
+            border-radius: 8px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--maintenance-primary), var(--maintenance-dark));
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+        }
+        
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .phase-card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid;
+        }
+        
+        .phase-card.phase-1 { border-left-color: var(--phase-1); }
+        .phase-card.phase-2 { border-left-color: var(--phase-2); }
+        .phase-card.phase-3 { border-left-color: var(--phase-3); }
+        .phase-card.phase-4 { border-left-color: var(--phase-4); }
+        .phase-card.phase-5 { border-left-color: var(--phase-5); }
+        .phase-card.phase-6 { border-left-color: var(--phase-6); }
+        .phase-card.phase-7 { border-left-color: var(--phase-7); }
+        
+        .phase-card h3 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .phase-card .phase-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--maintenance-primary);
+            color: white;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+        }
+        
+        .phase-card p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        
+        .phase-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0 0 0;
+        }
+        
+        .phase-card li {
+            padding: 0.3rem 0;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+        
+        .phase-card li::before {
+            content: "• ";
+            color: var(--maintenance-primary);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--maintenance-primary);
+        }
+        
+        .feature-card h3 {
+            color: var(--maintenance-secondary);
+            margin-top: 0;
+        }
+        
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-card li {
+            padding: 0.5rem 0;
+            color: #cbd5e1;
+        }
+        
+        .feature-card li::before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: #1e293b;
+            border: 1px solid var(--maintenance-primary);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 2px solid var(--maintenance-primary);
+            color: #94a3b8;
+            margin-top: 4rem;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .metadata {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 System Maintenance Orchestrator</h1>
+            <p class="subtitle">Automated 7-Phase Maintenance Workflow with Health Monitoring</p>
+            <div class="metadata">
+                <span>📄 <strong>Version:</strong> 3.0</span>
+                <span>📦 <strong>Category:</strong> System</span>
+                <span>⚡ <strong>Phases:</strong> 7</span>
+                <span>📊 <strong>Status:</strong> PRODUCTION</span>
+            </div>
+        </header>
+
+        <!-- Overview Section -->
+        <section class="section">
+            <h2>📋 Overview</h2>
+            <p>
+                The System Maintenance Orchestrator provides automated 7-phase maintenance workflow that executes
+                healthcheck, alignment, cleanup, optimization, vacuum, and prompt refresh in optimal sequence.
+                Features tiered routing integration, health delta calculation, and completion detection with 100% test coverage.
+            </p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Maintenance Phases</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">884</div>
+                    <div class="stat-label">Lines of Code</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Test Coverage</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">36/36</div>
+                    <div class="stat-label">Tests Passing</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7-Phase Workflow -->
+        <section class="section">
+            <h2>🔄 7-Phase Workflow</h2>
+            <p>
+                Each phase builds on the previous, with conditional execution logic and health delta tracking
+                to measure system improvements.
+            </p>
+            
+            <div class="phases-grid">
+                <div class="phase-card phase-1">
+                    <h3>
+                        <span class="phase-number">1</span>
+                        Pre-Healthcheck
+                    </h3>
+                    <p>Establish baseline system health across 7 components</p>
+                    <ul>
+                        <li>Tier 0/1/2/3 health checks</li>
+                        <li>Orchestrator/agent validation</li>
+                        <li>System integrity scan</li>
+                        <li>Baseline metrics storage</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card phase-2">
+                    <h3>
+                        <span class="phase-number">2</span>
+                        Align
+                    </h3>
+                    <p>Auto-fix system issues with tiered routing</p>
+                    <ul>
+                        <li>Realignment utility integration</li>
+                        <li>10+ auto-fix strategies</li>
+                        <li>Planning System alignment</li>
+                        <li>Git checkpoint creation</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card phase-3">
+                    <h3>
+                        <span class="phase-number">3</span>
+                        Cleanup
+                    </h3>
+                    <p>Organize files and update references</p>
+                    <ul>
+                        <li>File organization (cortex-brain/)</li>
+                        <li>AST-powered reference updates</li>
+                        <li>Backup before changes</li>
+                        <li>Import fixing</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card phase-4">
+                    <h3>
+                        <span class="phase-number">4</span>
+                        Optimize
+                    </h3>
+                    <p>Improve performance and reduce tokens</p>
+                    <ul>
+                        <li>Token optimization</li>
+                        <li>Cache cleanup (stale data)</li>
+                        <li>Prompt compression</li>
+                        <li>Performance engine</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card phase-5">
+                    <h3>
+                        <span class="phase-number">5</span>
+                        Vacuum
+                    </h3>
+                    <p>SQLite optimization + AST cleanup</p>
+                    <ul>
+                        <li>SQLite VACUUM (compaction)</li>
+                        <li>AST-based code cleanup</li>
+                        <li>Database optimization</li>
+                        <li>Space reclamation</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card phase-6">
+                    <h3>
+                        <span class="phase-number">6</span>
+                        Refresh Prompts
+                    </h3>
+                    <p>Regenerate prompts to reflect system changes</p>
+                    <ul>
+                        <li>Corpus collection</li>
+                        <li>Template rendering</li>
+                        <li>System context update</li>
+                        <li>Prompt generation</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card phase-7">
+                    <h3>
+                        <span class="phase-number">7</span>
+                        Post-Healthcheck
+                    </h3>
+                    <p>Validate improvements and calculate delta</p>
+                    <ul>
+                        <li>Final health scan</li>
+                        <li>Delta calculation (baseline vs final)</li>
+                        <li>Report generation (JSON + Markdown)</li>
+                        <li>Success template rendering</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Complete Workflow Diagram -->
+        <section class="section">
+            <h2>📊 Complete Workflow Sequence</h2>
+            <p>
+                The 7-phase workflow with conditional execution logic. Phases 3-4 are skipped if Phase 2 (Align) fails,
+                while Phases 5-7 always run to ensure system consistency.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🔄 7-Phase Execution Flow with Conditional Logic</div>
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Orch as Maintenance Orchestrator
+    participant Pre as Phase 1: Pre-Healthcheck
+    participant Align as Phase 2: Align
+    participant Cleanup as Phase 3: Cleanup
+    participant Optimize as Phase 4: Optimize
+    participant Vacuum as Phase 5: Vacuum
+    participant Refresh as Phase 6: Refresh
+    participant Post as Phase 7: Post-Healthcheck
+    participant Report
+    
+    User->>Orch: system maintenance
+    Orch->>Orch: 🎭 Orchestrator engaged
+    
+    Note over Orch,Pre: Phase 1: Establish Baseline
+    Orch->>Pre: Execute pre-healthcheck
+    Pre->>Pre: Scan 7 components:<br/>Tier0, Tier1, Tier2, Tier3<br/>Orchestrators, Agents, System
+    Pre->>Pre: Calculate baseline health
+    Pre-->>Orch: Baseline: 75.5/100
+    
+    Note over Orch,Align: Phase 2: Auto-Fix Issues
+    Orch->>Align: Execute align (auto-fix=True)
+    Align->>Align: Tiered routing analysis
+    Align->>Align: Apply 10+ fix strategies
+    Align->>Align: Create git checkpoint
+    
+    alt Align Success
+        Align-->>Orch: ✅ 5 fixes applied
+        
+        Note over Orch,Cleanup: Phase 3: Cleanup (CONDITIONAL)
+        Orch->>Cleanup: Execute cleanup
+        Cleanup->>Cleanup: Organize files (cortex-brain/)
+        Cleanup->>Cleanup: Update references (AST)
+        Cleanup->>Cleanup: Backup + safety checks
+        Cleanup-->>Orch: ✅ 12 files organized
+        
+        Note over Orch,Optimize: Phase 4: Optimize (CONDITIONAL)
+        Orch->>Optimize: Execute optimize
+        Optimize->>Optimize: Token optimization
+        Optimize->>Optimize: Cache cleanup
+        Optimize->>Optimize: Prompt compression
+        Optimize-->>Orch: ✅ 2,500 tokens saved
+    else Align Failed
+        Align-->>Orch: ❌ Alignment failed
+        Orch->>Orch: ⚠️ Skip cleanup (align dependency)
+        Orch->>Orch: ⚠️ Skip optimize (align dependency)
+    end
+    
+    Note over Orch,Vacuum: Phase 5: Vacuum (ALWAYS RUN)
+    Orch->>Vacuum: Execute vacuum
+    Vacuum->>Vacuum: SQLite VACUUM (4 databases)
+    Vacuum->>Vacuum: AST-powered cleanup
+    Vacuum-->>Orch: ✅ 15.2 MB reclaimed
+    
+    Note over Orch,Refresh: Phase 6: Refresh (ALWAYS RUN)
+    Orch->>Refresh: Execute refresh prompts
+    Refresh->>Refresh: Collect system corpus
+    Refresh->>Refresh: Render templates
+    Refresh->>Refresh: Generate prompts
+    Refresh-->>Orch: ✅ 8 prompts refreshed
+    
+    Note over Orch,Post: Phase 7: Validate Improvements
+    Orch->>Post: Execute post-healthcheck
+    Post->>Post: Scan 7 components
+    Post->>Post: Calculate final health
+    Post->>Post: Calculate delta (final - baseline)
+    Post-->>Orch: Final: 88.2/100<br/>Delta: +12.7
+    
+    Orch->>Report: Generate report
+    Report->>Report: JSON + Markdown
+    Report-->>Orch: Report saved
+    
+    Orch->>Orch: 🎭 Orchestrator completing:<br/>✅ ALL WORK COMPLETE
+    Orch-->>User: # 🎉 CONGRATULATIONS<br/>System maintenance complete!<br/>Health improved: 75.5 → 88.2
+                </div>
+            </div>
+        </section>
+
+        <!-- Tiered Routing Visualization -->
+        <section class="section">
+            <h2>🎯 Tiered Routing Integration</h2>
+            <p>
+                Phase 2 (Align) uses Planning System's tiered routing to apply complexity-appropriate fixes.
+                Simple fixes execute first, followed by progressively more complex orchestrator-level operations.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🔀 Tiered Routing Decision Tree</div>
+                <div id="tiered-routing-viz"></div>
+            </div>
+        </section>
+
+        <!-- Health Delta Visualization -->
+        <section class="section">
+            <h2>📈 Health Delta Tracking</h2>
+            <p>
+                Compare baseline health (Phase 1) vs final health (Phase 7) across all 7 components to measure
+                maintenance effectiveness. Delta >10 indicates significant improvement.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">📊 Health Improvement Metrics</div>
+                <div id="health-delta-viz"></div>
+            </div>
+        </section>
+
+        <!-- Key Features Section -->
+        <section class="section">
+            <h2>✨ Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔄 Conditional Execution</h3>
+                    <ul>
+                        <li>Phases 3-4 skip if align fails</li>
+                        <li>Phases 5-7 always run</li>
+                        <li>Non-critical phase recovery</li>
+                        <li>Error isolation</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📊 Health Monitoring</h3>
+                    <ul>
+                        <li>7-component health scan</li>
+                        <li>Baseline vs final comparison</li>
+                        <li>Delta calculation</li>
+                        <li>Component-level reporting</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🔒 Safety Features</h3>
+                    <ul>
+                        <li>Git checkpoints per phase</li>
+                        <li>Backup before modifications</li>
+                        <li>Rollback support</li>
+                        <li>State restoration</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🎭 Progress Tracking</h3>
+                    <ul>
+                        <li>Real-time phase updates</li>
+                        <li>Engagement hints (🎭 pattern)</li>
+                        <li>Success template on completion</li>
+                        <li>JSON + Markdown reports</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integration Points -->
+        <section class="section">
+            <h2>🔗 Integration Architecture</h2>
+            <p>
+                The Maintenance Orchestrator integrates with 5 CORTEX subsystems, coordinating healthcheck,
+                alignment, cleanup, optimization, and vacuum operations.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🏗️ System Integration Map</div>
+                <div class="mermaid">
+graph TB
+    MAIN[Maintenance Orchestrator<br/>7-Phase Controller]
+    
+    subgraph "Phase Executors"
+        HC[Healthcheck<br/>Component Scanner]
+        ALIGN[Align Utility<br/>Auto-Fix Engine]
+        CLEANUP[Cleanup Orchestrator<br/>File Organization]
+        OPT[Optimize<br/>Performance Engine]
+        VAC[Vacuum<br/>SQLite + AST]
+        REF[Refresh Prompts<br/>Template Generator]
+    end
+    
+    subgraph "Supporting Systems"
+        PLAN[Planning System<br/>Tiered Routing]
+        GIT[Git Checkpoints<br/>Rollback Safety]
+        BRAIN[CORTEX Brain<br/>Tier 1 + Tier 2]
+        CONFIG[cortex.config.json<br/>Version Management]
+    end
+    
+    MAIN --> HC
+    MAIN --> ALIGN
+    MAIN --> CLEANUP
+    MAIN --> OPT
+    MAIN --> VAC
+    MAIN --> REF
+    
+    ALIGN --> PLAN
+    ALIGN --> GIT
+    CLEANUP --> GIT
+    OPT --> BRAIN
+    VAC --> BRAIN
+    REF --> BRAIN
+    
+    HC --> CONFIG
+    ALIGN --> CONFIG
+    
+    style MAIN fill:#FF9800,stroke:#F57C00,stroke-width:3px,color:#fff
+    style PLAN fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff
+    style GIT fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style BRAIN fill:#9C27B0,stroke:#7B1FA2,stroke-width:2px,color:#fff
+    style CONFIG fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>Author:</strong> Asif Hussain | <strong>GitHub:</strong> github.com/asifhussain60/CORTEX</p>
+            <p>Copyright © 2025 Asif Hussain. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- D3.js Visualizations -->
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#FF9800',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#F57C00',
+                lineColor: '#FFB74D',
+                secondaryColor: '#4CAF50',
+                tertiaryColor: '#2196F3'
+            }
+        });
+
+        // Tiered Routing Tree Visualization
+        const routingData = {
+            name: "System Issues Detected",
+            children: [
+                {
+                    name: "INSTANT Tier",
+                    complexity: "Simple",
+                    children: [
+                        { name: "File permission fixes", impact: 5 },
+                        { name: "Symlink repairs", impact: 3 },
+                        { name: "Config validation", impact: 4 }
+                    ]
+                },
+                {
+                    name: "LIGHTWEIGHT Tier",
+                    complexity: "Low",
+                    children: [
+                        { name: "Missing directory creation", impact: 8 },
+                        { name: "Import path updates", impact: 6 },
+                        { name: "Reference corrections", impact: 7 }
+                    ]
+                },
+                {
+                    name: "DOCUMENTED Tier",
+                    complexity: "Medium",
+                    children: [
+                        { name: "Manifest compliance", impact: 12 },
+                        { name: "Module registration", impact: 10 },
+                        { name: "Dependency resolution", impact: 15 }
+                    ]
+                },
+                {
+                    name: "COMPLEX Tier",
+                    complexity: "High",
+                    children: [
+                        { name: "Orchestrator re-initialization", impact: 25 },
+                        { name: "Brain tier synchronization", impact: 30 },
+                        { name: "Architecture restructuring", impact: 40 }
+                    ]
+                }
+            ]
+        };
+
+        const routingWidth = 1200;
+        const routingHeight = 500;
+
+        const routingSvg = d3.select("#tiered-routing-viz")
+            .append("svg")
+            .attr("width", routingWidth)
+            .attr("height", routingHeight)
+            .attr("viewBox", [0, 0, routingWidth, routingHeight])
+            .attr("style", "max-width: 100%; height: auto;");
+
+        const routingG = routingSvg.append("g")
+            .attr("transform", `translate(${routingWidth / 2}, 50)`);
+
+        const routingTree = d3.tree()
+            .size([routingWidth - 200, routingHeight - 100]);
+
+        const routingRoot = d3.hierarchy(routingData);
+        routingTree(routingRoot);
+
+        // Links
+        routingG.selectAll(".link")
+            .data(routingRoot.links())
+            .join("path")
+            .attr("class", "link")
+            .attr("fill", "none")
+            .attr("stroke", "#FFB74D")
+            .attr("stroke-width", 2)
+            .attr("d", d3.linkVertical()
+                .x(d => d.x)
+                .y(d => d.y));
+
+        // Nodes
+        const routingNode = routingG.selectAll(".node")
+            .data(routingRoot.descendants())
+            .join("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.x}, ${d.y})`);
+
+        routingNode.append("circle")
+            .attr("r", d => d.children ? 8 : 5)
+            .attr("fill", d => {
+                if (d.depth === 0) return "#FF9800";
+                if (d.data.complexity === "Simple") return "#4CAF50";
+                if (d.data.complexity === "Low") return "#2196F3";
+                if (d.data.complexity === "Medium") return "#FF9800";
+                if (d.data.complexity === "High") return "#F44336";
+                return "#9C27B0";
+            })
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 2)
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", d => d.children ? 12 : 8);
+                    
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px")
+                    .style("opacity", 1)
+                    .html(() => {
+                        let html = `<strong>${d.data.name}</strong><br/>`;
+                        if (d.data.complexity) html += `Complexity: ${d.data.complexity}<br/>`;
+                        if (d.data.impact) html += `Impact: ${d.data.impact} issues`;
+                        return html;
+                    });
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", d => d.children ? 8 : 5);
+                    
+                d3.selectAll(".tooltip").remove();
+            });
+
+        routingNode.append("text")
+            .attr("dy", "0.31em")
+            .attr("x", d => d.children ? -12 : 12)
+            .attr("text-anchor", d => d.children ? "end" : "start")
+            .text(d => d.data.name)
+            .attr("fill", "#e2e8f0")
+            .style("font-size", "12px")
+            .clone(true).lower()
+            .attr("stroke", "#0f172a")
+            .attr("stroke-width", 3);
+
+        // Health Delta Visualization (Before/After Comparison)
+        const healthData = [
+            { component: "Tier 0", baseline: 95, final: 100, improvement: 5 },
+            { component: "Tier 1", baseline: 70, final: 85, improvement: 15 },
+            { component: "Tier 2", baseline: 65, final: 82, improvement: 17 },
+            { component: "Tier 3", baseline: 72, final: 88, improvement: 16 },
+            { component: "Orchestrators", baseline: 80, final: 92, improvement: 12 },
+            { component: "Agents", baseline: 75, final: 87, improvement: 12 },
+            { component: "System", baseline: 68, final: 84, improvement: 16 }
+        ];
+
+        const healthWidth = 1200;
+        const healthHeight = 500;
+        const healthMargin = { top: 20, right: 120, bottom: 60, left: 100 };
+
+        const healthSvg = d3.select("#health-delta-viz")
+            .append("svg")
+            .attr("width", healthWidth)
+            .attr("height", healthHeight)
+            .attr("viewBox", [0, 0, healthWidth, healthHeight])
+            .attr("style", "max-width: 100%; height: auto;");
+
+        const xScale = d3.scaleBand()
+            .domain(healthData.map(d => d.component))
+            .range([healthMargin.left, healthWidth - healthMargin.right])
+            .padding(0.2);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([healthHeight - healthMargin.bottom, healthMargin.top]);
+
+        // Baseline bars
+        healthSvg.selectAll(".bar-baseline")
+            .data(healthData)
+            .join("rect")
+            .attr("class", "bar-baseline")
+            .attr("x", d => xScale(d.component))
+            .attr("y", d => yScale(d.baseline))
+            .attr("width", xScale.bandwidth() / 2 - 2)
+            .attr("height", d => healthHeight - healthMargin.bottom - yScale(d.baseline))
+            .attr("fill", "#64748b")
+            .attr("rx", 4);
+
+        // Final bars
+        healthSvg.selectAll(".bar-final")
+            .data(healthData)
+            .join("rect")
+            .attr("class", "bar-final")
+            .attr("x", d => xScale(d.component) + xScale.bandwidth() / 2 + 2)
+            .attr("y", d => yScale(d.final))
+            .attr("width", xScale.bandwidth() / 2 - 2)
+            .attr("height", d => healthHeight - healthMargin.bottom - yScale(d.final))
+            .attr("fill", "#10B981")
+            .attr("rx", 4);
+
+        // Improvement arrows
+        healthData.forEach(d => {
+            const x1 = xScale(d.component) + xScale.bandwidth() / 4;
+            const x2 = xScale(d.component) + 3 * xScale.bandwidth() / 4;
+            const y1 = yScale(d.baseline) - 10;
+            const y2 = yScale(d.final) - 10;
+            
+            if (d.improvement > 0) {
+                healthSvg.append("line")
+                    .attr("x1", x1)
+                    .attr("y1", y1)
+                    .attr("x2", x2)
+                    .attr("y2", y2)
+                    .attr("stroke", "#10B981")
+                    .attr("stroke-width", 2)
+                    .attr("marker-end", "url(#arrow)");
+                
+                healthSvg.append("text")
+                    .attr("x", (x1 + x2) / 2)
+                    .attr("y", (y1 + y2) / 2 - 10)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#10B981")
+                    .attr("font-size", "12px")
+                    .attr("font-weight", "600")
+                    .text(`+${d.improvement}`);
+            }
+        });
+
+        // Arrow marker
+        healthSvg.append("defs").append("marker")
+            .attr("id", "arrow")
+            .attr("viewBox", "0 0 10 10")
+            .attr("refX", 5)
+            .attr("refY", 5)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto-start-reverse")
+            .append("path")
+            .attr("d", "M 0 0 L 10 5 L 0 10 z")
+            .attr("fill", "#10B981");
+
+        // Axes
+        healthSvg.append("g")
+            .attr("transform", `translate(0, ${healthHeight - healthMargin.bottom})`)
+            .call(d3.axisBottom(xScale))
+            .attr("color", "#94a3b8")
+            .selectAll("text")
+            .attr("font-size", "12px");
+
+        healthSvg.append("g")
+            .attr("transform", `translate(${healthMargin.left}, 0)`)
+            .call(d3.axisLeft(yScale).ticks(5))
+            .attr("color", "#94a3b8");
+
+        // Legend
+        const legend = healthSvg.append("g")
+            .attr("transform", `translate(${healthWidth - 100}, 30)`);
+
+        legend.append("rect")
+            .attr("width", 15)
+            .attr("height", 15)
+            .attr("fill", "#64748b")
+            .attr("rx", 2);
+
+        legend.append("text")
+            .attr("x", 20)
+            .attr("y", 12)
+            .attr("fill", "#e2e8f0")
+            .attr("font-size", "12px")
+            .text("Baseline");
+
+        legend.append("rect")
+            .attr("y", 25)
+            .attr("width", 15)
+            .attr("height", 15)
+            .attr("fill", "#10B981")
+            .attr("rx", 2);
+
+        legend.append("text")
+            .attr("x", 20)
+            .attr("y", 37)
+            .attr("fill", "#e2e8f0")
+            .attr("font-size", "12px")
+            .text("Final");
+
+        // Overall improvement annotation
+        const overallBaseline = healthData.reduce((sum, d) => sum + d.baseline, 0) / healthData.length;
+        const overallFinal = healthData.reduce((sum, d) => sum + d.final, 0) / healthData.length;
+        const overallDelta = (overallFinal - overallBaseline).toFixed(1);
+
+        healthSvg.append("text")
+            .attr("x", healthWidth / 2)
+            .attr("y", healthHeight - 10)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#10B981")
+            .attr("font-size", "18px")
+            .attr("font-weight", "700")
+            .text(`Overall Health Improvement: ${overallBaseline.toFixed(1)} → ${overallFinal.toFixed(1)} (+${overallDelta} points)`);
+    </script>
+</body>
+</html>

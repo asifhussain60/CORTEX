@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning System Orchestrator | CORTEX Technical Documentation</title>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/orchestrator-viz.css">
+    
+    <style>
+        :root {
+            --planning-primary: #2196F3;
+            --planning-secondary: #1976D2;
+            --planning-dark: #0D47A1;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #DC2626;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--planning-primary);
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--planning-primary);
+            margin: 0;
+        }
+        
+        header .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+        
+        .metadata {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+        
+        .metadata span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section {
+            margin: 4rem 0;
+        }
+        
+        .section h2 {
+            font-size: 2rem;
+            color: var(--planning-primary);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--planning-primary);
+            padding-left: 1rem;
+        }
+        
+        .section p {
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+        
+        .diagram-container {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .diagram-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--planning-secondary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .mermaid {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            min-height: 500px;
+        }
+        
+        #phase-tree-viz {
+            width: 100%;
+            min-height: 600px;
+            background: #0f172a;
+            border-radius: 8px;
+        }
+        
+        #routing-tree-viz {
+            width: 100%;
+            min-height: 500px;
+            background: #0f172a;
+            border-radius: 8px;
+        }
+        
+        #token-optimization-viz {
+            width: 100%;
+            min-height: 400px;
+            background: #0f172a;
+            border-radius: 8px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--planning-primary);
+        }
+        
+        .feature-card h3 {
+            color: var(--planning-secondary);
+            margin-top: 0;
+        }
+        
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-card li {
+            padding: 0.5rem 0;
+            color: #cbd5e1;
+        }
+        
+        .feature-card li::before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--planning-primary), var(--planning-dark));
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: #1e293b;
+            border: 1px solid var(--planning-primary);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            z-index: 1000;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 2px solid var(--planning-primary);
+            color: #94a3b8;
+            margin-top: 4rem;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .metadata {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Planning System Orchestrator</h1>
+            <p class="subtitle">Intelligent Feature Planning with 4-Tier Routing & TDD Integration</p>
+            <div class="metadata">
+                <span>📄 <strong>Version:</strong> 4.0.1</span>
+                <span>📦 <strong>Category:</strong> Planning</span>
+                <span>⚡ <strong>Complexity:</strong> HIGH</span>
+                <span>📊 <strong>Status:</strong> ACTIVE</span>
+            </div>
+        </header>
+
+        <!-- Overview Section -->
+        <section class="section">
+            <h2>📋 Overview</h2>
+            <p>
+                The Planning System Orchestrator is CORTEX's flagship feature planning engine, providing intelligent
+                tiered routing based on feature complexity. It automatically includes TDD phases, enforces DoR/DoD
+                compliance, and supports hierarchical plan modularization for large implementations.
+            </p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Routing Tiers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">13+</div>
+                    <div class="stat-label">Workflow Phases</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">95%</div>
+                    <div class="stat-label">Token Reduction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">TDD Coverage</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features Section -->
+        <section class="section">
+            <h2>✨ Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🎯 Tiered Routing</h3>
+                    <ul>
+                        <li>Skeleton (LOW complexity)</li>
+                        <li>Conditional (MEDIUM)</li>
+                        <li>Incremental (HIGH)</li>
+                        <li>Granular (CRITICAL)</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🧪 TDD Integration</h3>
+                    <ul>
+                        <li>Auto-included in all plans</li>
+                        <li>RED→GREEN→REFACTOR</li>
+                        <li>Per-phase quality gates</li>
+                        <li>Test coverage tracking</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📊 Manifest Compliance</h3>
+                    <ul>
+                        <li>DoR validation</li>
+                        <li>DoD enforcement</li>
+                        <li>Acceptance criteria gates</li>
+                        <li>Inheritance support</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🔧 Token Optimization</h3>
+                    <ul>
+                        <li>95% token reduction</li>
+                        <li>Hierarchical structure</li>
+                        <li>Auto-modularization (>20KB)</li>
+                        <li>Smart plan loader</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4-Tier Routing Diagram -->
+        <section class="section">
+            <h2>🔀 4-Tier Intelligent Routing</h2>
+            <p>
+                The Planning System automatically analyzes feature complexity and routes to the appropriate planning tier.
+                HIGH complexity features trigger incremental planning with fine-grained phases and checkpoints.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">📊 Routing Decision Tree</div>
+                <div class="mermaid">
+graph TD
+    A[User Request] --> B{Analyze Feature Complexity}
+    B -->|LOW<br/>Simple CRUD, UI tweak| C[Skeleton Tier]
+    B -->|MEDIUM<br/>Multi-file, integration| D[Conditional Tier]
+    B -->|HIGH<br/>Security, auth, API| E[Incremental Tier]
+    B -->|CRITICAL<br/>Data migration, infra| F[Granular Tier]
+    
+    C --> C1[5-7 phases<br/>Basic structure]
+    D --> D1[8-10 phases<br/>Conditional details]
+    E --> E1[11-15 phases<br/>Fine-grained milestones]
+    F --> F1[16+ phases<br/>Sub-phase breakdown]
+    
+    C1 --> G[TDD Integration]
+    D1 --> G
+    E1 --> G
+    F1 --> G
+    
+    G --> H[Manifest Compliance]
+    H --> I[Plan Generation]
+    
+    I --> J{Plan Size Check}
+    J -->|>20KB| K[Auto-Modularize<br/>Index + Modules]
+    J -->|<=20KB| L[Single File<br/>Standard Plan]
+    
+    K --> M[Execute Plan]
+    L --> M
+    
+    style A fill:#2196F3,stroke:#1976D2,stroke-width:3px,color:#fff
+    style B fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style E fill:#4CAF50,stroke:#388E3C,stroke-width:3px,color:#fff
+    style G fill:#9C27B0,stroke:#7B1FA2,stroke-width:2px,color:#fff
+    style H fill:#9C27B0,stroke:#7B1FA2,stroke-width:2px,color:#fff
+    style K fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#fff
+    style M fill:#10B981,stroke:#059669,stroke-width:3px,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Phase Tree -->
+        <section class="section">
+            <h2>🌳 Interactive Phase Hierarchy</h2>
+            <p>
+                Explore the planning workflow with expandable phases showing DoR/DoD gates, validation checkpoints,
+                and TDD integration points. Click nodes to drill down into sub-phases.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🎯 Phase Tree Visualization (Click to Expand)</div>
+                <div id="phase-tree-viz"></div>
+            </div>
+        </section>
+
+        <!-- Manifest Inheritance -->
+        <section class="section">
+            <h2>🔗 Manifest Inheritance Architecture</h2>
+            <p>
+                The Planning System serves as the base manifest for child orchestrators (ADO Planning, Feature Planning).
+                Inheritance enables DRY principles while allowing orchestrator-specific customization.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">📦 Inheritance Hierarchy</div>
+                <div class="mermaid">
+graph TB
+    A[planning-system-4.0-manifest.yaml<br/>752 lines] --> B[Base Requirements]
+    A --> C[DoR/DoD Gates]
+    A --> D[Complexity Analysis]
+    A --> E[TDD Integration]
+    
+    B --> F[ado-planning-manifest.yaml<br/>inherits_from: planning-system]
+    C --> F
+    D --> F
+    E --> F
+    
+    F --> G[ADO-Specific]
+    G --> G1[Story/Feature/Task<br/>Work Item Types]
+    G --> G2[Azure DevOps<br/>Formatting]
+    G --> G3[Completion<br/>Summaries]
+    
+    B --> H[feature-planning-manifest.yaml<br/>inherits_from: planning-system]
+    C --> H
+    
+    H --> I[Feature-Specific]
+    I --> I1[Epic Breakdown]
+    I --> I2[Cross-Team<br/>Coordination]
+    
+    style A fill:#2196F3,stroke:#1976D2,stroke-width:3px,color:#fff
+    style F fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style H fill:#9C27B0,stroke:#7B1FA2,stroke-width:2px,color:#fff
+    style G fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style I fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <!-- Token Optimization -->
+        <section class="section">
+            <h2>⚡ Token Optimization (95% Reduction)</h2>
+            <p>
+                Phase 10 introduced hierarchical plan structure with smart loading. Plans >20KB are automatically
+                modularized into an index file plus individual phase modules, reducing context window usage by 95%.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">📊 Token Usage Comparison</div>
+                <div id="token-optimization-viz"></div>
+            </div>
+        </section>
+
+        <!-- TDD Integration -->
+        <section class="section">
+            <h2>🧪 TDD Integration Workflow</h2>
+            <p>
+                All planning system plans automatically include TDD phases. The RED→GREEN→REFACTOR cycle is enforced
+                with validation gates at each phase transition.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🔄 TDD Cycle Integration</div>
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Planning
+    participant TDD
+    participant Git
+    participant Validation
+    
+    User->>Planning: Request Feature Plan
+    Planning->>Planning: Analyze Complexity
+    Planning->>TDD: Auto-Include TDD Phases
+    
+    Note over TDD: RED Phase
+    TDD->>TDD: Write Failing Tests
+    TDD->>Validation: Validate Tests Fail
+    Validation-->>TDD: ✓ Tests Failing
+    TDD->>Git: Checkpoint (RED Complete)
+    
+    Note over TDD: GREEN Phase
+    TDD->>TDD: Implement Feature
+    TDD->>Validation: Validate Tests Pass
+    Validation-->>TDD: ✓ Tests Passing
+    TDD->>Git: Checkpoint (GREEN Complete)
+    
+    Note over TDD: REFACTOR Phase
+    TDD->>TDD: Clean Code
+    TDD->>Validation: Quality Score 0-10
+    Validation-->>TDD: ✓ Score ≥8
+    TDD->>Git: Checkpoint (REFACTOR Complete)
+    
+    TDD-->>Planning: TDD Complete
+    Planning->>User: Plan with TDD Ready
+    
+    Note over User,Validation: Phase 10: Auto-Modularize if >20KB
+    Planning->>Planning: Check Plan Size
+    alt Plan > 20KB
+        Planning->>Planning: Generate Index + Modules
+        Planning->>User: Modularized Plan
+    else Plan ≤ 20KB
+        Planning->>User: Standard Plan
+    end
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>Author:</strong> Asif Hussain | <strong>GitHub:</strong> github.com/asifhussain60/CORTEX</p>
+            <p>Copyright © 2025 Asif Hussain. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- D3.js Visualizations -->
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#2196F3',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#1976D2',
+                lineColor: '#64B5F6',
+                secondaryColor: '#4CAF50',
+                tertiaryColor: '#FF9800'
+            }
+        });
+
+        // Phase Tree Visualization
+        const phaseTreeData = {
+            name: "Planning System",
+            complexity: "HIGH",
+            children: [
+                {
+                    name: "Phase 1: Discovery",
+                    dor: "Feature requirements defined",
+                    dod: "All dependencies identified",
+                    children: [
+                        { name: "Holistic Code Search", value: 100 },
+                        { name: "Complexity Analysis", value: 100 },
+                        { name: "Technology Stack Review", value: 80 }
+                    ]
+                },
+                {
+                    name: "Phase 2: Architecture Design",
+                    dor: "Discovery complete",
+                    dod: "Architecture approved",
+                    children: [
+                        { name: "Component Design", value: 120 },
+                        { name: "Integration Points", value: 90 },
+                        { name: "Data Flow Modeling", value: 110 }
+                    ]
+                },
+                {
+                    name: "Phase 3-5: TDD Cycle",
+                    dor: "Architecture finalized",
+                    dod: "All tests passing, quality ≥8",
+                    children: [
+                        { 
+                            name: "RED: Write Tests", 
+                            value: 150,
+                            checkpoint: "Tests failing as expected"
+                        },
+                        { 
+                            name: "GREEN: Implementation", 
+                            value: 200,
+                            checkpoint: "All tests passing"
+                        },
+                        { 
+                            name: "REFACTOR: Clean Code", 
+                            value: 100,
+                            checkpoint: "Code quality ≥8/10"
+                        }
+                    ]
+                },
+                {
+                    name: "Phase 6: Integration",
+                    dor: "TDD complete",
+                    dod: "Integration tests pass",
+                    children: [
+                        { name: "API Integration", value: 80 },
+                        { name: "Database Integration", value: 90 },
+                        { name: "E2E Testing", value: 120 }
+                    ]
+                },
+                {
+                    name: "Phase 7: Documentation",
+                    dor: "Integration complete",
+                    dod: "All documentation up-to-date",
+                    children: [
+                        { name: "API Documentation", value: 60 },
+                        { name: "User Guide", value: 70 },
+                        { name: "Architecture Docs", value: 80 }
+                    ]
+                },
+                {
+                    name: "Phase 8: Validation",
+                    dor: "Documentation complete",
+                    dod: "Sign-off received",
+                    children: [
+                        { name: "Manifest Compliance", value: 50 },
+                        { name: "Quality Gates", value: 60 },
+                        { name: "Final Review", value: 70 }
+                    ]
+                }
+            ]
+        };
+
+        const width = 1200;
+        const height = 600;
+
+        const svg = d3.select("#phase-tree-viz")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", [0, 0, width, height])
+            .attr("style", "max-width: 100%; height: auto;");
+
+        const g = svg.append("g")
+            .attr("transform", `translate(${width / 2}, 50)`);
+
+        const tree = d3.tree()
+            .size([width - 200, height - 100]);
+
+        const root = d3.hierarchy(phaseTreeData);
+        tree(root);
+
+        // Links
+        g.selectAll(".link")
+            .data(root.links())
+            .join("path")
+            .attr("class", "link")
+            .attr("fill", "none")
+            .attr("stroke", "#64B5F6")
+            .attr("stroke-width", 2)
+            .attr("d", d3.linkVertical()
+                .x(d => d.x)
+                .y(d => d.y));
+
+        // Nodes
+        const node = g.selectAll(".node")
+            .data(root.descendants())
+            .join("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.x}, ${d.y})`);
+
+        node.append("circle")
+            .attr("r", d => d.children ? 8 : 5)
+            .attr("fill", d => {
+                if (d.depth === 0) return "#2196F3";
+                if (d.data.name.includes("TDD")) return "#9C27B0";
+                if (d.data.checkpoint) return "#10B981";
+                return d.children ? "#1976D2" : "#4CAF50";
+            })
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 2)
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", d => d.children ? 12 : 8);
+                    
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px")
+                    .style("opacity", 1)
+                    .html(() => {
+                        let html = `<strong>${d.data.name}</strong><br/>`;
+                        if (d.data.dor) html += `<em>DoR:</em> ${d.data.dor}<br/>`;
+                        if (d.data.dod) html += `<em>DoD:</em> ${d.data.dod}<br/>`;
+                        if (d.data.checkpoint) html += `<em>Checkpoint:</em> ${d.data.checkpoint}`;
+                        return html;
+                    });
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", d => d.children ? 8 : 5);
+                    
+                d3.selectAll(".tooltip").remove();
+            });
+
+        node.append("text")
+            .attr("dy", "0.31em")
+            .attr("x", d => d.children ? -12 : 12)
+            .attr("text-anchor", d => d.children ? "end" : "start")
+            .text(d => d.data.name)
+            .attr("fill", "#e2e8f0")
+            .style("font-size", "12px")
+            .clone(true).lower()
+            .attr("stroke", "#0f172a")
+            .attr("stroke-width", 3);
+
+        // Token Optimization Visualization
+        const tokenData = [
+            { type: "Before Phase 10", tokens: 20000, color: "#F44336" },
+            { type: "After Phase 10 (Index)", tokens: 400, color: "#10B981" },
+            { type: "Master Hub (On-demand)", tokens: 1200, color: "#2196F3" },
+            { type: "Phase Module (On-demand)", tokens: 2500, color: "#9C27B0" }
+        ];
+
+        const tokenWidth = 1200;
+        const tokenHeight = 400;
+        const tokenMargin = { top: 20, right: 30, bottom: 60, left: 100 };
+
+        const tokenSvg = d3.select("#token-optimization-viz")
+            .append("svg")
+            .attr("width", tokenWidth)
+            .attr("height", tokenHeight)
+            .attr("viewBox", [0, 0, tokenWidth, tokenHeight])
+            .attr("style", "max-width: 100%; height: auto;");
+
+        const xScale = d3.scaleLinear()
+            .domain([0, d3.max(tokenData, d => d.tokens)])
+            .range([tokenMargin.left, tokenWidth - tokenMargin.right]);
+
+        const yScale = d3.scaleBand()
+            .domain(tokenData.map(d => d.type))
+            .range([tokenMargin.top, tokenHeight - tokenMargin.bottom])
+            .padding(0.2);
+
+        tokenSvg.selectAll("rect")
+            .data(tokenData)
+            .join("rect")
+            .attr("x", tokenMargin.left)
+            .attr("y", d => yScale(d.type))
+            .attr("width", d => xScale(d.tokens) - tokenMargin.left)
+            .attr("height", yScale.bandwidth())
+            .attr("fill", d => d.color)
+            .attr("rx", 4);
+
+        tokenSvg.selectAll(".label")
+            .data(tokenData)
+            .join("text")
+            .attr("class", "label")
+            .attr("x", d => xScale(d.tokens) + 10)
+            .attr("y", d => yScale(d.type) + yScale.bandwidth() / 2)
+            .attr("dy", "0.35em")
+            .attr("fill", "#e2e8f0")
+            .attr("font-size", "14px")
+            .attr("font-weight", "600")
+            .text(d => `${d.tokens.toLocaleString()} tokens`);
+
+        tokenSvg.append("g")
+            .attr("transform", `translate(0, ${tokenHeight - tokenMargin.bottom})`)
+            .call(d3.axisBottom(xScale).ticks(5).tickFormat(d => `${d/1000}K`))
+            .attr("color", "#94a3b8");
+
+        tokenSvg.append("g")
+            .attr("transform", `translate(${tokenMargin.left}, 0)`)
+            .call(d3.axisLeft(yScale))
+            .attr("color", "#94a3b8")
+            .selectAll("text")
+            .attr("font-size", "12px");
+
+        // Reduction annotation
+        tokenSvg.append("text")
+            .attr("x", tokenWidth / 2)
+            .attr("y", tokenHeight - 10)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#10B981")
+            .attr("font-size", "16px")
+            .attr("font-weight", "700")
+            .text("95% Token Reduction (20,000 → 400 tokens for index)");
+    </script>
+</body>
+</html>

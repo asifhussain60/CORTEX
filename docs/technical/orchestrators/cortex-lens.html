@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Lens v3 Orchestrator | CORTEX Technical Documentation</title>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            --lens-primary: #9C27B0;
+            --lens-secondary: #7B1FA2;
+            --lens-dark: #4A148C;
+            --phase-1: #2196F3;
+            --phase-2: #4CAF50;
+            --phase-3: #FF9800;
+            --phase-4: #F44336;
+            --phase-5: #00BCD4;
+            --phase-6: #8BC34A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #DC2626;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--lens-primary);
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: var(--lens-primary);
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+        
+        .orchestrator-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #1e293b;
+            border-radius: 8px;
+            border-left: 4px solid var(--lens-primary);
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .meta-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 0.25rem;
+        }
+        
+        .meta-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--lens-primary);
+        }
+        
+        .section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-top: 0;
+            color: #f1f5f9;
+            border-bottom: 2px solid var(--lens-secondary);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            color: var(--lens-primary);
+            margin-top: 2rem;
+        }
+        
+        .diagram-container {
+            background: #0f172a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid #334155;
+        }
+        
+        .mermaid {
+            text-align: center;
+        }
+        
+        #narrativeFlow, #patternDetection, #insightVisualization, #learningIntegration {
+            min-height: 600px;
+            width: 100%;
+        }
+        
+        .phase-legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: #0f172a;
+            border-radius: 6px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .legend-label {
+            font-size: 0.875rem;
+            color: #e2e8f0;
+        }
+        
+        .feature-list {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-card {
+            padding: 1rem;
+            background: #0f172a;
+            border-radius: 8px;
+            border-left: 4px solid var(--lens-primary);
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: var(--lens-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-desc {
+            color: #cbd5e1;
+            font-size: 0.938rem;
+            line-height: 1.6;
+        }
+        
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .template-card {
+            padding: 1.5rem;
+            background: #0f172a;
+            border-radius: 8px;
+            border: 2px solid var(--lens-primary);
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(156, 39, 176, 0.3);
+        }
+        
+        .template-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .template-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--lens-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .template-desc {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 0.75rem;
+            background: #1e293b;
+            border: 1px solid var(--lens-primary);
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            max-width: 300px;
+            z-index: 1000;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 2rem 0;
+            padding: 0.75rem 1.5rem;
+            background: var(--lens-primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .back-link:hover {
+            background: var(--lens-secondary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .orchestrator-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 CORTEX Lens v3 Orchestrator</h1>
+            <p class="subtitle">Universal Repository Analyzer with Narrative Generation & Pattern Detection</p>
+        </header>
+
+        <!-- Orchestrator Metadata -->
+        <div class="orchestrator-meta">
+            <div class="meta-item">
+                <span class="meta-label">File Location</span>
+                <span class="meta-value">src/cortex_lens/</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Complexity</span>
+                <span class="meta-value">HIGH</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Phases</span>
+                <span class="meta-value">6</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Templates</span>
+                <span class="meta-value">8+ Adaptive</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Version</span>
+                <span class="meta-value">3.0.0</span>
+            </div>
+        </div>
+
+        <!-- Overview Section -->
+        <section class="section">
+            <h2>Overview</h2>
+            <p>
+                CORTEX Lens v3 is a universal repository analyzer that transforms raw code data into compelling 
+                narratives with interactive visualizations. It automatically detects repository type, extracts 
+                relevant metrics, and generates adaptive dashboards tailored to the project's technology stack 
+                and architecture patterns.
+            </p>
+            
+            <h3>Core Capabilities</h3>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">📊 Repository Classification</div>
+                    <div class="feature-desc">
+                        Automatically detects repository type (web app, API, ML pipeline, CLI tool, library) 
+                        and technology stack through file analysis and pattern matching.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📖 Story Weaving</div>
+                    <div class="feature-desc">
+                        Transforms technical metrics into human-readable narratives that explain what the code 
+                        does, how it's structured, and why architectural decisions were made.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🎨 Adaptive Templates</div>
+                    <div class="feature-desc">
+                        8+ specialized dashboard templates (React, Django, FastAPI, ML, microservices, etc.) 
+                        with auto-selection based on repository characteristics.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔥 Hotspot Analysis</div>
+                    <div class="feature-desc">
+                        Identifies code complexity hotspots, frequently changed files, and architectural 
+                        bottlenecks using git history and AST analysis.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📈 Business Value Extraction</div>
+                    <div class="feature-desc">
+                        Connects technical metrics to business outcomes: feature velocity, technical debt impact, 
+                        quality trends, deployment frequency.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🧠 Learning Integration</div>
+                    <div class="feature-desc">
+                        Stores discovered patterns in Tier 2 brain for future analysis, enabling continuous 
+                        improvement of narrative quality and insight detection.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6-Phase Workflow -->
+        <section class="section">
+            <h2>6-Phase Narrative Generation Workflow</h2>
+            <div class="phase-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--phase-1);"></div>
+                    <div class="legend-label">Phase 1: Classification</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--phase-2);"></div>
+                    <div class="legend-label">Phase 2: Collection</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--phase-3);"></div>
+                    <div class="legend-label">Phase 3: Narrative</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--phase-4);"></div>
+                    <div class="legend-label">Phase 4: Dashboard</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--phase-5);"></div>
+                    <div class="legend-label">Phase 5: Validation</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--phase-6);"></div>
+                    <div class="legend-label">Phase 6: Packaging</div>
+                </div>
+            </div>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    START([Repository Path]) --> CLASSIFY[Phase 1: Classification<br/>Detect type & stack]
+    
+    CLASSIFY --> ANALYZE_STRUCTURE[Analyze Structure:<br/>- File types<br/>- Directory patterns<br/>- Config files<br/>- Dependencies]
+    
+    ANALYZE_STRUCTURE --> DETECT_TYPE{Repository<br/>Type?}
+    
+    DETECT_TYPE --> |Web App| WEB[Classification: Web Application<br/>React/Vue/Angular detected]
+    DETECT_TYPE --> |API| API[Classification: REST/GraphQL API<br/>FastAPI/Django/Express detected]
+    DETECT_TYPE --> |ML Pipeline| ML[Classification: ML Project<br/>Jupyter/TensorFlow/PyTorch detected]
+    DETECT_TYPE --> |CLI Tool| CLI[Classification: CLI Application<br/>Click/Argparse/Commander detected]
+    DETECT_TYPE --> |Library| LIB[Classification: Library/Package<br/>setup.py/package.json detected]
+    DETECT_TYPE --> |Microservices| MICRO[Classification: Microservices<br/>Docker/K8s/Multiple services detected]
+    DETECT_TYPE --> |Data Pipeline| DATA[Classification: Data Pipeline<br/>Airflow/Kafka/Spark detected]
+    DETECT_TYPE --> |Unknown| GENERIC[Classification: Generic Project<br/>No specific pattern detected]
+    
+    WEB --> COLLECT
+    API --> COLLECT
+    ML --> COLLECT
+    CLI --> COLLECT
+    LIB --> COLLECT
+    MICRO --> COLLECT
+    DATA --> COLLECT
+    GENERIC --> COLLECT
+    
+    COLLECT[Phase 2: Data Collection<br/>Extract metrics] --> GATHER[Gather Data:<br/>- LOC by language<br/>- Complexity metrics<br/>- Git history<br/>- Test coverage<br/>- Dependencies]
+    
+    GATHER --> HOTSPOTS[Identify Hotspots:<br/>- High churn files<br/>- Complex modules<br/>- Coupling issues]
+    
+    HOTSPOTS --> NARRATIVE[Phase 3: Narrative Generation<br/>Story weaving]
+    
+    NARRATIVE --> WEAVE[Weave Story:<br/>- Opening: What is this?<br/>- Context: Why built?<br/>- Architecture: How structured?<br/>- Quality: How maintained?<br/>- Insights: What's notable?]
+    
+    WEAVE --> BUSINESS[Extract Business Value:<br/>- Feature velocity<br/>- Quality trends<br/>- Risk indicators<br/>- ROI metrics]
+    
+    BUSINESS --> TEMPLATE_SELECT{Select<br/>Template}
+    
+    TEMPLATE_SELECT --> |Manual Override| FORCED_TEMPLATE[Use specified template]
+    TEMPLATE_SELECT --> |Auto-Detect| MATCH_TEMPLATE[Match classification to template<br/>React → react-dashboard.html<br/>API → api-dashboard.html]
+    
+    FORCED_TEMPLATE --> DASHBOARD
+    MATCH_TEMPLATE --> DASHBOARD
+    
+    DASHBOARD[Phase 4: Dashboard Generation<br/>Render visualizations] --> RENDER[Render Dashboard:<br/>- Hero metrics<br/>- Complexity heatmap<br/>- Timeline charts<br/>- Dependency graph<br/>- Hotspot visualization]
+    
+    RENDER --> VALIDATE[Phase 5: Validation<br/>Quality checks]
+    
+    VALIDATE --> CHECK_DATA{Data<br/>Complete?}
+    CHECK_DATA --> |Missing| REPORT_GAPS[Log data gaps<br/>Use fallbacks]
+    CHECK_DATA --> |Complete| CHECK_LINKS
+    
+    REPORT_GAPS --> CHECK_LINKS{Links<br/>Valid?}
+    
+    CHECK_LINKS --> |Broken| FIX_REFS[Fix references<br/>Update paths]
+    CHECK_LINKS --> |Valid| PACKAGE
+    
+    FIX_REFS --> PACKAGE[Phase 6: Packaging<br/>Export & bundle]
+    
+    PACKAGE --> EXPORT[Export Formats:<br/>- HTML dashboard<br/>- JSON data<br/>- YAML config<br/>- CSV metrics]
+    
+    EXPORT --> LEARN[Store patterns in Tier 2:<br/>- Repository patterns<br/>- Narrative templates<br/>- Insight heuristics]
+    
+    LEARN --> END([Output: Dashboard + Package])
+    
+    style START fill:#2196F3,stroke:#1976D2,color:#fff
+    style CLASSIFY fill:#4CAF50,stroke:#388E3C,color:#fff
+    style COLLECT fill:#FF9800,stroke:#F57C00,color:#fff
+    style NARRATIVE fill:#F44336,stroke:#D32F2F,color:#fff
+    style DASHBOARD fill:#00BCD4,stroke:#0097A7,color:#fff
+    style VALIDATE fill:#8BC34A,stroke:#689F38,color:#fff
+    style PACKAGE fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style END fill:#10B981,stroke:#059669,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <!-- Adaptive Templates -->
+        <section class="section">
+            <h2>Adaptive Dashboard Templates</h2>
+            <p>
+                CORTEX Lens includes 8+ specialized templates that adapt to repository characteristics, 
+                ensuring relevant metrics and visualizations for each project type.
+            </p>
+            <div class="template-grid">
+                <div class="template-card">
+                    <div class="template-icon">⚛️</div>
+                    <div class="template-name">React/Vue/Angular</div>
+                    <div class="template-desc">Component complexity, bundle size, render performance</div>
+                </div>
+                <div class="template-card">
+                    <div class="template-icon">🚀</div>
+                    <div class="template-name">REST/GraphQL API</div>
+                    <div class="template-desc">Endpoint coverage, response times, error rates</div>
+                </div>
+                <div class="template-card">
+                    <div class="template-icon">🧠</div>
+                    <div class="template-name">ML Pipeline</div>
+                    <div class="template-desc">Model performance, data quality, experiment tracking</div>
+                </div>
+                <div class="template-card">
+                    <div class="template-icon">🐳</div>
+                    <div class="template-name">Microservices</div>
+                    <div class="template-desc">Service dependencies, latency, deployment topology</div>
+                </div>
+                <div class="template-card">
+                    <div class="template-icon">📦</div>
+                    <div class="template-name">Library/Package</div>
+                    <div class="template-desc">API surface, breaking changes, adoption metrics</div>
+                </div>
+                <div class="template-card">
+                    <div class="template-icon">⚡</div>
+                    <div class="template-name">CLI Tool</div>
+                    <div class="template-desc">Command coverage, error handling, help quality</div>
+                </div>
+                <div class="template-card">
+                    <div class="template-icon">🔄</div>
+                    <div class="template-name">Data Pipeline</div>
+                    <div class="template-desc">DAG structure, data lineage, failure recovery</div>
+                </div>
+                <div class="template-card">
+                    <div class="template-icon">🌐</div>
+                    <div class="template-name">Generic Project</div>
+                    <div class="template-desc">Universal metrics, code quality, architecture</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pattern Detection Visualization -->
+        <section class="section">
+            <h2>Pattern Detection & Insight Extraction</h2>
+            <p>Interactive visualization of how CORTEX Lens detects architectural patterns and extracts insights.</p>
+            <div class="diagram-container">
+                <div id="patternDetection"></div>
+            </div>
+        </section>
+
+        <!-- Insight Visualization Network -->
+        <section class="section">
+            <h2>Story Element Relationship Graph</h2>
+            <p>Network graph showing how narrative elements connect technical metrics to business value.</p>
+            <div class="diagram-container">
+                <div id="insightVisualization"></div>
+            </div>
+        </section>
+
+        <!-- Learning Integration -->
+        <section class="section">
+            <h2>Learning Module Integration</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph LR
+    ANALYZE[CORTEX Lens<br/>Analysis] --> DETECT[Pattern Detection:<br/>- Architecture styles<br/>- Code conventions<br/>- Quality indicators]
+    
+    DETECT --> EXTRACT[Extract Learnings:<br/>- Repository patterns<br/>- Narrative templates<br/>- Insight heuristics]
+    
+    EXTRACT --> TIER2[(Tier 2 Brain<br/>Knowledge Graph)]
+    
+    TIER2 --> QUERY[Future Analysis<br/>Query Patterns]
+    
+    QUERY --> IMPROVE[Improved Narratives:<br/>- Better insights<br/>- Contextual recommendations<br/>- Pattern recognition]
+    
+    IMPROVE --> FEEDBACK[User Feedback:<br/>Dashboard ratings<br/>Insight usefulness]
+    
+    FEEDBACK --> REFINE[Refine Patterns<br/>Update heuristics]
+    
+    REFINE --> TIER2
+    
+    style ANALYZE fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style TIER2 fill:#2196F3,stroke:#1976D2,color:#fff
+    style IMPROVE fill:#10B981,stroke:#059669,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features -->
+        <section class="section">
+            <h2>Technical Features</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">🔍 AST-Powered Analysis</div>
+                    <div class="feature-desc">
+                        Uses Abstract Syntax Tree parsing for accurate code complexity, pattern detection, 
+                        and architectural analysis across multiple languages.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📊 Git History Mining</div>
+                    <div class="feature-desc">
+                        Analyzes commit history to identify code churn hotspots, contributor patterns, 
+                        and feature velocity trends over time.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🎯 Dependency Analysis</div>
+                    <div class="feature-desc">
+                        Maps internal and external dependencies to detect tight coupling, circular dependencies, 
+                        and vulnerable packages.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📈 Quality Metrics</div>
+                    <div class="feature-desc">
+                        Calculates cyclomatic complexity, maintainability index, test coverage, documentation 
+                        coverage, and technical debt ratio.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🎨 D3.js Visualizations</div>
+                    <div class="feature-desc">
+                        Interactive charts: complexity heatmaps, dependency graphs, timeline views, sunburst 
+                        diagrams, network graphs.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📦 Multi-Format Export</div>
+                    <div class="feature-desc">
+                        Exports data in HTML (interactive dashboard), JSON (programmatic access), YAML (config), 
+                        and CSV (spreadsheet analysis).
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Documentation -->
+        <section class="section">
+            <h2>Related Documentation</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">Orchestrator</div>
+                    <div class="feature-desc">
+                        <code>src/cortex_lens/orchestrator.py</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Manifest</div>
+                    <div class="feature-desc">
+                        <code>cortex-brain/manifests/orchestrators/cortex-lens-v3-manifest.yaml</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Story Viewer</div>
+                    <div class="feature-desc">
+                        <code>docs/story/story-viewer.js</code> - Integration with story timeline
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#9C27B0',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#7B1FA2',
+                lineColor: '#94a3b8',
+                secondaryColor: '#1e293b',
+                tertiaryColor: '#0f172a'
+            }
+        });
+
+        // Pattern Detection Network (D3.js Force-Directed Graph)
+        function createPatternDetection() {
+            const data = {
+                nodes: [
+                    { id: 'repo', label: 'Repository', type: 'source', r: 30 },
+                    { id: 'files', label: 'File Analysis', type: 'detector', r: 20 },
+                    { id: 'git', label: 'Git History', type: 'detector', r: 20 },
+                    { id: 'ast', label: 'AST Parsing', type: 'detector', r: 20 },
+                    { id: 'deps', label: 'Dependencies', type: 'detector', r: 20 },
+                    { id: 'mvc', label: 'MVC Pattern', type: 'pattern', r: 15 },
+                    { id: 'microservice', label: 'Microservices', type: 'pattern', r: 15 },
+                    { id: 'layered', label: 'Layered Arch', type: 'pattern', r: 15 },
+                    { id: 'event', label: 'Event-Driven', type: 'pattern', r: 15 },
+                    { id: 'restful', label: 'RESTful API', type: 'pattern', r: 15 },
+                    { id: 'dashboard', label: 'Dashboard', type: 'output', r: 25 }
+                ],
+                links: [
+                    { source: 'repo', target: 'files', strength: 2 },
+                    { source: 'repo', target: 'git', strength: 2 },
+                    { source: 'repo', target: 'ast', strength: 2 },
+                    { source: 'repo', target: 'deps', strength: 2 },
+                    { source: 'files', target: 'mvc', strength: 1 },
+                    { source: 'files', target: 'microservice', strength: 1 },
+                    { source: 'ast', target: 'layered', strength: 1 },
+                    { source: 'deps', target: 'microservice', strength: 1 },
+                    { source: 'git', target: 'event', strength: 1 },
+                    { source: 'deps', target: 'restful', strength: 1 },
+                    { source: 'mvc', target: 'dashboard', strength: 1 },
+                    { source: 'microservice', target: 'dashboard', strength: 1 },
+                    { source: 'layered', target: 'dashboard', strength: 1 },
+                    { source: 'event', target: 'dashboard', strength: 1 },
+                    { source: 'restful', target: 'dashboard', strength: 1 }
+                ]
+            };
+
+            const width = document.getElementById('patternDetection').clientWidth;
+            const height = 600;
+
+            const svg = d3.select('#patternDetection')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const colorMap = {
+                source: '#9C27B0',
+                detector: '#2196F3',
+                pattern: '#FF9800',
+                output: '#10B981'
+            };
+
+            const simulation = d3.forceSimulation(data.nodes)
+                .force('link', d3.forceLink(data.links).id(d => d.id).distance(150))
+                .force('charge', d3.forceManyBody().strength(-500))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(d => d.r + 10));
+
+            const link = svg.append('g')
+                .selectAll('line')
+                .data(data.links)
+                .enter()
+                .append('line')
+                .attr('stroke', '#64748b')
+                .attr('stroke-width', d => d.strength * 2)
+                .attr('stroke-opacity', 0.6);
+
+            const node = svg.append('g')
+                .selectAll('g')
+                .data(data.nodes)
+                .enter()
+                .append('g')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+
+            node.append('circle')
+                .attr('r', d => d.r)
+                .attr('fill', d => colorMap[d.type])
+                .attr('stroke', '#0f172a')
+                .attr('stroke-width', 3);
+
+            node.append('text')
+                .text(d => d.label)
+                .attr('x', 0)
+                .attr('y', d => d.r + 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', '12px')
+                .attr('font-weight', '600');
+
+            node.on('mouseover', function(event, d) {
+                const tooltip = d3.select('#tooltip');
+                tooltip.style('opacity', 1)
+                    .html(`<strong>${d.label}</strong><br/>Type: ${d.type}`)
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY - 28) + 'px');
+                
+                d3.select(this).select('circle').attr('stroke-width', 5);
+            })
+            .on('mouseout', function() {
+                d3.select('#tooltip').style('opacity', 0);
+                d3.select(this).select('circle').attr('stroke-width', 3);
+            });
+
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 150}, 20)`);
+
+            const legendData = [
+                { type: 'source', label: 'Repository' },
+                { type: 'detector', label: 'Detectors' },
+                { type: 'pattern', label: 'Patterns' },
+                { type: 'output', label: 'Output' }
+            ];
+
+            legendData.forEach((d, i) => {
+                const g = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 30})`);
+                
+                g.append('circle')
+                    .attr('r', 8)
+                    .attr('fill', colorMap[d.type]);
+                
+                g.append('text')
+                    .attr('x', 15)
+                    .attr('y', 5)
+                    .attr('fill', '#e2e8f0')
+                    .attr('font-size', '12px')
+                    .text(d.label);
+            });
+        }
+
+        // Insight Visualization (D3.js Hierarchical Edge Bundling)
+        function createInsightVisualization() {
+            const data = {
+                name: "Narrative",
+                children: [
+                    {
+                        name: "Technical Metrics",
+                        children: [
+                            { name: "Cyclomatic Complexity", value: 25 },
+                            { name: "Test Coverage", value: 85 },
+                            { name: "Code Churn", value: 15 },
+                            { name: "Dependencies", value: 42 }
+                        ]
+                    },
+                    {
+                        name: "Quality Indicators",
+                        children: [
+                            { name: "Maintainability Index", value: 72 },
+                            { name: "Technical Debt", value: 18 },
+                            { name: "Documentation Coverage", value: 68 }
+                        ]
+                    },
+                    {
+                        name: "Business Value",
+                        children: [
+                            { name: "Feature Velocity", value: 90 },
+                            { name: "Deployment Frequency", value: 80 },
+                            { name: "Quality Trends", value: 75 },
+                            { name: "ROI Metrics", value: 85 }
+                        ]
+                    }
+                ]
+            };
+
+            const width = document.getElementById('insightVisualization').clientWidth;
+            const height = 600;
+            const radius = Math.min(width, height) / 2 - 100;
+
+            const svg = d3.select('#insightVisualization')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const g = svg.append('g')
+                .attr('transform', `translate(${width / 2},${height / 2})`);
+
+            const tree = d3.tree()
+                .size([2 * Math.PI, radius])
+                .separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth);
+
+            const root = d3.hierarchy(data);
+            tree(root);
+
+            // Links
+            g.selectAll('.link')
+                .data(root.links())
+                .enter()
+                .append('path')
+                .attr('class', 'link')
+                .attr('d', d3.linkRadial()
+                    .angle(d => d.x)
+                    .radius(d => d.y))
+                .attr('fill', 'none')
+                .attr('stroke', '#9C27B0')
+                .attr('stroke-width', 2)
+                .attr('stroke-opacity', 0.4);
+
+            // Nodes
+            const node = g.selectAll('.node')
+                .data(root.descendants())
+                .enter()
+                .append('g')
+                .attr('class', 'node')
+                .attr('transform', d => `
+                    rotate(${d.x * 180 / Math.PI - 90})
+                    translate(${d.y},0)
+                `);
+
+            node.append('circle')
+                .attr('r', d => d.depth === 0 ? 12 : (d.depth === 1 ? 8 : 5))
+                .attr('fill', d => d.depth === 0 ? '#9C27B0' : (d.depth === 1 ? '#2196F3' : '#10B981'))
+                .attr('stroke', '#0f172a')
+                .attr('stroke-width', 2);
+
+            node.append('text')
+                .attr('dy', '0.31em')
+                .attr('x', d => d.x < Math.PI === !d.children ? 6 : -6)
+                .attr('text-anchor', d => d.x < Math.PI === !d.children ? 'start' : 'end')
+                .attr('transform', d => d.x >= Math.PI ? 'rotate(180)' : null)
+                .text(d => d.data.name)
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', d => d.depth === 0 ? '16px' : '12px')
+                .attr('font-weight', d => d.depth === 0 ? '700' : '400')
+                .clone(true).lower()
+                .attr('stroke', '#0f172a')
+                .attr('stroke-width', 3);
+        }
+
+        // Initialize visualizations
+        window.addEventListener('load', () => {
+            createPatternDetection();
+            createInsightVisualization();
+        });
+    </script>
+</body>
+</html>

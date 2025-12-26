@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADO Planning Orchestrator | CORTEX Technical Documentation</title>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            --ado-primary: #2196F3;
+            --ado-secondary: #1976D2;
+            --ado-dark: #0D47A1;
+            --phase-1: #4CAF50;
+            --phase-2: #FF9800;
+            --phase-3: #9C27B0;
+            --phase-4: #F44336;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #DC2626;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--ado-primary);
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--ado-primary);
+            margin: 0;
+        }
+        
+        header .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+        
+        .metadata {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+        
+        .metadata span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section {
+            margin: 4rem 0;
+        }
+        
+        .section h2 {
+            font-size: 2rem;
+            color: var(--ado-primary);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--ado-primary);
+            padding-left: 1rem;
+        }
+        
+        .section p {
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+        
+        .diagram-container {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .diagram-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--ado-secondary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .mermaid {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            min-height: 400px;
+        }
+        
+        #work-item-hierarchy,
+        #formatting-pipeline {
+            width: 100%;
+            min-height: 500px;
+            background: #0f172a;
+            border-radius: 8px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--ado-primary), var(--ado-dark));
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--ado-primary);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(33, 150, 243, 0.3);
+        }
+        
+        .feature-card h3 {
+            color: var(--ado-secondary);
+            margin-top: 0;
+        }
+        
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-card li {
+            padding: 0.5rem 0;
+            color: #cbd5e1;
+        }
+        
+        .feature-card li::before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .work-item-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        
+        .work-item-type.epic {
+            background: #9C27B0;
+            color: white;
+        }
+        
+        .work-item-type.feature {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .work-item-type.story {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .work-item-type.task {
+            background: #FF9800;
+            color: white;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: #1e293b;
+            border: 1px solid var(--ado-primary);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .inheritance-box {
+            background: #1e293b;
+            border: 2px solid var(--ado-primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .inheritance-box h4 {
+            color: var(--ado-primary);
+            margin-top: 0;
+        }
+        
+        .inheritance-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .inheritance-box li {
+            padding: 0.3rem 0;
+            color: #cbd5e1;
+        }
+        
+        .inheritance-box li::before {
+            content: "← ";
+            color: var(--ado-primary);
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 2px solid var(--ado-primary);
+            color: #94a3b8;
+            margin-top: 4rem;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .metadata {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 ADO Planning Orchestrator</h1>
+            <p class="subtitle">Azure DevOps Work Item Generation with Planning System Integration</p>
+            <div class="metadata">
+                <span>📄 <strong>Version:</strong> 3.0</span>
+                <span>📦 <strong>Category:</strong> Planning</span>
+                <span>⚡ <strong>Inherits From:</strong> Planning System</span>
+                <span>📊 <strong>Status:</strong> PRODUCTION</span>
+            </div>
+        </header>
+
+        <!-- Overview Section -->
+        <section class="section">
+            <h2>📋 Overview</h2>
+            <p>
+                The ADO Planning Orchestrator extends Planning System 2.0 to generate Azure DevOps-formatted
+                work items (Epic, Feature, Story, Task). Inherits complexity analysis, DoR/DoD validation,
+                TDD integration, and adds ADO-specific formatting, work item hierarchy, and acceptance criteria templates.
+            </p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Work Item Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">150</div>
+                    <div class="stat-label">Lines of Formatting</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">2,000+</div>
+                    <div class="stat-label">Inherited LOC</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">DoR/DoD Compliance</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Work Item Types -->
+        <section class="section">
+            <h2>🎯 Work Item Types</h2>
+            <p>
+                ADO Planning supports 4 work item types with automatic complexity-based type selection:
+            </p>
+            <div style="margin: 1rem 0;">
+                <span class="work-item-type epic">EPIC</span>
+                <span style="color: #cbd5e1;">Large initiatives spanning multiple features (>40 points)</span>
+            </div>
+            <div style="margin: 1rem 0;">
+                <span class="work-item-type feature">FEATURE</span>
+                <span style="color: #cbd5e1;">Major functional areas with multiple stories (20-40 points)</span>
+            </div>
+            <div style="margin: 1rem 0;">
+                <span class="work-item-type story">STORY</span>
+                <span style="color: #cbd5e1;">User-facing functionality with acceptance criteria (5-20 points)</span>
+            </div>
+            <div style="margin: 1rem 0;">
+                <span class="work-item-type task">TASK</span>
+                <span style="color: #cbd5e1;">Implementation steps within stories (<5 points)</span>
+            </div>
+        </section>
+
+        <!-- Inheritance Architecture -->
+        <section class="section">
+            <h2>🏗️ Planning System Inheritance</h2>
+            <p>
+                ADO Planning Orchestrator extends PlanningOrchestrator, inheriting core capabilities and adding
+                ADO-specific formatting. 150 lines of new code on top of 2,000+ lines of inherited logic.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🔗 Inheritance Architecture</div>
+                <div class="mermaid">
+graph TB
+    PS[Planning System 2.0<br/>PlanningOrchestrator]
+    ADO[ADO Planning Orchestrator<br/>extends PlanningOrchestrator]
+    
+    subgraph "Inherited Capabilities"
+        COMPLEX[Complexity Analysis<br/>4-Tier Routing]
+        DOR[DoR/DoD Validation<br/>Quality Gates]
+        TDD[TDD Integration<br/>Test Plan Generation]
+        CONTEXT[Historical Context<br/>Anti-patterns + Success]
+        VISUAL[Visual Progress<br/>🎭 Orchestrator Hints]
+    end
+    
+    subgraph "ADO-Specific Features"
+        FORMAT[ADO Formatting Layer<br/>Work Item Templates]
+        HIERARCHY[Work Item Hierarchy<br/>Epic → Feature → Story → Task]
+        CRITERIA[Acceptance Criteria<br/>Gherkin Format]
+        POINTS[Story Point Estimation<br/>Fibonacci Scale]
+        SUMMARY[Completion Summary<br/>DoD Validation]
+    end
+    
+    PS --> COMPLEX
+    PS --> DOR
+    PS --> TDD
+    PS --> CONTEXT
+    PS --> VISUAL
+    
+    PS --> ADO
+    ADO --> FORMAT
+    ADO --> HIERARCHY
+    ADO --> CRITERIA
+    ADO --> POINTS
+    ADO --> SUMMARY
+    
+    style PS fill:#9C27B0,stroke:#7B1FA2,stroke-width:3px,color:#fff
+    style ADO fill:#2196F3,stroke:#1976D2,stroke-width:3px,color:#fff
+    style COMPLEX fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style DOR fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style TDD fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style CONTEXT fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style VISUAL fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style FORMAT fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style HIERARCHY fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style CRITERIA fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style POINTS fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style SUMMARY fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+                </div>
+            </div>
+            
+            <div class="inheritance-box">
+                <h4>Inherited from Planning System 2.0:</h4>
+                <ul>
+                    <li>Complexity-based routing (Tier 1-4 classification)</li>
+                    <li>DoR/DoD validation framework with quality gates</li>
+                    <li>TDD workflow integration (RED→GREEN→REFACTOR)</li>
+                    <li>Historical context (anti-patterns, success patterns)</li>
+                    <li>Visual progress tracking with 🎭 orchestrator hints</li>
+                    <li>Contextual review orchestrator integration</li>
+                    <li>PlanningSession state management</li>
+                </ul>
+            </div>
+            
+            <div class="inheritance-box">
+                <h4>ADO-Specific Additions:</h4>
+                <ul>
+                    <li>ADO-formatted Markdown output (copy-paste ready)</li>
+                    <li>Work item hierarchy generation (Epic/Feature/Story/Task)</li>
+                    <li>Acceptance criteria in Gherkin format</li>
+                    <li>Story point estimation (Fibonacci: 1,2,3,5,8,13,21)</li>
+                    <li>Completion summary with DoD validation</li>
+                    <li>Business value and technical approach sections</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Work Item Hierarchy Visualization -->
+        <section class="section">
+            <h2>📊 Work Item Hierarchy</h2>
+            <p>
+                Interactive hierarchy showing Epic→Feature→Story→Task relationships with automatic point distribution
+                using Fibonacci scale and complexity-based work item type selection.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🏗️ Work Item Structure</div>
+                <div id="work-item-hierarchy"></div>
+            </div>
+        </section>
+
+        <!-- Formatting Pipeline -->
+        <section class="section">
+            <h2>🎨 ADO Formatting Pipeline</h2>
+            <p>
+                The formatting pipeline converts internal plan structures to ADO work item format with
+                DoR/DoD compliance gates and acceptance criteria validation.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">⚙️ Format Transformation Flow</div>
+                <div id="formatting-pipeline"></div>
+            </div>
+        </section>
+
+        <!-- DoR/DoD Integration -->
+        <section class="section">
+            <h2>✅ DoR/DoD Quality Gates</h2>
+            <p>
+                All ADO work items pass through Definition of Ready (DoR) and Definition of Done (DoD) validation
+                gates inherited from Planning System.
+            </p>
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🚦 Quality Gate Workflow</div>
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant ADO as ADO Orchestrator
+    participant PS as Planning System
+    participant DoR as DoR Validator
+    participant DoD as DoD Validator
+    participant Output
+    
+    User->>ADO: plan ado story "user authentication"
+    ADO->>ADO: 🎭 Orchestrator engaged
+    
+    Note over ADO,PS: Inherit Planning System Analysis
+    ADO->>PS: Complexity analysis
+    PS->>PS: Classify: HIGH (security-critical)
+    PS->>PS: Route: DOCUMENTED tier
+    PS-->>ADO: Complexity: HIGH<br/>Work Item Type: Story
+    
+    Note over ADO,DoR: DoR Validation Gate
+    ADO->>DoR: Validate DoR criteria
+    DoR->>DoR: Check:<br/>- Clear acceptance criteria<br/>- Story points estimated<br/>- Technical approach defined<br/>- Security considerations
+    DoR-->>ADO: ✅ DoR validated
+    
+    Note over ADO: Generate ADO Work Item
+    ADO->>ADO: Format as ADO Story
+    ADO->>ADO: Add Gherkin criteria
+    ADO->>ADO: Estimate: 8 points
+    ADO->>ADO: Add test plan (TDD)
+    
+    Note over ADO,DoD: DoD Validation Setup
+    ADO->>DoD: Define DoD checklist
+    DoD->>DoD: Generate checklist:<br/>- Code review completed<br/>- Unit tests written (TDD)<br/>- Integration tests pass<br/>- Security scan clean<br/>- Documentation updated
+    DoD-->>ADO: DoD checklist created
+    
+    ADO->>Output: Format ADO Markdown
+    Output->>Output: User Story format
+    Output->>Output: Acceptance criteria (Gherkin)
+    Output->>Output: Test plan (RED→GREEN→REFACTOR)
+    Output->>Output: DoD checklist
+    
+    ADO-->>User: # 📊 ADO User Story<br/>**Title:** User Authentication<br/>**Points:** 8<br/>**Criteria:** [Gherkin format]<br/>**DoD:** [Checklist]
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features Section -->
+        <section class="section">
+            <h2>✨ Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔗 Planning System Inheritance</h3>
+                    <ul>
+                        <li>Complexity analysis (4-tier routing)</li>
+                        <li>DoR/DoD quality gates</li>
+                        <li>TDD integration (test plans)</li>
+                        <li>Historical context awareness</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📊 Work Item Hierarchy</h3>
+                    <ul>
+                        <li>Epic → Feature → Story → Task</li>
+                        <li>Automatic type selection</li>
+                        <li>Fibonacci story points (1-21)</li>
+                        <li>Parent-child linking</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>✅ Acceptance Criteria</h3>
+                    <ul>
+                        <li>Gherkin format (Given/When/Then)</li>
+                        <li>User story template (As a/I want/So that)</li>
+                        <li>Business value section</li>
+                        <li>Technical approach notes</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🎯 Story Point Estimation</h3>
+                    <ul>
+                        <li>Fibonacci scale (1,2,3,5,8,13,21)</li>
+                        <li>Complexity-based distribution</li>
+                        <li>Automatic point rollup</li>
+                        <li>T-shirt sizing (XS-XXL)</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📝 ADO-Formatted Output</h3>
+                    <ul>
+                        <li>Copy-paste ready Markdown</li>
+                        <li>Azure DevOps compatible</li>
+                        <li>Section templates (Description, Criteria, DoD)</li>
+                        <li>File export support</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🔄 Completion Summary</h3>
+                    <ul>
+                        <li>Auto-generate from completed work</li>
+                        <li>Files changed tracking</li>
+                        <li>DoD validation before closing</li>
+                        <li>Test coverage metrics</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage Examples -->
+        <section class="section">
+            <h2>💡 Usage Examples</h2>
+            
+            <div class="feature-card" style="margin: 1rem 0;">
+                <h3>Natural Language Commands</h3>
+                <pre style="background: #0f172a; padding: 1rem; border-radius: 4px; overflow-x: auto; color: #10B981;">
+# Create User Story
+plan ado story for user authentication
+
+# Create Feature
+plan ado feature for payment processing
+
+# Create Task
+plan ado task for API endpoint implementation
+
+# Generate Completion Summary
+generate ado summary
+                </pre>
+            </div>
+            
+            <div class="feature-card" style="margin: 1rem 0;">
+                <h3>Example Output: User Story</h3>
+                <pre style="background: #0f172a; padding: 1rem; border-radius: 4px; overflow-x: auto; color: #64B5F6;">
+# User Story: User Authentication
+
+**As a** registered user  
+**I want** to log in with email and password  
+**So that** I can access my account securely
+
+## Acceptance Criteria
+
+**Given** a registered user on the login page  
+**When** they enter valid credentials  
+**Then** they should be redirected to the dashboard
+
+**Given** a user enters invalid credentials  
+**When** they submit the login form  
+**Then** an error message should display
+
+## Story Points: 8
+
+## DoD Checklist
+- [ ] Code review completed
+- [ ] Unit tests written (RED→GREEN→REFACTOR)
+- [ ] Integration tests pass
+- [ ] Security scan clean
+- [ ] Documentation updated
+                </pre>
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>Author:</strong> Asif Hussain | <strong>GitHub:</strong> github.com/asifhussain60/CORTEX</p>
+            <p>Copyright © 2025 Asif Hussain. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- D3.js Visualizations -->
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#2196F3',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#1976D2',
+                lineColor: '#64B5F6',
+                secondaryColor: '#4CAF50',
+                tertiaryColor: '#9C27B0'
+            }
+        });
+
+        // Work Item Hierarchy Visualization (Tree)
+        const hierarchyData = {
+            name: "Epic: E-Commerce Platform",
+            type: "epic",
+            points: 89,
+            children: [
+                {
+                    name: "Feature: Payment Processing",
+                    type: "feature",
+                    points: 34,
+                    children: [
+                        {
+                            name: "Story: Credit Card Integration",
+                            type: "story",
+                            points: 13,
+                            children: [
+                                { name: "Task: Stripe API Setup", type: "task", points: 3 },
+                                { name: "Task: Payment Form UI", type: "task", points: 5 },
+                                { name: "Task: Security Validation", type: "task", points: 5 }
+                            ]
+                        },
+                        {
+                            name: "Story: PayPal Integration",
+                            type: "story",
+                            points: 8,
+                            children: [
+                                { name: "Task: PayPal SDK Integration", type: "task", points: 3 },
+                                { name: "Task: Callback Handling", type: "task", points: 5 }
+                            ]
+                        },
+                        {
+                            name: "Story: Refund Processing",
+                            type: "story",
+                            points: 13,
+                            children: [
+                                { name: "Task: Refund API", type: "task", points: 5 },
+                                { name: "Task: Admin Dashboard", type: "task", points: 8 }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Feature: User Authentication",
+                    type: "feature",
+                    points: 21,
+                    children: [
+                        {
+                            name: "Story: Email Login",
+                            type: "story",
+                            points: 8,
+                            children: [
+                                { name: "Task: Login Form", type: "task", points: 3 },
+                                { name: "Task: Session Management", type: "task", points: 5 }
+                            ]
+                        },
+                        {
+                            name: "Story: OAuth Integration",
+                            type: "story",
+                            points: 13,
+                            children: [
+                                { name: "Task: Google OAuth", type: "task", points: 5 },
+                                { name: "Task: GitHub OAuth", type: "task", points: 5 },
+                                { name: "Task: Token Management", type: "task", points: 3 }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Feature: Product Catalog",
+                    type: "feature",
+                    points: 34,
+                    children: [
+                        {
+                            name: "Story: Product Search",
+                            type: "story",
+                            points: 13,
+                            children: [
+                                { name: "Task: Search API", type: "task", points: 5 },
+                                { name: "Task: Search UI", type: "task", points: 8 }
+                            ]
+                        },
+                        {
+                            name: "Story: Product Filters",
+                            type: "story",
+                            points: 8,
+                            children: [
+                                { name: "Task: Filter Logic", type: "task", points: 3 },
+                                { name: "Task: Filter UI", type: "task", points: 5 }
+                            ]
+                        },
+                        {
+                            name: "Story: Product Details",
+                            type: "story",
+                            points: 13,
+                            children: [
+                                { name: "Task: Details Page", type: "task", points: 8 },
+                                { name: "Task: Image Gallery", type: "task", points: 5 }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const hierarchyWidth = 1200;
+        const hierarchyHeight = 600;
+
+        const hierarchySvg = d3.select("#work-item-hierarchy")
+            .append("svg")
+            .attr("width", hierarchyWidth)
+            .attr("height", hierarchyHeight)
+            .attr("viewBox", [0, 0, hierarchyWidth, hierarchyHeight])
+            .attr("style", "max-width: 100%; height: auto;");
+
+        const hierarchyG = hierarchySvg.append("g")
+            .attr("transform", `translate(100, 50)`);
+
+        const hierarchyTree = d3.tree()
+            .size([hierarchyHeight - 100, hierarchyWidth - 250]);
+
+        const hierarchyRoot = d3.hierarchy(hierarchyData);
+        hierarchyTree(hierarchyRoot);
+
+        // Type colors
+        const typeColors = {
+            "epic": "#9C27B0",
+            "feature": "#2196F3",
+            "story": "#4CAF50",
+            "task": "#FF9800"
+        };
+
+        // Links
+        hierarchyG.selectAll(".link")
+            .data(hierarchyRoot.links())
+            .join("path")
+            .attr("class", "link")
+            .attr("fill", "none")
+            .attr("stroke", "#64B5F6")
+            .attr("stroke-width", 2)
+            .attr("d", d3.linkHorizontal()
+                .x(d => d.y)
+                .y(d => d.x));
+
+        // Nodes
+        const hierarchyNode = hierarchyG.selectAll(".node")
+            .data(hierarchyRoot.descendants())
+            .join("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.y}, ${d.x})`);
+
+        hierarchyNode.append("circle")
+            .attr("r", 8)
+            .attr("fill", d => typeColors[d.data.type])
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 2)
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", 12);
+                    
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px")
+                    .style("opacity", 1)
+                    .html(`
+                        <strong>${d.data.name}</strong><br/>
+                        Type: ${d.data.type.toUpperCase()}<br/>
+                        Points: ${d.data.points}
+                    `);
+            })
+            .on("mouseout", function() {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", 8);
+                    
+                d3.selectAll(".tooltip").remove();
+            });
+
+        hierarchyNode.append("text")
+            .attr("dy", "0.31em")
+            .attr("x", d => d.children ? -12 : 12)
+            .attr("text-anchor", d => d.children ? "end" : "start")
+            .text(d => `${d.data.name} (${d.data.points})`)
+            .attr("fill", "#e2e8f0")
+            .style("font-size", "11px")
+            .clone(true).lower()
+            .attr("stroke", "#0f172a")
+            .attr("stroke-width", 3);
+
+        // Formatting Pipeline Visualization (Sankey-style)
+        const pipelineWidth = 1200;
+        const pipelineHeight = 500;
+
+        const pipelineSvg = d3.select("#formatting-pipeline")
+            .append("svg")
+            .attr("width", pipelineWidth)
+            .attr("height", pipelineHeight)
+            .attr("viewBox", [0, 0, pipelineWidth, pipelineHeight])
+            .attr("style", "max-width: 100%; height: auto;");
+
+        const pipelineSteps = [
+            { id: "input", label: "User Request", x: 100, y: 250, color: "#9C27B0" },
+            { id: "analyze", label: "Complexity Analysis", x: 300, y: 250, color: "#2196F3" },
+            { id: "dor", label: "DoR Validation", x: 500, y: 150, color: "#4CAF50" },
+            { id: "format", label: "ADO Formatting", x: 500, y: 250, color: "#2196F3" },
+            { id: "tdd", label: "TDD Test Plan", x: 500, y: 350, color: "#9C27B0" },
+            { id: "dod", label: "DoD Checklist", x: 700, y: 200, color: "#4CAF50" },
+            { id: "output", label: "ADO Work Item", x: 900, y: 250, color: "#2196F3" }
+        ];
+
+        const pipelineLinks = [
+            { source: "input", target: "analyze" },
+            { source: "analyze", target: "dor" },
+            { source: "analyze", target: "format" },
+            { source: "analyze", target: "tdd" },
+            { source: "dor", target: "format" },
+            { source: "format", target: "dod" },
+            { source: "tdd", target: "dod" },
+            { source: "dod", target: "output" }
+        ];
+
+        // Draw links
+        pipelineLinks.forEach(link => {
+            const sourceNode = pipelineSteps.find(n => n.id === link.source);
+            const targetNode = pipelineSteps.find(n => n.id === link.target);
+            
+            pipelineSvg.append("line")
+                .attr("x1", sourceNode.x + 70)
+                .attr("y1", sourceNode.y)
+                .attr("x2", targetNode.x - 10)
+                .attr("y2", targetNode.y)
+                .attr("stroke", "#64B5F6")
+                .attr("stroke-width", 2)
+                .attr("marker-end", "url(#pipeline-arrow)");
+        });
+
+        // Arrow marker
+        pipelineSvg.append("defs").append("marker")
+            .attr("id", "pipeline-arrow")
+            .attr("viewBox", "0 0 10 10")
+            .attr("refX", 5)
+            .attr("refY", 5)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto-start-reverse")
+            .append("path")
+            .attr("d", "M 0 0 L 10 5 L 0 10 z")
+            .attr("fill", "#64B5F6");
+
+        // Draw nodes
+        const pipelineNodes = pipelineSvg.selectAll(".pipeline-node")
+            .data(pipelineSteps)
+            .join("g")
+            .attr("class", "pipeline-node")
+            .attr("transform", d => `translate(${d.x}, ${d.y})`);
+
+        pipelineNodes.append("rect")
+            .attr("width", 140)
+            .attr("height", 50)
+            .attr("y", -25)
+            .attr("fill", d => d.color)
+            .attr("stroke", "#1e293b")
+            .attr("stroke-width", 2)
+            .attr("rx", 8);
+
+        pipelineNodes.append("text")
+            .attr("x", 70)
+            .attr("y", 5)
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", "#fff")
+            .attr("font-size", "12px")
+            .attr("font-weight", "600")
+            .text(d => d.label);
+    </script>
+</body>
+</html>

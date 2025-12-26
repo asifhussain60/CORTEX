@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rollback Orchestrator | CORTEX Technical Documentation</title>
+    
+    <!-- D3.js -->
+    <script src="https://d3.js.org/d3.v7.min.js"></script>
+    
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            --rollback-primary: #F44336;
+            --rollback-secondary: #D32F2F;
+            --rollback-dark: #B71C1C;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #DC2626;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--rollback-primary);
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: var(--rollback-primary);
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+        
+        .orchestrator-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #1e293b;
+            border-radius: 8px;
+            border-left: 4px solid var(--rollback-primary);
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .meta-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 0.25rem;
+        }
+        
+        .meta-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--rollback-primary);
+        }
+        
+        .section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-top: 0;
+            color: #f1f5f9;
+            border-bottom: 2px solid var(--rollback-secondary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .diagram-container {
+            background: #0f172a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid #334155;
+        }
+        
+        .mermaid {
+            text-align: center;
+        }
+        
+        #checkpointTree, #stateComparison {
+            min-height: 500px;
+            width: 100%;
+        }
+        
+        .feature-list {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-card {
+            padding: 1rem;
+            background: #0f172a;
+            border-radius: 8px;
+            border-left: 4px solid var(--rollback-primary);
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: var(--rollback-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-desc {
+            color: #cbd5e1;
+            font-size: 0.938rem;
+            line-height: 1.6;
+        }
+        
+        .validation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .validation-card {
+            padding: 1rem;
+            background: #0f172a;
+            border-radius: 8px;
+            border: 2px solid var(--rollback-primary);
+        }
+        
+        .validation-title {
+            font-weight: 600;
+            color: var(--rollback-primary);
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .validation-desc {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 0.75rem;
+            background: #1e293b;
+            border: 1px solid var(--rollback-primary);
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            max-width: 300px;
+            z-index: 1000;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 2rem 0;
+            padding: 0.75rem 1.5rem;
+            background: var(--rollback-primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .back-link:hover {
+            background: var(--rollback-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            .orchestrator-meta { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⏪ Rollback Orchestrator</h1>
+            <p class="subtitle">State Restoration & Checkpoint Management with Validation Gates</p>
+        </header>
+
+        <div class="orchestrator-meta">
+            <div class="meta-item">
+                <span class="meta-label">File Location</span>
+                <span class="meta-value">src/operations/utilities/</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Complexity</span>
+                <span class="meta-value">MEDIUM</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Manager Class</span>
+                <span class="meta-value">OrchestrationCheckpointManager</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Integration</span>
+                <span class="meta-value">All Orchestrators</span>
+            </div>
+        </div>
+
+        <section class="section">
+            <h2>Overview</h2>
+            <p>
+                The Rollback Orchestrator provides checkpoint-based state restoration for all CORTEX orchestrators. 
+                It enables recovery from failed executions by restoring to known-good checkpoints and removing 
+                all later checkpoints created after that point. Supports both git-based and memory-based checkpoints 
+                with validation gates ensuring safe rollback operations.
+            </p>
+            
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">🎯 Checkpoint Selection</div>
+                    <div class="feature-desc">
+                        Intelligent checkpoint selection by ID, phase, timestamp, or tag. Shows checkpoint 
+                        metadata (phase, state, timestamp) before rollback to confirm target.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔍 Pre-Rollback Validation</div>
+                    <div class="feature-desc">
+                        Validates checkpoint exists, is not corrupted, and is compatible with current 
+                        orchestrator version. Prevents rollback to incompatible states.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔄 Dual-Mode Rollback</div>
+                    <div class="feature-desc">
+                        Supports git rollback (filesystem + code changes) and memory rollback (state-only). 
+                        Git mode uses `git restore`, memory mode updates internal state.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📊 State Comparison</div>
+                    <div class="feature-desc">
+                        Before/after state comparison showing: phase changes, file differences, test status, 
+                        metric deltas. Confirms rollback achieved desired state.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Rollback Workflow with Validation Gates</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    START([Rollback Request]) --> SELECT[Checkpoint Selection:<br/>- By ID<br/>- By phase<br/>- By timestamp<br/>- By tag]
+    
+    SELECT --> RETRIEVE[Retrieve Checkpoint<br/>Metadata]
+    
+    RETRIEVE --> VALIDATE1{Validation Gate 1:<br/>Checkpoint Exists?}
+    
+    VALIDATE1 --> |No| ERROR1[❌ Checkpoint not found]
+    VALIDATE1 --> |Yes| VALIDATE2{Validation Gate 2:<br/>Not Corrupted?}
+    
+    VALIDATE2 --> |No| ERROR2[❌ Checkpoint corrupted]
+    VALIDATE2 --> |Yes| VALIDATE3{Validation Gate 3:<br/>Compatible Version?}
+    
+    VALIDATE3 --> |No| ERROR3[❌ Version incompatible]
+    VALIDATE3 --> |Yes| CONFIRM[Show Checkpoint Details:<br/>- Phase: Implementation<br/>- Timestamp: 2025-12-26<br/>- Files: 42 changed<br/>- Tests: 15 passing]
+    
+    CONFIRM --> USER{User<br/>Confirms?}
+    
+    USER --> |No| CANCEL[Cancel rollback]
+    USER --> |Yes| SNAPSHOT[Create Pre-Rollback<br/>Snapshot]
+    
+    SNAPSHOT --> TYPE{Checkpoint<br/>Type?}
+    
+    TYPE --> |Git| GIT_ROLLBACK[Git Rollback:<br/>- git restore --source={commit}<br/>- Restore files<br/>- Update working tree]
+    TYPE --> |Memory| MEMORY_ROLLBACK[Memory Rollback:<br/>- Restore orchestrator state<br/>- Update internal variables<br/>- Reset phase counter]
+    
+    GIT_ROLLBACK --> CLEANUP
+    MEMORY_ROLLBACK --> CLEANUP
+    
+    CLEANUP[Cleanup Later Checkpoints:<br/>- Find checkpoints after target<br/>- Remove checkpoint files<br/>- Update checkpoint list]
+    
+    CLEANUP --> RESTORE[Restore Target State:<br/>- Phase<br/>- Variables<br/>- Context]
+    
+    RESTORE --> VALIDATE4{Validation Gate 4:<br/>State Restored?}
+    
+    VALIDATE4 --> |No| ROLLBACK_FAIL[Restore from<br/>pre-rollback snapshot]
+    VALIDATE4 --> |Yes| COMPARE[Generate State<br/>Comparison Report]
+    
+    COMPARE --> SUCCESS[✅ Rollback complete]
+    
+    ROLLBACK_FAIL --> FAIL[❌ Rollback failed]
+    
+    ERROR1 --> END([Complete])
+    ERROR2 --> END
+    ERROR3 --> END
+    CANCEL --> END
+    FAIL --> END
+    SUCCESS --> END
+    
+    style START fill:#F44336,stroke:#D32F2F,color:#fff
+    style VALIDATE1 fill:#FF9800,stroke:#F57C00,color:#fff
+    style VALIDATE2 fill:#FF9800,stroke:#F57C00,color:#fff
+    style VALIDATE3 fill:#FF9800,stroke:#F57C00,color:#fff
+    style VALIDATE4 fill:#FF9800,stroke:#F57C00,color:#fff
+    style GIT_ROLLBACK fill:#2196F3,stroke:#1976D2,color:#fff
+    style MEMORY_ROLLBACK fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style SUCCESS fill:#10B981,stroke:#059669,color:#fff
+    style ROLLBACK_FAIL fill:#DC2626,stroke:#B91C1C,color:#fff
+    style END fill:#10B981,stroke:#059669,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Validation Gates</h2>
+            <div class="validation-grid">
+                <div class="validation-card">
+                    <div class="validation-title">Gate 1: Checkpoint Exists</div>
+                    <div class="validation-desc">
+                        Verifies checkpoint file exists at expected path. Checks both git and memory checkpoint lists.
+                    </div>
+                </div>
+                <div class="validation-card">
+                    <div class="validation-title">Gate 2: Not Corrupted</div>
+                    <div class="validation-desc">
+                        Validates checkpoint JSON structure, required fields (checkpoint_id, timestamp, state), and file integrity.
+                    </div>
+                </div>
+                <div class="validation-card">
+                    <div class="validation-title">Gate 3: Version Compatible</div>
+                    <div class="validation-desc">
+                        Ensures checkpoint orchestrator version matches current version. Prevents incompatible state restoration.
+                    </div>
+                </div>
+                <div class="validation-card">
+                    <div class="validation-title">Gate 4: State Restored</div>
+                    <div class="validation-desc">
+                        Post-rollback validation: phase matches checkpoint, files restored, state variables correct.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Checkpoint Selection Tree</h2>
+            <p>Hierarchical view of available checkpoints for rollback selection.</p>
+            <div class="diagram-container">
+                <div id="checkpointTree"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Git vs Memory Rollback</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph LR
+    ROLLBACK[Rollback Request] --> CHECK{Checkpoint<br/>Type?}
+    
+    CHECK --> |Git| GIT_FLOW[Git Rollback Flow]
+    CHECK --> |Memory| MEM_FLOW[Memory Rollback Flow]
+    
+    GIT_FLOW --> GIT1[1. Get commit SHA<br/>from checkpoint]
+    GIT1 --> GIT2[2. Run git restore<br/>--source={sha}]
+    GIT2 --> GIT3[3. Update working tree]
+    GIT3 --> GIT4[4. Restore file changes]
+    GIT4 --> GIT_DONE[✅ Git restore complete]
+    
+    MEM_FLOW --> MEM1[1. Extract state<br/>from checkpoint]
+    MEM1 --> MEM2[2. Update orchestrator<br/>internal state]
+    MEM2 --> MEM3[3. Reset phase counter]
+    MEM3 --> MEM4[4. Restore context vars]
+    MEM4 --> MEM_DONE[✅ Memory restore complete]
+    
+    GIT_DONE --> CLEANUP[Cleanup later<br/>checkpoints]
+    MEM_DONE --> CLEANUP
+    
+    style GIT_FLOW fill:#2196F3,stroke:#1976D2,color:#fff
+    style MEM_FLOW fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style GIT_DONE fill:#10B981,stroke:#059669,color:#fff
+    style MEM_DONE fill:#10B981,stroke:#059669,color:#fff
+    style CLEANUP fill:#FF9800,stroke:#F57C00,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>State Comparison Visualization</h2>
+            <p>Before/after comparison showing impact of rollback on orchestrator state.</p>
+            <div class="diagram-container">
+                <div id="stateComparison"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Checkpoint Cleanup Strategy</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    TARGET[Target Checkpoint<br/>Selected] --> TIMESTAMP[Get Target<br/>Timestamp]
+    
+    TIMESTAMP --> SCAN[Scan All Checkpoints<br/>for Orchestrator]
+    
+    SCAN --> FILTER[Filter Checkpoints<br/>After Target Timestamp]
+    
+    FILTER --> CHECK{Checkpoints<br/>Found?}
+    
+    CHECK --> |No| SKIP[No cleanup needed]
+    CHECK --> |Yes| PRESERVE{Has Preserve<br/>Tags?}
+    
+    PRESERVE --> |Yes| WARN[Warn: Tagged checkpoint<br/>will be removed]
+    PRESERVE --> |No| DELETE[Delete Checkpoint<br/>Files]
+    
+    WARN --> USER{User<br/>Confirms?}
+    
+    USER --> |No| ABORT[Abort cleanup]
+    USER --> |Yes| DELETE
+    
+    DELETE --> UPDATE[Update Checkpoint<br/>List in Memory]
+    
+    UPDATE --> LOG[Log Deleted<br/>Checkpoint IDs]
+    
+    LOG --> DONE[✅ Cleanup complete]
+    
+    SKIP --> END([Complete])
+    ABORT --> END
+    DONE --> END
+    
+    style TARGET fill:#F44336,stroke:#D32F2F,color:#fff
+    style DELETE fill:#DC2626,stroke:#B91C1C,color:#fff
+    style DONE fill:#10B981,stroke:#059669,color:#fff
+    style END fill:#10B981,stroke:#059669,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Key Features</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">📂 Checkpoint Storage</div>
+                    <div class="feature-desc">
+                        Checkpoints stored at <code>cortex-brain/checkpoints/{orchestrator_name}/{checkpoint_id}.json</code>. 
+                        Thread-safe concurrent access for multiple orchestrators.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔍 Checkpoint Listing</div>
+                    <div class="feature-desc">
+                        List all checkpoints with filtering by: phase name, timestamp range, tags, orchestrator name. 
+                        Returns sorted list (newest first).
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">💾 Pre-Rollback Snapshot</div>
+                    <div class="feature-desc">
+                        Creates snapshot before rollback for emergency recovery. If rollback fails, can restore 
+                        from snapshot to pre-rollback state.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📊 Rollback Metrics</div>
+                    <div class="feature-desc">
+                        Tracks: rollback count, success rate, average restore time, checkpoints deleted. 
+                        Helps identify problematic checkpoints.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔄 Automatic Cleanup</div>
+                    <div class="feature-desc">
+                        Removes checkpoints after target timestamp. Prevents checkpoint list bloat. 
+                        Preserves tagged checkpoints if configured.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🛡️ Safety Guardrails</div>
+                    <div class="feature-desc">
+                        Prevents rollback to: corrupted checkpoints, incompatible versions, non-existent 
+                        checkpoints. Requires confirmation for destructive operations.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Integration Points</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">BaseOrchestrator</div>
+                    <div class="feature-desc">
+                        All orchestrators inherit <code>restore_checkpoint()</code> and <code>create_checkpoint()</code> 
+                        methods from <code>BaseOrchestrator</code>.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Planning Orchestrator</div>
+                    <div class="feature-desc">
+                        <code>_rollback_to_checkpoint()</code> supports rollback to any planning phase. 
+                        Restores plan state, phase counter, and execution context.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Adaptive Execution</div>
+                    <div class="feature-desc">
+                        <code>SafetyGuardrail.restore_checkpoint()</code> integrates with autonomous execution 
+                        for automatic rollback on error.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Git Checkpoint Rules</div>
+                    <div class="feature-desc">
+                        Manifest <code>git-checkpoint-rules.yaml</code> defines auto-checkpoint triggers, 
+                        retention policies, cleanup strategies.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Usage Examples</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">Example 1: List & Rollback</div>
+                    <div class="feature-desc">
+                        <pre style="background:#0f172a; padding:1rem; border-radius:4px; color:#e2e8f0; overflow-x:auto;"><code>manager = OrchestrationCheckpointManager()
+checkpoints = manager.list_checkpoints('planning_orchestrator')
+# Show: [{'checkpoint_id': 'cp1', 'phase': 'Phase2', 'timestamp': '2025-12-26T10:00:00'}]
+
+# Rollback to Phase 1
+state = manager.rollback('planning_orchestrator', 'cp1')
+print(state['phase'])  # Output: Phase1</code></pre>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Example 2: Memory Checkpoint Rollback</div>
+                    <div class="feature-desc">
+                        <pre style="background:#0f172a; padding:1rem; border-radius:4px; color:#e2e8f0; overflow-x:auto;"><code># In orchestrator
+checkpoint_id = self._create_checkpoint("Refactoring", {"state": "stable"})
+
+# Make changes
+self._update_state({"state": "unstable"})
+
+# Rollback to stable state
+success = self._rollback_to_checkpoint(checkpoint_id)
+assert self._get_current_state()["state"] == "stable"</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Related Documentation</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">Implementation</div>
+                    <div class="feature-desc">
+                        <code>src/operations/utilities/orchestration_checkpoint_manager.py</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Base Integration</div>
+                    <div class="feature-desc">
+                        <code>src/orchestrators/base/base_orchestrator.py</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Manifest</div>
+                    <div class="feature-desc">
+                        <code>cortex-brain/manifests/orchestrators/git-checkpoint-rules.yaml</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Tests</div>
+                    <div class="feature-desc">
+                        <code>tests/orchestrators/planning/test_planning_orchestrator_checkpoint_mgmt.py</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#F44336',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#D32F2F',
+                lineColor: '#94a3b8',
+                secondaryColor: '#1e293b',
+                tertiaryColor: '#0f172a'
+            }
+        });
+
+        function createCheckpointTree() {
+            const data = {
+                name: "Checkpoints",
+                children: [
+                    {
+                        name: "planning_orchestrator",
+                        children: [
+                            { name: "Phase1_Init", timestamp: "2025-12-26 09:00", type: "git" },
+                            { name: "Phase2_Analysis", timestamp: "2025-12-26 09:30", type: "git" },
+                            { name: "Phase3_Implementation", timestamp: "2025-12-26 10:00", type: "git" },
+                            { name: "Phase4_Refactoring", timestamp: "2025-12-26 10:30", type: "memory" }
+                        ]
+                    },
+                    {
+                        name: "tdd_orchestrator",
+                        children: [
+                            { name: "RED_Phase", timestamp: "2025-12-26 11:00", type: "git" },
+                            { name: "GREEN_Phase", timestamp: "2025-12-26 11:15", type: "git" },
+                            { name: "REFACTOR_Phase", timestamp: "2025-12-26 11:30", type: "memory" }
+                        ]
+                    },
+                    {
+                        name: "maintenance_orchestrator",
+                        children: [
+                            { name: "Healthcheck_Pre", timestamp: "2025-12-26 12:00", type: "memory" },
+                            { name: "Align_Complete", timestamp: "2025-12-26 12:15", type: "git" },
+                            { name: "Cleanup_Done", timestamp: "2025-12-26 12:30", type: "memory" }
+                        ]
+                    }
+                ]
+            };
+
+            const width = document.getElementById('checkpointTree').clientWidth;
+            const height = 500;
+
+            const svg = d3.select('#checkpointTree')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const tree = d3.tree()
+                .size([height - 100, width - 200]);
+
+            const root = d3.hierarchy(data);
+            tree(root);
+
+            const g = svg.append('g')
+                .attr('transform', 'translate(100, 50)');
+
+            g.selectAll('.link')
+                .data(root.links())
+                .enter()
+                .append('path')
+                .attr('d', d3.linkHorizontal()
+                    .x(d => d.y)
+                    .y(d => d.x))
+                .attr('fill', 'none')
+                .attr('stroke', '#64748b')
+                .attr('stroke-width', 2);
+
+            const node = g.selectAll('.node')
+                .data(root.descendants())
+                .enter()
+                .append('g')
+                .attr('transform', d => `translate(${d.y},${d.x})`);
+
+            node.append('circle')
+                .attr('r', 6)
+                .attr('fill', d => {
+                    if (d.depth === 0) return '#F44336';
+                    if (d.depth === 1) return '#FF9800';
+                    return d.data.type === 'git' ? '#2196F3' : '#9C27B0';
+                })
+                .attr('stroke', '#0f172a')
+                .attr('stroke-width', 2);
+
+            node.append('text')
+                .attr('dy', '0.31em')
+                .attr('x', d => d.children ? -10 : 10)
+                .attr('text-anchor', d => d.children ? 'end' : 'start')
+                .text(d => d.data.name)
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', '11px')
+                .clone(true).lower()
+                .attr('stroke', '#0f172a')
+                .attr('stroke-width', 3);
+
+            // Add timestamp for leaf nodes
+            node.filter(d => !d.children && d.data.timestamp)
+                .append('text')
+                .attr('dy', '1.5em')
+                .attr('x', 10)
+                .attr('text-anchor', 'start')
+                .text(d => d.data.timestamp)
+                .attr('fill', '#64748b')
+                .attr('font-size', '9px');
+        }
+
+        function createStateComparison() {
+            const beforeData = [
+                { metric: 'Phase', before: 'Phase 3', after: 'Phase 1' },
+                { metric: 'Files Changed', before: 42, after: 12 },
+                { metric: 'Tests Passing', before: 15, after: 25 },
+                { metric: 'Lines of Code', before: 5600, after: 4200 },
+                { metric: 'Complexity Score', before: 68, after: 45 }
+            ];
+
+            const width = document.getElementById('stateComparison').clientWidth;
+            const height = 400;
+            const margin = { top: 40, right: 40, bottom: 60, left: 150 };
+
+            const svg = d3.select('#stateComparison')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const yScale = d3.scaleBand()
+                .domain(beforeData.map(d => d.metric))
+                .range([margin.top, height - margin.bottom])
+                .padding(0.2);
+
+            // Normalize numeric values for visualization
+            const normalizedData = beforeData.map(d => ({
+                metric: d.metric,
+                before: typeof d.before === 'number' ? d.before : 0,
+                after: typeof d.after === 'number' ? d.after : 0,
+                beforeLabel: d.before,
+                afterLabel: d.after
+            }));
+
+            const maxValue = d3.max(normalizedData, d => Math.max(d.before, d.after));
+
+            const xScale = d3.scaleLinear()
+                .domain([0, maxValue])
+                .range([margin.left, width - margin.right]);
+
+            // Before bars
+            svg.selectAll('.bar-before')
+                .data(normalizedData)
+                .enter()
+                .append('rect')
+                .attr('class', 'bar-before')
+                .attr('x', margin.left)
+                .attr('y', d => yScale(d.metric))
+                .attr('width', d => xScale(d.before) - margin.left)
+                .attr('height', yScale.bandwidth() / 2)
+                .attr('fill', '#DC2626')
+                .attr('opacity', 0.7);
+
+            // After bars
+            svg.selectAll('.bar-after')
+                .data(normalizedData)
+                .enter()
+                .append('rect')
+                .attr('class', 'bar-after')
+                .attr('x', margin.left)
+                .attr('y', d => yScale(d.metric) + yScale.bandwidth() / 2)
+                .attr('width', d => xScale(d.after) - margin.left)
+                .attr('height', yScale.bandwidth() / 2)
+                .attr('fill', '#10B981')
+                .attr('opacity', 0.7);
+
+            // Y-axis
+            svg.append('g')
+                .attr('transform', `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0');
+
+            // X-axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0');
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 120}, ${margin.top})`);
+
+            legend.append('rect')
+                .attr('width', 20)
+                .attr('height', 10)
+                .attr('fill', '#DC2626')
+                .attr('opacity', 0.7);
+
+            legend.append('text')
+                .attr('x', 25)
+                .attr('y', 10)
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', '12px')
+                .text('Before');
+
+            legend.append('rect')
+                .attr('y', 20)
+                .attr('width', 20)
+                .attr('height', 10)
+                .attr('fill', '#10B981')
+                .attr('opacity', 0.7);
+
+            legend.append('text')
+                .attr('x', 25)
+                .attr('y', 30)
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', '12px')
+                .text('After');
+        }
+
+        window.addEventListener('load', () => {
+            createCheckpointTree();
+            createStateComparison();
+        });
+    </script>
+</body>
+</html>

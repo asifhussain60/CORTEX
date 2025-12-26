@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Dashboard Orchestrator | CORTEX Technical Documentation</title>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            --dashboard-primary: #9C27B0;
+            --dashboard-secondary: #7B1FA2;
+            --dashboard-dark: #6A1B9A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #DC2626;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--dashboard-primary);
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: var(--dashboard-primary);
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+        
+        .orchestrator-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #1e293b;
+            border-radius: 8px;
+            border-left: 4px solid var(--dashboard-primary);
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .meta-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 0.25rem;
+        }
+        
+        .meta-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dashboard-primary);
+        }
+        
+        .section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-top: 0;
+            color: #f1f5f9;
+            border-bottom: 2px solid var(--dashboard-secondary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .diagram-container {
+            background: #0f172a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid #334155;
+        }
+        
+        .mermaid {
+            text-align: center;
+        }
+        
+        #collectorFlow, #metricsTimeline {
+            min-height: 500px;
+            width: 100%;
+        }
+        
+        .feature-list {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-card {
+            padding: 1rem;
+            background: #0f172a;
+            border-radius: 8px;
+            border-left: 4px solid var(--dashboard-primary);
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: var(--dashboard-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-desc {
+            color: #cbd5e1;
+            font-size: 0.938rem;
+            line-height: 1.6;
+        }
+        
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .phase-card {
+            padding: 1.5rem;
+            background: #0f172a;
+            border-radius: 8px;
+            border-top: 4px solid var(--dashboard-primary);
+        }
+        
+        .phase-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dashboard-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .collector-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .collector-item:last-child {
+            border-bottom: none;
+        }
+        
+        .collector-name {
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        
+        .collector-desc {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 0.75rem;
+            background: #1e293b;
+            border: 1px solid var(--dashboard-primary);
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            max-width: 300px;
+            z-index: 1000;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 2rem 0;
+            padding: 0.75rem 1.5rem;
+            background: var(--dashboard-primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .back-link:hover {
+            background: var(--dashboard-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            .orchestrator-meta { grid-template-columns: 1fr; }
+            .phase-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Intelligent Dashboard Orchestrator</h1>
+            <p class="subtitle">Multi-Phase Repository Analytics with Live Metrics Collection</p>
+        </header>
+
+        <div class="orchestrator-meta">
+            <div class="meta-item">
+                <span class="meta-label">File Location</span>
+                <span class="meta-value">src/dashboard/orchestrator.py</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Complexity</span>
+                <span class="meta-value">HIGH</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Collectors</span>
+                <span class="meta-value">15+ across 3 phases</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Output Format</span>
+                <span class="meta-value">JSON (template-ready)</span>
+            </div>
+        </div>
+
+        <section class="section">
+            <h2>Overview</h2>
+            <p>
+                The Intelligent Dashboard Orchestrator collects, enriches, and visualizes repository analytics 
+                across three sequential phases: <strong>Phase 7</strong> (base metrics), <strong>Phase 8</strong> 
+                (structure + risk), and <strong>Phase 9</strong> (intelligence features). It generates template-ready 
+                JSON for Dashboard v3 with live metrics, security vulnerabilities, migration roadmaps, and actionable recommendations.
+            </p>
+            
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">🔄 Sequential Pipeline</div>
+                    <div class="feature-desc">
+                        Phase 7 → Phase 8 → Phase 9 execution with data enrichment between phases. Each phase 
+                        depends on outputs from previous phases for contextual analysis.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔍 Universal Repository Analysis</div>
+                    <div class="feature-desc">
+                        Analyzes ANY repository (user or CORTEX) - detects languages, frameworks, dependencies, 
+                        business capabilities, security vulnerabilities, and technical debt.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🛡️ Security & Risk Scoring</div>
+                    <div class="feature-desc">
+                        CVE detection, EOL risk scoring, dependency bloat analysis. Identifies vulnerable 
+                        frameworks and generates upgrade paths to maintained versions.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📈 Intelligence Features</div>
+                    <div class="feature-desc">
+                        Migration roadmaps, framework health heatmaps, dependency bloat detection. Uses 
+                        statistical analysis and AST parsing for deep insights.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>3-Phase Collection Workflow</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    START([Dashboard Request]) --> PHASE7[Phase 7: Base Data Collection]
+    
+    PHASE7 --> OVERVIEW[OverviewCollector:<br/>LOC, files, commits, contributors]
+    PHASE7 --> TECHSTACK[TechStackCollector:<br/>Languages, frameworks, versions]
+    PHASE7 --> SECURITY[SecurityCollector:<br/>CVEs, vulnerabilities]
+    PHASE7 --> BUSINESS[BusinessCapabilityDetector:<br/>Entities, patterns]
+    PHASE7 --> RECOMMEND[RecommendationCollector:<br/>Actionable items]
+    PHASE7 --> USECASE[UseCaseCollector:<br/>Role/domain/process]
+    
+    OVERVIEW --> COMBINE7[Combine Phase 7 Data]
+    TECHSTACK --> COMBINE7
+    SECURITY --> COMBINE7
+    BUSINESS --> COMBINE7
+    RECOMMEND --> COMBINE7
+    USECASE --> COMBINE7
+    
+    COMBINE7 --> PHASE8[Phase 8: Structure + Risk Scoring]
+    
+    PHASE8 --> SOLUTION[SolutionStructureCollector:<br/>Solution hierarchy]
+    PHASE8 --> RISK[TechStackRiskScorer:<br/>EOL + CVE risk scores]
+    
+    SOLUTION --> ENRICH[Enrich tech_stack with:<br/>- Risk scores<br/>- EOL dates<br/>- CVE counts]
+    RISK --> ENRICH
+    
+    ENRICH --> PHASE9[Phase 9: Intelligence Features]
+    
+    PHASE9 --> MIGRATION[MigrationRoadmapGenerator:<br/>Upgrade paths]
+    PHASE9 --> HEATMAP[FrameworkHealthHeatmap:<br/>Health visualization]
+    PHASE9 --> BLOAT[DependencyBloatAnalyzer:<br/>Statistical bloat detection]
+    
+    MIGRATION --> OUTPUT[Generate Dashboard JSON]
+    HEATMAP --> OUTPUT
+    BLOAT --> OUTPUT
+    
+    OUTPUT --> VALIDATE{Validation<br/>Pass?}
+    
+    VALIDATE --> |No| ERROR[❌ Collection failed<br/>Log errors]
+    VALIDATE --> |Yes| SAVE[Save to:<br/>cortex-brain/dashboards/data/repos/{repo}/]
+    
+    SAVE --> SUCCESS[✅ Dashboard data ready]
+    
+    ERROR --> END([Complete])
+    SUCCESS --> END
+    
+    style START fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style PHASE7 fill:#2196F3,stroke:#1976D2,color:#fff
+    style PHASE8 fill:#4CAF50,stroke:#388E3C,color:#fff
+    style PHASE9 fill:#FF9800,stroke:#F57C00,color:#fff
+    style OUTPUT fill:#00BCD4,stroke:#0097A7,color:#fff
+    style SUCCESS fill:#10B981,stroke:#059669,color:#fff
+    style ERROR fill:#DC2626,stroke:#B91C1C,color:#fff
+    style END fill:#10B981,stroke:#059669,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Collector Breakdown by Phase</h2>
+            
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="phase-header">📊 Phase 7: Base Collectors</div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">OverviewCollector</div>
+                        <div class="collector-desc">Repository metrics: LOC, file count, commits, contributors</div>
+                    </div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">TechStackCollector</div>
+                        <div class="collector-desc">Languages, frameworks, versions, package manifests</div>
+                    </div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">SecurityCollector</div>
+                        <div class="collector-desc">CVE detection, vulnerability scanning, dependency audits</div>
+                    </div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">BusinessCapabilityDetector</div>
+                        <div class="collector-desc">Business entities, domain patterns, capability mapping</div>
+                    </div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">RecommendationCollector</div>
+                        <div class="collector-desc">Actionable recommendations based on analysis results</div>
+                    </div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">UseCaseCollector</div>
+                        <div class="collector-desc">Role/domain/process extraction from code + docs</div>
+                    </div>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-header">🏗️ Phase 8: Structure + Risk</div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">SolutionStructureCollector</div>
+                        <div class="collector-desc">Solution hierarchy: solutions → projects → files</div>
+                    </div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">TechStackRiskScorer</div>
+                        <div class="collector-desc">EOL + CVE risk scoring for frameworks (0-100 scale)</div>
+                    </div>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-header">🧠 Phase 9: Intelligence</div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">MigrationRoadmapGenerator</div>
+                        <div class="collector-desc">Upgrade paths from EOL to maintained versions</div>
+                    </div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">FrameworkHealthHeatmap</div>
+                        <div class="collector-desc">Visual health matrix for all frameworks</div>
+                    </div>
+                    
+                    <div class="collector-item">
+                        <div class="collector-name">DependencyBloatAnalyzer</div>
+                        <div class="collector-desc">Statistical bloat detection with removal recommendations</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Collector Orchestration Flow</h2>
+            <p>Force-directed graph showing collector dependencies and data flow between phases.</p>
+            <div class="diagram-container">
+                <div id="collectorFlow"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Live Metrics Timeline Visualization</h2>
+            <p>Time-series view of dashboard data collection showing metrics evolution over time.</p>
+            <div class="diagram-container">
+                <div id="metricsTimeline"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Data Enrichment Strategy</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph LR
+    P7[Phase 7 Data:<br/>- tech_stack<br/>- security<br/>- overview] --> ENRICH1[Enrichment 1:<br/>Add solution structure]
+    
+    ENRICH1 --> P8[Phase 8 Data:<br/>- tech_stack + solutions<br/>- security<br/>- overview]
+    
+    P8 --> ENRICH2[Enrichment 2:<br/>Add risk scores + EOL]
+    
+    ENRICH2 --> P9INPUT[Phase 9 Input:<br/>- tech_stack + risk + EOL<br/>- security + CVE counts<br/>- overview]
+    
+    P9INPUT --> INTEL[Intelligence Generation:<br/>- Migration roadmaps<br/>- Health heatmap<br/>- Bloat analysis]
+    
+    INTEL --> FINAL[Final JSON:<br/>All phases merged]
+    
+    style P7 fill:#2196F3,stroke:#1976D2,color:#fff
+    style P8 fill:#4CAF50,stroke:#388E3C,color:#fff
+    style P9INPUT fill:#FF9800,stroke:#F57C00,color:#fff
+    style FINAL fill:#9C27B0,stroke:#7B1FA2,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Key Features</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">📂 Output Directory Management</div>
+                    <div class="feature-desc">
+                        Defaults to <code>cortex-brain/dashboards/data/repos/{repo_name}/</code> with 
+                        automatic directory creation. Custom output paths supported.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔄 Data Dependency Resolution</div>
+                    <div class="feature-desc">
+                        Automatically passes enriched data between phases. Phase 8 uses Phase 7 tech_stack, 
+                        Phase 9 uses Phase 8 risk-enriched data.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🛡️ Error Handling</div>
+                    <div class="feature-desc">
+                        Per-collector error handling with fallback to empty datasets. Logs detailed errors 
+                        while continuing collection pipeline.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📊 Template-Ready Output</div>
+                    <div class="feature-desc">
+                        Generates JSON matching Dashboard v3 template requirements. Direct integration with 
+                        Jinja2 templates for HTML rendering.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔍 AST-Powered Analysis</div>
+                    <div class="feature-desc">
+                        Uses Abstract Syntax Tree parsing for deep code analysis: docstring extraction, 
+                        semantic analysis, business capability detection.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Alert Triggers & Thresholds</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">🚨 High Severity CVEs</div>
+                    <div class="feature-desc">
+                        Alert when CVE count > 5 or CVSS score ≥ 7.0. Triggers security recommendation 
+                        for immediate patching.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">⏰ EOL Frameworks</div>
+                    <div class="feature-desc">
+                        Alert when framework is EOL or EOL date < 6 months. Triggers migration roadmap generation.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📊 Dependency Bloat</div>
+                    <div class="feature-desc">
+                        Alert when unused dependencies > 30% or total dependencies > 100. Triggers bloat 
+                        analysis with removal recommendations.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔥 Technical Debt</div>
+                    <div class="feature-desc">
+                        Alert when complexity score > 70 or test coverage < 50%. Triggers refactoring 
+                        recommendations.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Related Documentation</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">Implementation</div>
+                    <div class="feature-desc">
+                        <code>src/dashboard/orchestrator.py</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Phase 7 Collectors</div>
+                    <div class="feature-desc">
+                        <code>src/dashboard/data/{collector_name}.py</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Phase 9 Intelligence</div>
+                    <div class="feature-desc">
+                        <code>src/dashboard/intelligence/{feature_name}.py</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Dashboard Templates</div>
+                    <div class="feature-desc">
+                        <code>templates/dashboard/dashboard_v3.html</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#9C27B0',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#7B1FA2',
+                lineColor: '#94a3b8',
+                secondaryColor: '#1e293b',
+                tertiaryColor: '#0f172a'
+            }
+        });
+
+        function createCollectorFlow() {
+            const nodes = [
+                // Phase 7
+                { id: 'overview', name: 'Overview', phase: 7, group: 1 },
+                { id: 'techstack', name: 'TechStack', phase: 7, group: 1 },
+                { id: 'security', name: 'Security', phase: 7, group: 1 },
+                { id: 'business', name: 'Business', phase: 7, group: 1 },
+                { id: 'recommend', name: 'Recommend', phase: 7, group: 1 },
+                { id: 'usecase', name: 'UseCase', phase: 7, group: 1 },
+                
+                // Phase 8
+                { id: 'solution', name: 'Solution', phase: 8, group: 2 },
+                { id: 'risk', name: 'Risk', phase: 8, group: 2 },
+                
+                // Phase 9
+                { id: 'migration', name: 'Migration', phase: 9, group: 3 },
+                { id: 'heatmap', name: 'Heatmap', phase: 9, group: 3 },
+                { id: 'bloat', name: 'Bloat', phase: 9, group: 3 },
+                
+                // Output
+                { id: 'output', name: 'JSON Output', phase: 10, group: 4 }
+            ];
+
+            const links = [
+                // Phase 7 → Phase 8
+                { source: 'overview', target: 'solution', value: 2 },
+                { source: 'techstack', target: 'solution', value: 3 },
+                { source: 'techstack', target: 'risk', value: 3 },
+                { source: 'security', target: 'risk', value: 2 },
+                
+                // Phase 8 → Phase 9
+                { source: 'solution', target: 'migration', value: 2 },
+                { source: 'risk', target: 'migration', value: 3 },
+                { source: 'risk', target: 'heatmap', value: 3 },
+                { source: 'techstack', target: 'bloat', value: 2 },
+                
+                // Phase 9 → Output
+                { source: 'migration', target: 'output', value: 2 },
+                { source: 'heatmap', target: 'output', value: 2 },
+                { source: 'bloat', target: 'output', value: 2 },
+                { source: 'overview', target: 'output', value: 1 },
+                { source: 'security', target: 'output', value: 1 }
+            ];
+
+            const width = document.getElementById('collectorFlow').clientWidth;
+            const height = 500;
+
+            const svg = d3.select('#collectorFlow')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const colorScale = d3.scaleOrdinal()
+                .domain([1, 2, 3, 4])
+                .range(['#2196F3', '#4CAF50', '#FF9800', '#9C27B0']);
+
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('x', d3.forceX(d => (d.group - 1) * (width / 4) + width / 8))
+                .force('y', d3.forceY(height / 2));
+
+            const link = svg.append('g')
+                .selectAll('line')
+                .data(links)
+                .enter()
+                .append('line')
+                .attr('stroke', '#64748b')
+                .attr('stroke-width', d => d.value)
+                .attr('opacity', 0.6);
+
+            const node = svg.append('g')
+                .selectAll('g')
+                .data(nodes)
+                .enter()
+                .append('g')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+
+            node.append('circle')
+                .attr('r', 20)
+                .attr('fill', d => colorScale(d.group))
+                .attr('stroke', '#0f172a')
+                .attr('stroke-width', 2);
+
+            node.append('text')
+                .attr('dy', 35)
+                .attr('text-anchor', 'middle')
+                .text(d => d.name)
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', '11px')
+                .attr('font-weight', '600');
+
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+        }
+
+        function createMetricsTimeline() {
+            const data = [
+                { date: '2025-01-01', loc: 45000, files: 450, commits: 1200, contributors: 8 },
+                { date: '2025-01-15', loc: 48000, files: 475, commits: 1280, contributors: 9 },
+                { date: '2025-02-01', loc: 51000, files: 500, commits: 1350, contributors: 10 },
+                { date: '2025-02-15', loc: 53000, files: 520, commits: 1420, contributors: 11 },
+                { date: '2025-03-01', loc: 56000, files: 545, commits: 1500, contributors: 12 }
+            ];
+
+            const width = document.getElementById('metricsTimeline').clientWidth;
+            const height = 400;
+            const margin = { top: 40, right: 150, bottom: 60, left: 60 };
+
+            const svg = d3.select('#metricsTimeline')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const parseDate = d3.timeParse('%Y-%m-%d');
+            data.forEach(d => d.date = parseDate(d.date));
+
+            const xScale = d3.scaleTime()
+                .domain(d3.extent(data, d => d.date))
+                .range([margin.left, width - margin.right]);
+
+            const yScale = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.loc)])
+                .range([height - margin.bottom, margin.top]);
+
+            // Lines
+            const metrics = ['loc', 'commits'];
+            const colors = { loc: '#9C27B0', commits: '#2196F3' };
+
+            metrics.forEach(metric => {
+                const line = d3.line()
+                    .x(d => xScale(d.date))
+                    .y(d => yScale(d[metric] * (metric === 'commits' ? 40 : 1))); // Scale commits for visibility
+
+                svg.append('path')
+                    .datum(data)
+                    .attr('fill', 'none')
+                    .attr('stroke', colors[metric])
+                    .attr('stroke-width', 2)
+                    .attr('d', line);
+
+                svg.selectAll(`.dot-${metric}`)
+                    .data(data)
+                    .enter()
+                    .append('circle')
+                    .attr('class', `dot-${metric}`)
+                    .attr('cx', d => xScale(d.date))
+                    .attr('cy', d => yScale(d[metric] * (metric === 'commits' ? 40 : 1)))
+                    .attr('r', 4)
+                    .attr('fill', colors[metric]);
+            });
+
+            // Axes
+            svg.append('g')
+                .attr('transform', `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0');
+
+            svg.append('g')
+                .attr('transform', `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0');
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 130}, ${margin.top})`);
+
+            Object.entries(colors).forEach(([key, color], i) => {
+                legend.append('rect')
+                    .attr('y', i * 25)
+                    .attr('width', 20)
+                    .attr('height', 10)
+                    .attr('fill', color);
+
+                legend.append('text')
+                    .attr('x', 25)
+                    .attr('y', i * 25 + 10)
+                    .attr('fill', '#e2e8f0')
+                    .attr('font-size', '12px')
+                    .text(key.toUpperCase());
+            });
+        }
+
+        window.addEventListener('load', () => {
+            createCollectorFlow();
+            createMetricsTimeline();
+        });
+    </script>
+</body>
+</html>

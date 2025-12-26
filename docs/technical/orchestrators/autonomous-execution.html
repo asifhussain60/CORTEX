@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autonomous Execution Engine | CORTEX Technical Documentation</title>
+    
+    <!-- D3.js -->
+    <script src="https://d3.js.org/d3.v7.min.js"></script>
+    
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            --autonomous-primary: #00BCD4;
+            --autonomous-secondary: #0097A7;
+            --autonomous-dark: #006064;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #DC2626;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--autonomous-primary);
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: var(--autonomous-primary);
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+        
+        .orchestrator-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #1e293b;
+            border-radius: 8px;
+            border-left: 4px solid var(--autonomous-primary);
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .meta-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 0.25rem;
+        }
+        
+        .meta-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--autonomous-primary);
+        }
+        
+        .section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-top: 0;
+            color: #f1f5f9;
+            border-bottom: 2px solid var(--autonomous-secondary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .diagram-container {
+            background: #0f172a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid #334155;
+        }
+        
+        .mermaid {
+            text-align: center;
+        }
+        
+        #progressTimeline, #riskAssessment {
+            min-height: 500px;
+            width: 100%;
+        }
+        
+        .feature-list {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-card {
+            padding: 1rem;
+            background: #0f172a;
+            border-radius: 8px;
+            border-left: 4px solid var(--autonomous-primary);
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: var(--autonomous-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-desc {
+            color: #cbd5e1;
+            font-size: 0.938rem;
+            line-height: 1.6;
+        }
+        
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .mode-card {
+            padding: 1.5rem;
+            background: #0f172a;
+            border-radius: 8px;
+            border-top: 4px solid var(--autonomous-primary);
+        }
+        
+        .mode-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .mode-supervised { border-top-color: #FF9800; }
+        .mode-autonomous { border-top-color: #00BCD4; }
+        .mode-hybrid { border-top-color: #9C27B0; }
+        
+        .mode-supervised .mode-header { color: #FF9800; }
+        .mode-autonomous .mode-header { color: #00BCD4; }
+        .mode-hybrid .mode-header { color: #9C27B0; }
+        
+        .mode-desc {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .mode-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .mode-features li {
+            padding: 0.5rem 0;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+        
+        .mode-features li::before {
+            content: "✓ ";
+            color: #10B981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 0.75rem;
+            background: #1e293b;
+            border: 1px solid var(--autonomous-primary);
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            max-width: 300px;
+            z-index: 1000;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 2rem 0;
+            padding: 0.75rem 1.5rem;
+            background: var(--autonomous-primary);
+            color: #0f172a;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .back-link:hover {
+            background: var(--autonomous-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            .orchestrator-meta { grid-template-columns: 1fr; }
+            .mode-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Autonomous Execution Engine</h1>
+            <p class="subtitle">Adaptive Execution with Risk-Based Confirmation & Auto-Rollback</p>
+        </header>
+
+        <div class="orchestrator-meta">
+            <div class="meta-item">
+                <span class="meta-label">File Location</span>
+                <span class="meta-value">src/operations/modules/orchestration/</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Complexity</span>
+                <span class="meta-value">HIGH</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Execution Modes</span>
+                <span class="meta-value">3 (Supervised/Autonomous/Hybrid)</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Design Pattern</span>
+                <span class="meta-value">Strategy Pattern</span>
+            </div>
+        </div>
+
+        <section class="section">
+            <h2>Overview</h2>
+            <p>
+                The Autonomous Execution Engine enables orchestrators to adapt execution behavior based on user intent, 
+                task complexity, and safety requirements. It implements the <strong>Strategy Pattern</strong> with three 
+                execution modes: <em>Supervised</em> (user confirmation per phase), <em>Autonomous</em> (full automation 
+                with auto-rollback), and <em>Hybrid</em> (conditional confirmation for high-risk actions).
+            </p>
+            
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">🎯 Intelligent Risk Assessment</div>
+                    <div class="feature-desc">
+                        Analyzes task descriptions for safety-critical keywords (delete, drop, production) and 
+                        high-risk keywords (database, migration, deploy). Routes to appropriate execution strategy.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔄 Automatic Checkpointing</div>
+                    <div class="feature-desc">
+                        Creates checkpoints before each autonomous phase execution. Enables instant rollback 
+                        if errors occur, ensuring no permanent damage from failed operations.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🛡️ Validation Gates</div>
+                    <div class="feature-desc">
+                        Pre-execution validation checks: context completeness, parameter validity, dependency 
+                        availability. Prevents execution with invalid or missing data.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">⚡ Error Recovery</div>
+                    <div class="feature-desc">
+                        Three-level recovery: rollback to last checkpoint → retry with modified params → 
+                        escalate to supervised mode. Never leaves system in broken state.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Phase-by-Phase Execution Workflow</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    START([Execution Request]) --> MODE_SELECT{Select<br/>Execution Mode}
+    
+    MODE_SELECT --> |User Choice| SUPERVISED[Supervised Mode]
+    MODE_SELECT --> |Auto-Detect| AUTO_SELECT[Auto-Select Mode:<br/>Risk Assessment]
+    
+    AUTO_SELECT --> RISK{Risk<br/>Level?}
+    
+    RISK --> |High| SUPERVISED
+    RISK --> |Medium| HYBRID[Hybrid Mode]
+    RISK --> |Low| AUTONOMOUS[Autonomous Mode]
+    
+    SUPERVISED --> PHASE1[Phase 1: Validate Context]
+    HYBRID --> PHASE1
+    AUTONOMOUS --> PHASE1
+    
+    PHASE1 --> VALIDATE1{Valid?}
+    
+    VALIDATE1 --> |No| ERROR1[❌ Validation failed<br/>Return errors]
+    VALIDATE1 --> |Yes| CHECKPOINT1[Create Checkpoint:<br/>Phase 1 start]
+    
+    CHECKPOINT1 --> CONFIRM1{Mode-Specific<br/>Confirmation?}
+    
+    CONFIRM1 --> |Supervised: Yes| WAIT_USER1[Wait for user<br/>confirmation]
+    CONFIRM1 --> |Hybrid: Conditional| CHECK_RISK1{High Risk?}
+    CONFIRM1 --> |Autonomous: No| EXECUTE1
+    
+    CHECK_RISK1 --> |Yes| WAIT_USER1
+    CHECK_RISK1 --> |No| EXECUTE1
+    
+    WAIT_USER1 --> USER_APPROVED1{User<br/>Approved?}
+    
+    USER_APPROVED1 --> |No| CANCEL[Cancel execution]
+    USER_APPROVED1 --> |Yes| EXECUTE1[Execute Phase 1]
+    
+    EXECUTE1 --> SUCCESS1{Success?}
+    
+    SUCCESS1 --> |No| ROLLBACK1[Auto-Rollback:<br/>Restore checkpoint]
+    SUCCESS1 --> |Yes| PHASE2[Phase 2: Execute]
+    
+    ROLLBACK1 --> RETRY1{Retry?}
+    
+    RETRY1 --> |Yes| EXECUTE1
+    RETRY1 --> |No| FAIL[❌ Execution failed]
+    
+    PHASE2 --> VALIDATE2{Valid?}
+    
+    VALIDATE2 --> |No| ERROR2[❌ Phase 2 validation failed]
+    VALIDATE2 --> |Yes| CHECKPOINT2[Create Checkpoint:<br/>Phase 2 start]
+    
+    CHECKPOINT2 --> EXECUTE2[Execute Phase 2]
+    
+    EXECUTE2 --> SUCCESS2{Success?}
+    
+    SUCCESS2 --> |No| ROLLBACK2[Auto-Rollback:<br/>Restore checkpoint]
+    SUCCESS2 --> |Yes| COMPLETE[✅ Execution complete]
+    
+    ROLLBACK2 --> ESCALATE[Escalate to<br/>Supervised Mode]
+    
+    ESCALATE --> MANUAL[Manual intervention<br/>required]
+    
+    ERROR1 --> END([Complete])
+    ERROR2 --> END
+    CANCEL --> END
+    FAIL --> END
+    MANUAL --> END
+    COMPLETE --> END
+    
+    style START fill:#00BCD4,stroke:#0097A7,color:#fff
+    style SUPERVISED fill:#FF9800,stroke:#F57C00,color:#fff
+    style AUTONOMOUS fill:#00BCD4,stroke:#0097A7,color:#fff
+    style HYBRID fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style CHECKPOINT1 fill:#4CAF50,stroke:#388E3C,color:#fff
+    style CHECKPOINT2 fill:#4CAF50,stroke:#388E3C,color:#fff
+    style ROLLBACK1 fill:#F44336,stroke:#D32F2F,color:#fff
+    style ROLLBACK2 fill:#F44336,stroke:#D32F2F,color:#fff
+    style COMPLETE fill:#10B981,stroke:#059669,color:#fff
+    style END fill:#10B981,stroke:#059669,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Execution Modes Comparison</h2>
+            <div class="mode-grid">
+                <div class="mode-card mode-supervised">
+                    <div class="mode-header">🛡️ Supervised Mode</div>
+                    <div class="mode-desc">
+                        Maximum control and visibility. User confirmation required before each phase execution. 
+                        Best for high-risk operations or learning new workflows.
+                    </div>
+                    <ul class="mode-features">
+                        <li>User approval required for every phase</li>
+                        <li>Full visibility into each step</li>
+                        <li>Maximum safety and control</li>
+                        <li>Slowest execution (interactive)</li>
+                        <li>Best for: Production deployments, database migrations</li>
+                    </ul>
+                </div>
+                
+                <div class="mode-card mode-autonomous">
+                    <div class="mode-header">⚡ Autonomous Mode</div>
+                    <div class="mode-desc">
+                        Fully automated execution with automatic rollback on failure. Suitable for low-risk, 
+                        well-tested operations. Fastest execution mode with built-in safety.
+                    </div>
+                    <ul class="mode-features">
+                        <li>No user interaction required</li>
+                        <li>Automatic checkpoint creation</li>
+                        <li>Auto-rollback on failures</li>
+                        <li>Fastest execution (fully automated)</li>
+                        <li>Best for: Unit tests, code formatting, documentation updates</li>
+                    </ul>
+                </div>
+                
+                <div class="mode-card mode-hybrid">
+                    <div class="mode-header">🎯 Hybrid Mode</div>
+                    <div class="mode-desc">
+                        Intelligently decides when to require confirmation based on risk level, complexity, and 
+                        safety-critical indicators. Best balance between speed and safety.
+                    </div>
+                    <ul class="mode-features">
+                        <li>Intelligent risk assessment</li>
+                        <li>Conditional confirmation (high-risk only)</li>
+                        <li>Automatic checkpoints for auto-execution</li>
+                        <li>Balanced speed vs safety</li>
+                        <li>Best for: Mixed workflows, feature implementation</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Progress Timeline Visualization</h2>
+            <p>Real-time execution progress showing phase transitions, checkpoints, and rollback events.</p>
+            <div class="diagram-container">
+                <div id="progressTimeline"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Risk Assessment Algorithm</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph LR
+    TASK[Task Description] --> EXTRACT[Extract Keywords]
+    ACTION[Action Text] --> EXTRACT
+    
+    EXTRACT --> CHECK_SAFETY{Contains<br/>Safety-Critical<br/>Keywords?}
+    
+    CHECK_SAFETY --> |Yes: delete, drop,<br/>truncate, production| HIGH[Risk: HIGH<br/>Mode: Supervised]
+    CHECK_SAFETY --> |No| CHECK_RISK{Contains<br/>High-Risk<br/>Keywords?}
+    
+    CHECK_RISK --> |Yes: database,<br/>migration, deploy| MEDIUM[Risk: MEDIUM<br/>Mode: Hybrid]
+    CHECK_RISK --> |No| LOW[Risk: LOW<br/>Mode: Autonomous]
+    
+    HIGH --> SUPERVISED[Supervised Strategy:<br/>- Require confirmation<br/>- Full validation]
+    MEDIUM --> HYBRID_STRAT[Hybrid Strategy:<br/>- Conditional confirmation<br/>- Intelligent routing]
+    LOW --> AUTO_STRAT[Autonomous Strategy:<br/>- No confirmation<br/>- Auto-checkpoint]
+    
+    style HIGH fill:#DC2626,stroke:#B91C1C,color:#fff
+    style MEDIUM fill:#F59E0B,stroke:#D97706,color:#fff
+    style LOW fill:#10B981,stroke:#059669,color:#fff
+    style SUPERVISED fill:#FF9800,stroke:#F57C00,color:#fff
+    style HYBRID_STRAT fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style AUTO_STRAT fill:#00BCD4,stroke:#0097A7,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Risk Assessment Dashboard</h2>
+            <p>Heat map showing risk levels for different operation types across execution modes.</p>
+            <div class="diagram-container">
+                <div id="riskAssessment"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Error Recovery Paths</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    ERROR[❌ Phase Execution<br/>Failed] --> CHECK_MODE{Execution<br/>Mode?}
+    
+    CHECK_MODE --> |Supervised| NOTIFY_USER[Notify user:<br/>Manual intervention]
+    CHECK_MODE --> |Autonomous| AUTO_RECOVER[Automatic Recovery]
+    CHECK_MODE --> |Hybrid| HYBRID_RECOVER[Hybrid Recovery]
+    
+    AUTO_RECOVER --> ROLLBACK[Level 1: Rollback<br/>to last checkpoint]
+    
+    ROLLBACK --> ANALYZE[Analyze error:<br/>- Type<br/>- Severity<br/>- Context]
+    
+    ANALYZE --> RETRY{Can<br/>Retry?}
+    
+    RETRY --> |Yes| MODIFY[Level 2: Retry with<br/>modified params]
+    RETRY --> |No| ESCALATE1[Level 3: Escalate<br/>to Supervised]
+    
+    MODIFY --> EXECUTE[Re-execute phase]
+    
+    EXECUTE --> SUCCESS{Success?}
+    
+    SUCCESS --> |Yes| COMPLETE[✅ Recovery complete]
+    SUCCESS --> |No| ESCALATE2[Escalate to<br/>Supervised]
+    
+    HYBRID_RECOVER --> ASSESS_RISK{Risk<br/>Level?}
+    
+    ASSESS_RISK --> |High| ESCALATE1
+    ASSESS_RISK --> |Low| AUTO_RECOVER
+    
+    ESCALATE1 --> MANUAL[Manual intervention:<br/>- Show error<br/>- Request guidance]
+    ESCALATE2 --> MANUAL
+    
+    NOTIFY_USER --> END([Recovery Complete])
+    COMPLETE --> END
+    MANUAL --> END
+    
+    style ERROR fill:#DC2626,stroke:#B91C1C,color:#fff
+    style ROLLBACK fill:#F44336,stroke:#D32F2F,color:#fff
+    style MODIFY fill:#FF9800,stroke:#F57C00,color:#fff
+    style ESCALATE1 fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style ESCALATE2 fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style COMPLETE fill:#10B981,stroke:#059669,color:#fff
+    style END fill:#10B981,stroke:#059669,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Key Features</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">🎨 Strategy Pattern Implementation</div>
+                    <div class="feature-desc">
+                        Three strategy classes (<code>SupervisedStrategy</code>, <code>AutonomousStrategy</code>, 
+                        <code>HybridStrategy</code>) inherit from <code>ExecutionStrategy</code> base class. 
+                        Enables runtime mode switching.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📊 Safety Guardrails</div>
+                    <div class="feature-desc">
+                        <code>SafetyGuardrail</code> class provides: action validation, checkpoint management, 
+                        rollback support. Integrated with all execution modes.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔧 Configuration</div>
+                    <div class="feature-desc">
+                        <code>AdaptiveExecutionConfig</code> dataclass: default mode, auto-rollback toggle, 
+                        validation gates, custom safety keywords. Per-orchestrator customization supported.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">📈 Execution Metrics</div>
+                    <div class="feature-desc">
+                        Tracks: execution time per phase, confirmation wait time, rollback count, success rate. 
+                        Helps optimize workflow efficiency.
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">🔄 Mode Migration</div>
+                    <div class="feature-desc">
+                        Can switch modes mid-execution. Example: Start Hybrid, escalate to Supervised on error, 
+                        return to Hybrid after manual fix.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Related Documentation</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="feature-title">Implementation</div>
+                    <div class="feature-desc">
+                        <code>src/operations/modules/orchestration/adaptive_execution.py</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Base Integration</div>
+                    <div class="feature-desc">
+                        <code>src/orchestrators/base/base_orchestrator.py</code>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">Tests</div>
+                    <div class="feature-desc">
+                        <code>tests/orchestrators/base/test_base_orchestrator_adaptive.py</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00BCD4',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#0097A7',
+                lineColor: '#94a3b8',
+                secondaryColor: '#1e293b',
+                tertiaryColor: '#0f172a'
+            }
+        });
+
+        function createProgressTimeline() {
+            const data = [
+                { phase: 'Phase 1', start: 0, duration: 30, status: 'completed', checkpoint: true },
+                { phase: 'Phase 2', start: 30, duration: 45, status: 'completed', checkpoint: true },
+                { phase: 'Phase 3', start: 75, duration: 20, status: 'failed', checkpoint: true },
+                { phase: 'Rollback', start: 95, duration: 5, status: 'recovery', checkpoint: false },
+                { phase: 'Phase 3 (retry)', start: 100, duration: 25, status: 'in-progress', checkpoint: false }
+            ];
+
+            const width = document.getElementById('progressTimeline').clientWidth;
+            const height = 400;
+            const margin = { top: 40, right: 40, bottom: 60, left: 150 };
+
+            const svg = d3.select('#progressTimeline')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const yScale = d3.scaleBand()
+                .domain(data.map(d => d.phase))
+                .range([margin.top, height - margin.bottom])
+                .padding(0.2);
+
+            const xScale = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.start + d.duration)])
+                .range([margin.left, width - margin.right]);
+
+            const colorScale = d3.scaleOrdinal()
+                .domain(['completed', 'failed', 'recovery', 'in-progress'])
+                .range(['#10B981', '#DC2626', '#FF9800', '#00BCD4']);
+
+            // Timeline bars
+            svg.selectAll('.timeline-bar')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('class', 'timeline-bar')
+                .attr('x', d => xScale(d.start))
+                .attr('y', d => yScale(d.phase))
+                .attr('width', d => xScale(d.start + d.duration) - xScale(d.start))
+                .attr('height', yScale.bandwidth())
+                .attr('fill', d => colorScale(d.status))
+                .attr('opacity', 0.8);
+
+            // Checkpoint markers
+            svg.selectAll('.checkpoint')
+                .data(data.filter(d => d.checkpoint))
+                .enter()
+                .append('circle')
+                .attr('class', 'checkpoint')
+                .attr('cx', d => xScale(d.start))
+                .attr('cy', d => yScale(d.phase) + yScale.bandwidth() / 2)
+                .attr('r', 6)
+                .attr('fill', '#4CAF50')
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 2);
+
+            // Y-axis
+            svg.append('g')
+                .attr('transform', `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0');
+
+            // X-axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale).ticks(5).tickFormat(d => `${d}s`))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0');
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 150}, ${margin.top})`);
+
+            const statuses = ['completed', 'failed', 'in-progress'];
+            statuses.forEach((status, i) => {
+                legend.append('rect')
+                    .attr('y', i * 25)
+                    .attr('width', 20)
+                    .attr('height', 10)
+                    .attr('fill', colorScale(status))
+                    .attr('opacity', 0.8);
+
+                legend.append('text')
+                    .attr('x', 25)
+                    .attr('y', i * 25 + 10)
+                    .attr('fill', '#e2e8f0')
+                    .attr('font-size', '11px')
+                    .text(status);
+            });
+        }
+
+        function createRiskAssessment() {
+            const operations = ['Code Changes', 'Database Migration', 'Deployment', 'Refactoring', 'Testing'];
+            const modes = ['Supervised', 'Hybrid', 'Autonomous'];
+            
+            const data = [];
+            const riskLevels = [
+                [3, 2, 1],  // Code Changes
+                [3, 3, 2],  // Database Migration
+                [3, 3, 1],  // Deployment
+                [2, 2, 1],  // Refactoring
+                [1, 1, 1]   // Testing
+            ];
+
+            operations.forEach((op, i) => {
+                modes.forEach((mode, j) => {
+                    data.push({
+                        operation: op,
+                        mode: mode,
+                        risk: riskLevels[i][j]
+                    });
+                });
+            });
+
+            const width = document.getElementById('riskAssessment').clientWidth;
+            const height = 400;
+            const margin = { top: 40, right: 40, bottom: 80, left: 150 };
+
+            const svg = d3.select('#riskAssessment')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const xScale = d3.scaleBand()
+                .domain(modes)
+                .range([margin.left, width - margin.right])
+                .padding(0.1);
+
+            const yScale = d3.scaleBand()
+                .domain(operations)
+                .range([margin.top, height - margin.bottom])
+                .padding(0.1);
+
+            const colorScale = d3.scaleSequential()
+                .domain([1, 3])
+                .interpolator(d3.interpolateRgb('#10B981', '#DC2626'));
+
+            // Heatmap cells
+            svg.selectAll('.cell')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('class', 'cell')
+                .attr('x', d => xScale(d.mode))
+                .attr('y', d => yScale(d.operation))
+                .attr('width', xScale.bandwidth())
+                .attr('height', yScale.bandwidth())
+                .attr('fill', d => colorScale(d.risk))
+                .attr('opacity', 0.8);
+
+            // Risk labels
+            svg.selectAll('.risk-label')
+                .data(data)
+                .enter()
+                .append('text')
+                .attr('class', 'risk-label')
+                .attr('x', d => xScale(d.mode) + xScale.bandwidth() / 2)
+                .attr('y', d => yScale(d.operation) + yScale.bandwidth() / 2)
+                .attr('text-anchor', 'middle')
+                .attr('dy', '0.35em')
+                .text(d => ['Low', 'Med', 'High'][d.risk - 1])
+                .attr('fill', '#fff')
+                .attr('font-size', '12px')
+                .attr('font-weight', '600');
+
+            // X-axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0')
+                .attr('transform', 'rotate(-45)')
+                .attr('text-anchor', 'end');
+
+            // Y-axis
+            svg.append('g')
+                .attr('transform', `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0');
+        }
+
+        window.addEventListener('load', () => {
+            createProgressTimeline();
+            createRiskAssessment();
+        });
+    </script>
+</body>
+</html>
