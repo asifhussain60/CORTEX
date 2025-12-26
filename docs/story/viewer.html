@@ -335,10 +335,31 @@
     <div class="story-layout">
         <!-- Left Sidebar - Chapter Navigation -->
         <aside class="chapter-sidebar">
+            <!-- Back to Home Link -->
+            <div style="margin-bottom: 1.5rem;">
+                <a href="../index.html" style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    padding: 0.5rem 1rem;
+                    color: var(--text-secondary);
+                    text-decoration: none;
+                    font-size: 0.9rem;
+                    border-radius: var(--radius-md);
+                    transition: all 0.2s ease;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid var(--glass-border);
+                " onmouseover="this.style.color='var(--accent-primary)'; this.style.borderColor='var(--accent-primary)'; this.style.background='rgba(0, 212, 255, 0.1)'" onmouseout="this.style.color='var(--text-secondary)'; this.style.borderColor='var(--glass-border)'; this.style.background='rgba(255, 255, 255, 0.05)'">
+                    ← Back to Home
+                </a>
+            </div>
+            
             <div class="story-header">
-                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; display: block; margin: 0 auto 1rem; border-radius: 15px; box-shadow: var(--shadow);" />
-                <h1>🧠 The Awakening</h1>
-                <p class="story-subtitle">A Tech Comedy in 12 Chapters</p>
+                <a href="#" style="text-decoration: none; display: block;" onclick="window.location.hash=''; return false;">
+                    <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; display: block; margin: 0 auto 1rem; cursor: pointer; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
+                    <h1 style="cursor: pointer; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">🧠 The Awakening</h1>
+                    <p class="story-subtitle">A Tech Comedy in 12 Chapters</p>
+                </a>
             </div>
 
             <nav>

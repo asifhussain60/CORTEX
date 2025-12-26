@@ -185,19 +185,27 @@ let currentChapter = null;
  * Initialize the story viewer
  */
 function init() {
-    // Check URL hash for chapter, default to prologue
-    const hash = window.location.hash.slice(1) || 'prologue';
+    // Check URL hash for chapter
+    const hash = window.location.hash.slice(1);
     
     // Setup navigation listeners first
     setupNavigation();
     
-    // Load initial chapter
-    loadChapter(hash);
+    // Load initial view - show title if no hash, otherwise load chapter
+    if (hash) {
+        loadChapter(hash);
+    } else {
+        showTitleCover();
+    }
 
     // Handle browser back/forward
     window.addEventListener('hashchange', () => {
-        const newHash = window.location.hash.slice(1) || 'prologue';
-        loadChapter(newHash);
+        const newHash = window.location.hash.slice(1);
+        if (newHash) {
+            loadChapter(newHash);
+        } else {
+            showTitleCover();
+        }
     });
 }
 
@@ -222,6 +230,55 @@ function setupNavigation() {
         });
     });
 }
+
+/**
+ * Show the title cover image (when no chapter selected)
+ */
+function showTitleCover() {
+    const container = document.getElementById('chapterContent');
+    
+    // Clear all active states in sidebar
+    const links = document.querySelectorAll('.chapter-link');
+    links.forEach(link => link.classList.remove('active'));
+    
+    // Display centered title cover with fade-in animation
+    container.innerHTML = `
+        <div class="title-cover-container" style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            padding: 2rem;
+            animation: fadeIn 0.6s ease-in;
+        ">
+            <img 
+                src="illustrations/images/TitleCover.png" 
+                alt="The Awakening of CORTEX - Title Cover" 
+                style="
+                    max-width: 100%;
+                    max-height: 85vh;
+                    width: auto;
+                    height: auto;
+                    border-radius: var(--radius-lg);
+                    box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+                    transition: transform 0.3s ease;
+                "
+                onload="this.style.opacity='1'"
+                onerror="this.src=''; this.alt='Title cover image not found'; this.style.border='2px dashed var(--glass-border)'; this.style.padding='4rem'; this.style.color='var(--text-secondary)';"
+            />
+        </div>
+        <style>
+            @keyframes fadeIn {
+                from { opacity: 0; transform: scale(0.95); }
+                to { opacity: 1; transform: scale(1); }
+            }
+        </style>
+    `;
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 
 /**
  * Load a chapter
