@@ -20,3 +20,10 @@ mypy>=1.14.2  # Static type checker
 # Code Analysis
 radon>=6.0.1  # Code complexity metrics
 vulture>=2.14  # Dead code detection
+
+# Vision API Dependencies (Phase 13D)
+# Auto-installed when first used by Planning System screenshot analysis
+opencv-python>=4.8.0       # Computer vision library (image processing, contour detection)
+Pillow>=10.0.0             # Image loading, manipulation, preprocessing
+scikit-learn>=1.3.0        # K-means clustering for color palette extraction
+numpy>=1.24.0              # Numerical operations (array processing)
