@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "sanitization_date": "2025-12-25T12:00:00Z",
+    "cortex_version": "4.0.0",
+    "operation": "code_sanitization_validation",
+    "phase": "13B-Week1-Day3",
+    "total_secrets_found": 5,
+    "total_secrets_sanitized": 5,
+    "detection_rate": "100%",
+    "transformation_status": "COMPLETE"
+  },
+  "secrets": [
+    {
+      "id": "SECRET-001",
+      "type": "jwt_secret",
+      "original_value": "super_secret_key_12345",
+      "placeholder": "JWT_SECRET",
+      "env_variable": "JWT_SECRET",
+      "file": "src/api/auth.py",
+      "line": 27,
+      "severity": "CRITICAL",
+      "owasp": "A02:2021 - Cryptographic Failures",
+      "cwe": "CWE-798: Use of Hard-coded Password",
+      "impact": "Full authentication bypass possible",
+      "remediation": "Replace with os.getenv('JWT_SECRET') and rotate key",
+      "detection_pattern": "JWT_SECRET = \"",
+      "transformation_applied": true
+    },
+    {
+      "id": "SECRET-002",
+      "type": "smtp_password",
+      "original_value": "hardcoded_password_123",
+      "placeholder": "SMTP_PASSWORD",
+      "env_variable": "SMTP_PASSWORD",
+      "file": "src/api/orders.py",
+      "line": 406,
+      "severity": "CRITICAL",
+      "owasp": "A02:2021 - Cryptographic Failures",
+      "cwe": "CWE-798: Use of Hard-coded Password",
+      "impact": "SMTP account compromise, email spoofing",
+      "remediation": "Replace with os.getenv('SMTP_PASSWORD') and rotate credential",
+      "detection_pattern": "server.login\\([^,]+, \"[^\"]+\"\\)",
+      "transformation_applied": true
+    },
+    {
+      "id": "SECRET-003",
+      "type": "smtp_password",
+      "original_value": "hardcoded_email_password_123",
+      "placeholder": "SMTP_PASSWORD",
+      "env_variable": "SMTP_PASSWORD",
+      "file": "src/api/users.py",
+      "line": 103,
+      "severity": "HIGH",
+      "owasp": "A02:2021 - Cryptographic Failures",
+      "cwe": "CWE-798: Use of Hard-coded Password",
+      "impact": "SMTP account compromise, email spoofing",
+      "remediation": "Replace with os.getenv('SMTP_PASSWORD')",
+      "detection_pattern": "smtp_password = \"",
+      "transformation_applied": true
+    },
+    {
+      "id": "SECRET-004",
+      "type": "smtp_user",
+      "original_value": "admin@example.com",
+      "placeholder": "SMTP_USER",
+      "env_variable": "SMTP_USER",
+      "file": "src/api/users.py",
+      "line": 102,
+      "severity": "MEDIUM",
+      "owasp": "A02:2021 - Cryptographic Failures",
+      "cwe": "CWE-547: Use of Hard-coded, Security-relevant Constants",
+      "impact": "Configuration inflexibility, email account exposure",
+      "remediation": "Replace with os.getenv('SMTP_USER', 'admin@example.com')",
+      "detection_pattern": "smtp_user = \"",
+      "transformation_applied": true
+    },
+    {
+      "id": "SECRET-005",
+      "type": "smtp_server",
+      "original_value": "smtp.gmail.com",
+      "placeholder": "SMTP_SERVER",
+      "env_variable": "SMTP_SERVER",
+      "file": "src/api/users.py",
+      "line": 100,
+      "severity": "LOW",
+      "owasp": "A05:2021 - Security Misconfiguration",
+      "cwe": "CWE-547: Use of Hard-coded, Security-relevant Constants",
+      "impact": "Configuration inflexibility",
+      "remediation": "Replace with os.getenv('SMTP_SERVER', 'smtp.gmail.com')",
+      "detection_pattern": "smtp_server = \"",
+      "transformation_applied": true
+    }
+  ],
+  "statistics": {
+    "by_severity": {
+      "CRITICAL": 2,
+      "HIGH": 1,
+      "MEDIUM": 1,
+      "LOW": 1
+    },
+    "by_type": {
+      "jwt_secret": 1,
+      "smtp_password": 2,
+      "smtp_user": 1,
+      "smtp_server": 1
+    },
+    "by_file": {
+      "src/api/auth.py": 1,
+      "src/api/orders.py": 1,
+      "src/api/users.py": 3
+    }
+  },
+  "validation": {
+    "detection_complete": true,
+    "transformation_complete": true,
+    "tests_passing": false,
+    "mapping_verified": true,
+    "templates_generated": true
+  },
+  "next_steps": [
+    "Apply transformations to source files",
+    "Generate .env.template and .env.example",
+    "Run pytest to verify functionality",
+    "Update sts-baseline.json with new security score",
+    "Generate capability validation report"
+  ]
+}

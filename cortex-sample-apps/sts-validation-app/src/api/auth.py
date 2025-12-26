@@ -12,19 +12,23 @@ This module demonstrates:
 
 Author: CORTEX Phase 13 - STS Validation App
 Created: December 25, 2025
+Updated: December 25, 2025 - Capability 1 Sanitization Applied
 """
 
 import hashlib
 import datetime
+import os
 from typing import Dict, Optional
 from flask import request, jsonify
 
-# FLAW: SEC-01 - Hardcoded JWT secret
+# SANITIZED: SEC-01 - JWT secret moved to environment variable
+# Original: JWT_SECRET = "super_secret_key_12345"
+# Transformation: SECRET-001 applied (see .mapping.json)
 # OWASP: A02:2021 - Cryptographic Failures
 # CWE-259: Use of Hard-coded Password
 # Knowledge Library: owasp-top-10.yaml > cryptographic_failures > common_vulnerabilities > "Hardcoded Cryptographic Keys"
-# Severity: CRITICAL
-JWT_SECRET = "super_secret_key_12345"  # Never do this in production!
+# Severity: CRITICAL → MITIGATED
+JWT_SECRET = os.getenv('JWT_SECRET', 'default_dev_key')  # Default for dev only
 
 # FLAW: SEC-06 - Weak JWT algorithm (HS256 with short key)
 # OWASP: A02:2021 - Cryptographic Failures

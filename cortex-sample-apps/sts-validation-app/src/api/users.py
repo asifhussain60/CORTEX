@@ -28,8 +28,7 @@ Knowledge Library References:
 - solid-principles.yaml > single_responsibility_principle > violations
 - clean-code.yaml > functions > single_responsibility
 
-Author: CORTEX Phase 13 - STS Validation App
-Created: December 25, 2025
+Updated: December 25, 2025 - Capability 1 Sanitization Applied (SECRET-003, SECRET-004, SECRET-005)
 """
 
 import re
@@ -95,12 +94,16 @@ class UserManager:
         self.db_path = DATABASE_PATH
         self._init_database()
         
-        # FLAW: Hardcoded email configuration
-        # OWASP: A02:2021 - Cryptographic Failures (credentials in code)
-        self.smtp_server = "smtp.gmail.com"
-        self.smtp_port = 587
-        self.smtp_user = "admin@example.com"
-        self.smtp_password = "hardcoded_email_password_123"  # SEC-08 variant
+        # SANITIZED: SEC-08-B/C - SMTP configuration moved to environment variables
+        # Original: self.smtp_server = "smtp.gmail.com"
+        # Original: self.smtp_user = "admin@example.com"
+        # Original: self.smtp_password = "hardcoded_email_password_123"
+        # Transformation: SECRET-003, SECRET-004, SECRET-005 applied (see .mapping.json)
+        # OWASP: A02:2021 - Cryptographic Failures (credentials in code) → MITIGATED
+        self.smtp_server = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
+        self.smtp_port = int(os.getenv('SMTP_PORT', '587'))
+        self.smtp_user = os.getenv('SMTP_USER', 'admin@example.com')
+        self.smtp_password = os.getenv('SMTP_PASSWORD')
         
         # FLAW: In-memory cache (not thread-safe, memory leak potential)
         self.user_cache = {}

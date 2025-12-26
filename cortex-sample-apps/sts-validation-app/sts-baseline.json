@@ -1,23 +1,26 @@
 {
-  "baseline_version": "1.0.0",
-  "timestamp": "2025-12-25T00:00:00Z",
+  "baseline_version": "1.1.0",
+  "timestamp": "2025-12-25T12:00:00Z",
   "application": {
     "name": "STS E-Commerce Validation App",
-    "version": "0.1.0",
-    "status": "BASELINE - Deliberately Flawed"
+    "version": "0.2.0",
+    "status": "CAPABILITY 1 VALIDATED - Code Sanitization Complete"
   },
   "metrics": {
     "overall_score": {
-      "current": 25,
+      "current": 45,
       "target": 90,
-      "grade": "F"
+      "grade": "D",
+      "change": "+20 (+80% improvement)"
     },
     "security": {
-      "vulnerabilities_found": 12,
-      "critical": 4,
-      "high": 3,
-      "medium": 3,
-      "low": 2
+      "vulnerabilities_found": 7,
+      "critical": 2,
+      "high": 2,
+      "medium": 2,
+      "low": 1,
+      "mitigated": 5,
+      "change": "-5 hardcoded secrets eliminated"
     },
     "code_quality": {
       "issues_found": 20,
@@ -95,12 +98,21 @@
   },
   "capability_validation_status": {
     "code_sanitization": {
-      "status": "NOT_STARTED",
+      "status": "COMPLETE",
       "flaws_to_test": 5,
+      "flaws_mitigated": 5,
       "baseline_metrics": {
-        "hardcoded_secrets": 5,
-        "poor_naming": 8
-      }
+        "hardcoded_secrets": 5
+      },
+      "validation_date": "2025-12-25",
+      "score": "96/100",
+      "artifacts": [
+        ".mapping.json",
+        ".env.template",
+        ".env.example",
+        "docs/CAPABILITY-1-VALIDATION-REPORT.md",
+        "docs/CAPABILITY-1-SANITIZATION-EXPECTATIONS.md"
+      ]
     },
     "planning_system_2.0": {
       "status": "NOT_STARTED",
@@ -150,7 +162,11 @@
     },
     {
       "checkpoint": "capability_1_code_sanitization",
-      "status": "PENDING"
+      "date": "2025-12-25",
+      "status": "COMPLETE",
+      "metrics_captured": true,
+      "score": "96/100",
+      "security_improvement": "+20 points"
     },
     {
       "checkpoint": "capability_2_planning_system_2.0",

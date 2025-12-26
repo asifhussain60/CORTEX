@@ -21,8 +21,10 @@ Knowledge Library References:
 
 Author: CORTEX Phase 13 - STS Validation App
 Created: December 25, 2025
+Updated: December 25, 2025 - Capability 1 Sanitization Applied (SECRET-002)
 """
 
+import os
 import sqlite3
 import datetime
 import smtplib
@@ -400,10 +402,14 @@ def create_order(user_id: int, items: List[Dict], shipping_address: str,
         msg['From'] = "orders@example.com"
         msg['To'] = user[3]  # user email
         
-        # FLAW: Hardcoded SMTP credentials (security issue)
+        # SANITIZED: SEC-08-A - SMTP credentials moved to environment variables
+        # Original: server.login("orders@example.com", "hardcoded_password_123")
+        # Transformation: SECRET-002 applied (see .mapping.json)
+        smtp_user = os.getenv('SMTP_USER', 'orders@example.com')
+        smtp_password = os.getenv('SMTP_PASSWORD')
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
-        server.login("orders@example.com", "hardcoded_password_123")
+        server.login(smtp_user, smtp_password)
         server.send_message(msg)
         server.quit()
         email_sent = True
