@@ -1,0 +1,189 @@
+{
+  "baseline_version": "1.0.0",
+  "timestamp": "2025-12-25T00:00:00Z",
+  "application": {
+    "name": "STS E-Commerce Validation App",
+    "version": "0.1.0",
+    "status": "BASELINE - Deliberately Flawed"
+  },
+  "metrics": {
+    "overall_score": {
+      "current": 25,
+      "target": 90,
+      "grade": "F"
+    },
+    "security": {
+      "vulnerabilities_found": 12,
+      "critical": 4,
+      "high": 3,
+      "medium": 3,
+      "low": 2
+    },
+    "code_quality": {
+      "issues_found": 20,
+      "average_complexity": 68,
+      "target_complexity": 15,
+      "solid_violations": 15,
+      "anti_patterns": 20
+    },
+    "testing": {
+      "total_tests": 6,
+      "coverage_percentage": 15,
+      "target_coverage": 90,
+      "placeholder_tests": 4,
+      "missing_test_files": 3
+    },
+    "performance": {
+      "issues_found": 8,
+      "avg_response_time_ms": 2340,
+      "target_response_time_ms": 200,
+      "queries_per_request": 47,
+      "target_queries_per_request": 5
+    },
+    "documentation": {
+      "issues_found": 8,
+      "completeness": 20,
+      "target_completeness": 85
+    }
+  },
+  "flaw_inventory": {
+    "by_file": {
+      "src/api/auth.py": {
+        "security": 3,
+        "code_quality": 2,
+        "total_flaws": 5
+      },
+      "src/api/users.py": {
+        "solid": 2,
+        "code_quality": 3,
+        "total_flaws": 5
+      },
+      "src/app.py": {
+        "security": 3,
+        "solid": 2,
+        "code_quality": 2,
+        "total_flaws": 7
+      },
+      "src/data/database.py": {
+        "security": 4,
+        "performance": 3,
+        "code_quality": 3,
+        "total_flaws": 10
+      },
+      "src/business/payment.py": {
+        "solid": 3,
+        "code_quality": 4,
+        "total_flaws": 7
+      },
+      "src/utils/helpers.py": {
+        "solid": 2,
+        "code_quality": 8,
+        "performance": 2,
+        "total_flaws": 12
+      },
+      "tests/": {
+        "testing": 3,
+        "total_flaws": 3
+      }
+    },
+    "by_severity": {
+      "CRITICAL": 8,
+      "HIGH": 12,
+      "MEDIUM": 24,
+      "LOW": 17
+    }
+  },
+  "capability_validation_status": {
+    "code_sanitization": {
+      "status": "NOT_STARTED",
+      "flaws_to_test": 5,
+      "baseline_metrics": {
+        "hardcoded_secrets": 5,
+        "poor_naming": 8
+      }
+    },
+    "planning_system_2.0": {
+      "status": "NOT_STARTED",
+      "complexity_level": "HIGH",
+      "expected_phases": 4
+    },
+    "tdd_mastery": {
+      "status": "NOT_STARTED",
+      "current_coverage": 15,
+      "target_coverage": 90,
+      "placeholder_tests": 4
+    },
+    "system_maintenance": {
+      "status": "NOT_STARTED",
+      "issues_to_fix": 20,
+      "expected_phases": 7
+    },
+    "system_refinement": {
+      "status": "NOT_STARTED",
+      "violations_to_resolve": 35,
+      "current_score": 25,
+      "target_score": 90
+    },
+    "architectural_review": {
+      "status": "NOT_STARTED",
+      "current_score": 25,
+      "target_score": 90,
+      "expected_recommendations": 20
+    },
+    "ado_operations": {
+      "status": "NOT_STARTED",
+      "test_scenario": "authentication_refactoring_story"
+    },
+    "holistic_discovery": {
+      "status": "NOT_STARTED",
+      "duplicate_code_blocks": 3,
+      "dead_code_functions": 5,
+      "god_objects": 2
+    }
+  },
+  "validation_checkpoints": [
+    {
+      "checkpoint": "baseline_established",
+      "date": "2025-12-25",
+      "status": "COMPLETE",
+      "metrics_captured": true
+    },
+    {
+      "checkpoint": "capability_1_code_sanitization",
+      "status": "PENDING"
+    },
+    {
+      "checkpoint": "capability_2_planning_system_2.0",
+      "status": "PENDING"
+    },
+    {
+      "checkpoint": "capability_3_tdd_mastery",
+      "status": "PENDING"
+    },
+    {
+      "checkpoint": "capability_4_system_maintenance",
+      "status": "PENDING"
+    },
+    {
+      "checkpoint": "capability_5_system_refinement",
+      "status": "PENDING"
+    },
+    {
+      "checkpoint": "capability_6_architectural_review",
+      "status": "PENDING"
+    },
+    {
+      "checkpoint": "capability_7_ado_operations",
+      "status": "PENDING"
+    },
+    {
+      "checkpoint": "capability_8_holistic_discovery",
+      "status": "PENDING"
+    },
+    {
+      "checkpoint": "final_transformation_measurement",
+      "status": "PENDING"
+    }
+  ],
+  "notes": "Baseline established for CORTEX 4.0 STS validation. Application contains 61 documented flaws across 6 categories. All flaws are intentional and mapped to CORTEX capabilities for validation testing."
+}
