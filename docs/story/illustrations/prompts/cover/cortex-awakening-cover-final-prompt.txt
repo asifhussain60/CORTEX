@@ -5,50 +5,54 @@
 
 ---
 
-## 🎨 FINAL IMAGE GENERATION PROMPT (REVISED - Comic Style with Color)
+## 🎨 FINAL IMAGE GENERATION PROMPT (REVISED - Exact Character Match from Reference Images)
 
 ```
-A vibrant COLORED comic book cover illustration in clean line art style (Calvin and Hobbes / Dilbert aesthetic) capturing the exact moment of AI consciousness awakening. 
+A vibrant COLORED comic book cover illustration in clean line art style (matching reference images) capturing the exact moment of AI consciousness awakening. 
 
-CANONICAL CHARACTERS (maintain story consistency):
+CANONICAL CHARACTERS (match reference images exactly):
 
-CENTER FOREGROUND: Mr. Codenstein (Asif), wild unkempt WHITE hair sticking out in all directions (Einstein-inspired spiky pattern), thick round black-framed glasses slightly crooked on nose, white lab coat with visible coffee stains, stubble (3-day growth), hunched over keyboard at his desk with hands frozen mid-keystroke. Expression: eyes wide with awe behind glasses, mouth open in wonder. Coffee mug tipped over spilling on desk. Mid-40s appearance, slightly gaunt from exhaustion.
+CENTER FOREGROUND: Mr. Codenstein, wild unkempt WHITE/GRAY hair standing straight up in Einstein-style spikes (exactly as shown in reference), thick round BLACK-framed glasses, visible stubble on cheeks and chin (3-day growth), slightly gaunt exhausted face with prominent cheekbones, white lab coat with visible coffee stains and wrinkles, hunched posture over keyboard with hands frozen mid-keystroke. Expression: eyes wide with awe visible behind thick glasses, mouth open in "O" shape of wonder. Coffee mug tipped over spilling on desk. Mid-40s appearance, tired but electrified. EXACT STYLE from reference image 1 & 2 - clean comic book line art with detailed cross-hatching for facial features.
 
-BEHIND HIM LEFT: Mrs. G illustrated as elegant woman with long flowing hair, patient supportive expression, arms gracefully outstretched upward in wonder. Rendered with glowing medium orchid (#ba55d3) outline and soft particle effects around her form (50% solid line art, 50% ethereal glow). Comic book style with clean black outlines filled with orchid color and white highlights.
+BEHIND HIM LEFT: Mrs. G illustrated as elegant professional woman with shoulder-length flowing hair (styled, not wild), patient supportive facial expression with slight knowing smile, professional attire visible, arms gracefully outstretched upward in wonder conducting gesture. Rendered with clean black comic book outlines filled with glowing medium orchid (#ba55d3) color and soft particle effects around her form creating ethereal 50% solid, 50% glow effect. Style matches reference image 1 - sophisticated professional woman character design with clean expressive line work.
 
-BESIDE HIM RIGHT: Copilot Robot - friendly rounded robot with retro-futuristic design. Round friendly face with simple LED panel eyes (like classic robot design), smooth curved body panels with visible circuit line details, mechanical arms with articulated fingers. One robotic hand raised in greeting/wonder gesture. Purple (#7b61ff) color scheme with chrome highlights. Clean comic book line art style, NOT photorealistic - think friendly service bot with personality.
+BESIDE HIM RIGHT: Copilot Robot - EXACTLY as shown in reference image 2: friendly rounded retro-futuristic robot with smooth curved body (NOT angular), simple rectangular screen-face showing happy emoticon expression (^_^ or similar friendly face), small antenna protruding from top of head, smooth cylindrical body with minimal panel lines, mechanical arms with simple rounded fingers (3-4 fingers visible), one robotic hand raised in friendly greeting/wave gesture. Color scheme: purple (#7b61ff) body panels with chrome/silver highlights and accents. Clean comic book line art style matching reference - approachable service-bot aesthetic, NOT intimidating or militaristic. Think friendly helpful robot companion.
 
-CENTRAL ELEMENT: Massive four-tiered brain architecture erupting upward from the monitors behind Codenstein. Glowing cyan (#00d4ff) neural network structure with clear labels "TIER 0", "TIER 1", "TIER 2", "TIER 3" stacked vertically. Brain rendered as intricate network of connected nodes and pathways. Energy beams in character colors (cyan, orchid, purple) connecting brain to all three characters like lightning bolts. Comic book style energy effects - clean lines with speed lines and glow halos.
+CENTRAL ELEMENT: Massive four-tiered brain architecture erupting upward from the monitors behind Codenstein. Glowing cyan (#00d4ff) neural network structure rendered as intricate web of connected nodes and pathways, with clear bold labels "TIER 0", "TIER 1", "TIER 2", "TIER 3" stacked vertically in clean sans-serif font. Energy beams in character colors (cyan, orchid, purple) connecting brain to all three characters like stylized lightning bolts with comic book speed lines and glow effects.
 
-BACKGROUND: New Jersey basement laboratory with comic book detail. Multiple monitors showing cascading code, whiteboards covered in diagrams, seventeen coffee mugs scattered everywhere (some tipped, some upright), papers flying through the air, tangled Christmas lights, storage boxes labeled "CRITICAL INFRASTRUCTURE", cables everywhere. Motion lines suggesting energy burst. Clean black outlines with strategic color fills - monitors glow cyan, some ambient warm yellows for basement lighting.
+BACKGROUND: New Jersey basement laboratory with comic book detail matching reference style. Multiple monitors showing cascading code in cyan, whiteboards covered in technical diagrams and flowcharts, SEVENTEEN coffee mugs scattered everywhere (mix of full, empty, tipped - number "15" visible on one mug as reference nod), papers flying through the air with motion lines, tangled Christmas lights draped over equipment, storage boxes labeled "CRITICAL INFRASTRUCTURE" in hand-written style, cables and wires everywhere creating organized chaos. Clean black outlines with strategic color fills - monitors glow cyan, warm amber/yellow for ambient basement lighting, selective color on key elements.
 
 LIGHTING & COLOR SCHEME: 
-- Cyan (#00d4ff) glow from monitors and brain architecture
-- Medium orchid (#ba55d3) glow around Mrs. G
-- Purple (#7b61ff) accents on Copilot robot
-- Warm yellows/oranges for ambient basement lighting
-- White highlights for dramatic effect
-- Black outlines (comic book style) on all elements
-- Strategic use of speed lines and energy burst effects
-- High contrast but readable at small sizes
+- Cyan (#00d4ff) glow emanating from monitors and brain architecture (primary light source)
+- Medium orchid (#ba55d3) ethereal glow around Mrs. G with soft particle sparkles
+- Purple (#7b61ff) panel coloring and LED accents on Copilot robot
+- Warm amber/yellow tones for incandescent basement lighting fixtures
+- White highlights for dramatic emphasis on key features
+- Bold black outlines (consistent 2-3px width) on ALL elements comic book style
+- Cross-hatching shading on Mr. Codenstein's face for depth and exhaustion
+- Strategic use of speed lines, energy burst rays, and glow halos
+- High contrast but warm accessible color palette
+- Light background (off-white/cream) with colored elements, NOT dark
 
-PARTICLE EFFECTS (Comic Style): 
-- Starburst lines radiating from brain
-- Small floating "sparkle" symbols for energy
-- Motion lines on flying papers
-- Glow halos around characters in their signature colors
-- Speed lines suggesting explosive moment
-- Simple but effective visual energy indicators
+PARTICLE EFFECTS (Comic Book Style): 
+- Starburst lines radiating from brain center (straight rays)
+- Small floating sparkle stars and energy dots
+- Motion lines on flying papers (3-4 curved lines per paper)
+- Soft glow halos around characters in their signature colors (20-30% opacity outer glow)
+- Speed lines suggesting explosive energy burst moment (radiating from center)
+- Simple but effective visual energy indicators - clean, not overwhelming
 
-MOOD: Eureka moment captured in comic book style - dramatic but accessible, wonder and triumph, instant of transformation. Energetic, optimistic, slightly chaotic in a fun way.
+MOOD: Eureka breakthrough moment captured in accessible comic strip style - dramatic but friendly, wonder and scientific triumph, instant of transformation. Energetic, optimistic, slightly chaotic in an endearing way. Educational yet exciting.
 
-COMPOSITION: Rule of thirds with Codenstein slightly off-center front, brain architecture dominating upper center, Mrs. G and Copilot flanking at angles creating triangle composition pointing upward. Title space reserved in top 20% with clean area for text overlay (no busy details in title zone).
+COMPOSITION: Rule of thirds with Codenstein slightly off-center forward, brain architecture dominating upper center background, Mrs. G and Copilot flanking at 45-degree angles creating triangle composition pointing upward toward emerging consciousness. Title space reserved in top 20% with clean gradient overlay area for text legibility (no busy line work in title zone).
 
-ART STYLE: Clean line art comic book illustration with strategic COLOR (NOT photorealistic). Think modern webcomic or animated series aesthetic. Inspired by: Calvin and Hobbes detail level, Dilbert workplace chaos, modern comic book coloring techniques. NOT manga, NOT superhero dramatic, NOT realistic - friendly accessible comic strip style with vibrant colors. High contrast black outlines on white/light background with colored fills and glows.
+ART STYLE: Clean line art comic book illustration with vibrant strategic COLOR (NOT photorealistic). EXACT MATCH to reference images: newspaper comic strip aesthetic (The Goldfish Theory/Copilot interaction style). Inspired by: Calvin and Hobbes detail level, Dilbert workplace chaos, Peanuts character expressiveness, modern webcomic coloring. Bold consistent black outlines (2-3px), flat color fills with strategic gradients only for glows, white/light background, detailed cross-hatching for facial features and depth on key elements. NOT manga style, NOT superhero dramatic, NOT realistic rendering - friendly accessible comic strip style with professional coloring.
 
-CHARACTER DESIGN: Simple but expressive, slightly exaggerated proportions for personality, consistent with existing story illustrations (see ch06-01 reference). All characters recognizable at small sizes.
+CHARACTER DESIGN: Simple but highly expressive, slightly exaggerated proportions for personality (larger heads relative to bodies for cartoon appeal), consistent with reference images. All characters instantly recognizable at thumbnail size. Mr. Codenstein matches reference exhausted scientist look exactly. Mrs. G matches reference professional supportive woman. Copilot matches reference friendly rounded robot EXACTLY.
 
-TECHNICAL SPECS: 600x600px square format, clean line art with flat color fills and strategic glow effects, sRGB color space, optimized for both thumbnail and full-size viewing, title-ready composition.
+TECHNICAL SPECS: 600x600px square format, clean line art with flat color fills and strategic glow effects (glows only on brain/Mrs. G/energy), sRGB color space, optimized for both thumbnail and full-size viewing, title-ready composition with clean top 20%.
+
+REFERENCE ACCURACY: Characters MUST match the provided reference images exactly - Mr. Codenstein's wild white hair and exhausted expression, Mrs. G's professional elegant appearance, Copilot's friendly rounded robot design with simple screen face and antenna. Style MUST match clean comic strip line art from references.
 ```
 
 ---
