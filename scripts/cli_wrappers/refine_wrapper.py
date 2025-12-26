@@ -15,7 +15,7 @@ from pathlib import Path
 cortex_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(cortex_root / "src"))
 
-from operations.modules.orchestration.refinement_orchestrator_v1 import RefinementOrchestratorV1
+from operations.modules.orchestration.refinement_orchestrator import RefinementOrchestrator
 
 
 def main():
@@ -58,7 +58,7 @@ def main():
     print()
     
     try:
-        orchestrator = RefinementOrchestratorV1(
+        orchestrator = RefinementOrchestrator(
             cortex_root=cortex_root,
             dry_run=dry_run
         )
