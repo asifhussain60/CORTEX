@@ -2138,6 +2138,181 @@ class PlanningOrchestrator(BaseOrchestrator):
         logger.info(f"Generated test plan: {len(test_plan['test_cases'])} test cases")
         return test_plan
     
+    # ========================================================================
+    # TDD Integration Methods (Task 8.4 - Extended Testing)
+    # ========================================================================
+    
+    def _generate_tdd_dor(self, phase_name: str) -> List[str]:
+        """
+        Generate TDD-specific Definition of Ready criteria for a phase.
+        
+        Args:
+            phase_name: Phase name
+            
+        Returns:
+            List of TDD DoR criteria
+        """
+        base_criteria = [
+            "Test cases identified from acceptance criteria",
+            "Test framework configured and operational",
+            "Test environment available",
+            "Test data prepared"
+        ]
+        
+        # Phase-specific criteria
+        if "implementation" in phase_name.lower() or "code" in phase_name.lower():
+            base_criteria.extend([
+                "Tests written before implementation (RED phase)",
+                "All tests failing with expected reasons",
+                "Test coverage targets defined (≥95% unit)"
+            ])
+        elif "refactor" in phase_name.lower():
+            base_criteria.extend([
+                "All tests passing before refactoring",
+                "Baseline coverage established"
+            ])
+        
+        logger.debug(f"Generated TDD DoR for '{phase_name}': {len(base_criteria)} criteria")
+        return base_criteria
+    
+    def _generate_tdd_dod(self, phase_name: str) -> List[str]:
+        """
+        Generate TDD-specific Definition of Done criteria for a phase.
+        
+        Args:
+            phase_name: Phase name
+            
+        Returns:
+            List of TDD DoD criteria
+        """
+        base_criteria = [
+            "All tests passing (100% pass rate)",
+            "Code coverage ≥95% for unit tests",
+            "No skipped or ignored tests",
+            "Test execution time <5 seconds"
+        ]
+        
+        # Phase-specific criteria
+        if "implementation" in phase_name.lower() or "green" in phase_name.lower():
+            base_criteria.extend([
+                "Minimal implementation passing all tests",
+                "No premature optimization",
+                "Code follows SOLID principles"
+            ])
+        elif "refactor" in phase_name.lower():
+            base_criteria.extend([
+                "Code complexity reduced",
+                "Duplication eliminated",
+                "All tests still passing (regression check)"
+            ])
+        
+        logger.debug(f"Generated TDD DoD for '{phase_name}': {len(base_criteria)} criteria")
+        return base_criteria
+    
+    def _get_tdd_guidance(self, context: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Get TDD workflow guidance from intelligence layer.
+        
+        Args:
+            context: Context with phase information
+            
+        Returns:
+            TDD guidance dict or None
+        """
+        phase = context.get("phase", "")
+        
+        guidance = {
+            "phase": phase,
+            "description": f"TDD guidance for {phase} phase",
+            "best_practices": [
+                "Write smallest test that fails",
+                "Make test pass with simplest code",
+                "Refactor while keeping tests green"
+            ],
+            "common_mistakes": [
+                "Writing too many tests at once",
+                "Skipping the RED phase",
+                "Not refactoring after GREEN"
+            ]
+        }
+        
+        # Phase-specific guidance
+        if phase.upper() == "RED":
+            guidance["focus"] = "Write failing test that describes next behavior"
+            guidance["exit_criteria"] = "Test fails for the right reason"
+        elif phase.upper() == "GREEN":
+            guidance["focus"] = "Make test pass with minimal code"
+            guidance["exit_criteria"] = "All tests passing"
+        elif phase.upper() == "REFACTOR":
+            guidance["focus"] = "Improve code quality while maintaining tests"
+            guidance["exit_criteria"] = "Clean code, all tests still passing"
+        
+        logger.debug(f"TDD guidance for '{phase}': {guidance.get('focus', 'general')}")
+        return guidance
+    
+    def _is_test_quality_validation_enabled(self) -> bool:
+        """
+        Check if test quality validation is enabled.
+        
+        Returns:
+            True if enabled, False otherwise
+        """
+        # Check config
+        tdd_workflow = self.config.get("tdd_workflow", True)
+        quality_validation = self.config.get("test_quality_validation", True)
+        
+        enabled = tdd_workflow and quality_validation
+        logger.debug(f"Test quality validation: {'enabled' if enabled else 'disabled'}")
+        return enabled
+    
+    def _get_checkpoint_strategy(self) -> Dict[str, Any]:
+        """
+        Get git checkpoint strategy for TDD workflow.
+        
+        Returns:
+            Checkpoint strategy dict
+        """
+        strategy = {
+            "enabled": True,
+            "after_tdd_cycle": True,
+            "phases": ["RED", "GREEN", "REFACTOR"],
+            "auto_commit": True,
+            "commit_message_template": "TDD {phase}: {description}"
+        }
+        
+        logger.debug(f"Checkpoint strategy: after_tdd_cycle={strategy['after_tdd_cycle']}")
+        return strategy
+    
+    def _track_tdd_metric(self, metric_name: str, value: Any):
+        """
+        Track TDD metrics during execution.
+        
+        Args:
+            metric_name: Metric name
+            value: Metric value
+        """
+        if not hasattr(self, '_tdd_metrics'):
+            self._tdd_metrics = {}
+        
+        self._tdd_metrics[metric_name] = value
+        logger.debug(f"TDD metric tracked: {metric_name}={value}")
+    
+    def _get_tdd_metrics(self) -> Dict[str, Any]:
+        """
+        Get collected TDD metrics.
+        
+        Returns:
+            Dict of TDD metrics
+        """
+        if not hasattr(self, '_tdd_metrics'):
+            self._tdd_metrics = {}
+        
+        return self._tdd_metrics
+    
+    # ========================================================================
+    # RED Phase Execution
+    # ========================================================================
+    
     def _execute_red_phase(self, plan: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute RED phase - write failing tests.
