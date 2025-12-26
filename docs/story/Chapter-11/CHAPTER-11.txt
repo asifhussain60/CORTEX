@@ -1,6 +1,6 @@
 CHAPTER 11: THE KNOWLEDGE KEEPER
 
-4:30 AM Friday. Ninety minutes until Mrs. G's flight landed. Ninety minutes until Christmas decorations deadline.
+4:30 AM Friday. Ninety minutes until his deadline. Ninety minutes until Christmas decorations must be complete.
 
 Codenstein was close. So close.
 
@@ -42,7 +42,7 @@ But Project B's CORTEX had no idea. It was starting fresh. Relearning. Rediscove
 
 "Knowledge amnesia," he said quietly.
 
-Mrs. G's voice over the speaker—she'd been monitoring his stress levels: "Different from conversation amnesia?"
+Miss G's voice manifested—she'd been monitoring his stress levels: "Different from conversation amnesia?"
 
 "Yes. Conversation amnesia is forgetting what we JUST discussed. Knowledge amnesia is forgetting what I PREVIOUSLY solved."
 
@@ -76,7 +76,7 @@ And anti_patterns documenting bad practices discovered across projects, like sto
 
 Cross-project wisdom. Anonymized. Searchable. Always available.
 
-"Is this like your personal development journal?" Mrs. G asked.
+"Is this like your personal development journal?" Miss G asked gently.
 
 "I don't KEEP a development journal."
 
@@ -118,7 +118,7 @@ Second result: JWT Validation Middleware with context about validating JWTs in A
 
 "IT FOUND IT," he said.
 
-Mrs. G: "Found what?"
+Miss G: "Found what?"
 
 "The solution I couldn't remember. From Project A. Now available in Project B."
 
@@ -158,7 +158,7 @@ The system had found relevant patterns from past work, integrated them into the 
 
 "This is... actually useful," Codenstein said.
 
-"You sound surprised," Mrs. G replied.
+"You sound surprised," Miss G replied supportively.
 
 "I'm always surprised when things work."
 
@@ -176,7 +176,7 @@ The JWT implementation took 40 minutes instead of the usual 2+ hours. Because he
 
 "Is this what experienced developers feel like?" he wondered aloud.
 
-Mrs. G laughed. "Experienced developers forget solutions too. They just have better notes."
+Miss G's wisdom emerged. "Experienced developers forget solutions too. They just have better notes."
 
 "I don't take notes."
 
@@ -198,7 +198,7 @@ Every project contributing to collective wisdom. Every solution recorded. Every 
 
 THE FINAL TEST
 
-5:45 AM. Fifteen minutes until Mrs. G's flight landed. Fifteen minutes until deadline.
+5:45 AM. Fifteen minutes until his deadline. Fifteen minutes until he must switch to decorations.
 
 One piece left: Multi-repository integration.
 
@@ -206,7 +206,7 @@ Currently, each project ran its own CORTEX instance. Separate memory. Separate k
 
 What if ONE CORTEX could serve MULTIPLE repositories simultaneously?
 
-"Ambitious for fifteen minutes," Mrs. G observed.
+"Ambitious for fifteen minutes," Miss G observed with gentle humor.
 
 "I have the pieces. Tier 3 already works across projects. Just need workspace detection and context switching."
 
@@ -246,7 +246,7 @@ test_shared_tier3_knowledge PASSED
 
 All passing.
 
-6:00 AM. Mrs. G's flight had landed.
+6:00 AM. His deadline had arrived.
 
 His phone buzzed: "Landed. Collecting baggage. You finished?"
 

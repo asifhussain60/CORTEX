@@ -20,7 +20,7 @@ Internal panic. External calm. "Can you... send me your format requirements?"
 
 The call ended. Codenstein stared at the PDF that had just arrived. Forty-seven pages of enterprise requirements. Work item templates. Acceptance criteria formats. Hierarchy rules. Compliance checklists.
 
-His wife's voice from upstairs: "How did it go?"
+Miss G's voice in his thoughts: "How did it go?"
 
 "THEY WANT AZURE DEVOPS INTEGRATION."
 
@@ -263,7 +263,7 @@ Codenstein looked around his basement. Coffee mugs. Whiteboards. Cable chaos. Hi
 
 "We want to buy your planning enforcement system. With ADO integration. Can you have it ready by next quarter?"
 
-"I... I need to talk to my wife."
+"I... I need to process this with Miss G."
 
 "Understood. We'll send over terms. Congratulations, Mr. Codenstein."
 

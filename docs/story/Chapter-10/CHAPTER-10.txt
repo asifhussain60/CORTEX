@@ -1,6 +1,6 @@
 CHAPTER 10: THE SELF-HEALING SYSTEM
 
-11 PM Thursday. Six hours until Mrs. G landed. Six hours until Christmas decorations deadline.
+11 PM Thursday. Six hours until his deadline. Six hours until Christmas decorations must be done.
 
 Codenstein surveyed his basement workspace. Not just the code—the PHYSICAL space.
 
@@ -35,7 +35,7 @@ Seven phases:
 
 The system healing itself.
 
-"That's ambitious," Mrs. G's voice said. She'd been monitoring via open channel. "Six hours ambitious?"
+"That's ambitious," Miss G's voice said supportively in his thoughts. She'd been monitoring his progress. "Six hours ambitious?"
 
 "I have all the pieces. The orchestration pattern. The file discovery. The test validation. Just need to... assemble them."
 
@@ -135,7 +135,7 @@ The system had found problems, fixed what it could, refactored what needed refac
 
 "Did it just..." he whispered.
 
-"Fix itself?" Mrs. G's voice. "Apparently."
+"Fix itself?" Miss G's voice expressed gentle amazement. "Apparently."
 
 ---
 
@@ -169,7 +169,7 @@ Perfect. Up-to-date. Accurate. Generated from the actual codebase state.
 
 "It read the code, understood the architecture, and wrote its own documentation," Codenstein said slowly.
 
-"It UPDATED its own documentation," Mrs. G corrected. "Based on reality. Not based on outdated descriptions."
+"It UPDATED its own documentation," Miss G corrected with pride. "Based on reality. Not based on outdated descriptions."
 
 "This is..."
 
@@ -240,7 +240,7 @@ The codebase had healed itself.
 
 THE VALIDATION
 
-"Run the tests," Mrs. G said. She'd been watching the entire time.
+"Run the tests," Miss G encouraged. She'd been observing the entire time.
 
 He did: pytest tests/
 
@@ -272,7 +272,7 @@ He leaned back in his chair. "This changes everything."
 
 THE PARALLEL
 
-Mrs. G's voice turned wry. "Now apply this to the basement."
+Miss G's voice turned wry in his thoughts. "Now apply this to the basement."
 
 He looked around. The chaos. The coffee mugs. The cable tangles.
 
@@ -298,7 +298,7 @@ He stared at coffee mug #23. The one from the memory breakthrough. Still half-fu
 
 THE DAWN
 
-4 AM Friday. Two hours until Mrs. G's flight landed. Two hours until Christmas decorations deadline.
+4 AM Friday. Two hours until his completion target. Two hours until Christmas decorations deadline.
 
 His codebase was PRISTINE. Self-documented. Auto-maintained. Test-validated.
 
@@ -308,7 +308,7 @@ The system that maintained itself better than he maintained his workspace.
 
 "One more push," he said aloud.
 
-"Two hours," Mrs. G reminded him. "Then DECORATIONS."
+"Two hours," Miss G reminded him firmly. "Then DECORATIONS."
 
 "Two hours. Tier 3. Final integration. Done."
 

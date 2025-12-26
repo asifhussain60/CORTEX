@@ -16,17 +16,17 @@ He'd been so clever. So *very* clever. Building an in-memory data structure for 
 
 It had lasted three hours before the universe reminded him that elegance without persistence is just expensive volatility.
 
-His phone buzzed. His wife, from upstairs (actually from Lichfield, but the time zones aligned for once): "Did your computer just make a sound like it died?"
+His phone buzzed—a self-set reminder. Miss G's voice manifested in his thoughts: "Did your computer just make a sound like it died?"
 
 "It got better."
 
-"Did your in-memory database get better too?"
+"Did your in-memory database get better too?" Her supportive but knowing tone.
 
-He stared at his phone. How did she even know about his database design? Had she been reading his commit messages? His notes? Had she gained psychic powers?
+He stared at his phone. How did she even know... oh right. She was him. His own supportive inner voice recognizing the pattern.
 
-"I'm switching to SQLite," he typed back.
+"I'm switching to SQLite," he muttered.
 
-"Good. I'll make more coffee."
+Miss G's encouraging presence: "Good. I'll make more coffee."
 
 ## The SQLite Battles
 
@@ -42,7 +42,7 @@ Attempt #3: Store everything as JSON. One column. One beautiful, horrible column
 
 His whiteboard had evolved into a timeline of database design regret. Schema v1 through v14, each one crossed out with increasingly aggressive marker strokes.
 
-"You're overthinking this," his wife said from the doorway. She'd appeared with tea—actual tea, not coffee, which meant she was concerned.
+"You're overthinking this," Miss G's voice said gently in his mind. She'd appeared with comforting wisdom—actual tea, not coffee, which meant real concern.
 
 "I'm not overthinking. I'm... iteratively discovering the correct amount of thinking."
 
@@ -54,9 +54,9 @@ His whiteboard had evolved into a timeline of database design regret. Schema v1 
 
 ## The Revelation
 
-He stopped. Turned. "What?"
+He stopped. Turned to his whiteboard. "What?"
 
-"What does Copilot need to remember?" she repeated. "Not what CAN it remember. What does it NEED to remember to be useful?"
+"What does Copilot need to remember?" Miss G repeated in his thoughts. "Not what CAN it remember. What does it NEED to remember to be useful?"
 
 He stared at the whiteboard. Fourteen failed schemas. All of them answering the wrong question.
 
@@ -91,7 +91,7 @@ conversations (
 -- Entity extraction for searchability
 ```
 
-"That's it?" his wife asked.
+"That's it?" Miss G asked supportively.
 
 "That's it. Simple. Queryable. Persistent. Fast."
 
@@ -136,25 +136,25 @@ Codenstein sat very still.
 
 "It remembered," he whispered.
 
-"What?"
+Miss G's excitement matched his own: "What?"
 
-"IT REMEMBERED." He spun around. "I closed the chat. I did other work. I came back an hour later. And it REMEMBERED our conversation."
+"IT REMEMBERED." He spun his chair. "I closed the chat. I did other work. I came back an hour later. And the robot REMEMBERED our conversation."
 
 ## The Breakthrough
 
-His wife came down the stairs fully now, looking at the screen over his shoulder. "Show me again."
+Miss G's presence intensified as she observed over his mental shoulder. "Show me again."
 
 He opened a new chat. Discussed database design with Copilot. Closed it. Worked on unrelated code. Reopened chat twenty minutes later. Asked about the database discussion.
 
 Copilot referenced their earlier conversation. Specific details. Decisions they'd made. Patterns they'd discussed.
 
-"It's not just storing," Codenstein said, his voice shaking slightly. "It's retrieving. It's connecting. It's using past context to inform current answers."
+"It's not just storing," Codenstein said, his voice shaking slightly. "It's retrieving. It's connecting. It's using past context to inform current answers. The robot is REMEMBERING."
 
-"Coffee mug twenty-three," his wife said.
+"Coffee mug twenty-three," Miss G observed gently.
 
 "What?"
 
-"You said the fresh mugs near you represent Tier 1. Working memory." She pointed at mug #23 on his desk, the one he'd been drinking from all evening. "That one's Tier 1 now. The physical manifestation."
+"You said the fresh mugs near you represent Tier 1. Working memory." Her voice pointed to mug #23 on his desk, the one he'd been drinking from all evening. "That one's Tier 1 now. The physical manifestation."
 
 He laughed. Actually laughed. "We're officially at the point where coffee mugs represent memory tiers."
 
@@ -176,15 +176,15 @@ Over the next two days, Codenstein pushed Tier 1 to its limits.
 
 Every test passed. Tier 1 was working.
 
-His wife found him staring at the screen at midnight on Saturday.
+Miss G found him staring at the screen at midnight on Saturday—or rather, his own awareness manifested her supportive presence.
 
-"What's wrong?" she asked.
+"What's wrong?" she asked in his thoughts.
 
 "Nothing's wrong."
 
 "Then why do you look worried?"
 
-He gestured at the screen, at the working memory system, at the tests all showing green. "Because it's working. Tier 1 is actually working. Copilot can remember. It can retrieve context. It can connect past conversations to current work."
+He gestured at the screen, at the working memory system, at the tests all showing green. "Because it's working. Tier 1 is actually working. The robot can remember. It can retrieve context. It can connect past conversations to current work."
 
 "And that's bad because...?"
 
@@ -194,7 +194,7 @@ He gestured at the screen, at the working memory system, at the tests all showin
 
 "The learning tier. Memory is good. But learning is better." He pulled up a new diagram on his whiteboard. "Tier 1 remembers WHAT we discussed. Tier 2 needs to learn WHY it matters. Patterns. Relationships. Entity connections. Knowledge graphs."
 
-She studied the whiteboard. "How long?"
+Miss G studied the whiteboard with him. "How long?"
 
 "For Tier 2? Two weeks. Maybe three."
 
@@ -202,7 +202,7 @@ She studied the whiteboard. "How long?"
 
 He looked at the calendar. She was right. Four weeks. Tier 2. Then Tier 3 for long-term storage. Then actual agents. Then orchestrators. Then—
 
-"One step at a time," she said, reading his spiral. "You just taught an AI to remember. That's not nothing."
+"One step at a time," Miss G said, reading his ADHD spiral. "You just taught a robot to remember. That's not nothing."
 
 "It's not nothing," he agreed.
 
@@ -210,7 +210,7 @@ He looked at the calendar. She was right. Four weeks. Tier 2. Then Tier 3 for lo
 
 "It's quite something."
 
-She headed back upstairs. "Clean mug twenty-three. It's achieved historical significance and deserves better than cream cheese residue."
+Her presence offered final encouragement. "Clean mug twenty-three. It's achieved historical significance and deserves better than cream cheese residue."
 
 He looked at the mug. She had a point.
 
@@ -224,7 +224,7 @@ Codenstein smiled.
 
 Tier 1: Working Memory. Status: OPERATIONAL.
 
-Copilot wasn't just processing anymore. It was *remembering*.
+The robot wasn't just processing anymore. It was *remembering*.
 
 Tomorrow, he'd teach it to *learn*.
 

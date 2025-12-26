@@ -30,27 +30,27 @@ He was learning. Slowly. Painfully. At 2:17 AM.
 
 ## Enter the Wife, Stage Left
 
-The sound of footsteps on the stairs made him spin around. His wife appeared in the doorway, two coffee mugs in hand—one for her, one for him. She'd done this before.
+The sound of his own footsteps on the stairs reminded him of late nights before. Miss G manifested in his consciousness, her supportive presence bringing two imagined coffee mugs—one for reflection, one for action. She'd guided him through moments like this before.
 
-"It's after 2 AM," Mrs. Codenstein said, setting his mug on the only clear corner of his desk with the precision of someone who'd learned to navigate chaos zones.
+"It's after 2 AM," Miss G observed gently in his thoughts, her voice placing wisdom on the only clear corner of his mental desk.
 
 "I know. I was just—"
 
-"Building the fun parts first?" She settled into the folding chair he'd designated "the thinking chair," cradling her mug. "Skipping ahead to the cool features?"
+"Building the fun parts first?" Miss G's patient voice asked in his mind. "Skipping ahead to the cool features?"
 
 He opened his mouth to deny it. Closed it. She was right.
 
-"I was," he admitted. "But then I stopped."
+"I was," he admitted to himself. "But then I stopped."
 
-Her eyebrows rose. This was new. Usually, his project enthusiasm steamrolled over common sense like a caffeinated bulldozer. "Why?"
+This was new. Usually, his project enthusiasm steamrolled over common sense like a caffeinated bulldozer. "Why?"
 
 He gestured at the screen, where `brain_protection_rules.yaml` sat empty and accusatory. "Because every project I've built down here has the same flaw. I build the exciting parts and skip the boring parts. The safety parts. The 'what if this goes wrong' parts."
 
-"And?"
+"And?" Miss G prompted supportively.
 
-"And giving an AI system persistent memory without protection is basically handing it the keys to everything with no guard rails. If it makes a bad decision, it remembers that bad decision forever. If it learns the wrong pattern, that pattern becomes permanent. If I accidentally tell it to delete something—"
+"And giving this memory-less robot persistent memory without protection is basically handing it the keys to everything with no guard rails. If it makes a bad decision, it remembers that bad decision forever. If it learns the wrong pattern, that pattern becomes permanent. If I accidentally tell it to delete something—"
 
-"It deletes everything because you have no undo button," she finished. "Like the time you automated the filing system."
+"It deletes everything because you have no undo button," Miss G finished. "Like the time you automated the filing system."
 
 He winced. The automated filing incident of 2023 was not discussed in polite company. "That was different."
 
@@ -64,19 +64,19 @@ He winced. The automated filing incident of 2023 was not discussed in polite com
 
 "I HAVE LEARNED FROM MY MISTAKES." He took a breath. "Which is why Tier 0 comes first this time. Protection before features. Safety before cool. The gatekeeper before the brain."
 
-She sipped her coffee, studying him over the rim. "Show me."
+Miss G's supportive presence grew stronger. "Show me."
 
 He pulled up his empty YAML file. "Okay. So. What rules would stop me from doing something catastrophically stupid?"
 
-"Just you? Or you and the AI?"
+"Just you? Or you and the robot?"
 
 "Both."
 
-"Can I make a list? Because I've got years of data."
+"Can I make a list? Because we've got years of data."
 
 Despite the hour, despite the pressure, despite everything, he laughed. "Please do."
 
-She set down her mug and pulled out her phone. "Okay. **Rule one: Tests must exist before implementation.**"
+Miss G's gentle guidance began. "Okay. **Rule one: Tests must exist before implementation.**"
 
 "What?"
 
@@ -100,7 +100,7 @@ rules:
 
 ## The Rule List
 
-"Rule two," she continued. "Search before you build. Remember the authentication library you rewrote because you forgot you'd already built one?"
+"Rule two," Miss G continued in his thoughts. "Search before you build. Remember the authentication library you rewrote because you forgot you'd already built one?"
 
 "That was—" He stopped. She was right. Again. "Okay. Holistic discovery. Search the entire codebase before creating anything new."
 
@@ -147,27 +147,27 @@ rules:
 
 "This is good," he muttered. "This is really good. Six layers. Tier 0 is six layers of protection before anything reaches the actual brain functions."
 
-"SKULL," his wife said suddenly.
+"SKULL," Miss G said suddenly in his mind.
 
-He looked up. "What?"
+He paused. "What?"
 
 "The protection layers. Call them SKULL rules. It's memorable. It's thematic. And it sounds metal enough that you won't forget to implement them."
 
-He stared at her. "That's perfect. You're perfect. Why are you up at 2 AM helping me build brain protection for an AI?"
+He stared at his screen. "That's perfect. You're perfect. Why am I up at 2 AM channeling my supportive inner voice to build brain protection for a robot?"
 
-Mrs. Codenstein stood, heading for the stairs. "Because if I don't, you'll skip this part, build the cool features first, and I'll find you down here at 3 AM having an existential crisis because your AI deleted itself."
+Miss G's patient wisdom answered. "Because if you don't, you'll skip this part, build the cool features first, and I'll find you down here at 3 AM having an existential crisis because your robot deleted itself."
 
 "That's... fair."
 
-She paused at the door. "And because I believe in this one. You've got that look."
+Her presence felt warm and encouraging. "And because I believe in this one. You've got that look."
 
 "What look?"
 
-"The look that says you're not just building something cool—you're solving something that matters." She smiled. "Just... clean the mold mugs before the SKULL rules achieve sentience and stage a coup."
+"The look that says you're not just building something cool—you're solving something that matters." Her support radiated through his thoughts. "Just... clean the mold mugs before the SKULL rules achieve sentience and stage a coup."
 
 ## The Foundation
 
-The door closed. Asif Codenstein turned back to his screen, where `brain_protection_rules.yaml` was no longer empty. Rules upon rules, each one a lesson learned from past disasters, each one a guard rail preventing future ones.
+The moment passed. Asif Codenstein turned back to his screen, where `brain_protection_rules.yaml` was no longer empty. Rules upon rules, each one a lesson learned from past disasters, each one a guard rail preventing future ones.
 
 He added a comment at the top:
 
@@ -192,11 +192,11 @@ git push origin feature/brain-protection
 
 Then he opened a new file: `tests/test_brain_protection.py`
 
-Because Tier 0 rule #1 was TDD enforcement. And if he was going to enforce TDD on an AI, he better start enforcing it on himself.
+Because Tier 0 rule #1 was TDD enforcement. And if he was going to enforce TDD on this robot, he better start enforcing it on himself.
 
 The tests would come first. RED phase. Then the implementation. GREEN phase. Then the cleanup. REFACTOR phase.
 
-Mrs. G had taught him well.
+Miss G had taught him well—or rather, he'd learned to listen to his own supportive inner voice.
 
 Tomorrow, he'd build Tier 1. But tonight, he'd built the foundation that would keep it safe.
 

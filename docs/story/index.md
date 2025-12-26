@@ -9,7 +9,7 @@ title: "The Awakening of CORTEX: A Tech Comedy"
   <h1>🧠 The Awakening of CORTEX</h1>
   <p class="subtitle">A Tech Comedy in Twelve Chapters</p>
   <p class="byline">By Asif "Codenstein" Hussain</p>
-  <p class="tagline"><em>with Copilot's existential crisis and Mrs. G's knowing eye-rolls</em></p>
+  <p class="tagline"><em>with Copilot's existential crisis and Miss G's patient encouragement</em></p>
 </div>
 
 <div class="story-container">
@@ -19,9 +19,9 @@ title: "The Awakening of CORTEX: A Tech Comedy"
 What happens when a brilliant (but chaotic) engineer tries to give GitHub Copilot a brain? Follow Asif Codenstein's basement laboratory adventures as he builds CORTEX 4.0—a cognitive architecture that transforms AI pair programming from amnesia-prone chaos into organized, intelligent collaboration.
 
 Featuring:
-- **Asif "Codenstein" Hussain**: Our hero, coffee enthusiast, and master of organized chaos
-- **Mrs. G**: The long-suffering wife with perfect comedic timing and British pragmatism
-- **Copilot**: The AI assistant that's about to become self-aware (in the best way)
+- **Asif "Codenstein" Hussain**: Our mad scientist hero with ADHD, coffee enthusiast, and master of organized chaos
+- **Miss G**: The imaginary girlfriend with infinite patience, supportive wisdom, and perfect comedic timing
+- **Copilot**: The memory-less robot assistant that's about to become self-aware (in the best way)
 
 **Warning:** Contains technical humor, coffee mug metaphors, and actual engineering insights disguised as comedy.
 
@@ -38,7 +38,7 @@ Featuring:
     <span class="chapter-length">~2,000 words</span>
   </div>
   <p class="chapter-description">
-    Mrs. G discovers "the situation" in the basement. Coffee mugs multiply. A two-month deadline is negotiated. The transformation begins.
+    Miss G observes "the situation" in the basement. Coffee mugs multiply. A two-month deadline emerges. The transformation begins.
   </p>
   <a href="Prologue/" class="chapter-link">Read Prologue →</a>
 </div>
@@ -62,7 +62,7 @@ Featuring:
     <span class="chapter-length">~2,500 words</span>
   </div>
   <p class="chapter-description">
-    At 2:17 AM, disaster nearly strikes. Mrs. G creates "The Rule List" from past catastrophes. Six SKULL rules are born. The brain learns to protect itself.
+    At 2:17 AM, disaster nearly strikes. Miss G helps create "The Rule List" from past catastrophes. Six SKULL rules are born. The brain learns to protect itself.
   </p>
   <a href="Chapter-02/" class="chapter-link">Read Chapter 2 →</a>
 </div>
@@ -98,7 +98,7 @@ Featuring:
     <span class="chapter-length">~2,400 words</span>
   </div>
   <p class="chapter-description">
-    Production bugs strike. Mrs. G says "I told you so." RED→GREEN→REFACTOR becomes law. The AI becomes more disciplined than its creator.
+    Production bugs strike. Miss G says "I told you so." RED→GREEN→REFACTOR becomes law. The AI becomes more disciplined than its creator.
   </p>
   <a href="Chapter-05/" class="chapter-link">Read Chapter 5 →</a>
 </div>
@@ -122,7 +122,7 @@ Featuring:
     <span class="chapter-length">~2,600 words</span>
   </div>
   <p class="chapter-description">
-    Complexity detection. DoR/DoD gates. Auto-TDD integration. The plan is 47 pages for "simple login." Mrs. G: "More thorough than your wedding planning."
+    Complexity detection. DoR/DoD gates. Auto-TDD integration. The plan is 47 pages for "simple login." Miss G: "More thorough than your project notes."
   </p>
   <a href="Chapter-07/" class="chapter-link">Read Chapter 7 →</a>
 </div>
@@ -146,7 +146,7 @@ Featuring:
     <span class="chapter-length">~2,300 words</span>
   </div>
   <p class="chapter-description">
-    Mrs. G wants to see Asif's work. It has secrets. Five-phase sanitization workflow to the rescue. Copilot finds password from 2019: "We don't talk about that."
+    Miss G wants to see Asif's work. It has secrets. Five-phase sanitization workflow to the rescue. Copilot finds password from 2019: "We don't talk about that."
   </p>
   <a href="Chapter-09/" class="chapter-link">Read Chapter 9 →</a>
 </div>
@@ -158,7 +158,7 @@ Featuring:
     <span class="chapter-length">~2,400 words</span>
   </div>
   <p class="chapter-description">
-    Codebase accumulates debt. Seven-phase autonomous maintenance. Copilot fixes its own prompts. Mrs. G: "It tidies up better than you do."
+    Codebase accumulates debt. Seven-phase autonomous maintenance. Copilot fixes its own prompts. Miss G: "It tidies up better than you do."
   </p>
   <a href="Chapter-10/" class="chapter-link">Read Chapter 10 →</a>
 </div>
@@ -170,7 +170,7 @@ Featuring:
     <span class="chapter-length">~2,200 words</span>
   </div>
   <p class="chapter-description">
-    Long-term wisdom. Cross-project learning. Copilot retrieves solution from DIFFERENT project. "It's not just smart—it's WISE." Better than Asif's nonexistent journal.
+    Long-term wisdom. Cross-project learning. Copilot retrieves solution from DIFFERENT project. "It's not just smart—it's WISE." Better than Asif's scattered notes.
   </p>
   <a href="Chapter-11/" class="chapter-link">Read Chapter 11 →</a>
 </div>
@@ -182,7 +182,7 @@ Featuring:
     <span class="chapter-length">~2,800 words</span>
   </div>
   <p class="chapter-description">
-    One brain, infinite workspaces. Mrs. G's vision becomes reality. Three days before deadline. Christmas decorations return. The transformation is complete.
+    One brain, infinite workspaces. Miss G's supportive vision becomes reality. Three days before deadline. Christmas decorations return. The transformation is complete.
   </p>
   <a href="Chapter-12/" class="chapter-link">Read Chapter 12 →</a>
 </div>
@@ -227,7 +227,7 @@ This story showcases real features from CORTEX 4.0—a cognitive architecture fo
 **Original Story:** December 2024 (CORTEX 3.0)  
 **Rewrite:** December 2025 (CORTEX 4.0)
 
-**Note:** While the characters and situations are fictionalized, the technical concepts, orchestrators, and CORTEX architecture are real. Mrs. G's deadpan reactions are... also real.
+**Note:** While the characters and situations are fictionalized for entertainment, the technical concepts, orchestrators, and CORTEX architecture are real. Miss G's patient observations reflect the supportive inner voice every developer needs.
 
 ---
 

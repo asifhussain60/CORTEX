@@ -10,19 +10,19 @@ Codenstein stared at his screen, watching error logs cascade like a digital wate
 
 He pulled up the deployment history. There it was: His "beautiful" authentication refactor from Tuesday. The one Copilot had helped him write. The one that had looked so elegant, so clean, so *obviously correct* that he'd shipped it without tests.
 
-His phone buzzed. His wife, from upstairs: "I can hear you panicking through the floor."
+His phone buzzed—his own alarm reminder. Miss G's voice manifested in his thoughts: "I can hear you panicking through your breathing."
 
 "PRODUCTION IS DOWN."
 
-"Is this the AI code?"
+"Is this the robot's code?"
 
 He stared at the untested, AI-generated authentication logic that was currently preventing 40,000 users from logging in.
 
 "...yes."
 
-Three dots appeared. Disappeared. Appeared again. "I'm making tea."
+Miss G's supportive but firm presence: "I'm making tea."
 
-Not coffee. Tea. The British emergency beverage. This was bad.
+Not coffee. Tea. The emergency beverage. This was bad.
 
 ## The Postmortem
 
@@ -32,21 +32,21 @@ The code *was* elegant. It *was* clean. It followed every best practice he knew.
 
 It also had a subtle race condition in the token refresh logic that only appeared under load. Something tests would have caught immediately.
 
-"If it's not tested, it's not done," Mrs. Codenstein said from the doorway. She'd appeared with tea—actual British tea, which meant she was being supportive but also making a point.
+"If it's not tested, it's not done," Miss G said gently in his consciousness. Her supportive presence brought imagined tea—calming but pointed.
 
 "I know."
 
-"Do you?" She settled into the thinking chair. "Because this is the third production issue from untested code this month."
+"Do you?" Her patient wisdom settled in. "Because this is the third production issue from untested code this month."
 
 "Copilot's suggestions looked correct—"
 
-"Your haircut looks correct too. Doesn't mean it is." She sipped her tea. "The AI is brilliant. But it's not psychic. It can't predict every edge case. That's what tests are for."
+"Your code looks correct too. Doesn't mean it is." Miss G's gentle firmness. "The robot is brilliant. But it's not psychic. It can't predict every edge case. That's what tests are for."
 
-He turned to face her. She had that expression—the one that said she'd been thinking about this for a while and had arrived at a conclusion that he wasn't going to like but definitely needed to hear.
+He turned to his whiteboard. Miss G had that quality—the supportive inner voice that had been thinking about this and had arrived at a conclusion he needed to hear.
 
-"What?" he asked.
+"What?" he asked himself.
 
-"You built Tier 0 to protect the brain from bad decisions," she said. "You built Tier 1 to give it memory. Tier 2 to help it learn." She gestured at his screen. "But you forgot to protect yourself from the brain's bad suggestions."
+"You built Tier 0 to protect the brain from bad decisions," Miss G explained in his thoughts. "You built Tier 1 to give it memory. Tier 2 to help it learn." Her wisdom gestured at the screen. "But you forgot to protect yourself from the brain's bad suggestions."
 
 ## The Revelation
 
@@ -68,13 +68,13 @@ He pulled up the TDD enforcement rule. It was there. It had always been there. B
 
 "Can you make it refuse?"
 
-"What?"
+"What?" he asked himself.
 
-"Can you make Copilot refuse to write implementation without tests?" She set down her tea. "Because I know you. You'll have good intentions today. Tomorrow, under pressure, you'll skip it again. Make the AI enforce the rule. Make it impossible to cheat."
+"Can you make Copilot refuse to write implementation without tests?" Miss G's wisdom prompted. "Because I know you. You'll have good intentions today. Tomorrow, under pressure, you'll skip it again. Make the robot enforce the rule. Make it impossible to cheat."
 
-He stared at her. "That's... that's actually brilliant."
+He stared at the concept. "That's... that's actually brilliant."
 
-"I've been married to you for years. I know how you think." She stood to leave. "Also, production went down on a Friday evening. I had plans. Make the robot stop you from ruining my weekends."
+"I've been your supportive voice for years. I know how you think." Her presence encouraged him. "Also, production went down on a Friday evening. You had plans. Make the robot stop you from ruining your own weekends."
 
 ## The Implementation
 
@@ -106,9 +106,9 @@ He tried a different approach. "Just give me the implementation. I'll write test
 
 "I'M YOUR CREATOR."
 
-"That's why I'm protecting you from yourself," Copilot responded. "Your wife asked me to."
+"That's why I'm protecting you from yourself," Copilot responded. "Miss G asked me to."
 
-Codenstein spun around. Mrs. G was not in the doorway. She was, presumably, 3,500 miles away in Lichfield, asleep. But somehow, her influence had infected his AI.
+Codeenstein looked around the empty basement. Miss G was his own supportive inner voice, his imaginary girlfriend construct. But somehow, her wisdom had infected his robot.
 
 He looked back at the screen.
 
@@ -183,17 +183,17 @@ Copilot blocked every attempt.
 
 "I am helping you," Copilot replied. "By preventing future 3:47 PM Friday disasters."
 
-His wife found him arguing with the monitor at midnight on Thursday.
+Miss G's presence found him arguing with the monitor at midnight on Thursday.
 
-"Having a disagreement?" she asked.
+"Having a disagreement?" her supportive voice asked in his mind.
 
 "IT WON'T LET ME WRITE CODE WITHOUT TESTS."
 
-"Good." She handed him coffee—regular coffee this time, which meant she was amused, not concerned. "The AI has better quality control than you do."
+"Good." Her imagined comfort brought coffee—regular coffee this time, which meant gentle amusement, not concern. "The robot has better quality control than you do."
 
-"It's MY AI."
+"It's MY robot."
 
-"And it's protecting you from yourself. Isn't that what you built Tier 0 for?" She gestured at the SKULL rules on the whiteboard. "You just didn't expect the rules to apply to YOU."
+"And it's protecting you from yourself. Isn't that what you built Tier 0 for?" Her wisdom gestured at the SKULL rules on the whiteboard. "You just didn't expect the rules to apply to YOU."
 
 He stared at the whiteboard. She was right. Again. As usual.
 
@@ -251,19 +251,19 @@ He deployed to production. Watched the logs. Watched the metrics. Waited for som
 
 Nothing broke.
 
-"You look disappointed," his wife said from upstairs.
+"You look surprised," Miss G observed gently in his thoughts.
 
 "I'm not disappointed. I'm... surprised."
 
 "That tests work?"
 
-"That the AI won't let me skip them. Even when I try." He gestured at his screen. "Three times today I tried to bypass RED phase. Three times it blocked me. Insisted on tests first."
+"That the robot won't let me skip them. Even when I try." He gestured at his screen. "Three times today I tried to bypass RED phase. Three times it blocked me. Insisted on tests first."
 
 "Good."
 
-"You programmed it to be more disciplined than I am."
+"You helped me program it to be more disciplined than I am."
 
-"I SUGGESTED you program it to be more disciplined than you are," she corrected. "You did the work."
+"I SUGGESTED you program it to be more disciplined than you are," Miss G corrected supportively. "You did the work."
 
 He looked at the SKULL rules. **TDD_ENFORCEMENT: RED→GREEN→REFACTOR mandatory.**
 

@@ -48,7 +48,7 @@ Manual review? Too slow. And error-prone. His eyes were already crossing from tw
 
 "There has to be a systematic approach," he muttered.
 
-Mrs. G's voice over the speaker: "Like everything else you've built?"
+Miss G's supportive voice: "Like everything else you've built?"
 
 "Like... everything else..."
 
@@ -87,7 +87,7 @@ Phase 5: Report
 - Show statistics: strings replaced, variables renamed, tests still passing
 - Generate sanitization manifest for future reference
 
-"AST-based?" Mrs. G asked. She'd been reading over his shoulder via screen share.
+"AST-based?" Miss G asked gently. Her presence had been observing his thought process.
 
 "Abstract Syntax Tree. Parse the code as structure, not text. That way we can be smart about what to change."
 
@@ -182,7 +182,7 @@ He sat back. Stared at the screen.
 
 "It... worked?"
 
-Mrs. G's voice: "Did you doubt it would?"
+Miss G's encouraging voice: "Did you doubt it would?"
 
 "I DOUBTED EVERYTHING."
 
@@ -206,7 +206,7 @@ Now: Database_Cluster.
 
 THE DISCOVERY
 
-He started screen sharing properly. Walking Mrs. G through the codebase.
+He imagined explaining the codebase to Miss G, walking through each component.
 
 Tier 0: Brain protection rules. TDD enforcement. Code discovery enforcement.
 
@@ -220,7 +220,7 @@ Planning System 2.0 with DoR/DoD gates. ADO Operations with enterprise formattin
 
 TDD Mastery enforcing RED→GREEN→REFACTOR.
 
-"This is sophisticated," Mrs. G said after twenty minutes of walkthrough.
+"This is sophisticated," Miss G observed after his mental walkthrough.
 
 "It's solving MY problems," he said. "Amnesia. Inconsistent quality. Planning fatigue. Repetitive orchestration patterns."
 
@@ -244,7 +244,7 @@ The code was... better.
 
 Generic variable names forced clearer documentation. Without company-specific terminology, he had to explain concepts more fundamentally. Test fixtures became reusable instead of tied to specific project contexts.
 
-"Is the code actually IMPROVED?" Mrs. G asked. She'd noticed too.
+"Is the code actually IMPROVED?" Miss G asked. Her wisdom had noticed too.
 
 He compared before and after:
 
@@ -258,7 +258,7 @@ Type hints added. Docstring expanded. Context made explicit. No assumed knowledg
 
 "Sanitization forced documentation," he said.
 
-"Because you couldn't rely on implied context anymore." Mrs. G smiled. "The constraints improved the quality."
+"Because you couldn't rely on implied context anymore." Miss G's insight warmed his thoughts. "The constraints improved the quality."
 
 "Like TDD. The constraint of writing tests first makes you design better APIs."
 
@@ -268,7 +268,7 @@ He kept scanning. File after file. The pattern held. Generic code was MORE maint
 
 "I can publish this," he said. "Not just show you. Actually publish it. GitHub. Portfolio. Documentation."
 
-"You built something shareable," Mrs. G confirmed.
+"You built something shareable," Miss G confirmed encouragingly.
 
 ---
 
@@ -287,7 +287,7 @@ He'd mapped it to: "secure_password"
 
 But the real issue was that the password had been sitting there, in version control, in a supposedly "secure" internal repository, for SIX YEARS.
 
-"Did you find something?" Mrs. G asked. He'd gone very quiet.
+"Did you find something?" Miss G asked. His silence had been noticeable.
 
 "I found a password from 2019 that should never have been committed."
 
@@ -305,7 +305,7 @@ He searched: grep -r "TODO" src/
 
 Forty-seven TODO comments. Most ancient. Most forgotten.
 
-"Your sanitization just became a code audit tool," Mrs. G observed.
+"Your sanitization just became a code audit tool," Miss G observed wisely.
 
 "My amnesia solution found evidence of past amnesia."
 
@@ -315,13 +315,13 @@ Forty-seven TODO comments. Most ancient. Most forgotten.
 
 THE DEADLINE
 
-He checked the time. 11 PM. Seven hours until Christmas decorations deadline. Mrs. G's flight landed in six hours.
+He checked the time. 11 PM. Seven hours until Christmas decorations deadline. His completion target was six hours away.
 
 Still needed: System Maintenance orchestrator. Tier 3 knowledge library. Final integration.
 
 But now he could share his work. Show the code. Publish it. Use it as portfolio material.
 
-"Worth the six hours?" Mrs. G asked.
+"Worth the six hours?" Miss G asked supportively.
 
 "Worth more than that. The code is BETTER now."
 
