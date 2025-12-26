@@ -150,7 +150,7 @@
 - **Git Commits:** 7 pushed (5 packages: ee114e01e, ef8abb456, 391f0f2b7, 6fe230d61, 87b7a49a3 + status: 28b01a731 + report: a9388719f)
 - **Documentation:** [Phase 11 Completion Report](../../reports/phase-11-completion-report.md) (550+ lines: architecture, tests, migration guide, impact analysis)
 
-### ⏳ Pending Phases (12-13, 15)
+### ⏳ Pending Phases (12-13, 15-16)
 
 | Phase | Name | Progress | Status | Dependencies |
 |-------|------|----------|--------|--------------|
@@ -158,6 +158,7 @@
 | 13A | Post-GA Refinement | 30% | ⏳ IN PROGRESS | Phase 14 complete ✅ |
 | 13B | Sharpen the Saw (STS) | 0% | ⏳ POST-GA | Phase 13A complete |
 | 15 | VS Code Extension | 0% | ⏳ POST-GA | Phases 14, 7B, 8, 9 complete ✅ |
+| 16 | CORTEX 4.0 Git Pages Story | 0% | 📋 PLANNING | Phases 9, 14 complete ✅ |
 
 **Remaining Work Breakdown:**
 - **Phase 12:** Native IDE extensions for VSCode/Visual Studio (2 weeks, optional, Phase 11 complete ✅)
@@ -168,6 +169,11 @@
   - **Scope:** Code Sanitization, Planning 2.0, TDD v4.0, Maintenance, Refinement, Review, ADO, Discovery
   - **Deliverables:** STS app, 9 validation reports, capability certification matrix, transformation dashboard
 - **Phase 15:** VS Code Extension development (8-10 weeks, post-GA enhancement)
+- **Phase 16:** CORTEX 4.0 Git Pages Story (1 week, 40-50 hours)
+  - **Plan:** [Phase 16 Git Pages Story](phases/phase-16-git-pages-story.md)
+  - **Purpose:** Educational narrative showcasing CORTEX 4.0 evolution through tech comedy
+  - **Scope:** 12 chapters (Prologue + 11 chapters), glassmorphism GitHub Pages site
+  - **Deliverables:** Complete story in `docs/story/`, navigation system, landing page
 
 **🎉 CORTEX 4.0 GA READY:** All critical phases (1-11, 14) complete with 97% overall progress!
 
