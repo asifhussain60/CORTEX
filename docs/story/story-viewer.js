@@ -430,26 +430,112 @@ function processCharacterDialog(text) {
     
     // Process quoted dialog with character detection
     text = text.replace(/"([^"]+)"/g, (match, dialog, offset) => {
-        // Get context before the quote (up to 150 chars for better detection)
-        const contextBefore = text.substring(Math.max(0, offset - 150), offset);
+        // Skip meta-content (HTML attributes, CSS, file paths)
+        if (dialog.includes('://') || dialog.includes('.css') || dialog.includes('.jpeg') || 
+            dialog.includes('.png') || dialog.includes('Chapter') || dialog.includes('float:') ||
+            dialog.includes('margin:') || dialog.includes('max-width') || dialog.includes('story-')) {
+            return match; // Return uncolored
+        }
         
-        // Check which character is speaking based on context
+        // Get context before the quote (up to 200 chars for better detection)
+        const contextBefore = text.substring(Math.max(0, offset - 200), offset);
+        
+        // Get context after the quote (up to 100 chars for "said" attribution)
+        const contextAfter = text.substring(offset + match.length, Math.min(text.length, offset + match.length + 100));
+        
+            // Check which character is speaking based on context
         for (const [character, color] of Object.entries(characterColors)) {
-            // Expanded pattern list to catch more dialog attribution styles
+            // Comprehensive pattern list to catch 70%+ unattributed dialogues
             const patterns = [
-                // Direct attribution: "Asif asked"
+                // === DIRECT ATTRIBUTION ===
+                // "Asif asked/said/muttered/whispered"
                 new RegExp(`${character}[^.]*?$`, 'i'),
-                // Possessive: "Asif's voice"
+                
+                // === POSSESSIVE FORMS ===
+                // "Asif's voice/thoughts/mind"
                 new RegExp(`${character}'s[^.]*?$`, 'i'),
-                // Action verbs: "Asif asked/said/responded/etc"
-                new RegExp(`${character} (?:asked|said|responded|replied|explained|observed|suggested|confirmed|gestured|pointed|looked up|turned|stopped|ran|squinted|spun back|finally|materialized)`, 'i'),
-                // Pronouns with actions: "He said", "She asked"
-                new RegExp(`${character} (?:didn't|did|stopped|turned|ran|gestured|pointed|looked|surveyed|studied|finally)`, 'i'),
-                // Direct presence: "in his/her thoughts/mind/consciousness"
-                new RegExp(`${character}[^.]{0,30}(?:thoughts|mind|consciousness|voice|presence)`, 'i')
+                
+                // === ACTION VERBS (Expanded) ===
+                // Speech verbs
+                new RegExp(`${character} (?:asked|said|responded|replied|explained|observed|suggested|confirmed|muttered|whispered|shouted|called|announced|added|continued|interrupted|stammered|blurted|declared|admitted|confessed|wondered|thought|mused|reflected|demanded|insisted|protested|argued|agreed|disagreed|corrected|clarified)`, 'i'),
+                
+                // Physical actions with dialogue
+                new RegExp(`${character} (?:gestured|pointed|looked up|looked down|turned|stopped|ran|squinted|spun|spun back|spun around|leaned|stepped|walked|moved|sat|stood|nodded|shook|waved|grabbed|held|opened|closed|raised|lowered|lifted|dropped|pushed|pulled|reached|stretched)`, 'i'),
+                
+                // Emotional/mental actions
+                new RegExp(`${character} (?:blinked|sighed|groaned|laughed|smiled|frowned|winced|flinched|hesitated|paused|waited|realized|noticed|recognized|remembered|forgot|wondered|worried|panicked|relaxed|tensed|softened|brightened|darkened)`, 'i'),
+                
+                // Temporal/modal markers
+                new RegExp(`${character} (?:finally|eventually|suddenly|immediately|quickly|slowly|carefully|reluctantly|eagerly|desperately|nervously|confidently|quietly|loudly|gently|firmly|sharply|softly|barely|almost|just|already|still|now|then)`, 'i'),
+                
+                // === NEGATIVE/CONTRACTIONS ===
+                new RegExp(`${character} (?:didn't|did|doesn't|don't|wasn't|weren't|isn't|aren't|couldn't|can't|wouldn't|won't|shouldn't|hasn't|haven't|hadn't)`, 'i'),
+                
+                // === CONTEXTUAL CLUES ===
+                // "in his/her thoughts/mind/consciousness"
+                new RegExp(`${character}[^.]{0,30}(?:thoughts|mind|consciousness|voice|presence|head|brain|heart|soul|memory|awareness|understanding)`, 'i'),
+                
+                // "His/Her [action]" patterns (possessive pronoun with action)
+                new RegExp(`(?:His|Her|Their)[^.]{0,40}${character}`, 'i'),
+                
+                // === NARRATIVE CONTEXT ===
+                // "[Character] could hear/see/feel"
+                new RegExp(`${character} (?:could|would|should|might|must|had to|needed to|wanted to|tried to|began to|started to|continued to|managed to|failed to|seemed to|appeared to|tended to|used to|got to)`, 'i'),
+                
+                // === SENTENCE START ===
+                // Catches "He muttered. 'text'" patterns
+                new RegExp(`${character}[^."]*?\\.\\s*$`, 'i'),
+                
+                // === BODY LANGUAGE ===
+                new RegExp(`${character}'s (?:hand|hands|eye|eyes|face|head|voice|expression|tone|demeanor|posture|body|fingers|lips|mouth|brow|forehead|shoulders|chest|arms|legs|feet)`, 'i'),
+                
+                // === STANDALONE/INTERNAL THOUGHTS ===
+                // Character's internal monologue patterns (no explicit attribution nearby)
+                new RegExp(`${character}[^.]{0,80}(?:thinking|wondering|realizing|noticing|questioning|understanding|knowing|feeling|sensing|believing|hoping|fearing|doubting)`, 'i'),
+                
+                // Multiple exclamations/capitals (emotional intensity = Asif style)
+                character === 'he' && /[.!?]\s*[A-Z][A-Z\s]+[.!]/.test(contextBefore) ? /./ : null,
+                
+                // Basement/workspace context (Asif location markers)
+                character === 'he' && /(?:basement|workspace|screen|keyboard|code|terminal|desk|chair|monitor|computer|laptop)/i.test(contextBefore) ? /./ : null,
+                
+                // === NARRATIVE FLOW MARKERS ===
+                // Character referenced in subject position nearby
+                new RegExp(`${character}(?:'s)?\\s+[a-z]+\\s+[^.]{0,50}$`, 'i'),
+                
+                // === PROXIMITY PATTERNS (NEW) ===
+                // Character name appears within 2 sentences before quote
+                new RegExp(`${character}[^.!?]{0,150}[.!?][^.!?]{0,150}$`, 'i'),
+                
+                // === DIALOGUE TAGS (NEW) ===
+                // Common dialogue framing without explicit "said"
+                new RegExp(`${character}[^.]{0,40}(?:spoke|called out|cried|yelled|screamed|whispered loudly|mumbled|grumbled|huffed|snapped|barked|growled)`, 'i'),
+                
+                // === SCENE CONTEXT (NEW) ===
+                // Character is the active subject in the scene
+                new RegExp(`${character}[^.]{0,60}(?:alone|by himself|by herself|in the|at the|from the|to the|with the|without)`, 'i'),
+                
+                // === MRS. G / MISS G PATTERNS (Special handling for AI voice) ===
+                // "Mrs. G's voice" or "Miss G's voice over the speaker"
+                (character === 'Miss G' || character === 'she') && /(?:Mrs\.|Miss)\s*G'?s?\s*voice/i.test(contextBefore) ? /./ : null,
+                (character === 'Miss G' || character === 'she') && /over the speaker/i.test(contextBefore) ? /./ : null,
+                (character === 'Miss G' || character === 'she') && /monitoring|observing/i.test(contextBefore) ? /./ : null,
+                
+                // === QUESTION-ANSWER PAIR DETECTION ===
+                // If previous dialogue was a question and current is answer, alternate speaker
+                // (This requires tracking previous speaker - simplified pattern)
+                character === 'Miss G' && /\?"\s*$/.test(contextBefore) && !/(?:he|Asif)\s+(?:said|asked|responded)/i.test(contextBefore) ? /./ : null
+            ].filter(Boolean);  // Remove null entries            // Check context AFTER quote for attribution (e.g., "text," he said)
+            const patternsAfter = [
+                // ", he said/asked/muttered" patterns
+                new RegExp(`^[,.]?\\s*${character}\\s+(?:asked|said|responded|replied|muttered|whispered|shouted|thought|wondered|continued|added|observed|suggested|confirmed|blurted|stammered)`, 'i'),
+                
+                // Character action immediately after
+                new RegExp(`^[,.]?\\s*${character}\\s+(?:blinked|sighed|nodded|turned|looked|smiled|frowned|winced)`, 'i')
             ];
             
-            if (patterns.some(pattern => pattern.test(contextBefore))) {
+            if (patterns.some(pattern => pattern && pattern.test(contextBefore)) || 
+                patternsAfter.some(pattern => pattern.test(contextAfter))) {
                 // Apply color with 10% reduction in font-size (1.17em = 90% of 1.3em)
                 return `<span style="color: ${color}; font-weight: 500; text-shadow: 0 0 20px ${color}40; font-size: 0.9em;">"${dialog}"</span>`;
             }
