@@ -10,6 +10,7 @@ Usage:
 """
 import argparse
 import json
+import logging
 import sys
 import time
 from pathlib import Path
@@ -31,7 +32,8 @@ class STSValidator:
         'brain_persistence': 'Brain Persistence Under Failure',
         'agent_collaboration': 'Agent Collaboration',
         'performance': 'Performance Baseline',
-        'regression': 'Regression Detection'
+        'regression': 'Regression Detection',
+        'vision_api': 'Vision API / Screenshot Analysis'
     }
     
     def __init__(self, app_path: str):
@@ -39,6 +41,7 @@ class STSValidator:
         self.results = {}
         self.start_time = None
         self.end_time = None
+        self.logger = logging.getLogger(__name__)
         
         if not self.app_path.exists():
             raise ValueError(f"STS app path not found: {app_path}")
@@ -59,7 +62,8 @@ class STSValidator:
             'brain_persistence': self._validate_brain_persistence,
             'agent_collaboration': self._validate_agent_collaboration,
             'performance': self._validate_performance,
-            'regression': self._validate_regression
+            'regression': self._validate_regression,
+            'vision_api': self._validate_vision_api
         }
         
         validator = validators.get(capability)
@@ -260,6 +264,69 @@ class STSValidator:
             },
             'issues': []
         }
+    
+    def _validate_vision_api(self) -> Dict:
+        """Validate Vision API / Screenshot Analysis capability"""
+        print("  🖼️  Loading mockup directory...")
+        print("  🎨 Analyzing UI mockups...")
+        
+        # Check for mockup directory
+        mockup_dir = self.app_path / "mockups"
+        if not mockup_dir.exists():
+            return {
+                'status': 'FAIL',
+                'metrics': {},
+                'issues': ['Mockup directory not found']
+            }
+        
+        # Count mockup files
+        mockups = list(mockup_dir.glob("*.png")) + list(mockup_dir.glob("*.jpg"))
+        if not mockups:
+            return {
+                'status': 'FAIL',
+                'metrics': {},
+                'issues': ['No mockup files found']
+            }
+        
+        print(f"  🎨 Found {len(mockups)} mockup(s)")
+        
+        # Simulate Vision API analysis
+        try:
+            # Import Vision API orchestrator
+            import sys
+            sys.path.insert(0, str(CORTEX_ROOT / 'src'))
+            from operations.modules.orchestration.vision_api_validation_orchestrator import (
+                VisionAPIValidationOrchestrator
+            )
+            
+            # Execute validation
+            orchestrator = VisionAPIValidationOrchestrator()
+            result = orchestrator.execute(mockup_dir=str(mockup_dir))
+            
+            print(f"  ✅ Analyzed {result.metrics.mockups_analyzed} mockup(s)")
+            print(f"  🎨 Extracted {result.metrics.colors_extracted} color(s)")
+            print(f"  📦 Detected {result.metrics.elements_detected} UI element(s)")
+            
+            return {
+                'status': 'PASS' if result.success else 'FAIL',
+                'metrics': {
+                    'mockups_analyzed': result.metrics.mockups_analyzed,
+                    'colors_extracted': result.metrics.colors_extracted,
+                    'elements_detected': result.metrics.elements_detected,
+                    'layouts_identified': result.metrics.layouts_identified,
+                    'user_stories_generated': result.metrics.user_stories_generated,
+                    'processing_time_seconds': round(result.execution_time, 2)
+                },
+                'issues': result.validation_errors
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Vision API validation failed: {e}")
+            return {
+                'status': 'FAIL',
+                'metrics': {},
+                'issues': [f'Orchestrator execution failed: {str(e)}']
+            }
     
     def save_results(self, results: Dict, output_path: Optional[Path] = None):
         """Save validation results to JSON"""

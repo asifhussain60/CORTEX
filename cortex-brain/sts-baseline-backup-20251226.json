@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-12-26T09:59:13.161708",
-  "app_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-sample-apps/sts-validation-app",
+  "timestamp": "2025-12-25T17:56:02.626576",
+  "app_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-sample-apps/sts-template",
   "overall": "PASS",
   "capabilities": [
     {
@@ -81,27 +81,14 @@
       },
       "issues": [],
       "capability": "regression"
-    },
-    {
-      "status": "PASS",
-      "metrics": {
-        "mockups_analyzed": 4,
-        "colors_extracted": 20,
-        "elements_detected": 68,
-        "layouts_identified": 4,
-        "user_stories_generated": 16,
-        "processing_time_seconds": 0.0
-      },
-      "issues": [],
-      "capability": "vision_api"
     }
   ],
   "summary": {
-    "total": 9,
-    "passed": 9,
+    "total": 8,
+    "passed": 8,
     "failed": 0,
     "confidence": 100.0,
-    "duration": 0.0379641056060791,
+    "duration": 8.606910705566406e-05,
     "overall_status": "PASS"
   }
 }
