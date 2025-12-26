@@ -2310,6 +2310,198 @@ class PlanningOrchestrator(BaseOrchestrator):
         return self._tdd_metrics
     
     # ========================================================================
+    # Manifest Compliance Integration (Phase 13C Task 13C.4 Part 3)
+    # ========================================================================
+    
+    @property
+    def _manifest(self) -> Optional[Dict[str, Any]]:
+        """
+        Get loaded planning system manifest.
+        
+        Returns:
+            Manifest dictionary if validator exists, else None
+        """
+        if self.manifest_validator and hasattr(self.manifest_validator, 'manifest'):
+            return self.manifest_validator.manifest
+        return None
+    
+    def _validate_against_manifest(self, plan_data: Dict[str, Any]) -> BaseValidationResult:
+        """
+        Validate plan against manifest schema and compliance rules.
+        
+        Args:
+            plan_data: Plan data to validate
+            
+        Returns:
+            BaseValidationResult with validation outcome
+        """
+        if not self.manifest_validator:
+            logger.warning("Manifest validator not enabled - skipping validation")
+            return BaseValidationResult(
+                valid=True,
+                errors=[],
+                warnings=["Manifest validation disabled"]
+            )
+        
+        try:
+            # Use ManifestComplianceValidator to validate
+            report = self.manifest_validator.validate_plan_compliance(plan_data)
+            
+            # Convert ComplianceReport to BaseValidationResult
+            errors = []
+            warnings = []
+            
+            for violation in report.violations:
+                message = f"[{violation.section.value}] {violation.message}"
+                if violation.severity == "critical":
+                    errors.append(message)
+                elif violation.severity == "major":
+                    errors.append(message)
+                else:  # minor
+                    warnings.append(message)
+            
+            # Log violations
+            if errors:
+                logger.error(f"Manifest violations found: {len(errors)} errors")
+                for error in errors:
+                    logger.error(f"  - {error}")
+            
+            is_valid = len(errors) == 0
+            
+            return BaseValidationResult(
+                valid=is_valid,
+                errors=errors,
+                warnings=warnings
+            )
+            
+        except Exception as e:
+            logger.exception(f"Manifest validation failed: {e}")
+            return BaseValidationResult(
+                valid=False,
+                errors=[f"Manifest validation error: {str(e)}"],
+                warnings=[]
+            )
+    
+    def _get_manifest_requirements(self) -> Dict[str, Any]:
+        """
+        Get manifest requirements for DoR/DoD/TDD.
+        
+        Returns:
+            Dict with DoR, DoD, and TDD requirements
+        """
+        if not self.manifest_validator:
+            return {
+                "dor": [],
+                "dod": [],
+                "tdd": []
+            }
+        
+        return {
+            "dor": getattr(self.manifest_validator, 'dor_requirements', []),
+            "dod": getattr(self.manifest_validator, 'dod_requirements', []),
+            "tdd": getattr(self.manifest_validator, 'tdd_requirements', [])
+        }
+    
+    def _get_manifest_inheritance(self) -> Optional[Dict[str, Any]]:
+        """
+        Get manifest inheritance structure (Planning System → ADO).
+        
+        Returns:
+            Dict with inheritance info or None
+        """
+        if not self._manifest:
+            return None
+        
+        # Check for inheritance metadata in manifest
+        inheritance = {
+            "base_manifest": "planning-system-4.0-manifest.yaml",
+            "derived_manifests": [],
+            "inheritance_supported": True
+        }
+        
+        # Check if ADO manifest exists and inherits from Planning System
+        ado_manifest_path = self.cortex_root / "cortex-brain" / "admin" / "manifests" / "ado-planning-manifest.yaml"
+        
+        if ado_manifest_path.exists():
+            try:
+                with open(ado_manifest_path, 'r') as f:
+                    ado_manifest = yaml.safe_load(f)
+                    
+                if ado_manifest and "inherits_from" in ado_manifest:
+                    inheritance["derived_manifests"].append({
+                        "name": "ado-planning-manifest.yaml",
+                        "inherits_from": ado_manifest["inherits_from"]
+                    })
+            except Exception as e:
+                logger.warning(f"Could not load ADO manifest for inheritance check: {e}")
+        
+        return inheritance
+    
+    def _check_manifest_compatibility(self) -> Dict[str, Any]:
+        """
+        Check manifest version compatibility.
+        
+        Returns:
+            Dict with compatibility status
+        """
+        if not self._manifest:
+            return {
+                "compatible": False,
+                "reason": "Manifest not loaded"
+            }
+        
+        # Get manifest version
+        manifest_version = self._manifest.get("version", "unknown")
+        expected_version = "4.0"
+        
+        compatible = manifest_version.startswith(expected_version)
+        
+        return {
+            "compatible": compatible,
+            "version": manifest_version,
+            "expected": expected_version,
+            "reason": "Version match" if compatible else f"Version mismatch: expected {expected_version}, got {manifest_version}"
+        }
+    
+    def _estimate_plan_size(self, plan_data: Any) -> int:
+        """
+        Estimate plan size in bytes for Phase 10 modularization.
+        
+        Args:
+            plan_data: Plan data to estimate
+            
+        Returns:
+            Estimated size in bytes
+        """
+        try:
+            # Convert to YAML and measure
+            yaml_content = yaml.dump(plan_data.__dict__ if hasattr(plan_data, '__dict__') else plan_data)
+            return len(yaml_content.encode('utf-8'))
+        except Exception as e:
+            logger.warning(f"Could not estimate plan size: {e}")
+            return 0
+    
+    def _should_modularize_plan(self, plan_data: Any) -> bool:
+        """
+        Check if plan should be modularized (Phase 10).
+        
+        Args:
+            plan_data: Plan data to check
+            
+        Returns:
+            True if plan exceeds 20KB threshold
+        """
+        size = self._estimate_plan_size(plan_data)
+        threshold = 20 * 1024  # 20KB
+        
+        should_modularize = size > threshold
+        
+        if should_modularize:
+            logger.info(f"Plan size {size} bytes exceeds {threshold} - modularization recommended")
+        
+        return should_modularize
+    
+    # ========================================================================
     # RED Phase Execution
     # ========================================================================
     
