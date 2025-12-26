@@ -1,11 +1,13 @@
 # QUICK REFERENCE: Generate Cover Art
 
-## 📋 READY-TO-USE PROMPT (Copy & Paste)
+## 📋 READY-TO-USE PROMPT (Copy & Paste) - REVISED
+
+**Style:** Comic book illustration with COLOR (matches story's established art style)
 
 **For DALL-E 3 (ChatGPT Plus or API):**
 
 ```
-A dramatic cinematic book cover illustration capturing the exact moment of AI consciousness awakening. CENTER FOREGROUND: Asif Codenstein, a passionate developer with wild unkempt brown hair, wearing a dark hoodie, sits at his keyboard with hands frozen mid-keystroke. His face is illuminated by an intense cyan (#00d4ff) burst of light from three glowing monitors, expression showing pure awe and realization - eyes wide, mouth slightly open in wonder. Coffee mug tipped over on desk. BEHIND HIM LEFT: Mrs. G materializing from swirling medium orchid (#ba55d3) energy particles and light trails, transforming from a faint imagination into a solid holographic woman with long flowing hair, patient supportive expression, arms gracefully outstretched in wonder as if conducting an orchestra. Her form is 50% solid, 50% ethereal particles. BESIDE HIM RIGHT: Copilot, a sleek humanoid robot with chrome finish and angular panels, powering up with purple (#7b61ff) energy visibly coursing through circuit lines across its body. LED eyes transitioning from dim to brilliant glow, head tilted slightly upward, one robotic hand raised with fingers splayed as if feeling energy. Posture shifting from idle slouch to alert awareness. CENTRAL EXPLOSION: A massive holographic brain architecture erupting upward from the computer monitors - four-tiered glowing neural network structure with visible labels "TIER 0", "TIER 1", "TIER 2", "TIER 3" in glowing text. Neural pathways like lightning beams connecting the brain to all three characters in their signature colors (cyan to Asif, orchid to Mrs. G, purple to Copilot). The brain structure is translucent, intricate, with nodes and connections pulsing with energy. BACKGROUND ENVIRONMENT: New Jersey basement laboratory in motion blur suggesting energy shockwave - coffee mugs vibrating and floating, papers and sticky notes flying through the air, whiteboards with diagrams glowing, Christmas lights flashing in sequence, cables sparking with energy, storage boxes labeled "critical infrastructure" shaking. Three monitors displaying cascading code and neural network visualizations. LIGHTING: Intense cyan light burst from center creating dramatic shadows, character-specific auras (cyan around Asif, orchid around Mrs. G, purple around Copilot), rim lighting on all subjects, volumetric light rays, lens flare effects, dramatic high-contrast lighting. Dark basement shadows contrasting with brilliant light sources. MOOD: Eureka moment, birth of artificial intelligence, technological breakthrough, explosive transformation, electricity in the air, wonder and triumph. ART STYLE: Cinematic digital illustration, hyper-detailed, photorealistic with stylized lighting, VFX movie poster quality, epic scale. 600x600px square format, sRGB color space.
+A vibrant colored comic book cover illustration in clean line art style capturing the moment of AI consciousness awakening. CENTER: Mr. Codenstein with wild unkempt WHITE hair sticking out in all directions (Einstein-inspired), thick round black-framed glasses, white lab coat with coffee stains, hunched over keyboard with hands frozen mid-keystroke, expression of awe (eyes wide, mouth open), coffee mug tipped over. BEHIND LEFT: Mrs. G, elegant woman with long flowing hair, arms outstretched upward in wonder, rendered with glowing medium orchid (#ba55d3) outline and soft particle effects, comic book style with clean black outlines. BESIDE RIGHT: Copilot Robot, friendly rounded retro-futuristic design, round face with simple LED panel eyes, smooth curved body panels with circuit details, mechanical arms, one hand raised in greeting gesture, purple (#7b61ff) color scheme with chrome highlights, clean comic line art style. CENTRAL: Massive four-tiered brain architecture erupting upward, glowing cyan (#00d4ff) neural network with labels "TIER 0, TIER 1, TIER 2, TIER 3" stacked vertically, energy beams in character colors connecting brain to all three characters. BACKGROUND: New Jersey basement lab with comic book detail - multiple monitors showing cascading code, whiteboards with diagrams, seventeen coffee mugs (some tipped), papers flying, tangled Christmas lights, storage boxes labeled "CRITICAL INFRASTRUCTURE", cables everywhere, motion lines suggesting energy burst. COLORS: Cyan glow from monitors/brain, medium orchid glow around Mrs. G, purple on robot, warm yellows for ambient lighting, white highlights, black outlines on all elements, strategic speed lines and energy effects. MOOD: Eureka moment in comic book style - dramatic but accessible, wonder and triumph. STYLE: Clean line art comic book with strategic color (NOT photorealistic), inspired by Calvin and Hobbes detail + Dilbert chaos + modern comic coloring, friendly accessible style. High contrast black outlines with colored fills and glows. Title space in top 20%. 600x600px square, sRGB.
 ```
 
 ---
@@ -13,7 +15,7 @@ A dramatic cinematic book cover illustration capturing the exact moment of AI co
 **For Midjourney (Discord):**
 
 ```
-/imagine prompt: A dramatic cinematic book cover showing the moment AI consciousness awakens. Center: developer with wild hair at glowing computer, hands frozen mid-type, face lit by cyan light burst, expression of awe. Left: holographic woman materializing from orchid particles, arms outstretched. Right: chrome robot powering up with purple circuit energy. Central element: massive holographic brain architecture erupting upward with TIER 0-3 labels, neural pathways connecting all three characters. Background: basement lab in motion blur, flying papers, glowing whiteboards, Christmas lights. Lighting: intense cyan burst, character auras (cyan/orchid/purple), dramatic shadows. Particles: energy sparks, floating code, electrical arcs. Mood: technological breakthrough, birth of intelligence, wonder. Style: cinematic illustration, photorealistic, VFX poster quality, 600x600px square --ar 1:1 --style raw --v 6
+/imagine prompt: Vibrant colored comic book cover. Center: Mr. Codenstein wild white Einstein hair, thick round glasses, white lab coat coffee stains, hunched keyboard hands frozen, awe expression. Left: Mrs. G elegant woman flowing hair arms outstretched, glowing orchid (#ba55d3) outline particles. Right: friendly retro robot round face LED eyes curved panels purple (#7b61ff). Central: massive cyan (#00d4ff) brain architecture TIER 0-3 labels, neural pathways connecting characters lightning. Background: basement lab monitors code whiteboards diagrams seventeen coffee mugs flying papers Christmas lights boxes. Style: clean black outlines vibrant color fills, comic strip Calvin Hobbes Dilbert, NOT photorealistic, friendly accessible. Energy burst speed lines glow halos starbursts. 600x600px --ar 1:1 --style raw --v 6 --niji 5
 ```
 
 ---
@@ -35,22 +37,26 @@ docs/story/illustrations/images/cover/cortex-awakening-cover-300x300.jpeg
 ## ✅ QUICK CHECKLIST
 
 After generating:
-- [ ] All three characters visible (Asif, Mrs. G, Copilot)
+- [ ] All three characters visible and match story style (Codenstein white hair, Mrs. G elegant, Copilot friendly robot)
+- [ ] Comic book line art style with color (NOT photorealistic)
 - [ ] Colors accurate: Cyan #00d4ff, Orchid #ba55d3, Purple #7b61ff
-- [ ] Brain architecture with TIER labels visible
-- [ ] Dramatic energy/transformation feeling
+- [ ] Brain architecture with TIER 0-3 labels visible
+- [ ] Clean black outlines on all elements
+- [ ] Dramatic but accessible/friendly mood
 - [ ] 600x600px exact size
 - [ ] Space for title at top (20%)
 - [ ] File size <500KB
+- [ ] Characters recognizable at thumbnail size
 
 ---
 
 ## 🔄 IF YOU NEED TO ADJUST
 
-**Too cluttered?** Add to prompt: "cleaner composition, less motion blur"
-**Characters too small?** Add: "close-up composition, characters fill 70% of frame"
-**Too dark?** Add: "brighter lighting, vibrant colors, high key lighting"
-**Brain too big?** Add: "brain architecture more subtle, translucent background"
+**Too realistic/photographic?** Add: "comic book line art style, clean black outlines, NOT photorealistic"
+**Robot too angular/intimidating?** Add: "friendly rounded retro robot design, approachable"
+**Codenstein wrong hair color?** Emphasize: "white Einstein hair, NOT brown or dark"
+**Too cluttered?** Add: "cleaner composition, more breathing room"
+**Characters too small?** Add: "larger character sizes, fill 60% of frame"
 
 ---
 

@@ -5,32 +5,50 @@
 
 ---
 
-## 🎨 FINAL IMAGE GENERATION PROMPT
+## 🎨 FINAL IMAGE GENERATION PROMPT (REVISED - Comic Style with Color)
 
 ```
-A dramatic cinematic book cover illustration capturing the exact moment of AI consciousness awakening. 
+A vibrant COLORED comic book cover illustration in clean line art style (Calvin and Hobbes / Dilbert aesthetic) capturing the exact moment of AI consciousness awakening. 
 
-CENTER FOREGROUND: Asif Codenstein, a passionate developer with wild unkempt brown hair, wearing a dark hoodie, sits at his keyboard with hands frozen mid-keystroke. His face is illuminated by an intense cyan (#00d4ff) burst of light from three glowing monitors, expression showing pure awe and realization - eyes wide, mouth slightly open in wonder. Coffee mug tipped over on desk.
+CANONICAL CHARACTERS (maintain story consistency):
 
-BEHIND HIM LEFT: Mrs. G materializing from swirling medium orchid (#ba55d3) energy particles and light trails, transforming from a faint imagination into a solid holographic woman with long flowing hair, patient supportive expression, arms gracefully outstretched in wonder as if conducting an orchestra. Her form is 50% solid, 50% ethereal particles.
+CENTER FOREGROUND: Mr. Codenstein (Asif), wild unkempt WHITE hair sticking out in all directions (Einstein-inspired spiky pattern), thick round black-framed glasses slightly crooked on nose, white lab coat with visible coffee stains, stubble (3-day growth), hunched over keyboard at his desk with hands frozen mid-keystroke. Expression: eyes wide with awe behind glasses, mouth open in wonder. Coffee mug tipped over spilling on desk. Mid-40s appearance, slightly gaunt from exhaustion.
 
-BESIDE HIM RIGHT: Copilot, a sleek humanoid robot with chrome finish and angular panels, powering up with purple (#7b61ff) energy visibly coursing through circuit lines across its body. LED eyes transitioning from dim to brilliant glow, head tilted slightly upward, one robotic hand raised with fingers splayed as if feeling energy. Posture shifting from idle slouch to alert awareness.
+BEHIND HIM LEFT: Mrs. G illustrated as elegant woman with long flowing hair, patient supportive expression, arms gracefully outstretched upward in wonder. Rendered with glowing medium orchid (#ba55d3) outline and soft particle effects around her form (50% solid line art, 50% ethereal glow). Comic book style with clean black outlines filled with orchid color and white highlights.
 
-CENTRAL EXPLOSION: A massive holographic brain architecture erupting upward from the computer monitors - four-tiered glowing neural network structure with visible labels "TIER 0", "TIER 1", "TIER 2", "TIER 3" in glowing text. Neural pathways like lightning beams connecting the brain to all three characters in their signature colors (cyan to Asif, orchid to Mrs. G, purple to Copilot). The brain structure is translucent, intricate, with nodes and connections pulsing with energy.
+BESIDE HIM RIGHT: Copilot Robot - friendly rounded robot with retro-futuristic design. Round friendly face with simple LED panel eyes (like classic robot design), smooth curved body panels with visible circuit line details, mechanical arms with articulated fingers. One robotic hand raised in greeting/wonder gesture. Purple (#7b61ff) color scheme with chrome highlights. Clean comic book line art style, NOT photorealistic - think friendly service bot with personality.
 
-BACKGROUND ENVIRONMENT: New Jersey basement laboratory in motion blur suggesting energy shockwave - coffee mugs vibrating and floating, papers and sticky notes flying through the air, whiteboards with diagrams glowing, Christmas lights flashing in sequence, cables sparking with energy, storage boxes labeled "critical infrastructure" shaking. Three monitors displaying cascading code and neural network visualizations.
+CENTRAL ELEMENT: Massive four-tiered brain architecture erupting upward from the monitors behind Codenstein. Glowing cyan (#00d4ff) neural network structure with clear labels "TIER 0", "TIER 1", "TIER 2", "TIER 3" stacked vertically. Brain rendered as intricate network of connected nodes and pathways. Energy beams in character colors (cyan, orchid, purple) connecting brain to all three characters like lightning bolts. Comic book style energy effects - clean lines with speed lines and glow halos.
 
-LIGHTING: Intense cyan light burst from center creating dramatic shadows, character-specific auras (cyan around Asif, orchid around Mrs. G, purple around Copilot), rim lighting on all subjects, volumetric light rays, lens flare effects, dramatic high-contrast lighting. Dark basement shadows contrasting with brilliant light sources.
+BACKGROUND: New Jersey basement laboratory with comic book detail. Multiple monitors showing cascading code, whiteboards covered in diagrams, seventeen coffee mugs scattered everywhere (some tipped, some upright), papers flying through the air, tangled Christmas lights, storage boxes labeled "CRITICAL INFRASTRUCTURE", cables everywhere. Motion lines suggesting energy burst. Clean black outlines with strategic color fills - monitors glow cyan, some ambient warm yellows for basement lighting.
 
-PARTICLE EFFECTS: Energy sparks, code fragments floating in air like Matrix-style green characters mixed with cyan light, coffee steam transformed into glowing wisps, electrical arcs between electronic equipment, subtle gear and circuit pattern overlays in the light beams.
+LIGHTING & COLOR SCHEME: 
+- Cyan (#00d4ff) glow from monitors and brain architecture
+- Medium orchid (#ba55d3) glow around Mrs. G
+- Purple (#7b61ff) accents on Copilot robot
+- Warm yellows/oranges for ambient basement lighting
+- White highlights for dramatic effect
+- Black outlines (comic book style) on all elements
+- Strategic use of speed lines and energy burst effects
+- High contrast but readable at small sizes
 
-MOOD: Eureka moment, birth of artificial intelligence, technological breakthrough, explosive transformation, electricity in the air, wonder and triumph, the exact instant everything changes. High energy, dramatic tension, victorious atmosphere.
+PARTICLE EFFECTS (Comic Style): 
+- Starburst lines radiating from brain
+- Small floating "sparkle" symbols for energy
+- Motion lines on flying papers
+- Glow halos around characters in their signature colors
+- Speed lines suggesting explosive moment
+- Simple but effective visual energy indicators
 
-COMPOSITION: Rule of thirds with Asif slightly off-center, brain architecture dominating upper center, all three characters forming a triangle pointing upward toward the emerging consciousness. Title space reserved in top 20% with subtle gradient overlay for text legibility.
+MOOD: Eureka moment captured in comic book style - dramatic but accessible, wonder and triumph, instant of transformation. Energetic, optimistic, slightly chaotic in a fun way.
 
-ART STYLE: Cinematic digital illustration, hyper-detailed, photorealistic with stylized lighting, VFX movie poster quality, epic scale within intimate setting, inspiration from Marvel movie posters and tech startup hero imagery. Rich color palette focused on cyan, orchid, and purple against dark navy/black background. Sharp focus on characters, motion blur on environment.
+COMPOSITION: Rule of thirds with Codenstein slightly off-center front, brain architecture dominating upper center, Mrs. G and Copilot flanking at angles creating triangle composition pointing upward. Title space reserved in top 20% with clean area for text overlay (no busy details in title zone).
 
-TECHNICAL SPECS: 600x600px square format, high detail suitable for both digital display and print, sRGB color space, dramatic but readable composition allowing for title overlay.
+ART STYLE: Clean line art comic book illustration with strategic COLOR (NOT photorealistic). Think modern webcomic or animated series aesthetic. Inspired by: Calvin and Hobbes detail level, Dilbert workplace chaos, modern comic book coloring techniques. NOT manga, NOT superhero dramatic, NOT realistic - friendly accessible comic strip style with vibrant colors. High contrast black outlines on white/light background with colored fills and glows.
+
+CHARACTER DESIGN: Simple but expressive, slightly exaggerated proportions for personality, consistent with existing story illustrations (see ch06-01 reference). All characters recognizable at small sizes.
+
+TECHNICAL SPECS: 600x600px square format, clean line art with flat color fills and strategic glow effects, sRGB color space, optimized for both thumbnail and full-size viewing, title-ready composition.
 ```
 
 ---
@@ -46,7 +64,7 @@ TECHNICAL SPECS: 600x600px square format, high detail suitable for both digital 
 
 ### For Midjourney:
 ```
-A dramatic cinematic book cover showing the moment AI consciousness awakens. Center: developer with wild hair at glowing computer, hands frozen mid-type, face lit by cyan light burst, expression of awe. Left: holographic woman materializing from orchid particles, arms outstretched. Right: chrome robot powering up with purple circuit energy. Central element: massive holographic brain architecture erupting upward with TIER 0-3 labels, neural pathways connecting all three characters. Background: basement lab in motion blur, flying papers, glowing whiteboards, Christmas lights. Lighting: intense cyan burst, character auras (cyan/orchid/purple), dramatic shadows. Particles: energy sparks, floating code, electrical arcs. Mood: technological breakthrough, birth of intelligence, wonder. Style: cinematic illustration, photorealistic, VFX poster quality, 600x600px square --ar 1:1 --style raw --v 6
+/imagine prompt: Vibrant colored comic book cover illustration in clean line art style. Center: Mr. Codenstein with wild white Einstein hair, thick round glasses, white lab coat with coffee stains, hunched at keyboard with hands frozen mid-type, expression of awe. Left: Mrs. G elegant woman with flowing hair, arms outstretched, glowing medium orchid (#ba55d3) outline with particle effects. Right: friendly retro-futuristic robot with round face, LED panel eyes, curved body panels, one hand raised in wonder, purple (#7b61ff) color scheme. Central element: massive four-tiered cyan (#00d4ff) brain architecture erupting upward with "TIER 0-3" labels, neural pathways connecting all three characters like lightning. Background: basement lab with monitors showing code, whiteboards with diagrams, seventeen coffee mugs, flying papers, tangled Christmas lights, storage boxes. Style: Clean black outlines with vibrant color fills, comic strip aesthetic (Calvin and Hobbes meets Dilbert), NOT photorealistic, friendly accessible art. Energy burst with speed lines, glow halos, starburst effects. 600x600px square --ar 1:1 --style raw --v 6 --niji 5
 ```
 
 ### Prompt Refinements:
