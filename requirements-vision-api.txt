@@ -1,0 +1,26 @@
+# CORTEX Vision API Dependencies
+# Install with: pip install -r requirements-vision-api.txt
+# Required for: Vision API production implementation (Phase 13D)
+# Auto-installed when first used by Planning System screenshot analysis
+
+# Image Processing
+opencv-python>=4.8.0       # Computer vision library (image processing, contour detection)
+Pillow>=10.0.0             # Image loading, manipulation, preprocessing
+
+# Machine Learning (Color Clustering)
+scikit-learn>=1.3.0        # K-means clustering for color palette extraction
+numpy>=1.24.0              # Numerical operations (array processing)
+
+# Optional: Deep Learning (Enhanced Element Detection)
+# Uncomment if using CNN-based element classification
+# torch>=2.0.0             # Deep learning framework
+# torchvision>=0.15.0      # Pre-trained CNN models
+# transformers>=4.30.0     # LLM-based user story generation
+
+# Notes:
+# - opencv-python: ~50 MB, provides cv2.findContours, template matching
+# - Pillow: ~3 MB, handles image loading/preprocessing
+# - scikit-learn: ~30 MB, K-means clustering for color extraction
+# - numpy: ~20 MB, required by scikit-learn and opencv
+# Total: ~103 MB for core functionality
+# Optional ML: +500 MB if using deep learning enhancements
