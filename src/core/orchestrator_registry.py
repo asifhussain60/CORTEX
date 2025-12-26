@@ -21,7 +21,7 @@ import logging
 import threading
 import inspect
 from pathlib import Path
-from typing import Type, Dict, List, Optional, Any, Callable
+from typing import Type, Dict, List, Optional, Any, Callable, Set
 from functools import wraps
 import importlib.util
 import sys
@@ -95,6 +95,7 @@ class OrchestratorRegistry:
         self._orchestrators: Dict[str, Type] = {}
         self._metadata: Dict[str, Dict[str, Any]] = {}
         self._instances: Dict[str, Any] = {}
+        self._failed_orchestrators: Set[str] = set()  # Track orchestrators that failed to instantiate
         self._instance_lock = threading.Lock()
         
         logger.debug("OrchestratorRegistry initialized")
@@ -232,6 +233,9 @@ class OrchestratorRegistry:
             else:
                 # Use class name (convert CamelCase to snake_case)
                 reg_name = self._to_snake_case(name)
+                # Strip "_orchestrator" suffix if present for cleaner names
+                if reg_name.endswith('_orchestrator'):
+                    reg_name = reg_name[:-13]  # Remove "_orchestrator"
                 version = self._extract_version_from_docstring(obj)
                 extra_metadata = {}
             
@@ -323,22 +327,40 @@ class OrchestratorRegistry:
                 return instance
             except Exception as e:
                 logger.error(f"Failed to instantiate '{name}': {e}")
+                # Mark as failed for is_available() checks
+                self._failed_orchestrators.add(name)
                 return None
     
     def is_available(self, name: str) -> bool:
         """
         Check if orchestrator is registered and can be instantiated.
         
-        Note: This does NOT actually instantiate - just checks if registered.
-        Actual availability (can instantiate) is only verified during get().
-        
         Args:
             name: Orchestrator name
         
         Returns:
-            True if registered, False otherwise
+            True if registered and can instantiate, False otherwise
         """
-        return name in self._orchestrators
+        if name not in self._orchestrators:
+            return False
+        
+        # Check if orchestrator has failed before
+        if name in self._failed_orchestrators:
+            return False
+        
+        # Try a test instantiation to verify availability
+        try:
+            orchestrator_class = self._orchestrators[name]
+            # Attempt minimal instantiation to test availability
+            test_instance = orchestrator_class(config={})
+            # Clean up
+            del test_instance
+            return True
+        except Exception as e:
+            logger.debug(f"Orchestrator '{name}' not available: {e}")
+            # Mark as failed
+            self._failed_orchestrators.add(name)
+            return False
     
     def get_metadata(self, name: str) -> Dict[str, Any]:
         """
@@ -375,6 +397,7 @@ class OrchestratorRegistry:
         self._orchestrators.clear()
         self._metadata.clear()
         self._instances.clear()
+        self._failed_orchestrators.clear()
         logger.debug("Registry cleared")
 
 
