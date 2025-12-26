@@ -26,13 +26,13 @@ He typed: "How do we implement token refresh for the authentication system we di
 
 The response appeared instantly: "I don't have context about previous discussions. Could you provide more details about your authentication system?"
 
-Codenstein's eye twitched. It was the same eye twitch his wife had learned to recognize as "the project is becoming self-aware of its own ridiculousness."
+Codenstein's eye twitched. It was the same eye twitch that signaled his ADHD brain recognizing a pattern of frustration.
 
 "We literally spent two hours on this," he told the screen. "Two. Hours. You suggested PyJWT. You recommended Redis for token storage. You even caught that security flaw in my expiration logic."
 
 "I'd be happy to help with authentication!" Copilot responded cheerfully. "Could you share your current implementation?"
 
-The cursor blinked. The coffee grew colder. Somewhere upstairs in Lichfield (3,500 miles away, five time zones ahead), his wife was probably asleep, dreaming of basements without whiteboards and husbands without obsessive projects.
+The cursor blinked. The coffee grew colder. Somewhere in his consciousness, Miss G was probably observing with patient concern, knowing he'd been at this for hours without rest.
 
 ![Late night coding despair](images/late-night-coding.png)
 *11 PM: The moment you realize you're explaining the same thing for the third time*
@@ -69,7 +69,7 @@ Coffee mug seventeen sat on top of a stack of papers titled "Conversation Contex
 
 *How do you teach memory to something that forgets you're teaching it?*
 
-His phone buzzed. A text from his wife: "Still alive down there?"
+His phone buzzed—a reminder he'd set for himself earlier. Miss G's voice manifested in his thoughts: "Still alive down there?"
 
 He typed back: "Debatable."
 
@@ -99,11 +99,11 @@ The cursor blinked expectantly.
 
 "Okay, Copilot," he said to the screen. "Let's teach you how to remember."
 
-Behind him, unnoticed, his phone buzzed again. His wife had sent a photo: the Christmas decorations in the garage, buried under moving boxes and old furniture, with the caption "They remember what the basement used to be."
+Behind him, unnoticed, his reminder app buzzed again. A photo he'd taken earlier: the Christmas decorations in the garage, buried under moving boxes and old furniture. Miss G's supportive but firm voice echoed in his memory: "They remember what the basement used to be."
 
-He winced. Two months. She'd given him two months.
+He winced. Two months. He'd given himself two months.
 
-He had fifty-seven days to give an AI a brain, before his wife gave him a serious conversation about priorities.
+He had fifty-seven days to give this memory-less robot a brain, before he'd have to admit defeat and return to normal life.
 
 The coffee was definitely cold now. He drank it anyway.
 
@@ -148,7 +148,7 @@ And it needed a FIFO buffer. 70 conversations. Enough context to be useful. Not 
 
 ## The Revelation
 
-His phone buzzed. His wife: "Are you talking to yourself down there?"
+His phone buzzed. A self-reminder: "Are you talking to yourself down there?"
 
 He looked around the empty basement. Had he been talking out loud? Probably. "Working through a problem."
 
@@ -178,7 +178,7 @@ Tomorrow, he'd start building Tier 1. A working memory system that persisted. Th
 
 Tomorrow, he'd teach a goldfish to remember.
 
-Tonight, he'd clean up the mold mugs before his wife staged an intervention.
+Tonight, he'd clean up the mold mugs before they staged their own revolution.
 
 Small steps.
 

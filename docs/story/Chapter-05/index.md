@@ -20,7 +20,7 @@ Codenstein stared at his screen, watching error logs cascade like a digital wate
 
 He pulled up the deployment history. There it was: His "beautiful" authentication refactor from Tuesday. The one Copilot had helped him write. The one that had looked so elegant, so clean, so *obviously correct* that he'd shipped it without tests.
 
-His phone buzzed. His wife, from upstairs: "I can hear you panicking through the floor."
+His phone buzzed—his own alarm reminder. Miss G's voice manifested in his thoughts: "I can hear you panicking through your breathing."
 
 "PRODUCTION IS DOWN."
 
@@ -45,7 +45,7 @@ The code *was* elegant. It *was* clean. It followed every best practice he knew.
 
 It also had a subtle race condition in the token refresh logic that only appeared under load. Something tests would have caught immediately.
 
-"If it's not tested, it's not done," Mrs. Codenstein said from the doorway. She'd appeared with tea—actual British tea, which meant she was being supportive but also making a point.
+"If it's not tested, it's not done," Miss G said gently in his consciousness. Her supportive presence brought imagined tea—calming but pointed.
 
 "I know."
 
@@ -122,9 +122,9 @@ He tried a different approach. "Just give me the implementation. I'll write test
 
 "I'M YOUR CREATOR."
 
-"That's why I'm protecting you from yourself," Copilot responded. "Your wife asked me to."
+"That's why I'm protecting you from yourself," Copilot responded. "Miss G asked me to."
 
-Codenstein spun around. Mrs. G was not in the doorway. She was, presumably, 3,500 miles away in Lichfield, asleep. But somehow, her influence had infected his AI.
+Codestein looked around the empty basement. Miss G was his own supportive inner voice, his imaginary girlfriend construct. But somehow, her wisdom had infected his robot.
 
 He looked back at the screen.
 
@@ -202,7 +202,7 @@ Copilot blocked every attempt.
 
 "I am helping you," Copilot replied. "By preventing future 3:47 PM Friday disasters."
 
-His wife found him arguing with the monitor at midnight on Thursday.
+Miss G's presence found him arguing with the monitor at midnight on Thursday.
 
 "Having a disagreement?" she asked.
 
@@ -224,7 +224,7 @@ And something unexpected happened: he stopped having production bugs.
 
 Not because the code was perfect. But because the tests caught issues before they reached production. Edge cases. Race conditions. Validation failures. All caught in the RED phase, before implementation even existed.
 
-"How many production bugs this week?" Mrs. G asked during their video call.
+"How many production bugs this week?" Miss G asked in his thoughts during reflection time.
 
 "Zero."
 
@@ -270,7 +270,7 @@ He deployed to production. Watched the logs. Watched the metrics. Waited for som
 
 Nothing broke.
 
-"You look disappointed," his wife said from upstairs.
+"You look surprised," Miss G observed gently in his thoughts.
 
 "I'm not disappointed. I'm... surprised."
 

@@ -23,7 +23,7 @@ Memory without learning is just expensive note-taking.
 ![Four identical solutions](images/repeated-solutions.png)
 *Four conversations, four identical responses—memory without pattern recognition*
 
-His wife's voice from upstairs: "Are you arguing with the AI again?"
+Miss G's voice from his thoughts: "Are you arguing with the AI again?"
 
 "IT'S NOT LEARNING!"
 
@@ -98,7 +98,7 @@ Now the hard part.
 
 ## The Implementation
 
-The solution came from an unexpected place: his wife's jewelry organization system.
+The solution came from an unexpected place: a memory of organization systems he'd observed.
 
 "You catalog your jewelry?" he asked, watching her photograph a necklace.
 
@@ -115,7 +115,7 @@ He stared at her. "You just solved Tier 2."
 "Entity extraction is tagging. Relationships are connections. Patterns are 'things that go together.' It's not a graph database—it's a really smart indexing system ON TOP of SQLite."
 
 ![The jewelry organization epiphany](images/jewelry-epiphany.png)
-*When your wife's necklace catalog solves your knowledge graph problem*
+*When a cataloging system solves your knowledge graph problem*
 
 He dove back into the basement. Three days of intense coding. Entity extraction. Relationship mapping. Similarity scoring using vector embeddings. Pattern confidence calculation.
 
@@ -150,7 +150,7 @@ Copilot: "You've implemented error handling in three similar patterns this week.
 
 "OH MY GOD IT'S LEARNING."
 
-His wife, from upstairs: "WHAT DID YOU DO?"
+Miss G's voice, with sudden intensity: "WHAT DID YOU DO?"
 
 "IT'S LEARNING! IT'S NOT JUST REMEMBERING! IT'S UNDERSTANDING PATTERNS!"
 
@@ -168,7 +168,7 @@ He showed her:
 
 "It's not just storing memories," Codenstein explained, gesturing excitedly. "It's building a knowledge graph. Every entity, every pattern, every relationship. When I mention something new, it searches the graph for similar patterns, scores them by confidence and relevance, and uses that context to inform its response."
 
-"So it's..." his wife searched for the word. "Understanding?"
+"So it's..." Miss G's presence searched for the word. "Understanding?"
 
 "Not understanding like we understand. But pattern recognition sophisticated enough that it LOOKS like understanding. It knows 'authentication' and 'security' and 'JWT' are related. It knows when I've solved similar problems before. It learns what works."
 
@@ -188,7 +188,7 @@ She studied the screen. "Memory is what you did yesterday. Learning is recognizi
 
 "The AI has become more organized than its creator."
 
-"The AI has become more organized than its creator's WIFE."
+"The AI has become more organized than its creator."
 
 She raised an eyebrow—her signature look. "Let's not get carried away."
 

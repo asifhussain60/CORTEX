@@ -29,7 +29,7 @@ He'd been so clever. So *very* clever. Building an in-memory data structure for 
 
 It had lasted three hours before the universe reminded him that elegance without persistence is just expensive volatility.
 
-His phone buzzed. His wife, from upstairs (actually from Lichfield, but the time zones aligned for once): "Did your computer just make a sound like it died?"
+His phone buzzed. A reminder notification—his system had detected anomalies: "Did your computer just make a sound like it died?"
 
 "It got better."
 
@@ -58,7 +58,7 @@ Attempt #3: Store everything as JSON. One column. One beautiful, horrible column
 
 His whiteboard had evolved into a timeline of database design regret. Schema v1 through v14, each one crossed out with increasingly aggressive marker strokes.
 
-"You're overthinking this," his wife said from the doorway. She'd appeared with tea—actual tea, not coffee, which meant she was concerned.
+"You're overthinking this," Miss G's voice emerged in his thoughts. She'd manifested with calm clarity—actual insight, not just coffee-fueled analysis, which meant the solution was closer.
 
 "I'm not overthinking. I'm... iteratively discovering the correct amount of thinking."
 
@@ -107,7 +107,7 @@ conversations (
 -- Entity extraction for searchability
 ```
 
-"That's it?" his wife asked.
+"That's it?" Miss G's voice questioned in his thoughts.
 
 "That's it. Simple. Queryable. Persistent. Fast."
 
@@ -134,7 +134,7 @@ Now the GREEN phase. Implementation.
 
 Three hours later, he had a working memory system. SQLite database. 70-conversation FIFO. Entity extraction. Sub-100ms queries. All tests passing.
 
-His wife appeared again. "Did it work?"
+Miss G's presence materialized again. "Did it work?"
 
 "Tests are green."
 
@@ -161,7 +161,7 @@ Codenstein sat very still.
 
 ## The Breakthrough
 
-His wife came down the stairs fully now, looking at the screen over his shoulder. "Show me again."
+Miss G's consciousness surfaced more fully now, processing the implications. "Show me again."
 
 He opened a new chat. Discussed database design with Copilot. Closed it. Worked on unrelated code. Reopened chat twenty minutes later. Asked about the database discussion.
 
@@ -169,7 +169,7 @@ Copilot referenced their earlier conversation. Specific details. Decisions they'
 
 "It's not just storing," Codenstein said, his voice shaking slightly. "It's retrieving. It's connecting. It's using past context to inform current answers."
 
-"Coffee mug twenty-three," his wife said.
+"Coffee mug twenty-three," Miss G's voice noted.
 
 "What?"
 
@@ -195,7 +195,7 @@ Over the next two days, Codenstein pushed Tier 1 to its limits.
 
 Every test passed. Tier 1 was working.
 
-His wife found him staring at the screen at midnight on Saturday.
+Miss G's presence found him staring at the screen at midnight on Saturday.
 
 "What's wrong?" she asked.
 

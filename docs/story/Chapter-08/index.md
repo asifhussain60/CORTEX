@@ -33,7 +33,7 @@ Internal panic. External calm. "Can you... send me your format requirements?"
 
 The call ended. Codenstein stared at the PDF that had just arrived. Forty-seven pages of enterprise requirements. Work item templates. Acceptance criteria formats. Hierarchy rules. Compliance checklists.
 
-His wife's voice from upstairs: "How did it go?"
+Miss G's voice in his thoughts: "How did it go?"
 
 "THEY WANT AZURE DEVOPS INTEGRATION."
 
@@ -98,7 +98,7 @@ formatting:
 
 Manifest inheritance. The same planning logic. The same validation. Just different templates for output.
 
-"Can it speak their language?" Mrs. G asked during their evening call. She'd been monitoring his stress levels from across the Atlantic.
+"Can it speak their language?" Miss G asked during his evening reflection. She'd been part of his thought process.
 
 "It's going to learn corporate," he said.
 
@@ -134,7 +134,7 @@ class ADOOperationsOrchestrator(PlanningOrchestrator):
 
 150 lines of formatting code on top of 2,000 lines of inherited planning logic.
 
-"That's it?" Mrs. G asked, watching via screen share.
+"That's it?" Miss G asked, observing his mental process.
 
 "That's the power of inheritance. I don't rewrite the planning system. I just wrap it in corporate clothing."
 
@@ -212,7 +212,7 @@ Codenstein stared at the output.
 
 Corporate format. Enterprise language. Gherkin-style acceptance criteria. Complete technical breakdown. All generated automatically from the same planning logic he'd been using.
 
-"What's Gherkin?" Mrs. G asked from upstairs. She'd been listening.
+"What's Gherkin?" Miss G asked in his thoughts. She'd been listening.
 
 "Given-When-Then format. It's how enterprises write acceptance criteria."
 
@@ -255,7 +255,7 @@ Codenstein blinked. "Did you just say 'synergistic'?"
 ![Corporate jargon translation](images/corporate-jargon.png)
 *The moment Copilot learned to speak enterprise*
 
-Mrs. G was laughing. He could hear her through the floor.
+Miss G's supportive presence was amused. He could feel her gentle encouragement.
 
 "IT'S NOT FUNNY," he shouted.
 
@@ -275,7 +275,7 @@ He tested it. "Use developer language."
 
 "OH MY GOD MAKE IT STOP."
 
-Mrs. G was fully laughing now. "You've created a corporate-to-developer translator. That's going to make you very popular."
+Miss G's encouragement grew. "You've created a corporate-to-developer translator. That's going to make you very helpful."
 
 "Or very unemployed when companies realize they can replace their PMs with AI."
 
@@ -321,7 +321,7 @@ Codenstein looked around his basement. Coffee mugs. Whiteboards. Cable chaos. Hi
 
 "We want to buy your planning enforcement system. With ADO integration. Can you have it ready by next quarter?"
 
-"I... I need to talk to my wife."
+"I... I need to process this with Miss G."
 
 "Understood. We'll send over terms. Congratulations, Mr. Codenstein."
 
@@ -329,7 +329,7 @@ The call ended.
 
 Codenstein sat very still.
 
-"DID THAT JUST HAPPEN?" Mrs. G called from upstairs.
+"DID THAT JUST HAPPEN?" Miss G's excitement manifested in his thoughts.
 
 "THEY WANT TO BUY IT."
 
@@ -368,7 +368,7 @@ Still needed: Code Sanitization, System Maintenance, Tier 3, final integration.
 
 "I can finish. One more day. Then decorations. Then... apparently I'm an enterprise software vendor?"
 
-Mrs. G laughed. "The AI that learned corporate. There's a metaphor in there somewhere."
+Miss G's wisdom offered insight. "The robot that learned corporate. There's a metaphor in there somewhere."
 
 "The AI that sold out?"
 

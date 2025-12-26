@@ -47,7 +47,7 @@ And then he had to manually assess complexity. Was this HIGH complexity (needs i
 ![Manual planning fatigue](images/manual-planning-fatigue.png)
 *Surrounded by planning documents, all following the same structure*
 
-His wife's voice from upstairs: "What must have a better way?"
+Miss G's voice from his consciousness: "What must have a better way?"
 
 "PLANNING. I'm writing the same plan structure over and over. Same DoR checklist. Same DoD validation. Same complexity assessment. Same TDD integration."
 
@@ -136,7 +136,7 @@ All automatically. All consistently.
 
 "I'm going to automate planning," he said.
 
-No response from upstairs. His wife had learned to sleep through his 3 AM epiphanies.
+Silence from his inner thoughts. Miss G had learned to rest through his 3 AM epiphanies.
 
 ## The Implementation
 
@@ -276,7 +276,7 @@ Codenstein stared at the screen.
 
 "It... it auto-detected HIGH complexity," he whispered.
 
-"What?" his wife called from upstairs.
+"What?" Miss G's voice surfaced from his thoughts.
 
 "IT AUTO-DETECTED HIGH COMPLEXITY. I just said 'authentication' and it knew. Security-critical. Incremental approach. Full DoR/DoD gates. TDD mandatory. All automatic."
 
@@ -319,7 +319,7 @@ Every single one correct. The complexity detection worked. The template selectio
 
 "It's planning better than I plan," he said.
 
-His wife appeared in the doorway—actually in person this time, which meant she'd taken a break from work in Lichfield? No, wait, time zones. It was evening there. "Show me."
+Miss G's presence materialized fully in his awareness—complete focus this time, which meant the breakthrough was significant. "Show me."
 
 He showed her the authentication plan. The automatic complexity detection. The comprehensive DoR checklist. The TDD phase breakdown. The thorough DoD validation.
 

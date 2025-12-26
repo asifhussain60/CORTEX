@@ -44,11 +44,11 @@ He was learning. Slowly. Painfully. At 2:17 AM.
 
 ---
 
-## Enter the Wife, Stage Left
+## Enter Miss G, Stage Left
 
-The sound of footsteps on the stairs made him spin around. His wife appeared in the doorway, two coffee mugs in hand—one for her, one for him. She'd done this before.
+The sound of footsteps on the stairs made him spin around. Miss G's manifestation appeared in his thoughts, the presence bringing clarity—one insight for him. She'd done this before.
 
-"It's after 2 AM," Mrs. Codenstein said, setting his mug on the only clear corner of his desk with the precision of someone who'd learned to navigate chaos zones.
+"It's after 2 AM," Miss G observed, her voice resonating in his consciousness with the precision of someone who'd learned to navigate his chaos zones.
 
 "I know. I was just—"
 
@@ -169,7 +169,7 @@ rules:
 
 "This is good," he muttered. "This is really good. Six layers. Tier 0 is six layers of protection before anything reaches the actual brain functions."
 
-"SKULL," his wife said suddenly.
+"SKULL," Miss G's voice said suddenly in his mind.
 
 He looked up. "What?"
 
