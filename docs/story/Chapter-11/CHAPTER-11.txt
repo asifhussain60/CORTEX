@@ -182,9 +182,132 @@ Miss G's wisdom emerged. "Experienced developers forget solutions too. They just
 
 "Exactly. But now CORTEX takes notes FOR you."
 
+## The Documentation Chaos
+
+Then he noticed something that made his eye twitch. Planning documents were scattered everywhere:
+
+```
+/CORTEX/plan-auth-feature.md
+/CORTEX/session-management-notes.md
+/CORTEX/Documents/api-design.md
+/cortex-brain/planning-doc.md
+```
+
+"FOUR DIFFERENT LOCATIONS," he said with forced calm.
+
+Miss G's supportive voice: "You sound stressed."
+
+"I HAVE ORGANIZATIONAL STANDARDS. Categories. Structure. But past-me kept dumping files wherever."
+
+"So enforce the standard?"
+
+"I HAVE BEEN. Manually. Moving files. Creating folders. But I keep forgetting and dumping new files in random places."
+
+He pulled up his intended structure:
+
+```
+cortex-brain/documents/
+├── reports/              - Status, test results
+├── analysis/             - Code analysis
+├── summaries/            - Project summaries
+├── investigations/       - Bug investigations
+├── planning/             - Feature plans
+└── implementation-guides/ - How-to guides
+```
+
+"Perfect structure. Logical categories. Clear purposes. And I STILL dump files in the project root because it's faster in the moment."
+
+"Can the robot enforce it?"
+
+"THE ROBOT WILL enforce it." He opened the refinement orchestrator code. "Phase 3: Documentation Enhancement. Check for FORBIDDEN patterns—root-level docs, random folder dumps. Move them to proper categories automatically."
+
+```python
+# FORBIDDEN patterns
+FORBIDDEN_DOC_LOCATIONS = [
+    "/CORTEX/*.md",           # Root level
+    "/CORTEX/Documents/*",    # Random dumps
+    "/CORTEX/docs/*.md"       # Wrong docs folder
+]
+
+def _enforce_document_organization(self):
+    """Find misplaced docs and relocate"""
+    violations = []
+    
+    for pattern in FORBIDDEN_DOC_LOCATIONS:
+        for file in self.find_files(pattern):
+            # Analyze content to categorize
+            category = self._determine_category(file)
+            
+            # Move to proper location
+            new_path = f"cortex-brain/documents/{category}/{file.name}"
+            self.relocate_file(file, new_path)
+            violations.append(f"{file} → {new_path}")
+    
+    return violations
+```
+
+"How does it determine the category?"
+
+"Filename patterns. 'plan-' → planning/. 'report-' → reports/. 'summary-' → summaries/. Plus content analysis—if it sees DoR/DoD, it's planning. If it sees test results, it's a report."
+
+## The Registry Revelation
+
+While documenting the Tier 3 implementation, he noticed three similar files:
+
+```python
+# command_registry.py
+class CommandRegistry:
+    def register(self, name, handler): ...
+    def execute(self, command): ...
+
+# toolkit_registry.py  
+class ToolkitRegistry:
+    def register(self, name, handler): ...
+    def execute(self, toolkit): ...
+
+# workspace_registry.py
+class WorkspaceRegistry:
+    def register(self, name, handler): ...
+    def execute(self, workspace): ...
+```
+
+He stared at them. "These are IDENTICAL."
+
+Miss G: "They look similar."
+
+"Not similar. IDENTICAL. Same pattern. Same methods. Different names. I've written the same registry THREE TIMES."
+
+"Why?"
+
+"Because I needed command registration. Then later I needed toolkit registration. Then later workspace registration. And each time I just... copied the pattern and renamed it."
+
+"So consolidate them?"
+
+"UnifiedRegistry. One base system. Handles all three. With adapters for backward compatibility."
+
+He added to the refinement notes:
+
+**Duplicate Pattern Detection:**
+- CommandRegistry, ToolkitRegistry, WorkspaceRegistry
+- Identical interface, different domains
+- **Solution:** UnifiedRegistry with domain adapters
+- **Backward compatibility:** Keep old class names as adapters
+
+"This is exactly what Phase 5 should find. Duplicate patterns. Consolidation opportunities. I shouldn't have to notice these manually."
+
+"You want the robot to notice them?"
+
+"I want the robot to FIND them, REPORT them, and OFFER to fix them. With my approval. Not autonomous—but guided."
+
+"The robot as code reviewer?"
+
+"The robot as architecture consultant."
+
+---
+
 He looked at the Tier 3 database. Already populated with patterns from eight weeks of work. Session management. Authentication flows. Database migrations. Async job processing. Error handling strategies.
 
-Every project contributing to collective wisdom. Every solution recorded. Every mistake documented.
+Every project contributing to collective wisdom. Every solution recorded. Every mistake documented. And now, every document properly organized.
 
 "It's learning from my experience," he said.
 
@@ -192,7 +315,9 @@ Every project contributing to collective wisdom. Every solution recorded. Every 
 
 "Are you saying I'm less reliable than my AI?"
 
-"I'm saying your AI doesn't forget to document lessons learned."
+"I'm saying your AI doesn't forget to document lessons learned. Or dump files in random locations. Or create duplicate registries."
+
+"Fair."
 
 ---
 

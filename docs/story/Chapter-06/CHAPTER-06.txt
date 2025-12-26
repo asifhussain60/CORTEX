@@ -258,13 +258,99 @@ Miss G's presence warmed with pride. "You're growing up."
 
 "Same thing."
 
+## The Execution Dilemma
+
+On Friday morning, one week into the orchestrator refactoring, Codenstein hit a wall.
+
+He'd just tried running the MaintenanceOrchestrator from Copilot Chat. It worked beautifully—interactive, conversational, guiding him through decisions. Then he tried running the same orchestrator from a CLI script for automation. It hung, waiting for input that would never come.
+
+"Why are you different in different contexts?" he asked his screen.
+
+Miss G's voice in his thoughts: "Different how?"
+
+"The orchestrators. Some need to be interactive—asking questions, getting user input, having conversations. Like the Planning Orchestrator. But others need to be autonomous—just execute, no questions asked. Like the HealthcheckOrchestrator."
+
+"So... make them adaptable?"
+
+"That's overengineering. They don't need to be BOTH. They need to be ONE OR THE OTHER." He grabbed a marker. "Some orchestrators are conversational. Some are operational."
+
+He added to the whiteboard:
+
+**EXECUTION METHODS**
+
+**copilot_chat** - Interactive workflows  
+- Multi-turn conversations  
+- User guidance required  
+- Planning, TDD, feedback  
+
+**cli_wrapper** - System operations  
+- File I/O, git ops, system maintenance  
+- No user interaction  
+- Align, healthcheck, optimize  
+
+**internal** - Infrastructure  
+- Called by other orchestrators  
+- Not directly invoked  
+- Base classes, utilities  
+
+"They're not all the same kind of orchestrator," he muttered. "They're different SPECIES."
+
+## The Orchestrator Engagement Mystery
+
+He was testing the system again when something caught his eye in the terminal output:
+
+```
+🎭 Orchestrator engaged: MaintenanceOrchestrator
+Phase 1: Setup          ✓ Complete
+🎭 Phase transition: Setup → Discovery
+Phase 2: Discovery      ✓ Found 3 issues
+🎭 Phase transition: Discovery → Execution
+Phase 4: Execution      ✓ Issues resolved
+🎭 Orchestrator completing: ✅ ALL WORK COMPLETE
+```
+
+"Wait," he said. "Where did the mask emoji come from?"
+
+He hadn't added that. He searched the code. Found a logger line he'd written at 3 AM three days ago and completely forgotten about:
+
+```python
+logger.info("🎭 Orchestrator engaged: %s", self.__class__.__name__)
+```
+
+"A theater mask," he said slowly. "For orchestration. Because orchestrators are like... conductors. Performers. Directors."
+
+Miss G's presence manifested: "You added that at 3 AM when you were delirious."
+
+"Past-me was BRILLIANT. It's perfect. You can see exactly when orchestrators activate. When they transition phases. When they complete." He added more:
+
+```python
+# Entry
+logger.info("🎭 Orchestrator engaged: %s", self.__class__.__name__)
+
+# Transitions  
+logger.info("🎭 Phase transition: %s → %s", old_phase, new_phase)
+
+# Completion
+logger.info("🎭 Orchestrator completing: ✅ ALL WORK COMPLETE")
+```
+
+"Orchestrator engagement hints," he said. "Visual feedback without being intrusive."
+
+"You're adding emoji to your logging system."
+
+"I'm adding CLARITY to my logging system. The emoji just happens to perfectly convey the concept."
+
+"This is what sleep deprivation does."
+
+"This is what GOOD DESIGN does," he insisted. "Now I can watch orchestrators work. See them engage. Track their progress. Know exactly what's happening."
+
 ## The Test
 
-On Friday morning, one week into the orchestrator refactoring, Codenstein decided to test the system properly.
+He decided to test the enhanced system properly.
 
 "Run complete system maintenance," he told Copilot.
 
-The ExecutionOrchestrator engaged. Coordinated multiple orchestrators in sequence:
+The MaintenanceOrchestrator engaged. Coordinated multiple orchestrators in sequence:
 
 1. HealthcheckOrchestrator - Assess system state
 2. AlignSystemOrchestrator - Fix misalignments  
@@ -274,7 +360,7 @@ The ExecutionOrchestrator engaged. Coordinated multiple orchestrators in sequenc
 
 All running automatically. Each following the seven-phase pattern. Progress tracked. Errors handled. Git checkpoints created. Rollback available.
 
-He watched the terminal output scroll past. Phase transitions. Progress updates. Validation confirmations. Report generation.
+He watched the terminal output scroll past. The 🎭 masks dancing through the logs. Phase transitions. Progress updates. Validation confirmations. Report generation.
 
 Twenty-seven minutes later:
 
@@ -288,6 +374,11 @@ System Maintenance Report:
 - Test coverage: 96% (up from 89%)
 - Documentation: 100% (up from 67%)
 
+Execution Method: cli_wrapper (autonomous)
+Phases Completed: 7/7
+Git Checkpoints: 3 created
+Rollback Available: Yes
+
 All phases complete. No errors. System healthy.
 ```
 
@@ -297,11 +388,15 @@ Codenstein leaned back in his chair.
 
 His phone buzzed—a reminder. Miss G's voice: "Did the orchestration complete?"
 
-How did she always know? "Yes. Zero errors. Full maintenance cycle. Autonomous execution."
+How did she always know? "Yes. Zero errors. Full maintenance cycle. Autonomous execution with CLI wrapper."
+
+"CLI what now?"
+
+"Execution method classification. Some orchestrators run interactively in chat. Others run autonomously via CLI wrappers. Different species for different purposes."
 
 "So the chaos is organized?"
 
-"The chaos is CONDUCTED."
+"The chaos is CONDUCTED. And it knows how to conduct ITSELF based on context."
 
 "Should I be worried you're this excited about project management?"
 

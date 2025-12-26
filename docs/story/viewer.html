@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Awakening of CORTEX - Story Viewer</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <style>
+        /* Story Viewer Specific Styles */
+        .story-layout {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 2rem;
+        }
+
+        /* Left Sidebar - Chapter Navigation */
+        .chapter-sidebar {
+            width: 320px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--glass-border);
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            z-index: 100;
+        }
+
+        .story-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .story-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .story-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .chapter-list {
+            list-style: none;
+        }
+
+        .chapter-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .chapter-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .chapter-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateX(5px);
+        }
+
+        .chapter-link.active {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
+            border-color: var(--accent-primary);
+        }
+
+        .chapter-number {
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .chapter-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: block;
+        }
+
+        /* Main Content Area */
+        .story-content {
+            margin-left: 320px;
+            flex: 1;
+            padding: 2rem 4rem 4rem;
+            max-width: none;
+            width: calc(100% - 320px);
+        }
+
+        .chapter-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .chapter-header {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--glass-border);
+        }
+
+        .chapter-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-badge {
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--accent-primary);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+        }
+
+        .chapter-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .chapter-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .chapter-body p {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            font-size: 1.3em;
+        }
+
+        .chapter-body p {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            font-size: 1.3em;
+        }
+
+        .chapter-body h2 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .chapter-body h3 {
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .chapter-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        .chapter-body em {
+            color: var(--accent-primary);
+            font-style: italic;
+        }
+
+        .chapter-body strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .chapter-body li,
+        .chapter-body span,
+        .chapter-body div:not(.chapter-image) {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            font-size: 1.3em;
+        }
+
+        /* Inline Image Styling */
+        .chapter-body::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .chapter-body img {
+            transition: transform var(--transition-base);
+        }
+
+        .chapter-body img:hover {
+            transform: scale(1.02);
+        }
+
+        .chapter-image {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .chapter-image img {
+            max-width: 100%;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--glass-border);
+            gap: 1rem;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all var(--transition-base);
+            font-size: 0.95rem;
+        }
+
+        .nav-button:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-button.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .nav-title {
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .chapter-sidebar {
+                width: 280px;
+            }
+
+            .story-content {
+                margin-left: 280px;
+                padding: 2rem;
+                width: calc(100% - 280px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .story-layout {
+                flex-direction: column;
+            }
+
+            .chapter-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .story-content {
+                margin-left: 0;
+                padding: 1.5rem;
+                width: 100%;
+            }
+
+            .chapter-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .chapter-header h1 {
+                font-size: 2rem;
+            }
+
+            /* Make images full width on mobile */
+            .chapter-body img {
+                float: none !important;
+                max-width: 100% !important;
+                min-width: 100% !important;
+                margin: 1.5rem 0 !important;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--glass-border);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="story-layout">
+        <!-- Left Sidebar - Chapter Navigation -->
+        <aside class="chapter-sidebar">
+            <div class="story-header">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; display: block; margin: 0 auto 1rem; border-radius: 15px; box-shadow: var(--shadow);" />
+                <h1>🧠 The Awakening</h1>
+                <p class="story-subtitle">A Tech Comedy in 12 Chapters</p>
+            </div>
+
+            <nav>
+                <ul class="chapter-list" id="chapterList">
+                    <li class="chapter-item">
+                        <a href="#prologue" class="chapter-link active" data-chapter="prologue">
+                            <span class="chapter-number">PROLOGUE</span>
+                            <span class="chapter-title">The Basement Laboratory</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-01" class="chapter-link" data-chapter="chapter-01">
+                            <span class="chapter-number">CHAPTER 1</span>
+                            <span class="chapter-title">The Amnesia Crisis</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-02" class="chapter-link" data-chapter="chapter-02">
+                            <span class="chapter-number">CHAPTER 2</span>
+                            <span class="chapter-title">Tier 0 - The Gatekeeper</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-03" class="chapter-link" data-chapter="chapter-03">
+                            <span class="chapter-number">CHAPTER 3</span>
+                            <span class="chapter-title">Tier 1 - Memory Awakens</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-04" class="chapter-link" data-chapter="chapter-04">
+                            <span class="chapter-number">CHAPTER 4</span>
+                            <span class="chapter-title">Tier 2 - The Learning Machine</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-05" class="chapter-link" data-chapter="chapter-05">
+                            <span class="chapter-number">CHAPTER 5</span>
+                            <span class="chapter-title">The Test-Driven Rebellion</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-06" class="chapter-link" data-chapter="chapter-06">
+                            <span class="chapter-number">CHAPTER 6</span>
+                            <span class="chapter-title">The Great Orchestration</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-07" class="chapter-link" data-chapter="chapter-07">
+                            <span class="chapter-number">CHAPTER 7</span>
+                            <span class="chapter-title">The Planning Revolution</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-08" class="chapter-link" data-chapter="chapter-08">
+                            <span class="chapter-number">CHAPTER 8</span>
+                            <span class="chapter-title">The Enterprise Awakening</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-09" class="chapter-link" data-chapter="chapter-09">
+                            <span class="chapter-number">CHAPTER 9</span>
+                            <span class="chapter-title">The Sanitizer's Dilemma</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-10" class="chapter-link" data-chapter="chapter-10">
+                            <span class="chapter-number">CHAPTER 10</span>
+                            <span class="chapter-title">The Self-Healing System</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-11" class="chapter-link" data-chapter="chapter-11">
+                            <span class="chapter-number">CHAPTER 11</span>
+                            <span class="chapter-title">The Knowledge Keeper</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-12" class="chapter-link" data-chapter="chapter-12">
+                            <span class="chapter-number">CHAPTER 12</span>
+                            <span class="chapter-title">The Convergence</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="story-content">
+            <div id="chapterContent">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading chapter...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="story-viewer.js"></script>
+</body>
+</html>
