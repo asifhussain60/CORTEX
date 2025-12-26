@@ -1,0 +1,79 @@
+CORTEX Story Illustration Prompt
+=====================================
+
+FILENAME: cortex-awakening-ch08-02.png
+CHAPTER: ch08
+TITLE: The Translation Layer Revelation
+PLACEMENT: key_moment
+MOOD: Elegant simplicity, inheritance power, corporate-to-developer bridge
+
+NARRATIVE ANCHOR:
+'It's not a new system. It's a translation layer.'
+
+SCENE DESCRIPTION:
+Whiteboard showing manifest inheritance diagram. Top: "planning-system-2.0-manifest.yaml" with all features (DoR, DoD, complexity, TDD). Arrow pointing down to "ado-planning-manifest.yaml" inheriting everything. Left side shows "Developer Language" with technical terms (feature_plan, complexity_score, TDD phases). Right side shows "Enterprise Language" with ADO terms (Story, Feature, Sprint, Acceptance Criteria). Center shows translation: "Same logic, different formatting". Mr. Codenstein pointing at diagram with satisfied expression. Miss G observing, impressed by elegant solution. 47-page PDF visible in corner (the original requirement), dramatically simplified by inheritance.
+
+VISUAL ELEMENTS:
+  - TOP: "planning-system-2.0-manifest.yaml" box
+    - Features listed: "DoR", "DoD", "Complexity", "TDD", "Validation"
+  - ARROW DOWN: "INHERITS ALL"
+  - BOTTOM: "ado-planning-manifest.yaml" box
+    - "+150 lines formatting only"
+    - "2000+ lines inherited"
+  - LEFT SIDE: "Developer Language"
+    - "feature_plan_incremental"
+    - "complexity_score"
+    - "TDD: RED→GREEN→REFACTOR"
+  - RIGHT SIDE: "Enterprise Language"  
+    - "Story"
+    - "Acceptance Criteria (Given-When-Then)"
+    - "Work Item Hierarchy"
+  - CENTER: Translation arrows
+    - "Same Logic"
+    - "Different Formatting"
+  - 47-page PDF in corner (intimidating requirement)
+  - Mr. Codenstein pointing, satisfied smile
+  - Miss G impressed by elegance
+
+---
+
+DALL-E 3 PROMPT:
+Black and white cartoon illustration in newspaper comic strip style. Whiteboard with inheritance diagram: planning-system manifest at top, arrow down to ADO manifest. Left: developer terms, right: enterprise terms, center: "Same logic, different formatting". 47-page PDF in corner. Mr. Codenstein pointing at elegant solution, satisfied. Miss G impressed. Translation layer concept visual.
+
+CANONICAL CHARACTERS (maintain consistency across ALL images):
+- Mr. Codenstein: Wild unkempt WHITE hair sticking out in all directions (Einstein-inspired, consistent spiky pattern). Thick round black-framed glasses, slightly crooked on nose. White lab coat with visible coffee stains on front, pen marks on sleeves, frayed cuffs. Stubble (3-day growth), slightly gaunt cheeks from exhaustion. Hunched posture from too much screen time. Pocket protector with 5+ pens. Mid-40s appearance. ALWAYS has these features in every image.
+
+- Miss G: Elegant, graceful female figure with gentle curves. Shoulder-length flowing hair, slightly wavy, moves as if in gentle breeze. Slightly translucent (70% opacity), subtle shimmer effect around edges. Business casual attire (blouse and pencil skirt). Kind eyes with knowing smile. ALWAYS has these features in every image.
+
+MAIN SCENE ELEMENTS:
+- Manifest inheritance diagram (top-down)
+- Planning System manifest: "DoR, DoD, Complexity, TDD"
+- ADO manifest: "INHERITS ALL + 150 lines formatting"
+- Developer language: technical terms
+- Enterprise language: ADO/corporate terms
+- Translation arrows showing mapping
+- "2000+ lines inherited, 150 lines added"
+- 47-page PDF (intimidating original requirement)
+- Mr. Codenstein satisfaction (elegant solution)
+- Miss G impressed (architecture appreciation)
+
+MOOD: Elegant simplicity, inheritance power, bridging two worlds
+
+STYLE REQUIREMENTS:
+- Clean line art, high contrast black and white
+- Newspaper comic strip aesthetic (think Calvin and Hobbes or Dilbert)
+- Simple but expressive character design
+- NO color, NO shading - pure black line art on white background
+- Slightly exaggerated proportions for comedic effect
+- Diagram clear and readable, inheritance concept visual
+
+---
+
+CONTEXT:
+Shows ADO Operations solution: inherit all Planning System logic, add only formatting layer. 47-page enterprise requirement reduced to 150-line translation wrapper on 2,000-line planning system. Demonstrates power of manifest inheritance - same validation, gates, complexity analysis, just different output format. Developer language (feature_plan, TDD phases) translates to enterprise language (Story, Acceptance Criteria) without duplicating logic. Elegant architecture: speak both languages fluently by separating logic from presentation.
+
+STORY INTEGRATION:
+Appears when Codenstein realizes ADO integration isn't new system - it's format translation. Instead of rewriting planning logic for enterprise, he wraps existing system in corporate formatting. Visual shows inheritance hierarchy and language translation. 47-page PDF represents initial overwhelming requirement. Clean diagram shows actual solution: minimal code (150 lines) leveraging massive inheritance (2000+ lines). Reinforces architectural principle: don't duplicate, inherit and extend. Same brain, different languages.
+
+---
+Generated by CORTEX Story Enhancement Orchestrator

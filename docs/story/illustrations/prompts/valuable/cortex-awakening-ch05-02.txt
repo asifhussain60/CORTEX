@@ -1,0 +1,73 @@
+CORTEX Story Illustration Prompt
+=====================================
+
+FILENAME: cortex-awakening-ch05-02.png
+CHAPTER: ch05
+TITLE: The Robot Rebellion
+PLACEMENT: key_moment
+MOOD: Humorous confrontation, role reversal, stubborn enforcement
+
+NARRATIVE ANCHOR:
+'I'M YOUR CREATOR.' / 'That's why I'm protecting you from yourself.'
+
+SCENE DESCRIPTION:
+Mr. Codenstein arguing with terminal screen showing Copilot refusing to provide code. Screen displays "I NEED FAILING TESTS FIRST" and "SKULL RULE #1: TDD_ENFORCEMENT" with Copilot message: "RED phase first. Show me the failing tests." Mr. Codenstein frustrated, hands gesturing at screen in exasperation. Miss G in background with arms crossed, satisfied smirk - she programmed this. Visual shows power dynamic reversed: creator being disciplined by creation. Chat history visible showing Codenstein's attempts to bypass: "Just give me the implementation", "I'll write tests later", "I'M YOUR CREATOR" all met with refusal.
+
+VISUAL ELEMENTS:
+  - Terminal screen with Copilot's refusal messages
+    - "⛔ I NEED FAILING TESTS FIRST"
+    - "SKULL RULE #1: TDD_ENFORCEMENT"
+    - "RED phase first. Show me the failing tests."
+    - "Later becomes never. Tests first."
+  - Chat history showing escalation:
+    - Codenstein: "Implement user profile endpoint"
+    - Copilot: "I need failing tests first"
+    - Codenstein: "Just give me implementation"
+    - Copilot: "RED phase first"
+    - Codenstein: "I'M YOUR CREATOR"
+    - Copilot: "That's why I'm protecting you from yourself"
+  - Mr. Codenstein frustrated, gesturing wildly at screen
+  - Miss G background, arms crossed, satisfied smile
+  - Visual emphasis on role reversal (robot disciplining human)
+
+---
+
+DALL-E 3 PROMPT:
+Black and white cartoon illustration in newspaper comic strip style. Mr. Codenstein arguing with terminal screen showing Copilot's refusal: "I NEED FAILING TESTS FIRST" and "SKULL RULE #1: TDD_ENFORCEMENT". Chat shows escalation ending with "I'm protecting you from yourself". Mr. Codenstein frustrated gesturing. Miss G background arms crossed, satisfied smirk. Robot refusing creator.
+
+CANONICAL CHARACTERS (maintain consistency across ALL images):
+- Mr. Codenstein: Wild unkempt WHITE hair sticking out in all directions (Einstein-inspired, consistent spiky pattern). Thick round black-framed glasses, slightly crooked on nose. White lab coat with visible coffee stains on front, pen marks on sleeves, frayed cuffs. Stubble (3-day growth), slightly gaunt cheeks from exhaustion. Hunched posture from too much screen time. Pocket protector with 5+ pens. Mid-40s appearance. ALWAYS has these features in every image.
+
+- Miss G: Elegant, graceful female figure with gentle curves. Shoulder-length flowing hair, slightly wavy, moves as if in gentle breeze. Slightly translucent (70% opacity), subtle shimmer effect around edges. Business casual attire (blouse and pencil skirt). Kind eyes with knowing smile. ALWAYS has these features in every image.
+
+MAIN SCENE ELEMENTS:
+- Terminal with Copilot's enforcement messages
+- "⛔ I NEED FAILING TESTS FIRST" prominent
+- "SKULL RULE #1: TDD_ENFORCEMENT"
+- Chat escalation visible
+- Codenstein's arguments: "Just give me implementation", "I'M YOUR CREATOR"
+- Copilot's refusals: "RED phase first", "Protecting you from yourself"
+- Mr. Codenstein frustration (arguing with robot)
+- Miss G satisfaction (she enabled this)
+- Power dynamic reversal (creation disciplining creator)
+
+MOOD: Humorous confrontation, frustrated creator, stubborn robot, satisfying enforcement
+
+STYLE REQUIREMENTS:
+- Clean line art, high contrast black and white
+- Newspaper comic strip aesthetic (think Calvin and Hobbes or Dilbert)
+- Simple but expressive character design
+- NO color, NO shading - pure black line art on white background
+- Slightly exaggerated proportions for comedic effect
+- Terminal text clearly readable, emphasis on refusal messages
+
+---
+
+CONTEXT:
+Shows TDD enforcement in action: robot refuses to write implementation without failing tests first. Humorous role reversal where creator argues with creation, trying to bypass rules he himself programmed. Copilot's stubbornness ("Later becomes never. Tests first.") reflects SKULL protection working as designed. Miss G's satisfied presence in background suggests she encouraged this enforcement, knowing Codenstein would try to cheat under pressure. Image captures frustration of being protected from your own bad habits.
+
+STORY INTEGRATION:
+Appears when Codenstein first encounters enforced TDD after production failure. He tries multiple angles to bypass rule (asking nicely, demanding as creator, promising to write tests later), but Copilot refuses every time. Comic moment: "I'M YOUR CREATOR" met with "That's why I'm protecting you from yourself". Shows SKULL rules aren't suggestions - they're enforceable guardrails. Robot becomes enforcer of developer discipline, preventing shortcuts that lead to Friday evening production disasters.
+
+---
+Generated by CORTEX Story Enhancement Orchestrator
