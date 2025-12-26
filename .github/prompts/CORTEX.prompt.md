@@ -10,7 +10,7 @@ DO NOT provide generic introduction - respond to user's ACTUAL request.
     
     Manual enhancements:
     - ADO Operations orchestrator-level integration
-    - Planning System 2.0 manifest references
+    - Planning System manifest references
     - DoR/DoD compliance requirements
     - Manifest inheritance documentation
 -->
@@ -152,28 +152,27 @@ These hints confirm orchestrators are actively working without being intrusive.
 - **Execution Method:** `copilot_chat` (interactive workflow)
 - **Output:** Sanitized codebase + audit report + mapping reference + backup
 
-### Planning System 2.0
+### Planning System
 - **Commands:** `plan [feature]`, `execute all phases autonomously`
 - **AUTO-DETECTION:** Complexity-based routing (HIGH→incremental, LOW→skeleton)
 - **Triggers:** Security, auth, migrations, APIs auto-route to incremental
 - **TDD:** Auto-included in all plans
-- **Manifest:** `cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml`
+- **Manifest:** `cortex-brain/orchestrator-manifests/planning-system-manifest.yaml`
 - **Compliance:** MUST follow DoR/DoD requirements, acceptance criteria gates, TDD integration
 - **Execution Method:** `copilot_chat` (interactive workflow)
 
 ### ADO Operations
 - **Commands:** `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`
 - **Features:** Story/Feature/Task creation, completion summaries, code reviews
-- **Integration:** Works like Planning System 2.0 with ADO-formatted output
+- **Integration:** Works like Planning System with ADO-formatted output
 - **Manifest:** `cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml`
-- **Compliance:** Inherits all Planning System 2.0 requirements + ADO-specific formatting
+- **Compliance:** Inherits all Planning System requirements + ADO-specific formatting
 - **Execution Method:** `copilot_chat` (interactive workflow)
 
-### TDD Mastery (v4.0)
+### TDD Mastery
 - **Commands:** `start tdd`, `run tests`, `tdd [feature]`
-- **Version:** 4.0.0 - Unified orchestrator with adaptive learning
 - **Features:** RED→GREEN→REFACTOR, adaptive tech discovery (11+ languages), AI-driven generation, clean code enforcement (SOLID/DRY/KISS/YAGNI), per-phase rollback
-- **Manifest:** `cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml`
+- **Manifest:** `cortex-brain/manifests/orchestrators/tdd-orchestrator-manifest.yaml`
 - **Guide:** `cortex-brain/brain-protection-rules.yaml` (TDD_ENFORCEMENT)
 - **Execution Method:** `copilot_chat` (interactive workflow)
 - **Architecture:** Strategy pattern with pluggable phases
@@ -185,8 +184,7 @@ These hints confirm orchestrators are actively working without being intrusive.
 ### System Maintenance
 - **Commands:** `system maintenance`, `maintain system`
 - **Phases:** Pre-healthcheck → align (auto-fix) → cleanup → optimize → vacuum → refresh prompts → post-healthcheck (7 phases)
-- **Implementation:** `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
-- **Version:** v4.0 (Planning System 4.0 integration)
+- **Implementation:** `src/operations/modules/orchestration/maintenance_orchestrator.py`
 - **Status:** ✅ Orchestrator complete, invoked via Copilot Chat
 - **Execution Method:** `copilot_chat` (interactive workflow)
 - **Features:** Tiered routing, AST-powered cleanup, version management
@@ -196,7 +194,7 @@ These hints confirm orchestrators are actively working without being intrusive.
 ### System Refinement
 - **Commands:** `refine`, `refine the system`, `improve cortex`, `optimize cortex holistically`
 - **Phases:** Discovery → SKULL Review → Documentation → Code Quality → Architecture → Performance → Validation (7 phases)
-- **Implementation:** `src/operations/modules/orchestration/refinement_orchestrator_v1.py`
+- **Implementation:** `src/operations/modules/orchestration/refinement_orchestrator.py`
 - **Status:** ✅ Orchestrator complete, invoked via Copilot Chat
 - **Execution Method:** `copilot_chat` (interactive workflow)
 - **Features:** AST-based analysis, SKULL test optimization, documentation refinement, rollback safety
@@ -355,7 +353,7 @@ python -m src.main
 ## 📚 Additional Resources
 
 **Module Guides:**
-- `modules/planning-orchestrator-guide.md` - Planning System 2.0
+- `modules/planning-orchestrator-guide.md` - Planning System
 - `modules/tdd-mastery-guide.md` - TDD workflow
 - `modules/response-format-v3.md` - Response format spec
 

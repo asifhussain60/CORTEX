@@ -8,7 +8,7 @@
     
     Manual enhancements:
     - ADO Operations orchestrator-level integration
-    - Planning System 2.0 manifest references
+    - Planning System manifest references
     - DoR/DoD compliance requirements
     - Manifest inheritance structure
 -->
@@ -173,17 +173,17 @@ Format: `**Next:** {single_action_with_context}`
 - Removes company-specific data while preserving functionality
 - Guide: `cortex-brain/CODE-SANITIZATION-QUICK-REF.md`
 
-**Planning System 2.0**
+**Planning System**
 - Commands: `plan [feature]`, `execute all phases autonomously`
 - AUTO-COMPLEXITY: HIGH→incremental, MEDIUM→conditional, LOW→skeleton
 - TDD auto-included in all plans
-- Manifest: `planning-system-2.0-manifest.yaml` (DoR/DoD/TDD compliance)
+- Manifest: `planning-system-manifest.yaml` (DoR/DoD/TDD compliance)
 - Phase 10 Integration: Automatic YAML modularization (>20KB plans split into index + modules)
 
 **ADO Operations**
 - Commands: `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`
-- Works like Planning System 2.0 with ADO-formatted output
-- Manifest: `ado-planning-manifest.yaml` (inherits Planning System 2.0 + ADO formatting)
+- Works like Planning System with ADO-formatted output
+- Manifest: `ado-planning-manifest.yaml` (inherits Planning System + ADO formatting)
 
 **TDD Mastery**
 - Commands: `start tdd`, `run tests`
@@ -193,8 +193,7 @@ Format: `**Next:** {single_action_with_context}`
 **System Maintenance**
 - Commands: `system maintenance`
 - 7 phases: healthcheck → align (auto-fix) → cleanup → optimize → vacuum → refresh prompts → healthcheck
-- Implementation: `src/operations/modules/orchestration/maintenance_orchestrator_v3.py`
-- Version: v3.0 (Planning System 3.0 integration with tiered routing)
+- Implementation: `src/operations/modules/orchestration/maintenance_orchestrator.py`
 - Status: ✅ Complete (invoked via Copilot Chat)
 - **Completion:** Shows `# 🎉 CONGRATULATIONS` when all phases complete with no errors
 - **Engagement hints:** Shows `🎭 Orchestrator engaged` and phase progress
