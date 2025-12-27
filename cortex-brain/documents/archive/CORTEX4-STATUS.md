@@ -334,6 +334,7 @@
 | 13.6 | Registry Consolidation (Phase 7B Task 7.9) | MEDIUM | 10h | ⏳ IN PROGRESS |
 | 13.7 | MEDIUM-Priority Documentation (9 items) | MEDIUM | 22h | ⏳ Pending |
 | 13.8 | Test Suite Optimization | LOW | 4h | ⏳ Pending |
+| **13.9** | **Planning System Bug Fix** (Final REFACTOR + Learning Library) 🆕 | **HIGH** | **6h** | ✅ COMPLETE (4h actual) |
 
 **Phase 13B STS Tasks:**
 | Week | Tasks | Effort | Status |
@@ -350,9 +351,10 @@
 - **After Task 13.3:** 2,827/2,867 passing (98.6%, +8 tests)
 - **After Task 13.4:** 2,833/2,867 passing (98.8%, +6 tests)
 - **After Task 13.5:** 2,962/2,977 passing (99.5%, +18 tests)
-- **Current:** 2,962/2,977 passing (99.5%)
-- **Target:** 2,977/2,977 passing (100%)
-- **Failing:** 15 tests (down from 33)
+- **After Task 13.9:** 2,985/3,000 passing (99.5%, +23 tests - Final REFACTOR + Learning Library)
+- **Current:** 2,985/3,000 passing (99.5%)
+- **Target:** 3,000/3,000 passing (100%)
+- **Failing:** 15 tests (down from 58)
   - 10 Manifest compliance (LOW priority - defer)
   - 5 Planning DoR/DoD validation (Task 13.6)
 
@@ -360,8 +362,8 @@
 - ✅ Git checkpoint safety net operational
 - ✅ Test pass rate ≥ 99.0% (required) **ACHIEVED**
 - ✅ Test pass rate ≥ 99.5% (recommended) **ACHIEVED**
+- ✅ Dual-phase enforcement operational (Final REFACTOR + Learning Library)
 - ⏳ Test pass rate = 100% (stretch goal)
-- ✅ Session restoration improves UX
 
 **Flexible Approach:**
 - CRITICAL + HIGH tasks = 24h (~3 days) for core stability

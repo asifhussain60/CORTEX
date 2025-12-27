@@ -30,6 +30,8 @@ tier0_instincts:
 - TDD_ENFORCEMENT
 - RED_PHASE_VALIDATION
 - GREEN_PHASE_VALIDATION
+- REFACTOR_CODE_CLEANUP_ENFORCEMENT
+- LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT
 - DEFINITION_OF_READY
 - DEFINITION_OF_DONE
 - SOLID_PRINCIPLES
@@ -518,6 +520,131 @@ protection_layers:
     - Delete temporary file after successful copy
     evidence_template: '#file:documents/evidence-templates/misc/CORTEX_PROMPT_FILE_PROTECTION.md'
     rationale: '#file:documents/rationales/CORTEX_PROMPT_FILE_PROTECTION.md'
+  - rule_id: REFACTOR_CODE_CLEANUP_ENFORCEMENT
+    name: Mandatory Final REFACTOR Phase in All Plans
+    severity: blocked
+    description: All feature plans MUST include final REFACTOR phase that reviews ENTIRE file for cleanup (duplicates, broken structure, complexity, SOLID violations). Prevents technical debt accumulation.
+    detection:
+      combined_keywords:
+        plan_generation:
+        - generate plan
+        - create plan
+        - planning phases
+        - feature plan
+        - implementation plan
+        missing_final_refactor:
+        - no final refactor
+        - no cleanup phase
+        - no whole-file review
+        - missing overall refactor
+      scope:
+      - intent
+      - phases
+      - plan_structure
+      logic: AND
+    alternatives:
+    - Add final REFACTOR phase that reviews ENTIRE file (not just modified code)
+    - Phase must check for duplicates, broken HTML/structure, dead code
+    - Phase must validate complexity ≤30 and SOLID principles
+    - Phase must ensure no redundant code or incomplete refactoring
+    - This is SEPARATE from TDD REFACTOR (which only reviews new code)
+    evidence_template: 'Plan lacks mandatory final REFACTOR phase. Planning System must ALWAYS append final cleanup phase that reviews ENTIRE file for: 1) Duplicates/redundancy, 2) Broken HTML/structure, 3) Dead code, 4) Complexity >30, 5) SOLID violations. TDD REFACTOR only cleans new code - final REFACTOR cleans EVERYTHING.'
+    rationale: |
+      Problem: CORTEX leaves broken HTML, duplicates, and technical debt after implementation because TDD REFACTOR phase only cleans code that was just written.
+      
+      Root Cause: Planning System generates TDD phases (RED→GREEN→REFACTOR) that focus on NEW code, but no final phase reviews ENTIRE file for overall cleanliness.
+      
+      Impact: Modified files accumulate:
+      - Broken HTML tags and structure
+      - Duplicate/redundant code
+      - High complexity (>30) functions
+      - SOLID violations
+      - Dead/orphaned code
+      
+      Solution: Mandatory final REFACTOR phase at END of plan that:
+      1. Reviews ENTIRE file (not just modified sections)
+      2. Validates structural integrity (HTML, syntax)
+      3. Removes all duplicates and redundancy
+      4. Refactors complexity >30 down to ≤30
+      5. Enforces SOLID principles throughout
+      6. Removes all dead/orphaned code
+      
+      This ensures files are left clean, optimized, and maintainable.
+      
+      Enforcement: Brain Protector will BLOCK any plan generation without this phase.
+  - rule_id: LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT
+    name: Mandatory Learning Library Documentation Phase
+    severity: blocked
+    description: All plans MUST include learning library documentation phase AFTER final REFACTOR to capture implementation knowledge, design decisions, and lessons learned in repository-specific organized folder structure.
+    detection:
+      combined_keywords:
+        plan_generation:
+        - generate plan
+        - create plan
+        - planning phases
+        - feature plan
+        missing_learning_phase:
+        - no learning library phase
+        - no documentation phase
+        - no knowledge capture
+        - missing documentation
+      scope:
+      - intent
+      - phases
+      - plan_structure
+      logic: AND
+    alternatives:
+    - Add learning library documentation phase after final REFACTOR
+    - Phase must capture implementation knowledge and design decisions
+    - Phase must create structured documentation in cortex-brain/documents/library/{repo_name}/
+    - Documentation must include README, context, architecture, implementation guide, test strategy
+    - This ensures ALL work is documented in learning library for future reference
+    evidence_template: 'Plan lacks mandatory learning library documentation phase. Planning System must ALWAYS append documentation phase AFTER final REFACTOR that creates learning artifacts in cortex-brain/documents/library/{repo_name}/{category}/{topic}/ with: README.md (overview), context.md (problem/requirements), architecture.md (design), implementation-guide.md (walkthrough), test-strategy.md (coverage), research-notes.md (decisions). Repository separation prevents knowledge mixing across projects.'
+    rationale: |
+      Problem: Knowledge loss after implementation - design decisions, lessons learned, and implementation insights not captured per repository.
+      
+      Root Cause: No mandatory documentation phase ensures knowledge is preserved in repository-specific learning library.
+      
+      Impact: 
+      - Design decisions lost to time
+      - New developers struggle with "why?"
+      - Research/analysis not captured
+      - Learning opportunities missed
+      - Onboarding time increases
+      - Multi-repo knowledge mixing causes confusion
+      
+      Solution: Mandatory learning library documentation phase AFTER final REFACTOR that:
+      1. Captures implementation knowledge (what was built)
+      2. Documents design decisions (why it was built this way)
+      3. Records lessons learned (what worked/didn't work)
+      4. Creates learning aids (implementation guides)
+      5. Documents test coverage and strategy
+      6. Stores research and analysis
+      7. Maintains repository isolation (prevents knowledge mixing)
+      
+      Documentation Structure:
+      cortex-brain/documents/library/{repo_name}/{category}/{topic}/
+      ├── README.md (Overview & quickstart)
+      ├── context.md (Problem statement, requirements)
+      ├── architecture.md (Design diagrams, components)
+      ├── implementation-guide.md (Code walkthrough for learning)
+      ├── test-strategy.md (Test coverage, TDD approach)
+      └── research-notes.md (Design decisions, trade-offs)
+      
+      Repository Organization:
+      - library/CORTEX/ - CORTEX project knowledge
+      - library/UserRepo1/ - User repo 1 knowledge
+      - library/UserRepo2/ - User repo 2 knowledge
+      
+      Benefits:
+      - 100% documentation coverage for complex work
+      - Knowledge library grows automatically per repository
+      - Implementation guides accelerate learning
+      - Design rationale preserved forever
+      - Onboarding time reduced by 50%
+      - Multi-repo support prevents confusion
+      
+      Enforcement: Brain Protector will BLOCK any plan generation without this phase.
   - rule_id: GIT_CHECKPOINT_ENFORCEMENT
     name: Git Checkpoint Before Development Work
     severity: blocked

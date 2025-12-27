@@ -526,6 +526,17 @@ class PlanningOrchestrator(BaseOrchestrator):
                     )
                 plan_data = generation_result.plan_data
             
+            # CRITICAL: Enforce final REFACTOR phase (SKULL rule)
+            # Must be applied after plan generation and before any validation
+            # This ensures ALL plans have mandatory whole-file cleanup phase
+            self.logger.info("🎭 Enforcing final REFACTOR phase (REFACTOR_CODE_CLEANUP_ENFORCEMENT)")
+            plan_data = self._enforce_final_refactor_on_plan_data(plan_data)
+            
+            # CRITICAL: Enforce learning library documentation phase (SKULL rule)
+            # Must come AFTER final REFACTOR to document complete work
+            self.logger.info("🎭 Enforcing learning library documentation phase (LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT)")
+            plan_data = self._enforce_learning_library_documentation_on_plan_data(plan_data)
+            
             # Task 13.2: DoR (Definition of Ready) validation
             if self.enforce_dor and plan_data:
                 is_ready, dor_violations = self._validate_definition_of_ready(plan_data)
@@ -2114,6 +2125,16 @@ class PlanningOrchestrator(BaseOrchestrator):
         plan["metadata"]["tdd_required"] = tdd_required
         
         logger.info(f"✅ TDD workflow integrated: {len(tdd_phases)} phases added")
+        
+        # CRITICAL: Enforce final REFACTOR phase (SKULL rule)
+        # This MUST be called AFTER all phases are added to ensure
+        # final cleanup phase reviews ENTIRE file
+        plan = self._enforce_final_refactor_phase(plan)
+        
+        # CRITICAL: Enforce learning library documentation phase (SKULL rule)
+        # This MUST come AFTER final REFACTOR to document complete work
+        plan = self._enforce_learning_library_documentation(plan)
+        
         return plan
     
     def _generate_test_plan(self, plan: Dict[str, Any]) -> Dict[str, Any]:
@@ -2176,6 +2197,265 @@ class PlanningOrchestrator(BaseOrchestrator):
         
         logger.info(f"Generated test plan: {len(test_plan['test_cases'])} test cases")
         return test_plan
+    
+    def _enforce_final_refactor_phase(self, plan: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Enforce mandatory final REFACTOR phase at end of plan.
+        
+        CRITICAL: This is SEPARATE from TDD REFACTOR phase.
+        - TDD REFACTOR: Cleans code that was just written (micro-level)
+        - FINAL REFACTOR: Reviews ENTIRE file for overall cleanliness (macro-level)
+        
+        Purpose: Prevent technical debt accumulation by ensuring modified files
+        are left in clean, optimized state with no broken structure, duplicates,
+        or high complexity.
+        
+        SKULL Rule: REFACTOR_CODE_CLEANUP_ENFORCEMENT (Tier 0 instinct)
+        
+        Args:
+            plan: Plan dict (will be modified in-place)
+            
+        Returns:
+            Plan dict with final REFACTOR phase appended
+        """
+        phases = plan.get("phases", [])
+        
+        # Check if final REFACTOR phase already exists
+        if phases and "final refactor" in phases[-1].get("name", "").lower():
+            logger.info("Final REFACTOR phase already exists, skipping enforcement")
+            return plan
+        
+        # Create comprehensive final REFACTOR phase
+        final_refactor_phase = {
+            "name": "Final REFACTOR - Whole-File Cleanup",
+            "type": "quality_gate",
+            "description": "Review ENTIRE file(s) for overall cleanliness and optimization",
+            "rationale": "Ensures modified files are left clean with no broken structure, duplicates, or technical debt",
+            "scope": "ALL modified files (not just new code)",
+            "activities": [
+                "Review ENTIRE file structure (not just modified sections)",
+                "Fix broken HTML tags, syntax errors, structural issues",
+                "Remove ALL duplicate and redundant code",
+                "Refactor ALL functions with complexity >30 down to ≤30",
+                "Enforce SOLID principles throughout file",
+                "Remove ALL dead/orphaned code and unused imports",
+                "Validate file integrity and completeness",
+                "Run all tests to ensure no regressions"
+            ],
+            "validation_criteria": [
+                "✅ No broken HTML tags or structural issues",
+                "✅ Zero duplicate or redundant code blocks",
+                "✅ All function complexity ≤30 (measured with radon/complexity tools)",
+                "✅ SOLID principles enforced (SRP, OCP, LSP, ISP, DIP)",
+                "✅ No dead code or unused imports",
+                "✅ All tests passing (100% pass rate)",
+                "✅ File is production-ready and maintainable"
+            ],
+            "tools": [
+                "radon cc (complexity analysis)",
+                "pylint/flake8 (code quality)",
+                "HTML validator (for HTML files)",
+                "duplicate code detectors"
+            ],
+            "estimated_hours": 1.0,
+            "required": True,
+            "enforcement_level": "MANDATORY",
+            "skull_rule": "REFACTOR_CODE_CLEANUP_ENFORCEMENT"
+        }
+        
+        # Append to end of phases
+        phases.append(final_refactor_phase)
+        plan["phases"] = phases
+        plan["metadata"]["final_refactor_enforced"] = True
+        
+        logger.info("✅ Final REFACTOR phase enforced (SKULL: REFACTOR_CODE_CLEANUP_ENFORCEMENT)")
+        return plan
+    
+    def _enforce_learning_library_documentation(self, plan: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Enforce mandatory learning library documentation phase.
+        
+        CRITICAL: This phase comes AFTER final REFACTOR to ensure ALL work
+        (implementation + cleanup) is documented in learning library.
+        
+        Purpose: Capture implementation knowledge, design decisions, and lessons
+        learned in organized folder structure for future reference and onboarding.
+        
+        SKULL Rule: LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT (Tier 0 instinct)
+        
+        Args:
+            plan: Plan dict (will be modified in-place)
+            
+        Returns:
+            Plan dict with learning library documentation phase appended
+        """
+        phases = plan.get("phases", [])
+        
+        # Check if learning library phase already exists
+        if phases and any("learning library" in p.get("name", "").lower() for p in phases):
+            logger.info("Learning library documentation phase already exists, skipping enforcement")
+            return plan
+        
+        # Determine repository name from workspace context
+        repo_name = getattr(self, 'workspace_name', 'unknown')
+        if repo_name == 'unknown' or not repo_name:
+            # Fallback to extracting from workspace_root config
+            workspace_root = Path(self.config.get("workspace_root", Path.cwd()))
+            repo_name = workspace_root.name
+        
+        # Determine category and topic from plan metadata
+        metadata = plan.get("metadata", {})
+        plan_title = metadata.get("title", "Unknown")
+        
+        # Create learning library documentation phase
+        learning_phase = {
+            "name": "Learning Library Documentation",
+            "type": "knowledge_capture",
+            "description": "Capture implementation knowledge, design decisions, and lessons learned in learning library",
+            "rationale": "Ensures work is documented for future reference, accelerates onboarding, preserves design rationale",
+            "scope": "Complete implementation and decision history",
+            "activities": [
+                f"Create learning library folder: cortex-brain/documents/library/{repo_name}/{{category}}/{{topic}}/",
+                "Generate README.md (overview, quickstart, key concepts)",
+                "Generate context.md (problem statement, requirements, constraints)",
+                "Generate architecture.md (design diagrams, components, data flow)",
+                "Generate implementation-guide.md (code walkthrough, key algorithms, extension points)",
+                "Generate test-strategy.md (test approach, coverage metrics, test files)",
+                "Generate research-notes.md (design decisions, trade-offs, alternatives considered)",
+                "Link documentation to knowledge graph for cross-referencing"
+            ],
+            "documentation_structure": {
+                "location": f"cortex-brain/documents/library/{repo_name}/{{category}}/{{topic}}/",
+                "files": [
+                    "README.md",
+                    "context.md",
+                    "architecture.md",
+                    "implementation-guide.md",
+                    "test-strategy.md",
+                    "research-notes.md"
+                ]
+            },
+            "validation_criteria": [
+                "✅ All 6 documentation files created",
+                "✅ README includes overview and quickstart",
+                "✅ Context captures problem and requirements",
+                "✅ Architecture includes diagrams and components",
+                "✅ Implementation guide provides code walkthrough",
+                "✅ Test strategy documents coverage and approach",
+                "✅ Research notes preserve design decisions",
+                "✅ Documentation linked to knowledge graph"
+            ],
+            "tools": [
+                "AutoDocumentationGenerator",
+                "KnowledgeGraphUpdater",
+                "MarkdownGenerator"
+            ],
+            "estimated_hours": 0.5,
+            "required": True,
+            "enforcement_level": "MANDATORY",
+            "skull_rule": "LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT",
+            "benefits": [
+                "100% documentation coverage",
+                "Knowledge preserved forever",
+                "50% faster onboarding",
+                "Design rationale available",
+                "Learning aids for developers"
+            ]
+        }
+        
+        # Append after final REFACTOR phase
+        phases.append(learning_phase)
+        plan["phases"] = phases
+        plan["metadata"]["learning_library_enforced"] = True
+        
+        logger.info("✅ Learning library documentation phase enforced (SKULL: LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT)")
+        return plan
+    
+    def _enforce_final_refactor_on_plan_data(self, plan_data: PlanData) -> PlanData:
+        """
+        Enforce final REFACTOR phase on PlanData object.
+        
+        Converts PlanData to dict, applies enforcement, converts back.
+        
+        Args:
+            plan_data: PlanData object
+            
+        Returns:
+            PlanData with final REFACTOR phase added
+        """
+        # Convert PlanData to dict
+        plan_dict = {
+            "metadata": {
+                "title": plan_data.metadata.title,
+                "description": plan_data.metadata.description,
+                "complexity": plan_data.metadata.complexity.value if hasattr(plan_data.metadata.complexity, 'value') else plan_data.metadata.complexity,
+                "plan_type": plan_data.metadata.plan_type.value if hasattr(plan_data.metadata.plan_type, 'value') else plan_data.metadata.plan_type,
+            },
+            "phases": [
+                {
+                    "name": phase.phase_name,
+                    "tasks": phase.tasks,
+                    "acceptance_criteria": phase.acceptance_criteria
+                }
+                for phase in plan_data.phases
+            ]
+        }
+        
+        # Apply enforcement
+        plan_dict = self._enforce_final_refactor_phase(plan_dict)
+        
+        # Convert back to PlanData (append final phase)
+        final_phase_dict = plan_dict["phases"][-1]
+        final_phase = PlanPhaseData(
+            phase_name=final_phase_dict["name"],
+            tasks=[{"task": activity, "estimated_hours": 0.15} for activity in final_phase_dict.get("activities", [])],
+            acceptance_criteria=final_phase_dict.get("validation_criteria", [])
+        )
+        plan_data.phases.append(final_phase)
+        
+        return plan_data
+    
+    def _enforce_learning_library_documentation_on_plan_data(self, plan_data: PlanData) -> PlanData:
+        """
+        Enforce learning library documentation phase on PlanData object.
+        
+        Converts PlanData to dict, applies enforcement, converts back.
+        
+        Args:
+            plan_data: PlanData object
+            
+        Returns:
+            PlanData with learning library documentation phase added
+        """
+        # Convert PlanData to dict
+        plan_dict = {
+            "metadata": {
+                "title": plan_data.metadata.title,
+                "description": plan_data.metadata.description,
+            },
+            "phases": [
+                {
+                    "name": phase.phase_name,
+                    "tasks": phase.tasks,
+                    "acceptance_criteria": phase.acceptance_criteria
+                }
+                for phase in plan_data.phases
+            ]
+        }
+        
+        # Apply enforcement
+        plan_dict = self._enforce_learning_library_documentation(plan_dict)
+        
+        # Convert back to PlanData (append learning phase)
+        learning_phase_dict = plan_dict["phases"][-1]
+        learning_phase = PlanPhaseData(
+            phase_name=learning_phase_dict["name"],
+            tasks=[{"task": activity, "estimated_hours": 0.05} for activity in learning_phase_dict.get("activities", [])],
+            acceptance_criteria=learning_phase_dict.get("validation_criteria", [])
+        )
+        plan_data.phases.append(learning_phase)
+        
+        return plan_data
     
     # ========================================================================
     # TDD Integration Methods (Task 8.4 - Extended Testing)
