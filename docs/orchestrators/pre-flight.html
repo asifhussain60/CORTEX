@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Pre-Flight Orchestrator - Environment validation before plan execution with pattern detection and remediation scripts">
+    <title>Pre-Flight Orchestrator - CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .mermaid { background: transparent; margin: 1.5rem 0; }
+        .diagram-card { margin-bottom: 2rem; }
+        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .pattern-heatmap { width: 100%; min-height: 320px; }
+        .gate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+        .gate-card { padding: 1.5rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; text-align: center; border-top: 4px solid; }
+        .gate-status { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .pattern-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin: 1rem 0; }
+        .pattern-item { padding: 0.75rem; background: rgba(26, 26, 46, 0.6); border-radius: 6px; font-size: 0.9rem; }
+        @media (max-width: 768px) { 
+            .gate-grid { grid-template-columns: 1fr; } 
+            .pattern-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Pre-Flight Orchestrator</span>
+    </nav>
+    
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none;">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <h1>Pre-Flight Orchestrator</h1>
+            <span class="badge badge-success">Production Ready</span>
+            
+            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
+                The Pre-Flight Orchestrator validates your development environment <strong>BEFORE</strong> executing 
+                a feature plan. It detects project patterns (FastAPI, .NET, Node.js, Docker), generates environment 
+                requirements, validates installed tools, and enforces gates with remediation scripts. Prevent costly 
+                delays—like the 2-week .NET SDK blocker—before they happen.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">12+</div>
+                    <div class="metric-label">Project Patterns</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">8+</div>
+                    <div class="metric-label">Requirements</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">&lt;15s</div>
+                    <div class="metric-label">Validation Time</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Blocker Prevention</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">pre-flight [--project path] [--generate-script] [--output path]</code>
+                <p class="command-description">
+                    Validate environment before plan execution or generate remediation script.
+                </p>
+                <div class="command-example">
+                    pre-flight --project ./my-project
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gate Status -->
+        <section class="section-gates" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">🚦</span> Gate Enforcement</h2>
+                
+                <div class="gate-grid">
+                    <div class="gate-card" style="border-color: #ef4444;">
+                        <div class="gate-status">🛑</div>
+                        <h3 style="color: #ef4444; font-size: 1.2rem;">BLOCK</h3>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.75rem;">
+                            Critical tools missing. Execution <strong>halted</strong>. Run remediation script.
+                        </p>
+                        <code style="font-size: 0.8rem; color: #ef4444;">CRITICAL severity</code>
+                    </div>
+                    <div class="gate-card" style="border-color: #f59e0b;">
+                        <div class="gate-status">⚠️</div>
+                        <h3 style="color: #f59e0b; font-size: 1.2rem;">WARN</h3>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.75rem;">
+                            Recommended tools missing. Can proceed with <strong>caution</strong>.
+                        </p>
+                        <code style="font-size: 0.8rem; color: #f59e0b;">RECOMMENDED severity</code>
+                    </div>
+                    <div class="gate-card" style="border-color: #10b981;">
+                        <div class="gate-status">✅</div>
+                        <h3 style="color: #10b981; font-size: 1.2rem;">PASS</h3>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.75rem;">
+                            All checks passed. Proceed to Phase 1 <strong>normally</strong>.
+                        </p>
+                        <code style="font-size: 0.8rem; color: #10b981;">All requirements met</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pattern Detection Heatmap -->
+        <section class="section-heatmap" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🔍</span> Pattern Detection Coverage (D3.js)</h2>
+                <p class="diagram-title">Project patterns detected by file triggers</p>
+                
+                <div id="pattern-heatmap" class="pattern-heatmap"></div>
+            </div>
+        </section>
+        
+        <!-- 7-Step Workflow -->
+        <section class="section-workflow" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🔄</span> 7-Step Validation Workflow</h2>
+                <p class="diagram-title">From detection to gate enforcement</p>
+                
+                <div class="mermaid">
+flowchart TB
+    START[Pre-Flight Start] --> P1[Step 1: DETECT PATTERNS]
+    
+    subgraph DETECT["🔍 Pattern Detection"]
+        P1 --> D1[Scan project files]
+        D1 --> D2[.csproj, requirements.txt, package.json]
+        D2 --> D3[Identify patterns]
+        D3 --> D4[FastAPI, .NET, Node.js, Docker...]
+    end
+    
+    D4 --> P2[Step 2: GENERATE REQUIREMENTS]
+    
+    subgraph REQUIRE["📋 Requirements"]
+        P2 --> R1[Map patterns to tools]
+        R1 --> R2[FastAPI → Python 3.8+]
+        R2 --> R3[Assign severity]
+        R3 --> R4[CRITICAL / RECOMMENDED / OPTIONAL]
+    end
+    
+    R4 --> P3[Step 3: VALIDATE ENVIRONMENT]
+    
+    subgraph VALIDATE["✅ Validation"]
+        P3 --> V1[Run check commands]
+        V1 --> V2[python --version]
+        V2 --> V3[dotnet --version]
+        V3 --> V4[Detect installed versions]
+    end
+    
+    V4 --> P4[Step 4: ANALYZE RESULTS]
+    
+    P4 --> P5[Step 5: GENERATE SCRIPT]
+    
+    subgraph SCRIPT["📜 Remediation"]
+        P5 --> S1[Create PowerShell/bash]
+        S1 --> S2[Include install commands]
+    end
+    
+    S2 --> P6[Step 6: BUILD REPORT]
+    
+    P6 --> P7[Step 7: ENFORCE GATE]
+    
+    P7 --> GATE{Gate Status?}
+    
+    GATE -->|BLOCK| HALT["🛑 Halt Execution"]
+    GATE -->|WARN| CAUTION["⚠️ Proceed with Caution"]
+    GATE -->|PASS| GO["✅ Proceed to Phase 1"]
+    
+    style START fill:#00d4ff,color:#1a1a2e
+    style GO fill:#10b981,color:#fff
+    style HALT fill:#ef4444,color:#fff
+    style CAUTION fill:#f59e0b,color:#1a1a2e
+                </div>
+            </div>
+        </section>
+        
+        <!-- Supported Patterns -->
+        <section class="section-patterns" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">📂</span> Supported Project Patterns</h2>
+                
+                <div class="pattern-grid">
+                    <div class="pattern-item">
+                        <strong style="color: #00d4ff;">🔷 DOTNET_API</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">.csproj with Microsoft.NET.Sdk.Web</p>
+                    </div>
+                    <div class="pattern-item">
+                        <strong style="color: #00d4ff;">🔷 DOTNET_CONSOLE</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">.csproj (other SDK)</p>
+                    </div>
+                    <div class="pattern-item">
+                        <strong style="color: #10b981;">🐍 PYTHON_FASTAPI</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">requirements.txt with fastapi</p>
+                    </div>
+                    <div class="pattern-item">
+                        <strong style="color: #10b981;">🐍 PYTHON_FLASK</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">requirements.txt with flask</p>
+                    </div>
+                    <div class="pattern-item">
+                        <strong style="color: #f59e0b;">📦 NODEJS_EXPRESS</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">package.json with express</p>
+                    </div>
+                    <div class="pattern-item">
+                        <strong style="color: #f59e0b;">⚛️ REACT_SPA</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">package.json with react</p>
+                    </div>
+                    <div class="pattern-item">
+                        <strong style="color: #8b5cf6;">🔐 JWT_AUTH</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">Code contains jwt/JWT</p>
+                    </div>
+                    <div class="pattern-item">
+                        <strong style="color: #8b5cf6;">🗃️ DATABASE_MIGRATIONS</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">migrations/ folder exists</p>
+                    </div>
+                    <div class="pattern-item">
+                        <strong style="color: #ef4444;">🐳 DOCKER_COMPOSE</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">docker-compose.yml</p>
+                    </div>
+                    <div class="pattern-item">
+                        <strong style="color: #ef4444;">☸️ KUBERNETES</strong>
+                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">k8s/*.yaml, kubernetes/*.yaml</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Integration -->
+        <section class="section-integration" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🔗</span> Planning System Integration</h2>
+                <p class="diagram-title">Pre-Flight automatically invoked before Phase 1</p>
+                
+                <div class="mermaid">
+flowchart LR
+    USER[User Request] --> ROUTER[Intent Router]
+    ROUTER --> PLANNING[Planning Orchestrator]
+    
+    subgraph PREFLIGHT["🛫 Pre-Flight Check"]
+        PLANNING --> PF[Pre-Flight Orchestrator]
+        PF --> VALIDATE[Validate Environment]
+        VALIDATE --> RESULT{Result}
+    end
+    
+    RESULT -->|PASS/WARN| PHASE1[Phase 1: Blueprint]
+    RESULT -->|BLOCK| REMEDIATE[Show Remediation Script]
+    
+    PHASE1 --> PHASE2[Phase 2: Implementation]
+    PHASE2 --> PHASE3[Phase 3: Testing]
+    PHASE3 --> PHASE4[Phase 4: Review]
+    
+    REMEDIATE --> FIX[User Fixes Issues]
+    FIX --> PF
+    
+    style USER fill:#00d4ff,color:#1a1a2e
+    style PHASE1 fill:#10b981,color:#fff
+    style REMEDIATE fill:#ef4444,color:#fff
+                </div>
+            </div>
+        </section>
+        
+        <!-- Validation Report -->
+        <section class="section-report" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">📋</span> Example Validation Report</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">JSON</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>{
+  "status": "WARN",
+  "execution_time_seconds": 1.65,
+  
+  "checks": {
+    "total": 40,
+    "passed": 38,
+    "warned": 2,
+    "blocked": 0
+  },
+  
+  "patterns_detected": [
+    "PYTHON_FASTAPI",
+    "JWT_AUTH",
+    "DOCKER_COMPOSE",
+    "DATABASE_MIGRATIONS"
+  ],
+  
+  "requirements": [
+    {
+      "tool": "python",
+      "required_version": ">=3.8",
+      "detected_version": "3.11.5",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "tool": "docker",
+      "required_version": ">=20.0",
+      "detected_version": "24.0.7",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "tool": "redis-cli",
+      "required_version": "any",
+      "detected_version": null,
+      "severity": "RECOMMENDED",
+      "status": "WARN"
+    }
+  ],
+  
+  "warnings": [
+    "redis-cli not found (recommended for local caching tests)",
+    "pre-commit hooks not installed (recommended for code quality)"
+  ],
+  
+  "remediation_script": "./validation-output/validate-environment.ps1"
+}</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Remediation Script -->
+        <section class="section-script" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">📜</span> Generated Remediation Script</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">PowerShell</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code># CORTEX Pre-Flight Remediation Script
+# Generated: 2025-12-27T15:30:00Z
+# Status: BLOCK (2 critical issues)
+
+Write-Host "🛫 CORTEX Pre-Flight Environment Setup" -ForegroundColor Cyan
+
+# Critical: Install .NET SDK 6.0
+Write-Host "Installing .NET SDK 6.0..." -ForegroundColor Yellow
+winget install Microsoft.DotNet.SDK.6
+
+# Critical: Install Docker Desktop
+Write-Host "Installing Docker Desktop..." -ForegroundColor Yellow
+winget install Docker.DockerDesktop
+
+# Recommended: Install Redis CLI
+Write-Host "Installing Redis CLI (optional)..." -ForegroundColor Gray
+winget install Redis.RedisInsight
+
+# Verify installations
+Write-Host "`n✅ Verifying installations..." -ForegroundColor Green
+dotnet --version
+docker --version
+
+Write-Host "`n🎉 Environment setup complete! Re-run pre-flight check." -ForegroundColor Green</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Features -->
+        <section class="section-related" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">🔗</span> Related Orchestrators</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="planning-system.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">📋</span>
+                        <h3 class="feature-title">Planning System</h3>
+                        <p class="text-secondary">Invokes pre-flight</p>
+                    </a>
+                    <a href="cortex-lens.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">🔍</span>
+                        <h3 class="feature-title">CORTEX Lens</h3>
+                        <p class="text-secondary">Pattern detection</p>
+                    </a>
+                    <a href="system-integrity.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">🛡️</span>
+                        <h3 class="feature-title">System Integrity</h3>
+                        <p class="text-secondary">Validation & auto-fix</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
+            </div>
+        </div>
+    </footer>
+    
+    <button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        // Mermaid Configuration
+        mermaid.initialize({ 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1a2e',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#16213e',
+                tertiaryColor: '#0f3460'
+            }
+        });
+        
+        // D3.js Pattern Detection Heatmap
+        (function() {
+            const container = document.getElementById('pattern-heatmap');
+            const width = container.clientWidth || 700;
+            const height = 300;
+            const margin = { top: 50, right: 30, bottom: 50, left: 140 };
+            
+            const patterns = [
+                'DOTNET_API', 'DOTNET_CONSOLE', 'PYTHON_FASTAPI', 'PYTHON_FLASK',
+                'NODEJS_EXPRESS', 'REACT_SPA', 'JWT_AUTH', 'DATABASE_MIGRATIONS',
+                'DOCKER_COMPOSE', 'KUBERNETES'
+            ];
+            
+            const triggers = ['Detected', 'Requirement', 'Validated'];
+            
+            // Sample data: 1 = present, 0 = absent
+            const data = [
+                { pattern: 'DOTNET_API', trigger: 'Detected', value: 1, color: '#00d4ff' },
+                { pattern: 'DOTNET_API', trigger: 'Requirement', value: 1, color: '#00d4ff' },
+                { pattern: 'DOTNET_API', trigger: 'Validated', value: 1, color: '#10b981' },
+                { pattern: 'PYTHON_FASTAPI', trigger: 'Detected', value: 1, color: '#10b981' },
+                { pattern: 'PYTHON_FASTAPI', trigger: 'Requirement', value: 1, color: '#10b981' },
+                { pattern: 'PYTHON_FASTAPI', trigger: 'Validated', value: 1, color: '#10b981' },
+                { pattern: 'JWT_AUTH', trigger: 'Detected', value: 1, color: '#8b5cf6' },
+                { pattern: 'JWT_AUTH', trigger: 'Requirement', value: 1, color: '#8b5cf6' },
+                { pattern: 'JWT_AUTH', trigger: 'Validated', value: 0, color: '#f59e0b' },
+                { pattern: 'DOCKER_COMPOSE', trigger: 'Detected', value: 1, color: '#ef4444' },
+                { pattern: 'DOCKER_COMPOSE', trigger: 'Requirement', value: 1, color: '#ef4444' },
+                { pattern: 'DOCKER_COMPOSE', trigger: 'Validated', value: 1, color: '#10b981' }
+            ];
+            
+            // Fill in missing combinations
+            patterns.forEach(p => {
+                triggers.forEach(t => {
+                    if (!data.find(d => d.pattern === p && d.trigger === t)) {
+                        data.push({ pattern: p, trigger: t, value: 0, color: '#1a1a2e' });
+                    }
+                });
+            });
+            
+            const svg = d3.select('#pattern-heatmap')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+            const innerWidth = width - margin.left - margin.right;
+            const innerHeight = height - margin.top - margin.bottom;
+            
+            const x = d3.scaleBand()
+                .domain(triggers)
+                .range([0, innerWidth])
+                .padding(0.05);
+            
+            const y = d3.scaleBand()
+                .domain(patterns)
+                .range([0, innerHeight])
+                .padding(0.05);
+            
+            // Draw cells
+            g.selectAll('rect')
+                .data(data)
+                .join('rect')
+                .attr('x', d => x(d.trigger))
+                .attr('y', d => y(d.pattern))
+                .attr('width', x.bandwidth())
+                .attr('height', y.bandwidth())
+                .attr('fill', d => d.value ? d.color : '#1a1a2e')
+                .attr('fill-opacity', d => d.value ? 0.8 : 0.3)
+                .attr('stroke', '#2d2d4a')
+                .attr('rx', 3);
+            
+            // Status icons
+            g.selectAll('text.icon')
+                .data(data.filter(d => d.value))
+                .join('text')
+                .attr('class', 'icon')
+                .attr('x', d => x(d.trigger) + x.bandwidth() / 2)
+                .attr('y', d => y(d.pattern) + y.bandwidth() / 2)
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'central')
+                .attr('fill', '#fff')
+                .attr('font-size', 14)
+                .text(d => d.trigger === 'Validated' ? (d.value ? '✅' : '❌') : '●');
+            
+            // X axis
+            g.append('g')
+                .attr('transform', `translate(0,${innerHeight})`)
+                .call(d3.axisBottom(x))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', 11);
+            
+            // Y axis
+            g.append('g')
+                .call(d3.axisLeft(y))
+                .selectAll('text')
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', 9);
+            
+            // Remove axis lines
+            g.selectAll('.domain').attr('stroke', '#2d2d4a');
+            g.selectAll('.tick line').attr('stroke', '#2d2d4a');
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#a0aec0')
+                .attr('font-size', 11)
+                .text('Pattern → Requirement → Validation status');
+        })();
+    </script>
+</body>
+</html>

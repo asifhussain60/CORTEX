@@ -11,12 +11,7 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
-    
+    <!-- Breadcrumb Navigation (Top) -->
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="../index.html">Home</a>
         <span class="breadcrumb-separator">→</span>
@@ -25,20 +20,25 @@
         <span class="breadcrumb-current">Upgrade Orchestrator</span>
     </nav>
     
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none;">
+        </a>
+    </div>
+    
     <main class="container" id="main-content">
-        <div class="feature-benefit-panel">
-            <span class="icon">🚀</span>
-            <p class="description">
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <h1>Upgrade Orchestrator</h1>
+            <span class="badge badge-info">Migration Support</span>
+            
+            <!-- Intro Description -->
+            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
                 Upgrading between CORTEX versions can be complex—configuration changes, deprecated features, 
                 new dependencies. The Upgrade Orchestrator handles the entire migration process automatically: 
                 backing up your current state, checking compatibility, applying migrations, validating the 
                 new installation, and providing rollback options if anything goes wrong. Upgrade with confidence.
             </p>
-        </div>
-        
-        <div class="glass-card">
-            <h1>Upgrade Orchestrator</h1>
-            <span class="badge badge-info">Migration Support</span>
             
             <div class="metrics-grid metrics-grid-4">
                 <div class="metric-card glass-card">
@@ -67,32 +67,32 @@
             </div>
         </div>
         
-        <section class="section-workflow">
+        <section class="section-workflow" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>🔄 Upgrade Workflow</h2>
+                <h2><span style="font-size: 2rem;">🔄</span> Upgrade Workflow</h2>
                 
                 <div class="workflow-phases">
                     <div class="phase-card">
                         <span class="phase-number">1</span>
-                        <span class="phase-icon">💾</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">💾</span>
                         <div class="phase-title">Backup</div>
                         <p class="phase-description">Save current state and configuration</p>
                     </div>
                     <div class="phase-card">
                         <span class="phase-number">2</span>
-                        <span class="phase-icon">🔍</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">🔍</span>
                         <div class="phase-title">Compatibility Check</div>
                         <p class="phase-description">Verify system meets requirements</p>
                     </div>
                     <div class="phase-card">
                         <span class="phase-number">3</span>
-                        <span class="phase-icon">🔄</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">🔄</span>
                         <div class="phase-title">Migration</div>
                         <p class="phase-description">Apply version-specific migrations</p>
                     </div>
                     <div class="phase-card">
                         <span class="phase-number">4</span>
-                        <span class="phase-icon">✅</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">✅</span>
                         <div class="phase-title">Validation</div>
                         <p class="phase-description">Run tests, verify functionality</p>
                     </div>
@@ -100,9 +100,9 @@
             </div>
         </section>
         
-        <section class="section-architecture">
+        <section class="section-architecture" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>📋 3.0 → 4.0 Migration Guide</h2>
+                <h2><span style="font-size: 2rem;">📋</span> 3.0 → 4.0 Migration Guide</h2>
                 
                 <table class="glass-table">
                     <thead>
@@ -143,9 +143,9 @@
             </div>
         </section>
         
-        <section class="section-configuration">
+        <section class="section-configuration" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>⚠️ Rollback Options</h2>
+                <h2><span style="font-size: 2rem;">⚠️</span> Rollback Options</h2>
                 
                 <div class="alert alert-info">
                     <span class="alert-icon">ℹ️</span>
@@ -167,22 +167,22 @@
             </div>
         </section>
         
-        <section class="section-integration">
+        <section class="section-integration" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>🔗 Related Features</h2>
+                <h2><span style="font-size: 2rem;">🔗</span> Related Features</h2>
                 <div class="feature-grid feature-grid-3">
                     <a href="../getting-started/deployment.html" class="glass-card">
-                        <span class="feature-icon">🚀</span>
+                        <span class="feature-icon" style="font-size: 2.5rem;">🚀</span>
                         <h3 class="feature-title">Deployment</h3>
                         <p class="text-secondary">Fresh installation guide</p>
                     </a>
                     <a href="../architecture/index.html" class="glass-card">
-                        <span class="feature-icon">🏗️</span>
+                        <span class="feature-icon" style="font-size: 2.5rem;">🏗️</span>
                         <h3 class="feature-title">Architecture</h3>
                         <p class="text-secondary">4.0 system design</p>
                     </a>
                     <a href="../governance/skull-rulebook.html" class="glass-card">
-                        <span class="feature-icon">🛡️</span>
+                        <span class="feature-icon" style="font-size: 2.5rem;">🛡️</span>
                         <h3 class="feature-title">SKULL Rulebook</h3>
                         <p class="text-secondary">Upgrade governance</p>
                     </a>

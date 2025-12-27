@@ -11,12 +11,7 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
-    
+    <!-- Breadcrumb Navigation (Top) -->
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="../index.html">Home</a>
         <span class="breadcrumb-separator">→</span>
@@ -25,21 +20,26 @@
         <span class="breadcrumb-current">TDD Mastery</span>
     </nav>
     
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none;">
+        </a>
+    </div>
+    
     <main class="container" id="main-content">
-        <div class="feature-benefit-panel">
-            <span class="icon">✅</span>
-            <p class="description">
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <h1>TDD Mastery</h1>
+            <span class="badge badge-success">94% Success Rate</span>
+            
+            <!-- Intro Description -->
+            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
                 Writing tests first sounds great in theory, but in practice it's easy to skip or do 
                 incorrectly. TDD Mastery enforces the discipline for you—forcing tests to fail first (RED 
                 phase), then guiding you to make them pass (GREEN phase), and finally ensuring you clean 
                 up technical debt (REFACTOR phase). The result? Code that's 94% more reliable with 
                 comprehensive test coverage, all without the mental overhead of remembering the cycle yourself.
             </p>
-        </div>
-        
-        <div class="glass-card">
-            <h1>TDD Mastery</h1>
-            <span class="badge badge-success">94% Success Rate</span>
             
             <div class="metrics-grid metrics-grid-4">
                 <div class="metric-card glass-card">
@@ -69,56 +69,56 @@
         </div>
         
         <!-- RED-GREEN-REFACTOR -->
-        <section class="section-workflow">
+        <section class="section-workflow" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>🔄 RED-GREEN-REFACTOR Cycle</h2>
+                <h2><span style="font-size: 2rem;">🔄</span> RED-GREEN-REFACTOR Cycle</h2>
                 
                 <div class="card-grid">
                     <div class="tier-card tier-0">
                         <div class="tier-header">
-                            <span class="tier-icon">🔴</span>
+                            <span class="tier-icon" style="font-size: 2.5rem;">🔴</span>
                             <div>
                                 <div class="tier-title">RED Phase</div>
                                 <div class="tier-subtitle">Tests MUST fail first</div>
                             </div>
                         </div>
                         <p>Write tests that describe expected behavior. Tests must fail before any implementation code is written.</p>
-                        <ul class="feature-list">
-                            <li>Write test cases first</li>
-                            <li>Verify tests fail (no false positives)</li>
-                            <li>Document expected behavior</li>
+                        <ul class="feature-list" style="font-size: 1.25rem; line-height: 1.6; margin: 0.5rem 0;">
+                            <li style="padding: 0.25rem 0;">• Write test cases first</li>
+                            <li style="padding: 0.25rem 0;">• Verify tests fail (no false positives)</li>
+                            <li style="padding: 0.25rem 0;">• Document expected behavior</li>
                         </ul>
                     </div>
                     
                     <div class="tier-card tier-3">
                         <div class="tier-header">
-                            <span class="tier-icon">🟢</span>
+                            <span class="tier-icon" style="font-size: 2.5rem;">🟢</span>
                             <div>
                                 <div class="tier-title">GREEN Phase</div>
                                 <div class="tier-subtitle">Make tests pass</div>
                             </div>
                         </div>
                         <p>Write minimal implementation code to make all tests pass. Focus on functionality, not elegance.</p>
-                        <ul class="feature-list">
-                            <li>Implement minimal code</li>
-                            <li>All tests must pass</li>
-                            <li>No new functionality without tests</li>
+                        <ul class="feature-list" style="font-size: 1.25rem; line-height: 1.6; margin: 0.5rem 0;">
+                            <li style="padding: 0.25rem 0;">• Implement minimal code</li>
+                            <li style="padding: 0.25rem 0;">• All tests must pass</li>
+                            <li style="padding: 0.25rem 0;">• No new functionality without tests</li>
                         </ul>
                     </div>
                     
                     <div class="tier-card tier-2">
                         <div class="tier-header">
-                            <span class="tier-icon">🔵</span>
+                            <span class="tier-icon" style="font-size: 2.5rem;">🔵</span>
                             <div>
                                 <div class="tier-title">REFACTOR Phase</div>
                                 <div class="tier-subtitle">Clean up technical debt</div>
                             </div>
                         </div>
                         <p>Improve code quality while keeping tests green. Remove duplication, improve naming, optimize.</p>
-                        <ul class="feature-list">
-                            <li>Remove code duplication</li>
-                            <li>Improve naming/structure</li>
-                            <li>Tests stay green</li>
+                        <ul class="feature-list" style="font-size: 1.25rem; line-height: 1.6; margin: 0.5rem 0;">
+                            <li style="padding: 0.25rem 0;">• Remove code duplication</li>
+                            <li style="padding: 0.25rem 0;">• Improve naming/structure</li>
+                            <li style="padding: 0.25rem 0;">• Tests stay green</li>
                         </ul>
                     </div>
                 </div>
@@ -126,9 +126,9 @@
         </section>
         
         <!-- 4-Layer Coverage -->
-        <section class="section-architecture">
+        <section class="section-architecture" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>📊 4-Layer Coverage Validation</h2>
+                <h2><span style="font-size: 2rem;">📊</span> 4-Layer Coverage Validation</h2>
                 <p>TDD Mastery validates coverage across all architectural layers:</p>
                 
                 <table class="glass-table">
@@ -166,9 +166,9 @@
         </section>
         
         <!-- Enforcement -->
-        <section class="section-configuration">
+        <section class="section-configuration" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>🛡️ SKULL Enforcement</h2>
+                <h2><span style="font-size: 2rem;">🛡️</span> SKULL Enforcement</h2>
                 
                 <div class="alert alert-warning">
                     <span class="alert-icon">⚠️</span>
@@ -199,22 +199,22 @@ TDD_ENFORCEMENT:
         </section>
         
         <!-- Related -->
-        <section class="section-integration">
+        <section class="section-integration" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>🔗 Related Features</h2>
+                <h2><span style="font-size: 2rem;">🔗</span> Related Features</h2>
                 <div class="feature-grid feature-grid-3">
                     <a href="planning-system.html" class="glass-card">
-                        <span class="feature-icon">🎯</span>
+                        <span class="feature-icon" style="font-size: 2.5rem;">🎯</span>
                         <h3 class="feature-title">Planning System</h3>
                         <p class="text-secondary">Generates TDD-ready plans</p>
                     </a>
                     <a href="../governance/skull-rulebook.html" class="glass-card">
-                        <span class="feature-icon">🛡️</span>
+                        <span class="feature-icon" style="font-size: 2.5rem;">🛡️</span>
                         <h3 class="feature-title">SKULL Rulebook</h3>
                         <p class="text-secondary">TDD enforcement rules</p>
                     </a>
                     <a href="execution-orchestrator.html" class="glass-card">
-                        <span class="feature-icon">⚡</span>
+                        <span class="feature-icon" style="font-size: 2.5rem;">⚡</span>
                         <h3 class="feature-title">Execution</h3>
                         <p class="text-secondary">Runs TDD cycles autonomously</p>
                     </a>

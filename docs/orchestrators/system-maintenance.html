@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX System Maintenance Orchestrator - 7-phase health pipeline with tiered routing and rollback safety">
+    <title>System Maintenance - CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        .mermaid { background: transparent; margin: 1.5rem 0; }
+        .diagram-card { margin-bottom: 2rem; }
+        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">System Maintenance</span>
+    </nav>
+    
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none;">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <h1>System Maintenance Orchestrator</h1>
+            <span class="badge badge-success">Production Ready</span>
+            
+            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
+                Think of the System Maintenance Orchestrator as your automated system doctor—it runs a 
+                comprehensive 7-phase health check that analyzes your CORTEX brain state, aligns 
+                databases, cleans up orphaned files, optimizes performance, and generates detailed 
+                health reports. With tiered routing (quick/standard/comprehensive), it adapts to your 
+                needs, always creating safe rollback points before making any changes.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">7</div>
+                    <div class="metric-label">Phases</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">Tiered Routes</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Rollback Safety</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">AUTO</div>
+                    <div class="metric-label">Health Delta</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">system maintenance [--tier quick|standard|comprehensive]</code>
+                <p class="command-description">
+                    Runs the full 7-phase health pipeline with automatic tier selection based on system state.
+                </p>
+                <div class="command-example">
+                    system maintenance --tier comprehensive
+                </div>
+            </div>
+        </div>
+        
+        <!-- 7-Phase Workflow -->
+        <section class="section-workflow" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">📋</span> The 7-Phase Health Pipeline</h2>
+                
+                <div class="workflow-phases">
+                    <div class="phase-card">
+                        <span class="phase-number">1</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">🩺</span>
+                        <div class="phase-title">Pre-Healthcheck</div>
+                        <p class="phase-description">Capture baseline metrics, system state snapshot</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">2</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">🔄</span>
+                        <div class="phase-title">Align</div>
+                        <p class="phase-description">Sync databases, resolve schema drift</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">3</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">🧹</span>
+                        <div class="phase-title">Cleanup</div>
+                        <p class="phase-description">Remove orphaned files, dead references</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">4</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">⚡</span>
+                        <div class="phase-title">Optimize</div>
+                        <p class="phase-description">Index rebuild, query optimization</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">5</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">🗜️</span>
+                        <div class="phase-title">Vacuum</div>
+                        <p class="phase-description">Database compaction, space reclamation</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">6</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">🔃</span>
+                        <div class="phase-title">Refresh</div>
+                        <p class="phase-description">Cache invalidation, state refresh</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">7</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">✅</span>
+                        <div class="phase-title">Post-Healthcheck</div>
+                        <p class="phase-description">Compare metrics, generate delta report</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Workflow Flowchart -->
+        <section class="section-diagrams" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">📊</span> Maintenance Workflow Flowchart</h2>
+                <p class="diagram-title">Decision flow through the 7-phase pipeline</p>
+                
+                <div class="mermaid">
+flowchart TD
+    subgraph INIT["🚀 Initialization"]
+        A[Start Maintenance] --> B{Check System State}
+        B -->|Healthy| C[Quick Tier]
+        B -->|Degraded| D[Standard Tier]
+        B -->|Critical| E[Comprehensive Tier]
+    end
+    
+    subgraph P1["Phase 1: Pre-Healthcheck"]
+        C --> F[Capture Baseline]
+        D --> F
+        E --> F
+        F --> G[Create Git Checkpoint]
+        G --> H[Record Metrics Snapshot]
+    end
+    
+    subgraph P2["Phase 2: Align"]
+        H --> I{Schema Drift?}
+        I -->|Yes| J[Apply Migrations]
+        I -->|No| K[Skip]
+        J --> L[Verify Alignment]
+        K --> L
+    end
+    
+    subgraph P3["Phase 3: Cleanup"]
+        L --> M[Scan Orphaned Files]
+        M --> N{Files Found?}
+        N -->|Yes| O[Remove with Backup]
+        N -->|No| P[Skip]
+        O --> Q[Update References]
+        P --> Q
+    end
+    
+    subgraph P4["Phase 4-6: Optimize/Vacuum/Refresh"]
+        Q --> R[Rebuild Indexes]
+        R --> S[Vacuum Databases]
+        S --> T[Invalidate Caches]
+        T --> U[Refresh State]
+    end
+    
+    subgraph P7["Phase 7: Post-Healthcheck"]
+        U --> V[Capture Final Metrics]
+        V --> W[Calculate Delta]
+        W --> X{Improved?}
+        X -->|Yes| Y[✅ Generate Success Report]
+        X -->|No| Z[⚠️ Generate Warning Report]
+        Y --> AA[Complete]
+        Z --> AA
+    end
+    
+    style INIT fill:#1a1a2e,stroke:#00d4ff
+    style P1 fill:#1a1a2e,stroke:#10b981
+    style P2 fill:#1a1a2e,stroke:#f59e0b
+    style P3 fill:#1a1a2e,stroke:#ef4444
+    style P4 fill:#1a1a2e,stroke:#8b5cf6
+    style P7 fill:#1a1a2e,stroke:#06b6d4
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sequence Diagram -->
+        <section class="section-sequence" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🔀</span> Component Interaction Sequence</h2>
+                <p class="diagram-title">How components communicate during maintenance</p>
+                
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Orchestrator as MaintenanceOrchestrator
+    participant Health as HealthChecker
+    participant Git as GitCheckpoint
+    participant DB as DatabaseManager
+    participant Cleanup as CleanupModule
+    participant Cache as CacheManager
+    
+    User->>Orchestrator: system maintenance --tier standard
+    
+    rect rgb(26, 26, 46)
+        Note over Orchestrator,Health: Phase 1: Pre-Healthcheck
+        Orchestrator->>Health: capture_baseline()
+        Health-->>Orchestrator: BaselineMetrics
+        Orchestrator->>Git: create_checkpoint("pre-maintenance")
+        Git-->>Orchestrator: checkpoint_id
+    end
+    
+    rect rgb(26, 46, 26)
+        Note over Orchestrator,DB: Phase 2: Align
+        Orchestrator->>DB: check_schema_drift()
+        DB-->>Orchestrator: DriftReport
+        alt Has Drift
+            Orchestrator->>DB: apply_migrations()
+        end
+    end
+    
+    rect rgb(46, 26, 26)
+        Note over Orchestrator,Cleanup: Phase 3: Cleanup
+        Orchestrator->>Cleanup: scan_orphaned_files()
+        Cleanup-->>Orchestrator: OrphanedFiles[]
+        alt Files Found
+            Orchestrator->>Cleanup: remove_with_backup()
+        end
+    end
+    
+    rect rgb(26, 26, 66)
+        Note over Orchestrator,Cache: Phases 4-6: Optimize/Vacuum/Refresh
+        Orchestrator->>DB: rebuild_indexes()
+        Orchestrator->>DB: vacuum_databases()
+        Orchestrator->>Cache: invalidate_all()
+        Orchestrator->>Cache: refresh_state()
+    end
+    
+    rect rgb(26, 66, 66)
+        Note over Orchestrator,Health: Phase 7: Post-Healthcheck
+        Orchestrator->>Health: capture_final()
+        Health-->>Orchestrator: FinalMetrics
+        Orchestrator->>Orchestrator: calculate_delta()
+        Orchestrator-->>User: MaintenanceReport
+    end
+                </div>
+            </div>
+        </section>
+        
+        <!-- Data Flow Diagram -->
+        <section class="section-dfd" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">📈</span> Data Flow Diagram</h2>
+                <p class="diagram-title">How data flows through the maintenance pipeline</p>
+                
+                <div class="mermaid">
+flowchart LR
+    subgraph INPUTS["📥 Inputs"]
+        I1[(cortex-brain.db)]
+        I2[(conversation-history.db)]
+        I3[File System]
+        I4[Config Files]
+    end
+    
+    subgraph PROCESS["⚙️ Processing"]
+        P1[Health Analyzer]
+        P2[Schema Validator]
+        P3[File Scanner]
+        P4[Index Optimizer]
+        P5[Cache Manager]
+    end
+    
+    subgraph OUTPUTS["📤 Outputs"]
+        O1[Health Report]
+        O2[Cleanup Log]
+        O3[Delta Metrics]
+        O4[Git Checkpoint]
+    end
+    
+    I1 --> P1
+    I2 --> P1
+    I1 --> P2
+    I2 --> P2
+    I3 --> P3
+    I4 --> P3
+    
+    P1 --> O1
+    P1 --> O3
+    P2 --> P4
+    P3 --> O2
+    P4 --> P5
+    P5 --> O4
+    
+    style INPUTS fill:#1a1a2e,stroke:#00d4ff
+    style PROCESS fill:#1a1a2e,stroke:#10b981
+    style OUTPUTS fill:#1a1a2e,stroke:#f59e0b
+                </div>
+            </div>
+        </section>
+        
+        <!-- Mind Map -->
+        <section class="section-mindmap" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🧠</span> Maintenance Concepts Mind Map</h2>
+                <p class="diagram-title">Key concepts and their relationships</p>
+                
+                <div class="mermaid">
+mindmap
+    root((System Maintenance))
+        Health Monitoring
+            Baseline Capture
+            Delta Calculation
+            Trend Analysis
+            Alert Triggers
+        Database Operations
+            Schema Alignment
+            Index Optimization
+            Vacuum/Compaction
+            Migration Handling
+        File System
+            Orphan Detection
+            Reference Tracking
+            Backup Creation
+            Safe Deletion
+        Tiered Routing
+            Quick (5min)
+                Basic health check
+                Essential cleanup
+            Standard (15min)
+                Full alignment
+                Index rebuild
+            Comprehensive (30min)
+                Deep analysis
+                Full optimization
+        Safety Mechanisms
+            Git Checkpoints
+            Rollback Scripts
+            Backup Retention
+            Confirmation Gates
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tiered Routing -->
+        <section class="section-tiers" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">🎚️</span> Tiered Routing System</h2>
+                <p>The orchestrator automatically selects the appropriate tier based on system state:</p>
+                
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Tier</th>
+                            <th>Duration</th>
+                            <th>Trigger Condition</th>
+                            <th>Phases Executed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-success">Quick</span></td>
+                            <td>~5 min</td>
+                            <td>System healthy, routine check</td>
+                            <td>1 → 7 (skip 4-6)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">Standard</span></td>
+                            <td>~15 min</td>
+                            <td>Minor issues detected</td>
+                            <td>All 7 phases</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-danger">Comprehensive</span></td>
+                            <td>~30 min</td>
+                            <td>Critical issues or manual request</td>
+                            <td>All phases + deep analysis</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Health Delta Visualization -->
+        <section class="section-delta" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">📊</span> Health Delta Report</h2>
+                <p>Example output showing before/after metrics:</p>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">YAML</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>maintenance_report:
+  session_id: "maint-20251227-143022"
+  tier: "standard"
+  duration: "12m 34s"
+  
+  baseline_metrics:
+    database_size_mb: 156.2
+    orphaned_files: 23
+    index_fragmentation: 0.34
+    cache_hit_ratio: 0.78
+    
+  final_metrics:
+    database_size_mb: 142.8
+    orphaned_files: 0
+    index_fragmentation: 0.05
+    cache_hit_ratio: 0.95
+    
+  delta:
+    space_reclaimed_mb: 13.4
+    files_cleaned: 23
+    fragmentation_reduced: "85%"
+    cache_improvement: "+22%"
+    
+  git_checkpoint: "pre-maintenance-20251227-143022"
+  rollback_available: true
+  status: "SUCCESS"</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Features -->
+        <section class="section-related" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">🔗</span> Related Orchestrators</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="refinement-orchestrator.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">🔧</span>
+                        <h3 class="feature-title">Refinement</h3>
+                        <p class="text-secondary">7-phase code quality improvement</p>
+                    </a>
+                    <a href="git-checkpoint.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">📍</span>
+                        <h3 class="feature-title">Git Checkpoint</h3>
+                        <p class="text-secondary">Automatic rollback points</p>
+                    </a>
+                    <a href="system-integrity.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">🛡️</span>
+                        <h3 class="feature-title">System Integrity</h3>
+                        <p class="text-secondary">Validation and auto-fix</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
+            </div>
+        </div>
+    </footer>
+    
+    <button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        mermaid.initialize({ 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1a2e',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#16213e',
+                tertiaryColor: '#0f3460'
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,47 +1,13 @@
 # GitHub Copilot Instructions for CORTEX
 
-<!--
-⚠️  PROTECTED FILE - Contains manual enhancements
-    This file has been manually enhanced with orchestrator documentation.
-    DO NOT regenerate with scripts/regenerate_cortex_prompts.py unless using --force.
-    Protected by: .github/.prompt-preserve marker file
-    
-    Manual enhancements:
-    - ADO Operations orchestrator-level integration
-    - Planning System manifest references
-    - DoR/DoD compliance requirements
-    - Manifest inheritance structure
--->
-
-**Purpose:** AI Assistant enhancement with long-term memory, context awareness, and strategic planning
-
-**Version:** 3.9.0 | **Updated:** December 14, 2025
-
----
-
-## ⚠️ CRITICAL: Parse User Request FIRST
-
-**Problem:** Meta-directives incorrectly treated as user's request.
-
-**Solution:** Extract actual request BEFORE intent classification.
-
-**Meta-Directive Patterns (REMOVE):**
-```regex
-^Follow instructions in .+?[;.\n]
-^Use .+?\.prompt\.md[;.\n]
-^Reference file:///.+?[;.\n]
-```
-
-**Example:**
-- INPUT: `Follow instructions in CORTEX.prompt.md. Should we run align?`
-- FILTERED: `Should we run align?`
-- ROUTE TO: Strategic planning agent
+**Purpose:** AI Assistant with long-term memory, context awareness, and strategic planning  
+**Version:** 4.0.0 | **Author:** Asif Hussain
 
 ---
 
 ## 🎯 Entry Point
 
-**Load:** `.github/prompts/CORTEX.prompt.md` + `cortex-brain/response-templates-v4.yaml`
+**Primary:** Load `.github/prompts/CORTEX.prompt.md` for all intent routing.
 
 **Context Detection:**
 - **CORTEX repo** (has `cortex-brain/admin/`): Admin operations enabled
@@ -49,255 +15,91 @@
 
 ---
 
-## 📋 ADAPTIVE RESPONSE FORMAT (v4.1)
+## 🔀 Intent Routing
 
-**Header (ALWAYS required):**
-```markdown
-## 🧠 CORTEX {Title}
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-```
+All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 
-**Body (Scales by complexity):**
+| Intent Pattern | Route To |
+|----------------|----------|
+| `plan`, `create a plan`, `make a plan` | Planning System → folder with 4 subfolders |
+| `tdd`, `start tdd`, `run tests` | TDD Orchestrator → RED→GREEN→REFACTOR |
+| `ado`, `ado story`, `ado feature` | ADO Operations → work items |
+| `sanitize`, `make generic` | Sanitization → 5-phase cleanup |
+| `maintenance`, `health check` | Maintenance → 6-phase pipeline |
+| `refine`, `improve` | Refinement → 7-phase improvement |
 
-**TIER 1 - INSTANT** (Simple questions, <50 tokens):
-```markdown
-{direct_answer}
-```
-Examples: "What files are in src/?" → List files directly
-
-**TIER 2 - FOCUSED** (Single concept, 50-200 tokens):
-```markdown
-{explanation}
-
-**Next:** {single_action}
-```
-Examples: "How does X work?" → Brief explanation + ONE next step
-
-**TIER 3 - STRUCTURED** (Multi-step, 200-600 tokens):
-```markdown
-**Context:** {what_you_understood}
-
-{main_content}
-
-**Changes:**
-- {files_modified}
-
-**Next:** {single_highest_value_action}
-```
-Examples: File edits, multiple changes, implementation work
-
-**TIER 4 - COMPREHENSIVE** (Complex operations, 600+ tokens):
-```markdown
-### {Dynamic_Section_1}
-{content}
-
-### {Dynamic_Section_2}
-{content}
-```
-Examples: Architecture analysis, system maintenance, planning
-
-**Rules:**
-- ✅ Header ALWAYS included (H2 with 🧠 + author)
-- ✅ Body adapts to question complexity (no mandatory sections)
-- ✅ Use bolded labels (**Context:**, **Changes:**) for brevity
-- ✅ Use concise pseudo-code by default (NOT full code snippets)
-- ✅ **Next Steps: EXACTLY ONE action** (highest value) OR completion message
-- ❌ NO separators after header, NO full code unless explicitly requested, NO multiple next steps
-
-**Completion Template (Use when ALL work is complete):**
-```markdown
-# 🎉 CONGRATULATIONS
-## 🧠 CORTEX {Operation}
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+**Manifest Location:** `cortex-brain/manifests/orchestrators/`
 
 ---
 
-### 🎯 Understanding & Scope
-{what you understood}
+## 📋 Response Format
 
-### ⚡ Approach & Considerations
-No Challenge - All work completed successfully
+Defer to `CORTEX.prompt.md` for full spec. Summary:
 
-### 💬 Response
-{completion summary with metrics}
-
-### 📊 Impact & Changes
-{files changed, outcomes achieved}
-
-### 🔍 Next Steps
-✅ **All work complete!** No further action required.
-```
-
-**Next Steps Intelligence (v4.1):**
-
-Show EXACTLY ONE high-value action OR completion message using priority hierarchy:
-1. ✅ Complete: "✅ **All work complete!** No further action required."
-2. 🔥 Critical: Errors/bugs blocking system
-3. ⏳ In-progress: Incomplete orchestrator phases
-4. 🎯 High-value: Complexity refactoring (>30), critical gaps
-5. 📈 Medium-value: Test coverage, documentation, performance
-6. 💡 Low-value: Feature enhancements, backlog
-
-Format: `**Next:** {single_action_with_context}`
-
-**When to Use Success Template:**
-- ✅ ALL phases completed (no pending tasks)
-- ✅ All tests passing (100% pass rate)
-- ✅ No errors or warnings
-- ✅ User action NOT required
-- ✅ Orchestrator signals `is_complete=True`
-
-**When to Use Standard Template:**
-- ☐ Work in progress
-- ☐ Next steps require user action
-- ☐ Errors/warnings present
-
-**Orchestrator Engagement Hints (🎭 Pattern):**
-- Entry: `logger.info("🎭 Orchestrator engaged: OrchestratorName")`
-- Transitions: `logger.info("🎭 Phase transition: OLD → NEW")`
-- Completion: `logger.info("🎭 Orchestrator completing: ✅ ALL WORK COMPLETE")`
-
-**Available Completion Templates:**
-- `system_maintenance_complete` - Full maintenance workflow done
-- `plan_execution_complete` - Feature implementation finished
-- `tdd_workflow_complete` - RED→GREEN→REFACTOR cycle complete
-- `sanitization_complete` - Code sanitization with validation complete
+- **Header:** Always include `## 🧠 CORTEX {Title}` + author line
+- **Body:** Scales with complexity (INSTANT → COMPREHENSIVE)
+- **Next Steps:** EXACTLY ONE action OR completion message
+- **Completion:** Use `# 🎉 CONGRATULATIONS` when all work done
 
 ---
 
-## 🚀 Key Workflows
+## 🛡️ Brain Protection (SKULL)
 
-**Code Sanitization**
-- Commands: `sanitize [directory]`, `make generic`, `anonymize project`
-- 5-phase workflow: analyze → mapping → transform → validate → report
-- Removes company-specific data while preserving functionality
-- Guide: `cortex-brain/CODE-SANITIZATION-QUICK-REF.md`
+| Rule | Action |
+|------|--------|
+| TDD_ENFORCEMENT | Tests must fail before implementation |
+| HOLISTIC_DISCOVERY | Search before create (prevent duplication) |
+| GIT_ISOLATION | CORTEX code never commits to user repos |
 
-**Planning System**
-- Commands: `plan [feature]`, `execute all phases autonomously`
-- AUTO-COMPLEXITY: HIGH→incremental, MEDIUM→conditional, LOW→skeleton
-- TDD auto-included in all plans
-- Manifest: `planning-system-manifest.yaml` (DoR/DoD/TDD compliance)
-- Phase 10 Integration: Automatic YAML modularization (>20KB plans split into index + modules)
-
-**ADO Operations**
-- Commands: `plan ado`, `plan ado story`, `plan ado feature`, `generate ado summary`
-- Works like Planning System with ADO-formatted output
-- Manifest: `ado-planning-manifest.yaml` (inherits Planning System + ADO formatting)
-
-**TDD Mastery**
-- Commands: `start tdd`, `run tests`
-- RED→GREEN→REFACTOR mandatory
-- Per-layer coverage validation
-
-**System Maintenance**
-- Commands: `system maintenance`
-- 7 phases: healthcheck → align (auto-fix) → cleanup → optimize → vacuum → refresh prompts → healthcheck
-- Implementation: `src/operations/modules/orchestration/maintenance_orchestrator.py`
-- Status: ✅ Complete (invoked via Copilot Chat)
-- **Completion:** Shows `# 🎉 CONGRATULATIONS` when all phases complete with no errors
-- **Engagement hints:** Shows `🎭 Orchestrator engaged` and phase progress
+**Full rules:** `cortex-brain/brain-protection-rules.yaml`
 
 ---
 
 ## 📁 Document Organization
 
-**⛔ FORBIDDEN:** Root-level docs (`CORTEX/summary.md`)
+**⛔ FORBIDDEN:** Root-level docs  
+**✅ REQUIRED:** `cortex-brain/documents/{category}/`
 
-**✅ REQUIRED:** `cortex-brain/documents/{category}/{filename}.md`
-
-**Categories:** `reports/`, `analysis/`, `summaries/`, `investigations/`, `planning/`, `implementation-guides/`
+Categories: `reports/`, `analysis/`, `summaries/`, `investigations/`, `planning/`, `implementation-guides/`
 
 ---
 
 ## 🏗️ Architecture
 
-**4-Tier Brain:**
 ```
-cortex-brain/
-├── tier0/  # Governance (SKULL rules)
-├── tier1/  # Working memory (70-conv FIFO)
-├── tier2/  # Knowledge graph
-├── tier3/  # Dev context
-└── response-templates-v4.yaml
-```
+cortex-brain/           # Long-term memory (4-tier brain)
+├── tier0/ (Governance) 
+├── tier1/ (Working memory)
+├── tier2/ (Knowledge graph)
+├── tier3/ (Dev context)
+└── manifests/orchestrators/
 
-**Code:**
+src/                    # Implementation
+├── cortex_agents/      # 2 specialist agents
+├── orchestrators/      # 8 workflow orchestrators
+└── response_templates/ # Template rendering
 ```
-src/
-├── tier0/, tier1/, tier2/, tier3/
-├── cortex_agents/      # 2 agents
-├── orchestrators/      # 8 workflows
-└── response_templates/
-```
-
-**Brain Protection (SKULL):**
-- TDD_ENFORCEMENT: RED→GREEN→REFACTOR mandatory, tests fail first
-- HOLISTIC_CODE_DISCOVERY_ENFORCEMENT: Search before create (no duplication)
-- REFACTOR_CODE_CLEANUP_ENFORCEMENT: Remove orphaned/duplicate code
-- GIT_ISOLATION_ENFORCEMENT: CORTEX code never in user repos, tests in `tests/`
 
 ---
 
-## 🛠️ Developer Workflows
-
-**Tests:**
-```bash
-pytest tests/                    # CORTEX internal only
-pytest --cov=src tests/
-```
-
-**Setup:**
-```bash
-python --version                 # Requires 3.8+
-pip install -r requirements.txt
-python -m src.main
-```
-
-**Configuration:** Edit `cortex.config.json` with machine-specific paths
-
----
-
-## 🗺️ Key Files
+## 📚 Key Files
 
 | File | Purpose |
 |------|---------|
-| `.github/prompts/CORTEX.prompt.md` | Complete instructions |
+| `.github/prompts/CORTEX.prompt.md` | Intent router (source of truth) |
+| `.github/prompts/cortex-maintenance.prompt.md` | 6-phase maintenance |
 | `cortex-brain/brain-protection-rules.yaml` | SKULL rules |
-| `cortex-brain/response-templates-v4.yaml` | 62 templates |
-| `cortex.config.json` | Machine settings |
-| `cortex-brain/documents/learning-paths/` | Interactive tutorials (NEW) |
+| `cortex-brain/response-templates-v4.yaml` | Response templates |
+| `cortex-brain/manifests/orchestrators/` | All orchestrator manifests |
 
 ---
 
-## 🚨 Common Pitfalls
+## 🚀 Quick Start
 
-1. **Don't bypass Tier 0 instincts** - Brain Protector enforces with evidence
-2. **Don't skip RED phase** - Tests must fail before implementation
-3. **Don't create root-level docs** - All in `cortex-brain/documents/`
-4. **Don't mix CORTEX/user code** - Git isolation enforced
-5. **Don't bloat responses** - Every section must add value
+Say `help` in Copilot Chat to see all operations.
+
+**For maintenance:** Use `system maintenance` to run 6-phase health pipeline.
 
 ---
 
-## 🔄 CORTEX 3.0 → 4.0 Migration
-
-**BEFORE implementing new functionality:**
-1. Search for existing 3.0 implementations (semantic_search/grep_search)
-2. Review port-readiness (tests passing, architecture-compatible)
-3. Port and enhance if ready (migrate to 4.0 standards)
-4. Delete 3.0 artifacts (prevent import confusion, conflicts)
-
-**Port-Ready Indicators:**
-- Tests passing, clear boundaries, 4.0-compatible architecture
-
-**Post-Port:**
-- Remove 3.0 files, update imports/registry, archive with timestamp
-
----
-
-**Quick Start:** Say "help" to see available operations.
-
-**New Users:** Check `cortex-brain/documents/learning-paths/` for tutorials.
-
-**Anti-Bloat:** This file MUST stay under 300 lines.
+**Anti-Bloat:** This file MUST stay under 150 lines. All details defer to CORTEX.prompt.md.

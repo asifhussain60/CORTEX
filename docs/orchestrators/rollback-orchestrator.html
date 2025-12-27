@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Rollback Orchestrator - Safe checkpoint rollback with validation, safety checks, and user confirmation">
+    <title>Rollback Orchestrator - CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .mermaid { background: transparent; margin: 1.5rem 0; }
+        .diagram-card { margin-bottom: 2rem; }
+        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .checkpoint-selector { width: 100%; min-height: 280px; }
+        .safety-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0; }
+        .safety-card { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; border-left: 4px solid; }
+        .check-pass { color: #10b981; }
+        .check-fail { color: #ef4444; }
+        @media (max-width: 768px) { .safety-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Rollback Orchestrator</span>
+    </nav>
+    
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none;">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <h1>Rollback Orchestrator</h1>
+            <span class="badge badge-success">Production Ready</span>
+            
+            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
+                The Rollback Orchestrator provides safe state restoration to previous checkpoints. It integrates 
+                with the PhaseCheckpointManager to list, validate, and restore checkpoints created during TDD 
+                workflows. With built-in safety checks for uncommitted changes and merge conflicts, plus dry-run 
+                mode and force override, you can confidently restore your codebase to a known-good state.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">Safety Checks</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">DRY</div>
+                    <div class="metric-label">Run Mode</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">DIFF</div>
+                    <div class="metric-label">Preview</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">FORCE</div>
+                    <div class="metric-label">Override</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">rollback [checkpoint-id] [--dry-run] [--force] [--show-diff]</code>
+                <p class="command-description">
+                    Rollback to a specific checkpoint with safety checks and confirmation.
+                </p>
+                <div class="command-example">
+                    rollback tdd-green-20251227-151234 --show-diff
+                </div>
+            </div>
+        </div>
+        
+        <!-- Checkpoint Timeline -->
+        <section class="section-timeline" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">📍</span> Checkpoint Selection (D3.js)</h2>
+                <p class="diagram-title">Available checkpoints with rollback targets</p>
+                
+                <div id="checkpoint-selector" class="checkpoint-selector"></div>
+            </div>
+        </section>
+        
+        <!-- Safety Checks -->
+        <section class="section-safety" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">🛡️</span> Safety Checks</h2>
+                
+                <div class="safety-grid">
+                    <div class="safety-card" style="border-color: #ef4444;">
+                        <h3 style="font-size: 1rem;"><span class="check-fail">⚠️</span> Uncommitted Changes</h3>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+                            Detects modified files in working tree. Rollback blocked until changes are 
+                            committed or stashed. Lists all affected files.
+                        </p>
+                        <code style="font-size: 0.8rem; color: #ef4444;">SAFETY_MSG_UNCOMMITTED</code>
+                    </div>
+                    <div class="safety-card" style="border-color: #f59e0b;">
+                        <h3 style="font-size: 1rem;"><span class="check-fail">⚠️</span> Merge In Progress</h3>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+                            Checks for .git/MERGE_HEAD presence. Cannot rollback during active merge. 
+                            Complete or abort merge first.
+                        </p>
+                        <code style="font-size: 0.8rem; color: #f59e0b;">SAFETY_MSG_MERGE</code>
+                    </div>
+                    <div class="safety-card" style="border-color: #10b981;">
+                        <h3 style="font-size: 1rem;"><span class="check-pass">✅</span> Checkpoint Exists</h3>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+                            Validates checkpoint ID exists in PhaseCheckpointManager registry 
+                            before attempting rollback.
+                        </p>
+                        <code style="font-size: 0.8rem; color: #10b981;">validate_checkpoint()</code>
+                    </div>
+                    <div class="safety-card" style="border-color: #00d4ff;">
+                        <h3 style="font-size: 1rem;"><span class="check-pass">✅</span> User Confirmation</h3>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+                            Shows diff preview (optional) and requires explicit user confirmation 
+                            before executing rollback.
+                        </p>
+                        <code style="font-size: 0.8rem; color: #00d4ff;">confirm_rollback()</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Rollback Flow -->
+        <section class="section-flow" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🔄</span> Rollback Execution Flow</h2>
+                <p class="diagram-title">Complete workflow from command to state restoration</p>
+                
+                <div class="mermaid">
+flowchart TB
+    START[rollback checkpoint-id] --> VALIDATE{Checkpoint exists?}
+    
+    VALIDATE -->|No| ERR1["❌ Checkpoint not found"]
+    VALIDATE -->|Yes| FLAGS{Check flags}
+    
+    FLAGS -->|--dry-run| DRY[Show what would happen]
+    FLAGS -->|--force| FORCE[Skip safety checks]
+    FLAGS -->|normal| SAFETY[Run safety checks]
+    
+    DRY --> MSG1["📋 Would rollback to {id}"]
+    
+    FORCE --> EXEC[Execute git reset --hard]
+    
+    SAFETY --> CHECK1{Uncommitted changes?}
+    CHECK1 -->|Yes| ERR2["⚠️ Commit or stash changes first"]
+    CHECK1 -->|No| CHECK2{Merge in progress?}
+    
+    CHECK2 -->|Yes| ERR3["⚠️ Complete merge first"]
+    CHECK2 -->|No| DIFF{--show-diff?}
+    
+    DIFF -->|Yes| SHOW[Show git diff preview]
+    DIFF -->|No| CONFIRM
+    
+    SHOW --> CONFIRM{User confirms?}
+    
+    CONFIRM -->|No| CANCEL["❌ Rollback cancelled"]
+    CONFIRM -->|Yes| EXEC
+    
+    EXEC --> RESULT{Git reset success?}
+    
+    RESULT -->|No| ERR4["❌ Git reset failed"]
+    RESULT -->|Yes| SUCCESS["✅ Rollback complete"]
+    
+    style START fill:#00d4ff,color:#1a1a2e
+    style SUCCESS fill:#10b981,color:#fff
+    style ERR1 fill:#ef4444,color:#fff
+    style ERR2 fill:#f59e0b,color:#1a1a2e
+    style ERR3 fill:#f59e0b,color:#1a1a2e
+    style ERR4 fill:#ef4444,color:#fff
+    style CANCEL fill:#6b7280,color:#fff
+    style MSG1 fill:#8b5cf6,color:#fff
+                </div>
+            </div>
+        </section>
+        
+        <!-- State Comparison -->
+        <section class="section-comparison" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">⚖️</span> State Comparison</h2>
+                <p class="diagram-title">Before vs after rollback visualization</p>
+                
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Rollback as RollbackOrchestrator
+    participant Checkpoint as PhaseCheckpointManager
+    participant Git
+    
+    User->>Rollback: rollback tdd-green-20251227
+    
+    Rollback->>Checkpoint: validate_checkpoint(session, id)
+    Checkpoint-->>Rollback: checkpoint metadata
+    
+    Rollback->>Git: git status --porcelain
+    Git-->>Rollback: working tree status
+    
+    alt Uncommitted changes
+        Rollback-->>User: ⚠️ Changes detected
+        Note over Rollback: List affected files
+    else Clean working tree
+        Rollback->>Git: git diff HEAD checkpoint-id
+        Git-->>Rollback: diff output
+        
+        Rollback-->>User: Show diff preview
+        User->>Rollback: Confirm rollback
+        
+        Rollback->>Git: git reset --hard checkpoint-id
+        Git-->>Rollback: Reset result
+        
+        Rollback-->>User: ✅ Rollback complete
+    end
+                </div>
+            </div>
+        </section>
+        
+        <!-- Checkpoint Metadata -->
+        <section class="section-metadata" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">📋</span> Checkpoint Summary Format</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">Output</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>Checkpoint: tdd-green-20251227-151234
+Session: oauth-refactor-20251227
+Phase: implementation
+Commit SHA: abc1234
+Created: 2025-12-27T15:12:34
+
+Metrics:
+  tests: 45
+  passed: 43
+  failed: 2
+  coverage: 87.5
+  
+Files Changed:
+  - src/auth/oauth_handler.py
+  - tests/test_oauth.py
+  - src/utils/token_refresh.py</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Data Model -->
+        <section class="section-datamodel" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🗃️</span> Rollback Data Model</h2>
+                <p class="diagram-title">Key classes and methods for rollback operations</p>
+                
+                <div class="mermaid">
+classDiagram
+    class RollbackOrchestrator {
+        +Path cortex_dir
+        +Path project_root
+        +PhaseCheckpointManager checkpoint_manager
+        +list_checkpoints(session_id) List~Dict~
+        +validate_checkpoint(session_id, checkpoint_id) bool
+        +format_checkpoint_summary(session_id, checkpoint_id) str
+        +check_rollback_safety(checkpoint_id) Dict
+        +confirm_rollback(checkpoint_id, show_diff) Dict
+        +execute_rollback(checkpoint_id, dry_run, force) Dict
+        -_get_git_status() Dict
+        -_get_git_diff(checkpoint_id) str
+    }
+    
+    class PhaseCheckpointManager {
+        +Path cortex_root
+        +list_checkpoints(session_id) List~Dict~
+        +get_checkpoint(checkpoint_id) Dict
+        +create_checkpoint(phase, metadata) str
+    }
+    
+    class SafetyCheckResult {
+        +bool safe
+        +str warning
+        +str details
+    }
+    
+    class RollbackResult {
+        +bool success
+        +str message
+        +str checkpoint_id
+        +str commit_sha
+    }
+    
+    RollbackOrchestrator *-- PhaseCheckpointManager
+    RollbackOrchestrator --> SafetyCheckResult : produces
+    RollbackOrchestrator --> RollbackResult : returns
+                </div>
+            </div>
+        </section>
+        
+        <!-- Command Options -->
+        <section class="section-options" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">⚙️</span> Command Options</h2>
+                
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Description</th>
+                            <th>Default</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>--dry-run</code></td>
+                            <td>Preview rollback without executing</td>
+                            <td>false</td>
+                            <td><code>rollback abc123 --dry-run</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>--force</code></td>
+                            <td>Skip safety checks (dangerous)</td>
+                            <td>false</td>
+                            <td><code>rollback abc123 --force</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>--show-diff</code></td>
+                            <td>Show git diff before confirming</td>
+                            <td>false</td>
+                            <td><code>rollback abc123 --show-diff</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>--session</code></td>
+                            <td>Specify session ID for checkpoint lookup</td>
+                            <td>current</td>
+                            <td><code>rollback abc123 --session my-session</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Related Features -->
+        <section class="section-related" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">🔗</span> Related Orchestrators</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="git-checkpoint.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">📍</span>
+                        <h3 class="feature-title">Git Checkpoint</h3>
+                        <p class="text-secondary">Creates checkpoints</p>
+                    </a>
+                    <a href="tdd-orchestrator.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">✅</span>
+                        <h3 class="feature-title">TDD Mastery</h3>
+                        <p class="text-secondary">Phase checkpoints</p>
+                    </a>
+                    <a href="cleanup-orchestrator.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">🧹</span>
+                        <h3 class="feature-title">Cleanup</h3>
+                        <p class="text-secondary">Safe with backup</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
+            </div>
+        </div>
+    </footer>
+    
+    <button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        // Mermaid Configuration
+        mermaid.initialize({ 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1a2e',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#16213e',
+                tertiaryColor: '#0f3460'
+            }
+        });
+        
+        // D3.js Checkpoint Selector
+        (function() {
+            const container = document.getElementById('checkpoint-selector');
+            const width = container.clientWidth || 700;
+            const height = 260;
+            
+            const checkpoints = [
+                { id: 'tdd-red-001', phase: 'RED', time: '14:30', current: false, safe: true },
+                { id: 'tdd-green-001', phase: 'GREEN', time: '14:45', current: false, safe: true },
+                { id: 'tdd-refactor-001', phase: 'REFACTOR', time: '15:00', current: false, safe: true },
+                { id: 'impl-start-001', phase: 'IMPL', time: '15:15', current: false, safe: true },
+                { id: 'impl-complete-001', phase: 'IMPL', time: '15:45', current: false, safe: true },
+                { id: 'debug-fix-001', phase: 'DEBUG', time: '16:00', current: true, safe: false }
+            ];
+            
+            const phaseColors = {
+                RED: '#ef4444',
+                GREEN: '#10b981',
+                REFACTOR: '#f59e0b',
+                IMPL: '#00d4ff',
+                DEBUG: '#8b5cf6'
+            };
+            
+            const svg = d3.select('#checkpoint-selector')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const lineY = 120;
+            const startX = 80;
+            const endX = width - 80;
+            const spacing = (endX - startX) / (checkpoints.length - 1);
+            
+            // Current position indicator
+            const currentIdx = checkpoints.findIndex(c => c.current);
+            const currentX = startX + currentIdx * spacing;
+            
+            // Timeline line
+            svg.append('line')
+                .attr('x1', startX)
+                .attr('y1', lineY)
+                .attr('x2', endX)
+                .attr('y2', lineY)
+                .attr('stroke', '#2d2d4a')
+                .attr('stroke-width', 4);
+            
+            // Rollback zone (before current)
+            if (currentIdx > 0) {
+                svg.append('line')
+                    .attr('x1', startX)
+                    .attr('y1', lineY)
+                    .attr('x2', currentX)
+                    .attr('y2', lineY)
+                    .attr('stroke', '#10b981')
+                    .attr('stroke-width', 4)
+                    .attr('stroke-opacity', 0.6);
+            }
+            
+            // Draw checkpoints
+            checkpoints.forEach((cp, i) => {
+                const x = startX + i * spacing;
+                const g = svg.append('g')
+                    .attr('transform', `translate(${x}, ${lineY})`)
+                    .style('cursor', cp.safe && !cp.current ? 'pointer' : 'default');
+                
+                // Outer ring for current
+                if (cp.current) {
+                    g.append('circle')
+                        .attr('r', 22)
+                        .attr('fill', 'none')
+                        .attr('stroke', '#fff')
+                        .attr('stroke-width', 2)
+                        .attr('stroke-dasharray', '4,2');
+                }
+                
+                // Main circle
+                g.append('circle')
+                    .attr('r', cp.current ? 16 : 12)
+                    .attr('fill', phaseColors[cp.phase])
+                    .attr('stroke', cp.safe ? '#10b981' : '#ef4444')
+                    .attr('stroke-width', cp.current ? 0 : 2);
+                
+                // Phase label above
+                g.append('text')
+                    .attr('y', -35)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#e2e8f0')
+                    .attr('font-size', 11)
+                    .attr('font-weight', 600)
+                    .text(cp.phase);
+                
+                // ID below
+                g.append('text')
+                    .attr('y', 40)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#a0aec0')
+                    .attr('font-size', 9)
+                    .text(cp.id.slice(0, 12));
+                
+                // Time below ID
+                g.append('text')
+                    .attr('y', 55)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#6b7280')
+                    .attr('font-size', 9)
+                    .text(cp.time);
+                
+                // Rollback arrow (for non-current, safe checkpoints)
+                if (cp.safe && !cp.current && i < currentIdx) {
+                    g.append('text')
+                        .attr('y', -55)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#10b981')
+                        .attr('font-size', 14)
+                        .text('🔙');
+                }
+            });
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(20, ${height - 40})`);
+            
+            legend.append('circle')
+                .attr('cx', 0).attr('cy', 0).attr('r', 6)
+                .attr('fill', '#10b981');
+            legend.append('text')
+                .attr('x', 12).attr('y', 4)
+                .attr('fill', '#a0aec0').attr('font-size', 10)
+                .text('Safe rollback target');
+            
+            legend.append('circle')
+                .attr('cx', 150).attr('cy', 0).attr('r', 6)
+                .attr('fill', '#ef4444');
+            legend.append('text')
+                .attr('x', 162).attr('y', 4)
+                .attr('fill', '#a0aec0').attr('font-size', 10)
+                .text('Current (cannot rollback)');
+            
+            // Current position label
+            svg.append('text')
+                .attr('x', currentX)
+                .attr('y', lineY - 60)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', 10)
+                .attr('font-weight', 600)
+                .text('YOU ARE HERE');
+        })();
+    </script>
+</body>
+</html>

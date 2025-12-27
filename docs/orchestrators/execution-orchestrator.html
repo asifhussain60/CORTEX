@@ -11,12 +11,7 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
-    
+    <!-- Breadcrumb Navigation (Top) -->
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="../index.html">Home</a>
         <span class="breadcrumb-separator">→</span>
@@ -25,21 +20,26 @@
         <span class="breadcrumb-current">Execution Orchestrator</span>
     </nav>
     
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none;">
+        </a>
+    </div>
+    
     <main class="container" id="main-content">
-        <div class="feature-benefit-panel">
-            <span class="icon">⚡</span>
-            <p class="description">
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <h1>Execution Orchestrator</h1>
+            <span class="badge badge-info">Autonomous</span>
+            
+            <!-- Intro Description -->
+            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
                 Once you have a plan, you need to execute it—but manually tracking which phase you're on, 
                 running validations, and handling failures is tedious and error-prone. The Execution 
                 Orchestrator takes your approved plan and runs it autonomously, phase by phase, with 
                 validation gates ensuring each step completes successfully before moving forward. If 
                 something fails, it pauses and gives you clear options for rollback or manual intervention.
             </p>
-        </div>
-        
-        <div class="glass-card">
-            <h1>Execution Orchestrator</h1>
-            <span class="badge badge-info">Autonomous</span>
             
             <div class="metrics-grid metrics-grid-4">
                 <div class="metric-card glass-card">
@@ -68,32 +68,32 @@
             </div>
         </div>
         
-        <section class="section-workflow">
+        <section class="section-workflow" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>🔄 Execution Flow</h2>
+                <h2><span style="font-size: 2rem;">🔄</span> Execution Flow</h2>
                 
                 <div class="workflow-phases">
                     <div class="phase-card">
                         <span class="phase-number">1</span>
-                        <span class="phase-icon">📋</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">📋</span>
                         <div class="phase-title">Plan Validation</div>
                         <p class="phase-description">Verify plan is complete and approved</p>
                     </div>
                     <div class="phase-card">
                         <span class="phase-number">2</span>
-                        <span class="phase-icon">🔄</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">🔄</span>
                         <div class="phase-title">Phase Iteration</div>
                         <p class="phase-description">Execute each phase sequentially</p>
                     </div>
                     <div class="phase-card">
                         <span class="phase-number">3</span>
-                        <span class="phase-icon">✅</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">✅</span>
                         <div class="phase-title">Gate Validation</div>
                         <p class="phase-description">Verify phase completion criteria</p>
                     </div>
                     <div class="phase-card">
                         <span class="phase-number">4</span>
-                        <span class="phase-icon">📊</span>
+                        <span class="phase-icon" style="font-size: 2.5rem;">📊</span>
                         <div class="phase-title">Progress Report</div>
                         <p class="phase-description">Real-time status updates</p>
                     </div>
@@ -101,9 +101,9 @@
             </div>
         </section>
         
-        <section class="section-architecture">
+        <section class="section-architecture" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>🛡️ Failure Handling</h2>
+                <h2><span style="font-size: 2rem;">🛡️</span> Failure Handling</h2>
                 
                 <div class="card-grid-2">
                     <div class="alert alert-warning">
@@ -124,22 +124,22 @@
             </div>
         </section>
         
-        <section class="section-integration">
+        <section class="section-integration" style="margin-bottom: 2rem;">
             <div class="glass-card">
-                <h2>🔗 Related Features</h2>
+                <h2><span style="font-size: 2rem;">🔗</span> Related Features</h2>
                 <div class="feature-grid feature-grid-3">
                     <a href="planning-system.html" class="glass-card">
-                        <span class="feature-icon">🎯</span>
+                        <span class="feature-icon" style="font-size: 2.5rem;">🎯</span>
                         <h3 class="feature-title">Planning System</h3>
                         <p class="text-secondary">Creates the plans to execute</p>
                     </a>
                     <a href="tdd-orchestrator.html" class="glass-card">
-                        <span class="feature-icon">✅</span>
+                        <span class="feature-icon" style="font-size: 2.5rem;">✅</span>
                         <h3 class="feature-title">TDD Mastery</h3>
                         <p class="text-secondary">Tests run during execution</p>
                     </a>
                     <a href="../features/token-optimization.html" class="glass-card">
-                        <span class="feature-icon">⚡</span>
+                        <span class="feature-icon" style="font-size: 2.5rem;">⚡</span>
                         <h3 class="feature-title">Token Optimization</h3>
                         <p class="text-secondary">Efficient execution reporting</p>
                     </a>

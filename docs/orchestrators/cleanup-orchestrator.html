@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Cleanup Orchestrator - Holistic repository analysis with file categorization, production-readiness validation, and safe cleanup">
+    <title>Cleanup Orchestrator - CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .mermaid { background: transparent; margin: 1.5rem 0; }
+        .diagram-card { margin-bottom: 2rem; }
+        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .category-tree { width: 100%; min-height: 350px; }
+        .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+        .category-card { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; border-left: 4px solid; }
+        .severity-high { color: #ef4444; }
+        .severity-medium { color: #f59e0b; }
+        .severity-low { color: #10b981; }
+        @media (max-width: 768px) { .category-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Cleanup Orchestrator</span>
+    </nav>
+    
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none;">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <h1>Cleanup Orchestrator</h1>
+            <span class="badge badge-success">Production Ready</span>
+            
+            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
+                The Cleanup Orchestrator performs comprehensive repository analysis and cleanup through 
+                holistic scanning. It categorizes files by type and purpose, validates production-readiness 
+                naming conventions, detects redundancies, and safely executes cleanup with backup/rollback 
+                capabilities. The orchestrator never touches protected directories.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">7</div>
+                    <div class="metric-label">File Categories</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">12</div>
+                    <div class="metric-label">Violation Patterns</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">DRY</div>
+                    <div class="metric-label">Run Default</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">SAFE</div>
+                    <div class="metric-label">With Backup</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">cleanup [--dry-run] [--execute] [--backup]</code>
+                <p class="command-description">
+                    Scan repository for cleanup candidates, optionally execute with backup.
+                </p>
+                <div class="command-example">
+                    cleanup --dry-run
+                </div>
+            </div>
+        </div>
+        
+        <!-- File Categories -->
+        <section class="section-categories" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">📁</span> File Categories</h2>
+                
+                <div class="category-grid">
+                    <div class="category-card" style="border-color: #10b981;">
+                        <h3 style="color: #10b981; font-size: 1rem;">✅ production</h3>
+                        <p style="font-size: 0.9rem;">Production-ready files with clean naming</p>
+                        <code style="font-size: 0.75rem;">^[a-z_]+\.py$</code>
+                    </div>
+                    <div class="category-card" style="border-color: #f59e0b;">
+                        <h3 style="color: #f59e0b; font-size: 1rem;">⚠️ non_production</h3>
+                        <p style="font-size: 0.9rem;">Temporary or versioned naming</p>
+                        <code style="font-size: 0.75rem;">*_v2.*, *-20251225.*</code>
+                    </div>
+                    <div class="category-card" style="border-color: #ef4444;">
+                        <h3 style="color: #ef4444; font-size: 1rem;">🗑️ redundant</h3>
+                        <p style="font-size: 0.9rem;">Backup and redundant files</p>
+                        <code style="font-size: 0.75rem;">*.bak, *BACKUP*, *.old</code>
+                    </div>
+                    <div class="category-card" style="border-color: #ec4899;">
+                        <h3 style="color: #ec4899; font-size: 1rem;">📦 deprecated</h3>
+                        <p style="font-size: 0.9rem;">Explicitly deprecated files</p>
+                        <code style="font-size: 0.75rem;">*deprecated*, *legacy*</code>
+                    </div>
+                    <div class="category-card" style="border-color: #8b5cf6;">
+                        <h3 style="color: #8b5cf6; font-size: 1rem;">📂 dependency_cache</h3>
+                        <p style="font-size: 0.9rem;">Caches and virtual environments</p>
+                        <code style="font-size: 0.75rem;">node_modules/, __pycache__/</code>
+                    </div>
+                    <div class="category-card" style="border-color: #06b6d4;">
+                        <h3 style="color: #06b6d4; font-size: 1rem;">⚙️ config_artifact</h3>
+                        <p style="font-size: 0.9rem;">Config from deprecated tech</p>
+                        <code style="font-size: 0.75rem;">package.json, yarn.lock</code>
+                    </div>
+                    <div class="category-card" style="border-color: #00d4ff;">
+                        <h3 style="color: #00d4ff; font-size: 1rem;">📊 reports</h3>
+                        <p style="font-size: 0.9rem;">Temporary reports and summaries</p>
+                        <code style="font-size: 0.75rem;">*REPORT*.md, *STATUS*.md</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Category Distribution Tree -->
+        <section class="section-tree" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🌳</span> Category Distribution (D3.js)</h2>
+                <p class="diagram-title">Interactive treemap of file categories</p>
+                
+                <div id="category-tree" class="category-tree"></div>
+            </div>
+        </section>
+        
+        <!-- Cleanup Workflow -->
+        <section class="section-workflow" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🔄</span> Cleanup Workflow</h2>
+                <p class="diagram-title">From scan to safe execution with rollback</p>
+                
+                <div class="mermaid">
+flowchart TB
+    START[cleanup command] --> MODE{Mode?}
+    
+    MODE -->|--dry-run| SCAN[Holistic Repository Scan]
+    MODE -->|--execute| BACKUP[Create Backup First]
+    
+    BACKUP --> SCAN
+    
+    subgraph ANALYSIS["🔍 Analysis Phase"]
+        SCAN --> CAT[Categorize Files]
+        CAT --> VAL[Validate Production Readiness]
+        VAL --> DUP[Detect Duplicates]
+        DUP --> BLO[Find Bloated Files]
+    end
+    
+    BLO --> MANIFEST[Generate Cleanup Manifest]
+    
+    MANIFEST --> CHECK{Dry Run?}
+    
+    CHECK -->|Yes| REPORT[📋 Display Report Only]
+    CHECK -->|No| CONFIRM{User Confirms?}
+    
+    CONFIRM -->|No| ABORT[❌ Abort]
+    CONFIRM -->|Yes| EXECUTE[Execute Cleanup Actions]
+    
+    EXECUTE --> VERIFY{Verification Pass?}
+    
+    VERIFY -->|No| ROLLBACK[🔙 Rollback from Backup]
+    VERIFY -->|Yes| SUCCESS[✅ Cleanup Complete]
+    
+    ROLLBACK --> FAIL[❌ Cleanup Failed - State Restored]
+    
+    style START fill:#00d4ff,color:#1a1a2e
+    style SUCCESS fill:#10b981,color:#fff
+    style FAIL fill:#ef4444,color:#fff
+    style ROLLBACK fill:#f59e0b,color:#1a1a2e
+    style REPORT fill:#8b5cf6,color:#fff
+                </div>
+            </div>
+        </section>
+        
+        <!-- Production Readiness Violations -->
+        <section class="section-violations" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">🚫</span> Production Readiness Violations</h2>
+                
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Pattern Type</th>
+                            <th>Example</th>
+                            <th>Severity</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>temporary_prefix</td>
+                            <td><code>temp_config.py</code></td>
+                            <td><span class="severity-high">HIGH</span></td>
+                            <td>Starts with temp, tmp, test, demo</td>
+                        </tr>
+                        <tr>
+                            <td>version_suffix</td>
+                            <td><code>handler_v2.py</code></td>
+                            <td><span class="severity-medium">MEDIUM</span></td>
+                            <td>Version number suffix</td>
+                        </tr>
+                        <tr>
+                            <td>date_stamp</td>
+                            <td><code>report-20251227.md</code></td>
+                            <td><span class="severity-medium">MEDIUM</span></td>
+                            <td>Date embedded in filename</td>
+                        </tr>
+                        <tr>
+                            <td>modification_indicator</td>
+                            <td><code>auth_fixed.py</code></td>
+                            <td><span class="severity-high">HIGH</span></td>
+                            <td>Words like cleaned, fixed, updated</td>
+                        </tr>
+                        <tr>
+                            <td>status_indicator</td>
+                            <td><code>database_old.py</code></td>
+                            <td><span class="severity-high">HIGH</span></td>
+                            <td>Words like backup, old, deprecated</td>
+                        </tr>
+                        <tr>
+                            <td>copy_indicator</td>
+                            <td><code>config - Copy.json</code></td>
+                            <td><span class="severity-high">HIGH</span></td>
+                            <td>Windows-style copy suffix</td>
+                        </tr>
+                        <tr>
+                            <td>temporary_report</td>
+                            <td><code>ANALYSIS_REPORT.md</code></td>
+                            <td><span class="severity-medium">MEDIUM</span></td>
+                            <td>All-caps report files</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Protected Directories -->
+        <section class="section-protected" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🛡️</span> Protected Directories</h2>
+                <p class="diagram-title">Directories the cleanup orchestrator will NEVER touch</p>
+                
+                <div class="mermaid">
+flowchart LR
+    ROOT[Repository Root] --> PROTECTED["🛡️ Protected"]
+    ROOT --> SCANNED["🔍 Scanned"]
+    
+    PROTECTED --> P1[".git/"]
+    PROTECTED --> P2["cortex-brain/admin/"]
+    PROTECTED --> P3["cortex-brain/tier0/"]
+    PROTECTED --> P4["cortex-brain/protection-layers/"]
+    PROTECTED --> P5[".venv/"]
+    PROTECTED --> P6["node_modules/"]
+    PROTECTED --> P7["backups/"]
+    
+    SCANNED --> S1["src/"]
+    SCANNED --> S2["tests/"]
+    SCANNED --> S3["docs/"]
+    SCANNED --> S4["scripts/"]
+    SCANNED --> S5["cortex-brain/documents/"]
+    
+    style PROTECTED fill:#ef4444,color:#fff
+    style SCANNED fill:#10b981,color:#fff
+    style P1 fill:#1a1a2e,stroke:#ef4444
+    style P2 fill:#1a1a2e,stroke:#ef4444
+    style P3 fill:#1a1a2e,stroke:#ef4444
+    style P4 fill:#1a1a2e,stroke:#ef4444
+    style P5 fill:#1a1a2e,stroke:#ef4444
+    style P6 fill:#1a1a2e,stroke:#ef4444
+    style P7 fill:#1a1a2e,stroke:#ef4444
+                </div>
+            </div>
+        </section>
+        
+        <!-- Data Model -->
+        <section class="section-datamodel" style="margin-bottom: 2rem;">
+            <div class="glass-card diagram-card">
+                <h2><span style="font-size: 2rem;">🗃️</span> Cleanup Data Model</h2>
+                <p class="diagram-title">Key data structures for cleanup analysis</p>
+                
+                <div class="mermaid">
+classDiagram
+    class FileInfo {
+        +str path
+        +str name
+        +int size
+        +datetime modified
+        +List~str~ categories
+        +bool production_ready
+        +List~Dict~ violations
+        +str recommended_name
+    }
+    
+    class CleanupManifest {
+        +datetime generated_at
+        +str repository
+        +Dict overview
+        +Dict categories
+        +List recommendations
+        +List proposed_actions
+        +to_dict() Dict
+    }
+    
+    class FileCategorizationEngine {
+        +CATEGORIES: Dict
+        +categorize_file(Path) FileInfo
+    }
+    
+    class ProductionReadinessValidator {
+        +NON_PRODUCTION_PATTERNS: List
+        +validate_file(Path) FileInfo
+        -_suggest_production_name(Path) str
+    }
+    
+    class HolisticRepositoryScanner {
+        +Path project_root
+        +Set protected_paths
+        +scan_repository() Dict
+        -_is_protected(Path) bool
+    }
+    
+    class HolisticCleanupOrchestrator {
+        +execute(context) OperationResult
+        -_phase_scan()
+        -_phase_categorize()
+        -_phase_validate()
+        -_phase_generate_manifest()
+        -_phase_execute()
+        -_phase_verify()
+    }
+    
+    HolisticCleanupOrchestrator *-- HolisticRepositoryScanner
+    HolisticRepositoryScanner *-- FileCategorizationEngine
+    HolisticRepositoryScanner *-- ProductionReadinessValidator
+    HolisticCleanupOrchestrator --> CleanupManifest : generates
+    FileCategorizationEngine --> FileInfo : produces
+    ProductionReadinessValidator --> FileInfo : validates
+                </div>
+            </div>
+        </section>
+        
+        <!-- Example Output -->
+        <section class="section-output" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">📋</span> Example Cleanup Manifest</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">JSON</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>{
+  "generated_at": "2025-12-27T15:30:00Z",
+  "repository": "/Users/dev/my-project",
+  
+  "overview": {
+    "total_files": 1250,
+    "total_directories": 85,
+    "total_size_bytes": 15728640,
+    "production_ready": 1180,
+    "non_production": 70
+  },
+  
+  "categories": {
+    "production": { "count": 1180, "size_mb": 12.5 },
+    "non_production": { "count": 35, "size_mb": 1.2 },
+    "redundant": { "count": 15, "size_mb": 0.8 },
+    "deprecated": { "count": 8, "size_mb": 0.3 },
+    "dependency_cache": { "count": 5, "size_mb": 0.1 },
+    "reports": { "count": 7, "size_mb": 0.1 }
+  },
+  
+  "recommendations": [
+    {
+      "action": "rename",
+      "file": "src/auth/handler_v2.py",
+      "current": "handler_v2.py",
+      "suggested": "handler.py",
+      "reason": "version_suffix violation"
+    },
+    {
+      "action": "delete",
+      "file": "config-backup.json",
+      "reason": "redundant backup file"
+    }
+  ],
+  
+  "proposed_actions": [
+    { "type": "rename", "count": 35 },
+    { "type": "delete", "count": 15 },
+    { "type": "relocate", "count": 8 }
+  ]
+}</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Features -->
+        <section class="section-related" style="margin-bottom: 2rem;">
+            <div class="glass-card">
+                <h2><span style="font-size: 2rem;">🔗</span> Related Orchestrators</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="system-integrity.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">🛡️</span>
+                        <h3 class="feature-title">System Integrity</h3>
+                        <p class="text-secondary">Validation & auto-fix</p>
+                    </a>
+                    <a href="git-checkpoint.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">📍</span>
+                        <h3 class="feature-title">Git Checkpoint</h3>
+                        <p class="text-secondary">Rollback safety net</p>
+                    </a>
+                    <a href="rollback-orchestrator.html" class="glass-card">
+                        <span class="feature-icon" style="font-size: 2.5rem;">🔙</span>
+                        <h3 class="feature-title">Rollback</h3>
+                        <p class="text-secondary">State restoration</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
+            </div>
+        </div>
+    </footer>
+    
+    <button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        // Mermaid Configuration
+        mermaid.initialize({ 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1a2e',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#16213e',
+                tertiaryColor: '#0f3460'
+            }
+        });
+        
+        // D3.js Category Treemap
+        (function() {
+            const container = document.getElementById('category-tree');
+            const width = container.clientWidth || 700;
+            const height = 320;
+            
+            const data = {
+                name: 'Repository',
+                children: [
+                    { name: 'production', value: 1180, color: '#10b981' },
+                    { name: 'non_production', value: 35, color: '#f59e0b' },
+                    { name: 'redundant', value: 15, color: '#ef4444' },
+                    { name: 'deprecated', value: 8, color: '#ec4899' },
+                    { name: 'dependency_cache', value: 5, color: '#8b5cf6' },
+                    { name: 'config_artifact', value: 3, color: '#06b6d4' },
+                    { name: 'reports', value: 7, color: '#00d4ff' }
+                ]
+            };
+            
+            const root = d3.hierarchy(data)
+                .sum(d => d.value)
+                .sort((a, b) => b.value - a.value);
+            
+            d3.treemap()
+                .size([width, height])
+                .padding(4)
+                .round(true)(root);
+            
+            const svg = d3.select('#category-tree')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const nodes = svg.selectAll('g')
+                .data(root.leaves())
+                .join('g')
+                .attr('transform', d => `translate(${d.x0},${d.y0})`);
+            
+            // Rectangles
+            nodes.append('rect')
+                .attr('width', d => d.x1 - d.x0)
+                .attr('height', d => d.y1 - d.y0)
+                .attr('fill', d => d.data.color)
+                .attr('fill-opacity', 0.8)
+                .attr('stroke', '#1a1a2e')
+                .attr('stroke-width', 2)
+                .attr('rx', 4);
+            
+            // Category name
+            nodes.append('text')
+                .attr('x', 8)
+                .attr('y', 20)
+                .attr('fill', '#fff')
+                .attr('font-size', d => Math.min(14, (d.x1 - d.x0) / 6))
+                .attr('font-weight', 600)
+                .text(d => d.data.name);
+            
+            // File count
+            nodes.filter(d => (d.x1 - d.x0) > 60)
+                .append('text')
+                .attr('x', 8)
+                .attr('y', 38)
+                .attr('fill', 'rgba(255,255,255,0.8)')
+                .attr('font-size', 11)
+                .text(d => `${d.data.value} files`);
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(10, ${height - 30})`);
+            
+            legend.append('text')
+                .attr('fill', '#a0aec0')
+                .attr('font-size', 10)
+                .text('Size = file count per category');
+        })();
+    </script>
+</body>
+</html>
