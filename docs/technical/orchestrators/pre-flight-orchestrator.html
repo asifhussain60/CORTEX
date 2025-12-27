@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-Flight Orchestrator | CORTEX Technical Documentation</title>
-    
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    
-    <!-- Mermaid -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
-    <style>
-        :root {
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Pre-Flight Orchestrator | CORTEX Technical Documentation</title>
+<!-- D3.js -->
+<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
+</script><!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+</script>
+<style type="text/css">
+      :root {
             --preflight-primary: #673AB7;
             --preflight-secondary: #5E35B1;
             --preflight-dark: #512DA8;
@@ -222,82 +220,108 @@
             h1 { font-size: 2rem; }
             .orchestrator-meta { grid-template-columns: 1fr; }
         }
-    </style>
-</head>
-<body>
+            
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary, #2196F3);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--secondary, #1976D2);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+        
+        .breadcrumb-current {
+            color: #e2e8f0;
+        }
+
+  <body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Technical Documentation<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">Pre-Flight<\/span>
+    <\/nav>
+    
     <div class="container">
         <header>
-            <h1>✈️ Pre-Flight Orchestrator</h1>
-            <p class="subtitle">Environment Validation Before Plan Execution</p>
-        </header>
+            <h1>✈️ Pre-Flight Orchestrator<\/h1>
+            <p class="subtitle">Environment Validation Before Plan Execution<\/p>
+        <\/header>
 
         <div class="orchestrator-meta">
             <div class="meta-item">
-                <span class="meta-label">File Location</span>
-                <span class="meta-value">src/orchestrators/planning/</span>
-            </div>
+                <span class="meta-label">File Location<\/span>
+                <span class="meta-value">src/orchestrators/planning/<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Complexity</span>
-                <span class="meta-value">MEDIUM</span>
-            </div>
+                <span class="meta-label">Complexity<\/span>
+                <span class="meta-value">MEDIUM<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Validation Checks</span>
-                <span class="meta-value">12+ patterns</span>
-            </div>
+                <span class="meta-label">Validation Checks<\/span>
+                <span class="meta-value">12+ patterns<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Integration</span>
-                <span class="meta-value">Planning System (Pre-Phase 1)</span>
-            </div>
-        </div>
+                <span class="meta-label">Integration<\/span>
+                <span class="meta-value">Planning System (Pre-Phase 1)<\/span>
+            <\/div>
 
         <section class="section">
-            <h2>Overview</h2>
+            <h2>Overview<\/h2>
             <p>
-                The Pre-Flight Orchestrator validates environment requirements <strong>BEFORE</strong> plan execution 
-                to prevent catastrophic delays. Inspired by the <em>2-week .NET SDK blocker</em> in RA migration 
+                The Pre-Flight Orchestrator validates environment requirements <strong>BEFORE<\/strong> plan execution 
+                to prevent catastrophic delays. Inspired by the <em>2-week .NET SDK blocker<\/em> in RA migration 
                 (detected in 15 minutes via PrevalidationWS). It scans projects for patterns (.csproj, requirements.txt, 
                 package.json), infers required tools/SDKs, validates their presence, and generates executable 
                 remediation scripts.
-            </p>
             
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">🔍 Pattern Detection</div>
+                    <div class="feature-title">🔍 Pattern Detection<\/div>
                     <div class="feature-desc">
                         Scans project files to detect patterns: .NET API, Python FastAPI, Node.js Express, 
                         React SPA, JWT auth, Docker Compose, Kubernetes. Infers requirements from project structure.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">⚠️ Severity-Based Blocking</div>
+                    <div class="feature-title">⚠️ Severity-Based Blocking<\/div>
                     <div class="feature-desc">
-                        Three severity levels: <strong>CRITICAL</strong> (blocks execution), 
-                        <strong>RECOMMENDED</strong> (warns), <strong>OPTIONAL</strong> (info only). 
+                        Three severity levels: <strong>CRITICAL<\/strong> (blocks execution), 
+                        <strong>RECOMMENDED<\/strong> (warns), <strong>OPTIONAL<\/strong> (info only). 
                         Prevents execution with missing critical requirements.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🛠️ Auto-Remediation Scripts</div>
+                    <div class="feature-title">🛠️ Auto-Remediation Scripts<\/div>
                     <div class="feature-desc">
                         Generates platform-specific scripts (PowerShell for Windows, bash for Linux/macOS) 
                         with install commands, config fixes, and validation checks.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 Health Reports</div>
+                    <div class="feature-title">📊 Health Reports<\/div>
                     <div class="feature-desc">
-                        Returns <code>PreFlightHealthReport</code> with status (PASS/WARN/BLOCK), validation 
+                        Returns <code>PreFlightHealthReport<\/code> with status (PASS/WARN/BLOCK), validation 
                         results, blocking issues, warnings, and remediation script path.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Validation Workflow</h2>
+            <h2>Validation Workflow<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     START([Planning System<br/>Pre-Phase 1]) --> PREFLIGHT[Pre-Flight<br/>Orchestrator Start]
     
     PREFLIGHT --> DETECT[Pattern Detection:<br/>Scan project files]
@@ -382,84 +406,78 @@ graph TD
     style REPORT_PASS fill:#10B981,stroke:#059669,color:#fff
     style EXIT_PASS fill:#10B981,stroke:#059669,color:#fff
     style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Detected Project Patterns</h2>
+            <h2>Detected Project Patterns<\/h2>
             <div class="pattern-grid">
                 <div class="pattern-card">
-                    <div class="pattern-title">🔷 .NET API</div>
-                    <div class="pattern-desc">Detected from: *.csproj with Microsoft.NET.Sdk.Web</div>
-                    <div class="pattern-req">Requires: dotnet SDK 6.0+ (CRITICAL)</div>
-                    <span class="severity-badge severity-critical">CRITICAL</span>
-                </div>
+                    <div class="pattern-title">🔷 .NET API<\/div>
+                    <div class="pattern-desc">Detected from: *.csproj with Microsoft.NET.Sdk.Web<\/div>
+                    <div class="pattern-req">Requires: dotnet SDK 6.0+ (CRITICAL)<\/div>
+                    <span class="severity-badge severity-critical">CRITICAL<\/span>
+                <\/div>
                 
                 <div class="pattern-card">
-                    <div class="pattern-title">🐍 Python FastAPI</div>
-                    <div class="pattern-desc">Detected from: requirements.txt with "fastapi"</div>
-                    <div class="pattern-req">Requires: Python 3.8+, pip (CRITICAL)</div>
-                    <span class="severity-badge severity-critical">CRITICAL</span>
-                </div>
+                    <div class="pattern-title">🐍 Python FastAPI<\/div>
+                    <div class="pattern-desc">Detected from: requirements.txt with "fastapi"<\/div>
+                    <div class="pattern-req">Requires: Python 3.8+, pip (CRITICAL)<\/div>
+                    <span class="severity-badge severity-critical">CRITICAL<\/span>
+                <\/div>
                 
                 <div class="pattern-card">
-                    <div class="pattern-title">🟢 Node.js Express</div>
-                    <div class="pattern-desc">Detected from: package.json with "express"</div>
-                    <div class="pattern-req">Requires: Node.js 16+, npm (CRITICAL)</div>
-                    <span class="severity-badge severity-critical">CRITICAL</span>
-                </div>
+                    <div class="pattern-title">🟢 Node.js Express<\/div>
+                    <div class="pattern-desc">Detected from: package.json with "express"<\/div>
+                    <div class="pattern-req">Requires: Node.js 16+, npm (CRITICAL)<\/div>
+                    <span class="severity-badge severity-critical">CRITICAL<\/span>
+                <\/div>
                 
                 <div class="pattern-card">
-                    <div class="pattern-title">⚛️ React SPA</div>
-                    <div class="pattern-desc">Detected from: package.json with "react"</div>
-                    <div class="pattern-req">Requires: Node.js 16+, npm (CRITICAL)</div>
-                    <span class="severity-badge severity-critical">CRITICAL</span>
-                </div>
+                    <div class="pattern-title">⚛️ React SPA<\/div>
+                    <div class="pattern-desc">Detected from: package.json with "react"<\/div>
+                    <div class="pattern-req">Requires: Node.js 16+, npm (CRITICAL)<\/div>
+                    <span class="severity-badge severity-critical">CRITICAL<\/span>
+                <\/div>
                 
                 <div class="pattern-card">
-                    <div class="pattern-title">🔐 JWT Auth</div>
-                    <div class="pattern-desc">Detected from: "jwt" in *.py or *.cs files</div>
-                    <div class="pattern-req">Requires: OpenSSL (RECOMMENDED)</div>
-                    <span class="severity-badge severity-recommended">RECOMMENDED</span>
-                </div>
+                    <div class="pattern-title">🔐 JWT Auth<\/div>
+                    <div class="pattern-desc">Detected from: "jwt" in *.py or *.cs files<\/div>
+                    <div class="pattern-req">Requires: OpenSSL (RECOMMENDED)<\/div>
+                    <span class="severity-badge severity-recommended">RECOMMENDED<\/span>
+                <\/div>
                 
                 <div class="pattern-card">
-                    <div class="pattern-title">🗄️ Database Migrations</div>
-                    <div class="pattern-desc">Detected from: migrations/ or Migrations/ folder</div>
-                    <div class="pattern-req">Requires: dotnet-ef tools (CRITICAL)</div>
-                    <span class="severity-badge severity-critical">CRITICAL</span>
-                </div>
+                    <div class="pattern-title">🗄️ Database Migrations<\/div>
+                    <div class="pattern-desc">Detected from: migrations/ or Migrations/ folder<\/div>
+                    <div class="pattern-req">Requires: dotnet-ef tools (CRITICAL)<\/div>
+                    <span class="severity-badge severity-critical">CRITICAL<\/span>
+                <\/div>
                 
                 <div class="pattern-card">
-                    <div class="pattern-title">🐳 Docker Compose</div>
-                    <div class="pattern-desc">Detected from: docker-compose.yml</div>
-                    <div class="pattern-req">Requires: Docker Desktop (RECOMMENDED)</div>
-                    <span class="severity-badge severity-recommended">RECOMMENDED</span>
-                </div>
+                    <div class="pattern-title">🐳 Docker Compose<\/div>
+                    <div class="pattern-desc">Detected from: docker-compose.yml<\/div>
+                    <div class="pattern-req">Requires: Docker Desktop (RECOMMENDED)<\/div>
+                    <span class="severity-badge severity-recommended">RECOMMENDED<\/span>
+                <\/div>
                 
                 <div class="pattern-card">
-                    <div class="pattern-title">☸️ Kubernetes</div>
-                    <div class="pattern-desc">Detected from: k8s/*.yaml or kubernetes/*.yaml</div>
-                    <div class="pattern-req">Requires: kubectl (OPTIONAL)</div>
-                    <span class="severity-badge severity-optional">OPTIONAL</span>
-                </div>
-            </div>
-        </section>
+                    <div class="pattern-title">☸️ Kubernetes<\/div>
+                    <div class="pattern-desc">Detected from: k8s/*.yaml or kubernetes/*.yaml<\/div>
+                    <div class="pattern-req">Requires: kubectl (OPTIONAL)<\/div>
+                    <span class="severity-badge severity-optional">OPTIONAL<\/span>
+                <\/div>
 
         <section class="section">
-            <h2>Complexity Estimation Heatmap</h2>
-            <p>Heat map showing validation complexity by project pattern and requirement count.</p>
+            <h2>Complexity Estimation Heatmap<\/h2>
+            <p>Heat map showing validation complexity by project pattern and requirement count.<\/p>
             <div class="diagram-container">
-                <div id="complexityHeatmap"></div>
-            </div>
-        </section>
+                <div id="complexityHeatmap"><\/div>
+            <\/div>
 
         <section class="section">
-            <h2>Severity Decision Tree</h2>
+            <h2>Severity Decision Tree<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     REQ[Environment<br/>Requirement] --> CHECK_TYPE{Requirement<br/>Type?}
     
     CHECK_TYPE --> |SDK/Runtime| CRITICAL1[Severity: CRITICAL<br/>Examples: .NET SDK,<br/>Python, Node.js]
@@ -496,121 +514,90 @@ graph TD
     style BLOCK2 fill:#DC2626,stroke:#B91C1C,color:#fff
     style WARN1 fill:#F59E0B,stroke:#D97706,color:#fff
     style PASS1 fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Requirements Dashboard</h2>
-            <p>Interactive dashboard showing requirement status, severity distribution, and validation results.</p>
+            <h2>Requirements Dashboard<\/h2>
+            <p>Interactive dashboard showing requirement status, severity distribution, and validation results.<\/p>
             <div class="diagram-container">
-                <div id="requirementsDashboard"></div>
-            </div>
-        </section>
+                <div id="requirementsDashboard"><\/div>
+            <\/div>
 
         <section class="section">
-            <h2>Key Features</h2>
+            <h2>Key Features<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">🎯 Intelligent Detection</div>
+                    <div class="feature-title">🎯 Intelligent Detection<\/div>
                     <div class="feature-desc">
                         Uses heuristics to infer requirements: .csproj files → .NET SDK, FastAPI imports → 
                         Python 3.8+, JWT in code → SSL certificates. No manual configuration needed.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">⏱️ Fast Execution</div>
+                    <div class="feature-title">⏱️ Fast Execution<\/div>
                     <div class="feature-desc">
                         Completes in 15 seconds for typical projects. Parallel validation checks with timeout 
                         protection. Prevents blocking on slow commands.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📋 Version Validation</div>
+                    <div class="feature-title">📋 Version Validation<\/div>
                     <div class="feature-desc">
                         Checks minimum versions: .NET SDK 6.0+, Python 3.8+, Node.js 16+. Uses semantic 
                         versioning for comparison. Blocks on incompatible versions.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔧 Platform-Specific Scripts</div>
+                    <div class="feature-title">🔧 Platform-Specific Scripts<\/div>
                     <div class="feature-desc">
                         Generates PowerShell scripts for Windows, bash scripts for Linux/macOS. Includes 
                         install commands with correct package managers (apt, brew, choco).
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 JSON Reports</div>
+                    <div class="feature-title">📊 JSON Reports<\/div>
                     <div class="feature-desc">
-                        Saves <code>pre-flight-health-report.json</code> with: status, passed/warned/blocked 
+                        Saves <code>pre-flight-health-report.json<\/code> with: status, passed/warned/blocked 
                         counts, validation results, remediation script path, execution time.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔄 Integration with Planning System</div>
+                    <div class="feature-title">🔄 Integration with Planning System<\/div>
                     <div class="feature-desc">
                         Called automatically by Planning Orchestrator before Phase 1. Returns 
-                        <code>PreFlightHealthReport</code> to gate plan execution. Blocks on CRITICAL failures.
-                    </div>
-                </div>
-            </div>
-        </section>
+                        <code>PreFlightHealthReport<\/code> to gate plan execution. Blocks on CRITICAL failures.
 
         <section class="section">
-            <h2>Success Story: RA Migration</h2>
+            <h2>Success Story: RA Migration<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">🎯 Problem</div>
+                    <div class="feature-title">🎯 Problem<\/div>
                     <div class="feature-desc">
-                        RA migration to .NET Core 8.0 blocked for <strong>2 weeks</strong> due to missing 
+                        RA migration to .NET Core 8.0 blocked for <strong>2 weeks<\/strong> due to missing 
                         .NET SDK. Discovery happened late after multiple failed build attempts.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">✅ Solution</div>
+                    <div class="feature-title">✅ Solution<\/div>
                     <div class="feature-desc">
-                        Pre-Flight Orchestrator detected missing .NET SDK in <strong>15 minutes</strong> 
+                        Pre-Flight Orchestrator detected missing .NET SDK in <strong>15 minutes<\/strong> 
                         via PrevalidationWS chat. Generated remediation script with install commands.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 Impact</div>
+                    <div class="feature-title">📊 Impact<\/div>
                     <div class="feature-desc">
-                        Saved <strong>13.75 days</strong> of wasted effort. Prevented build failures, 
+                        Saved <strong>13.75 days<\/strong> of wasted effort. Prevented build failures, 
                         troubleshooting cycles, and developer frustration. Enabled proactive environment setup.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Related Documentation</h2>
+            <h2>Related Documentation<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">Implementation</div>
+                    <div class="feature-title">Implementation<\/div>
                     <div class="feature-desc">
-                        <code>src/orchestrators/planning/pre_flight_orchestrator.py</code>
-                    </div>
-                </div>
+                        <code>src/orchestrators/planning/pre_flight_orchestrator.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Environment Diagnostics</div>
+                    <div class="feature-title">Environment Diagnostics<\/div>
                     <div class="feature-desc">
-                        <code>src/orchestrators/planning/environment_diagnostics_orchestrator.py</code>
-                    </div>
-                </div>
+                        <code>src/orchestrators/planning/environment_diagnostics_orchestrator.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Planning System Integration</div>
+                    <div class="feature-title">Planning System Integration<\/div>
                     <div class="feature-desc">
-                        <code>src/orchestrators/planning/planning_orchestrator.py</code>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        <code>src/orchestrators/planning/planning_orchestrator.py<\/code>
+                    <\/div>
 
-        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
-    </div>
+        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
+    <\/div>
 
-    <div class="tooltip" id="tooltip"></div>
+    <div class="tooltip" id="tooltip"><\/div>
 
     <script>
         mermaid.initialize({ 
@@ -814,6 +801,8 @@ graph TD
             createComplexityHeatmap();
             createRequirementsDashboard();
         });
-    </script>
+  </style>
+</head>
+<body>
 </body>
 </html>

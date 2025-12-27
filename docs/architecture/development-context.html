@@ -1,561 +1,515 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Development Context (Tier 3) - CORTEX 4.0 Architecture</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css">
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Development Context (Tier 3) - CORTEX 4.0 Architecture</title>
+<link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+<link href="../assets/css/main.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="index.html">Architecture</a>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">Development Context (Tier 3)</span>
-    </nav>
-
-    <!-- Evolution Banner -->
-    <section class="section" style="padding-top: 2rem; padding-bottom: 0;">
-        <div class="container">
-            <div class="evolution-banner">
-                <div>
-                    <strong>Architecture Evolution in Progress</strong>
-                    <p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="index.html">Architecture</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">Development Context (Tier 3)</span>
+</nav>
+<!-- Evolution Banner -->
+<section class="section" style="padding-top: 2rem; padding-bottom: 0;">
+<div class="container">
+<div class="evolution-banner">
+<div>
+<strong>Architecture Evolution in Progress</strong>
+<p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
                        This page reflects current (3.0) architecture. See 
                        <a href="../future/technical-evolution.html">Technical Evolution</a> for CORTEX 4.0 plans.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Header -->
-    <section class="section">
-        <div class="container">
-            <h1 class="section-title">🔥 Development Context (Tier 3)</h1>
-            <p class="text-center" style="max-width: 900px; margin: 0 auto 3rem; color: var(--text-secondary); font-size: 1.125rem;">
+</div>
+<!-- Header -->
+<section class="section">
+<div class="container">
+<h1 class="section-title">🔥 Development Context (Tier 3)</h1>
+<p class="text-center" style="max-width: 900px; margin: 0 auto 3rem; color: var(--text-secondary); font-size: 1.125rem;">
                 Real-time code thermal heatmap tracking 847 commits, 87°C hotspots, and 81.4% test coverage across codebase activity
-            </p>
-        </div>
-    </section>
 
     <!-- Executive Summary -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <div class="glass-card">
-                <h2 class="mb-3">Executive Summary</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8;">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<div class="glass-card">
+<h2 class="mb-3">Executive Summary</h2>
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8;">
                     CORTEX's Tier 3 development context transforms git history into thermal intelligence. Instead of commit logs, 
                     you see heat: red critical zones show files changing daily (align.py at 87°C with 347 commits), green stable zones 
                     show mature foundations rarely modified (Tier 0 rules at 0°C). With 847 commits in 30 days, 81.4% test coverage, 
                     and controlled 12.3% churn rate, these metrics reveal development health at a glance. This is real-time codebase 
                     awareness—where energy flows, where code evolves, where stability reigns.
                 </p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem;">
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #f44336;">847</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Commits (30 days)</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Sustainable pace</div>
-                    </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(255, 152, 0, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #ff9800;">87°C</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Hotspot Temp</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">align.py (347 commits)</div>
-                    </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">81.4%</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Test Coverage</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Trending up</div>
-                    </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">12.3%</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Churn Rate</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Healthy (<15%)</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Thermal Zones -->
-    <section class="section">
-        <div class="container">
-            <h2 class="mb-3 text-center">🌡️ Code Thermal Zones</h2>
-            <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; text-align: center;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem;">
+<div style="text-align: center; padding: 1.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 8px;">
+<div style="font-size: 2.5rem; font-weight: 700; color: #f44336;">847</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Commits (30 days)</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Sustainable pace</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(255, 152, 0, 0.1); border-radius: 8px;">
+<div style="font-size: 2.5rem; font-weight: 700; color: #ff9800;">87°C</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Hotspot Temp</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">align.py (347 commits)</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+<div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">81.4%</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Test Coverage</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Trending up</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
+<div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">12.3%</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Churn Rate</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Healthy (&lt;15%)</div>
+</div>
+<!-- Thermal Zones -->
+<section class="section">
+<div class="container">
+<h2 class="mb-3 text-center">🌡️ Code Thermal Zones</h2>
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; text-align: center;">
                 Temperature (0-100°C) indicates file volatility from git commit frequency—red hot vs ice cold
-            </p>
             
             <!-- Red Critical Hotspots -->
-            <div class="glass-card" style="background: linear-gradient(135deg, rgba(244, 67, 54, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%); border: 2px solid #f44336; margin-bottom: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('red-zone-content')">
-                    <h3 style="margin: 0; color: #f44336;">🔥 Red Critical Hotspots (80-100°C)</h3>
-                    <span id="red-zone-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
-                </div>
-                <div id="red-zone-content" style="display: block;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                        Files changing daily—active evolution zones. High churn rate (>15%) indicates rapid feature additions, bug fixes, 
+</p>
+<div class="glass-card" style="background: linear-gradient(135deg, rgba(244, 67, 54, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%); border: 2px solid #f44336; margin-bottom: 1.5rem;">
+<div onclick="toggleSection('red-zone-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
+<h3 style="margin: 0; color: #f44336;">🔥 Red Critical Hotspots (80-100°C)</h3>
+<span id="red-zone-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+</div>
+<div id="red-zone-content" style="display: block;">
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+                        Files changing daily—active evolution zones. High churn rate (&gt;15%) indicates rapid feature additions, bug fixes, 
                         and architecture refinement. Red doesn't mean bad—it means "pay attention here."
-                    </p>
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
-                        <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f44336;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                <h4 style="margin: 0; color: #f44336;">src/operations/align.py</h4>
-                                <span style="font-size: 1.5rem; font-weight: 700; color: #f44336;">87°C</span>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
-                                <div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
-                                    <div style="font-weight: 700; color: #f44336;">347</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Commits</div>
-                                </div>
-                                <div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
-                                    <div style="font-weight: 700; color: #f44336;">2,450</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Lines Changed</div>
-                                </div>
-                                <div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
-                                    <div style="font-weight: 700; color: #f44336;">23.4%</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Churn</div>
-                                </div>
-                            </div>
-                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
+                    </p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+<div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f44336;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+<h4 style="margin: 0; color: #f44336;">src/operations/align.py</h4>
+<span style="font-size: 1.5rem; font-weight: 700; color: #f44336;">87°C</span>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+<div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
+<div style="font-weight: 700; color: #f44336;">347</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary);">Commits</div>
+</div>
+<div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
+<div style="font-weight: 700; color: #f44336;">2,450</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary);">Lines Changed</div>
+</div>
+<div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
+<div style="font-weight: 700; color: #f44336;">23.4%</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary);">Churn</div>
+</div>
+<p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
                                 Core system maintenance orchestrator—constant refinement as complexity grows. Daily changes expected.
-                            </p>
-                        </div>
                         
-                        <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f44336;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                <h4 style="margin: 0; color: #f44336;">src/cortex_agents/intent_router.py</h4>
-                                <span style="font-size: 1.5rem; font-weight: 700; color: #f44336;">83°C</span>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
-                                <div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
-                                    <div style="font-weight: 700; color: #f44336;">198</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Commits</div>
-                                </div>
-                                <div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
-                                    <div style="font-weight: 700; color: #f44336;">1,820</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Lines Changed</div>
-                                </div>
-                                <div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
-                                    <div style="font-weight: 700; color: #f44336;">19.2%</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Churn</div>
-                                </div>
-                            </div>
-                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
+                        </p>
+<div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f44336;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+<h4 style="margin: 0; color: #f44336;">src/cortex_agents/intent_router.py</h4>
+<span style="font-size: 1.5rem; font-weight: 700; color: #f44336;">83°C</span>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+<div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
+<div style="font-weight: 700; color: #f44336;">198</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary);">Commits</div>
+</div>
+<div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
+<div style="font-weight: 700; color: #f44336;">1,820</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary);">Lines Changed</div>
+</div>
+<div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
+<div style="font-weight: 700; color: #f44336;">19.2%</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary);">Churn</div>
+</div>
+<p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
                                 Network core routing logic—evolves as new agent types and routing patterns added.
-                            </p>
-                        </div>
                         
-                        <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f44336;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                <h4 style="margin: 0; color: #f44336;">cortex-brain/brain-protection-rules.yaml</h4>
-                                <span style="font-size: 1.5rem; font-weight: 700; color: #f44336;">81°C</span>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
-                                <div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
-                                    <div style="font-weight: 700; color: #f44336;">156</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Commits</div>
-                                </div>
-                                <div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
-                                    <div style="font-weight: 700; color: #f44336;">3,295</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Total Lines</div>
-                                </div>
-                                <div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
-                                    <div style="font-weight: 700; color: #f44336;">17.8%</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Churn</div>
-                                </div>
-                            </div>
-                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
+                        </p>
+<div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f44336;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+<h4 style="margin: 0; color: #f44336;">cortex-brain/brain-protection-rules.yaml</h4>
+<span style="font-size: 1.5rem; font-weight: 700; color: #f44336;">81°C</span>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+<div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
+<div style="font-weight: 700; color: #f44336;">156</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary);">Commits</div>
+</div>
+<div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
+<div style="font-weight: 700; color: #f44336;">3,295</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary);">Total Lines</div>
+</div>
+<div style="text-align: center; padding: 0.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 4px;">
+<div style="font-weight: 700; color: #f44336;">17.8%</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary);">Churn</div>
+</div>
+<p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
                                 SKULL governance rules expand as new threat patterns discovered—active learning system.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
             
             <!-- Orange-Yellow Active Zones -->
-            <div class="glass-card" style="border-left: 4px solid #ff9800; margin-bottom: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('orange-zone-content')">
-                    <h3 style="margin: 0; color: #ff9800;">🟠 Orange-Yellow Active Zones (40-79°C)</h3>
-                    <span id="orange-zone-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
-                </div>
-                <div id="orange-zone-content" style="display: block;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+</p>
+<div class="glass-card" style="border-left: 4px solid #ff9800; margin-bottom: 1.5rem;">
+<div onclick="toggleSection('orange-zone-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
+<h3 style="margin: 0; color: #ff9800;">🟠 Orange-Yellow Active Zones (40-79°C)</h3>
+<span id="orange-zone-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+</div>
+<div id="orange-zone-content" style="display: block;">
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
                         Weekly to bi-weekly changes—active development but more controlled. These files are maturing: feature additions 
                         slowing, maintenance predominant. Balanced evolution.
-                    </p>
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-                        <div style="background: rgba(255, 152, 0, 0.1); padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <strong style="color: #ff9800;">Planning Orchestrator</strong>
-                                <span style="font-size: 1.25rem; font-weight: 700; color: #ff9800;">62°C</span>
-                            </div>
-                            <div style="color: var(--text-secondary); font-size: 0.875rem;">
+                    </p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+<div style="background: rgba(255, 152, 0, 0.1); padding: 1rem; border-radius: 6px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+<strong style="color: #ff9800;">Planning Orchestrator</strong>
+<span style="font-size: 1.25rem; font-weight: 700; color: #ff9800;">62°C</span>
+</div>
+<div style="color: var(--text-secondary); font-size: 0.875rem;">
                                 84 commits | 1,120 lines changed | 14.2% churn
-                            </div>
-                        </div>
                         
                         <div style="background: rgba(255, 152, 0, 0.1); padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <strong style="color: #ff9800;">Working Memory (Tier 1)</strong>
-                                <span style="font-size: 1.25rem; font-weight: 700; color: #ff9800;">58°C</span>
-                            </div>
-                            <div style="color: var(--text-secondary); font-size: 0.875rem;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+<strong style="color: #ff9800;">Working Memory (Tier 1)</strong>
+<span style="font-size: 1.25rem; font-weight: 700; color: #ff9800;">58°C</span>
+</div>
+<div style="color: var(--text-secondary); font-size: 0.875rem;">
                                 67 commits | 890 lines changed | 11.8% churn
-                            </div>
-                        </div>
                         
                         <div style="background: rgba(255, 152, 0, 0.1); padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <strong style="color: #ff9800;">Response Templates</strong>
-                                <span style="font-size: 1.25rem; font-weight: 700; color: #ff9800;">54°C</span>
-                            </div>
-                            <div style="color: var(--text-secondary); font-size: 0.875rem;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+<strong style="color: #ff9800;">Response Templates</strong>
+<span style="font-size: 1.25rem; font-weight: 700; color: #ff9800;">54°C</span>
+</div>
+<div style="color: var(--text-secondary); font-size: 0.875rem;">
                                 52 commits | 14,718 total lines | 9.4% churn
-                            </div>
-                        </div>
                         
                         <div style="background: rgba(255, 193, 7, 0.1); padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <strong style="color: #ffc107;">TDD Orchestrator</strong>
-                                <span style="font-size: 1.25rem; font-weight: 700; color: #ffc107;">47°C</span>
-                            </div>
-                            <div style="color: var(--text-secondary); font-size: 0.875rem;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+<strong style="color: #ffc107;">TDD Orchestrator</strong>
+<span style="font-size: 1.25rem; font-weight: 700; color: #ffc107;">47°C</span>
+</div>
+<div style="color: var(--text-secondary); font-size: 0.875rem;">
                                 41 commits | 670 lines changed | 8.1% churn
-                            </div>
-                        </div>
                         
                         <div style="background: rgba(255, 193, 7, 0.1); padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <strong style="color: #ffc107;">Git Checkpoint</strong>
-                                <span style="font-size: 1.25rem; font-weight: 700; color: #ffc107;">43°C</span>
-                            </div>
-                            <div style="color: var(--text-secondary); font-size: 0.875rem;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+<strong style="color: #ffc107;">Git Checkpoint</strong>
+<span style="font-size: 1.25rem; font-weight: 700; color: #ffc107;">43°C</span>
+</div>
+<div style="color: var(--text-secondary); font-size: 0.875rem;">
                                 36 commits | 520 checkpoints created | 7.2% churn
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             
             <!-- Green-Blue Stable Zones -->
-            <div class="glass-card" style="border-left: 4px solid #4caf50; margin-bottom: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('green-zone-content')">
-                    <h3 style="margin: 0; color: #4caf50;">🟢 Green-Blue Stable Zones (0-39°C)</h3>
-                    <span id="green-zone-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
-                </div>
-                <div id="green-zone-content" style="display: block;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+<div class="glass-card" style="border-left: 4px solid #4caf50; margin-bottom: 1.5rem;">
+<div onclick="toggleSection('green-zone-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
+<h3 style="margin: 0; color: #4caf50;">🟢 Green-Blue Stable Zones (0-39°C)</h3>
+<span id="green-zone-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+</div>
+<div id="green-zone-content" style="display: block;">
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
                         Stable foundations—set and forget. Cold zones aren't neglected, they're <em>done</em>. Requirements satisfied, 
                         code mature, tests passing. Minimal maintenance required.
-                    </p>
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-                        <div style="background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <strong style="color: #4caf50;">Tier 0 Governance</strong>
-                                <span style="font-size: 1.25rem; font-weight: 700; color: #4caf50;">12°C</span>
-                            </div>
-                            <div style="color: var(--text-secondary); font-size: 0.875rem;">
+                    </p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+<div style="background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 6px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+<strong style="color: #4caf50;">Tier 0 Governance</strong>
+<span style="font-size: 1.25rem; font-weight: 700; color: #4caf50;">12°C</span>
+</div>
+<div style="color: var(--text-secondary); font-size: 0.875rem;">
                                 12 commits | Stable foundation | 2.1% churn
-                            </div>
-                        </div>
                         
                         <div style="background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <strong style="color: #4caf50;">Core Libraries</strong>
-                                <span style="font-size: 1.25rem; font-weight: 700; color: #4caf50;">8°C</span>
-                            </div>
-                            <div style="color: var(--text-secondary); font-size: 0.875rem;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+<strong style="color: #4caf50;">Core Libraries</strong>
+<span style="font-size: 1.25rem; font-weight: 700; color: #4caf50;">8°C</span>
+</div>
+<div style="color: var(--text-secondary); font-size: 0.875rem;">
                                 8 commits | Mature APIs | 1.4% churn
-                            </div>
-                        </div>
                         
                         <div style="background: rgba(0, 150, 136, 0.1); padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <strong style="color: #009688;">Configuration Files</strong>
-                                <span style="font-size: 1.25rem; font-weight: 700; color: #009688;">5°C</span>
-                            </div>
-                            <div style="color: var(--text-secondary); font-size: 0.875rem;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+<strong style="color: #009688;">Configuration Files</strong>
+<span style="font-size: 1.25rem; font-weight: 700; color: #009688;">5°C</span>
+</div>
+<div style="color: var(--text-secondary); font-size: 0.875rem;">
                                 5 commits | Infrastructure | 0.9% churn
-                            </div>
-                        </div>
                         
                         <div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <strong style="color: #2196f3;">requirements.txt</strong>
-                                <span style="font-size: 1.25rem; font-weight: 700; color: #2196f3;">3°C</span>
-                            </div>
-                            <div style="color: var(--text-secondary); font-size: 0.875rem;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+<strong style="color: #2196f3;">requirements.txt</strong>
+<span style="font-size: 1.25rem; font-weight: 700; color: #2196f3;">3°C</span>
+</div>
+<div style="color: var(--text-secondary); font-size: 0.875rem;">
                                 3 commits | Dependencies rarely change | 0.5% churn
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Git Activity Calendar -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(76, 175, 80, 0.1) 100%); border: 2px solid var(--accent-primary);">
-                <h2 class="mb-3" style="color: var(--accent-primary);">📅 Git Activity Calendar (90 Days)</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; text-align: center; margin-bottom: 2rem;">
+<section class="section">
+<div class="container">
+<div class="glass-card" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(76, 175, 80, 0.1) 100%); border: 2px solid var(--accent-primary);">
+<h2 class="mb-3" style="color: var(--accent-primary);">📅 Git Activity Calendar (90 Days)</h2>
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; text-align: center; margin-bottom: 2rem;">
                     GitHub-style heatmap revealing sprint cycles and development rhythm
+                
                 </p>
-                
-                <div style="background: rgba(10, 14, 39, 0.5); padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
-                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-bottom: 1.5rem;">
-                        <div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Mon</div>
-                        <div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Tue</div>
-                        <div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Wed</div>
-                        <div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Thu</div>
-                        <div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Fri</div>
-                        <div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Sat</div>
-                        <div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Sun</div>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem;">
-                        <!-- Week 1 -->
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="8 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.3); border-radius: 3px;" title="15 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.3); border-radius: 3px;" title="12 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="6 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.3); border-radius: 3px;" title="14 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.1); border-radius: 3px;" title="2 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;" title="0 commits"></div>
-                        
-                        <!-- Week 2 -->
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="7 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.4); border-radius: 3px;" title="18 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.5); border-radius: 3px;" title="22 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.4); border-radius: 3px;" title="19 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="9 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.1); border-radius: 3px;" title="3 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.1); border-radius: 3px;" title="1 commit"></div>
-                        
-                        <!-- Week 3 -->
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="5 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="8 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.3); border-radius: 3px;" title="11 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="7 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="6 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;" title="0 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;" title="0 commits"></div>
-                        
-                        <!-- Week 4 (current) -->
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.4); border-radius: 3px;" title="16 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.5); border-radius: 3px;" title="24 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.4); border-radius: 3px;" title="17 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="9 commits"></div>
-                        <div style="aspect-ratio: 1; background: rgba(0, 212, 255, 0.4); border-radius: 3px; border: 2px solid var(--accent-primary);" title="Today: active"></div>
-                        <div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;"></div>
-                        <div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;"></div>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(0, 212, 255, 0.3);">
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background: rgba(30, 40, 80, 0.3); border-radius: 3px;"></div>
-                            <span style="font-size: 0.875rem; color: var(--text-secondary);">0 commits</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background: rgba(76, 175, 80, 0.2); border-radius: 3px;"></div>
-                            <span style="font-size: 0.875rem; color: var(--text-secondary);">1-9 commits</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background: rgba(244, 67, 54, 0.3); border-radius: 3px;"></div>
-                            <span style="font-size: 0.875rem; color: var(--text-secondary);">10-19 commits</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background: rgba(244, 67, 54, 0.5); border-radius: 3px;"></div>
-                            <span style="font-size: 0.875rem; color: var(--text-secondary);">20+ commits</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
-                    <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">📊 Pattern Analysis</h3>
-                    <ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
-                        <li><strong style="color: #f44336;">Red Squares (10+ commits/day):</strong> Intense development sprints—feature implementation, architecture refactoring</li>
-                        <li><strong style="color: #4caf50;">Light Green (1-9 commits/day):</strong> Maintenance mode—bug fixes, small improvements, documentation</li>
-                        <li><strong style="color: var(--accent-primary);">Pattern Visible:</strong> Clusters of red (sprint weeks) separated by green (stabilization weeks)—sustainable rhythm</li>
-                        <li><strong style="color: #ff9800;">Last 30 Days:</strong> 847 commits averaging 28 commits/day—consistent high-quality delivery</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Code Health Metrics -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card" style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border: 2px solid #4caf50;">
-                <h2 class="mb-3" style="color: #4caf50;">📊 Code Health Metrics Dashboard</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; text-align: center; margin-bottom: 2rem;">
+<div style="background: rgba(10, 14, 39, 0.5); padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
+<div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-bottom: 1.5rem;">
+<div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Mon</div>
+<div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Tue</div>
+<div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Wed</div>
+<div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Thu</div>
+<div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Fri</div>
+<div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Sat</div>
+<div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary);">Sun</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem;">
+<!-- Week 1 -->
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="8 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.3); border-radius: 3px;" title="15 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.3); border-radius: 3px;" title="12 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="6 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.3); border-radius: 3px;" title="14 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.1); border-radius: 3px;" title="2 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;" title="0 commits"></div>
+<!-- Week 2 -->
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="7 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.4); border-radius: 3px;" title="18 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.5); border-radius: 3px;" title="22 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.4); border-radius: 3px;" title="19 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="9 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.1); border-radius: 3px;" title="3 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.1); border-radius: 3px;" title="1 commit"></div>
+<!-- Week 3 -->
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="5 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="8 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.3); border-radius: 3px;" title="11 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="7 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="6 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;" title="0 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;" title="0 commits"></div>
+<!-- Week 4 (current) -->
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.4); border-radius: 3px;" title="16 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.5); border-radius: 3px;" title="24 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(244, 67, 54, 0.4); border-radius: 3px;" title="17 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(76, 175, 80, 0.2); border-radius: 3px;" title="9 commits"></div>
+<div style="aspect-ratio: 1; background: rgba(0, 212, 255, 0.4); border-radius: 3px; border: 2px solid var(--accent-primary);" title="Today: active"></div>
+<div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;"></div>
+<div style="aspect-ratio: 1; background: rgba(30, 40, 80, 0.3); border-radius: 3px;"></div>
+</div>
+<div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(0, 212, 255, 0.3);">
+<div style="display: flex; align-items: center; gap: 0.5rem;">
+<div style="width: 20px; height: 20px; background: rgba(30, 40, 80, 0.3); border-radius: 3px;"></div>
+<span style="font-size: 0.875rem; color: var(--text-secondary);">0 commits</span>
+</div>
+<div style="display: flex; align-items: center; gap: 0.5rem;">
+<div style="width: 20px; height: 20px; background: rgba(76, 175, 80, 0.2); border-radius: 3px;"></div>
+<span style="font-size: 0.875rem; color: var(--text-secondary);">1-9 commits</span>
+</div>
+<div style="display: flex; align-items: center; gap: 0.5rem;">
+<div style="width: 20px; height: 20px; background: rgba(244, 67, 54, 0.3); border-radius: 3px;"></div>
+<span style="font-size: 0.875rem; color: var(--text-secondary);">10-19 commits</span>
+</div>
+<div style="display: flex; align-items: center; gap: 0.5rem;">
+<div style="width: 20px; height: 20px; background: rgba(244, 67, 54, 0.5); border-radius: 3px;"></div>
+<span style="font-size: 0.875rem; color: var(--text-secondary);">20+ commits</span>
+</div>
+<div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
+<h3 style="color: var(--accent-primary); margin-bottom: 1rem;">📊 Pattern Analysis</h3>
+<ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
+<li>
+<strong style="color: #f44336;">Red Squares (10+ commits/day):</strong> Intense development sprints—feature implementation, architecture refactoring</li>
+<li>
+<strong style="color: #4caf50;">Light Green (1-9 commits/day):</strong> Maintenance mode—bug fixes, small improvements, documentation</li>
+<li>
+<strong style="color: var(--accent-primary);">Pattern Visible:</strong> Clusters of red (sprint weeks) separated by green (stabilization weeks)—sustainable rhythm</li>
+<li>
+<strong style="color: #ff9800;">Last 30 Days:</strong> 847 commits averaging 28 commits/day—consistent high-quality delivery</li>
+</ul>
+<!-- Code Health Metrics -->
+<section class="section">
+<div class="container">
+<div class="glass-card" style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border: 2px solid #4caf50;">
+<h2 class="mb-3" style="color: #4caf50;">📊 Code Health Metrics Dashboard</h2>
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; text-align: center; margin-bottom: 2rem;">
                     Not vanity metrics—operational indicators revealing development health
+                
                 </p>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
-                        <div style="font-size: 0.875rem; color: #4caf50; margin-bottom: 0.5rem;">COMMITS (30 DAYS)</div>
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">847</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Sustainable pace</div>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
-                        <div style="font-size: 0.875rem; color: var(--accent-primary); margin-bottom: 0.5rem;">TEST COVERAGE</div>
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">81.4%</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Trending up ↗</div>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
-                        <div style="font-size: 0.875rem; color: #4caf50; margin-bottom: 0.5rem;">CHURN RATE</div>
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">12.3%</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Healthy (<15%)</div>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 8px;">
-                        <div style="font-size: 0.875rem; color: #f44336; margin-bottom: 0.5rem;">HOTSPOT TEMP</div>
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #f44336;">87°C</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Monitored closely</div>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
-                        <div style="font-size: 0.875rem; color: #4caf50; margin-bottom: 0.5rem;">BUILD STATUS</div>
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">✓</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Passing</div>
-                    </div>
-                </div>
-                
-                <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
-                    <h3 style="color: #4caf50; margin-bottom: 1rem;">What These Numbers Mean</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                        <div>
-                            <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.75rem;">Healthy Indicators:</div>
-                            <ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
-                                <li>Sustainable commit pace (not burnout mode)</li>
-                                <li>Coverage trending up (quality improving)</li>
-                                <li>Churn controlled <15% (not thrashing)</li>
-                                <li>Builds green (production-ready)</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div style="font-weight: 700; color: #ff9800; margin-bottom: 0.75rem;">Watch Areas:</div>
-                            <ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
-                                <li>87°C hotspots need refactoring planning</li>
-                                <li>Files with >20% churn risk instability</li>
-                                <li>Coverage gaps in newer modules</li>
-                                <li>Sprint intensity vs stabilization balance</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Key Takeaways -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card" style="background: linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border: 1px solid rgba(123, 97, 255, 0.3);">
-                <h2 class="mb-3 text-center">🎓 Key Takeaways</h2>
-                <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem;">
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">🌡️</div>
-                        <div>
-                            <strong style="color: #f44336;">Thermal Heatmap:</strong>
-                            <span style="color: var(--text-secondary);"> 0-100°C scale visualizes file volatility from git commit frequency—red critical hotspots vs green stable foundations</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">📈</div>
-                        <div>
-                            <strong style="color: #4caf50;">Healthy Development Pace:</strong>
-                            <span style="color: var(--text-secondary);"> 847 commits in 30 days with controlled 12.3% churn rate (<15% threshold)—sustainable high-quality delivery</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">🔥</div>
-                        <div>
-                            <strong style="color: #f44336;">Red Hotspots Identified:</strong>
-                            <span style="color: var(--text-secondary);"> align.py (87°C), intent_router.py (83°C), brain-protection-rules.yaml (81°C)—high-change areas needing attention</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">🟢</div>
-                        <div>
-                            <strong style="color: #4caf50;">Stable Foundations:</strong>
-                            <span style="color: var(--text-secondary);"> Tier 0 governance (12°C), core libraries (8°C), config files (5°C)—mature unchanging code at 0-39°C zone</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">📅</div>
-                        <div>
-                            <strong style="color: var(--accent-primary);">Sprint Rhythm Visible:</strong>
-                            <span style="color: var(--text-secondary);"> Git calendar shows clusters of red (feature sprints) separated by green (stabilization)—balanced development cycles over 90 days</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lateral Navigation -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <h3 class="text-center mb-3">Explore Other Architecture Components</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                    <a href="four-tier-brain.html" class="btn btn-secondary" style="display: block; text-align: center;">🧠 4-Tier Brain</a>
-                    <a href="skull-protection.html" class="btn btn-secondary" style="display: block; text-align: center;">🛡️ SKULL Protection</a>
-                    <a href="orchestrator-ecosystem.html" class="btn btn-secondary" style="display: block; text-align: center;">🎭 Orchestrator Ecosystem</a>
-                    <a href="agent-system.html" class="btn btn-secondary" style="display: block; text-align: center;">🤖 Agent System</a>
-                    <a href="working-memory.html" class="btn btn-secondary" style="display: block; text-align: center;">💾 Working Memory (Tier 1)</a>
-                    <a href="knowledge-graph.html" class="btn btn-secondary" style="display: block; text-align: center;">🕸️ Knowledge Graph (Tier 2)</a>
-                    <a href="index.html" class="btn btn-secondary" style="display: block; text-align: center;">← Architecture Overview</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container text-center">
-            <a href="index.html" class="btn btn-primary">← Back to Architecture</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="../assets/js/main.js"></script>
-    <script>
-        function toggleSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            const icon = document.getElementById(sectionId + '-icon');
-            
-            if (section.style.display === 'none') {
-                section.style.display = 'block';
-                icon.style.transform = 'rotate(0deg)';
-                icon.textContent = '▼';
-            } else {
-                section.style.display = 'none';
-                icon.style.transform = 'rotate(-90deg)';
-                icon.textContent = '▶';
-            }
-        }
-    </script>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+<div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+<div style="font-size: 0.875rem; color: #4caf50; margin-bottom: 0.5rem;">COMMITS (30 DAYS)</div>
+<div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">847</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Sustainable pace</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
+<div style="font-size: 0.875rem; color: var(--accent-primary); margin-bottom: 0.5rem;">TEST COVERAGE</div>
+<div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">81.4%</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Trending up ↗</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+<div style="font-size: 0.875rem; color: #4caf50; margin-bottom: 0.5rem;">CHURN RATE</div>
+<div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">12.3%</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Healthy (&lt;15%)</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 8px;">
+<div style="font-size: 0.875rem; color: #f44336; margin-bottom: 0.5rem;">HOTSPOT TEMP</div>
+<div style="font-size: 2.5rem; font-weight: 700; color: #f44336;">87°C</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Monitored closely</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+<div style="font-size: 0.875rem; color: #4caf50; margin-bottom: 0.5rem;">BUILD STATUS</div>
+<div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">✓</div>
+<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Passing</div>
+</div>
+<div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
+<h3 style="color: #4caf50; margin-bottom: 1rem;">What These Numbers Mean</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+<div>
+<div style="font-weight: 700; color: #4caf50; margin-bottom: 0.75rem;">Healthy Indicators:</div>
+<ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
+<li>Sustainable commit pace (not burnout mode)</li>
+<li>Coverage trending up (quality improving)</li>
+<li>Churn controlled &lt;15% (not thrashing)</li>
+<li>Builds green (production-ready)</li>
+</ul>
+<div>
+<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.75rem;">Watch Areas:</div>
+<ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
+<li>87°C hotspots need refactoring planning</li>
+<li>Files with &gt;20% churn risk instability</li>
+<li>Coverage gaps in newer modules</li>
+<li>Sprint intensity vs stabilization balance</li>
+</ul>
+<!-- Key Takeaways -->
+<section class="section">
+<div class="container">
+<div class="glass-card" style="background: linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border: 1px solid rgba(123, 97, 255, 0.3);">
+<h2 class="mb-3 text-center">🎓 Key Takeaways</h2>
+<div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem;">
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">🌡️</div>
+<div>
+<strong style="color: #f44336;">Thermal Heatmap:</strong>
+<span style="color: var(--text-secondary);"> 0-100°C scale visualizes file volatility from git commit frequency—red critical hotspots vs green stable foundations</span>
+</div>
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">📈</div>
+<div>
+<strong style="color: #4caf50;">Healthy Development Pace:</strong>
+<span style="color: var(--text-secondary);"> 847 commits in 30 days with controlled 12.3% churn rate (&lt;15% threshold)—sustainable high-quality delivery</span>
+</div>
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">🔥</div>
+<div>
+<strong style="color: #f44336;">Red Hotspots Identified:</strong>
+<span style="color: var(--text-secondary);"> align.py (87°C), intent_router.py (83°C), brain-protection-rules.yaml (81°C)—high-change areas needing attention</span>
+</div>
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">🟢</div>
+<div>
+<strong style="color: #4caf50;">Stable Foundations:</strong>
+<span style="color: var(--text-secondary);"> Tier 0 governance (12°C), core libraries (8°C), config files (5°C)—mature unchanging code at 0-39°C zone</span>
+</div>
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">📅</div>
+<div>
+<strong style="color: var(--accent-primary);">Sprint Rhythm Visible:</strong>
+<span style="color: var(--text-secondary);"> Git calendar shows clusters of red (feature sprints) separated by green (stabilization)—balanced development cycles over 90 days</span>
+</div>
+<!-- Lateral Navigation -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<h3 class="text-center mb-3">Explore Other Architecture Components</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+<a class="btn btn-secondary" href="four-tier-brain.html" style="display: block; text-align: center;">🧠 4-Tier Brain</a>
+<a class="btn btn-secondary" href="skull-protection.html" style="display: block; text-align: center;">🛡️ SKULL Protection</a>
+<a class="btn btn-secondary" href="orchestrator-ecosystem.html" style="display: block; text-align: center;">🎭 Orchestrator Ecosystem</a>
+<a class="btn btn-secondary" href="agent-system.html" style="display: block; text-align: center;">🤖 Agent System</a>
+<a class="btn btn-secondary" href="working-memory.html" style="display: block; text-align: center;">💾 Working Memory (Tier 1)</a>
+<a class="btn btn-secondary" href="knowledge-graph.html" style="display: block; text-align: center;">🕸️ Knowledge Graph (Tier 2)</a>
+<a class="btn btn-secondary" href="index.html" style="display: block; text-align: center;">← Architecture Overview</a>
+</div>
+<section class="section">
+<div class="container text-center">
+<a class="btn btn-primary" href="index.html">← Back to Architecture</a>
+</div>
+<footer>
+<div class="container">
+<div class="footer-bottom">
+<p>© 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
+</div>
+<script src="../assets/js/main.js"></script>
+<script></script>
+</div></footer></section>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section></p>
+</div></section>
+</div>
+</div></section>
 </body>
 </html>

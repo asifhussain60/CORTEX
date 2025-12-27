@@ -143,3 +143,58 @@ async function loadMetrics() {
 
     return metrics;
 }
+
+/**
+ * Toggle complexity tile details (Planning System page)
+ */
+function toggleComplexityDetails(tile) {
+    const details = tile.querySelector('.complexity-details');
+    const isExpanded = tile.classList.contains('expanded');
+    
+    // Close all other tiles first
+    document.querySelectorAll('.complexity-tile.expanded').forEach(otherTile => {
+        if (otherTile !== tile) {
+            otherTile.classList.remove('expanded');
+            otherTile.querySelector('.complexity-details').style.display = 'none';
+        }
+    });
+    
+    // Toggle current tile
+    if (isExpanded) {
+        tile.classList.remove('expanded');
+        details.style.display = 'none';
+    } else {
+        tile.classList.add('expanded');
+        details.style.display = 'block';
+    }
+}
+
+/**
+ * Toggle compliance tile details (Planning System page)
+ */
+function toggleComplianceDetails(tile) {
+    const details = tile.querySelector('.compliance-details');
+    const isExpanded = tile.classList.contains('expanded');
+    
+    // Close all other tiles first
+    document.querySelectorAll('.compliance-tile.expanded').forEach(otherTile => {
+        if (otherTile !== tile) {
+            otherTile.classList.remove('expanded');
+            otherTile.querySelector('.compliance-details').style.display = 'none';
+        }
+    });
+    
+    // Toggle current tile
+    if (isExpanded) {
+        tile.classList.remove('expanded');
+        details.style.display = 'none';
+    } else {
+        tile.classList.add('expanded');
+        details.style.display = 'block';
+    }
+}
+
+// Make functions globally available
+window.toggleComplexityDetails = toggleComplexityDetails;
+window.toggleComplianceDetails = toggleComplianceDetails;
+

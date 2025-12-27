@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debug Orchestrator | CORTEX Technical Documentation</title>
-    
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    
-    <!-- Mermaid -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
-    <style>
-        :root {
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Debug Orchestrator | CORTEX Technical Documentation</title>
+<!-- D3.js -->
+<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
+</script><!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+</script>
+<style type="text/css">
+      :root {
             --debug-primary: #F44336;
             --debug-secondary: #D32F2F;
             --debug-dark: #B71C1C;
@@ -224,121 +222,142 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
-</head>
-<body>
+            
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary, #2196F3);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--secondary, #1976D2);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+        
+        .breadcrumb-current {
+            color: #e2e8f0;
+        }
+
+  <body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Technical Documentation<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">Debug<\/span>
+    <\/nav>
+    
     <div class="container">
         <header>
-            <h1>🐛 Debug Orchestrator</h1>
-            <p class="subtitle">Orchestrated Bug Resolution with Context Capture & Learning Integration</p>
-        </header>
+            <h1>🐛 Debug Orchestrator<\/h1>
+            <p class="subtitle">Orchestrated Bug Resolution with Context Capture & Learning Integration<\/p>
+        <\/header>
 
         <!-- Orchestrator Metadata -->
         <div class="orchestrator-meta">
             <div class="meta-item">
-                <span class="meta-label">Manifest Location</span>
-                <span class="meta-value">cortex-brain/manifests/orchestrators/</span>
-            </div>
+                <span class="meta-label">Manifest Location<\/span>
+                <span class="meta-value">cortex-brain/manifests/orchestrators/<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Complexity</span>
-                <span class="meta-value">MEDIUM</span>
-            </div>
+                <span class="meta-label">Complexity<\/span>
+                <span class="meta-value">MEDIUM<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Workflow</span>
-                <span class="meta-value">Symptom → Root Cause → Fix</span>
-            </div>
+                <span class="meta-label">Workflow<\/span>
+                <span class="meta-value">Symptom → Root Cause → Fix<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Rollback Support</span>
-                <span class="meta-value">Yes</span>
-            </div>
+                <span class="meta-label">Rollback Support<\/span>
+                <span class="meta-value">Yes<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Version</span>
-                <span class="meta-value">2.0.0</span>
-            </div>
-        </div>
+                <span class="meta-label">Version<\/span>
+                <span class="meta-value">2.0.0<\/span>
+            <\/div>
 
         <!-- Overview Section -->
         <section class="section">
-            <h2>Overview</h2>
+            <h2>Overview<\/h2>
             <p>
                 The Debug Orchestrator provides orchestrated bug resolution with full Planning/TDD parity. 
                 It accepts bug reports in natural language or structured format, performs contextual architectural 
                 review, injects debug code strategically, captures execution context, and learns from successful 
                 resolutions to improve future debugging.
-            </p>
             
-            <h3>Key Capabilities</h3>
+            <h3>Key Capabilities<\/h3>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">📋 Bug Report Intake</div>
+                    <div class="feature-title">📋 Bug Report Intake<\/div>
                     <div class="feature-desc">
                         Accepts natural language descriptions or structured test failure output. Parses to extract 
                         affected components, error messages, and stack traces.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔍 Contextual Review Integration</div>
+                    <div class="feature-title">🔍 Contextual Review Integration<\/div>
                     <div class="feature-desc">
                         Triggers scoped architectural review focused on bug context. Classifies findings as 
                         BLOCKER/CRITICAL/INFO for prioritization.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">💉 Template-Based Debug Injection</div>
+                    <div class="feature-title">💉 Template-Based Debug Injection<\/div>
                     <div class="feature-desc">
                         Injects debug code at strategic locations using pre-defined templates. All injected code 
                         has CORTEX_DEBUG_ markers for one-shot cleanup.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 Context Capture</div>
+                    <div class="feature-title">📊 Context Capture<\/div>
                     <div class="feature-desc">
                         Captures full execution context: variable states, function call stacks, timing data, 
                         and environment conditions during bug occurrence.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🧠 Learning Integration</div>
+                    <div class="feature-title">🧠 Learning Integration<\/div>
                     <div class="feature-desc">
                         Stores successful debug patterns in Tier 2 brain for future reference. Improves root 
                         cause analysis and fix strategy recommendations over time.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">✅ Validation & Rollback</div>
+                    <div class="feature-title">✅ Validation & Rollback<\/div>
                     <div class="feature-desc">
                         Validates fixes with test suite execution. Automatic rollback if tests fail or new 
                         issues are introduced.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Debug Workflow -->
         <section class="section">
-            <h2>Debugging Workflow</h2>
+            <h2>Debugging Workflow<\/h2>
             <div class="phase-legend">
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-1);"></div>
-                    <div class="legend-label">Symptom Analysis</div>
-                </div>
+                    <div class="legend-color" style="background: var(--phase-1);"><\/div>
+                    <div class="legend-label">Symptom Analysis<\/div>
+                <\/div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-2);"></div>
-                    <div class="legend-label">Root Cause</div>
-                </div>
+                    <div class="legend-color" style="background: var(--phase-2);"><\/div>
+                    <div class="legend-label">Root Cause<\/div>
+                <\/div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-3);"></div>
-                    <div class="legend-label">Fix Strategy</div>
-                </div>
+                    <div class="legend-color" style="background: var(--phase-3);"><\/div>
+                    <div class="legend-label">Fix Strategy<\/div>
+                <\/div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-4);"></div>
-                    <div class="legend-label">Validation</div>
-                </div>
-            </div>
+                    <div class="legend-color" style="background: var(--phase-4);"><\/div>
+                    <div class="legend-label">Validation<\/div>
+                <\/div>
             
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     START([Bug Report]) --> PARSE[Parse Bug Report<br/>Extract components & errors]
     
     PARSE --> CLASSIFY{Bug<br/>Type?}
@@ -416,25 +435,21 @@ graph TD
     style SUCCESS fill:#10B981,stroke:#059669,color:#fff
     style ROLLBACK fill:#DC2626,stroke:#B91C1C,color:#fff
     style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <!-- Error Trace Visualization -->
         <section class="section">
-            <h2>Error Trace Visualization with Stack Analysis</h2>
-            <p>Interactive stack trace visualization showing error propagation through call hierarchy.</p>
+            <h2>Error Trace Visualization with Stack Analysis<\/h2>
+            <p>Interactive stack trace visualization showing error propagation through call hierarchy.<\/p>
             <div class="diagram-container">
-                <div id="errorTrace"></div>
-            </div>
-        </section>
+                <div id="errorTrace"><\/div>
+            <\/div>
 
         <!-- Context Capture -->
         <section class="section">
-            <h2>Context Capture & Learning Integration</h2>
+            <h2>Context Capture & Learning Integration<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph LR
+  graph LR
     BUG[Bug Occurrence] --> CAPTURE[Context Capture:<br/>Variables, Stack, Timing]
     
     CAPTURE --> STORE_SESSION[Store Debug Session:<br/>- Symptoms<br/>- Context data<br/>- Applied fixes]
@@ -456,96 +471,74 @@ graph LR
     style BUG fill:#F44336,stroke:#D32F2F,color:#fff
     style TIER2 fill:#2196F3,stroke:#1976D2,color:#fff
     style RECOMMEND fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <!-- Rollback Decision Tree -->
         <section class="section">
-            <h2>Rollback Decision Tree</h2>
-            <p>Automated decision-making for when to rollback vs. iterate on fix strategy.</p>
+            <h2>Rollback Decision Tree<\/h2>
+            <p>Automated decision-making for when to rollback vs. iterate on fix strategy.<\/p>
             <div class="diagram-container">
-                <div id="rollbackTree"></div>
-            </div>
-        </section>
+                <div id="rollbackTree"><\/div>
+            <\/div>
 
         <!-- Debug Templates -->
         <section class="section">
-            <h2>Debug Injection Templates</h2>
+            <h2>Debug Injection Templates<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">🔧 Function Entry/Exit Logging</div>
+                    <div class="feature-title">🔧 Function Entry/Exit Logging<\/div>
                     <div class="feature-desc">
-                        <code>CORTEX_DEBUG_FUNC_ENTRY</code> and <code>CORTEX_DEBUG_FUNC_EXIT</code> markers 
+                        <code>CORTEX_DEBUG_FUNC_ENTRY<\/code> and <code>CORTEX_DEBUG_FUNC_EXIT<\/code> markers 
                         with parameter capture and return value logging.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 Variable State Capture</div>
+                    <div class="feature-title">📊 Variable State Capture<\/div>
                     <div class="feature-desc">
-                        <code>CORTEX_DEBUG_VAR_STATE</code> markers for snapshot capture at critical locations 
+                        <code>CORTEX_DEBUG_VAR_STATE<\/code> markers for snapshot capture at critical locations 
                         with full object serialization.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">⚠️ Exception Boundary Wrapping</div>
+                    <div class="feature-title">⚠️ Exception Boundary Wrapping<\/div>
                     <div class="feature-desc">
-                        <code>CORTEX_DEBUG_EXCEPTION</code> try-catch wrappers with enhanced error details, 
+                        <code>CORTEX_DEBUG_EXCEPTION<\/code> try-catch wrappers with enhanced error details, 
                         stack preservation, and context data.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🖥️ Browser Console Logging</div>
+                    <div class="feature-title">🖥️ Browser Console Logging<\/div>
                     <div class="feature-desc">
-                        <code>CORTEX_DEBUG_UI</code> console.log statements for UI bugs with component lifecycle 
+                        <code>CORTEX_DEBUG_UI<\/code> console.log statements for UI bugs with component lifecycle 
                         tracking and state inspection.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">⏱️ Timing & Performance</div>
+                    <div class="feature-title">⏱️ Timing & Performance<\/div>
                     <div class="feature-desc">
-                        <code>CORTEX_DEBUG_PERF</code> timing markers for performance analysis with high-resolution 
+                        <code>CORTEX_DEBUG_PERF<\/code> timing markers for performance analysis with high-resolution 
                         timestamps and operation duration tracking.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Related Documentation -->
         <section class="section">
-            <h2>Related Documentation</h2>
+            <h2>Related Documentation<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">Manifest</div>
+                    <div class="feature-title">Manifest<\/div>
                     <div class="feature-desc">
-                        <code>cortex-brain/manifests/orchestrators/debug-orchestrator-manifest.yaml</code>
-                    </div>
-                </div>
+                        <code>cortex-brain/manifests/orchestrators/debug-orchestrator-manifest.yaml<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Implementation Guide</div>
+                    <div class="feature-title">Implementation Guide<\/div>
                     <div class="feature-desc">
-                        <code>cortex-brain/documents/implementation-guides/debug-orchestrator-guide.md</code>
-                    </div>
-                </div>
+                        <code>cortex-brain/documents/implementation-guides/debug-orchestrator-guide.md<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Review Integration</div>
+                    <div class="feature-title">Review Integration<\/div>
                     <div class="feature-desc">
-                        <code>src/operations/modules/architectural/review_orchestrator.py</code>
-                    </div>
-                </div>
+                        <code>src/operations/modules/architectural/review_orchestrator.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">TDD Integration</div>
+                    <div class="feature-title">TDD Integration<\/div>
                     <div class="feature-desc">
-                        <code>src/orchestrators/tdd/tdd_orchestrator.py</code>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        <code>src/orchestrators/tdd/tdd_orchestrator.py<\/code>
+                    <\/div>
 
-        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
-    </div>
+        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
+    <\/div>
 
-    <div class="tooltip" id="tooltip"></div>
+    <div class="tooltip" id="tooltip"><\/div>
 
     <script>
         // Initialize Mermaid
@@ -795,6 +788,8 @@ graph LR
             createErrorTrace();
             createRollbackTree();
         });
-    </script>
+  </style>
+</head>
+<body>
 </body>
 </html>

@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rollback Orchestrator | CORTEX Technical Documentation</title>
-    
-    <!-- D3.js -->
-    <script src="https://d3.js.org/d3.v7.min.js"></script>
-    
-    <!-- Mermaid -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
-    <style>
-        :root {
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Rollback Orchestrator | CORTEX Technical Documentation</title>
+<!-- D3.js -->
+<script src="https://d3.js.org/d3.v7.min.js" type="text/javascript">
+</script><!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+</script>
+<style type="text/css">
+      :root {
             --rollback-primary: #F44336;
             --rollback-secondary: #D32F2F;
             --rollback-dark: #B71C1C;
@@ -203,80 +201,106 @@
             h1 { font-size: 2rem; }
             .orchestrator-meta { grid-template-columns: 1fr; }
         }
-    </style>
-</head>
-<body>
+            
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary, #2196F3);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--secondary, #1976D2);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+        
+        .breadcrumb-current {
+            color: #e2e8f0;
+        }
+
+  <body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Technical Documentation<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">Rollback<\/span>
+    <\/nav>
+    
     <div class="container">
         <header>
-            <h1>⏪ Rollback Orchestrator</h1>
-            <p class="subtitle">State Restoration & Checkpoint Management with Validation Gates</p>
-        </header>
+            <h1>⏪ Rollback Orchestrator<\/h1>
+            <p class="subtitle">State Restoration & Checkpoint Management with Validation Gates<\/p>
+        <\/header>
 
         <div class="orchestrator-meta">
             <div class="meta-item">
-                <span class="meta-label">File Location</span>
-                <span class="meta-value">src/operations/utilities/</span>
-            </div>
+                <span class="meta-label">File Location<\/span>
+                <span class="meta-value">src/operations/utilities/<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Complexity</span>
-                <span class="meta-value">MEDIUM</span>
-            </div>
+                <span class="meta-label">Complexity<\/span>
+                <span class="meta-value">MEDIUM<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Manager Class</span>
-                <span class="meta-value">OrchestrationCheckpointManager</span>
-            </div>
+                <span class="meta-label">Manager Class<\/span>
+                <span class="meta-value">OrchestrationCheckpointManager<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Integration</span>
-                <span class="meta-value">All Orchestrators</span>
-            </div>
-        </div>
+                <span class="meta-label">Integration<\/span>
+                <span class="meta-value">All Orchestrators<\/span>
+            <\/div>
 
         <section class="section">
-            <h2>Overview</h2>
+            <h2>Overview<\/h2>
             <p>
                 The Rollback Orchestrator provides checkpoint-based state restoration for all CORTEX orchestrators. 
                 It enables recovery from failed executions by restoring to known-good checkpoints and removing 
                 all later checkpoints created after that point. Supports both git-based and memory-based checkpoints 
                 with validation gates ensuring safe rollback operations.
-            </p>
             
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">🎯 Checkpoint Selection</div>
+                    <div class="feature-title">🎯 Checkpoint Selection<\/div>
                     <div class="feature-desc">
                         Intelligent checkpoint selection by ID, phase, timestamp, or tag. Shows checkpoint 
                         metadata (phase, state, timestamp) before rollback to confirm target.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔍 Pre-Rollback Validation</div>
+                    <div class="feature-title">🔍 Pre-Rollback Validation<\/div>
                     <div class="feature-desc">
                         Validates checkpoint exists, is not corrupted, and is compatible with current 
                         orchestrator version. Prevents rollback to incompatible states.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔄 Dual-Mode Rollback</div>
+                    <div class="feature-title">🔄 Dual-Mode Rollback<\/div>
                     <div class="feature-desc">
                         Supports git rollback (filesystem + code changes) and memory rollback (state-only). 
                         Git mode uses `git restore`, memory mode updates internal state.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 State Comparison</div>
+                    <div class="feature-title">📊 State Comparison<\/div>
                     <div class="feature-desc">
                         Before/after state comparison showing: phase changes, file differences, test status, 
                         metric deltas. Confirms rollback achieved desired state.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Rollback Workflow with Validation Gates</h2>
+            <h2>Rollback Workflow with Validation Gates<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     START([Rollback Request]) --> SELECT[Checkpoint Selection:<br/>- By ID<br/>- By phase<br/>- By timestamp<br/>- By tag]
     
     SELECT --> RETRIEVE[Retrieve Checkpoint<br/>Metadata]
@@ -335,53 +359,39 @@ graph TD
     style SUCCESS fill:#10B981,stroke:#059669,color:#fff
     style ROLLBACK_FAIL fill:#DC2626,stroke:#B91C1C,color:#fff
     style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Validation Gates</h2>
+            <h2>Validation Gates<\/h2>
             <div class="validation-grid">
                 <div class="validation-card">
-                    <div class="validation-title">Gate 1: Checkpoint Exists</div>
+                    <div class="validation-title">Gate 1: Checkpoint Exists<\/div>
                     <div class="validation-desc">
                         Verifies checkpoint file exists at expected path. Checks both git and memory checkpoint lists.
-                    </div>
-                </div>
                 <div class="validation-card">
-                    <div class="validation-title">Gate 2: Not Corrupted</div>
+                    <div class="validation-title">Gate 2: Not Corrupted<\/div>
                     <div class="validation-desc">
                         Validates checkpoint JSON structure, required fields (checkpoint_id, timestamp, state), and file integrity.
-                    </div>
-                </div>
                 <div class="validation-card">
-                    <div class="validation-title">Gate 3: Version Compatible</div>
+                    <div class="validation-title">Gate 3: Version Compatible<\/div>
                     <div class="validation-desc">
                         Ensures checkpoint orchestrator version matches current version. Prevents incompatible state restoration.
-                    </div>
-                </div>
                 <div class="validation-card">
-                    <div class="validation-title">Gate 4: State Restored</div>
+                    <div class="validation-title">Gate 4: State Restored<\/div>
                     <div class="validation-desc">
                         Post-rollback validation: phase matches checkpoint, files restored, state variables correct.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Checkpoint Selection Tree</h2>
-            <p>Hierarchical view of available checkpoints for rollback selection.</p>
+            <h2>Checkpoint Selection Tree<\/h2>
+            <p>Hierarchical view of available checkpoints for rollback selection.<\/p>
             <div class="diagram-container">
-                <div id="checkpointTree"></div>
-            </div>
-        </section>
+                <div id="checkpointTree"><\/div>
+            <\/div>
 
         <section class="section">
-            <h2>Git vs Memory Rollback</h2>
+            <h2>Git vs Memory Rollback<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph LR
+  graph LR
     ROLLBACK[Rollback Request] --> CHECK{Checkpoint<br/>Type?}
     
     CHECK --> |Git| GIT_FLOW[Git Rollback Flow]
@@ -407,23 +417,19 @@ graph LR
     style GIT_DONE fill:#10B981,stroke:#059669,color:#fff
     style MEM_DONE fill:#10B981,stroke:#059669,color:#fff
     style CLEANUP fill:#FF9800,stroke:#F57C00,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>State Comparison Visualization</h2>
-            <p>Before/after comparison showing impact of rollback on orchestrator state.</p>
+            <h2>State Comparison Visualization<\/h2>
+            <p>Before/after comparison showing impact of rollback on orchestrator state.<\/p>
             <div class="diagram-container">
-                <div id="stateComparison"></div>
-            </div>
-        </section>
+                <div id="stateComparison"><\/div>
+            <\/div>
 
         <section class="section">
-            <h2>Checkpoint Cleanup Strategy</h2>
+            <h2>Checkpoint Cleanup Strategy<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     TARGET[Target Checkpoint<br/>Selected] --> TIMESTAMP[Get Target<br/>Timestamp]
     
     TIMESTAMP --> SCAN[Scan All Checkpoints<br/>for Orchestrator]
@@ -457,158 +463,121 @@ graph TD
     style DELETE fill:#DC2626,stroke:#B91C1C,color:#fff
     style DONE fill:#10B981,stroke:#059669,color:#fff
     style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Key Features</h2>
+            <h2>Key Features<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">📂 Checkpoint Storage</div>
+                    <div class="feature-title">📂 Checkpoint Storage<\/div>
                     <div class="feature-desc">
-                        Checkpoints stored at <code>cortex-brain/checkpoints/{orchestrator_name}/{checkpoint_id}.json</code>. 
+                        Checkpoints stored at <code>cortex-brain/checkpoints/{orchestrator_name}/{checkpoint_id}.json<\/code>. 
                         Thread-safe concurrent access for multiple orchestrators.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔍 Checkpoint Listing</div>
+                    <div class="feature-title">🔍 Checkpoint Listing<\/div>
                     <div class="feature-desc">
                         List all checkpoints with filtering by: phase name, timestamp range, tags, orchestrator name. 
                         Returns sorted list (newest first).
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">💾 Pre-Rollback Snapshot</div>
+                    <div class="feature-title">💾 Pre-Rollback Snapshot<\/div>
                     <div class="feature-desc">
                         Creates snapshot before rollback for emergency recovery. If rollback fails, can restore 
                         from snapshot to pre-rollback state.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 Rollback Metrics</div>
+                    <div class="feature-title">📊 Rollback Metrics<\/div>
                     <div class="feature-desc">
                         Tracks: rollback count, success rate, average restore time, checkpoints deleted. 
                         Helps identify problematic checkpoints.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔄 Automatic Cleanup</div>
+                    <div class="feature-title">🔄 Automatic Cleanup<\/div>
                     <div class="feature-desc">
                         Removes checkpoints after target timestamp. Prevents checkpoint list bloat. 
                         Preserves tagged checkpoints if configured.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🛡️ Safety Guardrails</div>
+                    <div class="feature-title">🛡️ Safety Guardrails<\/div>
                     <div class="feature-desc">
                         Prevents rollback to: corrupted checkpoints, incompatible versions, non-existent 
                         checkpoints. Requires confirmation for destructive operations.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Integration Points</h2>
+            <h2>Integration Points<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">BaseOrchestrator</div>
+                    <div class="feature-title">BaseOrchestrator<\/div>
                     <div class="feature-desc">
-                        All orchestrators inherit <code>restore_checkpoint()</code> and <code>create_checkpoint()</code> 
-                        methods from <code>BaseOrchestrator</code>.
-                    </div>
-                </div>
+                        All orchestrators inherit <code>restore_checkpoint()<\/code> and <code>create_checkpoint()<\/code> 
+                        methods from <code>BaseOrchestrator<\/code>.
                 <div class="feature-card">
-                    <div class="feature-title">Planning Orchestrator</div>
+                    <div class="feature-title">Planning Orchestrator<\/div>
                     <div class="feature-desc">
-                        <code>_rollback_to_checkpoint()</code> supports rollback to any planning phase. 
+                        <code>_rollback_to_checkpoint()<\/code> supports rollback to any planning phase. 
                         Restores plan state, phase counter, and execution context.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">Adaptive Execution</div>
+                    <div class="feature-title">Adaptive Execution<\/div>
                     <div class="feature-desc">
-                        <code>SafetyGuardrail.restore_checkpoint()</code> integrates with autonomous execution 
+                        <code>SafetyGuardrail.restore_checkpoint()<\/code> integrates with autonomous execution 
                         for automatic rollback on error.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">Git Checkpoint Rules</div>
+                    <div class="feature-title">Git Checkpoint Rules<\/div>
                     <div class="feature-desc">
-                        Manifest <code>git-checkpoint-rules.yaml</code> defines auto-checkpoint triggers, 
+                        Manifest <code>git-checkpoint-rules.yaml<\/code> defines auto-checkpoint triggers, 
                         retention policies, cleanup strategies.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Usage Examples</h2>
+            <h2>Usage Examples<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">Example 1: List & Rollback</div>
+                    <div class="feature-title">Example 1: List & Rollback<\/div>
                     <div class="feature-desc">
                         <pre style="background:#0f172a; padding:1rem; border-radius:4px; color:#e2e8f0; overflow-x:auto;"><code>manager = OrchestrationCheckpointManager()
-checkpoints = manager.list_checkpoints('planning_orchestrator')
-# Show: [{'checkpoint_id': 'cp1', 'phase': 'Phase2', 'timestamp': '2025-12-26T10:00:00'}]
+  checkpoints = manager.list_checkpoints('planning_orchestrator')
+  # Show: [{'checkpoint_id': 'cp1', 'phase': 'Phase2', 'timestamp': '2025-12-26T10:00:00'}]
 
-# Rollback to Phase 1
-state = manager.rollback('planning_orchestrator', 'cp1')
-print(state['phase'])  # Output: Phase1</code></pre>
-                    </div>
-                </div>
+  # Rollback to Phase 1
+  state = manager.rollback('planning_orchestrator', 'cp1')
+  print(state['phase'])  # Output: Phase1<\/code><\/pre>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Example 2: Memory Checkpoint Rollback</div>
+                    <div class="feature-title">Example 2: Memory Checkpoint Rollback<\/div>
                     <div class="feature-desc">
                         <pre style="background:#0f172a; padding:1rem; border-radius:4px; color:#e2e8f0; overflow-x:auto;"><code># In orchestrator
-checkpoint_id = self._create_checkpoint("Refactoring", {"state": "stable"})
+  checkpoint_id = self._create_checkpoint("Refactoring", {"state": "stable"})
 
-# Make changes
-self._update_state({"state": "unstable"})
+  # Make changes
+  self._update_state({"state": "unstable"})
 
-# Rollback to stable state
-success = self._rollback_to_checkpoint(checkpoint_id)
-assert self._get_current_state()["state"] == "stable"</code></pre>
-                    </div>
-                </div>
-            </div>
-        </section>
+  # Rollback to stable state
+  success = self._rollback_to_checkpoint(checkpoint_id)
+  assert self._get_current_state()["state"] == "stable"<\/code><\/pre>
+                    <\/div>
 
         <section class="section">
-            <h2>Related Documentation</h2>
+            <h2>Related Documentation<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">Implementation</div>
+                    <div class="feature-title">Implementation<\/div>
                     <div class="feature-desc">
-                        <code>src/operations/utilities/orchestration_checkpoint_manager.py</code>
-                    </div>
-                </div>
+                        <code>src/operations/utilities/orchestration_checkpoint_manager.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Base Integration</div>
+                    <div class="feature-title">Base Integration<\/div>
                     <div class="feature-desc">
-                        <code>src/orchestrators/base/base_orchestrator.py</code>
-                    </div>
-                </div>
+                        <code>src/orchestrators/base/base_orchestrator.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Manifest</div>
+                    <div class="feature-title">Manifest<\/div>
                     <div class="feature-desc">
-                        <code>cortex-brain/manifests/orchestrators/git-checkpoint-rules.yaml</code>
-                    </div>
-                </div>
+                        <code>cortex-brain/manifests/orchestrators/git-checkpoint-rules.yaml<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Tests</div>
+                    <div class="feature-title">Tests<\/div>
                     <div class="feature-desc">
-                        <code>tests/orchestrators/planning/test_planning_orchestrator_checkpoint_mgmt.py</code>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        <code>tests/orchestrators/planning/test_planning_orchestrator_checkpoint_mgmt.py<\/code>
+                    <\/div>
 
-        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
-    </div>
+        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
+    <\/div>
 
-    <div class="tooltip" id="tooltip"></div>
+    <div class="tooltip" id="tooltip"><\/div>
 
     <script>
         mermaid.initialize({ 
@@ -836,6 +805,8 @@ assert self._get_current_state()["state"] == "stable"</code></pre>
             createCheckpointTree();
             createStateComparison();
         });
-    </script>
+  </style>
+</head>
+<body>
 </body>
 </html>

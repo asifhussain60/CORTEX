@@ -1,642 +1,1806 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
+
 <html lang="en">
-<head>
+
+<head><html lang="en"><html lang="en">
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
+
     <title>CORTEX Lens v3 Orchestrator | CORTEX Technical Documentation</title>
-    
+
+        <meta charset="utf-8"/><meta charset="utf-8">
+
     <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>    <meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta content="width=device-width, initial-scale=1.0" name="viewport">
+
     
-    <!-- Mermaid -->
+
+    <!-- Mermaid -->    <title>CORTEX Lens v3 Orchestrator | CORTEX Technical Documentation</title><title>CORTEX Lens v3 Orchestrator | CORTEX Technical Documentation</title>
+
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
+
+        <!-- D3.js -->
+
     <style>
-        :root {
+
+        :root {    <!-- D3.js --><script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
+
             --lens-primary: #9C27B0;
-            --lens-secondary: #7B1FA2;
+
+            --lens-secondary: #7B1FA2;    <script src="https://d3js.org/d3.v7.min.js"></script></script><!-- Mermaid -->
+
             --lens-dark: #4A148C;
-            --phase-1: #2196F3;
+
+            --phase-1: #2196F3;    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+
             --phase-2: #4CAF50;
-            --phase-3: #FF9800;
+
+            --phase-3: #FF9800;    <!-- Mermaid --></script>
+
             --phase-4: #F44336;
-            --phase-5: #00BCD4;
+
+            --phase-5: #00BCD4;    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script><style type="text/css">
+
             --phase-6: #8BC34A;
-            --success: #10B981;
+
+            --success: #10B981;          :root {
+
             --warning: #F59E0B;
-            --error: #DC2626;
+
+            --error: #DC2626;    <style>            --lens-primary: #9C27B0;
+
         }
-        
+
+                :root {            --lens-secondary: #7B1FA2;
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;            --lens-primary: #9C27B0;            --lens-dark: #4A148C;
+
             margin: 0;
-            padding: 0;
+
+            padding: 0;            --lens-secondary: #7B1FA2;            --phase-1: #2196F3;
+
             background: #0f172a;
-            color: #e2e8f0;
+
+            color: #e2e8f0;            --lens-dark: #4A148C;            --phase-2: #4CAF50;
+
         }
-        
+
+                    --phase-1: #2196F3;            --phase-3: #FF9800;
+
         .container {
-            max-width: 1400px;
+
+            max-width: 1400px;            --phase-2: #4CAF50;            --phase-4: #F44336;
+
             margin: 0 auto;
-            padding: 2rem;
+
+            padding: 2rem;            --phase-3: #FF9800;            --phase-5: #00BCD4;
+
         }
-        
+
+                    --phase-4: #F44336;            --phase-6: #8BC34A;
+
         header {
-            text-align: center;
+
+            text-align: center;            --phase-5: #00BCD4;            --success: #10B981;
+
             padding: 3rem 0;
-            border-bottom: 2px solid var(--lens-primary);
-            margin-bottom: 3rem;
+
+            border-bottom: 2px solid var(--lens-primary);            --phase-6: #8BC34A;            --warning: #F59E0B;
+
         }
-        
-        h1 {
-            font-size: 3rem;
+
+                    --success: #10B981;            --error: #DC2626;
+
+        header h1 {
+
+            font-size: 3rem;            --warning: #F59E0B;        }
+
+            font-weight: 700;
+
+            color: var(--lens-primary);            --error: #DC2626;        
+
             margin: 0;
-            color: var(--lens-primary);
-            font-weight: 600;
-        }
+
+        }        }        body {
+
         
-        .subtitle {
-            font-size: 1.25rem;
-            color: #94a3b8;
+
+        header .subtitle {                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            font-size: 1.2rem;
+
+            color: #94a3b8;        body {            margin: 0;
+
             margin-top: 0.5rem;
-        }
+
+        }            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;            padding: 0;
+
         
-        .orchestrator-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: #1e293b;
-            border-radius: 8px;
-            border-left: 4px solid var(--lens-primary);
-        }
-        
-        .meta-item {
+
+        .metadata {            margin: 0;            background: #0f172a;
+
             display: flex;
-            flex-direction: column;
+
+            justify-content: center;            padding: 0;            color: #e2e8f0;
+
+            gap: 2rem;
+
+            margin-top: 1.5rem;            background: #0f172a;        }
+
+            font-size: 0.9rem;
+
+            color: #cbd5e1;            color: #e2e8f0;        
+
         }
-        
-        .meta-label {
-            font-size: 0.875rem;
-            color: #94a3b8;
-            margin-bottom: 0.25rem;
-        }
-        
-        .meta-value {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--lens-primary);
-        }
-        
-        .section {
-            margin: 3rem 0;
-            padding: 2rem;
-            background: #1e293b;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        h2 {
-            font-size: 2rem;
-            margin-top: 0;
-            color: #f1f5f9;
-            border-bottom: 2px solid var(--lens-secondary);
-            padding-bottom: 0.5rem;
-        }
-        
-        h3 {
-            font-size: 1.5rem;
-            color: var(--lens-primary);
-            margin-top: 2rem;
-        }
-        
-        .diagram-container {
-            background: #0f172a;
-            padding: 2rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border: 1px solid #334155;
-        }
-        
-        .mermaid {
-            text-align: center;
-        }
-        
-        #narrativeFlow, #patternDetection, #insightVisualization, #learningIntegration {
-            min-height: 600px;
-            width: 100%;
-        }
-        
-        .phase-legend {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-        
-        .legend-item {
-            display: flex;
+
+                }        .container {
+
+        .metadata span {
+
+            display: flex;                    max-width: 1400px;
+
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem;
-            background: #0f172a;
-            border-radius: 6px;
+
+            gap: 0.5rem;        .container {            margin: 0 auto;
+
         }
-        
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
+
+                    max-width: 1400px;            padding: 2rem;
+
+        .section {
+
+            margin: 4rem 0;            margin: 0 auto;        }
+
         }
-        
-        .legend-label {
-            font-size: 0.875rem;
-            color: #e2e8f0;
-        }
-        
-        .feature-list {
-            display: grid;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .feature-card {
-            padding: 1rem;
-            background: #0f172a;
-            border-radius: 8px;
+
+                    padding: 2rem;        
+
+        .section h2 {
+
+            font-size: 2rem;        }        header {
+
+            color: var(--lens-primary);
+
+            margin-bottom: 1.5rem;                    text-align: center;
+
             border-left: 4px solid var(--lens-primary);
+
+            padding-left: 1rem;        header {            padding: 3rem 0;
+
         }
-        
-        .feature-title {
-            font-weight: 600;
-            color: var(--lens-primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .feature-desc {
+
+                    text-align: center;            border-bottom: 2px solid var(--lens-primary);
+
+        .section p {
+
+            line-height: 1.8;            padding: 3rem 0;            margin-bottom: 3rem;
+
             color: #cbd5e1;
-            font-size: 0.938rem;
-            line-height: 1.6;
+
+            margin-bottom: 1rem;            border-bottom: 2px solid var(--lens-primary);        }
+
         }
-        
-        .template-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+
+                }        
+
+        .diagram-container {
+
+            background: #1e293b;                h1 {
+
+            border-radius: 12px;
+
+            padding: 2rem;        header h1 {            font-size: 3rem;
+
             margin: 2rem 0;
+
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);            font-size: 3rem;            margin: 0;
+
         }
-        
-        .template-card {
-            padding: 1.5rem;
-            background: #0f172a;
+
+                    font-weight: 700;            color: var(--lens-primary);
+
+        .diagram-title {
+
+            font-size: 1.3rem;            color: var(--lens-primary);            font-weight: 600;
+
+            font-weight: 600;
+
+            color: var(--lens-secondary);            margin: 0;        }
+
+            margin-bottom: 1.5rem;
+
+            display: flex;        }        
+
+            align-items: center;
+
+            gap: 0.5rem;                .subtitle {
+
+        }
+
+                header .subtitle {            font-size: 1.25rem;
+
+        .mermaid {
+
+            background: #0f172a;            font-size: 1.2rem;            color: #94a3b8;
+
             border-radius: 8px;
-            border: 2px solid var(--lens-primary);
-            text-align: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+
+            padding: 1.5rem;            color: #94a3b8;            margin-top: 0.5rem;
+
+            min-height: 400px;
+
+        }            margin-top: 0.5rem;        }
+
         
-        .template-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(156, 39, 176, 0.3);
-        }
+
+        #narrative-workflow-viz,        }        
+
+        #insight-viz {
+
+            width: 100%;                .orchestrator-meta {
+
+            min-height: 500px;
+
+            background: #0f172a;        .metadata {            display: grid;
+
+            border-radius: 8px;
+
+        }            display: flex;            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
         
-        .template-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+
+        .feature-grid {            justify-content: center;            gap: 1rem;
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));            gap: 2rem;            margin: 2rem 0;
+
+            gap: 1.5rem;
+
+            margin: 2rem 0;            margin-top: 1.5rem;            padding: 1.5rem;
+
         }
+
+                    font-size: 0.9rem;            background: #1e293b;
+
+        .feature-card {
+
+            background: #1e293b;            color: #cbd5e1;            border-radius: 8px;
+
+            border-radius: 8px;
+
+            padding: 1.5rem;        }            border-left: 4px solid var(--lens-primary);
+
+            border-left: 4px solid var(--lens-primary);
+
+        }                }
+
         
-        .template-name {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--lens-primary);
-            margin-bottom: 0.5rem;
+
+        .feature-card h3 {        .metadata span {        
+
+            color: var(--lens-secondary);
+
+            margin-top: 0;            display: flex;        .meta-item {
+
         }
+
+                    align-items: center;            display: flex;
+
+        .feature-card ul {
+
+            list-style: none;            gap: 0.5rem;            flex-direction: column;
+
+            padding: 0;
+
+        }        }        }
+
         
-        .template-desc {
-            font-size: 0.875rem;
-            color: #94a3b8;
+
+        .feature-card li {                
+
+            padding: 0.5rem 0;
+
+            color: #cbd5e1;        .section {        .meta-label {
+
         }
+
+                    margin: 4rem 0;            font-size: 0.875rem;
+
+        .feature-card li::before {
+
+            content: "✓ ";        }            color: #94a3b8;
+
+            color: var(--success);
+
+            font-weight: bold;                    margin-bottom: 0.25rem;
+
+            margin-right: 0.5rem;
+
+        }        .section h2 {        }
+
         
-        .tooltip {
-            position: absolute;
-            padding: 0.75rem;
-            background: #1e293b;
-            border: 1px solid var(--lens-primary);
-            border-radius: 6px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-size: 0.875rem;
-            color: #e2e8f0;
-            max-width: 300px;
-            z-index: 1000;
+
+        .phases-grid {            font-size: 2rem;        
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));            color: var(--lens-primary);        .meta-value {
+
+            gap: 1.5rem;
+
+            margin: 2rem 0;            margin-bottom: 1.5rem;            font-size: 1.125rem;
+
         }
+
+                    border-left: 4px solid var(--lens-primary);            font-weight: 600;
+
+        .phase-card {
+
+            background: #1e293b;            padding-left: 1rem;            color: var(--lens-primary);
+
+            border-radius: 8px;
+
+            padding: 1.5rem;        }        }
+
+            border-left: 4px solid;
+
+        }                
+
         
-        .back-link {
+
+        .phase-card.phase-1 { border-left-color: var(--phase-1); }        .section p {        .section {
+
+        .phase-card.phase-2 { border-left-color: var(--phase-2); }
+
+        .phase-card.phase-3 { border-left-color: var(--phase-3); }            line-height: 1.8;            margin: 3rem 0;
+
+        .phase-card.phase-4 { border-left-color: var(--phase-4); }
+
+        .phase-card.phase-5 { border-left-color: var(--phase-5); }            color: #cbd5e1;            padding: 2rem;
+
+        .phase-card.phase-6 { border-left-color: var(--phase-6); }
+
+                    margin-bottom: 1rem;            background: #1e293b;
+
+        .phase-card h3 {
+
+            margin-top: 0;        }            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+            gap: 0.5rem;
+
+        }        .diagram-container {        }
+
+        
+
+        .phase-number {            background: #1e293b;        
+
             display: inline-block;
-            margin: 2rem 0;
-            padding: 0.75rem 1.5rem;
+
+            width: 32px;            border-radius: 12px;        h2 {
+
+            height: 32px;
+
+            border-radius: 50%;            padding: 2rem;            font-size: 2rem;
+
             background: var(--lens-primary);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
+
+            color: white;            margin: 2rem 0;            margin-top: 0;
+
+            text-align: center;
+
+            line-height: 32px;            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);            color: #f1f5f9;
+
+            font-weight: 700;
+
+        }        }            border-bottom: 2px solid var(--lens-secondary);
+
         
-        .back-link:hover {
-            background: var(--lens-secondary);
-        }
+
+        footer {                    padding-bottom: 0.5rem;
+
+            text-align: center;
+
+            padding: 3rem 0;        .diagram-title {        }
+
+            border-top: 2px solid var(--lens-primary);
+
+            color: #94a3b8;            font-size: 1.3rem;        
+
+            margin-top: 4rem;
+
+        }            font-weight: 600;        h3 {
+
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .orchestrator-meta {
-                grid-template-columns: 1fr;
-            }
+
+        /* Breadcrumb Navigation */            color: var(--lens-secondary);            font-size: 1.5rem;
+
+        .breadcrumb {
+
+            background: rgba(30, 41, 59, 0.8);            margin-bottom: 1.5rem;            color: var(--lens-primary);
+
+            padding: 1rem 2rem;
+
+            border-bottom: 1px solid rgba(156, 39, 176, 0.3);            display: flex;            margin-top: 2rem;
+
+            margin-bottom: 2rem;
+
+        }            align-items: center;        }
+
+        
+
+        .breadcrumb a {            gap: 0.5rem;        
+
+            color: var(--lens-primary);
+
+            text-decoration: none;        }        .diagram-container {
+
+            transition: color 0.2s;
+
+        }                    background: #0f172a;
+
+        
+
+        .breadcrumb a:hover {        .mermaid {            padding: 2rem;
+
+            color: var(--lens-secondary);
+
+            text-decoration: underline;            background: #0f172a;            border-radius: 8px;
+
         }
-    </style>
+
+                    border-radius: 8px;            margin: 1.5rem 0;
+
+        .breadcrumb-separator {
+
+            color: #64748b;            padding: 1.5rem;            border: 1px solid #334155;
+
+            margin: 0 0.5rem;
+
+        }            min-height: 400px;        }
+
+        
+
+        .breadcrumb-current {        }        
+
+            color: #e2e8f0;
+
+        }                .mermaid {
+
+        
+
+        @media (max-width: 768px) {        #narrative-workflow-viz,            text-align: center;
+
+            header h1 {
+
+                font-size: 2rem;        #insight-viz {        }
+
+            }
+
+                        width: 100%;        
+
+            .metadata {
+
+                flex-direction: column;            min-height: 500px;        #narrativeFlow, #patternDetection, #insightVisualization, #learningIntegration {
+
+                gap: 0.5rem;
+
+            }            background: #0f172a;            min-height: 600px;
+
+        }
+
+    </style>            border-radius: 8px;            width: 100%;
+
 </head>
-<body>
-    <div class="container">
+
+<body>        }        }
+
+    <!-- Breadcrumb -->
+
+    <nav class="breadcrumb">                
+
+        <a href="../../index.html">Home</a>
+
+        <span class="breadcrumb-separator">›</span>        .feature-grid {        .phase-legend {
+
+        <a href="../../features/orchestrators.html">Orchestrators</a>
+
+        <span class="breadcrumb-separator">›</span>            display: grid;            display: grid;
+
+        <a href="index.html">Technical Documentation</a>
+
+        <span class="breadcrumb-separator">›</span>            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+        <span class="breadcrumb-current">CORTEX Lens v3</span>
+
+    </nav>            gap: 1.5rem;            gap: 1rem;
+
+    
+
+    <div class="container">            margin: 2rem 0;            margin: 2rem 0;
+
         <header>
-            <h1>🔍 CORTEX Lens v3 Orchestrator</h1>
+
+            <h1>🔍 CORTEX Lens v3 Orchestrator</h1>        }        }
+
             <p class="subtitle">Universal Repository Analyzer with Narrative Generation & Pattern Detection</p>
-        </header>
 
-        <!-- Orchestrator Metadata -->
-        <div class="orchestrator-meta">
-            <div class="meta-item">
-                <span class="meta-label">File Location</span>
-                <span class="meta-value">src/cortex_lens/</span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Complexity</span>
-                <span class="meta-value">HIGH</span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Phases</span>
-                <span class="meta-value">6</span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Templates</span>
-                <span class="meta-value">8+ Adaptive</span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Version</span>
-                <span class="meta-value">3.0.0</span>
-            </div>
-        </div>
+            <div class="metadata">                
 
-        <!-- Overview Section -->
+                <span>📄 <strong>File:</strong> src/cortex_lens/orchestrator.py</span>
+
+                <span>⚙️ <strong>Complexity:</strong> HIGH</span>        .feature-card {        .legend-item {
+
+                <span>📊 <strong>Phases:</strong> 6</span>
+
+                <span>🎨 <strong>Templates:</strong> 8+ Adaptive</span>            background: #1e293b;            display: flex;
+
+            </div>
+
+        </header>            border-radius: 8px;            align-items: center;
+
+
+
+        <!-- Overview -->            padding: 1.5rem;            gap: 0.5rem;
+
         <section class="section">
-            <h2>Overview</h2>
+
+            <h2>📋 Overview</h2>            border-left: 4px solid var(--lens-primary);            padding: 0.75rem;
+
             <p>
-                CORTEX Lens v3 is a universal repository analyzer that transforms raw code data into compelling 
+
+                CORTEX Lens v3 is a universal repository analyzer that transforms raw code data into compelling         }            background: #0f172a;
+
                 narratives with interactive visualizations. It automatically detects repository type, extracts 
-                relevant metrics, and generates adaptive dashboards tailored to the project's technology stack 
+
+                relevant metrics, and generates adaptive dashboards tailored to the project's technology stack                     border-radius: 6px;
+
                 and architecture patterns.
-            </p>
+
+            </p>        .feature-card h3 {        }
+
+        </section>
+
+            color: var(--lens-secondary);        
+
+        <!-- Core Capabilities -->
+
+        <section class="section">            margin-top: 0;        .legend-color {
+
+            <h2>🎯 Core Capabilities</h2>
+
+            <div class="feature-grid">        }            width: 20px;
+
+                <div class="feature-card">
+
+                    <h3>📊 Repository Classification</h3>                    height: 20px;
+
+                    <ul>
+
+                        <li>Auto-detect repository type (web app, API, ML pipeline, CLI tool, library)</li>        .feature-card ul {            border-radius: 4px;
+
+                        <li>Technology stack identification through file analysis</li>
+
+                        <li>Pattern matching across 11+ languages</li>            list-style: none;        }
+
+                    </ul>
+
+                </div>            padding: 0;        
+
+                
+
+                <div class="feature-card">        }        .legend-label {
+
+                    <h3>📖 Story Weaving</h3>
+
+                    <ul>                    font-size: 0.875rem;
+
+                        <li>Transform technical metrics into human-readable narratives</li>
+
+                        <li>Explain what code does, how it's structured, why decisions made</li>        .feature-card li {            color: #e2e8f0;
+
+                        <li>Context-aware narrative generation</li>
+
+                    </ul>            padding: 0.5rem 0;        }
+
+                </div>
+
+                            color: #cbd5e1;        
+
+                <div class="feature-card">
+
+                    <h3>🎨 Adaptive Templates</h3>        }        .feature-list {
+
+                    <ul>
+
+                        <li>8+ specialized dashboard templates</li>                    display: grid;
+
+                        <li>React, Django, FastAPI, ML, microservices support</li>
+
+                        <li>Auto-selection based on repository characteristics</li>        .feature-card li::before {            gap: 1rem;
+
+                    </ul>
+
+                </div>            content: "✓ ";            margin: 1.5rem 0;
+
+                
+
+                <div class="feature-card">            color: var(--success);        }
+
+                    <h3>🔥 Hotspot Analysis</h3>
+
+                    <ul>            font-weight: bold;        
+
+                        <li>Identify code complexity hotspots</li>
+
+                        <li>Track frequently changed files</li>            margin-right: 0.5rem;        .feature-card {
+
+                        <li>Detect architectural bottlenecks using git history and AST</li>
+
+                    </ul>        }            padding: 1rem;
+
+                </div>
+
+                                    background: #0f172a;
+
+                <div class="feature-card">
+
+                    <h3>📈 Business Value Extraction</h3>        .phases-grid {            border-radius: 8px;
+
+                    <ul>
+
+                        <li>Connect technical metrics to business outcomes</li>            display: grid;            border-left: 4px solid var(--lens-primary);
+
+                        <li>Feature velocity tracking</li>
+
+                        <li>Technical debt impact analysis</li>            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));        }
+
+                        <li>Quality trends and deployment frequency</li>
+
+                    </ul>            gap: 1.5rem;        
+
+                </div>
+
+                            margin: 2rem 0;        .feature-title {
+
+                <div class="feature-card">
+
+                    <h3>🧠 Learning Integration</h3>        }            font-weight: 600;
+
+                    <ul>
+
+                        <li>Store discovered patterns in Tier 2 brain</li>                    color: var(--lens-primary);
+
+                        <li>Continuous improvement of narrative quality</li>
+
+                        <li>Insight detection enhancement over time</li>        .phase-card {            margin-bottom: 0.5rem;
+
+                    </ul>
+
+                </div>            background: #1e293b;        }
+
+            </div>
+
+        </section>            border-radius: 8px;        
+
+
+
+        <!-- 6-Phase Workflow -->            padding: 1.5rem;        .feature-desc {
+
+        <section class="section">
+
+            <h2>🔄 6-Phase Narrative Generation Workflow</h2>            border-left: 4px solid;            color: #cbd5e1;
+
             
-            <h3>Core Capabilities</h3>
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">📊 Repository Classification</div>
-                    <div class="feature-desc">
-                        Automatically detects repository type (web app, API, ML pipeline, CLI tool, library) 
-                        and technology stack through file analysis and pattern matching.
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">📖 Story Weaving</div>
-                    <div class="feature-desc">
-                        Transforms technical metrics into human-readable narratives that explain what the code 
-                        does, how it's structured, and why architectural decisions were made.
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">🎨 Adaptive Templates</div>
-                    <div class="feature-desc">
-                        8+ specialized dashboard templates (React, Django, FastAPI, ML, microservices, etc.) 
-                        with auto-selection based on repository characteristics.
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">🔥 Hotspot Analysis</div>
-                    <div class="feature-desc">
-                        Identifies code complexity hotspots, frequently changed files, and architectural 
-                        bottlenecks using git history and AST analysis.
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">📈 Business Value Extraction</div>
-                    <div class="feature-desc">
-                        Connects technical metrics to business outcomes: feature velocity, technical debt impact, 
-                        quality trends, deployment frequency.
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">🧠 Learning Integration</div>
-                    <div class="feature-desc">
-                        Stores discovered patterns in Tier 2 brain for future analysis, enabling continuous 
-                        improvement of narrative quality and insight detection.
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- 6-Phase Workflow -->
-        <section class="section">
-            <h2>6-Phase Narrative Generation Workflow</h2>
-            <div class="phase-legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-1);"></div>
-                    <div class="legend-label">Phase 1: Classification</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-2);"></div>
-                    <div class="legend-label">Phase 2: Collection</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-3);"></div>
-                    <div class="legend-label">Phase 3: Narrative</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-4);"></div>
-                    <div class="legend-label">Phase 4: Dashboard</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-5);"></div>
-                    <div class="legend-label">Phase 5: Validation</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-6);"></div>
-                    <div class="legend-label">Phase 6: Packaging</div>
-                </div>
+            <div class="diagram-container">        }            font-size: 0.938rem;
+
+                <div class="diagram-title">📊 Workflow Sequence</div>
+
+                <div class="mermaid">                    line-height: 1.6;
+
+graph LR
+
+    A[Phase 1: Classification] -->|Detect Type| B[Phase 2: Collection]        .phase-card.phase-1 { border-left-color: var(--phase-1); }        }
+
+    B -->|Gather Metrics| C[Phase 3: Narrative]
+
+    C -->|Weave Story| D[Phase 4: Dashboard]        .phase-card.phase-2 { border-left-color: var(--phase-2); }        
+
+    D -->|Generate Viz| E[Phase 5: Validation]
+
+    E -->|Check Quality| F[Phase 6: Learning]        .phase-card.phase-3 { border-left-color: var(--phase-3); }        .template-grid {
+
+    
+
+    style A fill:#2196F3        .phase-card.phase-4 { border-left-color: var(--phase-4); }            display: grid;
+
+    style B fill:#4CAF50
+
+    style C fill:#FF9800        .phase-card.phase-5 { border-left-color: var(--phase-5); }            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+    style D fill:#F44336
+
+    style E fill:#00BCD4        .phase-card.phase-6 { border-left-color: var(--phase-6); }            gap: 1.5rem;
+
+    style F fill:#8BC34A
+
+                </div>                    margin: 2rem 0;
+
             </div>
+
+                    .phase-card h3 {        }
+
+            <div class="phases-grid">
+
+                <div class="phase-card phase-1">            margin-top: 0;        
+
+                    <h3><span class="phase-number">1</span> Classification</h3>
+
+                    <p><strong>Goal:</strong> Identify repository type and technology stack</p>            display: flex;        .template-card {
+
+                    <ul>
+
+                        <li>Scan file structure and extensions</li>            align-items: center;            padding: 1.5rem;
+
+                        <li>Detect frameworks and libraries</li>
+
+                        <li>Classify repository type</li>            gap: 0.5rem;            background: #0f172a;
+
+                    </ul>
+
+                </div>        }            border-radius: 8px;
+
+                
+
+                <div class="phase-card phase-2">                    border: 2px solid var(--lens-primary);
+
+                    <h3><span class="phase-number">2</span> Collection</h3>
+
+                    <p><strong>Goal:</strong> Gather comprehensive repository metrics</p>        .phase-number {            text-align: center;
+
+                    <ul>
+
+                        <li>Extract code metrics (LOC, complexity)</li>            display: inline-block;            transition: transform 0.2s, box-shadow 0.2s;
+
+                        <li>Analyze git history</li>
+
+                        <li>Collect dependency information</li>            width: 32px;        }
+
+                    </ul>
+
+                </div>            height: 32px;        
+
+                
+
+                <div class="phase-card phase-3">            border-radius: 50%;        .template-card:hover {
+
+                    <h3><span class="phase-number">3</span> Narrative</h3>
+
+                    <p><strong>Goal:</strong> Transform metrics into human-readable story</p>            background: var(--lens-primary);            transform: translateY(-4px);
+
+                    <ul>
+
+                        <li>Apply storytelling templates</li>            color: white;            box-shadow: 0 8px 16px rgba(156, 39, 176, 0.3);
+
+                        <li>Connect technical and business context</li>
+
+                        <li>Generate executive summary</li>            text-align: center;        }
+
+                    </ul>
+
+                </div>            line-height: 32px;        
+
+                
+
+                <div class="phase-card phase-4">            font-weight: 700;        .template-icon {
+
+                    <h3><span class="phase-number">4</span> Dashboard</h3>
+
+                    <p><strong>Goal:</strong> Create adaptive visualization dashboard</p>        }            font-size: 3rem;
+
+                    <ul>
+
+                        <li>Select appropriate template</li>                    margin-bottom: 1rem;
+
+                        <li>Generate interactive visualizations</li>
+
+                        <li>Render D3.js and Mermaid diagrams</li>        footer {        }
+
+                    </ul>
+
+                </div>            text-align: center;        
+
+                
+
+                <div class="phase-card phase-5">            padding: 3rem 0;        .template-name {
+
+                    <h3><span class="phase-number">5</span> Validation</h3>
+
+                    <p><strong>Goal:</strong> Ensure narrative quality and accuracy</p>            border-top: 2px solid var(--lens-primary);            font-size: 1.25rem;
+
+                    <ul>
+
+                        <li>Verify metric calculations</li>            color: #94a3b8;            font-weight: 600;
+
+                        <li>Check narrative coherence</li>
+
+                        <li>Validate visualizations render correctly</li>            margin-top: 4rem;            color: var(--lens-primary);
+
+                    </ul>
+
+                </div>        }            margin-bottom: 0.5rem;
+
+                
+
+                <div class="phase-card phase-6">                }
+
+                    <h3><span class="phase-number">6</span> Learning</h3>
+
+                    <p><strong>Goal:</strong> Store patterns for future improvement</p>        /* Breadcrumb Navigation */        
+
+                    <ul>
+
+                        <li>Archive successful patterns to Tier 2</li>        .breadcrumb {        .template-desc {
+
+                        <li>Update template effectiveness scores</li>
+
+                        <li>Refine narrative generation rules</li>            background: rgba(30, 41, 59, 0.8);            font-size: 0.875rem;
+
+                    </ul>
+
+                </div>            padding: 1rem 2rem;            color: #94a3b8;
+
+            </div>
+
+        </section>            border-bottom: 1px solid rgba(156, 39, 176, 0.3);        }
+
+
+
+        <!-- Interactive Visualizations -->            margin-bottom: 2rem;        
+
+        <section class="section">
+
+            <h2>📊 Interactive Visualizations</h2>        }        .tooltip {
+
             
-            <div class="diagram-container">
-                <div class="mermaid">
-graph TD
-    START([Repository Path]) --> CLASSIFY[Phase 1: Classification<br/>Detect type & stack]
-    
-    CLASSIFY --> ANALYZE_STRUCTURE[Analyze Structure:<br/>- File types<br/>- Directory patterns<br/>- Config files<br/>- Dependencies]
-    
-    ANALYZE_STRUCTURE --> DETECT_TYPE{Repository<br/>Type?}
-    
-    DETECT_TYPE --> |Web App| WEB[Classification: Web Application<br/>React/Vue/Angular detected]
-    DETECT_TYPE --> |API| API[Classification: REST/GraphQL API<br/>FastAPI/Django/Express detected]
-    DETECT_TYPE --> |ML Pipeline| ML[Classification: ML Project<br/>Jupyter/TensorFlow/PyTorch detected]
-    DETECT_TYPE --> |CLI Tool| CLI[Classification: CLI Application<br/>Click/Argparse/Commander detected]
-    DETECT_TYPE --> |Library| LIB[Classification: Library/Package<br/>setup.py/package.json detected]
-    DETECT_TYPE --> |Microservices| MICRO[Classification: Microservices<br/>Docker/K8s/Multiple services detected]
-    DETECT_TYPE --> |Data Pipeline| DATA[Classification: Data Pipeline<br/>Airflow/Kafka/Spark detected]
-    DETECT_TYPE --> |Unknown| GENERIC[Classification: Generic Project<br/>No specific pattern detected]
-    
-    WEB --> COLLECT
-    API --> COLLECT
-    ML --> COLLECT
-    CLI --> COLLECT
-    LIB --> COLLECT
-    MICRO --> COLLECT
-    DATA --> COLLECT
-    GENERIC --> COLLECT
-    
-    COLLECT[Phase 2: Data Collection<br/>Extract metrics] --> GATHER[Gather Data:<br/>- LOC by language<br/>- Complexity metrics<br/>- Git history<br/>- Test coverage<br/>- Dependencies]
-    
-    GATHER --> HOTSPOTS[Identify Hotspots:<br/>- High churn files<br/>- Complex modules<br/>- Coupling issues]
-    
-    HOTSPOTS --> NARRATIVE[Phase 3: Narrative Generation<br/>Story weaving]
-    
-    NARRATIVE --> WEAVE[Weave Story:<br/>- Opening: What is this?<br/>- Context: Why built?<br/>- Architecture: How structured?<br/>- Quality: How maintained?<br/>- Insights: What's notable?]
-    
-    WEAVE --> BUSINESS[Extract Business Value:<br/>- Feature velocity<br/>- Quality trends<br/>- Risk indicators<br/>- ROI metrics]
-    
-    BUSINESS --> TEMPLATE_SELECT{Select<br/>Template}
-    
-    TEMPLATE_SELECT --> |Manual Override| FORCED_TEMPLATE[Use specified template]
-    TEMPLATE_SELECT --> |Auto-Detect| MATCH_TEMPLATE[Match classification to template<br/>React → react-dashboard.html<br/>API → api-dashboard.html]
-    
-    FORCED_TEMPLATE --> DASHBOARD
-    MATCH_TEMPLATE --> DASHBOARD
-    
-    DASHBOARD[Phase 4: Dashboard Generation<br/>Render visualizations] --> RENDER[Render Dashboard:<br/>- Hero metrics<br/>- Complexity heatmap<br/>- Timeline charts<br/>- Dependency graph<br/>- Hotspot visualization]
-    
-    RENDER --> VALIDATE[Phase 5: Validation<br/>Quality checks]
-    
-    VALIDATE --> CHECK_DATA{Data<br/>Complete?}
-    CHECK_DATA --> |Missing| REPORT_GAPS[Log data gaps<br/>Use fallbacks]
-    CHECK_DATA --> |Complete| CHECK_LINKS
-    
-    REPORT_GAPS --> CHECK_LINKS{Links<br/>Valid?}
-    
-    CHECK_LINKS --> |Broken| FIX_REFS[Fix references<br/>Update paths]
-    CHECK_LINKS --> |Valid| PACKAGE
-    
-    FIX_REFS --> PACKAGE[Phase 6: Packaging<br/>Export & bundle]
-    
-    PACKAGE --> EXPORT[Export Formats:<br/>- HTML dashboard<br/>- JSON data<br/>- YAML config<br/>- CSV metrics]
-    
-    EXPORT --> LEARN[Store patterns in Tier 2:<br/>- Repository patterns<br/>- Narrative templates<br/>- Insight heuristics]
-    
-    LEARN --> END([Output: Dashboard + Package])
-    
-    style START fill:#2196F3,stroke:#1976D2,color:#fff
-    style CLASSIFY fill:#4CAF50,stroke:#388E3C,color:#fff
-    style COLLECT fill:#FF9800,stroke:#F57C00,color:#fff
-    style NARRATIVE fill:#F44336,stroke:#D32F2F,color:#fff
-    style DASHBOARD fill:#00BCD4,stroke:#0097A7,color:#fff
-    style VALIDATE fill:#8BC34A,stroke:#689F38,color:#fff
-    style PACKAGE fill:#9C27B0,stroke:#7B1FA2,color:#fff
-    style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
+
+            <div class="diagram-container">                    position: absolute;
+
+                <div class="diagram-title">🎭 Narrative Generation Process</div>
+
+                <div id="narrative-workflow-viz"></div>        .breadcrumb a {            padding: 0.75rem;
+
             </div>
+
+                        color: var(--lens-primary);            background: #1e293b;
+
+            <div class="diagram-container">
+
+                <div class="diagram-title">🔍 Pattern Detection & Insight Visualization</div>            text-decoration: none;            border: 1px solid var(--lens-primary);
+
+                <div id="insight-viz"></div>
+
+            </div>            transition: color 0.2s;            border-radius: 6px;
+
         </section>
 
-        <!-- Adaptive Templates -->
-        <section class="section">
-            <h2>Adaptive Dashboard Templates</h2>
-            <p>
-                CORTEX Lens includes 8+ specialized templates that adapt to repository characteristics, 
-                ensuring relevant metrics and visualizations for each project type.
-            </p>
-            <div class="template-grid">
-                <div class="template-card">
-                    <div class="template-icon">⚛️</div>
-                    <div class="template-name">React/Vue/Angular</div>
-                    <div class="template-desc">Component complexity, bundle size, render performance</div>
-                </div>
-                <div class="template-card">
-                    <div class="template-icon">🚀</div>
-                    <div class="template-name">REST/GraphQL API</div>
-                    <div class="template-desc">Endpoint coverage, response times, error rates</div>
-                </div>
-                <div class="template-card">
-                    <div class="template-icon">🧠</div>
-                    <div class="template-name">ML Pipeline</div>
-                    <div class="template-desc">Model performance, data quality, experiment tracking</div>
-                </div>
-                <div class="template-card">
-                    <div class="template-icon">🐳</div>
-                    <div class="template-name">Microservices</div>
-                    <div class="template-desc">Service dependencies, latency, deployment topology</div>
-                </div>
-                <div class="template-card">
-                    <div class="template-icon">📦</div>
-                    <div class="template-name">Library/Package</div>
-                    <div class="template-desc">API surface, breaking changes, adoption metrics</div>
-                </div>
-                <div class="template-card">
-                    <div class="template-icon">⚡</div>
-                    <div class="template-name">CLI Tool</div>
-                    <div class="template-desc">Command coverage, error handling, help quality</div>
-                </div>
-                <div class="template-card">
-                    <div class="template-icon">🔄</div>
-                    <div class="template-name">Data Pipeline</div>
-                    <div class="template-desc">DAG structure, data lineage, failure recovery</div>
-                </div>
-                <div class="template-card">
-                    <div class="template-icon">🌐</div>
-                    <div class="template-name">Generic Project</div>
-                    <div class="template-desc">Universal metrics, code quality, architecture</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Pattern Detection Visualization -->
-        <section class="section">
-            <h2>Pattern Detection & Insight Extraction</h2>
-            <p>Interactive visualization of how CORTEX Lens detects architectural patterns and extracts insights.</p>
-            <div class="diagram-container">
-                <div id="patternDetection"></div>
-            </div>
-        </section>
-
-        <!-- Insight Visualization Network -->
-        <section class="section">
-            <h2>Story Element Relationship Graph</h2>
-            <p>Network graph showing how narrative elements connect technical metrics to business value.</p>
-            <div class="diagram-container">
-                <div id="insightVisualization"></div>
-            </div>
-        </section>
+        }            pointer-events: none;
 
         <!-- Learning Integration -->
-        <section class="section">
-            <h2>Learning Module Integration</h2>
-            <div class="diagram-container">
-                <div class="mermaid">
-graph LR
-    ANALYZE[CORTEX Lens<br/>Analysis] --> DETECT[Pattern Detection:<br/>- Architecture styles<br/>- Code conventions<br/>- Quality indicators]
-    
-    DETECT --> EXTRACT[Extract Learnings:<br/>- Repository patterns<br/>- Narrative templates<br/>- Insight heuristics]
-    
-    EXTRACT --> TIER2[(Tier 2 Brain<br/>Knowledge Graph)]
-    
-    TIER2 --> QUERY[Future Analysis<br/>Query Patterns]
-    
-    QUERY --> IMPROVE[Improved Narratives:<br/>- Better insights<br/>- Contextual recommendations<br/>- Pattern recognition]
-    
-    IMPROVE --> FEEDBACK[User Feedback:<br/>Dashboard ratings<br/>Insight usefulness]
-    
-    FEEDBACK --> REFINE[Refine Patterns<br/>Update heuristics]
-    
-    REFINE --> TIER2
-    
-    style ANALYZE fill:#9C27B0,stroke:#7B1FA2,color:#fff
-    style TIER2 fill:#2196F3,stroke:#1976D2,color:#fff
-    style IMPROVE fill:#10B981,stroke:#059669,color:#fff
+
+        <section class="section">                    opacity: 0;
+
+            <h2>🧠 Learning Module Integration</h2>
+
+            <div class="diagram-container">        .breadcrumb a:hover {            transition: opacity 0.2s;
+
+                <div class="diagram-title">📚 Knowledge Storage Flow</div>
+
+                <div class="mermaid">            color: var(--lens-secondary);            font-size: 0.875rem;
+
+graph TB
+
+    A[Repository Analysis] -->|Patterns Detected| B[Tier 2 Brain]            text-decoration: underline;            color: #e2e8f0;
+
+    B -->|Store Templates| C[Template Library]
+
+    B -->|Store Metrics| D[Metric Patterns]        }            max-width: 300px;
+
+    B -->|Store Narratives| E[Story Patterns]
+
+                        z-index: 1000;
+
+    C -->|Retrieve| F[Future Analysis]
+
+    D -->|Retrieve| F        .breadcrumb-separator {        }
+
+    E -->|Retrieve| F
+
+                color: #64748b;        
+
+    F -->|Improved Quality| G[Enhanced Narratives]
+
+                margin: 0 0.5rem;        .back-link {
+
+    style B fill:#9C27B0
+
+    style G fill:#10B981        }            display: inline-block;
+
                 </div>
-            </div>
+
+            </div>                    margin: 2rem 0;
+
         </section>
 
-        <!-- Key Features -->
+        .breadcrumb-current {            padding: 0.75rem 1.5rem;
+
+        <footer>
+
+            <p>&copy; 2025 CORTEX. All rights reserved.</p>            color: #e2e8f0;            background: var(--lens-primary);
+
+            <p>Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX</p>
+
+        </footer>        }            color: #fff;
+
+    </div>
+
+                    text-decoration: none;
+
+    <script>
+
+        // Initialize Mermaid        @media (max-width: 768px) {            border-radius: 6px;
+
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+
+            header h1 {            font-weight: 600;
+
+        // D3.js Visualization: Narrative Workflow
+
+        function createNarrativeWorkflow() {                font-size: 2rem;            transition: background 0.2s;
+
+            const width = document.getElementById('narrative-workflow-viz').clientWidth;
+
+            const height = 500;            }        }
+
+            
+
+            const svg = d3.select('#narrative-workflow-viz')                    
+
+                .append('svg')
+
+                .attr('width', width)            .metadata {        .back-link:hover {
+
+                .attr('height', height);
+
+                flex-direction: column;            background: var(--lens-secondary);
+
+            const data = {
+
+                name: "Repository",                gap: 0.5rem;        }
+
+                children: [
+
+                    { name: "Classification", value: 100, color: "#2196F3" },            }        
+
+                    { name: "Collection", value: 150, color: "#4CAF50" },
+
+                    { name: "Narrative", value: 200, color: "#FF9800" },        }        /* Responsive */
+
+                    { name: "Dashboard", value: 180, color: "#F44336" },
+
+                    { name: "Validation", value: 120, color: "#00BCD4" },    </style>        @media (max-width: 768px) {
+
+                    { name: "Learning", value: 90, color: "#8BC34A" }
+
+                ]</head>            .container {
+
+            };
+
+<body>                padding: 1rem;
+
+            const pack = d3.pack()
+
+                .size([width, height])    <!-- Breadcrumb -->            }
+
+                .padding(3);
+
+    <nav class="breadcrumb">            
+
+            const root = d3.hierarchy(data)
+
+                .sum(d => d.value);        <a href="../../index.html">Home</a>            h1 {
+
+
+
+            const nodes = pack(root).descendants();        <span class="breadcrumb-separator">›</span>                font-size: 2rem;
+
+
+
+            const node = svg.selectAll('g')        <a href="../../features/orchestrators.html">Orchestrators</a>            }
+
+                .data(nodes)
+
+                .enter().append('g')        <span class="breadcrumb-separator">›</span>            
+
+                .attr('transform', d => `translate(${d.x},${d.y})`);
+
+        <a href="index.html">Technical Documentation</a>            .orchestrator-meta {
+
+            node.append('circle')
+
+                .attr('r', d => d.r)        <span class="breadcrumb-separator">›</span>                grid-template-columns: 1fr;
+
+                .attr('fill', d => d.data.color || '#9C27B0')
+
+                .attr('opacity', 0.7)        <span class="breadcrumb-current">CORTEX Lens v3</span>            }
+
+                .attr('stroke', '#e2e8f0')
+
+                .attr('stroke-width', 2);    </nav>        }
+
+
+
+            node.append('text')                
+
+                .attr('dy', '0.3em')
+
+                .attr('text-anchor', 'middle')    <div class="container">        /* Breadcrumb Navigation */
+
+                .attr('fill', '#e2e8f0')
+
+                .attr('font-size', d => d.r / 3)        <header>        .breadcrumb {
+
+                .attr('font-weight', '600')
+
+                .text(d => d.data.name);            <h1>🔍 CORTEX Lens v3 Orchestrator</h1>            background: rgba(30, 41, 59, 0.8);
+
+        }
+
+            <p class="subtitle">Universal Repository Analyzer with Narrative Generation & Pattern Detection</p>            padding: 1rem 2rem;
+
+        // D3.js Visualization: Insight Detection
+
+        function createInsightVisualization() {            <div class="metadata">            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+
+            const width = document.getElementById('insight-viz').clientWidth;
+
+            const height = 500;                <span>📄 <strong>File:</strong> src/cortex_lens/orchestrator.py</span>            margin-bottom: 2rem;
+
+            
+
+            const svg = d3.select('#insight-viz')                <span>⚙️ <strong>Complexity:</strong> HIGH</span>        }
+
+                .append('svg')
+
+                .attr('width', width)                <span>📊 <strong>Phases:</strong> 6</span>        
+
+                .attr('height', height);
+
+                <span>🎨 <strong>Templates:</strong> 8+ Adaptive</span>        .breadcrumb a {
+
+            const insights = [
+
+                { type: "Hotspot", count: 15, x: width * 0.2, y: height * 0.3, color: "#F44336" },            </div>            color: var(--primary, #2196F3);
+
+                { type: "Pattern", count: 23, x: width * 0.5, y: height * 0.4, color: "#2196F3" },
+
+                { type: "Bottleneck", count: 8, x: width * 0.7, y: height * 0.6, color: "#FF9800" },        </header>            text-decoration: none;
+
+                { type: "Opportunity", count: 12, x: width * 0.3, y: height * 0.7, color: "#4CAF50" }
+
+            ];            transition: color 0.2s;
+
+
+
+            insights.forEach(insight => {        <!-- Overview -->        }
+
+                const g = svg.append('g')
+
+                    .attr('transform', `translate(${insight.x},${insight.y})`);        <section class="section">        
+
+
+
+                g.append('circle')            <h2>📋 Overview</h2>        .breadcrumb a:hover {
+
+                    .attr('r', insight.count * 3)
+
+                    .attr('fill', insight.color)            <p>            color: var(--secondary, #1976D2);
+
+                    .attr('opacity', 0.6)
+
+                    .attr('stroke', '#e2e8f0')                CORTEX Lens v3 is a universal repository analyzer that transforms raw code data into compelling             text-decoration: underline;
+
+                    .attr('stroke-width', 2);
+
+                narratives with interactive visualizations. It automatically detects repository type, extracts         }
+
+                g.append('text')
+
+                    .attr('text-anchor', 'middle')                relevant metrics, and generates adaptive dashboards tailored to the project's technology stack         
+
+                    .attr('dy', '-1em')
+
+                    .attr('fill', '#e2e8f0')                and architecture patterns.        .breadcrumb-separator {
+
+                    .attr('font-size', '16px')
+
+                    .attr('font-weight', '600')            </p>            color: #64748b;
+
+                    .text(insight.type);
+
+        </section>            margin: 0 0.5rem;
+
+                g.append('text')
+
+                    .attr('text-anchor', 'middle')        }
+
+                    .attr('dy', '0.5em')
+
+                    .attr('fill', '#94a3b8')        <!-- Core Capabilities -->        
+
+                    .attr('font-size', '14px')
+
+                    .text(`${insight.count} found`);        <section class="section">        .breadcrumb-current {
+
+            });
+
+        }            <h2>🎯 Core Capabilities</h2>            color: #e2e8f0;
+
+
+
+        // Initialize visualizations on load            <div class="feature-grid">        }
+
+        window.addEventListener('load', () => {
+
+            createNarrativeWorkflow();                <div class="feature-card">
+
+            createInsightVisualization();
+
+        });                    <h3>📊 Repository Classification</h3>  <body>
+
+    </script>
+
+</body>                    <ul>    <!-- Breadcrumb -->
+
+</html>
+
+                        <li>Auto-detect repository type (web app, API, ML pipeline, CLI tool, library)</li>    <nav class="breadcrumb">
+
+                        <li>Technology stack identification through file analysis</li>        <a href="../../index.html">Home<\/a>
+
+                        <li>Pattern matching across 11+ languages</li>        <span class="breadcrumb-separator">›<\/span>
+
+                    </ul>        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+
+                </div>        <span class="breadcrumb-separator">›<\/span>
+
+                        <a href="index.html">Technical Documentation<\/a>
+
+                <div class="feature-card">        <span class="breadcrumb-separator">›<\/span>
+
+                    <h3>📖 Story Weaving</h3>        <span class="breadcrumb-current">CORTEX Lens v3<\/span>
+
+                    <ul>    <\/nav>
+
+                        <li>Transform technical metrics into human-readable narratives</li>    
+
+                        <li>Explain what code does, how it's structured, why decisions made</li>    <div class="container">
+
+                        <li>Context-aware narrative generation</li>        <header>
+
+                    </ul>            <h1>🔍 CORTEX Lens v3 Orchestrator<\/h1>
+
+                </div>            <p class="subtitle">Universal Repository Analyzer with Narrative Generation & Pattern Detection<\/p>
+
+                        <\/header>
+
+                <div class="feature-card">
+
+                    <h3>🎨 Adaptive Templates</h3>        <!-- Orchestrator Metadata -->
+
+                    <ul>        <div class="orchestrator-meta">
+
+                        <li>8+ specialized dashboard templates</li>            <div class="meta-item">
+
+                        <li>React, Django, FastAPI, ML, microservices support</li>                <span class="meta-label">File Location<\/span>
+
+                        <li>Auto-selection based on repository characteristics</li>                <span class="meta-value">src/cortex_lens/<\/span>
+
+                    </ul>            <\/div>
+
+                </div>            <div class="meta-item">
+
+                                <span class="meta-label">Complexity<\/span>
+
+                <div class="feature-card">                <span class="meta-value">HIGH<\/span>
+
+                    <h3>🔥 Hotspot Analysis</h3>            <\/div>
+
+                    <ul>            <div class="meta-item">
+
+                        <li>Identify code complexity hotspots</li>                <span class="meta-label">Phases<\/span>
+
+                        <li>Track frequently changed files</li>                <span class="meta-value">6<\/span>
+
+                        <li>Detect architectural bottlenecks using git history and AST</li>            <\/div>
+
+                    </ul>            <div class="meta-item">
+
+                </div>                <span class="meta-label">Templates<\/span>
+
+                                <span class="meta-value">8+ Adaptive<\/span>
+
+                <div class="feature-card">            <\/div>
+
+                    <h3>📈 Business Value Extraction</h3>            <div class="meta-item">
+
+                    <ul>                <span class="meta-label">Version<\/span>
+
+                        <li>Connect technical metrics to business outcomes</li>                <span class="meta-value">3.0.0<\/span>
+
+                        <li>Feature velocity tracking</li>            <\/div>
+
+                        <li>Technical debt impact analysis</li>
+
+                        <li>Quality trends and deployment frequency</li>        <!-- Overview Section -->
+
+                    </ul>        <section class="section">
+
+                </div>            <h2>Overview<\/h2>
+
+                            <p>
+
+                <div class="feature-card">                CORTEX Lens v3 is a universal repository analyzer that transforms raw code data into compelling 
+
+                    <h3>🧠 Learning Integration</h3>                narratives with interactive visualizations. It automatically detects repository type, extracts 
+
+                    <ul>                relevant metrics, and generates adaptive dashboards tailored to the project's technology stack 
+
+                        <li>Store discovered patterns in Tier 2 brain</li>                and architecture patterns.
+
+                        <li>Continuous improvement of narrative quality</li>            
+
+                        <li>Insight detection enhancement over time</li>            <h3>Core Capabilities<\/h3>
+
+                    </ul>            <div class="feature-list">
+
+                </div>                <div class="feature-card">
+
+            </div>                    <div class="feature-title">📊 Repository Classification<\/div>
+
+        </section>                    <div class="feature-desc">
+
+                        Automatically detects repository type (web app, API, ML pipeline, CLI tool, library) 
+
+        <!-- 6-Phase Workflow -->                        and technology stack through file analysis and pattern matching.
+
+        <section class="section">                <div class="feature-card">
+
+            <h2>🔄 6-Phase Narrative Generation Workflow</h2>                    <div class="feature-title">📖 Story Weaving<\/div>
+
+                                <div class="feature-desc">
+
+            <div class="diagram-container">                        Transforms technical metrics into human-readable narratives that explain what the code 
+
+                <div class="diagram-title">📊 Workflow Sequence</div>                        does, how it's structured, and why architectural decisions were made.
+
+                <div class="mermaid">                <div class="feature-card">
+
+graph LR                    <div class="feature-title">🎨 Adaptive Templates<\/div>
+
+    A[Phase 1: Classification] -->|Detect Type| B[Phase 2: Collection]                    <div class="feature-desc">
+
+    B -->|Gather Metrics| C[Phase 3: Narrative]                        8+ specialized dashboard templates (React, Django, FastAPI, ML, microservices, etc.) 
+
+    C -->|Weave Story| D[Phase 4: Dashboard]                        with auto-selection based on repository characteristics.
+
+    D -->|Generate Viz| E[Phase 5: Validation]                <div class="feature-card">
+
+    E -->|Check Quality| F[Phase 6: Learning]                    <div class="feature-title">🔥 Hotspot Analysis<\/div>
+
+                        <div class="feature-desc">
+
+    style A fill:#2196F3                        Identifies code complexity hotspots, frequently changed files, and architectural 
+
+    style B fill:#4CAF50                        bottlenecks using git history and AST analysis.
+
+    style C fill:#FF9800                <div class="feature-card">
+
+    style D fill:#F44336                    <div class="feature-title">📈 Business Value Extraction<\/div>
+
+    style E fill:#00BCD4                    <div class="feature-desc">
+
+    style F fill:#8BC34A                        Connects technical metrics to business outcomes: feature velocity, technical debt impact, 
+
+                </div>                        quality trends, deployment frequency.
+
+            </div>                <div class="feature-card">
+
+                                <div class="feature-title">🧠 Learning Integration<\/div>
+
+            <div class="phases-grid">                    <div class="feature-desc">
+
+                <div class="phase-card phase-1">                        Stores discovered patterns in Tier 2 brain for future analysis, enabling continuous 
+
+                    <h3><span class="phase-number">1</span> Classification</h3>                        improvement of narrative quality and insight detection.
+
+                    <p><strong>Goal:</strong> Identify repository type and technology stack</p>
+
+                    <ul>        <!-- 6-Phase Workflow -->
+
+                        <li>Scan file structure and extensions</li>        <section class="section">
+
+                        <li>Detect frameworks and libraries</li>            <h2>6-Phase Narrative Generation Workflow<\/h2>
+
+                        <li>Classify repository type</li>            <div class="phase-legend">
+
+                    </ul>                <div class="legend-item">
+
+                </div>                    <div class="legend-color" style="background: var(--phase-1);"><\/div>
+
+                                    <div class="legend-label">Phase 1: Classification<\/div>
+
+                <div class="phase-card phase-2">                <\/div>
+
+                    <h3><span class="phase-number">2</span> Collection</h3>                <div class="legend-item">
+
+                    <p><strong>Goal:</strong> Gather comprehensive repository metrics</p>                    <div class="legend-color" style="background: var(--phase-2);"><\/div>
+
+                    <ul>                    <div class="legend-label">Phase 2: Collection<\/div>
+
+                        <li>Extract code metrics (LOC, complexity)</li>                <\/div>
+
+                        <li>Analyze git history</li>                <div class="legend-item">
+
+                        <li>Collect dependency information</li>                    <div class="legend-color" style="background: var(--phase-3);"><\/div>
+
+                    </ul>                    <div class="legend-label">Phase 3: Narrative<\/div>
+
+                </div>                <\/div>
+
+                                <div class="legend-item">
+
+                <div class="phase-card phase-3">                    <div class="legend-color" style="background: var(--phase-4);"><\/div>
+
+                    <h3><span class="phase-number">3</span> Narrative</h3>                    <div class="legend-label">Phase 4: Dashboard<\/div>
+
+                    <p><strong>Goal:</strong> Transform metrics into human-readable story</p>                <\/div>
+
+                    <ul>                <div class="legend-item">
+
+                        <li>Apply storytelling templates</li>                    <div class="legend-color" style="background: var(--phase-5);"><\/div>
+
+                        <li>Connect technical and business context</li>                    <div class="legend-label">Phase 5: Validation<\/div>
+
+                        <li>Generate executive summary</li>                <\/div>
+
+                    </ul>                <div class="legend-item">
+
+                </div>                    <div class="legend-color" style="background: var(--phase-6);"><\/div>
+
+                                    <div class="legend-label">Phase 6: Packaging<\/div>
+
+                <div class="phase-card phase-4">                <\/div>
+
+                    <h3><span class="phase-number">4</span> Dashboard</h3>            
+
+                    <p><strong>Goal:</strong> Create adaptive visualization dashboard</p>            <div class="diagram-container">
+
+                    <ul>                <div class="mermaid">
+
+                        <li>Select appropriate template</li>  graph TD
+
+                        <li>Generate interactive visualizations</li>    START([Repository Path]) --> CLASSIFY[Phase 1: Classification<br/>Detect type & stack]
+
+                        <li>Render D3.js and Mermaid diagrams</li>    
+
+                    </ul>    CLASSIFY --> ANALYZE_STRUCTURE[Analyze Structure:<br/>- File types<br/>- Directory patterns<br/>- Config files<br/>- Dependencies]
+
+                </div>    
+
+                    ANALYZE_STRUCTURE --> DETECT_TYPE{Repository<br/>Type?}
+
+                <div class="phase-card phase-5">    
+
+                    <h3><span class="phase-number">5</span> Validation</h3>    DETECT_TYPE --> |Web App| WEB[Classification: Web Application<br/>React/Vue/Angular detected]
+
+                    <p><strong>Goal:</strong> Ensure narrative quality and accuracy</p>    DETECT_TYPE --> |API| API[Classification: REST/GraphQL API<br/>FastAPI/Django/Express detected]
+
+                    <ul>    DETECT_TYPE --> |ML Pipeline| ML[Classification: ML Project<br/>Jupyter/TensorFlow/PyTorch detected]
+
+                        <li>Verify metric calculations</li>    DETECT_TYPE --> |CLI Tool| CLI[Classification: CLI Application<br/>Click/Argparse/Commander detected]
+
+                        <li>Check narrative coherence</li>    DETECT_TYPE --> |Library| LIB[Classification: Library/Package<br/>setup.py/package.json detected]
+
+                        <li>Validate visualizations render correctly</li>    DETECT_TYPE --> |Microservices| MICRO[Classification: Microservices<br/>Docker/K8s/Multiple services detected]
+
+                    </ul>    DETECT_TYPE --> |Data Pipeline| DATA[Classification: Data Pipeline<br/>Airflow/Kafka/Spark detected]
+
+                </div>    DETECT_TYPE --> |Unknown| GENERIC[Classification: Generic Project<br/>No specific pattern detected]
+
+                    
+
+                <div class="phase-card phase-6">    WEB --> COLLECT
+
+                    <h3><span class="phase-number">6</span> Learning</h3>    API --> COLLECT
+
+                    <p><strong>Goal:</strong> Store patterns for future improvement</p>    ML --> COLLECT
+
+                    <ul>    CLI --> COLLECT
+
+                        <li>Archive successful patterns to Tier 2</li>    LIB --> COLLECT
+
+                        <li>Update template effectiveness scores</li>    MICRO --> COLLECT
+
+                        <li>Refine narrative generation rules</li>    DATA --> COLLECT
+
+                    </ul>    GENERIC --> COLLECT
+
+                </div>    
+
+            </div>    COLLECT[Phase 2: Data Collection<br/>Extract metrics] --> GATHER[Gather Data:<br/>- LOC by language<br/>- Complexity metrics<br/>- Git history<br/>- Test coverage<br/>- Dependencies]
+
+        </section>    
+
+    GATHER --> HOTSPOTS[Identify Hotspots:<br/>- High churn files<br/>- Complex modules<br/>- Coupling issues]
+
+        <!-- Interactive Visualizations -->    
+
+        <section class="section">    HOTSPOTS --> NARRATIVE[Phase 3: Narrative Generation<br/>Story weaving]
+
+            <h2>📊 Interactive Visualizations</h2>    
+
+                NARRATIVE --> WEAVE[Weave Story:<br/>- Opening: What is this?<br/>- Context: Why built?<br/>- Architecture: How structured?<br/>- Quality: How maintained?<br/>- Insights: What's notable?]
+
+            <div class="diagram-container">    
+
+                <div class="diagram-title">🎭 Narrative Generation Process</div>    WEAVE --> BUSINESS[Extract Business Value:<br/>- Feature velocity<br/>- Quality trends<br/>- Risk indicators<br/>- ROI metrics]
+
+                <div id="narrative-workflow-viz"></div>    
+
+            </div>    BUSINESS --> TEMPLATE_SELECT{Select<br/>Template}
+
+                
+
+            <div class="diagram-container">    TEMPLATE_SELECT --> |Manual Override| FORCED_TEMPLATE[Use specified template]
+
+                <div class="diagram-title">🔍 Pattern Detection & Insight Visualization</div>    TEMPLATE_SELECT --> |Auto-Detect| MATCH_TEMPLATE[Match classification to template<br/>React → react-dashboard.html<br/>API → api-dashboard.html]
+
+                <div id="insight-viz"></div>    
+
+            </div>    FORCED_TEMPLATE --> DASHBOARD
+
+        </section>    MATCH_TEMPLATE --> DASHBOARD
+
+    
+
+        <!-- Learning Integration -->    DASHBOARD[Phase 4: Dashboard Generation<br/>Render visualizations] --> RENDER[Render Dashboard:<br/>- Hero metrics<br/>- Complexity heatmap<br/>- Timeline charts<br/>- Dependency graph<br/>- Hotspot visualization]
+
+        <section class="section">    
+
+            <h2>🧠 Learning Module Integration</h2>    RENDER --> VALIDATE[Phase 5: Validation<br/>Quality checks]
+
+            <div class="diagram-container">    
+
+                <div class="diagram-title">📚 Knowledge Storage Flow</div>    VALIDATE --> CHECK_DATA{Data<br/>Complete?}
+
+                <div class="mermaid">    CHECK_DATA --> |Missing| REPORT_GAPS[Log data gaps<br/>Use fallbacks]
+
+graph TB    CHECK_DATA --> |Complete| CHECK_LINKS
+
+    A[Repository Analysis] -->|Patterns Detected| B[Tier 2 Brain]    
+
+    B -->|Store Templates| C[Template Library]    REPORT_GAPS --> CHECK_LINKS{Links<br/>Valid?}
+
+    B -->|Store Metrics| D[Metric Patterns]    
+
+    B -->|Store Narratives| E[Story Patterns]    CHECK_LINKS --> |Broken| FIX_REFS[Fix references<br/>Update paths]
+
+        CHECK_LINKS --> |Valid| PACKAGE
+
+    C -->|Retrieve| F[Future Analysis]    
+
+    D -->|Retrieve| F    FIX_REFS --> PACKAGE[Phase 6: Packaging<br/>Export & bundle]
+
+    E -->|Retrieve| F    
+
+        PACKAGE --> EXPORT[Export Formats:<br/>- HTML dashboard<br/>- JSON data<br/>- YAML config<br/>- CSV metrics]
+
+    F -->|Improved Quality| G[Enhanced Narratives]    
+
+        EXPORT --> LEARN[Store patterns in Tier 2:<br/>- Repository patterns<br/>- Narrative templates<br/>- Insight heuristics]
+
+    style B fill:#9C27B0    
+
+    style G fill:#10B981    LEARN --> END([Output: Dashboard + Package])
+
+                </div>    
+
+            </div>    style START fill:#2196F3,stroke:#1976D2,color:#fff
+
+        </section>    style CLASSIFY fill:#4CAF50,stroke:#388E3C,color:#fff
+
+    style COLLECT fill:#FF9800,stroke:#F57C00,color:#fff
+
+        <footer>    style NARRATIVE fill:#F44336,stroke:#D32F2F,color:#fff
+
+            <p>&copy; 2025 CORTEX. All rights reserved.</p>    style DASHBOARD fill:#00BCD4,stroke:#0097A7,color:#fff
+
+            <p>Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX</p>    style VALIDATE fill:#8BC34A,stroke:#689F38,color:#fff
+
+        </footer>    style PACKAGE fill:#9C27B0,stroke:#7B1FA2,color:#fff
+
+    </div>    style END fill:#10B981,stroke:#059669,color:#fff
+
+
+
+    <script>        <!-- Adaptive Templates -->
+
+        // Initialize Mermaid        <section class="section">
+
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });            <h2>Adaptive Dashboard Templates<\/h2>
+
+            <p>
+
+        // D3.js Visualization: Narrative Workflow                CORTEX Lens includes 8+ specialized templates that adapt to repository characteristics, 
+
+        function createNarrativeWorkflow() {                ensuring relevant metrics and visualizations for each project type.
+
+            const width = document.getElementById('narrative-workflow-viz').clientWidth;            <div class="template-grid">
+
+            const height = 500;                <div class="template-card">
+
+                                <div class="template-icon">⚛️<\/div>
+
+            const svg = d3.select('#narrative-workflow-viz')                    <div class="template-name">React/Vue/Angular<\/div>
+
+                .append('svg')                    <div class="template-desc">Component complexity, bundle size, render performance<\/div>
+
+                .attr('width', width)                <\/div>
+
+                .attr('height', height);                <div class="template-card">
+
+                    <div class="template-icon">🚀<\/div>
+
+            const data = {                    <div class="template-name">REST/GraphQL API<\/div>
+
+                name: "Repository",                    <div class="template-desc">Endpoint coverage, response times, error rates<\/div>
+
+                children: [                <\/div>
+
+                    { name: "Classification", value: 100, color: "#2196F3" },                <div class="template-card">
+
+                    { name: "Collection", value: 150, color: "#4CAF50" },                    <div class="template-icon">🧠<\/div>
+
+                    { name: "Narrative", value: 200, color: "#FF9800" },                    <div class="template-name">ML Pipeline<\/div>
+
+                    { name: "Dashboard", value: 180, color: "#F44336" },                    <div class="template-desc">Model performance, data quality, experiment tracking<\/div>
+
+                    { name: "Validation", value: 120, color: "#00BCD4" },                <\/div>
+
+                    { name: "Learning", value: 90, color: "#8BC34A" }                <div class="template-card">
+
+                ]                    <div class="template-icon">🐳<\/div>
+
+            };                    <div class="template-name">Microservices<\/div>
+
+                    <div class="template-desc">Service dependencies, latency, deployment topology<\/div>
+
+            const pack = d3.pack()                <\/div>
+
+                .size([width, height])                <div class="template-card">
+
+                .padding(3);                    <div class="template-icon">📦<\/div>
+
+                    <div class="template-name">Library/Package<\/div>
+
+            const root = d3.hierarchy(data)                    <div class="template-desc">API surface, breaking changes, adoption metrics<\/div>
+
+                .sum(d => d.value);                <\/div>
+
+                <div class="template-card">
+
+            const nodes = pack(root).descendants();                    <div class="template-icon">⚡<\/div>
+
+                    <div class="template-name">CLI Tool<\/div>
+
+            const node = svg.selectAll('g')                    <div class="template-desc">Command coverage, error handling, help quality<\/div>
+
+                .data(nodes)                <\/div>
+
+                .enter().append('g')                <div class="template-card">
+
+                .attr('transform', d => `translate(${d.x},${d.y})`);                    <div class="template-icon">🔄<\/div>
+
+                    <div class="template-name">Data Pipeline<\/div>
+
+            node.append('circle')                    <div class="template-desc">DAG structure, data lineage, failure recovery<\/div>
+
+                .attr('r', d => d.r)                <\/div>
+
+                .attr('fill', d => d.data.color || '#9C27B0')                <div class="template-card">
+
+                .attr('opacity', 0.7)                    <div class="template-icon">🌐<\/div>
+
+                .attr('stroke', '#e2e8f0')                    <div class="template-name">Generic Project<\/div>
+
+                .attr('stroke-width', 2);                    <div class="template-desc">Universal metrics, code quality, architecture<\/div>
+
+                <\/div>
+
+            node.append('text')
+
+                .attr('dy', '0.3em')        <!-- Pattern Detection Visualization -->
+
+                .attr('text-anchor', 'middle')        <section class="section">
+
+                .attr('fill', '#e2e8f0')            <h2>Pattern Detection & Insight Extraction<\/h2>
+
+                .attr('font-size', d => d.r / 3)            <p>Interactive visualization of how CORTEX Lens detects architectural patterns and extracts insights.<\/p>
+
+                .attr('font-weight', '600')            <div class="diagram-container">
+
+                .text(d => d.data.name);                <div id="patternDetection"><\/div>
+
+        }            <\/div>
+
+
+
+        // D3.js Visualization: Insight Detection        <!-- Insight Visualization Network -->
+
+        function createInsightVisualization() {        <section class="section">
+
+            const width = document.getElementById('insight-viz').clientWidth;            <h2>Story Element Relationship Graph<\/h2>
+
+            const height = 500;            <p>Network graph showing how narrative elements connect technical metrics to business value.<\/p>
+
+                        <div class="diagram-container">
+
+            const svg = d3.select('#insight-viz')                <div id="insightVisualization"><\/div>
+
+                .append('svg')            <\/div>
+
+                .attr('width', width)
+
+                .attr('height', height);        <!-- Learning Integration -->
+
         <section class="section">
-            <h2>Technical Features</h2>
-            <div class="feature-list">
+
+            const insights = [            <h2>Learning Module Integration<\/h2>
+
+                { type: "Hotspot", count: 15, x: width * 0.2, y: height * 0.3, color: "#F44336" },            <div class="diagram-container">
+
+                { type: "Pattern", count: 23, x: width * 0.5, y: height * 0.4, color: "#2196F3" },                <div class="mermaid">
+
+                { type: "Bottleneck", count: 8, x: width * 0.7, y: height * 0.6, color: "#FF9800" },  graph LR
+
+                { type: "Opportunity", count: 12, x: width * 0.3, y: height * 0.7, color: "#4CAF50" }    ANALYZE[CORTEX Lens<br/>Analysis] --> DETECT[Pattern Detection:<br/>- Architecture styles<br/>- Code conventions<br/>- Quality indicators]
+
+            ];    
+
+    DETECT --> EXTRACT[Extract Learnings:<br/>- Repository patterns<br/>- Narrative templates<br/>- Insight heuristics]
+
+            insights.forEach(insight => {    
+
+                const g = svg.append('g')    EXTRACT --> TIER2[(Tier 2 Brain<br/>Knowledge Graph)]
+
+                    .attr('transform', `translate(${insight.x},${insight.y})`);    
+
+    TIER2 --> QUERY[Future Analysis<br/>Query Patterns]
+
+                g.append('circle')    
+
+                    .attr('r', insight.count * 3)    QUERY --> IMPROVE[Improved Narratives:<br/>- Better insights<br/>- Contextual recommendations<br/>- Pattern recognition]
+
+                    .attr('fill', insight.color)    
+
+                    .attr('opacity', 0.6)    IMPROVE --> FEEDBACK[User Feedback:<br/>Dashboard ratings<br/>Insight usefulness]
+
+                    .attr('stroke', '#e2e8f0')    
+
+                    .attr('stroke-width', 2);    FEEDBACK --> REFINE[Refine Patterns<br/>Update heuristics]
+
+    
+
+                g.append('text')    REFINE --> TIER2
+
+                    .attr('text-anchor', 'middle')    
+
+                    .attr('dy', '-1em')    style ANALYZE fill:#9C27B0,stroke:#7B1FA2,color:#fff
+
+                    .attr('fill', '#e2e8f0')    style TIER2 fill:#2196F3,stroke:#1976D2,color:#fff
+
+                    .attr('font-size', '16px')    style IMPROVE fill:#10B981,stroke:#059669,color:#fff
+
+                    .attr('font-weight', '600')
+
+                    .text(insight.type);        <!-- Key Features -->
+
+        <section class="section">
+
+                g.append('text')            <h2>Technical Features<\/h2>
+
+                    .attr('text-anchor', 'middle')            <div class="feature-list">
+
+                    .attr('dy', '0.5em')                <div class="feature-card">
+
+                    .attr('fill', '#94a3b8')                    <div class="feature-title">🔍 AST-Powered Analysis<\/div>
+
+                    .attr('font-size', '14px')                    <div class="feature-desc">
+
+                    .text(`${insight.count} found`);                        Uses Abstract Syntax Tree parsing for accurate code complexity, pattern detection, 
+
+            });                        and architectural analysis across multiple languages.
+
+        }                <div class="feature-card">
+
+                    <div class="feature-title">📊 Git History Mining<\/div>
+
+        // Initialize visualizations on load                    <div class="feature-desc">
+
+        window.addEventListener('load', () => {                        Analyzes commit history to identify code churn hotspots, contributor patterns, 
+
+            createNarrativeWorkflow();                        and feature velocity trends over time.
+
+            createInsightVisualization();                <div class="feature-card">
+
+        });                    <div class="feature-title">🎯 Dependency Analysis<\/div>
+
+    </script>                    <div class="feature-desc">
+
+</body>                        Maps internal and external dependencies to detect tight coupling, circular dependencies, 
+
+</html>                        and vulnerable packages.
+
                 <div class="feature-card">
-                    <div class="feature-title">🔍 AST-Powered Analysis</div>
-                    <div class="feature-desc">
-                        Uses Abstract Syntax Tree parsing for accurate code complexity, pattern detection, 
-                        and architectural analysis across multiple languages.
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">📊 Git History Mining</div>
-                    <div class="feature-desc">
-                        Analyzes commit history to identify code churn hotspots, contributor patterns, 
-                        and feature velocity trends over time.
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">🎯 Dependency Analysis</div>
-                    <div class="feature-desc">
-                        Maps internal and external dependencies to detect tight coupling, circular dependencies, 
-                        and vulnerable packages.
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">📈 Quality Metrics</div>
+                    <div class="feature-title">📈 Quality Metrics<\/div>
                     <div class="feature-desc">
                         Calculates cyclomatic complexity, maintainability index, test coverage, documentation 
                         coverage, and technical debt ratio.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🎨 D3.js Visualizations</div>
+                    <div class="feature-title">🎨 D3.js Visualizations<\/div>
                     <div class="feature-desc">
                         Interactive charts: complexity heatmaps, dependency graphs, timeline views, sunburst 
                         diagrams, network graphs.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📦 Multi-Format Export</div>
+                    <div class="feature-title">📦 Multi-Format Export<\/div>
                     <div class="feature-desc">
                         Exports data in HTML (interactive dashboard), JSON (programmatic access), YAML (config), 
                         and CSV (spreadsheet analysis).
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Related Documentation -->
         <section class="section">
-            <h2>Related Documentation</h2>
+            <h2>Related Documentation<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">Orchestrator</div>
+                    <div class="feature-title">Orchestrator<\/div>
                     <div class="feature-desc">
-                        <code>src/cortex_lens/orchestrator.py</code>
-                    </div>
-                </div>
+                        <code>src/cortex_lens/orchestrator.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Manifest</div>
+                    <div class="feature-title">Manifest<\/div>
                     <div class="feature-desc">
-                        <code>cortex-brain/manifests/orchestrators/cortex-lens-v3-manifest.yaml</code>
-                    </div>
-                </div>
+                        <code>cortex-brain/manifests/orchestrators/cortex-lens-v3-manifest.yaml<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Story Viewer</div>
+                    <div class="feature-title">Story Viewer<\/div>
                     <div class="feature-desc">
-                        <code>docs/story/story-viewer.js</code> - Integration with story timeline
-                    </div>
-                </div>
-            </div>
-        </section>
+                        <code>docs/story/story-viewer.js<\/code> - Integration with story timeline
 
-        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
-    </div>
+        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
+    <\/div>
 
-    <div class="tooltip" id="tooltip"></div>
+    <div class="tooltip" id="tooltip"><\/div>
 
     <script>
         // Initialize Mermaid
@@ -746,7 +1910,7 @@ graph LR
             node.on('mouseover', function(event, d) {
                 const tooltip = d3.select('#tooltip');
                 tooltip.style('opacity', 1)
-                    .html(`<strong>${d.label}</strong><br/>Type: ${d.type}`)
+                    .html(`<strong>${d.label}<\/strong><br/>Type: ${d.type}`)
                     .style('left', (event.pageX + 10) + 'px')
                     .style('top', (event.pageY - 28) + 'px');
                 
@@ -915,6 +2079,7 @@ graph LR
             createPatternDetection();
             createInsightVisualization();
         });
-    </script>
-</body>
+  </style>
+
+
 </html>

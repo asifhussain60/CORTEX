@@ -1,345 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Maintenance - CORTEX 4.0</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>System Maintenance - CORTEX 4.0</title>
+<link href="../assets/css/main.css" rel="stylesheet">
+<link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
 </head>
 <body>
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="index.html">Features</a>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">System Maintenance</span>
-    </nav>
-
-    <!-- Hero -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
-                    <div class="icon" style="font-size: 4rem;">🔧</div>
-                    <div>
-                        <h1 style="margin-bottom: 0.5rem;">System Maintenance</h1>
-                        <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="index.html">Features</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">System Maintenance</span>
+</nav>
+<!-- Hero -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+<div class="icon" style="font-size: 4rem;">🔧</div>
+<div style="flex: 1;">
+<h1 style="margin-bottom: 0.5rem;">System Maintenance</h1>
+<p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0 0 1rem 0;">
                             Automated 6-Phase Maintenance with Auto-Fix and Validation
-                        </p>
-                    </div>
-                </div>
+                        <a class="btn btn-primary" href="../technical/orchestrators/maintenance-orchestrator.html" style="display: inline-block;">
+                            🎨 View Interactive Diagrams &amp; Visualizations →
                 
                 <div class="metrics-grid" style="margin-top: 2rem;">
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2rem;">6</div>
-                        <div class="metric-label">Maintenance Phases</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2rem;">100%</div>
-                        <div class="metric-label">Automated</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2rem;">< 5min</div>
-                        <div class="metric-label">Avg Execution Time</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Executive Summary -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Executive Summary</h2>
-            <div class="glass-card">
-                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2rem;">6</div>
+<div class="metric-label">Maintenance Phases</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2rem;">100%</div>
+<div class="metric-label">Automated</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2rem;">&lt; 5min</div>
+<div class="metric-label">Avg Execution Time</div>
+</div>
+<!-- Executive Summary -->
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Executive Summary</h2>
+<div class="glass-card">
+<p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
                     System Maintenance is CORTEX's comprehensive health and optimization orchestrator. In a single 
                     command, it runs 6 sequential phases: pre-healthcheck (baseline), alignment (auto-fix issues), 
                     cleanup (remove obsolete files), optimization (performance tuning), prompt refresh (regenerate 
                     documentation), and post-healthcheck (validation). Each phase builds on the previous, with 
                     conditional execution ensuring safe operation.
-                </p>
-            </div>
-        </div>
-    </section>
 
     <!-- How It Works -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>6-Phase Maintenance Workflow</h2>
-            
-            <!-- Phase 1 -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>📊 Phase 1: Pre-Maintenance Healthcheck</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Establish baseline system health before making changes</p>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>15+ System Checks:</strong> File integrity, imports, YAML validation, brain health</li>
-                        <li><strong>Metrics Collection:</strong> Operation counts, orchestrator inventory, test coverage</li>
-                        <li><strong>Baseline Report:</strong> JSON report saved to cortex-brain/health-reports/</li>
-                        <li><strong>Risk Assessment:</strong> Identifies critical vs warning issues</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Sample output:</strong></p>
-                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--accent-primary);">✅ Pre-healthcheck: 13/15 checks passed (2 warnings)
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>6-Phase Maintenance Workflow</h2>
+<!-- Phase 1 -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>📊 Phase 1: Pre-Maintenance Healthcheck</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Establish baseline system health before making changes</p>
+<p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>
+<strong>15+ System Checks:</strong> File integrity, imports, YAML validation, brain health</li>
+<li>
+<strong>Metrics Collection:</strong> Operation counts, orchestrator inventory, test coverage</li>
+<li>
+<strong>Baseline Report:</strong> JSON report saved to cortex-brain/health-reports/</li>
+<li>
+<strong>Risk Assessment:</strong> Identifies critical vs warning issues</li>
+</ul>
+<p style="margin-top: 1.5rem;"><strong>Sample output:</strong></p>
+<pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--accent-primary);">✅ Pre-healthcheck: 13/15 checks passed (2 warnings)
 ├── Operations: 302 registered
 ├── Orchestrators: 8 active
 ├── Test Coverage: 87%
 └── Brain Health: GOOD</pre>
-                </div>
-            </div>
-
-            <!-- Phase 2 -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>🔄 Phase 2: System Alignment (Auto-Fix)</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Automatically fix common issues and synchronize system state</p>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Auto-Fix Enabled:</strong> Applies fixes automatically (no manual intervention)</li>
-                        <li><strong>Operation Registration:</strong> Scans src/ and registers missing operations</li>
-                        <li><strong>YAML Validation:</strong> Checks cortex-operations.yaml for consistency</li>
-                        <li><strong>Import Resolution:</strong> Fixes broken imports and missing modules</li>
-                        <li><strong>Git Sync:</strong> Ensures CORTEX/user repo isolation</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Sample fixes applied:</strong></p>
-                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--success);">✅ Alignment: 4 fixes applied
+</div>
+<!-- Phase 2 -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🔄 Phase 2: System Alignment (Auto-Fix)</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Automatically fix common issues and synchronize system state</p>
+<p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>
+<strong>Auto-Fix Enabled:</strong> Applies fixes automatically (no manual intervention)</li>
+<li>
+<strong>Operation Registration:</strong> Scans src/ and registers missing operations</li>
+<li>
+<strong>YAML Validation:</strong> Checks cortex-operations.yaml for consistency</li>
+<li>
+<strong>Import Resolution:</strong> Fixes broken imports and missing modules</li>
+<li>
+<strong>Git Sync:</strong> Ensures CORTEX/user repo isolation</li>
+</ul>
+<p style="margin-top: 1.5rem;"><strong>Sample fixes applied:</strong></p>
+<pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--success);">✅ Alignment: 4 fixes applied
 ├── Registered 3 new operations
 ├── Fixed 1 broken import
 ├── Updated YAML (consistency)
 └── Validated git isolation</pre>
-                </div>
-            </div>
-
-            <!-- Phase 3 -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>🧹 Phase 3: Cleanup Orchestrator</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Remove obsolete files, organize structure, free disk space</p>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Obsolete File Detection:</strong> Identifies unused/outdated files</li>
-                        <li><strong>Safe Backup:</strong> Archives to cortex-brain/archives/ before deletion</li>
-                        <li><strong>Reference Updates:</strong> Updates imports and links to moved files</li>
-                        <li><strong>Space Optimization:</strong> Compresses logs, removes duplicates</li>
-                        <li><strong>Structure Validation:</strong> Ensures cortex-brain/ organization</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Safety features:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>Dry-run mode available (preview changes without applying)</li>
-                        <li>Git checkpoint before any deletions</li>
-                        <li>Rollback capability (restore from archives)</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Phase 4 -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>⚡ Phase 4: CORTEX Optimization</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Performance tuning and efficiency improvements</p>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Query Optimization:</strong> Indexes brain databases for faster queries</li>
-                        <li><strong>Token Reduction:</strong> Compresses prompts, removes redundancy</li>
-                        <li><strong>Cache Warming:</strong> Pre-loads frequently accessed data</li>
-                        <li><strong>Memory Optimization:</strong> Trims Tier 1 working memory (FIFO enforcement)</li>
-                        <li><strong>Benchmarking:</strong> Measures before/after performance</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Conditional execution:</strong></p>
-                    <p style="color: var(--text-secondary);">
+</div>
+<!-- Phase 3 -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🧹 Phase 3: Cleanup Orchestrator</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Remove obsolete files, organize structure, free disk space</p>
+<p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>
+<strong>Obsolete File Detection:</strong> Identifies unused/outdated files</li>
+<li>
+<strong>Safe Backup:</strong> Archives to cortex-brain/archives/ before deletion</li>
+<li>
+<strong>Reference Updates:</strong> Updates imports and links to moved files</li>
+<li>
+<strong>Space Optimization:</strong> Compresses logs, removes duplicates</li>
+<li>
+<strong>Structure Validation:</strong> Ensures cortex-brain/ organization</li>
+</ul>
+<p style="margin-top: 1.5rem;"><strong>Safety features:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>Dry-run mode available (preview changes without applying)</li>
+<li>Git checkpoint before any deletions</li>
+<li>Rollback capability (restore from archives)</li>
+</ul>
+<!-- Phase 4 -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>⚡ Phase 4: CORTEX Optimization</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Performance tuning and efficiency improvements</p>
+<p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>
+<strong>Query Optimization:</strong> Indexes brain databases for faster queries</li>
+<li>
+<strong>Token Reduction:</strong> Compresses prompts, removes redundancy</li>
+<li>
+<strong>Cache Warming:</strong> Pre-loads frequently accessed data</li>
+<li>
+<strong>Memory Optimization:</strong> Trims Tier 1 working memory (FIFO enforcement)</li>
+<li>
+<strong>Benchmarking:</strong> Measures before/after performance</li>
+</ul>
+<p style="margin-top: 1.5rem;"><strong>Conditional execution:</strong></p>
+<p style="color: var(--text-secondary);">
                         Only runs if Phase 2 (Alignment) succeeds. If alignment fails, optimization is skipped to 
                         prevent optimizing a broken system.
-                    </p>
-                </div>
-            </div>
 
             <!-- Phase 5 -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>📝 Phase 5: Refresh Prompts</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Regenerate documentation and prompt files with latest content</p>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Prompt Regeneration:</strong> Updates .github/prompts/ with latest operations</li>
-                        <li><strong>Module Guides:</strong> Regenerates planning, TDD, response format guides</li>
-                        <li><strong>Feature Catalogs:</strong> Updates capabilities.yaml with new features</li>
-                        <li><strong>API Documentation:</strong> Refreshes docstring-based API docs</li>
-                        <li><strong>Version Sync:</strong> Ensures version numbers consistent across files</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Why this matters:</strong></p>
-                    <p style="color: var(--text-secondary);">
+</p>
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>📝 Phase 5: Refresh Prompts</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Regenerate documentation and prompt files with latest content</p>
+<p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>
+<strong>Prompt Regeneration:</strong> Updates .github/prompts/ with latest operations</li>
+<li>
+<strong>Module Guides:</strong> Regenerates planning, TDD, response format guides</li>
+<li>
+<strong>Feature Catalogs:</strong> Updates capabilities.yaml with new features</li>
+<li>
+<strong>API Documentation:</strong> Refreshes docstring-based API docs</li>
+<li>
+<strong>Version Sync:</strong> Ensures version numbers consistent across files</li>
+</ul>
+<p style="margin-top: 1.5rem;"><strong>Why this matters:</strong></p>
+<p style="color: var(--text-secondary);">
                         As CORTEX evolves, documentation can become stale. This phase ensures GitHub Copilot always 
                         has the latest operation list, command syntax, and feature descriptions.
-                    </p>
-                </div>
-            </div>
 
             <!-- Phase 6 -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>✅ Phase 6: Post-Maintenance Healthcheck</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Validate improvements and ensure system stability</p>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Re-run All Checks:</strong> Same 15+ checks as Phase 1</li>
-                        <li><strong>Before/After Comparison:</strong> Shows improvements vs baseline</li>
-                        <li><strong>Regression Detection:</strong> Alerts if any checks worsened</li>
-                        <li><strong>Final Report:</strong> Comprehensive JSON with all 6 phases</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Success criteria:</strong></p>
-                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--success);">✅ Post-healthcheck: 15/15 checks passed
+</p>
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>✅ Phase 6: Post-Maintenance Healthcheck</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Validate improvements and ensure system stability</p>
+<p style="margin-top: 1.5rem;"><strong>What happens:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>
+<strong>Re-run All Checks:</strong> Same 15+ checks as Phase 1</li>
+<li>
+<strong>Before/After Comparison:</strong> Shows improvements vs baseline</li>
+<li>
+<strong>Regression Detection:</strong> Alerts if any checks worsened</li>
+<li>
+<strong>Final Report:</strong> Comprehensive JSON with all 6 phases</li>
+</ul>
+<p style="margin-top: 1.5rem;"><strong>Success criteria:</strong></p>
+<pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--success);">✅ Post-healthcheck: 15/15 checks passed
    Improvements: +2 checks (13→15)
    Warnings: -2 (2→0)
    System Health: EXCELLENT</pre>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Real-World Results -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Real-World Results</h2>
-            <div class="glass-card">
-                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">100%</div>
-                        <div class="metric-label">Automated (no manual steps)</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">6</div>
-                        <div class="metric-label">Sequential phases</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">< 5min</div>
-                        <div class="metric-label">Average execution time</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">+15%</div>
-                        <div class="metric-label">System health improvement (avg)</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SKULL Protection -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>SKULL Protection Integration</h2>
-            <div class="glass-card">
-                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+</div>
+<!-- Real-World Results -->
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Real-World Results</h2>
+<div class="glass-card">
+<div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2.5rem; color: var(--success);">100%</div>
+<div class="metric-label">Automated (no manual steps)</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2.5rem; color: var(--success);">6</div>
+<div class="metric-label">Sequential phases</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2.5rem; color: var(--success);">&lt; 5min</div>
+<div class="metric-label">Average execution time</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2.5rem; color: var(--success);">+15%</div>
+<div class="metric-label">System health improvement (avg)</div>
+</div>
+<!-- SKULL Protection -->
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>SKULL Protection Integration</h2>
+<div class="glass-card">
+<p style="color: var(--text-secondary); margin-bottom: 2rem;">
                     System Maintenance respects SKULL rules throughout execution:
-                </p>
                 
-                <div style="display: grid; gap: 1.5rem;">
-                    <div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
-                        <h4>GIT_ISOLATION_ENFORCEMENT</h4>
-                        <p style="color: var(--text-secondary);">
+                </p>
+<div style="display: grid; gap: 1.5rem;">
+<div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
+<h4>GIT_ISOLATION_ENFORCEMENT</h4>
+<p style="color: var(--text-secondary);">
                             Phase 2 (Alignment) validates CORTEX code never touches user repos. Git checkpoints 
                             before Phase 3 (Cleanup) ensure safe rollback.
-                        </p>
-                    </div>
                     
-                    <div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
-                        <h4>REFACTOR_CODE_CLEANUP_ENFORCEMENT</h4>
-                        <p style="color: var(--text-secondary);">
+                    </p>
+<div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
+<h4>REFACTOR_CODE_CLEANUP_ENFORCEMENT</h4>
+<p style="color: var(--text-secondary);">
                             Phase 3 (Cleanup) enforces removal of orphaned code and obsolete files, satisfying 
                             this SKULL rule automatically.
-                        </p>
-                    </div>
                     
-                    <div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
-                        <h4>HOLISTIC_CODE_DISCOVERY_ENFORCEMENT</h4>
-                        <p style="color: var(--text-secondary);">
+                    </p>
+<div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
+<h4>HOLISTIC_CODE_DISCOVERY_ENFORCEMENT</h4>
+<p style="color: var(--text-secondary);">
                             Phase 2 (Alignment) searches entire codebase for duplicate operations before registration, 
                             preventing code duplication.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Usage Examples -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>How to Use</h2>
-            <div class="glass-card">
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    <strong>Simple command in Copilot Chat:</strong>
-                </p>
-                <pre style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px; color: var(--accent-primary); font-size: 1rem;">system maintenance</pre>
-                
-                <p style="color: var(--text-secondary); margin-top: 2rem; margin-bottom: 1.5rem;">
-                    <strong>Alternative commands:</strong>
-                </p>
-                <ul style="color: var(--text-secondary); line-height: 2;">
-                    <li><code>maintain system</code></li>
-                    <li><code>run maintenance</code></li>
-                    <li><code>full maintenance</code></li>
-                    <li><code>comprehensive maintenance</code></li>
-                </ul>
-                
-                <p style="color: var(--text-secondary); margin-top: 2rem;">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>How to Use</h2>
+<div class="glass-card">
+<p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+<strong>Simple command in Copilot Chat:</strong>
+</p>
+<pre style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px; color: var(--accent-primary); font-size: 1rem;">system maintenance</pre>
+<p style="color: var(--text-secondary); margin-top: 2rem; margin-bottom: 1.5rem;">
+<strong>Alternative commands:</strong>
+</p>
+<ul style="color: var(--text-secondary); line-height: 2;">
+<li><code>maintain system</code></li>
+<li><code>run maintenance</code></li>
+<li><code>full maintenance</code></li>
+<li><code>comprehensive maintenance</code></li>
+</ul>
+<p style="color: var(--text-secondary); margin-top: 2rem;">
                     All commands execute the same 6-phase workflow. No configuration needed.
-                </p>
-            </div>
-        </div>
-    </section>
 
     <!-- Navigation -->
-    <section class="section">
-        <div class="container">
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <a href="index.html" class="btn btn-secondary">← Back to Features</a>
-                <a href="ado-operations.html" class="btn btn-secondary">Next: ADO Operations →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="../assets/js/main.js"></script>
+<section class="section">
+<div class="container">
+<div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+<a class="btn btn-secondary" href="index.html">← Back to Features</a>
+<a class="btn btn-secondary" href="ado-operations.html">Next: ADO Operations →</a>
+</div>
+<!-- Footer -->
+<footer>
+<div class="container">
+<div class="footer-bottom">
+<p>© 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
+</div>
+<script src="../assets/js/main.js"></script>
+</div></footer>
+</div></section></p>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section></p>
+</div>
+</div></section>
+</div></a></p>
+</div>
+</div>
+</div>
+</div></section>
 </body>
 </html>

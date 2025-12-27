@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cleanup Orchestrator | CORTEX Technical Documentation</title>
-    
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    
-    <!-- Mermaid -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
-    <style>
-        :root {
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Cleanup Orchestrator | CORTEX Technical Documentation</title>
+<!-- D3.js -->
+<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
+</script><!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+</script>
+<style type="text/css">
+      :root {
             --cleanup-primary: #FF9800;
             --cleanup-secondary: #F57C00;
             --cleanup-dark: #E65100;
@@ -204,79 +202,105 @@
             h1 { font-size: 2rem; }
             .orchestrator-meta { grid-template-columns: 1fr; }
         }
-    </style>
-</head>
-<body>
+            
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary, #2196F3);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--secondary, #1976D2);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+        
+        .breadcrumb-current {
+            color: #e2e8f0;
+        }
+
+  <body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Technical Documentation<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">Cleanup<\/span>
+    <\/nav>
+    
     <div class="container">
         <header>
-            <h1>🧹 Cleanup Orchestrator</h1>
-            <p class="subtitle">File Organization & Reference Tracking with AST-Powered Cleanup</p>
-        </header>
+            <h1>🧹 Cleanup Orchestrator<\/h1>
+            <p class="subtitle">File Organization & Reference Tracking with AST-Powered Cleanup<\/p>
+        <\/header>
 
         <div class="orchestrator-meta">
             <div class="meta-item">
-                <span class="meta-label">File Location</span>
-                <span class="meta-value">src/operations/modules/orchestration/</span>
-            </div>
+                <span class="meta-label">File Location<\/span>
+                <span class="meta-value">src/operations/modules/orchestration/<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Complexity</span>
-                <span class="meta-value">MEDIUM</span>
-            </div>
+                <span class="meta-label">Complexity<\/span>
+                <span class="meta-value">MEDIUM<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Manifest</span>
-                <span class="meta-value">cleanup-rules.yaml</span>
-            </div>
+                <span class="meta-label">Manifest<\/span>
+                <span class="meta-value">cleanup-rules.yaml<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Integration</span>
-                <span class="meta-value">Maintenance Phase 3</span>
-            </div>
-        </div>
+                <span class="meta-label">Integration<\/span>
+                <span class="meta-value">Maintenance Phase 3<\/span>
+            <\/div>
 
         <section class="section">
-            <h2>Overview</h2>
+            <h2>Overview<\/h2>
             <p>
-                The Cleanup Orchestrator organizes files into proper <code>cortex-brain/documents/{category}/</code> 
+                The Cleanup Orchestrator organizes files into proper <code>cortex-brain/documents/{category}/<\/code> 
                 structure and updates references across the codebase. It prevents root-level document sprawl by 
                 enforcing CORTEX file organization standards with AST-powered reference tracking.
-            </p>
             
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">📁 Smart File Organization</div>
+                    <div class="feature-title">📁 Smart File Organization<\/div>
                     <div class="feature-desc">
                         Scans for misplaced files, categorizes by content analysis, and moves to appropriate 
-                        subdirectories within <code>cortex-brain/documents/</code>.
-                    </div>
-                </div>
+                        subdirectories within <code>cortex-brain/documents/<\/code>.
                 <div class="feature-card">
-                    <div class="feature-title">🔒 Protected Directories</div>
+                    <div class="feature-title">🔒 Protected Directories<\/div>
                     <div class="feature-desc">
                         Enforces protection rules for critical files: README, LICENSE, requirements.txt never 
                         moved. Root-level configs stay in place.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔍 AST Reference Tracking</div>
+                    <div class="feature-title">🔍 AST Reference Tracking<\/div>
                     <div class="feature-desc">
                         Uses Abstract Syntax Tree analysis to find all file references in Python code, markdown 
                         links, and imports. Updates paths automatically after moves.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 Impact Assessment</div>
+                    <div class="feature-title">📊 Impact Assessment<\/div>
                     <div class="feature-desc">
                         Before cleanup, shows: files to be moved, references to be updated, potential conflicts, 
                         estimated space freed.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>5-Phase File Organization Workflow</h2>
+            <h2>5-Phase File Organization Workflow<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     START([Cleanup Request]) --> SCAN[Phase 1: Scan<br/>Identify misplaced files]
     
     SCAN --> CHECK_ROOT{Files in<br/>Root?}
@@ -347,66 +371,60 @@ graph TD
     style SUCCESS fill:#10B981,stroke:#059669,color:#fff
     style ROLLBACK fill:#DC2626,stroke:#B91C1C,color:#fff
     style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Document Categories</h2>
-            <p>Valid categories for file organization under <code>cortex-brain/documents/</code>:</p>
+            <h2>Document Categories<\/h2>
+            <p>Valid categories for file organization under <code>cortex-brain/documents/<\/code>:<\/p>
             <div class="category-grid">
                 <div class="category-card">
-                    <div class="category-name">📊 reports/</div>
-                    <div class="category-desc">Status reports, test results, validation summaries</div>
-                </div>
+                    <div class="category-name">📊 reports/<\/div>
+                    <div class="category-desc">Status reports, test results, validation summaries<\/div>
+                <\/div>
                 <div class="category-card">
-                    <div class="category-name">🔍 analysis/</div>
-                    <div class="category-desc">Code analysis, architecture reviews, technical debt</div>
-                </div>
+                    <div class="category-name">🔍 analysis/<\/div>
+                    <div class="category-desc">Code analysis, architecture reviews, technical debt<\/div>
+                <\/div>
                 <div class="category-card">
-                    <div class="category-name">📝 summaries/</div>
-                    <div class="category-desc">Project summaries, progress reports, overviews</div>
-                </div>
+                    <div class="category-name">📝 summaries/<\/div>
+                    <div class="category-desc">Project summaries, progress reports, overviews<\/div>
+                <\/div>
                 <div class="category-card">
-                    <div class="category-name">🐛 investigations/</div>
-                    <div class="category-desc">Bug investigations, root cause analysis, debugging</div>
-                </div>
+                    <div class="category-name">🐛 investigations/<\/div>
+                    <div class="category-desc">Bug investigations, root cause analysis, debugging<\/div>
+                <\/div>
                 <div class="category-card">
-                    <div class="category-name">📋 planning/</div>
-                    <div class="category-desc">Feature plans, ADO items, master plans, roadmaps</div>
-                </div>
+                    <div class="category-name">📋 planning/<\/div>
+                    <div class="category-desc">Feature plans, ADO items, master plans, roadmaps<\/div>
+                <\/div>
                 <div class="category-card">
-                    <div class="category-name">📚 implementation-guides/</div>
-                    <div class="category-desc">How-to guides, setup instructions, best practices</div>
-                </div>
+                    <div class="category-name">📚 implementation-guides/<\/div>
+                    <div class="category-desc">How-to guides, setup instructions, best practices<\/div>
+                <\/div>
                 <div class="category-card">
-                    <div class="category-name">📐 diagrams/</div>
-                    <div class="category-desc">Architecture diagrams, flowcharts, visualizations</div>
-                </div>
+                    <div class="category-name">📐 diagrams/<\/div>
+                    <div class="category-desc">Architecture diagrams, flowcharts, visualizations<\/div>
+                <\/div>
                 <div class="category-card">
-                    <div class="category-name">💬 conversation-captures/</div>
-                    <div class="category-desc">Conversation logs, session captures, chat exports</div>
-                </div>
+                    <div class="category-name">💬 conversation-captures/<\/div>
+                    <div class="category-desc">Conversation logs, session captures, chat exports<\/div>
+                <\/div>
                 <div class="category-card">
-                    <div class="category-name">📦 archive/</div>
-                    <div class="category-desc">Deprecated docs, old versions, historical content</div>
-                </div>
-            </div>
-        </section>
+                    <div class="category-name">📦 archive/<\/div>
+                    <div class="category-desc">Deprecated docs, old versions, historical content<\/div>
+                <\/div>
 
         <section class="section">
-            <h2>Protected Directories Tree Visualization</h2>
-            <p>Hierarchical view of protected files and directories that are never moved.</p>
+            <h2>Protected Directories Tree Visualization<\/h2>
+            <p>Hierarchical view of protected files and directories that are never moved.<\/p>
             <div class="diagram-container">
-                <div id="protectedDirs"></div>
-            </div>
-        </section>
+                <div id="protectedDirs"><\/div>
+            <\/div>
 
         <section class="section">
-            <h2>Reference Update Flowchart</h2>
+            <h2>Reference Update Flowchart<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph LR
+  graph LR
     FILE[File Moved] --> SCAN[Scan Codebase<br/>AST Analysis]
     
     SCAN --> PYTHON{Python<br/>Files?}
@@ -440,87 +458,66 @@ graph LR
     style VALIDATE fill:#4CAF50,stroke:#388E3C,color:#fff
     style SUCCESS fill:#10B981,stroke:#059669,color:#fff
     style FAIL fill:#DC2626,stroke:#B91C1C,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Cleanup Impact Assessment</h2>
-            <p>Before/after comparison showing cleanup results and impact metrics.</p>
+            <h2>Cleanup Impact Assessment<\/h2>
+            <p>Before/after comparison showing cleanup results and impact metrics.<\/p>
             <div class="diagram-container">
-                <div id="cleanupImpact"></div>
-            </div>
-        </section>
+                <div id="cleanupImpact"><\/div>
+            <\/div>
 
         <section class="section">
-            <h2>Key Features</h2>
+            <h2>Key Features<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">🎯 Content-Based Categorization</div>
+                    <div class="feature-title">🎯 Content-Based Categorization<\/div>
                     <div class="feature-desc">
                         Analyzes file content (keywords, structure, metadata) to automatically determine 
                         the correct category. No manual classification needed.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔄 Dry Run Mode</div>
+                    <div class="feature-title">🔄 Dry Run Mode<\/div>
                     <div class="feature-desc">
                         Simulates cleanup without making changes. Shows what would be moved, where, and 
                         which references would be updated.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">💾 Automatic Backup</div>
+                    <div class="feature-title">💾 Automatic Backup<\/div>
                     <div class="feature-desc">
-                        Creates timestamped backup in <code>cortex-brain/backups/cleanup_YYYYMMDD_HHMMSS/</code> 
+                        Creates timestamped backup in <code>cortex-brain/backups/cleanup_YYYYMMDD_HHMMSS/<\/code> 
                         before any file moves. Easy rollback if needed.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔍 Duplicate Detection</div>
+                    <div class="feature-title">🔍 Duplicate Detection<\/div>
                     <div class="feature-desc">
                         Identifies duplicate files by content hash. Prompts to keep one version and archive 
                         duplicates to prevent clutter.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 Comprehensive Reporting</div>
+                    <div class="feature-title">📊 Comprehensive Reporting<\/div>
                     <div class="feature-desc">
                         Generates cleanup report with: files moved count, categories affected, references 
                         updated, space freed, errors encountered.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Related Documentation</h2>
+            <h2>Related Documentation<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">Implementation</div>
+                    <div class="feature-title">Implementation<\/div>
                     <div class="feature-desc">
-                        <code>src/operations/modules/orchestration/cleanup_orchestrator.py</code>
-                    </div>
-                </div>
+                        <code>src/operations/modules/orchestration/cleanup_orchestrator.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Manifest</div>
+                    <div class="feature-title">Manifest<\/div>
                     <div class="feature-desc">
-                        <code>cortex-brain/manifests/orchestrators/cleanup-rules.yaml</code>
-                    </div>
-                </div>
+                        <code>cortex-brain/manifests/orchestrators/cleanup-rules.yaml<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Maintenance Integration</div>
+                    <div class="feature-title">Maintenance Integration<\/div>
                     <div class="feature-desc">
-                        <code>src/operations/modules/orchestration/maintenance_orchestrator.py</code>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        <code>src/operations/modules/orchestration/maintenance_orchestrator.py<\/code>
+                    <\/div>
 
-        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
-    </div>
+        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
+    <\/div>
 
-    <div class="tooltip" id="tooltip"></div>
+    <div class="tooltip" id="tooltip"><\/div>
 
     <script>
         mermaid.initialize({ 
@@ -736,6 +733,8 @@ graph LR
             createProtectedDirsTree();
             createCleanupImpact();
         });
-    </script>
+  </style>
+</head>
+<body>
 </body>
 </html>

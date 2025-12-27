@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autonomous Execution Engine | CORTEX Technical Documentation</title>
-    
-    <!-- D3.js -->
-    <script src="https://d3.js.org/d3.v7.min.js"></script>
-    
-    <!-- Mermaid -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
-    <style>
-        :root {
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Autonomous Execution Engine | CORTEX Technical Documentation</title>
+<!-- D3.js -->
+<script src="https://d3.js.org/d3.v7.min.js" type="text/javascript">
+</script><!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+</script>
+<style type="text/css">
+      :root {
             --autonomous-primary: #00BCD4;
             --autonomous-secondary: #0097A7;
             --autonomous-dark: #006064;
@@ -230,80 +228,106 @@
             .orchestrator-meta { grid-template-columns: 1fr; }
             .mode-grid { grid-template-columns: 1fr; }
         }
-    </style>
-</head>
-<body>
+            
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary, #2196F3);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--secondary, #1976D2);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+        
+        .breadcrumb-current {
+            color: #e2e8f0;
+        }
+
+  <body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Technical Documentation<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">Autonomous Execution<\/span>
+    <\/nav>
+    
     <div class="container">
         <header>
-            <h1>🤖 Autonomous Execution Engine</h1>
-            <p class="subtitle">Adaptive Execution with Risk-Based Confirmation & Auto-Rollback</p>
-        </header>
+            <h1>🤖 Autonomous Execution Engine<\/h1>
+            <p class="subtitle">Adaptive Execution with Risk-Based Confirmation & Auto-Rollback<\/p>
+        <\/header>
 
         <div class="orchestrator-meta">
             <div class="meta-item">
-                <span class="meta-label">File Location</span>
-                <span class="meta-value">src/operations/modules/orchestration/</span>
-            </div>
+                <span class="meta-label">File Location<\/span>
+                <span class="meta-value">src/operations/modules/orchestration/<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Complexity</span>
-                <span class="meta-value">HIGH</span>
-            </div>
+                <span class="meta-label">Complexity<\/span>
+                <span class="meta-value">HIGH<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Execution Modes</span>
-                <span class="meta-value">3 (Supervised/Autonomous/Hybrid)</span>
-            </div>
+                <span class="meta-label">Execution Modes<\/span>
+                <span class="meta-value">3 (Supervised/Autonomous/Hybrid)<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Design Pattern</span>
-                <span class="meta-value">Strategy Pattern</span>
-            </div>
-        </div>
+                <span class="meta-label">Design Pattern<\/span>
+                <span class="meta-value">Strategy Pattern<\/span>
+            <\/div>
 
         <section class="section">
-            <h2>Overview</h2>
+            <h2>Overview<\/h2>
             <p>
                 The Autonomous Execution Engine enables orchestrators to adapt execution behavior based on user intent, 
-                task complexity, and safety requirements. It implements the <strong>Strategy Pattern</strong> with three 
-                execution modes: <em>Supervised</em> (user confirmation per phase), <em>Autonomous</em> (full automation 
-                with auto-rollback), and <em>Hybrid</em> (conditional confirmation for high-risk actions).
-            </p>
+                task complexity, and safety requirements. It implements the <strong>Strategy Pattern<\/strong> with three 
+                execution modes: <em>Supervised<\/em> (user confirmation per phase), <em>Autonomous<\/em> (full automation 
+                with auto-rollback), and <em>Hybrid<\/em> (conditional confirmation for high-risk actions).
             
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">🎯 Intelligent Risk Assessment</div>
+                    <div class="feature-title">🎯 Intelligent Risk Assessment<\/div>
                     <div class="feature-desc">
                         Analyzes task descriptions for safety-critical keywords (delete, drop, production) and 
                         high-risk keywords (database, migration, deploy). Routes to appropriate execution strategy.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔄 Automatic Checkpointing</div>
+                    <div class="feature-title">🔄 Automatic Checkpointing<\/div>
                     <div class="feature-desc">
                         Creates checkpoints before each autonomous phase execution. Enables instant rollback 
                         if errors occur, ensuring no permanent damage from failed operations.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🛡️ Validation Gates</div>
+                    <div class="feature-title">🛡️ Validation Gates<\/div>
                     <div class="feature-desc">
                         Pre-execution validation checks: context completeness, parameter validity, dependency 
                         availability. Prevents execution with invalid or missing data.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">⚡ Error Recovery</div>
+                    <div class="feature-title">⚡ Error Recovery<\/div>
                     <div class="feature-desc">
                         Three-level recovery: rollback to last checkpoint → retry with modified params → 
                         escalate to supervised mode. Never leaves system in broken state.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Phase-by-Phase Execution Workflow</h2>
+            <h2>Phase-by-Phase Execution Workflow<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     START([Execution Request]) --> MODE_SELECT{Select<br/>Execution Mode}
     
     MODE_SELECT --> |User Choice| SUPERVISED[Supervised Mode]
@@ -381,73 +405,61 @@ graph TD
     style ROLLBACK2 fill:#F44336,stroke:#D32F2F,color:#fff
     style COMPLETE fill:#10B981,stroke:#059669,color:#fff
     style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Execution Modes Comparison</h2>
+            <h2>Execution Modes Comparison<\/h2>
             <div class="mode-grid">
                 <div class="mode-card mode-supervised">
-                    <div class="mode-header">🛡️ Supervised Mode</div>
+                    <div class="mode-header">🛡️ Supervised Mode<\/div>
                     <div class="mode-desc">
                         Maximum control and visibility. User confirmation required before each phase execution. 
                         Best for high-risk operations or learning new workflows.
-                    </div>
                     <ul class="mode-features">
-                        <li>User approval required for every phase</li>
-                        <li>Full visibility into each step</li>
-                        <li>Maximum safety and control</li>
-                        <li>Slowest execution (interactive)</li>
-                        <li>Best for: Production deployments, database migrations</li>
-                    </ul>
-                </div>
+                        <li>User approval required for every phase<\/li>
+                        <li>Full visibility into each step<\/li>
+                        <li>Maximum safety and control<\/li>
+                        <li>Slowest execution (interactive)<\/li>
+                        <li>Best for: Production deployments, database migrations<\/li>
+                    <\/ul>
                 
                 <div class="mode-card mode-autonomous">
-                    <div class="mode-header">⚡ Autonomous Mode</div>
+                    <div class="mode-header">⚡ Autonomous Mode<\/div>
                     <div class="mode-desc">
                         Fully automated execution with automatic rollback on failure. Suitable for low-risk, 
                         well-tested operations. Fastest execution mode with built-in safety.
-                    </div>
                     <ul class="mode-features">
-                        <li>No user interaction required</li>
-                        <li>Automatic checkpoint creation</li>
-                        <li>Auto-rollback on failures</li>
-                        <li>Fastest execution (fully automated)</li>
-                        <li>Best for: Unit tests, code formatting, documentation updates</li>
-                    </ul>
-                </div>
+                        <li>No user interaction required<\/li>
+                        <li>Automatic checkpoint creation<\/li>
+                        <li>Auto-rollback on failures<\/li>
+                        <li>Fastest execution (fully automated)<\/li>
+                        <li>Best for: Unit tests, code formatting, documentation updates<\/li>
+                    <\/ul>
                 
                 <div class="mode-card mode-hybrid">
-                    <div class="mode-header">🎯 Hybrid Mode</div>
+                    <div class="mode-header">🎯 Hybrid Mode<\/div>
                     <div class="mode-desc">
                         Intelligently decides when to require confirmation based on risk level, complexity, and 
                         safety-critical indicators. Best balance between speed and safety.
-                    </div>
                     <ul class="mode-features">
-                        <li>Intelligent risk assessment</li>
-                        <li>Conditional confirmation (high-risk only)</li>
-                        <li>Automatic checkpoints for auto-execution</li>
-                        <li>Balanced speed vs safety</li>
-                        <li>Best for: Mixed workflows, feature implementation</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+                        <li>Intelligent risk assessment<\/li>
+                        <li>Conditional confirmation (high-risk only)<\/li>
+                        <li>Automatic checkpoints for auto-execution<\/li>
+                        <li>Balanced speed vs safety<\/li>
+                        <li>Best for: Mixed workflows, feature implementation<\/li>
+                    <\/ul>
 
         <section class="section">
-            <h2>Progress Timeline Visualization</h2>
-            <p>Real-time execution progress showing phase transitions, checkpoints, and rollback events.</p>
+            <h2>Progress Timeline Visualization<\/h2>
+            <p>Real-time execution progress showing phase transitions, checkpoints, and rollback events.<\/p>
             <div class="diagram-container">
-                <div id="progressTimeline"></div>
-            </div>
-        </section>
+                <div id="progressTimeline"><\/div>
+            <\/div>
 
         <section class="section">
-            <h2>Risk Assessment Algorithm</h2>
+            <h2>Risk Assessment Algorithm<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph LR
+  graph LR
     TASK[Task Description] --> EXTRACT[Extract Keywords]
     ACTION[Action Text] --> EXTRACT
     
@@ -469,23 +481,19 @@ graph LR
     style SUPERVISED fill:#FF9800,stroke:#F57C00,color:#fff
     style HYBRID_STRAT fill:#9C27B0,stroke:#7B1FA2,color:#fff
     style AUTO_STRAT fill:#00BCD4,stroke:#0097A7,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Risk Assessment Dashboard</h2>
-            <p>Heat map showing risk levels for different operation types across execution modes.</p>
+            <h2>Risk Assessment Dashboard<\/h2>
+            <p>Heat map showing risk levels for different operation types across execution modes.<\/p>
             <div class="diagram-container">
-                <div id="riskAssessment"></div>
-            </div>
-        </section>
+                <div id="riskAssessment"><\/div>
+            <\/div>
 
         <section class="section">
-            <h2>Error Recovery Paths</h2>
+            <h2>Error Recovery Paths<\/h2>
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     ERROR[❌ Phase Execution<br/>Failed] --> CHECK_MODE{Execution<br/>Mode?}
     
     CHECK_MODE --> |Supervised| NOTIFY_USER[Notify user:<br/>Manual intervention]
@@ -527,80 +535,60 @@ graph TD
     style ESCALATE2 fill:#9C27B0,stroke:#7B1FA2,color:#fff
     style COMPLETE fill:#10B981,stroke:#059669,color:#fff
     style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Key Features</h2>
+            <h2>Key Features<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">🎨 Strategy Pattern Implementation</div>
+                    <div class="feature-title">🎨 Strategy Pattern Implementation<\/div>
                     <div class="feature-desc">
-                        Three strategy classes (<code>SupervisedStrategy</code>, <code>AutonomousStrategy</code>, 
-                        <code>HybridStrategy</code>) inherit from <code>ExecutionStrategy</code> base class. 
+                        Three strategy classes (<code>SupervisedStrategy<\/code>, <code>AutonomousStrategy<\/code>, 
+                        <code>HybridStrategy<\/code>) inherit from <code>ExecutionStrategy<\/code> base class. 
                         Enables runtime mode switching.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 Safety Guardrails</div>
+                    <div class="feature-title">📊 Safety Guardrails<\/div>
                     <div class="feature-desc">
-                        <code>SafetyGuardrail</code> class provides: action validation, checkpoint management, 
+                        <code>SafetyGuardrail<\/code> class provides: action validation, checkpoint management, 
                         rollback support. Integrated with all execution modes.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔧 Configuration</div>
+                    <div class="feature-title">🔧 Configuration<\/div>
                     <div class="feature-desc">
-                        <code>AdaptiveExecutionConfig</code> dataclass: default mode, auto-rollback toggle, 
+                        <code>AdaptiveExecutionConfig<\/code> dataclass: default mode, auto-rollback toggle, 
                         validation gates, custom safety keywords. Per-orchestrator customization supported.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📈 Execution Metrics</div>
+                    <div class="feature-title">📈 Execution Metrics<\/div>
                     <div class="feature-desc">
                         Tracks: execution time per phase, confirmation wait time, rollback count, success rate. 
                         Helps optimize workflow efficiency.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔄 Mode Migration</div>
+                    <div class="feature-title">🔄 Mode Migration<\/div>
                     <div class="feature-desc">
                         Can switch modes mid-execution. Example: Start Hybrid, escalate to Supervised on error, 
                         return to Hybrid after manual fix.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section">
-            <h2>Related Documentation</h2>
+            <h2>Related Documentation<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">Implementation</div>
+                    <div class="feature-title">Implementation<\/div>
                     <div class="feature-desc">
-                        <code>src/operations/modules/orchestration/adaptive_execution.py</code>
-                    </div>
-                </div>
+                        <code>src/operations/modules/orchestration/adaptive_execution.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Base Integration</div>
+                    <div class="feature-title">Base Integration<\/div>
                     <div class="feature-desc">
-                        <code>src/orchestrators/base/base_orchestrator.py</code>
-                    </div>
-                </div>
+                        <code>src/orchestrators/base/base_orchestrator.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Tests</div>
+                    <div class="feature-title">Tests<\/div>
                     <div class="feature-desc">
-                        <code>tests/orchestrators/base/test_base_orchestrator_adaptive.py</code>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        <code>tests/orchestrators/base/test_base_orchestrator_adaptive.py<\/code>
+                    <\/div>
 
-        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
-    </div>
+        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
+    <\/div>
 
-    <div class="tooltip" id="tooltip"></div>
+    <div class="tooltip" id="tooltip"><\/div>
 
     <script>
         mermaid.initialize({ 
@@ -804,6 +792,8 @@ graph TD
             createProgressTimeline();
             createRiskAssessment();
         });
-    </script>
+  </style>
+</head>
+<body>
 </body>
 </html>

@@ -1,80 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holistic Code Discovery - CORTEX 4.0</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Holistic Code Discovery - CORTEX 4.0</title>
+<link href="../assets/css/main.css" rel="stylesheet">
+<link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
 </head>
 <body>
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="index.html">Features</a>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">Holistic Discovery</span>
-    </nav>
-
-    <!-- Hero -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
-                    <div class="icon" style="font-size: 4rem;">🔍</div>
-                    <div>
-                        <h1 style="margin-bottom: 0.5rem;">Holistic Code Discovery</h1>
-                        <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="index.html">Features</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">Holistic Discovery</span>
+</nav>
+<!-- Hero -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+<div class="icon" style="font-size: 4rem;">🔍</div>
+<div>
+<h1 style="margin-bottom: 0.5rem;">Holistic Code Discovery</h1>
+<p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
                             Search-Before-Create Enforcement to Prevent Code Duplication
-                        </p>
-                    </div>
-                </div>
                 
-                <div class="metrics-grid" style="margin-top: 2rem;">
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2rem;">100%</div>
-                        <div class="metric-label">Enforcement Rate</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2rem;">3</div>
-                        <div class="metric-label">Search Strategies</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2rem;">Zero</div>
-                        <div class="metric-label">Duplicate Functions Created</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Executive Summary -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Executive Summary</h2>
-            <div class="glass-card">
-                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                </p>
+<div class="metrics-grid" style="margin-top: 2rem;">
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2rem;">100%</div>
+<div class="metric-label">Enforcement Rate</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2rem;">3</div>
+<div class="metric-label">Search Strategies</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2rem;">Zero</div>
+<div class="metric-label">Duplicate Functions Created</div>
+</div>
+<!-- Executive Summary -->
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Executive Summary</h2>
+<div class="glass-card">
+<p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
                     Holistic Code Discovery is CORTEX's search-before-create system that prevents code duplication 
                     at creation time. The <strong>HOLISTIC_CODE_DISCOVERY_ENFORCEMENT</strong> SKULL rule blocks any 
                     new implementation until the entire codebase has been searched for existing solutions. This 
                     eliminates the common problem of duplicate functions with different names (e.g., parse_config, 
                     load_config, read_config) that plague large codebases.
-                </p>
-            </div>
-        </div>
-    </section>
 
     <!-- The Problem -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>The Problem: Accidental Duplication</h2>
-            <div class="glass-card">
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    <strong>Without discovery enforcement, this happens:</strong>
-                </p>
-                
-                <pre style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px; overflow-x: auto; color: var(--error);"># Developer A creates:
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>The Problem: Accidental Duplication</h2>
+<div class="glass-card">
+<p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+<strong>Without discovery enforcement, this happens:</strong>
+</p>
+<pre style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px; overflow-x: auto; color: var(--error);"># Developer A creates:
 def load_yaml_config(path):
     with open(path) as f:
         return yaml.safe_load(f)
@@ -87,168 +74,146 @@ def parse_config_file(filepath):
 def read_configuration(config_path):
     with open(config_path) as file:
         return yaml.load(file)</pre>
-
-                <p style="color: var(--text-secondary); margin-top: 1.5rem;">
-                    <strong>Result:</strong> Three functions doing the same thing. Which one should new code use? 
+<p style="color: var(--text-secondary); margin-top: 1.5rem;">
+<strong>Result:</strong> Three functions doing the same thing. Which one should new code use? 
                     Which is the "correct" implementation? Code reviewers catch this too late. Technical debt grows.
-                </p>
-            </div>
-        </div>
-    </section>
 
     <!-- How It Works -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>How Holistic Discovery Works</h2>
-            
-            <!-- Step 1: Semantic Search -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>🧠 Step 1: Semantic Search (Intent-Based)</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Find similar functionality regardless of naming</p>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>How it works:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Natural Language Query:</strong> Describe what you want to implement</li>
-                        <li><strong>Semantic Matching:</strong> AI finds code with similar intent/purpose</li>
-                        <li><strong>Cross-File Search:</strong> Searches entire codebase, not just current module</li>
-                        <li><strong>Context-Aware:</strong> Understands synonyms and related concepts</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Example queries:</strong></p>
-                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--accent-primary);">semantic_search("parse configuration file yaml")
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>How Holistic Discovery Works</h2>
+<!-- Step 1: Semantic Search -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🧠 Step 1: Semantic Search (Intent-Based)</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Find similar functionality regardless of naming</p>
+<p style="margin-top: 1.5rem;"><strong>How it works:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>
+<strong>Natural Language Query:</strong> Describe what you want to implement</li>
+<li>
+<strong>Semantic Matching:</strong> AI finds code with similar intent/purpose</li>
+<li>
+<strong>Cross-File Search:</strong> Searches entire codebase, not just current module</li>
+<li>
+<strong>Context-Aware:</strong> Understands synonyms and related concepts</li>
+</ul>
+<p style="margin-top: 1.5rem;"><strong>Example queries:</strong></p>
+<pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--accent-primary);">semantic_search("parse configuration file yaml")
 semantic_search("authenticate user with token")
 semantic_search("validate email address format")
 semantic_search("convert markdown to html")</pre>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>What it finds:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>Functions with similar behavior</li>
-                        <li>Classes providing related functionality</li>
-                        <li>Utility modules with overlapping purpose</li>
-                        <li>Documentation comments describing similar goals</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Step 2: Grep Search -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>🔎 Step 2: Grep Search (Pattern-Based)</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Find functions/classes with similar keywords in names</p>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>How it works:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Regex Patterns:</strong> Search for naming patterns across codebase</li>
-                        <li><strong>Fast & Precise:</strong> Text-based matching for exact keyword hits</li>
-                        <li><strong>Case-Insensitive:</strong> Finds PascalCase, camelCase, snake_case variations</li>
-                        <li><strong>Multi-Language:</strong> Works across Python, C#, JavaScript, etc.</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Example patterns:</strong></p>
-                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--accent-secondary);">grep_search("def.*config|class.*Config", isRegexp=true)
+<p style="margin-top: 1.5rem;"><strong>What it finds:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>Functions with similar behavior</li>
+<li>Classes providing related functionality</li>
+<li>Utility modules with overlapping purpose</li>
+<li>Documentation comments describing similar goals</li>
+</ul>
+<!-- Step 2: Grep Search -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🔎 Step 2: Grep Search (Pattern-Based)</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Find functions/classes with similar keywords in names</p>
+<p style="margin-top: 1.5rem;"><strong>How it works:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>
+<strong>Regex Patterns:</strong> Search for naming patterns across codebase</li>
+<li>
+<strong>Fast &amp; Precise:</strong> Text-based matching for exact keyword hits</li>
+<li>
+<strong>Case-Insensitive:</strong> Finds PascalCase, camelCase, snake_case variations</li>
+<li>
+<strong>Multi-Language:</strong> Works across Python, C#, JavaScript, etc.</li>
+</ul>
+<p style="margin-top: 1.5rem;"><strong>Example patterns:</strong></p>
+<pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--accent-secondary);">grep_search("def.*config|class.*Config", isRegexp=true)
 grep_search("authenticate|verify.*token", isRegexp=true)
 grep_search("parse|load|read.*yaml", isRegexp=true)
 grep_search("validate.*email", isRegexp=true)</pre>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>What it finds:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>Functions with keywords in names (e.g., <code>parse_config</code>, <code>load_config</code>)</li>
-                        <li>Classes with related names (e.g., <code>ConfigParser</code>, <code>ConfigLoader</code>)</li>
-                        <li>Variables and constants with similar naming</li>
-                        <li>Import statements for related modules</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Step 3: Usage Analysis -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>📊 Step 3: Usage Analysis (Dependency-Based)</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Understand how existing implementations are used</p>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>How it works:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Call Site Analysis:</strong> Finds all locations where function is called</li>
-                        <li><strong>Usage Patterns:</strong> Shows how callers use the function (parameters, return values)</li>
-                        <li><strong>Dependency Graph:</strong> Maps what depends on what</li>
-                        <li><strong>Impact Assessment:</strong> Helps decide reuse vs enhance vs create new</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Example queries:</strong></p>
-                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--success);">list_code_usages("ConfigParser")
+<p style="margin-top: 1.5rem;"><strong>What it finds:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>Functions with keywords in names (e.g., <code>parse_config</code>, <code>load_config</code>)</li>
+<li>Classes with related names (e.g., <code>ConfigParser</code>, <code>ConfigLoader</code>)</li>
+<li>Variables and constants with similar naming</li>
+<li>Import statements for related modules</li>
+</ul>
+<!-- Step 3: Usage Analysis -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>📊 Step 3: Usage Analysis (Dependency-Based)</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Understand how existing implementations are used</p>
+<p style="margin-top: 1.5rem;"><strong>How it works:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>
+<strong>Call Site Analysis:</strong> Finds all locations where function is called</li>
+<li>
+<strong>Usage Patterns:</strong> Shows how callers use the function (parameters, return values)</li>
+<li>
+<strong>Dependency Graph:</strong> Maps what depends on what</li>
+<li>
+<strong>Impact Assessment:</strong> Helps decide reuse vs enhance vs create new</li>
+</ul>
+<p style="margin-top: 1.5rem;"><strong>Example queries:</strong></p>
+<pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; color: var(--success);">list_code_usages("ConfigParser")
 list_code_usages("authenticate_user")
 list_code_usages("parse_yaml")</pre>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>What it reveals:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>How many call sites exist (usage frequency)</li>
-                        <li>What parameters are commonly passed</li>
-                        <li>What modules depend on this function</li>
-                        <li>Whether it's safe to modify (impact radius)</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Step 4: Decision Matrix -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>⚖️ Step 4: Decision Matrix</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Based on discovery results, CORTEX decides:</strong></p>
-                    
-                    <div style="margin-top: 1.5rem; display: grid; gap: 1.5rem;">
-                        <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
-                            <h4>Found Exact Match → Reuse It</h4>
-                            <p style="color: var(--text-secondary);">
+<p style="margin-top: 1.5rem;"><strong>What it reveals:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>How many call sites exist (usage frequency)</li>
+<li>What parameters are commonly passed</li>
+<li>What modules depend on this function</li>
+<li>Whether it's safe to modify (impact radius)</li>
+</ul>
+<!-- Step 4: Decision Matrix -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>⚖️ Step 4: Decision Matrix</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Based on discovery results, CORTEX decides:</strong></p>
+<div style="margin-top: 1.5rem; display: grid; gap: 1.5rem;">
+<div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
+<h4>Found Exact Match → Reuse It</h4>
+<p style="color: var(--text-secondary);">
                                 Existing function does exactly what you need. Link your caller to the existing 
                                 implementation. No new code needed.
-                            </p>
-                        </div>
                         
-                        <div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
-                            <h4>Found Similar → Enhance It</h4>
-                            <p style="color: var(--text-secondary);">
+                        </p>
+<div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
+<h4>Found Similar → Enhance It</h4>
+<p style="color: var(--text-secondary);">
                                 Existing function almost works but needs additional features. Add parameters, 
                                 extend functionality, update tests. Better than creating duplicate.
-                            </p>
-                        </div>
                         
-                        <div style="border-left: 3px solid var(--warning); padding-left: 1.5rem;">
-                            <h4>Found None → Create New (Document Why)</h4>
-                            <p style="color: var(--text-secondary);">
+                        </p>
+<div style="border-left: 3px solid var(--warning); padding-left: 1.5rem;">
+<h4>Found None → Create New (Document Why)</h4>
+<p style="color: var(--text-secondary);">
                                 Genuinely unique functionality. Create new function with clear documentation 
                                 explaining why it's different from similar-sounding functions.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Real-World Example -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Real-World Example: Configuration Parsing</h2>
-            <div class="glass-card">
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    <strong>Scenario:</strong> Developer wants to implement configuration file parsing
-                </p>
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Real-World Example: Configuration Parsing</h2>
+<div class="glass-card">
+<p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+<strong>Scenario:</strong> Developer wants to implement configuration file parsing
                 
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>Discovery Phase:</strong></p>
-                <pre style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px; overflow-x: auto; color: var(--accent-primary);"># Semantic search
+                </p>
+<p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>Discovery Phase:</strong></p>
+<pre style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px; overflow-x: auto; color: var(--accent-primary);"># Semantic search
 semantic_search("parse configuration yaml file")
 
 # Results found:
@@ -262,128 +227,137 @@ grep_search("def.*config.*yaml|load.*yaml", isRegexp=true)
 # Usage analysis
 list_code_usages("load_yaml_config")
 # 14 call sites found across 8 files</pre>
-
-                <p style="color: var(--text-secondary); margin-top: 2rem; margin-bottom: 1rem;"><strong>Decision:</strong></p>
-                <p style="color: var(--text-secondary);">
-                    <code>load_yaml_config()</code> in <code>src/config_loader.py</code> does exactly what's needed. 
+<p style="color: var(--text-secondary); margin-top: 2rem; margin-bottom: 1rem;"><strong>Decision:</strong></p>
+<p style="color: var(--text-secondary);">
+<code>load_yaml_config()</code> in <code>src/config_loader.py</code> does exactly what's needed. 
                     14 existing callers prove it's battle-tested. <strong>REUSE IT.</strong> No new function created.
-                </p>
                 
-                <p style="color: var(--success); margin-top: 2rem; font-weight: 600;">
-                    ✅ Result: Zero duplication. Cleaner codebase. Faster development.
                 </p>
-            </div>
-        </div>
-    </section>
+<p style="color: var(--success); margin-top: 2rem; font-weight: 600;">
+                    ✅ Result: Zero duplication. Cleaner codebase. Faster development.
 
     <!-- SKULL Protection -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>SKULL Protection Rule</h2>
-            <div class="glass-card">
-                <div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
-                    <h4>HOLISTIC_CODE_DISCOVERY_ENFORCEMENT</h4>
-                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                        <strong>Zero-tolerance policy:</strong> Before implementing any new functionality, CORTEX MUST 
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>SKULL Protection Rule</h2>
+<div class="glass-card">
+<div style="border-left: 3px solid var(--accent-primary); padding-left: 1.5rem;">
+<h4>HOLISTIC_CODE_DISCOVERY_ENFORCEMENT</h4>
+<p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+<strong>Zero-tolerance policy:</strong> Before implementing any new functionality, CORTEX MUST 
                         search the entire codebase for existing implementations. Brain Protector blocks implementation 
                         until discovery is complete.
+                    
                     </p>
-                    
-                    <p style="color: var(--text-secondary);"><strong>Enforcement triggers:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>Keywords: "implement", "create function", "add method", "new class"</li>
-                        <li>Scope: Intent analysis, implementation phase detection</li>
-                        <li>Validation: Semantic search + grep search + usage analysis must run</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Real-World Results -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Real-World Results</h2>
-            <div class="glass-card">
-                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">100%</div>
-                        <div class="metric-label">Discovery enforcement (all implementations)</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">Zero</div>
-                        <div class="metric-label">Duplicate functions created</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">3x</div>
-                        <div class="metric-label">Search strategies (semantic, grep, usage)</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">40%</div>
-                        <div class="metric-label">Faster codebase navigation (less noise)</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Benefits -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Business Benefits</h2>
-            <div class="glass-card">
-                <div style="display: grid; gap: 1.5rem;">
-                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
-                        <h4>Prevents Technical Debt</h4>
-                        <p style="color: var(--text-secondary);">
+<p style="color: var(--text-secondary);"><strong>Enforcement triggers:</strong></p>
+<ul style="color: var(--text-secondary); line-height: 1.8;">
+<li>Keywords: "implement", "create function", "add method", "new class"</li>
+<li>Scope: Intent analysis, implementation phase detection</li>
+<li>Validation: Semantic search + grep search + usage analysis must run</li>
+</ul>
+<!-- Real-World Results -->
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Real-World Results</h2>
+<div class="glass-card">
+<div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2.5rem; color: var(--success);">100%</div>
+<div class="metric-label">Discovery enforcement (all implementations)</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2.5rem; color: var(--success);">Zero</div>
+<div class="metric-label">Duplicate functions created</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2.5rem; color: var(--success);">3x</div>
+<div class="metric-label">Search strategies (semantic, grep, usage)</div>
+</div>
+<div style="text-align: center;">
+<div class="metric-value" style="font-size: 2.5rem; color: var(--success);">40%</div>
+<div class="metric-label">Faster codebase navigation (less noise)</div>
+</div>
+<!-- Benefits -->
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Business Benefits</h2>
+<div class="glass-card">
+<div style="display: grid; gap: 1.5rem;">
+<div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
+<h4>Prevents Technical Debt</h4>
+<p style="color: var(--text-secondary);">
                             Stop duplication at creation time. Zero accumulation of redundant code.
-                        </p>
-                    </div>
                     
-                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
-                        <h4>Faster Code Reviews</h4>
-                        <p style="color: var(--text-secondary);">
+                    </p>
+<div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
+<h4>Faster Code Reviews</h4>
+<p style="color: var(--text-secondary);">
                             Reviewers don't waste time catching duplicates. CORTEX catches them before PR.
-                        </p>
-                    </div>
                     
-                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
-                        <h4>Cleaner Codebase</h4>
-                        <p style="color: var(--text-secondary);">
+                    </p>
+<div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
+<h4>Cleaner Codebase</h4>
+<p style="color: var(--text-secondary);">
                             One canonical implementation per functionality. No ambiguity about which version to use.
-                        </p>
-                    </div>
                     
-                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
-                        <h4>Knowledge Reuse</h4>
-                        <p style="color: var(--text-secondary);">
+                    </p>
+<div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
+<h4>Knowledge Reuse</h4>
+<p style="color: var(--text-secondary);">
                             Existing battle-tested code gets reused. Bug fixes and improvements benefit all callers.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Navigation -->
-    <section class="section">
-        <div class="container">
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <a href="index.html" class="btn btn-secondary">← Back to Features</a>
-                <a href="response-templates.html" class="btn btn-secondary">Next: Response Templates →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="../assets/js/main.js"></script>
+<section class="section">
+<div class="container">
+<div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+<a class="btn btn-secondary" href="index.html">← Back to Features</a>
+<a class="btn btn-secondary" href="response-templates.html">Next: Response Templates →</a>
+</div>
+<!-- Footer -->
+<footer>
+<div class="container">
+<div class="footer-bottom">
+<p>© 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
+</div>
+<script src="../assets/js/main.js"></script>
+</div></footer>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section></p>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section></p>
+</div>
+</div></section></p>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div></section>
 </body>
 </html>

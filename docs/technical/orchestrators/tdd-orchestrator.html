@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TDD Orchestrator v4.0 | CORTEX Technical Documentation</title>
-    
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    
-    <!-- Mermaid -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
-    <style>
-        :root {
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>TDD Orchestrator v4.0 | CORTEX Technical Documentation</title>
+<!-- D3.js -->
+<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
+</script><!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+</script>
+<style type="text/css">
+      :root {
             --tdd-primary: #9C27B0;
             --tdd-secondary: #7B1FA2;
             --tdd-dark: #4A148C;
@@ -265,9 +263,42 @@
             margin-top: 4rem;
         }
         
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(156, 39, 176, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--tdd-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--tdd-secondary);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+        
+        .breadcrumb-current {
+            color: #e2e8f0;
+        }
+        
         @media (max-width: 768px) {
             header h1 {
                 font-size: 2rem;
+            }
+            
+            .breadcrumb {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
             }
             
             .metadata {
@@ -279,80 +310,82 @@
                 flex-direction: column;
             }
         }
-    </style>
-</head>
-<body>
+  <body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Technical Documentation<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">TDD Orchestrator<\/span>
+    <\/nav>
+    
     <div class="container">
         <header>
-            <h1>🧪 TDD Orchestrator v4.0</h1>
-            <p class="subtitle">Adaptive Test-Driven Development with AI-Powered Code Quality</p>
+            <h1>🧪 TDD Orchestrator v4.0<\/h1>
+            <p class="subtitle">Adaptive Test-Driven Development with AI-Powered Code Quality<\/p>
             <div class="metadata">
-                <span>📄 <strong>Version:</strong> 4.0.0</span>
-                <span>📦 <strong>Category:</strong> TDD</span>
-                <span>⚡ <strong>Pattern:</strong> Strategy</span>
-                <span>📊 <strong>Status:</strong> ACTIVE</span>
-            </div>
-        </header>
+                <span>📄 <strong>Version:<\/strong> 4.0.0<\/span>
+                <span>📦 <strong>Category:<\/strong> TDD<\/span>
+                <span>⚡ <strong>Pattern:<\/strong> Strategy<\/span>
+                <span>📊 <strong>Status:<\/strong> ACTIVE<\/span>
+            <\/div>
 
         <!-- Overview Section -->
         <section class="section">
-            <h2>📋 Overview</h2>
+            <h2>📋 Overview<\/h2>
             <p>
                 The TDD Orchestrator v4.0 is a unified, adaptive system for Test-Driven Development that automatically
                 discovers technology stacks, generates comprehensive tests, implements minimal code, and refactors for
                 quality—all while learning patterns and enforcing clean code principles (SOLID, DRY, KISS, YAGNI).
-            </p>
             
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value">11+</div>
-                    <div class="stat-label">Languages Supported</div>
-                </div>
+                    <div class="stat-value">11+<\/div>
+                    <div class="stat-label">Languages Supported<\/div>
+                <\/div>
                 <div class="stat-card">
-                    <div class="stat-value">0-10</div>
-                    <div class="stat-label">Quality Scoring</div>
-                </div>
+                    <div class="stat-value">0-10<\/div>
+                    <div class="stat-label">Quality Scoring<\/div>
+                <\/div>
                 <div class="stat-card">
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">TDD Phases</div>
-                </div>
+                    <div class="stat-value">3<\/div>
+                    <div class="stat-label">TDD Phases<\/div>
+                <\/div>
                 <div class="stat-card">
-                    <div class="stat-value">5</div>
-                    <div class="stat-label">Clean Code Principles</div>
-                </div>
-            </div>
-        </section>
+                    <div class="stat-value">5<\/div>
+                    <div class="stat-label">Clean Code Principles<\/div>
+                <\/div>
 
         <!-- TDD Cycle Badges -->
         <section class="section">
-            <h2>🔄 The TDD Cycle</h2>
+            <h2>🔄 The TDD Cycle<\/h2>
             <div class="phase-badges">
                 <div class="phase-badge red">
                     🔴 RED<br/>
-                    <small>Write Failing Tests</small>
-                </div>
+                    <small>Write Failing Tests<\/small>
+                <\/div>
                 <div class="phase-badge green">
                     🟢 GREEN<br/>
-                    <small>Minimal Implementation</small>
-                </div>
+                    <small>Minimal Implementation<\/small>
+                <\/div>
                 <div class="phase-badge refactor">
                     ♻️ REFACTOR<br/>
-                    <small>Clean Code</small>
-                </div>
-            </div>
-        </section>
+                    <small>Clean Code<\/small>
+                <\/div>
 
         <!-- RED→GREEN→REFACTOR Workflow -->
         <section class="section">
-            <h2>🔄 RED→GREEN→REFACTOR Workflow</h2>
+            <h2>🔄 RED→GREEN→REFACTOR Workflow<\/h2>
             <p>
                 The classic TDD cycle enforced with validation gates, checkpoints, and rollback safety at each phase transition.
-            </p>
             
             <div class="diagram-container">
-                <div class="diagram-title">📊 Complete TDD Workflow with Validation Gates</div>
+                <div class="diagram-title">📊 Complete TDD Workflow with Validation Gates<\/div>
                 <div class="mermaid">
-sequenceDiagram
+  sequenceDiagram
     participant User
     participant TDD as TDD Orchestrator
     participant Tech as Tech Discovery
@@ -407,144 +440,127 @@ sequenceDiagram
     
     TDD->>TDD: Store patterns in Tier 2<br/>(knowledge graph)
     TDD-->>User: TDD workflow complete!<br/>Quality: 8.2/10 ✅
-                </div>
-            </div>
-        </section>
 
         <!-- Key Features Section -->
         <section class="section">
-            <h2>✨ Key Features</h2>
+            <h2>✨ Key Features<\/h2>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h3>🌍 Adaptive Learning</h3>
+                    <h3>🌍 Adaptive Learning<\/h3>
                     <ul>
-                        <li>11+ language detection</li>
-                        <li>Framework auto-discovery</li>
-                        <li>Test tool identification</li>
-                        <li>Pattern learning (Tier 2)</li>
-                        <li>Best practice retrieval</li>
-                    </ul>
-                </div>
+                        <li>11+ language detection<\/li>
+                        <li>Framework auto-discovery<\/li>
+                        <li>Test tool identification<\/li>
+                        <li>Pattern learning (Tier 2)<\/li>
+                        <li>Best practice retrieval<\/li>
+                    <\/ul>
                 
                 <div class="feature-card">
-                    <h3>🤖 AI-Driven</h3>
+                    <h3>🤖 AI-Driven<\/h3>
                     <ul>
-                        <li>LLM-powered test generation</li>
-                        <li>Edge case analysis</li>
-                        <li>Minimal implementation</li>
-                        <li>AI refactoring suggestions</li>
-                        <li>Code smell detection</li>
-                    </ul>
-                </div>
+                        <li>LLM-powered test generation<\/li>
+                        <li>Edge case analysis<\/li>
+                        <li>Minimal implementation<\/li>
+                        <li>AI refactoring suggestions<\/li>
+                        <li>Code smell detection<\/li>
+                    <\/ul>
                 
                 <div class="feature-card">
-                    <h3>🔒 Rollback Safety</h3>
+                    <h3>🔒 Rollback Safety<\/h3>
                     <ul>
-                        <li>Per-phase git checkpoints</li>
-                        <li>Automatic rollback on failure</li>
-                        <li>State restoration</li>
-                        <li>Validation at each gate</li>
-                        <li>No partial commits</li>
-                    </ul>
-                </div>
+                        <li>Per-phase git checkpoints<\/li>
+                        <li>Automatic rollback on failure<\/li>
+                        <li>State restoration<\/li>
+                        <li>Validation at each gate<\/li>
+                        <li>No partial commits<\/li>
+                    <\/ul>
                 
                 <div class="feature-card">
-                    <h3>📐 Strategy Pattern</h3>
+                    <h3>📐 Strategy Pattern<\/h3>
                     <ul>
-                        <li>Pluggable phase strategies</li>
-                        <li>REDPhaseStrategy</li>
-                        <li>GREENPhaseStrategy</li>
-                        <li>REFACTORPhaseStrategy</li>
-                        <li>Custom strategies supported</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+                        <li>Pluggable phase strategies<\/li>
+                        <li>REDPhaseStrategy<\/li>
+                        <li>GREENPhaseStrategy<\/li>
+                        <li>REFACTORPhaseStrategy<\/li>
+                        <li>Custom strategies supported<\/li>
+                    <\/ul>
 
         <!-- Clean Code Principles -->
         <section class="section">
-            <h2>🧹 Clean Code Enforcement</h2>
+            <h2>🧹 Clean Code Enforcement<\/h2>
             <p>
                 The TDD Orchestrator enforces clean code principles at every phase, with automated detection
                 and refactoring suggestions. Quality scoring (0-10) ensures consistent code excellence.
-            </p>
             
             <div class="principles-grid">
                 <div class="principle-card">
-                    <h4>S - Single Responsibility</h4>
-                    <p>Each class/function has one reason to change</p>
-                </div>
+                    <h4>S - Single Responsibility<\/h4>
+                    <p>Each class/function has one reason to change<\/p>
+                <\/div>
                 <div class="principle-card">
-                    <h4>O - Open/Closed</h4>
-                    <p>Open for extension, closed for modification</p>
-                </div>
+                    <h4>O - Open/Closed<\/h4>
+                    <p>Open for extension, closed for modification<\/p>
+                <\/div>
                 <div class="principle-card">
-                    <h4>L - Liskov Substitution</h4>
-                    <p>Subtypes must be substitutable for base types</p>
-                </div>
+                    <h4>L - Liskov Substitution<\/h4>
+                    <p>Subtypes must be substitutable for base types<\/p>
+                <\/div>
                 <div class="principle-card">
-                    <h4>I - Interface Segregation</h4>
-                    <p>No client forced to depend on unused methods</p>
-                </div>
+                    <h4>I - Interface Segregation<\/h4>
+                    <p>No client forced to depend on unused methods<\/p>
+                <\/div>
                 <div class="principle-card">
-                    <h4>D - Dependency Inversion</h4>
-                    <p>Depend on abstractions, not concretions</p>
-                </div>
+                    <h4>D - Dependency Inversion<\/h4>
+                    <p>Depend on abstractions, not concretions<\/p>
+                <\/div>
                 <div class="principle-card">
-                    <h4>DRY - Don't Repeat Yourself</h4>
-                    <p>Every piece of knowledge must have a single representation</p>
-                </div>
+                    <h4>DRY - Don't Repeat Yourself<\/h4>
+                    <p>Every piece of knowledge must have a single representation<\/p>
+                <\/div>
                 <div class="principle-card">
-                    <h4>KISS - Keep It Simple</h4>
-                    <p>Simplicity should be a key goal in design</p>
-                </div>
+                    <h4>KISS - Keep It Simple<\/h4>
+                    <p>Simplicity should be a key goal in design<\/p>
+                <\/div>
                 <div class="principle-card">
-                    <h4>YAGNI - You Aren't Gonna Need It</h4>
-                    <p>Don't add functionality until necessary</p>
-                </div>
-            </div>
-        </section>
+                    <h4>YAGNI - You Aren't Gonna Need It<\/h4>
+                    <p>Don't add functionality until necessary<\/p>
+                <\/div>
 
         <!-- Test Coverage Visualization -->
         <section class="section">
-            <h2>📊 Test Coverage Visualization</h2>
+            <h2>📊 Test Coverage Visualization<\/h2>
             <p>
                 Interactive visualization showing test coverage across different layers (unit, integration, e2e)
                 with real-time progress tracking and quality metrics.
-            </p>
             
             <div class="diagram-container">
-                <div class="diagram-title">🎯 Multi-Layer Test Coverage (Interactive)</div>
-                <div id="test-coverage-viz"></div>
-            </div>
-        </section>
+                <div class="diagram-title">🎯 Multi-Layer Test Coverage (Interactive)<\/div>
+                <div id="test-coverage-viz"><\/div>
+            <\/div>
 
         <!-- Quality Scoring Dashboard -->
         <section class="section">
-            <h2>⭐ Quality Scoring (0-10 Scale)</h2>
+            <h2>⭐ Quality Scoring (0-10 Scale)<\/h2>
             <p>
                 Comprehensive quality analysis with actionable recommendations. Scores below 7.0 trigger
                 automatic refactoring suggestions. 8.0+ is production-ready code.
-            </p>
             
             <div class="diagram-container">
-                <div class="diagram-title">📈 Quality Score Breakdown</div>
-                <div id="quality-scoring-viz"></div>
-            </div>
-        </section>
+                <div class="diagram-title">📈 Quality Score Breakdown<\/div>
+                <div id="quality-scoring-viz"><\/div>
+            <\/div>
 
         <!-- Technology Detection -->
         <section class="section">
-            <h2>🌐 Technology Detection (11+ Languages)</h2>
+            <h2>🌐 Technology Detection (11+ Languages)<\/h2>
             <p>
                 Automatic detection of programming languages, frameworks, test tools, and version information.
                 The orchestrator adapts test generation and validation strategies based on detected technology.
-            </p>
             
             <div class="diagram-container">
-                <div class="diagram-title">🔍 Technology Discovery Flowchart</div>
+                <div class="diagram-title">🔍 Technology Discovery Flowchart<\/div>
                 <div class="mermaid">
-graph TD
+  graph TD
     A[Project Scan] --> B{Detect Language}
     
     B -->|Python| P[Python Detected]
@@ -608,22 +624,18 @@ graph TD
     style P fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff
     style J fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
     style T fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#fff
-                </div>
-            </div>
-        </section>
 
         <!-- Integration Points -->
         <section class="section">
-            <h2>🔗 Integration Architecture</h2>
+            <h2>🔗 Integration Architecture<\/h2>
             <p>
                 The TDD Orchestrator integrates with CORTEX's 4-tier brain, knowledge graph (Tier 2), and
                 Planning System for seamless TDD workflow management.
-            </p>
             
             <div class="diagram-container">
-                <div class="diagram-title">🏗️ Integration Points</div>
+                <div class="diagram-title">🏗️ Integration Points<\/div>
                 <div class="mermaid">
-graph TB
+  graph TB
     TDD[TDD Orchestrator v4.0] --> PS[Planning System]
     TDD --> T2[Tier 2: Knowledge Graph]
     TDD --> MCP[MCP Gateway]
@@ -653,15 +665,11 @@ graph TB
     style T2 fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
     style STRATEGIES fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
     style CLEAN fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#fff
-                </div>
-            </div>
-        </section>
 
         <footer>
-            <p><strong>Author:</strong> Asif Hussain | <strong>GitHub:</strong> github.com/asifhussain60/CORTEX</p>
-            <p>Copyright © 2025 Asif Hussain. All rights reserved.</p>
-        </footer>
-    </div>
+            <p><strong>Author:<\/strong> Asif Hussain | <strong>GitHub:<\/strong> github.com/asifhussain60/CORTEX<\/p>
+            <p>Copyright © 2025 Asif Hussain. All rights reserved.<\/p>
+        <\/footer>
 
     <!-- D3.js Visualizations -->
     <script>
@@ -770,7 +778,7 @@ graph TB
                     .style("top", (event.pageY - 10) + "px")
                     .style("opacity", 1)
                     .html(() => {
-                        let html = `<strong>${d.data.name}</strong><br/>`;
+                        let html = `<strong>${d.data.name}<\/strong><br/>`;
                         if (d.data.coverage) html += `Coverage: ${d.data.coverage}%<br/>`;
                         if (d.data.tests) html += `Tests: ${d.data.tests}`;
                         return html;
@@ -904,7 +912,7 @@ graph TB
                         .style("left", (event.pageX + 10) + "px")
                         .style("top", (event.pageY - 10) + "px")
                         .style("opacity", 1)
-                        .html(`<strong>${d.metric}</strong><br/>Score: ${d.score}/10`);
+                        .html(`<strong>${d.metric}<\/strong><br/>Score: ${d.score}/10`);
                 })
                 .on("mouseout", function() {
                     d3.select(this)
@@ -932,6 +940,8 @@ graph TB
             .attr("fill", "#9C27B0")
             .style("font-size", "36px")
             .style("font-weight", "700");
-    </script>
+  </style>
+</head>
+<body>
 </body>
 </html>

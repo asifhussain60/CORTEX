@@ -25,6 +25,24 @@ The **CORTEX Technical Documentation System** provides comprehensive, interactiv
 ```
 docs/technical/
 ├── index.html                    # Landing page
+├── orchestrators/                # Orchestrator visualizations (NEW)
+│   ├── index.html                # Master orchestrator index
+│   ├── planning-system.html      # Planning System (4-tier routing)
+│   ├── tdd-orchestrator.html     # TDD Orchestrator (RED→GREEN→REFACTOR)
+│   ├── ado-planning.html         # ADO Planning (manifest inheritance)
+│   ├── maintenance-orchestrator.html  # System Maintenance (7-phase)
+│   ├── code-sanitization.html    # Code Sanitization (5-phase)
+│   ├── system-integrity.html     # System Integrity (8-phase validation)
+│   ├── refinement-orchestrator.html   # Refinement (holistic improvement)
+│   ├── cleanup-orchestrator.html # Cleanup (AST-powered)
+│   ├── git-checkpoint.html       # Git Checkpoint (milestones)
+│   ├── architectural-review.html # Architectural Review (0-100 scoring)
+│   ├── cortex-lens.html          # CORTEX Lens v3 (narrative generation)
+│   ├── intelligent-dashboard.html # Intelligent Dashboard (metrics)
+│   ├── debug-orchestrator.html   # Debug (symptom analysis)
+│   ├── rollback-orchestrator.html # Rollback (state restoration)
+│   ├── autonomous-execution.html # Autonomous Execution (plan automation)
+│   └── pre-flight-orchestrator.html # Pre-Flight (validation)
 ├── architecture/                 # System architecture
 │   ├── diagrams/                 # D3.js interactive diagrams
 │   └── components/               # Component documentation
@@ -85,11 +103,16 @@ Modern, elegant design with:
 
 ### 4. Documentation Coverage
 
-- ✅ **8 Orchestrators** - Complete API documentation
+- ✅ **16 Orchestrators** - Complete visualization documentation with interactive diagrams
+  - **Planning:** Planning System, TDD, ADO Planning, Pre-Flight
+  - **Execution:** Code Sanitization, Autonomous Execution
+  - **System:** Maintenance, System Integrity, Refinement, Cleanup, Git Checkpoint
+  - **Analysis:** Architectural Review, CORTEX Lens, Intelligent Dashboard
+  - **Debug:** Debug, Rollback
 - ✅ **2 Agents** - Strategic Planning, Code Execution
 - ✅ **4 Brain Tiers** - Tier 0-3 APIs
 - ✅ **5 Major Workflows** - Planning, TDD, Maintenance, Refinement, Sanitization
-- ✅ **50+ Diagrams** - Architecture, sequence, flowcharts, DFDs, UML
+- ✅ **64+ Diagrams** - 32 Mermaid + 32 D3.js interactive visualizations
 
 ---
 

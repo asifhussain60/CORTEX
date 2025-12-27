@@ -612,7 +612,7 @@ body {
     transition: all var(--transition-base);
 }
 
-.glass-card:hover {
+.glass-card:hover:not(.feature-card) {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
     border-color: rgba(255, 255, 255, 0.15);
@@ -711,7 +711,45 @@ body {
     position: relative;
     padding: 2rem;
     text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Clickable card link styling */
+.feature-card-link {
     cursor: pointer;
+    display: block;
+}
+
+/* Hover effect - highlight active card with cyan glow and dim others */
+.feature-grid:hover .feature-card {
+    opacity: 0.4;
+    transform: scale(0.98);
+    filter: brightness(0.7);
+}
+
+.feature-grid .feature-card:hover {
+    opacity: 1 !important;
+    transform: scale(1.02);
+    filter: brightness(1);
+    border: 2px solid var(--accent-primary) !important;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.3) !important;
+}
+
+/* Make entire card clickable by extending the link */
+.feature-card .learn-more::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+/* Ensure other interactive elements stay on top */
+.feature-card a:not(.learn-more) {
+    position: relative;
+    z-index: 2;
 }
 
 .feature-card .icon {
@@ -1108,3 +1146,295 @@ footer {
 .mb-4 { margin-bottom: var(--spacing-xl); }
 
 .hidden { display: none !important; }
+
+/* ============================================
+   COMPLEXITY & COMPLIANCE TILES (Modern Design)
+   ============================================ */
+.complexity-tile, .compliance-tile {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.complexity-tile:hover, .compliance-tile:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2);
+    border-color: rgba(0, 212, 255, 0.4);
+}
+
+.complexity-tile.expanded, .compliance-tile.expanded {
+    border-color: var(--accent-primary);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+}
+
+.complexity-icon, .compliance-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.complexity-tile:hover .complexity-icon,
+.compliance-tile:hover .compliance-icon {
+    transform: scale(1.1);
+}
+
+.complexity-title, .compliance-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.complexity-subtitle, .compliance-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.complexity-details, .compliance-details {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+    text-align: left;
+    animation: slideDown 0.3s ease-out;
+}
+
+.complexity-detail-item, .compliance-details > p,
+.compliance-details > ul {
+    margin-bottom: 1rem;
+}
+
+.complexity-detail-item strong,
+.compliance-details strong {
+    color: var(--accent-primary);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.complexity-detail-item p,
+.compliance-details p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.complexity-detail-item ul,
+.compliance-details ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.8;
+}
+
+.complexity-detail-item ul li,
+.compliance-details ul li {
+    margin-bottom: 0.5rem;
+}
+
+.complexity-expand-hint, .compliance-expand-hint {
+    text-align: center;
+    color: var(--accent-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.complexity-tile:hover .complexity-expand-hint,
+.compliance-tile:hover .compliance-expand-hint {
+    opacity: 1;
+}
+
+.complexity-tile.expanded .complexity-expand-hint,
+.compliance-tile.expanded .compliance-expand-hint {
+    display: none;
+}
+
+/* Complexity-specific styling */
+.complexity-high {
+    border-left: 4px solid #ef4444;
+}
+
+.complexity-medium {
+    border-left: 4px solid #f59e0b;
+}
+
+.complexity-low {
+    border-left: 4px solid #10b981;
+}
+
+/* Animation */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .complexity-tile, .compliance-tile {
+        padding: 1.5rem;
+    }
+    
+    .complexity-icon, .compliance-icon {
+        font-size: 2.5rem;
+    }
+    
+    .complexity-title, .compliance-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* ============================================
+   EXECUTION TILES (Autonomous Execution Section)
+   ============================================ */
+.execution-tile {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.execution-tile:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(123, 97, 255, 0.2);
+    border-color: rgba(123, 97, 255, 0.4);
+}
+
+.execution-tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.execution-tile:hover::before {
+    transform: scaleX(1);
+}
+
+.execution-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.execution-tile:hover .execution-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.execution-title {
+    color: var(--accent-primary);
+    margin-bottom: 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.execution-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .execution-tile {
+        padding: 1.5rem;
+    }
+    
+    .execution-icon {
+        font-size: 2.5rem;
+    }
+}
+
+/* ============================================
+   SKULL TILES (SKULL Protection Section)
+   ============================================ */
+.skull-tile {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-left: 4px solid #ef4444;
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.skull-tile:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 35px rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.6);
+}
+
+.skull-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.skull-tile:hover .skull-icon {
+    transform: scale(1.15);
+}
+
+.skull-title {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.skull-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .skull-tile {
+        padding: 1.25rem;
+    }
+    
+    .skull-icon {
+        font-size: 2rem;
+    }
+}
+

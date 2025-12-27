@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Architectural Review Orchestrator | CORTEX Technical Documentation</title>
-    
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    
-    <!-- Mermaid -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
-    <style>
-        :root {
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Architectural Review Orchestrator | CORTEX Technical Documentation</title>
+<!-- D3.js -->
+<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
+</script><!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+</script>
+<style type="text/css">
+      :root {
             --review-primary: #9C27B0;
             --review-secondary: #7B1FA2;
             --review-dark: #4A148C;
@@ -259,110 +257,143 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
-</head>
-<body>
+            
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary, #2196F3);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--secondary, #1976D2);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+        
+        .breadcrumb-current {
+            color: #e2e8f0;
+        }
+
+  <body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Technical Documentation<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">Architectural Review<\/span>
+    <\/nav>
+    
     <div class="container">
         <header>
-            <h1>📊 Architectural Review Orchestrator</h1>
-            <p class="subtitle">Comprehensive Code & Architecture Analysis with 0-100 Scoring</p>
-        </header>
+            <h1>📊 Architectural Review Orchestrator<\/h1>
+            <p class="subtitle">Comprehensive Code & Architecture Analysis with 0-100 Scoring<\/p>
+        <\/header>
 
         <!-- Orchestrator Metadata -->
         <div class="orchestrator-meta">
             <div class="meta-item">
-                <span class="meta-label">File Location</span>
-                <span class="meta-value">src/operations/modules/architectural/</span>
-            </div>
+                <span class="meta-label">File Location<\/span>
+                <span class="meta-value">src/operations/modules/architectural/<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Complexity</span>
-                <span class="meta-value">MEDIUM</span>
-            </div>
+                <span class="meta-label">Complexity<\/span>
+                <span class="meta-value">MEDIUM<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Phases</span>
-                <span class="meta-value">6</span>
-            </div>
+                <span class="meta-label">Phases<\/span>
+                <span class="meta-value">6<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Scoring</span>
-                <span class="meta-value">0-100 Scale</span>
-            </div>
+                <span class="meta-label">Scoring<\/span>
+                <span class="meta-value">0-100 Scale<\/span>
+            <\/div>
             <div class="meta-item">
-                <span class="meta-label">Version</span>
-                <span class="meta-value">3.0.0</span>
-            </div>
-        </div>
+                <span class="meta-label">Version<\/span>
+                <span class="meta-value">3.0.0<\/span>
+            <\/div>
 
         <!-- Overview Section -->
         <section class="section">
-            <h2>Overview</h2>
+            <h2>Overview<\/h2>
             <p>
                 The Architectural Review Orchestrator performs comprehensive code and architecture analysis from a 
                 senior architect perspective. It examines structure, patterns, SOLID principles, API design, security, 
                 scalability, and maintainability with quantitative scoring and actionable recommendations.
-            </p>
             
-            <h3>Review Dimensions</h3>
+            <h3>Review Dimensions<\/h3>
             <div class="score-grid">
                 <div class="score-card">
-                    <div class="score-value">0-100</div>
-                    <div class="score-label">Architecture & Structure</div>
-                </div>
+                    <div class="score-value">0-100<\/div>
+                    <div class="score-label">Architecture & Structure<\/div>
+                <\/div>
                 <div class="score-card">
-                    <div class="score-value">0-100</div>
-                    <div class="score-label">Code Quality & Patterns</div>
-                </div>
+                    <div class="score-value">0-100<\/div>
+                    <div class="score-label">Code Quality & Patterns<\/div>
+                <\/div>
                 <div class="score-card">
-                    <div class="score-value">0-100</div>
-                    <div class="score-label">Security & Risk</div>
-                </div>
+                    <div class="score-value">0-100<\/div>
+                    <div class="score-label">Security & Risk<\/div>
+                <\/div>
                 <div class="score-card">
-                    <div class="score-value">0-100</div>
-                    <div class="score-label">Performance & Scalability</div>
-                </div>
+                    <div class="score-value">0-100<\/div>
+                    <div class="score-label">Performance & Scalability<\/div>
+                <\/div>
                 <div class="score-card">
-                    <div class="score-value">0-100</div>
-                    <div class="score-label">Maintainability</div>
-                </div>
+                    <div class="score-value">0-100<\/div>
+                    <div class="score-label">Maintainability<\/div>
+                <\/div>
                 <div class="score-card">
-                    <div class="score-value">0-100</div>
-                    <div class="score-label">Technical Debt</div>
-                </div>
-            </div>
-        </section>
+                    <div class="score-value">0-100<\/div>
+                    <div class="score-label">Technical Debt<\/div>
+                <\/div>
 
         <!-- 6-Phase Analysis Workflow -->
         <section class="section">
-            <h2>6-Phase Analysis Workflow</h2>
+            <h2>6-Phase Analysis Workflow<\/h2>
             <div class="phase-legend">
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-1);"></div>
-                    <div class="legend-label">Phase 1: Architecture</div>
-                </div>
+                    <div class="legend-color" style="background: var(--phase-1);"><\/div>
+                    <div class="legend-label">Phase 1: Architecture<\/div>
+                <\/div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-2);"></div>
-                    <div class="legend-label">Phase 2: Code Quality</div>
-                </div>
+                    <div class="legend-color" style="background: var(--phase-2);"><\/div>
+                    <div class="legend-label">Phase 2: Code Quality<\/div>
+                <\/div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-3);"></div>
-                    <div class="legend-label">Phase 3: Security</div>
-                </div>
+                    <div class="legend-color" style="background: var(--phase-3);"><\/div>
+                    <div class="legend-label">Phase 3: Security<\/div>
+                <\/div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-4);"></div>
-                    <div class="legend-label">Phase 4: Performance</div>
-                </div>
+                    <div class="legend-color" style="background: var(--phase-4);"><\/div>
+                    <div class="legend-label">Phase 4: Performance<\/div>
+                <\/div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-5);"></div>
-                    <div class="legend-label">Phase 5: Maintainability</div>
-                </div>
+                    <div class="legend-color" style="background: var(--phase-5);"><\/div>
+                    <div class="legend-label">Phase 5: Maintainability<\/div>
+                <\/div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-6);"></div>
-                    <div class="legend-label">Phase 6: Report</div>
-                </div>
-            </div>
+                    <div class="legend-color" style="background: var(--phase-6);"><\/div>
+                    <div class="legend-label">Phase 6: Report<\/div>
+                <\/div>
             
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     START([Start Review]) --> SCOPE{Scope<br/>Filter?}
     
     SCOPE --> |No Filter| ARCH_FULL[Phase 1: Architecture Analysis<br/>Full System Scan]
@@ -420,20 +451,16 @@ graph TD
     style MAINTAIN fill:#8BC34A,stroke:#689F38,color:#fff
     style OVERALL_SCORE fill:#9C27B0,stroke:#7B1FA2,color:#fff
     style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <!-- Git Protection Flowchart -->
         <section class="section">
-            <h2>Git Protection & Alignment Tracking</h2>
+            <h2>Git Protection & Alignment Tracking<\/h2>
             <p>
                 The Architectural Review Orchestrator integrates with CORTEX's git protection system to track
                 alignment state and prevent regressions.
-            </p>
             <div class="diagram-container">
                 <div class="mermaid">
-graph TD
+  graph TD
     START([Review Complete]) --> CHECK_GIT{Git Protection<br/>Enabled?}
     
     CHECK_GIT --> |No| SKIP[Skip alignment tracking<br/>Report only]
@@ -472,106 +499,82 @@ graph TD
     style PREVENT fill:#DC2626,stroke:#B91C1C,color:#fff
     style UPDATE_SUCCESS fill:#10B981,stroke:#059669,color:#fff
     style END fill:#10B981,stroke:#059669,color:#fff
-                </div>
-            </div>
-        </section>
 
         <!-- Scoring Dashboard -->
         <section class="section">
-            <h2>Scoring Dashboard Visualization</h2>
-            <p>Interactive breakdown of review scores by category with drill-down to specific findings.</p>
+            <h2>Scoring Dashboard Visualization<\/h2>
+            <p>Interactive breakdown of review scores by category with drill-down to specific findings.<\/p>
             <div class="diagram-container">
-                <div id="scoringDashboard"></div>
-            </div>
-        </section>
+                <div id="scoringDashboard"><\/div>
+            <\/div>
 
         <!-- Critical Issues Visualization -->
         <section class="section">
-            <h2>Critical Issues & Recommendations</h2>
-            <p>Priority-ranked visualization of findings with severity indicators.</p>
+            <h2>Critical Issues & Recommendations<\/h2>
+            <p>Priority-ranked visualization of findings with severity indicators.<\/p>
             <div class="diagram-container">
-                <div id="criticalIssues"></div>
-            </div>
-        </section>
+                <div id="criticalIssues"><\/div>
+            <\/div>
 
         <!-- Key Features -->
         <section class="section">
-            <h2>Key Features</h2>
+            <h2>Key Features<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">🎯 Context-Aware Analysis</div>
+                    <div class="feature-title">🎯 Context-Aware Analysis<\/div>
                     <div class="feature-desc">
                         Accepts scope filters and request context to focus review on specific features or 
                         keywords (e.g., 'auth', 'api', 'payment').
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📊 Quantitative Scoring</div>
+                    <div class="feature-title">📊 Quantitative Scoring<\/div>
                     <div class="feature-desc">
                         0-100 scoring across 6 dimensions with weighted composite overall score. Clear thresholds 
                         for excellent (90+), good (70-89), fair (50-69), and poor (&lt;50).
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🔍 AST-Powered Analysis</div>
+                    <div class="feature-title">🔍 AST-Powered Analysis<\/div>
                     <div class="feature-desc">
                         Uses Abstract Syntax Tree analysis for precise code quality metrics, complexity calculation, 
                         and pattern detection.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">🛡️ Git Protection Integration</div>
+                    <div class="feature-title">🛡️ Git Protection Integration<\/div>
                     <div class="feature-desc">
                         Tracks alignment state across runs, detects regressions, and optionally blocks commits 
                         when critical issues are introduced.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📋 Actionable Recommendations</div>
+                    <div class="feature-title">📋 Actionable Recommendations<\/div>
                     <div class="feature-desc">
                         Generates priority-ranked recommendations with specific locations, root cause analysis, 
                         and suggested fixes.
-                    </div>
-                </div>
                 <div class="feature-card">
-                    <div class="feature-title">📈 Compliance Analysis</div>
+                    <div class="feature-title">📈 Compliance Analysis<\/div>
                     <div class="feature-desc">
                         Validates compliance with SOLID principles, design patterns, security best practices, 
                         and CORTEX coding standards.
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Related Documentation -->
         <section class="section">
-            <h2>Related Documentation</h2>
+            <h2>Related Documentation<\/h2>
             <div class="feature-list">
                 <div class="feature-card">
-                    <div class="feature-title">Implementation</div>
+                    <div class="feature-title">Implementation<\/div>
                     <div class="feature-desc">
-                        <code>src/operations/modules/architectural/review_orchestrator.py</code>
-                    </div>
-                </div>
+                        <code>src/operations/modules/architectural/review_orchestrator.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Git Protection</div>
+                    <div class="feature-title">Git Protection<\/div>
                     <div class="feature-desc">
-                        <code>src/operations/modules/git_protection/alignment_state_tracker.py</code>
-                    </div>
-                </div>
+                        <code>src/operations/modules/git_protection/alignment_state_tracker.py<\/code>
+                    <\/div>
                 <div class="feature-card">
-                    <div class="feature-title">Base Module</div>
+                    <div class="feature-title">Base Module<\/div>
                     <div class="feature-desc">
-                        <code>src/operations/base_operation_module.py</code>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        <code>src/operations/base_operation_module.py<\/code>
+                    <\/div>
 
-        <a href="index.html" class="back-link">← Back to Orchestrator Index</a>
-    </div>
+        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
+    <\/div>
 
-    <div class="tooltip" id="tooltip"></div>
+    <div class="tooltip" id="tooltip"><\/div>
 
     <script>
         // Initialize Mermaid
@@ -673,7 +676,7 @@ graph TD
                     const tooltip = d3.select('#tooltip');
                     tooltip.style('opacity', 1)
                         .html(`
-                            <strong>${d.category}</strong><br/>
+                            <strong>${d.category}<\/strong><br/>
                             Score: ${d.score}/100<br/>
                             Findings: ${d.findings}
                         `)
@@ -823,7 +826,7 @@ graph TD
                     const tooltip = d3.select('#tooltip');
                     tooltip.style('opacity', 1)
                         .html(`
-                            <strong>${d.data.name}</strong><br/>
+                            <strong>${d.data.name}<\/strong><br/>
                             ${d.depth === 1 ? 'Severity Level' : 'Finding'}<br/>
                             ${d.value ? `Impact: ${d.value}/10` : ''}
                         `)
@@ -852,6 +855,8 @@ graph TD
             createScoringDashboard();
             createCriticalIssues();
         });
-    </script>
+  </style>
+</head>
+<body>
 </body>
 </html>

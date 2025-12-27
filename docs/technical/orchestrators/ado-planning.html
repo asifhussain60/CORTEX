@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADO Planning Orchestrator | CORTEX Technical Documentation</title>
-    
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    
-    <!-- Mermaid -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
-    <style>
-        :root {
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ADO Planning Orchestrator | CORTEX Technical Documentation</title>
+<!-- D3.js -->
+<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
+</script><!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+</script>
+<style type="text/css">
+      :root {
             --ado-primary: #2196F3;
             --ado-secondary: #1976D2;
             --ado-dark: #0D47A1;
@@ -283,86 +281,117 @@
                 gap: 0.5rem;
             }
         }
-    </style>
-</head>
-<body>
+            
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary, #2196F3);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--secondary, #1976D2);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+        
+        .breadcrumb-current {
+            color: #e2e8f0;
+        }
+
+  <body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Technical Documentation<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">ADO Planning<\/span>
+    <\/nav>
+    
     <div class="container">
         <header>
-            <h1>📊 ADO Planning Orchestrator</h1>
-            <p class="subtitle">Azure DevOps Work Item Generation with Planning System Integration</p>
+            <h1>📊 ADO Planning Orchestrator<\/h1>
+            <p class="subtitle">Azure DevOps Work Item Generation with Planning System Integration<\/p>
             <div class="metadata">
-                <span>📄 <strong>Version:</strong> 3.0</span>
-                <span>📦 <strong>Category:</strong> Planning</span>
-                <span>⚡ <strong>Inherits From:</strong> Planning System</span>
-                <span>📊 <strong>Status:</strong> PRODUCTION</span>
-            </div>
-        </header>
+                <span>📄 <strong>Version:<\/strong> 3.0<\/span>
+                <span>📦 <strong>Category:<\/strong> Planning<\/span>
+                <span>⚡ <strong>Inherits From:<\/strong> Planning System<\/span>
+                <span>📊 <strong>Status:<\/strong> PRODUCTION<\/span>
+            <\/div>
 
         <!-- Overview Section -->
         <section class="section">
-            <h2>📋 Overview</h2>
+            <h2>📋 Overview<\/h2>
             <p>
                 The ADO Planning Orchestrator extends Planning System 2.0 to generate Azure DevOps-formatted
                 work items (Epic, Feature, Story, Task). Inherits complexity analysis, DoR/DoD validation,
                 TDD integration, and adds ADO-specific formatting, work item hierarchy, and acceptance criteria templates.
-            </p>
             
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value">4</div>
-                    <div class="stat-label">Work Item Types</div>
-                </div>
+                    <div class="stat-value">4<\/div>
+                    <div class="stat-label">Work Item Types<\/div>
+                <\/div>
                 <div class="stat-card">
-                    <div class="stat-value">150</div>
-                    <div class="stat-label">Lines of Formatting</div>
-                </div>
+                    <div class="stat-value">150<\/div>
+                    <div class="stat-label">Lines of Formatting<\/div>
+                <\/div>
                 <div class="stat-card">
-                    <div class="stat-value">2,000+</div>
-                    <div class="stat-label">Inherited LOC</div>
-                </div>
+                    <div class="stat-value">2,000+<\/div>
+                    <div class="stat-label">Inherited LOC<\/div>
+                <\/div>
                 <div class="stat-card">
-                    <div class="stat-value">100%</div>
-                    <div class="stat-label">DoR/DoD Compliance</div>
-                </div>
-            </div>
-        </section>
+                    <div class="stat-value">100%<\/div>
+                    <div class="stat-label">DoR/DoD Compliance<\/div>
+                <\/div>
 
         <!-- Work Item Types -->
         <section class="section">
-            <h2>🎯 Work Item Types</h2>
+            <h2>🎯 Work Item Types<\/h2>
             <p>
                 ADO Planning supports 4 work item types with automatic complexity-based type selection:
-            </p>
             <div style="margin: 1rem 0;">
-                <span class="work-item-type epic">EPIC</span>
-                <span style="color: #cbd5e1;">Large initiatives spanning multiple features (>40 points)</span>
-            </div>
+                <span class="work-item-type epic">EPIC<\/span>
+                <span style="color: #cbd5e1;">Large initiatives spanning multiple features (>40 points)<\/span>
+            <\/div>
             <div style="margin: 1rem 0;">
-                <span class="work-item-type feature">FEATURE</span>
-                <span style="color: #cbd5e1;">Major functional areas with multiple stories (20-40 points)</span>
-            </div>
+                <span class="work-item-type feature">FEATURE<\/span>
+                <span style="color: #cbd5e1;">Major functional areas with multiple stories (20-40 points)<\/span>
+            <\/div>
             <div style="margin: 1rem 0;">
-                <span class="work-item-type story">STORY</span>
-                <span style="color: #cbd5e1;">User-facing functionality with acceptance criteria (5-20 points)</span>
-            </div>
+                <span class="work-item-type story">STORY<\/span>
+                <span style="color: #cbd5e1;">User-facing functionality with acceptance criteria (5-20 points)<\/span>
+            <\/div>
             <div style="margin: 1rem 0;">
-                <span class="work-item-type task">TASK</span>
-                <span style="color: #cbd5e1;">Implementation steps within stories (<5 points)</span>
-            </div>
-        </section>
+                <span class="work-item-type task">TASK<\/span>
+                <span style="color: #cbd5e1;">Implementation steps within stories (<5 points)<\/span>
+            <\/div>
 
         <!-- Inheritance Architecture -->
         <section class="section">
-            <h2>🏗️ Planning System Inheritance</h2>
+            <h2>🏗️ Planning System Inheritance<\/h2>
             <p>
                 ADO Planning Orchestrator extends PlanningOrchestrator, inheriting core capabilities and adding
                 ADO-specific formatting. 150 lines of new code on top of 2,000+ lines of inherited logic.
-            </p>
             
             <div class="diagram-container">
-                <div class="diagram-title">🔗 Inheritance Architecture</div>
+                <div class="diagram-title">🔗 Inheritance Architecture<\/div>
                 <div class="mermaid">
-graph TB
+  graph TB
     PS[Planning System 2.0<br/>PlanningOrchestrator]
     ADO[ADO Planning Orchestrator<br/>extends PlanningOrchestrator]
     
@@ -407,75 +436,65 @@ graph TB
     style CRITERIA fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
     style POINTS fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
     style SUMMARY fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
-                </div>
-            </div>
             
             <div class="inheritance-box">
-                <h4>Inherited from Planning System 2.0:</h4>
+                <h4>Inherited from Planning System 2.0:<\/h4>
                 <ul>
-                    <li>Complexity-based routing (Tier 1-4 classification)</li>
-                    <li>DoR/DoD validation framework with quality gates</li>
-                    <li>TDD workflow integration (RED→GREEN→REFACTOR)</li>
-                    <li>Historical context (anti-patterns, success patterns)</li>
-                    <li>Visual progress tracking with 🎭 orchestrator hints</li>
-                    <li>Contextual review orchestrator integration</li>
-                    <li>PlanningSession state management</li>
-                </ul>
-            </div>
+                    <li>Complexity-based routing (Tier 1-4 classification)<\/li>
+                    <li>DoR/DoD validation framework with quality gates<\/li>
+                    <li>TDD workflow integration (RED→GREEN→REFACTOR)<\/li>
+                    <li>Historical context (anti-patterns, success patterns)<\/li>
+                    <li>Visual progress tracking with 🎭 orchestrator hints<\/li>
+                    <li>Contextual review orchestrator integration<\/li>
+                    <li>PlanningSession state management<\/li>
+                <\/ul>
             
             <div class="inheritance-box">
-                <h4>ADO-Specific Additions:</h4>
+                <h4>ADO-Specific Additions:<\/h4>
                 <ul>
-                    <li>ADO-formatted Markdown output (copy-paste ready)</li>
-                    <li>Work item hierarchy generation (Epic/Feature/Story/Task)</li>
-                    <li>Acceptance criteria in Gherkin format</li>
-                    <li>Story point estimation (Fibonacci: 1,2,3,5,8,13,21)</li>
-                    <li>Completion summary with DoD validation</li>
-                    <li>Business value and technical approach sections</li>
-                </ul>
-            </div>
-        </section>
+                    <li>ADO-formatted Markdown output (copy-paste ready)<\/li>
+                    <li>Work item hierarchy generation (Epic/Feature/Story/Task)<\/li>
+                    <li>Acceptance criteria in Gherkin format<\/li>
+                    <li>Story point estimation (Fibonacci: 1,2,3,5,8,13,21)<\/li>
+                    <li>Completion summary with DoD validation<\/li>
+                    <li>Business value and technical approach sections<\/li>
+                <\/ul>
 
         <!-- Work Item Hierarchy Visualization -->
         <section class="section">
-            <h2>📊 Work Item Hierarchy</h2>
+            <h2>📊 Work Item Hierarchy<\/h2>
             <p>
                 Interactive hierarchy showing Epic→Feature→Story→Task relationships with automatic point distribution
                 using Fibonacci scale and complexity-based work item type selection.
-            </p>
             
             <div class="diagram-container">
-                <div class="diagram-title">🏗️ Work Item Structure</div>
-                <div id="work-item-hierarchy"></div>
-            </div>
-        </section>
+                <div class="diagram-title">🏗️ Work Item Structure<\/div>
+                <div id="work-item-hierarchy"><\/div>
+            <\/div>
 
         <!-- Formatting Pipeline -->
         <section class="section">
-            <h2>🎨 ADO Formatting Pipeline</h2>
+            <h2>🎨 ADO Formatting Pipeline<\/h2>
             <p>
                 The formatting pipeline converts internal plan structures to ADO work item format with
                 DoR/DoD compliance gates and acceptance criteria validation.
-            </p>
             
             <div class="diagram-container">
-                <div class="diagram-title">⚙️ Format Transformation Flow</div>
-                <div id="formatting-pipeline"></div>
-            </div>
-        </section>
+                <div class="diagram-title">⚙️ Format Transformation Flow<\/div>
+                <div id="formatting-pipeline"><\/div>
+            <\/div>
 
         <!-- DoR/DoD Integration -->
         <section class="section">
-            <h2>✅ DoR/DoD Quality Gates</h2>
+            <h2>✅ DoR/DoD Quality Gates<\/h2>
             <p>
                 All ADO work items pass through Definition of Ready (DoR) and Definition of Done (DoD) validation
                 gates inherited from Planning System.
-            </p>
             
             <div class="diagram-container">
-                <div class="diagram-title">🚦 Quality Gate Workflow</div>
+                <div class="diagram-title">🚦 Quality Gate Workflow<\/div>
                 <div class="mermaid">
-sequenceDiagram
+  sequenceDiagram
     participant User
     participant ADO as ADO Orchestrator
     participant PS as Planning System
@@ -515,133 +534,116 @@ sequenceDiagram
     Output->>Output: DoD checklist
     
     ADO-->>User: # 📊 ADO User Story<br/>**Title:** User Authentication<br/>**Points:** 8<br/>**Criteria:** [Gherkin format]<br/>**DoD:** [Checklist]
-                </div>
-            </div>
-        </section>
 
         <!-- Key Features Section -->
         <section class="section">
-            <h2>✨ Key Features</h2>
+            <h2>✨ Key Features<\/h2>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h3>🔗 Planning System Inheritance</h3>
+                    <h3>🔗 Planning System Inheritance<\/h3>
                     <ul>
-                        <li>Complexity analysis (4-tier routing)</li>
-                        <li>DoR/DoD quality gates</li>
-                        <li>TDD integration (test plans)</li>
-                        <li>Historical context awareness</li>
-                    </ul>
-                </div>
+                        <li>Complexity analysis (4-tier routing)<\/li>
+                        <li>DoR/DoD quality gates<\/li>
+                        <li>TDD integration (test plans)<\/li>
+                        <li>Historical context awareness<\/li>
+                    <\/ul>
                 
                 <div class="feature-card">
-                    <h3>📊 Work Item Hierarchy</h3>
+                    <h3>📊 Work Item Hierarchy<\/h3>
                     <ul>
-                        <li>Epic → Feature → Story → Task</li>
-                        <li>Automatic type selection</li>
-                        <li>Fibonacci story points (1-21)</li>
-                        <li>Parent-child linking</li>
-                    </ul>
-                </div>
+                        <li>Epic → Feature → Story → Task<\/li>
+                        <li>Automatic type selection<\/li>
+                        <li>Fibonacci story points (1-21)<\/li>
+                        <li>Parent-child linking<\/li>
+                    <\/ul>
                 
                 <div class="feature-card">
-                    <h3>✅ Acceptance Criteria</h3>
+                    <h3>✅ Acceptance Criteria<\/h3>
                     <ul>
-                        <li>Gherkin format (Given/When/Then)</li>
-                        <li>User story template (As a/I want/So that)</li>
-                        <li>Business value section</li>
-                        <li>Technical approach notes</li>
-                    </ul>
-                </div>
+                        <li>Gherkin format (Given/When/Then)<\/li>
+                        <li>User story template (As a/I want/So that)<\/li>
+                        <li>Business value section<\/li>
+                        <li>Technical approach notes<\/li>
+                    <\/ul>
                 
                 <div class="feature-card">
-                    <h3>🎯 Story Point Estimation</h3>
+                    <h3>🎯 Story Point Estimation<\/h3>
                     <ul>
-                        <li>Fibonacci scale (1,2,3,5,8,13,21)</li>
-                        <li>Complexity-based distribution</li>
-                        <li>Automatic point rollup</li>
-                        <li>T-shirt sizing (XS-XXL)</li>
-                    </ul>
-                </div>
+                        <li>Fibonacci scale (1,2,3,5,8,13,21)<\/li>
+                        <li>Complexity-based distribution<\/li>
+                        <li>Automatic point rollup<\/li>
+                        <li>T-shirt sizing (XS-XXL)<\/li>
+                    <\/ul>
                 
                 <div class="feature-card">
-                    <h3>📝 ADO-Formatted Output</h3>
+                    <h3>📝 ADO-Formatted Output<\/h3>
                     <ul>
-                        <li>Copy-paste ready Markdown</li>
-                        <li>Azure DevOps compatible</li>
-                        <li>Section templates (Description, Criteria, DoD)</li>
-                        <li>File export support</li>
-                    </ul>
-                </div>
+                        <li>Copy-paste ready Markdown<\/li>
+                        <li>Azure DevOps compatible<\/li>
+                        <li>Section templates (Description, Criteria, DoD)<\/li>
+                        <li>File export support<\/li>
+                    <\/ul>
                 
                 <div class="feature-card">
-                    <h3>🔄 Completion Summary</h3>
+                    <h3>🔄 Completion Summary<\/h3>
                     <ul>
-                        <li>Auto-generate from completed work</li>
-                        <li>Files changed tracking</li>
-                        <li>DoD validation before closing</li>
-                        <li>Test coverage metrics</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+                        <li>Auto-generate from completed work<\/li>
+                        <li>Files changed tracking<\/li>
+                        <li>DoD validation before closing<\/li>
+                        <li>Test coverage metrics<\/li>
+                    <\/ul>
 
         <!-- Usage Examples -->
         <section class="section">
-            <h2>💡 Usage Examples</h2>
+            <h2>💡 Usage Examples<\/h2>
             
             <div class="feature-card" style="margin: 1rem 0;">
-                <h3>Natural Language Commands</h3>
+                <h3>Natural Language Commands<\/h3>
                 <pre style="background: #0f172a; padding: 1rem; border-radius: 4px; overflow-x: auto; color: #10B981;">
-# Create User Story
-plan ado story for user authentication
+  # Create User Story
+  plan ado story for user authentication
 
-# Create Feature
-plan ado feature for payment processing
+  # Create Feature
+  plan ado feature for payment processing
 
-# Create Task
-plan ado task for API endpoint implementation
+  # Create Task
+  plan ado task for API endpoint implementation
 
-# Generate Completion Summary
-generate ado summary
-                </pre>
-            </div>
+  # Generate Completion Summary
+  generate ado summary
             
             <div class="feature-card" style="margin: 1rem 0;">
-                <h3>Example Output: User Story</h3>
+                <h3>Example Output: User Story<\/h3>
                 <pre style="background: #0f172a; padding: 1rem; border-radius: 4px; overflow-x: auto; color: #64B5F6;">
-# User Story: User Authentication
+  # User Story: User Authentication
 
-**As a** registered user  
-**I want** to log in with email and password  
-**So that** I can access my account securely
+  **As a** registered user  
+  **I want** to log in with email and password  
+  **So that** I can access my account securely
 
-## Acceptance Criteria
+  ## Acceptance Criteria
 
-**Given** a registered user on the login page  
-**When** they enter valid credentials  
-**Then** they should be redirected to the dashboard
+  **Given** a registered user on the login page  
+  **When** they enter valid credentials  
+  **Then** they should be redirected to the dashboard
 
-**Given** a user enters invalid credentials  
-**When** they submit the login form  
-**Then** an error message should display
+  **Given** a user enters invalid credentials  
+  **When** they submit the login form  
+  **Then** an error message should display
 
-## Story Points: 8
+  ## Story Points: 8
 
-## DoD Checklist
-- [ ] Code review completed
-- [ ] Unit tests written (RED→GREEN→REFACTOR)
-- [ ] Integration tests pass
-- [ ] Security scan clean
-- [ ] Documentation updated
-                </pre>
-            </div>
-        </section>
+  ## DoD Checklist
+  - [ ] Code review completed
+  - [ ] Unit tests written (RED→GREEN→REFACTOR)
+  - [ ] Integration tests pass
+  - [ ] Security scan clean
+  - [ ] Documentation updated
 
         <footer>
-            <p><strong>Author:</strong> Asif Hussain | <strong>GitHub:</strong> github.com/asifhussain60/CORTEX</p>
-            <p>Copyright © 2025 Asif Hussain. All rights reserved.</p>
-        </footer>
-    </div>
+            <p><strong>Author:<\/strong> Asif Hussain | <strong>GitHub:<\/strong> github.com/asifhussain60/CORTEX<\/p>
+            <p>Copyright © 2025 Asif Hussain. All rights reserved.<\/p>
+        <\/footer>
 
     <!-- D3.js Visualizations -->
     <script>
@@ -827,7 +829,7 @@ generate ado summary
                     .style("top", (event.pageY - 10) + "px")
                     .style("opacity", 1)
                     .html(`
-                        <strong>${d.data.name}</strong><br/>
+                        <strong>${d.data.name}<\/strong><br/>
                         Type: ${d.data.type.toUpperCase()}<br/>
                         Points: ${d.data.points}
                     `);
@@ -937,6 +939,8 @@ generate ado summary
             .attr("font-size", "12px")
             .attr("font-weight", "600")
             .text(d => d.label);
-    </script>
+  </style>
+</head>
+<body>
 </body>
 </html>
