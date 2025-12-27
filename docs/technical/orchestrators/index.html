@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>CORTEX Orchestrators | Technical Documentation</title>
-<!-- D3.js -->
-<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
-</script>
-<style type="text/css">
-      :root {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Orchestrators | Technical Documentation</title>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <style>
+        :root {
             --primary: #2196F3;
             --planning: #2196F3;
             --execution: #4CAF50;
@@ -281,25 +282,22 @@
                 font-size: 0.9rem;
             }
         }
-  <body>
+    </style>
+</head>
+<body>
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
-        <a href="../../index.html">Home<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <a href="../../features/orchestrators.html">Orchestrators<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <span class="breadcrumb-current">Technical Documentation<\/span>
-    <\/nav>
-
-    <!-- Logo Header -->
-    <div style="padding-top: 2rem; padding-bottom: 0; text-align: center;">
-        <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 300px; height: 300px; margin: 0 auto 1rem; display: block;" />
-    <\/div>
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="../../features/orchestrators.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Technical Documentation</span>
+    </nav>
     
     <header>
-        <h1>🧠 CORTEX Orchestrators<\/h1>
-        <p class="subtitle">16 Intelligent Workflow Orchestrators for AI-Assisted Development<\/p>
-    <\/header>
+        <h1>🧠 CORTEX Orchestrators</h1>
+        <p class="subtitle">16 Intelligent Workflow Orchestrators for AI-Assisted Development</p>
+    </header>
 
     <div class="intro">
         <p>
@@ -307,337 +305,415 @@
             through multi-phase execution pipelines. Each orchestrator specializes in a specific domain 
             (planning, execution, system maintenance, analysis, or debugging) and integrates seamlessly 
             with the CORTEX 4.0 brain architecture.
+        </p>
+    </div>
 
     <div class="network-container">
         <div class="network-header">
-            <h2>Orchestrator Relationship Network<\/h2>
-            <p>Interactive D3.js force-directed graph showing all 16 orchestrators and their relationships<\/p>
-        <\/div>
+            <h2>Orchestrator Relationship Network</h2>
+            <p>Interactive D3.js force-directed graph showing all 16 orchestrators and their relationships</p>
+        </div>
         
         <div class="legend">
             <div class="legend-item">
-                <div class="legend-color" style="background: #2196F3;"><\/div>
-                <span>Planning (3)<\/span>
-            <\/div>
+                <div class="legend-color" style="background: #2196F3;"></div>
+                <span>Planning (3)</span>
+            </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #4CAF50;"><\/div>
-                <span>Execution (4)<\/span>
-            <\/div>
+                <div class="legend-color" style="background: #4CAF50;"></div>
+                <span>Execution (4)</span>
+            </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #FF9800;"><\/div>
-                <span>System (4)<\/span>
-            <\/div>
+                <div class="legend-color" style="background: #FF9800;"></div>
+                <span>System (4)</span>
+            </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #9C27B0;"><\/div>
-                <span>Analysis (3)<\/span>
-            <\/div>
+                <div class="legend-color" style="background: #9C27B0;"></div>
+                <span>Analysis (3)</span>
+            </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #F44336;"><\/div>
-                <span>Debug (2)<\/span>
-            <\/div>
+                <div class="legend-color" style="background: #F44336;"></div>
+                <span>Debug (2)</span>
+            </div>
+        </div>
         
-        <div id="network"><\/div>
-    <\/div>
+        <div id="network"></div>
+    </div>
 
     <div class="orchestrator-grid">
         <!-- Planning Orchestrators -->
         <div class="category-section">
             <div class="category-header">
-                <div class="category-icon" style="background: #2196F3;">📋<\/div>
-                <h2 class="category-title" style="color: #2196F3;">Planning Orchestrators<\/h2>
-            <\/div>
+                <div class="category-icon" style="background: #2196F3;">📋</div>
+                <h2 class="category-title" style="color: #2196F3;">Planning Orchestrators</h2>
+            </div>
             <div class="cards-grid">
                 <a href="planning-system.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #2196F3;">
                         <div class="card-header">
-                            <div class="card-icon">📋<\/div>
+                            <div class="card-icon">📋</div>
                             <div class="card-title">
-                                <h3 style="color: #2196F3;">Planning System<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #2196F3;">Planning System</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             10-phase master plan generation with TDD integration, DoR/DoD compliance, and YAML modularization for plans >20KB.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Master Plans<\/span>
-                            <span class="feature-tag">TDD Integration<\/span>
-                            <span class="feature-tag">Autonomous Execution<\/span>
-                        <\/div>
+                            <span class="feature-tag">Master Plans</span>
+                            <span class="feature-tag">TDD Integration</span>
+                            <span class="feature-tag">Autonomous Execution</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="ado-planning.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #2196F3;">
                         <div class="card-header">
-                            <div class="card-icon">📊<\/div>
+                            <div class="card-icon">📊</div>
                             <div class="card-title">
-                                <h3 style="color: #2196F3;">ADO Planning<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #2196F3;">ADO Planning</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Azure DevOps-formatted planning with story/feature generation, acceptance criteria, and epic hierarchies.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">ADO Integration<\/span>
-                            <span class="feature-tag">Story Generation<\/span>
-                            <span class="feature-tag">Epic Hierarchies<\/span>
-                        <\/div>
+                            <span class="feature-tag">ADO Integration</span>
+                            <span class="feature-tag">Story Generation</span>
+                            <span class="feature-tag">Epic Hierarchies</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="pre-flight-orchestrator.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #2196F3;">
                         <div class="card-header">
-                            <div class="card-icon">✈️<\/div>
+                            <div class="card-icon">✈️</div>
                             <div class="card-title">
-                                <h3 style="color: #2196F3;">Pre-Flight<\/h3>
-                                <span class="complexity">Complexity: MEDIUM<\/span>
-                            <\/div>
+                                <h3 style="color: #2196F3;">Pre-Flight</h3>
+                                <span class="complexity">Complexity: MEDIUM</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Environment validation before plan execution. Detects missing SDKs, generates remediation scripts.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Environment Validation<\/span>
-                            <span class="feature-tag">12+ Patterns<\/span>
-                            <span class="feature-tag">Auto-Remediation<\/span>
-                        <\/div>
+                            <span class="feature-tag">Environment Validation</span>
+                            <span class="feature-tag">12+ Patterns</span>
+                            <span class="feature-tag">Auto-Remediation</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
 
         <!-- Execution Orchestrators -->
         <div class="category-section">
             <div class="category-header">
-                <div class="category-icon" style="background: #4CAF50;">⚡<\/div>
-                <h2 class="category-title" style="color: #4CAF50;">Execution Orchestrators<\/h2>
-            <\/div>
+                <div class="category-icon" style="background: #4CAF50;">⚡</div>
+                <h2 class="category-title" style="color: #4CAF50;">Execution Orchestrators</h2>
+            </div>
             <div class="cards-grid">
                 <a href="tdd-orchestrator.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #4CAF50;">
                         <div class="card-header">
-                            <div class="card-icon">🧪<\/div>
+                            <div class="card-icon">🧪</div>
                             <div class="card-title">
-                                <h3 style="color: #4CAF50;">TDD Orchestrator<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #4CAF50;">TDD Orchestrator</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Test-Driven Development workflow: RED (failing tests) → GREEN (implementation) → REFACTOR (optimization).
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">RED-GREEN-REFACTOR<\/span>
-                            <span class="feature-tag">Coverage Tracking<\/span>
-                            <span class="feature-tag">Test Generation<\/span>
-                        <\/div>
+                            <span class="feature-tag">RED-GREEN-REFACTOR</span>
+                            <span class="feature-tag">Coverage Tracking</span>
+                            <span class="feature-tag">Test Generation</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="refinement-orchestrator.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #4CAF50;">
                         <div class="card-header">
-                            <div class="card-icon">💎<\/div>
+                            <div class="card-icon">💎</div>
                             <div class="card-title">
-                                <h3 style="color: #4CAF50;">Refinement<\/h3>
-                                <span class="complexity">Complexity: MEDIUM<\/span>
-                            <\/div>
+                                <h3 style="color: #4CAF50;">Refinement</h3>
+                                <span class="complexity">Complexity: MEDIUM</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Post-implementation refinement: complexity reduction, code quality improvements, performance optimization.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Complexity Analysis<\/span>
-                            <span class="feature-tag">Quality Metrics<\/span>
-                            <span class="feature-tag">Optimization<\/span>
-                        <\/div>
+                            <span class="feature-tag">Complexity Analysis</span>
+                            <span class="feature-tag">Quality Metrics</span>
+                            <span class="feature-tag">Optimization</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="autonomous-execution.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #4CAF50;">
                         <div class="card-header">
-                            <div class="card-icon">🤖<\/div>
+                            <div class="card-icon">🤖</div>
                             <div class="card-title">
-                                <h3 style="color: #4CAF50;">Autonomous Execution<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #4CAF50;">Autonomous Execution</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Adaptive execution with 3 modes: Supervised, Autonomous, Hybrid. Risk-based confirmation and auto-rollback.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Strategy Pattern<\/span>
-                            <span class="feature-tag">Risk Assessment<\/span>
-                            <span class="feature-tag">Error Recovery<\/span>
-                        <\/div>
+                            <span class="feature-tag">Strategy Pattern</span>
+                            <span class="feature-tag">Risk Assessment</span>
+                            <span class="feature-tag">Error Recovery</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="code-sanitization.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #4CAF50;">
                         <div class="card-header">
-                            <div class="card-icon">🧼<\/div>
+                            <div class="card-icon">🧼</div>
                             <div class="card-title">
-                                <h3 style="color: #4CAF50;">Code Sanitization<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #4CAF50;">Code Sanitization</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             5-phase code sanitization: analyze → mapping → transform → validate → report. Removes company-specific data.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Data Anonymization<\/span>
-                            <span class="feature-tag">AST Transform<\/span>
-                            <span class="feature-tag">Validation<\/span>
-                        <\/div>
+                            <span class="feature-tag">Data Anonymization</span>
+                            <span class="feature-tag">AST Transform</span>
+                            <span class="feature-tag">Validation</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
 
         <!-- System Orchestrators -->
         <div class="category-section">
             <div class="category-header">
-                <div class="category-icon" style="background: #FF9800;">⚙️<\/div>
-                <h2 class="category-title" style="color: #FF9800;">System Orchestrators<\/h2>
-            <\/div>
+                <div class="category-icon" style="background: #FF9800;">⚙️</div>
+                <h2 class="category-title" style="color: #FF9800;">System Orchestrators</h2>
+            </div>
             <div class="cards-grid">
                 <a href="maintenance-orchestrator.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #FF9800;">
                         <div class="card-header">
-                            <div class="card-icon">🔧<\/div>
+                            <div class="card-icon">🔧</div>
                             <div class="card-title">
-                                <h3 style="color: #FF9800;">Maintenance<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #FF9800;">Maintenance</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             7-phase system maintenance: healthcheck → align → cleanup → optimize → vacuum → refresh prompts → healthcheck.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Health Checks<\/span>
-                            <span class="feature-tag">Auto-Fix<\/span>
-                            <span class="feature-tag">Optimization<\/span>
-                        <\/div>
+                            <span class="feature-tag">Health Checks</span>
+                            <span class="feature-tag">Auto-Fix</span>
+                            <span class="feature-tag">Optimization</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="system-integrity.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #FF9800;">
                         <div class="card-header">
-                            <div class="card-icon">🛡️<\/div>
+                            <div class="card-icon">🛡️</div>
                             <div class="card-title">
-                                <h3 style="color: #FF9800;">System Integrity<\/h3>
-                                <span class="complexity">Complexity: MEDIUM<\/span>
-                            <\/div>
+                                <h3 style="color: #FF9800;">System Integrity</h3>
+                                <span class="complexity">Complexity: MEDIUM</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Admin-level validation and auto-fix. Manifest compliance, dependency validation, configuration checks.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Validation<\/span>
-                            <span class="feature-tag">Auto-Fix<\/span>
-                            <span class="feature-tag">Compliance<\/span>
-                        <\/div>
+                            <span class="feature-tag">Validation</span>
+                            <span class="feature-tag">Auto-Fix</span>
+                            <span class="feature-tag">Compliance</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="cleanup-orchestrator.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #FF9800;">
                         <div class="card-header">
-                            <div class="card-icon">🧹<\/div>
+                            <div class="card-icon">🧹</div>
                             <div class="card-title">
-                                <h3 style="color: #FF9800;">Cleanup<\/h3>
-                                <span class="complexity">Complexity: MEDIUM<\/span>
-                            <\/div>
+                                <h3 style="color: #FF9800;">Cleanup</h3>
+                                <span class="complexity">Complexity: MEDIUM</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             File organization with AST-powered reference tracking. Enforces document structure, updates imports.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">File Organization<\/span>
-                            <span class="feature-tag">AST Tracking<\/span>
-                            <span class="feature-tag">Protected Files<\/span>
-                        <\/div>
+                            <span class="feature-tag">File Organization</span>
+                            <span class="feature-tag">AST Tracking</span>
+                            <span class="feature-tag">Protected Files</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="git-checkpoint.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #FF9800;">
                         <div class="card-header">
-                            <div class="card-icon">📍<\/div>
+                            <div class="card-icon">📍</div>
                             <div class="card-title">
-                                <h3 style="color: #FF9800;">Git Checkpoint<\/h3>
-                                <span class="complexity">Complexity: MEDIUM<\/span>
-                            <\/div>
+                                <h3 style="color: #FF9800;">Git Checkpoint</h3>
+                                <span class="complexity">Complexity: MEDIUM</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Phase milestone tracking with automatic git commits. Rollback management, branch protection, commit history.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Milestone Tracking<\/span>
-                            <span class="feature-tag">Auto-Commit<\/span>
-                            <span class="feature-tag">Rollback Support<\/span>
-                        <\/div>
+                            <span class="feature-tag">Milestone Tracking</span>
+                            <span class="feature-tag">Auto-Commit</span>
+                            <span class="feature-tag">Rollback Support</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
 
         <!-- Analysis Orchestrators -->
         <div class="category-section">
             <div class="category-header">
-                <div class="category-icon" style="background: #9C27B0;">📊<\/div>
-                <h2 class="category-title" style="color: #9C27B0;">Analysis Orchestrators<\/h2>
-            <\/div>
+                <div class="category-icon" style="background: #9C27B0;">📊</div>
+                <h2 class="category-title" style="color: #9C27B0;">Analysis Orchestrators</h2>
+            </div>
             <div class="cards-grid">
                 <a href="architectural-review.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #9C27B0;">
                         <div class="card-header">
-                            <div class="card-icon">🏗️<\/div>
+                            <div class="card-icon">🏗️</div>
                             <div class="card-title">
-                                <h3 style="color: #9C27B0;">Architectural Review<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #9C27B0;">Architectural Review</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             6-phase code/architecture analysis with 0-100 scoring. Contextual review, critical issue detection, recommendations.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Scoring System<\/span>
-                            <span class="feature-tag">Issue Detection<\/span>
-                            <span class="feature-tag">Best Practices<\/span>
-                        <\/div>
+                            <span class="feature-tag">Scoring System</span>
+                            <span class="feature-tag">Issue Detection</span>
+                            <span class="feature-tag">Best Practices</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="cortex-lens.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #9C27B0;">
                         <div class="card-header">
-                            <div class="card-icon">🔍<\/div>
+                            <div class="card-icon">🔍</div>
                             <div class="card-title">
-                                <h3 style="color: #9C27B0;">CORTEX Lens<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #9C27B0;">CORTEX Lens</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Universal repository analyzer with narrative generation. Pattern detection, tech stack analysis, story element graphs.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Repository Analysis<\/span>
-                            <span class="feature-tag">Pattern Detection<\/span>
-                            <span class="feature-tag">Narrative Generation<\/span>
-                        <\/div>
+                            <span class="feature-tag">Repository Analysis</span>
+                            <span class="feature-tag">Pattern Detection</span>
+                            <span class="feature-tag">Narrative Generation</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="intelligent-dashboard.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #9C27B0;">
                         <div class="card-header">
-                            <div class="card-icon">📊<\/div>
+                            <div class="card-icon">📊</div>
                             <div class="card-title">
-                                <h3 style="color: #9C27B0;">Intelligent Dashboard<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #9C27B0;">Intelligent Dashboard</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Multi-phase data collection: Phase 7 (base), Phase 8 (risk), Phase 9 (intelligence). CVE/EOL detection, migration roadmaps.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">15+ Collectors<\/span>
-                            <span class="feature-tag">Security Analysis<\/span>
-                            <span class="feature-tag">Live Metrics<\/span>
-                        <\/div>
+                            <span class="feature-tag">15+ Collectors</span>
+                            <span class="feature-tag">Security Analysis</span>
+                            <span class="feature-tag">Live Metrics</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
 
         <!-- Debug Orchestrators -->
         <div class="category-section">
             <div class="category-header">
-                <div class="category-icon" style="background: #F44336;">🐛<\/div>
-                <h2 class="category-title" style="color: #F44336;">Debug Orchestrators<\/h2>
-            <\/div>
+                <div class="category-icon" style="background: #F44336;">🐛</div>
+                <h2 class="category-title" style="color: #F44336;">Debug Orchestrators</h2>
+            </div>
             <div class="cards-grid">
                 <a href="debug-orchestrator.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #F44336;">
                         <div class="card-header">
-                            <div class="card-icon">🐛<\/div>
+                            <div class="card-icon">🐛</div>
                             <div class="card-title">
-                                <h3 style="color: #F44336;">Debug Orchestrator<\/h3>
-                                <span class="complexity">Complexity: HIGH<\/span>
-                            <\/div>
+                                <h3 style="color: #F44336;">Debug Orchestrator</h3>
+                                <span class="complexity">Complexity: HIGH</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             Orchestrated bug resolution: symptom → root cause → fix → verify. Error trace analysis, rollback decisions, learning integration.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Root Cause Analysis<\/span>
-                            <span class="feature-tag">Fix Verification<\/span>
-                            <span class="feature-tag">Learning Integration<\/span>
-                        <\/div>
+                            <span class="feature-tag">Root Cause Analysis</span>
+                            <span class="feature-tag">Fix Verification</span>
+                            <span class="feature-tag">Learning Integration</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <a href="rollback-orchestrator.html" style="text-decoration: none;">
                     <div class="orchestrator-card" style="border-left-color: #F44336;">
                         <div class="card-header">
-                            <div class="card-icon">⏪<\/div>
+                            <div class="card-icon">⏪</div>
                             <div class="card-title">
-                                <h3 style="color: #F44336;">Rollback<\/h3>
-                                <span class="complexity">Complexity: MEDIUM<\/span>
-                            <\/div>
+                                <h3 style="color: #F44336;">Rollback</h3>
+                                <span class="complexity">Complexity: MEDIUM</span>
+                            </div>
+                        </div>
                         <p class="card-desc">
                             State restoration with 4 validation gates. Checkpoint selection, git/memory rollback, before/after comparison.
+                        </p>
                         <div class="card-features">
-                            <span class="feature-tag">Checkpoint Management<\/span>
-                            <span class="feature-tag">Validation Gates<\/span>
-                            <span class="feature-tag">State Comparison<\/span>
-                        <\/div>
+                            <span class="feature-tag">Checkpoint Management</span>
+                            <span class="feature-tag">Validation Gates</span>
+                            <span class="feature-tag">State Comparison</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <footer>
-        <p><strong>CORTEX 4.0<\/strong> | Orchestrator Documentation<\/p>
-        <p>Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX<\/p>
-        <p>© 2024-2025 Asif Hussain. All rights reserved.<\/p>
-    <\/footer>
+        <p><strong>CORTEX 4.0</strong> | Orchestrator Documentation</p>
+        <p>Author: Asif Hussain | GitHub: github.com/asifhussain60/CORTEX</p>
+        <p>© 2024-2025 Asif Hussain. All rights reserved.</p>
+    </footer>
 
-    <div class="tooltip" id="tooltip"><\/div>
+    <div class="tooltip" id="tooltip"></div>
 
     <script>
         const orchestrators = [
@@ -757,7 +833,7 @@
 
         node.on('mouseover', function(event, d) {
             tooltip
-                .html(`<h4>${d.name}<\/h4><p>Category: ${d.category}<br>Complexity: ${d.complexity}<\/p>`)
+                .html(`<h4>${d.name}</h4><p>Category: ${d.category}<br>Complexity: ${d.complexity}</p>`)
                 .style('left', (event.pageX + 10) + 'px')
                 .style('top', (event.pageY + 10) + 'px')
                 .style('opacity', 1);
@@ -795,8 +871,6 @@
             d.fx = null;
             d.fy = null;
         }
-  </style>
-</head>
-<body>
+    </script>
 </body>
 </html>

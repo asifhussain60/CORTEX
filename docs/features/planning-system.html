@@ -1,395 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Planning System 2.0 - CORTEX 4.0</title>
-<link href="../assets/css/main.css" rel="stylesheet">
-<link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning System 2.0 - CORTEX 4.0</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
 <body>
-<nav class="breadcrumb">
-<a href="../index.html">Home</a>
-<span class="breadcrumb-separator">›</span>
-<a href="index.html">Features</a>
-<span class="breadcrumb-separator">›</span>
-<span class="breadcrumb-current">Planning System 2.0</span>
-</nav>
-<section class="section">
-<div class="container">
-<div class="glass-card">
-<div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
-<div class="icon" style="font-size: 4rem;">🗺️</div>
-<div style="flex: 1;">
-<h1 style="margin-bottom: 0.5rem;">Planning System 2.0</h1>
-<p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0 0 1rem 0;">
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Features</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Planning System 2.0</span>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+                    <div class="icon" style="font-size: 4rem;">🗺️</div>
+                    <div style="flex: 1;">
+                        <h1 style="margin-bottom: 0.5rem;">Planning System 2.0</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0 0 1rem 0;">
                             Autonomous Multi-Phase Feature Planning with DoR/DoD Compliance
-                        <a class="btn btn-primary" href="../technical/orchestrators/planning-system.html" style="display: inline-block;">
-                            🎨 View Interactive Diagrams &amp; Visualizations →
+                        </p>
+                        <a href="../technical/orchestrators/planning-system.html" class="btn btn-primary" style="display: inline-block;">
+                            🎨 View Interactive Diagrams & Visualizations →
+                        </a>
+                    </div>
+                </div>
 
                 <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 2rem;">
-<div class="metric-card">
-<div class="metric-value">8</div>
-<div class="metric-label">Requirements</div>
-<div class="metric-sublabel">100% Compliant</div>
-</div>
-<div class="metric-card">
-<div class="metric-value">3</div>
-<div class="metric-label">Complexity Levels</div>
-<div class="metric-sublabel">Auto-Detected</div>
-</div>
-<div class="metric-card">
-<div class="metric-value">6</div>
-<div class="metric-label">Quality Gates</div>
-<div class="metric-sublabel">DoR/DoD/TDD</div>
-</div>
-<div class="metric-card">
-<div class="metric-value">100%</div>
-<div class="metric-label">Autonomous</div>
-<div class="metric-sublabel">End-to-End</div>
-</div>
-<section class="section" style="padding-top: 0;">
-<div class="container">
-<h2>Overview</h2>
-<div class="glass-card">
-<p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    <div class="metric-card">
+                        <div class="metric-value">8</div>
+                        <div class="metric-label">Requirements</div>
+                        <div class="metric-sublabel">100% Compliant</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">3</div>
+                        <div class="metric-label">Complexity Levels</div>
+                        <div class="metric-sublabel">Auto-Detected</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">6</div>
+                        <div class="metric-label">Quality Gates</div>
+                        <div class="metric-sublabel">DoR/DoD/TDD</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">Autonomous</div>
+                        <div class="metric-sublabel">End-to-End</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
                     Planning System 2.0 transforms feature requests into executable, phase-by-phase plans with built-in quality gates.
                     The system automatically detects complexity (LOW/MEDIUM/HIGH), validates Definition of Ready (DoR), generates 
                     Definition of Done (DoD) criteria, integrates TDD at every layer, and can execute autonomously through all phases
                     with continuous user feedback loops.
+                </p>
+            </div>
 
-            </p>
-<h2 style="margin-top: 3rem;">🎯 Auto-Complexity Detection</h2>
-<div class="glass-card">
-<p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+            <h2 style="margin-top: 3rem;">🎯 Auto-Complexity Detection</h2>
+            <div class="glass-card">
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
                     The system analyzes your feature request and automatically routes to the appropriate planning strategy:
+                </p>
                 
-                </p>
-<div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-<div class="complexity-tile complexity-high" onclick="toggleComplexityDetails(this)">
-<div class="complexity-icon">🔴</div>
-<h3 class="complexity-title">HIGH Complexity</h3>
-<p class="complexity-subtitle">Security, Auth, Migrations, Multi-Tier APIs</p>
-<div class="complexity-details" style="display: none;">
-<div class="complexity-detail-item">
-<strong>Triggers:</strong>
-<p>Authentication, authorization, database migrations, payment integration, complex APIs, data pipelines</p>
-</div>
-<div class="complexity-detail-item">
-<strong>Strategy:</strong>
-<p>Incremental delivery with phased rollout</p>
-</div>
-<div class="complexity-detail-item">
-<strong>Phases:</strong>
-<p>4-6 phases with checkpoints</p>
-</div>
-<div class="complexity-detail-item">
-<strong>Example:</strong>
-<p style="font-style: italic; color: var(--accent-primary);">"Implement OAuth2 authentication with social login"</p>
-<ul style="margin-top: 0.5rem;">
-<li>Phase 0: Contextual architectural review (auto-fix blockers)</li>
-<li>Phase 1: Core authentication infrastructure</li>
-<li>Phase 2: Social provider integration (Google, GitHub)</li>
-<li>Phase 3: Token management &amp; refresh</li>
-<li>Phase 4: Security hardening &amp; audit logging</li>
-</ul>
-<div class="complexity-expand-hint">Click to expand</div>
-</div>
-<div class="complexity-tile complexity-medium" onclick="toggleComplexityDetails(this)">
-<div class="complexity-icon">🟡</div>
-<h3 class="complexity-title">MEDIUM Complexity</h3>
-<p class="complexity-subtitle">Multi-File Features, Business Logic</p>
-<div class="complexity-details" style="display: none;">
-<div class="complexity-detail-item">
-<strong>Triggers:</strong>
-<p>Multi-file changes, new endpoints, business logic, state management</p>
-</div>
-<div class="complexity-detail-item">
-<strong>Strategy:</strong>
-<p>Conditional phases based on validation</p>
-</div>
-<div class="complexity-detail-item">
-<strong>Phases:</strong>
-<p>2-3 phases with decision points</p>
-</div>
-<div class="complexity-detail-item">
-<strong>Example:</strong>
-<p style="font-style: italic; color: var(--accent-primary);">"Add user profile editing with validation"</p>
-<ul style="margin-top: 0.5rem;">
-<li>Phase 1: Profile data model &amp; validation rules</li>
-<li>Phase 2: Edit UI component with form handling</li>
-<li>Phase 3 (conditional): Avatar upload if file storage ready</li>
-</ul>
-<div class="complexity-expand-hint">Click to expand</div>
-</div>
-<div class="complexity-tile complexity-low" onclick="toggleComplexityDetails(this)">
-<div class="complexity-icon">🟢</div>
-<h3 class="complexity-title">LOW Complexity</h3>
-<p class="complexity-subtitle">Simple Changes, Bug Fixes</p>
-<div class="complexity-details" style="display: none;">
-<div class="complexity-detail-item">
-<strong>Triggers:</strong>
-<p>Single-file changes, UI tweaks, simple bug fixes, documentation</p>
-</div>
-<div class="complexity-detail-item">
-<strong>Strategy:</strong>
-<p>Skeleton plan with direct implementation</p>
-</div>
-<div class="complexity-detail-item">
-<strong>Phases:</strong>
-<p>1 phase with clear acceptance criteria</p>
-</div>
-<div class="complexity-detail-item">
-<strong>Example:</strong>
-<p style="font-style: italic; color: var(--accent-primary);">"Fix button alignment on mobile"</p>
-<ul style="margin-top: 0.5rem;">
-<li>Phase 1: Update CSS media query for button container</li>
-<li>Tests: Visual regression test for mobile viewport</li>
-<li>DoD: Button centered on all mobile devices (320px-768px)</li>
-</ul>
-<div class="complexity-expand-hint">Click to expand</div>
-</div>
-<h2 style="margin-top: 3rem;">✅ DoR/DoD Compliance Framework</h2>
-<div class="glass-card">
-<div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-<div class="compliance-tile" onclick="toggleComplianceDetails(this)">
-<div class="compliance-icon">📋</div>
-<h3 class="compliance-title">Definition of Ready (DoR)</h3>
-<p class="compliance-subtitle">Interactive Validation</p>
-<div class="compliance-details" style="display: none;">
-<p style="margin-bottom: 1rem;">Before planning begins, the system validates that all prerequisites are met through an interactive question-based workflow:</p>
-<ul style="color: var(--text-secondary);">
-<li>
-<strong>Feature clearly defined:</strong> "What problem does this solve for users?"</li>
-<li>
-<strong>Acceptance criteria exist:</strong> "How will we know it's done?"</li>
-<li>
-<strong>Dependencies identified:</strong> "What systems/APIs does this rely on?"</li>
-<li>
-<strong>Technical feasibility confirmed:</strong> "Are there any blockers?"</li>
-<li>
-<strong>Scope bounded:</strong> "What's explicitly out of scope?"</li>
-</ul>
-<div style="margin-top: 1rem; padding: 1rem; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent-primary); border-radius: 4px;">
-<strong>Iterative Refinement:</strong> You approve each DoR item individually. The system asks clarifying questions until requirements are unambiguous.
-                        <div class="compliance-expand-hint">Click to expand</div>
-</div>
-<div class="compliance-tile" onclick="toggleComplianceDetails(this)">
-<div class="compliance-icon">✅</div>
-<h3 class="compliance-title">Definition of Done (DoD)</h3>
-<p class="compliance-subtitle">Quality Gates</p>
-<div class="compliance-details" style="display: none;">
-<p style="margin-bottom: 1rem;">Each phase generates specific DoD criteria that must be met before proceeding:</p>
-<ul style="color: var(--text-secondary);">
-<li>
-<strong>Code complete:</strong> All planned files implemented</li>
-<li>
-<strong>Tests passing:</strong> RED→GREEN→REFACTOR cycle completed</li>
-<li>
-<strong>Coverage requirements met:</strong> 94% minimum per layer</li>
-<li>
-<strong>Documentation updated:</strong> README, API docs, inline comments</li>
-<li>
-<strong>Code review complete:</strong> Peer review or architectural review</li>
-<li>
-<strong>Acceptance criteria validated:</strong> Feature works as specified</li>
-</ul>
-<div style="margin-top: 1rem; padding: 1rem; background: rgba(123, 97, 255, 0.1); border-left: 3px solid var(--accent-secondary); border-radius: 4px;">
-<strong>Approval Gate:</strong> After Phase 3, you explicitly approve acceptance criteria before autonomous execution proceeds. Visual checklist ensures nothing is missed.
-                        <div class="compliance-expand-hint">Click to expand</div>
-</div>
-<div class="compliance-tile" onclick="toggleComplianceDetails(this)">
-<div class="compliance-icon">🎯</div>
-<h3 class="compliance-title">TDD Integration</h3>
-<p class="compliance-subtitle">Every Phase, Every Layer</p>
-<div class="compliance-details" style="display: none;">
-<p style="margin-bottom: 1rem;">TDD is not optional—it's baked into every phase of the plan:</p>
-<ul style="color: var(--text-secondary);">
-<li>
-<strong>RED:</strong> Write failing test first (validates requirement understanding)</li>
-<li>
-<strong>GREEN:</strong> Implement minimum code to pass</li>
-<li>
-<strong>REFACTOR:</strong> Clean up while maintaining green tests</li>
-<li>
-<strong>4-Layer Coverage:</strong> Unit → Integration → System → Acceptance</li>
-<li>
-<strong>Empty Test Detection:</strong> No placeholder tests allowed</li>
-<li>
-<strong>Test-First Enforcement:</strong> SKULL rules block implementation-first commits</li>
-</ul>
-<div style="margin-top: 1rem;">
-<a href="tdd-mastery.html" style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">
-                                    Learn more about TDD Mastery →
-                        <div class="compliance-expand-hint">Click to expand</div>
-</a>
-</div>
-<h2 style="margin-top: 3rem;">🤖 Autonomous Execution</h2>
-<div class="glass-card">
-<p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span>🔴 <strong>HIGH Complexity</strong> - Security, Auth, Migrations, Multi-Tier APIs</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Triggers:</strong> Authentication, authorization, database migrations, payment integration, complex APIs, data pipelines</p>
+                        <p><strong>Strategy:</strong> Incremental delivery with phased rollout</p>
+                        <p><strong>Phases:</strong> 4-6 phases with checkpoints</p>
+                        <p><strong>Example:</strong> "Implement OAuth2 authentication with social login"</p>
+                        <ul style="color: var(--text-secondary); margin-top: 1rem;">
+                            <li>Phase 0: Contextual architectural review (auto-fix blockers)</li>
+                            <li>Phase 1: Core authentication infrastructure</li>
+                            <li>Phase 2: Social provider integration (Google, GitHub)</li>
+                            <li>Phase 3: Token management & refresh</li>
+                            <li>Phase 4: Security hardening & audit logging</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span>🟡 <strong>MEDIUM Complexity</strong> - Multi-File Features, Business Logic</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Triggers:</strong> Multi-file changes, new endpoints, business logic, state management</p>
+                        <p><strong>Strategy:</strong> Conditional phases based on validation</p>
+                        <p><strong>Phases:</strong> 2-3 phases with decision points</p>
+                        <p><strong>Example:</strong> "Add user profile editing with validation"</p>
+                        <ul style="color: var(--text-secondary); margin-top: 1rem;">
+                            <li>Phase 1: Profile data model & validation rules</li>
+                            <li>Phase 2: Edit UI component with form handling</li>
+                            <li>Phase 3 (conditional): Avatar upload if file storage ready</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span>🟢 <strong>LOW Complexity</strong> - Simple Changes, Bug Fixes</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p><strong>Triggers:</strong> Single-file changes, UI tweaks, simple bug fixes, documentation</p>
+                        <p><strong>Strategy:</strong> Skeleton plan with direct implementation</p>
+                        <p><strong>Phases:</strong> 1 phase with clear acceptance criteria</p>
+                        <p><strong>Example:</strong> "Fix button alignment on mobile"</p>
+                        <ul style="color: var(--text-secondary); margin-top: 1rem;">
+                            <li>Phase 1: Update CSS media query for button container</li>
+                            <li>Tests: Visual regression test for mobile viewport</li>
+                            <li>DoD: Button centered on all mobile devices (320px-768px)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 3rem;">✅ DoR/DoD Compliance Framework</h2>
+            <div class="glass-card">
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>Definition of Ready (DoR)</strong> - Interactive Validation</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p style="margin-bottom: 1rem;">Before planning begins, the system validates that all prerequisites are met through an interactive question-based workflow:</p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><strong>Feature clearly defined:</strong> "What problem does this solve for users?"</li>
+                            <li><strong>Acceptance criteria exist:</strong> "How will we know it's done?"</li>
+                            <li><strong>Dependencies identified:</strong> "What systems/APIs does this rely on?"</li>
+                            <li><strong>Technical feasibility confirmed:</strong> "Are there any blockers?"</li>
+                            <li><strong>Scope bounded:</strong> "What's explicitly out of scope?"</li>
+                        </ul>
+                        <p style="margin-top: 1rem; padding: 1rem; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent-primary); border-radius: 4px;">
+                            <strong>Iterative Refinement:</strong> You approve each DoR item individually. The system asks clarifying questions until requirements are unambiguous.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>Definition of Done (DoD)</strong> - Quality Gates</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p style="margin-bottom: 1rem;">Each phase generates specific DoD criteria that must be met before proceeding:</p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><strong>Code complete:</strong> All planned files implemented</li>
+                            <li><strong>Tests passing:</strong> RED→GREEN→REFACTOR cycle completed</li>
+                            <li><strong>Coverage requirements met:</strong> 94% minimum per layer</li>
+                            <li><strong>Documentation updated:</strong> README, API docs, inline comments</li>
+                            <li><strong>Code review complete:</strong> Peer review or architectural review</li>
+                            <li><strong>Acceptance criteria validated:</strong> Feature works as specified</li>
+                        </ul>
+                        <p style="margin-top: 1rem; padding: 1rem; background: rgba(123, 97, 255, 0.1); border-left: 3px solid var(--accent-secondary); border-radius: 4px;">
+                            <strong>Approval Gate:</strong> After Phase 3, you explicitly approve acceptance criteria before autonomous execution proceeds. Visual checklist ensures nothing is missed.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <button class="collapsible-header">
+                        <span><strong>TDD Integration</strong> - Every Phase, Every Layer</span>
+                        <span class="collapsible-icon">▼</span>
+                    </button>
+                    <div class="collapsible-content">
+                        <p style="margin-bottom: 1rem;">TDD is not optional—it's baked into every phase of the plan:</p>
+                        <ul style="color: var(--text-secondary);">
+                            <li><strong>RED:</strong> Write failing test first (validates requirement understanding)</li>
+                            <li><strong>GREEN:</strong> Implement minimum code to pass</li>
+                            <li><strong>REFACTOR:</strong> Clean up while maintaining green tests</li>
+                            <li><strong>4-Layer Coverage:</strong> Unit → Integration → System → Acceptance</li>
+                            <li><strong>Empty Test Detection:</strong> No placeholder tests allowed</li>
+                            <li><strong>Test-First Enforcement:</strong> SKULL rules block implementation-first commits</li>
+                        </ul>
+                        <p style="margin-top: 1rem;">
+                            <a href="tdd-mastery.html" style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">
+                                Learn more about TDD Mastery →
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 3rem;">🤖 Autonomous Execution</h2>
+            <div class="glass-card">
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
                     Say <strong>"execute all phases autonomously"</strong> and CORTEX will implement your entire plan from start to finish with continuous feedback loops:
-
                 </p>
-<div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-<div class="execution-tile">
-<div class="execution-icon">📊</div>
-<h4 class="execution-title">Phase-by-Phase Execution</h4>
-<p class="execution-description">
-                            Complete Phase 1, validate DoD, get approval, move to Phase 2. Continuous checkpoints ensure quality.
-                    </p>
-<div class="execution-tile">
-<div class="execution-icon">🧪</div>
-<h4 class="execution-title">Test-First Every Step</h4>
-<p class="execution-description">
-                            RED phase validates understanding, GREEN implements solution, REFACTOR optimizes code.
-                    </p>
-<div class="execution-tile">
-<div class="execution-icon">🔒</div>
-<h4 class="execution-title">Git Isolation Protection</h4>
-<p class="execution-description">
-                            CORTEX code never pollutes user repos. Clean commit history maintained automatically.
-                    </p>
-<div class="execution-tile">
-<div class="execution-icon">🚧</div>
-<h4 class="execution-title">Blocker Detection</h4>
-<p class="execution-description">
-                            Contextual architectural review auto-fixes blockers or injects Phase 0: Remediation.
 
-            </p>
-<h2 style="margin-top: 3rem;">🛡️ SKULL Protection</h2>
-<div class="glass-card">
-<p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+                <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Phase-by-Phase Execution</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            Complete Phase 1, validate DoD, get approval, move to Phase 2. Continuous checkpoints ensure quality.
+                        </p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Test-First Every Step</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            RED phase validates understanding, GREEN implements solution, REFACTOR optimizes code.
+                        </p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Git Isolation Protection</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            CORTEX code never pollutes user repos. Clean commit history maintained automatically.
+                        </p>
+                    </div>
+                    <div class="glass-card-flat" style="padding: 1.5rem;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Blocker Detection</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            Contextual architectural review auto-fixes blockers or injects Phase 0: Remediation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 3rem;">🛡️ SKULL Protection</h2>
+            <div class="glass-card">
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
                     Planning System 2.0 is protected by 4 SKULL rules that enforce quality at every step:
                 </p>
-<div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-<div class="skull-tile">
-<div class="skull-icon">📋</div>
-<h4 class="skull-title">DoR/DoD Compliance</h4>
-<p class="skull-description">Plans must pass DoR validation before execution</p>
-</div>
-<div class="skull-tile">
-<div class="skull-icon">🧪</div>
-<h4 class="skull-title">TDD in Plans</h4>
-<p class="skull-description">Every phase includes TDD workflow (RED→GREEN→REFACTOR)</p>
-</div>
-<div class="skull-tile">
-<div class="skull-icon">🎯</div>
-<h4 class="skull-title">Complexity Routing</h4>
-<p class="skull-description">Auto-detect complexity and route to correct strategy</p>
-</div>
-<div class="skull-tile">
-<div class="skull-icon">✅</div>
-<h4 class="skull-title">Phase Gate Validation</h4>
-<p class="skull-description">Block execution until DoD criteria met</p>
-</div>
-<p style="margin-top: 1.5rem; text-align: center;">
-<a class="btn btn-secondary" href="../governance/skull-rulebook.html">
+                <ul style="color: var(--text-secondary); line-height: 1.8;">
+                    <li><strong>DOR_DOD_COMPLIANCE:</strong> Plans must pass DoR validation before execution</li>
+                    <li><strong>TDD_IN_PLANS:</strong> Every phase includes TDD workflow (RED→GREEN→REFACTOR)</li>
+                    <li><strong>COMPLEXITY_ROUTING:</strong> Auto-detect complexity and route to correct strategy</li>
+                    <li><strong>PHASE_GATE_VALIDATION:</strong> Block execution until DoD criteria met</li>
+                </ul>
+                <p style="margin-top: 1.5rem;">
+                    <a href="../governance/skull-rulebook.html" class="btn btn-secondary">
                         View All 22 SKULL Rules
+                    </a>
+                </p>
+            </div>
 
             <h2 style="margin-top: 3rem;">📝 Example Workflow</h2>
-<div class="glass-card">
-<h4 style="margin-bottom: 1rem;">User Request: "Add real-time notifications with WebSocket"</h4>
-<div style="background: rgba(10, 14, 39, 0.6); padding: 1.5rem; border-radius: 8px; border-left: 3px solid var(--accent-primary); margin-top: 1rem;">
-<p style="margin: 0; color: var(--text-secondary);"><strong>Phase 0:</strong> Contextual Review → Detects missing Redis dependency → Offers auto-fix</p>
-<p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);"><strong>DoR Validation:</strong> Interactive questions confirm requirements are clear</p>
-<p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);"><strong>Complexity:</strong> HIGH (real-time, stateful, multiple services)</p>
-<p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);"><strong>Strategy:</strong> Incremental (5 phases)</p>
-</div>
-<div style="margin-top: 1.5rem; padding: 1rem; background: rgba(0, 212, 255, 0.05); border-radius: 8px;">
-<p style="margin: 0; font-weight: 600;">Generated Plan:</p>
-<ul style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">
-<li>Phase 1: WebSocket server setup with connection management</li>
-<li>Phase 2: Redis pub/sub integration for scalability</li>
-<li>Phase 3: Client SDK with auto-reconnect logic</li>
-<li>Phase 4: Notification service integration</li>
-<li>Phase 5: Load testing &amp; monitoring</li>
-</ul>
-<div style="margin-top: 1rem; padding: 1rem; background: rgba(123, 97, 255, 0.05); border-radius: 8px;">
-<p style="margin: 0; font-weight: 600;">After Phase 3: Approval Gate</p>
-<p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">✅ Visual checklist shows: WebSocket connects, Redis pub/sub works, Client reconnects on disconnect</p>
-<p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">User approves → Autonomous execution continues</p>
-<div class="glass-card" style="margin-top: 2rem; background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.1));">
-<h3 style="margin-bottom: 1rem;">Ready to Plan?</h3>
-<p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+            <div class="glass-card">
+                <h4 style="margin-bottom: 1rem;">User Request: "Add real-time notifications with WebSocket"</h4>
+                
+                <div style="background: rgba(10, 14, 39, 0.6); padding: 1.5rem; border-radius: 8px; border-left: 3px solid var(--accent-primary); margin-top: 1rem;">
+                    <p style="margin: 0; color: var(--text-secondary);"><strong>Phase 0:</strong> Contextual Review → Detects missing Redis dependency → Offers auto-fix</p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);"><strong>DoR Validation:</strong> Interactive questions confirm requirements are clear</p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);"><strong>Complexity:</strong> HIGH (real-time, stateful, multiple services)</p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);"><strong>Strategy:</strong> Incremental (5 phases)</p>
+                </div>
+
+                <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(0, 212, 255, 0.05); border-radius: 8px;">
+                    <p style="margin: 0; font-weight: 600;">Generated Plan:</p>
+                    <ul style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">
+                        <li>Phase 1: WebSocket server setup with connection management</li>
+                        <li>Phase 2: Redis pub/sub integration for scalability</li>
+                        <li>Phase 3: Client SDK with auto-reconnect logic</li>
+                        <li>Phase 4: Notification service integration</li>
+                        <li>Phase 5: Load testing & monitoring</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(123, 97, 255, 0.05); border-radius: 8px;">
+                    <p style="margin: 0; font-weight: 600;">After Phase 3: Approval Gate</p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">✅ Visual checklist shows: WebSocket connects, Redis pub/sub works, Client reconnects on disconnect</p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">User approves → Autonomous execution continues</p>
+                </div>
+            </div>
+
+            <div class="glass-card" style="margin-top: 2rem; background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.1));">
+                <h3 style="margin-bottom: 1rem;">Ready to Plan?</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
                     Use these commands in GitHub Copilot Chat:
                 </p>
-<div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-<code style="padding: 0.5rem 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 4px; color: var(--accent-primary);">plan [your feature]</code>
-<code style="padding: 0.5rem 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 4px; color: var(--accent-primary);">execute all phases autonomously</code>
-</div>
-<div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 3rem;">
-<a class="btn btn-secondary" href="tdd-mastery.html">← Previous: TDD Mastery</a>
-<a class="btn btn-secondary" href="index.html">Back to Features</a>
-<a class="btn btn-secondary" href="dashboard-system.html">Next: Dashboard System →</a>
-</div>
-<footer class="footer">
-<div class="container">
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-<div>
-<h4>Features</h4>
-<ul style="list-style: none; padding: 0;">
-<li><a href="tdd-mastery.html">TDD Mastery</a></li>
-<li><a href="planning-system.html">Planning System</a></li>
-<li><a href="dashboard-system.html">Dashboard</a></li>
-</ul>
-<div>
-<h4>Architecture</h4>
-<ul style="list-style: none; padding: 0;">
-<li><a href="../architecture/index.html">4-Tier Brain</a></li>
-<li><a href="../governance/skull-rulebook.html">SKULL Rulebook</a></li>
-</ul>
-<div>
-<h4>Resources</h4>
-<ul style="list-style: none; padding: 0;">
-<li><a href="https://github.com/asifhussain60/CORTEX">GitHub</a></li>
-<li><a href="../future/index.html">CORTEX 4.0</a></li>
-</ul>
-<p>© 2025 Asif Hussain. All rights reserved.</p>
-</div>
-<button aria-label="Scroll to top" class="scroll-to-top" id="scroll-to-top">
-<svg fill="none" height="24" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="24">
-<path d="M12 19V5M5 12l7-7 7 7"></path>
-</svg>
-<script src="../assets/js/main.js"></script>
-</button>
-</div>
-</div>
-</div>
-</div></footer>
-</div>
-</div>
-</div>
-</div></a></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div></section>
-</div></a></p>
-</div>
-</div>
-</div>
-</div></section>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <code style="padding: 0.5rem 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 4px; color: var(--accent-primary);">plan [your feature]</code>
+                    <code style="padding: 0.5rem 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 4px; color: var(--accent-primary);">execute all phases autonomously</code>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 3rem;">
+                <a href="tdd-mastery.html" class="btn btn-secondary">← Previous: TDD Mastery</a>
+                <a href="index.html" class="btn btn-secondary">Back to Features</a>
+                <a href="dashboard-system.html" class="btn btn-secondary">Next: Dashboard System →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <h4>Features</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="tdd-mastery.html">TDD Mastery</a></li>
+                        <li><a href="planning-system.html">Planning System</a></li>
+                        <li><a href="dashboard-system.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Architecture</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="../architecture/index.html">4-Tier Brain</a></li>
+                        <li><a href="../governance/skull-rulebook.html">SKULL Rulebook</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Resources</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="https://github.com/asifhussain60/CORTEX">GitHub</a></li>
+                        <li><a href="../future/index.html">CORTEX 4.0</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>&copy; 2025 Asif Hussain. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
+
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>
