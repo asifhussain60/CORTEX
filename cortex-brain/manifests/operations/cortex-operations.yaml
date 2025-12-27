@@ -95,11 +95,13 @@ operations:
     - system refine
   upgrade:
     name: Upgrade
-    description: Upgrade CORTEX to latest version with brain data backup and dependency
-      updates
+    description: Brain-safe CORTEX upgrade with 9-phase workflow and zero data loss
+      guarantee. Preserves all learned patterns, knowledge graphs, and user work.
     deployment_tier: user
     execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/upgrade_wrapper.py
+    orchestrator: src.orchestrators.upgrade_orchestrator_v2:UpgradeOrchestratorV2
+    prompt_file: .github/prompts/cortex-upgrade.prompt.md
     natural_language:
     - upgrade cortex
     - upgrade system
@@ -110,27 +112,48 @@ operations:
     category: system
     modules:
     - upgrade_utility
+    - upgrade_orchestrator_v2
     profiles:
       standard:
-        description: "Full upgrade workflow (backup \u2192 git pull \u2192 pip install\
-          \ \u2192 migrations \u2192 validation)"
+        description: "Full 9-phase upgrade (health check \u2192 backup \u2192 pull\
+          \ \u2192 dependencies \u2192 migrations \u2192 validation \u2192 health\
+          \ \u2192 sync \u2192 report)"
         modules:
         - upgrade_utility
+        - upgrade_orchestrator_v2
       check_only:
         description: Check for updates without upgrading
         modules:
         - upgrade_utility
+      rollback:
+        description: Rollback to previous version using backup
+        modules:
+        - upgrade_utility
     implementation_status:
       status: ready
-      modules_implemented: 1
-      modules_total: 1
+      modules_implemented: 2
+      modules_total: 2
       completion_percentage: 100
-      notes: 7-phase upgrade with brain backup, git pull, dependency updates, migrations,
-        and validation
+      notes: 9-phase brain-safe upgrade with zero-loss guarantee. Only user-facing
+        features validated. Protected paths never overwritten (brain data, knowledge
+        graphs, configs).
+    brain_protection:
+      enabled: true
+      protected_paths:
+      - cortex-brain/tier1/working_memory.db
+      - cortex-brain/tier2/knowledge-graph.yaml
+      - cortex-brain/tier2/patterns/
+      - cortex-brain/tier3/*.db
+      - cortex-brain/conversation-history.db
+      - cortex-brain/documents/
+      - cortex-brain/config/
+      - cortex.config.json
+      zero_loss_guarantee: true
     examples:
     - upgrade cortex
     - check for updates
     - update to latest version
+    - rollback upgrade
   review:
     name: Review
     description: Code Review CLI

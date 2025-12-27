@@ -1,28 +1,29 @@
 #!/usr/bin/env python3
 """
-CORTEX Upgrade CLI Wrapper
+CORTEX Upgrade CLI Wrapper v2 - Brain-Safe Deployment
 
-Command-line interface for CORTEX system upgrades.
+Command-line interface for CORTEX system upgrades with 9-phase workflow.
 
 Features:
-- Version checking and comparison
-- Brain data backup/restore with verification
-- Git pull from origin/main
-- Dependency updates (requirements.txt)
-- Schema migrations
-- Operational readiness validation
-- What's New feature discovery
-- Rollback support
+- 9-phase brain-safe upgrade workflow
+- Zero data loss guarantee (brain preservation)
+- Pre/post health checks
+- Automatic rollback on failure (Phase 5+)
+- User-facing feature validation only
+- Immutable backups with verification
+- Prompt & config sync
+- Comprehensive upgrade reports
 
 Usage:
     python scripts/cli_wrappers/upgrade_wrapper.py
     python scripts/cli_wrappers/upgrade_wrapper.py --check-only
-    python scripts/cli_wrappers/upgrade_wrapper.py --backup-only
-    python scripts/cli_wrappers/upgrade_wrapper.py --force
+    python scripts/cli_wrappers/upgrade_wrapper.py --dry-run
+    python scripts/cli_wrappers/upgrade_wrapper.py --rollback <backup_id>
+    python scripts/cli_wrappers/upgrade_wrapper.py --list-backups
 
 Author: Asif Hussain
 Copyright © 2025 Asif Hussain. All rights reserved.
-Version: 1.0.0
+Version: 2.0.0
 """
 
 import sys
@@ -35,164 +36,228 @@ CORTEX_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(CORTEX_ROOT))
 
 from scripts.cli_wrappers.base_wrapper import BaseCLIWrapper, main_template
+from src.orchestrators.upgrade_orchestrator_v2 import UpgradeOrchestratorV2
 from src.operations.modules.upgrade.upgrade_utility import (
-    execute_upgrade,
     check_for_updates,
     create_backup,
     list_backups,
-    VersionInfo,
-    UpgradeResult
+    restore_backup,
+    get_current_version,
+    VersionInfo
 )
 from src.operations.base_operation_module import OperationResult, OperationStatus
 
 
 class UpgradeWrapper(BaseCLIWrapper):
-    """CLI wrapper for CORTEX system upgrade."""
+    """CLI wrapper for brain-safe CORTEX system upgrade (v2)."""
+    
+    def get_operation_name(self) -> str:
+        """Get operation name for logging."""
+        return "upgrade"
     
     def get_orchestrator(self):
         """
-        Get upgrade executor.
+        Get UpgradeOrchestratorV2 instance.
         
-        Note: execute_upgrade is a function, not a class.
-        We'll wrap it in a simple executor.
-        """
-        class UpgradeExecutor:
-            def __init__(self):
-                self.cortex_root = CORTEX_ROOT
-            
-            def run(self, check_only: bool = False, backup_only: bool = False, 
-                   force: bool = False, auto_confirm: bool = True) -> UpgradeResult:
-                """Execute upgrade with options."""
-                if check_only:
-                    version_info = check_for_updates(self.cortex_root)
-                    return UpgradeResult(
-                        success=True,
-                        from_version=version_info.version,
-                        to_version="N/A",
-                        backup_id=None,
-                        migrations_applied=0,
-                        whats_new="Check only mode",
-                        validation_results={"has_updates": version_info.has_updates},
-                        message="Version check complete",
-                        errors=[]
-                    )
-                
-                if backup_only:
-                    backup = create_backup(self.cortex_root)
-                    return UpgradeResult(
-                        success=backup is not None,
-                        from_version="N/A",
-                        to_version="N/A",
-                        backup_id=backup.backup_id if backup else None,
-                        migrations_applied=0,
-                        whats_new="Backup only mode",
-                        validation_results={"backup_created": backup is not None},
-                        message="Backup complete" if backup else "Backup failed",
-                        errors=[] if backup else ["Backup creation failed"]
-                    )
-                
-                return execute_upgrade(
-                    cortex_root=self.cortex_root,
-                    force=force,
-                    auto_confirm=auto_confirm
-                )
-        
-        return UpgradeExecutor()
-    
-    def execute(self, args: argparse.Namespace) -> OperationResult:
-        """
-        Execute upgrade operation.
-        
-        Args:
-            args: Parsed command line arguments
-            
         Returns:
-            OperationResult with upgrade status
+            UpgradeOrchestratorV2 configured for CLI execution
         """
-        try:
-            orchestrator = self.get_orchestrator()
-            
-            # Execute upgrade
-            result = orchestrator.run(
-                check_only=args.check_only,
-                backup_only=args.backup_only,
-                force=args.force,
-                auto_confirm=not args.interactive
-            )
-            
-            if result.success:
-                return self.success_result(
-                    message=result.message,
-                    data={
-                        "from_version": result.from_version,
-                        "to_version": result.to_version,
-                        "backup_id": result.backup_id,
-                        "migrations_applied": result.migrations_applied,
-                        "whats_new": result.whats_new,
-                        "validation_results": result.validation_results
-                    }
-                )
-            else:
-                return self.error_result(
-                    message=result.message,
-                    errors=result.errors
-                )
-        
-        except Exception as e:
-            return self.error_result(
-                message=f"Upgrade failed: {str(e)}",
-                errors=[str(e)]
-            )
+        return UpgradeOrchestratorV2(
+            config={
+                "cortex_root": str(CORTEX_ROOT),
+                "dry_run": False,  # Overridden in execute()
+                "skip_phases": []
+            }
+        )
     
-    def add_custom_args(self, parser: argparse.ArgumentParser):
-        """Add upgrade-specific arguments."""
+    def setup_argparse(self, parser: argparse.ArgumentParser) -> None:
+        """Configure command-line arguments."""
+        super().setup_argparse(parser)
+        
         parser.add_argument(
             '--check-only',
             action='store_true',
             help='Check for updates without upgrading'
         )
         parser.add_argument(
-            '--backup-only',
+            '--dry-run',
             action='store_true',
-            help='Create backup without upgrading'
+            help='Preview upgrade without making changes'
         )
         parser.add_argument(
-            '--force',
-            action='store_true',
-            help='Force upgrade even if on latest version'
-        )
-        parser.add_argument(
-            '--interactive',
-            action='store_true',
-            help='Prompt for confirmation before upgrading'
+            '--rollback',
+            type=str,
+            metavar='BACKUP_ID',
+            help='Rollback to specific backup (e.g., 20251227_143000)'
         )
         parser.add_argument(
             '--list-backups',
             action='store_true',
             help='List available backups'
         )
+    
+    def execute(self) -> OperationResult:
+        """
+        Execute upgrade operation with 9-phase workflow.
+        
+        Returns:
+            OperationResult with upgrade status
+        """
+        try:
+            # Handle special operations
+            if self.args.list_backups:
+                return self._list_backups()
+            
+            if self.args.check_only:
+                return self._check_for_updates()
+            
+            if self.args.rollback:
+                return self._rollback_upgrade(self.args.rollback)
+            
+            # Execute full 9-phase upgrade
+            orchestrator = self.get_orchestrator()
+            orchestrator.dry_run = self.args.dry_run
+            
+            print("🎭 Orchestrator engaged: UpgradeOrchestratorV2")
+            print("🚀 Starting brain-safe CORTEX upgrade...")
+            print()
+            
+            result = orchestrator.execute()
+            
+            if result.success:
+                return OperationResult(
+                    success=True,
+                    status=OperationStatus.SUCCESS,
+                    message=result.message,
+                    data=result.data
+                )
+            else:
+                return OperationResult(
+                    success=False,
+                    status=OperationStatus.FAILED,
+                    message=result.message,
+                    data=result.data,
+                    errors=[result.message]
+                )
+        
+        except Exception as e:
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Upgrade failed: {str(e)}",
+                errors=[str(e)]
+            )
+    
+    def _list_backups(self) -> OperationResult:
+        """List available backups."""
+        try:
+            backups = list_backups(CORTEX_ROOT)
+            
+            print("\n📦 Available Backups:")
+            print("=" * 80)
+            
+            if not backups:
+                print("No backups found.")
+            else:
+                for backup in backups:
+                    print(f"\nBackup ID: {backup.backup_id}")
+                    print(f"Timestamp: {backup.timestamp}")
+                    print(f"Version: {backup.version}")
+                    print(f"Branch: {backup.branch}")
+                    print(f"Size: {backup.total_size_bytes / 1024 / 1024:.2f} MB")
+                    print(f"Verified: {'✅' if backup.verified else '❌'}")
+            
+            print("\n" + "=" * 80)
+            
+            return OperationResult(
+                success=True,
+                status=OperationStatus.SUCCESS,
+                message=f"Found {len(backups)} backup(s)",
+                data={"backups": len(backups)}
+            )
+        
+        except Exception as e:
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Failed to list backups: {str(e)}",
+                errors=[str(e)]
+            )
+    
+    def _check_for_updates(self) -> OperationResult:
+        """Check for updates without upgrading."""
+        try:
+            print("🔍 Checking for updates...")
+            
+            version_info = check_for_updates(CORTEX_ROOT)
+            current_version = get_current_version(CORTEX_ROOT)
+            
+            print(f"\nCurrent Version: {current_version}")
+            print(f"Remote Version: {version_info.version}")
+            print(f"Updates Available: {'✅ Yes' if version_info.has_updates else '❌ No'}")
+            
+            if version_info.has_updates:
+                print(f"\n📢 Update available: {current_version} → {version_info.version}")
+                print("Run without --check-only to upgrade.")
+            else:
+                print("\n✅ You're on the latest version!")
+            
+            return OperationResult(
+                success=True,
+                status=OperationStatus.SUCCESS,
+                message="Version check complete",
+                data={
+                    "current_version": current_version,
+                    "remote_version": version_info.version,
+                    "has_updates": version_info.has_updates
+                }
+            )
+        
+        except Exception as e:
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Version check failed: {str(e)}",
+                errors=[str(e)]
+            )
+    
+    def _rollback_upgrade(self, backup_id: str) -> OperationResult:
+        """Rollback to previous version using backup."""
+        try:
+            print(f"🔄 Rolling back to backup: {backup_id}")
+            
+            success = restore_backup(CORTEX_ROOT, backup_id)
+            
+            if success:
+                print(f"✅ Rollback successful!")
+                print("Run healthcheck to verify system integrity.")
+                
+                return OperationResult(
+                    success=True,
+                    status=OperationStatus.SUCCESS,
+                    message="Rollback successful",
+                    data={"backup_id": backup_id}
+                )
+            else:
+                return OperationResult(
+                    success=False,
+                    status=OperationStatus.FAILED,
+                    message="Rollback failed",
+                    errors=["Backup restoration failed"]
+                )
+        
+        except Exception as e:
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                message=f"Rollback failed: {str(e)}",
+                errors=[str(e)]
+            )
 
 
 def main():
     """Main entry point."""
-    wrapper = UpgradeWrapper()
-    
-    # Handle list-backups as special case
-    if '--list-backups' in sys.argv:
-        backups = list_backups(CORTEX_ROOT)
-        print("\n📦 Available Backups:")
-        print("=" * 80)
-        for backup in backups:
-            print(f"\nBackup ID: {backup.backup_id}")
-            print(f"Timestamp: {backup.timestamp}")
-            print(f"Version: {backup.version}")
-            print(f"Branch: {backup.branch}")
-            print(f"Size: {backup.size_bytes / 1024 / 1024:.2f} MB")
-            print(f"Verified: {'✅' if backup.verified else '❌'}")
-        print("\n" + "=" * 80)
-        sys.exit(0)
-    
-    return main_template(wrapper)
+    return main_template(UpgradeWrapper)
 
 
 if __name__ == '__main__':

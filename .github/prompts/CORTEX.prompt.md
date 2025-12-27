@@ -210,8 +210,19 @@ These hints confirm orchestrators are actively working without being intrusive.
 ### System Operations
 - **Commands:** `align`, `optimize`, `healthcheck`, `cleanup`, `review`, `feedback`, `help`
 - **Admin-only:** `deploy`, `regenerate_prompts`, `refine`
+- **Upgrade:** `upgrade cortex` (9-phase brain-safe workflow)
 - **Execution Method:** `cli_wrapper` for file operations, `copilot_chat` for interactive
 - **Implemented CLI Wrappers:** 8/8 (align, healthcheck, optimize, cleanup, review, deploy, regenerate_prompts, refine)
+
+### Upgrade System (NEW)
+- **Commands:** `upgrade cortex`, `check for updates`, `rollback upgrade`
+- **Features:** 9-phase workflow with zero data loss, brain preservation, automatic rollback
+- **Protected Data:** All brain tiers (working memory, knowledge graph, patterns, dev context)
+- **Manifest:** `cortex-operations.yaml` (brain_protection config)
+- **Guide:** `.github/prompts/cortex-upgrade.prompt.md`
+- **Implementation:** `src/orchestrators/upgrade_orchestrator_v2.py`
+- **Execution Method:** `cli_wrapper` (safe system operation)
+- **User-Facing Only:** Validates only features users invoke (excludes internal modules)
 
 ---
 
