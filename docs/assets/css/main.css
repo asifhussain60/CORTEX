@@ -865,6 +865,105 @@ body {
     padding: 1.5rem;
 }
 
+/* Tile-based Collapsibles */
+.collapsible-tile {
+    background: rgba(15, 20, 45, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: all var(--transition-base);
+}
+
+.collapsible-tile:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+.collapsible-tile-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: all var(--transition-base);
+}
+
+.collapsible-tile-header:hover {
+    background: rgba(26, 31, 58, 0.3);
+}
+
+.collapsible-tile-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.collapsible-tile-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.collapsible-tile-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.collapsible-tile-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+.collapsible-tile .collapsible-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: transform var(--transition-base);
+    color: var(--text-secondary);
+    opacity: 0.6;
+    margin-top: 0.25rem;
+}
+
+.collapsible-tile.expanded .collapsible-icon {
+    transform: rotate(180deg);
+}
+
+.collapsible-tile .collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-slow), padding var(--transition-slow);
+    padding: 0 1.5rem;
+    background: rgba(10, 14, 39, 0.6);
+}
+
+.collapsible-tile.expanded .collapsible-content {
+    max-height: 2000px;
+    padding: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.collapsible-tile .collapsible-content p {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.collapsible-tile .collapsible-content ul {
+    margin: 0.5rem 0;
+}
+
+.collapsible-tile .collapsible-content li {
+    margin-bottom: 0.5rem;
+}
+
 /* ============================================
    TYPOGRAPHY
    ============================================ */

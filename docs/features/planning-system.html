@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planning System 2.0 - CORTEX 4.0</title>
+    <title>Planning System - CORTEX 4.0</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
@@ -13,16 +13,16 @@
         <span class="breadcrumb-separator">›</span>
         <a href="index.html">Features</a>
         <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">Planning System 2.0</span>
+        <span class="breadcrumb-current">Planning System</span>
     </nav>
 
     <section class="section">
         <div class="container">
             <div class="glass-card">
                 <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
-                    <div class="icon" style="font-size: 4rem;">🗺️</div>
+                    <div class="icon" style="font-size: 4rem;">�</div>
                     <div style="flex: 1;">
-                        <h1 style="margin-bottom: 0.5rem;">Planning System 2.0</h1>
+                        <h1 style="margin-bottom: 0.5rem;">Planning System</h1>
                         <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0 0 1rem 0;">
                             Autonomous Multi-Phase Feature Planning with DoR/DoD Compliance
                         </p>
@@ -75,127 +75,155 @@
                 <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
                     The system analyzes your feature request and automatically routes to the appropriate planning strategy:
                 </p>
-                
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span>🔴 <strong>HIGH Complexity</strong> - Security, Auth, Migrations, Multi-Tier APIs</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p><strong>Triggers:</strong> Authentication, authorization, database migrations, payment integration, complex APIs, data pipelines</p>
-                        <p><strong>Strategy:</strong> Incremental delivery with phased rollout</p>
-                        <p><strong>Phases:</strong> 4-6 phases with checkpoints</p>
-                        <p><strong>Example:</strong> "Implement OAuth2 authentication with social login"</p>
-                        <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                            <li>Phase 0: Contextual architectural review (auto-fix blockers)</li>
-                            <li>Phase 1: Core authentication infrastructure</li>
-                            <li>Phase 2: Social provider integration (Google, GitHub)</li>
-                            <li>Phase 3: Token management & refresh</li>
-                            <li>Phase 4: Security hardening & audit logging</li>
-                        </ul>
-                    </div>
-                </div>
 
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span>🟡 <strong>MEDIUM Complexity</strong> - Multi-File Features, Business Logic</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p><strong>Triggers:</strong> Multi-file changes, new endpoints, business logic, state management</p>
-                        <p><strong>Strategy:</strong> Conditional phases based on validation</p>
-                        <p><strong>Phases:</strong> 2-3 phases with decision points</p>
-                        <p><strong>Example:</strong> "Add user profile editing with validation"</p>
-                        <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                            <li>Phase 1: Profile data model & validation rules</li>
-                            <li>Phase 2: Edit UI component with form handling</li>
-                            <li>Phase 3 (conditional): Avatar upload if file storage ready</li>
-                        </ul>
+                <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div class="collapsible-tile">
+                        <button class="collapsible-tile-header">
+                            <div class="collapsible-tile-icon">🔴</div>
+                            <div class="collapsible-tile-content">
+                                <div class="collapsible-tile-title">HIGH Complexity</div>
+                                <div class="collapsible-tile-subtitle">Security, Auth, Migrations, Multi-Tier APIs</div>
+                            </div>
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <p><strong>Triggers:</strong> Authentication, authorization, database migrations, payment integration, complex APIs, data pipelines</p>
+                            <p><strong>Strategy:</strong> Incremental delivery with phased rollout</p>
+                            <p><strong>Phases:</strong> 4-6 phases with checkpoints</p>
+                            <p><strong>Example:</strong> "Implement OAuth2 authentication with social login"</p>
+                            <ul style="color: var(--text-secondary); margin-top: 1rem;">
+                                <li>Phase 0: Contextual architectural review (auto-fix blockers)</li>
+                                <li>Phase 1: Core authentication infrastructure</li>
+                                <li>Phase 2: Social provider integration (Google, GitHub)</li>
+                                <li>Phase 3: Token management & refresh</li>
+                                <li>Phase 4: Security hardening & audit logging</li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
 
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span>🟢 <strong>LOW Complexity</strong> - Simple Changes, Bug Fixes</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p><strong>Triggers:</strong> Single-file changes, UI tweaks, simple bug fixes, documentation</p>
-                        <p><strong>Strategy:</strong> Skeleton plan with direct implementation</p>
-                        <p><strong>Phases:</strong> 1 phase with clear acceptance criteria</p>
-                        <p><strong>Example:</strong> "Fix button alignment on mobile"</p>
-                        <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                            <li>Phase 1: Update CSS media query for button container</li>
-                            <li>Tests: Visual regression test for mobile viewport</li>
-                            <li>DoD: Button centered on all mobile devices (320px-768px)</li>
-                        </ul>
+                    <div class="collapsible-tile">
+                        <button class="collapsible-tile-header">
+                            <div class="collapsible-tile-icon">🟡</div>
+                            <div class="collapsible-tile-content">
+                                <div class="collapsible-tile-title">MEDIUM Complexity</div>
+                                <div class="collapsible-tile-subtitle">Multi-File Features, Business Logic</div>
+                            </div>
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <p><strong>Triggers:</strong> Multi-file changes, new endpoints, business logic, state management</p>
+                            <p><strong>Strategy:</strong> Conditional phases based on validation</p>
+                            <p><strong>Phases:</strong> 2-3 phases with decision points</p>
+                            <p><strong>Example:</strong> "Add user profile editing with validation"</p>
+                            <ul style="color: var(--text-secondary); margin-top: 1rem;">
+                                <li>Phase 1: Profile data model & validation rules</li>
+                                <li>Phase 2: Edit UI component with form handling</li>
+                                <li>Phase 3 (conditional): Avatar upload if file storage ready</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="collapsible-tile">
+                        <button class="collapsible-tile-header">
+                            <div class="collapsible-tile-icon">🟢</div>
+                            <div class="collapsible-tile-content">
+                                <div class="collapsible-tile-title">LOW Complexity</div>
+                                <div class="collapsible-tile-subtitle">Simple Changes, Bug Fixes</div>
+                            </div>
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <p><strong>Triggers:</strong> Single-file changes, UI tweaks, simple bug fixes, documentation</p>
+                            <p><strong>Strategy:</strong> Skeleton plan with direct implementation</p>
+                            <p><strong>Phases:</strong> 1 phase with clear acceptance criteria</p>
+                            <p><strong>Example:</strong> "Fix button alignment on mobile"</p>
+                            <ul style="color: var(--text-secondary); margin-top: 1rem;">
+                                <li>Phase 1: Update CSS media query for button container</li>
+                                <li>Tests: Visual regression test for mobile viewport</li>
+                                <li>DoD: Button centered on all mobile devices (320px-768px)</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <h2 style="margin-top: 3rem;">✅ DoR/DoD Compliance Framework</h2>
             <div class="glass-card">
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span><strong>Definition of Ready (DoR)</strong> - Interactive Validation</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p style="margin-bottom: 1rem;">Before planning begins, the system validates that all prerequisites are met through an interactive question-based workflow:</p>
-                        <ul style="color: var(--text-secondary);">
-                            <li><strong>Feature clearly defined:</strong> "What problem does this solve for users?"</li>
-                            <li><strong>Acceptance criteria exist:</strong> "How will we know it's done?"</li>
-                            <li><strong>Dependencies identified:</strong> "What systems/APIs does this rely on?"</li>
-                            <li><strong>Technical feasibility confirmed:</strong> "Are there any blockers?"</li>
-                            <li><strong>Scope bounded:</strong> "What's explicitly out of scope?"</li>
-                        </ul>
-                        <p style="margin-top: 1rem; padding: 1rem; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent-primary); border-radius: 4px;">
-                            <strong>Iterative Refinement:</strong> You approve each DoR item individually. The system asks clarifying questions until requirements are unambiguous.
-                        </p>
+                <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div class="collapsible-tile">
+                        <button class="collapsible-tile-header">
+                            <div class="collapsible-tile-icon">📋</div>
+                            <div class="collapsible-tile-content">
+                                <div class="collapsible-tile-title">Definition of Ready (DoR)</div>
+                                <div class="collapsible-tile-subtitle">Interactive Validation</div>
+                            </div>
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <p style="margin-bottom: 1rem;">Before planning begins, the system validates that all prerequisites are met through an interactive question-based workflow:</p>
+                            <ul style="color: var(--text-secondary);">
+                                <li><strong>Feature clearly defined:</strong> "What problem does this solve for users?"</li>
+                                <li><strong>Acceptance criteria exist:</strong> "How will we know it's done?"</li>
+                                <li><strong>Dependencies identified:</strong> "What systems/APIs does this rely on?"</li>
+                                <li><strong>Technical feasibility confirmed:</strong> "Are there any blockers?"</li>
+                                <li><strong>Scope bounded:</strong> "What's explicitly out of scope?"</li>
+                            </ul>
+                            <p style="margin-top: 1rem; padding: 1rem; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent-primary); border-radius: 4px;">
+                                <strong>Iterative Refinement:</strong> You approve each DoR item individually. The system asks clarifying questions until requirements are unambiguous.
+                            </p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span><strong>Definition of Done (DoD)</strong> - Quality Gates</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p style="margin-bottom: 1rem;">Each phase generates specific DoD criteria that must be met before proceeding:</p>
-                        <ul style="color: var(--text-secondary);">
-                            <li><strong>Code complete:</strong> All planned files implemented</li>
-                            <li><strong>Tests passing:</strong> RED→GREEN→REFACTOR cycle completed</li>
-                            <li><strong>Coverage requirements met:</strong> 94% minimum per layer</li>
-                            <li><strong>Documentation updated:</strong> README, API docs, inline comments</li>
-                            <li><strong>Code review complete:</strong> Peer review or architectural review</li>
-                            <li><strong>Acceptance criteria validated:</strong> Feature works as specified</li>
-                        </ul>
-                        <p style="margin-top: 1rem; padding: 1rem; background: rgba(123, 97, 255, 0.1); border-left: 3px solid var(--accent-secondary); border-radius: 4px;">
-                            <strong>Approval Gate:</strong> After Phase 3, you explicitly approve acceptance criteria before autonomous execution proceeds. Visual checklist ensures nothing is missed.
-                        </p>
+                    <div class="collapsible-tile">
+                        <button class="collapsible-tile-header">
+                            <div class="collapsible-tile-icon">✅</div>
+                            <div class="collapsible-tile-content">
+                                <div class="collapsible-tile-title">Definition of Done (DoD)</div>
+                                <div class="collapsible-tile-subtitle">Quality Gates</div>
+                            </div>
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <p style="margin-bottom: 1rem;">Each phase generates specific DoD criteria that must be met before proceeding:</p>
+                            <ul style="color: var(--text-secondary);">
+                                <li><strong>Code complete:</strong> All planned files implemented</li>
+                                <li><strong>Tests passing:</strong> RED→GREEN→REFACTOR cycle completed</li>
+                                <li><strong>Coverage requirements met:</strong> 94% minimum per layer</li>
+                                <li><strong>Documentation updated:</strong> README, API docs, inline comments</li>
+                                <li><strong>Code review complete:</strong> Peer review or architectural review</li>
+                                <li><strong>Acceptance criteria validated:</strong> Feature works as specified</li>
+                            </ul>
+                            <p style="margin-top: 1rem; padding: 1rem; background: rgba(123, 97, 255, 0.1); border-left: 3px solid var(--accent-secondary); border-radius: 4px;">
+                                <strong>Approval Gate:</strong> After Phase 3, you explicitly approve acceptance criteria before autonomous execution proceeds. Visual checklist ensures nothing is missed.
+                            </p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span><strong>TDD Integration</strong> - Every Phase, Every Layer</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p style="margin-bottom: 1rem;">TDD is not optional—it's baked into every phase of the plan:</p>
-                        <ul style="color: var(--text-secondary);">
-                            <li><strong>RED:</strong> Write failing test first (validates requirement understanding)</li>
-                            <li><strong>GREEN:</strong> Implement minimum code to pass</li>
-                            <li><strong>REFACTOR:</strong> Clean up while maintaining green tests</li>
-                            <li><strong>4-Layer Coverage:</strong> Unit → Integration → System → Acceptance</li>
-                            <li><strong>Empty Test Detection:</strong> No placeholder tests allowed</li>
-                            <li><strong>Test-First Enforcement:</strong> SKULL rules block implementation-first commits</li>
-                        </ul>
-                        <p style="margin-top: 1rem;">
-                            <a href="tdd-mastery.html" style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">
-                                Learn more about TDD Mastery →
-                            </a>
-                        </p>
+                    <div class="collapsible-tile">
+                        <button class="collapsible-tile-header">
+                            <div class="collapsible-tile-icon">🎯</div>
+                            <div class="collapsible-tile-content">
+                                <div class="collapsible-tile-title">TDD Integration</div>
+                                <div class="collapsible-tile-subtitle">Every Phase, Every Layer</div>
+                            </div>
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <p style="margin-bottom: 1rem;">TDD is not optional—it's baked into every phase of the plan:</p>
+                            <ul style="color: var(--text-secondary);">
+                                <li><strong>RED:</strong> Write failing test first (validates requirement understanding)</li>
+                                <li><strong>GREEN:</strong> Implement minimum code to pass</li>
+                                <li><strong>REFACTOR:</strong> Clean up while maintaining green tests</li>
+                                <li><strong>4-Layer Coverage:</strong> Unit → Integration → System → Acceptance</li>
+                                <li><strong>Empty Test Detection:</strong> No placeholder tests allowed</li>
+                                <li><strong>Test-First Enforcement:</strong> SKULL rules block implementation-first commits</li>
+                            </ul>
+                            <p style="margin-top: 1rem;">
+                                <a href="tdd-mastery.html" style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">
+                                    Learn more about TDD Mastery →
+                                </a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
