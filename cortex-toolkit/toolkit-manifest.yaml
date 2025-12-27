@@ -161,6 +161,26 @@ categories:
         platforms: [windows, linux, macos]
         requires_admin: false
         execution_method: cli
+        
+      - name: html-style-centralizer
+        command: cortex-html-clean
+        script: documentation/html-tools/html_style_centralizer.py
+        description: Centralize inline CSS styles to external stylesheets
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "HTML Style Centralizer"
+        functionality: "Removes inline style attributes from HTML files and moves them to centralized CSS classes for better maintainability"
+        
+      - name: html-validator
+        command: cortex-html-validate
+        script: documentation/html-tools/html_validator.py
+        description: Validate HTML syntax and structure
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "HTML Validator"
+        functionality: "Checks HTML files for syntax errors, unclosed tags, malformed attributes, and structural issues"
 
   testing:
     description: Testing utilities

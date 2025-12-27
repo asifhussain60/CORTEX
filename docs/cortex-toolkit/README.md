@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0  
 **Last Updated:** December 27, 2025  
-**Total Tools:** 55 Python Scripts  
+**Total Tools:** 57 Python Scripts  
 **Status:** ✅ Production Ready
 
 ---
@@ -17,12 +17,13 @@
 6. [API Reference](#api-reference)
 7. [Development Guide](#development-guide)
 8. [Troubleshooting](#troubleshooting)
+9. [HTML Tools Guide](#html-tools-guide) ⭐ NEW
 
 ---
 
 ## 🎯 Overview
 
-The **CORTEX Toolkit** is a comprehensive collection of 55+ Python tools organized into 8 categories, providing cross-repository functionality for brain operations, system maintenance, planning, analytics, and more.
+The **CORTEX Toolkit** is a comprehensive collection of 57 Python tools organized into 8 categories, providing cross-repository functionality for brain operations, system maintenance, planning, analytics, documentation quality, and more.
 
 ### Key Features
 
@@ -184,13 +185,18 @@ Performance profiling, metrics collection, and visualization.
 - `analytics/visualization/generate_uml_standalone.py` - Generate UML diagrams
 - `analytics/visualization/visualize_brain_health.py` - Visualize brain health
 
-### 5. Documentation (3 tools)
+### 5. Documentation (5 tools)
 
-Automated documentation generation.
+Automated documentation generation and HTML quality assurance.
 
+**Documentation Generators (3 tools):**
 - `documentation/generate_docs_from_code.py` - Generate docs from code
 - `documentation/generate_quick_reference.py` - Generate quick references
 - `documentation/regenerate_prompts.py` - Regenerate prompt files
+
+**HTML Quality Tools (2 tools):**
+- `documentation/html-tools/html_style_centralizer.py` - **HTML Style Centralizer**: Removes inline CSS styles from HTML files and moves them to centralized stylesheets. Improves maintainability by ensuring 100% CSS centralization per docgen.prompt.md standards.
+- `documentation/html-tools/html_validator.py` - **HTML Validator**: Validates HTML syntax, checks for unclosed tags, malformed attributes, and structural issues. Ensures all documentation pages are syntactically correct.
 
 ### 6. Testing (3 tools)
 
@@ -332,7 +338,69 @@ python cortex-toolkit/core/brain/align.py --check-only
 python cortex-toolkit/cli/wrappers/align_wrapper.py --check-only
 ```
 
-### Example 4: System Health Check
+### Example 4: HTML Documentation Quality
+
+**For Non-Technical Users:**
+
+These tools help keep your HTML documentation clean and error-free. Think of them like spell-checkers for your web pages - they find and fix common problems automatically.
+
+**HTML Style Centralizer** - Cleans up messy inline styles:
+```bash
+# What it does: Moves all style="..." attributes to a central CSS file
+# Why: Makes your website easier to update (change colors in one place, not 100 places)
+# When to use: After creating new HTML pages or before publishing documentation
+
+python cortex-toolkit/documentation/html-tools/html_style_centralizer.py
+
+# Expected output:
+# ✅ features/tdd-mastery.html: 88 inline styles removed
+# ✅ architecture/agent-system.html: 254 inline styles removed
+# Files Modified: 37
+# Inline Styles Removed: 2,488
+```
+
+**HTML Validator** - Checks for broken HTML:
+```bash
+# What it does: Finds missing closing tags, broken links, syntax errors
+# Why: Prevents "broken" pages that don't display correctly in browsers
+# When to use: Before deploying documentation, after bulk edits
+
+python cortex-toolkit/documentation/html-tools/html_validator.py
+
+# Expected output:
+# ✅ Valid: 48/50 files
+# ⚠️  Valid with Warnings: 2 files (duplicate class attributes - safe to ignore)
+# ❌ Invalid: 0 files
+# 
+# 🎉 ALL HTML FILES ARE SYNTACTICALLY CORRECT!
+```
+
+**For Technical Users:**
+
+```bash
+# Style Centralizer - Remove inline styles, preserve exceptions
+python cortex-toolkit/documentation/html-tools/html_style_centralizer.py
+
+# Features:
+# - HTMLParser-based (safe, structure-preserving)
+# - Preserves story/viewer.html interactive styles
+# - Preserves D3.js dynamic template literals
+# - Creates reusable CSS classes in main.css
+# - Backup via git (reversible)
+
+# Validator - Comprehensive HTML5 validation
+python cortex-toolkit/documentation/html-tools/html_validator.py
+
+# Features:
+# - Tag stack tracking (opening/closing validation)
+# - Self-closing tag verification (<br/>, <img/>)
+# - Attribute syntax validation
+# - Nesting structure checks
+# - Duplicate attribute detection
+# - Line-by-line error reporting
+```
+
+### Example 5: System Health Check
 
 ```bash
 # Run health check
@@ -580,10 +648,55 @@ python cortex-toolkit/shared/toolkit_registry.py info <tool-name>
 
 ---
 
-## 📊 Statistics
+---
+
+## 📄 HTML Tools Guide
+
+**NEW: Specialized tools for HTML documentation quality assurance**
+
+The CORTEX Toolkit now includes two powerful HTML quality tools designed for both technical and non-technical users:
+
+### Tools Overview
+
+1. **HTML Style Centralizer** - Removes inline CSS and centralizes styles
+   - **User-Friendly Name:** Style Cleanup Tool
+   - **What it does:** Moves `style="..."` attributes to a central CSS file
+   - **Why use it:** Makes website updates easier (change once, affect all pages)
+   - **When to use:** After creating new pages, before publishing
+
+2. **HTML Validator** - Checks HTML syntax and structure
+   - **User-Friendly Name:** HTML Error Checker
+   - **What it does:** Finds missing closing tags, broken attributes, syntax errors
+   - **Why use it:** Prevents broken pages that don't display correctly
+   - **When to use:** Before deployment, after bulk edits
+
+### Quick Start
+
+```bash
+# Centralize inline styles
+python cortex-toolkit/documentation/html-tools/html_style_centralizer.py
+
+# Validate HTML syntax
+python cortex-toolkit/documentation/html-tools/html_validator.py
+```
+
+### Detailed Documentation
+
+� **[HTML Tools Complete Guide](HTML-TOOLS-GUIDE.md)**
+
+Comprehensive guide covering:
+- For Non-Technical Users: Simple explanations and step-by-step instructions
+- For Technical Users: Algorithm details, safety features, command options
+- Common Workflows: Pre-deployment checks, bulk cleanup, error fixing
+- Troubleshooting: Solutions for common issues
+- Success Metrics: How to measure quality improvements
+
+---
+
+## �📊 Statistics
 
 **Version:** 1.0.0  
-**Total Tools:** 55 Python scripts  
+**Total Tools:** 57 Python scripts ⬆️ (+2 HTML tools)  
 **Categories:** 10  
 **CLI Wrappers:** 20  
 **Platforms:** Windows, Linux, macOS  
@@ -595,6 +708,7 @@ python cortex-toolkit/shared/toolkit_registry.py info <tool-name>
 ## 🔗 Related Documentation
 
 - [CORTEX.prompt.md](/.github/prompts/CORTEX.prompt.md) - Main CORTEX instructions
+- [HTML-TOOLS-GUIDE.md](HTML-TOOLS-GUIDE.md) - ⭐ HTML quality tools guide
 - [toolkit-manifest.yaml](/cortex-toolkit/toolkit-manifest.yaml) - Tool registry
 - [TOOLS-INVENTORY.md](/cortex-toolkit/TOOLS-INVENTORY.md) - Detailed tool inventory
 - [FOLDER-STRUCTURE.md](/cortex-toolkit/FOLDER-STRUCTURE.md) - Directory structure
