@@ -8,9 +8,8 @@
     <meta name="copyright" content="© 2025 Asif Hussain. All rights reserved.">
     <title>CORTEX Technical Documentation</title>
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="assets/styles/glassmorphism.css">
-    <link rel="stylesheet" href="assets/styles/diagrams.css">
+    <!-- Styles - SINGLE centralized CSS file -->
+    <link rel="stylesheet" href="../assets/css/main.css">
     
     <!-- D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -26,7 +25,7 @@
                 <img src="../CORTEX-logo.png" alt="CORTEX Logo" class="logo">
                 <div>
                     <div class="logo-text">CORTEX</div>
-                    <div style="font-size: 12px; color: var(--text-secondary);">Technical Documentation</div>
+                    <div>Technical Documentation</div>
                 </div>
             </div>
             
@@ -51,23 +50,23 @@
             <div class="sidebar-section">
                 <div class="sidebar-title">Architecture</div>
                 <a href="architecture/overview.html" class="sidebar-item">
-                    <i class="fas fa-sitemap" style="margin-right: 8px;"></i>
+                    <i class="fas fa-sitemap"></i>
                     Overview
                 </a>
                 <a href="architecture/4-tier-brain.html" class="sidebar-item">
-                    <i class="fas fa-brain" style="margin-right: 8px;"></i>
+                    <i class="fas fa-brain"></i>
                     4-Tier Brain
                 </a>
                 <a href="architecture/orchestrator-framework.html" class="sidebar-item">
-                    <i class="fas fa-cogs" style="margin-right: 8px;"></i>
+                    <i class="fas fa-cogs"></i>
                     Orchestrators
                 </a>
                 <a href="architecture/agent-framework.html" class="sidebar-item">
-                    <i class="fas fa-robot" style="margin-right: 8px;"></i>
+                    <i class="fas fa-robot"></i>
                     Agents
                 </a>
                 <a href="architecture/diagrams/system-architecture.html" class="sidebar-item">
-                    <i class="fas fa-project-diagram" style="margin-right: 8px;"></i>
+                    <i class="fas fa-project-diagram"></i>
                     Diagrams
                 </a>
             </div>
@@ -75,23 +74,23 @@
             <div class="sidebar-section">
                 <div class="sidebar-title">API Reference</div>
                 <a href="api/orchestrators/planning-system.html" class="sidebar-item">
-                    <i class="fas fa-tasks" style="margin-right: 8px;"></i>
+                    <i class="fas fa-tasks"></i>
                     Planning System
                 </a>
                 <a href="api/orchestrators/tdd-mastery.html" class="sidebar-item">
-                    <i class="fas fa-vial" style="margin-right: 8px;"></i>
+                    <i class="fas fa-vial"></i>
                     TDD Mastery
                 </a>
                 <a href="api/orchestrators/maintenance.html" class="sidebar-item">
-                    <i class="fas fa-wrench" style="margin-right: 8px;"></i>
+                    <i class="fas fa-wrench"></i>
                     Maintenance
                 </a>
                 <a href="api/agents/strategic-planning-agent.html" class="sidebar-item">
-                    <i class="fas fa-chess" style="margin-right: 8px;"></i>
+                    <i class="fas fa-chess"></i>
                     Strategic Agent
                 </a>
                 <a href="api/agents/code-execution-agent.html" class="sidebar-item">
-                    <i class="fas fa-code" style="margin-right: 8px;"></i>
+                    <i class="fas fa-code"></i>
                     Execution Agent
                 </a>
             </div>
@@ -99,15 +98,15 @@
             <div class="sidebar-section">
                 <div class="sidebar-title">Workflows</div>
                 <a href="workflows/planning-workflow.html" class="sidebar-item">
-                    <i class="fas fa-stream" style="margin-right: 8px;"></i>
+                    <i class="fas fa-stream"></i>
                     Planning Workflow
                 </a>
                 <a href="workflows/tdd-workflow.html" class="sidebar-item">
-                    <i class="fas fa-circle-notch" style="margin-right: 8px;"></i>
+                    <i class="fas fa-circle-notch"></i>
                     TDD Cycle
                 </a>
                 <a href="workflows/maintenance-workflow.html" class="sidebar-item">
-                    <i class="fas fa-tools" style="margin-right: 8px;"></i>
+                    <i class="fas fa-tools"></i>
                     Maintenance
                 </a>
             </div>
@@ -115,19 +114,19 @@
             <div class="sidebar-section">
                 <div class="sidebar-title">Guides</div>
                 <a href="setup-guides/quick-start.html" class="sidebar-item">
-                    <i class="fas fa-rocket" style="margin-right: 8px;"></i>
+                    <i class="fas fa-rocket"></i>
                     Quick Start
                 </a>
                 <a href="integration/copilot-integration.html" class="sidebar-item">
-                    <i class="fas fa-plug" style="margin-right: 8px;"></i>
+                    <i class="fas fa-plug"></i>
                     Copilot Integration
                 </a>
                 <a href="deployment/overview.html" class="sidebar-item">
-                    <i class="fas fa-server" style="margin-right: 8px;"></i>
+                    <i class="fas fa-server"></i>
                     Deployment
                 </a>
                 <a href="troubleshooting/index.html" class="sidebar-item">
-                    <i class="fas fa-ambulance" style="margin-right: 8px;"></i>
+                    <i class="fas fa-ambulance"></i>
                     Troubleshooting
                 </a>
             </div>
@@ -142,52 +141,52 @@
                         <h1 class="card-title">CORTEX Technical Documentation</h1>
                         <p class="card-subtitle">Comprehensive developer guide for the CORTEX AI Assistant framework</p>
                     </div>
-                    <div style="display: flex; gap: 12px;">
+                    <div>
                         <span class="badge badge-primary">v3.9.0</span>
                         <span class="badge badge-success">Production</span>
                     </div>
                 </div>
                 
-                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+                <p>
                     CORTEX is an AI-powered development assistant with long-term memory, context awareness, and strategic planning capabilities. This documentation provides complete technical details for developers to understand, integrate, and extend the CORTEX framework.
                 </p>
                 
                 <div class="grid grid-3">
-                    <div class="glass" style="padding: 20px; border-radius: 12px;">
-                        <i class="fas fa-book" style="font-size: 32px; color: var(--primary); margin-bottom: 12px;"></i>
-                        <h3 style="margin-bottom: 8px;">Comprehensive</h3>
-                        <p style="color: var(--text-secondary); font-size: 14px;">Complete API docs, workflows, and integration guides</p>
+                    <div class="glass">
+                        <i class="fas fa-book"></i>
+                        <h3>Comprehensive</h3>
+                        <p>Complete API docs, workflows, and integration guides</p>
                     </div>
-                    <div class="glass" style="padding: 20px; border-radius: 12px;">
-                        <i class="fas fa-project-diagram" style="font-size: 32px; color: var(--secondary); margin-bottom: 12px;"></i>
-                        <h3 style="margin-bottom: 8px;">Interactive</h3>
-                        <p style="color: var(--text-secondary); font-size: 14px;">D3.js diagrams with zoom, pan, and drill-down</p>
+                    <div class="glass">
+                        <i class="fas fa-project-diagram"></i>
+                        <h3>Interactive</h3>
+                        <p>D3.js diagrams with zoom, pan, and drill-down</p>
                     </div>
-                    <div class="glass" style="padding: 20px; border-radius: 12px;">
-                        <i class="fas fa-mobile-alt" style="font-size: 32px; color: var(--accent); margin-bottom: 12px;"></i>
-                        <h3 style="margin-bottom: 8px;">Responsive</h3>
-                        <p style="color: var(--text-secondary); font-size: 14px;">Mobile-friendly, accessible, WCAG AA compliant</p>
+                    <div class="glass">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>Responsive</h3>
+                        <p>Mobile-friendly, accessible, WCAG AA compliant</p>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Links -->
             <div class="card fade-in">
-                <h2 style="margin-bottom: 24px;">Quick Access</h2>
+                <h2>Quick Access</h2>
                 <div class="grid grid-2">
-                    <a href="architecture/overview.html" class="btn btn-primary" style="width: 100%;">
+                    <a href="architecture/overview.html" class="btn btn-primary">
                         <i class="fas fa-sitemap"></i>
                         System Architecture
                     </a>
-                    <a href="api/index.html" class="btn btn-secondary" style="width: 100%;">
+                    <a href="api/index.html" class="btn btn-secondary">
                         <i class="fas fa-code"></i>
                         API Reference
                     </a>
-                    <a href="setup-guides/quick-start.html" class="btn" style="width: 100%;">
+                    <a href="setup-guides/quick-start.html" class="btn">
                         <i class="fas fa-rocket"></i>
                         Quick Start Guide
                     </a>
-                    <a href="workflows/index.html" class="btn" style="width: 100%;">
+                    <a href="workflows/index.html" class="btn">
                         <i class="fas fa-stream"></i>
                         Workflows
                     </a>
@@ -210,7 +209,7 @@
                     </div>
                 </div>
                 
-                <p style="color: var(--text-secondary); margin-top: 16px; font-size: 14px;">
+                <p>
                     <i class="fas fa-info-circle"></i>
                     Interactive diagram showing CORTEX's 4-tier brain architecture, orchestrator framework, and agent system. Click nodes to explore components.
                 </p>
@@ -218,13 +217,13 @@
 
             <!-- Key Features -->
             <div class="card fade-in">
-                <h2 style="margin-bottom: 24px;">Key Features</h2>
+                <h2>Key Features</h2>
                 <div class="grid grid-2">
                     <div>
-                        <h3 style="margin-bottom: 16px; color: var(--primary);">
+                        <h3>
                             <i class="fas fa-brain"></i> 4-Tier Brain Architecture
                         </h3>
-                        <ul style="color: var(--text-secondary); line-height: 1.8; list-style-position: inside;">
+                        <ul>
                             <li>Tier 0: Governance & SKULL Rules</li>
                             <li>Tier 1: Working Memory (70-conversation FIFO)</li>
                             <li>Tier 2: Knowledge Graph (pattern learning)</li>
@@ -232,10 +231,10 @@
                         </ul>
                     </div>
                     <div>
-                        <h3 style="margin-bottom: 16px; color: var(--secondary);">
+                        <h3>
                             <i class="fas fa-cogs"></i> 8 Orchestrators
                         </h3>
-                        <ul style="color: var(--text-secondary); line-height: 1.8; list-style-position: inside;">
+                        <ul>
                             <li>Planning System 2.0/3.0</li>
                             <li>TDD Mastery (RED→GREEN→REFACTOR)</li>
                             <li>System Maintenance (7-phase)</li>
@@ -244,10 +243,10 @@
                         </ul>
                     </div>
                     <div>
-                        <h3 style="margin-bottom: 16px; color: var(--accent);">
+                        <h3>
                             <i class="fas fa-robot"></i> 2-Agent Framework
                         </h3>
-                        <ul style="color: var(--text-secondary); line-height: 1.8; list-style-position: inside;">
+                        <ul>
                             <li>Strategic Planning Agent (RIGHT BRAIN)</li>
                             <li>Code Execution Agent (LEFT BRAIN)</li>
                             <li>Corpus Callosum integration</li>
@@ -255,10 +254,10 @@
                         </ul>
                     </div>
                     <div>
-                        <h3 style="margin-bottom: 16px; color: var(--warning);">
+                        <h3>
                             <i class="fas fa-shield-alt"></i> Brain Protection (SKULL)
                         </h3>
-                        <ul style="color: var(--text-secondary); line-height: 1.8; list-style-position: inside;">
+                        <ul>
                             <li>TDD Enforcement</li>
                             <li>Holistic Code Discovery</li>
                             <li>Refactor Code Cleanup</li>
@@ -270,38 +269,38 @@
 
             <!-- Statistics -->
             <div class="card fade-in">
-                <h2 style="margin-bottom: 24px;">Documentation Coverage</h2>
+                <h2>Documentation Coverage</h2>
                 <div class="grid grid-4">
-                    <div style="text-align: center;">
-                        <div style="font-size: 48px; font-weight: 700; color: var(--primary);">8</div>
-                        <div style="color: var(--text-secondary); font-size: 14px;">Orchestrators</div>
+                    <div>
+                        <div>8</div>
+                        <div>Orchestrators</div>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 48px; font-weight: 700; color: var(--secondary);">2</div>
-                        <div style="color: var(--text-secondary); font-size: 14px;">Agents</div>
+                    <div>
+                        <div>2</div>
+                        <div>Agents</div>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 48px; font-weight: 700; color: var(--accent);">4</div>
-                        <div style="color: var(--text-secondary); font-size: 14px;">Brain Tiers</div>
+                    <div>
+                        <div>4</div>
+                        <div>Brain Tiers</div>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 48px; font-weight: 700; color: var(--info);">50+</div>
-                        <div style="color: var(--text-secondary); font-size: 14px;">Diagrams</div>
+                    <div>
+                        <div>50+</div>
+                        <div>Diagrams</div>
                     </div>
                 </div>
             </div>
 
             <!-- Footer -->
             <div class="card fade-in">
-                <div style="text-align: center; color: var(--text-secondary);">
-                    <p style="margin-bottom: 8px;">
+                <div>
+                    <p>
                         <strong>CORTEX v3.9.0</strong> Technical Documentation
                     </p>
-                    <p style="font-size: 14px;">
+                    <p>
                         Author: Asif Hussain | Copyright © 2025 Asif Hussain. All rights reserved.
                     </p>
-                    <p style="font-size: 12px; margin-top: 12px;">
-                        <a href="https://github.com/asifhussain60/CORTEX" style="color: var(--primary); text-decoration: none;">
+                    <p>
+                        <a href="https://github.com/asifhussain60/CORTEX">
                             <i class="fab fa-github"></i> GitHub
                         </a>
                     </p>
