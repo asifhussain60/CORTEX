@@ -4,32 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Sanitization Orchestrator | CORTEX Technical Documentation</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="shared-styles.css">
+    <link rel="icon" href="../../assets/images/CORTEX-logo.png" type="image/png">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <style>
-        :root { --primary: #4CAF50; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }
-        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }
-        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }
-        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }
-        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
-        .metadata-item { background: rgba(76, 175, 80, 0.1); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
-        .section { margin: 3rem 0; }
-        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }
-        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
-        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }
-        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3); }
-        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }
-        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }
-        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(76, 175, 80, 0.3); }
-        .breadcrumb a { color: var(--primary); text-decoration: none; }
-        .breadcrumb a:hover { text-decoration: underline; }
-        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }
-        .breadcrumb-current { color: #e2e8f0; }
-        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }
-    </style>
 </head>
 <body>
     <nav class="breadcrumb">
@@ -40,14 +19,31 @@
         <span class="breadcrumb-current">Code Sanitization</span>
     </nav>
     
+    <!-- Feature Benefit Panel -->
+    <section class="section">
+        <div class="container">
+            <div class="feature-benefit-panel">
+                <span class="icon">🔒</span>
+                <p class="description">
+                    Sharing proprietary code for collaboration or portfolio purposes is risky—company names, 
+                    API keys, and business logic can accidentally leak. Code Sanitization automatically scrubs 
+                    sensitive data from your codebase in a 5-phase workflow: discovering what needs anonymization, 
+                    creating consistent replacement mappings, transforming all occurrences, validating the code 
+                    still works, and generating a detailed report. Share your architectural patterns publicly 
+                    without compromising confidential information.
+                </p>
+            </div>
+        </div>
+    </section>
+    
     <div class="container">
         <header>
             <h1>🧼 Code Sanitization Orchestrator</h1>
             <p class="subtitle">5-Phase Domain Transformation for Safe Code Sharing</p>
             <div class="metadata">
-                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">HIGH</span></div>
-                <div class="metadata-item"><span style="color:#94a3b8">Phases:</span> <span style="color:var(--primary);font-weight:600">5</span></div>
-                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">sanitization_orchestrator.py</span></div>
+                <div class="metadata-item"><span class="metadata-label">Complexity:</span> <span class="metadata-value">HIGH</span></div>
+                <div class="metadata-item"><span class="metadata-label">Phases:</span> <span class="metadata-value">5</span></div>
+                <div class="metadata-item"><span class="metadata-label">File:</span> <span class="metadata-value">sanitization_orchestrator.py</span></div>
             </div>
         </header>
         

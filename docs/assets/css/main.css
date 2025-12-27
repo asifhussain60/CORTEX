@@ -1209,6 +1209,207 @@ footer {
 .hidden { display: none !important; }
 
 /* ============================================
+   FEATURE BENEFIT PANEL - User-Centric Value Propositions
+   ============================================ */
+.feature-benefit-panel {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.1));
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    margin-bottom: var(--spacing-xl);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.feature-benefit-panel .icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    display: block;
+    line-height: 1;
+}
+
+.feature-benefit-panel .description {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+    margin: 0;
+    text-align: left;
+}
+
+/* Page Logo Header (for inner pages) */
+.logo-header {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+}
+
+.page-logo {
+    width: 120px;
+    height: auto;
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
+    transition: filter var(--transition-base);
+}
+
+.page-logo:hover {
+    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8));
+}
+
+/* Section Classes for Page Structure */
+.section-overview h2,
+.section-workflow h2,
+.section-architecture h2,
+.section-integration h2,
+.section-configuration h2,
+.section-usage h2,
+.section-testing h2,
+.section-performance h2 {
+    color: var(--accent-primary);
+    margin-bottom: var(--spacing-lg);
+    font-size: 1.75rem;
+}
+
+/* Feature Lists */
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-lg) 0;
+}
+
+.feature-list li {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    background: var(--glass-bg);
+    border-left: 4px solid var(--accent-primary);
+    border-radius: var(--radius-sm);
+    backdrop-filter: blur(10px);
+}
+
+.feature-list li strong {
+    color: var(--accent-primary);
+}
+
+/* Diagram Containers */
+.diagram-container {
+    margin: var(--spacing-2xl) 0;
+    padding: var(--spacing-xl);
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+}
+
+.diagram-container h2 {
+    color: var(--accent-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.diagram-canvas {
+    min-height: 400px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+/* Skip Link for Accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-primary);
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: 10000;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Responsive Feature Benefit Panel */
+@media (max-width: 768px) {
+    .feature-benefit-panel .icon {
+        font-size: 2rem;
+    }
+    
+    .feature-benefit-panel .description {
+        font-size: 1rem;
+    }
+    
+    .feature-benefit-panel {
+        padding: var(--spacing-lg);
+    }
+    
+    .page-logo {
+        width: 80px;
+    }
+}
+
+/* Hero Subtitle - Team size info */
+.hero-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* What is CORTEX description text */
+.intro-text {
+    font-size: 1.125rem;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.intro-text-secondary {
+    font-size: 1rem;
+    text-align: center;
+    max-width: 800px;
+    margin: 1.5rem auto 0;
+    color: var(--text-secondary);
+    opacity: 0.9;
+}
+
+/* Featured card highlight */
+.feature-card-highlight {
+    border: 2px solid var(--accent-primary);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+.feature-card-secondary {
+    border: 2px solid var(--accent-secondary);
+}
+
+/* Section spacing adjustments */
+.section-tight {
+    padding-top: 2rem;
+}
+
+/* Badge with margin */
+.badge-with-margin {
+    margin-bottom: 1rem;
+}
+
+/* ============================================
    GLOBAL SEARCH SYSTEM - Lunr.js Integration
    ============================================ */
 

@@ -1,3 +1,0 @@
-# DALL-E Prompt: Setup Orchestration
-
-Create a setup workflow diagram...

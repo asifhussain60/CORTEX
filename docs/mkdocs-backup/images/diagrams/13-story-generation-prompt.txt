@@ -1,5 +1,0 @@
-Story Generation Pipeline Diagram
-========================================
-
-This diagram illustrates the story generation workflow.
-See: cortex-brain/cortex-3.0-design/story-generation-pipeline.md

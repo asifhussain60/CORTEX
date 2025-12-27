@@ -1,2 +1,0 @@
-Placeholder for integration/testing-strategy.png
-Generate using DALL-E prompt: docs/diagrams/prompts/11-testing-strategy-prompt.md

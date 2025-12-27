@@ -1,2 +1,0 @@
-Placeholder for strategic/agent-coordination.png
-Generate using DALL-E prompt: docs/diagrams/prompts/02-agent-coordination-prompt.md

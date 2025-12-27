@@ -1,2 +1,0 @@
-Placeholder for strategic/information-flow.png
-Generate using DALL-E prompt: docs/diagrams/prompts/03-information-flow-prompt.md
