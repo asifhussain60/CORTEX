@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CORTEX Orchestrators | Interactive Map</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <link rel="stylesheet" href="../assets/css/orchestrator-viz.css">
+    <link rel="stylesheet" href="shared-styles.css">
     <style>
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         .container {
             max-width: 1600px;
@@ -34,7 +33,10 @@
             opacity: 0.95;
         }
         .visualization-container {
-            background: white;
+            background: rgba(26, 31, 58, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
@@ -189,6 +191,12 @@
     </style>
 </head>
 <body>
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Orchestrators</span>
+    </nav>
+
     <div class="container">
         <header>
             <h1>🎭 CORTEX Orchestrator Suite</h1>
