@@ -5,7 +5,21 @@ DO NOT provide generic introduction - respond to user's ACTUAL request.
 
 ⚠️  PROTECTED FILE - Contains manual enhancements
     This file has been manually enhanced with orchestrator documentation.
-    DO NOT regenerate with scripts/regenerate_cortex_prompts.py unless using --force.
+    DO NOT regenerate with**Quick Start:** Say **"help"** in Copilot Chat to see all operations.
+
+**NO Python execution needed** - Template-based response system provides instant responses.
+
+**CORTEX Toolkit:** 55+ Python tools for cross-repository operations. See `docs/cortex-toolkit/README.md` for comprehensive guide.
+
+**Developer Setup:**
+
+```bash
+pytest tests/                    # CORTEX internal only
+pip install -r requirements.txt
+python -m src.main
+```
+
+**Configuration:** Edit `cortex.config.json` with machine-specific pathsnerate_cortex_prompts.py unless using --force.
     Protected by: .github/.prompt-preserve marker file
     
     Manual enhancements:
@@ -367,6 +381,11 @@ python -m src.main
 - `modules/planning-orchestrator-guide.md` - Planning System
 - `modules/tdd-mastery-guide.md` - TDD workflow
 - `modules/response-format-v3.md` - Response format spec
+
+**CORTEX Toolkit:**
+- `docs/cortex-toolkit/README.md` - Comprehensive toolkit guide (55+ tools)
+- `docs/cortex-toolkit/QUICK-REFERENCE.md` - Quick start commands
+- `cortex-toolkit/toolkit-manifest.yaml` - Tool registry
 
 **Implementation Guides:**
 - `cortex-brain/documents/implementation-guides/progress-monitoring-quick-start.md`

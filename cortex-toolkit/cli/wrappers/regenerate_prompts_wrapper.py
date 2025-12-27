@@ -36,7 +36,7 @@ sys.path.insert(0, str(CORTEX_ROOT))
 sys.path.insert(0, str(CORTEX_ROOT / "scripts"))
 from regenerate_cortex_prompts import PromptRegenerator
 
-from scripts.cli_wrappers.base_wrapper import BaseCLIWrapper, main_template
+from .base_wrapper import BaseCLIWrapper, main_template
 from src.operations.base_operation_module import OperationResult, OperationStatus
 
 

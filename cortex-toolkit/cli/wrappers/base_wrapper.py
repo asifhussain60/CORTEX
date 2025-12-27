@@ -17,7 +17,7 @@ Features:
 - Consistent interface across all wrappers
 
 Usage:
-    from scripts.cli_wrappers.base_wrapper import BaseCLIWrapper
+    from cortex_toolkit.cli.wrappers.base_wrapper import BaseCLIWrapper
     
     class MyOperationWrapper(BaseCLIWrapper):
         def get_orchestrator(self):

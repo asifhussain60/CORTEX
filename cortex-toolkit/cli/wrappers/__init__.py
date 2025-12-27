@@ -13,7 +13,7 @@ Pattern:
 4. Use main_template() for entry point
 
 Example:
-    from scripts.cli_wrappers.base_wrapper import BaseCLIWrapper, main_template
+    from .base_wrapper import BaseCLIWrapper, main_template
     from src.operations.my_operation import MyOrchestrator
     
     class MyOperationWrapper(BaseCLIWrapper):

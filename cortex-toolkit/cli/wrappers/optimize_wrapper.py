@@ -29,7 +29,7 @@ from pathlib import Path
 CORTEX_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(CORTEX_ROOT))
 
-from scripts.cli_wrappers.base_wrapper import BaseCLIWrapper, main_template
+from .base_wrapper import BaseCLIWrapper, main_template
 from src.operations.modules.optimization.optimize_cortex_orchestrator import OptimizeCortexOrchestrator
 
 
