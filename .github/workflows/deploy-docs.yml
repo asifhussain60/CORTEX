@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - CORTEX-3.0
+      - CORTEX-4.0
+      - main
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
@@ -168,7 +170,6 @@ jobs:
         run: |
           echo "::notice::✅ Documentation deployed successfully!"
           echo "::notice::📝 Site URL: https://asifhussain60.github.io/CORTEX/"
-          echo "::notice::📊 Build duration: ${{ job.duration }}s"
       
       - name: Report failure
         if: failure()
@@ -181,7 +182,7 @@ jobs:
     name: Lighthouse Performance Check
     needs: build-and-deploy
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/CORTEX-3.0'
+    if: github.ref == 'refs/heads/CORTEX-4.0' || github.ref == 'refs/heads/main'
     
     steps:
       - name: Wait for deployment
